@@ -101,6 +101,22 @@ const DanhSachMonDangKy = ({
           ?.filter((sc) => (sc?.classRegisterLogs?.length || 0) > 0)
       : []
 
+  // Map subjectClass ID -> parent subject code, and set of subject codes with a registered class
+  const classToSubjectCodeMap = new Map<string, string>()
+  const registeredSubjectCodes = new Set<string>()
+  if (classesInfo?.status === 200) {
+    classesInfo.data?.forEach((subject) => {
+      const subjectCode = subject.code ?? ""
+      const hasRegistered = subject.subjectClass?.some(
+        (sc) => (sc?.classRegisterLogs?.length || 0) > 0
+      )
+      if (hasRegistered) registeredSubjectCodes.add(subjectCode)
+      subject.subjectClass?.forEach((sc) => {
+        if (sc?.id) classToSubjectCodeMap.set(sc.id, subjectCode)
+      })
+    })
+  }
+
   const { mutateAsync: classRegisterMutate, isPending: isPendingClassRegister } = useMutation({
     mutationFn: async (subjectClassIds: string[]) => {
       const res = await classRegister({
@@ -200,140 +216,6 @@ const DanhSachMonDangKy = ({
           onChange={setByCurriculum}
         />
       </div>
-      <b className="text-lg">Danh sách môn học mở đăng ký</b>
-      {classesInfo?.status === 200 && (
-        <TableCollapse
-          defaultExpandAll
-          columns={[
-            {
-              title: "Mã học phần",
-              dataIndex: "code",
-              align: "center",
-              width: 120,
-            },
-            {
-              title: "Tên học phần",
-              dataIndex: "name",
-            },
-            {
-              title: "Số TC",
-              dataIndex: "credit",
-              align: "center",
-              width: 60,
-            },
-            {
-              title: "Bắt buộc",
-              align: "center",
-              width: 80,
-              render: (_, record) => (
-                <Checkbox
-                  checked={record?.type === $Enums.SubjectRequirementType.Mandatory}
-                  disabled
-                />
-              ),
-            },
-            {
-              title: "Giảng viên",
-              render: (_, record) =>
-                [
-                  record.mainLecturer?.userProfile?.fullname,
-                  record.extraLecturer?.userProfile?.fullname,
-                ]
-                  .filter(Boolean)
-                  .join(", "),
-            },
-            {
-              title: "Phòng học",
-              align: "center",
-              width: 150,
-              render: (_, record) => record?.room?.name,
-            },
-            {
-              title: "Số lượng",
-              align: "center",
-              width: 80,
-              render: (_, record) =>
-                `${record?._count?.subjectClassStudent || 0}/${record?.maxStudent}`,
-            },
-            {
-              title: "Thời khoá biểu",
-              width: 150,
-              align: "center",
-              render: (_, record) => {
-                return record?.subjectClassTimes?.uniqueByKey?.("dayOfWeek")?.map?.((tkb) => {
-                  return (
-                    <p>
-                      {tkb?.dayOfWeek === 8 ? "CN" : `T${tkb?.dayOfWeek}`} - {tkb?.startPeriod} -{" "}
-                      {tkb?.endPeriod}
-                    </p>
-                  )
-                })
-              },
-            },
-            {
-              title: "Học phí",
-              align: "center",
-              width: 120,
-              render: (_, record) =>
-                tuitionPerCredit
-                  ? `${((record?.credit || 0) * tuitionPerCredit).formatVND()}`
-                  : "-",
-            },
-            {
-              title: "Thao tác",
-              align: "center",
-              width: 120,
-              fixed: "right",
-              render: (_, record) => {
-                const isMaxed =
-                  (record?.maxStudent || 0) <= (record?._count?.subjectClassStudent || 0)
-                const isRegisteredBool = (record?.classRegisterLogs?.length || 0) > 0
-                const totalRegisteredCredit =
-                  registeredClasses?.reduce(
-                    (acc: number, curr: GetClassesInfo200ItemSubjectClassItem) =>
-                      acc + (curr?.credit || 0),
-                    0
-                  ) ?? 0
-
-                const isOverMaxCredit = creditLimit.some(
-                  (limit) =>
-                    limit?.maxCredit != null &&
-                    totalRegisteredCredit + (record?.credit ?? 0) > limit.maxCredit
-                )
-                const isDisabled =
-                  isMaxed || isRegisteredBool || isPendingClassRegister || isOverMaxCredit
-
-                return (
-                  <Button
-                    disabled={isDisabled}
-                    type="text"
-                    onClick={() => {
-                      const subjectClassIds = [record?.id]
-                      handleClassRegister(subjectClassIds)
-                    }}
-                    className={cn(
-                      "text-primary flex justify-center items-center gap-2 cursor-pointer",
-                      isDisabled ? "opacity-50 cursor-not-allowed" : ""
-                    )}
-                  >
-                    <LogOutIcon />
-                    Đăng ký
-                  </Button>
-                )
-              },
-            },
-          ]}
-          onRow={(record) => {
-            const r = record as unknown as GetClassesInfo200ItemSubjectClassItem
-            return {
-              className: (r?.classRegisterLogs?.length || 0) > 0 ? "bg-green-200" : "",
-            }
-          }}
-          headerTitleKey={(record) => [record?.code, record?.name].filter(Boolean).join(" - ")}
-          childrenFieldName={"subjectClass"}
-          data={classesInfo?.data?.filter((cls) => cls?.subjectClass?.length > 0)}
-        />
-      )}
 
       <div className="flex gap-2 items-center">
         <b className="text-lg">Danh sách môn học đã đăng ký</b>
@@ -467,6 +349,154 @@ const DanhSachMonDangKy = ({
             x: "max-content",
           }}
           data={registeredClasses}
+          className="mb-2"
+        />
+      )}
+
+      <b className="text-lg">Danh sách môn học mở đăng ký</b>
+      {classesInfo?.status === 200 && (
+        <TableCollapse
+          defaultExpandAll
+          columns={[
+            {
+              title: "Mã học phần",
+              dataIndex: "code",
+              align: "center",
+              width: 120,
+            },
+            {
+              title: "Tên học phần",
+              dataIndex: "name",
+            },
+            {
+              title: "Số TC",
+              dataIndex: "credit",
+              align: "center",
+              width: 60,
+            },
+            {
+              title: "Bắt buộc",
+              align: "center",
+              width: 80,
+              render: (_, record) => (
+                <Checkbox
+                  checked={record?.type === $Enums.SubjectRequirementType.Mandatory}
+                  disabled
+                />
+              ),
+            },
+            {
+              title: "Giảng viên",
+              render: (_, record) =>
+                [
+                  record.mainLecturer?.userProfile?.fullname,
+                  record.extraLecturer?.userProfile?.fullname,
+                ]
+                  .filter(Boolean)
+                  .join(", "),
+            },
+            {
+              title: "Phòng học",
+              align: "center",
+              width: 150,
+              render: (_, record) => record?.room?.name,
+            },
+            {
+              title: "Số lượng",
+              align: "center",
+              width: 80,
+              render: (_, record) =>
+                `${record?._count?.subjectClassStudent || 0}/${record?.maxStudent}`,
+            },
+            {
+              title: "Thời khoá biểu",
+              width: 150,
+              align: "center",
+              render: (_, record) => {
+                return record?.subjectClassTimes?.uniqueByKey?.("dayOfWeek")?.map?.((tkb) => {
+                  return (
+                    <p>
+                      {tkb?.dayOfWeek === 8 ? "CN" : `T${tkb?.dayOfWeek}`} - {tkb?.startPeriod} -{" "}
+                      {tkb?.endPeriod}
+                    </p>
+                  )
+                })
+              },
+            },
+            {
+              title: "Học phí",
+              align: "center",
+              width: 120,
+              render: (_, record) =>
+                tuitionPerCredit
+                  ? `${((record?.credit || 0) * tuitionPerCredit).formatVND()}`
+                  : "-",
+            },
+            {
+              title: "Thao tác",
+              align: "center",
+              width: 120,
+              fixed: "right",
+              render: (_, record) => {
+                const isMaxed =
+                  (record?.maxStudent || 0) <= (record?._count?.subjectClassStudent || 0)
+                const isRegisteredBool = (record?.classRegisterLogs?.length || 0) > 0
+                const totalRegisteredCredit =
+                  registeredClasses?.reduce(
+                    (acc: number, curr: GetClassesInfo200ItemSubjectClassItem) =>
+                      acc + (curr?.credit || 0),
+                    0
+                  ) ?? 0
+
+                const isOverMaxCredit = creditLimit.some(
+                  (limit) =>
+                    limit?.maxCredit != null &&
+                    totalRegisteredCredit + (record?.credit ?? 0) > limit.maxCredit
+                )
+                const parentSubjectCode = classToSubjectCodeMap.get(record?.id ?? "")
+                const siblingAlreadyRegistered =
+                  !isRegisteredBool &&
+                  !!parentSubjectCode &&
+                  registeredSubjectCodes.has(parentSubjectCode)
+                const isDisabled =
+                  isMaxed ||
+                  isRegisteredBool ||
+                  isPendingClassRegister ||
+                  isOverMaxCredit ||
+                  siblingAlreadyRegistered
+
+                return (
+                  <Button
+                    disabled={isDisabled}
+                    type="text"
+                    onClick={() => {
+                      const subjectClassIds = [record?.id]
+                      handleClassRegister(subjectClassIds)
+                    }}
+                    className={cn(
+                      "text-primary flex justify-center items-center gap-2 cursor-pointer",
+                      isDisabled ? "opacity-50 cursor-not-allowed" : ""
+                    )}
+                  >
+                    <LogOutIcon />
+                    Đăng ký
+                  </Button>
+                )
+              },
+            },
+          ]}
+          onRow={(record) => {
+            const r = record as unknown as GetClassesInfo200ItemSubjectClassItem
+            return {
+              className:
+                (r?.classRegisterLogs?.length || 0) > 0
+                  ? "bg-green-200 [&>td]:!bg-green-200 [&>td]:hover:!bg-green-200"
+                  : "",
+            }
+          }}
+          headerTitleKey={(record) => [record?.code, record?.name].filter(Boolean).join(" - ")}
+          childrenFieldName={"subjectClass"}
+          data={classesInfo?.data?.filter((cls) => cls?.subjectClass?.length > 0)}
         />
       )}
     </div>
