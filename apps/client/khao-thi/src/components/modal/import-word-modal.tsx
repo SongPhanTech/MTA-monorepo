@@ -478,7 +478,7 @@ const WordImportModal: React.FC = () => {
             const difficultVal = difficultText.trim().replace(/\n/g, "↵") || "(trống)"
             errors.push({
               rowIndex: i,
-              message: `Sai mã — Loại: "${typeVal}", Độ khó: "${difficultVal}" (hợp lệ: TL, TN, TNM, DK, SX | NB, TH, VD, VDC)`,
+              message: `Sai mã — Loại: "${typeVal}", Độ khó: "${difficultVal}" (hợp lệ: TL, TN, TNN, DK, SX | NB, TH, VD, VDC)`,
             })
             continue
           }
@@ -760,7 +760,7 @@ const WordImportModal: React.FC = () => {
         q.answer
           ?.split(/[\n;]/)
           .map((line: string) => {
-            const match = line.match(/(\d+)\s*[:=]\s*(.+)/)
+            const match = line.match(/^\s*[([\{]?(\d+)[)\]\}\.\:\=\-]*\s*(.+)$/)
             if (!match) return null
             return {
               order: Number(match[1]),
