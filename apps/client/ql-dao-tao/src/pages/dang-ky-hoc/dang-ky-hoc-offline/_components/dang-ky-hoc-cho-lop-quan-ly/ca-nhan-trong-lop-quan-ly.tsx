@@ -345,7 +345,7 @@ export default function CaNhanTrongLopQuanLy({ hocLai }: RegisterClassProps) {
       ])
 
       const studentSubjectScores = scoreRes.data[0] as StudentSubjectScore[]
-      const studentIds = studentSubjectScores.map((s) => s.id)
+      const studentIds = studentSubjectScores.map((s) => s.studentId)
 
       for (const studentId of studentIds) {
         if (!selectedRowKeys.includes(studentId)) {
@@ -361,9 +361,9 @@ export default function CaNhanTrongLopQuanLy({ hocLai }: RegisterClassProps) {
           data: {
             where: {
               subjectClassId,
-              attendanceScore: { not: null },
-              midtermScore: { not: null },
-              examScore: { not: null },
+              studentId: {
+                notIn: selectedRowKeys as string[],
+              },
             },
           },
         },
