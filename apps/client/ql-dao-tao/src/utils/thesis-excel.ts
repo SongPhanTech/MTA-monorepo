@@ -709,23 +709,37 @@ export const exportHosobvlv = async ({
         thuky: thuky?.expert?.name || "",
         uyvien: uyvien?.expert?.name || "",
       }
-      const gapRow: TableRow = {
-        cells: [{ value: null, colSpan: 18, border: false }],
-      }
       return {
-        sheet: `${student.userProfile?.code}`,
+        // sheet: `${student.userProfile?.code}`,
         data: data,
-        tableStartCell: { row: 104, col: 1 },
-        rows: [gapRow],
+        // tableStartCell: { row: 104, col: 1 },
+        // rows: [gapRow],
       }
     })
-    await exportFromTemplate({
-      templateUrl: getMinioUrl("mta/template/HoSoBVLVTN.xlsx"),
-      sheets: allSheetOptions ?? [],
-      fileName: "Hosobvlv",
-      mergeSheetsToOne: true,
-      sheetName: "Hosobvlv",
-    })
+    const payload: ExcelTemplateBody = {
+      head: { data: null },
+      tail: { data: null },
+      fileName: "HoSoBVLVTN.",
+      path: "HoSoBVLVTN.xlsx",
+      payload: allSheetOptions?.filter((item) => item !== null) ?? [],
+      showGridLines: true,
+      wrapText: true,
+    }
+    const response = await excelTemplate(payload)
+    if (response.status !== 200) {
+      message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
+      return
+    }
+    const blob = response.data
+    downloadFile(blob, "Hosobvlv.xlsx")
+    message.success("Xuất file thành công")
+    // await exportFromTemplate({
+    //   templateUrl: getMinioUrl("mta/template/HoSoBVLVTN.xlsx"),
+    //   sheets: allSheetOptions ?? [],
+    //   fileName: "Hosobvlv",
+    //   mergeSheetsToOne: true,
+    //   sheetName: "Hosobvlv",
+    // })
   } catch (error) {
     message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
   } finally {
