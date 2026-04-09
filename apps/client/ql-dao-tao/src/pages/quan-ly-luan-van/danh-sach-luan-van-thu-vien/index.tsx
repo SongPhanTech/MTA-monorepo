@@ -1,0 +1,315 @@
+import Table from "@components/commons/table"
+import EditIcon from "@components/icons/edit"
+import { DEFAULT_PAGINATE_SIZE } from "@constants/constants"
+import type { FilterProps } from "@constants/type"
+import DefaultLayout from "@layouts/default-layout"
+import { ThesisType } from "@workspace/db/client"
+import {
+  useCountStudent,
+  useFindManyFixedClass,
+  useFindManyStudent,
+  useFindManyThesisSession,
+} from "@workspace/db/hooks"
+import { useAbility } from "@workspace/permissions/hooks"
+import { QL_DAO_TAO_PERMISSION } from "@workspace/router"
+import { useTrainingObjectTypeStore } from "@workspace/ui"
+import { Col, Form, Row, Select, Tag } from "antd"
+import dayjs from "dayjs"
+import type React from "react"
+import { useMemo, useState } from "react"
+import { useDisclosure } from "react-hook-disclosure-modal"
+import PutLibrarySubmission from "@components/modal/put-luan-van-thu-vien"
+
+interface SearchParams {
+  thesisSessionId?: string
+  fixedClassId?: string[]
+}
+
+export default function LibrarySubmissionPage() {
+  const { can } = useAbility()
+  const [currentPage, setCurrentPage] = useState(1)
+  const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
+  const { id: trainingObjectId } = useTrainingObjectTypeStore()
+  const [searchParams, setSearchParams] = useState<SearchParams>({})
+  const [trainingCourseId, setTrainingCourseId] = useState<string | null>(null)
+  const [filters, setFilters] = useState<FilterProps>({
+    name: undefined,
+    code: undefined,
+    title: undefined,
+  })
+
+  const { data: thesisSessionData } = useFindManyThesisSession({
+    orderBy: { startDate: "desc" },
+    where: { trainingObjectTypeId: trainingObjectId },
+    include: {
+      trainingObjectType: true,
+      trainingCourse: true,
+    },
+  })
+
+  const { data: fixedClasses } = useFindManyFixedClass(
+    { where: { trainingCourseId: trainingCourseId ?? "" } },
+    { enabled: !!trainingCourseId }
+  )
+
+  const studentWhere = useMemo(() => {
+    if (!searchParams.thesisSessionId) return { id: { in: [] } }
+    return {
+      ...(filters.name
+        ? {
+            userProfile: {
+              fullname: { contains: filters.name, mode: "insensitive" as const },
+            },
+          }
+        : {}),
+      ...(filters.code ? { code: { contains: filters.code, mode: "insensitive" as const } } : {}),
+      fixedClassId: {
+        in:
+          searchParams.fixedClassId && searchParams.fixedClassId.length > 0
+            ? searchParams.fixedClassId
+            : fixedClasses?.map((f) => f.id),
+      },
+      thesisRegistrations: {
+        some: {
+          thesisProject: {
+            thesisType: ThesisType.THESIS,
+            thesisSessionId: searchParams.thesisSessionId,
+            ...(filters.title
+              ? { title: { contains: filters.title, mode: "insensitive" as const } }
+              : {}),
+          },
+        },
+      },
+    }
+  }, [searchParams, fixedClasses, filters])
+
+  const { data: students = [] } = useFindManyStudent({
+    where: studentWhere,
+    include: {
+      userProfile: true,
+      fixedClass: true,
+      thesisRegistrations: {
+        include: {
+          thesisProject: {
+            include: {
+              supervisor: true,
+              coSupervisor: true,
+              librarySubmission: {
+                include: { documentFile: true },
+              },
+            },
+          },
+        },
+      },
+    },
+    take: numberOfPages,
+    skip: (currentPage - 1) * numberOfPages,
+  })
+
+  const { data: countStudent } = useCountStudent(
+    { where: studentWhere },
+    { enabled: !!searchParams.thesisSessionId }
+  )
+
+  const { onOpen: openPutLibrarySubmission } = useDisclosure<{ thesisProjectId: string }>({
+    tag: "PutLibrarySubmission",
+  })
+
+  const getSubmissionStatus = (librarySubmission: any) => {
+    if (!librarySubmission) return { label: "Chưa nộp", color: "default" }
+    const { isHardcopy, isSoftcopy } = librarySubmission
+    if (isHardcopy && isSoftcopy) return { label: "Đã nộp đầy đủ", color: "success" }
+    if (isHardcopy || isSoftcopy) return { label: "Nộp một phần", color: "warning" }
+    return { label: "Chưa nộp", color: "default" }
+  }
+
+  return (
+    <div>
+      <Row gutter={[16, 0]}>
+        <Col span={24}>
+          <Row gutter={[0, 16]} align="middle" justify="space-between">
+            <Col>
+              <Form.Item required className="mb-0">
+                <Select
+                  className="w-36"
+                  dropdownMatchSelectWidth={false}
+                  dropdownStyle={{ minWidth: 300 }}
+                  options={thesisSessionData?.map((item) => ({
+                    label: item.name,
+                    value: item.id,
+                  }))}
+                  onChange={(value) => {
+                    setSearchParams({ thesisSessionId: value as string })
+                    setTrainingCourseId(
+                      thesisSessionData?.find((x) => x.id === value)?.trainingCourse?.id || null
+                    )
+                    setCurrentPage(1)
+                  }}
+                  placeholder="Chọn đợt xét"
+                />
+              </Form.Item>
+            </Col>
+          </Row>
+        </Col>
+
+        <Col span={24}>
+          <Table
+            rowKey="id"
+            id="library-submission"
+            filters={filters}
+            setFilters={(value) => {
+              setFilters(value)
+              setCurrentPage(1)
+            }}
+            data={students}
+            columns={[
+              {
+                title: "STT",
+                width: 60,
+                align: "center",
+                fixed: "left",
+                render: (_, __, index) => index + 1 + (currentPage - 1) * numberOfPages,
+              },
+              {
+                title: "Mã sinh viên",
+                dataIndex: "studentCode",
+                width: 120,
+                align: "center",
+                type: "input",
+                render: (_, record) => record.code ?? "-",
+              },
+              {
+                title: "Họ tên",
+                dataIndex: "studentName",
+                width: 180,
+                type: "input",
+                align: "center",
+                render: (_, record) => record.userProfile?.fullname ?? "-",
+              },
+              {
+                title: "Lớp quản lý",
+                dataIndex: "fixedClass",
+                width: 150,
+                align: "center",
+                render: (_, record) => record.fixedClass?.name ?? "-",
+              },
+              {
+                title: "Tên đề tài",
+                dataIndex: "topicTitle",
+                width: 280,
+                type: "input",
+                align: "center",
+                render: (_, record) => record.thesisRegistrations?.[0]?.thesisProject?.title ?? "-",
+              },
+              {
+                title: "GVHD 1",
+                dataIndex: "supervisor",
+                width: 160,
+                align: "center",
+                render: (_, record) =>
+                  record.thesisRegistrations?.[0]?.thesisProject?.supervisor?.name ?? "-",
+              },
+              {
+                title: "GVHD 2",
+                dataIndex: "coSupervisor",
+                width: 160,
+                align: "center",
+                render: (_, record) =>
+                  record.thesisRegistrations?.[0]?.thesisProject?.coSupervisor?.name ?? "-",
+              },
+              {
+                title: "Ngày nộp",
+                dataIndex: "submissionDate",
+                width: 120,
+                align: "center",
+                render: (_, record) => {
+                  const date =
+                    record.thesisRegistrations?.[0]?.thesisProject?.librarySubmission
+                      ?.submissionDate
+                  return date ? dayjs(date).format("DD/MM/YYYY") : "-"
+                },
+              },
+              {
+                title: "Bản cứng",
+                dataIndex: "isHardcopy",
+                width: 100,
+                align: "center",
+                render: (_, record) =>
+                  record.thesisRegistrations?.[0]?.thesisProject?.librarySubmission?.isHardcopy ? (
+                    <Tag color="success">Đã nộp</Tag>
+                  ) : (
+                    <Tag color="default">Chưa nộp</Tag>
+                  ),
+              },
+              {
+                title: "Bản mềm",
+                dataIndex: "isSoftcopy",
+                width: 100,
+                align: "center",
+                render: (_, record) =>
+                  record.thesisRegistrations?.[0]?.thesisProject?.librarySubmission?.isSoftcopy ? (
+                    <Tag color="success">Đã nộp</Tag>
+                  ) : (
+                    <Tag color="default">Chưa nộp</Tag>
+                  ),
+              },
+              {
+                title: "Trạng thái",
+                dataIndex: "submissionStatus",
+                width: 150,
+                align: "center",
+                fixed: "right",
+                render: (_, record) => {
+                  const { label, color } = getSubmissionStatus(
+                    record.thesisRegistrations?.[0]?.thesisProject?.librarySubmission
+                  )
+                  return <Tag color={color}>{label}</Tag>
+                },
+              },
+              {
+                title: "Thao tác",
+                width: 80,
+                align: "center",
+                fixed: "right",
+                hidden: !can(
+                  QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_LUAN_VAN_DANH_SACH_LUAN_VAN_THU_VIEN,
+                  "SUA"
+                ),
+                render: (_, record) => {
+                  const thesisProjectId = record.thesisRegistrations?.[0]?.thesisProject?.id
+                  if (!thesisProjectId) return ""
+                  return (
+                    <Row className="justify-center gap-2">
+                      <EditIcon
+                        onClick={() => openPutLibrarySubmission({ thesisProjectId })}
+                        className="text-sm text-blue-700 cursor-pointer"
+                      />
+                    </Row>
+                  )
+                },
+              },
+            ]}
+            pagination={{
+              current: currentPage,
+              pageSize: numberOfPages,
+              total: countStudent ?? 0,
+              onChange: (page, pageSize) => {
+                if (numberOfPages === pageSize) {
+                  setCurrentPage(page)
+                } else {
+                  setCurrentPage(1)
+                  setNumberOfPages(pageSize)
+                }
+              },
+            }}
+          />
+        </Col>
+      </Row>
+      <PutLibrarySubmission />
+    </div>
+  )
+}
+
+LibrarySubmissionPage.getLayout = function getLayout(page: React.ReactElement) {
+  return <DefaultLayout>{page}</DefaultLayout>
+}

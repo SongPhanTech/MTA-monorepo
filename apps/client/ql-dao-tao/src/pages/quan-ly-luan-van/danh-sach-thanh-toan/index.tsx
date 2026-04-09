@@ -11,15 +11,25 @@ import {
   useCountPaymentRecord,
   useDeletePaymentRecord,
   useFindManyPaymentRecord,
+  useFindManyThesisSession,
 } from "@workspace/db/hooks"
 import { useAbility } from "@workspace/permissions/hooks"
 import { QL_DAO_TAO_PERMISSION } from "@workspace/router"
 import { useSemesterStore } from "@workspace/ui"
-import { Button, Col, Flex, message, Row, Tag } from "antd"
+import { Button, Col, Flex, message, Row, Tag, Form, Select } from "antd"
 import dayjs from "dayjs"
 import type React from "react"
 import { useEffect, useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
+import { useTrainingObjectTypeStore } from "@workspace/ui"
+
+interface ThesisProjectForm {
+  thesisSessionId: string
+  fixedClassId: string[]
+  organizationId: string
+  topicEntryDeadline?: ReturnType<typeof dayjs>
+  councilDeadline?: ReturnType<typeof dayjs>
+}
 
 export default function PaymentRecordPage() {
   const { can, canSome } = useAbility()
@@ -36,18 +46,27 @@ export default function PaymentRecordPage() {
     paymentDate: undefined,
     role: undefined,
   })
+  const [searchParams, setSearchParams] = useState<Partial<ThesisProjectForm>>({})
+  const { id: trainingObjectId } = useTrainingObjectTypeStore()
+  const [trainingCourseId, setTrainingCourseId] = useState<string | null>(null)
+  const [editingRowKeys, setEditingRowKeys] = useState<string[]>([])
 
   const where = useMemo(
     () => ({
-      councilMember: {
-        council: {
-          thesis: {
-            some: {
-              thesisType: ThesisType.THESIS,
+      ...(searchParams.thesisSessionId
+        ? {
+            councilMember: {
+              council: {
+                thesis: {
+                  some: {
+                    thesisType: ThesisType.THESIS,
+                    thesisSessionId: searchParams.thesisSessionId,
+                  },
+                },
+              },
             },
-          },
-        },
-      },
+          }
+        : { id: { in: [] } }),
       ...(filters.transactionCode
         ? {
             transactionCode: {
@@ -81,20 +100,26 @@ export default function PaymentRecordPage() {
             },
           }
         : {}),
-      ...(semesterId
-        ? {
-            councilMember: {
-              council: {
-                thesis: {
-                  some: { subjectClass: { semesterId } },
-                },
-              },
-            },
-          }
-        : {}),
     }),
-    [filters.name, filters.transactionCode, filters.paymentStatus, filters.paymentDate, semesterId]
+    [
+      searchParams.thesisSessionId,
+      filters.name,
+      filters.transactionCode,
+      filters.paymentStatus,
+      filters.paymentDate,
+    ]
   )
+
+  const { data: thesisSessionData } = useFindManyThesisSession({
+    orderBy: { startDate: "desc" },
+    where: {
+      trainingObjectTypeId: trainingObjectId,
+    },
+    include: {
+      trainingObjectType: true,
+      trainingCourse: true,
+    },
+  })
 
   const { data: paymentRecordData } = useFindManyPaymentRecord({
     where: {
@@ -109,8 +134,8 @@ export default function PaymentRecordPage() {
               thesis: {
                 where: {
                   thesisType: ThesisType.THESIS,
-                  ...(semesterId && {
-                    subjectClass: { semesterId },
+                  ...(searchParams.thesisSessionId && {
+                    thesisSessionId: searchParams.thesisSessionId,
                   }),
                 },
                 include: {
@@ -152,6 +177,7 @@ export default function PaymentRecordPage() {
   }, [isOpen])
 
   const { mutateAsync: deletePaymentRecord } = useDeletePaymentRecord()
+
   async function handleDelete(id: string) {
     try {
       showSpinner()
@@ -176,29 +202,50 @@ export default function PaymentRecordPage() {
     <div>
       <Row gutter={[16, 0]}>
         <Col span={24}>
-          <Row gutter={[0, 16]} align="top" justify="space-between">
+          <Row gutter={[0, 16]} align="middle" justify="space-between">
             <Col>
-              <Flex justify="end" gap={4}>
-                {can(
-                  QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DANH_SACH_THANH_TOAN,
-                  "THEM"
-                ) && (
-                  <Button
-                    onClick={() =>
-                      openUpdatePaymentStatus({
-                        paymentRecordIds: selectedRowKeys as string[],
-                      })
-                    }
-                    disabled={selectedRowKeys.length === 0}
-                    type="primary"
-                  >
-                    Cập nhật trạng thái
-                  </Button>
-                )}
-              </Flex>
+              <Form.Item name="thesisSessionId" label="Đợt xét" required className="mb-0">
+                <Select
+                  className="w-36"
+                  dropdownMatchSelectWidth={false}
+                  dropdownStyle={{ minWidth: 300 }}
+                  options={thesisSessionData?.map((item) => ({
+                    label: item.name,
+                    value: item.id,
+                  }))}
+                  onChange={(value) => {
+                    setSearchParams({
+                      ...searchParams,
+                      thesisSessionId: value as string,
+                    })
+                    setTrainingCourseId(
+                      thesisSessionData?.find((x) => x.id === value)?.trainingCourse?.id || null
+                    )
+                    setCurrentPage(1)
+                    setEditingRowKeys([])
+                  }}
+                  placeholder="Chọn đợt xét"
+                />
+              </Form.Item>
+            </Col>
+            <Col>
+              {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DANH_SACH_THANH_TOAN, "THEM") && (
+                <Button
+                  onClick={() =>
+                    openUpdatePaymentStatus({
+                      paymentRecordIds: selectedRowKeys as string[],
+                    })
+                  }
+                  disabled={selectedRowKeys.length === 0}
+                  type="primary"
+                >
+                  Cập nhật trạng thái
+                </Button>
+              )}
             </Col>
           </Row>
         </Col>
+
         <Col span={24}>
           <Table
             rowKey="id"

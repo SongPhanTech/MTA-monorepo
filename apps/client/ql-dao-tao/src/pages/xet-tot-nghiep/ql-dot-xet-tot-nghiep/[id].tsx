@@ -3,6 +3,7 @@ import Select from "@components/commons/select"
 import Table from "@components/commons/table"
 import EditIcon from "@components/icons/edit"
 import ViewIcon from "@components/icons/view"
+import DeleteIcon from "@components/icons/delete"
 import GraduationDecision from "@components/sub-pages/graduationDecision"
 import { DEFAULT_PAGINATE_SIZE } from "@constants/constants"
 import type { FilterProps } from "@constants/type"
@@ -969,26 +970,19 @@ export default function StudentGraduationApplication() {
                                     }}
                                     className="text-sm text-blue-700 cursor-pointer"
                                   />
-                                  {/* <DeleteIcon
-                                                                        disabled={
-                                                                            record.status ===
-                                                                            ApplicationStatus.APPROVED
-                                                                        }
-                                                                        popConfirm={{
-                                                                            onConfirm: (e) => {
-                                                                                handleDelete(
-                                                                                    record.id
-                                                                                )
-                                                                                e?.stopPropagation()
-                                                                            },
-                                                                            onCancel: (e) => {
-                                                                                e?.stopPropagation()
-                                                                            },
-                                                                        }}
-                                                                        onClick={(e) =>
-                                                                            e.stopPropagation()
-                                                                        }
-                                                                    /> */}
+                                  <DeleteIcon
+                                    disabled={record.status === ApplicationStatus.APPROVED}
+                                    popConfirm={{
+                                      onConfirm: (e) => {
+                                        handleDelete(record.id)
+                                        e?.stopPropagation()
+                                      },
+                                      onCancel: (e) => {
+                                        e?.stopPropagation()
+                                      },
+                                    }}
+                                    onClick={(e) => e.stopPropagation()}
+                                  />
                                 </Row>
                               )
                             }

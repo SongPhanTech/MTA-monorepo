@@ -67,19 +67,16 @@ const PutPaymentRecordDetail = () => {
   const { data: paymentRecord } = useFindUniquePaymentRecord(
     {
       where: { id },
-    },
-    { enabled: !!id }
-  )
-
-  const { data: expert = [] } = useFindManyExpertProfile({
-    include: {
-      lecturer: {
-        include: {
-          userProfile: true,
+      include: {
+        councilMember: {
+          include: {
+            expert: true,
+          },
         },
       },
     },
-  })
+    { enabled: !!id }
+  )
 
   useEffect(() => {
     if (paymentRecord) {
@@ -109,10 +106,16 @@ const PutPaymentRecordDetail = () => {
         <FormItem form={form} name="councilMemberId" label="Chuyên gia">
           <Select
             placeholder="Chọn chuyên gia"
-            options={expert.map((item) => ({
-              label: `${item.code ? `${item.code} -` : ""} ${item.lecturer?.userProfile.fullname || item.name}`,
-              value: item.id,
-            }))}
+            options={
+              paymentRecord?.councilMember
+                ? [
+                    {
+                      label: `${paymentRecord.councilMember.expert?.name ?? ""}`,
+                      value: paymentRecord.councilMember.id,
+                    },
+                  ]
+                : []
+            }
             disabled={true}
             allowClear
           />

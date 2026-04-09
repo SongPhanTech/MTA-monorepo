@@ -605,10 +605,16 @@ const NAVIGATION: NavigationType = {
             description: "Danh sách chuyên gia",
           },
           {
+            id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_LUAN_VAN_DANH_SACH_LUAN_VAN_THU_VIEN,
+            label: "Danh sách luận văn thư viện",
+            path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_LUAN_VAN_DANH_SACH_LUAN_VAN_THU_VIEN,
+            description: "Danh sách luận văn thư viện",
+          },
+          {
             id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_LUAN_VAN_DANH_SACH_THANH_TOAN,
-            label: "Danh sách thanh toán",
+            label: "Thanh toán hội đồng bảo vệ",
             path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_LUAN_VAN_DANH_SACH_THANH_TOAN,
-            description: "Danh sách thanh toán",
+            description: "Thanh toán hội đồng bảo vệ",
           },
           {
             id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_LUAN_VAN_DANH_SACH_THANH_TOAN_GVHD,
