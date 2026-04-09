@@ -338,38 +338,38 @@ const PutClassRegisterSession = () => {
                   ? record?.base10Max
                   : record?.base4Max,
             },
-            {
-              title: "TC Tối thiểu",
-              align: "center",
-              render: (_, record) => (
-                <FormItem
-                  form={form}
-                  label="Tín chỉ tối thiểu"
-                  name={[
-                    "creditLimit",
-                    getClassificationKey(
-                      record.baseScore === "Base10" ? record.base10Min : record.base4Min,
-                      record.baseScore === "Base4" ? record.base10Max : record.base4Max
-                    ),
-                    "minCredit",
-                  ]}
-                >
-                  <InputNumber
-                    className="w-full"
-                    min={0}
-                    // defaultValue={0}
-                    placeholder="Nhập tín chỉ tối thiểu"
-                  />
-                </FormItem>
-              ),
-            },
+            // {
+            //   title: "TC Tối thiểu",
+            //   align: "center",
+            //   render: (_, record) => (
+            //     <FormItem
+            //       form={form}
+            //       label="Tín chỉ tối thiểu"
+            //       name={[
+            //         "creditLimit",
+            //         getClassificationKey(
+            //           record.baseScore === "Base10" ? record.base10Min : record.base4Min,
+            //           record.baseScore === "Base4" ? record.base10Max : record.base4Max
+            //         ),
+            //         "minCredit",
+            //       ]}
+            //     >
+            //       <InputNumber
+            //         className="w-full"
+            //         min={0}
+            //         // defaultValue={0}
+            //         placeholder="Nhập tín chỉ tối thiểu"
+            //       />
+            //     </FormItem>
+            //   ),
+            // },
             {
               title: "TC Tối đa",
               align: "center",
               render: (_, record) => (
                 <FormItem
                   form={form}
-                  label="Tín chỉ tối đa"
+                  // label="Tín chỉ tối đa"
                   name={[
                     "creditLimit",
                     getClassificationKey(
