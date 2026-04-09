@@ -236,8 +236,8 @@ model ExpertProfile extends Base {
   bankAccountNumber            String? // số tài khoản ngân hàng
   bankName                     String? // tên ngân hàng
 
-  projectExpert                Boolean                @default(true)
-  thesisExpert                 Boolean                @default(true)
+  projectExpert                Boolean                @default(false)
+  thesisExpert                 Boolean                @default(false)
 
   eligiblePresident            Boolean                @default(false) // có thể làm chủ tịch
   eligibleSecretary            Boolean                @default(false) // có thể làm thư ký

@@ -23,8 +23,8 @@ const baseSchema = z.object({
     email: z.string().email().nullish(),
     bankAccountNumber: z.string().nullish(),
     bankName: z.string().nullish(),
-    projectExpert: z.boolean().default(true),
-    thesisExpert: z.boolean().default(true),
+    projectExpert: z.boolean().default(false),
+    thesisExpert: z.boolean().default(false),
     eligiblePresident: z.boolean().default(false),
     eligibleSecretary: z.boolean().default(false),
 }

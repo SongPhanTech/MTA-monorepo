@@ -17954,11 +17954,11 @@ const metadata: ModelMeta = {
                 }, projectExpert: {
                     name: "projectExpert",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, thesisExpert: {
                     name: "thesisExpert",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, eligiblePresident: {
                     name: "eligiblePresident",
                     type: "Boolean",

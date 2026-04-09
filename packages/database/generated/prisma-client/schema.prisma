@@ -4913,8 +4913,8 @@ model ExpertProfile {
   email                        String?
   bankAccountNumber            String?
   bankName                     String?
-  projectExpert                Boolean                @default(true)
-  thesisExpert                 Boolean                @default(true)
+  projectExpert                Boolean                @default(false)
+  thesisExpert                 Boolean                @default(false)
   eligiblePresident            Boolean                @default(false)
   eligibleSecretary            Boolean                @default(false)
   supervisedTheses             ThesisProject[]        @relation("SupervisorToThesis")
