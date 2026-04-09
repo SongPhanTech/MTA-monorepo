@@ -1342,7 +1342,7 @@ const ModalCauHinhLuanVan = () => {
                   labelAlign="left"
                   {...FORM_ITEM_LAYOUT}
                 >
-                  <InputNumber className="w-2/3" min={0} placeholder="Nhập kết quả" />
+                  <InputNumber className="w-2/3" placeholder="Nhập kết quả" />
                 </FormItem>
               </Col>
 
