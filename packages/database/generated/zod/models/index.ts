@@ -139,6 +139,7 @@ export * from './LoadCategory.schema';
 export * from './OutputStandard.schema';
 export * from './OutputStandardOnCurriculum.schema';
 export * from './Student.schema';
+export * from './TrainingActivity.schema';
 export * from './StudentSemesterResult.schema';
 export * from './StudentYearResult.schema';
 export * from './Notification.schema';

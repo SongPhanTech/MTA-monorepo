@@ -4612,6 +4612,31 @@ model Student {
   semesterTrainingScore          SemesterTrainingScore[]
   schoolYearTrainingScore        SchoolYearTrainingScore[]
   subjectClassAttendanceStudent  SubjectClassAttendanceStudent[]
+  trainingActivity               TrainingActivity[]
+
+  @@schema("ql-dao-tao")
+}
+
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model TrainingActivity {
+  id          String    @id() @default(cuid())
+  code        String?   @unique()
+  active      Boolean   @default(true)
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @default(now()) @updatedAt()
+  createdBy   String?   @default("") @db.Uuid()
+  student     Student   @relation(fields: [studentId], references: [id])
+  studentId   String
+  /// Loại hoạt động
+  category    String
+  /// Điểm hoạt động
+  score       Int
+  /// Ngày hoạt động
+  date        DateTime  @default(now())
 
   @@schema("ql-dao-tao")
 }

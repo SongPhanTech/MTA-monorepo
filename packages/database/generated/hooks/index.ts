@@ -139,6 +139,7 @@ export * from './load-category';
 export * from './output-standard';
 export * from './output-standard-on-curriculum';
 export * from './student';
+export * from './training-activity';
 export * from './student-semester-result';
 export * from './student-year-result';
 export * from './notification';
