@@ -555,39 +555,39 @@ app.openapi(classRegister, async (c) => {
         }
       }
     }
+  }
 
-    await prisma.$transaction(async (tx) => {
-      await tx.classRegisterLogs.createMany({
-        data: subjectClassIds.map((subjectClassId) => ({
-          classRegisterSessionId: sessionId,
-          studentId,
-          subjectClassId,
-        })),
-      })
-
-      for (const subjectClassId of subjectClassIds) {
-        const isExist = await tx.studentSubjectScore.findFirst({
-          where: { studentId, subjectClassId },
-        })
-        if (isExist) throw new Error("Bạn đã đăng ký học phần này")
-
-        const currentEnrolled = await tx.studentSubjectScore.count({ where: { subjectClassId } })
-        const subjectClass = await tx.subjectClass.findUniqueOrThrow({
-          where: { id: subjectClassId },
-          include: { subject: true },
-        })
-        if ((subjectClass.maxStudent || 0) <= currentEnrolled) {
-          throw new Error("Lớp học đã đủ số lượng sinh viên")
-        }
-
-        await tx.studentSubjectScore.create({
-          data: { subjectClassId, studentId, subjectVersionId: subjectClass.subjectId },
-        })
-      }
+  await prisma.$transaction(async (tx) => {
+    await tx.classRegisterLogs.createMany({
+      data: subjectClassIds.map((subjectClassId) => ({
+        classRegisterSessionId: sessionId,
+        studentId,
+        subjectClassId,
+      })),
     })
 
-    return c.json({ message: "success" }, 200)
-  }
+    for (const subjectClassId of subjectClassIds) {
+      const isExist = await tx.studentSubjectScore.findFirst({
+        where: { studentId, subjectClassId },
+      })
+      if (isExist) throw new Error("Bạn đã đăng ký học phần này")
+
+      const currentEnrolled = await tx.studentSubjectScore.count({ where: { subjectClassId } })
+      const subjectClass = await tx.subjectClass.findUniqueOrThrow({
+        where: { id: subjectClassId },
+        include: { subject: true },
+      })
+      if ((subjectClass.maxStudent || 0) <= currentEnrolled) {
+        throw new Error("Lớp học đã đủ số lượng sinh viên")
+      }
+
+      await tx.studentSubjectScore.create({
+        data: { subjectClassId, studentId, subjectVersionId: subjectClass.subjectId },
+      })
+    }
+  })
+
+  return c.json({ message: "success" }, 200)
 })
 
 const classUnregister = createRoute({
@@ -666,6 +666,24 @@ app.openapi(classUnregister, async (c) => {
       (item) => curriculumVersionId && item.curriculumVersionId === curriculumVersionId
     )?.id ?? (profile.educationAndTraining[0]?.id as string)
 
+  const studentSubjectScores = await prisma.studentSubjectScore.findMany({
+    where: {
+      studentId,
+      subjectClassId: { in: subjectClassIds },
+      attendanceScore: { not: null },
+      midtermScore: { not: null },
+      finalScore: { not: null },
+      examPaper: {},
+      studentResearchTopic: {},
+      studentInternship: {},
+    },
+    include: { studentSubjectScoreHistory: true },
+  })
+
+  if (studentSubjectScores.length > 0) {
+    return c.json({ message: "Bạn không thể hủy đăng ký lớp học đã có điểm" }, 400)
+  }
+
   await prisma.$transaction(async (tx) => {
     await tx.classRegisterLogs.deleteMany({
       where: {
@@ -678,6 +696,12 @@ app.openapi(classUnregister, async (c) => {
     })
 
     for (const subjectClassId of subjectClassIds) {
+      await tx.studentSubjectScoreHistory.deleteMany({
+        where: {
+          studentSubjectScore: { subjectClassId, studentId },
+        },
+      })
+
       await tx.studentSubjectScore.deleteMany({
         where: { subjectClassId, studentId },
       })
