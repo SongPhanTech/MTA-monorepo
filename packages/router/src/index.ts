@@ -522,6 +522,12 @@ const NAVIGATION: NavigationType = {
                 path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_DANH_MUC_XU_LY_HOC_TAP,
                 description: "Danh mục xử lý học tập",
               },
+              {
+                id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_DANH_MUC_CHUAN_DAU_RA,
+                label: "Chuẩn đầu ra",
+                path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_DANH_MUC_CHUAN_DAU_RA,
+                description: "Danh mục chuẩn đầu ra",
+              },
             ],
           },
         ],
