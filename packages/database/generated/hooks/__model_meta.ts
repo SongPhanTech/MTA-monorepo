@@ -5265,6 +5265,12 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'academicRankType',
+                }, expertProfile: {
+                    name: "expertProfile",
+                    type: "ExpertProfile",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'academicRankType',
                 },
             }, uniqueConstraints: {
                 Id: {
@@ -5350,6 +5356,12 @@ const metadata: ModelMeta = {
                 }, hocVi: {
                     name: "hocVi",
                     type: "HocVi",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'academicDegreeType',
+                }, expertProfile: {
+                    name: "expertProfile",
+                    type: "ExpertProfile",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'academicDegreeType',
@@ -17872,14 +17884,34 @@ const metadata: ModelMeta = {
                     name: "name",
                     type: "String",
                     isOptional: true,
-                }, academicRank: {
-                    name: "academicRank",
+                }, academicDegreeType: {
+                    name: "academicDegreeType",
+                    type: "DM_HocVi",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'expertProfile',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "Id": "academicDegreeTypeId" },
+                }, academicDegreeTypeId: {
+                    name: "academicDegreeTypeId",
                     type: "String",
                     isOptional: true,
-                }, academicDegree: {
-                    name: "academicDegree",
+                    isForeignKey: true,
+                    relationField: 'academicDegreeType',
+                }, academicRankType: {
+                    name: "academicRankType",
+                    type: "DM_HocHam",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'expertProfile',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "Id": "academicRankTypeId" },
+                }, academicRankTypeId: {
+                    name: "academicRankTypeId",
                     type: "String",
                     isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'academicRankType',
                 }, organization: {
                     name: "organization",
                     type: "String",
