@@ -475,6 +475,12 @@ const NAVIGATION: NavigationType = {
                 path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_NOI_DUNG_TINH_TAI,
                 description: "Nội dung tính tải",
               },
+              {
+                id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_QUA_TRINH_REN_LUYEN,
+                label: "Quá trình rèn luyện",
+                path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_QUA_TRINH_REN_LUYEN,
+                description: "Danh mục quá trình rèn luyện",
+              },
             ],
           },
           {
