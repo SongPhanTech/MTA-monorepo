@@ -40,6 +40,7 @@ export default {
     "CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO_ID": "/chuong-trinh-dao-tao/danh-muc-chuong-trinh-dao-tao/[id]",
     "CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO": "/chuong-trinh-dao-tao/danh-muc-chuong-trinh-dao-tao",
     "CHUONG_TRINH_DAO_TAO_DANH_SACH_MON_HOC": "/chuong-trinh-dao-tao/danh-sach-mon-hoc",
+    "CHUONG_TRINH_DAO_TAO_DS_LOP_MON_HOC": "/chuong-trinh-dao-tao/ds-lop-mon-hoc",
     "CHUONG_TRINH_DAO_TAO_KHOI_KIEN_THUC_CTDT": "/chuong-trinh-dao-tao/khoi-kien-thuc-ctdt",
     "CHUONG_TRINH_DAO_TAO_QL_MON_HOC": "/chuong-trinh-dao-tao/ql-mon-hoc",
     "DANG_KY_HOC_DANG_KY_HOC_OFFLINE": "/dang-ky-hoc/dang-ky-hoc-offline",

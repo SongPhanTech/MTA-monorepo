@@ -139,6 +139,7 @@ const NAVIGATION: NavigationType = {
             path: ROUTER_PATH.QL_DAO_TAO.CHUONG_TRINH_DAO_TAO_DANH_SACH_MON_HOC,
             description: "Danh sách môn học",
           },
+        
           {
             id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_QL_MON_HOC,
             label: "QL ràng buộc môn học",
@@ -176,6 +177,12 @@ const NAVIGATION: NavigationType = {
             id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_THONG_KE_THI_LAI,
             label: "Thống kê thi lại",
             path: ROUTER_PATH.QL_DAO_TAO.THONG_KE_THI_LAI,
+          },
+            {
+            id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DS_LOP_MON_HOC,
+            label: "Danh sách lớp môn học",
+            path: ROUTER_PATH.QL_DAO_TAO.CHUONG_TRINH_DAO_TAO_DS_LOP_MON_HOC,
+            description: "Danh sách lớp môn học",
           },
         ],
       },
