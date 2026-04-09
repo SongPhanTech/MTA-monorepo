@@ -56,6 +56,7 @@ export default {
     "DANH_MUC_DANH_MUC_PHONG_HOC_PHONG_HOC_ID": "/danh-muc/danh-muc-phong-hoc/phong-hoc/[id]",
     "DANH_MUC_DANH_MUC_XU_LY_HOC_TAP_ID": "/danh-muc/danh-muc-xu-ly-hoc-tap/[id]",
     "DANH_MUC_DANH_MUC_XU_LY_HOC_TAP": "/danh-muc/danh-muc-xu-ly-hoc-tap",
+    "DANH_MUC_DANH_MUC_CHUAN_DAU_RA": "/danh-muc/danh-muc-chuan-dau-ra",
     "DANH_MUC_DOI_TUONG_DAO_TAO": "/danh-muc/doi-tuong-dao-tao",
     "DANH_MUC_HINH_THUC_HUAN_LUYEN": "/danh-muc/hinh-thuc-huan-luyen",
     "DANH_MUC_KHOA_HUAN_LUYEN": "/danh-muc/khoa-huan-luyen",

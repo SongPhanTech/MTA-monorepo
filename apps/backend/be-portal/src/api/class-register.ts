@@ -617,6 +617,24 @@ app.openapi(classUnregister, async (c) => {
       (item) => curriculumVersionId && item.curriculumVersionId === curriculumVersionId
     )?.id ?? (profile.educationAndTraining[0]?.id as string)
 
+  const studentSubjectScores = await prisma.studentSubjectScore.findMany({
+    where: {
+      studentId,
+      subjectClassId: { in: subjectClassIds },
+      attendanceScore: { not: null },
+      midtermScore: { not: null },
+      finalScore: { not: null },
+      examPaper: {},
+      studentResearchTopic: {},
+      studentInternship: {},
+    },
+    include: { studentSubjectScoreHistory: true },
+  })
+
+  if (studentSubjectScores.length > 0) {
+    return c.json({ message: "Bạn không thể hủy đăng ký lớp học đã có điểm" }, 400)
+  }
+
   await prisma.$transaction(async (tx) => {
     await tx.classRegisterLogs.deleteMany({
       where: {
