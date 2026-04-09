@@ -57,14 +57,12 @@ const buildConflictMap = (
 
 const ThoiKhoaBieuDangKy = ({
   registeredClasses,
-  tuitionPerCredit,
   sessionId,
   curriculumVersionId,
   onUnregisterSuccess,
   isEdit = true,
 }: {
   registeredClasses: GetClassesInfo200ItemSubjectClassItem[]
-  tuitionPerCredit?: number
   sessionId: string
   curriculumVersionId: string
   onUnregisterSuccess?: () => void
@@ -126,12 +124,6 @@ const ThoiKhoaBieuDangKy = ({
 
   return (
     <div className="overflow-x-auto mb-4">
-      {conflictMap.size > 0 && (
-        <div className="flex items-center gap-2 mb-2 text-red-600 text-xs font-medium">
-          <CircleAlertIcon size={14} />
-          Có môn học bị trùng tiết, vui lòng kiểm tra lại!
-        </div>
-      )}
       <table className="w-full border-collapse text-xs" style={{ tableLayout: "fixed" }}>
         <colgroup>
           <col style={{ width: 100 }} />
@@ -207,20 +199,13 @@ const ThoiKhoaBieuDangKy = ({
                                 )
                               </p>
                               {course.room && (
-                                <p className="text-gray-600 truncate">
+                                <p className="text-gray-600 whitespace-normal break-words leading-tight">
                                   {[course.room.name, course.room.building?.name]
                                     .filter(Boolean)
                                     .join(" - ")}
-                                </p>
-                              )}
-                              {course.room?.building?.trainingLocation?.name && (
-                                <p className="text-gray-500 truncate">
-                                  ({course.room.building.trainingLocation.name})
-                                </p>
-                              )}
-                              {tuitionPerCredit && (
-                                <p className="text-gray-500">
-                                  {((course.credit || 0) * tuitionPerCredit).formatVND()}
+                                  {course.room.building?.trainingLocation?.name
+                                    ? ` (${course.room.building.trainingLocation.name})`
+                                    : ""}
                                 </p>
                               )}
                             </div>
