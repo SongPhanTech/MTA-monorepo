@@ -111,7 +111,7 @@ const PutTrainingCourseModal = () => {
             criteria: true,
           },
         }, // học bổng
-        academicWarningRule: true, // cảnh cáo học tập,
+        academicWarningRule: true, // cảnh báo học tập,
         academicActionConfig: {
           include: {
             ruleSets: {
@@ -815,7 +815,7 @@ const PutTrainingCourseModal = () => {
                   <span className="text-primary font-bold">Sao chép tham số cấu hình</span>
                   <Tooltip
                     placement="topLeft"
-                    title="Sao chép tài liệu đính kèm, tham số bổ sung, bảng chuyển đổi điểm, xếp loại học tập, học bổng, cảnh cáo học tập, xử lý học tập từ Khoá đã chọn sang Khoá hiện tại"
+                    title="Sao chép tài liệu đính kèm, tham số bổ sung, bảng chuyển đổi điểm, xếp loại học tập, học bổng, cảnh báo học tập, xử lý học tập từ Khoá đã chọn sang Khoá hiện tại"
                   >
                     <BadgeHelpIcon size={16} style={{ margin: "0 0 -1px" }} />
                   </Tooltip>

@@ -367,7 +367,7 @@ export default function ModalChiTietLopBienChe() {
               render: (value) => (value ? dayjs(value).format("DD/MM/YYYY") : ""),
             },
             {
-              title: "Cảnh cáo học tập",
+              title: "Cảnh báo học tập",
               dataIndex: "academicWarningLevel",
               width: 100,
               align: "center",

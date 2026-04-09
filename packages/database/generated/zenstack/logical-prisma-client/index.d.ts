@@ -1398,6 +1398,16 @@ export type OutputStandardOnCurriculum = $Result.DefaultSelection<Prisma.$Output
  */
 export type Student = $Result.DefaultSelection<Prisma.$StudentPayload>;
 /**
+ * Model TrainingActivity
+ * @
+ * @allow ('all', auth() != null)
+ * @
+ * @deny ('read', deletedAt != null)
+ * @
+ * @allow ('read', auth() != null)
+ */
+export type TrainingActivity = $Result.DefaultSelection<Prisma.$TrainingActivityPayload>;
+/**
  * Model StudentSemesterResult
  * @
  * @allow ('all', auth() != null)
@@ -2457,7 +2467,7 @@ export type NoteReminder = $Result.DefaultSelection<Prisma.$NoteReminderPayload>
 export type AcademicWarningRule = $Result.DefaultSelection<Prisma.$AcademicWarningRulePayload>;
 /**
  * Model AcademicWarning
- * Cảnh cáo học tập
+ * Cảnh báo học tập
  * @
  * @allow ('all', auth() != null)
  * @
@@ -4130,6 +4140,15 @@ export class PrismaClient<ClientOptions extends Prisma.PrismaClientOptions = Pri
      * ```
      */
     get student(): Prisma.StudentDelegate<ExtArgs, ClientOptions>;
+    /**
+     * `prisma.trainingActivity`: Exposes CRUD operations for the **TrainingActivity** model.
+     * Example usage:
+     * ```ts
+     * // Fetch zero or more TrainingActivities
+     * const trainingActivities = await prisma.trainingActivity.findMany()
+     * ```
+     */
+    get trainingActivity(): Prisma.TrainingActivityDelegate<ExtArgs, ClientOptions>;
     /**
      * `prisma.studentSemesterResult`: Exposes CRUD operations for the **StudentSemesterResult** model.
      * Example usage:
@@ -6263,6 +6282,7 @@ export namespace Prisma {
         OutputStandard: 'OutputStandard',
         OutputStandardOnCurriculum: 'OutputStandardOnCurriculum',
         Student: 'Student',
+        TrainingActivity: 'TrainingActivity',
         StudentSemesterResult: 'StudentSemesterResult',
         StudentYearResult: 'StudentYearResult',
         Notification: 'Notification',
@@ -8798,6 +8818,20 @@ export namespace Prisma {
         strengthTrainingPass: 'strengthTrainingPass',
         militaryTrainingPass: 'militaryTrainingPass'
     };
+    export const TrainingActivityScalarFieldEnum: {
+        id: 'id',
+        code: 'code',
+        active: 'active',
+        description: 'description',
+        deletedAt: 'deletedAt',
+        createdAt: 'createdAt',
+        updatedAt: 'updatedAt',
+        createdBy: 'createdBy',
+        studentId: 'studentId',
+        category: 'category',
+        score: 'score',
+        date: 'date'
+    };
     export const StudentSemesterResultScalarFieldEnum: {
         id: 'id',
         code: 'code',
@@ -9286,8 +9320,8 @@ export namespace Prisma {
         createdBy: 'createdBy',
         lecturerId: 'lecturerId',
         name: 'name',
-        academicRank: 'academicRank',
-        academicDegree: 'academicDegree',
+        academicDegreeTypeId: 'academicDegreeTypeId',
+        academicRankTypeId: 'academicRankTypeId',
         organization: 'organization',
         position: 'position',
         specialization: 'specialization',
@@ -12348,6 +12382,14 @@ export namespace Prisma {
         curriculumVersionId: 'curriculumVersionId',
         curriculumVersionParallelId: 'curriculumVersionParallelId'
     };
+    export const TrainingActivityOrderByRelevanceFieldEnum: {
+        id: 'id',
+        code: 'code',
+        description: 'description',
+        createdBy: 'createdBy',
+        studentId: 'studentId',
+        category: 'category'
+    };
     export const StudentSemesterResultOrderByRelevanceFieldEnum: {
         id: 'id',
         code: 'code',
@@ -12621,8 +12663,8 @@ export namespace Prisma {
         createdBy: 'createdBy',
         lecturerId: 'lecturerId',
         name: 'name',
-        academicRank: 'academicRank',
-        academicDegree: 'academicDegree',
+        academicDegreeTypeId: 'academicDegreeTypeId',
+        academicRankTypeId: 'academicRankTypeId',
         organization: 'organization',
         position: 'position',
         specialization: 'specialization',
@@ -32327,6 +32369,7 @@ export namespace Prisma {
         readonly [Symbol.toStringTag]: "PrismaPromise";
         profiles<T extends DM_HocHam$profilesArgs<ExtArgs> = {}>(args?: Subset<T, DM_HocHam$profilesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         hocHam<T extends DM_HocHam$hocHamArgs<ExtArgs> = {}>(args?: Subset<T, DM_HocHam$hocHamArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$HocHamPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        expertProfile<T extends DM_HocHam$expertProfileArgs<ExtArgs> = {}>(args?: Subset<T, DM_HocHam$expertProfileArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExpertProfilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         /**
          * Attaches callbacks for the resolution and/or rejection of the Promise.
          * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -32715,6 +32758,7 @@ export namespace Prisma {
         readonly [Symbol.toStringTag]: "PrismaPromise";
         profiles<T extends DM_HocVi$profilesArgs<ExtArgs> = {}>(args?: Subset<T, DM_HocVi$profilesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         hocVi<T extends DM_HocVi$hocViArgs<ExtArgs> = {}>(args?: Subset<T, DM_HocVi$hocViArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$HocViPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        expertProfile<T extends DM_HocVi$expertProfileArgs<ExtArgs> = {}>(args?: Subset<T, DM_HocVi$expertProfileArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExpertProfilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         /**
          * Attaches callbacks for the resolution and/or rejection of the Promise.
          * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -66321,6 +66365,7 @@ export namespace Prisma {
         semesterTrainingScore<T extends Student$semesterTrainingScoreArgs<ExtArgs> = {}>(args?: Subset<T, Student$semesterTrainingScoreArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SemesterTrainingScorePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         schoolYearTrainingScore<T extends Student$schoolYearTrainingScoreArgs<ExtArgs> = {}>(args?: Subset<T, Student$schoolYearTrainingScoreArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SchoolYearTrainingScorePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         subjectClassAttendanceStudent<T extends Student$subjectClassAttendanceStudentArgs<ExtArgs> = {}>(args?: Subset<T, Student$subjectClassAttendanceStudentArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SubjectClassAttendanceStudentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        trainingActivity<T extends Student$trainingActivityArgs<ExtArgs> = {}>(args?: Subset<T, Student$trainingActivityArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TrainingActivityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         /**
          * Attaches callbacks for the resolution and/or rejection of the Promise.
          * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -66391,6 +66436,390 @@ export namespace Prisma {
         readonly ITCertificationPass: FieldRef<"Student", 'Boolean'>;
         readonly strengthTrainingPass: FieldRef<"Student", 'Boolean'>;
         readonly militaryTrainingPass: FieldRef<"Student", 'Boolean'>;
+    }
+
+    export interface TrainingActivityDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+        [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['TrainingActivity'], meta: { name: 'TrainingActivity' } };
+        /**
+         * Fields of the TrainingActivity model
+         */
+        readonly fields: TrainingActivityFieldRefs;
+        /**
+         * Find zero or one TrainingActivity that matches the filter.
+         * @param {TrainingActivityFindUniqueArgs} args - Arguments to find a TrainingActivity
+         * @example
+         * // Get one TrainingActivity
+         * const trainingActivity = await prisma.trainingActivity.findUnique({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findUnique<T extends TrainingActivityFindUniqueArgs>(args: SelectSubset<T, TrainingActivityFindUniqueArgs<ExtArgs>>): Prisma__TrainingActivityClient<$Result.GetResult<Prisma.$TrainingActivityPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find one TrainingActivity that matches the filter or throw an error with `error.code='P2025'`
+         * if no matches were found.
+         * @param {TrainingActivityFindUniqueOrThrowArgs} args - Arguments to find a TrainingActivity
+         * @example
+         * // Get one TrainingActivity
+         * const trainingActivity = await prisma.trainingActivity.findUniqueOrThrow({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findUniqueOrThrow<T extends TrainingActivityFindUniqueOrThrowArgs>(args: SelectSubset<T, TrainingActivityFindUniqueOrThrowArgs<ExtArgs>>): Prisma__TrainingActivityClient<$Result.GetResult<Prisma.$TrainingActivityPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find the first TrainingActivity that matches the filter.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {TrainingActivityFindFirstArgs} args - Arguments to find a TrainingActivity
+         * @example
+         * // Get one TrainingActivity
+         * const trainingActivity = await prisma.trainingActivity.findFirst({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findFirst<T extends TrainingActivityFindFirstArgs>(args?: SelectSubset<T, TrainingActivityFindFirstArgs<ExtArgs>>): Prisma__TrainingActivityClient<$Result.GetResult<Prisma.$TrainingActivityPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find the first TrainingActivity that matches the filter or
+         * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {TrainingActivityFindFirstOrThrowArgs} args - Arguments to find a TrainingActivity
+         * @example
+         * // Get one TrainingActivity
+         * const trainingActivity = await prisma.trainingActivity.findFirstOrThrow({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findFirstOrThrow<T extends TrainingActivityFindFirstOrThrowArgs>(args?: SelectSubset<T, TrainingActivityFindFirstOrThrowArgs<ExtArgs>>): Prisma__TrainingActivityClient<$Result.GetResult<Prisma.$TrainingActivityPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find zero or more TrainingActivities that matches the filter.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {TrainingActivityFindManyArgs} args - Arguments to filter and select certain fields only.
+         * @example
+         * // Get all TrainingActivities
+         * const trainingActivities = await prisma.trainingActivity.findMany()
+         *
+         * // Get first 10 TrainingActivities
+         * const trainingActivities = await prisma.trainingActivity.findMany({ take: 10 })
+         *
+         * // Only select the `id`
+         * const trainingActivityWithIdOnly = await prisma.trainingActivity.findMany({ select: { id: true } })
+         */
+        findMany<T extends TrainingActivityFindManyArgs>(args?: SelectSubset<T, TrainingActivityFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TrainingActivityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>;
+        /**
+         * Create a TrainingActivity.
+         * @param {TrainingActivityCreateArgs} args - Arguments to create a TrainingActivity.
+         * @example
+         * // Create one TrainingActivity
+         * const TrainingActivity = await prisma.trainingActivity.create({
+         *   data: {
+         *     // ... data to create a TrainingActivity
+         *   }
+         * })
+         */
+        create<T extends TrainingActivityCreateArgs>(args: SelectSubset<T, TrainingActivityCreateArgs<ExtArgs>>): Prisma__TrainingActivityClient<$Result.GetResult<Prisma.$TrainingActivityPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Create many TrainingActivities.
+         * @param {TrainingActivityCreateManyArgs} args - Arguments to create many TrainingActivities.
+         * @example
+         * // Create many TrainingActivities
+         * const trainingActivity = await prisma.trainingActivity.createMany({
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         */
+        createMany<T extends TrainingActivityCreateManyArgs>(args?: SelectSubset<T, TrainingActivityCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Create many TrainingActivities and returns the data saved in the database.
+         * @param {TrainingActivityCreateManyAndReturnArgs} args - Arguments to create many TrainingActivities.
+         * @example
+         * // Create many TrainingActivities
+         * const trainingActivity = await prisma.trainingActivity.createManyAndReturn({
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         *
+         * // Create many TrainingActivities and only return the `id`
+         * const trainingActivityWithIdOnly = await prisma.trainingActivity.createManyAndReturn({
+         *   select: { id: true },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         */
+        createManyAndReturn<T extends TrainingActivityCreateManyAndReturnArgs>(args?: SelectSubset<T, TrainingActivityCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TrainingActivityPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>;
+        /**
+         * Delete a TrainingActivity.
+         * @param {TrainingActivityDeleteArgs} args - Arguments to delete one TrainingActivity.
+         * @example
+         * // Delete one TrainingActivity
+         * const TrainingActivity = await prisma.trainingActivity.delete({
+         *   where: {
+         *     // ... filter to delete one TrainingActivity
+         *   }
+         * })
+         */
+        delete<T extends TrainingActivityDeleteArgs>(args: SelectSubset<T, TrainingActivityDeleteArgs<ExtArgs>>): Prisma__TrainingActivityClient<$Result.GetResult<Prisma.$TrainingActivityPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Update one TrainingActivity.
+         * @param {TrainingActivityUpdateArgs} args - Arguments to update one TrainingActivity.
+         * @example
+         * // Update one TrainingActivity
+         * const trainingActivity = await prisma.trainingActivity.update({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: {
+         *     // ... provide data here
+         *   }
+         * })
+         */
+        update<T extends TrainingActivityUpdateArgs>(args: SelectSubset<T, TrainingActivityUpdateArgs<ExtArgs>>): Prisma__TrainingActivityClient<$Result.GetResult<Prisma.$TrainingActivityPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Delete zero or more TrainingActivities.
+         * @param {TrainingActivityDeleteManyArgs} args - Arguments to filter TrainingActivities to delete.
+         * @example
+         * // Delete a few TrainingActivities
+         * const { count } = await prisma.trainingActivity.deleteMany({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        deleteMany<T extends TrainingActivityDeleteManyArgs>(args?: SelectSubset<T, TrainingActivityDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Update zero or more TrainingActivities.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {TrainingActivityUpdateManyArgs} args - Arguments to update one or more rows.
+         * @example
+         * // Update many TrainingActivities
+         * const trainingActivity = await prisma.trainingActivity.updateMany({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: {
+         *     // ... provide data here
+         *   }
+         * })
+         */
+        updateMany<T extends TrainingActivityUpdateManyArgs>(args: SelectSubset<T, TrainingActivityUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Update zero or more TrainingActivities and returns the data updated in the database.
+         * @param {TrainingActivityUpdateManyAndReturnArgs} args - Arguments to update many TrainingActivities.
+         * @example
+         * // Update many TrainingActivities
+         * const trainingActivity = await prisma.trainingActivity.updateManyAndReturn({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         *
+         * // Update zero or more TrainingActivities and only return the `id`
+         * const trainingActivityWithIdOnly = await prisma.trainingActivity.updateManyAndReturn({
+         *   select: { id: true },
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         */
+        updateManyAndReturn<T extends TrainingActivityUpdateManyAndReturnArgs>(args: SelectSubset<T, TrainingActivityUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TrainingActivityPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>;
+        /**
+         * Create or update one TrainingActivity.
+         * @param {TrainingActivityUpsertArgs} args - Arguments to update or create a TrainingActivity.
+         * @example
+         * // Update or create a TrainingActivity
+         * const trainingActivity = await prisma.trainingActivity.upsert({
+         *   create: {
+         *     // ... data to create a TrainingActivity
+         *   },
+         *   update: {
+         *     // ... in case it already exists, update
+         *   },
+         *   where: {
+         *     // ... the filter for the TrainingActivity we want to update
+         *   }
+         * })
+         */
+        upsert<T extends TrainingActivityUpsertArgs>(args: SelectSubset<T, TrainingActivityUpsertArgs<ExtArgs>>): Prisma__TrainingActivityClient<$Result.GetResult<Prisma.$TrainingActivityPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Count the number of TrainingActivities.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {TrainingActivityCountArgs} args - Arguments to filter TrainingActivities to count.
+         * @example
+         * // Count the number of TrainingActivities
+         * const count = await prisma.trainingActivity.count({
+         *   where: {
+         *     // ... the filter for the TrainingActivities we want to count
+         *   }
+         * })
+         */
+        count<T extends TrainingActivityCountArgs>(args?: Subset<T, TrainingActivityCountArgs>): Prisma.PrismaPromise<
+            T extends $Utils.Record<'select', any>
+            ? T['select'] extends true
+            ? number
+            : GetScalarType<T['select'], TrainingActivityCountAggregateOutputType>
+            : number
+        >;
+        /**
+         * Allows you to perform aggregations operations on a TrainingActivity.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {TrainingActivityAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+         * @example
+         * // Ordered by age ascending
+         * // Where email contains prisma.io
+         * // Limited to the 10 users
+         * const aggregations = await prisma.user.aggregate({
+         *   _avg: {
+         *     age: true,
+         *   },
+         *   where: {
+         *     email: {
+         *       contains: "prisma.io",
+         *     },
+         *   },
+         *   orderBy: {
+         *     age: "asc",
+         *   },
+         *   take: 10,
+         * })
+         */
+        aggregate<T extends TrainingActivityAggregateArgs>(args: Subset<T, TrainingActivityAggregateArgs>): Prisma.PrismaPromise<GetTrainingActivityAggregateType<T>>;
+        /**
+         * Group by TrainingActivity.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {TrainingActivityGroupByArgs} args - Group by arguments.
+         * @example
+         * // Group by city, order by createdAt, get count
+         * const result = await prisma.user.groupBy({
+         *   by: ['city', 'createdAt'],
+         *   orderBy: {
+         *     createdAt: true
+         *   },
+         *   _count: {
+         *     _all: true
+         *   },
+         * })
+         */
+        groupBy<T extends TrainingActivityGroupByArgs, HasSelectOrTake extends Or<
+            Extends<'skip', Keys<T>>,
+            Extends<'take', Keys<T>>
+        >, OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: TrainingActivityGroupByArgs['orderBy'] }
+        : { orderBy?: TrainingActivityGroupByArgs['orderBy'] }, OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>, ByFields extends MaybeTupleToUnion<T['by']>, ByValid extends Has<ByFields, OrderFields>, HavingFields extends GetHavingFields<T['having']>, HavingValid extends Has<ByFields, HavingFields>, ByEmpty extends T['by'] extends never[] ? True : False, InputErrors extends ByEmpty extends True
+        ? `Error: "by" must not be empty.`
+        : HavingValid extends False
+        ? {
+            [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+            ]
+        }[HavingFields]
+        : 'take' extends Keys<T>
+        ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+        : 'skip' extends Keys<T>
+        ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+        : ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]>(args: SubsetIntersection<T, TrainingActivityGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetTrainingActivityGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>;
+    }
+
+    /**
+     * The delegate class that acts as a "Promise-like" for TrainingActivity.
+     * Why is this prefixed with `Prisma__`?
+     * Because we want to prevent naming conflicts as mentioned in
+     * https://github.com/prisma/prisma-client-js/issues/707
+     */
+    export interface Prisma__TrainingActivityClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+        readonly [Symbol.toStringTag]: "PrismaPromise";
+        student<T extends StudentDefaultArgs<ExtArgs> = {}>(args?: Subset<T, StudentDefaultArgs<ExtArgs>>): Prisma__StudentClient<$Result.GetResult<Prisma.$StudentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Attaches callbacks for the resolution and/or rejection of the Promise.
+         * @param onfulfilled The callback to execute when the Promise is resolved.
+         * @param onrejected The callback to execute when the Promise is rejected.
+         * @returns A Promise for the completion of which ever callback is executed.
+         */
+        then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>;
+        /**
+         * Attaches a callback for only the rejection of the Promise.
+         * @param onrejected The callback to execute when the Promise is rejected.
+         * @returns A Promise for the completion of the callback.
+         */
+        catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>;
+        /**
+         * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+         * resolved value cannot be modified from the callback.
+         * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+         * @returns A Promise for the completion of the callback.
+         */
+        finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+    }
+
+    /**
+     * Fields of the TrainingActivity model
+     */
+    interface TrainingActivityFieldRefs {
+        readonly id: FieldRef<"TrainingActivity", 'String'>;
+        readonly code: FieldRef<"TrainingActivity", 'String'>;
+        readonly active: FieldRef<"TrainingActivity", 'Boolean'>;
+        readonly description: FieldRef<"TrainingActivity", 'String'>;
+        readonly deletedAt: FieldRef<"TrainingActivity", 'DateTime'>;
+        readonly createdAt: FieldRef<"TrainingActivity", 'DateTime'>;
+        readonly updatedAt: FieldRef<"TrainingActivity", 'DateTime'>;
+        readonly createdBy: FieldRef<"TrainingActivity", 'String'>;
+        readonly studentId: FieldRef<"TrainingActivity", 'String'>;
+        readonly category: FieldRef<"TrainingActivity", 'String'>;
+        readonly score: FieldRef<"TrainingActivity", 'Int'>;
+        readonly date: FieldRef<"TrainingActivity", 'DateTime'>;
     }
 
     export interface StudentSemesterResultDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
@@ -75818,6 +76247,8 @@ export namespace Prisma {
     export interface Prisma__ExpertProfileClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
         readonly [Symbol.toStringTag]: "PrismaPromise";
         lecturer<T extends ExpertProfile$lecturerArgs<ExtArgs> = {}>(args?: Subset<T, ExpertProfile$lecturerArgs<ExtArgs>>): Prisma__LecturerClient<$Result.GetResult<Prisma.$LecturerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        academicDegreeType<T extends ExpertProfile$academicDegreeTypeArgs<ExtArgs> = {}>(args?: Subset<T, ExpertProfile$academicDegreeTypeArgs<ExtArgs>>): Prisma__DM_HocViClient<$Result.GetResult<Prisma.$DM_HocViPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        academicRankType<T extends ExpertProfile$academicRankTypeArgs<ExtArgs> = {}>(args?: Subset<T, ExpertProfile$academicRankTypeArgs<ExtArgs>>): Prisma__DM_HocHamClient<$Result.GetResult<Prisma.$DM_HocHamPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         major<T extends ExpertProfile$majorArgs<ExtArgs> = {}>(args?: Subset<T, ExpertProfile$majorArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TrainingMajorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         supervisedTheses<T extends ExpertProfile$supervisedThesesArgs<ExtArgs> = {}>(args?: Subset<T, ExpertProfile$supervisedThesesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ThesisProjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         coSupervisedTheses<T extends ExpertProfile$coSupervisedThesesArgs<ExtArgs> = {}>(args?: Subset<T, ExpertProfile$coSupervisedThesesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ThesisProjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
@@ -75865,8 +76296,8 @@ export namespace Prisma {
         readonly createdBy: FieldRef<"ExpertProfile", 'String'>;
         readonly lecturerId: FieldRef<"ExpertProfile", 'String'>;
         readonly name: FieldRef<"ExpertProfile", 'String'>;
-        readonly academicRank: FieldRef<"ExpertProfile", 'String'>;
-        readonly academicDegree: FieldRef<"ExpertProfile", 'String'>;
+        readonly academicDegreeTypeId: FieldRef<"ExpertProfile", 'String'>;
+        readonly academicRankTypeId: FieldRef<"ExpertProfile", 'String'>;
         readonly organization: FieldRef<"ExpertProfile", 'String'>;
         readonly position: FieldRef<"ExpertProfile", 'String'>;
         readonly specialization: FieldRef<"ExpertProfile", 'String'>;
@@ -118922,7 +119353,7 @@ export namespace Prisma {
             omit: GlobalOmitOptions
         }
         meta: {
-            modelProps: "config" | "suggestion" | "changeLog" | "userProfile" | "hocHam" | "chucVuChinhQuyen" | "chucVuDang" | "hocVi" | "relative" | "trinhDoLyLuanChinhTri" | "trinhDoQuanLyNhaNuoc" | "ngoaiNgu" | "tinHoc" | "boiDuongQuocPhongAnNinh" | "capBac" | "quaTrinhCongTac" | "quaTrinhCuDiCongTac" | "quaTrinhCuDiDaoTao" | "khenThuong" | "kyLuat" | "doiTuongChinhSach" | "keKhaiTaiSan" | "tiengDanToc" | "chienDau" | "nuocNgoai" | "thuongTat" | "danhHieu" | "quaTrinhHocTap" | "toChucXaHoi" | "quaTrinhLuong" | "group" | "role" | "permission" | "chatBotConfig" | "userSession" | "document" | "documentTopic" | "fAQ" | "prompt" | "conversation" | "message" | "citationMessage" | "topic" | "documentClassification" | "dM_CapBac" | "dM_ChucDanh" | "dM_ChucVu" | "dM_HocHam" | "dM_HocVi" | "dM_ChungChiTinHoc" | "dM_DanToc" | "dM_DonVi" | "dM_DonViHanhChinh" | "dM_KhuVuc_DiaLy" | "dM_NgoaiNgu" | "dM_TonGiao" | "dM_TrinhDoNgoaiNgu" | "dM_TrinhDoTinHoc" | "dM_GioiTinh" | "dM_NhanVien" | "dM_PhanCap_ChatLuong_TrangThietBi" | "dM_PhanLoai_CSKT" | "dM_NhomNguoiDung" | "dM_NhomUngDung" | "dM_QuocGia" | "dM_Tinh" | "dM_Tinh_New" | "dM_QuanHuyen" | "dM_XaPhuong" | "dM_XaPhuong_New" | "dM_ViTriCongViec" | "planTraining" | "planTrainingSubject" | "studentScoreConvert" | "subjectScoreConvert" | "studentSubjectScore" | "studentSubjectScoreHistory" | "studentResearchTopic" | "studentInternship" | "archivedCertificateOnStudentSubjectScore" | "archivedCertificate" | "archivedAwardOnStudentSubjectScore" | "archivedAward" | "schoolYear" | "semester" | "milestone" | "trainingLanguage" | "trainingCourse" | "trainingCourseRegulation" | "fixedClass" | "curriculum" | "curriculumVersion" | "subject" | "subjectVersionCategory" | "subjectVersion" | "subjectVersionHistory" | "equivalencyGroup" | "subjectInGroup" | "trainingBlockSubject" | "classRegisterSessionCredit" | "classRegisterSession" | "classRegisterLogs" | "subjectClass" | "subjectClassAttendance" | "subjectClassAttendanceStudent" | "subjectClassHistory" | "subjectClassTime" | "classSchedule" | "scoreCorrectionTicket" | "scoreCorrectionItem" | "trainingObjectType" | "priorityObject" | "trainingType" | "trainingLevel" | "trainingForm" | "trainingLocation" | "building" | "room" | "trainingField" | "trainingFieldOnTrainingObjectType" | "trainingMajor" | "trainingMajorOnTrainingObjectType" | "trainingBlock" | "trainingBlockOnCurriculumVersion" | "trainingTime" | "availableTrainingTime" | "certificate" | "certificateOnSubject" | "award" | "diplomaType" | "scoreConvert" | "loadCategory" | "outputStandard" | "outputStandardOnCurriculum" | "student" | "studentSemesterResult" | "studentYearResult" | "notification" | "documentFile" | "academicActionConfig" | "academicActionRuleSet" | "academicActionCondition" | "studentAcademicDecision" | "trainingScoreSession" | "studentTrainingScore" | "semesterTrainingScore" | "schoolYearTrainingScore" | "lecturerType" | "staffType" | "staffPosition" | "lecturer" | "lecturerHistory" | "researchProject" | "studentResearchRegistration" | "thesisSession" | "thesisProject" | "defenseSession" | "studentThesisRegistration" | "expertProfile" | "decision" | "invitation" | "council" | "councilMember" | "defenseRecord" | "librarySubmission" | "defaultCouncilRolePayAmount" | "defaultSupervisorPayAmount" | "paymentRecord" | "supervisorPaymentRecord" | "evaluationPeriod" | "evaluationStandardSet" | "standardCatalog" | "criterionCatalog" | "evidenceCategory" | "evidence" | "evaluationCriterionComment" | "requirementCriterionCatalog" | "standardPeriod" | "criterionPeriod" | "analysisCriterion" | "evaluationCriterion" | "requirementCriterion" | "analysisFormEvidence" | "evaluationCouncil" | "evaluationCouncilMember" | "evidenceFile" | "surveyObjectType" | "surveyTopic" | "surveyQuestionGroup" | "clusterSurvey" | "survey" | "surveyQuestion" | "specificChoice" | "surveyChoice" | "surveySession" | "surveyResponse" | "questionBank" | "question" | "multipleChoiceOption" | "fillInBlankSlot" | "orderingItem" | "exam" | "examRoom" | "examList" | "examBank" | "examBankQuestion" | "examPaper" | "examFramework" | "examMatrix" | "knowledgeBlock" | "configExam" | "staff" | "staffHistory" | "scholarship" | "scholarshipCriteria" | "scholarshipAward" | "graduationSession" | "studentGraduationApplication" | "applicationDowngraded" | "applicationCheckResult" | "graduationDecision" | "academicRankingConvert" | "graduationRankDowngradeRule" | "graduationRankDowngradeCondition" | "rankingCondition" | "diplomaVerificationApplication" | "scoreLinkSheet" | "scoreLinkSubjectVersion" | "scoreLinkStudent" | "note" | "noteFolder" | "noteTag" | "noteReminder" | "academicWarningRule" | "academicWarning" | "disciplinaryWarning" | "disciplinaryWarningReason" | "feedback" | "dM_TrinhDoHocVan" | "dM_TrinhDoLyLuanChinhTri" | "dM_TrinhDoQuanLyNhaNuoc" | "dM_TinhTrangHonNhan" | "dM_QuanHeThanNhan" | "dM_TrangThaiLamViec" | "dM_HinhThucKhenThuongChinhQuyen" | "dM_HinhThucKhenThuongDang" | "dM_XepLoaiDanhGiaCanBo" | "dM_XepLoaiDanhGiaChatLuongDangVien" | "dM_LoaiHinhCongTac" | "dM_TinhTrangCongTac" | "dM_LoaiTinhTrangCongTac" | "dM_LoaiHinhDiHocTap" | "dM_TinhTrangDiHocTap" | "dM_NuocCuDiHocTap" | "dM_ChucDanhCMNVGiangVien" | "dM_ChucDanhCMNVNghienCuuVien" | "dM_ChucDanhCMNVKySu" | "dM_TruongDaoTaoBacDH" | "dM_ChuyenNganhDaoTaoBacDH" | "dM_ChiHuyQuanLy" | "dM_ChuyenMonKyThuat" | "dM_SucKhoe" | "dM_NhomMau" | "dM_LoaiThuongTat" | "dM_NganhHoc" | "dM_ToChucXaHoi" | "dM_Ngach" | "dM_BacLuong" | "templateFile" | "blockedIp"
+            modelProps: "config" | "suggestion" | "changeLog" | "userProfile" | "hocHam" | "chucVuChinhQuyen" | "chucVuDang" | "hocVi" | "relative" | "trinhDoLyLuanChinhTri" | "trinhDoQuanLyNhaNuoc" | "ngoaiNgu" | "tinHoc" | "boiDuongQuocPhongAnNinh" | "capBac" | "quaTrinhCongTac" | "quaTrinhCuDiCongTac" | "quaTrinhCuDiDaoTao" | "khenThuong" | "kyLuat" | "doiTuongChinhSach" | "keKhaiTaiSan" | "tiengDanToc" | "chienDau" | "nuocNgoai" | "thuongTat" | "danhHieu" | "quaTrinhHocTap" | "toChucXaHoi" | "quaTrinhLuong" | "group" | "role" | "permission" | "chatBotConfig" | "userSession" | "document" | "documentTopic" | "fAQ" | "prompt" | "conversation" | "message" | "citationMessage" | "topic" | "documentClassification" | "dM_CapBac" | "dM_ChucDanh" | "dM_ChucVu" | "dM_HocHam" | "dM_HocVi" | "dM_ChungChiTinHoc" | "dM_DanToc" | "dM_DonVi" | "dM_DonViHanhChinh" | "dM_KhuVuc_DiaLy" | "dM_NgoaiNgu" | "dM_TonGiao" | "dM_TrinhDoNgoaiNgu" | "dM_TrinhDoTinHoc" | "dM_GioiTinh" | "dM_NhanVien" | "dM_PhanCap_ChatLuong_TrangThietBi" | "dM_PhanLoai_CSKT" | "dM_NhomNguoiDung" | "dM_NhomUngDung" | "dM_QuocGia" | "dM_Tinh" | "dM_Tinh_New" | "dM_QuanHuyen" | "dM_XaPhuong" | "dM_XaPhuong_New" | "dM_ViTriCongViec" | "planTraining" | "planTrainingSubject" | "studentScoreConvert" | "subjectScoreConvert" | "studentSubjectScore" | "studentSubjectScoreHistory" | "studentResearchTopic" | "studentInternship" | "archivedCertificateOnStudentSubjectScore" | "archivedCertificate" | "archivedAwardOnStudentSubjectScore" | "archivedAward" | "schoolYear" | "semester" | "milestone" | "trainingLanguage" | "trainingCourse" | "trainingCourseRegulation" | "fixedClass" | "curriculum" | "curriculumVersion" | "subject" | "subjectVersionCategory" | "subjectVersion" | "subjectVersionHistory" | "equivalencyGroup" | "subjectInGroup" | "trainingBlockSubject" | "classRegisterSessionCredit" | "classRegisterSession" | "classRegisterLogs" | "subjectClass" | "subjectClassAttendance" | "subjectClassAttendanceStudent" | "subjectClassHistory" | "subjectClassTime" | "classSchedule" | "scoreCorrectionTicket" | "scoreCorrectionItem" | "trainingObjectType" | "priorityObject" | "trainingType" | "trainingLevel" | "trainingForm" | "trainingLocation" | "building" | "room" | "trainingField" | "trainingFieldOnTrainingObjectType" | "trainingMajor" | "trainingMajorOnTrainingObjectType" | "trainingBlock" | "trainingBlockOnCurriculumVersion" | "trainingTime" | "availableTrainingTime" | "certificate" | "certificateOnSubject" | "award" | "diplomaType" | "scoreConvert" | "loadCategory" | "outputStandard" | "outputStandardOnCurriculum" | "student" | "trainingActivity" | "studentSemesterResult" | "studentYearResult" | "notification" | "documentFile" | "academicActionConfig" | "academicActionRuleSet" | "academicActionCondition" | "studentAcademicDecision" | "trainingScoreSession" | "studentTrainingScore" | "semesterTrainingScore" | "schoolYearTrainingScore" | "lecturerType" | "staffType" | "staffPosition" | "lecturer" | "lecturerHistory" | "researchProject" | "studentResearchRegistration" | "thesisSession" | "thesisProject" | "defenseSession" | "studentThesisRegistration" | "expertProfile" | "decision" | "invitation" | "council" | "councilMember" | "defenseRecord" | "librarySubmission" | "defaultCouncilRolePayAmount" | "defaultSupervisorPayAmount" | "paymentRecord" | "supervisorPaymentRecord" | "evaluationPeriod" | "evaluationStandardSet" | "standardCatalog" | "criterionCatalog" | "evidenceCategory" | "evidence" | "evaluationCriterionComment" | "requirementCriterionCatalog" | "standardPeriod" | "criterionPeriod" | "analysisCriterion" | "evaluationCriterion" | "requirementCriterion" | "analysisFormEvidence" | "evaluationCouncil" | "evaluationCouncilMember" | "evidenceFile" | "surveyObjectType" | "surveyTopic" | "surveyQuestionGroup" | "clusterSurvey" | "survey" | "surveyQuestion" | "specificChoice" | "surveyChoice" | "surveySession" | "surveyResponse" | "questionBank" | "question" | "multipleChoiceOption" | "fillInBlankSlot" | "orderingItem" | "exam" | "examRoom" | "examList" | "examBank" | "examBankQuestion" | "examPaper" | "examFramework" | "examMatrix" | "knowledgeBlock" | "configExam" | "staff" | "staffHistory" | "scholarship" | "scholarshipCriteria" | "scholarshipAward" | "graduationSession" | "studentGraduationApplication" | "applicationDowngraded" | "applicationCheckResult" | "graduationDecision" | "academicRankingConvert" | "graduationRankDowngradeRule" | "graduationRankDowngradeCondition" | "rankingCondition" | "diplomaVerificationApplication" | "scoreLinkSheet" | "scoreLinkSubjectVersion" | "scoreLinkStudent" | "note" | "noteFolder" | "noteTag" | "noteReminder" | "academicWarningRule" | "academicWarning" | "disciplinaryWarning" | "disciplinaryWarningReason" | "feedback" | "dM_TrinhDoHocVan" | "dM_TrinhDoLyLuanChinhTri" | "dM_TrinhDoQuanLyNhaNuoc" | "dM_TinhTrangHonNhan" | "dM_QuanHeThanNhan" | "dM_TrangThaiLamViec" | "dM_HinhThucKhenThuongChinhQuyen" | "dM_HinhThucKhenThuongDang" | "dM_XepLoaiDanhGiaCanBo" | "dM_XepLoaiDanhGiaChatLuongDangVien" | "dM_LoaiHinhCongTac" | "dM_TinhTrangCongTac" | "dM_LoaiTinhTrangCongTac" | "dM_LoaiHinhDiHocTap" | "dM_TinhTrangDiHocTap" | "dM_NuocCuDiHocTap" | "dM_ChucDanhCMNVGiangVien" | "dM_ChucDanhCMNVNghienCuuVien" | "dM_ChucDanhCMNVKySu" | "dM_TruongDaoTaoBacDH" | "dM_ChuyenNganhDaoTaoBacDH" | "dM_ChiHuyQuanLy" | "dM_ChuyenMonKyThuat" | "dM_SucKhoe" | "dM_NhomMau" | "dM_LoaiThuongTat" | "dM_NganhHoc" | "dM_ToChucXaHoi" | "dM_Ngach" | "dM_BacLuong" | "templateFile" | "blockedIp"
             txIsolationLevel: Prisma.TransactionIsolationLevel
         }
         model: {
@@ -128913,6 +129344,80 @@ export namespace Prisma {
                     count: {
                         args: Prisma.StudentCountArgs<ExtArgs>
                         result: $Utils.Optional<StudentCountAggregateOutputType> | number
+                    }
+                }
+            }
+            TrainingActivity: {
+                payload: Prisma.$TrainingActivityPayload<ExtArgs>
+                fields: Prisma.TrainingActivityFieldRefs
+                operations: {
+                    findUnique: {
+                        args: Prisma.TrainingActivityFindUniqueArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$TrainingActivityPayload> | null
+                    }
+                    findUniqueOrThrow: {
+                        args: Prisma.TrainingActivityFindUniqueOrThrowArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$TrainingActivityPayload>
+                    }
+                    findFirst: {
+                        args: Prisma.TrainingActivityFindFirstArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$TrainingActivityPayload> | null
+                    }
+                    findFirstOrThrow: {
+                        args: Prisma.TrainingActivityFindFirstOrThrowArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$TrainingActivityPayload>
+                    }
+                    findMany: {
+                        args: Prisma.TrainingActivityFindManyArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$TrainingActivityPayload>[]
+                    }
+                    create: {
+                        args: Prisma.TrainingActivityCreateArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$TrainingActivityPayload>
+                    }
+                    createMany: {
+                        args: Prisma.TrainingActivityCreateManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    createManyAndReturn: {
+                        args: Prisma.TrainingActivityCreateManyAndReturnArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$TrainingActivityPayload>[]
+                    }
+                    delete: {
+                        args: Prisma.TrainingActivityDeleteArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$TrainingActivityPayload>
+                    }
+                    update: {
+                        args: Prisma.TrainingActivityUpdateArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$TrainingActivityPayload>
+                    }
+                    deleteMany: {
+                        args: Prisma.TrainingActivityDeleteManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    updateMany: {
+                        args: Prisma.TrainingActivityUpdateManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    updateManyAndReturn: {
+                        args: Prisma.TrainingActivityUpdateManyAndReturnArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$TrainingActivityPayload>[]
+                    }
+                    upsert: {
+                        args: Prisma.TrainingActivityUpsertArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$TrainingActivityPayload>
+                    }
+                    aggregate: {
+                        args: Prisma.TrainingActivityAggregateArgs<ExtArgs>
+                        result: $Utils.Optional<AggregateTrainingActivity>
+                    }
+                    groupBy: {
+                        args: Prisma.TrainingActivityGroupByArgs<ExtArgs>
+                        result: $Utils.Optional<TrainingActivityGroupByOutputType>[]
+                    }
+                    count: {
+                        args: Prisma.TrainingActivityCountArgs<ExtArgs>
+                        result: $Utils.Optional<TrainingActivityCountAggregateOutputType> | number
                     }
                 }
             }
@@ -139072,6 +139577,7 @@ export namespace Prisma {
         outputStandard?: OutputStandardOmit
         outputStandardOnCurriculum?: OutputStandardOnCurriculumOmit
         student?: StudentOmit
+        trainingActivity?: TrainingActivityOmit
         studentSemesterResult?: StudentSemesterResultOmit
         studentYearResult?: StudentYearResultOmit
         notification?: NotificationOmit
@@ -140027,10 +140533,12 @@ export namespace Prisma {
     export type DM_HocHamCountOutputType = {
         profiles: number
         hocHam: number
+        expertProfile: number
     };
     export type DM_HocHamCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         profiles?: boolean | DM_HocHamCountOutputTypeCountProfilesArgs
         hocHam?: boolean | DM_HocHamCountOutputTypeCountHocHamArgs
+        expertProfile?: boolean | DM_HocHamCountOutputTypeCountExpertProfileArgs
     };
     /**
      * DM_HocHamCountOutputType without action
@@ -140054,15 +140562,23 @@ export namespace Prisma {
         where?: HocHamWhereInput
     };
     /**
+     * DM_HocHamCountOutputType without action
+     */
+    export type DM_HocHamCountOutputTypeCountExpertProfileArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: ExpertProfileWhereInput
+    };
+    /**
      * Count Type DM_HocViCountOutputType
      */
     export type DM_HocViCountOutputType = {
         profiles: number
         hocVi: number
+        expertProfile: number
     };
     export type DM_HocViCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         profiles?: boolean | DM_HocViCountOutputTypeCountProfilesArgs
         hocVi?: boolean | DM_HocViCountOutputTypeCountHocViArgs
+        expertProfile?: boolean | DM_HocViCountOutputTypeCountExpertProfileArgs
     };
     /**
      * DM_HocViCountOutputType without action
@@ -140084,6 +140600,12 @@ export namespace Prisma {
      */
     export type DM_HocViCountOutputTypeCountHocViArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         where?: HocViWhereInput
+    };
+    /**
+     * DM_HocViCountOutputType without action
+     */
+    export type DM_HocViCountOutputTypeCountExpertProfileArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: ExpertProfileWhereInput
     };
     /**
      * Count Type DM_DanTocCountOutputType
@@ -142682,6 +143204,7 @@ export namespace Prisma {
         semesterTrainingScore: number
         schoolYearTrainingScore: number
         subjectClassAttendanceStudent: number
+        trainingActivity: number
     };
     export type StudentCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         priorityObject?: boolean | StudentCountOutputTypeCountPriorityObjectArgs
@@ -142709,6 +143232,7 @@ export namespace Prisma {
         semesterTrainingScore?: boolean | StudentCountOutputTypeCountSemesterTrainingScoreArgs
         schoolYearTrainingScore?: boolean | StudentCountOutputTypeCountSchoolYearTrainingScoreArgs
         subjectClassAttendanceStudent?: boolean | StudentCountOutputTypeCountSubjectClassAttendanceStudentArgs
+        trainingActivity?: boolean | StudentCountOutputTypeCountTrainingActivityArgs
     };
     /**
      * StudentCountOutputType without action
@@ -142868,6 +143392,12 @@ export namespace Prisma {
      */
     export type StudentCountOutputTypeCountSubjectClassAttendanceStudentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         where?: SubjectClassAttendanceStudentWhereInput
+    };
+    /**
+     * StudentCountOutputType without action
+     */
+    export type StudentCountOutputTypeCountTrainingActivityArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: TrainingActivityWhereInput
     };
     /**
      * Count Type NotificationCountOutputType
@@ -183687,6 +184217,7 @@ export namespace Prisma {
         sThietBiSua?: boolean
         profiles?: boolean | DM_HocHam$profilesArgs<ExtArgs>
         hocHam?: boolean | DM_HocHam$hocHamArgs<ExtArgs>
+        expertProfile?: boolean | DM_HocHam$expertProfileArgs<ExtArgs>
         _count?: boolean | DM_HocHamCountOutputTypeDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["dM_HocHam"]>;
     export type DM_HocHamSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -183744,6 +184275,7 @@ export namespace Prisma {
     export type DM_HocHamInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         profiles?: boolean | DM_HocHam$profilesArgs<ExtArgs>
         hocHam?: boolean | DM_HocHam$hocHamArgs<ExtArgs>
+        expertProfile?: boolean | DM_HocHam$expertProfileArgs<ExtArgs>
         _count?: boolean | DM_HocHamCountOutputTypeDefaultArgs<ExtArgs>
     };
     export type DM_HocHamIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {};
@@ -183753,6 +184285,7 @@ export namespace Prisma {
         objects: {
             profiles: Prisma.$UserProfilePayload<ExtArgs>[]
             hocHam: Prisma.$HocHamPayload<ExtArgs>[]
+            expertProfile: Prisma.$ExpertProfilePayload<ExtArgs>[]
         }
         scalars: $Extensions.GetPayloadResult<{
             Id: string
@@ -184193,6 +184726,29 @@ export namespace Prisma {
         distinct?: HocHamScalarFieldEnum | HocHamScalarFieldEnum[]
     };
     /**
+     * DM_HocHam.expertProfile
+     */
+    export type DM_HocHam$expertProfileArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ExpertProfile
+         */
+        select?: ExpertProfileSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ExpertProfile
+         */
+        omit?: ExpertProfileOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ExpertProfileInclude<ExtArgs> | null
+        where?: ExpertProfileWhereInput
+        orderBy?: ExpertProfileOrderByWithRelationInput | ExpertProfileOrderByWithRelationInput[]
+        cursor?: ExpertProfileWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: ExpertProfileScalarFieldEnum | ExpertProfileScalarFieldEnum[]
+    };
+    /**
      * DM_HocHam without action
      */
     export type DM_HocHamDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -184471,6 +185027,7 @@ export namespace Prisma {
         sThietBiSua?: boolean
         profiles?: boolean | DM_HocVi$profilesArgs<ExtArgs>
         hocVi?: boolean | DM_HocVi$hocViArgs<ExtArgs>
+        expertProfile?: boolean | DM_HocVi$expertProfileArgs<ExtArgs>
         _count?: boolean | DM_HocViCountOutputTypeDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["dM_HocVi"]>;
     export type DM_HocViSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -184528,6 +185085,7 @@ export namespace Prisma {
     export type DM_HocViInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         profiles?: boolean | DM_HocVi$profilesArgs<ExtArgs>
         hocVi?: boolean | DM_HocVi$hocViArgs<ExtArgs>
+        expertProfile?: boolean | DM_HocVi$expertProfileArgs<ExtArgs>
         _count?: boolean | DM_HocViCountOutputTypeDefaultArgs<ExtArgs>
     };
     export type DM_HocViIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {};
@@ -184537,6 +185095,7 @@ export namespace Prisma {
         objects: {
             profiles: Prisma.$UserProfilePayload<ExtArgs>[]
             hocVi: Prisma.$HocViPayload<ExtArgs>[]
+            expertProfile: Prisma.$ExpertProfilePayload<ExtArgs>[]
         }
         scalars: $Extensions.GetPayloadResult<{
             Id: string
@@ -184975,6 +185534,29 @@ export namespace Prisma {
         take?: number
         skip?: number
         distinct?: HocViScalarFieldEnum | HocViScalarFieldEnum[]
+    };
+    /**
+     * DM_HocVi.expertProfile
+     */
+    export type DM_HocVi$expertProfileArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ExpertProfile
+         */
+        select?: ExpertProfileSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ExpertProfile
+         */
+        omit?: ExpertProfileOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ExpertProfileInclude<ExtArgs> | null
+        where?: ExpertProfileWhereInput
+        orderBy?: ExpertProfileOrderByWithRelationInput | ExpertProfileOrderByWithRelationInput[]
+        cursor?: ExpertProfileWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: ExpertProfileScalarFieldEnum | ExpertProfileScalarFieldEnum[]
     };
     /**
      * DM_HocVi without action
@@ -255125,6 +255707,7 @@ export namespace Prisma {
         semesterTrainingScore?: boolean | Student$semesterTrainingScoreArgs<ExtArgs>
         schoolYearTrainingScore?: boolean | Student$schoolYearTrainingScoreArgs<ExtArgs>
         subjectClassAttendanceStudent?: boolean | Student$subjectClassAttendanceStudentArgs<ExtArgs>
+        trainingActivity?: boolean | Student$trainingActivityArgs<ExtArgs>
         _count?: boolean | StudentCountOutputTypeDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["student"]>;
     export type StudentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -255313,6 +255896,7 @@ export namespace Prisma {
         semesterTrainingScore?: boolean | Student$semesterTrainingScoreArgs<ExtArgs>
         schoolYearTrainingScore?: boolean | Student$schoolYearTrainingScoreArgs<ExtArgs>
         subjectClassAttendanceStudent?: boolean | Student$subjectClassAttendanceStudentArgs<ExtArgs>
+        trainingActivity?: boolean | Student$trainingActivityArgs<ExtArgs>
         _count?: boolean | StudentCountOutputTypeDefaultArgs<ExtArgs>
     };
     export type StudentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -255371,6 +255955,7 @@ export namespace Prisma {
             semesterTrainingScore: Prisma.$SemesterTrainingScorePayload<ExtArgs>[]
             schoolYearTrainingScore: Prisma.$SchoolYearTrainingScorePayload<ExtArgs>[]
             subjectClassAttendanceStudent: Prisma.$SubjectClassAttendanceStudentPayload<ExtArgs>[]
+            trainingActivity: Prisma.$TrainingActivityPayload<ExtArgs>[]
         }
         scalars: $Extensions.GetPayloadResult<{
             id: string
@@ -256572,6 +257157,29 @@ export namespace Prisma {
         distinct?: SubjectClassAttendanceStudentScalarFieldEnum | SubjectClassAttendanceStudentScalarFieldEnum[]
     };
     /**
+     * Student.trainingActivity
+     */
+    export type Student$trainingActivityArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the TrainingActivity
+         */
+        select?: TrainingActivitySelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the TrainingActivity
+         */
+        omit?: TrainingActivityOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: TrainingActivityInclude<ExtArgs> | null
+        where?: TrainingActivityWhereInput
+        orderBy?: TrainingActivityOrderByWithRelationInput | TrainingActivityOrderByWithRelationInput[]
+        cursor?: TrainingActivityWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: TrainingActivityScalarFieldEnum | TrainingActivityScalarFieldEnum[]
+    };
+    /**
      * Student without action
      */
     export type StudentDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -256587,6 +257195,722 @@ export namespace Prisma {
          * Choose, which related nodes to fetch as well
          */
         include?: StudentInclude<ExtArgs> | null
+    };
+    /**
+     * Model TrainingActivity
+     */
+    export type AggregateTrainingActivity = {
+        _count: TrainingActivityCountAggregateOutputType | null
+        _avg: TrainingActivityAvgAggregateOutputType | null
+        _sum: TrainingActivitySumAggregateOutputType | null
+        _min: TrainingActivityMinAggregateOutputType | null
+        _max: TrainingActivityMaxAggregateOutputType | null
+    };
+    export type TrainingActivityAvgAggregateOutputType = {
+        score: number | null
+    };
+    export type TrainingActivitySumAggregateOutputType = {
+        score: number | null
+    };
+    export type TrainingActivityMinAggregateOutputType = {
+        id: string | null
+        code: string | null
+        active: boolean | null
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date | null
+        updatedAt: Date | null
+        createdBy: string | null
+        studentId: string | null
+        category: string | null
+        score: number | null
+        date: Date | null
+    };
+    export type TrainingActivityMaxAggregateOutputType = {
+        id: string | null
+        code: string | null
+        active: boolean | null
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date | null
+        updatedAt: Date | null
+        createdBy: string | null
+        studentId: string | null
+        category: string | null
+        score: number | null
+        date: Date | null
+    };
+    export type TrainingActivityCountAggregateOutputType = {
+        id: number
+        code: number
+        active: number
+        description: number
+        deletedAt: number
+        createdAt: number
+        updatedAt: number
+        createdBy: number
+        studentId: number
+        category: number
+        score: number
+        date: number
+        _all: number
+    };
+    export type TrainingActivityAvgAggregateInputType = {
+        score?: true
+    };
+    export type TrainingActivitySumAggregateInputType = {
+        score?: true
+    };
+    export type TrainingActivityMinAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        createdBy?: true
+        studentId?: true
+        category?: true
+        score?: true
+        date?: true
+    };
+    export type TrainingActivityMaxAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        createdBy?: true
+        studentId?: true
+        category?: true
+        score?: true
+        date?: true
+    };
+    export type TrainingActivityCountAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        createdBy?: true
+        studentId?: true
+        category?: true
+        score?: true
+        date?: true
+        _all?: true
+    };
+    export type TrainingActivityAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Filter which TrainingActivity to aggregate.
+         */
+        where?: TrainingActivityWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of TrainingActivities to fetch.
+         */
+        orderBy?: TrainingActivityOrderByWithRelationInput | TrainingActivityOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the start position
+         */
+        cursor?: TrainingActivityWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` TrainingActivities from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` TrainingActivities.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Count returned TrainingActivities
+        **/
+        _count?: true | TrainingActivityCountAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to average
+        **/
+        _avg?: TrainingActivityAvgAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to sum
+        **/
+        _sum?: TrainingActivitySumAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to find the minimum value
+        **/
+        _min?: TrainingActivityMinAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to find the maximum value
+        **/
+        _max?: TrainingActivityMaxAggregateInputType
+    };
+    export type GetTrainingActivityAggregateType<T extends TrainingActivityAggregateArgs> = {
+        [P in keyof T & keyof AggregateTrainingActivity]: P extends '_count' | 'count'
+        ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateTrainingActivity[P]>
+        : GetScalarType<T[P], AggregateTrainingActivity[P]>
+    };
+    export type TrainingActivityGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: TrainingActivityWhereInput
+        orderBy?: TrainingActivityOrderByWithAggregationInput | TrainingActivityOrderByWithAggregationInput[]
+        by: TrainingActivityScalarFieldEnum[] | TrainingActivityScalarFieldEnum
+        having?: TrainingActivityScalarWhereWithAggregatesInput
+        take?: number
+        skip?: number
+        _count?: TrainingActivityCountAggregateInputType | true
+        _avg?: TrainingActivityAvgAggregateInputType
+        _sum?: TrainingActivitySumAggregateInputType
+        _min?: TrainingActivityMinAggregateInputType
+        _max?: TrainingActivityMaxAggregateInputType
+    };
+    export type TrainingActivityGroupByOutputType = {
+        id: string
+        code: string | null
+        active: boolean
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date
+        updatedAt: Date
+        createdBy: string | null
+        studentId: string
+        category: string
+        score: number
+        date: Date
+        _count: TrainingActivityCountAggregateOutputType | null
+        _avg: TrainingActivityAvgAggregateOutputType | null
+        _sum: TrainingActivitySumAggregateOutputType | null
+        _min: TrainingActivityMinAggregateOutputType | null
+        _max: TrainingActivityMaxAggregateOutputType | null
+    };
+    type GetTrainingActivityGroupByPayload<T extends TrainingActivityGroupByArgs> = Prisma.PrismaPromise<
+        Array<
+            PickEnumerable<TrainingActivityGroupByOutputType, T['by']> &
+            {
+                [P in ((keyof T) & (keyof TrainingActivityGroupByOutputType))]: P extends '_count'
+                ? T[P] extends boolean
+                ? number
+                : GetScalarType<T[P], TrainingActivityGroupByOutputType[P]>
+                : GetScalarType<T[P], TrainingActivityGroupByOutputType[P]>
+            }
+        >
+    >;
+    export type TrainingActivitySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        createdBy?: boolean
+        studentId?: boolean
+        category?: boolean
+        score?: boolean
+        date?: boolean
+        student?: boolean | StudentDefaultArgs<ExtArgs>
+    }, ExtArgs["result"]["trainingActivity"]>;
+    export type TrainingActivitySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        createdBy?: boolean
+        studentId?: boolean
+        category?: boolean
+        score?: boolean
+        date?: boolean
+        student?: boolean | StudentDefaultArgs<ExtArgs>
+    }, ExtArgs["result"]["trainingActivity"]>;
+    export type TrainingActivitySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        createdBy?: boolean
+        studentId?: boolean
+        category?: boolean
+        score?: boolean
+        date?: boolean
+        student?: boolean | StudentDefaultArgs<ExtArgs>
+    }, ExtArgs["result"]["trainingActivity"]>;
+    export type TrainingActivitySelectScalar = {
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        createdBy?: boolean
+        studentId?: boolean
+        category?: boolean
+        score?: boolean
+        date?: boolean
+    };
+    export type TrainingActivityOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "studentId" | "category" | "score" | "date", ExtArgs["result"]["trainingActivity"]>;
+    export type TrainingActivityInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        student?: boolean | StudentDefaultArgs<ExtArgs>
+    };
+    export type TrainingActivityIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        student?: boolean | StudentDefaultArgs<ExtArgs>
+    };
+    export type TrainingActivityIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        student?: boolean | StudentDefaultArgs<ExtArgs>
+    };
+    export type $TrainingActivityPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        name: "TrainingActivity"
+        objects: {
+            student: Prisma.$StudentPayload<ExtArgs>
+        }
+        scalars: $Extensions.GetPayloadResult<{
+            id: string
+            code: string | null
+            active: boolean
+            description: string | null
+            deletedAt: Date | null
+            createdAt: Date
+            updatedAt: Date
+            createdBy: string | null
+            studentId: string
+            /**
+             * Loại hoạt động
+             */
+            category: string
+            /**
+             * Điểm hoạt động
+             */
+            score: number
+            /**
+             * Ngày hoạt động
+             */
+            date: Date
+        }, ExtArgs["result"]["trainingActivity"]>
+        composites: {}
+    };
+    type TrainingActivityGetPayload<S extends boolean | null | undefined | TrainingActivityDefaultArgs> = $Result.GetResult<Prisma.$TrainingActivityPayload, S>;
+    type TrainingActivityCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = Omit<TrainingActivityFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+        select?: TrainingActivityCountAggregateInputType | true
+    };
+    /**
+     * TrainingActivity findUnique
+     */
+    export type TrainingActivityFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the TrainingActivity
+         */
+        select?: TrainingActivitySelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the TrainingActivity
+         */
+        omit?: TrainingActivityOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: TrainingActivityInclude<ExtArgs> | null
+        /**
+         * Filter, which TrainingActivity to fetch.
+         */
+        where: TrainingActivityWhereUniqueInput
+    };
+    /**
+     * TrainingActivity findUniqueOrThrow
+     */
+    export type TrainingActivityFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the TrainingActivity
+         */
+        select?: TrainingActivitySelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the TrainingActivity
+         */
+        omit?: TrainingActivityOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: TrainingActivityInclude<ExtArgs> | null
+        /**
+         * Filter, which TrainingActivity to fetch.
+         */
+        where: TrainingActivityWhereUniqueInput
+    };
+    /**
+     * TrainingActivity findFirst
+     */
+    export type TrainingActivityFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the TrainingActivity
+         */
+        select?: TrainingActivitySelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the TrainingActivity
+         */
+        omit?: TrainingActivityOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: TrainingActivityInclude<ExtArgs> | null
+        /**
+         * Filter, which TrainingActivity to fetch.
+         */
+        where?: TrainingActivityWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of TrainingActivities to fetch.
+         */
+        orderBy?: TrainingActivityOrderByWithRelationInput | TrainingActivityOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for searching for TrainingActivities.
+         */
+        cursor?: TrainingActivityWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` TrainingActivities from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` TrainingActivities.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+         * 
+         * Filter by unique combinations of TrainingActivities.
+         */
+        distinct?: TrainingActivityScalarFieldEnum | TrainingActivityScalarFieldEnum[]
+    };
+    /**
+     * TrainingActivity findFirstOrThrow
+     */
+    export type TrainingActivityFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the TrainingActivity
+         */
+        select?: TrainingActivitySelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the TrainingActivity
+         */
+        omit?: TrainingActivityOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: TrainingActivityInclude<ExtArgs> | null
+        /**
+         * Filter, which TrainingActivity to fetch.
+         */
+        where?: TrainingActivityWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of TrainingActivities to fetch.
+         */
+        orderBy?: TrainingActivityOrderByWithRelationInput | TrainingActivityOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for searching for TrainingActivities.
+         */
+        cursor?: TrainingActivityWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` TrainingActivities from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` TrainingActivities.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+         * 
+         * Filter by unique combinations of TrainingActivities.
+         */
+        distinct?: TrainingActivityScalarFieldEnum | TrainingActivityScalarFieldEnum[]
+    };
+    /**
+     * TrainingActivity findMany
+     */
+    export type TrainingActivityFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the TrainingActivity
+         */
+        select?: TrainingActivitySelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the TrainingActivity
+         */
+        omit?: TrainingActivityOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: TrainingActivityInclude<ExtArgs> | null
+        /**
+         * Filter, which TrainingActivities to fetch.
+         */
+        where?: TrainingActivityWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of TrainingActivities to fetch.
+         */
+        orderBy?: TrainingActivityOrderByWithRelationInput | TrainingActivityOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for listing TrainingActivities.
+         */
+        cursor?: TrainingActivityWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` TrainingActivities from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` TrainingActivities.
+         */
+        skip?: number
+        distinct?: TrainingActivityScalarFieldEnum | TrainingActivityScalarFieldEnum[]
+    };
+    /**
+     * TrainingActivity create
+     */
+    export type TrainingActivityCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the TrainingActivity
+         */
+        select?: TrainingActivitySelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the TrainingActivity
+         */
+        omit?: TrainingActivityOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: TrainingActivityInclude<ExtArgs> | null
+        /**
+         * The data needed to create a TrainingActivity.
+         */
+        data: XOR<TrainingActivityCreateInput, TrainingActivityUncheckedCreateInput>
+    };
+    /**
+     * TrainingActivity createMany
+     */
+    export type TrainingActivityCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * The data used to create many TrainingActivities.
+         */
+        data: TrainingActivityCreateManyInput | TrainingActivityCreateManyInput[]
+        skipDuplicates?: boolean
+    };
+    /**
+     * TrainingActivity createManyAndReturn
+     */
+    export type TrainingActivityCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the TrainingActivity
+         */
+        select?: TrainingActivitySelectCreateManyAndReturn<ExtArgs> | null
+        /**
+         * Omit specific fields from the TrainingActivity
+         */
+        omit?: TrainingActivityOmit<ExtArgs> | null
+        /**
+         * The data used to create many TrainingActivities.
+         */
+        data: TrainingActivityCreateManyInput | TrainingActivityCreateManyInput[]
+        skipDuplicates?: boolean
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: TrainingActivityIncludeCreateManyAndReturn<ExtArgs> | null
+    };
+    /**
+     * TrainingActivity update
+     */
+    export type TrainingActivityUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the TrainingActivity
+         */
+        select?: TrainingActivitySelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the TrainingActivity
+         */
+        omit?: TrainingActivityOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: TrainingActivityInclude<ExtArgs> | null
+        /**
+         * The data needed to update a TrainingActivity.
+         */
+        data: XOR<TrainingActivityUpdateInput, TrainingActivityUncheckedUpdateInput>
+        /**
+         * Choose, which TrainingActivity to update.
+         */
+        where: TrainingActivityWhereUniqueInput
+    };
+    /**
+     * TrainingActivity updateMany
+     */
+    export type TrainingActivityUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * The data used to update TrainingActivities.
+         */
+        data: XOR<TrainingActivityUpdateManyMutationInput, TrainingActivityUncheckedUpdateManyInput>
+        /**
+         * Filter which TrainingActivities to update
+         */
+        where?: TrainingActivityWhereInput
+        /**
+         * Limit how many TrainingActivities to update.
+         */
+        limit?: number
+    };
+    /**
+     * TrainingActivity updateManyAndReturn
+     */
+    export type TrainingActivityUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the TrainingActivity
+         */
+        select?: TrainingActivitySelectUpdateManyAndReturn<ExtArgs> | null
+        /**
+         * Omit specific fields from the TrainingActivity
+         */
+        omit?: TrainingActivityOmit<ExtArgs> | null
+        /**
+         * The data used to update TrainingActivities.
+         */
+        data: XOR<TrainingActivityUpdateManyMutationInput, TrainingActivityUncheckedUpdateManyInput>
+        /**
+         * Filter which TrainingActivities to update
+         */
+        where?: TrainingActivityWhereInput
+        /**
+         * Limit how many TrainingActivities to update.
+         */
+        limit?: number
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: TrainingActivityIncludeUpdateManyAndReturn<ExtArgs> | null
+    };
+    /**
+     * TrainingActivity upsert
+     */
+    export type TrainingActivityUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the TrainingActivity
+         */
+        select?: TrainingActivitySelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the TrainingActivity
+         */
+        omit?: TrainingActivityOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: TrainingActivityInclude<ExtArgs> | null
+        /**
+         * The filter to search for the TrainingActivity to update in case it exists.
+         */
+        where: TrainingActivityWhereUniqueInput
+        /**
+         * In case the TrainingActivity found by the `where` argument doesn't exist, create a new TrainingActivity with this data.
+         */
+        create: XOR<TrainingActivityCreateInput, TrainingActivityUncheckedCreateInput>
+        /**
+         * In case the TrainingActivity was found with the provided `where` argument, update it with this data.
+         */
+        update: XOR<TrainingActivityUpdateInput, TrainingActivityUncheckedUpdateInput>
+    };
+    /**
+     * TrainingActivity delete
+     */
+    export type TrainingActivityDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the TrainingActivity
+         */
+        select?: TrainingActivitySelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the TrainingActivity
+         */
+        omit?: TrainingActivityOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: TrainingActivityInclude<ExtArgs> | null
+        /**
+         * Filter which TrainingActivity to delete.
+         */
+        where: TrainingActivityWhereUniqueInput
+    };
+    /**
+     * TrainingActivity deleteMany
+     */
+    export type TrainingActivityDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Filter which TrainingActivities to delete
+         */
+        where?: TrainingActivityWhereInput
+        /**
+         * Limit how many TrainingActivities to delete.
+         */
+        limit?: number
+    };
+    /**
+     * TrainingActivity without action
+     */
+    export type TrainingActivityDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the TrainingActivity
+         */
+        select?: TrainingActivitySelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the TrainingActivity
+         */
+        omit?: TrainingActivityOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: TrainingActivityInclude<ExtArgs> | null
     };
     /**
      * Model StudentSemesterResult
@@ -276743,8 +278067,8 @@ export namespace Prisma {
         createdBy: string | null
         lecturerId: string | null
         name: string | null
-        academicRank: string | null
-        academicDegree: string | null
+        academicDegreeTypeId: string | null
+        academicRankTypeId: string | null
         organization: string | null
         position: string | null
         specialization: string | null
@@ -276769,8 +278093,8 @@ export namespace Prisma {
         createdBy: string | null
         lecturerId: string | null
         name: string | null
-        academicRank: string | null
-        academicDegree: string | null
+        academicDegreeTypeId: string | null
+        academicRankTypeId: string | null
         organization: string | null
         position: string | null
         specialization: string | null
@@ -276795,8 +278119,8 @@ export namespace Prisma {
         createdBy: number
         lecturerId: number
         name: number
-        academicRank: number
-        academicDegree: number
+        academicDegreeTypeId: number
+        academicRankTypeId: number
         organization: number
         position: number
         specialization: number
@@ -276822,8 +278146,8 @@ export namespace Prisma {
         createdBy?: true
         lecturerId?: true
         name?: true
-        academicRank?: true
-        academicDegree?: true
+        academicDegreeTypeId?: true
+        academicRankTypeId?: true
         organization?: true
         position?: true
         specialization?: true
@@ -276848,8 +278172,8 @@ export namespace Prisma {
         createdBy?: true
         lecturerId?: true
         name?: true
-        academicRank?: true
-        academicDegree?: true
+        academicDegreeTypeId?: true
+        academicRankTypeId?: true
         organization?: true
         position?: true
         specialization?: true
@@ -276874,8 +278198,8 @@ export namespace Prisma {
         createdBy?: true
         lecturerId?: true
         name?: true
-        academicRank?: true
-        academicDegree?: true
+        academicDegreeTypeId?: true
+        academicRankTypeId?: true
         organization?: true
         position?: true
         specialization?: true
@@ -276967,8 +278291,8 @@ export namespace Prisma {
         createdBy: string | null
         lecturerId: string | null
         name: string | null
-        academicRank: string | null
-        academicDegree: string | null
+        academicDegreeTypeId: string | null
+        academicRankTypeId: string | null
         organization: string | null
         position: string | null
         specialization: string | null
@@ -277008,8 +278332,8 @@ export namespace Prisma {
         createdBy?: boolean
         lecturerId?: boolean
         name?: boolean
-        academicRank?: boolean
-        academicDegree?: boolean
+        academicDegreeTypeId?: boolean
+        academicRankTypeId?: boolean
         organization?: boolean
         position?: boolean
         specialization?: boolean
@@ -277023,6 +278347,8 @@ export namespace Prisma {
         eligiblePresident?: boolean
         eligibleSecretary?: boolean
         lecturer?: boolean | ExpertProfile$lecturerArgs<ExtArgs>
+        academicDegreeType?: boolean | ExpertProfile$academicDegreeTypeArgs<ExtArgs>
+        academicRankType?: boolean | ExpertProfile$academicRankTypeArgs<ExtArgs>
         major?: boolean | ExpertProfile$majorArgs<ExtArgs>
         supervisedTheses?: boolean | ExpertProfile$supervisedThesesArgs<ExtArgs>
         coSupervisedTheses?: boolean | ExpertProfile$coSupervisedThesesArgs<ExtArgs>
@@ -277047,8 +278373,8 @@ export namespace Prisma {
         createdBy?: boolean
         lecturerId?: boolean
         name?: boolean
-        academicRank?: boolean
-        academicDegree?: boolean
+        academicDegreeTypeId?: boolean
+        academicRankTypeId?: boolean
         organization?: boolean
         position?: boolean
         specialization?: boolean
@@ -277062,6 +278388,8 @@ export namespace Prisma {
         eligiblePresident?: boolean
         eligibleSecretary?: boolean
         lecturer?: boolean | ExpertProfile$lecturerArgs<ExtArgs>
+        academicDegreeType?: boolean | ExpertProfile$academicDegreeTypeArgs<ExtArgs>
+        academicRankType?: boolean | ExpertProfile$academicRankTypeArgs<ExtArgs>
     }, ExtArgs["result"]["expertProfile"]>;
     export type ExpertProfileSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
         id?: boolean
@@ -277074,8 +278402,8 @@ export namespace Prisma {
         createdBy?: boolean
         lecturerId?: boolean
         name?: boolean
-        academicRank?: boolean
-        academicDegree?: boolean
+        academicDegreeTypeId?: boolean
+        academicRankTypeId?: boolean
         organization?: boolean
         position?: boolean
         specialization?: boolean
@@ -277089,6 +278417,8 @@ export namespace Prisma {
         eligiblePresident?: boolean
         eligibleSecretary?: boolean
         lecturer?: boolean | ExpertProfile$lecturerArgs<ExtArgs>
+        academicDegreeType?: boolean | ExpertProfile$academicDegreeTypeArgs<ExtArgs>
+        academicRankType?: boolean | ExpertProfile$academicRankTypeArgs<ExtArgs>
     }, ExtArgs["result"]["expertProfile"]>;
     export type ExpertProfileSelectScalar = {
         id?: boolean
@@ -277101,8 +278431,8 @@ export namespace Prisma {
         createdBy?: boolean
         lecturerId?: boolean
         name?: boolean
-        academicRank?: boolean
-        academicDegree?: boolean
+        academicDegreeTypeId?: boolean
+        academicRankTypeId?: boolean
         organization?: boolean
         position?: boolean
         specialization?: boolean
@@ -277116,9 +278446,11 @@ export namespace Prisma {
         eligiblePresident?: boolean
         eligibleSecretary?: boolean
     };
-    export type ExpertProfileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "lecturerId" | "name" | "academicRank" | "academicDegree" | "organization" | "position" | "specialization" | "workplace" | "phone" | "email" | "bankAccountNumber" | "bankName" | "projectExpert" | "thesisExpert" | "eligiblePresident" | "eligibleSecretary", ExtArgs["result"]["expertProfile"]>;
+    export type ExpertProfileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "lecturerId" | "name" | "academicDegreeTypeId" | "academicRankTypeId" | "organization" | "position" | "specialization" | "workplace" | "phone" | "email" | "bankAccountNumber" | "bankName" | "projectExpert" | "thesisExpert" | "eligiblePresident" | "eligibleSecretary", ExtArgs["result"]["expertProfile"]>;
     export type ExpertProfileInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         lecturer?: boolean | ExpertProfile$lecturerArgs<ExtArgs>
+        academicDegreeType?: boolean | ExpertProfile$academicDegreeTypeArgs<ExtArgs>
+        academicRankType?: boolean | ExpertProfile$academicRankTypeArgs<ExtArgs>
         major?: boolean | ExpertProfile$majorArgs<ExtArgs>
         supervisedTheses?: boolean | ExpertProfile$supervisedThesesArgs<ExtArgs>
         coSupervisedTheses?: boolean | ExpertProfile$coSupervisedThesesArgs<ExtArgs>
@@ -277134,14 +278466,20 @@ export namespace Prisma {
     };
     export type ExpertProfileIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         lecturer?: boolean | ExpertProfile$lecturerArgs<ExtArgs>
+        academicDegreeType?: boolean | ExpertProfile$academicDegreeTypeArgs<ExtArgs>
+        academicRankType?: boolean | ExpertProfile$academicRankTypeArgs<ExtArgs>
     };
     export type ExpertProfileIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         lecturer?: boolean | ExpertProfile$lecturerArgs<ExtArgs>
+        academicDegreeType?: boolean | ExpertProfile$academicDegreeTypeArgs<ExtArgs>
+        academicRankType?: boolean | ExpertProfile$academicRankTypeArgs<ExtArgs>
     };
     export type $ExpertProfilePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         name: "ExpertProfile"
         objects: {
             lecturer: Prisma.$LecturerPayload<ExtArgs> | null
+            academicDegreeType: Prisma.$DM_HocViPayload<ExtArgs> | null
+            academicRankType: Prisma.$DM_HocHamPayload<ExtArgs> | null
             major: Prisma.$TrainingMajorPayload<ExtArgs>[]
             supervisedTheses: Prisma.$ThesisProjectPayload<ExtArgs>[]
             coSupervisedTheses: Prisma.$ThesisProjectPayload<ExtArgs>[]
@@ -277165,8 +278503,8 @@ export namespace Prisma {
             createdBy: string | null
             lecturerId: string | null
             name: string | null
-            academicRank: string | null
-            academicDegree: string | null
+            academicDegreeTypeId: string | null
+            academicRankTypeId: string | null
             organization: string | null
             position: string | null
             specialization: string | null
@@ -277583,6 +278921,42 @@ export namespace Prisma {
          */
         include?: LecturerInclude<ExtArgs> | null
         where?: LecturerWhereInput
+    };
+    /**
+     * ExpertProfile.academicDegreeType
+     */
+    export type ExpertProfile$academicDegreeTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the DM_HocVi
+         */
+        select?: DM_HocViSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the DM_HocVi
+         */
+        omit?: DM_HocViOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: DM_HocViInclude<ExtArgs> | null
+        where?: DM_HocViWhereInput
+    };
+    /**
+     * ExpertProfile.academicRankType
+     */
+    export type ExpertProfile$academicRankTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the DM_HocHam
+         */
+        select?: DM_HocHamSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the DM_HocHam
+         */
+        omit?: DM_HocHamOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: DM_HocHamInclude<ExtArgs> | null
+        where?: DM_HocHamWhereInput
     };
     /**
      * ExpertProfile.major
@@ -358914,6 +360288,7 @@ export namespace Prisma {
     export type OutputStandardScalarFieldEnum = (typeof OutputStandardScalarFieldEnum)[keyof typeof OutputStandardScalarFieldEnum];
     export type OutputStandardOnCurriculumScalarFieldEnum = (typeof OutputStandardOnCurriculumScalarFieldEnum)[keyof typeof OutputStandardOnCurriculumScalarFieldEnum];
     export type StudentScalarFieldEnum = (typeof StudentScalarFieldEnum)[keyof typeof StudentScalarFieldEnum];
+    export type TrainingActivityScalarFieldEnum = (typeof TrainingActivityScalarFieldEnum)[keyof typeof TrainingActivityScalarFieldEnum];
     export type StudentSemesterResultScalarFieldEnum = (typeof StudentSemesterResultScalarFieldEnum)[keyof typeof StudentSemesterResultScalarFieldEnum];
     export type StudentYearResultScalarFieldEnum = (typeof StudentYearResultScalarFieldEnum)[keyof typeof StudentYearResultScalarFieldEnum];
     export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum];
@@ -359189,6 +360564,7 @@ export namespace Prisma {
     export type OutputStandardOrderByRelevanceFieldEnum = (typeof OutputStandardOrderByRelevanceFieldEnum)[keyof typeof OutputStandardOrderByRelevanceFieldEnum];
     export type OutputStandardOnCurriculumOrderByRelevanceFieldEnum = (typeof OutputStandardOnCurriculumOrderByRelevanceFieldEnum)[keyof typeof OutputStandardOnCurriculumOrderByRelevanceFieldEnum];
     export type StudentOrderByRelevanceFieldEnum = (typeof StudentOrderByRelevanceFieldEnum)[keyof typeof StudentOrderByRelevanceFieldEnum];
+    export type TrainingActivityOrderByRelevanceFieldEnum = (typeof TrainingActivityOrderByRelevanceFieldEnum)[keyof typeof TrainingActivityOrderByRelevanceFieldEnum];
     export type StudentSemesterResultOrderByRelevanceFieldEnum = (typeof StudentSemesterResultOrderByRelevanceFieldEnum)[keyof typeof StudentSemesterResultOrderByRelevanceFieldEnum];
     export type StudentYearResultOrderByRelevanceFieldEnum = (typeof StudentYearResultOrderByRelevanceFieldEnum)[keyof typeof StudentYearResultOrderByRelevanceFieldEnum];
     export type NotificationOrderByRelevanceFieldEnum = (typeof NotificationOrderByRelevanceFieldEnum)[keyof typeof NotificationOrderByRelevanceFieldEnum];
@@ -365212,6 +366588,7 @@ export namespace Prisma {
         sThietBiSua?: StringNullableFilter<"DM_HocHam"> | string | null
         profiles?: UserProfileListRelationFilter
         hocHam?: HocHamListRelationFilter
+        expertProfile?: ExpertProfileListRelationFilter
     };
     export type DM_HocHamOrderByWithRelationInput = {
         Id?: SortOrder
@@ -365231,6 +366608,7 @@ export namespace Prisma {
         sThietBiSua?: SortOrderInput | SortOrder
         profiles?: UserProfileOrderByRelationAggregateInput
         hocHam?: HocHamOrderByRelationAggregateInput
+        expertProfile?: ExpertProfileOrderByRelationAggregateInput
         _relevance?: DM_HocHamOrderByRelevanceInput
     };
     export type DM_HocHamWhereUniqueInput = Prisma.AtLeast<{
@@ -365254,6 +366632,7 @@ export namespace Prisma {
         sThietBiSua?: StringNullableFilter<"DM_HocHam"> | string | null
         profiles?: UserProfileListRelationFilter
         hocHam?: HocHamListRelationFilter
+        expertProfile?: ExpertProfileListRelationFilter
     }, "Id">;
     export type DM_HocHamOrderByWithAggregationInput = {
         Id?: SortOrder
@@ -365318,6 +366697,7 @@ export namespace Prisma {
         sThietBiSua?: StringNullableFilter<"DM_HocVi"> | string | null
         profiles?: UserProfileListRelationFilter
         hocVi?: HocViListRelationFilter
+        expertProfile?: ExpertProfileListRelationFilter
     };
     export type DM_HocViOrderByWithRelationInput = {
         Id?: SortOrder
@@ -365337,6 +366717,7 @@ export namespace Prisma {
         sThietBiSua?: SortOrderInput | SortOrder
         profiles?: UserProfileOrderByRelationAggregateInput
         hocVi?: HocViOrderByRelationAggregateInput
+        expertProfile?: ExpertProfileOrderByRelationAggregateInput
         _relevance?: DM_HocViOrderByRelevanceInput
     };
     export type DM_HocViWhereUniqueInput = Prisma.AtLeast<{
@@ -365360,6 +366741,7 @@ export namespace Prisma {
         sThietBiSua?: StringNullableFilter<"DM_HocVi"> | string | null
         profiles?: UserProfileListRelationFilter
         hocVi?: HocViListRelationFilter
+        expertProfile?: ExpertProfileListRelationFilter
     }, "Id">;
     export type DM_HocViOrderByWithAggregationInput = {
         Id?: SortOrder
@@ -375136,6 +376518,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreListRelationFilter
         schoolYearTrainingScore?: SchoolYearTrainingScoreListRelationFilter
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentListRelationFilter
+        trainingActivity?: TrainingActivityListRelationFilter
     };
     export type StudentOrderByWithRelationInput = {
         id?: SortOrder
@@ -375216,6 +376599,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreOrderByRelationAggregateInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreOrderByRelationAggregateInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentOrderByRelationAggregateInput
+        trainingActivity?: TrainingActivityOrderByRelationAggregateInput
         _relevance?: StudentOrderByRelevanceInput
     };
     export type StudentWhereUniqueInput = Prisma.AtLeast<{
@@ -375300,6 +376684,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreListRelationFilter
         schoolYearTrainingScore?: SchoolYearTrainingScoreListRelationFilter
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentListRelationFilter
+        trainingActivity?: TrainingActivityListRelationFilter
     }, "id" | "code">;
     export type StudentOrderByWithAggregationInput = {
         id?: SortOrder
@@ -375400,6 +376785,94 @@ export namespace Prisma {
         ITCertificationPass?: BoolWithAggregatesFilter<"Student"> | boolean
         strengthTrainingPass?: BoolWithAggregatesFilter<"Student"> | boolean
         militaryTrainingPass?: BoolWithAggregatesFilter<"Student"> | boolean
+    };
+    export type TrainingActivityWhereInput = {
+        AND?: TrainingActivityWhereInput | TrainingActivityWhereInput[]
+        OR?: TrainingActivityWhereInput[]
+        NOT?: TrainingActivityWhereInput | TrainingActivityWhereInput[]
+        id?: StringFilter<"TrainingActivity"> | string
+        code?: StringNullableFilter<"TrainingActivity"> | string | null
+        active?: BoolFilter<"TrainingActivity"> | boolean
+        description?: StringNullableFilter<"TrainingActivity"> | string | null
+        deletedAt?: DateTimeNullableFilter<"TrainingActivity"> | Date | string | null
+        createdAt?: DateTimeFilter<"TrainingActivity"> | Date | string
+        updatedAt?: DateTimeFilter<"TrainingActivity"> | Date | string
+        createdBy?: UuidNullableFilter<"TrainingActivity"> | string | null
+        studentId?: StringFilter<"TrainingActivity"> | string
+        category?: StringFilter<"TrainingActivity"> | string
+        score?: IntFilter<"TrainingActivity"> | number
+        date?: DateTimeFilter<"TrainingActivity"> | Date | string
+        student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
+    };
+    export type TrainingActivityOrderByWithRelationInput = {
+        id?: SortOrder
+        code?: SortOrderInput | SortOrder
+        active?: SortOrder
+        description?: SortOrderInput | SortOrder
+        deletedAt?: SortOrderInput | SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        createdBy?: SortOrderInput | SortOrder
+        studentId?: SortOrder
+        category?: SortOrder
+        score?: SortOrder
+        date?: SortOrder
+        student?: StudentOrderByWithRelationInput
+        _relevance?: TrainingActivityOrderByRelevanceInput
+    };
+    export type TrainingActivityWhereUniqueInput = Prisma.AtLeast<{
+        id?: string
+        code?: string
+        AND?: TrainingActivityWhereInput | TrainingActivityWhereInput[]
+        OR?: TrainingActivityWhereInput[]
+        NOT?: TrainingActivityWhereInput | TrainingActivityWhereInput[]
+        active?: BoolFilter<"TrainingActivity"> | boolean
+        description?: StringNullableFilter<"TrainingActivity"> | string | null
+        deletedAt?: DateTimeNullableFilter<"TrainingActivity"> | Date | string | null
+        createdAt?: DateTimeFilter<"TrainingActivity"> | Date | string
+        updatedAt?: DateTimeFilter<"TrainingActivity"> | Date | string
+        createdBy?: UuidNullableFilter<"TrainingActivity"> | string | null
+        studentId?: StringFilter<"TrainingActivity"> | string
+        category?: StringFilter<"TrainingActivity"> | string
+        score?: IntFilter<"TrainingActivity"> | number
+        date?: DateTimeFilter<"TrainingActivity"> | Date | string
+        student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
+    }, "id" | "code">;
+    export type TrainingActivityOrderByWithAggregationInput = {
+        id?: SortOrder
+        code?: SortOrderInput | SortOrder
+        active?: SortOrder
+        description?: SortOrderInput | SortOrder
+        deletedAt?: SortOrderInput | SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        createdBy?: SortOrderInput | SortOrder
+        studentId?: SortOrder
+        category?: SortOrder
+        score?: SortOrder
+        date?: SortOrder
+        _count?: TrainingActivityCountOrderByAggregateInput
+        _avg?: TrainingActivityAvgOrderByAggregateInput
+        _max?: TrainingActivityMaxOrderByAggregateInput
+        _min?: TrainingActivityMinOrderByAggregateInput
+        _sum?: TrainingActivitySumOrderByAggregateInput
+    };
+    export type TrainingActivityScalarWhereWithAggregatesInput = {
+        AND?: TrainingActivityScalarWhereWithAggregatesInput | TrainingActivityScalarWhereWithAggregatesInput[]
+        OR?: TrainingActivityScalarWhereWithAggregatesInput[]
+        NOT?: TrainingActivityScalarWhereWithAggregatesInput | TrainingActivityScalarWhereWithAggregatesInput[]
+        id?: StringWithAggregatesFilter<"TrainingActivity"> | string
+        code?: StringNullableWithAggregatesFilter<"TrainingActivity"> | string | null
+        active?: BoolWithAggregatesFilter<"TrainingActivity"> | boolean
+        description?: StringNullableWithAggregatesFilter<"TrainingActivity"> | string | null
+        deletedAt?: DateTimeNullableWithAggregatesFilter<"TrainingActivity"> | Date | string | null
+        createdAt?: DateTimeWithAggregatesFilter<"TrainingActivity"> | Date | string
+        updatedAt?: DateTimeWithAggregatesFilter<"TrainingActivity"> | Date | string
+        createdBy?: UuidNullableWithAggregatesFilter<"TrainingActivity"> | string | null
+        studentId?: StringWithAggregatesFilter<"TrainingActivity"> | string
+        category?: StringWithAggregatesFilter<"TrainingActivity"> | string
+        score?: IntWithAggregatesFilter<"TrainingActivity"> | number
+        date?: DateTimeWithAggregatesFilter<"TrainingActivity"> | Date | string
     };
     export type StudentSemesterResultWhereInput = {
         AND?: StudentSemesterResultWhereInput | StudentSemesterResultWhereInput[]
@@ -378475,8 +379948,8 @@ export namespace Prisma {
         createdBy?: UuidNullableFilter<"ExpertProfile"> | string | null
         lecturerId?: StringNullableFilter<"ExpertProfile"> | string | null
         name?: StringNullableFilter<"ExpertProfile"> | string | null
-        academicRank?: StringNullableFilter<"ExpertProfile"> | string | null
-        academicDegree?: StringNullableFilter<"ExpertProfile"> | string | null
+        academicDegreeTypeId?: UuidNullableFilter<"ExpertProfile"> | string | null
+        academicRankTypeId?: UuidNullableFilter<"ExpertProfile"> | string | null
         organization?: StringNullableFilter<"ExpertProfile"> | string | null
         position?: StringNullableFilter<"ExpertProfile"> | string | null
         specialization?: StringNullableFilter<"ExpertProfile"> | string | null
@@ -378490,6 +379963,8 @@ export namespace Prisma {
         eligiblePresident?: BoolFilter<"ExpertProfile"> | boolean
         eligibleSecretary?: BoolFilter<"ExpertProfile"> | boolean
         lecturer?: XOR<LecturerNullableScalarRelationFilter, LecturerWhereInput> | null
+        academicDegreeType?: XOR<DM_HocViNullableScalarRelationFilter, DM_HocViWhereInput> | null
+        academicRankType?: XOR<DM_HocHamNullableScalarRelationFilter, DM_HocHamWhereInput> | null
         major?: TrainingMajorListRelationFilter
         supervisedTheses?: ThesisProjectListRelationFilter
         coSupervisedTheses?: ThesisProjectListRelationFilter
@@ -378513,8 +379988,8 @@ export namespace Prisma {
         createdBy?: SortOrderInput | SortOrder
         lecturerId?: SortOrderInput | SortOrder
         name?: SortOrderInput | SortOrder
-        academicRank?: SortOrderInput | SortOrder
-        academicDegree?: SortOrderInput | SortOrder
+        academicDegreeTypeId?: SortOrderInput | SortOrder
+        academicRankTypeId?: SortOrderInput | SortOrder
         organization?: SortOrderInput | SortOrder
         position?: SortOrderInput | SortOrder
         specialization?: SortOrderInput | SortOrder
@@ -378528,6 +380003,8 @@ export namespace Prisma {
         eligiblePresident?: SortOrder
         eligibleSecretary?: SortOrder
         lecturer?: LecturerOrderByWithRelationInput
+        academicDegreeType?: DM_HocViOrderByWithRelationInput
+        academicRankType?: DM_HocHamOrderByWithRelationInput
         major?: TrainingMajorOrderByRelationAggregateInput
         supervisedTheses?: ThesisProjectOrderByRelationAggregateInput
         coSupervisedTheses?: ThesisProjectOrderByRelationAggregateInput
@@ -378555,8 +380032,8 @@ export namespace Prisma {
         updatedAt?: DateTimeFilter<"ExpertProfile"> | Date | string
         createdBy?: UuidNullableFilter<"ExpertProfile"> | string | null
         name?: StringNullableFilter<"ExpertProfile"> | string | null
-        academicRank?: StringNullableFilter<"ExpertProfile"> | string | null
-        academicDegree?: StringNullableFilter<"ExpertProfile"> | string | null
+        academicDegreeTypeId?: UuidNullableFilter<"ExpertProfile"> | string | null
+        academicRankTypeId?: UuidNullableFilter<"ExpertProfile"> | string | null
         organization?: StringNullableFilter<"ExpertProfile"> | string | null
         position?: StringNullableFilter<"ExpertProfile"> | string | null
         specialization?: StringNullableFilter<"ExpertProfile"> | string | null
@@ -378570,6 +380047,8 @@ export namespace Prisma {
         eligiblePresident?: BoolFilter<"ExpertProfile"> | boolean
         eligibleSecretary?: BoolFilter<"ExpertProfile"> | boolean
         lecturer?: XOR<LecturerNullableScalarRelationFilter, LecturerWhereInput> | null
+        academicDegreeType?: XOR<DM_HocViNullableScalarRelationFilter, DM_HocViWhereInput> | null
+        academicRankType?: XOR<DM_HocHamNullableScalarRelationFilter, DM_HocHamWhereInput> | null
         major?: TrainingMajorListRelationFilter
         supervisedTheses?: ThesisProjectListRelationFilter
         coSupervisedTheses?: ThesisProjectListRelationFilter
@@ -378593,8 +380072,8 @@ export namespace Prisma {
         createdBy?: SortOrderInput | SortOrder
         lecturerId?: SortOrderInput | SortOrder
         name?: SortOrderInput | SortOrder
-        academicRank?: SortOrderInput | SortOrder
-        academicDegree?: SortOrderInput | SortOrder
+        academicDegreeTypeId?: SortOrderInput | SortOrder
+        academicRankTypeId?: SortOrderInput | SortOrder
         organization?: SortOrderInput | SortOrder
         position?: SortOrderInput | SortOrder
         specialization?: SortOrderInput | SortOrder
@@ -378625,8 +380104,8 @@ export namespace Prisma {
         createdBy?: UuidNullableWithAggregatesFilter<"ExpertProfile"> | string | null
         lecturerId?: StringNullableWithAggregatesFilter<"ExpertProfile"> | string | null
         name?: StringNullableWithAggregatesFilter<"ExpertProfile"> | string | null
-        academicRank?: StringNullableWithAggregatesFilter<"ExpertProfile"> | string | null
-        academicDegree?: StringNullableWithAggregatesFilter<"ExpertProfile"> | string | null
+        academicDegreeTypeId?: UuidNullableWithAggregatesFilter<"ExpertProfile"> | string | null
+        academicRankTypeId?: UuidNullableWithAggregatesFilter<"ExpertProfile"> | string | null
         organization?: StringNullableWithAggregatesFilter<"ExpertProfile"> | string | null
         position?: StringNullableWithAggregatesFilter<"ExpertProfile"> | string | null
         specialization?: StringNullableWithAggregatesFilter<"ExpertProfile"> | string | null
@@ -394809,6 +396288,7 @@ export namespace Prisma {
         sThietBiSua?: string | null
         profiles?: UserProfileCreateNestedManyWithoutAcademicRankTypeInput
         hocHam?: HocHamCreateNestedManyWithoutAcademicRankTypeInput
+        expertProfile?: ExpertProfileCreateNestedManyWithoutAcademicRankTypeInput
     };
     export type DM_HocHamUncheckedCreateInput = {
         Id?: string
@@ -394828,6 +396308,7 @@ export namespace Prisma {
         sThietBiSua?: string | null
         profiles?: UserProfileUncheckedCreateNestedManyWithoutAcademicRankTypeInput
         hocHam?: HocHamUncheckedCreateNestedManyWithoutAcademicRankTypeInput
+        expertProfile?: ExpertProfileUncheckedCreateNestedManyWithoutAcademicRankTypeInput
     };
     export type DM_HocHamUpdateInput = {
         Id?: StringFieldUpdateOperationsInput | string
@@ -394847,6 +396328,7 @@ export namespace Prisma {
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         profiles?: UserProfileUpdateManyWithoutAcademicRankTypeNestedInput
         hocHam?: HocHamUpdateManyWithoutAcademicRankTypeNestedInput
+        expertProfile?: ExpertProfileUpdateManyWithoutAcademicRankTypeNestedInput
     };
     export type DM_HocHamUncheckedUpdateInput = {
         Id?: StringFieldUpdateOperationsInput | string
@@ -394866,6 +396348,7 @@ export namespace Prisma {
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         profiles?: UserProfileUncheckedUpdateManyWithoutAcademicRankTypeNestedInput
         hocHam?: HocHamUncheckedUpdateManyWithoutAcademicRankTypeNestedInput
+        expertProfile?: ExpertProfileUncheckedUpdateManyWithoutAcademicRankTypeNestedInput
     };
     export type DM_HocHamCreateManyInput = {
         Id?: string
@@ -394936,6 +396419,7 @@ export namespace Prisma {
         sThietBiSua?: string | null
         profiles?: UserProfileCreateNestedManyWithoutAcademicDegreeTypeInput
         hocVi?: HocViCreateNestedManyWithoutAcademicDegreeTypeInput
+        expertProfile?: ExpertProfileCreateNestedManyWithoutAcademicDegreeTypeInput
     };
     export type DM_HocViUncheckedCreateInput = {
         Id?: string
@@ -394955,6 +396439,7 @@ export namespace Prisma {
         sThietBiSua?: string | null
         profiles?: UserProfileUncheckedCreateNestedManyWithoutAcademicDegreeTypeInput
         hocVi?: HocViUncheckedCreateNestedManyWithoutAcademicDegreeTypeInput
+        expertProfile?: ExpertProfileUncheckedCreateNestedManyWithoutAcademicDegreeTypeInput
     };
     export type DM_HocViUpdateInput = {
         Id?: StringFieldUpdateOperationsInput | string
@@ -394974,6 +396459,7 @@ export namespace Prisma {
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         profiles?: UserProfileUpdateManyWithoutAcademicDegreeTypeNestedInput
         hocVi?: HocViUpdateManyWithoutAcademicDegreeTypeNestedInput
+        expertProfile?: ExpertProfileUpdateManyWithoutAcademicDegreeTypeNestedInput
     };
     export type DM_HocViUncheckedUpdateInput = {
         Id?: StringFieldUpdateOperationsInput | string
@@ -394993,6 +396479,7 @@ export namespace Prisma {
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         profiles?: UserProfileUncheckedUpdateManyWithoutAcademicDegreeTypeNestedInput
         hocVi?: HocViUncheckedUpdateManyWithoutAcademicDegreeTypeNestedInput
+        expertProfile?: ExpertProfileUncheckedUpdateManyWithoutAcademicDegreeTypeNestedInput
     };
     export type DM_HocViCreateManyInput = {
         Id?: string
@@ -406233,6 +407720,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutStudentInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreCreateNestedManyWithoutStudentInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentCreateNestedManyWithoutStudentInput
+        trainingActivity?: TrainingActivityCreateNestedManyWithoutStudentInput
     };
     export type StudentUncheckedCreateInput = {
         id?: string
@@ -406307,6 +407795,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedCreateNestedManyWithoutStudentInput
+        trainingActivity?: TrainingActivityUncheckedCreateNestedManyWithoutStudentInput
     };
     export type StudentUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -406381,6 +407870,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutStudentNestedInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUpdateManyWithoutStudentNestedInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUpdateManyWithoutStudentNestedInput
+        trainingActivity?: TrainingActivityUpdateManyWithoutStudentNestedInput
     };
     export type StudentUncheckedUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -406455,6 +407945,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedUpdateManyWithoutStudentNestedInput
+        trainingActivity?: TrainingActivityUncheckedUpdateManyWithoutStudentNestedInput
     };
     export type StudentCreateManyInput = {
         id?: string
@@ -406587,6 +408078,103 @@ export namespace Prisma {
         ITCertificationPass?: BoolFieldUpdateOperationsInput | boolean
         strengthTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
+    };
+    export type TrainingActivityCreateInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        category: string
+        score: number
+        date?: Date | string
+        student: StudentCreateNestedOneWithoutTrainingActivityInput
+    };
+    export type TrainingActivityUncheckedCreateInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        studentId: string
+        category: string
+        score: number
+        date?: Date | string
+    };
+    export type TrainingActivityUpdateInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        category?: StringFieldUpdateOperationsInput | string
+        score?: IntFieldUpdateOperationsInput | number
+        date?: DateTimeFieldUpdateOperationsInput | Date | string
+        student?: StudentUpdateOneRequiredWithoutTrainingActivityNestedInput
+    };
+    export type TrainingActivityUncheckedUpdateInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        studentId?: StringFieldUpdateOperationsInput | string
+        category?: StringFieldUpdateOperationsInput | string
+        score?: IntFieldUpdateOperationsInput | number
+        date?: DateTimeFieldUpdateOperationsInput | Date | string
+    };
+    export type TrainingActivityCreateManyInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        studentId: string
+        category: string
+        score: number
+        date?: Date | string
+    };
+    export type TrainingActivityUpdateManyMutationInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        category?: StringFieldUpdateOperationsInput | string
+        score?: IntFieldUpdateOperationsInput | number
+        date?: DateTimeFieldUpdateOperationsInput | Date | string
+    };
+    export type TrainingActivityUncheckedUpdateManyInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        studentId?: StringFieldUpdateOperationsInput | string
+        category?: StringFieldUpdateOperationsInput | string
+        score?: IntFieldUpdateOperationsInput | number
+        date?: DateTimeFieldUpdateOperationsInput | Date | string
     };
     export type StudentSemesterResultCreateInput = {
         id?: string
@@ -410035,8 +411623,6 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         name?: string | null
-        academicRank?: string | null
-        academicDegree?: string | null
         organization?: string | null
         position?: string | null
         specialization?: string | null
@@ -410050,6 +411636,8 @@ export namespace Prisma {
         eligiblePresident?: boolean
         eligibleSecretary?: boolean
         lecturer?: LecturerCreateNestedOneWithoutExpertProfileInput
+        academicDegreeType?: DM_HocViCreateNestedOneWithoutExpertProfileInput
+        academicRankType?: DM_HocHamCreateNestedOneWithoutExpertProfileInput
         major?: TrainingMajorCreateNestedManyWithoutExpertProfileInput
         supervisedTheses?: ThesisProjectCreateNestedManyWithoutSupervisorInput
         coSupervisedTheses?: ThesisProjectCreateNestedManyWithoutCoSupervisorInput
@@ -410073,8 +411661,8 @@ export namespace Prisma {
         createdBy?: string | null
         lecturerId?: string | null
         name?: string | null
-        academicRank?: string | null
-        academicDegree?: string | null
+        academicDegreeTypeId?: string | null
+        academicRankTypeId?: string | null
         organization?: string | null
         position?: string | null
         specialization?: string | null
@@ -410109,8 +411697,6 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: NullableStringFieldUpdateOperationsInput | string | null
-        academicRank?: NullableStringFieldUpdateOperationsInput | string | null
-        academicDegree?: NullableStringFieldUpdateOperationsInput | string | null
         organization?: NullableStringFieldUpdateOperationsInput | string | null
         position?: NullableStringFieldUpdateOperationsInput | string | null
         specialization?: NullableStringFieldUpdateOperationsInput | string | null
@@ -410124,6 +411710,8 @@ export namespace Prisma {
         eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
         eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
         lecturer?: LecturerUpdateOneWithoutExpertProfileNestedInput
+        academicDegreeType?: DM_HocViUpdateOneWithoutExpertProfileNestedInput
+        academicRankType?: DM_HocHamUpdateOneWithoutExpertProfileNestedInput
         major?: TrainingMajorUpdateManyWithoutExpertProfileNestedInput
         supervisedTheses?: ThesisProjectUpdateManyWithoutSupervisorNestedInput
         coSupervisedTheses?: ThesisProjectUpdateManyWithoutCoSupervisorNestedInput
@@ -410147,8 +411735,8 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         name?: NullableStringFieldUpdateOperationsInput | string | null
-        academicRank?: NullableStringFieldUpdateOperationsInput | string | null
-        academicDegree?: NullableStringFieldUpdateOperationsInput | string | null
+        academicDegreeTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         organization?: NullableStringFieldUpdateOperationsInput | string | null
         position?: NullableStringFieldUpdateOperationsInput | string | null
         specialization?: NullableStringFieldUpdateOperationsInput | string | null
@@ -410184,8 +411772,8 @@ export namespace Prisma {
         createdBy?: string | null
         lecturerId?: string | null
         name?: string | null
-        academicRank?: string | null
-        academicDegree?: string | null
+        academicDegreeTypeId?: string | null
+        academicRankTypeId?: string | null
         organization?: string | null
         position?: string | null
         specialization?: string | null
@@ -410209,8 +411797,6 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: NullableStringFieldUpdateOperationsInput | string | null
-        academicRank?: NullableStringFieldUpdateOperationsInput | string | null
-        academicDegree?: NullableStringFieldUpdateOperationsInput | string | null
         organization?: NullableStringFieldUpdateOperationsInput | string | null
         position?: NullableStringFieldUpdateOperationsInput | string | null
         specialization?: NullableStringFieldUpdateOperationsInput | string | null
@@ -410235,8 +411821,8 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         name?: NullableStringFieldUpdateOperationsInput | string | null
-        academicRank?: NullableStringFieldUpdateOperationsInput | string | null
-        academicDegree?: NullableStringFieldUpdateOperationsInput | string | null
+        academicDegreeTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         organization?: NullableStringFieldUpdateOperationsInput | string | null
         position?: NullableStringFieldUpdateOperationsInput | string | null
         specialization?: NullableStringFieldUpdateOperationsInput | string | null
@@ -425441,6 +427027,14 @@ export namespace Prisma {
         iDictionaryKey?: SortOrder
         iNhomChucVu?: SortOrder
     };
+    export type ExpertProfileListRelationFilter = {
+        every?: ExpertProfileWhereInput
+        some?: ExpertProfileWhereInput
+        none?: ExpertProfileWhereInput
+    };
+    export type ExpertProfileOrderByRelationAggregateInput = {
+        _count?: SortOrder
+    };
     export type DM_HocHamOrderByRelevanceInput = {
         fields: DM_HocHamOrderByRelevanceFieldEnum | DM_HocHamOrderByRelevanceFieldEnum[]
         sort: SortOrder
@@ -430212,11 +431806,6 @@ export namespace Prisma {
         is?: ScoreLinkSubjectVersionWhereInput | null
         isNot?: ScoreLinkSubjectVersionWhereInput | null
     };
-    export type ExpertProfileListRelationFilter = {
-        every?: ExpertProfileWhereInput
-        some?: ExpertProfileWhereInput
-        none?: ExpertProfileWhereInput
-    };
     export type RoomListRelationFilter = {
         every?: RoomWhereInput
         some?: RoomWhereInput
@@ -430231,9 +431820,6 @@ export namespace Prisma {
         every?: ExamBankWhereInput
         some?: ExamBankWhereInput
         none?: ExamBankWhereInput
-    };
-    export type ExpertProfileOrderByRelationAggregateInput = {
-        _count?: SortOrder
     };
     export type RoomOrderByRelationAggregateInput = {
         _count?: SortOrder
@@ -432300,6 +433886,11 @@ export namespace Prisma {
         some?: NoteFolderWhereInput
         none?: NoteFolderWhereInput
     };
+    export type TrainingActivityListRelationFilter = {
+        every?: TrainingActivityWhereInput
+        some?: TrainingActivityWhereInput
+        none?: TrainingActivityWhereInput
+    };
     export type PriorityObjectOrderByRelationAggregateInput = {
         _count?: SortOrder
     };
@@ -432322,6 +433913,9 @@ export namespace Prisma {
         _count?: SortOrder
     };
     export type NoteFolderOrderByRelationAggregateInput = {
+        _count?: SortOrder
+    };
+    export type TrainingActivityOrderByRelationAggregateInput = {
         _count?: SortOrder
     };
     export type StudentOrderByRelevanceInput = {
@@ -432495,6 +434089,59 @@ export namespace Prisma {
         _count?: NestedIntFilter<$PrismaModel>
         _min?: NestedEnumStudentStatusFilter<$PrismaModel>
         _max?: NestedEnumStudentStatusFilter<$PrismaModel>
+    };
+    export type TrainingActivityOrderByRelevanceInput = {
+        fields: TrainingActivityOrderByRelevanceFieldEnum | TrainingActivityOrderByRelevanceFieldEnum[]
+        sort: SortOrder
+        search: string
+    };
+    export type TrainingActivityCountOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        createdBy?: SortOrder
+        studentId?: SortOrder
+        category?: SortOrder
+        score?: SortOrder
+        date?: SortOrder
+    };
+    export type TrainingActivityAvgOrderByAggregateInput = {
+        score?: SortOrder
+    };
+    export type TrainingActivityMaxOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        createdBy?: SortOrder
+        studentId?: SortOrder
+        category?: SortOrder
+        score?: SortOrder
+        date?: SortOrder
+    };
+    export type TrainingActivityMinOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        createdBy?: SortOrder
+        studentId?: SortOrder
+        category?: SortOrder
+        score?: SortOrder
+        date?: SortOrder
+    };
+    export type TrainingActivitySumOrderByAggregateInput = {
+        score?: SortOrder
     };
     export type DecimalFilter<$PrismaModel = never> = {
         equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
@@ -434675,8 +436322,8 @@ export namespace Prisma {
         createdBy?: SortOrder
         lecturerId?: SortOrder
         name?: SortOrder
-        academicRank?: SortOrder
-        academicDegree?: SortOrder
+        academicDegreeTypeId?: SortOrder
+        academicRankTypeId?: SortOrder
         organization?: SortOrder
         position?: SortOrder
         specialization?: SortOrder
@@ -434701,8 +436348,8 @@ export namespace Prisma {
         createdBy?: SortOrder
         lecturerId?: SortOrder
         name?: SortOrder
-        academicRank?: SortOrder
-        academicDegree?: SortOrder
+        academicDegreeTypeId?: SortOrder
+        academicRankTypeId?: SortOrder
         organization?: SortOrder
         position?: SortOrder
         specialization?: SortOrder
@@ -434727,8 +436374,8 @@ export namespace Prisma {
         createdBy?: SortOrder
         lecturerId?: SortOrder
         name?: SortOrder
-        academicRank?: SortOrder
-        academicDegree?: SortOrder
+        academicDegreeTypeId?: SortOrder
+        academicRankTypeId?: SortOrder
         organization?: SortOrder
         position?: SortOrder
         specialization?: SortOrder
@@ -445428,6 +447075,12 @@ export namespace Prisma {
         createMany?: HocHamCreateManyAcademicRankTypeInputEnvelope
         connect?: HocHamWhereUniqueInput | HocHamWhereUniqueInput[]
     };
+    export type ExpertProfileCreateNestedManyWithoutAcademicRankTypeInput = {
+        create?: XOR<ExpertProfileCreateWithoutAcademicRankTypeInput, ExpertProfileUncheckedCreateWithoutAcademicRankTypeInput> | ExpertProfileCreateWithoutAcademicRankTypeInput[] | ExpertProfileUncheckedCreateWithoutAcademicRankTypeInput[]
+        connectOrCreate?: ExpertProfileCreateOrConnectWithoutAcademicRankTypeInput | ExpertProfileCreateOrConnectWithoutAcademicRankTypeInput[]
+        createMany?: ExpertProfileCreateManyAcademicRankTypeInputEnvelope
+        connect?: ExpertProfileWhereUniqueInput | ExpertProfileWhereUniqueInput[]
+    };
     export type UserProfileUncheckedCreateNestedManyWithoutAcademicRankTypeInput = {
         create?: XOR<UserProfileCreateWithoutAcademicRankTypeInput, UserProfileUncheckedCreateWithoutAcademicRankTypeInput> | UserProfileCreateWithoutAcademicRankTypeInput[] | UserProfileUncheckedCreateWithoutAcademicRankTypeInput[]
         connectOrCreate?: UserProfileCreateOrConnectWithoutAcademicRankTypeInput | UserProfileCreateOrConnectWithoutAcademicRankTypeInput[]
@@ -445439,6 +447092,12 @@ export namespace Prisma {
         connectOrCreate?: HocHamCreateOrConnectWithoutAcademicRankTypeInput | HocHamCreateOrConnectWithoutAcademicRankTypeInput[]
         createMany?: HocHamCreateManyAcademicRankTypeInputEnvelope
         connect?: HocHamWhereUniqueInput | HocHamWhereUniqueInput[]
+    };
+    export type ExpertProfileUncheckedCreateNestedManyWithoutAcademicRankTypeInput = {
+        create?: XOR<ExpertProfileCreateWithoutAcademicRankTypeInput, ExpertProfileUncheckedCreateWithoutAcademicRankTypeInput> | ExpertProfileCreateWithoutAcademicRankTypeInput[] | ExpertProfileUncheckedCreateWithoutAcademicRankTypeInput[]
+        connectOrCreate?: ExpertProfileCreateOrConnectWithoutAcademicRankTypeInput | ExpertProfileCreateOrConnectWithoutAcademicRankTypeInput[]
+        createMany?: ExpertProfileCreateManyAcademicRankTypeInputEnvelope
+        connect?: ExpertProfileWhereUniqueInput | ExpertProfileWhereUniqueInput[]
     };
     export type UserProfileUpdateManyWithoutAcademicRankTypeNestedInput = {
         create?: XOR<UserProfileCreateWithoutAcademicRankTypeInput, UserProfileUncheckedCreateWithoutAcademicRankTypeInput> | UserProfileCreateWithoutAcademicRankTypeInput[] | UserProfileUncheckedCreateWithoutAcademicRankTypeInput[]
@@ -445466,6 +447125,19 @@ export namespace Prisma {
         updateMany?: HocHamUpdateManyWithWhereWithoutAcademicRankTypeInput | HocHamUpdateManyWithWhereWithoutAcademicRankTypeInput[]
         deleteMany?: HocHamScalarWhereInput | HocHamScalarWhereInput[]
     };
+    export type ExpertProfileUpdateManyWithoutAcademicRankTypeNestedInput = {
+        create?: XOR<ExpertProfileCreateWithoutAcademicRankTypeInput, ExpertProfileUncheckedCreateWithoutAcademicRankTypeInput> | ExpertProfileCreateWithoutAcademicRankTypeInput[] | ExpertProfileUncheckedCreateWithoutAcademicRankTypeInput[]
+        connectOrCreate?: ExpertProfileCreateOrConnectWithoutAcademicRankTypeInput | ExpertProfileCreateOrConnectWithoutAcademicRankTypeInput[]
+        upsert?: ExpertProfileUpsertWithWhereUniqueWithoutAcademicRankTypeInput | ExpertProfileUpsertWithWhereUniqueWithoutAcademicRankTypeInput[]
+        createMany?: ExpertProfileCreateManyAcademicRankTypeInputEnvelope
+        set?: ExpertProfileWhereUniqueInput | ExpertProfileWhereUniqueInput[]
+        disconnect?: ExpertProfileWhereUniqueInput | ExpertProfileWhereUniqueInput[]
+        delete?: ExpertProfileWhereUniqueInput | ExpertProfileWhereUniqueInput[]
+        connect?: ExpertProfileWhereUniqueInput | ExpertProfileWhereUniqueInput[]
+        update?: ExpertProfileUpdateWithWhereUniqueWithoutAcademicRankTypeInput | ExpertProfileUpdateWithWhereUniqueWithoutAcademicRankTypeInput[]
+        updateMany?: ExpertProfileUpdateManyWithWhereWithoutAcademicRankTypeInput | ExpertProfileUpdateManyWithWhereWithoutAcademicRankTypeInput[]
+        deleteMany?: ExpertProfileScalarWhereInput | ExpertProfileScalarWhereInput[]
+    };
     export type UserProfileUncheckedUpdateManyWithoutAcademicRankTypeNestedInput = {
         create?: XOR<UserProfileCreateWithoutAcademicRankTypeInput, UserProfileUncheckedCreateWithoutAcademicRankTypeInput> | UserProfileCreateWithoutAcademicRankTypeInput[] | UserProfileUncheckedCreateWithoutAcademicRankTypeInput[]
         connectOrCreate?: UserProfileCreateOrConnectWithoutAcademicRankTypeInput | UserProfileCreateOrConnectWithoutAcademicRankTypeInput[]
@@ -445492,6 +447164,19 @@ export namespace Prisma {
         updateMany?: HocHamUpdateManyWithWhereWithoutAcademicRankTypeInput | HocHamUpdateManyWithWhereWithoutAcademicRankTypeInput[]
         deleteMany?: HocHamScalarWhereInput | HocHamScalarWhereInput[]
     };
+    export type ExpertProfileUncheckedUpdateManyWithoutAcademicRankTypeNestedInput = {
+        create?: XOR<ExpertProfileCreateWithoutAcademicRankTypeInput, ExpertProfileUncheckedCreateWithoutAcademicRankTypeInput> | ExpertProfileCreateWithoutAcademicRankTypeInput[] | ExpertProfileUncheckedCreateWithoutAcademicRankTypeInput[]
+        connectOrCreate?: ExpertProfileCreateOrConnectWithoutAcademicRankTypeInput | ExpertProfileCreateOrConnectWithoutAcademicRankTypeInput[]
+        upsert?: ExpertProfileUpsertWithWhereUniqueWithoutAcademicRankTypeInput | ExpertProfileUpsertWithWhereUniqueWithoutAcademicRankTypeInput[]
+        createMany?: ExpertProfileCreateManyAcademicRankTypeInputEnvelope
+        set?: ExpertProfileWhereUniqueInput | ExpertProfileWhereUniqueInput[]
+        disconnect?: ExpertProfileWhereUniqueInput | ExpertProfileWhereUniqueInput[]
+        delete?: ExpertProfileWhereUniqueInput | ExpertProfileWhereUniqueInput[]
+        connect?: ExpertProfileWhereUniqueInput | ExpertProfileWhereUniqueInput[]
+        update?: ExpertProfileUpdateWithWhereUniqueWithoutAcademicRankTypeInput | ExpertProfileUpdateWithWhereUniqueWithoutAcademicRankTypeInput[]
+        updateMany?: ExpertProfileUpdateManyWithWhereWithoutAcademicRankTypeInput | ExpertProfileUpdateManyWithWhereWithoutAcademicRankTypeInput[]
+        deleteMany?: ExpertProfileScalarWhereInput | ExpertProfileScalarWhereInput[]
+    };
     export type UserProfileCreateNestedManyWithoutAcademicDegreeTypeInput = {
         create?: XOR<UserProfileCreateWithoutAcademicDegreeTypeInput, UserProfileUncheckedCreateWithoutAcademicDegreeTypeInput> | UserProfileCreateWithoutAcademicDegreeTypeInput[] | UserProfileUncheckedCreateWithoutAcademicDegreeTypeInput[]
         connectOrCreate?: UserProfileCreateOrConnectWithoutAcademicDegreeTypeInput | UserProfileCreateOrConnectWithoutAcademicDegreeTypeInput[]
@@ -445504,6 +447189,12 @@ export namespace Prisma {
         createMany?: HocViCreateManyAcademicDegreeTypeInputEnvelope
         connect?: HocViWhereUniqueInput | HocViWhereUniqueInput[]
     };
+    export type ExpertProfileCreateNestedManyWithoutAcademicDegreeTypeInput = {
+        create?: XOR<ExpertProfileCreateWithoutAcademicDegreeTypeInput, ExpertProfileUncheckedCreateWithoutAcademicDegreeTypeInput> | ExpertProfileCreateWithoutAcademicDegreeTypeInput[] | ExpertProfileUncheckedCreateWithoutAcademicDegreeTypeInput[]
+        connectOrCreate?: ExpertProfileCreateOrConnectWithoutAcademicDegreeTypeInput | ExpertProfileCreateOrConnectWithoutAcademicDegreeTypeInput[]
+        createMany?: ExpertProfileCreateManyAcademicDegreeTypeInputEnvelope
+        connect?: ExpertProfileWhereUniqueInput | ExpertProfileWhereUniqueInput[]
+    };
     export type UserProfileUncheckedCreateNestedManyWithoutAcademicDegreeTypeInput = {
         create?: XOR<UserProfileCreateWithoutAcademicDegreeTypeInput, UserProfileUncheckedCreateWithoutAcademicDegreeTypeInput> | UserProfileCreateWithoutAcademicDegreeTypeInput[] | UserProfileUncheckedCreateWithoutAcademicDegreeTypeInput[]
         connectOrCreate?: UserProfileCreateOrConnectWithoutAcademicDegreeTypeInput | UserProfileCreateOrConnectWithoutAcademicDegreeTypeInput[]
@@ -445515,6 +447206,12 @@ export namespace Prisma {
         connectOrCreate?: HocViCreateOrConnectWithoutAcademicDegreeTypeInput | HocViCreateOrConnectWithoutAcademicDegreeTypeInput[]
         createMany?: HocViCreateManyAcademicDegreeTypeInputEnvelope
         connect?: HocViWhereUniqueInput | HocViWhereUniqueInput[]
+    };
+    export type ExpertProfileUncheckedCreateNestedManyWithoutAcademicDegreeTypeInput = {
+        create?: XOR<ExpertProfileCreateWithoutAcademicDegreeTypeInput, ExpertProfileUncheckedCreateWithoutAcademicDegreeTypeInput> | ExpertProfileCreateWithoutAcademicDegreeTypeInput[] | ExpertProfileUncheckedCreateWithoutAcademicDegreeTypeInput[]
+        connectOrCreate?: ExpertProfileCreateOrConnectWithoutAcademicDegreeTypeInput | ExpertProfileCreateOrConnectWithoutAcademicDegreeTypeInput[]
+        createMany?: ExpertProfileCreateManyAcademicDegreeTypeInputEnvelope
+        connect?: ExpertProfileWhereUniqueInput | ExpertProfileWhereUniqueInput[]
     };
     export type UserProfileUpdateManyWithoutAcademicDegreeTypeNestedInput = {
         create?: XOR<UserProfileCreateWithoutAcademicDegreeTypeInput, UserProfileUncheckedCreateWithoutAcademicDegreeTypeInput> | UserProfileCreateWithoutAcademicDegreeTypeInput[] | UserProfileUncheckedCreateWithoutAcademicDegreeTypeInput[]
@@ -445542,6 +447239,19 @@ export namespace Prisma {
         updateMany?: HocViUpdateManyWithWhereWithoutAcademicDegreeTypeInput | HocViUpdateManyWithWhereWithoutAcademicDegreeTypeInput[]
         deleteMany?: HocViScalarWhereInput | HocViScalarWhereInput[]
     };
+    export type ExpertProfileUpdateManyWithoutAcademicDegreeTypeNestedInput = {
+        create?: XOR<ExpertProfileCreateWithoutAcademicDegreeTypeInput, ExpertProfileUncheckedCreateWithoutAcademicDegreeTypeInput> | ExpertProfileCreateWithoutAcademicDegreeTypeInput[] | ExpertProfileUncheckedCreateWithoutAcademicDegreeTypeInput[]
+        connectOrCreate?: ExpertProfileCreateOrConnectWithoutAcademicDegreeTypeInput | ExpertProfileCreateOrConnectWithoutAcademicDegreeTypeInput[]
+        upsert?: ExpertProfileUpsertWithWhereUniqueWithoutAcademicDegreeTypeInput | ExpertProfileUpsertWithWhereUniqueWithoutAcademicDegreeTypeInput[]
+        createMany?: ExpertProfileCreateManyAcademicDegreeTypeInputEnvelope
+        set?: ExpertProfileWhereUniqueInput | ExpertProfileWhereUniqueInput[]
+        disconnect?: ExpertProfileWhereUniqueInput | ExpertProfileWhereUniqueInput[]
+        delete?: ExpertProfileWhereUniqueInput | ExpertProfileWhereUniqueInput[]
+        connect?: ExpertProfileWhereUniqueInput | ExpertProfileWhereUniqueInput[]
+        update?: ExpertProfileUpdateWithWhereUniqueWithoutAcademicDegreeTypeInput | ExpertProfileUpdateWithWhereUniqueWithoutAcademicDegreeTypeInput[]
+        updateMany?: ExpertProfileUpdateManyWithWhereWithoutAcademicDegreeTypeInput | ExpertProfileUpdateManyWithWhereWithoutAcademicDegreeTypeInput[]
+        deleteMany?: ExpertProfileScalarWhereInput | ExpertProfileScalarWhereInput[]
+    };
     export type UserProfileUncheckedUpdateManyWithoutAcademicDegreeTypeNestedInput = {
         create?: XOR<UserProfileCreateWithoutAcademicDegreeTypeInput, UserProfileUncheckedCreateWithoutAcademicDegreeTypeInput> | UserProfileCreateWithoutAcademicDegreeTypeInput[] | UserProfileUncheckedCreateWithoutAcademicDegreeTypeInput[]
         connectOrCreate?: UserProfileCreateOrConnectWithoutAcademicDegreeTypeInput | UserProfileCreateOrConnectWithoutAcademicDegreeTypeInput[]
@@ -445567,6 +447277,19 @@ export namespace Prisma {
         update?: HocViUpdateWithWhereUniqueWithoutAcademicDegreeTypeInput | HocViUpdateWithWhereUniqueWithoutAcademicDegreeTypeInput[]
         updateMany?: HocViUpdateManyWithWhereWithoutAcademicDegreeTypeInput | HocViUpdateManyWithWhereWithoutAcademicDegreeTypeInput[]
         deleteMany?: HocViScalarWhereInput | HocViScalarWhereInput[]
+    };
+    export type ExpertProfileUncheckedUpdateManyWithoutAcademicDegreeTypeNestedInput = {
+        create?: XOR<ExpertProfileCreateWithoutAcademicDegreeTypeInput, ExpertProfileUncheckedCreateWithoutAcademicDegreeTypeInput> | ExpertProfileCreateWithoutAcademicDegreeTypeInput[] | ExpertProfileUncheckedCreateWithoutAcademicDegreeTypeInput[]
+        connectOrCreate?: ExpertProfileCreateOrConnectWithoutAcademicDegreeTypeInput | ExpertProfileCreateOrConnectWithoutAcademicDegreeTypeInput[]
+        upsert?: ExpertProfileUpsertWithWhereUniqueWithoutAcademicDegreeTypeInput | ExpertProfileUpsertWithWhereUniqueWithoutAcademicDegreeTypeInput[]
+        createMany?: ExpertProfileCreateManyAcademicDegreeTypeInputEnvelope
+        set?: ExpertProfileWhereUniqueInput | ExpertProfileWhereUniqueInput[]
+        disconnect?: ExpertProfileWhereUniqueInput | ExpertProfileWhereUniqueInput[]
+        delete?: ExpertProfileWhereUniqueInput | ExpertProfileWhereUniqueInput[]
+        connect?: ExpertProfileWhereUniqueInput | ExpertProfileWhereUniqueInput[]
+        update?: ExpertProfileUpdateWithWhereUniqueWithoutAcademicDegreeTypeInput | ExpertProfileUpdateWithWhereUniqueWithoutAcademicDegreeTypeInput[]
+        updateMany?: ExpertProfileUpdateManyWithWhereWithoutAcademicDegreeTypeInput | ExpertProfileUpdateManyWithWhereWithoutAcademicDegreeTypeInput[]
+        deleteMany?: ExpertProfileScalarWhereInput | ExpertProfileScalarWhereInput[]
     };
     export type UserProfileCreateNestedManyWithoutEthnicityInput = {
         create?: XOR<UserProfileCreateWithoutEthnicityInput, UserProfileUncheckedCreateWithoutEthnicityInput> | UserProfileCreateWithoutEthnicityInput[] | UserProfileUncheckedCreateWithoutEthnicityInput[]
@@ -455486,6 +457209,12 @@ export namespace Prisma {
         createMany?: SubjectClassAttendanceStudentCreateManyStudentInputEnvelope
         connect?: SubjectClassAttendanceStudentWhereUniqueInput | SubjectClassAttendanceStudentWhereUniqueInput[]
     };
+    export type TrainingActivityCreateNestedManyWithoutStudentInput = {
+        create?: XOR<TrainingActivityCreateWithoutStudentInput, TrainingActivityUncheckedCreateWithoutStudentInput> | TrainingActivityCreateWithoutStudentInput[] | TrainingActivityUncheckedCreateWithoutStudentInput[]
+        connectOrCreate?: TrainingActivityCreateOrConnectWithoutStudentInput | TrainingActivityCreateOrConnectWithoutStudentInput[]
+        createMany?: TrainingActivityCreateManyStudentInputEnvelope
+        connect?: TrainingActivityWhereUniqueInput | TrainingActivityWhereUniqueInput[]
+    };
     export type PriorityObjectUncheckedCreateNestedManyWithoutStudentsInput = {
         create?: XOR<PriorityObjectCreateWithoutStudentsInput, PriorityObjectUncheckedCreateWithoutStudentsInput> | PriorityObjectCreateWithoutStudentsInput[] | PriorityObjectUncheckedCreateWithoutStudentsInput[]
         connectOrCreate?: PriorityObjectCreateOrConnectWithoutStudentsInput | PriorityObjectCreateOrConnectWithoutStudentsInput[]
@@ -455648,6 +457377,12 @@ export namespace Prisma {
         connectOrCreate?: SubjectClassAttendanceStudentCreateOrConnectWithoutStudentInput | SubjectClassAttendanceStudentCreateOrConnectWithoutStudentInput[]
         createMany?: SubjectClassAttendanceStudentCreateManyStudentInputEnvelope
         connect?: SubjectClassAttendanceStudentWhereUniqueInput | SubjectClassAttendanceStudentWhereUniqueInput[]
+    };
+    export type TrainingActivityUncheckedCreateNestedManyWithoutStudentInput = {
+        create?: XOR<TrainingActivityCreateWithoutStudentInput, TrainingActivityUncheckedCreateWithoutStudentInput> | TrainingActivityCreateWithoutStudentInput[] | TrainingActivityUncheckedCreateWithoutStudentInput[]
+        connectOrCreate?: TrainingActivityCreateOrConnectWithoutStudentInput | TrainingActivityCreateOrConnectWithoutStudentInput[]
+        createMany?: TrainingActivityCreateManyStudentInputEnvelope
+        connect?: TrainingActivityWhereUniqueInput | TrainingActivityWhereUniqueInput[]
     };
     export type EnumStudentStatusFieldUpdateOperationsInput = {
         set?: $Enums.StudentStatus
@@ -456054,6 +457789,19 @@ export namespace Prisma {
         updateMany?: SubjectClassAttendanceStudentUpdateManyWithWhereWithoutStudentInput | SubjectClassAttendanceStudentUpdateManyWithWhereWithoutStudentInput[]
         deleteMany?: SubjectClassAttendanceStudentScalarWhereInput | SubjectClassAttendanceStudentScalarWhereInput[]
     };
+    export type TrainingActivityUpdateManyWithoutStudentNestedInput = {
+        create?: XOR<TrainingActivityCreateWithoutStudentInput, TrainingActivityUncheckedCreateWithoutStudentInput> | TrainingActivityCreateWithoutStudentInput[] | TrainingActivityUncheckedCreateWithoutStudentInput[]
+        connectOrCreate?: TrainingActivityCreateOrConnectWithoutStudentInput | TrainingActivityCreateOrConnectWithoutStudentInput[]
+        upsert?: TrainingActivityUpsertWithWhereUniqueWithoutStudentInput | TrainingActivityUpsertWithWhereUniqueWithoutStudentInput[]
+        createMany?: TrainingActivityCreateManyStudentInputEnvelope
+        set?: TrainingActivityWhereUniqueInput | TrainingActivityWhereUniqueInput[]
+        disconnect?: TrainingActivityWhereUniqueInput | TrainingActivityWhereUniqueInput[]
+        delete?: TrainingActivityWhereUniqueInput | TrainingActivityWhereUniqueInput[]
+        connect?: TrainingActivityWhereUniqueInput | TrainingActivityWhereUniqueInput[]
+        update?: TrainingActivityUpdateWithWhereUniqueWithoutStudentInput | TrainingActivityUpdateWithWhereUniqueWithoutStudentInput[]
+        updateMany?: TrainingActivityUpdateManyWithWhereWithoutStudentInput | TrainingActivityUpdateManyWithWhereWithoutStudentInput[]
+        deleteMany?: TrainingActivityScalarWhereInput | TrainingActivityScalarWhereInput[]
+    };
     export type PriorityObjectUncheckedUpdateManyWithoutStudentsNestedInput = {
         create?: XOR<PriorityObjectCreateWithoutStudentsInput, PriorityObjectUncheckedCreateWithoutStudentsInput> | PriorityObjectCreateWithoutStudentsInput[] | PriorityObjectUncheckedCreateWithoutStudentsInput[]
         connectOrCreate?: PriorityObjectCreateOrConnectWithoutStudentsInput | PriorityObjectCreateOrConnectWithoutStudentsInput[]
@@ -456403,6 +458151,31 @@ export namespace Prisma {
         update?: SubjectClassAttendanceStudentUpdateWithWhereUniqueWithoutStudentInput | SubjectClassAttendanceStudentUpdateWithWhereUniqueWithoutStudentInput[]
         updateMany?: SubjectClassAttendanceStudentUpdateManyWithWhereWithoutStudentInput | SubjectClassAttendanceStudentUpdateManyWithWhereWithoutStudentInput[]
         deleteMany?: SubjectClassAttendanceStudentScalarWhereInput | SubjectClassAttendanceStudentScalarWhereInput[]
+    };
+    export type TrainingActivityUncheckedUpdateManyWithoutStudentNestedInput = {
+        create?: XOR<TrainingActivityCreateWithoutStudentInput, TrainingActivityUncheckedCreateWithoutStudentInput> | TrainingActivityCreateWithoutStudentInput[] | TrainingActivityUncheckedCreateWithoutStudentInput[]
+        connectOrCreate?: TrainingActivityCreateOrConnectWithoutStudentInput | TrainingActivityCreateOrConnectWithoutStudentInput[]
+        upsert?: TrainingActivityUpsertWithWhereUniqueWithoutStudentInput | TrainingActivityUpsertWithWhereUniqueWithoutStudentInput[]
+        createMany?: TrainingActivityCreateManyStudentInputEnvelope
+        set?: TrainingActivityWhereUniqueInput | TrainingActivityWhereUniqueInput[]
+        disconnect?: TrainingActivityWhereUniqueInput | TrainingActivityWhereUniqueInput[]
+        delete?: TrainingActivityWhereUniqueInput | TrainingActivityWhereUniqueInput[]
+        connect?: TrainingActivityWhereUniqueInput | TrainingActivityWhereUniqueInput[]
+        update?: TrainingActivityUpdateWithWhereUniqueWithoutStudentInput | TrainingActivityUpdateWithWhereUniqueWithoutStudentInput[]
+        updateMany?: TrainingActivityUpdateManyWithWhereWithoutStudentInput | TrainingActivityUpdateManyWithWhereWithoutStudentInput[]
+        deleteMany?: TrainingActivityScalarWhereInput | TrainingActivityScalarWhereInput[]
+    };
+    export type StudentCreateNestedOneWithoutTrainingActivityInput = {
+        create?: XOR<StudentCreateWithoutTrainingActivityInput, StudentUncheckedCreateWithoutTrainingActivityInput>
+        connectOrCreate?: StudentCreateOrConnectWithoutTrainingActivityInput
+        connect?: StudentWhereUniqueInput
+    };
+    export type StudentUpdateOneRequiredWithoutTrainingActivityNestedInput = {
+        create?: XOR<StudentCreateWithoutTrainingActivityInput, StudentUncheckedCreateWithoutTrainingActivityInput>
+        connectOrCreate?: StudentCreateOrConnectWithoutTrainingActivityInput
+        upsert?: StudentUpsertWithoutTrainingActivityInput
+        connect?: StudentWhereUniqueInput
+        update?: XOR<XOR<StudentUpdateToOneWithWhereWithoutTrainingActivityInput, StudentUpdateWithoutTrainingActivityInput>, StudentUncheckedUpdateWithoutTrainingActivityInput>
     };
     export type StudentCreateNestedOneWithoutStudentSemesterResultInput = {
         create?: XOR<StudentCreateWithoutStudentSemesterResultInput, StudentUncheckedCreateWithoutStudentSemesterResultInput>
@@ -459031,6 +460804,16 @@ export namespace Prisma {
         connectOrCreate?: LecturerCreateOrConnectWithoutExpertProfileInput
         connect?: LecturerWhereUniqueInput
     };
+    export type DM_HocViCreateNestedOneWithoutExpertProfileInput = {
+        create?: XOR<DM_HocViCreateWithoutExpertProfileInput, DM_HocViUncheckedCreateWithoutExpertProfileInput>
+        connectOrCreate?: DM_HocViCreateOrConnectWithoutExpertProfileInput
+        connect?: DM_HocViWhereUniqueInput
+    };
+    export type DM_HocHamCreateNestedOneWithoutExpertProfileInput = {
+        create?: XOR<DM_HocHamCreateWithoutExpertProfileInput, DM_HocHamUncheckedCreateWithoutExpertProfileInput>
+        connectOrCreate?: DM_HocHamCreateOrConnectWithoutExpertProfileInput
+        connect?: DM_HocHamWhereUniqueInput
+    };
     export type TrainingMajorCreateNestedManyWithoutExpertProfileInput = {
         create?: XOR<TrainingMajorCreateWithoutExpertProfileInput, TrainingMajorUncheckedCreateWithoutExpertProfileInput> | TrainingMajorCreateWithoutExpertProfileInput[] | TrainingMajorUncheckedCreateWithoutExpertProfileInput[]
         connectOrCreate?: TrainingMajorCreateOrConnectWithoutExpertProfileInput | TrainingMajorCreateOrConnectWithoutExpertProfileInput[]
@@ -459167,6 +460950,24 @@ export namespace Prisma {
         delete?: LecturerWhereInput | boolean
         connect?: LecturerWhereUniqueInput
         update?: XOR<XOR<LecturerUpdateToOneWithWhereWithoutExpertProfileInput, LecturerUpdateWithoutExpertProfileInput>, LecturerUncheckedUpdateWithoutExpertProfileInput>
+    };
+    export type DM_HocViUpdateOneWithoutExpertProfileNestedInput = {
+        create?: XOR<DM_HocViCreateWithoutExpertProfileInput, DM_HocViUncheckedCreateWithoutExpertProfileInput>
+        connectOrCreate?: DM_HocViCreateOrConnectWithoutExpertProfileInput
+        upsert?: DM_HocViUpsertWithoutExpertProfileInput
+        disconnect?: DM_HocViWhereInput | boolean
+        delete?: DM_HocViWhereInput | boolean
+        connect?: DM_HocViWhereUniqueInput
+        update?: XOR<XOR<DM_HocViUpdateToOneWithWhereWithoutExpertProfileInput, DM_HocViUpdateWithoutExpertProfileInput>, DM_HocViUncheckedUpdateWithoutExpertProfileInput>
+    };
+    export type DM_HocHamUpdateOneWithoutExpertProfileNestedInput = {
+        create?: XOR<DM_HocHamCreateWithoutExpertProfileInput, DM_HocHamUncheckedCreateWithoutExpertProfileInput>
+        connectOrCreate?: DM_HocHamCreateOrConnectWithoutExpertProfileInput
+        upsert?: DM_HocHamUpsertWithoutExpertProfileInput
+        disconnect?: DM_HocHamWhereInput | boolean
+        delete?: DM_HocHamWhereInput | boolean
+        connect?: DM_HocHamWhereUniqueInput
+        update?: XOR<XOR<DM_HocHamUpdateToOneWithWhereWithoutExpertProfileInput, DM_HocHamUpdateWithoutExpertProfileInput>, DM_HocHamUncheckedUpdateWithoutExpertProfileInput>
     };
     export type TrainingMajorUpdateManyWithoutExpertProfileNestedInput = {
         create?: XOR<TrainingMajorCreateWithoutExpertProfileInput, TrainingMajorUncheckedCreateWithoutExpertProfileInput> | TrainingMajorCreateWithoutExpertProfileInput[] | TrainingMajorUncheckedCreateWithoutExpertProfileInput[]
@@ -469825,6 +471626,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         hocVi?: HocViCreateNestedManyWithoutAcademicDegreeTypeInput
+        expertProfile?: ExpertProfileCreateNestedManyWithoutAcademicDegreeTypeInput
     };
     export type DM_HocViUncheckedCreateWithoutProfilesInput = {
         Id?: string
@@ -469843,6 +471645,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         hocVi?: HocViUncheckedCreateNestedManyWithoutAcademicDegreeTypeInput
+        expertProfile?: ExpertProfileUncheckedCreateNestedManyWithoutAcademicDegreeTypeInput
     };
     export type DM_HocViCreateOrConnectWithoutProfilesInput = {
         where: DM_HocViWhereUniqueInput
@@ -469865,6 +471668,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         hocHam?: HocHamCreateNestedManyWithoutAcademicRankTypeInput
+        expertProfile?: ExpertProfileCreateNestedManyWithoutAcademicRankTypeInput
     };
     export type DM_HocHamUncheckedCreateWithoutProfilesInput = {
         Id?: string
@@ -469883,6 +471687,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         hocHam?: HocHamUncheckedCreateNestedManyWithoutAcademicRankTypeInput
+        expertProfile?: ExpertProfileUncheckedCreateNestedManyWithoutAcademicRankTypeInput
     };
     export type DM_HocHamCreateOrConnectWithoutProfilesInput = {
         where: DM_HocHamWhereUniqueInput
@@ -471434,6 +473239,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutStudentInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreCreateNestedManyWithoutStudentInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentCreateNestedManyWithoutStudentInput
+        trainingActivity?: TrainingActivityCreateNestedManyWithoutStudentInput
     };
     export type StudentUncheckedCreateWithoutUserProfileInput = {
         id?: string
@@ -471507,6 +473313,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedCreateNestedManyWithoutStudentInput
+        trainingActivity?: TrainingActivityUncheckedCreateNestedManyWithoutStudentInput
     };
     export type StudentCreateOrConnectWithoutUserProfileInput = {
         where: StudentWhereUniqueInput
@@ -473688,6 +475495,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         hocVi?: HocViUpdateManyWithoutAcademicDegreeTypeNestedInput
+        expertProfile?: ExpertProfileUpdateManyWithoutAcademicDegreeTypeNestedInput
     };
     export type DM_HocViUncheckedUpdateWithoutProfilesInput = {
         Id?: StringFieldUpdateOperationsInput | string
@@ -473706,6 +475514,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         hocVi?: HocViUncheckedUpdateManyWithoutAcademicDegreeTypeNestedInput
+        expertProfile?: ExpertProfileUncheckedUpdateManyWithoutAcademicDegreeTypeNestedInput
     };
     export type DM_HocHamUpsertWithoutProfilesInput = {
         update: XOR<DM_HocHamUpdateWithoutProfilesInput, DM_HocHamUncheckedUpdateWithoutProfilesInput>
@@ -473733,6 +475542,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         hocHam?: HocHamUpdateManyWithoutAcademicRankTypeNestedInput
+        expertProfile?: ExpertProfileUpdateManyWithoutAcademicRankTypeNestedInput
     };
     export type DM_HocHamUncheckedUpdateWithoutProfilesInput = {
         Id?: StringFieldUpdateOperationsInput | string
@@ -473751,6 +475561,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         hocHam?: HocHamUncheckedUpdateManyWithoutAcademicRankTypeNestedInput
+        expertProfile?: ExpertProfileUncheckedUpdateManyWithoutAcademicRankTypeNestedInput
     };
     export type DM_ChucDanhUpsertWithoutUserProfileInput = {
         update: XOR<DM_ChucDanhUpdateWithoutUserProfileInput, DM_ChucDanhUncheckedUpdateWithoutUserProfileInput>
@@ -475832,6 +477643,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         profiles?: UserProfileCreateNestedManyWithoutAcademicRankTypeInput
+        expertProfile?: ExpertProfileCreateNestedManyWithoutAcademicRankTypeInput
     };
     export type DM_HocHamUncheckedCreateWithoutHocHamInput = {
         Id?: string
@@ -475850,6 +477662,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         profiles?: UserProfileUncheckedCreateNestedManyWithoutAcademicRankTypeInput
+        expertProfile?: ExpertProfileUncheckedCreateNestedManyWithoutAcademicRankTypeInput
     };
     export type DM_HocHamCreateOrConnectWithoutHocHamInput = {
         where: DM_HocHamWhereUniqueInput
@@ -476231,6 +478044,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         profiles?: UserProfileUpdateManyWithoutAcademicRankTypeNestedInput
+        expertProfile?: ExpertProfileUpdateManyWithoutAcademicRankTypeNestedInput
     };
     export type DM_HocHamUncheckedUpdateWithoutHocHamInput = {
         Id?: StringFieldUpdateOperationsInput | string
@@ -476249,6 +478063,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         profiles?: UserProfileUncheckedUpdateManyWithoutAcademicRankTypeNestedInput
+        expertProfile?: ExpertProfileUncheckedUpdateManyWithoutAcademicRankTypeNestedInput
     };
     export type UserProfileUpsertWithoutHocHamInput = {
         update: XOR<UserProfileUpdateWithoutHocHamInput, UserProfileUncheckedUpdateWithoutHocHamInput>
@@ -478242,6 +480057,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         profiles?: UserProfileCreateNestedManyWithoutAcademicDegreeTypeInput
+        expertProfile?: ExpertProfileCreateNestedManyWithoutAcademicDegreeTypeInput
     };
     export type DM_HocViUncheckedCreateWithoutHocViInput = {
         Id?: string
@@ -478260,6 +480076,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         profiles?: UserProfileUncheckedCreateNestedManyWithoutAcademicDegreeTypeInput
+        expertProfile?: ExpertProfileUncheckedCreateNestedManyWithoutAcademicDegreeTypeInput
     };
     export type DM_HocViCreateOrConnectWithoutHocViInput = {
         where: DM_HocViWhereUniqueInput
@@ -478713,6 +480530,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         profiles?: UserProfileUpdateManyWithoutAcademicDegreeTypeNestedInput
+        expertProfile?: ExpertProfileUpdateManyWithoutAcademicDegreeTypeNestedInput
     };
     export type DM_HocViUncheckedUpdateWithoutHocViInput = {
         Id?: StringFieldUpdateOperationsInput | string
@@ -478731,6 +480549,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         profiles?: UserProfileUncheckedUpdateManyWithoutAcademicDegreeTypeNestedInput
+        expertProfile?: ExpertProfileUncheckedUpdateManyWithoutAcademicDegreeTypeNestedInput
     };
     export type DM_QuocGiaUpsertWithoutHocViInput = {
         update: XOR<DM_QuocGiaUpdateWithoutHocViInput, DM_QuocGiaUncheckedUpdateWithoutHocViInput>
@@ -504033,6 +505852,86 @@ export namespace Prisma {
         data: HocHamCreateManyAcademicRankTypeInput | HocHamCreateManyAcademicRankTypeInput[]
         skipDuplicates?: boolean
     };
+    export type ExpertProfileCreateWithoutAcademicRankTypeInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        name?: string | null
+        organization?: string | null
+        position?: string | null
+        specialization?: string | null
+        workplace?: string | null
+        phone?: string | null
+        email?: string | null
+        bankAccountNumber?: string | null
+        bankName?: string | null
+        projectExpert?: boolean
+        thesisExpert?: boolean
+        eligiblePresident?: boolean
+        eligibleSecretary?: boolean
+        lecturer?: LecturerCreateNestedOneWithoutExpertProfileInput
+        academicDegreeType?: DM_HocViCreateNestedOneWithoutExpertProfileInput
+        major?: TrainingMajorCreateNestedManyWithoutExpertProfileInput
+        supervisedTheses?: ThesisProjectCreateNestedManyWithoutSupervisorInput
+        coSupervisedTheses?: ThesisProjectCreateNestedManyWithoutCoSupervisorInput
+        thirdSupervisedTheses?: ThesisProjectCreateNestedManyWithoutThirdSupervisorInput
+        supervisorResearchTopic?: StudentResearchTopicCreateNestedManyWithoutSupervisorInput
+        coSupervisorResearchTopic?: StudentResearchTopicCreateNestedManyWithoutCoSupervisorInput
+        thirdSupervisorResearchTopic?: StudentResearchTopicCreateNestedManyWithoutThirdSupervisorInput
+        supervisorInternship?: StudentInternshipCreateNestedManyWithoutSupervisorInput
+        coSupervisorInternship?: StudentInternshipCreateNestedManyWithoutCoSupervisorInput
+        subjectClass?: SubjectClassCreateNestedManyWithoutExpertProfileInput
+        councilMemberships?: CouncilMemberCreateNestedManyWithoutExpertInput
+    };
+    export type ExpertProfileUncheckedCreateWithoutAcademicRankTypeInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        lecturerId?: string | null
+        name?: string | null
+        academicDegreeTypeId?: string | null
+        organization?: string | null
+        position?: string | null
+        specialization?: string | null
+        workplace?: string | null
+        phone?: string | null
+        email?: string | null
+        bankAccountNumber?: string | null
+        bankName?: string | null
+        projectExpert?: boolean
+        thesisExpert?: boolean
+        eligiblePresident?: boolean
+        eligibleSecretary?: boolean
+        major?: TrainingMajorUncheckedCreateNestedManyWithoutExpertProfileInput
+        supervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutSupervisorInput
+        coSupervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutCoSupervisorInput
+        thirdSupervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutThirdSupervisorInput
+        supervisorResearchTopic?: StudentResearchTopicUncheckedCreateNestedManyWithoutSupervisorInput
+        coSupervisorResearchTopic?: StudentResearchTopicUncheckedCreateNestedManyWithoutCoSupervisorInput
+        thirdSupervisorResearchTopic?: StudentResearchTopicUncheckedCreateNestedManyWithoutThirdSupervisorInput
+        supervisorInternship?: StudentInternshipUncheckedCreateNestedManyWithoutSupervisorInput
+        coSupervisorInternship?: StudentInternshipUncheckedCreateNestedManyWithoutCoSupervisorInput
+        subjectClass?: SubjectClassUncheckedCreateNestedManyWithoutExpertProfileInput
+        councilMemberships?: CouncilMemberUncheckedCreateNestedManyWithoutExpertInput
+    };
+    export type ExpertProfileCreateOrConnectWithoutAcademicRankTypeInput = {
+        where: ExpertProfileWhereUniqueInput
+        create: XOR<ExpertProfileCreateWithoutAcademicRankTypeInput, ExpertProfileUncheckedCreateWithoutAcademicRankTypeInput>
+    };
+    export type ExpertProfileCreateManyAcademicRankTypeInputEnvelope = {
+        data: ExpertProfileCreateManyAcademicRankTypeInput | ExpertProfileCreateManyAcademicRankTypeInput[]
+        skipDuplicates?: boolean
+    };
     export type UserProfileUpsertWithWhereUniqueWithoutAcademicRankTypeInput = {
         where: UserProfileWhereUniqueInput
         update: XOR<UserProfileUpdateWithoutAcademicRankTypeInput, UserProfileUncheckedUpdateWithoutAcademicRankTypeInput>
@@ -504058,6 +505957,48 @@ export namespace Prisma {
     export type HocHamUpdateManyWithWhereWithoutAcademicRankTypeInput = {
         where: HocHamScalarWhereInput
         data: XOR<HocHamUpdateManyMutationInput, HocHamUncheckedUpdateManyWithoutAcademicRankTypeInput>
+    };
+    export type ExpertProfileUpsertWithWhereUniqueWithoutAcademicRankTypeInput = {
+        where: ExpertProfileWhereUniqueInput
+        update: XOR<ExpertProfileUpdateWithoutAcademicRankTypeInput, ExpertProfileUncheckedUpdateWithoutAcademicRankTypeInput>
+        create: XOR<ExpertProfileCreateWithoutAcademicRankTypeInput, ExpertProfileUncheckedCreateWithoutAcademicRankTypeInput>
+    };
+    export type ExpertProfileUpdateWithWhereUniqueWithoutAcademicRankTypeInput = {
+        where: ExpertProfileWhereUniqueInput
+        data: XOR<ExpertProfileUpdateWithoutAcademicRankTypeInput, ExpertProfileUncheckedUpdateWithoutAcademicRankTypeInput>
+    };
+    export type ExpertProfileUpdateManyWithWhereWithoutAcademicRankTypeInput = {
+        where: ExpertProfileScalarWhereInput
+        data: XOR<ExpertProfileUpdateManyMutationInput, ExpertProfileUncheckedUpdateManyWithoutAcademicRankTypeInput>
+    };
+    export type ExpertProfileScalarWhereInput = {
+        AND?: ExpertProfileScalarWhereInput | ExpertProfileScalarWhereInput[]
+        OR?: ExpertProfileScalarWhereInput[]
+        NOT?: ExpertProfileScalarWhereInput | ExpertProfileScalarWhereInput[]
+        id?: StringFilter<"ExpertProfile"> | string
+        code?: StringNullableFilter<"ExpertProfile"> | string | null
+        active?: BoolFilter<"ExpertProfile"> | boolean
+        description?: StringNullableFilter<"ExpertProfile"> | string | null
+        deletedAt?: DateTimeNullableFilter<"ExpertProfile"> | Date | string | null
+        createdAt?: DateTimeFilter<"ExpertProfile"> | Date | string
+        updatedAt?: DateTimeFilter<"ExpertProfile"> | Date | string
+        createdBy?: UuidNullableFilter<"ExpertProfile"> | string | null
+        lecturerId?: StringNullableFilter<"ExpertProfile"> | string | null
+        name?: StringNullableFilter<"ExpertProfile"> | string | null
+        academicDegreeTypeId?: UuidNullableFilter<"ExpertProfile"> | string | null
+        academicRankTypeId?: UuidNullableFilter<"ExpertProfile"> | string | null
+        organization?: StringNullableFilter<"ExpertProfile"> | string | null
+        position?: StringNullableFilter<"ExpertProfile"> | string | null
+        specialization?: StringNullableFilter<"ExpertProfile"> | string | null
+        workplace?: StringNullableFilter<"ExpertProfile"> | string | null
+        phone?: StringNullableFilter<"ExpertProfile"> | string | null
+        email?: StringNullableFilter<"ExpertProfile"> | string | null
+        bankAccountNumber?: StringNullableFilter<"ExpertProfile"> | string | null
+        bankName?: StringNullableFilter<"ExpertProfile"> | string | null
+        projectExpert?: BoolFilter<"ExpertProfile"> | boolean
+        thesisExpert?: BoolFilter<"ExpertProfile"> | boolean
+        eligiblePresident?: BoolFilter<"ExpertProfile"> | boolean
+        eligibleSecretary?: BoolFilter<"ExpertProfile"> | boolean
     };
     export type UserProfileCreateWithoutAcademicDegreeTypeInput = {
         id?: string
@@ -504451,6 +506392,86 @@ export namespace Prisma {
         data: HocViCreateManyAcademicDegreeTypeInput | HocViCreateManyAcademicDegreeTypeInput[]
         skipDuplicates?: boolean
     };
+    export type ExpertProfileCreateWithoutAcademicDegreeTypeInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        name?: string | null
+        organization?: string | null
+        position?: string | null
+        specialization?: string | null
+        workplace?: string | null
+        phone?: string | null
+        email?: string | null
+        bankAccountNumber?: string | null
+        bankName?: string | null
+        projectExpert?: boolean
+        thesisExpert?: boolean
+        eligiblePresident?: boolean
+        eligibleSecretary?: boolean
+        lecturer?: LecturerCreateNestedOneWithoutExpertProfileInput
+        academicRankType?: DM_HocHamCreateNestedOneWithoutExpertProfileInput
+        major?: TrainingMajorCreateNestedManyWithoutExpertProfileInput
+        supervisedTheses?: ThesisProjectCreateNestedManyWithoutSupervisorInput
+        coSupervisedTheses?: ThesisProjectCreateNestedManyWithoutCoSupervisorInput
+        thirdSupervisedTheses?: ThesisProjectCreateNestedManyWithoutThirdSupervisorInput
+        supervisorResearchTopic?: StudentResearchTopicCreateNestedManyWithoutSupervisorInput
+        coSupervisorResearchTopic?: StudentResearchTopicCreateNestedManyWithoutCoSupervisorInput
+        thirdSupervisorResearchTopic?: StudentResearchTopicCreateNestedManyWithoutThirdSupervisorInput
+        supervisorInternship?: StudentInternshipCreateNestedManyWithoutSupervisorInput
+        coSupervisorInternship?: StudentInternshipCreateNestedManyWithoutCoSupervisorInput
+        subjectClass?: SubjectClassCreateNestedManyWithoutExpertProfileInput
+        councilMemberships?: CouncilMemberCreateNestedManyWithoutExpertInput
+    };
+    export type ExpertProfileUncheckedCreateWithoutAcademicDegreeTypeInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        lecturerId?: string | null
+        name?: string | null
+        academicRankTypeId?: string | null
+        organization?: string | null
+        position?: string | null
+        specialization?: string | null
+        workplace?: string | null
+        phone?: string | null
+        email?: string | null
+        bankAccountNumber?: string | null
+        bankName?: string | null
+        projectExpert?: boolean
+        thesisExpert?: boolean
+        eligiblePresident?: boolean
+        eligibleSecretary?: boolean
+        major?: TrainingMajorUncheckedCreateNestedManyWithoutExpertProfileInput
+        supervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutSupervisorInput
+        coSupervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutCoSupervisorInput
+        thirdSupervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutThirdSupervisorInput
+        supervisorResearchTopic?: StudentResearchTopicUncheckedCreateNestedManyWithoutSupervisorInput
+        coSupervisorResearchTopic?: StudentResearchTopicUncheckedCreateNestedManyWithoutCoSupervisorInput
+        thirdSupervisorResearchTopic?: StudentResearchTopicUncheckedCreateNestedManyWithoutThirdSupervisorInput
+        supervisorInternship?: StudentInternshipUncheckedCreateNestedManyWithoutSupervisorInput
+        coSupervisorInternship?: StudentInternshipUncheckedCreateNestedManyWithoutCoSupervisorInput
+        subjectClass?: SubjectClassUncheckedCreateNestedManyWithoutExpertProfileInput
+        councilMemberships?: CouncilMemberUncheckedCreateNestedManyWithoutExpertInput
+    };
+    export type ExpertProfileCreateOrConnectWithoutAcademicDegreeTypeInput = {
+        where: ExpertProfileWhereUniqueInput
+        create: XOR<ExpertProfileCreateWithoutAcademicDegreeTypeInput, ExpertProfileUncheckedCreateWithoutAcademicDegreeTypeInput>
+    };
+    export type ExpertProfileCreateManyAcademicDegreeTypeInputEnvelope = {
+        data: ExpertProfileCreateManyAcademicDegreeTypeInput | ExpertProfileCreateManyAcademicDegreeTypeInput[]
+        skipDuplicates?: boolean
+    };
     export type UserProfileUpsertWithWhereUniqueWithoutAcademicDegreeTypeInput = {
         where: UserProfileWhereUniqueInput
         update: XOR<UserProfileUpdateWithoutAcademicDegreeTypeInput, UserProfileUncheckedUpdateWithoutAcademicDegreeTypeInput>
@@ -504476,6 +506497,19 @@ export namespace Prisma {
     export type HocViUpdateManyWithWhereWithoutAcademicDegreeTypeInput = {
         where: HocViScalarWhereInput
         data: XOR<HocViUpdateManyMutationInput, HocViUncheckedUpdateManyWithoutAcademicDegreeTypeInput>
+    };
+    export type ExpertProfileUpsertWithWhereUniqueWithoutAcademicDegreeTypeInput = {
+        where: ExpertProfileWhereUniqueInput
+        update: XOR<ExpertProfileUpdateWithoutAcademicDegreeTypeInput, ExpertProfileUncheckedUpdateWithoutAcademicDegreeTypeInput>
+        create: XOR<ExpertProfileCreateWithoutAcademicDegreeTypeInput, ExpertProfileUncheckedCreateWithoutAcademicDegreeTypeInput>
+    };
+    export type ExpertProfileUpdateWithWhereUniqueWithoutAcademicDegreeTypeInput = {
+        where: ExpertProfileWhereUniqueInput
+        data: XOR<ExpertProfileUpdateWithoutAcademicDegreeTypeInput, ExpertProfileUncheckedUpdateWithoutAcademicDegreeTypeInput>
+    };
+    export type ExpertProfileUpdateManyWithWhereWithoutAcademicDegreeTypeInput = {
+        where: ExpertProfileScalarWhereInput
+        data: XOR<ExpertProfileUpdateManyMutationInput, ExpertProfileUncheckedUpdateManyWithoutAcademicDegreeTypeInput>
     };
     export type UserProfileCreateWithoutEthnicityInput = {
         id?: string
@@ -506358,6 +508392,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutStudentInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreCreateNestedManyWithoutStudentInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentCreateNestedManyWithoutStudentInput
+        trainingActivity?: TrainingActivityCreateNestedManyWithoutStudentInput
     };
     export type StudentUncheckedCreateWithoutRegistrationAreaInput = {
         id?: string
@@ -506431,6 +508466,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedCreateNestedManyWithoutStudentInput
+        trainingActivity?: TrainingActivityUncheckedCreateNestedManyWithoutStudentInput
     };
     export type StudentCreateOrConnectWithoutRegistrationAreaInput = {
         where: StudentWhereUniqueInput
@@ -516261,6 +518297,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutStudentInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreCreateNestedManyWithoutStudentInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentCreateNestedManyWithoutStudentInput
+        trainingActivity?: TrainingActivityCreateNestedManyWithoutStudentInput
     };
     export type StudentUncheckedCreateWithoutStudentScoreConvertInput = {
         id?: string
@@ -516334,6 +518371,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedCreateNestedManyWithoutStudentInput
+        trainingActivity?: TrainingActivityUncheckedCreateNestedManyWithoutStudentInput
     };
     export type StudentCreateOrConnectWithoutStudentScoreConvertInput = {
         where: StudentWhereUniqueInput
@@ -516534,6 +518572,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutStudentNestedInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUpdateManyWithoutStudentNestedInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUpdateManyWithoutStudentNestedInput
+        trainingActivity?: TrainingActivityUpdateManyWithoutStudentNestedInput
     };
     export type StudentUncheckedUpdateWithoutStudentScoreConvertInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -516607,6 +518646,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedUpdateManyWithoutStudentNestedInput
+        trainingActivity?: TrainingActivityUncheckedUpdateManyWithoutStudentNestedInput
     };
     export type DocumentFileUpsertWithWhereUniqueWithoutStudentScoreConvertInput = {
         where: DocumentFileWhereUniqueInput
@@ -517275,6 +519315,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutStudentInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreCreateNestedManyWithoutStudentInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentCreateNestedManyWithoutStudentInput
+        trainingActivity?: TrainingActivityCreateNestedManyWithoutStudentInput
     };
     export type StudentUncheckedCreateWithoutSubjectClassStudentInput = {
         id?: string
@@ -517348,6 +519389,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedCreateNestedManyWithoutStudentInput
+        trainingActivity?: TrainingActivityUncheckedCreateNestedManyWithoutStudentInput
     };
     export type StudentCreateOrConnectWithoutSubjectClassStudentInput = {
         where: StudentWhereUniqueInput
@@ -518232,6 +520274,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutStudentNestedInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUpdateManyWithoutStudentNestedInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUpdateManyWithoutStudentNestedInput
+        trainingActivity?: TrainingActivityUpdateManyWithoutStudentNestedInput
     };
     export type StudentUncheckedUpdateWithoutSubjectClassStudentInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -518305,6 +520348,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedUpdateManyWithoutStudentNestedInput
+        trainingActivity?: TrainingActivityUncheckedUpdateManyWithoutStudentNestedInput
     };
     export type SemesterUpsertWithoutStudentSubjectScoreInput = {
         update: XOR<SemesterUpdateWithoutStudentSubjectScoreInput, SemesterUncheckedUpdateWithoutStudentSubjectScoreInput>
@@ -519677,8 +521721,6 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         name?: string | null
-        academicRank?: string | null
-        academicDegree?: string | null
         organization?: string | null
         position?: string | null
         specialization?: string | null
@@ -519692,6 +521734,8 @@ export namespace Prisma {
         eligiblePresident?: boolean
         eligibleSecretary?: boolean
         lecturer?: LecturerCreateNestedOneWithoutExpertProfileInput
+        academicDegreeType?: DM_HocViCreateNestedOneWithoutExpertProfileInput
+        academicRankType?: DM_HocHamCreateNestedOneWithoutExpertProfileInput
         major?: TrainingMajorCreateNestedManyWithoutExpertProfileInput
         supervisedTheses?: ThesisProjectCreateNestedManyWithoutSupervisorInput
         coSupervisedTheses?: ThesisProjectCreateNestedManyWithoutCoSupervisorInput
@@ -519714,8 +521758,8 @@ export namespace Prisma {
         createdBy?: string | null
         lecturerId?: string | null
         name?: string | null
-        academicRank?: string | null
-        academicDegree?: string | null
+        academicDegreeTypeId?: string | null
+        academicRankTypeId?: string | null
         organization?: string | null
         position?: string | null
         specialization?: string | null
@@ -519753,8 +521797,6 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         name?: string | null
-        academicRank?: string | null
-        academicDegree?: string | null
         organization?: string | null
         position?: string | null
         specialization?: string | null
@@ -519768,6 +521810,8 @@ export namespace Prisma {
         eligiblePresident?: boolean
         eligibleSecretary?: boolean
         lecturer?: LecturerCreateNestedOneWithoutExpertProfileInput
+        academicDegreeType?: DM_HocViCreateNestedOneWithoutExpertProfileInput
+        academicRankType?: DM_HocHamCreateNestedOneWithoutExpertProfileInput
         major?: TrainingMajorCreateNestedManyWithoutExpertProfileInput
         supervisedTheses?: ThesisProjectCreateNestedManyWithoutSupervisorInput
         coSupervisedTheses?: ThesisProjectCreateNestedManyWithoutCoSupervisorInput
@@ -519790,8 +521834,8 @@ export namespace Prisma {
         createdBy?: string | null
         lecturerId?: string | null
         name?: string | null
-        academicRank?: string | null
-        academicDegree?: string | null
+        academicDegreeTypeId?: string | null
+        academicRankTypeId?: string | null
         organization?: string | null
         position?: string | null
         specialization?: string | null
@@ -519829,8 +521873,6 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         name?: string | null
-        academicRank?: string | null
-        academicDegree?: string | null
         organization?: string | null
         position?: string | null
         specialization?: string | null
@@ -519844,6 +521886,8 @@ export namespace Prisma {
         eligiblePresident?: boolean
         eligibleSecretary?: boolean
         lecturer?: LecturerCreateNestedOneWithoutExpertProfileInput
+        academicDegreeType?: DM_HocViCreateNestedOneWithoutExpertProfileInput
+        academicRankType?: DM_HocHamCreateNestedOneWithoutExpertProfileInput
         major?: TrainingMajorCreateNestedManyWithoutExpertProfileInput
         supervisedTheses?: ThesisProjectCreateNestedManyWithoutSupervisorInput
         coSupervisedTheses?: ThesisProjectCreateNestedManyWithoutCoSupervisorInput
@@ -519866,8 +521910,8 @@ export namespace Prisma {
         createdBy?: string | null
         lecturerId?: string | null
         name?: string | null
-        academicRank?: string | null
-        academicDegree?: string | null
+        academicDegreeTypeId?: string | null
+        academicRankTypeId?: string | null
         organization?: string | null
         position?: string | null
         specialization?: string | null
@@ -520001,8 +522045,6 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: NullableStringFieldUpdateOperationsInput | string | null
-        academicRank?: NullableStringFieldUpdateOperationsInput | string | null
-        academicDegree?: NullableStringFieldUpdateOperationsInput | string | null
         organization?: NullableStringFieldUpdateOperationsInput | string | null
         position?: NullableStringFieldUpdateOperationsInput | string | null
         specialization?: NullableStringFieldUpdateOperationsInput | string | null
@@ -520016,6 +522058,8 @@ export namespace Prisma {
         eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
         eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
         lecturer?: LecturerUpdateOneWithoutExpertProfileNestedInput
+        academicDegreeType?: DM_HocViUpdateOneWithoutExpertProfileNestedInput
+        academicRankType?: DM_HocHamUpdateOneWithoutExpertProfileNestedInput
         major?: TrainingMajorUpdateManyWithoutExpertProfileNestedInput
         supervisedTheses?: ThesisProjectUpdateManyWithoutSupervisorNestedInput
         coSupervisedTheses?: ThesisProjectUpdateManyWithoutCoSupervisorNestedInput
@@ -520038,8 +522082,8 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         name?: NullableStringFieldUpdateOperationsInput | string | null
-        academicRank?: NullableStringFieldUpdateOperationsInput | string | null
-        academicDegree?: NullableStringFieldUpdateOperationsInput | string | null
+        academicDegreeTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         organization?: NullableStringFieldUpdateOperationsInput | string | null
         position?: NullableStringFieldUpdateOperationsInput | string | null
         specialization?: NullableStringFieldUpdateOperationsInput | string | null
@@ -520082,8 +522126,6 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: NullableStringFieldUpdateOperationsInput | string | null
-        academicRank?: NullableStringFieldUpdateOperationsInput | string | null
-        academicDegree?: NullableStringFieldUpdateOperationsInput | string | null
         organization?: NullableStringFieldUpdateOperationsInput | string | null
         position?: NullableStringFieldUpdateOperationsInput | string | null
         specialization?: NullableStringFieldUpdateOperationsInput | string | null
@@ -520097,6 +522139,8 @@ export namespace Prisma {
         eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
         eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
         lecturer?: LecturerUpdateOneWithoutExpertProfileNestedInput
+        academicDegreeType?: DM_HocViUpdateOneWithoutExpertProfileNestedInput
+        academicRankType?: DM_HocHamUpdateOneWithoutExpertProfileNestedInput
         major?: TrainingMajorUpdateManyWithoutExpertProfileNestedInput
         supervisedTheses?: ThesisProjectUpdateManyWithoutSupervisorNestedInput
         coSupervisedTheses?: ThesisProjectUpdateManyWithoutCoSupervisorNestedInput
@@ -520119,8 +522163,8 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         name?: NullableStringFieldUpdateOperationsInput | string | null
-        academicRank?: NullableStringFieldUpdateOperationsInput | string | null
-        academicDegree?: NullableStringFieldUpdateOperationsInput | string | null
+        academicDegreeTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         organization?: NullableStringFieldUpdateOperationsInput | string | null
         position?: NullableStringFieldUpdateOperationsInput | string | null
         specialization?: NullableStringFieldUpdateOperationsInput | string | null
@@ -520163,8 +522207,6 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: NullableStringFieldUpdateOperationsInput | string | null
-        academicRank?: NullableStringFieldUpdateOperationsInput | string | null
-        academicDegree?: NullableStringFieldUpdateOperationsInput | string | null
         organization?: NullableStringFieldUpdateOperationsInput | string | null
         position?: NullableStringFieldUpdateOperationsInput | string | null
         specialization?: NullableStringFieldUpdateOperationsInput | string | null
@@ -520178,6 +522220,8 @@ export namespace Prisma {
         eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
         eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
         lecturer?: LecturerUpdateOneWithoutExpertProfileNestedInput
+        academicDegreeType?: DM_HocViUpdateOneWithoutExpertProfileNestedInput
+        academicRankType?: DM_HocHamUpdateOneWithoutExpertProfileNestedInput
         major?: TrainingMajorUpdateManyWithoutExpertProfileNestedInput
         supervisedTheses?: ThesisProjectUpdateManyWithoutSupervisorNestedInput
         coSupervisedTheses?: ThesisProjectUpdateManyWithoutCoSupervisorNestedInput
@@ -520200,8 +522244,8 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         name?: NullableStringFieldUpdateOperationsInput | string | null
-        academicRank?: NullableStringFieldUpdateOperationsInput | string | null
-        academicDegree?: NullableStringFieldUpdateOperationsInput | string | null
+        academicDegreeTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         organization?: NullableStringFieldUpdateOperationsInput | string | null
         position?: NullableStringFieldUpdateOperationsInput | string | null
         specialization?: NullableStringFieldUpdateOperationsInput | string | null
@@ -520317,8 +522361,6 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         name?: string | null
-        academicRank?: string | null
-        academicDegree?: string | null
         organization?: string | null
         position?: string | null
         specialization?: string | null
@@ -520332,6 +522374,8 @@ export namespace Prisma {
         eligiblePresident?: boolean
         eligibleSecretary?: boolean
         lecturer?: LecturerCreateNestedOneWithoutExpertProfileInput
+        academicDegreeType?: DM_HocViCreateNestedOneWithoutExpertProfileInput
+        academicRankType?: DM_HocHamCreateNestedOneWithoutExpertProfileInput
         major?: TrainingMajorCreateNestedManyWithoutExpertProfileInput
         supervisedTheses?: ThesisProjectCreateNestedManyWithoutSupervisorInput
         coSupervisedTheses?: ThesisProjectCreateNestedManyWithoutCoSupervisorInput
@@ -520354,8 +522398,8 @@ export namespace Prisma {
         createdBy?: string | null
         lecturerId?: string | null
         name?: string | null
-        academicRank?: string | null
-        academicDegree?: string | null
+        academicDegreeTypeId?: string | null
+        academicRankTypeId?: string | null
         organization?: string | null
         position?: string | null
         specialization?: string | null
@@ -520393,8 +522437,6 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         name?: string | null
-        academicRank?: string | null
-        academicDegree?: string | null
         organization?: string | null
         position?: string | null
         specialization?: string | null
@@ -520408,6 +522450,8 @@ export namespace Prisma {
         eligiblePresident?: boolean
         eligibleSecretary?: boolean
         lecturer?: LecturerCreateNestedOneWithoutExpertProfileInput
+        academicDegreeType?: DM_HocViCreateNestedOneWithoutExpertProfileInput
+        academicRankType?: DM_HocHamCreateNestedOneWithoutExpertProfileInput
         major?: TrainingMajorCreateNestedManyWithoutExpertProfileInput
         supervisedTheses?: ThesisProjectCreateNestedManyWithoutSupervisorInput
         coSupervisedTheses?: ThesisProjectCreateNestedManyWithoutCoSupervisorInput
@@ -520430,8 +522474,8 @@ export namespace Prisma {
         createdBy?: string | null
         lecturerId?: string | null
         name?: string | null
-        academicRank?: string | null
-        academicDegree?: string | null
+        academicDegreeTypeId?: string | null
+        academicRankTypeId?: string | null
         organization?: string | null
         position?: string | null
         specialization?: string | null
@@ -520565,8 +522609,6 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: NullableStringFieldUpdateOperationsInput | string | null
-        academicRank?: NullableStringFieldUpdateOperationsInput | string | null
-        academicDegree?: NullableStringFieldUpdateOperationsInput | string | null
         organization?: NullableStringFieldUpdateOperationsInput | string | null
         position?: NullableStringFieldUpdateOperationsInput | string | null
         specialization?: NullableStringFieldUpdateOperationsInput | string | null
@@ -520580,6 +522622,8 @@ export namespace Prisma {
         eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
         eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
         lecturer?: LecturerUpdateOneWithoutExpertProfileNestedInput
+        academicDegreeType?: DM_HocViUpdateOneWithoutExpertProfileNestedInput
+        academicRankType?: DM_HocHamUpdateOneWithoutExpertProfileNestedInput
         major?: TrainingMajorUpdateManyWithoutExpertProfileNestedInput
         supervisedTheses?: ThesisProjectUpdateManyWithoutSupervisorNestedInput
         coSupervisedTheses?: ThesisProjectUpdateManyWithoutCoSupervisorNestedInput
@@ -520602,8 +522646,8 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         name?: NullableStringFieldUpdateOperationsInput | string | null
-        academicRank?: NullableStringFieldUpdateOperationsInput | string | null
-        academicDegree?: NullableStringFieldUpdateOperationsInput | string | null
+        academicDegreeTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         organization?: NullableStringFieldUpdateOperationsInput | string | null
         position?: NullableStringFieldUpdateOperationsInput | string | null
         specialization?: NullableStringFieldUpdateOperationsInput | string | null
@@ -520646,8 +522690,6 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: NullableStringFieldUpdateOperationsInput | string | null
-        academicRank?: NullableStringFieldUpdateOperationsInput | string | null
-        academicDegree?: NullableStringFieldUpdateOperationsInput | string | null
         organization?: NullableStringFieldUpdateOperationsInput | string | null
         position?: NullableStringFieldUpdateOperationsInput | string | null
         specialization?: NullableStringFieldUpdateOperationsInput | string | null
@@ -520661,6 +522703,8 @@ export namespace Prisma {
         eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
         eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
         lecturer?: LecturerUpdateOneWithoutExpertProfileNestedInput
+        academicDegreeType?: DM_HocViUpdateOneWithoutExpertProfileNestedInput
+        academicRankType?: DM_HocHamUpdateOneWithoutExpertProfileNestedInput
         major?: TrainingMajorUpdateManyWithoutExpertProfileNestedInput
         supervisedTheses?: ThesisProjectUpdateManyWithoutSupervisorNestedInput
         coSupervisedTheses?: ThesisProjectUpdateManyWithoutCoSupervisorNestedInput
@@ -520683,8 +522727,8 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         name?: NullableStringFieldUpdateOperationsInput | string | null
-        academicRank?: NullableStringFieldUpdateOperationsInput | string | null
-        academicDegree?: NullableStringFieldUpdateOperationsInput | string | null
+        academicDegreeTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         organization?: NullableStringFieldUpdateOperationsInput | string | null
         position?: NullableStringFieldUpdateOperationsInput | string | null
         specialization?: NullableStringFieldUpdateOperationsInput | string | null
@@ -521092,6 +523136,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutStudentInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreCreateNestedManyWithoutStudentInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentCreateNestedManyWithoutStudentInput
+        trainingActivity?: TrainingActivityCreateNestedManyWithoutStudentInput
     };
     export type StudentUncheckedCreateWithoutArchivedCertificateInput = {
         id?: string
@@ -521165,6 +523210,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedCreateNestedManyWithoutStudentInput
+        trainingActivity?: TrainingActivityUncheckedCreateNestedManyWithoutStudentInput
     };
     export type StudentCreateOrConnectWithoutArchivedCertificateInput = {
         where: StudentWhereUniqueInput
@@ -521400,6 +523446,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutStudentNestedInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUpdateManyWithoutStudentNestedInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUpdateManyWithoutStudentNestedInput
+        trainingActivity?: TrainingActivityUpdateManyWithoutStudentNestedInput
     };
     export type StudentUncheckedUpdateWithoutArchivedCertificateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -521473,6 +523520,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedUpdateManyWithoutStudentNestedInput
+        trainingActivity?: TrainingActivityUncheckedUpdateManyWithoutStudentNestedInput
     };
     export type DocumentFileUpsertWithWhereUniqueWithoutArchivedCertificateInput = {
         where: DocumentFileWhereUniqueInput
@@ -521850,6 +523898,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutStudentInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreCreateNestedManyWithoutStudentInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentCreateNestedManyWithoutStudentInput
+        trainingActivity?: TrainingActivityCreateNestedManyWithoutStudentInput
     };
     export type StudentUncheckedCreateWithoutArchivedAwardInput = {
         id?: string
@@ -521923,6 +523972,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedCreateNestedManyWithoutStudentInput
+        trainingActivity?: TrainingActivityUncheckedCreateNestedManyWithoutStudentInput
     };
     export type StudentCreateOrConnectWithoutArchivedAwardInput = {
         where: StudentWhereUniqueInput
@@ -522158,6 +524208,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutStudentNestedInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUpdateManyWithoutStudentNestedInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUpdateManyWithoutStudentNestedInput
+        trainingActivity?: TrainingActivityUpdateManyWithoutStudentNestedInput
     };
     export type StudentUncheckedUpdateWithoutArchivedAwardInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -522231,6 +524282,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedUpdateManyWithoutStudentNestedInput
+        trainingActivity?: TrainingActivityUncheckedUpdateManyWithoutStudentNestedInput
     };
     export type DocumentFileUpsertWithWhereUniqueWithoutArchivedAwardInput = {
         where: DocumentFileWhereUniqueInput
@@ -526560,6 +528612,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutStudentInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreCreateNestedManyWithoutStudentInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentCreateNestedManyWithoutStudentInput
+        trainingActivity?: TrainingActivityCreateNestedManyWithoutStudentInput
     };
     export type StudentUncheckedCreateWithoutClassMonitorInput = {
         id?: string
@@ -526633,6 +528686,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedCreateNestedManyWithoutStudentInput
+        trainingActivity?: TrainingActivityUncheckedCreateNestedManyWithoutStudentInput
     };
     export type StudentCreateOrConnectWithoutClassMonitorInput = {
         where: StudentWhereUniqueInput
@@ -526710,6 +528764,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutStudentInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreCreateNestedManyWithoutStudentInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentCreateNestedManyWithoutStudentInput
+        trainingActivity?: TrainingActivityCreateNestedManyWithoutStudentInput
     };
     export type StudentUncheckedCreateWithoutUnionLeaderOfInput = {
         id?: string
@@ -526783,6 +528838,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedCreateNestedManyWithoutStudentInput
+        trainingActivity?: TrainingActivityUncheckedCreateNestedManyWithoutStudentInput
     };
     export type StudentCreateOrConnectWithoutUnionLeaderOfInput = {
         where: StudentWhereUniqueInput
@@ -527172,6 +529228,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutStudentInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreCreateNestedManyWithoutStudentInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentCreateNestedManyWithoutStudentInput
+        trainingActivity?: TrainingActivityCreateNestedManyWithoutStudentInput
     };
     export type StudentUncheckedCreateWithoutFixedClassInput = {
         id?: string
@@ -527245,6 +529302,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedCreateNestedManyWithoutStudentInput
+        trainingActivity?: TrainingActivityUncheckedCreateNestedManyWithoutStudentInput
     };
     export type StudentCreateOrConnectWithoutFixedClassInput = {
         where: StudentWhereUniqueInput
@@ -527705,6 +529763,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutStudentNestedInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUpdateManyWithoutStudentNestedInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUpdateManyWithoutStudentNestedInput
+        trainingActivity?: TrainingActivityUpdateManyWithoutStudentNestedInput
     };
     export type StudentUncheckedUpdateWithoutClassMonitorInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -527778,6 +529837,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedUpdateManyWithoutStudentNestedInput
+        trainingActivity?: TrainingActivityUncheckedUpdateManyWithoutStudentNestedInput
     };
     export type StudentUpsertWithoutUnionLeaderOfInput = {
         update: XOR<StudentUpdateWithoutUnionLeaderOfInput, StudentUncheckedUpdateWithoutUnionLeaderOfInput>
@@ -527860,6 +529920,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutStudentNestedInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUpdateManyWithoutStudentNestedInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUpdateManyWithoutStudentNestedInput
+        trainingActivity?: TrainingActivityUpdateManyWithoutStudentNestedInput
     };
     export type StudentUncheckedUpdateWithoutUnionLeaderOfInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -527933,6 +529994,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedUpdateManyWithoutStudentNestedInput
+        trainingActivity?: TrainingActivityUncheckedUpdateManyWithoutStudentNestedInput
     };
     export type TrainingCourseUpsertWithoutFixedClassInput = {
         update: XOR<TrainingCourseUpdateWithoutFixedClassInput, TrainingCourseUncheckedUpdateWithoutFixedClassInput>
@@ -529738,6 +531800,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutStudentInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreCreateNestedManyWithoutStudentInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentCreateNestedManyWithoutStudentInput
+        trainingActivity?: TrainingActivityCreateNestedManyWithoutStudentInput
     };
     export type StudentUncheckedCreateWithoutCurriculumVersionInput = {
         id?: string
@@ -529811,6 +531874,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedCreateNestedManyWithoutStudentInput
+        trainingActivity?: TrainingActivityUncheckedCreateNestedManyWithoutStudentInput
     };
     export type StudentCreateOrConnectWithoutCurriculumVersionInput = {
         where: StudentWhereUniqueInput
@@ -529892,6 +531956,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutStudentInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreCreateNestedManyWithoutStudentInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentCreateNestedManyWithoutStudentInput
+        trainingActivity?: TrainingActivityCreateNestedManyWithoutStudentInput
     };
     export type StudentUncheckedCreateWithoutCurriculumVersionParallelInput = {
         id?: string
@@ -529965,6 +532030,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedCreateNestedManyWithoutStudentInput
+        trainingActivity?: TrainingActivityUncheckedCreateNestedManyWithoutStudentInput
     };
     export type StudentCreateOrConnectWithoutCurriculumVersionParallelInput = {
         where: StudentWhereUniqueInput
@@ -535208,6 +537274,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutStudentInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreCreateNestedManyWithoutStudentInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentCreateNestedManyWithoutStudentInput
+        trainingActivity?: TrainingActivityCreateNestedManyWithoutStudentInput
     };
     export type StudentUncheckedCreateWithoutClassRegisterLogsInput = {
         id?: string
@@ -535281,6 +537348,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedCreateNestedManyWithoutStudentInput
+        trainingActivity?: TrainingActivityUncheckedCreateNestedManyWithoutStudentInput
     };
     export type StudentCreateOrConnectWithoutClassRegisterLogsInput = {
         where: StudentWhereUniqueInput
@@ -535531,6 +537599,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutStudentNestedInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUpdateManyWithoutStudentNestedInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUpdateManyWithoutStudentNestedInput
+        trainingActivity?: TrainingActivityUpdateManyWithoutStudentNestedInput
     };
     export type StudentUncheckedUpdateWithoutClassRegisterLogsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -535604,6 +537673,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedUpdateManyWithoutStudentNestedInput
+        trainingActivity?: TrainingActivityUncheckedUpdateManyWithoutStudentNestedInput
     };
     export type SubjectVersionCreateWithoutSubjectClassInput = {
         id?: string
@@ -536565,8 +538635,6 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         name?: string | null
-        academicRank?: string | null
-        academicDegree?: string | null
         organization?: string | null
         position?: string | null
         specialization?: string | null
@@ -536580,6 +538648,8 @@ export namespace Prisma {
         eligiblePresident?: boolean
         eligibleSecretary?: boolean
         lecturer?: LecturerCreateNestedOneWithoutExpertProfileInput
+        academicDegreeType?: DM_HocViCreateNestedOneWithoutExpertProfileInput
+        academicRankType?: DM_HocHamCreateNestedOneWithoutExpertProfileInput
         major?: TrainingMajorCreateNestedManyWithoutExpertProfileInput
         supervisedTheses?: ThesisProjectCreateNestedManyWithoutSupervisorInput
         coSupervisedTheses?: ThesisProjectCreateNestedManyWithoutCoSupervisorInput
@@ -536602,8 +538672,8 @@ export namespace Prisma {
         createdBy?: string | null
         lecturerId?: string | null
         name?: string | null
-        academicRank?: string | null
-        academicDegree?: string | null
+        academicDegreeTypeId?: string | null
+        academicRankTypeId?: string | null
         organization?: string | null
         position?: string | null
         specialization?: string | null
@@ -537705,35 +539775,6 @@ export namespace Prisma {
     export type ExpertProfileUpdateManyWithWhereWithoutSubjectClassInput = {
         where: ExpertProfileScalarWhereInput
         data: XOR<ExpertProfileUpdateManyMutationInput, ExpertProfileUncheckedUpdateManyWithoutSubjectClassInput>
-    };
-    export type ExpertProfileScalarWhereInput = {
-        AND?: ExpertProfileScalarWhereInput | ExpertProfileScalarWhereInput[]
-        OR?: ExpertProfileScalarWhereInput[]
-        NOT?: ExpertProfileScalarWhereInput | ExpertProfileScalarWhereInput[]
-        id?: StringFilter<"ExpertProfile"> | string
-        code?: StringNullableFilter<"ExpertProfile"> | string | null
-        active?: BoolFilter<"ExpertProfile"> | boolean
-        description?: StringNullableFilter<"ExpertProfile"> | string | null
-        deletedAt?: DateTimeNullableFilter<"ExpertProfile"> | Date | string | null
-        createdAt?: DateTimeFilter<"ExpertProfile"> | Date | string
-        updatedAt?: DateTimeFilter<"ExpertProfile"> | Date | string
-        createdBy?: UuidNullableFilter<"ExpertProfile"> | string | null
-        lecturerId?: StringNullableFilter<"ExpertProfile"> | string | null
-        name?: StringNullableFilter<"ExpertProfile"> | string | null
-        academicRank?: StringNullableFilter<"ExpertProfile"> | string | null
-        academicDegree?: StringNullableFilter<"ExpertProfile"> | string | null
-        organization?: StringNullableFilter<"ExpertProfile"> | string | null
-        position?: StringNullableFilter<"ExpertProfile"> | string | null
-        specialization?: StringNullableFilter<"ExpertProfile"> | string | null
-        workplace?: StringNullableFilter<"ExpertProfile"> | string | null
-        phone?: StringNullableFilter<"ExpertProfile"> | string | null
-        email?: StringNullableFilter<"ExpertProfile"> | string | null
-        bankAccountNumber?: StringNullableFilter<"ExpertProfile"> | string | null
-        bankName?: StringNullableFilter<"ExpertProfile"> | string | null
-        projectExpert?: BoolFilter<"ExpertProfile"> | boolean
-        thesisExpert?: BoolFilter<"ExpertProfile"> | boolean
-        eligiblePresident?: BoolFilter<"ExpertProfile"> | boolean
-        eligibleSecretary?: BoolFilter<"ExpertProfile"> | boolean
     };
     export type RoomUpsertWithWhereUniqueWithoutDefenseRoomsInput = {
         where: RoomWhereUniqueInput
@@ -539005,6 +541046,7 @@ export namespace Prisma {
         noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutStudentInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreCreateNestedManyWithoutStudentInput
+        trainingActivity?: TrainingActivityCreateNestedManyWithoutStudentInput
     };
     export type StudentUncheckedCreateWithoutSubjectClassAttendanceStudentInput = {
         id?: string
@@ -539078,6 +541120,7 @@ export namespace Prisma {
         noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
+        trainingActivity?: TrainingActivityUncheckedCreateNestedManyWithoutStudentInput
     };
     export type StudentCreateOrConnectWithoutSubjectClassAttendanceStudentInput = {
         where: StudentWhereUniqueInput
@@ -539199,6 +541242,7 @@ export namespace Prisma {
         noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutStudentNestedInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUpdateManyWithoutStudentNestedInput
+        trainingActivity?: TrainingActivityUpdateManyWithoutStudentNestedInput
     };
     export type StudentUncheckedUpdateWithoutSubjectClassAttendanceStudentInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -539272,6 +541316,7 @@ export namespace Prisma {
         noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
+        trainingActivity?: TrainingActivityUncheckedUpdateManyWithoutStudentNestedInput
     };
     export type SubjectClassCreateWithoutSubjectClassHistoryInput = {
         id?: string
@@ -543631,6 +545676,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutStudentInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreCreateNestedManyWithoutStudentInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentCreateNestedManyWithoutStudentInput
+        trainingActivity?: TrainingActivityCreateNestedManyWithoutStudentInput
     };
     export type StudentUncheckedCreateWithoutPriorityObjectInput = {
         id?: string
@@ -543704,6 +545750,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedCreateNestedManyWithoutStudentInput
+        trainingActivity?: TrainingActivityUncheckedCreateNestedManyWithoutStudentInput
     };
     export type StudentCreateOrConnectWithoutPriorityObjectInput = {
         where: StudentWhereUniqueInput
@@ -544300,6 +546347,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutStudentInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreCreateNestedManyWithoutStudentInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentCreateNestedManyWithoutStudentInput
+        trainingActivity?: TrainingActivityCreateNestedManyWithoutStudentInput
     };
     export type StudentUncheckedCreateWithoutTrainingLocationInput = {
         id?: string
@@ -544373,6 +546421,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedCreateNestedManyWithoutStudentInput
+        trainingActivity?: TrainingActivityUncheckedCreateNestedManyWithoutStudentInput
     };
     export type StudentCreateOrConnectWithoutTrainingLocationInput = {
         where: StudentWhereUniqueInput
@@ -546552,8 +548601,6 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         name?: string | null
-        academicRank?: string | null
-        academicDegree?: string | null
         organization?: string | null
         position?: string | null
         specialization?: string | null
@@ -546567,6 +548614,8 @@ export namespace Prisma {
         eligiblePresident?: boolean
         eligibleSecretary?: boolean
         lecturer?: LecturerCreateNestedOneWithoutExpertProfileInput
+        academicDegreeType?: DM_HocViCreateNestedOneWithoutExpertProfileInput
+        academicRankType?: DM_HocHamCreateNestedOneWithoutExpertProfileInput
         supervisedTheses?: ThesisProjectCreateNestedManyWithoutSupervisorInput
         coSupervisedTheses?: ThesisProjectCreateNestedManyWithoutCoSupervisorInput
         thirdSupervisedTheses?: ThesisProjectCreateNestedManyWithoutThirdSupervisorInput
@@ -546589,8 +548638,8 @@ export namespace Prisma {
         createdBy?: string | null
         lecturerId?: string | null
         name?: string | null
-        academicRank?: string | null
-        academicDegree?: string | null
+        academicDegreeTypeId?: string | null
+        academicRankTypeId?: string | null
         organization?: string | null
         position?: string | null
         specialization?: string | null
@@ -551916,6 +553965,40 @@ export namespace Prisma {
         data: SubjectClassAttendanceStudentCreateManyStudentInput | SubjectClassAttendanceStudentCreateManyStudentInput[]
         skipDuplicates?: boolean
     };
+    export type TrainingActivityCreateWithoutStudentInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        category: string
+        score: number
+        date?: Date | string
+    };
+    export type TrainingActivityUncheckedCreateWithoutStudentInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        category: string
+        score: number
+        date?: Date | string
+    };
+    export type TrainingActivityCreateOrConnectWithoutStudentInput = {
+        where: TrainingActivityWhereUniqueInput
+        create: XOR<TrainingActivityCreateWithoutStudentInput, TrainingActivityUncheckedCreateWithoutStudentInput>
+    };
+    export type TrainingActivityCreateManyStudentInputEnvelope = {
+        data: TrainingActivityCreateManyStudentInput | TrainingActivityCreateManyStudentInput[]
+        skipDuplicates?: boolean
+    };
     export type TrainingLocationUpsertWithoutStudentsInput = {
         update: XOR<TrainingLocationUpdateWithoutStudentsInput, TrainingLocationUncheckedUpdateWithoutStudentsInput>
         create: XOR<TrainingLocationCreateWithoutStudentsInput, TrainingLocationUncheckedCreateWithoutStudentsInput>
@@ -553267,6 +555350,345 @@ export namespace Prisma {
         where: SubjectClassAttendanceStudentScalarWhereInput
         data: XOR<SubjectClassAttendanceStudentUpdateManyMutationInput, SubjectClassAttendanceStudentUncheckedUpdateManyWithoutStudentInput>
     };
+    export type TrainingActivityUpsertWithWhereUniqueWithoutStudentInput = {
+        where: TrainingActivityWhereUniqueInput
+        update: XOR<TrainingActivityUpdateWithoutStudentInput, TrainingActivityUncheckedUpdateWithoutStudentInput>
+        create: XOR<TrainingActivityCreateWithoutStudentInput, TrainingActivityUncheckedCreateWithoutStudentInput>
+    };
+    export type TrainingActivityUpdateWithWhereUniqueWithoutStudentInput = {
+        where: TrainingActivityWhereUniqueInput
+        data: XOR<TrainingActivityUpdateWithoutStudentInput, TrainingActivityUncheckedUpdateWithoutStudentInput>
+    };
+    export type TrainingActivityUpdateManyWithWhereWithoutStudentInput = {
+        where: TrainingActivityScalarWhereInput
+        data: XOR<TrainingActivityUpdateManyMutationInput, TrainingActivityUncheckedUpdateManyWithoutStudentInput>
+    };
+    export type TrainingActivityScalarWhereInput = {
+        AND?: TrainingActivityScalarWhereInput | TrainingActivityScalarWhereInput[]
+        OR?: TrainingActivityScalarWhereInput[]
+        NOT?: TrainingActivityScalarWhereInput | TrainingActivityScalarWhereInput[]
+        id?: StringFilter<"TrainingActivity"> | string
+        code?: StringNullableFilter<"TrainingActivity"> | string | null
+        active?: BoolFilter<"TrainingActivity"> | boolean
+        description?: StringNullableFilter<"TrainingActivity"> | string | null
+        deletedAt?: DateTimeNullableFilter<"TrainingActivity"> | Date | string | null
+        createdAt?: DateTimeFilter<"TrainingActivity"> | Date | string
+        updatedAt?: DateTimeFilter<"TrainingActivity"> | Date | string
+        createdBy?: UuidNullableFilter<"TrainingActivity"> | string | null
+        studentId?: StringFilter<"TrainingActivity"> | string
+        category?: StringFilter<"TrainingActivity"> | string
+        score?: IntFilter<"TrainingActivity"> | number
+        date?: DateTimeFilter<"TrainingActivity"> | Date | string
+    };
+    export type StudentCreateWithoutTrainingActivityInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        note?: string | null
+        from?: Date | string | null
+        to?: Date | string | null
+        registerNumber?: string | null
+        doctoralCode?: string | null
+        admissionCombination?: string | null
+        entryScore?: number | null
+        competencyScore?: number | null
+        department?: string | null
+        departmentAddress?: string | null
+        careerYear?: number | null
+        universitySchool?: string | null
+        universityTrainingType?: string | null
+        universityGraduationYear?: number | null
+        universityMajor?: string | null
+        universityRank?: string | null
+        basic?: number | null
+        facility?: number | null
+        foreignLanguage?: string | null
+        priorityReason?: string | null
+        unionLeader?: string | null
+        status?: $Enums.StudentStatus
+        academicWarningLevel?: number
+        disciplinaryWarningLevel?: number
+        suspended?: boolean
+        expelled?: boolean
+        foreignLangPass?: boolean
+        ITCertificationPass?: boolean
+        strengthTrainingPass?: boolean
+        militaryTrainingPass?: boolean
+        trainingLocation?: TrainingLocationCreateNestedOneWithoutStudentsInput
+        priorityObject?: PriorityObjectCreateNestedManyWithoutStudentsInput
+        classMonitor?: FixedClassCreateNestedOneWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassCreateNestedOneWithoutUnionLeaderInput
+        fixedClass?: FixedClassCreateNestedOneWithoutStudentsInput
+        subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutStudentInput
+        userProfile: UserProfileCreateNestedOneWithoutEducationAndTrainingInput
+        registrationArea?: DM_KhuVuc_DiaLyCreateNestedOneWithoutStudentInput
+        curriculumVersion?: CurriculumVersionCreateNestedOneWithoutStudentsInput
+        curriculumVersionParallel?: CurriculumVersionCreateNestedOneWithoutStudentCurriculumVersionParallelInput
+        studentTrainingScore?: StudentTrainingScoreCreateNestedManyWithoutStudentInput
+        studentSemesterResult?: StudentSemesterResultCreateNestedManyWithoutStudentInput
+        studentYearResult?: StudentYearResultCreateNestedManyWithoutStudentInput
+        scholarshipAwards?: ScholarshipAwardCreateNestedManyWithoutStudentInput
+        archivedCertificate?: ArchivedCertificateCreateNestedManyWithoutStudentInput
+        archivedAward?: ArchivedAwardCreateNestedManyWithoutStudentInput
+        academicWarning?: AcademicWarningCreateNestedManyWithoutStudentInput
+        disciplinaryWarning?: DisciplinaryWarningCreateNestedManyWithoutStudentInput
+        studentAcademicDecision?: StudentAcademicDecisionCreateNestedManyWithoutStudentInput
+        graduationApplications?: StudentGraduationApplicationCreateNestedManyWithoutStudentInput
+        graduationDecision?: GraduationDecisionCreateNestedOneWithoutStudentInput
+        surveySessions?: SurveySessionCreateNestedManyWithoutStudentInput
+        notifications?: NotificationCreateNestedManyWithoutTargetStudentsInput
+        researchRegistrations?: StudentResearchRegistrationCreateNestedManyWithoutStudentInput
+        thesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutStudentInput
+        diplomaVerificationApplication?: DiplomaVerificationApplicationCreateNestedManyWithoutStudentInput
+        studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
+        scoreLinkStudent?: ScoreLinkStudentCreateNestedManyWithoutStudentInput
+        classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
+        notes?: NoteCreateNestedManyWithoutStudentInput
+        noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
+        semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutStudentInput
+        schoolYearTrainingScore?: SchoolYearTrainingScoreCreateNestedManyWithoutStudentInput
+        subjectClassAttendanceStudent?: SubjectClassAttendanceStudentCreateNestedManyWithoutStudentInput
+    };
+    export type StudentUncheckedCreateWithoutTrainingActivityInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        note?: string | null
+        from?: Date | string | null
+        to?: Date | string | null
+        registerNumber?: string | null
+        doctoralCode?: string | null
+        admissionCombination?: string | null
+        entryScore?: number | null
+        competencyScore?: number | null
+        department?: string | null
+        departmentAddress?: string | null
+        careerYear?: number | null
+        universitySchool?: string | null
+        universityTrainingType?: string | null
+        universityGraduationYear?: number | null
+        universityMajor?: string | null
+        universityRank?: string | null
+        basic?: number | null
+        facility?: number | null
+        foreignLanguage?: string | null
+        priorityReason?: string | null
+        trainingLocationId?: string | null
+        unionLeader?: string | null
+        status?: $Enums.StudentStatus
+        fixedClassId?: string | null
+        userProfileId: string
+        registrationAreaId?: string | null
+        curriculumVersionId?: string | null
+        curriculumVersionParallelId?: string | null
+        academicWarningLevel?: number
+        disciplinaryWarningLevel?: number
+        suspended?: boolean
+        expelled?: boolean
+        foreignLangPass?: boolean
+        ITCertificationPass?: boolean
+        strengthTrainingPass?: boolean
+        militaryTrainingPass?: boolean
+        priorityObject?: PriorityObjectUncheckedCreateNestedManyWithoutStudentsInput
+        classMonitor?: FixedClassUncheckedCreateNestedOneWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassUncheckedCreateNestedOneWithoutUnionLeaderInput
+        subjectClassStudent?: StudentSubjectScoreUncheckedCreateNestedManyWithoutStudentInput
+        studentTrainingScore?: StudentTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
+        studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutStudentInput
+        studentYearResult?: StudentYearResultUncheckedCreateNestedManyWithoutStudentInput
+        scholarshipAwards?: ScholarshipAwardUncheckedCreateNestedManyWithoutStudentInput
+        archivedCertificate?: ArchivedCertificateUncheckedCreateNestedManyWithoutStudentInput
+        archivedAward?: ArchivedAwardUncheckedCreateNestedManyWithoutStudentInput
+        academicWarning?: AcademicWarningUncheckedCreateNestedManyWithoutStudentInput
+        disciplinaryWarning?: DisciplinaryWarningUncheckedCreateNestedManyWithoutStudentInput
+        studentAcademicDecision?: StudentAcademicDecisionUncheckedCreateNestedManyWithoutStudentInput
+        graduationApplications?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutStudentInput
+        graduationDecision?: GraduationDecisionUncheckedCreateNestedOneWithoutStudentInput
+        surveySessions?: SurveySessionUncheckedCreateNestedManyWithoutStudentInput
+        notifications?: NotificationUncheckedCreateNestedManyWithoutTargetStudentsInput
+        researchRegistrations?: StudentResearchRegistrationUncheckedCreateNestedManyWithoutStudentInput
+        thesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentInput
+        diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedCreateNestedManyWithoutStudentInput
+        studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
+        scoreLinkStudent?: ScoreLinkStudentUncheckedCreateNestedManyWithoutStudentInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
+        notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
+        noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
+        semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
+        schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
+        subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedCreateNestedManyWithoutStudentInput
+    };
+    export type StudentCreateOrConnectWithoutTrainingActivityInput = {
+        where: StudentWhereUniqueInput
+        create: XOR<StudentCreateWithoutTrainingActivityInput, StudentUncheckedCreateWithoutTrainingActivityInput>
+    };
+    export type StudentUpsertWithoutTrainingActivityInput = {
+        update: XOR<StudentUpdateWithoutTrainingActivityInput, StudentUncheckedUpdateWithoutTrainingActivityInput>
+        create: XOR<StudentCreateWithoutTrainingActivityInput, StudentUncheckedCreateWithoutTrainingActivityInput>
+        where?: StudentWhereInput
+    };
+    export type StudentUpdateToOneWithWhereWithoutTrainingActivityInput = {
+        where?: StudentWhereInput
+        data: XOR<StudentUpdateWithoutTrainingActivityInput, StudentUncheckedUpdateWithoutTrainingActivityInput>
+    };
+    export type StudentUpdateWithoutTrainingActivityInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        note?: NullableStringFieldUpdateOperationsInput | string | null
+        from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+        admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+        entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        department?: NullableStringFieldUpdateOperationsInput | string | null
+        departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+        universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+        universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+        universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+        universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+        universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+        basic?: NullableFloatFieldUpdateOperationsInput | number | null
+        facility?: NullableFloatFieldUpdateOperationsInput | number | null
+        foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+        priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
+        unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
+        status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
+        academicWarningLevel?: IntFieldUpdateOperationsInput | number
+        disciplinaryWarningLevel?: IntFieldUpdateOperationsInput | number
+        suspended?: BoolFieldUpdateOperationsInput | boolean
+        expelled?: BoolFieldUpdateOperationsInput | boolean
+        foreignLangPass?: BoolFieldUpdateOperationsInput | boolean
+        ITCertificationPass?: BoolFieldUpdateOperationsInput | boolean
+        strengthTrainingPass?: BoolFieldUpdateOperationsInput | boolean
+        militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
+        trainingLocation?: TrainingLocationUpdateOneWithoutStudentsNestedInput
+        priorityObject?: PriorityObjectUpdateManyWithoutStudentsNestedInput
+        classMonitor?: FixedClassUpdateOneWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUpdateOneWithoutUnionLeaderNestedInput
+        fixedClass?: FixedClassUpdateOneWithoutStudentsNestedInput
+        subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutStudentNestedInput
+        userProfile?: UserProfileUpdateOneRequiredWithoutEducationAndTrainingNestedInput
+        registrationArea?: DM_KhuVuc_DiaLyUpdateOneWithoutStudentNestedInput
+        curriculumVersion?: CurriculumVersionUpdateOneWithoutStudentsNestedInput
+        curriculumVersionParallel?: CurriculumVersionUpdateOneWithoutStudentCurriculumVersionParallelNestedInput
+        studentTrainingScore?: StudentTrainingScoreUpdateManyWithoutStudentNestedInput
+        studentSemesterResult?: StudentSemesterResultUpdateManyWithoutStudentNestedInput
+        studentYearResult?: StudentYearResultUpdateManyWithoutStudentNestedInput
+        scholarshipAwards?: ScholarshipAwardUpdateManyWithoutStudentNestedInput
+        archivedCertificate?: ArchivedCertificateUpdateManyWithoutStudentNestedInput
+        archivedAward?: ArchivedAwardUpdateManyWithoutStudentNestedInput
+        academicWarning?: AcademicWarningUpdateManyWithoutStudentNestedInput
+        disciplinaryWarning?: DisciplinaryWarningUpdateManyWithoutStudentNestedInput
+        studentAcademicDecision?: StudentAcademicDecisionUpdateManyWithoutStudentNestedInput
+        graduationApplications?: StudentGraduationApplicationUpdateManyWithoutStudentNestedInput
+        graduationDecision?: GraduationDecisionUpdateOneWithoutStudentNestedInput
+        surveySessions?: SurveySessionUpdateManyWithoutStudentNestedInput
+        notifications?: NotificationUpdateManyWithoutTargetStudentsNestedInput
+        researchRegistrations?: StudentResearchRegistrationUpdateManyWithoutStudentNestedInput
+        thesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutStudentNestedInput
+        diplomaVerificationApplication?: DiplomaVerificationApplicationUpdateManyWithoutStudentNestedInput
+        studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
+        scoreLinkStudent?: ScoreLinkStudentUpdateManyWithoutStudentNestedInput
+        classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
+        notes?: NoteUpdateManyWithoutStudentNestedInput
+        noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
+        semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutStudentNestedInput
+        schoolYearTrainingScore?: SchoolYearTrainingScoreUpdateManyWithoutStudentNestedInput
+        subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUpdateManyWithoutStudentNestedInput
+    };
+    export type StudentUncheckedUpdateWithoutTrainingActivityInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        note?: NullableStringFieldUpdateOperationsInput | string | null
+        from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+        admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+        entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        department?: NullableStringFieldUpdateOperationsInput | string | null
+        departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+        universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+        universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+        universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+        universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+        universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+        basic?: NullableFloatFieldUpdateOperationsInput | number | null
+        facility?: NullableFloatFieldUpdateOperationsInput | number | null
+        foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+        priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
+        unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
+        status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
+        fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
+        userProfileId?: StringFieldUpdateOperationsInput | string
+        registrationAreaId?: NullableStringFieldUpdateOperationsInput | string | null
+        curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+        curriculumVersionParallelId?: NullableStringFieldUpdateOperationsInput | string | null
+        academicWarningLevel?: IntFieldUpdateOperationsInput | number
+        disciplinaryWarningLevel?: IntFieldUpdateOperationsInput | number
+        suspended?: BoolFieldUpdateOperationsInput | boolean
+        expelled?: BoolFieldUpdateOperationsInput | boolean
+        foreignLangPass?: BoolFieldUpdateOperationsInput | boolean
+        ITCertificationPass?: BoolFieldUpdateOperationsInput | boolean
+        strengthTrainingPass?: BoolFieldUpdateOperationsInput | boolean
+        militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
+        priorityObject?: PriorityObjectUncheckedUpdateManyWithoutStudentsNestedInput
+        classMonitor?: FixedClassUncheckedUpdateOneWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUncheckedUpdateOneWithoutUnionLeaderNestedInput
+        subjectClassStudent?: StudentSubjectScoreUncheckedUpdateManyWithoutStudentNestedInput
+        studentTrainingScore?: StudentTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
+        studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutStudentNestedInput
+        studentYearResult?: StudentYearResultUncheckedUpdateManyWithoutStudentNestedInput
+        scholarshipAwards?: ScholarshipAwardUncheckedUpdateManyWithoutStudentNestedInput
+        archivedCertificate?: ArchivedCertificateUncheckedUpdateManyWithoutStudentNestedInput
+        archivedAward?: ArchivedAwardUncheckedUpdateManyWithoutStudentNestedInput
+        academicWarning?: AcademicWarningUncheckedUpdateManyWithoutStudentNestedInput
+        disciplinaryWarning?: DisciplinaryWarningUncheckedUpdateManyWithoutStudentNestedInput
+        studentAcademicDecision?: StudentAcademicDecisionUncheckedUpdateManyWithoutStudentNestedInput
+        graduationApplications?: StudentGraduationApplicationUncheckedUpdateManyWithoutStudentNestedInput
+        graduationDecision?: GraduationDecisionUncheckedUpdateOneWithoutStudentNestedInput
+        surveySessions?: SurveySessionUncheckedUpdateManyWithoutStudentNestedInput
+        notifications?: NotificationUncheckedUpdateManyWithoutTargetStudentsNestedInput
+        researchRegistrations?: StudentResearchRegistrationUncheckedUpdateManyWithoutStudentNestedInput
+        thesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentNestedInput
+        diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedUpdateManyWithoutStudentNestedInput
+        studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
+        scoreLinkStudent?: ScoreLinkStudentUncheckedUpdateManyWithoutStudentNestedInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
+        notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
+        noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
+        semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
+        schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
+        subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedUpdateManyWithoutStudentNestedInput
+    };
     export type StudentCreateWithoutStudentSemesterResultInput = {
         id?: string
         code?: string | null
@@ -553339,6 +555761,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutStudentInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreCreateNestedManyWithoutStudentInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentCreateNestedManyWithoutStudentInput
+        trainingActivity?: TrainingActivityCreateNestedManyWithoutStudentInput
     };
     export type StudentUncheckedCreateWithoutStudentSemesterResultInput = {
         id?: string
@@ -553412,6 +555835,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedCreateNestedManyWithoutStudentInput
+        trainingActivity?: TrainingActivityUncheckedCreateNestedManyWithoutStudentInput
     };
     export type StudentCreateOrConnectWithoutStudentSemesterResultInput = {
         where: StudentWhereUniqueInput
@@ -553622,6 +556046,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutStudentNestedInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUpdateManyWithoutStudentNestedInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUpdateManyWithoutStudentNestedInput
+        trainingActivity?: TrainingActivityUpdateManyWithoutStudentNestedInput
     };
     export type StudentUncheckedUpdateWithoutStudentSemesterResultInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -553695,6 +556120,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedUpdateManyWithoutStudentNestedInput
+        trainingActivity?: TrainingActivityUncheckedUpdateManyWithoutStudentNestedInput
     };
     export type SemesterUpsertWithoutStudentSemesterResultInput = {
         update: XOR<SemesterUpdateWithoutStudentSemesterResultInput, SemesterUncheckedUpdateWithoutStudentSemesterResultInput>
@@ -553902,6 +556328,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutStudentInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreCreateNestedManyWithoutStudentInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentCreateNestedManyWithoutStudentInput
+        trainingActivity?: TrainingActivityCreateNestedManyWithoutStudentInput
     };
     export type StudentUncheckedCreateWithoutStudentYearResultInput = {
         id?: string
@@ -553975,6 +556402,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedCreateNestedManyWithoutStudentInput
+        trainingActivity?: TrainingActivityUncheckedCreateNestedManyWithoutStudentInput
     };
     export type StudentCreateOrConnectWithoutStudentYearResultInput = {
         where: StudentWhereUniqueInput
@@ -554159,6 +556587,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutStudentNestedInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUpdateManyWithoutStudentNestedInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUpdateManyWithoutStudentNestedInput
+        trainingActivity?: TrainingActivityUpdateManyWithoutStudentNestedInput
     };
     export type StudentUncheckedUpdateWithoutStudentYearResultInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -554232,6 +556661,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedUpdateManyWithoutStudentNestedInput
+        trainingActivity?: TrainingActivityUncheckedUpdateManyWithoutStudentNestedInput
     };
     export type SchoolYearUpsertWithoutStudentYearResultInput = {
         update: XOR<SchoolYearUpdateWithoutStudentYearResultInput, SchoolYearUncheckedUpdateWithoutStudentYearResultInput>
@@ -554589,6 +557019,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutStudentInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreCreateNestedManyWithoutStudentInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentCreateNestedManyWithoutStudentInput
+        trainingActivity?: TrainingActivityCreateNestedManyWithoutStudentInput
     };
     export type StudentUncheckedCreateWithoutNotificationsInput = {
         id?: string
@@ -554662,6 +557093,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedCreateNestedManyWithoutStudentInput
+        trainingActivity?: TrainingActivityUncheckedCreateNestedManyWithoutStudentInput
     };
     export type StudentCreateOrConnectWithoutNotificationsInput = {
         where: StudentWhereUniqueInput
@@ -557895,6 +560327,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutStudentInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreCreateNestedManyWithoutStudentInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentCreateNestedManyWithoutStudentInput
+        trainingActivity?: TrainingActivityCreateNestedManyWithoutStudentInput
     };
     export type StudentUncheckedCreateWithoutStudentAcademicDecisionInput = {
         id?: string
@@ -557968,6 +560401,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedCreateNestedManyWithoutStudentInput
+        trainingActivity?: TrainingActivityUncheckedCreateNestedManyWithoutStudentInput
     };
     export type StudentCreateOrConnectWithoutStudentAcademicDecisionInput = {
         where: StudentWhereUniqueInput
@@ -558272,6 +560706,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutStudentNestedInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUpdateManyWithoutStudentNestedInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUpdateManyWithoutStudentNestedInput
+        trainingActivity?: TrainingActivityUpdateManyWithoutStudentNestedInput
     };
     export type StudentUncheckedUpdateWithoutStudentAcademicDecisionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -558345,6 +560780,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedUpdateManyWithoutStudentNestedInput
+        trainingActivity?: TrainingActivityUncheckedUpdateManyWithoutStudentNestedInput
     };
     export type SemesterUpsertWithoutStudentAcademicDecisionInput = {
         update: XOR<SemesterUpdateWithoutStudentAcademicDecisionInput, SemesterUncheckedUpdateWithoutStudentAcademicDecisionInput>
@@ -558939,6 +561375,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutStudentInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreCreateNestedManyWithoutStudentInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentCreateNestedManyWithoutStudentInput
+        trainingActivity?: TrainingActivityCreateNestedManyWithoutStudentInput
     };
     export type StudentUncheckedCreateWithoutStudentTrainingScoreInput = {
         id?: string
@@ -559012,6 +561449,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedCreateNestedManyWithoutStudentInput
+        trainingActivity?: TrainingActivityUncheckedCreateNestedManyWithoutStudentInput
     };
     export type StudentCreateOrConnectWithoutStudentTrainingScoreInput = {
         where: StudentWhereUniqueInput
@@ -559135,6 +561573,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutStudentNestedInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUpdateManyWithoutStudentNestedInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUpdateManyWithoutStudentNestedInput
+        trainingActivity?: TrainingActivityUpdateManyWithoutStudentNestedInput
     };
     export type StudentUncheckedUpdateWithoutStudentTrainingScoreInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -559208,6 +561647,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedUpdateManyWithoutStudentNestedInput
+        trainingActivity?: TrainingActivityUncheckedUpdateManyWithoutStudentNestedInput
     };
     export type SemesterCreateWithoutSemesterTrainingScoreInput = {
         id?: string
@@ -559347,6 +561787,7 @@ export namespace Prisma {
         noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreCreateNestedManyWithoutStudentInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentCreateNestedManyWithoutStudentInput
+        trainingActivity?: TrainingActivityCreateNestedManyWithoutStudentInput
     };
     export type StudentUncheckedCreateWithoutSemesterTrainingScoreInput = {
         id?: string
@@ -559420,6 +561861,7 @@ export namespace Prisma {
         noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedCreateNestedManyWithoutStudentInput
+        trainingActivity?: TrainingActivityUncheckedCreateNestedManyWithoutStudentInput
     };
     export type StudentCreateOrConnectWithoutSemesterTrainingScoreInput = {
         where: StudentWhereUniqueInput
@@ -559577,6 +562019,7 @@ export namespace Prisma {
         noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUpdateManyWithoutStudentNestedInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUpdateManyWithoutStudentNestedInput
+        trainingActivity?: TrainingActivityUpdateManyWithoutStudentNestedInput
     };
     export type StudentUncheckedUpdateWithoutSemesterTrainingScoreInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -559650,6 +562093,7 @@ export namespace Prisma {
         noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedUpdateManyWithoutStudentNestedInput
+        trainingActivity?: TrainingActivityUncheckedUpdateManyWithoutStudentNestedInput
     };
     export type SchoolYearCreateWithoutSchoolYearTrainingScoreInput = {
         id?: string
@@ -559763,6 +562207,7 @@ export namespace Prisma {
         noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutStudentInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentCreateNestedManyWithoutStudentInput
+        trainingActivity?: TrainingActivityCreateNestedManyWithoutStudentInput
     };
     export type StudentUncheckedCreateWithoutSchoolYearTrainingScoreInput = {
         id?: string
@@ -559836,6 +562281,7 @@ export namespace Prisma {
         noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedCreateNestedManyWithoutStudentInput
+        trainingActivity?: TrainingActivityUncheckedCreateNestedManyWithoutStudentInput
     };
     export type StudentCreateOrConnectWithoutSchoolYearTrainingScoreInput = {
         where: StudentWhereUniqueInput
@@ -559967,6 +562413,7 @@ export namespace Prisma {
         noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutStudentNestedInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUpdateManyWithoutStudentNestedInput
+        trainingActivity?: TrainingActivityUpdateManyWithoutStudentNestedInput
     };
     export type StudentUncheckedUpdateWithoutSchoolYearTrainingScoreInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -560040,6 +562487,7 @@ export namespace Prisma {
         noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedUpdateManyWithoutStudentNestedInput
+        trainingActivity?: TrainingActivityUncheckedUpdateManyWithoutStudentNestedInput
     };
     export type LecturerCreateWithoutLecturerTypeInput = {
         id?: string
@@ -561559,8 +564007,6 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         name?: string | null
-        academicRank?: string | null
-        academicDegree?: string | null
         organization?: string | null
         position?: string | null
         specialization?: string | null
@@ -561573,6 +564019,8 @@ export namespace Prisma {
         thesisExpert?: boolean
         eligiblePresident?: boolean
         eligibleSecretary?: boolean
+        academicDegreeType?: DM_HocViCreateNestedOneWithoutExpertProfileInput
+        academicRankType?: DM_HocHamCreateNestedOneWithoutExpertProfileInput
         major?: TrainingMajorCreateNestedManyWithoutExpertProfileInput
         supervisedTheses?: ThesisProjectCreateNestedManyWithoutSupervisorInput
         coSupervisedTheses?: ThesisProjectCreateNestedManyWithoutCoSupervisorInput
@@ -561595,8 +564043,8 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         name?: string | null
-        academicRank?: string | null
-        academicDegree?: string | null
+        academicDegreeTypeId?: string | null
+        academicRankTypeId?: string | null
         organization?: string | null
         position?: string | null
         specialization?: string | null
@@ -564489,6 +566937,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutStudentInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreCreateNestedManyWithoutStudentInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentCreateNestedManyWithoutStudentInput
+        trainingActivity?: TrainingActivityCreateNestedManyWithoutStudentInput
     };
     export type StudentUncheckedCreateWithoutResearchRegistrationsInput = {
         id?: string
@@ -564562,6 +567011,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedCreateNestedManyWithoutStudentInput
+        trainingActivity?: TrainingActivityUncheckedCreateNestedManyWithoutStudentInput
     };
     export type StudentCreateOrConnectWithoutResearchRegistrationsInput = {
         where: StudentWhereUniqueInput
@@ -564776,6 +567226,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutStudentNestedInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUpdateManyWithoutStudentNestedInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUpdateManyWithoutStudentNestedInput
+        trainingActivity?: TrainingActivityUpdateManyWithoutStudentNestedInput
     };
     export type StudentUncheckedUpdateWithoutResearchRegistrationsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -564849,6 +567300,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedUpdateManyWithoutStudentNestedInput
+        trainingActivity?: TrainingActivityUncheckedUpdateManyWithoutStudentNestedInput
     };
     export type ResearchProjectUpsertWithoutRegistrationsInput = {
         update: XOR<ResearchProjectUpdateWithoutRegistrationsInput, ResearchProjectUncheckedUpdateWithoutRegistrationsInput>
@@ -565669,8 +568121,6 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         name?: string | null
-        academicRank?: string | null
-        academicDegree?: string | null
         organization?: string | null
         position?: string | null
         specialization?: string | null
@@ -565684,6 +568134,8 @@ export namespace Prisma {
         eligiblePresident?: boolean
         eligibleSecretary?: boolean
         lecturer?: LecturerCreateNestedOneWithoutExpertProfileInput
+        academicDegreeType?: DM_HocViCreateNestedOneWithoutExpertProfileInput
+        academicRankType?: DM_HocHamCreateNestedOneWithoutExpertProfileInput
         major?: TrainingMajorCreateNestedManyWithoutExpertProfileInput
         supervisedTheses?: ThesisProjectCreateNestedManyWithoutSupervisorInput
         coSupervisedTheses?: ThesisProjectCreateNestedManyWithoutCoSupervisorInput
@@ -565706,8 +568158,8 @@ export namespace Prisma {
         createdBy?: string | null
         lecturerId?: string | null
         name?: string | null
-        academicRank?: string | null
-        academicDegree?: string | null
+        academicDegreeTypeId?: string | null
+        academicRankTypeId?: string | null
         organization?: string | null
         position?: string | null
         specialization?: string | null
@@ -565913,8 +568365,6 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         name?: string | null
-        academicRank?: string | null
-        academicDegree?: string | null
         organization?: string | null
         position?: string | null
         specialization?: string | null
@@ -565928,6 +568378,8 @@ export namespace Prisma {
         eligiblePresident?: boolean
         eligibleSecretary?: boolean
         lecturer?: LecturerCreateNestedOneWithoutExpertProfileInput
+        academicDegreeType?: DM_HocViCreateNestedOneWithoutExpertProfileInput
+        academicRankType?: DM_HocHamCreateNestedOneWithoutExpertProfileInput
         major?: TrainingMajorCreateNestedManyWithoutExpertProfileInput
         coSupervisedTheses?: ThesisProjectCreateNestedManyWithoutCoSupervisorInput
         thirdSupervisedTheses?: ThesisProjectCreateNestedManyWithoutThirdSupervisorInput
@@ -565950,8 +568402,8 @@ export namespace Prisma {
         createdBy?: string | null
         lecturerId?: string | null
         name?: string | null
-        academicRank?: string | null
-        academicDegree?: string | null
+        academicDegreeTypeId?: string | null
+        academicRankTypeId?: string | null
         organization?: string | null
         position?: string | null
         specialization?: string | null
@@ -566023,8 +568475,6 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         name?: string | null
-        academicRank?: string | null
-        academicDegree?: string | null
         organization?: string | null
         position?: string | null
         specialization?: string | null
@@ -566038,6 +568488,8 @@ export namespace Prisma {
         eligiblePresident?: boolean
         eligibleSecretary?: boolean
         lecturer?: LecturerCreateNestedOneWithoutExpertProfileInput
+        academicDegreeType?: DM_HocViCreateNestedOneWithoutExpertProfileInput
+        academicRankType?: DM_HocHamCreateNestedOneWithoutExpertProfileInput
         major?: TrainingMajorCreateNestedManyWithoutExpertProfileInput
         supervisedTheses?: ThesisProjectCreateNestedManyWithoutSupervisorInput
         thirdSupervisedTheses?: ThesisProjectCreateNestedManyWithoutThirdSupervisorInput
@@ -566060,8 +568512,8 @@ export namespace Prisma {
         createdBy?: string | null
         lecturerId?: string | null
         name?: string | null
-        academicRank?: string | null
-        academicDegree?: string | null
+        academicDegreeTypeId?: string | null
+        academicRankTypeId?: string | null
         organization?: string | null
         position?: string | null
         specialization?: string | null
@@ -566644,8 +569096,6 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: NullableStringFieldUpdateOperationsInput | string | null
-        academicRank?: NullableStringFieldUpdateOperationsInput | string | null
-        academicDegree?: NullableStringFieldUpdateOperationsInput | string | null
         organization?: NullableStringFieldUpdateOperationsInput | string | null
         position?: NullableStringFieldUpdateOperationsInput | string | null
         specialization?: NullableStringFieldUpdateOperationsInput | string | null
@@ -566659,6 +569109,8 @@ export namespace Prisma {
         eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
         eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
         lecturer?: LecturerUpdateOneWithoutExpertProfileNestedInput
+        academicDegreeType?: DM_HocViUpdateOneWithoutExpertProfileNestedInput
+        academicRankType?: DM_HocHamUpdateOneWithoutExpertProfileNestedInput
         major?: TrainingMajorUpdateManyWithoutExpertProfileNestedInput
         supervisedTheses?: ThesisProjectUpdateManyWithoutSupervisorNestedInput
         coSupervisedTheses?: ThesisProjectUpdateManyWithoutCoSupervisorNestedInput
@@ -566681,8 +569133,8 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         name?: NullableStringFieldUpdateOperationsInput | string | null
-        academicRank?: NullableStringFieldUpdateOperationsInput | string | null
-        academicDegree?: NullableStringFieldUpdateOperationsInput | string | null
+        academicDegreeTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         organization?: NullableStringFieldUpdateOperationsInput | string | null
         position?: NullableStringFieldUpdateOperationsInput | string | null
         specialization?: NullableStringFieldUpdateOperationsInput | string | null
@@ -566903,8 +569355,6 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: NullableStringFieldUpdateOperationsInput | string | null
-        academicRank?: NullableStringFieldUpdateOperationsInput | string | null
-        academicDegree?: NullableStringFieldUpdateOperationsInput | string | null
         organization?: NullableStringFieldUpdateOperationsInput | string | null
         position?: NullableStringFieldUpdateOperationsInput | string | null
         specialization?: NullableStringFieldUpdateOperationsInput | string | null
@@ -566918,6 +569368,8 @@ export namespace Prisma {
         eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
         eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
         lecturer?: LecturerUpdateOneWithoutExpertProfileNestedInput
+        academicDegreeType?: DM_HocViUpdateOneWithoutExpertProfileNestedInput
+        academicRankType?: DM_HocHamUpdateOneWithoutExpertProfileNestedInput
         major?: TrainingMajorUpdateManyWithoutExpertProfileNestedInput
         coSupervisedTheses?: ThesisProjectUpdateManyWithoutCoSupervisorNestedInput
         thirdSupervisedTheses?: ThesisProjectUpdateManyWithoutThirdSupervisorNestedInput
@@ -566940,8 +569392,8 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         name?: NullableStringFieldUpdateOperationsInput | string | null
-        academicRank?: NullableStringFieldUpdateOperationsInput | string | null
-        academicDegree?: NullableStringFieldUpdateOperationsInput | string | null
+        academicDegreeTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         organization?: NullableStringFieldUpdateOperationsInput | string | null
         position?: NullableStringFieldUpdateOperationsInput | string | null
         specialization?: NullableStringFieldUpdateOperationsInput | string | null
@@ -567023,8 +569475,6 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: NullableStringFieldUpdateOperationsInput | string | null
-        academicRank?: NullableStringFieldUpdateOperationsInput | string | null
-        academicDegree?: NullableStringFieldUpdateOperationsInput | string | null
         organization?: NullableStringFieldUpdateOperationsInput | string | null
         position?: NullableStringFieldUpdateOperationsInput | string | null
         specialization?: NullableStringFieldUpdateOperationsInput | string | null
@@ -567038,6 +569488,8 @@ export namespace Prisma {
         eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
         eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
         lecturer?: LecturerUpdateOneWithoutExpertProfileNestedInput
+        academicDegreeType?: DM_HocViUpdateOneWithoutExpertProfileNestedInput
+        academicRankType?: DM_HocHamUpdateOneWithoutExpertProfileNestedInput
         major?: TrainingMajorUpdateManyWithoutExpertProfileNestedInput
         supervisedTheses?: ThesisProjectUpdateManyWithoutSupervisorNestedInput
         thirdSupervisedTheses?: ThesisProjectUpdateManyWithoutThirdSupervisorNestedInput
@@ -567060,8 +569512,8 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         name?: NullableStringFieldUpdateOperationsInput | string | null
-        academicRank?: NullableStringFieldUpdateOperationsInput | string | null
-        academicDegree?: NullableStringFieldUpdateOperationsInput | string | null
+        academicDegreeTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         organization?: NullableStringFieldUpdateOperationsInput | string | null
         position?: NullableStringFieldUpdateOperationsInput | string | null
         specialization?: NullableStringFieldUpdateOperationsInput | string | null
@@ -567673,6 +570125,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutStudentInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreCreateNestedManyWithoutStudentInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentCreateNestedManyWithoutStudentInput
+        trainingActivity?: TrainingActivityCreateNestedManyWithoutStudentInput
     };
     export type StudentUncheckedCreateWithoutThesisRegistrationsInput = {
         id?: string
@@ -567746,6 +570199,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedCreateNestedManyWithoutStudentInput
+        trainingActivity?: TrainingActivityUncheckedCreateNestedManyWithoutStudentInput
     };
     export type StudentCreateOrConnectWithoutThesisRegistrationsInput = {
         where: StudentWhereUniqueInput
@@ -568148,6 +570602,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutStudentNestedInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUpdateManyWithoutStudentNestedInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUpdateManyWithoutStudentNestedInput
+        trainingActivity?: TrainingActivityUpdateManyWithoutStudentNestedInput
     };
     export type StudentUncheckedUpdateWithoutThesisRegistrationsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -568221,6 +570676,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedUpdateManyWithoutStudentNestedInput
+        trainingActivity?: TrainingActivityUncheckedUpdateManyWithoutStudentNestedInput
     };
     export type StudentSubjectScoreUpsertWithoutStudentThesisRegistrationInput = {
         update: XOR<StudentSubjectScoreUpdateWithoutStudentThesisRegistrationInput, StudentSubjectScoreUncheckedUpdateWithoutStudentThesisRegistrationInput>
@@ -568631,6 +571087,90 @@ export namespace Prisma {
     export type LecturerCreateOrConnectWithoutExpertProfileInput = {
         where: LecturerWhereUniqueInput
         create: XOR<LecturerCreateWithoutExpertProfileInput, LecturerUncheckedCreateWithoutExpertProfileInput>
+    };
+    export type DM_HocViCreateWithoutExpertProfileInput = {
+        Id?: string
+        sMa?: string | null
+        sTen?: string | null
+        sGhiChu?: string | null
+        iSTT?: number | null
+        bActive?: boolean | null
+        bDeleted?: boolean | null
+        bSystem?: boolean | null
+        iDictionaryKey?: number | null
+        dNgayTao?: Date | string | null
+        dNgaySua?: Date | string | null
+        sNguoiTao?: string | null
+        sNguoiSua?: string | null
+        sThietBiTao?: string | null
+        sThietBiSua?: string | null
+        profiles?: UserProfileCreateNestedManyWithoutAcademicDegreeTypeInput
+        hocVi?: HocViCreateNestedManyWithoutAcademicDegreeTypeInput
+    };
+    export type DM_HocViUncheckedCreateWithoutExpertProfileInput = {
+        Id?: string
+        sMa?: string | null
+        sTen?: string | null
+        sGhiChu?: string | null
+        iSTT?: number | null
+        bActive?: boolean | null
+        bDeleted?: boolean | null
+        bSystem?: boolean | null
+        iDictionaryKey?: number | null
+        dNgayTao?: Date | string | null
+        dNgaySua?: Date | string | null
+        sNguoiTao?: string | null
+        sNguoiSua?: string | null
+        sThietBiTao?: string | null
+        sThietBiSua?: string | null
+        profiles?: UserProfileUncheckedCreateNestedManyWithoutAcademicDegreeTypeInput
+        hocVi?: HocViUncheckedCreateNestedManyWithoutAcademicDegreeTypeInput
+    };
+    export type DM_HocViCreateOrConnectWithoutExpertProfileInput = {
+        where: DM_HocViWhereUniqueInput
+        create: XOR<DM_HocViCreateWithoutExpertProfileInput, DM_HocViUncheckedCreateWithoutExpertProfileInput>
+    };
+    export type DM_HocHamCreateWithoutExpertProfileInput = {
+        Id?: string
+        sMa?: string | null
+        sTen?: string | null
+        sGhiChu?: string | null
+        iSTT?: number | null
+        bActive?: boolean | null
+        bDeleted?: boolean | null
+        bSystem?: boolean | null
+        iDictionaryKey?: number | null
+        dNgayTao?: Date | string | null
+        dNgaySua?: Date | string | null
+        sNguoiTao?: string | null
+        sNguoiSua?: string | null
+        sThietBiTao?: string | null
+        sThietBiSua?: string | null
+        profiles?: UserProfileCreateNestedManyWithoutAcademicRankTypeInput
+        hocHam?: HocHamCreateNestedManyWithoutAcademicRankTypeInput
+    };
+    export type DM_HocHamUncheckedCreateWithoutExpertProfileInput = {
+        Id?: string
+        sMa?: string | null
+        sTen?: string | null
+        sGhiChu?: string | null
+        iSTT?: number | null
+        bActive?: boolean | null
+        bDeleted?: boolean | null
+        bSystem?: boolean | null
+        iDictionaryKey?: number | null
+        dNgayTao?: Date | string | null
+        dNgaySua?: Date | string | null
+        sNguoiTao?: string | null
+        sNguoiSua?: string | null
+        sThietBiTao?: string | null
+        sThietBiSua?: string | null
+        profiles?: UserProfileUncheckedCreateNestedManyWithoutAcademicRankTypeInput
+        hocHam?: HocHamUncheckedCreateNestedManyWithoutAcademicRankTypeInput
+    };
+    export type DM_HocHamCreateOrConnectWithoutExpertProfileInput = {
+        where: DM_HocHamWhereUniqueInput
+        create: XOR<DM_HocHamCreateWithoutExpertProfileInput, DM_HocHamUncheckedCreateWithoutExpertProfileInput>
     };
     export type TrainingMajorCreateWithoutExpertProfileInput = {
         id?: string
@@ -569534,6 +572074,100 @@ export namespace Prisma {
         evaluationCriterionReviews?: EvaluationCriterionUncheckedUpdateManyWithoutLecturerReviewNestedInput
         primarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutPrimarySupervisorNestedInput
         secondarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutSecondarySupervisorNestedInput
+    };
+    export type DM_HocViUpsertWithoutExpertProfileInput = {
+        update: XOR<DM_HocViUpdateWithoutExpertProfileInput, DM_HocViUncheckedUpdateWithoutExpertProfileInput>
+        create: XOR<DM_HocViCreateWithoutExpertProfileInput, DM_HocViUncheckedCreateWithoutExpertProfileInput>
+        where?: DM_HocViWhereInput
+    };
+    export type DM_HocViUpdateToOneWithWhereWithoutExpertProfileInput = {
+        where?: DM_HocViWhereInput
+        data: XOR<DM_HocViUpdateWithoutExpertProfileInput, DM_HocViUncheckedUpdateWithoutExpertProfileInput>
+    };
+    export type DM_HocViUpdateWithoutExpertProfileInput = {
+        Id?: StringFieldUpdateOperationsInput | string
+        sMa?: NullableStringFieldUpdateOperationsInput | string | null
+        sTen?: NullableStringFieldUpdateOperationsInput | string | null
+        sGhiChu?: NullableStringFieldUpdateOperationsInput | string | null
+        iSTT?: NullableIntFieldUpdateOperationsInput | number | null
+        bActive?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bDeleted?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
+        dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        profiles?: UserProfileUpdateManyWithoutAcademicDegreeTypeNestedInput
+        hocVi?: HocViUpdateManyWithoutAcademicDegreeTypeNestedInput
+    };
+    export type DM_HocViUncheckedUpdateWithoutExpertProfileInput = {
+        Id?: StringFieldUpdateOperationsInput | string
+        sMa?: NullableStringFieldUpdateOperationsInput | string | null
+        sTen?: NullableStringFieldUpdateOperationsInput | string | null
+        sGhiChu?: NullableStringFieldUpdateOperationsInput | string | null
+        iSTT?: NullableIntFieldUpdateOperationsInput | number | null
+        bActive?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bDeleted?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
+        dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        profiles?: UserProfileUncheckedUpdateManyWithoutAcademicDegreeTypeNestedInput
+        hocVi?: HocViUncheckedUpdateManyWithoutAcademicDegreeTypeNestedInput
+    };
+    export type DM_HocHamUpsertWithoutExpertProfileInput = {
+        update: XOR<DM_HocHamUpdateWithoutExpertProfileInput, DM_HocHamUncheckedUpdateWithoutExpertProfileInput>
+        create: XOR<DM_HocHamCreateWithoutExpertProfileInput, DM_HocHamUncheckedCreateWithoutExpertProfileInput>
+        where?: DM_HocHamWhereInput
+    };
+    export type DM_HocHamUpdateToOneWithWhereWithoutExpertProfileInput = {
+        where?: DM_HocHamWhereInput
+        data: XOR<DM_HocHamUpdateWithoutExpertProfileInput, DM_HocHamUncheckedUpdateWithoutExpertProfileInput>
+    };
+    export type DM_HocHamUpdateWithoutExpertProfileInput = {
+        Id?: StringFieldUpdateOperationsInput | string
+        sMa?: NullableStringFieldUpdateOperationsInput | string | null
+        sTen?: NullableStringFieldUpdateOperationsInput | string | null
+        sGhiChu?: NullableStringFieldUpdateOperationsInput | string | null
+        iSTT?: NullableIntFieldUpdateOperationsInput | number | null
+        bActive?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bDeleted?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
+        dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        profiles?: UserProfileUpdateManyWithoutAcademicRankTypeNestedInput
+        hocHam?: HocHamUpdateManyWithoutAcademicRankTypeNestedInput
+    };
+    export type DM_HocHamUncheckedUpdateWithoutExpertProfileInput = {
+        Id?: StringFieldUpdateOperationsInput | string
+        sMa?: NullableStringFieldUpdateOperationsInput | string | null
+        sTen?: NullableStringFieldUpdateOperationsInput | string | null
+        sGhiChu?: NullableStringFieldUpdateOperationsInput | string | null
+        iSTT?: NullableIntFieldUpdateOperationsInput | number | null
+        bActive?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bDeleted?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
+        dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        profiles?: UserProfileUncheckedUpdateManyWithoutAcademicRankTypeNestedInput
+        hocHam?: HocHamUncheckedUpdateManyWithoutAcademicRankTypeNestedInput
     };
     export type TrainingMajorUpsertWithWhereUniqueWithoutExpertProfileInput = {
         where: TrainingMajorWhereUniqueInput
@@ -570495,8 +573129,6 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         name?: string | null
-        academicRank?: string | null
-        academicDegree?: string | null
         organization?: string | null
         position?: string | null
         specialization?: string | null
@@ -570510,6 +573142,8 @@ export namespace Prisma {
         eligiblePresident?: boolean
         eligibleSecretary?: boolean
         lecturer?: LecturerCreateNestedOneWithoutExpertProfileInput
+        academicDegreeType?: DM_HocViCreateNestedOneWithoutExpertProfileInput
+        academicRankType?: DM_HocHamCreateNestedOneWithoutExpertProfileInput
         major?: TrainingMajorCreateNestedManyWithoutExpertProfileInput
         supervisedTheses?: ThesisProjectCreateNestedManyWithoutSupervisorInput
         coSupervisedTheses?: ThesisProjectCreateNestedManyWithoutCoSupervisorInput
@@ -570532,8 +573166,8 @@ export namespace Prisma {
         createdBy?: string | null
         lecturerId?: string | null
         name?: string | null
-        academicRank?: string | null
-        academicDegree?: string | null
+        academicDegreeTypeId?: string | null
+        academicRankTypeId?: string | null
         organization?: string | null
         position?: string | null
         specialization?: string | null
@@ -570677,8 +573311,6 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: NullableStringFieldUpdateOperationsInput | string | null
-        academicRank?: NullableStringFieldUpdateOperationsInput | string | null
-        academicDegree?: NullableStringFieldUpdateOperationsInput | string | null
         organization?: NullableStringFieldUpdateOperationsInput | string | null
         position?: NullableStringFieldUpdateOperationsInput | string | null
         specialization?: NullableStringFieldUpdateOperationsInput | string | null
@@ -570692,6 +573324,8 @@ export namespace Prisma {
         eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
         eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
         lecturer?: LecturerUpdateOneWithoutExpertProfileNestedInput
+        academicDegreeType?: DM_HocViUpdateOneWithoutExpertProfileNestedInput
+        academicRankType?: DM_HocHamUpdateOneWithoutExpertProfileNestedInput
         major?: TrainingMajorUpdateManyWithoutExpertProfileNestedInput
         supervisedTheses?: ThesisProjectUpdateManyWithoutSupervisorNestedInput
         coSupervisedTheses?: ThesisProjectUpdateManyWithoutCoSupervisorNestedInput
@@ -570714,8 +573348,8 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         name?: NullableStringFieldUpdateOperationsInput | string | null
-        academicRank?: NullableStringFieldUpdateOperationsInput | string | null
-        academicDegree?: NullableStringFieldUpdateOperationsInput | string | null
+        academicDegreeTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         organization?: NullableStringFieldUpdateOperationsInput | string | null
         position?: NullableStringFieldUpdateOperationsInput | string | null
         specialization?: NullableStringFieldUpdateOperationsInput | string | null
@@ -580185,6 +582819,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutStudentInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreCreateNestedManyWithoutStudentInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentCreateNestedManyWithoutStudentInput
+        trainingActivity?: TrainingActivityCreateNestedManyWithoutStudentInput
     };
     export type StudentUncheckedCreateWithoutSurveySessionsInput = {
         id?: string
@@ -580258,6 +582893,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedCreateNestedManyWithoutStudentInput
+        trainingActivity?: TrainingActivityUncheckedCreateNestedManyWithoutStudentInput
     };
     export type StudentCreateOrConnectWithoutSurveySessionsInput = {
         where: StudentWhereUniqueInput
@@ -580840,6 +583476,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutStudentNestedInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUpdateManyWithoutStudentNestedInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUpdateManyWithoutStudentNestedInput
+        trainingActivity?: TrainingActivityUpdateManyWithoutStudentNestedInput
     };
     export type StudentUncheckedUpdateWithoutSurveySessionsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -580913,6 +583550,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedUpdateManyWithoutStudentNestedInput
+        trainingActivity?: TrainingActivityUncheckedUpdateManyWithoutStudentNestedInput
     };
     export type SurveyObjectTypeUpsertWithoutSurveySessionsInput = {
         update: XOR<SurveyObjectTypeUpdateWithoutSurveySessionsInput, SurveyObjectTypeUncheckedUpdateWithoutSurveySessionsInput>
@@ -588089,6 +590727,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutStudentInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreCreateNestedManyWithoutStudentInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentCreateNestedManyWithoutStudentInput
+        trainingActivity?: TrainingActivityCreateNestedManyWithoutStudentInput
     };
     export type StudentUncheckedCreateWithoutScholarshipAwardsInput = {
         id?: string
@@ -588162,6 +590801,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedCreateNestedManyWithoutStudentInput
+        trainingActivity?: TrainingActivityUncheckedCreateNestedManyWithoutStudentInput
     };
     export type StudentCreateOrConnectWithoutScholarshipAwardsInput = {
         where: StudentWhereUniqueInput
@@ -588354,6 +590994,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutStudentNestedInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUpdateManyWithoutStudentNestedInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUpdateManyWithoutStudentNestedInput
+        trainingActivity?: TrainingActivityUpdateManyWithoutStudentNestedInput
     };
     export type StudentUncheckedUpdateWithoutScholarshipAwardsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -588427,6 +591068,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedUpdateManyWithoutStudentNestedInput
+        trainingActivity?: TrainingActivityUncheckedUpdateManyWithoutStudentNestedInput
     };
     export type SemesterUpsertWithoutScholarshipAwardInput = {
         update: XOR<SemesterUpdateWithoutScholarshipAwardInput, SemesterUncheckedUpdateWithoutScholarshipAwardInput>
@@ -589158,6 +591800,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutStudentInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreCreateNestedManyWithoutStudentInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentCreateNestedManyWithoutStudentInput
+        trainingActivity?: TrainingActivityCreateNestedManyWithoutStudentInput
     };
     export type StudentUncheckedCreateWithoutGraduationApplicationsInput = {
         id?: string
@@ -589231,6 +591874,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedCreateNestedManyWithoutStudentInput
+        trainingActivity?: TrainingActivityUncheckedCreateNestedManyWithoutStudentInput
     };
     export type StudentCreateOrConnectWithoutGraduationApplicationsInput = {
         where: StudentWhereUniqueInput
@@ -589813,6 +592457,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutStudentNestedInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUpdateManyWithoutStudentNestedInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUpdateManyWithoutStudentNestedInput
+        trainingActivity?: TrainingActivityUpdateManyWithoutStudentNestedInput
     };
     export type StudentUncheckedUpdateWithoutGraduationApplicationsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -589886,6 +592531,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedUpdateManyWithoutStudentNestedInput
+        trainingActivity?: TrainingActivityUncheckedUpdateManyWithoutStudentNestedInput
     };
     export type GraduationSessionUpsertWithoutApplicationsInput = {
         update: XOR<GraduationSessionUpdateWithoutApplicationsInput, GraduationSessionUncheckedUpdateWithoutApplicationsInput>
@@ -591069,6 +593715,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutStudentInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreCreateNestedManyWithoutStudentInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentCreateNestedManyWithoutStudentInput
+        trainingActivity?: TrainingActivityCreateNestedManyWithoutStudentInput
     };
     export type StudentUncheckedCreateWithoutGraduationDecisionInput = {
         id?: string
@@ -591142,6 +593789,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedCreateNestedManyWithoutStudentInput
+        trainingActivity?: TrainingActivityUncheckedCreateNestedManyWithoutStudentInput
     };
     export type StudentCreateOrConnectWithoutGraduationDecisionInput = {
         where: StudentWhereUniqueInput
@@ -591621,6 +594269,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutStudentNestedInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUpdateManyWithoutStudentNestedInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUpdateManyWithoutStudentNestedInput
+        trainingActivity?: TrainingActivityUpdateManyWithoutStudentNestedInput
     };
     export type StudentUncheckedUpdateWithoutGraduationDecisionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -591694,6 +594343,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedUpdateManyWithoutStudentNestedInput
+        trainingActivity?: TrainingActivityUncheckedUpdateManyWithoutStudentNestedInput
     };
     export type TrainingMajorUpsertWithoutGraduationDecisionInput = {
         update: XOR<TrainingMajorUpdateWithoutGraduationDecisionInput, TrainingMajorUncheckedUpdateWithoutGraduationDecisionInput>
@@ -593560,6 +596210,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutStudentInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreCreateNestedManyWithoutStudentInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentCreateNestedManyWithoutStudentInput
+        trainingActivity?: TrainingActivityCreateNestedManyWithoutStudentInput
     };
     export type StudentUncheckedCreateWithoutDiplomaVerificationApplicationInput = {
         id?: string
@@ -593633,6 +596284,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedCreateNestedManyWithoutStudentInput
+        trainingActivity?: TrainingActivityUncheckedCreateNestedManyWithoutStudentInput
     };
     export type StudentCreateOrConnectWithoutDiplomaVerificationApplicationInput = {
         where: StudentWhereUniqueInput
@@ -593894,6 +596546,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutStudentNestedInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUpdateManyWithoutStudentNestedInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUpdateManyWithoutStudentNestedInput
+        trainingActivity?: TrainingActivityUpdateManyWithoutStudentNestedInput
     };
     export type StudentUncheckedUpdateWithoutDiplomaVerificationApplicationInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -593967,6 +596620,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedUpdateManyWithoutStudentNestedInput
+        trainingActivity?: TrainingActivityUncheckedUpdateManyWithoutStudentNestedInput
     };
     export type TrainingObjectTypeCreateWithoutScoreLinkSheetInput = {
         id?: string
@@ -595193,6 +597847,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutStudentInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreCreateNestedManyWithoutStudentInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentCreateNestedManyWithoutStudentInput
+        trainingActivity?: TrainingActivityCreateNestedManyWithoutStudentInput
     };
     export type StudentUncheckedCreateWithoutScoreLinkStudentInput = {
         id?: string
@@ -595266,6 +597921,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedCreateNestedManyWithoutStudentInput
+        trainingActivity?: TrainingActivityUncheckedCreateNestedManyWithoutStudentInput
     };
     export type StudentCreateOrConnectWithoutScoreLinkStudentInput = {
         where: StudentWhereUniqueInput
@@ -595387,6 +598043,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutStudentNestedInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUpdateManyWithoutStudentNestedInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUpdateManyWithoutStudentNestedInput
+        trainingActivity?: TrainingActivityUpdateManyWithoutStudentNestedInput
     };
     export type StudentUncheckedUpdateWithoutScoreLinkStudentInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -595460,6 +598117,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedUpdateManyWithoutStudentNestedInput
+        trainingActivity?: TrainingActivityUncheckedUpdateManyWithoutStudentNestedInput
     };
     export type StudentCreateWithoutNotesInput = {
         id?: string
@@ -595533,6 +598191,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutStudentInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreCreateNestedManyWithoutStudentInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentCreateNestedManyWithoutStudentInput
+        trainingActivity?: TrainingActivityCreateNestedManyWithoutStudentInput
     };
     export type StudentUncheckedCreateWithoutNotesInput = {
         id?: string
@@ -595606,6 +598265,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedCreateNestedManyWithoutStudentInput
+        trainingActivity?: TrainingActivityUncheckedCreateNestedManyWithoutStudentInput
     };
     export type StudentCreateOrConnectWithoutNotesInput = {
         where: StudentWhereUniqueInput
@@ -595876,6 +598536,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutStudentNestedInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUpdateManyWithoutStudentNestedInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUpdateManyWithoutStudentNestedInput
+        trainingActivity?: TrainingActivityUpdateManyWithoutStudentNestedInput
     };
     export type StudentUncheckedUpdateWithoutNotesInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -595949,6 +598610,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedUpdateManyWithoutStudentNestedInput
+        trainingActivity?: TrainingActivityUncheckedUpdateManyWithoutStudentNestedInput
     };
     export type NoteFolderUpsertWithoutNotesInput = {
         update: XOR<NoteFolderUpdateWithoutNotesInput, NoteFolderUncheckedUpdateWithoutNotesInput>
@@ -596137,6 +598799,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutStudentInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreCreateNestedManyWithoutStudentInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentCreateNestedManyWithoutStudentInput
+        trainingActivity?: TrainingActivityCreateNestedManyWithoutStudentInput
     };
     export type StudentUncheckedCreateWithoutNoteFoldersInput = {
         id?: string
@@ -596210,6 +598873,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedCreateNestedManyWithoutStudentInput
+        trainingActivity?: TrainingActivityUncheckedCreateNestedManyWithoutStudentInput
     };
     export type StudentCreateOrConnectWithoutNoteFoldersInput = {
         where: StudentWhereUniqueInput
@@ -596412,6 +599076,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutStudentNestedInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUpdateManyWithoutStudentNestedInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUpdateManyWithoutStudentNestedInput
+        trainingActivity?: TrainingActivityUpdateManyWithoutStudentNestedInput
     };
     export type StudentUncheckedUpdateWithoutNoteFoldersInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -596485,6 +599150,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedUpdateManyWithoutStudentNestedInput
+        trainingActivity?: TrainingActivityUncheckedUpdateManyWithoutStudentNestedInput
     };
     export type NoteFolderUpsertWithoutChildrenInput = {
         update: XOR<NoteFolderUpdateWithoutChildrenInput, NoteFolderUncheckedUpdateWithoutChildrenInput>
@@ -597039,6 +599705,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutStudentInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreCreateNestedManyWithoutStudentInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentCreateNestedManyWithoutStudentInput
+        trainingActivity?: TrainingActivityCreateNestedManyWithoutStudentInput
     };
     export type StudentUncheckedCreateWithoutAcademicWarningInput = {
         id?: string
@@ -597112,6 +599779,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedCreateNestedManyWithoutStudentInput
+        trainingActivity?: TrainingActivityUncheckedCreateNestedManyWithoutStudentInput
     };
     export type StudentCreateOrConnectWithoutAcademicWarningInput = {
         where: StudentWhereUniqueInput
@@ -597306,6 +599974,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutStudentNestedInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUpdateManyWithoutStudentNestedInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUpdateManyWithoutStudentNestedInput
+        trainingActivity?: TrainingActivityUpdateManyWithoutStudentNestedInput
     };
     export type StudentUncheckedUpdateWithoutAcademicWarningInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -597379,6 +600048,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedUpdateManyWithoutStudentNestedInput
+        trainingActivity?: TrainingActivityUncheckedUpdateManyWithoutStudentNestedInput
     };
     export type SemesterUpsertWithoutAcademicWarningInput = {
         update: XOR<SemesterUpdateWithoutAcademicWarningInput, SemesterUncheckedUpdateWithoutAcademicWarningInput>
@@ -597536,6 +600206,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutStudentInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreCreateNestedManyWithoutStudentInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentCreateNestedManyWithoutStudentInput
+        trainingActivity?: TrainingActivityCreateNestedManyWithoutStudentInput
     };
     export type StudentUncheckedCreateWithoutDisciplinaryWarningInput = {
         id?: string
@@ -597609,6 +600280,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedCreateNestedManyWithoutStudentInput
+        trainingActivity?: TrainingActivityUncheckedCreateNestedManyWithoutStudentInput
     };
     export type StudentCreateOrConnectWithoutDisciplinaryWarningInput = {
         where: StudentWhereUniqueInput
@@ -597789,6 +600461,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutStudentNestedInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUpdateManyWithoutStudentNestedInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUpdateManyWithoutStudentNestedInput
+        trainingActivity?: TrainingActivityUpdateManyWithoutStudentNestedInput
     };
     export type StudentUncheckedUpdateWithoutDisciplinaryWarningInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -597862,6 +600535,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedUpdateManyWithoutStudentNestedInput
+        trainingActivity?: TrainingActivityUncheckedUpdateManyWithoutStudentNestedInput
     };
     export type SemesterUpsertWithoutDisciplinaryWarningInput = {
         update: XOR<SemesterUpdateWithoutDisciplinaryWarningInput, SemesterUncheckedUpdateWithoutDisciplinaryWarningInput>
@@ -605850,6 +608524,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutStudentNestedInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUpdateManyWithoutStudentNestedInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUpdateManyWithoutStudentNestedInput
+        trainingActivity?: TrainingActivityUpdateManyWithoutStudentNestedInput
     };
     export type StudentUncheckedUpdateWithoutUserProfileInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -605923,6 +608598,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedUpdateManyWithoutStudentNestedInput
+        trainingActivity?: TrainingActivityUncheckedUpdateManyWithoutStudentNestedInput
     };
     export type StudentUncheckedUpdateManyWithoutUserProfileInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -611009,6 +613685,31 @@ export namespace Prisma {
         to?: Date | string | null
         userProfileId: string
     };
+    export type ExpertProfileCreateManyAcademicRankTypeInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        lecturerId?: string | null
+        name?: string | null
+        academicDegreeTypeId?: string | null
+        organization?: string | null
+        position?: string | null
+        specialization?: string | null
+        workplace?: string | null
+        phone?: string | null
+        email?: string | null
+        bankAccountNumber?: string | null
+        bankName?: string | null
+        projectExpert?: boolean
+        thesisExpert?: boolean
+        eligiblePresident?: boolean
+        eligibleSecretary?: boolean
+    };
     export type UserProfileUpdateWithoutAcademicRankTypeInput = {
         id?: StringFieldUpdateOperationsInput | string
         code?: NullableStringFieldUpdateOperationsInput | string | null
@@ -611528,6 +614229,103 @@ export namespace Prisma {
         to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
     };
+    export type ExpertProfileUpdateWithoutAcademicRankTypeInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: NullableStringFieldUpdateOperationsInput | string | null
+        organization?: NullableStringFieldUpdateOperationsInput | string | null
+        position?: NullableStringFieldUpdateOperationsInput | string | null
+        specialization?: NullableStringFieldUpdateOperationsInput | string | null
+        workplace?: NullableStringFieldUpdateOperationsInput | string | null
+        phone?: NullableStringFieldUpdateOperationsInput | string | null
+        email?: NullableStringFieldUpdateOperationsInput | string | null
+        bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        bankName?: NullableStringFieldUpdateOperationsInput | string | null
+        projectExpert?: BoolFieldUpdateOperationsInput | boolean
+        thesisExpert?: BoolFieldUpdateOperationsInput | boolean
+        eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
+        eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
+        lecturer?: LecturerUpdateOneWithoutExpertProfileNestedInput
+        academicDegreeType?: DM_HocViUpdateOneWithoutExpertProfileNestedInput
+        major?: TrainingMajorUpdateManyWithoutExpertProfileNestedInput
+        supervisedTheses?: ThesisProjectUpdateManyWithoutSupervisorNestedInput
+        coSupervisedTheses?: ThesisProjectUpdateManyWithoutCoSupervisorNestedInput
+        thirdSupervisedTheses?: ThesisProjectUpdateManyWithoutThirdSupervisorNestedInput
+        supervisorResearchTopic?: StudentResearchTopicUpdateManyWithoutSupervisorNestedInput
+        coSupervisorResearchTopic?: StudentResearchTopicUpdateManyWithoutCoSupervisorNestedInput
+        thirdSupervisorResearchTopic?: StudentResearchTopicUpdateManyWithoutThirdSupervisorNestedInput
+        supervisorInternship?: StudentInternshipUpdateManyWithoutSupervisorNestedInput
+        coSupervisorInternship?: StudentInternshipUpdateManyWithoutCoSupervisorNestedInput
+        subjectClass?: SubjectClassUpdateManyWithoutExpertProfileNestedInput
+        councilMemberships?: CouncilMemberUpdateManyWithoutExpertNestedInput
+    };
+    export type ExpertProfileUncheckedUpdateWithoutAcademicRankTypeInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: NullableStringFieldUpdateOperationsInput | string | null
+        academicDegreeTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        organization?: NullableStringFieldUpdateOperationsInput | string | null
+        position?: NullableStringFieldUpdateOperationsInput | string | null
+        specialization?: NullableStringFieldUpdateOperationsInput | string | null
+        workplace?: NullableStringFieldUpdateOperationsInput | string | null
+        phone?: NullableStringFieldUpdateOperationsInput | string | null
+        email?: NullableStringFieldUpdateOperationsInput | string | null
+        bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        bankName?: NullableStringFieldUpdateOperationsInput | string | null
+        projectExpert?: BoolFieldUpdateOperationsInput | boolean
+        thesisExpert?: BoolFieldUpdateOperationsInput | boolean
+        eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
+        eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
+        major?: TrainingMajorUncheckedUpdateManyWithoutExpertProfileNestedInput
+        supervisedTheses?: ThesisProjectUncheckedUpdateManyWithoutSupervisorNestedInput
+        coSupervisedTheses?: ThesisProjectUncheckedUpdateManyWithoutCoSupervisorNestedInput
+        thirdSupervisedTheses?: ThesisProjectUncheckedUpdateManyWithoutThirdSupervisorNestedInput
+        supervisorResearchTopic?: StudentResearchTopicUncheckedUpdateManyWithoutSupervisorNestedInput
+        coSupervisorResearchTopic?: StudentResearchTopicUncheckedUpdateManyWithoutCoSupervisorNestedInput
+        thirdSupervisorResearchTopic?: StudentResearchTopicUncheckedUpdateManyWithoutThirdSupervisorNestedInput
+        supervisorInternship?: StudentInternshipUncheckedUpdateManyWithoutSupervisorNestedInput
+        coSupervisorInternship?: StudentInternshipUncheckedUpdateManyWithoutCoSupervisorNestedInput
+        subjectClass?: SubjectClassUncheckedUpdateManyWithoutExpertProfileNestedInput
+        councilMemberships?: CouncilMemberUncheckedUpdateManyWithoutExpertNestedInput
+    };
+    export type ExpertProfileUncheckedUpdateManyWithoutAcademicRankTypeInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: NullableStringFieldUpdateOperationsInput | string | null
+        academicDegreeTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        organization?: NullableStringFieldUpdateOperationsInput | string | null
+        position?: NullableStringFieldUpdateOperationsInput | string | null
+        specialization?: NullableStringFieldUpdateOperationsInput | string | null
+        workplace?: NullableStringFieldUpdateOperationsInput | string | null
+        phone?: NullableStringFieldUpdateOperationsInput | string | null
+        email?: NullableStringFieldUpdateOperationsInput | string | null
+        bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        bankName?: NullableStringFieldUpdateOperationsInput | string | null
+        projectExpert?: BoolFieldUpdateOperationsInput | boolean
+        thesisExpert?: BoolFieldUpdateOperationsInput | boolean
+        eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
+        eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
+    };
     export type UserProfileCreateManyAcademicDegreeTypeInput = {
         id?: string
         code?: string | null
@@ -611670,6 +614468,31 @@ export namespace Prisma {
         truongId?: string | null
         year?: number | null
         userProfileId: string
+    };
+    export type ExpertProfileCreateManyAcademicDegreeTypeInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        lecturerId?: string | null
+        name?: string | null
+        academicRankTypeId?: string | null
+        organization?: string | null
+        position?: string | null
+        specialization?: string | null
+        workplace?: string | null
+        phone?: string | null
+        email?: string | null
+        bankAccountNumber?: string | null
+        bankName?: string | null
+        projectExpert?: boolean
+        thesisExpert?: boolean
+        eligiblePresident?: boolean
+        eligibleSecretary?: boolean
     };
     export type UserProfileUpdateWithoutAcademicDegreeTypeInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -612189,6 +615012,103 @@ export namespace Prisma {
         truongId?: NullableStringFieldUpdateOperationsInput | string | null
         year?: NullableIntFieldUpdateOperationsInput | number | null
         userProfileId?: StringFieldUpdateOperationsInput | string
+    };
+    export type ExpertProfileUpdateWithoutAcademicDegreeTypeInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: NullableStringFieldUpdateOperationsInput | string | null
+        organization?: NullableStringFieldUpdateOperationsInput | string | null
+        position?: NullableStringFieldUpdateOperationsInput | string | null
+        specialization?: NullableStringFieldUpdateOperationsInput | string | null
+        workplace?: NullableStringFieldUpdateOperationsInput | string | null
+        phone?: NullableStringFieldUpdateOperationsInput | string | null
+        email?: NullableStringFieldUpdateOperationsInput | string | null
+        bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        bankName?: NullableStringFieldUpdateOperationsInput | string | null
+        projectExpert?: BoolFieldUpdateOperationsInput | boolean
+        thesisExpert?: BoolFieldUpdateOperationsInput | boolean
+        eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
+        eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
+        lecturer?: LecturerUpdateOneWithoutExpertProfileNestedInput
+        academicRankType?: DM_HocHamUpdateOneWithoutExpertProfileNestedInput
+        major?: TrainingMajorUpdateManyWithoutExpertProfileNestedInput
+        supervisedTheses?: ThesisProjectUpdateManyWithoutSupervisorNestedInput
+        coSupervisedTheses?: ThesisProjectUpdateManyWithoutCoSupervisorNestedInput
+        thirdSupervisedTheses?: ThesisProjectUpdateManyWithoutThirdSupervisorNestedInput
+        supervisorResearchTopic?: StudentResearchTopicUpdateManyWithoutSupervisorNestedInput
+        coSupervisorResearchTopic?: StudentResearchTopicUpdateManyWithoutCoSupervisorNestedInput
+        thirdSupervisorResearchTopic?: StudentResearchTopicUpdateManyWithoutThirdSupervisorNestedInput
+        supervisorInternship?: StudentInternshipUpdateManyWithoutSupervisorNestedInput
+        coSupervisorInternship?: StudentInternshipUpdateManyWithoutCoSupervisorNestedInput
+        subjectClass?: SubjectClassUpdateManyWithoutExpertProfileNestedInput
+        councilMemberships?: CouncilMemberUpdateManyWithoutExpertNestedInput
+    };
+    export type ExpertProfileUncheckedUpdateWithoutAcademicDegreeTypeInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: NullableStringFieldUpdateOperationsInput | string | null
+        academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        organization?: NullableStringFieldUpdateOperationsInput | string | null
+        position?: NullableStringFieldUpdateOperationsInput | string | null
+        specialization?: NullableStringFieldUpdateOperationsInput | string | null
+        workplace?: NullableStringFieldUpdateOperationsInput | string | null
+        phone?: NullableStringFieldUpdateOperationsInput | string | null
+        email?: NullableStringFieldUpdateOperationsInput | string | null
+        bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        bankName?: NullableStringFieldUpdateOperationsInput | string | null
+        projectExpert?: BoolFieldUpdateOperationsInput | boolean
+        thesisExpert?: BoolFieldUpdateOperationsInput | boolean
+        eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
+        eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
+        major?: TrainingMajorUncheckedUpdateManyWithoutExpertProfileNestedInput
+        supervisedTheses?: ThesisProjectUncheckedUpdateManyWithoutSupervisorNestedInput
+        coSupervisedTheses?: ThesisProjectUncheckedUpdateManyWithoutCoSupervisorNestedInput
+        thirdSupervisedTheses?: ThesisProjectUncheckedUpdateManyWithoutThirdSupervisorNestedInput
+        supervisorResearchTopic?: StudentResearchTopicUncheckedUpdateManyWithoutSupervisorNestedInput
+        coSupervisorResearchTopic?: StudentResearchTopicUncheckedUpdateManyWithoutCoSupervisorNestedInput
+        thirdSupervisorResearchTopic?: StudentResearchTopicUncheckedUpdateManyWithoutThirdSupervisorNestedInput
+        supervisorInternship?: StudentInternshipUncheckedUpdateManyWithoutSupervisorNestedInput
+        coSupervisorInternship?: StudentInternshipUncheckedUpdateManyWithoutCoSupervisorNestedInput
+        subjectClass?: SubjectClassUncheckedUpdateManyWithoutExpertProfileNestedInput
+        councilMemberships?: CouncilMemberUncheckedUpdateManyWithoutExpertNestedInput
+    };
+    export type ExpertProfileUncheckedUpdateManyWithoutAcademicDegreeTypeInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: NullableStringFieldUpdateOperationsInput | string | null
+        academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        organization?: NullableStringFieldUpdateOperationsInput | string | null
+        position?: NullableStringFieldUpdateOperationsInput | string | null
+        specialization?: NullableStringFieldUpdateOperationsInput | string | null
+        workplace?: NullableStringFieldUpdateOperationsInput | string | null
+        phone?: NullableStringFieldUpdateOperationsInput | string | null
+        email?: NullableStringFieldUpdateOperationsInput | string | null
+        bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        bankName?: NullableStringFieldUpdateOperationsInput | string | null
+        projectExpert?: BoolFieldUpdateOperationsInput | boolean
+        thesisExpert?: BoolFieldUpdateOperationsInput | boolean
+        eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
+        eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
     };
     export type UserProfileCreateManyEthnicityInput = {
         id?: string
@@ -614376,6 +617296,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutStudentNestedInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUpdateManyWithoutStudentNestedInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUpdateManyWithoutStudentNestedInput
+        trainingActivity?: TrainingActivityUpdateManyWithoutStudentNestedInput
     };
     export type StudentUncheckedUpdateWithoutRegistrationAreaInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -614449,6 +617370,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedUpdateManyWithoutStudentNestedInput
+        trainingActivity?: TrainingActivityUncheckedUpdateManyWithoutStudentNestedInput
     };
     export type StudentUncheckedUpdateManyWithoutRegistrationAreaInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -633772,6 +636694,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutStudentNestedInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUpdateManyWithoutStudentNestedInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUpdateManyWithoutStudentNestedInput
+        trainingActivity?: TrainingActivityUpdateManyWithoutStudentNestedInput
     };
     export type StudentUncheckedUpdateWithoutFixedClassInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -633845,6 +636768,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedUpdateManyWithoutStudentNestedInput
+        trainingActivity?: TrainingActivityUncheckedUpdateManyWithoutStudentNestedInput
     };
     export type StudentUncheckedUpdateManyWithoutFixedClassInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -634928,6 +637852,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutStudentNestedInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUpdateManyWithoutStudentNestedInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUpdateManyWithoutStudentNestedInput
+        trainingActivity?: TrainingActivityUpdateManyWithoutStudentNestedInput
     };
     export type StudentUncheckedUpdateWithoutCurriculumVersionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -635001,6 +637926,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedUpdateManyWithoutStudentNestedInput
+        trainingActivity?: TrainingActivityUncheckedUpdateManyWithoutStudentNestedInput
     };
     export type StudentUncheckedUpdateManyWithoutCurriculumVersionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -635119,6 +638045,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutStudentNestedInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUpdateManyWithoutStudentNestedInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUpdateManyWithoutStudentNestedInput
+        trainingActivity?: TrainingActivityUpdateManyWithoutStudentNestedInput
     };
     export type StudentUncheckedUpdateWithoutCurriculumVersionParallelInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -635192,6 +638119,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedUpdateManyWithoutStudentNestedInput
+        trainingActivity?: TrainingActivityUncheckedUpdateManyWithoutStudentNestedInput
     };
     export type StudentUncheckedUpdateManyWithoutCurriculumVersionParallelInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -638255,8 +641183,6 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: NullableStringFieldUpdateOperationsInput | string | null
-        academicRank?: NullableStringFieldUpdateOperationsInput | string | null
-        academicDegree?: NullableStringFieldUpdateOperationsInput | string | null
         organization?: NullableStringFieldUpdateOperationsInput | string | null
         position?: NullableStringFieldUpdateOperationsInput | string | null
         specialization?: NullableStringFieldUpdateOperationsInput | string | null
@@ -638270,6 +641196,8 @@ export namespace Prisma {
         eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
         eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
         lecturer?: LecturerUpdateOneWithoutExpertProfileNestedInput
+        academicDegreeType?: DM_HocViUpdateOneWithoutExpertProfileNestedInput
+        academicRankType?: DM_HocHamUpdateOneWithoutExpertProfileNestedInput
         major?: TrainingMajorUpdateManyWithoutExpertProfileNestedInput
         supervisedTheses?: ThesisProjectUpdateManyWithoutSupervisorNestedInput
         coSupervisedTheses?: ThesisProjectUpdateManyWithoutCoSupervisorNestedInput
@@ -638292,8 +641220,8 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         name?: NullableStringFieldUpdateOperationsInput | string | null
-        academicRank?: NullableStringFieldUpdateOperationsInput | string | null
-        academicDegree?: NullableStringFieldUpdateOperationsInput | string | null
+        academicDegreeTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         organization?: NullableStringFieldUpdateOperationsInput | string | null
         position?: NullableStringFieldUpdateOperationsInput | string | null
         specialization?: NullableStringFieldUpdateOperationsInput | string | null
@@ -638328,8 +641256,8 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         name?: NullableStringFieldUpdateOperationsInput | string | null
-        academicRank?: NullableStringFieldUpdateOperationsInput | string | null
-        academicDegree?: NullableStringFieldUpdateOperationsInput | string | null
+        academicDegreeTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         organization?: NullableStringFieldUpdateOperationsInput | string | null
         position?: NullableStringFieldUpdateOperationsInput | string | null
         specialization?: NullableStringFieldUpdateOperationsInput | string | null
@@ -641037,6 +643965,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutStudentNestedInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUpdateManyWithoutStudentNestedInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUpdateManyWithoutStudentNestedInput
+        trainingActivity?: TrainingActivityUpdateManyWithoutStudentNestedInput
     };
     export type StudentUncheckedUpdateWithoutPriorityObjectInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -641110,6 +644039,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedUpdateManyWithoutStudentNestedInput
+        trainingActivity?: TrainingActivityUncheckedUpdateManyWithoutStudentNestedInput
     };
     export type StudentUncheckedUpdateManyWithoutPriorityObjectInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -641837,6 +644767,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutStudentNestedInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUpdateManyWithoutStudentNestedInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUpdateManyWithoutStudentNestedInput
+        trainingActivity?: TrainingActivityUpdateManyWithoutStudentNestedInput
     };
     export type StudentUncheckedUpdateWithoutTrainingLocationInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -641910,6 +644841,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedUpdateManyWithoutStudentNestedInput
+        trainingActivity?: TrainingActivityUncheckedUpdateManyWithoutStudentNestedInput
     };
     export type StudentUncheckedUpdateManyWithoutTrainingLocationInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -643550,8 +646482,6 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: NullableStringFieldUpdateOperationsInput | string | null
-        academicRank?: NullableStringFieldUpdateOperationsInput | string | null
-        academicDegree?: NullableStringFieldUpdateOperationsInput | string | null
         organization?: NullableStringFieldUpdateOperationsInput | string | null
         position?: NullableStringFieldUpdateOperationsInput | string | null
         specialization?: NullableStringFieldUpdateOperationsInput | string | null
@@ -643565,6 +646495,8 @@ export namespace Prisma {
         eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
         eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
         lecturer?: LecturerUpdateOneWithoutExpertProfileNestedInput
+        academicDegreeType?: DM_HocViUpdateOneWithoutExpertProfileNestedInput
+        academicRankType?: DM_HocHamUpdateOneWithoutExpertProfileNestedInput
         supervisedTheses?: ThesisProjectUpdateManyWithoutSupervisorNestedInput
         coSupervisedTheses?: ThesisProjectUpdateManyWithoutCoSupervisorNestedInput
         thirdSupervisedTheses?: ThesisProjectUpdateManyWithoutThirdSupervisorNestedInput
@@ -643587,8 +646519,8 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         name?: NullableStringFieldUpdateOperationsInput | string | null
-        academicRank?: NullableStringFieldUpdateOperationsInput | string | null
-        academicDegree?: NullableStringFieldUpdateOperationsInput | string | null
+        academicDegreeTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         organization?: NullableStringFieldUpdateOperationsInput | string | null
         position?: NullableStringFieldUpdateOperationsInput | string | null
         specialization?: NullableStringFieldUpdateOperationsInput | string | null
@@ -643623,8 +646555,8 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         name?: NullableStringFieldUpdateOperationsInput | string | null
-        academicRank?: NullableStringFieldUpdateOperationsInput | string | null
-        academicDegree?: NullableStringFieldUpdateOperationsInput | string | null
+        academicDegreeTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         organization?: NullableStringFieldUpdateOperationsInput | string | null
         position?: NullableStringFieldUpdateOperationsInput | string | null
         specialization?: NullableStringFieldUpdateOperationsInput | string | null
@@ -645460,6 +648392,19 @@ export namespace Prisma {
         subjectClassAttendanceId: string
         attendanceStatus?: boolean
     };
+    export type TrainingActivityCreateManyStudentInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        category: string
+        score: number
+        date?: Date | string
+    };
     export type PriorityObjectUpdateWithoutStudentsInput = {
         id?: StringFieldUpdateOperationsInput | string
         code?: NullableStringFieldUpdateOperationsInput | string | null
@@ -646923,6 +649868,45 @@ export namespace Prisma {
         subjectClassAttendanceId?: StringFieldUpdateOperationsInput | string
         attendanceStatus?: BoolFieldUpdateOperationsInput | boolean
     };
+    export type TrainingActivityUpdateWithoutStudentInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        category?: StringFieldUpdateOperationsInput | string
+        score?: IntFieldUpdateOperationsInput | number
+        date?: DateTimeFieldUpdateOperationsInput | Date | string
+    };
+    export type TrainingActivityUncheckedUpdateWithoutStudentInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        category?: StringFieldUpdateOperationsInput | string
+        score?: IntFieldUpdateOperationsInput | number
+        date?: DateTimeFieldUpdateOperationsInput | Date | string
+    };
+    export type TrainingActivityUncheckedUpdateManyWithoutStudentInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        category?: StringFieldUpdateOperationsInput | string
+        score?: IntFieldUpdateOperationsInput | number
+        date?: DateTimeFieldUpdateOperationsInput | Date | string
+    };
     export type DocumentFileCreateManyNotificationInput = {
         id?: string
         code?: string | null
@@ -647265,6 +650249,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutStudentNestedInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUpdateManyWithoutStudentNestedInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUpdateManyWithoutStudentNestedInput
+        trainingActivity?: TrainingActivityUpdateManyWithoutStudentNestedInput
     };
     export type StudentUncheckedUpdateWithoutNotificationsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -647338,6 +650323,7 @@ export namespace Prisma {
         semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedUpdateManyWithoutStudentNestedInput
+        trainingActivity?: TrainingActivityUncheckedUpdateManyWithoutStudentNestedInput
     };
     export type StudentUncheckedUpdateManyWithoutNotificationsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -648556,8 +651542,8 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         name?: string | null
-        academicRank?: string | null
-        academicDegree?: string | null
+        academicDegreeTypeId?: string | null
+        academicRankTypeId?: string | null
         organization?: string | null
         position?: string | null
         specialization?: string | null
@@ -649678,8 +652664,6 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: NullableStringFieldUpdateOperationsInput | string | null
-        academicRank?: NullableStringFieldUpdateOperationsInput | string | null
-        academicDegree?: NullableStringFieldUpdateOperationsInput | string | null
         organization?: NullableStringFieldUpdateOperationsInput | string | null
         position?: NullableStringFieldUpdateOperationsInput | string | null
         specialization?: NullableStringFieldUpdateOperationsInput | string | null
@@ -649692,6 +652676,8 @@ export namespace Prisma {
         thesisExpert?: BoolFieldUpdateOperationsInput | boolean
         eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
         eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
+        academicDegreeType?: DM_HocViUpdateOneWithoutExpertProfileNestedInput
+        academicRankType?: DM_HocHamUpdateOneWithoutExpertProfileNestedInput
         major?: TrainingMajorUpdateManyWithoutExpertProfileNestedInput
         supervisedTheses?: ThesisProjectUpdateManyWithoutSupervisorNestedInput
         coSupervisedTheses?: ThesisProjectUpdateManyWithoutCoSupervisorNestedInput
@@ -649714,8 +652700,8 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: NullableStringFieldUpdateOperationsInput | string | null
-        academicRank?: NullableStringFieldUpdateOperationsInput | string | null
-        academicDegree?: NullableStringFieldUpdateOperationsInput | string | null
+        academicDegreeTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         organization?: NullableStringFieldUpdateOperationsInput | string | null
         position?: NullableStringFieldUpdateOperationsInput | string | null
         specialization?: NullableStringFieldUpdateOperationsInput | string | null
@@ -649750,8 +652736,8 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: NullableStringFieldUpdateOperationsInput | string | null
-        academicRank?: NullableStringFieldUpdateOperationsInput | string | null
-        academicDegree?: NullableStringFieldUpdateOperationsInput | string | null
+        academicDegreeTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         organization?: NullableStringFieldUpdateOperationsInput | string | null
         position?: NullableStringFieldUpdateOperationsInput | string | null
         specialization?: NullableStringFieldUpdateOperationsInput | string | null

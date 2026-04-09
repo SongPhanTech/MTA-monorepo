@@ -222,8 +222,10 @@ model ExpertProfile extends Base {
   lecturer                     Lecturer?              @relation(fields: [lecturerId], references: [id])
   lecturerId                   String?                @unique // Null nếu là chuyên gia ngoài trường
   name                         String?   // Họ tên
-  academicRank                 String?   // Học hàm
-  academicDegree               String?   // Học vị
+  academicDegreeType           DM_HocVi?              @relation(fields: [academicDegreeTypeId], references: [Id])
+  academicDegreeTypeId         String?                @db.Uuid
+  academicRankType             DM_HocHam?             @relation(fields: [academicRankTypeId], references: [Id])
+  academicRankTypeId           String?                @db.Uuid
   organization                 String?   // Đơn vị
   position                     String?   // Chức vụ
   specialization               String?   // Chuyên ngành
@@ -234,8 +236,8 @@ model ExpertProfile extends Base {
   bankAccountNumber            String? // số tài khoản ngân hàng
   bankName                     String? // tên ngân hàng
 
-  projectExpert                Boolean                @default(true)
-  thesisExpert                 Boolean                @default(true)
+  projectExpert                Boolean                @default(false)
+  thesisExpert                 Boolean                @default(false)
 
   eligiblePresident            Boolean                @default(false) // có thể làm chủ tịch
   eligibleSecretary            Boolean                @default(false) // có thể làm thư ký
@@ -330,7 +332,6 @@ enum SupervisorRole {
 /// Thành viên trong một Hội đồng
 model CouncilMember extends Base {
   role        CouncilRole
-
   councilId   String
   council     Council        @relation(fields: [councilId], references: [id])
   expertId    String

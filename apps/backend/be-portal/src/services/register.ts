@@ -31,6 +31,8 @@ export const findClassRegisterSession = async (userId: string) => {
     where: {
       startDate: { lte: now },
       endDate: { gte: now },
+      active: true,
+      deletedAt: null,
       trainingCourses: {
         some: {
           id: {

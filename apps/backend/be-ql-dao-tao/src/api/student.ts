@@ -214,9 +214,9 @@ const exportAcademicWarningExcel = createRoute({
   operationId: "exportStudentAcademicWarningExcel",
   path: "/export-excel-list-student-academic-warning",
   tags: ["Student"],
-  summary: "Xuất Excel danh sách cảnh cáo học tập của học viên",
+  summary: "Xuất Excel danh sách cảnh báo học tập của học viên",
   description:
-    "Xuất danh sách học viên bị cảnh cáo học tập dưới dạng file Excel (dữ liệu đã được làm phẳng)",
+    "Xuất danh sách học viên bị cảnh báo học tập dưới dạng file Excel (dữ liệu đã được làm phẳng)",
   method: "get",
   request: {
     query: z.object({
@@ -265,8 +265,8 @@ const exportAcademicWarningJson = createRoute({
   operationId: "exportStudentAcademicWarningJson",
   path: "/export-json-list-student-academic-warning",
   tags: ["Student"],
-  summary: "Danh sách cảnh cáo học tập của học viên",
-  description: "Xuất danh sách học viên bị cảnh cáo học tập dưới dạng JSON",
+  summary: "Danh sách cảnh báo học tập của học viên",
+  description: "Xuất danh sách học viên bị cảnh báo học tập dưới dạng JSON",
   method: "get",
   request: {
     query: z.object({
@@ -345,8 +345,8 @@ const exportDecreaseAcademicWarningJson = createRoute({
   operationId: "exportStudentDecreaseAcademicWarningJson",
   path: "/export-json-list-student-decrease-academic-warning",
   tags: ["Student"],
-  summary: "Danh sách giảm cảnh cáo học tập của học viên",
-  description: "Xuất danh sách học viên được giảm cảnh cáo học tập dưới dạng JSON",
+  summary: "Danh sách giảm cảnh báo học tập của học viên",
+  description: "Xuất danh sách học viên được giảm cảnh báo học tập dưới dạng JSON",
   method: "get",
   request: {
     query: z.object({

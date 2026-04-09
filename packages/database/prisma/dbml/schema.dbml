@@ -3294,7 +3294,7 @@ Table AcademicWarning {
   decreasedFrom Int
   rules AcademicWarningRule [not null]
 
-  Note: 'Cảnh cáo học tập'
+  Note: 'Cảnh báo học tập'
 }
 
 Table DisciplinaryWarning {

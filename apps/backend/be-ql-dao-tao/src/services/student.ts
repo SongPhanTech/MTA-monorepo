@@ -327,11 +327,11 @@ export const exportStudentAcademicWarning = async ({
   }
 
   if (rows.length === 0) {
-    throw new Error("Không có dữ liệu cảnh cáo học tập để xuất")
+    throw new Error("Không có dữ liệu cảnh báo học tập để xuất")
   }
 
   const workbook = new ExcelJS.Workbook()
-  const worksheet = workbook.addWorksheet("Danh sách cảnh cáo học tập")
+  const worksheet = workbook.addWorksheet("Danh sách cảnh báo học tập")
 
   worksheet.columns = [
     { header: "Mã SV", key: "studentCode", width: 15 },

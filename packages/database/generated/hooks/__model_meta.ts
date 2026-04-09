@@ -5265,6 +5265,12 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'academicRankType',
+                }, expertProfile: {
+                    name: "expertProfile",
+                    type: "ExpertProfile",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'academicRankType',
                 },
             }, uniqueConstraints: {
                 Id: {
@@ -5350,6 +5356,12 @@ const metadata: ModelMeta = {
                 }, hocVi: {
                     name: "hocVi",
                     type: "HocVi",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'academicDegreeType',
+                }, expertProfile: {
+                    name: "expertProfile",
+                    type: "ExpertProfile",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'academicDegreeType',
@@ -14772,6 +14784,82 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'student',
+                }, trainingActivity: {
+                    name: "trainingActivity",
+                    type: "TrainingActivity",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'student',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+        },
+        trainingActivity: {
+            name: 'TrainingActivity', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$TrainingActivity$createdBy,
+                }, student: {
+                    name: "student",
+                    type: "Student",
+                    isDataModel: true,
+                    backLink: 'trainingActivity',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "studentId" },
+                }, studentId: {
+                    name: "studentId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'student',
+                }, category: {
+                    name: "category",
+                    type: "String",
+                }, score: {
+                    name: "score",
+                    type: "Int",
+                }, date: {
+                    name: "date",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 },
             }, uniqueConstraints: {
                 id: {
@@ -17872,14 +17960,34 @@ const metadata: ModelMeta = {
                     name: "name",
                     type: "String",
                     isOptional: true,
-                }, academicRank: {
-                    name: "academicRank",
+                }, academicDegreeType: {
+                    name: "academicDegreeType",
+                    type: "DM_HocVi",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'expertProfile',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "Id": "academicDegreeTypeId" },
+                }, academicDegreeTypeId: {
+                    name: "academicDegreeTypeId",
                     type: "String",
                     isOptional: true,
-                }, academicDegree: {
-                    name: "academicDegree",
+                    isForeignKey: true,
+                    relationField: 'academicDegreeType',
+                }, academicRankType: {
+                    name: "academicRankType",
+                    type: "DM_HocHam",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'expertProfile',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "Id": "academicRankTypeId" },
+                }, academicRankTypeId: {
+                    name: "academicRankTypeId",
                     type: "String",
                     isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'academicRankType',
                 }, organization: {
                     name: "organization",
                     type: "String",
@@ -17922,11 +18030,11 @@ const metadata: ModelMeta = {
                 }, projectExpert: {
                     name: "projectExpert",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, thesisExpert: {
                     name: "thesisExpert",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, eligiblePresident: {
                     name: "eligiblePresident",
                     type: "Boolean",
@@ -27730,6 +27838,10 @@ function $default$OutputStandardOnCurriculum$createdBy(user: any): unknown {
 }
 
 function $default$Student$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$TrainingActivity$createdBy(user: any): unknown {
     return user?.id;
 }
 

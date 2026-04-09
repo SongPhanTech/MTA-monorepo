@@ -5,7 +5,7 @@ import { useFindUniqueCurriculumVersion } from "@workspace/db/hooks"
 import { useAcademicRankingConverter } from "@workspace/libs/hook/academicRankingConvert"
 import { Button, Input, Modal } from "antd"
 import dayjs from "dayjs"
-import { useEffect, useRef, useState } from "react"
+import { useRef, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 import { useReactToPrint } from "react-to-print"
 
@@ -20,7 +20,6 @@ const ModalPrintToKQHT = () => {
   const formattedDate = `..., ngày ${dayjs().format("DD")} tháng ${dayjs().format("MM")} năm ${dayjs().format("YYYY")}`
   const printRef = useRef<HTMLDivElement>(null)
   const [signerName, setSignerName] = useState("Đại tá, TS Nguyễn Trọng Lưu")
-  const [gpaScore, setGpaScore] = useState(0)
 
   const { isOpen, onClose, input } = useDisclosure<ModalPrintToKQHTInput>({
     tag: "ModalPrintToKQHT",
@@ -36,6 +35,15 @@ const ModalPrintToKQHT = () => {
         trainingTime: true,
         trainingLevel: true,
         trainingType: true,
+        students: {
+          where: { id: input?.dataStudent?.id },
+          select: {
+            id: true,
+            graduationDecision: {
+              select: { finalGpa: true },
+            },
+          },
+        },
 
         curriculum: {
           include: {
@@ -65,6 +73,14 @@ const ModalPrintToKQHT = () => {
                     studentSubjectScore: {
                       where: {
                         studentId: input?.dataStudent?.id,
+                      },
+                      include: {
+                        graduationSupplementaryScore: {
+                          select: {
+                            id: true,
+                            sessionId: true,
+                          },
+                        },
                       },
                     },
                   },
@@ -97,6 +113,19 @@ const ModalPrintToKQHT = () => {
     graduationRankingData,
     graduationBaseScore
   )
+
+  const finalGpa = subjectScoreData?.students?.[0]?.graduationDecision?.finalGpa
+  const gpaScore =
+    typeof finalGpa === "number"
+      ? finalGpa
+      : typeof finalGpa === "string"
+        ? Number(finalGpa) || 0
+        : finalGpa && typeof finalGpa === "object" && "toNumber" in finalGpa
+          ? Number.isFinite((finalGpa as { toNumber: () => number }).toNumber())
+            ? (finalGpa as { toNumber: () => number }).toNumber()
+            : 0
+          : 0
+
   const handlePrint = useReactToPrint({
     contentRef: printRef,
     pageStyle: `
@@ -173,34 +202,6 @@ const ModalPrintToKQHT = () => {
     },
   ]
 
-  useEffect(() => {
-    if (!subjectScoreData) return
-
-    const validSubjects = subjectScoreData.trainingBlocks
-      .flatMap((block) => block.subjects)
-      .filter((subjectItem) => subjectItem.useForFinalScore === true)
-
-    let totalWeightedScore = 0
-    let totalCredits = 0
-
-    validSubjects.forEach((subjectItem: any) => {
-      const subject = subjectItem.subject
-      const score = subject.studentSubjectScore?.[0]
-      const credits = subject.credit || 0
-
-      if (score) {
-        const score10 = score.manualFinalScore || score.finalScore || 0
-        const scoreToUse =
-          graduationBaseScore === "Base4" ? convertScore(score10).base4 || 0 : score10
-
-        totalWeightedScore += scoreToUse * credits
-        totalCredits += credits
-      }
-    })
-
-    const gpa = totalCredits > 0 ? totalWeightedScore / totalCredits : 0
-    setGpaScore(Number(gpa.toFixed(2)))
-  }, [subjectScoreData, graduationBaseScore])
   return (
     <Modal
       open={isOpen}
@@ -297,6 +298,12 @@ const ModalPrintToKQHT = () => {
 
                 const sortedSubjects = (subjectScoreData?.trainingBlocks ?? [])
                   .flatMap((block) => block.subjects ?? [])
+                  .filter((subjectItem) => subjectItem.useForFinalScore === true)
+                  .filter(
+                    (subjectItem) =>
+                      !subjectItem.subject.studentSubjectScore?.[0]?.graduationSupplementaryScore
+                        ?.length
+                  )
                   .sort((a, b) => {
                     const semesterA = a.semester ?? Number.MAX_SAFE_INTEGER
                     const semesterB = b.semester ?? Number.MAX_SAFE_INTEGER
@@ -423,7 +430,9 @@ const ModalPrintToKQHT = () => {
                     .filter(
                       (subjectItem) =>
                         // subjectItem.print === true &&
-                        subjectItem.useForFinalScore === true
+                        subjectItem.useForFinalScore === true &&
+                        !subjectItem.subject.studentSubjectScore?.[0]?.graduationSupplementaryScore
+                          ?.length
                     )
                     ?.reduce(
                       (sum: number, subjectItem) => sum + (subjectItem.subject?.credit || 0),
@@ -442,7 +451,7 @@ const ModalPrintToKQHT = () => {
               <span className="font-bold">{gpaScore.toFixed(2)}</span>
             </div>
             <div className="flex">
-              <div className="min-w-32">Xếp hạng:</div>
+              <div className="min-w-32">Xếp loại:</div>
               <span className="font-bold">{convertAcademicRanking(gpaScore)?.classification}</span>
             </div>
           </div>

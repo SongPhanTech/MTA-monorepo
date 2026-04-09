@@ -8000,8 +8000,8 @@ export function useExportStudentScholarshipExcel<
 }
 
 /**
- * Xuất danh sách học viên bị cảnh cáo học tập dưới dạng file Excel (dữ liệu đã được làm phẳng)
- * @summary Xuất Excel danh sách cảnh cáo học tập của học viên
+ * Xuất danh sách học viên bị cảnh báo học tập dưới dạng file Excel (dữ liệu đã được làm phẳng)
+ * @summary Xuất Excel danh sách cảnh báo học tập của học viên
  */
 export type exportStudentAcademicWarningExcelResponse200 = {
   data: Blob
@@ -8154,7 +8154,7 @@ export function useExportStudentAcademicWarningExcel<
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
- * @summary Xuất Excel danh sách cảnh cáo học tập của học viên
+ * @summary Xuất Excel danh sách cảnh báo học tập của học viên
  */
 
 export function useExportStudentAcademicWarningExcel<
@@ -8466,8 +8466,8 @@ export function useExportStudentScholarshipJson<
 }
 
 /**
- * Xuất danh sách học viên bị cảnh cáo học tập dưới dạng JSON
- * @summary Danh sách cảnh cáo học tập của học viên
+ * Xuất danh sách học viên bị cảnh báo học tập dưới dạng JSON
+ * @summary Danh sách cảnh báo học tập của học viên
  */
 export type exportStudentAcademicWarningJsonResponse200 = {
   data: ExportStudentAcademicWarningJson200Item[]
@@ -8620,7 +8620,7 @@ export function useExportStudentAcademicWarningJson<
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
- * @summary Danh sách cảnh cáo học tập của học viên
+ * @summary Danh sách cảnh báo học tập của học viên
  */
 
 export function useExportStudentAcademicWarningJson<
@@ -8830,8 +8830,8 @@ export function useExportStudentAcademicActionJson<
 }
 
 /**
- * Xuất danh sách học viên được giảm cảnh cáo học tập dưới dạng JSON
- * @summary Danh sách giảm cảnh cáo học tập của học viên
+ * Xuất danh sách học viên được giảm cảnh báo học tập dưới dạng JSON
+ * @summary Danh sách giảm cảnh báo học tập của học viên
  */
 export type exportStudentDecreaseAcademicWarningJsonResponse200 = {
   data: ExportStudentDecreaseAcademicWarningJson200Item[]
@@ -9003,7 +9003,7 @@ export function useExportStudentDecreaseAcademicWarningJson<
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
- * @summary Danh sách giảm cảnh cáo học tập của học viên
+ * @summary Danh sách giảm cảnh báo học tập của học viên
  */
 
 export function useExportStudentDecreaseAcademicWarningJson<

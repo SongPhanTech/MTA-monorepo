@@ -340,7 +340,7 @@ export default function AcademicWarningRule() {
                         academicWarningRuleId: "",
                       })
                     }}
-                    title="Thêm mới cảnh cáo học tập"
+                    title="Thêm mới cảnh báo học tập"
                   />
                 )}
               </div>

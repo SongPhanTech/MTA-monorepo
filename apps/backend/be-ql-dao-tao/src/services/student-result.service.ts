@@ -786,7 +786,7 @@ export const calculateStudentSemesterResult = async (
           student.id,
           student.curriculumVersionId || student.fixedClass?.curriculumVersionId || "",
           trainingCourseId,
-          hocKyDauVao?.endDate || new Date()
+          hocKyDauVao?.startDate || new Date()
         )
 
         if (!thongTinTichLuy) {
@@ -868,7 +868,7 @@ export const calculateStudentSemesterResult = async (
           isClassMonitor: student.id === student.fixedClass?.classMonitorId, // là lớp trưởng nếu id trùng classMonitorId)
           isUnionLeader: student.id === student.fixedClass?.unionLeaderId, // là bí thư nếu id trùng unionLeaderId)
           entryScore: student.entryScore, // Điểm đầu vào
-          academicWarningLevel: academicWarningForSemester?.level ?? 0, // mức cảnh cáo học tập
+          academicWarningLevel: academicWarningForSemester?.level ?? 0, // mức cảnh báo học tập
           disciplinaryWarningLevel: disciplinaryWarning?.level ?? 0, // mức cảnh cáo học đường
           suspended: student.suspended, // đình chỉ học
           expelled: student.expelled, // đuổi học
@@ -986,7 +986,7 @@ export const calculateStudentSemesterResult = async (
     //                 isClassMonitor: student.id === student.fixedClass?.classMonitorId, // là lớp trưởng nếu id trùng classMonitorId)
     //                 isUnionLeader: student.id === student.fixedClass?.unionLeaderId, // là bí thư nếu id trùng unionLeaderId)
     //                 entryScore: student.entryScore, // Điểm đầu vào
-    //                 academicWarningLevel: student.academicWarningLevel, // mức cảnh cáo học tập
+    //                 academicWarningLevel: student.academicWarningLevel, // mức cảnh báo học tập
     //                 disciplinaryWarningLevel: student.disciplinaryWarningLevel, // mức cảnh cáo học đường
     //                 suspended: student.suspended, // đình chỉ học
     //                 expelled: student.expelled, // đuổi học
@@ -1059,7 +1059,7 @@ export const calculateStudentSemesterResult = async (
     //                 entryScore: existingResult?.entryScore || null, // Điểm đầu vào (hiện tại chưa có thông tin này)
     //                 isImproving: existingResult?.isImproving || false, // Đang cải thiện (hiện tại chưa có thông tin này)
     //                 postponeWithReason: existingResult?.postponeWithReason || false, // tạm ngưng có lý do
-    //                 academicWarningLevel: existingResult?.academicWarningLevel || 0, // mức cảnh cáo học tập
+    //                 academicWarningLevel: existingResult?.academicWarningLevel || 0, // mức cảnh báo học tập
     //                 disciplinaryWarningLevel: existingResult?.disciplinaryWarningLevel || 0, // mức cảnh cáo học đường
     //                 suspended: existingResult?.suspended || false, // đình chỉ học
     //                 expelled: existingResult?.expelled || false, // đuổi học.

@@ -117,8 +117,8 @@ const PutAcademicWarningRule = () => {
       maskClosable={true}
       title={
         input?.academicWarningRuleId
-          ? "Sửa quy tắc cảnh cáo học tập"
-          : "Thêm quy tắc cảnh cáo học tập"
+          ? "Sửa quy tắc cảnh báo học tập"
+          : "Thêm quy tắc cảnh báo học tập"
       }
     >
       <Col span={12}>

@@ -545,7 +545,7 @@ const DiemTrungBinhKyHoc = () => {
                 },
               },
               {
-                title: "Mức cảnh cáo học tập",
+                title: "Mức cảnh báo học tập",
                 dataIndex: ["studentSemesterResult", "0", "academicWarningLevel"],
                 width: 100,
                 align: "center",

@@ -151,7 +151,7 @@ const PutAcademicWarning = () => {
       onFinish={onOk}
       onCancel={onClose}
       maskClosable={true}
-      title={input?.id ? "Sửa cảnh cáo học tập" : "Thêm cảnh cáo học tập"}
+      title={input?.id ? "Sửa cảnh báo học tập" : "Thêm cảnh báo học tập"}
     >
       <Col span={12}>
         <FormItem form={form} name="trainingCourseId" label="Khoá học">
@@ -198,7 +198,7 @@ const PutAcademicWarning = () => {
         </FormItem>
       </Col>
       <Col span={12}>
-        <FormItem form={form} name="level" label="Mức cảnh cáo học tập">
+        <FormItem form={form} name="level" label="Mức cảnh báo học tập">
           <InputNumber
             type="number"
             placeholder="Nhập mức cảnh cáo"

@@ -68,12 +68,16 @@ model DM_ChucVu extends CoreBase {
 model DM_HocHam extends CoreBase {
   profiles UserProfile[]
   hocHam   HocHam[]
+	expertProfile ExpertProfile[]
+
   @@schema("mta")
 }
 
 model DM_HocVi extends CoreBase {
   profiles UserProfile[]
   hocVi    HocVi[]
+	expertProfile ExpertProfile[]
+  
   @@schema("mta")
 }
 

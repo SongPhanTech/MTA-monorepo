@@ -113,7 +113,7 @@ export const StudentAcademicAction = z.object({
   diemHe4TichLuy: z.number().describe("Điểm hệ 4 tích lũy"),
   noTinChiTrongKy: z.number().describe("Nợ tín chỉ trong kỳ (số môn thi trong kỳ không đạt)"),
   tongSoTinChiNo: z.number().describe("Số tín chỉ nợ"),
-  mucCanhCaoHocTap: z.number().describe("Mức cảnh cáo học tập"),
+  mucCanhCaoHocTap: z.number().describe("Mức cảnh báo học tập"),
   mucCanhCaoHocDuong: z.number().describe("Mức cảnh cáo học đường"),
   userProfile: z.any().describe("Thông tin người dùng"),
 })
@@ -161,7 +161,7 @@ export const StudentInfoCheck = z.object({
   diemHe10TichLuy: z.number().describe("Điểm hệ 10 tích lũy"),
   diemHe4TichLuy: z.number().describe("Điểm hệ 4 tích lũy"),
   namDangHoc: z.number().describe("Năm đang học"),
-  mucCanhCaoHocTap: z.number().describe("Mức cảnh cáo học tập"),
+  mucCanhCaoHocTap: z.number().describe("Mức cảnh báo học tập"),
   mucCanhCaoHocDuong: z.number().describe("Mức cảnh cáo học đường"),
   xepLoaiRenLuyenKy: z.string().nullable().describe("Xếp loại rèn luyện"),
   lyDoXepLoai: z.string().describe("Lý do xếp loại"),
@@ -183,9 +183,9 @@ export const StudentResult = z.object({
   scholarship: z.array(z.any()).describe("Danh sách học bổng của sinh viên"),
   hasAcademicAction: z.boolean().describe("Có hành động học vụ hay không"),
   academicAction: z.array(ListAcademicAction).describe("Danh sách hành động học vụ của sinh viên"),
-  hasAcademicWarning: z.boolean().describe("Có cảnh cáo học tập"),
-  academicWarningRule: z.array(z.any()).describe("Danh sách cảnh cáo học tập của sinh viên"),
-  decreaseAcademicWarning: z.boolean().describe("Giảm cảnh cáo học tập"),
+  hasAcademicWarning: z.boolean().describe("Có cảnh báo học tập"),
+  academicWarningRule: z.array(z.any()).describe("Danh sách cảnh báo học tập của sinh viên"),
+  decreaseAcademicWarning: z.boolean().describe("Giảm cảnh báo học tập"),
   highestScholarship: z.any().describe("Học bổng cao nhất của sinh viên"),
   scholarshipRecived: z.array(z.any()).describe("Thông tin học bổng đã nhận"),
   reason: z.string().describe("Lý do"),
@@ -222,7 +222,7 @@ export const StudentAcademicWarningResult = StudentResultBase.extend({
   hasAcademicWarning: z.literal(true),
   academicWarningRule: z
     .array(AcademicWarningRuleScalarSchema)
-    .describe("Danh sách cảnh cáo học tập của sinh viên"),
+    .describe("Danh sách cảnh báo học tập của sinh viên"),
 })
 
 export const StudentAcademicActionResult = StudentResultBase.extend({

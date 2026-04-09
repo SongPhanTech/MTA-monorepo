@@ -2770,6 +2770,26 @@ const policy: PolicyDef = {
             },
 
         },
+        trainingActivity: {
+            modelLevel: {
+                read: { guard: TrainingActivity_read, },
+                create: { guard: TrainingActivity_create, inputChecker: TrainingActivity_create_input, },
+                update: { guard: TrainingActivity_update, },
+                postUpdate: { guard: TrainingActivity_postUpdate, },
+                delete: { guard: TrainingActivity_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
         studentSemesterResult: {
             modelLevel: {
                 read: { guard: StudentSemesterResult_read, },
@@ -5607,6 +5627,7 @@ const policy: PolicyDef = {
         outputStandard: { hasValidation: false },
         outputStandardOnCurriculum: { hasValidation: false },
         student: { hasValidation: false },
+        trainingActivity: { hasValidation: false },
         studentSemesterResult: { hasValidation: false },
         studentYearResult: { hasValidation: false },
         notification: { hasValidation: false },
@@ -14494,6 +14515,71 @@ function Student_delete(context: QueryContext, db: CrudContract): any {
 }
 
 function $check_Student_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function TrainingActivity_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_TrainingActivity_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function TrainingActivity_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_TrainingActivity_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function TrainingActivity_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function TrainingActivity_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_TrainingActivity_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function TrainingActivity_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_TrainingActivity_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function TrainingActivity_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_TrainingActivity_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 

@@ -506,9 +506,9 @@ const NAVIGATION: NavigationType = {
               },
               {
                 id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_DANH_MUC_CANH_CAO_HOC_TAP,
-                label: "Cảnh cáo học tập",
+                label: "Cảnh báo học tập",
                 path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_DANH_MUC_CANH_CAO_HOC_TAP,
-                description: "Danh mục cảnh cáo học tập",
+                description: "Danh mục cảnh báo học tập",
               },
               {
                 id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_DANH_MUC_CANH_CAO_HOC_DUONG,

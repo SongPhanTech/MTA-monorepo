@@ -29,7 +29,7 @@ model AcademicWarningRule extends Base {
   @@schema("ql-dao-tao")
 }
 
-/// Cảnh cáo học tập
+/// Cảnh báo học tập
 model AcademicWarning extends Base {
   student       Student               @relation(fields: [studentId], references: [id])
   studentId     String
