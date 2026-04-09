@@ -6642,7 +6642,7 @@ model AcademicWarningRule {
   @@schema("ql-dao-tao")
 }
 
-/// Cảnh cáo học tập
+/// Cảnh báo học tập
 model AcademicWarning {
   id            String                @id() @default(cuid())
   code          String?               @unique()

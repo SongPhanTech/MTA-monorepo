@@ -2457,7 +2457,7 @@ export type NoteReminder = $Result.DefaultSelection<Prisma.$NoteReminderPayload>
 export type AcademicWarningRule = $Result.DefaultSelection<Prisma.$AcademicWarningRulePayload>;
 /**
  * Model AcademicWarning
- * Cảnh cáo học tập
+ * Cảnh báo học tập
  * @
  * @allow ('all', auth() != null)
  * @

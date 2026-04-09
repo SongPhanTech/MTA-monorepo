@@ -7369,7 +7369,7 @@ model AcademicWarningRule {
   @@schema("ql-dao-tao")
 }
 
-/// Cảnh cáo học tập
+/// Cảnh báo học tập
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)

@@ -34,6 +34,6 @@ export type ExportStudentAcademicWarningJson200ItemStudentsItem = {
   /** Thông tin lớp học */
   fixedClass: ExportStudentAcademicWarningJson200ItemStudentsItemFixedClass;
   hasAcademicWarning: boolean;
-  /** Danh sách cảnh cáo học tập của sinh viên */
+  /** Danh sách cảnh báo học tập của sinh viên */
   academicWarningRule: ExportStudentAcademicWarningJson200ItemStudentsItemAcademicWarningRuleItem[];
 };

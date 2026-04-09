@@ -368,7 +368,7 @@ const HoSoCaNhan = () => {
           <div>
             <h4 className="font-semibold mb-2">Tình trạng học tập:</h4>
             <Descriptions bordered column={2} size="small">
-              <Descriptions.Item label="Mức cảnh cáo học tập">
+              <Descriptions.Item label="Mức cảnh báo học tập">
                 <Tag color={studentData?.academicWarningLevel ? "orange" : "green"}>
                   {studentData?.academicWarningLevel || 0}
                 </Tag>
@@ -1074,7 +1074,7 @@ const HoSoCaNhan = () => {
     },
     {
       key: "canh-cao-hoc-tap",
-      label: `Cảnh cáo học tập (${studentData?.academicWarning?.length || 0})`,
+      label: `Cảnh báo học tập (${studentData?.academicWarning?.length || 0})`,
       children: (
         <Table
           dataSource={studentData?.academicWarning || []}

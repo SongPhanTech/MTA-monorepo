@@ -91,7 +91,7 @@ model Student extends Base {
   curriculumVersionParallelId    String?
 
   // Giảm 1 khi kỳ hiện tại không vi phạm
-  academicWarningLevel           Int                              @default(0) // mức cảnh cáo học tập
+  academicWarningLevel           Int                              @default(0) // mức cảnh báo học tập
   disciplinaryWarningLevel       Int                              @default(0) // mức cảnh cáo học đường
 
   suspended                      Boolean                          @default(false) // đình chỉ học
@@ -180,7 +180,7 @@ model StudentSemesterResult extends Base {
   isImproving              Boolean  // Có đang học lại hoặc cải thiện không
 
   postponeWithReason       Boolean                 @default(false) // tạm ngưng có lý do
-  academicWarningLevel     Int                     @default(0) // mức cảnh cáo học tập
+  academicWarningLevel     Int                     @default(0) // mức cảnh báo học tập
   disciplinaryWarningLevel Int                     @default(0) // mức cảnh cáo học đường
   suspended                Boolean                 @default(false) // đình chỉ học
   expelled                 Boolean                 @default(false) // đuổi học
