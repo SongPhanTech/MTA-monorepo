@@ -250,12 +250,23 @@ app.openapi(getClassesInfo, async (c) => {
   })
 
   const curriculumSubjects = curriculumVersion.trainingBlocks.flatMap((block) => block.subjects)
+
+  const studentTrainingObjectTypeId = registerSession.trainingCourses
+    .find((tc) => tc.trainingObjectTypeId)?.trainingObjectTypeId ?? undefined
+
   const subjectVersions = await prisma.subjectVersion.findMany({
     where: {
-      ...(byCurriculumBool ? { id: { in: curriculumSubjects.map((item) => item.subjectId) } } : {}),
+      ...(byCurriculumBool
+        ? { id: { in: curriculumSubjects.map((item) => item.subjectId) } }
+        : {
+            trainingObjectTypeId: studentTrainingObjectTypeId,
+          }),
       subjectClass: {
         some: {
           semesterId: registerSession.semesterId,
+          ...(studentTrainingObjectTypeId && !byCurriculumBool
+            ? { trainingObjectTypeId: studentTrainingObjectTypeId }
+            : {}),
           ...(isRegisteredBool
             ? {
                 classRegisterLogs: {
@@ -283,6 +294,9 @@ app.openapi(getClassesInfo, async (c) => {
           deletedAt: null,
           cancelled: false,
           semesterId: registerSession.semesterId,
+          ...(studentTrainingObjectTypeId && !byCurriculumBool
+            ? { trainingObjectTypeId: studentTrainingObjectTypeId }
+            : {}),
           ...(isRegisteredBool
             ? {
                 classRegisterLogs: {

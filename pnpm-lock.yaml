@@ -1099,6 +1099,9 @@ importers:
       '@tanstack/react-store':
         specifier: 'catalog:'
         version: 0.8.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@tiptap/core':
+        specifier: ^3.10.5
+        version: 3.11.0(@tiptap/pm@3.10.5)
       '@tiptap/extension-color':
         specifier: 'catalog:'
         version: 3.10.5(@tiptap/extension-text-style@3.10.5(@tiptap/core@3.11.0(@tiptap/pm@3.10.5)))
@@ -1108,6 +1111,9 @@ importers:
       '@tiptap/extension-image':
         specifier: 'catalog:'
         version: 3.10.5(@tiptap/core@3.11.0(@tiptap/pm@3.10.5))
+      '@tiptap/extension-link':
+        specifier: ^3.10.5
+        version: 3.11.0(@tiptap/core@3.11.0(@tiptap/pm@3.10.5))(@tiptap/pm@3.10.5)
       '@tiptap/extension-mathematics':
         specifier: 'catalog:'
         version: 3.10.5(@tiptap/core@3.11.0(@tiptap/pm@3.10.5))(@tiptap/pm@3.10.5)(katex@0.16.25)

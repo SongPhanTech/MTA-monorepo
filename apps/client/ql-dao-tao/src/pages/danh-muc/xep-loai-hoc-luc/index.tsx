@@ -225,7 +225,7 @@ export default function AcademicRankingConvertPage() {
                   }
                   allowClear
                 />
-                <Select
+                {/* <Select
                   id="active"
                   placeholder="Chọn trạng thái"
                   style={{ width: 200 }}
@@ -234,7 +234,7 @@ export default function AcademicRankingConvertPage() {
                     value: item.value === undefined ? undefined : item.value.toString(),
                   }))}
                   onChange={(value) => handleFilterChange("active", value)}
-                />
+                /> */}
               </Flex>
             </Col>
             <Col span={6}>
@@ -307,17 +307,17 @@ export default function AcademicRankingConvertPage() {
                 dataIndex: "classification",
                 width: 120,
               },
-              {
-                title: "Trạng thái",
-                align: "center",
-                render: (record) => {
-                  return !record?.active ? (
-                    <Tag color="error">Không áp dụng</Tag>
-                  ) : (
-                    <Tag color="success">Đang áp dụng</Tag>
-                  )
-                },
-              },
+              // {
+              //   title: "Trạng thái",
+              //   align: "center",
+              //   render: (record) => {
+              //     return !record?.active ? (
+              //       <Tag color="error">Không áp dụng</Tag>
+              //     ) : (
+              //       <Tag color="success">Đang áp dụng</Tag>
+              //     )
+              //   },
+              // },
               {
                 title: "Thao tác",
                 width: 100,

@@ -49,7 +49,7 @@ export async function fetchHoiDapFaq({
   formData.append("conversation_id", conversation_id)
 
   const response = await fetch(
-    // 'https://api.chat.chatbot.swantech.vn/hoi_dap_faq',
+    // 'https://fitmta.tail559bc0.ts.net/8011/hoi_dap_faq',
     `${getRuntimeEnv("NEXT_PUBLIC_CHAT_BOT_URL")}/hoi_dap_faq`,
     {
       method: "POST",

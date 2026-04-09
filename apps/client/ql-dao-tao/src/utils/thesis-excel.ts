@@ -357,8 +357,9 @@ export const exportPhuLucDsLuanVan = async ({
             },
             { value: `${thesis.tendetai}`, border: true, align: "left" },
             {
-              value: `${thesis.gvhd1 ? `1. ${thesis.gvhd1}` : ""}\n${thesis.gvhd2 ? `2. ${thesis.gvhd2}` : ""
-                }`,
+              value: `${thesis.gvhd1 ? `1. ${thesis.gvhd1}` : ""}\n${
+                thesis.gvhd2 ? `2. ${thesis.gvhd2}` : ""
+              }`,
               border: true,
               align: "left",
             },
@@ -601,8 +602,8 @@ export const exportDanhSachBaoVe = async ({
             {
               value: student?.thesisRegistrations?.[0]?.thesisProject?.defenseDate
                 ? dayjs(student?.thesisRegistrations?.[0]?.thesisProject?.defenseDate).format(
-                  "DD/MM/YYYY"
-                )
+                    "DD/MM/YYYY"
+                  )
                 : "",
               border: true,
               align: "center",
@@ -610,8 +611,8 @@ export const exportDanhSachBaoVe = async ({
             {
               value: student?.thesisRegistrations?.[0]?.thesisProject?.defenseSession?.startTime
                 ? dayjs(
-                  student?.thesisRegistrations?.[0]?.thesisProject?.defenseSession?.startTime
-                ).format("HH:mm")
+                    student?.thesisRegistrations?.[0]?.thesisProject?.defenseSession?.startTime
+                  ).format("HH:mm")
                 : "",
               border: true,
               align: "center",
@@ -690,8 +691,7 @@ export const exportHosobvlv = async ({
       const uyvien = thanhvienhoidong?.find((member: any) => member.role === CouncilRole.MEMBER)
       const data = {
         tenhocvien: student.userProfile?.fullname || "",
-        type:
-          student.thesisRegistrations?.[0]?.thesisProject?.type,
+        type: student.thesisRegistrations?.[0]?.thesisProject?.type,
         khoa: student?.fixedClass?.trainingCourse?.name || "",
         chuyennganh: student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || "",
         nganh:
@@ -700,8 +700,8 @@ export const exportHosobvlv = async ({
         detai: student?.thesisRegistrations?.[0]?.thesisProject?.title || "",
         ngaybaove: student?.thesisRegistrations?.[0]?.thesisProject?.defenseDate
           ? dayjs(student?.thesisRegistrations?.[0]?.thesisProject?.defenseDate).format(
-            "DD/MM/YYYY"
-          )
+              "DD/MM/YYYY"
+            )
           : "",
         phanbien1: phanbien1?.expert?.name || "",
         phanbien2: phanbien2?.expert?.name || "",
@@ -764,7 +764,9 @@ export const exportGiayMoiHdlv = async ({
   try {
     const allSheetOptions = allStudentsInClasses?.map((student) => {
       const supervisor = student?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.name
-      const khoahoc =  `${student?.fixedClass?.trainingCourse?.name}(${student?.fixedClass?.trainingCourse?.academicYear})`|| ""
+      const khoahoc =
+        `${student?.fixedClass?.trainingCourse?.name}(${student?.fixedClass?.trainingCourse?.academicYear})` ||
+        ""
       const data = {
         ngay: ngay,
         thang: thang,
@@ -774,8 +776,7 @@ export const exportGiayMoiHdlv = async ({
         khoa: khoahoc,
         chuyennganh: student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || "",
         tendetai: student?.thesisRegistrations?.[0]?.thesisProject?.title || "",
-        type:
-          student?.thesisRegistrations?.[0]?.thesisProject?.type,
+        type: student?.thesisRegistrations?.[0]?.thesisProject?.type,
       }
       return {
         data: data,
@@ -823,37 +824,39 @@ export const exportSaoQDHDLV = async ({
     const allSheetOptions = allStudentsInClasses
       ?.filter((s) => s?.thesisRegistrations?.[0]?.thesisProject)
       .map((student) => {
-        const thesisProject = student?.thesisRegistrations?.[0]?.thesisProject;
-        const supervisor = thesisProject?.supervisor;
+        const thesisProject = student?.thesisRegistrations?.[0]?.thesisProject
+        const supervisor = thesisProject?.supervisor
 
-        if (!supervisor) return null;
+        if (!supervisor) return null
 
-        const coSupervisor = thesisProject?.coSupervisor;
-        const major = student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor;
+        const coSupervisor = thesisProject?.coSupervisor
+        const major = student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor
         const getTeacherInfo = (teacher: any) => {
-          if (!teacher) return "";
-          const profile = teacher.lecturer?.userProfile;
-          const rank = profile?.academicRankType?.sTen || teacher.academicRank || "";
-          const degree = profile?.academicDegreeType?.sTen || teacher.academicDegree || "";
-          const name = teacher.name || profile?.fullname || "";
-          return [rank, degree, name].filter(Boolean).join(" ");
-        };
+          if (!teacher) return ""
+          const profile = teacher.lecturer?.userProfile
+          const rank = profile?.academicRankType?.sTen || teacher.academicRank || ""
+          const degree = profile?.academicDegreeType?.sTen || teacher.academicDegree || ""
+          const name = teacher.name || profile?.fullname || ""
+          return [rank, degree, name].filter(Boolean).join(" ")
+        }
 
-        const type = thesisProject.type;
-        const nganh = major?.trainingField?.name || "";
-        const chuyennganh = major?.name || "";
-        const detai = thesisProject.title || "";
-        const hoten = student?.userProfile?.fullname || "";
-        const canbohuongdan1 = `1. ${getTeacherInfo(supervisor)}`;
-        const canbohuongdan2 = coSupervisor ? `2. ${getTeacherInfo(coSupervisor)}` : "";
-        const khoaquanli = thesisProject.organization?.sTen || "";
+        const type = thesisProject.type
+        const nganh = major?.trainingField?.name || ""
+        const chuyennganh = major?.name || ""
+        const detai = thesisProject.title || ""
+        const hoten = student?.userProfile?.fullname || ""
+        const canbohuongdan1 = `1. ${getTeacherInfo(supervisor)}`
+        const canbohuongdan2 = coSupervisor ? `2. ${getTeacherInfo(coSupervisor)}` : ""
+        const khoaquanli = thesisProject.organization?.sTen || ""
         const dieu1 = `Điều 1: Giao đề tài ${type} tốt nghiệp và cán hộ hướng dẫn ngành ${nganh} (${chuyennganh}) về đề tài "${detai}".
         Học viên thực hiện: ${hoten}. 
         Cán bộ hướng dẫn: ${canbohuongdan1} 
                               ${canbohuongdan2}`
         const dieu2 = `Điều 2: ${khoaquanli} tổ chức triển khai cho cán bộ hướng dẫn và học viên thực hiện theo quy định.`
         const data = {
-          soQD: student?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.defenseDecisionNumber || "",
+          soQD:
+            student?.thesisRegistrations?.[0]?.thesisProject?.thesisSession
+              ?.defenseDecisionNumber || "",
           ngayQD: ngayQD,
           thangQD: thangQD,
           namQD: namQD,

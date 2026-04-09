@@ -5,6 +5,7 @@ import customParseFormat from "dayjs/plugin/customParseFormat"
 import { read, utils, type WorkSheet } from "xlsx"
 import { prisma } from ".."
 import { UploadExcelModel } from "../dto/upload-excel.dto"
+import { ExamType } from "@workspace/db/client";
 
 dayjs.extend(customParseFormat)
 const app = new OpenAPIHono({ strict: false })
@@ -112,7 +113,6 @@ const importFileGiaoVienCoGioGiay = async (
       tenGV
         .split(",")
         .map((e) => e.replace(/\([^)]*\)/g, "").trim())
-        // biome-ignore lint/suspicious/useIterableCallbackReturn: <dung cho set>
         .forEach((e) => danhSachTenGV.add(e))
     }
     if (maMon && tenMon) {
@@ -132,7 +132,6 @@ const importFileGiaoVienCoGioGiay = async (
       hocChung
         .split(",")
         .map((e) => e.replace(/\([^)]*\)/g, "").trim())
-        // biome-ignore lint/suspicious/useIterableCallbackReturn: <dung cho set>
         .forEach((e) => danhSachMaLopNienChe.add(e))
     }
     if (maPhongHoc && tenPhong) {
@@ -169,6 +168,7 @@ const importFileGiaoVienCoGioGiay = async (
       id: true,
       codeTkb: true,
       code: true,
+      examType: true,
     },
   })
   const danhSachLopNienChe = await prisma.fixedClass.findMany({
@@ -270,6 +270,7 @@ const importFileGiaoVienCoGioGiay = async (
           ngayBatDau: ngayHoc ? dayjs(ngayHoc, "DD/MM/YYYY").toDate() : null,
           ngayKetThuc: null as Date | null,
           khuVuc: null as string | null | undefined,
+          examType: ExamType.Oral as ExamType,
           ngayThi:
             hinhThucHoc === "Thi" ? (ngayHoc ? dayjs(ngayHoc, "DD/MM/YYYY").toDate() : null) : null,
           caHoc:
@@ -335,6 +336,7 @@ const importFileGiaoVienCoGioGiay = async (
           )
           if (monHoc) {
             subjectClass.monHoc = monHoc.id
+            subjectClass.examType = monHoc.examType
           } else {
             error.push({
               message: `Không tìm thấy môn học với mã: ${maMon}`,
@@ -528,6 +530,7 @@ const importFileGiaoVienCoGioGiay = async (
               lecturerId: subjectClass.gvChinh,
               extraLecturerId: subjectClass.gvPhu,
               subjectId: subjectClass.monHoc,
+              examType: subjectClass.examType,
               roomId: subjectClass.phongHoc,
               approveLecturerAssignmentAt: new Date(),
               type,
@@ -704,7 +707,6 @@ const importFileTKBTheoLopHocPhan = async (
       tenGV
         .split(";")
         .map((e) => e.replace(/\([^)]*\)/g, "").trim())
-        // biome-ignore lint/suspicious/useIterableCallbackReturn: <dung cho set>
         .forEach((e) => danhSachTenGV.add(e))
     }
     if (maMon) {
@@ -743,6 +745,7 @@ const importFileTKBTheoLopHocPhan = async (
       id: true,
       codeTkb: true,
       code: true,
+      examType: true,
     },
   })
 
@@ -808,6 +811,7 @@ const importFileTKBTheoLopHocPhan = async (
           monHoc: null as string | null,
           phongHoc: null as string | null,
           quanSo: sinhVienToiDa ? Number(sinhVienToiDa) : 0,
+          examType: ExamType.Oral as ExamType,
         }
         const dsTietHoc = String(tietHoc)
           .trim()
@@ -851,6 +855,7 @@ const importFileTKBTheoLopHocPhan = async (
           )
           if (monHoc) {
             subjectClass.monHoc = monHoc.id
+            subjectClass.examType = monHoc.examType
           } else {
             error.push({
               message: `Không tìm thấy môn học với mã: ${maMon}`,
@@ -1001,6 +1006,7 @@ const importFileTKBTheoLopHocPhan = async (
               lecturerId: subjectClass.gvChinh,
               extraLecturerId: subjectClass.gvPhu,
               subjectId: subjectClass.monHoc,
+              examType: subjectClass.examType,
               roomId: subjectClass.phongHoc,
               trainingObjectTypeId,
               status: "OFFICIAL",

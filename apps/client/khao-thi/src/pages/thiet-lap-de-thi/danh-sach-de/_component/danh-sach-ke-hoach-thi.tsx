@@ -334,9 +334,11 @@ export default function DanhSachKeHoachThi() {
               width: 50,
               render: (_, record) => {
                 let total = 0
-                record?.subjectClass?.forEach((sc: SubjectClass & { _count?: { subjectClassStudent: number } }) => {
-                  total += sc?._count?.subjectClassStudent || 0
-                })
+                record?.subjectClass?.forEach(
+                  (sc: SubjectClass & { _count?: { subjectClassStudent: number } }) => {
+                    total += sc?._count?.subjectClassStudent || 0
+                  }
+                )
                 return total
               },
             },
