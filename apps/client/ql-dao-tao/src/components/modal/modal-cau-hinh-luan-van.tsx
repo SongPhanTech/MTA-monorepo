@@ -51,7 +51,7 @@ import {
 } from "@workspace/db/hooks"
 import dayjs from "dayjs"
 import Decimal from "decimal.js"
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 
 // import  {useEffect} from 'react'
 const { Title } = Typography
@@ -109,6 +109,11 @@ export type ModalCauHinhLuanVanType = {
   attachments?: DocumentFile[]
 }
 
+const FORM_ITEM_LAYOUT = {
+  labelCol: { flex: "0 0 150px" },
+  wrapperCol: { flex: "1" },
+}
+
 const ModalCauHinhLuanVan = () => {
   const isCouncilRolesDuplicated = (data: ModalCauHinhLuanVanType): boolean => {
     const expertIds = [data.chairman, data.secretary, data.reviewer1, data.reviewer2, data.member]
@@ -125,6 +130,8 @@ const ModalCauHinhLuanVan = () => {
   const [form] = Form.useForm<ModalCauHinhLuanVanType>()
 
   const [activeTabKey, setActiveTabKey] = useState<string>("defenseConfig")
+  /** Tránh gọi setFieldsValue mỗi khi thesisProjectData đổi reference (refetch) — sẽ xóa dữ liệu user đang nhập khi đổi tab. */
+  const formHydratedKeyRef = useRef<string | null>(null)
   const { isOpen, onClose, input } = useDisclosure<{
     thesisProjectId: string
     thesisSessionId: string
@@ -133,11 +140,6 @@ const ModalCauHinhLuanVan = () => {
     onClose: form.resetFields,
   })
   const { showSpinner, hideSpinner } = useSpinner()
-
-  const formItemLayout = {
-    labelCol: { flex: "0 0 150px" },
-    wrapperCol: { flex: "1" },
-  }
 
   const handleConfigDefense = async (data?: ModalCauHinhLuanVanType) => {
     if (!data) return
@@ -504,8 +506,21 @@ const ModalCauHinhLuanVan = () => {
   )
 
   useEffect(() => {
-    if (thesisProjectData) {
-      const chairmanId = thesisProjectData?.council?.members.find(
+    if (!isOpen) {
+      formHydratedKeyRef.current = null
+      return
+    }
+    const projectId = input?.thesisProjectId
+    if (!thesisProjectData || !projectId) {
+      return
+    }
+    const hydrateKey = projectId
+    if (formHydratedKeyRef.current === hydrateKey) {
+      return
+    }
+    formHydratedKeyRef.current = hydrateKey
+
+    const chairmanId = thesisProjectData?.council?.members.find(
         (m) => m.role === CouncilRole.CHAIRMAN
       )?.expert?.id
       const secretaryId = thesisProjectData?.council?.members.find(
@@ -620,13 +635,17 @@ const ModalCauHinhLuanVan = () => {
           thesisProjectData?.council?.members.find((member) => member.role === CouncilRole.MEMBER)
             ?.expert?.id ?? "",
       })
-      setDocument(thesisProjectData?.librarySubmission?.documentFile ?? [])
-      setAttachments(thesisProjectData?.defenseRecord?.documents ?? [])
-    } else {
-      setDocument([])
-      setAttachments([])
-    }
-  }, [thesisProjectData, form, formatDecimal, getDefaultCouncilAmount, getDefaultSupervisorAmount])
+    setDocument(thesisProjectData?.librarySubmission?.documentFile ?? [])
+    setAttachments(thesisProjectData?.defenseRecord?.documents ?? [])
+  }, [
+    isOpen,
+    input?.thesisProjectId,
+    thesisProjectData,
+    form,
+    formatDecimal,
+    getDefaultCouncilAmount,
+    getDefaultSupervisorAmount,
+  ])
   const itemTab: TabsProps["items"] = [
     {
       key: "defenseConfig",
@@ -645,14 +664,9 @@ const ModalCauHinhLuanVan = () => {
               label="Chủ tịch"
               className="mb-5"
               labelAlign="left"
-              {...formItemLayout}
+              {...FORM_ITEM_LAYOUT}
             >
               <Select
-                value={
-                  thesisProjectData?.council?.members.find(
-                    (member) => member.role === CouncilRole.CHAIRMAN
-                  )?.expert?.id
-                }
                 placeholder="Chọn Chủ tịch"
                 allowClear
                 showSearch
@@ -678,7 +692,7 @@ const ModalCauHinhLuanVan = () => {
               label="Thư ký"
               className="mb-5"
               labelAlign="left"
-              {...formItemLayout}
+              {...FORM_ITEM_LAYOUT}
             >
               <Select
                 placeholder="Chọn Thư ký"
@@ -706,7 +720,7 @@ const ModalCauHinhLuanVan = () => {
               label="Phản biện 1"
               className="mb-5"
               labelAlign="left"
-              {...formItemLayout}
+              {...FORM_ITEM_LAYOUT}
             >
               <Select
                 placeholder="Chọn Phản biện 1"
@@ -734,7 +748,7 @@ const ModalCauHinhLuanVan = () => {
               label="Phản biện 2"
               className="mb-5"
               labelAlign="left"
-              {...formItemLayout}
+              {...FORM_ITEM_LAYOUT}
             >
               <Select
                 placeholder="Chọn Phản biện 2"
@@ -762,7 +776,7 @@ const ModalCauHinhLuanVan = () => {
               label="Ủy viên"
               className="mb-5"
               labelAlign="left"
-              {...formItemLayout}
+              {...FORM_ITEM_LAYOUT}
             >
               <Select
                 placeholder="Chọn Ủy viên"
@@ -796,7 +810,7 @@ const ModalCauHinhLuanVan = () => {
               label="Phòng"
               className="mb-5"
               labelAlign="left"
-              {...formItemLayout}
+              {...FORM_ITEM_LAYOUT}
             >
               <Select
                 placeholder="Chọn phòng bảo vệ"
@@ -823,7 +837,7 @@ const ModalCauHinhLuanVan = () => {
               label="Ngày bảo vệ"
               className="mb-5"
               labelAlign="left"
-              {...formItemLayout}
+              {...FORM_ITEM_LAYOUT}
             >
               <DatePicker
                 placeholder="Chọn ngày bảo vệ"
@@ -845,12 +859,15 @@ const ModalCauHinhLuanVan = () => {
               label="Thời gian bảo vệ"
               className="mb-5"
               labelAlign="left"
-              {...formItemLayout}
+              {...FORM_ITEM_LAYOUT}
             >
               <Select
                 placeholder="Chọn thời gian bảo vệ"
                 allowClear
                 showSearch
+                onChange={(value) => {
+                  form.setFieldsValue({ sessionId: value })
+                }}
                 filterOption={(input, option) => {
                   const label = String(option?.label ?? "")
                   return label.toLowerCase().includes(input.toLowerCase())
@@ -883,7 +900,7 @@ const ModalCauHinhLuanVan = () => {
                   label="Ngày nộp"
                   className="mb-5"
                   labelAlign="left"
-                  {...formItemLayout}
+                  {...FORM_ITEM_LAYOUT}
                 >
                   <DatePicker
                     placeholder="Chọn Ngày nộp"
@@ -946,7 +963,7 @@ const ModalCauHinhLuanVan = () => {
               label="Ghi chú"
               className="mb-5"
               labelAlign="left"
-              {...formItemLayout}
+              {...FORM_ITEM_LAYOUT}
             >
               <TextArea
                 placeholder="Nhập Ghi chú "
@@ -966,7 +983,7 @@ const ModalCauHinhLuanVan = () => {
               label="File minh chứng"
               className="mb-5"
               labelAlign="left"
-              {...formItemLayout}
+              {...FORM_ITEM_LAYOUT}
             >
               <DocumentPaths
                 form={form}
@@ -999,7 +1016,7 @@ const ModalCauHinhLuanVan = () => {
                   label="GVHD 1"
                   className="mb-5"
                   labelAlign="left"
-                  {...formItemLayout}
+                  {...FORM_ITEM_LAYOUT}
                 >
                   <Input className="w-full" disabled />
                 </FormItem>
@@ -1009,7 +1026,7 @@ const ModalCauHinhLuanVan = () => {
                   label="GVHD 1"
                   className="mb-5 hidden"
                   labelAlign="left"
-                  {...formItemLayout}
+                  {...FORM_ITEM_LAYOUT}
                 >
                   <Input className="w-full" disabled />
                 </FormItem>
@@ -1042,7 +1059,7 @@ const ModalCauHinhLuanVan = () => {
                   label="GVHD 2"
                   className="mb-5"
                   labelAlign="left"
-                  {...formItemLayout}
+                  {...FORM_ITEM_LAYOUT}
                 >
                   <Input className="w-full" disabled />
                 </FormItem>
@@ -1053,7 +1070,7 @@ const ModalCauHinhLuanVan = () => {
                 label="GVHD 2"
                 className="mb-5 hidden"
                 labelAlign="left"
-                {...formItemLayout}
+                {...FORM_ITEM_LAYOUT}
               >
                 <Input className="w-full" disabled />
               </FormItem>
@@ -1091,17 +1108,9 @@ const ModalCauHinhLuanVan = () => {
                   label="Chủ tịch "
                   className="mb-5"
                   labelAlign="left"
-                  {...formItemLayout}
+                  {...FORM_ITEM_LAYOUT}
                 >
-                  <Input
-                    className="w-full"
-                    defaultValue={
-                      thesisProjectData?.council?.members.find(
-                        (member) => member.role === CouncilRole.CHAIRMAN
-                      )?.expert?.name ?? ""
-                    }
-                    disabled
-                  />
+                  <Input className="w-full" disabled />
                 </FormItem>
                 <FormItem
                   form={form}
@@ -1109,7 +1118,7 @@ const ModalCauHinhLuanVan = () => {
                   label=""
                   className="mb-5 hidden"
                   labelAlign="left"
-                  {...formItemLayout}
+                  {...FORM_ITEM_LAYOUT}
                 >
                   <Input className="w-full" disabled />
                 </FormItem>
@@ -1143,7 +1152,7 @@ const ModalCauHinhLuanVan = () => {
                   label="Thư ký"
                   className="mb-5"
                   labelAlign="left"
-                  {...formItemLayout}
+                  {...FORM_ITEM_LAYOUT}
                 >
                   <Input className="w-full" disabled />
                 </FormItem>
@@ -1154,7 +1163,7 @@ const ModalCauHinhLuanVan = () => {
                 label="Thư ký"
                 className="mb-5 hidden"
                 labelAlign="left"
-                {...formItemLayout}
+                {...FORM_ITEM_LAYOUT}
               >
                 <Input className="w-full" disabled />
               </FormItem>
@@ -1187,7 +1196,7 @@ const ModalCauHinhLuanVan = () => {
                   label="Phản biện 1"
                   className="mb-5"
                   labelAlign="left"
-                  {...formItemLayout}
+                  {...FORM_ITEM_LAYOUT}
                 >
                   <Input className="w-full" disabled />
                 </FormItem>
@@ -1197,7 +1206,7 @@ const ModalCauHinhLuanVan = () => {
                   label="Phản biện 1"
                   className="mb-5 hidden"
                   labelAlign="left"
-                  {...formItemLayout}
+                  {...FORM_ITEM_LAYOUT}
                 >
                   <Input className="w-full" disabled />
                 </FormItem>
@@ -1231,7 +1240,7 @@ const ModalCauHinhLuanVan = () => {
                   label="Phản biện 2"
                   className="mb-5"
                   labelAlign="left"
-                  {...formItemLayout}
+                  {...FORM_ITEM_LAYOUT}
                 >
                   <Input className="w-full" disabled />
                 </FormItem>
@@ -1241,7 +1250,7 @@ const ModalCauHinhLuanVan = () => {
                   label="Phản biện 1"
                   className="mb-5 hidden"
                   labelAlign="left"
-                  {...formItemLayout}
+                  {...FORM_ITEM_LAYOUT}
                 >
                   <Input className="w-full" disabled />
                 </FormItem>
@@ -1274,7 +1283,7 @@ const ModalCauHinhLuanVan = () => {
                   label="Ủy viên"
                   className="mb-5"
                   labelAlign="left"
-                  {...formItemLayout}
+                  {...FORM_ITEM_LAYOUT}
                 >
                   <Input className="w-full" disabled />
                 </FormItem>
@@ -1284,7 +1293,7 @@ const ModalCauHinhLuanVan = () => {
                   label="Ủy viên"
                   className="mb-5 hidden"
                   labelAlign="left"
-                  {...formItemLayout}
+                  {...FORM_ITEM_LAYOUT}
                 >
                   <Input className="w-full" disabled />
                 </FormItem>
@@ -1331,9 +1340,9 @@ const ModalCauHinhLuanVan = () => {
                   label="Kết quả cuối cùng"
                   className="mb-5"
                   labelAlign="left"
-                  {...formItemLayout}
+                  {...FORM_ITEM_LAYOUT}
                 >
-                  <InputNumber className="w-2/3" min={0} placeholder="Nhập kết quả" />
+                  <InputNumber className="w-2/3" placeholder="Nhập kết quả" />
                 </FormItem>
               </Col>
 
@@ -1363,7 +1372,7 @@ const ModalCauHinhLuanVan = () => {
               label="Nhận xét"
               className="mb-5"
               labelAlign="left"
-              {...formItemLayout}
+              {...FORM_ITEM_LAYOUT}
             >
               <TextArea
                 placeholder="Nhập Nhận xét của hội đồng"
@@ -1383,7 +1392,7 @@ const ModalCauHinhLuanVan = () => {
               label="File đính kèm"
               className="mb-5"
               labelAlign="left"
-              {...formItemLayout}
+              {...FORM_ITEM_LAYOUT}
             >
               <DocumentPaths
                 form={form}
@@ -1414,6 +1423,8 @@ const ModalCauHinhLuanVan = () => {
         defaultActiveKey="defenseConfig"
         activeKey={activeTabKey}
         onChange={setActiveTabKey}
+        destroyInactiveTabPane={false}
+        destroyOnHidden={false}
         items={itemTab}
         className="w-full mt-4"
       />
