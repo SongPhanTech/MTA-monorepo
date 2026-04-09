@@ -126,12 +126,24 @@ model Student extends Base {
   notes                          Note[]
   noteFolders                    NoteFolder[]
   semesterTrainingScore          SemesterTrainingScore[]
-	schoolYearTrainingScore        SchoolYearTrainingScore[]
+  schoolYearTrainingScore        SchoolYearTrainingScore[]
   subjectClassAttendanceStudent  SubjectClassAttendanceStudent[]
+  trainingActivity               TrainingActivity[]
 
   @@schema("ql-dao-tao")
+}
 
-	
+model TrainingActivity extends Base {
+  student     Student  @relation(fields: [studentId], references: [id])
+  studentId   String
+  /// Loại hoạt động
+  category    String
+  /// Điểm hoạt động
+  score       Int
+  /// Ngày hoạt động
+  date        DateTime @default(now())
+
+  @@schema("ql-dao-tao")
 }
 
 model StudentSemesterResult extends Base {

@@ -2644,6 +2644,21 @@ exports.Prisma.StudentScalarFieldEnum = {
   militaryTrainingPass: 'militaryTrainingPass'
 };
 
+exports.Prisma.TrainingActivityScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  studentId: 'studentId',
+  category: 'category',
+  score: 'score',
+  date: 'date'
+};
+
 exports.Prisma.StudentSemesterResultScalarFieldEnum = {
   id: 'id',
   code: 'code',
@@ -6469,6 +6484,15 @@ exports.Prisma.StudentOrderByRelevanceFieldEnum = {
   curriculumVersionParallelId: 'curriculumVersionParallelId'
 };
 
+exports.Prisma.TrainingActivityOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  studentId: 'studentId',
+  category: 'category'
+};
+
 exports.Prisma.StudentSemesterResultOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
@@ -8423,6 +8447,7 @@ exports.Prisma.ModelName = {
   OutputStandard: 'OutputStandard',
   OutputStandardOnCurriculum: 'OutputStandardOnCurriculum',
   Student: 'Student',
+  TrainingActivity: 'TrainingActivity',
   StudentSemesterResult: 'StudentSemesterResult',
   StudentYearResult: 'StudentYearResult',
   Notification: 'Notification',

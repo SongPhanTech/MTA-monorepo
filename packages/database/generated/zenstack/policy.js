@@ -1760,6 +1760,19 @@ const policy = {
                 update: {},
             },
         },
+        trainingActivity: {
+            modelLevel: {
+                read: { guard: TrainingActivity_read, },
+                create: { guard: TrainingActivity_create, inputChecker: TrainingActivity_create_input, },
+                update: { guard: TrainingActivity_update, },
+                postUpdate: { guard: TrainingActivity_postUpdate, },
+                delete: { guard: TrainingActivity_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
         studentSemesterResult: {
             modelLevel: {
                 read: { guard: StudentSemesterResult_read, },
@@ -3652,6 +3665,7 @@ const policy = {
         outputStandard: { hasValidation: false },
         outputStandardOnCurriculum: { hasValidation: false },
         student: { hasValidation: false },
+        trainingActivity: { hasValidation: false },
         studentSemesterResult: { hasValidation: false },
         studentYearResult: { hasValidation: false },
         notification: { hasValidation: false },
@@ -14267,6 +14281,84 @@ function Student_delete(context, db) {
     return { OR: [] };
 }
 function $check_Student_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function TrainingActivity_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_TrainingActivity_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function TrainingActivity_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_TrainingActivity_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function TrainingActivity_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function TrainingActivity_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_TrainingActivity_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function TrainingActivity_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_TrainingActivity_postUpdate(input, context) {
+    return true;
+}
+function TrainingActivity_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_TrainingActivity_delete(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
