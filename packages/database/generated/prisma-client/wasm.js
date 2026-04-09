@@ -1498,6 +1498,23 @@ exports.Prisma.PlanTrainingScalarFieldEnum = {
   trainingCourseId: 'trainingCourseId'
 };
 
+exports.Prisma.PlanTrainingPracticeScalarFieldEnum = {
+  id: 'id',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  trainingObjectTypeId: 'trainingObjectTypeId',
+  semesterId: 'semesterId',
+  trainingCourseId: 'trainingCourseId',
+  name: 'name',
+  isDayOff: 'isDayOff',
+  startDate: 'startDate',
+  endDate: 'endDate'
+};
+
 exports.Prisma.PlanTrainingSubjectScalarFieldEnum = {
   id: 'id',
   active: 'active',
@@ -5806,6 +5823,16 @@ exports.Prisma.PlanTrainingOrderByRelevanceFieldEnum = {
   trainingCourseId: 'trainingCourseId'
 };
 
+exports.Prisma.PlanTrainingPracticeOrderByRelevanceFieldEnum = {
+  id: 'id',
+  description: 'description',
+  createdBy: 'createdBy',
+  trainingObjectTypeId: 'trainingObjectTypeId',
+  semesterId: 'semesterId',
+  trainingCourseId: 'trainingCourseId',
+  name: 'name'
+};
+
 exports.Prisma.PlanTrainingSubjectOrderByRelevanceFieldEnum = {
   id: 'id',
   description: 'description',
@@ -8384,6 +8411,7 @@ exports.Prisma.ModelName = {
   DM_XaPhuong_New: 'DM_XaPhuong_New',
   DM_ViTriCongViec: 'DM_ViTriCongViec',
   PlanTraining: 'PlanTraining',
+  PlanTrainingPractice: 'PlanTrainingPractice',
   PlanTrainingSubject: 'PlanTrainingSubject',
   StudentScoreConvert: 'StudentScoreConvert',
   SubjectScoreConvert: 'SubjectScoreConvert',

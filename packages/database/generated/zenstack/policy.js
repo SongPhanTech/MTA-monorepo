@@ -941,6 +941,19 @@ const policy = {
                 update: {},
             },
         },
+        planTrainingPractice: {
+            modelLevel: {
+                read: { guard: PlanTrainingPractice_read, },
+                create: { guard: PlanTrainingPractice_create, inputChecker: PlanTrainingPractice_create_input, },
+                update: { guard: PlanTrainingPractice_update, },
+                postUpdate: { guard: PlanTrainingPractice_postUpdate, },
+                delete: { guard: PlanTrainingPractice_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
         planTrainingSubject: {
             modelLevel: {
                 read: { guard: PlanTrainingSubject_read, },
@@ -3602,6 +3615,7 @@ const policy = {
         dM_XaPhuong_New: { hasValidation: false },
         dM_ViTriCongViec: { hasValidation: false },
         planTraining: { hasValidation: false },
+        planTrainingPractice: { hasValidation: false },
         planTrainingSubject: { hasValidation: false },
         studentScoreConvert: { hasValidation: false },
         subjectScoreConvert: { hasValidation: false },
@@ -9367,6 +9381,84 @@ function PlanTraining_delete(context, db) {
     return { OR: [] };
 }
 function $check_PlanTraining_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function PlanTrainingPractice_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_PlanTrainingPractice_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function PlanTrainingPractice_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_PlanTrainingPractice_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function PlanTrainingPractice_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function PlanTrainingPractice_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_PlanTrainingPractice_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function PlanTrainingPractice_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_PlanTrainingPractice_postUpdate(input, context) {
+    return true;
+}
+function PlanTrainingPractice_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_PlanTrainingPractice_delete(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {

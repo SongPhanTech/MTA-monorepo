@@ -76,6 +76,7 @@ export * from './dm-xa-phuong';
 export * from './dm-xa-phuong-new';
 export * from './dm-vi-tri-cong-viec';
 export * from './plan-training';
+export * from './plan-training-practice';
 export * from './plan-training-subject';
 export * from './student-score-convert';
 export * from './subject-score-convert';

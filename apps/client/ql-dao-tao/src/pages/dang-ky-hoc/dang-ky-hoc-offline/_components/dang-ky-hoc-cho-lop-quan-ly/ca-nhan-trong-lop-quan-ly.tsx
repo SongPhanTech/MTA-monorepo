@@ -345,10 +345,10 @@ export default function CaNhanTrongLopQuanLy({ hocLai }: RegisterClassProps) {
       ])
 
       const studentSubjectScores = scoreRes.data[0] as StudentSubjectScore[]
-      const studentIds = studentSubjectScores.map((s) => s.id)
+      const scoreIds = studentSubjectScores.map((s) => s.id)
 
-      for (const studentId of studentIds) {
-        if (!selectedRowKeys.includes(studentId)) {
+      for (const scoreId of scoreIds) {
+        if (!selectedRowKeys.includes(scoreId)) {
           message.error("Không thể huỷ đăng ký SV đã có điểm, vui lòng thử lại")
           return
         }
@@ -361,9 +361,9 @@ export default function CaNhanTrongLopQuanLy({ hocLai }: RegisterClassProps) {
           data: {
             where: {
               subjectClassId,
-              attendanceScore: { not: null },
-              midtermScore: { not: null },
-              examScore: { not: null },
+              attendanceScore: null,
+              midtermScore: null,
+              examScore: null,
             },
           },
         },

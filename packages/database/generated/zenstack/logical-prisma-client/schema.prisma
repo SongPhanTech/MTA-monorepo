@@ -2620,6 +2620,7 @@ model DM_ViTriCongViec {
   @@schema("mta")
 }
 
+/// Kế hoạch đào tạo
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)
@@ -2640,6 +2641,32 @@ model PlanTraining {
   planTrainingSubjects PlanTrainingSubject[]
 
   @@unique([trainingObjectTypeId, semesterId, trainingCourseId])
+  @@schema("ql-dao-tao")
+}
+
+/// Kế hoạch huấn luyện
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model PlanTrainingPractice {
+  id                   String             @id() @default(cuid())
+  active               Boolean            @default(true)
+  description          String?            @db.Text()
+  deletedAt            DateTime?
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @default(now()) @updatedAt()
+  createdBy            String?            @default("") @db.Uuid()
+  trainingObjectType   TrainingObjectType @relation(fields: [trainingObjectTypeId], references: [id])
+  trainingObjectTypeId String
+  semester             Semester           @relation(fields: [semesterId], references: [id])
+  semesterId           String
+  trainingCourseId     String?
+  trainingCourse       TrainingCourse?    @relation(fields: [trainingCourseId], references: [id])
+  name                 String
+  isDayOff             Boolean            @default(false)
+  startDate            DateTime
+  endDate              DateTime?
+
   @@schema("ql-dao-tao")
 }
 
@@ -3082,6 +3109,7 @@ model Semester {
   semesterTrainingScore   SemesterTrainingScore[]
   availableTrainingTime   AvailableTrainingTime[]
   studentSubjectScore     StudentSubjectScore[]
+  planTrainingPractice    PlanTrainingPractice[]
 
   @@schema("ql-dao-tao")
 }
@@ -3207,6 +3235,7 @@ model TrainingCourse {
   thesisSession              ThesisSession[]
   planTrainings              PlanTraining[]
   graduationSessions         GraduationSession[]
+  planTrainingPractice       PlanTrainingPractice[]
 
   @@schema("ql-dao-tao")
 }
@@ -3956,6 +3985,7 @@ model TrainingObjectType {
   scoreCorrectionTicket ScoreCorrectionTicket[]
   scoreLinkSheet        ScoreLinkSheet[]
   availableTrainingTime AvailableTrainingTime[]
+  planTrainingPractice  PlanTrainingPractice[]
 
   @@schema("ql-dao-tao")
 }

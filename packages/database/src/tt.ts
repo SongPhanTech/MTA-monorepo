@@ -8,7 +8,6 @@ const prismaNew = new PrismaClient({
   datasourceUrl: "postgres://admin:123456654321@113.192.17.90:5432/mta",
 })
 
-
 // await prismaNew.archivedCertificate.deleteMany({
 //   where: {
 //     studentSubjectScore: {
