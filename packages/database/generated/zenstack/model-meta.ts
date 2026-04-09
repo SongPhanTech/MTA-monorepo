@@ -8082,6 +8082,104 @@ const metadata: ModelMeta = {
             },
             attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
+        planTrainingPractice: {
+            name: 'PlanTrainingPractice', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$PlanTrainingPractice$createdBy,
+                }, trainingObjectType: {
+                    name: "trainingObjectType",
+                    type: "TrainingObjectType",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'planTrainingPractice',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "trainingObjectTypeId" },
+                }, trainingObjectTypeId: {
+                    name: "trainingObjectTypeId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'trainingObjectType',
+                }, semester: {
+                    name: "semester",
+                    type: "Semester",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'planTrainingPractice',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "semesterId" },
+                }, semesterId: {
+                    name: "semesterId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'semester',
+                }, trainingCourseId: {
+                    name: "trainingCourseId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'trainingCourse',
+                }, trainingCourse: {
+                    name: "trainingCourse",
+                    type: "TrainingCourse",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'planTrainingPractice',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "trainingCourseId" },
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, isDayOff: {
+                    name: "isDayOff",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                }, startDate: {
+                    name: "startDate",
+                    type: "DateTime",
+                }, endDate: {
+                    name: "endDate",
+                    type: "DateTime",
+                    isOptional: true,
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+        },
         planTrainingSubject: {
             name: 'PlanTrainingSubject', fields: {
                 id: {
@@ -9616,6 +9714,12 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'semester',
+                }, planTrainingPractice: {
+                    name: "planTrainingPractice",
+                    type: "PlanTrainingPractice",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'semester',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -10063,6 +10167,12 @@ const metadata: ModelMeta = {
                 }, graduationSessions: {
                     name: "graduationSessions",
                     type: "GraduationSession",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingCourse',
+                }, planTrainingPractice: {
+                    name: "planTrainingPractice",
+                    type: "PlanTrainingPractice",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'trainingCourse',
@@ -13131,6 +13241,12 @@ const metadata: ModelMeta = {
                 }, availableTrainingTime: {
                     name: "availableTrainingTime",
                     type: "AvailableTrainingTime",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingObjectType',
+                }, planTrainingPractice: {
+                    name: "planTrainingPractice",
+                    type: "PlanTrainingPractice",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'trainingObjectType',
@@ -29126,6 +29242,10 @@ function $default$DocumentClassification$createdBy(user: any): unknown {
 }
 
 function $default$PlanTraining$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$PlanTrainingPractice$createdBy(user: any): unknown {
     return user?.id;
 }
 

@@ -271,14 +271,26 @@ app.openapi(getClassesInfo, async (c) => {
             : {}),
           ...(isRegisteredBool
             ? {
-                // classRegisterLogs: {
-                subjectClassStudent: {
-                  some: {
-                    student: {
-                      userProfileId: session.id,
+                OR: [
+                  {
+                    classRegisterLogs: {
+                      some: {
+                        student: {
+                          userProfileId: session.id,
+                        },
+                      },
                     },
                   },
-                },
+                  {
+                    subjectClassStudent: {
+                      some: {
+                        student: {
+                          userProfileId: session.id,
+                        },
+                      },
+                    },
+                  },
+                ],
               }
             : {}),
         },
@@ -302,14 +314,26 @@ app.openapi(getClassesInfo, async (c) => {
             : {}),
           ...(isRegisteredBool
             ? {
-                // classRegisterLogs: {
-                subjectClassStudent: {
-                  some: {
-                    student: {
-                      userProfileId: session.id,
+                OR: [
+                  {
+                    classRegisterLogs: {
+                      some: {
+                        student: {
+                          userProfileId: session.id,
+                        },
+                      },
                     },
                   },
-                },
+                  {
+                    subjectClassStudent: {
+                      some: {
+                        student: {
+                          userProfileId: session.id,
+                        },
+                      },
+                    },
+                  },
+                ],
               }
             : {}),
         },

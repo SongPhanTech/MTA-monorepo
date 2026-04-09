@@ -1510,6 +1510,26 @@ const policy: PolicyDef = {
             },
 
         },
+        planTrainingPractice: {
+            modelLevel: {
+                read: { guard: PlanTrainingPractice_read, },
+                create: { guard: PlanTrainingPractice_create, inputChecker: PlanTrainingPractice_create_input, },
+                update: { guard: PlanTrainingPractice_update, },
+                postUpdate: { guard: PlanTrainingPractice_postUpdate, },
+                delete: { guard: PlanTrainingPractice_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
         planTrainingSubject: {
             modelLevel: {
                 read: { guard: PlanTrainingSubject_read, },
@@ -5564,6 +5584,7 @@ const policy: PolicyDef = {
         dM_XaPhuong_New: { hasValidation: false },
         dM_ViTriCongViec: { hasValidation: false },
         planTraining: { hasValidation: false },
+        planTrainingPractice: { hasValidation: false },
         planTrainingSubject: { hasValidation: false },
         studentScoreConvert: { hasValidation: false },
         subjectScoreConvert: { hasValidation: false },
@@ -10420,6 +10441,71 @@ function PlanTraining_delete(context: QueryContext, db: CrudContract): any {
 }
 
 function $check_PlanTraining_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function PlanTrainingPractice_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_PlanTrainingPractice_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function PlanTrainingPractice_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_PlanTrainingPractice_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function PlanTrainingPractice_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function PlanTrainingPractice_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_PlanTrainingPractice_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function PlanTrainingPractice_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_PlanTrainingPractice_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function PlanTrainingPractice_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_PlanTrainingPractice_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 

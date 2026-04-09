@@ -51,6 +51,7 @@ model TrainingObjectType extends Base {
   scoreCorrectionTicket ScoreCorrectionTicket[]
   scoreLinkSheet        ScoreLinkSheet[]
   availableTrainingTime AvailableTrainingTime[]
+  planTrainingPractice PlanTrainingPractice[]
 
   @@schema("ql-dao-tao")
 }

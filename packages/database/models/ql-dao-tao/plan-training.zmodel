@@ -22,8 +22,7 @@ import '../khao-thi/exam'
 import "../khao-thi/survey"
 import "../khao-thi/evaluate"
 
-
-// Kế hoạch đào tạo
+/// Kế hoạch đào tạo
 model PlanTraining extends BaseNoCode {
   trainingObjectType   TrainingObjectType    @relation(fields: [trainingObjectTypeId], references: [id])
   trainingObjectTypeId String
@@ -35,6 +34,26 @@ model PlanTraining extends BaseNoCode {
 
   planTrainingSubjects PlanTrainingSubject[]
   @@unique([trainingObjectTypeId, semesterId, trainingCourseId])
+  @@schema("ql-dao-tao")
+}
+
+/// Kế hoạch huấn luyện
+model PlanTrainingPractice extends BaseNoCode {
+  trainingObjectType   TrainingObjectType    @relation(fields: [trainingObjectTypeId], references: [id])
+  trainingObjectTypeId String
+  semester             Semester              @relation(fields: [semesterId], references: [id])
+  semesterId           String
+
+  trainingCourseId     String? // Khoá học
+  trainingCourse       TrainingCourse?       @relation(fields: [trainingCourseId], references: [id])
+
+  name String
+
+  isDayOff Boolean @default(false)
+
+  startDate DateTime
+  endDate   DateTime?
+
   @@schema("ql-dao-tao")
 }
 
@@ -417,6 +436,7 @@ model Semester extends Base {
   semesterTrainingScore   SemesterTrainingScore[]
   availableTrainingTime   AvailableTrainingTime[]
   studentSubjectScore     StudentSubjectScore[]
+  planTrainingPractice PlanTrainingPractice[]
 
   @@schema("ql-dao-tao")
 }
@@ -520,6 +540,7 @@ model TrainingCourse extends Base {
   thesisSession              ThesisSession[]
   planTrainings              PlanTraining[]
   graduationSessions         GraduationSession[]
+  planTrainingPractice PlanTrainingPractice[]
 
   @@schema("ql-dao-tao")
 }
