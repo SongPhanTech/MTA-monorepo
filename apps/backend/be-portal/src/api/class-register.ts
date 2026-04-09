@@ -251,8 +251,9 @@ app.openapi(getClassesInfo, async (c) => {
 
   const curriculumSubjects = curriculumVersion.trainingBlocks.flatMap((block) => block.subjects)
 
-  const studentTrainingObjectTypeId = registerSession.trainingCourses
-    .find((tc) => tc.trainingObjectTypeId)?.trainingObjectTypeId ?? undefined
+  const studentTrainingObjectTypeId =
+    registerSession.trainingCourses.find((tc) => tc.trainingObjectTypeId)?.trainingObjectTypeId ??
+    undefined
 
   const subjectVersions = await prisma.subjectVersion.findMany({
     where: {
@@ -269,7 +270,8 @@ app.openapi(getClassesInfo, async (c) => {
             : {}),
           ...(isRegisteredBool
             ? {
-                classRegisterLogs: {
+                // classRegisterLogs: {
+                subjectClassStudent: {
                   some: {
                     student: {
                       userProfileId: session.id,
@@ -299,7 +301,8 @@ app.openapi(getClassesInfo, async (c) => {
             : {}),
           ...(isRegisteredBool
             ? {
-                classRegisterLogs: {
+                // classRegisterLogs: {
+                subjectClassStudent: {
                   some: {
                     student: {
                       userProfileId: session.id,
@@ -643,14 +646,6 @@ app.openapi(classUnregister, async (c) => {
     })
 
     for (const subjectClassId of subjectClassIds) {
-      const isExist = await tx.studentSubjectScore.findFirst({
-        where: { studentId, subjectClassId },
-      })
-
-      if (!isExist) {
-        throw new Error(`Bạn chưa đăng ký học phần ${subjectClassId}`)
-      }
-
       await tx.studentSubjectScore.deleteMany({
         where: { subjectClassId, studentId },
       })
