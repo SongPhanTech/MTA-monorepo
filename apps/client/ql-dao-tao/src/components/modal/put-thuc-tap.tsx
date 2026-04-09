@@ -47,6 +47,8 @@ const PutInternshipModal = () => {
           },
         },
       },
+      academicDegreeType: true,
+      academicRankType: true,
     },
   })
 
@@ -230,7 +232,9 @@ const PutInternshipModal = () => {
                     ]
                       .filter(Boolean)
                       .join(". ")
-                  : [item.academicRank, item.academicDegree, item.name].filter(Boolean).join(". "),
+                  : [item.academicRankType?.sMa, item.academicDegreeType?.sMa, item.name]
+                      .filter(Boolean)
+                      .join(". "),
                 value: item.id,
               }))}
               showSearch
@@ -252,7 +256,9 @@ const PutInternshipModal = () => {
                     ]
                       .filter(Boolean)
                       .join(". ")
-                  : [item.academicRank, item.academicDegree, item.name].filter(Boolean).join(". "),
+                  : [item.academicRankType?.sMa, item.academicDegreeType?.sMa, item.name]
+                      .filter(Boolean)
+                      .join(". "),
                 value: item.id,
               }))}
               showSearch

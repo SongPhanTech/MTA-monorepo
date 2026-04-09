@@ -47,6 +47,8 @@ const PutResearchTopicModal = () => {
           },
         },
       },
+      academicDegreeType: true,
+      academicRankType: true,
     },
   })
 
@@ -213,7 +215,9 @@ const PutResearchTopicModal = () => {
                     ]
                       .filter(Boolean)
                       .join(". ")
-                  : [item.academicRank, item.academicDegree, item.name].filter(Boolean).join(". "),
+                  : [item.academicRankType?.sMa, item.academicDegreeType?.sMa, item.name]
+                      .filter(Boolean)
+                      .join(". "),
                 value: item.id,
               }))}
               showSearch
@@ -235,7 +239,9 @@ const PutResearchTopicModal = () => {
                     ]
                       .filter(Boolean)
                       .join(". ")
-                  : [item.academicRank, item.academicDegree, item.name].filter(Boolean).join(". "),
+                  : [item.academicRankType?.sMa, item.academicDegreeType?.sMa, item.name]
+                      .filter(Boolean)
+                      .join(". "),
                 value: item.id,
               }))}
               showSearch
