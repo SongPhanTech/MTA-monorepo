@@ -9286,8 +9286,8 @@ export namespace Prisma {
         createdBy: 'createdBy',
         lecturerId: 'lecturerId',
         name: 'name',
-        academicRank: 'academicRank',
-        academicDegree: 'academicDegree',
+        academicDegreeTypeId: 'academicDegreeTypeId',
+        academicRankTypeId: 'academicRankTypeId',
         organization: 'organization',
         position: 'position',
         specialization: 'specialization',
@@ -12621,8 +12621,8 @@ export namespace Prisma {
         createdBy: 'createdBy',
         lecturerId: 'lecturerId',
         name: 'name',
-        academicRank: 'academicRank',
-        academicDegree: 'academicDegree',
+        academicDegreeTypeId: 'academicDegreeTypeId',
+        academicRankTypeId: 'academicRankTypeId',
         organization: 'organization',
         position: 'position',
         specialization: 'specialization',
@@ -32327,6 +32327,7 @@ export namespace Prisma {
         readonly [Symbol.toStringTag]: "PrismaPromise";
         profiles<T extends DM_HocHam$profilesArgs<ExtArgs> = {}>(args?: Subset<T, DM_HocHam$profilesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         hocHam<T extends DM_HocHam$hocHamArgs<ExtArgs> = {}>(args?: Subset<T, DM_HocHam$hocHamArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$HocHamPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        expertProfile<T extends DM_HocHam$expertProfileArgs<ExtArgs> = {}>(args?: Subset<T, DM_HocHam$expertProfileArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExpertProfilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         /**
          * Attaches callbacks for the resolution and/or rejection of the Promise.
          * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -32715,6 +32716,7 @@ export namespace Prisma {
         readonly [Symbol.toStringTag]: "PrismaPromise";
         profiles<T extends DM_HocVi$profilesArgs<ExtArgs> = {}>(args?: Subset<T, DM_HocVi$profilesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         hocVi<T extends DM_HocVi$hocViArgs<ExtArgs> = {}>(args?: Subset<T, DM_HocVi$hocViArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$HocViPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        expertProfile<T extends DM_HocVi$expertProfileArgs<ExtArgs> = {}>(args?: Subset<T, DM_HocVi$expertProfileArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExpertProfilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         /**
          * Attaches callbacks for the resolution and/or rejection of the Promise.
          * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -75818,6 +75820,8 @@ export namespace Prisma {
     export interface Prisma__ExpertProfileClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
         readonly [Symbol.toStringTag]: "PrismaPromise";
         lecturer<T extends ExpertProfile$lecturerArgs<ExtArgs> = {}>(args?: Subset<T, ExpertProfile$lecturerArgs<ExtArgs>>): Prisma__LecturerClient<$Result.GetResult<Prisma.$LecturerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        academicDegreeType<T extends ExpertProfile$academicDegreeTypeArgs<ExtArgs> = {}>(args?: Subset<T, ExpertProfile$academicDegreeTypeArgs<ExtArgs>>): Prisma__DM_HocViClient<$Result.GetResult<Prisma.$DM_HocViPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        academicRankType<T extends ExpertProfile$academicRankTypeArgs<ExtArgs> = {}>(args?: Subset<T, ExpertProfile$academicRankTypeArgs<ExtArgs>>): Prisma__DM_HocHamClient<$Result.GetResult<Prisma.$DM_HocHamPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         major<T extends ExpertProfile$majorArgs<ExtArgs> = {}>(args?: Subset<T, ExpertProfile$majorArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TrainingMajorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         supervisedTheses<T extends ExpertProfile$supervisedThesesArgs<ExtArgs> = {}>(args?: Subset<T, ExpertProfile$supervisedThesesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ThesisProjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         coSupervisedTheses<T extends ExpertProfile$coSupervisedThesesArgs<ExtArgs> = {}>(args?: Subset<T, ExpertProfile$coSupervisedThesesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ThesisProjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
@@ -75865,8 +75869,8 @@ export namespace Prisma {
         readonly createdBy: FieldRef<"ExpertProfile", 'String'>;
         readonly lecturerId: FieldRef<"ExpertProfile", 'String'>;
         readonly name: FieldRef<"ExpertProfile", 'String'>;
-        readonly academicRank: FieldRef<"ExpertProfile", 'String'>;
-        readonly academicDegree: FieldRef<"ExpertProfile", 'String'>;
+        readonly academicDegreeTypeId: FieldRef<"ExpertProfile", 'String'>;
+        readonly academicRankTypeId: FieldRef<"ExpertProfile", 'String'>;
         readonly organization: FieldRef<"ExpertProfile", 'String'>;
         readonly position: FieldRef<"ExpertProfile", 'String'>;
         readonly specialization: FieldRef<"ExpertProfile", 'String'>;
@@ -140027,10 +140031,12 @@ export namespace Prisma {
     export type DM_HocHamCountOutputType = {
         profiles: number
         hocHam: number
+        expertProfile: number
     };
     export type DM_HocHamCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         profiles?: boolean | DM_HocHamCountOutputTypeCountProfilesArgs
         hocHam?: boolean | DM_HocHamCountOutputTypeCountHocHamArgs
+        expertProfile?: boolean | DM_HocHamCountOutputTypeCountExpertProfileArgs
     };
     /**
      * DM_HocHamCountOutputType without action
@@ -140054,15 +140060,23 @@ export namespace Prisma {
         where?: HocHamWhereInput
     };
     /**
+     * DM_HocHamCountOutputType without action
+     */
+    export type DM_HocHamCountOutputTypeCountExpertProfileArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: ExpertProfileWhereInput
+    };
+    /**
      * Count Type DM_HocViCountOutputType
      */
     export type DM_HocViCountOutputType = {
         profiles: number
         hocVi: number
+        expertProfile: number
     };
     export type DM_HocViCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         profiles?: boolean | DM_HocViCountOutputTypeCountProfilesArgs
         hocVi?: boolean | DM_HocViCountOutputTypeCountHocViArgs
+        expertProfile?: boolean | DM_HocViCountOutputTypeCountExpertProfileArgs
     };
     /**
      * DM_HocViCountOutputType without action
@@ -140084,6 +140098,12 @@ export namespace Prisma {
      */
     export type DM_HocViCountOutputTypeCountHocViArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         where?: HocViWhereInput
+    };
+    /**
+     * DM_HocViCountOutputType without action
+     */
+    export type DM_HocViCountOutputTypeCountExpertProfileArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: ExpertProfileWhereInput
     };
     /**
      * Count Type DM_DanTocCountOutputType
@@ -183687,6 +183707,7 @@ export namespace Prisma {
         sThietBiSua?: boolean
         profiles?: boolean | DM_HocHam$profilesArgs<ExtArgs>
         hocHam?: boolean | DM_HocHam$hocHamArgs<ExtArgs>
+        expertProfile?: boolean | DM_HocHam$expertProfileArgs<ExtArgs>
         _count?: boolean | DM_HocHamCountOutputTypeDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["dM_HocHam"]>;
     export type DM_HocHamSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -183744,6 +183765,7 @@ export namespace Prisma {
     export type DM_HocHamInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         profiles?: boolean | DM_HocHam$profilesArgs<ExtArgs>
         hocHam?: boolean | DM_HocHam$hocHamArgs<ExtArgs>
+        expertProfile?: boolean | DM_HocHam$expertProfileArgs<ExtArgs>
         _count?: boolean | DM_HocHamCountOutputTypeDefaultArgs<ExtArgs>
     };
     export type DM_HocHamIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {};
@@ -183753,6 +183775,7 @@ export namespace Prisma {
         objects: {
             profiles: Prisma.$UserProfilePayload<ExtArgs>[]
             hocHam: Prisma.$HocHamPayload<ExtArgs>[]
+            expertProfile: Prisma.$ExpertProfilePayload<ExtArgs>[]
         }
         scalars: $Extensions.GetPayloadResult<{
             Id: string
@@ -184193,6 +184216,29 @@ export namespace Prisma {
         distinct?: HocHamScalarFieldEnum | HocHamScalarFieldEnum[]
     };
     /**
+     * DM_HocHam.expertProfile
+     */
+    export type DM_HocHam$expertProfileArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ExpertProfile
+         */
+        select?: ExpertProfileSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ExpertProfile
+         */
+        omit?: ExpertProfileOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ExpertProfileInclude<ExtArgs> | null
+        where?: ExpertProfileWhereInput
+        orderBy?: ExpertProfileOrderByWithRelationInput | ExpertProfileOrderByWithRelationInput[]
+        cursor?: ExpertProfileWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: ExpertProfileScalarFieldEnum | ExpertProfileScalarFieldEnum[]
+    };
+    /**
      * DM_HocHam without action
      */
     export type DM_HocHamDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -184471,6 +184517,7 @@ export namespace Prisma {
         sThietBiSua?: boolean
         profiles?: boolean | DM_HocVi$profilesArgs<ExtArgs>
         hocVi?: boolean | DM_HocVi$hocViArgs<ExtArgs>
+        expertProfile?: boolean | DM_HocVi$expertProfileArgs<ExtArgs>
         _count?: boolean | DM_HocViCountOutputTypeDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["dM_HocVi"]>;
     export type DM_HocViSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -184528,6 +184575,7 @@ export namespace Prisma {
     export type DM_HocViInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         profiles?: boolean | DM_HocVi$profilesArgs<ExtArgs>
         hocVi?: boolean | DM_HocVi$hocViArgs<ExtArgs>
+        expertProfile?: boolean | DM_HocVi$expertProfileArgs<ExtArgs>
         _count?: boolean | DM_HocViCountOutputTypeDefaultArgs<ExtArgs>
     };
     export type DM_HocViIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {};
@@ -184537,6 +184585,7 @@ export namespace Prisma {
         objects: {
             profiles: Prisma.$UserProfilePayload<ExtArgs>[]
             hocVi: Prisma.$HocViPayload<ExtArgs>[]
+            expertProfile: Prisma.$ExpertProfilePayload<ExtArgs>[]
         }
         scalars: $Extensions.GetPayloadResult<{
             Id: string
@@ -184975,6 +185024,29 @@ export namespace Prisma {
         take?: number
         skip?: number
         distinct?: HocViScalarFieldEnum | HocViScalarFieldEnum[]
+    };
+    /**
+     * DM_HocVi.expertProfile
+     */
+    export type DM_HocVi$expertProfileArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ExpertProfile
+         */
+        select?: ExpertProfileSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ExpertProfile
+         */
+        omit?: ExpertProfileOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ExpertProfileInclude<ExtArgs> | null
+        where?: ExpertProfileWhereInput
+        orderBy?: ExpertProfileOrderByWithRelationInput | ExpertProfileOrderByWithRelationInput[]
+        cursor?: ExpertProfileWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: ExpertProfileScalarFieldEnum | ExpertProfileScalarFieldEnum[]
     };
     /**
      * DM_HocVi without action
@@ -276743,8 +276815,8 @@ export namespace Prisma {
         createdBy: string | null
         lecturerId: string | null
         name: string | null
-        academicRank: string | null
-        academicDegree: string | null
+        academicDegreeTypeId: string | null
+        academicRankTypeId: string | null
         organization: string | null
         position: string | null
         specialization: string | null
@@ -276769,8 +276841,8 @@ export namespace Prisma {
         createdBy: string | null
         lecturerId: string | null
         name: string | null
-        academicRank: string | null
-        academicDegree: string | null
+        academicDegreeTypeId: string | null
+        academicRankTypeId: string | null
         organization: string | null
         position: string | null
         specialization: string | null
@@ -276795,8 +276867,8 @@ export namespace Prisma {
         createdBy: number
         lecturerId: number
         name: number
-        academicRank: number
-        academicDegree: number
+        academicDegreeTypeId: number
+        academicRankTypeId: number
         organization: number
         position: number
         specialization: number
@@ -276822,8 +276894,8 @@ export namespace Prisma {
         createdBy?: true
         lecturerId?: true
         name?: true
-        academicRank?: true
-        academicDegree?: true
+        academicDegreeTypeId?: true
+        academicRankTypeId?: true
         organization?: true
         position?: true
         specialization?: true
@@ -276848,8 +276920,8 @@ export namespace Prisma {
         createdBy?: true
         lecturerId?: true
         name?: true
-        academicRank?: true
-        academicDegree?: true
+        academicDegreeTypeId?: true
+        academicRankTypeId?: true
         organization?: true
         position?: true
         specialization?: true
@@ -276874,8 +276946,8 @@ export namespace Prisma {
         createdBy?: true
         lecturerId?: true
         name?: true
-        academicRank?: true
-        academicDegree?: true
+        academicDegreeTypeId?: true
+        academicRankTypeId?: true
         organization?: true
         position?: true
         specialization?: true
@@ -276967,8 +277039,8 @@ export namespace Prisma {
         createdBy: string | null
         lecturerId: string | null
         name: string | null
-        academicRank: string | null
-        academicDegree: string | null
+        academicDegreeTypeId: string | null
+        academicRankTypeId: string | null
         organization: string | null
         position: string | null
         specialization: string | null
@@ -277008,8 +277080,8 @@ export namespace Prisma {
         createdBy?: boolean
         lecturerId?: boolean
         name?: boolean
-        academicRank?: boolean
-        academicDegree?: boolean
+        academicDegreeTypeId?: boolean
+        academicRankTypeId?: boolean
         organization?: boolean
         position?: boolean
         specialization?: boolean
@@ -277023,6 +277095,8 @@ export namespace Prisma {
         eligiblePresident?: boolean
         eligibleSecretary?: boolean
         lecturer?: boolean | ExpertProfile$lecturerArgs<ExtArgs>
+        academicDegreeType?: boolean | ExpertProfile$academicDegreeTypeArgs<ExtArgs>
+        academicRankType?: boolean | ExpertProfile$academicRankTypeArgs<ExtArgs>
         major?: boolean | ExpertProfile$majorArgs<ExtArgs>
         supervisedTheses?: boolean | ExpertProfile$supervisedThesesArgs<ExtArgs>
         coSupervisedTheses?: boolean | ExpertProfile$coSupervisedThesesArgs<ExtArgs>
@@ -277047,8 +277121,8 @@ export namespace Prisma {
         createdBy?: boolean
         lecturerId?: boolean
         name?: boolean
-        academicRank?: boolean
-        academicDegree?: boolean
+        academicDegreeTypeId?: boolean
+        academicRankTypeId?: boolean
         organization?: boolean
         position?: boolean
         specialization?: boolean
@@ -277062,6 +277136,8 @@ export namespace Prisma {
         eligiblePresident?: boolean
         eligibleSecretary?: boolean
         lecturer?: boolean | ExpertProfile$lecturerArgs<ExtArgs>
+        academicDegreeType?: boolean | ExpertProfile$academicDegreeTypeArgs<ExtArgs>
+        academicRankType?: boolean | ExpertProfile$academicRankTypeArgs<ExtArgs>
     }, ExtArgs["result"]["expertProfile"]>;
     export type ExpertProfileSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
         id?: boolean
@@ -277074,8 +277150,8 @@ export namespace Prisma {
         createdBy?: boolean
         lecturerId?: boolean
         name?: boolean
-        academicRank?: boolean
-        academicDegree?: boolean
+        academicDegreeTypeId?: boolean
+        academicRankTypeId?: boolean
         organization?: boolean
         position?: boolean
         specialization?: boolean
@@ -277089,6 +277165,8 @@ export namespace Prisma {
         eligiblePresident?: boolean
         eligibleSecretary?: boolean
         lecturer?: boolean | ExpertProfile$lecturerArgs<ExtArgs>
+        academicDegreeType?: boolean | ExpertProfile$academicDegreeTypeArgs<ExtArgs>
+        academicRankType?: boolean | ExpertProfile$academicRankTypeArgs<ExtArgs>
     }, ExtArgs["result"]["expertProfile"]>;
     export type ExpertProfileSelectScalar = {
         id?: boolean
@@ -277101,8 +277179,8 @@ export namespace Prisma {
         createdBy?: boolean
         lecturerId?: boolean
         name?: boolean
-        academicRank?: boolean
-        academicDegree?: boolean
+        academicDegreeTypeId?: boolean
+        academicRankTypeId?: boolean
         organization?: boolean
         position?: boolean
         specialization?: boolean
@@ -277116,9 +277194,11 @@ export namespace Prisma {
         eligiblePresident?: boolean
         eligibleSecretary?: boolean
     };
-    export type ExpertProfileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "lecturerId" | "name" | "academicRank" | "academicDegree" | "organization" | "position" | "specialization" | "workplace" | "phone" | "email" | "bankAccountNumber" | "bankName" | "projectExpert" | "thesisExpert" | "eligiblePresident" | "eligibleSecretary", ExtArgs["result"]["expertProfile"]>;
+    export type ExpertProfileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "lecturerId" | "name" | "academicDegreeTypeId" | "academicRankTypeId" | "organization" | "position" | "specialization" | "workplace" | "phone" | "email" | "bankAccountNumber" | "bankName" | "projectExpert" | "thesisExpert" | "eligiblePresident" | "eligibleSecretary", ExtArgs["result"]["expertProfile"]>;
     export type ExpertProfileInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         lecturer?: boolean | ExpertProfile$lecturerArgs<ExtArgs>
+        academicDegreeType?: boolean | ExpertProfile$academicDegreeTypeArgs<ExtArgs>
+        academicRankType?: boolean | ExpertProfile$academicRankTypeArgs<ExtArgs>
         major?: boolean | ExpertProfile$majorArgs<ExtArgs>
         supervisedTheses?: boolean | ExpertProfile$supervisedThesesArgs<ExtArgs>
         coSupervisedTheses?: boolean | ExpertProfile$coSupervisedThesesArgs<ExtArgs>
@@ -277134,14 +277214,20 @@ export namespace Prisma {
     };
     export type ExpertProfileIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         lecturer?: boolean | ExpertProfile$lecturerArgs<ExtArgs>
+        academicDegreeType?: boolean | ExpertProfile$academicDegreeTypeArgs<ExtArgs>
+        academicRankType?: boolean | ExpertProfile$academicRankTypeArgs<ExtArgs>
     };
     export type ExpertProfileIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         lecturer?: boolean | ExpertProfile$lecturerArgs<ExtArgs>
+        academicDegreeType?: boolean | ExpertProfile$academicDegreeTypeArgs<ExtArgs>
+        academicRankType?: boolean | ExpertProfile$academicRankTypeArgs<ExtArgs>
     };
     export type $ExpertProfilePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         name: "ExpertProfile"
         objects: {
             lecturer: Prisma.$LecturerPayload<ExtArgs> | null
+            academicDegreeType: Prisma.$DM_HocViPayload<ExtArgs> | null
+            academicRankType: Prisma.$DM_HocHamPayload<ExtArgs> | null
             major: Prisma.$TrainingMajorPayload<ExtArgs>[]
             supervisedTheses: Prisma.$ThesisProjectPayload<ExtArgs>[]
             coSupervisedTheses: Prisma.$ThesisProjectPayload<ExtArgs>[]
@@ -277165,8 +277251,8 @@ export namespace Prisma {
             createdBy: string | null
             lecturerId: string | null
             name: string | null
-            academicRank: string | null
-            academicDegree: string | null
+            academicDegreeTypeId: string | null
+            academicRankTypeId: string | null
             organization: string | null
             position: string | null
             specialization: string | null
@@ -277583,6 +277669,42 @@ export namespace Prisma {
          */
         include?: LecturerInclude<ExtArgs> | null
         where?: LecturerWhereInput
+    };
+    /**
+     * ExpertProfile.academicDegreeType
+     */
+    export type ExpertProfile$academicDegreeTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the DM_HocVi
+         */
+        select?: DM_HocViSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the DM_HocVi
+         */
+        omit?: DM_HocViOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: DM_HocViInclude<ExtArgs> | null
+        where?: DM_HocViWhereInput
+    };
+    /**
+     * ExpertProfile.academicRankType
+     */
+    export type ExpertProfile$academicRankTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the DM_HocHam
+         */
+        select?: DM_HocHamSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the DM_HocHam
+         */
+        omit?: DM_HocHamOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: DM_HocHamInclude<ExtArgs> | null
+        where?: DM_HocHamWhereInput
     };
     /**
      * ExpertProfile.major
@@ -365212,6 +365334,7 @@ export namespace Prisma {
         sThietBiSua?: StringNullableFilter<"DM_HocHam"> | string | null
         profiles?: UserProfileListRelationFilter
         hocHam?: HocHamListRelationFilter
+        expertProfile?: ExpertProfileListRelationFilter
     };
     export type DM_HocHamOrderByWithRelationInput = {
         Id?: SortOrder
@@ -365231,6 +365354,7 @@ export namespace Prisma {
         sThietBiSua?: SortOrderInput | SortOrder
         profiles?: UserProfileOrderByRelationAggregateInput
         hocHam?: HocHamOrderByRelationAggregateInput
+        expertProfile?: ExpertProfileOrderByRelationAggregateInput
         _relevance?: DM_HocHamOrderByRelevanceInput
     };
     export type DM_HocHamWhereUniqueInput = Prisma.AtLeast<{
@@ -365254,6 +365378,7 @@ export namespace Prisma {
         sThietBiSua?: StringNullableFilter<"DM_HocHam"> | string | null
         profiles?: UserProfileListRelationFilter
         hocHam?: HocHamListRelationFilter
+        expertProfile?: ExpertProfileListRelationFilter
     }, "Id">;
     export type DM_HocHamOrderByWithAggregationInput = {
         Id?: SortOrder
@@ -365318,6 +365443,7 @@ export namespace Prisma {
         sThietBiSua?: StringNullableFilter<"DM_HocVi"> | string | null
         profiles?: UserProfileListRelationFilter
         hocVi?: HocViListRelationFilter
+        expertProfile?: ExpertProfileListRelationFilter
     };
     export type DM_HocViOrderByWithRelationInput = {
         Id?: SortOrder
@@ -365337,6 +365463,7 @@ export namespace Prisma {
         sThietBiSua?: SortOrderInput | SortOrder
         profiles?: UserProfileOrderByRelationAggregateInput
         hocVi?: HocViOrderByRelationAggregateInput
+        expertProfile?: ExpertProfileOrderByRelationAggregateInput
         _relevance?: DM_HocViOrderByRelevanceInput
     };
     export type DM_HocViWhereUniqueInput = Prisma.AtLeast<{
@@ -365360,6 +365487,7 @@ export namespace Prisma {
         sThietBiSua?: StringNullableFilter<"DM_HocVi"> | string | null
         profiles?: UserProfileListRelationFilter
         hocVi?: HocViListRelationFilter
+        expertProfile?: ExpertProfileListRelationFilter
     }, "Id">;
     export type DM_HocViOrderByWithAggregationInput = {
         Id?: SortOrder
@@ -378475,8 +378603,8 @@ export namespace Prisma {
         createdBy?: UuidNullableFilter<"ExpertProfile"> | string | null
         lecturerId?: StringNullableFilter<"ExpertProfile"> | string | null
         name?: StringNullableFilter<"ExpertProfile"> | string | null
-        academicRank?: StringNullableFilter<"ExpertProfile"> | string | null
-        academicDegree?: StringNullableFilter<"ExpertProfile"> | string | null
+        academicDegreeTypeId?: UuidNullableFilter<"ExpertProfile"> | string | null
+        academicRankTypeId?: UuidNullableFilter<"ExpertProfile"> | string | null
         organization?: StringNullableFilter<"ExpertProfile"> | string | null
         position?: StringNullableFilter<"ExpertProfile"> | string | null
         specialization?: StringNullableFilter<"ExpertProfile"> | string | null
@@ -378490,6 +378618,8 @@ export namespace Prisma {
         eligiblePresident?: BoolFilter<"ExpertProfile"> | boolean
         eligibleSecretary?: BoolFilter<"ExpertProfile"> | boolean
         lecturer?: XOR<LecturerNullableScalarRelationFilter, LecturerWhereInput> | null
+        academicDegreeType?: XOR<DM_HocViNullableScalarRelationFilter, DM_HocViWhereInput> | null
+        academicRankType?: XOR<DM_HocHamNullableScalarRelationFilter, DM_HocHamWhereInput> | null
         major?: TrainingMajorListRelationFilter
         supervisedTheses?: ThesisProjectListRelationFilter
         coSupervisedTheses?: ThesisProjectListRelationFilter
@@ -378513,8 +378643,8 @@ export namespace Prisma {
         createdBy?: SortOrderInput | SortOrder
         lecturerId?: SortOrderInput | SortOrder
         name?: SortOrderInput | SortOrder
-        academicRank?: SortOrderInput | SortOrder
-        academicDegree?: SortOrderInput | SortOrder
+        academicDegreeTypeId?: SortOrderInput | SortOrder
+        academicRankTypeId?: SortOrderInput | SortOrder
         organization?: SortOrderInput | SortOrder
         position?: SortOrderInput | SortOrder
         specialization?: SortOrderInput | SortOrder
@@ -378528,6 +378658,8 @@ export namespace Prisma {
         eligiblePresident?: SortOrder
         eligibleSecretary?: SortOrder
         lecturer?: LecturerOrderByWithRelationInput
+        academicDegreeType?: DM_HocViOrderByWithRelationInput
+        academicRankType?: DM_HocHamOrderByWithRelationInput
         major?: TrainingMajorOrderByRelationAggregateInput
         supervisedTheses?: ThesisProjectOrderByRelationAggregateInput
         coSupervisedTheses?: ThesisProjectOrderByRelationAggregateInput
@@ -378555,8 +378687,8 @@ export namespace Prisma {
         updatedAt?: DateTimeFilter<"ExpertProfile"> | Date | string
         createdBy?: UuidNullableFilter<"ExpertProfile"> | string | null
         name?: StringNullableFilter<"ExpertProfile"> | string | null
-        academicRank?: StringNullableFilter<"ExpertProfile"> | string | null
-        academicDegree?: StringNullableFilter<"ExpertProfile"> | string | null
+        academicDegreeTypeId?: UuidNullableFilter<"ExpertProfile"> | string | null
+        academicRankTypeId?: UuidNullableFilter<"ExpertProfile"> | string | null
         organization?: StringNullableFilter<"ExpertProfile"> | string | null
         position?: StringNullableFilter<"ExpertProfile"> | string | null
         specialization?: StringNullableFilter<"ExpertProfile"> | string | null
@@ -378570,6 +378702,8 @@ export namespace Prisma {
         eligiblePresident?: BoolFilter<"ExpertProfile"> | boolean
         eligibleSecretary?: BoolFilter<"ExpertProfile"> | boolean
         lecturer?: XOR<LecturerNullableScalarRelationFilter, LecturerWhereInput> | null
+        academicDegreeType?: XOR<DM_HocViNullableScalarRelationFilter, DM_HocViWhereInput> | null
+        academicRankType?: XOR<DM_HocHamNullableScalarRelationFilter, DM_HocHamWhereInput> | null
         major?: TrainingMajorListRelationFilter
         supervisedTheses?: ThesisProjectListRelationFilter
         coSupervisedTheses?: ThesisProjectListRelationFilter
@@ -378593,8 +378727,8 @@ export namespace Prisma {
         createdBy?: SortOrderInput | SortOrder
         lecturerId?: SortOrderInput | SortOrder
         name?: SortOrderInput | SortOrder
-        academicRank?: SortOrderInput | SortOrder
-        academicDegree?: SortOrderInput | SortOrder
+        academicDegreeTypeId?: SortOrderInput | SortOrder
+        academicRankTypeId?: SortOrderInput | SortOrder
         organization?: SortOrderInput | SortOrder
         position?: SortOrderInput | SortOrder
         specialization?: SortOrderInput | SortOrder
@@ -378625,8 +378759,8 @@ export namespace Prisma {
         createdBy?: UuidNullableWithAggregatesFilter<"ExpertProfile"> | string | null
         lecturerId?: StringNullableWithAggregatesFilter<"ExpertProfile"> | string | null
         name?: StringNullableWithAggregatesFilter<"ExpertProfile"> | string | null
-        academicRank?: StringNullableWithAggregatesFilter<"ExpertProfile"> | string | null
-        academicDegree?: StringNullableWithAggregatesFilter<"ExpertProfile"> | string | null
+        academicDegreeTypeId?: UuidNullableWithAggregatesFilter<"ExpertProfile"> | string | null
+        academicRankTypeId?: UuidNullableWithAggregatesFilter<"ExpertProfile"> | string | null
         organization?: StringNullableWithAggregatesFilter<"ExpertProfile"> | string | null
         position?: StringNullableWithAggregatesFilter<"ExpertProfile"> | string | null
         specialization?: StringNullableWithAggregatesFilter<"ExpertProfile"> | string | null
@@ -394809,6 +394943,7 @@ export namespace Prisma {
         sThietBiSua?: string | null
         profiles?: UserProfileCreateNestedManyWithoutAcademicRankTypeInput
         hocHam?: HocHamCreateNestedManyWithoutAcademicRankTypeInput
+        expertProfile?: ExpertProfileCreateNestedManyWithoutAcademicRankTypeInput
     };
     export type DM_HocHamUncheckedCreateInput = {
         Id?: string
@@ -394828,6 +394963,7 @@ export namespace Prisma {
         sThietBiSua?: string | null
         profiles?: UserProfileUncheckedCreateNestedManyWithoutAcademicRankTypeInput
         hocHam?: HocHamUncheckedCreateNestedManyWithoutAcademicRankTypeInput
+        expertProfile?: ExpertProfileUncheckedCreateNestedManyWithoutAcademicRankTypeInput
     };
     export type DM_HocHamUpdateInput = {
         Id?: StringFieldUpdateOperationsInput | string
@@ -394847,6 +394983,7 @@ export namespace Prisma {
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         profiles?: UserProfileUpdateManyWithoutAcademicRankTypeNestedInput
         hocHam?: HocHamUpdateManyWithoutAcademicRankTypeNestedInput
+        expertProfile?: ExpertProfileUpdateManyWithoutAcademicRankTypeNestedInput
     };
     export type DM_HocHamUncheckedUpdateInput = {
         Id?: StringFieldUpdateOperationsInput | string
@@ -394866,6 +395003,7 @@ export namespace Prisma {
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         profiles?: UserProfileUncheckedUpdateManyWithoutAcademicRankTypeNestedInput
         hocHam?: HocHamUncheckedUpdateManyWithoutAcademicRankTypeNestedInput
+        expertProfile?: ExpertProfileUncheckedUpdateManyWithoutAcademicRankTypeNestedInput
     };
     export type DM_HocHamCreateManyInput = {
         Id?: string
@@ -394936,6 +395074,7 @@ export namespace Prisma {
         sThietBiSua?: string | null
         profiles?: UserProfileCreateNestedManyWithoutAcademicDegreeTypeInput
         hocVi?: HocViCreateNestedManyWithoutAcademicDegreeTypeInput
+        expertProfile?: ExpertProfileCreateNestedManyWithoutAcademicDegreeTypeInput
     };
     export type DM_HocViUncheckedCreateInput = {
         Id?: string
@@ -394955,6 +395094,7 @@ export namespace Prisma {
         sThietBiSua?: string | null
         profiles?: UserProfileUncheckedCreateNestedManyWithoutAcademicDegreeTypeInput
         hocVi?: HocViUncheckedCreateNestedManyWithoutAcademicDegreeTypeInput
+        expertProfile?: ExpertProfileUncheckedCreateNestedManyWithoutAcademicDegreeTypeInput
     };
     export type DM_HocViUpdateInput = {
         Id?: StringFieldUpdateOperationsInput | string
@@ -394974,6 +395114,7 @@ export namespace Prisma {
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         profiles?: UserProfileUpdateManyWithoutAcademicDegreeTypeNestedInput
         hocVi?: HocViUpdateManyWithoutAcademicDegreeTypeNestedInput
+        expertProfile?: ExpertProfileUpdateManyWithoutAcademicDegreeTypeNestedInput
     };
     export type DM_HocViUncheckedUpdateInput = {
         Id?: StringFieldUpdateOperationsInput | string
@@ -394993,6 +395134,7 @@ export namespace Prisma {
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         profiles?: UserProfileUncheckedUpdateManyWithoutAcademicDegreeTypeNestedInput
         hocVi?: HocViUncheckedUpdateManyWithoutAcademicDegreeTypeNestedInput
+        expertProfile?: ExpertProfileUncheckedUpdateManyWithoutAcademicDegreeTypeNestedInput
     };
     export type DM_HocViCreateManyInput = {
         Id?: string
@@ -410035,8 +410177,6 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         name?: string | null
-        academicRank?: string | null
-        academicDegree?: string | null
         organization?: string | null
         position?: string | null
         specialization?: string | null
@@ -410050,6 +410190,8 @@ export namespace Prisma {
         eligiblePresident?: boolean
         eligibleSecretary?: boolean
         lecturer?: LecturerCreateNestedOneWithoutExpertProfileInput
+        academicDegreeType?: DM_HocViCreateNestedOneWithoutExpertProfileInput
+        academicRankType?: DM_HocHamCreateNestedOneWithoutExpertProfileInput
         major?: TrainingMajorCreateNestedManyWithoutExpertProfileInput
         supervisedTheses?: ThesisProjectCreateNestedManyWithoutSupervisorInput
         coSupervisedTheses?: ThesisProjectCreateNestedManyWithoutCoSupervisorInput
@@ -410073,8 +410215,8 @@ export namespace Prisma {
         createdBy?: string | null
         lecturerId?: string | null
         name?: string | null
-        academicRank?: string | null
-        academicDegree?: string | null
+        academicDegreeTypeId?: string | null
+        academicRankTypeId?: string | null
         organization?: string | null
         position?: string | null
         specialization?: string | null
@@ -410109,8 +410251,6 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: NullableStringFieldUpdateOperationsInput | string | null
-        academicRank?: NullableStringFieldUpdateOperationsInput | string | null
-        academicDegree?: NullableStringFieldUpdateOperationsInput | string | null
         organization?: NullableStringFieldUpdateOperationsInput | string | null
         position?: NullableStringFieldUpdateOperationsInput | string | null
         specialization?: NullableStringFieldUpdateOperationsInput | string | null
@@ -410124,6 +410264,8 @@ export namespace Prisma {
         eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
         eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
         lecturer?: LecturerUpdateOneWithoutExpertProfileNestedInput
+        academicDegreeType?: DM_HocViUpdateOneWithoutExpertProfileNestedInput
+        academicRankType?: DM_HocHamUpdateOneWithoutExpertProfileNestedInput
         major?: TrainingMajorUpdateManyWithoutExpertProfileNestedInput
         supervisedTheses?: ThesisProjectUpdateManyWithoutSupervisorNestedInput
         coSupervisedTheses?: ThesisProjectUpdateManyWithoutCoSupervisorNestedInput
@@ -410147,8 +410289,8 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         name?: NullableStringFieldUpdateOperationsInput | string | null
-        academicRank?: NullableStringFieldUpdateOperationsInput | string | null
-        academicDegree?: NullableStringFieldUpdateOperationsInput | string | null
+        academicDegreeTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         organization?: NullableStringFieldUpdateOperationsInput | string | null
         position?: NullableStringFieldUpdateOperationsInput | string | null
         specialization?: NullableStringFieldUpdateOperationsInput | string | null
@@ -410184,8 +410326,8 @@ export namespace Prisma {
         createdBy?: string | null
         lecturerId?: string | null
         name?: string | null
-        academicRank?: string | null
-        academicDegree?: string | null
+        academicDegreeTypeId?: string | null
+        academicRankTypeId?: string | null
         organization?: string | null
         position?: string | null
         specialization?: string | null
@@ -410209,8 +410351,6 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: NullableStringFieldUpdateOperationsInput | string | null
-        academicRank?: NullableStringFieldUpdateOperationsInput | string | null
-        academicDegree?: NullableStringFieldUpdateOperationsInput | string | null
         organization?: NullableStringFieldUpdateOperationsInput | string | null
         position?: NullableStringFieldUpdateOperationsInput | string | null
         specialization?: NullableStringFieldUpdateOperationsInput | string | null
@@ -410235,8 +410375,8 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         name?: NullableStringFieldUpdateOperationsInput | string | null
-        academicRank?: NullableStringFieldUpdateOperationsInput | string | null
-        academicDegree?: NullableStringFieldUpdateOperationsInput | string | null
+        academicDegreeTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         organization?: NullableStringFieldUpdateOperationsInput | string | null
         position?: NullableStringFieldUpdateOperationsInput | string | null
         specialization?: NullableStringFieldUpdateOperationsInput | string | null
@@ -425441,6 +425581,14 @@ export namespace Prisma {
         iDictionaryKey?: SortOrder
         iNhomChucVu?: SortOrder
     };
+    export type ExpertProfileListRelationFilter = {
+        every?: ExpertProfileWhereInput
+        some?: ExpertProfileWhereInput
+        none?: ExpertProfileWhereInput
+    };
+    export type ExpertProfileOrderByRelationAggregateInput = {
+        _count?: SortOrder
+    };
     export type DM_HocHamOrderByRelevanceInput = {
         fields: DM_HocHamOrderByRelevanceFieldEnum | DM_HocHamOrderByRelevanceFieldEnum[]
         sort: SortOrder
@@ -430212,11 +430360,6 @@ export namespace Prisma {
         is?: ScoreLinkSubjectVersionWhereInput | null
         isNot?: ScoreLinkSubjectVersionWhereInput | null
     };
-    export type ExpertProfileListRelationFilter = {
-        every?: ExpertProfileWhereInput
-        some?: ExpertProfileWhereInput
-        none?: ExpertProfileWhereInput
-    };
     export type RoomListRelationFilter = {
         every?: RoomWhereInput
         some?: RoomWhereInput
@@ -430231,9 +430374,6 @@ export namespace Prisma {
         every?: ExamBankWhereInput
         some?: ExamBankWhereInput
         none?: ExamBankWhereInput
-    };
-    export type ExpertProfileOrderByRelationAggregateInput = {
-        _count?: SortOrder
     };
     export type RoomOrderByRelationAggregateInput = {
         _count?: SortOrder
@@ -434675,8 +434815,8 @@ export namespace Prisma {
         createdBy?: SortOrder
         lecturerId?: SortOrder
         name?: SortOrder
-        academicRank?: SortOrder
-        academicDegree?: SortOrder
+        academicDegreeTypeId?: SortOrder
+        academicRankTypeId?: SortOrder
         organization?: SortOrder
         position?: SortOrder
         specialization?: SortOrder
@@ -434701,8 +434841,8 @@ export namespace Prisma {
         createdBy?: SortOrder
         lecturerId?: SortOrder
         name?: SortOrder
-        academicRank?: SortOrder
-        academicDegree?: SortOrder
+        academicDegreeTypeId?: SortOrder
+        academicRankTypeId?: SortOrder
         organization?: SortOrder
         position?: SortOrder
         specialization?: SortOrder
@@ -434727,8 +434867,8 @@ export namespace Prisma {
         createdBy?: SortOrder
         lecturerId?: SortOrder
         name?: SortOrder
-        academicRank?: SortOrder
-        academicDegree?: SortOrder
+        academicDegreeTypeId?: SortOrder
+        academicRankTypeId?: SortOrder
         organization?: SortOrder
         position?: SortOrder
         specialization?: SortOrder
@@ -445428,6 +445568,12 @@ export namespace Prisma {
         createMany?: HocHamCreateManyAcademicRankTypeInputEnvelope
         connect?: HocHamWhereUniqueInput | HocHamWhereUniqueInput[]
     };
+    export type ExpertProfileCreateNestedManyWithoutAcademicRankTypeInput = {
+        create?: XOR<ExpertProfileCreateWithoutAcademicRankTypeInput, ExpertProfileUncheckedCreateWithoutAcademicRankTypeInput> | ExpertProfileCreateWithoutAcademicRankTypeInput[] | ExpertProfileUncheckedCreateWithoutAcademicRankTypeInput[]
+        connectOrCreate?: ExpertProfileCreateOrConnectWithoutAcademicRankTypeInput | ExpertProfileCreateOrConnectWithoutAcademicRankTypeInput[]
+        createMany?: ExpertProfileCreateManyAcademicRankTypeInputEnvelope
+        connect?: ExpertProfileWhereUniqueInput | ExpertProfileWhereUniqueInput[]
+    };
     export type UserProfileUncheckedCreateNestedManyWithoutAcademicRankTypeInput = {
         create?: XOR<UserProfileCreateWithoutAcademicRankTypeInput, UserProfileUncheckedCreateWithoutAcademicRankTypeInput> | UserProfileCreateWithoutAcademicRankTypeInput[] | UserProfileUncheckedCreateWithoutAcademicRankTypeInput[]
         connectOrCreate?: UserProfileCreateOrConnectWithoutAcademicRankTypeInput | UserProfileCreateOrConnectWithoutAcademicRankTypeInput[]
@@ -445439,6 +445585,12 @@ export namespace Prisma {
         connectOrCreate?: HocHamCreateOrConnectWithoutAcademicRankTypeInput | HocHamCreateOrConnectWithoutAcademicRankTypeInput[]
         createMany?: HocHamCreateManyAcademicRankTypeInputEnvelope
         connect?: HocHamWhereUniqueInput | HocHamWhereUniqueInput[]
+    };
+    export type ExpertProfileUncheckedCreateNestedManyWithoutAcademicRankTypeInput = {
+        create?: XOR<ExpertProfileCreateWithoutAcademicRankTypeInput, ExpertProfileUncheckedCreateWithoutAcademicRankTypeInput> | ExpertProfileCreateWithoutAcademicRankTypeInput[] | ExpertProfileUncheckedCreateWithoutAcademicRankTypeInput[]
+        connectOrCreate?: ExpertProfileCreateOrConnectWithoutAcademicRankTypeInput | ExpertProfileCreateOrConnectWithoutAcademicRankTypeInput[]
+        createMany?: ExpertProfileCreateManyAcademicRankTypeInputEnvelope
+        connect?: ExpertProfileWhereUniqueInput | ExpertProfileWhereUniqueInput[]
     };
     export type UserProfileUpdateManyWithoutAcademicRankTypeNestedInput = {
         create?: XOR<UserProfileCreateWithoutAcademicRankTypeInput, UserProfileUncheckedCreateWithoutAcademicRankTypeInput> | UserProfileCreateWithoutAcademicRankTypeInput[] | UserProfileUncheckedCreateWithoutAcademicRankTypeInput[]
@@ -445466,6 +445618,19 @@ export namespace Prisma {
         updateMany?: HocHamUpdateManyWithWhereWithoutAcademicRankTypeInput | HocHamUpdateManyWithWhereWithoutAcademicRankTypeInput[]
         deleteMany?: HocHamScalarWhereInput | HocHamScalarWhereInput[]
     };
+    export type ExpertProfileUpdateManyWithoutAcademicRankTypeNestedInput = {
+        create?: XOR<ExpertProfileCreateWithoutAcademicRankTypeInput, ExpertProfileUncheckedCreateWithoutAcademicRankTypeInput> | ExpertProfileCreateWithoutAcademicRankTypeInput[] | ExpertProfileUncheckedCreateWithoutAcademicRankTypeInput[]
+        connectOrCreate?: ExpertProfileCreateOrConnectWithoutAcademicRankTypeInput | ExpertProfileCreateOrConnectWithoutAcademicRankTypeInput[]
+        upsert?: ExpertProfileUpsertWithWhereUniqueWithoutAcademicRankTypeInput | ExpertProfileUpsertWithWhereUniqueWithoutAcademicRankTypeInput[]
+        createMany?: ExpertProfileCreateManyAcademicRankTypeInputEnvelope
+        set?: ExpertProfileWhereUniqueInput | ExpertProfileWhereUniqueInput[]
+        disconnect?: ExpertProfileWhereUniqueInput | ExpertProfileWhereUniqueInput[]
+        delete?: ExpertProfileWhereUniqueInput | ExpertProfileWhereUniqueInput[]
+        connect?: ExpertProfileWhereUniqueInput | ExpertProfileWhereUniqueInput[]
+        update?: ExpertProfileUpdateWithWhereUniqueWithoutAcademicRankTypeInput | ExpertProfileUpdateWithWhereUniqueWithoutAcademicRankTypeInput[]
+        updateMany?: ExpertProfileUpdateManyWithWhereWithoutAcademicRankTypeInput | ExpertProfileUpdateManyWithWhereWithoutAcademicRankTypeInput[]
+        deleteMany?: ExpertProfileScalarWhereInput | ExpertProfileScalarWhereInput[]
+    };
     export type UserProfileUncheckedUpdateManyWithoutAcademicRankTypeNestedInput = {
         create?: XOR<UserProfileCreateWithoutAcademicRankTypeInput, UserProfileUncheckedCreateWithoutAcademicRankTypeInput> | UserProfileCreateWithoutAcademicRankTypeInput[] | UserProfileUncheckedCreateWithoutAcademicRankTypeInput[]
         connectOrCreate?: UserProfileCreateOrConnectWithoutAcademicRankTypeInput | UserProfileCreateOrConnectWithoutAcademicRankTypeInput[]
@@ -445492,6 +445657,19 @@ export namespace Prisma {
         updateMany?: HocHamUpdateManyWithWhereWithoutAcademicRankTypeInput | HocHamUpdateManyWithWhereWithoutAcademicRankTypeInput[]
         deleteMany?: HocHamScalarWhereInput | HocHamScalarWhereInput[]
     };
+    export type ExpertProfileUncheckedUpdateManyWithoutAcademicRankTypeNestedInput = {
+        create?: XOR<ExpertProfileCreateWithoutAcademicRankTypeInput, ExpertProfileUncheckedCreateWithoutAcademicRankTypeInput> | ExpertProfileCreateWithoutAcademicRankTypeInput[] | ExpertProfileUncheckedCreateWithoutAcademicRankTypeInput[]
+        connectOrCreate?: ExpertProfileCreateOrConnectWithoutAcademicRankTypeInput | ExpertProfileCreateOrConnectWithoutAcademicRankTypeInput[]
+        upsert?: ExpertProfileUpsertWithWhereUniqueWithoutAcademicRankTypeInput | ExpertProfileUpsertWithWhereUniqueWithoutAcademicRankTypeInput[]
+        createMany?: ExpertProfileCreateManyAcademicRankTypeInputEnvelope
+        set?: ExpertProfileWhereUniqueInput | ExpertProfileWhereUniqueInput[]
+        disconnect?: ExpertProfileWhereUniqueInput | ExpertProfileWhereUniqueInput[]
+        delete?: ExpertProfileWhereUniqueInput | ExpertProfileWhereUniqueInput[]
+        connect?: ExpertProfileWhereUniqueInput | ExpertProfileWhereUniqueInput[]
+        update?: ExpertProfileUpdateWithWhereUniqueWithoutAcademicRankTypeInput | ExpertProfileUpdateWithWhereUniqueWithoutAcademicRankTypeInput[]
+        updateMany?: ExpertProfileUpdateManyWithWhereWithoutAcademicRankTypeInput | ExpertProfileUpdateManyWithWhereWithoutAcademicRankTypeInput[]
+        deleteMany?: ExpertProfileScalarWhereInput | ExpertProfileScalarWhereInput[]
+    };
     export type UserProfileCreateNestedManyWithoutAcademicDegreeTypeInput = {
         create?: XOR<UserProfileCreateWithoutAcademicDegreeTypeInput, UserProfileUncheckedCreateWithoutAcademicDegreeTypeInput> | UserProfileCreateWithoutAcademicDegreeTypeInput[] | UserProfileUncheckedCreateWithoutAcademicDegreeTypeInput[]
         connectOrCreate?: UserProfileCreateOrConnectWithoutAcademicDegreeTypeInput | UserProfileCreateOrConnectWithoutAcademicDegreeTypeInput[]
@@ -445504,6 +445682,12 @@ export namespace Prisma {
         createMany?: HocViCreateManyAcademicDegreeTypeInputEnvelope
         connect?: HocViWhereUniqueInput | HocViWhereUniqueInput[]
     };
+    export type ExpertProfileCreateNestedManyWithoutAcademicDegreeTypeInput = {
+        create?: XOR<ExpertProfileCreateWithoutAcademicDegreeTypeInput, ExpertProfileUncheckedCreateWithoutAcademicDegreeTypeInput> | ExpertProfileCreateWithoutAcademicDegreeTypeInput[] | ExpertProfileUncheckedCreateWithoutAcademicDegreeTypeInput[]
+        connectOrCreate?: ExpertProfileCreateOrConnectWithoutAcademicDegreeTypeInput | ExpertProfileCreateOrConnectWithoutAcademicDegreeTypeInput[]
+        createMany?: ExpertProfileCreateManyAcademicDegreeTypeInputEnvelope
+        connect?: ExpertProfileWhereUniqueInput | ExpertProfileWhereUniqueInput[]
+    };
     export type UserProfileUncheckedCreateNestedManyWithoutAcademicDegreeTypeInput = {
         create?: XOR<UserProfileCreateWithoutAcademicDegreeTypeInput, UserProfileUncheckedCreateWithoutAcademicDegreeTypeInput> | UserProfileCreateWithoutAcademicDegreeTypeInput[] | UserProfileUncheckedCreateWithoutAcademicDegreeTypeInput[]
         connectOrCreate?: UserProfileCreateOrConnectWithoutAcademicDegreeTypeInput | UserProfileCreateOrConnectWithoutAcademicDegreeTypeInput[]
@@ -445515,6 +445699,12 @@ export namespace Prisma {
         connectOrCreate?: HocViCreateOrConnectWithoutAcademicDegreeTypeInput | HocViCreateOrConnectWithoutAcademicDegreeTypeInput[]
         createMany?: HocViCreateManyAcademicDegreeTypeInputEnvelope
         connect?: HocViWhereUniqueInput | HocViWhereUniqueInput[]
+    };
+    export type ExpertProfileUncheckedCreateNestedManyWithoutAcademicDegreeTypeInput = {
+        create?: XOR<ExpertProfileCreateWithoutAcademicDegreeTypeInput, ExpertProfileUncheckedCreateWithoutAcademicDegreeTypeInput> | ExpertProfileCreateWithoutAcademicDegreeTypeInput[] | ExpertProfileUncheckedCreateWithoutAcademicDegreeTypeInput[]
+        connectOrCreate?: ExpertProfileCreateOrConnectWithoutAcademicDegreeTypeInput | ExpertProfileCreateOrConnectWithoutAcademicDegreeTypeInput[]
+        createMany?: ExpertProfileCreateManyAcademicDegreeTypeInputEnvelope
+        connect?: ExpertProfileWhereUniqueInput | ExpertProfileWhereUniqueInput[]
     };
     export type UserProfileUpdateManyWithoutAcademicDegreeTypeNestedInput = {
         create?: XOR<UserProfileCreateWithoutAcademicDegreeTypeInput, UserProfileUncheckedCreateWithoutAcademicDegreeTypeInput> | UserProfileCreateWithoutAcademicDegreeTypeInput[] | UserProfileUncheckedCreateWithoutAcademicDegreeTypeInput[]
@@ -445542,6 +445732,19 @@ export namespace Prisma {
         updateMany?: HocViUpdateManyWithWhereWithoutAcademicDegreeTypeInput | HocViUpdateManyWithWhereWithoutAcademicDegreeTypeInput[]
         deleteMany?: HocViScalarWhereInput | HocViScalarWhereInput[]
     };
+    export type ExpertProfileUpdateManyWithoutAcademicDegreeTypeNestedInput = {
+        create?: XOR<ExpertProfileCreateWithoutAcademicDegreeTypeInput, ExpertProfileUncheckedCreateWithoutAcademicDegreeTypeInput> | ExpertProfileCreateWithoutAcademicDegreeTypeInput[] | ExpertProfileUncheckedCreateWithoutAcademicDegreeTypeInput[]
+        connectOrCreate?: ExpertProfileCreateOrConnectWithoutAcademicDegreeTypeInput | ExpertProfileCreateOrConnectWithoutAcademicDegreeTypeInput[]
+        upsert?: ExpertProfileUpsertWithWhereUniqueWithoutAcademicDegreeTypeInput | ExpertProfileUpsertWithWhereUniqueWithoutAcademicDegreeTypeInput[]
+        createMany?: ExpertProfileCreateManyAcademicDegreeTypeInputEnvelope
+        set?: ExpertProfileWhereUniqueInput | ExpertProfileWhereUniqueInput[]
+        disconnect?: ExpertProfileWhereUniqueInput | ExpertProfileWhereUniqueInput[]
+        delete?: ExpertProfileWhereUniqueInput | ExpertProfileWhereUniqueInput[]
+        connect?: ExpertProfileWhereUniqueInput | ExpertProfileWhereUniqueInput[]
+        update?: ExpertProfileUpdateWithWhereUniqueWithoutAcademicDegreeTypeInput | ExpertProfileUpdateWithWhereUniqueWithoutAcademicDegreeTypeInput[]
+        updateMany?: ExpertProfileUpdateManyWithWhereWithoutAcademicDegreeTypeInput | ExpertProfileUpdateManyWithWhereWithoutAcademicDegreeTypeInput[]
+        deleteMany?: ExpertProfileScalarWhereInput | ExpertProfileScalarWhereInput[]
+    };
     export type UserProfileUncheckedUpdateManyWithoutAcademicDegreeTypeNestedInput = {
         create?: XOR<UserProfileCreateWithoutAcademicDegreeTypeInput, UserProfileUncheckedCreateWithoutAcademicDegreeTypeInput> | UserProfileCreateWithoutAcademicDegreeTypeInput[] | UserProfileUncheckedCreateWithoutAcademicDegreeTypeInput[]
         connectOrCreate?: UserProfileCreateOrConnectWithoutAcademicDegreeTypeInput | UserProfileCreateOrConnectWithoutAcademicDegreeTypeInput[]
@@ -445567,6 +445770,19 @@ export namespace Prisma {
         update?: HocViUpdateWithWhereUniqueWithoutAcademicDegreeTypeInput | HocViUpdateWithWhereUniqueWithoutAcademicDegreeTypeInput[]
         updateMany?: HocViUpdateManyWithWhereWithoutAcademicDegreeTypeInput | HocViUpdateManyWithWhereWithoutAcademicDegreeTypeInput[]
         deleteMany?: HocViScalarWhereInput | HocViScalarWhereInput[]
+    };
+    export type ExpertProfileUncheckedUpdateManyWithoutAcademicDegreeTypeNestedInput = {
+        create?: XOR<ExpertProfileCreateWithoutAcademicDegreeTypeInput, ExpertProfileUncheckedCreateWithoutAcademicDegreeTypeInput> | ExpertProfileCreateWithoutAcademicDegreeTypeInput[] | ExpertProfileUncheckedCreateWithoutAcademicDegreeTypeInput[]
+        connectOrCreate?: ExpertProfileCreateOrConnectWithoutAcademicDegreeTypeInput | ExpertProfileCreateOrConnectWithoutAcademicDegreeTypeInput[]
+        upsert?: ExpertProfileUpsertWithWhereUniqueWithoutAcademicDegreeTypeInput | ExpertProfileUpsertWithWhereUniqueWithoutAcademicDegreeTypeInput[]
+        createMany?: ExpertProfileCreateManyAcademicDegreeTypeInputEnvelope
+        set?: ExpertProfileWhereUniqueInput | ExpertProfileWhereUniqueInput[]
+        disconnect?: ExpertProfileWhereUniqueInput | ExpertProfileWhereUniqueInput[]
+        delete?: ExpertProfileWhereUniqueInput | ExpertProfileWhereUniqueInput[]
+        connect?: ExpertProfileWhereUniqueInput | ExpertProfileWhereUniqueInput[]
+        update?: ExpertProfileUpdateWithWhereUniqueWithoutAcademicDegreeTypeInput | ExpertProfileUpdateWithWhereUniqueWithoutAcademicDegreeTypeInput[]
+        updateMany?: ExpertProfileUpdateManyWithWhereWithoutAcademicDegreeTypeInput | ExpertProfileUpdateManyWithWhereWithoutAcademicDegreeTypeInput[]
+        deleteMany?: ExpertProfileScalarWhereInput | ExpertProfileScalarWhereInput[]
     };
     export type UserProfileCreateNestedManyWithoutEthnicityInput = {
         create?: XOR<UserProfileCreateWithoutEthnicityInput, UserProfileUncheckedCreateWithoutEthnicityInput> | UserProfileCreateWithoutEthnicityInput[] | UserProfileUncheckedCreateWithoutEthnicityInput[]
@@ -459031,6 +459247,16 @@ export namespace Prisma {
         connectOrCreate?: LecturerCreateOrConnectWithoutExpertProfileInput
         connect?: LecturerWhereUniqueInput
     };
+    export type DM_HocViCreateNestedOneWithoutExpertProfileInput = {
+        create?: XOR<DM_HocViCreateWithoutExpertProfileInput, DM_HocViUncheckedCreateWithoutExpertProfileInput>
+        connectOrCreate?: DM_HocViCreateOrConnectWithoutExpertProfileInput
+        connect?: DM_HocViWhereUniqueInput
+    };
+    export type DM_HocHamCreateNestedOneWithoutExpertProfileInput = {
+        create?: XOR<DM_HocHamCreateWithoutExpertProfileInput, DM_HocHamUncheckedCreateWithoutExpertProfileInput>
+        connectOrCreate?: DM_HocHamCreateOrConnectWithoutExpertProfileInput
+        connect?: DM_HocHamWhereUniqueInput
+    };
     export type TrainingMajorCreateNestedManyWithoutExpertProfileInput = {
         create?: XOR<TrainingMajorCreateWithoutExpertProfileInput, TrainingMajorUncheckedCreateWithoutExpertProfileInput> | TrainingMajorCreateWithoutExpertProfileInput[] | TrainingMajorUncheckedCreateWithoutExpertProfileInput[]
         connectOrCreate?: TrainingMajorCreateOrConnectWithoutExpertProfileInput | TrainingMajorCreateOrConnectWithoutExpertProfileInput[]
@@ -459167,6 +459393,24 @@ export namespace Prisma {
         delete?: LecturerWhereInput | boolean
         connect?: LecturerWhereUniqueInput
         update?: XOR<XOR<LecturerUpdateToOneWithWhereWithoutExpertProfileInput, LecturerUpdateWithoutExpertProfileInput>, LecturerUncheckedUpdateWithoutExpertProfileInput>
+    };
+    export type DM_HocViUpdateOneWithoutExpertProfileNestedInput = {
+        create?: XOR<DM_HocViCreateWithoutExpertProfileInput, DM_HocViUncheckedCreateWithoutExpertProfileInput>
+        connectOrCreate?: DM_HocViCreateOrConnectWithoutExpertProfileInput
+        upsert?: DM_HocViUpsertWithoutExpertProfileInput
+        disconnect?: DM_HocViWhereInput | boolean
+        delete?: DM_HocViWhereInput | boolean
+        connect?: DM_HocViWhereUniqueInput
+        update?: XOR<XOR<DM_HocViUpdateToOneWithWhereWithoutExpertProfileInput, DM_HocViUpdateWithoutExpertProfileInput>, DM_HocViUncheckedUpdateWithoutExpertProfileInput>
+    };
+    export type DM_HocHamUpdateOneWithoutExpertProfileNestedInput = {
+        create?: XOR<DM_HocHamCreateWithoutExpertProfileInput, DM_HocHamUncheckedCreateWithoutExpertProfileInput>
+        connectOrCreate?: DM_HocHamCreateOrConnectWithoutExpertProfileInput
+        upsert?: DM_HocHamUpsertWithoutExpertProfileInput
+        disconnect?: DM_HocHamWhereInput | boolean
+        delete?: DM_HocHamWhereInput | boolean
+        connect?: DM_HocHamWhereUniqueInput
+        update?: XOR<XOR<DM_HocHamUpdateToOneWithWhereWithoutExpertProfileInput, DM_HocHamUpdateWithoutExpertProfileInput>, DM_HocHamUncheckedUpdateWithoutExpertProfileInput>
     };
     export type TrainingMajorUpdateManyWithoutExpertProfileNestedInput = {
         create?: XOR<TrainingMajorCreateWithoutExpertProfileInput, TrainingMajorUncheckedCreateWithoutExpertProfileInput> | TrainingMajorCreateWithoutExpertProfileInput[] | TrainingMajorUncheckedCreateWithoutExpertProfileInput[]
@@ -469825,6 +470069,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         hocVi?: HocViCreateNestedManyWithoutAcademicDegreeTypeInput
+        expertProfile?: ExpertProfileCreateNestedManyWithoutAcademicDegreeTypeInput
     };
     export type DM_HocViUncheckedCreateWithoutProfilesInput = {
         Id?: string
@@ -469843,6 +470088,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         hocVi?: HocViUncheckedCreateNestedManyWithoutAcademicDegreeTypeInput
+        expertProfile?: ExpertProfileUncheckedCreateNestedManyWithoutAcademicDegreeTypeInput
     };
     export type DM_HocViCreateOrConnectWithoutProfilesInput = {
         where: DM_HocViWhereUniqueInput
@@ -469865,6 +470111,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         hocHam?: HocHamCreateNestedManyWithoutAcademicRankTypeInput
+        expertProfile?: ExpertProfileCreateNestedManyWithoutAcademicRankTypeInput
     };
     export type DM_HocHamUncheckedCreateWithoutProfilesInput = {
         Id?: string
@@ -469883,6 +470130,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         hocHam?: HocHamUncheckedCreateNestedManyWithoutAcademicRankTypeInput
+        expertProfile?: ExpertProfileUncheckedCreateNestedManyWithoutAcademicRankTypeInput
     };
     export type DM_HocHamCreateOrConnectWithoutProfilesInput = {
         where: DM_HocHamWhereUniqueInput
@@ -473688,6 +473936,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         hocVi?: HocViUpdateManyWithoutAcademicDegreeTypeNestedInput
+        expertProfile?: ExpertProfileUpdateManyWithoutAcademicDegreeTypeNestedInput
     };
     export type DM_HocViUncheckedUpdateWithoutProfilesInput = {
         Id?: StringFieldUpdateOperationsInput | string
@@ -473706,6 +473955,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         hocVi?: HocViUncheckedUpdateManyWithoutAcademicDegreeTypeNestedInput
+        expertProfile?: ExpertProfileUncheckedUpdateManyWithoutAcademicDegreeTypeNestedInput
     };
     export type DM_HocHamUpsertWithoutProfilesInput = {
         update: XOR<DM_HocHamUpdateWithoutProfilesInput, DM_HocHamUncheckedUpdateWithoutProfilesInput>
@@ -473733,6 +473983,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         hocHam?: HocHamUpdateManyWithoutAcademicRankTypeNestedInput
+        expertProfile?: ExpertProfileUpdateManyWithoutAcademicRankTypeNestedInput
     };
     export type DM_HocHamUncheckedUpdateWithoutProfilesInput = {
         Id?: StringFieldUpdateOperationsInput | string
@@ -473751,6 +474002,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         hocHam?: HocHamUncheckedUpdateManyWithoutAcademicRankTypeNestedInput
+        expertProfile?: ExpertProfileUncheckedUpdateManyWithoutAcademicRankTypeNestedInput
     };
     export type DM_ChucDanhUpsertWithoutUserProfileInput = {
         update: XOR<DM_ChucDanhUpdateWithoutUserProfileInput, DM_ChucDanhUncheckedUpdateWithoutUserProfileInput>
@@ -475832,6 +476084,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         profiles?: UserProfileCreateNestedManyWithoutAcademicRankTypeInput
+        expertProfile?: ExpertProfileCreateNestedManyWithoutAcademicRankTypeInput
     };
     export type DM_HocHamUncheckedCreateWithoutHocHamInput = {
         Id?: string
@@ -475850,6 +476103,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         profiles?: UserProfileUncheckedCreateNestedManyWithoutAcademicRankTypeInput
+        expertProfile?: ExpertProfileUncheckedCreateNestedManyWithoutAcademicRankTypeInput
     };
     export type DM_HocHamCreateOrConnectWithoutHocHamInput = {
         where: DM_HocHamWhereUniqueInput
@@ -476231,6 +476485,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         profiles?: UserProfileUpdateManyWithoutAcademicRankTypeNestedInput
+        expertProfile?: ExpertProfileUpdateManyWithoutAcademicRankTypeNestedInput
     };
     export type DM_HocHamUncheckedUpdateWithoutHocHamInput = {
         Id?: StringFieldUpdateOperationsInput | string
@@ -476249,6 +476504,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         profiles?: UserProfileUncheckedUpdateManyWithoutAcademicRankTypeNestedInput
+        expertProfile?: ExpertProfileUncheckedUpdateManyWithoutAcademicRankTypeNestedInput
     };
     export type UserProfileUpsertWithoutHocHamInput = {
         update: XOR<UserProfileUpdateWithoutHocHamInput, UserProfileUncheckedUpdateWithoutHocHamInput>
@@ -478242,6 +478498,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         profiles?: UserProfileCreateNestedManyWithoutAcademicDegreeTypeInput
+        expertProfile?: ExpertProfileCreateNestedManyWithoutAcademicDegreeTypeInput
     };
     export type DM_HocViUncheckedCreateWithoutHocViInput = {
         Id?: string
@@ -478260,6 +478517,7 @@ export namespace Prisma {
         sThietBiTao?: string | null
         sThietBiSua?: string | null
         profiles?: UserProfileUncheckedCreateNestedManyWithoutAcademicDegreeTypeInput
+        expertProfile?: ExpertProfileUncheckedCreateNestedManyWithoutAcademicDegreeTypeInput
     };
     export type DM_HocViCreateOrConnectWithoutHocViInput = {
         where: DM_HocViWhereUniqueInput
@@ -478713,6 +478971,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         profiles?: UserProfileUpdateManyWithoutAcademicDegreeTypeNestedInput
+        expertProfile?: ExpertProfileUpdateManyWithoutAcademicDegreeTypeNestedInput
     };
     export type DM_HocViUncheckedUpdateWithoutHocViInput = {
         Id?: StringFieldUpdateOperationsInput | string
@@ -478731,6 +478990,7 @@ export namespace Prisma {
         sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
         sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
         profiles?: UserProfileUncheckedUpdateManyWithoutAcademicDegreeTypeNestedInput
+        expertProfile?: ExpertProfileUncheckedUpdateManyWithoutAcademicDegreeTypeNestedInput
     };
     export type DM_QuocGiaUpsertWithoutHocViInput = {
         update: XOR<DM_QuocGiaUpdateWithoutHocViInput, DM_QuocGiaUncheckedUpdateWithoutHocViInput>
@@ -504033,6 +504293,86 @@ export namespace Prisma {
         data: HocHamCreateManyAcademicRankTypeInput | HocHamCreateManyAcademicRankTypeInput[]
         skipDuplicates?: boolean
     };
+    export type ExpertProfileCreateWithoutAcademicRankTypeInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        name?: string | null
+        organization?: string | null
+        position?: string | null
+        specialization?: string | null
+        workplace?: string | null
+        phone?: string | null
+        email?: string | null
+        bankAccountNumber?: string | null
+        bankName?: string | null
+        projectExpert?: boolean
+        thesisExpert?: boolean
+        eligiblePresident?: boolean
+        eligibleSecretary?: boolean
+        lecturer?: LecturerCreateNestedOneWithoutExpertProfileInput
+        academicDegreeType?: DM_HocViCreateNestedOneWithoutExpertProfileInput
+        major?: TrainingMajorCreateNestedManyWithoutExpertProfileInput
+        supervisedTheses?: ThesisProjectCreateNestedManyWithoutSupervisorInput
+        coSupervisedTheses?: ThesisProjectCreateNestedManyWithoutCoSupervisorInput
+        thirdSupervisedTheses?: ThesisProjectCreateNestedManyWithoutThirdSupervisorInput
+        supervisorResearchTopic?: StudentResearchTopicCreateNestedManyWithoutSupervisorInput
+        coSupervisorResearchTopic?: StudentResearchTopicCreateNestedManyWithoutCoSupervisorInput
+        thirdSupervisorResearchTopic?: StudentResearchTopicCreateNestedManyWithoutThirdSupervisorInput
+        supervisorInternship?: StudentInternshipCreateNestedManyWithoutSupervisorInput
+        coSupervisorInternship?: StudentInternshipCreateNestedManyWithoutCoSupervisorInput
+        subjectClass?: SubjectClassCreateNestedManyWithoutExpertProfileInput
+        councilMemberships?: CouncilMemberCreateNestedManyWithoutExpertInput
+    };
+    export type ExpertProfileUncheckedCreateWithoutAcademicRankTypeInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        lecturerId?: string | null
+        name?: string | null
+        academicDegreeTypeId?: string | null
+        organization?: string | null
+        position?: string | null
+        specialization?: string | null
+        workplace?: string | null
+        phone?: string | null
+        email?: string | null
+        bankAccountNumber?: string | null
+        bankName?: string | null
+        projectExpert?: boolean
+        thesisExpert?: boolean
+        eligiblePresident?: boolean
+        eligibleSecretary?: boolean
+        major?: TrainingMajorUncheckedCreateNestedManyWithoutExpertProfileInput
+        supervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutSupervisorInput
+        coSupervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutCoSupervisorInput
+        thirdSupervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutThirdSupervisorInput
+        supervisorResearchTopic?: StudentResearchTopicUncheckedCreateNestedManyWithoutSupervisorInput
+        coSupervisorResearchTopic?: StudentResearchTopicUncheckedCreateNestedManyWithoutCoSupervisorInput
+        thirdSupervisorResearchTopic?: StudentResearchTopicUncheckedCreateNestedManyWithoutThirdSupervisorInput
+        supervisorInternship?: StudentInternshipUncheckedCreateNestedManyWithoutSupervisorInput
+        coSupervisorInternship?: StudentInternshipUncheckedCreateNestedManyWithoutCoSupervisorInput
+        subjectClass?: SubjectClassUncheckedCreateNestedManyWithoutExpertProfileInput
+        councilMemberships?: CouncilMemberUncheckedCreateNestedManyWithoutExpertInput
+    };
+    export type ExpertProfileCreateOrConnectWithoutAcademicRankTypeInput = {
+        where: ExpertProfileWhereUniqueInput
+        create: XOR<ExpertProfileCreateWithoutAcademicRankTypeInput, ExpertProfileUncheckedCreateWithoutAcademicRankTypeInput>
+    };
+    export type ExpertProfileCreateManyAcademicRankTypeInputEnvelope = {
+        data: ExpertProfileCreateManyAcademicRankTypeInput | ExpertProfileCreateManyAcademicRankTypeInput[]
+        skipDuplicates?: boolean
+    };
     export type UserProfileUpsertWithWhereUniqueWithoutAcademicRankTypeInput = {
         where: UserProfileWhereUniqueInput
         update: XOR<UserProfileUpdateWithoutAcademicRankTypeInput, UserProfileUncheckedUpdateWithoutAcademicRankTypeInput>
@@ -504058,6 +504398,48 @@ export namespace Prisma {
     export type HocHamUpdateManyWithWhereWithoutAcademicRankTypeInput = {
         where: HocHamScalarWhereInput
         data: XOR<HocHamUpdateManyMutationInput, HocHamUncheckedUpdateManyWithoutAcademicRankTypeInput>
+    };
+    export type ExpertProfileUpsertWithWhereUniqueWithoutAcademicRankTypeInput = {
+        where: ExpertProfileWhereUniqueInput
+        update: XOR<ExpertProfileUpdateWithoutAcademicRankTypeInput, ExpertProfileUncheckedUpdateWithoutAcademicRankTypeInput>
+        create: XOR<ExpertProfileCreateWithoutAcademicRankTypeInput, ExpertProfileUncheckedCreateWithoutAcademicRankTypeInput>
+    };
+    export type ExpertProfileUpdateWithWhereUniqueWithoutAcademicRankTypeInput = {
+        where: ExpertProfileWhereUniqueInput
+        data: XOR<ExpertProfileUpdateWithoutAcademicRankTypeInput, ExpertProfileUncheckedUpdateWithoutAcademicRankTypeInput>
+    };
+    export type ExpertProfileUpdateManyWithWhereWithoutAcademicRankTypeInput = {
+        where: ExpertProfileScalarWhereInput
+        data: XOR<ExpertProfileUpdateManyMutationInput, ExpertProfileUncheckedUpdateManyWithoutAcademicRankTypeInput>
+    };
+    export type ExpertProfileScalarWhereInput = {
+        AND?: ExpertProfileScalarWhereInput | ExpertProfileScalarWhereInput[]
+        OR?: ExpertProfileScalarWhereInput[]
+        NOT?: ExpertProfileScalarWhereInput | ExpertProfileScalarWhereInput[]
+        id?: StringFilter<"ExpertProfile"> | string
+        code?: StringNullableFilter<"ExpertProfile"> | string | null
+        active?: BoolFilter<"ExpertProfile"> | boolean
+        description?: StringNullableFilter<"ExpertProfile"> | string | null
+        deletedAt?: DateTimeNullableFilter<"ExpertProfile"> | Date | string | null
+        createdAt?: DateTimeFilter<"ExpertProfile"> | Date | string
+        updatedAt?: DateTimeFilter<"ExpertProfile"> | Date | string
+        createdBy?: UuidNullableFilter<"ExpertProfile"> | string | null
+        lecturerId?: StringNullableFilter<"ExpertProfile"> | string | null
+        name?: StringNullableFilter<"ExpertProfile"> | string | null
+        academicDegreeTypeId?: UuidNullableFilter<"ExpertProfile"> | string | null
+        academicRankTypeId?: UuidNullableFilter<"ExpertProfile"> | string | null
+        organization?: StringNullableFilter<"ExpertProfile"> | string | null
+        position?: StringNullableFilter<"ExpertProfile"> | string | null
+        specialization?: StringNullableFilter<"ExpertProfile"> | string | null
+        workplace?: StringNullableFilter<"ExpertProfile"> | string | null
+        phone?: StringNullableFilter<"ExpertProfile"> | string | null
+        email?: StringNullableFilter<"ExpertProfile"> | string | null
+        bankAccountNumber?: StringNullableFilter<"ExpertProfile"> | string | null
+        bankName?: StringNullableFilter<"ExpertProfile"> | string | null
+        projectExpert?: BoolFilter<"ExpertProfile"> | boolean
+        thesisExpert?: BoolFilter<"ExpertProfile"> | boolean
+        eligiblePresident?: BoolFilter<"ExpertProfile"> | boolean
+        eligibleSecretary?: BoolFilter<"ExpertProfile"> | boolean
     };
     export type UserProfileCreateWithoutAcademicDegreeTypeInput = {
         id?: string
@@ -504451,6 +504833,86 @@ export namespace Prisma {
         data: HocViCreateManyAcademicDegreeTypeInput | HocViCreateManyAcademicDegreeTypeInput[]
         skipDuplicates?: boolean
     };
+    export type ExpertProfileCreateWithoutAcademicDegreeTypeInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        name?: string | null
+        organization?: string | null
+        position?: string | null
+        specialization?: string | null
+        workplace?: string | null
+        phone?: string | null
+        email?: string | null
+        bankAccountNumber?: string | null
+        bankName?: string | null
+        projectExpert?: boolean
+        thesisExpert?: boolean
+        eligiblePresident?: boolean
+        eligibleSecretary?: boolean
+        lecturer?: LecturerCreateNestedOneWithoutExpertProfileInput
+        academicRankType?: DM_HocHamCreateNestedOneWithoutExpertProfileInput
+        major?: TrainingMajorCreateNestedManyWithoutExpertProfileInput
+        supervisedTheses?: ThesisProjectCreateNestedManyWithoutSupervisorInput
+        coSupervisedTheses?: ThesisProjectCreateNestedManyWithoutCoSupervisorInput
+        thirdSupervisedTheses?: ThesisProjectCreateNestedManyWithoutThirdSupervisorInput
+        supervisorResearchTopic?: StudentResearchTopicCreateNestedManyWithoutSupervisorInput
+        coSupervisorResearchTopic?: StudentResearchTopicCreateNestedManyWithoutCoSupervisorInput
+        thirdSupervisorResearchTopic?: StudentResearchTopicCreateNestedManyWithoutThirdSupervisorInput
+        supervisorInternship?: StudentInternshipCreateNestedManyWithoutSupervisorInput
+        coSupervisorInternship?: StudentInternshipCreateNestedManyWithoutCoSupervisorInput
+        subjectClass?: SubjectClassCreateNestedManyWithoutExpertProfileInput
+        councilMemberships?: CouncilMemberCreateNestedManyWithoutExpertInput
+    };
+    export type ExpertProfileUncheckedCreateWithoutAcademicDegreeTypeInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        lecturerId?: string | null
+        name?: string | null
+        academicRankTypeId?: string | null
+        organization?: string | null
+        position?: string | null
+        specialization?: string | null
+        workplace?: string | null
+        phone?: string | null
+        email?: string | null
+        bankAccountNumber?: string | null
+        bankName?: string | null
+        projectExpert?: boolean
+        thesisExpert?: boolean
+        eligiblePresident?: boolean
+        eligibleSecretary?: boolean
+        major?: TrainingMajorUncheckedCreateNestedManyWithoutExpertProfileInput
+        supervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutSupervisorInput
+        coSupervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutCoSupervisorInput
+        thirdSupervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutThirdSupervisorInput
+        supervisorResearchTopic?: StudentResearchTopicUncheckedCreateNestedManyWithoutSupervisorInput
+        coSupervisorResearchTopic?: StudentResearchTopicUncheckedCreateNestedManyWithoutCoSupervisorInput
+        thirdSupervisorResearchTopic?: StudentResearchTopicUncheckedCreateNestedManyWithoutThirdSupervisorInput
+        supervisorInternship?: StudentInternshipUncheckedCreateNestedManyWithoutSupervisorInput
+        coSupervisorInternship?: StudentInternshipUncheckedCreateNestedManyWithoutCoSupervisorInput
+        subjectClass?: SubjectClassUncheckedCreateNestedManyWithoutExpertProfileInput
+        councilMemberships?: CouncilMemberUncheckedCreateNestedManyWithoutExpertInput
+    };
+    export type ExpertProfileCreateOrConnectWithoutAcademicDegreeTypeInput = {
+        where: ExpertProfileWhereUniqueInput
+        create: XOR<ExpertProfileCreateWithoutAcademicDegreeTypeInput, ExpertProfileUncheckedCreateWithoutAcademicDegreeTypeInput>
+    };
+    export type ExpertProfileCreateManyAcademicDegreeTypeInputEnvelope = {
+        data: ExpertProfileCreateManyAcademicDegreeTypeInput | ExpertProfileCreateManyAcademicDegreeTypeInput[]
+        skipDuplicates?: boolean
+    };
     export type UserProfileUpsertWithWhereUniqueWithoutAcademicDegreeTypeInput = {
         where: UserProfileWhereUniqueInput
         update: XOR<UserProfileUpdateWithoutAcademicDegreeTypeInput, UserProfileUncheckedUpdateWithoutAcademicDegreeTypeInput>
@@ -504476,6 +504938,19 @@ export namespace Prisma {
     export type HocViUpdateManyWithWhereWithoutAcademicDegreeTypeInput = {
         where: HocViScalarWhereInput
         data: XOR<HocViUpdateManyMutationInput, HocViUncheckedUpdateManyWithoutAcademicDegreeTypeInput>
+    };
+    export type ExpertProfileUpsertWithWhereUniqueWithoutAcademicDegreeTypeInput = {
+        where: ExpertProfileWhereUniqueInput
+        update: XOR<ExpertProfileUpdateWithoutAcademicDegreeTypeInput, ExpertProfileUncheckedUpdateWithoutAcademicDegreeTypeInput>
+        create: XOR<ExpertProfileCreateWithoutAcademicDegreeTypeInput, ExpertProfileUncheckedCreateWithoutAcademicDegreeTypeInput>
+    };
+    export type ExpertProfileUpdateWithWhereUniqueWithoutAcademicDegreeTypeInput = {
+        where: ExpertProfileWhereUniqueInput
+        data: XOR<ExpertProfileUpdateWithoutAcademicDegreeTypeInput, ExpertProfileUncheckedUpdateWithoutAcademicDegreeTypeInput>
+    };
+    export type ExpertProfileUpdateManyWithWhereWithoutAcademicDegreeTypeInput = {
+        where: ExpertProfileScalarWhereInput
+        data: XOR<ExpertProfileUpdateManyMutationInput, ExpertProfileUncheckedUpdateManyWithoutAcademicDegreeTypeInput>
     };
     export type UserProfileCreateWithoutEthnicityInput = {
         id?: string
@@ -519677,8 +520152,6 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         name?: string | null
-        academicRank?: string | null
-        academicDegree?: string | null
         organization?: string | null
         position?: string | null
         specialization?: string | null
@@ -519692,6 +520165,8 @@ export namespace Prisma {
         eligiblePresident?: boolean
         eligibleSecretary?: boolean
         lecturer?: LecturerCreateNestedOneWithoutExpertProfileInput
+        academicDegreeType?: DM_HocViCreateNestedOneWithoutExpertProfileInput
+        academicRankType?: DM_HocHamCreateNestedOneWithoutExpertProfileInput
         major?: TrainingMajorCreateNestedManyWithoutExpertProfileInput
         supervisedTheses?: ThesisProjectCreateNestedManyWithoutSupervisorInput
         coSupervisedTheses?: ThesisProjectCreateNestedManyWithoutCoSupervisorInput
@@ -519714,8 +520189,8 @@ export namespace Prisma {
         createdBy?: string | null
         lecturerId?: string | null
         name?: string | null
-        academicRank?: string | null
-        academicDegree?: string | null
+        academicDegreeTypeId?: string | null
+        academicRankTypeId?: string | null
         organization?: string | null
         position?: string | null
         specialization?: string | null
@@ -519753,8 +520228,6 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         name?: string | null
-        academicRank?: string | null
-        academicDegree?: string | null
         organization?: string | null
         position?: string | null
         specialization?: string | null
@@ -519768,6 +520241,8 @@ export namespace Prisma {
         eligiblePresident?: boolean
         eligibleSecretary?: boolean
         lecturer?: LecturerCreateNestedOneWithoutExpertProfileInput
+        academicDegreeType?: DM_HocViCreateNestedOneWithoutExpertProfileInput
+        academicRankType?: DM_HocHamCreateNestedOneWithoutExpertProfileInput
         major?: TrainingMajorCreateNestedManyWithoutExpertProfileInput
         supervisedTheses?: ThesisProjectCreateNestedManyWithoutSupervisorInput
         coSupervisedTheses?: ThesisProjectCreateNestedManyWithoutCoSupervisorInput
@@ -519790,8 +520265,8 @@ export namespace Prisma {
         createdBy?: string | null
         lecturerId?: string | null
         name?: string | null
-        academicRank?: string | null
-        academicDegree?: string | null
+        academicDegreeTypeId?: string | null
+        academicRankTypeId?: string | null
         organization?: string | null
         position?: string | null
         specialization?: string | null
@@ -519829,8 +520304,6 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         name?: string | null
-        academicRank?: string | null
-        academicDegree?: string | null
         organization?: string | null
         position?: string | null
         specialization?: string | null
@@ -519844,6 +520317,8 @@ export namespace Prisma {
         eligiblePresident?: boolean
         eligibleSecretary?: boolean
         lecturer?: LecturerCreateNestedOneWithoutExpertProfileInput
+        academicDegreeType?: DM_HocViCreateNestedOneWithoutExpertProfileInput
+        academicRankType?: DM_HocHamCreateNestedOneWithoutExpertProfileInput
         major?: TrainingMajorCreateNestedManyWithoutExpertProfileInput
         supervisedTheses?: ThesisProjectCreateNestedManyWithoutSupervisorInput
         coSupervisedTheses?: ThesisProjectCreateNestedManyWithoutCoSupervisorInput
@@ -519866,8 +520341,8 @@ export namespace Prisma {
         createdBy?: string | null
         lecturerId?: string | null
         name?: string | null
-        academicRank?: string | null
-        academicDegree?: string | null
+        academicDegreeTypeId?: string | null
+        academicRankTypeId?: string | null
         organization?: string | null
         position?: string | null
         specialization?: string | null
@@ -520001,8 +520476,6 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: NullableStringFieldUpdateOperationsInput | string | null
-        academicRank?: NullableStringFieldUpdateOperationsInput | string | null
-        academicDegree?: NullableStringFieldUpdateOperationsInput | string | null
         organization?: NullableStringFieldUpdateOperationsInput | string | null
         position?: NullableStringFieldUpdateOperationsInput | string | null
         specialization?: NullableStringFieldUpdateOperationsInput | string | null
@@ -520016,6 +520489,8 @@ export namespace Prisma {
         eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
         eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
         lecturer?: LecturerUpdateOneWithoutExpertProfileNestedInput
+        academicDegreeType?: DM_HocViUpdateOneWithoutExpertProfileNestedInput
+        academicRankType?: DM_HocHamUpdateOneWithoutExpertProfileNestedInput
         major?: TrainingMajorUpdateManyWithoutExpertProfileNestedInput
         supervisedTheses?: ThesisProjectUpdateManyWithoutSupervisorNestedInput
         coSupervisedTheses?: ThesisProjectUpdateManyWithoutCoSupervisorNestedInput
@@ -520038,8 +520513,8 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         name?: NullableStringFieldUpdateOperationsInput | string | null
-        academicRank?: NullableStringFieldUpdateOperationsInput | string | null
-        academicDegree?: NullableStringFieldUpdateOperationsInput | string | null
+        academicDegreeTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         organization?: NullableStringFieldUpdateOperationsInput | string | null
         position?: NullableStringFieldUpdateOperationsInput | string | null
         specialization?: NullableStringFieldUpdateOperationsInput | string | null
@@ -520082,8 +520557,6 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: NullableStringFieldUpdateOperationsInput | string | null
-        academicRank?: NullableStringFieldUpdateOperationsInput | string | null
-        academicDegree?: NullableStringFieldUpdateOperationsInput | string | null
         organization?: NullableStringFieldUpdateOperationsInput | string | null
         position?: NullableStringFieldUpdateOperationsInput | string | null
         specialization?: NullableStringFieldUpdateOperationsInput | string | null
@@ -520097,6 +520570,8 @@ export namespace Prisma {
         eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
         eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
         lecturer?: LecturerUpdateOneWithoutExpertProfileNestedInput
+        academicDegreeType?: DM_HocViUpdateOneWithoutExpertProfileNestedInput
+        academicRankType?: DM_HocHamUpdateOneWithoutExpertProfileNestedInput
         major?: TrainingMajorUpdateManyWithoutExpertProfileNestedInput
         supervisedTheses?: ThesisProjectUpdateManyWithoutSupervisorNestedInput
         coSupervisedTheses?: ThesisProjectUpdateManyWithoutCoSupervisorNestedInput
@@ -520119,8 +520594,8 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         name?: NullableStringFieldUpdateOperationsInput | string | null
-        academicRank?: NullableStringFieldUpdateOperationsInput | string | null
-        academicDegree?: NullableStringFieldUpdateOperationsInput | string | null
+        academicDegreeTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         organization?: NullableStringFieldUpdateOperationsInput | string | null
         position?: NullableStringFieldUpdateOperationsInput | string | null
         specialization?: NullableStringFieldUpdateOperationsInput | string | null
@@ -520163,8 +520638,6 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: NullableStringFieldUpdateOperationsInput | string | null
-        academicRank?: NullableStringFieldUpdateOperationsInput | string | null
-        academicDegree?: NullableStringFieldUpdateOperationsInput | string | null
         organization?: NullableStringFieldUpdateOperationsInput | string | null
         position?: NullableStringFieldUpdateOperationsInput | string | null
         specialization?: NullableStringFieldUpdateOperationsInput | string | null
@@ -520178,6 +520651,8 @@ export namespace Prisma {
         eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
         eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
         lecturer?: LecturerUpdateOneWithoutExpertProfileNestedInput
+        academicDegreeType?: DM_HocViUpdateOneWithoutExpertProfileNestedInput
+        academicRankType?: DM_HocHamUpdateOneWithoutExpertProfileNestedInput
         major?: TrainingMajorUpdateManyWithoutExpertProfileNestedInput
         supervisedTheses?: ThesisProjectUpdateManyWithoutSupervisorNestedInput
         coSupervisedTheses?: ThesisProjectUpdateManyWithoutCoSupervisorNestedInput
@@ -520200,8 +520675,8 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         name?: NullableStringFieldUpdateOperationsInput | string | null
-        academicRank?: NullableStringFieldUpdateOperationsInput | string | null
-        academicDegree?: NullableStringFieldUpdateOperationsInput | string | null
+        academicDegreeTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         organization?: NullableStringFieldUpdateOperationsInput | string | null
         position?: NullableStringFieldUpdateOperationsInput | string | null
         specialization?: NullableStringFieldUpdateOperationsInput | string | null
@@ -520317,8 +520792,6 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         name?: string | null
-        academicRank?: string | null
-        academicDegree?: string | null
         organization?: string | null
         position?: string | null
         specialization?: string | null
@@ -520332,6 +520805,8 @@ export namespace Prisma {
         eligiblePresident?: boolean
         eligibleSecretary?: boolean
         lecturer?: LecturerCreateNestedOneWithoutExpertProfileInput
+        academicDegreeType?: DM_HocViCreateNestedOneWithoutExpertProfileInput
+        academicRankType?: DM_HocHamCreateNestedOneWithoutExpertProfileInput
         major?: TrainingMajorCreateNestedManyWithoutExpertProfileInput
         supervisedTheses?: ThesisProjectCreateNestedManyWithoutSupervisorInput
         coSupervisedTheses?: ThesisProjectCreateNestedManyWithoutCoSupervisorInput
@@ -520354,8 +520829,8 @@ export namespace Prisma {
         createdBy?: string | null
         lecturerId?: string | null
         name?: string | null
-        academicRank?: string | null
-        academicDegree?: string | null
+        academicDegreeTypeId?: string | null
+        academicRankTypeId?: string | null
         organization?: string | null
         position?: string | null
         specialization?: string | null
@@ -520393,8 +520868,6 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         name?: string | null
-        academicRank?: string | null
-        academicDegree?: string | null
         organization?: string | null
         position?: string | null
         specialization?: string | null
@@ -520408,6 +520881,8 @@ export namespace Prisma {
         eligiblePresident?: boolean
         eligibleSecretary?: boolean
         lecturer?: LecturerCreateNestedOneWithoutExpertProfileInput
+        academicDegreeType?: DM_HocViCreateNestedOneWithoutExpertProfileInput
+        academicRankType?: DM_HocHamCreateNestedOneWithoutExpertProfileInput
         major?: TrainingMajorCreateNestedManyWithoutExpertProfileInput
         supervisedTheses?: ThesisProjectCreateNestedManyWithoutSupervisorInput
         coSupervisedTheses?: ThesisProjectCreateNestedManyWithoutCoSupervisorInput
@@ -520430,8 +520905,8 @@ export namespace Prisma {
         createdBy?: string | null
         lecturerId?: string | null
         name?: string | null
-        academicRank?: string | null
-        academicDegree?: string | null
+        academicDegreeTypeId?: string | null
+        academicRankTypeId?: string | null
         organization?: string | null
         position?: string | null
         specialization?: string | null
@@ -520565,8 +521040,6 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: NullableStringFieldUpdateOperationsInput | string | null
-        academicRank?: NullableStringFieldUpdateOperationsInput | string | null
-        academicDegree?: NullableStringFieldUpdateOperationsInput | string | null
         organization?: NullableStringFieldUpdateOperationsInput | string | null
         position?: NullableStringFieldUpdateOperationsInput | string | null
         specialization?: NullableStringFieldUpdateOperationsInput | string | null
@@ -520580,6 +521053,8 @@ export namespace Prisma {
         eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
         eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
         lecturer?: LecturerUpdateOneWithoutExpertProfileNestedInput
+        academicDegreeType?: DM_HocViUpdateOneWithoutExpertProfileNestedInput
+        academicRankType?: DM_HocHamUpdateOneWithoutExpertProfileNestedInput
         major?: TrainingMajorUpdateManyWithoutExpertProfileNestedInput
         supervisedTheses?: ThesisProjectUpdateManyWithoutSupervisorNestedInput
         coSupervisedTheses?: ThesisProjectUpdateManyWithoutCoSupervisorNestedInput
@@ -520602,8 +521077,8 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         name?: NullableStringFieldUpdateOperationsInput | string | null
-        academicRank?: NullableStringFieldUpdateOperationsInput | string | null
-        academicDegree?: NullableStringFieldUpdateOperationsInput | string | null
+        academicDegreeTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         organization?: NullableStringFieldUpdateOperationsInput | string | null
         position?: NullableStringFieldUpdateOperationsInput | string | null
         specialization?: NullableStringFieldUpdateOperationsInput | string | null
@@ -520646,8 +521121,6 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: NullableStringFieldUpdateOperationsInput | string | null
-        academicRank?: NullableStringFieldUpdateOperationsInput | string | null
-        academicDegree?: NullableStringFieldUpdateOperationsInput | string | null
         organization?: NullableStringFieldUpdateOperationsInput | string | null
         position?: NullableStringFieldUpdateOperationsInput | string | null
         specialization?: NullableStringFieldUpdateOperationsInput | string | null
@@ -520661,6 +521134,8 @@ export namespace Prisma {
         eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
         eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
         lecturer?: LecturerUpdateOneWithoutExpertProfileNestedInput
+        academicDegreeType?: DM_HocViUpdateOneWithoutExpertProfileNestedInput
+        academicRankType?: DM_HocHamUpdateOneWithoutExpertProfileNestedInput
         major?: TrainingMajorUpdateManyWithoutExpertProfileNestedInput
         supervisedTheses?: ThesisProjectUpdateManyWithoutSupervisorNestedInput
         coSupervisedTheses?: ThesisProjectUpdateManyWithoutCoSupervisorNestedInput
@@ -520683,8 +521158,8 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         name?: NullableStringFieldUpdateOperationsInput | string | null
-        academicRank?: NullableStringFieldUpdateOperationsInput | string | null
-        academicDegree?: NullableStringFieldUpdateOperationsInput | string | null
+        academicDegreeTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         organization?: NullableStringFieldUpdateOperationsInput | string | null
         position?: NullableStringFieldUpdateOperationsInput | string | null
         specialization?: NullableStringFieldUpdateOperationsInput | string | null
@@ -536565,8 +537040,6 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         name?: string | null
-        academicRank?: string | null
-        academicDegree?: string | null
         organization?: string | null
         position?: string | null
         specialization?: string | null
@@ -536580,6 +537053,8 @@ export namespace Prisma {
         eligiblePresident?: boolean
         eligibleSecretary?: boolean
         lecturer?: LecturerCreateNestedOneWithoutExpertProfileInput
+        academicDegreeType?: DM_HocViCreateNestedOneWithoutExpertProfileInput
+        academicRankType?: DM_HocHamCreateNestedOneWithoutExpertProfileInput
         major?: TrainingMajorCreateNestedManyWithoutExpertProfileInput
         supervisedTheses?: ThesisProjectCreateNestedManyWithoutSupervisorInput
         coSupervisedTheses?: ThesisProjectCreateNestedManyWithoutCoSupervisorInput
@@ -536602,8 +537077,8 @@ export namespace Prisma {
         createdBy?: string | null
         lecturerId?: string | null
         name?: string | null
-        academicRank?: string | null
-        academicDegree?: string | null
+        academicDegreeTypeId?: string | null
+        academicRankTypeId?: string | null
         organization?: string | null
         position?: string | null
         specialization?: string | null
@@ -537705,35 +538180,6 @@ export namespace Prisma {
     export type ExpertProfileUpdateManyWithWhereWithoutSubjectClassInput = {
         where: ExpertProfileScalarWhereInput
         data: XOR<ExpertProfileUpdateManyMutationInput, ExpertProfileUncheckedUpdateManyWithoutSubjectClassInput>
-    };
-    export type ExpertProfileScalarWhereInput = {
-        AND?: ExpertProfileScalarWhereInput | ExpertProfileScalarWhereInput[]
-        OR?: ExpertProfileScalarWhereInput[]
-        NOT?: ExpertProfileScalarWhereInput | ExpertProfileScalarWhereInput[]
-        id?: StringFilter<"ExpertProfile"> | string
-        code?: StringNullableFilter<"ExpertProfile"> | string | null
-        active?: BoolFilter<"ExpertProfile"> | boolean
-        description?: StringNullableFilter<"ExpertProfile"> | string | null
-        deletedAt?: DateTimeNullableFilter<"ExpertProfile"> | Date | string | null
-        createdAt?: DateTimeFilter<"ExpertProfile"> | Date | string
-        updatedAt?: DateTimeFilter<"ExpertProfile"> | Date | string
-        createdBy?: UuidNullableFilter<"ExpertProfile"> | string | null
-        lecturerId?: StringNullableFilter<"ExpertProfile"> | string | null
-        name?: StringNullableFilter<"ExpertProfile"> | string | null
-        academicRank?: StringNullableFilter<"ExpertProfile"> | string | null
-        academicDegree?: StringNullableFilter<"ExpertProfile"> | string | null
-        organization?: StringNullableFilter<"ExpertProfile"> | string | null
-        position?: StringNullableFilter<"ExpertProfile"> | string | null
-        specialization?: StringNullableFilter<"ExpertProfile"> | string | null
-        workplace?: StringNullableFilter<"ExpertProfile"> | string | null
-        phone?: StringNullableFilter<"ExpertProfile"> | string | null
-        email?: StringNullableFilter<"ExpertProfile"> | string | null
-        bankAccountNumber?: StringNullableFilter<"ExpertProfile"> | string | null
-        bankName?: StringNullableFilter<"ExpertProfile"> | string | null
-        projectExpert?: BoolFilter<"ExpertProfile"> | boolean
-        thesisExpert?: BoolFilter<"ExpertProfile"> | boolean
-        eligiblePresident?: BoolFilter<"ExpertProfile"> | boolean
-        eligibleSecretary?: BoolFilter<"ExpertProfile"> | boolean
     };
     export type RoomUpsertWithWhereUniqueWithoutDefenseRoomsInput = {
         where: RoomWhereUniqueInput
@@ -546552,8 +546998,6 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         name?: string | null
-        academicRank?: string | null
-        academicDegree?: string | null
         organization?: string | null
         position?: string | null
         specialization?: string | null
@@ -546567,6 +547011,8 @@ export namespace Prisma {
         eligiblePresident?: boolean
         eligibleSecretary?: boolean
         lecturer?: LecturerCreateNestedOneWithoutExpertProfileInput
+        academicDegreeType?: DM_HocViCreateNestedOneWithoutExpertProfileInput
+        academicRankType?: DM_HocHamCreateNestedOneWithoutExpertProfileInput
         supervisedTheses?: ThesisProjectCreateNestedManyWithoutSupervisorInput
         coSupervisedTheses?: ThesisProjectCreateNestedManyWithoutCoSupervisorInput
         thirdSupervisedTheses?: ThesisProjectCreateNestedManyWithoutThirdSupervisorInput
@@ -546589,8 +547035,8 @@ export namespace Prisma {
         createdBy?: string | null
         lecturerId?: string | null
         name?: string | null
-        academicRank?: string | null
-        academicDegree?: string | null
+        academicDegreeTypeId?: string | null
+        academicRankTypeId?: string | null
         organization?: string | null
         position?: string | null
         specialization?: string | null
@@ -561559,8 +562005,6 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         name?: string | null
-        academicRank?: string | null
-        academicDegree?: string | null
         organization?: string | null
         position?: string | null
         specialization?: string | null
@@ -561573,6 +562017,8 @@ export namespace Prisma {
         thesisExpert?: boolean
         eligiblePresident?: boolean
         eligibleSecretary?: boolean
+        academicDegreeType?: DM_HocViCreateNestedOneWithoutExpertProfileInput
+        academicRankType?: DM_HocHamCreateNestedOneWithoutExpertProfileInput
         major?: TrainingMajorCreateNestedManyWithoutExpertProfileInput
         supervisedTheses?: ThesisProjectCreateNestedManyWithoutSupervisorInput
         coSupervisedTheses?: ThesisProjectCreateNestedManyWithoutCoSupervisorInput
@@ -561595,8 +562041,8 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         name?: string | null
-        academicRank?: string | null
-        academicDegree?: string | null
+        academicDegreeTypeId?: string | null
+        academicRankTypeId?: string | null
         organization?: string | null
         position?: string | null
         specialization?: string | null
@@ -565669,8 +566115,6 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         name?: string | null
-        academicRank?: string | null
-        academicDegree?: string | null
         organization?: string | null
         position?: string | null
         specialization?: string | null
@@ -565684,6 +566128,8 @@ export namespace Prisma {
         eligiblePresident?: boolean
         eligibleSecretary?: boolean
         lecturer?: LecturerCreateNestedOneWithoutExpertProfileInput
+        academicDegreeType?: DM_HocViCreateNestedOneWithoutExpertProfileInput
+        academicRankType?: DM_HocHamCreateNestedOneWithoutExpertProfileInput
         major?: TrainingMajorCreateNestedManyWithoutExpertProfileInput
         supervisedTheses?: ThesisProjectCreateNestedManyWithoutSupervisorInput
         coSupervisedTheses?: ThesisProjectCreateNestedManyWithoutCoSupervisorInput
@@ -565706,8 +566152,8 @@ export namespace Prisma {
         createdBy?: string | null
         lecturerId?: string | null
         name?: string | null
-        academicRank?: string | null
-        academicDegree?: string | null
+        academicDegreeTypeId?: string | null
+        academicRankTypeId?: string | null
         organization?: string | null
         position?: string | null
         specialization?: string | null
@@ -565913,8 +566359,6 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         name?: string | null
-        academicRank?: string | null
-        academicDegree?: string | null
         organization?: string | null
         position?: string | null
         specialization?: string | null
@@ -565928,6 +566372,8 @@ export namespace Prisma {
         eligiblePresident?: boolean
         eligibleSecretary?: boolean
         lecturer?: LecturerCreateNestedOneWithoutExpertProfileInput
+        academicDegreeType?: DM_HocViCreateNestedOneWithoutExpertProfileInput
+        academicRankType?: DM_HocHamCreateNestedOneWithoutExpertProfileInput
         major?: TrainingMajorCreateNestedManyWithoutExpertProfileInput
         coSupervisedTheses?: ThesisProjectCreateNestedManyWithoutCoSupervisorInput
         thirdSupervisedTheses?: ThesisProjectCreateNestedManyWithoutThirdSupervisorInput
@@ -565950,8 +566396,8 @@ export namespace Prisma {
         createdBy?: string | null
         lecturerId?: string | null
         name?: string | null
-        academicRank?: string | null
-        academicDegree?: string | null
+        academicDegreeTypeId?: string | null
+        academicRankTypeId?: string | null
         organization?: string | null
         position?: string | null
         specialization?: string | null
@@ -566023,8 +566469,6 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         name?: string | null
-        academicRank?: string | null
-        academicDegree?: string | null
         organization?: string | null
         position?: string | null
         specialization?: string | null
@@ -566038,6 +566482,8 @@ export namespace Prisma {
         eligiblePresident?: boolean
         eligibleSecretary?: boolean
         lecturer?: LecturerCreateNestedOneWithoutExpertProfileInput
+        academicDegreeType?: DM_HocViCreateNestedOneWithoutExpertProfileInput
+        academicRankType?: DM_HocHamCreateNestedOneWithoutExpertProfileInput
         major?: TrainingMajorCreateNestedManyWithoutExpertProfileInput
         supervisedTheses?: ThesisProjectCreateNestedManyWithoutSupervisorInput
         thirdSupervisedTheses?: ThesisProjectCreateNestedManyWithoutThirdSupervisorInput
@@ -566060,8 +566506,8 @@ export namespace Prisma {
         createdBy?: string | null
         lecturerId?: string | null
         name?: string | null
-        academicRank?: string | null
-        academicDegree?: string | null
+        academicDegreeTypeId?: string | null
+        academicRankTypeId?: string | null
         organization?: string | null
         position?: string | null
         specialization?: string | null
@@ -566644,8 +567090,6 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: NullableStringFieldUpdateOperationsInput | string | null
-        academicRank?: NullableStringFieldUpdateOperationsInput | string | null
-        academicDegree?: NullableStringFieldUpdateOperationsInput | string | null
         organization?: NullableStringFieldUpdateOperationsInput | string | null
         position?: NullableStringFieldUpdateOperationsInput | string | null
         specialization?: NullableStringFieldUpdateOperationsInput | string | null
@@ -566659,6 +567103,8 @@ export namespace Prisma {
         eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
         eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
         lecturer?: LecturerUpdateOneWithoutExpertProfileNestedInput
+        academicDegreeType?: DM_HocViUpdateOneWithoutExpertProfileNestedInput
+        academicRankType?: DM_HocHamUpdateOneWithoutExpertProfileNestedInput
         major?: TrainingMajorUpdateManyWithoutExpertProfileNestedInput
         supervisedTheses?: ThesisProjectUpdateManyWithoutSupervisorNestedInput
         coSupervisedTheses?: ThesisProjectUpdateManyWithoutCoSupervisorNestedInput
@@ -566681,8 +567127,8 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         name?: NullableStringFieldUpdateOperationsInput | string | null
-        academicRank?: NullableStringFieldUpdateOperationsInput | string | null
-        academicDegree?: NullableStringFieldUpdateOperationsInput | string | null
+        academicDegreeTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         organization?: NullableStringFieldUpdateOperationsInput | string | null
         position?: NullableStringFieldUpdateOperationsInput | string | null
         specialization?: NullableStringFieldUpdateOperationsInput | string | null
@@ -566903,8 +567349,6 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: NullableStringFieldUpdateOperationsInput | string | null
-        academicRank?: NullableStringFieldUpdateOperationsInput | string | null
-        academicDegree?: NullableStringFieldUpdateOperationsInput | string | null
         organization?: NullableStringFieldUpdateOperationsInput | string | null
         position?: NullableStringFieldUpdateOperationsInput | string | null
         specialization?: NullableStringFieldUpdateOperationsInput | string | null
@@ -566918,6 +567362,8 @@ export namespace Prisma {
         eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
         eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
         lecturer?: LecturerUpdateOneWithoutExpertProfileNestedInput
+        academicDegreeType?: DM_HocViUpdateOneWithoutExpertProfileNestedInput
+        academicRankType?: DM_HocHamUpdateOneWithoutExpertProfileNestedInput
         major?: TrainingMajorUpdateManyWithoutExpertProfileNestedInput
         coSupervisedTheses?: ThesisProjectUpdateManyWithoutCoSupervisorNestedInput
         thirdSupervisedTheses?: ThesisProjectUpdateManyWithoutThirdSupervisorNestedInput
@@ -566940,8 +567386,8 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         name?: NullableStringFieldUpdateOperationsInput | string | null
-        academicRank?: NullableStringFieldUpdateOperationsInput | string | null
-        academicDegree?: NullableStringFieldUpdateOperationsInput | string | null
+        academicDegreeTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         organization?: NullableStringFieldUpdateOperationsInput | string | null
         position?: NullableStringFieldUpdateOperationsInput | string | null
         specialization?: NullableStringFieldUpdateOperationsInput | string | null
@@ -567023,8 +567469,6 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: NullableStringFieldUpdateOperationsInput | string | null
-        academicRank?: NullableStringFieldUpdateOperationsInput | string | null
-        academicDegree?: NullableStringFieldUpdateOperationsInput | string | null
         organization?: NullableStringFieldUpdateOperationsInput | string | null
         position?: NullableStringFieldUpdateOperationsInput | string | null
         specialization?: NullableStringFieldUpdateOperationsInput | string | null
@@ -567038,6 +567482,8 @@ export namespace Prisma {
         eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
         eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
         lecturer?: LecturerUpdateOneWithoutExpertProfileNestedInput
+        academicDegreeType?: DM_HocViUpdateOneWithoutExpertProfileNestedInput
+        academicRankType?: DM_HocHamUpdateOneWithoutExpertProfileNestedInput
         major?: TrainingMajorUpdateManyWithoutExpertProfileNestedInput
         supervisedTheses?: ThesisProjectUpdateManyWithoutSupervisorNestedInput
         thirdSupervisedTheses?: ThesisProjectUpdateManyWithoutThirdSupervisorNestedInput
@@ -567060,8 +567506,8 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         name?: NullableStringFieldUpdateOperationsInput | string | null
-        academicRank?: NullableStringFieldUpdateOperationsInput | string | null
-        academicDegree?: NullableStringFieldUpdateOperationsInput | string | null
+        academicDegreeTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         organization?: NullableStringFieldUpdateOperationsInput | string | null
         position?: NullableStringFieldUpdateOperationsInput | string | null
         specialization?: NullableStringFieldUpdateOperationsInput | string | null
@@ -568632,6 +569078,90 @@ export namespace Prisma {
         where: LecturerWhereUniqueInput
         create: XOR<LecturerCreateWithoutExpertProfileInput, LecturerUncheckedCreateWithoutExpertProfileInput>
     };
+    export type DM_HocViCreateWithoutExpertProfileInput = {
+        Id?: string
+        sMa?: string | null
+        sTen?: string | null
+        sGhiChu?: string | null
+        iSTT?: number | null
+        bActive?: boolean | null
+        bDeleted?: boolean | null
+        bSystem?: boolean | null
+        iDictionaryKey?: number | null
+        dNgayTao?: Date | string | null
+        dNgaySua?: Date | string | null
+        sNguoiTao?: string | null
+        sNguoiSua?: string | null
+        sThietBiTao?: string | null
+        sThietBiSua?: string | null
+        profiles?: UserProfileCreateNestedManyWithoutAcademicDegreeTypeInput
+        hocVi?: HocViCreateNestedManyWithoutAcademicDegreeTypeInput
+    };
+    export type DM_HocViUncheckedCreateWithoutExpertProfileInput = {
+        Id?: string
+        sMa?: string | null
+        sTen?: string | null
+        sGhiChu?: string | null
+        iSTT?: number | null
+        bActive?: boolean | null
+        bDeleted?: boolean | null
+        bSystem?: boolean | null
+        iDictionaryKey?: number | null
+        dNgayTao?: Date | string | null
+        dNgaySua?: Date | string | null
+        sNguoiTao?: string | null
+        sNguoiSua?: string | null
+        sThietBiTao?: string | null
+        sThietBiSua?: string | null
+        profiles?: UserProfileUncheckedCreateNestedManyWithoutAcademicDegreeTypeInput
+        hocVi?: HocViUncheckedCreateNestedManyWithoutAcademicDegreeTypeInput
+    };
+    export type DM_HocViCreateOrConnectWithoutExpertProfileInput = {
+        where: DM_HocViWhereUniqueInput
+        create: XOR<DM_HocViCreateWithoutExpertProfileInput, DM_HocViUncheckedCreateWithoutExpertProfileInput>
+    };
+    export type DM_HocHamCreateWithoutExpertProfileInput = {
+        Id?: string
+        sMa?: string | null
+        sTen?: string | null
+        sGhiChu?: string | null
+        iSTT?: number | null
+        bActive?: boolean | null
+        bDeleted?: boolean | null
+        bSystem?: boolean | null
+        iDictionaryKey?: number | null
+        dNgayTao?: Date | string | null
+        dNgaySua?: Date | string | null
+        sNguoiTao?: string | null
+        sNguoiSua?: string | null
+        sThietBiTao?: string | null
+        sThietBiSua?: string | null
+        profiles?: UserProfileCreateNestedManyWithoutAcademicRankTypeInput
+        hocHam?: HocHamCreateNestedManyWithoutAcademicRankTypeInput
+    };
+    export type DM_HocHamUncheckedCreateWithoutExpertProfileInput = {
+        Id?: string
+        sMa?: string | null
+        sTen?: string | null
+        sGhiChu?: string | null
+        iSTT?: number | null
+        bActive?: boolean | null
+        bDeleted?: boolean | null
+        bSystem?: boolean | null
+        iDictionaryKey?: number | null
+        dNgayTao?: Date | string | null
+        dNgaySua?: Date | string | null
+        sNguoiTao?: string | null
+        sNguoiSua?: string | null
+        sThietBiTao?: string | null
+        sThietBiSua?: string | null
+        profiles?: UserProfileUncheckedCreateNestedManyWithoutAcademicRankTypeInput
+        hocHam?: HocHamUncheckedCreateNestedManyWithoutAcademicRankTypeInput
+    };
+    export type DM_HocHamCreateOrConnectWithoutExpertProfileInput = {
+        where: DM_HocHamWhereUniqueInput
+        create: XOR<DM_HocHamCreateWithoutExpertProfileInput, DM_HocHamUncheckedCreateWithoutExpertProfileInput>
+    };
     export type TrainingMajorCreateWithoutExpertProfileInput = {
         id?: string
         code?: string | null
@@ -569534,6 +570064,100 @@ export namespace Prisma {
         evaluationCriterionReviews?: EvaluationCriterionUncheckedUpdateManyWithoutLecturerReviewNestedInput
         primarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutPrimarySupervisorNestedInput
         secondarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutSecondarySupervisorNestedInput
+    };
+    export type DM_HocViUpsertWithoutExpertProfileInput = {
+        update: XOR<DM_HocViUpdateWithoutExpertProfileInput, DM_HocViUncheckedUpdateWithoutExpertProfileInput>
+        create: XOR<DM_HocViCreateWithoutExpertProfileInput, DM_HocViUncheckedCreateWithoutExpertProfileInput>
+        where?: DM_HocViWhereInput
+    };
+    export type DM_HocViUpdateToOneWithWhereWithoutExpertProfileInput = {
+        where?: DM_HocViWhereInput
+        data: XOR<DM_HocViUpdateWithoutExpertProfileInput, DM_HocViUncheckedUpdateWithoutExpertProfileInput>
+    };
+    export type DM_HocViUpdateWithoutExpertProfileInput = {
+        Id?: StringFieldUpdateOperationsInput | string
+        sMa?: NullableStringFieldUpdateOperationsInput | string | null
+        sTen?: NullableStringFieldUpdateOperationsInput | string | null
+        sGhiChu?: NullableStringFieldUpdateOperationsInput | string | null
+        iSTT?: NullableIntFieldUpdateOperationsInput | number | null
+        bActive?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bDeleted?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
+        dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        profiles?: UserProfileUpdateManyWithoutAcademicDegreeTypeNestedInput
+        hocVi?: HocViUpdateManyWithoutAcademicDegreeTypeNestedInput
+    };
+    export type DM_HocViUncheckedUpdateWithoutExpertProfileInput = {
+        Id?: StringFieldUpdateOperationsInput | string
+        sMa?: NullableStringFieldUpdateOperationsInput | string | null
+        sTen?: NullableStringFieldUpdateOperationsInput | string | null
+        sGhiChu?: NullableStringFieldUpdateOperationsInput | string | null
+        iSTT?: NullableIntFieldUpdateOperationsInput | number | null
+        bActive?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bDeleted?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
+        dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        profiles?: UserProfileUncheckedUpdateManyWithoutAcademicDegreeTypeNestedInput
+        hocVi?: HocViUncheckedUpdateManyWithoutAcademicDegreeTypeNestedInput
+    };
+    export type DM_HocHamUpsertWithoutExpertProfileInput = {
+        update: XOR<DM_HocHamUpdateWithoutExpertProfileInput, DM_HocHamUncheckedUpdateWithoutExpertProfileInput>
+        create: XOR<DM_HocHamCreateWithoutExpertProfileInput, DM_HocHamUncheckedCreateWithoutExpertProfileInput>
+        where?: DM_HocHamWhereInput
+    };
+    export type DM_HocHamUpdateToOneWithWhereWithoutExpertProfileInput = {
+        where?: DM_HocHamWhereInput
+        data: XOR<DM_HocHamUpdateWithoutExpertProfileInput, DM_HocHamUncheckedUpdateWithoutExpertProfileInput>
+    };
+    export type DM_HocHamUpdateWithoutExpertProfileInput = {
+        Id?: StringFieldUpdateOperationsInput | string
+        sMa?: NullableStringFieldUpdateOperationsInput | string | null
+        sTen?: NullableStringFieldUpdateOperationsInput | string | null
+        sGhiChu?: NullableStringFieldUpdateOperationsInput | string | null
+        iSTT?: NullableIntFieldUpdateOperationsInput | number | null
+        bActive?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bDeleted?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
+        dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        profiles?: UserProfileUpdateManyWithoutAcademicRankTypeNestedInput
+        hocHam?: HocHamUpdateManyWithoutAcademicRankTypeNestedInput
+    };
+    export type DM_HocHamUncheckedUpdateWithoutExpertProfileInput = {
+        Id?: StringFieldUpdateOperationsInput | string
+        sMa?: NullableStringFieldUpdateOperationsInput | string | null
+        sTen?: NullableStringFieldUpdateOperationsInput | string | null
+        sGhiChu?: NullableStringFieldUpdateOperationsInput | string | null
+        iSTT?: NullableIntFieldUpdateOperationsInput | number | null
+        bActive?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bDeleted?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
+        dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        profiles?: UserProfileUncheckedUpdateManyWithoutAcademicRankTypeNestedInput
+        hocHam?: HocHamUncheckedUpdateManyWithoutAcademicRankTypeNestedInput
     };
     export type TrainingMajorUpsertWithWhereUniqueWithoutExpertProfileInput = {
         where: TrainingMajorWhereUniqueInput
@@ -570495,8 +571119,6 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         name?: string | null
-        academicRank?: string | null
-        academicDegree?: string | null
         organization?: string | null
         position?: string | null
         specialization?: string | null
@@ -570510,6 +571132,8 @@ export namespace Prisma {
         eligiblePresident?: boolean
         eligibleSecretary?: boolean
         lecturer?: LecturerCreateNestedOneWithoutExpertProfileInput
+        academicDegreeType?: DM_HocViCreateNestedOneWithoutExpertProfileInput
+        academicRankType?: DM_HocHamCreateNestedOneWithoutExpertProfileInput
         major?: TrainingMajorCreateNestedManyWithoutExpertProfileInput
         supervisedTheses?: ThesisProjectCreateNestedManyWithoutSupervisorInput
         coSupervisedTheses?: ThesisProjectCreateNestedManyWithoutCoSupervisorInput
@@ -570532,8 +571156,8 @@ export namespace Prisma {
         createdBy?: string | null
         lecturerId?: string | null
         name?: string | null
-        academicRank?: string | null
-        academicDegree?: string | null
+        academicDegreeTypeId?: string | null
+        academicRankTypeId?: string | null
         organization?: string | null
         position?: string | null
         specialization?: string | null
@@ -570677,8 +571301,6 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: NullableStringFieldUpdateOperationsInput | string | null
-        academicRank?: NullableStringFieldUpdateOperationsInput | string | null
-        academicDegree?: NullableStringFieldUpdateOperationsInput | string | null
         organization?: NullableStringFieldUpdateOperationsInput | string | null
         position?: NullableStringFieldUpdateOperationsInput | string | null
         specialization?: NullableStringFieldUpdateOperationsInput | string | null
@@ -570692,6 +571314,8 @@ export namespace Prisma {
         eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
         eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
         lecturer?: LecturerUpdateOneWithoutExpertProfileNestedInput
+        academicDegreeType?: DM_HocViUpdateOneWithoutExpertProfileNestedInput
+        academicRankType?: DM_HocHamUpdateOneWithoutExpertProfileNestedInput
         major?: TrainingMajorUpdateManyWithoutExpertProfileNestedInput
         supervisedTheses?: ThesisProjectUpdateManyWithoutSupervisorNestedInput
         coSupervisedTheses?: ThesisProjectUpdateManyWithoutCoSupervisorNestedInput
@@ -570714,8 +571338,8 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         name?: NullableStringFieldUpdateOperationsInput | string | null
-        academicRank?: NullableStringFieldUpdateOperationsInput | string | null
-        academicDegree?: NullableStringFieldUpdateOperationsInput | string | null
+        academicDegreeTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         organization?: NullableStringFieldUpdateOperationsInput | string | null
         position?: NullableStringFieldUpdateOperationsInput | string | null
         specialization?: NullableStringFieldUpdateOperationsInput | string | null
@@ -611009,6 +611633,31 @@ export namespace Prisma {
         to?: Date | string | null
         userProfileId: string
     };
+    export type ExpertProfileCreateManyAcademicRankTypeInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        lecturerId?: string | null
+        name?: string | null
+        academicDegreeTypeId?: string | null
+        organization?: string | null
+        position?: string | null
+        specialization?: string | null
+        workplace?: string | null
+        phone?: string | null
+        email?: string | null
+        bankAccountNumber?: string | null
+        bankName?: string | null
+        projectExpert?: boolean
+        thesisExpert?: boolean
+        eligiblePresident?: boolean
+        eligibleSecretary?: boolean
+    };
     export type UserProfileUpdateWithoutAcademicRankTypeInput = {
         id?: StringFieldUpdateOperationsInput | string
         code?: NullableStringFieldUpdateOperationsInput | string | null
@@ -611528,6 +612177,103 @@ export namespace Prisma {
         to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         userProfileId?: StringFieldUpdateOperationsInput | string
     };
+    export type ExpertProfileUpdateWithoutAcademicRankTypeInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: NullableStringFieldUpdateOperationsInput | string | null
+        organization?: NullableStringFieldUpdateOperationsInput | string | null
+        position?: NullableStringFieldUpdateOperationsInput | string | null
+        specialization?: NullableStringFieldUpdateOperationsInput | string | null
+        workplace?: NullableStringFieldUpdateOperationsInput | string | null
+        phone?: NullableStringFieldUpdateOperationsInput | string | null
+        email?: NullableStringFieldUpdateOperationsInput | string | null
+        bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        bankName?: NullableStringFieldUpdateOperationsInput | string | null
+        projectExpert?: BoolFieldUpdateOperationsInput | boolean
+        thesisExpert?: BoolFieldUpdateOperationsInput | boolean
+        eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
+        eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
+        lecturer?: LecturerUpdateOneWithoutExpertProfileNestedInput
+        academicDegreeType?: DM_HocViUpdateOneWithoutExpertProfileNestedInput
+        major?: TrainingMajorUpdateManyWithoutExpertProfileNestedInput
+        supervisedTheses?: ThesisProjectUpdateManyWithoutSupervisorNestedInput
+        coSupervisedTheses?: ThesisProjectUpdateManyWithoutCoSupervisorNestedInput
+        thirdSupervisedTheses?: ThesisProjectUpdateManyWithoutThirdSupervisorNestedInput
+        supervisorResearchTopic?: StudentResearchTopicUpdateManyWithoutSupervisorNestedInput
+        coSupervisorResearchTopic?: StudentResearchTopicUpdateManyWithoutCoSupervisorNestedInput
+        thirdSupervisorResearchTopic?: StudentResearchTopicUpdateManyWithoutThirdSupervisorNestedInput
+        supervisorInternship?: StudentInternshipUpdateManyWithoutSupervisorNestedInput
+        coSupervisorInternship?: StudentInternshipUpdateManyWithoutCoSupervisorNestedInput
+        subjectClass?: SubjectClassUpdateManyWithoutExpertProfileNestedInput
+        councilMemberships?: CouncilMemberUpdateManyWithoutExpertNestedInput
+    };
+    export type ExpertProfileUncheckedUpdateWithoutAcademicRankTypeInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: NullableStringFieldUpdateOperationsInput | string | null
+        academicDegreeTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        organization?: NullableStringFieldUpdateOperationsInput | string | null
+        position?: NullableStringFieldUpdateOperationsInput | string | null
+        specialization?: NullableStringFieldUpdateOperationsInput | string | null
+        workplace?: NullableStringFieldUpdateOperationsInput | string | null
+        phone?: NullableStringFieldUpdateOperationsInput | string | null
+        email?: NullableStringFieldUpdateOperationsInput | string | null
+        bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        bankName?: NullableStringFieldUpdateOperationsInput | string | null
+        projectExpert?: BoolFieldUpdateOperationsInput | boolean
+        thesisExpert?: BoolFieldUpdateOperationsInput | boolean
+        eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
+        eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
+        major?: TrainingMajorUncheckedUpdateManyWithoutExpertProfileNestedInput
+        supervisedTheses?: ThesisProjectUncheckedUpdateManyWithoutSupervisorNestedInput
+        coSupervisedTheses?: ThesisProjectUncheckedUpdateManyWithoutCoSupervisorNestedInput
+        thirdSupervisedTheses?: ThesisProjectUncheckedUpdateManyWithoutThirdSupervisorNestedInput
+        supervisorResearchTopic?: StudentResearchTopicUncheckedUpdateManyWithoutSupervisorNestedInput
+        coSupervisorResearchTopic?: StudentResearchTopicUncheckedUpdateManyWithoutCoSupervisorNestedInput
+        thirdSupervisorResearchTopic?: StudentResearchTopicUncheckedUpdateManyWithoutThirdSupervisorNestedInput
+        supervisorInternship?: StudentInternshipUncheckedUpdateManyWithoutSupervisorNestedInput
+        coSupervisorInternship?: StudentInternshipUncheckedUpdateManyWithoutCoSupervisorNestedInput
+        subjectClass?: SubjectClassUncheckedUpdateManyWithoutExpertProfileNestedInput
+        councilMemberships?: CouncilMemberUncheckedUpdateManyWithoutExpertNestedInput
+    };
+    export type ExpertProfileUncheckedUpdateManyWithoutAcademicRankTypeInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: NullableStringFieldUpdateOperationsInput | string | null
+        academicDegreeTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        organization?: NullableStringFieldUpdateOperationsInput | string | null
+        position?: NullableStringFieldUpdateOperationsInput | string | null
+        specialization?: NullableStringFieldUpdateOperationsInput | string | null
+        workplace?: NullableStringFieldUpdateOperationsInput | string | null
+        phone?: NullableStringFieldUpdateOperationsInput | string | null
+        email?: NullableStringFieldUpdateOperationsInput | string | null
+        bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        bankName?: NullableStringFieldUpdateOperationsInput | string | null
+        projectExpert?: BoolFieldUpdateOperationsInput | boolean
+        thesisExpert?: BoolFieldUpdateOperationsInput | boolean
+        eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
+        eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
+    };
     export type UserProfileCreateManyAcademicDegreeTypeInput = {
         id?: string
         code?: string | null
@@ -611670,6 +612416,31 @@ export namespace Prisma {
         truongId?: string | null
         year?: number | null
         userProfileId: string
+    };
+    export type ExpertProfileCreateManyAcademicDegreeTypeInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        lecturerId?: string | null
+        name?: string | null
+        academicRankTypeId?: string | null
+        organization?: string | null
+        position?: string | null
+        specialization?: string | null
+        workplace?: string | null
+        phone?: string | null
+        email?: string | null
+        bankAccountNumber?: string | null
+        bankName?: string | null
+        projectExpert?: boolean
+        thesisExpert?: boolean
+        eligiblePresident?: boolean
+        eligibleSecretary?: boolean
     };
     export type UserProfileUpdateWithoutAcademicDegreeTypeInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -612189,6 +612960,103 @@ export namespace Prisma {
         truongId?: NullableStringFieldUpdateOperationsInput | string | null
         year?: NullableIntFieldUpdateOperationsInput | number | null
         userProfileId?: StringFieldUpdateOperationsInput | string
+    };
+    export type ExpertProfileUpdateWithoutAcademicDegreeTypeInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: NullableStringFieldUpdateOperationsInput | string | null
+        organization?: NullableStringFieldUpdateOperationsInput | string | null
+        position?: NullableStringFieldUpdateOperationsInput | string | null
+        specialization?: NullableStringFieldUpdateOperationsInput | string | null
+        workplace?: NullableStringFieldUpdateOperationsInput | string | null
+        phone?: NullableStringFieldUpdateOperationsInput | string | null
+        email?: NullableStringFieldUpdateOperationsInput | string | null
+        bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        bankName?: NullableStringFieldUpdateOperationsInput | string | null
+        projectExpert?: BoolFieldUpdateOperationsInput | boolean
+        thesisExpert?: BoolFieldUpdateOperationsInput | boolean
+        eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
+        eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
+        lecturer?: LecturerUpdateOneWithoutExpertProfileNestedInput
+        academicRankType?: DM_HocHamUpdateOneWithoutExpertProfileNestedInput
+        major?: TrainingMajorUpdateManyWithoutExpertProfileNestedInput
+        supervisedTheses?: ThesisProjectUpdateManyWithoutSupervisorNestedInput
+        coSupervisedTheses?: ThesisProjectUpdateManyWithoutCoSupervisorNestedInput
+        thirdSupervisedTheses?: ThesisProjectUpdateManyWithoutThirdSupervisorNestedInput
+        supervisorResearchTopic?: StudentResearchTopicUpdateManyWithoutSupervisorNestedInput
+        coSupervisorResearchTopic?: StudentResearchTopicUpdateManyWithoutCoSupervisorNestedInput
+        thirdSupervisorResearchTopic?: StudentResearchTopicUpdateManyWithoutThirdSupervisorNestedInput
+        supervisorInternship?: StudentInternshipUpdateManyWithoutSupervisorNestedInput
+        coSupervisorInternship?: StudentInternshipUpdateManyWithoutCoSupervisorNestedInput
+        subjectClass?: SubjectClassUpdateManyWithoutExpertProfileNestedInput
+        councilMemberships?: CouncilMemberUpdateManyWithoutExpertNestedInput
+    };
+    export type ExpertProfileUncheckedUpdateWithoutAcademicDegreeTypeInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: NullableStringFieldUpdateOperationsInput | string | null
+        academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        organization?: NullableStringFieldUpdateOperationsInput | string | null
+        position?: NullableStringFieldUpdateOperationsInput | string | null
+        specialization?: NullableStringFieldUpdateOperationsInput | string | null
+        workplace?: NullableStringFieldUpdateOperationsInput | string | null
+        phone?: NullableStringFieldUpdateOperationsInput | string | null
+        email?: NullableStringFieldUpdateOperationsInput | string | null
+        bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        bankName?: NullableStringFieldUpdateOperationsInput | string | null
+        projectExpert?: BoolFieldUpdateOperationsInput | boolean
+        thesisExpert?: BoolFieldUpdateOperationsInput | boolean
+        eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
+        eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
+        major?: TrainingMajorUncheckedUpdateManyWithoutExpertProfileNestedInput
+        supervisedTheses?: ThesisProjectUncheckedUpdateManyWithoutSupervisorNestedInput
+        coSupervisedTheses?: ThesisProjectUncheckedUpdateManyWithoutCoSupervisorNestedInput
+        thirdSupervisedTheses?: ThesisProjectUncheckedUpdateManyWithoutThirdSupervisorNestedInput
+        supervisorResearchTopic?: StudentResearchTopicUncheckedUpdateManyWithoutSupervisorNestedInput
+        coSupervisorResearchTopic?: StudentResearchTopicUncheckedUpdateManyWithoutCoSupervisorNestedInput
+        thirdSupervisorResearchTopic?: StudentResearchTopicUncheckedUpdateManyWithoutThirdSupervisorNestedInput
+        supervisorInternship?: StudentInternshipUncheckedUpdateManyWithoutSupervisorNestedInput
+        coSupervisorInternship?: StudentInternshipUncheckedUpdateManyWithoutCoSupervisorNestedInput
+        subjectClass?: SubjectClassUncheckedUpdateManyWithoutExpertProfileNestedInput
+        councilMemberships?: CouncilMemberUncheckedUpdateManyWithoutExpertNestedInput
+    };
+    export type ExpertProfileUncheckedUpdateManyWithoutAcademicDegreeTypeInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: NullableStringFieldUpdateOperationsInput | string | null
+        academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        organization?: NullableStringFieldUpdateOperationsInput | string | null
+        position?: NullableStringFieldUpdateOperationsInput | string | null
+        specialization?: NullableStringFieldUpdateOperationsInput | string | null
+        workplace?: NullableStringFieldUpdateOperationsInput | string | null
+        phone?: NullableStringFieldUpdateOperationsInput | string | null
+        email?: NullableStringFieldUpdateOperationsInput | string | null
+        bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        bankName?: NullableStringFieldUpdateOperationsInput | string | null
+        projectExpert?: BoolFieldUpdateOperationsInput | boolean
+        thesisExpert?: BoolFieldUpdateOperationsInput | boolean
+        eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
+        eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
     };
     export type UserProfileCreateManyEthnicityInput = {
         id?: string
@@ -638255,8 +639123,6 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: NullableStringFieldUpdateOperationsInput | string | null
-        academicRank?: NullableStringFieldUpdateOperationsInput | string | null
-        academicDegree?: NullableStringFieldUpdateOperationsInput | string | null
         organization?: NullableStringFieldUpdateOperationsInput | string | null
         position?: NullableStringFieldUpdateOperationsInput | string | null
         specialization?: NullableStringFieldUpdateOperationsInput | string | null
@@ -638270,6 +639136,8 @@ export namespace Prisma {
         eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
         eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
         lecturer?: LecturerUpdateOneWithoutExpertProfileNestedInput
+        academicDegreeType?: DM_HocViUpdateOneWithoutExpertProfileNestedInput
+        academicRankType?: DM_HocHamUpdateOneWithoutExpertProfileNestedInput
         major?: TrainingMajorUpdateManyWithoutExpertProfileNestedInput
         supervisedTheses?: ThesisProjectUpdateManyWithoutSupervisorNestedInput
         coSupervisedTheses?: ThesisProjectUpdateManyWithoutCoSupervisorNestedInput
@@ -638292,8 +639160,8 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         name?: NullableStringFieldUpdateOperationsInput | string | null
-        academicRank?: NullableStringFieldUpdateOperationsInput | string | null
-        academicDegree?: NullableStringFieldUpdateOperationsInput | string | null
+        academicDegreeTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         organization?: NullableStringFieldUpdateOperationsInput | string | null
         position?: NullableStringFieldUpdateOperationsInput | string | null
         specialization?: NullableStringFieldUpdateOperationsInput | string | null
@@ -638328,8 +639196,8 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         name?: NullableStringFieldUpdateOperationsInput | string | null
-        academicRank?: NullableStringFieldUpdateOperationsInput | string | null
-        academicDegree?: NullableStringFieldUpdateOperationsInput | string | null
+        academicDegreeTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         organization?: NullableStringFieldUpdateOperationsInput | string | null
         position?: NullableStringFieldUpdateOperationsInput | string | null
         specialization?: NullableStringFieldUpdateOperationsInput | string | null
@@ -643550,8 +644418,6 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: NullableStringFieldUpdateOperationsInput | string | null
-        academicRank?: NullableStringFieldUpdateOperationsInput | string | null
-        academicDegree?: NullableStringFieldUpdateOperationsInput | string | null
         organization?: NullableStringFieldUpdateOperationsInput | string | null
         position?: NullableStringFieldUpdateOperationsInput | string | null
         specialization?: NullableStringFieldUpdateOperationsInput | string | null
@@ -643565,6 +644431,8 @@ export namespace Prisma {
         eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
         eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
         lecturer?: LecturerUpdateOneWithoutExpertProfileNestedInput
+        academicDegreeType?: DM_HocViUpdateOneWithoutExpertProfileNestedInput
+        academicRankType?: DM_HocHamUpdateOneWithoutExpertProfileNestedInput
         supervisedTheses?: ThesisProjectUpdateManyWithoutSupervisorNestedInput
         coSupervisedTheses?: ThesisProjectUpdateManyWithoutCoSupervisorNestedInput
         thirdSupervisedTheses?: ThesisProjectUpdateManyWithoutThirdSupervisorNestedInput
@@ -643587,8 +644455,8 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         name?: NullableStringFieldUpdateOperationsInput | string | null
-        academicRank?: NullableStringFieldUpdateOperationsInput | string | null
-        academicDegree?: NullableStringFieldUpdateOperationsInput | string | null
+        academicDegreeTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         organization?: NullableStringFieldUpdateOperationsInput | string | null
         position?: NullableStringFieldUpdateOperationsInput | string | null
         specialization?: NullableStringFieldUpdateOperationsInput | string | null
@@ -643623,8 +644491,8 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         name?: NullableStringFieldUpdateOperationsInput | string | null
-        academicRank?: NullableStringFieldUpdateOperationsInput | string | null
-        academicDegree?: NullableStringFieldUpdateOperationsInput | string | null
+        academicDegreeTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         organization?: NullableStringFieldUpdateOperationsInput | string | null
         position?: NullableStringFieldUpdateOperationsInput | string | null
         specialization?: NullableStringFieldUpdateOperationsInput | string | null
@@ -648556,8 +649424,8 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         name?: string | null
-        academicRank?: string | null
-        academicDegree?: string | null
+        academicDegreeTypeId?: string | null
+        academicRankTypeId?: string | null
         organization?: string | null
         position?: string | null
         specialization?: string | null
@@ -649678,8 +650546,6 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: NullableStringFieldUpdateOperationsInput | string | null
-        academicRank?: NullableStringFieldUpdateOperationsInput | string | null
-        academicDegree?: NullableStringFieldUpdateOperationsInput | string | null
         organization?: NullableStringFieldUpdateOperationsInput | string | null
         position?: NullableStringFieldUpdateOperationsInput | string | null
         specialization?: NullableStringFieldUpdateOperationsInput | string | null
@@ -649692,6 +650558,8 @@ export namespace Prisma {
         thesisExpert?: BoolFieldUpdateOperationsInput | boolean
         eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
         eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
+        academicDegreeType?: DM_HocViUpdateOneWithoutExpertProfileNestedInput
+        academicRankType?: DM_HocHamUpdateOneWithoutExpertProfileNestedInput
         major?: TrainingMajorUpdateManyWithoutExpertProfileNestedInput
         supervisedTheses?: ThesisProjectUpdateManyWithoutSupervisorNestedInput
         coSupervisedTheses?: ThesisProjectUpdateManyWithoutCoSupervisorNestedInput
@@ -649714,8 +650582,8 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: NullableStringFieldUpdateOperationsInput | string | null
-        academicRank?: NullableStringFieldUpdateOperationsInput | string | null
-        academicDegree?: NullableStringFieldUpdateOperationsInput | string | null
+        academicDegreeTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         organization?: NullableStringFieldUpdateOperationsInput | string | null
         position?: NullableStringFieldUpdateOperationsInput | string | null
         specialization?: NullableStringFieldUpdateOperationsInput | string | null
@@ -649750,8 +650618,8 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: NullableStringFieldUpdateOperationsInput | string | null
-        academicRank?: NullableStringFieldUpdateOperationsInput | string | null
-        academicDegree?: NullableStringFieldUpdateOperationsInput | string | null
+        academicDegreeTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         organization?: NullableStringFieldUpdateOperationsInput | string | null
         position?: NullableStringFieldUpdateOperationsInput | string | null
         specialization?: NullableStringFieldUpdateOperationsInput | string | null

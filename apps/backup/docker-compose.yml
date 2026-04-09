@@ -3,6 +3,7 @@ services:
         command: ./dist/app
         image: mta-backup:main
         container_name: mta-backup
+        restart: unless-stopped
         ports:
             - "8085:8085"
         env_file:

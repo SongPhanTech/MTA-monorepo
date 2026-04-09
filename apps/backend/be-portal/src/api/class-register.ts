@@ -2,6 +2,7 @@ import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
 import { models } from "@workspace/db/zod"
 import { prisma } from ".."
 import { findClassRegisterSession } from "../services/register"
+import { $Enums, AcademicRankingBaseType } from "@workspace/db"
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -251,8 +252,9 @@ app.openapi(getClassesInfo, async (c) => {
 
   const curriculumSubjects = curriculumVersion.trainingBlocks.flatMap((block) => block.subjects)
 
-  const studentTrainingObjectTypeId = registerSession.trainingCourses
-    .find((tc) => tc.trainingObjectTypeId)?.trainingObjectTypeId ?? undefined
+  const studentTrainingObjectTypeId =
+    registerSession.trainingCourses.find((tc) => tc.trainingObjectTypeId)?.trainingObjectTypeId ??
+    undefined
 
   const subjectVersions = await prisma.subjectVersion.findMany({
     where: {
@@ -269,7 +271,8 @@ app.openapi(getClassesInfo, async (c) => {
             : {}),
           ...(isRegisteredBool
             ? {
-                classRegisterLogs: {
+                // classRegisterLogs: {
+                subjectClassStudent: {
                   some: {
                     student: {
                       userProfileId: session.id,
@@ -299,7 +302,8 @@ app.openapi(getClassesInfo, async (c) => {
             : {}),
           ...(isRegisteredBool
             ? {
-                classRegisterLogs: {
+                // classRegisterLogs: {
+                subjectClassStudent: {
                   some: {
                     student: {
                       userProfileId: session.id,
@@ -483,76 +487,107 @@ app.openapi(classRegister, async (c) => {
     profile.educationAndTraining.find(
       (item) => curriculumVersionId && item.curriculumVersionId === curriculumVersionId
     )?.id ?? (profile.educationAndTraining[0]?.id as string)
+
+  const semester = await prisma.semester.findUniqueOrThrow({
+    where: { id: registerSession.semesterId },
+    select: { startDate: true },
+  })
+
+  const nearestSemesterResult = await prisma.studentSemesterResult.findFirst({
+    select: {
+      gpaBase10: true,
+      gpaBase4: true,
+    },
+    where: {
+      studentId,
+      semesterId: registerSession.semesterId,
+      semester: { startDate: { lt: semester.startDate } },
+    },
+    orderBy: { semester: { startDate: "desc" } },
+  })
   // TODO: check session => student trainingCourse
 
   // TODO: check subjectVersionIds, prerequisiteSubjectIds, coRequisiteSubjectIds
 
-  await prisma.$transaction(async (tx) => {
-    const creditLimits = await tx.classRegisterSessionCredit.findMany({
+  if (nearestSemesterResult) {
+    const creditLimits = await prisma.classRegisterSessionCredit.findMany({
       where: { classRegisterSessionId: sessionId },
     })
 
     if (creditLimits.length > 0) {
-      const currentScores = await tx.studentSubjectScore.findMany({
-        where: {
-          studentId,
-          subjectClass: { semesterId: registerSession.semesterId },
-        },
-        include: { subjectVersion: { select: { credit: true } } },
+      const creditLimit = creditLimits.find((item) => {
+        const gpa = (
+          item.baseScore === AcademicRankingBaseType.Base10
+            ? nearestSemesterResult.gpaBase10
+            : nearestSemesterResult.gpaBase4
+        ).toNumber()
+        const minGpa =
+          (item.baseScore === AcademicRankingBaseType.Base10 ? item.base10Min : item.base4Min) || 0
+        const maxGpa =
+          (item.baseScore === AcademicRankingBaseType.Base10 ? item.base10Max : item.base4Max) || 10
+        return gpa >= minGpa && gpa <= maxGpa
       })
 
-      const currentTotalCredit = currentScores.reduce(
-        (acc, curr) => acc + (curr.subjectVersion?.credit ?? 0),
-        0
-      )
+      if (creditLimit) {
+        const registeredScores = await prisma.studentSubjectScore.findMany({
+          where: {
+            studentId,
+            subjectClass: { semesterId: registerSession.semesterId },
+          },
+          select: { subjectVersion: { select: { credit: true } } },
+        })
 
-      const newClasses = await tx.subjectClass.findMany({
-        where: { id: { in: subjectClassIds } },
-        include: { subject: { select: { credit: true } } },
-      })
+        const registeredCredit = registeredScores.reduce(
+          (acc, curr) => acc + (curr.subjectVersion?.credit ?? 0),
+          0
+        )
 
-      const newTotalCredit =
-        currentTotalCredit + newClasses.reduce((acc, curr) => acc + (curr.subject?.credit ?? 0), 0)
+        const newClasses = await prisma.subjectClass.findMany({
+          where: { id: { in: subjectClassIds } },
+          select: { subject: { select: { credit: true } } },
+        })
 
-      for (const limit of creditLimits) {
-        if (limit.minCredit && newTotalCredit < limit.minCredit) {
-          throw new Error(`Số tín chỉ tối thiểu là ${limit.minCredit}`)
-        }
-        if (limit.maxCredit && newTotalCredit > limit.maxCredit) {
-          throw new Error(`Số tín chỉ tối đa là ${limit.maxCredit}`)
+        const newTotalCredit =
+          registeredCredit + newClasses.reduce((acc, curr) => acc + (curr.subject?.credit ?? 0), 0)
+
+        if (creditLimit.maxCredit && newTotalCredit > creditLimit.maxCredit) {
+          throw new Error(`Số tín chỉ tối đa là ${creditLimit.maxCredit}`)
         }
       }
     }
-    await tx.classRegisterLogs.createMany({
-      data: subjectClassIds.map((subjectClassId) => ({
-        classRegisterSessionId: sessionId,
-        studentId,
-        subjectClassId,
-      })),
+
+    await prisma.$transaction(async (tx) => {
+      await tx.classRegisterLogs.createMany({
+        data: subjectClassIds.map((subjectClassId) => ({
+          classRegisterSessionId: sessionId,
+          studentId,
+          subjectClassId,
+        })),
+      })
+
+      for (const subjectClassId of subjectClassIds) {
+        const isExist = await tx.studentSubjectScore.findFirst({
+          where: { studentId, subjectClassId },
+        })
+        if (isExist) throw new Error("Bạn đã đăng ký học phần này")
+
+        const currentEnrolled = await tx.studentSubjectScore.count({ where: { subjectClassId } })
+        const subjectClass = await tx.subjectClass.findUniqueOrThrow({
+          where: { id: subjectClassId },
+          include: { subject: true },
+        })
+        if ((subjectClass.maxStudent || 0) <= currentEnrolled) {
+          throw new Error("Lớp học đã đủ số lượng sinh viên")
+        }
+
+        await tx.studentSubjectScore.create({
+          data: { subjectClassId, studentId, subjectVersionId: subjectClass.subjectId },
+        })
+      }
     })
 
-    for (const subjectClassId of subjectClassIds) {
-      const isExist = await tx.studentSubjectScore.findFirst({
-        where: { studentId, subjectClassId },
-      })
-      if (isExist) throw new Error("Bạn đã đăng ký học phần này rồi")
-
-      const currentEnrolled = await tx.studentSubjectScore.count({ where: { subjectClassId } })
-      const subjectClass = await tx.subjectClass.findUniqueOrThrow({
-        where: { id: subjectClassId },
-        include: { subject: true },
-      })
-      if ((subjectClass.maxStudent || 0) <= currentEnrolled) {
-        throw new Error("Lớp học đã đủ số lượng sinh viên")
-      }
-
-      await tx.studentSubjectScore.create({
-        data: { subjectClassId, studentId, subjectVersionId: subjectClass.subjectId },
-      })
-    }
-  })
-
-  return c.json({ message: "success" }, 200)
+    return c.json({ message: "success" }, 200)
+  }
 })
 
 const classUnregister = createRoute({
@@ -643,14 +678,6 @@ app.openapi(classUnregister, async (c) => {
     })
 
     for (const subjectClassId of subjectClassIds) {
-      const isExist = await tx.studentSubjectScore.findFirst({
-        where: { studentId, subjectClassId },
-      })
-
-      if (!isExist) {
-        throw new Error(`Bạn chưa đăng ký học phần ${subjectClassId}`)
-      }
-
       await tx.studentSubjectScore.deleteMany({
         where: { subjectClassId, studentId },
       })
