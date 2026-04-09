@@ -137,6 +137,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
       thesisExpert: true,
     },
     include: {
+      academicRankType: true,
+      academicDegreeType: true,
       lecturer: {
         include: {
           userProfile: {
@@ -208,6 +210,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                     include: {
                       expert: {
                         include: {
+                          academicRankType: true,
+                          academicDegreeType: true,
                           lecturer: {
                             include: {
                               userProfile: {
@@ -228,6 +232,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
               organization: true,
               supervisor: {
                 include: {
+                  academicRankType: true,
+                  academicDegreeType: true,
                   lecturer: {
                     include: {
                       userProfile: {
@@ -239,6 +245,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
               },
               coSupervisor: {
                 include: {
+                  academicRankType: true,
+                  academicDegreeType: true,
                   lecturer: {
                     include: {
                       userProfile: {
@@ -312,6 +320,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                     include: {
                       expert: {
                         include: {
+                          academicRankType: true,
+                          academicDegreeType: true,
                           lecturer: {
                             select: {
                               userProfile: true,
@@ -1346,12 +1356,12 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           options={expertProfileData?.map((item) => {
                             console.log("item", item)
                             const academicRank =
-                              item.lecturer?.userProfile?.academicRankType?.sTen ||
-                              item.academicRank ||
+                              item.lecturer?.userProfile?.academicRankType?.sMa ||
+                              item.academicRankType?.sMa ||                            
                               ""
                             const academicDegree =
-                              item.lecturer?.userProfile?.academicDegreeType?.sTen ||
-                              item.academicDegree ||
+                              item.lecturer?.userProfile?.academicDegreeType?.sMa ||
+                              item.academicDegreeType?.sMa ||
                               ""
                             const academicRankAndDegree = `${academicRank} ${academicDegree}`.trim()
                             const expertName =
@@ -1393,13 +1403,13 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                   console.log(record?.thesisRegistrations?.[0]?.thesisProject?.supervisor)
                   const academicRank =
                     record?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.lecturer
-                      ?.userProfile?.academicRankType?.sTen ||
-                    record?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.academicRank ||
-                    ""
+                      ?.userProfile?.academicRankType?.sMa ||
+                    record?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.academicRankType?.sMa 
+                    || ""
                   const academicDegree =
                     record?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.lecturer
-                      ?.userProfile?.academicDegreeType?.sTen ||
-                    record?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.academicDegree ||
+                      ?.userProfile?.academicDegreeType?.sMa ||
+                    record?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.academicDegreeType?.sMa ||
                     ""
                   const academicRankAndDegree = `${academicRank} ${academicDegree}`.trim()
                   return `${academicRankAndDegree} ${
@@ -1432,12 +1442,13 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           className="w-full"
                           options={expertProfileData?.map((item) => {
                             const academicRank =
-                              item.lecturer?.userProfile?.academicRankType?.sTen ||
-                              item.academicRank ||
+                              item.lecturer?.userProfile?.academicRankType?.sMa ||
+                              item.academicRankType?.sMa ||
+                              
                               ""
                             const academicDegree =
-                              item.lecturer?.userProfile?.academicDegreeType?.sTen ||
-                              item.academicDegree ||
+                              item.lecturer?.userProfile?.academicDegreeType?.sMa ||
+                              item.academicDegreeType?.sMa ||
                               ""
                             const academicRankAndDegree = `${academicRank} ${academicDegree}`.trim()
                             const expertName =
@@ -1476,13 +1487,13 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                   }
                   const academicRank =
                     record?.thesisRegistrations?.[0]?.thesisProject?.coSupervisor?.lecturer
-                      ?.userProfile?.academicRankType?.sTen ||
-                    record?.thesisRegistrations?.[0]?.thesisProject?.coSupervisor?.academicRank ||
+                      ?.userProfile?.academicRankType?.sMa ||
+                    record?.thesisRegistrations?.[0]?.thesisProject?.coSupervisor?.academicRankType?.sMa ||
                     ""
                   const academicDegree =
                     record?.thesisRegistrations?.[0]?.thesisProject?.coSupervisor?.lecturer
-                      ?.userProfile?.academicDegreeType?.sTen ||
-                    record?.thesisRegistrations?.[0]?.thesisProject?.coSupervisor?.academicDegree ||
+                      ?.userProfile?.academicDegreeType?.sMa ||
+                    record?.thesisRegistrations?.[0]?.thesisProject?.coSupervisor?.academicDegreeType?.sMa ||
                     ""
                   const academicRankAndDegree = `${academicRank} ${academicDegree}`.trim()
                   return `${academicRankAndDegree} ${
@@ -1515,13 +1526,12 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                             ?.filter((item) => item.eligiblePresident === true)
                             .map((item) => {
                               const academicRank =
-                                item.lecturer?.userProfile?.academicRankType?.sTen ||
-                                item.academicRank ||
+                                item.lecturer?.userProfile?.academicRankType?.sMa ||
+                                item.academicRankType?.sMa ||
                                 ""
                               const academicDegree =
-                                item.lecturer?.userProfile?.academicDegreeType?.sTen ||
-                                item.academicDegree ||
-                                ""
+                                item.lecturer?.userProfile?.academicDegreeType?.sMa ||
+                                item.academicDegreeType?.sMa
                               const academicRankAndDegree =
                                 `${academicRank} ${academicDegree}`.trim()
                               const expertName =
@@ -1551,18 +1561,18 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                   const academicRank =
                     record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
                       (member: any) => member.role === CouncilRole.CHAIRMAN
-                    )?.expert?.lecturer?.userProfile?.academicRankType?.sTen ||
+                    )?.expert?.lecturer?.userProfile?.academicRankType?.sMa ||
                     record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
                       (member: any) => member.role === CouncilRole.CHAIRMAN
-                    )?.expert?.academicRank ||
+                    )?.expert?.academicRankType?.sMa ||
                     ""
                   const academicDegree =
                     record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
                       (member: any) => member.role === CouncilRole.CHAIRMAN
-                    )?.expert?.lecturer?.userProfile?.academicDegreeType?.sTen ||
+                    )?.expert?.lecturer?.userProfile?.academicDegreeType?.sMa ||
                     record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
                       (member: any) => member.role === CouncilRole.CHAIRMAN
-                    )?.expert?.academicDegree ||
+                    )?.expert?.academicDegreeType?.sMa ||
                     ""
                   const academicRankAndDegree = `${academicRank} ${academicDegree}`.trim()
                   return `${academicRankAndDegree} ${
@@ -1594,12 +1604,12 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                             ?.filter((item) => item.eligibleSecretary === true)
                             .map((item) => {
                               const academicRank =
-                                item.lecturer?.userProfile?.academicRankType?.sTen ||
-                                item.academicRank ||
+                                item.lecturer?.userProfile?.academicRankType?.sMa ||
+                                item.academicRankType?.sMa ||
                                 ""
                               const academicDegree =
-                                item.lecturer?.userProfile?.academicDegreeType?.sTen ||
-                                item.academicDegree ||
+                                item.lecturer?.userProfile?.academicDegreeType?.sMa ||
+                                item.academicDegreeType?.sMa ||
                                 ""
                               const academicRankAndDegree =
                                 `${academicRank} ${academicDegree}`.trim()
@@ -1630,18 +1640,18 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                   const academicRank =
                     record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
                       (member: any) => member.role === CouncilRole.SECRETARY
-                    )?.expert?.lecturer?.userProfile?.academicRankType?.sTen ||
+                    )?.expert?.lecturer?.userProfile?.academicRankType?.sMa ||
                     record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
                       (member: any) => member.role === CouncilRole.SECRETARY
-                    )?.expert?.academicRank ||
+                    )?.expert?.academicRankType?.sMa ||
                     ""
                   const academicDegree =
                     record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
                       (member: any) => member.role === CouncilRole.SECRETARY
-                    )?.expert?.lecturer?.userProfile?.academicDegreeType?.sTen ||
+                    )?.expert?.lecturer?.userProfile?.academicDegreeType?.sMa ||
                     record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
                       (member: any) => member.role === CouncilRole.SECRETARY
-                    )?.expert?.academicDegree ||
+                    )?.expert?.academicDegreeType?.sMa ||
                     ""
                   const academicRankAndDegree = `${academicRank} ${academicDegree}`.trim()
                   return `${academicRankAndDegree} ${
@@ -1671,12 +1681,12 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           dropdownStyle={{ minWidth: 200 }}
                           options={expertProfileData?.map((item) => {
                             const academicRank =
-                              item.lecturer?.userProfile?.academicRankType?.sTen ||
-                              item.academicRank ||
+                              item.lecturer?.userProfile?.academicRankType?.sMa ||
+                              item.academicRankType?.sMa ||
                               ""
                             const academicDegree =
-                              item.lecturer?.userProfile?.academicDegreeType?.sTen ||
-                              item.academicDegree ||
+                              item.lecturer?.userProfile?.academicDegreeType?.sMa ||
+                              item.academicDegreeType?.sMa ||
                               ""
                             const academicRankAndDegree = `${academicRank} ${academicDegree}`.trim()
                             const expertName =
@@ -1705,18 +1715,18 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                   const academicRank =
                     record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
                       (member: any) => member.role === CouncilRole.REVIEWER_1
-                    )?.expert?.lecturer?.userProfile?.academicRankType?.sTen ||
+                    )?.expert?.lecturer?.userProfile?.academicRankType?.sMa ||
                     record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
                       (member: any) => member.role === CouncilRole.REVIEWER_1
-                    )?.expert?.academicRank ||
+                    )?.expert?.academicRankType?.sMa ||
                     ""
                   const academicDegree =
                     record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
                       (member: any) => member.role === CouncilRole.REVIEWER_1
-                    )?.expert?.lecturer?.userProfile?.academicDegreeType?.sTen ||
+                    )?.expert?.lecturer?.userProfile?.academicDegreeType?.sMa ||
                     record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
                       (member: any) => member.role === CouncilRole.REVIEWER_1
-                    )?.expert?.academicDegree ||
+                    )?.expert?.academicDegreeType?.sMa ||
                     ""
                   const academicRankAndDegree = `${academicRank} ${academicDegree}`.trim()
                   return `${academicRankAndDegree} ${
@@ -1746,12 +1756,12 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           dropdownStyle={{ minWidth: 200 }}
                           options={expertProfileData?.map((item) => {
                             const academicRank =
-                              item.lecturer?.userProfile?.academicRankType?.sTen ||
-                              item.academicRank ||
+                              item.lecturer?.userProfile?.academicRankType?.sMa ||
+                              item.academicRankType?.sMa ||
                               ""
                             const academicDegree =
-                              item.lecturer?.userProfile?.academicDegreeType?.sTen ||
-                              item.academicDegree ||
+                              item.lecturer?.userProfile?.academicDegreeType?.sMa ||
+                              item.academicDegreeType?.sMa ||
                               ""
                             const academicRankAndDegree = `${academicRank} ${academicDegree}`.trim()
                             const expertName =
@@ -1779,18 +1789,18 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                   const academicRank =
                     record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
                       (member: any) => member.role === CouncilRole.REVIEWER_2
-                    )?.expert?.lecturer?.userProfile?.academicRankType?.sTen ||
+                    )?.expert?.lecturer?.userProfile?.academicRankType?.sMa ||
                     record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
                       (member: any) => member.role === CouncilRole.REVIEWER_2
-                    )?.expert?.academicRank ||
+                    )?.expert?.academicRankType?.sMa ||
                     ""
                   const academicDegree =
                     record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
                       (member: any) => member.role === CouncilRole.REVIEWER_2
-                    )?.expert?.lecturer?.userProfile?.academicDegreeType?.sTen ||
+                    )?.expert?.lecturer?.userProfile?.academicDegreeType?.sMa ||
                     record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
                       (member: any) => member.role === CouncilRole.REVIEWER_2
-                    )?.expert?.academicDegree ||
+                    )?.expert?.academicDegreeType?.sMa ||
                     ""
                   const academicRankAndDegree = `${academicRank} ${academicDegree}`.trim()
                   return `${academicRankAndDegree} ${
@@ -1820,12 +1830,12 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           dropdownStyle={{ minWidth: 200 }}
                           options={expertProfileData?.map((item) => {
                             const academicRank =
-                              item.lecturer?.userProfile?.academicRankType?.sTen ||
-                              item.academicRank ||
+                              item.lecturer?.userProfile?.academicRankType?.sMa ||
+                              item.academicRankType?.sMa ||
                               ""
                             const academicDegree =
-                              item.lecturer?.userProfile?.academicDegreeType?.sTen ||
-                              item.academicDegree ||
+                              item.lecturer?.userProfile?.academicDegreeType?.sMa ||
+                              item.academicDegreeType?.sMa ||
                               ""
                             const academicRankAndDegree = `${academicRank} ${academicDegree}`.trim()
                             const expertName =
@@ -1853,18 +1863,18 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                   const academicRank =
                     record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
                       (member: any) => member.role === CouncilRole.MEMBER
-                    )?.expert?.lecturer?.userProfile?.academicRankType?.sTen ||
+                    )?.expert?.lecturer?.userProfile?.academicRankType?.sMa ||
                     record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
                       (member: any) => member.role === CouncilRole.MEMBER
-                    )?.expert?.academicRank ||
+                    )?.expert?.academicRankType?.sMa ||
                     ""
                   const academicDegree =
                     record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
                       (member: any) => member.role === CouncilRole.MEMBER
-                    )?.expert?.lecturer?.userProfile?.academicDegreeType?.sTen ||
+                    )?.expert?.lecturer?.userProfile?.academicDegreeType?.sMa ||
                     record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
                       (member: any) => member.role === CouncilRole.MEMBER
-                    )?.expert?.academicDegree ||
+                    )?.expert?.academicDegreeType?.sMa ||
                     ""
                   const academicRankAndDegree = `${academicRank} ${academicDegree}`.trim()
                   return `${academicRankAndDegree} ${

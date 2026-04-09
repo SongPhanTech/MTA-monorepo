@@ -4,6 +4,8 @@ import useSpinner from "@hooks/spinner"
 import type { ExpertProfile } from "@workspace/db/client"
 import {
   useCreateExpertProfile,
+  useFindManyDM_HocHam,
+  useFindManyDM_HocVi,
   useFindManyLecturer,
   useFindUniqueExpertProfile,
   useFindUniqueLecturer,
@@ -72,6 +74,8 @@ const PutExpertProfile = () => {
     },
     { enabled: !!selectedLecturerId }
   )
+  const {data: academicRankType} = useFindManyDM_HocHam();
+  const {data: academicDegreeType} = useFindManyDM_HocVi();
 
   useEffect(() => {
     if (expert) {
@@ -115,8 +119,8 @@ const PutExpertProfile = () => {
               bankName: output.bankName,
             }
           : {
-              academicRank: output.academicRank,
-              academicDegree: output.academicDegree,
+              academicRankTypeId: output.academicRankTypeId,
+              academicDegreeTypeId: output.academicDegreeTypeId,
               specialization: output.specialization,
               workplace: output.workplace,
               phone: output.phone,
@@ -156,8 +160,8 @@ const PutExpertProfile = () => {
         } else {
           await createExpertProfile({
             data: {
-              academicRank: output.academicRank,
-              academicDegree: output.academicDegree,
+              academicRankTypeId: output.academicRankTypeId,
+              academicDegreeTypeId: output.academicDegreeTypeId,
               specialization: output.specialization,
               workplace: output.workplace,
               phone: output.phone,
@@ -253,15 +257,16 @@ const PutExpertProfile = () => {
       )}
       {!isInternal && (
         <Col span={12}>
-          <FormItem form={form} name="academicRank" label="Học hàm">
-            <Input placeholder="Nhập học hàm" />
+          <FormItem form={form} name="academicRankTypeId" label="Học hàm">
+            <Select options={academicRankType?.map((item) => ({ label: `${item.sMa} - ${item.sTen}`, value: item.Id })) ?? []} placeholder="Chọn học hàm" allowClear showSearch 
+            filterOption={false}/>
           </FormItem>
         </Col>
       )}
       {!isInternal && (
         <Col span={12}>
-          <FormItem form={form} name="academicDegree" label="Học vị">
-            <Input placeholder="Nhập học vị" />
+          <FormItem form={form} name="academicDegreeTypeId" label="Học vị">
+            <Select options={academicDegreeType?.map((item) => ({ label: `${item.sMa} - ${item.sTen}`, value: item.Id })) ?? []} placeholder="Chọn học vị" allowClear showSearch filterOption={false}/>
           </FormItem>
         </Col>
       )}
