@@ -1,7 +1,8 @@
-import { SafetyCertificateOutlined } from "@ant-design/icons"
+import { DeleteOutlined, SafetyCertificateOutlined } from "@ant-design/icons"
 import Select from "@components/commons/select"
 import Table from "@components/commons/table"
 import TableCollapse from "@components/commons/tableCollapse"
+import EditIcon from "@components/icons/edit"
 import type { FilterProps } from "@constants/type"
 import { useScoreConverter } from "@hooks/scoreConverter"
 import DefaultLayout from "@layouts/default-layout"
@@ -17,15 +18,16 @@ import {
   useFindManyStudentSubjectScore,
   useFindManySubjectVersion,
   useFindUniqueStudent,
+  useUpdateStudentSubjectScore,
 } from "@workspace/db/hooks"
 import { exportFromTemplate, type TableRow } from "@workspace/libs/template-excel"
 import { getMinioUrl } from "@workspace/libs/utils"
 import { useAbility } from "@workspace/permissions/hooks"
 import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from "@workspace/router"
-import { Button, Col, Divider, Flex, Row, Tag, Tooltip } from "antd"
+import { Button, Col, Divider, Flex, Popconfirm, Row, Tag, Tooltip, message } from "antd"
 import dayjs from "dayjs"
 import _ from "lodash"
-import { Check, X } from "lucide-react"
+import { BookCheckIcon, Check, X } from "lucide-react"
 import { useRouter } from "next/router"
 import { useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
@@ -85,8 +87,19 @@ export default function StudentScoreClassPage() {
     list: string[]
     studentId: string
     subjectClassStudent: StudentSubjectScore
+    refetch?: () => Promise<unknown>
   }>({
     tag: "PutAddCertificateScoreModal",
+  })
+
+  const { onOpen: onOpenModalEditScore } = useDisclosure<{
+    id: string
+    list: string[]
+    studentId: string
+    subjectClassStudent: StudentSubjectScore
+    refetch?: () => Promise<unknown>
+  }>({
+    tag: "PutEditScoreModal",
   })
 
   const { onOpen: onOpenModalNhapDiem } = useDisclosure<string>({
@@ -95,6 +108,8 @@ export default function StudentScoreClassPage() {
       refetch()
     },
   })
+
+  const { mutateAsync: updateStudentSubjectScore } = useUpdateStudentSubjectScore()
   const exportTemplate = async () => {
     const hocKis: IHocKi[] = []
     if (data.length > 0) {
@@ -593,6 +608,62 @@ export default function StudentScoreClassPage() {
       })
   }, [data, semesterId])
 
+  const buildActionPayload = (subjectClassStudent: any[] = []) => {
+    const currentSubjectClassStudent = subjectClassStudent?.[0]
+
+    if (!currentSubjectClassStudent?.id) {
+      message.warning("Không tìm thấy dữ liệu điểm của học phần")
+      return null
+    }
+
+    return {
+      id: currentSubjectClassStudent.id,
+      studentId,
+      list:
+        currentSubjectClassStudent?.certificates?.map((i: any) => i.archivedCertificateId) || [],
+      subjectClassStudent: currentSubjectClassStudent,
+      refetch,
+    }
+  }
+
+  const handleOpenEditScore = (subjectClassStudent: any[] = []) => {
+    const payload = buildActionPayload(subjectClassStudent)
+    if (!payload) return
+    onOpenModalEditScore(payload)
+  }
+
+  const handleOpenAddCertificate = (subjectClassStudent: any[] = []) => {
+    const payload = buildActionPayload(subjectClassStudent)
+    if (!payload) return
+    onOpenModalAddCertificate(payload)
+  }
+
+  const handleDeleteSubjectScore = async (subjectClassStudent: any[] = []) => {
+    const scoreId = subjectClassStudent?.[0]?.id
+    if (!scoreId) {
+      message.warning("Không tìm thấy dữ liệu điểm để xóa")
+      return
+    }
+
+    try {
+      await updateStudentSubjectScore({
+        where: { id: scoreId },
+        data: {
+          deletedAt: new Date(),
+          active: false,
+        },
+      })
+      message.success("Xóa môn học thành công")
+      await refetch()
+    } catch (error: any) {
+      if (error?.info?.message) {
+        message.error(error?.info?.message)
+        return
+      }
+      message.error("Đã xảy ra lỗi khi xóa môn học")
+    }
+  }
+
   return (
     <DefaultLayout
       breadcrumbList={[
@@ -1000,41 +1071,50 @@ export default function StudentScoreClassPage() {
                     return (
                       <Row className="justify-center gap-2">
                         {/* <Tooltip title="Cộng điểm">
-                                                <BookCheckIcon
-                                                    className="cursor-pointer hover:text-blue-500"
-                                                    size={16}
-                                                    onClick={() => {
-                                                        const currentAwards =
-                                                            subjectClassStudent?.[0]?.awards || []
-                                                        onOpenModalAddScore({
-                                                            id: subjectClassStudent?.[0]?.id,
-                                                            studentId: studentId,
-                                                            list: currentAwards.map(
-                                                                (i: any) => i.archivedAwardId
-                                                            ),
-                                                            subjectClassStudent:
-                                                                subjectClassStudent?.[0],
-                                                        })
-                                                    }}
-                                                />
-                                            </Tooltip> */}
+                          <BookCheckIcon
+                            className="cursor-pointer hover:text-blue-500"
+                            size={16}
+                            onClick={() => {
+                              const currentAwards = subjectClassStudent?.[0]?.awards || []
+                              onOpenModalAddScore({
+                                id: subjectClassStudent?.[0]?.id,
+                                studentId: studentId,
+                                list: currentAwards.map((i: any) => i.archivedAwardId),
+                                subjectClassStudent: subjectClassStudent?.[0],
+                              })
+                            }}
+                          />
+                        </Tooltip> */}
+
+                        <Tooltip title="Sửa điểm">
+                          <EditIcon
+                            className="cursor-pointer hover:text-blue-700"
+                            onClick={() => {
+                              handleOpenEditScore(subjectClassStudent)
+                            }}
+                          />
+                        </Tooltip>
 
                         <Tooltip title="Thêm chứng chỉ">
                           <SafetyCertificateOutlined
                             className="cursor-pointer hover:text-green-500"
                             onClick={() => {
-                              onOpenModalAddCertificate({
-                                id: subjectClassStudent?.[0]?.id,
-                                studentId: studentId,
-                                list:
-                                  subjectClassStudent?.[0]?.certificates.map(
-                                    (i: any) => i.archivedCertificateId
-                                  ) || [],
-                                subjectClassStudent: subjectClassStudent?.[0],
-                              })
+                              handleOpenAddCertificate(subjectClassStudent)
                             }}
                           />
                         </Tooltip>
+
+                        <Popconfirm
+                          title="Xóa môn học"
+                          description="Bạn có chắc muốn xóa môn học này khỏi bảng điểm?"
+                          okText="Xóa"
+                          cancelText="Hủy"
+                          onConfirm={() => handleDeleteSubjectScore(subjectClassStudent)}
+                        >
+                          <Tooltip title="Xóa môn học" placement="bottom">
+                            <DeleteOutlined className="cursor-pointer text-red-500 hover:text-red-700" />
+                          </Tooltip>
+                        </Popconfirm>
                       </Row>
                     )
                   },

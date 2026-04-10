@@ -111,6 +111,7 @@ import PutDeadlineScoreModal from "./set-deadline-score"
 import PutAddOlympicScoreModal from "./them-diem-cong"
 import ThongTinBaoCaoModal from "./thong-tin-bao-cao"
 import PutInternshipModal from "./put-thuc-tap"
+import PutEditScoreModal from "./put-sua-diem-ket-qua-hoc-tap"
 import ModalCurriculumVersionByTrainingBlock from "./modal-ctdt-theo-kkt"
 import ModalPreviewReason from "./modal-preview-reason"
 import ModalScoreDetail from "./modal-chi-tiet-diem-hoc-phan"
@@ -235,6 +236,7 @@ export {
   ModalChuyenDoiChungChiThanhDiem,
   PutResearchTopicModal,
   PutInternshipModal,
+  PutEditScoreModal,
   ModalChuyenDiemLopMonHoc,
   ModalCurriculumVersionByTrainingBlock,
   ModalPreviewReason,
