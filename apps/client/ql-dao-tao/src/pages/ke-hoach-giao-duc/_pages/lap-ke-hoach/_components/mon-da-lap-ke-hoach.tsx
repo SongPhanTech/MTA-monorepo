@@ -400,7 +400,7 @@ export default function MonDaLapKeHoach({ type }: { type?: $Enums.SubjectClassTy
                   className="text-left hover:text-primary cursor-pointer"
                 >
                   {record?.trainingBlockSubject?.subject?.name} (
-                  {record?.trainingBlockSubject?.subject?.credit})
+                  {record?.trainingBlockSubject?.subject?.credit} TC)
                 </div>
               ),
             },

@@ -2,8 +2,7 @@ import { queryClient } from "@api/index"
 import Table from "@components/commons/table"
 import useSpinner from "@hooks/spinner"
 import { useStore } from "@tanstack/react-store"
-import type { StudentSubjectScore } from "@workspace/db"
-import type { ScoreConvert } from "@workspace/db/client"
+import type { ScoreConvert, Student, StudentSubjectScore } from "@workspace/db/client"
 import {
   useCountStudent,
   useFindFirstTrainingCourseRegulation,
@@ -18,6 +17,7 @@ import _ from "lodash"
 import { Search } from "lucide-react"
 import { type Key, useCallback, useEffect, useMemo, useState } from "react"
 import { dangKyHocChoLopQuanLyStore } from "../.."
+import { isNullish } from "@workspace/libs/utils"
 
 interface FilterProps {
   searchText: string | null
@@ -57,96 +57,112 @@ export default function CaNhanTrongLopQuanLy({ hocLai }: RegisterClassProps) {
     },
   })
 
-  const { data: students = [], refetch } = useFindManyStudent({
-    where: {
-      ...(filters.searchText && filters.searchText !== ""
-        ? {
-            OR: [
-              {
-                userProfile: {
-                  fullname: {
+  const { data: selectedSubjectClass } = useFindUniqueSubjectClass(
+    {
+      where: {
+        id: subjectClassId as string,
+      },
+      select: {
+        id: true,
+        subjectId: true,
+        subjectClassStudent: {
+          select: {
+            studentId: true,
+          },
+        },
+        subject: {
+          select: {
+            type: true,
+          },
+        },
+      },
+    },
+    { enabled: !!semesterId && !!subjectClassId }
+  )
+
+  const { data: students = [], refetch } = useFindManyStudent(
+    {
+      where: {
+        ...(filters.searchText && filters.searchText !== ""
+          ? {
+              OR: [
+                {
+                  userProfile: {
+                    fullname: {
+                      contains: filters.searchText,
+                      mode: "insensitive",
+                    },
+                  },
+                },
+                {
+                  code: {
                     contains: filters.searchText,
                     mode: "insensitive",
                   },
                 },
-              },
-              {
-                code: {
-                  contains: filters.searchText,
-                  mode: "insensitive",
-                },
-              },
-            ],
-          }
-        : {}),
-      fixedClass: {
-        trainingCourseId: filters.trainingCourseId,
-        id: filters.fixedClassId
-          ? filters.fixedClassId
-          : {
-              in: fixedClassesIds,
-            },
-      },
-      active: true,
-      status: "ENROLLED",
-      deletedAt: null,
-    },
-    include: {
-      userProfile: {
-        select: {
-          fullname: true,
-        },
-      },
-      studentSemesterResult: {
-        select: {
-          gpaBase10: true,
-          cumulativeGpaBase10: true,
-          totalFailedCredits: true,
-        },
-        orderBy: {
-          semester: {
-            startDate: "desc",
-          },
-        },
-      },
-      subjectClassStudent: {
-        select: {
-          finalScore: true,
-        },
-        orderBy: {
-          finalScore: "desc",
-        },
-        where: {
-          subjectClassId: subjectClassId || undefined,
-        },
-      },
-      fixedClass: {
-        select: {
-          code: true,
-          trainingCourse: {
-            select: {
-              name: true,
-              scoreConverts: true,
-            },
-          },
-        },
-      },
-    },
-    orderBy: [
-      {
+              ],
+            }
+          : {}),
         fixedClass: {
-          code: "asc",
+          trainingCourseId: filters.trainingCourseId,
+          id: filters.fixedClassId
+            ? filters.fixedClassId
+            : {
+                in: fixedClassesIds,
+              },
         },
+        active: true,
+        status: "ENROLLED",
+        deletedAt: null,
       },
-      {
+      include: {
         userProfile: {
-          firstName: "asc",
+          select: {
+            fullname: true,
+          },
+        },
+        studentSemesterResult: {
+          select: {
+            gpaBase10: true,
+            cumulativeGpaBase10: true,
+            totalFailedCredits: true,
+          },
+          orderBy: {
+            semester: {
+              startDate: "desc",
+            },
+          },
+        },
+        subjectClassStudent: {
+          select: {
+            attendanceScore: true,
+            midtermScore: true,
+            finalScore: true,
+            subjectClassId: true,
+          },
+          orderBy: { createdAt: "desc" },
+          take: 2,
+          where: { subjectVersionId: selectedSubjectClass?.subjectId },
+        },
+        fixedClass: {
+          select: {
+            code: true,
+            trainingCourse: {
+              select: {
+                scoreConverts: true,
+              },
+            },
+          },
         },
       },
-    ],
-    take: numberOfPages,
-    skip: (currentPage - 1) * numberOfPages,
-  })
+      orderBy: [{ fixedClass: { code: "asc" } }, { userProfile: { firstName: "asc" } }],
+      take: numberOfPages,
+      skip: (currentPage - 1) * numberOfPages,
+    },
+    {
+      enabled: !!selectedSubjectClass,
+    }
+  )
 
   const { data: allStudentIds = [] } = useFindManyStudent({
     where: {
@@ -196,29 +212,6 @@ export default function CaNhanTrongLopQuanLy({ hocLai }: RegisterClassProps) {
       },
     },
   })
-
-  const { data: selectedSubjectClass } = useFindUniqueSubjectClass(
-    {
-      where: {
-        id: subjectClassId as string,
-      },
-      select: {
-        id: true,
-        subjectId: true,
-        subjectClassStudent: {
-          select: {
-            studentId: true,
-          },
-        },
-        subject: {
-          select: {
-            type: true,
-          },
-        },
-      },
-    },
-    { enabled: !!semesterId && !!subjectClassId }
-  )
 
   const { data: tcNoToiThieuLamDoAn } = useFindFirstTrainingCourseRegulation(
     {
@@ -345,10 +338,10 @@ export default function CaNhanTrongLopQuanLy({ hocLai }: RegisterClassProps) {
       ])
 
       const studentSubjectScores = scoreRes.data[0] as StudentSubjectScore[]
-      const scoreIds = studentSubjectScores.map((s) => s.id)
+      const studentIds = studentSubjectScores.map((s) => s.studentId)
 
-      for (const scoreId of scoreIds) {
-        if (!selectedRowKeys.includes(scoreId)) {
+      for (const studentId of studentIds) {
+        if (!selectedRowKeys.includes(studentId)) {
           message.error("Không thể huỷ đăng ký SV đã có điểm, vui lòng thử lại")
           return
         }
@@ -360,6 +353,7 @@ export default function CaNhanTrongLopQuanLy({ hocLai }: RegisterClassProps) {
           operation: "deleteMany",
           data: {
             where: {
+              id: { notIn: studentSubjectScores.map((s) => s.id) },
               subjectClassId,
               attendanceScore: null,
               midtermScore: null,
@@ -520,74 +514,92 @@ export default function CaNhanTrongLopQuanLy({ hocLai }: RegisterClassProps) {
               render: (_, record) => <p>{record?.fixedClass?.code}</p>,
             },
             {
-              title: "Khoá",
-              align: "center",
-              width: 80,
-              // dataIndex: ['fixedClass', 'trainingCourse', 'name'],
-              render: (_, record) => <p>{record?.fixedClass?.trainingCourse?.name}</p>,
-            },
-            {
               title: "GPA",
               align: "center",
-              // dataIndex: ['studentSemesterResult', 0, 'cumulativeGpaBase10'],
               width: 50,
               render: (_, record) =>
                 record?.studentSemesterResult.length > 0 ? (
                   <span>
-                    {Number(record.studentSemesterResult[0]?.cumulativeGpaBase10).toFixedSmart(2)}
+                    {Number(record.studentSemesterResult[0]?.cumulativeGpaBase10).toFixed(2)}
                   </span>
                 ) : (
                   <span>-</span>
                 ),
-              // render: (text) => (text ? Number(text).toFixedSmart(2) : '-'),
             },
             {
               title: "TC nợ",
               align: "center",
-              // dataIndex: ['studentSemesterResult', 0, 'cumulativeGpaBase10'],
               width: 60,
               render: (_, record) =>
                 record?.studentSemesterResult.length > 0 ? (
-                  <span>
-                    {Number(record.studentSemesterResult[0]?.totalFailedCredits).toFixedSmart(2)}
-                  </span>
+                  <span>{record.studentSemesterResult[0]?.totalFailedCredits}</span>
                 ) : (
                   <span>-</span>
                 ),
-              // render: (text) => (text ? Number(text).toFixedSmart(2) : '-'),
             },
             {
-              title: "Điểm",
+              title: "Có điểm",
               align: "center",
               width: 50,
-              // dataIndex: ['subjectClassStudent', 0, 'finalScore'],
-              // render: (text) => (text ? Number(text).toFixedSmart(2) : '-'),
-              render: (_, record) =>
-                record?.subjectClassStudent.length > 0 ? (
-                  <span>{Number(record.subjectClassStudent[0]?.finalScore).toFixedSmart(2)}</span>
-                ) : (
+              render: (_, record) => {
+                const scores =
+                  (record?.subjectClassStudent as Pick<
+                    StudentSubjectScore,
+                    "subjectClassId" | "attendanceScore" | "midtermScore" | "finalScore"
+                  >[]) || []
+                const currentScore = scores.find((s) => s.subjectClassId === subjectClassId)
+                return isNullish(currentScore?.attendanceScore) &&
+                  isNullish(currentScore?.midtermScore) ? (
                   <span>-</span>
-                ),
+                ) : (
+                  <span>✅</span>
+                )
+              },
+            },
+            {
+              title: "Điểm trước",
+              align: "center",
+              width: 50,
+              render: (_, record) => {
+                const scores =
+                  (record?.subjectClassStudent as Pick<
+                    StudentSubjectScore,
+                    "subjectClassId" | "attendanceScore" | "midtermScore" | "finalScore"
+                  >[]) || []
+                const preScore = scores
+                  .find((s) => s.subjectClassId !== subjectClassId)
+                  ?.finalScore?.toNumber()
+                return preScore ?? "-"
+              },
             },
             {
               title: "Cải thiện",
               align: "center",
               width: 50,
-              render: (_, record) => (
-                <Checkbox
-                  checked={
-                    record?.subjectClassStudent.length > 0 &&
-                    record?.subjectClassStudent[0]?.finalScore !== null
-                      ? record?.fixedClass?.trainingCourse?.scoreConverts?.some(
-                          (sc: ScoreConvert) =>
-                            sc?.base10Min <= record.subjectClassStudent[0]?.finalScore &&
-                            record.subjectClassStudent[0]?.finalScore <= sc?.base10Max &&
-                            sc?.improvementRegister
-                        )
-                      : false
-                  }
-                />
-              ),
+              render: (_, record) => {
+                const scores =
+                  (record?.subjectClassStudent as Pick<
+                    StudentSubjectScore,
+                    "subjectClassId" | "attendanceScore" | "midtermScore" | "finalScore"
+                  >[]) || []
+                const preScore = scores
+                  .find((s) => s.subjectClassId !== subjectClassId)
+                  ?.finalScore?.toNumber()
+                return (
+                  <Checkbox
+                    checked={
+                      preScore !== null && preScore !== undefined
+                        ? record?.fixedClass?.trainingCourse?.scoreConverts?.some(
+                            (sc: ScoreConvert) =>
+                              sc?.base10Min <= preScore &&
+                              preScore <= sc?.base10Max &&
+                              sc?.improvementRegister
+                          )
+                        : false
+                    }
+                  />
+                )
+              },
             },
           ]}
           pagination={{

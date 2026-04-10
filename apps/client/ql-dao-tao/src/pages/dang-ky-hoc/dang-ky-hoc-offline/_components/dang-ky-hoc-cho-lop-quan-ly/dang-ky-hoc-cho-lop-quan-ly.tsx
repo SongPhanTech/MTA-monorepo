@@ -245,7 +245,7 @@ export default function DangKyHocChoLopQuanLy() {
             width: 150,
             render: (text: string, record) => (
               <p className="text-left">
-                {record?.subject?.name}({record.subject?.credit})
+                {record?.subject?.name} ({record.subject?.credit} TC)
               </p>
             ),
           },
@@ -276,7 +276,7 @@ export default function DangKyHocChoLopQuanLy() {
                   arr={record?.fixedClasses.map((i: any) => {
                     return {
                       key: i?.id,
-                      label: `${i.code} (${i?._count.students})`,
+                      label: `${i.code} (${i?._count.students} SV)`,
                     }
                   })}
                   key="fixedClasses"
