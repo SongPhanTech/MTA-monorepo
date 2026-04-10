@@ -395,18 +395,21 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
   const getCouncilMemberName = (record: any, role: CouncilRole) => {
     const member = record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
       (m: CouncilMember) => m.role === role
-    );
+    )
 
-    if (!member) return "";
+    if (!member) return ""
 
-    const expert = member.expert;
-    const profile = expert?.lecturer?.userProfile;
+    const expert = member.expert
+    const profile = expert?.lecturer?.userProfile
 
-    const rank = profile?.academicRankType?.sMa || expert?.academicRankType?.sMa || "";
-    const degree = profile?.academicDegreeType?.sMa || expert?.academicDegreeType?.sMa || "";
+    const rank = profile?.academicRankType?.sMa || expert?.academicRankType?.sMa || ""
+    const degree = profile?.academicDegreeType?.sMa || expert?.academicDegreeType?.sMa || ""
+    const fullname = profile?.fullname || expert?.name || ""
 
-    return `${rank} ${degree} ${expert?.name || ""}`.replace(/\s+/g, ' ').trim();
-  };
+    const title = [rank, degree].filter(Boolean).join(".")
+
+    return [title, fullname].filter(Boolean).join(" ").trim()
+  }
   useEffect(() => {
     const id = searchParams.thesisSessionId
     if (!id || !thesisSessionData?.length) {
@@ -1380,7 +1383,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
               },
               {
                 title: "GVHD 1",
-                width: 150,
+                width: 200,
                 dataIndex: "supervisor",
                 render: (_, record) => {
 
@@ -1397,7 +1400,6 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           dropdownStyle={{ minWidth: 200 }}
                           disabled={role !== "Khoa" && !isWithinGvhdSupervisorEditWindow()}
                           options={expertProfileData?.map((item) => {
-                            console.log("item", item)
                             const academicRank =
                               item.lecturer?.userProfile?.academicRankType?.sMa ||
                               item.academicRankType?.sMa ||
@@ -1406,7 +1408,9 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                               item.lecturer?.userProfile?.academicDegreeType?.sMa ||
                               item.academicDegreeType?.sMa ||
                               ""
-                            const academicRankAndDegree = `${academicRank} ${academicDegree}`.trim()
+                            const academicRankAndDegree = [academicRank, academicDegree]
+                              .filter(Boolean)
+                              .join(".")
                             const expertName =
                               item.lecturer?.userProfile?.fullname || item.name || ""
                             const hasLecturer = item.lecturer != null
@@ -1417,7 +1421,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                                   className={hasLecturer ? "text-green-600" : "text-red-600"}
                                   style={{ color: hasLecturer ? "#16a34a" : "#dc2626" }}
                                 >
-                                  {`${academicRankAndDegree} ${expertName}`.trim()}
+                                  {[academicRankAndDegree, expertName].filter(Boolean).join(" ")}
                                 </span>
                               ),
                               value: item.id,
@@ -1429,8 +1433,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       </div>
                     )
                   }
-
-                  console.log(record?.thesisRegistrations?.[0]?.thesisProject?.supervisor)
+                  const isInAcademy = record?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.lecturer != null
                   const academicRank =
                     record?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.lecturer
                       ?.userProfile?.academicRankType?.sMa ||
@@ -1441,17 +1444,28 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       ?.userProfile?.academicDegreeType?.sMa ||
                     record?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.academicDegreeType?.sMa ||
                     ""
-                  const academicRankAndDegree = `${academicRank} ${academicDegree}`.trim()
-                  return `${academicRankAndDegree} ${record?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.name ||
+                  const academicRankAndDegree = [academicRank, academicDegree]
+                    .filter(Boolean)
+                    .join(".")
+                  const fullname =
                     record?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.lecturer
                       ?.userProfile?.fullname ||
+                    record?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.name ||
                     ""
-                    }`
+                  const text = [academicRankAndDegree, fullname].filter(Boolean).join(" ")
+
+                  return <span
+                    title={isInAcademy ? "Trong học viện" : "Ngoài học viện"}
+                    className={isInAcademy ? "text-green-600" : "text-red-600"}
+                    style={{ color: isInAcademy ? "#16a34a" : "#dc2626" }}
+                  >
+                    {text}
+                  </span>
                 },
               },
               {
                 title: "GVHD 2",
-                width: 150,
+                width: 200,
                 dataIndex: "coSupervisor",
                 render: (_, record) => {
                   if (editingRowKeys.includes(record?.id)) {
@@ -1476,7 +1490,9 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                               item.lecturer?.userProfile?.academicDegreeType?.sMa ||
                               item.academicDegreeType?.sMa ||
                               ""
-                            const academicRankAndDegree = `${academicRank} ${academicDegree}`.trim()
+                            const academicRankAndDegree = [academicRank, academicDegree]
+                              .filter(Boolean)
+                              .join(".")
                             const expertName =
                               item.lecturer?.userProfile?.fullname || item.name || ""
                             const hasLecturer = item.lecturer != null
@@ -1487,7 +1503,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                                   className={hasLecturer ? "text-green-600" : "text-red-600"}
                                   style={{ color: hasLecturer ? "#16a34a" : "#dc2626" }}
                                 >
-                                  {`${academicRankAndDegree} ${expertName}`.trim()}
+                                  {[academicRankAndDegree, expertName].filter(Boolean).join(" ")}
                                 </span>
                               ),
                               value: item.id,
@@ -1501,6 +1517,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                   }
 
 
+                  const isInAcademy =
+                    record?.thesisRegistrations?.[0]?.thesisProject?.coSupervisor?.lecturer != null
                   const academicRank =
                     record?.thesisRegistrations?.[0]?.thesisProject?.coSupervisor?.lecturer
                       ?.userProfile?.academicRankType?.sMa ||
@@ -1511,17 +1529,30 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       ?.userProfile?.academicDegreeType?.sMa ||
                     record?.thesisRegistrations?.[0]?.thesisProject?.coSupervisor?.academicDegreeType?.sMa ||
                     ""
-                  const academicRankAndDegree = `${academicRank} ${academicDegree}`.trim()
-                  return `${academicRankAndDegree} ${record?.thesisRegistrations?.[0]?.thesisProject?.coSupervisor?.name ||
+                  const academicRankAndDegree = [academicRank, academicDegree]
+                    .filter(Boolean)
+                    .join(".")
+                  const fullname =
                     record?.thesisRegistrations?.[0]?.thesisProject?.coSupervisor?.lecturer
                       ?.userProfile?.fullname ||
+                    record?.thesisRegistrations?.[0]?.thesisProject?.coSupervisor?.name ||
                     ""
-                    }`
+                  const text = [academicRankAndDegree, fullname].filter(Boolean).join(" ")
+
+                  return (
+                    <span
+                      title={isInAcademy ? "Trong học viện" : "Ngoài học viện"}
+                      className={isInAcademy ? "text-green-600" : "text-red-600"}
+                      style={{ color: isInAcademy ? "#16a34a" : "#dc2626" }}
+                    >
+                      {text}
+                    </span>
+                  )
                 },
               },
               {
                 title: "Chủ tịch ",
-                width: 150,
+                width: 200,
                 dataIndex: "councilChairman",
                 render: (_, record) => {
                   if (editingRowKeys.includes(record?.id)) {
@@ -1579,7 +1610,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
               },
               {
                 title: "Thư ký",
-                width: 150,
+                width: 200,
                 dataIndex: "councilSecretary",
                 render: (_, record) => {
                   if (editingRowKeys.includes(record?.id)) {
@@ -1638,7 +1669,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
               },
               {
                 title: "Phản biện 1",
-                width: 150,
+                width: 200,
                 dataIndex: "reviewer1",
                 render: (_, record) => {
                   if (editingRowKeys.includes(record?.id)) {
@@ -1693,7 +1724,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
               },
               {
                 title: "Phản biện 2",
-                width: 150,
+                width: 200,
                 dataIndex: "reviewer2",
                 render: (_, record) => {
                   if (editingRowKeys.includes(record?.id)) {
@@ -1747,7 +1778,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
               },
               {
                 title: "Ủy viên",
-                width: 150,
+                width: 200,
                 dataIndex: "councilMember",
                 render: (_, record) => {
                   if (editingRowKeys.includes(record?.id)) {
