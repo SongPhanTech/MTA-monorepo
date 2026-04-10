@@ -391,10 +391,12 @@ export default function TrainingActivity() {
               fixed: "right",
               render: (_, record) => (
                 <Row className="justify-center gap-2 flex items-center">
-                  <EditIcon
-                    onClick={() => onOpen(record.id)}
-                    className="text-sm text-green-700 cursor-pointer"
-                  />
+                  {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_QUA_TRINH_REN_LUYEN, "SUA") && (
+                    <EditIcon
+                      onClick={() => onOpen(record.id)}
+                      className="text-sm text-green-700 cursor-pointer"
+                    />
+                  )}
                   {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_QUA_TRINH_REN_LUYEN, "XOA") && (
                     <DeleteIcon
                       popConfirm={{

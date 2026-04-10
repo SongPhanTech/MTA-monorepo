@@ -150,7 +150,7 @@ const NAVIGATION: NavigationType = {
       },
       {
         id: "ke-hoach-giang-day",
-        label: "Kế hoạch giảng dạy",
+        label: "Kế hoạch",
         icon: CalendarRange,
         children: [
           {
@@ -169,6 +169,11 @@ const NAVIGATION: NavigationType = {
             path: ROUTER_PATH.QL_DAO_TAO.KE_HOACH_THI_LAI,
           },
           {
+            id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_HUAN_LUYEN,
+            label: "Kế hoạch huấn luyện",
+            path: ROUTER_PATH.QL_DAO_TAO.KE_HOACH_HUAN_LUYEN,
+          },
+          {
             id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_THONG_KE_HOC_LAI,
             label: "Thống kê học lại",
             path: ROUTER_PATH.QL_DAO_TAO.THONG_KE_HOC_LAI,
@@ -178,7 +183,7 @@ const NAVIGATION: NavigationType = {
             label: "Thống kê thi lại",
             path: ROUTER_PATH.QL_DAO_TAO.THONG_KE_THI_LAI,
           },
-            {
+          {
             id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DS_LOP_MON_HOC,
             label: "Danh sách lớp môn học",
             path: ROUTER_PATH.QL_DAO_TAO.CHUONG_TRINH_DAO_TAO_DS_LOP_MON_HOC,
