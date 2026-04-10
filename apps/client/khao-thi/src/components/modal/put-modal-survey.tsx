@@ -536,6 +536,7 @@ const PutSurveyModal = () => {
     semesterId,
     isPublic,
     anonymous,
+    choices,
     form,
   ])
   // biome-ignore lint/correctness/useExhaustiveDependencies: <>
