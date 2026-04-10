@@ -484,23 +484,27 @@ const PutSurveyModal = () => {
             </Col>
 
             <Col span={12}>
-              <FormItem form={form} name={"isPublic"} label="Có công khai không?" required>
-                <Radio.Group buttonStyle="solid">
-                  <Radio value={true}>Có</Radio>
-                  <Radio value={false}>Không</Radio>
-                </Radio.Group>
-              </FormItem>
+              <Row gutter={16}>
+                <Col span={8}>
+                  <FormItem form={form} name={"isPublic"} label="Có công khai không?" required>
+                    <Radio.Group buttonStyle="solid">
+                      <Radio value={true}>Có</Radio>
+                      <Radio value={false}>Không</Radio>
+                    </Radio.Group>
+                  </FormItem>
+                </Col>
+                {isPublic === true && (
+                  <Col span={8}>
+                    <FormItem form={form} name={"anonymous"} label="Có ẩn danh không?" required>
+                      <Radio.Group buttonStyle="solid">
+                        <Radio value={true}>Có</Radio>
+                        <Radio value={false}>Không</Radio>
+                      </Radio.Group>
+                    </FormItem>
+                  </Col>
+                )}
+              </Row>
             </Col>
-            {isPublic === true && (
-              <Col span={12}>
-                <FormItem form={form} name={"anonymous"} label="Có ẩn danh không?" required>
-                  <Radio.Group buttonStyle="solid">
-                    <Radio value={true}>Có</Radio>
-                    <Radio value={false}>Không</Radio>
-                  </Radio.Group>
-                </FormItem>
-              </Col>
-            )}
           </Row>
         ),
       },
