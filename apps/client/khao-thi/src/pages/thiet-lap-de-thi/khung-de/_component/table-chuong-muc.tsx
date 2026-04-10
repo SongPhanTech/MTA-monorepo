@@ -195,18 +195,11 @@ const TableChuongMuc = ({ matrixId }: TableChuongMucProps) => {
     )
   }
 
-  const renderCell = (quantity: number, point: number) => (
+  const renderCell = (quantity: number) => (
     <div className="relative inline-block min-w-[40px]">
-      <div className="absolute -top-2 -right-2 text-xs text-green-500 font-semibold">
-        <Tooltip title="Điểm mỗi câu đúng">
-          <div>{point}</div>
-        </Tooltip>
-      </div>
-      <div className="text-base font-medium">
-        <Tooltip title="Số câu hỏi">
-          <div className="text-base font-medium">{quantity}</div>
-        </Tooltip>
-      </div>
+      <Tooltip title="Số câu hỏi">
+        <div className="text-sm font-medium">{quantity}</div>
+      </Tooltip>
     </div>
   )
 
@@ -253,8 +246,8 @@ const TableChuongMuc = ({ matrixId }: TableChuongMucProps) => {
             width: 80,
             align: "center",
             render: (_, record) => {
-              const { quantity, point } = getConfigByDifficult(record.configExams, "D1")
-              return renderCell(quantity, point)
+              const { quantity } = getConfigByDifficult(record.configExams, "D1")
+              return renderCell(quantity)
             },
           },
           {
@@ -262,8 +255,8 @@ const TableChuongMuc = ({ matrixId }: TableChuongMucProps) => {
             width: 80,
             align: "center",
             render: (_, record) => {
-              const { quantity, point } = getConfigByDifficult(record.configExams, "D2")
-              return renderCell(quantity, point)
+              const { quantity } = getConfigByDifficult(record.configExams, "D2")
+              return renderCell(quantity)
             },
           },
           {
@@ -271,8 +264,8 @@ const TableChuongMuc = ({ matrixId }: TableChuongMucProps) => {
             width: 100,
             align: "center",
             render: (_, record) => {
-              const { quantity, point } = getConfigByDifficult(record.configExams, "D3")
-              return renderCell(quantity, point)
+              const { quantity } = getConfigByDifficult(record.configExams, "D3")
+              return renderCell(quantity)
             },
           },
           {
@@ -280,8 +273,8 @@ const TableChuongMuc = ({ matrixId }: TableChuongMucProps) => {
             width: 120,
             align: "center",
             render: (_, record) => {
-              const { quantity, point } = getConfigByDifficult(record.configExams, "D4")
-              return renderCell(quantity, point)
+              const { quantity } = getConfigByDifficult(record.configExams, "D4")
+              return renderCell(quantity)
             },
           },
           {

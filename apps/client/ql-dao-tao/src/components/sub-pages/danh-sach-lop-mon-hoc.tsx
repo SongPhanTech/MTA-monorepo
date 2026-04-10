@@ -563,7 +563,7 @@ export default function DanhSachLopMonHoc({
                           Thi lại
                         </Tag>
                       ) : null}
-                      {record.subject?.name} ({record.subject?.credit})
+                      {record.subject?.name} ({record.subject?.credit} TC)
                     </p>
                   ),
                 },

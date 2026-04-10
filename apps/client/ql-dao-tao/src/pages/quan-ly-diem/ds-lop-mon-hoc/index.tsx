@@ -774,7 +774,7 @@ export default function ClassSubject() {
                         Thi lại
                       </Tag>
                     ) : null}
-                    {record.subject?.name} ({record.subject?.credit})
+                    {record.subject?.name} ({record.subject?.credit} TC)
                   </p>
                 ),
               },

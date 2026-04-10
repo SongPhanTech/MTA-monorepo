@@ -5,7 +5,7 @@ import { renderWithMath } from "@components/commons/rich-text-editor/renderWithM
 import Select from "@components/commons/select"
 import TreeSelect from "@components/commons/tree-select"
 import { useStore } from "@tanstack/react-store"
-import type { ExamBank } from "@workspace/db/client"
+import { $Enums, type ExamBank } from "@workspace/db/client"
 import {
   useCreateExamBank,
   useFindManyKnowledgeBlock,
@@ -363,6 +363,14 @@ const SinhDeThuCongModal = () => {
     }
   }, [input?.subjectVersionId, form.setFieldValue])
 
+  useEffect(() => {
+    form.setFieldsValue({
+      examType: dataExam?.subjectVersion?.examType,
+      subjectClassId: dataExam?.subjectClass?.[0]?.id,
+      examDay: dataExam?.subjectClass?.[0]?.examDate,
+    })
+  }, [dataExam?.subjectVersion?.examType, dataExam?.subjectClass])
+
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   const steps: StepItem[] = useMemo(() => {
     return [
@@ -376,20 +384,14 @@ const SinhDeThuCongModal = () => {
               </FormItem>
             </Col>
             <Col span={24}>
-              <FormItem
-                form={form}
-                name="examType"
-                label="Hình thức thi"
-                required
-                initialValue={!input?.id ? dataExam?.subjectVersion?.examType : undefined}
-              >
+              <FormItem form={form} name="examType" label="Hình thức thi" required>
                 <Select
                   options={examTypeOptions
                     .filter(
                       (opt) =>
-                        opt.value === "OfflineWritten" ||
-                        opt.value === "Oral" ||
-                        opt.value === "OnlineWritten"
+                        opt.value === $Enums.ExamType.OfflineWritten ||
+                        opt.value === $Enums.ExamType.Oral ||
+                        opt.value === $Enums.ExamType.OnlineWritten
                     )
                     .map((opt) => ({
                       label: opt.label,
@@ -415,12 +417,7 @@ const SinhDeThuCongModal = () => {
               </FormItem>
             </Col>
             <Col span={24}>
-              <FormItem
-                form={form}
-                name="subjectClassId"
-                label="Dùng cho lớp"
-                initialValue={!input?.id ? dataExam?.subjectClass?.[0]?.id : undefined}
-              >
+              <FormItem form={form} name="subjectClassId" label="Dùng cho lớp">
                 <Select options={dataOption} placeholder="Chọn lớp môn học" />
               </FormItem>
             </Col>

@@ -288,7 +288,7 @@ export default function ThoiKhoaBieu({ type }: { type?: $Enums.SubjectClassType 
                 type: "input",
                 render: (_, record) => (
                   <p className="text-left">
-                    {record?.name} ({record.subject?.credit})
+                    {record?.name} ({record.subject?.credit} TC)
                   </p>
                 ),
               },

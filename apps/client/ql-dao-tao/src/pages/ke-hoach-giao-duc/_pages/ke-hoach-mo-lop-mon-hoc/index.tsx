@@ -595,7 +595,9 @@ export default function KeHoachMoLopMonHoc({ type }: { type?: $Enums.SubjectClas
                   align: "center",
                   render: (_, record) => {
                     return (
-                      <div className="text-left">{`${record?.name} (${record?.credit})` || ""}</div>
+                      <div className="text-left">
+                        {`${record?.name} (${record?.credit} TC)` || ""}
+                      </div>
                     )
                   },
                 },
@@ -616,7 +618,7 @@ export default function KeHoachMoLopMonHoc({ type }: { type?: $Enums.SubjectClas
                         arr={fixedClasses.map((i: any) => {
                           return {
                             key: i?.id,
-                            label: `${i?.code} (${i?._count?.students || 0})`,
+                            label: `${i?.code} (${i?._count?.students || 0} SV)`,
                           }
                         })}
                         key="fixedClass"

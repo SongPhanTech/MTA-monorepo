@@ -16,7 +16,7 @@ import {
   useUpdateQuestion,
 } from "@workspace/db/hooks"
 import { sqlTransaction } from "@workspace/libs/api/model"
-import { Button, Col, Flex, message, Row } from "antd"
+import { Button, Col, Flex, message, Popconfirm, Row } from "antd"
 import { BookPlus } from "lucide-react"
 import { useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
@@ -190,9 +190,17 @@ export default function QuestionList({ questionBankId }: QuestionListProps) {
                     >
                       Bỏ chọn
                     </Button>
-                    <Button className="bg-red-600" type="primary" onClick={handleDeleteMany}>
-                      Xóa
-                    </Button>
+                    <Popconfirm
+                      title="Xóa câu hỏi"
+                      description={`Bạn có chắc muốn xóa ${selectedRowKeys.length} câu hỏi không?`}
+                      onConfirm={handleDeleteMany}
+                      okText="Xóa"
+                      cancelText="Hủy"
+                    >
+                      <Button className="bg-red-600" type="primary">
+                        Xóa
+                      </Button>
+                    </Popconfirm>
                     <Button
                       type="primary"
                       onClick={() =>
