@@ -6,19 +6,18 @@ import DefaultLayout from "@layouts/default-layout"
 import { cn } from "@lib/utils"
 import { useMutation } from "@tanstack/react-query"
 import { $Enums } from "@workspace/db"
-import { useSession } from "@workspace/auth/react"
-import { useFindUniqueStudent, useFindUniqueUserProfile } from "@workspace/db/hooks"
 import {
   classRegister,
   useGetClassesInfo,
   useGetClassRegisterSession,
+  useGetStudentInfo,
 } from "@workspace/libs/api/portal"
 import type { GetClassesInfo200ItemSubjectClassItem } from "@workspace/libs/api/schemas/getClassesInfo200ItemSubjectClassItem"
 import type { GetClassRegisterSession200ItemCreditLimitItem } from "@workspace/libs/api/schemas/getClassRegisterSession200ItemCreditLimitItem"
 import { Button, Checkbox, message, Popconfirm, Tabs } from "antd"
 import dayjs from "dayjs"
 import { LogOutIcon } from "lucide-react"
-import { useMemo, useState } from "react"
+import { useEffect, useState } from "react"
 
 dayjs.locale("vi")
 export default function DangKyHocPage() {
@@ -26,49 +25,6 @@ export default function DangKyHocPage() {
     searchText: "",
   })
   const { data: classRegisterSession, isFetching } = useGetClassRegisterSession()
-
-  const { data: me } = useSession()
-  const { data: userProfileData } = useFindUniqueUserProfile(
-    {
-      where: { id: me?.sDM_NhanVienId || "" },
-      select: {
-        educationAndTraining: {
-          select: { id: true },
-          orderBy: { createdAt: "desc" },
-        },
-      },
-    },
-    { enabled: !!me?.sDM_NhanVienId }
-  )
-
-  const studentId = userProfileData?.educationAndTraining?.[0]?.id || ""
-
-  const { data: studentData } = useFindUniqueStudent(
-    {
-      where: { id: studentId },
-      select: {
-        code: true,
-        userProfile: { select: { fullname: true } },
-        studentSemesterResult: {
-          select: {
-            rank: {
-              select: {
-                classification: true,
-              },
-            },
-            baseScore: true,
-            cumulativeGpaBase4: true,
-            cumulativeGpaBase10: true,
-          },
-          orderBy: { semesterIndexInCourse: "asc" },
-          take: 1,
-        },
-      },
-    },
-    { enabled: !!studentId }
-  )
-
-  const latestSemesterResult = studentData?.studentSemesterResult?.[0]
 
   if (isFetching) {
     return <Loading />
@@ -101,9 +57,6 @@ export default function DangKyHocPage() {
                   endDate={session.endDate}
                   creditLimit={session.creditLimit}
                   tuitionPerCredit={session.tuitionPerCredit}
-                  studentCode={studentData?.code}
-                  studentName={studentData?.userProfile?.fullname}
-                  latestSemesterResult={latestSemesterResult}
                 />
               ),
             })) || []
@@ -118,55 +71,19 @@ const DanhSachMonDangKy = ({
   sessionId,
   curriculumVersions = [],
   endDate,
-  creditLimit,
   tuitionPerCredit,
-  studentCode,
-  studentName,
-  latestSemesterResult,
 }: {
   sessionId: string
   curriculumVersions: { id: string; name: string; code: string }[]
   endDate: string | null
   creditLimit: GetClassRegisterSession200ItemCreditLimitItem[]
   tuitionPerCredit?: number
-  studentCode?: string | null
-  studentName?: string | null
-  latestSemesterResult?: {
-    rank?: { classification?: string | null } | null
-    baseScore?: string | null
-    cumulativeGpaBase4?: unknown
-    cumulativeGpaBase10?: unknown
-  }
 }) => {
   const [curriculumVersionId, setCurriculumVersionId] = useState(
     curriculumVersions.length > 0 ? curriculumVersions[0].id : ""
   )
 
   const [byCurriculum, setByCurriculum] = useState(1)
-
-  const matchedCreditLimit = useMemo(() => {
-    if (!latestSemesterResult) return null
-
-    return (
-      creditLimit.find((limit) => {
-        if (limit.baseScore === "Base10") {
-          const gpaBase10 = Number(latestSemesterResult.cumulativeGpaBase10)
-          if (Number.isNaN(gpaBase10)) return false
-          return (
-            (limit.base10Min == null || gpaBase10 >= limit.base10Min) &&
-            (limit.base10Max == null || gpaBase10 <= limit.base10Max)
-          )
-        }
-
-        const gpaBase4 = Number(latestSemesterResult.cumulativeGpaBase4)
-        if (Number.isNaN(gpaBase4)) return false
-        return (
-          (limit.base4Min == null || gpaBase4 >= limit.base4Min) &&
-          (limit.base4Max == null || gpaBase4 <= limit.base4Max)
-        )
-      }) ?? null
-    )
-  }, [creditLimit, latestSemesterResult])
 
   const { data: classesInfo, refetch: refetchClassesInfo } = useGetClassesInfo({
     sessionId,
@@ -181,6 +98,11 @@ const DanhSachMonDangKy = ({
           ?.flatMap((e) => e?.subjectClass)
           ?.filter((sc) => (sc?.classRegisterLogs?.length || 0) > 0)
       : []
+
+  const registeredCredit = registeredClasses?.reduce(
+    (acc: number, curr: GetClassesInfo200ItemSubjectClassItem) => acc + (curr?.credit || 0),
+    0
+  )
 
   // Map subjectClass ID -> parent subject code, and set of subject codes with a registered class
   const classToSubjectCodeMap = new Map<string, string>()
@@ -221,6 +143,35 @@ const DanhSachMonDangKy = ({
     },
   })
 
+  const {
+    mutateAsync: getStudentInfoMutate,
+    data: studentInfoResponse,
+    isPending: isPendingStudentInfo,
+  } = useGetStudentInfo({
+    mutation: {
+      onError: (error: any) => {
+        message.error(error?.message || "Không lấy được thông tin sinh viên")
+      },
+    },
+  })
+
+  useEffect(() => {
+    if (!sessionId) return
+
+    getStudentInfoMutate({
+      data: {
+        sessionId,
+        curriculumVersionId,
+      },
+    })
+  }, [sessionId, curriculumVersionId, getStudentInfoMutate])
+
+  console.log(studentInfoResponse)
+
+  const studentInfo = studentInfoResponse?.status === 200 ? studentInfoResponse.data : null
+  const isOverMaxCredit =
+    studentInfo?.maxCredit != null && (registeredCredit || 0) > (studentInfo.maxCredit || 0)
+
   const handleClassRegister = (subjectClassIds: string[]) => {
     classRegisterMutate(subjectClassIds)
   }
@@ -233,34 +184,17 @@ const DanhSachMonDangKy = ({
           vui lòng đăng ký trước thời gian này!
         </p>
       )}
-      <div className="mb-2 flex flex-wrap gap-4">
-        {studentName && (
-          <p>
-            Họ và tên: <b>{studentName}</b>
-          </p>
-        )}
-        {studentCode && (
-          <p>
-            Mã sinh viên: <b>{studentCode}</b>
-          </p>
-        )}
-        {latestSemesterResult?.rank?.classification && (
-          <p>
-            Xếp loại: <b>{latestSemesterResult.rank.classification}</b>
-          </p>
-        )}
-        {matchedCreditLimit ? (
-          <p>
-            Giới hạn tín chỉ đăng ký{" "}
-            <span>
-              tối đa <b>{matchedCreditLimit.maxCredit}</b>
-            </span>
-          </p>
-        ) : (
-          creditLimit.length > 0 && <p>Giới hạn tín chỉ đăng ký: chưa xác định</p>
-        )}
-      </div>
+
       <p className="mb-4">Lưu ý: Môn học đã đăng ký sẽ được tô màu xanh lá</p>
+      {studentInfo && (
+        <p className="mb-3">
+          Sinh viên: <b>{studentInfo?.userProfile?.fullname || "-"}</b> | GPA hệ 10:{" "}
+          <b>{studentInfo?.gpaBase10 ?? "-"}</b> | GPA hệ 4: <b>{studentInfo?.gpaBase4 ?? "-"}</b> |
+          Xếp loại: <b>{studentInfo?.classification || "-"}</b> | TC tối đa:{" "}
+          <b>{studentInfo?.maxCredit ?? "-"}</b>
+        </p>
+      )}
+      {isPendingStudentInfo && <p className="mb-3">Đang tải thông tin sinh viên...</p>}
       <div className="flex gap-2">
         <Select
           options={curriculumVersions?.map((cv) => ({
@@ -297,24 +231,16 @@ const DanhSachMonDangKy = ({
         {classesInfo?.status === 200 && (
           <p>
             Bạn đã đăng ký <b>{registeredClasses?.length || 0}</b> học phần,{" "}
-            <b>
-              {registeredClasses?.reduce(
-                (acc: number, curr: GetClassesInfo200ItemSubjectClassItem) =>
-                  acc + (curr?.credit || 0),
-                0
-              )}
-            </b>{" "}
-            tín chỉ, học phí{" "}
-            {(
-              (registeredClasses?.reduce(
-                (acc: number, curr: GetClassesInfo200ItemSubjectClassItem) =>
-                  acc + (curr?.credit || 0),
-                0
-              ) ?? 0) * (tuitionPerCredit || 0)
-            ).formatVND()}
+            <b>{registeredCredit || 0}</b> tín chỉ, học phí{" "}
+            {((registeredCredit || 0) * (tuitionPerCredit || 0)).formatVND()}
           </p>
         )}
       </div>
+      {isOverMaxCredit && (
+        <p className="mb-2 text-red-500">
+          Bạn đã vượt quá số tín chỉ tối đa cho phép ({studentInfo?.maxCredit} TC).
+        </p>
+      )}
       {classesInfo?.status === 200 && (
         <ThoiKhoaBieuDangKy
           registeredClasses={registeredClasses}
@@ -412,27 +338,14 @@ const DanhSachMonDangKy = ({
                 const isMaxed =
                   (record?.maxStudent || 0) <= (record?._count?.subjectClassStudent || 0)
                 const isRegisteredBool = (record?.classRegisterLogs?.length || 0) > 0
-                const totalRegisteredCredit =
-                  registeredClasses?.reduce(
-                    (acc: number, curr: GetClassesInfo200ItemSubjectClassItem) =>
-                      acc + (curr?.credit || 0),
-                    0
-                  ) ?? 0
 
-                const isOverMaxCredit =
-                  matchedCreditLimit?.maxCredit != null &&
-                  totalRegisteredCredit + (record?.credit ?? 0) > matchedCreditLimit.maxCredit
                 const parentSubjectCode = classToSubjectCodeMap.get(record?.id ?? "")
                 const siblingAlreadyRegistered =
                   !isRegisteredBool &&
                   !!parentSubjectCode &&
                   registeredSubjectCodes.has(parentSubjectCode)
                 const isDisabled =
-                  isMaxed ||
-                  isRegisteredBool ||
-                  isPendingClassRegister ||
-                  isOverMaxCredit ||
-                  siblingAlreadyRegistered
+                  isMaxed || isRegisteredBool || isPendingClassRegister || siblingAlreadyRegistered
 
                 return (
                   <Popconfirm

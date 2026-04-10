@@ -145,6 +145,7 @@ export const SqlTransactionBodyItemModel = {
   OutputStandard: 'OutputStandard',
   OutputStandardOnCurriculum: 'OutputStandardOnCurriculum',
   Student: 'Student',
+  TrainingActivity: 'TrainingActivity',
   StudentSemesterResult: 'StudentSemesterResult',
   StudentYearResult: 'StudentYearResult',
   Notification: 'Notification',

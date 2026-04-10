@@ -711,4 +711,133 @@ app.openapi(classUnregister, async (c) => {
   return c.json({ message: "success" }, 200)
 })
 
+const getStudentInfo = createRoute({
+  operationId: "get-student-info",
+  path: "/get-student-info",
+  tags: ["ClassRegister"],
+  summary: "Lấy thông tin sinh viên",
+  description: "Lấy thông tin sinh viên gồm GPA, xếp loại, tín chỉ tối đa",
+  method: "post",
+  request: {
+    body: {
+      content: {
+        "application/json": {
+          schema: z.object({
+            sessionId: z.string().openapi({ description: "ID đợt đăng ký lớp học" }),
+            curriculumVersionId: z
+              .string()
+              .openapi({ description: "ID phiên bản chương trình học" })
+              .optional(),
+          }),
+        },
+      },
+    },
+  },
+  responses: {
+    200: {
+      description: "Thông tin sinh viên",
+      content: {
+        "application/json": {
+          schema: z.object({
+            studentId: z.string(),
+            userProfile: models.UserProfileScalarSchema.pick({
+              fullname: true,
+            }),
+            gpaBase10: z.number().nullable(),
+            gpaBase4: z.number().nullable(),
+            classification: z.string().nullable(),
+            maxCredit: z.number().nullable(),
+          }),
+        },
+      },
+    },
+    400: {
+      description: "Bad request",
+      content: {
+        "application/json": {
+          schema: z.object({
+            message: z.string(),
+          }),
+        },
+      },
+    },
+    404: {
+      description: "Not found",
+      content: {
+        "application/json": {
+          schema: z.object({
+            message: z.string(),
+          }),
+        },
+      },
+    },
+  },
+})
+
+app.openapi(getStudentInfo, async (c) => {
+  const session = c.get("user")
+  const { sessionId, curriculumVersionId } = c.req.valid("json")
+
+  const profile = await prisma.userProfile.findUniqueOrThrow({
+    where: { id: session.id },
+    include: {
+      educationAndTraining: {
+        include: {
+          fixedClass: {
+            include: {
+              trainingCourse: true,
+            },
+          },
+        },
+        orderBy: { createdAt: "desc" },
+      },
+    },
+  })
+
+  if (profile.educationAndTraining.length === 0) {
+    return c.json({ message: "Bạn không có thông tin học vụ" }, 404)
+  }
+
+  const studentId =
+    profile.educationAndTraining.find(
+      (item) => curriculumVersionId && item.curriculumVersionId === curriculumVersionId
+    )?.id ?? (profile.educationAndTraining[0]?.id as string)
+
+  const registerSession = await prisma.classRegisterSession.findUniqueOrThrow({
+    where: { id: sessionId },
+  })
+
+  const semester = await prisma.semester.findUniqueOrThrow({
+    where: { id: registerSession.semesterId },
+    select: { startDate: true },
+  })
+
+  const nearestSemesterResult = await prisma.studentSemesterResult.findFirst({
+    select: {
+      gpaBase10: true,
+      gpaBase4: true,
+    },
+    where: {
+      studentId,
+      semesterId: registerSession.semesterId,
+      semester: { startDate: { lt: semester.startDate } },
+    },
+    orderBy: { semester: { startDate: "desc" } },
+  })
+
+  return c.json(
+    {
+      studentId,
+      userProfile: {
+        fullname: profile.fullname,
+      },
+      gpaBase10: nearestSemesterResult?.gpaBase10?.toNumber() ?? null,
+      gpaBase4: nearestSemesterResult?.gpaBase4?.toNumber() ?? null,
+      classification,
+      maxCredit,
+    },
+    200
+  )
+})
+
 export default app

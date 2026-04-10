@@ -51,8 +51,7 @@ export type GetClassesInfo200ItemSubjectClassItem = {
   approveLecturerAssignmentAt?: string | null;
   /** @nullable */
   examDate?: string | null;
-  /** @nullable */
-  examType?: GetClassesInfo200ItemSubjectClassItemExamType;
+  examType: GetClassesInfo200ItemSubjectClassItemExamType;
   /** @nullable */
   scoreDeadLineStart?: string | null;
   /** @nullable */

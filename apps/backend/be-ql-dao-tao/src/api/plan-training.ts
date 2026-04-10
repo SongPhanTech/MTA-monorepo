@@ -5,7 +5,7 @@ import customParseFormat from "dayjs/plugin/customParseFormat"
 import { read, utils, type WorkSheet } from "xlsx"
 import { prisma } from ".."
 import { UploadExcelModel } from "../dto/upload-excel.dto"
-import { ExamType } from "@workspace/db/client";
+import { ExamType } from "@workspace/db/client"
 
 dayjs.extend(customParseFormat)
 const app = new OpenAPIHono({ strict: false })

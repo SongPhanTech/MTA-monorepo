@@ -37,6 +37,10 @@ import type {
   GetClassesInfo404,
   GetClassesInfoParams,
   GetSessionParams,
+  GetStudentInfo200,
+  GetStudentInfo400,
+  GetStudentInfo404,
+  GetStudentInfoBody,
   Session,
   Unauthorized,
 } from "./schemas"
@@ -739,6 +743,121 @@ export const useClassUnregister = <
   TContext
 > => {
   const mutationOptions = getClassUnregisterMutationOptions(options)
+
+  return useMutation(mutationOptions, queryClient)
+}
+
+/**
+ * Lấy thông tin sinh viên gồm GPA, xếp loại, tín chỉ tối đa
+ * @summary Lấy thông tin sinh viên
+ */
+export type getStudentInfoResponse200 = {
+  data: GetStudentInfo200
+  status: 200
+}
+
+export type getStudentInfoResponse400 = {
+  data: GetStudentInfo400
+  status: 400
+}
+
+export type getStudentInfoResponse404 = {
+  data: GetStudentInfo404
+  status: 404
+}
+
+export type getStudentInfoResponseSuccess = getStudentInfoResponse200 & {
+  headers: Headers
+}
+export type getStudentInfoResponseError = (
+  | getStudentInfoResponse400
+  | getStudentInfoResponse404
+) & {
+  headers: Headers
+}
+
+export type getStudentInfoResponse = getStudentInfoResponseSuccess | getStudentInfoResponseError
+
+export const getGetStudentInfoUrl = () => {
+  return `/api/class-register/get-student-info`
+}
+
+export const getStudentInfo = async (
+  getStudentInfoBody: GetStudentInfoBody,
+  options?: RequestInit
+): Promise<getStudentInfoResponse> => {
+  return customPortalFetch<getStudentInfoResponse>(getGetStudentInfoUrl(), {
+    ...options,
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(getStudentInfoBody),
+  })
+}
+
+export const getGetStudentInfoMutationOptions = <
+  TError = GetStudentInfo400 | GetStudentInfo404,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof getStudentInfo>>,
+    TError,
+    { data: GetStudentInfoBody },
+    TContext
+  >
+  request?: SecondParameter<typeof customPortalFetch>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof getStudentInfo>>,
+  TError,
+  { data: GetStudentInfoBody },
+  TContext
+> => {
+  const mutationKey = ["getStudentInfo"]
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof getStudentInfo>>,
+    { data: GetStudentInfoBody }
+  > = (props) => {
+    const { data } = props ?? {}
+
+    return getStudentInfo(data, requestOptions)
+  }
+
+  return { mutationFn, ...mutationOptions }
+}
+
+export type GetStudentInfoMutationResult = NonNullable<Awaited<ReturnType<typeof getStudentInfo>>>
+export type GetStudentInfoMutationBody = GetStudentInfoBody
+export type GetStudentInfoMutationError = GetStudentInfo400 | GetStudentInfo404
+
+/**
+ * @summary Lấy thông tin sinh viên
+ */
+export const useGetStudentInfo = <
+  TError = GetStudentInfo400 | GetStudentInfo404,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof getStudentInfo>>,
+      TError,
+      { data: GetStudentInfoBody },
+      TContext
+    >
+    request?: SecondParameter<typeof customPortalFetch>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof getStudentInfo>>,
+  TError,
+  { data: GetStudentInfoBody },
+  TContext
+> => {
+  const mutationOptions = getGetStudentInfoMutationOptions(options)
 
   return useMutation(mutationOptions, queryClient)
 }
