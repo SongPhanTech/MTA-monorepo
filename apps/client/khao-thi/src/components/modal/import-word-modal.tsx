@@ -193,8 +193,8 @@ const WordImportModal: React.FC = () => {
       .replace(/\r/g, "")
       .replace(/\u00A0/g, " ")
       .replace(/\b([a-d])\.\s+(?=[A-D]\.)/gi, "")
-      .replace(/([^\n\s])([A-D])\.(?=\S)/gi, "$1\n$2. ")
-      .replace(/([^\n])([A-D])\.\s+/gi, "$1\n$2. ")
+      .replace(/([^\n\s])([A-D])\.(?=\S)/g, "$1\n$2. ")
+      .replace(/([^\n])([A-D])\.\s+/g, "$1\n$2. ")
       .replace(/(\S)(\*\s*Đáp\s*án\s*:)/gi, "$1\n$2")
   }
 
