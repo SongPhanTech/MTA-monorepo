@@ -18,20 +18,29 @@ import _ from "lodash"
 import type React from "react"
 import { useCallback, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
+
 export default function LichKiemTraGiangDay() {
   const { can, canSome } = useAbility()
   const [currentPage, setCurrentPage] = useState(1)
   const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
-  const [_searchText, _setSearchText] = useState<string>("")
   const [filters, setFilters] = useState<FilterProps>({
-    code: "",
-    name: "",
+    location: "",
+    notes: "",
   })
 
+  const buildWhere = useCallback(() => {
+    return {
+      periodType: "CHECK" as const,
+      deletedAt: null,
+      ...(filters.location && {
+        location: { contains: filters.location, mode: "insensitive" as const },
+      }),
+      ...(filters.notes && { notes: { contains: filters.notes, mode: "insensitive" as const } }),
+    }
+  }, [filters])
+
   const { data = [], refetch } = useFindManyClassSchedule({
-    where: {
-      periodType: "CHECK",
-    },
+    where: buildWhere(),
     include: {
       subjectClass: true,
     },
@@ -43,10 +52,7 @@ export default function LichKiemTraGiangDay() {
   })
 
   const { data: count } = useCountClassSchedule({
-    where: {
-      deletedAt: null,
-      periodType: "CHECK",
-    },
+    where: buildWhere(),
   })
 
   const debouncedRefetch = useCallback(
@@ -55,6 +61,16 @@ export default function LichKiemTraGiangDay() {
     }, 500),
     []
   )
+
+  const handleSetFilters = useCallback(
+    (value: FilterProps) => {
+      setFilters(value)
+      setCurrentPage(1)
+      debouncedRefetch()
+    },
+    [debouncedRefetch]
+  )
+
   const { onOpen } = useDisclosure<string>({
     tag: "PutLichTuanThangModal",
   })
@@ -62,17 +78,15 @@ export default function LichKiemTraGiangDay() {
   const { showSpinner, hideSpinner } = useSpinner()
 
   const { mutateAsync: updateClassSchedule } = useUpdateClassSchedule()
+
   async function handleDelete(id: string) {
     try {
       showSpinner()
       await updateClassSchedule({
-        where: {
-          id,
-        },
-        data: {
-          deletedAt: new Date(),
-        },
+        where: { id },
+        data: { deletedAt: new Date() },
       })
+      refetch()
     } catch (error: any) {
       if (error?.info?.message) {
         message.error(error?.info?.message)
@@ -115,10 +129,7 @@ export default function LichKiemTraGiangDay() {
           <Table
             rowKey="id"
             filters={filters}
-            setFilters={(value) => {
-              setFilters(value)
-              setCurrentPage(1)
-            }}
+            setFilters={handleSetFilters}
             columns={[
               {
                 title: "TT",
@@ -143,14 +154,13 @@ export default function LichKiemTraGiangDay() {
                 align: "center",
                 render: (_, record) =>
                   record.startTime && record.endTime
-                    ? `${dayjs(record.startTime).format("HH:mm")} - ${dayjs(record.endTime).format(
-                        "HH:mm"
-                      )}`
+                    ? `${dayjs(record.startTime).format("HH:mm")} - ${dayjs(record.endTime).format("HH:mm")}`
                     : "-",
               },
               {
                 title: "Địa điểm",
                 dataIndex: "location",
+                type: "input",
                 align: "center",
                 width: 250,
               },
