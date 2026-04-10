@@ -140,6 +140,7 @@ const WordImportModal: React.FC = () => {
     ignoreAttributes: false,
     attributeNamePrefix: "@_",
     parseTagValue: false,
+    trimValues: false,
   })
   const extractRawTextFromCell = (cell: any): string => {
     if (!cell) return ""
@@ -187,7 +188,17 @@ const WordImportModal: React.FC = () => {
     return getText(cell)
   }
 
-  const cleanQuestionText = (text: string) => text
+  const normalizeWordQuestionText = (text: string) => {
+    return text
+      .replace(/\r/g, "")
+      .replace(/\u00A0/g, " ")
+      .replace(/\b([a-d])\.\s+(?=[A-D]\.)/gi, "")
+      .replace(/([^\n\s])([A-D])\.(?=\S)/gi, "$1\n$2. ")
+      .replace(/([^\n])([A-D])\.\s+/gi, "$1\n$2. ")
+      .replace(/(\S)(\*\s*Đáp\s*án\s*:)/gi, "$1\n$2")
+  }
+
+  const cleanQuestionText = (text: string) => normalizeWordQuestionText(text)
 
   const mapQuestionTypeFromText = (raw: string): QuestionType | undefined => {
     const value = raw.trim().toUpperCase().replace(/\s+/g, "")
@@ -235,16 +246,18 @@ const WordImportModal: React.FC = () => {
       if (typeof t === "string") value = t
       else if (typeof t === "object" && t?.["#text"]) value = t["#text"]
 
+      if (r?.["w:tab"]) {
+        text += "\t"
+      }
+
+      if (r?.["w:br"] || r?.["w:cr"]) {
+        text += "\n"
+      }
+
       if (value) {
         text += value
       }
 
-      // xuống dòng thật
-      if (r?.["w:br"]) {
-        text += "\n"
-      }
-
-      // IMAGE
       const drawing = r?.["w:drawing"]
       const blip =
         drawing?.["wp:inline"]?.["a:graphic"]?.["a:graphicData"]?.["pic:pic"]?.["pic:blipFill"]?.[
@@ -266,7 +279,7 @@ const WordImportModal: React.FC = () => {
     }
 
     return {
-      text: text.replace(/\r/g, "").trimEnd(), // chỉ trim cuối
+      text: `${normalizeWordQuestionText(text)}\n`,
       images,
       nextIndex: imgIndex,
     }
@@ -278,7 +291,7 @@ const WordImportModal: React.FC = () => {
     const match = text.match(/\(\s*([\d.,]+)\s*đ\s*\)/i)
     if (!match) return {}
 
-    const value = Number(match[1].replace(",", "."))
+    const value = Number(match[0])
     if (Number.isNaN(value)) return {}
 
     return { value }
@@ -586,8 +599,8 @@ const WordImportModal: React.FC = () => {
           }
         }
 
-        const rawQuestionText = contentLines.join("\n")
-        const answerTextRaw = answerLines.join("\n")
+        const rawQuestionText = normalizeWordQuestionText(contentLines.join("\n"))
+        const answerTextRaw = normalizeWordQuestionText(answerLines.join("\n"))
 
         const question: any = {
           type,
@@ -792,12 +805,19 @@ const WordImportModal: React.FC = () => {
   })
 
   const buildQuestionPayload = async (q: any, knowledgeBlockId?: string) => {
-    const content = await uploadImagesAndReplacePlaceholders(q.content, q.contentImagesRaw || [])
-    const explanation = await uploadImagesAndReplacePlaceholders(
-      q.explanation,
-      q.explanationImagesRaw || []
-    )
+    let content = ""
+let explanation = ""
 
+    try {
+      content = await uploadImagesAndReplacePlaceholders(q.content, q.contentImagesRaw || [])
+
+      explanation = await uploadImagesAndReplacePlaceholders(
+        q.explanation,
+        q.explanationImagesRaw || []
+      )
+    } catch (e) {
+      throw new Error("Upload ảnh thất bại")
+    }
     const payload: any = {
       content,
       explanation,
