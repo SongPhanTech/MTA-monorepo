@@ -407,8 +407,20 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
     const fullname = profile?.fullname || expert?.name || ""
 
     const title = [rank, degree].filter(Boolean).join(".")
+    const text = [title, fullname].filter(Boolean).join(" ").trim()
+    if (!text) return ""
 
-    return [title, fullname].filter(Boolean).join(" ").trim()
+    const isInAcademy = expert?.lecturer != null
+
+    return (
+      <span
+        title={isInAcademy ? "Trong học viện" : "Ngoài học viện"}
+        className={isInAcademy ? "text-green-600" : "text-red-600"}
+        style={{ color: isInAcademy ? "#16a34a" : "#dc2626" }}
+      >
+        {text}
+      </span>
+    )
   }
   useEffect(() => {
     const id = searchParams.thesisSessionId
