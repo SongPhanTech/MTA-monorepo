@@ -13,7 +13,6 @@ type PutEditScoreForm = {
   attendanceScore?: number
   midtermScore?: number
   examScore?: number
-  description?: string
 }
 
 const { TextArea } = Input
@@ -63,7 +62,6 @@ const PutEditScoreModal = () => {
       attendanceScore: getScoreValue(input.subjectClassStudent.attendanceScore),
       midtermScore: getScoreValue(input.subjectClassStudent.midtermScore),
       examScore: getScoreValue(input.subjectClassStudent.examScore),
-      description: input.subjectClassStudent.description || "",
     })
   }, [form, input, isOpen])
 
@@ -119,7 +117,6 @@ const PutEditScoreModal = () => {
           examScore: values.examScore ?? null,
           finalScore,
           manualFinalScore: null,
-          description: values.description?.trim() || null,
         },
       })
 
@@ -220,12 +217,6 @@ const PutEditScoreModal = () => {
             className="w-full"
             placeholder="Nhập điểm thi"
           />
-        </FormItem>
-      </Col>
-
-      <Col span={24} className="mb-3">
-        <FormItem form={form} name="description" label="Ghi chú">
-          <TextArea rows={3} placeholder="Nhập ghi chú" />
         </FormItem>
       </Col>
     </PutFormModal>
