@@ -330,9 +330,17 @@ export default function KhungDeList() {
                   />
                   <DeleteIcon
                     type="text"
+                    popConfirm={{
+                      onConfirm: (e) => {
+                        handleDelete(record.id)
+                        e?.stopPropagation()
+                      },
+                      onCancel: (e) => {
+                        e?.stopPropagation()
+                      },
+                    }}
                     onClick={(e) => {
                       e.stopPropagation()
-                      handleDelete(record.id)
                     }}
                   />
                 </Row>
