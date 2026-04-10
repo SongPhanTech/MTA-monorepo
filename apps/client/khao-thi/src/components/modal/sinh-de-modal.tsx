@@ -5,17 +5,17 @@ import PutFormModal from "@components/commons/put-modal"
 import Select from "@components/commons/select"
 import { store } from "@pages/thiet-lap-de-thi/danh-sach-de"
 import { useStore } from "@tanstack/react-store"
-import type { ExamBank } from "@workspace/db/client"
+import { $Enums, type ExamBank } from "@workspace/db/client"
 import {
   useFindManyExamFramework,
   useFindManyExamMatrix,
   useFindUniqueExam,
 } from "@workspace/db/hooks"
 import { automaticTopicGeneration } from "@workspace/libs/api/exam"
-import { Button, Checkbox, Col, Form, Input, InputNumber, message, Row } from "antd"
+import { Checkbox, Col, Form, Input, InputNumber, message, Row } from "antd"
 import dayjs from "dayjs"
 import { examTypeOptions } from "@workspace/libs/constants"
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 
 type PutMaTranDeInputType = ExamBank & {
@@ -30,7 +30,7 @@ const SinhDeModal = () => {
   const [form] = Form.useForm<PutMaTranDeInputType>()
   const [showExplain, setShowExplain] = useState(false)
 
-  const { isOpen, onClose, input } = useDisclosure<{
+  const { isOpen, onClose } = useDisclosure<{
     id?: string
   }>({
     tag: "SinhDeModal",
@@ -88,6 +88,18 @@ const SinhDeModal = () => {
     },
     { enabled: !!examFrameworkId }
   )
+
+  useEffect(() => {
+    form.setFieldsValue({
+      examType: dataExam?.subjectVersion?.examType,
+      subjectClassId: dataExam?.subjectClass?.[0]?.id,
+      examDay: dataExam?.subjectClass?.[0]?.examDate,
+    })
+  }, [
+    dataExam?.subjectVersion?.examType,
+    dataExam?.subjectClass?.[0]?.id,
+    dataExam?.subjectClass?.[0]?.examDate,
+  ])
 
   const onOk = async (values: PutMaTranDeInputType) => {
     try {
@@ -155,20 +167,14 @@ const SinhDeModal = () => {
             </FormItem>
           </Col>
           <Col span={12}>
-            <FormItem
-              form={form}
-              name="examType"
-              label="Hình thức thi"
-              required
-              initialValue={!input?.id ? dataExam?.subjectVersion?.examType : undefined}
-            >
+            <FormItem form={form} name="examType" label="Hình thức thi" required>
               <Select
                 options={examTypeOptions
                   .filter(
                     (opt) =>
-                      opt.value === "OfflineWritten" ||
-                      opt.value === "Oral" ||
-                      opt.value === "OnlineWritten"
+                      opt.value === $Enums.ExamType.OfflineWritten ||
+                      opt.value === $Enums.ExamType.Oral ||
+                      opt.value === $Enums.ExamType.OnlineWritten
                   )
                   .map((opt) => ({
                     label: opt.label,
@@ -204,14 +210,6 @@ const SinhDeModal = () => {
               />
             </FormItem>
           </Col>
-          {/* <Col span={24}>
-                        <FormItem form={form} name="sort" label="Cấu hình" required>
-                            <Radio.Group>
-                                <Radio value="khung">Sắp xếp theo chuẩn đầu ra</Radio>
-                                <Radio value="kho">Sắp xếp theo độ khó</Radio>
-                            </Radio.Group>
-                        </FormItem>
-                    </Col> */}
           <Col span={12}>
             <FormItem form={form} name="examDay" label="Ngày thi" required>
               <DatePicker
@@ -228,24 +226,18 @@ const SinhDeModal = () => {
             </FormItem>
           </Col>
           <Col span={12}>
-            <FormItem
-              form={form}
-              name="subjectClassId"
-              label="Dùng cho lớp"
-              required
-              initialValue={!input?.id ? dataExam?.subjectClass?.[0]?.id : undefined}
-            >
+            <FormItem form={form} name="subjectClassId" label="Dùng cho lớp" required>
               <Select options={dataOption} placeholder="Chọn lớp môn học" />
             </FormItem>
           </Col>
           <Col span={4}>
-            <FormItem form={form} name="isGroup" valuePropName="checked" initialValue={true}>
+            <FormItem form={form} name="isGroup" valuePropName="checked">
               <Checkbox>Hiển thị tiêu đề</Checkbox>
             </FormItem>
           </Col>
 
           <Col span={5}>
-            <FormItem form={form} name="isNote" valuePropName="checked" initialValue={false}>
+            <FormItem form={form} name="isNote" valuePropName="checked">
               <Checkbox>Được sử dụng tài liệu</Checkbox>
             </FormItem>
           </Col>
