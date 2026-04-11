@@ -395,18 +395,18 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
   const getCouncilMemberName = (record: any, role: CouncilRole) => {
     const member = record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
       (m: CouncilMember) => m.role === role
-    );
+    )
 
-    if (!member) return "";
+    if (!member) return ""
 
-    const expert = member.expert;
-    const profile = expert?.lecturer?.userProfile;
+    const expert = member.expert
+    const profile = expert?.lecturer?.userProfile
 
-    const rank = profile?.academicRankType?.sMa || expert?.academicRankType?.sMa || "";
-    const degree = profile?.academicDegreeType?.sMa || expert?.academicDegreeType?.sMa || "";
+    const rank = profile?.academicRankType?.sMa || expert?.academicRankType?.sMa || ""
+    const degree = profile?.academicDegreeType?.sMa || expert?.academicDegreeType?.sMa || ""
 
-    return `${rank} ${degree} ${expert?.name || ""}`.replace(/\s+/g, ' ').trim();
-  };
+    return `${rank} ${degree} ${expert?.name || ""}`.replace(/\s+/g, " ").trim()
+  }
   useEffect(() => {
     const id = searchParams.thesisSessionId
     if (!id || !thesisSessionData?.length) {
@@ -467,17 +467,17 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
         type: typeLabel,
         organization: organizationId
           ? {
-            connect: {
-              Id: organizationId,
-            },
-          }
+              connect: {
+                Id: organizationId,
+              },
+            }
           : { disconnect: true },
         thesisSession: thesisSessionId
           ? {
-            connect: {
-              id: thesisSessionId,
-            },
-          }
+              connect: {
+                id: thesisSessionId,
+              },
+            }
           : { disconnect: true },
         thesisType: ThesisType.THESIS,
         librarySubmission: {
@@ -1168,18 +1168,20 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                   )}
 
                   {role === "Khoa" && (
-                    <Button type="primary" onClick={async () => {
-                      await exportHDDanhGiaLuanVan({
-                        allStudentsInClasses,
-                        showSpinner,
-                        hideSpinner,
-                        message,
-                      })
-                    }}>
+                    <Button
+                      type="primary"
+                      onClick={async () => {
+                        await exportHDDanhGiaLuanVan({
+                          allStudentsInClasses,
+                          showSpinner,
+                          hideSpinner,
+                          message,
+                        })
+                      }}
+                    >
                       Đề xuất hội đồng
                     </Button>
                   )}
-
                 </Space>
               </Col>
             </Row>
@@ -1221,7 +1223,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                   }
                   if (record?.thesisRegistrations?.[0]?.thesisProject?.organization) {
                     return (
-                      `${record?.thesisRegistrations?.[0]?.thesisProject?.organization?.sMa || ""
+                      `${
+                        record?.thesisRegistrations?.[0]?.thesisProject?.organization?.sMa || ""
                       } ` || "N/A "
                     )
                   }
@@ -1306,7 +1309,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       editingValues[record?.id]?.researchTopicAssociated !== undefined
                         ? editingValues[record?.id]?.researchTopicAssociated
                         : record?.thesisRegistrations?.[0]?.thesisProject
-                          ?.researchTopicAssociated || ""
+                            ?.researchTopicAssociated || ""
 
                     return (
                       <div onClick={(e) => e.stopPropagation()}>
@@ -1383,7 +1386,6 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                 width: 150,
                 dataIndex: "supervisor",
                 render: (_, record) => {
-
                   if (editingRowKeys.includes(record?.id)) {
                     const currentValue =
                       editingValues[record?.id]?.supervisor !== undefined
@@ -1434,19 +1436,22 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                   const academicRank =
                     record?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.lecturer
                       ?.userProfile?.academicRankType?.sMa ||
-                    record?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.academicRankType?.sMa
-                    || ""
+                    record?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.academicRankType
+                      ?.sMa ||
+                    ""
                   const academicDegree =
                     record?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.lecturer
                       ?.userProfile?.academicDegreeType?.sMa ||
-                    record?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.academicDegreeType?.sMa ||
+                    record?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.academicDegreeType
+                      ?.sMa ||
                     ""
                   const academicRankAndDegree = `${academicRank} ${academicDegree}`.trim()
-                  return `${academicRankAndDegree} ${record?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.name ||
+                  return `${academicRankAndDegree} ${
+                    record?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.name ||
                     record?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.lecturer
                       ?.userProfile?.fullname ||
                     ""
-                    }`
+                  }`
                 },
               },
               {
@@ -1500,23 +1505,25 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                     )
                   }
 
-
                   const academicRank =
                     record?.thesisRegistrations?.[0]?.thesisProject?.coSupervisor?.lecturer
                       ?.userProfile?.academicRankType?.sMa ||
-                    record?.thesisRegistrations?.[0]?.thesisProject?.coSupervisor?.academicRankType?.sMa ||
+                    record?.thesisRegistrations?.[0]?.thesisProject?.coSupervisor?.academicRankType
+                      ?.sMa ||
                     ""
                   const academicDegree =
                     record?.thesisRegistrations?.[0]?.thesisProject?.coSupervisor?.lecturer
                       ?.userProfile?.academicDegreeType?.sMa ||
-                    record?.thesisRegistrations?.[0]?.thesisProject?.coSupervisor?.academicDegreeType?.sMa ||
+                    record?.thesisRegistrations?.[0]?.thesisProject?.coSupervisor
+                      ?.academicDegreeType?.sMa ||
                     ""
                   const academicRankAndDegree = `${academicRank} ${academicDegree}`.trim()
-                  return `${academicRankAndDegree} ${record?.thesisRegistrations?.[0]?.thesisProject?.coSupervisor?.name ||
+                  return `${academicRankAndDegree} ${
+                    record?.thesisRegistrations?.[0]?.thesisProject?.coSupervisor?.name ||
                     record?.thesisRegistrations?.[0]?.thesisProject?.coSupervisor?.lecturer
                       ?.userProfile?.fullname ||
                     ""
-                    }`
+                  }`
                 },
               },
               {
@@ -1529,8 +1536,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       editingValues[record?.id]?.chairman !== undefined
                         ? editingValues[record?.id]?.councilChairman
                         : record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
-                          (member: CouncilMember) => member.role === CouncilRole.CHAIRMAN
-                        )?.expert?.id || ""
+                            (member: CouncilMember) => member.role === CouncilRole.CHAIRMAN
+                          )?.expert?.id || ""
                     return (
                       <div onClick={(e) => e.stopPropagation()}>
                         <Select
@@ -1574,7 +1581,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       </div>
                     )
                   }
-                  return getCouncilMemberName(record, CouncilRole.CHAIRMAN);
+                  return getCouncilMemberName(record, CouncilRole.CHAIRMAN)
                 },
               },
               {
@@ -1587,8 +1594,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       editingValues[record?.id]?.councilSecretary !== undefined
                         ? editingValues[record?.id]?.councilSecretary
                         : record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
-                          (member: CouncilMember) => member.role === CouncilRole.SECRETARY
-                        )?.expert?.id || ""
+                            (member: CouncilMember) => member.role === CouncilRole.SECRETARY
+                          )?.expert?.id || ""
                     return (
                       <div onClick={(e) => e.stopPropagation()}>
                         <Select
@@ -1607,7 +1614,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                                 item.lecturer?.userProfile?.academicDegreeType?.sMa ||
                                 item.academicDegreeType?.sMa ||
                                 ""
-                              const academicRankAndDegree = `${academicRank} ${academicDegree}`.trim()
+                              const academicRankAndDegree =
+                                `${academicRank} ${academicDegree}`.trim()
                               const expertName =
                                 item.lecturer?.userProfile?.fullname || item.name || ""
                               const text = `${academicRankAndDegree} ${expertName}`.trim()
@@ -1633,7 +1641,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       </div>
                     )
                   }
-                  return getCouncilMemberName(record, CouncilRole.SECRETARY);
+                  return getCouncilMemberName(record, CouncilRole.SECRETARY)
                 },
               },
               {
@@ -1646,8 +1654,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       editingValues[record?.id]?.reviewer1 !== undefined
                         ? editingValues[record?.id]?.reviewer1
                         : record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
-                          (member: CouncilMember) => member.role === CouncilRole.REVIEWER_1
-                        )?.expert?.id || ""
+                            (member: CouncilMember) => member.role === CouncilRole.REVIEWER_1
+                          )?.expert?.id || ""
                     return (
                       <div onClick={(e) => e.stopPropagation()}>
                         <Select
@@ -1688,7 +1696,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       </div>
                     )
                   }
-                  return getCouncilMemberName(record, CouncilRole.REVIEWER_1);
+                  return getCouncilMemberName(record, CouncilRole.REVIEWER_1)
                 },
               },
               {
@@ -1701,8 +1709,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       editingValues[record?.id]?.reviewer2 !== undefined
                         ? editingValues[record?.id]?.reviewer2
                         : record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
-                          (member: any) => member.role === CouncilRole.REVIEWER_2
-                        )?.expert?.id || ""
+                            (member: any) => member.role === CouncilRole.REVIEWER_2
+                          )?.expert?.id || ""
                     return (
                       <div onClick={(e) => e.stopPropagation()}>
                         <Select
@@ -1742,7 +1750,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       </div>
                     )
                   }
-                  return getCouncilMemberName(record, CouncilRole.REVIEWER_2);
+                  return getCouncilMemberName(record, CouncilRole.REVIEWER_2)
                 },
               },
               {
@@ -1755,8 +1763,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       editingValues[record?.id]?.councilMember !== undefined
                         ? editingValues[record?.id]?.councilMember
                         : record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
-                          (member: any) => member.role === CouncilRole.MEMBER
-                        )?.expert?.id || ""
+                            (member: any) => member.role === CouncilRole.MEMBER
+                          )?.expert?.id || ""
                     return (
                       <div onClick={(e) => e.stopPropagation()}>
                         <Select
@@ -1796,7 +1804,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       </div>
                     )
                   }
-                  return getCouncilMemberName(record, CouncilRole.MEMBER);
+                  return getCouncilMemberName(record, CouncilRole.MEMBER)
                 },
               },
               {
@@ -1853,8 +1861,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                   }
                   return record?.thesisRegistrations?.[0]?.thesisProject?.defenseDate
                     ? dayjs(record?.thesisRegistrations?.[0]?.thesisProject?.defenseDate).format(
-                      "DD/MM/YYYY"
-                    )
+                        "DD/MM/YYYY"
+                      )
                     : ""
                 },
               },
@@ -1869,7 +1877,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       editingValues[record?.id]?.defenseSession !== undefined
                         ? editingValues[record?.id]?.defenseSession
                         : record?.thesisRegistrations?.[0]?.thesisProject?.defenseSession
-                          ?.startTime || ""
+                            ?.startTime || ""
                     const dayjsValue = currentValue
 
                     return (
@@ -1893,8 +1901,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                   }
                   return record?.thesisRegistrations?.[0]?.thesisProject?.defenseSession?.startTime
                     ? dayjs(
-                      record?.thesisRegistrations?.[0]?.thesisProject?.defenseSession?.startTime
-                    ).format("HH:mm")
+                        record?.thesisRegistrations?.[0]?.thesisProject?.defenseSession?.startTime
+                      ).format("HH:mm")
                     : ""
                 },
               },
@@ -1909,7 +1917,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       editingValues[record?.id]?.score !== undefined
                         ? editingValues[record?.id]?.score
                         : record?.thesisRegistrations?.[0]?.thesisProject?.defenseRecord
-                          ?.finalScore || ""
+                            ?.finalScore || ""
 
                     return (
                       <div onClick={(e) => e.stopPropagation()}>

@@ -5,10 +5,7 @@
  * OpenAPI spec version: 1.0.0
  */
 
-/**
- * @nullable
- */
-export type GetSurveysOfProfile200AllOfAllOfDataItemSubjectClassExamType = typeof GetSurveysOfProfile200AllOfAllOfDataItemSubjectClassExamType[keyof typeof GetSurveysOfProfile200AllOfAllOfDataItemSubjectClassExamType] | null;
+export type GetSurveysOfProfile200AllOfAllOfDataItemSubjectClassExamType = typeof GetSurveysOfProfile200AllOfAllOfDataItemSubjectClassExamType[keyof typeof GetSurveysOfProfile200AllOfAllOfDataItemSubjectClassExamType];
 
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare

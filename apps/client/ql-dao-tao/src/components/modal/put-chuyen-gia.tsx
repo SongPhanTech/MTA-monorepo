@@ -74,8 +74,8 @@ const PutExpertProfile = () => {
     },
     { enabled: !!selectedLecturerId }
   )
-  const {data: academicRankType} = useFindManyDM_HocHam();
-  const {data: academicDegreeType} = useFindManyDM_HocVi();
+  const { data: academicRankType } = useFindManyDM_HocHam()
+  const { data: academicDegreeType } = useFindManyDM_HocVi()
 
   useEffect(() => {
     if (expert) {
@@ -258,15 +258,36 @@ const PutExpertProfile = () => {
       {!isInternal && (
         <Col span={12}>
           <FormItem form={form} name="academicRankTypeId" label="Học hàm">
-            <Select options={academicRankType?.map((item) => ({ label: `${item.sMa} - ${item.sTen}`, value: item.Id })) ?? []} placeholder="Chọn học hàm" allowClear showSearch 
-            filterOption={false}/>
+            <Select
+              options={
+                academicRankType?.map((item) => ({
+                  label: `${item.sMa} - ${item.sTen}`,
+                  value: item.Id,
+                })) ?? []
+              }
+              placeholder="Chọn học hàm"
+              allowClear
+              showSearch
+              filterOption={false}
+            />
           </FormItem>
         </Col>
       )}
       {!isInternal && (
         <Col span={12}>
           <FormItem form={form} name="academicDegreeTypeId" label="Học vị">
-            <Select options={academicDegreeType?.map((item) => ({ label: `${item.sMa} - ${item.sTen}`, value: item.Id })) ?? []} placeholder="Chọn học vị" allowClear showSearch filterOption={false}/>
+            <Select
+              options={
+                academicDegreeType?.map((item) => ({
+                  label: `${item.sMa} - ${item.sTen}`,
+                  value: item.Id,
+                })) ?? []
+              }
+              placeholder="Chọn học vị"
+              allowClear
+              showSearch
+              filterOption={false}
+            />
           </FormItem>
         </Col>
       )}
