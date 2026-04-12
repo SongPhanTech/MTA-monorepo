@@ -83,9 +83,9 @@ const CriteriaAnalysisPeriodSubPage = ({
             value={deadlineFilter}
             onChange={(value) => setDeadlineFilter(value)}
           />
-          <Button type="primary" size="small" onClick={handleViewAll}>
+          {/* <Button type="primary" size="small" onClick={handleViewAll}>
             Xuất file
-          </Button>
+          </Button> */}
         </div>
       </div>
       {!filteredCriteria || filteredCriteria.length === 0 ? (

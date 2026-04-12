@@ -165,9 +165,7 @@ export default function DanhSachKeHoachThi() {
           },
         },
       },
-      orderBy: {
-        subjectVersionId: "asc",
-      },
+      orderBy: [{ subjectVersionId: "asc" }, { id: "asc" }],
       take: numberOfPages,
       skip: (currentPage - 1) * numberOfPages,
     },

@@ -3,7 +3,7 @@ import { useFindManyDM_DonVi } from "@workspace/db/hooks"
 import { useTrainingObjectTypeStore } from "@workspace/ui"
 import { Button, Col, Flex, Input, message, Row, Space } from "antd"
 import { BookOpen, BookPlus, Building2, Database, FileText } from "lucide-react"
-import { type Key, useCallback, useState } from "react"
+import { type Key, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 import QuestionBankTree from "./_component/question-bank-tree"
 import QuestionList from "./_component/question-list"
@@ -57,6 +57,17 @@ export default function QuestionBank() {
   const handleDeleteQuestionBank = async (id: string) => {
     try {
       const res = await sqlTransaction([
+        {
+          model: "ExamBankQuestion",
+          operation: "deleteMany",
+          data: {
+            where: {
+              question: {
+                questionBankId: id,
+              },
+            },
+          },
+        },
         {
           model: "Question",
           operation: "deleteMany",
