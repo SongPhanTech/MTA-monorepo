@@ -116,11 +116,12 @@ export default function ExpertProfile() {
       academicRankType: true,
       lecturer: {
         include: {
+          organization: true,
           userProfile: {
             include: {
               rank: true,
               academicDegreeType: true,
-              academicRankType: true,
+              academicRankType: true,              
             },
           },
         },
@@ -251,6 +252,8 @@ export default function ExpertProfile() {
                 width: 150,
                 align: "center",
                 type: "input",
+                render: (__, record) =>
+                  `${record.lecturer?.organization?.sMa}-${record.lecturer?.organization?.sTen}` || record?.workplace || "-"
               },
               {
                 title: "Số điện thoại",
