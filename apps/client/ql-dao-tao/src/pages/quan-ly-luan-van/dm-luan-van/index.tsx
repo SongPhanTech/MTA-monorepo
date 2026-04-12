@@ -318,8 +318,28 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                 },
               },
               organization: true,
-              supervisor: true,
-              coSupervisor: true,
+              supervisor: {
+                include: {
+                  academicRankType: true,
+                  academicDegreeType: true,
+                  lecturer: {
+                    include: {
+                      organization: true,
+                    },
+                  },
+                },
+              },
+              coSupervisor: {
+                include: {
+                  academicRankType: true,
+                  academicDegreeType: true,
+                  lecturer: {
+                    include: {
+                      organization: true,
+                    },
+                  },
+                },
+              },
               room: true,
               defenseRecord: true,
               supervisorPayment: true,

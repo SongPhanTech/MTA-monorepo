@@ -21,6 +21,8 @@ export type PutThesisSession = ThesisSession
 type PutThesisSessionForm = PutThesisSession & {
   decisionMakerRole?: "PGĐ" | "GĐ"
   decisionMakerName?: string
+  defenseDecisionMakerRole?: "PGĐ" | "GĐ"
+  defenseDecisionMakerName?: string
 }
 dayjs.locale("vi")
 
@@ -41,20 +43,31 @@ const PutThesisSession = () => {
 
   useEffect(() => {
     if (thesisSession) {
+      const { decisionMaker: _decisionMaker, defenseDecisionMaker: _defenseDecisionMaker, ...sessionRest } =
+        thesisSession
       const decisionMaker = thesisSession.decisionMaker?.trim() ?? ""
       const [firstToken, ...rest] = decisionMaker.split(" ")
       const decisionMakerRole = firstToken === "PGĐ" || firstToken === "GĐ" ? firstToken : undefined
       const decisionMakerName = decisionMakerRole ? rest.join(" ").trim() : decisionMaker
+      const defenseDecisionMakerRaw = thesisSession.defenseDecisionMaker?.trim() ?? ""
+      const [defFirst, ...defRest] = defenseDecisionMakerRaw.split(" ")
+      const defenseDecisionMakerRole =
+        defFirst === "PGĐ" || defFirst === "GĐ" ? defFirst : undefined
+      const defenseDecisionMakerName = defenseDecisionMakerRole
+        ? defRest.join(" ").trim()
+        : defenseDecisionMakerRaw
       form.setFieldsValue({
-        ...thesisSession,
+        ...sessionRest,
         trainingCourseId: thesisSession.trainingCourseId,
         trainingObjectTypeId: thesisSession.trainingObjectTypeId,
         decisionNumber: thesisSession.decisionNumber,
         decisionMakerRole,
         decisionMakerName,
         defenseDecisionNumber: thesisSession.defenseDecisionNumber,
-        defenseDecisionMaker: thesisSession.defenseDecisionMaker,
+        defenseDecisionMakerRole,
+        defenseDecisionMakerName,
         chief: thesisSession.chief,
+        deputy: thesisSession.deputy,
         startDate: thesisSession.startDate ? dayjs(thesisSession.startDate) : undefined,
         endDate: thesisSession.endDate ? dayjs(thesisSession.endDate) : undefined,
         decisionDate: thesisSession.decisionDate ? dayjs(thesisSession.decisionDate) : undefined,
@@ -67,6 +80,8 @@ const PutThesisSession = () => {
       form.setFieldsValue({
         decisionMakerRole: undefined,
         decisionMakerName: undefined,
+        defenseDecisionMakerRole: undefined,
+        defenseDecisionMakerName: undefined,
       })
     }
   }, [thesisSession, form])
@@ -96,6 +111,13 @@ const PutThesisSession = () => {
         .filter(Boolean)
         .join(" ")
         .trim()
+      const defenseDecisionMaker = [
+        output.defenseDecisionMakerRole,
+        output.defenseDecisionMakerName,
+      ]
+        .filter(Boolean)
+        .join(" ")
+        .trim()
       const payload = {
         name: output.name.trim(),
         startDate: output.startDate ? dayjs(output.startDate).toDate() : new Date(),
@@ -105,11 +127,12 @@ const PutThesisSession = () => {
         decisionMaker,
         decisionDate: output.decisionDate ? dayjs(output.decisionDate).toDate() : new Date(),
         defenseDecisionNumber: output.defenseDecisionNumber,
-        defenseDecisionMaker: output.defenseDecisionMaker,
+        defenseDecisionMaker: defenseDecisionMaker || undefined,
         defenseDecisionDate: output.defenseDecisionDate
           ? dayjs(output.defenseDecisionDate).toDate()
           : new Date(),
         chief: output.chief,
+        deputy: output.deputy?.trim() || undefined,
         endDate: output.endDate ? dayjs(output.endDate).toDate() : new Date(),
       }
 
@@ -227,13 +250,26 @@ const PutThesisSession = () => {
         </FormItem>
       </Col>
       <Col span={12}>
-        <FormItem
-          form={form}
-          name="defenseDecisionMaker"
+        <Form.Item
           label="Người ký quyết định thành lập hội đồng bảo vệ luận văn đề án"
+          className="mb-0"
         >
-          <Input placeholder="Nhập người ký quyết định thành lập hội đồng bảo vệ luận văn đề án" />
-        </FormItem>
+          <div className="flex gap-2">
+            <Form.Item name="defenseDecisionMakerRole" noStyle>
+              <Select
+                className="w-24"
+                placeholder="PGĐ/GĐ"
+                options={[
+                  { label: "PGĐ", value: "PGĐ" },
+                  { label: "GĐ", value: "GĐ" },
+                ]}
+              />
+            </Form.Item>
+            <Form.Item name="defenseDecisionMakerName" noStyle>
+              <Input placeholder="Nhập tên người ký quyết định thành lập hội đồng bảo vệ luận văn đề án" />
+            </Form.Item>
+          </div>
+        </Form.Item>
       </Col>
       <Col span={12}>
         <FormItem
@@ -254,6 +290,11 @@ const PutThesisSession = () => {
       <Col span={12}>
         <FormItem form={form} name="chief" label="Trưởng phòng sau đại học">
           <Input placeholder="Nhập trưởng phòng sau đại học" />
+        </FormItem>
+      </Col>
+      <Col span={12}>
+        <FormItem form={form} name="deputy" label="Phó phòng sau đại học">
+          <Input placeholder="Nhập phó phòng sau đại học" />
         </FormItem>
       </Col>
       <Col span={12}>
