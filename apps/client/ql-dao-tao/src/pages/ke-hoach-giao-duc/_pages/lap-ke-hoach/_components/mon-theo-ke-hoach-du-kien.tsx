@@ -317,9 +317,9 @@ export default function MonTheoKeHoachDuKien() {
                   onCell: (record) => ({ rowSpan: record.rowSpan }),
                 },
                 {
-                  title: "Đơn vị phụ trách",
+                  title: "ĐVPT",
                   dataIndex: "managementOrganizationCode",
-                  width: 150,
+                  width: 60,
                   align: "center",
                   onCell: (record) => ({ rowSpan: record.rowSpan }),
                 },

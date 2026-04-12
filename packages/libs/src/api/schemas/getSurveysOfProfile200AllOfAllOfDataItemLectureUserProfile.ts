@@ -48,8 +48,10 @@ export type GetSurveysOfProfile200AllOfAllOfDataItemLectureUserProfile = {
   sThietBiSua?: string | null;
   /** @nullable */
   avatar?: string | null;
-  firstName: string;
-  lastName: string;
+  /** @nullable */
+  firstName?: string | null;
+  /** @nullable */
+  lastName?: string | null;
   idCardNumber: string;
   /** @nullable */
   placeOfIdCardNumber?: string | null;

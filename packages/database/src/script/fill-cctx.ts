@@ -13,7 +13,7 @@ const subjectClassIds = await prisma.subjectClass.findMany({
         trainingCourseId: "cmnfopsiz002sp101f3r243hh",
       },
     },
-    semesterId: 'cmmvor6bi0001mp01mgfapxwk'
+    semesterId: "cmmvor6bi0001mp01mgfapxwk",
   },
 })
 
@@ -94,7 +94,7 @@ const classes = await prisma.subjectClass.findMany({
         trainingCourseId: "cmnfopsiz002sp101f3r243hh",
       },
     },
-    semesterId: 'cmmvor6bi0001mp01mgfapxwk'
+    semesterId: "cmmvor6bi0001mp01mgfapxwk",
   },
 })
 

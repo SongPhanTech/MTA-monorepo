@@ -267,10 +267,10 @@ export default function DangKyHocChoLopQuanLy() {
             render: (record) => record?._count?.subjectClassStudent ?? 0,
           },
           {
-            title: "Lớp QL đã ĐK",
+            title: "Lớp quản lý",
             align: "center",
             width: 120,
-            render: (__, record: any) => {
+            render: (__, record) => {
               return record?.fixedClasses.length ? (
                 <TextTruncate
                   arr={record?.fixedClasses.map((i: any) => {

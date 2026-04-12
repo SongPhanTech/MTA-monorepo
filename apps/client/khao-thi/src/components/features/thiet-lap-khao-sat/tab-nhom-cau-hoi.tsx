@@ -123,9 +123,9 @@ function TabNhomCauHoi({ topicSlected }: { topicSlected: SurveyTopic | null }) {
       <Row gutter={[16, 8]}>
         <Col span={selectedID ? 12 : 24}>
           <Col span={24}>
-             <Flex justify="space-between" align="center">
+            <Flex justify="space-between" align="center">
               <div className="ml-2 text-red-500 italic">
-               * Chọn <b>Nhóm câu hỏi</b> để xem các câu hỏi
+                * Chọn <b>Nhóm câu hỏi</b> để xem các câu hỏi
               </div>
               {can(KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_THIET_LAP_CHUNG, "THEM") && (
                 <Button onClick={handleModal} type="primary" size="small" className="mb-2">

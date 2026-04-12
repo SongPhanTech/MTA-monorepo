@@ -100,6 +100,9 @@ import type {
   SavePublicSurvey404,
   SaveSurveyRequest,
   SaveSurveyResult,
+  SingleTopicGeneration200,
+  SingleTopicGeneration400,
+  SingleTopicGenerationBody,
   ValidateUserSurvey200,
   ValidateUserSurvey400,
   ValidateUserSurvey404,
@@ -1061,6 +1064,114 @@ export const useGetExamBankWithGrouping = <TError = GetExamBankWithGrouping404, 
   TContext
 > => {
   const mutationOptions = getGetExamBankWithGroupingMutationOptions(options)
+
+  return useMutation(mutationOptions, queryClient)
+}
+
+/**
+ * Sinh 1 đề duy nhất theo ma trận cấu hình
+ * @summary Sinh đề thủ công (1 đề)
+ */
+export type singleTopicGenerationResponse200 = {
+  data: SingleTopicGeneration200
+  status: 200
+}
+
+export type singleTopicGenerationResponse400 = {
+  data: SingleTopicGeneration400
+  status: 400
+}
+
+export type singleTopicGenerationResponseSuccess = singleTopicGenerationResponse200 & {
+  headers: Headers
+}
+export type singleTopicGenerationResponseError = singleTopicGenerationResponse400 & {
+  headers: Headers
+}
+
+export type singleTopicGenerationResponse =
+  | singleTopicGenerationResponseSuccess
+  | singleTopicGenerationResponseError
+
+export const getSingleTopicGenerationUrl = () => {
+  return `/api/exam/single-topic-generation`
+}
+
+export const singleTopicGeneration = async (
+  singleTopicGenerationBody: SingleTopicGenerationBody,
+  options?: RequestInit
+): Promise<singleTopicGenerationResponse> => {
+  return customExamFetch<singleTopicGenerationResponse>(getSingleTopicGenerationUrl(), {
+    ...options,
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(singleTopicGenerationBody),
+  })
+}
+
+export const getSingleTopicGenerationMutationOptions = <
+  TError = SingleTopicGeneration400,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof singleTopicGeneration>>,
+    TError,
+    { data: SingleTopicGenerationBody },
+    TContext
+  >
+  request?: SecondParameter<typeof customExamFetch>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof singleTopicGeneration>>,
+  TError,
+  { data: SingleTopicGenerationBody },
+  TContext
+> => {
+  const mutationKey = ["singleTopicGeneration"]
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof singleTopicGeneration>>,
+    { data: SingleTopicGenerationBody }
+  > = (props) => {
+    const { data } = props ?? {}
+
+    return singleTopicGeneration(data, requestOptions)
+  }
+
+  return { mutationFn, ...mutationOptions }
+}
+
+export type SingleTopicGenerationMutationResult = NonNullable<
+  Awaited<ReturnType<typeof singleTopicGeneration>>
+>
+export type SingleTopicGenerationMutationBody = SingleTopicGenerationBody
+export type SingleTopicGenerationMutationError = SingleTopicGeneration400
+
+/**
+ * @summary Sinh đề thủ công (1 đề)
+ */
+export const useSingleTopicGeneration = <TError = SingleTopicGeneration400, TContext = unknown>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof singleTopicGeneration>>,
+      TError,
+      { data: SingleTopicGenerationBody },
+      TContext
+    >
+    request?: SecondParameter<typeof customExamFetch>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof singleTopicGeneration>>,
+  TError,
+  { data: SingleTopicGenerationBody },
+  TContext
+> => {
+  const mutationOptions = getSingleTopicGenerationMutationOptions(options)
 
   return useMutation(mutationOptions, queryClient)
 }

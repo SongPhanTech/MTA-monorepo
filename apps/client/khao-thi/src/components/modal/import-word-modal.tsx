@@ -806,7 +806,7 @@ const WordImportModal: React.FC = () => {
 
   const buildQuestionPayload = async (q: any, knowledgeBlockId?: string) => {
     let content = ""
-let explanation = ""
+    let explanation = ""
 
     try {
       content = await uploadImagesAndReplacePlaceholders(q.content, q.contentImagesRaw || [])

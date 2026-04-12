@@ -5,10 +5,7 @@
  * OpenAPI spec version: 1.0.0
  */
 
-/**
- * @nullable
- */
-export type GetSurveyResultSubjectClassExamType = typeof GetSurveyResultSubjectClassExamType[keyof typeof GetSurveyResultSubjectClassExamType] | null;
+export type GetSurveyResultSubjectClassExamType = typeof GetSurveyResultSubjectClassExamType[keyof typeof GetSurveyResultSubjectClassExamType];
 
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
