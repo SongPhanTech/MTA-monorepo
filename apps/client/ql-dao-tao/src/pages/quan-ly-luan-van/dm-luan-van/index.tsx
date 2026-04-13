@@ -108,9 +108,9 @@ export function getCouncilMemberName(record: any, role: CouncilRole) {
     {text}
   </span>
 }
-export function getSupervisorName(record: any, isSupervisor = false, htmlRender = false, showWorkplace = false) {
+export function getSupervisorName(record: any, htmlRender = false, showWorkplace = false) {
 
-  const expert = isSupervisor ? record?.thesisRegistrations?.[0]?.thesisProject?.supervisor || record : record?.thesisRegistrations?.[0]?.thesisProject?.coSupervisor || record
+  const expert =  record
   if (!expert) return ""
 
   const profile = expert?.lecturer?.userProfile
@@ -120,15 +120,15 @@ export function getSupervisorName(record: any, isSupervisor = false, htmlRender 
   const fullname = expert?.name || profile?.fullname || ""
   const inAcademy = expert?.lecturerId ? true : false
   const workplace = expert?.workplace || ""
-
-  const text = [title, fullname].filter(Boolean).join(" ").trim()
+  const text =   [title, fullname].filter(Boolean).join(" ").trim()
+  const textWithWorkplace = [text, showWorkplace ? workplace : ""].filter(Boolean).join(", ")
   return htmlRender ? <span
     title={inAcademy ? "Trong học viện" : "Ngoài học viện"}
     className={inAcademy ? "text-green-600" : "text-red-600"}
     style={{ color: inAcademy ? "#16a34a" : "#dc2626" }}
   >
-    {showWorkplace ? `${text}, ${workplace}` : text}
-  </span> : [title, fullname].filter(Boolean).join(" ").trim()
+    {textWithWorkplace}
+  </span> : textWithWorkplace
 }
 const { TextArea } = Input
 
@@ -1566,7 +1566,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           dropdownStyle={{ minWidth: 200 }}
                           disabled={role !== "Khoa" && !isWithinGvhdSupervisorEditWindow()}
                           options={expertProfileData?.map((item) => {
-                            const text = getSupervisorName(item)
+                            const text = getSupervisorName(item,true)
                             const hasLecturer = item.lecturer != null
                             return {
                               label: (
@@ -1587,8 +1587,9 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       </div>
                     )
                   }
+                  const supervisor = record?.thesisRegistrations?.[0]?.thesisProject?.supervisor 
 
-                  return getSupervisorName(record, true, true)
+                  return getSupervisorName(supervisor,true)
                 },
               },
               {
@@ -1610,7 +1611,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           className="w-full"
                           disabled={role !== "Khoa" && !isWithinGvhdSupervisorEditWindow()}
                           options={expertProfileData?.map((item) => {
-                            const text = getSupervisorName(item, false, false, true)
+                            const text = getSupervisorName(item,true)
                             const hasLecturer = item.lecturer != null
                             return {
                               label: (
@@ -1631,7 +1632,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       </div>
                     )
                   }
-                  return getSupervisorName(record, false, true)
+                  const coSupervisor = record?.thesisRegistrations?.[0]?.thesisProject?.coSupervisor 
+                  return getSupervisorName(coSupervisor,true)
                 },
               },
               {
@@ -1656,7 +1658,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           options={expertProfileData
                             ?.filter((item) => item.eligiblePresident === true)
                             .map((item) => {
-                              const text = getSupervisorName(item)
+                              const text = getSupervisorName(item,true)
                               const hasLecturer = item.lecturer != null
                               return {
                                 label: (
@@ -1704,7 +1706,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           options={expertProfileData
                             ?.filter((item) => item.eligibleSecretary === true)
                             .map((item) => {
-                              const text = getSupervisorName(item)
+                              const text = getSupervisorName(item,true)
                               const hasLecturer = item.lecturer != null
                               return {
                                 label: (
@@ -1750,7 +1752,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           dropdownStyle={{ minWidth: 200 }}
                           disabled={role !== "Khoa" && !isWithinCouncilEditWindow()}
                           options={expertProfileData?.map((item) => {
-                            const text = getSupervisorName(item)
+                            const text = getSupervisorName(item,true)
                             const hasLecturer = item.lecturer != null
                             return {
                               label: (
@@ -1794,7 +1796,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           dropdownStyle={{ minWidth: 200 }}
                           disabled={role !== "Khoa" && !isWithinCouncilEditWindow()}
                           options={expertProfileData?.map((item) => {
-                            const text = getSupervisorName(item)
+                            const text = getSupervisorName(item,true)
                             const hasLecturer = item.lecturer != null
                             return {
                               label: (
@@ -1838,7 +1840,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           dropdownStyle={{ minWidth: 200 }}
                           disabled={role !== "Khoa" && !isWithinCouncilEditWindow()}
                           options={expertProfileData?.map((item) => {
-                            const text = getSupervisorName(item)
+                            const text = getSupervisorName(item,true)
                             const hasLecturer = item.lecturer != null
                             return {
                               label: (
