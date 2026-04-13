@@ -5,6 +5,7 @@ import SemesterTrainingScore from "./_component/SemesterTrainingScore"
 import LopBienCheItem from "./_component/lop-bien-che"
 import useSpinner from "@hooks/spinner"
 import { useTrainingObjectTypeStore } from "@workspace/ui"
+import SubjectClassList from "./_component/SubjectClassList"
 
 export default function QuanLyDiemRenLuyen() {
   const [activeTabKey, setActiveTabKey] = useState(0)
@@ -26,7 +27,7 @@ export default function QuanLyDiemRenLuyen() {
 
   return (
     <div className="px-4">
-      <Row gutter={[0, 0]}>
+      <Row gutter={[16, 0]}>
         <Col span={4} className="bg-white rounded-lg shadow-sm">
           <LopBienCheItem
             onChangeSelected={handleChangeFixedClass}
@@ -34,7 +35,15 @@ export default function QuanLyDiemRenLuyen() {
           />
         </Col>
         <Col span={20}>
-          <SemesterTrainingScore selectedFixedClass={selectedFixedClass} />
+          <Row gutter={[0, 16]}>
+            <Col span={24} className="bg-white rounded-lg shadow-sm p-4">
+              <p className="font-medium mb-3">Môn học trong học kỳ</p>
+              <SubjectClassList selectedFixedClass={selectedFixedClass} />
+            </Col>
+            <Col span={24}>
+              <SemesterTrainingScore selectedFixedClass={selectedFixedClass} />
+            </Col>
+          </Row>
         </Col>
       </Row>
     </div>

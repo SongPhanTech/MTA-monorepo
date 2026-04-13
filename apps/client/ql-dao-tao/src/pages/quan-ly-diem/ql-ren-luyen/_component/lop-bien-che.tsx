@@ -7,7 +7,7 @@ import {
 } from "@workspace/db/hooks"
 import { useAbility } from "@workspace/permissions/hooks"
 import { QL_DAO_TAO_PERMISSION } from "@workspace/router"
-import { useTrainingObjectTypeStore } from "@workspace/ui"
+import { useTrainingObjectTypeStore, useSemesterStore } from "@workspace/ui"
 import { Tree } from "antd"
 import type React from "react"
 
@@ -25,6 +25,7 @@ const LopBienCheItem: React.FC<LopBienCheItemProps> = ({
   const { can } = useAbility()
   const { data: session } = useSession()
   const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
+  const { id: semesterId } = useSemesterStore()
 
   // Kiểm tra quyền XEM_TAT_CA
   const canViewAll = can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_REN_LUYEN, "XEM_TAT_CA")
@@ -61,6 +62,9 @@ const LopBienCheItem: React.FC<LopBienCheItemProps> = ({
       trainingObjectTypeId,
       deletedAt: null,
       active: true,
+      semesterStart: {
+        id: semesterId,
+      },
     },
     orderBy: {
       semesterStart: {
@@ -75,38 +79,22 @@ const LopBienCheItem: React.FC<LopBienCheItemProps> = ({
       trainingCourse: {
         id: { in: trainingCourses.map((course) => course.id) },
         trainingObjectTypeId: objectTrainingTypeId ? objectTrainingTypeId : undefined,
+        semesterStart: {
+          id: semesterId,
+        },
       },
       name: className ? { contains: className } : undefined,
     }
 
-    // Nếu có quyền xem tất cả -> không filter thêm
-    if (canViewAll) {
-      return baseWhere
-    }
+    if (canViewAll) return baseWhere
 
-    // Nếu không có quyền xem tất cả -> filter theo lecturer hoặc staff
     const orConditions: any[] = []
+    if (currentLecturer?.id) orConditions.push({ lecturerManagementId: currentLecturer.id })
+    if (currentStaff?.id) orConditions.push({ staffManagementId: currentStaff.id })
 
-    if (currentLecturer?.id) {
-      orConditions.push({ lecturerManagementId: currentLecturer.id })
-    }
+    if (orConditions.length === 0) return { ...baseWhere, id: "no-match" }
 
-    if (currentStaff?.id) {
-      orConditions.push({ staffManagementId: currentStaff.id })
-    }
-
-    // Nếu không có lecturer và staff thì trả về điều kiện không khớp gì
-    if (orConditions.length === 0) {
-      return {
-        ...baseWhere,
-        id: "no-match", // Điều kiện không khớp
-      }
-    }
-
-    return {
-      ...baseWhere,
-      OR: orConditions,
-    }
+    return { ...baseWhere, OR: orConditions }
   }
 
   // Lấy danh sách Fixed Classes
