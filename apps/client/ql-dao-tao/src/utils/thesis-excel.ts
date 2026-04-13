@@ -768,7 +768,7 @@ export const exportGiayMoiHdlv = async ({
   const nam = presentDay.split("/")[2]
   try {
     const allSheetOptions = allStudentsInClasses?.map((student) => {
-      const supervisor = student?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.name
+      const supervisor = student?.thesisRegistrations?.[0]?.thesisProject?.supervisor
       if (!supervisor) return null
       const khoahoc =
         `${student?.fixedClass?.trainingCourse?.name}(${student?.fixedClass?.trainingCourse?.academicYear})` ||
@@ -778,7 +778,7 @@ export const exportGiayMoiHdlv = async ({
         thang: thang,
         nam: nam,
         tenhocvien: student?.userProfile?.fullname,
-        tenhuongdan: supervisor ? ` ${getSupervisorName(supervisor,false,false,true)}` : "",
+        tenhuongdan: supervisor ? ` ${getSupervisorName(supervisor,false,true)}` : "",
         khoa: khoahoc,
         chuyennganh: student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || "",
         tendetai:  `Tên đề tài: "${student?.thesisRegistrations?.[0]?.thesisProject?.title.trim()}"` || "",
@@ -850,8 +850,8 @@ export const exportSaoQDHDLV = async ({
         const ngayQD = thesisProject?.thesisSession?.decisionDate ? dayjs(thesisProject?.thesisSession?.defenseDecisionDate).format("DD") : ""
         const thangQD = thesisProject?.thesisSession?.decisionDate ? dayjs(thesisProject?.thesisSession?.defenseDecisionDate).format("MM") : ""
         const namQD = thesisProject?.thesisSession?.decisionDate ? dayjs(thesisProject?.thesisSession?.defenseDecisionDate).format("YYYY") : ""
-        const canbohuongdan1 = `1. ${getSupervisorName(supervisor,false,false,true)}`
-        const canbohuongdan2 = coSupervisor ? `2. ${getSupervisorName(coSupervisor,false,false,true)}` : ""
+        const canbohuongdan1 = `1. ${getSupervisorName(supervisor,false,true)}`
+        const canbohuongdan2 = coSupervisor ? `2. ${getSupervisorName(coSupervisor,false,true)}` : ""
         const khoaquanli = thesisProject.organization?.sTen || ""
         const nguoikiqddt =
           student?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.decisionMaker?.trim() || ""
@@ -875,7 +875,6 @@ export const exportSaoQDHDLV = async ({
           khoa: student?.fixedClass?.trainingCourse?.name || "",
           dieu1: dieu1,
           dieu2: dieu2,
-
           text1: text1,
           text2: text2,
           nguoiky1:tenNguoiKyQddt,

@@ -253,7 +253,8 @@ export default function ExpertProfile() {
                 align: "center",
                 type: "input",
                 render: (__, record) =>
-                  `${record.lecturer?.organization?.sMa}-${record.lecturer?.organization?.sTen}` || record?.workplace || "-"
+
+                  `${ record.lecturer ? record.lecturer?.organization?.sMa+"-"+record.lecturer?.organization?.sTen : record?.workplace}` 
               },
               {
                 title: "Số điện thoại",
