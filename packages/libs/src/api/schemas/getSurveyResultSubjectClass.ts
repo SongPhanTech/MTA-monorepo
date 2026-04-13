@@ -47,8 +47,7 @@ export type GetSurveyResultSubjectClass = {
   approveLecturerAssignmentAt?: string | null;
   /** @nullable */
   examDate?: string | null;
-  /** @nullable */
-  examType?: GetSurveyResultSubjectClassExamType;
+  examType: GetSurveyResultSubjectClassExamType;
   /** @nullable */
   scoreDeadLineStart?: string | null;
   /** @nullable */

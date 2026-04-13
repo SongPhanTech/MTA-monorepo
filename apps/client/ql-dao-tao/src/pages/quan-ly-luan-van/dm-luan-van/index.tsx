@@ -1357,7 +1357,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                             console.log("item", item)
                             const academicRank =
                               item.lecturer?.userProfile?.academicRankType?.sMa ||
-                              item.academicRankType?.sMa ||                            
+                              item.academicRankType?.sMa ||
                               ""
                             const academicDegree =
                               item.lecturer?.userProfile?.academicDegreeType?.sMa ||
@@ -1404,12 +1404,14 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                   const academicRank =
                     record?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.lecturer
                       ?.userProfile?.academicRankType?.sMa ||
-                    record?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.academicRankType?.sMa 
-                    || ""
+                    record?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.academicRankType
+                      ?.sMa ||
+                    ""
                   const academicDegree =
                     record?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.lecturer
                       ?.userProfile?.academicDegreeType?.sMa ||
-                    record?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.academicDegreeType?.sMa ||
+                    record?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.academicDegreeType
+                      ?.sMa ||
                     ""
                   const academicRankAndDegree = `${academicRank} ${academicDegree}`.trim()
                   return `${academicRankAndDegree} ${
@@ -1444,7 +1446,6 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                             const academicRank =
                               item.lecturer?.userProfile?.academicRankType?.sMa ||
                               item.academicRankType?.sMa ||
-                              
                               ""
                             const academicDegree =
                               item.lecturer?.userProfile?.academicDegreeType?.sMa ||
@@ -1488,12 +1489,14 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                   const academicRank =
                     record?.thesisRegistrations?.[0]?.thesisProject?.coSupervisor?.lecturer
                       ?.userProfile?.academicRankType?.sMa ||
-                    record?.thesisRegistrations?.[0]?.thesisProject?.coSupervisor?.academicRankType?.sMa ||
+                    record?.thesisRegistrations?.[0]?.thesisProject?.coSupervisor?.academicRankType
+                      ?.sMa ||
                     ""
                   const academicDegree =
                     record?.thesisRegistrations?.[0]?.thesisProject?.coSupervisor?.lecturer
                       ?.userProfile?.academicDegreeType?.sMa ||
-                    record?.thesisRegistrations?.[0]?.thesisProject?.coSupervisor?.academicDegreeType?.sMa ||
+                    record?.thesisRegistrations?.[0]?.thesisProject?.coSupervisor
+                      ?.academicDegreeType?.sMa ||
                     ""
                   const academicRankAndDegree = `${academicRank} ${academicDegree}`.trim()
                   return `${academicRankAndDegree} ${

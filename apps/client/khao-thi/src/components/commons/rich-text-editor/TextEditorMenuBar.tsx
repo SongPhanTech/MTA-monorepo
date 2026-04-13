@@ -580,7 +580,7 @@ export default function TextEditorMenuBar({
             description: "Xóa hàng",
           },
         ],
-        [ 
+        [
           {
             id: "mergeCells",
             icon: <Merge className="size-5" />,

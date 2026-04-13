@@ -38,6 +38,8 @@ export type ListOfundefinedAllOfDataItemLecturerOrganization = {
   /** @nullable */
   sCode?: string | null;
   /** @nullable */
+  sTKPUCode?: string | null;
+  /** @nullable */
   sTenVietTat?: string | null;
   /** @nullable */
   sParentId?: string | null;
