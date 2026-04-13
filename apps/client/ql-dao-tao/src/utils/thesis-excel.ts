@@ -781,7 +781,7 @@ export const exportGiayMoiHdlv = async ({
         tenhuongdan: supervisor ? ` ${getSupervisorName(supervisor,false,false,true)}` : "",
         khoa: khoahoc,
         chuyennganh: student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || "",
-        tendetai:  `"${student?.thesisRegistrations?.[0]?.thesisProject?.title.trim()}"` || "",
+        tendetai:  `Tên đề tài: "${student?.thesisRegistrations?.[0]?.thesisProject?.title.trim()}"` || "",
         type: student?.thesisRegistrations?.[0]?.thesisProject?.type.trim().toLowerCase(),
         text1: isChief ? "TRƯỞNG PHÒNG SAU ĐẠI HỌC" : "KT. TRƯỞNG PHÒNG SAU ĐẠI HỌC",
         text2: isChief ? "" : "PHÓ PHÒNG SAU ĐẠI HỌC",
