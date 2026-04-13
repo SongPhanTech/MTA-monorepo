@@ -706,17 +706,17 @@ export const exportHosobvlv = async ({
         nganh:
           student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.trainingField?.name ||
           "",
-        detai: student?.thesisRegistrations?.[0]?.thesisProject?.title || "",
+        detai: `Đề tài: "${student?.thesisRegistrations?.[0]?.thesisProject?.title || ""}"`,
         ngaybaove: student?.thesisRegistrations?.[0]?.thesisProject?.defenseDate
           ? dayjs(student?.thesisRegistrations?.[0]?.thesisProject?.defenseDate).format(
               "DD/MM/YYYY"
             )
           : "",
-        phanbien1: phanbien1?.expert?.name || "",
-        phanbien2: phanbien2?.expert?.name || "",
-        chutich: chutich?.expert?.name || "",
-        thuky: thuky?.expert?.name || "",
-        uyvien: uyvien?.expert?.name || "",
+        phanbien1: getSupervisorName(phanbien1?.expert) || "",
+        phanbien2: getSupervisorName(phanbien2?.expert) || "",
+        chutich: getSupervisorName(chutich?.expert) || "",
+        thuky: getSupervisorName(thuky?.expert) || "",
+        uyvien: getSupervisorName(uyvien?.expert) || "",
       }
       return {
         // sheet: `${student.userProfile?.code}`,
