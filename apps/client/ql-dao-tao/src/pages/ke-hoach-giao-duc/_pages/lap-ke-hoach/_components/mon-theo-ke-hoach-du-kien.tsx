@@ -193,7 +193,7 @@ export default function MonTheoKeHoachDuKien() {
             </Col>
             <Flex gap={8}>
               <Button onClick={onSubmit} type="primary" disabled={subjectSelectedCount === 0}>
-                Đưa {subjectSelectedCount || ""} môn{" "}
+                Thêm {subjectSelectedCount || ""} môn{" "}
                 {subjectSelected.length ? `(${subjectSelected.length} lớp)` : ""} vào KHDK
               </Button>
             </Flex>
