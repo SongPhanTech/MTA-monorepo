@@ -1,6 +1,6 @@
 import { calcEvidenceTags as calcEvidenceTagsApi } from "@workspace/libs/api/exam"
 import { sqlTransaction } from "@workspace/libs/api/model"
-import { message, Tooltip } from "antd"
+import { Button, message, Tooltip } from "antd"
 import {
   AlignmentType,
   BorderStyle,
@@ -20,7 +20,7 @@ import {
 } from "docx"
 import { saveAs } from "file-saver"
 import { FileDown } from "lucide-react"
-export default function ExportReport({ id }: { id: string }) {
+export default function ExportReport({ id, variant = "icon" }: { id: string; variant?: "icon" | "button" }) {
   const role = {
     CHAIRMAN: "Chủ tịch hội đồng",
     VICE_PRESIDENT: "Phó chủ tịch hội đồng",
@@ -811,16 +811,26 @@ export default function ExportReport({ id }: { id: string }) {
       console.error("Lỗi tải file:", error)
     }
   }
+  if (variant === "button") {
+    return (
+      <Button
+        onClick={exportToWord}
+        icon={<FileDown size={14} style={{ display: "inline-flex" }} />}
+      >
+        Xuất báo cáo
+      </Button>
+    )
+  }
+
   return (
     <Tooltip title="Xuất báo cáo" placement="top">
       <FileDown
         size={17}
         strokeWidth={1.5}
         className="text-base text-green-600"
-        onClick={(e) => {
-          exportToWord()
-        }}
+        onClick={() => exportToWord()}
       />
     </Tooltip>
   )
 }
+

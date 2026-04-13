@@ -9,11 +9,9 @@ import EditIcon from "@components/icons/edit"
 import { LEVEL_COLUMNS, QUESTION_TYPE_LABELS, QUESTION_TYPE_OPTIONS } from "@constants/constants"
 import type { QuestionType } from "@workspace/db/client"
 import {
-  useDeleteQuestion,
   useFindManyKnowledgeBlock,
   useFindManyQuestion,
   useFindUniqueQuestionBank,
-  useUpdateQuestion,
 } from "@workspace/db/hooks"
 import { sqlTransaction } from "@workspace/libs/api/model"
 import { Button, Col, Flex, message, Popconfirm, Row } from "antd"
@@ -132,11 +130,36 @@ export default function QuestionList({ questionBankId }: QuestionListProps) {
     queryOptions
   )
 
-  const { mutateAsync: deleteQuestion } = useDeleteQuestion()
   async function handleDeleteQuestion(id: string) {
     try {
-      await deleteQuestion({
-        where: { id },
+      const res = await sqlTransaction([
+        {
+          model: "ExamBankQuestion",
+          operation: "deleteMany",
+          data: {
+            where: {
+              questionId: id,
+            },
+          },
+        },
+        {
+          model: "Question",
+          operation: "delete",
+          data: {
+            where: {
+              id: id,
+            },
+          },
+        },
+      ])
+
+      if (res.status !== 200) {
+        message.error("Xóa câu hỏi thất bại")
+        return
+      }
+
+      queryClient.invalidateQueries({
+        queryKey: ["zenstack", "Question"],
       })
 
       message.success("Xóa câu hỏi thành công")
@@ -148,6 +171,15 @@ export default function QuestionList({ questionBankId }: QuestionListProps) {
   async function handleDeleteMany() {
     try {
       const res = await sqlTransaction([
+        {
+          model: "ExamBankQuestion",
+          operation: "deleteMany",
+          data: {
+            where: {
+              questionId: { in: selectedRowKeys },
+            },
+          },
+        },
         {
           model: "Question",
           operation: "deleteMany",

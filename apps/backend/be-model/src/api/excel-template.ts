@@ -139,6 +139,14 @@ app.openapi(
           newRow.height = row.height
         }
 
+        // Giữ trạng thái ẩn hàng / outline (template đã ẩn hàng thì bản gộp vẫn ẩn)
+        if (row.hidden) {
+          newRow.hidden = true
+        }
+        if (row.outlineLevel !== undefined && row.outlineLevel > 0) {
+          newRow.outlineLevel = row.outlineLevel
+        }
+
         // Copy all cells with full styling
         row.eachCell({ includeEmpty: true }, (cell, colNumber) => {
           const newCell = newRow.getCell(colNumber)
@@ -209,11 +217,16 @@ app.openapi(
       currentRow = copySheetContent(tailSheet, currentRow)
     }
 
-    // Copy column widths from the first sheet
+    // Copy column width + ẩn cột từ sheet nguồn đầu tiên (payload)
     if (generatedSheets.length > 0 && generatedSheets[0]) {
       generatedSheets[0].worksheet.columns.forEach((col, index) => {
+        if (!col) return
+        const dest = mergedSheet.getColumn(index + 1)
         if (col.width) {
-          mergedSheet.getColumn(index + 1).width = col.width
+          dest.width = col.width
+        }
+        if (col.hidden) {
+          dest.hidden = true
         }
       })
     }
