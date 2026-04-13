@@ -277,7 +277,7 @@ export default function KeQuaDangKyHocLopQuanLy({ hocLai = false }: { hocLai?: b
               align: "center",
             },
             {
-              title: "Số HV, SV",
+              title: "Số SV",
               dataIndex: ["_count", "students"],
               align: "center",
               width: 80,

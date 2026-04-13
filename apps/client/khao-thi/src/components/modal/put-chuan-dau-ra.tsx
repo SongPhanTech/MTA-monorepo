@@ -16,7 +16,6 @@ import { useDisclosure } from "react-hook-disclosure-modal"
 export interface KnowledgeBlockFormData extends Record<string, unknown> {
   name: string
   code: string
-  description?: string
   biet?: ConfigExam
   hieu?: ConfigExam
   vanDung?: ConfigExam
@@ -50,7 +49,7 @@ const PutChuongMucModal = () => {
     select: { id: true, code: true },
   })
 
-  const existingCodes = knowledgeBlocks.map((item: any) => item.code).filter(Boolean)
+  const existingCodes = knowledgeBlocks.map((item) => item.code).filter(Boolean)
   const currentCode = knowledgeBlockData?.code
 
   useEffect(() => {
@@ -58,16 +57,14 @@ const PutChuongMucModal = () => {
       const formData: any = {
         name: knowledgeBlockData.name,
         code: knowledgeBlockData.code,
-        description: knowledgeBlockData.description,
       }
 
-      knowledgeBlockData.configExams?.forEach((config: any) => {
+      knowledgeBlockData.configExams?.forEach((config: ConfigExam) => {
         const levelColumn = LEVEL_COLUMNS.find((col) => col.difficult === config.difficult)
         if (levelColumn) {
           formData[levelColumn.key] = {
             type: config.type,
             quantity: config.quantity,
-            point: config.point,
           }
         }
       })
@@ -85,7 +82,6 @@ const PutChuongMucModal = () => {
         difficult: level.difficult,
         type: levelData.type,
         quantity: levelData.quantity,
-        point: levelData.point ?? 0,
       })
 
       return acc
@@ -106,7 +102,6 @@ const PutChuongMucModal = () => {
               data: {
                 name: values.name,
                 code: values.code,
-                description: values.description,
               },
             },
           },
@@ -141,7 +136,6 @@ const PutChuongMucModal = () => {
         const createData: any = {
           code: values.code,
           name: values.name,
-          description: values.description,
           configExams: {
             create: configExams,
           },
@@ -218,12 +212,6 @@ const PutChuongMucModal = () => {
       </Col>
 
       <Col span={24}>
-        <FormItem form={form} name="description" label="Mô tả">
-          <Input placeholder="Nhập mô tả" />
-        </FormItem>
-      </Col>
-
-      <Col span={24}>
         <Row gutter={12} align="middle" className="mb-1">
           <Col xs={24} sm={6}>
             &nbsp;
@@ -283,34 +271,6 @@ const PutChuongMucModal = () => {
                         options={QUESTION_TYPE_OPTIONS}
                         disabled={isDisabled}
                       />
-                    </Form.Item>
-                  </Col>
-                )
-              })}
-            </Row>
-          </Col>
-        </Row>
-      </Col>
-
-      <Col span={24}>
-        <Row gutter={12} align="middle">
-          <Col xs={24} sm={6}>
-            Điểm
-          </Col>
-          <Col xs={24} sm={18}>
-            <Row gutter={12}>
-              {LEVEL_COLUMNS.map((col) => {
-                const quantity = (watchedValues?.[col.key] as ConfigExam)?.quantity
-                const isDisabled = !quantity || quantity === 0
-
-                return (
-                  <Col xs={12} sm={6} key={col.key}>
-                    <Form.Item
-                      name={[col.key, "point"]}
-                      style={{ marginBottom: 8 }}
-                      initialValue={1}
-                    >
-                      <InputNumber min={0} className="w-full" disabled={isDisabled} />
                     </Form.Item>
                   </Col>
                 )

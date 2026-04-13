@@ -65,6 +65,7 @@ type TeachingAssignmentForm = {
   subjectClass: Record<
     string,
     {
+      schedule: $Enums.SubjectClassSchedule | null
       lecturerId: string | null
       extraLecturerId: string | null
       enterGradeLecturerId: string | null
@@ -150,36 +151,14 @@ export default function PhanCongGiangDay({
     () =>
       ({
         ...(filters?.name
-          ? {
-              name: { contains: filters.name, mode: "insensitive" as const },
-            }
+          ? { name: { contains: filters.name, mode: "insensitive" as const } }
           : {}),
         ...(filters?.code
-          ? {
-              code: { contains: filters.code, mode: "insensitive" as const },
-            }
+          ? { code: { contains: filters.code, mode: "insensitive" as const } }
           : {}),
-        ...(filters?.examType
-          ? {
-              examType: {
-                in: filters.examType,
-              },
-            }
-          : {}),
-        ...(filters?.schedule
-          ? {
-              schedule: {
-                in: filters.schedule,
-              },
-            }
-          : {}),
-        ...(semesterId
-          ? {
-              semester: {
-                id: semesterId,
-              },
-            }
-          : {}),
+        ...(filters?.examType ? { examType: { in: filters.examType } } : {}),
+        ...(filters?.schedule ? { schedule: { in: filters.schedule } } : {}),
+        ...(semesterId ? { semester: { id: semesterId } } : {}),
         ...(filters.lecturerId?.length === 1
           ? filters.lecturerId[0]
             ? { lecturerId: { not: null } }
@@ -268,15 +247,9 @@ export default function PhanCongGiangDay({
           : filterStatus === "YEU_CAU_PCGD"
             ? {
                 OR: [
-                  {
-                    lecturerId: null,
-                  },
-                  {
-                    extraLecturerId: null,
-                  },
-                  {
-                    enterGradeLecturerId: null,
-                  },
+                  { lecturerId: null },
+                  { extraLecturerId: null },
+                  { enterGradeLecturerId: null },
                 ],
               }
             : filterStatus === "DA_DUYET_PCGD"
@@ -286,9 +259,7 @@ export default function PhanCongGiangDay({
                   },
                 }
               : filterStatus === "LMH_DA_HUY"
-                ? {
-                    cancelled: true,
-                  }
+                ? { cancelled: true }
                 : {}),
       }) satisfies Prisma.SubjectClassWhereInput,
     [
@@ -380,6 +351,11 @@ export default function PhanCongGiangDay({
                       },
                     },
                     room: true,
+                    _count: {
+                      select: {
+                        subjectClassStudent: { where: { examScore: { not: null } } },
+                      },
+                    },
                     trainingLocation: true,
                     subjectClassStudent: true,
                     subjectClassTimes: true,
@@ -506,23 +482,9 @@ export default function PhanCongGiangDay({
     where: {
       bActive: true,
       subjects: {
-        some: {
-          subjectVersion: {
-            some: {
-              subjectClass: {
-                some: {
-                  ...where,
-                },
-              },
-            },
-          },
-        },
+        some: { subjectVersion: { some: { subjectClass: { some: where } } } },
       },
-      Id: !khoaBoMon
-        ? undefined
-        : {
-            in: orgIds,
-          },
+      Id: !khoaBoMon ? undefined : { in: orgIds },
     },
   })
 
@@ -636,11 +598,7 @@ export default function PhanCongGiangDay({
         where: {
           trainingObjectTypeId,
           semesterId,
-          ...(values.isOverride
-            ? {}
-            : {
-                lecturerAssignmentDeadline: null,
-              }),
+          ...(values.isOverride ? {} : { lecturerAssignmentDeadline: null }),
           type: type,
         },
       })
@@ -653,12 +611,6 @@ export default function PhanCongGiangDay({
       hideSpinner()
     }
   }
-
-  const { data: manageOrgData = [] } = useFindManyDM_DonVi({
-    where: whereOrganization,
-    orderBy: [{ iSTT: "asc" }, { sTen: "asc" }],
-  })
-  const treeData = buildOrgTree(manageOrgData, !khoaBoMon ? "0" : orgId)
 
   const { data: trainingLocationData = [] } = useFindManyTrainingLocation({
     orderBy: { name: "asc" },
@@ -690,6 +642,7 @@ export default function PhanCongGiangDay({
             data: {
               where: { id },
               data: {
+                schedule: subjectClass.schedule,
                 lecturerAssignmentDeadline: subjectClass.lecturerAssignmentDeadline
                   ? subjectClass.lecturerAssignmentDeadline?.toDate()
                   : null,
@@ -727,6 +680,7 @@ export default function PhanCongGiangDay({
             data: {
               where: { id },
               data: {
+                schedule: subjectClass.schedule,
                 examType: subjectClass.examType ?? null,
                 roomId: subjectClass.roomId ?? null,
                 lecturerId: subjectClass.lecturerId ?? null,
@@ -808,17 +762,13 @@ export default function PhanCongGiangDay({
   async function handleDelete(id: string) {
     try {
       showSpinner()
-      await deleteSubjectClass({
-        where: {
-          id,
-        },
-      })
+      await deleteSubjectClass({ where: { id } })
     } catch (error: any) {
       if (error?.info?.message) {
         message.error(error?.info?.message)
-        return
+      } else {
+        message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
       }
-      message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
     } finally {
       hideSpinner()
     }
@@ -880,6 +830,7 @@ export default function PhanCongGiangDay({
         .reduce(
           (acc, curr) => {
             acc[curr.id] = {
+              schedule: curr.schedule,
               lecturerId: curr.lecturerId ?? null,
               extraLecturerId: curr.extraLecturerId ?? null,
               enterGradeLecturerId: curr.enterGradeLecturerId ?? null,
@@ -1861,7 +1812,7 @@ export default function PhanCongGiangDay({
                 {
                   title: "Tên môn",
                   align: "center",
-                  width: 250,
+                  width: 220,
                   dataIndex: "name",
                   type: "input",
                   onCell: (record) => ({
@@ -1869,22 +1820,32 @@ export default function PhanCongGiangDay({
                   }),
                   render: (_, record) => (
                     <p className="text-left">
-                      {record?.subject?.name} ({record.subject?.credit})
+                      {record?.subject?.name} ({record.subject?.credit} TC)
                     </p>
                   ),
                 },
                 {
                   title: "Kíp",
                   align: "center",
-                  width: 60,
-                  options: Object.entries(SUBJECT_CLASS_SCHEDULE_TYPE).map(([key, value_]) => ({
-                    label: value_,
+                  width: 90,
+                  options: Object.entries(SUBJECT_CLASS_SCHEDULE_TYPE).map(([key, value]) => ({
+                    label: value,
                     value: key,
                   })),
-                  render: (_, record) =>
-                    SUBJECT_CLASS_SCHEDULE_TYPE[
-                      record.schedule as keyof typeof SUBJECT_CLASS_SCHEDULE_TYPE
-                    ],
+                  render: (_, record) => (
+                    <FormItem form={form} name={["subjectClass", record.id, "schedule"]}>
+                      <Select
+                        options={Object.entries(SUBJECT_CLASS_SCHEDULE_TYPE).map(
+                          ([key, value]) => ({
+                            label: value,
+                            value: key,
+                          })
+                        )}
+                        allowClear={false}
+                        disabled={subjectClassForm?.[record.id]?.cancelled}
+                      />
+                    </FormItem>
+                  ),
                 },
                 {
                   title: "Lớp QL",
@@ -1900,7 +1861,7 @@ export default function PhanCongGiangDay({
                 },
                 {
                   title: "Số SV",
-                  width: 80,
+                  width: 50,
                   align: "center",
                   distinctFilters: ["maxStudent"],
                   render: (_, record) => (
@@ -2021,7 +1982,7 @@ export default function PhanCongGiangDay({
                 {
                   title: "Hình thức thi",
                   align: "center",
-                  width: 150,
+                  width: 110,
                   type: "select",
                   options: options,
                   dataIndex: "examType",
@@ -2035,7 +1996,8 @@ export default function PhanCongGiangDay({
                         dropdownStyle={{ width: 250 }}
                         options={options}
                         disabled={
-                          subjectClassForm?.[record.id]?.cancelled ||
+                          record.cancelled ||
+                          record._count?.subjectClassStudent > 0 ||
                           (khoaBoMon &&
                             (!!record?.submitLecturerAssignmentAt ||
                               (!!record.lecturerAssignmentDeadline &&
@@ -2085,7 +2047,7 @@ export default function PhanCongGiangDay({
                 {
                   title: "Phòng học",
                   align: "center",
-                  width: 200,
+                  width: 150,
                   render: (_, record) => (
                     <FormItem form={form} name={["subjectClass", record.id, "roomId"]}>
                       <TreeSelect

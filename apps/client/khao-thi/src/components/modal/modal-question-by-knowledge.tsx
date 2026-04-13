@@ -5,9 +5,15 @@ import DeleteIcon from "@components/icons/delete"
 import EditIcon from "@components/icons/edit"
 import { LEVEL_COLUMNS, QUESTION_TYPE_LABELS } from "@constants/constants"
 import type { QuestionType } from "@workspace/db/client"
-import { useCountQuestion, useFindManyQuestion, useUpdateQuestion } from "@workspace/db/hooks"
+import {
+  useCountQuestion,
+  useFindManyQuestion,
+  useUpdateManyQuestion,
+  useUpdateQuestion,
+} from "@workspace/db/hooks"
 import { Button, Modal, message, Popconfirm, Row } from "antd"
-import { useEffect, useState } from "react"
+import { RowSelectMethod } from "antd/es/table/interface"
+import { Key, useEffect, useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 // import type { MultipleChoiceOption } from "../../../../prisma/client";
 
@@ -26,21 +32,23 @@ export default function QuestionListByKnowledgeBlockModal() {
   }>({
     tag: "PutQuestionModal",
   })
-  const { knowledgeBlockId, questionBankId, subjectVersionId } = input || {}
+  const { knowledgeBlockId } = input || {}
   const [currentPage, setCurrentPage] = useState(1)
   const [pageSize, setPageSize] = useState(10)
   const [selectedRowKeys, setSelectedRowKeys] = useState<string[]>([])
+  const [isAllSelected, setIsAllSelected] = useState(false)
 
-  const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
-    setSelectedRowKeys(newSelectedRowKeys as string[])
-  }
+  const where = useMemo(
+    () => ({
+      knowledgeBlockId,
+      deletedAt: null,
+    }),
+    [knowledgeBlockId]
+  )
 
   const { data: questions = [] } = useFindManyQuestion(
     {
-      where: {
-        knowledgeBlockId,
-        deletedAt: null,
-      },
+      where,
       include: {
         knowledgeBlock: true,
         multipleChoiceOptions: true,
@@ -56,19 +64,27 @@ export default function QuestionListByKnowledgeBlockModal() {
       skip: (currentPage - 1) * pageSize,
       orderBy: { createdAt: "desc" },
     },
-    { enabled: !!knowledgeBlockId }
+    { enabled: !!knowledgeBlockId && isOpen }
   )
   const { data: totalQuestions = 0 } = useCountQuestion(
     {
-      where: {
-        knowledgeBlockId,
-        deletedAt: null,
+      where,
+    },
+    { enabled: !!knowledgeBlockId && isOpen }
+  )
+
+  const { data: allQuestions = [] } = useFindManyQuestion(
+    {
+      where,
+      select: {
+        id: true,
       },
     },
-    { enabled: !!knowledgeBlockId }
+    { enabled: !!knowledgeBlockId && isOpen }
   )
 
   const { mutateAsync: updateQuestion } = useUpdateQuestion()
+  const { mutateAsync: updateManyQuestion } = useUpdateManyQuestion()
 
   async function handleDeleteQuestion(id: string) {
     try {
@@ -88,17 +104,20 @@ export default function QuestionListByKnowledgeBlockModal() {
     }
 
     try {
-      await Promise.all(
-        selectedRowKeys.map((id) =>
-          updateQuestion({
-            where: { id },
-            data: { deletedAt: new Date() },
-          })
-        )
-      )
+      await updateManyQuestion({
+        where: isAllSelected
+          ? where
+          : {
+              id: {
+                in: selectedRowKeys,
+              },
+            },
+        data: { deletedAt: new Date() },
+      })
 
       message.success(`Đã xoá ${selectedRowKeys.length} câu hỏi`)
       setSelectedRowKeys([])
+      setIsAllSelected(false)
     } catch (error) {
       message.error("Không thể xoá nhiều câu hỏi")
     }
@@ -108,7 +127,43 @@ export default function QuestionListByKnowledgeBlockModal() {
     if (!knowledgeBlockId) return
     setCurrentPage(1)
     setSelectedRowKeys([])
+    setIsAllSelected(false)
   }, [knowledgeBlockId])
+
+  const rowSelection = {
+    type: "checkbox" as const,
+    selectedRowKeys,
+    preserveSelectedRowKeys: true,
+    onSelect: (record: any, selected: boolean) => {
+      if (selected) {
+        setSelectedRowKeys((prev) => {
+          if (prev.includes(record.id)) return prev
+          return [...prev, record.id]
+        })
+      } else {
+        setIsAllSelected(false)
+        setSelectedRowKeys((prev) => prev.filter((id) => id !== record.id))
+      }
+    },
+    onChange: (
+      _keys: Key[],
+      _rows: any,
+      info: {
+        type: RowSelectMethod
+      }
+    ) => {
+      if (info?.type !== "all") return
+
+      if (isAllSelected) {
+        setSelectedRowKeys([])
+        setIsAllSelected(false)
+        return
+      }
+
+      setSelectedRowKeys(allQuestions.map((q) => q.id))
+      setIsAllSelected(true)
+    },
+  }
 
   return (
     <Modal
@@ -124,11 +179,7 @@ export default function QuestionListByKnowledgeBlockModal() {
         bordered
         scroll={{ y: "60vh" }}
         data={questions}
-        rowSelection={{
-          type: "checkbox",
-          selectedRowKeys,
-          onChange: onSelectChange,
-        }}
+        rowSelection={rowSelection}
         pagination={{
           current: currentPage,
           pageSize,
@@ -179,50 +230,6 @@ export default function QuestionListByKnowledgeBlockModal() {
             align: "center",
             render: (_, r) => LEVEL_COLUMNS.find((l) => l.difficult === r.difficult)?.label,
           },
-          // {
-          //   title: "Đáp án",
-          //   width: 300,
-          //   render: (_, record) => {
-          //     if (
-          //       record.type === QuestionType.MULTIPLE_CHOICE ||
-          //       record.type === QuestionType.SINGLE_CHOICE
-          //     ) {
-          //       return (
-          //         <div className="space-y-1">
-          //           {record.multipleChoiceOptions
-          //             ?.sort(
-          //               (a: MultipleChoiceOption, b: MultipleChoiceOption) =>
-          //                 (a.order || 0) - (b.order || 0)
-          //             )
-          //             .map((opt: MultipleChoiceOption) => (
-          //               <div
-          //                 key={opt.id}
-          //                 className={
-          //                   opt.isCorrect
-          //                     ? "text-green-600 font-semibold"
-          //                     : "text-gray-600"
-          //                 }
-          //                 dangerouslySetInnerHTML={{
-          //                   __html: renderWithMath(opt.content),
-          //                 }}
-          //               />
-          //             ))}
-          //         </div>
-          //       );
-          //     }
-          //     return (
-          //       <HtmlTruncate>
-          //         <div
-          //           dangerouslySetInnerHTML={{
-          //             __html: record.explanation
-          //               ? renderWithMath(record.explanation)
-          //               : "",
-          //           }}
-          //         />
-          //       </HtmlTruncate>
-          //     );
-          //   },
-          // },
           {
             title: "Thao tác",
             width: 90,
@@ -264,11 +271,7 @@ export default function QuestionListByKnowledgeBlockModal() {
           okText="Xoá"
           cancelText="Huỷ"
         >
-          {selectedRowKeys.length > 0 && (
-            <Button danger onClick={handleDeleteManyQuestions}>
-              Xoá
-            </Button>
-          )}
+          {selectedRowKeys.length > 0 && <Button danger>Xoá</Button>}
         </Popconfirm>
       </Row>
     </Modal>

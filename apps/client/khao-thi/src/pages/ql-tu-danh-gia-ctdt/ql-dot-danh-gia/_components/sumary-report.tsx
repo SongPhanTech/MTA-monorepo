@@ -7,6 +7,9 @@ import { RichTextEditor } from "@components/commons/rich-text-editor"
 import { useEffect } from "react"
 import useSpinner from "@hooks/spinner"
 import { queryClient } from "@api/index"
+import { useAbility } from "@workspace/permissions/hooks"
+import { KHAO_THI_PERMISSION } from "@workspace/router"
+import ExportReport from "./export-report"
 
 type SumaryReportEvaluationPeriodType = Prisma.EvaluationPeriodGetPayload<{
   select: {
@@ -20,6 +23,7 @@ type SumaryReportEvaluationPeriodType = Prisma.EvaluationPeriodGetPayload<{
 const SumaryReport = () => {
   const [form] = Form.useForm<SumaryReportEvaluationPeriodType>()
   const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
+  const { can } = useAbility()
 
   const { showSpinner, hideSpinner } = useSpinner()
 
@@ -90,9 +94,14 @@ const SumaryReport = () => {
           <Typography.Title level={4} className="!mb-0">
             Báo cáo {data?.name}
           </Typography.Title>
-          <Button type="primary" htmlType="submit">
-            Lưu báo cáo
-          </Button>
+          <div className="flex items-center gap-2 mr-3">
+            {selectedEvaluationPeriodId && (
+              <ExportReport id={selectedEvaluationPeriodId} variant="button" />
+            )}
+            <Button type="primary" htmlType="submit">
+              Lưu báo cáo
+            </Button>
+          </div>
         </div>
         <Typography.Title level={5}>Phần Ⅰ. KHÁI QUÁT </Typography.Title>
         <Form.Item label="1. Đặt vấn đề" name="overviewProblem">

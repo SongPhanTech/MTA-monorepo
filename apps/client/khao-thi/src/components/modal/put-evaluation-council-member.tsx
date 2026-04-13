@@ -10,6 +10,7 @@ import { $Enums } from "@workspace/db"
 import {
   useCreateEvaluationCouncilMember,
   useFindManyDM_DonVi,
+  useFindManyEvaluationCouncilMember,
   useFindUniqueEvaluationCouncilMember,
   useUpdateEvaluationCouncilMember,
 } from "@workspace/db/hooks"
@@ -36,6 +37,29 @@ const PutEvaluationCouncilMember = () => {
   const isSpecializedRole =
     roleWatch === $Enums.EvaluationMemberRole.HEAD_SPECIALIZED ||
     roleWatch === $Enums.EvaluationMemberRole.SPECIALIZED
+
+  const isHeadSpecialized = roleWatch === $Enums.EvaluationMemberRole.HEAD_SPECIALIZED
+
+  const { data: headSpecializedMembers = [] } = useFindManyEvaluationCouncilMember(
+    {
+      where: {
+        evaluationCouncilId: input?.evaluationCouncilId,
+        role: $Enums.EvaluationMemberRole.HEAD_SPECIALIZED,
+        deletedAt: null,
+      },
+      select: { groupName: true },
+    },
+    { enabled: !!input?.evaluationCouncilId }
+  )
+
+  const groupOptions = useMemo(
+    () =>
+      [...new Set(headSpecializedMembers.map((m) => m.groupName).filter(Boolean))].map((name) => ({
+        label: name,
+        value: name,
+      })),
+    [headSpecializedMembers]
+  )
 
   const { mutateAsync: createEvaluationCouncilMember } = useCreateEvaluationCouncilMember()
   const { mutateAsync: updateEvaluationCouncilMember } = useUpdateEvaluationCouncilMember()
@@ -165,7 +189,11 @@ const PutEvaluationCouncilMember = () => {
               },
             ]}
           >
-            <Input placeholder="Nhập tên nhóm chuyên trách" />
+            {isHeadSpecialized ? (
+              <Input placeholder="Nhập tên nhóm chuyên trách" />
+            ) : (
+              <Select placeholder="Chọn nhóm chuyên trách" options={groupOptions} />
+            )}
           </FormItem>
         </Col>
       )}

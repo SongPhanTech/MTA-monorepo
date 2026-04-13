@@ -3,6 +3,7 @@ import { queryClient } from "@api/index"
 import Table from "@components/commons/table"
 import DeleteIcon from "@components/icons/delete"
 import EditIcon from "@components/icons/edit"
+import { QUESTION_TYPE_LABELS } from "@constants/constants"
 import type { ConfigExam, DocumentFile } from "@workspace/db/client"
 import {
   useCreateDocumentFile,
@@ -78,32 +79,23 @@ const TableChuongMuc = ({ matrixId }: TableChuongMucProps) => {
   const getConfigByDifficult = (
     configExams: ConfigExam[],
     difficult: string
-  ): { quantity: number; point: number } => {
+  ): { quantity: number; type?: string | null } => {
     const config = configExams?.find((c) => c.difficult === difficult)
     return {
       quantity: config?.quantity || 0,
-      point: config?.point || 0,
+      type: config?.type,
     }
   }
 
-  const getTotals = (
-    configExams: ConfigExam[]
-  ): { quantity: number; point: number; total: number } => {
+  const getTotals = (configExams: ConfigExam[]): { quantity: number } => {
     return (
       configExams?.reduce(
         (acc, config) => ({
           quantity: acc.quantity + (config.quantity || 0),
-          point: acc.point + (config.point || 0),
-          total: (acc?.total || 0) + (config.point || 0) * (config.quantity || 0),
         }),
-        { quantity: 0, point: 0, total: 0 }
-      ) || { quantity: 0, point: 0, total: 0 }
+        { quantity: 0 }
+      ) || { quantity: 0 }
     )
-  }
-  const calcTotal = (data: ConfigExam[]) => {
-    return data.reduce((total, item) => {
-      return total + item.point * item.quantity
-    }, 0)
   }
 
   const { mutateAsync: createDocumentFile } = useCreateDocumentFile()
@@ -195,18 +187,18 @@ const TableChuongMuc = ({ matrixId }: TableChuongMucProps) => {
     )
   }
 
-  const renderCell = (quantity: number, point: number) => (
-    <div className="relative inline-block min-w-[40px]">
-      <div className="absolute -top-2 -right-2 text-xs text-green-500 font-semibold">
-        <Tooltip title="Điểm mỗi câu đúng">
-          <div>{point}</div>
-        </Tooltip>
-      </div>
-      <div className="text-base font-medium">
-        <Tooltip title="Số câu hỏi">
-          <div className="text-base font-medium">{quantity}</div>
-        </Tooltip>
-      </div>
+  const renderCell = (quantity: number, type?: string | null) => (
+    <div className="flex flex-col items-center gap-0.5">
+      <Tooltip title="Số câu hỏi">
+        <div className="text-sm font-medium">{quantity}</div>
+      </Tooltip>
+      {quantity > 0 && (
+        <div className="text-xs text-gray-500 leading-tight">
+          {type
+            ? (QUESTION_TYPE_LABELS[type as keyof typeof QUESTION_TYPE_LABELS] ?? type)
+            : "Tất cả"}
+        </div>
+      )}
     </div>
   )
 
@@ -216,10 +208,9 @@ const TableChuongMuc = ({ matrixId }: TableChuongMucProps) => {
         const config = kb.configExams?.find((c) => c.difficult === difficult)
         return {
           quantity: acc.quantity + (config?.quantity || 0),
-          point: acc.point + (config?.point || 0),
         }
       },
-      { quantity: 0, point: 0 }
+      { quantity: 0 }
     )
   }
 
@@ -229,11 +220,9 @@ const TableChuongMuc = ({ matrixId }: TableChuongMucProps) => {
         const totals = getTotals(kb.configExams)
         return {
           quantity: acc.quantity + totals.quantity,
-          point: acc.point + totals.point,
-          total: (acc?.total || 0) + totals.total,
         }
       },
-      { quantity: 0, point: 0, total: 0 }
+      { quantity: 0 }
     )
   }
 
@@ -253,8 +242,8 @@ const TableChuongMuc = ({ matrixId }: TableChuongMucProps) => {
             width: 80,
             align: "center",
             render: (_, record) => {
-              const { quantity, point } = getConfigByDifficult(record.configExams, "D1")
-              return renderCell(quantity, point)
+              const { quantity, type } = getConfigByDifficult(record.configExams, "D1")
+              return renderCell(quantity, type)
             },
           },
           {
@@ -262,8 +251,8 @@ const TableChuongMuc = ({ matrixId }: TableChuongMucProps) => {
             width: 80,
             align: "center",
             render: (_, record) => {
-              const { quantity, point } = getConfigByDifficult(record.configExams, "D2")
-              return renderCell(quantity, point)
+              const { quantity, type } = getConfigByDifficult(record.configExams, "D2")
+              return renderCell(quantity, type)
             },
           },
           {
@@ -271,8 +260,8 @@ const TableChuongMuc = ({ matrixId }: TableChuongMucProps) => {
             width: 100,
             align: "center",
             render: (_, record) => {
-              const { quantity, point } = getConfigByDifficult(record.configExams, "D3")
-              return renderCell(quantity, point)
+              const { quantity, type } = getConfigByDifficult(record.configExams, "D3")
+              return renderCell(quantity, type)
             },
           },
           {
@@ -280,8 +269,8 @@ const TableChuongMuc = ({ matrixId }: TableChuongMucProps) => {
             width: 120,
             align: "center",
             render: (_, record) => {
-              const { quantity, point } = getConfigByDifficult(record.configExams, "D4")
-              return renderCell(quantity, point)
+              const { quantity, type } = getConfigByDifficult(record.configExams, "D4")
+              return renderCell(quantity, type)
             },
           },
           {
@@ -291,15 +280,6 @@ const TableChuongMuc = ({ matrixId }: TableChuongMucProps) => {
             render: (_, record) => {
               const { quantity } = getTotals(record.configExams)
               return <span className="font-medium">{quantity}</span>
-            },
-          },
-          {
-            title: "Tổng điểm",
-            width: 100,
-            align: "center",
-            render: (_, record) => {
-              const { total } = getTotals(record.configExams)
-              return <span className="font-medium">{total}</span>
             },
           },
           {
@@ -356,10 +336,7 @@ const TableChuongMuc = ({ matrixId }: TableChuongMucProps) => {
                 <Table.Summary.Cell index={6} align="center">
                   {grandTotal.quantity}
                 </Table.Summary.Cell>
-                <Table.Summary.Cell index={7} align="center">
-                  {grandTotal.total}
-                </Table.Summary.Cell>
-                <Table.Summary.Cell index={8} align="center" />
+                <Table.Summary.Cell index={7} align="center" />
               </Table.Summary.Row>
             </Table.Summary>
           )

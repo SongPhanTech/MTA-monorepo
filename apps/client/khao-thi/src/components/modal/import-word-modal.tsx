@@ -140,6 +140,7 @@ const WordImportModal: React.FC = () => {
     ignoreAttributes: false,
     attributeNamePrefix: "@_",
     parseTagValue: false,
+    trimValues: false,
   })
   const extractRawTextFromCell = (cell: any): string => {
     if (!cell) return ""
@@ -187,7 +188,17 @@ const WordImportModal: React.FC = () => {
     return getText(cell)
   }
 
-  const cleanQuestionText = (text: string) => text
+  const normalizeWordQuestionText = (text: string) => {
+    return text
+      .replace(/\r/g, "")
+      .replace(/\u00A0/g, " ")
+      .replace(/\b([a-d])\.\s+(?=[A-D]\.)/gi, "")
+      .replace(/([^\n\s])([A-D])\.(?=\S)/g, "$1\n$2. ")
+      .replace(/([^\n])([A-D])\.\s+/g, "$1\n$2. ")
+      .replace(/(\S)(\*\s*Đáp\s*án\s*:)/gi, "$1\n$2")
+  }
+
+  const cleanQuestionText = (text: string) => normalizeWordQuestionText(text)
 
   const mapQuestionTypeFromText = (raw: string): QuestionType | undefined => {
     const value = raw.trim().toUpperCase().replace(/\s+/g, "")
@@ -216,90 +227,68 @@ const WordImportModal: React.FC = () => {
     return mapping[value]
   }
 
-  const extractTextAndImagesFromCell = (cell: any, zip: PizZip, relMap: Map<string, string>) => {
-    const paragraphs = Array.isArray(cell?.["w:p"]) ? cell["w:p"] : [cell?.["w:p"]]
-    let rawText = ""
+  const extractTextAndImagesFromParagraph = (
+    p: any,
+    zip: PizZip,
+    relMap: Map<string, string>,
+    startIndex = 1
+  ) => {
+    const runs = Array.isArray(p?.["w:r"]) ? p["w:r"] : [p?.["w:r"]]
+
+    let text = ""
     const images: { name: string; blob: Blob }[] = []
-    let imgIndex = 1
+    let imgIndex = startIndex
 
-    for (const p of paragraphs) {
-      const runs = Array.isArray(p?.["w:r"]) ? p["w:r"] : [p?.["w:r"]]
-      let paragraphText = ""
+    for (const r of runs) {
+      let value = ""
+      const t = r?.["w:t"]
 
-      for (const r of runs) {
-        let value = ""
-        const t = r?.["w:t"]
+      if (typeof t === "string") value = t
+      else if (typeof t === "object" && t?.["#text"]) value = t["#text"]
 
-        if (typeof t === "string") value = t
-        else if (typeof t === "object" && t?.["#text"]) value = t["#text"]
-
-        if (value) {
-          const isOption = /^([A-D])\.\s*/i.test(value)
-
-          if (isOption && paragraphText.trim().length > 0) {
-            paragraphText += "\n"
-          } else if (
-            paragraphText.length > 0 &&
-            !paragraphText.endsWith(" ") &&
-            !/^[.,!?;:]/.test(value)
-          ) {
-            paragraphText += " "
-          }
-
-          paragraphText += value
-        }
-
-        if (r?.["w:br"]) {
-          paragraphText += "\n"
-        }
-
-        const drawing = r?.["w:drawing"]
-        const blip =
-          drawing?.["wp:inline"]?.["a:graphic"]?.["a:graphicData"]?.["pic:pic"]?.["pic:blipFill"]?.[
-            "a:blip"
-          ]
-
-        const relId = blip?.["@_r:embed"]
-        if (relId) {
-          const imagePath = `word/${relMap.get(relId)}`
-          const file = zip.file(imagePath)
-          if (file) {
-            const blob = new Blob([file.asArrayBuffer()], { type: "image/png" })
-            const placeholder = `{img_${imgIndex}}`
-            paragraphText += placeholder
-            images.push({ name: placeholder, blob })
-            imgIndex++
-          }
-        }
+      if (r?.["w:tab"]) {
+        text += "\t"
       }
 
-      rawText += `${paragraphText.trim()}\n`
+      if (r?.["w:br"] || r?.["w:cr"]) {
+        text += "\n"
+      }
+
+      if (value) {
+        text += value
+      }
+
+      const drawing = r?.["w:drawing"]
+      const blip =
+        drawing?.["wp:inline"]?.["a:graphic"]?.["a:graphicData"]?.["pic:pic"]?.["pic:blipFill"]?.[
+          "a:blip"
+        ]
+
+      const relId = blip?.["@_r:embed"]
+      if (relId) {
+        const file = zip.file(`word/${relMap.get(relId)}`)
+        if (file) {
+          const blob = new Blob([file.asArrayBuffer()], { type: "image/png" })
+          const name = `{img_${imgIndex}}`
+
+          text += name
+          images.push({ name, blob })
+          imgIndex++
+        }
+      }
     }
 
-    return { text: rawText, images }
+    return {
+      text: `${normalizeWordQuestionText(text)}\n`,
+      images,
+      nextIndex: imgIndex,
+    }
   }
 
-  const extractPointFromCell = (cell: any): { value?: number } => {
-    if (!cell) return {}
+  const extractPointFromText = (text: string): { value?: number } => {
+    if (!text) return {}
 
-    const rawText = extractRawTextFromCell(cell)
-    if (!rawText) return {}
-
-    /**
-     * Chuẩn hoá:
-     * - bỏ chữ đ / điểm
-     * - đổi , thành .
-     * - bỏ toàn bộ ký tự thừa
-     */
-    const normalized = rawText
-      .toLowerCase()
-      .replace(/điểm|đ/g, "")
-      .replace(",", ".")
-      .replace(/\s+/g, "")
-      .replace(/[^0-9.]/g, "")
-
-    // bắt: 1 | 1.5 | .5
-    const match = normalized.match(/(\d+(\.\d+)?|\.\d+)/)
+    const match = text.match(/\(\s*([\d.,]+)\s*đ\s*\)/i)
     if (!match) return {}
 
     const value = Number(match[0])
@@ -310,35 +299,29 @@ const WordImportModal: React.FC = () => {
 
   const MAX_POINT_PER_QUESTION = 9
 
-  const checkQuestionPoint = (
-    value?: number
-  ): {
-    isInvalid: boolean
-    color: "black" | "red"
-    warning?: string
-  } => {
-    if (value === undefined) {
-      return { isInvalid: false, color: "black" }
-    }
+  const validateQuestionPoint = (value?: number) => {
+    if (value === undefined) return { isInvalid: false, color: "black" }
 
     if (value > MAX_POINT_PER_QUESTION) {
       return {
         isInvalid: true,
         color: "red",
-        warning: `Điểm ${value} vượt quá ${MAX_POINT_PER_QUESTION} điểm / câu`,
+        warning: `Điểm ${value} vượt quá ${MAX_POINT_PER_QUESTION}`,
       }
     }
 
-    const decimalPart = Number((value % 1).toFixed(2))
+    const decimal = value % 1
+    const valid = [
+      0, 0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.25, 2.5, 2.75, 3, 3.25, 3.5, 3.75, 4, 4.25, 4.5,
+      4.75, 5, 5.25, 5.5, 5.75, 6, 6.25, 6.5, 6.75, 7, 7.25, 7.5, 7.75, 8, 8.25, 8.5, 8.75, 9, 9.25,
+      9.5, 9.75,
+    ]
 
-    const isValidDecimal =
-      decimalPart === 0 || decimalPart === 0.25 || decimalPart === 0.5 || decimalPart === 0.75
-
-    if (!isValidDecimal) {
+    if (!valid.includes(Number(decimal.toFixed(2)))) {
       return {
         isInvalid: true,
         color: "red",
-        warning: `Điểm ${value} không hợp lệ (chỉ nhận .25, .5, .75 hoặc số nguyên)`,
+        warning: `Điểm ${value} không hợp lệ`,
       }
     }
 
@@ -406,6 +389,34 @@ const WordImportModal: React.FC = () => {
     },
   }
 
+  const parseQuestionHeader = (
+    line: string
+  ): {
+    questionNumber: number
+    typeCode: string
+    difficultCode: string
+    point: number
+    questionText: string
+  } | null => {
+    // Pattern: Câu N: ( TYPE- DIFFICULTY) ( POINT đ) Question text
+    // TYPE can be: TN, TNN, DK, SX, TL
+    // DIFFICULTY can be: NB, TH, VD, VDC
+    const headerRegex =
+      /^Câu\s*(\d+)\s*:\s*\(\s*(TNN|TN|DK|SX|TL)\s*-\s*(NB|TH|VD|VDC)\s*\)\s*\(\s*([\d.,]+)\s*đ\s*\)\s*(.+)?$/i
+
+    const match = line.match(headerRegex)
+    if (!match) return null
+
+    const questionNumber = Number.parseInt(match[1], 10)
+    const typeCode = match[2].toUpperCase()
+    const difficultCode = match[3].toUpperCase()
+    const pointStr = match[4].replace(",", ".")
+    const point = Number.parseFloat(pointStr)
+    const questionText = match[5]?.trim() || ""
+
+    return { questionNumber, typeCode, difficultCode, point, questionText }
+  }
+
   const handleImport = async (file: File) => {
     setLoading(true)
     setImportErrors([])
@@ -433,142 +444,233 @@ const WordImportModal: React.FC = () => {
       })
 
       const body = doc["w:document"]?.["w:body"]
-      const tables = Array.isArray(body?.["w:tbl"])
-        ? body["w:tbl"]
-        : body?.["w:tbl"]
-          ? [body["w:tbl"]]
-          : []
 
-      if (tables.length === 0) {
-        message.error("File Word không có bảng câu hỏi")
+      const paragraphs: any[] = []
+
+      const collectParagraphs = (node: any) => {
+        if (!node) return
+
+        if (node["w:p"]) {
+          const ps = Array.isArray(node["w:p"]) ? node["w:p"] : [node["w:p"]]
+          paragraphs.push(...ps)
+        }
+
+        Object.values(node).forEach((child: any) => {
+          if (typeof child === "object") {
+            if (Array.isArray(child)) child.forEach(collectParagraphs)
+            else collectParagraphs(child)
+          }
+        })
+      }
+
+      collectParagraphs(body)
+
+      if (paragraphs.length === 0) {
+        message.error("File Word không có nội dung câu hỏi")
+        return
+      }
+
+      let imgCounter = 1
+
+      const lines: { text: string; images: { name: string; blob: Blob }[] }[] = []
+
+      for (const p of paragraphs) {
+        const { text, images, nextIndex } = extractTextAndImagesFromParagraph(
+          p,
+          zip,
+          relMap,
+          imgCounter
+        )
+
+        imgCounter = nextIndex
+
+        lines.push({
+          text,
+          images,
+        })
+      }
+
+      const questionBlocks: {
+        lines: { text: string; images: { name: string; blob: Blob }[] }[]
+      }[] = []
+      let currentBlock: { text: string; images: { name: string; blob: Blob }[] }[] = []
+
+      for (const line of lines) {
+        const trimmed = line.text.replace(/\s+/g, " ").trim()
+        if (!trimmed) {
+          // Dòng trống - bỏ qua hoặc thêm vào block hiện tại
+          if (currentBlock.length > 0) {
+            currentBlock.push(line)
+          }
+          continue
+        }
+
+        // Kiểm tra xem dòng này có phải bắt đầu câu hỏi mới không
+        if (/^Câu\s+\d+\s*:/i.test(trimmed)) {
+          // Lưu block cũ
+          if (currentBlock.length > 0) {
+            questionBlocks.push({ lines: currentBlock })
+          }
+          currentBlock = [line]
+        } else {
+          currentBlock.push(line)
+        }
+      }
+
+      // Lưu block cuối
+      if (currentBlock.length > 0) {
+        questionBlocks.push({ lines: currentBlock })
+      }
+
+      if (questionBlocks.length === 0) {
+        message.error("Không tìm thấy câu hỏi nào trong file Word")
         return
       }
 
       const extractedQuestions: any[] = []
       const errors: { rowIndex: number; message: string }[] = []
 
-      for (const tbl of tables) {
-        const rows = Array.isArray(tbl["w:tr"]) ? tbl["w:tr"] : [tbl["w:tr"]]
+      for (const block of questionBlocks) {
+        const allText = block.lines.map((l) => l.text).join("\n")
+        const allImages = block.lines.flatMap((l) => l.images)
 
-        for (let i = 1; i < rows.length; i++) {
-          const row = rows[i]
-          const cells = Array.isArray(row["w:tc"]) ? row["w:tc"] : []
+        // Tách header và các dòng còn lại
+        const blockLines = allText.split("\n")
+        const headerLine = (blockLines[0] || "").replace(/\u00A0/g, " ").trim()
 
-          if (cells.length < 5) continue
-
-          // ===== CỘT 1: CÂU HỎI =====
-          const questionCell = extractTextAndImagesFromCell(cells[0], zip, relMap)
-          const rawQuestionText = questionCell.text
-
-          if (!rawQuestionText?.trim()) continue
-
-          // ===== CỘT 2: ĐÁP ÁN =====
-          const answerCell = extractTextAndImagesFromCell(cells[1], zip, relMap)
-          const answerTextRaw = answerCell.text
-
-          // ===== CỘT 3 + 4 =====
-          const typeText = extractTextAndImagesFromCell(cells[2], zip, relMap).text
-          const difficultText = extractTextAndImagesFromCell(cells[3], zip, relMap).text
-
-          const type = mapQuestionTypeFromText(typeText)
-          const difficult = mapDifficultFromText(difficultText)
-
-          if (!type || !difficult) {
-            const typeVal = typeText.trim().replace(/\n/g, "↵") || "(trống)"
-            const difficultVal = difficultText.trim().replace(/\n/g, "↵") || "(trống)"
-            errors.push({
-              rowIndex: i,
-              message: `Sai mã — Loại: "${typeVal}", Độ khó: "${difficultVal}" (hợp lệ: TL, TN, TNN, DK, SX | NB, TH, VD, VDC)`,
-            })
-            continue
-          }
-
-          const pointRaw = extractPointFromCell(cells[4])
-          const pointCheck = checkQuestionPoint(pointRaw.value)
-
-          if (pointCheck.isInvalid && pointCheck.warning) {
-            errors.push({ rowIndex: i, message: pointCheck.warning })
-          }
-
-          const question: any = {
-            type,
-            difficult,
-            contentImagesRaw: questionCell.images,
-            explanationImagesRaw: answerCell.images,
-            pointRaw: pointRaw.value,
-            point: pointCheck.isInvalid ? undefined : pointRaw.value,
-            pointStatus: pointCheck.color,
-          }
-
-          if (type === QuestionType.SINGLE_CHOICE || type === QuestionType.MULTIPLE_CHOICE) {
-            question.content = rawQuestionText
-
-            question.optionsRaw = rawQuestionText
-              .split("\n")
-              .map((l) => l.trim())
-              .filter((l) => /^[A-D]\.\s*/i.test(l))
-              .map((line) => {
-                const match = line.match(/^([A-D])\.\s*(.+)$/i)
-                return {
-                  label: match?.[1],
-                  content: match?.[2] || "",
-                  isCorrect: false,
-                }
-              })
-
-            // === xử lý đáp án từ cột 2 ===
-            const answerLines = answerTextRaw
-              .split(/\n|<br\s*\/?>/i)
-              .map((l) => l.trim())
-              .filter(Boolean)
-
-            if (type === QuestionType.SINGLE_CHOICE) {
-              const correct = answerLines[0]?.match(/^([A-D])\./i)?.[1]
-              question.optionsRaw.forEach((o: any) => {
-                o.isCorrect = o.label === correct
-              })
-            }
-
-            if (type === QuestionType.MULTIPLE_CHOICE) {
-              const correctLabels = answerLines
-                .map((l) => l.match(/^([A-D])\./i)?.[1])
-                .filter(Boolean)
-
-              question.optionsRaw.forEach((o: any) => {
-                o.isCorrect = correctLabels.includes(o.label)
-              })
-            }
-            question.explanation = answerTextRaw
-          } else if (type === QuestionType.ORDERING) {
-            // ORDERING - parse options từ content
-            question.content = rawQuestionText
-            question.explanation = answerTextRaw
-            question.answer = answerTextRaw
-
-            // Parse options giống như SINGLE_CHOICE/MULTIPLE_CHOICE
-            question.optionsRaw = rawQuestionText
-              .split("\n")
-              .map((l) => l.trim())
-              .filter((l) => /^[A-D]\.\s*/i.test(l))
-              .map((line) => {
-                const match = line.match(/^([A-D])\.\s*(.+)$/i)
-                return {
-                  label: match?.[1],
-                  content: match?.[2] || "",
-                }
-              })
-          } else {
-            // ESSAY / ORAL / FILL_IN_BLANK
-            question.content = cleanQuestionText(rawQuestionText)
-            question.explanation = answerTextRaw
-
-            if (type === QuestionType.FILL_IN_BLANK) {
-              question.answer = answerTextRaw
-            }
-          }
-
-          extractedQuestions.push(question)
+        const headerInfo = parseQuestionHeader(headerLine)
+        if (!headerInfo) {
+          errors.push({
+            rowIndex: questionBlocks.indexOf(block) + 1,
+            message: `Không parse được header: "${headerLine.slice(0, 80)}..."`,
+          })
+          continue
         }
+
+        const type = mapQuestionTypeFromText(headerInfo.typeCode)
+        const difficult = mapDifficultFromText(headerInfo.difficultCode)
+
+        if (!type || !difficult) {
+          errors.push({
+            rowIndex: headerInfo.questionNumber,
+            message: `Câu ${headerInfo.questionNumber}: Sai mã — Loại: "${headerInfo.typeCode}", Độ khó: "${headerInfo.difficultCode}" (hợp lệ: TL, TN, TNN, DK, SX | NB, TH, VD, VDC)`,
+          })
+          continue
+        }
+
+        const { value: extractedPoint } = extractPointFromText(headerLine)
+
+        const point = extractedPoint ?? headerInfo.point
+
+        const pointCheck = validateQuestionPoint(point)
+        if (pointCheck.isInvalid && pointCheck.warning) {
+          errors.push({ rowIndex: headerInfo.questionNumber, message: pointCheck.warning })
+        }
+
+        // Tìm dòng bắt đầu bằng "*Đáp án"
+        const answerStartIdx = blockLines.findIndex((l) => /^\*\s*Đáp\s*án\s*:/i.test(l))
+
+        // Nội dung câu hỏi: từ header text + các dòng trước đáp án
+        const contentLines: string[] = []
+        if (headerInfo.questionText) {
+          contentLines.push(headerInfo.questionText)
+        }
+
+        const endIdx = answerStartIdx >= 0 ? answerStartIdx : blockLines.length
+        for (let i = 1; i < endIdx; i++) {
+          contentLines.push(blockLines[i])
+        }
+
+        // Đáp án: từ dòng "*Đáp án:" trở đi
+        const answerLines: string[] = []
+        if (answerStartIdx >= 0) {
+          // Lấy text sau "*Đáp án:" trên cùng dòng
+          const firstAnswerLine = blockLines[answerStartIdx]
+            .replace(/^\*Đáp\s*án\s*:\s*/i, "")
+            .trim()
+          if (firstAnswerLine) {
+            answerLines.push(firstAnswerLine)
+          }
+          // Các dòng tiếp theo
+          for (let i = answerStartIdx + 1; i < blockLines.length; i++) {
+            if (blockLines[i]) {
+              answerLines.push(blockLines[i])
+            }
+          }
+        }
+
+        const rawQuestionText = normalizeWordQuestionText(contentLines.join("\n"))
+        const answerTextRaw = normalizeWordQuestionText(answerLines.join("\n"))
+
+        const question: any = {
+          type,
+          difficult,
+          contentImagesRaw: allImages,
+          explanationImagesRaw: [],
+          pointRaw: headerInfo.point,
+          point: pointCheck.isInvalid ? undefined : point,
+          pointStatus: pointCheck.color,
+        }
+
+        if (type === QuestionType.SINGLE_CHOICE || type === QuestionType.MULTIPLE_CHOICE) {
+          question.content = rawQuestionText
+
+          question.optionsRaw = contentLines
+            .filter((l) => /^\s*[A-D]\.\s*/i.test(l))
+            .map((line) => {
+              const match = line.match(/^([A-D])\.\s*(.+)$/i)
+              return {
+                label: match?.[1]?.toUpperCase(),
+                content: match?.[2] || "",
+                isCorrect: false,
+              }
+            })
+
+          if (type === QuestionType.SINGLE_CHOICE) {
+            // Đáp án dạng: "D. Liên Xô" hoặc chỉ "D"
+            const correctMatch = answerLines[0]?.match(/^([A-D])\.?\s*/i)
+            const correct = correctMatch?.[1]?.toUpperCase()
+            question.optionsRaw.forEach((o: any) => {
+              o.isCorrect = o.label === correct
+            })
+          }
+
+          if (type === QuestionType.MULTIPLE_CHOICE) {
+            // Nhiều đáp án, mỗi dòng: "A. Nội dung" hoặc chỉ "A"
+            const correctLabels = answerLines
+              .map((l) => l.trim())
+              .map((l) => l.match(/^([A-D])\./i)?.[1]?.toUpperCase())
+              .filter(Boolean)
+            question.optionsRaw.forEach((o: any) => {
+              o.isCorrect = correctLabels.includes(o.label)
+            })
+          }
+          question.explanation = answerTextRaw
+        } else if (type === QuestionType.ORDERING) {
+          question.content = rawQuestionText
+          question.explanation = answerTextRaw
+          question.answer = answerTextRaw
+
+          question.optionsRaw = contentLines
+            .filter((l) => /^[A-D]\.\s*/i.test(l))
+            .map((line) => {
+              const match = line.match(/^([A-D])\.\s*(.+)$/i)
+              return {
+                label: match?.[1]?.toUpperCase(),
+                content: match?.[2] || "",
+              }
+            })
+        } else if (type === QuestionType.FILL_IN_BLANK) {
+          question.content = cleanQuestionText(rawQuestionText)
+          question.explanation = answerTextRaw
+          question.answer = answerTextRaw
+        } else {
+          // ESSAY (TL)
+          question.content = cleanQuestionText(rawQuestionText)
+          question.explanation = answerTextRaw
+        }
+
+        extractedQuestions.push(question)
       }
 
       const questionsWithKey = extractedQuestions.map((q, index) => ({
@@ -703,12 +805,19 @@ const WordImportModal: React.FC = () => {
   })
 
   const buildQuestionPayload = async (q: any, knowledgeBlockId?: string) => {
-    const content = await uploadImagesAndReplacePlaceholders(q.content, q.contentImagesRaw || [])
-    const explanation = await uploadImagesAndReplacePlaceholders(
-      q.explanation,
-      q.explanationImagesRaw || []
-    )
+    let content = ""
+    let explanation = ""
 
+    try {
+      content = await uploadImagesAndReplacePlaceholders(q.content, q.contentImagesRaw || [])
+
+      explanation = await uploadImagesAndReplacePlaceholders(
+        q.explanation,
+        q.explanationImagesRaw || []
+      )
+    } catch (e) {
+      throw new Error("Upload ảnh thất bại")
+    }
     const payload: any = {
       content,
       explanation,

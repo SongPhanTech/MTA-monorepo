@@ -1453,7 +1453,9 @@ app.openapi(sinhdetudong, async (c) => {
         if (knowledgeBlock.configExams.length) {
           for (const configExam of knowledgeBlock.configExams) {
             const listRamdom = knowledgeBlock.questions.filter(
-              (i: any) => i?.difficult === configExam.difficult
+              (i: any) =>
+                i?.difficult === configExam.difficult &&
+                (configExam.type == null || i?.type === configExam.type)
             )
 
             if (listRamdom.length < configExam.quantity) {

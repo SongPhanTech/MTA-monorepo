@@ -224,22 +224,6 @@ export default function TrainingFieldPage() {
                 render: (_, __, index) => index + 1 + (currentPage - 1) * numberOfPages,
               },
               {
-                title: "Mã ngành",
-                dataIndex: "code",
-                align: "center",
-                fixed: "left",
-                width: 150,
-                type: "input",
-              },
-              {
-                title: "Tên ngành",
-                dataIndex: "name",
-                width: 200,
-                fixed: "left",
-                align: "center",
-                type: "input",
-              },
-              {
                 title: "Đối tượng đào tạo",
                 dataIndex: "trainingObjectTypes",
                 align: "center",
@@ -258,6 +242,30 @@ export default function TrainingFieldPage() {
                         trainingObjectType.name
                     )
                     .join("; "),
+              },
+              {
+                title: "Mã ngành",
+                dataIndex: "code",
+                align: "center",
+                fixed: "left",
+                width: 150,
+                type: "input",
+              },
+              {
+                title: "Tên ngành",
+                dataIndex: "name",
+                width: 200,
+                fixed: "left",
+                align: "center",
+                type: "input",
+              },
+              {
+                title: "Tên tiếng Anh",
+                dataIndex: "englishName",
+                width: 200,
+                fixed: "left",
+                align: "center",
+                type: "input",
               },
               {
                 title: "Đơn vị quản lý",

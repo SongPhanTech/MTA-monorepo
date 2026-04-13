@@ -791,7 +791,7 @@ model SubjectVersion extends BaseNoCode {
   prerequisiteSubject      SubjectVersion[]          @relation(name: "PrerequisiteSubject")
   dependentSubject         SubjectVersion[]          @relation(name: "PrerequisiteSubject")
 
-  // môn học song hành
+  // môn học học trước
   coRequisiteSubject       SubjectVersion[]          @relation(name: "CoRequisiteSubject")
   depCoRequisiteSubject    SubjectVersion[]          @relation(name: "CoRequisiteSubject")
 

@@ -245,7 +245,7 @@ export default function DangKyHocChoLopQuanLy() {
             width: 150,
             render: (text: string, record) => (
               <p className="text-left">
-                {record?.subject?.name}({record.subject?.credit})
+                {record?.subject?.name} ({record.subject?.credit} TC)
               </p>
             ),
           },
@@ -267,16 +267,16 @@ export default function DangKyHocChoLopQuanLy() {
             render: (record) => record?._count?.subjectClassStudent ?? 0,
           },
           {
-            title: "Lớp QL đã ĐK",
+            title: "Lớp quản lý",
             align: "center",
             width: 120,
-            render: (__, record: any) => {
+            render: (__, record) => {
               return record?.fixedClasses.length ? (
                 <TextTruncate
                   arr={record?.fixedClasses.map((i: any) => {
                     return {
                       key: i?.id,
-                      label: `${i.code} (${i?._count.students})`,
+                      label: `${i.code} (${i?._count.students} SV)`,
                     }
                   })}
                   key="fixedClasses"

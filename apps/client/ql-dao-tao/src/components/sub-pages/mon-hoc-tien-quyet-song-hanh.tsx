@@ -106,7 +106,7 @@ export default function MonHocTienQuyetSongHanhPage({ subjectVersionId, keyEnum 
           <Row gutter={[16, 0]} align="top" justify="space-between">
             <Col span={18}>
               <strong>
-                {keyEnum === SubjectType.prerequisite ? "Môn học tiên quyết" : "Môn học song hành"}
+                {keyEnum === SubjectType.prerequisite ? "Môn học tiên quyết" : "Môn học học trước"}
               </strong>
             </Col>
             <Col span={6}>
@@ -117,7 +117,7 @@ export default function MonHocTienQuyetSongHanhPage({ subjectVersionId, keyEnum 
                     onClick={() =>
                       onOpen({
                         id: subjectVersionId,
-                        title: `Thêm ${keyEnum === SubjectType.prerequisite ? "môn học tiên quyết" : "môn học song hành"}`,
+                        title: `Thêm ${keyEnum === SubjectType.prerequisite ? "môn học tiên quyết" : "môn học học trước"}`,
                         keyEnum,
                         type: "above",
                       })

@@ -103,7 +103,7 @@ export type ModalCauHinhLuanVanType = {
   councilMemberName?: string
   councilMemberId?: string
   councilMemberPaymentAmount?: number
-  finalResult?: number
+  finalResult?: number | null
   commentsCouncil?: string
   isCompleteCouncil?: boolean
   attachments?: DocumentFile[]
@@ -365,8 +365,12 @@ const ModalCauHinhLuanVan = () => {
 
     const filesInForm = (data as any).attachments || []
     const initialFiles = attachments
+    const finalScore =
+      data.finalResult === undefined || data.finalResult === null
+        ? null
+        : new Decimal(data.finalResult)
     const payload = {
-      finalScore: new Decimal(data.finalResult ?? 0),
+      finalScore,
       comments: data.commentsCouncil,
       isProfileComplete: data.isCompleteCouncil,
       documents: {
@@ -587,7 +591,7 @@ const ModalCauHinhLuanVan = () => {
       supervisorPaymentTransactionCode: thesisProjectData?.supervisorPayment?.transactionCode ?? "",
       coSupervisorPaymentTransactionCode:
         thesisProjectData?.coSupervisorPayment?.transactionCode ?? "",
-      finalResult: thesisProjectData?.defenseRecord?.finalScore?.toNumber() ?? 0,
+      finalResult: thesisProjectData?.defenseRecord?.finalScore?.toNumber() ?? undefined,
       commentsCouncil: thesisProjectData?.defenseRecord?.comments ?? "",
       isCompleteCouncil: thesisProjectData?.defenseRecord?.isProfileComplete ?? false,
       attachments: thesisProjectData?.defenseRecord?.documents ?? [],
@@ -1334,7 +1338,7 @@ const ModalCauHinhLuanVan = () => {
                   labelAlign="left"
                   {...FORM_ITEM_LAYOUT}
                 >
-                  <InputNumber className="w-2/3" placeholder="Nhập kết quả" />
+                  <InputNumber className="w-2/3" min={-1} placeholder="Nhập kết quả" />
                 </FormItem>
               </Col>
 

@@ -43,7 +43,6 @@ const PutMaTranDeModal = () => {
       form.setFieldsValue({
         code: examMatrixData.code,
         name: examMatrixData.name,
-        description: examMatrixData.description,
       })
     }
   }, [examMatrixData, input?.id, form])
@@ -59,7 +58,6 @@ const PutMaTranDeModal = () => {
           },
           data: {
             code: values.code,
-            description: values.description,
             name: values.name,
           },
         })
@@ -68,7 +66,6 @@ const PutMaTranDeModal = () => {
         await createExamMatrix({
           data: {
             code: values.code,
-            description: values.description,
             name: values.name,
             examFrameworkId,
           },
@@ -103,11 +100,6 @@ const PutMaTranDeModal = () => {
       <Col span={24}>
         <FormItem form={form} name="name" label="Tên ma trận đề" required>
           <Input placeholder="Nhập tên ma trận đề" />
-        </FormItem>
-      </Col>
-      <Col span={24}>
-        <FormItem form={form} name="description" label="Mô tả">
-          <Input.TextArea placeholder="Nhập mô tả ma trận đề" rows={4} />
         </FormItem>
       </Col>
     </PutFormModal>

@@ -238600,6 +238600,7 @@ export namespace Prisma {
     defenseDecisionMaker: string | null
     defenseDecisionDate: Date | null
     chief: string | null
+    deputy: string | null
     topicEntryDeadline: Date | null
     councilDeadline: Date | null
   }
@@ -238625,6 +238626,7 @@ export namespace Prisma {
     defenseDecisionMaker: string | null
     defenseDecisionDate: Date | null
     chief: string | null
+    deputy: string | null
     topicEntryDeadline: Date | null
     councilDeadline: Date | null
   }
@@ -238650,6 +238652,7 @@ export namespace Prisma {
     defenseDecisionMaker: number
     defenseDecisionDate: number
     chief: number
+    deputy: number
     topicEntryDeadline: number
     councilDeadline: number
     _all: number
@@ -238677,6 +238680,7 @@ export namespace Prisma {
     defenseDecisionMaker?: true
     defenseDecisionDate?: true
     chief?: true
+    deputy?: true
     topicEntryDeadline?: true
     councilDeadline?: true
   }
@@ -238702,6 +238706,7 @@ export namespace Prisma {
     defenseDecisionMaker?: true
     defenseDecisionDate?: true
     chief?: true
+    deputy?: true
     topicEntryDeadline?: true
     councilDeadline?: true
   }
@@ -238727,6 +238732,7 @@ export namespace Prisma {
     defenseDecisionMaker?: true
     defenseDecisionDate?: true
     chief?: true
+    deputy?: true
     topicEntryDeadline?: true
     councilDeadline?: true
     _all?: true
@@ -238825,6 +238831,7 @@ export namespace Prisma {
     defenseDecisionMaker: string | null
     defenseDecisionDate: Date | null
     chief: string | null
+    deputy: string | null
     topicEntryDeadline: Date | null
     councilDeadline: Date | null
     _count: ThesisSessionCountAggregateOutputType | null
@@ -238867,6 +238874,7 @@ export namespace Prisma {
     defenseDecisionMaker?: boolean
     defenseDecisionDate?: boolean
     chief?: boolean
+    deputy?: boolean
     topicEntryDeadline?: boolean
     councilDeadline?: boolean
     trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
@@ -238896,6 +238904,7 @@ export namespace Prisma {
     defenseDecisionMaker?: boolean
     defenseDecisionDate?: boolean
     chief?: boolean
+    deputy?: boolean
     topicEntryDeadline?: boolean
     councilDeadline?: boolean
     trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
@@ -238923,6 +238932,7 @@ export namespace Prisma {
     defenseDecisionMaker?: boolean
     defenseDecisionDate?: boolean
     chief?: boolean
+    deputy?: boolean
     topicEntryDeadline?: boolean
     councilDeadline?: boolean
     trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
@@ -238950,11 +238960,12 @@ export namespace Prisma {
     defenseDecisionMaker?: boolean
     defenseDecisionDate?: boolean
     chief?: boolean
+    deputy?: boolean
     topicEntryDeadline?: boolean
     councilDeadline?: boolean
   }
 
-  export type ThesisSessionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name" | "startDate" | "endDate" | "trainingObjectTypeId" | "trainingCourseId" | "decisionNumber" | "decisionMaker" | "decisionDate" | "defenseDecisionNumber" | "defenseDecisionMaker" | "defenseDecisionDate" | "chief" | "topicEntryDeadline" | "councilDeadline", ExtArgs["result"]["thesisSession"]>
+  export type ThesisSessionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name" | "startDate" | "endDate" | "trainingObjectTypeId" | "trainingCourseId" | "decisionNumber" | "decisionMaker" | "decisionDate" | "defenseDecisionNumber" | "defenseDecisionMaker" | "defenseDecisionDate" | "chief" | "deputy" | "topicEntryDeadline" | "councilDeadline", ExtArgs["result"]["thesisSession"]>
   export type ThesisSessionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
     trainingCourse?: boolean | TrainingCourseDefaultArgs<ExtArgs>
@@ -239016,9 +239027,13 @@ export namespace Prisma {
        */
       defenseDecisionDate: Date | null
       /**
-       * Thủ trưởng
+       * Trưởng phòng sau đại học
        */
       chief: string | null
+      /**
+       * Phó phòng sau đại học
+       */
+      deputy: string | null
       /**
        * Hạn nhập đề tài
        */
@@ -239473,6 +239488,7 @@ export namespace Prisma {
     readonly defenseDecisionMaker: FieldRef<"ThesisSession", 'String'>
     readonly defenseDecisionDate: FieldRef<"ThesisSession", 'DateTime'>
     readonly chief: FieldRef<"ThesisSession", 'String'>
+    readonly deputy: FieldRef<"ThesisSession", 'String'>
     readonly topicEntryDeadline: FieldRef<"ThesisSession", 'DateTime'>
     readonly councilDeadline: FieldRef<"ThesisSession", 'DateTime'>
   }
@@ -383570,6 +383586,7 @@ export namespace Prisma {
     defenseDecisionMaker: 'defenseDecisionMaker',
     defenseDecisionDate: 'defenseDecisionDate',
     chief: 'chief',
+    deputy: 'deputy',
     topicEntryDeadline: 'topicEntryDeadline',
     councilDeadline: 'councilDeadline'
   };
@@ -388067,7 +388084,8 @@ export namespace Prisma {
     decisionMaker: 'decisionMaker',
     defenseDecisionNumber: 'defenseDecisionNumber',
     defenseDecisionMaker: 'defenseDecisionMaker',
-    chief: 'chief'
+    chief: 'chief',
+    deputy: 'deputy'
   };
 
   export type ThesisSessionOrderByRelevanceFieldEnum = (typeof ThesisSessionOrderByRelevanceFieldEnum)[keyof typeof ThesisSessionOrderByRelevanceFieldEnum]
@@ -409389,6 +409407,7 @@ export namespace Prisma {
     defenseDecisionMaker?: StringNullableFilter<"ThesisSession"> | string | null
     defenseDecisionDate?: DateTimeNullableFilter<"ThesisSession"> | Date | string | null
     chief?: StringNullableFilter<"ThesisSession"> | string | null
+    deputy?: StringNullableFilter<"ThesisSession"> | string | null
     topicEntryDeadline?: DateTimeNullableFilter<"ThesisSession"> | Date | string | null
     councilDeadline?: DateTimeNullableFilter<"ThesisSession"> | Date | string | null
     trainingObjectType?: XOR<TrainingObjectTypeScalarRelationFilter, TrainingObjectTypeWhereInput>
@@ -409417,6 +409436,7 @@ export namespace Prisma {
     defenseDecisionMaker?: SortOrderInput | SortOrder
     defenseDecisionDate?: SortOrderInput | SortOrder
     chief?: SortOrderInput | SortOrder
+    deputy?: SortOrderInput | SortOrder
     topicEntryDeadline?: SortOrderInput | SortOrder
     councilDeadline?: SortOrderInput | SortOrder
     trainingObjectType?: TrainingObjectTypeOrderByWithRelationInput
@@ -409449,6 +409469,7 @@ export namespace Prisma {
     defenseDecisionMaker?: StringNullableFilter<"ThesisSession"> | string | null
     defenseDecisionDate?: DateTimeNullableFilter<"ThesisSession"> | Date | string | null
     chief?: StringNullableFilter<"ThesisSession"> | string | null
+    deputy?: StringNullableFilter<"ThesisSession"> | string | null
     topicEntryDeadline?: DateTimeNullableFilter<"ThesisSession"> | Date | string | null
     councilDeadline?: DateTimeNullableFilter<"ThesisSession"> | Date | string | null
     trainingObjectType?: XOR<TrainingObjectTypeScalarRelationFilter, TrainingObjectTypeWhereInput>
@@ -409477,6 +409498,7 @@ export namespace Prisma {
     defenseDecisionMaker?: SortOrderInput | SortOrder
     defenseDecisionDate?: SortOrderInput | SortOrder
     chief?: SortOrderInput | SortOrder
+    deputy?: SortOrderInput | SortOrder
     topicEntryDeadline?: SortOrderInput | SortOrder
     councilDeadline?: SortOrderInput | SortOrder
     _count?: ThesisSessionCountOrderByAggregateInput
@@ -409508,6 +409530,7 @@ export namespace Prisma {
     defenseDecisionMaker?: StringNullableWithAggregatesFilter<"ThesisSession"> | string | null
     defenseDecisionDate?: DateTimeNullableWithAggregatesFilter<"ThesisSession"> | Date | string | null
     chief?: StringNullableWithAggregatesFilter<"ThesisSession"> | string | null
+    deputy?: StringNullableWithAggregatesFilter<"ThesisSession"> | string | null
     topicEntryDeadline?: DateTimeNullableWithAggregatesFilter<"ThesisSession"> | Date | string | null
     councilDeadline?: DateTimeNullableWithAggregatesFilter<"ThesisSession"> | Date | string | null
   }
@@ -442750,6 +442773,7 @@ export namespace Prisma {
     defenseDecisionMaker?: string | null
     defenseDecisionDate?: Date | string | null
     chief?: string | null
+    deputy?: string | null
     topicEntryDeadline?: Date | string | null
     councilDeadline?: Date | string | null
     trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutThesisSessionInput
@@ -442778,6 +442802,7 @@ export namespace Prisma {
     defenseDecisionMaker?: string | null
     defenseDecisionDate?: Date | string | null
     chief?: string | null
+    deputy?: string | null
     topicEntryDeadline?: Date | string | null
     councilDeadline?: Date | string | null
     thesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutThesisSessionInput
@@ -442802,6 +442827,7 @@ export namespace Prisma {
     defenseDecisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
     defenseDecisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     chief?: NullableStringFieldUpdateOperationsInput | string | null
+    deputy?: NullableStringFieldUpdateOperationsInput | string | null
     topicEntryDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     councilDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutThesisSessionNestedInput
@@ -442830,6 +442856,7 @@ export namespace Prisma {
     defenseDecisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
     defenseDecisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     chief?: NullableStringFieldUpdateOperationsInput | string | null
+    deputy?: NullableStringFieldUpdateOperationsInput | string | null
     topicEntryDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     councilDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     thesisProject?: ThesisProjectUncheckedUpdateManyWithoutThesisSessionNestedInput
@@ -442856,6 +442883,7 @@ export namespace Prisma {
     defenseDecisionMaker?: string | null
     defenseDecisionDate?: Date | string | null
     chief?: string | null
+    deputy?: string | null
     topicEntryDeadline?: Date | string | null
     councilDeadline?: Date | string | null
   }
@@ -442879,6 +442907,7 @@ export namespace Prisma {
     defenseDecisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
     defenseDecisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     chief?: NullableStringFieldUpdateOperationsInput | string | null
+    deputy?: NullableStringFieldUpdateOperationsInput | string | null
     topicEntryDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     councilDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
@@ -442904,6 +442933,7 @@ export namespace Prisma {
     defenseDecisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
     defenseDecisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     chief?: NullableStringFieldUpdateOperationsInput | string | null
+    deputy?: NullableStringFieldUpdateOperationsInput | string | null
     topicEntryDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     councilDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
@@ -469994,6 +470024,7 @@ export namespace Prisma {
     defenseDecisionMaker?: SortOrder
     defenseDecisionDate?: SortOrder
     chief?: SortOrder
+    deputy?: SortOrder
     topicEntryDeadline?: SortOrder
     councilDeadline?: SortOrder
   }
@@ -470019,6 +470050,7 @@ export namespace Prisma {
     defenseDecisionMaker?: SortOrder
     defenseDecisionDate?: SortOrder
     chief?: SortOrder
+    deputy?: SortOrder
     topicEntryDeadline?: SortOrder
     councilDeadline?: SortOrder
   }
@@ -470044,6 +470076,7 @@ export namespace Prisma {
     defenseDecisionMaker?: SortOrder
     defenseDecisionDate?: SortOrder
     chief?: SortOrder
+    deputy?: SortOrder
     topicEntryDeadline?: SortOrder
     councilDeadline?: SortOrder
   }
@@ -568880,6 +568913,7 @@ export namespace Prisma {
     defenseDecisionMaker?: string | null
     defenseDecisionDate?: Date | string | null
     chief?: string | null
+    deputy?: string | null
     topicEntryDeadline?: Date | string | null
     councilDeadline?: Date | string | null
     trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutThesisSessionInput
@@ -568906,6 +568940,7 @@ export namespace Prisma {
     defenseDecisionMaker?: string | null
     defenseDecisionDate?: Date | string | null
     chief?: string | null
+    deputy?: string | null
     topicEntryDeadline?: Date | string | null
     councilDeadline?: Date | string | null
     thesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutThesisSessionInput
@@ -569650,6 +569685,7 @@ export namespace Prisma {
     defenseDecisionMaker?: StringNullableFilter<"ThesisSession"> | string | null
     defenseDecisionDate?: DateTimeNullableFilter<"ThesisSession"> | Date | string | null
     chief?: StringNullableFilter<"ThesisSession"> | string | null
+    deputy?: StringNullableFilter<"ThesisSession"> | string | null
     topicEntryDeadline?: DateTimeNullableFilter<"ThesisSession"> | Date | string | null
     councilDeadline?: DateTimeNullableFilter<"ThesisSession"> | Date | string | null
   }
@@ -587300,6 +587336,7 @@ export namespace Prisma {
     defenseDecisionMaker?: string | null
     defenseDecisionDate?: Date | string | null
     chief?: string | null
+    deputy?: string | null
     topicEntryDeadline?: Date | string | null
     councilDeadline?: Date | string | null
     trainingCourse: TrainingCourseCreateNestedOneWithoutThesisSessionInput
@@ -587326,6 +587363,7 @@ export namespace Prisma {
     defenseDecisionMaker?: string | null
     defenseDecisionDate?: Date | string | null
     chief?: string | null
+    deputy?: string | null
     topicEntryDeadline?: Date | string | null
     councilDeadline?: Date | string | null
     thesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutThesisSessionInput
@@ -612254,6 +612292,7 @@ export namespace Prisma {
     defenseDecisionMaker?: string | null
     defenseDecisionDate?: Date | string | null
     chief?: string | null
+    deputy?: string | null
     topicEntryDeadline?: Date | string | null
     councilDeadline?: Date | string | null
     trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutThesisSessionInput
@@ -612281,6 +612320,7 @@ export namespace Prisma {
     defenseDecisionMaker?: string | null
     defenseDecisionDate?: Date | string | null
     chief?: string | null
+    deputy?: string | null
     topicEntryDeadline?: Date | string | null
     councilDeadline?: Date | string | null
   }
@@ -613298,6 +613338,7 @@ export namespace Prisma {
     defenseDecisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
     defenseDecisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     chief?: NullableStringFieldUpdateOperationsInput | string | null
+    deputy?: NullableStringFieldUpdateOperationsInput | string | null
     topicEntryDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     councilDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutThesisSessionNestedInput
@@ -613325,6 +613366,7 @@ export namespace Prisma {
     defenseDecisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
     defenseDecisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     chief?: NullableStringFieldUpdateOperationsInput | string | null
+    deputy?: NullableStringFieldUpdateOperationsInput | string | null
     topicEntryDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     councilDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
@@ -682407,6 +682449,7 @@ export namespace Prisma {
     defenseDecisionMaker?: string | null
     defenseDecisionDate?: Date | string | null
     chief?: string | null
+    deputy?: string | null
     topicEntryDeadline?: Date | string | null
     councilDeadline?: Date | string | null
   }
@@ -683308,6 +683351,7 @@ export namespace Prisma {
     defenseDecisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
     defenseDecisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     chief?: NullableStringFieldUpdateOperationsInput | string | null
+    deputy?: NullableStringFieldUpdateOperationsInput | string | null
     topicEntryDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     councilDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutThesisSessionNestedInput
@@ -683334,6 +683378,7 @@ export namespace Prisma {
     defenseDecisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
     defenseDecisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     chief?: NullableStringFieldUpdateOperationsInput | string | null
+    deputy?: NullableStringFieldUpdateOperationsInput | string | null
     topicEntryDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     councilDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     thesisProject?: ThesisProjectUncheckedUpdateManyWithoutThesisSessionNestedInput
@@ -683359,6 +683404,7 @@ export namespace Prisma {
     defenseDecisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
     defenseDecisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     chief?: NullableStringFieldUpdateOperationsInput | string | null
+    deputy?: NullableStringFieldUpdateOperationsInput | string | null
     topicEntryDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     councilDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
@@ -689757,6 +689803,7 @@ export namespace Prisma {
     defenseDecisionMaker?: string | null
     defenseDecisionDate?: Date | string | null
     chief?: string | null
+    deputy?: string | null
     topicEntryDeadline?: Date | string | null
     councilDeadline?: Date | string | null
   }
@@ -690799,6 +690846,7 @@ export namespace Prisma {
     defenseDecisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
     defenseDecisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     chief?: NullableStringFieldUpdateOperationsInput | string | null
+    deputy?: NullableStringFieldUpdateOperationsInput | string | null
     topicEntryDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     councilDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     trainingCourse?: TrainingCourseUpdateOneRequiredWithoutThesisSessionNestedInput
@@ -690825,6 +690873,7 @@ export namespace Prisma {
     defenseDecisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
     defenseDecisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     chief?: NullableStringFieldUpdateOperationsInput | string | null
+    deputy?: NullableStringFieldUpdateOperationsInput | string | null
     topicEntryDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     councilDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     thesisProject?: ThesisProjectUncheckedUpdateManyWithoutThesisSessionNestedInput
@@ -690850,6 +690899,7 @@ export namespace Prisma {
     defenseDecisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
     defenseDecisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     chief?: NullableStringFieldUpdateOperationsInput | string | null
+    deputy?: NullableStringFieldUpdateOperationsInput | string | null
     topicEntryDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     councilDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
