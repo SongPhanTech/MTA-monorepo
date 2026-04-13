@@ -10,6 +10,8 @@ export interface TableCell {
   align?: "left" | "center" | "right"
   bgColor?: string
   bold?: boolean
+  italic?: boolean
+  fontSize?: number
   wrapText?: boolean
   border?: boolean
   color?: string
@@ -176,8 +178,9 @@ async function handleExcelJSDefault(
           }
           cell.font = {
             name: options.fontFamily || "Times New Roman",
-            size: options.fontSize || 14,
+            size: cellData.fontSize ?? options.fontSize ?? 14,
             bold: !!cellData.bold,
+            italic: !!cellData.italic,
           }
           if (cellData.bgColor) {
             cell.fill = {
@@ -205,6 +208,7 @@ async function handleExcelJSDefault(
           }
           if (cellData.color) {
             cell.font = {
+              ...cell.font,
               color: { argb: cellData.color },
             }
           }
@@ -521,8 +525,9 @@ async function handleExcelJSMergeSheets(
           }
           cell.font = {
             name: options.fontFamily || "Times New Roman",
-            size: options.fontSize || 14,
+            size: cellData.fontSize ?? options.fontSize ?? 14,
             bold: !!cellData.bold,
+            italic: !!cellData.italic,
           }
           if (cellData.bgColor) {
             cell.fill = {

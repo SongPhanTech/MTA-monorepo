@@ -247,7 +247,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
     return filter
   }, [searchParams, fixedClasses])
 
-  const { data: students = [], refetch } = useFindManyStudent({
+  const { data: students = [], refetch: refetchStudents } = useFindManyStudent({
     where: studentWhere,
     include: {
       userProfile: true,
@@ -322,7 +322,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
     skip: (currentPage - 1) * numberOfPages,
     take: numberOfPages,
   })
-  const { data: allStudentsInClasses = [] } = useFindManyStudent({
+  const { data: allStudentsInClasses = [], refetch: refetchAllStudentsInClasses } = useFindManyStudent({
     where: allStudentWhere,
     include: {
       userProfile: true,
@@ -414,7 +414,12 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           academicDegreeType: true,
                           lecturer: {
                             select: {
-                              userProfile: true,
+                              userProfile: {
+                                include: {
+                                  academicRankType: true,
+                                  academicDegreeType: true,
+                                },
+                              },
                             },
                           },
                         },
@@ -718,7 +723,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
       message.error("Đã xảy ra lỗi khi lưu hàng loạt, vui lòng kiểm tra lại")
     } finally {
       hideSpinner()
-      await refetch()
+      await refetchStudents()
+      await refetchAllStudentsInClasses()
       if (refetchCount) await refetchCount()
     }
     setSelectedRowKeys([])
@@ -837,12 +843,15 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
       {
         id: 5,
         label: "Giấy mời chấm LV PB",
-        onClick: async () =>
+        needSign: true,
+        onClick: async (signer?: SignerPayload) =>
           await exportGiayMoiChamLvPb({
             allStudentsInClasses,
             showSpinner,
             hideSpinner,
             message,
+            signerName: signer?.signerName,
+            isChief: signer?.isChief,
           }),
       },
       {
@@ -860,12 +869,15 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
       {
         id: 6.1,
         label: "Bản sao HDDGLV",
-        onClick: async () =>
+        needSign: true,
+        onClick: async (signer?: SignerPayload) =>
           await exportBanSaoHDDGLV({
             allStudentsInClasses,
             showSpinner,
             hideSpinner,
             message,
+            signerName: signer?.signerName,
+            isChief: signer?.isChief,
           }),
       },
       // {
