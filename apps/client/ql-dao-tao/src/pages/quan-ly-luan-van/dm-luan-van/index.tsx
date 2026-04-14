@@ -413,7 +413,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           academicRankType: true,
                           academicDegreeType: true,
                           lecturer: {
-                            select: {
+                            include: {
+                              organization: true,
                               userProfile: {
                                 include: {
                                   academicRankType: true,
@@ -1227,7 +1228,9 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       }}
                     />
                   </Form.Item>
+                  
                   <Form.Item className="flex justify-end gap-3">
+                    {role === "P7" && (
                     <Popconfirm
                       placement="rightTop"
                       title="Xác nhận tạo dữ liệu mẫu"
@@ -1241,7 +1244,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                         Tạo dữ liệu mẫu
                       </Button>
                     </Popconfirm>
-
+                    )}
                     {editingRowKeys.length > 0 ? (
                       <>
                         <Button
