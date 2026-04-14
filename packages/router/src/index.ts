@@ -139,7 +139,7 @@ const NAVIGATION: NavigationType = {
             path: ROUTER_PATH.QL_DAO_TAO.CHUONG_TRINH_DAO_TAO_DANH_SACH_MON_HOC,
             description: "Danh sách môn học",
           },
-        
+
           {
             id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_QL_MON_HOC,
             label: "QL ràng buộc môn học",
@@ -947,6 +947,21 @@ const NAVIGATION: NavigationType = {
           //     label: 'Hội đồng đánh giá',
           //     path: ROUTER_PATH.KHAO_THI.QL_TU_DANH_GIA_CTDT_HOI_DONG_DANH_GIA,
           // },
+          {
+            id: KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QL_PHIEU_PHAN_TICH,
+            label: "Quản lý phiếu phân tích",
+            path: ROUTER_PATH.KHAO_THI.QL_TU_DANH_GIA_CTDT_QL_PHIEU_PHAN_TICH,
+          },
+          {
+            id: KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QL_PHIEU_DANH_GIA,
+            label: "Quản lý phiếu đánh giá",
+            path: ROUTER_PATH.KHAO_THI.QL_TU_DANH_GIA_CTDT_QL_PHIEU_DANH_GIA,
+          },
+          {
+            id: KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QL_BAO_CAO_TU_DANH_GIA,
+            label: "Quản lý báo cáo tự đánh giá",
+            path: ROUTER_PATH.KHAO_THI.QL_TU_DANH_GIA_CTDT_QL_BAO_CAO_TU_DANH_GIA,
+          },
           {
             id: KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA,
             label: "Quản lý đợt tự đánh giá",
