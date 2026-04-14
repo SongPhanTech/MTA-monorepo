@@ -121,6 +121,7 @@ const PutExpertProfile = () => {
           : {
               academicRankTypeId: output.academicRankTypeId,
               academicDegreeTypeId: output.academicDegreeTypeId,
+              position: output.position,
               specialization: output.specialization,
               workplace: output.workplace,
               phone: output.phone,
@@ -162,6 +163,7 @@ const PutExpertProfile = () => {
             data: {
               academicRankTypeId: output.academicRankTypeId,
               academicDegreeTypeId: output.academicDegreeTypeId,
+              position: output.position,
               specialization: output.specialization,
               workplace: output.workplace,
               phone: output.phone,
@@ -252,6 +254,13 @@ const PutExpertProfile = () => {
         <Col span={12}>
           <FormItem form={form} name="name" label="Họ và tên" required>
             <Input placeholder="Nhập họ và tên" />
+          </FormItem>
+        </Col>
+      )}
+      {!isInternal && (
+        <Col span={12}>
+          <FormItem form={form} name="position" label="Chức vụ">
+            <Input placeholder="Nhập chức vụ" />
           </FormItem>
         </Col>
       )}

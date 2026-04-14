@@ -46,7 +46,8 @@ interface TthdbvData {
     thang: string
     nam: string
     khoa: string
-    dotXet: number
+    dotXet: string
+    nguoiki: string
     chuyenNganh: string
     khoaQuanLi: string
     data: TthdbvTable[]
@@ -114,6 +115,7 @@ interface ThanhToanHuongDanTrongHvData {
     soHocVien: string
     tongTienSo: number
     tongTienChu: string
+    nguoiki:string
     data: ThanhToanHuongDanTrongHvTable[]
   }
 }
@@ -241,6 +243,7 @@ interface DsChuyenGiaData {
     tongTienSo: string
     soChuyenGia: number
     tongTienChu: string
+    nguoiki: string
     data: DsChuyenGiaTable[]
   }
 }
@@ -1300,19 +1303,16 @@ const convertToTthdbvData = (allStudentsInClasses: any[]): TthdbvData[] => {
       else if (m.role === CouncilRole.REVIEWER_2) roleSuffix = ", PB2"
 
       const org = expert?.organization ? `, ${expert.organization}` : ""
-      const name = expert?.lecturerId ? expert?.lecturer?.userProfile?.fullname : expert?.name
+      const name = getSupervisorName(expert,false,true) as string || ""
       hdLines.push(`${rolePrefix}: ${name || ""}${org}${roleSuffix}`)
 
       const rawAmount = Number(m.payment?.amount || 0)
       studentTotal += rawAmount
       ttLines.push(rawAmount.toLocaleString("vi-VN").replace(/\./g, " "))
-      const bankNumber = expert?.lecturerId
-        ? expert?.lecturer?.userProfile?.bankAccountNumber
-        : expert?.bankAccountNumber
+      const bankNumber = expert?.lecturer?.userProfile?.bankAccountNumber || expert?.bankAccountNumber || "Chưa có thông tin"
       stkLines.push(bankNumber || "")
-      const bankName = expert?.lecturerId
-        ? expert?.lecturer?.userProfile?.bankName
-        : expert?.bankName
+      const bankName = expert?.lecturer?.userProfile?.bankName || expert?.bankName || "Chưa có thông tin"
+        
       nhLines.push(bankName || "")
     })
 
@@ -1334,7 +1334,7 @@ const convertToTthdbvData = (allStudentsInClasses: any[]): TthdbvData[] => {
       (s) => s.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name === majorName
     )
     const project = firstItem?.thesisRegistrations?.[0]?.thesisProject
-
+    const nguoiki = project?.thesisSession?.chief?.trim() || ""
     const dotXet = project?.thesisSession?.name || ""
 
     const tongTienSo = items.reduce((acc, curr) => {
@@ -1351,6 +1351,7 @@ const convertToTthdbvData = (allStudentsInClasses: any[]): TthdbvData[] => {
         chuyenNganh: majorName,
         khoaQuanLi: khoaquanli,
         tongTienBangSo: tongTienSo,
+        nguoiki: nguoiki,
         tongTienBangChu: Number(tongTienSo).toVndWord("đồng"),
         data: items.map((item, index) => ({
           stt: index + 1,
@@ -1624,7 +1625,7 @@ export const exportThanhToanHuongDanTrongHv = async ({
   }
   try {
     showSpinner?.()
-    const dataConvert = convertToThanhToanHuongDanTrongHvData(allStudentsInClasses)
+    const dataConvert = convertToThanhToanHuongDanTrongHvData(allStudentsInClasses,inAcademy)
     if (dataConvert.length === 0) {
       message.error("Chưa có dữ liệu để xuất thanh toán hướng dẫn")
       return []
@@ -1655,7 +1656,8 @@ export const exportThanhToanHuongDanTrongHv = async ({
   }
 }
 const convertToThanhToanHuongDanTrongHvData = (
-  allStudentsInClasses: any[]
+  allStudentsInClasses: any[],
+  inAcademy?: boolean
 ): ThanhToanHuongDanTrongHvData[] => {
   if (!allStudentsInClasses?.length) {
     return []
@@ -1668,6 +1670,30 @@ const convertToThanhToanHuongDanTrongHvData = (
     const project = student?.thesisRegistrations?.[0]?.thesisProject
     if (!project) return
 
+    const isMatchInAcademy = (expert: any) => {
+      const hasLecturer = !!(expert?.lecturer || expert?.lecturerId)
+      if (inAcademy === true) return hasLecturer
+      if (inAcademy === false) return !hasLecturer
+      return true
+    }
+
+    const supervisorRows = [
+      {
+        expert: project.supervisor,
+        amount: Number(project.supervisorPayment?.amount || 0),
+        bankAccountNumber: project.supervisor?.bankAccountNumber || "",
+        bankName: project.supervisor?.bankName || "",
+      },
+      {
+        expert: project.coSupervisor,
+        amount: Number(project.coSupervisorPayment?.amount || 0),
+        bankAccountNumber: project.coSupervisor?.bankAccountNumber || "",
+        bankName: project.coSupervisor?.bankName || "",
+      },
+    ].filter((item) => item.expert && isMatchInAcademy(item.expert))
+
+    if (!supervisorRows.length) return
+
     const orgName = project.organization?.sTen || "Chưa có đơn vị"
 
     if (!organizationMap.has(orgName)) {
@@ -1678,6 +1704,7 @@ const convertToThanhToanHuongDanTrongHvData = (
           nam: now.format("YYYY"),
           khoa: student.fixedClass?.trainingCourse?.name || "",
           dotXet: project.thesisSession?.name || "",
+          nguoiki: project.thesisSession?.chief?.trim() || "",
           khoaQuanLi: orgName,
           soHocVien: "0",
           tongTienSo: 0,
@@ -1690,36 +1717,33 @@ const convertToThanhToanHuongDanTrongHvData = (
     // biome-ignore lint/style/noNonNullAssertion: orgName luôn có
     const currentGroup = organizationMap.get(orgName)!
 
-    const qdNum = project.thesisSession?.defenseDecisionNumber || "...."
-    const qdDate = project.thesisSession?.defenseDecisionDate
-      ? dayjs(project.thesisSession.defenseDecisionDate).format("DD/MM/YYYY")
+    const qdNum = project.thesisSession?.decisionNumber || "...."
+    const qdDate = project.thesisSession?.decisionDate
+      ? dayjs(project.thesisSession.decisionDate).format("DD/MM/YYYY")
       : ".../.../...."
 
     const quyetDinh = `${qdNum} \n ngày ${qdDate}`
-
-    const gv1 = project.supervisor?.name
-    const gv2 = project.coSupervisor?.name
+    
+    const supervisorNames = supervisorRows.map(
+      (item) => (getSupervisorName(item.expert, false, false) as string) || ""
+    )
     let thongTinHuongDan = ""
-    if (gv1 && gv2) {
-      thongTinHuongDan = `1. ${gv1}\n2. ${gv2}`
-    } else {
-      thongTinHuongDan = gv1 || gv2 || "Chưa có GVHD"
-    }
+    thongTinHuongDan =
+      supervisorNames.length > 1
+        ? supervisorNames.map((name, index) => `${index + 1}. ${name}`).join("\n")
+        : (supervisorNames[0] ?? "Chưa có GVHD")
 
-    const loaiDoiTuong = student.fixedClass?.trainingCourse?.trainingObjectType?.type || ""
-    const shortDoiTuong = tenDoiTuong[loaiDoiTuong as keyof typeof tenDoiTuong]?.shortname || ""
+    // const loaiDoiTuong = student.fixedClass?.trainingCourse?.trainingObjectType?.type || ""
+    // const shortDoiTuong = tenDoiTuong[loaiDoiTuong as keyof typeof tenDoiTuong]?.shortname || ""
     const tenKhoa = student.fixedClass?.trainingCourse?.name || ""
-    const thongTinKhoaStr = `${shortDoiTuong} - ${tenKhoa}`
+    const thongTinKhoaStr = `${tenKhoa}`
 
-    const amount1 = Number(project.supervisorPayment?.amount || 0)
-    const amount2 = Number(project.coSupervisorPayment?.amount || 0)
-
-    const stk1 = project.supervisor?.bankAccountNumber || ""
-    const stk2 = project.coSupervisor?.bankAccountNumber || ""
-    const bank1 = project.supervisor?.bankName || ""
-    const bank2 = project.coSupervisor?.bankName || ""
-    const tienThanhToan = amount1 + amount2 === 0 ? 0 : amount1 + amount2
-    const thongTinThanhToan = amount1 + amount2 === 0 ? "" : `${amount1}\n${amount2}`
+    const amounts = supervisorRows.map((item) => item.amount)
+    const totalAmount = amounts.reduce((sum, amount) => sum + amount, 0)
+    const tienThanhToan = totalAmount === 0 ? 0 : totalAmount
+    const thongTinThanhToan = totalAmount === 0 ? "" : amounts.join("\n")
+    const thongTinStk = supervisorRows.map((item) => item.bankAccountNumber).join("\n")
+    const thongTinBank = supervisorRows.map((item) => item.bankName).join("\n")
     currentGroup.data.data.push({
       stt: currentGroup.data.data.length + 1,
       quyetDinh: quyetDinh,
@@ -1727,8 +1751,8 @@ const convertToThanhToanHuongDanTrongHvData = (
       thongTinBaoVe: student.userProfile?.fullname || "",
       thongTinKhoa: thongTinKhoaStr,
       thongTinThanhToan: thongTinThanhToan,
-      thongTinStk: gv1 && gv2 ? `${stk1}\n${stk2}` : stk1 || stk2,
-      thongTinBank: gv1 && gv2 ? `${bank1}\n${bank2}` : bank1 || bank2,
+      thongTinStk: thongTinStk,
+      thongTinBank: thongTinBank,
       thongtinKyNhan: "",
       tienThanhToan: tienThanhToan,
     })
@@ -2199,6 +2223,7 @@ const convertToDsChuyenGiaData = (allStudentsInClasses: any[]): DsChuyenGiaData 
         tongTienSo: "0",
         soChuyenGia: 0,
         tongTienChu: "0",
+        nguoiki: "",
         data: [],
       },
     }
@@ -2206,11 +2231,12 @@ const convertToDsChuyenGiaData = (allStudentsInClasses: any[]): DsChuyenGiaData 
 
   const expertAggregator = new Map<string, any>()
   const now = dayjs()
+  let nguoiki = ""
 
   allStudentsInClasses.forEach((student) => {
     const project = student?.thesisRegistrations?.[0]?.thesisProject
     const members = project?.council?.members || []
-
+    nguoiki = project?.thesisSession?.chief?.trim() || ""
     members.forEach((member: any) => {
       const expert = member.expert
       if (!expert || expert.lecturerId || expert.lecturer) return
@@ -2220,8 +2246,8 @@ const convertToDsChuyenGiaData = (allStudentsInClasses: any[]): DsChuyenGiaData 
 
       if (!expertAggregator.has(expertId)) {
         expertAggregator.set(expertId, {
-          tenChuyenGia: expert.name || "",
-          chucVu: expert.position || expert.academicDegree || "",
+          tenChuyenGia: getSupervisorName(expert,false,false) as string || "",
+          chucVu: expert.position || expert.lecturer?.userProfile?.position || "",
           donViQuanLi: expert.organization || expert.workplace || "",
           soTienRaw: 0,
           stk: expert.bankAccountNumber || "",
@@ -2251,11 +2277,13 @@ const convertToDsChuyenGiaData = (allStudentsInClasses: any[]): DsChuyenGiaData 
 
   return {
     data: {
+      nguoiki: nguoiki,
       ngay: now.format("DD"),
       thang: now.format("MM"),
       nam: now.format("YYYY"),
-      diaDiem: "Hà Nội",
-      thoiGian: `Ngày ${now.format("DD")} tháng ${now.format("MM")} năm ${now.format("YYYY")}`,
+      diaDiem: "",
+      // thoiGian: `Ngày ${now.format("DD")} tháng ${now.format("MM")} năm ${now.format("YYYY")}`,
+      thoiGian: "",
       tongTienSo: totalSum.toLocaleString("vi-VN"),
       soChuyenGia: tableData.length,
       tongTienChu: Number(totalSum).toVndWord("đồng"),
