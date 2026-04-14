@@ -6,16 +6,10 @@ import {
 } from "@ant-design/icons"
 import HtmlTruncate from "@components/commons/html-truncate"
 import Table from "@components/commons/table"
-import useSpinner from "@hooks/spinner"
 import { useGetSurveyObjectCount, useGetSurveyStatistics } from "@workspace/libs/api/exam"
 import type { GetSurveyStatistics200QuestionsItemAnswersItem } from "@workspace/libs/api/schemas"
 import { Button, Col, Dropdown, Empty, Row, Typography } from "antd"
-import { Document, Table as DocxTable, Packer, Paragraph, TableCell, TableRow, TextRun } from "docx"
-// @ts-nocheck
 import ReactECharts from "echarts-for-react"
-import ExcelJS from "exceljs"
-import { saveAs } from "file-saver"
-import { useRouter } from "next/router"
 import { useMemo } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 
@@ -26,6 +20,7 @@ export interface CriteriaItem {
   name: string
   answers: GetSurveyStatistics200QuestionsItemAnswersItem[]
 }
+
 type AnswerItem = {
   id: string
   answer: string
@@ -34,9 +29,8 @@ type AnswerItem = {
 }
 
 type AnswerWithPercent = AnswerItem & { percent: number; total: number }
+
 function SurveyReport({ selectedId }: { selectedId: string }) {
-  const router = useRouter()
-  const { showSpinner, hideSpinner } = useSpinner()
   const { onOpen } = useDisclosure({
     tag: "ModalPrintSurvey",
   })
@@ -83,24 +77,19 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
   }, [data])
 
   const { data: dataLevel } = useGetSurveyStatistics(selectedId as string)
+
   function convertToStackChartData(
     data: CriteriaItem[],
     answerDescriptions: GetSurveyStatistics200QuestionsItemAnswersItem[]
   ) {
-    // Map answer -> description
     const color = ["#dd0b31", "#ea8585", "#ffc769", "#4b50db", "#028850"]
     const answerMap: Record<string, string> = {}
     answerDescriptions.forEach((a) => {
       answerMap[a.answer] = a.description as string
     })
 
-    // Các đáp án theo thứ tự tăng dần 1 → 5
     const answerKeys = answerDescriptions.map((a) => a.answer).sort((a, b) => Number(a) - Number(b))
 
-    // Trục Y: danh sách Câu hỏi
-    const categories = data.map((item) => item.name)
-
-    // Series stack bar
     const series = answerKeys.map((answer, index: number) => ({
       name: answerMap[answer],
       type: "bar" as const,
@@ -116,13 +105,13 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
       itemStyle: { color: color[index] },
     }))
 
-    return { categories, series }
+    return { series }
   }
+
   const dataBarchart = useMemo(() => {
-    let label: string[] = []
     if (dataLevel?.status === 200 && dataLevel?.data?.questions?.length) {
-      label = dataLevel?.data?.questions?.map((item, index) => `Câu hỏi ${index + 1}`)
-      const { categories, series } = convertToStackChartData(
+      const label = dataLevel?.data?.questions?.map((_, index) => `Câu hỏi ${index + 1}`)
+      const { series } = convertToStackChartData(
         dataLevel?.data?.questions,
         dataLevel?.data?.questions[0]?.answers
       )
@@ -131,8 +120,7 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
         tooltip: {
           trigger: "axis",
           axisPointer: {
-            // Use axis to trigger tooltip
-            type: "shadow", // 'shadow' as default; can also be 'line' or 'shadow'
+            type: "shadow",
           },
         },
         legend: {},
@@ -154,166 +142,6 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
     }
     return {}
   }, [dataLevel])
-
-  const exportTemplate = async (name: string, dataTable: any, dataTableInfo: any) => {
-    // Tạo workbook mới
-    const workbook = new ExcelJS.Workbook()
-    const worksheet = workbook.addWorksheet("BaoCaoKhaoSat")
-
-    // Thiết lập style
-    const golbalFontStyle = {
-      name: "Times New Roman",
-    }
-
-    const headerTitleStyle = {
-      font: { ...golbalFontStyle, bold: true, size: 14 },
-      alignment: {
-        horizontal: "center" as const,
-        vertical: "middle" as const,
-        wrapText: true as const,
-      },
-    }
-
-    const headerSubtitleStyle = {
-      font: { ...golbalFontStyle, bold: true, size: 16 },
-      alignment: {
-        horizontal: "center" as const,
-        vertical: "middle" as const,
-        wrapText: true as const,
-      },
-    }
-    const headerSubtitleStyle1 = {
-      font: { ...golbalFontStyle, bold: true, size: 16 },
-      alignment: {
-        horizontal: "left" as const,
-        vertical: "middle" as const,
-        wrapText: true as const,
-      },
-    }
-    const tableHeaderStyle = {
-      font: {
-        ...golbalFontStyle,
-        bold: true,
-        size: 14,
-        color: { argb: "FF000000" },
-      },
-      fill: {
-        type: "pattern",
-        pattern: "none",
-      },
-      alignment: {
-        horizontal: "center",
-        vertical: "middle",
-        wrapText: true,
-      },
-      border: {
-        top: {
-          style: "thin" as ExcelJS.BorderStyle,
-          color: { argb: "FF000000" },
-        },
-        left: {
-          style: "thin" as ExcelJS.BorderStyle,
-          color: { argb: "FF000000" },
-        },
-        right: {
-          style: "thin" as ExcelJS.BorderStyle,
-          color: { argb: "FF000000" },
-        },
-        bottom: {
-          style: "thin" as ExcelJS.BorderStyle,
-          color: { argb: "FF000000" },
-        },
-      },
-    }
-
-    worksheet.mergeCells("A1:C2")
-    worksheet.getCell("A1").value = "BỘ QUỐC PHÒNG\nHỌC VIỆN KỸ THUẬT QUÂN SỰ"
-    worksheet.getCell("A1").style = headerTitleStyle
-
-    worksheet.getRow(1).height = 30
-    worksheet.getRow(2).height = 30
-
-    worksheet.mergeCells("E1:H2")
-    worksheet.getCell("E1").value =
-      "CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM\nĐộc lập - Tự do - Hạnh phúc"
-    worksheet.getCell("E1").style = headerTitleStyle
-
-    worksheet.mergeCells("A4:H4")
-    worksheet.getCell("A4").value = `Báo cáo khảo sát: ${name}`
-    worksheet.getCell("A4").style = headerSubtitleStyle
-    worksheet.getRow(4).height = 20
-
-    let rowIndex = 11
-    if (dataTableInfo?.length > 0) {
-      worksheet.mergeCells("A7:C7")
-      worksheet.getCell("A7").value = "Thông kê chung"
-      worksheet.getCell("A7").style = headerSubtitleStyle1
-      // Thông tin chung
-      const headerRowInfo = worksheet.getRow(9)
-      headerRowInfo.values = ["STT", "Đối tượng", "Trạng thái"]
-      headerRowInfo.eachCell((cell: any) => {
-        cell.style = tableHeaderStyle
-      })
-
-      dataTableInfo?.forEach((item: any, index: number) => {
-        worksheet.getRow(index + 10).values = [
-          index + 1,
-          item?.name,
-          `${item?.taken || 0}/${item?.total || 0}`,
-        ]
-      })
-
-      rowIndex = 9 + dataTableInfo?.length + 3
-    }
-
-    worksheet.mergeCells(`A${rowIndex}:C${rowIndex}`)
-    worksheet.getCell(`A${rowIndex}`).value = "Thống kê theo từng Câu hỏi"
-    worksheet.getCell(`A${rowIndex}`).style = headerSubtitleStyle1
-
-    // Thêm tiêu đề bảng
-    const headerRow = worksheet.getRow(rowIndex + 2)
-    headerRow.values = dataTable[0]?.answers?.length
-      ? [
-          "STT",
-          "Câu hỏi",
-          "Tên Câu hỏi",
-          // biome-ignore lint/correctness/noUnsafeOptionalChaining: <explanation>
-          ...dataTable[0]?.answers?.map((i: any) => i?.description),
-        ]
-      : ["STT", "Câu hỏi", "Tên Câu hỏi"]
-    headerRow.eachCell((cell: any) => {
-      cell.style = tableHeaderStyle
-    })
-
-    // Điều chỉnh độ rộng cột
-    worksheet.columns = [
-      { width: 10 },
-      { width: 30 },
-      { width: 60 },
-      { width: 20 },
-      { width: 20 },
-      { width: 20 },
-      { width: 20 },
-      { width: 20 },
-    ]
-    if (dataTable?.length > 0) {
-      dataTable.forEach((i: any, index: number) => {
-        const headerRowValue: any = worksheet.getRow(rowIndex + 3 + index)
-        headerRowValue.values = [
-          index + 1,
-          `Câu hỏi ${index + 1}`,
-          i?.name,
-          ...calculatePercent(i?.answers).map(
-            (a: any) => `${a.percent || 0}% (${a?.count || 0}/${a?.total || 0})`
-          ),
-        ]
-      })
-    }
-
-    // Xuất file
-    const buffer = await workbook.xlsx.writeBuffer()
-    saveAs(new Blob([buffer]), `Bao_cao_khao_sat_${name || ""}.xlsx`)
-  }
 
   function calculatePercent(items: AnswerItem[]): AnswerWithPercent[] {
     const total = items.reduce((sum, item) => sum + item.count, 0)
@@ -386,7 +214,6 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
                   align: "center",
                   render: (__: any, record: any) => {
                     const count = calculatePercent(record?.answers).find((a) => a.id === i?.id)
-
                     return `${count?.percent || 0}% (${count?.count || 0}/${count?.total})` || "0"
                   },
                 })),
@@ -402,130 +229,27 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
                 {
                   title: "Câu hỏi",
                   align: "center",
-                  render: (_, record, index) => {
+                  render: (_, __, index) => {
                     return `Câu hỏi ${index + 1}`
                   },
                 },
               ]
         }
-        dataSource={dataTable}
+        dataSource={datarender}
         pagination={false}
       />
     )
   }
-  const exportWordReport = async (name: string, dataTable: any, dataTableInfo: any) => {
-    const centerCell = (text = "") =>
-      new TableCell({
-        children: [
-          new Paragraph({
-            alignment: "center",
-            children: [new TextRun(text)],
-          }),
-        ],
-      })
 
-    // ===== BẢNG THỐNG KÊ CHUNG =====
-    const summaryRows = [
-      new TableRow({
-        children: [centerCell("STT"), centerCell("Đối tượng"), centerCell("Trạng thái")],
-      }),
-      ...(dataTableInfo || []).map(
-        (i: any, idx: number) =>
-          new TableRow({
-            children: [
-              centerCell(String(idx + 1)),
-              new TableCell({
-                children: [new Paragraph(i?.name || "")],
-              }),
-              centerCell(`${i?.taken || 0}/${i?.total || 0}`),
-            ],
-          })
-      ),
-    ]
-
-    // ===== BẢNG THEO CÂU HỎI =====
-    const answerHeaders = dataTable?.[0]?.answers?.map((a: any) => a.description) || []
-
-    const questionRows = [
-      new TableRow({
-        children: [
-          centerCell("STT"),
-          centerCell("Câu hỏi"),
-          new TableCell({ children: [new Paragraph("Nội dung câu hỏi")] }),
-          ...answerHeaders.map(centerCell),
-        ],
-      }),
-      ...dataTable.map((q: any, idx: number) => {
-        const percentData = calculatePercent(q.answers)
-        return new TableRow({
-          children: [
-            centerCell(String(idx + 1)),
-            centerCell(`Câu hỏi ${idx + 1}`),
-            new TableCell({ children: [new Paragraph(q.name || "")] }),
-            ...percentData.map((p) => centerCell(`${p.percent}% (${p.count}/${p.total})`)),
-          ],
-        })
-      }),
-    ]
-
-    const doc = new Document({
-      sections: [
-        {
-          properties: {
-            page: {
-              size: { orientation: "landscape" },
-              margin: { top: 720, bottom: 720, left: 720, right: 720 },
-            },
-          },
-          children: [
-            new Paragraph({
-              alignment: "center",
-              spacing: { after: 300 },
-              children: [
-                new TextRun({
-                  text: `BÁO CÁO KHẢO SÁT: ${name || ""}`,
-                  bold: true,
-                  size: 28,
-                }),
-              ],
-            }),
-
-            new Paragraph({
-              children: [
-                new TextRun({
-                  text: "Thống kê chung",
-                  bold: true,
-                }),
-              ],
-              spacing: { after: 200 },
-            }),
-            new DocxTable({
-              width: { size: 100, type: "pct" },
-              rows: summaryRows,
-            }),
-
-            new Paragraph({ spacing: { after: 300 } }),
-
-            new Paragraph({
-              children: [
-                new TextRun({
-                  text: "Thống kê theo từng Câu hỏi",
-                  bold: true,
-                }),
-              ],
-              spacing: { after: 200 },
-            }),
-            new DocxTable({
-              width: { size: 100, type: "pct" },
-              rows: questionRows,
-            }),
-          ],
-        },
-      ],
+  const openModal = () => {
+    if (dataLevel?.status !== 200) return
+    const levelData = dataLevel.data as { surveyName: string; questions: any[] }
+    onOpen({
+      surveyName: levelData.surveyName,
+      questions: levelData.questions,
+      summaryInfo: data?.data,
+      chartOption: dataBarchart,
     })
-
-    const blob = await Packer.toBlob(doc)
-    saveAs(blob, `Bao_cao_khao_sat_${name || ""}.docx`)
   }
 
   return (
@@ -550,7 +274,7 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
                     },
                     {
                       title: "Đối tượng",
-                      render: (_, record, index) => {
+                      render: (_, record) => {
                         return record?.name
                       },
                     },
@@ -558,7 +282,7 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
                       title: "Trạng thái",
                       align: "center",
                       width: 200,
-                      render: (_, record, index) => {
+                      render: (_, record) => {
                         return `${record?.taken || 0}/${record?.total || 0}`
                       },
                     },
@@ -583,35 +307,19 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
                         key: "print",
                         label: "In báo cáo",
                         icon: <PrinterOutlined />,
-                        onClick: () =>
-                          onOpen({
-                            surveyName: dataLevel?.data?.surveyName,
-                            questions: dataLevel?.data?.questions,
-                            summaryInfo: data?.data,
-                            chartOption: dataBarchart,
-                          }),
+                        onClick: openModal,
                       },
                       {
                         key: "word",
                         label: "Xuất Word",
                         icon: <FileWordOutlined />,
-                        onClick: () =>
-                          exportWordReport(
-                            dataLevel?.data?.surveyName,
-                            dataLevel?.data?.questions,
-                            data?.data
-                          ),
+                        onClick: openModal,
                       },
                       {
                         key: "excel",
                         label: "Xuất Excel",
                         icon: <FileExcelOutlined />,
-                        onClick: () =>
-                          exportTemplate(
-                            dataLevel?.data?.surveyName,
-                            dataLevel?.data?.questions,
-                            data?.data
-                          ),
+                        onClick: openModal,
                       },
                     ],
                   }}
