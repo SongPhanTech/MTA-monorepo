@@ -47,8 +47,12 @@ model ThesisSession extends Base {
   /// Ngày QĐBVLV
   defenseDecisionDate   DateTime?
 
-  /// Thủ trưởng
+  /// Trưởng phòng sau đại học
   chief                 String?
+
+  /// Phó phòng sau đại học
+  deputy                 String?
+   
   /// Hạn nhập đề tài
   topicEntryDeadline    DateTime?
   /// Hạn nhập hội đồng

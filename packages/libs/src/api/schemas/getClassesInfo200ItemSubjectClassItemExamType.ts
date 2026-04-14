@@ -5,10 +5,7 @@
  * OpenAPI spec version: 1.0.0
  */
 
-/**
- * @nullable
- */
-export type GetClassesInfo200ItemSubjectClassItemExamType = typeof GetClassesInfo200ItemSubjectClassItemExamType[keyof typeof GetClassesInfo200ItemSubjectClassItemExamType] | null;
+export type GetClassesInfo200ItemSubjectClassItemExamType = typeof GetClassesInfo200ItemSubjectClassItemExamType[keyof typeof GetClassesInfo200ItemSubjectClassItemExamType];
 
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare

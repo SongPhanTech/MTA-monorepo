@@ -223,7 +223,7 @@ export default function MonCham() {
                         }}
                         className="text-left hover:text-primary cursor-pointer"
                       >
-                        {`${record?.subjectVersion?.name} (${record?.subjectVersion?.credit})` ||
+                        {`${record?.subjectVersion?.name} (${record?.subjectVersion?.credit} TC)` ||
                           ""}
                       </div>
                     )

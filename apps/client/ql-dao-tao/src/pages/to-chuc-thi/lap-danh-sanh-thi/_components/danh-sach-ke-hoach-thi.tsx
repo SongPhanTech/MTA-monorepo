@@ -224,8 +224,9 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
     getCheckboxProps(record) {
       return {
         disabled:
-          record.subjectClass?.[0]?.subjectId !== selectedSubjectId &&
-          selectedSubjectId !== undefined,
+          record?.subjectClass.some((sc: SubjectClass) => sc.isLockScore) ||
+          (record.subjectClass?.[0]?.subjectId !== selectedSubjectId &&
+            selectedSubjectId !== undefined),
       }
     },
     hideSelectAll: true,
@@ -754,19 +755,20 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                 align: "center",
                 width: 70,
                 render: (_, record) => {
+                  const checked =
+                    record?.examRooms?.length &&
+                    record?.examRooms?.every?.((sc: { examList: ExamList[] }) =>
+                      sc.examList.every((el) => el.createdExamCode)
+                    )
                   return (
                     <Checkbox
+                      checked={checked}
                       indeterminate={
-                        !record?.examRooms?.every?.((er: { examList: ExamList[] }) =>
-                          er.examList.every((el) => el.createdExamCode)
-                        ) &&
+                        !checked &&
                         record?.examRooms?.some((er: { examList: ExamList[] }) =>
                           er.examList?.some((el) => el.createdExamCode)
                         )
                       }
-                      checked={record?.examRooms?.every?.((sc: { examList: ExamList[] }) =>
-                        sc.examList.every((el) => el.createdExamCode)
-                      )}
                     />
                   )
                 },
@@ -776,19 +778,20 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                 align: "center",
                 width: 70,
                 render: (_, record) => {
+                  const checked =
+                    record?.examRooms?.length &&
+                    record?.examRooms?.every?.((sc: { examList: ExamList[] }) =>
+                      sc.examList.every((el) => el.lockExamCode)
+                    )
                   return (
                     <Checkbox
+                      checked={checked}
                       indeterminate={
-                        !record?.examRooms?.every?.((er: { examList: ExamList[] }) =>
-                          er.examList.every((el) => el.lockExamCode)
-                        ) &&
+                        !checked &&
                         record?.examRooms?.some((er: { examList: ExamList[] }) =>
                           er.examList?.some((el) => el.lockExamCode)
                         )
                       }
-                      checked={record?.examRooms?.every?.((sc: { examList: ExamList[] }) =>
-                        sc.examList.every((el) => el.lockExamCode)
-                      )}
                     />
                   )
                 },

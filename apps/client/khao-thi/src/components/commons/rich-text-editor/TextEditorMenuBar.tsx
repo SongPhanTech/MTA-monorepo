@@ -579,6 +579,8 @@ export default function TextEditorMenuBar({
             disabled: !editor.can().chain().focus().deleteRow(),
             description: "Xóa hàng",
           },
+        ],
+        [ 
           {
             id: "mergeCells",
             icon: <Merge className="size-5" />,

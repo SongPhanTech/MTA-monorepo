@@ -16,7 +16,7 @@ export const store = new Store<{
 })
 export default function KhungDePage() {
   const [activeKey, setActiveKey] = useState("1")
-  const { examFrameworkId } = useStore(store)
+  const { examFrameworkId, matrixId } = useStore(store)
 
   const items: TabsProps["items"] = useMemo(() => {
     return [
@@ -35,10 +35,10 @@ export default function KhungDePage() {
         label: "Câu hỏi trong ma trận",
         key: "3",
         children: <QuestionBankLite examFrameworkId={examFrameworkId} questionBankId="" />,
-        disabled: !examFrameworkId,
+        disabled: !examFrameworkId || !matrixId,
       },
     ]
-  }, [examFrameworkId])
+  }, [examFrameworkId, matrixId])
 
   return (
     <div>

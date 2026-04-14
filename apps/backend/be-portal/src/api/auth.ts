@@ -31,15 +31,20 @@ app.openapi(
     },
   }),
   async (c) => {
-    const appCode = "dangkyhoc"
-    const xToken = getCookie(c, `x-token-${appCode}`)
-    const tenantCode = getCookie(c, "x-tenantcode")
-    const cookie = c.req.header("Cookie")
+    const { appCode } = c.req.valid("query")
+
+    const headerToken = c.req.header("Authorization")?.split(" ")[1]
+    const xToken = headerToken || getCookie(c, `x-token-${appCode}`)
+
+    const tenantCode = getCookie(c, "x-tenantcode") || "dev"
+    const reqCookie = c.req.header("Cookie") || ""
 
     console.log("[get-session].xToken", xToken)
-    if (!xToken || !tenantCode || !cookie) {
+    if (!xToken) {
       return c.json({ error: "Unauthorized" }, 401)
     }
+
+    const cookie = headerToken ? `x-tenantcode=dev; x-token-${appCode}=${xToken}` : reqCookie
 
     const session = await auth({ xToken, appCode, tenantCode, cookie })
     if (!session) {

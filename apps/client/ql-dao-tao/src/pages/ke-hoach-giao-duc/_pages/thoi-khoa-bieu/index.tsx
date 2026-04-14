@@ -587,7 +587,7 @@ export default function ThoiKhoaBieu({
                       }}
                       className="text-left hover:text-primary cursor-pointer"
                     >
-                      {record?.subject?.name} ({record.subject?.credit})
+                      {record?.subject?.name} ({record.subject?.credit} TC)
                     </p>
                   ),
                 },

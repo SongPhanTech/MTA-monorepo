@@ -1,6 +1,9 @@
 *.zip
 *.tar.gz
 
+# Claude Code
+CLAUDE.md
+
 # Dependencies
 node_modules
 .pnp
@@ -41,5 +44,5 @@ yarn-error.log*
 *.pem
 
 .idea
-
+.vscode
 ~$*

@@ -54,7 +54,15 @@ const parseQuantityAndPoint = (value: unknown): { quantity: number; point: numbe
 }
 
 const parseQuestionType = (value?: string | null): QuestionType | null => {
-  if (!value || value === "null") return null
+  if (!value) return null
+
+  const text = value.trim()
+
+  if (text.toLowerCase() === "tất cả" || text.toLowerCase() === "tat ca") {
+    return null
+  }
+
+  if (text === "null") return null
 
   const map: Record<string, QuestionType> = {
     "Tự luận": "ESSAY",
@@ -67,7 +75,8 @@ const parseQuestionType = (value?: string | null): QuestionType | null => {
     "Điền vào chỗ trống": "FILL_IN_BLANK",
     "Sắp xếp thứ tự": "ORDERING",
   }
-  return map[value.trim()] ?? null
+
+  return map[text] ?? null
 }
 
 const normalizeHeader = (text: string) =>

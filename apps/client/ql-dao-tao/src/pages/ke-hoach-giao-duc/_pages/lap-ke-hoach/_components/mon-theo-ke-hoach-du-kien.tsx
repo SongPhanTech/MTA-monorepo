@@ -269,7 +269,7 @@ export default function MonTheoKeHoachDuKien() {
                         }}
                         className="text-left hover:text-primary cursor-pointer"
                       >
-                        {`${record?.subjectVersionName} (${record?.subjectVersionCredit})`}
+                        {`${record?.subjectVersionName} (${record?.subjectVersionCredit} TC)`}
                       </div>
                     )
                   },
@@ -289,7 +289,7 @@ export default function MonTheoKeHoachDuKien() {
                         }}
                         className="hover:text-primary cursor-pointer"
                       >
-                        {`${record?.fixedClassCode ?? record?.fixedClassName ?? ""} (${record?.fixedClassCount})`}
+                        {`${record?.fixedClassCode ?? record?.fixedClassName ?? ""} (${record?.fixedClassCount} SV)`}
                       </span>
                     )
                   },
@@ -317,9 +317,9 @@ export default function MonTheoKeHoachDuKien() {
                   onCell: (record) => ({ rowSpan: record.rowSpan }),
                 },
                 {
-                  title: "Đơn vị phụ trách",
+                  title: "ĐVPT",
                   dataIndex: "managementOrganizationCode",
-                  width: 150,
+                  width: 60,
                   align: "center",
                   onCell: (record) => ({ rowSpan: record.rowSpan }),
                 },

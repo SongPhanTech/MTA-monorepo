@@ -18327,6 +18327,10 @@ const metadata = {
                     name: "chief",
                     type: "String",
                     isOptional: true,
+                }, deputy: {
+                    name: "deputy",
+                    type: "String",
+                    isOptional: true,
                 }, topicEntryDeadline: {
                     name: "topicEntryDeadline",
                     type: "DateTime",

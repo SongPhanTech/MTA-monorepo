@@ -222,7 +222,8 @@ export default function ExpertProfile() {
                 align: "center",
                 type: "input",
                 render: (__, record) =>
-                  record.lecturer?.userProfile?.academicRankType?.sTen || record?.academicRank,
+                  record.lecturer?.userProfile?.academicRankType?.sMa ||
+                  record?.academicRankType?.sMa,
               },
               {
                 title: "Hàm vị",
@@ -231,7 +232,8 @@ export default function ExpertProfile() {
                 align: "center",
                 type: "input",
                 render: (__, record) =>
-                  record.lecturer?.userProfile?.academicDegreeType?.sTen || record?.academicDegree,
+                  record.lecturer?.userProfile?.academicDegreeType?.sMa ||
+                  record?.academicDegreeType?.sMa,
               },
               {
                 title: "Chuyên ngành",

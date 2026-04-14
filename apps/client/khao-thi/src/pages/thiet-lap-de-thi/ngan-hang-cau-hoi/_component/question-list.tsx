@@ -9,14 +9,12 @@ import EditIcon from "@components/icons/edit"
 import { LEVEL_COLUMNS, QUESTION_TYPE_LABELS, QUESTION_TYPE_OPTIONS } from "@constants/constants"
 import type { QuestionType } from "@workspace/db/client"
 import {
-  useDeleteQuestion,
   useFindManyKnowledgeBlock,
   useFindManyQuestion,
   useFindUniqueQuestionBank,
-  useUpdateQuestion,
 } from "@workspace/db/hooks"
 import { sqlTransaction } from "@workspace/libs/api/model"
-import { Button, Col, Flex, message, Row } from "antd"
+import { Button, Col, Flex, message, Popconfirm, Row } from "antd"
 import { BookPlus } from "lucide-react"
 import { useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
@@ -132,11 +130,36 @@ export default function QuestionList({ questionBankId }: QuestionListProps) {
     queryOptions
   )
 
-  const { mutateAsync: deleteQuestion } = useDeleteQuestion()
   async function handleDeleteQuestion(id: string) {
     try {
-      await deleteQuestion({
-        where: { id },
+      const res = await sqlTransaction([
+        {
+          model: "ExamBankQuestion",
+          operation: "deleteMany",
+          data: {
+            where: {
+              questionId: id,
+            },
+          },
+        },
+        {
+          model: "Question",
+          operation: "delete",
+          data: {
+            where: {
+              id: id,
+            },
+          },
+        },
+      ])
+
+      if (res.status !== 200) {
+        message.error("Xóa câu hỏi thất bại")
+        return
+      }
+
+      queryClient.invalidateQueries({
+        queryKey: ["zenstack", "Question"],
       })
 
       message.success("Xóa câu hỏi thành công")
@@ -148,6 +171,15 @@ export default function QuestionList({ questionBankId }: QuestionListProps) {
   async function handleDeleteMany() {
     try {
       const res = await sqlTransaction([
+        {
+          model: "ExamBankQuestion",
+          operation: "deleteMany",
+          data: {
+            where: {
+              questionId: { in: selectedRowKeys },
+            },
+          },
+        },
         {
           model: "Question",
           operation: "deleteMany",
@@ -190,9 +222,17 @@ export default function QuestionList({ questionBankId }: QuestionListProps) {
                     >
                       Bỏ chọn
                     </Button>
-                    <Button className="bg-red-600" type="primary" onClick={handleDeleteMany}>
-                      Xóa
-                    </Button>
+                    <Popconfirm
+                      title="Xóa câu hỏi"
+                      description={`Bạn có chắc muốn xóa ${selectedRowKeys.length} câu hỏi không?`}
+                      onConfirm={handleDeleteMany}
+                      okText="Xóa"
+                      cancelText="Hủy"
+                    >
+                      <Button className="bg-red-600" type="primary">
+                        Xóa
+                      </Button>
+                    </Popconfirm>
                     <Button
                       type="primary"
                       onClick={() =>

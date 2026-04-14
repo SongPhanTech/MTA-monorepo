@@ -681,7 +681,7 @@ export default function KeHoachGhepLopMonHoc() {
                       width: 300,
                       render: (_, record) => {
                         return (
-                          <div className="text-left">{`${record?.name} (${record?.credit})`}</div>
+                          <div className="text-left">{`${record?.name} (${record?.credit} TC)`}</div>
                         )
                       },
                     },

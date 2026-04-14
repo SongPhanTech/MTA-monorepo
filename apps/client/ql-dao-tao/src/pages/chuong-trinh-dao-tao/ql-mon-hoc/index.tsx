@@ -45,7 +45,7 @@ export default function Subject() {
     },
     {
       key: SubjectType.parallel,
-      label: "Môn học song hành",
+      label: "Môn học học trước",
       children: (
         <MonHocTienQuyetSongHanhPage
           subjectVersionId={selectedVersionId || ""}
@@ -215,7 +215,7 @@ export default function Subject() {
               onChange={(val) => setActiveKey(val)}
               options={[
                 { label: "Môn học tiên quyết", value: SubjectType.prerequisite },
-                { label: "Môn học song hành", value: SubjectType.parallel },
+                { label: "Môn học học trước", value: SubjectType.parallel },
                 { label: "Môn học tương đương", value: SubjectType.equivalent },
               ]}
               style={{ marginBottom: 14 }}

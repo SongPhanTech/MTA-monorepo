@@ -47,8 +47,7 @@ export type GetSurveysOfProfile200AllOfAllOfDataItemSubjectClass = {
   approveLecturerAssignmentAt?: string | null;
   /** @nullable */
   examDate?: string | null;
-  /** @nullable */
-  examType?: GetSurveysOfProfile200AllOfAllOfDataItemSubjectClassExamType;
+  examType: GetSurveysOfProfile200AllOfAllOfDataItemSubjectClassExamType;
   /** @nullable */
   scoreDeadLineStart?: string | null;
   /** @nullable */

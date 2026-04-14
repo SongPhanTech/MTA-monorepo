@@ -5,15 +5,13 @@ import { renderWithMath } from "@components/commons/rich-text-editor/renderWithM
 import Select from "@components/commons/select"
 import TreeSelect from "@components/commons/tree-select"
 import { useStore } from "@tanstack/react-store"
-import type { ExamBank } from "@workspace/db/client"
+import { $Enums, type ExamBank } from "@workspace/db/client"
 import {
-  useCreateExamBank,
   useFindManyKnowledgeBlock,
   useFindManySubjectVersion,
   useFindUniqueExam,
   useFindUniqueExamBank,
 } from "@workspace/db/hooks"
-import { sqlTransaction } from "@workspace/libs/api/model"
 import { Button, Checkbox, Col, DatePicker, Form, Input, message, Row, Steps } from "antd"
 import dayjs from "dayjs"
 import { GripVertical } from "lucide-react"
@@ -23,6 +21,7 @@ import { HTML5Backend } from "react-dnd-html5-backend"
 import { useDisclosure } from "react-hook-disclosure-modal"
 import { store } from "@/pages/thiet-lap-de-thi/danh-sach-de"
 import { examTypeOptions } from "@workspace/libs/constants"
+import { useSingleTopicGeneration } from "@workspace/libs/api/exam"
 
 type PutMaTranDeInputType = ExamBank & {
   questions: string[]
@@ -167,96 +166,37 @@ const SinhDeThuCongModal = () => {
     setCurrent(current - 1)
   }
 
-  const { mutateAsync: create } = useCreateExamBank()
-  const orderedQuestionIds = items.map((it: { value: string }) => it.value)
+  const { mutateAsync: generateSingleTopic } = useSingleTopicGeneration()
   const onOk = async (values: PutMaTranDeInputType) => {
     try {
       if (!values || !selectedExamId) return
 
-      // Lấy examMatrixId từ KnowledgeBlock
       const examMatrixId = KnowledgeBlockData[0]?.examMatrixId
+      const examFrameworkId = KnowledgeBlockData[0]?.examMatrix?.examFramework?.id
 
-      if (input?.id) {
-        const res = await sqlTransaction([
-          {
-            model: "ExamBank",
-            operation: "update",
-            data: {
-              where: {
-                id: input.id,
-              },
-              data: {
-                examCode: values.examCode,
-                explain: values.explain,
-                examDay: values.examDay ? dayjs(values.examDay).toDate() : null,
-                examId: selectedExamId,
-                examType: values.examType,
-                subjectClassId: values.subjectClassId ?? undefined,
-                isGroup: values.isGroup || true,
-                isNote: values.isNote,
-                examMatrixId: examMatrixId ?? undefined,
-              },
-            },
-          },
-          {
-            model: "ExamBankQuestion",
-            operation: "deleteMany",
-            data: {
-              where: {
-                examBankId: input.id,
-              },
-            },
-          },
-          {
-            model: "ExamBankQuestion",
-            operation: "createMany",
-            data: {
-              data: orderedQuestionIds.map((questionId, index) => ({
-                questionId,
-                order: index + 1,
-                examBankId: input.id,
-              })),
-            },
-          },
-        ])
-        if (res?.status === 200) {
-          message.success("Cập nhật đề thành công!")
-          queryClient.invalidateQueries({
-            queryKey: ["zenstack", "ExamBank"],
-          })
-        } else {
-          message.error("Cập nhật đề thất bại!")
-          return
-        }
-      } else {
-        await create({
-          data: {
-            examCode: values.examCode,
-            explain: values.explain,
-            examDay: values.examDay ? dayjs(values.examDay).toDate() : null,
-            examId: selectedExamId,
-            examType: values.examType,
-            subjectClassId: values.subjectClassId ?? undefined,
-            isGroup: values.isGroup || true,
-            isNote: values.isNote,
-            examMatrixId: examMatrixId ?? undefined,
-            questions: {
-              createMany: {
-                data: orderedQuestionIds.map((questionId, index) => ({
-                  questionId,
-                  order: index + 1,
-                })),
-              },
-            },
-          },
-        })
-        message.success("Tạo đề thành công!")
-      }
-
-      queryClient.invalidateQueries({
-        queryKey: ["ExamBank"],
+      const res = await generateSingleTopic({
+        data: {
+          id: input?.id ?? "",
+          examCode: values.examCode,
+          explain: values.explain,
+          examDay: values.examDay ? dayjs(values.examDay).toISOString() : null,
+          examId: selectedExamId,
+          examType: values.examType,
+          subjectClassId: values.subjectClassId ?? "",
+          isGroup: values.isGroup ?? true,
+          isNote: values.isNote ?? false,
+          examMatrixId: examMatrixId ?? "",
+          examFrameworkId: examFrameworkId ?? "",
+        },
       })
-      onClose()
+
+      if (res?.status === 200) {
+        message.success(input?.id ? "Cập nhật đề thành công!" : "Tạo đề thành công!")
+        queryClient.invalidateQueries({ queryKey: ["zenstack", "ExamBank"] })
+        onClose()
+      } else {
+        message.error(input?.id ? "Cập nhật đề thất bại!" : "Tạo đề thất bại!")
+      }
     } catch (error) {
       console.log(error)
       message.error("Tạo đề thất bại!")
@@ -363,6 +303,14 @@ const SinhDeThuCongModal = () => {
     }
   }, [input?.subjectVersionId, form.setFieldValue])
 
+  useEffect(() => {
+    form.setFieldsValue({
+      examType: dataExam?.subjectVersion?.examType,
+      subjectClassId: dataExam?.subjectClass?.[0]?.id,
+      examDay: dataExam?.subjectClass?.[0]?.examDate,
+    })
+  }, [dataExam?.subjectVersion?.examType, dataExam?.subjectClass])
+
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   const steps: StepItem[] = useMemo(() => {
     return [
@@ -376,20 +324,14 @@ const SinhDeThuCongModal = () => {
               </FormItem>
             </Col>
             <Col span={24}>
-              <FormItem
-                form={form}
-                name="examType"
-                label="Hình thức thi"
-                required
-                initialValue={!input?.id ? dataExam?.subjectVersion?.examType : undefined}
-              >
+              <FormItem form={form} name="examType" label="Hình thức thi" required>
                 <Select
                   options={examTypeOptions
                     .filter(
                       (opt) =>
-                        opt.value === "OfflineWritten" ||
-                        opt.value === "Oral" ||
-                        opt.value === "OnlineWritten"
+                        opt.value === $Enums.ExamType.OfflineWritten ||
+                        opt.value === $Enums.ExamType.Oral ||
+                        opt.value === $Enums.ExamType.OnlineWritten
                     )
                     .map((opt) => ({
                       label: opt.label,
@@ -415,12 +357,7 @@ const SinhDeThuCongModal = () => {
               </FormItem>
             </Col>
             <Col span={24}>
-              <FormItem
-                form={form}
-                name="subjectClassId"
-                label="Dùng cho lớp"
-                initialValue={!input?.id ? dataExam?.subjectClass?.[0]?.id : undefined}
-              >
+              <FormItem form={form} name="subjectClassId" label="Dùng cho lớp">
                 <Select options={dataOption} placeholder="Chọn lớp môn học" />
               </FormItem>
             </Col>

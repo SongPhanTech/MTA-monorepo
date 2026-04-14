@@ -137,12 +137,27 @@ const AddHuongDanNganHang = () => {
         </Paragraph>
 
         <Paragraph style={{ marginBottom: 4 }}>
-          File Word phải có bảng với 5 cột theo thứ tự:{" "}
-          <Text strong>Câu hỏi, Đáp án, Loại câu hỏi, Độ khó, Điểm</Text>
+          File Word phải theo định dạng <Text strong>text (không dùng bảng)</Text>
         </Paragraph>
 
+        <Paragraph strong>Quy tắc:</Paragraph>
+
+        <ul style={{ marginLeft: 24, marginBottom: 16 }}>
+          <li>
+            Bắt đầu mỗi câu bằng <Text code>Câu X:</Text>
+          </li>
+          <li>
+            Format: <Text code>( Loại câu hỏi- Độ khó) ( Điểm đ)</Text>
+          </li>
+          <li>Các đáp án xuống dòng (A, B, C...)</li>
+          <li>
+            Đáp án bắt đầu bằng <Text code>*Đáp án:</Text>
+          </li>
+          <li>Giữ nguyên xuống dòng, không gộp text</li>
+        </ul>
+
         <Paragraph style={{ marginBottom: 4 }}>
-          - Cột <Text code>Loại câu hỏi</Text> sử dụng một trong các ký tự sau:
+          - Phần <Text code>Loại câu hỏi</Text> sử dụng một trong các ký tự sau:
         </Paragraph>
         <ul style={{ marginLeft: 24, marginBottom: 8 }}>
           {questionTypes.map(({ code, label }) => (
@@ -156,7 +171,7 @@ const AddHuongDanNganHang = () => {
         </ul>
 
         <Paragraph style={{ marginBottom: 4 }}>
-          - Cột <Text code>Độ khó</Text> sử dụng một trong các ký tự sau:
+          - Phần <Text code>Độ khó</Text> sử dụng một trong các ký tự sau:
         </Paragraph>
         <ul style={{ marginLeft: 24, marginBottom: 16 }}>
           {difficultyLevels.map(({ code, label }) => (
@@ -169,17 +184,70 @@ const AddHuongDanNganHang = () => {
           ))}
         </ul>
 
+        <Paragraph style={{ marginBottom: 4 }}>
+          - Phần <Text code>Điểm</Text> phải nằm trong dấu ngoặc đơn và có đơn vị{" "}
+          <Text code>đ</Text>:
+        </Paragraph>
+
+        <ul style={{ marginLeft: 24, marginBottom: 16 }}>
+          <li>
+            Ví dụ: <Text code>(1 đ)</Text>, <Text code>(0.25 đ)</Text>, <Text code>(8.5 đ)</Text>
+          </li>
+          <li>Cho phép số thập phân: 0.25, 0.5, 0.75...</li>
+          <li>
+            Tối đa: <Text strong>9.75 điểm</Text>
+          </li>
+          <li>
+            Format bắt buộc: <Text code>( số đ )</Text> (không thiếu dấu ngoặc hoặc chữ "đ")
+          </li>
+        </ul>
+
         {/* ===== II. VÍ DỤ ===== */}
         <Title level={5}>II. VÍ DỤ</Title>
 
-        <Table
-          columns={exampleColumns}
-          dataSource={exampleData}
-          pagination={false}
-          size="small"
-          bordered
-          style={{ marginBottom: 16 }}
-        />
+        <div
+          style={{
+            background: "#f6f6f6",
+            padding: 12,
+            borderRadius: 6,
+            whiteSpace: "pre-wrap",
+            fontFamily: "Times New Roman, serif",
+          }}
+        >
+          {`Câu 1: (TN-NB) (8.25 đ) Kế hoạch Barbarossa của Đức Quốc Xã nhằm tấn công quốc gia nào?
+A. Ba Lan
+B. Pháp
+C. Anh
+D. Liên Xô
+
+*Đáp án: D. Liên Xô
+
+Câu 2: (TNN-NB) (0.25 đ) Những nội dung nào thuộc vấn đề cơ bản của triết học?
+A. Vật chất và ý thức cái nào có trước
+B. Con người sống bao lâu
+C. Con người có khả năng nhận thức thế giới hay không
+D. Sự phát triển của công nghệ
+
+*Đáp án:
+A. Vật chất và ý thức cái nào có trước.
+C. Con người có khả năng nhận thức thế giới
+
+Câu 3: (DK-NB) (0.25 đ) Triết học nghiên cứu những quy luật chung nhất của ______, xã hội và tư duy.
+
+*Đáp án: 1. tự nhiên
+
+Câu 4: (SX-NB) (0.25 đ) Sắp xếp đúng trình tự quá trình nhận thức:
+
+A. Thực tiễn
+B. Tư duy trừu tượng
+C. Trực quan sinh động
+
+*Đáp án: C → B → A
+
+Câu 5: (TL-TH) (0.5 đ) Phân tích vấn đề cơ bản của triết học
+
+*Đáp án: Gợi ý: Trình bày 2 mặt (vật chất – ý thức, khả năng nhận thức) và ý nghĩa của nó.`}
+        </div>
       </div>
     </Modal>
   )

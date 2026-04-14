@@ -30,6 +30,7 @@ export type ListOfundefinedAllOfDataItemEducationAndTrainingItemTrainingCourse =
   academicYear?: string | null;
   /** @nullable */
   maxTrainingTime?: number | null;
+  isRetakeExam?: boolean;
   /** @nullable */
   admissionQuota?: number | null;
   /** @nullable */

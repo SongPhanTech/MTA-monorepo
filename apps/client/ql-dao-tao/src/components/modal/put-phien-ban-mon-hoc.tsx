@@ -674,13 +674,13 @@ const PutVersionSubjectModal = () => {
           </Form.Item>
         </Col>
         <Col span={8}>
-          <Form.Item name="coRequisiteSubjectIds" label="Môn học song hành">
+          <Form.Item name="coRequisiteSubjectIds" label="Môn học học trước">
             <TreeSelect
               treeData={treeData}
               // treeCheckable={true}
               multiple={true}
               treeDefaultExpandAll
-              placeholder="Chọn môn học song hành"
+              placeholder="Chọn môn học học trước"
               style={{ width: "100%" }}
               {...(input?.isLocked
                 ? {

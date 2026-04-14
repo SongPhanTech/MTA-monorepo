@@ -290,7 +290,7 @@ const KhoiTaoMon = () => {
           key: sv.id,
           value: sv.id,
           label: (
-            <p className="text-primary">{`${[sv.code, sv.name].filter(Boolean).join(" - ")} (${sv.credit})`}</p>
+            <p className="text-primary">{`${[sv.code, sv.name].filter(Boolean).join(" - ")} (${sv.credit} TC)`}</p>
           ),
         }))
       if (children.length === 0) return null

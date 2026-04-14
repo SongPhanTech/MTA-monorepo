@@ -3078,6 +3078,7 @@ exports.Prisma.ThesisSessionScalarFieldEnum = {
   defenseDecisionMaker: 'defenseDecisionMaker',
   defenseDecisionDate: 'defenseDecisionDate',
   chief: 'chief',
+  deputy: 'deputy',
   topicEntryDeadline: 'topicEntryDeadline',
   councilDeadline: 'councilDeadline'
 };
@@ -6744,7 +6745,8 @@ exports.Prisma.ThesisSessionOrderByRelevanceFieldEnum = {
   decisionMaker: 'decisionMaker',
   defenseDecisionNumber: 'defenseDecisionNumber',
   defenseDecisionMaker: 'defenseDecisionMaker',
-  chief: 'chief'
+  chief: 'chief',
+  deputy: 'deputy'
 };
 
 exports.Prisma.ThesisProjectOrderByRelevanceFieldEnum = {

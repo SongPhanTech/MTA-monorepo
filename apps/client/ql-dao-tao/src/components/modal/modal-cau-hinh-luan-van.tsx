@@ -103,7 +103,7 @@ export type ModalCauHinhLuanVanType = {
   councilMemberName?: string
   councilMemberId?: string
   councilMemberPaymentAmount?: number
-  finalResult?: number
+  finalResult?: number | null
   commentsCouncil?: string
   isCompleteCouncil?: boolean
   attachments?: DocumentFile[]
@@ -363,8 +363,12 @@ const ModalCauHinhLuanVan = () => {
 
     const filesInForm = (data as any).attachments || []
     const initialFiles = attachments
+    const finalScore =
+      data.finalResult === undefined || data.finalResult === null
+        ? null
+        : new Decimal(data.finalResult)
     const payload = {
-      finalScore: new Decimal(data.finalResult ?? 0),
+      finalScore,
       comments: data.commentsCouncil,
       isProfileComplete: data.isCompleteCouncil,
       documents: {
@@ -504,129 +508,138 @@ const ModalCauHinhLuanVan = () => {
   )
 
   useEffect(() => {
-    if (thesisProjectData) {
-      const chairmanId = thesisProjectData?.council?.members.find(
-        (m) => m.role === CouncilRole.CHAIRMAN
-      )?.expert?.id
-      const secretaryId = thesisProjectData?.council?.members.find(
-        (m) => m.role === CouncilRole.SECRETARY
-      )?.expert?.id
-      const rev1Id = thesisProjectData?.council?.members.find(
-        (m) => m.role === CouncilRole.REVIEWER_1
-      )?.expert?.id
-      const rev2Id = thesisProjectData?.council?.members.find(
-        (m) => m.role === CouncilRole.REVIEWER_2
-      )?.expert?.id
-      const memberId = thesisProjectData?.council?.members.find(
-        (m) => m.role === CouncilRole.MEMBER
-      )?.expert?.id
-
-      const getDisplayAmount = (role: CouncilRole, expertId?: string) => {
-        const savedAmount = thesisProjectData?.council?.members.find((m) => m.role === role)
-          ?.payment?.amount
-        return savedAmount ? formatDecimal(savedAmount) : getDefaultCouncilAmount(role, expertId)
-      }
-      form.setFieldsValue({
-        chairman: thesisProjectData?.council?.members.find(
-          (member) => member.role === CouncilRole.CHAIRMAN
-        )?.expert?.id,
-        secretary: thesisProjectData?.council?.members.find(
-          (member) => member.role === CouncilRole.SECRETARY
-        )?.expert?.id,
-        reviewer1: thesisProjectData?.council?.members.find(
-          (member) => member.role === CouncilRole.REVIEWER_1
-        )?.expert?.id,
-        reviewer2: thesisProjectData?.council?.members.find(
-          (member) => member.role === CouncilRole.REVIEWER_2
-        )?.expert?.id,
-        member: thesisProjectData?.council?.members.find(
-          (member) => member.role === CouncilRole.MEMBER
-        )?.expert?.id,
-        roomId: thesisProjectData?.room?.id,
-        defenseDate: thesisProjectData?.defenseDate
-          ? dayjs(thesisProjectData?.defenseDate)
-          : undefined,
-        sessionId: thesisProjectData?.defenseSession?.id,
-        submissionDate: thesisProjectData?.librarySubmission?.submissionDate
-          ? dayjs(thesisProjectData?.librarySubmission?.submissionDate)
-          : undefined,
-        isHardcopy: thesisProjectData?.librarySubmission?.isHardcopy,
-        isSoftcopy: thesisProjectData?.librarySubmission?.isSoftcopy,
-        librarianNote: thesisProjectData?.librarySubmission?.librarianNote ?? "",
-        supervisorId: thesisProjectData?.supervisorId ?? "",
-        supervisorName: thesisProjectData?.supervisor?.name ?? "",
-        coSupervisorId: thesisProjectData?.coSupervisorId ?? "",
-        coSupervisorName: thesisProjectData?.coSupervisor?.name ?? "",
-        supervisorPaymentAmount: thesisProjectData?.supervisorPayment?.amount
-          ? formatDecimal(thesisProjectData.supervisorPayment.amount)
-          : getDefaultSupervisorAmount(
-              SupervisorRole.SUPERVISOR,
-              thesisProjectData.supervisorId ?? undefined
-            ),
-
-        coSupervisorPaymentAmount: thesisProjectData?.coSupervisorPayment?.amount
-          ? formatDecimal(thesisProjectData.coSupervisorPayment.amount)
-          : getDefaultSupervisorAmount(
-              SupervisorRole.CO_SUPERVISOR,
-              thesisProjectData.coSupervisorId ?? undefined
-            ),
-        supervisorPaymentTransactionCode:
-          thesisProjectData?.supervisorPayment?.transactionCode ?? "",
-        coSupervisorPaymentTransactionCode:
-          thesisProjectData?.coSupervisorPayment?.transactionCode ?? "",
-        finalResult: thesisProjectData?.defenseRecord?.finalScore?.toNumber() ?? 0,
-        commentsCouncil: thesisProjectData?.defenseRecord?.comments ?? "",
-        isCompleteCouncil: thesisProjectData?.defenseRecord?.isProfileComplete ?? false,
-        attachments: thesisProjectData?.defenseRecord?.documents ?? [],
-        councilChairmanPaymentAmount: getDisplayAmount(CouncilRole.CHAIRMAN, chairmanId),
-        councilSecretaryPaymentAmount: getDisplayAmount(CouncilRole.SECRETARY, secretaryId),
-        councilReviewer1PaymentAmount: getDisplayAmount(CouncilRole.REVIEWER_1, rev1Id),
-        councilReviewer2PaymentAmount: getDisplayAmount(CouncilRole.REVIEWER_2, rev2Id),
-        councilMemberPaymentAmount: getDisplayAmount(CouncilRole.MEMBER, memberId),
-        councilChairmanName:
-          thesisProjectData?.council?.members.find((member) => member.role === CouncilRole.CHAIRMAN)
-            ?.expert?.name ?? "",
-        councilMemberName:
-          thesisProjectData?.council?.members.find((member) => member.role === CouncilRole.MEMBER)
-            ?.expert?.name ?? "",
-        councilSecretaryName:
-          thesisProjectData?.council?.members.find(
-            (member) => member.role === CouncilRole.SECRETARY
-          )?.expert?.name ?? "",
-        councilReviewer1Name:
-          thesisProjectData?.council?.members.find(
-            (member) => member.role === CouncilRole.REVIEWER_1
-          )?.expert?.name ?? "",
-        councilReviewer2Name:
-          thesisProjectData?.council?.members.find(
-            (member) => member.role === CouncilRole.REVIEWER_2
-          )?.expert?.name ?? "",
-        councilChairmanId:
-          thesisProjectData?.council?.members.find((member) => member.role === CouncilRole.CHAIRMAN)
-            ?.expert?.id ?? "",
-        councilSecretaryId:
-          thesisProjectData?.council?.members.find(
-            (member) => member.role === CouncilRole.SECRETARY
-          )?.expert?.id ?? "",
-        councilReviewer1Id:
-          thesisProjectData?.council?.members.find(
-            (member) => member.role === CouncilRole.REVIEWER_1
-          )?.expert?.id ?? "",
-        councilReviewer2Id:
-          thesisProjectData?.council?.members.find(
-            (member) => member.role === CouncilRole.REVIEWER_2
-          )?.expert?.id ?? "",
-        councilMemberId:
-          thesisProjectData?.council?.members.find((member) => member.role === CouncilRole.MEMBER)
-            ?.expert?.id ?? "",
-      })
-      setDocument(thesisProjectData?.librarySubmission?.documentFile ?? [])
-      setAttachments(thesisProjectData?.defenseRecord?.documents ?? [])
-    } else {
-      setDocument([])
-      setAttachments([])
+    if (!isOpen) {
+      formHydratedKeyRef.current = null
+      return
     }
-  }, [thesisProjectData, form, formatDecimal, getDefaultCouncilAmount, getDefaultSupervisorAmount])
+    const projectId = input?.thesisProjectId
+    if (!thesisProjectData || !projectId) {
+      return
+    }
+    const hydrateKey = projectId
+    if (formHydratedKeyRef.current === hydrateKey) {
+      return
+    }
+    formHydratedKeyRef.current = hydrateKey
+
+    const chairmanId = thesisProjectData?.council?.members.find(
+      (m) => m.role === CouncilRole.CHAIRMAN
+    )?.expert?.id
+    const secretaryId = thesisProjectData?.council?.members.find(
+      (m) => m.role === CouncilRole.SECRETARY
+    )?.expert?.id
+    const rev1Id = thesisProjectData?.council?.members.find(
+      (m) => m.role === CouncilRole.REVIEWER_1
+    )?.expert?.id
+    const rev2Id = thesisProjectData?.council?.members.find(
+      (m) => m.role === CouncilRole.REVIEWER_2
+    )?.expert?.id
+    const memberId = thesisProjectData?.council?.members.find((m) => m.role === CouncilRole.MEMBER)
+      ?.expert?.id
+
+    const getDisplayAmount = (role: CouncilRole, expertId?: string) => {
+      const savedAmount = thesisProjectData?.council?.members.find((m) => m.role === role)?.payment
+        ?.amount
+      return savedAmount ? formatDecimal(savedAmount) : getDefaultCouncilAmount(role, expertId)
+    }
+    form.setFieldsValue({
+      chairman: thesisProjectData?.council?.members.find(
+        (member) => member.role === CouncilRole.CHAIRMAN
+      )?.expert?.id,
+      secretary: thesisProjectData?.council?.members.find(
+        (member) => member.role === CouncilRole.SECRETARY
+      )?.expert?.id,
+      reviewer1: thesisProjectData?.council?.members.find(
+        (member) => member.role === CouncilRole.REVIEWER_1
+      )?.expert?.id,
+      reviewer2: thesisProjectData?.council?.members.find(
+        (member) => member.role === CouncilRole.REVIEWER_2
+      )?.expert?.id,
+      member: thesisProjectData?.council?.members.find(
+        (member) => member.role === CouncilRole.MEMBER
+      )?.expert?.id,
+      roomId: thesisProjectData?.room?.id,
+      defenseDate: thesisProjectData?.defenseDate
+        ? dayjs(thesisProjectData?.defenseDate)
+        : undefined,
+      sessionId: thesisProjectData?.defenseSession?.id,
+      submissionDate: thesisProjectData?.librarySubmission?.submissionDate
+        ? dayjs(thesisProjectData?.librarySubmission?.submissionDate)
+        : undefined,
+      isHardcopy: thesisProjectData?.librarySubmission?.isHardcopy,
+      isSoftcopy: thesisProjectData?.librarySubmission?.isSoftcopy,
+      librarianNote: thesisProjectData?.librarySubmission?.librarianNote ?? "",
+      supervisorId: thesisProjectData?.supervisorId ?? "",
+      supervisorName: thesisProjectData?.supervisor?.name ?? "",
+      coSupervisorId: thesisProjectData?.coSupervisorId ?? "",
+      coSupervisorName: thesisProjectData?.coSupervisor?.name ?? "",
+      supervisorPaymentAmount: thesisProjectData?.supervisorPayment?.amount
+        ? formatDecimal(thesisProjectData.supervisorPayment.amount)
+        : getDefaultSupervisorAmount(
+            SupervisorRole.SUPERVISOR,
+            thesisProjectData.supervisorId ?? undefined
+          ),
+
+      coSupervisorPaymentAmount: thesisProjectData?.coSupervisorPayment?.amount
+        ? formatDecimal(thesisProjectData.coSupervisorPayment.amount)
+        : getDefaultSupervisorAmount(
+            SupervisorRole.CO_SUPERVISOR,
+            thesisProjectData.coSupervisorId ?? undefined
+          ),
+      supervisorPaymentTransactionCode: thesisProjectData?.supervisorPayment?.transactionCode ?? "",
+      coSupervisorPaymentTransactionCode:
+        thesisProjectData?.coSupervisorPayment?.transactionCode ?? "",
+      finalResult: thesisProjectData?.defenseRecord?.finalScore?.toNumber() ?? undefined,
+      commentsCouncil: thesisProjectData?.defenseRecord?.comments ?? "",
+      isCompleteCouncil: thesisProjectData?.defenseRecord?.isProfileComplete ?? false,
+      attachments: thesisProjectData?.defenseRecord?.documents ?? [],
+      councilChairmanPaymentAmount: getDisplayAmount(CouncilRole.CHAIRMAN, chairmanId),
+      councilSecretaryPaymentAmount: getDisplayAmount(CouncilRole.SECRETARY, secretaryId),
+      councilReviewer1PaymentAmount: getDisplayAmount(CouncilRole.REVIEWER_1, rev1Id),
+      councilReviewer2PaymentAmount: getDisplayAmount(CouncilRole.REVIEWER_2, rev2Id),
+      councilMemberPaymentAmount: getDisplayAmount(CouncilRole.MEMBER, memberId),
+      councilChairmanName:
+        thesisProjectData?.council?.members.find((member) => member.role === CouncilRole.CHAIRMAN)
+          ?.expert?.name ?? "",
+      councilMemberName:
+        thesisProjectData?.council?.members.find((member) => member.role === CouncilRole.MEMBER)
+          ?.expert?.name ?? "",
+      councilSecretaryName:
+        thesisProjectData?.council?.members.find((member) => member.role === CouncilRole.SECRETARY)
+          ?.expert?.name ?? "",
+      councilReviewer1Name:
+        thesisProjectData?.council?.members.find((member) => member.role === CouncilRole.REVIEWER_1)
+          ?.expert?.name ?? "",
+      councilReviewer2Name:
+        thesisProjectData?.council?.members.find((member) => member.role === CouncilRole.REVIEWER_2)
+          ?.expert?.name ?? "",
+      councilChairmanId:
+        thesisProjectData?.council?.members.find((member) => member.role === CouncilRole.CHAIRMAN)
+          ?.expert?.id ?? "",
+      councilSecretaryId:
+        thesisProjectData?.council?.members.find((member) => member.role === CouncilRole.SECRETARY)
+          ?.expert?.id ?? "",
+      councilReviewer1Id:
+        thesisProjectData?.council?.members.find((member) => member.role === CouncilRole.REVIEWER_1)
+          ?.expert?.id ?? "",
+      councilReviewer2Id:
+        thesisProjectData?.council?.members.find((member) => member.role === CouncilRole.REVIEWER_2)
+          ?.expert?.id ?? "",
+      councilMemberId:
+        thesisProjectData?.council?.members.find((member) => member.role === CouncilRole.MEMBER)
+          ?.expert?.id ?? "",
+    })
+    setDocument(thesisProjectData?.librarySubmission?.documentFile ?? [])
+    setAttachments(thesisProjectData?.defenseRecord?.documents ?? [])
+  }, [
+    isOpen,
+    input?.thesisProjectId,
+    thesisProjectData,
+    form,
+    formatDecimal,
+    getDefaultCouncilAmount,
+    getDefaultSupervisorAmount,
+  ])
   const itemTab: TabsProps["items"] = [
     {
       key: "defenseConfig",
@@ -1333,7 +1346,7 @@ const ModalCauHinhLuanVan = () => {
                   labelAlign="left"
                   {...formItemLayout}
                 >
-                  <InputNumber className="w-2/3" min={0} placeholder="Nhập kết quả" />
+                  <InputNumber className="w-2/3" min={-1} placeholder="Nhập kết quả" />
                 </FormItem>
               </Col>
 

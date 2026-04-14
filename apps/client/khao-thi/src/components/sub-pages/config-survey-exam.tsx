@@ -26,7 +26,7 @@ function ConfigSurveyExam({
   const form = Form.useFormInstance<PutSurveyType>()
   const [initValue, setInitValue] = useState<string[]>([])
 
-  const { data: surveyQuestionGroup = [] } = useFindManySurveyQuestionGroup(
+  const { data: surveyQuestionGroup = [], refetch } = useFindManySurveyQuestionGroup(
     {
       where: {
         surveyTopic: {
@@ -67,22 +67,16 @@ function ConfigSurveyExam({
     form.setFieldValue("surveyQuestionIds", onlyLeafValues)
     setInitValue(onlyLeafValues)
   }
-  const listForm = Form.useWatch("surveyChoice", form) ?? []
-
   const handleAddChoices = () => {
-    const newList = [...listForm, { answer: "", description: "" }]
+    const newList = [...choices, { answer: "", description: "", requireExplanation: false }]
     setChoices(newList)
-
-    form.setFieldsValue({ surveyChoice: newList }) // ✅ cập nhật form theo state
-    console.log(form.getFieldValue("surveyChoice"), 123)
+    form.setFieldValue("surveyChoice", newList)
   }
 
   const handleRemoveChoices = (index: number) => {
-    const result = listForm.filter((i, idx) => idx !== index)
+    const result = choices.filter((_i: any, idx: number) => idx !== index)
     setChoices(result)
-    form.setFieldsValue({
-      surveyChoice: result,
-    })
+    form.setFieldValue("surveyChoice", result)
   }
 
   return (

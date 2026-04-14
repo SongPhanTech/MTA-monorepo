@@ -148,7 +148,7 @@ export default function MonKySau() {
                       }}
                       className="text-left hover:text-primary cursor-pointer"
                     >
-                      {`${record?.subjectVersionName} (${record?.subjectVersionCredit})` || ""}
+                      {`${record?.subjectVersionName} (${record?.subjectVersionCredit}TC)` || ""}
                     </div>
                   )
                 },
@@ -168,7 +168,7 @@ export default function MonKySau() {
                       }}
                       className="text-left hover:text-primary cursor-pointer"
                     >
-                      {`${record?.fixedClassCode} (${record?.fixedClassCount})`}
+                      {`${record?.fixedClassCode} (${record?.fixedClassCount} SV)`}
                     </span>
                   )
                 },

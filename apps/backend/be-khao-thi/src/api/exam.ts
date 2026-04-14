@@ -3,6 +3,7 @@ import { $Enums, createId, type Prisma } from "@workspace/db"
 import { getRandomQuestionIDs } from "@workspace/db/sql"
 import { questionTypeLabels } from "@workspace/libs/constants"
 import { prisma } from ".."
+import { models } from "@workspace/db/zod"
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -250,6 +251,125 @@ app.openapi(getExamBankWithGrouping, async (c) => {
   }
 
   return c.json({ isGroup, questions: examBank.questions }, 200)
+})
+
+const sinhdethuCong = createRoute({
+  operationId: "single-topic-generation",
+  path: "/single-topic-generation",
+  tags: ["Exam"],
+  summary: "Sinh đề thủ công (1 đề)",
+  description: "Sinh 1 đề duy nhất theo ma trận cấu hình",
+  method: "post",
+  request: {
+    body: {
+      content: {
+        "application/json": {
+          schema: models.ExamBankScalarSchema.extend({
+            examFrameworkId: z.string().nonempty(),
+            examMatrixId: z.string().nonempty(),
+            examId: z.string().nonempty(),
+            subjectClassId: z.string(),
+            isNote: z.boolean(),
+            description: z.string().optional(),
+            isGroup: z.boolean(),
+          }),
+        },
+      },
+    },
+  },
+  responses: {
+    200: {
+      description: "Success",
+      content: {
+        "application/json": {
+          schema: z.object({ message: z.string() }),
+        },
+      },
+    },
+    400: {
+      description: "Invalid request",
+      content: {
+        "application/json": {
+          schema: z.object({ message: z.string() }),
+        },
+      },
+    },
+  },
+})
+
+app.openapi(sinhdethuCong, async (c) => {
+  const body = c.req.valid("json")
+
+  function getRandomItems<T>(arr: T[], n: number): T[] {
+    const copy: any = [...arr]
+    const result: T[] = []
+    while (result.length < n) {
+      const idx = Math.floor(Math.random() * copy.length)
+      result.push(copy[idx])
+      copy.splice(idx, 1)
+    }
+    return result
+  }
+
+  const matrixData: any = await prisma.knowledgeBlock.findMany({
+    where: {
+      examMatrixId: body?.examMatrixId,
+      deletedAt: null,
+    },
+    include: {
+      questions: true,
+      configExams: true,
+    },
+  })
+
+  if (!matrixData.length) {
+    return c.json({ message: "Chưa có ma trận đề" }, 400)
+  }
+
+  let questions: any = []
+
+  for (const knowledgeBlock of matrixData) {
+    if (knowledgeBlock.configExams.length) {
+      for (const configExam of knowledgeBlock.configExams) {
+        const listRamdom = knowledgeBlock.questions.filter(
+          (i: any) =>
+            i?.difficult === configExam.difficult &&
+            (configExam.type == null || i?.type === configExam.type)
+        )
+
+        if (listRamdom.length < configExam.quantity) {
+          return c.json({ message: "Không đúng số câu hỏi" }, 400)
+        }
+
+        const selected = getRandomItems(listRamdom, configExam.quantity)
+        questions = [...questions, ...selected]
+      }
+    }
+  }
+
+  await prisma.examBank.create({
+    data: {
+      examCode: body?.examCode,
+      explain: body.explain,
+      examDay: body.examDay,
+      examMatrixId: body?.examMatrixId,
+      examId: body?.examId,
+      examType: body?.examType,
+      subjectClassId: body?.subjectClassId,
+      isNote: body.isNote,
+      isGroup: body.isGroup,
+      description: body.description,
+      questions: {
+        createMany: {
+          data: questions.map((item: any) => ({
+            questionId: item.id,
+          })),
+        },
+      },
+    },
+  })
+
+  return c.json({ message: "Success" })
 })
 
 export default app

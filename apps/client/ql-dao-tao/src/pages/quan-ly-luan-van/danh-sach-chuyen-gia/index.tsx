@@ -114,6 +114,7 @@ export default function ExpertProfile() {
     include: {
       lecturer: {
         include: {
+          organization: true,
           userProfile: {
             include: {
               rank: true,
@@ -223,7 +224,8 @@ export default function ExpertProfile() {
                 align: "center",
                 type: "input",
                 render: (__, record) =>
-                  record.lecturer?.userProfile?.academicRankType?.sTen || record?.academicRank,
+                  record.lecturer?.userProfile?.academicRankType?.sMa ||
+                  record?.academicRankType?.sMa,
               },
               {
                 title: "Hàm vị",
@@ -232,7 +234,8 @@ export default function ExpertProfile() {
                 align: "center",
                 type: "input",
                 render: (__, record) =>
-                  record.lecturer?.userProfile?.academicDegreeType?.sTen || record?.academicDegree,
+                  record.lecturer?.userProfile?.academicDegreeType?.sMa ||
+                  record?.academicDegreeType?.sMa,
               },
               {
                 title: "Chuyên ngành",
@@ -247,6 +250,8 @@ export default function ExpertProfile() {
                 width: 150,
                 align: "center",
                 type: "input",
+                render: (__, record) =>
+                  `${record.lecturer ? record.lecturer?.organization?.sMa + "-" + record.lecturer?.organization?.sTen : record?.workplace}`,
               },
               {
                 title: "Số điện thoại",

@@ -352,20 +352,27 @@ const mergeExam = createRoute({
 app.openapi(mergeExam, async (c) => {
   const { examIds } = c.req.valid("json")
 
-  const classes = await prisma.subjectClass.findMany({
-    where: {
-      examId: { in: examIds },
-      cancelled: false,
-      deletedAt: null,
-      status: "OFFICIAL",
-    },
-    select: {
-      id: true,
-      examId: true,
-      subjectId: true,
-      semesterId: true,
+  const exams = await prisma.exam.findMany({
+    where: { id: { in: examIds } },
+    include: {
+      subjectClass: {
+        where: {
+          cancelled: false,
+          deletedAt: null,
+          status: "OFFICIAL",
+        },
+        select: {
+          id: true,
+          examId: true,
+          subjectId: true,
+          semesterId: true,
+        },
+      },
+      examRooms: true,
     },
   })
+
+  const classes = exams.flatMap((exam) => exam.subjectClass)
 
   if (classes.length === 0) {
     return c.json({ success: false, message: "Không có lớp học cần ghép" }, 400)
@@ -397,6 +404,19 @@ app.openapi(mergeExam, async (c) => {
       where: { id: { in: classIds } },
       data: { examId: newExamId },
     })
+
+    await tx.examPaper.deleteMany({
+      where: { examList: { examRoom: { examId: { in: examIds } } } },
+    })
+
+    await tx.examList.deleteMany({
+      where: { examRoom: { examId: { in: examIds } } },
+    })
+
+    await tx.examRoom.deleteMany({
+      where: { examId: { in: examIds } },
+    })
+
     await tx.exam.deleteMany({
       where: { id: { in: examIds } },
     })
@@ -474,13 +494,7 @@ app.openapi(unmergeExam, async (c) => {
   }
 
   if (classes.length === 1) {
-    return c.json(
-      {
-        success: false,
-        message: "Kỳ thi chỉ có 1 lớp, không cần tách",
-      },
-      400
-    )
+    return c.json({ success: false, message: "Kỳ thi chỉ có 1 lớp, không cần tách" }, 400)
   }
 
   const subjectVersionId = classes?.[0]?.subjectId as string
@@ -496,6 +510,19 @@ app.openapi(unmergeExam, async (c) => {
       where: { id: { in: classes.map((c) => c.id) } },
       data: { examId: null },
     })
+
+    await tx.examPaper.deleteMany({
+      where: { examList: { examRoom: { examId } } },
+    })
+
+    await tx.examList.deleteMany({
+      where: { examRoom: { examId } },
+    })
+
+    await tx.examRoom.deleteMany({
+      where: { examId },
+    })
+
     for (const { examId, classId } of newExams) {
       await tx.exam.create({
         data: {
