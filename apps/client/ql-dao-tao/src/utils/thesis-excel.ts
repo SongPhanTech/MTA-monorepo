@@ -582,93 +582,55 @@ export const exportDanhSachBaoVe = async ({
   }
   showSpinner()
   try {
-    const row: TableRow[] =
-      allStudentsInClasses?.map((student, index) => {
+    const data  = allStudentsInClasses?.map((student, index) => {
         return {
-          cells: [
-            { value: index + 1, border: true, align: "center" },
-            {
-              value: student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || "",
-              border: true,
-              align: "center",
-            },
-            {
-              value: student?.fixedClass?.trainingCourse?.trainingObjectType?.name || "",
-              border: true,
-              align: "center",
-            },
-            {
-              value: student.userProfile?.lastName || "",
-              border: true,
-              align: "center",
-            },
-            {
-              value: student.userProfile?.firstName || "",
-              border: true,
-              align: "center",
-            },
-            { value: "", border: true, align: "center" },
-            {
-              value: student?.thesisRegistrations?.[0]?.thesisProject?.defenseDate
+          data: [
+            { stt: index + 1,
+              chuyennganh: student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || "",
+              doituongdaotao: tenDoiTuong[student?.fixedClass?.trainingCourse?.trainingObjectType?.type as keyof typeof tenDoiTuong]?.fullname || "",
+              lastname: student.userProfile?.lastName || "",
+              firstname: student.userProfile?.firstName || "",
+              emptyValue:"",
+              ngaybaove: student?.thesisRegistrations?.[0]?.thesisProject?.defenseDate
                 ? dayjs(student?.thesisRegistrations?.[0]?.thesisProject?.defenseDate).format(
                     "DD/MM/YYYY"
                   )
                 : "",
-              border: true,
-              align: "center",
-            },
-            {
-              value: student?.thesisRegistrations?.[0]?.thesisProject?.defenseSession?.startTime
+              giobaove: student?.thesisRegistrations?.[0]?.thesisProject?.defenseSession?.startTime
                 ? dayjs(
                     student?.thesisRegistrations?.[0]?.thesisProject?.defenseSession?.startTime
                   ).format("HH:mm")
                 : "",
-              border: true,
-              align: "center",
-            },
-            {
-              value: student?.thesisRegistrations?.[0]?.thesisProject?.room?.name || "",
-              border: true,
-              align: "center",
-            },
-            { value: "", border: true },
-            { value: "", border: true },
-            { value: "", border: true },
+              phongbaove: student?.thesisRegistrations?.[0]?.thesisProject?.room?.name || "",
+
+             }
           ],
         }
-      }) ?? []
-    const gapRow: TableRow = {
-      cells: [{ value: null, border: false }],
-    }
-    const totalRow: TableRow = {
-      cells: [
-        {
-          value: `(Tổng số: ${allStudentsInClasses?.length} học viên)`,
-          align: "center",
-          colSpan: 13,
-          border: false,
-          bold: true,
-        },
-      ],
-    }
+      })
     const dotxet =
       allStudentsInClasses?.length > 0
         ? allStudentsInClasses[0]?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.name
         : ""
-    await exportFromTemplate({
-      templateUrl: getMinioUrl("mta/template/DanhSachBaoVe.xlsx"),
-      sheets: [
-        {
-          sheet: "DanhSachBaoVe",
-          rows: [...row, gapRow, totalRow],
-          tableStartCell: { row: 7, col: 1 },
-          data: {
-            dotxet: dotxet || "",
-          },
-        },
-      ],
+    const payload: ExcelTemplateBody = {
+      head: { data: null },
+      tail: { data: null },
       fileName: "DanhSachBaoVe",
-    })
+      path: "DanhSachBaoVe.xlsx",
+      payload: [{ data:{
+        dotxet: dotxet || "",
+        data: data,
+      }}],
+      showGridLines: true,
+      wrapText: true,
+    }
+    const response = await excelTemplate(payload)
+    if (response.status !== 200) {
+      message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
+      return
+    }
+    const blob = response.data
+    downloadFile(blob, "DanhSachBaoVe.xlsx")
+    message.success("Xuất file thành công")
   } catch (error) {
     message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
   } finally {
@@ -698,6 +660,14 @@ export const exportHosobvlv = async ({
       const chutich = thanhvienhoidong?.find((member: any) => member.role === CouncilRole.CHAIRMAN)
       const thuky = thanhvienhoidong?.find((member: any) => member.role === CouncilRole.SECRETARY)
       const uyvien = thanhvienhoidong?.find((member: any) => member.role === CouncilRole.MEMBER)
+      const nguoikiqddt =
+          student?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.defenseDecisionMaker?.trim() || ""
+        const qddtKyTokens = nguoikiqddt.split(/\s+/).filter(Boolean)
+        const chucVuNguoiKyQddt = qddtKyTokens[0] ?? ""
+        const tenNguoiKyQddt = qddtKyTokens.slice(1).join(" ").trim()
+        const text1 = chucVuNguoiKyQddt === "GĐ" ? "GIÁM ĐỐC" : "KT.GIÁM ĐỐC"
+        const text2 = text1 === "GIÁM ĐỐC" ? "" : "PHÓ GIÁM ĐỐC"
+      // const nguoiKi
       const data = {
         tenhocvien: student.userProfile?.fullname || "",
         type: student.thesisRegistrations?.[0]?.thesisProject?.type,
@@ -706,17 +676,20 @@ export const exportHosobvlv = async ({
         nganh:
           student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.trainingField?.name ||
           "",
-        detai: student?.thesisRegistrations?.[0]?.thesisProject?.title || "",
+        detai: `Đề tài: "${student?.thesisRegistrations?.[0]?.thesisProject?.title || ""}"`,
         ngaybaove: student?.thesisRegistrations?.[0]?.thesisProject?.defenseDate
           ? dayjs(student?.thesisRegistrations?.[0]?.thesisProject?.defenseDate).format(
               "DD/MM/YYYY"
             )
           : "",
-        phanbien1: phanbien1?.expert?.name || "",
-        phanbien2: phanbien2?.expert?.name || "",
-        chutich: chutich?.expert?.name || "",
-        thuky: thuky?.expert?.name || "",
-        uyvien: uyvien?.expert?.name || "",
+        phanbien1: getSupervisorName(phanbien1?.expert) || "",
+        phanbien2: getSupervisorName(phanbien2?.expert) || "",
+        chutich: getSupervisorName(chutich?.expert) || "",
+        thuky: getSupervisorName(thuky?.expert) || "",
+        uyvien: getSupervisorName(uyvien?.expert) || "",
+        nguoiki:tenNguoiKyQddt,
+        text1: text1,
+        text2: text2,
       }
       return {
         // sheet: `${student.userProfile?.code}`,
@@ -742,13 +715,6 @@ export const exportHosobvlv = async ({
     const blob = response.data
     downloadFile(blob, "Hosobvlv.xlsx")
     message.success("Xuất file thành công")
-    // await exportFromTemplate({
-    //   templateUrl: getMinioUrl("mta/template/HoSoBVLVTN.xlsx"),
-    //   sheets: allSheetOptions ?? [],
-    //   fileName: "Hosobvlv",
-    //   mergeSheetsToOne: true,
-    //   sheetName: "Hosobvlv",
-    // })
   } catch (error) {
     message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
   } finally {
