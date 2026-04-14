@@ -563,6 +563,7 @@ export default function ThoiKhoaBieu({
               columns={[
                 {
                   title: "Mã LMH",
+                  dataIndex: "code",
                   width: 130,
                   align: "center",
                   type: "input",
@@ -570,6 +571,7 @@ export default function ThoiKhoaBieu({
                 },
                 {
                   title: "Tên môn",
+                  dataIndex: "name",
                   align: "center",
                   type: "input",
                   onCell: (record) => ({
@@ -591,6 +593,7 @@ export default function ThoiKhoaBieu({
                 },
                 {
                   title: "Kíp",
+                  dataIndex: "schedule",
                   align: "center",
                   type: "select",
                   width: 60,
@@ -621,7 +624,7 @@ export default function ThoiKhoaBieu({
                           }}
                           className="hover:text-primary cursor-pointer"
                         >
-                          {e.code}
+                          {e.code}{" "}
                         </span>
                       ))}
                     </p>
@@ -629,10 +632,11 @@ export default function ThoiKhoaBieu({
                 },
                 {
                   title: "Số SV",
+                  dataIndex: "maxStudent",
                   width: 80,
                   align: "center",
                   type: "order",
-                  distinctFilters: ["maxStudent", "credit"],
+                  // distinctFilters: ["maxStudent", "credit"],
                   render: (_, record) => (
                     <p>
                       {record?.fixedClasses?.reduce(
@@ -644,6 +648,7 @@ export default function ThoiKhoaBieu({
                 },
                 {
                   title: "Giảng viên 1",
+                  dataIndex: "mainLecturer",
                   align: "center",
                   type: "input",
                   render: (__, record) => (
@@ -660,6 +665,7 @@ export default function ThoiKhoaBieu({
                 },
                 {
                   title: "Giảng viên 2",
+                  dataIndex: "extraLecturer",
                   align: "center",
                   type: "input",
                   render: (__, record) => (
@@ -676,6 +682,7 @@ export default function ThoiKhoaBieu({
                 },
                 {
                   title: "Hình thức thi",
+                  dataIndex: "examType",
                   align: "center",
                   width: 150,
                   type: "select",
@@ -687,6 +694,7 @@ export default function ThoiKhoaBieu({
                 },
                 {
                   title: "Khu vực",
+                  dataIndex: "room",
                   align: "center",
                   width: 150,
                   type: "input",
