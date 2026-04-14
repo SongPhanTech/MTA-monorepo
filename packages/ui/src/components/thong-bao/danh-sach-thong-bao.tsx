@@ -34,7 +34,7 @@ function DanhSachThongBao() {
         <Space direction="vertical">
           {data?.map((item) => {
             return (
-              <p key={item.id} onClick={() => onOpen(item.id)} className="cursor-pointer">
+              <div key={item?.id} onClick={() => {console.log("open into");onOpen(item?.id)}} className="cursor-pointer">
                 <Alert
                   showIcon
                   icon={<NotificationOutlined />}
@@ -45,7 +45,7 @@ function DanhSachThongBao() {
                   }
                   type={item.type === "URGENT" ? "error" : "info"}
                 />
-              </p>
+              </div>
             )
           })}
         </Space>
