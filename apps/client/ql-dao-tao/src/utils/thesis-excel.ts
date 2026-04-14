@@ -583,14 +583,12 @@ export const exportDanhSachBaoVe = async ({
   showSpinner()
   try {
     const data  = allStudentsInClasses?.map((student, index) => {
-        return {
-          data: [
-            { stt: index + 1,
+        return { stt: index + 1,
               chuyennganh: student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || "",
-              doituongdaotao: tenDoiTuong[student?.fixedClass?.trainingCourse?.trainingObjectType?.type as keyof typeof tenDoiTuong]?.fullname || "",
+              dt: tenDoiTuong[student?.fixedClass?.trainingCourse?.trainingObjectType?.type as keyof typeof tenDoiTuong]?.shortname || "",
               lastname: student.userProfile?.lastName || "",
               firstname: student.userProfile?.firstName || "",
-              emptyValue:"",
+              empty:"",
               ngaybaove: student?.thesisRegistrations?.[0]?.thesisProject?.defenseDate
                 ? dayjs(student?.thesisRegistrations?.[0]?.thesisProject?.defenseDate).format(
                     "DD/MM/YYYY"
@@ -603,21 +601,22 @@ export const exportDanhSachBaoVe = async ({
                 : "",
               phongbaove: student?.thesisRegistrations?.[0]?.thesisProject?.room?.name || "",
 
-             }
-          ],
+             }     
         }
-      })
+      )
     const dotxet =
       allStudentsInClasses?.length > 0
         ? allStudentsInClasses[0]?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.name
         : ""
+    const soluonghocvien = allStudentsInClasses?.length
     const payload: ExcelTemplateBody = {
       head: { data: null },
       tail: { data: null },
       fileName: "DanhSachBaoVe",
       path: "DanhSachBaoVe.xlsx",
       payload: [{ data:{
-        dotxet: dotxet || "",
+        dotxet: dotxet.trim().toUpperCase() || "",
+        soluonghocvien: soluonghocvien,
         data: data,
       }}],
       showGridLines: true,
@@ -819,9 +818,9 @@ export const exportSaoQDHDLV = async ({
         const chuyennganh = major?.name || ""
         const detai = thesisProject.title || ""
         const hoten = student?.userProfile?.fullname || ""
-        const ngayQD = thesisProject?.thesisSession?.decisionDate ? dayjs(thesisProject?.thesisSession?.defenseDecisionDate).format("DD") : ""
-        const thangQD = thesisProject?.thesisSession?.decisionDate ? dayjs(thesisProject?.thesisSession?.defenseDecisionDate).format("MM") : ""
-        const namQD = thesisProject?.thesisSession?.decisionDate ? dayjs(thesisProject?.thesisSession?.defenseDecisionDate).format("YYYY") : ""
+        const ngayQD = thesisProject?.thesisSession?.decisionDate ? dayjs(thesisProject?.thesisSession?.decisionDate).format("DD") : ""
+        const thangQD = thesisProject?.thesisSession?.decisionDate ? dayjs(thesisProject?.thesisSession?.decisionDate).format("MM") : ""
+        const namQD = thesisProject?.thesisSession?.decisionDate ? dayjs(thesisProject?.thesisSession?.decisionDate).format("YYYY") : ""
         const canbohuongdan1 = `1. ${getSupervisorName(supervisor,false,true)}`
         const canbohuongdan2 = coSupervisor ? `2. ${getSupervisorName(coSupervisor,false,true)}` : ""
         const khoaquanli = thesisProject.organization?.sTen || ""
