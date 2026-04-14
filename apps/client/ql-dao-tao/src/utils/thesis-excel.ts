@@ -70,6 +70,7 @@ interface DsnlvtvData {
     dotxet: string
     data: DsnlvtvTable[]
     tongSo: string
+    nguoiki: string
   }
 }
 interface DsnlvtvTable {
@@ -307,10 +308,15 @@ export const exportPhuLucDsLuanVan = async ({
   try {
     const organizationMap = new Map<string, any>()
     let dotxet = ""
-
+    // let soQD = ""
+    // let ngayQD = ""
     allStudentsInClasses.forEach((student) => {
       dotxet = dotxet || student?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.name || ""
       const thesisProject = student?.thesisRegistrations?.[0]?.thesisProject
+      // soQD = soQD || student?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.decisionNumber || ""
+      // ngayQD = ngayQD || student?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.decisionDate
+      //   ? dayjs(student?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.decisionDate).format("DD/MM/YYYY")
+      //   : ""
       if (!thesisProject) return
       const organizationId = thesisProject.organization?.Id || ""
       const organizationName = thesisProject.organization?.sTen || "Chưa có đơn vị"
@@ -335,7 +341,7 @@ export const exportPhuLucDsLuanVan = async ({
         tendetai: thesisProject.title || "",
         gvhd1: getSupervisorName(thesisProject.supervisor ) || "",
         gvhd2: getSupervisorName(thesisProject.coSupervisor) || "",
-        isThesis: thesisProject.thesisType === ThesisType.THESIS ? "Luận văn" : "Đồ án",
+        isThesis: thesisProject.type,
         language: thesisProject.language.trim(),
       })
     })
@@ -346,37 +352,50 @@ export const exportPhuLucDsLuanVan = async ({
       return
     }
     let count = 1
-    const dataRows: TableRow[] = result.flatMap((item: any) => {
+    const headerRow: TableRow = {
+      cells: [
+        { value: "STT", border: true, align: "center",fontSize:12,rowSpan: 2 },
+        { value: "Họ và tên học viên", border: true, align: "center",fontSize:12,bold: true,rowSpan: 2 },
+        { value: "Tên đề tài luận văn thạc sĩ", border: true, align: "center",fontSize:12,bold: true,rowSpan: 2 },
+        { value: "Cán bộ hướng dẫn", border: true, align: "center",fontSize:12,bold: true,rowSpan: 2 },
+        { value: "Luận văn/đề án", border: true, align: "center",fontSize:12,bold: true,rowSpan: 2 },
+        { value: "Ghi chú", border: true, align: "center",fontSize:12,bold: true,rowSpan: 2 },
+      ],
+    }
+    const dataRows: TableRow[] = result.flatMap((item: any,index: number) => {
       const orgRow: TableRow = {
         cells: [
           {
-            value: `${item.sCode} - ${item.sTen}`,
+            value: `${index + 1}.${item.sCode} - ${item.sTen} (${item.thesisProject.length} học viên)`,
             border: true,
             align: "center",
             colSpan: 6,
             bold: true,
+            fontSize:12,
           },
         ],
       }
       const thesisRows: TableRow[] = item.thesisProject.map((thesis: any) => {
         return {
           cells: [
-            { value: count++, border: true, align: "center" },
+            { value: count++, border: true, align: "center",fontSize:12 },
             {
               value: `${thesis.hovatenhocvien}\n${thesis.ngaysinh}\n${thesis.doituongdaotao}-${thesis.khoa}`,
               border: true,
               align: "left",
+              fontSize:12,
             },
-            { value: `${thesis.tendetai}`, border: true, align: "left" },
+            { value: `${thesis.tendetai}`, border: true, align: "left",fontSize:12 },
             {
               value: `${thesis.gvhd1 ? `1. ${thesis.gvhd1}` : ""}\n${
                 thesis.gvhd2 ? `2. ${thesis.gvhd2}` : ""
               }`,
               border: true,
               align: "left",
+              fontSize:12,
             },
-            { value: `${thesis.isThesis}`, border: true, align: "center" },
-            { value: `${thesis.language}`, border: true, align: "center" },
+            { value: `${thesis.isThesis}`, border: true, align: "center",fontSize:12 },
+            { value: `${thesis.language}`, border: true, align: "center",fontSize:12 },
           ],
         }
       })
@@ -392,6 +411,8 @@ export const exportPhuLucDsLuanVan = async ({
           align: "center",
           colSpan: 6,
           border: false,
+          italic: true,
+          fontSize:12,
         },
       ],
     }
@@ -401,12 +422,18 @@ export const exportPhuLucDsLuanVan = async ({
         {
           sheet: "phulucluanvanthacsi",
           rows: [...dataRows, gapRow, totalRow],
-          tableStartCell: { row: 7, col: 1 },
-          data: { dotxet: dotxet || "" },
+          tableStartCell: { row: 5, col: 1 },
+          data: {
+            dotxet: dotxet || "",
+            // soQD: soQD || "",
+            // ngay: ngayQD.split("/")[0] || "",
+            // thang: ngayQD.split("/")[1] || "",
+            // nam: ngayQD.split("/")[2] || "",
+          },
         },
       ],
       fileName: "PhuLucDsLuanVan",
-    })
+    });
     message.success("Xuất file thành công")
   } catch (error) {
     message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
@@ -431,10 +458,10 @@ export const getExpertSupervisionStats = (allStudentsInClasses: any[]) => {
     if (!stats) {
       stats = {
         expertId: expertId,
-        name: expert.name ?? "",
-        sDonvi: expert.organization ?? "",
-        stk: expert.bankAccountNumber ?? "",
-        tennganhang: expert.bankName ?? "",
+        name: getSupervisorName(expert,false,false) as string || "",
+        sDonvi: expert?.workplace || expert?.lecturer?.organization?.sMa || "",
+        stk: expert?.bankAccountNumber || expert?.lecturer?.userProfile?.bankAccountNumber || "",
+        tennganhang: expert?.bankName || expert?.lecturer?.userProfile?.bankName || "",
         GVHD1Student: 0,
         GVHD2Student: 0,
         totalPayment: 0,
@@ -488,85 +515,52 @@ export const exportThongKeCbHdlv = async ({
       ? allStudentsInClasses[0]?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.name
       : ""
 
-  const tenkhoa = ""
-  const rows: TableRow[] = dataMapping?.map((item, index) => {
+  const tenkhoa =  allStudentsInClasses?.length > 0
+  ? allStudentsInClasses[0]?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.trainingCourse?.name
+  : ""
+  const data  = dataMapping?.map((item, index) => {
     return {
-      cells: [
-        { value: index + 1, border: true, align: "center" },
-        { value: item.name, border: true, align: "center" },
-        { value: item.sDonvi, border: true, align: "center" },
-        {
-          value: item.GVHD1Student + item.GVHD2Student || 0,
-          border: true,
-          align: "center",
-        },
-        { value: 0, border: true, align: "center" },
-        { value: item.GVHD1Student, border: true, align: "center" },
-        { value: item.GVHD2Student, border: true, align: "center" },
-        { value: item.totalPayment, border: true, align: "center" },
-        { value: item.stk, border: true, align: "center" },
-        { value: item.tennganhang, border: true, align: "center" },
-      ],
+      stt: index + 1,
+      gvhd: item.name,
+      donvi: item.sDonvi,
+      tongsohv: item.GVHD1Student + item.GVHD2Student || 0,
+      doclap: 0,
+      gvhd1: item.GVHD1Student,
+      gvhd2: item.GVHD2Student,
+      thanhtoan: item.totalPayment,
+      stk: item.stk,
+      bank: item.tennganhang,
     }
   })
-  const totalRow: TableRow = {
-    cells: [
-      { value: "", border: true, align: "center" },
-      {
-        value: "Tổng cộng",
-        border: true,
-        align: "right",
-        colSpan: 2,
-        bold: true,
-      },
-      {
-        value: dataMapping?.reduce((acc, item) => acc + item.GVHD1Student + item.GVHD2Student, 0),
-        border: true,
-        align: "center",
-        bold: true,
-      },
-      { value: 0, border: true, align: "center", bold: true },
-      {
-        value: dataMapping?.reduce((acc, item) => acc + item.GVHD1Student, 0),
-        border: true,
-        align: "center",
-        bold: true,
-      },
-      {
-        value: dataMapping?.reduce((acc, item) => acc + item.GVHD2Student, 0),
-        border: true,
-        align: "center",
-        bold: true,
-      },
-      {
-        value: dataMapping?.reduce((acc, item) => acc + item.totalPayment, 0),
-        border: true,
-        align: "center",
-        bold: true,
-      },
-      { value: "", border: true, align: "center", bold: true },
-      { value: "", border: true, align: "center", bold: true },
-    ],
-  }
   try {
-    await exportFromTemplate({
-      templateUrl: getMinioUrl("mta/template/ThongKeCanBoHuongDan.xlsx"),
-      sheets: [
-        {
-          sheet: "ThongKeCanBoHuongDan",
-          data: {
-            tendot: tendot || "",
-            tenkhoa: tenkhoa,
-            ngay: ngay,
-            thang: thang,
-            nam: nam,
-          },
-          rows: [...rows, totalRow],
-          tableStartCell: { row: 10, col: 1 },
-        },
-      ],
+    const payload: ExcelTemplateBody = {
+      head: { data: null },
+      tail: { data: null },
       fileName: "ThongKeCanBoHuongDan",
-    })
+      path: "ThongKeCanBoHuongDan.xlsx",
+      payload: [{ data:{
+        tendot: tendot || "",
+        tenkhoa: tenkhoa,
+        ngay: ngay,
+        thang: thang,
+        nam: nam,
+        tongsohocvien: dataMapping?.reduce((acc, item) => acc + item.GVHD1Student + item.GVHD2Student, 0),
+        tongsohd1: dataMapping?.reduce((acc, item) => acc + item.GVHD1Student, 0),
+        tongsohd2: dataMapping?.reduce((acc, item) => acc + item.GVHD2Student, 0),
+        tongsotien: dataMapping?.reduce((acc, item) => acc + item.totalPayment, 0),
+        data: data,
+      }}],
+      showGridLines: true,
+      wrapText: true,
+    }
+    const response = await excelTemplate(payload)
+    if (response.status !== 200) {
+      message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
+      return
+    }
+    const blob = response.data
+    downloadFile(blob, "ThongKeCanBoHuongDan.xlsx")
+    message.success("Xuất file thành công")
   } catch (error) {
     message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
   } finally {
@@ -1412,6 +1406,7 @@ const convertToDsnlvtvData = (allStudentsInClasses: any[]): DsnlvtvData => {
       data: {
         khoa: "",
         dotxet: "",
+        nguoiki: "",
         data: [],
         tongSo: "0",
       },
@@ -1432,8 +1427,8 @@ const convertToDsnlvtvData = (allStudentsInClasses: any[]): DsnlvtvData => {
 
     const thongTinBaoVe = `${hoTen} \n ${doiTuong} - ${khoaHoc} - ${chuyenNganh}`
 
-    const gvhd1 = project?.supervisor?.name
-    const gvhd2 = project?.coSupervisor?.name
+    const gvhd1 = getSupervisorName(project?.supervisor,false,false) as string || ""
+    const gvhd2 = getSupervisorName(project?.coSupervisor,false,false) as string || ""
 
     let thongTinHuongDan = ""
     if (gvhd1 && gvhd2) {
@@ -1459,6 +1454,7 @@ const convertToDsnlvtvData = (allStudentsInClasses: any[]): DsnlvtvData => {
 
   return {
     data: {
+      nguoiki: firstProject?.thesisSession?.chief?.trim() || "",
       khoa: allStudentsInClasses[0]?.fixedClass?.trainingCourse?.name || "",
       dotxet: firstProject?.thesisSession?.name || "",
       data: tableData,
@@ -1537,8 +1533,8 @@ const convertToThongKeCbThamGiaHdData = (allStudentsInClasses: any[]): ThongKeCb
 
       project.council.members.forEach((member: any) => {
         const expert = member.expert
-        const name = expert.lecturer ? expert.lecturer.userProfile?.fullname : expert.name
-        const donViQuanLi = expert.lecturer ? expert.lecturer.organization : expert.organization
+        const name = getSupervisorName(expert,false,false) as string || ""
+        const donViQuanLi = expert?.workplace || expert?.lecturer?.organization?.sMa || ""
 
         if (!expert?.id) return
 
@@ -2003,7 +1999,7 @@ const convertToBanSaoHDDGLV = (allStudentsInClasses: any[],signerName?: string,i
         nganh: nganh,
         chuyenNganh: chuyenNganh,
         deTai: deTai,
-        dieu1: `Điều 1. Thành lập hội đồng đánh giá ${loaiLuanVan} tốt nghiệp thạc sĩ ngành ${nganh} (${chuyenNganh}) về đề tài "${deTai}". \n     Học viên thực hiện: ${tenhocvien}, sinh ngày ${ngaysinh}, Khoá ${khoaHoc} (${nienkhoahoc}). \n     Cán bộ hướng dẫn: ${gvhd}.\n     Chỉ định và mời các đồng chí có tên sau đây tham gia hội đồng:
+        dieu1: `Điều 1. Thành lập hội đồng đánh giá ${loaiLuanVan} tốt nghiệp thạc sĩ ngành ${nganh} (${chuyenNganh}) về đề tài "${deTai}". \n     Học viên thực hiện: ${tenhocvien}, sinh ngày ${ngaysinh}, ${khoaHoc} (${nienkhoahoc}). \n     Cán bộ hướng dẫn: ${gvhd}.\n     Chỉ định và mời các đồng chí có tên sau đây tham gia hội đồng:
         `,
         tenHocVien: student.userProfile?.fullname || "",
         ngaySinh: student.userProfile?.dateOfBirth
