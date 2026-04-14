@@ -1,5 +1,7 @@
 import { queryClient } from "@api/index"
 import Table from "@components/commons/table"
+import DeleteIcon from "@components/icons/delete"
+import EditIcon from "@components/icons/edit"
 import useSpinner from "@hooks/spinner"
 import type { PlanTraining } from "@workspace/db/client"
 import { $Enums } from "@workspace/db/client"
@@ -7,6 +9,7 @@ import { sqlTransaction } from "@workspace/libs/api/model"
 import type { OpenSubjectClass } from "@workspace/libs/api/schemas/openSubjectClass"
 import { useOpenSubjectClass } from "@workspace/libs/api/training"
 import { useAbility } from "@workspace/permissions/hooks"
+import { useUpdateTrainingBlockSubject } from "@workspace/db/hooks"
 import {
   useFixedClassStore,
   useSemesterStore,
@@ -14,7 +17,7 @@ import {
   useTrainingMajorStore,
   useTrainingObjectTypeStore,
 } from "@workspace/ui"
-import { Button, Col, Flex, Form, Input, message, Row, Skeleton } from "antd"
+import { Button, Col, Flex, Form, Input, message, Popconfirm, Row, Skeleton } from "antd"
 import _ from "lodash"
 import { useCallback, useMemo } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
@@ -106,6 +109,22 @@ export default function MonTheoKeHoachDuKien() {
   )
 
   const { showSpinner, hideSpinner } = useSpinner()
+
+  const { mutateAsync: updateTrainingBlockSubject } = useUpdateTrainingBlockSubject()
+
+  const handleDelete = async (id: string) => {
+    try {
+      showSpinner()
+      await updateTrainingBlockSubject({ where: { id }, data: { deletedAt: new Date() } })
+      message.success("Xoá môn khỏi kế hoạch dự kiến thành công")
+      debouncedRefetch()
+    } catch (error) {
+      console.log(error)
+      message.error("Xoá môn khỏi kế hoạch dự kiến thất bại")
+    } finally {
+      hideSpinner()
+    }
+  }
 
   const onSubmit = async () => {
     try {
@@ -322,6 +341,28 @@ export default function MonTheoKeHoachDuKien() {
                   width: 60,
                   align: "center",
                   onCell: (record) => ({ rowSpan: record.rowSpan }),
+                },
+                {
+                  title: "Thao tác",
+                  width: 100,
+                  align: "center",
+                  onCell: (record) => ({ rowSpan: record.rowSpan }),
+                  render: (_, record) => (
+                    <Row
+                      className="justify-center gap-2 flex-nowrap"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <DeleteIcon
+                        popConfirm={{
+                          title: "Bạn có chắc chắn muốn xoá môn học này khỏi kế hoạch dự kiến?",
+                          onConfirm: () => handleDelete(record.trainingBlockSubjectId),
+                          okText: "Xoá",
+                          cancelText: "Hủy",
+                          placement: "topRight",
+                        }}
+                      />
+                    </Row>
+                  ),
                 },
               ]}
               pagination={false}
