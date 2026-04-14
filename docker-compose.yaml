@@ -1,22 +1,22 @@
 version: "3.8"
 
 services:
-  backup:
-    build:
-      context: apps/backup
-      dockerfile: docker/Dockerfile
-    container_name: backup
-    hostname: backup
-    environment:
-      PBW_ENCRYPTION_KEY: "my_secret_key"
-      # PBW_POSTGRES_CONN_STRING: "postgresql://postgres:postgres@postgres:5432/pgbackweb?sslmode=disable"
-      TZ: "Asia/Ho_chi_minh"
-    ports:
-      - "8085:8085"
-    restart: always
-    depends_on:
-      postgres:
-        condition: service_healthy
+  # backup:
+  #   build:
+  #     context: apps/backup
+  #     dockerfile: docker/Dockerfile
+  #   container_name: backup
+  #   hostname: backup
+  #   environment:
+  #     PBW_ENCRYPTION_KEY: "my_secret_key"
+  #     # PBW_POSTGRES_CONN_STRING: "postgresql://postgres:postgres@postgres:5432/pgbackweb?sslmode=disable"
+  #     TZ: "Asia/Ho_chi_minh"
+  #   ports:
+  #     - "8085:8085"
+  #   restart: always
+  #   depends_on:
+  #     postgres:
+  #       condition: service_healthy
 
   postgres:
     image: postgres:17
@@ -37,18 +37,18 @@ services:
       timeout: 5s
       retries: 5
 
-  openobserve:
-    container_name: openobserve
-    image: public.ecr.aws/zinclabs/openobserve:latest
-    restart: unless-stopped
-    environment:
-      ZO_ROOT_USER_EMAIL: root@swantech.vn
-      ZO_ROOT_USER_PASSWORD: Password@123
-    ports:
-      - "5080:5080"
-    volumes:
-      - openobserve_data:/data
+  # openobserve:
+  #   container_name: openobserve
+  #   image: public.ecr.aws/zinclabs/openobserve:latest
+  #   restart: unless-stopped
+  #   environment:
+  #     ZO_ROOT_USER_EMAIL: root@swantech.vn
+  #     ZO_ROOT_USER_PASSWORD: Password@123
+  #   ports:
+  #     - "5080:5080"
+  #   volumes:
+  #     - openobserve_data:/data
 
 volumes:
   postgres_data:
-  openobserve_data:
+  # openobserve_data:
