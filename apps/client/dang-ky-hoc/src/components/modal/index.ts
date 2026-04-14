@@ -1,4 +1,4 @@
-import { XemTaiLieu } from "@workspace/ui"
+import { ViewNotificationModal, XemTaiLieu } from "@workspace/ui"
 import ConfirmModal from "./confirm-dialog"
 import ModalChiTietGiangVien from "./modal-chi-tiet-giang-vien"
 import ModalChiTietLopBienChe from "./modal-chi-tiet-lop-bien-che"
@@ -23,4 +23,5 @@ export {
   ModalChiTietSinhVien,
   PutOneSubjectClassModal,
   XemTaiLieu,
+  ViewNotificationModal,
 }

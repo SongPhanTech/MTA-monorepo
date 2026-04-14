@@ -13,6 +13,7 @@ const ViewNotificationModal = () => {
   } = useDisclosure<string>({
     tag: "ViewNotificationModal",
   })
+  console.log("id", id)
   const { onOpen: onOpenPreview } = useDisclosure<{
     uri: string
     name?: string
