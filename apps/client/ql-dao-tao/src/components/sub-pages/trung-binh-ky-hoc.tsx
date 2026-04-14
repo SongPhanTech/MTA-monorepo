@@ -6,7 +6,12 @@ import { getWarningLevelColor } from "@hooks/getWarningLevelColor"
 import useSpinner from "@hooks/spinner"
 import { useStudentTrainingTypeOptions } from "@hooks/studentTrainingType"
 import type { AcademicRankingConvert, FixedClass } from "@workspace/db/client"
-import { useCountStudent, useFindManyFixedClass, useFindManyStudent } from "@workspace/db/hooks"
+import {
+  useCountStudent,
+  useFindManyFixedClass,
+  useFindManyStudent,
+  useUpdateManyStudentSemesterResult,
+} from "@workspace/db/hooks"
 import {
   useCalculateStudentSemesterResultJson,
   useExportStudentSemesterResult,
@@ -18,7 +23,7 @@ import {
   useTrainingCourseStore,
   useTrainingObjectTypeStore,
 } from "@workspace/ui"
-import { Button, Checkbox, Col, Flex, Form, message, Row, Tag, Tooltip } from "antd"
+import { Button, Checkbox, Col, Flex, Form, message, Modal, Row, Tag, Tooltip } from "antd"
 import dayjs from "dayjs"
 import { saveAs } from "file-saver"
 import "dayjs/locale/vi"
@@ -34,6 +39,7 @@ const DiemTrungBinhKyHoc = () => {
 
   const [currentPage, setCurrentPage] = useState(1)
   const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
+  const [selectedRowKeys, setSelectedRowKeys] = useState<any[]>([])
   const [filters, setFilters] = useState<FilterProps>({
     code: "",
     name: "",
@@ -165,6 +171,7 @@ const DiemTrungBinhKyHoc = () => {
 
   const { mutateAsync: calculateSemesterResults } = useCalculateStudentSemesterResultJson()
   const { mutateAsync: exportExcel } = useExportStudentSemesterResult()
+  const { mutateAsync: updateManyStudentSemesterResult } = useUpdateManyStudentSemesterResult()
 
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
@@ -238,6 +245,87 @@ const DiemTrungBinhKyHoc = () => {
     }
   }
 
+  const rowSelection = {
+    selectedRowKeys,
+    getCheckboxProps: (record: any) => ({
+      disabled: !record?.studentSemesterResult?.[0]?.id,
+    }),
+    onChange: (newSelectedRowKeys: any[]) => {
+      setSelectedRowKeys(newSelectedRowKeys)
+    },
+  }
+
+  const handleApprove = async (approved: boolean) => {
+    try {
+      if (!selectedRowKeys.length) {
+        message.warning("Vui lòng chọn ít nhất một sinh viên")
+        return
+      }
+
+      const selectedSemesterResults = selectedRowKeys
+        .map(
+          (studentId) =>
+            dataStudents?.find((student: any) => student.id === studentId)
+              ?.studentSemesterResult?.[0]
+        )
+        .filter(Boolean)
+
+      const semesterResultIds = selectedSemesterResults
+        .filter((result: any) => result.approved !== approved)
+        .map((result: any) => result.id)
+
+      if (!semesterResultIds.length) {
+        message.warning(
+          approved ? "Không có bản ghi nào cần phê duyệt" : "Không có bản ghi nào cần bỏ phê duyệt"
+        )
+        return
+      }
+
+      await updateManyStudentSemesterResult({
+        where: {
+          id: {
+            in: semesterResultIds,
+          },
+        },
+        data: { approved },
+      })
+
+      message.success(approved ? "Phê duyệt thành công" : "Bỏ phê duyệt thành công")
+      refetch()
+      setSelectedRowKeys([])
+    } catch (error: any) {
+      if (error?.info?.message) {
+        message.error(error?.info?.message)
+        return
+      }
+      message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
+    }
+  }
+
+  const handleOpenApprove = () => {
+    Modal.confirm({
+      title: "Xác nhận",
+      content: "Bạn có chắc chắn muốn phê duyệt không?",
+      okText: "Xác nhận",
+      cancelText: "Hủy",
+      onOk: async () => {
+        await handleApprove(true)
+      },
+    })
+  }
+
+  const handleOpenReject = () => {
+    Modal.confirm({
+      title: "Xác nhận",
+      content: "Bạn có chắc chắn muốn bỏ phê duyệt không?",
+      okText: "Xác nhận",
+      cancelText: "Hủy",
+      onOk: async () => {
+        await handleApprove(false)
+      },
+    })
+  }
+
   return (
     <div className="bg-white rounded-lg shadow-sm px-4">
       <Row>
@@ -266,6 +354,16 @@ const DiemTrungBinhKyHoc = () => {
             </Col>
             <Col span={6}>
               <Flex justify="end" gap={4}>
+                <Button onClick={handleOpenReject} disabled={!selectedRowKeys.length}>
+                  Bỏ phê duyệt
+                </Button>
+                <Button
+                  type="primary"
+                  onClick={handleOpenApprove}
+                  disabled={!selectedRowKeys.length}
+                >
+                  Phê duyệt
+                </Button>
                 <Button type="primary" onClick={handleSummaryClick}>
                   Tổng kết kết quả học kỳ
                 </Button>
@@ -280,6 +378,7 @@ const DiemTrungBinhKyHoc = () => {
           <Table
             rowKey="id"
             className="m-0"
+            rowSelection={rowSelection}
             filters={filters}
             setFilters={(value) => {
               setFilters(value)
@@ -574,6 +673,19 @@ const DiemTrungBinhKyHoc = () => {
               {
                 title: "Đuổi học",
                 dataIndex: ["studentSemesterResult", "0", "expelled"],
+                align: "center",
+                width: 80,
+                render: (value) => {
+                  return (
+                    <div className="flex items-center justify-center">
+                      <Checkbox checked={value} disabled />
+                    </div>
+                  )
+                },
+              },
+              {
+                title: "Phê duyệt",
+                dataIndex: ["studentSemesterResult", "0", "approved"],
                 align: "center",
                 width: 80,
                 render: (value) => {
