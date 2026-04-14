@@ -223,7 +223,6 @@ export function LichCongTac({
   hiddenCalendarFilter?: boolean
   onlyMySchedule?: boolean
 }) {
-  console.log("onlyMySchedule", onlyMySchedule)
 
   const { data: profile } = useSession()
   const profileIdLogin = profile?.sDM_NhanVienId || undefined
