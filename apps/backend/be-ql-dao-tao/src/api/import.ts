@@ -607,17 +607,7 @@ app.openapi(importStudent, async (c) => {
     data.students.map((student) => student.position)
   )
 
-  const managementOrganizationMap = createCurriculumVersion
-    ? await buildOrgNameMapOrThrow(
-        prisma,
-        data.students.map((student) => student.managementOrganization)
-      )
-    : null
-
-  const classConsistencyMap = new Map<
-    string,
-    { className: string; curriculum: string; managementOrganization: string }
-  >()
+  const classConsistencyMap = new Map<string, { className: string; curriculum: string }>()
   const inconsistentClassCodes = new Set<string>()
 
   for (const student of data.students) {
@@ -625,18 +615,13 @@ app.openapi(importStudent, async (c) => {
 
     const existing = classConsistencyMap.get(student.fixedClassCode)
     if (existing) {
-      if (
-        existing.className !== student.fixedClass ||
-        existing.curriculum !== student.curriculum ||
-        existing.managementOrganization !== student.managementOrganization
-      ) {
+      if (existing.className !== student.fixedClass || existing.curriculum !== student.curriculum) {
         inconsistentClassCodes.add(student.fixedClassCode)
       }
     } else {
       classConsistencyMap.set(student.fixedClassCode, {
         className: student.fixedClass,
         curriculum: student.curriculum,
-        managementOrganization: student.managementOrganization,
       })
     }
   }
@@ -851,7 +836,6 @@ app.openapi(importStudent, async (c) => {
     uniqueClasses.map((s) => {
       const curriculumName = s.curriculum?.trim()
       const cvId = curriculumVersionMap.get(curriculumName)
-      const orgId = managementOrganizationMap?.get(s.managementOrganization?.trim())
 
       return prisma.fixedClass.upsert({
         where: { code: s.fixedClassCode },
@@ -859,14 +843,12 @@ app.openapi(importStudent, async (c) => {
           name: s.fixedClass,
           trainingCourseId: trainingCourse.id,
           curriculumVersionId: cvId,
-          managementOrganizationId: orgId,
         },
         create: {
           name: s.fixedClass,
           code: s.fixedClassCode,
           trainingCourseId: trainingCourse.id,
           curriculumVersionId: cvId,
-          managementOrganizationId: orgId,
           startYear: new Date().getFullYear(),
         },
       })

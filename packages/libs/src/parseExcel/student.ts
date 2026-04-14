@@ -476,13 +476,13 @@ export const parseSheetStudent = (file: ArrayBufferLike) => {
       }
 
       const managementOrganization = row[cols.managementOrganization]?.trim()
-      if (!managementOrganization) {
-        errors.push({
-          sheetRef: sheetName,
-          cellRef: `${cols.managementOrganization}${row.__rowNum__ + 1}`,
-          message: "Đơn vị quản lý không được để trống",
-        })
-      }
+      // if (!managementOrganization) {
+      //   errors.push({
+      //     sheetRef: sheetName,
+      //     cellRef: `${cols.managementOrganization}${row.__rowNum__ + 1}`,
+      //     message: "Đơn vị quản lý không được để trống",
+      //   })
+      // }
 
       const dateOfBirth = parseDateFromCell(cols.dateOfBirth, row.__rowNum__)
       if (row[cols.dateOfBirth] && !dateOfBirth.isValid()) {
@@ -523,7 +523,7 @@ export const parseSheetStudent = (file: ArrayBufferLike) => {
         trainingField: row[cols.trainingField]?.trim(),
         trainingMajor: row[cols.trainingMajor]?.trim(),
         curriculum: row[cols.curriculum]?.trim() as string,
-        managementOrganization: managementOrganization as string,
+        managementOrganization,
         objectType: row[cols.objectType]?.trim(),
         officerNumber: row[cols.officerNumber]?.trim(),
         rank: row[cols.rank]?.trim(),

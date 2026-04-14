@@ -774,6 +774,7 @@ export default function TrainingProgramSubjects() {
               {
                 title: "Tên môn học",
                 dataIndex: "name",
+                width: 300,
                 type: "input",
                 render: (__, record: { subject?: SubjectVersion }) => {
                   return record?.subject?.name
