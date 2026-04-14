@@ -2718,7 +2718,8 @@ exports.Prisma.StudentSemesterResultScalarFieldEnum = {
   academicWarningLevel: 'academicWarningLevel',
   disciplinaryWarningLevel: 'disciplinaryWarningLevel',
   suspended: 'suspended',
-  expelled: 'expelled'
+  expelled: 'expelled',
+  approved: 'approved'
 };
 
 exports.Prisma.StudentYearResultScalarFieldEnum = {

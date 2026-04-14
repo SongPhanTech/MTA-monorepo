@@ -4718,6 +4718,7 @@ model StudentSemesterResult {
   disciplinaryWarningLevel Int                     @default(0)
   suspended                Boolean                 @default(false)
   expelled                 Boolean                 @default(false)
+  approved                 Boolean                 @default(false)
 
   @@unique([studentId, semesterId])
   @@schema("ql-dao-tao")

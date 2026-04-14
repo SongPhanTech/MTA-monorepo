@@ -15944,6 +15944,10 @@ const metadata: ModelMeta = {
                     name: "expelled",
                     type: "Boolean",
                     attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                }, approved: {
+                    name: "approved",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 },
             }, uniqueConstraints: {
                 id: {

@@ -8912,7 +8912,8 @@ export namespace Prisma {
         academicWarningLevel: 'academicWarningLevel',
         disciplinaryWarningLevel: 'disciplinaryWarningLevel',
         suspended: 'suspended',
-        expelled: 'expelled'
+        expelled: 'expelled',
+        approved: 'approved'
     };
     export const StudentYearResultScalarFieldEnum: {
         id: 'id',
@@ -67674,6 +67675,7 @@ export namespace Prisma {
         readonly disciplinaryWarningLevel: FieldRef<"StudentSemesterResult", 'Int'>;
         readonly suspended: FieldRef<"StudentSemesterResult", 'Boolean'>;
         readonly expelled: FieldRef<"StudentSemesterResult", 'Boolean'>;
+        readonly approved: FieldRef<"StudentSemesterResult", 'Boolean'>;
     }
 
     export interface StudentYearResultDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
@@ -259290,6 +259292,7 @@ export namespace Prisma {
         disciplinaryWarningLevel: number | null
         suspended: boolean | null
         expelled: boolean | null
+        approved: boolean | null
     };
     export type StudentSemesterResultMaxAggregateOutputType = {
         id: string | null
@@ -259334,6 +259337,7 @@ export namespace Prisma {
         disciplinaryWarningLevel: number | null
         suspended: boolean | null
         expelled: boolean | null
+        approved: boolean | null
     };
     export type StudentSemesterResultCountAggregateOutputType = {
         id: number
@@ -259378,6 +259382,7 @@ export namespace Prisma {
         disciplinaryWarningLevel: number
         suspended: number
         expelled: number
+        approved: number
         _all: number
     };
     export type StudentSemesterResultAvgAggregateInputType = {
@@ -259469,6 +259474,7 @@ export namespace Prisma {
         disciplinaryWarningLevel?: true
         suspended?: true
         expelled?: true
+        approved?: true
     };
     export type StudentSemesterResultMaxAggregateInputType = {
         id?: true
@@ -259513,6 +259519,7 @@ export namespace Prisma {
         disciplinaryWarningLevel?: true
         suspended?: true
         expelled?: true
+        approved?: true
     };
     export type StudentSemesterResultCountAggregateInputType = {
         id?: true
@@ -259557,6 +259564,7 @@ export namespace Prisma {
         disciplinaryWarningLevel?: true
         suspended?: true
         expelled?: true
+        approved?: true
         _all?: true
     };
     export type StudentSemesterResultAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -259682,6 +259690,7 @@ export namespace Prisma {
         disciplinaryWarningLevel: number
         suspended: boolean
         expelled: boolean
+        approved: boolean
         _count: StudentSemesterResultCountAggregateOutputType | null
         _avg: StudentSemesterResultAvgAggregateOutputType | null
         _sum: StudentSemesterResultSumAggregateOutputType | null
@@ -259743,6 +259752,7 @@ export namespace Prisma {
         disciplinaryWarningLevel?: boolean
         suspended?: boolean
         expelled?: boolean
+        approved?: boolean
         student?: boolean | StudentDefaultArgs<ExtArgs>
         semester?: boolean | SemesterDefaultArgs<ExtArgs>
         rank?: boolean | StudentSemesterResult$rankArgs<ExtArgs>
@@ -259790,6 +259800,7 @@ export namespace Prisma {
         disciplinaryWarningLevel?: boolean
         suspended?: boolean
         expelled?: boolean
+        approved?: boolean
         student?: boolean | StudentDefaultArgs<ExtArgs>
         semester?: boolean | SemesterDefaultArgs<ExtArgs>
         rank?: boolean | StudentSemesterResult$rankArgs<ExtArgs>
@@ -259837,6 +259848,7 @@ export namespace Prisma {
         disciplinaryWarningLevel?: boolean
         suspended?: boolean
         expelled?: boolean
+        approved?: boolean
         student?: boolean | StudentDefaultArgs<ExtArgs>
         semester?: boolean | SemesterDefaultArgs<ExtArgs>
         rank?: boolean | StudentSemesterResult$rankArgs<ExtArgs>
@@ -259884,8 +259896,9 @@ export namespace Prisma {
         disciplinaryWarningLevel?: boolean
         suspended?: boolean
         expelled?: boolean
+        approved?: boolean
     };
-    export type StudentSemesterResultOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "studentId" | "semesterId" | "studyYear" | "semesterIndexInCourse" | "isLastSemester" | "baseScore" | "gpaBase4" | "cumulativeGpaBase4" | "gpaBase10" | "cumulativeGpaBase10" | "conductScore" | "studentTrainingType" | "rankId" | "lowestFinalScore" | "lowestGraduationScore" | "totalCredits" | "registeredCredits" | "retakingCredits" | "reExamCredits" | "passedCredits" | "failedCredits" | "accumulatedCredits" | "totalCreditsByCurriculum" | "totalFailedCredits" | "foreignLangPass" | "isClassMonitor" | "isUnionLeader" | "entryScore" | "isImproving" | "postponeWithReason" | "academicWarningLevel" | "disciplinaryWarningLevel" | "suspended" | "expelled", ExtArgs["result"]["studentSemesterResult"]>;
+    export type StudentSemesterResultOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "studentId" | "semesterId" | "studyYear" | "semesterIndexInCourse" | "isLastSemester" | "baseScore" | "gpaBase4" | "cumulativeGpaBase4" | "gpaBase10" | "cumulativeGpaBase10" | "conductScore" | "studentTrainingType" | "rankId" | "lowestFinalScore" | "lowestGraduationScore" | "totalCredits" | "registeredCredits" | "retakingCredits" | "reExamCredits" | "passedCredits" | "failedCredits" | "accumulatedCredits" | "totalCreditsByCurriculum" | "totalFailedCredits" | "foreignLangPass" | "isClassMonitor" | "isUnionLeader" | "entryScore" | "isImproving" | "postponeWithReason" | "academicWarningLevel" | "disciplinaryWarningLevel" | "suspended" | "expelled" | "approved", ExtArgs["result"]["studentSemesterResult"]>;
     export type StudentSemesterResultInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         student?: boolean | StudentDefaultArgs<ExtArgs>
         semester?: boolean | SemesterDefaultArgs<ExtArgs>
@@ -259951,6 +259964,7 @@ export namespace Prisma {
             disciplinaryWarningLevel: number
             suspended: boolean
             expelled: boolean
+            approved: boolean
         }, ExtArgs["result"]["studentSemesterResult"]>
         composites: {}
     };
@@ -378271,6 +378285,7 @@ export namespace Prisma {
         disciplinaryWarningLevel?: IntFilter<"StudentSemesterResult"> | number
         suspended?: BoolFilter<"StudentSemesterResult"> | boolean
         expelled?: BoolFilter<"StudentSemesterResult"> | boolean
+        approved?: BoolFilter<"StudentSemesterResult"> | boolean
         student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
         semester?: XOR<SemesterScalarRelationFilter, SemesterWhereInput>
         rank?: XOR<AcademicRankingConvertNullableScalarRelationFilter, AcademicRankingConvertWhereInput> | null
@@ -378318,6 +378333,7 @@ export namespace Prisma {
         disciplinaryWarningLevel?: SortOrder
         suspended?: SortOrder
         expelled?: SortOrder
+        approved?: SortOrder
         student?: StudentOrderByWithRelationInput
         semester?: SemesterOrderByWithRelationInput
         rank?: AcademicRankingConvertOrderByWithRelationInput
@@ -378370,6 +378386,7 @@ export namespace Prisma {
         disciplinaryWarningLevel?: IntFilter<"StudentSemesterResult"> | number
         suspended?: BoolFilter<"StudentSemesterResult"> | boolean
         expelled?: BoolFilter<"StudentSemesterResult"> | boolean
+        approved?: BoolFilter<"StudentSemesterResult"> | boolean
         student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
         semester?: XOR<SemesterScalarRelationFilter, SemesterWhereInput>
         rank?: XOR<AcademicRankingConvertNullableScalarRelationFilter, AcademicRankingConvertWhereInput> | null
@@ -378417,6 +378434,7 @@ export namespace Prisma {
         disciplinaryWarningLevel?: SortOrder
         suspended?: SortOrder
         expelled?: SortOrder
+        approved?: SortOrder
         _count?: StudentSemesterResultCountOrderByAggregateInput
         _avg?: StudentSemesterResultAvgOrderByAggregateInput
         _max?: StudentSemesterResultMaxOrderByAggregateInput
@@ -378469,6 +378487,7 @@ export namespace Prisma {
         disciplinaryWarningLevel?: IntWithAggregatesFilter<"StudentSemesterResult"> | number
         suspended?: BoolWithAggregatesFilter<"StudentSemesterResult"> | boolean
         expelled?: BoolWithAggregatesFilter<"StudentSemesterResult"> | boolean
+        approved?: BoolWithAggregatesFilter<"StudentSemesterResult"> | boolean
     };
     export type StudentYearResultWhereInput = {
         AND?: StudentYearResultWhereInput | StudentYearResultWhereInput[]
@@ -409679,6 +409698,7 @@ export namespace Prisma {
         disciplinaryWarningLevel?: number
         suspended?: boolean
         expelled?: boolean
+        approved?: boolean
         student: StudentCreateNestedOneWithoutStudentSemesterResultInput
         semester: SemesterCreateNestedOneWithoutStudentSemesterResultInput
         rank?: AcademicRankingConvertCreateNestedOneWithoutStudentSemesterResultInput
@@ -409726,6 +409746,7 @@ export namespace Prisma {
         disciplinaryWarningLevel?: number
         suspended?: boolean
         expelled?: boolean
+        approved?: boolean
     };
     export type StudentSemesterResultUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -409767,6 +409788,7 @@ export namespace Prisma {
         disciplinaryWarningLevel?: IntFieldUpdateOperationsInput | number
         suspended?: BoolFieldUpdateOperationsInput | boolean
         expelled?: BoolFieldUpdateOperationsInput | boolean
+        approved?: BoolFieldUpdateOperationsInput | boolean
         student?: StudentUpdateOneRequiredWithoutStudentSemesterResultNestedInput
         semester?: SemesterUpdateOneRequiredWithoutStudentSemesterResultNestedInput
         rank?: AcademicRankingConvertUpdateOneWithoutStudentSemesterResultNestedInput
@@ -409814,6 +409836,7 @@ export namespace Prisma {
         disciplinaryWarningLevel?: IntFieldUpdateOperationsInput | number
         suspended?: BoolFieldUpdateOperationsInput | boolean
         expelled?: BoolFieldUpdateOperationsInput | boolean
+        approved?: BoolFieldUpdateOperationsInput | boolean
     };
     export type StudentSemesterResultCreateManyInput = {
         id?: string
@@ -409858,6 +409881,7 @@ export namespace Prisma {
         disciplinaryWarningLevel?: number
         suspended?: boolean
         expelled?: boolean
+        approved?: boolean
     };
     export type StudentSemesterResultUpdateManyMutationInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -409899,6 +409923,7 @@ export namespace Prisma {
         disciplinaryWarningLevel?: IntFieldUpdateOperationsInput | number
         suspended?: BoolFieldUpdateOperationsInput | boolean
         expelled?: BoolFieldUpdateOperationsInput | boolean
+        approved?: BoolFieldUpdateOperationsInput | boolean
     };
     export type StudentSemesterResultUncheckedUpdateManyInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -409943,6 +409968,7 @@ export namespace Prisma {
         disciplinaryWarningLevel?: IntFieldUpdateOperationsInput | number
         suspended?: BoolFieldUpdateOperationsInput | boolean
         expelled?: BoolFieldUpdateOperationsInput | boolean
+        approved?: BoolFieldUpdateOperationsInput | boolean
     };
     export type StudentYearResultCreateInput = {
         id?: string
@@ -435748,6 +435774,7 @@ export namespace Prisma {
         disciplinaryWarningLevel?: SortOrder
         suspended?: SortOrder
         expelled?: SortOrder
+        approved?: SortOrder
     };
     export type StudentSemesterResultAvgOrderByAggregateInput = {
         studyYear?: SortOrder
@@ -435815,6 +435842,7 @@ export namespace Prisma {
         disciplinaryWarningLevel?: SortOrder
         suspended?: SortOrder
         expelled?: SortOrder
+        approved?: SortOrder
     };
     export type StudentSemesterResultMinOrderByAggregateInput = {
         id?: SortOrder
@@ -435859,6 +435887,7 @@ export namespace Prisma {
         disciplinaryWarningLevel?: SortOrder
         suspended?: SortOrder
         expelled?: SortOrder
+        approved?: SortOrder
     };
     export type StudentSemesterResultSumOrderByAggregateInput = {
         studyYear?: SortOrder
@@ -527097,6 +527126,7 @@ export namespace Prisma {
         disciplinaryWarningLevel?: number
         suspended?: boolean
         expelled?: boolean
+        approved?: boolean
         student: StudentCreateNestedOneWithoutStudentSemesterResultInput
         rank?: AcademicRankingConvertCreateNestedOneWithoutStudentSemesterResultInput
     };
@@ -527142,6 +527172,7 @@ export namespace Prisma {
         disciplinaryWarningLevel?: number
         suspended?: boolean
         expelled?: boolean
+        approved?: boolean
     };
     export type StudentSemesterResultCreateOrConnectWithoutSemesterInput = {
         where: StudentSemesterResultWhereUniqueInput
@@ -527968,6 +527999,7 @@ export namespace Prisma {
         disciplinaryWarningLevel?: IntFilter<"StudentSemesterResult"> | number
         suspended?: BoolFilter<"StudentSemesterResult"> | boolean
         expelled?: BoolFilter<"StudentSemesterResult"> | boolean
+        approved?: BoolFilter<"StudentSemesterResult"> | boolean
     };
     export type ScholarshipAwardUpsertWithWhereUniqueWithoutSemesterInput = {
         where: ScholarshipAwardWhereUniqueInput
@@ -555099,6 +555131,7 @@ export namespace Prisma {
         disciplinaryWarningLevel?: number
         suspended?: boolean
         expelled?: boolean
+        approved?: boolean
         semester: SemesterCreateNestedOneWithoutStudentSemesterResultInput
         rank?: AcademicRankingConvertCreateNestedOneWithoutStudentSemesterResultInput
     };
@@ -555144,6 +555177,7 @@ export namespace Prisma {
         disciplinaryWarningLevel?: number
         suspended?: boolean
         expelled?: boolean
+        approved?: boolean
     };
     export type StudentSemesterResultCreateOrConnectWithoutStudentInput = {
         where: StudentSemesterResultWhereUniqueInput
@@ -597164,6 +597198,7 @@ export namespace Prisma {
         disciplinaryWarningLevel?: number
         suspended?: boolean
         expelled?: boolean
+        approved?: boolean
         student: StudentCreateNestedOneWithoutStudentSemesterResultInput
         semester: SemesterCreateNestedOneWithoutStudentSemesterResultInput
     };
@@ -597209,6 +597244,7 @@ export namespace Prisma {
         disciplinaryWarningLevel?: number
         suspended?: boolean
         expelled?: boolean
+        approved?: boolean
     };
     export type StudentSemesterResultCreateOrConnectWithoutRankInput = {
         where: StudentSemesterResultWhereUniqueInput
@@ -635531,6 +635567,7 @@ export namespace Prisma {
         disciplinaryWarningLevel?: number
         suspended?: boolean
         expelled?: boolean
+        approved?: boolean
     };
     export type ScholarshipAwardCreateManySemesterInput = {
         id?: string
@@ -636130,6 +636167,7 @@ export namespace Prisma {
         disciplinaryWarningLevel?: IntFieldUpdateOperationsInput | number
         suspended?: BoolFieldUpdateOperationsInput | boolean
         expelled?: BoolFieldUpdateOperationsInput | boolean
+        approved?: BoolFieldUpdateOperationsInput | boolean
         student?: StudentUpdateOneRequiredWithoutStudentSemesterResultNestedInput
         rank?: AcademicRankingConvertUpdateOneWithoutStudentSemesterResultNestedInput
     };
@@ -636175,6 +636213,7 @@ export namespace Prisma {
         disciplinaryWarningLevel?: IntFieldUpdateOperationsInput | number
         suspended?: BoolFieldUpdateOperationsInput | boolean
         expelled?: BoolFieldUpdateOperationsInput | boolean
+        approved?: BoolFieldUpdateOperationsInput | boolean
     };
     export type StudentSemesterResultUncheckedUpdateManyWithoutSemesterInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -636218,6 +636257,7 @@ export namespace Prisma {
         disciplinaryWarningLevel?: IntFieldUpdateOperationsInput | number
         suspended?: BoolFieldUpdateOperationsInput | boolean
         expelled?: BoolFieldUpdateOperationsInput | boolean
+        approved?: BoolFieldUpdateOperationsInput | boolean
     };
     export type ScholarshipAwardUpdateWithoutSemesterInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -650110,6 +650150,7 @@ export namespace Prisma {
         disciplinaryWarningLevel?: number
         suspended?: boolean
         expelled?: boolean
+        approved?: boolean
     };
     export type StudentYearResultCreateManyStudentInput = {
         id?: string
@@ -650695,6 +650736,7 @@ export namespace Prisma {
         disciplinaryWarningLevel?: IntFieldUpdateOperationsInput | number
         suspended?: BoolFieldUpdateOperationsInput | boolean
         expelled?: BoolFieldUpdateOperationsInput | boolean
+        approved?: BoolFieldUpdateOperationsInput | boolean
         semester?: SemesterUpdateOneRequiredWithoutStudentSemesterResultNestedInput
         rank?: AcademicRankingConvertUpdateOneWithoutStudentSemesterResultNestedInput
     };
@@ -650740,6 +650782,7 @@ export namespace Prisma {
         disciplinaryWarningLevel?: IntFieldUpdateOperationsInput | number
         suspended?: BoolFieldUpdateOperationsInput | boolean
         expelled?: BoolFieldUpdateOperationsInput | boolean
+        approved?: BoolFieldUpdateOperationsInput | boolean
     };
     export type StudentSemesterResultUncheckedUpdateManyWithoutStudentInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -650783,6 +650826,7 @@ export namespace Prisma {
         disciplinaryWarningLevel?: IntFieldUpdateOperationsInput | number
         suspended?: BoolFieldUpdateOperationsInput | boolean
         expelled?: BoolFieldUpdateOperationsInput | boolean
+        approved?: BoolFieldUpdateOperationsInput | boolean
     };
     export type StudentYearResultUpdateWithoutStudentInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -664241,6 +664285,7 @@ export namespace Prisma {
         disciplinaryWarningLevel?: number
         suspended?: boolean
         expelled?: boolean
+        approved?: boolean
     };
     export type StudentYearResultCreateManyRankInput = {
         id?: string
@@ -664620,6 +664665,7 @@ export namespace Prisma {
         disciplinaryWarningLevel?: IntFieldUpdateOperationsInput | number
         suspended?: BoolFieldUpdateOperationsInput | boolean
         expelled?: BoolFieldUpdateOperationsInput | boolean
+        approved?: BoolFieldUpdateOperationsInput | boolean
         student?: StudentUpdateOneRequiredWithoutStudentSemesterResultNestedInput
         semester?: SemesterUpdateOneRequiredWithoutStudentSemesterResultNestedInput
     };
@@ -664665,6 +664711,7 @@ export namespace Prisma {
         disciplinaryWarningLevel?: IntFieldUpdateOperationsInput | number
         suspended?: BoolFieldUpdateOperationsInput | boolean
         expelled?: BoolFieldUpdateOperationsInput | boolean
+        approved?: BoolFieldUpdateOperationsInput | boolean
     };
     export type StudentSemesterResultUncheckedUpdateManyWithoutRankInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -664708,6 +664755,7 @@ export namespace Prisma {
         disciplinaryWarningLevel?: IntFieldUpdateOperationsInput | number
         suspended?: BoolFieldUpdateOperationsInput | boolean
         expelled?: BoolFieldUpdateOperationsInput | boolean
+        approved?: BoolFieldUpdateOperationsInput | boolean
     };
     export type StudentYearResultUpdateWithoutRankInput = {
         id?: StringFieldUpdateOperationsInput | string

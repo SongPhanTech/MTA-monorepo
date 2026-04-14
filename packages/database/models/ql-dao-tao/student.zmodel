@@ -197,6 +197,8 @@ model StudentSemesterResult extends Base {
   suspended                Boolean                 @default(false) // đình chỉ học
   expelled                 Boolean                 @default(false) // đuổi học
 
+  approved                 Boolean                 @default(false) // đã duyệt
+
   @@unique([studentId, semesterId])
   @@schema("ql-dao-tao")
 }
