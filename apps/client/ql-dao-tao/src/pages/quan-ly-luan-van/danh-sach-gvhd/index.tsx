@@ -155,11 +155,6 @@ export default function DanhSachGiangVienHuongDan() {
             rowSelection={rowSelection}
             columns={[
               {
-                title: "STT",
-                width: 60,
-                align: "center",
-              },
-              {
                 title: "Mã CBHD",
                 width: 150,
                 align: "center",
