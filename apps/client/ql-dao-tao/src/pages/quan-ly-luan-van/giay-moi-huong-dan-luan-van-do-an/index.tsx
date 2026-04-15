@@ -433,6 +433,7 @@ export default function GiayMoiHuongDanLuanVanDoAn({ role = "P7" }: DanhMucLuanV
               {
                 title: "Thao tác",
                 align: "center",
+                fixed: "right",
                 width: 80,
                 render: (_, record) => {
                   if (record?.id) {

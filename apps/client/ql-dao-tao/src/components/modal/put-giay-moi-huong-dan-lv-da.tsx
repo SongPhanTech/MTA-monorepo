@@ -243,7 +243,7 @@ const PutEditGiayMoiHuongDanLVDA = () => {
       onFinish={onOk}
       onCancel={onClose}
       maskClosable
-      title={isCreateMode ? "Tạo mới giấy mời hướng dẫn" : "Sửa giấy mời hướng dẫn luận văn/đồ án"}
+      title={isCreateMode ? "Tạo mới giấy mời hướng dẫn" : "Sửa giấy mời hướng dẫn luận văn/đề án"}
       className="w-[720px]"
     >
       <Col span={24} className="rounded-lg bg-slate-50 px-4 py-3 text-sm text-slate-600">
@@ -266,7 +266,7 @@ const PutEditGiayMoiHuongDanLVDA = () => {
             <Select
               placeholder="Chọn sinh viên"
               showSearch
-              filterOption={false}
+              optionFilterProp="label"
               allowClear
               options={candidateStudents.map((item) => ({
                 label: `${item.code ? `${item.code} -` : ""} ${item.userProfile?.fullname || ""}`,
@@ -289,7 +289,7 @@ const PutEditGiayMoiHuongDanLVDA = () => {
             placeholder="Chọn loại"
             options={[
               { label: "Luận văn", value: "Luận văn" },
-              { label: "Đồ án", value: "Đồ án" },
+              { label: "Đề án", value: "Đề án" },
             ]}
             allowClear
           />
