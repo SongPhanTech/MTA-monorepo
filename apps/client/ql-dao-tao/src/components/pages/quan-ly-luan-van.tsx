@@ -167,7 +167,7 @@ const PHU_LUC_TEMPLATE_COLUMN_DEFS: Record<PhuLucTemplateColumnKey, TemplateColu
       const project = record?.thesisRegistrations?.[0]?.thesisProject
       const major = record?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor
       const khoa = record?.fixedClass?.trainingCourse
-      return `${project?.type || ""} tốt nghiệp thạc sĩ ngành ${major?.name || ""}, Khóa: ${khoa?.name || ""} (${khoa?.academicYear || ""}), Đề tài: ${project?.title || ""}`
+      return `${project?.type || ""} tốt nghiệp thạc sĩ ngành ${major?.name || ""}, ${khoa?.name || ""} (${khoa?.academicYear || ""}), Đề tài: ${project?.title || ""}`
     },
   },
   tenChuTich: {

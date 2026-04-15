@@ -349,9 +349,7 @@ const PutEditQuanLyLuanVan = ({
         })
 
         if (phulucFieldsChanged) {
-          message.info(
-            "Cập nhật thông tin luận văn thành công. Lưu ý: Để cập nhật thông tin hội đồng và quyết định, vui lòng sử dụng trang quản lý phụ lục"
-          )
+          message.success("Cập nhật thông tin luận văn thành công")
         } else {
           message.success("Cập nhật thông tin giấy mời hướng dẫn thành công")
         }
