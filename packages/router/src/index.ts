@@ -676,6 +676,18 @@ const NAVIGATION: NavigationType = {
             path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_PHU_LUC_QUYET_DINH_HOI_DONG_DANH_GIA_LUAN_VAN_DE_AN,
             description: "Phụ lục quyết định hội đồng đánh giá luận văn/đề án",
           },
+          {
+            id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_LUAN_VAN_DANH_SACH_HO_SO_BAO_VE,
+            label: "Danh sách hồ sơ bảo vệ",
+            path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_LUAN_VAN_DANH_SACH_HO_SO_BAO_VE,
+            description: "Danh sách hồ sơ bảo vệ",
+          },
+          {
+            id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_LUAN_VAN_DE_XUAT_HOI_DONG_DANH_GIA,
+            label: "Đề xuất hội đồng đánh giá",
+            path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_LUAN_VAN_DE_XUAT_HOI_DONG_DANH_GIA,
+            description: "Đề xuất hội đồng đánh giá",
+          },
         ],
       },
       {

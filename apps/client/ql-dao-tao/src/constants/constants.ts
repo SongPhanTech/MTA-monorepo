@@ -1,5 +1,6 @@
 import { $Enums } from "@workspace/db/client"
 
+const DEFAULT_PAGINATE_PAGE = 1
 const DEFAULT_PAGINATE_SIZE = 10
 const MAX_INPUT_LENGTH = 255
 const MAX_TEXTAREA_LENGTH = 1000
@@ -187,6 +188,7 @@ const EXAMTYPECOLOR: Record<$Enums.ExamType, string> = {
 }
 
 export {
+  DEFAULT_PAGINATE_PAGE,
   DEFAULT_PAGINATE_SIZE,
   MAX_INPUT_LENGTH,
   MAX_TEXTAREA_LENGTH,
