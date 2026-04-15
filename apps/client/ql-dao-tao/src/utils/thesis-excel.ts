@@ -1726,8 +1726,6 @@ const convertToThanhToanHuongDanTrongHvData = (
         ? supervisorNames.map((name, index) => `${index + 1}. ${name}`).join("\n")
         : (supervisorNames[0] ?? "Chưa có GVHD")
 
-    // const loaiDoiTuong = student.fixedClass?.trainingCourse?.trainingObjectType?.type || ""
-    // const shortDoiTuong = tenDoiTuong[loaiDoiTuong as keyof typeof tenDoiTuong]?.shortname || ""
     const tenKhoa = student.fixedClass?.trainingCourse?.name || ""
     const thongTinKhoaStr = `${tenKhoa}`
 
@@ -2369,9 +2367,9 @@ const convertToHDDanhGiaLuanVanTemplateData = (
   const now = dayjs()
   const orgMap = new Map<string, { code: string; name: string; students: any[] }>()
 
-  allStudentsInClasses.forEach((student) => {
+  allStudentsInClasses.filter((student) => student?.thesisRegistrations?.[0]?.thesisProject != null).forEach((student) => {
     const project = student?.thesisRegistrations?.[0]?.thesisProject
-    if (!project) return
+    if (!project) return 
 
     const organization = project.organization
     const orgId = organization?.Id || "no-id"
@@ -2440,7 +2438,7 @@ const convertToHDDanhGiaLuanVanTemplateData = (
       tenDonViQuanLi: groupedData.map((g) => g.tenDonViQuanLi).join("\n"),
     },
     tail: {
-      tongSoHocVien: allStudentsInClasses.length,
+      tongSoHocVien: allStudentsInClasses.filter((student) => student?.thesisRegistrations?.[0]?.thesisProject != null).length,
       ngay: now.format("DD"),
       thang: now.format("MM"),
       nam: now.format("YYYY"),
