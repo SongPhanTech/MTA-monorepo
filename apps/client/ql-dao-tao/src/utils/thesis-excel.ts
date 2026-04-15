@@ -355,8 +355,8 @@ export const exportPhuLucDsLuanVan = async ({
       return
     }
     let count = 1
-    const tableBodyStartRow = 7
-    const tableHeaderThinBorder = { top: 5, left: 1, bottom: 6, right: 6 } as const
+    // const tableBodyStartRow = 7
+    // const tableHeaderThinBorder = { top: 5, left: 1, bottom: 6, right: 6 } as const
     const dataRows: TableRow[] = result.flatMap((item: any,index: number) => {
       const orgRow: TableRow = {
         cells: [
@@ -417,6 +417,7 @@ export const exportPhuLucDsLuanVan = async ({
         {
           sheet: "PhuLucDanhSachLuanVan",
           rows: [...dataRows, gapRow, totalRow],
+          tableStartCell: { row: 7, col: 1 },
           // tableStartCell: { row: tableBodyStartRow, col: 1 },
           // thinBorderRange: tableHeaderThinBorder,
           data: {
@@ -580,7 +581,7 @@ export const exportDanhSachBaoVe = async ({
     const data  = allStudentsInClasses
       ?.map((student) => {
       if (!student?.thesisRegistrations?.[0]?.thesisProject) return null
-        return { stt: index++,
+        return { stt: ++index,
               chuyennganh: student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || "",
               dt: tenDoiTuong[student?.fixedClass?.trainingCourse?.trainingObjectType?.type as keyof typeof tenDoiTuong]?.shortname || "",
               lastname: student.userProfile?.lastName || "",
@@ -2755,3 +2756,163 @@ const convertToHDDanhGiaLuanVanTemplateData = (
     data: groupedData,
   }
 }
+interface ThongKeCoQuanDonViCanBoNgoaiHvData {
+   khoa:string
+  dotxet:string
+  data:ThongKeCoQuanDonViCanBoNgoaiHvTable[]
+}
+interface ThongKeCoQuanDonViCanBoNgoaiHvTable {
+  stt:number
+  tenDonVi:string
+  soLuongGVHD:number
+  soLuongBV:number
+  soLuongHDNC:number
+  soLuongDGNC:number
+  tongSoLuong:number
+}
+const convertToThongKeCoQuanDonViCanBoNgoaiHvData = (
+  allStudentsInClasses: any[]
+): ThongKeCoQuanDonViCanBoNgoaiHvData => {
+  if (!allStudentsInClasses?.length) {
+    return {
+      khoa: "",
+      dotxet: "",
+      data: [],
+    }
+  }
+
+  const firstProject = allStudentsInClasses
+    .map((student) =>
+      student?.thesisRegistrations?.find((registration: any) => registration?.thesisProject)
+        ?.thesisProject
+    )
+    .find(Boolean)
+
+  const khoa =
+    firstProject?.thesisSession?.trainingCourse?.name ||
+    allStudentsInClasses[0]?.fixedClass?.trainingCourse?.name ||
+    ""
+  const dotxet = firstProject?.thesisSession?.name || ""
+
+  const isOutsideExpert = (expert: any) => {
+    if (!expert) return false
+    return !(expert?.lecturer || expert?.lecturerId)
+  }
+
+  const getExpertKey = (expert: any, workplace: string) => {
+    if (expert?.id) return String(expert.id)
+    const fullName = getSupervisorName(expert, false, false) as string
+    return `${fullName || "unknown"}-${workplace}`
+  }
+
+  const unitMap = new Map<
+    string,
+    {
+      gvhd: Set<string>
+      bv: Set<string>
+      hdnc: Set<string>
+      dgnc: Set<string>
+    }
+  >()
+
+  const ensureUnit = (workplace: string) => {
+    if (!unitMap.has(workplace)) {
+      unitMap.set(workplace, {
+        gvhd: new Set<string>(),
+        bv: new Set<string>(),
+        hdnc: new Set<string>(),
+        dgnc: new Set<string>(),
+      })
+    }
+    // biome-ignore lint/style/noNonNullAssertion: ensured by has/set above
+    return unitMap.get(workplace)!
+  }
+
+  allStudentsInClasses.forEach((student) => {
+    const project = student?.thesisRegistrations?.find((registration: any) => registration?.thesisProject)
+      ?.thesisProject
+    if (!project) return
+
+    const supervisors = [project?.supervisor, project?.coSupervisor]
+    supervisors.forEach((expert) => {
+      if (!isOutsideExpert(expert)) return
+      const workplace = expert?.workplace?.trim() || "Chưa có đơn vị"
+      const unit = ensureUnit(workplace)
+      unit.gvhd.add(getExpertKey(expert, workplace))
+    })
+
+    const members = project?.council?.members || []
+    members.forEach((member: any) => {
+      const expert = member?.expert
+      if (!isOutsideExpert(expert)) return
+
+      const workplace = expert?.workplace?.trim() || "Chưa có đơn vị"
+      const unit = ensureUnit(workplace)
+      const expertKey = getExpertKey(expert, workplace)
+
+      unit.bv.add(expertKey)
+    })
+  })
+
+  const data: ThongKeCoQuanDonViCanBoNgoaiHvTable[] = Array.from(unitMap.entries())
+    .sort(([unitA], [unitB]) => unitA.localeCompare(unitB, "vi"))
+    .map(([tenDonVi, stats], index) => {
+      const soLuongGVHD = stats.gvhd.size
+      const soLuongBV = stats.bv.size
+      const soLuongHDNC = 0
+      const soLuongDGNC = 0
+
+      return {
+        stt: index + 1,
+        tenDonVi,
+        soLuongGVHD,
+        soLuongBV,
+        soLuongHDNC,
+        soLuongDGNC,
+        tongSoLuong: soLuongGVHD + soLuongBV + soLuongHDNC + soLuongDGNC,
+      }
+    })
+
+  return {
+    khoa,
+    dotxet,
+    data,
+  }
+}
+export const exportThongKeCoQuanDonViCanBoNgoaiHv = async ({
+  allStudentsInClasses,
+  showSpinner,
+  hideSpinner,
+  message,
+}: ExportOptions) => {
+  if (!allStudentsInClasses?.length) {
+    message.error("Không có dữ liệu để tạo thống kê cán bộ tham gia HĐ ngoài HV")
+    return
+  }
+  showSpinner()
+  try {
+    const data = convertToThongKeCoQuanDonViCanBoNgoaiHvData(allStudentsInClasses)
+    const payload: ExcelTemplateBody = {
+      head: { data: null },
+      tail: { data: null },
+      fileName: "ThongKeCoQuanDonViCanBoNgoaiHv",
+      path: "ThongKeCoQuanDonViCanBoNgoaiHv.xlsx",
+      payload: [{ data: data }],
+      showGridLines: true,
+      wrapText: true,
+    }
+    const response = await excelTemplate(payload)
+    if (response.status !== 200) {
+      message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
+      return
+    }
+    const blob = response.data
+    downloadFile(blob, "ThongKeCoQuanDonViCanBoNgoaiHv.xlsx")
+    message.success("Xuất file thành công")
+  } catch (error) {
+    message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
+  } finally {
+    hideSpinner()
+  }
+}
+

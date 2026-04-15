@@ -71,6 +71,7 @@ import {
   exportThanhToanHuongDanTrongHv,
   exportThongKeCbHdlv,
   exportThongKeCbThamGiaHd,
+  exportThongKeCoQuanDonViCanBoNgoaiHv,
 } from "@/utils/thesis-excel"
 
 interface ThesisProjectForm {
@@ -970,6 +971,17 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
         label: "Thống kê cán bộ tham gia HĐ",
         onClick: async () =>
           await exportThongKeCbThamGiaHd({
+            allStudentsInClasses,
+            showSpinner,
+            hideSpinner,
+            message,
+          }),
+      },
+      {
+        id: 15.1,
+        label: "Thống kê cơ quan đơn vị cán bộ (ngoài HV)",
+        onClick: async () =>
+          await exportThongKeCoQuanDonViCanBoNgoaiHv({
             allStudentsInClasses,
             showSpinner,
             hideSpinner,
