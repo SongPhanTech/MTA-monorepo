@@ -124,6 +124,7 @@ const PHU_LUC_TEMPLATE_COLUMN_DEFS: Record<PhuLucTemplateColumnKey, TemplateColu
   soQd: {
     title: "Số quyết định",
     width: 140,
+    align: "center",
     render: (record) =>
       record?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.defenseDecisionNumber || "",
   },

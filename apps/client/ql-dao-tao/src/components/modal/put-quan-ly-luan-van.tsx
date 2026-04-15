@@ -472,7 +472,7 @@ const PutEditQuanLyLuanVan = ({
 
       {disclosureTag === "PutEditQuyetDinhHDDG" && (
         <>
-          {appendix && (
+          {!appendix && (
             <>
               <Col span={24} className="mt-4 border-t pt-4">
                 <div className="font-semibold text-slate-700">Thông tin phụ lục</div>
@@ -486,7 +486,7 @@ const PutEditQuanLyLuanVan = ({
 
               <Col span={12}>
                 <FormItem form={form} name="ngayQd" label="Ngày quyết định">
-                  <DatePicker className="w-full" />
+                  <DatePicker className="w-full" placeholder="Chọn ngày quyết định" />
                 </FormItem>
               </Col>
             </>
