@@ -439,7 +439,7 @@ export default function GiayMoiHuongDanLuanVanDoAn({ role = "P7" }: DanhMucLuanV
                     return (
                       <Row className="justify-center gap-2 px-3">
                         {can(
-                          QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_GIAY_MOI_HUONG_DAN_LUAN_VAN_DO_AN,
+                          QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_LUAN_VAN_GIAY_MOI_HUONG_DAN_LUAN_VAN_DO_AN,
                           "SUA"
                         ) && (
                           <EditIcon
