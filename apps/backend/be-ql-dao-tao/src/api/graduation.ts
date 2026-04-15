@@ -182,7 +182,7 @@ app.openapi(graduationCheck, async (c) => {
             },
       },
       outputStandard: {
-        where: { deletedAt: null, active: true, isRequired: true },
+        where: { deletedAt: null, active: true },
         include: { certificates: true },
       },
     },
