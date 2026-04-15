@@ -181,6 +181,10 @@ app.openapi(graduationCheck, async (c) => {
               },
             },
       },
+      outputStandard: {
+        where: { deletedAt: null, active: true, isRequired: true },
+        include: { certificates: true },
+      },
     },
   })
 
@@ -192,10 +196,10 @@ app.openapi(graduationCheck, async (c) => {
     diplomaType: true,
     trainingBlocks: { include: { subjects: { include: { subject: true } } } },
     curriculum: { include: { trainingMajor: true } },
-    outputStandardOnCurriculum: {
-      include: { outputStandard: { include: { certificates: true } } },
-      where: { deletedAt: null, active: true, isRequired: true },
-    },
+    // outputStandardOnCurriculum: {
+    //   include: { outputStandard: { include: { certificates: true } } },
+    //   where: { deletedAt: null, active: true, isRequired: true },
+    // },
   }
 
   for (const [idx, application] of session.applications.entries()) {
@@ -268,8 +272,8 @@ app.openapi(graduationCheck, async (c) => {
     const reasons: string[] = []
 
     // Kiểm tra chuẩn đầu ra
-    const lackOfOutputStandard = curriculumVersion.outputStandardOnCurriculum.filter((standard) => {
-      const notCompleted = standard.outputStandard.certificates.every((cert) => {
+    const lackOfOutputStandard = session.outputStandard.filter((standard) => {
+      const notCompleted = standard.certificates.every((cert) => {
         const archived = student.archivedCertificate.find(
           (archived) => archived.certificateId === cert.id
         )
@@ -280,9 +284,7 @@ app.openapi(graduationCheck, async (c) => {
 
     if (lackOfOutputStandard.length > 0) {
       reasons.push(
-        `Chưa đạt chuẩn đầu ra: ${lackOfOutputStandard
-          .map((standard) => standard.outputStandard.name)
-          .join(", ")}`
+        `Chưa đạt chuẩn đầu ra: ${lackOfOutputStandard.map((standard) => standard.name).join(", ")}`
       )
     }
 
