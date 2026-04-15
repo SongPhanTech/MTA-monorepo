@@ -795,14 +795,14 @@ export const exportGiayMoiHdlv = async ({
     }
     const response = await excelTemplate(payload)
     if (response.status !== 200) {
-      message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại1")
+      message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
       return
     }
     const blob = response.data
     downloadFile(blob, "GiayMoiHDLV.xlsx")
     message.success("Xuất file thành công")
   } catch (error) {
-    message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại2")
+    message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
   } finally {
     hideSpinner()
   }

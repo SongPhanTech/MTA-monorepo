@@ -60,8 +60,11 @@ import { exportSubjectClassListExcel } from "@workspace/libs/api/training"
 import PutSubjectClassModal from "@components/modal/put-ds-mon-hoc"
 
 type DisclosurePayload = {
-  id: string
-  thesisExpert: boolean
+  id?: string
+  thesisExpert?: boolean
+  mode?: "create" | "edit"
+  trainingObjectTypeId?: string
+  semesterId?: string
 }
 
 type TimeScore = {
@@ -289,7 +292,23 @@ export default function ClassSubject() {
               </Flex>
             </Col>
             <Col span={12}>
-              <Flex justify="end" align="center" gap={4} />
+              <Flex justify="end" align="center" gap={4}>
+                {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_DS_LOP_MON_HOC, "SUA") && (
+                  <Button
+                    type="primary"
+                    onClick={() =>
+                      onOpen({
+                        mode: "create",
+                        thesisExpert: false,
+                        trainingObjectTypeId,
+                        semesterId,
+                      })
+                    }
+                  >
+                    Thêm mới
+                  </Button>
+                )}
+              </Flex>
             </Col>
           </Row>
         </Col>
@@ -336,6 +355,24 @@ export default function ClassSubject() {
                 ),
               },
               {
+                title: "Thi",
+                width: 80,
+                align: "center",
+                type: "input",
+                dataIndex: "examType",
+                render: (__, record: { subject?: SubjectVersion }) => {
+                  return record?.subject?.examType ? (
+                    <div
+                    // className={`${record?.subject?.examType === 'OfflineWritten' ? 'text-red-500' : ''}`}
+                    >
+                      {getExamTypeLabel(record?.subject?.examType)}
+                    </div>
+                  ) : (
+                    ""
+                  )
+                },
+              },
+              {
                 title: "Giảng viên 1",
                 width: 150,
                 align: "center",
@@ -376,7 +413,7 @@ export default function ClassSubject() {
                     <Row className="justify-center gap-2">
                       {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_DS_LOP_MON_HOC, "SUA") && (
                         <EditIcon
-                          onClick={() => onOpen({ id, thesisExpert: false })}
+                          onClick={() => onOpen({ id, mode: "edit", thesisExpert: false })}
                           className="text-sm text-blue-700 cursor-pointer"
                         />
                       )}
