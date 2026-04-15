@@ -857,7 +857,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
       },
       {
         id: 6,
-        disabled: true,
+        // disabled: true,
         label: "Phụ lục QĐHĐ",
         onClick: async () =>
           await exportPhuLucQdhdd({
