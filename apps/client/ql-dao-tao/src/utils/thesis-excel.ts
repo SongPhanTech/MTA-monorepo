@@ -576,7 +576,9 @@ export const exportDanhSachBaoVe = async ({
   }
   showSpinner()
   try {
-    const data  = allStudentsInClasses?.map((student, index) => {
+    const data  = allStudentsInClasses
+      ?.map((student, index) => {
+      if (!student?.thesisRegistrations?.[0]?.thesisProject) return null
         return { stt: index + 1,
               chuyennganh: student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || "",
               dt: tenDoiTuong[student?.fixedClass?.trainingCourse?.trainingObjectType?.type as keyof typeof tenDoiTuong]?.shortname || "",
@@ -596,12 +598,17 @@ export const exportDanhSachBaoVe = async ({
               phongbaove: student?.thesisRegistrations?.[0]?.thesisProject?.room?.name || "",
 
              }     
-        }
-      )
+        })
+      .filter(Boolean)
+    // console.log("allStudentsInClasses",allStudentsInClasses)
     const dotxet =
-      allStudentsInClasses?.length > 0
-        ? allStudentsInClasses[0]?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.name
-        : ""
+      allStudentsInClasses
+        ?.map((student) =>
+          student?.thesisRegistrations?.find((registration: any) => registration?.thesisProject?.thesisSession?.name)
+            ?.thesisProject?.thesisSession?.name
+            ?.trim()
+        )
+        .find(Boolean) || "CHƯA CÓ ĐỢT XÉT"
     const soluonghocvien = allStudentsInClasses?.length
     const payload: ExcelTemplateBody = {
       head: { data: null },
@@ -609,7 +616,7 @@ export const exportDanhSachBaoVe = async ({
       fileName: "DanhSachBaoVe",
       path: "DanhSachBaoVe.xlsx",
       payload: [{ data:{
-        dotxet: dotxet.trim().toUpperCase() || "",
+        dotxet: dotxet?.toUpperCase() || "",
         soluonghocvien: soluonghocvien,
         data: data,
       }}],
@@ -2057,13 +2064,25 @@ export const exportPhuLucQdhdd = async ({
       message.error("Chưa có dữ liệu để xuất phụ lục QĐHĐ")
       return []
     }
-    console.log("dataConvert", dataConvert)
+    const payloadRows = dataConvert.data.flatMap((major) =>
+      major.data.data.map((row, rowIdx) => ({
+        data: {
+          sttChuyenNganh: rowIdx === 0 ? major.data.sttChuyenNganh : "",
+          tenChuyenNganh: rowIdx === 0 ? major.data.tenChuyenNganh : "",
+          data: row,
+        },
+      }))
+    )
+    if (!payloadRows.length) {
+      message.error("Chưa có dữ liệu để xuất phụ lục QĐHĐ")
+      return []
+    }
     const payload: ExcelTemplateBody = {
       head: { data: dataConvert.head.data },
       tail: { data: dataConvert.tail.data },
       fileName: "PhuLucQdhd",
       path: "PhuLucQDHoiDong.xlsx",
-      payload: dataConvert.data,
+      payload: payloadRows,
       showGridLines: true,
       wrapText: true,
     }
@@ -2090,9 +2109,10 @@ const convertToPhuLucQdhdTemplateData = (allStudentsInClasses: any[]): PhuLucQdh
     }
   }
 
-  const firstStudent = allStudentsInClasses[0]
+  const firstStudent =
+    allStudentsInClasses.find((student) => student?.thesisRegistrations?.[0]?.thesisProject) ||
+    allStudentsInClasses[0]
   const firstProject = firstStudent?.thesisRegistrations?.[0]?.thesisProject
-  console.log("firstProject", firstProject)
   const session = firstProject?.thesisSession
 
   const head: PhuLucQdhdHead = {
@@ -2108,6 +2128,7 @@ const convertToPhuLucQdhdTemplateData = (allStudentsInClasses: any[]): PhuLucQdh
 
   const majorMap = new Map<string, any[]>()
   allStudentsInClasses.forEach((student) => {
+    if (!student?.thesisRegistrations?.[0]?.thesisProject) return
     const majorName =
       student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || "Chưa xác định"
     if (!majorMap.has(majorName)) {
@@ -2121,7 +2142,15 @@ const convertToPhuLucQdhdTemplateData = (allStudentsInClasses: any[]): PhuLucQdh
   let majorIndex = 1
 
   majorMap.forEach((students, majorName) => {
-    const tableRows: PhuLucQdhdTable[] = students.map((student, studentIdx) => {
+    const validStudents = students.filter(
+      (student) =>
+        student?.thesisRegistrations?.[0]?.thesisProject &&
+        student?.thesisRegistrations?.[0]?.thesisProject?.council
+    )
+    if (!validStudents.length) {
+      return
+    }
+    const tableRows: PhuLucQdhdTable[] = validStudents.map((student, studentIdx) => {
       const project = student.thesisRegistrations?.[0]?.thesisProject
       const members = project?.council?.members || []
       totalCouncils++
@@ -2141,23 +2170,23 @@ const convertToPhuLucQdhdTemplateData = (allStudentsInClasses: any[]): PhuLucQdh
         ngaySinh: student.userProfile?.dateOfBirth
           ? dayjs(student.userProfile.dateOfBirth).format("DD/MM/YYYY")
           : "",
-        gvhd1: project?.supervisor?.name || "",
-        gvhd2: project?.coSupervisor?.name || "",
+        gvhd1: getSupervisorName(project?.supervisor, false, true) as string || "",
+        gvhd2: getSupervisorName(project?.coSupervisor, false, true) as string || "",
 
-        tenChuTich: chairman?.expert?.name || "Chưa có thông tin chủ tịch",
-        toChucChuTich: chairman?.expert?.organization || "",
+        tenChuTich: getSupervisorName(chairman?.expert, false, false) as string || "",
+        toChucChuTich: chairman?.expert?.workplace || "Học viện KTQS		",
 
-        tenThuKy: secretary?.expert?.name || "Chưa có thông tin thư ký",
-        toChucThuKy: secretary?.expert?.organization || "",
+        tenThuKy: getSupervisorName(secretary?.expert, false, false) as string || "",
+        toChucThuKy: secretary?.expert?.workplace || "Học viện KTQS		",
 
-        tenUyVien: member?.expert?.name || "Chưa có thông tin ủy viên",
-        toChucUyVien: member?.expert?.organization || "",
+        tenUyVien: getSupervisorName(member?.expert, false, false) as string || "",
+        toChucUyVien: member?.expert?.workplace || "Học viện KTQS		",
 
-        tenPb1: reviewer1?.expert?.name || "Chưa có thông tin PB1",
-        toChucPb1: reviewer1?.expert?.organization || "",
+        tenPb1: getSupervisorName(reviewer1?.expert, false, false) as string || "",
+        toChucPb1: reviewer1?.expert?.workplace || "Học viện KTQS		",
 
-        tenPb2: reviewer2?.expert?.name || "Chưa có thông tin PB2",
-        toChucPb2: reviewer2?.expert?.organization || "",
+        tenPb2: getSupervisorName(reviewer2?.expert, false, false) as string || "",
+        toChucPb2: reviewer2?.expert?.workplace || "Học viện KTQS		",
       }
     })
 
