@@ -1,7 +1,6 @@
 import Select from "@components/commons/select"
 import Table from "@components/commons/table"
 import useSpinner from "@hooks/spinner"
-import DefaultLayout from "@layouts/default-layout"
 import { buildOrgTree } from "@lib/utils"
 import { ThesisType } from "@workspace/db/client"
 import {
@@ -16,11 +15,10 @@ import { Button, Col, Flex, Form, Input, message, Modal, Radio, Row, Space } fro
 import { useEffect, useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 import TreeSelect from "@/components/commons/tree-select"
-import { exportGiayMoiHdlv } from "@/utils/thesis-excel"
-import { QL_DAO_TAO_PERMISSION } from "@workspace/router"
-import EditIcon from "@components/icons/edit"
 import { useAbility } from "@workspace/permissions"
-import PutEditGiayMoiHuongDanLVDA from "@components/modal/put-giay-moi-huong-dan-lv-da"
+import EditIcon from "@components/icons/edit"
+import { QL_DAO_TAO_PERMISSION } from "@workspace/router"
+import PutEditQuanLyLuanVan from "@components/modal/put-quan-ly-luan-van"
 
 interface ThesisProjectForm {
   thesisSessionId: string
@@ -37,6 +35,203 @@ interface SignerPayload {
   isChief: boolean
 }
 
+type ExportExcelPayload = {
+  allStudentsInClasses: any[]
+  showSpinner: () => void
+  hideSpinner: () => void
+  message: typeof message
+  signerName: string
+  isChief: boolean
+}
+
+export type QuanLyLuanVanProps = DanhMucLuanVanProps & {
+  exportExcel: (payload: ExportExcelPayload) => Promise<unknown> | unknown
+  exportButtonLabel?: string
+  addNewButtonLabel?: string
+  showPhuLucTemplateColumns?: boolean
+  templateColumnKeys?: PhuLucTemplateColumnKey[]
+  templateColumnAccess?: Partial<Record<PhuLucTemplateColumnKey, boolean>>
+  putEditVariant?: "giayMoi" | "quyetDinh"
+}
+
+type PhuLucTemplateColumnKey =
+  | "gvhd2"
+  | "dotXet"
+  | "soQd"
+  | "ngayQd"
+  | "soHoiDong"
+  | "sttChuyenNganh"
+  | "tenChuyenNganh"
+  | "sttHoiDong"
+  | "contentDieu1"
+  | "tenChuTich"
+  | "toChucChuTich"
+  | "tenThuKy"
+  | "toChucThuKy"
+  | "tenUyVien"
+  | "toChucUyVien"
+  | "tenPb1"
+  | "toChucPb1"
+  | "tenPb2"
+  | "toChucPb2"
+
+const PHU_LUC_TEMPLATE_COLUMN_ORDER: PhuLucTemplateColumnKey[] = [
+  "gvhd2",
+  "dotXet",
+  "soQd",
+  "ngayQd",
+  "soHoiDong",
+  "sttChuyenNganh",
+  "tenChuyenNganh",
+  "sttHoiDong",
+  "contentDieu1",
+  "tenChuTich",
+  "toChucChuTich",
+  "tenThuKy",
+  "toChucThuKy",
+  "tenUyVien",
+  "toChucUyVien",
+  "tenPb1",
+  "toChucPb1",
+  "tenPb2",
+  "toChucPb2",
+]
+
+type TemplateColumnContext = {
+  students: any[]
+  getCouncilMember: (record: any, role: string) => any
+}
+
+type TemplateColumnDef = {
+  title: string
+  width: number
+  align?: "left" | "right" | "center"
+  render: (record: any, index: number, ctx: TemplateColumnContext) => string
+}
+
+const PHU_LUC_TEMPLATE_COLUMN_DEFS: Record<PhuLucTemplateColumnKey, TemplateColumnDef> = {
+  gvhd2: {
+    title: "Giảng viên hướng dẫn 2",
+    width: 180,
+    render: (record: any) =>
+      getSupervisorName(record?.thesisRegistrations?.[0]?.thesisProject?.coSupervisor),
+  },
+  dotXet: {
+    title: "Đợt xét",
+    width: 160,
+    render: (record) => record?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.name || "",
+  },
+  soQd: {
+    title: "Số quyết định",
+    width: 140,
+    render: (record) =>
+      record?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.defenseDecisionNumber || "",
+  },
+  ngayQd: {
+    title: "Ngày quyết định",
+    width: 130,
+    align: "center",
+    render: (record) => {
+      const date =
+        record?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.defenseDecisionDate
+      return date ? dayjs(date).format("DD/MM/YYYY") : ""
+    },
+  },
+  soHoiDong: {
+    title: "Số hội đồng",
+    width: 110,
+    align: "center",
+    render: (_record, _index, ctx) => String(ctx.students.length || 0),
+  },
+  sttChuyenNganh: {
+    title: "STT Chuyên ngành",
+    width: 140,
+    render: () => "",
+  },
+  tenChuyenNganh: {
+    title: "Tên chuyên ngành",
+    width: 180,
+    render: (record) =>
+      record?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || "",
+  },
+  sttHoiDong: {
+    title: "STT Hội đồng",
+    width: 110,
+    align: "center",
+    render: (_record, index) => String(index + 1),
+  },
+  contentDieu1: {
+    title: "Nội dung điều 1",
+    width: 420,
+    render: (record) => {
+      const project = record?.thesisRegistrations?.[0]?.thesisProject
+      const major = record?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor
+      const khoa = record?.fixedClass?.trainingCourse
+      return `${project?.type || ""} tốt nghiệp thạc sĩ ngành ${major?.name || ""}, Khóa: ${khoa?.name || ""} (${khoa?.academicYear || ""}), Đề tài: ${project?.title || ""}`
+    },
+  },
+  tenChuTich: {
+    title: "Tên chủ tịch",
+    width: 180,
+    render: (record, _index) => record?.thesisRegistrations?.[0]?.thesisProject?.CHUTICH || "",
+  },
+  toChucChuTich: {
+    title: "Tổ chức chủ tịch",
+    width: 170,
+    render: (record, _index, ctx) =>
+      ctx.getCouncilMember(record, "CHAIRMAN")?.expert?.organization || "",
+  },
+  tenThuKy: {
+    title: "Tên thư ký",
+    width: 170,
+    render: (record, _index) => record?.thesisRegistrations?.[0]?.thesisProject?.THUKY || "",
+  },
+  toChucThuKy: {
+    title: "Tổ chức thư ký",
+    width: 170,
+    render: (record, _index, ctx) =>
+      ctx.getCouncilMember(record, "SECRETARY")?.expert?.organization || "",
+  },
+  tenUyVien: {
+    title: "Tên ủy viên",
+    width: 170,
+    render: (record, _index) => record?.thesisRegistrations?.[0]?.thesisProject?.UYVIEN3 || "",
+  },
+  toChucUyVien: {
+    title: "Tổ chức ủy viên",
+    width: 170,
+    render: (record, _index, ctx) =>
+      ctx.getCouncilMember(record, "MEMBER")?.expert?.organization || "",
+  },
+  tenPb1: {
+    title: "Tên phản biện 1",
+    width: 160,
+    render: (record, _index) => record?.thesisRegistrations?.[0]?.thesisProject?.PHANBIEN1 || "",
+  },
+  toChucPb1: {
+    title: "Tổ chức phản biện 1",
+    width: 160,
+    render: (record, _index, ctx) =>
+      ctx.getCouncilMember(record, "REVIEWER_1")?.expert?.organization || "",
+  },
+  tenPb2: {
+    title: "Tên phản biện 2",
+    width: 160,
+    render: (record, _index) => record?.thesisRegistrations?.[0]?.thesisProject?.PHANBIEN2 || "",
+  },
+  toChucPb2: {
+    title: "Tổ chức phản biện 2",
+    width: 160,
+    render: (record, _index, ctx) =>
+      ctx.getCouncilMember(record, "REVIEWER_2")?.expert?.organization || "",
+  },
+}
+
+const getCouncilMember = (record: any, role: string) => {
+  const members = record?.thesisRegistrations?.[0]?.thesisProject?.council?.members || []
+  return members.find((m: any) => m?.role === role)
+}
+
 function getSupervisorName(record: any) {
   const expert = record
   if (!expert) return ""
@@ -51,7 +246,16 @@ function getSupervisorName(record: any) {
   return [title, fullname].filter(Boolean).join(" ").trim() + (workplace ? `, ${workplace}` : "")
 }
 
-export default function GiayMoiHuongDanLuanVanDoAn({ role = "P7" }: DanhMucLuanVanProps) {
+export default function QuanLyLuanVan({
+  role = "P7",
+  exportExcel,
+  exportButtonLabel = "Xuất giấy mời hướng dẫn",
+  addNewButtonLabel = "Thêm giấy mời hướng dẫn",
+  showPhuLucTemplateColumns = false,
+  templateColumnKeys,
+  templateColumnAccess,
+  putEditVariant = "giayMoi",
+}: QuanLyLuanVanProps) {
   const orgId = window.contextData?.organizationId
   const { can } = useAbility()
   const [form] = Form.useForm<ThesisProjectForm>()
@@ -165,7 +369,22 @@ export default function GiayMoiHuongDanLuanVanDoAn({ role = "P7" }: DanhMucLuanV
           include: {
             thesisProject: {
               include: {
+                thesisSession: true,
                 supervisor: {
+                  include: {
+                    lecturer: {
+                      include: {
+                        userProfile: {
+                          include: {
+                            academicRankType: true,
+                            academicDegreeType: true,
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+                coSupervisor: {
                   include: {
                     lecturer: {
                       include: {
@@ -225,7 +444,7 @@ export default function GiayMoiHuongDanLuanVanDoAn({ role = "P7" }: DanhMucLuanV
 
     setSignModalOpen(false)
 
-    await exportGiayMoiHdlv({
+    await exportExcel({
       allStudentsInClasses: students,
       showSpinner,
       hideSpinner,
@@ -238,23 +457,23 @@ export default function GiayMoiHuongDanLuanVanDoAn({ role = "P7" }: DanhMucLuanV
   const chiefDisplay = selectedThesisSession?.chief?.trim() || "(chưa nhập)"
   const deputyDisplay = selectedThesisSession?.deputy?.trim() || "(chưa nhập)"
 
-  const { onOpen: onOpenPutGiayMoiHuongDanLVDA } = useDisclosure<{
+  const { onOpen: onOpenPutQuanLyLuanVan } = useDisclosure<{
     id?: string
     mode?: "create" | "edit"
     thesisSessionId?: string
     organizationId?: string
     fixedClassIds?: string[]
   }>({
-    tag: "PutEditGiayMoiHuongDanLVDA",
+    tag: putEditVariant === "quyetDinh" ? "PutEditQuyetDinhHDDG" : "PutEditGiayMoiHuongDanLVDA",
   })
 
-  const handleOpenCreateGiayMoi = () => {
+  const handleOpenCreate = () => {
     if (!searchParams.thesisSessionId) {
-      message.warning("Vui lòng chọn đợt xét trước khi thêm mới giấy mời.")
+      message.warning("Vui lòng chọn đợt xét trước khi thêm mới.")
       return
     }
 
-    onOpenPutGiayMoiHuongDanLVDA({
+    onOpenPutQuanLyLuanVan({
       mode: "create",
       thesisSessionId: searchParams.thesisSessionId,
       organizationId: searchParams.organizationId,
@@ -262,9 +481,29 @@ export default function GiayMoiHuongDanLuanVanDoAn({ role = "P7" }: DanhMucLuanV
     })
   }
 
+  const phuLucTemplateColumns: any[] = showPhuLucTemplateColumns
+    ? (templateColumnKeys ?? PHU_LUC_TEMPLATE_COLUMN_ORDER)
+        .filter((key) => PHU_LUC_TEMPLATE_COLUMN_DEFS[key])
+        .filter((key) => templateColumnAccess?.[key] !== false)
+        .map((key) => {
+          const def = PHU_LUC_TEMPLATE_COLUMN_DEFS[key]
+          return {
+            title: def.title,
+            width: def.width,
+            align: def.align,
+            render: (_: unknown, record: any, index: number) =>
+              def.render(record, index, { students, getCouncilMember }),
+          }
+        })
+    : []
+
   return (
     <div>
-      <PutEditGiayMoiHuongDanLVDA />
+      <PutEditQuanLyLuanVan
+        disclosureTag={
+          putEditVariant === "quyetDinh" ? "PutEditQuyetDinhHDDG" : "PutEditGiayMoiHuongDanLVDA"
+        }
+      />
       <Modal
         title="Chọn người ký"
         open={signModalOpen}
@@ -357,10 +596,10 @@ export default function GiayMoiHuongDanLuanVanDoAn({ role = "P7" }: DanhMucLuanV
               <Form.Item>
                 <Space>
                   <Button type="primary" onClick={handleOpenExport}>
-                    Xuất giấy mời hướng dẫn
+                    {exportButtonLabel}
                   </Button>
-                  <Button type="primary" onClick={handleOpenCreateGiayMoi}>
-                    Thêm mới giấy mời
+                  <Button type="primary" onClick={handleOpenCreate}>
+                    {addNewButtonLabel}
                   </Button>
                 </Space>
               </Form.Item>
@@ -377,26 +616,38 @@ export default function GiayMoiHuongDanLuanVanDoAn({ role = "P7" }: DanhMucLuanV
             columns={[
               {
                 title: "Mã sinh viên",
-                width: 120,
+                width: 100,
+                align: "center",
                 fixed: "left",
-                render: (_, record) => record?.code || "",
+                render: (_: unknown, record: any) => record?.code || "",
               },
               {
                 title: "Họ tên",
-                width: 220,
+                width: 180,
                 fixed: "left",
-                render: (_, record) => record?.userProfile?.fullname || "",
+                render: (_: unknown, record: any) => record?.userProfile?.fullname || "",
               },
               {
-                title: "Cán bộ hướng dẫn",
-                width: 280,
-                render: (_, record) =>
+                title: "Ngày sinh",
+                width: 120,
+                align: "center",
+                fixed: "left",
+                render: (_: unknown, record: any) =>
+                  record?.userProfile?.dateOfBirth
+                    ? dayjs(record.userProfile.dateOfBirth).format("DD/MM/YYYY")
+                    : "",
+              },
+              {
+                title: "Giảng viên hướng dẫn",
+                width: 180,
+                render: (_: unknown, record: any) =>
                   getSupervisorName(record?.thesisRegistrations?.[0]?.thesisProject?.supervisor),
               },
+              ...phuLucTemplateColumns,
               {
                 title: "Khóa",
                 width: 220,
-                render: (_, record) => {
+                render: (_: unknown, record: any) => {
                   const tc = record?.fixedClass?.trainingCourse
                   return tc ? `${tc.name || ""} (${tc.academicYear || ""})` : ""
                 },
@@ -404,30 +655,22 @@ export default function GiayMoiHuongDanLuanVanDoAn({ role = "P7" }: DanhMucLuanV
               {
                 title: "Chuyên ngành",
                 width: 220,
-                render: (_, record) =>
+                render: (_: unknown, record: any) =>
                   record?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || "",
               },
               {
                 title: "Tên đề tài",
                 width: 360,
-                render: (_, record) => record?.thesisRegistrations?.[0]?.thesisProject?.title || "",
+                render: (_: unknown, record: any) =>
+                  record?.thesisRegistrations?.[0]?.thesisProject?.title || "",
               },
               {
                 title: "Loại",
                 width: 120,
                 align: "center",
-                render: (_, record) =>
+                render: (_: unknown, record: any) =>
                   record?.thesisRegistrations?.[0]?.thesisProject?.type
                     ? String(record.thesisRegistrations[0].thesisProject.type)
-                    : "",
-              },
-              {
-                title: "Ngày sinh",
-                width: 120,
-                align: "center",
-                render: (_, record) =>
-                  record?.userProfile?.dateOfBirth
-                    ? dayjs(record.userProfile.dateOfBirth).format("DD/MM/YYYY")
                     : "",
               },
               {
@@ -435,25 +678,25 @@ export default function GiayMoiHuongDanLuanVanDoAn({ role = "P7" }: DanhMucLuanV
                 align: "center",
                 fixed: "right",
                 width: 80,
-                render: (_, record) => {
+                render: (_: unknown, record: any) => {
                   if (record?.id) {
                     return (
                       <Row className="justify-center gap-2 px-3">
                         {can(
-                          QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_GIAY_MOI_HUONG_DAN_LUAN_VAN_DO_AN,
+                          QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_GIAY_MOI_HUONG_DAN_LUAN_VAN_DE_AN,
                           "SUA"
                         ) && (
                           <EditIcon
                             onClick={(e) => {
                               e.stopPropagation()
-                              onOpenPutGiayMoiHuongDanLVDA({
+                              onOpenPutQuanLyLuanVan({
                                 mode: "edit",
                                 id: record?.id,
                                 thesisSessionId: searchParams.thesisSessionId,
                                 organizationId: searchParams.organizationId,
                               })
                             }}
-                            className="text-sm text-blue-700 cursor-pointer"
+                            className="cursor-pointer text-sm text-blue-700"
                           />
                         )}
                       </Row>
@@ -468,8 +711,4 @@ export default function GiayMoiHuongDanLuanVanDoAn({ role = "P7" }: DanhMucLuanV
       </Row>
     </div>
   )
-}
-
-GiayMoiHuongDanLuanVanDoAn.getLayout = function getLayout(page: React.ReactElement) {
-  return <DefaultLayout>{page}</DefaultLayout>
 }
