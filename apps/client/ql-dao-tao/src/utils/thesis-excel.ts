@@ -692,11 +692,11 @@ export const exportHosobvlv = async ({
               "DD/MM/YYYY"
             )
           : "",
-        phanbien1: getSupervisorName(phanbien1?.expert) || "",
-        phanbien2: getSupervisorName(phanbien2?.expert) || "",
-        chutich: getSupervisorName(chutich?.expert) || "",
-        thuky: getSupervisorName(thuky?.expert) || "",
-        uyvien: getSupervisorName(uyvien?.expert) || "",
+        phanbien1: String(getSupervisorName(phanbien1?.expert) || ""),
+        phanbien2: String(getSupervisorName(phanbien2?.expert) || ""),
+        chutich: String(getSupervisorName(chutich?.expert) || ""),
+        thuky: String(getSupervisorName(thuky?.expert) || ""),
+        uyvien: String(getSupervisorName(uyvien?.expert) || ""),
         nguoiki: tenNguoiKyQddt,
         text1: text1,
         text2: text2,
@@ -774,8 +774,8 @@ export const exportGiayMoiHdlv = async ({
         khoa: khoahoc,
         chuyennganh: student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || "",
         tendetai:
-          `Tên đề tài: "${student?.thesisRegistrations?.[0]?.thesisProject?.title.trim()}"` || "",
-        type: student?.thesisRegistrations?.[0]?.thesisProject?.type.trim().toLowerCase(),
+          `Tên đề tài: "${student?.thesisRegistrations?.[0]?.thesisProject?.title?.trim()}"` || "",
+        type: student?.thesisRegistrations?.[0]?.thesisProject?.type?.trim()?.toLowerCase(),
         text1: isChief ? "TRƯỞNG PHÒNG SAU ĐẠI HỌC" : "KT. TRƯỞNG PHÒNG SAU ĐẠI HỌC",
         text2: isChief ? "" : "PHÓ PHÒNG SAU ĐẠI HỌC",
         nguoiky1: signerName || "",

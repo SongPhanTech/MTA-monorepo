@@ -139,7 +139,12 @@ const NAVIGATION: NavigationType = {
             path: ROUTER_PATH.QL_DAO_TAO.CHUONG_TRINH_DAO_TAO_DANH_SACH_MON_HOC,
             description: "Danh sách môn học",
           },
-
+          {
+            id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_PHIEN_BAN_NOI_DUNG_CT_CHI_TIET,
+            label: "Quản lý phiên bản CTCT môn học",
+            path: ROUTER_PATH.QL_DAO_TAO.CHUONG_TRINH_DAO_TAO_PHIEN_BAN_NOI_DUNG_CT_CHI_TIET,
+            description: "Quản lý phiên bản CTCT môn học",
+          },
           {
             id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_QL_MON_HOC,
             label: "QL ràng buộc môn học",
@@ -647,6 +652,12 @@ const NAVIGATION: NavigationType = {
             description: "Thanh toán hội đồng bảo vệ",
           },
           {
+            id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_LUAN_VAN_DANH_SACH_GVHD,
+            label: "Thống kê cán bộ hướng dẫn",
+            path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_LUAN_VAN_DANH_SACH_GVHD,
+            description: "Thống kê cán bộ hướng dẫn",
+          },
+          {
             id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_LUAN_VAN_DANH_SACH_THANH_TOAN_GVHD,
             label: "Danh sách thanh toán GVHD",
             path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_LUAN_VAN_DANH_SACH_THANH_TOAN_GVHD,
@@ -665,15 +676,16 @@ const NAVIGATION: NavigationType = {
             description: "Cấu hình thanh toán",
           },
           {
-            id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_GIAY_MOI_HUONG_DAN_LUAN_VAN_DE_AN,
+            id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_LUAN_VAN_GIAY_MOI_HUONG_DAN_LUAN_VAN_DE_AN,
             label: "Giấy mời hướng dẫn luận văn/đề án",
-            path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_GIAY_MOI_HUONG_DAN_LUAN_VAN_DE_AN,
+            path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_LUAN_VAN_GIAY_MOI_HUONG_DAN_LUAN_VAN_DE_AN,
             description: "Giấy mời hướng dẫn luận văn/đề án",
           },
           {
-            id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_PHU_LUC_QUYET_DINH_HOI_DONG_DANH_GIA_LUAN_VAN_DE_AN,
+            id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_LUAN_VAN_PHU_LUC_QUYET_DINH_HOI_DONG_DANH_GIA_LUAN_VAN_DE_AN,
             label: "Phụ lục quyết định hội đồng đánh giá luận văn/đề án",
-            path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_PHU_LUC_QUYET_DINH_HOI_DONG_DANH_GIA_LUAN_VAN_DE_AN,
+            path: ROUTER_PATH.QL_DAO_TAO
+              .QUAN_LY_LUAN_VAN_PHU_LUC_QUYET_DINH_HOI_DONG_DANH_GIA_LUAN_VAN_DE_AN,
             description: "Phụ lục quyết định hội đồng đánh giá luận văn/đề án",
           },
           {

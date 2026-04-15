@@ -105,7 +105,7 @@ export const ModalVanBang = () => {
           />
           <Space>
             <Button type="primary" onClick={() => handlePrintVanBang()} icon={<Printer />}>
-              Sao lưu văn bằng
+              Sao y QĐ văn bằng
             </Button>
           </Space>
         </div>

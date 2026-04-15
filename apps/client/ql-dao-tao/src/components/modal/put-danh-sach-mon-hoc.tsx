@@ -109,14 +109,14 @@ const PutSubjectListModal = () => {
       onFinish={onOk}
       onCancel={onClose}
       maskClosable={true}
-      title={input?.id ? "Sửa nhóm môn học" : "Thêm nhóm môn học"}
+      title={input?.id ? "Sửa thông tin môn học" : "Thêm thông tin môn học"}
       className="w-[60vw]"
       okButtonProps={{ disabled: input?.isLocked }}
       cancelButtonProps={{ disabled: input?.isLocked }}
     >
       <Col span={12}>
-        <FormItem form={form} name="name" label="Tên nhóm môn học" required>
-          <Input placeholder="Nhập tên môn học" readOnly={input?.isLocked} />
+        <FormItem form={form} name="name" label="Tên thông tin môn học" required>
+          <Input placeholder="Nhập tên thông tin môn học" readOnly={input?.isLocked} />
         </FormItem>
       </Col>
       {/* <Col span={12}>

@@ -518,7 +518,7 @@ export default function SubjectList() {
                 .filter(Boolean)
                 .join(" - ")
 
-              return `Nhóm môn: ${[name, org].filter(Boolean).join(" | ")}`
+              return `${[name, org].filter(Boolean).join(" | ")}`
             }}
             className="mt-0"
             childrenFieldName="subjectVersion"
@@ -855,7 +855,10 @@ export default function SubjectList() {
                     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_SACH_MON_HOC,
                     "THEM"
                   ) && (
-                    <Tooltip title="Thêm mới phiên bản môn học" placement="bottomLeft">
+                    <Tooltip
+                      title="Thêm mới thông tin chương trình chi tiết môn học"
+                      placement="bottomLeft"
+                    >
                       <BookPlus
                         onClick={() => handleModalSubjectVersion(record.id, "", isLocked)}
                         className="cursor-pointer"
