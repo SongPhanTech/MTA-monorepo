@@ -15,6 +15,7 @@ import { keHoachThiStore } from ".."
 import ExportExamList from "./export-exam-list"
 import { useAbility } from "@workspace/permissions/hooks"
 import { QL_DAO_TAO_PERMISSION } from "@workspace/router"
+import where from "lodash/fp/where"
 
 interface StudentSubjectScoreFormType {
   list: Record<
@@ -224,7 +225,7 @@ export default function DanhSachSinhVien() {
 
   const listForm = Form.useWatch("list", form) || []
 
-  const handleLayDiemCCTX = async () => {
+  const handleLayDiemCCTX = async ({ lockAfter = true }: { lockAfter?: boolean } = {}) => {
     try {
       showSpinner()
       const resExam = await sqlTransaction([
@@ -333,6 +334,19 @@ export default function DanhSachSinhVien() {
       if (res.status !== 200) {
         throw new Error("Lấy điểm thất bại")
       }
+      if (lockAfter) {
+        await updateExamData({
+          where: { id: selectedExamId || "" },
+          data: {
+            subjectClass: {
+              updateMany: {
+                data: { isLockScore: true },
+                where: {},
+              },
+            },
+          },
+        })
+      }
       queryClient.invalidateQueries({
         queryKey: ["zenstack", "ExamPaper"],
       })
@@ -342,7 +356,7 @@ export default function DanhSachSinhVien() {
       queryClient.invalidateQueries({
         queryKey: ["zenstack", "Exam"],
       })
-      message.success("Lấy điểm thành công")
+      lockAfter && message.success("Lấy điểm và khóa điểm thành công")
     } catch (error: any) {
       message.error(error.message || "Có lỗi xảy ra, vui lòng thử lại sau!")
     } finally {
@@ -723,7 +737,7 @@ export default function DanhSachSinhVien() {
               <Button
                 type="primary"
                 disabled={examData?.lockExamSessions || isCreatedExamCode}
-                onClick={handleLayDiemCCTX}
+                onClick={() => handleLayDiemCCTX()}
               >
                 0. Lấy điểm SV
               </Button>
@@ -761,6 +775,9 @@ export default function DanhSachSinhVien() {
                         },
                       },
                     })
+                    if (!e.target.checked) {
+                      await handleLayDiemCCTX({ lockAfter: false })
+                    }
                   } catch (error) {}
                 }}
                 disabled={examData?.lockExamSessions || isCreatedExamCode}
