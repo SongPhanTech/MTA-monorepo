@@ -1219,10 +1219,7 @@ export default function NhapDiem({
                 dataIndex: "examScore",
                 width: 100,
                 align: "center",
-                render: (
-                  _,
-                  { id, attendanceScore, midtermScore, examBanned, examScore }
-                ) => {
+                render: (_, { id, attendanceScore, midtermScore, examBanned, examScore }) => {
                   const isMissingScore =
                     (attendanceScore == null || midtermScore == null) &&
                     !dataDetailSubjectClass?.subject?.onePoint

@@ -269,7 +269,7 @@ export default function MonCoHVSVChuaDat({ type }: { type?: $Enums.SubjectClassT
             pagination={{
               current: currentPage,
               pageSize: numberOfPages,
-              total: res?.data?.count ?? 0,
+              total: res?.status === 200 ? (res?.data?.count ?? 0) : 0,
               onChange: (page, pageSize) => {
                 if (numberOfPages === pageSize) {
                   setCurrentPage(page)
