@@ -63,6 +63,8 @@ export default function ThoiKhoaBieu({
     room: undefined,
     pcgd: undefined,
     approved: undefined,
+    examDateFrom: undefined,
+    examDateTo: undefined,
   })
 
   const [form] = Form.useForm<TeachingAssignmentForm>()
@@ -188,6 +190,21 @@ export default function ThoiKhoaBieu({
               approveLecturerAssignmentAt: null,
             }
           : {}),
+
+        // 👇 Thêm lọc ngày thi
+        ...(filters.examDateFrom || filters.examDateTo
+          ? {
+              examDate: {
+                ...(filters.examDateFrom
+                  ? { gte: (filters.examDateFrom as unknown as Dayjs).startOf("day").toDate() }
+                  : {}),
+                ...(filters.examDateTo
+                  ? { lte: (filters.examDateTo as unknown as Dayjs).endOf("day").toDate() }
+                  : {}),
+              },
+            }
+          : {}),
+
         subject: {
           ...(filters.organization && filters.organization.length > 0
             ? {
@@ -345,7 +362,6 @@ export default function ThoiKhoaBieu({
               in: orgIds,
             },
         ...whereOrganization,
-        // sParentId: !khoaBoMon ? undefined : orgId,
       },
       orderBy: [{ iSTT: "asc" }, { sTen: "asc" }],
     },
@@ -636,7 +652,6 @@ export default function ThoiKhoaBieu({
                   width: 80,
                   align: "center",
                   type: "order",
-                  // distinctFilters: ["maxStudent", "credit"],
                   render: (_, record) => (
                     <p>
                       {record?.fixedClasses?.reduce(
@@ -709,22 +724,13 @@ export default function ThoiKhoaBieu({
                 },
                 {
                   title: "Ngày thi",
+                  dataIndex: "examDate", // 👈 thêm dataIndex
                   align: "center",
-                  width: 100,
+                  width: 180,
+                  type: "date_range", // 👈 thêm type bộ lọc
+                  filterKey: ["examDateFrom", "examDateTo"], // 👈 map sang 2 filter key
                   render: (_, record) => (record.examDate ? formatDate(record.examDate) : ""),
                 },
-                // {
-                //     title: 'Hạn nhập điểm TX/ĐK',
-                //     width: 200,
-                //     align: 'center',
-                //     render: (value) => (value ? formatDate(value) : ''),
-                // },
-                // {
-                //     title: 'Hạn nhập điểm thi',
-                //     width: 170,
-                //     align: 'center',
-                //     render: (value) => (value ? formatDate(value) : ''),
-                // },
                 {
                   title: "Thời khoá biểu",
                   width: 150,
@@ -740,30 +746,6 @@ export default function ThoiKhoaBieu({
                     })
                   },
                 },
-                // {
-                //     title: 'Số SV tối đa',
-                //     width: 150,
-                //     align: 'center',
-                //     type: 'order',
-                //     distinctFilters: ['credit', 'subjectClassStudent'],
-                // },
-                // {
-                //     title: <Tooltip title="Đơn vị phụ trách">ĐVPT</Tooltip>,
-                //     width: 80,
-                //     align: 'center',
-                //     type: 'tree_select',
-                //     options: treeData,
-                //     render: (_, record) =>
-                //         record.subject?.managementOrganization?.sMa || '',
-                // },
-                // {
-                //     title: 'Điểm bằng nhau',
-                //     width: 150,
-                //     align: 'center',
-                //     render: (value) => (
-                //         <Checkbox checked={value.subjectEquivalentType} disabled />
-                //     ),
-                // },
                 ...(canXemTatCa && !khoaBoMon
                   ? [
                       {
@@ -828,7 +810,7 @@ export default function ThoiKhoaBieu({
         {`
                 .readonly-checkbox.ant-checkbox-wrapper-disabled {
                     opacity: 1;
-                    pointer-events: none; /* không click được */
+                    pointer-events: none;
                     }
 
                 .readonly-checkbox .ant-checkbox-disabled .ant-checkbox-inner {
@@ -844,3 +826,4 @@ export default function ThoiKhoaBieu({
 ThoiKhoaBieu.getLayout = function getLayout(page: React.ReactElement) {
   return <DefaultLayout>{page}</DefaultLayout>
 }
+S
