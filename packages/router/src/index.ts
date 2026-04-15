@@ -671,10 +671,16 @@ const NAVIGATION: NavigationType = {
             description: "Cấu hình thanh toán",
           },
           {
-            id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_LUAN_VAN_GIAY_MOI_HUONG_DAN_LUAN_VAN_DO_AN,
-            label: "Giấy mời hướng dẫn luận văn/đồ án",
-            path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_LUAN_VAN_GIAY_MOI_HUONG_DAN_LUAN_VAN_DO_AN,
-            description: "Giấy mời hướng dẫn luận văn/đồ án",
+            id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_GIAY_MOI_HUONG_DAN_LUAN_VAN_DE_AN,
+            label: "Giấy mời hướng dẫn luận văn/đề án",
+            path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_GIAY_MOI_HUONG_DAN_LUAN_VAN_DE_AN,
+            description: "Giấy mời hướng dẫn luận văn/đề án",
+          },
+          {
+            id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_PHU_LUC_QUYET_DINH_HOI_DONG_DANH_GIA_LUAN_VAN_DE_AN,
+            label: "Phụ lục quyết định hội đồng đánh giá luận văn/đề án",
+            path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_PHU_LUC_QUYET_DINH_HOI_DONG_DANH_GIA_LUAN_VAN_DE_AN,
+            description: "Phụ lục quyết định hội đồng đánh giá luận văn/đề án",
           },
           {
             id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_LUAN_VAN_DANH_SACH_HO_SO_BAO_VE,
