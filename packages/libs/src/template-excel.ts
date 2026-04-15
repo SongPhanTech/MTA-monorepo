@@ -41,6 +41,17 @@ export interface ExportOptions {
   sheetName?: string
 }
 
+const INVALID_XML_CONTROL_CHARS = /[\u0000-\u0008\u000B\u000C\u000E-\u001F\uFFFE\uFFFF]/g
+
+/**
+ * Excel/OpenXML không chấp nhận một số control chars trong text cell.
+ * Dữ liệu production đôi khi chứa các ký tự này (copy/paste), khiến file tải về nhưng Excel báo corrupt.
+ */
+function sanitizeExcelCellValue(value: unknown): ExcelJS.CellValue {
+  if (typeof value !== "string") return value as ExcelJS.CellValue
+  return value.replace(INVALID_XML_CONTROL_CHARS, "")
+}
+
 function cloneWorksheet(
   workbook: ExcelJS.Workbook,
   sourceSheet: ExcelJS.Worksheet,
@@ -217,7 +228,7 @@ async function handleExcelJSDefault(
           for (const key in data) {
             text = text.replace(new RegExp(`{{\\s*${key}\\s*}}`, "g"), String(data[key] ?? ""))
           }
-          cell.value = text
+          cell.value = sanitizeExcelCellValue(text) as ExcelJS.CellValue
         }
       })
     })
@@ -237,7 +248,7 @@ async function handleExcelJSDefault(
 
         for (const cellData of rowData.cells) {
           const cell = excelRow.getCell(currentCol)
-          cell.value = cellData.value
+          cell.value = sanitizeExcelCellValue(cellData.value) as ExcelJS.CellValue
 
           // Style
           cell.alignment = {
@@ -390,7 +401,7 @@ async function handleSheetJSExport(
             text = text.replace(new RegExp(`{{\\s*${key}\\s*}}`, "g"), String(data[key] ?? ""))
           }
 
-          cell.value = text
+          cell.value = sanitizeExcelCellValue(text)
         }
       })
     })
@@ -417,7 +428,7 @@ async function handleSheetJSExport(
 
           cloneCellStyle(templateCell, cell)
 
-          cell.value = cellData.value
+          cell.value = sanitizeExcelCellValue(cellData.value)
 
           const colSpan = cellData.colSpan ?? 1
           const rowSpan = cellData.rowSpan ?? 1
@@ -572,7 +583,7 @@ async function handleExcelJSMergeSheets(
           for (const key in data) {
             text = text.replace(new RegExp(`{{\\s*${key}\\s*}}`, "g"), String(data[key] ?? ""))
           }
-          cell.value = text
+          cell.value = sanitizeExcelCellValue(text)
         }
       })
     })
@@ -591,7 +602,7 @@ async function handleExcelJSMergeSheets(
 
         for (const cellData of rowData.cells) {
           const cell = excelRow.getCell(currentCol)
-          cell.value = cellData.value
+          cell.value = sanitizeExcelCellValue(cellData.value)
 
           // Style (đã bao gồm logic border: false)
           cell.alignment = {
