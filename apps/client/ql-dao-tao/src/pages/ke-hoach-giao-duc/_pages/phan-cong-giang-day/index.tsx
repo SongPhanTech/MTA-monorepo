@@ -73,6 +73,7 @@ type TeachingAssignmentForm = {
       examType: $Enums.ExamType | null
       roomId: string | null
       trainingLocationId: string | null
+      maxStudent: number | null
       isEdit?: boolean
       cancelled: boolean
     }
@@ -652,6 +653,7 @@ export default function PhanCongGiangDay({
                 examType: subjectClass.examType ?? null,
                 roomId: subjectClass.roomId ?? null,
                 trainingLocationId: subjectClass.trainingLocationId ?? null,
+                maxStudent: subjectClass.maxStudent ?? null,
               },
             },
           }))
@@ -683,6 +685,7 @@ export default function PhanCongGiangDay({
                 schedule: subjectClass.schedule,
                 examType: subjectClass.examType ?? null,
                 roomId: subjectClass.roomId ?? null,
+                maxStudent: subjectClass.maxStudent ?? null,
                 lecturerId: subjectClass.lecturerId ?? null,
                 extraLecturerId: subjectClass.extraLecturerId ?? null,
                 enterGradeLecturerId: subjectClass.enterGradeLecturerId ?? null,
@@ -840,6 +843,7 @@ export default function PhanCongGiangDay({
               examType: curr.examType,
               roomId: curr.roomId,
               trainingLocationId: curr.trainingLocationId ?? null,
+              maxStudent: curr.maxStudent ?? null,
               isEdit: false,
               cancelled: !!curr.cancelled,
             }
@@ -1699,6 +1703,14 @@ export default function PhanCongGiangDay({
 
                   if ("trainingLocationId" in changedField) {
                     newSubjectClassData.roomId = null
+                    newSubjectClassData.maxStudent = null
+                  }
+
+                  if ("roomId" in changedField) {
+                    const room = buildingData
+                      .flatMap((b) => b.rooms)
+                      .find((r) => r.id === changedField.roomId)
+                    newSubjectClassData.maxStudent = room?.capacity ?? null
                   }
 
                   form.setFieldValue("subjectClass", {
@@ -1866,7 +1878,10 @@ export default function PhanCongGiangDay({
                   distinctFilters: ["maxStudent"],
                   render: (_, record) => (
                     <p>
-                      {record.maxStudent ??
+                      {(subjectClassForm?.[record.id]?.isEdit
+                        ? subjectClassForm[record.id]?.maxStudent
+                        : null) ??
+                        record.maxStudent ??
                         record?.fixedClasses?.reduce(
                           (acc, curr) => acc + (curr?._count?.students ?? 0),
                           0
@@ -2064,15 +2079,19 @@ export default function PhanCongGiangDay({
                             value: e.id,
                             selectable: false,
                             children: e.rooms.map((room) => ({
-                              title: room.name,
-                              label: <p className="text-primary">{room.name}</p>,
+                              title: (
+                                <span>
+                                  {room.name} - Sức chứa: {room.capacity}
+                                </span>
+                              ),
+                              label: room.name,
+                              filterValue: room.name,
                               value: room.id,
                               selectable: true,
                             })),
                           }))}
                         filterTreeNode={(input, option) =>
-                          (option?.title ?? "")
-                            .toString()
+                          ((option as any)?.filterValue ?? "")
                             .toLowerCase()
                             .includes(input?.toLowerCase())
                         }
@@ -2088,6 +2107,7 @@ export default function PhanCongGiangDay({
                         showSearch
                         allowClear
                         treeNodeFilterProp="title"
+                        treeNodeLabelProp="label"
                         multiple={false}
                         treeExpandAction="click"
                         showCheckedStrategy="SHOW_CHILD"
