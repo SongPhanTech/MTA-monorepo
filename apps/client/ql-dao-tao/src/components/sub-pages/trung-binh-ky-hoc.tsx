@@ -409,16 +409,16 @@ const DiemTrungBinhKyHoc = () => {
                     ? Number(value).toFixed(2).replace(".", ",")
                     : "-",
               },
-              {
-                title: "Điểm tốt nghiệp thấp nhất",
-                dataIndex: ["studentSemesterResult", "0", "lowestGraduationScore"],
-                width: 130,
-                align: "center",
-                render: (value) =>
-                  value !== null && value !== undefined
-                    ? Number(value).toFixed(2).replace(".", ",")
-                    : "-",
-              },
+              // {
+              //   title: "Điểm tốt nghiệp thấp nhất",
+              //   dataIndex: ["studentSemesterResult", "0", "lowestGraduationScore"],
+              //   width: 130,
+              //   align: "center",
+              //   render: (value) =>
+              //     value !== null && value !== undefined
+              //       ? Number(value).toFixed(2).replace(".", ",")
+              //       : "-",
+              // },
               {
                 title: "Tổng tín chỉ",
                 dataIndex: ["studentSemesterResult", "0", "totalCredits"],

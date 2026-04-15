@@ -413,6 +413,7 @@ const ModalCauHinhLuanVan = () => {
     })
   }
   const onOk = async () => {
+    await form.validateFields()
     const dataFormValue = form.getFieldsValue()
 
     try {
@@ -647,6 +648,7 @@ const ModalCauHinhLuanVan = () => {
       key: "defenseConfig",
       label: "Cấu hình bảo vệ",
       icon: <SettingOutlined />,
+      forceRender: true,
       children: (
         <Row gutter={32} className="w-full mt-4">
           <Col span={12}>
@@ -882,6 +884,7 @@ const ModalCauHinhLuanVan = () => {
       key: "defenseInforSubmit",
       label: "Thông tin nộp luận văn",
       icon: <CloudUploadOutlined />,
+      forceRender: true,
       children: (
         <Row gutter={32} className="w-full mt-4">
           <Col span={24}>
@@ -997,6 +1000,7 @@ const ModalCauHinhLuanVan = () => {
       key: "defenseInforPayment",
       label: "Thông tin thanh toán",
       icon: <DollarOutlined />,
+      forceRender: true,
       children: (
         <Row gutter={32} className="w-full mt-4">
           <Col span={24}>
@@ -1322,6 +1326,7 @@ const ModalCauHinhLuanVan = () => {
       key: "inforSubmit",
       label: "Hồ sơ và Kết quả bảo vệ",
       icon: <SolutionOutlined />,
+      forceRender: true,
       children: (
         <Row gutter={32} className="w-full mt-4">
           <Col span={24}>
