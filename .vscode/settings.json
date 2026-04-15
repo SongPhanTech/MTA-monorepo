@@ -40,7 +40,4 @@
     "[caddyfile]": {
         "editor.defaultFormatter": "matthewpi.caddyfile-support"
     },
-    "[typescriptreact]": {
-        "editor.defaultFormatter": "vscode.typescript-language-features"
-    }
 }

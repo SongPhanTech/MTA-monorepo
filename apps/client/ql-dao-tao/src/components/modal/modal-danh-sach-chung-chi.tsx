@@ -102,8 +102,6 @@ const ModalDanhSachChungChi = () => {
 
   const certificates = input?.certificates || []
 
-  console.log(111, displayCertificates)
-
   useEffect(() => {
     setDisplayCertificates(certificates)
     setDraftValues(initializeDrafts(certificates))
@@ -365,7 +363,7 @@ const ModalDanhSachChungChi = () => {
             title: "Minh chứng",
             align: "center",
             width: 200,
-            render: (_: any, cert: any) => {
+            render: (_, cert) => {
               const files: DocFileItem[] = draftDocFiles[cert.id] || []
               const isEditing = editingCertId === cert.id
               return (
@@ -378,9 +376,9 @@ const ModalDanhSachChungChi = () => {
                           className="cursor-pointer text-blue-600 hover:underline text-xs truncate max-w-[120px]"
                           onClick={() =>
                             onOpenPreview({
-                              uri: getMinioUrl(file.path),
+                              uri: file.path,
                               name: file.name,
-                              mimeType: file.mimeType,
+                              mimeType: file.name.split(".").pop() || file.mimeType,
                             })
                           }
                         >

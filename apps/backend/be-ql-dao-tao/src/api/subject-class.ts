@@ -1770,7 +1770,7 @@ app.openapi(exportSubjectClassListExcel, async (c) => {
       no: idx + 1,
       code: item.code || "",
       name: item.subject?.name || "",
-      examType: examTypeOptions.find((et) => et.value === item.subject?.examType)?.label || "", // hình thức thi
+      examType: examTypeOptions.find((et) => et.value === item.examType)?.label || "", // hình thức thi
       status: item.enteredExamScore
         ? "Đã nhập điểm thi"
         : item.enteredScore
