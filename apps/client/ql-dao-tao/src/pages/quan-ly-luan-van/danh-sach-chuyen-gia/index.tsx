@@ -121,7 +121,7 @@ export default function ExpertProfile() {
             include: {
               rank: true,
               academicDegreeType: true,
-              academicRankType: true,              
+              academicRankType: true,
             },
           },
         },
@@ -253,7 +253,7 @@ export default function ExpertProfile() {
                 align: "center",
                 type: "input",
               },
-              
+
               {
                 title: "Đơn vị công tác",
                 dataIndex: "workplace",
@@ -261,8 +261,7 @@ export default function ExpertProfile() {
                 align: "center",
                 type: "input",
                 render: (__, record) =>
-
-                  `${ record.lecturer ? record.lecturer?.organization?.sMa+"-"+record.lecturer?.organization?.sTen : record?.workplace}` 
+                  `${record.lecturer ? record.lecturer?.organization?.sMa + "-" + record.lecturer?.organization?.sTen : record?.workplace}`,
               },
               {
                 title: "Số điện thoại",

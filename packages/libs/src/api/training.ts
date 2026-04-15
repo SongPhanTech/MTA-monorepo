@@ -143,6 +143,7 @@ import type {
   MergeExamRequest,
   MergeExamResponse,
   OpenSubjectClassParams,
+  OpenSubjectClassReExam400,
   OpenSubjectClassReExamParams,
   OpenSubjectClassReExamStudentsParams,
   OpenSubjectClassRetakeParams,
@@ -6688,7 +6689,7 @@ export type openSubjectClassReExamResponse200 = {
 }
 
 export type openSubjectClassReExamResponse400 = {
-  data: void
+  data: OpenSubjectClassReExam400
   status: 400
 }
 
@@ -6735,7 +6736,7 @@ export const getOpenSubjectClassReExamQueryKey = (params?: OpenSubjectClassReExa
 
 export const getOpenSubjectClassReExamQueryOptions = <
   TData = Awaited<ReturnType<typeof openSubjectClassReExam>>,
-  TError = void,
+  TError = OpenSubjectClassReExam400,
 >(
   params: OpenSubjectClassReExamParams,
   options?: {
@@ -6762,11 +6763,11 @@ export const getOpenSubjectClassReExamQueryOptions = <
 export type OpenSubjectClassReExamQueryResult = NonNullable<
   Awaited<ReturnType<typeof openSubjectClassReExam>>
 >
-export type OpenSubjectClassReExamQueryError = void
+export type OpenSubjectClassReExamQueryError = OpenSubjectClassReExam400
 
 export function useOpenSubjectClassReExam<
   TData = Awaited<ReturnType<typeof openSubjectClassReExam>>,
-  TError = void,
+  TError = OpenSubjectClassReExam400,
 >(
   params: OpenSubjectClassReExamParams,
   options: {
@@ -6787,7 +6788,7 @@ export function useOpenSubjectClassReExam<
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useOpenSubjectClassReExam<
   TData = Awaited<ReturnType<typeof openSubjectClassReExam>>,
-  TError = void,
+  TError = OpenSubjectClassReExam400,
 >(
   params: OpenSubjectClassReExamParams,
   options?: {
@@ -6808,7 +6809,7 @@ export function useOpenSubjectClassReExam<
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useOpenSubjectClassReExam<
   TData = Awaited<ReturnType<typeof openSubjectClassReExam>>,
-  TError = void,
+  TError = OpenSubjectClassReExam400,
 >(
   params: OpenSubjectClassReExamParams,
   options?: {
@@ -6825,7 +6826,7 @@ export function useOpenSubjectClassReExam<
 
 export function useOpenSubjectClassReExam<
   TData = Awaited<ReturnType<typeof openSubjectClassReExam>>,
-  TError = void,
+  TError = OpenSubjectClassReExam400,
 >(
   params: OpenSubjectClassReExamParams,
   options?: {

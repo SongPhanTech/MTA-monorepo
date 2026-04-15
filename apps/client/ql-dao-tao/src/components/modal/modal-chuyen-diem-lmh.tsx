@@ -172,8 +172,7 @@ const ModalChuyenDiemLopMonHoc = () => {
 
       const updatePromises = studentsToSave.map(async (item) => {
         await updateSubjectScore({
-          data: { 
-            
+          data: {
             finalScore: item.finalScore,
             attendanceScore: item.attendanceScore,
             midtermScore: item.midtermScore,
@@ -257,9 +256,7 @@ const ModalChuyenDiemLopMonHoc = () => {
         </Row>
 
         <div className="mt-6 mx-auto w-full max-w-[1000px]">
-          <h3 className="mb-4 font-bold">
-            Danh sách sinh viên  trong lớp môn học:
-          </h3>
+          <h3 className="mb-4 font-bold">Danh sách sinh viên trong lớp môn học:</h3>
           <div className="overflow-x-auto">
             <Table
               dataSource={displayStudents}

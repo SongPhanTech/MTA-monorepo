@@ -217,17 +217,10 @@ export default function PhanCongGiangDay({
                 },
               }
             : {},
-        fixedClasses:
-          trainingCourseId && type === "NORMAL" ? { some: { trainingCourseId } } : { some: {} },
-        ...(fixedClassId
-          ? {
-              fixedClasses: {
-                some: {
-                  id: fixedClassId,
-                },
-              },
-            }
+        ...(trainingCourseId && type === "NORMAL"
+          ? { fixedClasses: { some: { trainingCourseId } } }
           : {}),
+        ...(fixedClassId ? { fixedClasses: { some: { id: fixedClassId } } } : {}),
         deletedAt: null,
         active: true,
         trainingObjectTypeId,
@@ -274,6 +267,8 @@ export default function PhanCongGiangDay({
       filterStatus,
     ]
   )
+
+  console.log(111, where)
 
   const { data: dmDonViIds = [] } = useFindManyDM_DonVi(
     {
@@ -424,11 +419,7 @@ export default function PhanCongGiangDay({
             },
           },
         },
-        Id: !khoaBoMon
-          ? undefined
-          : {
-              in: orgIds,
-            },
+        Id: !khoaBoMon ? undefined : { in: orgIds },
         ...whereOrganization,
       },
     },
@@ -448,13 +439,7 @@ export default function PhanCongGiangDay({
       cancelled: false,
       type: type,
       ...(trainingCourseId && type === "NORMAL"
-        ? {
-            fixedClasses: {
-              some: {
-                trainingCourseId,
-              },
-            },
-          }
+        ? { fixedClasses: { some: { trainingCourseId } } }
         : {}),
     },
   })
@@ -468,13 +453,7 @@ export default function PhanCongGiangDay({
       cancelled: false,
       type: type,
       ...(trainingCourseId && type === "NORMAL"
-        ? {
-            fixedClasses: {
-              some: {
-                trainingCourseId,
-              },
-            },
-          }
+        ? { fixedClasses: { some: { trainingCourseId } } }
         : {}),
     },
   })

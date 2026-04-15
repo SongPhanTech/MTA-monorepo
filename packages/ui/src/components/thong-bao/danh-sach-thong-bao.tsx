@@ -34,7 +34,14 @@ function DanhSachThongBao() {
         <Space direction="vertical">
           {data?.map((item) => {
             return (
-              <div key={item?.id} onClick={() => {console.log("open into");onOpen(item?.id)}} className="cursor-pointer">
+              <div
+                key={item?.id}
+                onClick={() => {
+                  console.log("open into")
+                  onOpen(item?.id)
+                }}
+                className="cursor-pointer"
+              >
                 <Alert
                   showIcon
                   icon={<NotificationOutlined />}

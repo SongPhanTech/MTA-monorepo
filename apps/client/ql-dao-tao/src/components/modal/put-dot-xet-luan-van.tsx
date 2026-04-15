@@ -43,8 +43,11 @@ const PutThesisSession = () => {
 
   useEffect(() => {
     if (thesisSession) {
-      const { decisionMaker: _decisionMaker, defenseDecisionMaker: _defenseDecisionMaker, ...sessionRest } =
-        thesisSession
+      const {
+        decisionMaker: _decisionMaker,
+        defenseDecisionMaker: _defenseDecisionMaker,
+        ...sessionRest
+      } = thesisSession
       const decisionMaker = thesisSession.decisionMaker?.trim() ?? ""
       const [firstToken, ...rest] = decisionMaker.split(" ")
       const decisionMakerRole = firstToken === "PGĐ" || firstToken === "GĐ" ? firstToken : undefined

@@ -801,6 +801,7 @@ export * from './notificationMessageRequest';
 export * from './openSubjectClass';
 export * from './openSubjectClassFixedClassItem';
 export * from './openSubjectClassParams';
+export * from './openSubjectClassReExam400';
 export * from './openSubjectClassReExamParams';
 export * from './openSubjectClassReExamResponse';
 export * from './openSubjectClassReExamStudentsParams';

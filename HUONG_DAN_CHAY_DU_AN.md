@@ -107,6 +107,7 @@ cp .env.example .env
 ```
 
 Chỉnh tối thiểu:
+
 - **`DATABASE_URL`**: trỏ đúng DB (local hoặc server)
 
 ### 5.2. Chạy service backend
@@ -162,11 +163,13 @@ docker compose up -d
 ```
 
 Mặc định theo `docker-compose.yaml`:
+
 - PostgreSQL: `localhost:5432`
 - OpenObserve: `localhost:5080`
 - Backup UI: `localhost:8085`
 
 Sau đó cập nhật `DATABASE_URL` trong:
+
 - `packages/database/.env`
 - và `.env` của backend bạn chạy
 
@@ -196,6 +199,7 @@ Chỉnh `DATABASE_URL` trong `.env` cho đúng DB.
 ### 7.3. Quy trình đồng bộ schema nhanh (dev/local) – khuyến nghị khi dựng mới DB
 
 Trong `packages/database` có sẵn scripts:
+
 - `pnpm db:push`: `prisma db push --skip-generate`
 - `pnpm db:sync`: `zenstack generate && prisma db push --skip-generate`
 
@@ -207,6 +211,7 @@ pnpm db:sync
 ```
 
 Khi nào dùng:
+
 - DB local mới tạo
 - Muốn “kéo schema lên DB” nhanh, không quan tâm lịch sử migration
 
@@ -221,12 +226,14 @@ pnpm prisma migrate dev
 ```
 
 Ghi chú:
+
 - `prisma migrate dev` phù hợp **development/local**.
 - Repo đã có thư mục migrations trong `packages/database/prisma/migrations/*`.
 
 ### 7.5. Generate SQL/client (nếu cần)
 
 Trong `packages/database` có:
+
 - `pnpm generate:sql` → `prisma generate --sql`
 
 ```bash
@@ -239,6 +246,7 @@ pnpm generate:sql
 ## 8) Seed dữ liệu (tham khảo)
 
 Repo có:
+
 - Seed TypeScript: `packages/database/src/seed.ts`
 - Seed SQL: `packages/database/src/seed.sql`
 
@@ -261,4 +269,3 @@ Nếu cần chuẩn hoá 1 lệnh seed cho cả team (ví dụ `pnpm --filter @w
 - [ ] `packages/database`: đã `pnpm db:sync` (hoặc `pnpm prisma migrate dev` tuỳ quy trình)
 - [ ] Backend chạy được (bun)
 - [ ] Client chạy được và trỏ đúng API theo cấu hình app
-
