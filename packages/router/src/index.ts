@@ -647,6 +647,12 @@ const NAVIGATION: NavigationType = {
             description: "Thanh toán hội đồng bảo vệ",
           },
           {
+            id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_LUAN_VAN_DANH_SACH_GVHD,
+            label: "Thống kê cán bộ hướng dẫn",
+            path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_LUAN_VAN_DANH_SACH_GVHD,
+            description: "Thống kê cán bộ hướng dẫn",
+          },
+          {
             id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_LUAN_VAN_DANH_SACH_THANH_TOAN_GVHD,
             label: "Danh sách thanh toán GVHD",
             path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_LUAN_VAN_DANH_SACH_THANH_TOAN_GVHD,
