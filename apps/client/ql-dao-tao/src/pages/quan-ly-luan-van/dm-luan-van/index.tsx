@@ -1295,6 +1295,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
             <Row gutter={[8, 8]}>
               <Col span={24}>
                 <Space size={12} align="end" wrap className="w-full">
+                  {role === "P7" && (
                   <Select
                     className="min-w-72 w-72"
                     placeholder="Chọn mẫu in"
@@ -1309,6 +1310,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       setSelectedPrintTemplateId(value ? String(value) : undefined)
                     }
                   />
+                  )}
+                  {role === "P7" && (
                   <Button
                     type="primary"
                     onClick={handleExportExcelFromTemplate}
@@ -1316,6 +1319,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                   >
                     Xuất Excel
                   </Button>
+                  )}
                   <Form.Item
                     name="topicEntryDeadline"
                     label="Hạn nhập đề tài"
@@ -1465,7 +1469,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       <div onClick={(e) => e.stopPropagation()}>
                         <TextArea
                           rows={3}
-                          disabled={role !== "Khoa"}
+                          disabled={role !== "Khoa" || !isWithinGvhdSupervisorEditWindow()}
                           defaultValue={currentValue}
                           onBlur={(e) => {
                             handleEditChange(record?.id, "title", e.target.value)
@@ -1497,7 +1501,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       <div onClick={(e) => e.stopPropagation()}>
                         <TextArea
                           rows={2}
-                          disabled={role !== "Khoa"}
+                          disabled={role !== "Khoa" || !isWithinGvhdSupervisorEditWindow()}
                           defaultValue={currentValue}
                           onBlur={(e) => {
                             handleEditChange(record?.id, "researchTopicAssociated", e.target.value)
@@ -1579,7 +1583,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           className="w-full"
                           dropdownMatchSelectWidth={false}
                           dropdownStyle={{ minWidth: 200 }}
-                          disabled={role !== "Khoa" && !isWithinGvhdSupervisorEditWindow()}
+                          disabled={role !== "Khoa" || !isWithinGvhdSupervisorEditWindow()}
                           options={expertProfileData?.map((item) => {
                             const text = getSupervisorName(item,true)
                             const hasLecturer = item.lecturer != null
@@ -1624,7 +1628,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           dropdownMatchSelectWidth={false}
                           dropdownStyle={{ minWidth: 200 }}
                           className="w-full"
-                          disabled={role !== "Khoa" && !isWithinGvhdSupervisorEditWindow()}
+                          disabled={role !== "Khoa" || !isWithinGvhdSupervisorEditWindow()}
                           options={expertProfileData?.map((item) => {
                             const text = getSupervisorName(item,true)
                             const hasLecturer = item.lecturer != null
@@ -1669,7 +1673,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           dropdownMatchSelectWidth={false}
                           dropdownStyle={{ minWidth: 200 }}
                           className="w-full"
-                          disabled={role !== "Khoa" && !isWithinCouncilEditWindow()}
+                          disabled={role !== "Khoa" || !isWithinCouncilEditWindow()}
                           options={expertProfileData
                             ?.filter((item) => item.eligiblePresident === true)
                             .map((item) => {
@@ -1717,7 +1721,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           className="w-full"
                           dropdownMatchSelectWidth={false}
                           dropdownStyle={{ minWidth: 200 }}
-                          disabled={role !== "Khoa" && !isWithinCouncilEditWindow()}
+                          disabled={role !== "Khoa" || !isWithinCouncilEditWindow()}
                           options={expertProfileData
                             ?.filter((item) => item.eligibleSecretary === true)
                             .map((item) => {
@@ -1765,7 +1769,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           className="w-full"
                           dropdownMatchSelectWidth={false}
                           dropdownStyle={{ minWidth: 200 }}
-                          disabled={role !== "Khoa" && !isWithinCouncilEditWindow()}
+                          disabled={role !== "Khoa" || !isWithinCouncilEditWindow()}
                           options={expertProfileData?.map((item) => {
                             const text = getSupervisorName(item,true)
                             const hasLecturer = item.lecturer != null
@@ -1809,7 +1813,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           className="w-full"
                           dropdownMatchSelectWidth={false}
                           dropdownStyle={{ minWidth: 200 }}
-                          disabled={role !== "Khoa" && !isWithinCouncilEditWindow()}
+                          disabled={role !== "Khoa" || !isWithinCouncilEditWindow()}
                           options={expertProfileData?.map((item) => {
                             const text = getSupervisorName(item,true)
                             const hasLecturer = item.lecturer != null
@@ -1853,7 +1857,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           className="w-full"
                           dropdownMatchSelectWidth={false}
                           dropdownStyle={{ minWidth: 200 }}
-                          disabled={role !== "Khoa" && !isWithinCouncilEditWindow()}
+                          disabled={role !== "Khoa" || !isWithinCouncilEditWindow()}
                           options={expertProfileData?.map((item) => {
                             const text = getSupervisorName(item,true)
                             const hasLecturer = item.lecturer != null
@@ -1894,6 +1898,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                         <Select
                           dropdownMatchSelectWidth={false}
                           dropdownStyle={{ minWidth: 200 }}
+                          disabled={role !== "Khoa" || !isWithinGvhdSupervisorEditWindow()}
                           className="w-full"
                           value={currentValue || ""}
                           options={roomData?.map((item) => ({
@@ -1924,6 +1929,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       <div onClick={(e) => e.stopPropagation()}>
                         <DatePicker
                           className="w-full"
+                          disabled={role !== "Khoa" || !isWithinGvhdSupervisorEditWindow()}
                           placeholder="Chọn ngày bảo vệ"
                           value={dayjsValue || undefined}
                           onChange={(value) => handleEditChange(record?.id, "defenseDate", value)}
@@ -1959,6 +1965,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           dropdownMatchSelectWidth={false}
                           dropdownStyle={{ minWidth: 100 }}
                           value={dayjsValue || undefined}
+                          disabled={role !== "Khoa" || !isWithinGvhdSupervisorEditWindow()}
                           placeholder="Chọn thời gian bảo vệ"
                           options={defenseSessionData?.map((item) => ({
                             label: item.startTime ? dayjs(item.startTime).format("HH:mm") : "",

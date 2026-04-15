@@ -64,7 +64,11 @@ const ModalChuyenDiemLopMonHoc = () => {
       if (defenseScore !== undefined && defenseScore !== null) {
         return {
           ...targetScore,
+          attendanceScore: defenseScore,
+          midtermScore: defenseScore,
+          examScore: defenseScore,
           finalScore: defenseScore,
+          manualFinalScore: defenseScore,
           isUpdated: true,
         }
       }
@@ -168,7 +172,14 @@ const ModalChuyenDiemLopMonHoc = () => {
 
       const updatePromises = studentsToSave.map(async (item) => {
         await updateSubjectScore({
-          data: { finalScore: item.finalScore },
+          data: { 
+            
+            finalScore: item.finalScore,
+            attendanceScore: item.attendanceScore,
+            midtermScore: item.midtermScore,
+            examScore: item.examScore,
+            manualFinalScore: item.manualFinalScore,
+          },
           where: { id: item.id },
         })
 
