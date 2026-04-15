@@ -3,7 +3,7 @@ import FormItem from "@components/commons/form-item"
 import PutFormModal from "@components/commons/put-modal"
 import useSpinner from "@hooks/spinner"
 import { useFindUniqueSubjectClass, useUpdateSubjectClass } from "@workspace/db/hooks"
-import { DatePicker as AntdDatePicker, Col, Form, message } from "antd"
+import { DatePicker as AntdDatePicker, Col, Form, Row, message } from "antd"
 import locale from "antd/es/date-picker/locale/vi_VN"
 import type { Dayjs } from "dayjs"
 import dayjs from "dayjs"
@@ -81,22 +81,25 @@ const PutDeadlineScoreModal = () => {
       maskClosable={true}
       title={"Đặt hạn sửa điểm"}
       className="w-[30vw]"
+      layout="vertical"
     >
-      <Col span={24}>
-        <FormItem form={form} name={"time"} label="Thời gian sửa điểm">
-          <AntdDatePicker.RangePicker
-            locale={locale}
-            format={"DD/MM/YYYY"}
-            placeholder={["Bắt đầu", "Kết thúc"]}
-            className="w-full"
-          />
-        </FormItem>
-      </Col>
-      <Col span={24}>
-        <FormItem form={form} name={"examScoreDeadline"} label="Hạn sửa điểm ">
-          <DatePicker format={"DD/MM/YYYY"} placeholder={"Hạn sửa điểm "} className="w-full" />
-        </FormItem>
-      </Col>
+      <Row gutter={[16, 16]}>
+        <Col span={24}>
+          <FormItem form={form} name={"time"} label="Thời gian sửa điểm">
+            <AntdDatePicker.RangePicker
+              locale={locale}
+              format={"DD/MM/YYYY"}
+              placeholder={["Bắt đầu", "Kết thúc"]}
+              className="w-full"
+            />
+          </FormItem>
+        </Col>
+        <Col span={24}>
+          <FormItem form={form} name={"examScoreDeadline"} label="Hạn sửa điểm ">
+            <DatePicker format={"DD/MM/YYYY"} placeholder={"Hạn sửa điểm "} className="w-full" />
+          </FormItem>
+        </Col>
+      </Row>
     </PutFormModal>
   )
 }
