@@ -79,11 +79,11 @@ const PutDeadlineScoreModal = () => {
       onFinish={onOk}
       onCancel={onClose}
       maskClosable={true}
-      title={"Đặt hạn nhập điểm"}
+      title={"Đặt hạn sửa điểm"}
       className="w-[30vw]"
     >
       <Col span={24}>
-        <FormItem form={form} name={"time"} label="Thời gian nhập điểm TX,ĐK">
+        <FormItem form={form} name={"time"} label="Thời gian sửa điểm">
           <AntdDatePicker.RangePicker
             locale={locale}
             format={"DD/MM/YYYY"}
@@ -93,8 +93,8 @@ const PutDeadlineScoreModal = () => {
         </FormItem>
       </Col>
       <Col span={24}>
-        <FormItem form={form} name={"examScoreDeadline"} label="Hạn nhập điểm thi">
-          <DatePicker format={"DD/MM/YYYY"} placeholder={"Hạn nhập điểm thi"} className="w-full" />
+        <FormItem form={form} name={"examScoreDeadline"} label="Hạn sửa điểm ">
+          <DatePicker format={"DD/MM/YYYY"} placeholder={"Hạn sửa điểm "} className="w-full" />
         </FormItem>
       </Col>
     </PutFormModal>

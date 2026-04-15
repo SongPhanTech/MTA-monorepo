@@ -625,7 +625,7 @@ export default function ClassSubject() {
                             name="time"
                             label={
                               <Tooltip title={"Dành cho những lớp chưa có ngày thi"}>
-                                Thời gian nhập điểm quá trình
+                                Hạn nhập điểm
                               </Tooltip>
                             }
                             className="italic"
@@ -651,13 +651,13 @@ export default function ClassSubject() {
                           </Col>
                         </Form>
                       }
-                      title="Gán hạn nhập điểm quá trình"
+                      title="Chọn hạn nhập điểm"
                       trigger="click"
                       placement="bottomRight"
                       open={open}
                       onOpenChange={setOpen}
                     >
-                      <Button type="primary">Đặt hạn nhập điểm TX/ĐK</Button>
+                      <Button type="primary">Chọn hạn nhập điểm </Button>
                     </Popover>
                     <Popover
                       content={
@@ -682,13 +682,13 @@ export default function ClassSubject() {
                             name="endDate"
                             label={
                               <Tooltip title={"Dành cho những lớp chưa có ngày thi"}>
-                                Thời gian nhập điểm thi
+                                Thời gian cấu hình hạn nhập điểm/sửa điểm
                               </Tooltip>
                             }
                           >
                             <DatePicker
                               format="DD/MM/YYYY"
-                              placeholder="Hạn nhập điểm thi"
+                              placeholder="Hạn nhập điểm/sửa điểm"
                               className="w-full"
                             />
                           </FormItem>
@@ -707,13 +707,13 @@ export default function ClassSubject() {
                           </Col>
                         </Form>
                       }
-                      title="Gán hạn nhập điểm thi"
+                      title="Cấu hình hạn nhập điểm/sửa điểm"
                       trigger="click"
                       placement="bottomRight"
                       open={openExam}
                       onOpenChange={setOpenExam}
                     >
-                      <Button type="primary">Đặt hạn nhập điểm thi</Button>
+                      <Button type="primary">Cấu hình hạn nhập điểm/sửa điểm </Button>
                     </Popover>
                   </>
                 )}
@@ -1012,7 +1012,7 @@ export default function ClassSubject() {
                   if (id) {
                     return (
                       <Row className="flex justify-center items-center gap-2 text-[#028850]">
-                        <Tooltip title="Đặt hạn nhập điểm" placement="top">
+                        <Tooltip title="Cấu hình hạn sửa điểm" placement="top">
                           <CalendarPlus
                             size={16}
                             onClick={() => handleSchedule(id)}

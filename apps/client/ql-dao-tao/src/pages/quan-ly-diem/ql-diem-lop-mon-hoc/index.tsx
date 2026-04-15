@@ -353,9 +353,7 @@ export default function QuanLyDiemLopMonHoc({
                 className="min-w-[200px] !mb-0"
                 valuePropName="checked"
               >
-                <Checkbox disabled={role !== "P13" || !selectedSubjectClassId}>
-                  P13 đã khoá sửa điểm
-                </Checkbox>
+                <Checkbox>P13 đã khoá sửa điểm</Checkbox>
               </FormItem>
             </div>
             <div className="flex items-center w-full">
