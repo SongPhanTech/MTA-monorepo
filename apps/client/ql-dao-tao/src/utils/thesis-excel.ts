@@ -83,6 +83,7 @@ interface DsnlvtvTable {
 interface ThongKeCbThamGiaHdData {
   data: {
     khoa: string
+    khoaTitle: string
     chuyenNganh: string
     dotXet: string
     tong: number
@@ -624,6 +625,7 @@ export const exportDanhSachBaoVe = async ({
     downloadFile(blob, "DanhSachBaoVe.xlsx")
     message.success("Xuất file thành công")
   } catch (error) {
+    console.error(error)
     message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
   } finally {
     hideSpinner()
@@ -1580,16 +1582,26 @@ const convertToThongKeCbThamGiaHdData = (allStudentsInClasses: any[]): ThongKeCb
     })
 
     const tableRows = Array.from(expertStats.values())
+    if (tableRows.length === 0) {
+      // Bỏ qua chuyên ngành không có cán bộ nào tham gia hội đồng.
+      return
+    }
     tableRows.forEach((row, index) => {
       row.stt = index + 1
     })
 
-    const firstStudent = students[0]
-    const project = firstStudent.thesisRegistrations?.[0]?.thesisProject
+    const firstStudentWithProject = students.find(
+      (student) => student?.thesisRegistrations?.[0]?.thesisProject
+    )
+    if (!firstStudentWithProject) {
+      return
+    }
+    const project = firstStudentWithProject.thesisRegistrations?.[0]?.thesisProject
 
     result.push({
       data: {
-        khoa: firstStudent.fixedClass?.trainingCourse?.name || "",
+        khoaTitle: firstStudentWithProject.fixedClass?.trainingCourse?.name?.toUpperCase()  || "",
+        khoa: firstStudentWithProject.fixedClass?.trainingCourse?.name || "",
         chuyenNganh: majorName,
         dotXet: project?.thesisSession?.name || "",
         tong: totalParticipations,
