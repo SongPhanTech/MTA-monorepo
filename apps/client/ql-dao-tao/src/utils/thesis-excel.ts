@@ -308,15 +308,15 @@ export const exportPhuLucDsLuanVan = async ({
   try {
     const organizationMap = new Map<string, any>()
     let dotxet = ""
-    // let soQD = ""
-    // let ngayQD = ""
+    let soQD = ""
+    let ngayQD = ""
     allStudentsInClasses.forEach((student) => {
       dotxet = dotxet || student?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.name || ""
       const thesisProject = student?.thesisRegistrations?.[0]?.thesisProject
-      // soQD = soQD || student?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.decisionNumber || ""
-      // ngayQD = ngayQD || student?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.decisionDate
-      //   ? dayjs(student?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.decisionDate).format("DD/MM/YYYY")
-      //   : ""
+      soQD = soQD || student?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.decisionNumber || ""
+      ngayQD = ngayQD || student?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.decisionDate
+        ? dayjs(student?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.decisionDate).format("DD/MM/YYYY")
+        : ""
       if (!thesisProject) return
       const organizationId = thesisProject.organization?.Id || ""
       const organizationName = thesisProject.organization?.sTen || "Chưa có đơn vị"
@@ -352,16 +352,8 @@ export const exportPhuLucDsLuanVan = async ({
       return
     }
     let count = 1
-    const headerRow: TableRow = {
-      cells: [
-        { value: "STT", border: true, align: "center",fontSize:12,rowSpan: 2 },
-        { value: "Họ và tên học viên", border: true, align: "center",fontSize:12,bold: true,rowSpan: 2 },
-        { value: "Tên đề tài luận văn thạc sĩ", border: true, align: "center",fontSize:12,bold: true,rowSpan: 2 },
-        { value: "Cán bộ hướng dẫn", border: true, align: "center",fontSize:12,bold: true,rowSpan: 2 },
-        { value: "Luận văn/đề án", border: true, align: "center",fontSize:12,bold: true,rowSpan: 2 },
-        { value: "Ghi chú", border: true, align: "center",fontSize:12,bold: true,rowSpan: 2 },
-      ],
-    }
+    const tableBodyStartRow = 7
+    const tableHeaderThinBorder = { top: 5, left: 1, bottom: 6, right: 6 } as const
     const dataRows: TableRow[] = result.flatMap((item: any,index: number) => {
       const orgRow: TableRow = {
         cells: [
@@ -402,7 +394,7 @@ export const exportPhuLucDsLuanVan = async ({
       return [orgRow, ...thesisRows]
     })
     const gapRow: TableRow = {
-      cells: [{ value: null, border: false }],
+      cells: [{ value: "", border: false, colSpan: 6 }],
     }
     const totalRow: TableRow = {
       cells: [
@@ -422,13 +414,14 @@ export const exportPhuLucDsLuanVan = async ({
         {
           sheet: "phulucluanvanthacsi",
           rows: [...dataRows, gapRow, totalRow],
-          tableStartCell: { row: 5, col: 1 },
+          tableStartCell: { row: tableBodyStartRow, col: 1 },
+          thinBorderRange: tableHeaderThinBorder,
           data: {
-            dotxet: dotxet || "",
-            // soQD: soQD || "",
-            // ngay: ngayQD.split("/")[0] || "",
-            // thang: ngayQD.split("/")[1] || "",
-            // nam: ngayQD.split("/")[2] || "",
+            dotxet: dotxet.trim().toUpperCase() || "",
+            soQD: soQD || "",
+            ngay: ngayQD.split("/")[0] || "",
+            thang: ngayQD.split("/")[1] || "",
+            nam: ngayQD.split("/")[2] || "",
           },
         },
       ],
@@ -436,6 +429,7 @@ export const exportPhuLucDsLuanVan = async ({
     });
     message.success("Xuất file thành công")
   } catch (error) {
+    console.log("error", error)
     message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
   } finally {
     hideSpinner()
@@ -646,6 +640,7 @@ export const exportHosobvlv = async ({
   showSpinner()
   try {
     const allSheetOptions = allStudentsInClasses?.map((student) => {
+      if (!student?.thesisRegistrations?.[0]?.thesisProject) return null
       const thanhvienhoidong = student?.thesisRegistrations?.[0]?.thesisProject?.council?.members
       const phanbien1 = thanhvienhoidong?.find(
         (member: any) => member.role === CouncilRole.REVIEWER_1
@@ -1945,8 +1940,11 @@ const convertToBanSaoHDDGLV = (allStudentsInClasses: any[],signerName?: string,i
   const currentMonth = now.format("MM")
   const currentYear = now.format("YYYY")
 
-  return allStudentsInClasses.map((student) => {
+  return allStudentsInClasses
+    .filter((student) => student?.thesisRegistrations?.[0]?.thesisProject != null)
+    .map((student) => {
     const project = student?.thesisRegistrations?.[0]?.thesisProject
+
     const session = project?.thesisSession
     const nguoikibvlv = project?.thesisSession?.defenseDecisionMaker?.trim() || ""
     const qddtKyTokens = nguoikibvlv.split(/\s+/).filter(Boolean)

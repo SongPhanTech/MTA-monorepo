@@ -27,6 +27,7 @@ export interface SheetExportOptions {
   rows?: TableRow[]
   tableStartCell?: { row: number; col: number }
   hiddenColumns?: string[]
+  thinBorderRange?: { top: number; left: number; bottom: number; right: number }
 }
 
 export interface ExportOptions {
@@ -88,6 +89,74 @@ function cloneWorksheet(
   })
 
   return newSheet
+}
+
+function cellRectsIntersect(
+  t1: number,
+  l1: number,
+  b1: number,
+  r1: number,
+  t2: number,
+  l2: number,
+  b2: number,
+  r2: number
+): boolean {
+  return !(b2 < t1 || t2 > b1 || r2 < l1 || l2 > r1)
+}
+
+/**
+ * Gỡ merge cũ (kể cả khi `unMergeCells` không tìm thấy ô do hàng thưa), rồi merge lại.
+ * Tránh lỗi ExcelJS "Cannot merge already merged cells" khi gộp ô trùng vùng template / sau spliceRows.
+ */
+function mergeCellsSafe(
+  worksheet: ExcelJS.Worksheet,
+  top: number,
+  left: number,
+  bottom: number,
+  right: number
+) {
+  type MergeBounds = { top: number; left: number; bottom: number; right: number }
+  const ws = worksheet as ExcelJS.Worksheet & { _merges?: Record<string, MergeBounds> }
+  for (let attempt = 0; attempt < 24; attempt++) {
+    const merges = ws._merges
+    if (!merges) break
+    const snapshot = Object.values(merges).filter(Boolean) as MergeBounds[]
+    let clearedAny = false
+    for (const m of snapshot) {
+      if (
+        cellRectsIntersect(top, left, bottom, right, m.top, m.left, m.bottom, m.right)
+      ) {
+        worksheet.getCell(m.top, m.left)
+        worksheet.unMergeCells(m.top, m.left, m.bottom, m.right)
+        clearedAny = true
+      }
+    }
+    if (!clearedAny) break
+  }
+  worksheet.mergeCells(top, left, bottom, right)
+}
+
+function applyThinBorderRange(
+  worksheet: ExcelJS.Worksheet,
+  top: number,
+  left: number,
+  bottom: number,
+  right: number
+) {
+  const side = { style: "thin" as const }
+  for (let row = top; row <= bottom; row++) {
+    const excelRow = worksheet.getRow(row)
+    for (let col = left; col <= right; col++) {
+      const cell = excelRow.getCell(col)
+      cell.border = {
+        top: side,
+        left: side,
+        bottom: side,
+        right: side,
+      }
+    }
+    excelRow.commit()
+  }
 }
 
 /** ──────────────── Main ──────────────── */
@@ -215,7 +284,8 @@ async function handleExcelJSDefault(
           const colSpan = cellData.colSpan ?? 1
           const rowSpan = cellData.rowSpan ?? 1
           if (colSpan > 1 || rowSpan > 1) {
-            worksheet.mergeCells(
+            mergeCellsSafe(
+              worksheet,
               currentRow,
               currentCol,
               currentRow + rowSpan - 1,
@@ -240,6 +310,11 @@ async function handleExcelJSDefault(
       // colWidths.forEach((width, index) => {
       //     worksheet.getColumn(tableStartCell.col + index).width = width
       // })
+    }
+
+    if (sheetOption.thinBorderRange) {
+      const r = sheetOption.thinBorderRange
+      applyThinBorderRange(worksheet, r.top, r.left, r.bottom, r.right)
     }
   }
 
@@ -348,7 +423,8 @@ async function handleSheetJSExport(
           const rowSpan = cellData.rowSpan ?? 1
 
           if (colSpan > 1 || rowSpan > 1) {
-            worksheet.mergeCells(
+            mergeCellsSafe(
+              worksheet,
               currentRow,
               currentCol,
               currentRow + rowSpan - 1,
@@ -557,7 +633,8 @@ async function handleExcelJSMergeSheets(
           const colSpan = cellData.colSpan ?? 1
           const rowSpan = cellData.rowSpan ?? 1
           if (colSpan > 1 || rowSpan > 1) {
-            worksheet.mergeCells(
+            mergeCellsSafe(
+              worksheet,
               currentRow,
               currentCol,
               currentRow + rowSpan - 1,
