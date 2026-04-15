@@ -303,11 +303,7 @@ export default function DanhSachLopMonHoc({
       type: "radio" as const,
       selectedRowKeys: [selectedSubjectClassId as Key],
       onChange: (selectedRowKeys: Key[], selectedRows: any[]) => {
-        if (
-          selectedRows[0]?.subject?.examType === "OfflineWritten" &&
-          role !== "P13" &&
-          score === "THI"
-        ) {
+        if (selectedRows[0]?.examType === "OfflineWritten" && role !== "P13" && score === "THI") {
           message.error("Lớp thi viết không được nhập điểm trực tiếp")
           return
         }
@@ -323,21 +319,21 @@ export default function DanhSachLopMonHoc({
   const onRow = useCallback(
     (record: any) => ({
       onClick: () => {
-        if (record?.subject?.examType === "OfflineWritten" && role !== "P13" && score === "THI") {
+        if (record?.examType === "OfflineWritten" && role !== "P13" && score === "THI") {
           message.error("Lớp thi viết không được nhập điểm trực tiếp")
           return
         }
         diemLopMonHocStore.setState({ selectedSubjectClassId: record.id })
       },
       onDoubleClick: () => {
-        if (record?.subject?.examType === "OfflineWritten" && role !== "P13" && score === "THI") {
+        if (record?.examType === "OfflineWritten" && role !== "P13" && score === "THI") {
           message.error("Lớp thi viết không được nhập điểm trực tiếp")
           return
         }
         setActiveKey?.("2")
       },
       className: cn(
-        record?.subject?.examType === "OfflineWritten" ? "text-red-500" : "",
+        record?.examType === "OfflineWritten" ? "text-red-500" : "",
         dayjs()?.isAfter(record?.scoreDeadline) && !record?.enteredScore
           ? "bg-yellow-200"
           : dayjs().isAfter(record?.examScoreDeadline) && !record?.enteredExamScore
@@ -574,12 +570,8 @@ export default function DanhSachLopMonHoc({
                   width: 100,
                   type: "select",
                   options: options,
-                  render: (__, record: { subject?: SubjectVersion }) => {
-                    return record?.subject?.examType ? (
-                      <div>{getExamTypeLabel(record?.subject?.examType)}</div>
-                    ) : (
-                      ""
-                    )
+                  render: (__, record) => {
+                    return record?.examType ? getExamTypeLabel(record?.examType) : ""
                   },
                 },
                 {

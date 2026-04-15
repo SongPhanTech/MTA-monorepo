@@ -424,12 +424,8 @@ export default function DanhSachLopMonHoc({
                 width: 100,
                 type: "select",
                 options: options,
-                render: (__, record: { subject?: SubjectVersion }) => {
-                  return record?.subject?.examType ? (
-                    <div>{getExamTypeLabel(record?.subject?.examType)}</div>
-                  ) : (
-                    ""
-                  )
+                render: (__, record) => {
+                  return record?.examType ? getExamTypeLabel(record?.examType) : ""
                 },
               },
               {
