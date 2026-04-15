@@ -608,26 +608,26 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
     }
 
     showSpinner()
-    if (role === "Khoa") {
-      for (const studentId of selectedRowKeys) {
-        const rowData = editingValues[studentId.toString()]
-        if (!rowData) continue
-        const studentRecord = students?.find((s) => s.id === studentId)
-        const orig = studentRecord?.thesisRegistrations?.[0]?.thesisProject
-        if (!orig) continue
-        const newSup = rowData.supervisor ?? ""
-        const newCo = rowData.coSupervisor ?? ""
-        const oldSup = orig.supervisor?.id ?? ""
-        const oldCo = orig.coSupervisor?.id ?? ""
-        if ((newSup !== oldSup || newCo !== oldCo) && !isWithinGvhdSupervisorEditWindow()) {
-          message.error(
-            "Đã quá hạn nhập GVHD. Chỉ được thay đổi giáo viên hướng dẫn khi còn trong hạn (theo ngày hạn nhập đề tài của đợt xét)."
-          )
-          hideSpinner()
-          return
-        }
+    // if (role === "Khoa") {
+    for (const studentId of selectedRowKeys) {
+      const rowData = editingValues[studentId.toString()]
+      if (!rowData) continue
+      const studentRecord = students?.find((s) => s.id === studentId)
+      const orig = studentRecord?.thesisRegistrations?.[0]?.thesisProject
+      if (!orig) continue
+      const newSup = rowData.supervisor ?? ""
+      const newCo = rowData.coSupervisor ?? ""
+      const oldSup = orig.supervisor?.id ?? ""
+      const oldCo = orig.coSupervisor?.id ?? ""
+      if ((newSup !== oldSup || newCo !== oldCo) && !isWithinGvhdSupervisorEditWindow()) {
+        message.error(
+          "Đã quá hạn nhập GVHD. Chỉ được thay đổi giáo viên hướng dẫn khi còn trong hạn (theo ngày hạn nhập đề tài của đợt xét)."
+        )
+        hideSpinner()
+        return
       }
     }
+    // }
     try {
       const updatePromises = selectedRowKeys.map(async (studentId) => {
         const rowData = editingValues[studentId.toString()]
@@ -697,14 +697,14 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
           },
         }
 
-        if (role === "Khoa") {
-          payload.supervisor = rowData.supervisor
-            ? { connect: { id: rowData.supervisor } }
-            : { disconnect: true }
-          payload.coSupervisor = rowData.coSupervisor
-            ? { connect: { id: rowData.coSupervisor } }
-            : { disconnect: true }
-        }
+        // if (role === "Khoa") {
+        payload.supervisor = rowData.supervisor
+          ? { connect: { id: rowData.supervisor } }
+          : { disconnect: true }
+        payload.coSupervisor = rowData.coSupervisor
+          ? { connect: { id: rowData.coSupervisor } }
+          : { disconnect: true }
+        // }
 
         return await updateThesisProject({
           data: payload,

@@ -51,7 +51,7 @@ import {
 } from "@workspace/db/hooks"
 import dayjs from "dayjs"
 import Decimal from "decimal.js"
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useState, useRef } from "react"
 
 // import  {useEffect} from 'react'
 const { Title } = Typography
@@ -123,7 +123,7 @@ const ModalCauHinhLuanVan = () => {
 
   const [attachments, setAttachments] = useState<DocumentFile[]>([])
   const [form] = Form.useForm<ModalCauHinhLuanVanType>()
-
+  const formHydratedKeyRef = useRef<string | null>(null)
   const [activeTabKey, setActiveTabKey] = useState<string>("defenseConfig")
   const { isOpen, onClose, input } = useDisclosure<{
     thesisProjectId: string
