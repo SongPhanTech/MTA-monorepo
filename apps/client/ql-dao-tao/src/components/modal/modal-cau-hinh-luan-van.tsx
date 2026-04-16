@@ -52,6 +52,7 @@ import {
 import dayjs from "dayjs"
 import Decimal from "decimal.js"
 import { useCallback, useEffect, useRef, useState } from "react"
+import { validateScore } from "@lib/utils"
 
 // import  {useEffect} from 'react'
 const { Title } = Typography
@@ -128,7 +129,7 @@ const ModalCauHinhLuanVan = () => {
 
   const [attachments, setAttachments] = useState<DocumentFile[]>([])
   const [form] = Form.useForm<ModalCauHinhLuanVanType>()
-
+  console.log('formdata',form)
   const [activeTabKey, setActiveTabKey] = useState<string>("defenseConfig")
   /** Tránh gọi setFieldsValue mỗi khi thesisProjectData đổi reference (refetch) — sẽ xóa dữ liệu user đang nhập khi đổi tab. */
   const formHydratedKeyRef = useRef<string | null>(null)
@@ -1231,7 +1232,7 @@ const ModalCauHinhLuanVan = () => {
                     formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                     placeholder="Nhập số tiền"
                     suffix="VNĐ"
-                    disabled={!form.getFieldValue("councilReviewer1PaymentAmount")}
+                    disabled={!form.getFieldValue("councilReviewer1Id")}
                   />
                 </FormItem>
               </Col>
@@ -1348,9 +1349,18 @@ const ModalCauHinhLuanVan = () => {
                   label="Kết quả cuối cùng"
                   className="mb-5"
                   labelAlign="left"
+                  rules={[
+                    {
+                      validator: (_, value) =>
+                        validateScore(
+                          value,
+                          true
+                        ),
+                    },
+                  ]}
                   {...FORM_ITEM_LAYOUT}
                 >
-                  <InputNumber className="w-2/3" min={-1} placeholder="Nhập kết quả" />
+                  <InputNumber className="w-2/3" min={0} max={10} placeholder="Nhập kết quả" />
                 </FormItem>
               </Col>
 
