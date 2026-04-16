@@ -650,148 +650,93 @@ export const exportDanhSachBaoVe = async ({
   }
 }
 
-interface DanhSachBaoVeDanNgoaiPhongRow {
+type DanhSachBaoVeDanNgoaiPhongHall = {
+  roomName: string
+  hoiDong: string
+  ctName: string
+  tkName: string
+  pb1Name: string
+  pb2Name: string
+  uvNames: string[]
+}
+
+interface DanhSachBaoVeDanNgoaiPhongSlot {
   stt: number
   thoiGianBatDau: string
   ngayBaoVe: string
-  h1Title: string
-  h1HoiDong: string
-  h1CT: string
-  h1TK: string
-  h1UV1: string
-  h1PB1: string
-  h1UV2: string
-  h1PB2: string
-  h1UV3: string
-  h2Title: string
-  h2HoiDong: string
-  h2CT: string
-  h2TK: string
-  h2UV1: string
-  h2PB1: string
-  h2UV2: string
-  h2PB2: string
-  h2UV3: string
-  h3Title: string
-  h3HoiDong: string
-  h3CT: string
-  h3TK: string
-  h3UV1: string
-  h3PB1: string
-  h3UV2: string
-  h3PB2: string
-  h3UV3: string
-  h4Title: string
-  h4HoiDong: string
-  h4CT: string
-  h4TK: string
-  h4UV1: string
-  h4PB1: string
-  h4UV2: string
-  h4PB2: string
-  h4UV3: string
+  hallsByRoom: Map<string, DanhSachBaoVeDanNgoaiPhongHall>
 }
 
-interface DanhSachBaoVeDanNgoaiPhongData {
-  data: {
-    khoa: string
-    nganh: string
-    dotXet: string
-    data: DanhSachBaoVeDanNgoaiPhongRow[]
-  }
+interface DanhSachBaoVeDanNgoaiPhongResult {
+  khoa: string
+  nganh: string
+  dotXet: string
+  allRooms: string[]
+  slots: DanhSachBaoVeDanNgoaiPhongSlot[]
 }
 
-type DanhSachBaoVeDanNgoaiPhongHall = {
-  title: string
-  hoiDong: string
-  ct: string
-  tk: string
-  uv1: string
-  pb1: string
-  uv2: string
-  pb2: string
-  uv3: string
-}
+const ROWS_PER_SLOT = 6
 
-const EMPTY_DANH_SACH_BAO_VE_HALL: DanhSachBaoVeDanNgoaiPhongHall = {
-  title: "",
-  hoiDong: "",
-  ct: "",
-  tk: "",
-  uv1: "",
-  pb1: "",
-  uv2: "",
-  pb2: "",
-  uv3: "",
-}
-
-const buildDanhSachBaoVeDanNgoaiPhongHall = (project: any): DanhSachBaoVeDanNgoaiPhongHall => {
-  const members = project?.council?.members || []
-  const getMember = (role: CouncilRole) => members.find((m: any) => m.role === role)
-  const memberExperts = members
-    .filter((m: any) => m.role === CouncilRole.MEMBER)
-    .map((m: any) => getSupervisorName(m?.expert, false, false) as string || "")
-    .filter(Boolean)
+const buildDanhSachBaoVeDanNgoaiPhongHall = (
+  project: any,
+  studentNames: string[],
+): DanhSachBaoVeDanNgoaiPhongHall => {
+  const councilMembers = project?.council?.members || []
+  const getMember = (role: CouncilRole) => councilMembers.find((m: any) => m.role === role)
 
   const chairman = getMember(CouncilRole.CHAIRMAN)
   const secretary = getMember(CouncilRole.SECRETARY)
   const reviewer1 = getMember(CouncilRole.REVIEWER_1)
   const reviewer2 = getMember(CouncilRole.REVIEWER_2)
 
+  const uvNames = councilMembers
+    .filter((m: any) => m.role === CouncilRole.MEMBER)
+    .map((m: any) => (getSupervisorName(m?.expert, false, false) as string) || "")
+    .filter(Boolean)
+
+  const cbhd1Name = (getSupervisorName(project?.supervisor, false, false) as string) || ""
+  const cbhd2Name = (getSupervisorName(project?.coSupervisor, false, false) as string) || ""
+
   return {
-    title: project?.room?.name ? `Hội trường: ${project.room.name}` : "",
+    roomName: project?.room?.name || "",
     hoiDong: [
-      project?.council?.name || "",
-      `CBHD1: ${getSupervisorName(project?.supervisor, false, false) as string || ""}`,
-      `CBHD2: ${getSupervisorName(project?.coSupervisor, false, false) as string || ""}`,
+      ...studentNames.filter(Boolean),
+      cbhd1Name ? `CBHD1: ${cbhd1Name}` : "",
+      cbhd2Name ? `CBHD2: ${cbhd2Name}` : "",
     ]
       .filter((line) => line.trim() !== "")
       .join("\n"),
-    ct: `CT : ${getSupervisorName(chairman?.expert, false, false) as string || ""}`,
-    tk: `TK : ${getSupervisorName(secretary?.expert, false, false) as string || ""}`,
-    uv1: memberExperts[0] ? `UV : ${memberExperts[0]}` : "",
-    pb1: reviewer1?.expert
-      ? `PB1 : ${getSupervisorName(reviewer1.expert, false, false) as string || ""}`
-      : "",
-    uv2: memberExperts[1] ? `UV : ${memberExperts[1]}` : "",
-    pb2: reviewer2?.expert
-      ? `PB2 : ${getSupervisorName(reviewer2.expert, false, false) as string || ""}`
-      : "",
-    uv3: memberExperts[2] ? `UV : ${memberExperts[2]}` : "",
+    ctName: (getSupervisorName(chairman?.expert, false, false) as string) || "",
+    tkName: (getSupervisorName(secretary?.expert, false, false) as string) || "",
+    pb1Name: (getSupervisorName(reviewer1?.expert, false, false) as string) || "",
+    pb2Name: (getSupervisorName(reviewer2?.expert, false, false) as string) || "",
+    uvNames,
   }
 }
 
-export const convertToDanhSachBaoVeDanNgoaiPhongData = (
-  allStudentsInClasses: any[]
-): DanhSachBaoVeDanNgoaiPhongData | null => {
-  if (!allStudentsInClasses?.length) return null
+const buildSlotsFromEntries = (
+  entries: { project: any; studentName: string }[],
+): { allRooms: string[]; slots: DanhSachBaoVeDanNgoaiPhongSlot[] } => {
+  const allRoomSet = new Set<string>()
+  const slotMap = new Map<string, { project: any; studentName: string }[]>()
 
-  const validStudents = allStudentsInClasses.filter((student) => {
-    const project = student?.thesisRegistrations?.[0]?.thesisProject
-    return project?.defenseDate && project?.defenseSession?.startTime && project?.room?.name
-  })
-  if (!validStudents.length) return null
-
-  const firstStudent = validStudents[0]
-  const firstProject = firstStudent?.thesisRegistrations?.[0]?.thesisProject
-  const khoa = firstStudent?.fixedClass?.trainingCourse?.name || ""
-  const nganh = firstStudent?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || ""
-  const dotXet = firstProject?.thesisSession?.name || ""
-
-  const slotMap = new Map<string, any[]>()
-  validStudents.forEach((student) => {
-    const project = student?.thesisRegistrations?.[0]?.thesisProject
+  for (const entry of entries) {
+    const { project } = entry
     const date = project?.defenseDate ? dayjs(project.defenseDate).format("DD/MM/YYYY") : ""
     const time = project?.defenseSession?.startTime
       ? dayjs(project.defenseSession.startTime).format("HH:mm")
       : ""
-    if (!date || !time) return
+    if (!date || !time) continue
+    const roomName = project?.room?.name || ""
+    if (roomName) allRoomSet.add(roomName)
     const key = `${date}__${time}`
     if (!slotMap.has(key)) slotMap.set(key, [])
-    slotMap.get(key)?.push(project)
-  })
+    slotMap.get(key)?.push(entry)
+  }
 
-  const rows: DanhSachBaoVeDanNgoaiPhongRow[] = Array.from(slotMap.entries())
+  const allRooms = Array.from(allRoomSet).sort()
+
+  const slots: DanhSachBaoVeDanNgoaiPhongSlot[] = Array.from(slotMap.entries())
     .sort(([a], [b]) => {
       const [aDate, aTime] = a.split("__")
       const [bDate, bTime] = b.split("__")
@@ -799,67 +744,71 @@ export const convertToDanhSachBaoVeDanNgoaiPhongData = (
       const dateB = dayjs(`${bDate} ${bTime}`, "DD/MM/YYYY HH:mm")
       return dateA.valueOf() - dateB.valueOf()
     })
-    .map(([key, projects], slotIdx) => {
+    .map(([key, slotEntries], slotIdx) => {
       const [ngayBaoVe, thoiGianBatDau] = key.split("__")
-      const halls = [...projects]
-        .sort((a, b) => String(a?.room?.name || "").localeCompare(String(b?.room?.name || "")))
-        .slice(0, 4)
-        .map((project) => buildDanhSachBaoVeDanNgoaiPhongHall(project))
-      while (halls.length < 4) halls.push(EMPTY_DANH_SACH_BAO_VE_HALL)
-      const [h1, h2, h3, h4] = halls
+      const hallsByRoom = new Map<string, DanhSachBaoVeDanNgoaiPhongHall>()
 
-      return {
-        stt: slotIdx + 1,
-        thoiGianBatDau,
-        ngayBaoVe,
-        h1Title: h1.title,
-        h1HoiDong: h1.hoiDong,
-        h1CT: h1.ct,
-        h1TK: h1.tk,
-        h1UV1: h1.uv1,
-        h1PB1: h1.pb1,
-        h1UV2: h1.uv2,
-        h1PB2: h1.pb2,
-        h1UV3: h1.uv3,
-        h2Title: h2.title,
-        h2HoiDong: h2.hoiDong,
-        h2CT: h2.ct,
-        h2TK: h2.tk,
-        h2UV1: h2.uv1,
-        h2PB1: h2.pb1,
-        h2UV2: h2.uv2,
-        h2PB2: h2.pb2,
-        h2UV3: h2.uv3,
-        h3Title: h3.title,
-        h3HoiDong: h3.hoiDong,
-        h3CT: h3.ct,
-        h3TK: h3.tk,
-        h3UV1: h3.uv1,
-        h3PB1: h3.pb1,
-        h3UV2: h3.uv2,
-        h3PB2: h3.pb2,
-        h3UV3: h3.uv3,
-        h4Title: h4.title,
-        h4HoiDong: h4.hoiDong,
-        h4CT: h4.ct,
-        h4TK: h4.tk,
-        h4UV1: h4.uv1,
-        h4PB1: h4.pb1,
-        h4UV2: h4.uv2,
-        h4PB2: h4.pb2,
-        h4UV3: h4.uv3,
+      const roomStudentNames = new Map<string, string[]>()
+      for (const { project, studentName } of slotEntries) {
+        const roomName = project?.room?.name || ""
+        if (!roomName) continue
+        if (!roomStudentNames.has(roomName)) roomStudentNames.set(roomName, [])
+        if (studentName) roomStudentNames.get(roomName)?.push(studentName)
       }
+
+      for (const { project } of slotEntries) {
+        const roomName = project?.room?.name || ""
+        if (roomName && !hallsByRoom.has(roomName)) {
+          const studentNames = roomStudentNames.get(roomName) || []
+          hallsByRoom.set(roomName, buildDanhSachBaoVeDanNgoaiPhongHall(project, studentNames))
+        }
+      }
+      return { stt: slotIdx + 1, thoiGianBatDau, ngayBaoVe, hallsByRoom }
     })
 
-  if (!rows.length) return null
-  return {
-    data: {
-      khoa,
-      nganh,
-      dotXet,
-      data: rows,
-    },
+  return { allRooms, slots }
+}
+
+export const convertToDanhSachBaoVeDanNgoaiPhongData = (
+  allStudentsInClasses: any[],
+): DanhSachBaoVeDanNgoaiPhongResult[] => {
+  if (!allStudentsInClasses?.length) return []
+
+  const validStudents = allStudentsInClasses.filter((student) => {
+    const project = student?.thesisRegistrations?.[0]?.thesisProject
+    return project?.defenseDate && project?.defenseSession?.startTime && project?.room?.name
+  })
+  if (!validStudents.length) return []
+
+  const firstProject = validStudents[0]?.thesisRegistrations?.[0]?.thesisProject
+  const dotXet = firstProject?.thesisSession?.name || ""
+
+  const orgMap = new Map<string, { orgName: string; nganh: string; entries: { project: any; studentName: string }[] }>()
+
+  validStudents.forEach((student) => {
+    const project = student?.thesisRegistrations?.[0]?.thesisProject
+    const orgId = project?.organization?.Id || project?.organizationId || "unknown"
+    const orgName = project?.organization?.sTen || "Chưa có đơn vị"
+    const nganh = student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || ""
+
+    if (!orgMap.has(orgId)) {
+      orgMap.set(orgId, { orgName, nganh, entries: [] })
+    }
+    orgMap.get(orgId)?.entries.push({
+      project,
+      studentName: student.userProfile?.fullname || "",
+    })
+  })
+
+  const results: DanhSachBaoVeDanNgoaiPhongResult[] = []
+  for (const [, { orgName, nganh, entries }] of orgMap) {
+    const { allRooms, slots } = buildSlotsFromEntries(entries)
+    if (slots.length) {
+      results.push({ khoa: orgName, nganh, dotXet, allRooms, slots })
+    }
   }
+
+  return results
 }
 
 export const exportDanhSachBaoVeDanNgoaiPhong = async ({
@@ -874,31 +823,231 @@ export const exportDanhSachBaoVeDanNgoaiPhong = async ({
   }
   showSpinner?.()
   try {
-    const dataConvert = convertToDanhSachBaoVeDanNgoaiPhongData(allStudentsInClasses)
-    if (!dataConvert) {
+    const results = convertToDanhSachBaoVeDanNgoaiPhongData(allStudentsInClasses)
+    if (!results.length) {
       message.error("Chưa có dữ liệu để xuất danh sách bảo vệ dán ngoài phòng")
       return []
     }
 
-    // Skeleton export:
-    // - Tạo template trên MinIO: mta/template/DanhSachBaoVeDanNgoaiPhong.xlsx
-    // - Dùng các placeholder: ${khoa}, ${nganh}, ${dotXet}, ${table:data.*}
-    const payload: ExcelTemplateBody = {
-      head: { data: null },
-      tail: { data: null },
-      fileName: "DanhSachBaoVeDanNgoaiPhong",
-      path: "DanhSachBaoVeDanNgoaiPhong.xlsx",
-      payload: [dataConvert],
-      showGridLines: true,
-      wrapText: true,
+    const { default: ExcelJS } = await import("exceljs")
+    const { saveAs } = await import("file-saver")
+
+    const COLS_PER_ROOM = 3
+    const FIXED_COLS = 3
+
+    const thin = { style: "thin" as const }
+    const dotted = { style: "dotted" as const }
+    const allBorders = { top: thin, left: thin, bottom: thin, right: thin }
+
+    const hoiDongBorders = { top: thin, left: thin, bottom: dotted, right: thin }
+    const memberCdBorders = (isLast: boolean) => ({ top: dotted, left: thin, bottom: isLast ? thin : dotted, right: dotted })
+    const memberHdBorders = (isLast: boolean) => ({ top: dotted, left: dotted, bottom: isLast ? thin : dotted, right: dotted })
+    const memberPbBorders = (isLast: boolean) => ({ top: dotted, left: dotted, bottom: isLast ? thin : dotted, right: thin })
+    const defaultFont = { name: "Times New Roman", size: 13 }
+    const boldFont = { ...defaultFont, bold: true }
+    const titleFont = { name: "Times New Roman", size: 14, bold: true }
+
+    const centerAlign = { horizontal: "center" as const, vertical: "middle" as const, wrapText: true }
+    const leftAlign = { horizontal: "left" as const, vertical: "middle" as const, wrapText: true }
+
+    const workbook = new ExcelJS.Workbook()
+
+    for (const result of results) {
+      const { khoa, nganh, dotXet, allRooms, slots } = result
+      const totalCols = FIXED_COLS + allRooms.length * COLS_PER_ROOM
+
+      const sheetName = (khoa || "Chưa có đơn vị").substring(0, 31)
+      const ws = workbook.addWorksheet(sheetName)
+
+      ws.getColumn(1).width = 3
+      ws.getColumn(2).width = 5
+      ws.getColumn(3).width = 16
+      for (let i = 0; i < allRooms.length; i++) {
+        ws.getColumn(FIXED_COLS + i * COLS_PER_ROOM + 1).width = 6
+        ws.getColumn(FIXED_COLS + i * COLS_PER_ROOM + 2).width = 40
+        ws.getColumn(FIXED_COLS + i * COLS_PER_ROOM + 3).width = 6
+      }
+
+      const setCell = (
+        row: number, col: number, value: string | number,
+        opts?: { font?: Record<string, any>; align?: Record<string, any>; border?: boolean },
+      ) => {
+        const cell = ws.getRow(row).getCell(col)
+        cell.value = value as any
+        cell.font = opts?.font ?? defaultFont
+        cell.alignment = opts?.align ?? centerAlign
+        if (opts?.border !== false) cell.border = allBorders
+      }
+
+      const mergeSafe = (top: number, left: number, bottom: number, right: number) => {
+        ws.mergeCells(top, left, bottom, right)
+      }
+
+      // --- Header rows ---
+      let r = 1
+      setCell(r, 1, "HỌC VIỆN KỸ THUẬT QUÂN SỰ", { font: boldFont, align: centerAlign, border: false })
+      mergeSafe(r, 1, r, 5)
+      r++
+      setCell(r, 1, "PHÒNG SAU ĐẠI HỌC", { font: boldFont, align: centerAlign, border: false })
+      mergeSafe(r, 1, r, 5)
+      r++
+
+      setCell(r, 1, "LỊCH BẢO VỆ LUẬN VĂN THẠC SĨ", { font: titleFont, border: false })
+      mergeSafe(r, 1, r, totalCols)
+      r++
+      setCell(r, 1, khoa ? `${khoa.toUpperCase()}` : "", { font: boldFont, border: false })
+      mergeSafe(r, 1, r, totalCols)
+      r++
+      setCell(r, 1, nganh ? `NGÀNH: ${nganh}` : "", { font: boldFont, border: false })
+      mergeSafe(r, 1, r, totalCols)
+      r++
+
+      // --- Room header row ---
+      setCell(r, 1, "", { border: true })
+      mergeSafe(r, 1, r + 1, 1)
+      setCell(r, 2, "TT", { font: boldFont })
+      mergeSafe(r, 2, r + 1, 2)
+      setCell(r, 3, "Thời gian\nBắt đầu", { font: boldFont })
+      mergeSafe(r, 3, r + 1, 3)
+
+      for (let i = 0; i < allRooms.length; i++) {
+        const startCol = FIXED_COLS + i * COLS_PER_ROOM + 1
+        setCell(r, startCol, `Hội trường: ${allRooms[i]}`, { font: boldFont })
+        mergeSafe(r, startCol, r, startCol + COLS_PER_ROOM - 1)
+      }
+      r++
+
+      // --- Sub-header row ---
+      for (let i = 0; i < allRooms.length; i++) {
+        const startCol = FIXED_COLS + i * COLS_PER_ROOM + 1
+        setCell(r, startCol, "CD", { font: boldFont })
+        setCell(r, startCol + 1, "Hội đồng", { font: boldFont })
+        setCell(r, startCol + 2, "PB", { font: boldFont })
+      }
+      r++
+
+      // --- Data rows ---
+      for (const slot of slots) {
+        const slotStartRow = r
+
+        // Row 1: Hội đồng info
+        setCell(r, 1, "", { border: true })
+        setCell(r, 2, "", { border: true })
+        setCell(r, 3, "", { border: true })
+        for (let i = 0; i < allRooms.length; i++) {
+          const startCol = FIXED_COLS + i * COLS_PER_ROOM + 1
+          const hall = slot.hallsByRoom.get(allRooms[i])
+          setCell(r, startCol, "", { border: true })
+          setCell(r, startCol + 1, "", { border: true })
+          setCell(r, startCol + 2, "", { border: true })
+          mergeSafe(r, startCol, r, startCol + 2)
+          const mergedCell = ws.getRow(r).getCell(startCol)
+          mergedCell.value = hall?.hoiDong || ("" as any)
+          mergedCell.font = defaultFont
+          mergedCell.alignment = centerAlign
+          mergedCell.border = hoiDongBorders
+        }
+        const hoiDongLineCount = Math.max(
+          3,
+          ...allRooms.map((room) => (slot.hallsByRoom.get(room)?.hoiDong || "").split("\n").length),
+        )
+        ws.getRow(r).height = hoiDongLineCount * 16
+        r++
+
+        const setMemberRow = (
+          hall: DanhSachBaoVeDanNgoaiPhongHall | undefined,
+          startCol: number,
+          cdLabel: string,
+          name: string,
+          pbLabel: string,
+          rowNum: number,
+          isLast: boolean,
+        ) => {
+          const cell1 = ws.getRow(rowNum).getCell(startCol)
+          cell1.value = cdLabel as any
+          cell1.font = defaultFont
+          cell1.alignment = centerAlign
+          cell1.border = memberCdBorders(isLast)
+
+          const cell2 = ws.getRow(rowNum).getCell(startCol + 1)
+          cell2.value = name as any
+          cell2.font = defaultFont
+          cell2.alignment = leftAlign
+          cell2.border = memberHdBorders(isLast)
+
+          const cell3 = ws.getRow(rowNum).getCell(startCol + 2)
+          cell3.value = pbLabel as any
+          cell3.font = defaultFont
+          cell3.alignment = centerAlign
+          cell3.border = memberPbBorders(isLast)
+        }
+
+        // Row 2: CT (Chủ tịch)
+        for (let i = 0; i < allRooms.length; i++) {
+          const startCol = FIXED_COLS + i * COLS_PER_ROOM + 1
+          const hall = slot.hallsByRoom.get(allRooms[i])
+          setMemberRow(hall, startCol, hall?.ctName ? "CT" : "", hall?.ctName || "", "", r, false)
+        }
+        r++
+
+        // Row 3: TK (Thư ký)
+        for (let i = 0; i < allRooms.length; i++) {
+          const startCol = FIXED_COLS + i * COLS_PER_ROOM + 1
+          const hall = slot.hallsByRoom.get(allRooms[i])
+          setMemberRow(hall, startCol, hall?.tkName ? "TK" : "", hall?.tkName || "", "", r, false)
+        }
+        r++
+
+        // Row 4: PB1 (Phản biện 1)
+        for (let i = 0; i < allRooms.length; i++) {
+          const startCol = FIXED_COLS + i * COLS_PER_ROOM + 1
+          const hall = slot.hallsByRoom.get(allRooms[i])
+          setMemberRow(hall, startCol, hall?.pb1Name ? "UV" : "", hall?.pb1Name || "", hall?.pb1Name ? "PB1" : "", r, false)
+        }
+        r++
+
+        // Row 5: PB2 (Phản biện 2)
+        for (let i = 0; i < allRooms.length; i++) {
+          const startCol = FIXED_COLS + i * COLS_PER_ROOM + 1
+          const hall = slot.hallsByRoom.get(allRooms[i])
+          setMemberRow(hall, startCol, hall?.pb2Name ? "UV" : "", hall?.pb2Name || "", hall?.pb2Name ? "PB2" : "", r, false)
+        }
+        r++
+
+        // Row 6: UV (Ủy viên)
+        for (let i = 0; i < allRooms.length; i++) {
+          const startCol = FIXED_COLS + i * COLS_PER_ROOM + 1
+          const hall = slot.hallsByRoom.get(allRooms[i])
+          const uvName = hall?.uvNames?.[0] || ""
+          setMemberRow(hall, startCol, uvName ? "UV" : "", uvName, "", r, true)
+        }
+        r++
+
+        // Fill fixed columns for the slot (merged vertically)
+        setCell(slotStartRow, 2, slot.stt)
+        mergeSafe(slotStartRow, 2, slotStartRow + ROWS_PER_SLOT - 1, 2)
+
+        setCell(slotStartRow, 3, `${slot.thoiGianBatDau}\n---\n${slot.ngayBaoVe}`)
+        mergeSafe(slotStartRow, 3, slotStartRow + ROWS_PER_SLOT - 1, 3)
+
+        mergeSafe(slotStartRow, 1, slotStartRow + ROWS_PER_SLOT - 1, 1)
+
+        // Apply borders on all empty fixed-col cells
+        for (let dr = slotStartRow; dr < slotStartRow + ROWS_PER_SLOT; dr++) {
+          for (let c = 1; c <= FIXED_COLS; c++) {
+            ws.getRow(dr).getCell(c).border = allBorders
+          }
+        }
+      }
     }
-    const response = await excelTemplate(payload)
-    if (response.status !== 200) {
-      message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
-      return []
-    }
-    const blob = response.data
-    downloadFile(blob, "DanhSachBaoVeDanNgoaiPhong.xlsx")
+
+    const buffer = await workbook.xlsx.writeBuffer()
+    saveAs(
+      new Blob([buffer], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      }),
+      "DanhSachBaoVeDanNgoaiPhong.xlsx",
+    )
     message.success("Xuất file thành công")
   } catch (error) {
     message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")

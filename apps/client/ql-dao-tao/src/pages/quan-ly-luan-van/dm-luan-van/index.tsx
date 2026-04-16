@@ -56,6 +56,7 @@ import TreeSelect from "@/components/commons/tree-select"
 import {
   exportBanSaoHDDGLV,
   exportDanhSachBaoVe,
+  exportDanhSachBaoVeDanNgoaiPhong,
   exportDanhSachNopLuanVanThuVien,
   exportDsChuyenGia,
   exportGiayMoiChamLvPb,
@@ -915,10 +916,13 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
         id: 10,
         label: "Danh sách bảo vệ(Dán PBV)",
         onClick: async () => {
-          defaultButtonClick()
-        },
-        disabled: true,
-      },
+          exportDanhSachBaoVeDanNgoaiPhong({
+            allStudentsInClasses,
+            showSpinner,
+            hideSpinner,
+            message,
+          })
+      }},
       {
         id: 12,
         label: "Danh sách chuyên gia",
