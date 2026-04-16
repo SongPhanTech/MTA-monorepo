@@ -700,6 +700,12 @@ const NAVIGATION: NavigationType = {
             path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_LUAN_VAN_DE_XUAT_HOI_DONG_DANH_GIA,
             description: "Đề xuất hội đồng đánh giá",
           },
+          {
+            id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_LUAN_VAN_DANH_SACH_BAN_SAO_QDHD,
+            label: "Danh sách bản sao QĐHD",
+            path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_LUAN_VAN_DANH_SACH_BAN_SAO_QDHD,
+            description: "Danh sách bản sao QĐHD",
+          },
         ],
       },
       {

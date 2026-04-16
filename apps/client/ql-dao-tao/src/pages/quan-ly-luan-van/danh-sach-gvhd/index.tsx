@@ -71,12 +71,18 @@ export default function DanhSachGiangVienHuongDan() {
         OR: [
           {
             supervisedTheses: {
-              some: { title: { contains: filters.thesisTitle, mode: "insensitive" as const } },
+              some: {
+                title: { contains: filters.thesisTitle, mode: "insensitive" as const },
+                deletedAt: null,
+              },
             },
           },
           {
             coSupervisedTheses: {
-              some: { title: { contains: filters.thesisTitle, mode: "insensitive" as const } },
+              some: {
+                title: { contains: filters.thesisTitle, mode: "insensitive" as const },
+                deletedAt: null,
+              },
             },
           },
         ],
@@ -105,9 +111,11 @@ export default function DanhSachGiangVienHuongDan() {
       academicRankType: true,
       academicDegreeType: true,
       supervisedTheses: {
+        where: { deletedAt: null },
         select: { title: true, id: true },
       },
       coSupervisedTheses: {
+        where: { deletedAt: null },
         select: { title: true, id: true },
       },
     },

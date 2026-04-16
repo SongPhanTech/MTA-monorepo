@@ -134,6 +134,7 @@ export default {
     "QUAN_LY_LUAN_VAN_CAU_HINH_THANH_TOAN_LUAN_VAN": "/quan-ly-luan-van/cau-hinh-thanh-toan-luan-van",
     "QUAN_LY_LUAN_VAN_DANH_MUC_LUAN_VAN_KHOA": "/quan-ly-luan-van/danh-muc-luan-van-khoa",
     "QUAN_LY_LUAN_VAN_DANH_MUC_LUAN_VAN_P7": "/quan-ly-luan-van/danh-muc-luan-van-p7",
+    "QUAN_LY_LUAN_VAN_DANH_SACH_BAN_SAO_QDHD": "/quan-ly-luan-van/danh-sach-ban-sao-qdhd",
     "QUAN_LY_LUAN_VAN_DANH_SACH_CHUYEN_GIA": "/quan-ly-luan-van/danh-sach-chuyen-gia",
     "QUAN_LY_LUAN_VAN_DANH_SACH_GVHD": "/quan-ly-luan-van/danh-sach-gvhd",
     "QUAN_LY_LUAN_VAN_DANH_SACH_HO_SO_BAO_VE": "/quan-ly-luan-van/danh-sach-ho-so-bao-ve",
