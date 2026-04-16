@@ -1937,8 +1937,14 @@ const convertToDsnlvtvData = (allStudentsInClasses: any[]): DsnlvtvData => {
   const firstProject = allStudentsInClasses.find((s) => s.thesisRegistrations?.[0]?.thesisProject)
     ?.thesisRegistrations[0].thesisProject
 
-  const tableData: DsnlvtvTable[] = allStudentsInClasses.map((student, index) => {
+  const firstStudentWithProject = allStudentsInClasses.find(
+    (s) => s?.thesisRegistrations?.[0]?.thesisProject
+  )
+
+  const tableData: DsnlvtvTable[] = []
+  for (const student of allStudentsInClasses) {
     const project = student?.thesisRegistrations?.[0]?.thesisProject
+    if (!project) continue
 
     const hoTen = student.userProfile?.fullname || ""
     const doiTuong = student?.fixedClass?.trainingCourse?.trainingObjectType?.name || ""
@@ -1948,8 +1954,8 @@ const convertToDsnlvtvData = (allStudentsInClasses: any[]): DsnlvtvData => {
 
     const thongTinBaoVe = `${hoTen} \n ${doiTuong} - ${khoaHoc} - ${chuyenNganh}`
 
-    const gvhd1 = (getSupervisorName(project?.supervisor, false, false) as string) || ""
-    const gvhd2 = (getSupervisorName(project?.coSupervisor, false, false) as string) || ""
+    const gvhd1 = (getSupervisorName(project.supervisor, false, false) as string) || ""
+    const gvhd2 = (getSupervisorName(project.coSupervisor, false, false) as string) || ""
 
     let thongTinHuongDan = ""
     if (gvhd1 && gvhd2) {
@@ -1958,25 +1964,28 @@ const convertToDsnlvtvData = (allStudentsInClasses: any[]): DsnlvtvData => {
       thongTinHuongDan = gvhd1 || gvhd2 || "Chưa có GVHD"
     }
 
-    const thongTinDeTai = project?.title || "Chưa có tên đề tài"
+    const thongTinDeTai = project.title || "Chưa có tên đề tài"
 
     //TODO: Thông tin Lưu trữ
     const lib = ""
     const thongTinLuuTru = lib
 
-    return {
-      stt: index + 1,
+    tableData.push({
+      stt: tableData.length + 1,
       thongTinBaoVe,
       thongTinHuongDan,
       thongTinDeTai,
       thongTinLuuTru,
-    }
-  })
+    })
+  }
 
   return {
     data: {
       nguoiki: firstProject?.thesisSession?.chief?.trim() || "",
-      khoa: allStudentsInClasses[0]?.fixedClass?.trainingCourse?.name || "",
+      khoa:
+        firstStudentWithProject?.fixedClass?.trainingCourse?.name ||
+        allStudentsInClasses[0]?.fixedClass?.trainingCourse?.name ||
+        "",
       dotxet: firstProject?.thesisSession?.name || "",
       data: tableData,
       tongSo: tableData.length.toString(),
@@ -2788,8 +2797,10 @@ const convertToDsChuyenGiaData = (allStudentsInClasses: any[]): DsChuyenGiaData 
 
   allStudentsInClasses.forEach((student) => {
     const project = student?.thesisRegistrations?.[0]?.thesisProject
-    const members = project?.council?.members || []
-    nguoiki = project?.thesisSession?.chief?.trim() || ""
+    if (!project) return
+
+    const members = project.council?.members || []
+    nguoiki = project.thesisSession?.chief?.trim() || ""
     members.forEach((member: any) => {
       const expert = member.expert
       if (!expert || expert.lecturerId || expert.lecturer) return
