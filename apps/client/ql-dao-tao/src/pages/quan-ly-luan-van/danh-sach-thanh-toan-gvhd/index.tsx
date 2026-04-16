@@ -124,7 +124,7 @@ export default function SupervisorPaymentRecordPage() {
 
   const { showSpinner, hideSpinner } = useSpinner()
 
-  const { onOpen: openPaymentRecord } = useDisclosure<{ paymentRecordId: string }>({
+  const { onOpen: openPaymentRecord } = useDisclosure<{ paymentRecordId?: string }>({
     tag: "PutSupervisorPaymentRecord",
   })
 
@@ -184,6 +184,21 @@ export default function SupervisorPaymentRecordPage() {
                     type="primary"
                   >
                     Cập nhật trạng thái
+                  </Button>
+                )}
+                {can(
+                  QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DANH_SACH_THANH_TOAN_GVHD,
+                  "THEM"
+                ) && (
+                  <Button
+                    onClick={() =>
+                      openPaymentRecord({
+                        paymentRecordId: undefined,
+                      })
+                    }
+                    type="primary"
+                  >
+                    Thêm mới
                   </Button>
                 )}
               </Flex>
