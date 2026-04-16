@@ -2035,42 +2035,42 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                 },
               },
 
-              {
-                title: "Trạng thái",
-                width: 100,
-                fixed: "right",
-                dataIndex: "status",
-                render: (_, record) => {
-                  if (editingRowKeys.includes(record?.id)) {
-                    const currentValue =
-                      editingValues[record?.id]?.status !== undefined
-                        ? editingValues[record?.id]?.status
-                        : record?.thesisRegistrations?.[0]?.thesisProject?.status || ""
-                    return (
-                      <div onClick={(e) => e.stopPropagation()}>
-                        <Select
-                          className="w-full"
-                          options={useThesisProjectStatusOptions()
-                            .ignoreProjectStatus([ThesisProjectStatus.ASSIGNED])
-                            .map((item) => ({
-                              label: item.label,
-                              value: item.value,
-                            }))}
-                          value={currentValue || ""}
-                          onChange={(value) => handleEditChange(record?.id, "status", value)}
-                        />
-                      </div>
-                    )
-                  }
-                  const label = getThesisProjectStatusLabel(
-                    record?.thesisRegistrations?.[0]?.thesisProject?.status
-                  )
-                  const color = getThesisProjectStatusColor(
-                    record?.thesisRegistrations?.[0]?.thesisProject?.status
-                  )
-                  return <Tag color={color}>{label}</Tag>
-                },
-              },
+              // {
+              //   title: "Trạng thái",
+              //   width: 100,
+              //   fixed: "right",
+              //   dataIndex: "status",
+              //   render: (_, record) => {
+              //     if (editingRowKeys.includes(record?.id)) {
+              //       const currentValue =
+              //         editingValues[record?.id]?.status !== undefined
+              //           ? editingValues[record?.id]?.status
+              //           : record?.thesisRegistrations?.[0]?.thesisProject?.status || ""
+              //       return (
+              //         <div onClick={(e) => e.stopPropagation()}>
+              //           <Select
+              //             className="w-full"
+              //             options={useThesisProjectStatusOptions()
+              //               .ignoreProjectStatus([ThesisProjectStatus.ASSIGNED])
+              //               .map((item) => ({
+              //                 label: item.label,
+              //                 value: item.value,
+              //               }))}
+              //             value={currentValue || ""}
+              //             onChange={(value) => handleEditChange(record?.id, "status", value)}
+              //           />
+              //         </div>
+              //       )
+              //     }
+              //     const label = getThesisProjectStatusLabel(
+              //       record?.thesisRegistrations?.[0]?.thesisProject?.status
+              //     )
+              //     const color = getThesisProjectStatusColor(
+              //       record?.thesisRegistrations?.[0]?.thesisProject?.status
+              //     )
+              //     return <Tag color={color}>{label}</Tag>
+              //   },
+              // },
               {
                 title: "Thao tác",
                 width: 100,

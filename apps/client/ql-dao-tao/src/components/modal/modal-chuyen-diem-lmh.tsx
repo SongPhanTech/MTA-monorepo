@@ -177,7 +177,7 @@ const ModalChuyenDiemLopMonHoc = () => {
             attendanceScore: item.attendanceScore,
             midtermScore: item.midtermScore,
             examScore: item.examScore,
-            manualFinalScore: item.manualFinalScore,
+            // manualFinalScore: item.manualFinalScore,
           },
           where: { id: item.id },
         })
