@@ -3,10 +3,10 @@ import FormItem from "@components/commons/form-item"
 import PutFormModal from "@components/commons/put-modal"
 import { usePaymentStatusOptions } from "@hooks/paymentStatus"
 import useSpinner from "@hooks/spinner"
-import type { PaymentRecord } from "@workspace/db/client"
+import { ThesisType, type PaymentRecord } from "@workspace/db/client"
 import {
   useCreatePaymentRecord,
-  useFindManyExpertProfile,
+  useFindManyCouncilMember,
   useFindUniquePaymentRecord,
   useUpdatePaymentRecord,
 } from "@workspace/db/hooks"
@@ -17,11 +17,13 @@ import { useDisclosure } from "react-hook-disclosure-modal"
 import { formatter } from "@/utils/formatterInputNumber"
 
 export type PutPaymentRecord = PaymentRecord
+type PutPaymentRecordForm = Partial<PutPaymentRecord>
 
 const PutPaymentRecordDetail = () => {
-  const [form] = Form.useForm<PutPaymentRecord>()
+  const [form] = Form.useForm<PutPaymentRecordForm>()
   const { isOpen, onClose, input } = useDisclosure<{
-    paymentRecordId: string
+    paymentRecordId?: string
+    thesisSessionId?: string
   }>({
     tag: "PutPaymentRecordDetail",
     onClose: form.resetFields,
@@ -30,25 +32,42 @@ const PutPaymentRecordDetail = () => {
   const id = input?.paymentRecordId
   const { showSpinner, hideSpinner } = useSpinner()
   const { paymentStatusOptions } = usePaymentStatusOptions()
+  const thesisSessionId = input?.thesisSessionId
 
   const { mutateAsync: create } = useCreatePaymentRecord()
   const { mutateAsync: update } = useUpdatePaymentRecord()
-  async function onOk(value: PutPaymentRecord) {
+  async function onOk(value: PutPaymentRecordForm) {
     try {
       showSpinner()
+
+      if (!value.amount && value.amount !== 0) {
+        message.error("Vui lòng nhập số tiền thanh toán")
+        return
+      }
+
+      if (!value.councilMemberId) {
+        message.error("Vui lòng chọn chuyên gia")
+        return
+      }
+
+      const data = {
+        active: value.active,
+        amount: value.amount,
+        councilMemberId: value.councilMemberId,
+        paymentDate: value.paymentDate,
+        status: value.status,
+        transactionCode: value.transactionCode,
+      }
+
       if (id) {
         await update({
-          data: {
-            ...value,
-          },
+          data,
           where: { id },
         })
         message.success("Cập nhật thành công")
       } else {
         await create({
-          data: {
-            ...value,
-          },
+          data,
         })
         message.success("Thêm mới thành công")
       }
@@ -78,18 +97,50 @@ const PutPaymentRecordDetail = () => {
     { enabled: !!id }
   )
 
+  const { data: councilMembers = [] } = useFindManyCouncilMember(
+    {
+      where: {
+        active: true,
+        deletedAt: null,
+        // payment: {
+        //   is: null,
+        // },
+        council: {
+          thesis: {
+            some: {
+              thesisType: ThesisType.THESIS,
+              ...(thesisSessionId ? { thesisSessionId } : {}),
+            },
+          },
+        },
+      },
+      include: {
+        expert: true,
+      },
+      orderBy: {
+        expert: {
+          name: "asc",
+        },
+      },
+    },
+    {
+      enabled: isOpen && !id,
+    }
+  )
+
   useEffect(() => {
-    if (paymentRecord) {
+    if (id && paymentRecord) {
       form.setFieldsValue({
         ...paymentRecord,
         paymentDate: paymentRecord.paymentDate ? dayjs(paymentRecord.paymentDate) : undefined,
       })
     } else {
+      form.resetFields()
       form.setFieldsValue({
         active: true,
       })
     }
-  }, [paymentRecord, form])
+  }, [id, paymentRecord, form])
 
   return (
     <PutFormModal
@@ -102,22 +153,27 @@ const PutPaymentRecordDetail = () => {
       className="w-[45vw]"
     >
       <Col span={12}>
-        {/* TODO: Fix */}
-        <FormItem form={form} name="councilMemberId" label="Chuyên gia">
+        <FormItem form={form} name="councilMemberId" label="Chuyên gia" required>
           <Select
             placeholder="Chọn chuyên gia"
             options={
-              paymentRecord?.councilMember
-                ? [
-                    {
-                      label: `${paymentRecord.councilMember.expert?.name ?? ""}`,
-                      value: paymentRecord.councilMember.id,
-                    },
-                  ]
-                : []
+              id
+                ? paymentRecord?.councilMember
+                  ? [
+                      {
+                        label: `${paymentRecord.councilMember.expert?.name ?? ""}`,
+                        value: paymentRecord.councilMember.id,
+                      },
+                    ]
+                  : []
+                : councilMembers.map((item) => ({
+                    label: item.expert?.name ?? "",
+                    value: item.id,
+                  }))
             }
-            disabled={true}
+            disabled={!!id}
             allowClear
+            showSearch
           />
         </FormItem>
       </Col>
@@ -127,7 +183,7 @@ const PutPaymentRecordDetail = () => {
         </FormItem>
       </Col>
       <Col span={12}>
-        <FormItem form={form} name="amount" label="Số tiền thanh toán">
+        <FormItem form={form} name="amount" label="Số tiền thanh toán" required>
           <InputNumber
             className="w-full"
             min={0}

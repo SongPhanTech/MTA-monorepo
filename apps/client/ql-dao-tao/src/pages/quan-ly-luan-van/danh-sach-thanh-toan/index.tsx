@@ -160,7 +160,10 @@ export default function PaymentRecordPage() {
 
   const { showSpinner, hideSpinner } = useSpinner()
 
-  const { onOpen: openPaymentRecord } = useDisclosure<{ paymentRecordId: string }>({
+  const { onOpen: openPaymentRecord } = useDisclosure<{
+    paymentRecordId?: string
+    thesisSessionId?: string
+  }>({
     tag: "PutPaymentRecordDetail",
   })
 
@@ -229,19 +232,41 @@ export default function PaymentRecordPage() {
               </Form.Item>
             </Col>
             <Col>
-              {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DANH_SACH_THANH_TOAN, "THEM") && (
-                <Button
-                  onClick={() =>
-                    openUpdatePaymentStatus({
-                      paymentRecordIds: selectedRowKeys as string[],
-                    })
-                  }
-                  disabled={selectedRowKeys.length === 0}
-                  type="primary"
-                >
-                  Cập nhật trạng thái
-                </Button>
-              )}
+              <Flex justify="end" gap={4}>
+                {can(
+                  QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DANH_SACH_THANH_TOAN,
+                  "THEM"
+                ) && (
+                  <Button
+                    onClick={() =>
+                      openUpdatePaymentStatus({
+                        paymentRecordIds: selectedRowKeys as string[],
+                      })
+                    }
+                    disabled={selectedRowKeys.length === 0}
+                    type="primary"
+                  >
+                    Cập nhật trạng thái
+                  </Button>
+                )}
+                {can(
+                  QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DANH_SACH_THANH_TOAN,
+                  "THEM"
+                ) && (
+                  <Button
+                    onClick={() =>
+                      openPaymentRecord({
+                        paymentRecordId: undefined,
+                        thesisSessionId: searchParams.thesisSessionId,
+                      })
+                    }
+                    disabled={!searchParams.thesisSessionId}
+                    type="primary"
+                  >
+                    Thêm mới
+                  </Button>
+                )}
+              </Flex>
             </Col>
           </Row>
         </Col>
@@ -341,6 +366,7 @@ export default function PaymentRecordPage() {
                             onClick={() => {
                               openPaymentRecord({
                                 paymentRecordId: id,
+                                thesisSessionId: searchParams.thesisSessionId,
                               })
                             }}
                             className="text-sm text-blue-700 cursor-pointer"
