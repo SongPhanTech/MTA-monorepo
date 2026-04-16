@@ -1755,11 +1755,16 @@ const convertToTthdbvData = (allStudentsInClasses: any[]): TthdbvData[] => {
   if (!allStudentsInClasses?.length) return []
 
   const now = dayjs()
+  const studentsWithProject = allStudentsInClasses.filter((student) => {
+    const project = student?.thesisRegistrations?.[0]?.thesisProject
+    return Boolean(project?.council?.members?.length)
+  })
+  if (!studentsWithProject.length) return []
 
   const majorMap = new Map<string, any[]>()
   let khoaquanli = ""
 
-  allStudentsInClasses.forEach((student) => {
+  studentsWithProject.forEach((student) => {
     const project = student?.thesisRegistrations?.[0]?.thesisProject
     const council = project?.council?.members
     if (!project || !council?.length) return
@@ -1845,7 +1850,7 @@ const convertToTthdbvData = (allStudentsInClasses: any[]): TthdbvData[] => {
   })
 
   return Array.from(majorMap.entries()).map(([majorName, items]) => {
-    const firstItem = allStudentsInClasses.find(
+    const firstItem = studentsWithProject.find(
       (s) => s.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name === majorName
     )
     const project = firstItem?.thesisRegistrations?.[0]?.thesisProject
@@ -2048,6 +2053,13 @@ const convertToThongKeCbThamGiaHdData = (allStudentsInClasses: any[]): ThongKeCb
   const result: ThongKeCbThamGiaHdData[] = []
 
   majorMap.forEach((students, majorName) => {
+    const studentsWithProject = students.filter(
+      (student) => student?.thesisRegistrations?.[0]?.thesisProject?.council
+    )
+    if (!studentsWithProject.length) {
+      return
+    }
+
     const expertStats = new Map<string, ThongKeCbThamGiaHdTable>()
 
     let totalParticipations = 0
@@ -2057,7 +2069,7 @@ const convertToThongKeCbThamGiaHdData = (allStudentsInClasses: any[]): ThongKeCb
     let totalPB1 = 0
     let totalPB2 = 0
 
-    students.forEach((student) => {
+    studentsWithProject.forEach((student) => {
       const project = student.thesisRegistrations?.[0]?.thesisProject
       if (!project || !project.council) return
 
@@ -2121,9 +2133,7 @@ const convertToThongKeCbThamGiaHdData = (allStudentsInClasses: any[]): ThongKeCb
       row.stt = index + 1
     })
 
-    const firstStudentWithProject = students.find(
-      (student) => student?.thesisRegistrations?.[0]?.thesisProject
-    )
+    const firstStudentWithProject = studentsWithProject[0]
     if (!firstStudentWithProject) {
       return
     }
@@ -2956,12 +2966,15 @@ const convertToHDDanhGiaLuanVanTemplateData = (
         })
       }
 
-      orgMap.get(orgId)!.students.push(student)
+      const orgEntry = orgMap.get(orgId)
+      if (!orgEntry) return
+      orgEntry.students.push(student)
     })
 
   const groupedData: HDDanhGiaLuanVanData[] = Array.from(orgMap.values()).map((org, index) => {
-    const tableData: HDDanhGiaLuanVanTable[] = org.students.map((student: any, sIdx: number) => {
-      const project = student?.thesisRegistrations?.[0]?.thesisProject
+    const validStudents = org.students.filter((student) => student?.thesisRegistrations?.[0]?.thesisProject)
+    const tableData: HDDanhGiaLuanVanTable[] = validStudents.map((student: any, sIdx: number) => {
+      const project = student.thesisRegistrations?.[0]?.thesisProject
       const members = project?.council?.members || []
 
       const findMemberName = (role: CouncilRole) =>
