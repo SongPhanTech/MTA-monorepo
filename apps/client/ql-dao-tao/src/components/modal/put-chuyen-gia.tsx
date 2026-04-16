@@ -323,12 +323,12 @@ const PutExpertProfile = () => {
       )}
 
       <Col span={12}>
-        <FormItem form={form} name="bankAccountNumber" label="Số tài khoản" required>
+        <FormItem form={form} name="bankAccountNumber" label="Số tài khoản">
           <Input placeholder="Nhập số tài khoản" />
         </FormItem>
       </Col>
       <Col span={12}>
-        <FormItem form={form} name="bankName" label="Ngân hàng" required>
+        <FormItem form={form} name="bankName" label="Ngân hàng">
           <Input placeholder="Nhập tên ngân hàng" />
         </FormItem>
       </Col>

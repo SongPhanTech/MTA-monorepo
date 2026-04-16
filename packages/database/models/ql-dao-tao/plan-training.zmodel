@@ -39,20 +39,20 @@ model PlanTraining extends BaseNoCode {
 
 /// Kế hoạch huấn luyện
 model PlanTrainingPractice extends BaseNoCode {
-  trainingObjectType   TrainingObjectType    @relation(fields: [trainingObjectTypeId], references: [id])
+  trainingObjectType   TrainingObjectType @relation(fields: [trainingObjectTypeId], references: [id])
   trainingObjectTypeId String
-  semester             Semester              @relation(fields: [semesterId], references: [id])
+  semester             Semester           @relation(fields: [semesterId], references: [id])
   semesterId           String
 
   trainingCourseId     String? // Khoá học
-  trainingCourse       TrainingCourse?       @relation(fields: [trainingCourseId], references: [id])
+  trainingCourse       TrainingCourse?    @relation(fields: [trainingCourseId], references: [id])
 
-  name String
+  name                 String
 
-  isDayOff Boolean @default(false)
+  isDayOff             Boolean            @default(false)
 
-  startDate DateTime
-  endDate   DateTime?
+  startDate            DateTime
+  endDate              DateTime?
 
   @@schema("ql-dao-tao")
 }
@@ -247,15 +247,13 @@ model StudentResearchTopic extends Base {
   coSupervisorId        String?
 
   /// GVHD 3
-  thirdSupervisor ExpertProfile? @relation("ThirdSupervisorToResearchTopic", fields: [thirdSupervisorId], references: [id])
-	thirdSupervisorId String?
+  thirdSupervisor       ExpertProfile?      @relation("ThirdSupervisorToResearchTopic", fields: [thirdSupervisorId], references: [id])
+  thirdSupervisorId     String?
 
   /// ngày báo cáo
   reportDate            DateTime?
 
   @@schema("ql-dao-tao")
-
-	
 }
 
 model StudentInternship extends Base {
@@ -436,7 +434,7 @@ model Semester extends Base {
   semesterTrainingScore   SemesterTrainingScore[]
   availableTrainingTime   AvailableTrainingTime[]
   studentSubjectScore     StudentSubjectScore[]
-  planTrainingPractice PlanTrainingPractice[]
+  planTrainingPractice    PlanTrainingPractice[]
 
   @@schema("ql-dao-tao")
 }
@@ -540,7 +538,7 @@ model TrainingCourse extends Base {
   thesisSession              ThesisSession[]
   planTrainings              PlanTraining[]
   graduationSessions         GraduationSession[]
-  planTrainingPractice PlanTrainingPractice[]
+  planTrainingPractice       PlanTrainingPractice[]
 
   @@schema("ql-dao-tao")
 }
@@ -690,8 +688,8 @@ model CurriculumVersion extends BaseNoCode {
 
 /// môn học
 model Subject extends Base {
-  name                     String                 @unique
-  englishName              String?                @unique
+  name                     String
+  englishName              String?
 
   managementOrganization   DM_DonVi?              @relation(fields: [managementOrganizationId], references: [Id])
   managementOrganizationId String?                @db.Uuid
@@ -700,6 +698,8 @@ model Subject extends Base {
   subjectVersion           SubjectVersion[]       @relation(name: "SubjectVersion")
   certificateOnSubject     CertificateOnSubject[]
   awardOnSubject           Award[]
+
+  @@unique([name,managementOrganizationId])
 
   @@schema("ql-dao-tao")
 }

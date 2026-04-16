@@ -10434,12 +10434,9 @@ const metadata: ModelMeta = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
-                }, name: {
-                    name: "name",
-                    fields: ["name"]
-                }, englishName: {
-                    name: "englishName",
-                    fields: ["englishName"]
+                }, name_managementOrganizationId: {
+                    name: "name_managementOrganizationId",
+                    fields: ["name", "managementOrganizationId"]
                 },
             },
         },

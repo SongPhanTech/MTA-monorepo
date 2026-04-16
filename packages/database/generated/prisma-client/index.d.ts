@@ -401980,8 +401980,7 @@ export namespace Prisma {
   export type SubjectWhereUniqueInput = Prisma.AtLeast<{
     id?: string
     code?: string
-    name?: string
-    englishName?: string
+    name_managementOrganizationId?: SubjectNameManagementOrganizationIdCompoundUniqueInput
     AND?: SubjectWhereInput | SubjectWhereInput[]
     OR?: SubjectWhereInput[]
     NOT?: SubjectWhereInput | SubjectWhereInput[]
@@ -401991,13 +401990,15 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Subject"> | Date | string
     updatedAt?: DateTimeFilter<"Subject"> | Date | string
     createdBy?: UuidNullableFilter<"Subject"> | string | null
+    name?: StringFilter<"Subject"> | string
+    englishName?: StringNullableFilter<"Subject"> | string | null
     managementOrganizationId?: UuidNullableFilter<"Subject"> | string | null
     information?: StringNullableFilter<"Subject"> | string | null
     managementOrganization?: XOR<DM_DonViNullableScalarRelationFilter, DM_DonViWhereInput> | null
     subjectVersion?: SubjectVersionListRelationFilter
     certificateOnSubject?: CertificateOnSubjectListRelationFilter
     awardOnSubject?: AwardListRelationFilter
-  }, "id" | "code" | "name" | "englishName">
+  }, "id" | "code" | "name_managementOrganizationId">
 
   export type SubjectOrderByWithAggregationInput = {
     id?: SortOrder
@@ -464706,6 +464707,11 @@ export namespace Prisma {
     fields: SubjectOrderByRelevanceFieldEnum | SubjectOrderByRelevanceFieldEnum[]
     sort: SortOrder
     search: string
+  }
+
+  export type SubjectNameManagementOrganizationIdCompoundUniqueInput = {
+    name: string
+    managementOrganizationId: string
   }
 
   export type SubjectCountOrderByAggregateInput = {

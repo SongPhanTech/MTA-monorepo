@@ -10,10 +10,10 @@ const subjectClassIds = await prisma.subjectClass.findMany({
     subject: { onePoint: false },
     fixedClasses: {
       some: {
-        trainingCourseId: "cmnfopsiz002sp101f3r243hh",
+        trainingCourseId: "cmo0ui5z4000cmp01ryih8bxn",
       },
     },
-    semesterId: "cmmvor6bi0001mp01mgfapxwk",
+    // semesterId: "cmmvor6bi0001mp01mgfapxwk",
   },
 })
 
@@ -91,10 +91,10 @@ const classes = await prisma.subjectClass.findMany({
     examType: { not: "OfflineWritten" },
     fixedClasses: {
       some: {
-        trainingCourseId: "cmnfopsiz002sp101f3r243hh",
+        trainingCourseId: "cmo0ui5z4000cmp01ryih8bxn",
       },
     },
-    semesterId: "cmmvor6bi0001mp01mgfapxwk",
+    // semesterId: "cmmvor6bi0001mp01mgfapxwk",
   },
 })
 
@@ -130,6 +130,7 @@ if (scoresKhac.length > 0) {
             SET
                 "attendanceScore" = data."attendanceScore"::double precision,
                 "midtermScore" = data."midtermScore"::double precision,
+                "examScore" = data."examScore"::double precision,
                 "updatedAt" = NOW()
             FROM (
                 VALUES
@@ -148,11 +149,12 @@ if (scoresKhac.length > 0) {
                     return `(
                             '${s.id}',
                             ${getRandomScore()},
+                            ${getRandomScore()},
                             ${getRandomScore()}
                         )`
                   })
                   .join(",\n")}
-            ) AS data("id", "attendanceScore", "midtermScore")
+            ) AS data("id", "attendanceScore", "midtermScore", "examScore")
             WHERE sss.id = data.id;
         `)
 
@@ -164,7 +166,7 @@ if (scoresKhac.length > 0) {
 
 await prisma.subjectClass.updateMany({
   where: { id: { in: classes.map((c) => c.id) } },
-  data: { enteredScore: true },
+  data: { enteredScore: true, enteredExamScore: true },
 })
 
 console.log("Update complete!")

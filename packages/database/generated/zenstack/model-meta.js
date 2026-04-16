@@ -10927,12 +10927,10 @@ const metadata = {
                 }, name: {
                     name: "name",
                     type: "String",
-                    attributes: [{ "name": "@unique", "args": [] }],
                 }, englishName: {
                     name: "englishName",
                     type: "String",
                     isOptional: true,
-                    attributes: [{ "name": "@unique", "args": [] }],
                 }, managementOrganization: {
                     name: "managementOrganization",
                     type: "DM_DonVi",
@@ -10981,15 +10979,12 @@ const metadata = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
-                }, name: {
-                    name: "name",
-                    fields: ["name"]
-                }, englishName: {
-                    name: "englishName",
-                    fields: ["englishName"]
+                }, name_managementOrganizationId: {
+                    name: "name_managementOrganizationId",
+                    fields: ["name", "managementOrganizationId"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         subjectVersionCategory: {
             name: 'SubjectVersionCategory', fields: {

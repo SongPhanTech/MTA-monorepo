@@ -1,4 +1,6 @@
 import { CouncilRole, ThesisType, TrainingObjectTypes } from "@workspace/db/client"
+import ExcelJS from "exceljs"
+import { saveAs } from "file-saver"
 import { excelTemplate } from "@workspace/libs/api/model"
 import type { ExcelTemplateBody } from "@workspace/libs/api/schemas"
 import { exportFromTemplate, type TableRow } from "@workspace/libs/template-excel"
@@ -117,7 +119,7 @@ interface ThanhToanHuongDanTrongHvData {
     soHocVien: string
     tongTienSo: number
     tongTienChu: string
-    nguoiki:string
+    nguoiki: string
     data: ThanhToanHuongDanTrongHvTable[]
   }
 }
@@ -164,7 +166,7 @@ interface banSaoHDDGLV {
   data: {
     soQd: string
     ngayTl: string
-    dieu1:string
+    dieu1: string
     thangTl: string
     namTl: string
     khoa: string
@@ -176,7 +178,7 @@ interface banSaoHDDGLV {
     tenHocVien: string
     ngaySinh: string
     khoaHoc: string
-    gvhd:string
+    gvhd: string
     tenChuTich: string
     toChucChuTich: string
     tenThuKy: string
@@ -316,10 +318,16 @@ export const exportPhuLucDsLuanVan = async ({
     allStudentsInClasses.forEach((student) => {
       dotxet = dotxet || student?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.name || ""
       const thesisProject = student?.thesisRegistrations?.[0]?.thesisProject
-      soQD = soQD || student?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.decisionNumber || ""
-      ngayQD = ngayQD || student?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.decisionDate
-        ? dayjs(student?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.decisionDate).format("DD/MM/YYYY")
-        : ""
+      soQD =
+        soQD ||
+        student?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.decisionNumber ||
+        ""
+      ngayQD =
+        ngayQD || student?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.decisionDate
+          ? dayjs(
+              student?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.decisionDate
+            ).format("DD/MM/YYYY")
+          : ""
       if (!thesisProject) return
       const organizationId = thesisProject.organization?.Id || ""
       const organizationName = thesisProject.organization?.sTen || "Chưa có đơn vị"
@@ -342,7 +350,7 @@ export const exportPhuLucDsLuanVan = async ({
         doituongdaotao: student?.fixedClass?.trainingCourse?.trainingObjectType?.name || "",
         khoa: student.fixedClass?.trainingCourse?.name || "",
         tendetai: thesisProject.title || "",
-        gvhd1: getSupervisorName(thesisProject.supervisor ) || "",
+        gvhd1: getSupervisorName(thesisProject.supervisor) || "",
         gvhd2: getSupervisorName(thesisProject.coSupervisor) || "",
         isThesis: thesisProject.type,
         language: thesisProject.language.trim(),
@@ -357,7 +365,7 @@ export const exportPhuLucDsLuanVan = async ({
     let count = 1
     // const tableBodyStartRow = 7
     // const tableHeaderThinBorder = { top: 5, left: 1, bottom: 6, right: 6 } as const
-    const dataRows: TableRow[] = result.flatMap((item: any,index: number) => {
+    const dataRows: TableRow[] = result.flatMap((item: any, index: number) => {
       const orgRow: TableRow = {
         cells: [
           {
@@ -366,31 +374,31 @@ export const exportPhuLucDsLuanVan = async ({
             align: "center",
             colSpan: 6,
             bold: true,
-            fontSize:12,
+            fontSize: 12,
           },
         ],
       }
       const thesisRows: TableRow[] = item.thesisProject.map((thesis: any) => {
         return {
           cells: [
-            { value: count++, border: true, align: "center",fontSize:12 },
+            { value: count++, border: true, align: "center", fontSize: 12 },
             {
               value: `${thesis.hovatenhocvien}\n${thesis.ngaysinh}\n${thesis.doituongdaotao}-${thesis.khoa}`,
               border: true,
               align: "left",
-              fontSize:12,
+              fontSize: 12,
             },
-            { value: `${thesis.tendetai}`, border: true, align: "left",fontSize:12 },
+            { value: `${thesis.tendetai}`, border: true, align: "left", fontSize: 12 },
             {
               value: `${thesis.gvhd1 ? `1. ${thesis.gvhd1}` : ""}\n${
                 thesis.gvhd2 ? `2. ${thesis.gvhd2}` : ""
               }`,
               border: true,
               align: "left",
-              fontSize:12,
+              fontSize: 12,
             },
-            { value: `${thesis.isThesis}`, border: true, align: "center",fontSize:12 },
-            { value: `${thesis.language}`, border: true, align: "center",fontSize:12 },
+            { value: `${thesis.isThesis}`, border: true, align: "center", fontSize: 12 },
+            { value: `${thesis.language}`, border: true, align: "center", fontSize: 12 },
           ],
         }
       })
@@ -407,7 +415,7 @@ export const exportPhuLucDsLuanVan = async ({
           colSpan: 6,
           border: false,
           italic: true,
-          fontSize:12,
+          fontSize: 12,
         },
       ],
     }
@@ -430,7 +438,7 @@ export const exportPhuLucDsLuanVan = async ({
         },
       ],
       fileName: "PhuLucDsLuanVan",
-    });
+    })
     message.success("Xuất file thành công")
   } catch (error) {
     console.log("error", error)
@@ -456,7 +464,7 @@ export const getExpertSupervisionStats = (allStudentsInClasses: any[]) => {
     if (!stats) {
       stats = {
         expertId: expertId,
-        name: getSupervisorName(expert,false,false) as string || "",
+        name: (getSupervisorName(expert, false, false) as string) || "",
         sDonvi: expert?.workplace || expert?.lecturer?.organization?.sMa || "",
         stk: expert?.bankAccountNumber || expert?.lecturer?.userProfile?.bankAccountNumber || "",
         tennganhang: expert?.bankName || expert?.lecturer?.userProfile?.bankName || "",
@@ -513,10 +521,12 @@ export const exportThongKeCbHdlv = async ({
       ? allStudentsInClasses[0]?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.name
       : ""
 
-  const tenkhoa =  allStudentsInClasses?.length > 0
-  ? allStudentsInClasses[0]?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.trainingCourse?.name
-  : ""
-  const data  = dataMapping?.map((item, index) => {
+  const tenkhoa =
+    allStudentsInClasses?.length > 0
+      ? allStudentsInClasses[0]?.thesisRegistrations?.[0]?.thesisProject?.thesisSession
+          ?.trainingCourse?.name
+      : ""
+  const data = dataMapping?.map((item, index) => {
     return {
       stt: index + 1,
       gvhd: item.name,
@@ -536,18 +546,25 @@ export const exportThongKeCbHdlv = async ({
       tail: { data: null },
       fileName: "ThongKeCanBoHuongDan",
       path: "ThongKeCanBoHuongDan.xlsx",
-      payload: [{ data:{
-        tendot: tendot || "",
-        tenkhoa: tenkhoa,
-        ngay: ngay,
-        thang: thang,
-        nam: nam,
-        tongsohocvien: dataMapping?.reduce((acc, item) => acc + item.GVHD1Student + item.GVHD2Student, 0),
-        tongsohd1: dataMapping?.reduce((acc, item) => acc + item.GVHD1Student, 0),
-        tongsohd2: dataMapping?.reduce((acc, item) => acc + item.GVHD2Student, 0),
-        tongsotien: dataMapping?.reduce((acc, item) => acc + item.totalPayment, 0),
-        data: data,
-      }}],
+      payload: [
+        {
+          data: {
+            tendot: tendot || "",
+            tenkhoa: tenkhoa,
+            ngay: ngay,
+            thang: thang,
+            nam: nam,
+            tongsohocvien: dataMapping?.reduce(
+              (acc, item) => acc + item.GVHD1Student + item.GVHD2Student,
+              0
+            ),
+            tongsohd1: dataMapping?.reduce((acc, item) => acc + item.GVHD1Student, 0),
+            tongsohd2: dataMapping?.reduce((acc, item) => acc + item.GVHD2Student, 0),
+            tongsotien: dataMapping?.reduce((acc, item) => acc + item.totalPayment, 0),
+            data: data,
+          },
+        },
+      ],
       showGridLines: true,
       wrapText: true,
     }
@@ -577,38 +594,43 @@ export const exportDanhSachBaoVe = async ({
   }
   showSpinner()
   try {
-    let index = 0;
-    const data  = allStudentsInClasses
+    let index = 0
+    const data = allStudentsInClasses
       ?.map((student) => {
-      if (!student?.thesisRegistrations?.[0]?.thesisProject) return null
-        return { stt: ++index,
-              chuyennganh: student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || "",
-              dt: tenDoiTuong[student?.fixedClass?.trainingCourse?.trainingObjectType?.type as keyof typeof tenDoiTuong]?.shortname || "",
-              lastname: student.userProfile?.lastName || "",
-              firstname: student.userProfile?.firstName || "",
-              empty:"",
-              ngaybaove: student?.thesisRegistrations?.[0]?.thesisProject?.defenseDate
-                ? dayjs(student?.thesisRegistrations?.[0]?.thesisProject?.defenseDate).format(
-                    "DD/MM/YYYY"
-                  )
-                : "",
-              giobaove: student?.thesisRegistrations?.[0]?.thesisProject?.defenseSession?.startTime
-                ? dayjs(
-                    student?.thesisRegistrations?.[0]?.thesisProject?.defenseSession?.startTime
-                  ).format("HH:mm")
-                : "",
-              phongbaove: student?.thesisRegistrations?.[0]?.thesisProject?.room?.name || "",
-
-             }     
-        })
+        if (!student?.thesisRegistrations?.[0]?.thesisProject) return null
+        return {
+          stt: ++index,
+          chuyennganh:
+            student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || "",
+          dt:
+            tenDoiTuong[
+              student?.fixedClass?.trainingCourse?.trainingObjectType
+                ?.type as keyof typeof tenDoiTuong
+            ]?.shortname || "",
+          lastname: student.userProfile?.lastName || "",
+          firstname: student.userProfile?.firstName || "",
+          empty: "",
+          ngaybaove: student?.thesisRegistrations?.[0]?.thesisProject?.defenseDate
+            ? dayjs(student?.thesisRegistrations?.[0]?.thesisProject?.defenseDate).format(
+                "DD/MM/YYYY"
+              )
+            : "",
+          giobaove: student?.thesisRegistrations?.[0]?.thesisProject?.defenseSession?.startTime
+            ? dayjs(
+                student?.thesisRegistrations?.[0]?.thesisProject?.defenseSession?.startTime
+              ).format("HH:mm")
+            : "",
+          phongbaove: student?.thesisRegistrations?.[0]?.thesisProject?.room?.name || "",
+        }
+      })
       .filter(Boolean)
     // console.log("allStudentsInClasses",allStudentsInClasses)
     const dotxet =
       allStudentsInClasses
         ?.map((student) =>
-          student?.thesisRegistrations?.find((registration: any) => registration?.thesisProject?.thesisSession?.name)
-            ?.thesisProject?.thesisSession?.name
-            ?.trim()
+          student?.thesisRegistrations
+            ?.find((registration: any) => registration?.thesisProject?.thesisSession?.name)
+            ?.thesisProject?.thesisSession?.name?.trim()
         )
         .find(Boolean) || "CHƯA CÓ ĐỢT XÉT"
     const normalizedDotxet = dotxet?.trim()?.toUpperCase()
@@ -626,11 +648,15 @@ export const exportDanhSachBaoVe = async ({
       tail: { data: null },
       fileName: "DanhSachBaoVe",
       path: "DanhSachBaoVe.xlsx",
-      payload: [{ data:{
-        dotxet: dotxet?.toUpperCase() || "",
-        soluonghocvien: soluonghocvien,
-        data: data,
-      }}],
+      payload: [
+        {
+          data: {
+            dotxet: dotxet?.toUpperCase() || "",
+            soluonghocvien: soluonghocvien,
+            data: data,
+          },
+        },
+      ],
       showGridLines: true,
       wrapText: true,
     }
@@ -679,7 +705,7 @@ const ROWS_PER_SLOT = 6
 
 const buildDanhSachBaoVeDanNgoaiPhongHall = (
   project: any,
-  studentNames: string[],
+  studentNames: string[]
 ): DanhSachBaoVeDanNgoaiPhongHall => {
   const councilMembers = project?.council?.members || []
   const getMember = (role: CouncilRole) => councilMembers.find((m: any) => m.role === role)
@@ -715,7 +741,7 @@ const buildDanhSachBaoVeDanNgoaiPhongHall = (
 }
 
 const buildSlotsFromEntries = (
-  entries: { project: any; studentName: string }[],
+  entries: { project: any; studentName: string }[]
 ): { allRooms: string[]; slots: DanhSachBaoVeDanNgoaiPhongSlot[] } => {
   const allRoomSet = new Set<string>()
   const slotMap = new Map<string, { project: any; studentName: string }[]>()
@@ -770,7 +796,7 @@ const buildSlotsFromEntries = (
 }
 
 export const convertToDanhSachBaoVeDanNgoaiPhongData = (
-  allStudentsInClasses: any[],
+  allStudentsInClasses: any[]
 ): DanhSachBaoVeDanNgoaiPhongResult[] => {
   if (!allStudentsInClasses?.length) return []
 
@@ -783,7 +809,10 @@ export const convertToDanhSachBaoVeDanNgoaiPhongData = (
   const firstProject = validStudents[0]?.thesisRegistrations?.[0]?.thesisProject
   const dotXet = firstProject?.thesisSession?.name || ""
 
-  const orgMap = new Map<string, { orgName: string; nganh: string; entries: { project: any; studentName: string }[] }>()
+  const orgMap = new Map<
+    string,
+    { orgName: string; nganh: string; entries: { project: any; studentName: string }[] }
+  >()
 
   validStudents.forEach((student) => {
     const project = student?.thesisRegistrations?.[0]?.thesisProject
@@ -829,9 +858,6 @@ export const exportDanhSachBaoVeDanNgoaiPhong = async ({
       return []
     }
 
-    const { default: ExcelJS } = await import("exceljs")
-    const { saveAs } = await import("file-saver")
-
     const COLS_PER_ROOM = 3
     const FIXED_COLS = 3
 
@@ -840,14 +866,33 @@ export const exportDanhSachBaoVeDanNgoaiPhong = async ({
     const allBorders = { top: thin, left: thin, bottom: thin, right: thin }
 
     const hoiDongBorders = { top: thin, left: thin, bottom: dotted, right: thin }
-    const memberCdBorders = (isLast: boolean) => ({ top: dotted, left: thin, bottom: isLast ? thin : dotted, right: dotted })
-    const memberHdBorders = (isLast: boolean) => ({ top: dotted, left: dotted, bottom: isLast ? thin : dotted, right: dotted })
-    const memberPbBorders = (isLast: boolean) => ({ top: dotted, left: dotted, bottom: isLast ? thin : dotted, right: thin })
+    const memberCdBorders = (isLast: boolean) => ({
+      top: dotted,
+      left: thin,
+      bottom: isLast ? thin : dotted,
+      right: dotted,
+    })
+    const memberHdBorders = (isLast: boolean) => ({
+      top: dotted,
+      left: dotted,
+      bottom: isLast ? thin : dotted,
+      right: dotted,
+    })
+    const memberPbBorders = (isLast: boolean) => ({
+      top: dotted,
+      left: dotted,
+      bottom: isLast ? thin : dotted,
+      right: thin,
+    })
     const defaultFont = { name: "Times New Roman", size: 13 }
     const boldFont = { ...defaultFont, bold: true }
     const titleFont = { name: "Times New Roman", size: 14, bold: true }
 
-    const centerAlign = { horizontal: "center" as const, vertical: "middle" as const, wrapText: true }
+    const centerAlign = {
+      horizontal: "center" as const,
+      vertical: "middle" as const,
+      wrapText: true,
+    }
     const leftAlign = { horizontal: "left" as const, vertical: "middle" as const, wrapText: true }
 
     const workbook = new ExcelJS.Workbook()
@@ -869,8 +914,10 @@ export const exportDanhSachBaoVeDanNgoaiPhong = async ({
       }
 
       const setCell = (
-        row: number, col: number, value: string | number,
-        opts?: { font?: Record<string, any>; align?: Record<string, any>; border?: boolean },
+        row: number,
+        col: number,
+        value: string | number,
+        opts?: { font?: Record<string, any>; align?: Record<string, any>; border?: boolean }
       ) => {
         const cell = ws.getRow(row).getCell(col)
         cell.value = value as any
@@ -885,7 +932,11 @@ export const exportDanhSachBaoVeDanNgoaiPhong = async ({
 
       // --- Header rows ---
       let r = 1
-      setCell(r, 1, "HỌC VIỆN KỸ THUẬT QUÂN SỰ", { font: boldFont, align: centerAlign, border: false })
+      setCell(r, 1, "HỌC VIỆN KỸ THUẬT QUÂN SỰ", {
+        font: boldFont,
+        align: centerAlign,
+        border: false,
+      })
       mergeSafe(r, 1, r, 5)
       r++
       setCell(r, 1, "PHÒNG SAU ĐẠI HỌC", { font: boldFont, align: centerAlign, border: false })
@@ -949,7 +1000,7 @@ export const exportDanhSachBaoVeDanNgoaiPhong = async ({
         }
         const hoiDongLineCount = Math.max(
           3,
-          ...allRooms.map((room) => (slot.hallsByRoom.get(room)?.hoiDong || "").split("\n").length),
+          ...allRooms.map((room) => (slot.hallsByRoom.get(room)?.hoiDong || "").split("\n").length)
         )
         ws.getRow(r).height = hoiDongLineCount * 16
         r++
@@ -961,7 +1012,7 @@ export const exportDanhSachBaoVeDanNgoaiPhong = async ({
           name: string,
           pbLabel: string,
           rowNum: number,
-          isLast: boolean,
+          isLast: boolean
         ) => {
           const cell1 = ws.getRow(rowNum).getCell(startCol)
           cell1.value = cdLabel as any
@@ -1002,7 +1053,15 @@ export const exportDanhSachBaoVeDanNgoaiPhong = async ({
         for (let i = 0; i < allRooms.length; i++) {
           const startCol = FIXED_COLS + i * COLS_PER_ROOM + 1
           const hall = slot.hallsByRoom.get(allRooms[i])
-          setMemberRow(hall, startCol, hall?.pb1Name ? "UV" : "", hall?.pb1Name || "", hall?.pb1Name ? "PB1" : "", r, false)
+          setMemberRow(
+            hall,
+            startCol,
+            hall?.pb1Name ? "UV" : "",
+            hall?.pb1Name || "",
+            hall?.pb1Name ? "PB1" : "",
+            r,
+            false
+          )
         }
         r++
 
@@ -1010,7 +1069,15 @@ export const exportDanhSachBaoVeDanNgoaiPhong = async ({
         for (let i = 0; i < allRooms.length; i++) {
           const startCol = FIXED_COLS + i * COLS_PER_ROOM + 1
           const hall = slot.hallsByRoom.get(allRooms[i])
-          setMemberRow(hall, startCol, hall?.pb2Name ? "UV" : "", hall?.pb2Name || "", hall?.pb2Name ? "PB2" : "", r, false)
+          setMemberRow(
+            hall,
+            startCol,
+            hall?.pb2Name ? "UV" : "",
+            hall?.pb2Name || "",
+            hall?.pb2Name ? "PB2" : "",
+            r,
+            false
+          )
         }
         r++
 
@@ -1046,10 +1113,11 @@ export const exportDanhSachBaoVeDanNgoaiPhong = async ({
       new Blob([buffer], {
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       }),
-      "DanhSachBaoVeDanNgoaiPhong.xlsx",
+      "DanhSachBaoVeDanNgoaiPhong.xlsx"
     )
     message.success("Xuất file thành công")
   } catch (error) {
+    console.error(error)
     message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
   } finally {
     hideSpinner?.()
@@ -1081,12 +1149,13 @@ export const exportHosobvlv = async ({
       const thuky = thanhvienhoidong?.find((member: any) => member.role === CouncilRole.SECRETARY)
       const uyvien = thanhvienhoidong?.find((member: any) => member.role === CouncilRole.MEMBER)
       const nguoikiqddt =
-          student?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.defenseDecisionMaker?.trim() || ""
-        const qddtKyTokens = nguoikiqddt.split(/\s+/).filter(Boolean)
-        const chucVuNguoiKyQddt = qddtKyTokens[0] ?? ""
-        const tenNguoiKyQddt = qddtKyTokens.slice(1).join(" ").trim()
-        const text1 = chucVuNguoiKyQddt === "GĐ" ? "GIÁM ĐỐC" : "KT.GIÁM ĐỐC"
-        const text2 = text1 === "GIÁM ĐỐC" ? "" : "PHÓ GIÁM ĐỐC"
+        student?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.defenseDecisionMaker?.trim() ||
+        ""
+      const qddtKyTokens = nguoikiqddt.split(/\s+/).filter(Boolean)
+      const chucVuNguoiKyQddt = qddtKyTokens[0] ?? ""
+      const tenNguoiKyQddt = qddtKyTokens.slice(1).join(" ").trim()
+      const text1 = chucVuNguoiKyQddt === "GĐ" ? "GIÁM ĐỐC" : "KT.GIÁM ĐỐC"
+      const text2 = text1 === "GIÁM ĐỐC" ? "" : "PHÓ GIÁM ĐỐC"
       // const nguoiKi
       const data = {
         tenhocvien: student.userProfile?.fullname || "",
@@ -1107,7 +1176,7 @@ export const exportHosobvlv = async ({
         chutich: getSupervisorName(chutich?.expert) || "",
         thuky: getSupervisorName(thuky?.expert) || "",
         uyvien: getSupervisorName(uyvien?.expert) || "",
-        nguoiki:tenNguoiKyQddt,
+        nguoiki: tenNguoiKyQddt,
         text1: text1,
         text2: text2,
       }
@@ -1170,14 +1239,15 @@ export const exportGiayMoiHdlv = async ({
         thang: thang,
         nam: nam,
         tenhocvien: student?.userProfile?.fullname,
-        tenhuongdan: supervisor ? ` ${getSupervisorName(supervisor,false,true)}` : "",
+        tenhuongdan: supervisor ? ` ${getSupervisorName(supervisor, false, true)}` : "",
         khoa: khoahoc,
         chuyennganh: student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || "",
-        tendetai:  `Tên đề tài: "${student?.thesisRegistrations?.[0]?.thesisProject?.title.trim()}"` || "",
+        tendetai:
+          `Tên đề tài: "${student?.thesisRegistrations?.[0]?.thesisProject?.title.trim()}"` || "",
         type: student?.thesisRegistrations?.[0]?.thesisProject?.type.trim().toLowerCase(),
         text1: isChief ? "TRƯỞNG PHÒNG SAU ĐẠI HỌC" : "KT. TRƯỞNG PHÒNG SAU ĐẠI HỌC",
         text2: isChief ? "" : "PHÓ PHÒNG SAU ĐẠI HỌC",
-        nguoiky1:signerName || "",
+        nguoiky1: signerName || "",
       }
       return {
         data: data,
@@ -1239,14 +1309,23 @@ export const exportSaoQDHDLV = async ({
         const chuyennganh = major?.name || ""
         const detai = thesisProject.title || ""
         const hoten = student?.userProfile?.fullname || ""
-        const ngayQD = thesisProject?.thesisSession?.decisionDate ? dayjs(thesisProject?.thesisSession?.decisionDate).format("DD") : ""
-        const thangQD = thesisProject?.thesisSession?.decisionDate ? dayjs(thesisProject?.thesisSession?.decisionDate).format("MM") : ""
-        const namQD = thesisProject?.thesisSession?.decisionDate ? dayjs(thesisProject?.thesisSession?.decisionDate).format("YYYY") : ""
-        const canbohuongdan1 = `1. ${getSupervisorName(supervisor,false,true)}`
-        const canbohuongdan2 = coSupervisor ? `2. ${getSupervisorName(coSupervisor,false,true)}` : ""
+        const ngayQD = thesisProject?.thesisSession?.decisionDate
+          ? dayjs(thesisProject?.thesisSession?.decisionDate).format("DD")
+          : ""
+        const thangQD = thesisProject?.thesisSession?.decisionDate
+          ? dayjs(thesisProject?.thesisSession?.decisionDate).format("MM")
+          : ""
+        const namQD = thesisProject?.thesisSession?.decisionDate
+          ? dayjs(thesisProject?.thesisSession?.decisionDate).format("YYYY")
+          : ""
+        const canbohuongdan1 = `1. ${getSupervisorName(supervisor, false, true)}`
+        const canbohuongdan2 = coSupervisor
+          ? `2. ${getSupervisorName(coSupervisor, false, true)}`
+          : ""
         const khoaquanli = thesisProject.organization?.sTen || ""
         const nguoikiqddt =
-          student?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.decisionMaker?.trim() || ""
+          student?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.decisionMaker?.trim() ||
+          ""
         const qddtKyTokens = nguoikiqddt.split(/\s+/).filter(Boolean)
         const chucVuNguoiKyQddt = qddtKyTokens[0] ?? ""
         const tenNguoiKyQddt = qddtKyTokens.slice(1).join(" ").trim()
@@ -1259,8 +1338,7 @@ export const exportSaoQDHDLV = async ({
         const dieu2 = `Điều 2: ${khoaquanli} tổ chức triển khai cho cán bộ hướng dẫn và học viên thực hiện theo quy định.`
         const data = {
           soQD:
-            student?.thesisRegistrations?.[0]?.thesisProject?.thesisSession
-              ?.decisionNumber || "",
+            student?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.decisionNumber || "",
           ngayQD: ngayQD,
           thangQD: thangQD,
           namQD: namQD,
@@ -1269,10 +1347,10 @@ export const exportSaoQDHDLV = async ({
           dieu2: dieu2,
           text1: text1,
           text2: text2,
-          nguoiky1:tenNguoiKyQddt,
+          nguoiky1: tenNguoiKyQddt,
           text3: isChief ? "TRƯỞNG PHÒNG SAU ĐẠI HỌC" : "KT.TRƯỞNG PHÒNG SAU ĐẠI HỌC",
           text4: isChief ? "" : "PHÓ PHÒNG SAU ĐẠI HỌC",
-          nguoiki2:signerName,
+          nguoiki2: signerName,
           ngay: ngayHT,
           thang: thangHT,
           nam: namHT,
@@ -1346,7 +1424,11 @@ export const exportKiemTraTienDo = async ({
         ngaysinh: student.userProfile?.dateOfBirth
           ? dayjs(student.userProfile.dateOfBirth).format("DD/MM/YYYY")
           : "",
-        doituongdaotao: tenDoiTuong[student?.fixedClass?.trainingCourse?.trainingObjectType?.type as keyof typeof tenDoiTuong]?.shortname ||  "",
+        doituongdaotao:
+          tenDoiTuong[
+            student?.fixedClass?.trainingCourse?.trainingObjectType
+              ?.type as keyof typeof tenDoiTuong
+          ]?.shortname || "",
         decisionNumber: thesisProject?.thesisSession?.decisionNumber || "",
         tendetai: thesisProject.title || "",
         gvhd:
@@ -1370,7 +1452,7 @@ export const exportKiemTraTienDo = async ({
       ).size
       const orgRow: TableRow = {
         cells: [
-          {value:""},
+          { value: "" },
           {
             value: `${index + 1}.  ${item.sTen}: ${tongHocVien} học viên`,
             border: true,
@@ -1384,21 +1466,22 @@ export const exportKiemTraTienDo = async ({
         count++
         return {
           cells: [
-            { value: index + 1, border: true, align: "center",fontSize:12 },
+            { value: index + 1, border: true, align: "center", fontSize: 12 },
             {
-              value: `${thesis.hovatenhocvien}\nĐT:${thesis.doituongdaotao}\nSố QĐ:${thesis.decisionNumber}\n${thesis.gvhd ? `CBHD:${thesis.gvhd}` : "CBHD"}`.trim(),
+              value:
+                `${thesis.hovatenhocvien}\nĐT:${thesis.doituongdaotao}\nSố QĐ:${thesis.decisionNumber}\n${thesis.gvhd ? `CBHD:${thesis.gvhd}` : "CBHD"}`.trim(),
               border: true,
               align: "left",
-              fontSize:12,
+              fontSize: 12,
             },
             { value: `${thesis.tendetai}`, border: true, align: "left" },
             {
               value: "",
               border: true,
               align: "left",
-              fontSize:12,
+              fontSize: 12,
             },
-            { value: "", border: true, align: "center",fontSize:12 },
+            { value: "", border: true, align: "center", fontSize: 12 },
           ],
         }
       })
@@ -1412,7 +1495,7 @@ export const exportKiemTraTienDo = async ({
         {
           value: `Tổng số: ${count - 1} học viên./.`,
           align: "center",
-          fontSize:12,
+          fontSize: 12,
           colSpan: 5,
           italic: true,
           border: false,
@@ -1438,7 +1521,13 @@ export const exportKiemTraTienDo = async ({
         { value: "", border: false, align: "center" },
         { value: "", border: false, align: "center" },
         { value: "", border: false, align: "center" },
-        { value: "(Ký và ghi rõ họ tên)", colSpan: 2, border: false, italic: true, align: "center" },
+        {
+          value: "(Ký và ghi rõ họ tên)",
+          colSpan: 2,
+          border: false,
+          italic: true,
+          align: "center",
+        },
       ],
     }
     await exportFromTemplate({
@@ -1474,7 +1563,7 @@ export const exportGiayMoiChamLvPb = async ({
   }
   try {
     showSpinner?.()
-    const dataConvert = convertToGmcLvPbData(allStudentsInClasses,signerName,isChief)
+    const dataConvert = convertToGmcLvPbData(allStudentsInClasses, signerName, isChief)
     if (dataConvert.length === 0) {
       message.error("Không có dữ liệu để tạo giấy mời chấm LV PB")
       return
@@ -1512,7 +1601,11 @@ const downloadFile = (blob: Blob, fileName: string) => {
   document.body.removeChild(link)
   URL.revokeObjectURL(url)
 }
-const convertToGmcLvPbData = (allStudentsInClasses: any[],signerName?: string,isChief?: boolean): GmcLvPbData[] => {
+const convertToGmcLvPbData = (
+  allStudentsInClasses: any[],
+  signerName?: string,
+  isChief?: boolean
+): GmcLvPbData[] => {
   if (!allStudentsInClasses?.length) return []
 
   const expertMap = new Map<string, GmcLvPbData>()
@@ -1557,8 +1650,8 @@ const convertToGmcLvPbData = (allStudentsInClasses: any[],signerName?: string,is
             tongSoHocVien: 0,
             text1: isChief ? "TRƯỞNG PHÒNG SAU ĐẠI HỌC" : "KT. TRƯỞNG PHÒNG SAU ĐẠI HỌC",
             text2: isChief ? "" : "PHÓ PHÒNG SAU ĐẠI HỌC",
-            nguoiki:signerName || "",
-            tenThanhVien: getSupervisorName(expert,false,true) as string || "",
+            nguoiki: signerName || "",
+            tenThanhVien: (getSupervisorName(expert, false, true) as string) || "",
             data: [],
           },
         })
@@ -1721,16 +1814,20 @@ const convertToTthdbvData = (allStudentsInClasses: any[]): TthdbvData[] => {
       else if (m.role === CouncilRole.REVIEWER_2) roleSuffix = ", PB2"
 
       const org = expert?.organization ? `, ${expert.organization}` : ""
-      const name = getSupervisorName(expert,false,true) as string || ""
+      const name = (getSupervisorName(expert, false, true) as string) || ""
       hdLines.push(`${rolePrefix}: ${name || ""}${org}${roleSuffix}`)
 
       const rawAmount = Number(m.payment?.amount || 0)
       studentTotal += rawAmount
       ttLines.push(rawAmount.toLocaleString("vi-VN").replace(/\./g, " "))
-      const bankNumber = expert?.lecturer?.userProfile?.bankAccountNumber || expert?.bankAccountNumber || "Chưa có thông tin"
+      const bankNumber =
+        expert?.lecturer?.userProfile?.bankAccountNumber ||
+        expert?.bankAccountNumber ||
+        "Chưa có thông tin"
       stkLines.push(bankNumber || "")
-      const bankName = expert?.lecturer?.userProfile?.bankName || expert?.bankName || "Chưa có thông tin"
-        
+      const bankName =
+        expert?.lecturer?.userProfile?.bankName || expert?.bankName || "Chưa có thông tin"
+
       nhLines.push(bankName || "")
     })
 
@@ -1851,8 +1948,8 @@ const convertToDsnlvtvData = (allStudentsInClasses: any[]): DsnlvtvData => {
 
     const thongTinBaoVe = `${hoTen} \n ${doiTuong} - ${khoaHoc} - ${chuyenNganh}`
 
-    const gvhd1 = getSupervisorName(project?.supervisor,false,false) as string || ""
-    const gvhd2 = getSupervisorName(project?.coSupervisor,false,false) as string || ""
+    const gvhd1 = (getSupervisorName(project?.supervisor, false, false) as string) || ""
+    const gvhd2 = (getSupervisorName(project?.coSupervisor, false, false) as string) || ""
 
     let thongTinHuongDan = ""
     if (gvhd1 && gvhd2) {
@@ -1957,7 +2054,7 @@ const convertToThongKeCbThamGiaHdData = (allStudentsInClasses: any[]): ThongKeCb
 
       project.council.members.forEach((member: any) => {
         const expert = member.expert
-        const name = getSupervisorName(expert,false,false) as string || ""
+        const name = (getSupervisorName(expert, false, false) as string) || ""
         const donViQuanLi = expert?.workplace || expert?.lecturer?.organization?.sMa || ""
 
         if (!expert?.id) return
@@ -2025,7 +2122,7 @@ const convertToThongKeCbThamGiaHdData = (allStudentsInClasses: any[]): ThongKeCb
 
     result.push({
       data: {
-        khoaTitle: firstStudentWithProject.fixedClass?.trainingCourse?.name?.toUpperCase()  || "",
+        khoaTitle: firstStudentWithProject.fixedClass?.trainingCourse?.name?.toUpperCase() || "",
         khoa: firstStudentWithProject.fixedClass?.trainingCourse?.name || "",
         chuyenNganh: majorName,
         dotXet: project?.thesisSession?.name || "",
@@ -2055,7 +2152,7 @@ export const exportThanhToanHuongDanTrongHv = async ({
   }
   try {
     showSpinner?.()
-    const dataConvert = convertToThanhToanHuongDanTrongHvData(allStudentsInClasses,inAcademy)
+    const dataConvert = convertToThanhToanHuongDanTrongHvData(allStudentsInClasses, inAcademy)
     if (dataConvert.length === 0) {
       message.error("Chưa có dữ liệu để xuất thanh toán hướng dẫn")
       return []
@@ -2153,7 +2250,7 @@ const convertToThanhToanHuongDanTrongHvData = (
       : ".../.../...."
 
     const quyetDinh = `${qdNum} \n ngày ${qdDate}`
-    
+
     const supervisorNames = supervisorRows.map(
       (item) => (getSupervisorName(item.expert, false, false) as string) || ""
     )
@@ -2340,7 +2437,7 @@ export const exportBanSaoHDDGLV = async ({
   }
   try {
     showSpinner?.()
-    const dataConvert = convertToBanSaoHDDGLV(allStudentsInClasses,signerName,isChief)
+    const dataConvert = convertToBanSaoHDDGLV(allStudentsInClasses, signerName, isChief)
 
     if (!dataConvert) {
       message.error("Chưa có dữ liệu để xuất bản sao hội đồng bảo vệ luan van")
@@ -2369,7 +2466,11 @@ export const exportBanSaoHDDGLV = async ({
     hideSpinner?.()
   }
 }
-const convertToBanSaoHDDGLV = (allStudentsInClasses: any[],signerName?: string,isChief?: boolean): banSaoHDDGLV[] => {
+const convertToBanSaoHDDGLV = (
+  allStudentsInClasses: any[],
+  signerName?: string,
+  isChief?: boolean
+): banSaoHDDGLV[] => {
   if (!allStudentsInClasses?.length) return []
 
   const now = dayjs()
@@ -2380,90 +2481,89 @@ const convertToBanSaoHDDGLV = (allStudentsInClasses: any[],signerName?: string,i
   return allStudentsInClasses
     .filter((student) => student?.thesisRegistrations?.[0]?.thesisProject != null)
     .map((student) => {
-    const project = student?.thesisRegistrations?.[0]?.thesisProject
+      const project = student?.thesisRegistrations?.[0]?.thesisProject
 
-    const session = project?.thesisSession
-    const nguoikibvlv = project?.thesisSession?.defenseDecisionMaker?.trim() || ""
-    const qddtKyTokens = nguoikibvlv.split(/\s+/).filter(Boolean)
-    const chucVuNguoiKyQddt = qddtKyTokens[0] ?? ""
-    const tenNguoiKyQddt = qddtKyTokens.slice(1).join(" ").trim()
-    const members = project?.council?.members || []
+      const session = project?.thesisSession
+      const nguoikibvlv = project?.thesisSession?.defenseDecisionMaker?.trim() || ""
+      const qddtKyTokens = nguoikibvlv.split(/\s+/).filter(Boolean)
+      const chucVuNguoiKyQddt = qddtKyTokens[0] ?? ""
+      const tenNguoiKyQddt = qddtKyTokens.slice(1).join(" ").trim()
+      const members = project?.council?.members || []
 
-    const findMember = (role: CouncilRole) => members.find((m: any) => m.role === role)
+      const findMember = (role: CouncilRole) => members.find((m: any) => m.role === role)
 
-    const chairman = findMember(CouncilRole.CHAIRMAN)
-    const secretary = findMember(CouncilRole.SECRETARY)
-    const member = findMember(CouncilRole.MEMBER)
-    const pb1 = findMember(CouncilRole.REVIEWER_1)
-    const pb2 = findMember(CouncilRole.REVIEWER_2)
-    const qdDate = session?.defenseDecisionDate ? dayjs(session.defenseDecisionDate) : null
-    let gvhd1 = ""
-    if (project?.supervisor) {
-      gvhd1 = getSupervisorName(project?.supervisor) as string || ""
-    }
-    let gvhd2 = ""
-    if (project?.coSupervisor) {
-      gvhd2 = getSupervisorName(project?.coSupervisor) as string || ""
-    }
-    const loaiLuanVan = project?.type.trim().toLowerCase() || ""
-    const nganh = student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.trainingField?.name || ""
-    const chuyenNganh = student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || ""
-    const deTai = project?.title || ""
-    const tenhocvien = student.userProfile?.fullname || ""
-    const ngaysinh = student.userProfile?.dateOfBirth ? dayjs(student.userProfile.dateOfBirth).format("DD/MM/YYYY") : ""
-    const khoaHoc = student.fixedClass?.trainingCourse?.name || ""
-   const nienkhoahoc = student.fixedClass?.trainingCourse?.academicYear || ""
-   const gvhd = [gvhd1, gvhd2].filter(Boolean).join("; ")
-    return {
-      data: {
-        text1: chucVuNguoiKyQddt === "GĐ" ? "GIÁM ĐỐC" : "KT.GIÁM ĐỐC",
-        text2: chucVuNguoiKyQddt === "GĐ" ? "" : "PHÓ GIÁM ĐỐC",
-        nguoiki1:tenNguoiKyQddt,
-        text3: isChief ? "TRƯỞNG PHÒNG SAU ĐẠI HỌC" : "KT. TRƯỞNG PHÒNG SAU ĐẠI HỌC",
-        text4: isChief ? "" : "PHÓ PHÒNG SAU ĐẠI HỌC",
-        nguoiki2:signerName || "",
-        
-        soQd: session?.defenseDecisionNumber || "",
-        ngayTl: qdDate ? qdDate.format("DD") : "",
-        thangTl: qdDate ? qdDate.format("MM") : "",
-        namTl: qdDate ? qdDate.format("YYYY") : "",
-        khoa: session?.trainingCourse?.name || "",
-        dotXet: session?.name || "",
-        loaiLuanVan: loaiLuanVan,
-        
-        nganh: nganh,
-        chuyenNganh: chuyenNganh,
-        deTai: deTai,
-        dieu1: `Điều 1. Thành lập hội đồng đánh giá ${loaiLuanVan} tốt nghiệp thạc sĩ ngành ${nganh} (${chuyenNganh}) về đề tài "${deTai}". \n     Học viên thực hiện: ${tenhocvien}, sinh ngày ${ngaysinh}, ${khoaHoc} (${nienkhoahoc}). \n     Cán bộ hướng dẫn: ${gvhd}.\n     Chỉ định và mời các đồng chí có tên sau đây tham gia hội đồng:
+      const chairman = findMember(CouncilRole.CHAIRMAN)
+      const secretary = findMember(CouncilRole.SECRETARY)
+      const member = findMember(CouncilRole.MEMBER)
+      const pb1 = findMember(CouncilRole.REVIEWER_1)
+      const pb2 = findMember(CouncilRole.REVIEWER_2)
+      const qdDate = session?.defenseDecisionDate ? dayjs(session.defenseDecisionDate) : null
+      let gvhd1 = ""
+      if (project?.supervisor) {
+        gvhd1 = (getSupervisorName(project?.supervisor) as string) || ""
+      }
+      let gvhd2 = ""
+      if (project?.coSupervisor) {
+        gvhd2 = (getSupervisorName(project?.coSupervisor) as string) || ""
+      }
+      const loaiLuanVan = project?.type.trim().toLowerCase() || ""
+      const nganh =
+        student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.trainingField?.name || ""
+      const chuyenNganh =
+        student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || ""
+      const deTai = project?.title || ""
+      const tenhocvien = student.userProfile?.fullname || ""
+      const ngaysinh = student.userProfile?.dateOfBirth
+        ? dayjs(student.userProfile.dateOfBirth).format("DD/MM/YYYY")
+        : ""
+      const khoaHoc = student.fixedClass?.trainingCourse?.name || ""
+      const nienkhoahoc = student.fixedClass?.trainingCourse?.academicYear || ""
+      const gvhd = [gvhd1, gvhd2].filter(Boolean).join("; ")
+      return {
+        data: {
+          text1: chucVuNguoiKyQddt === "GĐ" ? "GIÁM ĐỐC" : "KT.GIÁM ĐỐC",
+          text2: chucVuNguoiKyQddt === "GĐ" ? "" : "PHÓ GIÁM ĐỐC",
+          nguoiki1: tenNguoiKyQddt,
+          text3: isChief ? "TRƯỞNG PHÒNG SAU ĐẠI HỌC" : "KT. TRƯỞNG PHÒNG SAU ĐẠI HỌC",
+          text4: isChief ? "" : "PHÓ PHÒNG SAU ĐẠI HỌC",
+          nguoiki2: signerName || "",
+
+          soQd: session?.defenseDecisionNumber || "",
+          ngayTl: qdDate ? qdDate.format("DD") : "",
+          thangTl: qdDate ? qdDate.format("MM") : "",
+          namTl: qdDate ? qdDate.format("YYYY") : "",
+          khoa: session?.trainingCourse?.name || "",
+          dotXet: session?.name || "",
+          loaiLuanVan: loaiLuanVan,
+
+          nganh: nganh,
+          chuyenNganh: chuyenNganh,
+          deTai: deTai,
+          dieu1: `Điều 1. Thành lập hội đồng đánh giá ${loaiLuanVan} tốt nghiệp thạc sĩ ngành ${nganh} (${chuyenNganh}) về đề tài "${deTai}". \n     Học viên thực hiện: ${tenhocvien}, sinh ngày ${ngaysinh}, ${khoaHoc} (${nienkhoahoc}). \n     Cán bộ hướng dẫn: ${gvhd}.\n     Chỉ định và mời các đồng chí có tên sau đây tham gia hội đồng:
         `,
-        tenHocVien: student.userProfile?.fullname || "",
-        ngaySinh: student.userProfile?.dateOfBirth
-          ? dayjs(student.userProfile.dateOfBirth).format("DD/MM/YYYY")
-          : "",
-        khoaHoc: student.fixedClass?.trainingCourse?.name || "",
-        gvhd: [gvhd1, gvhd2].filter(Boolean).join("; "),
-        tenChuTich: getSupervisorName(chairman?.expert) as string || "",
-        toChucChuTich:
-          chairman?.expert?.workplace || "HVKTQS",
-            
-        tenThuKy: getSupervisorName(secretary?.expert) as string || "",
-        toChucThuKy:
-          secretary?.expert?.workplace || "HVKTQS",
-        tenUyVien: getSupervisorName(member?.expert) as string || "",
-        toChucUyVien:
-          member?.expert?.workplace || "HVKTQS",
-        tenPb1: getSupervisorName(pb1?.expert) as string || "",
-        toChucPb1:
-          pb1?.expert?.workplace || "HVKTQS",
-        tenPb2: getSupervisorName(pb2?.expert) as string || "",
-        toChucPb2:
-          pb2?.expert?.workplace || "HVKTQS",
-        ngay: currentDay,
-        thang: currentMonth,
-        nam: currentYear,
-      },
-    }
-  })
+          tenHocVien: student.userProfile?.fullname || "",
+          ngaySinh: student.userProfile?.dateOfBirth
+            ? dayjs(student.userProfile.dateOfBirth).format("DD/MM/YYYY")
+            : "",
+          khoaHoc: student.fixedClass?.trainingCourse?.name || "",
+          gvhd: [gvhd1, gvhd2].filter(Boolean).join("; "),
+          tenChuTich: (getSupervisorName(chairman?.expert) as string) || "",
+          toChucChuTich: chairman?.expert?.workplace || "HVKTQS",
+
+          tenThuKy: (getSupervisorName(secretary?.expert) as string) || "",
+          toChucThuKy: secretary?.expert?.workplace || "HVKTQS",
+          tenUyVien: (getSupervisorName(member?.expert) as string) || "",
+          toChucUyVien: member?.expert?.workplace || "HVKTQS",
+          tenPb1: (getSupervisorName(pb1?.expert) as string) || "",
+          toChucPb1: pb1?.expert?.workplace || "HVKTQS",
+          tenPb2: (getSupervisorName(pb2?.expert) as string) || "",
+          toChucPb2: pb2?.expert?.workplace || "HVKTQS",
+          ngay: currentDay,
+          thang: currentMonth,
+          nam: currentYear,
+        },
+      }
+    })
 }
 export const exportPhuLucQdhdd = async ({
   allStudentsInClasses,
@@ -2588,22 +2688,22 @@ const convertToPhuLucQdhdTemplateData = (allStudentsInClasses: any[]): PhuLucQdh
         ngaySinh: student.userProfile?.dateOfBirth
           ? dayjs(student.userProfile.dateOfBirth).format("DD/MM/YYYY")
           : "",
-        gvhd1: getSupervisorName(project?.supervisor, false, true) as string || "",
-        gvhd2: getSupervisorName(project?.coSupervisor, false, true) as string || "",
+        gvhd1: (getSupervisorName(project?.supervisor, false, true) as string) || "",
+        gvhd2: (getSupervisorName(project?.coSupervisor, false, true) as string) || "",
 
-        tenChuTich: getSupervisorName(chairman?.expert, false, false) as string || "",
+        tenChuTich: (getSupervisorName(chairman?.expert, false, false) as string) || "",
         toChucChuTich: chairman?.expert?.workplace || "Học viện KTQS		",
 
-        tenThuKy: getSupervisorName(secretary?.expert, false, false) as string || "",
+        tenThuKy: (getSupervisorName(secretary?.expert, false, false) as string) || "",
         toChucThuKy: secretary?.expert?.workplace || "Học viện KTQS		",
 
-        tenUyVien: getSupervisorName(member?.expert, false, false) as string || "",
+        tenUyVien: (getSupervisorName(member?.expert, false, false) as string) || "",
         toChucUyVien: member?.expert?.workplace || "Học viện KTQS		",
 
-        tenPb1: getSupervisorName(reviewer1?.expert, false, false) as string || "",
+        tenPb1: (getSupervisorName(reviewer1?.expert, false, false) as string) || "",
         toChucPb1: reviewer1?.expert?.workplace || "Học viện KTQS		",
 
-        tenPb2: getSupervisorName(reviewer2?.expert, false, false) as string || "",
+        tenPb2: (getSupervisorName(reviewer2?.expert, false, false) as string) || "",
         toChucPb2: reviewer2?.expert?.workplace || "Học viện KTQS		",
       }
     })
@@ -2699,7 +2799,7 @@ const convertToDsChuyenGiaData = (allStudentsInClasses: any[]): DsChuyenGiaData 
 
       if (!expertAggregator.has(expertId)) {
         expertAggregator.set(expertId, {
-          tenChuyenGia: getSupervisorName(expert,false,false) as string || "",
+          tenChuyenGia: (getSupervisorName(expert, false, false) as string) || "",
           chucVu: expert.position || expert.lecturer?.userProfile?.position || "",
           donViQuanLi: expert.organization || expert.workplace || "",
           soTienRaw: 0,
@@ -2826,25 +2926,27 @@ const convertToHDDanhGiaLuanVanTemplateData = (
   const now = dayjs()
   const orgMap = new Map<string, { code: string; name: string; students: any[] }>()
 
-  allStudentsInClasses.filter((student) => student?.thesisRegistrations?.[0]?.thesisProject != null).forEach((student) => {
-    const project = student?.thesisRegistrations?.[0]?.thesisProject
-    if (!project) return 
+  allStudentsInClasses
+    .filter((student) => student?.thesisRegistrations?.[0]?.thesisProject != null)
+    .forEach((student) => {
+      const project = student?.thesisRegistrations?.[0]?.thesisProject
+      if (!project) return
 
-    const organization = project.organization
-    const orgId = organization?.Id || "no-id"
-    const orgCode = organization?.sCode || "..."
-    const orgName = organization?.sTen || "Chưa có đơn vị"
+      const organization = project.organization
+      const orgId = organization?.Id || "no-id"
+      const orgCode = organization?.sCode || "..."
+      const orgName = organization?.sTen || "Chưa có đơn vị"
 
-    if (!orgMap.has(orgId)) {
-      orgMap.set(orgId, {
-        code: orgCode,
-        name: orgName,
-        students: [],
-      })
-    }
+      if (!orgMap.has(orgId)) {
+        orgMap.set(orgId, {
+          code: orgCode,
+          name: orgName,
+          students: [],
+        })
+      }
 
-    orgMap.get(orgId)!.students.push(student)
-  })
+      orgMap.get(orgId)!.students.push(student)
+    })
 
   const groupedData: HDDanhGiaLuanVanData[] = Array.from(orgMap.values()).map((org, index) => {
     const tableData: HDDanhGiaLuanVanTable[] = org.students.map((student: any, sIdx: number) => {
@@ -2852,14 +2954,18 @@ const convertToHDDanhGiaLuanVanTemplateData = (
       const members = project?.council?.members || []
 
       const findMemberName = (role: CouncilRole) =>
-        getSupervisorName(members.find((m: any) => m.role === role)?.expert,false,false) as string || ""
+        (getSupervisorName(
+          members.find((m: any) => m.role === role)?.expert,
+          false,
+          false
+        ) as string) || ""
 
       const gvhd1 = project?.supervisor
       const gvhd2 = project?.coSupervisor
 
       let hvCbhd = `Học viên: ${student.userProfile?.fullname || ""}`
-      if (gvhd1) hvCbhd += `\nGVHD1: ${getSupervisorName(gvhd1,false,false) as string || ""}`
-      if (gvhd2) hvCbhd += `\nGVHD2: ${getSupervisorName(gvhd2,false,false) as string || ""}`
+      if (gvhd1) hvCbhd += `\nGVHD1: ${(getSupervisorName(gvhd1, false, false) as string) || ""}`
+      if (gvhd2) hvCbhd += `\nGVHD2: ${(getSupervisorName(gvhd2, false, false) as string) || ""}`
 
       return {
         stt: sIdx + 1,
@@ -2897,7 +3003,9 @@ const convertToHDDanhGiaLuanVanTemplateData = (
       tenDonViQuanLi: groupedData.map((g) => g.tenDonViQuanLi).join("\n"),
     },
     tail: {
-      tongSoHocVien: allStudentsInClasses.filter((student) => student?.thesisRegistrations?.[0]?.thesisProject != null).length,
+      tongSoHocVien: allStudentsInClasses.filter(
+        (student) => student?.thesisRegistrations?.[0]?.thesisProject != null
+      ).length,
       ngay: now.format("DD"),
       thang: now.format("MM"),
       nam: now.format("YYYY"),
@@ -2906,18 +3014,18 @@ const convertToHDDanhGiaLuanVanTemplateData = (
   }
 }
 interface ThongKeCoQuanDonViCanBoNgoaiHvData {
-   khoa:string
-  dotxet:string
-  data:ThongKeCoQuanDonViCanBoNgoaiHvTable[]
+  khoa: string
+  dotxet: string
+  data: ThongKeCoQuanDonViCanBoNgoaiHvTable[]
 }
 interface ThongKeCoQuanDonViCanBoNgoaiHvTable {
-  stt:number
-  tenDonVi:string
-  soLuongGVHD:number
-  soLuongBV:number
-  soLuongHDNC:number
-  soLuongDGNC:number
-  tongSoLuong:number
+  stt: number
+  tenDonVi: string
+  soLuongGVHD: number
+  soLuongBV: number
+  soLuongHDNC: number
+  soLuongDGNC: number
+  tongSoLuong: number
 }
 const convertToThongKeCoQuanDonViCanBoNgoaiHvData = (
   allStudentsInClasses: any[]
@@ -2931,9 +3039,10 @@ const convertToThongKeCoQuanDonViCanBoNgoaiHvData = (
   }
 
   const firstProject = allStudentsInClasses
-    .map((student) =>
-      student?.thesisRegistrations?.find((registration: any) => registration?.thesisProject)
-        ?.thesisProject
+    .map(
+      (student) =>
+        student?.thesisRegistrations?.find((registration: any) => registration?.thesisProject)
+          ?.thesisProject
     )
     .find(Boolean)
 
@@ -2978,8 +3087,9 @@ const convertToThongKeCoQuanDonViCanBoNgoaiHvData = (
   }
 
   allStudentsInClasses.forEach((student) => {
-    const project = student?.thesisRegistrations?.find((registration: any) => registration?.thesisProject)
-      ?.thesisProject
+    const project = student?.thesisRegistrations?.find(
+      (registration: any) => registration?.thesisProject
+    )?.thesisProject
     if (!project) return
 
     const supervisors = [project?.supervisor, project?.coSupervisor]
@@ -3064,4 +3174,3 @@ export const exportThongKeCoQuanDonViCanBoNgoaiHv = async ({
     hideSpinner()
   }
 }
-
