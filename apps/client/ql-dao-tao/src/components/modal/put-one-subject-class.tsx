@@ -507,9 +507,7 @@ const PutOneSubjectClassModal = () => {
                       })),
                     }))}
                     onChange={(roomId) => {
-                      const room = buildingData
-                        .flatMap((b) => b.rooms)
-                        .find((r) => r.id === roomId)
+                      const room = buildingData.flatMap((b) => b.rooms).find((r) => r.id === roomId)
                       form.setFieldsValue({ maxStudent: room?.capacity ?? undefined })
                     }}
                     showSearch

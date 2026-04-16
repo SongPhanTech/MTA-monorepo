@@ -134,9 +134,7 @@ function mergeCellsSafe(
     const snapshot = Object.values(merges).filter(Boolean) as MergeBounds[]
     let clearedAny = false
     for (const m of snapshot) {
-      if (
-        cellRectsIntersect(top, left, bottom, right, m.top, m.left, m.bottom, m.right)
-      ) {
+      if (cellRectsIntersect(top, left, bottom, right, m.top, m.left, m.bottom, m.right)) {
         worksheet.getCell(m.top, m.left)
         worksheet.unMergeCells(m.top, m.left, m.bottom, m.right)
         clearedAny = true

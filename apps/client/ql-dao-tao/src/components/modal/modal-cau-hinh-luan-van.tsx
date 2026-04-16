@@ -129,7 +129,6 @@ const ModalCauHinhLuanVan = () => {
 
   const [attachments, setAttachments] = useState<DocumentFile[]>([])
   const [form] = Form.useForm<ModalCauHinhLuanVanType>()
-  console.log('formdata',form)
   const [activeTabKey, setActiveTabKey] = useState<string>("defenseConfig")
   /** Tránh gọi setFieldsValue mỗi khi thesisProjectData đổi reference (refetch) — sẽ xóa dữ liệu user đang nhập khi đổi tab. */
   const formHydratedKeyRef = useRef<string | null>(null)
@@ -1040,12 +1039,12 @@ const ModalCauHinhLuanVan = () => {
                   label="Số tiền "
                   className="mb-5"
                   labelAlign="left"
-                  normalize={(value) => value && Number(String(value).replace(/,/g, ''))}
+                  normalize={(value) => value && Number(String(value).replace(/,/g, ""))}
                 >
                   <InputNumber
                     className="w-2/3"
                     placeholder="Nhập số tiền"
-                    formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                    formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                     suffix="VNĐ"
                     disabled={!form.getFieldValue("supervisorName")}
                   />
@@ -1084,12 +1083,12 @@ const ModalCauHinhLuanVan = () => {
                   label="Số tiền"
                   className="mb-5"
                   labelAlign="left"
-                  normalize={(value) => value && Number(String(value).replace(/,/g, ''))}
+                  normalize={(value) => value && Number(String(value).replace(/,/g, ""))}
                 >
                   <InputNumber
                     className="w-2/3"
                     min={0}
-                    formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                    formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                     placeholder="Nhập số tiền"
                     suffix="VNĐ"
                     disabled={!form.getFieldValue("coSupervisorName")}
@@ -1134,12 +1133,12 @@ const ModalCauHinhLuanVan = () => {
                   label="Số tiền "
                   className="mb-5"
                   labelAlign="left"
-                  normalize={(value) => value && Number(String(value).replace(/,/g, ''))}
+                  normalize={(value) => value && Number(String(value).replace(/,/g, ""))}
                 >
                   <InputNumber
                     className="w-2/3"
                     min={0}
-                    formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                    formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                     placeholder="Nhập số tiền"
                     suffix="VNĐ"
                     disabled={!form.getFieldValue("councilChairmanId")}
@@ -1179,12 +1178,12 @@ const ModalCauHinhLuanVan = () => {
                   label="Số tiền"
                   className="mb-5"
                   labelAlign="left"
-                  normalize={(value) => value && Number(String(value).replace(/,/g, ''))}
+                  normalize={(value) => value && Number(String(value).replace(/,/g, ""))}
                 >
                   <InputNumber
                     className="w-2/3"
                     min={0}
-                    formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                    formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                     placeholder="Nhập số tiền"
                     suffix="VNĐ"
                     disabled={!form.getFieldValue("councilSecretaryId")}
@@ -1224,12 +1223,12 @@ const ModalCauHinhLuanVan = () => {
                   label="Số tiền "
                   className="mb-5"
                   labelAlign="left"
-                  normalize={(value) => value && Number(String(value).replace(/,/g, ''))}
+                  normalize={(value) => value && Number(String(value).replace(/,/g, ""))}
                 >
                   <InputNumber
                     className="w-2/3"
                     min={0}
-                    formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                    formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                     placeholder="Nhập số tiền"
                     suffix="VNĐ"
                     disabled={!form.getFieldValue("councilReviewer1Id")}
@@ -1269,12 +1268,12 @@ const ModalCauHinhLuanVan = () => {
                   label="Số tiền "
                   className="mb-5"
                   labelAlign="left"
-                  normalize={(value) => value && Number(String(value).replace(/,/g, ''))}
+                  normalize={(value) => value && Number(String(value).replace(/,/g, ""))}
                 >
                   <InputNumber
                     className="w-2/3"
                     min={0}
-                    formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                    formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                     placeholder="Nhập số tiền"
                     suffix="VNĐ"
                     disabled={!form.getFieldValue("councilReviewer2Id")}
@@ -1313,12 +1312,12 @@ const ModalCauHinhLuanVan = () => {
                   label="Số tiền "
                   className="mb-5"
                   labelAlign="left"
-                  normalize={(value) => value && Number(String(value).replace(/,/g, ''))}
+                  normalize={(value) => value && Number(String(value).replace(/,/g, ""))}
                 >
                   <InputNumber
                     className="w-2/3"
                     min={0}
-                    formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                    formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                     placeholder="Nhập số tiền"
                     suffix="VNĐ"
                     disabled={!form.getFieldValue("councilMemberId")}
@@ -1351,11 +1350,7 @@ const ModalCauHinhLuanVan = () => {
                   labelAlign="left"
                   rules={[
                     {
-                      validator: (_, value) =>
-                        validateScore(
-                          value,
-                          true
-                        ),
+                      validator: (_, value) => validateScore(value, true),
                     },
                   ]}
                   {...FORM_ITEM_LAYOUT}
