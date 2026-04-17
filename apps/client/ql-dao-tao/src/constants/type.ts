@@ -18,6 +18,7 @@ import type {
   ThesisProjectStatus,
   TrainingObjectTypes,
 } from "@workspace/db/client"
+import type { Dayjs } from "dayjs"
 import type { ColumnsType } from "antd/es/table"
 export type FilterProps = {
   searchText?: string
@@ -184,8 +185,8 @@ export type FilterProps = {
   location?: string
   classDate?: Date[]
   notes?: string
-  examDateFrom?: string
-  examDateTo?: string
+  examDateFrom?: Dayjs
+  examDateTo?: Dayjs
 }
 export type ColumnTypeProps = ColumnsType & {
   type?: string

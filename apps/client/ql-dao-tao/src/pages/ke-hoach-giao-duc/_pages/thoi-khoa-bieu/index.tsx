@@ -22,7 +22,8 @@ import _ from "lodash"
 import type React from "react"
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
-
+import { DatePicker } from "antd"
+const { RangePicker } = DatePicker
 type TeachingAssignmentForm = {
   subjectClass: Record<
     string,
@@ -526,7 +527,26 @@ export default function ThoiKhoaBieu({
       <Row gutter={[8, 8]}>
         <Col span={24}>
           <Affix offsetTop={105} style={{ zIndex: 1000 }}>
-            <Flex gap={4} justify="end">
+            <Flex gap={8} justify="end">
+              <RangePicker
+                allowClear
+                placeholder={["Từ ngày thi", "Đến ngày thi"]}
+                value={
+                  filters.examDateFrom && filters.examDateTo
+                    ? [dayjs(filters.examDateFrom), dayjs(filters.examDateTo)]
+                    : null
+                }
+                onChange={(dates) => {
+                  setFilters((prev) => ({
+                    ...prev,
+                    examDateFrom: dates?.[0]?.startOf("day") || undefined,
+                    examDateTo: dates?.[1]?.endOf("day") || undefined,
+                  }))
+                  setCurrentPage(1)
+                  debouncedRefetch()
+                }}
+              />
+
               <TreeSelectDepartment
                 className="w-[300px]"
                 rootId={!khoaBoMon ? "0" : orgId}
