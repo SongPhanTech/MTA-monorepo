@@ -2972,7 +2972,9 @@ const convertToHDDanhGiaLuanVanTemplateData = (
     })
 
   const groupedData: HDDanhGiaLuanVanData[] = Array.from(orgMap.values()).map((org, index) => {
-    const validStudents = org.students.filter((student) => student?.thesisRegistrations?.[0]?.thesisProject)
+    const validStudents = org.students.filter(
+      (student) => student?.thesisRegistrations?.[0]?.thesisProject
+    )
     const tableData: HDDanhGiaLuanVanTable[] = validStudents.map((student: any, sIdx: number) => {
       const project = student.thesisRegistrations?.[0]?.thesisProject
       const members = project?.council?.members || []

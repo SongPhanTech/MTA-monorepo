@@ -734,5 +734,142 @@ app.openapi(classUnregister, async (c) => {
 
   return c.json({ message: "success" }, 200)
 })
+const getStudentInfo = createRoute({
+  operationId: "get-student-info",
+  path: "/get-student-info",
+  tags: ["ClassRegister"],
+  summary: "Lấy thông tin sinh viên cho đăng ký học",
+  description: "Lấy thông tin sinh viên cho đăng ký học",
+  method: "get",
+  request: {
+    query: z.object({
+      sessionId: z.string().optional().openapi({ description: "ID đợt đăng ký lớp học" }),
+    }),
+  },
+  responses: {
+    200: {
+      description: "Thành công",
+      content: {
+        "application/json": {
+          schema: z.object({
+            userProfile: models.UserProfileScalarSchema.nullish(),
+            student: models.StudentScalarSchema.nullish(),
+            latestSemesterResult: z
+              .object({
+                rank: z
+                  .object({
+                    classification: z.string().nullish(),
+                  })
+                  .nullish(),
+                baseScore: z.string().nullish(),
+                cumulativeGpaBase4: z.union([z.number(), z.string()]).nullish(),
+                cumulativeGpaBase10: z.union([z.number(), z.string()]).nullish(),
+              })
+              .nullish(),
+            creditLimit: z
+              .object({
+                maxCredit: z.number().nullish(),
+              })
+              .nullish(),
+          }),
+        },
+      },
+    },
+    404: {
+      description: "Not found",
+      content: { "application/json": { schema: z.object({ message: z.string() }) } },
+    },
+  },
+})
+
+app.openapi(getStudentInfo, async (c) => {
+  const session = c.get("user")
+  const { sessionId } = c.req.valid("query")
+
+  const profile = await prisma.userProfile.findUniqueOrThrow({
+    where: { id: session.id },
+    include: {
+      educationAndTraining: {
+        orderBy: { createdAt: "desc" },
+        take: 1,
+      },
+    },
+  })
+
+  const studentId = profile.educationAndTraining[0]?.id
+  if (!studentId) {
+    return c.json({ message: "Không tìm thấy thông tin học vụ" }, 404)
+  }
+
+  const student = await prisma.student.findUnique({
+    where: { id: studentId },
+  })
+
+  const latestSemesterResult = await prisma.studentSemesterResult.findFirst({
+    where: { studentId },
+    orderBy: { semesterIndexInCourse: "desc" },
+    select: {
+      rank: {
+        select: {
+          classification: true,
+        },
+      },
+      baseScore: true,
+      cumulativeGpaBase4: true,
+      cumulativeGpaBase10: true,
+    },
+  })
+
+  let maxCredit = null
+
+  if (sessionId && latestSemesterResult) {
+    const maxCreditsSetting = await prisma.classRegisterSessionCredit.findMany({
+      where: { classRegisterSessionId: sessionId },
+    })
+
+    if (maxCreditsSetting.length > 0) {
+      const matchedLimit = maxCreditsSetting.find((limit) => {
+        if (limit.baseScore === AcademicRankingBaseType.Base10) {
+          const gpaBase10 = Number(latestSemesterResult.cumulativeGpaBase10) || 0
+          return (
+            (limit.base10Min == null || gpaBase10 >= limit.base10Min) &&
+            (limit.base10Max == null || gpaBase10 <= limit.base10Max)
+          )
+        }
+
+        const gpaBase4 = Number(latestSemesterResult.cumulativeGpaBase4) || 0
+        return (
+          (limit.base4Min == null || gpaBase4 >= limit.base4Min) &&
+          (limit.base4Max == null || gpaBase4 <= limit.base4Max)
+        )
+      })
+
+      if (matchedLimit && matchedLimit.maxCredit != null) {
+        maxCredit = matchedLimit.maxCredit
+      }
+    }
+  }
+
+  return c.json(
+    {
+      userProfile: profile,
+      student: student,
+      latestSemesterResult: latestSemesterResult
+        ? {
+            rank: latestSemesterResult.rank,
+            baseScore: latestSemesterResult.baseScore,
+            cumulativeGpaBase4: latestSemesterResult.cumulativeGpaBase4
+              ? Number(latestSemesterResult.cumulativeGpaBase4)
+              : null,
+            cumulativeGpaBase10: latestSemesterResult.cumulativeGpaBase10
+              ? Number(latestSemesterResult.cumulativeGpaBase10)
+              : null,
+          }
+        : null,
+      creditLimit: maxCredit != null ? { maxCredit } : null,
+    },
+    200
+  )
+})
 
 export default app
