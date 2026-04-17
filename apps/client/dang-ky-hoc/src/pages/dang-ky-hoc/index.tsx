@@ -34,12 +34,64 @@ export interface ClassRegisterSessionProps {
   tuitionPerCredit?: number;
 }
 
+type GetRegisterStateParams = {
+  record: GetClassesInfo200ItemSubjectClassItem;
+  maxCredit?: number;
+  totalRegisteredCredit: number;
+  classToSubjectCodeMap: Map<string, string>;
+  registeredSubjectCodes: Set<string>;
+  isPending: boolean;
+};
+
+export const getRegisterState = ({
+  record,
+  maxCredit,
+  totalRegisteredCredit,
+  classToSubjectCodeMap,
+  registeredSubjectCodes,
+  isPending,
+}: GetRegisterStateParams) => {
+  const isMaxed =
+    (record?.maxStudent || 0) <= (record?._count?.subjectClassStudent || 0);
+
+  const isRegistered = record?.classRegisterLogs?.length > 0;
+
+  const isOverMaxCredit =
+    maxCredit != null &&
+    totalRegisteredCredit + (record?.credit ?? 0) > maxCredit;
+
+  const parentSubjectCode = classToSubjectCodeMap.get(record?.id);
+
+  const siblingAlreadyRegistered =
+    !isRegistered &&
+    !!parentSubjectCode &&
+    registeredSubjectCodes.has(parentSubjectCode);
+
+  const isDisabled =
+    isMaxed ||
+    isRegistered ||
+    isPending ||
+    isOverMaxCredit ||
+    siblingAlreadyRegistered;
+
+  return {
+    isDisabled,
+    isMaxed,
+    isRegistered,
+    isOverMaxCredit,
+    siblingAlreadyRegistered,
+  };
+};
+
 export default function DangKyHocPage() {
   const [_filters, _setFilters] = useState({
     searchText: "",
   });
-  const { data: classRegisterSession, isFetching, isLoading } =
-    useGetClassRegisterSession();
+  const {
+    data: classRegisterSession,
+    isFetching,
+    isLoading,
+  } = useGetClassRegisterSession();
 
   if (isFetching || isLoading) {
     return <Loading />;
@@ -155,20 +207,28 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
           ?.filter((sc) => (sc?.classRegisterLogs?.length || 0) > 0)
       : [];
 
-  const classToSubjectCodeMap = new Map<string, string>();
-  const registeredSubjectCodes = new Set<string>();
-  if (classesInfo?.status === 200) {
-    classesInfo.data?.forEach((subject) => {
-      const subjectCode = subject.code ?? "";
-      const hasRegistered = subject.subjectClass?.some(
-        (sc) => (sc?.classRegisterLogs?.length || 0) > 0,
-      );
-      if (hasRegistered) registeredSubjectCodes.add(subjectCode);
-      subject.subjectClass?.forEach((sc) => {
-        if (sc?.id) classToSubjectCodeMap.set(sc.id, subjectCode);
+  const { classToSubjectCodeMap, registeredSubjectCodes } = useMemo(() => {
+    const map = new Map<string, string>();
+    const set = new Set<string>();
+
+    if (classesInfo?.status === 200) {
+      classesInfo.data?.forEach((subject) => {
+        const subjectCode = subject.code ?? "";
+
+        const hasRegistered = subject.subjectClass?.some(
+          (sc) => (sc?.classRegisterLogs?.length || 0) > 0,
+        );
+
+        if (hasRegistered) set.add(subjectCode);
+
+        subject.subjectClass?.forEach((sc) => {
+          if (sc?.id) map.set(sc.id, subjectCode);
+        });
       });
-    });
-  }
+    }
+
+    return { classToSubjectCodeMap: map, registeredSubjectCodes: set };
+  }, [classesInfo]);
 
   const {
     mutateAsync: classRegisterMutate,
@@ -372,11 +432,6 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
               width: 120,
               fixed: "right",
               render: (_, record) => {
-                const isMaxed =
-                  (record?.maxStudent || 0) <=
-                  (record?._count?.subjectClassStudent || 0);
-                const isRegisteredBool =
-                  (record?.classRegisterLogs?.length || 0) > 0;
                 const totalRegisteredCredit =
                   registeredClasses?.reduce(
                     (
@@ -386,23 +441,14 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
                     0,
                   ) ?? 0;
 
-                const isOverMaxCredit =
-                  studentData?.maxCredit != null &&
-                  totalRegisteredCredit + (record?.credit ?? 0) >
-                    studentData?.maxCredit;
-                const parentSubjectCode = classToSubjectCodeMap.get(
-                  record?.id ?? "",
-                );
-                const siblingAlreadyRegistered =
-                  !isRegisteredBool &&
-                  !!parentSubjectCode &&
-                  registeredSubjectCodes.has(parentSubjectCode);
-                const isDisabled =
-                  isMaxed ||
-                  isRegisteredBool ||
-                  isPendingClassRegister ||
-                  isOverMaxCredit ||
-                  siblingAlreadyRegistered;
+                const { isDisabled } = getRegisterState({
+                  record,
+                  maxCredit: studentData?.maxCredit as number,
+                  totalRegisteredCredit,
+                  classToSubjectCodeMap,
+                  registeredSubjectCodes,
+                  isPending: isPendingClassRegister,
+                });
 
                 return (
                   <Popconfirm

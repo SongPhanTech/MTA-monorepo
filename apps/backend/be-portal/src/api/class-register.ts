@@ -829,6 +829,8 @@ app.openapi(getStudentInfo, async (c) => {
 
     if (maxCreditsSetting.length > 0) {
       const matchedLimit = maxCreditsSetting.find((limit) => {
+        if (limit.baseScore !== latestSemesterResult.baseScore) return false
+
         if (limit.baseScore === AcademicRankingBaseType.Base10) {
           const gpaBase10 = Number(latestSemesterResult.cumulativeGpaBase10) || 0
           return (
