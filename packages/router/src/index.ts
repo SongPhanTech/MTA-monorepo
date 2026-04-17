@@ -623,9 +623,9 @@ const NAVIGATION: NavigationType = {
           },
           {
             id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_LUAN_VAN_DANH_MUC_LUAN_VAN_KHOA,
-            label: "Quản lý luận văn/đề án",
+            label: "Danh sách luận văn/đề án",
             path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_LUAN_VAN_DANH_MUC_LUAN_VAN_KHOA,
-            description: "Quản lý luận văn/đề án",
+            description: "Danh sách luận văn/đề án",
           },
           {
             id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_LUAN_VAN_DANH_MUC_LUAN_VAN_P7,

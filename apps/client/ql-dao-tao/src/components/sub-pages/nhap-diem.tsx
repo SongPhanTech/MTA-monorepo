@@ -1181,7 +1181,7 @@ export default function NhapDiem({
               },
               // #region Điểm ĐK
               {
-                title: "Điểm ĐK",
+                title: "Điểm CC",
                 dataIndex: "midtermScore",
                 width: 100,
                 align: "center",
