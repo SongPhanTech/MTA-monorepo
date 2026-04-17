@@ -770,16 +770,7 @@ export default function SettingCouncil() {
 
 SettingCouncil.getLayout = function getLayout(page: React.ReactElement) {
   return (
-    <DefaultLayout
-      breadcrumbList={[
-        { title: "Quản lý luận văn" },
-        {
-          title: "Danh mục luận văn",
-          href: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_LUAN_VAN_DANH_MUC_LUAN_VAN,
-        },
-        { title: "Cấu hình hội đồng" },
-      ]}
-    >
+    <DefaultLayout breadcrumbList={[{ title: "Quản lý luận văn" }, { title: "Cấu hình hội đồng" }]}>
       {page}
     </DefaultLayout>
   )
