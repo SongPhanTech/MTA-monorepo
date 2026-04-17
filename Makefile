@@ -28,18 +28,28 @@ ifeq ($(SERVER_PROFILE),swan1)
   SERVER_HOST      := swan1
   SERVER_PASSWORD  :=
   BE_DEPLOY_DIR    := ~/mta-deploy
-  BE_APP_DIR       := ~/app/be
-  FE_APP_DIR       := ~/app/fe
-  FE_COMPOSE_FILE  := docker-compose.yml
+  BE_APP_DIR       := ~/mta-be
+  FE_APP_DIR       := ~/app
+  FE_COMPOSE_FILE  := app-docker-compose.yml
   FE_APP_URL       := https://mta.swantech.vn
 
-# ── Profile: app2 ─────────────────────────────────────────────────────────────
+# ── Profile: swantech_x52 ─────────────────────────────────────────────────────────────
 else ifeq ($(SERVER_PROFILE),swantech_x52)
   SERVER_HOST      := swantech_x52
   SERVER_PASSWORD  :=
   BE_DEPLOY_DIR    := ~/app_mta_sso/mta-be
   BE_APP_DIR       := ~/app_mta_sso/mta-be
   FE_APP_DIR       := ~/app_mta_sso
+  FE_COMPOSE_FILE  := app-docker-compose.yml
+  FE_APP_URL       := https://demodaotao.swantech.vn
+
+# ── Profile: local_mta ─────────────────────────────────────────────────────────────
+else ifeq ($(SERVER_PROFILE),local_mta)
+  SERVER_HOST      := local_mta
+  SERVER_PASSWORD  :=
+  BE_DEPLOY_DIR    := ~/mta-prod/be
+  BE_APP_DIR       := ~/mta-prod/be
+  FE_APP_DIR       := ~/mta_app
   FE_COMPOSE_FILE  := app-docker-compose.yml
   FE_APP_URL       := https://demodaotao.swantech.vn
 
