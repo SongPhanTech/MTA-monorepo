@@ -21,14 +21,27 @@ import { useMemo, useState } from "react";
 import clsx from "clsx";
 
 dayjs.locale("vi");
+
+export interface ClassRegisterSessionProps {
+  sessionId: string;
+  curriculumVersions: {
+    id: string;
+    name: string;
+    code: string;
+  }[];
+  endDate: string | null;
+  creditLimit: GetClassRegisterSession200ItemCreditLimitItem[];
+  tuitionPerCredit?: number;
+}
+
 export default function DangKyHocPage() {
   const [_filters, _setFilters] = useState({
     searchText: "",
   });
-  const { data: classRegisterSession, isFetching } =
+  const { data: classRegisterSession, isFetching, isLoading } =
     useGetClassRegisterSession();
 
-  if (isFetching) {
+  if (isFetching || isLoading) {
     return <Loading />;
   }
 
@@ -74,19 +87,14 @@ export default function DangKyHocPage() {
   );
 }
 
-const DanhSachMonDangKy = ({
-  sessionId,
-  curriculumVersions = [],
-  endDate,
-  creditLimit,
-  tuitionPerCredit,
-}: {
-  sessionId: string;
-  curriculumVersions: { id: string; name: string; code: string }[];
-  endDate: string | null;
-  creditLimit: GetClassRegisterSession200ItemCreditLimitItem[];
-  tuitionPerCredit?: number;
-}) => {
+const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
+  const {
+    sessionId,
+    curriculumVersions,
+    endDate,
+    creditLimit,
+    tuitionPerCredit,
+  } = props;
   const [curriculumVersionId, setCurriculumVersionId] = useState(
     curriculumVersions.length > 0 ? curriculumVersions[0].id : "",
   );
