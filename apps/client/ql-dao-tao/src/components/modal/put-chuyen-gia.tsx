@@ -4,6 +4,8 @@ import useSpinner from "@hooks/spinner"
 import type { ExpertProfile } from "@workspace/db/client"
 import {
   useCreateExpertProfile,
+  useFindManyDM_HocHam,
+  useFindManyDM_HocVi,
   useFindManyLecturer,
   useFindUniqueExpertProfile,
   useFindUniqueLecturer,
@@ -117,8 +119,9 @@ const PutExpertProfile = () => {
               bankName: output.bankName,
             }
           : {
-              academicRank: output.academicRank,
-              academicDegree: output.academicDegree,
+              academicRankTypeId: output.academicRank,
+              academicDegreeTypeId: output.academicDegree,
+              position: output.position,
               specialization: output.specialization,
               workplace: output.workplace,
               phone: output.phone,
@@ -158,8 +161,9 @@ const PutExpertProfile = () => {
         } else {
           await createExpertProfile({
             data: {
-              academicRank: output.academicRank,
-              academicDegree: output.academicDegree,
+              academicRankTypeId: output.academicRank,
+              academicDegreeTypeId: output.academicDegree,
+              position: output.position,
               specialization: output.specialization,
               workplace: output.workplace,
               phone: output.phone,
@@ -253,7 +257,7 @@ const PutExpertProfile = () => {
           </FormItem>
         </Col>
       )}
-      {!isInternal && (
+      {/* {!isInternal && (
         <Col span={12}>
           <FormItem form={form} name="academicRankTypeId" label="Học hàm">
             <Select
@@ -270,8 +274,8 @@ const PutExpertProfile = () => {
             />
           </FormItem>
         </Col>
-      )}
-      {!isInternal && (
+      )} */}
+      {/* {!isInternal && (
         <Col span={12}>
           <FormItem form={form} name="academicDegreeTypeId" label="Học vị">
             <Select
@@ -288,7 +292,7 @@ const PutExpertProfile = () => {
             />
           </FormItem>
         </Col>
-      )}
+      )} */}
       {!isInternal && (
         <Col span={12}>
           <FormItem form={form} name="specialization" label="Chuyên ngành" required>
@@ -312,12 +316,12 @@ const PutExpertProfile = () => {
       )}
 
       <Col span={12}>
-        <FormItem form={form} name="bankAccountNumber" label="Số tài khoản" required>
+        <FormItem form={form} name="bankAccountNumber" label="Số tài khoản">
           <Input placeholder="Nhập số tài khoản" />
         </FormItem>
       </Col>
       <Col span={12}>
-        <FormItem form={form} name="bankName" label="Ngân hàng" required>
+        <FormItem form={form} name="bankName" label="Ngân hàng">
           <Input placeholder="Nhập tên ngân hàng" />
         </FormItem>
       </Col>

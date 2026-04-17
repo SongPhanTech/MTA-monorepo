@@ -112,6 +112,8 @@ export default function ExpertProfile() {
   const { data: expertProfileData } = useFindManyExpertProfile({
     where,
     include: {
+      academicDegreeType: true,
+      academicRankType: true,
       lecturer: {
         include: {
           organization: true,
@@ -238,12 +240,20 @@ export default function ExpertProfile() {
                   record?.academicDegreeType?.sMa,
               },
               {
+                title: "Chức vụ",
+                dataIndex: "position",
+                width: 100,
+                align: "center",
+                type: "input",
+              },
+              {
                 title: "Chuyên ngành",
                 dataIndex: "specialization",
                 width: 150,
                 align: "center",
                 type: "input",
               },
+
               {
                 title: "Đơn vị công tác",
                 dataIndex: "workplace",
