@@ -181,9 +181,11 @@ export type FilterProps = {
   capacityOrder?: "asc" | "desc"
   examCapacityOrder?: "asc" | "desc"
   trainingLocation?: string
-  location?:string
-  classDate?:Date[]
-  notes?:string
+  location?: string
+  classDate?: Date[]
+  notes?: string
+  examDateFrom?: string
+  examDateTo?: string
 }
 export type ColumnTypeProps = ColumnsType & {
   type?: string

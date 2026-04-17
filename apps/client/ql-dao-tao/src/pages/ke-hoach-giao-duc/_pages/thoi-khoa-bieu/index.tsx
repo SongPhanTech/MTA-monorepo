@@ -191,7 +191,6 @@ export default function ThoiKhoaBieu({
             }
           : {}),
 
-        // 👇 Thêm lọc ngày thi
         ...(filters.examDateFrom || filters.examDateTo
           ? {
               examDate: {
@@ -724,11 +723,11 @@ export default function ThoiKhoaBieu({
                 },
                 {
                   title: "Ngày thi",
-                  dataIndex: "examDate", // 👈 thêm dataIndex
+                  dataIndex: "examDate",
                   align: "center",
                   width: 180,
-                  type: "date_range", // 👈 thêm type bộ lọc
-                  filterKey: ["examDateFrom", "examDateTo"], // 👈 map sang 2 filter key
+                  type: "date_range",
+                  filterKey: ["examDateFrom", "examDateTo"],
                   render: (_, record) => (record.examDate ? formatDate(record.examDate) : ""),
                 },
                 {
@@ -826,4 +825,3 @@ export default function ThoiKhoaBieu({
 ThoiKhoaBieu.getLayout = function getLayout(page: React.ReactElement) {
   return <DefaultLayout>{page}</DefaultLayout>
 }
-S

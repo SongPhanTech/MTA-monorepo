@@ -24,9 +24,18 @@ export type Data<T, ChildKey extends keyof T> = T &
 type TableProps<T, ChildKey extends keyof T> = {
   data?: Data<T, ChildKey>[]
   columns?: (ColumnType<Data<T, ChildKey>[ChildKey][number]> & {
-    type?: "input" | "input_search" | "select" | "tree_select" | "order" | "date" | "cmp"
+    type?:
+      | "input"
+      | "input_search"
+      | "select"
+      | "tree_select"
+      | "order"
+      | "date"
+      | "date_range"
+      | "cmp"
     distinctFilters?: string[]
     options?: ColumnOption[]
+    filterKey?: string[]
   })[]
   pagination?:
     | (TablePaginationConfig & {
