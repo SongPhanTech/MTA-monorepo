@@ -8,12 +8,17 @@ import DefaultLayout from "@layouts/default-layout"
 import { buildOrgTree, formatDateVN } from "@lib/utils"
 import type { Semester, Student } from "@workspace/db"
 import type {
+  CurriculumVersion,
   FixedClass,
   ScoreConvert,
   StudentSubjectScore,
   SubjectClass,
   SubjectVersion,
   TrainingCourse,
+  TrainingLanguage,
+  TrainingField,
+  TrainingTime,
+  TrainingLevel,
   UserProfile,
 } from "@workspace/db/client"
 import {
@@ -46,11 +51,25 @@ type TSubjectItem = StudentSubjectScore & {
 
 type TTrainingCourse = TrainingCourse & {
   scoreConverts: ScoreConvert[]
+  trainingLanguage: TrainingLanguage | null
+  trainingObjectType: {
+    trainingForm: {
+      name: string
+    } | null
+  } | null
 }
 
 type TFixedClass = {
   fixedClass: FixedClass & {
     trainingCourse: TTrainingCourse
+    curriculumVersion: CurriculumVersion & {
+      curriculum: {
+        trainingMajor: {
+          name: string
+          trainingField: TrainingField | null
+        }
+      }
+    }
   }
 }
 
@@ -68,11 +87,22 @@ export type TStudentWithSubjects = Student &
   TFixedClass &
   TUserProfile & {
     subjectClassStudent: (StudentSubjectScore & {
-      subjectVersion: SubjectVersion
+      subjectVersion: SubjectVersion & {
+        trainingBlocks?: Array<{
+          semester?: number | null
+          trainingBlockOnCurriculumVersion?: {
+            curriculumVersionId: string
+          } | null
+        }>
+      }
       subjectClass?: SubjectClass & {
         semester?: Semester
       }
     })[]
+    curriculumVersion?: CurriculumVersion & {
+      trainingTime?: TrainingTime | null
+      trainingLevel?: TrainingLevel | null
+    }
   }
 
 export type TStudentWithSemesters = TStudentWithSubjects & {
@@ -245,18 +275,55 @@ export default function StudentGradeSystem() {
             trainingCourse: {
               include: {
                 scoreConverts: true,
+                trainingLanguage: true,
+                trainingObjectType: {
+                  include: {
+                    trainingForm: true,
+                  },
+                },
+              },
+            },
+            curriculumVersion: {
+              include: {
+                curriculum: {
+                  include: {
+                    trainingMajor: {
+                      include: {
+                        trainingField: true,
+                      },
+                    },
+                  },
+                },
               },
             },
           },
         },
         subjectClassStudent: {
           include: {
-            subjectVersion: true,
+            subjectVersion: {
+              include: {
+                trainingBlocks: {
+                  include: {
+                    trainingBlockOnCurriculumVersion: {
+                      select: {
+                        curriculumVersionId: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
             subjectClass: {
               include: {
                 semester: true,
               },
             },
+          },
+        },
+        curriculumVersion: {
+          include: {
+            trainingTime: true,
+            trainingLevel: true,
           },
         },
       },
@@ -273,9 +340,40 @@ export default function StudentGradeSystem() {
   const studentsWithSemesters = useMemo(() => {
     return (students || []).map((student) => {
       const { scoreConverts } = student?.fixedClass?.trainingCourse || {}
+      const curriculumVersionId =
+        student?.fixedClass?.curriculumVersion?.id || student?.curriculumVersion?.id
+
+      const sortedSubjectClassStudent = [...(student.subjectClassStudent || [])].sort((a, b) => {
+        const getPlannedSemester = (item: (typeof student.subjectClassStudent)[number]) => {
+          const matchedTrainingBlock = item?.subjectVersion?.trainingBlocks?.find(
+            (trainingBlock) =>
+              trainingBlock?.trainingBlockOnCurriculumVersion?.curriculumVersionId ===
+              curriculumVersionId
+          )
+
+          return matchedTrainingBlock?.semester ?? Number.MAX_SAFE_INTEGER
+        }
+
+        const plannedSemesterA = getPlannedSemester(a)
+        const plannedSemesterB = getPlannedSemester(b)
+
+        if (plannedSemesterA !== plannedSemesterB) {
+          return plannedSemesterA - plannedSemesterB
+        }
+
+        const semesterNameA = a?.subjectClass?.semester?.name || ""
+        const semesterNameB = b?.subjectClass?.semester?.name || ""
+        const semesterCompare = semesterNameA.localeCompare(semesterNameB, "vi")
+        if (semesterCompare !== 0) {
+          return semesterCompare
+        }
+
+        return (a?.subjectVersion?.name || "").localeCompare(b?.subjectVersion?.name || "", "vi")
+      })
+
       const semesterMap = new Map()
 
-      student.subjectClassStudent?.forEach((item) => {
+      sortedSubjectClassStudent.forEach((item) => {
         const semester = item.subjectClass?.semester
         if (!semester) return
 
@@ -339,13 +437,13 @@ export default function StudentGradeSystem() {
     }))
   }, [selectedStudent])
 
-  const handleExportPLVB1 = () => {
+  const handleExportPLVB2Col = () => {
     if (!students?.length) {
       notification.info({ message: "Không có dữ liệu để xuất!" })
       return
     }
-    const TOTAL_COLUMNS = 11
-    const SIGN_COL = 4
+    const TOTAL_COLUMNS = 12
+    const SIGN_COL = 6
     const MAX_ROWS = 50
 
     const allSheetOptions = studentsWithSemesters.map((student) => {
@@ -358,24 +456,35 @@ export default function StudentGradeSystem() {
           for (let i = 0; i < subjects.length; i += 2) {
             const s1 = subjects[i]
             const s2 = subjects[i + 1]
-            stt += 2
+            const hasSecondSubject = !!s2
+            const sttFirst = stt + 1
+            const sttSecond = hasSecondSubject ? stt + 2 : null
+            stt += hasSecondSubject ? 2 : 1
 
             subjectRows.push({
               cells: [
-                { value: stt - 1, align: "center" },
+                { value: sttFirst, align: "center" }, // STT 1
 
-                { value: s1?.tenHocPhan ?? "", colSpan: 1, border: true },
-                { value: s1?.soTinChi ?? 0, align: "center" },
-                { value: Number(s1?.thangDiem10 ?? 0), align: "right" },
-                { value: Number(s1?.thangDiem4 ?? 0), align: "right" },
-                { value: s1?.thangDiemChu ?? "", align: "center" },
+                {
+                  value: s1?.tenHocPhan ?? "",
+                  colSpan: 1,
+                  border: true,
+                }, // Tên học phần 1
+                { value: s1?.soTinChi ?? 0, align: "center" }, // Số tín chỉ 1
+                { value: Number(s1?.thangDiem10 ?? 0), align: "right" }, // Điểm hệ 10 - 1
+                { value: Number(s1?.thangDiem4 ?? 0), align: "right" }, // Điểm hệ 4 - 1
+                { value: s1?.thangDiemChu ?? "", align: "center" }, // Điểm chữ - 1
 
-                { value: stt, align: "center" },
-                { value: s2?.tenHocPhan ?? "", colSpan: 1, border: true },
-                { value: s2?.soTinChi ?? 0, align: "center" },
-                { value: Number(s2?.thangDiem10 ?? 0), align: "right" },
-                { value: Number(s2?.thangDiem4 ?? 0), align: "right" },
-                { value: s2?.thangDiemChu ?? "", align: "center" },
+                { value: sttSecond, align: "center" }, // STT 2
+                {
+                  value: s2?.tenHocPhan ?? "",
+                  colSpan: 1,
+                  border: true,
+                }, // Tên học phần 2
+                { value: s2?.soTinChi ?? "", align: "center" }, // Số tín chỉ 2
+                { value: s2?.thangDiem10 ? Number(s2.thangDiem10) : "", align: "right" }, // Điểm hệ 10 - 2
+                { value: s2?.thangDiem4 ? Number(s2.thangDiem4) : "", align: "right" }, // Điểm hệ 4 - 2
+                { value: s2?.thangDiemChu ?? "", align: "center" }, // Điểm chữ - 2
               ],
             })
           }
@@ -425,9 +534,14 @@ export default function StudentGradeSystem() {
       const tongTinChiRow: TableRow = {
         cells: [
           {
-            value: `Tổng tín chỉ: ${tongTinChi}`,
+            value: {
+              richText: [
+                { text: "Tổng số tín chỉ: " },
+                { text: String(tongTinChi), font: { bold: true } },
+              ],
+            },
             colSpan: TOTAL_COLUMNS,
-            bold: true,
+            fontSize: 12,
           },
         ],
       }
@@ -435,8 +549,14 @@ export default function StudentGradeSystem() {
       const diemHe10Row: TableRow = {
         cells: [
           {
-            value: `Điểm TB hệ 10: ${diemTBHe10}`,
+            value: {
+              richText: [
+                { text: "Điểm trung bình chung tích lũy toàn khóa (Thang điểm 10): " },
+                { text: String(diemTBHe10), font: { bold: true } },
+              ],
+            },
             colSpan: TOTAL_COLUMNS,
+            fontSize: 12,
           },
         ],
       }
@@ -453,9 +573,14 @@ export default function StudentGradeSystem() {
       const xepLoaiRow: TableRow = {
         cells: [
           {
-            value: `Xếp loại: ${xepLoai}`,
+            value: {
+              richText: [
+                { text: "Xếp hạng tốt nghiệp: " },
+                { text: xepLoai, font: { bold: true } },
+              ],
+            },
             colSpan: TOTAL_COLUMNS,
-            bold: true,
+            fontSize: 12,
           },
         ],
       }
@@ -464,25 +589,41 @@ export default function StudentGradeSystem() {
 
       const dateSignatureRow: TableRow = {
         cells: [
-          { value: null, colSpan: TOTAL_COLUMNS - SIGN_COL }, // 7
+          { value: null, colSpan: TOTAL_COLUMNS - SIGN_COL }, // 6
           {
             value: `Hà Nội, ngày ${today.getDate()} tháng ${
               today.getMonth() + 1
             } năm ${today.getFullYear()}`,
             colSpan: SIGN_COL,
             align: "center",
+            fontSize: 12,
+            italic: true,
           },
         ],
       }
 
-      const titleSignatureRow: TableRow = {
+      const titleSignatureRow1: TableRow = {
         cells: [
           { value: null, colSpan: TOTAL_COLUMNS - SIGN_COL },
           {
-            value: "KT. TRƯỞNG PHÒNG\nPHÓ TRƯỞNG PHÒNG",
+            value: "KT. TRƯỞNG PHÒNG",
             colSpan: SIGN_COL,
             align: "center",
             bold: true,
+            fontSize: 13,
+          },
+        ],
+      }
+
+      const titleSignatureRow2: TableRow = {
+        cells: [
+          { value: null, colSpan: TOTAL_COLUMNS - SIGN_COL },
+          {
+            value: "PHÓ TRƯỞNG PHÒNG",
+            colSpan: SIGN_COL,
+            align: "center",
+            bold: true,
+            fontSize: 13,
           },
         ],
       }
@@ -495,6 +636,82 @@ export default function StudentGradeSystem() {
             colSpan: SIGN_COL,
             align: "center",
             bold: true,
+            fontSize: 13,
+          },
+        ],
+      }
+
+      const noteRow1: TableRow = {
+        cells: [
+          {
+            value: "Ghi chú:  - Hệ thống điểm được quy định theo:",
+            colSpan: TOTAL_COLUMNS,
+            fontSize: 10,
+          },
+        ],
+      }
+
+      const noteRow2: TableRow = {
+        cells: [
+          {
+            value:
+              "Thang điểm chữ        A+                       A                         B+                      B                        C+                      C                     D+                     D                      F",
+            colSpan: TOTAL_COLUMNS,
+            fontSize: 10,
+          },
+        ],
+      }
+
+      const noteRow3: TableRow = {
+        cells: [
+          {
+            value:
+              "Thang điểm 4            4,0                       3,7                       3,5                      3,0                     2,5                      2,0                    1,5                     1,0                    0,0",
+            colSpan: TOTAL_COLUMNS,
+            fontSize: 10,
+          },
+        ],
+      }
+
+      const noteRow4: TableRow = {
+        cells: [
+          {
+            value:
+              "Thang điểm 10       9,0-10                8,5 - 8,9               8,0 - 8,4              7,0 - 7,9             6,5 - 6,9              5,5 - 6,4            5,0 - 5,4            4,0 - 4,9             < 4,0",
+            colSpan: TOTAL_COLUMNS,
+            fontSize: 10,
+          },
+        ],
+      }
+
+      const noteRow5: TableRow = {
+        cells: [
+          {
+            value:
+              " - Phân hạng tốt nghiệp theo thang điểm 10: Xuất sắc 9,00-10; Giỏi 8,00-8,99; Khá: 7,00-7,99; Trung bình khá: 6,50-6,99;",
+            colSpan: TOTAL_COLUMNS,
+            fontSize: 10,
+          },
+        ],
+      }
+
+      const noteRow6: TableRow = {
+        cells: [
+          {
+            value:
+              "   Trung bình: 5,50-6,49. (Hạng tốt nghiệp có thể bị hạ mức theo quy chế đào tạo đại học của HVKTQS được áp dụng tại thời điểm",
+            colSpan: TOTAL_COLUMNS,
+            fontSize: 10,
+          },
+        ],
+      }
+
+      const noteRow7: TableRow = {
+        cells: [
+          {
+            value: "   xét tốt nghiệp)",
+            colSpan: TOTAL_COLUMNS,
+            fontSize: 10,
           },
         ],
       }
@@ -506,36 +723,54 @@ export default function StudentGradeSystem() {
           ma_hoc_vien: student.userProfile.code,
           ngay_sinh: formatDateVN(student.userProfile.dateOfBirth ?? ""),
           ngay_nhap_hoc: formatDateVN(student.fixedClass.createdAt),
-          hinh_thuc_dao_tao: student.universityTrainingType || "",
-          ngon_ngu_dao_tao: "",
-          nganh_hoc: "",
-          chuyen_nganh: "",
-          thoi_gian_dao_tao: "",
-          trinh_do_dao_tao: "",
-          ngon_ngu: "",
+          hinh_thuc_dao_tao:
+            student.fixedClass?.trainingCourse?.trainingObjectType?.trainingForm?.name || "",
+          // ngon_ngu_dao_tao: student.fixedClass?.trainingCourse?.trainingLanguage?.name || "",
+          nganh_hoc:
+            student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.trainingField?.name ||
+            "",
+          chuyen_nganh:
+            student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || "",
+          thoi_gian_dao_tao: student.curriculumVersion?.trainingTime?.name || "",
+          trinh_do_dao_tao: student.curriculumVersion?.trainingLevel?.name || "",
+          ngon_ngu: student.fixedClass?.trainingCourse?.trainingLanguage?.name || "",
+          so_ky_hieu: student.fixedClass?.trainingCourse?.code || "",
         },
         tableStartCell: { row: 14, col: 1 },
         rows: [
           ...tableRows,
           tongTinChiRow,
           diemHe10Row,
-          diemHe4Row,
+          // diemHe4Row,
           xepLoaiRow,
           gapRow,
           dateSignatureRow,
-          titleSignatureRow,
-          { cells: [{ value: null, colSpan: TOTAL_COLUMNS }] },
+          titleSignatureRow1,
+          titleSignatureRow2,
+          ...Array.from({ length: 5 }, () => ({
+            cells: [{ value: null, colSpan: TOTAL_COLUMNS }],
+          })),
           nameSignatureRow,
+          gapRow,
+          noteRow1,
+          noteRow2,
+          noteRow3,
+          noteRow4,
+          noteRow5,
+          noteRow6,
+          noteRow7,
         ],
       }
     })
 
     exportFromTemplate({
-      templateUrl: getMinioUrl("/mta/template/phu-luc-van-ban-2-cot.xlsx"),
+      templateUrl: getMinioUrl("/mta/template/phu-luc-van-bang-2-cot.xlsx"),
       sheets: allSheetOptions,
-      fileName: "PLVB1.xlsx",
+      fileName: "PLVB2C.xlsx",
+      fontFamily: "Times New Roman",
+      fontSize: 10,
       mergeSheetsToOne: true,
-      sheetName: "PLVB1",
+      sheetName: "PLVB",
     })
   }
 
@@ -544,8 +779,8 @@ export default function StudentGradeSystem() {
       notification.info({ message: "Không có dữ liệu để xuất!" })
       return
     }
-    const TOTAL_COLUMNS = 11
-    const SIGN_COL = 4
+    const TOTAL_COLUMNS = 12
+    const SIGN_COL = 6
     const MAX_ROWS = 50
 
     const allSheetOptions = studentsWithSemesters.map((student) => {
@@ -563,11 +798,19 @@ export default function StudentGradeSystem() {
               cells: [
                 { value: stt - 1, align: "center" },
 
-                { value: s1?.tenHocPhan ?? "", colSpan: 3, border: true },
-                { value: s1?.soTinChi ?? 0, colSpan: 2, align: "center" },
-                { value: Number(s1?.thangDiem10 ?? 0), colSpan: 2, align: "right" },
-                { value: Number(s1?.thangDiem4 ?? 0), colSpan: 2, align: "right" },
-                { value: s1?.thangDiemChu ?? "", colSpan: 2, align: "center" },
+                { value: s1?.tenHocPhan ?? "", colSpan: 3, border: true }, // Tên học phần
+                { value: s1?.soTinChi ?? "", colSpan: 2, align: "center" }, // Số tín chỉ
+                {
+                  value: s1?.thangDiem10 ? Number(s1.thangDiem10) : "",
+                  colSpan: 2,
+                  align: "right",
+                }, // Điểm hệ 10
+                {
+                  value: s1?.thangDiem4 ? Number(s1.thangDiem4) : "",
+                  colSpan: 2,
+                  align: "right",
+                }, // Điểm hệ 4
+                { value: s1?.thangDiemChu ?? "", colSpan: 2, align: "center" }, // Điểm chữ
               ],
             })
           }
@@ -617,9 +860,14 @@ export default function StudentGradeSystem() {
       const tongTinChiRow: TableRow = {
         cells: [
           {
-            value: `Tổng tín chỉ: ${tongTinChi}`,
+            value: {
+              richText: [
+                { text: "Tổng số tín chỉ: " },
+                { text: String(tongTinChi), font: { bold: true } },
+              ],
+            },
             colSpan: TOTAL_COLUMNS,
-            bold: true,
+            fontSize: 12,
           },
         ],
       }
@@ -627,8 +875,15 @@ export default function StudentGradeSystem() {
       const diemHe10Row: TableRow = {
         cells: [
           {
-            value: `Điểm TB hệ 10: ${diemTBHe10}`,
+            // value: `Điểm TB hệ 10: ${diemTBHe10}`,
+            value: {
+              richText: [
+                { text: "Điểm trung bình chung tích lũy toàn khóa (Thang điểm 10): " },
+                { text: String(diemTBHe10), font: { bold: true } },
+              ],
+            },
             colSpan: TOTAL_COLUMNS,
+            fontSize: 12,
           },
         ],
       }
@@ -636,7 +891,12 @@ export default function StudentGradeSystem() {
       const diemHe4Row: TableRow = {
         cells: [
           {
-            value: `Điểm TB hệ 4: ${diemTBHe4}`,
+            value: {
+              richText: [
+                { text: "Điểm trung bình chung tích lũy toàn khóa (Thang điểm 4): " },
+                { text: String(diemTBHe4), font: { bold: true } },
+              ],
+            },
             colSpan: TOTAL_COLUMNS,
           },
         ],
@@ -645,9 +905,15 @@ export default function StudentGradeSystem() {
       const xepLoaiRow: TableRow = {
         cells: [
           {
-            value: `Xếp loại: ${xepLoai}`,
+            // value: `Xếp hạng tốt nghiệp: ${xepLoai}`,
+            value: {
+              richText: [
+                { text: "Xếp hạng tốt nghiệp: " },
+                { text: xepLoai, font: { bold: true } },
+              ],
+            },
             colSpan: TOTAL_COLUMNS,
-            bold: true,
+            fontSize: 12,
           },
         ],
       }
@@ -663,18 +929,34 @@ export default function StudentGradeSystem() {
             } năm ${today.getFullYear()}`,
             colSpan: SIGN_COL,
             align: "center",
+            italic: true,
+            fontSize: 12,
           },
         ],
       }
 
-      const titleSignatureRow: TableRow = {
+      const titleSignatureRow1: TableRow = {
         cells: [
           { value: null, colSpan: TOTAL_COLUMNS - SIGN_COL },
           {
-            value: "KT. TRƯỞNG PHÒNG\nPHÓ TRƯỞNG PHÒNG",
+            value: "KT. TRƯỞNG PHÒNG",
             colSpan: SIGN_COL,
             align: "center",
             bold: true,
+            fontSize: 13,
+          },
+        ],
+      }
+
+      const titleSignatureRow2: TableRow = {
+        cells: [
+          { value: null, colSpan: TOTAL_COLUMNS - SIGN_COL },
+          {
+            value: "PHÓ TRƯỞNG PHÒNG",
+            colSpan: SIGN_COL,
+            align: "center",
+            bold: true,
+            fontSize: 13,
           },
         ],
       }
@@ -687,6 +969,82 @@ export default function StudentGradeSystem() {
             colSpan: SIGN_COL,
             align: "center",
             bold: true,
+            fontSize: 13,
+          },
+        ],
+      }
+
+      const noteRow1: TableRow = {
+        cells: [
+          {
+            value: "Ghi chú:  - Hệ thống điểm được quy định theo:",
+            colSpan: TOTAL_COLUMNS,
+            fontSize: 10,
+          },
+        ],
+      }
+
+      const noteRow2: TableRow = {
+        cells: [
+          {
+            value:
+              "Thang điểm chữ       A+                   A                     B+                  B                    C+                   C                 D+                 D                  F",
+            colSpan: TOTAL_COLUMNS,
+            fontSize: 10,
+          },
+        ],
+      }
+
+      const noteRow3: TableRow = {
+        cells: [
+          {
+            value:
+              "Thang điểm 4           4,0                   3,7                   3,5                   3,0                 2,5                  2,0                1,5                 1,0                0,0",
+            colSpan: TOTAL_COLUMNS,
+            fontSize: 10,
+          },
+        ],
+      }
+
+      const noteRow4: TableRow = {
+        cells: [
+          {
+            value:
+              "Thang điểm 10       9,0-10            8,5 - 8,9          8,0 - 8,4           7,0 - 7,9        6,5 - 6,9           5,5 - 6,4       5,0 - 5,4        4,0 - 4,9         < 4,0",
+            colSpan: TOTAL_COLUMNS,
+            fontSize: 10,
+          },
+        ],
+      }
+
+      const noteRow5: TableRow = {
+        cells: [
+          {
+            value:
+              " - Phân hạng tốt nghiệp theo thang điểm 10: Xuất sắc 9,00-10; Giỏi 8,00-8,99; Khá: 7,00-7,99; Trung bình khá: 6,50-6,99;",
+            colSpan: TOTAL_COLUMNS,
+            fontSize: 10,
+          },
+        ],
+      }
+
+      const noteRow6: TableRow = {
+        cells: [
+          {
+            value:
+              "   Trung bình: 5,50-6,49. (Hạng tốt nghiệp có thể bị hạ mức theo quy chế đào tạo đại học của HVKTQS được áp dụng tại thời điểm",
+            colSpan: TOTAL_COLUMNS,
+            fontSize: 10,
+          },
+        ],
+      }
+
+      const noteRow7: TableRow = {
+        cells: [
+          {
+            value: "   xét tốt nghiệp)",
+            colSpan: TOTAL_COLUMNS,
+            fontSize: 10,
           },
         ],
       }
@@ -698,34 +1056,52 @@ export default function StudentGradeSystem() {
           ma_hoc_vien: student.userProfile.code,
           ngay_sinh: formatDateVN(student.userProfile.dateOfBirth ?? ""),
           ngay_nhap_hoc: formatDateVN(student.fixedClass.createdAt),
-          hinh_thuc_dao_tao: student.universityTrainingType || "",
-          ngon_ngu_dao_tao: "",
-          nganh_hoc: "",
-          chuyen_nganh: "",
-          thoi_gian_dao_tao: "",
-          trinh_do_dao_tao: "",
-          ngon_ngu: "",
+          hinh_thuc_dao_tao:
+            student.fixedClass?.trainingCourse?.trainingObjectType?.trainingForm?.name || "",
+          ngon_ngu_dao_tao: student.fixedClass?.trainingCourse?.trainingLanguage?.name || "",
+          nganh_hoc:
+            student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.trainingField?.name ||
+            "",
+          chuyen_nganh:
+            student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || "",
+          thoi_gian_dao_tao: student.curriculumVersion?.trainingTime?.name || "",
+          trinh_do_dao_tao: student.curriculumVersion?.trainingLevel?.name || "",
+          ngon_ngu: student.fixedClass?.trainingCourse?.trainingLanguage?.name || "",
+          so_ky_hieu: student.fixedClass?.trainingCourse?.code || "",
         },
         tableStartCell: { row: 14, col: 1 },
         rows: [
           ...tableRows,
           tongTinChiRow,
           diemHe10Row,
-          diemHe4Row,
+          // diemHe4Row,
           xepLoaiRow,
           gapRow,
           dateSignatureRow,
-          titleSignatureRow,
-          { cells: [{ value: null, colSpan: TOTAL_COLUMNS }] },
+          titleSignatureRow1,
+          titleSignatureRow2,
+          ...Array.from({ length: 5 }, () => ({
+            cells: [{ value: null, colSpan: TOTAL_COLUMNS }],
+          })),
           nameSignatureRow,
+          gapRow,
+          noteRow1,
+          noteRow2,
+          noteRow3,
+          noteRow4,
+          noteRow5,
+          noteRow6,
+          noteRow7,
         ],
       }
     })
 
     exportFromTemplate({
-      templateUrl: getMinioUrl("/mta/template/phu-luc-van-ban-1-cot.xlsx"),
+      templateUrl: getMinioUrl("/mta/template/phu-luc-van-bang-1-cot.xlsx"),
       sheets: allSheetOptions,
       fileName: "PLVB1C.xlsx",
+      fontFamily: "Times New Roman",
+      fontSize: 10,
       mergeSheetsToOne: true,
       sheetName: "PLVB",
     })
@@ -738,7 +1114,7 @@ export default function StudentGradeSystem() {
   } = {
     daiHoc: [
       { id: 1, name: "Phụ lục VB (1 cột)", onClick: handleExportPLVB1Col },
-      { id: 2, name: "Phụ lục VB (2 cột)", onClick: handleExportPLVB1 },
+      { id: 2, name: "Phụ lục VB (2 cột)", onClick: handleExportPLVB2Col },
       { id: 3, name: "Phụ lục VB (2 cột - 1 trang)" },
       { id: 4, name: "Bảng điểm Ngân hạn (P2)" },
     ],
