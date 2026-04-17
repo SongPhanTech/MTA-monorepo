@@ -3,7 +3,6 @@ import Select from "@components/commons/select"
 import Table from "@components/commons/table"
 import TableCollapse from "@components/commons/tableCollapse"
 import { ExportDiplomaAppendix } from "@components/ui/export-button"
-import { useScoreConverter } from "@hooks/scoreConverter"
 import DefaultLayout from "@layouts/default-layout"
 import { buildOrgTree, formatDateVN } from "@lib/utils"
 import type { Semester, Student } from "@workspace/db"
@@ -51,6 +50,7 @@ type TSubjectItem = StudentSubjectScore & {
 
 type TTrainingCourse = TrainingCourse & {
   scoreConverts: ScoreConvert[]
+  academicRankingConvert?: any[]
   trainingLanguage: TrainingLanguage | null
   trainingObjectType: {
     trainingForm: {
@@ -275,6 +275,7 @@ export default function StudentGradeSystem() {
             trainingCourse: {
               include: {
                 scoreConverts: true,
+                academicRankingConvert: true,
                 trainingLanguage: true,
                 trainingObjectType: {
                   include: {
@@ -331,10 +332,6 @@ export default function StudentGradeSystem() {
     {
       enabled: viewResult,
     }
-  )
-
-  const { convertScore } = useScoreConverter(
-    students?.[0]?.fixedClass?.trainingCourse?.scoreConverts
   )
 
   const studentsWithSemesters = useMemo(() => {
@@ -437,6 +434,116 @@ export default function StudentGradeSystem() {
     }))
   }, [selectedStudent])
 
+  const getScoreClassification = (finalScore: number, scoreConverts: ScoreConvert[] = []) => {
+    const matched = scoreConverts.find(
+      (range) => finalScore >= range.base10Min && finalScore <= range.base10Max
+    )
+
+    return matched?.classification ?? ""
+  }
+
+  const buildScoreSystemNoteRows = (scoreConverts: ScoreConvert[] = [], totalColumns: number) => {
+    const sortedData = [...scoreConverts].sort((a, b) => b.base4 - a.base4)
+
+    const labelColSpan = 2
+    const valueColumnCount = Math.max(totalColumns - labelColSpan, 1)
+
+    const toBase10Range = (item: ScoreConvert) =>
+      item.base10Min === 0
+        ? `< ${Number(item.base10Max) + 0.1}`
+        : `${item.base10Min}${item.base10Max != null ? ` - ${item.base10Max}` : ""}`
+
+    const buildGridRow = (label: string, values: string[]) => {
+      const normalizedValues = values.slice(0, valueColumnCount)
+      while (normalizedValues.length < valueColumnCount) {
+        normalizedValues.push("")
+      }
+
+      return {
+        cells: [
+          {
+            value: label,
+            colSpan: labelColSpan,
+            fontSize: 10,
+            border: false,
+          },
+          ...normalizedValues.map((value) => ({
+            value,
+            colSpan: 1,
+            align: "center" as const,
+            fontSize: 10,
+            border: false,
+          })),
+        ],
+      } as TableRow
+    }
+
+    const letters = sortedData.map((item) => item.letter ?? "")
+    const base4Values = sortedData.map((item) => String(item.base4 ?? ""))
+    const base10Values = sortedData.map(toBase10Range)
+
+    return {
+      noteRow1: {
+        cells: [
+          {
+            value: "Ghi chú:  - Hệ thống điểm được quy định theo:",
+            colSpan: totalColumns,
+            fontSize: 10,
+            border: false,
+          },
+        ],
+      } as TableRow,
+      noteRow2: {
+        ...buildGridRow("Thang điểm chữ", letters),
+      },
+      noteRow3: {
+        ...buildGridRow("Thang điểm 4", base4Values),
+      },
+      noteRow4: {
+        ...buildGridRow("Thang điểm 10", base10Values),
+      },
+    }
+  }
+
+  const buildGraduationRankingNote = (academicRankingConvert: any[] = []) => {
+    const graduationRankingData = academicRankingConvert.filter(
+      (item) => item?.context === "GRADUATION" && item?.graduated
+    )
+
+    const graduationBaseScore =
+      graduationRankingData.find((item) => item?.base4Min != null)?.baseScore ??
+      graduationRankingData[0]?.baseScore
+
+    const formatNumber = (num: number | null | undefined) => {
+      if (num == null) return "-"
+      if (Number.isInteger(num)) return num.toFixed(1)
+      const decimalPart = (num.toString().split(".")[1] || "").length
+      if (decimalPart === 1) return num.toFixed(2)
+      return num.toString()
+    }
+
+    const sortedRankings = graduationRankingData.sort((a, b) =>
+      graduationBaseScore === "Base4" ? b.base4Min - a.base4Min : b.base10Min - a.base10Min
+    )
+
+    const rankingText = sortedRankings
+      .map((item) => {
+        const range =
+          graduationBaseScore === "Base4"
+            ? `${formatNumber(item.base4Min)} - ${formatNumber(item.base4Max)}`
+            : `${formatNumber(item.base10Min)} - ${formatNumber(item.base10Max)}`
+
+        return `${item.classification}: ${range}`
+      })
+      .join("; ")
+
+    if (!rankingText) {
+      return " - Phân hạng tốt nghiệp theo thang điểm 10: -"
+    }
+
+    return ` - Phân hạng tốt nghiệp theo thang điểm ${graduationBaseScore === "Base4" ? "4" : "10"}: ${rankingText}. (Hạng tốt nghiệp có thể bị hạ mức theo quy chế đào tạo đại học của HVKTQS được áp dụng tại thời điểm xét tốt nghiệp).`
+  }
+
   const handleExportPLVB2Col = () => {
     if (!students?.length) {
       notification.info({ message: "Không có dữ liệu để xuất!" })
@@ -447,6 +554,9 @@ export default function StudentGradeSystem() {
     const MAX_ROWS = 50
 
     const allSheetOptions = studentsWithSemesters.map((student) => {
+      const scoreConverts = student.fixedClass?.trainingCourse?.scoreConverts || []
+      const academicRankingConvert =
+        student.fixedClass?.trainingCourse?.academicRankingConvert || []
       let stt = 0
       const tableRows = student.semesters
         .flatMap((semester) => {
@@ -525,10 +635,10 @@ export default function StudentGradeSystem() {
       const diemTBHe4 =
         tongTinChi === 0 ? 0 : Number((tongDiemNhanTinChiHe4 / tongTinChi).toFixed(2))
 
-      const xepLoai = convertScore(diemTBHe10)?.classification ?? ""
+      const xepLoai = getScoreClassification(diemTBHe10, scoreConverts || [])
 
       const gapRow: TableRow = {
-        cells: [{ value: null, colSpan: TOTAL_COLUMNS }],
+        cells: [{ value: null, colSpan: TOTAL_COLUMNS, border: false }],
       }
 
       const tongTinChiRow: TableRow = {
@@ -542,6 +652,7 @@ export default function StudentGradeSystem() {
             },
             colSpan: TOTAL_COLUMNS,
             fontSize: 12,
+            border: false,
           },
         ],
       }
@@ -557,6 +668,7 @@ export default function StudentGradeSystem() {
             },
             colSpan: TOTAL_COLUMNS,
             fontSize: 12,
+            border: false,
           },
         ],
       }
@@ -566,6 +678,7 @@ export default function StudentGradeSystem() {
           {
             value: `Điểm TB hệ 4: ${diemTBHe4}`,
             colSpan: TOTAL_COLUMNS,
+            border: false,
           },
         ],
       }
@@ -581,6 +694,7 @@ export default function StudentGradeSystem() {
             },
             colSpan: TOTAL_COLUMNS,
             fontSize: 12,
+            border: false,
           },
         ],
       }
@@ -589,7 +703,7 @@ export default function StudentGradeSystem() {
 
       const dateSignatureRow: TableRow = {
         cells: [
-          { value: null, colSpan: TOTAL_COLUMNS - SIGN_COL }, // 6
+          { value: null, colSpan: TOTAL_COLUMNS - SIGN_COL, border: false },
           {
             value: `Hà Nội, ngày ${today.getDate()} tháng ${
               today.getMonth() + 1
@@ -598,120 +712,66 @@ export default function StudentGradeSystem() {
             align: "center",
             fontSize: 12,
             italic: true,
+            border: false,
           },
         ],
       }
 
       const titleSignatureRow1: TableRow = {
         cells: [
-          { value: null, colSpan: TOTAL_COLUMNS - SIGN_COL },
+          { value: null, colSpan: TOTAL_COLUMNS - SIGN_COL, border: false },
           {
             value: "KT. TRƯỞNG PHÒNG",
             colSpan: SIGN_COL,
             align: "center",
             bold: true,
             fontSize: 13,
+            border: false,
           },
         ],
       }
 
       const titleSignatureRow2: TableRow = {
         cells: [
-          { value: null, colSpan: TOTAL_COLUMNS - SIGN_COL },
+          { value: null, colSpan: TOTAL_COLUMNS - SIGN_COL, border: false },
           {
             value: "PHÓ TRƯỞNG PHÒNG",
             colSpan: SIGN_COL,
             align: "center",
             bold: true,
             fontSize: 13,
+            border: false,
           },
         ],
       }
 
       const nameSignatureRow: TableRow = {
         cells: [
-          { value: null, colSpan: TOTAL_COLUMNS - SIGN_COL },
+          { value: null, colSpan: TOTAL_COLUMNS - SIGN_COL, border: false },
           {
             value: "Đại tá, TS Nguyễn Văn Bình",
             colSpan: SIGN_COL,
             align: "center",
             bold: true,
             fontSize: 13,
+            border: false,
           },
         ],
       }
 
-      const noteRow1: TableRow = {
-        cells: [
-          {
-            value: "Ghi chú:  - Hệ thống điểm được quy định theo:",
-            colSpan: TOTAL_COLUMNS,
-            fontSize: 10,
-          },
-        ],
-      }
-
-      const noteRow2: TableRow = {
-        cells: [
-          {
-            value:
-              "Thang điểm chữ        A+                       A                         B+                      B                        C+                      C                     D+                     D                      F",
-            colSpan: TOTAL_COLUMNS,
-            fontSize: 10,
-          },
-        ],
-      }
-
-      const noteRow3: TableRow = {
-        cells: [
-          {
-            value:
-              "Thang điểm 4            4,0                       3,7                       3,5                      3,0                     2,5                      2,0                    1,5                     1,0                    0,0",
-            colSpan: TOTAL_COLUMNS,
-            fontSize: 10,
-          },
-        ],
-      }
-
-      const noteRow4: TableRow = {
-        cells: [
-          {
-            value:
-              "Thang điểm 10       9,0-10                8,5 - 8,9               8,0 - 8,4              7,0 - 7,9             6,5 - 6,9              5,5 - 6,4            5,0 - 5,4            4,0 - 4,9             < 4,0",
-            colSpan: TOTAL_COLUMNS,
-            fontSize: 10,
-          },
-        ],
-      }
+      const { noteRow1, noteRow2, noteRow3, noteRow4 } = buildScoreSystemNoteRows(
+        scoreConverts || [],
+        TOTAL_COLUMNS
+      )
 
       const noteRow5: TableRow = {
         cells: [
           {
-            value:
-              " - Phân hạng tốt nghiệp theo thang điểm 10: Xuất sắc 9,00-10; Giỏi 8,00-8,99; Khá: 7,00-7,99; Trung bình khá: 6,50-6,99;",
+            value: buildGraduationRankingNote(academicRankingConvert),
             colSpan: TOTAL_COLUMNS,
             fontSize: 10,
-          },
-        ],
-      }
-
-      const noteRow6: TableRow = {
-        cells: [
-          {
-            value:
-              "   Trung bình: 5,50-6,49. (Hạng tốt nghiệp có thể bị hạ mức theo quy chế đào tạo đại học của HVKTQS được áp dụng tại thời điểm",
-            colSpan: TOTAL_COLUMNS,
-            fontSize: 10,
-          },
-        ],
-      }
-
-      const noteRow7: TableRow = {
-        cells: [
-          {
-            value: "   xét tốt nghiệp)",
-            colSpan: TOTAL_COLUMNS,
-            fontSize: 10,
+            rowSpan: 2,
+            border: false,
           },
         ],
       }
@@ -739,6 +799,7 @@ export default function StudentGradeSystem() {
         tableStartCell: { row: 14, col: 1 },
         rows: [
           ...tableRows,
+          gapRow,
           tongTinChiRow,
           diemHe10Row,
           // diemHe4Row,
@@ -748,7 +809,7 @@ export default function StudentGradeSystem() {
           titleSignatureRow1,
           titleSignatureRow2,
           ...Array.from({ length: 5 }, () => ({
-            cells: [{ value: null, colSpan: TOTAL_COLUMNS }],
+            cells: [{ value: null, colSpan: TOTAL_COLUMNS, border: false }],
           })),
           nameSignatureRow,
           gapRow,
@@ -757,8 +818,6 @@ export default function StudentGradeSystem() {
           noteRow3,
           noteRow4,
           noteRow5,
-          noteRow6,
-          noteRow7,
         ],
       }
     })
@@ -784,6 +843,9 @@ export default function StudentGradeSystem() {
     const MAX_ROWS = 50
 
     const allSheetOptions = studentsWithSemesters.map((student) => {
+      const scoreConverts = student.fixedClass?.trainingCourse?.scoreConverts || []
+      const academicRankingConvert =
+        student.fixedClass?.trainingCourse?.academicRankingConvert || []
       let stt = 0
       const tableRows = student.semesters
         .flatMap((semester) => {
@@ -798,7 +860,7 @@ export default function StudentGradeSystem() {
               cells: [
                 { value: stt - 1, align: "center" },
 
-                { value: s1?.tenHocPhan ?? "", colSpan: 3, border: true }, // Tên học phần
+                { value: s1?.tenHocPhan ?? "", colSpan: 3, border: true, wrapText: true }, // Tên học phần
                 { value: s1?.soTinChi ?? "", colSpan: 2, align: "center" }, // Số tín chỉ
                 {
                   value: s1?.thangDiem10 ? Number(s1.thangDiem10) : "",
@@ -851,10 +913,10 @@ export default function StudentGradeSystem() {
       const diemTBHe4 =
         tongTinChi === 0 ? 0 : Number((tongDiemNhanTinChiHe4 / tongTinChi).toFixed(2))
 
-      const xepLoai = convertScore(diemTBHe10)?.classification ?? ""
+      const xepLoai = getScoreClassification(diemTBHe10, scoreConverts || [])
 
       const gapRow: TableRow = {
-        cells: [{ value: null, colSpan: TOTAL_COLUMNS }],
+        cells: [{ value: null, colSpan: TOTAL_COLUMNS, border: false }],
       }
 
       const tongTinChiRow: TableRow = {
@@ -868,6 +930,7 @@ export default function StudentGradeSystem() {
             },
             colSpan: TOTAL_COLUMNS,
             fontSize: 12,
+            border: false,
           },
         ],
       }
@@ -884,6 +947,7 @@ export default function StudentGradeSystem() {
             },
             colSpan: TOTAL_COLUMNS,
             fontSize: 12,
+            border: false,
           },
         ],
       }
@@ -898,6 +962,7 @@ export default function StudentGradeSystem() {
               ],
             },
             colSpan: TOTAL_COLUMNS,
+            border: false,
           },
         ],
       }
@@ -914,6 +979,7 @@ export default function StudentGradeSystem() {
             },
             colSpan: TOTAL_COLUMNS,
             fontSize: 12,
+            border: false,
           },
         ],
       }
@@ -922,7 +988,7 @@ export default function StudentGradeSystem() {
 
       const dateSignatureRow: TableRow = {
         cells: [
-          { value: null, colSpan: TOTAL_COLUMNS - SIGN_COL }, // 7
+          { value: null, colSpan: TOTAL_COLUMNS - SIGN_COL, border: false }, // 7
           {
             value: `Hà Nội, ngày ${today.getDate()} tháng ${
               today.getMonth() + 1
@@ -931,120 +997,66 @@ export default function StudentGradeSystem() {
             align: "center",
             italic: true,
             fontSize: 12,
+            border: false,
           },
         ],
       }
 
       const titleSignatureRow1: TableRow = {
         cells: [
-          { value: null, colSpan: TOTAL_COLUMNS - SIGN_COL },
+          { value: null, colSpan: TOTAL_COLUMNS - SIGN_COL, border: false },
           {
             value: "KT. TRƯỞNG PHÒNG",
             colSpan: SIGN_COL,
             align: "center",
             bold: true,
             fontSize: 13,
+            border: false,
           },
         ],
       }
 
       const titleSignatureRow2: TableRow = {
         cells: [
-          { value: null, colSpan: TOTAL_COLUMNS - SIGN_COL },
+          { value: null, colSpan: TOTAL_COLUMNS - SIGN_COL, border: false },
           {
             value: "PHÓ TRƯỞNG PHÒNG",
             colSpan: SIGN_COL,
             align: "center",
             bold: true,
             fontSize: 13,
+            border: false,
           },
         ],
       }
 
       const nameSignatureRow: TableRow = {
         cells: [
-          { value: null, colSpan: TOTAL_COLUMNS - SIGN_COL },
+          { value: null, colSpan: TOTAL_COLUMNS - SIGN_COL, border: false },
           {
             value: "Đại tá, TS Nguyễn Văn Bình",
             colSpan: SIGN_COL,
             align: "center",
             bold: true,
             fontSize: 13,
+            border: false,
           },
         ],
       }
 
-      const noteRow1: TableRow = {
-        cells: [
-          {
-            value: "Ghi chú:  - Hệ thống điểm được quy định theo:",
-            colSpan: TOTAL_COLUMNS,
-            fontSize: 10,
-          },
-        ],
-      }
-
-      const noteRow2: TableRow = {
-        cells: [
-          {
-            value:
-              "Thang điểm chữ       A+                   A                     B+                  B                    C+                   C                 D+                 D                  F",
-            colSpan: TOTAL_COLUMNS,
-            fontSize: 10,
-          },
-        ],
-      }
-
-      const noteRow3: TableRow = {
-        cells: [
-          {
-            value:
-              "Thang điểm 4           4,0                   3,7                   3,5                   3,0                 2,5                  2,0                1,5                 1,0                0,0",
-            colSpan: TOTAL_COLUMNS,
-            fontSize: 10,
-          },
-        ],
-      }
-
-      const noteRow4: TableRow = {
-        cells: [
-          {
-            value:
-              "Thang điểm 10       9,0-10            8,5 - 8,9          8,0 - 8,4           7,0 - 7,9        6,5 - 6,9           5,5 - 6,4       5,0 - 5,4        4,0 - 4,9         < 4,0",
-            colSpan: TOTAL_COLUMNS,
-            fontSize: 10,
-          },
-        ],
-      }
+      const { noteRow1, noteRow2, noteRow3, noteRow4 } = buildScoreSystemNoteRows(
+        scoreConverts || [],
+        TOTAL_COLUMNS
+      )
 
       const noteRow5: TableRow = {
         cells: [
           {
-            value:
-              " - Phân hạng tốt nghiệp theo thang điểm 10: Xuất sắc 9,00-10; Giỏi 8,00-8,99; Khá: 7,00-7,99; Trung bình khá: 6,50-6,99;",
+            value: buildGraduationRankingNote(academicRankingConvert),
             colSpan: TOTAL_COLUMNS,
             fontSize: 10,
-          },
-        ],
-      }
-
-      const noteRow6: TableRow = {
-        cells: [
-          {
-            value:
-              "   Trung bình: 5,50-6,49. (Hạng tốt nghiệp có thể bị hạ mức theo quy chế đào tạo đại học của HVKTQS được áp dụng tại thời điểm",
-            colSpan: TOTAL_COLUMNS,
-            fontSize: 10,
-          },
-        ],
-      }
-
-      const noteRow7: TableRow = {
-        cells: [
-          {
-            value: "   xét tốt nghiệp)",
-            colSpan: TOTAL_COLUMNS,
-            fontSize: 10,
+            rowSpan: 2,
+            border: false,
           },
         ],
       }
@@ -1072,6 +1084,7 @@ export default function StudentGradeSystem() {
         tableStartCell: { row: 14, col: 1 },
         rows: [
           ...tableRows,
+          gapRow,
           tongTinChiRow,
           diemHe10Row,
           // diemHe4Row,
@@ -1081,7 +1094,7 @@ export default function StudentGradeSystem() {
           titleSignatureRow1,
           titleSignatureRow2,
           ...Array.from({ length: 5 }, () => ({
-            cells: [{ value: null, colSpan: TOTAL_COLUMNS }],
+            cells: [{ value: null, colSpan: TOTAL_COLUMNS, border: false }],
           })),
           nameSignatureRow,
           gapRow,
@@ -1090,8 +1103,6 @@ export default function StudentGradeSystem() {
           noteRow3,
           noteRow4,
           noteRow5,
-          noteRow6,
-          noteRow7,
         ],
       }
     })
