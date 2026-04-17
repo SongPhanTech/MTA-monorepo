@@ -209,7 +209,7 @@ const PutHoSoBaoVeLv = () => {
           },
         })
 
-        message.success("Tạo mới giấy mời hướng dẫn thành công")
+        message.success("Tạo mới thành công")
       } else {
         if (!studentId || !thesisProject?.id) {
           message.warning("Không tìm thấy dữ liệu để cập nhật")
@@ -229,7 +229,7 @@ const PutHoSoBaoVeLv = () => {
           },
         })
 
-        message.success("Cập nhật thông tin hồ sơ bảo vệ thành công")
+        message.success("Cập nhật thông tin thành công")
       }
 
       onClose()

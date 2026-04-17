@@ -634,6 +634,12 @@ const NAVIGATION: NavigationType = {
             description: "Quản lý luận văn/đề án",
           },
           {
+            id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_LUAN_VAN_DANH_SACH_BAO_VE_LVDA,
+            label: "Danh sách bảo vệ Luận văn/đồ án",
+            path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_LUAN_VAN_DANH_SACH_BAO_VE_LVDA,
+            description: "Danh sách bảo vệ Luận văn/đồ án",
+          },
+          {
             id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_LUAN_VAN_DANH_SACH_CHUYEN_GIA,
             label: "Danh sách chuyên gia",
             path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_LUAN_VAN_DANH_SACH_CHUYEN_GIA,
@@ -656,6 +662,12 @@ const NAVIGATION: NavigationType = {
             label: "Thống kê cán bộ hướng dẫn",
             path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_LUAN_VAN_DANH_SACH_GVHD,
             description: "Thống kê cán bộ hướng dẫn",
+          },
+          {
+            id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_LUAN_VAN_DANH_SACH_SAO_DQHD,
+            label: "Quản lý sao QĐHDLV",
+            path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_LUAN_VAN_DANH_SACH_SAO_DQHD,
+            description: "Quản lý sao QĐHDLV",
           },
           {
             id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_LUAN_VAN_DANH_SACH_THANH_TOAN_GVHD,

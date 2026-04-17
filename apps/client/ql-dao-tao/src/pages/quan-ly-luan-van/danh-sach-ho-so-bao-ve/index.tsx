@@ -276,7 +276,7 @@ export default function HoSoBaoVeLv({ role = "P7" }: DanhMucLuanVanProps) {
 
   const handleOpenCreateGiayMoi = () => {
     if (!searchParams.thesisSessionId) {
-      message.warning("Vui lòng chọn đợt xét trước khi thêm mới giấy mời.")
+      message.warning("Vui lòng chọn đợt xét trước khi thêm mới.")
       return
     }
 
@@ -365,7 +365,7 @@ export default function HoSoBaoVeLv({ role = "P7" }: DanhMucLuanVanProps) {
                 />
               </Form.Item>
 
-              <Form.Item name="organizationId" label="Khoa quản lí">
+              {/* <Form.Item name="organizationId" label="Khoa quản lí">
                 <TreeSelect
                   className="w-80"
                   placeholder="Chọn khoa quản lý"
@@ -378,7 +378,7 @@ export default function HoSoBaoVeLv({ role = "P7" }: DanhMucLuanVanProps) {
                     setSearchParams((prev) => ({ ...prev, organizationId: value as string }))
                   }}
                 />
-              </Form.Item>
+              </Form.Item> */}
 
               <Form.Item>
                 <Space>
@@ -414,6 +414,15 @@ export default function HoSoBaoVeLv({ role = "P7" }: DanhMucLuanVanProps) {
                 render: (_, record) => record?.userProfile?.fullname || "",
               },
               {
+                title: "Ngày sinh",
+                width: 120,
+                align: "center",
+                render: (_, record) =>
+                  record?.userProfile?.dateOfBirth
+                    ? dayjs(record.userProfile.dateOfBirth).format("DD/MM/YYYY")
+                    : "",
+              },
+              {
                 title: "Cán bộ hướng dẫn",
                 width: 280,
                 render: (_, record) =>
@@ -447,15 +456,7 @@ export default function HoSoBaoVeLv({ role = "P7" }: DanhMucLuanVanProps) {
                     ? String(record.thesisRegistrations[0].thesisProject.type)
                     : "",
               },
-              {
-                title: "Ngày sinh",
-                width: 120,
-                align: "center",
-                render: (_, record) =>
-                  record?.userProfile?.dateOfBirth
-                    ? dayjs(record.userProfile.dateOfBirth).format("DD/MM/YYYY")
-                    : "",
-              },
+
               {
                 title: "Thao tác",
                 align: "center",
@@ -465,7 +466,7 @@ export default function HoSoBaoVeLv({ role = "P7" }: DanhMucLuanVanProps) {
                     return (
                       <Row className="justify-center gap-2 px-3">
                         {can(
-                          QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_LUAN_VAN_GIAY_MOI_HUONG_DAN_LUAN_VAN_DO_AN,
+                          QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_LUAN_VAN_GIAY_MOI_HUONG_DAN_LUAN_VAN_DE_AN,
                           "SUA"
                         ) && (
                           <EditIcon

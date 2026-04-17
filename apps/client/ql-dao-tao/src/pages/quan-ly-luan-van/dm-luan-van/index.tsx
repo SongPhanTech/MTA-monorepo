@@ -585,10 +585,10 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
       const skippedCount = results.filter((r) => r === null).length
       if (skippedCount > 0) {
         message.success(
-          `Tạo dữ liệu mẫu thành công. Đã bỏ qua ${skippedCount} sinh viên đã có luận văn/đề án.`
+          `Thêm thành công. Đã bỏ qua ${skippedCount} sinh viên đã có luận văn/đề án.`
         )
       } else {
-        message.success("Tạo dữ liệu mẫu thành công")
+        message.success("Thêm thành công")
       }
     } catch (error) {
       message.error("Đã xảy ra lỗi trong lúc tạo dữ liệu mẫu")
@@ -1232,15 +1232,15 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                   <Form.Item className="flex justify-end gap-3">
                     <Popconfirm
                       placement="rightTop"
-                      title="Xác nhận tạo dữ liệu mẫu"
-                      description="Tạo dữ liệu mẫu sẽ ghi đè lại dữ liệu (nếu có). Bạn có chắc chắn muốn tạo dữ liệu mẫu không?"
+                      title="Xác nhận thêm dữ liệu"
+                      description="Bạn có chắc chắn muốn thêm dữ liệu không?"
                       onConfirm={async () => {
                         setEditingRowKeys([])
                         await taodulieumau()
                       }}
                     >
                       <Button type="primary" className="ml-2">
-                        Tạo dữ liệu mẫu
+                        Thêm
                       </Button>
                     </Popconfirm>
 
@@ -2157,7 +2157,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
             pagination={{
               current: currentPage,
               pageSize: numberOfPages,
-              total: countStudent || 0,
+              // total: countStudent || 0,
               onChange: async (page, pageSize) => {
                 setEditingRowKeys([])
                 setEditingValues({})
