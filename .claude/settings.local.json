@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl -sS -D - -o /dev/null -X OPTIONS -H 'Origin: https://your-app-domain.com' -H 'Access-Control-Request-Method: POST' -H 'Access-Control-Request-Headers: Content-Type' https://api.chat.chatbot.swantech.vn/hoi_dap_v4)",
+      "Bash(curl -sS -D - -X POST -H 'Content-Type: application/json' -H 'Origin: https://your-app-domain.com' -d '{\"prompt\":\"hello\",\"conversation_id\":\"test123\"}' https://api.chat.chatbot.swantech.vn/hoi_dap_v4)",
+      "Bash(curl -sS -X POST -H 'Content-Type: application/json' -d '{\"prompt\":\"hello\",\"conversation_id\":\"cmnzrrv3000x5pb01zyllcajn\"}' https://api.chat.chatbot.swantech.vn/hoi_dap_v4 --max-time 30)",
+      "Bash(curl -sS --http1.1 -X POST -H 'Content-Type: application/json' -d '{\"prompt\":\"hello\",\"conversation_id\":\"cmnzrrv3000x5pb01zyllcajn\"}' https://api.chat.chatbot.swantech.vn/hoi_dap_v4 --max-time 30 -w '\\\\n\\\\nHTTP_CODE: %{http_code}\\\\nTIME: %{time_total}s')",
+      "Bash(curl -sS --http1.1 -X POST -H 'Content-Type: application/json' -d '{\"prompt\":\"hello\",\"conversation_id\":\"cmnzrrv3000x5pb01zyllcajn\"}' https://api.chat.chatbot.swantech.vn/hoi_dap_v4 --max-time 60 -N)",
+      "Bash(curl -v --http1.1 -X POST -H 'Content-Type: application/json' -d '{\"prompt\":\"hello\",\"conversation_id\":\"cmnzrrv3000x5pb01zyllcajn\"}' https://api.chat.chatbot.swantech.vn/hoi_dap_v4 --max-time 30)"
+    ]
+  }
+}
