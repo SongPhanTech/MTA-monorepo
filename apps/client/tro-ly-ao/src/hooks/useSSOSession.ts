@@ -31,6 +31,12 @@ const SSO_REDIRECT_FLAG = "sso-pending-redirect"
 const SSO_CHECKED_FLAG = "sso-redirect-checked" // Flag để đánh dấu đã check rồi trong session này
 const CACHE_TIME = 5 * 60 * 1000 // 5 phút
 
+// Retry config cho lỗi tạm thời (5xx, network)
+const MAX_RETRIES = 3
+const RETRY_BASE_DELAY = 500 // ms - exponential backoff: 500, 1000, 2000
+
+const sleep = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms))
+
 const checkSSORedirect = (): boolean => {
   if (typeof window === "undefined") return false
 
@@ -134,14 +140,47 @@ export const useSSOSession = () => {
     if (isFetching) return
     isFetching = true
 
+    const url = `${getRuntimeEnv("NEXT_PUBLIC_API_MODEL_BASE_URL")}/api/auth/get-session?appCode=${encodeURIComponent(appCode)}`
+
     try {
-      const response = await fetch(
-        `${getRuntimeEnv("NEXT_PUBLIC_API_MODEL_BASE_URL")}/api/auth/get-session?appCode=${encodeURIComponent(appCode)}`,
-        {
-          method: "GET",
-          credentials: "include",
+      let response: Response | null = null
+      let lastError: unknown = null
+
+      for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
+        try {
+          response = await fetch(url, {
+            method: "GET",
+            credentials: "include",
+          })
+
+          // Chỉ retry với lỗi server tạm thời (5xx). 4xx coi như unauthenticated, không retry.
+          if (response.status >= 500 && response.status < 600 && attempt < MAX_RETRIES) {
+            console.warn(
+              `[useSSOSession] get-session ${response.status}, retrying (${attempt + 1}/${MAX_RETRIES})...`
+            )
+            await sleep(RETRY_BASE_DELAY * 2 ** attempt)
+            continue
+          }
+
+          break
+        } catch (err) {
+          // Network error - retry
+          lastError = err
+          if (attempt < MAX_RETRIES) {
+            console.warn(
+              `[useSSOSession] get-session network error, retrying (${attempt + 1}/${MAX_RETRIES})...`,
+              err
+            )
+            await sleep(RETRY_BASE_DELAY * 2 ** attempt)
+            continue
+          }
+          throw err
         }
-      )
+      }
+
+      if (!response) {
+        throw lastError ?? new Error("No response")
+      }
 
       const newStatus: SSOSessionStatus = response.ok ? "authenticated" : "unauthenticated"
       const newSession = response.ok ? await response.json() : null
@@ -149,15 +188,21 @@ export const useSSOSession = () => {
       // Set window.contextData TRƯỚC khi setState để usePermissions có userId khi re-render
       setWindowContextData(newSession)
 
-      // Update global cache
-      globalCache = {
-        status: newStatus,
-        session: newSession,
-        timestamp: Date.now(),
+      // Chỉ cache khi authenticated hoặc 4xx (unauthenticated thực sự).
+      // Không cache lỗi 5xx để lần sau còn thử lại.
+      const isServerError = !response.ok && response.status >= 500
+      if (!isServerError) {
+        globalCache = {
+          status: newStatus,
+          session: newSession,
+          timestamp: Date.now(),
+        }
+        saveCache(globalCache)
+      } else {
+        console.warn(
+          `[useSSOSession] get-session failed with ${response.status} after retries, not caching`
+        )
       }
-
-      // Save to localStorage
-      saveCache(globalCache)
 
       setStatus(newStatus)
       setSession(newSession)
@@ -167,14 +212,7 @@ export const useSSOSession = () => {
     } catch (error) {
       console.warn("[useSSOSession] SSO session fetch failed:", error)
 
-      globalCache = {
-        status: "unauthenticated",
-        session: null,
-        timestamp: Date.now(),
-      }
-
-      saveCache(globalCache)
-
+      // Network error sau khi đã retry hết - KHÔNG cache để lần mount sau còn thử lại
       setStatus("unauthenticated")
       setSession(null)
 

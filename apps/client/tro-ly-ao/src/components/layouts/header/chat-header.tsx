@@ -1,7 +1,6 @@
 import {
   AppstoreOutlined,
   ExportOutlined,
-  LoginOutlined,
   MenuOutlined,
   UnorderedListOutlined,
 } from "@ant-design/icons"
@@ -113,17 +112,15 @@ const ChatHeader = ({
             title="Mở trong tab mới"
           />
         )}
-        {!isSSOAuthenticated && onSignIn && (
-          <Button
-            type="primary"
-            icon={<LoginOutlined />}
-            onClick={onSignIn}
-            className="flex items-center justify-center"
-          >
-            Đăng nhập
-          </Button>
-        )}
-        {isSSOAuthenticated && <HeaderApp />}
+        {/*
+         * Luôn render UMD HeaderApp giống QLDT.
+         * - Plugin MTAMenuComponents tự fetch session, tự retry, tự render:
+         *   + Chưa đăng nhập → hiển thị nút đăng nhập + avatar mặc định.
+         *   + Đã đăng nhập → hiển thị avatar, app switcher, notifications.
+         * - Không phụ thuộc vào trạng thái get-session bên React, nên 502 tạm thời
+         *   không làm "kẹt" UI. Guest vẫn chat được vì ChatLayout không gate render.
+         */}
+        <HeaderApp />
       </div>
     </Header>
   )
