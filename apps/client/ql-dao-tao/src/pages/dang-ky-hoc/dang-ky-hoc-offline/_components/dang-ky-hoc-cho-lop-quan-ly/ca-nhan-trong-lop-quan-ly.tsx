@@ -92,6 +92,13 @@ export default function CaNhanTrongLopQuanLy({ hocLai }: RegisterClassProps) {
                 name: true,
               },
             },
+            coRequisiteSubject: {
+              select: {
+                id: true,
+                code: true,
+                name: true,
+              },
+            },
           },
         },
       },
@@ -169,7 +176,10 @@ export default function CaNhanTrongLopQuanLy({ hocLai }: RegisterClassProps) {
               { subjectVersionId: selectedSubjectClass?.subjectId },
               {
                 subjectVersionId: {
-                  in: selectedSubjectClass?.subject?.prerequisiteSubject?.map((s) => s.id) || [],
+                  in: [
+                    ...(selectedSubjectClass?.subject?.prerequisiteSubject?.map((s) => s.id) || []),
+                    ...(selectedSubjectClass?.subject?.coRequisiteSubject?.map((s) => s.id) || []),
+                  ],
                 },
               },
             ],
@@ -344,6 +354,7 @@ export default function CaNhanTrongLopQuanLy({ hocLai }: RegisterClassProps) {
   }
 
   const prerequisiteSubjects = selectedSubjectClass?.subject?.prerequisiteSubject || []
+  const coRequisiteSubjects = selectedSubjectClass?.subject?.coRequisiteSubject || []
 
   const getScoreValue = (score: TStudentSubjectScoreLite) => {
     if (score.manualFinalScore !== null && score.manualFinalScore !== undefined) {
@@ -410,6 +421,46 @@ export default function CaNhanTrongLopQuanLy({ hocLai }: RegisterClassProps) {
               </div>
               <div className={passed ? "text-green-600" : "text-red-600"}>
                 {passed ? "Đạt tiên quyết" : `Chưa đạt tiên quyết (>= ${scoreToPass})`}
+              </div>
+            </div>
+          )
+        })}
+      </div>
+    )
+  }
+
+  const hasLearnedCoRequisiteSubject = (
+    scores: TStudentSubjectScoreLite[],
+    coRequisiteSubjectId: string
+  ) => {
+    return scores.some((s) => s.subjectVersionId === coRequisiteSubjectId)
+  }
+
+  const isCoRequisiteNotLearned = (record: any) => {
+    if (!coRequisiteSubjects.length) return false
+
+    const scores = (record?.subjectClassStudent || []) as TStudentSubjectScoreLite[]
+
+    return coRequisiteSubjects.some((subject) => !hasLearnedCoRequisiteSubject(scores, subject.id))
+  }
+
+  const renderCoRequisiteInfo = (record: any) => {
+    if (!coRequisiteSubjects.length) return null
+
+    const scores = (record?.subjectClassStudent || []) as TStudentSubjectScoreLite[]
+
+    return (
+      <div className="space-y-2 max-w-[380px] text-xs">
+        {coRequisiteSubjects.map((subject) => {
+          const learned = hasLearnedCoRequisiteSubject(scores, subject.id)
+
+          return (
+            <div key={subject.id} className="border border-gray-200 rounded px-2 py-1">
+              <div className="font-semibold">
+                {subject.code} - {subject.name}
+              </div>
+              <div className={learned ? "text-green-600" : "text-red-600"}>
+                {learned ? "Đã học môn học trước" : "Chưa học môn học trước"}
               </div>
             </div>
           )
@@ -565,8 +616,9 @@ export default function CaNhanTrongLopQuanLy({ hocLai }: RegisterClassProps) {
                 !!tcNoToiThieuLamDoAnValue &&
                 record?.studentSemesterResult?.[0]?.totalFailedCredits >= tcNoToiThieuLamDoAnValue
               const blockedByPrerequisite = isPrerequisiteNotPassed(record)
+              const blockedByCoRequisite = isCoRequisiteNotLearned(record)
 
-              if (blockedByDebtCredits || blockedByPrerequisite) {
+              if (blockedByDebtCredits || blockedByPrerequisite || blockedByCoRequisite) {
                 return
               }
               if (!selectedRowKeys.includes(record.id)) {
@@ -590,12 +642,14 @@ export default function CaNhanTrongLopQuanLy({ hocLai }: RegisterClassProps) {
               } else handleRowSelection(selectedKeys)
             },
             type: "checkbox",
+            fixed: "left",
             getCheckboxProps: (record) => ({
               disabled:
                 (!!tcNoToiThieuLamDoAnValue &&
                   record?.studentSemesterResult?.[0]?.totalFailedCredits >=
                     tcNoToiThieuLamDoAnValue) ||
-                isPrerequisiteNotPassed(record),
+                isPrerequisiteNotPassed(record) ||
+                isCoRequisiteNotLearned(record),
             }),
             columnWidth: 35,
           }}
@@ -603,12 +657,14 @@ export default function CaNhanTrongLopQuanLy({ hocLai }: RegisterClassProps) {
             {
               title: "TT",
               width: 35,
+              fixed: "left",
               align: "center",
               render: (_, __, index) => index + 1 + (currentPage - 1) * numberOfPages,
             },
             {
               title: "Mã",
               dataIndex: "code",
+              fixed: "left",
               align: "center",
               width: 100,
             },
@@ -745,6 +801,7 @@ export default function CaNhanTrongLopQuanLy({ hocLai }: RegisterClassProps) {
               title: "Tiên quyết",
               align: "center",
               width: 50,
+              fixed: "right",
               render: (_, record) => {
                 if (!prerequisiteSubjects.length) return null
                 const blocked = isPrerequisiteNotPassed(record)
@@ -762,6 +819,25 @@ export default function CaNhanTrongLopQuanLy({ hocLai }: RegisterClassProps) {
                     />
                   </Popover>
                   // </div>
+                )
+              },
+            },
+            {
+              title: "Học trước",
+              align: "center",
+              width: 50,
+              fixed: "right",
+              render: (_, record) => {
+                if (!coRequisiteSubjects.length) return null
+                const blocked = isCoRequisiteNotLearned(record)
+
+                return (
+                  <Popover content={renderCoRequisiteInfo(record)} trigger="hover" placement="left">
+                    <InfoCircleOutlined
+                      className={blocked ? "text-red-500" : "text-blue-500"}
+                      style={{ fontSize: 16 }}
+                    />
+                  </Popover>
                 )
               },
             },
