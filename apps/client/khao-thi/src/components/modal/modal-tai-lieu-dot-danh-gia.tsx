@@ -1,5 +1,10 @@
 import { queryClient } from "@api/index"
-import { CloseOutlined, CloudUploadOutlined, DownloadOutlined, PaperClipOutlined } from "@ant-design/icons"
+import {
+  CloseOutlined,
+  CloudUploadOutlined,
+  DownloadOutlined,
+  PaperClipOutlined,
+} from "@ant-design/icons"
 import useSpinner from "@hooks/spinner"
 import { generatePresignedUrl } from "@workspace/libs/api/model"
 import { getRuntimeEnv } from "@workspace/libs/utils"
@@ -25,11 +30,7 @@ const ModalTaiLieuDotDanhGia = () => {
   const [uploading, setUploading] = useState(false)
   const { showSpinner, hideSpinner } = useSpinner()
 
-  const {
-    isOpen,
-    onClose,
-    input,
-  } = useDisclosure<ModalTaiLieuDotDanhGiaInput>({
+  const { isOpen, onClose, input } = useDisclosure<ModalTaiLieuDotDanhGiaInput>({
     tag: "ModalTaiLieuDotDanhGia",
   })
 
@@ -192,12 +193,7 @@ const ModalTaiLieuDotDanhGia = () => {
                   onConfirm={() => handleDelete(file.id)}
                 >
                   <Tooltip title="Xóa">
-                    <Button
-                      type="text"
-                      size="small"
-                      danger
-                      icon={<CloseOutlined />}
-                    />
+                    <Button type="text" size="small" danger icon={<CloseOutlined />} />
                   </Tooltip>
                 </Popconfirm>
               </div>

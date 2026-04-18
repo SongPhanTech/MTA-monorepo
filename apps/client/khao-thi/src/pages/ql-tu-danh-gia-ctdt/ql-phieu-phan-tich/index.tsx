@@ -1,5 +1,10 @@
 import { queryClient } from "@api/index"
-import { CloseOutlined, CloudUploadOutlined, DownloadOutlined, PaperClipOutlined } from "@ant-design/icons"
+import {
+  CloseOutlined,
+  CloudUploadOutlined,
+  DownloadOutlined,
+  PaperClipOutlined,
+} from "@ant-design/icons"
 import useSpinner from "@hooks/spinner"
 import EvaluateLayout from "@layouts/evaluate-layout"
 import { generatePresignedUrl } from "@workspace/libs/api/model"
@@ -137,7 +142,8 @@ const QuanLyPhieuPhanTich = () => {
               <CloudUploadOutlined style={{ color: "#52c41a" }} />
             </p>
             <p className="ant-upload-text text-[#111827] text-base font-normal">
-              <Link className="text-[#2563EB] font-medium">Chọn tệp</Link> hoặc kéo và thả tệp vào đây
+              <Link className="text-[#2563EB] font-medium">Chọn tệp</Link> hoặc kéo và thả tệp vào
+              đây
             </p>
             <span className="text-[#4B5563] text-sm font-normal">
               Định dạng DOC, DOCX (tối đa 50MB)

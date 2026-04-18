@@ -20,7 +20,13 @@ import {
 } from "docx"
 import { saveAs } from "file-saver"
 import { FileDown } from "lucide-react"
-export default function ExportReport({ id, variant = "icon" }: { id: string; variant?: "icon" | "button" }) {
+export default function ExportReport({
+  id,
+  variant = "icon",
+}: {
+  id: string
+  variant?: "icon" | "button"
+}) {
   const role = {
     CHAIRMAN: "Chủ tịch hội đồng",
     VICE_PRESIDENT: "Phó chủ tịch hội đồng",
@@ -825,4 +831,3 @@ export default function ExportReport({ id, variant = "icon" }: { id: string; var
     </Tooltip>
   )
 }
-

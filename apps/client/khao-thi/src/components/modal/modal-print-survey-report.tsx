@@ -164,7 +164,8 @@ const ModalPrintSurvey = () => {
     worksheet.getRow(2).height = 30
 
     worksheet.mergeCells("E1:H2")
-    worksheet.getCell("E1").value = "CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM\nĐộc lập - Tự do - Hạnh phúc"
+    worksheet.getCell("E1").value =
+      "CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM\nĐộc lập - Tự do - Hạnh phúc"
     worksheet.getCell("E1").style = headerTitleStyle
 
     worksheet.mergeCells("A4:H4")
@@ -173,7 +174,7 @@ const ModalPrintSurvey = () => {
     worksheet.getRow(4).height = 20
 
     let rowIndex = 11
-    if (dataTableInfo?.length > 0) {
+    if (dataTableInfo && dataTableInfo?.length > 0) {
       worksheet.mergeCells("A7:C7")
       worksheet.getCell("A7").value = "Thông kê chung"
       worksheet.getCell("A7").style = headerSubtitleStyle1
@@ -343,11 +344,7 @@ const ModalPrintSurvey = () => {
       title={
         <div className="flex items-center gap-2 mr-6">
           <span className="flex-1">Xem trước báo cáo khảo sát</span>
-          <Button
-            size="small"
-            icon={<EditOutlined />}
-            onClick={() => setIsEditing((v) => !v)}
-          >
+          <Button size="small" icon={<EditOutlined />} onClick={() => setIsEditing((v) => !v)}>
             {isEditing ? "Xong" : "Chỉnh sửa"}
           </Button>
           <Button size="small" icon={<FileWordOutlined />} onClick={exportWord}>
@@ -415,9 +412,7 @@ const ModalPrintSurvey = () => {
                               min={0}
                               size="small"
                               value={a.count}
-                              onChange={(val) =>
-                                updateAnswerCount(questionIdx, a.id, val ?? 0)
-                              }
+                              onChange={(val) => updateAnswerCount(questionIdx, a.id, val ?? 0)}
                             />
                             <span className="text-xs text-gray-500">
                               {p?.percent ?? 0}% /{p?.total ?? 0}

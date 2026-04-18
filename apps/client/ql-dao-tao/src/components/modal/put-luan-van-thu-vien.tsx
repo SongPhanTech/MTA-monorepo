@@ -1,59 +1,54 @@
-import DatePicker from "@components/commons/date-picker";
-import FormItem from "@components/commons/form-item";
-import PutFormModal from "@components/commons/put-modal";
-import DocumentPaths from "@components/commons/documentPaths";
-import useSpinner from "@hooks/spinner";
-import { type DocumentFile } from "@workspace/db";
-import {
-  useFindUniqueThesisProject,
-  useUpdateLibrarySubmission,
-} from "@workspace/db/hooks";
-import { Checkbox, Col, Form, Input, message, Row } from "antd";
-import dayjs from "dayjs";
-import { useEffect, useState } from "react";
-import { useDisclosure } from "react-hook-disclosure-modal";
+import DatePicker from "@components/commons/date-picker"
+import FormItem from "@components/commons/form-item"
+import PutFormModal from "@components/commons/put-modal"
+import DocumentPaths from "@components/commons/documentPaths"
+import useSpinner from "@hooks/spinner"
+import { type DocumentFile } from "@workspace/db"
+import { useFindUniqueThesisProject, useUpdateLibrarySubmission } from "@workspace/db/hooks"
+import { Checkbox, Col, Form, Input, message, Row } from "antd"
+import dayjs from "dayjs"
+import { useEffect, useState } from "react"
+import { useDisclosure } from "react-hook-disclosure-modal"
 
-const { TextArea } = Input;
+const { TextArea } = Input
 
 export type PutLibrarySubmissionFormType = {
-  submissionDate?: Date;
-  isHardcopy?: boolean;
-  isSoftcopy?: boolean;
-  librarianNote?: string;
-  documentFile?: DocumentFile[];
-};
+  submissionDate?: Date
+  isHardcopy?: boolean
+  isSoftcopy?: boolean
+  librarianNote?: string
+  documentFile?: DocumentFile[]
+}
 
 const formItemLayout = {
   labelCol: { flex: "0 0 150px" },
   wrapperCol: { flex: "1" },
-};
+}
 
 const PutLibrarySubmission = () => {
-  const [form] = Form.useForm<PutLibrarySubmissionFormType>();
-  const [document, setDocument] = useState<DocumentFile[]>([]);
+  const [form] = Form.useForm<PutLibrarySubmissionFormType>()
+  const [document, setDocument] = useState<DocumentFile[]>([])
   const { isOpen, onClose, input } = useDisclosure<{
-    thesisProjectId: string;
+    thesisProjectId: string
   }>({
     tag: "PutLibrarySubmission",
     onClose: form.resetFields,
-  });
+  })
 
-  const {
-    mutateAsync: updateLibrarySubmission,
-    isPending: isPendingUpdateLibrarySubmission,
-  } = useUpdateLibrarySubmission({
-    onSuccess: (res) => {
-      if (res) {
-        message.success("Cập nhật thông tin nộp luận văn thành công");
-      }
-    },
-    onError: (error: any) => {
-      message.error(error?.message || "Đã xảy ra lỗi khi lưu thông tin");
-    },
-    onSettled: () => {
-      onClose();
-    },
-  });
+  const { mutateAsync: updateLibrarySubmission, isPending: isPendingUpdateLibrarySubmission } =
+    useUpdateLibrarySubmission({
+      onSuccess: (res) => {
+        if (res) {
+          message.success("Cập nhật thông tin nộp luận văn thành công")
+        }
+      },
+      onError: (error: any) => {
+        message.error(error?.message || "Đã xảy ra lỗi khi lưu thông tin")
+      },
+      onSettled: () => {
+        onClose()
+      },
+    })
 
   const { data: thesisProjectData, isLoading: isLoadingThesisProjectData } =
     useFindUniqueThesisProject(
@@ -67,18 +62,18 @@ const PutLibrarySubmission = () => {
           },
         },
       },
-      { enabled: !!input?.thesisProjectId },
-    );
+      { enabled: !!input?.thesisProjectId }
+    )
 
   const onOk = async () => {
-    const data = form.getFieldsValue();
-    const filesInForm = (data as any).documentFile || [];
-    const initialFiles = document;
-    const thesisLibraryId = thesisProjectData?.librarySubmission?.id;
+    const data = form.getFieldsValue()
+    const filesInForm = (data as any).documentFile || []
+    const initialFiles = document
+    const thesisLibraryId = thesisProjectData?.librarySubmission?.id
 
     if (!thesisLibraryId) {
-      message.error("Không tìm thấy thông tin luận văn thư viện");
-      return;
+      message.error("Không tìm thấy thông tin luận văn thư viện")
+      return
     }
 
     await updateLibrarySubmission({
@@ -117,15 +112,13 @@ const PutLibrarySubmission = () => {
           disconnect: initialFiles
             .filter(
               (initialFile) =>
-                !filesInForm.some(
-                  (finalFile: DocumentFile) => finalFile?.id === initialFile?.id,
-                ),
+                !filesInForm.some((finalFile: DocumentFile) => finalFile?.id === initialFile?.id)
             )
             .map((fileToDisconnect) => ({ id: fileToDisconnect?.id })),
         },
       },
-    });
-  };
+    })
+  }
 
   useEffect(() => {
     if (thesisProjectData) {
@@ -135,15 +128,14 @@ const PutLibrarySubmission = () => {
           : undefined,
         isHardcopy: thesisProjectData?.librarySubmission?.isHardcopy,
         isSoftcopy: thesisProjectData?.librarySubmission?.isSoftcopy,
-        librarianNote:
-          thesisProjectData?.librarySubmission?.librarianNote ?? "",
+        librarianNote: thesisProjectData?.librarySubmission?.librarianNote ?? "",
         documentFile: thesisProjectData?.librarySubmission?.documentFile ?? [],
-      });
-      setDocument(thesisProjectData?.librarySubmission?.documentFile ?? []);
+      })
+      setDocument(thesisProjectData?.librarySubmission?.documentFile ?? [])
     } else {
-      setDocument([]);
+      setDocument([])
     }
-  }, [thesisProjectData, form]);
+  }, [thesisProjectData, form])
 
   return (
     <PutFormModal
@@ -179,7 +171,7 @@ const PutLibrarySubmission = () => {
                   }}
                   className="w-full"
                   onChange={(value) => {
-                    form.setFieldsValue({ submissionDate: value as any });
+                    form.setFieldsValue({ submissionDate: value as any })
                   }}
                 />
               </FormItem>
@@ -196,7 +188,7 @@ const PutLibrarySubmission = () => {
               >
                 <Checkbox
                   onChange={(e) => {
-                    form.setFieldsValue({ isHardcopy: e.target.checked });
+                    form.setFieldsValue({ isHardcopy: e.target.checked })
                   }}
                 />
               </FormItem>
@@ -213,7 +205,7 @@ const PutLibrarySubmission = () => {
               >
                 <Checkbox
                   onChange={(e) => {
-                    form.setFieldsValue({ isSoftcopy: e.target.checked });
+                    form.setFieldsValue({ isSoftcopy: e.target.checked })
                   }}
                 />
               </FormItem>
@@ -233,7 +225,7 @@ const PutLibrarySubmission = () => {
               rows={4}
               className="w-full"
               onChange={(e) => {
-                form.setFieldsValue({ librarianNote: e.target.value });
+                form.setFieldsValue({ librarianNote: e.target.value })
               }}
             />
           </FormItem>
@@ -257,7 +249,7 @@ const PutLibrarySubmission = () => {
         </Col>
       </Row>
     </PutFormModal>
-  );
-};
+  )
+}
 
-export default PutLibrarySubmission;
+export default PutLibrarySubmission

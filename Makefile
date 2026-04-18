@@ -3,9 +3,89 @@ DOCKER := $(shell which docker 2>/dev/null || echo docker)
 REGISTRY := ghcr.io/songphantech
 DEV_TAG := latest
 RELEASE_TAG := release
-SERVER := swan1
 COMPOSE_CMD := docker compose up
 IMG_PREFIX := mta-
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Server Profiles
+# Usage: make <target> SERVER_PROFILE=<profile>
+# Example: make deploy-cdn SERVER_PROFILE=app2
+#
+# Each profile defines:
+#   SERVER_HOST      – SSH alias or user@host
+#   SERVER_PASSWORD  – (optional) password for sshpass; leave empty to use SSH keys
+#   BE_DEPLOY_DIR    – directory on server where docker-images are extracted
+#   BE_APP_DIR       – directory on server where BE docker-compose lives
+#   FE_APP_DIR       – directory on server where FE CDN dirs + compose file live
+#   FE_COMPOSE_FILE  – docker-compose filename used for FE services on the server
+#   FE_APP_URL       – base URL injected as NEXT_PUBLIC_APP_URL at build time
+#                      (overrides .env; each profile sets its own domain)
+#   ONLY_OFFICE_ENDPOINT – OnlyOffice server URL injected as
+#                          NEXT_PUBLIC_ONLY_OFFICE_ENDPOINT at build time
+# ─────────────────────────────────────────────────────────────────────────────
+SERVER_PROFILE ?= swan1
+
+# ── Profile: swan1 ────────────────────────────────────────────────────────────
+ifeq ($(SERVER_PROFILE),swan1)
+  SERVER_HOST      := swan1
+  SERVER_PASSWORD  :=
+  BE_DEPLOY_DIR    := ~/mta-deploy
+  BE_APP_DIR       := ~/mta-be
+  FE_APP_DIR       := ~/app
+  FE_COMPOSE_FILE  := app-docker-compose.yml
+  FE_APP_URL       := https://mta.swantech.vn
+  ONLY_OFFICE_ENDPOINT := https://doc.mta.swantech.vn
+
+# ── Profile: swantech_x52 ─────────────────────────────────────────────────────────────
+else ifeq ($(SERVER_PROFILE),swantech_x52)
+  SERVER_HOST      := swantech_x52
+  SERVER_PASSWORD  :=
+  BE_DEPLOY_DIR    := ~/app_mta_sso/mta-be
+  BE_APP_DIR       := ~/app_mta_sso/mta-be
+  FE_APP_DIR       := ~/app_mta_sso
+  FE_COMPOSE_FILE  := app-docker-compose.yml
+  FE_APP_URL       := https://demodaotao.swantech.vn
+  ONLY_OFFICE_ENDPOINT := https://doc.x52.swantech.vn
+
+# ── Profile: local_mta ─────────────────────────────────────────────────────────────
+else ifeq ($(SERVER_PROFILE),local_mta)
+  SERVER_HOST      := local_mta
+  SERVER_PASSWORD  :=
+  BE_DEPLOY_DIR    := ~/mta-prod/be
+  BE_APP_DIR       := ~/mta-prod/be
+  FE_APP_DIR       := ~/app
+  FE_COMPOSE_FILE  := app-docker-compose.yml
+  FE_APP_URL       := http://192.168.0.102
+  ONLY_OFFICE_ENDPOINT := http://192.168.0.102:3100
+
+# ── Profile: app2 ─────────────────────────────────────────────────────────────
+else ifeq ($(SERVER_PROFILE),app2)
+  SERVER_HOST      := app2
+  SERVER_PASSWORD  := Bancntt@2025
+  BE_DEPLOY_DIR    := ~/mta-deploy
+  BE_APP_DIR       := ~/app/be
+  FE_APP_DIR       := ~/app/fe
+  FE_COMPOSE_FILE  := app-docker-compose.yml
+  FE_APP_URL       := http://192.168.100.134
+  ONLY_OFFICE_ENDPOINT := http://192.168.100.133:3100
+
+# ── Fallback: unknown profile ─────────────────────────────────────────────────
+else
+  $(error Unknown SERVER_PROFILE "$(SERVER_PROFILE)". \
+    Add a new profile block in the Makefile or choose from: swan1, swantech_x52, local_mta, app2)
+endif
+
+# SSH / SCP helpers (automatically use sshpass when a password is set)
+ifneq ($(SERVER_PASSWORD),)
+  SSH  := sshpass -p "$(SERVER_PASSWORD)" ssh
+  SCP  := sshpass -p "$(SERVER_PASSWORD)" scp
+else
+  SSH  := ssh
+  SCP  := scp
+endif
+
+# Convenience alias kept for backward-compat with older targets that used SERVER
+SERVER := $(SERVER_HOST)
 
 # Package Names
 PKG_BE_MODEL := be-model
@@ -38,8 +118,16 @@ ROUTER_NAME_ql-ho-so = hrm
 CDN_NAME_khao-thi = ems-cdn
 ROUTER_NAME_khao-thi = ems
 
+# Per-app URL suffix appended to FE_APP_URL → NEXT_PUBLIC_APP_URL
+# Format: <domain from profile><suffix below>  e.g. https://mta.swantech.vn/lms/home
+APP_URL_SUFFIX_ql-dao-tao   = /lms/home
+APP_URL_SUFFIX_khao-thi     = /ems/home
+APP_URL_SUFFIX_dang-ky-hoc  = /dangkyhoc
+APP_URL_SUFFIX_ql-ho-so     = /hrm/home
+APP_URL_SUFFIX_tro-ly-ao    = /chatbot/?mode=tro-ly-ao
+
 # Targets
-.PHONY: all clean push deploy release all-be build-all-be build-all-fe \
+.PHONY: all clean push deploy release all-be build-all-be build-all-fe ship-fe \
 	build-% all-% save-docker-images package-cdn _package-fe-cdn-copy
 
 help:
@@ -92,6 +180,10 @@ build-all-fe:
 		$(MAKE) build-$$pkg; \
 	done
 
+# Build all FE apps, package them, and deploy to the active SERVER_PROFILE in one shot.
+# Usage: make ship-fe SERVER_PROFILE=swantech_x52
+ship-fe: build-all-fe package-cdn deploy-cdn
+
 all-clients:
 	@for pkg in $(FE_PKGS); do \
 		$(MAKE) all-$$pkg; \
@@ -115,22 +207,22 @@ package-cdn:
 	@zip -r -q cdn.zip cdn
 
 deploy-cdn:
-	scp -O cdn.zip app2:~/app/fe/
-	ssh app2 "cd app/fe/ && \
- 	docker compose down; \
+	$(SCP) -O cdn.zip $(SERVER_HOST):$(FE_APP_DIR)/
+	$(SSH) $(SERVER_HOST) "cd $(FE_APP_DIR) && \
+	docker compose -f $(FE_COMPOSE_FILE) down; \
 	rm -rf dang-ky-hoc-cdn/ lms-cdn/ ems-cdn/ hrm-cdn/ chatbot-cdn/; \
 	unzip -q cdn.zip && \
 	mv cdn/* . && \
-	docker compose up -d"
+	docker compose -f $(FE_COMPOSE_FILE) up -d"
 
 deploy-all-be:
 	@rm -rf docker-images.zip
 	@zip -r docker-images.zip docker-images
-	scp -O docker-images.zip app2:~/mta-deploy
-	ssh app2 "cd mta-deploy && \
+	$(SCP) -O docker-images.zip $(SERVER_HOST):$(BE_DEPLOY_DIR)
+	$(SSH) $(SERVER_HOST) "cd $(BE_DEPLOY_DIR) && \
 	unzip -o docker-images.zip && \
 	cd docker-images && ls *.tar.gz | xargs -I {} docker load -i {} && \
-	cd ~/app/be && \
+	cd $(BE_APP_DIR) && \
 	docker rm -f mta-be-exchange mta-be-khao-thi mta-be-model mta-be-portal mta-be-ql-dao-tao mta-be-ql-dao-tao-shared && \
 	docker compose up -d"
 
@@ -145,9 +237,9 @@ deploy-all-be:
 
 deploy-%:
 	$(DOCKER) save $(REGISTRY)/$(IMG_PREFIX)$*:$(DEV_TAG) | gzip > docker-images/$(IMG_PREFIX)$*.tar.gz
-	sshpass -p "Bancntt@2025" scp -O docker-images/$(IMG_PREFIX)$*.tar.gz app2:~/Documents/docker-compose/
-	sshpass -p "Bancntt@2025" ssh app2 "cd Documents/docker-compose/ && \
-	docker load -i $(IMG_PREFIX)$*.tar.gz && \
+	$(SCP) -O docker-images/$(IMG_PREFIX)$*.tar.gz $(SERVER_HOST):$(BE_DEPLOY_DIR)/
+	$(SSH) $(SERVER_HOST) "cd $(BE_DEPLOY_DIR) && \
+	docker load -i docker-images/$(IMG_PREFIX)$*.tar.gz && \
 	docker rm -f $(IMG_PREFIX)$* && \
 	docker compose up $(IMG_PREFIX)$* -d"
 
@@ -156,7 +248,7 @@ deploy-%:
 all-%: build-%
 	@if echo "$(BE_PKGS)" | tr ' ' '\n' | grep -Fxq "$*"; then \
 		$(DOCKER) push $(REGISTRY)/$(IMG_PREFIX)$*:$(DEV_TAG); \
-		ssh $(SERVER) "cd mta-be && $(COMPOSE_CMD) $(IMG_PREFIX)$* -d"; \
+		$(SSH) $(SERVER_HOST) "cd $(BE_APP_DIR) && $(COMPOSE_CMD) $(IMG_PREFIX)$* -d"; \
 	elif echo "$(FE_PKGS)" | tr ' ' '\n' | grep -Fxq "$*"; then \
 		$(MAKE) _deploy-fe PACKAGE=$*; \
 	fi
@@ -173,9 +265,12 @@ _build-be:
 # Internal frontend build
 _build-fe:
 	$(eval CDN_NAME := $(CDN_NAME_$(PACKAGE)))
-	@echo "Building FE package $(PACKAGE) -> $(CDN_NAME)"
+	$(eval APP_URL  := $(FE_APP_URL)$(APP_URL_SUFFIX_$(PACKAGE)))
+	@echo "Building FE package $(PACKAGE) -> $(CDN_NAME) [APP_URL=$(APP_URL)] [ONLY_OFFICE=$(ONLY_OFFICE_ENDPOINT)]"
 	cd apps/client/$(PACKAGE) && \
 	pnpm i && \
+	NEXT_PUBLIC_APP_URL=$(APP_URL) \
+	NEXT_PUBLIC_ONLY_OFFICE_ENDPOINT=$(ONLY_OFFICE_ENDPOINT) \
 	pnpm build && \
 	rm -rf $(CDN_NAME) && \
 	mv out $(CDN_NAME) && \
@@ -187,12 +282,12 @@ _deploy-fe:
 	$(eval ROUTER_NAME := $(ROUTER_NAME_$(PACKAGE)))
 	@echo "Deploying FE package $(PACKAGE) -> cdn:$(CDN_NAME), router:$(ROUTER_NAME)"
 	cd apps/client/$(PACKAGE) && \
-	scp $(CDN_NAME).zip $(SERVER):app && \
-	ssh $(SERVER) "cd app && \
-		docker compose -f app-docker-compose.yml down mta-$(CDN_NAME) router-$(ROUTER_NAME)-api && \
+	$(SCP) $(CDN_NAME).zip $(SERVER_HOST):$(FE_APP_DIR)/ && \
+	$(SSH) $(SERVER_HOST) "cd $(FE_APP_DIR) && \
+		docker compose -f $(FE_COMPOSE_FILE) down mta-$(CDN_NAME) router-$(ROUTER_NAME)-api && \
 		rm -rf $(CDN_NAME) && \
 		unzip -o $(CDN_NAME).zip && \
-		docker compose -f app-docker-compose.yml up mta-$(CDN_NAME) router-$(ROUTER_NAME)-api -d"
+		docker compose -f $(FE_COMPOSE_FILE) up mta-$(CDN_NAME) router-$(ROUTER_NAME)-api -d"
 
 _package-fe-cdn-copy:
 	$(eval CDN_NAME := $(CDN_NAME_$(PACKAGE)))

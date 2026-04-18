@@ -1,56 +1,52 @@
-import FormItem from "@components/commons/form-item";
-import PutFormModal from "@components/commons/put-modal";
-import DatePicker from "@components/commons/date-picker";
-import useSpinner from "@hooks/spinner";
-import { ThesisType } from "@workspace/db/client";
+import FormItem from "@components/commons/form-item"
+import PutFormModal from "@components/commons/put-modal"
+import DatePicker from "@components/commons/date-picker"
+import useSpinner from "@hooks/spinner"
+import { ThesisType } from "@workspace/db/client"
 import {
   useCreateStudentThesisRegistration,
   useCreateThesisProject,
   useFindManyExpertProfile,
   useFindManyFixedClass,
   useFindManyStudent,
-} from "@workspace/db/hooks";
-import { Col, Form, Input, message, Select } from "antd";
-import dayjs from "dayjs";
-import { useState } from "react";
-import { useDisclosure } from "react-hook-disclosure-modal";
-import "dayjs/locale/vi";
+} from "@workspace/db/hooks"
+import { Col, Form, Input, message, Select } from "antd"
+import dayjs from "dayjs"
+import { useState } from "react"
+import { useDisclosure } from "react-hook-disclosure-modal"
+import "dayjs/locale/vi"
 
 type PutLibrarySubmissionCreateForm = {
-  fixedClassId?: string;
-  studentId?: string;
-  supervisorId?: string;
-  coSupervisorId?: string;
-  title?: string;
-  submissionDate?: Date;
-};
+  fixedClassId?: string
+  studentId?: string
+  supervisorId?: string
+  coSupervisorId?: string
+  title?: string
+  submissionDate?: Date
+}
 
-dayjs.locale("vi");
+dayjs.locale("vi")
 
 const PutLibrarySubmissionCreate = () => {
-  const [form] = Form.useForm<PutLibrarySubmissionCreateForm>();
+  const [form] = Form.useForm<PutLibrarySubmissionCreateForm>()
   const { isOpen, onClose, input } = useDisclosure<{ thesisSessionId?: string }>({
     tag: "PutLibrarySubmissionCreate",
     onClose: form.resetFields,
-  });
-  const fixedClassId = Form.useWatch("fixedClassId", form);
-  const [searchExpert, setSearchExpert] = useState("");
+  })
+  const fixedClassId = Form.useWatch("fixedClassId", form)
+  const [searchExpert, setSearchExpert] = useState("")
 
-  const {
-    mutateAsync: createThesisProject,
-    isPending: isPendingCreateThesisProject,
-  } = useCreateThesisProject({
-    onSuccess: (res) => {
-      if (!res?.id) {
-        message.error("Không thể tạo dự án luận văn");
-      }
-    },
-    onError: (error: any) => {
-      message.error(
-        error?.info?.message || "Đã xảy ra lỗi khi tạo dự án luận văn",
-      );
-    },
-  });
+  const { mutateAsync: createThesisProject, isPending: isPendingCreateThesisProject } =
+    useCreateThesisProject({
+      onSuccess: (res) => {
+        if (!res?.id) {
+          message.error("Không thể tạo dự án luận văn")
+        }
+      },
+      onError: (error: any) => {
+        message.error(error?.info?.message || "Đã xảy ra lỗi khi tạo dự án luận văn")
+      },
+    })
 
   const {
     mutateAsync: createStudentThesisRegistration,
@@ -58,21 +54,18 @@ const PutLibrarySubmissionCreate = () => {
   } = useCreateStudentThesisRegistration({
     onSuccess: (res) => {
       if (res) {
-        message.success("Tạo đăng ký luận văn cho sinh viên thành công");
+        message.success("Tạo đăng ký luận văn cho sinh viên thành công")
       }
-      onClose();
+      onClose()
     },
     onError: (error: any) => {
-      message.error(
-        error?.info?.message ||
-          "Đã xảy ra lỗi khi tạo đăng ký luận văn cho sinh viên",
-      );
+      message.error(error?.info?.message || "Đã xảy ra lỗi khi tạo đăng ký luận văn cho sinh viên")
     },
-  });
+  })
 
   const { data: fixedClasses = [] } = useFindManyFixedClass({
     orderBy: [{ name: "asc" }, { code: "asc" }],
-  });
+  })
 
   const { data: students = [] } = useFindManyStudent(
     {
@@ -86,8 +79,8 @@ const PutLibrarySubmissionCreate = () => {
     },
     {
       enabled: !!fixedClassId,
-    },
-  );
+    }
+  )
 
   const { data: expertProfiles = [] } = useFindManyExpertProfile({
     where: {
@@ -115,12 +108,12 @@ const PutLibrarySubmissionCreate = () => {
         },
       },
     },
-  });
+  })
 
   const onOk = async (values?: PutLibrarySubmissionCreateForm) => {
-    if (!values?.fixedClassId) return;
+    if (!values?.fixedClassId) return
 
-    if (!values?.studentId) return;
+    if (!values?.studentId) return
 
     const thesisProject = await createThesisProject({
       data: {
@@ -138,10 +131,10 @@ const PutLibrarySubmissionCreate = () => {
           },
         },
       },
-    });
+    })
 
     if (!thesisProject?.id) {
-      return;
+      return
     }
 
     await createStudentThesisRegistration({
@@ -149,19 +142,17 @@ const PutLibrarySubmissionCreate = () => {
         studentId: values.studentId,
         thesisProjectId: thesisProject?.id,
       },
-    });
-  };
+    })
+  }
 
   const handleSearchExpert = (value: string) => {
-    setSearchExpert(value);
-  };
+    setSearchExpert(value)
+  }
 
   return (
     <PutFormModal
       open={isOpen}
-      confirmLoading={
-        isPendingCreateThesisProject || isPendingCreateStudentThesisRegistration
-      }
+      confirmLoading={isPendingCreateThesisProject || isPendingCreateStudentThesisRegistration}
       form={form}
       onFinish={onOk}
       onCancel={onClose}
@@ -193,9 +184,7 @@ const PutLibrarySubmissionCreate = () => {
             }))}
             showSearch
             filterOption={(inputValue, option) =>
-              String(option?.label)
-                .toLowerCase()
-                .includes(inputValue.toLowerCase())
+              String(option?.label).toLowerCase().includes(inputValue.toLowerCase())
             }
           />
         </FormItem>
@@ -220,11 +209,7 @@ const PutLibrarySubmissionCreate = () => {
       </Col>
 
       <Col span={12}>
-        <FormItem
-          form={form}
-          name="supervisorId"
-          label="Giảng viên hướng dẫn 1"
-        >
+        <FormItem form={form} name="supervisorId" label="Giảng viên hướng dẫn 1">
           <Select
             placeholder="Chọn giảng viên hướng dẫn 1"
             showSearch
@@ -239,11 +224,7 @@ const PutLibrarySubmissionCreate = () => {
         </FormItem>
       </Col>
       <Col span={12}>
-        <FormItem
-          form={form}
-          name="coSupervisorId"
-          label="Giảng viên hướng dẫn 2"
-        >
+        <FormItem form={form} name="coSupervisorId" label="Giảng viên hướng dẫn 2">
           <Select
             placeholder="Chọn giảng viên hướng dẫn 2"
             showSearch
@@ -258,7 +239,7 @@ const PutLibrarySubmissionCreate = () => {
         </FormItem>
       </Col>
     </PutFormModal>
-  );
-};
+  )
+}
 
-export default PutLibrarySubmissionCreate;
+export default PutLibrarySubmissionCreate

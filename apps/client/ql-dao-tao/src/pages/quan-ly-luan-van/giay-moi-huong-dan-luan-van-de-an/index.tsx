@@ -6,9 +6,7 @@ function GiayMoiHuongDanLuanVanDeAnPage() {
   return <QuanLyLuanVan exportExcel={exportGiayMoiHdlv} />
 }
 
-GiayMoiHuongDanLuanVanDeAnPage.getLayout = function getLayout(
-  page: React.ReactElement
-) {
+GiayMoiHuongDanLuanVanDeAnPage.getLayout = function getLayout(page: React.ReactElement) {
   return <DefaultLayout>{page}</DefaultLayout>
 }
 
