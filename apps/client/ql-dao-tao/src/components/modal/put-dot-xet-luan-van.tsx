@@ -296,8 +296,8 @@ const PutThesisSession = () => {
         </FormItem>
       </Col>
       <Col span={12}>
-        <FormItem form={form} name="deputy" label="Phó phòng sau đại học">
-          <Input placeholder="Nhập phó phòng sau đại học" />
+        <FormItem form={form} name="deputy" label="Phó trưởng phòng sau đại học">
+          <Input placeholder="Nhập phó trưởng phòng sau đại học" />
         </FormItem>
       </Col>
       <Col span={12}>

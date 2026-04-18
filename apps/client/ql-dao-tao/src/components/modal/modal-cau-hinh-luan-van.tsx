@@ -57,6 +57,17 @@ import { validateScore } from "@lib/utils"
 // import  {useEffect} from 'react'
 const { Title } = Typography
 
+function formatDefenseSessionClock(startTime: Date | string | null | undefined): string {
+  if (startTime === null || startTime === undefined) {
+    return ""
+  }
+  const d = typeof startTime === "string" ? new Date(startTime) : startTime
+  if (Number.isNaN(d.getTime())) {
+    return ""
+  }
+  return `${String(d.getUTCHours()).padStart(2, "0")}:${String(d.getUTCMinutes()).padStart(2, "0")}`
+}
+
 export type CouncilMemberType = {
   expertProfileId?: string
   role: string
@@ -130,7 +141,6 @@ const ModalCauHinhLuanVan = () => {
   const [attachments, setAttachments] = useState<DocumentFile[]>([])
   const [form] = Form.useForm<ModalCauHinhLuanVanType>()
   const [activeTabKey, setActiveTabKey] = useState<string>("defenseConfig")
-  /** Tránh gọi setFieldsValue mỗi khi thesisProjectData đổi reference (refetch) — sẽ xóa dữ liệu user đang nhập khi đổi tab. */
   const formHydratedKeyRef = useRef<string | null>(null)
   const { isOpen, onClose, input } = useDisclosure<{
     thesisProjectId: string
@@ -872,7 +882,7 @@ const ModalCauHinhLuanVan = () => {
                 }}
                 options={defenseSessionData.map((session) => ({
                   value: session.id,
-                  label: session.startTime ? dayjs(session.startTime).format("HH:mm") : "",
+                  label: session.startTime ? formatDefenseSessionClock(session.startTime) : "",
                 }))}
               />
             </FormItem>
