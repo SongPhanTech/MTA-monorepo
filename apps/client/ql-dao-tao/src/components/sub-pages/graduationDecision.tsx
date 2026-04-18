@@ -45,7 +45,7 @@ import { useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 import { removeVietnameseTones } from "@/utils/removeVietnamese"
 import { formatDate } from "@lib/utils"
-
+import ExcelJS from "exceljs"
 interface GraduationDecisionProps {
   sessionId: string
 }
@@ -79,7 +79,7 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
   const isFiltering = useMemo(() => {
     return Object.values(filters).some((value) => !!value)
   }, [filters])
-
+  const [isExportingPhuLucTemplate, setIsExportingPhuLucTemplate] = useState(false)
   const where: Prisma.GraduationDecisionWhereInput = useMemo(() => {
     if (!isFiltering) {
       return {
@@ -229,7 +229,277 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
     take: numberOfPages,
     skip: (currentPage - 1) * numberOfPages,
   })
+  const handleExportPhuLucTemplate = async () => {
+    setIsExportingPhuLucTemplate(true)
+    try {
+      const wb = new ExcelJS.Workbook()
+      const ws = wb.addWorksheet("PhuLucVanBang")
+      const FONT = "Times New Roman"
 
+      ws.columns = [
+        { width: 6 }, // A - STT
+        { width: 38 }, // B - Tên học phần
+        { width: 9 }, // C - Số tín chỉ
+        { width: 12 }, // D - Điểm 10
+        { width: 12 }, // E - Điểm 4
+        { width: 12 }, // F - Điểm chữ
+      ]
+
+      const thin: ExcelJS.BorderStyle = "thin"
+      const border = {
+        top: { style: thin },
+        left: { style: thin },
+        bottom: { style: thin },
+        right: { style: thin },
+      }
+      const center: Partial<ExcelJS.Alignment> = { horizontal: "center", vertical: "middle" }
+      const middle: Partial<ExcelJS.Alignment> = { horizontal: "left", vertical: "middle" }
+
+      let r = 1
+
+      ws.mergeCells(`A${r}:C${r}`)
+      const c1 = ws.getCell(`A${r}`)
+      c1.value = "BỘ QUỐC PHÒNG"
+      c1.font = { name: FONT, size: 11 }
+      c1.alignment = center
+
+      ws.mergeCells(`D${r}:F${r}`)
+      const c2 = ws.getCell(`D${r}`)
+      c2.value = "CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM"
+      c2.font = { name: FONT, size: 11, bold: true }
+      c2.alignment = center
+      r++
+
+      ws.mergeCells(`A${r}:C${r}`)
+      const c3 = ws.getCell(`A${r}`)
+      c3.value = "HỌC VIỆN KỸ THUẬT QUÂN SỰ"
+      c3.font = { name: FONT, size: 11, bold: true }
+      c3.alignment = center
+
+      ws.mergeCells(`D${r}:F${r}`)
+      const c4 = ws.getCell(`D${r}`)
+      c4.value = "Độc lập - Tự do - Hạnh phúc"
+      c4.font = { name: FONT, size: 11, italic: true }
+      c4.alignment = center
+      r++
+
+      ws.getRow(r).height = 4
+      r++
+
+      ws.mergeCells(`A${r}:F${r}`)
+      const title = ws.getCell(`A${r}`)
+      title.value = "PHỤ LỤC VĂN BẰNG"
+      title.font = { name: FONT, size: 14, bold: true }
+      title.alignment = center
+      ws.getRow(r).height = 26
+      r++
+
+      ws.mergeCells(`A${r}:F${r}`)
+      ws.getCell(`A${r}`).value = "(Kèm theo bằng tốt nghiệp số hiệu ...)"
+      ws.getCell(`A${r}`).font = { name: FONT, size: 10, italic: true }
+      ws.getCell(`A${r}`).alignment = center
+      r += 2
+
+      const infoLeft = [
+        "Họ và tên:",
+        "Mã sinh viên:",
+        "Ngôn ngữ đào tạo:",
+        "Ngành đào tạo:",
+        "Chuyên ngành:",
+      ]
+      const infoRight = [
+        "Ngày sinh:",
+        "Năm nhập học:",
+        "Thời gian đào tạo:",
+        "Bậc đào tạo:",
+        "Hình thức đào tạo:",
+      ]
+
+      for (let i = 0; i < infoLeft.length; i++) {
+        ws.getRow(r).height = 18
+
+        ws.getCell(`A${r}`).value = infoLeft[i]
+        ws.getCell(`A${r}`).font = { name: FONT, size: 10, color: { argb: "FF656565" } }
+        ws.getCell(`A${r}`).alignment = middle
+
+        ws.mergeCells(`B${r}:C${r}`)
+        ws.getCell(`B${r}`).border = { bottom: { style: thin } }
+
+        ws.getCell(`D${r}`).value = infoRight[i]
+        ws.getCell(`D${r}`).font = { name: FONT, size: 10, color: { argb: "FF656565" } }
+        ws.getCell(`D${r}`).alignment = middle
+
+        ws.mergeCells(`E${r}:F${r}`)
+        ws.getCell(`E${r}`).border = { bottom: { style: thin } }
+
+        r++
+      }
+      r++
+
+      ws.getRow(r).height = 22
+      const gray = {
+        type: "pattern" as const,
+        pattern: "solid" as const,
+        fgColor: { argb: "FFD9D9D9" },
+      }
+
+      ws.mergeCells(`A${r}:A${r + 1}`)
+      const hTT = ws.getCell(`A${r}`)
+      hTT.value = "TT"
+      hTT.font = { name: FONT, bold: true, size: 10 }
+      hTT.alignment = center
+      hTT.border = border
+      hTT.fill = gray
+
+      ws.mergeCells(`B${r}:B${r + 1}`)
+      const hTen = ws.getCell(`B${r}`)
+      hTen.value = "Tên học phần"
+      hTen.font = { name: FONT, bold: true, size: 10 }
+      hTen.alignment = center
+      hTen.border = border
+      hTen.fill = gray
+
+      ws.mergeCells(`C${r}:C${r + 1}`)
+      const hTC = ws.getCell(`C${r}`)
+      hTC.value = "Số tín chỉ"
+      hTC.font = { name: FONT, bold: true, size: 10 }
+      hTC.alignment = center
+      hTC.border = border
+      hTC.fill = gray
+
+      ws.mergeCells(`D${r}:F${r}`)
+      const hDiem = ws.getCell(`D${r}`)
+      hDiem.value = "Điểm học phần"
+      hDiem.font = { name: FONT, bold: true, size: 10 }
+      hDiem.alignment = center
+      hDiem.border = border
+      hDiem.fill = gray
+      r++
+
+      ws.getRow(r).height = 32
+      ;["D", "E", "F"].forEach((col, idx) => {
+        const labels = ["Thang điểm 10", "Thang điểm 4", "Thang điểm chữ"]
+        const cell = ws.getCell(`${col}${r}`)
+        cell.value = labels[idx]
+        cell.font = { name: FONT, bold: true, size: 10 }
+        cell.alignment = { ...center, wrapText: true }
+        cell.border = border
+        cell.fill = gray
+      })
+      r++
+
+      for (let i = 1; i <= 15; i++) {
+        ws.getRow(r).height = 18
+        ;["A", "B", "C", "D", "E", "F"].forEach((col) => {
+          const cell = ws.getCell(`${col}${r}`)
+          cell.value = col === "A" ? i : ""
+          cell.font = { name: FONT, size: 10 }
+          cell.alignment = col === "A" ? center : middle
+          cell.border = border
+        })
+        r++
+      }
+
+      ws.mergeCells(`A${r}:F${r}`)
+      const gradRow = ws.getCell(`A${r}`)
+      gradRow.value = "Học phần tốt nghiệp"
+      gradRow.font = { name: FONT, bold: true, size: 10 }
+      gradRow.alignment = middle
+      gradRow.border = border
+      gradRow.fill = { type: "pattern", pattern: "solid", fgColor: { argb: "FFEFEFEF" } }
+      r++
+
+      for (let i = 0; i < 3; i++) {
+        ws.getRow(r).height = 18
+        ;["A", "B", "C", "D", "E", "F"].forEach((col) => {
+          ws.getCell(`${col}${r}`).border = border
+          ws.getCell(`${col}${r}`).font = { name: FONT, size: 10 }
+        })
+        r++
+      }
+      r++
+
+      ws.mergeCells(`A${r}:F${r}`)
+      ws.getCell(`A${r}`).value = "Tổng số tín chỉ: ............"
+      ws.getCell(`A${r}`).font = { name: FONT, size: 10 }
+      r++
+
+      ws.mergeCells(`A${r}:F${r}`)
+      ws.getCell(`A${r}`).value =
+        "Điểm trung bình chung tích lũy toàn khoá (Thang điểm 4): ............"
+      ws.getCell(`A${r}`).font = { name: FONT, size: 10 }
+      r++
+
+      ws.mergeCells(`A${r}:F${r}`)
+      ws.getCell(`A${r}`).value = "Xếp hạng: ............"
+      ws.getCell(`A${r}`).font = { name: FONT, size: 10 }
+      r += 2
+      ws.mergeCells(`D${r}:F${r}`)
+      ws.getCell(`D${r}`).value = "Hà Nội, ngày ...... tháng ...... năm ......"
+      ws.getCell(`D${r}`).font = { name: FONT, size: 10, italic: true }
+      ws.getCell(`D${r}`).alignment = center
+      r++
+
+      ws.mergeCells(`D${r}:F${r}`)
+      ws.getCell(`D${r}`).value = "TL. GIÁM ĐỐC"
+      ws.getCell(`D${r}`).font = { name: FONT, size: 10, bold: true }
+      ws.getCell(`D${r}`).alignment = center
+      r++
+
+      ws.mergeCells(`D${r}:F${r}`)
+      ws.getCell(`D${r}`).value = "Trưởng phòng đào tạo"
+      ws.getCell(`D${r}`).font = { name: FONT, size: 10, bold: true }
+      ws.getCell(`D${r}`).alignment = center
+      r += 4
+
+      ws.mergeCells(`D${r}:F${r}`)
+      ws.getCell(`D${r}`).value = "Họ tên người ký"
+      ws.getCell(`D${r}`).font = { name: FONT, size: 10 }
+      ws.getCell(`D${r}`).alignment = center
+      r += 2
+      ;[
+        { text: "Ghi chú:", bold: true, italic: false },
+        { text: "- Học phần có đánh dấu * là học phần tự chọn", bold: false, italic: true },
+        {
+          text: "- Học phần in nghiêng và học phần bổ sung kiến thức không được tính vào trung bình chung tích lũy",
+          bold: false,
+          italic: true,
+        },
+        { text: "- Hệ thống điểm được quy định theo:", bold: false, italic: true },
+      ].forEach(({ text, bold, italic }) => {
+        ws.mergeCells(`A${r}:F${r}`)
+        ws.getCell(`A${r}`).value = text
+        ws.getCell(`A${r}`).font = { name: FONT, size: 9, bold, italic }
+        ws.getRow(r).height = 16
+        r++
+      })
+
+      ;["Thang điểm chữ", "Thang điểm 4", "Thang điểm 10"].forEach((label) => {
+        ws.getCell(`A${r}`).value = label
+        ws.getCell(`A${r}`).font = { name: FONT, size: 9, bold: true }
+        ws.getRow(r).height = 16
+        r++
+      })
+
+      ws.mergeCells(`A${r}:F${r}`)
+      ws.getCell(`A${r}`).value =
+        "- Phân hạng tốt nghiệp theo thang điểm 4: ............. (Loại tốt nghiệp có thể bị hạ mức theo quy chế đào tạo đại học của HVKTQS được áp dụng tại thời điểm xét tốt nghiệp)."
+      ws.getCell(`A${r}`).font = { name: FONT, size: 9, italic: true }
+      ws.getCell(`A${r}`).alignment = { wrapText: true }
+      ws.getRow(r).height = 28
+      const buf = await wb.xlsx.writeBuffer()
+      const blob = new Blob([buf], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      })
+      saveAs(blob, "mau_phu_luc_van_bang.xlsx")
+      message.success("Xuất file thành công")
+    } catch (error) {
+      console.error(error)
+      message.error("Đã xảy ra lỗi, vui lòng thử lại")
+    } finally {
+      setIsExportingPhuLucTemplate(false)
+    }
+  }
   const { data: count } = useCountGraduationDecision({ where })
 
   const { showSpinner, hideSpinner } = useSpinner()
@@ -338,7 +608,7 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
         const ngayCap = diplomaIssueDate ? dayjs(diplomaIssueDate).format("D MMMM YYYY") : ""
 
         return {
-          sheet: id ? `${id}` : `sheet_${index + 1}`, // 🟢 tránh undefined
+          sheet: id ? `${id}` : `sheet_${index + 1}`,
           tableStartCell: { row: 24, col: 1 },
           rows: [{ cells: [{ value: null, colSpan: 18, border: false }] }],
           data: {
@@ -394,6 +664,7 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
   const { onOpen: onOpenPhuLucVanBang } = useDisclosure<{
     dataTable: any
     dataStudent: any
+    sessionId?: string
   }>({
     tag: "ModalPrintToKQHT",
   })
@@ -624,6 +895,14 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
           >
             <FileDown />
             Xuất mẫu file phụ lục văn bằng
+          </Button>
+          <Button
+            type="primary"
+            onClick={handleExportPhuLucTemplate}
+            loading={isExportingPhuLucTemplate}
+          >
+            <FileDown />
+            Xuất phụ lục văn bằng
           </Button>
           <Button type="primary" onClick={() => handleExportResult()} loading={isExporting}>
             <Sheet />

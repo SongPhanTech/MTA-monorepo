@@ -147,12 +147,18 @@ const PutSupervisorPaymentRecord = () => {
   const { data: thesisProjects = [] } = useFindManyThesisProject(
     {
       where: {
-        OR: [{ supervisorId: { not: null } }, { coSupervisorId: { not: null } }],
-        ...(selectedExpertId
-          ? {
-              OR: [{ supervisorId: selectedExpertId }, { coSupervisorId: selectedExpertId }],
-            }
-          : {}),
+        AND: [
+          {
+            OR: [{ supervisorId: { not: null } }, { coSupervisorId: { not: null } }],
+          },
+          ...(selectedExpertId
+            ? [
+                {
+                  OR: [{ supervisorId: selectedExpertId }, { coSupervisorId: selectedExpertId }],
+                },
+              ]
+            : []),
+        ],
       },
       include: {
         supervisor: true,
