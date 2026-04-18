@@ -104,43 +104,43 @@ export default function ArchivedAward() {
       award: {
         ...(filters.awardName
           ? {
-              name: {
-                contains: filters.awardName,
-                mode: "insensitive" as const,
-              },
-            }
+            name: {
+              contains: filters.awardName,
+              mode: "insensitive" as const,
+            },
+          }
           : {}),
       },
       ...(filters.bonusScoreStatus
         ? {
-            studentSubjectScore: {
-              some: {
-                status: { in: filters.bonusScoreStatus },
-              },
+          studentSubjectScore: {
+            some: {
+              status: { in: filters.bonusScoreStatus },
             },
-          }
+          },
+        }
         : {}),
       student: {
         fixedClass: {
           ...(filters.fixedClassCode
             ? {
-                code: {
-                  contains: filters.fixedClassCode,
-                  mode: "insensitive" as const,
-                },
-              }
+              code: {
+                contains: filters.fixedClassCode,
+                mode: "insensitive" as const,
+              },
+            }
             : {}),
           trainingCourse: { trainingObjectTypeId },
         },
         ...(filters.name
           ? {
-              userProfile: {
-                fullname: {
-                  contains: filters.name,
-                  mode: "insensitive" as const,
-                },
+            userProfile: {
+              fullname: {
+                contains: filters.name,
+                mode: "insensitive" as const,
               },
-            }
+            },
+          }
           : {}),
       },
     }
@@ -275,39 +275,54 @@ export default function ArchivedAward() {
       <Col span={24}>
         <Row gutter={[16, 16]} align="top" justify="space-between">
           <Col span={24} className="mt-3">
-            <Flex justify="end">
-              {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_DIEM_OLYMPIC, "DUYET") && (
-                <>
-                  <Button
-                    onClick={handleOpenReject}
-                    disabled={!selectedRowKeys.length}
-                    type="default"
-                  >
-                    Từ chối
-                  </Button>
-                  {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_DIEM_OLYMPIC, "DUYET") && (
+            <Flex justify="space-between" align="center">
+              <Flex align="center" gap={8}>
+                <div
+                  style={{
+                    width: 16,
+                    height: 16,
+                    backgroundColor: '#52c41a', // Màu xanh lá đậm chuẩn
+                    borderRadius: '2px',
+                  }}
+                />
+                <span style={{ fontSize: '14px', fontWeight: 500, color: '#434343' }}>
+                  Điểm đã được cộng
+                </span>
+              </Flex>
+              <Flex justify="end">
+                {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_DIEM_OLYMPIC, "DUYET") && (
+                  <>
                     <Button
-                      className="ml-3"
-                      onClick={handleOpenAprove}
+                      onClick={handleOpenReject}
                       disabled={!selectedRowKeys.length}
-                      type="primary"
+                      type="default"
                     >
-                      Phê duyệt
+                      Từ chối
                     </Button>
-                  )}
-                </>
-              )}
-              {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_DIEM_OLYMPIC, "THEM") && (
-                <Button onClick={handleModal} type="primary" className="ml-3">
-                  Thêm mới
-                </Button>
-              )}
-              {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_DIEM_OLYMPIC, "XEM") && (
-                <Button onClick={handleExportModal} type="primary" className="ml-3">
-                  <DownloadOutlined />
-                  Xuất thống kê
-                </Button>
-              )}
+                    {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_DIEM_OLYMPIC, "DUYET") && (
+                      <Button
+                        className="ml-3"
+                        onClick={handleOpenAprove}
+                        disabled={!selectedRowKeys.length}
+                        type="primary"
+                      >
+                        Phê duyệt
+                      </Button>
+                    )}
+                  </>
+                )}
+                {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_DIEM_OLYMPIC, "THEM") && (
+                  <Button onClick={handleModal} type="primary" className="ml-3">
+                    Thêm mới
+                  </Button>
+                )}
+                {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_DIEM_OLYMPIC, "XEM") && (
+                  <Button onClick={handleExportModal} type="primary" className="ml-3">
+                    <DownloadOutlined />
+                    Xuất thống kê
+                  </Button>
+                )}
+              </Flex>
             </Flex>
           </Col>
         </Row>
@@ -463,7 +478,28 @@ export default function ArchivedAward() {
               width: 70,
               align: "center",
               render: (__, record) => {
-                return record?.studentSubjectScore[0]?.studentSubjectScore?.finalScore?.toNumber()
+                // 1. Lấy trạng thái cộng điểm
+                const status = record?.studentSubjectScore[0]?.status;
+
+                // 2. Lấy giá trị điểm
+                const score = record?.studentSubjectScore[0]?.studentSubjectScore?.finalScore?.toNumber();
+
+                if (score === undefined || score === null) return "-";
+
+                // 3. Logic tô màu: Chỉ lấy màu khi trạng thái là APPROVED
+                const isApproved = status === "APPROVED";
+                const color = isApproved ? getArchivedCertificateStatusColor(status) : "inherit";
+
+                return (
+                  <span
+                    style={{
+                      color: color,
+                      fontWeight: isApproved ? "bold" : "normal" // In đậm nếu đã duyệt để dễ phân biệt
+                    }}
+                  >
+                    {score}
+                  </span>
+                );
               },
             },
             {

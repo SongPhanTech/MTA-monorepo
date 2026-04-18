@@ -132,6 +132,7 @@ export default {
     "QUAN_LY_HO_SO_QL_SINH_VIEN_ID": "/quan-ly-ho-so/ql-sinh-vien/[id]",
     "QUAN_LY_HO_SO_QL_SINH_VIEN": "/quan-ly-ho-so/ql-sinh-vien",
     "QUAN_LY_LUAN_VAN_CAU_HINH_THANH_TOAN_LUAN_VAN": "/quan-ly-luan-van/cau-hinh-thanh-toan-luan-van",
+    "QUAN_LY_LUAN_VAN_CAU_HINH_THOI_GIAN_BAO_VE": "/quan-ly-luan-van/cau-hinh-thoi-gian-bao-ve",
     "QUAN_LY_LUAN_VAN_DANH_MUC_LUAN_VAN_KHOA": "/quan-ly-luan-van/danh-muc-luan-van-khoa",
     "QUAN_LY_LUAN_VAN_DANH_MUC_LUAN_VAN_P7": "/quan-ly-luan-van/danh-muc-luan-van-p7",
     "QUAN_LY_LUAN_VAN_DANH_SACH_BAN_SAO_QDHD": "/quan-ly-luan-van/danh-sach-ban-sao-qdhd",

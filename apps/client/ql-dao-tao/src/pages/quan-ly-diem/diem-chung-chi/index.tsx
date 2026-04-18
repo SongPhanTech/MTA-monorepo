@@ -12,6 +12,7 @@ import {
   useFindManyTrainingCourse,
   useFindManyTrainingField,
   useFindManyTrainingMajor,
+  useFindManyCertificate,
   useUpdateManyArchivedCertificate,
 } from "@workspace/db/hooks"
 import { exportArchivedCertificateExcel, useCertificateScore } from "@workspace/libs/api/training"
@@ -44,6 +45,7 @@ export default function ArchivedCertificate() {
   const [showLanguageScoreColumns, setShowLanguageScoreColumns] = useState(true)
   const [isExportModalOpen, setIsExportModalOpen] = useState(false)
   const [exportTrainingCourseId, setExportTrainingCourseId] = useState<string | undefined>()
+  const [exportCertificateId, setExportCertificateId] = useState<string | undefined>()
 
   const { showSpinner, hideSpinner } = useSpinner()
 
@@ -83,6 +85,11 @@ export default function ArchivedCertificate() {
   const { data: trainingFieldData = [] } = useFindManyTrainingField()
 
   const { data: trainingMajorData = [] } = useFindManyTrainingMajor({
+    orderBy: { name: "asc" },
+  })
+
+  const { data: certificateData = [] } = useFindManyCertificate({
+    where: { deletedAt: null },
     orderBy: { name: "asc" },
   })
 
@@ -365,6 +372,12 @@ export default function ArchivedCertificate() {
     setIsExportModalOpen(true)
   }
 
+  const handleCloseExportModal = () => {
+    setIsExportModalOpen(false)
+    setExportTrainingCourseId(undefined)
+    setExportCertificateId(undefined)
+  }
+
   const handleExportExcel = async () => {
     if (!trainingObjectTypeId) {
       message.warning("Vui lòng chọn đối tượng đào tạo")
@@ -405,12 +418,12 @@ export default function ArchivedCertificate() {
         trainingObjectTypeId,
         trainingCourseId: exportTrainingCourseId,
         fixedClassId: filters.fixedClassId || undefined,
-        certificateId: filters.certificateId || undefined,
+        certificateId: exportCertificateId || undefined,
       })
       if (res.status === 200) {
         saveAs(res.data, "Danh_sach_diem_chung_chi.xlsx")
         message.success("Xuất Excel thành công")
-        setIsExportModalOpen(false)
+        handleCloseExportModal()
       } else {
         const error: any = new Error()
         error.response = { status: res.status, data: res.data }
@@ -843,26 +856,49 @@ export default function ArchivedCertificate() {
       </Col>
 
       <Modal
-        title="Chọn khóa học để xuất Excel"
+        title="Xuất Excel danh sách chứng chỉ"
         open={isExportModalOpen}
-        onCancel={() => setIsExportModalOpen(false)}
+        onCancel={handleCloseExportModal}
         onOk={handleExportExcel}
         okText="Xuất Excel"
         cancelText="Hủy"
       >
-        <Select
-          className="w-full"
-          placeholder="Chọn khóa học"
-          options={trainingCourseData.map((item: TrainingCourse) => ({
-            label: item.name,
-            value: item.id,
-          }))}
-          value={exportTrainingCourseId}
-          onChange={(value) => setExportTrainingCourseId(value)}
-          allowClear
-          showSearch
-          optionFilterProp="label"
-        />
+        <Flex vertical gap={12} className="mt-4">
+          <div>
+            <div className="mb-1 text-sm font-medium">
+              Khóa học <span className="text-red-500">*</span>
+            </div>
+            <Select
+              className="w-full"
+              placeholder="Chọn khóa học"
+              options={trainingCourseData.map((item: TrainingCourse) => ({
+                label: item.name,
+                value: item.id,
+              }))}
+              value={exportTrainingCourseId}
+              onChange={(value) => setExportTrainingCourseId(value)}
+              allowClear
+              showSearch
+              optionFilterProp="label"
+            />
+          </div>
+          <div>
+            <div className="mb-1 text-sm font-medium">Loại chứng chỉ</div>
+            <Select
+              className="w-full"
+              placeholder="Tất cả loại chứng chỉ"
+              options={certificateData.map((item: any) => ({
+                label: item.name,
+                value: item.id,
+              }))}
+              value={exportCertificateId}
+              onChange={(value) => setExportCertificateId(value)}
+              allowClear
+              showSearch
+              optionFilterProp="label"
+            />
+          </div>
+        </Flex>
       </Modal>
     </Row>
   )

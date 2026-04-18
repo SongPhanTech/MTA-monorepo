@@ -64,7 +64,11 @@ const ModalChuyenDiemLopMonHoc = () => {
       if (defenseScore !== undefined && defenseScore !== null) {
         return {
           ...targetScore,
+          attendanceScore: defenseScore,
+          midtermScore: defenseScore,
+          examScore: defenseScore,
           finalScore: defenseScore,
+          manualFinalScore: defenseScore,
           isUpdated: true,
         }
       }
@@ -83,7 +87,7 @@ const ModalChuyenDiemLopMonHoc = () => {
     },
     {
       title: "Họ tên",
-      width: 80,
+      width: 120,
       render: (__: any, record: any) => record.student?.userProfile?.fullname,
       key: "fullname",
     },
@@ -98,13 +102,37 @@ const ModalChuyenDiemLopMonHoc = () => {
     },
     {
       title: "Lớp quản lý",
-      width: 80,
+      width: 120,
       dataIndex: ["student", "fixedClass", "name"],
       key: "fixedClass",
       render: (__: any, record: any) => record.student?.fixedClass?.name,
     },
     {
-      title: "Điểm",
+      title: "Điểm TX ",
+      width: 80,
+      dataIndex: "finalScore",
+      key: "finalScore",
+      align: "center" as const,
+      render: (__: any, record: any) => record.attendanceScore?.toString() || "",
+    },
+    {
+      title: "Điểm ĐK",
+      width: 80,
+      dataIndex: "midtermScore",
+      key: "midtermScore",
+      align: "center" as const,
+      render: (__: any, record: any) => record.midtermScore?.toString() || "",
+    },
+    {
+      title: "Điểm thi",
+      width: 80,
+      dataIndex: "examScore",
+      key: "examScore",
+      align: "center" as const,
+      render: (__: any, record: any) => record.examScore?.toString() || "",
+    },
+    {
+      title: "Điểm HP",
       width: 80,
       dataIndex: "finalScore",
       key: "finalScore",
@@ -144,7 +172,13 @@ const ModalChuyenDiemLopMonHoc = () => {
 
       const updatePromises = studentsToSave.map(async (item) => {
         await updateSubjectScore({
-          data: { finalScore: item.finalScore },
+          data: {
+            finalScore: item.finalScore,
+            attendanceScore: item.attendanceScore,
+            midtermScore: item.midtermScore,
+            examScore: item.examScore,
+            // manualFinalScore: item.manualFinalScore,
+          },
           where: { id: item.id },
         })
 
@@ -177,7 +211,7 @@ const ModalChuyenDiemLopMonHoc = () => {
       onCancel={onClose}
       title="Chuyển điểm sang lớp môn học"
       layout="horizontal"
-      className="w-[=800px]"
+      className="w-[1100px]"
     >
       <div className="py-4">
         <Row gutter={16} align="middle">
@@ -221,21 +255,23 @@ const ModalChuyenDiemLopMonHoc = () => {
           </Col>
         </Row>
 
-        <div className="mt-6">
-          <h3 className="mb-4 font-bold">Danh sách sinh viên hiện tại trong lớp môn học:</h3>
-          <Table
-            dataSource={displayStudents}
-            columns={columns}
-            rowKey="id"
-            pagination={{
-              pageSize: 10,
-              showSizeChanger: true,
-              pageSizeOptions: ["10", "20", "50", "100"],
-              showTotal: (total) => `Tổng cộng ${total} sinh viên`,
-              position: ["bottomRight"],
-            }}
-            bordered
-          />
+        <div className="mt-6 mx-auto w-full max-w-[1000px]">
+          <h3 className="mb-4 font-bold">Danh sách sinh viên trong lớp môn học:</h3>
+          <div className="overflow-x-auto">
+            <Table
+              dataSource={displayStudents}
+              columns={columns}
+              rowKey="id"
+              pagination={{
+                pageSize: 10,
+                showSizeChanger: true,
+                pageSizeOptions: ["10", "20", "50", "100"],
+                showTotal: (total) => `Tổng cộng ${total} sinh viên`,
+                position: ["bottomRight"],
+              }}
+              bordered
+            />
+          </div>
         </div>
       </div>
     </PutFormModal>

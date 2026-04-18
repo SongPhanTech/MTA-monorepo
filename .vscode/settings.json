@@ -39,5 +39,5 @@
     },
     "[caddyfile]": {
         "editor.defaultFormatter": "matthewpi.caddyfile-support"
-    }
+    },
 }

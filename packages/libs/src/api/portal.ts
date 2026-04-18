@@ -37,6 +37,9 @@ import type {
   GetClassesInfo404,
   GetClassesInfoParams,
   GetSessionParams,
+  GetStudentInfo200,
+  GetStudentInfo404,
+  GetStudentInfoParams,
   Session,
   Unauthorized,
 } from "./schemas"
@@ -741,4 +744,159 @@ export const useClassUnregister = <
   const mutationOptions = getClassUnregisterMutationOptions(options)
 
   return useMutation(mutationOptions, queryClient)
+}
+
+/**
+ * Lấy thông tin sinh viên cho đăng ký học
+ * @summary Lấy thông tin sinh viên cho đăng ký học
+ */
+export type getStudentInfoResponse200 = {
+  data: GetStudentInfo200
+  status: 200
+}
+
+export type getStudentInfoResponse404 = {
+  data: GetStudentInfo404
+  status: 404
+}
+
+export type getStudentInfoResponseSuccess = getStudentInfoResponse200 & {
+  headers: Headers
+}
+export type getStudentInfoResponseError = getStudentInfoResponse404 & {
+  headers: Headers
+}
+
+export type getStudentInfoResponse = getStudentInfoResponseSuccess | getStudentInfoResponseError
+
+export const getGetStudentInfoUrl = (params?: GetStudentInfoParams) => {
+  const normalizedParams = new URLSearchParams()
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? "null" : value.toString())
+    }
+  })
+
+  const stringifiedParams = normalizedParams.toString()
+
+  return stringifiedParams.length > 0
+    ? `/api/class-register/get-student-info?${stringifiedParams}`
+    : `/api/class-register/get-student-info`
+}
+
+export const getStudentInfo = async (
+  params?: GetStudentInfoParams,
+  options?: RequestInit
+): Promise<getStudentInfoResponse> => {
+  return customPortalFetch<getStudentInfoResponse>(getGetStudentInfoUrl(params), {
+    ...options,
+    method: "GET",
+  })
+}
+
+export const getGetStudentInfoQueryKey = (params?: GetStudentInfoParams) => {
+  return [`/api/class-register/get-student-info`, ...(params ? [params] : [])] as const
+}
+
+export const getGetStudentInfoQueryOptions = <
+  TData = Awaited<ReturnType<typeof getStudentInfo>>,
+  TError = GetStudentInfo404,
+>(
+  params?: GetStudentInfoParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getStudentInfo>>, TError, TData>>
+    request?: SecondParameter<typeof customPortalFetch>
+  }
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {}
+
+  const queryKey = queryOptions?.queryKey ?? getGetStudentInfoQueryKey(params)
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getStudentInfo>>> = ({ signal }) =>
+    getStudentInfo(params, { signal, ...requestOptions })
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getStudentInfo>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetStudentInfoQueryResult = NonNullable<Awaited<ReturnType<typeof getStudentInfo>>>
+export type GetStudentInfoQueryError = GetStudentInfo404
+
+export function useGetStudentInfo<
+  TData = Awaited<ReturnType<typeof getStudentInfo>>,
+  TError = GetStudentInfo404,
+>(
+  params: undefined | GetStudentInfoParams,
+  options: {
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getStudentInfo>>, TError, TData>> &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getStudentInfo>>,
+          TError,
+          Awaited<ReturnType<typeof getStudentInfo>>
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customPortalFetch>
+  },
+  queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetStudentInfo<
+  TData = Awaited<ReturnType<typeof getStudentInfo>>,
+  TError = GetStudentInfo404,
+>(
+  params?: GetStudentInfoParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getStudentInfo>>, TError, TData>> &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getStudentInfo>>,
+          TError,
+          Awaited<ReturnType<typeof getStudentInfo>>
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customPortalFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetStudentInfo<
+  TData = Awaited<ReturnType<typeof getStudentInfo>>,
+  TError = GetStudentInfo404,
+>(
+  params?: GetStudentInfoParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getStudentInfo>>, TError, TData>>
+    request?: SecondParameter<typeof customPortalFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Lấy thông tin sinh viên cho đăng ký học
+ */
+
+export function useGetStudentInfo<
+  TData = Awaited<ReturnType<typeof getStudentInfo>>,
+  TError = GetStudentInfo404,
+>(
+  params?: GetStudentInfoParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getStudentInfo>>, TError, TData>>
+    request?: SecondParameter<typeof customPortalFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getGetStudentInfoQueryOptions(params, options)
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
+
+  query.queryKey = queryOptions.queryKey
+
+  return query
 }

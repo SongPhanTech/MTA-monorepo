@@ -141,7 +141,14 @@ const PutAcademicRanking = () => {
               value: item.value,
             }))}
             allowClear
-            onChange={(value) => setBaseScoreValue(value)}
+            onChange={(value) => {
+              setBaseScoreValue(value)
+              if (value === AcademicRankingBaseType.Base10) {
+                form.setFieldsValue({ base4Min: null, base4Max: null })
+              } else if (value === AcademicRankingBaseType.Base4) {
+                form.setFieldsValue({ base10Min: null, base10Max: null })
+              }
+            }}
           />
         </FormItem>
       </Col>

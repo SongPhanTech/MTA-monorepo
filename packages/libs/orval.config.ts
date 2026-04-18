@@ -2,7 +2,7 @@ import { defineConfig } from "orval"
 
 export default defineConfig({
   model_api: {
-    input: "https://api.model.mta.swantech.vn/openapi",
+    input: "https://mta.swantech.vn/api/model/openapi",
     output: {
       client: "react-query",
       httpClient: "fetch",
@@ -20,7 +20,7 @@ export default defineConfig({
     },
   },
   training_api: {
-    input: "https://api.daotao.mta.swantech.vn/openapi",
+    input: "https://mta.swantech.vn/api/lms/openapi",
     output: {
       client: "react-query",
       httpClient: "fetch",
@@ -38,7 +38,7 @@ export default defineConfig({
     },
   },
   ems_api: {
-    input: "https://api.khaothi.mta.swantech.vn/openapi",
+    input: "https://mta.swantech.vn/api/ems/openapi",
     output: {
       client: "react-query",
       httpClient: "fetch",
@@ -57,7 +57,7 @@ export default defineConfig({
   },
   portal_api: {
     // input: 'http://localhost:3002/openapi',
-    input: "https://api.portal.mta.swantech.vn/openapi",
+    input: "https://mta.swantech.vn/api/portal/openapi",
     output: {
       client: "react-query",
       httpClient: "fetch",

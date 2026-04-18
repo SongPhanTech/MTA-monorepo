@@ -29,12 +29,12 @@ export const examTypeOptions = Object.entries(examTypes).map(([label, value]) =>
 }))
 
 export const criteriaOperatorLabels: Record<CriteriaOperator, string> = {
-  [CriteriaOperator.GT]: "> (Lớn hơn)",
-  [CriteriaOperator.GTE]: ">= (Lớn hơn hoặc bằng)",
-  [CriteriaOperator.LT]: "< (Nhỏ hơn)",
-  [CriteriaOperator.LTE]: "<= (Nhỏ hơn hoặc bằng)",
-  [CriteriaOperator.EQ]: "= (Bằng)",
-  [CriteriaOperator.IN]: "IN (Thuộc danh sách)",
+  [CriteriaOperator.GT]: ">", // Lớn hơn
+  [CriteriaOperator.GTE]: "≥", // Lớn hơn hoặc bằng
+  [CriteriaOperator.LT]: "<", // Nhỏ hơn
+  [CriteriaOperator.LTE]: "≤", // Nhỏ hơn hoặc bằng
+  [CriteriaOperator.EQ]: "=", // Bằng
+  [CriteriaOperator.IN]: "IN", // Thuộc danh sách
 }
 
 export const criteriaOperatorOptions = Object.entries(criteriaOperatorLabels).map(

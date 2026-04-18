@@ -119,8 +119,8 @@ const PutExpertProfile = () => {
               bankName: output.bankName,
             }
           : {
-              academicRankTypeId: output.academicRank,
-              academicDegreeTypeId: output.academicDegree,
+              academicRankTypeId: output.academicRankTypeId,
+              academicDegreeTypeId: output.academicDegreeTypeId,
               position: output.position,
               specialization: output.specialization,
               workplace: output.workplace,
@@ -161,8 +161,8 @@ const PutExpertProfile = () => {
         } else {
           await createExpertProfile({
             data: {
-              academicRankTypeId: output.academicRank,
-              academicDegreeTypeId: output.academicDegree,
+              academicRankTypeId: output.academicRankTypeId,
+              academicDegreeTypeId: output.academicDegreeTypeId,
               position: output.position,
               specialization: output.specialization,
               workplace: output.workplace,
@@ -257,7 +257,14 @@ const PutExpertProfile = () => {
           </FormItem>
         </Col>
       )}
-      {/* {!isInternal && (
+      {!isInternal && (
+        <Col span={12}>
+          <FormItem form={form} name="position" label="Chức vụ">
+            <Input placeholder="Nhập chức vụ" />
+          </FormItem>
+        </Col>
+      )}
+      {!isInternal && (
         <Col span={12}>
           <FormItem form={form} name="academicRankTypeId" label="Học hàm">
             <Select

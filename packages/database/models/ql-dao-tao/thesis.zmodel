@@ -58,7 +58,6 @@ model ThesisSession extends Base {
   /// Hạn nhập hội đồng
   councilDeadline       DateTime?
 
-
   thesisProject         ThesisProject[]
 
   @@schema("ql-dao-tao")

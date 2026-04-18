@@ -284,7 +284,71 @@ const ModalDanhSachChungChi = () => {
             align: "center",
             width: 150,
             render: (date: string, cert: ArchivedCertificate) =>
-              cert.status === "APPROVED" ? date : renderEditableDate(date, cert, "expiredDate"),
+              cert.status === "APPROVED"
+                ? formatDateVN(date)
+                : renderEditableDate(date, cert, "expiredDate"),
+          },
+          {
+            title: "Minh chứng",
+            align: "center",
+            width: 200,
+            render: (_, cert) => {
+              const files: DocFileItem[] = draftDocFiles[cert.id] || []
+              const isEditing = editingCertId === cert.id
+              return (
+                <div className="flex flex-col gap-1 items-start">
+                  {files.map((file, idx) => (
+                    <div key={`${file.path}-${idx}`} className="flex items-center gap-1 max-w-full">
+                      <PaperClipOutlined className="text-gray-500 flex-shrink-0" />
+                      <Tooltip title={file.name}>
+                        <span
+                          className="cursor-pointer text-blue-600 hover:underline text-xs truncate max-w-[120px]"
+                          onClick={() =>
+                            onOpenPreview({
+                              uri: file.path,
+                              name: file.name,
+                              mimeType: file.name.split(".").pop() || file.mimeType,
+                            })
+                          }
+                        >
+                          {file.name}
+                        </span>
+                      </Tooltip>
+                      {isEditing && (
+                        <CloseOutlined
+                          className="cursor-pointer text-red-500 text-[10px] flex-shrink-0"
+                          onClick={() => handleRemoveDocFile(cert.id, idx)}
+                        />
+                      )}
+                    </div>
+                  ))}
+                  {isEditing && (
+                    <Upload
+                      multiple
+                      accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.xls,.xlsx"
+                      beforeUpload={(file: File) => {
+                        if (file.size / 1024 / 1024 > 50) {
+                          message.error(`${file.name} vượt quá 50MB`)
+                          return Upload.LIST_IGNORE
+                        }
+                        handleUploadFile(cert.id, file)
+                        return false
+                      }}
+                      showUploadList={false}
+                    >
+                      <Button
+                        type="default"
+                        icon={<UploadOutlined />}
+                        size="small"
+                        loading={uploadingCertId === cert.id}
+                      >
+                        Tải lên
+                      </Button>
+                    </Upload>
+                  )}
+                </div>
+              )
+            },
           },
           {
             title: "Trạng thái",

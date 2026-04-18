@@ -734,7 +734,7 @@ export default function ClassSubject() {
             onRow={(record) => {
               return {
                 className: cn(
-                  record?.subject?.examType === "OfflineWritten" ? "text-blue-500" : "",
+                  record?.examType === "OfflineWritten" ? "text-blue-500" : "",
                   dayjs()?.isAfter(record?.scoreDeadline) && !record?.enteredScore
                     ? "text-red-500"
                     : "",
@@ -794,16 +794,8 @@ export default function ClassSubject() {
                 width: 100,
                 type: "select",
                 options: options,
-                render: (__, record: { subject?: SubjectVersion }) => {
-                  return record?.subject?.examType ? (
-                    <div
-                    // className={`${record?.subject?.examType === 'OfflineWritten' ? 'text-red-500' : ''}`}
-                    >
-                      {getExamTypeLabel(record?.subject?.examType)}
-                    </div>
-                  ) : (
-                    ""
-                  )
+                render: (__, record) => {
+                  return record?.examType ? getExamTypeLabel(record?.examType) : ""
                 },
               },
               {

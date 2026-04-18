@@ -26,13 +26,6 @@ interface FilterProps {
   searchText: string | undefined
   active: string | undefined
 }
-
-const DataActive = [
-  { value: "true", name: "Đang áp dụng" },
-  { value: "false", name: "Không áp dụng" },
-  { value: "all", name: "Tất cả" },
-]
-
 export default function AcademicRankingConvertPage() {
   const { can, canSome } = useAbility()
   const [expandAll, setExpandAll] = useState(false)
@@ -225,16 +218,6 @@ export default function AcademicRankingConvertPage() {
                   }
                   allowClear
                 />
-                <Select
-                  id="active"
-                  placeholder="Chọn trạng thái"
-                  style={{ width: 200 }}
-                  options={DataActive.map((item) => ({
-                    label: item.name,
-                    value: item.value === undefined ? undefined : item.value.toString(),
-                  }))}
-                  onChange={(value) => handleFilterChange("active", value)}
-                />
               </Flex>
             </Col>
             <Col span={6}>
@@ -306,17 +289,6 @@ export default function AcademicRankingConvertPage() {
                 title: "Xếp loại",
                 dataIndex: "classification",
                 width: 120,
-              },
-              {
-                title: "Trạng thái",
-                align: "center",
-                render: (record) => {
-                  return !record?.active ? (
-                    <Tag color="error">Không áp dụng</Tag>
-                  ) : (
-                    <Tag color="success">Đang áp dụng</Tag>
-                  )
-                },
               },
               {
                 title: "Thao tác",

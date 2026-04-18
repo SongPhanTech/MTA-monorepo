@@ -1213,19 +1213,15 @@ export default function NhapDiem({
                   )
                 },
               },
-              // #region Điểm Thi
               {
                 title: "Điểm thi",
                 dataIndex: "examScore",
                 width: 100,
                 align: "center",
-                render: (
-                  _,
-                  { id, attendanceScore, midtermScore, examBanned, subjectClass, examScore }
-                ) => {
+                render: (_, { id, attendanceScore, midtermScore, examBanned, examScore }) => {
                   const isMissingScore =
                     (attendanceScore == null || midtermScore == null) &&
-                    !subjectClass?.subject?.onePoint
+                    !dataDetailSubjectClass?.subject?.onePoint
                   if (role !== "GV" || score === "TX/ĐK" || !!examBanned || isMissingScore) {
                     return examScore ?? ""
                   }

@@ -56,6 +56,7 @@ import TreeSelect from "@/components/commons/tree-select"
 import {
   exportBanSaoHDDGLV,
   exportDanhSachBaoVe,
+  exportDanhSachBaoVeDanNgoaiPhong,
   exportDanhSachNopLuanVanThuVien,
   exportDsChuyenGia,
   exportGiayMoiChamLvPb,
@@ -71,6 +72,7 @@ import {
   exportThanhToanHuongDanTrongHv,
   exportThongKeCbHdlv,
   exportThongKeCbThamGiaHd,
+  exportThongKeCoQuanDonViCanBoNgoaiHv,
 } from "@/utils/thesis-excel"
 
 interface ThesisProjectForm {
@@ -109,8 +111,18 @@ export function getCouncilMemberName(record: any, role: CouncilRole) {
       {text}
     </span>
   )
+  return (
+    <span
+      title={inAcademy ? "Trong học viện" : "Ngoài học viện"}
+      className={inAcademy ? "text-green-600" : "text-red-600"}
+      style={{ color: inAcademy ? "#16a34a" : "#dc2626" }}
+    >
+      {text}
+    </span>
+  )
 }
 export function getSupervisorName(record: any, htmlRender = false, showWorkplace = false) {
+  const expert = record
   const expert = record
   if (!expert) return ""
 
@@ -122,7 +134,19 @@ export function getSupervisorName(record: any, htmlRender = false, showWorkplace
   const inAcademy = expert?.lecturerId ? true : false
   const workplace = expert?.workplace || ""
   const text = [title, fullname].filter(Boolean).join(" ").trim()
+  const text = [title, fullname].filter(Boolean).join(" ").trim()
   const textWithWorkplace = [text, showWorkplace ? workplace : ""].filter(Boolean).join(", ")
+  return htmlRender ? (
+    <span
+      title={inAcademy ? "Trong học viện" : "Ngoài học viện"}
+      className={inAcademy ? "text-green-600" : "text-red-600"}
+      style={{ color: inAcademy ? "#16a34a" : "#dc2626" }}
+    >
+      {textWithWorkplace}
+    </span>
+  ) : (
+    textWithWorkplace
+  )
   return htmlRender ? (
     <span
       title={inAcademy ? "Trong học viện" : "Ngoài học viện"}
@@ -538,9 +562,17 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                 Id: organizationId,
               },
             }
+              connect: {
+                Id: organizationId,
+              },
+            }
           : { disconnect: true },
         thesisSession: thesisSessionId
           ? {
+              connect: {
+                id: thesisSessionId,
+              },
+            }
               connect: {
                 id: thesisSessionId,
               },
@@ -1056,6 +1088,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
     const deputyName = (session.deputy ?? "").trim()
     const signerName = signRole === "chief" ? chiefName : deputyName
     const isChief = signRole === "chief" ? true : false
+    const isChief = signRole === "chief" ? true : false
     if (!signerName) {
       message.warning(
         `Chưa có họ tên ${signRole === "chief" ? "Trưởng phòng" : "Phó phòng"} sau đại học trong đợt xét.`
@@ -1229,6 +1262,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       }}
                     />
                   </Form.Item>
+
                   <Form.Item className="flex justify-end gap-3">
                     <Popconfirm
                       placement="rightTop"
@@ -1294,27 +1328,31 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
             <Row gutter={[8, 8]}>
               <Col span={24}>
                 <Space size={12} align="end" wrap className="w-full">
-                  <Select
-                    className="min-w-72 w-72"
-                    placeholder="Chọn mẫu in"
-                    dropdownMatchSelectWidth={false}
-                    options={buttonList.map((item) => ({
-                      label: `${item.id}. ${item.label}`,
-                      value: String(item.id),
-                      disabled: item.disabled,
-                    }))}
-                    value={selectedPrintTemplateId}
-                    onChange={(value) =>
-                      setSelectedPrintTemplateId(value ? String(value) : undefined)
-                    }
-                  />
-                  <Button
-                    type="primary"
-                    onClick={handleExportExcelFromTemplate}
-                    disabled={!selectedPrintTemplateId}
-                  >
-                    Xuất Excel
-                  </Button>
+                  {role === "P7" && (
+                    <Select
+                      className="min-w-72 w-72"
+                      placeholder="Chọn mẫu in"
+                      dropdownMatchSelectWidth={false}
+                      options={buttonList.map((item) => ({
+                        label: `${item.id}. ${item.label}`,
+                        value: String(item.id),
+                        disabled: item.disabled,
+                      }))}
+                      value={selectedPrintTemplateId}
+                      onChange={(value) =>
+                        setSelectedPrintTemplateId(value ? String(value) : undefined)
+                      }
+                    />
+                  )}
+                  {role === "P7" && (
+                    <Button
+                      type="primary"
+                      onClick={handleExportExcelFromTemplate}
+                      disabled={!selectedPrintTemplateId}
+                    >
+                      Xuất Excel
+                    </Button>
+                  )}
                   <Form.Item
                     name="topicEntryDeadline"
                     label="Hạn nhập đề tài"
@@ -1407,6 +1445,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                     return (
                       `${
                         record?.thesisRegistrations?.[0]?.thesisProject?.organization?.sMa || ""
+                      `${
+                        record?.thesisRegistrations?.[0]?.thesisProject?.organization?.sMa || ""
                       } ` || "N/A "
                     )
                   }
@@ -1465,7 +1505,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       <div onClick={(e) => e.stopPropagation()}>
                         <TextArea
                           rows={3}
-                          disabled={role !== "Khoa"}
+                          disabled={role !== "Khoa" || !isWithinGvhdSupervisorEditWindow()}
                           defaultValue={currentValue}
                           onBlur={(e) => {
                             handleEditChange(record?.id, "title", e.target.value)
@@ -1492,12 +1532,13 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                         ? editingValues[record?.id]?.researchTopicAssociated
                         : record?.thesisRegistrations?.[0]?.thesisProject
                             ?.researchTopicAssociated || ""
+                            ?.researchTopicAssociated || ""
 
                     return (
                       <div onClick={(e) => e.stopPropagation()}>
                         <TextArea
                           rows={2}
-                          disabled={role !== "Khoa"}
+                          disabled={role !== "Khoa" || !isWithinGvhdSupervisorEditWindow()}
                           defaultValue={currentValue}
                           onBlur={(e) => {
                             handleEditChange(record?.id, "researchTopicAssociated", e.target.value)
@@ -1579,8 +1620,9 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           className="w-full"
                           dropdownMatchSelectWidth={false}
                           dropdownStyle={{ minWidth: 200 }}
-                          disabled={role !== "Khoa" && !isWithinGvhdSupervisorEditWindow()}
+                          disabled={role !== "Khoa" || !isWithinGvhdSupervisorEditWindow()}
                           options={expertProfileData?.map((item) => {
+                            const text = getSupervisorName(item, true)
                             const text = getSupervisorName(item, true)
                             const hasLecturer = item.lecturer != null
                             return {
@@ -1603,7 +1645,9 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                     )
                   }
                   const supervisor = record?.thesisRegistrations?.[0]?.thesisProject?.supervisor
+                  const supervisor = record?.thesisRegistrations?.[0]?.thesisProject?.supervisor
 
+                  return getSupervisorName(supervisor, true)
                   return getSupervisorName(supervisor, true)
                 },
               },
@@ -1624,8 +1668,9 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           dropdownMatchSelectWidth={false}
                           dropdownStyle={{ minWidth: 200 }}
                           className="w-full"
-                          disabled={role !== "Khoa" && !isWithinGvhdSupervisorEditWindow()}
+                          disabled={role !== "Khoa" || !isWithinGvhdSupervisorEditWindow()}
                           options={expertProfileData?.map((item) => {
+                            const text = getSupervisorName(item, true)
                             const text = getSupervisorName(item, true)
                             const hasLecturer = item.lecturer != null
                             return {
@@ -1649,6 +1694,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                   }
                   const coSupervisor = record?.thesisRegistrations?.[0]?.thesisProject?.coSupervisor
                   return getSupervisorName(coSupervisor, true)
+                  const coSupervisor = record?.thesisRegistrations?.[0]?.thesisProject?.coSupervisor
+                  return getSupervisorName(coSupervisor, true)
                 },
               },
               {
@@ -1663,16 +1710,19 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                         : record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
                             (member: CouncilMember) => member.role === CouncilRole.CHAIRMAN
                           )?.expert?.id || ""
+                            (member: CouncilMember) => member.role === CouncilRole.CHAIRMAN
+                          )?.expert?.id || ""
                     return (
                       <div onClick={(e) => e.stopPropagation()}>
                         <Select
                           dropdownMatchSelectWidth={false}
                           dropdownStyle={{ minWidth: 200 }}
                           className="w-full"
-                          disabled={role !== "Khoa" && !isWithinCouncilEditWindow()}
+                          disabled={role !== "Khoa" || !isWithinCouncilEditWindow()}
                           options={expertProfileData
                             ?.filter((item) => item.eligiblePresident === true)
                             .map((item) => {
+                              const text = getSupervisorName(item, true)
                               const text = getSupervisorName(item, true)
                               const hasLecturer = item.lecturer != null
                               return {
@@ -1711,16 +1761,19 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                         : record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
                             (member: CouncilMember) => member.role === CouncilRole.SECRETARY
                           )?.expert?.id || ""
+                            (member: CouncilMember) => member.role === CouncilRole.SECRETARY
+                          )?.expert?.id || ""
                     return (
                       <div onClick={(e) => e.stopPropagation()}>
                         <Select
                           className="w-full"
                           dropdownMatchSelectWidth={false}
                           dropdownStyle={{ minWidth: 200 }}
-                          disabled={role !== "Khoa" && !isWithinCouncilEditWindow()}
+                          disabled={role !== "Khoa" || !isWithinCouncilEditWindow()}
                           options={expertProfileData
                             ?.filter((item) => item.eligibleSecretary === true)
                             .map((item) => {
+                              const text = getSupervisorName(item, true)
                               const text = getSupervisorName(item, true)
                               const hasLecturer = item.lecturer != null
                               return {
@@ -1759,14 +1812,17 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                         : record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
                             (member: CouncilMember) => member.role === CouncilRole.REVIEWER_1
                           )?.expert?.id || ""
+                            (member: CouncilMember) => member.role === CouncilRole.REVIEWER_1
+                          )?.expert?.id || ""
                     return (
                       <div onClick={(e) => e.stopPropagation()}>
                         <Select
                           className="w-full"
                           dropdownMatchSelectWidth={false}
                           dropdownStyle={{ minWidth: 200 }}
-                          disabled={role !== "Khoa" && !isWithinCouncilEditWindow()}
+                          disabled={role !== "Khoa" || !isWithinCouncilEditWindow()}
                           options={expertProfileData?.map((item) => {
+                            const text = getSupervisorName(item, true)
                             const text = getSupervisorName(item, true)
                             const hasLecturer = item.lecturer != null
                             return {
@@ -1803,14 +1859,17 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                         : record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
                             (member: any) => member.role === CouncilRole.REVIEWER_2
                           )?.expert?.id || ""
+                            (member: any) => member.role === CouncilRole.REVIEWER_2
+                          )?.expert?.id || ""
                     return (
                       <div onClick={(e) => e.stopPropagation()}>
                         <Select
                           className="w-full"
                           dropdownMatchSelectWidth={false}
                           dropdownStyle={{ minWidth: 200 }}
-                          disabled={role !== "Khoa" && !isWithinCouncilEditWindow()}
+                          disabled={role !== "Khoa" || !isWithinCouncilEditWindow()}
                           options={expertProfileData?.map((item) => {
+                            const text = getSupervisorName(item, true)
                             const text = getSupervisorName(item, true)
                             const hasLecturer = item.lecturer != null
                             return {
@@ -1847,14 +1906,17 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                         : record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
                             (member: any) => member.role === CouncilRole.MEMBER
                           )?.expert?.id || ""
+                            (member: any) => member.role === CouncilRole.MEMBER
+                          )?.expert?.id || ""
                     return (
                       <div onClick={(e) => e.stopPropagation()}>
                         <Select
                           className="w-full"
                           dropdownMatchSelectWidth={false}
                           dropdownStyle={{ minWidth: 200 }}
-                          disabled={role !== "Khoa" && !isWithinCouncilEditWindow()}
+                          disabled={role !== "Khoa" || !isWithinCouncilEditWindow()}
                           options={expertProfileData?.map((item) => {
+                            const text = getSupervisorName(item, true)
                             const text = getSupervisorName(item, true)
                             const hasLecturer = item.lecturer != null
                             return {
@@ -1894,6 +1956,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                         <Select
                           dropdownMatchSelectWidth={false}
                           dropdownStyle={{ minWidth: 200 }}
+                          disabled={role !== "Khoa" || !isWithinGvhdSupervisorEditWindow()}
                           className="w-full"
                           value={currentValue || ""}
                           options={roomData?.map((item) => ({
@@ -1924,6 +1987,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       <div onClick={(e) => e.stopPropagation()}>
                         <DatePicker
                           className="w-full"
+                          disabled={role !== "Khoa" || !isWithinGvhdSupervisorEditWindow()}
                           placeholder="Chọn ngày bảo vệ"
                           value={dayjsValue || undefined}
                           onChange={(value) => handleEditChange(record?.id, "defenseDate", value)}
@@ -1933,6 +1997,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                   }
                   return record?.thesisRegistrations?.[0]?.thesisProject?.defenseDate
                     ? dayjs(record?.thesisRegistrations?.[0]?.thesisProject?.defenseDate).format(
+                        "DD/MM/YYYY"
+                      )
                         "DD/MM/YYYY"
                       )
                     : ""
@@ -1950,6 +2016,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                         ? editingValues[record?.id]?.defenseSession
                         : record?.thesisRegistrations?.[0]?.thesisProject?.defenseSession
                             ?.startTime || ""
+                            ?.startTime || ""
                     const dayjsValue = currentValue
 
                     return (
@@ -1959,6 +2026,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           dropdownMatchSelectWidth={false}
                           dropdownStyle={{ minWidth: 100 }}
                           value={dayjsValue || undefined}
+                          disabled={role !== "Khoa" || !isWithinGvhdSupervisorEditWindow()}
                           placeholder="Chọn thời gian bảo vệ"
                           options={defenseSessionData?.map((item) => ({
                             label: item.startTime ? dayjs(item.startTime).format("HH:mm") : "",
@@ -1975,6 +2043,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                     ? dayjs(
                         record?.thesisRegistrations?.[0]?.thesisProject?.defenseSession?.startTime
                       ).format("HH:mm")
+                        record?.thesisRegistrations?.[0]?.thesisProject?.defenseSession?.startTime
+                      ).format("HH:mm")
                     : ""
                 },
               },
@@ -1989,6 +2059,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       editingValues[record?.id]?.score !== undefined
                         ? editingValues[record?.id]?.score
                         : record?.thesisRegistrations?.[0]?.thesisProject?.defenseRecord
+                            ?.finalScore || ""
                             ?.finalScore || ""
 
                     return (
@@ -2012,42 +2083,42 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                 },
               },
 
-              {
-                title: "Trạng thái",
-                width: 100,
-                fixed: "right",
-                dataIndex: "status",
-                render: (_, record) => {
-                  if (editingRowKeys.includes(record?.id)) {
-                    const currentValue =
-                      editingValues[record?.id]?.status !== undefined
-                        ? editingValues[record?.id]?.status
-                        : record?.thesisRegistrations?.[0]?.thesisProject?.status || ""
-                    return (
-                      <div onClick={(e) => e.stopPropagation()}>
-                        <Select
-                          className="w-full"
-                          options={useThesisProjectStatusOptions()
-                            .ignoreProjectStatus([ThesisProjectStatus.ASSIGNED])
-                            .map((item) => ({
-                              label: item.label,
-                              value: item.value,
-                            }))}
-                          value={currentValue || ""}
-                          onChange={(value) => handleEditChange(record?.id, "status", value)}
-                        />
-                      </div>
-                    )
-                  }
-                  const label = getThesisProjectStatusLabel(
-                    record?.thesisRegistrations?.[0]?.thesisProject?.status
-                  )
-                  const color = getThesisProjectStatusColor(
-                    record?.thesisRegistrations?.[0]?.thesisProject?.status
-                  )
-                  return <Tag color={color}>{label}</Tag>
-                },
-              },
+              // {
+              //   title: "Trạng thái",
+              //   width: 100,
+              //   fixed: "right",
+              //   dataIndex: "status",
+              //   render: (_, record) => {
+              //     if (editingRowKeys.includes(record?.id)) {
+              //       const currentValue =
+              //         editingValues[record?.id]?.status !== undefined
+              //           ? editingValues[record?.id]?.status
+              //           : record?.thesisRegistrations?.[0]?.thesisProject?.status || ""
+              //       return (
+              //         <div onClick={(e) => e.stopPropagation()}>
+              //           <Select
+              //             className="w-full"
+              //             options={useThesisProjectStatusOptions()
+              //               .ignoreProjectStatus([ThesisProjectStatus.ASSIGNED])
+              //               .map((item) => ({
+              //                 label: item.label,
+              //                 value: item.value,
+              //               }))}
+              //             value={currentValue || ""}
+              //             onChange={(value) => handleEditChange(record?.id, "status", value)}
+              //           />
+              //         </div>
+              //       )
+              //     }
+              //     const label = getThesisProjectStatusLabel(
+              //       record?.thesisRegistrations?.[0]?.thesisProject?.status
+              //     )
+              //     const color = getThesisProjectStatusColor(
+              //       record?.thesisRegistrations?.[0]?.thesisProject?.status
+              //     )
+              //     return <Tag color={color}>{label}</Tag>
+              //   },
+              // },
               {
                 title: "Thao tác",
                 width: 100,

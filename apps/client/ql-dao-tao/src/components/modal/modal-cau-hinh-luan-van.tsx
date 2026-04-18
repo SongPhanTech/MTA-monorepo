@@ -51,7 +51,8 @@ import {
 } from "@workspace/db/hooks"
 import dayjs from "dayjs"
 import Decimal from "decimal.js"
-import { useCallback, useEffect, useState, useRef } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
+import { validateScore } from "@lib/utils"
 
 // import  {useEffect} from 'react'
 const { Title } = Typography
@@ -123,6 +124,8 @@ const ModalCauHinhLuanVan = () => {
 
   const [attachments, setAttachments] = useState<DocumentFile[]>([])
   const [form] = Form.useForm<ModalCauHinhLuanVanType>()
+  const [activeTabKey, setActiveTabKey] = useState<string>("defenseConfig")
+  /** Tránh gọi setFieldsValue mỗi khi thesisProjectData đổi reference (refetch) — sẽ xóa dữ liệu user đang nhập khi đổi tab. */
   const formHydratedKeyRef = useRef<string | null>(null)
   const [activeTabKey, setActiveTabKey] = useState<string>("defenseConfig")
   const { isOpen, onClose, input } = useDisclosure<{
@@ -411,6 +414,7 @@ const ModalCauHinhLuanVan = () => {
     })
   }
   const onOk = async () => {
+    await form.validateFields()
     const dataFormValue = form.getFieldsValue()
 
     try {
@@ -645,6 +649,7 @@ const ModalCauHinhLuanVan = () => {
       key: "defenseConfig",
       label: "Cấu hình bảo vệ",
       icon: <SettingOutlined />,
+      forceRender: true,
       children: (
         <Row gutter={32} className="w-full mt-4">
           <Col span={12}>
@@ -882,6 +887,7 @@ const ModalCauHinhLuanVan = () => {
       key: "defenseInforSubmit",
       label: "Thông tin nộp luận văn",
       icon: <CloudUploadOutlined />,
+      forceRender: true,
       children: (
         <Row gutter={32} className="w-full mt-4">
           <Col span={24}>
@@ -997,6 +1003,7 @@ const ModalCauHinhLuanVan = () => {
       key: "defenseInforPayment",
       label: "Thông tin thanh toán",
       icon: <DollarOutlined />,
+      forceRender: true,
       children: (
         <Row gutter={32} className="w-full mt-4">
           <Col span={24}>
@@ -1035,11 +1042,12 @@ const ModalCauHinhLuanVan = () => {
                   label="Số tiền "
                   className="mb-5"
                   labelAlign="left"
+                  normalize={(value) => value && Number(String(value).replace(/,/g, ""))}
                 >
                   <InputNumber
                     className="w-2/3"
                     placeholder="Nhập số tiền"
-                    parser={(value) => value?.replace(/\$\s?|(,*)/g, "") as unknown as number}
+                    formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                     suffix="VNĐ"
                     disabled={!form.getFieldValue("supervisorName")}
                   />
@@ -1078,11 +1086,12 @@ const ModalCauHinhLuanVan = () => {
                   label="Số tiền"
                   className="mb-5"
                   labelAlign="left"
+                  normalize={(value) => value && Number(String(value).replace(/,/g, ""))}
                 >
                   <InputNumber
                     className="w-2/3"
                     min={0}
-                    parser={(value) => value?.replace(/\$\s?|(,*)/g, "") as unknown as number}
+                    formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                     placeholder="Nhập số tiền"
                     suffix="VNĐ"
                     disabled={!form.getFieldValue("coSupervisorName")}
@@ -1135,12 +1144,13 @@ const ModalCauHinhLuanVan = () => {
                   label="Số tiền "
                   className="mb-5"
                   labelAlign="left"
+                  normalize={(value) => value && Number(String(value).replace(/,/g, ""))}
                 >
                   <InputNumber
                     className="w-2/3"
                     min={0}
+                    formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                     placeholder="Nhập số tiền"
-                    parser={(value) => value?.replace(/\$\s?|(,*)/g, "") as unknown as number}
                     suffix="VNĐ"
                     disabled={!form.getFieldValue("councilChairmanId")}
                   />
@@ -1179,11 +1189,12 @@ const ModalCauHinhLuanVan = () => {
                   label="Số tiền"
                   className="mb-5"
                   labelAlign="left"
+                  normalize={(value) => value && Number(String(value).replace(/,/g, ""))}
                 >
                   <InputNumber
                     className="w-2/3"
                     min={0}
-                    parser={(value) => value?.replace(/\$\s?|(,*)/g, "") as unknown as number}
+                    formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                     placeholder="Nhập số tiền"
                     suffix="VNĐ"
                     disabled={!form.getFieldValue("councilSecretaryId")}
@@ -1223,14 +1234,15 @@ const ModalCauHinhLuanVan = () => {
                   label="Số tiền "
                   className="mb-5"
                   labelAlign="left"
+                  normalize={(value) => value && Number(String(value).replace(/,/g, ""))}
                 >
                   <InputNumber
                     className="w-2/3"
                     min={0}
+                    formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                     placeholder="Nhập số tiền"
-                    parser={(value) => value?.replace(/\$\s?|(,*)/g, "") as unknown as number}
                     suffix="VNĐ"
-                    disabled={!form.getFieldValue("councilReviewer1PaymentAmount")}
+                    disabled={!form.getFieldValue("councilReviewer1Id")}
                   />
                 </FormItem>
               </Col>
@@ -1267,12 +1279,13 @@ const ModalCauHinhLuanVan = () => {
                   label="Số tiền "
                   className="mb-5"
                   labelAlign="left"
+                  normalize={(value) => value && Number(String(value).replace(/,/g, ""))}
                 >
                   <InputNumber
                     className="w-2/3"
                     min={0}
+                    formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                     placeholder="Nhập số tiền"
-                    parser={(value) => value?.replace(/\$\s?|(,*)/g, "") as unknown as number}
                     suffix="VNĐ"
                     disabled={!form.getFieldValue("councilReviewer2Id")}
                   />
@@ -1310,12 +1323,13 @@ const ModalCauHinhLuanVan = () => {
                   label="Số tiền "
                   className="mb-5"
                   labelAlign="left"
+                  normalize={(value) => value && Number(String(value).replace(/,/g, ""))}
                 >
                   <InputNumber
                     className="w-2/3"
                     min={0}
+                    formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                     placeholder="Nhập số tiền"
-                    parser={(value) => value?.replace(/\$\s?|(,*)/g, "") as unknown as number}
                     suffix="VNĐ"
                     disabled={!form.getFieldValue("councilMemberId")}
                   />
@@ -1330,6 +1344,7 @@ const ModalCauHinhLuanVan = () => {
       key: "inforSubmit",
       label: "Hồ sơ và Kết quả bảo vệ",
       icon: <SolutionOutlined />,
+      forceRender: true,
       children: (
         <Row gutter={32} className="w-full mt-4">
           <Col span={24}>
@@ -1344,9 +1359,14 @@ const ModalCauHinhLuanVan = () => {
                   label="Kết quả cuối cùng"
                   className="mb-5"
                   labelAlign="left"
-                  {...formItemLayout}
+                  rules={[
+                    {
+                      validator: (_, value) => validateScore(value, true),
+                    },
+                  ]}
+                  {...FORM_ITEM_LAYOUT}
                 >
-                  <InputNumber className="w-2/3" min={-1} placeholder="Nhập kết quả" />
+                  <InputNumber className="w-2/3" min={0} max={10} placeholder="Nhập kết quả" />
                 </FormItem>
               </Col>
 

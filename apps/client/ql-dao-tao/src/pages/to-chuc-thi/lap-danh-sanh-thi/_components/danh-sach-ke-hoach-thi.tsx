@@ -704,11 +704,19 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
               },
               {
                 title: "Hình thức thi",
-                align: "center",
+                align: "left",
                 width: 80,
                 render: (_, record) => {
-                  const examType = record.subjectClass?.[0]?.subject?.examType
-                  return examType ? getExamTypeLabel(examType) : ""
+                  const examTypes: Set<string> = new Set(
+                    record?.subjectClass?.map((c: SubjectClass) => getExamTypeLabel(c.examType))
+                  )
+                  return (
+                    <div>
+                      {[...examTypes].map((examType) => (
+                        <div>- {examType}</div>
+                      ))}
+                    </div>
+                  )
                 },
               },
               {

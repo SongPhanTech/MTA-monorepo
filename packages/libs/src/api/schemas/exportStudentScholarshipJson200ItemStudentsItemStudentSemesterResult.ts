@@ -60,4 +60,5 @@ export type ExportStudentScholarshipJson200ItemStudentsItemStudentSemesterResult
   disciplinaryWarningLevel?: number;
   suspended?: boolean;
   expelled?: boolean;
+  approved?: boolean;
 };

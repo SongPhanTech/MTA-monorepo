@@ -611,11 +611,16 @@ export const buildSubjectMapOrThrow = async (
       })
 
       const subjectGroup = await tx.subject.findMany({
-        where: { name: { in: missing.map((s) => s.name) } },
-        select: { id: true, name: true },
+        where: {
+          OR: missing.map((s) => ({
+            name: s.name,
+            managementOrganizationId: orgMap.get(s.organizationCode || null),
+          })),
+        },
+        select: { id: true, name: true, managementOrganizationId: true },
       })
 
-      const groupMap = new Map(subjectGroup.map((s) => [s.name, s.id]))
+      const groupMap = new Map(subjectGroup.map((s) => [s.name + s.managementOrganizationId, s.id]))
 
       return await tx.subjectVersion.createManyAndReturn({
         data: missing.map((subject) => ({
@@ -635,12 +640,10 @@ export const buildSubjectMapOrThrow = async (
           numberOfPractice: subject.numberOfPractice,
           numberOfReview: subject.numberOfReview,
           numberOfExam: subject.numberOfExam,
-          ...(orgMap.get(subject.organizationCode || null)
-            ? {
-                managementOrganizationId: orgMap.get(subject.organizationCode || null),
-              }
-            : {}),
-          subjectId: groupMap.get(subject.name) as string,
+          managementOrganizationId: orgMap.get(subject.organizationCode || null),
+          subjectId: groupMap.get(
+            subject.name + orgMap.get(subject.organizationCode || null)
+          ) as string,
         })),
         select: { id: true, code: true },
       })

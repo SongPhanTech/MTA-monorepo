@@ -243,6 +243,13 @@ const openSubjectClassReExam = createRoute({
       description: "Danh sách môn học cần thi lại",
     },
     400: {
+      content: {
+        "application/json": {
+          schema: z.object({
+            message: z.string(),
+          }),
+        },
+      },
       description: "Yêu cầu không hợp lệ",
     },
   },
@@ -811,21 +818,27 @@ app.openapi(openSubjectClassRetake, async (c) => {
                                sv.name,
                                sv."trainingObjectTypeId",
                                C."trainingMajorId",
-                               TC.id                                                                                    as trainingCourseId,
+                               TC.id as trainingCourseId,
                                SSS."studentId",
-                               SSS."finalScore"                                                                         as diem_cuoi,
+                               SSS."finalScore" as diem_cuoi,
                                SSS.withdrew,
                                SSS.exempted,
                                SSS."examPostponed",
-                               SSS."examBanned"                                                                         as cam_thi,
-                               SSS."examBannedReason"                                                                   as ly_do_cam_thi,
-                               SSS.suspended                                                                            as dinh_chi,
-                               SSS."suspendedReason"                                                                    as ly_do_dinh_chi,
+                               SSS."examBanned" as cam_thi,
+                               SSS."examBannedReason" as ly_do_cam_thi,
+                               SSS.suspended as dinh_chi,
+                               SSS."suspendedReason" as ly_do_dinh_chi,
                                TBS."graduation" = true and SSS."finalScore" < TC."scoreToPassGraduation" or
                                TBS."useForFinalScore" = true and SSS."finalScore" < TC."scoreToPass" or
-                               TBS."useForFinalScore" = false and SSS."finalScore" <
-                                                                  TC."scoreToPassConditional"                           as truot_mon,
+                               TBS."useForFinalScore" = false and SSS."finalScore" < TC."scoreToPassConditional"
+                                    as truot_mon,
                                TBS.id                         as trainingBlockSubjectId,
+                               TC."isRetakeExam",
+                               FIRST_VALUE(SSS."examBanned") OVER (
+                                 PARTITION BY SSS."studentId", SSS."subjectVersionId"
+                                 ORDER BY SSS."createdAt" ASC
+                                 ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
+                               )                              as first_attempt_exam_banned,
                                row_number()
                                over (partition by SSS."studentId",SSS."subjectVersionId" order by SSS."createdAt" desc) as rn
                         from "ql-dao-tao"."SubjectVersion" as sv
@@ -850,6 +863,10 @@ app.openapi(openSubjectClassRetake, async (c) => {
           and withdrew = false        -- rút khỏi lớp
           and exempted = false        -- miễn học
           and "examPostponed" = false -- hoãn thi
+          -- exclude students eligible for ReExam (thi lại)
+          -- isRetakeExam course + not banned on first attempt → they belong in ReExam, not Retake
+          and not ("isRetakeExam" = true and first_attempt_exam_banned = false and truot_mon = true
+                   and cam_thi = false and dinh_chi = false)
           and (${trainingObjectTypeId}::TEXT IS NULL
             OR "trainingObjectTypeId" = ${trainingObjectTypeId}
             )
@@ -888,6 +905,12 @@ app.openapi(openSubjectClassRetake, async (c) => {
                                TBS."useForFinalScore" = true and SSS."finalScore" < TC."scoreToPass" or
                                TBS."useForFinalScore" = false and SSS."finalScore" <
                                                                   TC."scoreToPassConditional"                           as truot_mon,
+                               TC."isRetakeExam",
+                               FIRST_VALUE(SSS."examBanned") OVER (
+                                 PARTITION BY SSS."studentId", SSS."subjectVersionId"
+                                 ORDER BY SSS."createdAt" ASC
+                                 ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
+                               )                                                                                         as first_attempt_exam_banned,
                                row_number()
                                over (partition by SSS."studentId",SSS."subjectVersionId" order by SSS."createdAt" desc) as rn
                         from "ql-dao-tao"."SubjectVersion" as sv
@@ -912,6 +935,9 @@ app.openapi(openSubjectClassRetake, async (c) => {
           and withdrew = false        -- rút khỏi lớp
           and exempted = false        -- miễn học
           and "examPostponed" = false -- hoãn thi
+          -- exclude students eligible for ReExam (thi lại)
+          and not ("isRetakeExam" = true and first_attempt_exam_banned = false and truot_mon = true
+                   and cam_thi = false and dinh_chi = false)
           and (${trainingObjectTypeId}::TEXT IS NULL
             OR "trainingObjectTypeId" = ${trainingObjectTypeId}
             )
@@ -981,6 +1007,12 @@ app.openapi(openSubjectClassRetakeStudents, async (c) => {
                                TBS."useForFinalScore" = true and SSS."finalScore" < TC."scoreToPass" or
                                TBS."useForFinalScore" = false and SSS."finalScore" <
                                                                   TC."scoreToPassConditional"                                    as truot_mon,
+                               TC."isRetakeExam",
+                               FIRST_VALUE(SSS."examBanned") OVER (
+                                 PARTITION BY SSS."studentId", SSS."subjectVersionId"
+                                 ORDER BY SSS."createdAt" ASC
+                                 ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
+                               )                                                                                                  as first_attempt_exam_banned,
                                SC."code"                                                                                         as ma_lop_mon_hoc,
                                Sem."name"                                                                                        as ky_hoc,
                                Sch."name"                                                                                        as nam_hoc,
@@ -1026,6 +1058,9 @@ app.openapi(openSubjectClassRetakeStudents, async (c) => {
           and withdrew = false -- rút khỏi lớp
           and mien_thi = false -- miễn học
           and hoan_thi = false -- hoãn thi
+          -- exclude students eligible for ReExam (thi lại)
+          and not ("isRetakeExam" = true and first_attempt_exam_banned = false and truot_mon = true
+                   and cam_thi = false and dinh_chi = false)
           and (
             ${trainingObjectTypeId}::TEXT IS NULL
                 OR "trainingObjectTypeId" = ${trainingObjectTypeId}
@@ -1097,6 +1132,15 @@ app.openapi(openSubjectClassReExam, async (c) => {
     viewAll = 0,
   } = c.req.valid("query")
 
+  const trainingCourse = await prisma.trainingCourse.findUniqueOrThrow({
+    where: { id: trainingCourseId },
+    select: { name: true, isRetakeExam: true },
+  })
+
+  if (!trainingCourse.isRetakeExam) {
+    return c.json({ message: `${trainingCourse.name} không được thi lại` }, 400)
+  }
+
   const planTraining = await prisma.planTraining.upsert({
     where: {
       trainingObjectTypeId_semesterId_trainingCourseId: {
@@ -1166,7 +1210,7 @@ app.openapi(openSubjectClassReExam, async (c) => {
         where rn = 1
           and (truot_mon = true or "examPostponed" = true)
           and cam_thi = false
-          and dinh_chi = false
+          -- and dinh_chi = false
           and withdrew = false        -- rút khỏi lớp
           and exempted = false        -- miễn học
           and (${trainingObjectTypeId}::TEXT IS NULL
@@ -1227,7 +1271,7 @@ app.openapi(openSubjectClassReExam, async (c) => {
         where rn = 1
           and (truot_mon = true or "examPostponed" = true)
           and cam_thi = false
-          and dinh_chi = false
+          -- and dinh_chi = false
           and withdrew = false        -- rút khỏi lớp
           and exempted = false        -- miễn học
           and (${trainingObjectTypeId}::TEXT IS NULL
@@ -1244,7 +1288,7 @@ app.openapi(openSubjectClassReExam, async (c) => {
             OR name ILIKE ${`%${search}%`}
             )
     `
-  return c.json({ data: res, count: countRaw[0]?.count }, 200)
+  return c.json({ data: res || [], count: countRaw[0]?.count || 0 }, 200)
 })
 
 app.openapi(openSubjectClassReExamStudents, async (c) => {
@@ -1770,7 +1814,7 @@ app.openapi(exportSubjectClassListExcel, async (c) => {
       no: idx + 1,
       code: item.code || "",
       name: item.subject?.name || "",
-      examType: examTypeOptions.find((et) => et.value === item.subject?.examType)?.label || "", // hình thức thi
+      examType: examTypeOptions.find((et) => et.value === item.examType)?.label || "", // hình thức thi
       status: item.enteredExamScore
         ? "Đã nhập điểm thi"
         : item.enteredScore

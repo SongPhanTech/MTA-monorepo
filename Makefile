@@ -126,7 +126,16 @@ APP_URL_SUFFIX_dang-ky-hoc  = /dangkyhoc
 APP_URL_SUFFIX_ql-ho-so     = /hrm/home
 APP_URL_SUFFIX_tro-ly-ao    = /chatbot/?mode=tro-ly-ao
 
+# Per-app URL suffix appended to FE_APP_URL → NEXT_PUBLIC_APP_URL
+# Format: <domain from profile><suffix below>  e.g. https://mta.swantech.vn/lms/home
+APP_URL_SUFFIX_ql-dao-tao   = /lms/home
+APP_URL_SUFFIX_khao-thi     = /ems/home
+APP_URL_SUFFIX_dang-ky-hoc  = /dangkyhoc
+APP_URL_SUFFIX_ql-ho-so     = /hrm/home
+APP_URL_SUFFIX_tro-ly-ao    = /chatbot/?mode=tro-ly-ao
+
 # Targets
+.PHONY: all clean push deploy release all-be build-all-be build-all-fe ship-fe \
 .PHONY: all clean push deploy release all-be build-all-be build-all-fe ship-fe \
 	build-% all-% save-docker-images package-cdn _package-fe-cdn-copy
 
@@ -184,6 +193,10 @@ build-all-fe:
 # Usage: make ship-fe SERVER_PROFILE=swantech_x52
 ship-fe: build-all-fe package-cdn deploy-cdn
 
+# Build all FE apps, package them, and deploy to the active SERVER_PROFILE in one shot.
+# Usage: make ship-fe SERVER_PROFILE=swantech_x52
+ship-fe: build-all-fe package-cdn deploy-cdn
+
 all-clients:
 	@for pkg in $(FE_PKGS); do \
 		$(MAKE) all-$$pkg; \
@@ -210,9 +223,13 @@ deploy-cdn:
 	$(SCP) -O cdn.zip $(SERVER_HOST):$(FE_APP_DIR)/
 	$(SSH) $(SERVER_HOST) "cd $(FE_APP_DIR) && \
 	docker compose -f $(FE_COMPOSE_FILE) down; \
+	$(SCP) -O cdn.zip $(SERVER_HOST):$(FE_APP_DIR)/
+	$(SSH) $(SERVER_HOST) "cd $(FE_APP_DIR) && \
+	docker compose -f $(FE_COMPOSE_FILE) down; \
 	rm -rf dang-ky-hoc-cdn/ lms-cdn/ ems-cdn/ hrm-cdn/ chatbot-cdn/; \
 	unzip -q cdn.zip && \
 	mv cdn/* . && \
+	docker compose -f $(FE_COMPOSE_FILE) up -d"
 	docker compose -f $(FE_COMPOSE_FILE) up -d"
 
 deploy-all-be:
@@ -220,8 +237,11 @@ deploy-all-be:
 	@zip -r docker-images.zip docker-images
 	$(SCP) -O docker-images.zip $(SERVER_HOST):$(BE_DEPLOY_DIR)
 	$(SSH) $(SERVER_HOST) "cd $(BE_DEPLOY_DIR) && \
+	$(SCP) -O docker-images.zip $(SERVER_HOST):$(BE_DEPLOY_DIR)
+	$(SSH) $(SERVER_HOST) "cd $(BE_DEPLOY_DIR) && \
 	unzip -o docker-images.zip && \
 	cd docker-images && ls *.tar.gz | xargs -I {} docker load -i {} && \
+	cd $(BE_APP_DIR) && \
 	cd $(BE_APP_DIR) && \
 	docker rm -f mta-be-exchange mta-be-khao-thi mta-be-model mta-be-portal mta-be-ql-dao-tao mta-be-ql-dao-tao-shared && \
 	docker compose up -d"
@@ -240,6 +260,9 @@ deploy-%:
 	$(SCP) -O docker-images/$(IMG_PREFIX)$*.tar.gz $(SERVER_HOST):$(BE_DEPLOY_DIR)/
 	$(SSH) $(SERVER_HOST) "cd $(BE_DEPLOY_DIR) && \
 	docker load -i docker-images/$(IMG_PREFIX)$*.tar.gz && \
+	$(SCP) -O docker-images/$(IMG_PREFIX)$*.tar.gz $(SERVER_HOST):$(BE_DEPLOY_DIR)/
+	$(SSH) $(SERVER_HOST) "cd $(BE_DEPLOY_DIR) && \
+	docker load -i docker-images/$(IMG_PREFIX)$*.tar.gz && \
 	docker rm -f $(IMG_PREFIX)$* && \
 	docker compose up $(IMG_PREFIX)$* -d"
 
@@ -248,6 +271,7 @@ deploy-%:
 all-%: build-%
 	@if echo "$(BE_PKGS)" | tr ' ' '\n' | grep -Fxq "$*"; then \
 		$(DOCKER) push $(REGISTRY)/$(IMG_PREFIX)$*:$(DEV_TAG); \
+		$(SSH) $(SERVER_HOST) "cd $(BE_APP_DIR) && $(COMPOSE_CMD) $(IMG_PREFIX)$* -d"; \
 		$(SSH) $(SERVER_HOST) "cd $(BE_APP_DIR) && $(COMPOSE_CMD) $(IMG_PREFIX)$* -d"; \
 	elif echo "$(FE_PKGS)" | tr ' ' '\n' | grep -Fxq "$*"; then \
 		$(MAKE) _deploy-fe PACKAGE=$*; \
@@ -285,8 +309,12 @@ _deploy-fe:
 	$(SCP) $(CDN_NAME).zip $(SERVER_HOST):$(FE_APP_DIR)/ && \
 	$(SSH) $(SERVER_HOST) "cd $(FE_APP_DIR) && \
 		docker compose -f $(FE_COMPOSE_FILE) down mta-$(CDN_NAME) router-$(ROUTER_NAME)-api && \
+	$(SCP) $(CDN_NAME).zip $(SERVER_HOST):$(FE_APP_DIR)/ && \
+	$(SSH) $(SERVER_HOST) "cd $(FE_APP_DIR) && \
+		docker compose -f $(FE_COMPOSE_FILE) down mta-$(CDN_NAME) router-$(ROUTER_NAME)-api && \
 		rm -rf $(CDN_NAME) && \
 		unzip -o $(CDN_NAME).zip && \
+		docker compose -f $(FE_COMPOSE_FILE) up mta-$(CDN_NAME) router-$(ROUTER_NAME)-api -d"
 		docker compose -f $(FE_COMPOSE_FILE) up mta-$(CDN_NAME) router-$(ROUTER_NAME)-api -d"
 
 _package-fe-cdn-copy:

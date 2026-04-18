@@ -490,18 +490,35 @@ const PutOneSubjectClassModal = () => {
                 <FormItem form={form} name="roomId" label="Phòng học">
                   <TreeSelect
                     treeData={buildingData.map((e) => ({
+                      title: e.name,
                       label: e.name,
                       value: e.id,
                       selectable: false,
                       children: e.rooms.map((room) => ({
-                        label: <p className="text-primary">{room.name}</p>,
+                        title: (
+                          <span>
+                            {room.name} - Sức chứa: {room.capacity}
+                          </span>
+                        ),
+                        label: room.name,
+                        filterValue: room.name,
                         value: room.id,
                         selectable: true,
                       })),
                     }))}
+                    onChange={(roomId) => {
+                      const room = buildingData.flatMap((b) => b.rooms).find((r) => r.id === roomId)
+                      form.setFieldsValue({ maxStudent: room?.capacity ?? undefined })
+                    }}
                     showSearch
                     allowClear
                     treeNodeFilterProp="title"
+                    treeNodeLabelProp="label"
+                    filterTreeNode={(input, option) =>
+                      ((option as any)?.filterValue ?? "")
+                        .toLowerCase()
+                        .includes(input?.toLowerCase())
+                    }
                     multiple={false}
                     showCheckedStrategy="SHOW_CHILD"
                     dropdownStyle={{

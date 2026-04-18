@@ -3107,8 +3107,8 @@ model Subject {
   createdAt                DateTime               @default(now())
   updatedAt                DateTime               @default(now()) @updatedAt()
   createdBy                String?                @db.Uuid()
-  name                     String                 @unique()
-  englishName              String?                @unique()
+  name                     String
+  englishName              String?
   managementOrganization   DM_DonVi?              @relation(fields: [managementOrganizationId], references: [Id])
   managementOrganizationId String?                @db.Uuid()
   information              String?
@@ -3116,6 +3116,7 @@ model Subject {
   certificateOnSubject     CertificateOnSubject[]
   awardOnSubject           Award[]
 
+  @@unique([name, managementOrganizationId])
   @@schema("ql-dao-tao")
 }
 

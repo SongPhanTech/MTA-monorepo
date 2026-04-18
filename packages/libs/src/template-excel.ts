@@ -27,6 +27,7 @@ export interface SheetExportOptions {
   rows?: TableRow[]
   tableStartCell?: { row: number; col: number }
   hiddenColumns?: string[]
+  thinBorderRange?: { top: number; left: number; bottom: number; right: number }
 }
 
 export interface ExportOptions {
@@ -38,6 +39,17 @@ export interface ExportOptions {
   fontSize?: number
   mergeSheetsToOne?: boolean
   sheetName?: string
+}
+
+const INVALID_XML_CONTROL_CHARS = /[\u0000-\u0008\u000B\u000C\u000E-\u001F\uFFFE\uFFFF]/g
+
+/**
+ * Excel/OpenXML không chấp nhận một số control chars trong text cell.
+ * Dữ liệu production đôi khi chứa các ký tự này (copy/paste), khiến file tải về nhưng Excel báo corrupt.
+ */
+function sanitizeExcelCellValue(value: unknown): ExcelJS.CellValue {
+  if (typeof value !== "string") return value as ExcelJS.CellValue
+  return value.replace(INVALID_XML_CONTROL_CHARS, "")
 }
 
 function cloneWorksheet(
@@ -88,6 +100,72 @@ function cloneWorksheet(
   })
 
   return newSheet
+}
+
+function cellRectsIntersect(
+  t1: number,
+  l1: number,
+  b1: number,
+  r1: number,
+  t2: number,
+  l2: number,
+  b2: number,
+  r2: number
+): boolean {
+  return !(b2 < t1 || t2 > b1 || r2 < l1 || l2 > r1)
+}
+
+/**
+ * Gỡ merge cũ (kể cả khi `unMergeCells` không tìm thấy ô do hàng thưa), rồi merge lại.
+ * Tránh lỗi ExcelJS "Cannot merge already merged cells" khi gộp ô trùng vùng template / sau spliceRows.
+ */
+function mergeCellsSafe(
+  worksheet: ExcelJS.Worksheet,
+  top: number,
+  left: number,
+  bottom: number,
+  right: number
+) {
+  type MergeBounds = { top: number; left: number; bottom: number; right: number }
+  const ws = worksheet as ExcelJS.Worksheet & { _merges?: Record<string, MergeBounds> }
+  for (let attempt = 0; attempt < 24; attempt++) {
+    const merges = ws._merges
+    if (!merges) break
+    const snapshot = Object.values(merges).filter(Boolean) as MergeBounds[]
+    let clearedAny = false
+    for (const m of snapshot) {
+      if (cellRectsIntersect(top, left, bottom, right, m.top, m.left, m.bottom, m.right)) {
+        worksheet.getCell(m.top, m.left)
+        worksheet.unMergeCells(m.top, m.left, m.bottom, m.right)
+        clearedAny = true
+      }
+    }
+    if (!clearedAny) break
+  }
+  worksheet.mergeCells(top, left, bottom, right)
+}
+
+function applyThinBorderRange(
+  worksheet: ExcelJS.Worksheet,
+  top: number,
+  left: number,
+  bottom: number,
+  right: number
+) {
+  const side = { style: "thin" as const }
+  for (let row = top; row <= bottom; row++) {
+    const excelRow = worksheet.getRow(row)
+    for (let col = left; col <= right; col++) {
+      const cell = excelRow.getCell(col)
+      cell.border = {
+        top: side,
+        left: side,
+        bottom: side,
+        right: side,
+      }
+    }
+    excelRow.commit()
+  }
 }
 
 /** ──────────────── Main ──────────────── */
@@ -148,7 +226,7 @@ async function handleExcelJSDefault(
           for (const key in data) {
             text = text.replace(new RegExp(`{{\\s*${key}\\s*}}`, "g"), String(data[key] ?? ""))
           }
-          cell.value = text
+          cell.value = sanitizeExcelCellValue(text) as ExcelJS.CellValue
         }
       })
     })
@@ -168,7 +246,7 @@ async function handleExcelJSDefault(
 
         for (const cellData of rowData.cells) {
           const cell = excelRow.getCell(currentCol)
-          cell.value = cellData.value
+          cell.value = sanitizeExcelCellValue(cellData.value) as ExcelJS.CellValue
 
           // Style
           cell.alignment = {
@@ -215,7 +293,8 @@ async function handleExcelJSDefault(
           const colSpan = cellData.colSpan ?? 1
           const rowSpan = cellData.rowSpan ?? 1
           if (colSpan > 1 || rowSpan > 1) {
-            worksheet.mergeCells(
+            mergeCellsSafe(
+              worksheet,
               currentRow,
               currentCol,
               currentRow + rowSpan - 1,
@@ -240,6 +319,11 @@ async function handleExcelJSDefault(
       // colWidths.forEach((width, index) => {
       //     worksheet.getColumn(tableStartCell.col + index).width = width
       // })
+    }
+
+    if (sheetOption.thinBorderRange) {
+      const r = sheetOption.thinBorderRange
+      applyThinBorderRange(worksheet, r.top, r.left, r.bottom, r.right)
     }
   }
 
@@ -315,7 +399,7 @@ async function handleSheetJSExport(
             text = text.replace(new RegExp(`{{\\s*${key}\\s*}}`, "g"), String(data[key] ?? ""))
           }
 
-          cell.value = text
+          cell.value = sanitizeExcelCellValue(text)
         }
       })
     })
@@ -342,13 +426,14 @@ async function handleSheetJSExport(
 
           cloneCellStyle(templateCell, cell)
 
-          cell.value = cellData.value
+          cell.value = sanitizeExcelCellValue(cellData.value)
 
           const colSpan = cellData.colSpan ?? 1
           const rowSpan = cellData.rowSpan ?? 1
 
           if (colSpan > 1 || rowSpan > 1) {
-            worksheet.mergeCells(
+            mergeCellsSafe(
+              worksheet,
               currentRow,
               currentCol,
               currentRow + rowSpan - 1,
@@ -496,7 +581,7 @@ async function handleExcelJSMergeSheets(
           for (const key in data) {
             text = text.replace(new RegExp(`{{\\s*${key}\\s*}}`, "g"), String(data[key] ?? ""))
           }
-          cell.value = text
+          cell.value = sanitizeExcelCellValue(text)
         }
       })
     })
@@ -515,7 +600,7 @@ async function handleExcelJSMergeSheets(
 
         for (const cellData of rowData.cells) {
           const cell = excelRow.getCell(currentCol)
-          cell.value = cellData.value
+          cell.value = sanitizeExcelCellValue(cellData.value)
 
           // Style (đã bao gồm logic border: false)
           cell.alignment = {
@@ -557,7 +642,8 @@ async function handleExcelJSMergeSheets(
           const colSpan = cellData.colSpan ?? 1
           const rowSpan = cellData.rowSpan ?? 1
           if (colSpan > 1 || rowSpan > 1) {
-            worksheet.mergeCells(
+            mergeCellsSafe(
+              worksheet,
               currentRow,
               currentCol,
               currentRow + rowSpan - 1,
