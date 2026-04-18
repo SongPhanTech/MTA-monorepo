@@ -15,8 +15,6 @@ const baseSchema = z.object({
     updatedAt: z.coerce.date().default(() => new Date()),
     createdBy: z.string().uuid().nullish(),
     name: z.string().nullish(),
-    academicRank: z.string().nullish(),
-    academicDegree: z.string().nullish(),
     organization: z.string().nullish(),
     position: z.string().nullish(),
     specialization: z.string().nullish(),
@@ -25,8 +23,8 @@ const baseSchema = z.object({
     email: z.string().email().nullish(),
     bankAccountNumber: z.string().nullish(),
     bankName: z.string().nullish(),
-    projectExpert: z.boolean().default(true),
-    thesisExpert: z.boolean().default(true),
+    projectExpert: z.boolean().default(false),
+    thesisExpert: z.boolean().default(false),
     eligiblePresident: z.boolean().default(false),
     eligibleSecretary: z.boolean().default(false),
 }
@@ -41,8 +39,6 @@ const baseSchemaWithoutDefaults = z.object({
     updatedAt: z.coerce.date(),
     createdBy: z.string().uuid().nullish(),
     name: z.string().nullish(),
-    academicRank: z.string().nullish(),
-    academicDegree: z.string().nullish(),
     organization: z.string().nullish(),
     position: z.string().nullish(),
     specialization: z.string().nullish(),
@@ -59,6 +55,8 @@ const baseSchemaWithoutDefaults = z.object({
 ).strict();
 const relationSchema = z.object({
     lecturer: z.record(z.string(), z.unknown()).optional(),
+    academicDegreeType: z.record(z.string(), z.unknown()).optional(),
+    academicRankType: z.record(z.string(), z.unknown()).optional(),
     major: z.array(z.unknown()).optional(),
     supervisedTheses: z.array(z.unknown()).optional(),
     coSupervisedTheses: z.array(z.unknown()).optional(),
@@ -74,6 +72,8 @@ const relationSchema = z.object({
 );
 const fkSchema = z.object({
     lecturerId: z.string().nullish(),
+    academicDegreeTypeId: z.string().uuid().nullish(),
+    academicRankTypeId: z.string().uuid().nullish(),
 }
 );
 
@@ -110,8 +110,6 @@ export const ExpertProfilePrismaUpdateSchema = z.object({
     updatedAt: z.coerce.date(),
     createdBy: z.string().uuid().nullish(),
     name: z.string().nullish(),
-    academicRank: z.string().nullish(),
-    academicDegree: z.string().nullish(),
     organization: z.string().nullish(),
     position: z.string().nullish(),
     specialization: z.string().nullish(),

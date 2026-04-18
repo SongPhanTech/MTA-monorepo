@@ -5603,6 +5603,12 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'academicRankType',
+                }, expertProfile: {
+                    name: "expertProfile",
+                    type: "ExpertProfile",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'academicRankType',
                 },
             }, uniqueConstraints: {
                 Id: {
@@ -5689,6 +5695,12 @@ const metadata: ModelMeta = {
                 }, hocVi: {
                     name: "hocVi",
                     type: "HocVi",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'academicDegreeType',
+                }, expertProfile: {
+                    name: "expertProfile",
+                    type: "ExpertProfile",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'academicDegreeType',
@@ -19052,14 +19064,38 @@ const metadata: ModelMeta = {
                     name: "name",
                     type: "String",
                     isOptional: true,
-                }, academicRank: {
-                    name: "academicRank",
+                }, academicDegreeType: {
+                    name: "academicDegreeType",
+                    type: "DM_HocVi",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'expertProfile',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "Id": "academicDegreeTypeId" },
+                }, academicDegreeTypeId: {
+                    name: "academicDegreeTypeId",
                     type: "String",
                     isOptional: true,
-                }, academicDegree: {
-                    name: "academicDegree",
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
+                    isForeignKey: true,
+                    relationField: 'academicDegreeType',
+                }, academicRankType: {
+                    name: "academicRankType",
+                    type: "DM_HocHam",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'expertProfile',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "Id": "academicRankTypeId" },
+                }, academicRankTypeId: {
+                    name: "academicRankTypeId",
                     type: "String",
                     isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
+                    isForeignKey: true,
+                    relationField: 'academicRankType',
                 }, organization: {
                     name: "organization",
                     type: "String",
@@ -19103,11 +19139,11 @@ const metadata: ModelMeta = {
                 }, projectExpert: {
                     name: "projectExpert",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, thesisExpert: {
                     name: "thesisExpert",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, eligiblePresident: {
                     name: "eligiblePresident",
                     type: "Boolean",

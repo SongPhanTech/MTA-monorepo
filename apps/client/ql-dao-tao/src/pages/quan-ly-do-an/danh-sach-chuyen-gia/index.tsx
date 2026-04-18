@@ -111,6 +111,8 @@ export default function ExpertProfile() {
   const { data: expertProfileData } = useFindManyExpertProfile({
     where,
     include: {
+      academicDegreeType: true,
+      academicRankType: true,
       lecturer: {
         include: {
           userProfile: {

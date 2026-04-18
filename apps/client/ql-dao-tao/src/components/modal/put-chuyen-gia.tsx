@@ -281,8 +281,8 @@ const PutExpertProfile = () => {
             />
           </FormItem>
         </Col>
-      )} */}
-      {/* {!isInternal && (
+      )}
+      {!isInternal && (
         <Col span={12}>
           <FormItem form={form} name="academicDegreeTypeId" label="Học vị">
             <Select
@@ -299,7 +299,7 @@ const PutExpertProfile = () => {
             />
           </FormItem>
         </Col>
-      )} */}
+      )}
       {!isInternal && (
         <Col span={12}>
           <FormItem form={form} name="specialization" label="Chuyên ngành" required>

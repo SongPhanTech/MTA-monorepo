@@ -327,7 +327,7 @@ export function useSuspenseCountExpertProfile<TArgs extends Prisma.ExpertProfile
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('ExpertProfile', `${endpoint}/expertProfile/count`, args, options, fetch);
 }
 
-export function useCheckExpertProfile<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; lecturerId?: string; name?: string; academicRank?: string; academicDegree?: string; organization?: string; position?: string; specialization?: string; workplace?: string; phone?: string; email?: string; bankAccountNumber?: string; bankName?: string; projectExpert?: boolean; thesisExpert?: boolean; eligiblePresident?: boolean; eligibleSecretary?: boolean }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckExpertProfile<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; lecturerId?: string; name?: string; academicDegreeTypeId?: string; academicRankTypeId?: string; organization?: string; position?: string; specialization?: string; workplace?: string; phone?: string; email?: string; bankAccountNumber?: string; bankName?: string; projectExpert?: boolean; thesisExpert?: boolean; eligiblePresident?: boolean; eligibleSecretary?: boolean }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('ExpertProfile', `${endpoint}/expertProfile/check`, args, options, fetch);
 }

@@ -1802,15 +1802,15 @@ model DM_ChucVu {
 }
 
 model DM_HocHam {
-  Id             String        @id() @default(uuid()) @db.Uuid()
+  Id             String          @id() @default(uuid()) @db.Uuid()
   sMa            String?
   sTen           String?
   sGhiChu        String?
-  iSTT           Int?          @default(0)
-  bActive        Boolean?      @default(true)
-  bDeleted       Boolean?      @default(false)
-  bSystem        Boolean?      @default(false)
-  iDictionaryKey Int?          @default(0)
+  iSTT           Int?            @default(0)
+  bActive        Boolean?        @default(true)
+  bDeleted       Boolean?        @default(false)
+  bSystem        Boolean?        @default(false)
+  iDictionaryKey Int?            @default(0)
   dNgayTao       DateTime?
   dNgaySua       DateTime?
   sNguoiTao      String?
@@ -1819,20 +1819,21 @@ model DM_HocHam {
   sThietBiSua    String?
   profiles       UserProfile[]
   hocHam         HocHam[]
+  expertProfile  ExpertProfile[]
 
   @@schema("mta")
 }
 
 model DM_HocVi {
-  Id             String        @id() @default(uuid()) @db.Uuid()
+  Id             String          @id() @default(uuid()) @db.Uuid()
   sMa            String?
   sTen           String?
   sGhiChu        String?
-  iSTT           Int?          @default(0)
-  bActive        Boolean?      @default(true)
-  bDeleted       Boolean?      @default(false)
-  bSystem        Boolean?      @default(false)
-  iDictionaryKey Int?          @default(0)
+  iSTT           Int?            @default(0)
+  bActive        Boolean?        @default(true)
+  bDeleted       Boolean?        @default(false)
+  bSystem        Boolean?        @default(false)
+  iDictionaryKey Int?            @default(0)
   dNgayTao       DateTime?
   dNgaySua       DateTime?
   sNguoiTao      String?
@@ -1841,6 +1842,7 @@ model DM_HocVi {
   sThietBiSua    String?
   profiles       UserProfile[]
   hocVi          HocVi[]
+  expertProfile  ExpertProfile[]
 
   @@schema("mta")
 }
@@ -4951,8 +4953,10 @@ model ExpertProfile {
   lecturer                     Lecturer?              @relation(fields: [lecturerId], references: [id])
   lecturerId                   String?                @unique()
   name                         String?
-  academicRank                 String?
-  academicDegree               String?
+  academicDegreeType           DM_HocVi?              @relation(fields: [academicDegreeTypeId], references: [Id])
+  academicDegreeTypeId         String?                @db.Uuid()
+  academicRankType             DM_HocHam?             @relation(fields: [academicRankTypeId], references: [Id])
+  academicRankTypeId           String?                @db.Uuid()
   organization                 String?
   position                     String?
   specialization               String?
@@ -4962,8 +4966,8 @@ model ExpertProfile {
   email                        String?
   bankAccountNumber            String?
   bankName                     String?
-  projectExpert                Boolean                @default(true)
-  thesisExpert                 Boolean                @default(true)
+  projectExpert                Boolean                @default(false)
+  thesisExpert                 Boolean                @default(false)
   eligiblePresident            Boolean                @default(false)
   eligibleSecretary            Boolean                @default(false)
   supervisedTheses             ThesisProject[]        @relation("SupervisorToThesis")

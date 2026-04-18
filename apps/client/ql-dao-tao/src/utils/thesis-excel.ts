@@ -1180,22 +1180,12 @@ export const exportHosobvlv = async ({
         text1: text1,
         text2: text2,
       }
-      const gapRow: TableRow = {
-        cells: [{ value: null, colSpan: 18, border: false }],
-      }
       return {
-        sheet: `${student.userProfile?.code}`,
+        // sheet: `${student.userProfile?.code}`,
         data: data,
-        tableStartCell: { row: 104, col: 1 },
-        rows: [gapRow],
+        // tableStartCell: { row: 104, col: 1 },
+        // rows: [gapRow],
       }
-    })
-    await exportFromTemplate({
-      templateUrl: getMinioUrl("mta/template/HoSoBVLVTN.xlsx"),
-      sheets: allSheetOptions ?? [],
-      fileName: "Hosobvlv",
-      mergeSheetsToOne: true,
-      sheetName: "Hosobvlv",
     })
     const payload: ExcelTemplateBody = {
       head: { data: null },
