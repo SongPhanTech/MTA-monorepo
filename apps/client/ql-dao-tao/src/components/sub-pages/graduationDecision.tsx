@@ -894,7 +894,7 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
             loading={isExportingTemplate}
           >
             <FileDown />
-            Xuất mẫu file phụ lục văn bằng
+            Xuất mẫu file phôi văn bằng
           </Button>
           <Button
             type="primary"
@@ -902,7 +902,7 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
             loading={isExportingPhuLucTemplate}
           >
             <FileDown />
-            Xuất phụ lục văn bằng
+            Xuất mẫu phụ lục văn bằng
           </Button>
           <Button type="primary" onClick={() => handleExportResult()} loading={isExporting}>
             <Sheet />
