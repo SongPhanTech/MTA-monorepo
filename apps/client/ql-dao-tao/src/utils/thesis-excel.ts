@@ -17,7 +17,11 @@ interface ExportOptions {
   /** Người ký (mẫu cần ký): họ tên và chức danh — thay thế placeholder trong template */
   signerName?: string
   isChief?: boolean
+  signingDate?: Date | string
 }
+
+const resolveSigningDate = (signingDate?: Date | string) =>
+  signingDate ? dayjs(signingDate) : dayjs()
 interface GmcLvPbData {
   data: {
     dotXet: string
@@ -311,7 +315,7 @@ export const exportPhuLucDsLuanVan = async ({
   }
 
   try {
-    const organizationMap = new Map<string, any>()
+    const majorMap = new Map<string, any>()
     let dotxet = ""
     let soQD = ""
     let ngayQD = ""
@@ -329,25 +333,26 @@ export const exportPhuLucDsLuanVan = async ({
             ).format("DD/MM/YYYY")
           : ""
       if (!thesisProject) return
-      const organizationId = thesisProject.organization?.Id || ""
-      const organizationName = thesisProject.organization?.sTen || "Chưa có đơn vị"
-      const organizationCode = thesisProject.organization?.sCode || ""
-      if (!organizationMap.has(organizationId)) {
-        organizationMap.set(organizationId, {
-          organizationId: organizationId === "" ? null : organizationId,
-          sTen: organizationName || "",
-          sCode: organizationCode || "",
+      const majorName =
+        student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.trainingField?.name || ""
+      const specializationName =
+        student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || ""
+      const groupKey = `${majorName}__${specializationName}`
+      if (!majorMap.has(groupKey)) {
+        majorMap.set(groupKey, {
+          majorName: majorName || "Chưa có ngành",
+          specializationName: specializationName || "Chưa có chuyên ngành",
           thesisProject: [],
         })
       }
-      const orgData = organizationMap.get(organizationId)
-      orgData.thesisProject.push({
+      const groupData = majorMap.get(groupKey)
+      groupData.thesisProject.push({
         studentId: student.id || "",
         hovatenhocvien: student.userProfile?.fullname || "",
         ngaysinh: student.userProfile?.dateOfBirth
           ? dayjs(student.userProfile.dateOfBirth).format("DD/MM/YYYY")
           : "",
-        doituongdaotao: student?.fixedClass?.trainingCourse?.trainingObjectType?.name || "",
+        doituongdaotao: tenDoiTuong[student?.fixedClass?.trainingCourse?.trainingObjectType?.type as keyof typeof tenDoiTuong]?.shortname || "",
         khoa: student.fixedClass?.trainingCourse?.name || "",
         tendetai: thesisProject.title || "",
         gvhd1: getSupervisorName(thesisProject.supervisor, false, true) || "",
@@ -356,7 +361,7 @@ export const exportPhuLucDsLuanVan = async ({
         language: thesisProject.language.trim(),
       })
     })
-    const result = Array.from(organizationMap.values())
+    const result = Array.from(majorMap.values())
     if (result.length === 0) {
       message.error("Không có dữ liệu để xuất phụ lục danh sách luận văn")
       hideSpinner()
@@ -369,7 +374,7 @@ export const exportPhuLucDsLuanVan = async ({
       const orgRow: TableRow = {
         cells: [
           {
-            value: `${index + 1}.${item.sCode} - ${item.sTen} (${item.thesisProject.length} học viên)`,
+            value: `${index + 1} Ngành ${item.majorName} (${item.specializationName}) : ${item.thesisProject.length} học viên`,
             border: true,
             align: "center",
             colSpan: 6,
@@ -383,22 +388,23 @@ export const exportPhuLucDsLuanVan = async ({
           cells: [
             { value: count++, border: true, align: "center", fontSize: 12 },
             {
-              value: `${thesis.hovatenhocvien}\n${thesis.ngaysinh}\n${thesis.doituongdaotao}-${thesis.khoa}`,
+              value: `${thesis.hovatenhocvien}\nNS:${thesis.ngaysinh}\n${thesis.doituongdaotao}-${thesis.khoa}`,
               border: true,
               align: "left",
               fontSize: 12,
             },
             { value: `${thesis.tendetai}`, border: true, align: "left", fontSize: 12 },
             {
-              value: `${thesis.gvhd1 ? `1. ${thesis.gvhd1}` : ""}\n${
-                thesis.gvhd2 ? `2. ${thesis.gvhd2}` : ""
-              }`,
+              value:
+                thesis.gvhd1 && thesis.gvhd2
+                  ? `1. ${thesis.gvhd1}\n2. ${thesis.gvhd2}`
+                  : thesis.gvhd1 || thesis.gvhd2 || "",
               border: true,
               align: "left",
               fontSize: 12,
             },
             { value: `${thesis.isThesis}`, border: true, align: "center", fontSize: 12 },
-            { value: `${thesis.language}`, border: true, align: "center", fontSize: 12 },
+            { value: `${thesis.language.trim().toLowerCase() === "tiếng việt" ? "" : thesis.language}`, border: true, align: "center", fontSize: 12 },
           ],
         }
       })
@@ -1217,13 +1223,14 @@ export const exportGiayMoiHdlv = async ({
   message,
   isChief,
   signerName,
+  signingDate,
 }: ExportOptions) => {
   if (!allStudentsInClasses?.length) {
     message.error("Không có dữ liệu đế tạo giấy mời HDLV")
     return
   }
   showSpinner()
-  const presentDay = dayjs().format("DD/MM/YYYY")
+  const presentDay = resolveSigningDate(signingDate).format("DD/MM/YYYY")
   const ngay = presentDay.split("/")[0]
   const thang = presentDay.split("/")[1]
   const nam = presentDay.split("/")[2]
@@ -1283,17 +1290,17 @@ export const exportSaoQDHDLV = async ({
   message,
   signerName,
   isChief,
+  signingDate,
 }: ExportOptions) => {
   if (!allStudentsInClasses?.length) {
     message.error("Không có dữ liệu đế tạo sao QĐ HDLV")
     return
   }
   showSpinner()
-  const presentDay = dayjs().format("DD/MM/YYYY")
-
-  const ngayHT = presentDay.split("/")[0]
-  const thangHT = presentDay.split("/")[1]
-  const namHT = presentDay.split("/")[2]
+  const now = resolveSigningDate(signingDate)
+  const ngayHT = now.format("DD")
+  const thangHT = now.format("M")
+  const namHT = now.format("YYYY")
   try {
     const allSheetOptions = allStudentsInClasses
       ?.filter((s) => s?.thesisRegistrations?.[0]?.thesisProject)
@@ -1313,7 +1320,7 @@ export const exportSaoQDHDLV = async ({
           ? dayjs(thesisProject?.thesisSession?.decisionDate).format("DD")
           : ""
         const thangQD = thesisProject?.thesisSession?.decisionDate
-          ? dayjs(thesisProject?.thesisSession?.decisionDate).format("MM")
+          ? dayjs(thesisProject?.thesisSession?.decisionDate).format("M")
           : ""
         const namQD = thesisProject?.thesisSession?.decisionDate
           ? dayjs(thesisProject?.thesisSession?.decisionDate).format("YYYY")
@@ -1556,6 +1563,7 @@ export const exportGiayMoiChamLvPb = async ({
   message,
   signerName,
   isChief,
+  signingDate,
 }: ExportOptions) => {
   if (!allStudentsInClasses?.length) {
     message.error("Không có dữ liệu để tạo giấy mời chấm LV PB")
@@ -1563,7 +1571,12 @@ export const exportGiayMoiChamLvPb = async ({
   }
   try {
     showSpinner?.()
-    const dataConvert = convertToGmcLvPbData(allStudentsInClasses, signerName, isChief)
+    const dataConvert = convertToGmcLvPbData(
+      allStudentsInClasses,
+      signerName,
+      isChief,
+      signingDate
+    )
     if (dataConvert.length === 0) {
       message.error("Không có dữ liệu để tạo giấy mời chấm LV PB")
       return
@@ -1604,7 +1617,8 @@ const downloadFile = (blob: Blob, fileName: string) => {
 const convertToGmcLvPbData = (
   allStudentsInClasses: any[],
   signerName?: string,
-  isChief?: boolean
+  isChief?: boolean,
+  signingDate?: Date | string
 ): GmcLvPbData[] => {
   if (!allStudentsInClasses?.length) return []
 
@@ -1612,7 +1626,7 @@ const convertToGmcLvPbData = (
   const expertStudentMap = new Map<string, Set<string>>()
   const expertProjectTypeMap = new Map<string, Set<"luận văn" | "đề án">>()
 
-  const now = dayjs()
+  const now = resolveSigningDate(signingDate)
   const ngay = now.format("DD")
   const thang = now.format("MM")
   const nam = now.format("YYYY")
@@ -2449,6 +2463,7 @@ export const exportBanSaoHDDGLV = async ({
   message,
   signerName,
   isChief,
+  signingDate,
 }: ExportOptions) => {
   if (!allStudentsInClasses?.length) {
     message.error("Không có dữ liệu để xuất bản sao hội đồng bảo vệ luan van")
@@ -2456,7 +2471,12 @@ export const exportBanSaoHDDGLV = async ({
   }
   try {
     showSpinner?.()
-    const dataConvert = convertToBanSaoHDDGLV(allStudentsInClasses, signerName, isChief)
+    const dataConvert = convertToBanSaoHDDGLV(
+      allStudentsInClasses,
+      signerName,
+      isChief,
+      signingDate
+    )
 
     if (!dataConvert) {
       message.error("Chưa có dữ liệu để xuất bản sao hội đồng bảo vệ luan van")
@@ -2488,11 +2508,12 @@ export const exportBanSaoHDDGLV = async ({
 const convertToBanSaoHDDGLV = (
   allStudentsInClasses: any[],
   signerName?: string,
-  isChief?: boolean
+  isChief?: boolean,
+  signingDate?: Date | string
 ): banSaoHDDGLV[] => {
   if (!allStudentsInClasses?.length) return []
 
-  const now = dayjs()
+  const now = resolveSigningDate(signingDate)
   const currentDay = now.format("DD")
   const currentMonth = now.format("MM")
   const currentYear = now.format("YYYY")
