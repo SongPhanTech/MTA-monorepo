@@ -1,11 +1,11 @@
-import { NotificationOutlined } from "@ant-design/icons"
-import { useFindManyNotification } from "@workspace/db/hooks"
-import { Alert, Empty, Space } from "antd"
-import dayjs from "dayjs"
-import { useDisclosure } from "react-hook-disclosure-modal"
+import { NotificationOutlined } from "@ant-design/icons";
+import { useFindManyNotification } from "@workspace/db/hooks";
+import { Alert, Empty, Space } from "antd";
+import dayjs from "dayjs";
+import { useDisclosure } from "react-hook-disclosure-modal";
 
 function DanhSachThongBao() {
-  const today = dayjs().endOf("day").toDate()
+  const today = dayjs().endOf("day").toDate();
   const { data = [] } = useFindManyNotification({
     where: {
       active: true,
@@ -17,10 +17,10 @@ function DanhSachThongBao() {
     orderBy: {
       publishedAt: "desc",
     },
-  })
+  });
   const { onOpen } = useDisclosure<string>({
     tag: "ViewNotificationModal",
-  })
+  });
   return (
     <div
       style={{
@@ -37,8 +37,8 @@ function DanhSachThongBao() {
               <div
                 key={item?.id}
                 onClick={() => {
-                  console.log("open into")
-                  onOpen(item?.id)
+                  console.log("open into");
+                  onOpen(item?.id);
                 }}
                 className="cursor-pointer"
               >
@@ -53,7 +53,7 @@ function DanhSachThongBao() {
                   type={item.type === "URGENT" ? "error" : "info"}
                 />
               </div>
-            )
+            );
           })}
         </Space>
       ) : (
@@ -62,7 +62,7 @@ function DanhSachThongBao() {
         </div>
       )}
     </div>
-  )
+  );
 }
 
-export { DanhSachThongBao }
+export { DanhSachThongBao };

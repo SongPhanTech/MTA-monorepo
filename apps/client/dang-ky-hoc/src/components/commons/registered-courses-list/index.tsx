@@ -109,8 +109,9 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
           ?.filter((sc) => (sc?.classRegisterLogs?.length || 0) > 0)
       : [];
 
-  const { classToSubjectCodeMap, registeredSubjectCodes } = useMemo(() => {
+  const { classToSubjectCodeMap, registeredSubjectCodes, classToParentMap } = useMemo(() => {
     const map = new Map<string, string>();
+    const parentMap = new Map<string, any>();
     const set = new Set<string>();
 
     if (classesInfo?.status === 200) {
@@ -124,13 +125,21 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
         if (hasRegistered) set.add(subjectCode);
 
         subject.subjectClass?.forEach((sc) => {
-          if (sc?.id) map.set(sc.id, subjectCode);
+          if (sc?.id) {
+            map.set(sc.id, subjectCode);
+            parentMap.set(sc.id, subject); // Lưu mapping từ Class ID sang Subject Version (Cha)
+          }
         });
       });
     }
 
-    return { classToSubjectCodeMap: map, registeredSubjectCodes: set };
+    return { 
+      classToSubjectCodeMap: map, 
+      registeredSubjectCodes: set,
+      classToParentMap: parentMap
+    };
   }, [classesInfo]);
+
 
   const {
     mutateAsync: classRegisterMutate,
@@ -377,21 +386,45 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
                   : "-",
             },
             {
-              title: "Môn học tiên quyết",
+              title: "Tiên quyết / Song hành",
               align: "center",
-              width: 150,
+              width: 180,
               render: (_, record) => {
-                if (!record?.prerequisiteSubject?.length) {
-                  return <div>Không có</div>;
+                const parentData = record.$type === "child" 
+                  ? classToParentMap.get(record.id) 
+                  : record;
+
+                const hasPrerequisite = parentData?.prerequisiteSubject?.length > 0;
+                const hasCoRequisite = parentData?.coRequisiteSubject?.length > 0;
+
+                if (!hasPrerequisite && !hasCoRequisite) {
+                  return <div className="text-gray-400 italic">Không có</div>;
                 }
-                const prerequisiteSubjects = record?.prerequisiteSubject?.map(
-                  (subject) => {
-                    return <p>{subject?.name}</p>;
-                  },
+
+                return (
+                  <div className="flex flex-col gap-1 text-[11px] text-left">
+                    {hasPrerequisite && (
+                      <div>
+                        <span className="font-semibold text-red-600">Tiên quyết:</span>
+                        {parentData.prerequisiteSubject.map((s: any) => (
+                          <div key={s.code} className="ml-1 text-gray-700">• {s.name}</div>
+                        ))}
+                      </div>
+                    )}
+                    {hasCoRequisite && (
+                      <div className={hasPrerequisite ? "mt-1 border-t pt-1" : ""}>
+                        <span className="font-semibold text-blue-600">Học trước:</span>
+                        {parentData.coRequisiteSubject.map((s: any) => (
+                          <div key={s.code} className="ml-1 text-gray-700">• {s.name}</div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 );
-                return prerequisiteSubjects;
               },
+
             },
+
             {
               title: "Thao tác",
               align: "center",
