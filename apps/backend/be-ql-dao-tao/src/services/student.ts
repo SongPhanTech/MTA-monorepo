@@ -539,3 +539,176 @@ export const exportArchivedCertificate = async ({
   const result = (await template.generate({ type: "arraybuffer" })) as ArrayBuffer
   return result
 }
+
+export const exportArchivedCertificateMulti = async ({
+  trainingObjectTypeId,
+  trainingCourseIds,
+  certificateIds,
+}: {
+  trainingObjectTypeId: string
+  trainingCourseIds: string[]
+  certificateIds: string[]
+}) => {
+  if (!trainingCourseIds.length) {
+    throw new Error("Vui lòng chọn ít nhất một khóa học")
+  }
+
+  if (!certificateIds.length) {
+    throw new Error("Vui lòng chọn ít nhất một loại chứng chỉ")
+  }
+
+  const archivedCertificates = await prisma.archivedCertificate.findMany({
+    where: {
+      deletedAt: null,
+      certificateId: { in: certificateIds },
+      student: {
+        fixedClass: {
+          trainingCourseId: { in: trainingCourseIds },
+          trainingCourse: {
+            trainingObjectTypeId,
+            deletedAt: null,
+            active: true,
+          },
+        },
+      },
+    },
+    include: {
+      certificate: true,
+      student: {
+        include: {
+          userProfile: true,
+          fixedClass: {
+            include: {
+              trainingCourse: true,
+              curriculumVersion: {
+                include: {
+                  curriculum: {
+                    include: {
+                      trainingMajor: {
+                        include: {
+                          trainingField: true,
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    orderBy: [
+      { student: { userProfile: { fullname: "asc" } } },
+      { createdAt: "desc" },
+    ],
+  })
+
+  if (!archivedCertificates.length) {
+    throw new Error("Không có dữ liệu điểm chứng chỉ để xuất")
+  }
+
+  const selectedCertificates = await prisma.certificate.findMany({
+    where: {
+      id: { in: certificateIds },
+      deletedAt: null,
+      active: true,
+    },
+    select: {
+      id: true,
+      name: true,
+    },
+  })
+
+  const certificateMap = new Map(selectedCertificates.map((item) => [item.id, item.name]))
+  const orderedCertificates = certificateIds
+    .map((id) => ({ id, name: certificateMap.get(id) }))
+    .filter((item): item is { id: string; name: string } => !!item.name)
+
+  const studentMap = new Map<
+    string,
+    {
+      no: number
+      dateOfBirth: string
+      placeOfBirth: string
+      idCardNumber: string
+      studentName: string
+      fixedClass: string
+      trainingCourse: string
+      trainingMajorName: string
+      scores: Record<string, string | number | null>
+      issuedDate: string
+      issuedBy: string
+    }
+  >()
+
+  for (const archived of archivedCertificates) {
+    const student = archived.student
+    const userProfile = student?.userProfile
+    const fixedClass = student.fixedClass
+    const curriculum = fixedClass?.curriculumVersion?.curriculum
+    const trainingMajor = curriculum?.trainingMajor
+    const key = `${archived.studentId}_${fixedClass?.id || ""}`
+
+    if (!studentMap.has(key)) {
+      studentMap.set(key, {
+        no: studentMap.size + 1,
+        studentName: student.userProfile?.fullname || "",
+        dateOfBirth: userProfile?.dateOfBirth
+          ? `'${dayjs(userProfile.dateOfBirth).tz("Asia/Ho_Chi_Minh").format("DD/MM/YYYY")}`
+          : "",
+        placeOfBirth: userProfile?.placeOfBirth || "",
+        idCardNumber: userProfile?.idCardNumber || "",
+        fixedClass: fixedClass?.name || "",
+        trainingCourse: fixedClass?.trainingCourse?.name || "",
+        trainingMajorName: trainingMajor?.name || "",
+        issuedDate: archived.issuedDate
+        ? `'${dayjs(archived.issuedDate).tz("Asia/Ho_Chi_Minh").format("DD/MM/YYYY")}`
+        : "",
+        issuedBy: archived.issuedBy || "",
+        scores: {},
+      })
+    }
+
+    const row = studentMap.get(key)
+    if (!row) continue
+
+    if (row.scores[archived.certificateId] === undefined) {
+      row.scores[archived.certificateId] = "Có"
+    }
+  }
+
+  const data = Array.from(studentMap.values()).map((rowData) => {
+
+    const scoresArray = orderedCertificates.map((cert) =>
+      rowData.scores[cert.id] !== undefined ? "Có" : "Không"
+    )
+
+    return {
+      no: rowData.no,
+      studentName: rowData.studentName,
+      dateOfBirth: rowData.dateOfBirth,
+      placeOfBirth: rowData.placeOfBirth,
+      idCardNumber: rowData.idCardNumber,
+      fixedClass: rowData.fixedClass,
+      trainingCourse: rowData.trainingCourse,
+      trainingMajorName: rowData.trainingMajorName,
+      issuedDate: rowData.issuedDate,
+      issuedBy: rowData.issuedBy,
+      scores: scoresArray,
+    }
+  })
+
+  const certNames = orderedCertificates.map(cert => cert.name);
+
+  const buffer = await getTemplateBuffer(prisma, "DIEM_CHUNG_CHI_MULTI.xlsx")
+  const template = new XlsxTemplate(buffer)
+
+  template.substitute(1, {
+    data,
+    certNames: certNames,
+  })
+
+  const result = (await template.generate({ type: "arraybuffer" })) as ArrayBuffer
+  return result
+}
