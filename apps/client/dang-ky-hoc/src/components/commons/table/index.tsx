@@ -30,6 +30,7 @@ import { Search } from "lucide-react";
 import { useCallback, useState } from "react";
 import FilterSelect from "./filter-select";
 import "./index.css";
+import clsx from "clsx";
 
 dayjs.locale("vi");
 
@@ -878,7 +879,7 @@ const Table = <T extends AnyObject>({
   };
 
   return (
-    <div className="flex flex-col">
+    <div className={clsx("flex flex-col", rest?.className)}>
       {header && (
         <div className="mt-5 border-gray-200 border border-b-0 px-2.5 py-2.5">
           {header}
@@ -902,7 +903,6 @@ const Table = <T extends AnyObject>({
             ...genFilter(column as ColumnTypeProps),
           })) as ColumnsType<T>
         }
-        // scroll={{ x: 'max-content', y: scrollable ? maxHeight : undefined }}
         scroll={{ x: "100%", y: scrollable ? maxHeight : undefined }}
         bordered
         dataSource={data}

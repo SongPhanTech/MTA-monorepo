@@ -8,16 +8,14 @@
   border-collapse: collapse;
   table-layout: fixed;
   min-width: 900px;
-  border: 1px solid #CCCCCC;
+  border: 1px solid #cccccc;
 }
 
 .timetable th,
 .timetable td {
-  border: 1px solid #CCCCCC;
+  border: 1px solid #cccccc;
   padding: 8px;
 }
-
-
 
 .timetable th {
   padding: 8px;
@@ -50,8 +48,8 @@
   display: flex;
   flex-direction: column;
   gap: 2px;
-  border: 1px solid #3b82f6; 
-  background: #f0f7ff; 
+  border: 1px solid #3b82f6;
+  background: #f0f7ff;
   transition: all 0.2s ease;
   cursor: pointer;
 }
@@ -126,4 +124,78 @@
   text-align: center;
 }
 
+@media print {
+  @page {
+    size: A4 landscape;
+    margin: 5mm;
+  }
 
+  body {
+    background: #fff !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  #print-timetable {
+    display: block !important;
+    overflow-x: visible;
+    width: 100% !important;
+    height: auto !important;
+    position: relative !important;
+    z-index: 9999;
+    background: #fff;
+    border: none !important;
+    -webkit-print-color-adjust: exact;
+    page-break-inside: avoid;
+  }
+
+  .ant-layout {
+    margin-inline-start: 0 !important;
+  }
+
+  .timetable {
+    width: 100% !important;
+    min-width: unset !important;
+    border: 1.5px solid #000 !important;
+    table-layout: auto;
+  }
+
+  .timetable th,
+  .timetable td {
+    border: 1px solid #000 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .course-block {
+    break-inside: avoid;
+    border: 1px solid #3b82f6 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .course-block.conflict {
+    border: 1.5px solid #ef4444 !important;
+  }
+
+  .ant-layout-sider,
+  .ant-layout-header,
+  .ant-tabs-nav,
+  .ant-tabs-nav-list,
+  .ant-tabs-nav-operations,
+  .not-print,
+  .ant-tooltip {
+    display: none !important;
+  }
+
+  .course-name {
+    color: #000 !important;
+  }
+  .chatbox-toggle-btn {
+    display: none !important;
+  }
+
+  .ant-layout-content > div:first-child {
+    box-shadow: none !important;
+  }
+}

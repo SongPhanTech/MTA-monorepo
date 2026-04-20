@@ -292,7 +292,7 @@ const TableCollapse = <
           expandIcon: ({ expanded, onExpand, record }) => {
             const children = record[childrenFieldName];
             return Array.isArray(children) ? (
-              <div className="flex">
+              <div className="flex justify-center">
                 {children.length > 0 && (
                   <DownOutlined
                     onClick={(e) => {

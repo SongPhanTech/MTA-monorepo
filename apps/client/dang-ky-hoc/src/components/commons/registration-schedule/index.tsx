@@ -55,7 +55,7 @@ const CourseBlock = ({
               disabled={isUnregistering}
               onConfirm={() => onUnregister(course.id)}
             >
-              <CircleXIcon size={12} className="text-gray-400 cursor-pointer hover:text-red-500 transition-colors" />
+              <CircleXIcon size={12} className="text-gray-400 cursor-pointer hover:text-red-500 transition-colors not-print" />
             </Popconfirm>
           )}
         </div>
@@ -130,7 +130,7 @@ const ThoiKhoaBieuDangKy = (props: ISubjectClassTime) => {
   });
 
   return (
-    <div className="timetable-container">
+    <div className="timetable-container" id="print-timetable">
       <table className="timetable">
         <thead>
           <tr>
