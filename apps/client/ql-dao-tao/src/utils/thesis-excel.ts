@@ -350,8 +350,8 @@ export const exportPhuLucDsLuanVan = async ({
         doituongdaotao: student?.fixedClass?.trainingCourse?.trainingObjectType?.name || "",
         khoa: student.fixedClass?.trainingCourse?.name || "",
         tendetai: thesisProject.title || "",
-        gvhd1: getSupervisorName(thesisProject.supervisor) || "",
-        gvhd2: getSupervisorName(thesisProject.coSupervisor) || "",
+        gvhd1: getSupervisorName(thesisProject.supervisor, false, true) || "",
+        gvhd2: getSupervisorName(thesisProject.coSupervisor, false, true) || "",
         isThesis: thesisProject.type,
         language: thesisProject.language.trim(),
       })
@@ -464,7 +464,7 @@ export const getExpertSupervisionStats = (allStudentsInClasses: any[]) => {
     if (!stats) {
       stats = {
         expertId: expertId,
-        name: (getSupervisorName(expert, false, false) as string) || "",
+        name: (getSupervisorName(expert, false, true) as string) || "",
         sDonvi: expert?.workplace || expert?.lecturer?.organization?.sMa || "",
         stk: expert?.bankAccountNumber || expert?.lecturer?.userProfile?.bankAccountNumber || "",
         tennganhang: expert?.bankName || expert?.lecturer?.userProfile?.bankName || "",
@@ -717,11 +717,11 @@ const buildDanhSachBaoVeDanNgoaiPhongHall = (
 
   const uvNames = councilMembers
     .filter((m: any) => m.role === CouncilRole.MEMBER)
-    .map((m: any) => (getSupervisorName(m?.expert, false, false) as string) || "")
+    .map((m: any) => (getSupervisorName(m?.expert, false, true) as string) || "")
     .filter(Boolean)
 
-  const cbhd1Name = (getSupervisorName(project?.supervisor, false, false) as string) || ""
-  const cbhd2Name = (getSupervisorName(project?.coSupervisor, false, false) as string) || ""
+  const cbhd1Name = (getSupervisorName(project?.supervisor, false, true) as string) || ""
+  const cbhd2Name = (getSupervisorName(project?.coSupervisor, false, true) as string) || ""
 
   return {
     roomName: project?.room?.name || "",
@@ -732,10 +732,10 @@ const buildDanhSachBaoVeDanNgoaiPhongHall = (
     ]
       .filter((line) => line.trim() !== "")
       .join("\n"),
-    ctName: (getSupervisorName(chairman?.expert, false, false) as string) || "",
-    tkName: (getSupervisorName(secretary?.expert, false, false) as string) || "",
-    pb1Name: (getSupervisorName(reviewer1?.expert, false, false) as string) || "",
-    pb2Name: (getSupervisorName(reviewer2?.expert, false, false) as string) || "",
+    ctName: (getSupervisorName(chairman?.expert, false, true) as string) || "",
+    tkName: (getSupervisorName(secretary?.expert, false, true) as string) || "",
+    pb1Name: (getSupervisorName(reviewer1?.expert, false, true) as string) || "",
+    pb2Name: (getSupervisorName(reviewer2?.expert, false, true) as string) || "",
     uvNames,
   }
 }
@@ -1171,11 +1171,11 @@ export const exportHosobvlv = async ({
               "DD/MM/YYYY"
             )
           : "",
-        phanbien1: getSupervisorName(phanbien1?.expert) || "",
-        phanbien2: getSupervisorName(phanbien2?.expert) || "",
-        chutich: getSupervisorName(chutich?.expert) || "",
-        thuky: getSupervisorName(thuky?.expert) || "",
-        uyvien: getSupervisorName(uyvien?.expert) || "",
+        phanbien1: getSupervisorName(phanbien1?.expert, false, true) || "",
+        phanbien2: getSupervisorName(phanbien2?.expert, false, true) || "",
+        chutich: getSupervisorName(chutich?.expert, false, true) || "",
+        thuky: getSupervisorName(thuky?.expert, false, true) || "",
+        uyvien: getSupervisorName(uyvien?.expert, false, true) || "",
         nguoiki: tenNguoiKyQddt,
         text1: text1,
         text2: text2,
@@ -1415,8 +1415,8 @@ export const exportKiemTraTienDo = async ({
         })
       }
       const orgData = organizationMap.get(organizationId)
-      const gvhd1 = getSupervisorName(thesisProject.supervisor) || ""
-      const gvhd2 = getSupervisorName(thesisProject.coSupervisor) || ""
+      const gvhd1 = getSupervisorName(thesisProject.supervisor, false, true) || ""
+      const gvhd2 = getSupervisorName(thesisProject.coSupervisor, false, true) || ""
       const gvhdNames = [gvhd1, gvhd2].filter(Boolean)
       orgData.thesisProject.push({
         studentId: student.id || "",
@@ -1959,8 +1959,8 @@ const convertToDsnlvtvData = (allStudentsInClasses: any[]): DsnlvtvData => {
 
     const thongTinBaoVe = `${hoTen} \n ${doiTuong} - ${khoaHoc} - ${chuyenNganh}`
 
-    const gvhd1 = (getSupervisorName(project.supervisor, false, false) as string) || ""
-    const gvhd2 = (getSupervisorName(project.coSupervisor, false, false) as string) || ""
+    const gvhd1 = (getSupervisorName(project.supervisor, false, true) as string) || ""
+    const gvhd2 = (getSupervisorName(project.coSupervisor, false, true) as string) || ""
 
     let thongTinHuongDan = ""
     if (gvhd1 && gvhd2) {
@@ -2075,7 +2075,7 @@ const convertToThongKeCbThamGiaHdData = (allStudentsInClasses: any[]): ThongKeCb
 
       project.council.members.forEach((member: any) => {
         const expert = member.expert
-        const name = (getSupervisorName(expert, false, false) as string) || ""
+        const name = (getSupervisorName(expert, false, true) as string) || ""
         const donViQuanLi = expert?.workplace || expert?.lecturer?.organization?.sMa || ""
 
         if (!expert?.id) return
@@ -2271,7 +2271,7 @@ const convertToThanhToanHuongDanTrongHvData = (
     const quyetDinh = `${qdNum} \n ngày ${qdDate}`
 
     const supervisorNames = supervisorRows.map(
-      (item) => (getSupervisorName(item.expert, false, false) as string) || ""
+      (item) => (getSupervisorName(item.expert, false, true) as string) || ""
     )
     let thongTinHuongDan = ""
     thongTinHuongDan =
@@ -2519,11 +2519,11 @@ const convertToBanSaoHDDGLV = (
       const qdDate = session?.defenseDecisionDate ? dayjs(session.defenseDecisionDate) : null
       let gvhd1 = ""
       if (project?.supervisor) {
-        gvhd1 = (getSupervisorName(project?.supervisor) as string) || ""
+        gvhd1 = (getSupervisorName(project?.supervisor, false, true) as string) || ""
       }
       let gvhd2 = ""
       if (project?.coSupervisor) {
-        gvhd2 = (getSupervisorName(project?.coSupervisor) as string) || ""
+        gvhd2 = (getSupervisorName(project?.coSupervisor, false, true) as string) || ""
       }
       const loaiLuanVan = project?.type.trim().toLowerCase() || ""
       const nganh =
@@ -2566,16 +2566,16 @@ const convertToBanSaoHDDGLV = (
             : "",
           khoaHoc: student.fixedClass?.trainingCourse?.name || "",
           gvhd: [gvhd1, gvhd2].filter(Boolean).join("; "),
-          tenChuTich: (getSupervisorName(chairman?.expert) as string) || "",
+          tenChuTich: (getSupervisorName(chairman?.expert, false, true) as string) || "",
           toChucChuTich: chairman?.expert?.workplace || "HVKTQS",
 
-          tenThuKy: (getSupervisorName(secretary?.expert) as string) || "",
+          tenThuKy: (getSupervisorName(secretary?.expert, false, true) as string) || "",
           toChucThuKy: secretary?.expert?.workplace || "HVKTQS",
-          tenUyVien: (getSupervisorName(member?.expert) as string) || "",
+          tenUyVien: (getSupervisorName(member?.expert, false, true) as string) || "",
           toChucUyVien: member?.expert?.workplace || "HVKTQS",
-          tenPb1: (getSupervisorName(pb1?.expert) as string) || "",
+          tenPb1: (getSupervisorName(pb1?.expert, false, true) as string) || "",
           toChucPb1: pb1?.expert?.workplace || "HVKTQS",
-          tenPb2: (getSupervisorName(pb2?.expert) as string) || "",
+          tenPb2: (getSupervisorName(pb2?.expert, false, true) as string) || "",
           toChucPb2: pb2?.expert?.workplace || "HVKTQS",
           ngay: currentDay,
           thang: currentMonth,
@@ -2710,19 +2710,19 @@ const convertToPhuLucQdhdTemplateData = (allStudentsInClasses: any[]): PhuLucQdh
         gvhd1: (getSupervisorName(project?.supervisor, false, true) as string) || "",
         gvhd2: (getSupervisorName(project?.coSupervisor, false, true) as string) || "",
 
-        tenChuTich: (getSupervisorName(chairman?.expert, false, false) as string) || "",
+        tenChuTich: (getSupervisorName(chairman?.expert, false, true) as string) || "",
         toChucChuTich: chairman?.expert?.workplace || "Học viện KTQS		",
 
-        tenThuKy: (getSupervisorName(secretary?.expert, false, false) as string) || "",
+        tenThuKy: (getSupervisorName(secretary?.expert, false, true) as string) || "",
         toChucThuKy: secretary?.expert?.workplace || "Học viện KTQS		",
 
-        tenUyVien: (getSupervisorName(member?.expert, false, false) as string) || "",
+        tenUyVien: (getSupervisorName(member?.expert, false, true) as string) || "",
         toChucUyVien: member?.expert?.workplace || "Học viện KTQS		",
 
-        tenPb1: (getSupervisorName(reviewer1?.expert, false, false) as string) || "",
+        tenPb1: (getSupervisorName(reviewer1?.expert, false, true) as string) || "",
         toChucPb1: reviewer1?.expert?.workplace || "Học viện KTQS		",
 
-        tenPb2: (getSupervisorName(reviewer2?.expert, false, false) as string) || "",
+        tenPb2: (getSupervisorName(reviewer2?.expert, false, true) as string) || "",
         toChucPb2: reviewer2?.expert?.workplace || "Học viện KTQS		",
       }
     })
@@ -2820,7 +2820,7 @@ const convertToDsChuyenGiaData = (allStudentsInClasses: any[]): DsChuyenGiaData 
 
       if (!expertAggregator.has(expertId)) {
         expertAggregator.set(expertId, {
-          tenChuyenGia: (getSupervisorName(expert, false, false) as string) || "",
+          tenChuyenGia: (getSupervisorName(expert, false, true) as string) || "",
           chucVu: expert.position || expert.lecturer?.userProfile?.position || "",
           donViQuanLi: expert.organization || expert.workplace || "",
           soTienRaw: 0,
@@ -2983,15 +2983,15 @@ const convertToHDDanhGiaLuanVanTemplateData = (
         (getSupervisorName(
           members.find((m: any) => m.role === role)?.expert,
           false,
-          false
+          true
         ) as string) || ""
 
       const gvhd1 = project?.supervisor
       const gvhd2 = project?.coSupervisor
 
       let hvCbhd = `Học viên: ${student.userProfile?.fullname || ""}`
-      if (gvhd1) hvCbhd += `\nGVHD1: ${(getSupervisorName(gvhd1, false, false) as string) || ""}`
-      if (gvhd2) hvCbhd += `\nGVHD2: ${(getSupervisorName(gvhd2, false, false) as string) || ""}`
+      if (gvhd1) hvCbhd += `\nGVHD1: ${(getSupervisorName(gvhd1, false, true) as string) || ""}`
+      if (gvhd2) hvCbhd += `\nGVHD2: ${(getSupervisorName(gvhd2, false, true) as string) || ""}`
 
       return {
         stt: sIdx + 1,
@@ -3085,7 +3085,7 @@ const convertToThongKeCoQuanDonViCanBoNgoaiHvData = (
 
   const getExpertKey = (expert: any, workplace: string) => {
     if (expert?.id) return String(expert.id)
-    const fullName = getSupervisorName(expert, false, false) as string
+    const fullName = getSupervisorName(expert, false, true) as string
     return `${fullName || "unknown"}-${workplace}`
   }
 
