@@ -52,11 +52,7 @@ const PutArchivedAwardModal = () => {
 
   const { mutateAsync: createArchivedAward } = useCreateArchivedAward()
   const { mutateAsync: updateArchivedAward } = useUpdateArchivedAward()
-  const { data: awardData = [] } = useFindManyAward({
-    include: {
-      subjects: true,
-    },
-  })
+  const { data: awardData = [] } = useFindManyAward({ include: { subjects: true } })
   const { data: trainingCourses = [] } = useFindManyTrainingCourse(
     {
       where: { trainingObjectTypeId },
@@ -282,7 +278,7 @@ const PutArchivedAwardModal = () => {
       onFinish={onOk}
       onCancel={onClose}
       maskClosable={true}
-      title={id ? "Chỉnh sửa đơn cộng điểm oplympic" : "Thêm mới đơn cộng điểm oplympic"}
+      title={id ? "Chỉnh sửa đơn cộng điểm" : "Thêm mới đơn cộng điểm"}
       className="w-[700px]"
     >
       <Col span={20} className="mb-4">

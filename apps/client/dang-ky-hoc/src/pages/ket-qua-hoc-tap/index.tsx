@@ -586,8 +586,8 @@ export default function StudentScoreClassPage() {
           {/* Row nút thêm */}
           <Row gutter={[8, 8]} align="top" justify="space-between">
             {/* Hàng chứa các button */}
-            <Col xs={24}>
-              <Flex justify="end" wrap="wrap" gap="8px" className="mt-1">
+            <Col xs={24} className="w-full">
+              <Flex justify="space-between" wrap="wrap" gap="8px" className="mt-1 w-full">
                 <Select
                   value={semesterId}
                   onChange={(v) => {
@@ -600,6 +600,7 @@ export default function StudentScoreClassPage() {
                     value: s.id,
                   }))}
                 />
+                <Col className="flex flex-row gap-2.5">
                 <Button
                   type="primary"
                   onClick={() =>
@@ -619,14 +620,15 @@ export default function StudentScoreClassPage() {
                 >
                   Xuất bảng điểm cá nhân
                 </Button>
+                </Col>
               </Flex>
             </Col>
           </Row>
         </Col>
         <Col span={24}>
-          <h3 className="text-lg font-bold">Kết quả học tập theo kỳ</h3>
           <TableCollapse
             rowKey="key"
+            header={<div className="text-sm font-semibold uppercase">Kết quả học tập theo kỳ</div>}
             currentPage={1}
             headerTitleKey={({ name, schoolYear }) => (
               <p className="font-medium text-base">
@@ -640,7 +642,7 @@ export default function StudentScoreClassPage() {
                 colSpan: 1,
               },
               {
-                render: (_, { code, name, schoolYear }) => (
+                render: (_, { name, schoolYear }) => (
                   <p className="font-bold text-base">
                     {[name, schoolYear?.name].filter(Boolean).join(" - ")}
                   </p>
@@ -819,8 +821,8 @@ export default function StudentScoreClassPage() {
           />
         </Col>
         <Col span={24}>
-          <h3 className="text-lg font-bold">Danh sách điểm chứng chỉ</h3>
           <Table
+            header={<div className="text-sm font-semibold uppercase">Danh sách điểm chứng chỉ</div>}
             columns={[
               {
                 title: "STT",
@@ -872,8 +874,8 @@ export default function StudentScoreClassPage() {
           />
         </Col>
         <Col span={24}>
-          <h3 className="text-lg font-bold">Danh sách điểm phiên</h3>
           <Table
+            header={<div className="text-sm font-semibold uppercase">Danh sách điểm phiên</div>}
             columns={[
               {
                 title: "STT",

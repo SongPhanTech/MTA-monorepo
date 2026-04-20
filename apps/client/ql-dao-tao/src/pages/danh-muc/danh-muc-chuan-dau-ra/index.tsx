@@ -103,11 +103,9 @@ export default function NoiDungTinhTaiPage() {
             <Col span={12} />
             <Col span={12}>
               <Flex justify="end">
-                {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_DANH_MUC_CHUAN_DAU_RA, "THEM") && (
-                  <Button onClick={handleModal} type="primary">
-                    Thêm mới
-                  </Button>
-                )}
+                <Button onClick={handleModal} type="primary">
+                  Thêm mới
+                </Button>
               </Flex>
             </Col>
           </Row>

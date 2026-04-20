@@ -302,21 +302,21 @@ const PutExpertProfile = () => {
       )}
       {!isInternal && (
         <Col span={12}>
-          <FormItem form={form} name="specialization" label="Chuyên ngành" required>
+          <FormItem form={form} name="specialization" label="Chuyên ngành" >
             <Input placeholder="Nhập chuyên ngành" />
           </FormItem>
         </Col>
       )}
       {!isInternal && (
         <Col span={12}>
-          <FormItem form={form} name="workplace" label="Đơn vị công tác" required>
+          <FormItem form={form} name="workplace" label="Đơn vị công tác" >
             <Input placeholder="Nhập đơn vị công tác" />
           </FormItem>
         </Col>
       )}
       {!isInternal && (
         <Col span={12}>
-          <FormItem form={form} name="phone" label="Số điện thoại" required>
+          <FormItem form={form} name="phone" label="Số điện thoại" >
             <Input placeholder="Nhập số điện thoại" />
           </FormItem>
         </Col>
@@ -334,12 +334,12 @@ const PutExpertProfile = () => {
       </Col>
       {!isInternal && (
         <Col span={12}>
-          <FormItem form={form} name="email" label="Email" required>
+          <FormItem form={form} name="email" label="Email" >
             <Input placeholder="Nhập email" />
           </FormItem>
         </Col>
       )}
-      {isInternal && (
+      
         <Col span={24} className="flex flex-row">
           <Col span={12}>
             <FormItem form={form} name="eligiblePresident" valuePropName="checked">
@@ -352,7 +352,7 @@ const PutExpertProfile = () => {
             </FormItem>
           </Col>
         </Col>
-      )}
+      
     </PutFormModal>
   )
 }
