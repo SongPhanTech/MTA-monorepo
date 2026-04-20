@@ -75,11 +75,8 @@ export default function SaoQuyetDinhHoiDongPage() {
     try {
       const mockedDataForExport = selectedRecords.map((d: any) => {
         const tp = d.thesisProject
-        // Lấy thông tin sinh viên từ hội đồng (council) như code cũ của bạn
         const studentData = tp?.council?.studentThesisRegistration?.student
         const profile = studentData?.userProfile
-
-        // Ghép Họ + Tên sinh viên
         const fullName = [profile?.lastName, profile?.firstName].filter(Boolean).join(" ")
 
         return {
@@ -87,13 +84,11 @@ export default function SaoQuyetDinhHoiDongPage() {
             {
               thesisProject: {
                 ...tp,
-                // FAKE: Đưa Chủ tịch vào làm Supervisor (GVHD1)
                 supervisor: {
                   userProfile: {
                     fullname: getNameByExpertId(tp?.CHUTICH) || "N/A",
                   },
                 },
-                // FAKE: Đưa Thư ký hoặc Phản biện vào làm CoSupervisor (GVHD2) nếu có
                 coSupervisor: tp?.THUKY
                   ? {
                       userProfile: {
@@ -102,12 +97,10 @@ export default function SaoQuyetDinhHoiDongPage() {
                     }
                   : null,
 
-                // Giữ lại các trường cũ nếu cần
                 title: tp?.title || "",
               },
             },
           ],
-          // Cung cấp profile cho hàm Export lấy tên sinh viên
           userProfile: {
             ...profile,
             fullname: fullName || "N/A",
@@ -165,7 +158,6 @@ export default function SaoQuyetDinhHoiDongPage() {
                 {roles.map((role, idx) => (
                   <div key={idx} className="text-[11px] leading-5">
                     <span className="font-semibold text-gray-700">
-                      {/* Gọi hàm lấy tên đã có của bạn */}
                       {getNameByExpertId(role.id) || "Chưa cập nhật"}
                     </span>
                   </div>

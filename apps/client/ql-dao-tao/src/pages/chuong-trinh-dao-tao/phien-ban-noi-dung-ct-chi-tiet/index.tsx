@@ -3,9 +3,9 @@ import Table from "@components/commons/table"
 import DeleteIcon from "@components/icons/delete"
 import EditIcon from "@components/icons/edit"
 import ViewIcon from "@components/icons/view"
-import PutVersionSubjectModal, {
+import PutVersionSubjectDetailModal, {
   HistorySubjectVersionType,
-} from "@components/modal/put-phien-ban-mon-hoc"
+} from "@components/modal/put-phien-ban-chi-tiet-mon-hoc"
 import PutSubjectListModal from "@components/modal/put-danh-sach-mon-hoc"
 import { DEFAULT_PAGINATE_SIZE } from "@constants/constants"
 import type { FilterProps } from "@constants/type"
@@ -33,6 +33,7 @@ import type React from "react"
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 import * as XLSX from "xlsx"
+
 export default function SubjectList() {
   const { can, canSome } = useAbility()
   const [expandAll, setExpandAll] = useState(false)
@@ -61,13 +62,13 @@ export default function SubjectList() {
   const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
   const { getExamTypeLabel, options: examTypeFilters } = useExamTypeOptions()
   const { mutateAsync: updateManySubjectVersion } = useUpdateManySubjectVersion()
+
   async function handleToggleLock() {
     try {
       showSpinner()
       await updateManySubjectVersion({
         data: { isLocked: !isLocked },
       })
-
       message.success(isLocked ? "Mở khoá thành công" : "Khoá thành công")
       setIsLocked(!isLocked)
     } catch (error: any) {
@@ -164,6 +165,7 @@ export default function SubjectList() {
     take: numberOfPages,
     skip: (currentPage - 1) * numberOfPages,
   })
+
   const { refetch: refetchSubjectsForExport } = useFindManySubjectVersion(
     {
       where,
@@ -200,9 +202,7 @@ export default function SubjectList() {
     }, 500),
     []
   )
-  //   const { onOpen } = useDisclosure<{ id: string; isLocked: boolean }>({
-  //     tag: "PutSubjectListModal",
-  //   })
+
   const { onOpen: onOpenHistory } = useDisclosure<{
     id: string
     isLocked: boolean
@@ -215,7 +215,7 @@ export default function SubjectList() {
     subjectVersionId?: string
     isLocked?: boolean
   }>({
-    tag: "PutVersionSubjectModal",
+    tag: "PutVersionSubjectDetailModal",
   })
 
   const { onOpen: onOpenDetailSubject } = useDisclosure<{
@@ -227,8 +227,9 @@ export default function SubjectList() {
   const { showSpinner, hideSpinner } = useSpinner()
 
   const handleModal = () => {
-    onOpenSubjectVersion({ subjectId: "", subjectVersionId: "", isLocked: false })
+    onOpenSubjectVersion({ subjectId: "", subjectVersionId: undefined, isLocked: false })
   }
+
   const handleHistory = () => {
     onOpenHistory()
   }
@@ -244,6 +245,7 @@ export default function SubjectList() {
   const { mutateAsync: updateSubjectVersion } = useUpdateSubjectVersion()
   const { mutateAsync: updateSubject } = useUpdateSubject()
   const { mutateAsync: createSubjectVersionHistory } = useCreateSubjectVersionHistory()
+
   async function handleDelete(record: any) {
     try {
       showSpinner()
@@ -271,18 +273,16 @@ export default function SubjectList() {
       }
       await createSubjectVersionHistory({ data: historyData })
       message.success("Xóa thành công")
+      refetch()
     } catch (error: any) {
       if (error?.info?.message) {
-        message.error(error?.info?.message)
+        // message.error(error?.info?.message)
         return
       }
       message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
     } finally {
       hideSpinner()
     }
-  }
-  const handleLogHistory = (record: any) => {
-    // console.log(record)
   }
 
   async function handleDeleteSubject(id: string) {
@@ -297,6 +297,7 @@ export default function SubjectList() {
         },
       })
       message.success("Xóa thành công")
+      refetch()
     } catch (error: any) {
       if (error?.info?.message) {
         message.error(error?.info?.message)
@@ -339,7 +340,6 @@ export default function SubjectList() {
     })
 
     const worksheet = XLSX.utils.json_to_sheet(dataExport)
-
     const workbook = XLSX.utils.book_new()
     XLSX.utils.book_append_sheet(workbook, worksheet, "DanhSachMonHoc")
 
@@ -351,11 +351,14 @@ export default function SubjectList() {
     const blob = new Blob([excelBuffer], {
       type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8",
     })
+
     const trainingObjectTypeName =
       subjects?.find((v: any) => v.trainingObjectType?.id === trainingObjectTypeId)
         ?.trainingObjectType?.name || ""
+
     saveAs(blob, `DanhSachMonHoc${trainingObjectTypeName}.xlsx`)
   }
+
   const handleFilterChange = (key: string, value: string | ExamType[] | boolean) => {
     setFilters((prev) => {
       const newFilters = { ...prev, [key]: value }
@@ -363,7 +366,9 @@ export default function SubjectList() {
       return newFilters
     })
   }
+
   const pageTitle = "Quản lý phiên bản nội dung chương trình CTMH"
+
   return (
     <div>
       <Row>
@@ -417,13 +422,16 @@ export default function SubjectList() {
                 </Col>
               </Flex>
             </Col>
+
             <Col span={12}>
               <Flex justify="end" gap={4}>
+                {/* <Button onClick={handleExportExcel} icon={<Download size={14} />}>
+                  Xuất Excel
+                </Button> */}
                 <Button onClick={handleModal} type="primary">
                   <BookPlus />
                   Thêm môn học
                 </Button>
-                {/* )} */}
               </Flex>
             </Col>
           </Row>
@@ -590,7 +598,7 @@ export default function SubjectList() {
         </Col>
       </Row>
       <PutSubjectListModal />
-      <PutVersionSubjectModal />
+      <PutVersionSubjectDetailModal />
     </div>
   )
 }
