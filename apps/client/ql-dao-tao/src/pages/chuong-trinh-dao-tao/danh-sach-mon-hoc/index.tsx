@@ -103,14 +103,17 @@ export default function SubjectList() {
 
   const where = useMemo(() => {
     return {
-      ...(trainingObjectTypeId
-        ? {
-            OR: [
-              { subjectVersion: { some: { trainingObjectTypeId } } },
-              { subjectVersion: { none: {} } },
-            ],
-          }
-        : {}),
+      // ...(trainingObjectTypeId
+      //   ? {
+      //       OR: [
+      //         { subjectVersion: { some: { trainingObjectTypeId } } },
+      //         { subjectVersion: { none: {} } },
+      //       ],
+      //     }
+      //   : {}),
+      ...(Object.keys(subjectVersionWhere).length > 0 && {
+        OR: [{ subjectVersion: { some: subjectVersionWhere } }, { subjectVersion: { none: {} } }],
+      }),
       ...(filters.searchText
         ? {
             name: {
@@ -134,9 +137,6 @@ export default function SubjectList() {
             },
           }
         : {}),
-      ...(Object.keys(subjectVersionWhere).length > 0 && {
-        subjectVersion: { some: subjectVersionWhere },
-      }),
     }
   }, [trainingObjectTypeId, filters, subjectVersionWhere])
 
