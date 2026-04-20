@@ -31,9 +31,24 @@ export type PutSubjectVersion = SubjectVersion & {
 }
 dayjs.locale("vi")
 
+// LƯU Ý CHO NGƯỜI BẢO TRÌ:
+// Hệ thống sử dụng trường 'description' của model DocumentFile để định danh loại tài liệu (category).
+// Các giá trị được quy ước: 'SYLLABUS' (Đề cương), 'LECTURE' (Bài giảng), 'PLAN' (Kế hoạch).
+// Việc này giúp tách tài liệu vào 3 khung giao diện mà không cần thay đổi cấu trúc Database.
+// Các tài liệu cũ có description null sẽ được mặc định hiểu là SYLLABUS khi load dữ liệu.
+export const DocKeywords = {
+  SYLLABUS: 'SYLLABUS', // Đề cương chi tiết
+  LECTURE: 'LECTURE',   // Bài giảng
+  PLAN: 'PLAN',         // Kế hoạch
+}
+
+// Cập nhật lại Type của FormValues
 type PutSubjectVersionFormValues = PutSubjectVersion & {
   prerequisiteSubjectIds?: string[]
   coRequisiteSubjectIds?: string[]
+  syllabusDocs?: DocumentFile[]
+  lectureDocs?: DocumentFile[]
+  planDocs?: DocumentFile[]
 }
 
 export enum HistorySubjectVersionType {
@@ -43,7 +58,8 @@ export enum HistorySubjectVersionType {
 }
 
 const PutVersionSubjectModal = () => {
-  const [document, setDocument] = useState<DocumentFile[]>([])
+  // const [document, setDocument] = useState<DocumentFile[]>([])
+
   const modalContentRef = useRef<HTMLDivElement>(null)
   const [form] = Form.useForm<PutSubjectVersionFormValues>()
   const { isOpen, onClose, input } = useDisclosure<{
@@ -54,6 +70,11 @@ const PutVersionSubjectModal = () => {
     tag: "PutVersionSubjectModal",
     onClose: form.resetFields,
   })
+
+  const [syllabusDocs, setSyllabusDocs] = useState<DocumentFile[]>([])
+  const [lectureDocs, setLectureDocs] = useState<DocumentFile[]>([])
+  const [planDocs, setPlanDocs] = useState<DocumentFile[]>([])
+
 
   const subjectVersionId = input?.subjectVersionId
   const { id: selectedTrainingObjectTypeId } = useTrainingObjectTypeStore()
@@ -133,6 +154,15 @@ const PutVersionSubjectModal = () => {
       showSpinner()
       const values = (await form.validateFields()) as PutSubjectVersionFormValues
 
+      const combinedDocs = [
+        ...(values.syllabusDocs || []).map(file => ({ ...file, description: DocKeywords.SYLLABUS })),
+        ...(values.lectureDocs || []).map(file => ({ ...file, description: DocKeywords.LECTURE })),
+        ...(values.planDocs || []).map(file => ({ ...file, description: DocKeywords.PLAN })),
+      ]
+
+      const oldCombinedDocs = subjectVersion?.documentFiles || []
+
+
       const baseData = {
         isLocked: input?.isLocked ?? false,
         codeTkb: output.codeTkb,
@@ -164,28 +194,28 @@ const PutVersionSubjectModal = () => {
         type: output.type,
         prerequisiteSubject: subjectVersionId
           ? {
-              set:
-                values.prerequisiteSubjectIds?.map((id) => ({
-                  id,
-                })) || [],
-            }
-          : {
-              connect: values.prerequisiteSubjectIds?.map((id) => ({
+            set:
+              values.prerequisiteSubjectIds?.map((id) => ({
                 id,
-              })),
-            },
+              })) || [],
+          }
+          : {
+            connect: values.prerequisiteSubjectIds?.map((id) => ({
+              id,
+            })),
+          },
         coRequisiteSubject: subjectVersionId
           ? {
-              set:
-                values.coRequisiteSubjectIds?.map((id) => ({
-                  id,
-                })) || [],
-            }
-          : {
-              connect: values.coRequisiteSubjectIds?.map((id) => ({
+            set:
+              values.coRequisiteSubjectIds?.map((id) => ({
                 id,
-              })),
-            },
+              })) || [],
+          }
+          : {
+            connect: values.coRequisiteSubjectIds?.map((id) => ({
+              id,
+            })),
+          },
       }
 
       if (subjectVersionId && subjectVersion) {
@@ -236,14 +266,14 @@ const PutVersionSubjectModal = () => {
           if (JSON.stringify(normalizedOldValue) !== JSON.stringify(normalizedNewValue)) {
             let oldDisplay =
               normalizedOldValue === "" ||
-              normalizedOldValue === null ||
-              normalizedOldValue === undefined
+                normalizedOldValue === null ||
+                normalizedOldValue === undefined
                 ? "trống"
                 : oldValue
             let newDisplay =
               normalizedNewValue === "" ||
-              normalizedNewValue === null ||
-              normalizedNewValue === undefined
+                normalizedNewValue === null ||
+                normalizedNewValue === undefined
                 ? "trống"
                 : newValue
 
@@ -288,7 +318,7 @@ const PutVersionSubjectModal = () => {
         const updateData = {
           ...baseData,
           documentFiles: {
-            upsert: (output.documentFiles || [])
+            upsert: combinedDocs
               .filter((file) => !!file.id)
               .map((file) => ({
                 where: { id: file.id },
@@ -297,6 +327,7 @@ const PutVersionSubjectModal = () => {
                   path: file.path,
                   mimeType: file.mimeType,
                   size: file.size,
+                  description: file.description, 
                   subjectVersionId: { connect: { id: subjectVersionId } },
                 },
                 update: {
@@ -304,18 +335,20 @@ const PutVersionSubjectModal = () => {
                   path: file.path,
                   mimeType: file.mimeType,
                   size: file.size,
+                  description: file.description, 
                 },
               })),
-            create: (output.documentFiles || [])
+            create: combinedDocs
               .filter((file) => !file.id)
               .map((file) => ({
                 name: file.name,
                 path: file.path,
                 mimeType: file.mimeType,
                 size: file.size,
+                description: file.description,
               })),
-            disconnect: document
-              .filter((existing) => !output.documentFiles?.some((f) => f.id === existing.id))
+            disconnect: oldCombinedDocs
+              .filter((existing) => !combinedDocs.some((f) => f.id === existing.id))
               .map((file) => ({ id: file.id })),
           },
         }
@@ -348,11 +381,12 @@ const PutVersionSubjectModal = () => {
           data: {
             ...baseData,
             documentFiles: {
-              create: (output.documentFiles || []).map((file) => ({
+              create: combinedDocs.map((file) => ({
                 name: file.name,
                 path: file.path,
                 mimeType: file.mimeType,
                 size: file.size,
+                description: file.description, 
               })),
             },
           },
@@ -391,26 +425,46 @@ const PutVersionSubjectModal = () => {
 
   useEffect(() => {
     if (subjectVersion) {
+      // 1. Kiểm tra xem form đã có dữ liệu chưa để tránh update lặp lại
+      const currentValues = form.getFieldsValue(['code', 'name', 'syllabusDocs']);
+      if (currentValues.code === subjectVersion.code && currentValues.name === subjectVersion.name) {
+        return; // Nếu đã set rồi thì không làm gì cả
+      }
+
+      const sDocs: DocumentFile[] = [];
+      const lDocs: DocumentFile[] = [];
+      const pDocs: DocumentFile[] = [];
+
+      (subjectVersion.documentFiles || []).forEach((file: any) => {
+        if (file.description === DocKeywords.LECTURE) {
+          lDocs.push(file);
+        } else if (file.description === DocKeywords.PLAN) {
+          pDocs.push(file);
+        } else {
+          sDocs.push(file);
+        }
+      });
+
       form.setFieldsValue({
         ...subjectVersion,
-        coRequisiteSubjectIds: subjectVersion.coRequisiteSubject.map(
-          (item: { id: string }) => item.id
-        ),
-        prerequisiteSubjectIds: subjectVersion.prerequisiteSubject.map(
-          (item: { id: string }) => item.id
-        ),
-      })
-      setDocument(subjectVersion?.documentFiles)
+        coRequisiteSubjectIds: subjectVersion.coRequisiteSubject.map((item: { id: string }) => item.id),
+        prerequisiteSubjectIds: subjectVersion.prerequisiteSubject.map((item: { id: string }) => item.id),
+        syllabusDocs: sDocs,
+        lectureDocs: lDocs,
+        planDocs: pDocs,
+      });
     } else {
+      // Trường hợp tạo mới
       form.setFieldsValue({
         active: true,
         type: SubjectVersionType.Normal,
-        documentFiles: [],
+        syllabusDocs: [],
+        lectureDocs: [],
+        planDocs: [],
         trainingObjectTypeId: selectedTrainingObjectTypeId,
-      })
-      setDocument([])
+      });
     }
-  }, [subjectVersion, form, selectedTrainingObjectTypeId])
+  }, [subjectVersion, form, selectedTrainingObjectTypeId]);
 
   return (
     <PutFormModal
@@ -454,11 +508,11 @@ const PutVersionSubjectModal = () => {
               }))}
               {...(input?.isLocked
                 ? {
-                    showSearch: false,
-                    allowClear: false,
-                    showArrow: false,
-                    open: false,
-                  }
+                  showSearch: false,
+                  allowClear: false,
+                  showArrow: false,
+                  open: false,
+                }
                 : {})}
             />
           </FormItem>
@@ -490,11 +544,11 @@ const PutVersionSubjectModal = () => {
               }))}
               {...(input?.isLocked
                 ? {
-                    showSearch: false,
-                    allowClear: false,
-                    showArrow: false,
-                    open: false,
-                  }
+                  showSearch: false,
+                  allowClear: false,
+                  showArrow: false,
+                  open: false,
+                }
                 : {})}
               allowClear
             />
@@ -510,11 +564,11 @@ const PutVersionSubjectModal = () => {
               }))}
               {...(input?.isLocked
                 ? {
-                    showSearch: false,
-                    allowClear: false,
-                    showArrow: false,
-                    open: false,
-                  }
+                  showSearch: false,
+                  allowClear: false,
+                  showArrow: false,
+                  open: false,
+                }
                 : {})}
             />
           </FormItem>
@@ -664,11 +718,11 @@ const PutVersionSubjectModal = () => {
               style={{ width: "100%" }}
               {...(input?.isLocked
                 ? {
-                    showSearch: false,
-                    allowClear: false,
-                    showArrow: false,
-                    open: false,
-                  }
+                  showSearch: false,
+                  allowClear: false,
+                  showArrow: false,
+                  open: false,
+                }
                 : {})}
             />
           </Form.Item>
@@ -684,11 +738,11 @@ const PutVersionSubjectModal = () => {
               style={{ width: "100%" }}
               {...(input?.isLocked
                 ? {
-                    showSearch: false,
-                    allowClear: false,
-                    showArrow: false,
-                    open: false,
-                  }
+                  showSearch: false,
+                  allowClear: false,
+                  showArrow: false,
+                  open: false,
+                }
                 : {})}
             />
           </Form.Item>
@@ -708,15 +762,51 @@ const PutVersionSubjectModal = () => {
           </FormItem>
         </Col>
         <Col span={24}>
-          <FormItem form={form} name="documentFiles" label="Tài liệu đính kèm">
-            <DocumentPaths
-              form={form}
-              data={document}
-              relationId={subjectVersionId ?? ""}
-              relationType="subjectVersionId"
-              // disabled={input?.isLocked}
-            />
-          </FormItem>
+          {/* Phần tiêu đề chung */}
+          <div className="font-bold text-lg mb-4 text-gray-800 border-b pb-2">
+            Tài liệu đính kèm
+          </div>
+
+          <Row gutter={[24, 16]}>
+            <Col span={8}>
+              <div className="font-semibold text-blue-600 mb-2">Đề cương chi tiết</div>
+              <FormItem form={form} name="syllabusDocs" label="" className="mb-0">
+                <DocumentPaths
+                  form={form}
+                  titleForm="syllabusDocs"
+                  data={form ? form.getFieldValue("syllabusDocs") || [] : []}
+                  relationId={subjectVersionId ?? ""}
+                  relationType="subjectVersionId"
+                />
+              </FormItem>
+            </Col>
+
+            <Col span={8}>
+              <div className="font-semibold text-green-600 mb-2">Bài giảng</div>
+              <FormItem form={form} name="lectureDocs" label="" className="mb-0">
+                <DocumentPaths
+                  form={form}
+                  titleForm="lectureDocs" 
+                  data={form ? form.getFieldValue("lectureDocs") || [] : []}
+                  relationId={subjectVersionId ?? ""}
+                  relationType="subjectVersionId"
+                />
+              </FormItem>
+            </Col>
+
+            <Col span={8}>
+              <div className="font-semibold text-orange-600 mb-2">Kế hoạch</div>
+              <FormItem form={form} name="planDocs" label="" className="mb-0">
+                <DocumentPaths
+                  form={form}
+                  titleForm="planDocs" // <--- THÊM DÒNG NÀY
+                  data={form ? form.getFieldValue("planDocs") || [] : []}
+                  relationId={subjectVersionId ?? ""}
+                  relationType="subjectVersionId"
+                />
+              </FormItem>
+            </Col>
+          </Row>
         </Col>
         <Col span={24}>
           <Tabs
