@@ -28,14 +28,14 @@ const CardStudyResult = (props: CardStudyResultProps) => {
         <div className="flex justify-center gap-3 w-full items-center">
           <div className="flex flex-col items-start flex-1 gap-2 w-full justify-center">
             <div className="uppercase font-medium text-xs ">Điểm tích luỹ</div>
-            <span className="text-3xl font-bold">
+            <span className="text-xl font-semibold">
               {gpaScore.gpa.toFixed(2)}
             </span>
           </div>
           <div className="border border-gray-200 h-10" />
           <div className="flex flex-col items-start flex-1 gap-2 w-full justify-center">
             <div className="uppercase font-medium">Xếp hạng</div>
-            <span className="text-3xl font-bold">{academicRanking}</span>
+            <span className="text-xl font-semibold">{academicRanking}</span>
           </div>
         </div>
       </div>
@@ -44,10 +44,10 @@ const CardStudyResult = (props: CardStudyResultProps) => {
         <div className="flex flex-row justify-between items-center h-full">
           <div className="uppercase">Tín chỉ tích luỹ</div>
           <div className="text-sm text-blue-600">
-            {((gpaScore.totalCredits || 0) /
+            {Number(((gpaScore.totalCredits || 0) /
               ((subjectScoreData?.requiredCredits ?? 0) +
                 (subjectScoreData?.electiveCredits ?? 0) || 1)) *
-              100}
+              100).toFixed(1)}
             % Hoàn thành
           </div>
         </div>
