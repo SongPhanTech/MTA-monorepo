@@ -522,6 +522,8 @@ app.openapi(openSubjectClassRetakeStudents, async (c) => {
     dinh_chi: boolean
     ly_do_dinh_chi: string | null
     truot_mon: boolean
+    reason: string | null
+    attempt_count: number
   }[]
 
   const res = await prisma.$queryRaw<Result>`
@@ -594,7 +596,8 @@ app.openapi(openSubjectClassRetakeStudents, async (c) => {
                ly_do_dinh_chi,
                truot_mon,
                ky_hoc,
-               nam_hoc
+               nam_hoc,
+               attempt_count
         from mon_no
         where rn = 1
           and (truot_mon = true or cam_thi = true or dinh_chi = true)
@@ -655,10 +658,33 @@ app.openapi(openSubjectClassRetakeStudents, async (c) => {
 
   return c.json(
     {
-      data: students.map((student) => ({
-        ...student,
-        ...res.find((r) => r.studentId === student.id),
-      })),
+      data: students.map((student) => {
+        const record = res.find((r) => r.studentId === student.id)
+        let reason = ""
+
+        if (record) {
+          const reasons: string[] = []
+          if (record.cam_thi)
+            reasons.push(record.ly_do_cam_thi ? `Cấm thi: ${record.ly_do_cam_thi}` : "Cấm thi")
+          if (record.dinh_chi)
+            reasons.push(record.ly_do_dinh_chi ? `Đình chỉ: ${record.ly_do_dinh_chi}` : "Đình chỉ")
+          if (record.withdrew) reasons.push("Rút khỏi lớp")
+
+          if (reasons.length > 0) {
+            reason = reasons.join(", ")
+          } else if (record.attempt_count >= 2 && record.truot_mon) {
+            reason = "Trượt thi lại"
+          } else if (record.truot_mon) {
+            reason = "Trượt môn"
+          }
+        }
+
+        return {
+          ...student,
+          ...record,
+          reason,
+        }
+      }),
     },
     200
   )
