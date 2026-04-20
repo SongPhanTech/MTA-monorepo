@@ -531,7 +531,60 @@ app.openapi(classRegister, async (c) => {
   })
   // TODO: check session => student trainingCourse
 
-  // TODO: check subjectVersionIds, prerequisiteSubjectIds, coRequisiteSubjectIds
+  const subjectClasses = await prisma.subjectClass.findMany({
+    where: { id: { in: subjectClassIds } },
+    include: {
+      subject: {
+        include: {
+          prerequisiteSubject: true,
+          coRequisiteSubject: true,
+        },
+      },
+    },
+  })
+
+  const allPrerequisiteIds = [
+    ...new Set(subjectClasses.flatMap((sc) => sc.subject.prerequisiteSubject.map((p) => p.id))),
+  ]
+  const allCoRequisiteIds = [
+    ...new Set(subjectClasses.flatMap((sc) => sc.subject.coRequisiteSubject.map((p) => p.id))),
+  ]
+  const allRequiredIds = [...new Set([...allPrerequisiteIds, ...allCoRequisiteIds])]
+
+  if (allRequiredIds.length > 0) {
+    const studentHistory = await prisma.studentSubjectScore.findMany({
+      where: {
+        studentId,
+        subjectVersionId: { in: allRequiredIds },
+      },
+      select: { subjectVersionId: true },
+    })
+
+    const takenIds = new Set(studentHistory.map((h) => h.subjectVersionId))
+
+    for (const sc of subjectClasses) {
+      const missingPrerequisites = sc.subject.prerequisiteSubject.filter((p) => !takenIds.has(p.id))
+      const missingCoRequisites = sc.subject.coRequisiteSubject.filter((p) => !takenIds.has(p.id))
+
+      if (missingPrerequisites.length > 0) {
+        return c.json(
+          {
+            message: `Bạn chưa học môn tiên quyết của môn ${sc.subject.name}: ${missingPrerequisites.map((p) => p.name).join(", ")}`,
+          },
+          400
+        )
+      }
+
+      if (missingCoRequisites.length > 0) {
+        return c.json(
+          {
+            message: `Bạn chưa học môn song hành của môn ${sc.subject.name}: ${missingCoRequisites.map((p) => p.name).join(", ")}`,
+          },
+          400
+        )
+      }
+    }
+  }
 
   if (nearestSemesterResult) {
     const creditLimits = await prisma.classRegisterSessionCredit.findMany({

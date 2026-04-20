@@ -9,21 +9,43 @@ import {
 import { Button, Col, Flex, Form, message, Modal, Row, TimePicker } from "antd"
 import dayjs, { type Dayjs } from "dayjs"
 import utc from "dayjs/plugin/utc"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import EditOutlined from "@components/icons/edit"
 import DeleteIcon from "@components/icons/delete"
+
 dayjs.extend(utc)
 
-interface DefenseSessionRow {
-  id: string
-  time: Dayjs
-}
-
 interface FormValues {
-  time: Dayjs
+  time: Dayjs | null
 }
 
-export default function DefenseScheduleConfigurationPage({ isThesis }: { isThesis: boolean }) {
+type DefenseSessionRecord = {
+  id: string
+  startTime: Date | string
+}
+
+/** Giá trị từ API (TIME → Date): luôn đọc phần giờ theo UTC để khớp cách lưu, tránh lệch +1h khi format theo local. */
+function formatSessionTimeDisplay(startTime: Date | string | null | undefined): string {
+  if (startTime === null || startTime === undefined) {
+    return ""
+  }
+  return dayjs.utc(startTime).format("HH:mm")
+}
+
+function timeKeyFromStored(startTime: Date | string): string {
+  return dayjs.utc(startTime).format("HH:mm")
+}
+
+function timeKeyFromPicker(picked: Dayjs): string {
+  return picked.format("HH:mm")
+}
+
+/** Lưu đúng hai chữ số giờ/phút người chọn (không phụ thuộc múi giờ máy khi hiển thị lại). */
+function toDefenseSessionStartTime(picked: Dayjs): Date {
+  return new Date(Date.UTC(1970, 0, 1, picked.hour(), picked.minute(), 0, 0))
+}
+
+export default function DefenseScheduleConfigurationPage({ isThesis: _isThesis }: { isThesis: boolean }) {
   const { showSpinner, hideSpinner } = useSpinner()
   const [form] = Form.useForm<FormValues>()
 
@@ -35,44 +57,32 @@ export default function DefenseScheduleConfigurationPage({ isThesis }: { isThesi
   const { mutateAsync: updateSession } = useUpdateDefenseSession()
   const { mutateAsync: deleteSession } = useDeleteDefenseSession()
 
-  const [dataSource, setDataSource] = useState<DefenseSessionRow[]>([])
-
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [editingRow, setEditingRow] = useState<DefenseSessionRow | null>(null)
-
-  useEffect(() => {
-    const mappedData: DefenseSessionRow[] = rawData.map((item) => ({
-      id: item.id,
-      time: dayjs.utc(item.startTime),
-    }))
-
-    setDataSource(mappedData)
-  }, [rawData])
+  const [editingRow, setEditingRow] = useState<DefenseSessionRecord | null>(null)
 
   const handleSave = async () => {
     try {
       const values = await form.validateFields()
-      const localTime = values.time
+      const picked = values.time ? dayjs(values.time) : null
+      if (!picked || !picked.isValid()) {
+        message.error("Vui lòng chọn thời gian bắt đầu!")
+        return
+      }
 
-      const timeToSave = dayjs
-        .utc()
-        .hour(localTime.hour())
-        .minute(localTime.minute())
-        .second(0)
-        .millisecond(0)
-        .toDate()
-
-      const isDuplicated = dataSource.some(
-        (item) =>
-          item.id !== editingRow?.id &&
-          item.time.hour() === localTime.hour() &&
-          item.time.minute() === localTime.minute()
-      )
+      const newKey = timeKeyFromPicker(picked)
+      const isDuplicated = rawData.some((item) => {
+        if (editingRow?.id === item.id) {
+          return false
+        }
+        return timeKeyFromStored(item.startTime) === newKey
+      })
 
       if (isDuplicated) {
         message.error("Thời gian này đã tồn tại thời gian bảo vệ khác!")
         return
       }
+
+      const timeToSave = toDefenseSessionStartTime(picked)
 
       showSpinner()
 
@@ -95,6 +105,9 @@ export default function DefenseScheduleConfigurationPage({ isThesis }: { isThesi
       form.resetFields()
       await refetch()
     } catch (error) {
+      if (error && typeof error === "object" && "errorFields" in error) {
+        return
+      }
       console.error("Save failed:", error)
       message.error("Lưu thời gian bảo vệ thất bại. Vui lòng thử lại.")
     } finally {
@@ -143,7 +156,7 @@ export default function DefenseScheduleConfigurationPage({ isThesis }: { isThesi
         <Col span={24}>
           <Table
             rowKey="id"
-            data={dataSource}
+            data={rawData}
             pagination={false}
             locale={{ emptyText: "Chưa có thời gian bảo vệ" }}
             columns={[
@@ -155,9 +168,9 @@ export default function DefenseScheduleConfigurationPage({ isThesis }: { isThesi
               },
               {
                 title: "Thời gian bắt đầu",
-                dataIndex: "time",
+                dataIndex: "startTime",
                 align: "center" as const,
-                render: (value: dayjs.Dayjs) => value.format("HH:mm"),
+                render: (startTime) => formatSessionTimeDisplay(startTime),
               },
               {
                 title: "Thao tác",
@@ -165,8 +178,10 @@ export default function DefenseScheduleConfigurationPage({ isThesis }: { isThesi
                 align: "center" as const,
                 fixed: "right" as const,
                 render: (_: unknown, record) => {
-                  const row = record as DefenseSessionRow
-                  if (!row?.id) return null
+                  const row = record as DefenseSessionRecord
+                  if (!row?.id) {
+                    return null
+                  }
 
                   return (
                     <div className="flex justify-center gap-3" key={row.id}>
@@ -175,8 +190,13 @@ export default function DefenseScheduleConfigurationPage({ isThesis }: { isThesi
                         onClick={(e) => {
                           e.stopPropagation()
                           setEditingRow(row)
+                          const u = dayjs.utc(row.startTime)
                           form.setFieldsValue({
-                            time: row.time,
+                            time: dayjs()
+                              .hour(u.hour())
+                              .minute(u.minute())
+                              .second(0)
+                              .millisecond(0),
                           })
                           setIsModalOpen(true)
                         }}

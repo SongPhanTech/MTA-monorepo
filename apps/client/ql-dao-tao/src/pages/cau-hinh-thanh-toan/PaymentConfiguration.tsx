@@ -3,6 +3,8 @@ import Table from "@components/commons/table"
 import useSpinner from "@hooks/spinner"
 import { CouncilRole, SupervisorRole } from "@workspace/db"
 import {
+  useCreateDefaultCouncilRolePayAmount,
+  useCreateDefaultSupervisorPayAmount,
   useFindManyDefaultCouncilRolePayAmount,
   useFindManyDefaultSupervisorPayAmount,
   useUpdateDefaultCouncilRolePayAmount,
@@ -20,6 +22,63 @@ const RoleType: Map<SupervisorRole | CouncilRole, string> = new Map([
   [SupervisorRole.SUPERVISOR, "Chuyên gia hướng dẫn (GVHD1)"],
   [SupervisorRole.CO_SUPERVISOR, "Chuyên gia hướng dẫn phụ (GVHD2)"],
 ])
+
+const COUNCIL_PLACEHOLDER_ROLES: { roleName: string; role: CouncilRole }[] = [
+  { roleName: "Chủ tịch", role: CouncilRole.CHAIRMAN },
+  { roleName: "Thư ký", role: CouncilRole.SECRETARY },
+  { roleName: "Phản biện 1", role: CouncilRole.REVIEWER_1 },
+  { roleName: "Phản biện 2", role: CouncilRole.REVIEWER_2 },
+  { roleName: "Ủy viên", role: CouncilRole.MEMBER },
+]
+
+const SUPERVISOR_PLACEHOLDER_ROLES: { roleName: string; role: SupervisorRole }[] = [
+  { roleName: "Chuyên gia hướng dẫn (GVHD1)", role: SupervisorRole.SUPERVISOR },
+  { roleName: "Chuyên gia hướng dẫn phụ (GVHD2)", role: SupervisorRole.CO_SUPERVISOR },
+]
+
+const PAY_AMOUNT_CELL_DEFS = [
+  {
+    idKey: "idProjectIn" as const,
+    valueKey: "projectIn" as const,
+    description: "PROJECT" as const,
+    inAcademy: true,
+  },
+  {
+    idKey: "idProjectOut" as const,
+    valueKey: "projectOut" as const,
+    description: "PROJECT" as const,
+    inAcademy: false,
+  },
+  {
+    idKey: "idThesisIn" as const,
+    valueKey: "thesisIn" as const,
+    description: "THESIS" as const,
+    inAcademy: true,
+  },
+  {
+    idKey: "idThesisOut" as const,
+    valueKey: "thesisOut" as const,
+    description: "THESIS" as const,
+    inAcademy: false,
+  },
+] as const
+
+/** Phân tách hàng nghìn bằng dấu phẩy (1,000,000) khi nhập */
+function formatAmountInputDisplay(n: number): string {
+  if (n === 0 || Number.isNaN(n)) {
+    return ""
+  }
+  return n.toLocaleString("en-US", { maximumFractionDigits: 0 })
+}
+
+function parseAmountInput(raw: string): number {
+  const digits = raw.replace(/\D/g, "")
+  if (digits === "") {
+    return 0
+  }
+  const n = Number.parseInt(digits, 10)
+  return Number.isNaN(n) ? 0 : n
+}
 
 interface GroupedRecordData {
   roleName: string
@@ -43,6 +102,8 @@ export default function PaymentConfigurationPage({ isThesis }: { isThesis: boole
   const { data: supervisorPayAmounts = [] } = useFindManyDefaultSupervisorPayAmount()
   const { mutateAsync: updateCouncilPay } = useUpdateDefaultCouncilRolePayAmount()
   const { mutateAsync: updateSupervisorPay } = useUpdateDefaultSupervisorPayAmount()
+  const { mutateAsync: createSupervisorPay } = useCreateDefaultSupervisorPayAmount()
+  const { mutateAsync: createCouncilPay } = useCreateDefaultCouncilRolePayAmount()
 
   const { showSpinner, hideSpinner } = useSpinner()
   const buildGroupedData = (): GroupedRecordData[] => {
@@ -92,6 +153,41 @@ export default function PaymentConfigurationPage({ isThesis }: { isThesis: boole
         }
       }
     })
+
+    for (const { roleName } of COUNCIL_PLACEHOLDER_ROLES) {
+      if (!map.has(roleName)) {
+        map.set(roleName, {
+          roleName,
+          idProjectIn: "",
+          idThesisIn: "",
+          idProjectOut: "",
+          idThesisOut: "",
+          projectIn: 0,
+          projectOut: 0,
+          thesisIn: 0,
+          thesisOut: 0,
+          type: "COUNCIL",
+        })
+      }
+    }
+
+    for (const { roleName } of SUPERVISOR_PLACEHOLDER_ROLES) {
+      if (!map.has(roleName)) {
+        map.set(roleName, {
+          roleName,
+          idProjectIn: "",
+          idThesisIn: "",
+          idProjectOut: "",
+          idThesisOut: "",
+          projectIn: 0,
+          projectOut: 0,
+          thesisIn: 0,
+          thesisOut: 0,
+          type: "SUPERVISOR",
+        })
+      }
+    }
+
     const roleOrder = [
       "Chủ tịch",
       "Thư ký",
@@ -114,17 +210,14 @@ export default function PaymentConfigurationPage({ isThesis }: { isThesis: boole
     setDataSource(data)
     setInitialDataSource(JSON.parse(JSON.stringify(data)))
   }, [councilRolePayAmounts, supervisorPayAmounts])
-  const handleInputChange = (
-    value: number | null,
-    roleName: string,
-    field: keyof GroupedRecordData
-  ) => {
+  const handleInputChange = (raw: string, roleName: string, field: keyof GroupedRecordData) => {
+    const value = parseAmountInput(raw)
     setDataSource((prevData) => {
       return prevData.map((item) => {
         if (item.roleName === roleName) {
           return {
             ...item,
-            [field]: value || 0,
+            [field]: value,
           }
         }
         return item
@@ -133,11 +226,13 @@ export default function PaymentConfigurationPage({ isThesis }: { isThesis: boole
   }
   const renderCell = (value: number, record: GroupedRecordData, field: keyof GroupedRecordData) => {
     if (isEditing) {
+      const num = record[field] as number
       return (
         <Input
-          value={record[field]}
+          inputMode="numeric"
+          value={formatAmountInputDisplay(num)}
           style={{ width: "100%" }}
-          onChange={(e) => handleInputChange(Number(e.target.value), record.roleName, field)}
+          onChange={(e) => handleInputChange(e.target.value, record.roleName, field)}
         />
       )
     }
@@ -157,35 +252,69 @@ export default function PaymentConfigurationPage({ isThesis }: { isThesis: boole
         const originalItem = initialDataSource[index]
         if (!originalItem) return
 
-        const pushIfChanged = (
-          id: string,
-          currentValue: number,
-          originalValue: number,
-          type: "COUNCIL" | "SUPERVISOR"
-        ) => {
-          if (id && currentValue !== originalValue) {
-            if (type === "COUNCIL") {
+        if (item.type === "COUNCIL") {
+          const councilRole = COUNCIL_PLACEHOLDER_ROLES.find((r) => r.roleName === item.roleName)?.role
+          if (!councilRole) return
+
+          for (const { idKey, valueKey, description, inAcademy } of PAY_AMOUNT_CELL_DEFS) {
+            const id = item[idKey]
+            const current = item[valueKey]
+            const original = originalItem[valueKey]
+            if (id) {
+              if (current !== original) {
+                updatePromises.push(
+                  updateCouncilPay({
+                    where: { id },
+                    data: { amount: current },
+                  })
+                )
+              }
+            } else if (current !== original && current !== 0) {
               updatePromises.push(
-                updateCouncilPay({
-                  where: { id },
-                  data: { amount: currentValue },
-                })
-              )
-            } else {
-              updatePromises.push(
-                updateSupervisorPay({
-                  where: { id },
-                  data: { amount: currentValue },
+                createCouncilPay({
+                  data: {
+                    role: councilRole,
+                    amount: current,
+                    inAcademy,
+                    description,
+                  },
                 })
               )
             }
           }
+          return
         }
 
-        pushIfChanged(item.idProjectIn, item.projectIn, originalItem.projectIn, item.type)
-        pushIfChanged(item.idProjectOut, item.projectOut, originalItem.projectOut, item.type)
-        pushIfChanged(item.idThesisIn, item.thesisIn, originalItem.thesisIn, item.type)
-        pushIfChanged(item.idThesisOut, item.thesisOut, originalItem.thesisOut, item.type)
+        const supervisorRole = SUPERVISOR_PLACEHOLDER_ROLES.find((r) => r.roleName === item.roleName)
+          ?.role
+        if (!supervisorRole) return
+
+        for (const { idKey, valueKey, description, inAcademy } of PAY_AMOUNT_CELL_DEFS) {
+          const id = item[idKey]
+          const current = item[valueKey]
+          const original = originalItem[valueKey]
+          if (id) {
+            if (current !== original) {
+              updatePromises.push(
+                updateSupervisorPay({
+                  where: { id },
+                  data: { amount: current },
+                })
+              )
+            }
+          } else if (current !== original && current !== 0) {
+            updatePromises.push(
+              createSupervisorPay({
+                data: {
+                  role: supervisorRole,
+                  amount: current,
+                  inAcademy,
+                  description,
+                },
+              })
+            )
+          }
+        }
       })
 
       if (updatePromises.length === 0) {
@@ -265,7 +394,7 @@ export default function PaymentConfigurationPage({ isThesis }: { isThesis: boole
                       align: "center" as const,
                       children: [
                         {
-                          title: "Trong học viện",
+                          title: "Trong học viện (VNĐ) ",
                           dataIndex: "projectIn",
                           align: "center" as const,
                           width: 150,
@@ -273,7 +402,7 @@ export default function PaymentConfigurationPage({ isThesis }: { isThesis: boole
                             renderCell(val, record, "projectIn"),
                         },
                         {
-                          title: "Ngoài học viện",
+                          title: "Ngoài học viện (VNĐ)",
                           dataIndex: "projectOut",
                           align: "center" as const,
                           width: 150,
@@ -292,7 +421,7 @@ export default function PaymentConfigurationPage({ isThesis }: { isThesis: boole
                       align: "center" as const,
                       children: [
                         {
-                          title: "Trong học viện",
+                          title: "Trong học viện (VNĐ)",
                           dataIndex: "thesisIn",
                           align: "center" as const,
                           width: 150,
@@ -300,7 +429,7 @@ export default function PaymentConfigurationPage({ isThesis }: { isThesis: boole
                             renderCell(val, record, "thesisIn"),
                         },
                         {
-                          title: "Ngoài học viện",
+                          title: "Ngoài học viện (VNĐ)",
                           dataIndex: "thesisOut",
                           align: "center" as const,
                           width: 150,
