@@ -1,29 +1,36 @@
-import type { QueryKey, UseQueryOptions } from '@tanstack/react-query'
-import type { QueryOperation } from './qaComponents'
+import {
+  skipToken,
+  type DefaultError,
+  type Enabled,
+  type QueryKey,
+  type UseQueryOptions,
+} from "@tanstack/react-query";
+import type { QueryOperation } from "./qaComponents";
 
-export type QaContext = {
-    fetcherOptions: {
-        /**
-         * Headers to inject in the fetcher
-         */
-        headers?: {}
-        /**
-         * Query params to inject in the fetcher
-         */
-        queryParams?: {}
-    }
-    queryOptions: {
-        /**
-         * Set this to `false` to disable automatic refetching when the query mounts or changes query keys.
-         * Defaults to `true`.
-         */
-        enabled?: boolean
-    }
+export type QaContext<
+  TQueryFnData = unknown,
+  TError = DefaultError,
+  TData = TQueryFnData,
+  TQueryKey extends QueryKey = QueryKey,
+> = {
+  fetcherOptions: {
     /**
-     * Query key manager.
+     * Headers to inject in the fetcher
      */
-    queryKeyFn: (operation: QueryOperation) => QueryKey
-}
+    headers?: {};
+    /**
+     * Query params to inject in the fetcher
+     */
+    queryParams?: {};
+  };
+  queryOptions: {
+    /**
+     * Set this to `false` to disable automatic refetching when the query mounts or changes query keys.
+     * Defaults to `true`.
+     */
+    enabled?: Enabled<TQueryFnData, TError, TQueryFnData, TQueryKey>;
+  };
+};
 
 /**
  * Context injected into every react-query hook wrappers
@@ -31,69 +38,71 @@ export type QaContext = {
  * @param queryOptions options from the useQuery wrapper
  */
 export function useQaContext<
-    TQueryFnData = unknown,
-    TError = unknown,
-    TData = TQueryFnData,
-    TQueryKey extends QueryKey = QueryKey,
+  TQueryFnData = unknown,
+  TError = DefaultError,
+  TData = TQueryFnData,
+  TQueryKey extends QueryKey = QueryKey,
 >(
-    _queryOptions?: Omit<
-        UseQueryOptions<TQueryFnData, TError, TData, TQueryKey>,
-        'queryKey' | 'queryFn'
-    >
-): QaContext {
-    return {
-        fetcherOptions: {},
-        queryOptions: {},
-        queryKeyFn,
-    }
+  _queryOptions?: Omit<
+    UseQueryOptions<TQueryFnData, TError, TData, TQueryKey>,
+    "queryKey" | "queryFn"
+  >,
+): QaContext<TQueryFnData, TError, TData, TQueryKey> {
+  return {
+    fetcherOptions: {},
+    queryOptions: {},
+  };
 }
 
-export const queryKeyFn = (operation: QueryOperation) => {
-    const queryKey: unknown[] = hasPathParams(operation)
-        ? operation.path
-              .split('/')
-              .filter(Boolean)
-              .map((i) => resolvePathParam(i, operation.variables.pathParams))
-        : operation.path.split('/').filter(Boolean)
+export const queryKeyFn = (operation: QueryOperation): QueryKey => {
+  const queryKey: unknown[] = hasPathParams(operation)
+    ? operation.path
+        .split("/")
+        .filter(Boolean)
+        .map((i) => resolvePathParam(i, operation.variables.pathParams))
+    : operation.path.split("/").filter(Boolean);
 
-    if (hasQueryParams(operation)) {
-        queryKey.push(operation.variables.queryParams)
-    }
+  if (hasQueryParams(operation)) {
+    queryKey.push(operation.variables.queryParams);
+  }
 
-    if (hasBody(operation)) {
-        queryKey.push(operation.variables.body)
-    }
+  if (hasBody(operation)) {
+    queryKey.push(operation.variables.body);
+  }
 
-    return queryKey
-}
+  return queryKey;
+};
 // Helpers
 const resolvePathParam = (key: string, pathParams: Record<string, string>) => {
-    if (key.startsWith('{') && key.endsWith('}')) {
-        return pathParams[key.slice(1, -1)]
-    }
-    return key
-}
+  if (key.startsWith("{") && key.endsWith("}")) {
+    return pathParams[key.slice(1, -1)];
+  }
+  return key;
+};
 
 const hasPathParams = (
-    operation: QueryOperation
+  operation: QueryOperation,
 ): operation is QueryOperation & {
-    variables: { pathParams: Record<string, string> }
+  variables: { pathParams: Record<string, string> };
 } => {
-    return Boolean((operation.variables as any).pathParams)
-}
+  if (operation.variables === skipToken) return false;
+  return "variables" in operation && "pathParams" in operation.variables;
+};
 
 const hasBody = (
-    operation: QueryOperation
+  operation: QueryOperation,
 ): operation is QueryOperation & {
-    variables: { body: Record<string, unknown> }
+  variables: { body: Record<string, unknown> };
 } => {
-    return Boolean((operation.variables as any).body)
-}
+  if (operation.variables === skipToken) return false;
+  return "variables" in operation && "body" in operation.variables;
+};
 
 const hasQueryParams = (
-    operation: QueryOperation
+  operation: QueryOperation,
 ): operation is QueryOperation & {
-    variables: { queryParams: Record<string, unknown> }
+  variables: { queryParams: Record<string, unknown> };
 } => {
-    return Boolean((operation.variables as any).queryParams)
-}
+  if (operation.variables === skipToken) return false;
+  return "variables" in operation && "queryParams" in operation.variables;
+};

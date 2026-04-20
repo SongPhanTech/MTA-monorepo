@@ -6,6 +6,8 @@
         "build:backend": "turbo run build --filter=backend",
         "dev": "turbo dev",
         "lint": "oxlint --fix",
+        "tsc": "tsc",
+        "typecheck": "tsc --noEmit",
         "generate": "turbo run generate",
         "generate:sql": "turbo run generate:sql",
         "generate:router": "turbo run generate:router",
