@@ -1,35 +1,33 @@
-import { classUnregister } from "@workspace/libs/api/portal";
-import type { GetClassesInfo200ItemSubjectClassItem } from "@workspace/libs/api/schemas/getClassesInfo200ItemSubjectClassItem";
-import { useMutation } from "@tanstack/react-query";
-import { message, Popconfirm, Tooltip } from "antd";
-import { CircleAlertIcon, CircleXIcon, InfoIcon, MapPinIcon } from "lucide-react";
-import { useMemo, useState } from "react";
-import registrationScheduleHelper, { DAYS, PERIODS, type ScheduleCourse } from "./helper";
-import "./registration-schedule.css";
+import { classUnregister } from "@workspace/libs/api/portal"
+import type { GetClassesInfo200ItemSubjectClassItem } from "@workspace/libs/api/schemas/getClassesInfo200ItemSubjectClassItem"
+import { useMutation } from "@tanstack/react-query"
+import { message, Popconfirm, Tooltip } from "antd"
+import { CircleAlertIcon, CircleXIcon, InfoIcon, MapPinIcon } from "lucide-react"
+import { useMemo, useState } from "react"
+import registrationScheduleHelper, { DAYS, PERIODS, type ScheduleCourse } from "./helper"
+import "./registration-schedule.css"
 
 interface ISubjectClassTime {
-  registeredClasses: GetClassesInfo200ItemSubjectClassItem[];
-  sessionId: string;
-  curriculumVersionId: string;
-  onUnregisterSuccess?: () => void;
-  isEdit?: boolean;
+  registeredClasses: GetClassesInfo200ItemSubjectClassItem[]
+  sessionId: string
+  curriculumVersionId: string
+  onUnregisterSuccess?: () => void
+  isEdit?: boolean
 }
 
-const CourseBlock = ({ 
-  course, 
-  isEdit, 
-  onUnregister, 
-  isUnregistering 
-}: { 
-  course: ScheduleCourse; 
-  isEdit: boolean; 
-  onUnregister: (id: string) => void;
-  isUnregistering: boolean;
+const CourseBlock = ({
+  course,
+  isEdit,
+  onUnregister,
+  isUnregistering,
+}: {
+  course: ScheduleCourse
+  isEdit: boolean
+  onUnregister: (id: string) => void
+  isUnregistering: boolean
 }) => {
   return (
-    <div 
-      className={`course-block ${course.isConflict ? 'conflict' : ''}`}
-    >
+    <div className={`course-block ${course.isConflict ? "conflict" : ""}`}>
       <div className="flex justify-between items-start">
         <span className="course-code">{course.code}</span>
         <div className="flex gap-1 items-center">
@@ -55,12 +53,15 @@ const CourseBlock = ({
               disabled={isUnregistering}
               onConfirm={() => onUnregister(course.id)}
             >
-              <CircleXIcon size={12} className="text-gray-400 cursor-pointer hover:text-red-500 transition-colors not-print" />
+              <CircleXIcon
+                size={12}
+                className="text-gray-400 cursor-pointer hover:text-red-500 transition-colors not-print"
+              />
             </Popconfirm>
           )}
         </div>
       </div>
-      
+
       <Tooltip title={course.name} placement="bottom">
         <p className="course-name">{course.name}</p>
       </Tooltip>
@@ -68,7 +69,9 @@ const CourseBlock = ({
       <div className="course-info">
         <div className="flex items-center gap-1">
           <InfoIcon size={10} className="text-blue-400" />
-          <span>Tiết: {course.startPeriod} - {course.endPeriod}</span>
+          <span>
+            Tiết: {course.startPeriod} - {course.endPeriod}
+          </span>
         </div>
         {course.room && (
           <div className="flex items-center gap-1">
@@ -78,9 +81,8 @@ const CourseBlock = ({
         )}
       </div>
     </div>
-  );
-};
-
+  )
+}
 
 const ThoiKhoaBieuDangKy = (props: ISubjectClassTime) => {
   const {
@@ -89,16 +91,14 @@ const ThoiKhoaBieuDangKy = (props: ISubjectClassTime) => {
     curriculumVersionId,
     onUnregisterSuccess,
     isEdit = true,
-  } = props;
-  
-  const [removedIds, setRemovedIds] = useState<Set<string>>(new Set());
+  } = props
+
+  const [removedIds, setRemovedIds] = useState<Set<string>>(new Set())
 
   const { scheduleMap } = useMemo(() => {
-    const displayClasses = registeredClasses.filter(
-      (c) => !removedIds.has(c.id ?? ""),
-    );
-    return registrationScheduleHelper.buildScheduleMap(displayClasses);
-  }, [registeredClasses, removedIds]);
+    const displayClasses = registeredClasses.filter((c) => !removedIds.has(c.id ?? ""))
+    return registrationScheduleHelper.buildScheduleMap(displayClasses)
+  }, [registeredClasses, removedIds])
 
   const { mutate: unregisterMutate, isPending: isUnregistering } = useMutation({
     mutationFn: async (subjectClassId: string) => {
@@ -106,28 +106,28 @@ const ThoiKhoaBieuDangKy = (props: ISubjectClassTime) => {
         sessionId,
         curriculumVersionId,
         subjectClassIds: [subjectClassId],
-      });
+      })
       if (res.status !== 200) {
-        throw new Error(res.data?.message || "Huỷ đăng ký thất bại");
+        throw new Error(res.data?.message || "Huỷ đăng ký thất bại")
       }
-      return res;
+      return res
     },
     onMutate: (subjectClassId) => {
-      setRemovedIds((prev) => new Set([...prev, subjectClassId]));
+      setRemovedIds((prev) => new Set([...prev, subjectClassId]))
     },
     onSuccess: () => {
-      message.success("Huỷ đăng ký thành công");
-      onUnregisterSuccess?.();
+      message.success("Huỷ đăng ký thành công")
+      onUnregisterSuccess?.()
     },
     onError: (error: any, subjectClassId) => {
       setRemovedIds((prev) => {
-        const next = new Set(prev);
-        next.delete(subjectClassId);
-        return next;
-      });
-      message.error(error?.message || "Huỷ đăng ký thất bại");
+        const next = new Set(prev)
+        next.delete(subjectClassId)
+        return next
+      })
+      message.error(error?.message || "Huỷ đăng ký thất bại")
     },
-  });
+  })
 
   return (
     <div className="timetable-container" id="print-timetable">
@@ -147,26 +147,22 @@ const ThoiKhoaBieuDangKy = (props: ISubjectClassTime) => {
                 <div className="period-label">{period}</div>
               </td>
               {DAYS.map((day) => {
-                const dayMap = scheduleMap.get(day.key);
-                const courses = dayMap?.get(period);
-                
+                const dayMap = scheduleMap.get(day.key)
+                const courses = dayMap?.get(period)
+
                 if (registrationScheduleHelper.isInsideSpan(day.key, period, scheduleMap)) {
-                  return null;
+                  return null
                 }
 
                 if (courses && courses.length > 0) {
-                  const maxEndPeriod = Math.max(...courses.map(c => c.endPeriod));
-                  const rowSpan = maxEndPeriod - period + 1;
+                  const maxEndPeriod = Math.max(...courses.map((c) => c.endPeriod))
+                  const rowSpan = maxEndPeriod - period + 1
 
                   return (
-                    <td 
-                      key={`${day.key}-${period}`} 
-                      rowSpan={rowSpan}
-                      className="day-cell"
-                    >
+                    <td key={`${day.key}-${period}`} rowSpan={rowSpan} className="day-cell">
                       <div className="conflict-stack">
                         {courses.map((course) => (
-                          <CourseBlock 
+                          <CourseBlock
                             key={`${course.id}-${day.key}-${course.startPeriod}`}
                             course={course}
                             isEdit={isEdit}
@@ -176,18 +172,17 @@ const ThoiKhoaBieuDangKy = (props: ISubjectClassTime) => {
                         ))}
                       </div>
                     </td>
-                  );
+                  )
                 }
 
-                return <td key={`${day.key}-${period}`} className="day-cell" />;
+                return <td key={`${day.key}-${period}`} className="day-cell" />
               })}
             </tr>
           ))}
         </tbody>
       </table>
     </div>
-  );
-};
+  )
+}
 
-export default ThoiKhoaBieuDangKy;
-
+export default ThoiKhoaBieuDangKy

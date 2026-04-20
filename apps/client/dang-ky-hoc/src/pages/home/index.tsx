@@ -4,7 +4,8 @@ import DefaultLayout from "@layouts/default-layout"
 import { useSession } from "@workspace/auth/react"
 import { useFindUniqueCurriculumVersion, useFindUniqueUserProfile } from "@workspace/db/hooks"
 import { useAcademicRankingConverter } from "@workspace/libs/hook/academicRankingConvert"
-import { DanhSachThongBao, LichCongTac } from "@workspace/ui"
+import { LichCongTac } from "@workspace/ui"
+import { DanhSachThongBao } from "@components/commons/thong-bao"
 import { Col, Row, Typography } from "antd"
 import { useMemo } from "react"
 
@@ -112,11 +113,11 @@ function Page() {
     <div>
       <Row gutter={[8, 8]}>
         <Col xs={24} lg={18}>
-          <div className="bg-white rounded shadow h-full flex flex-col">
+          <div className="bg-white rounded border-gray-200 border h-full flex flex-col">
             <div className="p-4">
               <Title level={4}>Thời khoá biểu</Title>
             </div>
-            <div className="flex-1 p-2">
+            <div className="flex-1 px-4 py-1.5">
               <LichCongTac onlyMySchedule />
             </div>
           </div>
@@ -130,9 +131,11 @@ function Page() {
             }}
             academicRanking={convertAcademicRanking(gpaScore.gpa).classification || "-"}
           />
-          <div className="bg-white rounded shadow h-[550px] flex flex-col mt-2">
-            <div className="p-4">
-              <Title level={4}>Thông báo</Title>
+          <div className="bg-white rounded-sm border border-gray-200 h-[550px] overflow-hidden flex flex-col mt-2">
+            <div className="px-4 py-2 border-b border-gray-200 bg-green-700">
+              <Title className="mb-0 uppercase font-medium text-white" level={4}>
+                Thông báo
+              </Title>
             </div>
             <div className="flex-1 overflow-y-auto mb-2 p-2">
               <DanhSachThongBao />
