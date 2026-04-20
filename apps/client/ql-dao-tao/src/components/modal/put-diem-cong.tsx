@@ -41,6 +41,7 @@ const PutOlympicScoreModal = () => {
     include: { managementOrganization: true },
     orderBy: { name: "asc" },
   })
+
   async function onOk({ subjects, ...rest }: PutAward) {
     try {
       showSpinner()
@@ -136,7 +137,7 @@ const PutOlympicScoreModal = () => {
             style={{ width: "100%" }}
             placeholder="Chọn môn học"
             options={subjectData.map((item) => ({
-              label: item.code + " - " + item.name + " - " + (item.managementOrganization?.sTen || "Không có đơn vị"),
+              label: item.name + " - " + (item.managementOrganization?.sTen || "Không có đơn vị"),
               value: item.id,
             }))}
           />
