@@ -601,25 +601,25 @@ export default function StudentScoreClassPage() {
                   }))}
                 />
                 <Col className="flex flex-row gap-2.5">
-                <Button
-                  type="primary"
-                  onClick={() =>
-                    onOpen({
-                      dataTable: data,
-                      dataStudent: student,
-                    })
-                  }
-                >
-                  In kết quả học tập
-                </Button>
-                <Button
-                  type="primary"
-                  onClick={() => {
-                    exportTemplate()
-                  }}
-                >
-                  Xuất bảng điểm cá nhân
-                </Button>
+                  <Button
+                    type="primary"
+                    onClick={() =>
+                      onOpen({
+                        dataTable: data,
+                        dataStudent: student,
+                      })
+                    }
+                  >
+                    In kết quả học tập
+                  </Button>
+                  <Button
+                    type="primary"
+                    onClick={() => {
+                      exportTemplate()
+                    }}
+                  >
+                    Xuất bảng điểm cá nhân
+                  </Button>
                 </Col>
               </Flex>
             </Col>

@@ -1,21 +1,21 @@
-import { Typography, Progress } from "antd";
+import { Typography, Progress } from "antd"
 
-const { Title } = Typography;
+const { Title } = Typography
 
 interface CardStudyResultProps {
   gpaScore: {
-    gpa: number;
-    totalCredits: number;
-  };
+    gpa: number
+    totalCredits: number
+  }
   subjectScoreData: {
-    requiredCredits: number;
-    electiveCredits: number;
-  };
-  academicRanking: string;
+    requiredCredits: number
+    electiveCredits: number
+  }
+  academicRanking: string
 }
 
 const CardStudyResult = (props: CardStudyResultProps) => {
-  const { gpaScore, subjectScoreData, academicRanking } = props;
+  const { gpaScore, subjectScoreData, academicRanking } = props
 
   return (
     <div className="bg-white rounded-md overflow-hidden border border-gray-200 border-solid flex flex-col">
@@ -28,9 +28,7 @@ const CardStudyResult = (props: CardStudyResultProps) => {
         <div className="flex justify-center gap-3 w-full items-center">
           <div className="flex flex-col items-start flex-1 gap-2 w-full justify-center">
             <div className="uppercase font-medium text-xs ">Điểm tích luỹ</div>
-            <span className="text-xl font-semibold">
-              {gpaScore.gpa.toFixed(2)}
-            </span>
+            <span className="text-xl font-semibold">{gpaScore.gpa.toFixed(2)}</span>
           </div>
           <div className="border border-gray-200 h-10" />
           <div className="flex flex-col items-start flex-1 gap-2 w-full justify-center">
@@ -44,10 +42,12 @@ const CardStudyResult = (props: CardStudyResultProps) => {
         <div className="flex flex-row justify-between items-center h-full">
           <div className="uppercase">Tín chỉ tích luỹ</div>
           <div className="text-sm text-blue-600">
-            {Number(((gpaScore.totalCredits || 0) /
-              ((subjectScoreData?.requiredCredits ?? 0) +
-                (subjectScoreData?.electiveCredits ?? 0) || 1)) *
-              100).toFixed(1)}
+            {Number(
+              ((gpaScore.totalCredits || 0) /
+                ((subjectScoreData?.requiredCredits ?? 0) +
+                  (subjectScoreData?.electiveCredits ?? 0) || 1)) *
+                100
+            ).toFixed(1)}
             % Hoàn thành
           </div>
         </div>
@@ -66,8 +66,7 @@ const CardStudyResult = (props: CardStudyResultProps) => {
           <div className="flex flex-col justify-between items-start h-full flex-1">
             <div className="text-sm font-semibold">
               {gpaScore.totalCredits}/
-              {(subjectScoreData?.requiredCredits ?? 0) +
-                (subjectScoreData?.electiveCredits ?? 0)}
+              {(subjectScoreData?.requiredCredits ?? 0) + (subjectScoreData?.electiveCredits ?? 0)}
             </div>
 
             <div className="text-xs text-gray-400">
@@ -81,7 +80,7 @@ const CardStudyResult = (props: CardStudyResultProps) => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default CardStudyResult;
+export default CardStudyResult

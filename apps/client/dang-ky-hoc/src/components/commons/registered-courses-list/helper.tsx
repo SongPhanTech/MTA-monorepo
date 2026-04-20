@@ -1,13 +1,13 @@
-import { GetClassesInfo200ItemSubjectClassItem } from "@workspace/libs/api/schemas";
+import { GetClassesInfo200ItemSubjectClassItem } from "@workspace/libs/api/schemas"
 
 type GetRegisterStateParams = {
-  record: GetClassesInfo200ItemSubjectClassItem;
-  maxCredit?: number;
-  totalRegisteredCredit: number;
-  classToSubjectCodeMap: Map<string, string>;
-  registeredSubjectCodes: Set<string>;
-  isPending: boolean;
-};
+  record: GetClassesInfo200ItemSubjectClassItem
+  maxCredit?: number
+  totalRegisteredCredit: number
+  classToSubjectCodeMap: Map<string, string>
+  registeredSubjectCodes: Set<string>
+  isPending: boolean
+}
 
 const getRegisterState = (args: GetRegisterStateParams) => {
   const {
@@ -17,29 +17,21 @@ const getRegisterState = (args: GetRegisterStateParams) => {
     classToSubjectCodeMap,
     registeredSubjectCodes,
     isPending,
-  } = args;
-  const isMaxed =
-    (record?.maxStudent || 0) <= (record?._count?.subjectClassStudent || 0);
+  } = args
+  const isMaxed = (record?.maxStudent || 0) <= (record?._count?.subjectClassStudent || 0)
 
-  const isRegistered = record?.classRegisterLogs?.length > 0;
+  const isRegistered = record?.classRegisterLogs?.length > 0
 
   const isOverMaxCredit =
-    maxCredit != null &&
-    totalRegisteredCredit + (record?.credit ?? 0) > maxCredit;
+    maxCredit != null && totalRegisteredCredit + (record?.credit ?? 0) > maxCredit
 
-  const parentSubjectCode = classToSubjectCodeMap.get(record?.id);
+  const parentSubjectCode = classToSubjectCodeMap.get(record?.id)
 
   const siblingAlreadyRegistered =
-    !isRegistered &&
-    !!parentSubjectCode &&
-    registeredSubjectCodes.has(parentSubjectCode);
+    !isRegistered && !!parentSubjectCode && registeredSubjectCodes.has(parentSubjectCode)
 
   const isDisabled =
-    isMaxed ||
-    isRegistered ||
-    isPending ||
-    isOverMaxCredit ||
-    siblingAlreadyRegistered;
+    isMaxed || isRegistered || isPending || isOverMaxCredit || siblingAlreadyRegistered
 
   return {
     isDisabled,
@@ -47,8 +39,8 @@ const getRegisterState = (args: GetRegisterStateParams) => {
     isRegistered,
     isOverMaxCredit,
     siblingAlreadyRegistered,
-  };
-};
-const registeredCoursesListHelper = {getRegisterState}
+  }
+}
+const registeredCoursesListHelper = { getRegisterState }
 
 export default registeredCoursesListHelper

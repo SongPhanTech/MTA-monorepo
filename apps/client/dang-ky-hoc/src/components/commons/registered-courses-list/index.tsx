@@ -1,33 +1,29 @@
-import ThoiKhoaBieuDangKy from "@components/commons/registration-schedule";
-import Select from "@components/commons/select";
-import TableCollapse from "@components/commons/tableCollapse";
-import { cn } from "@lib/utils";
-import { useMutation } from "@tanstack/react-query";
-import { $Enums } from "@workspace/db";
-import {
-  classRegister,
-  useGetClassesInfo,
-  useGetStudentInfo,
-} from "@workspace/libs/api/portal";
-import type { GetClassesInfo200ItemSubjectClassItem } from "@workspace/libs/api/schemas/getClassesInfo200ItemSubjectClassItem";
-import type { GetClassRegisterSession200ItemCreditLimitItem } from "@workspace/libs/api/schemas/getClassRegisterSession200ItemCreditLimitItem";
-import { Button, Checkbox, message, Popconfirm } from "antd";
-import dayjs from "dayjs";
-import { CircleAlertIcon, LogOutIcon } from "lucide-react";
-import { useMemo, useState } from "react";
-import clsx from "clsx";
-import registeredCoursesListHelper from "./helper";
+import ThoiKhoaBieuDangKy from "@components/commons/registration-schedule"
+import Select from "@components/commons/select"
+import TableCollapse from "@components/commons/tableCollapse"
+import { cn } from "@lib/utils"
+import { useMutation } from "@tanstack/react-query"
+import { $Enums } from "@workspace/db"
+import { classRegister, useGetClassesInfo, useGetStudentInfo } from "@workspace/libs/api/portal"
+import type { GetClassesInfo200ItemSubjectClassItem } from "@workspace/libs/api/schemas/getClassesInfo200ItemSubjectClassItem"
+import type { GetClassRegisterSession200ItemCreditLimitItem } from "@workspace/libs/api/schemas/getClassRegisterSession200ItemCreditLimitItem"
+import { Button, Checkbox, message, Popconfirm } from "antd"
+import dayjs from "dayjs"
+import { CircleAlertIcon, LogOutIcon } from "lucide-react"
+import { useMemo, useState } from "react"
+import clsx from "clsx"
+import registeredCoursesListHelper from "./helper"
 
 export interface ClassRegisterSessionProps {
-  sessionId: string;
+  sessionId: string
   curriculumVersions: {
-    id: string;
-    name: string;
-    code: string;
-  }[];
-  endDate: string | null;
-  creditLimit: GetClassRegisterSession200ItemCreditLimitItem[];
-  tuitionPerCredit?: number;
+    id: string
+    name: string
+    code: string
+  }[]
+  endDate: string | null
+  creditLimit: GetClassRegisterSession200ItemCreditLimitItem[]
+  tuitionPerCredit?: number
 }
 
 const BY_CURRICULUM_OPTIONS = [
@@ -39,36 +35,30 @@ const BY_CURRICULUM_OPTIONS = [
     label: "Môn học toàn khoá",
     value: 0,
   },
-];
+]
 
 const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
-  const {
-    sessionId,
-    curriculumVersions,
-    endDate,
-    creditLimit,
-    tuitionPerCredit,
-  } = props;
+  const { sessionId, curriculumVersions, endDate, creditLimit, tuitionPerCredit } = props
   const [curriculumVersionId, setCurriculumVersionId] = useState(
-    curriculumVersions.length > 0 ? curriculumVersions[0].id : "",
-  );
-  const [byCurriculum, setByCurriculum] = useState(1);
+    curriculumVersions.length > 0 ? curriculumVersions[0].id : ""
+  )
+  const [byCurriculum, setByCurriculum] = useState(1)
   const { data: classStudentData } = useGetStudentInfo({
     sessionId: sessionId,
-  });
+  })
 
   const studentData = useMemo(() => {
-    if (classStudentData?.status !== 200) return null;
+    if (classStudentData?.status !== 200) return null
 
-    const data = classStudentData.data;
+    const data = classStudentData.data
 
     return {
       studentName: data?.userProfile?.fullname,
       studentCode: data?.student?.code,
       classification: data?.latestSemesterResult?.rank?.classification,
       maxCredit: data?.creditLimit?.maxCredit,
-    };
-  }, [classStudentData]);
+    }
+  }, [classStudentData])
 
   const infoItems = [
     {
@@ -93,83 +83,79 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
         "chưa xác định"
       ) : null,
     },
-  ].filter((item) => item.value);
+  ].filter((item) => item.value)
 
   const { data: classesInfo, refetch: refetchClassesInfo } = useGetClassesInfo({
     sessionId,
     curriculumVersionId,
     byCurriculum: byCurriculum === 1 ? "true" : "false",
     isRegistered: "false",
-  });
+  })
 
   const registeredClasses =
     classesInfo?.status === 200
       ? classesInfo.data
           ?.flatMap((e) => e?.subjectClass)
           ?.filter((sc) => (sc?.classRegisterLogs?.length || 0) > 0)
-      : [];
+      : []
 
   const { classToSubjectCodeMap, registeredSubjectCodes, classToParentMap } = useMemo(() => {
-    const map = new Map<string, string>();
-    const parentMap = new Map<string, any>();
-    const set = new Set<string>();
+    const map = new Map<string, string>()
+    const parentMap = new Map<string, any>()
+    const set = new Set<string>()
 
     if (classesInfo?.status === 200) {
       classesInfo.data?.forEach((subject) => {
-        const subjectCode = subject.code ?? "";
+        const subjectCode = subject.code ?? ""
 
         const hasRegistered = subject.subjectClass?.some(
-          (sc) => (sc?.classRegisterLogs?.length || 0) > 0,
-        );
+          (sc) => (sc?.classRegisterLogs?.length || 0) > 0
+        )
 
-        if (hasRegistered) set.add(subjectCode);
+        if (hasRegistered) set.add(subjectCode)
 
         subject.subjectClass?.forEach((sc) => {
           if (sc?.id) {
-            map.set(sc.id, subjectCode);
-            parentMap.set(sc.id, subject); // Lưu mapping từ Class ID sang Subject Version (Cha)
+            map.set(sc.id, subjectCode)
+            parentMap.set(sc.id, subject) // Lưu mapping từ Class ID sang Subject Version (Cha)
           }
-        });
-      });
+        })
+      })
     }
 
-    return { 
-      classToSubjectCodeMap: map, 
+    return {
+      classToSubjectCodeMap: map,
       registeredSubjectCodes: set,
-      classToParentMap: parentMap
-    };
-  }, [classesInfo]);
+      classToParentMap: parentMap,
+    }
+  }, [classesInfo])
 
-
-  const {
-    mutateAsync: classRegisterMutate,
-    isPending: isPendingClassRegister,
-  } = useMutation({
+  const { mutateAsync: classRegisterMutate, isPending: isPendingClassRegister } = useMutation({
     mutationFn: async (subjectClassIds: string[]) => {
       const res = await classRegister({
         sessionId,
         subjectClassIds,
         curriculumVersionId,
-      });
+      })
 
       if (res.status !== 200) {
-        throw new Error(res.data?.message || "Đăng ký thất bại");
+        throw new Error(res.data?.message || "Đăng ký thất bại")
       }
 
-      return res;
+      return res
     },
     onSuccess: () => {
-      refetchClassesInfo();
-      message.success("Đăng ký thành công");
+      refetchClassesInfo()
+      message.success("Đăng ký thành công")
     },
     onError: (error: any) => {
-      message.error(error?.message || "Đăng ký thất bại");
+      message.error(error?.message || "Đăng ký thất bại")
     },
-  });
+  })
 
   const handleClassRegister = (subjectClassIds: string[]) => {
-    classRegisterMutate(subjectClassIds);
-  };
+    classRegisterMutate(subjectClassIds)
+  }
 
   return (
     <div>
@@ -181,8 +167,7 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
               Hạn đăng ký học: {dayjs(endDate).format("DD/MM/YYYY")}
             </p>
             <p className="text-xs font-normal text-red-600/80">
-              Vui lòng hoàn tất đăng ký học phần trước thời gian này để đảm bảo
-              kế hoạch học tập!
+              Vui lòng hoàn tất đăng ký học phần trước thời gian này để đảm bảo kế hoạch học tập!
             </p>
           </div>
         </div>
@@ -202,7 +187,7 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
           <div
             className={clsx(
               "grid grid-cols-1 md:grid-cols-2 gap-y-5 gap-x-10 px-5 py-3",
-              classStudentData?.status !== 200 && "hidden",
+              classStudentData?.status !== 200 && "hidden"
             )}
           >
             {infoItems.map((item) => (
@@ -210,9 +195,7 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
                 <span className="text-[10px] font-normal uppercase tracking-wider text-gray-500">
                   {item.label}
                 </span>
-                <span className="text-xs font-normal text-gray-900">
-                  {item.value}
-                </span>
+                <span className="text-xs font-normal text-gray-900">{item.value}</span>
               </div>
             ))}
           </div>
@@ -232,38 +215,37 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
           </div>
 
           <p className="text-[11px] px-5 py-3 leading-relaxed text-gray-400 ">
-            Sinh viên cần kiểm tra kỹ số tín chỉ tối thiểu và tối đa được phép
-            đăng ký trong học kỳ này. Mọi thắc mắc vui lòng liên hệ phòng đào
-            tạo.
+            Sinh viên cần kiểm tra kỹ số tín chỉ tối thiểu và tối đa được phép đăng ký trong học kỳ
+            này. Mọi thắc mắc vui lòng liên hệ phòng đào tạo.
           </p>
         </div>
       </div>
       <div className="flex gap-2 flex-row justify-between not-print">
         <div className="flex gap-2 flex-row">
-        <Select
-          options={curriculumVersions?.map((cv) => ({
-            label: `${cv?.code} - ${cv?.name}`,
-            value: cv?.id,
-          }))}
-          placeholder="Chọn chương trình đào tạo"
-          style={{ width: 300, marginBottom: 16 }}
-          value={curriculumVersionId}
-          allowClear={false}
-          onChange={setCurriculumVersionId}
-        />
-        <Select
-          options={BY_CURRICULUM_OPTIONS}
-          placeholder="Chọn loại môn học"
-          style={{ width: 300, marginBottom: 16 }}
-          value={byCurriculum}
-          allowClear={false}
-          onChange={setByCurriculum}
-        />
+          <Select
+            options={curriculumVersions?.map((cv) => ({
+              label: `${cv?.code} - ${cv?.name}`,
+              value: cv?.id,
+            }))}
+            placeholder="Chọn chương trình đào tạo"
+            style={{ width: 300, marginBottom: 16 }}
+            value={curriculumVersionId}
+            allowClear={false}
+            onChange={setCurriculumVersionId}
+          />
+          <Select
+            options={BY_CURRICULUM_OPTIONS}
+            placeholder="Chọn loại môn học"
+            style={{ width: 300, marginBottom: 16 }}
+            value={byCurriculum}
+            allowClear={false}
+            onChange={setByCurriculum}
+          />
         </div>
         <Button
           type="primary"
           onClick={() => {
-            window.print();
+            window.print()
           }}
         >
           In Danh sách môn đã đăng ký
@@ -279,7 +261,7 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
               {registeredClasses?.reduce(
                 (acc: number, curr: GetClassesInfo200ItemSubjectClassItem) =>
                   acc + (curr?.credit || 0),
-                0,
+                0
               )}
             </b>{" "}
             tín chỉ, học phí{" "}
@@ -287,7 +269,7 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
               (registeredClasses?.reduce(
                 (acc: number, curr: GetClassesInfo200ItemSubjectClassItem) =>
                   acc + (curr?.credit || 0),
-                0,
+                0
               ) ?? 0) * (tuitionPerCredit || 0)
             ).formatVND()}
           </p>
@@ -331,9 +313,7 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
               width: 80,
               render: (_, record) => (
                 <Checkbox
-                  checked={
-                    record?.type === $Enums.SubjectRequirementType.Mandatory
-                  }
+                  checked={record?.type === $Enums.SubjectRequirementType.Mandatory}
                   disabled
                 />
               ),
@@ -369,11 +349,11 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
                 return record?.subjectClassTimes?.map?.((tkb) => {
                   return (
                     <p>
-                      {tkb?.dayOfWeek === 8 ? "CN" : `T${tkb?.dayOfWeek}`} -{" "}
-                      {tkb?.startPeriod} - {tkb?.endPeriod}
+                      {tkb?.dayOfWeek === 8 ? "CN" : `T${tkb?.dayOfWeek}`} - {tkb?.startPeriod} -{" "}
+                      {tkb?.endPeriod}
                     </p>
-                  );
-                });
+                  )
+                })
               },
             },
             {
@@ -386,19 +366,18 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
                   : "-",
             },
             {
-              title: "Tiên quyết / Song hành",
+              title: "Tiên quyết / Học trước",
               align: "center",
               width: 180,
               render: (_, record) => {
-                const parentData = record.$type === "child" 
-                  ? classToParentMap.get(record.id) 
-                  : record;
+                const parentData =
+                  record.$type === "child" ? classToParentMap.get(record.id) : record
 
-                const hasPrerequisite = parentData?.prerequisiteSubject?.length > 0;
-                const hasCoRequisite = parentData?.coRequisiteSubject?.length > 0;
+                const hasPrerequisite = parentData?.prerequisiteSubject?.length > 0
+                const hasCoRequisite = parentData?.coRequisiteSubject?.length > 0
 
                 if (!hasPrerequisite && !hasCoRequisite) {
-                  return <div className="text-gray-400 italic">Không có</div>;
+                  return <div className="text-gray-400 italic">Không có</div>
                 }
 
                 return (
@@ -407,7 +386,9 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
                       <div>
                         <span className="font-semibold text-red-600">Tiên quyết:</span>
                         {parentData.prerequisiteSubject.map((s: any) => (
-                          <div key={s.code} className="ml-1 text-gray-700">• {s.name}</div>
+                          <div key={s.code} className="ml-1 text-gray-700">
+                            • {s.name}
+                          </div>
                         ))}
                       </div>
                     )}
@@ -415,14 +396,15 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
                       <div className={hasPrerequisite ? "mt-1 border-t pt-1" : ""}>
                         <span className="font-semibold text-blue-600">Học trước:</span>
                         {parentData.coRequisiteSubject.map((s: any) => (
-                          <div key={s.code} className="ml-1 text-gray-700">• {s.name}</div>
+                          <div key={s.code} className="ml-1 text-gray-700">
+                            • {s.name}
+                          </div>
                         ))}
                       </div>
                     )}
                   </div>
-                );
+                )
               },
-
             },
 
             {
@@ -433,22 +415,19 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
               render: (_, record) => {
                 const totalRegisteredCredit =
                   registeredClasses?.reduce(
-                    (
-                      acc: number,
-                      curr: GetClassesInfo200ItemSubjectClassItem,
-                    ) => acc + (curr?.credit || 0),
-                    0,
-                  ) ?? 0;
+                    (acc: number, curr: GetClassesInfo200ItemSubjectClassItem) =>
+                      acc + (curr?.credit || 0),
+                    0
+                  ) ?? 0
 
-                const { isDisabled } =
-                  registeredCoursesListHelper.getRegisterState({
-                    record,
-                    maxCredit: studentData?.maxCredit as number,
-                    totalRegisteredCredit,
-                    classToSubjectCodeMap,
-                    registeredSubjectCodes,
-                    isPending: isPendingClassRegister,
-                  });
+                const { isDisabled } = registeredCoursesListHelper.getRegisterState({
+                  record,
+                  maxCredit: studentData?.maxCredit as number,
+                  totalRegisteredCredit,
+                  classToSubjectCodeMap,
+                  registeredSubjectCodes,
+                  isPending: isPendingClassRegister,
+                })
 
                 return (
                   <Popconfirm
@@ -463,38 +442,33 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
                       type="text"
                       className={cn(
                         "text-primary flex justify-center items-center gap-2 cursor-pointer",
-                        isDisabled ? "opacity-50 cursor-not-allowed" : "",
+                        isDisabled ? "opacity-50 cursor-not-allowed" : ""
                       )}
                     >
                       <LogOutIcon />
                       Đăng ký
                     </Button>
                   </Popconfirm>
-                );
+                )
               },
             },
           ]}
           onRow={(record) => {
-            const r =
-              record as unknown as GetClassesInfo200ItemSubjectClassItem;
+            const r = record as unknown as GetClassesInfo200ItemSubjectClassItem
             return {
               className:
                 (r?.classRegisterLogs?.length || 0) > 0
                   ? "bg-green-200 [&>td]:!bg-green-200 [&>td]:hover:!bg-green-200"
                   : "",
-            };
+            }
           }}
-          headerTitleKey={(record) =>
-            [record?.code, record?.name].filter(Boolean).join(" - ")
-          }
+          headerTitleKey={(record) => [record?.code, record?.name].filter(Boolean).join(" - ")}
           childrenFieldName={"subjectClass"}
-          data={classesInfo?.data?.filter(
-            (cls) => cls?.subjectClass?.length > 0,
-          )}
+          data={classesInfo?.data?.filter((cls) => cls?.subjectClass?.length > 0)}
         />
       )}
     </div>
-  );
-};
+  )
+}
 
-export default DanhSachMonDangKy;
+export default DanhSachMonDangKy
