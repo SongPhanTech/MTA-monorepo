@@ -41,4 +41,3 @@ const LoginButton: React.FC<LoginButtonProps> = ({ className }) => {
 }
 
 export default LoginButton
-

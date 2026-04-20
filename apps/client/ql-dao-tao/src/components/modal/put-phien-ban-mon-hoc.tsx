@@ -37,9 +37,9 @@ dayjs.locale("vi")
 // Việc này giúp tách tài liệu vào 3 khung giao diện mà không cần thay đổi cấu trúc Database.
 // Các tài liệu cũ có description null sẽ được mặc định hiểu là SYLLABUS khi load dữ liệu.
 export const DocKeywords = {
-  SYLLABUS: 'SYLLABUS', // Đề cương chi tiết
-  LECTURE: 'LECTURE',   // Bài giảng
-  PLAN: 'PLAN',         // Kế hoạch
+  SYLLABUS: "SYLLABUS", // Đề cương chi tiết
+  LECTURE: "LECTURE", // Bài giảng
+  PLAN: "PLAN", // Kế hoạch
 }
 
 // Cập nhật lại Type của FormValues
@@ -74,7 +74,6 @@ const PutVersionSubjectModal = () => {
   const [syllabusDocs, setSyllabusDocs] = useState<DocumentFile[]>([])
   const [lectureDocs, setLectureDocs] = useState<DocumentFile[]>([])
   const [planDocs, setPlanDocs] = useState<DocumentFile[]>([])
-
 
   const subjectVersionId = input?.subjectVersionId
   const { id: selectedTrainingObjectTypeId } = useTrainingObjectTypeStore()
@@ -155,13 +154,18 @@ const PutVersionSubjectModal = () => {
       const values = (await form.validateFields()) as PutSubjectVersionFormValues
 
       const combinedDocs = [
-        ...(values.syllabusDocs || []).map(file => ({ ...file, description: DocKeywords.SYLLABUS })),
-        ...(values.lectureDocs || []).map(file => ({ ...file, description: DocKeywords.LECTURE })),
-        ...(values.planDocs || []).map(file => ({ ...file, description: DocKeywords.PLAN })),
+        ...(values.syllabusDocs || []).map((file) => ({
+          ...file,
+          description: DocKeywords.SYLLABUS,
+        })),
+        ...(values.lectureDocs || []).map((file) => ({
+          ...file,
+          description: DocKeywords.LECTURE,
+        })),
+        ...(values.planDocs || []).map((file) => ({ ...file, description: DocKeywords.PLAN })),
       ]
 
       const oldCombinedDocs = subjectVersion?.documentFiles || []
-
 
       const baseData = {
         isLocked: input?.isLocked ?? false,
@@ -194,28 +198,28 @@ const PutVersionSubjectModal = () => {
         type: output.type,
         prerequisiteSubject: subjectVersionId
           ? {
-            set:
-              values.prerequisiteSubjectIds?.map((id) => ({
-                id,
-              })) || [],
-          }
+              set:
+                values.prerequisiteSubjectIds?.map((id) => ({
+                  id,
+                })) || [],
+            }
           : {
-            connect: values.prerequisiteSubjectIds?.map((id) => ({
-              id,
-            })),
-          },
+              connect: values.prerequisiteSubjectIds?.map((id) => ({
+                id,
+              })),
+            },
         coRequisiteSubject: subjectVersionId
           ? {
-            set:
-              values.coRequisiteSubjectIds?.map((id) => ({
-                id,
-              })) || [],
-          }
+              set:
+                values.coRequisiteSubjectIds?.map((id) => ({
+                  id,
+                })) || [],
+            }
           : {
-            connect: values.coRequisiteSubjectIds?.map((id) => ({
-              id,
-            })),
-          },
+              connect: values.coRequisiteSubjectIds?.map((id) => ({
+                id,
+              })),
+            },
       }
 
       if (subjectVersionId && subjectVersion) {
@@ -266,14 +270,14 @@ const PutVersionSubjectModal = () => {
           if (JSON.stringify(normalizedOldValue) !== JSON.stringify(normalizedNewValue)) {
             let oldDisplay =
               normalizedOldValue === "" ||
-                normalizedOldValue === null ||
-                normalizedOldValue === undefined
+              normalizedOldValue === null ||
+              normalizedOldValue === undefined
                 ? "trống"
                 : oldValue
             let newDisplay =
               normalizedNewValue === "" ||
-                normalizedNewValue === null ||
-                normalizedNewValue === undefined
+              normalizedNewValue === null ||
+              normalizedNewValue === undefined
                 ? "trống"
                 : newValue
 
@@ -327,7 +331,7 @@ const PutVersionSubjectModal = () => {
                   path: file.path,
                   mimeType: file.mimeType,
                   size: file.size,
-                  description: file.description, 
+                  description: file.description,
                   subjectVersionId: { connect: { id: subjectVersionId } },
                 },
                 update: {
@@ -335,7 +339,7 @@ const PutVersionSubjectModal = () => {
                   path: file.path,
                   mimeType: file.mimeType,
                   size: file.size,
-                  description: file.description, 
+                  description: file.description,
                 },
               })),
             create: combinedDocs
@@ -386,7 +390,7 @@ const PutVersionSubjectModal = () => {
                 path: file.path,
                 mimeType: file.mimeType,
                 size: file.size,
-                description: file.description, 
+                description: file.description,
               })),
             },
           },
@@ -426,33 +430,40 @@ const PutVersionSubjectModal = () => {
   useEffect(() => {
     if (subjectVersion) {
       // 1. Kiểm tra xem form đã có dữ liệu chưa để tránh update lặp lại
-      const currentValues = form.getFieldsValue(['code', 'name', 'syllabusDocs']);
-      if (currentValues.code === subjectVersion.code && currentValues.name === subjectVersion.name) {
-        return; // Nếu đã set rồi thì không làm gì cả
+      const currentValues = form.getFieldsValue(["code", "name", "syllabusDocs"])
+      if (
+        currentValues.code === subjectVersion.code &&
+        currentValues.name === subjectVersion.name
+      ) {
+        return // Nếu đã set rồi thì không làm gì cả
       }
 
-      const sDocs: DocumentFile[] = [];
-      const lDocs: DocumentFile[] = [];
-      const pDocs: DocumentFile[] = [];
+      const sDocs: DocumentFile[] = []
+      const lDocs: DocumentFile[] = []
+      const pDocs: DocumentFile[] = []
 
-      (subjectVersion.documentFiles || []).forEach((file: any) => {
+      ;(subjectVersion.documentFiles || []).forEach((file: any) => {
         if (file.description === DocKeywords.LECTURE) {
-          lDocs.push(file);
+          lDocs.push(file)
         } else if (file.description === DocKeywords.PLAN) {
-          pDocs.push(file);
+          pDocs.push(file)
         } else {
-          sDocs.push(file);
+          sDocs.push(file)
         }
-      });
+      })
 
       form.setFieldsValue({
         ...subjectVersion,
-        coRequisiteSubjectIds: subjectVersion.coRequisiteSubject.map((item: { id: string }) => item.id),
-        prerequisiteSubjectIds: subjectVersion.prerequisiteSubject.map((item: { id: string }) => item.id),
+        coRequisiteSubjectIds: subjectVersion.coRequisiteSubject.map(
+          (item: { id: string }) => item.id
+        ),
+        prerequisiteSubjectIds: subjectVersion.prerequisiteSubject.map(
+          (item: { id: string }) => item.id
+        ),
         syllabusDocs: sDocs,
         lectureDocs: lDocs,
         planDocs: pDocs,
-      });
+      })
     } else {
       // Trường hợp tạo mới
       form.setFieldsValue({
@@ -462,9 +473,9 @@ const PutVersionSubjectModal = () => {
         lectureDocs: [],
         planDocs: [],
         trainingObjectTypeId: selectedTrainingObjectTypeId,
-      });
+      })
     }
-  }, [subjectVersion, form, selectedTrainingObjectTypeId]);
+  }, [subjectVersion, form, selectedTrainingObjectTypeId])
 
   return (
     <PutFormModal
@@ -508,11 +519,11 @@ const PutVersionSubjectModal = () => {
               }))}
               {...(input?.isLocked
                 ? {
-                  showSearch: false,
-                  allowClear: false,
-                  showArrow: false,
-                  open: false,
-                }
+                    showSearch: false,
+                    allowClear: false,
+                    showArrow: false,
+                    open: false,
+                  }
                 : {})}
             />
           </FormItem>
@@ -544,11 +555,11 @@ const PutVersionSubjectModal = () => {
               }))}
               {...(input?.isLocked
                 ? {
-                  showSearch: false,
-                  allowClear: false,
-                  showArrow: false,
-                  open: false,
-                }
+                    showSearch: false,
+                    allowClear: false,
+                    showArrow: false,
+                    open: false,
+                  }
                 : {})}
               allowClear
             />
@@ -564,11 +575,11 @@ const PutVersionSubjectModal = () => {
               }))}
               {...(input?.isLocked
                 ? {
-                  showSearch: false,
-                  allowClear: false,
-                  showArrow: false,
-                  open: false,
-                }
+                    showSearch: false,
+                    allowClear: false,
+                    showArrow: false,
+                    open: false,
+                  }
                 : {})}
             />
           </FormItem>
@@ -718,11 +729,11 @@ const PutVersionSubjectModal = () => {
               style={{ width: "100%" }}
               {...(input?.isLocked
                 ? {
-                  showSearch: false,
-                  allowClear: false,
-                  showArrow: false,
-                  open: false,
-                }
+                    showSearch: false,
+                    allowClear: false,
+                    showArrow: false,
+                    open: false,
+                  }
                 : {})}
             />
           </Form.Item>
@@ -738,11 +749,11 @@ const PutVersionSubjectModal = () => {
               style={{ width: "100%" }}
               {...(input?.isLocked
                 ? {
-                  showSearch: false,
-                  allowClear: false,
-                  showArrow: false,
-                  open: false,
-                }
+                    showSearch: false,
+                    allowClear: false,
+                    showArrow: false,
+                    open: false,
+                  }
                 : {})}
             />
           </Form.Item>
@@ -786,7 +797,7 @@ const PutVersionSubjectModal = () => {
               <FormItem form={form} name="lectureDocs" label="" className="mb-0">
                 <DocumentPaths
                   form={form}
-                  titleForm="lectureDocs" 
+                  titleForm="lectureDocs"
                   data={form ? form.getFieldValue("lectureDocs") || [] : []}
                   relationId={subjectVersionId ?? ""}
                   relationType="subjectVersionId"

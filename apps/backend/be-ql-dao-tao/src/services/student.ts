@@ -598,10 +598,7 @@ export const exportArchivedCertificateMulti = async ({
         },
       },
     },
-    orderBy: [
-      { student: { userProfile: { fullname: "asc" } } },
-      { createdAt: "desc" },
-    ],
+    orderBy: [{ student: { userProfile: { fullname: "asc" } } }, { createdAt: "desc" }],
   })
 
   if (!archivedCertificates.length) {
@@ -663,8 +660,8 @@ export const exportArchivedCertificateMulti = async ({
         trainingCourse: fixedClass?.trainingCourse?.name || "",
         trainingMajorName: trainingMajor?.name || "",
         issuedDate: archived.issuedDate
-        ? `'${dayjs(archived.issuedDate).tz("Asia/Ho_Chi_Minh").format("DD/MM/YYYY")}`
-        : "",
+          ? `'${dayjs(archived.issuedDate).tz("Asia/Ho_Chi_Minh").format("DD/MM/YYYY")}`
+          : "",
         issuedBy: archived.issuedBy || "",
         scores: {},
       })
@@ -679,7 +676,6 @@ export const exportArchivedCertificateMulti = async ({
   }
 
   const data = Array.from(studentMap.values()).map((rowData) => {
-
     const scoresArray = orderedCertificates.map((cert) =>
       rowData.scores[cert.id] !== undefined ? "Có" : "Không"
     )
@@ -699,7 +695,7 @@ export const exportArchivedCertificateMulti = async ({
     }
   })
 
-  const certNames = orderedCertificates.map(cert => cert.name);
+  const certNames = orderedCertificates.map((cert) => cert.name)
 
   const buffer = await getTemplateBuffer(prisma, "DIEM_CHUNG_CHI_MULTI.xlsx")
   const template = new XlsxTemplate(buffer)

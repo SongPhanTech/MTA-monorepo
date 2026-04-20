@@ -352,7 +352,11 @@ export const exportPhuLucDsLuanVan = async ({
         ngaysinh: student.userProfile?.dateOfBirth
           ? dayjs(student.userProfile.dateOfBirth).format("DD/MM/YYYY")
           : "",
-        doituongdaotao: tenDoiTuong[student?.fixedClass?.trainingCourse?.trainingObjectType?.type as keyof typeof tenDoiTuong]?.shortname || "",
+        doituongdaotao:
+          tenDoiTuong[
+            student?.fixedClass?.trainingCourse?.trainingObjectType
+              ?.type as keyof typeof tenDoiTuong
+          ]?.shortname || "",
         khoa: student.fixedClass?.trainingCourse?.name || "",
         tendetai: thesisProject.title || "",
         gvhd1: getSupervisorName(thesisProject.supervisor, false, true) || "",
@@ -404,7 +408,12 @@ export const exportPhuLucDsLuanVan = async ({
               fontSize: 12,
             },
             { value: `${thesis.isThesis}`, border: true, align: "center", fontSize: 12 },
-            { value: `${thesis.language.trim().toLowerCase() === "tiếng việt" ? "" : thesis.language}`, border: true, align: "center", fontSize: 12 },
+            {
+              value: `${thesis.language.trim().toLowerCase() === "tiếng việt" ? "" : thesis.language}`,
+              border: true,
+              align: "center",
+              fontSize: 12,
+            },
           ],
         }
       })
@@ -1571,12 +1580,7 @@ export const exportGiayMoiChamLvPb = async ({
   }
   try {
     showSpinner?.()
-    const dataConvert = convertToGmcLvPbData(
-      allStudentsInClasses,
-      signerName,
-      isChief,
-      signingDate
-    )
+    const dataConvert = convertToGmcLvPbData(allStudentsInClasses, signerName, isChief, signingDate)
     if (dataConvert.length === 0) {
       message.error("Không có dữ liệu để tạo giấy mời chấm LV PB")
       return

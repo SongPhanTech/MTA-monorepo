@@ -6,10 +6,7 @@ import {
   getStatsArchivedAward,
   StatsArchivedResponseSchema,
 } from "../services/stats-archived"
-import {
-  exportArchivedCertificate,
-  exportArchivedCertificateMulti,
-} from "../services/student"
+import { exportArchivedCertificate, exportArchivedCertificateMulti } from "../services/student"
 
 const app = new OpenAPIHono({ strict: false })
 

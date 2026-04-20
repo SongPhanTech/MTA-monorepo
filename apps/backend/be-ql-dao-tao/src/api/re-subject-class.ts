@@ -361,8 +361,9 @@ app.openapi(openSubjectClassRetake, async (c) => {
                                  ORDER BY SSS."createdAt" ASC
                                  ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
                                )                              as first_attempt_exam_banned,
-                               COUNT(*) OVER (
-                                 PARTITION BY SSS."studentId", SSS."subjectVersionId"
+                               (SELECT COUNT(*) FROM "ql-dao-tao"."StudentSubjectScore" s2
+                                WHERE s2."studentId" = SSS."studentId"
+                                  AND s2."subjectVersionId" = SSS."subjectVersionId"
                                )                              as attempt_count,
                                row_number()
                                over (partition by SSS."studentId",SSS."subjectVersionId" order by SSS."createdAt" desc) as rn
@@ -436,8 +437,9 @@ app.openapi(openSubjectClassRetake, async (c) => {
                                  ORDER BY SSS."createdAt" ASC
                                  ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
                                )                                                                                         as first_attempt_exam_banned,
-                               COUNT(*) OVER (
-                                 PARTITION BY SSS."studentId", SSS."subjectVersionId"
+                               (SELECT COUNT(*) FROM "ql-dao-tao"."StudentSubjectScore" s2
+                                WHERE s2."studentId" = SSS."studentId"
+                                  AND s2."subjectVersionId" = SSS."subjectVersionId"
                                )                                                                                         as attempt_count,
                                row_number()
                                over (partition by SSS."studentId",SSS."subjectVersionId" order by SSS."createdAt" desc) as rn
@@ -524,7 +526,7 @@ app.openapi(openSubjectClassRetakeStudents, async (c) => {
 
   const res = await prisma.$queryRaw<Result>`
         with mon_no as (select sv.id,
-                               sv.code,
+                               S.code,
                                sv.name,
                                "UP"."fullname",
                                sv."trainingObjectTypeId",
@@ -553,8 +555,9 @@ app.openapi(openSubjectClassRetakeStudents, async (c) => {
                                  ORDER BY SSS."createdAt" ASC
                                  ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
                                )                                                                                                  as first_attempt_exam_banned,
-                               COUNT(*) OVER (
-                                 PARTITION BY SSS."studentId", SSS."subjectVersionId"
+                               (SELECT COUNT(*) FROM "ql-dao-tao"."StudentSubjectScore" s2
+                                WHERE s2."studentId" = SSS."studentId"
+                                  AND s2."subjectVersionId" = SSS."subjectVersionId"
                                )                                                                                                  as attempt_count,
                                SC."code"                                                                                         as ma_lop_mon_hoc,
                                Sem."name"                                                                                        as ky_hoc,
@@ -564,10 +567,10 @@ app.openapi(openSubjectClassRetakeStudents, async (c) => {
                         from "ql-dao-tao"."SubjectVersion" as sv
                                  inner join "ql-dao-tao"."StudentSubjectScore" SSS on sv.id = SSS."subjectVersionId"
                                  inner join "ql-dao-tao"."Student" S on S.id = SSS."studentId"
-                                 inner join "ql-nguoi-dung"."UserProfile" "UP" on "UP".id = S."userProfileId"
+                                 left join "ql-nguoi-dung"."UserProfile" "UP" on "UP".id = S."userProfileId"
                                  inner join "ql-dao-tao"."SubjectClass" SC on SC.id = SSS."subjectClassId"
-                                 inner join "ql-dao-tao"."Semester" Sem on SC."semesterId" = Sem.id
-                                 inner join "ql-dao-tao"."SchoolYear" Sch on Sem."schoolYearId" = Sch.id
+                                 left join "ql-dao-tao"."Semester" Sem on SC."semesterId" = Sem.id
+                                 left join "ql-dao-tao"."SchoolYear" Sch on Sem."schoolYearId" = Sch.id
                                  inner join "ql-dao-tao"."CurriculumVersion" CV on CV.id = S."curriculumVersionId"
                                  inner join "ql-dao-tao"."Curriculum" C on C.id = CV."curriculumId"
                                  inner join "ql-dao-tao"."TrainingBlockOnCurriculumVersion" TBOCV
@@ -737,6 +740,8 @@ app.openapi(openSubjectClassReExam, async (c) => {
                                C."trainingMajorId",
                                TC.id                                                                                    as trainingCourseId,
                                SSS."studentId",
+                               SSS."attendanceScore"                                                                    as thuong_xuyen,
+                               SSS."midtermScore"                                                                       as dinh_ky,
                                SSS."finalScore"                                                                         as diem_cuoi,
                                SSS.withdrew,
                                SSS.exempted,
@@ -750,8 +755,9 @@ app.openapi(openSubjectClassReExam, async (c) => {
                                TBS."useForFinalScore" = false and SSS."finalScore" <
                                                                   TC."scoreToPassConditional"                           as truot_mon,
                                TBS.id                         as trainingBlockSubjectId,
-                               COUNT(*) OVER (
-                                 PARTITION BY SSS."studentId", SSS."subjectVersionId"
+                               (SELECT COUNT(*) FROM "ql-dao-tao"."StudentSubjectScore" s2
+                                WHERE s2."studentId" = SSS."studentId"
+                                  AND s2."subjectVersionId" = SSS."subjectVersionId"
                                )                              as attempt_count,
                                row_number()
                                over (partition by SSS."studentId",SSS."subjectVersionId" order by SSS."createdAt" desc) as rn
@@ -815,8 +821,9 @@ app.openapi(openSubjectClassReExam, async (c) => {
                                TBS."useForFinalScore" = true and SSS."finalScore" < TC."scoreToPass" or
                                TBS."useForFinalScore" = false and SSS."finalScore" <
                                                                   TC."scoreToPassConditional"                           as truot_mon,
-                               COUNT(*) OVER (
-                                 PARTITION BY SSS."studentId", SSS."subjectVersionId"
+                               (SELECT COUNT(*) FROM "ql-dao-tao"."StudentSubjectScore" s2
+                                WHERE s2."studentId" = SSS."studentId"
+                                  AND s2."subjectVersionId" = SSS."subjectVersionId"
                                )                                                                                         as attempt_count,
                                row_number()
                                over (partition by SSS."studentId",SSS."subjectVersionId" order by SSS."createdAt" desc) as rn
@@ -888,7 +895,7 @@ app.openapi(openSubjectClassReExamStudents, async (c) => {
 
   const res = await prisma.$queryRaw<Result>`
         with mon_no as (select sv.id,
-                               sv.code,
+                               S.code,
                                sv.name,
                                "UP"."fullname",
                                sv."trainingObjectTypeId",
@@ -912,15 +919,19 @@ app.openapi(openSubjectClassReExamStudents, async (c) => {
                                SC."code"                                                                                         as ma_lop_mon_hoc,
                                Sem."name"                                                                                        as ky_hoc,
                                Sch."name"                                                                                        as nam_hoc,
+                               (SELECT COUNT(*) FROM "ql-dao-tao"."StudentSubjectScore" s2
+                                WHERE s2."studentId" = SSS."studentId"
+                                  AND s2."subjectVersionId" = SSS."subjectVersionId"
+                               )::INTEGER                                                                                         as attempt_count,
                                row_number()
                                over (partition by SSS."studentId",SSS."subjectVersionId" order by SSS."createdAt" desc)::INTEGER as rn
                         from "ql-dao-tao"."SubjectVersion" as sv
                                  inner join "ql-dao-tao"."StudentSubjectScore" SSS on sv.id = SSS."subjectVersionId"
                                  inner join "ql-dao-tao"."Student" S on S.id = SSS."studentId"
-                                 inner join "ql-nguoi-dung"."UserProfile" "UP" on "UP".id = S."userProfileId"
+                                 left join "ql-nguoi-dung"."UserProfile" "UP" on "UP".id = S."userProfileId"
                                  inner join "ql-dao-tao"."SubjectClass" SC on SC.id = SSS."subjectClassId"
-                                 inner join "ql-dao-tao"."Semester" Sem on SC."semesterId" = Sem.id
-                                 inner join "ql-dao-tao"."SchoolYear" Sch on Sem."schoolYearId" = Sch.id
+                                 left join "ql-dao-tao"."Semester" Sem on SC."semesterId" = Sem.id
+                                 left join "ql-dao-tao"."SchoolYear" Sch on Sem."schoolYearId" = Sch.id
                                  inner join "ql-dao-tao"."CurriculumVersion" CV on CV.id = S."curriculumVersionId"
                                  inner join "ql-dao-tao"."Curriculum" C on C.id = CV."curriculumId"
                                  inner join "ql-dao-tao"."TrainingBlockOnCurriculumVersion" TBOCV
@@ -946,6 +957,7 @@ app.openapi(openSubjectClassReExamStudents, async (c) => {
         from mon_no
         where rn = 1
           and (truot_mon = true or hoan_thi = true) and cam_thi = false and dinh_chi = false
+          and attempt_count = 1      -- only first attempt: if they failed ReExam, they belong in Retake
           and withdrew = false -- rút khỏi lớp
           and mien_thi = false -- miễn học
           and (

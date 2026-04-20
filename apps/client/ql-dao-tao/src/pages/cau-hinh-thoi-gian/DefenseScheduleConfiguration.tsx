@@ -45,7 +45,11 @@ function toDefenseSessionStartTime(picked: Dayjs): Date {
   return new Date(Date.UTC(1970, 0, 1, picked.hour(), picked.minute(), 0, 0))
 }
 
-export default function DefenseScheduleConfigurationPage({ isThesis: _isThesis }: { isThesis: boolean }) {
+export default function DefenseScheduleConfigurationPage({
+  isThesis: _isThesis,
+}: {
+  isThesis: boolean
+}) {
   const { showSpinner, hideSpinner } = useSpinner()
   const [form] = Form.useForm<FormValues>()
 

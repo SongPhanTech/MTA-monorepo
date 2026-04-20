@@ -253,7 +253,9 @@ export default function PaymentConfigurationPage({ isThesis }: { isThesis: boole
         if (!originalItem) return
 
         if (item.type === "COUNCIL") {
-          const councilRole = COUNCIL_PLACEHOLDER_ROLES.find((r) => r.roleName === item.roleName)?.role
+          const councilRole = COUNCIL_PLACEHOLDER_ROLES.find(
+            (r) => r.roleName === item.roleName
+          )?.role
           if (!councilRole) return
 
           for (const { idKey, valueKey, description, inAcademy } of PAY_AMOUNT_CELL_DEFS) {
@@ -285,8 +287,9 @@ export default function PaymentConfigurationPage({ isThesis }: { isThesis: boole
           return
         }
 
-        const supervisorRole = SUPERVISOR_PLACEHOLDER_ROLES.find((r) => r.roleName === item.roleName)
-          ?.role
+        const supervisorRole = SUPERVISOR_PLACEHOLDER_ROLES.find(
+          (r) => r.roleName === item.roleName
+        )?.role
         if (!supervisorRole) return
 
         for (const { idKey, valueKey, description, inAcademy } of PAY_AMOUNT_CELL_DEFS) {

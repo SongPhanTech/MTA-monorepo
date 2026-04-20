@@ -849,7 +849,7 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
                                 select: {
                                   id: true,
                                   supervisorId: true,
-                                  
+
                                   studentSubjectScore: {
                                     select: {
                                       subjectVersion: {

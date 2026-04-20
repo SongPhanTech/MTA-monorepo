@@ -46,28 +46,28 @@ const DiemTrungBinhKyHoc = () => {
   const { getAcademicRankingBaseTypeLabel } = useAcademicRankingBaseTypeOptions()
   const { showSpinner, hideSpinner } = useSpinner()
 
-  const [sorter, setSorter] = useState<{ field: string | null; order: 'asc' | 'desc' | null }>({
+  const [sorter, setSorter] = useState<{ field: string | null; order: "asc" | "desc" | null }>({
     field: null,
     order: null,
-  });
+  })
 
   const DEFAULT_ORDER_BY = [
-    { fixedClass: { code: "desc" } },
-    { userProfile: { firstName: "asc" } },
-    { userProfile: { lastName: "asc" } },
-  ];
+    { fixedClass: { code: "desc" as const } },
+    { userProfile: { firstName: "asc" as const } },
+    { userProfile: { lastName: "asc" as const } },
+  ]
 
   const orderBy = useMemo(() => {
     // Nếu người dùng chọn sort tên
     if (sorter.field === "name" && sorter.order) {
       return [
         { userProfile: { fullname: sorter.order } }, // Sắp xếp theo tên người dùng chọn
-        ...DEFAULT_ORDER_BY // Giữ nguyên logic mặc định làm ưu tiên phụ
-      ];
+        ...DEFAULT_ORDER_BY, // Giữ nguyên logic mặc định làm ưu tiên phụ
+      ]
     }
     // Mặc định ban đầu
-    return DEFAULT_ORDER_BY;
-  }, [sorter]);
+    return DEFAULT_ORDER_BY
+  }, [sorter])
 
   const where = useMemo(() => {
     return {
@@ -90,36 +90,36 @@ const DiemTrungBinhKyHoc = () => {
       ],
       ...(filters.code
         ? {
-          code: {
-            contains: filters.code,
-            mode: "insensitive" as const,
-          },
-        }
+            code: {
+              contains: filters.code,
+              mode: "insensitive" as const,
+            },
+          }
         : {}),
       ...(filters.name
         ? {
-          userProfile: {
-            fullname: {
-              contains: filters.name,
-              mode: "insensitive" as const,
+            userProfile: {
+              fullname: {
+                contains: filters.name,
+                mode: "insensitive" as const,
+              },
             },
-          },
-        }
+          }
         : {}),
       ...(trainingCourseId || filters.fixedClassId || filters.managementOrganizationId
         ? {
-          fixedClass: {
-            ...(trainingCourseId
-              ? { trainingCourseId }
-              : trainingObjectTypeId
-                ? { trainingCourse: { trainingObjectTypeId } }
+            fixedClass: {
+              ...(trainingCourseId
+                ? { trainingCourseId }
+                : trainingObjectTypeId
+                  ? { trainingCourse: { trainingObjectTypeId } }
+                  : {}),
+              ...(filters.fixedClassId ? { id: filters.fixedClassId } : {}),
+              ...(filters.managementOrganizationId
+                ? { managementOrganizationId: filters.managementOrganizationId }
                 : {}),
-            ...(filters.fixedClassId ? { id: filters.fixedClassId } : {}),
-            ...(filters.managementOrganizationId
-              ? { managementOrganizationId: filters.managementOrganizationId }
-              : {}),
-          },
-        }
+            },
+          }
         : {}),
     }
   }, [filters, semesterId, trainingObjectTypeId, trainingCourseId])
@@ -643,10 +643,15 @@ const DiemTrungBinhKyHoc = () => {
               if (sorterInfo.columnKey === "name" || sorterInfo.field === "name") {
                 setSorter({
                   field: "name",
-                  order: sorterInfo.order === 'ascend' ? 'asc' : sorterInfo.order === 'descend' ? 'desc' : null,
-                });
+                  order:
+                    sorterInfo.order === "ascend"
+                      ? "asc"
+                      : sorterInfo.order === "descend"
+                        ? "desc"
+                        : null,
+                })
               } else {
-                setSorter({ field: null, order: null });
+                setSorter({ field: null, order: null })
               }
             }}
           />
