@@ -15,7 +15,11 @@ import {
   useFindManyCertificate,
   useUpdateManyArchivedCertificate,
 } from "@workspace/db/hooks"
-import { exportArchivedCertificateExcel, useCertificateScore } from "@workspace/libs/api/training"
+import {
+  exportArchivedCertificateExcel,
+  useCertificateScore,
+  exportArchivedCertificateMultiExcel,
+} from "@workspace/libs/api/training"
 import { useAbility } from "@workspace/permissions/hooks"
 import { QL_DAO_TAO_PERMISSION } from "@workspace/router"
 import { useTrainingObjectTypeStore } from "@workspace/ui"
@@ -46,6 +50,9 @@ export default function ArchivedCertificate() {
   const [isExportModalOpen, setIsExportModalOpen] = useState(false)
   const [exportTrainingCourseId, setExportTrainingCourseId] = useState<string | undefined>()
   const [exportCertificateId, setExportCertificateId] = useState<string | undefined>()
+  const [isMultiExportModalOpen, setIsMultiExportModalOpen] = useState(false)
+  const [exportTrainingCourseIds, setExportTrainingCourseIds] = useState<string[]>([])
+  const [exportCertificateIds, setExportCertificateIds] = useState<string[]>([])
 
   const { showSpinner, hideSpinner } = useSpinner()
 
@@ -378,6 +385,18 @@ export default function ArchivedCertificate() {
     setExportCertificateId(undefined)
   }
 
+  const handleOpenMultiExportModal = () => {
+    setExportTrainingCourseIds([])
+    setExportCertificateIds([])
+    setIsMultiExportModalOpen(true)
+  }
+
+  const handleCloseMultiExportModal = () => {
+    setIsMultiExportModalOpen(false)
+    setExportTrainingCourseIds([])
+    setExportCertificateIds([])
+  }
+
   const handleExportExcel = async () => {
     if (!trainingObjectTypeId) {
       message.warning("Vui lòng chọn đối tượng đào tạo")
@@ -436,6 +455,69 @@ export default function ArchivedCertificate() {
     }
   }
 
+  const handleExportMultiExcel = async () => {
+    if (!trainingObjectTypeId) {
+      message.warning("Vui lòng chọn đối tượng đào tạo")
+      return
+    }
+
+    if (!exportTrainingCourseIds.length) {
+      message.warning("Vui lòng chọn ít nhất một khóa học")
+      return
+    }
+
+    if (!exportCertificateIds.length) {
+      message.warning("Vui lòng chọn ít nhất một loại chứng chỉ")
+      return
+    }
+
+    const extractExportErrorMessage = (error: any) => {
+      const status = error?.response?.status
+      const rawMessage = error?.response?.data?.message || error?.response?.data?.error
+
+      const detailedMessage = Array.isArray(rawMessage)
+        ? rawMessage.join(", ")
+        : rawMessage || error?.message
+
+      if (status && detailedMessage) {
+        return `Xuất Excel thất bại: ${detailedMessage}`
+      }
+
+      if (status) {
+        return `Xuất Excel thất bại`
+      }
+
+      if (detailedMessage) {
+        return `Xuất Excel thất bại: ${detailedMessage}`
+      }
+
+      return "Đã xảy ra lỗi khi xuất Excel, vui lòng thử lại"
+    }
+
+    try {
+      showSpinner()
+      const res = await exportArchivedCertificateMultiExcel({
+        trainingObjectTypeId,
+        trainingCourseIds: exportTrainingCourseIds,
+        certificateIds: exportCertificateIds,
+      })
+
+      if (res.status === 200) {
+        saveAs(res.data, "Danh_sach_diem_chung_chi_nhieu_loai.xlsx")
+        message.success("Xuất Excel thành công")
+        handleCloseMultiExportModal()
+      } else {
+        const error: any = new Error()
+        error.response = { status: res.status, data: res.data }
+        message.error(extractExportErrorMessage(error))
+      }
+    } catch (error: any) {
+      message.error(extractExportErrorMessage(error))
+    } finally {
+      hideSpinner()
+    }
+  }
+
   return (
     <Row gutter={[16, 0]}>
       <Col span={24}>
@@ -443,72 +525,68 @@ export default function ArchivedCertificate() {
           <Col span={4}>
             <Flex gap={8}>
               {/* <Select
-                                className="w-full"
-                                placeholder="Chọn khóa học"
-                                options={trainingCourseData
-                                    .filter((trainingCourse: TrainingCourse) => {
-                                        if (!filters.fixedClassId) return true
+                className="w-full"
+                placeholder="Chọn khóa học"
+                options={trainingCourseData
+                  .filter((trainingCourse: TrainingCourse) => {
+                    if (!filters.fixedClassId) return true
 
-                                        const selectedFixedClass = fixedClassData.find(
-                                            (fixedClass: FixedClass) =>
-                                                fixedClass.id === filters.fixedClassId
-                                        )
+                    const selectedFixedClass = fixedClassData.find(
+                      (fixedClass: FixedClass) => fixedClass.id === filters.fixedClassId
+                    )
 
-                                        return (
-                                            selectedFixedClass?.trainingCourseId ===
-                                            trainingCourse.id
-                                        )
-                                    })
-                                    .map((i: TrainingCourse) => ({
-                                        value: i.id,
-                                        label: i.name,
-                                    }))}
-                                onChange={(val) =>
-                                    setFilters({
-                                        ...filters,
-                                        trainingCourseId: val,
-                                    })
-                                }
-                                value={filters.trainingCourseId}
-                                allowClear
-                            />
-                            <Select
-                                className="w-full"
-                                placeholder="Chọn lớp quản lý"
-                                options={fixedClassData.map((i: FixedClass) => ({
-                                    value: i.id,
-                                    label: i.name,
-                                }))}
-                                onChange={(val) => {
-                                    const selectedFixedClass = fixedClassData.find(
-                                        (fixedClass: FixedClass) => fixedClass.id === val
-                                    )
+                    return selectedFixedClass?.trainingCourseId === trainingCourse.id
+                  })
+                  .map((i: TrainingCourse) => ({
+                    value: i.id,
+                    label: i.name,
+                  }))}
+                onChange={(val) =>
+                  setFilters({
+                    ...filters,
+                    trainingCourseId: val,
+                  })
+                }
+                value={filters.trainingCourseId}
+                allowClear
+              />
+              <Select
+                className="w-full"
+                placeholder="Chọn lớp quản lý"
+                options={fixedClassData.map((i: FixedClass) => ({
+                  value: i.id,
+                  label: i.name,
+                }))}
+                onChange={(val) => {
+                  const selectedFixedClass = fixedClassData.find(
+                    (fixedClass: FixedClass) => fixedClass.id === val
+                  )
 
-                                    setFilters({
-                                        ...filters,
-                                        fixedClassId: val,
-                                        trainingCourseId: selectedFixedClass?.trainingCourseId,
-                                    })
-                                }}
-                                value={filters.fixedClassId}
-                                allowClear
-                            />
-                            <Select
-                                className="w-full"
-                                placeholder="Chọn chứng chỉ"
-                                options={certificatesData.map((i: any) => ({
-                                    value: i.id,
-                                    label: i.name,
-                                }))}
-                                onChange={(val) =>
-                                    setFilters({
-                                        ...filters,
-                                        certificateId: val,
-                                    })
-                                }
-                                value={filters.certificateId}
-                                allowClear
-                            /> */}
+                  setFilters({
+                    ...filters,
+                    fixedClassId: val,
+                    trainingCourseId: selectedFixedClass?.trainingCourseId,
+                  })
+                }}
+                value={filters.fixedClassId}
+                allowClear
+              />
+              <Select
+                className="w-full"
+                placeholder="Chọn chứng chỉ"
+                options={certificatesData.map((i: any) => ({
+                  value: i.id,
+                  label: i.name,
+                }))}
+                onChange={(val) =>
+                  setFilters({
+                    ...filters,
+                    certificateId: val,
+                  })
+                }
+                value={filters.certificateId}
+                allowClear
+              /> */}
               <Input
                 className="w-full"
                 placeholder="Tìm số quyết định"
@@ -523,7 +601,7 @@ export default function ArchivedCertificate() {
               />
             </Flex>
           </Col>
-          <Col span={8}>
+          <Col span={20}>
             <Flex justify="end">
               {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_DIEM_CHUNG_CHI, "THEM") && (
                 <>
@@ -543,6 +621,14 @@ export default function ArchivedCertificate() {
                   </Button>
                   <Button
                     className="ml-3"
+                    onClick={handleOpenMultiExportModal}
+                    icon={<DownloadOutlined />}
+                    type="primary"
+                  >
+                    Xuất nhiều loại
+                  </Button>
+                  <Button
+                    className="ml-3"
                     onClick={handleOpenReject}
                     disabled={!selectedRowKeys.length}
                     type="default"
@@ -558,29 +644,27 @@ export default function ArchivedCertificate() {
                     Phê duyệt
                   </Button>
                   {/* <Button
-                                        className="ml-3"
-                                        onClick={() => {
-                                            if (selectedRowKeys.length === 0) {
-                                                message.warning(
-                                                    'Vui lòng chọn ít nhất một học viên'
-                                                )
-                                                return
-                                            }
-                                            const studentNames = dataTable
-                                                .filter((s: any) => selectedRowKeys.includes(s.id))
-                                                .map((s: any) =>
-                                                    `${s?.userProfile?.lastName || ''} ${s?.userProfile?.firstName || ''}`.trim()
-                                                )
-                                            onOpenConvertCertificate({
-                                                studentIds: selectedRowKeys as string[],
-                                                studentNames,
-                                            })
-                                        }}
-                                        disabled={!selectedRowKeys.length}
-                                        type="default"
-                                    >
-                                        Chuyển đổi CC → Điểm
-                                    </Button> */}
+                    className="ml-3"
+                    onClick={() => {
+                      if (selectedRowKeys.length === 0) {
+                        message.warning("Vui lòng chọn ít nhất một học viên")
+                        return
+                      }
+                      const studentNames = dataTable
+                        .filter((s: any) => selectedRowKeys.includes(s.id))
+                        .map((s: any) =>
+                          `${s?.userProfile?.lastName || ""} ${s?.userProfile?.firstName || ""}`.trim()
+                        )
+                      onOpenConvertCertificate({
+                        studentIds: selectedRowKeys as string[],
+                        studentNames,
+                      })
+                    }}
+                    disabled={!selectedRowKeys.length}
+                    type="default"
+                  >
+                    Chuyển đổi CC → Điểm
+                  </Button> */}
                 </>
               )}
               {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_DIEM_CHUNG_CHI, "THEM") && (
@@ -893,6 +977,59 @@ export default function ArchivedCertificate() {
               }))}
               value={exportCertificateId}
               onChange={(value) => setExportCertificateId(value)}
+              allowClear
+              showSearch
+              optionFilterProp="label"
+            />
+          </div>
+        </Flex>
+      </Modal>
+
+      <Modal
+        title="Xuất Excel điểm chứng chỉ nhiều loại"
+        open={isMultiExportModalOpen}
+        onCancel={handleCloseMultiExportModal}
+        onOk={handleExportMultiExcel}
+        okText="Xuất Excel"
+        cancelText="Hủy"
+        okButtonProps={{
+          disabled: !exportTrainingCourseIds.length || !exportCertificateIds.length,
+        }}
+      >
+        <Flex vertical gap={12} className="mt-4">
+          <div>
+            <div className="mb-1 text-sm font-medium">
+              Khóa học <span className="text-red-500">*</span>
+            </div>
+            <Select
+              className="w-full"
+              mode="multiple"
+              placeholder="Chọn một hoặc nhiều khóa học"
+              options={trainingCourseData.map((item: TrainingCourse) => ({
+                label: item.name,
+                value: item.id,
+              }))}
+              value={exportTrainingCourseIds}
+              onChange={(values) => setExportTrainingCourseIds(values)}
+              allowClear
+              showSearch
+              optionFilterProp="label"
+            />
+          </div>
+          <div>
+            <div className="mb-1 text-sm font-medium">
+              Loại chứng chỉ <span className="text-red-500">*</span>
+            </div>
+            <Select
+              className="w-full"
+              mode="multiple"
+              placeholder="Chọn một hoặc nhiều loại chứng chỉ"
+              options={certificateData.map((item: any) => ({
+                label: item.name,
+                value: item.id,
+              }))}
+              value={exportCertificateIds}
+              onChange={(values) => setExportCertificateIds(values)}
               allowClear
               showSearch
               optionFilterProp="label"
