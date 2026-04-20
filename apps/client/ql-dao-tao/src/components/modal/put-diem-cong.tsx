@@ -37,14 +37,9 @@ const PutOlympicScoreModal = () => {
   const { mutateAsync: createAward } = useCreateAward()
   const { mutateAsync: updateAward } = useUpdateAward()
   const { data: subjectData = [] } = useFindManySubject({
-    where: {
-      subjectVersion: {
-        some: { trainingObjectTypeId },
-      },
-    },
-    include: {
-      managementOrganization: true,
-    },
+    where: { subjectVersion: { some: { trainingObjectTypeId } } },
+    include: { managementOrganization: true },
+    orderBy: { name: "asc" },
   })
   async function onOk({ subjects, ...rest }: PutAward) {
     try {
@@ -113,7 +108,7 @@ const PutOlympicScoreModal = () => {
       onFinish={onOk}
       onCancel={onClose}
       maskClosable={true}
-      title={id ? "Chỉnh sửa điểm oplympic" : "Thêm mới điểm oplympic"}
+      title={id ? "Chỉnh sửa điểm olympic" : "Thêm mới điểm olympic"}
       className="w-[500px]"
     >
       <Col span={24} className="mb-4">
@@ -141,7 +136,7 @@ const PutOlympicScoreModal = () => {
             style={{ width: "100%" }}
             placeholder="Chọn môn học"
             options={subjectData.map((item) => ({
-              label: item.name + " - " + (item.managementOrganization?.sTen || "Không có đơn vị"),
+              label: item.code + " - " + item.name + " - " + (item.managementOrganization?.sTen || "Không có đơn vị"),
               value: item.id,
             }))}
           />

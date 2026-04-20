@@ -13,12 +13,7 @@ import type { GetClassesInfo200ItemSubjectClassItem } from "@workspace/libs/api/
 import type { GetClassRegisterSession200ItemCreditLimitItem } from "@workspace/libs/api/schemas/getClassRegisterSession200ItemCreditLimitItem";
 import { Button, Checkbox, message, Popconfirm } from "antd";
 import dayjs from "dayjs";
-import {
-  CircleAlertIcon,
-  InfoIcon,
-  LogOutIcon,
-  UserIcon,
-} from "lucide-react";
+import { CircleAlertIcon, LogOutIcon } from "lucide-react";
 import { useMemo, useState } from "react";
 import clsx from "clsx";
 import registeredCoursesListHelper from "./helper";
@@ -170,7 +165,7 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
   return (
     <div>
       {endDate && (
-        <div className="mb-4 flex gap-4 rounded-sm bg-red-50 p-3 border items-center flex-row  border-red-200">
+        <div className="mb-4 flex gap-4 rounded-sm bg-red-50 p-3 border not-print items-center flex-row  border-red-200">
           <CircleAlertIcon className="mt-0.5 h-5 w-5 text-red-500" />
           <div>
             <p className="text-sm font-medium text-red-600">
@@ -184,13 +179,13 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
         </div>
       )}
 
-      <div className="mb-6 grid grid-cols-1 gap-6 lg:grid-cols-3">
+      <div className="mb-6 grid grid-cols-1 gap-6 lg:grid-cols-3 not-print">
         <div className="lg:col-span-2 rounded-sm border border-gray-300 bg-white">
-          <div className="flex items-center justify-between bg-gray-100 border-b border-gray-200 px-5 py-3">
-            <h2 className="text-sm font-semibold text-gray-800 uppercase tracking-tight">
+          <div className="flex items-center justify-between bg-green-700 border-b border-gray-200 px-5 py-3">
+            <h2 className="text-sm font-semibold text-white uppercase tracking-tight">
               Thông tin sinh viên
             </h2>
-            <span className="rounded-sm border border-blue-100 bg-blue-50 px-2 py-0.5 text-[10px] font-semibold text-blue-600 uppercase tracking-wider">
+            <span className="rounded-sm border border-white bg-white px-2 py-0.5 text-[10px] font-semibold text-green-600 uppercase tracking-wider">
               Hệ chính quy
             </span>
           </div>
@@ -215,8 +210,8 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
         </div>
 
         <div className="rounded-sm border border-gray-300 bg-white flex flex-col">
-          <div className="mb-2.5 bg-gray-100 border-b border-gray-200 pb-3 px-5 py-3">
-            <h2 className="text-sm font-semibold text-gray-800 uppercase tracking-tight">
+          <div className="mb-2.5 bg-green-700 border-b border-gray-200 pb-3 px-5 py-3">
+            <h2 className="text-sm font-semibold text-white uppercase tracking-tight">
               Lưu ý đăng ký
             </h2>
           </div>
@@ -234,7 +229,8 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
           </p>
         </div>
       </div>
-      <div className="flex gap-2">
+      <div className="flex gap-2 flex-row justify-between not-print">
+        <div className="flex gap-2 flex-row">
         <Select
           options={curriculumVersions?.map((cv) => ({
             label: `${cv?.code} - ${cv?.name}`,
@@ -254,9 +250,18 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
           allowClear={false}
           onChange={setByCurriculum}
         />
+        </div>
+        <Button
+          type="primary"
+          onClick={() => {
+            window.print();
+          }}
+        >
+          In Danh sách môn đã đăng ký
+        </Button>
       </div>
 
-      <div className="flex gap-2 items-center border-gray-300 border border-b-0 px-2.5 py-2.5 justify-between">
+      <div className="flex gap-2 items-center border-gray-300 border border-b-0 px-2.5 py-2.5 justify-between not-print">
         <b className="text-sm uppercase ">Danh sách môn học đã đăng ký</b>
         {classesInfo?.status === 200 && (
           <p>
@@ -293,7 +298,7 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
           header={<b className="text-sm uppercase">Danh sách môn học mở đăng ký</b>}
           defaultExpandAll
           scroll={{ y: 400 }}
-          className="!mt-0 !rounded-0"
+          className="!mt-0 !rounded-0 not-print"
           columns={[
             {
               title: "Mã học phần",
