@@ -44,6 +44,8 @@ app.openapi(
                 description: "Có tự động xuống dòng trong ô hay không",
                 default: true,
               }),
+              orientation: z.enum(["portrait", "landscape"]).optional(),
+              horizontalCentered: z.boolean().optional(),
             }),
           },
         },
@@ -61,6 +63,58 @@ app.openapi(
     },
   }),
   async (c) => {
+    const PAGE_BREAK_MARKER = "ngắt trang"
+
+    const normalizeCellValue = (value: ExcelJS.CellValue | null | undefined): string => {
+      if (value === null || value === undefined) return ""
+      if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") {
+        return String(value).trim().toLowerCase()
+      }
+      if (value instanceof Date) {
+        return value.toISOString().trim().toLowerCase()
+      }
+      if (typeof value === "object") {
+        if ("richText" in value && Array.isArray(value.richText)) {
+          return value.richText
+            .map((part) => part.text)
+            .join("")
+            .trim()
+            .toLowerCase()
+        }
+        if ("text" in value && typeof value.text === "string") {
+          return value.text.trim().toLowerCase()
+        }
+        if ("result" in value && value.result !== undefined && value.result !== null) {
+          return String(value.result).trim().toLowerCase()
+        }
+      }
+      return ""
+    }
+
+    const toColumnLetter = (columnNumber: number) => {
+      let result = ""
+      let current = columnNumber
+      while (current > 0) {
+        const remainder = (current - 1) % 26
+        result = String.fromCharCode(65 + remainder) + result
+        current = Math.floor((current - 1) / 26)
+      }
+      return result || "A"
+    }
+
+    const getLastUsedDataRow = (sheet: ExcelJS.Worksheet) => {
+      const n = sheet.rowCount
+      for (let r = n; r >= 1; r--) {
+        const row = sheet.getRow(r)
+        let has = false
+        row.eachCell({ includeEmpty: false }, () => {
+          has = true
+        })
+        if (has) return r
+      }
+      return 1
+    }
+
     const {
       fileName,
       path,
@@ -69,17 +123,17 @@ app.openapi(
       wrapText = false,
       head,
       tail,
+      orientation,
+      horizontalCentered,
     } = c.req.valid("json")
     const res = await fetch(getMinioUrl(`/mta/template/${path}`))
     const buffer = await res.arrayBuffer()
     const nodeBuffer = Buffer.from(buffer)
     const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
 
-    // Load template workbook to get Head and Tail sheets
     const templateWorkbook = new ExcelJS.Workbook()
     await templateWorkbook.xlsx.load(buffer)
 
-    // Process Head sheet if data is provided
     let headSheet: ExcelJS.Worksheet | undefined
     if (head?.data) {
       const headTemplate = new XlsxTemplate(nodeBuffer)
@@ -89,7 +143,6 @@ app.openapi(
       await headWorkbook.xlsx.load(headBuffer)
       headSheet = headWorkbook.getWorksheet("Head")
     }
-    // Process Tail sheet if data is provided
     let tailSheet: ExcelJS.Worksheet | undefined
     if (tail?.data) {
       const tailTemplate = new XlsxTemplate(nodeBuffer)
@@ -100,14 +153,12 @@ app.openapi(
       tailSheet = tailWorkbook.getWorksheet("Tail")
     }
 
-    // Generate a workbook for each payload item
     const generatedSheets: { worksheet: ExcelJS.Worksheet; mergeCells?: string[] }[] = []
 
     for (const item of payload) {
       const template = new XlsxTemplate(nodeBuffer)
       template.substitute(1, item.data)
       const sheetBuffer = await template.generate({ type: "nodebuffer" })
-      // Load the generated sheet using exceljs
       const workbook = new ExcelJS.Workbook()
       await workbook.xlsx.load(sheetBuffer)
       const worksheet = workbook.getWorksheet(1) || workbook.worksheets[0]
@@ -116,30 +167,24 @@ app.openapi(
       }
     }
 
-    // Create a new workbook and merge all sheets vertically
     const mergedWorkbook = new ExcelJS.Workbook()
     const mergedSheet = mergedWorkbook.addWorksheet("Merged")
 
-    // Hide gridlines
     mergedSheet.views = [{ showGridLines: showGridLines }]
 
     let currentRow = 1
 
-    // Helper function to copy sheet content
     const copySheetContent = (sheet: ExcelJS.Worksheet, startRow: number) => {
       const rowOffset = startRow - 1
       let currentRowInCopy = startRow
 
-      // Copy all rows with full formatting
       sheet.eachRow({ includeEmpty: true }, (row) => {
         const newRow = mergedSheet.getRow(currentRowInCopy)
 
-        // Copy row height
-        if (row.height) {
+        if (row.height !== undefined) {
           newRow.height = row.height
         }
 
-        // Giữ trạng thái ẩn hàng / outline (template đã ẩn hàng thì bản gộp vẫn ẩn)
         if (row.hidden) {
           newRow.hidden = true
         }
@@ -147,12 +192,10 @@ app.openapi(
           newRow.outlineLevel = row.outlineLevel
         }
 
-        // Copy all cells with full styling
         row.eachCell({ includeEmpty: true }, (cell, colNumber) => {
           const newCell = newRow.getCell(colNumber)
           newCell.value = cell.value
 
-          // Copy full cell style
           newCell.style = {
             font: cell.font,
             alignment: {
@@ -170,7 +213,6 @@ app.openapi(
         currentRowInCopy++
       })
 
-      // Copy merged cells with adjusted row positions
       if (sheet.model.merges) {
         for (const merge of sheet.model.merges) {
           const [topLeft, bottomRight] = merge.split(":")
@@ -192,14 +234,12 @@ app.openapi(
       return currentRowInCopy
     }
 
-    // Copy Head sheet at the top
     if (headSheet) {
       currentRow = copySheetContent(headSheet, currentRow)
     }
 
-    // Copy all payload sheets
+
     for (const { worksheet: sheet, mergeCells: customMergeCells } of generatedSheets) {
-      // Apply custom merge cells before copying
       if (customMergeCells && customMergeCells.length > 0) {
         for (const merge of customMergeCells) {
           try {
@@ -212,12 +252,10 @@ app.openapi(
       currentRow = copySheetContent(sheet, currentRow)
     }
 
-    // Copy Tail sheet at the bottom
     if (tailSheet) {
       currentRow = copySheetContent(tailSheet, currentRow)
     }
 
-    // Copy column width + ẩn cột từ sheet nguồn đầu tiên (payload)
     if (generatedSheets.length > 0 && generatedSheets[0]) {
       generatedSheets[0].worksheet.columns.forEach((col, index) => {
         if (!col) return
@@ -229,6 +267,52 @@ app.openapi(
           dest.hidden = true
         }
       })
+    }
+
+    const finalMarkerRows: number[] = []
+    for (let rowNumber = 1; rowNumber <= mergedSheet.rowCount; rowNumber++) {
+      const row = mergedSheet.getRow(rowNumber)
+      let hasPageBreakMarker = false
+      row.eachCell({ includeEmpty: true }, (cell) => {
+        if (normalizeCellValue(cell.value) === PAGE_BREAK_MARKER) {
+          hasPageBreakMarker = true
+          cell.value = null
+        }
+      })
+
+      if (hasPageBreakMarker) {
+        row.hidden = true
+        finalMarkerRows.push(rowNumber)
+      }
+      row.commit()
+    }
+
+    const lastDataRow = getLastUsedDataRow(mergedSheet)
+    const maxColumn = Math.max(mergedSheet.columnCount, 1)
+    const maxColumnLetter = toColumnLetter(maxColumn)
+
+    const applyPrintDefaults = () => {
+      mergedSheet.pageSetup.paperSize = 9
+      mergedSheet.pageSetup.fitToPage = false
+      mergedSheet.pageSetup.scale = 100
+      if (orientation) {
+        mergedSheet.pageSetup.orientation = orientation
+      }
+      if (horizontalCentered !== undefined) {
+        mergedSheet.pageSetup.horizontalCentered = horizontalCentered
+      }
+    }
+
+    if (finalMarkerRows.length > 0) {
+      const uniqueBreakRows = [...new Set(finalMarkerRows)].sort((a, b) => a - b)
+      for (const markerRow of uniqueBreakRows) {
+        if (markerRow <= 1) continue
+        if (markerRow > lastDataRow) continue
+        mergedSheet.getRow(markerRow - 1).addPageBreak()
+      }
+
+      mergedSheet.pageSetup.printArea = `A1:${maxColumnLetter}${lastDataRow}`
+      applyPrintDefaults()
     }
 
     const result = await mergedWorkbook.xlsx.writeBuffer()

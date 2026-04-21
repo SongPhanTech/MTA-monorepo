@@ -19,4 +19,6 @@ export type ExcelTemplateBody = {
   showGridLines?: boolean;
   /** Có tự động xuống dòng trong ô hay không */
   wrapText?: boolean;
+  orientation?: "portrait" | "landscape";
+  horizontalCentered?: boolean;
 };
