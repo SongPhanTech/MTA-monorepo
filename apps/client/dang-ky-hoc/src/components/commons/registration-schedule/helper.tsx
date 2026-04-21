@@ -15,6 +15,24 @@ export interface ScheduleCourse {
   originalData: GetClassesInfo200ItemSubjectClassItem
 }
 
+export const SESSIONS = [
+  {
+    key: "morning",
+    label: "Sáng",
+    periods: [1, 2, 3, 4, 5],
+  },
+  {
+    key: "afternoon",
+    label: "Chiều",
+    periods: [6, 7, 8, 9, 10],
+  },
+  {
+    key: "evening",
+    label: "Tối",
+    periods: [11, 12, 13, 14, 15],
+  },
+]
+
 export const DAYS = [
   { key: 2, label: "Thứ 2" },
   { key: 3, label: "Thứ 3" },
@@ -25,7 +43,7 @@ export const DAYS = [
   { key: 8, label: "Chủ nhật" },
 ]
 
-export const PERIODS = Array.from({ length: 12 }, (_, i) => i + 1)
+export const PERIODS = Array.from({ length: 15 }, (_, i) => i + 1)
 
 const COURSE_COLORS = [
   "#3b82f6",
@@ -47,17 +65,23 @@ const getCourseColor = (courseId: string) => {
 }
 
 const buildScheduleMap = (registeredClasses: GetClassesInfo200ItemSubjectClassItem[]) => {
-  const scheduleMap = new Map<number, Map<number, ScheduleCourse[]>>()
-  const conflictMap = new Map<string, string[]>()
+  const scheduleMap = new Map<number, Map<string, ScheduleCourse[][]>>()
 
   DAYS.forEach((day) => {
     scheduleMap.set(day.key, new Map())
   })
 
+  // Build all segments, then deduplicate: same subject (id) + same day + same period slot
+  // should only appear once (it's the same weekly slot, just repeated across weeks)
+  const segmentKeySet = new Set<string>()
   const allSegments: ScheduleCourse[] = []
   registeredClasses.forEach((cls) => {
     cls.subjectClassTimes?.forEach((time) => {
       if (time.dayOfWeek && time.startPeriod && time.endPeriod) {
+        const dedupeKey = `${cls.id}-${time.dayOfWeek}-${time.startPeriod}-${time.endPeriod}`
+        if (segmentKeySet.has(dedupeKey)) return
+        segmentKeySet.add(dedupeKey)
+
         allSegments.push({
           id: cls.id,
           code: cls.code,
@@ -74,80 +98,80 @@ const buildScheduleMap = (registeredClasses: GetClassesInfo200ItemSubjectClassIt
     })
   })
 
-  const segmentsByDay = new Map<number, ScheduleCourse[]>()
-  allSegments.forEach((seg) => {
-    if (!segmentsByDay.has(seg.dayOfWeek)) segmentsByDay.set(seg.dayOfWeek, [])
-    segmentsByDay.get(seg.dayOfWeek)!.push(seg)
-  })
+  DAYS.forEach((day) => {
+    const dayMap = scheduleMap.get(day.key)!
+    const daySegments = allSegments.filter((seg) => seg.dayOfWeek === day.key)
 
-  segmentsByDay.forEach((daySegments, day) => {
-    const sortedSegments = [...daySegments].sort((a, b) => a.startPeriod - b.startPeriod)
+    const processedDaySegments = daySegments.map((seg) => {
+      // Only count overlaps with DIFFERENT subjects (different id) as conflicts
+      const others = daySegments.filter(
+        (o) => o.id !== seg.id && seg.startPeriod <= o.endPeriod && o.startPeriod <= seg.endPeriod
+      )
 
-    const disjointSets: ScheduleCourse[][] = []
+      const conflictsWithNames = Array.from(new Set(others.map((o) => `${o.code} - ${o.name}`)))
 
-    sortedSegments.forEach((seg) => {
-      let added = false
-      for (const set of disjointSets) {
-        const overlapsWithSet = set.some(
-          (s) => seg.startPeriod <= s.endPeriod && s.startPeriod <= seg.endPeriod
-        )
-
-        if (overlapsWithSet) {
-          set.push(seg)
-          added = true
-          break
-        }
-      }
-
-      if (!added) {
-        disjointSets.push([seg])
+      return {
+        ...seg,
+        isConflict: others.length > 0,
+        conflictsWith: conflictsWithNames,
       }
     })
 
-    disjointSets.forEach((set) => {
-      const minStart = Math.min(...set.map((s) => s.startPeriod))
-      const dayMap = scheduleMap.get(day)!
+    SESSIONS.forEach((session) => {
+      const sessionSegments = processedDaySegments.filter(
+        (seg) =>
+          seg.startPeriod >= session.periods[0] &&
+          seg.startPeriod <= session.periods[session.periods.length - 1]
+      )
 
-      const setWithConflictInfo = set.map((s) => {
-        const others = set.filter((o) => o.id !== s.id)
-        const conflictsWith = Array.from(new Set(others.map((o) => `${o.code} - ${o.name}`)))
+      if (sessionSegments.length === 0) {
+        dayMap.set(session.key, [])
+        return
+      }
 
-        return {
-          ...s,
-          isConflict: set.length > 1,
-          conflictsWith,
+      const sortedSegments = [...sessionSegments].sort((a, b) => a.startPeriod - b.startPeriod)
+      const disjointSets: ScheduleCourse[][] = []
+
+      sortedSegments.forEach((seg) => {
+        let added = false
+        for (const set of disjointSets) {
+          const overlapsWithSet = set.some(
+            (s) => seg.startPeriod <= s.endPeriod && s.startPeriod <= seg.endPeriod
+          )
+
+          if (overlapsWithSet) {
+            // If same subject already in this stack (same id, same periods), skip — it's a duplicate week session
+            const isDuplicateSameSubject = set.some(
+              (s) =>
+                s.id === seg.id &&
+                s.startPeriod === seg.startPeriod &&
+                s.endPeriod === seg.endPeriod
+            )
+            if (!isDuplicateSameSubject) {
+              set.push(seg)
+            }
+            added = true
+            break
+          }
+        }
+
+        if (!added) {
+          disjointSets.push([seg])
         }
       })
 
-      dayMap.set(minStart, setWithConflictInfo)
+      dayMap.set(session.key, disjointSets)
     })
   })
 
-  return { scheduleMap, conflictMap }
-}
-
-const isInsideSpan = (
-  dayOfWeek: number,
-  period: number,
-  scheduleMap: Map<number, Map<number, ScheduleCourse[]>>
-) => {
-  const dayMap = scheduleMap.get(dayOfWeek)
-  if (!dayMap) return false
-
-  for (const [startPeriod, courses] of dayMap.entries()) {
-    const maxEnd = Math.max(...courses.map((c) => c.endPeriod))
-    if (period > startPeriod && period <= maxEnd) {
-      return true
-    }
-  }
-  return false
+  return { scheduleMap }
 }
 
 const registrationScheduleHelper = {
   DAYS,
   PERIODS,
+  SESSIONS,
   buildScheduleMap,
-  isInsideSpan,
 }
 
 export default registrationScheduleHelper

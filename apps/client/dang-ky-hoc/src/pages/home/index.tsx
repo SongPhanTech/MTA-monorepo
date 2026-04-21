@@ -115,7 +115,12 @@ function Page() {
         <Col xs={24} lg={18}>
           <div className="bg-white rounded border-gray-200 border h-full flex flex-col">
             <div className="p-4">
-              <Divider orientation="center" className="font-semibold uppercase my-0 mt-2.5 text-2xl after:border-t-gray-500 before:border-t-gray-500">Thời khoá biểu</Divider>
+              <Divider
+                orientation="center"
+                className="font-semibold uppercase my-0 mt-2.5 text-2xl after:border-t-gray-500 before:border-t-gray-500"
+              >
+                Thời khoá biểu
+              </Divider>
             </div>
             <div className="flex-1 px-4 py-1.5">
               <LichCongTac onlyMySchedule />
