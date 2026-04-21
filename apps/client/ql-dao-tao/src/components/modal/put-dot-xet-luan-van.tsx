@@ -185,6 +185,17 @@ const PutThesisSession = () => {
         </FormItem>
       </Col>
       <Col span={12}>
+        <FormItem form={form} name="trainingCourseId" label="Khóa học" required>
+          <Select
+            placeholder="Chọn khóa học"
+            options={trainingCourses?.map((item) => ({
+              label: item.name,
+              value: item.id,
+            }))}
+          />
+        </FormItem>
+      </Col>
+      <Col span={12}>
         <FormItem form={form} name="trainingObjectTypeId" label="Đối tượng đào tạo" required>
           <Select
             placeholder="Chọn đối tượng đào tạo"
@@ -196,17 +207,7 @@ const PutThesisSession = () => {
           />
         </FormItem>
       </Col>
-      <Col span={12}>
-        <FormItem form={form} name="trainingCourseId" label="Khóa học" required>
-          <Select
-            placeholder="Chọn khóa học"
-            options={trainingCourses?.map((item) => ({
-              label: item.name,
-              value: item.id,
-            }))}
-          />
-        </FormItem>
-      </Col>
+      
       <Col span={12}>
         <FormItem form={form} name="decisionNumber" label="Số quyết định giao đề tài">
           <Input placeholder="Nhập số quyết định giao đề tài" />
@@ -243,15 +244,7 @@ const PutThesisSession = () => {
           />
         </FormItem>
       </Col>
-      <Col span={12}>
-        <FormItem
-          form={form}
-          name="defenseDecisionNumber"
-          label="Số quyết định thành lập hội đồng bảo vệ luận văn đề án"
-        >
-          <Input placeholder="Nhập số quyết định thành lập hội đồng bảo vệ luận văn đề án" />
-        </FormItem>
-      </Col>
+
       <Col span={12}>
         <Form.Item
           label="Người ký quyết định thành lập hội đồng bảo vệ luận văn đề án"
@@ -296,6 +289,15 @@ const PutThesisSession = () => {
         </FormItem>
       </Col>
       <Col span={12}>
+        <FormItem
+          form={form}
+          name="defenseDecisionNumber"
+          label="Số quyết định thành lập hội đồng bảo vệ luận văn đề án"
+        >
+          <Input placeholder="Nhập số quyết định thành lập hội đồng bảo vệ luận văn đề án" />
+        </FormItem>
+      </Col>
+      <Col span={12}>
         <FormItem form={form} name="deputy" label="Phó trưởng phòng sau đại học">
           <Input placeholder="Nhập phó trưởng phòng sau đại học" />
         </FormItem>
@@ -311,6 +313,9 @@ const PutThesisSession = () => {
             placeholder="Chọn ngày bắt đầu"
           />
         </FormItem>
+      </Col>
+      <Col span={12}>
+
       </Col>
       <Col span={12}>
         <FormItem form={form} name="endDate" label="Ngày kết thúc" required>
