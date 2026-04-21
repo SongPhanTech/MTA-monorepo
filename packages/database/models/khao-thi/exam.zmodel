@@ -276,7 +276,7 @@ model ExamList extends Base {
 model ExamBank extends Base {
   exam           Exam               @relation(fields: [examId], references: [id])
   examId         String
-
+  examTime       Int?
   examCode       String
 
   subjectClass   SubjectClass?      @relation(fields: [subjectClassId], references: [id])

@@ -20,6 +20,8 @@ export type AutomaticTopicGenerationBody = {
   updatedAt?: string | null;
   /** @nullable */
   createdBy?: string | null;
+  /** @nullable */
+  examTime?: number | null;
   examCode: string;
   /** @nullable */
   explain?: string | null;

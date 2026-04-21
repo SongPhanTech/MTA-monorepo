@@ -301380,8 +301380,18 @@ export namespace Prisma {
 
   export type AggregateExamBank = {
     _count: ExamBankCountAggregateOutputType | null
+    _avg: ExamBankAvgAggregateOutputType | null
+    _sum: ExamBankSumAggregateOutputType | null
     _min: ExamBankMinAggregateOutputType | null
     _max: ExamBankMaxAggregateOutputType | null
+  }
+
+  export type ExamBankAvgAggregateOutputType = {
+    examTime: number | null
+  }
+
+  export type ExamBankSumAggregateOutputType = {
+    examTime: number | null
   }
 
   export type ExamBankMinAggregateOutputType = {
@@ -301394,6 +301404,7 @@ export namespace Prisma {
     updatedAt: Date | null
     createdBy: string | null
     examId: string | null
+    examTime: number | null
     examCode: string | null
     subjectClassId: string | null
     explain: string | null
@@ -301415,6 +301426,7 @@ export namespace Prisma {
     updatedAt: Date | null
     createdBy: string | null
     examId: string | null
+    examTime: number | null
     examCode: string | null
     subjectClassId: string | null
     explain: string | null
@@ -301436,6 +301448,7 @@ export namespace Prisma {
     updatedAt: number
     createdBy: number
     examId: number
+    examTime: number
     examCode: number
     subjectClassId: number
     explain: number
@@ -301449,6 +301462,14 @@ export namespace Prisma {
   }
 
 
+  export type ExamBankAvgAggregateInputType = {
+    examTime?: true
+  }
+
+  export type ExamBankSumAggregateInputType = {
+    examTime?: true
+  }
+
   export type ExamBankMinAggregateInputType = {
     id?: true
     code?: true
@@ -301459,6 +301480,7 @@ export namespace Prisma {
     updatedAt?: true
     createdBy?: true
     examId?: true
+    examTime?: true
     examCode?: true
     subjectClassId?: true
     explain?: true
@@ -301480,6 +301502,7 @@ export namespace Prisma {
     updatedAt?: true
     createdBy?: true
     examId?: true
+    examTime?: true
     examCode?: true
     subjectClassId?: true
     explain?: true
@@ -301501,6 +301524,7 @@ export namespace Prisma {
     updatedAt?: true
     createdBy?: true
     examId?: true
+    examTime?: true
     examCode?: true
     subjectClassId?: true
     explain?: true
@@ -301551,6 +301575,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: ExamBankAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ExamBankSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: ExamBankMinAggregateInputType
@@ -301581,6 +301617,8 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: ExamBankCountAggregateInputType | true
+    _avg?: ExamBankAvgAggregateInputType
+    _sum?: ExamBankSumAggregateInputType
     _min?: ExamBankMinAggregateInputType
     _max?: ExamBankMaxAggregateInputType
   }
@@ -301595,6 +301633,7 @@ export namespace Prisma {
     updatedAt: Date
     createdBy: string | null
     examId: string
+    examTime: number | null
     examCode: string
     subjectClassId: string | null
     explain: string | null
@@ -301605,6 +301644,8 @@ export namespace Prisma {
     isNote: boolean | null
     isGroup: boolean | null
     _count: ExamBankCountAggregateOutputType | null
+    _avg: ExamBankAvgAggregateOutputType | null
+    _sum: ExamBankSumAggregateOutputType | null
     _min: ExamBankMinAggregateOutputType | null
     _max: ExamBankMaxAggregateOutputType | null
   }
@@ -301633,6 +301674,7 @@ export namespace Prisma {
     updatedAt?: boolean
     createdBy?: boolean
     examId?: boolean
+    examTime?: boolean
     examCode?: boolean
     subjectClassId?: boolean
     explain?: boolean
@@ -301659,6 +301701,7 @@ export namespace Prisma {
     updatedAt?: boolean
     createdBy?: boolean
     examId?: boolean
+    examTime?: boolean
     examCode?: boolean
     subjectClassId?: boolean
     explain?: boolean
@@ -301683,6 +301726,7 @@ export namespace Prisma {
     updatedAt?: boolean
     createdBy?: boolean
     examId?: boolean
+    examTime?: boolean
     examCode?: boolean
     subjectClassId?: boolean
     explain?: boolean
@@ -301707,6 +301751,7 @@ export namespace Prisma {
     updatedAt?: boolean
     createdBy?: boolean
     examId?: boolean
+    examTime?: boolean
     examCode?: boolean
     subjectClassId?: boolean
     explain?: boolean
@@ -301718,7 +301763,7 @@ export namespace Prisma {
     isGroup?: boolean
   }
 
-  export type ExamBankOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "examId" | "examCode" | "subjectClassId" | "explain" | "examDay" | "examType" | "examMatrixId" | "isLock" | "isNote" | "isGroup", ExtArgs["result"]["examBank"]>
+  export type ExamBankOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "examId" | "examTime" | "examCode" | "subjectClassId" | "explain" | "examDay" | "examType" | "examMatrixId" | "isLock" | "isNote" | "isGroup", ExtArgs["result"]["examBank"]>
   export type ExamBankInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     exam?: boolean | ExamDefaultArgs<ExtArgs>
     subjectClass?: boolean | ExamBank$subjectClassArgs<ExtArgs>
@@ -301755,6 +301800,7 @@ export namespace Prisma {
       updatedAt: Date
       createdBy: string | null
       examId: string
+      examTime: number | null
       examCode: string
       subjectClassId: string | null
       explain: string | null
@@ -302203,6 +302249,7 @@ export namespace Prisma {
     readonly updatedAt: FieldRef<"ExamBank", 'DateTime'>
     readonly createdBy: FieldRef<"ExamBank", 'String'>
     readonly examId: FieldRef<"ExamBank", 'String'>
+    readonly examTime: FieldRef<"ExamBank", 'Int'>
     readonly examCode: FieldRef<"ExamBank", 'String'>
     readonly subjectClassId: FieldRef<"ExamBank", 'String'>
     readonly explain: FieldRef<"ExamBank", 'String'>
@@ -384573,6 +384620,7 @@ export namespace Prisma {
     updatedAt: 'updatedAt',
     createdBy: 'createdBy',
     examId: 'examId',
+    examTime: 'examTime',
     examCode: 'examCode',
     subjectClassId: 'subjectClassId',
     explain: 'explain',
@@ -414806,6 +414854,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"ExamBank"> | Date | string
     createdBy?: UuidNullableFilter<"ExamBank"> | string | null
     examId?: StringFilter<"ExamBank"> | string
+    examTime?: IntNullableFilter<"ExamBank"> | number | null
     examCode?: StringFilter<"ExamBank"> | string
     subjectClassId?: StringNullableFilter<"ExamBank"> | string | null
     explain?: StringNullableFilter<"ExamBank"> | string | null
@@ -414831,6 +414880,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     createdBy?: SortOrderInput | SortOrder
     examId?: SortOrder
+    examTime?: SortOrderInput | SortOrder
     examCode?: SortOrder
     subjectClassId?: SortOrderInput | SortOrder
     explain?: SortOrderInput | SortOrder
@@ -414861,6 +414911,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"ExamBank"> | Date | string
     createdBy?: UuidNullableFilter<"ExamBank"> | string | null
     examId?: StringFilter<"ExamBank"> | string
+    examTime?: IntNullableFilter<"ExamBank"> | number | null
     examCode?: StringFilter<"ExamBank"> | string
     subjectClassId?: StringNullableFilter<"ExamBank"> | string | null
     explain?: StringNullableFilter<"ExamBank"> | string | null
@@ -414886,6 +414937,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     createdBy?: SortOrderInput | SortOrder
     examId?: SortOrder
+    examTime?: SortOrderInput | SortOrder
     examCode?: SortOrder
     subjectClassId?: SortOrderInput | SortOrder
     explain?: SortOrderInput | SortOrder
@@ -414896,8 +414948,10 @@ export namespace Prisma {
     isNote?: SortOrderInput | SortOrder
     isGroup?: SortOrderInput | SortOrder
     _count?: ExamBankCountOrderByAggregateInput
+    _avg?: ExamBankAvgOrderByAggregateInput
     _max?: ExamBankMaxOrderByAggregateInput
     _min?: ExamBankMinOrderByAggregateInput
+    _sum?: ExamBankSumOrderByAggregateInput
   }
 
   export type ExamBankScalarWhereWithAggregatesInput = {
@@ -414913,6 +414967,7 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"ExamBank"> | Date | string
     createdBy?: UuidNullableWithAggregatesFilter<"ExamBank"> | string | null
     examId?: StringWithAggregatesFilter<"ExamBank"> | string
+    examTime?: IntNullableWithAggregatesFilter<"ExamBank"> | number | null
     examCode?: StringWithAggregatesFilter<"ExamBank"> | string
     subjectClassId?: StringNullableWithAggregatesFilter<"ExamBank"> | string | null
     explain?: StringNullableWithAggregatesFilter<"ExamBank"> | string | null
@@ -448891,6 +448946,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    examTime?: number | null
     examCode: string
     explain?: string | null
     examDay?: Date | string | null
@@ -448914,6 +448970,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     examId: string
+    examTime?: number | null
     examCode: string
     subjectClassId?: string | null
     explain?: string | null
@@ -448935,6 +448992,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    examTime?: NullableIntFieldUpdateOperationsInput | number | null
     examCode?: StringFieldUpdateOperationsInput | string
     explain?: NullableStringFieldUpdateOperationsInput | string | null
     examDay?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -448958,6 +449016,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     examId?: StringFieldUpdateOperationsInput | string
+    examTime?: NullableIntFieldUpdateOperationsInput | number | null
     examCode?: StringFieldUpdateOperationsInput | string
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     explain?: NullableStringFieldUpdateOperationsInput | string | null
@@ -448980,6 +449039,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     examId: string
+    examTime?: number | null
     examCode: string
     subjectClassId?: string | null
     explain?: string | null
@@ -449000,6 +449060,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    examTime?: NullableIntFieldUpdateOperationsInput | number | null
     examCode?: StringFieldUpdateOperationsInput | string
     explain?: NullableStringFieldUpdateOperationsInput | string | null
     examDay?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -449019,6 +449080,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     examId?: StringFieldUpdateOperationsInput | string
+    examTime?: NullableIntFieldUpdateOperationsInput | number | null
     examCode?: StringFieldUpdateOperationsInput | string
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     explain?: NullableStringFieldUpdateOperationsInput | string | null
@@ -473849,6 +473911,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     createdBy?: SortOrder
     examId?: SortOrder
+    examTime?: SortOrder
     examCode?: SortOrder
     subjectClassId?: SortOrder
     explain?: SortOrder
@@ -473858,6 +473921,10 @@ export namespace Prisma {
     isLock?: SortOrder
     isNote?: SortOrder
     isGroup?: SortOrder
+  }
+
+  export type ExamBankAvgOrderByAggregateInput = {
+    examTime?: SortOrder
   }
 
   export type ExamBankMaxOrderByAggregateInput = {
@@ -473870,6 +473937,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     createdBy?: SortOrder
     examId?: SortOrder
+    examTime?: SortOrder
     examCode?: SortOrder
     subjectClassId?: SortOrder
     explain?: SortOrder
@@ -473891,6 +473959,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     createdBy?: SortOrder
     examId?: SortOrder
+    examTime?: SortOrder
     examCode?: SortOrder
     subjectClassId?: SortOrder
     explain?: SortOrder
@@ -473900,6 +473969,10 @@ export namespace Prisma {
     isLock?: SortOrder
     isNote?: SortOrder
     isGroup?: SortOrder
+  }
+
+  export type ExamBankSumOrderByAggregateInput = {
+    examTime?: SortOrder
   }
 
   export type EnumExamTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -581114,6 +581187,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    examTime?: number | null
     examCode: string
     explain?: string | null
     examDay?: Date | string | null
@@ -581136,6 +581210,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     examId: string
+    examTime?: number | null
     examCode: string
     explain?: string | null
     examDay?: Date | string | null
@@ -582148,6 +582223,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"ExamBank"> | Date | string
     createdBy?: UuidNullableFilter<"ExamBank"> | string | null
     examId?: StringFilter<"ExamBank"> | string
+    examTime?: IntNullableFilter<"ExamBank"> | number | null
     examCode?: StringFilter<"ExamBank"> | string
     subjectClassId?: StringNullableFilter<"ExamBank"> | string | null
     explain?: StringNullableFilter<"ExamBank"> | string | null
@@ -630258,6 +630334,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    examTime?: number | null
     examCode: string
     explain?: string | null
     examDay?: Date | string | null
@@ -630279,6 +630356,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    examTime?: number | null
     examCode: string
     subjectClassId?: string | null
     explain?: string | null
@@ -631771,6 +631849,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    examTime?: number | null
     examCode: string
     explain?: string | null
     examDay?: Date | string | null
@@ -631793,6 +631872,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     examId: string
+    examTime?: number | null
     examCode: string
     subjectClassId?: string | null
     explain?: string | null
@@ -631878,6 +631958,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    examTime?: NullableIntFieldUpdateOperationsInput | number | null
     examCode?: StringFieldUpdateOperationsInput | string
     explain?: NullableStringFieldUpdateOperationsInput | string | null
     examDay?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -631900,6 +631981,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     examId?: StringFieldUpdateOperationsInput | string
+    examTime?: NullableIntFieldUpdateOperationsInput | number | null
     examCode?: StringFieldUpdateOperationsInput | string
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     explain?: NullableStringFieldUpdateOperationsInput | string | null
@@ -632721,6 +632803,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    examTime?: number | null
     examCode: string
     explain?: string | null
     examDay?: Date | string | null
@@ -632743,6 +632826,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     examId: string
+    examTime?: number | null
     examCode: string
     subjectClassId?: string | null
     explain?: string | null
@@ -687943,6 +688027,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     examId: string
+    examTime?: number | null
     examCode: string
     explain?: string | null
     examDay?: Date | string | null
@@ -688868,6 +688953,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    examTime?: NullableIntFieldUpdateOperationsInput | number | null
     examCode?: StringFieldUpdateOperationsInput | string
     explain?: NullableStringFieldUpdateOperationsInput | string | null
     examDay?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -688890,6 +688976,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     examId?: StringFieldUpdateOperationsInput | string
+    examTime?: NullableIntFieldUpdateOperationsInput | number | null
     examCode?: StringFieldUpdateOperationsInput | string
     explain?: NullableStringFieldUpdateOperationsInput | string | null
     examDay?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -688911,6 +688998,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     examId?: StringFieldUpdateOperationsInput | string
+    examTime?: NullableIntFieldUpdateOperationsInput | number | null
     examCode?: StringFieldUpdateOperationsInput | string
     explain?: NullableStringFieldUpdateOperationsInput | string | null
     examDay?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -708351,6 +708439,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy?: string | null
+    examTime?: number | null
     examCode: string
     subjectClassId?: string | null
     explain?: string | null
@@ -708542,6 +708631,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    examTime?: NullableIntFieldUpdateOperationsInput | number | null
     examCode?: StringFieldUpdateOperationsInput | string
     explain?: NullableStringFieldUpdateOperationsInput | string | null
     examDay?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -708563,6 +708653,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    examTime?: NullableIntFieldUpdateOperationsInput | number | null
     examCode?: StringFieldUpdateOperationsInput | string
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     explain?: NullableStringFieldUpdateOperationsInput | string | null
@@ -708584,6 +708675,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    examTime?: NullableIntFieldUpdateOperationsInput | number | null
     examCode?: StringFieldUpdateOperationsInput | string
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     explain?: NullableStringFieldUpdateOperationsInput | string | null
@@ -709037,6 +709129,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     examId: string
+    examTime?: number | null
     examCode: string
     subjectClassId?: string | null
     explain?: string | null
@@ -709101,6 +709194,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    examTime?: NullableIntFieldUpdateOperationsInput | number | null
     examCode?: StringFieldUpdateOperationsInput | string
     explain?: NullableStringFieldUpdateOperationsInput | string | null
     examDay?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -709123,6 +709217,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     examId?: StringFieldUpdateOperationsInput | string
+    examTime?: NullableIntFieldUpdateOperationsInput | number | null
     examCode?: StringFieldUpdateOperationsInput | string
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     explain?: NullableStringFieldUpdateOperationsInput | string | null
@@ -709144,6 +709239,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     examId?: StringFieldUpdateOperationsInput | string
+    examTime?: NullableIntFieldUpdateOperationsInput | number | null
     examCode?: StringFieldUpdateOperationsInput | string
     subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
     explain?: NullableStringFieldUpdateOperationsInput | string | null

@@ -1,47 +1,47 @@
-import Loading from "@components/commons/loading";
-import ThoiKhoaBieuDangKy from "@components/commons/registration-schedule";
-import Select from "@components/commons/select";
-import TableCollapse from "@components/commons/tableCollapse";
-import DefaultLayout from "@layouts/default-layout";
-import { cn } from "@lib/utils";
-import { useMutation } from "@tanstack/react-query";
-import { $Enums } from "@workspace/db";
+import Loading from "@components/commons/loading"
+import ThoiKhoaBieuDangKy from "@components/commons/registration-schedule"
+import Select from "@components/commons/select"
+import TableCollapse from "@components/commons/tableCollapse"
+import DefaultLayout from "@layouts/default-layout"
+import { cn } from "@lib/utils"
+import { useMutation } from "@tanstack/react-query"
+import { $Enums } from "@workspace/db"
 import {
   classRegister,
   useGetClassesInfo,
   useGetClassRegisterSession,
   useGetStudentInfo,
-} from "@workspace/libs/api/portal";
-import type { GetClassesInfo200ItemSubjectClassItem } from "@workspace/libs/api/schemas/getClassesInfo200ItemSubjectClassItem";
-import type { GetClassRegisterSession200ItemCreditLimitItem } from "@workspace/libs/api/schemas/getClassRegisterSession200ItemCreditLimitItem";
-import { Button, Checkbox, message, Popconfirm, Tabs } from "antd";
-import dayjs from "dayjs";
-import { LogOutIcon } from "lucide-react";
-import { useMemo, useState } from "react";
-import clsx from "clsx";
+} from "@workspace/libs/api/portal"
+import type { GetClassesInfo200ItemSubjectClassItem } from "@workspace/libs/api/schemas/getClassesInfo200ItemSubjectClassItem"
+import type { GetClassRegisterSession200ItemCreditLimitItem } from "@workspace/libs/api/schemas/getClassRegisterSession200ItemCreditLimitItem"
+import { Button, Checkbox, message, Popconfirm, Tabs } from "antd"
+import dayjs from "dayjs"
+import { LogOutIcon } from "lucide-react"
+import { useMemo, useState } from "react"
+import clsx from "clsx"
 
-dayjs.locale("vi");
+dayjs.locale("vi")
 
 export interface ClassRegisterSessionProps {
-  sessionId: string;
+  sessionId: string
   curriculumVersions: {
-    id: string;
-    name: string;
-    code: string;
-  }[];
-  endDate: string | null;
-  creditLimit: GetClassRegisterSession200ItemCreditLimitItem[];
-  tuitionPerCredit?: number;
+    id: string
+    name: string
+    code: string
+  }[]
+  endDate: string | null
+  creditLimit: GetClassRegisterSession200ItemCreditLimitItem[]
+  tuitionPerCredit?: number
 }
 
 type GetRegisterStateParams = {
-  record: GetClassesInfo200ItemSubjectClassItem;
-  maxCredit?: number;
-  totalRegisteredCredit: number;
-  classToSubjectCodeMap: Map<string, string>;
-  registeredSubjectCodes: Set<string>;
-  isPending: boolean;
-};
+  record: GetClassesInfo200ItemSubjectClassItem
+  maxCredit?: number
+  totalRegisteredCredit: number
+  classToSubjectCodeMap: Map<string, string>
+  registeredSubjectCodes: Set<string>
+  isPending: boolean
+}
 
 export const getRegisterState = ({
   record,
@@ -51,28 +51,20 @@ export const getRegisterState = ({
   registeredSubjectCodes,
   isPending,
 }: GetRegisterStateParams) => {
-  const isMaxed =
-    (record?.maxStudent || 0) <= (record?._count?.subjectClassStudent || 0);
+  const isMaxed = (record?.maxStudent || 0) <= (record?._count?.subjectClassStudent || 0)
 
-  const isRegistered = record?.classRegisterLogs?.length > 0;
+  const isRegistered = record?.classRegisterLogs?.length > 0
 
   const isOverMaxCredit =
-    maxCredit != null &&
-    totalRegisteredCredit + (record?.credit ?? 0) > maxCredit;
+    maxCredit != null && totalRegisteredCredit + (record?.credit ?? 0) > maxCredit
 
-  const parentSubjectCode = classToSubjectCodeMap.get(record?.id);
+  const parentSubjectCode = classToSubjectCodeMap.get(record?.id)
 
   const siblingAlreadyRegistered =
-    !isRegistered &&
-    !!parentSubjectCode &&
-    registeredSubjectCodes.has(parentSubjectCode);
+    !isRegistered && !!parentSubjectCode && registeredSubjectCodes.has(parentSubjectCode)
 
   const isDisabled =
-    isMaxed ||
-    isRegistered ||
-    isPending ||
-    isOverMaxCredit ||
-    siblingAlreadyRegistered;
+    isMaxed || isRegistered || isPending || isOverMaxCredit || siblingAlreadyRegistered
 
   return {
     isDisabled,
@@ -80,31 +72,24 @@ export const getRegisterState = ({
     isRegistered,
     isOverMaxCredit,
     siblingAlreadyRegistered,
-  };
-};
+  }
+}
 
 export default function DangKyHocPage() {
   const [_filters, _setFilters] = useState({
     searchText: "",
-  });
-  const {
-    data: classRegisterSession,
-    isFetching,
-    isLoading,
-  } = useGetClassRegisterSession();
+  })
+  const { data: classRegisterSession, isFetching, isLoading } = useGetClassRegisterSession()
 
   if (isFetching || isLoading) {
-    return <Loading />;
+    return <Loading />
   }
 
   return (
     <div>
-      {classRegisterSession?.status !== 200 ||
-      classRegisterSession.data.length === 0 ? (
+      {classRegisterSession?.status !== 200 || classRegisterSession.data.length === 0 ? (
         <center>
-          <b className="text-lg">
-            {"Tạm ngừng đăng ký học. Vui lòng quay lại sau!"}
-          </b>
+          <b className="text-lg">{"Tạm ngừng đăng ký học. Vui lòng quay lại sau!"}</b>
         </center>
       ) : (
         <Tabs
@@ -112,11 +97,9 @@ export default function DangKyHocPage() {
           type="card"
           items={
             classRegisterSession?.data?.map((session) => ({
-              label: [
-                session.name,
-                session.semester.name,
-                session.semester.schoolYear.name,
-              ].join(" - "),
+              label: [session.name, session.semester.name, session.semester.schoolYear.name].join(
+                " - "
+              ),
               key: session.id,
               children: (
                 <DanhSachMonDangKy
@@ -136,37 +119,31 @@ export default function DangKyHocPage() {
         />
       )}
     </div>
-  );
+  )
 }
 
 const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
-  const {
-    sessionId,
-    curriculumVersions,
-    endDate,
-    creditLimit,
-    tuitionPerCredit,
-  } = props;
+  const { sessionId, curriculumVersions, endDate, creditLimit, tuitionPerCredit } = props
   const [curriculumVersionId, setCurriculumVersionId] = useState(
-    curriculumVersions.length > 0 ? curriculumVersions[0].id : "",
-  );
-  const [byCurriculum, setByCurriculum] = useState(1);
+    curriculumVersions.length > 0 ? curriculumVersions[0].id : ""
+  )
+  const [byCurriculum, setByCurriculum] = useState(1)
   const { data: classStudentData } = useGetStudentInfo({
     sessionId: sessionId,
-  });
+  })
 
   const studentData = useMemo(() => {
-    if (classStudentData?.status !== 200) return null;
+    if (classStudentData?.status !== 200) return null
 
-    const data = classStudentData.data;
+    const data = classStudentData.data
 
     return {
       studentName: data?.userProfile?.fullname,
       studentCode: data?.student?.code,
       classification: data?.latestSemesterResult?.rank?.classification,
       maxCredit: data?.creditLimit?.maxCredit,
-    };
-  }, [classStudentData]);
+    }
+  }, [classStudentData])
 
   const infoItems = [
     {
@@ -191,89 +168,82 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
         "chưa xác định"
       ) : null,
     },
-  ].filter((item) => item.value);
+  ].filter((item) => item.value)
 
   const { data: classesInfo, refetch: refetchClassesInfo } = useGetClassesInfo({
     sessionId,
     curriculumVersionId,
     byCurriculum: byCurriculum === 1 ? "true" : "false",
     isRegistered: "false",
-  });
+  })
 
   const registeredClasses =
     classesInfo?.status === 200
       ? classesInfo.data
           ?.flatMap((e) => e?.subjectClass)
           ?.filter((sc) => (sc?.classRegisterLogs?.length || 0) > 0)
-      : [];
+      : []
 
   const { classToSubjectCodeMap, registeredSubjectCodes } = useMemo(() => {
-    const map = new Map<string, string>();
-    const set = new Set<string>();
+    const map = new Map<string, string>()
+    const set = new Set<string>()
 
     if (classesInfo?.status === 200) {
       classesInfo.data?.forEach((subject) => {
-        const subjectCode = subject.code ?? "";
+        const subjectCode = subject.code ?? ""
 
         const hasRegistered = subject.subjectClass?.some(
-          (sc) => (sc?.classRegisterLogs?.length || 0) > 0,
-        );
+          (sc) => (sc?.classRegisterLogs?.length || 0) > 0
+        )
 
-        if (hasRegistered) set.add(subjectCode);
+        if (hasRegistered) set.add(subjectCode)
 
         subject.subjectClass?.forEach((sc) => {
-          if (sc?.id) map.set(sc.id, subjectCode);
-        });
-      });
+          if (sc?.id) map.set(sc.id, subjectCode)
+        })
+      })
     }
 
-    return { classToSubjectCodeMap: map, registeredSubjectCodes: set };
-  }, [classesInfo]);
+    return { classToSubjectCodeMap: map, registeredSubjectCodes: set }
+  }, [classesInfo])
 
-  const {
-    mutateAsync: classRegisterMutate,
-    isPending: isPendingClassRegister,
-  } = useMutation({
+  const { mutateAsync: classRegisterMutate, isPending: isPendingClassRegister } = useMutation({
     mutationFn: async (subjectClassIds: string[]) => {
       const res = await classRegister({
         sessionId,
         subjectClassIds,
         curriculumVersionId,
-      });
+      })
 
       if (res.status !== 200) {
-        throw new Error(res.data?.message || "Đăng ký thất bại");
+        throw new Error(res.data?.message || "Đăng ký thất bại")
       }
 
-      return res;
+      return res
     },
     onSuccess: () => {
-      refetchClassesInfo();
-      message.success("Đăng ký thành công");
+      refetchClassesInfo()
+      message.success("Đăng ký thành công")
     },
     onError: (error: any) => {
-      message.error(error?.message || "Đăng ký thất bại");
+      message.error(error?.message || "Đăng ký thất bại")
     },
-  });
+  })
 
   const handleClassRegister = (subjectClassIds: string[]) => {
-    classRegisterMutate(subjectClassIds);
-  };
+    classRegisterMutate(subjectClassIds)
+  }
 
   return (
     <div>
       {endDate && (
         <p className="mb-2">
-          Hạn đăng ký học:{" "}
-          <b className="text-red-500">{dayjs(endDate).format("DD/MM/YYYY")}</b>,
+          Hạn đăng ký học: <b className="text-red-500">{dayjs(endDate).format("DD/MM/YYYY")}</b>,
           vui lòng đăng ký trước thời gian này!
         </p>
       )}
       <div
-        className={clsx(
-          "mb-2 flex flex-wrap gap-4",
-          classStudentData?.status !== 200 && "hidden",
-        )}
+        className={clsx("mb-2 flex flex-wrap gap-4", classStudentData?.status !== 200 && "hidden")}
       >
         {infoItems.map((item) => (
           <p key={item?.label}>
@@ -322,7 +292,7 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
               {registeredClasses?.reduce(
                 (acc: number, curr: GetClassesInfo200ItemSubjectClassItem) =>
                   acc + (curr?.credit || 0),
-                0,
+                0
               )}
             </b>{" "}
             tín chỉ, học phí{" "}
@@ -330,7 +300,7 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
               (registeredClasses?.reduce(
                 (acc: number, curr: GetClassesInfo200ItemSubjectClassItem) =>
                   acc + (curr?.credit || 0),
-                0,
+                0
               ) ?? 0) * (tuitionPerCredit || 0)
             ).formatVND()}
           </p>
@@ -372,9 +342,7 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
               width: 80,
               render: (_, record) => (
                 <Checkbox
-                  checked={
-                    record?.type === $Enums.SubjectRequirementType.Mandatory
-                  }
+                  checked={record?.type === $Enums.SubjectRequirementType.Mandatory}
                   disabled
                 />
               ),
@@ -410,11 +378,11 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
                 return record?.subjectClassTimes?.map?.((tkb) => {
                   return (
                     <p>
-                      {tkb?.dayOfWeek === 8 ? "CN" : `T${tkb?.dayOfWeek}`} -{" "}
-                      {tkb?.startPeriod} - {tkb?.endPeriod}
+                      {tkb?.dayOfWeek === 8 ? "CN" : `T${tkb?.dayOfWeek}`} - {tkb?.startPeriod} -{" "}
+                      {tkb?.endPeriod}
                     </p>
-                  );
-                });
+                  )
+                })
               },
             },
             {
@@ -434,12 +402,10 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
               render: (_, record) => {
                 const totalRegisteredCredit =
                   registeredClasses?.reduce(
-                    (
-                      acc: number,
-                      curr: GetClassesInfo200ItemSubjectClassItem,
-                    ) => acc + (curr?.credit || 0),
-                    0,
-                  ) ?? 0;
+                    (acc: number, curr: GetClassesInfo200ItemSubjectClassItem) =>
+                      acc + (curr?.credit || 0),
+                    0
+                  ) ?? 0
 
                 const { isDisabled } = getRegisterState({
                   record,
@@ -448,7 +414,7 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
                   classToSubjectCodeMap,
                   registeredSubjectCodes,
                   isPending: isPendingClassRegister,
-                });
+                })
 
                 return (
                   <Popconfirm
@@ -463,44 +429,35 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
                       type="text"
                       className={cn(
                         "text-primary flex justify-center items-center gap-2 cursor-pointer",
-                        isDisabled ? "opacity-50 cursor-not-allowed" : "",
+                        isDisabled ? "opacity-50 cursor-not-allowed" : ""
                       )}
                     >
                       <LogOutIcon />
                       Đăng ký
                     </Button>
                   </Popconfirm>
-                );
+                )
               },
             },
           ]}
           onRow={(record) => {
-            const r =
-              record as unknown as GetClassesInfo200ItemSubjectClassItem;
+            const r = record as unknown as GetClassesInfo200ItemSubjectClassItem
             return {
               className:
                 (r?.classRegisterLogs?.length || 0) > 0
                   ? "bg-green-200 [&>td]:!bg-green-200 [&>td]:hover:!bg-green-200"
                   : "",
-            };
+            }
           }}
-          headerTitleKey={(record) =>
-            [record?.code, record?.name].filter(Boolean).join(" - ")
-          }
+          headerTitleKey={(record) => [record?.code, record?.name].filter(Boolean).join(" - ")}
           childrenFieldName={"subjectClass"}
-          data={classesInfo?.data?.filter(
-            (cls) => cls?.subjectClass?.length > 0,
-          )}
+          data={classesInfo?.data?.filter((cls) => cls?.subjectClass?.length > 0)}
         />
       )}
     </div>
-  );
-};
+  )
+}
 
 DangKyHocPage.getLayout = function getLayout(page: React.ReactElement) {
-  return (
-    <DefaultLayout breadcrumbList={[{ title: "Đăng ký học" }]}>
-      {page}
-    </DefaultLayout>
-  );
-};
+  return <DefaultLayout breadcrumbList={[{ title: "Đăng ký học" }]}>{page}</DefaultLayout>
+}

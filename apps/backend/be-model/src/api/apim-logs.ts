@@ -107,15 +107,12 @@ app.openapi(
   }),
   async (c) => {
     const { apiId, baseUrl, enabled } = c.req.valid("json")
-    const res = await fetch(
-      `${baseUrl}/api/am/devops/v0/tenant-logs/carbon.super/apis/${apiId}`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Basic YWRtaW46YWRtaW4=",
-        },
-      }
-    )
+    const res = await fetch(`${baseUrl}/api/am/devops/v0/tenant-logs/carbon.super/apis/${apiId}`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Basic YWRtaW46YWRtaW4=",
+      },
+    })
     const data = await res.json()
     const apis = data?.apis || []
     const results = await Promise.all(
@@ -592,9 +589,7 @@ app.openapi(
   async (c) => {
     const { apiId, limit } = c.req.valid("query")
     try {
-      const res = await prismaApimLogs.$queryRaw<
-        { time: Date; data: Record<string, any> }[]
-      >`
+      const res = await prismaApimLogs.$queryRaw<{ time: Date; data: Record<string, any> }[]>`
         SELECT time, data
         FROM apim_logs
         WHERE data->>'type' = 'deploy_log'
