@@ -1428,6 +1428,7 @@ export const exportKiemTraTienDo = async ({
       orgData.thesisProject.push({
         studentId: student.id || "",
         hovatenhocvien: student.userProfile?.fullname || "",
+        khoa: student.fixedClass?.trainingCourse?.name || "",
         ngaysinh: student.userProfile?.dateOfBirth
           ? dayjs(student.userProfile.dateOfBirth).format("DD/MM/YYYY")
           : "",
@@ -1476,7 +1477,7 @@ export const exportKiemTraTienDo = async ({
             { value: index + 1, border: true, align: "center", fontSize: 12 },
             {
               value:
-                `${thesis.hovatenhocvien}\nĐT:${thesis.doituongdaotao}\nSố QĐ:${thesis.decisionNumber}\n${thesis.gvhd ? `CBHD:${thesis.gvhd}` : "CBHD"}`.trim(),
+                `${thesis.hovatenhocvien}\nNS:${thesis.ngaysinh} \nĐT:${thesis.doituongdaotao} - ${thesis.khoa} \n${thesis.gvhd ? `CBHD:\n${thesis.gvhd}` : "CBHD"}`.trim(),
               border: true,
               align: "left",
               fontSize: 12,
