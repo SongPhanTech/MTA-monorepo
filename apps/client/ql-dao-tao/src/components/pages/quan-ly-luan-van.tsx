@@ -365,6 +365,30 @@ export default function QuanLyLuanVan({
           include: {
             thesisProject: {
               include: {
+                council: {
+                  include: {
+                    members: {
+                      include: {
+                        expert: {
+                          include: {
+                            academicRankType: true,
+                            academicDegreeType: true,
+                            lecturer: {
+                              include: {
+                                userProfile: {
+                                  include: {
+                                    academicRankType: true,
+                                    academicDegreeType: true,
+                                  },
+                                },
+                              },
+                            },
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
                 thesisSession: true,
                 supervisor: {
                   include: {
