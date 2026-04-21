@@ -111,6 +111,20 @@ export default function ClassSubject() {
     },
   })
 
+  const [sorter, setSorter] = useState<{ field: string | null; order: "asc" | "desc" | null }>({
+    field: "examDate", // Mặc định sort theo ngày thi
+    order: "asc", // Mặc định tăng dần (gần nhất lên đầu)
+  })
+
+  const orderBy = useMemo(() => {
+    if (sorter.field === "examDate" && sorter.order) {
+      return [{ examDate: sorter.order }, { code: "asc" as const }]
+    }
+
+    // Trả về mảng để đồng nhất kiểu dữ liệu
+    return [{ code: "asc" as const }]
+  }, [sorter])
+
   const handleSchedule = (id: string) => {
     onOpen(id)
   }
@@ -133,12 +147,8 @@ export default function ClassSubject() {
   const { data: fixedClasses = [] } = useFindManyFixedClass(
     {
       where: {
-        ...((trainingObjectTypeId || semesterId) && {
-          trainingCourse: {
-            ...(trainingObjectTypeId && { trainingObjectTypeId }),
-            ...(semesterId && { semesterStartId: semesterId }),
-          },
-        }),
+        trainingCourse: { trainingObjectTypeId },
+        subjectClasses: { some: { semesterId } },
       },
       include: {
         trainingCourse: {
@@ -149,10 +159,9 @@ export default function ClassSubject() {
         },
       },
       orderBy: { name: "asc" },
-      // skip: trainingCourses.length ? 0 : 1,
     },
     {
-      enabled: !!trainingObjectTypeId || !!semesterId,
+      enabled: !!trainingObjectTypeId,
     }
   )
   //#region Mới
@@ -325,9 +334,7 @@ export default function ClassSubject() {
         },
       },
     },
-    orderBy: {
-      code: "asc",
-    },
+    orderBy: orderBy,
     take: numberOfPages,
     skip: (currentPage - 1) * numberOfPages,
   })
@@ -884,6 +891,7 @@ export default function ClassSubject() {
                 width: 120,
                 align: "center",
                 type: "date",
+                sorter: true,
                 // render: (record: string) => (record ? dayjs(record).format("DD/MM/YYYY") : ""),
                 render: (_, record) => {
                   if (!canReadAll) {
@@ -1034,6 +1042,23 @@ export default function ClassSubject() {
               },
               showTotal: (total, range) =>
                 `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
+            }}
+            onChange={(_, __, sorterInfo: any) => {
+              // Nếu bấm vào cột 'examDate'
+              if (sorterInfo.columnKey === "examDate" || sorterInfo.field === "examDate") {
+                setSorter({
+                  field: "examDate",
+                  order:
+                    sorterInfo.order === "ascend"
+                      ? "asc"
+                      : sorterInfo.order === "descend"
+                        ? "desc"
+                        : null,
+                })
+              } else {
+                // Nếu không sort hoặc sort cột khác thì reset
+                setSorter({ field: null, order: null })
+              }
             }}
           />
         </Col>

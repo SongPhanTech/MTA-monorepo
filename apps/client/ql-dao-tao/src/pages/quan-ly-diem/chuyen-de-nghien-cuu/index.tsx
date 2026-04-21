@@ -145,6 +145,8 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
       include: {
         supervisor: {
           include: {
+            academicDegreeType: true,
+            academicRankType: true,
             lecturer: {
               select: {
                 userProfile: {
@@ -160,6 +162,8 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
         },
         coSupervisor: {
           include: {
+            academicDegreeType: true,
+            academicRankType: true,
             lecturer: {
               select: {
                 userProfile: {
@@ -824,6 +828,8 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
                               ],
                             },
                             include: {
+                              academicDegreeType: true,
+                              academicRankType: true,
                               supervisorResearchTopic: {
                                 select: {
                                   id: true,
@@ -843,6 +849,7 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
                                 select: {
                                   id: true,
                                   supervisorId: true,
+
                                   studentSubjectScore: {
                                     select: {
                                       subjectVersion: {

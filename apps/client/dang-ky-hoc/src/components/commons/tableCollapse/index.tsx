@@ -3,7 +3,7 @@ import { DEFAULT_PAGINATE_SIZE } from "@constants/constants"
 import type { FilterProps } from "@constants/type"
 import type { TableProps as TableAntdProps } from "antd"
 import type { ColumnType, TablePaginationConfig } from "antd/es/table"
-import { type ReactNode, useEffect, useMemo, useState } from "react"
+import { Fragment, type ReactNode, useEffect, useMemo, useState } from "react"
 import Table, { type ColumnOption } from "../table"
 
 interface BaseNode {
@@ -22,6 +22,7 @@ export type Data<T, ChildKey extends keyof T> = T &
   }
 
 type TableProps<T, ChildKey extends keyof T> = {
+  header?: ReactNode
   data?: Data<T, ChildKey>[]
   columns?: (ColumnType<Data<T, ChildKey>[ChildKey][number]> & {
     type?: "input" | "input_search" | "select" | "tree_select" | "order" | "date" | "cmp"
@@ -33,6 +34,7 @@ type TableProps<T, ChildKey extends keyof T> = {
         onShowSizeChange?: ((size: number) => void) | undefined
       })
     | false
+
   headerTitleKey: keyof T | ((record: T) => ReactNode)
   headerColumn?: ColumnType<Data<T, ChildKey>>[]
   onRow?: (data: T, index?: number) => React.HTMLAttributes<any> & React.TdHTMLAttributes<any>
@@ -92,10 +94,8 @@ const TableCollapse = <
     if (!Array.isArray(children) || children?.length === 0) return
     setExpandedKeys((prev) => {
       if (expanded && record.key) {
-        // Mở rộng thêm key
         return [...prev, record.key]
       }
-      // Thu gọn bớt key
       return prev.filter((k) => k !== record.key)
     })
   }
@@ -106,7 +106,6 @@ const TableCollapse = <
     return data.map((item) => {
       const children = item[childrenFieldName]
       const hasChildren = Array.isArray(children)
-      // Nếu item không có key thì tạo key mới
       if (!item.key) {
         item.key = item.id
       }
@@ -121,7 +120,6 @@ const TableCollapse = <
             $type: "child",
           }
         })
-        // Đảm bảo trường children được đặt đúng tên
         const newItem = {
           ...item,
           $type: "parent",
@@ -129,7 +127,6 @@ const TableCollapse = <
         }
         return newItem
       }
-      // Item không có children thì chắc chắn là child
       if (!item.key) {
         item.key = item.id
       }
@@ -170,14 +167,17 @@ const TableCollapse = <
   const restColumns = useMemo(() => {
     const baseColumns = [
       {
-        title: "TT",
+        title: "STT",
         align: "center",
-        width: 40,
+        width: 60,
         render: (_: any, record: T) => {
           if (record.$type !== "child") return ""
 
-          // @ts-expect-error
-          const order = allChildren.findIndex((item) => item.key === record.key)
+          const order = allChildren.findIndex(
+            // @ts-expect-error
+            //allowed
+            (item) => item.key === record.key
+          )
           return order >= 0
             ? order +
                 1 +
@@ -190,7 +190,6 @@ const TableCollapse = <
       ...columns,
     ]
 
-    // Merge onCell for colSpan handling
     return baseColumns?.map((col, index) => ({
       ...col,
       onCell: (record: T) => {
@@ -215,7 +214,6 @@ const TableCollapse = <
             return headerCol?.render?.(text, record, idx)
           }
         }
-        // Nếu là child thì hiển thị dữ liệu bình thường
         if (col.render) {
           return col.render(text, record, index)
         }
@@ -225,11 +223,10 @@ const TableCollapse = <
   }, [columns, allChildren, currentPage, pagination, headerColumn])
 
   return (
-    <>
+    <Fragment>
       <Table
         id={id}
         rowKey={rowKey}
-        className="mt-2"
         scrollable={scrollable}
         maxHeight={maxHeight}
         bordered
@@ -239,7 +236,6 @@ const TableCollapse = <
           const children = record[childrenFieldName]
           const isParent = Array.isArray(children)
 
-          // Nếu là cha -> không cho click/doubleClick
           if (isParent) {
             return {
               style: { cursor: "default" },
@@ -273,7 +269,7 @@ const TableCollapse = <
           expandIcon: ({ expanded, onExpand, record }) => {
             const children = record[childrenFieldName]
             return Array.isArray(children) ? (
-              <div className="flex">
+              <div className="flex justify-center">
                 {children.length > 0 && (
                   <DownOutlined
                     onClick={(e) => {
@@ -329,7 +325,7 @@ const TableCollapse = <
                 }
             `}
       </style>
-    </>
+    </Fragment>
   )
 }
 

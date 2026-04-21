@@ -14,7 +14,7 @@ import { useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 
 interface ModalFormType {
-  subjectClassId: string
+  subjectClassIds: string[]
 }
 const ModalChuyenDiemLopMonHoc = () => {
   const { isOpen, onClose, input } = useDisclosure<{
@@ -46,39 +46,60 @@ const ModalChuyenDiemLopMonHoc = () => {
   const { mutateAsync: updateSubjectScore } = useUpdateStudentSubjectScore()
   const { mutateAsync: updateRegistration } = useUpdateStudentThesisRegistration()
   const handleAssignScore = () => {
-    const selectedId = form.getFieldValue("subjectClassId")
-    const targetClass = subjectClasses?.find((c) => c.id === selectedId)
+    const selectedIds: string[] = form.getFieldValue("subjectClassIds") || []
     const sourceStudents = input?.allStudentsInClasses || []
 
-    if (!targetClass) {
-      message.warning("Vui lòng chọn lớp môn học và lấy danh sách trước.")
+    if (!selectedIds.length) {
+      message.warning("Vui lòng chọn ít nhất một lớp môn học và lấy danh sách trước.")
       return
     }
 
-    const updatedList = targetClass.subjectClassStudent.map((targetScore) => {
-      const sourceStudent = sourceStudents.find((s) => s.id === targetScore.studentId)
-
-      const defenseScore =
-        sourceStudent?.thesisRegistrations?.[0]?.thesisProject?.defenseRecord?.finalScore
-
-      if (defenseScore !== undefined && defenseScore !== null) {
-        return {
-          ...targetScore,
-          attendanceScore: defenseScore,
-          midtermScore: defenseScore,
-          examScore: defenseScore,
-          finalScore: defenseScore,
-          manualFinalScore: defenseScore,
-          isUpdated: true,
-        }
+    const allUpdated: any[] = []
+    for (const selectedId of selectedIds) {
+      const targetClass = subjectClasses?.find((c) => c.id === selectedId)
+      if (!targetClass) {
+        continue
       }
-      return targetScore
-    })
+      const classLabel = `${targetClass.code} - ${targetClass.name}`
+      const updatedList = (targetClass.subjectClassStudent || []).map((targetScore) => {
+        const sourceStudent = sourceStudents.find((s) => s.id === targetScore.studentId)
 
-    setDisplayStudents(updatedList)
+        const defenseScore =
+          sourceStudent?.thesisRegistrations?.[0]?.thesisProject?.defenseRecord?.finalScore
+
+        if (defenseScore !== undefined && defenseScore !== null) {
+          return {
+            ...targetScore,
+            _subjectClassLabel: classLabel,
+            attendanceScore: defenseScore,
+            midtermScore: defenseScore,
+            examScore: defenseScore,
+            finalScore: defenseScore,
+            manualFinalScore: defenseScore,
+            isUpdated: true,
+          }
+        }
+        return { ...targetScore, _subjectClassLabel: classLabel }
+      })
+      allUpdated.push(...updatedList)
+    }
+
+    if (allUpdated.length === 0) {
+      message.warning("Không có dữ liệu lớp môn học để gán điểm.")
+      return
+    }
+
+    setDisplayStudents(allUpdated)
     message.success("Đã gán điểm bảo vệ vào danh sách. Vui lòng nhấn 'Lưu' để cập nhật hệ thống.")
   }
   const columns = [
+    {
+      title: "Lớp môn học",
+      width: 200,
+      key: "subjectClassLabel",
+      ellipsis: true,
+      render: (__: any, record: any) => record._subjectClassLabel ?? "",
+    },
     {
       title: "Mã sinh viên",
       key: "code",
@@ -141,26 +162,32 @@ const ModalChuyenDiemLopMonHoc = () => {
     },
   ]
   const handleFetchStudents = async () => {
-    const selectedId = form.getFieldValue("subjectClassId")
-    console.log("selectedId", selectedId)
-    if (!selectedId) {
-      message.warning("Vui lòng chọn một lớp môn học trước khi lấy danh sách.")
+    const selectedIds: string[] = form.getFieldValue("subjectClassIds") || []
+    if (!selectedIds.length) {
+      message.warning("Vui lòng chọn ít nhất một lớp môn học trước khi lấy danh sách.")
       return
     }
 
-    const targetClass = subjectClasses?.find((item) => item.id === selectedId)
-
-    if (targetClass) {
-      const studentList = targetClass.subjectClassStudent || []
-      setDisplayStudents(studentList)
-
-      if (studentList.length === 0) {
-        message.info("Lớp môn học này hiện chưa có sinh viên nào.")
-      } else {
-        message.success(`Đã tải danh sách ${studentList.length} sinh viên.`)
+    const studentList = selectedIds.flatMap((id) => {
+      const targetClass = subjectClasses?.find((item) => item.id === id)
+      if (!targetClass) {
+        return []
       }
+      const classLabel = `${targetClass.code} - ${targetClass.name}`
+      return (targetClass.subjectClassStudent || []).map((row) => ({
+        ...row,
+        _subjectClassLabel: classLabel,
+      }))
+    })
+
+    setDisplayStudents(studentList)
+
+    if (studentList.length === 0) {
+      message.info("Các lớp môn học đã chọn hiện chưa có sinh viên nào.")
     } else {
-      message.error("Không tìm thấy dữ liệu cho lớp môn học đã chọn.")
+      message.success(
+        `Đã tải danh sách ${studentList.length} bản ghi điểm (có thể trùng sinh viên giữa các lớp).`
+      )
     }
   }
 
@@ -217,18 +244,34 @@ const ModalChuyenDiemLopMonHoc = () => {
         <Row gutter={16} align="middle">
           <Col span={24}>
             <Form.Item
-              name="subjectClassId"
+              name="subjectClassIds"
+              initialValue={[]}
               label="Lớp môn học luận văn/đề án"
               labelCol={{ span: 6 }}
               wrapperCol={{ span: 18 }}
+              rules={[
+                {
+                  validator: async (_, value: string[]) => {
+                    if (!value?.length) {
+                      return Promise.reject(new Error("Vui lòng chọn ít nhất một lớp môn học."))
+                    }
+                    return Promise.resolve()
+                  },
+                },
+              ]}
             >
               <Select
-                className="w-[500px]"
+                mode="multiple"
+                allowClear
+                showSearch
+                className="w-full max-w-[700px]"
+                maxTagCount="responsive"
+                optionFilterProp="label"
                 options={subjectClasses?.map((item) => ({
                   label: `${item.code} - ${item.name}`,
                   value: item.id,
                 }))}
-                placeholder="Chọn lớp môn học"
+                placeholder="Chọn một hoặc nhiều lớp môn học"
               />
             </Form.Item>
           </Col>

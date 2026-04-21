@@ -37,15 +37,11 @@ const PutOlympicScoreModal = () => {
   const { mutateAsync: createAward } = useCreateAward()
   const { mutateAsync: updateAward } = useUpdateAward()
   const { data: subjectData = [] } = useFindManySubject({
-    where: {
-      subjectVersion: {
-        some: { trainingObjectTypeId },
-      },
-    },
-    include: {
-      managementOrganization: true,
-    },
+    where: { subjectVersion: { some: { trainingObjectTypeId } } },
+    include: { managementOrganization: true },
+    orderBy: { name: "asc" },
   })
+
   async function onOk({ subjects, ...rest }: PutAward) {
     try {
       showSpinner()
@@ -113,7 +109,7 @@ const PutOlympicScoreModal = () => {
       onFinish={onOk}
       onCancel={onClose}
       maskClosable={true}
-      title={id ? "Chỉnh sửa điểm oplympic" : "Thêm mới điểm oplympic"}
+      title={id ? "Chỉnh sửa điểm olympic" : "Thêm mới điểm olympic"}
       className="w-[500px]"
     >
       <Col span={24} className="mb-4">

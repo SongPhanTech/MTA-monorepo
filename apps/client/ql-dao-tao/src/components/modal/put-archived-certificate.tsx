@@ -182,6 +182,12 @@ const PutCertificateArchivedModal = () => {
 
   async function onOk({ ...rest }: PutArchivedCertificate) {
     try {
+      if (!id && selectedStudents.length === 0) {
+        message.warning("Vui lòng thêm ít nhất một học viên")
+        return
+      }
+
+      await form.validateFields()
       showSpinner()
 
       if (id) {
@@ -430,7 +436,11 @@ const PutCertificateArchivedModal = () => {
                   width: 250,
                   align: "center",
                   render: (_, record) => (
-                    <FormItem form={form} name={["student", record.rowId, "certificateId"]}>
+                    <FormItem
+                      form={form}
+                      name={["student", record.rowId, "certificateId"]}
+                      rules={[{ required: true, message: "Vui lòng chọn chứng chỉ" }]}
+                    >
                       <Select
                         variant="underlined"
                         options={certificate.map((item) => ({

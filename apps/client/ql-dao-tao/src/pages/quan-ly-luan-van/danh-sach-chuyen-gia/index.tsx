@@ -246,13 +246,13 @@ export default function ExpertProfile() {
                 align: "center",
                 type: "input",
               },
-              {
-                title: "Chuyên ngành",
-                dataIndex: "specialization",
-                width: 150,
-                align: "center",
-                type: "input",
-              },
+              // {
+              //   title: "Chuyên ngành",
+              //   dataIndex: "specialization",
+              //   width: 150,
+              //   align: "center",
+              //   type: "input",
+              // },
 
               {
                 title: "Đơn vị công tác",
@@ -262,6 +262,34 @@ export default function ExpertProfile() {
                 type: "input",
                 render: (__, record) =>
                   `${record.lecturer ? record.lecturer?.organization?.sMa + "-" + record.lecturer?.organization?.sTen : record?.workplace}`,
+              },
+              {
+                title: "SĐT",
+                dataIndex: "phone",
+                width: 100,
+                align: "center",
+                type: "input",
+                render: (__, record) => record?.phone || record?.lecturer?.userProfile?.phone || "",
+              },
+              {
+                title: "STK",
+                dataIndex: "bankAccountNumber",
+                width: 100,
+                align: "center",
+                type: "input",
+                render: (__, record) =>
+                  record?.bankAccountNumber ||
+                  record?.lecturer?.userProfile?.bankAccountNumber ||
+                  "",
+              },
+              {
+                title: "Tên ngân hàng",
+                dataIndex: "bankName",
+                width: 100,
+                align: "center",
+                type: "input",
+                render: (__, record) =>
+                  record?.bankName || record?.lecturer?.userProfile?.bankName || "",
               },
               {
                 title: "Số điện thoại",

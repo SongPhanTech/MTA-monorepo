@@ -6,7 +6,7 @@ import {
   getStatsArchivedAward,
   StatsArchivedResponseSchema,
 } from "../services/stats-archived"
-import { exportArchivedCertificate } from "../services/student"
+import { exportArchivedCertificate, exportArchivedCertificateMulti } from "../services/student"
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -609,6 +609,72 @@ app.openapi(exportArchivedCertificateExcel, async (c) => {
     })
 
     const fileName = "Danh_sach_diem_chung_chi.xlsx"
+    const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
+
+    return c.body(buffer, 200, {
+      "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "Content-Disposition": disposition,
+    })
+  } catch (error: any) {
+    return c.json({ message: error.message || "Đã xảy ra lỗi khi xuất Excel" }, 404)
+  }
+})
+
+const exportArchivedCertificateMultiExcel = createRoute({
+  operationId: "exportArchivedCertificateMultiExcel",
+  path: "/export-archived-certificate-multi-excel",
+  tags: ["ArchivedScore"],
+  summary: "Xuất Excel danh sách điểm chứng chỉ nhiều loại",
+  description: "Xuất danh sách điểm chứng chỉ theo nhiều khóa học và nhiều loại chứng chỉ",
+  method: "post",
+  request: {
+    body: {
+      content: {
+        "application/json": {
+          schema: z
+            .object({
+              trainingObjectTypeId: z.string(),
+              trainingCourseIds: z.string().array().min(1),
+              certificateIds: z.string().array().min(1),
+            })
+            .openapi("ExportArchivedCertificateMultiInput"),
+        },
+      },
+    },
+  },
+  responses: {
+    200: {
+      description: "Export danh sách điểm chứng chỉ thành công",
+      content: {
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
+          schema: z.string().openapi({ type: "string", format: "binary" }),
+        },
+      },
+    },
+    404: {
+      description: "Không tìm thấy dữ liệu",
+      content: {
+        "application/json": {
+          schema: z.object({
+            message: z.string(),
+          }),
+        },
+      },
+    },
+  },
+})
+
+app.openapi(exportArchivedCertificateMultiExcel, async (c) => {
+  const { trainingObjectTypeId, trainingCourseIds, certificateIds } = c.req.valid("json")
+
+  try {
+    const buffer = await exportArchivedCertificateMulti({
+      trainingObjectTypeId,
+      trainingCourseIds,
+      certificateIds,
+    })
+
+    const fileName = "Danh_sach_diem_chung_chi_nhieu_loai.xlsx"
     const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
 
     return c.body(buffer, 200, {

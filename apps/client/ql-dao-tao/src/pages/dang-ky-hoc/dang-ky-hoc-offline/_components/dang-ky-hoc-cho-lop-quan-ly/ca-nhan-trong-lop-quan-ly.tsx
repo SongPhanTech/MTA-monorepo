@@ -12,7 +12,8 @@ import {
 } from "@workspace/db/hooks"
 import { sqlTransaction } from "@workspace/libs/api/model"
 import { useSemesterStore, useTrainingObjectTypeStore } from "@workspace/ui"
-import { Button, Checkbox, Col, Form, Input, message, Row, Select } from "antd"
+import { InfoCircleOutlined } from "@ant-design/icons"
+import { Button, Checkbox, Col, Form, Input, message, Popover, Row, Select } from "antd"
 import _ from "lodash"
 import { Search } from "lucide-react"
 import { type Key, useCallback, useEffect, useMemo, useState } from "react"
@@ -28,6 +29,17 @@ interface FilterProps {
 interface RegisterClassProps {
   hocLai?: boolean
 }
+
+type TStudentSubjectScoreLite = Pick<
+  StudentSubjectScore,
+  | "subjectClassId"
+  | "subjectVersionId"
+  | "attendanceScore"
+  | "midtermScore"
+  | "examScore"
+  | "finalScore"
+  | "manualFinalScore"
+>
 
 export default function CaNhanTrongLopQuanLy({ hocLai }: RegisterClassProps) {
   const [currentPage, setCurrentPage] = useState(1)
@@ -73,6 +85,20 @@ export default function CaNhanTrongLopQuanLy({ hocLai }: RegisterClassProps) {
         subject: {
           select: {
             type: true,
+            prerequisiteSubject: {
+              select: {
+                id: true,
+                code: true,
+                name: true,
+              },
+            },
+            coRequisiteSubject: {
+              select: {
+                id: true,
+                code: true,
+                name: true,
+              },
+            },
           },
         },
       },
@@ -137,12 +163,27 @@ export default function CaNhanTrongLopQuanLy({ hocLai }: RegisterClassProps) {
           select: {
             attendanceScore: true,
             midtermScore: true,
+            examScore: true,
             finalScore: true,
+            manualFinalScore: true,
             subjectClassId: true,
+            subjectVersionId: true,
           },
           orderBy: { createdAt: "desc" },
           take: 2,
-          where: { subjectVersionId: selectedSubjectClass?.subjectId },
+          where: {
+            OR: [
+              { subjectVersionId: selectedSubjectClass?.subjectId },
+              {
+                subjectVersionId: {
+                  in: [
+                    ...(selectedSubjectClass?.subject?.prerequisiteSubject?.map((s) => s.id) || []),
+                    ...(selectedSubjectClass?.subject?.coRequisiteSubject?.map((s) => s.id) || []),
+                  ],
+                },
+              },
+            ],
+          },
         },
         fixedClass: {
           select: {
@@ -150,6 +191,7 @@ export default function CaNhanTrongLopQuanLy({ hocLai }: RegisterClassProps) {
             trainingCourse: {
               select: {
                 scoreConverts: true,
+                scoreToPass: true,
               },
             },
           },
@@ -311,6 +353,122 @@ export default function CaNhanTrongLopQuanLy({ hocLai }: RegisterClassProps) {
     setSelectedRowKeys(ids)
   }
 
+  const prerequisiteSubjects = selectedSubjectClass?.subject?.prerequisiteSubject || []
+  const coRequisiteSubjects = selectedSubjectClass?.subject?.coRequisiteSubject || []
+
+  const getScoreValue = (score: TStudentSubjectScoreLite) => {
+    if (score.manualFinalScore !== null && score.manualFinalScore !== undefined) {
+      return Number(score.manualFinalScore)
+    }
+    if (score.finalScore) {
+      return score.finalScore.toNumber()
+    }
+    return null
+  }
+
+  const getBestPrerequisiteScore = (
+    scores: TStudentSubjectScoreLite[],
+    prerequisiteSubjectId: string
+  ) => {
+    const sameSubjectScores = scores.filter((s) => s.subjectVersionId === prerequisiteSubjectId)
+    if (sameSubjectScores.length === 0) return null
+
+    return sameSubjectScores.reduce<TStudentSubjectScoreLite | null>((best, current) => {
+      if (!best) return current
+      const currentScore = getScoreValue(current)
+      const bestScore = getScoreValue(best)
+      if (currentScore === null) return best
+      if (bestScore === null) return current
+      return currentScore > bestScore ? current : best
+    }, null)
+  }
+
+  const isPrerequisiteNotPassed = (record: any) => {
+    if (!prerequisiteSubjects.length) return false
+
+    const scores = (record?.subjectClassStudent || []) as TStudentSubjectScoreLite[]
+    const scoreToPass = record?.fixedClass?.trainingCourse?.scoreToPass ?? 5
+
+    return prerequisiteSubjects.some((subject) => {
+      const bestScoreRecord = getBestPrerequisiteScore(scores, subject.id)
+      const bestScore = bestScoreRecord ? getScoreValue(bestScoreRecord) : null
+      return bestScore === null || bestScore < scoreToPass
+    })
+  }
+
+  const renderPrerequisiteInfo = (record: any) => {
+    if (!prerequisiteSubjects.length) return null
+
+    const scores = (record?.subjectClassStudent || []) as TStudentSubjectScoreLite[]
+    const scoreToPass = record?.fixedClass?.trainingCourse?.scoreToPass ?? 5
+
+    return (
+      <div className="space-y-2 max-w-[380px] text-xs">
+        {prerequisiteSubjects.map((subject) => {
+          const bestScoreRecord = getBestPrerequisiteScore(scores, subject.id)
+          const bestScore = bestScoreRecord ? getScoreValue(bestScoreRecord) : null
+          const passed = bestScore !== null && bestScore >= scoreToPass
+
+          return (
+            <div key={subject.id} className="border border-gray-200 rounded px-2 py-1">
+              <div className="font-semibold">
+                {subject.code} - {subject.name}
+              </div>
+              <div>
+                CC: {bestScoreRecord?.attendanceScore ?? "-"} | ĐK:{" "}
+                {bestScoreRecord?.midtermScore ?? "-"} | Thi: {bestScoreRecord?.examScore ?? "-"} |
+                TK: {bestScore ?? "-"}
+              </div>
+              <div className={passed ? "text-green-600" : "text-red-600"}>
+                {passed ? "Đạt tiên quyết" : `Chưa đạt tiên quyết (>= ${scoreToPass})`}
+              </div>
+            </div>
+          )
+        })}
+      </div>
+    )
+  }
+
+  const hasLearnedCoRequisiteSubject = (
+    scores: TStudentSubjectScoreLite[],
+    coRequisiteSubjectId: string
+  ) => {
+    return scores.some((s) => s.subjectVersionId === coRequisiteSubjectId)
+  }
+
+  const isCoRequisiteNotLearned = (record: any) => {
+    if (!coRequisiteSubjects.length) return false
+
+    const scores = (record?.subjectClassStudent || []) as TStudentSubjectScoreLite[]
+
+    return coRequisiteSubjects.some((subject) => !hasLearnedCoRequisiteSubject(scores, subject.id))
+  }
+
+  const renderCoRequisiteInfo = (record: any) => {
+    if (!coRequisiteSubjects.length) return null
+
+    const scores = (record?.subjectClassStudent || []) as TStudentSubjectScoreLite[]
+
+    return (
+      <div className="space-y-2 max-w-[380px] text-xs">
+        {coRequisiteSubjects.map((subject) => {
+          const learned = hasLearnedCoRequisiteSubject(scores, subject.id)
+
+          return (
+            <div key={subject.id} className="border border-gray-200 rounded px-2 py-1">
+              <div className="font-semibold">
+                {subject.code} - {subject.name}
+              </div>
+              <div className={learned ? "text-green-600" : "text-red-600"}>
+                {learned ? "Đã học môn học trước" : "Chưa học môn học trước"}
+              </div>
+            </div>
+          )
+        })}
+      </div>
+    )
+  }
+
   const { showSpinner, hideSpinner } = useSpinner()
 
   const handleSaveDangKyHoc = async () => {
@@ -454,10 +612,13 @@ export default function CaNhanTrongLopQuanLy({ hocLai }: RegisterClassProps) {
           data={students}
           onRow={(record) => ({
             onClick: () => {
-              if (
+              const blockedByDebtCredits =
                 !!tcNoToiThieuLamDoAnValue &&
                 record?.studentSemesterResult?.[0]?.totalFailedCredits >= tcNoToiThieuLamDoAnValue
-              ) {
+              const blockedByPrerequisite = isPrerequisiteNotPassed(record)
+              const blockedByCoRequisite = isCoRequisiteNotLearned(record)
+
+              if (blockedByDebtCredits || blockedByPrerequisite || blockedByCoRequisite) {
                 return
               }
               if (!selectedRowKeys.includes(record.id)) {
@@ -481,10 +642,14 @@ export default function CaNhanTrongLopQuanLy({ hocLai }: RegisterClassProps) {
               } else handleRowSelection(selectedKeys)
             },
             type: "checkbox",
+            fixed: "left",
             getCheckboxProps: (record) => ({
               disabled:
-                !!tcNoToiThieuLamDoAnValue &&
-                record?.studentSemesterResult?.[0]?.totalFailedCredits >= tcNoToiThieuLamDoAnValue,
+                (!!tcNoToiThieuLamDoAnValue &&
+                  record?.studentSemesterResult?.[0]?.totalFailedCredits >=
+                    tcNoToiThieuLamDoAnValue) ||
+                isPrerequisiteNotPassed(record) ||
+                isCoRequisiteNotLearned(record),
             }),
             columnWidth: 35,
           }}
@@ -492,12 +657,14 @@ export default function CaNhanTrongLopQuanLy({ hocLai }: RegisterClassProps) {
             {
               title: "TT",
               width: 35,
+              fixed: "left",
               align: "center",
               render: (_, __, index) => index + 1 + (currentPage - 1) * numberOfPages,
             },
             {
               title: "Mã",
               dataIndex: "code",
+              fixed: "left",
               align: "center",
               width: 100,
             },
@@ -545,11 +712,20 @@ export default function CaNhanTrongLopQuanLy({ hocLai }: RegisterClassProps) {
                 const scores =
                   (record?.subjectClassStudent as Pick<
                     StudentSubjectScore,
-                    "subjectClassId" | "attendanceScore" | "midtermScore" | "finalScore"
+                    | "subjectClassId"
+                    | "subjectVersionId"
+                    | "attendanceScore"
+                    | "midtermScore"
+                    | "finalScore"
                   >[]) || []
-                const currentScore = scores.find((s) => s.subjectClassId === subjectClassId)
+                const currentScore = scores.find(
+                  (s) =>
+                    s.subjectClassId === subjectClassId &&
+                    s.subjectVersionId === selectedSubjectClass?.subjectId
+                )
                 return isNullish(currentScore?.attendanceScore) &&
-                  isNullish(currentScore?.midtermScore) ? (
+                  isNullish(currentScore?.midtermScore) &&
+                  isNullish(currentScore?.finalScore) ? (
                   <span>-</span>
                 ) : (
                   <span>✅</span>
@@ -564,11 +740,21 @@ export default function CaNhanTrongLopQuanLy({ hocLai }: RegisterClassProps) {
                 const scores =
                   (record?.subjectClassStudent as Pick<
                     StudentSubjectScore,
-                    "subjectClassId" | "attendanceScore" | "midtermScore" | "finalScore"
+                    | "subjectClassId"
+                    | "subjectVersionId"
+                    | "attendanceScore"
+                    | "midtermScore"
+                    | "finalScore"
+                    | "manualFinalScore"
                   >[]) || []
-                const preScore = scores
-                  .find((s) => s.subjectClassId !== subjectClassId)
-                  ?.finalScore?.toNumber()
+                const preScoreRecord = scores.find(
+                  (s) =>
+                    s.subjectVersionId === selectedSubjectClass?.subjectId &&
+                    s.subjectClassId !== subjectClassId
+                )
+                const preScore = preScoreRecord
+                  ? (preScoreRecord.manualFinalScore ?? preScoreRecord.finalScore?.toNumber())
+                  : undefined
                 return preScore ?? "-"
               },
             },
@@ -580,11 +766,21 @@ export default function CaNhanTrongLopQuanLy({ hocLai }: RegisterClassProps) {
                 const scores =
                   (record?.subjectClassStudent as Pick<
                     StudentSubjectScore,
-                    "subjectClassId" | "attendanceScore" | "midtermScore" | "finalScore"
+                    | "subjectClassId"
+                    | "subjectVersionId"
+                    | "attendanceScore"
+                    | "midtermScore"
+                    | "finalScore"
+                    | "manualFinalScore"
                   >[]) || []
-                const preScore = scores
-                  .find((s) => s.subjectClassId !== subjectClassId)
-                  ?.finalScore?.toNumber()
+                const preScoreRecord = scores.find(
+                  (s) =>
+                    s.subjectVersionId === selectedSubjectClass?.subjectId &&
+                    s.subjectClassId !== subjectClassId
+                )
+                const preScore = preScoreRecord
+                  ? (preScoreRecord.manualFinalScore ?? preScoreRecord.finalScore?.toNumber())
+                  : undefined
                 return (
                   <Checkbox
                     checked={
@@ -598,6 +794,50 @@ export default function CaNhanTrongLopQuanLy({ hocLai }: RegisterClassProps) {
                         : false
                     }
                   />
+                )
+              },
+            },
+            {
+              title: "Tiên quyết",
+              align: "center",
+              width: 50,
+              fixed: "right",
+              render: (_, record) => {
+                if (!prerequisiteSubjects.length) return null
+                const blocked = isPrerequisiteNotPassed(record)
+
+                return (
+                  // <div title="Thông tin môn tiên quyết">
+                  <Popover
+                    content={renderPrerequisiteInfo(record)}
+                    trigger="hover"
+                    placement="left"
+                  >
+                    <InfoCircleOutlined
+                      className={blocked ? "text-red-500" : "text-blue-500"}
+                      style={{ fontSize: 16 }}
+                    />
+                  </Popover>
+                  // </div>
+                )
+              },
+            },
+            {
+              title: "Học trước",
+              align: "center",
+              width: 50,
+              fixed: "right",
+              render: (_, record) => {
+                if (!coRequisiteSubjects.length) return null
+                const blocked = isCoRequisiteNotLearned(record)
+
+                return (
+                  <Popover content={renderCoRequisiteInfo(record)} trigger="hover" placement="left">
+                    <InfoCircleOutlined
+                      className={blocked ? "text-red-500" : "text-blue-500"}
+                      style={{ fontSize: 16 }}
+                    />
+                  </Popover>
                 )
               },
             },

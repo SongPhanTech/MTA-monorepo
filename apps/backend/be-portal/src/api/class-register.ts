@@ -303,6 +303,12 @@ app.openapi(getClassesInfo, async (c) => {
           name: true,
         },
       },
+      coRequisiteSubject: {
+        select: {
+          code: true,
+          name: true,
+        },
+      },
       subjectClass: {
         where: {
           active: true,
@@ -418,6 +424,8 @@ app.openapi(getClassesInfo, async (c) => {
           ...subjectClass,
           credit: version.credit ?? 0,
           type: subjectVersion?.type,
+          prerequisiteSubject: version.prerequisiteSubject,
+          coRequisiteSubject: version.coRequisiteSubject,
         })),
       }
     })
@@ -531,7 +539,88 @@ app.openapi(classRegister, async (c) => {
   })
   // TODO: check session => student trainingCourse
 
-  // TODO: check subjectVersionIds, prerequisiteSubjectIds, coRequisiteSubjectIds
+  const subjectClasses = await prisma.subjectClass.findMany({
+    where: { id: { in: subjectClassIds } },
+    include: {
+      subject: {
+        include: {
+          prerequisiteSubject: true,
+          coRequisiteSubject: true,
+        },
+      },
+    },
+  })
+
+  const allPrerequisiteIds = [
+    ...new Set(subjectClasses.flatMap((sc) => sc.subject.prerequisiteSubject.map((p) => p.id))),
+  ]
+  const allCoRequisiteIds = [
+    ...new Set(subjectClasses.flatMap((sc) => sc.subject.coRequisiteSubject.map((p) => p.id))),
+  ]
+  const allRequiredIds = [...new Set([...allPrerequisiteIds, ...allCoRequisiteIds])]
+
+  if (allPrerequisiteIds.length > 0 || allCoRequisiteIds.length > 0) {
+    const passedPrerequisites = await prisma.studentSubjectScore.findMany({
+      where: {
+        studentId,
+        subjectVersionId: { in: allPrerequisiteIds },
+        finalScore: { gt: 4.0 },
+      },
+      select: { subjectVersionId: true },
+    })
+    const passedPrerequisiteIds = new Set(passedPrerequisites.map((h) => h.subjectVersionId))
+
+    const registeredCoRequisites = await prisma.classRegisterLogs.findMany({
+      where: {
+        studentId,
+        subjectClass: {
+          subjectId: { in: allCoRequisiteIds },
+        },
+      },
+      select: { subjectClass: { select: { subjectId: true } } },
+    })
+    const enrolledCoRequisites = await prisma.studentSubjectScore.findMany({
+      where: {
+        studentId,
+        subjectVersionId: { in: allCoRequisiteIds },
+      },
+      select: { subjectVersionId: true },
+    })
+
+    const registeredCoRequisiteSubjectIds = new Set([
+      ...registeredCoRequisites.map((r) => r.subjectClass.subjectId).filter(Boolean),
+      ...enrolledCoRequisites.map((r) => r.subjectVersionId),
+      ...subjectClasses.map((sc) => sc.subjectId),
+    ])
+
+    for (const sc of subjectClasses) {
+      const missingPrerequisites = sc.subject.prerequisiteSubject.filter(
+        (p) => !passedPrerequisiteIds.has(p.id)
+      )
+
+      const missingCoRequisites = sc.subject.coRequisiteSubject.filter(
+        (p) => !registeredCoRequisiteSubjectIds.has(p.id)
+      )
+
+      if (missingPrerequisites.length > 0) {
+        return c.json(
+          {
+            message: `Bạn chưa hoàn thành môn tiên quyết của môn ${sc.subject.name}: ${missingPrerequisites.map((p) => p.name).join(", ")}`,
+          },
+          400
+        )
+      }
+
+      if (missingCoRequisites.length > 0) {
+        return c.json(
+          {
+            message: `Bạn chưa đăng ký môn song hành của môn ${sc.subject.name}: ${missingCoRequisites.map((p) => p.name).join(", ")}`,
+          },
+          400
+        )
+      }
+    }
+  }
 
   if (nearestSemesterResult) {
     const creditLimits = await prisma.classRegisterSessionCredit.findMany({
@@ -733,6 +822,145 @@ app.openapi(classUnregister, async (c) => {
   })
 
   return c.json({ message: "success" }, 200)
+})
+const getStudentInfo = createRoute({
+  operationId: "get-student-info",
+  path: "/get-student-info",
+  tags: ["ClassRegister"],
+  summary: "Lấy thông tin sinh viên cho đăng ký học",
+  description: "Lấy thông tin sinh viên cho đăng ký học",
+  method: "get",
+  request: {
+    query: z.object({
+      sessionId: z.string().optional().openapi({ description: "ID đợt đăng ký lớp học" }),
+    }),
+  },
+  responses: {
+    200: {
+      description: "Thành công",
+      content: {
+        "application/json": {
+          schema: z.object({
+            userProfile: models.UserProfileScalarSchema.nullish(),
+            student: models.StudentScalarSchema.nullish(),
+            latestSemesterResult: z
+              .object({
+                rank: z
+                  .object({
+                    classification: z.string().nullish(),
+                  })
+                  .nullish(),
+                baseScore: z.string().nullish(),
+                cumulativeGpaBase4: z.union([z.number(), z.string()]).nullish(),
+                cumulativeGpaBase10: z.union([z.number(), z.string()]).nullish(),
+              })
+              .nullish(),
+            creditLimit: z
+              .object({
+                maxCredit: z.number().nullish(),
+              })
+              .nullish(),
+          }),
+        },
+      },
+    },
+    404: {
+      description: "Not found",
+      content: { "application/json": { schema: z.object({ message: z.string() }) } },
+    },
+  },
+})
+
+app.openapi(getStudentInfo, async (c) => {
+  const session = c.get("user")
+  const { sessionId } = c.req.valid("query")
+
+  const profile = await prisma.userProfile.findUniqueOrThrow({
+    where: { id: session.id },
+    include: {
+      educationAndTraining: {
+        orderBy: { createdAt: "desc" },
+        take: 1,
+      },
+    },
+  })
+
+  const studentId = profile.educationAndTraining[0]?.id
+  if (!studentId) {
+    return c.json({ message: "Không tìm thấy thông tin học vụ" }, 404)
+  }
+
+  const student = await prisma.student.findUnique({
+    where: { id: studentId },
+  })
+
+  const latestSemesterResult = await prisma.studentSemesterResult.findFirst({
+    where: { studentId },
+    orderBy: { semesterIndexInCourse: "desc" },
+    select: {
+      rank: {
+        select: {
+          classification: true,
+        },
+      },
+      baseScore: true,
+      cumulativeGpaBase4: true,
+      cumulativeGpaBase10: true,
+    },
+  })
+
+  let maxCredit = null
+
+  if (sessionId && latestSemesterResult) {
+    const maxCreditsSetting = await prisma.classRegisterSessionCredit.findMany({
+      where: { classRegisterSessionId: sessionId },
+    })
+
+    if (maxCreditsSetting.length > 0) {
+      const matchedLimit = maxCreditsSetting.find((limit) => {
+        if (limit.baseScore !== latestSemesterResult.baseScore) return false
+
+        if (limit.baseScore === AcademicRankingBaseType.Base10) {
+          const gpaBase10 = Number(latestSemesterResult.cumulativeGpaBase10) || 0
+          return (
+            (limit.base10Min == null || gpaBase10 >= limit.base10Min) &&
+            (limit.base10Max == null || gpaBase10 <= limit.base10Max)
+          )
+        }
+
+        const gpaBase4 = Number(latestSemesterResult.cumulativeGpaBase4) || 0
+        return (
+          (limit.base4Min == null || gpaBase4 >= limit.base4Min) &&
+          (limit.base4Max == null || gpaBase4 <= limit.base4Max)
+        )
+      })
+
+      if (matchedLimit && matchedLimit.maxCredit != null) {
+        maxCredit = matchedLimit.maxCredit
+      }
+    }
+  }
+
+  return c.json(
+    {
+      userProfile: profile,
+      student: student,
+      latestSemesterResult: latestSemesterResult
+        ? {
+            rank: latestSemesterResult.rank,
+            baseScore: latestSemesterResult.baseScore,
+            cumulativeGpaBase4: latestSemesterResult.cumulativeGpaBase4
+              ? Number(latestSemesterResult.cumulativeGpaBase4)
+              : null,
+            cumulativeGpaBase10: latestSemesterResult.cumulativeGpaBase10
+              ? Number(latestSemesterResult.cumulativeGpaBase10)
+              : null,
+          }
+        : null,
+      creditLimit: maxCredit != null ? { maxCredit } : null,
+    },
+    200
+  )
 })
 
 export default app

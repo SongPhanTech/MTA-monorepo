@@ -147,7 +147,7 @@ const DefaultLayout = ({
         >
           <Header
             className={
-              "flex justify-between items-center bg-white shadow-sm mb-2 sticky z-[1000] top-0 "
+              "flex justify-between items-center bg-white border-b border-gray-200 mb-2 sticky z-[1000] top-0 "
             }
           >
             <div>{<Breadcrumb items={listBreadcrumb} />}</div>
@@ -159,7 +159,7 @@ const DefaultLayout = ({
             ) : (
               <div
                 className={cn(
-                  "min-h-[calc(100vh-64px-24px)] bg-white rounded-lg shadow-sm p-4",
+                  "min-h-[calc(100vh-64px-24px)] bg-white rounded-lg shadow-sm px-6 py-4",
                   className
                 )}
                 style={{

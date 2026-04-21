@@ -22,6 +22,8 @@ import dayjs from "dayjs"
 import { Search } from "lucide-react"
 import { useCallback, useState } from "react"
 import FilterSelect from "./filter-select"
+import "./index.css"
+import clsx from "clsx"
 
 dayjs.locale("vi")
 
@@ -49,6 +51,7 @@ export type ColumnsType<RecordType = AnyObject> = ((
 })[]
 
 type TableProps<T = AnyObject> = {
+  header?: React.ReactNode
   columns?: ColumnsType<T> & {
     distinctFilters?: string[]
     // options?: ColumnOption[]
@@ -87,6 +90,7 @@ const Table = <T extends AnyObject>({
   scrollable,
   maxHeight,
   rowSelection,
+  header,
   ...rest
 }: TableProps<T>) => {
   const [filtersTable, setFiltersTable] = useState<FilterProps>(filters || {})
@@ -721,8 +725,9 @@ const Table = <T extends AnyObject>({
                 placeholder="0"
                 type="number"
                 value={
-                  // @ts-expect-error
-                  filtersTable[item.dataIndex as keyof FilterProps]?.gte as string
+                  filtersTable[item.dataIndex as keyof FilterProps]
+                    // @ts-expect-error
+                    ?.gte as string
                 }
                 onChange={(e) => {
                   setFiltersTable({
@@ -741,8 +746,9 @@ const Table = <T extends AnyObject>({
                 placeholder="10"
                 type="number"
                 value={
-                  // @ts-expect-error
-                  filtersTable[item.dataIndex as keyof FilterProps]?.lte as string
+                  filtersTable[item.dataIndex as keyof FilterProps]
+                    // @ts-expect-error
+                    ?.lte as string
                 }
                 onChange={(e) => {
                   setFiltersTable({
@@ -807,63 +813,66 @@ const Table = <T extends AnyObject>({
   }
 
   return (
-    <TableAntd<T>
-      id={id}
-      rowKey={rowKey}
-      size="small"
-      className="mt-2"
-      rowSelection={rowSelection}
-      columns={
-        columns.map((column) => ({
-          ...column,
-          key: column.key || (column as unknown as { dataIndex: string }).dataIndex,
-          onCell: (record: T) => ({
-            className: cn("px-2 py-[2px]", column.className || ""),
-            ...(column.onCell ? column.onCell(record) : {}),
-          }),
-          ...genFilter(column as ColumnTypeProps),
-        })) as ColumnsType<T>
-      }
-      // scroll={{ x: 'max-content', y: scrollable ? maxHeight : undefined }}
-      scroll={{ x: "100%", y: scrollable ? maxHeight : undefined }}
-      bordered
-      dataSource={data}
-      locale={{
-        emptyText: <Empty description="Không có dữ liệu" />,
-      }}
-      pagination={
-        pagination !== false
-          ? {
-              position: ["bottomRight"],
-              defaultPageSize: DEFAULT_PAGINATE_SIZE,
-              showSizeChanger: {
-                labelRender: ({ value }) => `${value} / trang`,
-                optionRender: (oriOption) => `${oriOption.value} / trang`,
-              },
-              showTotal: (total, range) =>
-                `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
-              ...pagination,
+    <div className={clsx("flex flex-col", rest?.className)}>
+      {header && (
+        <div className="mt-5 border-gray-200 border border-b-0 px-2.5 py-2.5">{header}</div>
+      )}
+      <TableAntd<T>
+        id={id}
+        rowKey={rowKey}
+        size="small"
+        rowSelection={rowSelection}
+        columns={
+          columns.map((column) => ({
+            ...column,
+            key: column.key || (column as unknown as { dataIndex: string }).dataIndex,
+            onCell: (record: T) => ({
+              className: cn("px-2.5 py-4", column.className || ""),
+              ...(column.onCell ? column.onCell(record) : {}),
+            }),
+            ...genFilter(column as ColumnTypeProps),
+          })) as ColumnsType<T>
+        }
+        scroll={{ x: "100%", y: scrollable ? maxHeight : undefined }}
+        bordered
+        dataSource={data}
+        locale={{
+          emptyText: <Empty description="Không có dữ liệu" />,
+        }}
+        pagination={
+          pagination !== false
+            ? {
+                position: ["bottomRight"],
+                defaultPageSize: DEFAULT_PAGINATE_SIZE,
+                showSizeChanger: {
+                  labelRender: ({ value }) => `${value} / trang`,
+                  optionRender: (oriOption) => `${oriOption.value} / trang`,
+                },
+                showTotal: (total, range) =>
+                  `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
+                ...pagination,
+              }
+            : false
+        }
+        expandable={expandable}
+        {...rest}
+        onRow={(record) => ({
+          onClick: () => {
+            if (onRowClick) {
+              onRowClick(record)
             }
-          : false
-      }
-      expandable={expandable}
-      {...rest}
-      onRow={(record) => ({
-        onClick: () => {
-          if (onRowClick) {
-            onRowClick(record)
-          }
-        },
-        onDoubleClick: () => {
-          if (onRowDoubleClick) {
-            onRowDoubleClick(record)
-          }
-        },
-        style: { cursor: "pointer" },
-        className: cn(record.id && selectedRow && record.id === selectedRow ? "bg-blue-200" : ""),
-        ...rest.onRow?.(record),
-      })}
-    />
+          },
+          onDoubleClick: () => {
+            if (onRowDoubleClick) {
+              onRowDoubleClick(record)
+            }
+          },
+          style: { cursor: "pointer" },
+          className: cn(record.id && selectedRow && record.id === selectedRow ? "bg-blue-200" : ""),
+          ...rest.onRow?.(record),
+        })}
+      />
+    </div>
   )
 }
 

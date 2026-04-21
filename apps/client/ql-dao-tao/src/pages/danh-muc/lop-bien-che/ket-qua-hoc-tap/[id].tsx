@@ -550,23 +550,16 @@ export default function StudentScoreClassPage() {
             },
           },
         },
+        orderBy: [{ subject: { name: "asc" } }, { createdAt: "asc" }],
       },
-      studentSemesterResult: {
-        where: { studentId },
-      },
+      studentSemesterResult: { where: { studentId } },
       trainingCoursesStart: {
-        where: {
-          id: student?.fixedClass?.trainingCourseId ?? undefined,
-        },
-        include: {
-          scoreConverts: true,
-        },
+        where: { id: student?.fixedClass?.trainingCourseId ?? undefined },
+        include: { scoreConverts: true },
       },
       schoolYear: true,
     },
-    orderBy: {
-      startDate: "asc",
-    },
+    orderBy: { startDate: "asc" },
   })
 
   const { convertScore } = useScoreConverter(student?.fixedClass?.trainingCourse.scoreConverts)
