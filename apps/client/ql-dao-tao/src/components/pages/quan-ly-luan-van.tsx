@@ -26,10 +26,6 @@ interface ThesisProjectForm {
   organizationId: string
 }
 
-export interface DanhMucLuanVanProps {
-  role?: "P7" | "Khoa"
-}
-
 interface SignerPayload {
   signerName: string
   isChief: boolean
@@ -44,7 +40,7 @@ type ExportExcelPayload = {
   isChief: boolean
 }
 
-export type QuanLyLuanVanProps = DanhMucLuanVanProps & {
+export type QuanLyLuanVanProps = {
   exportExcel: (payload: ExportExcelPayload) => Promise<unknown> | unknown
   exportButtonLabel?: string
   addNewButtonLabel?: string
@@ -248,7 +244,6 @@ function getSupervisorName(record: any) {
 }
 
 export default function QuanLyLuanVan({
-  role = "P7",
   exportExcel,
   exportButtonLabel = "Xuất excel",
   addNewButtonLabel = "Thêm mới",
@@ -300,13 +295,13 @@ export default function QuanLyLuanVan({
   )
 
   useEffect(() => {
-    if (role !== "Khoa" || !orgId) return
+    if (!orgId) return
     form.setFieldValue("organizationId", orgId)
     setSearchParams((prev) => ({
       ...prev,
       organizationId: orgId,
     }))
-  }, [role, orgId, form])
+  }, [orgId, form])
 
   const where = useMemo(() => {
     if (!searchParams.thesisSessionId) {
@@ -583,8 +578,6 @@ export default function QuanLyLuanVan({
                 <TreeSelect
                   className="w-80"
                   placeholder="Chọn khoa quản lý"
-                  allowClear={role !== "Khoa"}
-                  disabled={role === "Khoa"}
                   showSearch
                   treeDefaultExpandAll
                   treeData={treeOrgData}
