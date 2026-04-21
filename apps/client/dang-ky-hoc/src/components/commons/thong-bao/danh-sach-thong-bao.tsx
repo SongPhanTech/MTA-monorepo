@@ -24,7 +24,7 @@ function DanhSachThongBao() {
   })
 
   return (
-    <div className="h-full max-h-[600px] overflow-y-auto w-full scrollbar-hidden">
+    <div className="h-full max-h-[500px] overflow-y-auto w-full scrollbar-hidden">
       {data?.length > 0 ? (
         <div className="flex flex-col">
           {data?.map((item) => {
@@ -54,7 +54,7 @@ function DanhSachThongBao() {
           })}
         </div>
       ) : (
-        <div className="flex h-40 justify-center items-center">
+        <div className="flex h-full justify-center items-center">
           <Empty description="Không có thông báo" />
         </div>
       )}

@@ -6,7 +6,7 @@ import { useFindUniqueCurriculumVersion, useFindUniqueUserProfile } from "@works
 import { useAcademicRankingConverter } from "@workspace/libs/hook/academicRankingConvert"
 import { LichCongTac } from "@workspace/ui"
 import { DanhSachThongBao } from "@components/commons/thong-bao"
-import { Col, Row, Typography } from "antd"
+import { Col, Divider, Row, Typography } from "antd"
 import { useMemo } from "react"
 
 const { Title } = Typography
@@ -111,18 +111,18 @@ function Page() {
 
   return (
     <div>
-      <Row gutter={[8, 8]}>
+      <Row gutter={[24, 24]}>
         <Col xs={24} lg={18}>
           <div className="bg-white rounded border-gray-200 border h-full flex flex-col">
             <div className="p-4">
-              <Title level={4}>Thời khoá biểu</Title>
+              <Divider orientation="center" className="font-semibold uppercase my-0 mt-2.5 text-2xl after:border-t-gray-500 before:border-t-gray-500">Thời khoá biểu</Divider>
             </div>
             <div className="flex-1 px-4 py-1.5">
               <LichCongTac onlyMySchedule />
             </div>
           </div>
         </Col>
-        <Col xs={24} md={6}>
+        <Col xs={24} md={6} className="flex flex-col gap-4">
           <CardStudyResult
             gpaScore={gpaScore}
             subjectScoreData={{
@@ -131,7 +131,7 @@ function Page() {
             }}
             academicRanking={convertAcademicRanking(gpaScore.gpa).classification || "-"}
           />
-          <div className="bg-white rounded-sm border border-gray-200 h-[550px] overflow-hidden flex flex-col mt-2">
+          <div className="bg-white rounded-sm border border-gray-200 h-[500px] overflow-hidden flex flex-col mt-2">
             <div className="px-4 py-2 border-b border-gray-200 bg-green-700">
               <Title className="mb-0 uppercase font-medium text-white" level={4}>
                 Thông báo
