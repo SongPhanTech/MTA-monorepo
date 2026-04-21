@@ -838,7 +838,7 @@ export default function StudentGradeSystem() {
       notification.info({ message: "Không có dữ liệu để xuất!" })
       return
     }
-    const TOTAL_COLUMNS = 12
+    const TOTAL_COLUMNS = 10
     const SIGN_COL = 6
     const MAX_ROWS = 50
 
@@ -860,7 +860,7 @@ export default function StudentGradeSystem() {
               cells: [
                 { value: stt - 1, align: "center" },
 
-                { value: s1?.tenHocPhan ?? "", colSpan: 3, border: true, wrapText: true }, // Tên học phần
+                { value: s1?.tenHocPhan ?? "", colSpan: 1, border: true, wrapText: true }, // Tên học phần
                 { value: s1?.soTinChi ?? "", colSpan: 2, align: "center" }, // Số tín chỉ
                 {
                   value: s1?.thangDiem10 ? Number(s1.thangDiem10) : "",
