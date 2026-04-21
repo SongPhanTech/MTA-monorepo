@@ -5961,6 +5961,7 @@ model ExamBank {
   createdBy      String?            @db.Uuid()
   exam           Exam               @relation(fields: [examId], references: [id])
   examId         String
+  examTime       Int?
   examCode       String
   subjectClass   SubjectClass?      @relation(fields: [subjectClassId], references: [id])
   subjectClassId String?

@@ -23435,6 +23435,10 @@ const metadata = {
                     type: "String",
                     isForeignKey: true,
                     relationField: 'exam',
+                }, examTime: {
+                    name: "examTime",
+                    type: "Int",
+                    isOptional: true,
                 }, examCode: {
                     name: "examCode",
                     type: "String",

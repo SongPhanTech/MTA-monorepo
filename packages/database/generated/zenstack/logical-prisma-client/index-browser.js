@@ -3902,6 +3902,7 @@ exports.Prisma.ExamBankScalarFieldEnum = {
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
   examId: 'examId',
+  examTime: 'examTime',
   examCode: 'examCode',
   subjectClassId: 'subjectClassId',
   explain: 'explain',

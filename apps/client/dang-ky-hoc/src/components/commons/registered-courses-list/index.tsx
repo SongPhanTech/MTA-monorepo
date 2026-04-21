@@ -415,12 +415,12 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
               width: 180,
               render: (_, record) => {
                 const parent = record.$type === "child" ? classToParentMap.get(record.id) : record
-                
+
                 const equivalencies: { code: string; name: string }[] =
                   parent?.equivalencyGroups
                     ?.map((e: { subject: { code: string; name: string } }) => e?.subject)
                     ?.filter(Boolean) ?? []
-                
+
                 if (!equivalencies.length) {
                   return <span className="text-gray-400 italic">Không có</span>
                 }

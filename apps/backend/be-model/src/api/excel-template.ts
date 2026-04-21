@@ -238,7 +238,6 @@ app.openapi(
       currentRow = copySheetContent(headSheet, currentRow)
     }
 
-
     for (const { worksheet: sheet, mergeCells: customMergeCells } of generatedSheets) {
       if (customMergeCells && customMergeCells.length > 0) {
         for (const merge of customMergeCells) {
