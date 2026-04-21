@@ -1262,15 +1262,15 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                     {role === "P7" && (
                       <Popconfirm
                         placement="rightTop"
-                        title="Xác nhận tạo dữ liệu mẫu"
-                        description="Tạo dữ liệu mẫu sẽ ghi đè lại dữ liệu (nếu có). Bạn có chắc chắn muốn tạo dữ liệu mẫu không?"
+                        title="Xác nhận thêm dữ liệu"
+                        description="Bạn có chắc chắn muốn thêm?"
                         onConfirm={async () => {
                           setEditingRowKeys([])
                           await taodulieumau()
                         }}
                       >
                         <Button type="primary" className="ml-2">
-                          Tạo dữ liệu mẫu
+                          Thêm
                         </Button>
                       </Popconfirm>
                     )}
@@ -1305,7 +1305,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                         Chỉnh sửa
                       </Button>
                     )}
-                    <Button
+                    {/* <Button
                       type="primary"
                       className="ml-2"
                       onClick={() =>
@@ -1316,7 +1316,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       disabled={!students?.length}
                     >
                       Gán điểm sang LMH
-                    </Button>
+                    </Button> */}
                   </Form.Item>
                 </Flex>
               </Col>
