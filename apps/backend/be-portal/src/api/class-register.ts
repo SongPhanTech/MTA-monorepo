@@ -309,6 +309,16 @@ app.openapi(getClassesInfo, async (c) => {
           name: true,
         },
       },
+      equivalencyGroups: {
+        select: {
+          subject: {
+            select: {
+              name: true,
+              code: true,
+            }
+          }
+        }
+      },
       subjectClass: {
         where: {
           active: true,
@@ -426,8 +436,10 @@ app.openapi(getClassesInfo, async (c) => {
           type: subjectVersion?.type,
           prerequisiteSubject: version.prerequisiteSubject,
           coRequisiteSubject: version.coRequisiteSubject,
+          equivalencyGroups: version.equivalencyGroups,
         })),
       }
+
     })
     .filter((version) => {
       if (version.type === "Project" || version.type === "Thesis") {
@@ -560,6 +572,7 @@ app.openapi(classRegister, async (c) => {
   const allRequiredIds = [...new Set([...allPrerequisiteIds, ...allCoRequisiteIds])]
 
   if (allPrerequisiteIds.length > 0 || allCoRequisiteIds.length > 0) {
+
     const passedPrerequisites = await prisma.studentSubjectScore.findMany({
       where: {
         studentId,
@@ -621,6 +634,8 @@ app.openapi(classRegister, async (c) => {
       }
     }
   }
+
+
 
   if (nearestSemesterResult) {
     const creditLimits = await prisma.classRegisterSessionCredit.findMany({

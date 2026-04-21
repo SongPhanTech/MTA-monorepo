@@ -1,11 +1,11 @@
 import { classUnregister } from "@workspace/libs/api/portal"
 import type { GetClassesInfo200ItemSubjectClassItem } from "@workspace/libs/api/schemas/getClassesInfo200ItemSubjectClassItem"
 import { useMutation } from "@tanstack/react-query"
-import { message, Popconfirm, Tooltip } from "antd"
-import { CircleAlertIcon, CircleXIcon, InfoIcon, MapPinIcon } from "lucide-react"
+import { Badge, message, Popover } from "antd"
 import { useMemo, useState } from "react"
-import registrationScheduleHelper, { DAYS, PERIODS, type ScheduleCourse } from "./helper"
+import registrationScheduleHelper, { DAYS, SESSIONS } from "./helper"
 import "./registration-schedule.css"
+import CourseBlock from "./course-block"
 
 interface ISubjectClassTime {
   registeredClasses: GetClassesInfo200ItemSubjectClassItem[]
@@ -13,75 +13,6 @@ interface ISubjectClassTime {
   curriculumVersionId: string
   onUnregisterSuccess?: () => void
   isEdit?: boolean
-}
-
-const CourseBlock = ({
-  course,
-  isEdit,
-  onUnregister,
-  isUnregistering,
-}: {
-  course: ScheduleCourse
-  isEdit: boolean
-  onUnregister: (id: string) => void
-  isUnregistering: boolean
-}) => {
-  return (
-    <div className={`course-block ${course.isConflict ? "conflict" : ""}`}>
-      <div className="flex justify-between items-start">
-        <span className="course-code">{course.code}</span>
-        <div className="flex gap-1 items-center">
-          {course.isConflict && (
-            <Tooltip
-              title={
-                <div>
-                  <p className="font-semibold mb-1">Trùng tiết với:</p>
-                  {course.conflictsWith?.map((label) => (
-                    <p key={label}>• {label}</p>
-                  ))}
-                </div>
-              }
-            >
-              <CircleAlertIcon size={12} className="text-red-500" />
-            </Tooltip>
-          )}
-          {isEdit && (
-            <Popconfirm
-              title="Huỷ đăng ký học phần này?"
-              okText="Huỷ"
-              cancelText="Đóng"
-              disabled={isUnregistering}
-              onConfirm={() => onUnregister(course.id)}
-            >
-              <CircleXIcon
-                size={12}
-                className="text-gray-400 cursor-pointer hover:text-red-500 transition-colors not-print"
-              />
-            </Popconfirm>
-          )}
-        </div>
-      </div>
-
-      <Tooltip title={course.name} placement="bottom">
-        <p className="course-name">{course.name}</p>
-      </Tooltip>
-
-      <div className="course-info">
-        <div className="flex items-center gap-1">
-          <InfoIcon size={10} className="text-blue-400" />
-          <span>
-            Tiết: {course.startPeriod} - {course.endPeriod}
-          </span>
-        </div>
-        {course.room && (
-          <div className="flex items-center gap-1">
-            <MapPinIcon size={10} className="text-blue-400" />
-            <span className="truncate">{course.room}</span>
-          </div>
-        )}
-      </div>
-    </div>
-  )
 }
 
 const ThoiKhoaBieuDangKy = (props: ISubjectClassTime) => {
@@ -134,48 +65,52 @@ const ThoiKhoaBieuDangKy = (props: ISubjectClassTime) => {
       <table className="timetable">
         <thead>
           <tr>
-            <th className="period-col">Tiết</th>
+            <th className="period-col">Buổi</th>
             {DAYS.map((day) => (
               <th key={day.key}>{day.label}</th>
             ))}
           </tr>
         </thead>
         <tbody>
-          {PERIODS.map((period) => (
-            <tr key={period}>
+          {SESSIONS.map((session) => (
+            <tr key={session.key}>
               <td className="period-cell">
-                <div className="period-label">{period}</div>
+                <div className="period-label">{session.label}</div>
               </td>
               {DAYS.map((day) => {
                 const dayMap = scheduleMap.get(day.key)
-                const courses = dayMap?.get(period)
+                const stacks = dayMap?.get(session.key)
 
-                if (registrationScheduleHelper.isInsideSpan(day.key, period, scheduleMap)) {
-                  return null
-                }
+                const allCoursesInSession = stacks?.flat() || []
+                const uniqueCourseIds = new Set(allCoursesInSession.map((c) => c.id))
+                const totalCourses = uniqueCourseIds.size
 
-                if (courses && courses.length > 0) {
-                  const maxEndPeriod = Math.max(...courses.map((c) => c.endPeriod))
-                  const rowSpan = maxEndPeriod - period + 1
-
-                  return (
-                    <td key={`${day.key}-${period}`} rowSpan={rowSpan} className="day-cell">
-                      <div className="conflict-stack">
-                        {courses.map((course) => (
-                          <CourseBlock
-                            key={`${course.id}-${day.key}-${course.startPeriod}`}
-                            course={course}
-                            isEdit={isEdit}
-                            isUnregistering={isUnregistering}
-                            onUnregister={(id) => unregisterMutate(id)}
-                          />
+                return (
+                  <td key={`${day.key}-${session.key}`} className="day-cell">
+                    <div className="session-cell-content">
+                      {totalCourses > 1 && (
+                        <div className="absolute top-1 right-1 z-50 not-print">
+                          <Badge count={totalCourses} style={{ backgroundColor: "#ff4d4f" }} />
+                        </div>
+                      )}
+                      {stacks &&
+                        stacks.map((stack, stackIndex) => (
+                          <div key={stackIndex} className={`conflict-stack-${stackIndex}`}>
+                            {stack.map((course, courseIndex) => (
+                              <CourseBlock
+                                key={`${course.id}-${day.key}-${course.startPeriod}-${courseIndex}`}
+                                course={course}
+                                index={courseIndex}
+                                isEdit={isEdit}
+                                isUnregistering={isUnregistering}
+                                onUnregister={(id) => unregisterMutate(id)}
+                              />
+                            ))}
+                          </div>
                         ))}
-                      </div>
-                    </td>
-                  )
-                }
-
-                return <td key={`${day.key}-${period}`} className="day-cell" />
+                    </div>
+                  </td>
+                )
               })}
             </tr>
           ))}

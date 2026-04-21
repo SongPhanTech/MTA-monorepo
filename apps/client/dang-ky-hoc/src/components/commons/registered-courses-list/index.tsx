@@ -117,7 +117,7 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
         subject.subjectClass?.forEach((sc) => {
           if (sc?.id) {
             map.set(sc.id, subjectCode)
-            parentMap.set(sc.id, subject) // Lưu mapping từ Class ID sang Subject Version (Cha)
+            parentMap.set(sc.id, subject)
           }
         })
       })
@@ -139,7 +139,7 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
       })
 
       if (res.status !== 200) {
-        throw new Error(res.data?.message || "Đăng ký thất bại")
+        message.error(res.data?.message || "Đăng ký thất bại")
       }
 
       return res
@@ -277,6 +277,7 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
       </div>
       {classesInfo?.status === 200 && (
         <ThoiKhoaBieuDangKy
+          key={registeredClasses?.length}
           registeredClasses={registeredClasses}
           sessionId={sessionId}
           curriculumVersionId={curriculumVersionId}
@@ -370,79 +371,110 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
               align: "center",
               width: 180,
               render: (_, record) => {
-                const parentData =
-                  record.$type === "child" ? classToParentMap.get(record.id) : record
+                const parent = record.$type === "child" ? classToParentMap.get(record.id) : record
 
-                const hasPrerequisite = parentData?.prerequisiteSubject?.length > 0
-                const hasCoRequisite = parentData?.coRequisiteSubject?.length > 0
+                const prerequisites = parent?.prerequisiteSubject ?? []
+                const corequisites = parent?.coRequisiteSubject ?? []
 
-                if (!hasPrerequisite && !hasCoRequisite) {
-                  return <div className="text-gray-400 italic">Không có</div>
+                if (!prerequisites.length && !corequisites.length) {
+                  return <span className="text-gray-400 italic">Không có</span>
                 }
+
+                const renderList = (
+                  title: string,
+                  color: string,
+                  subjects: { code: string; name: string }[]
+                ) => (
+                  <div>
+                    <span className={cn("font-semibold", color)}>{title}:</span>
+                    {subjects?.map?.((s) => (
+                      <div key={s.code} className="ml-1 text-gray-700">
+                        • {s.name}
+                      </div>
+                    ))}
+                  </div>
+                )
 
                 return (
                   <div className="flex flex-col gap-1 text-[11px] text-left">
-                    {hasPrerequisite && (
-                      <div>
-                        <span className="font-semibold text-red-600">Tiên quyết:</span>
-                        {parentData.prerequisiteSubject.map((s: any) => (
-                          <div key={s.code} className="ml-1 text-gray-700">
-                            • {s.name}
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                    {hasCoRequisite && (
-                      <div className={hasPrerequisite ? "mt-1 border-t pt-1" : ""}>
-                        <span className="font-semibold text-blue-600">Học trước:</span>
-                        {parentData.coRequisiteSubject.map((s: any) => (
-                          <div key={s.code} className="ml-1 text-gray-700">
-                            • {s.name}
-                          </div>
-                        ))}
+                    {prerequisites.length > 0 &&
+                      renderList("Tiên quyết", "text-red-600", prerequisites)}
+
+                    {corequisites.length > 0 && (
+                      <div className={prerequisites.length ? "mt-1 border-t pt-1" : ""}>
+                        {renderList("Học trước", "text-blue-600", corequisites)}
                       </div>
                     )}
                   </div>
                 )
               },
             },
+            {
+              title: "Môn học tương đương",
+              align: "center",
+              width: 180,
+              render: (_, record) => {
+                const parent = record.$type === "child" ? classToParentMap.get(record.id) : record
 
+                const equivalencies: {
+                  subject: { code: string; name: string }
+                }[] =
+                  parent?.equivalencyGroups
+                    ?.map((e: { subject: { code: string; name: string } }) => e?.subject)
+                    ?.filter(Boolean) ?? []
+
+                if (!equivalencies.length) {
+                  return <span className="text-gray-400 italic">Không có</span>
+                }
+
+                return (
+                  <div className="flex flex-col gap-1 text-[11px] text-left">
+                    <div>
+                      <span className="font-semibold text-purple-600">Môn tương đương:</span>
+                      {equivalencies.map((s) => (
+                        <div key={s?.subject?.code} className="ml-1 text-gray-700">
+                          • {s?.subject?.name}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )
+              },
+            },
             {
               title: "Thao tác",
               align: "center",
               width: 120,
               fixed: "right",
               render: (_, record) => {
-                const totalRegisteredCredit =
-                  registeredClasses?.reduce(
-                    (acc: number, curr: GetClassesInfo200ItemSubjectClassItem) =>
-                      acc + (curr?.credit || 0),
-                    0
-                  ) ?? 0
+                const totalCredit =
+                  registeredClasses?.reduce((acc, curr) => acc + (curr?.credit || 0), 0) ?? 0
 
                 const { isDisabled } = registeredCoursesListHelper.getRegisterState({
                   record,
                   maxCredit: studentData?.maxCredit as number,
-                  totalRegisteredCredit,
+                  totalRegisteredCredit: totalCredit,
                   classToSubjectCodeMap,
                   registeredSubjectCodes,
                   isPending: isPendingClassRegister,
                 })
 
+                const handleConfirm = () => handleClassRegister([record?.id])
+
                 return (
                   <Popconfirm
-                    title={`Xác nhận đăng ký học phần ?`}
+                    title="Xác nhận đăng ký học phần?"
                     okText="Đăng ký"
                     cancelText="Đóng"
                     disabled={isDisabled}
-                    onConfirm={() => handleClassRegister([record?.id])}
+                    onConfirm={handleConfirm}
                   >
                     <Button
                       disabled={isDisabled}
                       type="text"
                       className={cn(
-                        "text-primary flex justify-center items-center gap-2 cursor-pointer",
-                        isDisabled ? "opacity-50 cursor-not-allowed" : ""
+                        "flex items-center justify-center gap-2 text-primary",
+                        isDisabled && "cursor-not-allowed opacity-50"
                       )}
                     >
                       <LogOutIcon />
