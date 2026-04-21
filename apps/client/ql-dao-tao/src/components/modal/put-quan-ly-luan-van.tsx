@@ -498,7 +498,20 @@ const PutEditQuanLyLuanVan = ({
 
           <Col span={12}>
             <FormItem form={form} name="tenChuTich" label="Tên chủ tịch">
-              <Input placeholder="Nhập tên chủ tịch" />
+              <Select
+                placeholder="Chọn chủ tịch"
+                showSearch
+                filterOption={false}
+                onSearch={setSearchExpert}
+                onClear={() => setSearchExpert("")}
+                allowClear
+                options={expertProfiles.map((item) => ({
+                  label: `${item.code ? `${item.code} -` : ""} ${
+                    item.lecturer?.userProfile?.fullname || item.name || ""
+                  }`,
+                  value: item.lecturer?.userProfile?.fullname || item.name || item.id,
+                }))}
+              />
             </FormItem>
           </Col>
 
@@ -510,7 +523,20 @@ const PutEditQuanLyLuanVan = ({
 
           <Col span={12}>
             <FormItem form={form} name="tenThuKy" label="Tên thư ký">
-              <Input placeholder="Nhập tên thư ký" />
+              <Select
+                placeholder="Chọn thư ký"
+                showSearch
+                filterOption={false}
+                onSearch={setSearchExpert}
+                onClear={() => setSearchExpert("")}
+                allowClear
+                options={expertProfiles.map((item) => ({
+                  label: `${item.code ? `${item.code} -` : ""} ${
+                    item.lecturer?.userProfile?.fullname || item.name || ""
+                  }`,
+                  value: item.lecturer?.userProfile?.fullname || item.name || item.id,
+                }))}
+              />
             </FormItem>
           </Col>
 
@@ -522,7 +548,20 @@ const PutEditQuanLyLuanVan = ({
 
           <Col span={12}>
             <FormItem form={form} name="tenUyVien" label="Tên ủy viên">
-              <Input placeholder="Nhập tên ủy viên" />
+              <Select
+                placeholder="Chọn ủy viên"
+                showSearch
+                filterOption={false}
+                onSearch={setSearchExpert}
+                onClear={() => setSearchExpert("")}
+                allowClear
+                options={expertProfiles.map((item) => ({
+                  label: `${item.code ? `${item.code} -` : ""} ${
+                    item.lecturer?.userProfile?.fullname || item.name || ""
+                  }`,
+                  value: item.lecturer?.userProfile?.fullname || item.name || item.id,
+                }))}
+              />
             </FormItem>
           </Col>
 
@@ -534,7 +573,20 @@ const PutEditQuanLyLuanVan = ({
 
           <Col span={12}>
             <FormItem form={form} name="tenPb1" label="Tên phản biện 1">
-              <Input placeholder="Nhập tên phản biện" />
+              <Select
+                placeholder="Chọn phản biện 1"
+                showSearch
+                filterOption={false}
+                onSearch={setSearchExpert}
+                onClear={() => setSearchExpert("")}
+                allowClear
+                options={expertProfiles.map((item) => ({
+                  label: `${item.code ? `${item.code} -` : ""} ${
+                    item.lecturer?.userProfile?.fullname || item.name || ""
+                  }`,
+                  value: item.lecturer?.userProfile?.fullname || item.name || item.id,
+                }))}
+              />
             </FormItem>
           </Col>
 
@@ -546,7 +598,20 @@ const PutEditQuanLyLuanVan = ({
 
           <Col span={12}>
             <FormItem form={form} name="tenPb2" label="Tên phản biện 2">
-              <Input placeholder="Nhập tên phản biện" />
+              <Select
+                placeholder="Chọn phản biện 2"
+                showSearch
+                filterOption={false}
+                onSearch={setSearchExpert}
+                onClear={() => setSearchExpert("")}
+                allowClear
+                options={expertProfiles.map((item) => ({
+                  label: `${item.code ? `${item.code} -` : ""} ${
+                    item.lecturer?.userProfile?.fullname || item.name || ""
+                  }`,
+                  value: item.lecturer?.userProfile?.fullname || item.name || item.id,
+                }))}
+              />
             </FormItem>
           </Col>
 

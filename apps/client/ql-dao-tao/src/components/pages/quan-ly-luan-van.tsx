@@ -250,8 +250,8 @@ function getSupervisorName(record: any) {
 export default function QuanLyLuanVan({
   role = "P7",
   exportExcel,
-  exportButtonLabel = "Xuất giấy mời hướng dẫn",
-  addNewButtonLabel = "Thêm giấy mời hướng dẫn",
+  exportButtonLabel = "Xuất excel",
+  addNewButtonLabel = "Thêm mới",
   showPhuLucTemplateColumns = false,
   templateColumnKeys,
   templateColumnAccess,
