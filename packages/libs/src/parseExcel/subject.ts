@@ -101,6 +101,31 @@ export const parseSheetSubject = (file: ArrayBufferLike): ParseSubjectResult => 
     return Number.isInteger(parsed) ? parsed : undefined
   }
 
+  const isGraduation = (name: string, type: $Enums.SubjectVersionType): boolean => {
+    // 1. Kiểm tra theo Enum chuẩn (Phòng thủ bằng code cứng của hệ thống)
+    const isEnumValid =
+      type === $Enums.SubjectVersionType.Project ||
+      type === $Enums.SubjectVersionType.Thesis ||
+      type === $Enums.SubjectVersionType.Graduation;
+    if (isEnumValid) return true;
+
+    // 2. Danh sách từ khóa (Tiếng Việt + Tiếng Anh + Các từ khóa dễ sai chính tả)
+    // Lưu ý: Chuẩn hóa hết về lowercase để so sánh
+    const keywords = [
+      // Tiếng Việt
+      'luận văn', 'đồ án', 'khóa luận', 'tốt nghiệp', 'thực tập',
+      'luan van', 'do an', 'khoa luan', 'tot nghiep', 'thuc tap', // Không dấu
+
+      // Tiếng Anh
+      'thesis', 'project', 'graduation', 'internship', 'practicum',
+
+      // Các biến thể/sai chính tả thường gặp
+       'luanvan', 'thuctap'
+    ];
+
+    return keywords.some(kw => name.toLowerCase().includes(kw));
+  };
+
   for (const row of rows) {
     const rowNumber = row.__rowNum__ + 1
     const knowledgeBlock = row[cols.knowledgeBlock]?.trim()
@@ -249,10 +274,7 @@ export const parseSheetSubject = (file: ArrayBufferLike): ParseSubjectResult => 
       numberOfReview,
       numberOfExam,
       onePoint,
-      graduation:
-        subjectVersionType === $Enums.SubjectVersionType.Project ||
-        subjectVersionType === $Enums.SubjectVersionType.Thesis ||
-        subjectVersionType === $Enums.SubjectVersionType.Graduation,
+      graduation: isGraduation(name, subjectVersionType),
     })
   }
 
