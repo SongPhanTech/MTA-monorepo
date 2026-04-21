@@ -341,7 +341,7 @@ export default function DanhSachKeHoachThi() {
               },
             },
             {
-              title: "Khóa DTS",
+              title: "Khoá DTS",
               align: "center",
               width: 60,
               render: (_, record) => {

@@ -1,35 +1,28 @@
-import Loading from "@components/commons/loading";
-import DefaultLayout from "@layouts/default-layout";
-import { useGetClassRegisterSession } from "@workspace/libs/api/portal";
-import { Tabs } from "antd";
-import dayjs from "dayjs";
-import { useState } from "react";
-import DanhSachMonDangKy from "@components/commons/registered-courses-list";
+import Loading from "@components/commons/loading"
+import DefaultLayout from "@layouts/default-layout"
+import { useGetClassRegisterSession } from "@workspace/libs/api/portal"
+import { Tabs } from "antd"
+import dayjs from "dayjs"
+import { useState } from "react"
+import DanhSachMonDangKy from "@components/commons/registered-courses-list"
 
-dayjs.locale("vi");
+dayjs.locale("vi")
 
 export default function DangKyHocPage() {
   const [_filters, _setFilters] = useState({
     searchText: "",
-  });
-  const {
-    data: classRegisterSession,
-    isFetching,
-    isLoading,
-  } = useGetClassRegisterSession();
+  })
+  const { data: classRegisterSession, isFetching, isLoading } = useGetClassRegisterSession()
 
   if (isFetching || isLoading) {
-    return <Loading />;
+    return <Loading />
   }
 
   return (
     <div>
-      {classRegisterSession?.status !== 200 ||
-      classRegisterSession.data.length === 0 ? (
+      {classRegisterSession?.status !== 200 || classRegisterSession.data.length === 0 ? (
         <center>
-          <b className="text-lg">
-            {"Tạm ngừng đăng ký học. Vui lòng quay lại sau!"}
-          </b>
+          <b className="text-lg">{"Tạm ngừng đăng ký học. Vui lòng quay lại sau!"}</b>
         </center>
       ) : (
         <Tabs
@@ -61,13 +54,9 @@ export default function DangKyHocPage() {
         />
       )}
     </div>
-  );
+  )
 }
 
 DangKyHocPage.getLayout = function getLayout(page: React.ReactElement) {
-  return (
-    <DefaultLayout breadcrumbList={[{ title: "Đăng ký học" }]}>
-      {page}
-    </DefaultLayout>
-  );
-};
+  return <DefaultLayout breadcrumbList={[{ title: "Đăng ký học" }]}>{page}</DefaultLayout>
+}

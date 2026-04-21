@@ -8,8 +8,8 @@ const exportThoiKhoaBieuRoute = createRoute({
   tags: ["ThoiKhoaBieu"],
   path: "/export-thoi-khoa-bieu",
   method: "post",
-  summary: "Export Thời Khóa Biểu",
-  description: "Xuất thời khóa biểu ra file Excel theo học kỳ",
+  summary: "Export Thời Khoá Biểu",
+  description: "Xuất thời khoá biểu ra file Excel theo học kỳ",
   request: {
     body: {
       content: {
@@ -26,7 +26,7 @@ const exportThoiKhoaBieuRoute = createRoute({
   },
   responses: {
     200: {
-      description: "File Excel thời khóa biểu",
+      description: "File Excel thời khoá biểu",
       content: {
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
           schema: z.any().openapi({ type: "string", format: "binary" }),

@@ -734,7 +734,7 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                 },
               },
               {
-                title: "Khóa nhập ĐQT",
+                title: "Khoá nhập ĐQT",
                 align: "center",
                 width: 90,
                 render: (_, record) => {
@@ -750,7 +750,7 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                 },
               },
               {
-                title: "Khóa DTS",
+                title: "Khoá DTS",
                 align: "center",
                 width: 60,
                 render: (_, record) => {
@@ -782,7 +782,7 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                 },
               },
               {
-                title: "Khóa phách",
+                title: "Khoá phách",
                 align: "center",
                 width: 70,
                 render: (_, record) => {

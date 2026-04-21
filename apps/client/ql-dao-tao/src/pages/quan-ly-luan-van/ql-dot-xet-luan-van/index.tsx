@@ -177,7 +177,7 @@ export default function ThesisSession() {
                 render: (_, record) => record?.trainingObjectType?.name || "",
               },
               {
-                title: "Khóa học",
+                title: "Khoá học",
                 dataIndex: "trainingCourseId",
                 width: 140,
                 align: "center",

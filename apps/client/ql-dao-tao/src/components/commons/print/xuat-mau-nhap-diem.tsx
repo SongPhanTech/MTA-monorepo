@@ -298,14 +298,14 @@ const ExportScoreTemplate = ({
       if (type !== "THI") {
         worksheet.eachRow((row, rowNumber) => {
           row.eachCell((cell, colNumber) => {
-            // Nếu là cột "Điểm thi" → khóa, ngược lại thì cho sửa
+            // Nếu là cột "Điểm thi" → khoá, ngược lại thì cho sửa
             cell.protection = { locked: colNumber === 8 }
           })
         })
       } else {
         worksheet.eachRow((row, rowNumber) => {
           row.eachCell((cell, colNumber) => {
-            // Nếu là cột "Điểm thi" → khóa, ngược lại thì cho sửa
+            // Nếu là cột "Điểm thi" → khoá, ngược lại thì cho sửa
             cell.protection = { locked: colNumber === 7 || colNumber === 6 }
           })
         })

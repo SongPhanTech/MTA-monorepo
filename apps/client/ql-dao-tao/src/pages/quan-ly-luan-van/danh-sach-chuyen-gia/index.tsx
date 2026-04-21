@@ -269,8 +269,7 @@ export default function ExpertProfile() {
                 width: 100,
                 align: "center",
                 type: "input",
-                render: (__, record) =>
-                  record?.phone || record?.lecturer?.userProfile?.phone || "",
+                render: (__, record) => record?.phone || record?.lecturer?.userProfile?.phone || "",
               },
               {
                 title: "STK",
@@ -279,7 +278,9 @@ export default function ExpertProfile() {
                 align: "center",
                 type: "input",
                 render: (__, record) =>
-                  record?.bankAccountNumber || record?.lecturer?.userProfile?.bankAccountNumber || "",
+                  record?.bankAccountNumber ||
+                  record?.lecturer?.userProfile?.bankAccountNumber ||
+                  "",
               },
               {
                 title: "Tên ngân hàng",

@@ -10,7 +10,7 @@ const postStudentSchedule = createRoute({
   operationId: "schedules",
   path: "/schedules",
   tags: ["Schedules"],
-  summary: "2.6. Thời khóa biểu",
+  summary: "2.6. Thời khoá biểu",
   method: "post",
   request: {
     body: {

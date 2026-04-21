@@ -22,7 +22,7 @@ async function calcStudentYearResult({
 
   if (!schoolYear) throw new Error("Không tìm thấy năm học")
 
-  // 2. Lấy thông tin Sinh viên và Khóa học (để lấy cấu hình điểm chuẩn)
+  // 2. Lấy thông tin Sinh viên và Khoá học (để lấy cấu hình điểm chuẩn)
   const student = await prisma.student.findUnique({
     where: { id: studentId },
     include: {
@@ -39,7 +39,7 @@ async function calcStudentYearResult({
   })
 
   if (!student || !student.fixedClass?.trainingCourse)
-    throw new Error("Dữ liệu sinh viên hoặc khóa học không hợp lệ")
+    throw new Error("Dữ liệu sinh viên hoặc khoá học không hợp lệ")
 
   const scoreToPass = student.fixedClass.trainingCourse.scoreToPass || 5.0 // Mặc định 4.0 hoặc 5.0 tùy quy chế
   const semesterIds = schoolYear.semesters.map((s) => s.id)

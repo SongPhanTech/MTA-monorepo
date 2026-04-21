@@ -1,24 +1,24 @@
-import TableCollapse from "@components/commons/tableCollapse";
-import type { FilterProps } from "@constants/type";
-import { useExamTypeOptions } from "@hooks/examType";
-import DefaultLayout from "@layouts/default-layout";
-import { buildOrgTree } from "@lib/utils";
-import { useSession } from "@workspace/auth/react";
-import { emptyObjectIf } from "@workspace/constant";
-import type { Prisma, SubjectVersion } from "@workspace/db/client";
-import { $Enums } from "@workspace/db/client";
+import TableCollapse from "@components/commons/tableCollapse"
+import type { FilterProps } from "@constants/type"
+import { useExamTypeOptions } from "@hooks/examType"
+import DefaultLayout from "@layouts/default-layout"
+import { buildOrgTree } from "@lib/utils"
+import { useSession } from "@workspace/auth/react"
+import { emptyObjectIf } from "@workspace/constant"
+import type { Prisma, SubjectVersion } from "@workspace/db/client"
+import { $Enums } from "@workspace/db/client"
 import {
   useFindManyDM_DonVi,
   useFindManyTrainingBlockOnCurriculumVersion,
   useFindUniqueCurriculumVersion,
   useFindUniqueUserProfile,
-} from "@workspace/db/hooks";
-import { whereOrganization } from "@workspace/libs/constants";
-import { cn } from "@workspace/ui/lib/utils";
-import { Col, Divider, Row, Tooltip } from "antd";
-import type React from "react";
-import { Fragment, useMemo, useState } from "react";
-import { useDisclosure } from "react-hook-disclosure-modal";
+} from "@workspace/db/hooks"
+import { whereOrganization } from "@workspace/libs/constants"
+import { cn } from "@workspace/ui/lib/utils"
+import { Col, Divider, Row, Tooltip } from "antd"
+import type React from "react"
+import { Fragment, useMemo, useState } from "react"
+import { useDisclosure } from "react-hook-disclosure-modal"
 
 export default function TrainingProgramSubjects() {
   const [filters, setFilters] = useState<FilterProps>({
@@ -28,10 +28,10 @@ export default function TrainingProgramSubjects() {
     trainingMajors: undefined,
     semester: undefined,
     examType: undefined,
-  });
+  })
 
-  const { data: me } = useSession();
-  const userId = me?.sDM_NhanVienId || "";
+  const { data: me } = useSession()
+  const userId = me?.sDM_NhanVienId || ""
 
   const { data: userProfile } = useFindUniqueUserProfile(
     {
@@ -46,9 +46,9 @@ export default function TrainingProgramSubjects() {
     },
     {
       enabled: !!userId,
-    },
-  );
-  const id = userProfile?.educationAndTraining?.[0]?.curriculumVersionId ?? "";
+    }
+  )
+  const id = userProfile?.educationAndTraining?.[0]?.curriculumVersionId ?? ""
 
   const { data: initialValue } = useFindUniqueCurriculumVersion(
     {
@@ -79,13 +79,13 @@ export default function TrainingProgramSubjects() {
         documentFiles: true,
       },
     },
-    { enabled: !!id },
-  );
-  const { options, getExamTypeLabel } = useExamTypeOptions();
+    { enabled: !!id }
+  )
+  const { options, getExamTypeLabel } = useExamTypeOptions()
 
   const isFiltering = useMemo(() => {
-    return Object.values(filters).some((value) => !!value);
-  }, [filters]);
+    return Object.values(filters).some((value) => !!value)
+  }, [filters])
 
   const where: Prisma.TrainingBlockOnCurriculumVersionWhereInput = useMemo(
     () =>
@@ -116,7 +116,7 @@ export default function TrainingProgramSubjects() {
                         in: filters.organization,
                       },
                     },
-                    !!filters.organization,
+                    !!filters.organization
                   ),
                   ...emptyObjectIf(
                     {
@@ -124,15 +124,15 @@ export default function TrainingProgramSubjects() {
                         in: filters.examType,
                       },
                     },
-                    !!filters.examType,
+                    !!filters.examType
                   ),
                 },
               },
             },
           }
         : {},
-    [filters, isFiltering],
-  );
+    [filters, isFiltering]
+  )
 
   const { data = [] } = useFindManyTrainingBlockOnCurriculumVersion({
     where: {
@@ -168,7 +168,7 @@ export default function TrainingProgramSubjects() {
                   in: filters.organization,
                 },
               },
-              !!filters.organization,
+              !!filters.organization
             ),
             ...emptyObjectIf(
               {
@@ -176,7 +176,7 @@ export default function TrainingProgramSubjects() {
                   in: filters.examType,
                 },
               },
-              !!filters.examType,
+              !!filters.examType
             ),
             ...(filters.creditCmp
               ? {
@@ -346,45 +346,49 @@ export default function TrainingProgramSubjects() {
     orderBy: {
       priority: "asc",
     },
-  });
+  })
 
   const { data: manageOrgData = [] } = useFindManyDM_DonVi({
     where: whereOrganization,
     orderBy: [{ iSTT: "asc" }, { sTen: "asc" }],
-  });
+  })
 
   const { onOpen: openChiTietMonHoc } = useDisclosure<{
-    subjectVersionId?: string;
+    subjectVersionId?: string
   }>({
     tag: "ModalChiTietMonHoc",
-  });
-  const treeData = buildOrgTree(manageOrgData);
+  })
+  const treeData = buildOrgTree(manageOrgData)
 
   return (
     <Fragment>
-      <Divider orientation="center" orientationMargin={0}  className="
+      <Divider
+        orientation="center"
+        orientationMargin={0}
+        className="
     uppercase !my-0 text-lg font-semibold
     [&::before]:border-gray-950
     [&::after]:border-gray-950
-  ">
-        CTĐT toàn khoá:{" "}
-        {[initialValue?.code, initialValue?.name].filter(Boolean).join(" - ")}
+  "
+      >
+        CTĐT toàn khoá: {[initialValue?.code, initialValue?.name].filter(Boolean).join(" - ")}
       </Divider>
       <Row gutter={[16, 0]}>
         <Col span={24}>
           <TableCollapse
-          header={<div className="flex gap-2">
-            <p className="flex gap-2 items-center">
-              <p className="w-4 h-4 bg-white border border-black" /> Môn bắt
-              buộc
-            </p>
-            <p className="flex gap-2 items-center">
-              <p className="w-4 h-4 bg-yellow-200" /> Môn tự chọn
-            </p>
-            <p className="flex gap-2 items-center">
-              <p className="w-4 h-4 bg-orange-300" /> Môn điều kiện
-            </p>
-          </div>}
+            header={
+              <div className="flex gap-2">
+                <p className="flex gap-2 items-center">
+                  <p className="w-4 h-4 bg-white border border-black" /> Môn bắt buộc
+                </p>
+                <p className="flex gap-2 items-center">
+                  <p className="w-4 h-4 bg-yellow-200" /> Môn tự chọn
+                </p>
+                <p className="flex gap-2 items-center">
+                  <p className="w-4 h-4 bg-orange-300" /> Môn điều kiện
+                </p>
+              </div>
+            }
             scrollable
             maxHeight={"calc(100vh - 250px)"}
             rowKey="key"
@@ -392,59 +396,52 @@ export default function TrainingProgramSubjects() {
               `${[trainingBlock?.name].filter(Boolean).join(" - ")}`
             }
             onRow={(record) => {
-              const isParent = Array.isArray(record?.subjects);
+              const isParent = Array.isArray(record?.subjects)
               if (isParent) {
-                return {};
+                return {}
               }
-              const subject =
-                record as unknown as Prisma.TrainingBlockSubjectGetPayload<{
-                  include: {
-                    subject: {
-                      include: {
-                        managementOrganization: {
-                          include: {
-                            trainingMajors: true;
-                          };
-                        };
-                        subject: {
-                          select: {
-                            id: true;
-                          };
-                        };
-                      };
-                    };
-                  };
-                }>;
+              const subject = record as unknown as Prisma.TrainingBlockSubjectGetPayload<{
+                include: {
+                  subject: {
+                    include: {
+                      managementOrganization: {
+                        include: {
+                          trainingMajors: true
+                        }
+                      }
+                      subject: {
+                        select: {
+                          id: true
+                        }
+                      }
+                    }
+                  }
+                }
+              }>
               return {
                 className: cn(
                   !subject.useForFinalScore && "bg-orange-300",
-                  subject.type === $Enums.SubjectRequirementType.Mandatory &&
-                    "bg-white",
-                  subject.type === $Enums.SubjectRequirementType.Optional &&
-                    "bg-yellow-100",
+                  subject.type === $Enums.SubjectRequirementType.Mandatory && "bg-white",
+                  subject.type === $Enums.SubjectRequirementType.Optional && "bg-yellow-100"
                 ),
                 onClick: () => {
                   openChiTietMonHoc({
                     subjectVersionId: subject?.subjectId,
-                  });
+                  })
                 },
-              };
+              }
             }}
             headerColumn={[
               {
                 colSpan: 1,
               },
               {
-                render: (_, record) => (
-                  <p className="font-bold">{record?.trainingBlock?.name}</p>
-                ),
+                render: (_, record) => <p className="font-bold">{record?.trainingBlock?.name}</p>,
                 colSpan: 2,
               },
               {
                 render: (_, record) => (
-                  <p className="text-center font-bold">
-                    {record?.electiveCreditsRequired}
-                  </p>
+                  <p className="text-center font-bold">{record?.electiveCreditsRequired}</p>
                 ),
                 colSpan: 1,
               },
@@ -454,10 +451,7 @@ export default function TrainingProgramSubjects() {
               {
                 render: (_, record) => (
                   <p className="text-center font-bold">
-                    {record.subjects.reduce(
-                      (sum, s) => sum + s.subject.credit,
-                      0,
-                    )}
+                    {record.subjects.reduce((sum, s) => sum + s.subject.credit, 0)}
                   </p>
                 ),
                 colSpan: 1,
@@ -471,10 +465,7 @@ export default function TrainingProgramSubjects() {
               {
                 render: (_, record) => (
                   <p className="font-bold">
-                    {record.subjects.reduce(
-                      (sum, s) => sum + (s.subject?.period ?? 0),
-                      0,
-                    )}
+                    {record.subjects.reduce((sum, s) => sum + (s.subject?.period ?? 0), 0)}
                   </p>
                 ),
                 colSpan: 1,
@@ -482,10 +473,7 @@ export default function TrainingProgramSubjects() {
               {
                 render: (_, record) => (
                   <p className="font-bold">
-                    {record.subjects.reduce(
-                      (sum, s) => sum + (s.subject?.numberOfTheory ?? 0),
-                      0,
-                    )}
+                    {record.subjects.reduce((sum, s) => sum + (s.subject?.numberOfTheory ?? 0), 0)}
                   </p>
                 ),
                 colSpan: 1,
@@ -495,7 +483,7 @@ export default function TrainingProgramSubjects() {
                   <p className="font-bold">
                     {record.subjects.reduce(
                       (sum, s) => sum + (s.subject.numberOfPractical ?? 0),
-                      0,
+                      0
                     )}
                   </p>
                 ),
@@ -506,7 +494,7 @@ export default function TrainingProgramSubjects() {
                   <p className="font-bold">
                     {record.subjects.reduce(
                       (sum, s) => sum + (s.subject.numberOfSelfStudy ?? 0),
-                      0,
+                      0
                     )}
                   </p>
                 ),
@@ -515,10 +503,7 @@ export default function TrainingProgramSubjects() {
               {
                 render: (_, record) => (
                   <p className="font-bold">
-                    {record.subjects.reduce(
-                      (sum, s) => sum + (s.subject.numberOfPractice ?? 0),
-                      0,
-                    )}
+                    {record.subjects.reduce((sum, s) => sum + (s.subject.numberOfPractice ?? 0), 0)}
                   </p>
                 ),
                 colSpan: 1,
@@ -526,10 +511,7 @@ export default function TrainingProgramSubjects() {
               {
                 render: (_, record) => (
                   <p className="font-bold">
-                    {record.subjects.reduce(
-                      (sum, s) => sum + (s.subject.numberOfReview ?? 0),
-                      0,
-                    )}
+                    {record.subjects.reduce((sum, s) => sum + (s.subject.numberOfReview ?? 0), 0)}
                   </p>
                 ),
                 colSpan: 1,
@@ -537,10 +519,7 @@ export default function TrainingProgramSubjects() {
               {
                 render: (_, record) => (
                   <p className="font-bold">
-                    {record.subjects.reduce(
-                      (sum, s) => sum + (s.subject.numberOfExam ?? 0),
-                      0,
-                    )}
+                    {record.subjects.reduce((sum, s) => sum + (s.subject.numberOfExam ?? 0), 0)}
                   </p>
                 ),
                 colSpan: 1,
@@ -561,7 +540,7 @@ export default function TrainingProgramSubjects() {
                 align: "center",
                 type: "input",
                 render: (__, record: { subject?: SubjectVersion }) => {
-                  return record?.subject?.code ? record?.subject?.code : "";
+                  return record?.subject?.code ? record?.subject?.code : ""
                 },
               },
               {
@@ -570,7 +549,7 @@ export default function TrainingProgramSubjects() {
                 type: "input",
                 width: 250,
                 render: (__, record: { subject?: SubjectVersion }) => {
-                  return record?.subject?.name;
+                  return record?.subject?.name
                 },
               },
               {
@@ -594,7 +573,7 @@ export default function TrainingProgramSubjects() {
                 type: "tree_select",
                 options: treeData,
                 render: (_, record) => {
-                  return record?.subject?.managementOrganization?.sMa;
+                  return record?.subject?.managementOrganization?.sMa
                 },
               },
               {
@@ -615,7 +594,7 @@ export default function TrainingProgramSubjects() {
                   "numberOfOther",
                 ],
                 render: (__, record: { subject?: SubjectVersion }) => {
-                  return record?.subject?.credit;
+                  return record?.subject?.credit
                 },
               },
               {
@@ -657,7 +636,7 @@ export default function TrainingProgramSubjects() {
                   "numberOfOther",
                 ],
                 render: (__, record: { subject?: SubjectVersion }) => {
-                  return record?.subject?.period;
+                  return record?.subject?.period
                 },
               },
               {
@@ -677,7 +656,7 @@ export default function TrainingProgramSubjects() {
                   "numberOfOther",
                 ],
                 render: (__, record: { subject?: SubjectVersion }) => {
-                  return record?.subject?.numberOfTheory;
+                  return record?.subject?.numberOfTheory
                 },
               },
               {
@@ -697,7 +676,7 @@ export default function TrainingProgramSubjects() {
                   "numberOfOther",
                 ],
                 render: (__, record: { subject?: SubjectVersion }) => {
-                  return record?.subject?.numberOfPractical;
+                  return record?.subject?.numberOfPractical
                 },
               },
               {
@@ -717,7 +696,7 @@ export default function TrainingProgramSubjects() {
                   "numberOfOther",
                 ],
                 render: (__, record: { subject?: SubjectVersion }) => {
-                  return record?.subject?.numberOfSelfStudy;
+                  return record?.subject?.numberOfSelfStudy
                 },
               },
               {
@@ -737,7 +716,7 @@ export default function TrainingProgramSubjects() {
                   "numberOfOther",
                 ],
                 render: (__, record: { subject?: SubjectVersion }) => {
-                  return record?.subject?.numberOfPractice;
+                  return record?.subject?.numberOfPractice
                 },
               },
               {
@@ -757,7 +736,7 @@ export default function TrainingProgramSubjects() {
                   "numberOfOther",
                 ],
                 render: (__, record: { subject?: SubjectVersion }) => {
-                  return record?.subject?.numberOfReview;
+                  return record?.subject?.numberOfReview
                 },
               },
               {
@@ -777,7 +756,7 @@ export default function TrainingProgramSubjects() {
                   "numberOfOther",
                 ],
                 render: (__, record: { subject?: SubjectVersion }) => {
-                  return record?.subject?.numberOfExam;
+                  return record?.subject?.numberOfExam
                 },
               },
               {
@@ -841,14 +820,8 @@ export default function TrainingProgramSubjects() {
         </Col>
       </Row>
     </Fragment>
-  );
+  )
 }
-TrainingProgramSubjects.getLayout = function getLayout(
-  page: React.ReactElement,
-) {
-  return (
-    <DefaultLayout breadcrumbList={[{ title: "Chương trình đào tạo" }]}>
-      {page}
-    </DefaultLayout>
-  );
-};
+TrainingProgramSubjects.getLayout = function getLayout(page: React.ReactElement) {
+  return <DefaultLayout breadcrumbList={[{ title: "Chương trình đào tạo" }]}>{page}</DefaultLayout>
+}

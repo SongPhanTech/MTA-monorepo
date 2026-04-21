@@ -139,7 +139,7 @@ export default function ModalChiTietLopBienChe() {
           <Descriptions.Item label="Đơn vị quản lý" span={1}>
             {fixedClassData?.managementOrganization?.sTen || ""}
           </Descriptions.Item>
-          <Descriptions.Item label="Khóa đào tạo" span={1}>
+          <Descriptions.Item label="Khoá đào tạo" span={1}>
             {fixedClassData?.trainingCourse?.name || ""}
           </Descriptions.Item>
           <Descriptions.Item label="Đối tượng đào tạo" span={1}>
@@ -549,18 +549,18 @@ export default function ModalChiTietLopBienChe() {
               render: (value) => (value ? dayjs(value).format("DD/MM/YYYY HH:mm") : ""),
             },
             {
-              title: "Khóa điểm TX/ĐK",
+              title: "Khoá điểm TX/ĐK",
               dataIndex: "isLockScore",
               width: 100,
               align: "center",
-              render: (value) => (value ? <Tag color="error">Đã khóa</Tag> : <Tag>Chưa khóa</Tag>),
+              render: (value) => (value ? <Tag color="error">Đã khoá</Tag> : <Tag>Chưa khoá</Tag>),
             },
             {
-              title: "Khóa điểm thi",
+              title: "Khoá điểm thi",
               dataIndex: "isLockExamScore",
               width: 100,
               align: "center",
-              render: (value) => (value ? <Tag color="error">Đã khóa</Tag> : <Tag>Chưa khóa</Tag>),
+              render: (value) => (value ? <Tag color="error">Đã khoá</Tag> : <Tag>Chưa khoá</Tag>),
             },
             {
               title: "Đã nhập điểm TX/ĐK",

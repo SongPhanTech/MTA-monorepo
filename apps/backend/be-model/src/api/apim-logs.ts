@@ -7,6 +7,26 @@ const prismaApimLogs = new PrismaClient({
 
 const app = new OpenAPIHono({ strict: false })
 
+// ---- Auto-create api_keys table ----
+async function ensureApiKeysTable() {
+  await prismaApimLogs.$executeRaw`
+    CREATE TABLE IF NOT EXISTS api_keys (
+      id          UUID        PRIMARY KEY DEFAULT gen_random_uuid(),
+      api_id      TEXT        NOT NULL,
+      key_value   TEXT        NOT NULL UNIQUE,
+      name        TEXT        NOT NULL,
+      description TEXT,
+      status      TEXT        NOT NULL DEFAULT 'active',
+      expires_at  TIMESTAMPTZ,
+      created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      created_by  TEXT        NOT NULL DEFAULT '',
+      revoked_at  TIMESTAMPTZ,
+      revoked_by  TEXT
+    )
+  `
+}
+ensureApiKeysTable().catch((e) => console.error("[ERROR][ensureApiKeysTable]", e))
+
 app.openapi(
   createRoute({
     operationId: "get-config-logs",
@@ -15,6 +35,7 @@ app.openapi(
     request: {
       query: z.object({
         apiId: z.string(),
+        baseUrl: z.string(),
       }),
     },
     responses: {
@@ -29,10 +50,10 @@ app.openapi(
     },
   }),
   async (c) => {
-    const { apiId } = c.req.valid("query")
+    const { apiId, baseUrl } = c.req.valid("query")
     try {
       const res = await fetch(
-        `https://am.swantech.vn/api/am/devops/v0/tenant-logs/carbon.super/apis/${apiId}`,
+        `${baseUrl}/api/am/devops/v0/tenant-logs/carbon.super/apis/${apiId}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -66,6 +87,7 @@ app.openapi(
           "application/json": {
             schema: z.object({
               apiId: z.string(),
+              baseUrl: z.string(),
               enabled: z.boolean(),
             }),
           },
@@ -84,21 +106,18 @@ app.openapi(
     },
   }),
   async (c) => {
-    const { apiId, enabled } = c.req.valid("json")
-    const res = await fetch(
-      `https://am.swantech.vn/api/am/devops/v0/tenant-logs/carbon.super/apis/${apiId}`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Basic YWRtaW46YWRtaW4=",
-        },
-      }
-    )
+    const { apiId, baseUrl, enabled } = c.req.valid("json")
+    const res = await fetch(`${baseUrl}/api/am/devops/v0/tenant-logs/carbon.super/apis/${apiId}`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Basic YWRtaW46YWRtaW4=",
+      },
+    })
     const data = await res.json()
     const apis = data?.apis || []
     const results = await Promise.all(
       apis.map((api: any) =>
-        fetch(`https://am.swantech.vn/api/am/devops/v0/tenant-logs/carbon.super/apis/${apiId}`, {
+        fetch(`${baseUrl}/api/am/devops/v0/tenant-logs/carbon.super/apis/${apiId}`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
@@ -476,3 +495,352 @@ app.openapi(
 )
 
 export default app
+
+// ---- Deploy Logs ----
+
+app.openapi(
+  createRoute({
+    operationId: "insert-deploy-log",
+    path: "/deploy-logs",
+    method: "post",
+    request: {
+      body: {
+        content: {
+          "application/json": {
+            schema: z.object({
+              apiId: z.string(),
+              apiName: z.string(),
+              apiVersion: z.string(),
+              revisionName: z.string(),
+              environment: z.string(),
+              action: z.enum(["deploy", "undeploy"]),
+              status: z.enum(["success", "pending", "failed"]),
+              userName: z.string().optional(),
+            }),
+          },
+        },
+      },
+    },
+    responses: {
+      200: {
+        content: { "application/json": { schema: z.object({ ok: z.boolean() }) } },
+        description: "Successfully",
+      },
+    },
+  }),
+  async (c) => {
+    const body = c.req.valid("json")
+    try {
+      await prismaApimLogs.$executeRaw`
+        INSERT INTO apim_logs (time, data)
+        VALUES (NOW(), ${JSON.stringify({
+          type: "deploy_log",
+          apiId: body.apiId,
+          apiName: body.apiName,
+          apiVersion: body.apiVersion,
+          revisionName: body.revisionName,
+          environment: body.environment,
+          action: body.action,
+          status: body.status,
+          userName: body.userName ?? "",
+        })}::jsonb)
+      `
+      return c.json({ ok: true }, 200)
+    } catch (error) {
+      console.log("[ERROR][insert-deploy-log]", error)
+      return c.json({ ok: false }, 200)
+    }
+  }
+)
+
+app.openapi(
+  createRoute({
+    operationId: "get-deploy-logs",
+    path: "/deploy-logs",
+    method: "get",
+    request: {
+      query: z.object({
+        apiId: z.string(),
+        limit: z.coerce.number().default(50),
+      }),
+    },
+    responses: {
+      200: {
+        content: {
+          "application/json": {
+            schema: z.array(
+              z.object({
+                time: z.string(),
+                apiName: z.string(),
+                apiVersion: z.string(),
+                revisionName: z.string(),
+                environment: z.string(),
+                action: z.string(),
+                status: z.string(),
+                userName: z.string(),
+              })
+            ),
+          },
+        },
+        description: "Successfully",
+      },
+    },
+  }),
+  async (c) => {
+    const { apiId, limit } = c.req.valid("query")
+    try {
+      const res = await prismaApimLogs.$queryRaw<{ time: Date; data: Record<string, any> }[]>`
+        SELECT time, data
+        FROM apim_logs
+        WHERE data->>'type' = 'deploy_log'
+          AND data->>'apiId' = ${apiId}
+        ORDER BY time DESC
+        LIMIT ${limit}
+      `
+      return c.json(
+        res.map(({ time, data }) => ({
+          time: time.toISOString(),
+          apiName: data.apiName ?? "",
+          apiVersion: data.apiVersion ?? "",
+          revisionName: data.revisionName ?? "",
+          environment: data.environment ?? "",
+          action: data.action ?? "",
+          status: data.status ?? "",
+          userName: data.userName ?? "",
+        })),
+        200
+      )
+    } catch (error) {
+      console.log("[ERROR][get-deploy-logs]", error)
+      return c.json([], 200)
+    }
+  }
+)
+
+// ---- Key (Token) Management ----
+
+const apiKeySchema = z.object({
+  id: z.string(),
+  apiId: z.string(),
+  keyValue: z.string(),
+  name: z.string(),
+  description: z.string().nullable(),
+  status: z.enum(["active", "revoked"]),
+  expiresAt: z.string().nullable(),
+  createdAt: z.string(),
+  createdBy: z.string(),
+  revokedAt: z.string().nullable(),
+  revokedBy: z.string().nullable(),
+})
+
+type ApiKeyRow = {
+  id: string
+  api_id: string
+  key_value: string
+  name: string
+  description: string | null
+  status: string
+  expires_at: Date | null
+  created_at: Date
+  created_by: string
+  revoked_at: Date | null
+  revoked_by: string | null
+}
+
+function mapApiKey(r: ApiKeyRow) {
+  return {
+    id: r.id,
+    apiId: r.api_id,
+    keyValue: r.key_value,
+    name: r.name,
+    description: r.description ?? null,
+    status: r.status as "active" | "revoked",
+    expiresAt: r.expires_at?.toISOString() ?? null,
+    createdAt: r.created_at.toISOString(),
+    createdBy: r.created_by,
+    revokedAt: r.revoked_at?.toISOString() ?? null,
+    revokedBy: r.revoked_by ?? null,
+  }
+}
+
+app.openapi(
+  createRoute({
+    operationId: "list-api-keys",
+    path: "/api-keys",
+    method: "get",
+    request: {
+      query: z.object({
+        apiId: z.string(),
+        status: z.enum(["active", "revoked"]).optional(),
+      }),
+    },
+    responses: {
+      200: {
+        content: { "application/json": { schema: z.array(apiKeySchema) } },
+        description: "Successfully",
+      },
+    },
+  }),
+  async (c) => {
+    const { apiId, status } = c.req.valid("query")
+    try {
+      await ensureApiKeysTable()
+      let rows: ApiKeyRow[]
+      if (status) {
+        rows = await prismaApimLogs.$queryRaw<ApiKeyRow[]>`
+          SELECT id::text, api_id, key_value, name, description, status,
+                 expires_at, created_at, created_by, revoked_at, revoked_by
+          FROM api_keys
+          WHERE api_id = ${apiId} AND status = ${status}
+          ORDER BY created_at DESC
+        `
+      } else {
+        rows = await prismaApimLogs.$queryRaw<ApiKeyRow[]>`
+          SELECT id::text, api_id, key_value, name, description, status,
+                 expires_at, created_at, created_by, revoked_at, revoked_by
+          FROM api_keys
+          WHERE api_id = ${apiId}
+          ORDER BY created_at DESC
+        `
+      }
+      return c.json(rows.map(mapApiKey), 200)
+    } catch (error) {
+      console.log("[ERROR][list-api-keys]", error)
+      return c.json([], 200)
+    }
+  }
+)
+
+app.openapi(
+  createRoute({
+    operationId: "create-api-key",
+    path: "/api-keys",
+    method: "post",
+    request: {
+      body: {
+        content: {
+          "application/json": {
+            schema: z.object({
+              apiId: z.string(),
+              name: z.string(),
+              description: z.string().optional(),
+              keyValue: z.string(),
+              expiresAt: z.string().datetime().optional(),
+              createdBy: z.string().optional(),
+            }),
+          },
+        },
+      },
+    },
+    responses: {
+      200: {
+        content: { "application/json": { schema: apiKeySchema } },
+        description: "Successfully",
+      },
+    },
+  }),
+  async (c) => {
+    const { apiId, name, description, keyValue, expiresAt, createdBy } = c.req.valid("json")
+    await ensureApiKeysTable()
+    const rows = await prismaApimLogs.$queryRaw<ApiKeyRow[]>`
+      INSERT INTO api_keys (api_id, key_value, name, description, expires_at, created_by)
+      VALUES (
+        ${apiId},
+        ${keyValue},
+        ${name},
+        ${description ?? null},
+        ${expiresAt ? new Date(expiresAt) : null},
+        ${createdBy ?? ""}
+      )
+      RETURNING id::text, api_id, key_value, name, description, status,
+                expires_at, created_at, created_by, revoked_at, revoked_by
+    `
+    if (!rows[0]) return c.json(null as unknown as ReturnType<typeof mapApiKey>, 200)
+    return c.json(mapApiKey(rows[0]), 200)
+  }
+)
+
+app.openapi(
+  createRoute({
+    operationId: "renew-api-key",
+    path: "/api-keys/:id/renew",
+    method: "post",
+    request: {
+      params: z.object({ id: z.string() }),
+      body: {
+        content: {
+          "application/json": {
+            schema: z.object({
+              expiresAt: z.string().datetime(),
+            }),
+          },
+        },
+      },
+    },
+    responses: {
+      200: {
+        content: { "application/json": { schema: apiKeySchema } },
+        description: "Successfully",
+      },
+    },
+  }),
+  async (c) => {
+    const { id } = c.req.valid("param")
+    const { expiresAt } = c.req.valid("json")
+    await ensureApiKeysTable()
+    const rows = await prismaApimLogs.$queryRaw<ApiKeyRow[]>`
+      UPDATE api_keys
+      SET expires_at = ${new Date(expiresAt)},
+          status     = 'active',
+          revoked_at = NULL,
+          revoked_by = NULL
+      WHERE id = ${id}::uuid
+      RETURNING id::text, api_id, key_value, name, description, status,
+                expires_at, created_at, created_by, revoked_at, revoked_by
+    `
+    if (!rows[0]) return c.json(null as unknown as ReturnType<typeof mapApiKey>, 200)
+    return c.json(mapApiKey(rows[0]), 200)
+  }
+)
+
+app.openapi(
+  createRoute({
+    operationId: "revoke-api-key",
+    path: "/api-keys/:id/revoke",
+    method: "post",
+    request: {
+      params: z.object({ id: z.string() }),
+      body: {
+        content: {
+          "application/json": {
+            schema: z.object({
+              revokedBy: z.string().optional(),
+            }),
+          },
+        },
+      },
+    },
+    responses: {
+      200: {
+        content: { "application/json": { schema: apiKeySchema } },
+        description: "Successfully",
+      },
+    },
+  }),
+  async (c) => {
+    const { id } = c.req.valid("param")
+    const { revokedBy } = c.req.valid("json")
+    await ensureApiKeysTable()
+    const rows = await prismaApimLogs.$queryRaw<ApiKeyRow[]>`
+      UPDATE api_keys
+      SET status     = 'revoked',
+          revoked_at = NOW(),
+          revoked_by = ${revokedBy ?? null}
+      WHERE id = ${id}::uuid
+      RETURNING id::text, api_id, key_value, name, description, status,
+                expires_at, created_at, created_by, revoked_at, revoked_by
+    `
+    if (!rows[0]) return c.json(null as unknown as ReturnType<typeof mapApiKey>, 200)
+    return c.json(mapApiKey(rows[0]), 200)
+  }
+)

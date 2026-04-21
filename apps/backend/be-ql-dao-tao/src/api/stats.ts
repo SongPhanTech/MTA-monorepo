@@ -4709,10 +4709,10 @@ app.openapi(
           data: {
             By_Course: generateData(
               [
-                { id: "K14", name: "Khóa 14", total: 1200, count: 40 },
-                { id: "K15", name: "Khóa 15", total: 1500, count: 55 },
+                { id: "K14", name: "Khoá 14", total: 1200, count: 40 },
+                { id: "K15", name: "Khoá 15", total: 1500, count: 55 },
               ],
-              "Khóa"
+              "Khoá"
             ),
 
             By_Curriculum: generateData(
@@ -4998,10 +4998,10 @@ app.openapi(
           data: {
             By_Course: generateData(
               [
-                { id: "K14", name: "Khóa 14", total: 1200, count: 40 },
-                { id: "K15", name: "Khóa 15", total: 1500, count: 55 },
+                { id: "K14", name: "Khoá 14", total: 1200, count: 40 },
+                { id: "K15", name: "Khoá 15", total: 1500, count: 55 },
               ],
-              "Khóa"
+              "Khoá"
             ),
 
             By_Curriculum: generateData(

@@ -29,7 +29,7 @@ SERVER_PROFILE ?= swan1
 ifeq ($(SERVER_PROFILE),swan1)
   SERVER_HOST      := swan1
   SERVER_PASSWORD  :=
-  BE_DEPLOY_DIR    := ~/mta-deploy
+  BE_DEPLOY_DIR    := ~/mta-be
   BE_APP_DIR       := ~/mta-be
   FE_APP_DIR       := ~/app
   FE_COMPOSE_FILE  := app-docker-compose.yml
