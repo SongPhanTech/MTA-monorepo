@@ -12731,7 +12731,7 @@ export function useExportArchivedCertificateExcel<
 }
 
 /**
- * Xuất danh sách điểm chứng chỉ theo nhiều khóa học và nhiều loại chứng chỉ
+ * Xuất danh sách điểm chứng chỉ theo nhiều khoá học và nhiều loại chứng chỉ
  * @summary Xuất Excel danh sách điểm chứng chỉ nhiều loại
  */
 export type exportArchivedCertificateMultiExcelResponse200 = {
@@ -13681,8 +13681,8 @@ export const useExportStudentYearResult = <TError = ExportStudentYearResult404, 
 }
 
 /**
- * Xuất thời khóa biểu ra file Excel theo học kỳ
- * @summary Export Thời Khóa Biểu
+ * Xuất thời khoá biểu ra file Excel theo học kỳ
+ * @summary Export Thời Khoá Biểu
  */
 export type exportThoiKhoaBieuResponse200 = {
   data: Blob
@@ -13764,7 +13764,7 @@ export type ExportThoiKhoaBieuMutationBody = ExportThoiKhoaBieuBody
 export type ExportThoiKhoaBieuMutationError = ExportThoiKhoaBieu404
 
 /**
- * @summary Export Thời Khóa Biểu
+ * @summary Export Thời Khoá Biểu
  */
 export const useExportThoiKhoaBieu = <TError = ExportThoiKhoaBieu404, TContext = unknown>(
   options?: {

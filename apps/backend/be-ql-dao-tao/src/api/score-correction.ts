@@ -148,7 +148,7 @@ app.openapi(approveScoreCorrection, async (c) => {
 
         if (!trainingCourse) {
           throw new Error(
-            `Sinh viên ${studentSubjectScore.studentId} không thuộc khóa học nào có cấu hình điểm`
+            `Sinh viên ${studentSubjectScore.studentId} không thuộc khoá học nào có cấu hình điểm`
           )
         }
 

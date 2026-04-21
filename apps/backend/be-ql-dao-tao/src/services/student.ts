@@ -242,7 +242,7 @@ export const exportStudentScholarship = async ({
     { header: "Tên học viên", key: "studentName", width: 25 },
     { header: "Ngày sinh", key: "dob", width: 15 },
     { header: "Chuyên ngành", key: "trainingMajor", width: 25 },
-    { header: "Khóa", key: "courseName", width: 15 },
+    { header: "Khoá", key: "courseName", width: 15 },
     { header: "Lớp", key: "classCode", width: 15 },
     { header: "Kỳ đang học", key: "semester", width: 15 },
     { header: "Trung bình học kỳ", key: "gpaSemester", width: 18 },
@@ -550,7 +550,7 @@ export const exportArchivedCertificateMulti = async ({
   certificateIds: string[]
 }) => {
   if (!trainingCourseIds.length) {
-    throw new Error("Vui lòng chọn ít nhất một khóa học")
+    throw new Error("Vui lòng chọn ít nhất một khoá học")
   }
 
   if (!certificateIds.length) {

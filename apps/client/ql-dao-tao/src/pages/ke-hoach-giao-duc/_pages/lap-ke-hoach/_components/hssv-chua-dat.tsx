@@ -199,7 +199,10 @@ export default function HSSVChuaDat({ subjectVersionId, viewOnly }: RegisterClas
               align: "center",
               width: 150,
               render: (_, record) =>
-                record?.ly_do_cam_thi ?? record?.ly_do_dinh_chi ?? record?.ly_do_hoan_thi,
+                record?.reason ??
+                record?.ly_do_cam_thi ??
+                record?.ly_do_dinh_chi ??
+                record?.ly_do_hoan_thi,
             },
           ]}
           pagination={{

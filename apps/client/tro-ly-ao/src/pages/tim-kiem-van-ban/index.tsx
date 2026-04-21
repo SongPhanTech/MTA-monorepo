@@ -153,7 +153,7 @@ export default function Page() {
                         d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14"
                       />
                     </svg>
-                    Từ khóa
+                    Từ khoá
                   </span>
                 </Radio.Button>
               </Radio.Group>
@@ -162,7 +162,7 @@ export default function Page() {
               placeholder={
                 searchType === "semantic"
                   ? "Nhập nội dung cần tìm kiếm..."
-                  : "Nhập từ khóa để tìm kiếm..."
+                  : "Nhập từ khoá để tìm kiếm..."
               }
               size="large"
               value={input}

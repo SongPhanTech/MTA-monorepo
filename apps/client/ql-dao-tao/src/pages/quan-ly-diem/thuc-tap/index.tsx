@@ -560,7 +560,7 @@ export default function ThucTap({ role = "P7" }: { role: "P7" | "KHOA_BO_MON" })
       <Col span={24}>
         <Form form={form}>
           <Flex gap={6} wrap="wrap">
-            <Form.Item name="trainingCourseId" label="Khóa học" className="mb-0">
+            <Form.Item name="trainingCourseId" label="Khoá học" className="mb-0">
               <Select
                 className="w-36"
                 options={
@@ -570,7 +570,7 @@ export default function ThucTap({ role = "P7" }: { role: "P7" | "KHOA_BO_MON" })
                   })) || []
                 }
                 popupMatchSelectWidth={false}
-                placeholder="Chọn khóa học"
+                placeholder="Chọn khoá học"
               />
             </Form.Item>
             <Form.Item name="organizationId" label="Khoa quản lí" className="mb-0">
@@ -647,7 +647,7 @@ export default function ThucTap({ role = "P7" }: { role: "P7" | "KHOA_BO_MON" })
                                         onClick={async () => {
                                             if (!trainingCourseId) {
                                                 return message.warning(
-                                                    'Vui lòng chọn khóa học trước khi xuất phụ lục!'
+                                                    'Vui lòng chọn khoá học trước khi xuất phụ lục!'
                                                 )
                                             }
 
@@ -717,7 +717,7 @@ export default function ThucTap({ role = "P7" }: { role: "P7" | "KHOA_BO_MON" })
                                         onClick={async () => {
                                             if (!trainingCourseId) {
                                                 return message.warning(
-                                                    'Vui lòng chọn khóa học trước khi xuất phụ lục!'
+                                                    'Vui lòng chọn khoá học trước khi xuất phụ lục!'
                                                 )
                                             }
 
@@ -908,7 +908,7 @@ export default function ThucTap({ role = "P7" }: { role: "P7" | "KHOA_BO_MON" })
                                         onClick={async () => {
                                             if (!trainingCourseId) {
                                                 return message.warning(
-                                                    'Vui lòng chọn khóa học trước khi xuất phụ lục!'
+                                                    'Vui lòng chọn khoá học trước khi xuất phụ lục!'
                                                 )
                                             }
 
@@ -1206,7 +1206,7 @@ export default function ThucTap({ role = "P7" }: { role: "P7" | "KHOA_BO_MON" })
                                         onClick={async () => {
                                             if (!trainingCourseId) {
                                                 return message.warning(
-                                                    'Vui lòng chọn khóa học trước khi xuất phụ lục!'
+                                                    'Vui lòng chọn khoá học trước khi xuất phụ lục!'
                                                 )
                                             }
 

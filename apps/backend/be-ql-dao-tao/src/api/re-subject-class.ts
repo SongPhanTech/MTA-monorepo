@@ -15,7 +15,7 @@ const openSubjectClassRetake = createRoute({
   request: {
     query: PaginationQuerySchema.extend({
       trainingCourseId: z.string().openapi("trainingCourseId", {
-        description: "ID khóa đào tạo",
+        description: "ID khoá đào tạo",
       }),
       trainingMajorId: z
         .string()
@@ -146,7 +146,7 @@ const openSubjectClassReExam = createRoute({
   request: {
     query: PaginationQuerySchema.extend({
       trainingCourseId: z.string().openapi("trainingCourseId", {
-        description: "ID khóa đào tạo",
+        description: "ID khoá đào tạo",
       }),
       trainingMajorId: z
         .string()
@@ -364,7 +364,7 @@ app.openapi(openSubjectClassRetake, async (c) => {
                                (SELECT COUNT(*) FROM "ql-dao-tao"."StudentSubjectScore" s2
                                 WHERE s2."studentId" = SSS."studentId"
                                   AND s2."subjectVersionId" = SSS."subjectVersionId"
-                               )                              as attempt_count,
+                               )::INTEGER                     as attempt_count,
                                row_number()
                                over (partition by SSS."studentId",SSS."subjectVersionId" order by SSS."createdAt" desc) as rn
                         from "ql-dao-tao"."SubjectVersion" as sv
@@ -440,7 +440,7 @@ app.openapi(openSubjectClassRetake, async (c) => {
                                (SELECT COUNT(*) FROM "ql-dao-tao"."StudentSubjectScore" s2
                                 WHERE s2."studentId" = SSS."studentId"
                                   AND s2."subjectVersionId" = SSS."subjectVersionId"
-                               )                                                                                         as attempt_count,
+                               )::INTEGER                                                                                as attempt_count,
                                row_number()
                                over (partition by SSS."studentId",SSS."subjectVersionId" order by SSS."createdAt" desc) as rn
                         from "ql-dao-tao"."SubjectVersion" as sv
@@ -560,7 +560,7 @@ app.openapi(openSubjectClassRetakeStudents, async (c) => {
                                (SELECT COUNT(*) FROM "ql-dao-tao"."StudentSubjectScore" s2
                                 WHERE s2."studentId" = SSS."studentId"
                                   AND s2."subjectVersionId" = SSS."subjectVersionId"
-                               )                                                                                                  as attempt_count,
+                               )::INTEGER                                                                                         as attempt_count,
                                SC."code"                                                                                         as ma_lop_mon_hoc,
                                Sem."name"                                                                                        as ky_hoc,
                                Sch."name"                                                                                        as nam_hoc,
@@ -784,7 +784,7 @@ app.openapi(openSubjectClassReExam, async (c) => {
                                (SELECT COUNT(*) FROM "ql-dao-tao"."StudentSubjectScore" s2
                                 WHERE s2."studentId" = SSS."studentId"
                                   AND s2."subjectVersionId" = SSS."subjectVersionId"
-                               )                              as attempt_count,
+                               )::INTEGER                     as attempt_count,
                                row_number()
                                over (partition by SSS."studentId",SSS."subjectVersionId" order by SSS."createdAt" desc) as rn
                         from "ql-dao-tao"."SubjectVersion" as sv
@@ -850,7 +850,7 @@ app.openapi(openSubjectClassReExam, async (c) => {
                                (SELECT COUNT(*) FROM "ql-dao-tao"."StudentSubjectScore" s2
                                 WHERE s2."studentId" = SSS."studentId"
                                   AND s2."subjectVersionId" = SSS."subjectVersionId"
-                               )                                                                                         as attempt_count,
+                               )::INTEGER                                                                                as attempt_count,
                                row_number()
                                over (partition by SSS."studentId",SSS."subjectVersionId" order by SSS."createdAt" desc) as rn
                         from "ql-dao-tao"."SubjectVersion" as sv

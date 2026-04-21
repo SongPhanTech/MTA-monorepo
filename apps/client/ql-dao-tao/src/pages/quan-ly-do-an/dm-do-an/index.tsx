@@ -518,7 +518,7 @@ export default function DanhMucDoAn() {
         })
       }
       await refetchThesisProjectData()
-      message.success(isLocking ? "Đã khóa đề tài!" : "Đã mở khóa đề tài")
+      message.success(isLocking ? "Đã khoá đề tài!" : "Đã mở khoá đề tài")
     } catch (error) {
       message.error("Có lỗi xảy ra. Vui lòng thử lại.")
     } finally {
@@ -542,7 +542,7 @@ export default function DanhMucDoAn() {
         queryKey: ["zenstack", "ThesisProject"],
       })
       setSelectedRowKeys([])
-      message.success(isLocking ? "Đã khóa đề tài!" : "Đã mở khóa các đề tài")
+      message.success(isLocking ? "Đã khoá đề tài!" : "Đã mở khoá các đề tài")
     } catch (error) {
       message.error("Có lỗi xảy ra. Vui lòng thử lại.")
     } finally {
@@ -643,15 +643,15 @@ export default function DanhMucDoAn() {
                       </Button>
                       {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DM_DO_AN, "DUYET") && (
                         <Popconfirm
-                          title="Xác nhận khóa các đề tài đã chọn?"
-                          description="Các đề tài đã chọn sẽ bị khóa và không thể chỉnh sửa."
+                          title="Xác nhận khoá các đề tài đã chọn?"
+                          description="Các đề tài đã chọn sẽ bị khoá và không thể chỉnh sửa."
                           okText="Xác nhận"
                           cancelText="Hủy"
                           onConfirm={() => handleBulkToggleLock(true)}
                           disabled={selectedRowKeys.length === 0}
                         >
                           <Button disabled={selectedRowKeys.length === 0} danger>
-                            Khóa đề tài đã chọn
+                            Khoá đề tài đã chọn
                           </Button>
                         </Popconfirm>
                       )}
@@ -1365,7 +1365,7 @@ export default function DanhMucDoAn() {
                     <Tooltip title={record?.isLock ? "Mở khoá" : "Khoá"}>
                       <Popconfirm
                         title={
-                          record?.isLock ? "Xác nhận mở khóa đề tài?" : "Xác nhận khóa đề tài?"
+                          record?.isLock ? "Xác nhận mở khoá đề tài?" : "Xác nhận khoá đề tài?"
                         }
                         okText="Xác nhận"
                         cancelText="Hủy"

@@ -1236,11 +1236,11 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       placeholder="Chọn đợt xét"
                     />
                   </Form.Item>
-                  <Form.Item label="Khóa học" required>
+                  <Form.Item label="Khoá học" required>
                     <Input
                       className="w-36"
                       value={trainingCourse?.name || ""}
-                      placeholder="Chọn khóa học"
+                      placeholder="Chọn khoá học"
                       readOnly={true}
                     />
                   </Form.Item>

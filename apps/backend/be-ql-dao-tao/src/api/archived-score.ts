@@ -563,7 +563,7 @@ const exportArchivedCertificateExcel = createRoute({
       trainingCourseId: z
         .string()
         .optional()
-        .openapi("trainingCourseId", { description: "ID khóa học" }),
+        .openapi("trainingCourseId", { description: "ID khoá học" }),
       fixedClassId: z
         .string()
         .optional()
@@ -625,7 +625,7 @@ const exportArchivedCertificateMultiExcel = createRoute({
   path: "/export-archived-certificate-multi-excel",
   tags: ["ArchivedScore"],
   summary: "Xuất Excel danh sách điểm chứng chỉ nhiều loại",
-  description: "Xuất danh sách điểm chứng chỉ theo nhiều khóa học và nhiều loại chứng chỉ",
+  description: "Xuất danh sách điểm chứng chỉ theo nhiều khoá học và nhiều loại chứng chỉ",
   method: "post",
   request: {
     body: {

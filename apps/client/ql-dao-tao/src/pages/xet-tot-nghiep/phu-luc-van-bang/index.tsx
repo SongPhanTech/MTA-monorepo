@@ -662,7 +662,7 @@ export default function StudentGradeSystem() {
           {
             value: {
               richText: [
-                { text: "Điểm trung bình chung tích lũy toàn khóa (Thang điểm 10): " },
+                { text: "Điểm trung bình chung tích lũy toàn khoá (Thang điểm 10): " },
                 { text: String(diemTBHe10), font: { bold: true } },
               ],
             },
@@ -941,7 +941,7 @@ export default function StudentGradeSystem() {
             // value: `Điểm TB hệ 10: ${diemTBHe10}`,
             value: {
               richText: [
-                { text: "Điểm trung bình chung tích lũy toàn khóa (Thang điểm 10): " },
+                { text: "Điểm trung bình chung tích lũy toàn khoá (Thang điểm 10): " },
                 { text: String(diemTBHe10), font: { bold: true } },
               ],
             },
@@ -957,7 +957,7 @@ export default function StudentGradeSystem() {
           {
             value: {
               richText: [
-                { text: "Điểm trung bình chung tích lũy toàn khóa (Thang điểm 4): " },
+                { text: "Điểm trung bình chung tích lũy toàn khoá (Thang điểm 4): " },
                 { text: String(diemTBHe4), font: { bold: true } },
               ],
             },
@@ -1429,7 +1429,7 @@ export default function StudentGradeSystem() {
                 width: 150,
               },
               {
-                title: "Khóa",
+                title: "Khoá",
                 dataIndex: "khoa",
                 key: "khoa",
                 width: 100,

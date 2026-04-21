@@ -404,7 +404,7 @@ export default function ArchivedCertificate() {
     }
 
     if (!exportTrainingCourseId) {
-      message.warning("Vui lòng chọn khóa học để xuất Excel")
+      message.warning("Vui lòng chọn khoá học để xuất Excel")
       return
     }
 
@@ -462,7 +462,7 @@ export default function ArchivedCertificate() {
     }
 
     if (!exportTrainingCourseIds.length) {
-      message.warning("Vui lòng chọn ít nhất một khóa học")
+      message.warning("Vui lòng chọn ít nhất một khoá học")
       return
     }
 
@@ -526,7 +526,7 @@ export default function ArchivedCertificate() {
             <Flex gap={8}>
               {/* <Select
                 className="w-full"
-                placeholder="Chọn khóa học"
+                placeholder="Chọn khoá học"
                 options={trainingCourseData
                   .filter((trainingCourse: TrainingCourse) => {
                     if (!filters.fixedClassId) return true
@@ -739,7 +739,7 @@ export default function ArchivedCertificate() {
               },
             },
             {
-              title: "Khóa",
+              title: "Khoá",
               align: "center",
               width: 100,
               dataIndex: "trainingCourseId",
@@ -950,11 +950,11 @@ export default function ArchivedCertificate() {
         <Flex vertical gap={12} className="mt-4">
           <div>
             <div className="mb-1 text-sm font-medium">
-              Khóa học <span className="text-red-500">*</span>
+              Khoá học <span className="text-red-500">*</span>
             </div>
             <Select
               className="w-full"
-              placeholder="Chọn khóa học"
+              placeholder="Chọn khoá học"
               options={trainingCourseData.map((item: TrainingCourse) => ({
                 label: item.name,
                 value: item.id,
@@ -999,12 +999,12 @@ export default function ArchivedCertificate() {
         <Flex vertical gap={12} className="mt-4">
           <div>
             <div className="mb-1 text-sm font-medium">
-              Khóa học <span className="text-red-500">*</span>
+              Khoá học <span className="text-red-500">*</span>
             </div>
             <Select
               className="w-full"
               mode="multiple"
-              placeholder="Chọn một hoặc nhiều khóa học"
+              placeholder="Chọn một hoặc nhiều khoá học"
               options={trainingCourseData.map((item: TrainingCourse) => ({
                 label: item.name,
                 value: item.id,

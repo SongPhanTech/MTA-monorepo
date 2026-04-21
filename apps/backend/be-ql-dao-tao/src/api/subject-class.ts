@@ -910,10 +910,10 @@ app.openapi(exportSubjectClassListExcel, async (c) => {
       secondLecturer: item.extraLecturer?.userProfile?.fullname || "",
       enterGradeLecturer: item.enterGradeLecturer?.userProfile?.fullname || "",
       managementOrganization: item.subject?.managementOrganization?.sMa || "", // đơn vị quản lý
-      isLockScore: item.isLockScore ? "1" : "", // khóa ĐQT
-      lockExamSessions: item.exam?.lockExamSessions ? "1" : "", // khóa DS thi
-      lockExamCode: item.exam?.examRooms?.[0]?.examList?.[0]?.lockExamCode ? "1" : "", // khóa phách
-      isLockExamScore: item.isLockExamScore ? "1" : "", // p13 đã khóa
+      isLockScore: item.isLockScore ? "1" : "", // khoá ĐQT
+      lockExamSessions: item.exam?.lockExamSessions ? "1" : "", // khoá DS thi
+      lockExamCode: item.exam?.examRooms?.[0]?.examList?.[0]?.lockExamCode ? "1" : "", // khoá phách
+      isLockExamScore: item.isLockExamScore ? "1" : "", // p13 đã khoá
       scoreSubmitted: item.scoreSubmitted ? "1" : "", // p13 đã nhận phiếu điểm
       scoreChecked: item.scoreChecked ? "1" : "", // p2/p7 đã kiểm tra
     }))

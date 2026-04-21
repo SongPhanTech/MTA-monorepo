@@ -2727,7 +2727,7 @@ const convertToPhuLucQdhdTemplateData = (allStudentsInClasses: any[]): PhuLucQdh
 
       return {
         sttHoiDong: (studentIdx + 1).toString(),
-        contentDieu1: `${project?.type} tốt nghiệp thạc sĩ ngành ${student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || ""},Khóa: ${student.fixedClass?.trainingCourse?.name || ""} (${student.fixedClass?.trainingCourse?.academicYear || ""}), Đề tài: ${project?.title || ""}`,
+        contentDieu1: `${project?.type} tốt nghiệp thạc sĩ ngành ${student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || ""},Khoá: ${student.fixedClass?.trainingCourse?.name || ""} (${student.fixedClass?.trainingCourse?.academicYear || ""}), Đề tài: ${project?.title || ""}`,
         tenHocVien: student.userProfile?.fullname || "",
         ngaySinh: student.userProfile?.dateOfBirth
           ? dayjs(student.userProfile.dateOfBirth).format("DD/MM/YYYY")
@@ -3046,7 +3046,7 @@ const convertToHDDanhGiaLuanVanTemplateData = (
   })
 
   const rawKhoa = allStudentsInClasses[0]?.fixedClass?.trainingCourse?.name || ""
-  const khoaHead = rawKhoa.replace(/^\s*khóa\s+/i, "").trim() || rawKhoa
+  const khoaHead = rawKhoa.replace(/^\s*khoá\s+/i, "").trim() || rawKhoa
 
   return {
     head: {

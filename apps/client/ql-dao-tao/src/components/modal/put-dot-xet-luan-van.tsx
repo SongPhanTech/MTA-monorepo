@@ -197,9 +197,9 @@ const PutThesisSession = () => {
         </FormItem>
       </Col>
       <Col span={12}>
-        <FormItem form={form} name="trainingCourseId" label="Khóa học" required>
+        <FormItem form={form} name="trainingCourseId" label="Khoá học" required>
           <Select
-            placeholder="Chọn khóa học"
+            placeholder="Chọn khoá học"
             options={trainingCourses?.map((item) => ({
               label: item.name,
               value: item.id,

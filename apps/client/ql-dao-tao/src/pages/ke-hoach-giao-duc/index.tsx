@@ -61,7 +61,7 @@ export default function KeHoachDaoTao({ type = "NORMAL", role }: KeHoachDaoTaoPa
         },
         {
           key: "thoi-khoa-bieu",
-          label: "Thời khóa biểu",
+          label: "Thời khoá biểu",
           content: <ThoiKhoaBieu type={type} />,
         },
       ]
@@ -82,7 +82,7 @@ export default function KeHoachDaoTao({ type = "NORMAL", role }: KeHoachDaoTaoPa
           },
           {
             key: "thoi-khoa-bieu",
-            label: "Thời khóa biểu học lại",
+            label: "Thời khoá biểu học lại",
             content: <ThoiKhoaBieu type={type} />,
           },
         ]
@@ -106,7 +106,7 @@ export default function KeHoachDaoTao({ type = "NORMAL", role }: KeHoachDaoTaoPa
         },
         {
           key: "thoi-khoa-bieu",
-          label: "Thời khóa biểu học lại",
+          label: "Thời khoá biểu học lại",
           content: <ThoiKhoaBieu type={type} />,
         },
       ]
@@ -127,7 +127,7 @@ export default function KeHoachDaoTao({ type = "NORMAL", role }: KeHoachDaoTaoPa
           },
           {
             key: "thoi-khoa-bieu",
-            label: "Thời khóa biểu thi lại",
+            label: "Thời khoá biểu thi lại",
             content: <ThoiKhoaBieu type={type} />,
           },
         ]
@@ -150,7 +150,7 @@ export default function KeHoachDaoTao({ type = "NORMAL", role }: KeHoachDaoTaoPa
         },
         {
           key: "thoi-khoa-bieu",
-          label: "Thời khóa biểu thi lại",
+          label: "Thời khoá biểu thi lại",
           content: <ThoiKhoaBieu type={type} />,
         },
       ]
@@ -192,7 +192,7 @@ export default function KeHoachDaoTao({ type = "NORMAL", role }: KeHoachDaoTaoPa
   return (
     <>
       <Flex gap={8}>
-        <Form.Item className="m-0" name="trainingCourseId" label="Khóa đào tạo" labelAlign="left">
+        <Form.Item className="m-0" name="trainingCourseId" label="Khoá đào tạo" labelAlign="left">
           <SelectTrainingCourseStore />
         </Form.Item>
         <Form.Item
