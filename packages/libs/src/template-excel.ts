@@ -4,7 +4,7 @@ import * as XLSX from "xlsx"
 
 /** ──────────────── Types ──────────────── */
 export interface TableCell {
-  value?: string | number | null
+  value?: ExcelJS.CellValue | null
   colSpan?: number
   rowSpan?: number
   align?: "left" | "center" | "right"
