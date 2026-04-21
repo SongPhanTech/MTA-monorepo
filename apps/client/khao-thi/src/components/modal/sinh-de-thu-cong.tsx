@@ -307,7 +307,9 @@ const SinhDeThuCongModal = () => {
     form.setFieldsValue({
       examType: dataExam?.subjectVersion?.examType,
       subjectClassId: dataExam?.subjectClass?.[0]?.id,
-      examDay: dataExam?.subjectClass?.[0]?.examDate,
+      examDay: dataExam?.subjectClass?.[0]?.examDate
+        ? dayjs(dataExam?.subjectClass?.[0]?.examDate)
+        : undefined,
     })
   }, [dataExam?.subjectVersion?.examType, dataExam?.subjectClass])
 
