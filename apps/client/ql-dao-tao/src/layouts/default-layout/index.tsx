@@ -4,6 +4,7 @@ import { useMenuList } from "@hooks/menu-list"
 import { cn } from "@lib/utils"
 import { CONFIG_KEY } from "@workspace/constant"
 import { useFindUniqueConfig } from "@workspace/db/hooks"
+import { useGetUnitInfosInfo } from "@workspace/libs/api/system"
 import { getVersion } from "@workspace/libs/api/training"
 import { getDynamicBreadcrumb } from "@workspace/permissions/hooks"
 import { SelectTrainingObjectType, TreeSelectSemester } from "@workspace/ui"
@@ -42,6 +43,8 @@ const DefaultLayout = ({
   const [version, setVersion] = useState<string>()
   const router = useRouter()
   const currentPath = router.pathname
+  const { data: unitInfoResponse } = useGetUnitInfosInfo()
+  const unitInfo = unitInfoResponse?.data
   const breadcrumb = getDynamicBreadcrumb("QL_DAO_TAO", currentPath)
   const listBreadcrumb = useMemo(() => {
     return breadcrumb?.length > 0
@@ -148,7 +151,10 @@ const DefaultLayout = ({
           )}
         </Content>
         <Footer className="fixed bottom-0 w-full z-[1000] flex items-center p-2">
-          <div>Học viện Kỹ thuật Quân sự - Địa chỉ: Số 236, Hoàng Quốc Việt, Cầu Giấy, Hà Nội</div>
+          <div>
+            {unitInfo?.sTenDayDu || "Học viện Kỹ thuật Quân sự"} - Địa chỉ:{" "}
+            {unitInfo?.sDiaChi || "Số 236, Hoàng Quốc Việt, Cầu Giấy, Hà Nội"}
+          </div>
           <div className="ml-auto">Phiên bản: {(version || packageInfo.version) ?? "..."}</div>
         </Footer>
       </Layout>
