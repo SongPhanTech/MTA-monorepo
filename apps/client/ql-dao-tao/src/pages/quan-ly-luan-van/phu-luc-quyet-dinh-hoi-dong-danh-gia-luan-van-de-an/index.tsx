@@ -10,7 +10,7 @@ function PhuLucQuyetDinhHoiDongDanhGiaLuanVanDeAnPage() {
       exportButtonLabel="Xuất phụ lục"
       addNewButtonLabel="Thêm phụ lục"
       putEditVariant="quyetDinh"
-      // templateColumnKeys={["dotXet", "soQd", "ngayQd", "tenChuTich", "tenThuKy"]}
+      templateColumnKeys={["dotXet", "soQd", "ngayQd", "tenChuTich", "tenThuKy"]}
       templateColumnAccess={{
         toChucChuTich: false,
         toChucPb1: false,

@@ -1242,8 +1242,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                     <TreeSelect
                       className="w-80"
                       placeholder="Chọn khoa quản lý"
-                      allowClear={role !== "Khoa"}
-                      disabled={role === "Khoa"}
+                      //allowClear={role !== "Khoa"}
+                      //disabled={role === "Khoa"}
                       showSearch
                       treeDefaultExpandAll
                       treeData={treeOrgData}
