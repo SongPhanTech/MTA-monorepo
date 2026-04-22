@@ -63,6 +63,7 @@ export default function ModalChiTietMonHoc() {
             // Nhóm tương đương
             equivalencyGroups: {
               include: {
+                subject: true,
                 equivalencyGroup: {
                   include: {
                     subjects: {
@@ -847,14 +848,23 @@ export default function ModalChiTietMonHoc() {
               render: (_, __, index) => index + 1,
             },
             {
-              title: "Tên nhóm",
-              width: 200,
-              render: (_: any, record: any) => record.equivalencyGroup?.name,
+              title: "Môn tương đương",
+              width: 300,
+              render: (_, record) => {
+                const equivalentNames =
+                  record.equivalencyGroup?.subjects
+                    ?.filter((item: any) => item.subjectId !== record.subjectId)
+                    .map((item: any) => item.subject?.name)
+                    .filter(Boolean)
+                    .join(", ") || "-"
+
+                return equivalentNames
+              },
             },
             {
               title: "Mô tả",
               width: 250,
-              render: (_: any, record: any) => record.equivalencyGroup?.description,
+              render: (_, record) => record.equivalencyGroup?.description || "-",
             },
             {
               title: "Số môn trong nhóm",
