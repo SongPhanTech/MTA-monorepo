@@ -2506,6 +2506,7 @@ exports.Prisma.CertificateScalarFieldEnum = {
   name: 'name',
   englishName: 'englishName',
   outputStandardId: 'outputStandardId',
+  scoreThreshold: 'scoreThreshold',
   isUsingScore: 'isUsingScore'
 };
 

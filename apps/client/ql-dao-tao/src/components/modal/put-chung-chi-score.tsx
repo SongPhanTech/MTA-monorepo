@@ -7,13 +7,16 @@ import {
   useCreateCertificate,
   useFindUniqueCertificate,
   useUpdateCertificate,
+  useFindManySubjectVersion,
 } from "@workspace/db/hooks"
 import { Col, Form, Input, message, Radio } from "antd"
+import Select from "@components/commons/select"
 import dayjs from "dayjs"
 import "dayjs/locale/vi"
 import { useEffect, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
-export type PutCertificate = Certificate
+import { useTrainingObjectTypeStore } from "@workspace/ui"
+export type PutCertificate = Certificate & { subjectVersions?: string[] }
 dayjs.locale("vi")
 
 const PutCertificateScoreModal = () => {
@@ -28,24 +31,39 @@ const PutCertificateScoreModal = () => {
     onClose: form.resetFields,
   })
   const { showSpinner, hideSpinner } = useSpinner()
+  const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
 
   const { mutateAsync: createCertificate } = useCreateCertificate()
   const { mutateAsync: updateCertificate } = useUpdateCertificate()
   async function onOk({ ...rest }: PutCertificate) {
     try {
       showSpinner()
+      const subjectVersionsData = rest.subjectVersions
+        ? {
+            set: rest.subjectVersions.map((sv: string) => ({ id: sv })),
+          }
+        : { set: [] }
+
       if (id) {
         await updateCertificate({
           data: {
             name: rest.name,
             isUsingScore: rest.isUsingScore,
+            subjectVersions: subjectVersionsData,
           },
           where: { id },
         })
         message.success("Cập nhật thành công")
       } else {
         await createCertificate({
-          data: rest,
+          data: {
+            ...rest,
+            subjectVersions: rest.subjectVersions
+              ? {
+                  connect: rest.subjectVersions.map((sv: string) => ({ id: sv })),
+                }
+              : undefined,
+          },
         })
         message.success("Thêm mới thành công")
       }
@@ -65,19 +83,26 @@ const PutCertificateScoreModal = () => {
     }
   }
 
-  const { data: level } = useFindUniqueCertificate(
+  const { data: certificate } = useFindUniqueCertificate(
     {
       where: { id },
+      include: { subjectVersions: true },
     },
     { enabled: !!id }
   )
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: <>
+  const { data: subjectVersionData = [] } = useFindManySubjectVersion({
+    where: { trainingObjectTypeId },
+    orderBy: { name: "asc" },
+    take: 500,
+  })
+
   useEffect(() => {
-    if (level) {
+    if (certificate) {
       setTargetDisabled(false)
       form.setFieldsValue({
-        ...level,
+        ...certificate,
+        subjectVersions: certificate.subjectVersions?.map((sv) => sv.id) || [],
       })
     } else {
       form.setFieldsValue({
@@ -85,7 +110,7 @@ const PutCertificateScoreModal = () => {
         isUsingScore: true,
       })
     }
-  }, [level])
+  }, [certificate])
 
   return (
     <PutFormModal
@@ -110,18 +135,23 @@ const PutCertificateScoreModal = () => {
           </Radio.Group>
         </FormItem>
       </Col>
-      {/* <Col span={24}>
-                <FormItem form={form} name="finalScore" label="Điểm tương đương">
-                    <InputNumber
-                        type="number"
-                        placeholder="Nhập điểm tương đương"
-                        className="w-full"
-                        min={0}
-                        max={10}
-                        step={0.1}
-                    />
-                </FormItem>
-            </Col> */}
+      <Col span={24}>
+        <FormItem
+          form={form}
+          name="subjectVersions"
+          label="Danh sách môn học để xét chứng chỉ thông qua điểm TBC"
+        >
+          <Select
+            mode="multiple"
+            allowClear
+            placeholder="Chọn môn học"
+            options={subjectVersionData.map((item) => ({
+              value: item.id,
+              label: `${item.code} - ${item.name} (${item.credit} TC)`,
+            }))}
+          />
+        </FormItem>
+      </Col>
     </PutFormModal>
   )
 }

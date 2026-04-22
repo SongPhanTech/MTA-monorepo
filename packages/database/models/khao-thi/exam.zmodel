@@ -27,18 +27,6 @@ enum Difficult {
   @@schema("khao-thi")
 }
 
-// enum ExamType {
-//   OfflineWritten // thi viết (trắc nghiệm hoặc tự luận, hoặc kết hợp trắc nghiệm và tự luận)
-//   // OnlineWritten // thi viết trực tuyến (trắc nghiệm hoặc tự luận, hoặc kết hợp trắc nghiệm và tự luận)
-//   // OfflineChoices // thi trắc nghiệm
-//   // OnlineChoices // thi trắc nghiệm trực tuyến
-//   Oral // thi vấn đáp
-//   // Practice // thi thực hành
-//   // Project // thi đồ án
-//   // Other // loại khác
-//   @@schema("khao-thi")
-// }
-
 /// Phiên bản ngân hàng câu hỏi
 model QuestionBank extends Base {
   name             String           // Tên ngân hàng câu hỏi

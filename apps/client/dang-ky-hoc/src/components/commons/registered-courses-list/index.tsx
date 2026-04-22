@@ -13,6 +13,7 @@ import { CircleAlertIcon, LogOutIcon } from "lucide-react"
 import { useMemo, useState } from "react"
 import clsx from "clsx"
 import registeredCoursesListHelper from "./helper"
+import { EquivalencySide } from "@workspace/db/client"
 
 export interface ClassRegisterSessionProps {
   sessionId: string
@@ -418,9 +419,15 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
 
                 const equivalencies =
                   parent?.equivalencyGroups
-                    ?.flatMap((eg: any) =>
-                      eg?.equivalencyGroup?.subjects?.map((s: any) => s?.subject)
-                    )
+                    ?.flatMap((eg: any) => {
+                      const targetSide =
+                        eg.side === EquivalencySide.SOURCE
+                          ? EquivalencySide.TARGET
+                          : EquivalencySide.SOURCE
+                      return eg?.equivalencyGroup?.subjects
+                        ?.filter((s: any) => s?.side === targetSide)
+                        ?.map((s: any) => s?.subject)
+                    })
                     ?.filter(Boolean) ?? []
 
                 if (!equivalencies.length) {
@@ -431,7 +438,7 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
                   <div className="flex flex-col gap-1 text-[11px] text-left">
                     <div>
                       <span className="font-semibold text-purple-600">Môn tương đương:</span>
-                      {equivalencies.map((s: any) => (
+                      {equivalencies.map((s: { code: string; name: string }) => (
                         <div key={s?.code} className="ml-1 text-gray-700">
                           • {s?.name}
                         </div>

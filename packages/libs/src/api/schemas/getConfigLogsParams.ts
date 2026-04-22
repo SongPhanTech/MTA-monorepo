@@ -7,4 +7,5 @@
 
 export type GetConfigLogsParams = {
 apiId: string;
+baseUrl: string;
 };

@@ -116,6 +116,7 @@ const openSubjectClassRetakeStudents = createRoute({
                 diem_cuoi: z.number().nullable(),
                 withdrew: z.boolean(),
                 mien_thi: z.boolean(),
+                reason: z.string().nullable(),
                 hoan_thi: z.boolean(),
                 ly_do_hoan_thi: z.string().nullable(),
                 cam_thi: z.boolean(),

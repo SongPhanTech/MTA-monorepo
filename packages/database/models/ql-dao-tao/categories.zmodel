@@ -51,7 +51,7 @@ model TrainingObjectType extends Base {
   scoreCorrectionTicket ScoreCorrectionTicket[]
   scoreLinkSheet        ScoreLinkSheet[]
   availableTrainingTime AvailableTrainingTime[]
-  planTrainingPractice PlanTrainingPractice[]
+  planTrainingPractice  PlanTrainingPractice[]
 
   @@schema("ql-dao-tao")
 }
@@ -256,11 +256,11 @@ model TrainingTime extends Base {
 
 // quỹ thời gian có thể dào tạo
 model AvailableTrainingTime extends Base {
-  duration         Float                 // số lượng đơn vị thời gian tính theo ngày
-	trainingObjectType TrainingObjectType? @relation(fields: [trainingObjectTypeId], references: [id])
-	trainingObjectTypeId String?
-	semester          Semester? @relation(fields: [semesterId], references: [id])
-	semesterId        String?
+  duration             Float                 // số lượng đơn vị thời gian tính theo ngày
+  trainingObjectType   TrainingObjectType? @relation(fields: [trainingObjectTypeId], references: [id])
+  trainingObjectTypeId String?
+  semester             Semester?           @relation(fields: [semesterId], references: [id])
+  semesterId           String?
   @@schema("ql-dao-tao")
 }
 
@@ -277,9 +277,13 @@ model Certificate extends Base {
   archivedCertificate ArchivedCertificate[]
   /// môn học có thể phiên điểm
   subjects            CertificateOnSubject[]
+  /// danh sách môn để xét chứng chỉ (e.g. SUM(finalScore * credit) / SUM(credit) > 5)
+  subjectVersions     SubjectVersion[]
+
+  scoreThreshold      Float @default(5)
 
   // phân biệt chứng chỉ dùng điểm hay đạt/không đạt
-  isUsingScore              Boolean               @default(true)
+  isUsingScore        Boolean                @default(true)
 
   @@schema("ql-dao-tao")
 }

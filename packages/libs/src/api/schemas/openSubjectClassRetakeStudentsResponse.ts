@@ -19,6 +19,8 @@ export interface OpenSubjectClassRetakeStudentsResponse {
   diem_cuoi: number | null;
   withdrew: boolean;
   mien_thi: boolean;
+  /** @nullable */
+  reason: string | null;
   hoan_thi: boolean;
   /** @nullable */
   ly_do_hoan_thi: string | null;

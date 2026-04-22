@@ -207,7 +207,7 @@ const PutThesisSession = () => {
           />
         </FormItem>
       </Col>
-      
+
       <Col span={12}>
         <FormItem form={form} name="decisionNumber" label="Số quyết định giao đề tài">
           <Input placeholder="Nhập số quyết định giao đề tài" />
@@ -314,9 +314,7 @@ const PutThesisSession = () => {
           />
         </FormItem>
       </Col>
-      <Col span={12}>
-
-      </Col>
+      <Col span={12}></Col>
       <Col span={12}>
         <FormItem form={form} name="endDate" label="Ngày kết thúc" required>
           <DatePicker

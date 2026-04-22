@@ -7,26 +7,22 @@
 import type { ExcelTemplateBodyTail } from './excelTemplateBodyTail';
 import type { ExcelTemplateBodyHead } from './excelTemplateBodyHead';
 import type { ExcelTemplateBodyPayloadItem } from './excelTemplateBodyPayloadItem';
-
-/** Một sheet trong file xuất (be-model excel-template khi gửi `sheets`). */
-export type ExcelTemplateBodySheet = {
-  sheetName?: string;
-  payload: ExcelTemplateBodyPayloadItem[];
-};
+import type { ExcelTemplateBodySheetsItem } from './excelTemplateBodySheetsItem';
+import type { ExcelTemplateBodyOrientation } from './excelTemplateBodyOrientation';
 
 export type ExcelTemplateBody = {
   tail?: ExcelTemplateBodyTail;
   head?: ExcelTemplateBodyHead;
-  /** Dữ liệu điền template — một sheet (chế độ cũ). */
+  /** Dữ liệu để điền vào template (chế độ cũ: 1 sheet) */
   payload?: ExcelTemplateBodyPayloadItem[];
-  /** Nhiều sheet trong cùng một file. BE ưu tiên khi có; không gửi cùng lúc với `payload` nếu muốn rõ ràng. */
-  sheets?: ExcelTemplateBodySheet[];
+  /** Dữ liệu nhiều sheet. Nếu có thì mỗi phần tử tạo ra 1 sheet trong file xuất. */
+  sheets?: ExcelTemplateBodySheetsItem[];
   fileName: string;
   path: string;
   /** Có hiển thị lưới trong Excel hay không */
   showGridLines?: boolean;
   /** Có tự động xuống dòng trong ô hay không */
   wrapText?: boolean;
-  orientation?: "portrait" | "landscape";
+  orientation?: ExcelTemplateBodyOrientation;
   horizontalCentered?: boolean;
 };
