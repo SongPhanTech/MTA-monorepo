@@ -305,7 +305,7 @@ export default function PaymentRecordPage() {
                 width: 150,
                 type: "input",
                 align: "center",
-                render: (_, record) => record.councilMember.expert.name,
+                render: (_, record) => record.councilMember?.expert?.name ?? "-",
               },
               {
                 title: "Mã giao dịch",
@@ -328,7 +328,7 @@ export default function PaymentRecordPage() {
                 width: 150,
                 type: "date",
                 render: (_, record) =>
-                  record?.paymentDate ? dayjs(record?.paymentDate).format("DD/MM/YYYY") : "",
+                  record?.paymentDate ? dayjs(record?.paymentDate).format("DD/MM/YYYY") : undefined,
               },
               {
                 title: "Trạng thái",
