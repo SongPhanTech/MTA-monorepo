@@ -2141,44 +2141,13 @@ const getScholarship = async (
 
 const CheckDecreaseAcademicWarning = (
   student: StudentInfoCheck,
-  hasAcademicWarningThisTerm: boolean,
-  trainingCourse?: {
-    id: string
-    baseScore: string
-    academicRankingConvert: {
-      base10Min: number | null
-      base4Min: number | null
-      classification: string | null
-    }[]
-  } | null
+  hasAcademicWarningThisTerm: boolean
 ): boolean => {
   const academicWarningLevel = student.mucCanhCaoHocTap ?? 0
 
   if (academicWarningLevel <= 0) return false
 
-  const baseScore = trainingCourse?.baseScore ?? "Base10"
-
-  // Lấy ngưỡng điểm "Khá" từ cấu hình xếp loại học tập
-  const goodRankThreshold = trainingCourse?.academicRankingConvert?.find(
-    (item) => item.classification === "Khá"
-  )
-
-  // Định nghĩa điểm tối thiểu để được coi là "cải thiện" (mức Khá).
-  // Sử dụng giá trị mặc định nếu không có cấu hình.
-  const scoreToImprove10 = goodRankThreshold?.base10Min ?? 6.5
-  const scoreToImprove4 = goodRankThreshold?.base4Min ?? 2.5
-
-  let isImproved = false
-
-  if (baseScore === "Base10") {
-    isImproved =
-      typeof student.diemTrungBinh10 === "number" && student.diemTrungBinh10 >= scoreToImprove10
-  } else {
-    isImproved =
-      typeof student.diemTrungBinh4 === "number" && student.diemTrungBinh4 >= scoreToImprove4
-  }
-
-  return academicWarningLevel >= 1 && !hasAcademicWarningThisTerm && isImproved
+  return academicWarningLevel >= 1 && !hasAcademicWarningThisTerm
 }
 const fetchStudentSemesterResult = async (studentId: string, semesterId: string) => {
   return await prisma.studentSemesterResult.findFirst({
@@ -2575,33 +2544,6 @@ export const resultCourseStudentDecreaseAcademicWarning = async (
       active: true,
     },
   })
-  const trainingCourses = await prisma.trainingCourse.findMany({
-    where: {
-      id: { in: Array.from(courseIds) },
-    },
-    select: {
-      id: true,
-      baseScore: true,
-      academicRankingConvert: {
-        where: {
-          context: RankingContext.STUDYING,
-          deletedAt: null,
-          active: true,
-        },
-        select: {
-          base10Min: true,
-          base4Min: true,
-          classification: true,
-        },
-      },
-    },
-    orderBy: {
-      semesterStart: {
-        startDate: "desc",
-      },
-    },
-  })
-
   await Promise.all(
     students.map(async (student) => {
       const courseId = student.khoaId
@@ -2623,12 +2565,9 @@ export const resultCourseStudentDecreaseAcademicWarning = async (
         warningCriteriaList
       )
 
-      const trainingCourse = trainingCourses.find((tc) => tc.id === student.khoaId)
-
       const decreaseAcademicWarning = CheckDecreaseAcademicWarning(
         student,
-        checkAcademicWarningResult.length > 0,
-        trainingCourse
+        checkAcademicWarningResult.length > 0
       )
 
       if (!decreaseAcademicWarning) return
