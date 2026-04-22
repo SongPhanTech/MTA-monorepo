@@ -299,11 +299,11 @@ const ModalPrintToKQHT = () => {
                 const sortedSubjects = (subjectScoreData?.trainingBlocks ?? [])
                   .flatMap((block) => block.subjects ?? [])
                   .filter((subjectItem) => subjectItem.useForFinalScore === true)
-                  .filter(
-                    (subjectItem) =>
-                      !subjectItem.subject.studentSubjectScore?.[0]?.graduationSupplementaryScore
-                        ?.length
-                  )
+                  // .filter(
+                  //   (subjectItem) =>
+                  //     !subjectItem.subject.studentSubjectScore?.[0]?.graduationSupplementaryScore
+                  //       ?.length
+                  // )
                   .sort((a, b) => {
                     const semesterA = a.semester ?? Number.MAX_SAFE_INTEGER
                     const semesterB = b.semester ?? Number.MAX_SAFE_INTEGER
@@ -332,11 +332,14 @@ const ModalPrintToKQHT = () => {
                   const subject = subjectItem.subject
                   const score = subject.studentSubjectScore?.[0]
                   const isOptional = subjectItem.type === SubjectRequirementType.Optional
-                  const notForFinalScore = !subjectItem.useForFinalScore
+                  const notForFinalScore =
+                    subjectItem.subject.studentSubjectScore?.[0]?.graduationSupplementaryScore
+                      ?.length
+                  const isOptionalNonGpa = isOptional && notForFinalScore
 
                   const score10 = score?.manualFinalScore || score?.finalScore || 0
                   const score4 = convertScore(score10).base4
-                  const letterGrade = convertScore(score10).letter
+                  const letterGrade = isOptionalNonGpa ? "Đạt" : convertScore(score10).letter
 
                   return (
                     <tr key={subject.id}>
@@ -353,10 +356,10 @@ const ModalPrintToKQHT = () => {
                         {subject.credit}
                       </td>
                       <td className="border border-black px-1 py-1 text-center">
-                        {Number(score10).toFixedSmart(1)}
+                        {isOptionalNonGpa ? "" : Number(score10).toFixedSmart(1)}
                       </td>
                       <td className="border border-black px-1 py-1 text-center">
-                        {Number(score4).toFixedSmart(2)}
+                        {isOptionalNonGpa ? "" : Number(score4).toFixedSmart(2)}
                       </td>
                       <td className="border border-black px-1 py-1 text-center">
                         {String(letterGrade)}
@@ -378,10 +381,13 @@ const ModalPrintToKQHT = () => {
                     const subject = subjectItem.subject
                     const score = subject.studentSubjectScore?.[0]
                     const isOptional = subjectItem.type === SubjectRequirementType.Optional
-                    const notForFinalScore = !subjectItem.useForFinalScore
+                    const notForFinalScore =
+                      subjectItem.subject.studentSubjectScore?.[0]?.graduationSupplementaryScore
+                        ?.length
+                    const isOptionalNonGpa = isOptional && notForFinalScore
                     const score10 = score?.manualFinalScore || score?.finalScore || 0
                     const score4 = convertScore(score10).base4
-                    const letterGrade = convertScore(score10).letter
+                    const letterGrade = isOptionalNonGpa ? "Đạt" : convertScore(score10).letter
 
                     return (
                       <tr key={subject.id}>
@@ -398,10 +404,10 @@ const ModalPrintToKQHT = () => {
                           {subject.credit}
                         </td>
                         <td className="border border-black px-1 py-1 text-center">
-                          {Number(score10).toFixedSmart(1)}
+                          {isOptionalNonGpa ? "" : Number(score10).toFixedSmart(1)}
                         </td>
                         <td className="border border-black px-1 py-1 text-center">
-                          {Number(score4).toFixedSmart(2)}
+                          {isOptionalNonGpa ? "" : Number(score4).toFixedSmart(2)}
                         </td>
                         <td className="border border-black px-1 py-1 text-center">
                           {String(letterGrade)}
