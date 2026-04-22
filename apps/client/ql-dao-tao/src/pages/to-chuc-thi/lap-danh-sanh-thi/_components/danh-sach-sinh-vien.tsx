@@ -687,6 +687,7 @@ export default function DanhSachSinhVien() {
           data: {
             examPostponed: i.examPostponed ?? false,
             examPostponedReason: i.examPostponed ? i.examPostponedReason || null : null,
+            description: i.description ?? null,
           },
         },
       }))
