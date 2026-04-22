@@ -81,8 +81,7 @@ const PutChuongMucModal = () => {
     const patch: any = {}
     LEVEL_COLUMNS.forEach((col) => {
       const quantity = (watchedValues?.[col.key] as ConfigExamFormValue | undefined)?.quantity ?? 0
-      const percent =
-        totalQuestions > 0 ? Math.trunc((Number(quantity) / totalQuestions) * 100) : 0
+      const percent = totalQuestions > 0 ? Math.trunc((Number(quantity) / totalQuestions) * 100) : 0
       patch[col.key] = {
         ...(watchedValues?.[col.key] as any),
         percent,
@@ -193,7 +192,7 @@ const PutChuongMucModal = () => {
     if (!isQuantityMode) {
       const total = Number(values.totalQuestions ?? 0)
       const sumPercent = LEVEL_COLUMNS.reduce((acc, col) => {
-      const p = Number((values?.[col.key] as ConfigExamFormValue | undefined)?.percent ?? 0)
+        const p = Number((values?.[col.key] as ConfigExamFormValue | undefined)?.percent ?? 0)
         return acc + (Number.isFinite(p) ? p : 0)
       }, 0)
 
@@ -400,10 +399,14 @@ const PutChuongMucModal = () => {
                         }
                       }}
                       onFocus={() => {
-                        percentBaseTotalRef.current = Number(form.getFieldValue("totalQuestions") ?? 0)
+                        percentBaseTotalRef.current = Number(
+                          form.getFieldValue("totalQuestions") ?? 0
+                        )
                       }}
                       onBlur={() => {
-                        percentBaseTotalRef.current = Number(form.getFieldValue("totalQuestions") ?? 0)
+                        percentBaseTotalRef.current = Number(
+                          form.getFieldValue("totalQuestions") ?? 0
+                        )
                         recalcQuantitiesFromPercents()
                       }}
                     />
@@ -471,7 +474,9 @@ const PutChuongMucModal = () => {
                             )
                           }}
                           onFocus={() => {
-                            percentBaseTotalRef.current = Number(form.getFieldValue("totalQuestions") ?? 0)
+                            percentBaseTotalRef.current = Number(
+                              form.getFieldValue("totalQuestions") ?? 0
+                            )
                           }}
                           onKeyDown={(e) => {
                             if (e.key === "Enter") {
@@ -512,7 +517,11 @@ const PutChuongMucModal = () => {
                 <Row gutter={12}>
                   {LEVEL_COLUMNS.map((col) => (
                     <Col xs={12} sm={6} key={col.key}>
-                      <Form.Item name={[col.key, "quantity"]} style={{ marginBottom: 8 }} initialValue={0}>
+                      <Form.Item
+                        name={[col.key, "quantity"]}
+                        style={{ marginBottom: 8 }}
+                        initialValue={0}
+                      >
                         <InputNumber min={0} className="w-full" readOnly />
                       </Form.Item>
                     </Col>
@@ -533,7 +542,11 @@ const PutChuongMucModal = () => {
                 <Row gutter={12}>
                   {LEVEL_COLUMNS.map((col) => (
                     <Col xs={12} sm={6} key={col.key}>
-                      <Form.Item name={[col.key, "quantity"]} style={{ marginBottom: 8 }} initialValue={0}>
+                      <Form.Item
+                        name={[col.key, "quantity"]}
+                        style={{ marginBottom: 8 }}
+                        initialValue={0}
+                      >
                         <InputNumber
                           min={0}
                           className="w-full"
@@ -564,7 +577,11 @@ const PutChuongMucModal = () => {
                 <Row gutter={12}>
                   {LEVEL_COLUMNS.map((col) => (
                     <Col xs={12} sm={6} key={col.key}>
-                      <Form.Item name={[col.key, "percent"]} style={{ marginBottom: 8 }} initialValue={0}>
+                      <Form.Item
+                        name={[col.key, "percent"]}
+                        style={{ marginBottom: 8 }}
+                        initialValue={0}
+                      >
                         <Input
                           className="w-full"
                           readOnly

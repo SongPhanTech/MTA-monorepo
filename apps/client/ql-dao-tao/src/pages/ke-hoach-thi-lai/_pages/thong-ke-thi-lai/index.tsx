@@ -20,7 +20,7 @@ import {
 } from "chart.js"
 import type React from "react"
 import { useMemo, useState } from "react"
-import HSSVThiLai from "@pages/ke-hoach-giao-duc/_pages/lap-ke-hoach/_components/hssv-chua-dat"
+import HSSVThiLai from "@pages/ke-hoach-giao-duc/_pages/lap-ke-hoach/_components/hssv-thi-lai"
 
 interface SubjectBySemesterForm {
   searchText?: string

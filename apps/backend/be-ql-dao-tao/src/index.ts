@@ -31,6 +31,7 @@ import ScoreCorrectionApp from "./api/score-correction"
 import Stats from "./api/stats"
 import StudentApp from "./api/student"
 import SubjectClassApp from "./api/subject-class"
+import ReSubjectClassApp from "./api/re-subject-class"
 import TrainingFieldApp from "./api/training-field"
 import TrainingScoreApp from "./api/training-score"
 import UserProfileApp from "./api/user-profile"
@@ -94,6 +95,7 @@ setupOpenApi(app)
 app.route("/api/user-profile", UserProfileApp)
 app.route("/api/fixed-class", FixedClassApp)
 app.route("/api/subject-class", SubjectClassApp)
+app.route("/api/subject-class", ReSubjectClassApp)
 app.route("/api/student", StudentApp)
 app.route("/api/lecturer", LecturerApp)
 app.route("/api/diploma-verification", DiplomaVerificationApp)

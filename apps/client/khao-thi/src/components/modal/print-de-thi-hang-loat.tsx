@@ -286,9 +286,7 @@ const PrintBatchExamBank = () => {
                   </div>
                   <div style={{ textAlign: "center", marginBottom: "10px" }}>
                     <strong>
-                      Thời gian làm bài:{" "}
-                      {duration || exam?.examTime || exam?.exam?.duration}{" "}
-                      phút
+                      Thời gian làm bài: {duration || exam?.examTime || exam?.exam?.duration} phút
                     </strong>
                   </div>
                 </td>
