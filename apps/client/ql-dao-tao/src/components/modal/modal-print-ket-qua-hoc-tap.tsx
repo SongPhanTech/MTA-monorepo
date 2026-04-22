@@ -42,6 +42,30 @@ const ModalPrintToKQHT = () => {
             graduationDecision: {
               select: { finalGpa: true },
             },
+            graduationApplications: {
+              orderBy: {
+                createdAt: "desc",
+              },
+              take: 1,
+              select: {
+                gpaScore: {
+                  select: {
+                    id: true,
+                    subjectVersionId: true,
+                    manualFinalScore: true,
+                    finalScore: true,
+                  },
+                },
+                supplementaryScore: {
+                  select: {
+                    id: true,
+                    subjectVersionId: true,
+                    manualFinalScore: true,
+                    finalScore: true,
+                  },
+                },
+              },
+            },
           },
         },
 
@@ -68,23 +92,7 @@ const ModalPrintToKQHT = () => {
           include: {
             subjects: {
               include: {
-                subject: {
-                  include: {
-                    studentSubjectScore: {
-                      where: {
-                        studentId: input?.dataStudent?.id,
-                      },
-                      include: {
-                        graduationSupplementaryScore: {
-                          select: {
-                            id: true,
-                            sessionId: true,
-                          },
-                        },
-                      },
-                    },
-                  },
-                },
+                subject: true,
               },
             },
           },
@@ -125,6 +133,42 @@ const ModalPrintToKQHT = () => {
             ? (finalGpa as { toNumber: () => number }).toNumber()
             : 0
           : 0
+
+  const graduationApplication = subjectScoreData?.students?.[0]?.graduationApplications?.[0]
+
+  const toScoreNumber = (value: unknown) => {
+    if (typeof value === "number") return value
+    if (typeof value === "string") return Number(value) || 0
+    if (value && typeof value === "object" && "toNumber" in value) {
+      const parsed = (value as { toNumber: () => number }).toNumber()
+      return Number.isFinite(parsed) ? parsed : 0
+    }
+    return 0
+  }
+
+  const scoreBySubjectVersionId = new Map<string, any>()
+
+  ;[
+    ...(graduationApplication?.gpaScore ?? []),
+    ...(graduationApplication?.supplementaryScore ?? []),
+  ].forEach((scoreItem: any) => {
+    const incomingScore = toScoreNumber(scoreItem?.manualFinalScore ?? scoreItem?.finalScore)
+
+    const subjectVersionId = scoreItem?.subjectVersionId
+    if (subjectVersionId) {
+      const current = scoreBySubjectVersionId.get(subjectVersionId)
+      const currentScore = toScoreNumber(current?.manualFinalScore ?? current?.finalScore)
+      if (!current || incomingScore > currentScore) {
+        scoreBySubjectVersionId.set(subjectVersionId, scoreItem)
+      }
+    }
+  })
+
+  const supplementaryBySubjectVersionId = new Set(
+    (graduationApplication?.supplementaryScore ?? [])
+      .map((item) => item?.subjectVersionId)
+      .filter((id): id is string => Boolean(id))
+  )
 
   const handlePrint = useReactToPrint({
     contentRef: printRef,
@@ -299,11 +343,11 @@ const ModalPrintToKQHT = () => {
                 const sortedSubjects = (subjectScoreData?.trainingBlocks ?? [])
                   .flatMap((block) => block.subjects ?? [])
                   .filter((subjectItem) => subjectItem.useForFinalScore === true)
-                  .filter(
-                    (subjectItem) =>
-                      !subjectItem.subject.studentSubjectScore?.[0]?.graduationSupplementaryScore
-                        ?.length
-                  )
+                  // .filter(
+                  //   (subjectItem) =>
+                  //     !subjectItem.subject.studentSubjectScore?.[0]?.graduationSupplementaryScore
+                  //       ?.length
+                  // )
                   .sort((a, b) => {
                     const semesterA = a.semester ?? Number.MAX_SAFE_INTEGER
                     const semesterB = b.semester ?? Number.MAX_SAFE_INTEGER
@@ -330,13 +374,16 @@ const ModalPrintToKQHT = () => {
                 // Render các môn thường trước
                 const regularRows = regularSubjects?.map(({ subjectItem }, originalIndex) => {
                   const subject = subjectItem.subject
-                  const score = subject.studentSubjectScore?.[0]
+                  const score = scoreBySubjectVersionId.get(subjectItem.subjectId)
                   const isOptional = subjectItem.type === SubjectRequirementType.Optional
-                  const notForFinalScore = !subjectItem.useForFinalScore
+                  const notForFinalScore = supplementaryBySubjectVersionId.has(
+                    subjectItem.subjectId
+                  )
+                  const isOptionalNonGpa = isOptional && notForFinalScore
 
-                  const score10 = score?.manualFinalScore || score?.finalScore || 0
+                  const score10 = toScoreNumber(score?.manualFinalScore ?? score?.finalScore)
                   const score4 = convertScore(score10).base4
-                  const letterGrade = convertScore(score10).letter
+                  const letterGrade = isOptionalNonGpa ? "Đạt" : convertScore(score10).letter
 
                   return (
                     <tr key={subject.id}>
@@ -353,10 +400,10 @@ const ModalPrintToKQHT = () => {
                         {subject.credit}
                       </td>
                       <td className="border border-black px-1 py-1 text-center">
-                        {Number(score10).toFixedSmart(1)}
+                        {isOptionalNonGpa ? "" : Number(score10).toFixedSmart(1)}
                       </td>
                       <td className="border border-black px-1 py-1 text-center">
-                        {Number(score4).toFixedSmart(2)}
+                        {isOptionalNonGpa ? "" : Number(score4).toFixedSmart(2)}
                       </td>
                       <td className="border border-black px-1 py-1 text-center">
                         {String(letterGrade)}
@@ -376,12 +423,15 @@ const ModalPrintToKQHT = () => {
                   ) : null,
                   ...graduationSubjects.map(({ subjectItem }, originalIndex) => {
                     const subject = subjectItem.subject
-                    const score = subject.studentSubjectScore?.[0]
+                    const score = scoreBySubjectVersionId.get(subjectItem.subjectId)
                     const isOptional = subjectItem.type === SubjectRequirementType.Optional
-                    const notForFinalScore = !subjectItem.useForFinalScore
-                    const score10 = score?.manualFinalScore || score?.finalScore || 0
+                    const notForFinalScore = supplementaryBySubjectVersionId.has(
+                      subjectItem.subjectId
+                    )
+                    const isOptionalNonGpa = isOptional && notForFinalScore
+                    const score10 = toScoreNumber(score?.manualFinalScore ?? score?.finalScore)
                     const score4 = convertScore(score10).base4
-                    const letterGrade = convertScore(score10).letter
+                    const letterGrade = isOptionalNonGpa ? "Đạt" : convertScore(score10).letter
 
                     return (
                       <tr key={subject.id}>
@@ -398,10 +448,10 @@ const ModalPrintToKQHT = () => {
                           {subject.credit}
                         </td>
                         <td className="border border-black px-1 py-1 text-center">
-                          {Number(score10).toFixedSmart(1)}
+                          {isOptionalNonGpa ? "" : Number(score10).toFixedSmart(1)}
                         </td>
                         <td className="border border-black px-1 py-1 text-center">
-                          {Number(score4).toFixedSmart(2)}
+                          {isOptionalNonGpa ? "" : Number(score4).toFixedSmart(2)}
                         </td>
                         <td className="border border-black px-1 py-1 text-center">
                           {String(letterGrade)}
@@ -431,8 +481,7 @@ const ModalPrintToKQHT = () => {
                       (subjectItem) =>
                         // subjectItem.print === true &&
                         subjectItem.useForFinalScore === true &&
-                        !subjectItem.subject.studentSubjectScore?.[0]?.graduationSupplementaryScore
-                          ?.length
+                        !supplementaryBySubjectVersionId.has(subjectItem.subjectId)
                     )
                     ?.reduce(
                       (sum: number, subjectItem) => sum + (subjectItem.subject?.credit || 0),

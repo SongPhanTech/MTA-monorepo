@@ -4,6 +4,12 @@ import ExcelJS from "exceljs"
 import XlsxTemplate from "xlsx-template"
 
 const app = new OpenAPIHono({ strict: false })
+const payloadItemSchema = z.object({
+  data: z.any(),
+  mergeCells: z.array(z.string()).optional().openapi({
+    description: "Danh sách các ô cần gộp trong sheet, định dạng giống như A1:B2",
+  }),
+})
 app.openapi(
   createRoute({
     operationId: "excelTemplate",
@@ -13,38 +19,61 @@ app.openapi(
       body: {
         content: {
           "application/json": {
-            schema: z.object({
-              tail: z
-                .object({
-                  data: z.any(),
-                })
-                .optional(),
-              head: z
-                .object({
-                  data: z.any(),
-                })
-                .optional(),
-              payload: z
-                .array(
-                  z.object({
+            schema: z
+              .object({
+                tail: z
+                  .object({
                     data: z.any(),
-                    mergeCells: z.array(z.string()).optional().openapi({
-                      description: "Danh sách các ô cần gộp trong sheet, định dạng giống như A1:B2",
-                    }),
                   })
-                )
-                .openapi({ description: "Dữ liệu để điền vào template" }),
-              fileName: z.string(),
-              path: z.string(),
-              showGridLines: z.boolean().optional().openapi({
-                description: "Có hiển thị lưới trong Excel hay không",
-                default: false,
+                  .optional(),
+                head: z
+                  .object({
+                    data: z.any(),
+                  })
+                  .optional(),
+                payload: z.array(payloadItemSchema).optional().openapi({
+                  description: "Dữ liệu để điền vào template (chế độ cũ: 1 sheet)",
+                }),
+                sheets: z
+                  .array(
+                    z.object({
+                      sheetName: z.string().optional(),
+                      payload: z.array(payloadItemSchema),
+                    })
+                  )
+                  .optional()
+                  .openapi({
+                    description:
+                      "Dữ liệu nhiều sheet. Nếu có thì mỗi phần tử tạo ra 1 sheet trong file xuất.",
+                  }),
+                fileName: z.string(),
+                path: z.string(),
+                showGridLines: z.boolean().optional().openapi({
+                  description: "Có hiển thị lưới trong Excel hay không",
+                  default: false,
+                }),
+                wrapText: z.boolean().optional().openapi({
+                  description: "Có tự động xuống dòng trong ô hay không",
+                  default: true,
+                }),
+                orientation: z.enum(["portrait", "landscape"]).optional(),
+                horizontalCentered: z.boolean().optional(),
+              })
+              .superRefine((data, ctx) => {
+                const hasPayload = Array.isArray(data.payload) && data.payload.length > 0
+                const hasSheets =
+                  Array.isArray(data.sheets) &&
+                  data.sheets.some(
+                    (sheet) => Array.isArray(sheet.payload) && sheet.payload.length > 0
+                  )
+                if (!hasPayload && !hasSheets) {
+                  ctx.addIssue({
+                    code: "custom",
+                    message: "Cần có payload hoặc sheets với ít nhất 1 phần tử dữ liệu",
+                    path: ["payload"],
+                  })
+                }
               }),
-              wrapText: z.boolean().optional().openapi({
-                description: "Có tự động xuống dòng trong ô hay không",
-                default: true,
-              }),
-            }),
           },
         },
       },
@@ -61,25 +90,75 @@ app.openapi(
     },
   }),
   async (c) => {
+    const PAGE_BREAK_MARKER = "ngắt trang"
+
+    const normalizeCellValue = (value: ExcelJS.CellValue | null | undefined): string => {
+      if (value === null || value === undefined) return ""
+      if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") {
+        return String(value).trim().toLowerCase()
+      }
+      if (value instanceof Date) {
+        return value.toISOString().trim().toLowerCase()
+      }
+      if (typeof value === "object") {
+        if ("richText" in value && Array.isArray(value.richText)) {
+          return value.richText
+            .map((part) => part.text)
+            .join("")
+            .trim()
+            .toLowerCase()
+        }
+        if ("text" in value && typeof value.text === "string") {
+          return value.text.trim().toLowerCase()
+        }
+        if ("result" in value && value.result !== undefined && value.result !== null) {
+          return String(value.result).trim().toLowerCase()
+        }
+      }
+      return ""
+    }
+
+    const toColumnLetter = (columnNumber: number) => {
+      let result = ""
+      let current = columnNumber
+      while (current > 0) {
+        const remainder = (current - 1) % 26
+        result = String.fromCharCode(65 + remainder) + result
+        current = Math.floor((current - 1) / 26)
+      }
+      return result || "A"
+    }
+
+    const getLastUsedDataRow = (sheet: ExcelJS.Worksheet) => {
+      const n = sheet.rowCount
+      for (let r = n; r >= 1; r--) {
+        const row = sheet.getRow(r)
+        let has = false
+        row.eachCell({ includeEmpty: false }, () => {
+          has = true
+        })
+        if (has) return r
+      }
+      return 1
+    }
+
     const {
       fileName,
       path,
       payload,
+      sheets,
       showGridLines = false,
       wrapText = false,
       head,
       tail,
+      orientation,
+      horizontalCentered,
     } = c.req.valid("json")
     const res = await fetch(getMinioUrl(`/mta/template/${path}`))
     const buffer = await res.arrayBuffer()
     const nodeBuffer = Buffer.from(buffer)
     const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
 
-    // Load template workbook to get Head and Tail sheets
-    const templateWorkbook = new ExcelJS.Workbook()
-    await templateWorkbook.xlsx.load(buffer)
-
-    // Process Head sheet if data is provided
     let headSheet: ExcelJS.Worksheet | undefined
     if (head?.data) {
       const headTemplate = new XlsxTemplate(nodeBuffer)
@@ -89,7 +168,6 @@ app.openapi(
       await headWorkbook.xlsx.load(headBuffer)
       headSheet = headWorkbook.getWorksheet("Head")
     }
-    // Process Tail sheet if data is provided
     let tailSheet: ExcelJS.Worksheet | undefined
     if (tail?.data) {
       const tailTemplate = new XlsxTemplate(nodeBuffer)
@@ -100,46 +178,58 @@ app.openapi(
       tailSheet = tailWorkbook.getWorksheet("Tail")
     }
 
-    // Generate a workbook for each payload item
-    const generatedSheets: { worksheet: ExcelJS.Worksheet; mergeCells?: string[] }[] = []
+    const mergedWorkbook = new ExcelJS.Workbook()
+    const usedSheetNames = new Set<string>()
 
-    for (const item of payload) {
-      const template = new XlsxTemplate(nodeBuffer)
-      template.substitute(1, item.data)
-      const sheetBuffer = await template.generate({ type: "nodebuffer" })
-      // Load the generated sheet using exceljs
-      const workbook = new ExcelJS.Workbook()
-      await workbook.xlsx.load(sheetBuffer)
-      const worksheet = workbook.getWorksheet(1) || workbook.worksheets[0]
-      if (worksheet) {
-        generatedSheets.push({ worksheet, mergeCells: item.mergeCells })
+    const createUniqueSheetName = (rawName: string, index: number) => {
+      const fallback = `Sheet${index + 1}`
+      const base =
+        (rawName || fallback)
+          .trim()
+          .replace(/[\\/?*:[\]]/g, "_")
+          .slice(0, 31) || fallback
+      let name = base
+      let suffix = 1
+      while (usedSheetNames.has(name)) {
+        const suffixText = `_${suffix}`
+        name = `${base.slice(0, Math.max(1, 31 - suffixText.length))}${suffixText}`
+        suffix++
       }
+      usedSheetNames.add(name)
+      return name
     }
 
-    // Create a new workbook and merge all sheets vertically
-    const mergedWorkbook = new ExcelJS.Workbook()
-    const mergedSheet = mergedWorkbook.addWorksheet("Merged")
+    const buildGeneratedSheets = async (items: z.infer<typeof payloadItemSchema>[]) => {
+      const generatedSheets: { worksheet: ExcelJS.Worksheet; mergeCells?: string[] }[] = []
+      for (const item of items) {
+        const template = new XlsxTemplate(nodeBuffer)
+        template.substitute(1, item.data)
+        const sheetBuffer = await template.generate({ type: "nodebuffer" })
+        const workbook = new ExcelJS.Workbook()
+        await workbook.xlsx.load(sheetBuffer)
+        const worksheet = workbook.getWorksheet(1) || workbook.worksheets[0]
+        if (worksheet) {
+          generatedSheets.push({ worksheet, mergeCells: item.mergeCells })
+        }
+      }
+      return generatedSheets
+    }
 
-    // Hide gridlines
-    mergedSheet.views = [{ showGridLines: showGridLines }]
-
-    let currentRow = 1
-
-    // Helper function to copy sheet content
-    const copySheetContent = (sheet: ExcelJS.Worksheet, startRow: number) => {
+    const copySheetContent = (
+      sourceSheet: ExcelJS.Worksheet,
+      targetSheet: ExcelJS.Worksheet,
+      startRow: number
+    ) => {
       const rowOffset = startRow - 1
       let currentRowInCopy = startRow
 
-      // Copy all rows with full formatting
-      sheet.eachRow({ includeEmpty: true }, (row) => {
-        const newRow = mergedSheet.getRow(currentRowInCopy)
+      sourceSheet.eachRow({ includeEmpty: true }, (row) => {
+        const newRow = targetSheet.getRow(currentRowInCopy)
 
-        // Copy row height
-        if (row.height) {
+        if (row.height !== undefined) {
           newRow.height = row.height
         }
 
-        // Giữ trạng thái ẩn hàng / outline (template đã ẩn hàng thì bản gộp vẫn ẩn)
         if (row.hidden) {
           newRow.hidden = true
         }
@@ -147,12 +237,10 @@ app.openapi(
           newRow.outlineLevel = row.outlineLevel
         }
 
-        // Copy all cells with full styling
         row.eachCell({ includeEmpty: true }, (cell, colNumber) => {
           const newCell = newRow.getCell(colNumber)
           newCell.value = cell.value
 
-          // Copy full cell style
           newCell.style = {
             font: cell.font,
             alignment: {
@@ -170,9 +258,8 @@ app.openapi(
         currentRowInCopy++
       })
 
-      // Copy merged cells with adjusted row positions
-      if (sheet.model.merges) {
-        for (const merge of sheet.model.merges) {
+      if (sourceSheet.model.merges) {
+        for (const merge of sourceSheet.model.merges) {
           const [topLeft, bottomRight] = merge.split(":")
 
           const topMatch = topLeft?.match(/([A-Z]+)(\d+)/)
@@ -184,7 +271,7 @@ app.openapi(
             const startCol = topMatch[1]
             const endCol = bottomMatch[1]
 
-            mergedSheet.mergeCells(`${startCol}${startRowNum}:${endCol}${endRowNum}`)
+            targetSheet.mergeCells(`${startCol}${startRowNum}:${endCol}${endRowNum}`)
           }
         }
       }
@@ -192,43 +279,101 @@ app.openapi(
       return currentRowInCopy
     }
 
-    // Copy Head sheet at the top
-    if (headSheet) {
-      currentRow = copySheetContent(headSheet, currentRow)
-    }
+    const applySheetConfig = async (
+      targetSheet: ExcelJS.Worksheet,
+      payloadItems: z.infer<typeof payloadItemSchema>[]
+    ) => {
+      targetSheet.views = [{ showGridLines: showGridLines }]
+      const generatedSheets = await buildGeneratedSheets(payloadItems)
+      let currentRow = 1
 
-    // Copy all payload sheets
-    for (const { worksheet: sheet, mergeCells: customMergeCells } of generatedSheets) {
-      // Apply custom merge cells before copying
-      if (customMergeCells && customMergeCells.length > 0) {
-        for (const merge of customMergeCells) {
-          try {
-            sheet.mergeCells(merge)
-          } catch (error) {
-            console.log(`Failed to merge cells ${merge}:`, error)
+      if (headSheet) {
+        currentRow = copySheetContent(headSheet, targetSheet, currentRow)
+      }
+      for (const { worksheet: sourceSheet, mergeCells: customMergeCells } of generatedSheets) {
+        if (customMergeCells && customMergeCells.length > 0) {
+          for (const merge of customMergeCells) {
+            try {
+              sourceSheet.mergeCells(merge)
+            } catch (error) {
+              console.log(`Failed to merge cells ${merge}:`, error)
+            }
           }
         }
+        currentRow = copySheetContent(sourceSheet, targetSheet, currentRow)
       }
-      currentRow = copySheetContent(sheet, currentRow)
+      if (tailSheet) {
+        currentRow = copySheetContent(tailSheet, targetSheet, currentRow)
+      }
+
+      if (generatedSheets.length > 0 && generatedSheets[0]) {
+        generatedSheets[0].worksheet.columns.forEach((col, index) => {
+          if (!col) return
+          const dest = targetSheet.getColumn(index + 1)
+          if (col.width) {
+            dest.width = col.width
+          }
+          if (col.hidden) {
+            dest.hidden = true
+          }
+        })
+      }
+
+      const finalMarkerRows: number[] = []
+      for (let rowNumber = 1; rowNumber <= targetSheet.rowCount; rowNumber++) {
+        const row = targetSheet.getRow(rowNumber)
+        let hasPageBreakMarker = false
+        row.eachCell({ includeEmpty: true }, (cell) => {
+          if (normalizeCellValue(cell.value) === PAGE_BREAK_MARKER) {
+            hasPageBreakMarker = true
+            cell.value = null
+          }
+        })
+
+        if (hasPageBreakMarker) {
+          row.hidden = true
+          finalMarkerRows.push(rowNumber)
+        }
+        row.commit()
+      }
+
+      const lastDataRow = getLastUsedDataRow(targetSheet)
+      const maxColumn = Math.max(targetSheet.columnCount, 1)
+      const maxColumnLetter = toColumnLetter(maxColumn)
+      const applyPrintDefaults = () => {
+        targetSheet.pageSetup.paperSize = 9
+        targetSheet.pageSetup.fitToPage = false
+        targetSheet.pageSetup.scale = 100
+        if (orientation) {
+          targetSheet.pageSetup.orientation = orientation
+        }
+        if (horizontalCentered !== undefined) {
+          targetSheet.pageSetup.horizontalCentered = horizontalCentered
+        }
+      }
+      if (finalMarkerRows.length > 0) {
+        const uniqueBreakRows = [...new Set(finalMarkerRows)].sort((a, b) => a - b)
+        for (const markerRow of uniqueBreakRows) {
+          if (markerRow <= 1) continue
+          if (markerRow > lastDataRow) continue
+          targetSheet.getRow(markerRow - 1).addPageBreak()
+        }
+        targetSheet.pageSetup.printArea = `A1:${maxColumnLetter}${lastDataRow}`
+        applyPrintDefaults()
+      }
     }
 
-    // Copy Tail sheet at the bottom
-    if (tailSheet) {
-      currentRow = copySheetContent(tailSheet, currentRow)
-    }
-
-    // Copy column width + ẩn cột từ sheet nguồn đầu tiên (payload)
-    if (generatedSheets.length > 0 && generatedSheets[0]) {
-      generatedSheets[0].worksheet.columns.forEach((col, index) => {
-        if (!col) return
-        const dest = mergedSheet.getColumn(index + 1)
-        if (col.width) {
-          dest.width = col.width
-        }
-        if (col.hidden) {
-          dest.hidden = true
-        }
-      })
+    if (sheets && sheets.length > 0) {
+      for (let index = 0; index < sheets.length; index++) {
+        const sheetInput = sheets[index]
+        if (!sheetInput || !sheetInput.payload || sheetInput.payload.length === 0) continue
+        const sheetName = createUniqueSheetName(sheetInput.sheetName || "", index)
+        const outputSheet = mergedWorkbook.addWorksheet(sheetName)
+        await applySheetConfig(outputSheet, sheetInput.payload)
+      }
+    } else {
+      const outputSheet = mergedWorkbook.addWorksheet("Merged")
+      await applySheetConfig(outputSheet, payload ?? [])
     }
 
     const result = await mergedWorkbook.xlsx.writeBuffer()

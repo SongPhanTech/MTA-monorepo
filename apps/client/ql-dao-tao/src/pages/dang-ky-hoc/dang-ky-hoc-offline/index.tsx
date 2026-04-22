@@ -67,13 +67,13 @@ export default function DangKyHoc() {
       label: "Đăng ký học cho lớp quản lý",
       content: (
         <Row gutter={[8, 8]}>
-          <Col span={8}>
+          <Col span={7}>
             <DangKyHocChoLopQuanLy />
           </Col>
-          <Col span={6}>
+          <Col span={5}>
             <LopQuanLyDaGhep />
           </Col>
-          <Col span={10}>
+          <Col span={12}>
             <CaNhanTrongLopQuanLy />
           </Col>
         </Row>

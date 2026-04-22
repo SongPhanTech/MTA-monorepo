@@ -47,6 +47,7 @@ export default function UserProfilePageDs() {
   const { can } = useAbility()
   const [currentPage, setCurrentPage] = useState(1)
   const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
+  const [sortDescriptor, setSortDescriptor] = useState<any>(null)
   const [filters, setFilters] = useState<FilterProps>({
     code: "",
     name: "",
@@ -243,7 +244,12 @@ export default function UserProfilePageDs() {
     [filters, trainingObjectTypeId]
   )
 
-  const { data = [], refetch } = useFindManyStudent({
+  const {
+    data = [],
+    isLoading: isLoadingStudents,
+    isFetching: isFetchingStudents,
+    refetch,
+  } = useFindManyStudent({
     where,
     include: {
       userProfile: {
@@ -289,6 +295,7 @@ export default function UserProfilePageDs() {
       curriculumVersionParallel: true,
     },
     orderBy: [
+      ...(sortDescriptor ? [sortDescriptor] : []),
       {
         fixedClass: {
           trainingCourse: {
@@ -431,7 +438,6 @@ export default function UserProfilePageDs() {
     <div>
       <Row gutter={[16, 16]}>
         <Col span={24}>
-          {/* Row nút thêm */}
           <Row gutter={[16, 16]} align="top" justify="end">
             <Col span={12}>
               <Flex>
@@ -475,7 +481,6 @@ export default function UserProfilePageDs() {
                   <>
                     <Button
                       className="px-4 py-1"
-                      // href={getMinioUrl('mta/template/MauImportDSHV.xlsx')}
                       onClick={() => handleDownloadTemplate()}
                       type="primary"
                     >
@@ -520,10 +525,35 @@ export default function UserProfilePageDs() {
         <Col span={24}>
           <Table
             className="h-[calc(100vh-250px)]"
+            loading={isFetchingStudents || isLoadingStudents}
             filters={filters}
             setFilters={(value) => {
               setFilters(value)
               setCurrentPage(1)
+            }}
+            onChange={(_, __, sorter: any) => {
+              if (sorter.order) {
+                const order = sorter.order === "ascend" ? "asc" : "desc"
+                if (sorter.field === "code") {
+                  setSortDescriptor({ code: order })
+                } else if (sorter.field === "trainingField") {
+                  setSortDescriptor({
+                    fixedClass: {
+                      curriculumVersion: {
+                        curriculum: {
+                          trainingMajor: {
+                            trainingField: {
+                              name: order,
+                            },
+                          },
+                        },
+                      },
+                    },
+                  })
+                }
+              } else {
+                setSortDescriptor(null)
+              }
             }}
             columns={[
               {
@@ -540,6 +570,7 @@ export default function UserProfilePageDs() {
                 align: "center",
                 fixed: "left",
                 type: "input",
+                sorter: true,
                 render: (__, record: any) => (record.code ? record?.code : ""),
               },
               {
@@ -625,6 +656,7 @@ export default function UserProfilePageDs() {
                 width: 160,
                 dataIndex: "trainingField",
                 type: "select",
+                sorter: true,
                 options: trainingFieldData.map((item: TrainingField) => ({
                   label: item.name,
                   value: item.id,

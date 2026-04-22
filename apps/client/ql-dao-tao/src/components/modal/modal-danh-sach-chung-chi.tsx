@@ -303,7 +303,7 @@ const ModalDanhSachChungChi = () => {
             align: "center",
             width: 140,
             render: (finalScore: number, cert: ArchivedCertificate) =>
-              cert.status === "APPROVED"
+              cert.status === $Enums.ArchivedCertificateStatus.APPROVED
                 ? finalScore
                 : renderEditableNumber(finalScore, cert, "finalScore"),
           },
@@ -345,7 +345,7 @@ const ModalDanhSachChungChi = () => {
             align: "center",
             width: 150,
             render: (date: string, cert: ArchivedCertificate) =>
-              cert.status === "APPROVED"
+              cert.status === $Enums.ArchivedCertificateStatus.APPROVED
                 ? formatDateVN(date)
                 : renderEditableDate(date, cert, "issuedDate"),
           },
@@ -355,7 +355,7 @@ const ModalDanhSachChungChi = () => {
             align: "center",
             width: 150,
             render: (date: string, cert: ArchivedCertificate) =>
-              cert.status === "APPROVED"
+              cert.status === $Enums.ArchivedCertificateStatus.APPROVED
                 ? formatDateVN(date)
                 : renderEditableDate(date, cert, "expiredDate"),
           },
@@ -397,6 +397,7 @@ const ModalDanhSachChungChi = () => {
                     <Upload
                       multiple
                       accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.xls,.xlsx"
+                      disabled={cert.status === $Enums.ArchivedCertificateStatus.APPROVED}
                       beforeUpload={(file: File) => {
                         if (file.size / 1024 / 1024 > 50) {
                           message.error(`${file.name} vượt quá 50MB`)
@@ -411,6 +412,7 @@ const ModalDanhSachChungChi = () => {
                         type="default"
                         icon={<UploadOutlined />}
                         size="small"
+                        disabled={cert.status === $Enums.ArchivedCertificateStatus.APPROVED}
                         loading={uploadingCertId === cert.id}
                       >
                         Tải lên
@@ -436,9 +438,11 @@ const ModalDanhSachChungChi = () => {
             title: "Thao tác",
             width: 160,
             align: "center",
-            hidden: !input?.isEditMode,
+            hidden: !input?.isEditMode || displayCertificates.every((c) => c.status === "APPROVED"),
             render: (_: any, cert: any) => {
               const isEditing = editingCertId === cert.id
+
+              if (cert.status === "APPROVED") return null
 
               if (isEditing) {
                 return (

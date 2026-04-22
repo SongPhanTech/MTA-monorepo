@@ -8710,6 +8710,7 @@ export namespace Prisma {
         name: 'name',
         englishName: 'englishName',
         outputStandardId: 'outputStandardId',
+        scoreThreshold: 'scoreThreshold',
         isUsingScore: 'isUsingScore'
     };
     export const CertificateOnSubjectScalarFieldEnum: {
@@ -10027,6 +10028,7 @@ export namespace Prisma {
         updatedAt: 'updatedAt',
         createdBy: 'createdBy',
         examId: 'examId',
+        examTime: 'examTime',
         examCode: 'examCode',
         subjectClassId: 'subjectClassId',
         explain: 'explain',
@@ -51243,6 +51245,7 @@ export namespace Prisma {
         exams<T extends SubjectVersion$examsArgs<ExtArgs> = {}>(args?: Subset<T, SubjectVersion$examsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExamPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         examFramework<T extends SubjectVersion$examFrameworkArgs<ExtArgs> = {}>(args?: Subset<T, SubjectVersion$examFrameworkArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExamFrameworkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         scoreLinkSubjectVersion<T extends SubjectVersion$scoreLinkSubjectVersionArgs<ExtArgs> = {}>(args?: Subset<T, SubjectVersion$scoreLinkSubjectVersionArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ScoreLinkSubjectVersionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        certificate<T extends SubjectVersion$certificateArgs<ExtArgs> = {}>(args?: Subset<T, SubjectVersion$certificateArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         /**
          * Attaches callbacks for the resolution and/or rejection of the Promise.
          * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -63695,6 +63698,7 @@ export namespace Prisma {
         outputStandard<T extends Certificate$outputStandardArgs<ExtArgs> = {}>(args?: Subset<T, Certificate$outputStandardArgs<ExtArgs>>): Prisma__OutputStandardClient<$Result.GetResult<Prisma.$OutputStandardPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         archivedCertificate<T extends Certificate$archivedCertificateArgs<ExtArgs> = {}>(args?: Subset<T, Certificate$archivedCertificateArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ArchivedCertificatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         subjects<T extends Certificate$subjectsArgs<ExtArgs> = {}>(args?: Subset<T, Certificate$subjectsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificateOnSubjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        subjectVersions<T extends Certificate$subjectVersionsArgs<ExtArgs> = {}>(args?: Subset<T, Certificate$subjectVersionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SubjectVersionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         /**
          * Attaches callbacks for the resolution and/or rejection of the Promise.
          * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -63732,6 +63736,7 @@ export namespace Prisma {
         readonly name: FieldRef<"Certificate", 'String'>;
         readonly englishName: FieldRef<"Certificate", 'String'>;
         readonly outputStandardId: FieldRef<"Certificate", 'String'>;
+        readonly scoreThreshold: FieldRef<"Certificate", 'Float'>;
         readonly isUsingScore: FieldRef<"Certificate", 'Boolean'>;
     }
 
@@ -94516,6 +94521,7 @@ export namespace Prisma {
         readonly updatedAt: FieldRef<"ExamBank", 'DateTime'>;
         readonly createdBy: FieldRef<"ExamBank", 'String'>;
         readonly examId: FieldRef<"ExamBank", 'String'>;
+        readonly examTime: FieldRef<"ExamBank", 'Int'>;
         readonly examCode: FieldRef<"ExamBank", 'String'>;
         readonly subjectClassId: FieldRef<"ExamBank", 'String'>;
         readonly explain: FieldRef<"ExamBank", 'String'>;
@@ -142593,6 +142599,7 @@ export namespace Prisma {
         exams: number
         examFramework: number
         scoreLinkSubjectVersion: number
+        certificate: number
     };
     export type SubjectVersionCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         trainingBlocks?: boolean | SubjectVersionCountOutputTypeCountTrainingBlocksArgs
@@ -142611,6 +142618,7 @@ export namespace Prisma {
         exams?: boolean | SubjectVersionCountOutputTypeCountExamsArgs
         examFramework?: boolean | SubjectVersionCountOutputTypeCountExamFrameworkArgs
         scoreLinkSubjectVersion?: boolean | SubjectVersionCountOutputTypeCountScoreLinkSubjectVersionArgs
+        certificate?: boolean | SubjectVersionCountOutputTypeCountCertificateArgs
     };
     /**
      * SubjectVersionCountOutputType without action
@@ -142716,6 +142724,12 @@ export namespace Prisma {
      */
     export type SubjectVersionCountOutputTypeCountScoreLinkSubjectVersionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         where?: ScoreLinkSubjectVersionWhereInput
+    };
+    /**
+     * SubjectVersionCountOutputType without action
+     */
+    export type SubjectVersionCountOutputTypeCountCertificateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: CertificateWhereInput
     };
     /**
      * Count Type EquivalencyGroupCountOutputType
@@ -143579,10 +143593,12 @@ export namespace Prisma {
     export type CertificateCountOutputType = {
         archivedCertificate: number
         subjects: number
+        subjectVersions: number
     };
     export type CertificateCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         archivedCertificate?: boolean | CertificateCountOutputTypeCountArchivedCertificateArgs
         subjects?: boolean | CertificateCountOutputTypeCountSubjectsArgs
+        subjectVersions?: boolean | CertificateCountOutputTypeCountSubjectVersionsArgs
     };
     /**
      * CertificateCountOutputType without action
@@ -143604,6 +143620,12 @@ export namespace Prisma {
      */
     export type CertificateCountOutputTypeCountSubjectsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         where?: CertificateOnSubjectWhereInput
+    };
+    /**
+     * CertificateCountOutputType without action
+     */
+    export type CertificateCountOutputTypeCountSubjectVersionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: SubjectVersionWhereInput
     };
     /**
      * Count Type AwardCountOutputType
@@ -225237,6 +225259,7 @@ export namespace Prisma {
         exams?: boolean | SubjectVersion$examsArgs<ExtArgs>
         examFramework?: boolean | SubjectVersion$examFrameworkArgs<ExtArgs>
         scoreLinkSubjectVersion?: boolean | SubjectVersion$scoreLinkSubjectVersionArgs<ExtArgs>
+        certificate?: boolean | SubjectVersion$certificateArgs<ExtArgs>
         _count?: boolean | SubjectVersionCountOutputTypeDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["subjectVersion"]>;
     export type SubjectVersionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -225383,6 +225406,7 @@ export namespace Prisma {
         exams?: boolean | SubjectVersion$examsArgs<ExtArgs>
         examFramework?: boolean | SubjectVersion$examFrameworkArgs<ExtArgs>
         scoreLinkSubjectVersion?: boolean | SubjectVersion$scoreLinkSubjectVersionArgs<ExtArgs>
+        certificate?: boolean | SubjectVersion$certificateArgs<ExtArgs>
         _count?: boolean | SubjectVersionCountOutputTypeDefaultArgs<ExtArgs>
     };
     export type SubjectVersionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -225426,6 +225450,7 @@ export namespace Prisma {
             exams: Prisma.$ExamPayload<ExtArgs>[]
             examFramework: Prisma.$ExamFrameworkPayload<ExtArgs>[]
             scoreLinkSubjectVersion: Prisma.$ScoreLinkSubjectVersionPayload<ExtArgs>[]
+            certificate: Prisma.$CertificatePayload<ExtArgs>[]
         }
         scalars: $Extensions.GetPayloadResult<{
             id: string
@@ -226263,6 +226288,29 @@ export namespace Prisma {
         take?: number
         skip?: number
         distinct?: ScoreLinkSubjectVersionScalarFieldEnum | ScoreLinkSubjectVersionScalarFieldEnum[]
+    };
+    /**
+     * SubjectVersion.certificate
+     */
+    export type SubjectVersion$certificateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the Certificate
+         */
+        select?: CertificateSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the Certificate
+         */
+        omit?: CertificateOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: CertificateInclude<ExtArgs> | null
+        where?: CertificateWhereInput
+        orderBy?: CertificateOrderByWithRelationInput | CertificateOrderByWithRelationInput[]
+        cursor?: CertificateWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: CertificateScalarFieldEnum | CertificateScalarFieldEnum[]
     };
     /**
      * SubjectVersion without action
@@ -250725,8 +250773,16 @@ export namespace Prisma {
      */
     export type AggregateCertificate = {
         _count: CertificateCountAggregateOutputType | null
+        _avg: CertificateAvgAggregateOutputType | null
+        _sum: CertificateSumAggregateOutputType | null
         _min: CertificateMinAggregateOutputType | null
         _max: CertificateMaxAggregateOutputType | null
+    };
+    export type CertificateAvgAggregateOutputType = {
+        scoreThreshold: number | null
+    };
+    export type CertificateSumAggregateOutputType = {
+        scoreThreshold: number | null
     };
     export type CertificateMinAggregateOutputType = {
         id: string | null
@@ -250740,6 +250796,7 @@ export namespace Prisma {
         name: string | null
         englishName: string | null
         outputStandardId: string | null
+        scoreThreshold: number | null
         isUsingScore: boolean | null
     };
     export type CertificateMaxAggregateOutputType = {
@@ -250754,6 +250811,7 @@ export namespace Prisma {
         name: string | null
         englishName: string | null
         outputStandardId: string | null
+        scoreThreshold: number | null
         isUsingScore: boolean | null
     };
     export type CertificateCountAggregateOutputType = {
@@ -250768,8 +250826,15 @@ export namespace Prisma {
         name: number
         englishName: number
         outputStandardId: number
+        scoreThreshold: number
         isUsingScore: number
         _all: number
+    };
+    export type CertificateAvgAggregateInputType = {
+        scoreThreshold?: true
+    };
+    export type CertificateSumAggregateInputType = {
+        scoreThreshold?: true
     };
     export type CertificateMinAggregateInputType = {
         id?: true
@@ -250783,6 +250848,7 @@ export namespace Prisma {
         name?: true
         englishName?: true
         outputStandardId?: true
+        scoreThreshold?: true
         isUsingScore?: true
     };
     export type CertificateMaxAggregateInputType = {
@@ -250797,6 +250863,7 @@ export namespace Prisma {
         name?: true
         englishName?: true
         outputStandardId?: true
+        scoreThreshold?: true
         isUsingScore?: true
     };
     export type CertificateCountAggregateInputType = {
@@ -250811,6 +250878,7 @@ export namespace Prisma {
         name?: true
         englishName?: true
         outputStandardId?: true
+        scoreThreshold?: true
         isUsingScore?: true
         _all?: true
     };
@@ -250852,6 +250920,18 @@ export namespace Prisma {
         /**
          * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
          * 
+         * Select which fields to average
+        **/
+        _avg?: CertificateAvgAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to sum
+        **/
+        _sum?: CertificateSumAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
          * Select which fields to find the minimum value
         **/
         _min?: CertificateMinAggregateInputType
@@ -250877,6 +250957,8 @@ export namespace Prisma {
         take?: number
         skip?: number
         _count?: CertificateCountAggregateInputType | true
+        _avg?: CertificateAvgAggregateInputType
+        _sum?: CertificateSumAggregateInputType
         _min?: CertificateMinAggregateInputType
         _max?: CertificateMaxAggregateInputType
     };
@@ -250892,8 +250974,11 @@ export namespace Prisma {
         name: string
         englishName: string | null
         outputStandardId: string | null
+        scoreThreshold: number
         isUsingScore: boolean
         _count: CertificateCountAggregateOutputType | null
+        _avg: CertificateAvgAggregateOutputType | null
+        _sum: CertificateSumAggregateOutputType | null
         _min: CertificateMinAggregateOutputType | null
         _max: CertificateMaxAggregateOutputType | null
     };
@@ -250921,10 +251006,12 @@ export namespace Prisma {
         name?: boolean
         englishName?: boolean
         outputStandardId?: boolean
+        scoreThreshold?: boolean
         isUsingScore?: boolean
         outputStandard?: boolean | Certificate$outputStandardArgs<ExtArgs>
         archivedCertificate?: boolean | Certificate$archivedCertificateArgs<ExtArgs>
         subjects?: boolean | Certificate$subjectsArgs<ExtArgs>
+        subjectVersions?: boolean | Certificate$subjectVersionsArgs<ExtArgs>
         _count?: boolean | CertificateCountOutputTypeDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["certificate"]>;
     export type CertificateSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -250939,6 +251026,7 @@ export namespace Prisma {
         name?: boolean
         englishName?: boolean
         outputStandardId?: boolean
+        scoreThreshold?: boolean
         isUsingScore?: boolean
         outputStandard?: boolean | Certificate$outputStandardArgs<ExtArgs>
     }, ExtArgs["result"]["certificate"]>;
@@ -250954,6 +251042,7 @@ export namespace Prisma {
         name?: boolean
         englishName?: boolean
         outputStandardId?: boolean
+        scoreThreshold?: boolean
         isUsingScore?: boolean
         outputStandard?: boolean | Certificate$outputStandardArgs<ExtArgs>
     }, ExtArgs["result"]["certificate"]>;
@@ -250969,13 +251058,15 @@ export namespace Prisma {
         name?: boolean
         englishName?: boolean
         outputStandardId?: boolean
+        scoreThreshold?: boolean
         isUsingScore?: boolean
     };
-    export type CertificateOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name" | "englishName" | "outputStandardId" | "isUsingScore", ExtArgs["result"]["certificate"]>;
+    export type CertificateOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name" | "englishName" | "outputStandardId" | "scoreThreshold" | "isUsingScore", ExtArgs["result"]["certificate"]>;
     export type CertificateInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         outputStandard?: boolean | Certificate$outputStandardArgs<ExtArgs>
         archivedCertificate?: boolean | Certificate$archivedCertificateArgs<ExtArgs>
         subjects?: boolean | Certificate$subjectsArgs<ExtArgs>
+        subjectVersions?: boolean | Certificate$subjectVersionsArgs<ExtArgs>
         _count?: boolean | CertificateCountOutputTypeDefaultArgs<ExtArgs>
     };
     export type CertificateIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -250999,6 +251090,10 @@ export namespace Prisma {
              * môn học có thể phiên điểm
              */
             subjects: Prisma.$CertificateOnSubjectPayload<ExtArgs>[]
+            /**
+             * danh sách môn để xét chứng chỉ (e.g. SUM(finalScore * credit) / SUM(credit) > 5)
+             */
+            subjectVersions: Prisma.$SubjectVersionPayload<ExtArgs>[]
         }
         scalars: $Extensions.GetPayloadResult<{
             id: string
@@ -251012,6 +251107,7 @@ export namespace Prisma {
             name: string
             englishName: string | null
             outputStandardId: string | null
+            scoreThreshold: number
             isUsingScore: boolean
         }, ExtArgs["result"]["certificate"]>
         composites: {}
@@ -251460,6 +251556,29 @@ export namespace Prisma {
         take?: number
         skip?: number
         distinct?: CertificateOnSubjectScalarFieldEnum | CertificateOnSubjectScalarFieldEnum[]
+    };
+    /**
+     * Certificate.subjectVersions
+     */
+    export type Certificate$subjectVersionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the SubjectVersion
+         */
+        select?: SubjectVersionSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the SubjectVersion
+         */
+        omit?: SubjectVersionOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: SubjectVersionInclude<ExtArgs> | null
+        where?: SubjectVersionWhereInput
+        orderBy?: SubjectVersionOrderByWithRelationInput | SubjectVersionOrderByWithRelationInput[]
+        cursor?: SubjectVersionWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: SubjectVersionScalarFieldEnum | SubjectVersionScalarFieldEnum[]
     };
     /**
      * Certificate without action
@@ -314153,8 +314272,16 @@ export namespace Prisma {
      */
     export type AggregateExamBank = {
         _count: ExamBankCountAggregateOutputType | null
+        _avg: ExamBankAvgAggregateOutputType | null
+        _sum: ExamBankSumAggregateOutputType | null
         _min: ExamBankMinAggregateOutputType | null
         _max: ExamBankMaxAggregateOutputType | null
+    };
+    export type ExamBankAvgAggregateOutputType = {
+        examTime: number | null
+    };
+    export type ExamBankSumAggregateOutputType = {
+        examTime: number | null
     };
     export type ExamBankMinAggregateOutputType = {
         id: string | null
@@ -314166,6 +314293,7 @@ export namespace Prisma {
         updatedAt: Date | null
         createdBy: string | null
         examId: string | null
+        examTime: number | null
         examCode: string | null
         subjectClassId: string | null
         explain: string | null
@@ -314186,6 +314314,7 @@ export namespace Prisma {
         updatedAt: Date | null
         createdBy: string | null
         examId: string | null
+        examTime: number | null
         examCode: string | null
         subjectClassId: string | null
         explain: string | null
@@ -314206,6 +314335,7 @@ export namespace Prisma {
         updatedAt: number
         createdBy: number
         examId: number
+        examTime: number
         examCode: number
         subjectClassId: number
         explain: number
@@ -314217,6 +314347,12 @@ export namespace Prisma {
         isGroup: number
         _all: number
     };
+    export type ExamBankAvgAggregateInputType = {
+        examTime?: true
+    };
+    export type ExamBankSumAggregateInputType = {
+        examTime?: true
+    };
     export type ExamBankMinAggregateInputType = {
         id?: true
         code?: true
@@ -314227,6 +314363,7 @@ export namespace Prisma {
         updatedAt?: true
         createdBy?: true
         examId?: true
+        examTime?: true
         examCode?: true
         subjectClassId?: true
         explain?: true
@@ -314247,6 +314384,7 @@ export namespace Prisma {
         updatedAt?: true
         createdBy?: true
         examId?: true
+        examTime?: true
         examCode?: true
         subjectClassId?: true
         explain?: true
@@ -314267,6 +314405,7 @@ export namespace Prisma {
         updatedAt?: true
         createdBy?: true
         examId?: true
+        examTime?: true
         examCode?: true
         subjectClassId?: true
         explain?: true
@@ -314316,6 +314455,18 @@ export namespace Prisma {
         /**
          * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
          * 
+         * Select which fields to average
+        **/
+        _avg?: ExamBankAvgAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to sum
+        **/
+        _sum?: ExamBankSumAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
          * Select which fields to find the minimum value
         **/
         _min?: ExamBankMinAggregateInputType
@@ -314341,6 +314492,8 @@ export namespace Prisma {
         take?: number
         skip?: number
         _count?: ExamBankCountAggregateInputType | true
+        _avg?: ExamBankAvgAggregateInputType
+        _sum?: ExamBankSumAggregateInputType
         _min?: ExamBankMinAggregateInputType
         _max?: ExamBankMaxAggregateInputType
     };
@@ -314354,6 +314507,7 @@ export namespace Prisma {
         updatedAt: Date
         createdBy: string | null
         examId: string
+        examTime: number | null
         examCode: string
         subjectClassId: string | null
         explain: string | null
@@ -314364,6 +314518,8 @@ export namespace Prisma {
         isNote: boolean | null
         isGroup: boolean | null
         _count: ExamBankCountAggregateOutputType | null
+        _avg: ExamBankAvgAggregateOutputType | null
+        _sum: ExamBankSumAggregateOutputType | null
         _min: ExamBankMinAggregateOutputType | null
         _max: ExamBankMaxAggregateOutputType | null
     };
@@ -314389,6 +314545,7 @@ export namespace Prisma {
         updatedAt?: boolean
         createdBy?: boolean
         examId?: boolean
+        examTime?: boolean
         examCode?: boolean
         subjectClassId?: boolean
         explain?: boolean
@@ -314414,6 +314571,7 @@ export namespace Prisma {
         updatedAt?: boolean
         createdBy?: boolean
         examId?: boolean
+        examTime?: boolean
         examCode?: boolean
         subjectClassId?: boolean
         explain?: boolean
@@ -314437,6 +314595,7 @@ export namespace Prisma {
         updatedAt?: boolean
         createdBy?: boolean
         examId?: boolean
+        examTime?: boolean
         examCode?: boolean
         subjectClassId?: boolean
         explain?: boolean
@@ -314460,6 +314619,7 @@ export namespace Prisma {
         updatedAt?: boolean
         createdBy?: boolean
         examId?: boolean
+        examTime?: boolean
         examCode?: boolean
         subjectClassId?: boolean
         explain?: boolean
@@ -314470,7 +314630,7 @@ export namespace Prisma {
         isNote?: boolean
         isGroup?: boolean
     };
-    export type ExamBankOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "examId" | "examCode" | "subjectClassId" | "explain" | "examDay" | "examType" | "examMatrixId" | "isLock" | "isNote" | "isGroup", ExtArgs["result"]["examBank"]>;
+    export type ExamBankOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "examId" | "examTime" | "examCode" | "subjectClassId" | "explain" | "examDay" | "examType" | "examMatrixId" | "isLock" | "isNote" | "isGroup", ExtArgs["result"]["examBank"]>;
     export type ExamBankInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         exam?: boolean | ExamDefaultArgs<ExtArgs>
         subjectClass?: boolean | ExamBank$subjectClassArgs<ExtArgs>
@@ -314506,6 +314666,7 @@ export namespace Prisma {
             updatedAt: Date
             createdBy: string | null
             examId: string
+            examTime: number | null
             examCode: string
             subjectClassId: string | null
             explain: string | null
@@ -373799,6 +373960,7 @@ export namespace Prisma {
         exams?: ExamListRelationFilter
         examFramework?: ExamFrameworkListRelationFilter
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionListRelationFilter
+        certificate?: CertificateListRelationFilter
     };
     export type SubjectVersionOrderByWithRelationInput = {
         id?: SortOrder
@@ -373857,6 +374019,7 @@ export namespace Prisma {
         exams?: ExamOrderByRelationAggregateInput
         examFramework?: ExamFrameworkOrderByRelationAggregateInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionOrderByRelationAggregateInput
+        certificate?: CertificateOrderByRelationAggregateInput
         _relevance?: SubjectVersionOrderByRelevanceInput
     };
     export type SubjectVersionWhereUniqueInput = Prisma.AtLeast<{
@@ -373920,6 +374083,7 @@ export namespace Prisma {
         exams?: ExamListRelationFilter
         examFramework?: ExamFrameworkListRelationFilter
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionListRelationFilter
+        certificate?: CertificateListRelationFilter
     }, "id" | "trainingObjectTypeId_name_credit_period_managementOrganizationId">;
     export type SubjectVersionOrderByWithAggregationInput = {
         id?: SortOrder
@@ -377222,10 +377386,12 @@ export namespace Prisma {
         name?: StringFilter<"Certificate"> | string
         englishName?: StringNullableFilter<"Certificate"> | string | null
         outputStandardId?: StringNullableFilter<"Certificate"> | string | null
+        scoreThreshold?: FloatFilter<"Certificate"> | number
         isUsingScore?: BoolFilter<"Certificate"> | boolean
         outputStandard?: XOR<OutputStandardNullableScalarRelationFilter, OutputStandardWhereInput> | null
         archivedCertificate?: ArchivedCertificateListRelationFilter
         subjects?: CertificateOnSubjectListRelationFilter
+        subjectVersions?: SubjectVersionListRelationFilter
     };
     export type CertificateOrderByWithRelationInput = {
         id?: SortOrder
@@ -377239,10 +377405,12 @@ export namespace Prisma {
         name?: SortOrder
         englishName?: SortOrderInput | SortOrder
         outputStandardId?: SortOrderInput | SortOrder
+        scoreThreshold?: SortOrder
         isUsingScore?: SortOrder
         outputStandard?: OutputStandardOrderByWithRelationInput
         archivedCertificate?: ArchivedCertificateOrderByRelationAggregateInput
         subjects?: CertificateOnSubjectOrderByRelationAggregateInput
+        subjectVersions?: SubjectVersionOrderByRelationAggregateInput
         _relevance?: CertificateOrderByRelevanceInput
     };
     export type CertificateWhereUniqueInput = Prisma.AtLeast<{
@@ -377260,10 +377428,12 @@ export namespace Prisma {
         name?: StringFilter<"Certificate"> | string
         englishName?: StringNullableFilter<"Certificate"> | string | null
         outputStandardId?: StringNullableFilter<"Certificate"> | string | null
+        scoreThreshold?: FloatFilter<"Certificate"> | number
         isUsingScore?: BoolFilter<"Certificate"> | boolean
         outputStandard?: XOR<OutputStandardNullableScalarRelationFilter, OutputStandardWhereInput> | null
         archivedCertificate?: ArchivedCertificateListRelationFilter
         subjects?: CertificateOnSubjectListRelationFilter
+        subjectVersions?: SubjectVersionListRelationFilter
     }, "id" | "code">;
     export type CertificateOrderByWithAggregationInput = {
         id?: SortOrder
@@ -377277,10 +377447,13 @@ export namespace Prisma {
         name?: SortOrder
         englishName?: SortOrderInput | SortOrder
         outputStandardId?: SortOrderInput | SortOrder
+        scoreThreshold?: SortOrder
         isUsingScore?: SortOrder
         _count?: CertificateCountOrderByAggregateInput
+        _avg?: CertificateAvgOrderByAggregateInput
         _max?: CertificateMaxOrderByAggregateInput
         _min?: CertificateMinOrderByAggregateInput
+        _sum?: CertificateSumOrderByAggregateInput
     };
     export type CertificateScalarWhereWithAggregatesInput = {
         AND?: CertificateScalarWhereWithAggregatesInput | CertificateScalarWhereWithAggregatesInput[]
@@ -377297,6 +377470,7 @@ export namespace Prisma {
         name?: StringWithAggregatesFilter<"Certificate"> | string
         englishName?: StringNullableWithAggregatesFilter<"Certificate"> | string | null
         outputStandardId?: StringNullableWithAggregatesFilter<"Certificate"> | string | null
+        scoreThreshold?: FloatWithAggregatesFilter<"Certificate"> | number
         isUsingScore?: BoolWithAggregatesFilter<"Certificate"> | boolean
     };
     export type CertificateOnSubjectWhereInput = {
@@ -385878,6 +386052,7 @@ export namespace Prisma {
         updatedAt?: DateTimeFilter<"ExamBank"> | Date | string
         createdBy?: UuidNullableFilter<"ExamBank"> | string | null
         examId?: StringFilter<"ExamBank"> | string
+        examTime?: IntNullableFilter<"ExamBank"> | number | null
         examCode?: StringFilter<"ExamBank"> | string
         subjectClassId?: StringNullableFilter<"ExamBank"> | string | null
         explain?: StringNullableFilter<"ExamBank"> | string | null
@@ -385902,6 +386077,7 @@ export namespace Prisma {
         updatedAt?: SortOrder
         createdBy?: SortOrderInput | SortOrder
         examId?: SortOrder
+        examTime?: SortOrderInput | SortOrder
         examCode?: SortOrder
         subjectClassId?: SortOrderInput | SortOrder
         explain?: SortOrderInput | SortOrder
@@ -385931,6 +386107,7 @@ export namespace Prisma {
         updatedAt?: DateTimeFilter<"ExamBank"> | Date | string
         createdBy?: UuidNullableFilter<"ExamBank"> | string | null
         examId?: StringFilter<"ExamBank"> | string
+        examTime?: IntNullableFilter<"ExamBank"> | number | null
         examCode?: StringFilter<"ExamBank"> | string
         subjectClassId?: StringNullableFilter<"ExamBank"> | string | null
         explain?: StringNullableFilter<"ExamBank"> | string | null
@@ -385955,6 +386132,7 @@ export namespace Prisma {
         updatedAt?: SortOrder
         createdBy?: SortOrderInput | SortOrder
         examId?: SortOrder
+        examTime?: SortOrderInput | SortOrder
         examCode?: SortOrder
         subjectClassId?: SortOrderInput | SortOrder
         explain?: SortOrderInput | SortOrder
@@ -385965,8 +386143,10 @@ export namespace Prisma {
         isNote?: SortOrderInput | SortOrder
         isGroup?: SortOrderInput | SortOrder
         _count?: ExamBankCountOrderByAggregateInput
+        _avg?: ExamBankAvgOrderByAggregateInput
         _max?: ExamBankMaxOrderByAggregateInput
         _min?: ExamBankMinOrderByAggregateInput
+        _sum?: ExamBankSumOrderByAggregateInput
     };
     export type ExamBankScalarWhereWithAggregatesInput = {
         AND?: ExamBankScalarWhereWithAggregatesInput | ExamBankScalarWhereWithAggregatesInput[]
@@ -385981,6 +386161,7 @@ export namespace Prisma {
         updatedAt?: DateTimeWithAggregatesFilter<"ExamBank"> | Date | string
         createdBy?: UuidNullableWithAggregatesFilter<"ExamBank"> | string | null
         examId?: StringWithAggregatesFilter<"ExamBank"> | string
+        examTime?: IntNullableWithAggregatesFilter<"ExamBank"> | number | null
         examCode?: StringWithAggregatesFilter<"ExamBank"> | string
         subjectClassId?: StringNullableWithAggregatesFilter<"ExamBank"> | string | null
         explain?: StringNullableWithAggregatesFilter<"ExamBank"> | string | null
@@ -404620,6 +404801,7 @@ export namespace Prisma {
         exams?: ExamCreateNestedManyWithoutSubjectVersionInput
         examFramework?: ExamFrameworkCreateNestedManyWithoutSubjectVersionInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionCreateNestedManyWithoutSubjectVersionInput
+        certificate?: CertificateCreateNestedManyWithoutSubjectVersionsInput
     };
     export type SubjectVersionUncheckedCreateInput = {
         id?: string
@@ -404674,6 +404856,7 @@ export namespace Prisma {
         exams?: ExamUncheckedCreateNestedManyWithoutSubjectVersionInput
         examFramework?: ExamFrameworkUncheckedCreateNestedManyWithoutSubjectVersionInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionUncheckedCreateNestedManyWithoutSubjectVersionInput
+        certificate?: CertificateUncheckedCreateNestedManyWithoutSubjectVersionsInput
     };
     export type SubjectVersionUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -404728,6 +404911,7 @@ export namespace Prisma {
         exams?: ExamUpdateManyWithoutSubjectVersionNestedInput
         examFramework?: ExamFrameworkUpdateManyWithoutSubjectVersionNestedInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionUpdateManyWithoutSubjectVersionNestedInput
+        certificate?: CertificateUpdateManyWithoutSubjectVersionsNestedInput
     };
     export type SubjectVersionUncheckedUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -404782,6 +404966,7 @@ export namespace Prisma {
         exams?: ExamUncheckedUpdateManyWithoutSubjectVersionNestedInput
         examFramework?: ExamFrameworkUncheckedUpdateManyWithoutSubjectVersionNestedInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionUncheckedUpdateManyWithoutSubjectVersionNestedInput
+        certificate?: CertificateUncheckedUpdateManyWithoutSubjectVersionsNestedInput
     };
     export type SubjectVersionCreateManyInput = {
         id?: string
@@ -408465,10 +408650,12 @@ export namespace Prisma {
         createdBy?: string | null
         name: string
         englishName?: string | null
+        scoreThreshold?: number
         isUsingScore?: boolean
         outputStandard?: OutputStandardCreateNestedOneWithoutCertificatesInput
         archivedCertificate?: ArchivedCertificateCreateNestedManyWithoutCertificateInput
         subjects?: CertificateOnSubjectCreateNestedManyWithoutCertificateInput
+        subjectVersions?: SubjectVersionCreateNestedManyWithoutCertificateInput
     };
     export type CertificateUncheckedCreateInput = {
         id?: string
@@ -408482,9 +408669,11 @@ export namespace Prisma {
         name: string
         englishName?: string | null
         outputStandardId?: string | null
+        scoreThreshold?: number
         isUsingScore?: boolean
         archivedCertificate?: ArchivedCertificateUncheckedCreateNestedManyWithoutCertificateInput
         subjects?: CertificateOnSubjectUncheckedCreateNestedManyWithoutCertificateInput
+        subjectVersions?: SubjectVersionUncheckedCreateNestedManyWithoutCertificateInput
     };
     export type CertificateUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -408497,10 +408686,12 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
+        scoreThreshold?: FloatFieldUpdateOperationsInput | number
         isUsingScore?: BoolFieldUpdateOperationsInput | boolean
         outputStandard?: OutputStandardUpdateOneWithoutCertificatesNestedInput
         archivedCertificate?: ArchivedCertificateUpdateManyWithoutCertificateNestedInput
         subjects?: CertificateOnSubjectUpdateManyWithoutCertificateNestedInput
+        subjectVersions?: SubjectVersionUpdateManyWithoutCertificateNestedInput
     };
     export type CertificateUncheckedUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -408514,9 +408705,11 @@ export namespace Prisma {
         name?: StringFieldUpdateOperationsInput | string
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
         outputStandardId?: NullableStringFieldUpdateOperationsInput | string | null
+        scoreThreshold?: FloatFieldUpdateOperationsInput | number
         isUsingScore?: BoolFieldUpdateOperationsInput | boolean
         archivedCertificate?: ArchivedCertificateUncheckedUpdateManyWithoutCertificateNestedInput
         subjects?: CertificateOnSubjectUncheckedUpdateManyWithoutCertificateNestedInput
+        subjectVersions?: SubjectVersionUncheckedUpdateManyWithoutCertificateNestedInput
     };
     export type CertificateCreateManyInput = {
         id?: string
@@ -408530,6 +408723,7 @@ export namespace Prisma {
         name: string
         englishName?: string | null
         outputStandardId?: string | null
+        scoreThreshold?: number
         isUsingScore?: boolean
     };
     export type CertificateUpdateManyMutationInput = {
@@ -408543,6 +408737,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
+        scoreThreshold?: FloatFieldUpdateOperationsInput | number
         isUsingScore?: BoolFieldUpdateOperationsInput | boolean
     };
     export type CertificateUncheckedUpdateManyInput = {
@@ -408557,6 +408752,7 @@ export namespace Prisma {
         name?: StringFieldUpdateOperationsInput | string
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
         outputStandardId?: NullableStringFieldUpdateOperationsInput | string | null
+        scoreThreshold?: FloatFieldUpdateOperationsInput | number
         isUsingScore?: BoolFieldUpdateOperationsInput | boolean
     };
     export type CertificateOnSubjectCreateInput = {
@@ -418191,6 +418387,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        examTime?: number | null
         examCode: string
         explain?: string | null
         examDay?: Date | string | null
@@ -418213,6 +418410,7 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         examId: string
+        examTime?: number | null
         examCode: string
         subjectClassId?: string | null
         explain?: string | null
@@ -418233,6 +418431,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        examTime?: NullableIntFieldUpdateOperationsInput | number | null
         examCode?: StringFieldUpdateOperationsInput | string
         explain?: NullableStringFieldUpdateOperationsInput | string | null
         examDay?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -418255,6 +418454,7 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         examId?: StringFieldUpdateOperationsInput | string
+        examTime?: NullableIntFieldUpdateOperationsInput | number | null
         examCode?: StringFieldUpdateOperationsInput | string
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         explain?: NullableStringFieldUpdateOperationsInput | string | null
@@ -418276,6 +418476,7 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         examId: string
+        examTime?: number | null
         examCode: string
         subjectClassId?: string | null
         explain?: string | null
@@ -418295,6 +418496,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        examTime?: NullableIntFieldUpdateOperationsInput | number | null
         examCode?: StringFieldUpdateOperationsInput | string
         explain?: NullableStringFieldUpdateOperationsInput | string | null
         examDay?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -418313,6 +418515,7 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         examId?: StringFieldUpdateOperationsInput | string
+        examTime?: NullableIntFieldUpdateOperationsInput | number | null
         examCode?: StringFieldUpdateOperationsInput | string
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         explain?: NullableStringFieldUpdateOperationsInput | string | null
@@ -432847,6 +433050,11 @@ export namespace Prisma {
         some?: ScoreLinkSubjectVersionWhereInput
         none?: ScoreLinkSubjectVersionWhereInput
     };
+    export type CertificateListRelationFilter = {
+        every?: CertificateWhereInput
+        some?: CertificateWhereInput
+        none?: CertificateWhereInput
+    };
     export type TrainingBlockSubjectOrderByRelationAggregateInput = {
         _count?: SortOrder
     };
@@ -432863,6 +433071,9 @@ export namespace Prisma {
         _count?: SortOrder
     };
     export type ScoreLinkSubjectVersionOrderByRelationAggregateInput = {
+        _count?: SortOrder
+    };
+    export type CertificateOrderByRelationAggregateInput = {
         _count?: SortOrder
     };
     export type SubjectVersionOrderByRelevanceInput = {
@@ -435100,7 +435311,11 @@ export namespace Prisma {
         name?: SortOrder
         englishName?: SortOrder
         outputStandardId?: SortOrder
+        scoreThreshold?: SortOrder
         isUsingScore?: SortOrder
+    };
+    export type CertificateAvgOrderByAggregateInput = {
+        scoreThreshold?: SortOrder
     };
     export type CertificateMaxOrderByAggregateInput = {
         id?: SortOrder
@@ -435114,6 +435329,7 @@ export namespace Prisma {
         name?: SortOrder
         englishName?: SortOrder
         outputStandardId?: SortOrder
+        scoreThreshold?: SortOrder
         isUsingScore?: SortOrder
     };
     export type CertificateMinOrderByAggregateInput = {
@@ -435128,7 +435344,11 @@ export namespace Prisma {
         name?: SortOrder
         englishName?: SortOrder
         outputStandardId?: SortOrder
+        scoreThreshold?: SortOrder
         isUsingScore?: SortOrder
+    };
+    export type CertificateSumOrderByAggregateInput = {
+        scoreThreshold?: SortOrder
     };
     export type CertificateOnSubjectOrderByRelevanceInput = {
         fields: CertificateOnSubjectOrderByRelevanceFieldEnum | CertificateOnSubjectOrderByRelevanceFieldEnum[]
@@ -435424,14 +435644,6 @@ export namespace Prisma {
     };
     export type LoadCategorySumOrderByAggregateInput = {
         standardHours?: SortOrder
-    };
-    export type CertificateListRelationFilter = {
-        every?: CertificateWhereInput
-        some?: CertificateWhereInput
-        none?: CertificateWhereInput
-    };
-    export type CertificateOrderByRelationAggregateInput = {
-        _count?: SortOrder
     };
     export type OutputStandardOrderByRelevanceInput = {
         fields: OutputStandardOrderByRelevanceFieldEnum | OutputStandardOrderByRelevanceFieldEnum[]
@@ -440966,6 +441178,7 @@ export namespace Prisma {
         updatedAt?: SortOrder
         createdBy?: SortOrder
         examId?: SortOrder
+        examTime?: SortOrder
         examCode?: SortOrder
         subjectClassId?: SortOrder
         explain?: SortOrder
@@ -440975,6 +441188,9 @@ export namespace Prisma {
         isLock?: SortOrder
         isNote?: SortOrder
         isGroup?: SortOrder
+    };
+    export type ExamBankAvgOrderByAggregateInput = {
+        examTime?: SortOrder
     };
     export type ExamBankMaxOrderByAggregateInput = {
         id?: SortOrder
@@ -440986,6 +441202,7 @@ export namespace Prisma {
         updatedAt?: SortOrder
         createdBy?: SortOrder
         examId?: SortOrder
+        examTime?: SortOrder
         examCode?: SortOrder
         subjectClassId?: SortOrder
         explain?: SortOrder
@@ -441006,6 +441223,7 @@ export namespace Prisma {
         updatedAt?: SortOrder
         createdBy?: SortOrder
         examId?: SortOrder
+        examTime?: SortOrder
         examCode?: SortOrder
         subjectClassId?: SortOrder
         explain?: SortOrder
@@ -441015,6 +441233,9 @@ export namespace Prisma {
         isLock?: SortOrder
         isNote?: SortOrder
         isGroup?: SortOrder
+    };
+    export type ExamBankSumOrderByAggregateInput = {
+        examTime?: SortOrder
     };
     export type EnumExamTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
         equals?: $Enums.ExamType | EnumExamTypeFieldRefInput<$PrismaModel> | null
@@ -454594,6 +454815,11 @@ export namespace Prisma {
         createMany?: ScoreLinkSubjectVersionCreateManySubjectVersionInputEnvelope
         connect?: ScoreLinkSubjectVersionWhereUniqueInput | ScoreLinkSubjectVersionWhereUniqueInput[]
     };
+    export type CertificateCreateNestedManyWithoutSubjectVersionsInput = {
+        create?: XOR<CertificateCreateWithoutSubjectVersionsInput, CertificateUncheckedCreateWithoutSubjectVersionsInput> | CertificateCreateWithoutSubjectVersionsInput[] | CertificateUncheckedCreateWithoutSubjectVersionsInput[]
+        connectOrCreate?: CertificateCreateOrConnectWithoutSubjectVersionsInput | CertificateCreateOrConnectWithoutSubjectVersionsInput[]
+        connect?: CertificateWhereUniqueInput | CertificateWhereUniqueInput[]
+    };
     export type TrainingBlockSubjectUncheckedCreateNestedManyWithoutSubjectInput = {
         create?: XOR<TrainingBlockSubjectCreateWithoutSubjectInput, TrainingBlockSubjectUncheckedCreateWithoutSubjectInput> | TrainingBlockSubjectCreateWithoutSubjectInput[] | TrainingBlockSubjectUncheckedCreateWithoutSubjectInput[]
         connectOrCreate?: TrainingBlockSubjectCreateOrConnectWithoutSubjectInput | TrainingBlockSubjectCreateOrConnectWithoutSubjectInput[]
@@ -454685,6 +454911,11 @@ export namespace Prisma {
         connectOrCreate?: ScoreLinkSubjectVersionCreateOrConnectWithoutSubjectVersionInput | ScoreLinkSubjectVersionCreateOrConnectWithoutSubjectVersionInput[]
         createMany?: ScoreLinkSubjectVersionCreateManySubjectVersionInputEnvelope
         connect?: ScoreLinkSubjectVersionWhereUniqueInput | ScoreLinkSubjectVersionWhereUniqueInput[]
+    };
+    export type CertificateUncheckedCreateNestedManyWithoutSubjectVersionsInput = {
+        create?: XOR<CertificateCreateWithoutSubjectVersionsInput, CertificateUncheckedCreateWithoutSubjectVersionsInput> | CertificateCreateWithoutSubjectVersionsInput[] | CertificateUncheckedCreateWithoutSubjectVersionsInput[]
+        connectOrCreate?: CertificateCreateOrConnectWithoutSubjectVersionsInput | CertificateCreateOrConnectWithoutSubjectVersionsInput[]
+        connect?: CertificateWhereUniqueInput | CertificateWhereUniqueInput[]
     };
     export type EnumExamTypeFieldUpdateOperationsInput = {
         set?: $Enums.ExamType
@@ -454928,6 +455159,18 @@ export namespace Prisma {
         updateMany?: ScoreLinkSubjectVersionUpdateManyWithWhereWithoutSubjectVersionInput | ScoreLinkSubjectVersionUpdateManyWithWhereWithoutSubjectVersionInput[]
         deleteMany?: ScoreLinkSubjectVersionScalarWhereInput | ScoreLinkSubjectVersionScalarWhereInput[]
     };
+    export type CertificateUpdateManyWithoutSubjectVersionsNestedInput = {
+        create?: XOR<CertificateCreateWithoutSubjectVersionsInput, CertificateUncheckedCreateWithoutSubjectVersionsInput> | CertificateCreateWithoutSubjectVersionsInput[] | CertificateUncheckedCreateWithoutSubjectVersionsInput[]
+        connectOrCreate?: CertificateCreateOrConnectWithoutSubjectVersionsInput | CertificateCreateOrConnectWithoutSubjectVersionsInput[]
+        upsert?: CertificateUpsertWithWhereUniqueWithoutSubjectVersionsInput | CertificateUpsertWithWhereUniqueWithoutSubjectVersionsInput[]
+        set?: CertificateWhereUniqueInput | CertificateWhereUniqueInput[]
+        disconnect?: CertificateWhereUniqueInput | CertificateWhereUniqueInput[]
+        delete?: CertificateWhereUniqueInput | CertificateWhereUniqueInput[]
+        connect?: CertificateWhereUniqueInput | CertificateWhereUniqueInput[]
+        update?: CertificateUpdateWithWhereUniqueWithoutSubjectVersionsInput | CertificateUpdateWithWhereUniqueWithoutSubjectVersionsInput[]
+        updateMany?: CertificateUpdateManyWithWhereWithoutSubjectVersionsInput | CertificateUpdateManyWithWhereWithoutSubjectVersionsInput[]
+        deleteMany?: CertificateScalarWhereInput | CertificateScalarWhereInput[]
+    };
     export type TrainingBlockSubjectUncheckedUpdateManyWithoutSubjectNestedInput = {
         create?: XOR<TrainingBlockSubjectCreateWithoutSubjectInput, TrainingBlockSubjectUncheckedCreateWithoutSubjectInput> | TrainingBlockSubjectCreateWithoutSubjectInput[] | TrainingBlockSubjectUncheckedCreateWithoutSubjectInput[]
         connectOrCreate?: TrainingBlockSubjectCreateOrConnectWithoutSubjectInput | TrainingBlockSubjectCreateOrConnectWithoutSubjectInput[]
@@ -455131,6 +455374,18 @@ export namespace Prisma {
         update?: ScoreLinkSubjectVersionUpdateWithWhereUniqueWithoutSubjectVersionInput | ScoreLinkSubjectVersionUpdateWithWhereUniqueWithoutSubjectVersionInput[]
         updateMany?: ScoreLinkSubjectVersionUpdateManyWithWhereWithoutSubjectVersionInput | ScoreLinkSubjectVersionUpdateManyWithWhereWithoutSubjectVersionInput[]
         deleteMany?: ScoreLinkSubjectVersionScalarWhereInput | ScoreLinkSubjectVersionScalarWhereInput[]
+    };
+    export type CertificateUncheckedUpdateManyWithoutSubjectVersionsNestedInput = {
+        create?: XOR<CertificateCreateWithoutSubjectVersionsInput, CertificateUncheckedCreateWithoutSubjectVersionsInput> | CertificateCreateWithoutSubjectVersionsInput[] | CertificateUncheckedCreateWithoutSubjectVersionsInput[]
+        connectOrCreate?: CertificateCreateOrConnectWithoutSubjectVersionsInput | CertificateCreateOrConnectWithoutSubjectVersionsInput[]
+        upsert?: CertificateUpsertWithWhereUniqueWithoutSubjectVersionsInput | CertificateUpsertWithWhereUniqueWithoutSubjectVersionsInput[]
+        set?: CertificateWhereUniqueInput | CertificateWhereUniqueInput[]
+        disconnect?: CertificateWhereUniqueInput | CertificateWhereUniqueInput[]
+        delete?: CertificateWhereUniqueInput | CertificateWhereUniqueInput[]
+        connect?: CertificateWhereUniqueInput | CertificateWhereUniqueInput[]
+        update?: CertificateUpdateWithWhereUniqueWithoutSubjectVersionsInput | CertificateUpdateWithWhereUniqueWithoutSubjectVersionsInput[]
+        updateMany?: CertificateUpdateManyWithWhereWithoutSubjectVersionsInput | CertificateUpdateManyWithWhereWithoutSubjectVersionsInput[]
+        deleteMany?: CertificateScalarWhereInput | CertificateScalarWhereInput[]
     };
     export type SubjectVersionCreateNestedOneWithoutSubjectVersionHistoryInput = {
         create?: XOR<SubjectVersionCreateWithoutSubjectVersionHistoryInput, SubjectVersionUncheckedCreateWithoutSubjectVersionHistoryInput>
@@ -458446,6 +458701,11 @@ export namespace Prisma {
         createMany?: CertificateOnSubjectCreateManyCertificateInputEnvelope
         connect?: CertificateOnSubjectWhereUniqueInput | CertificateOnSubjectWhereUniqueInput[]
     };
+    export type SubjectVersionCreateNestedManyWithoutCertificateInput = {
+        create?: XOR<SubjectVersionCreateWithoutCertificateInput, SubjectVersionUncheckedCreateWithoutCertificateInput> | SubjectVersionCreateWithoutCertificateInput[] | SubjectVersionUncheckedCreateWithoutCertificateInput[]
+        connectOrCreate?: SubjectVersionCreateOrConnectWithoutCertificateInput | SubjectVersionCreateOrConnectWithoutCertificateInput[]
+        connect?: SubjectVersionWhereUniqueInput | SubjectVersionWhereUniqueInput[]
+    };
     export type ArchivedCertificateUncheckedCreateNestedManyWithoutCertificateInput = {
         create?: XOR<ArchivedCertificateCreateWithoutCertificateInput, ArchivedCertificateUncheckedCreateWithoutCertificateInput> | ArchivedCertificateCreateWithoutCertificateInput[] | ArchivedCertificateUncheckedCreateWithoutCertificateInput[]
         connectOrCreate?: ArchivedCertificateCreateOrConnectWithoutCertificateInput | ArchivedCertificateCreateOrConnectWithoutCertificateInput[]
@@ -458457,6 +458717,11 @@ export namespace Prisma {
         connectOrCreate?: CertificateOnSubjectCreateOrConnectWithoutCertificateInput | CertificateOnSubjectCreateOrConnectWithoutCertificateInput[]
         createMany?: CertificateOnSubjectCreateManyCertificateInputEnvelope
         connect?: CertificateOnSubjectWhereUniqueInput | CertificateOnSubjectWhereUniqueInput[]
+    };
+    export type SubjectVersionUncheckedCreateNestedManyWithoutCertificateInput = {
+        create?: XOR<SubjectVersionCreateWithoutCertificateInput, SubjectVersionUncheckedCreateWithoutCertificateInput> | SubjectVersionCreateWithoutCertificateInput[] | SubjectVersionUncheckedCreateWithoutCertificateInput[]
+        connectOrCreate?: SubjectVersionCreateOrConnectWithoutCertificateInput | SubjectVersionCreateOrConnectWithoutCertificateInput[]
+        connect?: SubjectVersionWhereUniqueInput | SubjectVersionWhereUniqueInput[]
     };
     export type OutputStandardUpdateOneWithoutCertificatesNestedInput = {
         create?: XOR<OutputStandardCreateWithoutCertificatesInput, OutputStandardUncheckedCreateWithoutCertificatesInput>
@@ -458493,6 +458758,18 @@ export namespace Prisma {
         updateMany?: CertificateOnSubjectUpdateManyWithWhereWithoutCertificateInput | CertificateOnSubjectUpdateManyWithWhereWithoutCertificateInput[]
         deleteMany?: CertificateOnSubjectScalarWhereInput | CertificateOnSubjectScalarWhereInput[]
     };
+    export type SubjectVersionUpdateManyWithoutCertificateNestedInput = {
+        create?: XOR<SubjectVersionCreateWithoutCertificateInput, SubjectVersionUncheckedCreateWithoutCertificateInput> | SubjectVersionCreateWithoutCertificateInput[] | SubjectVersionUncheckedCreateWithoutCertificateInput[]
+        connectOrCreate?: SubjectVersionCreateOrConnectWithoutCertificateInput | SubjectVersionCreateOrConnectWithoutCertificateInput[]
+        upsert?: SubjectVersionUpsertWithWhereUniqueWithoutCertificateInput | SubjectVersionUpsertWithWhereUniqueWithoutCertificateInput[]
+        set?: SubjectVersionWhereUniqueInput | SubjectVersionWhereUniqueInput[]
+        disconnect?: SubjectVersionWhereUniqueInput | SubjectVersionWhereUniqueInput[]
+        delete?: SubjectVersionWhereUniqueInput | SubjectVersionWhereUniqueInput[]
+        connect?: SubjectVersionWhereUniqueInput | SubjectVersionWhereUniqueInput[]
+        update?: SubjectVersionUpdateWithWhereUniqueWithoutCertificateInput | SubjectVersionUpdateWithWhereUniqueWithoutCertificateInput[]
+        updateMany?: SubjectVersionUpdateManyWithWhereWithoutCertificateInput | SubjectVersionUpdateManyWithWhereWithoutCertificateInput[]
+        deleteMany?: SubjectVersionScalarWhereInput | SubjectVersionScalarWhereInput[]
+    };
     export type ArchivedCertificateUncheckedUpdateManyWithoutCertificateNestedInput = {
         create?: XOR<ArchivedCertificateCreateWithoutCertificateInput, ArchivedCertificateUncheckedCreateWithoutCertificateInput> | ArchivedCertificateCreateWithoutCertificateInput[] | ArchivedCertificateUncheckedCreateWithoutCertificateInput[]
         connectOrCreate?: ArchivedCertificateCreateOrConnectWithoutCertificateInput | ArchivedCertificateCreateOrConnectWithoutCertificateInput[]
@@ -458518,6 +458795,18 @@ export namespace Prisma {
         update?: CertificateOnSubjectUpdateWithWhereUniqueWithoutCertificateInput | CertificateOnSubjectUpdateWithWhereUniqueWithoutCertificateInput[]
         updateMany?: CertificateOnSubjectUpdateManyWithWhereWithoutCertificateInput | CertificateOnSubjectUpdateManyWithWhereWithoutCertificateInput[]
         deleteMany?: CertificateOnSubjectScalarWhereInput | CertificateOnSubjectScalarWhereInput[]
+    };
+    export type SubjectVersionUncheckedUpdateManyWithoutCertificateNestedInput = {
+        create?: XOR<SubjectVersionCreateWithoutCertificateInput, SubjectVersionUncheckedCreateWithoutCertificateInput> | SubjectVersionCreateWithoutCertificateInput[] | SubjectVersionUncheckedCreateWithoutCertificateInput[]
+        connectOrCreate?: SubjectVersionCreateOrConnectWithoutCertificateInput | SubjectVersionCreateOrConnectWithoutCertificateInput[]
+        upsert?: SubjectVersionUpsertWithWhereUniqueWithoutCertificateInput | SubjectVersionUpsertWithWhereUniqueWithoutCertificateInput[]
+        set?: SubjectVersionWhereUniqueInput | SubjectVersionWhereUniqueInput[]
+        disconnect?: SubjectVersionWhereUniqueInput | SubjectVersionWhereUniqueInput[]
+        delete?: SubjectVersionWhereUniqueInput | SubjectVersionWhereUniqueInput[]
+        connect?: SubjectVersionWhereUniqueInput | SubjectVersionWhereUniqueInput[]
+        update?: SubjectVersionUpdateWithWhereUniqueWithoutCertificateInput | SubjectVersionUpdateWithWhereUniqueWithoutCertificateInput[]
+        updateMany?: SubjectVersionUpdateManyWithWhereWithoutCertificateInput | SubjectVersionUpdateManyWithWhereWithoutCertificateInput[]
+        deleteMany?: SubjectVersionScalarWhereInput | SubjectVersionScalarWhereInput[]
     };
     export type CertificateCreateNestedOneWithoutSubjectsInput = {
         create?: XOR<CertificateCreateWithoutSubjectsInput, CertificateUncheckedCreateWithoutSubjectsInput>
@@ -509143,6 +509432,7 @@ export namespace Prisma {
         exams?: ExamCreateNestedManyWithoutSubjectVersionInput
         examFramework?: ExamFrameworkCreateNestedManyWithoutSubjectVersionInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionCreateNestedManyWithoutSubjectVersionInput
+        certificate?: CertificateCreateNestedManyWithoutSubjectVersionsInput
     };
     export type SubjectVersionUncheckedCreateWithoutManagementOrganizationInput = {
         id?: string
@@ -509196,6 +509486,7 @@ export namespace Prisma {
         exams?: ExamUncheckedCreateNestedManyWithoutSubjectVersionInput
         examFramework?: ExamFrameworkUncheckedCreateNestedManyWithoutSubjectVersionInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionUncheckedCreateNestedManyWithoutSubjectVersionInput
+        certificate?: CertificateUncheckedCreateNestedManyWithoutSubjectVersionsInput
     };
     export type SubjectVersionCreateOrConnectWithoutManagementOrganizationInput = {
         where: SubjectVersionWhereUniqueInput
@@ -521212,6 +521503,7 @@ export namespace Prisma {
         exams?: ExamCreateNestedManyWithoutSubjectVersionInput
         examFramework?: ExamFrameworkCreateNestedManyWithoutSubjectVersionInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionCreateNestedManyWithoutSubjectVersionInput
+        certificate?: CertificateCreateNestedManyWithoutSubjectVersionsInput
     };
     export type SubjectVersionUncheckedCreateWithoutSubjectScoreConvertInput = {
         id?: string
@@ -521265,6 +521557,7 @@ export namespace Prisma {
         exams?: ExamUncheckedCreateNestedManyWithoutSubjectVersionInput
         examFramework?: ExamFrameworkUncheckedCreateNestedManyWithoutSubjectVersionInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionUncheckedCreateNestedManyWithoutSubjectVersionInput
+        certificate?: CertificateUncheckedCreateNestedManyWithoutSubjectVersionsInput
     };
     export type SubjectVersionCreateOrConnectWithoutSubjectScoreConvertInput = {
         where: SubjectVersionWhereUniqueInput
@@ -521364,6 +521657,7 @@ export namespace Prisma {
         exams?: ExamUpdateManyWithoutSubjectVersionNestedInput
         examFramework?: ExamFrameworkUpdateManyWithoutSubjectVersionNestedInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionUpdateManyWithoutSubjectVersionNestedInput
+        certificate?: CertificateUpdateManyWithoutSubjectVersionsNestedInput
     };
     export type SubjectVersionUncheckedUpdateWithoutSubjectScoreConvertInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -521417,6 +521711,7 @@ export namespace Prisma {
         exams?: ExamUncheckedUpdateManyWithoutSubjectVersionNestedInput
         examFramework?: ExamFrameworkUncheckedUpdateManyWithoutSubjectVersionNestedInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionUncheckedUpdateManyWithoutSubjectVersionNestedInput
+        certificate?: CertificateUncheckedUpdateManyWithoutSubjectVersionsNestedInput
     };
     export type SubjectClassCreateWithoutSubjectClassStudentInput = {
         id?: string
@@ -521586,6 +521881,7 @@ export namespace Prisma {
         exams?: ExamCreateNestedManyWithoutSubjectVersionInput
         examFramework?: ExamFrameworkCreateNestedManyWithoutSubjectVersionInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionCreateNestedManyWithoutSubjectVersionInput
+        certificate?: CertificateCreateNestedManyWithoutSubjectVersionsInput
     };
     export type SubjectVersionUncheckedCreateWithoutStudentSubjectScoreInput = {
         id?: string
@@ -521639,6 +521935,7 @@ export namespace Prisma {
         exams?: ExamUncheckedCreateNestedManyWithoutSubjectVersionInput
         examFramework?: ExamFrameworkUncheckedCreateNestedManyWithoutSubjectVersionInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionUncheckedCreateNestedManyWithoutSubjectVersionInput
+        certificate?: CertificateUncheckedCreateNestedManyWithoutSubjectVersionsInput
     };
     export type SubjectVersionCreateOrConnectWithoutStudentSubjectScoreInput = {
         where: SubjectVersionWhereUniqueInput
@@ -522542,6 +522839,7 @@ export namespace Prisma {
         exams?: ExamUpdateManyWithoutSubjectVersionNestedInput
         examFramework?: ExamFrameworkUpdateManyWithoutSubjectVersionNestedInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionUpdateManyWithoutSubjectVersionNestedInput
+        certificate?: CertificateUpdateManyWithoutSubjectVersionsNestedInput
     };
     export type SubjectVersionUncheckedUpdateWithoutStudentSubjectScoreInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -522595,6 +522893,7 @@ export namespace Prisma {
         exams?: ExamUncheckedUpdateManyWithoutSubjectVersionNestedInput
         examFramework?: ExamFrameworkUncheckedUpdateManyWithoutSubjectVersionNestedInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionUncheckedUpdateManyWithoutSubjectVersionNestedInput
+        certificate?: CertificateUncheckedUpdateManyWithoutSubjectVersionsNestedInput
     };
     export type StudentUpsertWithoutSubjectClassStudentInput = {
         update: XOR<StudentUpdateWithoutSubjectClassStudentInput, StudentUncheckedUpdateWithoutSubjectClassStudentInput>
@@ -525446,9 +525745,11 @@ export namespace Prisma {
         createdBy?: string | null
         name: string
         englishName?: string | null
+        scoreThreshold?: number
         isUsingScore?: boolean
         outputStandard?: OutputStandardCreateNestedOneWithoutCertificatesInput
         subjects?: CertificateOnSubjectCreateNestedManyWithoutCertificateInput
+        subjectVersions?: SubjectVersionCreateNestedManyWithoutCertificateInput
     };
     export type CertificateUncheckedCreateWithoutArchivedCertificateInput = {
         id?: string
@@ -525462,8 +525763,10 @@ export namespace Prisma {
         name: string
         englishName?: string | null
         outputStandardId?: string | null
+        scoreThreshold?: number
         isUsingScore?: boolean
         subjects?: CertificateOnSubjectUncheckedCreateNestedManyWithoutCertificateInput
+        subjectVersions?: SubjectVersionUncheckedCreateNestedManyWithoutCertificateInput
     };
     export type CertificateCreateOrConnectWithoutArchivedCertificateInput = {
         where: CertificateWhereUniqueInput
@@ -525751,9 +526054,11 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
+        scoreThreshold?: FloatFieldUpdateOperationsInput | number
         isUsingScore?: BoolFieldUpdateOperationsInput | boolean
         outputStandard?: OutputStandardUpdateOneWithoutCertificatesNestedInput
         subjects?: CertificateOnSubjectUpdateManyWithoutCertificateNestedInput
+        subjectVersions?: SubjectVersionUpdateManyWithoutCertificateNestedInput
     };
     export type CertificateUncheckedUpdateWithoutArchivedCertificateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -525767,8 +526072,10 @@ export namespace Prisma {
         name?: StringFieldUpdateOperationsInput | string
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
         outputStandardId?: NullableStringFieldUpdateOperationsInput | string | null
+        scoreThreshold?: FloatFieldUpdateOperationsInput | number
         isUsingScore?: BoolFieldUpdateOperationsInput | boolean
         subjects?: CertificateOnSubjectUncheckedUpdateManyWithoutCertificateNestedInput
+        subjectVersions?: SubjectVersionUncheckedUpdateManyWithoutCertificateNestedInput
     };
     export type StudentUpsertWithoutArchivedCertificateInput = {
         update: XOR<StudentUpdateWithoutArchivedCertificateInput, StudentUncheckedUpdateWithoutArchivedCertificateInput>
@@ -535312,6 +535619,7 @@ export namespace Prisma {
         exams?: ExamCreateNestedManyWithoutSubjectVersionInput
         examFramework?: ExamFrameworkCreateNestedManyWithoutSubjectVersionInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionCreateNestedManyWithoutSubjectVersionInput
+        certificate?: CertificateCreateNestedManyWithoutSubjectVersionsInput
     };
     export type SubjectVersionUncheckedCreateWithoutSubjectInput = {
         id?: string
@@ -535365,6 +535673,7 @@ export namespace Prisma {
         exams?: ExamUncheckedCreateNestedManyWithoutSubjectVersionInput
         examFramework?: ExamFrameworkUncheckedCreateNestedManyWithoutSubjectVersionInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionUncheckedCreateNestedManyWithoutSubjectVersionInput
+        certificate?: CertificateUncheckedCreateNestedManyWithoutSubjectVersionsInput
     };
     export type SubjectVersionCreateOrConnectWithoutSubjectInput = {
         where: SubjectVersionWhereUniqueInput
@@ -535652,6 +535961,7 @@ export namespace Prisma {
         exams?: ExamCreateNestedManyWithoutSubjectVersionInput
         examFramework?: ExamFrameworkCreateNestedManyWithoutSubjectVersionInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionCreateNestedManyWithoutSubjectVersionInput
+        certificate?: CertificateCreateNestedManyWithoutSubjectVersionsInput
     };
     export type SubjectVersionUncheckedCreateWithoutSubjectVersionCategoryInput = {
         id?: string
@@ -535705,6 +536015,7 @@ export namespace Prisma {
         exams?: ExamUncheckedCreateNestedManyWithoutSubjectVersionInput
         examFramework?: ExamFrameworkUncheckedCreateNestedManyWithoutSubjectVersionInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionUncheckedCreateNestedManyWithoutSubjectVersionInput
+        certificate?: CertificateUncheckedCreateNestedManyWithoutSubjectVersionsInput
     };
     export type SubjectVersionCreateOrConnectWithoutSubjectVersionCategoryInput = {
         where: SubjectVersionWhereUniqueInput
@@ -536035,6 +536346,7 @@ export namespace Prisma {
         exams?: ExamCreateNestedManyWithoutSubjectVersionInput
         examFramework?: ExamFrameworkCreateNestedManyWithoutSubjectVersionInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionCreateNestedManyWithoutSubjectVersionInput
+        certificate?: CertificateCreateNestedManyWithoutSubjectVersionsInput
     };
     export type SubjectVersionUncheckedCreateWithoutDependentSubjectInput = {
         id?: string
@@ -536088,6 +536400,7 @@ export namespace Prisma {
         exams?: ExamUncheckedCreateNestedManyWithoutSubjectVersionInput
         examFramework?: ExamFrameworkUncheckedCreateNestedManyWithoutSubjectVersionInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionUncheckedCreateNestedManyWithoutSubjectVersionInput
+        certificate?: CertificateUncheckedCreateNestedManyWithoutSubjectVersionsInput
     };
     export type SubjectVersionCreateOrConnectWithoutDependentSubjectInput = {
         where: SubjectVersionWhereUniqueInput
@@ -536145,6 +536458,7 @@ export namespace Prisma {
         exams?: ExamCreateNestedManyWithoutSubjectVersionInput
         examFramework?: ExamFrameworkCreateNestedManyWithoutSubjectVersionInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionCreateNestedManyWithoutSubjectVersionInput
+        certificate?: CertificateCreateNestedManyWithoutSubjectVersionsInput
     };
     export type SubjectVersionUncheckedCreateWithoutPrerequisiteSubjectInput = {
         id?: string
@@ -536198,6 +536512,7 @@ export namespace Prisma {
         exams?: ExamUncheckedCreateNestedManyWithoutSubjectVersionInput
         examFramework?: ExamFrameworkUncheckedCreateNestedManyWithoutSubjectVersionInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionUncheckedCreateNestedManyWithoutSubjectVersionInput
+        certificate?: CertificateUncheckedCreateNestedManyWithoutSubjectVersionsInput
     };
     export type SubjectVersionCreateOrConnectWithoutPrerequisiteSubjectInput = {
         where: SubjectVersionWhereUniqueInput
@@ -536255,6 +536570,7 @@ export namespace Prisma {
         exams?: ExamCreateNestedManyWithoutSubjectVersionInput
         examFramework?: ExamFrameworkCreateNestedManyWithoutSubjectVersionInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionCreateNestedManyWithoutSubjectVersionInput
+        certificate?: CertificateCreateNestedManyWithoutSubjectVersionsInput
     };
     export type SubjectVersionUncheckedCreateWithoutDepCoRequisiteSubjectInput = {
         id?: string
@@ -536308,6 +536624,7 @@ export namespace Prisma {
         exams?: ExamUncheckedCreateNestedManyWithoutSubjectVersionInput
         examFramework?: ExamFrameworkUncheckedCreateNestedManyWithoutSubjectVersionInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionUncheckedCreateNestedManyWithoutSubjectVersionInput
+        certificate?: CertificateUncheckedCreateNestedManyWithoutSubjectVersionsInput
     };
     export type SubjectVersionCreateOrConnectWithoutDepCoRequisiteSubjectInput = {
         where: SubjectVersionWhereUniqueInput
@@ -536365,6 +536682,7 @@ export namespace Prisma {
         exams?: ExamCreateNestedManyWithoutSubjectVersionInput
         examFramework?: ExamFrameworkCreateNestedManyWithoutSubjectVersionInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionCreateNestedManyWithoutSubjectVersionInput
+        certificate?: CertificateCreateNestedManyWithoutSubjectVersionsInput
     };
     export type SubjectVersionUncheckedCreateWithoutCoRequisiteSubjectInput = {
         id?: string
@@ -536418,6 +536736,7 @@ export namespace Prisma {
         exams?: ExamUncheckedCreateNestedManyWithoutSubjectVersionInput
         examFramework?: ExamFrameworkUncheckedCreateNestedManyWithoutSubjectVersionInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionUncheckedCreateNestedManyWithoutSubjectVersionInput
+        certificate?: CertificateUncheckedCreateNestedManyWithoutSubjectVersionsInput
     };
     export type SubjectVersionCreateOrConnectWithoutCoRequisiteSubjectInput = {
         where: SubjectVersionWhereUniqueInput
@@ -536991,6 +537310,44 @@ export namespace Prisma {
         data: ScoreLinkSubjectVersionCreateManySubjectVersionInput | ScoreLinkSubjectVersionCreateManySubjectVersionInput[]
         skipDuplicates?: boolean
     };
+    export type CertificateCreateWithoutSubjectVersionsInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        name: string
+        englishName?: string | null
+        scoreThreshold?: number
+        isUsingScore?: boolean
+        outputStandard?: OutputStandardCreateNestedOneWithoutCertificatesInput
+        archivedCertificate?: ArchivedCertificateCreateNestedManyWithoutCertificateInput
+        subjects?: CertificateOnSubjectCreateNestedManyWithoutCertificateInput
+    };
+    export type CertificateUncheckedCreateWithoutSubjectVersionsInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        name: string
+        englishName?: string | null
+        outputStandardId?: string | null
+        scoreThreshold?: number
+        isUsingScore?: boolean
+        archivedCertificate?: ArchivedCertificateUncheckedCreateNestedManyWithoutCertificateInput
+        subjects?: CertificateOnSubjectUncheckedCreateNestedManyWithoutCertificateInput
+    };
+    export type CertificateCreateOrConnectWithoutSubjectVersionsInput = {
+        where: CertificateWhereUniqueInput
+        create: XOR<CertificateCreateWithoutSubjectVersionsInput, CertificateUncheckedCreateWithoutSubjectVersionsInput>
+    };
     export type DM_DonViUpsertWithoutSubjectVersionsInput = {
         update: XOR<DM_DonViUpdateWithoutSubjectVersionsInput, DM_DonViUncheckedUpdateWithoutSubjectVersionsInput>
         create: XOR<DM_DonViCreateWithoutSubjectVersionsInput, DM_DonViUncheckedCreateWithoutSubjectVersionsInput>
@@ -537532,6 +537889,37 @@ export namespace Prisma {
         scoreLinkSheetId?: StringFilter<"ScoreLinkSubjectVersion"> | string
         subjectVersionId?: StringFilter<"ScoreLinkSubjectVersion"> | string
     };
+    export type CertificateUpsertWithWhereUniqueWithoutSubjectVersionsInput = {
+        where: CertificateWhereUniqueInput
+        update: XOR<CertificateUpdateWithoutSubjectVersionsInput, CertificateUncheckedUpdateWithoutSubjectVersionsInput>
+        create: XOR<CertificateCreateWithoutSubjectVersionsInput, CertificateUncheckedCreateWithoutSubjectVersionsInput>
+    };
+    export type CertificateUpdateWithWhereUniqueWithoutSubjectVersionsInput = {
+        where: CertificateWhereUniqueInput
+        data: XOR<CertificateUpdateWithoutSubjectVersionsInput, CertificateUncheckedUpdateWithoutSubjectVersionsInput>
+    };
+    export type CertificateUpdateManyWithWhereWithoutSubjectVersionsInput = {
+        where: CertificateScalarWhereInput
+        data: XOR<CertificateUpdateManyMutationInput, CertificateUncheckedUpdateManyWithoutSubjectVersionsInput>
+    };
+    export type CertificateScalarWhereInput = {
+        AND?: CertificateScalarWhereInput | CertificateScalarWhereInput[]
+        OR?: CertificateScalarWhereInput[]
+        NOT?: CertificateScalarWhereInput | CertificateScalarWhereInput[]
+        id?: StringFilter<"Certificate"> | string
+        code?: StringNullableFilter<"Certificate"> | string | null
+        active?: BoolFilter<"Certificate"> | boolean
+        description?: StringNullableFilter<"Certificate"> | string | null
+        deletedAt?: DateTimeNullableFilter<"Certificate"> | Date | string | null
+        createdAt?: DateTimeFilter<"Certificate"> | Date | string
+        updatedAt?: DateTimeFilter<"Certificate"> | Date | string
+        createdBy?: UuidNullableFilter<"Certificate"> | string | null
+        name?: StringFilter<"Certificate"> | string
+        englishName?: StringNullableFilter<"Certificate"> | string | null
+        outputStandardId?: StringNullableFilter<"Certificate"> | string | null
+        scoreThreshold?: FloatFilter<"Certificate"> | number
+        isUsingScore?: BoolFilter<"Certificate"> | boolean
+    };
     export type SubjectVersionCreateWithoutSubjectVersionHistoryInput = {
         id?: string
         active?: boolean
@@ -537584,6 +537972,7 @@ export namespace Prisma {
         exams?: ExamCreateNestedManyWithoutSubjectVersionInput
         examFramework?: ExamFrameworkCreateNestedManyWithoutSubjectVersionInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionCreateNestedManyWithoutSubjectVersionInput
+        certificate?: CertificateCreateNestedManyWithoutSubjectVersionsInput
     };
     export type SubjectVersionUncheckedCreateWithoutSubjectVersionHistoryInput = {
         id?: string
@@ -537637,6 +538026,7 @@ export namespace Prisma {
         exams?: ExamUncheckedCreateNestedManyWithoutSubjectVersionInput
         examFramework?: ExamFrameworkUncheckedCreateNestedManyWithoutSubjectVersionInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionUncheckedCreateNestedManyWithoutSubjectVersionInput
+        certificate?: CertificateUncheckedCreateNestedManyWithoutSubjectVersionsInput
     };
     export type SubjectVersionCreateOrConnectWithoutSubjectVersionHistoryInput = {
         where: SubjectVersionWhereUniqueInput
@@ -538053,6 +538443,7 @@ export namespace Prisma {
         exams?: ExamUpdateManyWithoutSubjectVersionNestedInput
         examFramework?: ExamFrameworkUpdateManyWithoutSubjectVersionNestedInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionUpdateManyWithoutSubjectVersionNestedInput
+        certificate?: CertificateUpdateManyWithoutSubjectVersionsNestedInput
     };
     export type SubjectVersionUncheckedUpdateWithoutSubjectVersionHistoryInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -538106,6 +538497,7 @@ export namespace Prisma {
         exams?: ExamUncheckedUpdateManyWithoutSubjectVersionNestedInput
         examFramework?: ExamFrameworkUncheckedUpdateManyWithoutSubjectVersionNestedInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionUncheckedUpdateManyWithoutSubjectVersionNestedInput
+        certificate?: CertificateUncheckedUpdateManyWithoutSubjectVersionsNestedInput
     };
     export type UserProfileUpsertWithoutSubjectVersionHistoryInput = {
         update: XOR<UserProfileUpdateWithoutSubjectVersionHistoryInput, UserProfileUncheckedUpdateWithoutSubjectVersionHistoryInput>
@@ -538559,6 +538951,7 @@ export namespace Prisma {
         exams?: ExamCreateNestedManyWithoutSubjectVersionInput
         examFramework?: ExamFrameworkCreateNestedManyWithoutSubjectVersionInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionCreateNestedManyWithoutSubjectVersionInput
+        certificate?: CertificateCreateNestedManyWithoutSubjectVersionsInput
     };
     export type SubjectVersionUncheckedCreateWithoutEquivalencyGroupsInput = {
         id?: string
@@ -538612,6 +539005,7 @@ export namespace Prisma {
         exams?: ExamUncheckedCreateNestedManyWithoutSubjectVersionInput
         examFramework?: ExamFrameworkUncheckedCreateNestedManyWithoutSubjectVersionInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionUncheckedCreateNestedManyWithoutSubjectVersionInput
+        certificate?: CertificateUncheckedCreateNestedManyWithoutSubjectVersionsInput
     };
     export type SubjectVersionCreateOrConnectWithoutEquivalencyGroupsInput = {
         where: SubjectVersionWhereUniqueInput
@@ -538702,6 +539096,7 @@ export namespace Prisma {
         exams?: ExamUpdateManyWithoutSubjectVersionNestedInput
         examFramework?: ExamFrameworkUpdateManyWithoutSubjectVersionNestedInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionUpdateManyWithoutSubjectVersionNestedInput
+        certificate?: CertificateUpdateManyWithoutSubjectVersionsNestedInput
     };
     export type SubjectVersionUncheckedUpdateWithoutEquivalencyGroupsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -538755,6 +539150,7 @@ export namespace Prisma {
         exams?: ExamUncheckedUpdateManyWithoutSubjectVersionNestedInput
         examFramework?: ExamFrameworkUncheckedUpdateManyWithoutSubjectVersionNestedInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionUncheckedUpdateManyWithoutSubjectVersionNestedInput
+        certificate?: CertificateUncheckedUpdateManyWithoutSubjectVersionsNestedInput
     };
     export type EquivalencyGroupUpsertWithoutSubjectsInput = {
         update: XOR<EquivalencyGroupUpdateWithoutSubjectsInput, EquivalencyGroupUncheckedUpdateWithoutSubjectsInput>
@@ -538837,6 +539233,7 @@ export namespace Prisma {
         exams?: ExamCreateNestedManyWithoutSubjectVersionInput
         examFramework?: ExamFrameworkCreateNestedManyWithoutSubjectVersionInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionCreateNestedManyWithoutSubjectVersionInput
+        certificate?: CertificateCreateNestedManyWithoutSubjectVersionsInput
     };
     export type SubjectVersionUncheckedCreateWithoutTrainingBlocksInput = {
         id?: string
@@ -538890,6 +539287,7 @@ export namespace Prisma {
         exams?: ExamUncheckedCreateNestedManyWithoutSubjectVersionInput
         examFramework?: ExamFrameworkUncheckedCreateNestedManyWithoutSubjectVersionInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionUncheckedCreateNestedManyWithoutSubjectVersionInput
+        certificate?: CertificateUncheckedCreateNestedManyWithoutSubjectVersionsInput
     };
     export type SubjectVersionCreateOrConnectWithoutTrainingBlocksInput = {
         where: SubjectVersionWhereUniqueInput
@@ -539022,6 +539420,7 @@ export namespace Prisma {
         exams?: ExamUpdateManyWithoutSubjectVersionNestedInput
         examFramework?: ExamFrameworkUpdateManyWithoutSubjectVersionNestedInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionUpdateManyWithoutSubjectVersionNestedInput
+        certificate?: CertificateUpdateManyWithoutSubjectVersionsNestedInput
     };
     export type SubjectVersionUncheckedUpdateWithoutTrainingBlocksInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -539075,6 +539474,7 @@ export namespace Prisma {
         exams?: ExamUncheckedUpdateManyWithoutSubjectVersionNestedInput
         examFramework?: ExamFrameworkUncheckedUpdateManyWithoutSubjectVersionNestedInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionUncheckedUpdateManyWithoutSubjectVersionNestedInput
+        certificate?: CertificateUncheckedUpdateManyWithoutSubjectVersionsNestedInput
     };
     export type TrainingBlockOnCurriculumVersionUpsertWithoutSubjectsInput = {
         update: XOR<TrainingBlockOnCurriculumVersionUpdateWithoutSubjectsInput, TrainingBlockOnCurriculumVersionUncheckedUpdateWithoutSubjectsInput>
@@ -540303,6 +540703,7 @@ export namespace Prisma {
         exams?: ExamCreateNestedManyWithoutSubjectVersionInput
         examFramework?: ExamFrameworkCreateNestedManyWithoutSubjectVersionInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionCreateNestedManyWithoutSubjectVersionInput
+        certificate?: CertificateCreateNestedManyWithoutSubjectVersionsInput
     };
     export type SubjectVersionUncheckedCreateWithoutSubjectClassInput = {
         id?: string
@@ -540356,6 +540757,7 @@ export namespace Prisma {
         exams?: ExamUncheckedCreateNestedManyWithoutSubjectVersionInput
         examFramework?: ExamFrameworkUncheckedCreateNestedManyWithoutSubjectVersionInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionUncheckedCreateNestedManyWithoutSubjectVersionInput
+        certificate?: CertificateUncheckedCreateNestedManyWithoutSubjectVersionsInput
     };
     export type SubjectVersionCreateOrConnectWithoutSubjectClassInput = {
         where: SubjectVersionWhereUniqueInput
@@ -541554,6 +541956,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        examTime?: number | null
         examCode: string
         explain?: string | null
         examDay?: Date | string | null
@@ -541575,6 +541978,7 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         examId: string
+        examTime?: number | null
         examCode: string
         explain?: string | null
         examDay?: Date | string | null
@@ -541688,6 +542092,7 @@ export namespace Prisma {
         exams?: ExamUpdateManyWithoutSubjectVersionNestedInput
         examFramework?: ExamFrameworkUpdateManyWithoutSubjectVersionNestedInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionUpdateManyWithoutSubjectVersionNestedInput
+        certificate?: CertificateUpdateManyWithoutSubjectVersionsNestedInput
     };
     export type SubjectVersionUncheckedUpdateWithoutSubjectClassInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -541741,6 +542146,7 @@ export namespace Prisma {
         exams?: ExamUncheckedUpdateManyWithoutSubjectVersionNestedInput
         examFramework?: ExamFrameworkUncheckedUpdateManyWithoutSubjectVersionNestedInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionUncheckedUpdateManyWithoutSubjectVersionNestedInput
+        certificate?: CertificateUncheckedUpdateManyWithoutSubjectVersionsNestedInput
     };
     export type TrainingObjectTypeUpsertWithoutSubjectClassInput = {
         update: XOR<TrainingObjectTypeUpdateWithoutSubjectClassInput, TrainingObjectTypeUncheckedUpdateWithoutSubjectClassInput>
@@ -542502,6 +542908,7 @@ export namespace Prisma {
         updatedAt?: DateTimeFilter<"ExamBank"> | Date | string
         createdBy?: UuidNullableFilter<"ExamBank"> | string | null
         examId?: StringFilter<"ExamBank"> | string
+        examTime?: IntNullableFilter<"ExamBank"> | number | null
         examCode?: StringFilter<"ExamBank"> | string
         subjectClassId?: StringNullableFilter<"ExamBank"> | string | null
         explain?: StringNullableFilter<"ExamBank"> | string | null
@@ -547432,6 +547839,7 @@ export namespace Prisma {
         exams?: ExamCreateNestedManyWithoutSubjectVersionInput
         examFramework?: ExamFrameworkCreateNestedManyWithoutSubjectVersionInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionCreateNestedManyWithoutSubjectVersionInput
+        certificate?: CertificateCreateNestedManyWithoutSubjectVersionsInput
     };
     export type SubjectVersionUncheckedCreateWithoutTrainingObjectTypeInput = {
         id?: string
@@ -547485,6 +547893,7 @@ export namespace Prisma {
         exams?: ExamUncheckedCreateNestedManyWithoutSubjectVersionInput
         examFramework?: ExamFrameworkUncheckedCreateNestedManyWithoutSubjectVersionInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionUncheckedCreateNestedManyWithoutSubjectVersionInput
+        certificate?: CertificateUncheckedCreateNestedManyWithoutSubjectVersionsInput
     };
     export type SubjectVersionCreateOrConnectWithoutTrainingObjectTypeInput = {
         where: SubjectVersionWhereUniqueInput
@@ -553271,6 +553680,118 @@ export namespace Prisma {
         data: CertificateOnSubjectCreateManyCertificateInput | CertificateOnSubjectCreateManyCertificateInput[]
         skipDuplicates?: boolean
     };
+    export type SubjectVersionCreateWithoutCertificateInput = {
+        id?: string
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        code: string
+        isLocked?: boolean
+        name: string
+        codeTkb?: string | null
+        examType: $Enums.ExamType
+        type?: $Enums.SubjectVersionType
+        onePoint?: boolean
+        credit: number
+        week?: number | null
+        period?: number | null
+        schedulePeriod?: number | null
+        numberOfTheory?: number | null
+        numberOfPractical?: number | null
+        numberOfSelfStudy?: number | null
+        numberOfPractice?: number | null
+        numberOfReview?: number | null
+        numberOfExam?: number | null
+        numberOfOther?: number | null
+        objectives?: string | null
+        learningOutcome?: string | null
+        structure?: string | null
+        guild?: string | null
+        academicResults?: string | null
+        materials?: string | null
+        rules?: string | null
+        managementOrganization?: DM_DonViCreateNestedOneWithoutSubjectVersionsInput
+        subject: SubjectCreateNestedOneWithoutSubjectVersionInput
+        trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutSubjectVersionInput
+        subjectVersionCategory?: SubjectVersionCategoryCreateNestedOneWithoutSubjectVersionsInput
+        trainingBlocks?: TrainingBlockSubjectCreateNestedManyWithoutSubjectInput
+        prerequisiteSubject?: SubjectVersionCreateNestedManyWithoutDependentSubjectInput
+        dependentSubject?: SubjectVersionCreateNestedManyWithoutPrerequisiteSubjectInput
+        coRequisiteSubject?: SubjectVersionCreateNestedManyWithoutDepCoRequisiteSubjectInput
+        depCoRequisiteSubject?: SubjectVersionCreateNestedManyWithoutCoRequisiteSubjectInput
+        equivalencyGroups?: SubjectInGroupCreateNestedManyWithoutSubjectInput
+        knowledgeBlocks?: KnowledgeBlockCreateNestedManyWithoutSubjectVersionInput
+        subjectClass?: SubjectClassCreateNestedManyWithoutSubjectInput
+        studentSubjectScore?: StudentSubjectScoreCreateNestedManyWithoutSubjectVersionInput
+        documentFiles?: DocumentFileCreateNestedManyWithoutSubjectVersionInput
+        questionBanks?: QuestionBankCreateNestedManyWithoutSubjectVersionInput
+        subjectScoreConvert?: SubjectScoreConvertCreateNestedManyWithoutSubjectVersionInput
+        subjectVersionHistory?: SubjectVersionHistoryCreateNestedManyWithoutSubjectVersionInput
+        exams?: ExamCreateNestedManyWithoutSubjectVersionInput
+        examFramework?: ExamFrameworkCreateNestedManyWithoutSubjectVersionInput
+        scoreLinkSubjectVersion?: ScoreLinkSubjectVersionCreateNestedManyWithoutSubjectVersionInput
+    };
+    export type SubjectVersionUncheckedCreateWithoutCertificateInput = {
+        id?: string
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        code: string
+        isLocked?: boolean
+        name: string
+        codeTkb?: string | null
+        examType: $Enums.ExamType
+        type?: $Enums.SubjectVersionType
+        onePoint?: boolean
+        credit: number
+        week?: number | null
+        period?: number | null
+        schedulePeriod?: number | null
+        numberOfTheory?: number | null
+        numberOfPractical?: number | null
+        numberOfSelfStudy?: number | null
+        numberOfPractice?: number | null
+        numberOfReview?: number | null
+        numberOfExam?: number | null
+        numberOfOther?: number | null
+        objectives?: string | null
+        learningOutcome?: string | null
+        structure?: string | null
+        guild?: string | null
+        academicResults?: string | null
+        materials?: string | null
+        rules?: string | null
+        managementOrganizationId?: string | null
+        subjectId: string
+        trainingObjectTypeId: string
+        subjectVersionCategoryId?: string | null
+        trainingBlocks?: TrainingBlockSubjectUncheckedCreateNestedManyWithoutSubjectInput
+        prerequisiteSubject?: SubjectVersionUncheckedCreateNestedManyWithoutDependentSubjectInput
+        dependentSubject?: SubjectVersionUncheckedCreateNestedManyWithoutPrerequisiteSubjectInput
+        coRequisiteSubject?: SubjectVersionUncheckedCreateNestedManyWithoutDepCoRequisiteSubjectInput
+        depCoRequisiteSubject?: SubjectVersionUncheckedCreateNestedManyWithoutCoRequisiteSubjectInput
+        equivalencyGroups?: SubjectInGroupUncheckedCreateNestedManyWithoutSubjectInput
+        knowledgeBlocks?: KnowledgeBlockUncheckedCreateNestedManyWithoutSubjectVersionInput
+        subjectClass?: SubjectClassUncheckedCreateNestedManyWithoutSubjectInput
+        studentSubjectScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutSubjectVersionInput
+        documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutSubjectVersionInput
+        questionBanks?: QuestionBankUncheckedCreateNestedManyWithoutSubjectVersionInput
+        subjectScoreConvert?: SubjectScoreConvertUncheckedCreateNestedManyWithoutSubjectVersionInput
+        subjectVersionHistory?: SubjectVersionHistoryUncheckedCreateNestedManyWithoutSubjectVersionInput
+        exams?: ExamUncheckedCreateNestedManyWithoutSubjectVersionInput
+        examFramework?: ExamFrameworkUncheckedCreateNestedManyWithoutSubjectVersionInput
+        scoreLinkSubjectVersion?: ScoreLinkSubjectVersionUncheckedCreateNestedManyWithoutSubjectVersionInput
+    };
+    export type SubjectVersionCreateOrConnectWithoutCertificateInput = {
+        where: SubjectVersionWhereUniqueInput
+        create: XOR<SubjectVersionCreateWithoutCertificateInput, SubjectVersionUncheckedCreateWithoutCertificateInput>
+    };
     export type OutputStandardUpsertWithoutCertificatesInput = {
         update: XOR<OutputStandardUpdateWithoutCertificatesInput, OutputStandardUncheckedUpdateWithoutCertificatesInput>
         create: XOR<OutputStandardCreateWithoutCertificatesInput, OutputStandardUncheckedCreateWithoutCertificatesInput>
@@ -553358,6 +553879,19 @@ export namespace Prisma {
         where: CertificateOnSubjectScalarWhereInput
         data: XOR<CertificateOnSubjectUpdateManyMutationInput, CertificateOnSubjectUncheckedUpdateManyWithoutCertificateInput>
     };
+    export type SubjectVersionUpsertWithWhereUniqueWithoutCertificateInput = {
+        where: SubjectVersionWhereUniqueInput
+        update: XOR<SubjectVersionUpdateWithoutCertificateInput, SubjectVersionUncheckedUpdateWithoutCertificateInput>
+        create: XOR<SubjectVersionCreateWithoutCertificateInput, SubjectVersionUncheckedCreateWithoutCertificateInput>
+    };
+    export type SubjectVersionUpdateWithWhereUniqueWithoutCertificateInput = {
+        where: SubjectVersionWhereUniqueInput
+        data: XOR<SubjectVersionUpdateWithoutCertificateInput, SubjectVersionUncheckedUpdateWithoutCertificateInput>
+    };
+    export type SubjectVersionUpdateManyWithWhereWithoutCertificateInput = {
+        where: SubjectVersionScalarWhereInput
+        data: XOR<SubjectVersionUpdateManyMutationInput, SubjectVersionUncheckedUpdateManyWithoutCertificateInput>
+    };
     export type CertificateCreateWithoutSubjectsInput = {
         id?: string
         code?: string | null
@@ -553369,9 +553903,11 @@ export namespace Prisma {
         createdBy?: string | null
         name: string
         englishName?: string | null
+        scoreThreshold?: number
         isUsingScore?: boolean
         outputStandard?: OutputStandardCreateNestedOneWithoutCertificatesInput
         archivedCertificate?: ArchivedCertificateCreateNestedManyWithoutCertificateInput
+        subjectVersions?: SubjectVersionCreateNestedManyWithoutCertificateInput
     };
     export type CertificateUncheckedCreateWithoutSubjectsInput = {
         id?: string
@@ -553385,8 +553921,10 @@ export namespace Prisma {
         name: string
         englishName?: string | null
         outputStandardId?: string | null
+        scoreThreshold?: number
         isUsingScore?: boolean
         archivedCertificate?: ArchivedCertificateUncheckedCreateNestedManyWithoutCertificateInput
+        subjectVersions?: SubjectVersionUncheckedCreateNestedManyWithoutCertificateInput
     };
     export type CertificateCreateOrConnectWithoutSubjectsInput = {
         where: CertificateWhereUniqueInput
@@ -553448,9 +553986,11 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
+        scoreThreshold?: FloatFieldUpdateOperationsInput | number
         isUsingScore?: BoolFieldUpdateOperationsInput | boolean
         outputStandard?: OutputStandardUpdateOneWithoutCertificatesNestedInput
         archivedCertificate?: ArchivedCertificateUpdateManyWithoutCertificateNestedInput
+        subjectVersions?: SubjectVersionUpdateManyWithoutCertificateNestedInput
     };
     export type CertificateUncheckedUpdateWithoutSubjectsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -553464,8 +554004,10 @@ export namespace Prisma {
         name?: StringFieldUpdateOperationsInput | string
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
         outputStandardId?: NullableStringFieldUpdateOperationsInput | string | null
+        scoreThreshold?: FloatFieldUpdateOperationsInput | number
         isUsingScore?: BoolFieldUpdateOperationsInput | boolean
         archivedCertificate?: ArchivedCertificateUncheckedUpdateManyWithoutCertificateNestedInput
+        subjectVersions?: SubjectVersionUncheckedUpdateManyWithoutCertificateNestedInput
     };
     export type SubjectUpsertWithoutCertificateOnSubjectInput = {
         update: XOR<SubjectUpdateWithoutCertificateOnSubjectInput, SubjectUncheckedUpdateWithoutCertificateOnSubjectInput>
@@ -554167,9 +554709,11 @@ export namespace Prisma {
         createdBy?: string | null
         name: string
         englishName?: string | null
+        scoreThreshold?: number
         isUsingScore?: boolean
         archivedCertificate?: ArchivedCertificateCreateNestedManyWithoutCertificateInput
         subjects?: CertificateOnSubjectCreateNestedManyWithoutCertificateInput
+        subjectVersions?: SubjectVersionCreateNestedManyWithoutCertificateInput
     };
     export type CertificateUncheckedCreateWithoutOutputStandardInput = {
         id?: string
@@ -554182,9 +554726,11 @@ export namespace Prisma {
         createdBy?: string | null
         name: string
         englishName?: string | null
+        scoreThreshold?: number
         isUsingScore?: boolean
         archivedCertificate?: ArchivedCertificateUncheckedCreateNestedManyWithoutCertificateInput
         subjects?: CertificateOnSubjectUncheckedCreateNestedManyWithoutCertificateInput
+        subjectVersions?: SubjectVersionUncheckedCreateNestedManyWithoutCertificateInput
     };
     export type CertificateCreateOrConnectWithoutOutputStandardInput = {
         where: CertificateWhereUniqueInput
@@ -554314,23 +554860,6 @@ export namespace Prisma {
     export type CertificateUpdateManyWithWhereWithoutOutputStandardInput = {
         where: CertificateScalarWhereInput
         data: XOR<CertificateUpdateManyMutationInput, CertificateUncheckedUpdateManyWithoutOutputStandardInput>
-    };
-    export type CertificateScalarWhereInput = {
-        AND?: CertificateScalarWhereInput | CertificateScalarWhereInput[]
-        OR?: CertificateScalarWhereInput[]
-        NOT?: CertificateScalarWhereInput | CertificateScalarWhereInput[]
-        id?: StringFilter<"Certificate"> | string
-        code?: StringNullableFilter<"Certificate"> | string | null
-        active?: BoolFilter<"Certificate"> | boolean
-        description?: StringNullableFilter<"Certificate"> | string | null
-        deletedAt?: DateTimeNullableFilter<"Certificate"> | Date | string | null
-        createdAt?: DateTimeFilter<"Certificate"> | Date | string
-        updatedAt?: DateTimeFilter<"Certificate"> | Date | string
-        createdBy?: UuidNullableFilter<"Certificate"> | string | null
-        name?: StringFilter<"Certificate"> | string
-        englishName?: StringNullableFilter<"Certificate"> | string | null
-        outputStandardId?: StringNullableFilter<"Certificate"> | string | null
-        isUsingScore?: BoolFilter<"Certificate"> | boolean
     };
     export type OutputStandardOnCurriculumUpsertWithWhereUniqueWithoutOutputStandardInput = {
         where: OutputStandardOnCurriculumWhereUniqueInput
@@ -560302,6 +560831,7 @@ export namespace Prisma {
         exams?: ExamCreateNestedManyWithoutSubjectVersionInput
         examFramework?: ExamFrameworkCreateNestedManyWithoutSubjectVersionInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionCreateNestedManyWithoutSubjectVersionInput
+        certificate?: CertificateCreateNestedManyWithoutSubjectVersionsInput
     };
     export type SubjectVersionUncheckedCreateWithoutDocumentFilesInput = {
         id?: string
@@ -560355,6 +560885,7 @@ export namespace Prisma {
         exams?: ExamUncheckedCreateNestedManyWithoutSubjectVersionInput
         examFramework?: ExamFrameworkUncheckedCreateNestedManyWithoutSubjectVersionInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionUncheckedCreateNestedManyWithoutSubjectVersionInput
+        certificate?: CertificateUncheckedCreateNestedManyWithoutSubjectVersionsInput
     };
     export type SubjectVersionCreateOrConnectWithoutDocumentFilesInput = {
         where: SubjectVersionWhereUniqueInput
@@ -561512,6 +562043,7 @@ export namespace Prisma {
         exams?: ExamUpdateManyWithoutSubjectVersionNestedInput
         examFramework?: ExamFrameworkUpdateManyWithoutSubjectVersionNestedInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionUpdateManyWithoutSubjectVersionNestedInput
+        certificate?: CertificateUpdateManyWithoutSubjectVersionsNestedInput
     };
     export type SubjectVersionUncheckedUpdateWithoutDocumentFilesInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -561565,6 +562097,7 @@ export namespace Prisma {
         exams?: ExamUncheckedUpdateManyWithoutSubjectVersionNestedInput
         examFramework?: ExamFrameworkUncheckedUpdateManyWithoutSubjectVersionNestedInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionUncheckedUpdateManyWithoutSubjectVersionNestedInput
+        certificate?: CertificateUncheckedUpdateManyWithoutSubjectVersionsNestedInput
     };
     export type StudentAcademicDecisionUpsertWithoutDocumentEvidenceInput = {
         update: XOR<StudentAcademicDecisionUpdateWithoutDocumentEvidenceInput, StudentAcademicDecisionUncheckedUpdateWithoutDocumentEvidenceInput>
@@ -586624,6 +587157,7 @@ export namespace Prisma {
         exams?: ExamCreateNestedManyWithoutSubjectVersionInput
         examFramework?: ExamFrameworkCreateNestedManyWithoutSubjectVersionInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionCreateNestedManyWithoutSubjectVersionInput
+        certificate?: CertificateCreateNestedManyWithoutSubjectVersionsInput
     };
     export type SubjectVersionUncheckedCreateWithoutQuestionBanksInput = {
         id?: string
@@ -586677,6 +587211,7 @@ export namespace Prisma {
         exams?: ExamUncheckedCreateNestedManyWithoutSubjectVersionInput
         examFramework?: ExamFrameworkUncheckedCreateNestedManyWithoutSubjectVersionInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionUncheckedCreateNestedManyWithoutSubjectVersionInput
+        certificate?: CertificateUncheckedCreateNestedManyWithoutSubjectVersionsInput
     };
     export type SubjectVersionCreateOrConnectWithoutQuestionBanksInput = {
         where: SubjectVersionWhereUniqueInput
@@ -586793,6 +587328,7 @@ export namespace Prisma {
         exams?: ExamUpdateManyWithoutSubjectVersionNestedInput
         examFramework?: ExamFrameworkUpdateManyWithoutSubjectVersionNestedInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionUpdateManyWithoutSubjectVersionNestedInput
+        certificate?: CertificateUpdateManyWithoutSubjectVersionsNestedInput
     };
     export type SubjectVersionUncheckedUpdateWithoutQuestionBanksInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -586846,6 +587382,7 @@ export namespace Prisma {
         exams?: ExamUncheckedUpdateManyWithoutSubjectVersionNestedInput
         examFramework?: ExamFrameworkUncheckedUpdateManyWithoutSubjectVersionNestedInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionUncheckedUpdateManyWithoutSubjectVersionNestedInput
+        certificate?: CertificateUncheckedUpdateManyWithoutSubjectVersionsNestedInput
     };
     export type QuestionUpsertWithWhereUniqueWithoutQuestionBankInput = {
         where: QuestionWhereUniqueInput
@@ -587605,6 +588142,7 @@ export namespace Prisma {
         subjectVersionHistory?: SubjectVersionHistoryCreateNestedManyWithoutSubjectVersionInput
         examFramework?: ExamFrameworkCreateNestedManyWithoutSubjectVersionInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionCreateNestedManyWithoutSubjectVersionInput
+        certificate?: CertificateCreateNestedManyWithoutSubjectVersionsInput
     };
     export type SubjectVersionUncheckedCreateWithoutExamsInput = {
         id?: string
@@ -587658,6 +588196,7 @@ export namespace Prisma {
         subjectVersionHistory?: SubjectVersionHistoryUncheckedCreateNestedManyWithoutSubjectVersionInput
         examFramework?: ExamFrameworkUncheckedCreateNestedManyWithoutSubjectVersionInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionUncheckedCreateNestedManyWithoutSubjectVersionInput
+        certificate?: CertificateUncheckedCreateNestedManyWithoutSubjectVersionsInput
     };
     export type SubjectVersionCreateOrConnectWithoutExamsInput = {
         where: SubjectVersionWhereUniqueInput
@@ -587860,6 +588399,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        examTime?: number | null
         examCode: string
         explain?: string | null
         examDay?: Date | string | null
@@ -587880,6 +588420,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        examTime?: number | null
         examCode: string
         subjectClassId?: string | null
         explain?: string | null
@@ -587994,6 +588535,7 @@ export namespace Prisma {
         subjectVersionHistory?: SubjectVersionHistoryUpdateManyWithoutSubjectVersionNestedInput
         examFramework?: ExamFrameworkUpdateManyWithoutSubjectVersionNestedInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionUpdateManyWithoutSubjectVersionNestedInput
+        certificate?: CertificateUpdateManyWithoutSubjectVersionsNestedInput
     };
     export type SubjectVersionUncheckedUpdateWithoutExamsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -588047,6 +588589,7 @@ export namespace Prisma {
         subjectVersionHistory?: SubjectVersionHistoryUncheckedUpdateManyWithoutSubjectVersionNestedInput
         examFramework?: ExamFrameworkUncheckedUpdateManyWithoutSubjectVersionNestedInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionUncheckedUpdateManyWithoutSubjectVersionNestedInput
+        certificate?: CertificateUncheckedUpdateManyWithoutSubjectVersionsNestedInput
     };
     export type SemesterUpsertWithoutExamInput = {
         update: XOR<SemesterUpdateWithoutExamInput, SemesterUncheckedUpdateWithoutExamInput>
@@ -589270,6 +589813,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        examTime?: number | null
         examCode: string
         explain?: string | null
         examDay?: Date | string | null
@@ -589291,6 +589835,7 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         examId: string
+        examTime?: number | null
         examCode: string
         subjectClassId?: string | null
         explain?: string | null
@@ -589369,6 +589914,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        examTime?: NullableIntFieldUpdateOperationsInput | number | null
         examCode?: StringFieldUpdateOperationsInput | string
         explain?: NullableStringFieldUpdateOperationsInput | string | null
         examDay?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -589390,6 +589936,7 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         examId?: StringFieldUpdateOperationsInput | string
+        examTime?: NullableIntFieldUpdateOperationsInput | number | null
         examCode?: StringFieldUpdateOperationsInput | string
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         explain?: NullableStringFieldUpdateOperationsInput | string | null
@@ -589753,6 +590300,7 @@ export namespace Prisma {
         subjectVersionHistory?: SubjectVersionHistoryCreateNestedManyWithoutSubjectVersionInput
         exams?: ExamCreateNestedManyWithoutSubjectVersionInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionCreateNestedManyWithoutSubjectVersionInput
+        certificate?: CertificateCreateNestedManyWithoutSubjectVersionsInput
     };
     export type SubjectVersionUncheckedCreateWithoutExamFrameworkInput = {
         id?: string
@@ -589806,6 +590354,7 @@ export namespace Prisma {
         subjectVersionHistory?: SubjectVersionHistoryUncheckedCreateNestedManyWithoutSubjectVersionInput
         exams?: ExamUncheckedCreateNestedManyWithoutSubjectVersionInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionUncheckedCreateNestedManyWithoutSubjectVersionInput
+        certificate?: CertificateUncheckedCreateNestedManyWithoutSubjectVersionsInput
     };
     export type SubjectVersionCreateOrConnectWithoutExamFrameworkInput = {
         where: SubjectVersionWhereUniqueInput
@@ -589988,6 +590537,7 @@ export namespace Prisma {
         subjectVersionHistory?: SubjectVersionHistoryUpdateManyWithoutSubjectVersionNestedInput
         exams?: ExamUpdateManyWithoutSubjectVersionNestedInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionUpdateManyWithoutSubjectVersionNestedInput
+        certificate?: CertificateUpdateManyWithoutSubjectVersionsNestedInput
     };
     export type SubjectVersionUncheckedUpdateWithoutExamFrameworkInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -590041,6 +590591,7 @@ export namespace Prisma {
         subjectVersionHistory?: SubjectVersionHistoryUncheckedUpdateManyWithoutSubjectVersionNestedInput
         exams?: ExamUncheckedUpdateManyWithoutSubjectVersionNestedInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionUncheckedUpdateManyWithoutSubjectVersionNestedInput
+        certificate?: CertificateUncheckedUpdateManyWithoutSubjectVersionsNestedInput
     };
     export type ExamMatrixUpsertWithWhereUniqueWithoutExamFrameworkInput = {
         where: ExamMatrixWhereUniqueInput
@@ -590163,6 +590714,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        examTime?: number | null
         examCode: string
         explain?: string | null
         examDay?: Date | string | null
@@ -590184,6 +590736,7 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         examId: string
+        examTime?: number | null
         examCode: string
         subjectClassId?: string | null
         explain?: string | null
@@ -590515,6 +591068,7 @@ export namespace Prisma {
         exams?: ExamCreateNestedManyWithoutSubjectVersionInput
         examFramework?: ExamFrameworkCreateNestedManyWithoutSubjectVersionInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionCreateNestedManyWithoutSubjectVersionInput
+        certificate?: CertificateCreateNestedManyWithoutSubjectVersionsInput
     };
     export type SubjectVersionUncheckedCreateWithoutKnowledgeBlocksInput = {
         id?: string
@@ -590568,6 +591122,7 @@ export namespace Prisma {
         exams?: ExamUncheckedCreateNestedManyWithoutSubjectVersionInput
         examFramework?: ExamFrameworkUncheckedCreateNestedManyWithoutSubjectVersionInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionUncheckedCreateNestedManyWithoutSubjectVersionInput
+        certificate?: CertificateUncheckedCreateNestedManyWithoutSubjectVersionsInput
     };
     export type SubjectVersionCreateOrConnectWithoutKnowledgeBlocksInput = {
         where: SubjectVersionWhereUniqueInput
@@ -590728,6 +591283,7 @@ export namespace Prisma {
         exams?: ExamUpdateManyWithoutSubjectVersionNestedInput
         examFramework?: ExamFrameworkUpdateManyWithoutSubjectVersionNestedInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionUpdateManyWithoutSubjectVersionNestedInput
+        certificate?: CertificateUpdateManyWithoutSubjectVersionsNestedInput
     };
     export type SubjectVersionUncheckedUpdateWithoutKnowledgeBlocksInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -590781,6 +591337,7 @@ export namespace Prisma {
         exams?: ExamUncheckedUpdateManyWithoutSubjectVersionNestedInput
         examFramework?: ExamFrameworkUncheckedUpdateManyWithoutSubjectVersionNestedInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionUncheckedUpdateManyWithoutSubjectVersionNestedInput
+        certificate?: CertificateUncheckedUpdateManyWithoutSubjectVersionsNestedInput
     };
     export type KnowledgeBlockCreateWithoutConfigExamsInput = {
         id?: string
@@ -600010,6 +600567,7 @@ export namespace Prisma {
         subjectVersionHistory?: SubjectVersionHistoryCreateNestedManyWithoutSubjectVersionInput
         exams?: ExamCreateNestedManyWithoutSubjectVersionInput
         examFramework?: ExamFrameworkCreateNestedManyWithoutSubjectVersionInput
+        certificate?: CertificateCreateNestedManyWithoutSubjectVersionsInput
     };
     export type SubjectVersionUncheckedCreateWithoutScoreLinkSubjectVersionInput = {
         id?: string
@@ -600063,6 +600621,7 @@ export namespace Prisma {
         subjectVersionHistory?: SubjectVersionHistoryUncheckedCreateNestedManyWithoutSubjectVersionInput
         exams?: ExamUncheckedCreateNestedManyWithoutSubjectVersionInput
         examFramework?: ExamFrameworkUncheckedCreateNestedManyWithoutSubjectVersionInput
+        certificate?: CertificateUncheckedCreateNestedManyWithoutSubjectVersionsInput
     };
     export type SubjectVersionCreateOrConnectWithoutScoreLinkSubjectVersionInput = {
         where: SubjectVersionWhereUniqueInput
@@ -600320,6 +600879,7 @@ export namespace Prisma {
         subjectVersionHistory?: SubjectVersionHistoryUpdateManyWithoutSubjectVersionNestedInput
         exams?: ExamUpdateManyWithoutSubjectVersionNestedInput
         examFramework?: ExamFrameworkUpdateManyWithoutSubjectVersionNestedInput
+        certificate?: CertificateUpdateManyWithoutSubjectVersionsNestedInput
     };
     export type SubjectVersionUncheckedUpdateWithoutScoreLinkSubjectVersionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -600373,6 +600933,7 @@ export namespace Prisma {
         subjectVersionHistory?: SubjectVersionHistoryUncheckedUpdateManyWithoutSubjectVersionNestedInput
         exams?: ExamUncheckedUpdateManyWithoutSubjectVersionNestedInput
         examFramework?: ExamFrameworkUncheckedUpdateManyWithoutSubjectVersionNestedInput
+        certificate?: CertificateUncheckedUpdateManyWithoutSubjectVersionsNestedInput
     };
     export type ScoreLinkStudentUpsertWithWhereUniqueWithoutScoreLinkSubjectVersionInput = {
         where: ScoreLinkStudentWhereUniqueInput
@@ -619250,6 +619811,7 @@ export namespace Prisma {
         exams?: ExamUpdateManyWithoutSubjectVersionNestedInput
         examFramework?: ExamFrameworkUpdateManyWithoutSubjectVersionNestedInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionUpdateManyWithoutSubjectVersionNestedInput
+        certificate?: CertificateUpdateManyWithoutSubjectVersionsNestedInput
     };
     export type SubjectVersionUncheckedUpdateWithoutManagementOrganizationInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -619303,6 +619865,7 @@ export namespace Prisma {
         exams?: ExamUncheckedUpdateManyWithoutSubjectVersionNestedInput
         examFramework?: ExamFrameworkUncheckedUpdateManyWithoutSubjectVersionNestedInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionUncheckedUpdateManyWithoutSubjectVersionNestedInput
+        certificate?: CertificateUncheckedUpdateManyWithoutSubjectVersionsNestedInput
     };
     export type SubjectVersionUncheckedUpdateManyWithoutManagementOrganizationInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -641176,6 +641739,7 @@ export namespace Prisma {
         exams?: ExamUpdateManyWithoutSubjectVersionNestedInput
         examFramework?: ExamFrameworkUpdateManyWithoutSubjectVersionNestedInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionUpdateManyWithoutSubjectVersionNestedInput
+        certificate?: CertificateUpdateManyWithoutSubjectVersionsNestedInput
     };
     export type SubjectVersionUncheckedUpdateWithoutSubjectInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -641229,6 +641793,7 @@ export namespace Prisma {
         exams?: ExamUncheckedUpdateManyWithoutSubjectVersionNestedInput
         examFramework?: ExamFrameworkUncheckedUpdateManyWithoutSubjectVersionNestedInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionUncheckedUpdateManyWithoutSubjectVersionNestedInput
+        certificate?: CertificateUncheckedUpdateManyWithoutSubjectVersionsNestedInput
     };
     export type SubjectVersionUncheckedUpdateManyWithoutSubjectInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -641433,6 +641998,7 @@ export namespace Prisma {
         exams?: ExamUpdateManyWithoutSubjectVersionNestedInput
         examFramework?: ExamFrameworkUpdateManyWithoutSubjectVersionNestedInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionUpdateManyWithoutSubjectVersionNestedInput
+        certificate?: CertificateUpdateManyWithoutSubjectVersionsNestedInput
     };
     export type SubjectVersionUncheckedUpdateWithoutSubjectVersionCategoryInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -641486,6 +642052,7 @@ export namespace Prisma {
         exams?: ExamUncheckedUpdateManyWithoutSubjectVersionNestedInput
         examFramework?: ExamFrameworkUncheckedUpdateManyWithoutSubjectVersionNestedInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionUncheckedUpdateManyWithoutSubjectVersionNestedInput
+        certificate?: CertificateUncheckedUpdateManyWithoutSubjectVersionsNestedInput
     };
     export type SubjectVersionUncheckedUpdateManyWithoutSubjectVersionCategoryInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -641844,6 +642411,7 @@ export namespace Prisma {
         exams?: ExamUpdateManyWithoutSubjectVersionNestedInput
         examFramework?: ExamFrameworkUpdateManyWithoutSubjectVersionNestedInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionUpdateManyWithoutSubjectVersionNestedInput
+        certificate?: CertificateUpdateManyWithoutSubjectVersionsNestedInput
     };
     export type SubjectVersionUncheckedUpdateWithoutDependentSubjectInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -641897,6 +642465,7 @@ export namespace Prisma {
         exams?: ExamUncheckedUpdateManyWithoutSubjectVersionNestedInput
         examFramework?: ExamFrameworkUncheckedUpdateManyWithoutSubjectVersionNestedInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionUncheckedUpdateManyWithoutSubjectVersionNestedInput
+        certificate?: CertificateUncheckedUpdateManyWithoutSubjectVersionsNestedInput
     };
     export type SubjectVersionUncheckedUpdateManyWithoutDependentSubjectInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -641988,6 +642557,7 @@ export namespace Prisma {
         exams?: ExamUpdateManyWithoutSubjectVersionNestedInput
         examFramework?: ExamFrameworkUpdateManyWithoutSubjectVersionNestedInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionUpdateManyWithoutSubjectVersionNestedInput
+        certificate?: CertificateUpdateManyWithoutSubjectVersionsNestedInput
     };
     export type SubjectVersionUncheckedUpdateWithoutPrerequisiteSubjectInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -642041,6 +642611,7 @@ export namespace Prisma {
         exams?: ExamUncheckedUpdateManyWithoutSubjectVersionNestedInput
         examFramework?: ExamFrameworkUncheckedUpdateManyWithoutSubjectVersionNestedInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionUncheckedUpdateManyWithoutSubjectVersionNestedInput
+        certificate?: CertificateUncheckedUpdateManyWithoutSubjectVersionsNestedInput
     };
     export type SubjectVersionUncheckedUpdateManyWithoutPrerequisiteSubjectInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -642132,6 +642703,7 @@ export namespace Prisma {
         exams?: ExamUpdateManyWithoutSubjectVersionNestedInput
         examFramework?: ExamFrameworkUpdateManyWithoutSubjectVersionNestedInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionUpdateManyWithoutSubjectVersionNestedInput
+        certificate?: CertificateUpdateManyWithoutSubjectVersionsNestedInput
     };
     export type SubjectVersionUncheckedUpdateWithoutDepCoRequisiteSubjectInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -642185,6 +642757,7 @@ export namespace Prisma {
         exams?: ExamUncheckedUpdateManyWithoutSubjectVersionNestedInput
         examFramework?: ExamFrameworkUncheckedUpdateManyWithoutSubjectVersionNestedInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionUncheckedUpdateManyWithoutSubjectVersionNestedInput
+        certificate?: CertificateUncheckedUpdateManyWithoutSubjectVersionsNestedInput
     };
     export type SubjectVersionUncheckedUpdateManyWithoutDepCoRequisiteSubjectInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -642276,6 +642849,7 @@ export namespace Prisma {
         exams?: ExamUpdateManyWithoutSubjectVersionNestedInput
         examFramework?: ExamFrameworkUpdateManyWithoutSubjectVersionNestedInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionUpdateManyWithoutSubjectVersionNestedInput
+        certificate?: CertificateUpdateManyWithoutSubjectVersionsNestedInput
     };
     export type SubjectVersionUncheckedUpdateWithoutCoRequisiteSubjectInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -642329,6 +642903,7 @@ export namespace Prisma {
         exams?: ExamUncheckedUpdateManyWithoutSubjectVersionNestedInput
         examFramework?: ExamFrameworkUncheckedUpdateManyWithoutSubjectVersionNestedInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionUncheckedUpdateManyWithoutSubjectVersionNestedInput
+        certificate?: CertificateUncheckedUpdateManyWithoutSubjectVersionsNestedInput
     };
     export type SubjectVersionUncheckedUpdateManyWithoutCoRequisiteSubjectInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -643054,6 +643629,55 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         scoreLinkSheetId?: StringFieldUpdateOperationsInput | string
     };
+    export type CertificateUpdateWithoutSubjectVersionsInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+        englishName?: NullableStringFieldUpdateOperationsInput | string | null
+        scoreThreshold?: FloatFieldUpdateOperationsInput | number
+        isUsingScore?: BoolFieldUpdateOperationsInput | boolean
+        outputStandard?: OutputStandardUpdateOneWithoutCertificatesNestedInput
+        archivedCertificate?: ArchivedCertificateUpdateManyWithoutCertificateNestedInput
+        subjects?: CertificateOnSubjectUpdateManyWithoutCertificateNestedInput
+    };
+    export type CertificateUncheckedUpdateWithoutSubjectVersionsInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+        englishName?: NullableStringFieldUpdateOperationsInput | string | null
+        outputStandardId?: NullableStringFieldUpdateOperationsInput | string | null
+        scoreThreshold?: FloatFieldUpdateOperationsInput | number
+        isUsingScore?: BoolFieldUpdateOperationsInput | boolean
+        archivedCertificate?: ArchivedCertificateUncheckedUpdateManyWithoutCertificateNestedInput
+        subjects?: CertificateOnSubjectUncheckedUpdateManyWithoutCertificateNestedInput
+    };
+    export type CertificateUncheckedUpdateManyWithoutSubjectVersionsInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+        englishName?: NullableStringFieldUpdateOperationsInput | string | null
+        outputStandardId?: NullableStringFieldUpdateOperationsInput | string | null
+        scoreThreshold?: FloatFieldUpdateOperationsInput | number
+        isUsingScore?: BoolFieldUpdateOperationsInput | boolean
+    };
     export type SubjectInGroupCreateManyEquivalencyGroupInput = {
         id?: string
         code?: string | null
@@ -643621,6 +644245,7 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         examId: string
+        examTime?: number | null
         examCode: string
         explain?: string | null
         examDay?: Date | string | null
@@ -644511,6 +645136,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        examTime?: NullableIntFieldUpdateOperationsInput | number | null
         examCode?: StringFieldUpdateOperationsInput | string
         explain?: NullableStringFieldUpdateOperationsInput | string | null
         examDay?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -644532,6 +645158,7 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         examId?: StringFieldUpdateOperationsInput | string
+        examTime?: NullableIntFieldUpdateOperationsInput | number | null
         examCode?: StringFieldUpdateOperationsInput | string
         explain?: NullableStringFieldUpdateOperationsInput | string | null
         examDay?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -644552,6 +645179,7 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         examId?: StringFieldUpdateOperationsInput | string
+        examTime?: NullableIntFieldUpdateOperationsInput | number | null
         examCode?: StringFieldUpdateOperationsInput | string
         explain?: NullableStringFieldUpdateOperationsInput | string | null
         examDay?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -646325,6 +646953,7 @@ export namespace Prisma {
         exams?: ExamUpdateManyWithoutSubjectVersionNestedInput
         examFramework?: ExamFrameworkUpdateManyWithoutSubjectVersionNestedInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionUpdateManyWithoutSubjectVersionNestedInput
+        certificate?: CertificateUpdateManyWithoutSubjectVersionsNestedInput
     };
     export type SubjectVersionUncheckedUpdateWithoutTrainingObjectTypeInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -646378,6 +647007,7 @@ export namespace Prisma {
         exams?: ExamUncheckedUpdateManyWithoutSubjectVersionNestedInput
         examFramework?: ExamFrameworkUncheckedUpdateManyWithoutSubjectVersionNestedInput
         scoreLinkSubjectVersion?: ScoreLinkSubjectVersionUncheckedUpdateManyWithoutSubjectVersionNestedInput
+        certificate?: CertificateUncheckedUpdateManyWithoutSubjectVersionsNestedInput
     };
     export type SubjectVersionUncheckedUpdateManyWithoutTrainingObjectTypeInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -650206,6 +650836,152 @@ export namespace Prisma {
         finalScore?: FloatFieldUpdateOperationsInput | number
         subjectId?: StringFieldUpdateOperationsInput | string
     };
+    export type SubjectVersionUpdateWithoutCertificateInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        code?: StringFieldUpdateOperationsInput | string
+        isLocked?: BoolFieldUpdateOperationsInput | boolean
+        name?: StringFieldUpdateOperationsInput | string
+        codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
+        examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
+        type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
+        onePoint?: BoolFieldUpdateOperationsInput | boolean
+        credit?: IntFieldUpdateOperationsInput | number
+        week?: NullableIntFieldUpdateOperationsInput | number | null
+        period?: NullableIntFieldUpdateOperationsInput | number | null
+        schedulePeriod?: NullableIntFieldUpdateOperationsInput | number | null
+        numberOfTheory?: NullableIntFieldUpdateOperationsInput | number | null
+        numberOfPractical?: NullableIntFieldUpdateOperationsInput | number | null
+        numberOfSelfStudy?: NullableIntFieldUpdateOperationsInput | number | null
+        numberOfPractice?: NullableIntFieldUpdateOperationsInput | number | null
+        numberOfReview?: NullableIntFieldUpdateOperationsInput | number | null
+        numberOfExam?: NullableIntFieldUpdateOperationsInput | number | null
+        numberOfOther?: NullableIntFieldUpdateOperationsInput | number | null
+        objectives?: NullableStringFieldUpdateOperationsInput | string | null
+        learningOutcome?: NullableStringFieldUpdateOperationsInput | string | null
+        structure?: NullableStringFieldUpdateOperationsInput | string | null
+        guild?: NullableStringFieldUpdateOperationsInput | string | null
+        academicResults?: NullableStringFieldUpdateOperationsInput | string | null
+        materials?: NullableStringFieldUpdateOperationsInput | string | null
+        rules?: NullableStringFieldUpdateOperationsInput | string | null
+        managementOrganization?: DM_DonViUpdateOneWithoutSubjectVersionsNestedInput
+        subject?: SubjectUpdateOneRequiredWithoutSubjectVersionNestedInput
+        trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutSubjectVersionNestedInput
+        subjectVersionCategory?: SubjectVersionCategoryUpdateOneWithoutSubjectVersionsNestedInput
+        trainingBlocks?: TrainingBlockSubjectUpdateManyWithoutSubjectNestedInput
+        prerequisiteSubject?: SubjectVersionUpdateManyWithoutDependentSubjectNestedInput
+        dependentSubject?: SubjectVersionUpdateManyWithoutPrerequisiteSubjectNestedInput
+        coRequisiteSubject?: SubjectVersionUpdateManyWithoutDepCoRequisiteSubjectNestedInput
+        depCoRequisiteSubject?: SubjectVersionUpdateManyWithoutCoRequisiteSubjectNestedInput
+        equivalencyGroups?: SubjectInGroupUpdateManyWithoutSubjectNestedInput
+        knowledgeBlocks?: KnowledgeBlockUpdateManyWithoutSubjectVersionNestedInput
+        subjectClass?: SubjectClassUpdateManyWithoutSubjectNestedInput
+        studentSubjectScore?: StudentSubjectScoreUpdateManyWithoutSubjectVersionNestedInput
+        documentFiles?: DocumentFileUpdateManyWithoutSubjectVersionNestedInput
+        questionBanks?: QuestionBankUpdateManyWithoutSubjectVersionNestedInput
+        subjectScoreConvert?: SubjectScoreConvertUpdateManyWithoutSubjectVersionNestedInput
+        subjectVersionHistory?: SubjectVersionHistoryUpdateManyWithoutSubjectVersionNestedInput
+        exams?: ExamUpdateManyWithoutSubjectVersionNestedInput
+        examFramework?: ExamFrameworkUpdateManyWithoutSubjectVersionNestedInput
+        scoreLinkSubjectVersion?: ScoreLinkSubjectVersionUpdateManyWithoutSubjectVersionNestedInput
+    };
+    export type SubjectVersionUncheckedUpdateWithoutCertificateInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        code?: StringFieldUpdateOperationsInput | string
+        isLocked?: BoolFieldUpdateOperationsInput | boolean
+        name?: StringFieldUpdateOperationsInput | string
+        codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
+        examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
+        type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
+        onePoint?: BoolFieldUpdateOperationsInput | boolean
+        credit?: IntFieldUpdateOperationsInput | number
+        week?: NullableIntFieldUpdateOperationsInput | number | null
+        period?: NullableIntFieldUpdateOperationsInput | number | null
+        schedulePeriod?: NullableIntFieldUpdateOperationsInput | number | null
+        numberOfTheory?: NullableIntFieldUpdateOperationsInput | number | null
+        numberOfPractical?: NullableIntFieldUpdateOperationsInput | number | null
+        numberOfSelfStudy?: NullableIntFieldUpdateOperationsInput | number | null
+        numberOfPractice?: NullableIntFieldUpdateOperationsInput | number | null
+        numberOfReview?: NullableIntFieldUpdateOperationsInput | number | null
+        numberOfExam?: NullableIntFieldUpdateOperationsInput | number | null
+        numberOfOther?: NullableIntFieldUpdateOperationsInput | number | null
+        objectives?: NullableStringFieldUpdateOperationsInput | string | null
+        learningOutcome?: NullableStringFieldUpdateOperationsInput | string | null
+        structure?: NullableStringFieldUpdateOperationsInput | string | null
+        guild?: NullableStringFieldUpdateOperationsInput | string | null
+        academicResults?: NullableStringFieldUpdateOperationsInput | string | null
+        materials?: NullableStringFieldUpdateOperationsInput | string | null
+        rules?: NullableStringFieldUpdateOperationsInput | string | null
+        managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
+        subjectId?: StringFieldUpdateOperationsInput | string
+        trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
+        subjectVersionCategoryId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingBlocks?: TrainingBlockSubjectUncheckedUpdateManyWithoutSubjectNestedInput
+        prerequisiteSubject?: SubjectVersionUncheckedUpdateManyWithoutDependentSubjectNestedInput
+        dependentSubject?: SubjectVersionUncheckedUpdateManyWithoutPrerequisiteSubjectNestedInput
+        coRequisiteSubject?: SubjectVersionUncheckedUpdateManyWithoutDepCoRequisiteSubjectNestedInput
+        depCoRequisiteSubject?: SubjectVersionUncheckedUpdateManyWithoutCoRequisiteSubjectNestedInput
+        equivalencyGroups?: SubjectInGroupUncheckedUpdateManyWithoutSubjectNestedInput
+        knowledgeBlocks?: KnowledgeBlockUncheckedUpdateManyWithoutSubjectVersionNestedInput
+        subjectClass?: SubjectClassUncheckedUpdateManyWithoutSubjectNestedInput
+        studentSubjectScore?: StudentSubjectScoreUncheckedUpdateManyWithoutSubjectVersionNestedInput
+        documentFiles?: DocumentFileUncheckedUpdateManyWithoutSubjectVersionNestedInput
+        questionBanks?: QuestionBankUncheckedUpdateManyWithoutSubjectVersionNestedInput
+        subjectScoreConvert?: SubjectScoreConvertUncheckedUpdateManyWithoutSubjectVersionNestedInput
+        subjectVersionHistory?: SubjectVersionHistoryUncheckedUpdateManyWithoutSubjectVersionNestedInput
+        exams?: ExamUncheckedUpdateManyWithoutSubjectVersionNestedInput
+        examFramework?: ExamFrameworkUncheckedUpdateManyWithoutSubjectVersionNestedInput
+        scoreLinkSubjectVersion?: ScoreLinkSubjectVersionUncheckedUpdateManyWithoutSubjectVersionNestedInput
+    };
+    export type SubjectVersionUncheckedUpdateManyWithoutCertificateInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        code?: StringFieldUpdateOperationsInput | string
+        isLocked?: BoolFieldUpdateOperationsInput | boolean
+        name?: StringFieldUpdateOperationsInput | string
+        codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
+        examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
+        type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
+        onePoint?: BoolFieldUpdateOperationsInput | boolean
+        credit?: IntFieldUpdateOperationsInput | number
+        week?: NullableIntFieldUpdateOperationsInput | number | null
+        period?: NullableIntFieldUpdateOperationsInput | number | null
+        schedulePeriod?: NullableIntFieldUpdateOperationsInput | number | null
+        numberOfTheory?: NullableIntFieldUpdateOperationsInput | number | null
+        numberOfPractical?: NullableIntFieldUpdateOperationsInput | number | null
+        numberOfSelfStudy?: NullableIntFieldUpdateOperationsInput | number | null
+        numberOfPractice?: NullableIntFieldUpdateOperationsInput | number | null
+        numberOfReview?: NullableIntFieldUpdateOperationsInput | number | null
+        numberOfExam?: NullableIntFieldUpdateOperationsInput | number | null
+        numberOfOther?: NullableIntFieldUpdateOperationsInput | number | null
+        objectives?: NullableStringFieldUpdateOperationsInput | string | null
+        learningOutcome?: NullableStringFieldUpdateOperationsInput | string | null
+        structure?: NullableStringFieldUpdateOperationsInput | string | null
+        guild?: NullableStringFieldUpdateOperationsInput | string | null
+        academicResults?: NullableStringFieldUpdateOperationsInput | string | null
+        materials?: NullableStringFieldUpdateOperationsInput | string | null
+        rules?: NullableStringFieldUpdateOperationsInput | string | null
+        managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
+        subjectId?: StringFieldUpdateOperationsInput | string
+        trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
+        subjectVersionCategoryId?: NullableStringFieldUpdateOperationsInput | string | null
+    };
     export type ArchivedAwardCreateManyAwardInput = {
         id?: string
         code?: string | null
@@ -650737,6 +651513,7 @@ export namespace Prisma {
         createdBy?: string | null
         name: string
         englishName?: string | null
+        scoreThreshold?: number
         isUsingScore?: boolean
     };
     export type OutputStandardOnCurriculumCreateManyOutputStandardInput = {
@@ -650763,9 +651540,11 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
+        scoreThreshold?: FloatFieldUpdateOperationsInput | number
         isUsingScore?: BoolFieldUpdateOperationsInput | boolean
         archivedCertificate?: ArchivedCertificateUpdateManyWithoutCertificateNestedInput
         subjects?: CertificateOnSubjectUpdateManyWithoutCertificateNestedInput
+        subjectVersions?: SubjectVersionUpdateManyWithoutCertificateNestedInput
     };
     export type CertificateUncheckedUpdateWithoutOutputStandardInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -650778,9 +651557,11 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
+        scoreThreshold?: FloatFieldUpdateOperationsInput | number
         isUsingScore?: BoolFieldUpdateOperationsInput | boolean
         archivedCertificate?: ArchivedCertificateUncheckedUpdateManyWithoutCertificateNestedInput
         subjects?: CertificateOnSubjectUncheckedUpdateManyWithoutCertificateNestedInput
+        subjectVersions?: SubjectVersionUncheckedUpdateManyWithoutCertificateNestedInput
     };
     export type CertificateUncheckedUpdateManyWithoutOutputStandardInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -650793,6 +651574,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
+        scoreThreshold?: FloatFieldUpdateOperationsInput | number
         isUsingScore?: BoolFieldUpdateOperationsInput | boolean
     };
     export type OutputStandardOnCurriculumUpdateWithoutOutputStandardInput = {
@@ -663244,6 +664026,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         createdBy?: string | null
+        examTime?: number | null
         examCode: string
         subjectClassId?: string | null
         explain?: string | null
@@ -663430,6 +664213,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        examTime?: NullableIntFieldUpdateOperationsInput | number | null
         examCode?: StringFieldUpdateOperationsInput | string
         explain?: NullableStringFieldUpdateOperationsInput | string | null
         examDay?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -663450,6 +664234,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        examTime?: NullableIntFieldUpdateOperationsInput | number | null
         examCode?: StringFieldUpdateOperationsInput | string
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         explain?: NullableStringFieldUpdateOperationsInput | string | null
@@ -663470,6 +664255,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        examTime?: NullableIntFieldUpdateOperationsInput | number | null
         examCode?: StringFieldUpdateOperationsInput | string
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         explain?: NullableStringFieldUpdateOperationsInput | string | null
@@ -663898,6 +664684,7 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         examId: string
+        examTime?: number | null
         examCode: string
         subjectClassId?: string | null
         explain?: string | null
@@ -663958,6 +664745,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        examTime?: NullableIntFieldUpdateOperationsInput | number | null
         examCode?: StringFieldUpdateOperationsInput | string
         explain?: NullableStringFieldUpdateOperationsInput | string | null
         examDay?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -663979,6 +664767,7 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         examId?: StringFieldUpdateOperationsInput | string
+        examTime?: NullableIntFieldUpdateOperationsInput | number | null
         examCode?: StringFieldUpdateOperationsInput | string
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         explain?: NullableStringFieldUpdateOperationsInput | string | null
@@ -663999,6 +664788,7 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         examId?: StringFieldUpdateOperationsInput | string
+        examTime?: NullableIntFieldUpdateOperationsInput | number | null
         examCode?: StringFieldUpdateOperationsInput | string
         subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
         explain?: NullableStringFieldUpdateOperationsInput | string | null

@@ -447,7 +447,7 @@ export default function TrainingProgramCatalog() {
                   <Select
                     className="w-full"
                     value={filters.trainingCourses}
-                    placeholder="Chọn khóa đào tạo"
+                    placeholder="Chọn khoá đào tạo"
                     options={trainingCourseData.map((i) => ({
                       value: i.id,
                       label: i.name,

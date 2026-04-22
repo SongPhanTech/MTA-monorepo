@@ -12,7 +12,7 @@ import { prisma } from ".."
 // ${table:data.fullname}	Full name (Họ và tên).
 // ${table:data.dateOfBirth}	Date of birth (DD/MM/YYYY).
 // ${table:data.fixedClass}	Class code (Lớp).
-// ${table:data.trainingCourse}	Training Course name (Khóa).
+// ${table:data.trainingCourse}	Training Course name (Khoá).
 // ${table:data.studyYear}	Study Year (Năm học thứ).
 // ${table:data.semesterIndexInCourse}	Semester index (Học kỳ thứ).
 // ${table:data.gpaBase10}	GPA Base 10 (TBCHK hệ 10).

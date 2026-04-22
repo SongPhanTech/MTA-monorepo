@@ -63,6 +63,7 @@ export default function ModalChiTietMonHoc() {
             // Nhóm tương đương
             equivalencyGroups: {
               include: {
+                subject: true,
                 equivalencyGroup: {
                   include: {
                     subjects: {
@@ -268,9 +269,9 @@ export default function ModalChiTietMonHoc() {
               <Tag color="error">Không hoạt động</Tag>
             )}
           </Descriptions.Item>
-          <Descriptions.Item label="Trạng thái khóa">
+          <Descriptions.Item label="Trạng thái khoá">
             {currentVersion.isLocked ? (
-              <Tag color="error">Đã khóa</Tag>
+              <Tag color="error">Đã khoá</Tag>
             ) : (
               <Tag color="success">Đang mở</Tag>
             )}
@@ -351,12 +352,12 @@ export default function ModalChiTietMonHoc() {
                 ),
             },
             {
-              title: "Khóa",
+              title: "Khoá",
               dataIndex: "isLocked",
               width: 100,
               align: "center",
               render: (value) =>
-                value ? <Tag color="error">Đã khóa</Tag> : <Tag color="success">Đang mở</Tag>,
+                value ? <Tag color="error">Đã khoá</Tag> : <Tag color="success">Đang mở</Tag>,
             },
             {
               title: "Loại",
@@ -587,14 +588,14 @@ export default function ModalChiTietMonHoc() {
               render: (value) => (value ? dayjs(value).format("DD/MM/YYYY HH:mm") : ""),
             },
             {
-              title: "Khóa TX/ĐK",
+              title: "Khoá TX/ĐK",
               dataIndex: "isLockScore",
               width: 100,
               align: "center" as const,
               render: (value: boolean) => (value ? "Có" : "Không"),
             },
             {
-              title: "Khóa điểm thi",
+              title: "Khoá điểm thi",
               dataIndex: "isLockExamScore",
               width: 100,
               align: "center" as const,
@@ -847,14 +848,23 @@ export default function ModalChiTietMonHoc() {
               render: (_, __, index) => index + 1,
             },
             {
-              title: "Tên nhóm",
-              width: 200,
-              render: (_: any, record: any) => record.equivalencyGroup?.name,
+              title: "Môn tương đương",
+              width: 300,
+              render: (_, record) => {
+                const equivalentNames =
+                  record.equivalencyGroup?.subjects
+                    ?.filter((item: any) => item.subjectId !== record.subjectId)
+                    .map((item: any) => item.subject?.name)
+                    .filter(Boolean)
+                    .join(", ") || "-"
+
+                return equivalentNames
+              },
             },
             {
               title: "Mô tả",
               width: 250,
-              render: (_: any, record: any) => record.equivalencyGroup?.description,
+              render: (_, record) => record.equivalencyGroup?.description || "-",
             },
             {
               title: "Số môn trong nhóm",
@@ -960,7 +970,7 @@ export default function ModalChiTietMonHoc() {
                 ),
             },
             {
-              title: "Khóa DS thi",
+              title: "Khoá DS thi",
               dataIndex: "lockExamSessions",
               width: 100,
               align: "center" as const,

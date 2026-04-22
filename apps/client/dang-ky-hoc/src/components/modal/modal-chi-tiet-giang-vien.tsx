@@ -528,7 +528,7 @@ const ModalChiTietGiangVien = () => {
               width: 200,
             },
             {
-              title: "Khóa đào tạo",
+              title: "Khoá đào tạo",
               dataIndex: ["trainingCourse", "name"],
               width: 150,
             },

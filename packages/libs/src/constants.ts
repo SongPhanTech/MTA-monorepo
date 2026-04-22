@@ -76,7 +76,7 @@ export const criteriaFieldLabels: Record<CriteriaField, string> = {
   [CriteriaField.SUSPENSION_COUNT]: "Số lần bị đình chỉ",
 
   // --- Nhóm 4: Rèn luyện & Điều kiện khác ---
-  [CriteriaField.CONDUCT_SCORE]: "Điểm rèn luyện",
+  [CriteriaField.CONDUCT_SCORE]: "Điểm rèn luyện (0-10)",
   [CriteriaField.HAS_PASSED_FOREIGN_LANGUAGE]: "Đã đạt chuẩn ngoại ngữ",
   [CriteriaField.HAS_REGISTERED_FOR_SEMESTER]: "Đã đăng ký học kỳ hiện tại",
   [CriteriaField.IS_PRIORITY_STUDENT]: "Đối tượng ưu tiên",

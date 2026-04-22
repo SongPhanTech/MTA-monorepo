@@ -732,10 +732,10 @@ export default function NhapDiem({
           },
         },
       })
-      message.success("Khóa điểm thành công")
+      message.success("Khoá điểm thành công")
       return true
     } catch (error) {
-      message.error("Có lỗi xảy ra khi khóa điểm")
+      message.error("Có lỗi xảy ra khi khoá điểm")
       console.error(error)
       return false
     }
@@ -747,7 +747,7 @@ export default function NhapDiem({
 
     Modal.confirm({
       title: "Xác nhận",
-      content: "Bạn có chắc chắn muốn in phiếu điểm và khóa nhập điểm lại không?",
+      content: "Bạn có chắc chắn muốn in phiếu điểm và khoá nhập điểm lại không?",
       okText: "Xác nhận",
       cancelText: "Hủy",
       onOk: async () => {
@@ -800,7 +800,7 @@ export default function NhapDiem({
       }
       setRowData(newRowData)
     }
-  }, [dataTable.length])
+  }, [dataTable])
 
   if (!selectedSubjectClassId) {
     return (

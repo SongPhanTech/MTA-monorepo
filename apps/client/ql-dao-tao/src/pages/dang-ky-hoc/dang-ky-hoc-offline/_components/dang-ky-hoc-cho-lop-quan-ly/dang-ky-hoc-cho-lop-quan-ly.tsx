@@ -236,7 +236,7 @@ export default function DangKyHocChoLopQuanLy() {
             title: "Mã LMH",
             dataIndex: "code",
             align: "center",
-            width: 120,
+            width: 80,
           },
           {
             title: "Tên môn",
@@ -249,16 +249,16 @@ export default function DangKyHocChoLopQuanLy() {
               </p>
             ),
           },
-          {
-            title: "Khu vực",
-            dataIndex: ["trainingLocation", "name"],
-            align: "center",
-            width: 120,
-          },
+          // {
+          //   title: "Khu vực",
+          //   dataIndex: ["trainingLocation", "name"],
+          //   align: "center",
+          //   width: 100,
+          // },
           {
             title: "Số SV đã ĐK",
             align: "center",
-            width: 100,
+            width: 60,
             onCell: (record) => ({
               className: cn(
                 record?._count?.subjectClassStudent === 0 ? "text-red-500" : "text-primary"

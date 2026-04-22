@@ -58,7 +58,7 @@ const ExportStatsArchivedAwardModal = () => {
         </FormItem>
       </Col>
       <Col span={24} className="mb-4">
-        <FormItem form={form} className="w-full" name="trainingCourseId" label="Khóa học" required>
+        <FormItem form={form} className="w-full" name="trainingCourseId" label="Khoá học" required>
           <SelectTrainingCourse className="w-full" />
         </FormItem>
       </Col>

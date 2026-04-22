@@ -50,7 +50,7 @@ import {
   Tag,
 } from "antd"
 import { SquarePen } from "lucide-react"
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 import TreeSelect from "@/components/commons/tree-select"
 import {
@@ -75,7 +75,6 @@ import {
   exportThongKeCoQuanDonViCanBoNgoaiHv,
 } from "@/utils/thesis-excel"
 
-/** Giờ ca bảo vệ lưu như UTC (giống DefenseScheduleConfiguration); tránh lệch khi format local. */
 function formatDefenseSessionClock(startTime: Date | string | null | undefined): string {
   if (startTime === null || startTime === undefined) {
     return ""
@@ -107,20 +106,21 @@ export function getCouncilMemberName(record: any, role: CouncilRole) {
 
   const expert = member.expert
   const profile = expert?.lecturer?.userProfile
-
   const rank = profile?.academicRankType?.sMa || expert?.academicRankType?.sMa || ""
   const degree = profile?.academicDegreeType?.sMa || expert?.academicDegreeType?.sMa || ""
   const title = [rank, degree].filter(Boolean).join(".")
   const fullname = expert?.name || profile?.fullname || ""
   const inAcademy = expert?.lecturerId ? true : false
+  const workplace = expert?.workplace || ""
   const text = [title, fullname].filter(Boolean).join(" ").trim()
+  const textWithWorkplace = [text, workplace].filter(Boolean).join(", ")
   return (
     <span
       title={inAcademy ? "Trong học viện" : "Ngoài học viện"}
-      className={inAcademy ? "text-green-600" : ""}
-      style={{ color: inAcademy ? "#16a34a" : "" }}
+      className={inAcademy ? "" : "text-green-600"}
+      style={{ color: inAcademy ? "" : "#16a34a" }}
     >
-      {text}
+      {textWithWorkplace}
     </span>
   )
 }
@@ -140,8 +140,8 @@ export function getSupervisorName(record: any, htmlRender = false, showWorkplace
   return htmlRender ? (
     <span
       title={inAcademy ? "Trong học viện" : "Ngoài học viện"}
-      className={inAcademy ? "text-green-600" : ""}
-      style={{ color: inAcademy ? "#16a34a" : "" }}
+      className={inAcademy ? "" : "text-green-600"}
+      style={{ color: inAcademy ? "" : "#16a34a" }}
     >
       {textWithWorkplace}
     </span>
@@ -151,6 +151,8 @@ export function getSupervisorName(record: any, htmlRender = false, showWorkplace
 }
 const { TextArea } = Input
 
+const NAME_SEARCH_DEBOUNCE_MS = 400
+
 export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
   const orgId = window.contextData?.organizationId
   const [form] = Form.useForm<ThesisProjectForm>()
@@ -159,8 +161,25 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
   const [editingRowKeys, setEditingRowKeys] = useState<string[]>([])
   const [editingValues, setEditingValues] = useState<Record<string, Record<string, any>>>({})
   const [currentPage, setCurrentPage] = useState(1)
+  const [nameKeyword, setNameKeyword] = useState("")
+  const [debouncedNameKeyword, setDebouncedNameKeyword] = useState("")
+  const nameSearchDebounceReady = useRef(false)
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
   const [trainingCourseId, setTrainingCourseId] = useState<string | null>(null)
+
+  useEffect(() => {
+    const id = window.setTimeout(() => {
+      const next = nameKeyword.trim()
+      setDebouncedNameKeyword(next)
+      if (nameSearchDebounceReady.current) {
+        setCurrentPage(1)
+        setEditingRowKeys([])
+      } else {
+        nameSearchDebounceReady.current = true
+      }
+    }, NAME_SEARCH_DEBOUNCE_MS)
+    return () => window.clearTimeout(id)
+  }, [nameKeyword])
   const rowSelection = {
     selectedRowKeys,
     onChange: (newSelectedRowKeys: React.Key[]) => {
@@ -232,7 +251,47 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
   const studentWhere = useMemo(() => {
     if (!searchParams.thesisSessionId) return { id: { in: [] } }
 
-    return {
+    const thesisProjectBaseWhere: Record<string, any> = {
+      thesisSessionId: searchParams.thesisSessionId,
+      thesisType: ThesisType.THESIS,
+      organizationId: searchParams.organizationId || undefined,
+    }
+    const thesisProjectWhere: Record<string, any> = {
+      ...thesisProjectBaseWhere,
+    }
+    if (debouncedNameKeyword) {
+      thesisProjectWhere.OR = [
+        {
+          supervisor: {
+            name: { contains: debouncedNameKeyword, mode: "insensitive" },
+          },
+        },
+        {
+          supervisor: {
+            lecturer: {
+              userProfile: {
+                fullname: { contains: debouncedNameKeyword, mode: "insensitive" },
+              },
+            },
+          },
+        },
+        {
+          coSupervisor: {
+            name: { contains: debouncedNameKeyword, mode: "insensitive" },
+          },
+        },
+        {
+          coSupervisor: {
+            lecturer: {
+              userProfile: {
+                fullname: { contains: debouncedNameKeyword, mode: "insensitive" },
+              },
+            },
+          },
+        },
+      ]
+    }
+    const baseWhere: Record<string, any> = {
       fixedClassId: {
         in:
           searchParams.fixedClassId && searchParams.fixedClassId.length > 0
@@ -241,20 +300,71 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
       },
       thesisRegistrations: {
         some: {
-          thesisProject: {
-            thesisSessionId: searchParams.thesisSessionId,
-            thesisType: ThesisType.THESIS,
-            organizationId: searchParams.organizationId || undefined,
-          },
+          thesisProject: thesisProjectBaseWhere,
         },
       },
     }
-  }, [searchParams, fixedClasses])
+    if (!debouncedNameKeyword) return baseWhere
+    return {
+      ...baseWhere,
+      OR: [
+        {
+          userProfile: {
+            fullname: { contains: debouncedNameKeyword, mode: "insensitive" },
+          },
+        },
+        {
+          thesisRegistrations: {
+            some: {
+              thesisProject: thesisProjectWhere,
+            },
+          },
+        },
+      ],
+    }
+  }, [searchParams, fixedClasses, debouncedNameKeyword])
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: dùng cho searchParams
   const allStudentWhere = useMemo(() => {
     if (!searchParams.thesisSessionId) return { id: { in: [] } }
-    const filter = {
+    const thesisProjectWhere: Record<string, any> = {
+      thesisSessionId: searchParams.thesisSessionId,
+      thesisType: ThesisType.THESIS,
+      organizationId: searchParams.organizationId || undefined,
+    }
+    if (debouncedNameKeyword) {
+      thesisProjectWhere.OR = [
+        {
+          supervisor: {
+            name: { contains: debouncedNameKeyword, mode: "insensitive" },
+          },
+        },
+        {
+          supervisor: {
+            lecturer: {
+              userProfile: {
+                fullname: { contains: debouncedNameKeyword, mode: "insensitive" },
+              },
+            },
+          },
+        },
+        {
+          coSupervisor: {
+            name: { contains: debouncedNameKeyword, mode: "insensitive" },
+          },
+        },
+        {
+          coSupervisor: {
+            lecturer: {
+              userProfile: {
+                fullname: { contains: debouncedNameKeyword, mode: "insensitive" },
+              },
+            },
+          },
+        },
+      ]
+    }
+    const filter: Record<string, any> = {
       fixedClassId: {
         in:
           searchParams.fixedClassId && searchParams.fixedClassId.length > 0
@@ -262,9 +372,25 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
             : fixedClasses?.map((f) => f.id),
       },
     }
-
-    return filter
-  }, [searchParams, fixedClasses])
+    if (!debouncedNameKeyword) return filter
+    return {
+      ...filter,
+      OR: [
+        {
+          userProfile: {
+            fullname: { contains: debouncedNameKeyword, mode: "insensitive" },
+          },
+        },
+        {
+          thesisRegistrations: {
+            some: {
+              thesisProject: thesisProjectWhere,
+            },
+          },
+        },
+      ],
+    }
+  }, [searchParams, fixedClasses, debouncedNameKeyword])
 
   const { data: students = [], refetch: refetchStudents } = useFindManyStudent({
     where: studentWhere,
@@ -556,17 +682,17 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
         type: typeLabel,
         organization: organizationId
           ? {
-            connect: {
-              Id: organizationId,
-            },
-          }
+              connect: {
+                Id: organizationId,
+              },
+            }
           : { disconnect: true },
         thesisSession: thesisSessionId
           ? {
-            connect: {
-              id: thesisSessionId,
-            },
-          }
+              connect: {
+                id: thesisSessionId,
+              },
+            }
           : { disconnect: true },
         thesisType: ThesisType.THESIS,
         librarySubmission: {
@@ -616,6 +742,9 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
       message.error("Đã xảy ra lỗi trong lúc tạo dữ liệu mẫu")
     } finally {
       hideSpinner()
+      await refetchStudents()
+      await refetchAllStudentsInClasses()
+      await refetchCount()
     }
   }
 
@@ -804,8 +933,9 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
     null
   )
   const [signRole, setSignRole] = useState<"chief" | "deputy">("chief")
+  const [signingDate, setSigningDate] = useState<ReturnType<typeof dayjs>>(dayjs())
 
-  type SignerPayload = { signerName: string; isChief: boolean }
+  type SignerPayload = { signerName: string; isChief: boolean; signingDate?: Date }
 
   const buttonList: Array<{
     id: number
@@ -814,241 +944,245 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
     disabled?: boolean
     onClick: (signer?: SignerPayload) => Promise<unknown>
   }> = [
-      {
-        id: 1,
-        label: "Phụ lục ds luận văn",
-        needSign: true,
-        onClick: async () =>
-          await exportPhuLucDsLuanVan({
-            allStudentsInClasses,
-            showSpinner,
-            hideSpinner,
-            message,
-          }),
+    {
+      id: 1,
+      label: "Phụ lục ds luận văn",
+      needSign: true,
+      onClick: async () =>
+        await exportPhuLucDsLuanVan({
+          allStudentsInClasses,
+          showSpinner,
+          hideSpinner,
+          message,
+        }),
+    },
+    {
+      id: 2,
+      label: "Sao QĐ HDLV",
+      needSign: true,
+      onClick: async (signer?: SignerPayload) =>
+        await exportSaoQDHDLV({
+          allStudentsInClasses,
+          showSpinner,
+          hideSpinner,
+          message,
+          signerName: signer?.signerName,
+          isChief: signer?.isChief,
+          signingDate: signer?.signingDate,
+        }),
+    },
+    {
+      id: 3,
+      label: "Giấy mời HDLV",
+      needSign: true,
+      onClick: async (signer?: SignerPayload) =>
+        await exportGiayMoiHdlv({
+          allStudentsInClasses,
+          showSpinner,
+          hideSpinner,
+          message,
+          isChief: signer?.isChief,
+          signerName: signer?.signerName,
+          signingDate: signer?.signingDate,
+        }),
+    },
+    {
+      id: 4,
+      label: "Kiếm tra tiến độ",
+      onClick: async () =>
+        await exportKiemTraTienDo({
+          allStudentsInClasses,
+          showSpinner,
+          hideSpinner,
+          message,
+        }),
+    },
+    {
+      id: 5,
+      label: "Giấy mời chấm LV PB",
+      needSign: true,
+      onClick: async (signer?: SignerPayload) =>
+        await exportGiayMoiChamLvPb({
+          allStudentsInClasses,
+          showSpinner,
+          hideSpinner,
+          message,
+          signerName: signer?.signerName,
+          isChief: signer?.isChief,
+          signingDate: signer?.signingDate,
+        }),
+    },
+    {
+      id: 6,
+      // disabled: true,
+      label: "Phụ lục QĐHĐ",
+      onClick: async () =>
+        await exportPhuLucQdhdd({
+          allStudentsInClasses,
+          showSpinner,
+          hideSpinner,
+          message,
+        }),
+    },
+    {
+      id: 6.1,
+      label: "Bản sao HDDGLV",
+      needSign: true,
+      onClick: async (signer?: SignerPayload) =>
+        await exportBanSaoHDDGLV({
+          allStudentsInClasses,
+          showSpinner,
+          hideSpinner,
+          message,
+          signerName: signer?.signerName,
+          isChief: signer?.isChief,
+          signingDate: signer?.signingDate,
+        }),
+    },
+    // {
+    //   id: 7,
+    //   label: "Đề xuất hội đồng",
+    //   disabled: true,
+    //   onClick: async () =>
+    //     await exportHDDanhGiaLuanVan({
+    //       allStudentsInClasses,
+    //       showSpinner,
+    //       hideSpinner,
+    //       message,
+    //     }),
+    // },
+    {
+      id: 8,
+      label: "Hồ sơ BV LV",
+      onClick: async () =>
+        await exportHosobvlv({ allStudentsInClasses, showSpinner, hideSpinner, message }),
+    },
+    {
+      id: 9,
+      label: "Danh sách bảo vệ",
+      onClick: async () =>
+        await exportDanhSachBaoVe({
+          allStudentsInClasses,
+          showSpinner,
+          hideSpinner,
+          message,
+        }),
+    },
+    {
+      id: 10,
+      label: "Danh sách bảo vệ(Dán PBV)",
+      onClick: async () => {
+        exportDanhSachBaoVeDanNgoaiPhong({
+          allStudentsInClasses,
+          showSpinner,
+          hideSpinner,
+          message,
+        })
       },
-      {
-        id: 2,
-        label: "Sao QĐ HDLV",
-        needSign: true,
-        onClick: async (signer?: SignerPayload) =>
-          await exportSaoQDHDLV({
-            allStudentsInClasses,
-            showSpinner,
-            hideSpinner,
-            message,
-            signerName: signer?.signerName,
-            isChief: signer?.isChief,
-          }),
-      },
-      {
-        id: 3,
-        label: "Giấy mời HDLV",
-        needSign: true,
-        onClick: async (signer?: SignerPayload) =>
-          await exportGiayMoiHdlv({
-            allStudentsInClasses,
-            showSpinner,
-            hideSpinner,
-            message,
-            isChief: signer?.isChief,
-            signerName: signer?.signerName,
-          }),
-      },
-      {
-        id: 4,
-        label: "Kiếm tra tiến độ",
-        onClick: async () =>
-          await exportKiemTraTienDo({
-            allStudentsInClasses,
-            showSpinner,
-            hideSpinner,
-            message,
-          }),
-      },
-      {
-        id: 5,
-        label: "Giấy mời chấm LV PB",
-        needSign: true,
-        onClick: async (signer?: SignerPayload) =>
-          await exportGiayMoiChamLvPb({
-            allStudentsInClasses,
-            showSpinner,
-            hideSpinner,
-            message,
-            signerName: signer?.signerName,
-            isChief: signer?.isChief,
-          }),
-      },
-      {
-        id: 6,
-        // disabled: true,
-        label: "Phụ lục QĐHĐ",
-        onClick: async () =>
-          await exportPhuLucQdhdd({
-            allStudentsInClasses,
-            showSpinner,
-            hideSpinner,
-            message,
-          }),
-      },
-      {
-        id: 6.1,
-        label: "Bản sao HDDGLV",
-        needSign: true,
-        onClick: async (signer?: SignerPayload) =>
-          await exportBanSaoHDDGLV({
-            allStudentsInClasses,
-            showSpinner,
-            hideSpinner,
-            message,
-            signerName: signer?.signerName,
-            isChief: signer?.isChief,
-          }),
-      },
-      // {
-      //   id: 7,
-      //   label: "Đề xuất hội đồng",
-      //   disabled: true,
-      //   onClick: async () =>
-      //     await exportHDDanhGiaLuanVan({
-      //       allStudentsInClasses,
-      //       showSpinner,
-      //       hideSpinner,
-      //       message,
-      //     }),
-      // },
-      {
-        id: 8,
-        label: "Hồ sơ BV LV",
-        onClick: async () =>
-          await exportHosobvlv({ allStudentsInClasses, showSpinner, hideSpinner, message }),
-      },
-      {
-        id: 9,
-        label: "Danh sách bảo vệ",
-        onClick: async () =>
-          await exportDanhSachBaoVe({
-            allStudentsInClasses,
-            showSpinner,
-            hideSpinner,
-            message,
-          }),
-      },
-      {
-        id: 10,
-        label: "Danh sách bảo vệ(Dán PBV)",
-        onClick: async () => {
-          exportDanhSachBaoVeDanNgoaiPhong({
-            allStudentsInClasses,
-            showSpinner,
-            hideSpinner,
-            message,
-          })
-        },
-      },
-      {
-        id: 12,
-        label: "Danh sách chuyên gia",
-        onClick: async () =>
-          await exportDsChuyenGia({
-            allStudentsInClasses,
-            showSpinner,
-            hideSpinner,
-            message,
-          }),
-      },
+    },
+    {
+      id: 12,
+      label: "Danh sách chuyên gia",
+      onClick: async () =>
+        await exportDsChuyenGia({
+          allStudentsInClasses,
+          showSpinner,
+          hideSpinner,
+          message,
+        }),
+    },
 
-      {
-        id: 13,
-        label: "Thanh toán hướng dẫn",
-        onClick: async () =>
-          await exportThanhToanHuongDanTrongHv({
-            allStudentsInClasses,
-            showSpinner,
-            hideSpinner,
-            message,
-            inAcademy: true,
-          }),
-      },
-      {
-        id: 13.1,
-        label: "Thanh toán hướng dẫn - Ngoài HV",
-        onClick: async () =>
-          await exportThanhToanHuongDanTrongHv({
-            allStudentsInClasses,
-            showSpinner,
-            hideSpinner,
-            message,
-            inAcademy: false,
-          }),
-      },
-      {
-        id: 14,
-        label: "Thống kê CBHD LV",
-        onClick: async () =>
-          await exportThongKeCbHdlv({
-            allStudentsInClasses,
-            showSpinner,
-            hideSpinner,
-            message,
-          }),
-      },
-      {
-        id: 15,
-        label: "Thống kê cán bộ tham gia HĐ",
-        onClick: async () =>
-          await exportThongKeCbThamGiaHd({
-            allStudentsInClasses,
-            showSpinner,
-            hideSpinner,
-            message,
-          }),
-      },
-      {
-        id: 15.1,
-        label: "Thống kê cơ quan đơn vị cán bộ (ngoài HV)",
-        onClick: async () =>
-          await exportThongKeCoQuanDonViCanBoNgoaiHv({
-            allStudentsInClasses,
-            showSpinner,
-            hideSpinner,
-            message,
-          }),
-      },
-      {
-        id: 16,
-        label: "Thống kê KQ BV LV",
-        onClick: async () =>
-          await exportKetQuaBaoVeLuanVan({
-            allStudentsInClasses,
-            showSpinner,
-            hideSpinner,
-            message,
-          }),
-      },
-      {
-        id: 19,
-        label: "Danh sách nộp luận văn thư viện",
-        onClick: async () =>
-          await exportDanhSachNopLuanVanThuVien({
-            allStudentsInClasses,
-            showSpinner,
-            hideSpinner,
-            message,
-          }),
-      },
-      {
-        id: 11,
-        label: "Thanh toán hội đồng bảo vệ",
-        onClick: async () =>
-          await exportThanhToanHoiDongBaoVe({
-            allStudentsInClasses,
-            showSpinner,
-            hideSpinner,
-            message,
-          }),
-      },
-    ]
+    {
+      id: 13,
+      label: "Thanh toán hướng dẫn",
+      onClick: async () =>
+        await exportThanhToanHuongDanTrongHv({
+          allStudentsInClasses,
+          showSpinner,
+          hideSpinner,
+          message,
+          inAcademy: true,
+        }),
+    },
+    {
+      id: 13.1,
+      label: "Thanh toán hướng dẫn - Ngoài HV",
+      onClick: async () =>
+        await exportThanhToanHuongDanTrongHv({
+          allStudentsInClasses,
+          showSpinner,
+          hideSpinner,
+          message,
+          inAcademy: false,
+        }),
+    },
+    {
+      id: 14,
+      label: "Thống kê CBHD LV",
+      onClick: async () =>
+        await exportThongKeCbHdlv({
+          allStudentsInClasses,
+          showSpinner,
+          hideSpinner,
+          message,
+        }),
+    },
+    {
+      id: 15,
+      label: "Thống kê cán bộ tham gia HĐ",
+      onClick: async () =>
+        await exportThongKeCbThamGiaHd({
+          allStudentsInClasses,
+          showSpinner,
+          hideSpinner,
+          message,
+        }),
+    },
+    {
+      id: 15.1,
+      label: "Thống kê cơ quan đơn vị cán bộ (ngoài HV)",
+      onClick: async () =>
+        await exportThongKeCoQuanDonViCanBoNgoaiHv({
+          allStudentsInClasses,
+          showSpinner,
+          hideSpinner,
+          message,
+        }),
+    },
+    {
+      id: 16,
+      label: "Thống kê KQ BV LV",
+      onClick: async () =>
+        await exportKetQuaBaoVeLuanVan({
+          allStudentsInClasses,
+          showSpinner,
+          hideSpinner,
+          message,
+        }),
+    },
+    {
+      id: 19,
+      label: "Danh sách nộp luận văn thư viện",
+      onClick: async () =>
+        await exportDanhSachNopLuanVanThuVien({
+          allStudentsInClasses,
+          showSpinner,
+          hideSpinner,
+          message,
+        }),
+    },
+    {
+      id: 11,
+      label: "Thanh toán hội đồng bảo vệ",
+      onClick: async () =>
+        await exportThanhToanHoiDongBaoVe({
+          allStudentsInClasses,
+          showSpinner,
+          hideSpinner,
+          message,
+        }),
+    },
+  ]
 
   const handleExportExcelFromTemplate = async () => {
     if (!selectedPrintTemplateId) {
@@ -1074,6 +1208,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
         return
       }
       setSignRole(session.chief?.trim() ? "chief" : "deputy")
+      setSigningDate(dayjs())
       setPendingSignExportTemplateId(selectedPrintTemplateId)
       setSignModalOpen(true)
       return
@@ -1103,12 +1238,17 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
     if (!selected?.onClick) return
     setSignModalOpen(false)
     setPendingSignExportTemplateId(null)
-    await selected.onClick({ signerName, isChief })
+    await selected.onClick({
+      signerName,
+      isChief,
+      signingDate: signingDate?.toDate?.() ?? undefined,
+    })
   }
 
   const handleCancelSignModal = () => {
     setSignModalOpen(false)
     setPendingSignExportTemplateId(null)
+    setSigningDate(dayjs())
   }
 
   const handleAssignDates = async () => {
@@ -1185,6 +1325,16 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
             Phó phòng sau đại học: <strong>{deputyDisplay}</strong>
           </Radio>
         </Radio.Group>
+        <div className="mt-4">
+          <div className="mb-2 text-gray-700">Thời gian ký</div>
+          <DatePicker
+            className="w-full"
+            format="DD/MM/YYYY"
+            value={signingDate}
+            onChange={(value) => setSigningDate(value || dayjs())}
+            placeholder="Chọn thời gian ký"
+          />
+        </div>
       </Modal>
       <Row gutter={[8, 0]}>
         <Col span={24}>
@@ -1264,6 +1414,15 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                         setCurrentPage(1)
                         setEditingRowKeys([])
                       }}
+                    />
+                  </Form.Item>
+                  <Form.Item label="Tìm kiếm">
+                    <Input
+                      className="w-48"
+                      allowClear
+                      value={nameKeyword}
+                      placeholder="Tên học viên / GVHD"
+                      onChange={(e) => setNameKeyword(e.target.value)}
                     />
                   </Form.Item>
 
@@ -1448,7 +1607,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                   }
                   if (record?.thesisRegistrations?.[0]?.thesisProject?.organization) {
                     return (
-                      `${record?.thesisRegistrations?.[0]?.thesisProject?.organization?.sMa || ""
+                      `${
+                        record?.thesisRegistrations?.[0]?.thesisProject?.organization?.sMa || ""
                       } ` || "N/A "
                     )
                   }
@@ -1464,7 +1624,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                 },
               },
               {
-                title: "Họ tên",
+                title: "Họ tên học viên",
                 width: 180,
                 fixed: "left",
                 dataIndex: "name",
@@ -1526,7 +1686,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
               },
               {
                 title: "GVHD 1",
-                width: 150,
+                width: 200,
                 fixed: "left",
                 dataIndex: "supervisor",
                 render: (_, record) => {
@@ -1543,7 +1703,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           dropdownStyle={{ minWidth: 200 }}
                           disabled={!isWithinGvhdSupervisorEditWindow()}
                           options={expertProfileData?.map((item) => {
-                            const text = getSupervisorName(item, true)
+                            const text = getSupervisorName(item, true, true)
                             const hasLecturer = item.lecturer != null
                             return {
                               label: (
@@ -1566,12 +1726,12 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                   }
                   const supervisor = record?.thesisRegistrations?.[0]?.thesisProject?.supervisor
 
-                  return getSupervisorName(supervisor, true)
+                  return getSupervisorName(supervisor, true, true)
                 },
               },
               {
                 title: "GVHD 2",
-                width: 150,
+                width: 200,
                 fixed: "left",
                 dataIndex: "coSupervisor",
                 render: (_, record) => {
@@ -1589,7 +1749,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           className="w-full"
                           disabled={!isWithinGvhdSupervisorEditWindow()}
                           options={expertProfileData?.map((item) => {
-                            const text = getSupervisorName(item, true)
+                            const text = getSupervisorName(item, true, true)
                             const hasLecturer = item.lecturer != null
                             return {
                               label: (
@@ -1611,7 +1771,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                     )
                   }
                   const coSupervisor = record?.thesisRegistrations?.[0]?.thesisProject?.coSupervisor
-                  return getSupervisorName(coSupervisor, true)
+                  return getSupervisorName(coSupervisor, true, true)
                 },
               },
               {
@@ -1624,7 +1784,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       editingValues[record?.id]?.researchTopicAssociated !== undefined
                         ? editingValues[record?.id]?.researchTopicAssociated
                         : record?.thesisRegistrations?.[0]?.thesisProject
-                          ?.researchTopicAssociated || ""
+                            ?.researchTopicAssociated || ""
 
                     return (
                       <div onClick={(e) => e.stopPropagation()}>
@@ -1699,7 +1859,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
 
               {
                 title: "Chủ tịch ",
-                width: 150,
+                width: 200,
                 dataIndex: "councilChairman",
                 render: (_, record) => {
                   if (editingRowKeys.includes(record?.id)) {
@@ -1707,8 +1867,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       editingValues[record?.id]?.councilChairman !== undefined
                         ? editingValues[record?.id]?.councilChairman
                         : record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
-                          (member: CouncilMember) => member.role === CouncilRole.CHAIRMAN
-                        )?.expert?.id || ""
+                            (member: CouncilMember) => member.role === CouncilRole.CHAIRMAN
+                          )?.expert?.id || ""
                     return (
                       <div onClick={(e) => e.stopPropagation()}>
                         <Select
@@ -1719,7 +1879,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           options={expertProfileData
                             ?.filter((item) => item.eligiblePresident === true)
                             .map((item) => {
-                              const text = getSupervisorName(item, true)
+                              const text = getSupervisorName(item, true, true)
                               const hasLecturer = item.lecturer != null
                               return {
                                 label: (
@@ -1747,7 +1907,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
               },
               {
                 title: "Thư ký",
-                width: 150,
+                width: 200,
                 dataIndex: "councilSecretary",
                 render: (_, record) => {
                   if (editingRowKeys.includes(record?.id)) {
@@ -1755,8 +1915,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       editingValues[record?.id]?.councilSecretary !== undefined
                         ? editingValues[record?.id]?.councilSecretary
                         : record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
-                          (member: CouncilMember) => member.role === CouncilRole.SECRETARY
-                        )?.expert?.id || ""
+                            (member: CouncilMember) => member.role === CouncilRole.SECRETARY
+                          )?.expert?.id || ""
                     return (
                       <div onClick={(e) => e.stopPropagation()}>
                         <Select
@@ -1767,7 +1927,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           options={expertProfileData
                             ?.filter((item) => item.eligibleSecretary === true)
                             .map((item) => {
-                              const text = getSupervisorName(item, true)
+                              const text = getSupervisorName(item, true, true)
                               const hasLecturer = item.lecturer != null
                               return {
                                 label: (
@@ -1795,7 +1955,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
               },
               {
                 title: "Phản biện 1",
-                width: 150,
+                width: 200,
                 dataIndex: "reviewer1",
                 render: (_, record) => {
                   if (editingRowKeys.includes(record?.id)) {
@@ -1803,8 +1963,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       editingValues[record?.id]?.reviewer1 !== undefined
                         ? editingValues[record?.id]?.reviewer1
                         : record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
-                          (member: CouncilMember) => member.role === CouncilRole.REVIEWER_1
-                        )?.expert?.id || ""
+                            (member: CouncilMember) => member.role === CouncilRole.REVIEWER_1
+                          )?.expert?.id || ""
                     return (
                       <div onClick={(e) => e.stopPropagation()}>
                         <Select
@@ -1813,7 +1973,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           dropdownStyle={{ minWidth: 200 }}
                           disabled={!isWithinCouncilEditWindow()}
                           options={expertProfileData?.map((item) => {
-                            const text = getSupervisorName(item, true)
+                            const text = getSupervisorName(item, true, true)
                             const hasLecturer = item.lecturer != null
                             return {
                               label: (
@@ -1839,7 +1999,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
               },
               {
                 title: "Phản biện 2",
-                width: 150,
+                width: 200,
                 dataIndex: "reviewer2",
                 render: (_, record) => {
                   if (editingRowKeys.includes(record?.id)) {
@@ -1847,8 +2007,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       editingValues[record?.id]?.reviewer2 !== undefined
                         ? editingValues[record?.id]?.reviewer2
                         : record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
-                          (member: any) => member.role === CouncilRole.REVIEWER_2
-                        )?.expert?.id || ""
+                            (member: any) => member.role === CouncilRole.REVIEWER_2
+                          )?.expert?.id || ""
                     return (
                       <div onClick={(e) => e.stopPropagation()}>
                         <Select
@@ -1857,7 +2017,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           dropdownStyle={{ minWidth: 200 }}
                           disabled={!isWithinCouncilEditWindow()}
                           options={expertProfileData?.map((item) => {
-                            const text = getSupervisorName(item, true)
+                            const text = getSupervisorName(item, true, true)
                             const hasLecturer = item.lecturer != null
                             return {
                               label: (
@@ -1883,7 +2043,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
               },
               {
                 title: "Ủy viên",
-                width: 150,
+                width: 200,
                 dataIndex: "councilMember",
                 render: (_, record) => {
                   if (editingRowKeys.includes(record?.id)) {
@@ -1891,8 +2051,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       editingValues[record?.id]?.councilMember !== undefined
                         ? editingValues[record?.id]?.councilMember
                         : record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
-                          (member: any) => member.role === CouncilRole.MEMBER
-                        )?.expert?.id || ""
+                            (member: any) => member.role === CouncilRole.MEMBER
+                          )?.expert?.id || ""
                     return (
                       <div onClick={(e) => e.stopPropagation()}>
                         <Select
@@ -1901,7 +2061,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           dropdownStyle={{ minWidth: 200 }}
                           disabled={!isWithinCouncilEditWindow()}
                           options={expertProfileData?.map((item) => {
-                            const text = getSupervisorName(item, true)
+                            const text = getSupervisorName(item, true, true)
                             const hasLecturer = item.lecturer != null
                             return {
                               label: (
@@ -1982,8 +2142,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                   }
                   return record?.thesisRegistrations?.[0]?.thesisProject?.defenseDate
                     ? dayjs(record?.thesisRegistrations?.[0]?.thesisProject?.defenseDate).format(
-                      "DD/MM/YYYY"
-                    )
+                        "DD/MM/YYYY"
+                      )
                     : ""
                 },
               },
@@ -2035,7 +2195,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       editingValues[record?.id]?.score !== undefined
                         ? editingValues[record?.id]?.score
                         : record?.thesisRegistrations?.[0]?.thesisProject?.defenseRecord
-                          ?.finalScore || ""
+                            ?.finalScore || ""
 
                     return (
                       <div onClick={(e) => e.stopPropagation()}>

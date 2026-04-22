@@ -17,7 +17,17 @@ interface ExportOptions {
   /** Người ký (mẫu cần ký): họ tên và chức danh — thay thế placeholder trong template */
   signerName?: string
   isChief?: boolean
+  signingDate?: Date | string
 }
+
+const resolveSigningDate = (signingDate?: Date | string) =>
+  signingDate ? dayjs(signingDate) : dayjs()
+/** Phạm vi chuyên gia khi gom dữ liệu giấy mời chấm LV PB (cán bộ trong / ngoài học viện). */
+type GmcLvPbExpertScope = "all" | "inAcademy" | "outsideAcademy"
+
+/** Cán bộ trong học viện: có liên kết giảng viên (lecturer / lecturerId). Ngoài HV = không có. */
+const isExpertInAcademy = (expert: any) => !!(expert?.lecturer || expert?.lecturerId)
+
 interface GmcLvPbData {
   data: {
     dotXet: string
@@ -311,7 +321,7 @@ export const exportPhuLucDsLuanVan = async ({
   }
 
   try {
-    const organizationMap = new Map<string, any>()
+    const majorMap = new Map<string, any>()
     let dotxet = ""
     let soQD = ""
     let ngayQD = ""
@@ -329,34 +339,39 @@ export const exportPhuLucDsLuanVan = async ({
             ).format("DD/MM/YYYY")
           : ""
       if (!thesisProject) return
-      const organizationId = thesisProject.organization?.Id || ""
-      const organizationName = thesisProject.organization?.sTen || "Chưa có đơn vị"
-      const organizationCode = thesisProject.organization?.sCode || ""
-      if (!organizationMap.has(organizationId)) {
-        organizationMap.set(organizationId, {
-          organizationId: organizationId === "" ? null : organizationId,
-          sTen: organizationName || "",
-          sCode: organizationCode || "",
+      const majorName =
+        student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.trainingField?.name || ""
+      const specializationName =
+        student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || ""
+      const groupKey = `${majorName}__${specializationName}`
+      if (!majorMap.has(groupKey)) {
+        majorMap.set(groupKey, {
+          majorName: majorName || "Chưa có ngành",
+          specializationName: specializationName || "Chưa có chuyên ngành",
           thesisProject: [],
         })
       }
-      const orgData = organizationMap.get(organizationId)
-      orgData.thesisProject.push({
+      const groupData = majorMap.get(groupKey)
+      groupData.thesisProject.push({
         studentId: student.id || "",
         hovatenhocvien: student.userProfile?.fullname || "",
         ngaysinh: student.userProfile?.dateOfBirth
           ? dayjs(student.userProfile.dateOfBirth).format("DD/MM/YYYY")
           : "",
-        doituongdaotao: student?.fixedClass?.trainingCourse?.trainingObjectType?.name || "",
+        doituongdaotao:
+          tenDoiTuong[
+            student?.fixedClass?.trainingCourse?.trainingObjectType
+              ?.type as keyof typeof tenDoiTuong
+          ]?.shortname || "",
         khoa: student.fixedClass?.trainingCourse?.name || "",
         tendetai: thesisProject.title || "",
-        gvhd1: getSupervisorName(thesisProject.supervisor) || "",
-        gvhd2: getSupervisorName(thesisProject.coSupervisor) || "",
+        gvhd1: getSupervisorName(thesisProject.supervisor, false, true) || "",
+        gvhd2: getSupervisorName(thesisProject.coSupervisor, false, true) || "",
         isThesis: thesisProject.type,
         language: thesisProject.language.trim(),
       })
     })
-    const result = Array.from(organizationMap.values())
+    const result = Array.from(majorMap.values())
     if (result.length === 0) {
       message.error("Không có dữ liệu để xuất phụ lục danh sách luận văn")
       hideSpinner()
@@ -369,7 +384,7 @@ export const exportPhuLucDsLuanVan = async ({
       const orgRow: TableRow = {
         cells: [
           {
-            value: `${index + 1}.${item.sCode} - ${item.sTen} (${item.thesisProject.length} học viên)`,
+            value: `${index + 1} Ngành ${item.majorName} (${item.specializationName}) : ${item.thesisProject.length} học viên`,
             border: true,
             align: "center",
             colSpan: 6,
@@ -383,22 +398,28 @@ export const exportPhuLucDsLuanVan = async ({
           cells: [
             { value: count++, border: true, align: "center", fontSize: 12 },
             {
-              value: `${thesis.hovatenhocvien}\n${thesis.ngaysinh}\n${thesis.doituongdaotao}-${thesis.khoa}`,
+              value: `${thesis.hovatenhocvien}\nNS:${thesis.ngaysinh}\n${thesis.doituongdaotao}-${thesis.khoa}`,
               border: true,
               align: "left",
               fontSize: 12,
             },
             { value: `${thesis.tendetai}`, border: true, align: "left", fontSize: 12 },
             {
-              value: `${thesis.gvhd1 ? `1. ${thesis.gvhd1}` : ""}\n${
-                thesis.gvhd2 ? `2. ${thesis.gvhd2}` : ""
-              }`,
+              value:
+                thesis.gvhd1 && thesis.gvhd2
+                  ? `1. ${thesis.gvhd1}\n2. ${thesis.gvhd2}`
+                  : thesis.gvhd1 || thesis.gvhd2 || "",
               border: true,
               align: "left",
               fontSize: 12,
             },
             { value: `${thesis.isThesis}`, border: true, align: "center", fontSize: 12 },
-            { value: `${thesis.language}`, border: true, align: "center", fontSize: 12 },
+            {
+              value: `${thesis.language.trim().toLowerCase() === "tiếng việt" ? "" : thesis.language}`,
+              border: true,
+              align: "center",
+              fontSize: 12,
+            },
           ],
         }
       })
@@ -464,7 +485,7 @@ export const getExpertSupervisionStats = (allStudentsInClasses: any[]) => {
     if (!stats) {
       stats = {
         expertId: expertId,
-        name: (getSupervisorName(expert, false, false) as string) || "",
+        name: (getSupervisorName(expert, false, true) as string) || "",
         sDonvi: expert?.workplace || expert?.lecturer?.organization?.sMa || "",
         stk: expert?.bankAccountNumber || expert?.lecturer?.userProfile?.bankAccountNumber || "",
         tennganhang: expert?.bankName || expert?.lecturer?.userProfile?.bankName || "",
@@ -717,11 +738,11 @@ const buildDanhSachBaoVeDanNgoaiPhongHall = (
 
   const uvNames = councilMembers
     .filter((m: any) => m.role === CouncilRole.MEMBER)
-    .map((m: any) => (getSupervisorName(m?.expert, false, false) as string) || "")
+    .map((m: any) => (getSupervisorName(m?.expert, false, true) as string) || "")
     .filter(Boolean)
 
-  const cbhd1Name = (getSupervisorName(project?.supervisor, false, false) as string) || ""
-  const cbhd2Name = (getSupervisorName(project?.coSupervisor, false, false) as string) || ""
+  const cbhd1Name = (getSupervisorName(project?.supervisor, false, true) as string) || ""
+  const cbhd2Name = (getSupervisorName(project?.coSupervisor, false, true) as string) || ""
 
   return {
     roomName: project?.room?.name || "",
@@ -732,10 +753,10 @@ const buildDanhSachBaoVeDanNgoaiPhongHall = (
     ]
       .filter((line) => line.trim() !== "")
       .join("\n"),
-    ctName: (getSupervisorName(chairman?.expert, false, false) as string) || "",
-    tkName: (getSupervisorName(secretary?.expert, false, false) as string) || "",
-    pb1Name: (getSupervisorName(reviewer1?.expert, false, false) as string) || "",
-    pb2Name: (getSupervisorName(reviewer2?.expert, false, false) as string) || "",
+    ctName: (getSupervisorName(chairman?.expert, false, true) as string) || "",
+    tkName: (getSupervisorName(secretary?.expert, false, true) as string) || "",
+    pb1Name: (getSupervisorName(reviewer1?.expert, false, true) as string) || "",
+    pb2Name: (getSupervisorName(reviewer2?.expert, false, true) as string) || "",
     uvNames,
   }
 }
@@ -1171,11 +1192,11 @@ export const exportHosobvlv = async ({
               "DD/MM/YYYY"
             )
           : "",
-        phanbien1: getSupervisorName(phanbien1?.expert) || "",
-        phanbien2: getSupervisorName(phanbien2?.expert) || "",
-        chutich: getSupervisorName(chutich?.expert) || "",
-        thuky: getSupervisorName(thuky?.expert) || "",
-        uyvien: getSupervisorName(uyvien?.expert) || "",
+        phanbien1: getSupervisorName(phanbien1?.expert, false, true) || "",
+        phanbien2: getSupervisorName(phanbien2?.expert, false, true) || "",
+        chutich: getSupervisorName(chutich?.expert, false, true) || "",
+        thuky: getSupervisorName(thuky?.expert, false, true) || "",
+        uyvien: getSupervisorName(uyvien?.expert, false, true) || "",
         nguoiki: tenNguoiKyQddt,
         text1: text1,
         text2: text2,
@@ -1217,13 +1238,14 @@ export const exportGiayMoiHdlv = async ({
   message,
   isChief,
   signerName,
+  signingDate,
 }: ExportOptions) => {
   if (!allStudentsInClasses?.length) {
     message.error("Không có dữ liệu đế tạo giấy mời HDLV")
     return
   }
   showSpinner()
-  const presentDay = dayjs().format("DD/MM/YYYY")
+  const presentDay = resolveSigningDate(signingDate).format("DD/MM/YYYY")
   const ngay = presentDay.split("/")[0]
   const thang = presentDay.split("/")[1]
   const nam = presentDay.split("/")[2]
@@ -1283,17 +1305,17 @@ export const exportSaoQDHDLV = async ({
   message,
   signerName,
   isChief,
+  signingDate,
 }: ExportOptions) => {
   if (!allStudentsInClasses?.length) {
     message.error("Không có dữ liệu đế tạo sao QĐ HDLV")
     return
   }
   showSpinner()
-  const presentDay = dayjs().format("DD/MM/YYYY")
-
-  const ngayHT = presentDay.split("/")[0]
-  const thangHT = presentDay.split("/")[1]
-  const namHT = presentDay.split("/")[2]
+  const now = resolveSigningDate(signingDate)
+  const ngayHT = now.format("DD")
+  const thangHT = now.format("M")
+  const namHT = now.format("YYYY")
   try {
     const allSheetOptions = allStudentsInClasses
       ?.filter((s) => s?.thesisRegistrations?.[0]?.thesisProject)
@@ -1313,7 +1335,7 @@ export const exportSaoQDHDLV = async ({
           ? dayjs(thesisProject?.thesisSession?.decisionDate).format("DD")
           : ""
         const thangQD = thesisProject?.thesisSession?.decisionDate
-          ? dayjs(thesisProject?.thesisSession?.decisionDate).format("MM")
+          ? dayjs(thesisProject?.thesisSession?.decisionDate).format("M")
           : ""
         const namQD = thesisProject?.thesisSession?.decisionDate
           ? dayjs(thesisProject?.thesisSession?.decisionDate).format("YYYY")
@@ -1415,12 +1437,13 @@ export const exportKiemTraTienDo = async ({
         })
       }
       const orgData = organizationMap.get(organizationId)
-      const gvhd1 = getSupervisorName(thesisProject.supervisor) || ""
-      const gvhd2 = getSupervisorName(thesisProject.coSupervisor) || ""
+      const gvhd1 = getSupervisorName(thesisProject.supervisor, false, true) || ""
+      const gvhd2 = getSupervisorName(thesisProject.coSupervisor, false, true) || ""
       const gvhdNames = [gvhd1, gvhd2].filter(Boolean)
       orgData.thesisProject.push({
         studentId: student.id || "",
         hovatenhocvien: student.userProfile?.fullname || "",
+        khoa: student.fixedClass?.trainingCourse?.name || "",
         ngaysinh: student.userProfile?.dateOfBirth
           ? dayjs(student.userProfile.dateOfBirth).format("DD/MM/YYYY")
           : "",
@@ -1469,7 +1492,7 @@ export const exportKiemTraTienDo = async ({
             { value: index + 1, border: true, align: "center", fontSize: 12 },
             {
               value:
-                `${thesis.hovatenhocvien}\nĐT:${thesis.doituongdaotao}\nSố QĐ:${thesis.decisionNumber}\n${thesis.gvhd ? `CBHD:${thesis.gvhd}` : "CBHD"}`.trim(),
+                `${thesis.hovatenhocvien}\nNS:${thesis.ngaysinh} \nĐT:${thesis.doituongdaotao} - ${thesis.khoa} \n${thesis.gvhd ? `CBHD:\n${thesis.gvhd}` : "CBHD"}`.trim(),
               border: true,
               align: "left",
               fontSize: 12,
@@ -1549,70 +1572,38 @@ export const exportKiemTraTienDo = async ({
     hideSpinner()
   }
 }
-export const exportGiayMoiChamLvPb = async ({
-  allStudentsInClasses,
-  showSpinner,
-  hideSpinner,
-  message,
-  signerName,
-  isChief,
-}: ExportOptions) => {
-  if (!allStudentsInClasses?.length) {
-    message.error("Không có dữ liệu để tạo giấy mời chấm LV PB")
-    return
-  }
-  try {
-    showSpinner?.()
-    const dataConvert = convertToGmcLvPbData(allStudentsInClasses, signerName, isChief)
-    if (dataConvert.length === 0) {
-      message.error("Không có dữ liệu để tạo giấy mời chấm LV PB")
-      return
-    }
-    const payload: ExcelTemplateBody = {
-      head: { data: null },
-      tail: { data: null },
-      fileName: "GiayMoiChamLuanVan",
-      path: "GiayMoiChamLuanVan.xlsx",
-      payload: dataConvert,
-      showGridLines: true,
-    }
-    const response = await excelTemplate(payload)
 
-    if (response.status !== 200) {
-      message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
-      return
-    }
-    const blob = response.data
-    downloadFile(blob, "GiayMoiChamLuanVan.xlsx")
-    message.success("Xuất file thành công")
-  } catch (error) {
-    message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
-  } finally {
-    hideSpinner?.()
-  }
-}
-const downloadFile = (blob: Blob, fileName: string) => {
-  const url = URL.createObjectURL(blob)
-  const link = document.createElement("a")
-  link.href = url
-  link.setAttribute("download", fileName)
-  document.body.appendChild(link)
-  link.click()
-  document.body.removeChild(link)
-  URL.revokeObjectURL(url)
-}
-const convertToGmcLvPbData = (
+export const convertToGmcLvPbData = (
   allStudentsInClasses: any[],
   signerName?: string,
-  isChief?: boolean
+  isChief?: boolean,
+  signingDate?: Date | string,
+  expertScope: GmcLvPbExpertScope = "all"
 ): GmcLvPbData[] => {
   if (!allStudentsInClasses?.length) return []
+  const parseDateSortValue = (dateStr?: string) => {
+    if (!dateStr) return Number.MAX_SAFE_INTEGER
+    const [ddRaw, mmRaw, yyyyRaw] = dateStr.split("/")
+    const dd = Number.parseInt(ddRaw || "", 10)
+    const mm = Number.parseInt(mmRaw || "", 10)
+    const yyyy = Number.parseInt(yyyyRaw || "", 10)
+    if (!dd || !mm || !yyyy) return Number.MAX_SAFE_INTEGER
+    return yyyy * 10000 + mm * 100 + dd
+  }
+  const parseTimeSortValue = (timeStr?: string) => {
+    if (!timeStr) return Number.MAX_SAFE_INTEGER
+    const [hhRaw, mmRaw] = timeStr.split(":")
+    const hh = Number.parseInt(hhRaw || "", 10)
+    const mm = Number.parseInt(mmRaw || "", 10)
+    if (Number.isNaN(hh) || Number.isNaN(mm)) return Number.MAX_SAFE_INTEGER
+    return hh * 60 + mm
+  }
 
   const expertMap = new Map<string, GmcLvPbData>()
   const expertStudentMap = new Map<string, Set<string>>()
   const expertProjectTypeMap = new Map<string, Set<"luận văn" | "đề án">>()
 
-  const now = dayjs()
+  const now = resolveSigningDate(signingDate)
   const ngay = now.format("DD")
   const thang = now.format("MM")
   const nam = now.format("YYYY")
@@ -1632,12 +1623,16 @@ const convertToGmcLvPbData = (
     const projectType: "luận văn" | "đề án" =
       project?.thesisType === ThesisType.THESIS ? "luận văn" : "đề án"
     const chuyennganh =
-      student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || ""
+      student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.summary || ""
 
     const members = project.council?.members || []
     members.forEach((member: any) => {
       const expert = member.expert
       if (!expert?.id) return
+
+      const internal = isExpertInAcademy(expert)
+      if (expertScope === "inAcademy" && !internal) return
+      if (expertScope === "outsideAcademy" && internal) return
 
       if (!expertMap.has(expert.id)) {
         expertMap.set(expert.id, {
@@ -1700,7 +1695,97 @@ const convertToGmcLvPbData = (
     })
   })
 
-  return Array.from(expertMap.values())
+  return Array.from(expertMap.values()).map((expertEntry) => {
+    const sortedRows = [...expertEntry.data.data].sort((a, b) => {
+      const dateDiff = parseDateSortValue(a.ngaybaove) - parseDateSortValue(b.ngaybaove)
+      if (dateDiff !== 0) return dateDiff
+      return parseTimeSortValue(a.giobaove) - parseTimeSortValue(b.giobaove)
+    })
+    sortedRows.forEach((row, index) => {
+      row.stt = index + 1
+    })
+    return {
+      ...expertEntry,
+      data: {
+        ...expertEntry.data,
+        data: sortedRows,
+      },
+    }
+  })
+}
+export const exportGiayMoiChamLvPb = async ({
+  allStudentsInClasses,
+  showSpinner,
+  hideSpinner,
+  message,
+  signerName,
+  isChief,
+  signingDate,
+}: ExportOptions) => {
+  if (!allStudentsInClasses?.length) {
+    message.error("Không có dữ liệu để tạo giấy mời chấm LV PB")
+    return
+  }
+  try {
+    showSpinner?.()
+    const dataTrongHv = convertToGmcLvPbData(
+      allStudentsInClasses,
+      signerName,
+      isChief,
+      signingDate,
+      "inAcademy"
+    )
+    const dataNgoaiHv = convertToGmcLvPbData(
+      allStudentsInClasses,
+      signerName,
+      isChief,
+      signingDate,
+      "outsideAcademy"
+    )
+    if (dataTrongHv.length === 0 && dataNgoaiHv.length === 0) {
+      message.error("Không có dữ liệu để tạo giấy mời chấm LV PB")
+      return
+    }
+    const sheets = [
+      ...(dataTrongHv.length > 0
+        ? [{ sheetName: "Can bo trong hoc vien", payload: dataTrongHv }]
+        : []),
+      ...(dataNgoaiHv.length > 0
+        ? [{ sheetName: "Can bo ngoai hoc vien", payload: dataNgoaiHv }]
+        : []),
+    ]
+    const payload: ExcelTemplateBody = {
+      head: { data: null },
+      tail: { data: null },
+      fileName: "GiayMoiChamLuanVan",
+      path: "GiayMoiChamLuanVan.xlsx",
+      sheets,
+      showGridLines: true,
+    }
+    const response = await excelTemplate(payload)
+
+    if (response.status !== 200) {
+      message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
+      return
+    }
+    const blob = response.data
+    downloadFile(blob, "GiayMoiChamLuanVan.xlsx")
+    message.success("Xuất file thành công")
+  } catch (error) {
+    message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
+  } finally {
+    hideSpinner?.()
+  }
+}
+const downloadFile = (blob: Blob, fileName: string) => {
+  const url = URL.createObjectURL(blob)
+  const link = document.createElement("a")
+  link.href = url
+  link.setAttribute("download", fileName)
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
+  URL.revokeObjectURL(url)
 }
 
 export const exportThanhToanHoiDongBaoVe = async ({
@@ -1959,8 +2044,8 @@ const convertToDsnlvtvData = (allStudentsInClasses: any[]): DsnlvtvData => {
 
     const thongTinBaoVe = `${hoTen} \n ${doiTuong} - ${khoaHoc} - ${chuyenNganh}`
 
-    const gvhd1 = (getSupervisorName(project.supervisor, false, false) as string) || ""
-    const gvhd2 = (getSupervisorName(project.coSupervisor, false, false) as string) || ""
+    const gvhd1 = (getSupervisorName(project.supervisor, false, true) as string) || ""
+    const gvhd2 = (getSupervisorName(project.coSupervisor, false, true) as string) || ""
 
     let thongTinHuongDan = ""
     if (gvhd1 && gvhd2) {
@@ -2075,7 +2160,7 @@ const convertToThongKeCbThamGiaHdData = (allStudentsInClasses: any[]): ThongKeCb
 
       project.council.members.forEach((member: any) => {
         const expert = member.expert
-        const name = (getSupervisorName(expert, false, false) as string) || ""
+        const name = (getSupervisorName(expert, false, true) as string) || ""
         const donViQuanLi = expert?.workplace || expert?.lecturer?.organization?.sMa || ""
 
         if (!expert?.id) return
@@ -2271,7 +2356,7 @@ const convertToThanhToanHuongDanTrongHvData = (
     const quyetDinh = `${qdNum} \n ngày ${qdDate}`
 
     const supervisorNames = supervisorRows.map(
-      (item) => (getSupervisorName(item.expert, false, false) as string) || ""
+      (item) => (getSupervisorName(item.expert, false, true) as string) || ""
     )
     let thongTinHuongDan = ""
     thongTinHuongDan =
@@ -2449,6 +2534,7 @@ export const exportBanSaoHDDGLV = async ({
   message,
   signerName,
   isChief,
+  signingDate,
 }: ExportOptions) => {
   if (!allStudentsInClasses?.length) {
     message.error("Không có dữ liệu để xuất bản sao hội đồng bảo vệ luan van")
@@ -2456,7 +2542,12 @@ export const exportBanSaoHDDGLV = async ({
   }
   try {
     showSpinner?.()
-    const dataConvert = convertToBanSaoHDDGLV(allStudentsInClasses, signerName, isChief)
+    const dataConvert = convertToBanSaoHDDGLV(
+      allStudentsInClasses,
+      signerName,
+      isChief,
+      signingDate
+    )
 
     if (!dataConvert) {
       message.error("Chưa có dữ liệu để xuất bản sao hội đồng bảo vệ luan van")
@@ -2488,11 +2579,12 @@ export const exportBanSaoHDDGLV = async ({
 const convertToBanSaoHDDGLV = (
   allStudentsInClasses: any[],
   signerName?: string,
-  isChief?: boolean
+  isChief?: boolean,
+  signingDate?: Date | string
 ): banSaoHDDGLV[] => {
   if (!allStudentsInClasses?.length) return []
 
-  const now = dayjs()
+  const now = resolveSigningDate(signingDate)
   const currentDay = now.format("DD")
   const currentMonth = now.format("MM")
   const currentYear = now.format("YYYY")
@@ -2519,11 +2611,11 @@ const convertToBanSaoHDDGLV = (
       const qdDate = session?.defenseDecisionDate ? dayjs(session.defenseDecisionDate) : null
       let gvhd1 = ""
       if (project?.supervisor) {
-        gvhd1 = (getSupervisorName(project?.supervisor) as string) || ""
+        gvhd1 = (getSupervisorName(project?.supervisor, false, true) as string) || ""
       }
       let gvhd2 = ""
       if (project?.coSupervisor) {
-        gvhd2 = (getSupervisorName(project?.coSupervisor) as string) || ""
+        gvhd2 = (getSupervisorName(project?.coSupervisor, false, true) as string) || ""
       }
       const loaiLuanVan = project?.type.trim().toLowerCase() || ""
       const nganh =
@@ -2566,16 +2658,16 @@ const convertToBanSaoHDDGLV = (
             : "",
           khoaHoc: student.fixedClass?.trainingCourse?.name || "",
           gvhd: [gvhd1, gvhd2].filter(Boolean).join("; "),
-          tenChuTich: (getSupervisorName(chairman?.expert) as string) || "",
+          tenChuTich: (getSupervisorName(chairman?.expert, false, true) as string) || "",
           toChucChuTich: chairman?.expert?.workplace || "HVKTQS",
 
-          tenThuKy: (getSupervisorName(secretary?.expert) as string) || "",
+          tenThuKy: (getSupervisorName(secretary?.expert, false, true) as string) || "",
           toChucThuKy: secretary?.expert?.workplace || "HVKTQS",
-          tenUyVien: (getSupervisorName(member?.expert) as string) || "",
+          tenUyVien: (getSupervisorName(member?.expert, false, true) as string) || "",
           toChucUyVien: member?.expert?.workplace || "HVKTQS",
-          tenPb1: (getSupervisorName(pb1?.expert) as string) || "",
+          tenPb1: (getSupervisorName(pb1?.expert, false, true) as string) || "",
           toChucPb1: pb1?.expert?.workplace || "HVKTQS",
-          tenPb2: (getSupervisorName(pb2?.expert) as string) || "",
+          tenPb2: (getSupervisorName(pb2?.expert, false, true) as string) || "",
           toChucPb2: pb2?.expert?.workplace || "HVKTQS",
           ngay: currentDay,
           thang: currentMonth,
@@ -2710,19 +2802,19 @@ const convertToPhuLucQdhdTemplateData = (allStudentsInClasses: any[]): PhuLucQdh
         gvhd1: (getSupervisorName(project?.supervisor, false, true) as string) || "",
         gvhd2: (getSupervisorName(project?.coSupervisor, false, true) as string) || "",
 
-        tenChuTich: (getSupervisorName(chairman?.expert, false, false) as string) || "",
+        tenChuTich: (getSupervisorName(chairman?.expert, false, true) as string) || "",
         toChucChuTich: chairman?.expert?.workplace || "Học viện KTQS		",
 
-        tenThuKy: (getSupervisorName(secretary?.expert, false, false) as string) || "",
+        tenThuKy: (getSupervisorName(secretary?.expert, false, true) as string) || "",
         toChucThuKy: secretary?.expert?.workplace || "Học viện KTQS		",
 
-        tenUyVien: (getSupervisorName(member?.expert, false, false) as string) || "",
+        tenUyVien: (getSupervisorName(member?.expert, false, true) as string) || "",
         toChucUyVien: member?.expert?.workplace || "Học viện KTQS		",
 
-        tenPb1: (getSupervisorName(reviewer1?.expert, false, false) as string) || "",
+        tenPb1: (getSupervisorName(reviewer1?.expert, false, true) as string) || "",
         toChucPb1: reviewer1?.expert?.workplace || "Học viện KTQS		",
 
-        tenPb2: (getSupervisorName(reviewer2?.expert, false, false) as string) || "",
+        tenPb2: (getSupervisorName(reviewer2?.expert, false, true) as string) || "",
         toChucPb2: reviewer2?.expert?.workplace || "Học viện KTQS		",
       }
     })
@@ -2820,7 +2912,7 @@ const convertToDsChuyenGiaData = (allStudentsInClasses: any[]): DsChuyenGiaData 
 
       if (!expertAggregator.has(expertId)) {
         expertAggregator.set(expertId, {
-          tenChuyenGia: (getSupervisorName(expert, false, false) as string) || "",
+          tenChuyenGia: (getSupervisorName(expert, false, true) as string) || "",
           chucVu: expert.position || expert.lecturer?.userProfile?.position || "",
           donViQuanLi: expert.organization || expert.workplace || "",
           soTienRaw: 0,
@@ -2983,15 +3075,15 @@ const convertToHDDanhGiaLuanVanTemplateData = (
         (getSupervisorName(
           members.find((m: any) => m.role === role)?.expert,
           false,
-          false
+          true
         ) as string) || ""
 
       const gvhd1 = project?.supervisor
       const gvhd2 = project?.coSupervisor
 
       let hvCbhd = `Học viên: ${student.userProfile?.fullname || ""}`
-      if (gvhd1) hvCbhd += `\nGVHD1: ${(getSupervisorName(gvhd1, false, false) as string) || ""}`
-      if (gvhd2) hvCbhd += `\nGVHD2: ${(getSupervisorName(gvhd2, false, false) as string) || ""}`
+      if (gvhd1) hvCbhd += `\nGVHD1: ${(getSupervisorName(gvhd1, false, true) as string) || ""}`
+      if (gvhd2) hvCbhd += `\nGVHD2: ${(getSupervisorName(gvhd2, false, true) as string) || ""}`
 
       return {
         stt: sIdx + 1,
@@ -3085,7 +3177,7 @@ const convertToThongKeCoQuanDonViCanBoNgoaiHvData = (
 
   const getExpertKey = (expert: any, workplace: string) => {
     if (expert?.id) return String(expert.id)
-    const fullName = getSupervisorName(expert, false, false) as string
+    const fullName = getSupervisorName(expert, false, true) as string
     return `${fullName || "unknown"}-${workplace}`
   }
 

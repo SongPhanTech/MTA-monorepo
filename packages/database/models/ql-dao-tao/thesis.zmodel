@@ -84,7 +84,7 @@ model ThesisProject extends Base {
   status                  ThesisProjectStatus         @default(PROPOSED)
   language                String?                     @db.Text() // Ngôn ngữ
   type                    String?                     @db.Text() // Loại luận văn (Luận văn/Đề án)
-  isLock                  Boolean                     @default(false) //Khóa đồ án
+  isLock                  Boolean                     @default(false) //Khoá đồ án
   editProject             String?                     @db.Text() // Chỉnh sửa đồ án (Thư ký tổng hợp nhập)
 
   researchTopicAssociated String? // gán với đề tài nghiên cứu
