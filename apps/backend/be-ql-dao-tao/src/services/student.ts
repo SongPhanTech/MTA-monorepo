@@ -708,3 +708,116 @@ export const exportArchivedCertificateMulti = async ({
   const result = (await template.generate({ type: "arraybuffer" })) as ArrayBuffer
   return result
 }
+export const exportStudentsMissingCertificate = async ({
+  trainingObjectTypeId,
+  trainingCourseId,
+  fixedClassId,
+  certificateId,
+}: {
+  trainingObjectTypeId: string
+  trainingCourseId?: string
+  fixedClassId?: string
+  certificateId?: string
+}) => {
+  const where: any = {
+    deletedAt: null,
+    fixedClass: {
+      trainingCourse: {
+        trainingObjectTypeId,
+        deletedAt: null,
+        active: true,
+      },
+    },
+  }
+
+  if (trainingCourseId) {
+    where.fixedClass.trainingCourseId = trainingCourseId
+  }
+
+  if (fixedClassId) {
+    where.fixedClassId = fixedClassId
+  }
+
+  if (certificateId) {
+    where.archivedCertificate = {
+      none: {
+        certificateId,
+        deletedAt: null,
+      },
+    }
+  }
+
+  const students = await prisma.student.findMany({
+    where,
+    include: {
+      userProfile: true,
+      fixedClass: {
+        include: {
+          trainingCourse: true,
+          curriculumVersion: {
+            include: {
+              curriculum: {
+                include: {
+                  trainingMajor: {
+                    include: {
+                      trainingField: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    orderBy: [{ fixedClass: { name: "asc" } }, { userProfile: { fullname: "asc" } }],
+  })
+
+  if (!students || students.length === 0) {
+    throw new Error("Không có dữ liệu học viên chưa có chứng chỉ để xuất")
+  }
+
+  let certificateName = ""
+  if (certificateId) {
+    const cert = await prisma.certificate.findUnique({
+      where: { id: certificateId },
+      select: { name: true },
+    })
+    certificateName = cert?.name || ""
+  }
+
+  const data = students.map((item, idx) => {
+    const userProfile = item.userProfile
+    const fixedClass = item.fixedClass
+    const curriculum = fixedClass?.curriculumVersion?.curriculum
+    const trainingMajor = curriculum?.trainingMajor
+
+    return {
+      no: idx + 1,
+      studentCode: userProfile?.code || "",
+      studentName: userProfile?.fullname || "",
+      dateOfBirth: userProfile?.dateOfBirth
+        ? `'${dayjs(userProfile.dateOfBirth).tz("Asia/Ho_Chi_Minh").format("DD/MM/YYYY")}`
+        : "",
+      fixedClass: fixedClass?.name || "",
+      trainingCourse: fixedClass?.trainingCourse?.name || "",
+      trainingField: trainingMajor?.trainingField?.name || "",
+      trainingMajorName: trainingMajor?.name || "",
+      placeOfBirth: userProfile?.placeOfBirth || "",
+      idCardNumber: userProfile?.idCardNumber || "",
+      certificateName: certificateName || "Tất cả",
+      status: "Chưa có",
+    }
+  })
+
+  const buffer = await getTemplateBuffer(prisma, "DS_CHUA_CO_DIEM_CHUNG_CHI.xlsx")
+  const template = new XlsxTemplate(buffer)
+
+  template.substitute(1, {
+    data,
+    certificateName: certificateName || "Tất cả",
+  })
+
+  const result = (await template.generate({ type: "arraybuffer" })) as ArrayBuffer
+  return result
+}
