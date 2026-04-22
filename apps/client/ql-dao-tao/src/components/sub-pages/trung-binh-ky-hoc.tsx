@@ -46,6 +46,29 @@ const DiemTrungBinhKyHoc = () => {
   const { getAcademicRankingBaseTypeLabel } = useAcademicRankingBaseTypeOptions()
   const { showSpinner, hideSpinner } = useSpinner()
 
+  const [sorter, setSorter] = useState<{ field: string | null; order: "asc" | "desc" | null }>({
+    field: null,
+    order: null,
+  })
+
+  const DEFAULT_ORDER_BY = [
+    { fixedClass: { code: "desc" as const } },
+    { userProfile: { firstName: "asc" as const } },
+    { userProfile: { lastName: "asc" as const } },
+  ]
+
+  const orderBy = useMemo(() => {
+    // Nếu người dùng chọn sort tên
+    if (sorter.field === "name" && sorter.order) {
+      return [
+        { userProfile: { fullname: sorter.order } }, // Sắp xếp theo tên người dùng chọn
+        ...DEFAULT_ORDER_BY, // Giữ nguyên logic mặc định làm ưu tiên phụ
+      ]
+    }
+    // Mặc định ban đầu
+    return DEFAULT_ORDER_BY
+  }, [sorter])
+
   const where = useMemo(() => {
     return {
       deletedAt: null,
@@ -122,11 +145,7 @@ const DiemTrungBinhKyHoc = () => {
           },
         },
       },
-      orderBy: [
-        { fixedClass: { code: "desc" } },
-        { userProfile: { firstName: "asc" } },
-        { userProfile: { lastName: "asc" } },
-      ],
+      orderBy: orderBy,
       take: numberOfPages,
       skip: (currentPage - 1) * numberOfPages,
     },
@@ -303,6 +322,7 @@ const DiemTrungBinhKyHoc = () => {
                 align: "center",
                 fixed: "left",
                 type: "input",
+                sorter: true,
                 render: (__, record) => record?.userProfile?.fullname,
               },
               {
@@ -617,6 +637,22 @@ const DiemTrungBinhKyHoc = () => {
                   setNumberOfPages(pageSize)
                 }
               },
+            }}
+            onChange={(pagination, filters, sorterInfo: any) => {
+              // Xử lý sort
+              if (sorterInfo.columnKey === "name" || sorterInfo.field === "name") {
+                setSorter({
+                  field: "name",
+                  order:
+                    sorterInfo.order === "ascend"
+                      ? "asc"
+                      : sorterInfo.order === "descend"
+                        ? "desc"
+                        : null,
+                })
+              } else {
+                setSorter({ field: null, order: null })
+              }
             }}
           />
         </Col>

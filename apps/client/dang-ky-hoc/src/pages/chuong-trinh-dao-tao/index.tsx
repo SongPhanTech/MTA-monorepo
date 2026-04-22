@@ -14,14 +14,13 @@ import {
   useFindUniqueUserProfile,
 } from "@workspace/db/hooks"
 import { whereOrganization } from "@workspace/libs/constants"
-import { useAbility } from "@workspace/permissions/hooks"
 import { cn } from "@workspace/ui/lib/utils"
 import { Col, Divider, Row, Tooltip } from "antd"
 import type React from "react"
-import { useMemo, useState } from "react"
+import { Fragment, useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
+
 export default function TrainingProgramSubjects() {
-  const { can, canSome } = useAbility()
   const [filters, setFilters] = useState<FilterProps>({
     organization: undefined,
     code: "",
@@ -32,7 +31,6 @@ export default function TrainingProgramSubjects() {
   })
 
   const { data: me } = useSession()
-  // const userId = '1fdeb41e-932b-47f2-92b5-85b271c1596c'
   const userId = me?.sDM_NhanVienId || ""
 
   const { data: userProfile } = useFindUniqueUserProfile(
@@ -363,24 +361,34 @@ export default function TrainingProgramSubjects() {
   const treeData = buildOrgTree(manageOrgData)
 
   return (
-    <div>
-      <Divider orientation="left" orientationMargin={0}>
+    <Fragment>
+      <Divider
+        orientation="center"
+        orientationMargin={0}
+        className="
+    uppercase !my-0 text-lg font-semibold
+    [&::before]:border-gray-950
+    [&::after]:border-gray-950
+  "
+      >
         CTĐT toàn khoá: {[initialValue?.code, initialValue?.name].filter(Boolean).join(" - ")}
       </Divider>
       <Row gutter={[16, 0]}>
         <Col span={24}>
-          <div className="flex gap-2">
-            <p className="flex gap-2 items-center">
-              <p className="w-4 h-4 bg-white border border-black" /> Môn bắt buộc
-            </p>
-            <p className="flex gap-2 items-center">
-              <p className="w-4 h-4 bg-yellow-200" /> Môn tự chọn
-            </p>
-            <p className="flex gap-2 items-center">
-              <p className="w-4 h-4 bg-orange-300" /> Môn điều kiện
-            </p>
-          </div>
           <TableCollapse
+            header={
+              <div className="flex gap-2">
+                <p className="flex gap-2 items-center">
+                  <p className="w-4 h-4 bg-white border border-black" /> Môn bắt buộc
+                </p>
+                <p className="flex gap-2 items-center">
+                  <p className="w-4 h-4 bg-yellow-200" /> Môn tự chọn
+                </p>
+                <p className="flex gap-2 items-center">
+                  <p className="w-4 h-4 bg-orange-300" /> Môn điều kiện
+                </p>
+              </div>
+            }
             scrollable
             maxHeight={"calc(100vh - 250px)"}
             rowKey="key"
@@ -811,7 +819,7 @@ export default function TrainingProgramSubjects() {
           />
         </Col>
       </Row>
-    </div>
+    </Fragment>
   )
 }
 TrainingProgramSubjects.getLayout = function getLayout(page: React.ReactElement) {

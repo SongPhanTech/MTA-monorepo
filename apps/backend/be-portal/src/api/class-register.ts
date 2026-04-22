@@ -303,6 +303,25 @@ app.openapi(getClassesInfo, async (c) => {
           name: true,
         },
       },
+      coRequisiteSubject: {
+        select: {
+          code: true,
+          name: true,
+        },
+      },
+      equivalencyGroups: {
+        include: {
+          equivalencyGroup: {
+            include: {
+              subjects: {
+                include: {
+                  subject: { select: { id: true, name: true, code: true } },
+                },
+              },
+            },
+          },
+        },
+      },
       subjectClass: {
         where: {
           active: true,
@@ -418,6 +437,9 @@ app.openapi(getClassesInfo, async (c) => {
           ...subjectClass,
           credit: version.credit ?? 0,
           type: subjectVersion?.type,
+          prerequisiteSubject: version.prerequisiteSubject,
+          coRequisiteSubject: version.coRequisiteSubject,
+          equivalencyGroups: version.equivalencyGroups,
         })),
       }
     })
@@ -531,7 +553,87 @@ app.openapi(classRegister, async (c) => {
   })
   // TODO: check session => student trainingCourse
 
-  // TODO: check subjectVersionIds, prerequisiteSubjectIds, coRequisiteSubjectIds
+  const subjectClasses = await prisma.subjectClass.findMany({
+    where: { id: { in: subjectClassIds } },
+    include: {
+      subject: {
+        include: {
+          prerequisiteSubject: true,
+          coRequisiteSubject: true,
+        },
+      },
+    },
+  })
+
+  const allPrerequisiteIds = [
+    ...new Set(subjectClasses.flatMap((sc) => sc.subject.prerequisiteSubject.map((p) => p.id))),
+  ]
+  const allCoRequisiteIds = [
+    ...new Set(subjectClasses.flatMap((sc) => sc.subject.coRequisiteSubject.map((p) => p.id))),
+  ]
+
+  if (allPrerequisiteIds.length > 0 || allCoRequisiteIds.length > 0) {
+    const passedPrerequisites = await prisma.studentSubjectScore.findMany({
+      where: {
+        studentId,
+        subjectVersionId: { in: allPrerequisiteIds },
+        finalScore: { gt: 4.0 },
+      },
+      select: { subjectVersionId: true },
+    })
+    const passedPrerequisiteIds = new Set(passedPrerequisites.map((h) => h.subjectVersionId))
+
+    const registeredCoRequisites = await prisma.classRegisterLogs.findMany({
+      where: {
+        studentId,
+        subjectClass: {
+          subjectId: { in: allCoRequisiteIds },
+        },
+      },
+      select: { subjectClass: { select: { subjectId: true } } },
+    })
+    const enrolledCoRequisites = await prisma.studentSubjectScore.findMany({
+      where: {
+        studentId,
+        subjectVersionId: { in: allCoRequisiteIds },
+      },
+      select: { subjectVersionId: true },
+    })
+
+    const registeredCoRequisiteSubjectIds = new Set([
+      ...registeredCoRequisites.map((r) => r.subjectClass.subjectId).filter(Boolean),
+      ...enrolledCoRequisites.map((r) => r.subjectVersionId),
+      ...subjectClasses.map((sc) => sc.subjectId),
+    ])
+
+    for (const sc of subjectClasses) {
+      const missingPrerequisites = sc.subject.prerequisiteSubject.filter(
+        (p) => !passedPrerequisiteIds.has(p.id)
+      )
+
+      const missingCoRequisites = sc.subject.coRequisiteSubject.filter(
+        (p) => !registeredCoRequisiteSubjectIds.has(p.id)
+      )
+
+      if (missingPrerequisites.length > 0) {
+        return c.json(
+          {
+            message: `Bạn chưa hoàn thành môn tiên quyết của môn ${sc.subject.name}: ${missingPrerequisites.map((p) => p.name).join(", ")}`,
+          },
+          400
+        )
+      }
+
+      if (missingCoRequisites.length > 0) {
+        return c.json(
+          {
+            message: `Bạn chưa đăng ký môn song hành của môn ${sc.subject.name}: ${missingCoRequisites.map((p) => p.name).join(", ")}`,
+          },
+          400
+        )
+      }
+    }
+  }
 
   if (nearestSemesterResult) {
     const creditLimits = await prisma.classRegisterSessionCredit.findMany({

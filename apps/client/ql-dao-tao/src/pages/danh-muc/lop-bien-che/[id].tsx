@@ -895,7 +895,7 @@ export default function StudentFixedClassPage() {
           0
         )
 
-        // Tính điểm trung bình hệ 10 toàn khóa: tổng (điểm TB kỳ × số tín chỉ kỳ) / tổng số tín chỉ
+        // Tính điểm trung bình hệ 10 toàn khoá: tổng (điểm TB kỳ × số tín chỉ kỳ) / tổng số tín chỉ
         const tongDiemNhanTinChiHe10 = sampleStudentData.hocKis.reduce(
           (acc: number, curr: IHocKi) => acc + (curr.DiemTBKyHe10 ?? 0) * (curr.SoTinChiKy ?? 0),
           0
@@ -915,7 +915,7 @@ export default function StudentFixedClassPage() {
         const diemTBHe10Row: TableRow = {
           cells: [
             {
-              value: `Điểm trung bình hệ 10 toàn khóa: ${tongdiemhe10}`,
+              value: `Điểm trung bình hệ 10 toàn khoá: ${tongdiemhe10}`,
               colSpan: 18,
               border: false,
             },
@@ -924,7 +924,7 @@ export default function StudentFixedClassPage() {
         const diemTBHe4Row: TableRow = {
           cells: [
             {
-              value: `Điểm trung bình hệ 4 toàn khóa: ${tongdiemhe4}`,
+              value: `Điểm trung bình hệ 4 toàn khoá: ${tongdiemhe4}`,
               colSpan: 18,
               border: false,
             },
@@ -1252,7 +1252,7 @@ export default function StudentFixedClassPage() {
           0
         )
 
-        // Tính điểm trung bình hệ 10 toàn khóa: tổng (điểm TB kỳ × số tín chỉ kỳ) / tổng số tín chỉ
+        // Tính điểm trung bình hệ 10 toàn khoá: tổng (điểm TB kỳ × số tín chỉ kỳ) / tổng số tín chỉ
         const tongDiemNhanTinChiHe10 = sampleStudentData.hocKis.reduce(
           (acc: number, curr: IHocKi) => acc + (curr.DiemTBKyHe10 ?? 0) * (curr.SoTinChiKy ?? 0),
           0
@@ -1272,7 +1272,7 @@ export default function StudentFixedClassPage() {
         const diemTBHe10Row: TableRow = {
           cells: [
             {
-              value: `Điểm trung bình hệ 10 toàn khóa: ${tongdiemhe10}`,
+              value: `Điểm trung bình hệ 10 toàn khoá: ${tongdiemhe10}`,
               colSpan: 18,
               border: false,
             },
@@ -1281,7 +1281,7 @@ export default function StudentFixedClassPage() {
         const diemTBHe4Row: TableRow = {
           cells: [
             {
-              value: `Điểm trung bình hệ 4 toàn khóa: ${tongdiemhe4}`,
+              value: `Điểm trung bình hệ 4 toàn khoá: ${tongdiemhe4}`,
               colSpan: 18,
               border: false,
             },

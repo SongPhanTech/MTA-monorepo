@@ -714,7 +714,7 @@ const Table = <T extends AnyObject>({
           ...column,
           key: column.key || (column as unknown as { dataIndex: string }).dataIndex,
           onCell: (record: T) => ({
-            className: cn("px-2 py-[2px]", column.className || ""),
+            className: cn("px-[10px] py-[15px]", column.className || ""),
             ...(column.onCell ? column.onCell(record) : {}),
           }),
           ...genFilter(column as ColumnTypeProps),

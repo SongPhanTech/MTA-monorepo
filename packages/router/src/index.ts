@@ -77,7 +77,7 @@ const NAVIGATION: NavigationType = {
       },
       {
         id: DANG_KY_HOC_PERMISSION.DANG_KY_HOC_THOI_KHOA_BIEU,
-        label: "Thời khóa biểu",
+        label: "Thời khoá biểu",
         icon: CalendarRange,
         path: ROUTER_PATH.DANG_KY_HOC.THOI_KHOA_BIEU,
       },

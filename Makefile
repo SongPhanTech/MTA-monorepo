@@ -20,6 +20,8 @@ IMG_PREFIX := mta-
 #   FE_COMPOSE_FILE  – docker-compose filename used for FE services on the server
 #   FE_APP_URL       – base URL injected as NEXT_PUBLIC_APP_URL at build time
 #                      (overrides .env; each profile sets its own domain)
+#   ONLY_OFFICE_ENDPOINT – OnlyOffice server URL injected as
+#                          NEXT_PUBLIC_ONLY_OFFICE_ENDPOINT at build time
 # ─────────────────────────────────────────────────────────────────────────────
 SERVER_PROFILE ?= swan1
 
@@ -27,11 +29,12 @@ SERVER_PROFILE ?= swan1
 ifeq ($(SERVER_PROFILE),swan1)
   SERVER_HOST      := swan1
   SERVER_PASSWORD  :=
-  BE_DEPLOY_DIR    := ~/mta-deploy
+  BE_DEPLOY_DIR    := ~/mta-be
   BE_APP_DIR       := ~/mta-be
   FE_APP_DIR       := ~/app
   FE_COMPOSE_FILE  := app-docker-compose.yml
   FE_APP_URL       := https://mta.swantech.vn
+  ONLY_OFFICE_ENDPOINT := https://doc.mta.swantech.vn
 
 # ── Profile: swantech_x52 ─────────────────────────────────────────────────────────────
 else ifeq ($(SERVER_PROFILE),swantech_x52)
@@ -42,6 +45,7 @@ else ifeq ($(SERVER_PROFILE),swantech_x52)
   FE_APP_DIR       := ~/app_mta_sso
   FE_COMPOSE_FILE  := app-docker-compose.yml
   FE_APP_URL       := https://demodaotao.swantech.vn
+  ONLY_OFFICE_ENDPOINT := https://doc.x52.swantech.vn
 
 # ── Profile: local_mta ─────────────────────────────────────────────────────────────
 else ifeq ($(SERVER_PROFILE),local_mta)
@@ -49,9 +53,10 @@ else ifeq ($(SERVER_PROFILE),local_mta)
   SERVER_PASSWORD  :=
   BE_DEPLOY_DIR    := ~/mta-prod/be
   BE_APP_DIR       := ~/mta-prod/be
-  FE_APP_DIR       := ~/mta_app
+  FE_APP_DIR       := ~/app
   FE_COMPOSE_FILE  := app-docker-compose.yml
-  FE_APP_URL       := https://demodaotao.swantech.vn
+  FE_APP_URL       := http://192.168.0.102
+  ONLY_OFFICE_ENDPOINT := http://192.168.0.102:3100
 
 # ── Profile: app2 ─────────────────────────────────────────────────────────────
 else ifeq ($(SERVER_PROFILE),app2)
@@ -62,11 +67,12 @@ else ifeq ($(SERVER_PROFILE),app2)
   FE_APP_DIR       := ~/app/fe
   FE_COMPOSE_FILE  := app-docker-compose.yml
   FE_APP_URL       := http://192.168.100.134
+  ONLY_OFFICE_ENDPOINT := http://192.168.100.133:3100
 
 # ── Fallback: unknown profile ─────────────────────────────────────────────────
 else
   $(error Unknown SERVER_PROFILE "$(SERVER_PROFILE)". \
-    Add a new profile block in the Makefile or choose from: swan1, app2)
+    Add a new profile block in the Makefile or choose from: swan1, swantech_x52, local_mta, app2)
 endif
 
 # SSH / SCP helpers (automatically use sshpass when a password is set)
@@ -260,10 +266,12 @@ _build-be:
 _build-fe:
 	$(eval CDN_NAME := $(CDN_NAME_$(PACKAGE)))
 	$(eval APP_URL  := $(FE_APP_URL)$(APP_URL_SUFFIX_$(PACKAGE)))
-	@echo "Building FE package $(PACKAGE) -> $(CDN_NAME) [APP_URL=$(APP_URL)]"
+	@echo "Building FE package $(PACKAGE) -> $(CDN_NAME) [APP_URL=$(APP_URL)] [ONLY_OFFICE=$(ONLY_OFFICE_ENDPOINT)]"
 	cd apps/client/$(PACKAGE) && \
 	pnpm i && \
-	NEXT_PUBLIC_APP_URL=$(APP_URL) pnpm build && \
+	NEXT_PUBLIC_APP_URL=$(APP_URL) \
+	NEXT_PUBLIC_ONLY_OFFICE_ENDPOINT=$(ONLY_OFFICE_ENDPOINT) \
+	pnpm build && \
 	rm -rf $(CDN_NAME) && \
 	mv out $(CDN_NAME) && \
 	zip -r -q $(CDN_NAME).zip $(CDN_NAME)

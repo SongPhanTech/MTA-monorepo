@@ -28,7 +28,7 @@
  *   placeholder="Chọn danh mục dự án..."
  * />
  *
- * @param suggestionKey - Khóa định danh cho nhóm gợi ý (VD: "task_name", "location", "category")
+ * @param suggestionKey - Khoá định danh cho nhóm gợi ý (VD: "task_name", "location", "category")
  * @param suggestionMode - Chế độ gợi ý: "personal" (riêng tư) hoặc "global" (chung)
  * @param value - Giá trị hiện tại của input
  * @param onChange - Callback khi giá trị thay đổi

@@ -163,6 +163,8 @@ export * from './excelTemplateBodyTail';
 export * from './excelTemplateBodyTailData';
 export * from './exportArchivedCertificateExcel404';
 export * from './exportArchivedCertificateExcelParams';
+export * from './exportArchivedCertificateMultiExcel404';
+export * from './exportArchivedCertificateMultiInput';
 export * from './exportClusterSurveyStatistics404';
 export * from './exportClusterSurveyStatisticsParams';
 export * from './exportDiplomaVerification400';

@@ -265,7 +265,7 @@ export default function SinhPhach() {
             }}
             checked={lockExamCode}
           >
-            Khóa sinh phách
+            Khoá sinh phách
           </Checkbox>
           <Flex justify="end" align="center" gap={8}>
             <Button

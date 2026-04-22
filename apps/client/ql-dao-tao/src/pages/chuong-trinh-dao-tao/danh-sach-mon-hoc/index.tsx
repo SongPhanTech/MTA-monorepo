@@ -546,7 +546,7 @@ export default function SubjectList() {
                 type: "input",
               },
               {
-                title: <Tooltip title="Mã thời khóa biểu">Mã TKB</Tooltip>,
+                title: <Tooltip title="Mã thời khoá biểu">Mã TKB</Tooltip>,
                 dataIndex: "codeTkb",
                 width: 100,
                 align: "center",

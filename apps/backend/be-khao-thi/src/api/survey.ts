@@ -1366,6 +1366,7 @@ const sinhdetudong = createRoute({
         "application/json": {
           schema: models.ExamBankScalarSchema.extend({
             quantity: z.number(),
+            examTime: z.number().optional(),
             examFrameworkId: z.string().nonempty(),
             examMatrixId: z.string().nonempty(),
             examId: z.string().nonempty(),
@@ -1476,6 +1477,7 @@ app.openapi(sinhdetudong, async (c) => {
           examCode: `${body?.examCode}_${body?.codeFrom + t}`,
           explain: body.explain,
           examDay: body.examDay,
+          examTime: body.examTime,
           examMatrixId: body?.examMatrixId,
           examId: body?.examId,
           examType: body?.examType,

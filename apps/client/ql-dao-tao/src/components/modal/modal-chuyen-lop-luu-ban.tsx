@@ -164,8 +164,8 @@ const ModalChuyenLopLuuBan = () => {
   }
 
   /**
-   * Lọc danh sách lớp niên chế theo khóa học được chọn
-   * Có thể lọc theo: khóa học, ngành
+   * Lọc danh sách lớp niên chế theo khoá học được chọn
+   * Có thể lọc theo: khoá học, ngành
    */
   const getAvailableFixedClasses = (
     selectedTrainingCourseId?: string,
@@ -174,7 +174,7 @@ const ModalChuyenLopLuuBan = () => {
     if (!selectedTrainingCourseId) return []
 
     return fixedClasses.filter((fc) => {
-      // Lọc theo khóa học
+      // Lọc theo khoá học
       if (fc.trainingCourseId !== selectedTrainingCourseId) return false
 
       // Lọc theo ngành đào tạo
@@ -242,12 +242,12 @@ const ModalChuyenLopLuuBan = () => {
               render: (_, record) => record.student.fixedClass?.name || "",
             },
             {
-              title: "Khóa",
+              title: "Khoá",
               width: 100,
               render: (_, record) => record.student.fixedClass?.trainingCourse?.name || "",
             },
             {
-              title: "Khóa mới",
+              title: "Khoá mới",
               width: 200,
               render: (_, record) => {
                 const currentTrainingCourseId = record.student.fixedClass?.trainingCourse?.id
@@ -261,12 +261,12 @@ const ModalChuyenLopLuuBan = () => {
                     rules={[
                       {
                         required: true,
-                        message: "Vui lòng chọn khóa mới",
+                        message: "Vui lòng chọn khoá mới",
                       },
                     ]}
                   >
                     <Select
-                      placeholder="Chọn khóa mới"
+                      placeholder="Chọn khoá mới"
                       showSearch
                       optionFilterProp="label"
                       allowClear

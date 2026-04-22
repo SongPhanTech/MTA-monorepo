@@ -7,7 +7,6 @@ import { type ReactNode, useState } from "react"
 
 const { Sider } = Layout
 
-// Định nghĩa kiểu dữ liệu cho props của SiderDefaultLayout
 interface SiderDefaultLayoutProps {
   collapsed: boolean
   theme: "light" | "dark"
@@ -17,7 +16,6 @@ interface SiderDefaultLayoutProps {
   logo2: ReactNode
 }
 
-// Hàm hỗ trợ để chuyển đổi "item props" thành thành cấu trúc phù hợp
 function getMenus(menus: MenuItem[]): ItemType<MenuItemType>[] {
   return menus.map((item) => ({
     label: item.children ? (
@@ -62,7 +60,7 @@ const findOpenKeys = (menus: MenuItem[], currentPath: string | null): string[] =
   }
   return []
 }
-// Component SiderDefaultLayout
+
 const SiderDefaultLayout = ({
   collapsed,
   theme,
@@ -73,7 +71,6 @@ const SiderDefaultLayout = ({
 }: SiderDefaultLayoutProps) => {
   const pathname = usePathname()
 
-  // State để quản lý các menu đang mở
   const [openKeys, setOpenKeys] = useState<string[]>(findOpenKeys(items, pathname))
   return (
     <Sider
@@ -93,21 +90,24 @@ const SiderDefaultLayout = ({
       width={230}
     >
       <div
-        className={`flex items-center bg-white justify-center py-3 fixed z-[100] top-[0px] left-[0px] ${collapsed ? "w-[80px]" : "w-[230px]"}`}
+        className={`flex items-center px-5 border-b border-r border-gray-200 bg-white justify-start h-16 fixed z-[100] top-[0px] left-[0px] ${collapsed ? "w-[80px]" : "w-[230px]"}`}
       >
         {collapsed ? logo1 : logo2}
       </div>
       <Menu
-        className="pb-20 pt-[64px]"
+        className="pb-20 pt-[64px] px-4 mt-2"
         theme={"light"}
         mode="inline"
+        inlineIndent={10}
         selectedKeys={pathname ? [pathname] : []}
         openKeys={openKeys}
-        onOpenChange={setOpenKeys} // Cập nhật trạng thái openKeys khi menu được mở/đóng
+        onOpenChange={setOpenKeys}
         items={getMenus(items)}
         style={{
           background: "transparent",
           borderTop: "1px solid #f1f1f1",
+          marginBlock: "0",
+          marginInline: "0",
         }}
       />
     </Sider>

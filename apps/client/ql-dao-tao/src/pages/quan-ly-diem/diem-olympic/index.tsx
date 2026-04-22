@@ -104,43 +104,43 @@ export default function ArchivedAward() {
       award: {
         ...(filters.awardName
           ? {
-            name: {
-              contains: filters.awardName,
-              mode: "insensitive" as const,
-            },
-          }
+              name: {
+                contains: filters.awardName,
+                mode: "insensitive" as const,
+              },
+            }
           : {}),
       },
       ...(filters.bonusScoreStatus
         ? {
-          studentSubjectScore: {
-            some: {
-              status: { in: filters.bonusScoreStatus },
+            studentSubjectScore: {
+              some: {
+                status: { in: filters.bonusScoreStatus },
+              },
             },
-          },
-        }
+          }
         : {}),
       student: {
         fixedClass: {
           ...(filters.fixedClassCode
             ? {
-              code: {
-                contains: filters.fixedClassCode,
-                mode: "insensitive" as const,
-              },
-            }
+                code: {
+                  contains: filters.fixedClassCode,
+                  mode: "insensitive" as const,
+                },
+              }
             : {}),
           trainingCourse: { trainingObjectTypeId },
         },
         ...(filters.name
           ? {
-            userProfile: {
-              fullname: {
-                contains: filters.name,
-                mode: "insensitive" as const,
+              userProfile: {
+                fullname: {
+                  contains: filters.name,
+                  mode: "insensitive" as const,
+                },
               },
-            },
-          }
+            }
           : {}),
       },
     }
@@ -281,11 +281,11 @@ export default function ArchivedAward() {
                   style={{
                     width: 16,
                     height: 16,
-                    backgroundColor: '#52c41a', // Màu xanh lá đậm chuẩn
-                    borderRadius: '2px',
+                    backgroundColor: "#52c41a", // Màu xanh lá đậm chuẩn
+                    borderRadius: "2px",
                   }}
                 />
-                <span style={{ fontSize: '14px', fontWeight: 500, color: '#434343' }}>
+                <span style={{ fontSize: "14px", fontWeight: 500, color: "#434343" }}>
                   Điểm đã được cộng
                 </span>
               </Flex>
@@ -479,27 +479,28 @@ export default function ArchivedAward() {
               align: "center",
               render: (__, record) => {
                 // 1. Lấy trạng thái cộng điểm
-                const status = record?.studentSubjectScore[0]?.status;
+                const status = record?.studentSubjectScore[0]?.status
 
                 // 2. Lấy giá trị điểm
-                const score = record?.studentSubjectScore[0]?.studentSubjectScore?.finalScore?.toNumber();
+                const score =
+                  record?.studentSubjectScore[0]?.studentSubjectScore?.finalScore?.toNumber()
 
-                if (score === undefined || score === null) return "-";
+                if (score === undefined || score === null) return "-"
 
                 // 3. Logic tô màu: Chỉ lấy màu khi trạng thái là APPROVED
-                const isApproved = status === "APPROVED";
-                const color = isApproved ? getArchivedCertificateStatusColor(status) : "inherit";
+                const isApproved = status === "APPROVED"
+                const color = isApproved ? getArchivedCertificateStatusColor(status) : "inherit"
 
                 return (
                   <span
                     style={{
                       color: color,
-                      fontWeight: isApproved ? "bold" : "normal" // In đậm nếu đã duyệt để dễ phân biệt
+                      fontWeight: isApproved ? "bold" : "normal", // In đậm nếu đã duyệt để dễ phân biệt
                     }}
                   >
                     {score}
                   </span>
-                );
+                )
               },
             },
             {

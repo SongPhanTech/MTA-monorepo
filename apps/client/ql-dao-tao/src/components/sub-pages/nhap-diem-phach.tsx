@@ -158,10 +158,10 @@ export default function NhapDiemPhach() {
             status={isLockExamCode ? "success" : "error"}
             text={
               isLockExamScore
-                ? "P13 đã khóa điểm"
+                ? "P13 đã khoá điểm"
                 : isLockExamCode
-                  ? "Đã khóa phách - Cho phép nhập điểm"
-                  : "Chưa khóa phách - Không thể nhập điểm"
+                  ? "Đã khoá phách - Cho phép nhập điểm"
+                  : "Chưa khoá phách - Không thể nhập điểm"
             }
           />
           <Flex gap={8}>

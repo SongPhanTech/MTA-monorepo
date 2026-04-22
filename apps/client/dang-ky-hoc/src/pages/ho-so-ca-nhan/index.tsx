@@ -409,6 +409,7 @@ const HoSoCaNhan = () => {
           rowKey="id"
           size="small"
           pagination={{ pageSize: 10 }}
+          bordered
           scroll={{ x: 1200 }}
           columns={[
             {
@@ -477,6 +478,7 @@ const HoSoCaNhan = () => {
           dataSource={studentData?.studentSemesterResult || []}
           rowKey="id"
           size="small"
+          bordered
           pagination={{ pageSize: 10 }}
           scroll={{ x: 2400 }}
           columns={[
@@ -699,6 +701,7 @@ const HoSoCaNhan = () => {
           dataSource={studentData?.studentYearResult || []}
           rowKey="id"
           size="small"
+          bordered
           pagination={{ pageSize: 10 }}
           scroll={{ x: 1400 }}
           columns={[
@@ -854,6 +857,7 @@ const HoSoCaNhan = () => {
           dataSource={studentData?.scholarshipAwards || []}
           rowKey="id"
           size="small"
+          bordered
           pagination={{ pageSize: 10 }}
           columns={[
             {
@@ -921,6 +925,7 @@ const HoSoCaNhan = () => {
           dataSource={studentData?.archivedCertificate || []}
           rowKey="id"
           size="small"
+          bordered
           pagination={{ pageSize: 10 }}
           columns={[
             {
@@ -1010,6 +1015,7 @@ const HoSoCaNhan = () => {
           dataSource={studentData?.archivedAward || []}
           rowKey="id"
           size="small"
+          bordered
           pagination={{ pageSize: 10 }}
           columns={[
             {
@@ -1080,6 +1086,7 @@ const HoSoCaNhan = () => {
           dataSource={studentData?.academicWarning || []}
           rowKey="id"
           size="small"
+          bordered
           pagination={{ pageSize: 10 }}
           columns={[
             {
@@ -1140,6 +1147,7 @@ const HoSoCaNhan = () => {
         <Table
           dataSource={studentData?.disciplinaryWarning || []}
           rowKey="id"
+          bordered
           size="small"
           pagination={{ pageSize: 10 }}
           columns={[
@@ -1196,6 +1204,7 @@ const HoSoCaNhan = () => {
           dataSource={studentData?.studentAcademicDecision || []}
           rowKey="id"
           size="small"
+          bordered
           pagination={{ pageSize: 10 }}
           columns={[
             {
@@ -1242,6 +1251,7 @@ const HoSoCaNhan = () => {
           dataSource={studentData?.graduationApplications || []}
           rowKey="id"
           size="small"
+          bordered
           pagination={{ pageSize: 10 }}
           columns={[
             {
@@ -1312,6 +1322,7 @@ const HoSoCaNhan = () => {
           dataSource={studentData?.researchRegistrations || []}
           rowKey="id"
           size="small"
+          bordered
           pagination={{ pageSize: 10 }}
           columns={[
             {
@@ -1358,6 +1369,7 @@ const HoSoCaNhan = () => {
           dataSource={studentData?.thesisRegistrations || []}
           rowKey="id"
           size="small"
+          bordered
           pagination={{ pageSize: 10 }}
           columns={[
             {
@@ -1404,6 +1416,7 @@ const HoSoCaNhan = () => {
           dataSource={studentData?.diplomaVerificationApplication || []}
           rowKey="id"
           size="small"
+          bordered
           pagination={{ pageSize: 10 }}
           columns={[
             {
@@ -1449,6 +1462,7 @@ const HoSoCaNhan = () => {
         <Table
           dataSource={studentData?.studentTrainingScore || []}
           rowKey="id"
+          bordered
           size="small"
           pagination={{ pageSize: 10 }}
           scroll={{ x: 800 }}
@@ -1532,6 +1546,7 @@ const HoSoCaNhan = () => {
           dataSource={studentData?.studentScoreConvert || []}
           rowKey="id"
           size="small"
+          bordered
           pagination={{ pageSize: 10 }}
           columns={[
             {
@@ -1587,6 +1602,7 @@ const HoSoCaNhan = () => {
           dataSource={studentData?.classRegisterLogs || []}
           rowKey="id"
           size="small"
+          bordered
           pagination={{ pageSize: 10 }}
           columns={[
             {
@@ -1628,6 +1644,7 @@ const HoSoCaNhan = () => {
           dataSource={studentData?.notes || []}
           rowKey="id"
           size="small"
+          bordered
           pagination={{ pageSize: 10 }}
           columns={[
             {

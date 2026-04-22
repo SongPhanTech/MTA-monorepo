@@ -6,6 +6,6 @@
  */
 
 /**
- * ID khóa đào tạo
+ * ID khoá đào tạo
  */
 export type TrainingCourseId = string;

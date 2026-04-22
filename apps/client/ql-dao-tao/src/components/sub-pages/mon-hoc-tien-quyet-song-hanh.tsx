@@ -61,7 +61,6 @@ export default function MonHocTienQuyetSongHanhPage({ subjectVersionId, keyEnum 
     return { aboveData: [], belowData: [] }
   }, [data, keyEnum])
 
-  // Định nghĩa map cho các quan hệ
   const relationFieldMap: Record<string, { above: string; below: string }> = {
     prerequisite: {
       above: "prerequisiteSubject",
@@ -73,7 +72,6 @@ export default function MonHocTienQuyetSongHanhPage({ subjectVersionId, keyEnum 
     },
   }
 
-  // Hàm helper
   const getRelationField = (keyEnum: string, type: "above" | "below"): string | undefined => {
     return relationFieldMap[keyEnum]?.[type]
   }

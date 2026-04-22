@@ -10,13 +10,12 @@ import { emptyObjectIf } from "@workspace/constant"
 import type { $Enums, Prisma, SubjectClassTime } from "@workspace/db/client"
 import {
   useCountSubjectClass,
-  useFindFirstSemester,
   useFindManySemester,
   useFindManySubjectClass,
   useFindUniqueUserProfile,
 } from "@workspace/db/hooks"
 import { dayjs } from "@workspace/ui"
-import { Col, Row, Select } from "antd"
+import { Col, Divider, Row, Select } from "antd"
 import _ from "lodash"
 import type React from "react"
 import { useCallback, useEffect, useMemo, useState } from "react"
@@ -60,7 +59,6 @@ export default function ThoiKhoaBieu({ type }: { type?: $Enums.SubjectClassType 
   const { data: allSemesters = [] } = useFindManySemester(
     {
       where: {
-        //startDate: { lte: toDay.toDate() },
         subjectClasses: {
           some: {
             deletedAt: null,
@@ -138,7 +136,10 @@ export default function ThoiKhoaBieu({ type }: { type?: $Enums.SubjectClassType 
           ? {
               mainLecturer: {
                 userProfile: {
-                  fullname: { contains: filters.mainLecturer, mode: "insensitive" as const },
+                  fullname: {
+                    contains: filters.mainLecturer,
+                    mode: "insensitive" as const,
+                  },
                 },
               },
             }
@@ -147,7 +148,10 @@ export default function ThoiKhoaBieu({ type }: { type?: $Enums.SubjectClassType 
           ? {
               extraLecturer: {
                 userProfile: {
-                  fullname: { contains: filters.extraLecturer, mode: "insensitive" as const },
+                  fullname: {
+                    contains: filters.extraLecturer,
+                    mode: "insensitive" as const,
+                  },
                 },
               },
             }
@@ -157,7 +161,10 @@ export default function ThoiKhoaBieu({ type }: { type?: $Enums.SubjectClassType 
               room: {
                 building: {
                   trainingLocation: {
-                    name: { contains: filters.room, mode: "insensitive" as const },
+                    name: {
+                      contains: filters.room,
+                      mode: "insensitive" as const,
+                    },
                   },
                 },
               },
@@ -232,7 +239,10 @@ export default function ThoiKhoaBieu({ type }: { type?: $Enums.SubjectClassType 
     })
   }
 
-  const { onOpen: onOpenEditSubjectClass } = useDisclosure<{ id: string; mode: "edit" | "view" }>({
+  const { onOpen: onOpenEditSubjectClass } = useDisclosure<{
+    id: string
+    mode: "edit" | "view"
+  }>({
     tag: "PutOneSubjectClassModal",
   })
 
@@ -245,28 +255,40 @@ export default function ThoiKhoaBieu({ type }: { type?: $Enums.SubjectClassType 
     <div>
       <Row gutter={[8, 8]}>
         <Col span={24}>
-          <h2 className="m-0 text-center text-2xl font-bold">
-            Thời khoá biểu{" "}
-            {displaySemester ? `${displaySemester.name} - ${displaySemester.schoolYear?.name}` : ""}
-          </h2>
-        </Col>
-
-        <Col span={24} md={8} lg={6}>
-          <Select
-            style={{ width: "100%" }}
-            placeholder="Chọn học kỳ"
-            value={selectedSemesterId}
-            onChange={handleSemesterChange}
-            options={allSemesters.map((s) => ({
-              label: `${s.name} - ${s.schoolYear?.name}`,
-              value: s.id,
-            }))}
-            allowClear={false}
-          />
-        </Col>
-
-        <Col span={24}>
+          <Col span={24}>
+            <Divider
+              orientation="center"
+              className="
+    uppercase !my-0 text-lg font-semibold
+    [&::before]:border-gray-950
+    [&::after]:border-gray-950
+  "
+              orientationMargin={0}
+            >
+              Thời khoá biểu{" "}
+              {displaySemester
+                ? `${displaySemester.name} - ${displaySemester.schoolYear?.name}`
+                : ""}
+            </Divider>
+          </Col>
           <Table
+            header={
+              <Row gutter={[8, 8]} justify="end" align="middle">
+                <Col span={12} md={8} lg={6}>
+                  <Select
+                    style={{ width: "100%" }}
+                    placeholder="Chọn học kỳ"
+                    value={selectedSemesterId}
+                    onChange={handleSemesterChange}
+                    options={allSemesters.map((s) => ({
+                      label: `${s.name} - ${s.schoolYear?.name}`,
+                      value: s.id,
+                    }))}
+                    allowClear={false}
+                  />
+                </Col>
+              </Row>
+            }
             rowKey="id"
             scrollable
             filters={filters}
