@@ -18,7 +18,9 @@ import { useDisclosure } from "react-hook-disclosure-modal"
 import { useTopics } from "@/hooks/useTopics"
 
 // Nguong diem tuong dong de xem la trung lap (0 - 1)
-const DUPLICATE_SCORE_THRESHOLD = 0.9
+// BE tra ve cosine similarity, thuc te voi FAQ ngan chi dat ~0.5 - 0.7
+// nen set nguong 0.5 de phat hien noi dung gan giong nhau.
+const DUPLICATE_SCORE_THRESHOLD = 0.5
 
 type FAQFormType = {
   topicId: string
@@ -112,6 +114,25 @@ const PutCauHoi = () => {
     }
   }
 
+  // Hoi nguoi dung co muon luu du bi canh bao trung lap khong
+  const confirmKeepDuplicate = (reason: string): Promise<boolean> =>
+    new Promise((resolve) => {
+      Modal.confirm({
+        title: "Phát hiện nội dung trùng lặp",
+        content: (
+          <div>
+            <p>{reason}</p>
+            <p className="mt-2">Bạn có vẫn muốn lưu câu hỏi này không?</p>
+          </div>
+        ),
+        okText: "Vẫn lưu",
+        okButtonProps: { danger: true },
+        cancelText: "Hủy",
+        onOk: () => resolve(true),
+        onCancel: () => resolve(false),
+      })
+    })
+
   const onFinish = async (values: FAQFormType) => {
     if (isSubmitting) return
     setIsSubmitting(true)
@@ -132,8 +153,10 @@ const PutCauHoi = () => {
         // Edit: kiem tra trung lap truoc khi update bang OpenAPI
         const check = await checkSemanticDuplicate(id, topicType, id)
         if (check.duplicated) {
-          message.error(check.reason || "Nội dung đã tồn tại trong hệ thống.")
-          return
+          const keep = await confirmKeepDuplicate(
+            check.reason || "Nội dung đã tồn tại trong hệ thống."
+          )
+          if (!keep) return
         }
 
         await update({
@@ -148,7 +171,8 @@ const PutCauHoi = () => {
         })
         message.success("Cập nhật tài liệu thành công")
       } else {
-        // Create: tao truoc, sau do kiem tra trung lap qua OpenAPI; neu trung thi xoa lai
+        // Create: tao truoc, sau do kiem tra trung lap qua OpenAPI
+        // Neu trung: hoi nguoi dung co muon giu lai khong — khong thi xoa rollback
         const created = await create({
           data: {
             topicId: values.topicId,
@@ -161,13 +185,17 @@ const PutCauHoi = () => {
         if (newId) {
           const check = await checkSemanticDuplicate(newId, topicType, newId)
           if (check.duplicated) {
-            try {
-              await deleteFAQ({ where: { id: newId } })
-            } catch (_e) {
-              // noop: khong chan thong bao trung lap
+            const keep = await confirmKeepDuplicate(
+              check.reason || "Nội dung đã tồn tại trong hệ thống."
+            )
+            if (!keep) {
+              try {
+                await deleteFAQ({ where: { id: newId } })
+              } catch (_e) {
+                // noop
+              }
+              return
             }
-            message.error(check.reason || "Nội dung đã tồn tại trong hệ thống.")
-            return
           }
         }
 

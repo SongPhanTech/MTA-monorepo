@@ -92,8 +92,35 @@ export default function Page() {
 
   const [selectedDocument, setSelectedDocument] = useState<(typeof documents)[0] | undefined>()
   const onDownload = async (url: string, fileName: string) => {
-    const response = await fetch(url)
-    if (!response.ok) return message.error("Lỗi khi tải file")
+    const buildFallbackUrl = (raw: string): string | null => {
+      try {
+        const u = new URL(raw)
+        if (u.hostname !== "minio.mta.swantech.vn") return null
+        u.protocol = "https:"
+        u.hostname = "minio.swantech.vn"
+        u.port = ""
+        return u.toString()
+      } catch {
+        return null
+      }
+    }
+    const fallbackUrl = buildFallbackUrl(url)
+    const primaryUrl = fallbackUrl ?? url
+    const secondaryUrl = fallbackUrl ? url : null
+    let response: Response | null = null
+    try {
+      response = await fetch(primaryUrl)
+    } catch {
+      // network error → thử URL còn lại
+    }
+    if ((!response || !response.ok) && secondaryUrl) {
+      try {
+        response = await fetch(secondaryUrl)
+      } catch {
+        response = null
+      }
+    }
+    if (!response || !response.ok) return message.error("Lỗi khi tải file")
     const blob = await response.blob()
     const blobUrl = window.URL.createObjectURL(blob)
     const link = document.createElement("a")

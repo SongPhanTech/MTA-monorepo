@@ -174,17 +174,19 @@ function Page() {
       }
 
       const fallbackUrl = buildFallbackUrl(presignedUrl)
+      const primaryUrl = fallbackUrl ?? presignedUrl
+      const secondaryUrl = fallbackUrl ? presignedUrl : null
 
       let response: Response | null = null
       try {
-        response = await fetch(presignedUrl)
+        response = await fetch(primaryUrl)
       } catch {
-        // DNS / network error → thử fallback
+        // DNS / network error → thử URL còn lại
       }
 
-      if ((!response || !response.ok) && fallbackUrl) {
+      if ((!response || !response.ok) && secondaryUrl) {
         try {
-          response = await fetch(fallbackUrl)
+          response = await fetch(secondaryUrl)
         } catch {
           response = null
         }
