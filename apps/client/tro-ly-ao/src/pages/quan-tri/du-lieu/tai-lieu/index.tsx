@@ -158,9 +158,39 @@ function Page() {
         return
       }
 
-      // Tải file từ presigned URL
-      const response = await fetch(presignedUrl)
-      if (!response.ok) {
+      // Fallback: nếu BE ký URL với host cũ (vd minio.mta.swantech.vn không resolve được)
+      // thì rewrite về minio.swantech.vn, giữ nguyên path + query (signature vẫn hợp lệ)
+      const buildFallbackUrl = (raw: string): string | null => {
+        try {
+          const u = new URL(raw)
+          if (u.hostname === "minio.swantech.vn") return null // đã đúng, không cần fallback
+          u.protocol = "https:"
+          u.hostname = "minio.swantech.vn"
+          u.port = ""
+          return u.toString()
+        } catch {
+          return null
+        }
+      }
+
+      const fallbackUrl = buildFallbackUrl(presignedUrl)
+
+      let response: Response | null = null
+      try {
+        response = await fetch(presignedUrl)
+      } catch {
+        // DNS / network error → thử fallback
+      }
+
+      if ((!response || !response.ok) && fallbackUrl) {
+        try {
+          response = await fetch(fallbackUrl)
+        } catch {
+          response = null
+        }
+      }
+
+      if (!response || !response.ok) {
         message.error("Lỗi khi tải file")
         return
       }

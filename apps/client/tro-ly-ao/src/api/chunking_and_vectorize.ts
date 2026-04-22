@@ -14,28 +14,6 @@ const postFormUrlEncoded = async (url: string, id_document: string, fieldName: s
   return response.data
 }
 
-const postFormUrlEncodedWithFallback = async (
-  urls: string[],
-  id_document: string,
-  fieldName: string
-) => {
-  let lastError: unknown
-
-  for (const url of urls) {
-    try {
-      return await postFormUrlEncoded(url, id_document, fieldName)
-    } catch (error) {
-      lastError = error
-
-      if (!axios.isAxiosError(error) || error.response?.status !== 404) {
-        throw error
-      }
-    }
-  }
-
-  throw lastError
-}
-
 export const fetchChungkingAndVectorizeDocument = async (id_document: string) => {
   try {
     return await postFormUrlEncoded(
@@ -80,13 +58,8 @@ export const fetchFAQVectorize = async (faq_id: string) => {
 
 export const deleteVectorRecordHoiDap = async (id_document: string) => {
   try {
-    const baseUrl = getRuntimeEnv("NEXT_PUBLIC_CHAT_BOT_URL")
-
-    return await postFormUrlEncodedWithFallback(
-      [
-        `${baseUrl}/indexing/xoa_ban_ghi_trong_vector_db_hoi_dap_v4`,
-        `${baseUrl}/xoa_ban_ghi_trong_vector_db_hoi_dap_v4`,
-      ],
+    return await postFormUrlEncoded(
+      `${getRuntimeEnv("NEXT_PUBLIC_CHAT_BOT_URL")}/xoa_ban_ghi_trong_vector_db_hoi_dap_v4`,
       id_document,
       "id_document"
     )
@@ -101,13 +74,8 @@ export const deleteVectorRecordHoiDap = async (id_document: string) => {
 
 export const deleteVectorRecordFAQ = async (id_document: string) => {
   try {
-    const baseUrl = getRuntimeEnv("NEXT_PUBLIC_CHAT_BOT_URL")
-
-    return await postFormUrlEncodedWithFallback(
-      [
-        `${baseUrl}/indexing/xoa_ban_ghi_trong_db_faq`,
-        `${baseUrl}/xoa_ban_ghi_trong_db_faq`,
-      ],
+    return await postFormUrlEncoded(
+      `${getRuntimeEnv("NEXT_PUBLIC_CHAT_BOT_URL")}/xoa_ban_ghi_trong_db_faq`,
       id_document,
       "id_document"
     )

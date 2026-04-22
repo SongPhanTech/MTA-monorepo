@@ -15,6 +15,32 @@ const { Title } = Typography
 
 type SearchType = "semantic" | "keyword"
 
+const extractSearchResultIds = (response: unknown): string[] => {
+  if (!response || typeof response !== "object") {
+    return []
+  }
+
+  const payload = response as {
+    document_ids?: unknown
+    results?: unknown
+    success_detail?: unknown
+  }
+
+  if (Array.isArray(payload.document_ids)) {
+    return payload.document_ids.filter((id): id is string => typeof id === "string")
+  }
+
+  if (Array.isArray(payload.results)) {
+    return payload.results.filter((id): id is string => typeof id === "string")
+  }
+
+  if (Array.isArray(payload.success_detail)) {
+    return payload.success_detail.filter((id): id is string => typeof id === "string")
+  }
+
+  return []
+}
+
 export default function Page() {
   const [loading, setLoading] = useState(false)
   const [input, setInput] = useState("")
@@ -64,8 +90,6 @@ export default function Page() {
     .map((id) => documentsData.find((doc) => doc.id === id))
     .filter((doc): doc is NonNullable<typeof doc> => Boolean(doc))
 
-  console.log("Debug search:", { results, documentsData, documents })
-
   const [selectedDocument, setSelectedDocument] = useState<(typeof documents)[0] | undefined>()
   const onDownload = async (url: string, fileName: string) => {
     const response = await fetch(url)
@@ -92,7 +116,8 @@ export default function Page() {
         searchType === "semantic"
           ? await TimKiemTheoNguNghia(input)
           : await TimKiemTheoTuKhoa(input)
-      setResults(response?.success_detail || [])
+
+      setResults(extractSearchResultIds(response))
     } catch (_error: unknown) {
       message.warning("Không tìm thấy kết quả nào")
       setResults([])
