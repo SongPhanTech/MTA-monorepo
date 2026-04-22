@@ -63,7 +63,9 @@ app.openapi(
                 const hasPayload = Array.isArray(data.payload) && data.payload.length > 0
                 const hasSheets =
                   Array.isArray(data.sheets) &&
-                  data.sheets.some((sheet) => Array.isArray(sheet.payload) && sheet.payload.length > 0)
+                  data.sheets.some(
+                    (sheet) => Array.isArray(sheet.payload) && sheet.payload.length > 0
+                  )
                 if (!hasPayload && !hasSheets) {
                   ctx.addIssue({
                     code: "custom",
@@ -181,7 +183,11 @@ app.openapi(
 
     const createUniqueSheetName = (rawName: string, index: number) => {
       const fallback = `Sheet${index + 1}`
-      const base = (rawName || fallback).trim().replace(/[\\/?*:[\]]/g, "_").slice(0, 31) || fallback
+      const base =
+        (rawName || fallback)
+          .trim()
+          .replace(/[\\/?*:[\]]/g, "_")
+          .slice(0, 31) || fallback
       let name = base
       let suffix = 1
       while (usedSheetNames.has(name)) {

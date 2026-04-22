@@ -350,10 +350,7 @@ export default function CaNhanHocLai() {
               align: "center",
               width: 120,
               render: (_, record) =>
-                record?.reason ??
-                record?.ly_do_cam_thi ??
-                record?.ly_do_dinh_chi ??
-                record?.ly_do_hoan_thi,
+                record?.ly_do_cam_thi ?? record?.ly_do_dinh_chi ?? record?.ly_do_hoan_thi,
             },
           ]}
           pagination={{
