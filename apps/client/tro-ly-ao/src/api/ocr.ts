@@ -12,7 +12,7 @@ export const fetchOCR = async (file: File) => {
     //     },
     // })
     const response = await axios.post(
-      `${getRuntimeEnv("NEXT_PUBLIC_CHAT_BOT_URL")}/upload`,
+      `${getRuntimeEnv("NEXT_PUBLIC_CHAT_BOT_URL")}/ocr/upload`,
       formData,
       {
         headers: {
@@ -37,7 +37,7 @@ interface OCRResult {
 export const getOCRResult = async (taskId: string): Promise<OCRResult> => {
   try {
     const response = await axios.get(
-      `${getRuntimeEnv("NEXT_PUBLIC_CHAT_BOT_URL")}/result/${taskId}`
+      `${getRuntimeEnv("NEXT_PUBLIC_CHAT_BOT_URL")}/ocr/result/${taskId}`
     )
     return response.data
   } catch (_error: any) {
@@ -47,7 +47,7 @@ export const getOCRResult = async (taskId: string): Promise<OCRResult> => {
 
 export const cancelOCRTask = async (taskId: string): Promise<void> => {
   try {
-    await axios.post(`${getRuntimeEnv("NEXT_PUBLIC_CHAT_BOT_URL")}/cancel/${taskId}`)
+    await axios.post(`${getRuntimeEnv("NEXT_PUBLIC_CHAT_BOT_URL")}/ocr/cancel/${taskId}`)
     console.log("[OCR Cancel] Đã hủy task OCR với task_id:", taskId)
   } catch (_error: any) {
     console.error("[OCR Cancel] Lỗi hủy task OCR:", _error)
