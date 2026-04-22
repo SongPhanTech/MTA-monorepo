@@ -159,6 +159,7 @@ export default function DanhSachGiangVienHuongDan() {
           <Table
             bordered
             loading={isFetching}
+            rowKey="id"
             data={experts}
             rowSelection={rowSelection}
             columns={[
