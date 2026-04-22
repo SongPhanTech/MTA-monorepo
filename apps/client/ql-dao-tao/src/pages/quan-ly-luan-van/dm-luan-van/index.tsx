@@ -117,8 +117,8 @@ export function getCouncilMemberName(record: any, role: CouncilRole) {
   return (
     <span
       title={inAcademy ? "Trong học viện" : "Ngoài học viện"}
-      className={inAcademy ? "text-green-600" : ""}
-      style={{ color: inAcademy ? "#16a34a" : "" }}
+      className={inAcademy ? "" : "text-green-600"}
+      style={{ color: inAcademy ? "" : "#16a34a" }}
     >
       {textWithWorkplace}
     </span>
@@ -140,8 +140,8 @@ export function getSupervisorName(record: any, htmlRender = false, showWorkplace
   return htmlRender ? (
     <span
       title={inAcademy ? "Trong học viện" : "Ngoài học viện"}
-      className={inAcademy ? "text-green-600" : ""}
-      style={{ color: inAcademy ? "#16a34a" : "" }}
+      className={inAcademy ? "" : "text-green-600"}
+      style={{ color: inAcademy ? "" : "#16a34a" }}
     >
       {textWithWorkplace}
     </span>
@@ -1418,7 +1418,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                   </Form.Item>
                   <Form.Item label="Tìm kiếm">
                     <Input
-                      className="w-72"
+                      className="w-48"
                       allowClear
                       value={nameKeyword}
                       placeholder="Tên học viên / GVHD"
