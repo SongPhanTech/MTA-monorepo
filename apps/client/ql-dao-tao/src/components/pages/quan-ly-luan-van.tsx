@@ -320,7 +320,7 @@ export default function QuanLyLuanVan({
           thesisProject: {
             thesisSessionId: searchParams.thesisSessionId,
             thesisType: ThesisType.THESIS,
-            organizationId: searchParams.organizationId || undefined,
+            ...(searchParams.organizationId ? { organizationId: searchParams.organizationId } : {}),
           },
         },
       },
@@ -356,7 +356,9 @@ export default function QuanLyLuanVan({
             thesisProject: {
               thesisSessionId: searchParams.thesisSessionId,
               thesisType: ThesisType.THESIS,
-              organizationId: searchParams.organizationId || undefined,
+              ...(searchParams.organizationId
+                ? { organizationId: searchParams.organizationId }
+                : {}),
             },
           },
           orderBy: {
@@ -601,12 +603,16 @@ export default function QuanLyLuanVan({
               <Form.Item name="organizationId" label="Khoa quản lí">
                 <TreeSelect
                   className="w-80"
-                  placeholder="Chọn khoa quản lý"
+                  placeholder="Tất cả đơn vị"
+                  allowClear
                   showSearch
                   treeDefaultExpandAll
                   treeData={treeOrgData}
                   onChange={(value) => {
-                    setSearchParams((prev) => ({ ...prev, organizationId: value as string }))
+                    setSearchParams((prev) => ({
+                      ...prev,
+                      organizationId: (value as string) || undefined,
+                    }))
                   }}
                 />
               </Form.Item>

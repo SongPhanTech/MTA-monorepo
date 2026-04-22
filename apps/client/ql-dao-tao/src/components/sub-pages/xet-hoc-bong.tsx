@@ -647,7 +647,7 @@ const XetHocBong = ({ semesterId, trainingObjectTypeId }: XetHocBongProps) => {
                             disabled={transferDataDisabled}
                           >
                             <BookPlus />
-                            Chuyển dữ liệu
+                            Phê Duyệt
                           </Button>
                         </Flex>
                       </Flex>
