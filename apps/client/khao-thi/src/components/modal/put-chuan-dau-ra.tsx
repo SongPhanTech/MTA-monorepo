@@ -11,7 +11,7 @@ import {
 } from "@workspace/db/hooks"
 import { sqlTransaction } from "@workspace/libs/api/model"
 import { Col, Form, Input, InputNumber, message, Row } from "antd"
-import { useEffect } from "react"
+import { useEffect, useRef } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 export interface KnowledgeBlockFormData extends Record<string, unknown> {
   name: string
@@ -33,6 +33,8 @@ const PutChuongMucModal = () => {
   })
 
   const watchedValues = Form.useWatch([], form)
+  const percentBaseTotalRef = useRef<number>(0)
+  const lastEditRef = useRef<"quantity" | "percent" | null>(null)
   const totalQuestions =
     LEVEL_COLUMNS.reduce<number>((sum, col) => {
       const quantity = (watchedValues?.[col.key] as ConfigExam | undefined)?.quantity
@@ -41,6 +43,7 @@ const PutChuongMucModal = () => {
 
   // Tự động cập nhật tỷ lệ (%) theo số lượng câu hỏi hiện tại
   useEffect(() => {
+    if (lastEditRef.current === "percent") return
     const patch: any = {}
     LEVEL_COLUMNS.forEach((col) => {
       const quantity = (watchedValues?.[col.key] as ConfigExam | undefined)?.quantity ?? 0
@@ -262,7 +265,13 @@ const PutChuongMucModal = () => {
                     style={{ marginBottom: 8 }}
                     initialValue={0}
                   >
-                    <InputNumber min={0} className="w-full" />
+                    <InputNumber
+                      min={0}
+                      className="w-full"
+                      onChange={() => {
+                        lastEditRef.current = "quantity"
+                      }}
+                    />
                   </Form.Item>
                 </Col>
               ))}
@@ -284,7 +293,19 @@ const PutChuongMucModal = () => {
                     <InputNumber
                       className="w-full"
                       controls={false}
-                      readOnly
+                      onFocus={() => {
+                        percentBaseTotalRef.current = totalQuestions
+                      }}
+                      onChange={(value) => {
+                        const n = typeof value === "number" ? value : Number(value ?? 0)
+                        if (!Number.isFinite(n)) return
+                        lastEditRef.current = "percent"
+                        const baseTotal = percentBaseTotalRef.current
+                        if (baseTotal <= 0) return
+                        const nextQuantity = Math.max(0, Math.round((baseTotal * n) / 100))
+                        form.setFieldValue([col.key, "quantity"], nextQuantity)
+                        lastEditRef.current = "quantity"
+                      }}
                       // Hiển thị như 1 ô input bo tròn để đồng bộ UI với các ô phía dưới
                       style={{
                         width: "100%",
