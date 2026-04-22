@@ -1,11 +1,11 @@
-import FormItem from "@components/commons/form-item";
-import Select from "@components/commons/select";
-import Table from "@components/commons/table";
-import TableCollapse from "@components/commons/tableCollapse";
-import { ExportDiplomaAppendix } from "@components/ui/export-button";
-import DefaultLayout from "@layouts/default-layout";
-import { buildOrgTree, formatDateVN } from "@lib/utils";
-import type { Semester, Student } from "@workspace/db";
+import FormItem from "@components/commons/form-item"
+import Select from "@components/commons/select"
+import Table from "@components/commons/table"
+import TableCollapse from "@components/commons/tableCollapse"
+import { ExportDiplomaAppendix } from "@components/ui/export-button"
+import DefaultLayout from "@layouts/default-layout"
+import { buildOrgTree, formatDateVN } from "@lib/utils"
+import type { Semester, Student } from "@workspace/db"
 import type {
   CurriculumVersion,
   FixedClass,
@@ -19,7 +19,7 @@ import type {
   TrainingTime,
   TrainingLevel,
   UserProfile,
-} from "@workspace/db/client";
+} from "@workspace/db/client"
 import {
   useCountStudent,
   useFindManyDM_DonVi,
@@ -28,66 +28,59 @@ import {
   useFindManyThesisSession,
   useFindManyTrainingCourse,
   useFindManyTrainingObjectType,
-} from "@workspace/db/hooks";
-import { whereOrganization } from "@workspace/libs/constants";
-import { exportFromTemplate, TableRow } from "@workspace/libs/template-excel";
-import { fuzzyMatch, getMinioUrl } from "@workspace/libs/utils";
-import { useTrainingObjectTypeStore } from "@workspace/ui";
-import {
-  Button,
-  DatePicker,
-  Form,
-  Input,
-  notification,
-  TreeSelect,
-} from "antd";
-import { useWatch } from "antd/es/form/Form";
-import dayjs from "dayjs";
-import type React from "react";
-import { useEffect, useMemo, useState } from "react";
+} from "@workspace/db/hooks"
+import { whereOrganization } from "@workspace/libs/constants"
+import { exportFromTemplate, TableRow } from "@workspace/libs/template-excel"
+import { fuzzyMatch, getMinioUrl } from "@workspace/libs/utils"
+import { useTrainingObjectTypeStore } from "@workspace/ui"
+import { Button, DatePicker, Form, Input, notification, TreeSelect } from "antd"
+import { useWatch } from "antd/es/form/Form"
+import dayjs from "dayjs"
+import type React from "react"
+import { useEffect, useMemo, useState } from "react"
 
 type TSubjectItem = StudentSubjectScore & {
-  subjectVersion: SubjectVersion;
+  subjectVersion: SubjectVersion
   subjectClass:
     | (SubjectClass & {
-        semester: Semester;
+        semester: Semester
       })
-    | null;
-};
+    | null
+}
 
 type TTrainingCourse = TrainingCourse & {
-  scoreConverts: ScoreConvert[];
-  academicRankingConvert?: any[];
-  trainingLanguage: TrainingLanguage | null;
+  scoreConverts: ScoreConvert[]
+  academicRankingConvert?: any[]
+  trainingLanguage: TrainingLanguage | null
   trainingObjectType: {
     trainingForm: {
-      name: string;
-    } | null;
-  } | null;
-};
+      name: string
+    } | null
+  } | null
+}
 
 type TFixedClass = {
   fixedClass: FixedClass & {
-    trainingCourse: TTrainingCourse;
+    trainingCourse: TTrainingCourse
     curriculumVersion: CurriculumVersion & {
       curriculum: {
         trainingMajor: {
-          name: string;
-          trainingField: TrainingField | null;
-        };
-      };
-    };
-  };
-};
+          name: string
+          trainingField: TrainingField | null
+        }
+      }
+    }
+  }
+}
 
 type TUserProfile = {
-  userProfile: UserProfile;
-};
+  userProfile: UserProfile
+}
 
 export interface ISemesterGroup {
-  id: string;
-  name: string;
-  subjects: TSubjectItem[];
+  id: string
+  name: string
+  subjects: TSubjectItem[]
 }
 
 export type TStudentWithSubjects = Student &
@@ -96,79 +89,75 @@ export type TStudentWithSubjects = Student &
     subjectClassStudent: (StudentSubjectScore & {
       subjectVersion: SubjectVersion & {
         trainingBlocks?: Array<{
-          semester?: number | null;
+          semester?: number | null
           trainingBlockOnCurriculumVersion?: {
-            curriculumVersionId: string;
-          } | null;
-        }>;
-      };
+            curriculumVersionId: string
+          } | null
+        }>
+      }
       subjectClass?: SubjectClass & {
-        semester?: Semester;
-      };
-    })[];
+        semester?: Semester
+      }
+    })[]
     curriculumVersion?: CurriculumVersion & {
-      trainingTime?: TrainingTime | null;
-      trainingLevel?: TrainingLevel | null;
-    };
-  };
+      trainingTime?: TrainingTime | null
+      trainingLevel?: TrainingLevel | null
+    }
+  }
 
 export type TStudentWithSemesters = TStudentWithSubjects & {
   semesters: Array<{
-    id: string;
-    name: string;
+    id: string
+    name: string
     subjects: Array<{
-      id: string;
-      key: string;
-      stt: number;
-      tenHocPhan: string;
-      soTinChi: number;
-      thangDiem10: string;
-      thangDiem4: string;
-      thangDiemChu: string | null;
-    }>;
-  }>;
-};
+      id: string
+      key: string
+      stt: number
+      tenHocPhan: string
+      soTinChi: number
+      thangDiem10: string
+      thangDiem4: string
+      thangDiemChu: string | null
+    }>
+  }>
+}
 
 const formItemLayout = {
   labelCol: { flex: "0 0 100px" },
   wrapperCol: { flex: "1" },
-};
+}
 
 const initialPagination = {
   page: 1,
   pageSize: 10,
-};
+}
 
 export type StudentGradeSystemForm = {
-  trainingObjectTypeId: string[];
-  fixedClassIds: string[];
-  thesisSessionIds: string[];
-  trainingCourseIds: string[];
-  managementOrganizationIds: string[];
-  recordsPerPage: string;
-  date: string;
-  signer: string;
-  imageUrl: string;
-};
+  trainingObjectTypeId: string[]
+  fixedClassIds: string[]
+  thesisSessionIds: string[]
+  trainingCourseIds: string[]
+  managementOrganizationIds: string[]
+  recordsPerPage: string
+  date: string
+  signer: string
+  imageUrl: string
+}
 
 export default function StudentGradeSystem() {
-  const [form] = Form.useForm<StudentGradeSystemForm>();
-  const { id: trainingObjectTypeId } = useTrainingObjectTypeStore();
-  const trainingCourseIds: string[] = useWatch("trainingCourseIds", form);
-  const fixedClassIds: string[] = useWatch("fixedClassIds", form);
-  const thesisSessionIds: string[] = useWatch("thesisSessionIds", form);
-  const managementOrganizationIds: string[] = useWatch(
-    "managementOrganizationIds",
-    form,
-  );
-  const [page, setPage] = useState(initialPagination.page);
-  const [pageSize, setPageSize] = useState(initialPagination.pageSize);
-  const [viewResult, setViewResult] = useState(false);
-  const [selectedStudent, setSelectedStudent] =
-    useState<TStudentWithSemesters | null>(null);
+  const [form] = Form.useForm<StudentGradeSystemForm>()
+  const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
+  const trainingCourseIds: string[] = useWatch("trainingCourseIds", form)
+  const fixedClassIds: string[] = useWatch("fixedClassIds", form)
+  const thesisSessionIds: string[] = useWatch("thesisSessionIds", form)
+  const managementOrganizationIds: string[] = useWatch("managementOrganizationIds", form)
+  const [page, setPage] = useState(initialPagination.page)
+  const [pageSize, setPageSize] = useState(initialPagination.pageSize)
+  const [viewResult, setViewResult] = useState(false)
+  const [selectedStudent, setSelectedStudent] = useState<TStudentWithSemesters | null>(null)
   const { data: trainingObjectTypes = [] } = useFindManyTrainingObjectType({
     where: { active: true },
-  });
+  })
 
   const { data: trainingCourseData = [] } = useFindManyTrainingCourse(
     {
@@ -187,8 +176,8 @@ export default function StudentGradeSystem() {
     },
     {
       enabled: !!trainingObjectTypeId || trainingObjectTypes?.length > 0,
-    },
-  );
+    }
+  )
 
   const { data: fixedClasses = [] } = useFindManyFixedClass(
     {
@@ -204,8 +193,8 @@ export default function StudentGradeSystem() {
     },
     {
       enabled: trainingCourseIds?.length > 0,
-    },
-  );
+    }
+  )
 
   const { data: thesisSessionData = [] } = useFindManyThesisSession(
     {
@@ -221,8 +210,8 @@ export default function StudentGradeSystem() {
     },
     {
       enabled: !!trainingObjectTypeId || trainingCourseData?.length > 0,
-    },
-  );
+    }
+  )
 
   const { data: dm_DonVi = [] } = useFindManyDM_DonVi({
     where: {
@@ -237,9 +226,9 @@ export default function StudentGradeSystem() {
         },
       }),
     },
-  });
+  })
 
-  const treeData = buildOrgTree(dm_DonVi);
+  const treeData = buildOrgTree(dm_DonVi)
 
   const where = {
     active: true,
@@ -260,7 +249,7 @@ export default function StudentGradeSystem() {
         },
       }),
     },
-  };
+  }
 
   const { data: count } = useCountStudent(
     {
@@ -268,8 +257,8 @@ export default function StudentGradeSystem() {
     },
     {
       enabled: viewResult,
-    },
-  );
+    }
+  )
 
   const {
     data: students,
@@ -361,75 +350,61 @@ export default function StudentGradeSystem() {
     },
     {
       enabled: viewResult,
-    },
-  );
+    }
+  )
 
   const studentsWithSemesters = useMemo(() => {
     return (students || []).map((student) => {
-      const { scoreConverts } = student?.fixedClass?.trainingCourse || {};
+      const { scoreConverts } = student?.fixedClass?.trainingCourse || {}
       const curriculumVersionId =
-        student?.fixedClass?.curriculumVersion?.id ||
-        student?.curriculumVersion?.id;
+        student?.fixedClass?.curriculumVersion?.id || student?.curriculumVersion?.id
 
-      const sortedSubjectClassStudent = [
-        ...(student.subjectClassStudent || []),
-      ].sort((a, b) => {
-        const getPlannedSemester = (
-          item: (typeof student.subjectClassStudent)[number],
-        ) => {
-          const matchedTrainingBlock =
-            item?.subjectVersion?.trainingBlocks?.find(
-              (trainingBlock) =>
-                trainingBlock?.trainingBlockOnCurriculumVersion
-                  ?.curriculumVersionId === curriculumVersionId,
-            );
+      const sortedSubjectClassStudent = [...(student.subjectClassStudent || [])].sort((a, b) => {
+        const getPlannedSemester = (item: (typeof student.subjectClassStudent)[number]) => {
+          const matchedTrainingBlock = item?.subjectVersion?.trainingBlocks?.find(
+            (trainingBlock) =>
+              trainingBlock?.trainingBlockOnCurriculumVersion?.curriculumVersionId ===
+              curriculumVersionId
+          )
 
-          return matchedTrainingBlock?.semester ?? Number.MAX_SAFE_INTEGER;
-        };
+          return matchedTrainingBlock?.semester ?? Number.MAX_SAFE_INTEGER
+        }
 
-        const plannedSemesterA = getPlannedSemester(a);
-        const plannedSemesterB = getPlannedSemester(b);
+        const plannedSemesterA = getPlannedSemester(a)
+        const plannedSemesterB = getPlannedSemester(b)
 
         if (plannedSemesterA !== plannedSemesterB) {
-          return plannedSemesterA - plannedSemesterB;
+          return plannedSemesterA - plannedSemesterB
         }
 
-        const semesterNameA = a?.subjectClass?.semester?.name || "";
-        const semesterNameB = b?.subjectClass?.semester?.name || "";
-        const semesterCompare = semesterNameA.localeCompare(
-          semesterNameB,
-          "vi",
-        );
+        const semesterNameA = a?.subjectClass?.semester?.name || ""
+        const semesterNameB = b?.subjectClass?.semester?.name || ""
+        const semesterCompare = semesterNameA.localeCompare(semesterNameB, "vi")
         if (semesterCompare !== 0) {
-          return semesterCompare;
+          return semesterCompare
         }
 
-        return (a?.subjectVersion?.name || "").localeCompare(
-          b?.subjectVersion?.name || "",
-          "vi",
-        );
-      });
+        return (a?.subjectVersion?.name || "").localeCompare(b?.subjectVersion?.name || "", "vi")
+      })
 
-      const semesterMap = new Map();
+      const semesterMap = new Map()
 
       sortedSubjectClassStudent.forEach((item) => {
-        const semester = item.subjectClass?.semester;
-        if (!semester) return;
+        const semester = item.subjectClass?.semester
+        if (!semester) return
 
         if (!semesterMap.has(semester.id)) {
           semesterMap.set(semester.id, {
             id: semester.id,
             name: semester.name,
             subjects: [],
-          });
+          })
         }
-        const semesterGroup = semesterMap.get(semester.id);
+        const semesterGroup = semesterMap.get(semester.id)
 
         const scoreConvert = scoreConverts?.find(
-          (s) =>
-            s.base10Min <= Number(item.finalScore) &&
-            s.base10Max >= Number(item.finalScore),
-        );
+          (s) => s.base10Min <= Number(item.finalScore) && s.base10Max >= Number(item.finalScore)
+        )
 
         semesterGroup.subjects.push({
           id: item.id,
@@ -437,20 +412,18 @@ export default function StudentGradeSystem() {
           stt: semesterGroup.subjects.length + 1,
           tenHocPhan: item.subjectVersion?.name || "",
           soTinChi: item.subjectVersion?.credit || "",
-          thangDiem10: item?.finalScore
-            ? Number(item?.finalScore).toFixed(2)
-            : "-",
+          thangDiem10: item?.finalScore ? Number(item?.finalScore).toFixed(2) : "-",
           thangDiem4: scoreConvert?.base4 || "",
           thangDiemChu: scoreConvert?.letter,
-        });
-      });
+        })
+      })
 
       return {
         ...student,
         semesters: Array.from(semesterMap.values()),
-      };
-    }) as TStudentWithSemesters[];
-  }, [students]);
+      }
+    }) as TStudentWithSemesters[]
+  }, [students])
 
   const studentTableData = useMemo(() => {
     return (studentsWithSemesters || []).map((student, index) => ({
@@ -461,11 +434,11 @@ export default function StudentGradeSystem() {
       lop: student.fixedClass?.name || "",
       khoa: student.fixedClass?.trainingCourse?.name || "",
       semesters: student.semesters,
-    }));
-  }, [studentsWithSemesters, page, pageSize]);
+    }))
+  }, [studentsWithSemesters, page, pageSize])
 
   const selectedStudentGradeData = useMemo(() => {
-    if (!selectedStudent) return [];
+    if (!selectedStudent) return []
 
     return (selectedStudent.semesters || []).map((semester) => ({
       id: semester.id,
@@ -477,38 +450,32 @@ export default function StudentGradeSystem() {
         stt: index + 1,
         $type: "child" as const,
       })),
-    }));
-  }, [selectedStudent]);
+    }))
+  }, [selectedStudent])
 
-  const getScoreClassification = (
-    finalScore: number,
-    scoreConverts: ScoreConvert[] = [],
-  ) => {
+  const getScoreClassification = (finalScore: number, scoreConverts: ScoreConvert[] = []) => {
     const matched = scoreConverts.find(
-      (range) => finalScore >= range.base10Min && finalScore <= range.base10Max,
-    );
+      (range) => finalScore >= range.base10Min && finalScore <= range.base10Max
+    )
 
-    return matched?.classification ?? "";
-  };
+    return matched?.classification ?? ""
+  }
 
-  const buildScoreSystemNoteRows = (
-    scoreConverts: ScoreConvert[] = [],
-    totalColumns: number,
-  ) => {
-    const sortedData = [...scoreConverts].sort((a, b) => b.base4 - a.base4);
+  const buildScoreSystemNoteRows = (scoreConverts: ScoreConvert[] = [], totalColumns: number) => {
+    const sortedData = [...scoreConverts].sort((a, b) => b.base4 - a.base4)
 
-    const labelColSpan = 2;
-    const valueColumnCount = Math.max(totalColumns - labelColSpan, 1);
+    const labelColSpan = 2
+    const valueColumnCount = Math.max(totalColumns - labelColSpan, 1)
 
     const toBase10Range = (item: ScoreConvert) =>
       item.base10Min === 0
         ? `< ${Number(item.base10Max) + 0.1}`
-        : `${item.base10Min}${item.base10Max != null ? ` - ${item.base10Max}` : ""}`;
+        : `${item.base10Min}${item.base10Max != null ? ` - ${item.base10Max}` : ""}`
 
     const buildGridRow = (label: string, values: string[]) => {
-      const normalizedValues = values.slice(0, valueColumnCount);
+      const normalizedValues = values.slice(0, valueColumnCount)
       while (normalizedValues.length < valueColumnCount) {
-        normalizedValues.push("");
+        normalizedValues.push("")
       }
 
       return {
@@ -527,12 +494,12 @@ export default function StudentGradeSystem() {
             border: false,
           })),
         ],
-      } as TableRow;
-    };
+      } as TableRow
+    }
 
-    const letters = sortedData.map((item) => item.letter ?? "");
-    const base4Values = sortedData.map((item) => String(item.base4 ?? ""));
-    const base10Values = sortedData.map(toBase10Range);
+    const letters = sortedData.map((item) => item.letter ?? "")
+    const base4Values = sortedData.map((item) => String(item.base4 ?? ""))
+    const base10Values = sortedData.map(toBase10Range)
 
     return {
       noteRow1: {
@@ -554,77 +521,74 @@ export default function StudentGradeSystem() {
       noteRow4: {
         ...buildGridRow("Thang điểm 10", base10Values),
       },
-    };
-  };
+    }
+  }
 
   const buildGraduationRankingNote = (academicRankingConvert: any[] = []) => {
     const graduationRankingData = academicRankingConvert.filter(
-      (item) => item?.context === "GRADUATION" && item?.graduated,
-    );
+      (item) => item?.context === "GRADUATION" && item?.graduated
+    )
 
     const graduationBaseScore =
       graduationRankingData.find((item) => item?.base4Min != null)?.baseScore ??
-      graduationRankingData[0]?.baseScore;
+      graduationRankingData[0]?.baseScore
 
     const formatNumber = (num: number | null | undefined) => {
-      if (num == null) return "-";
-      if (Number.isInteger(num)) return num.toFixed(1);
-      const decimalPart = (num.toString().split(".")[1] || "").length;
-      if (decimalPart === 1) return num.toFixed(2);
-      return num.toString();
-    };
+      if (num == null) return "-"
+      if (Number.isInteger(num)) return num.toFixed(1)
+      const decimalPart = (num.toString().split(".")[1] || "").length
+      if (decimalPart === 1) return num.toFixed(2)
+      return num.toString()
+    }
 
     const sortedRankings = graduationRankingData.sort((a, b) =>
-      graduationBaseScore === "Base4"
-        ? b.base4Min - a.base4Min
-        : b.base10Min - a.base10Min,
-    );
+      graduationBaseScore === "Base4" ? b.base4Min - a.base4Min : b.base10Min - a.base10Min
+    )
 
     const rankingText = sortedRankings
       .map((item) => {
         const range =
           graduationBaseScore === "Base4"
             ? `${formatNumber(item.base4Min)} - ${formatNumber(item.base4Max)}`
-            : `${formatNumber(item.base10Min)} - ${formatNumber(item.base10Max)}`;
+            : `${formatNumber(item.base10Min)} - ${formatNumber(item.base10Max)}`
 
-        return `${item.classification}: ${range}`;
+        return `${item.classification}: ${range}`
       })
-      .join("; ");
+      .join("; ")
 
     if (!rankingText) {
-      return " - Phân hạng tốt nghiệp theo thang điểm 10: -";
+      return " - Phân hạng tốt nghiệp theo thang điểm 10: -"
     }
 
-    return ` - Phân hạng tốt nghiệp theo thang điểm ${graduationBaseScore === "Base4" ? "4" : "10"}: ${rankingText}. (Hạng tốt nghiệp có thể bị hạ mức theo quy chế đào tạo đại học của HVKTQS được áp dụng tại thời điểm xét tốt nghiệp).`;
-  };
+    return ` - Phân hạng tốt nghiệp theo thang điểm ${graduationBaseScore === "Base4" ? "4" : "10"}: ${rankingText}. (Hạng tốt nghiệp có thể bị hạ mức theo quy chế đào tạo đại học của HVKTQS được áp dụng tại thời điểm xét tốt nghiệp).`
+  }
 
   const handleExportPLVB2Col = () => {
     if (!students?.length) {
-      notification.info({ message: "Không có dữ liệu để xuất!" });
-      return;
+      notification.info({ message: "Không có dữ liệu để xuất!" })
+      return
     }
-    const TOTAL_COLUMNS = 12;
-    const SIGN_COL = 6;
-    const MAX_ROWS = 50;
+    const TOTAL_COLUMNS = 12
+    const SIGN_COL = 6
+    const MAX_ROWS = 50
 
     const allSheetOptions = studentsWithSemesters.map((student) => {
-      const scoreConverts =
-        student.fixedClass?.trainingCourse?.scoreConverts || [];
+      const scoreConverts = student.fixedClass?.trainingCourse?.scoreConverts || []
       const academicRankingConvert =
-        student.fixedClass?.trainingCourse?.academicRankingConvert || [];
-      let stt = 0;
+        student.fixedClass?.trainingCourse?.academicRankingConvert || []
+      let stt = 0
       const tableRows = student.semesters
         .flatMap((semester) => {
-          const subjectRows: TableRow[] = [];
+          const subjectRows: TableRow[] = []
 
-          const subjects = semester?.subjects ?? [];
+          const subjects = semester?.subjects ?? []
           for (let i = 0; i < subjects.length; i += 2) {
-            const s1 = subjects[i];
-            const s2 = subjects[i + 1];
-            const hasSecondSubject = !!s2;
-            const sttFirst = stt + 1;
-            const sttSecond = hasSecondSubject ? stt + 2 : null;
-            stt += hasSecondSubject ? 2 : 1;
+            const s1 = subjects[i]
+            const s2 = subjects[i + 1]
+            const hasSecondSubject = !!s2
+            const sttFirst = stt + 1
+            const sttSecond = hasSecondSubject ? stt + 2 : null
+            stt += hasSecondSubject ? 2 : 1
 
             subjectRows.push({
               cells: [
@@ -657,58 +621,50 @@ export default function StudentGradeSystem() {
                 }, // Điểm hệ 4 - 2
                 { value: s2?.thangDiemChu ?? "", align: "center" }, // Điểm chữ - 2
               ],
-            });
+            })
           }
 
-          return subjectRows;
+          return subjectRows
         })
-        .slice(0, MAX_ROWS);
+        .slice(0, MAX_ROWS)
 
       const tongTinChi = student.semesters.reduce(
         (acc, semester) =>
-          acc +
-          (semester.subjects?.reduce((s, sub) => s + (sub.soTinChi ?? 0), 0) ??
-            0),
-        0,
-      );
+          acc + (semester.subjects?.reduce((s, sub) => s + (sub.soTinChi ?? 0), 0) ?? 0),
+        0
+      )
 
       const tongDiemNhanTinChiHe10 = student.semesters.reduce(
         (acc, semester) =>
           acc +
           (semester.subjects?.reduce(
-            (s, sub) =>
-              s + (Number(sub?.thangDiem10) || 0) * (sub.soTinChi ?? 0),
-            0,
+            (s, sub) => s + (Number(sub?.thangDiem10) || 0) * (sub.soTinChi ?? 0),
+            0
           ) ?? 0),
-        0,
-      );
+        0
+      )
 
       const tongDiemNhanTinChiHe4 = student.semesters.reduce(
         (acc, semester) =>
           acc +
           (semester.subjects?.reduce(
-            (s, sub) =>
-              s + (Number(sub?.thangDiem4) || 0) * (sub.soTinChi ?? 0),
-            0,
+            (s, sub) => s + (Number(sub?.thangDiem4) || 0) * (sub.soTinChi ?? 0),
+            0
           ) ?? 0),
-        0,
-      );
+        0
+      )
 
       const diemTBHe10 =
-        tongTinChi === 0
-          ? 0
-          : Number((tongDiemNhanTinChiHe10 / tongTinChi).toFixed(2));
+        tongTinChi === 0 ? 0 : Number((tongDiemNhanTinChiHe10 / tongTinChi).toFixed(2))
 
       const diemTBHe4 =
-        tongTinChi === 0
-          ? 0
-          : Number((tongDiemNhanTinChiHe4 / tongTinChi).toFixed(2));
+        tongTinChi === 0 ? 0 : Number((tongDiemNhanTinChiHe4 / tongTinChi).toFixed(2))
 
-      const xepLoai = getScoreClassification(diemTBHe10, scoreConverts || []);
+      const xepLoai = getScoreClassification(diemTBHe10, scoreConverts || [])
 
       const gapRow: TableRow = {
         cells: [{ value: null, colSpan: TOTAL_COLUMNS, border: false }],
-      };
+      }
 
       const tongTinChiRow: TableRow = {
         cells: [
@@ -724,7 +680,7 @@ export default function StudentGradeSystem() {
             border: false,
           },
         ],
-      };
+      }
 
       const diemHe10Row: TableRow = {
         cells: [
@@ -742,7 +698,7 @@ export default function StudentGradeSystem() {
             border: false,
           },
         ],
-      };
+      }
 
       const diemHe4Row: TableRow = {
         cells: [
@@ -752,7 +708,7 @@ export default function StudentGradeSystem() {
             border: false,
           },
         ],
-      };
+      }
 
       const xepLoaiRow: TableRow = {
         cells: [
@@ -768,9 +724,9 @@ export default function StudentGradeSystem() {
             border: false,
           },
         ],
-      };
+      }
 
-      const today = new Date();
+      const today = new Date()
 
       const dateSignatureRow: TableRow = {
         cells: [
@@ -786,7 +742,7 @@ export default function StudentGradeSystem() {
             border: false,
           },
         ],
-      };
+      }
 
       const titleSignatureRow1: TableRow = {
         cells: [
@@ -800,7 +756,7 @@ export default function StudentGradeSystem() {
             border: false,
           },
         ],
-      };
+      }
 
       const titleSignatureRow2: TableRow = {
         cells: [
@@ -814,7 +770,7 @@ export default function StudentGradeSystem() {
             border: false,
           },
         ],
-      };
+      }
 
       const nameSignatureRow: TableRow = {
         cells: [
@@ -828,10 +784,12 @@ export default function StudentGradeSystem() {
             border: false,
           },
         ],
-      };
+      }
 
-      const { noteRow1, noteRow2, noteRow3, noteRow4 } =
-        buildScoreSystemNoteRows(scoreConverts || [], TOTAL_COLUMNS);
+      const { noteRow1, noteRow2, noteRow3, noteRow4 } = buildScoreSystemNoteRows(
+        scoreConverts || [],
+        TOTAL_COLUMNS
+      )
 
       const noteRow5: TableRow = {
         cells: [
@@ -843,7 +801,7 @@ export default function StudentGradeSystem() {
             border: false,
           },
         ],
-      };
+      }
 
       return {
         sheet: `${student.userProfile.code} - ${student.userProfile.fullname}`,
@@ -853,21 +811,16 @@ export default function StudentGradeSystem() {
           ngay_sinh: formatDateVN(student.userProfile.dateOfBirth ?? ""),
           ngay_nhap_hoc: formatDateVN(student.fixedClass.createdAt),
           hinh_thuc_dao_tao:
-            student.fixedClass?.trainingCourse?.trainingObjectType?.trainingForm
-              ?.name || "",
+            student.fixedClass?.trainingCourse?.trainingObjectType?.trainingForm?.name || "",
           // ngon_ngu_dao_tao: student.fixedClass?.trainingCourse?.trainingLanguage?.name || "",
           nganh_hoc:
-            student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor
-              ?.trainingField?.name || "",
+            student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.trainingField?.name ||
+            "",
           chuyen_nganh:
-            student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor
-              ?.name || "",
-          thoi_gian_dao_tao:
-            student.curriculumVersion?.trainingTime?.name || "",
-          trinh_do_dao_tao:
-            student.curriculumVersion?.trainingLevel?.name || "",
-          ngon_ngu:
-            student.fixedClass?.trainingCourse?.trainingLanguage?.name || "",
+            student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || "",
+          thoi_gian_dao_tao: student.curriculumVersion?.trainingTime?.name || "",
+          trinh_do_dao_tao: student.curriculumVersion?.trainingLevel?.name || "",
+          ngon_ngu: student.fixedClass?.trainingCourse?.trainingLanguage?.name || "",
           so_ky_hieu: student.fixedClass?.trainingCourse?.code || "",
         },
         tableStartCell: { row: 14, col: 1 },
@@ -893,8 +846,8 @@ export default function StudentGradeSystem() {
           noteRow4,
           noteRow5,
         ],
-      };
-    });
+      }
+    })
 
     exportFromTemplate({
       templateUrl: getMinioUrl("/mta/template/phu-luc-van-bang-2-cot.xlsx"),
@@ -904,32 +857,31 @@ export default function StudentGradeSystem() {
       fontSize: 10,
       mergeSheetsToOne: true,
       sheetName: "PLVB",
-    });
-  };
+    })
+  }
 
   const handleExportPLVB1Col = () => {
     if (!students?.length) {
-      notification.info({ message: "Không có dữ liệu để xuất!" });
-      return;
+      notification.info({ message: "Không có dữ liệu để xuất!" })
+      return
     }
-    const TOTAL_COLUMNS = 10;
-    const SIGN_COL = 6;
-    const MAX_ROWS = 50;
+    const TOTAL_COLUMNS = 10
+    const SIGN_COL = 6
+    const MAX_ROWS = 50
 
     const allSheetOptions = studentsWithSemesters.map((student) => {
-      const scoreConverts =
-        student.fixedClass?.trainingCourse?.scoreConverts || [];
+      const scoreConverts = student.fixedClass?.trainingCourse?.scoreConverts || []
       const academicRankingConvert =
-        student.fixedClass?.trainingCourse?.academicRankingConvert || [];
-      let stt = 0;
+        student.fixedClass?.trainingCourse?.academicRankingConvert || []
+      let stt = 0
       const tableRows = student.semesters
         .flatMap((semester) => {
-          const subjectRows: TableRow[] = [];
+          const subjectRows: TableRow[] = []
 
-          const subjects = semester?.subjects ?? [];
+          const subjects = semester?.subjects ?? []
           for (let i = 0; i < subjects.length; i++) {
-            const s1 = subjects[i];
-            stt += 1;
+            const s1 = subjects[i]
+            stt += 1
 
             subjectRows.push({
               cells: [
@@ -954,58 +906,50 @@ export default function StudentGradeSystem() {
                 }, // Điểm hệ 4
                 { value: s1?.thangDiemChu ?? "", colSpan: 2, align: "center" }, // Điểm chữ
               ],
-            });
+            })
           }
 
-          return subjectRows;
+          return subjectRows
         })
-        .slice(0, MAX_ROWS);
+        .slice(0, MAX_ROWS)
 
       const tongTinChi = student.semesters.reduce(
         (acc, semester) =>
-          acc +
-          (semester.subjects?.reduce((s, sub) => s + (sub.soTinChi ?? 0), 0) ??
-            0),
-        0,
-      );
+          acc + (semester.subjects?.reduce((s, sub) => s + (sub.soTinChi ?? 0), 0) ?? 0),
+        0
+      )
 
       const tongDiemNhanTinChiHe10 = student.semesters.reduce(
         (acc, semester) =>
           acc +
           (semester.subjects?.reduce(
-            (s, sub) =>
-              s + (Number(sub?.thangDiem10) || 0) * (sub.soTinChi ?? 0),
-            0,
+            (s, sub) => s + (Number(sub?.thangDiem10) || 0) * (sub.soTinChi ?? 0),
+            0
           ) ?? 0),
-        0,
-      );
+        0
+      )
 
       const tongDiemNhanTinChiHe4 = student.semesters.reduce(
         (acc, semester) =>
           acc +
           (semester.subjects?.reduce(
-            (s, sub) =>
-              s + (Number(sub?.thangDiem4) || 0) * (sub.soTinChi ?? 0),
-            0,
+            (s, sub) => s + (Number(sub?.thangDiem4) || 0) * (sub.soTinChi ?? 0),
+            0
           ) ?? 0),
-        0,
-      );
+        0
+      )
 
       const diemTBHe10 =
-        tongTinChi === 0
-          ? 0
-          : Number((tongDiemNhanTinChiHe10 / tongTinChi).toFixed(2));
+        tongTinChi === 0 ? 0 : Number((tongDiemNhanTinChiHe10 / tongTinChi).toFixed(2))
 
       const diemTBHe4 =
-        tongTinChi === 0
-          ? 0
-          : Number((tongDiemNhanTinChiHe4 / tongTinChi).toFixed(2));
+        tongTinChi === 0 ? 0 : Number((tongDiemNhanTinChiHe4 / tongTinChi).toFixed(2))
 
-      const xepLoai = getScoreClassification(diemTBHe10, scoreConverts || []);
+      const xepLoai = getScoreClassification(diemTBHe10, scoreConverts || [])
 
       const gapRow: TableRow = {
         cells: [{ value: null, colSpan: TOTAL_COLUMNS, border: false }],
-      };
+      }
 
       const tongTinChiRow: TableRow = {
         cells: [
@@ -1021,7 +965,7 @@ export default function StudentGradeSystem() {
             border: false,
           },
         ],
-      };
+      }
 
       const diemHe10Row: TableRow = {
         cells: [
@@ -1040,7 +984,7 @@ export default function StudentGradeSystem() {
             border: false,
           },
         ],
-      };
+      }
 
       const diemHe4Row: TableRow = {
         cells: [
@@ -1057,7 +1001,7 @@ export default function StudentGradeSystem() {
             border: false,
           },
         ],
-      };
+      }
 
       const xepLoaiRow: TableRow = {
         cells: [
@@ -1073,9 +1017,9 @@ export default function StudentGradeSystem() {
             border: false,
           },
         ],
-      };
+      }
 
-      const today = new Date();
+      const today = new Date()
 
       const dateSignatureRow: TableRow = {
         cells: [
@@ -1091,7 +1035,7 @@ export default function StudentGradeSystem() {
             border: false,
           },
         ],
-      };
+      }
 
       const titleSignatureRow1: TableRow = {
         cells: [
@@ -1105,7 +1049,7 @@ export default function StudentGradeSystem() {
             border: false,
           },
         ],
-      };
+      }
 
       const titleSignatureRow2: TableRow = {
         cells: [
@@ -1119,7 +1063,7 @@ export default function StudentGradeSystem() {
             border: false,
           },
         ],
-      };
+      }
 
       const nameSignatureRow: TableRow = {
         cells: [
@@ -1133,10 +1077,12 @@ export default function StudentGradeSystem() {
             border: false,
           },
         ],
-      };
+      }
 
-      const { noteRow1, noteRow2, noteRow3, noteRow4 } =
-        buildScoreSystemNoteRows(scoreConverts || [], TOTAL_COLUMNS);
+      const { noteRow1, noteRow2, noteRow3, noteRow4 } = buildScoreSystemNoteRows(
+        scoreConverts || [],
+        TOTAL_COLUMNS
+      )
 
       const noteRow5: TableRow = {
         cells: [
@@ -1148,7 +1094,7 @@ export default function StudentGradeSystem() {
             border: false,
           },
         ],
-      };
+      }
 
       return {
         sheet: `${student.userProfile.code} - ${student.userProfile.fullname}`,
@@ -1158,22 +1104,16 @@ export default function StudentGradeSystem() {
           ngay_sinh: formatDateVN(student.userProfile.dateOfBirth ?? ""),
           ngay_nhap_hoc: formatDateVN(student.fixedClass.createdAt),
           hinh_thuc_dao_tao:
-            student.fixedClass?.trainingCourse?.trainingObjectType?.trainingForm
-              ?.name || "",
-          ngon_ngu_dao_tao:
-            student.fixedClass?.trainingCourse?.trainingLanguage?.name || "",
+            student.fixedClass?.trainingCourse?.trainingObjectType?.trainingForm?.name || "",
+          ngon_ngu_dao_tao: student.fixedClass?.trainingCourse?.trainingLanguage?.name || "",
           nganh_hoc:
-            student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor
-              ?.trainingField?.name || "",
+            student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.trainingField?.name ||
+            "",
           chuyen_nganh:
-            student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor
-              ?.name || "",
-          thoi_gian_dao_tao:
-            student.curriculumVersion?.trainingTime?.name || "",
-          trinh_do_dao_tao:
-            student.curriculumVersion?.trainingLevel?.name || "",
-          ngon_ngu:
-            student.fixedClass?.trainingCourse?.trainingLanguage?.name || "",
+            student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || "",
+          thoi_gian_dao_tao: student.curriculumVersion?.trainingTime?.name || "",
+          trinh_do_dao_tao: student.curriculumVersion?.trainingLevel?.name || "",
+          ngon_ngu: student.fixedClass?.trainingCourse?.trainingLanguage?.name || "",
           so_ky_hieu: student.fixedClass?.trainingCourse?.code || "",
         },
         tableStartCell: { row: 14, col: 1 },
@@ -1198,8 +1138,8 @@ export default function StudentGradeSystem() {
           noteRow4,
           noteRow5,
         ],
-      };
-    });
+      }
+    })
 
     exportFromTemplate({
       templateUrl: getMinioUrl("/mta/template/phu-luc-van-bang-1-cot.xlsx"),
@@ -1209,58 +1149,54 @@ export default function StudentGradeSystem() {
       fontSize: 10,
       mergeSheetsToOne: true,
       sheetName: "PLVB",
-    });
-  };
+    })
+  }
 
   const handleExportSoGocCapPhatVanBang = () => {
-    console.log("students", students);
+    console.log("students", students)
 
     if (!students?.length) {
-      notification.info({ message: "Không có dữ liệu để xuất!" });
-      return;
+      notification.info({ message: "Không có dữ liệu để xuất!" })
+      return
     }
-    const { date } = form.getFieldsValue();
-    let selectedDate = dayjs(date);
+    const { date } = form.getFieldsValue()
+    let selectedDate = dayjs(date)
     if (!selectedDate.isValid()) {
-      selectedDate = dayjs();
+      selectedDate = dayjs()
     }
 
     const courseNames =
       trainingCourseData
         ?.filter((e) => trainingCourseIds?.includes(e.id))
         ?.map((e) => e.name)
-        ?.join(", ") || "";
+        ?.join(", ") || ""
 
     const sessionNames =
       thesisSessionData
         ?.filter((e) => thesisSessionIds?.includes(e.id))
         ?.map((e) => e.name)
-        ?.join(", ") || "";
+        ?.join(", ") || ""
 
-    const firstStudent = students[0];
+    const firstStudent = students[0]
     const trainingForm =
-      firstStudent?.fixedClass?.trainingCourse?.trainingObjectType?.trainingForm
-        ?.name || "";
-    const graduationDecision = firstStudent?.graduationDecision?.code || "";
+      firstStudent?.fixedClass?.trainingCourse?.trainingObjectType?.trainingForm?.name || ""
+    const graduationDecision = firstStudent?.graduationDecision?.code || ""
 
     const tableRows = students.map((student, index) => {
-      const gD = student.graduationDecision;
-      const tR = student.thesisRegistrations?.[0];
-      const user = student.userProfile;
+      const gD = student.graduationDecision
+      const tR = student.thesisRegistrations?.[0]
+      const user = student.userProfile
 
-      const subjectScores = student.subjectClassStudent || [];
+      const subjectScores = student.subjectClassStudent || []
       const totalCredits = subjectScores.reduce(
         (acc, item) => acc + (item.subjectVersion?.credit || 0),
-        0,
-      );
+        0
+      )
       const totalPoints = subjectScores.reduce(
-        (acc, item) =>
-          acc +
-          (Number(item.finalScore) || 0) * (item.subjectVersion?.credit || 0),
-        0,
-      );
-      const gpa =
-        totalCredits > 0 ? (totalPoints / totalCredits).toFixed(2) : "";
+        (acc, item) => acc + (Number(item.finalScore) || 0) * (item.subjectVersion?.credit || 0),
+        0
+      )
+      const gpa = totalCredits > 0 ? (totalPoints / totalCredits).toFixed(2) : ""
 
       return {
         cells: [
@@ -1281,9 +1217,7 @@ export default function StudentGradeSystem() {
           { value: user?.nationality?.sTen || "", align: "center" as const },
           { value: tR?.council?.code || "", wrapText: true },
           {
-            value: tR?.council?.proposedDate
-              ? formatDateVN(tR.council.proposedDate)
-              : "",
+            value: tR?.council?.proposedDate ? formatDateVN(tR.council.proposedDate) : "",
             align: "center" as const,
           },
           { value: gD?.code || "", wrapText: true },
@@ -1292,9 +1226,7 @@ export default function StudentGradeSystem() {
             align: "center" as const,
           },
           {
-            value:
-              student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor
-                ?.name || "",
+            value: student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || "",
             wrapText: true,
           },
           { value: gD?.diplomaNumber || "", align: "center" as const },
@@ -1311,15 +1243,15 @@ export default function StudentGradeSystem() {
           },
           { value: gpa, align: "center" as const },
         ],
-      };
-    });
+      }
+    })
 
-    const TOTAL_COLUMNS = 19;
-    const SIGN_COL = 7;
+    const TOTAL_COLUMNS = 19
+    const SIGN_COL = 7
 
     const gapRow: TableRow = {
       cells: [{ value: null, colSpan: TOTAL_COLUMNS, border: false }],
-    };
+    }
 
     const dateSignatureRow: TableRow = {
       cells: [
@@ -1335,7 +1267,7 @@ export default function StudentGradeSystem() {
           border: false,
         },
       ],
-    };
+    }
 
     const titleSignatureRow: TableRow = {
       cells: [
@@ -1349,7 +1281,7 @@ export default function StudentGradeSystem() {
           border: false,
         },
       ],
-    };
+    }
 
     const nameSignatureRow: TableRow = {
       cells: [
@@ -1363,7 +1295,7 @@ export default function StudentGradeSystem() {
           border: false,
         },
       ],
-    };
+    }
 
     exportFromTemplate({
       templateUrl: getMinioUrl("/mta/template/SoGocCapPhatVanBangCaoHoc.xlsx"),
@@ -1394,13 +1326,13 @@ export default function StudentGradeSystem() {
       fontFamily: "Times New Roman",
       fontSize: 11,
       mergeSheetsToOne: false,
-    });
-  };
+    })
+  }
 
   const subjects: {
-    daiHoc: { id: number; name: string; onClick?: () => void }[];
-    nganHan: { id: number; name: string }[];
-    caoHoc: { id: number; name: string; onClick?: () => void }[];
+    daiHoc: { id: number; name: string; onClick?: () => void }[]
+    nganHan: { id: number; name: string }[]
+    caoHoc: { id: number; name: string; onClick?: () => void }[]
   } = {
     daiHoc: [
       { id: 1, name: "Phụ lục VB (1 cột)", onClick: handleExportPLVB1Col },
@@ -1436,13 +1368,13 @@ export default function StudentGradeSystem() {
       { id: 25, name: "Trình chiếu tốt nghiệp (WORD)" },
       { id: 26, name: "Trình chiếu tốt nghiệp (PDF)" },
     ],
-  };
+  }
   useEffect(() => {
-    if (!form) return;
+    if (!form) return
 
-    form.resetFields();
-    form.setFieldValue("trainingObjectTypeId", trainingObjectTypeId);
-  }, [form, trainingObjectTypeId]);
+    form.resetFields()
+    form.setFieldValue("trainingObjectTypeId", trainingObjectTypeId)
+  }, [form, trainingObjectTypeId])
 
   return (
     <div className="flex h-screen bg-gray-50">
@@ -1459,11 +1391,11 @@ export default function StudentGradeSystem() {
                 form.setFieldsValue({
                   fixedClassIds: [],
                   managementOrganizationIds: [],
-                });
+                })
               }
 
               if ("fixedClassIds" in changed) {
-                form.setFieldValue("managementOrganizationIds", []);
+                form.setFieldValue("managementOrganizationIds", [])
               }
             }}
             className="space-y-4"
@@ -1501,16 +1433,12 @@ export default function StudentGradeSystem() {
                   className="flex-1 w-64"
                   placeholder="Chọn Khoá"
                   maxTagCount={2}
-                  maxTagPlaceholder={(omittedValues) =>
-                    `+${omittedValues?.length}`
-                  }
+                  maxTagPlaceholder={(omittedValues) => `+${omittedValues?.length}`}
                   options={trainingCourseData?.map((e) => ({
                     label: e.name,
                     value: e.id,
                   }))}
-                  disabled={
-                    !trainingObjectTypeId || !trainingObjectTypes.length
-                  }
+                  disabled={!trainingObjectTypeId || !trainingObjectTypes.length}
                 />
               </FormItem>
             </div>
@@ -1527,9 +1455,7 @@ export default function StudentGradeSystem() {
                   mode="multiple"
                   className="flex-1 w-64"
                   maxTagCount={2}
-                  maxTagPlaceholder={(omittedValues) =>
-                    `+${omittedValues?.length}`
-                  }
+                  maxTagPlaceholder={(omittedValues) => `+${omittedValues?.length}`}
                   placeholder="Chọn lớp quản lí"
                   options={fixedClasses?.map((e) => ({
                     label: e.name,
@@ -1553,9 +1479,7 @@ export default function StudentGradeSystem() {
                   className="flex-1 w-64"
                   placeholder="Chọn Đợt xét"
                   maxTagCount={2}
-                  maxTagPlaceholder={(omittedValues) =>
-                    `+${omittedValues.length}`
-                  }
+                  maxTagPlaceholder={(omittedValues) => `+${omittedValues.length}`}
                   options={thesisSessionData?.map((e) => ({
                     label: e.name,
                     value: e.id,
@@ -1577,9 +1501,7 @@ export default function StudentGradeSystem() {
                   multiple
                   className="flex-1 w-64"
                   maxTagCount={2}
-                  maxTagPlaceholder={(omittedValues) =>
-                    `+${omittedValues.length}`
-                  }
+                  maxTagPlaceholder={(omittedValues) => `+${omittedValues.length}`}
                   treeData={treeData}
                   placeholder="Chọn khoa quản lý"
                   allowClear
@@ -1596,9 +1518,9 @@ export default function StudentGradeSystem() {
             <Button
               type="primary"
               onClick={() => {
-                setSelectedStudent(null);
-                setViewResult(true);
-                setPage(initialPagination.page);
+                setSelectedStudent(null)
+                setViewResult(true)
+                setPage(initialPagination.page)
               }}
               className="w-full h-8 text-xs text-white"
             >
@@ -1644,9 +1566,7 @@ export default function StudentGradeSystem() {
 
       <div className="flex-1 p-6 overflow-y-auto">
         <div className="mb-6">
-          <h3 className="text-sm font-bold color text-primary mb-3">
-            I. Đại học
-          </h3>
+          <h3 className="text-sm font-bold color text-primary mb-3">I. Đại học</h3>
           <div className="grid grid-cols-4 gap-3">
             {subjects.daiHoc.map((subject, index) => {
               return (
@@ -1657,7 +1577,7 @@ export default function StudentGradeSystem() {
                   type="primary"
                   className="h-auto px-3 text-xs justify-start text-white"
                 />
-              );
+              )
             })}
           </div>
         </div>
@@ -1680,9 +1600,7 @@ export default function StudentGradeSystem() {
         </div>
 
         <div className="mb-6">
-          <h3 className="text-sm font-bold color text-primary mb-3">
-            III. Cao học
-          </h3>
+          <h3 className="text-sm font-bold color text-primary mb-3">III. Cao học</h3>
           <div className="grid grid-cols-4 gap-3">
             {subjects.caoHoc.map((subject, index) => (
               <Button
@@ -1739,20 +1657,18 @@ export default function StudentGradeSystem() {
               total: count,
               onChange(newPage, newPageSize) {
                 if (newPageSize !== pageSize) {
-                  setPage(initialPagination.page);
-                  setPageSize(pageSize);
-                  return;
+                  setPage(initialPagination.page)
+                  setPageSize(pageSize)
+                  return
                 }
-                setPage(newPage);
-                setPageSize(pageSize);
+                setPage(newPage)
+                setPageSize(pageSize)
               },
             }}
             onRow={(record) => ({
               onClick: () => {
-                const student = studentsWithSemesters?.find(
-                  (s) => s.id === record.key,
-                );
-                setSelectedStudent(student || null);
+                const student = studentsWithSemesters?.find((s) => s.id === record.key)
+                setSelectedStudent(student || null)
               },
               className:
                 selectedStudent?.id === record.key
@@ -1766,8 +1682,7 @@ export default function StudentGradeSystem() {
         {selectedStudent && (
           <div>
             <h3 className="text-md font-semibold mb-2">
-              Bảng điểm: {selectedStudent.userProfile?.fullname} -{" "}
-              {selectedStudent.code}
+              Bảng điểm: {selectedStudent.userProfile?.fullname} - {selectedStudent.code}
             </h3>
             <TableCollapse
               data={selectedStudentGradeData}
@@ -1815,9 +1730,9 @@ export default function StudentGradeSystem() {
         )}
       </div>
     </div>
-  );
+  )
 }
 
 StudentGradeSystem.getLayout = function getLayout(page: React.ReactElement) {
-  return <DefaultLayout>{page}</DefaultLayout>;
-};
+  return <DefaultLayout>{page}</DefaultLayout>
+}
