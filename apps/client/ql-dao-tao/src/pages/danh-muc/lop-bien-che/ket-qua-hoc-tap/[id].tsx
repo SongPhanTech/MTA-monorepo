@@ -884,7 +884,7 @@ export default function StudentScoreClassPage() {
                   },
                 },
                 {
-                  title: "Điểm ĐK",
+                  title: "Điểm CC",
                   align: "center",
                   dataIndex: "midtermScoreCmp",
                   type: "cmp",
