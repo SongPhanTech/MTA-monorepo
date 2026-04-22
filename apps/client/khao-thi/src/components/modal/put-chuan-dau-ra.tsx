@@ -10,16 +10,48 @@ import {
   useFindUniqueKnowledgeBlock,
 } from "@workspace/db/hooks"
 import { sqlTransaction } from "@workspace/libs/api/model"
-import { Col, Form, Input, InputNumber, message, Row } from "antd"
-import { useEffect, useRef } from "react"
+import { Col, Form, Input, InputNumber, Switch, message, Row } from "antd"
+import { useEffect, useRef, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
+type ConfigExamFormValue = Partial<ConfigExam> & {
+  percent?: number
+}
+
+const toIntPercent = (value: unknown) => {
+  const n = Number(value)
+  if (!Number.isFinite(n)) return 0
+  return Math.trunc(n)
+}
+
+const clamp = (n: number, min: number, max: number) => Math.min(max, Math.max(min, n))
 export interface KnowledgeBlockFormData extends Record<string, unknown> {
   name: string
   code: string
-  biet?: ConfigExam
-  hieu?: ConfigExam
-  vanDung?: ConfigExam
-  VanDungCao?: ConfigExam
+  totalQuestions?: number
+  biet?: ConfigExamFormValue
+  hieu?: ConfigExamFormValue
+  vanDung?: ConfigExamFormValue
+  VanDungCao?: ConfigExamFormValue
+}
+
+const allocateByPercent = (total: number, percents: number[]) => {
+  const safeTotal = Number.isFinite(total) ? Math.max(0, Math.round(total)) : 0
+  if (safeTotal <= 0) return percents.map(() => 0)
+
+  const raw = percents.map((p) => (safeTotal * (Number.isFinite(p) ? p : 0)) / 100)
+  const floors = raw.map((x) => Math.floor(Math.max(0, x)))
+  let remainder = safeTotal - floors.reduce((a, b) => a + b, 0)
+
+  const order = raw
+    .map((x, idx) => ({ idx, frac: x - Math.floor(Math.max(0, x)) }))
+    .sort((a, b) => b.frac - a.frac)
+
+  const out = [...floors]
+  for (let i = 0; i < order.length && remainder > 0; i++) {
+    out[order[i].idx] += 1
+    remainder -= 1
+  }
+  return out
 }
 
 const PutChuongMucModal = () => {
@@ -32,30 +64,91 @@ const PutChuongMucModal = () => {
     onClose: form.resetFields,
   })
 
+  const [isQuantityMode, setIsQuantityMode] = useState(true) // switch ON = nhập theo số câu
   const watchedValues = Form.useWatch([], form)
   const percentBaseTotalRef = useRef<number>(0)
   const lastEditRef = useRef<"quantity" | "percent" | null>(null)
   const totalQuestions =
     LEVEL_COLUMNS.reduce<number>((sum, col) => {
-      const quantity = (watchedValues?.[col.key] as ConfigExam | undefined)?.quantity
+      const quantity = (watchedValues?.[col.key] as ConfigExamFormValue | undefined)?.quantity
       return sum + (typeof quantity === "number" ? quantity : 0)
     }, 0) || 0
 
   // Tự động cập nhật tỷ lệ (%) theo số lượng câu hỏi hiện tại
   useEffect(() => {
+    if (!isQuantityMode) return
     if (lastEditRef.current === "percent") return
     const patch: any = {}
     LEVEL_COLUMNS.forEach((col) => {
-      const quantity = (watchedValues?.[col.key] as ConfigExam | undefined)?.quantity ?? 0
+      const quantity = (watchedValues?.[col.key] as ConfigExamFormValue | undefined)?.quantity ?? 0
       const percent =
-        totalQuestions > 0 ? (Number(quantity) / totalQuestions) * 100 : 0
+        totalQuestions > 0 ? Math.trunc((Number(quantity) / totalQuestions) * 100) : 0
       patch[col.key] = {
         ...(watchedValues?.[col.key] as any),
         percent,
       }
     })
     form.setFieldsValue(patch)
-  }, [totalQuestions, watchedValues, form])
+  }, [isQuantityMode, totalQuestions, watchedValues, form])
+
+  const recalcQuantitiesFromPercents = () => {
+    const total = Number(form.getFieldValue("totalQuestions") ?? 0)
+    const percents = LEVEL_COLUMNS.map((col) =>
+      Number(form.getFieldValue([col.key, "percent"]) ?? 0)
+    )
+
+    const quantities = allocateByPercent(total, percents)
+    const patch: any = {}
+    LEVEL_COLUMNS.forEach((col, idx) => {
+      patch[col.key] = {
+        ...(form.getFieldValue(col.key) as any),
+        quantity: quantities[idx],
+      }
+    })
+    lastEditRef.current = "percent"
+    form.setFieldsValue(patch)
+    lastEditRef.current = "quantity"
+  }
+
+  const syncPercentsTo100 = (editedKey: string, nextValue: unknown) => {
+    const nextEdited = clamp(toIntPercent(nextValue), 0, 100)
+
+    // pick an "adjust" column (prefer last col, otherwise the previous one)
+    const adjustKey =
+      LEVEL_COLUMNS.findLast((c) => c.key !== editedKey)?.key ??
+      LEVEL_COLUMNS.find((c) => c.key !== editedKey)?.key
+
+    if (!adjustKey) {
+      form.setFieldValue([editedKey, "percent"], nextEdited)
+      return
+    }
+
+    const sumOthers = LEVEL_COLUMNS.reduce((acc, c) => {
+      if (c.key === editedKey || c.key === adjustKey) return acc
+      return acc + clamp(toIntPercent(form.getFieldValue([c.key, "percent"])), 0, 100)
+    }, 0)
+
+    // try keep edited as user typed; adjust the adjustKey to fill the remainder
+    let remainder = 100 - (sumOthers + nextEdited)
+
+    // if remainder < 0 => total would exceed 100, clamp edited down so remainder becomes 0
+    let editedFinal = nextEdited
+    if (remainder < 0) {
+      editedFinal = clamp(100 - sumOthers, 0, 100)
+      remainder = 0
+    }
+
+    form.setFieldsValue({
+      [editedKey]: {
+        ...(form.getFieldValue(editedKey) as any),
+        percent: editedFinal,
+      },
+      [adjustKey]: {
+        ...(form.getFieldValue(adjustKey) as any),
+        percent: clamp(remainder, 0, 100),
+      },
+    })
+  }
 
   const { mutateAsync: createKnowledgeBlock } = useCreateKnowledgeBlock()
 
@@ -97,8 +190,29 @@ const PutChuongMucModal = () => {
   }, [knowledgeBlockData, input?.id, form])
 
   const onOk = async (values: KnowledgeBlockFormData) => {
+    if (!isQuantityMode) {
+      const total = Number(values.totalQuestions ?? 0)
+      const sumPercent = LEVEL_COLUMNS.reduce((acc, col) => {
+      const p = Number((values?.[col.key] as ConfigExamFormValue | undefined)?.percent ?? 0)
+        return acc + (Number.isFinite(p) ? p : 0)
+      }, 0)
+
+      if (total <= 0) {
+        message.error("Vui lòng nhập tổng số câu hỏi")
+        return
+      }
+      if (Math.abs(sumPercent - 100) > 1e-6) {
+        message.error("Tổng tỷ lệ phải bằng 100%")
+        return
+      }
+
+      // đảm bảo số câu được tính đúng trước khi submit
+      recalcQuantitiesFromPercents()
+      values = form.getFieldsValue(true) as KnowledgeBlockFormData
+    }
+
     const configExams = LEVEL_COLUMNS.reduce<any[]>((acc, level) => {
-      const levelData = values[level.key] as ConfigExam
+      const levelData = values[level.key] as ConfigExamFormValue
       if (!levelData?.quantity) return acc
 
       acc.push({
@@ -235,6 +349,67 @@ const PutChuongMucModal = () => {
       </Col>
 
       <Col span={24}>
+        <Row gutter={12} align="middle" className="mb-2">
+          <Col xs={24} sm={6}>
+            <div className="flex items-center gap-2">
+              <Switch
+                checked={isQuantityMode}
+                onChange={(checked) => {
+                  setIsQuantityMode(checked)
+                  if (!checked) {
+                    form.setFieldValue("totalQuestions", totalQuestions)
+                    percentBaseTotalRef.current = totalQuestions
+                  } else {
+                    lastEditRef.current = "quantity"
+                  }
+                }}
+              />
+              <span>Nhập theo số câu</span>
+            </div>
+          </Col>
+
+          {!isQuantityMode && (
+            <Col xs={24} sm={18}>
+              <Row gutter={12} align="middle">
+                <Col xs={24} sm={6}>
+                  <Form.Item
+                    name="totalQuestions"
+                    style={{ marginBottom: 0 }}
+                    label="Tổng số câu hỏi"
+                    initialValue={totalQuestions}
+                    rules={[
+                      { required: true, message: "Vui lòng nhập tổng số câu hỏi" },
+                      {
+                        validator: async (_, value) => {
+                          const n = Number(value)
+                          if (!Number.isFinite(n) || n <= 0) {
+                            return Promise.reject(new Error("Tổng số câu hỏi phải > 0"))
+                          }
+                          return Promise.resolve()
+                        },
+                      },
+                    ]}
+                  >
+                    <InputNumber
+                      min={1}
+                      className="w-full"
+                      onFocus={() => {
+                        percentBaseTotalRef.current = Number(form.getFieldValue("totalQuestions") ?? 0)
+                      }}
+                      onBlur={() => {
+                        percentBaseTotalRef.current = Number(form.getFieldValue("totalQuestions") ?? 0)
+                        recalcQuantitiesFromPercents()
+                      }}
+                    />
+                  </Form.Item>
+                </Col>
+              </Row>
+            </Col>
+          )}
+        </Row>
+      </Col>
+
+      <Col span={24}>
         <Row gutter={12} align="middle" className="mb-1">
           <Col xs={24} sm={6}>
             &nbsp;
@@ -251,87 +426,145 @@ const PutChuongMucModal = () => {
         </Row>
       </Col>
 
-      <Col span={24}>
-        <Row gutter={12} align="middle">
-          <Col xs={24} sm={6}>
-            Số lượng câu hỏi
-          </Col>
-          <Col xs={24} sm={18}>
-            <Row gutter={12}>
-              {LEVEL_COLUMNS.map((col) => (
-                <Col xs={12} sm={6} key={col.key}>
-                  <Form.Item
-                    name={[col.key, "quantity"]}
-                    style={{ marginBottom: 8 }}
-                    initialValue={0}
-                  >
-                    <InputNumber
-                      min={0}
-                      className="w-full"
-                      onChange={() => {
-                        lastEditRef.current = "quantity"
-                      }}
-                    />
-                  </Form.Item>
-                </Col>
-              ))}
+      {!isQuantityMode ? (
+        <>
+          <Col span={24} className="transition-all duration-200">
+            <Row gutter={12} align="middle">
+              <Col xs={24} sm={6}>
+                Tỷ lệ (%)
+              </Col>
+              <Col xs={24} sm={18}>
+                <Row gutter={12}>
+                  {LEVEL_COLUMNS.map((col) => (
+                    <Col xs={12} sm={6} key={col.key}>
+                      <Form.Item
+                        name={[col.key, "percent"]}
+                        style={{ marginBottom: 8 }}
+                        initialValue={0}
+                      >
+                        <InputNumber<number>
+                          className="w-full"
+                          controls={false}
+                          precision={0}
+                          min={0}
+                          max={100}
+                          onChange={(value) => {
+                            syncPercentsTo100(col.key, value)
+                          }}
+                          onFocus={() => {
+                            percentBaseTotalRef.current = Number(form.getFieldValue("totalQuestions") ?? 0)
+                          }}
+                          onBlur={() => {
+                            recalcQuantitiesFromPercents()
+                          }}
+                          style={{
+                            width: "100%",
+                            textAlign: "center",
+                            color: "#16a34a",
+                            fontSize: 12,
+                            borderRadius: 8,
+                          }}
+                          formatter={(value) => {
+                            return `${toIntPercent(value)}%`
+                          }}
+                          parser={(value) => {
+                            const raw = (value ?? "").toString().replace("%", "").trim()
+                            return toIntPercent(raw)
+                          }}
+                        />
+                      </Form.Item>
+                    </Col>
+                  ))}
+                </Row>
+              </Col>
             </Row>
           </Col>
-        </Row>
-      </Col>
 
-      <Col span={24}>
-        <Row gutter={12} align="middle">
-          <Col xs={24} sm={6}>
-            Tỷ lệ (%)
-          </Col>
-          <Col xs={24} sm={18}>
-            <Row gutter={12}>
-              {LEVEL_COLUMNS.map((col) => (
-                <Col xs={12} sm={6} key={col.key}>
-                  <Form.Item name={[col.key, "percent"]} style={{ marginBottom: 8 }} initialValue={0}>
-                    <InputNumber
-                      className="w-full"
-                      controls={false}
-                      onFocus={() => {
-                        percentBaseTotalRef.current = totalQuestions
-                      }}
-                      onChange={(value) => {
-                        const n = typeof value === "number" ? value : Number(value ?? 0)
-                        if (!Number.isFinite(n)) return
-                        lastEditRef.current = "percent"
-                        const baseTotal = percentBaseTotalRef.current
-                        if (baseTotal <= 0) return
-                        const nextQuantity = Math.max(0, Math.round((baseTotal * n) / 100))
-                        form.setFieldValue([col.key, "quantity"], nextQuantity)
-                        lastEditRef.current = "quantity"
-                      }}
-                      // Hiển thị như 1 ô input bo tròn để đồng bộ UI với các ô phía dưới
-                      style={{
-                        width: "100%",
-                        textAlign: "center",
-                        color: "#16a34a",
-                        fontSize: 12,
-                        borderRadius: 8,
-                      }}
-                      formatter={(value) => {
-                        const n = Number(value)
-                        if (!Number.isFinite(n)) return "0%"
-                        return `${n.toFixed(2)}%`
-                      }}
-                      parser={(value) => {
-                        const raw = (value ?? "").toString().replace("%", "").trim()
-                        const n = Number(raw)
-                        return Number.isFinite(n) ? n : 0
-                      }}
-                    />
-                  </Form.Item>
-                </Col>
-              ))}
+          <Col span={24} className="transition-all duration-200">
+            <Row gutter={12} align="middle">
+              <Col xs={24} sm={6}>
+                Số lượng câu hỏi
+              </Col>
+              <Col xs={24} sm={18}>
+                <Row gutter={12}>
+                  {LEVEL_COLUMNS.map((col) => (
+                    <Col xs={12} sm={6} key={col.key}>
+                      <Form.Item name={[col.key, "quantity"]} style={{ marginBottom: 8 }} initialValue={0}>
+                        <InputNumber min={0} className="w-full" readOnly />
+                      </Form.Item>
+                    </Col>
+                  ))}
+                </Row>
+              </Col>
             </Row>
           </Col>
-        </Row>
-      </Col>
+        </>
+      ) : (
+        <>
+          <Col span={24} className="transition-all duration-200">
+            <Row gutter={12} align="middle">
+              <Col xs={24} sm={6}>
+                Số lượng câu hỏi
+              </Col>
+              <Col xs={24} sm={18}>
+                <Row gutter={12}>
+                  {LEVEL_COLUMNS.map((col) => (
+                    <Col xs={12} sm={6} key={col.key}>
+                      <Form.Item name={[col.key, "quantity"]} style={{ marginBottom: 8 }} initialValue={0}>
+                        <InputNumber
+                          min={0}
+                          className="w-full"
+                          onChange={() => {
+                            lastEditRef.current = "quantity"
+                          }}
+                        />
+                      </Form.Item>
+                    </Col>
+                  ))}
+                </Row>
+              </Col>
+            </Row>
+          </Col>
+
+          <Col span={24} className="transition-all duration-200">
+            <Row gutter={12} align="middle">
+              <Col xs={24} sm={6}>
+                Tỷ lệ (%)
+              </Col>
+              <Col xs={24} sm={18}>
+                <Row gutter={12}>
+                  {LEVEL_COLUMNS.map((col) => (
+                    <Col xs={12} sm={6} key={col.key}>
+                      <Form.Item name={[col.key, "percent"]} style={{ marginBottom: 8 }} initialValue={0}>
+                        <InputNumber
+                          className="w-full"
+                          controls={false}
+                          readOnly
+                          precision={0}
+                          style={{
+                            width: "100%",
+                            textAlign: "center",
+                            color: "#16a34a",
+                            fontSize: 12,
+                            borderRadius: 8,
+                          }}
+                          formatter={(value) => {
+                            return `${toIntPercent(value)}%`
+                          }}
+                          parser={(value) => {
+                            const raw = (value ?? "").toString().replace("%", "").trim()
+                            return toIntPercent(raw)
+                          }}
+                        />
+                      </Form.Item>
+                    </Col>
+                  ))}
+                </Row>
+              </Col>
+            </Row>
+          </Col>
+        </>
+      )}
 
       <Col span={24}>
         <Row gutter={12} align="middle">
@@ -341,7 +574,7 @@ const PutChuongMucModal = () => {
           <Col xs={24} sm={18}>
             <Row gutter={12}>
               {LEVEL_COLUMNS.map((col) => {
-                const quantity = (watchedValues?.[col.key] as ConfigExam)?.quantity
+                const quantity = (watchedValues?.[col.key] as ConfigExamFormValue)?.quantity
                 const isDisabled = !quantity || quantity === 0
 
                 return (
