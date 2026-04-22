@@ -4,7 +4,10 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import { useMutation, useQuery } from "@tanstack/react-query"
+import {
+  useMutation,
+  useQuery
+} from '@tanstack/react-query';
 import type {
   DataTag,
   DefinedInitialDataOptions,
@@ -17,8 +20,8 @@ import type {
   UseMutationOptions,
   UseMutationResult,
   UseQueryOptions,
-  UseQueryResult,
-} from "@tanstack/react-query"
+  UseQueryResult
+} from '@tanstack/react-query';
 
 import type {
   ApproveAwardScore400,
@@ -286,15 +289,18 @@ import type {
   UploadExcelImportTrainingScore200,
   UploadExcelImportTrainingScore400,
   UploadExcelUpdateUserProfile,
-  UploadExcelUpdateUserProfile400,
-} from "./schemas"
+  UploadExcelUpdateUserProfile400
+} from './schemas';
 
-import { customTrainingFetch } from "./custom-instance"
-type AwaitedInput<T> = PromiseLike<T> | T
+import { customTrainingFetch } from './custom-instance';
+type AwaitedInput<T> = PromiseLike<T> | T;
 
-type Awaited<O> = O extends AwaitedInput<infer T> ? T : never
+      type Awaited<O> = O extends AwaitedInput<infer T> ? T : never;
 
-type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
+
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
 
 export type trainingFieldResponse200 = {
   data: TrainingField200Item[]
@@ -305,122 +311,110 @@ export type trainingFieldResponse400 = {
   data: TrainingField400
   status: 400
 }
+    
+export type trainingFieldResponseSuccess = (trainingFieldResponse200) & {
+  headers: Headers;
+};
+export type trainingFieldResponseError = (trainingFieldResponse400) & {
+  headers: Headers;
+};
 
-export type trainingFieldResponseSuccess = trainingFieldResponse200 & {
-  headers: Headers
-}
-export type trainingFieldResponseError = trainingFieldResponse400 & {
-  headers: Headers
-}
-
-export type trainingFieldResponse = trainingFieldResponseSuccess | trainingFieldResponseError
+export type trainingFieldResponse = (trainingFieldResponseSuccess | trainingFieldResponseError)
 
 export const getTrainingFieldUrl = () => {
+
+
+  
+
   return `/api/training-field`
 }
 
-export const trainingField = async (options?: RequestInit): Promise<trainingFieldResponse> => {
-  return customTrainingFetch<trainingFieldResponse>(getTrainingFieldUrl(), {
+export const trainingField = async ( options?: RequestInit): Promise<trainingFieldResponse> => {
+  
+  return customTrainingFetch<trainingFieldResponse>(getTrainingFieldUrl(),
+  {      
     ...options,
-    method: "GET",
-  })
-}
+    method: 'GET'
+    
+    
+  }
+);}
+
+
+
+
 
 export const getTrainingFieldQueryKey = () => {
-  return [`/api/training-field`] as const
-}
+    return [
+    `/api/training-field`
+    ] as const;
+    }
 
-export const getTrainingFieldQueryOptions = <
-  TData = Awaited<ReturnType<typeof trainingField>>,
-  TError = TrainingField400,
->(options?: {
-  query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof trainingField>>, TError, TData>>
-  request?: SecondParameter<typeof customTrainingFetch>
-}) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {}
+    
+export const getTrainingFieldQueryOptions = <TData = Awaited<ReturnType<typeof trainingField>>, TError = TrainingField400>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof trainingField>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+) => {
 
-  const queryKey = queryOptions?.queryKey ?? getTrainingFieldQueryKey()
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof trainingField>>> = ({ signal }) =>
-    trainingField({ signal, ...requestOptions })
+  const queryKey =  queryOptions?.queryKey ?? getTrainingFieldQueryKey();
 
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof trainingField>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof trainingField>>> = ({ signal }) => trainingField({ signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof trainingField>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type TrainingFieldQueryResult = NonNullable<Awaited<ReturnType<typeof trainingField>>>
 export type TrainingFieldQueryError = TrainingField400
 
-export function useTrainingField<
-  TData = Awaited<ReturnType<typeof trainingField>>,
-  TError = TrainingField400,
->(
-  options: {
-    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof trainingField>>, TError, TData>> &
-      Pick<
+
+export function useTrainingField<TData = Awaited<ReturnType<typeof trainingField>>, TError = TrainingField400>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof trainingField>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof trainingField>>,
           TError,
           Awaited<ReturnType<typeof trainingField>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useTrainingField<
-  TData = Awaited<ReturnType<typeof trainingField>>,
-  TError = TrainingField400,
->(
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof trainingField>>, TError, TData>> &
-      Pick<
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useTrainingField<TData = Awaited<ReturnType<typeof trainingField>>, TError = TrainingField400>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof trainingField>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof trainingField>>,
           TError,
           Awaited<ReturnType<typeof trainingField>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useTrainingField<
-  TData = Awaited<ReturnType<typeof trainingField>>,
-  TError = TrainingField400,
->(
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof trainingField>>, TError, TData>>
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useTrainingField<TData = Awaited<ReturnType<typeof trainingField>>, TError = TrainingField400>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof trainingField>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useTrainingField<
-  TData = Awaited<ReturnType<typeof trainingField>>,
-  TError = TrainingField400,
->(
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof trainingField>>, TError, TData>>
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useTrainingField<TData = Awaited<ReturnType<typeof trainingField>>, TError = TrainingField400>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof trainingField>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
   const queryOptions = getTrainingFieldQueryOptions(options)
 
-  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData, TError>
-  }
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  query.queryKey = queryOptions.queryKey
+  query.queryKey = queryOptions.queryKey ;
 
-  return query
+  return query;
 }
+
+
+
+
 
 export type roomResponse200 = {
   data: Room200Item[]
@@ -431,4568 +425,3699 @@ export type roomResponse400 = {
   data: Room400
   status: 400
 }
+    
+export type roomResponseSuccess = (roomResponse200) & {
+  headers: Headers;
+};
+export type roomResponseError = (roomResponse400) & {
+  headers: Headers;
+};
 
-export type roomResponseSuccess = roomResponse200 & {
-  headers: Headers
-}
-export type roomResponseError = roomResponse400 & {
-  headers: Headers
-}
-
-export type roomResponse = roomResponseSuccess | roomResponseError
+export type roomResponse = (roomResponseSuccess | roomResponseError)
 
 export const getRoomUrl = () => {
+
+
+  
+
   return `/api/room`
 }
 
-export const room = async (options?: RequestInit): Promise<roomResponse> => {
-  return customTrainingFetch<roomResponse>(getRoomUrl(), {
+export const room = async ( options?: RequestInit): Promise<roomResponse> => {
+  
+  return customTrainingFetch<roomResponse>(getRoomUrl(),
+  {      
     ...options,
-    method: "GET",
-  })
-}
+    method: 'GET'
+    
+    
+  }
+);}
+
+
+
+
 
 export const getRoomQueryKey = () => {
-  return [`/api/room`] as const
-}
+    return [
+    `/api/room`
+    ] as const;
+    }
 
-export const getRoomQueryOptions = <
-  TData = Awaited<ReturnType<typeof room>>,
-  TError = Room400,
->(options?: {
-  query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof room>>, TError, TData>>
-  request?: SecondParameter<typeof customTrainingFetch>
-}) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {}
+    
+export const getRoomQueryOptions = <TData = Awaited<ReturnType<typeof room>>, TError = Room400>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof room>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+) => {
 
-  const queryKey = queryOptions?.queryKey ?? getRoomQueryKey()
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof room>>> = ({ signal }) =>
-    room({ signal, ...requestOptions })
+  const queryKey =  queryOptions?.queryKey ?? getRoomQueryKey();
 
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof room>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof room>>> = ({ signal }) => room({ signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof room>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type RoomQueryResult = NonNullable<Awaited<ReturnType<typeof room>>>
 export type RoomQueryError = Room400
 
+
 export function useRoom<TData = Awaited<ReturnType<typeof room>>, TError = Room400>(
-  options: {
-    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof room>>, TError, TData>> &
-      Pick<
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof room>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof room>>,
           TError,
           Awaited<ReturnType<typeof room>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useRoom<TData = Awaited<ReturnType<typeof room>>, TError = Room400>(
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof room>>, TError, TData>> &
-      Pick<
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof room>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof room>>,
           TError,
           Awaited<ReturnType<typeof room>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useRoom<TData = Awaited<ReturnType<typeof room>>, TError = Room400>(
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof room>>, TError, TData>>
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof room>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
 export function useRoom<TData = Awaited<ReturnType<typeof room>>, TError = Room400>(
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof room>>, TError, TData>>
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof room>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
   const queryOptions = getRoomQueryOptions(options)
 
-  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData, TError>
-  }
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  query.queryKey = queryOptions.queryKey
+  query.queryKey = queryOptions.queryKey ;
 
-  return query
+  return query;
 }
+
+
+
+
 
 export type postApiStatsStudentDistributionByTrainingObjectTypeResponse200 = {
   data: PostApiStatsStudentDistributionByTrainingObjectType200
   status: 200
 }
+    
+export type postApiStatsStudentDistributionByTrainingObjectTypeResponseSuccess = (postApiStatsStudentDistributionByTrainingObjectTypeResponse200) & {
+  headers: Headers;
+};
+;
 
-export type postApiStatsStudentDistributionByTrainingObjectTypeResponseSuccess =
-  postApiStatsStudentDistributionByTrainingObjectTypeResponse200 & {
-    headers: Headers
-  }
-
-export type postApiStatsStudentDistributionByTrainingObjectTypeResponse =
-  postApiStatsStudentDistributionByTrainingObjectTypeResponseSuccess
+export type postApiStatsStudentDistributionByTrainingObjectTypeResponse = (postApiStatsStudentDistributionByTrainingObjectTypeResponseSuccess)
 
 export const getPostApiStatsStudentDistributionByTrainingObjectTypeUrl = () => {
+
+
+  
+
   return `/api/stats/student-distribution-by-training-object-type`
 }
 
-export const postApiStatsStudentDistributionByTrainingObjectType = async (
-  postApiStatsStudentDistributionByTrainingObjectTypeBody: PostApiStatsStudentDistributionByTrainingObjectTypeBody,
-  options?: RequestInit
-): Promise<postApiStatsStudentDistributionByTrainingObjectTypeResponse> => {
-  return customTrainingFetch<postApiStatsStudentDistributionByTrainingObjectTypeResponse>(
-    getPostApiStatsStudentDistributionByTrainingObjectTypeUrl(),
-    {
-      ...options,
-      method: "POST",
-      headers: { "Content-Type": "application/json", ...options?.headers },
-      body: JSON.stringify(postApiStatsStudentDistributionByTrainingObjectTypeBody),
-    }
-  )
-}
-
-export const getPostApiStatsStudentDistributionByTrainingObjectTypeMutationOptions = <
-  TError = unknown,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingObjectType>>,
-    TError,
-    { data: PostApiStatsStudentDistributionByTrainingObjectTypeBody },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingObjectType>>,
-  TError,
-  { data: PostApiStatsStudentDistributionByTrainingObjectTypeBody },
-  TContext
-> => {
-  const mutationKey = ["postApiStatsStudentDistributionByTrainingObjectType"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingObjectType>>,
-    { data: PostApiStatsStudentDistributionByTrainingObjectTypeBody }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return postApiStatsStudentDistributionByTrainingObjectType(data, requestOptions)
+export const postApiStatsStudentDistributionByTrainingObjectType = async (postApiStatsStudentDistributionByTrainingObjectTypeBody: PostApiStatsStudentDistributionByTrainingObjectTypeBody, options?: RequestInit): Promise<postApiStatsStudentDistributionByTrainingObjectTypeResponse> => {
+  
+  return customTrainingFetch<postApiStatsStudentDistributionByTrainingObjectTypeResponse>(getPostApiStatsStudentDistributionByTrainingObjectTypeUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      postApiStatsStudentDistributionByTrainingObjectTypeBody,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type PostApiStatsStudentDistributionByTrainingObjectTypeMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingObjectType>>
->
-export type PostApiStatsStudentDistributionByTrainingObjectTypeMutationBody =
-  PostApiStatsStudentDistributionByTrainingObjectTypeBody
-export type PostApiStatsStudentDistributionByTrainingObjectTypeMutationError = unknown
 
-export const usePostApiStatsStudentDistributionByTrainingObjectType = <
-  TError = unknown,
-  TContext = unknown,
->(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingObjectType>>,
-      TError,
-      { data: PostApiStatsStudentDistributionByTrainingObjectTypeBody },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingObjectType>>,
-  TError,
-  { data: PostApiStatsStudentDistributionByTrainingObjectTypeBody },
-  TContext
-> => {
-  const mutationOptions =
-    getPostApiStatsStudentDistributionByTrainingObjectTypeMutationOptions(options)
 
-  return useMutation(mutationOptions, queryClient)
-}
+export const getPostApiStatsStudentDistributionByTrainingObjectTypeMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingObjectType>>, TError,{data: PostApiStatsStudentDistributionByTrainingObjectTypeBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingObjectType>>, TError,{data: PostApiStatsStudentDistributionByTrainingObjectTypeBody}, TContext> => {
 
+const mutationKey = ['postApiStatsStudentDistributionByTrainingObjectType'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingObjectType>>, {data: PostApiStatsStudentDistributionByTrainingObjectTypeBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postApiStatsStudentDistributionByTrainingObjectType(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostApiStatsStudentDistributionByTrainingObjectTypeMutationResult = NonNullable<Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingObjectType>>>
+    export type PostApiStatsStudentDistributionByTrainingObjectTypeMutationBody = PostApiStatsStudentDistributionByTrainingObjectTypeBody
+    export type PostApiStatsStudentDistributionByTrainingObjectTypeMutationError = unknown
+
+    export const usePostApiStatsStudentDistributionByTrainingObjectType = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingObjectType>>, TError,{data: PostApiStatsStudentDistributionByTrainingObjectTypeBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingObjectType>>,
+        TError,
+        {data: PostApiStatsStudentDistributionByTrainingObjectTypeBody},
+        TContext
+      > => {
+
+      const mutationOptions = getPostApiStatsStudentDistributionByTrainingObjectTypeMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 export type postApiStatsStudentDistributionByTrainingLevelResponse200 = {
   data: PostApiStatsStudentDistributionByTrainingLevel200
   status: 200
 }
+    
+export type postApiStatsStudentDistributionByTrainingLevelResponseSuccess = (postApiStatsStudentDistributionByTrainingLevelResponse200) & {
+  headers: Headers;
+};
+;
 
-export type postApiStatsStudentDistributionByTrainingLevelResponseSuccess =
-  postApiStatsStudentDistributionByTrainingLevelResponse200 & {
-    headers: Headers
-  }
-
-export type postApiStatsStudentDistributionByTrainingLevelResponse =
-  postApiStatsStudentDistributionByTrainingLevelResponseSuccess
+export type postApiStatsStudentDistributionByTrainingLevelResponse = (postApiStatsStudentDistributionByTrainingLevelResponseSuccess)
 
 export const getPostApiStatsStudentDistributionByTrainingLevelUrl = () => {
+
+
+  
+
   return `/api/stats/student-distribution-by-training-level`
 }
 
-export const postApiStatsStudentDistributionByTrainingLevel = async (
-  postApiStatsStudentDistributionByTrainingLevelBody: PostApiStatsStudentDistributionByTrainingLevelBody,
-  options?: RequestInit
-): Promise<postApiStatsStudentDistributionByTrainingLevelResponse> => {
-  return customTrainingFetch<postApiStatsStudentDistributionByTrainingLevelResponse>(
-    getPostApiStatsStudentDistributionByTrainingLevelUrl(),
-    {
-      ...options,
-      method: "POST",
-      headers: { "Content-Type": "application/json", ...options?.headers },
-      body: JSON.stringify(postApiStatsStudentDistributionByTrainingLevelBody),
-    }
-  )
-}
-
-export const getPostApiStatsStudentDistributionByTrainingLevelMutationOptions = <
-  TError = unknown,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingLevel>>,
-    TError,
-    { data: PostApiStatsStudentDistributionByTrainingLevelBody },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingLevel>>,
-  TError,
-  { data: PostApiStatsStudentDistributionByTrainingLevelBody },
-  TContext
-> => {
-  const mutationKey = ["postApiStatsStudentDistributionByTrainingLevel"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingLevel>>,
-    { data: PostApiStatsStudentDistributionByTrainingLevelBody }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return postApiStatsStudentDistributionByTrainingLevel(data, requestOptions)
+export const postApiStatsStudentDistributionByTrainingLevel = async (postApiStatsStudentDistributionByTrainingLevelBody: PostApiStatsStudentDistributionByTrainingLevelBody, options?: RequestInit): Promise<postApiStatsStudentDistributionByTrainingLevelResponse> => {
+  
+  return customTrainingFetch<postApiStatsStudentDistributionByTrainingLevelResponse>(getPostApiStatsStudentDistributionByTrainingLevelUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      postApiStatsStudentDistributionByTrainingLevelBody,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type PostApiStatsStudentDistributionByTrainingLevelMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingLevel>>
->
-export type PostApiStatsStudentDistributionByTrainingLevelMutationBody =
-  PostApiStatsStudentDistributionByTrainingLevelBody
-export type PostApiStatsStudentDistributionByTrainingLevelMutationError = unknown
 
-export const usePostApiStatsStudentDistributionByTrainingLevel = <
-  TError = unknown,
-  TContext = unknown,
->(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingLevel>>,
-      TError,
-      { data: PostApiStatsStudentDistributionByTrainingLevelBody },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingLevel>>,
-  TError,
-  { data: PostApiStatsStudentDistributionByTrainingLevelBody },
-  TContext
-> => {
-  const mutationOptions = getPostApiStatsStudentDistributionByTrainingLevelMutationOptions(options)
 
-  return useMutation(mutationOptions, queryClient)
-}
+export const getPostApiStatsStudentDistributionByTrainingLevelMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingLevel>>, TError,{data: PostApiStatsStudentDistributionByTrainingLevelBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingLevel>>, TError,{data: PostApiStatsStudentDistributionByTrainingLevelBody}, TContext> => {
 
+const mutationKey = ['postApiStatsStudentDistributionByTrainingLevel'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingLevel>>, {data: PostApiStatsStudentDistributionByTrainingLevelBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postApiStatsStudentDistributionByTrainingLevel(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostApiStatsStudentDistributionByTrainingLevelMutationResult = NonNullable<Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingLevel>>>
+    export type PostApiStatsStudentDistributionByTrainingLevelMutationBody = PostApiStatsStudentDistributionByTrainingLevelBody
+    export type PostApiStatsStudentDistributionByTrainingLevelMutationError = unknown
+
+    export const usePostApiStatsStudentDistributionByTrainingLevel = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingLevel>>, TError,{data: PostApiStatsStudentDistributionByTrainingLevelBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingLevel>>,
+        TError,
+        {data: PostApiStatsStudentDistributionByTrainingLevelBody},
+        TContext
+      > => {
+
+      const mutationOptions = getPostApiStatsStudentDistributionByTrainingLevelMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 export type postApiStatsStudentDistributionByTrainingCourseResponse200 = {
   data: PostApiStatsStudentDistributionByTrainingCourse200
   status: 200
 }
+    
+export type postApiStatsStudentDistributionByTrainingCourseResponseSuccess = (postApiStatsStudentDistributionByTrainingCourseResponse200) & {
+  headers: Headers;
+};
+;
 
-export type postApiStatsStudentDistributionByTrainingCourseResponseSuccess =
-  postApiStatsStudentDistributionByTrainingCourseResponse200 & {
-    headers: Headers
-  }
-
-export type postApiStatsStudentDistributionByTrainingCourseResponse =
-  postApiStatsStudentDistributionByTrainingCourseResponseSuccess
+export type postApiStatsStudentDistributionByTrainingCourseResponse = (postApiStatsStudentDistributionByTrainingCourseResponseSuccess)
 
 export const getPostApiStatsStudentDistributionByTrainingCourseUrl = () => {
+
+
+  
+
   return `/api/stats/student-distribution-by-training-course`
 }
 
-export const postApiStatsStudentDistributionByTrainingCourse = async (
-  postApiStatsStudentDistributionByTrainingCourseBody: PostApiStatsStudentDistributionByTrainingCourseBody,
-  options?: RequestInit
-): Promise<postApiStatsStudentDistributionByTrainingCourseResponse> => {
-  return customTrainingFetch<postApiStatsStudentDistributionByTrainingCourseResponse>(
-    getPostApiStatsStudentDistributionByTrainingCourseUrl(),
-    {
-      ...options,
-      method: "POST",
-      headers: { "Content-Type": "application/json", ...options?.headers },
-      body: JSON.stringify(postApiStatsStudentDistributionByTrainingCourseBody),
-    }
-  )
-}
-
-export const getPostApiStatsStudentDistributionByTrainingCourseMutationOptions = <
-  TError = unknown,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingCourse>>,
-    TError,
-    { data: PostApiStatsStudentDistributionByTrainingCourseBody },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingCourse>>,
-  TError,
-  { data: PostApiStatsStudentDistributionByTrainingCourseBody },
-  TContext
-> => {
-  const mutationKey = ["postApiStatsStudentDistributionByTrainingCourse"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingCourse>>,
-    { data: PostApiStatsStudentDistributionByTrainingCourseBody }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return postApiStatsStudentDistributionByTrainingCourse(data, requestOptions)
+export const postApiStatsStudentDistributionByTrainingCourse = async (postApiStatsStudentDistributionByTrainingCourseBody: PostApiStatsStudentDistributionByTrainingCourseBody, options?: RequestInit): Promise<postApiStatsStudentDistributionByTrainingCourseResponse> => {
+  
+  return customTrainingFetch<postApiStatsStudentDistributionByTrainingCourseResponse>(getPostApiStatsStudentDistributionByTrainingCourseUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      postApiStatsStudentDistributionByTrainingCourseBody,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type PostApiStatsStudentDistributionByTrainingCourseMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingCourse>>
->
-export type PostApiStatsStudentDistributionByTrainingCourseMutationBody =
-  PostApiStatsStudentDistributionByTrainingCourseBody
-export type PostApiStatsStudentDistributionByTrainingCourseMutationError = unknown
 
-export const usePostApiStatsStudentDistributionByTrainingCourse = <
-  TError = unknown,
-  TContext = unknown,
->(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingCourse>>,
-      TError,
-      { data: PostApiStatsStudentDistributionByTrainingCourseBody },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingCourse>>,
-  TError,
-  { data: PostApiStatsStudentDistributionByTrainingCourseBody },
-  TContext
-> => {
-  const mutationOptions = getPostApiStatsStudentDistributionByTrainingCourseMutationOptions(options)
 
-  return useMutation(mutationOptions, queryClient)
-}
+export const getPostApiStatsStudentDistributionByTrainingCourseMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingCourse>>, TError,{data: PostApiStatsStudentDistributionByTrainingCourseBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingCourse>>, TError,{data: PostApiStatsStudentDistributionByTrainingCourseBody}, TContext> => {
 
+const mutationKey = ['postApiStatsStudentDistributionByTrainingCourse'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingCourse>>, {data: PostApiStatsStudentDistributionByTrainingCourseBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postApiStatsStudentDistributionByTrainingCourse(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostApiStatsStudentDistributionByTrainingCourseMutationResult = NonNullable<Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingCourse>>>
+    export type PostApiStatsStudentDistributionByTrainingCourseMutationBody = PostApiStatsStudentDistributionByTrainingCourseBody
+    export type PostApiStatsStudentDistributionByTrainingCourseMutationError = unknown
+
+    export const usePostApiStatsStudentDistributionByTrainingCourse = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingCourse>>, TError,{data: PostApiStatsStudentDistributionByTrainingCourseBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingCourse>>,
+        TError,
+        {data: PostApiStatsStudentDistributionByTrainingCourseBody},
+        TContext
+      > => {
+
+      const mutationOptions = getPostApiStatsStudentDistributionByTrainingCourseMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 export type postApiStatsAverageEntryScoreByCourseResponse200 = {
   data: PostApiStatsAverageEntryScoreByCourse200
   status: 200
 }
+    
+export type postApiStatsAverageEntryScoreByCourseResponseSuccess = (postApiStatsAverageEntryScoreByCourseResponse200) & {
+  headers: Headers;
+};
+;
 
-export type postApiStatsAverageEntryScoreByCourseResponseSuccess =
-  postApiStatsAverageEntryScoreByCourseResponse200 & {
-    headers: Headers
-  }
-
-export type postApiStatsAverageEntryScoreByCourseResponse =
-  postApiStatsAverageEntryScoreByCourseResponseSuccess
+export type postApiStatsAverageEntryScoreByCourseResponse = (postApiStatsAverageEntryScoreByCourseResponseSuccess)
 
 export const getPostApiStatsAverageEntryScoreByCourseUrl = () => {
+
+
+  
+
   return `/api/stats/average-entry-score-by-course`
 }
 
-export const postApiStatsAverageEntryScoreByCourse = async (
-  postApiStatsAverageEntryScoreByCourseBody: PostApiStatsAverageEntryScoreByCourseBody,
-  options?: RequestInit
-): Promise<postApiStatsAverageEntryScoreByCourseResponse> => {
-  return customTrainingFetch<postApiStatsAverageEntryScoreByCourseResponse>(
-    getPostApiStatsAverageEntryScoreByCourseUrl(),
-    {
-      ...options,
-      method: "POST",
-      headers: { "Content-Type": "application/json", ...options?.headers },
-      body: JSON.stringify(postApiStatsAverageEntryScoreByCourseBody),
-    }
-  )
-}
-
-export const getPostApiStatsAverageEntryScoreByCourseMutationOptions = <
-  TError = unknown,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsAverageEntryScoreByCourse>>,
-    TError,
-    { data: PostApiStatsAverageEntryScoreByCourseBody },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiStatsAverageEntryScoreByCourse>>,
-  TError,
-  { data: PostApiStatsAverageEntryScoreByCourseBody },
-  TContext
-> => {
-  const mutationKey = ["postApiStatsAverageEntryScoreByCourse"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiStatsAverageEntryScoreByCourse>>,
-    { data: PostApiStatsAverageEntryScoreByCourseBody }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return postApiStatsAverageEntryScoreByCourse(data, requestOptions)
+export const postApiStatsAverageEntryScoreByCourse = async (postApiStatsAverageEntryScoreByCourseBody: PostApiStatsAverageEntryScoreByCourseBody, options?: RequestInit): Promise<postApiStatsAverageEntryScoreByCourseResponse> => {
+  
+  return customTrainingFetch<postApiStatsAverageEntryScoreByCourseResponse>(getPostApiStatsAverageEntryScoreByCourseUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      postApiStatsAverageEntryScoreByCourseBody,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type PostApiStatsAverageEntryScoreByCourseMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postApiStatsAverageEntryScoreByCourse>>
->
-export type PostApiStatsAverageEntryScoreByCourseMutationBody =
-  PostApiStatsAverageEntryScoreByCourseBody
-export type PostApiStatsAverageEntryScoreByCourseMutationError = unknown
 
-export const usePostApiStatsAverageEntryScoreByCourse = <TError = unknown, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiStatsAverageEntryScoreByCourse>>,
-      TError,
-      { data: PostApiStatsAverageEntryScoreByCourseBody },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postApiStatsAverageEntryScoreByCourse>>,
-  TError,
-  { data: PostApiStatsAverageEntryScoreByCourseBody },
-  TContext
-> => {
-  const mutationOptions = getPostApiStatsAverageEntryScoreByCourseMutationOptions(options)
 
-  return useMutation(mutationOptions, queryClient)
-}
+export const getPostApiStatsAverageEntryScoreByCourseMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsAverageEntryScoreByCourse>>, TError,{data: PostApiStatsAverageEntryScoreByCourseBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof postApiStatsAverageEntryScoreByCourse>>, TError,{data: PostApiStatsAverageEntryScoreByCourseBody}, TContext> => {
 
+const mutationKey = ['postApiStatsAverageEntryScoreByCourse'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiStatsAverageEntryScoreByCourse>>, {data: PostApiStatsAverageEntryScoreByCourseBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postApiStatsAverageEntryScoreByCourse(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostApiStatsAverageEntryScoreByCourseMutationResult = NonNullable<Awaited<ReturnType<typeof postApiStatsAverageEntryScoreByCourse>>>
+    export type PostApiStatsAverageEntryScoreByCourseMutationBody = PostApiStatsAverageEntryScoreByCourseBody
+    export type PostApiStatsAverageEntryScoreByCourseMutationError = unknown
+
+    export const usePostApiStatsAverageEntryScoreByCourse = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsAverageEntryScoreByCourse>>, TError,{data: PostApiStatsAverageEntryScoreByCourseBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postApiStatsAverageEntryScoreByCourse>>,
+        TError,
+        {data: PostApiStatsAverageEntryScoreByCourseBody},
+        TContext
+      > => {
+
+      const mutationOptions = getPostApiStatsAverageEntryScoreByCourseMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 export type postApiStatsAverageGpaByCourseResponse200 = {
   data: PostApiStatsAverageGpaByCourse200
   status: 200
 }
+    
+export type postApiStatsAverageGpaByCourseResponseSuccess = (postApiStatsAverageGpaByCourseResponse200) & {
+  headers: Headers;
+};
+;
 
-export type postApiStatsAverageGpaByCourseResponseSuccess =
-  postApiStatsAverageGpaByCourseResponse200 & {
-    headers: Headers
-  }
-
-export type postApiStatsAverageGpaByCourseResponse = postApiStatsAverageGpaByCourseResponseSuccess
+export type postApiStatsAverageGpaByCourseResponse = (postApiStatsAverageGpaByCourseResponseSuccess)
 
 export const getPostApiStatsAverageGpaByCourseUrl = () => {
+
+
+  
+
   return `/api/stats/average-gpa-by-course`
 }
 
-export const postApiStatsAverageGpaByCourse = async (
-  postApiStatsAverageGpaByCourseBody: PostApiStatsAverageGpaByCourseBody,
-  options?: RequestInit
-): Promise<postApiStatsAverageGpaByCourseResponse> => {
-  return customTrainingFetch<postApiStatsAverageGpaByCourseResponse>(
-    getPostApiStatsAverageGpaByCourseUrl(),
-    {
-      ...options,
-      method: "POST",
-      headers: { "Content-Type": "application/json", ...options?.headers },
-      body: JSON.stringify(postApiStatsAverageGpaByCourseBody),
-    }
-  )
-}
-
-export const getPostApiStatsAverageGpaByCourseMutationOptions = <
-  TError = unknown,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsAverageGpaByCourse>>,
-    TError,
-    { data: PostApiStatsAverageGpaByCourseBody },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiStatsAverageGpaByCourse>>,
-  TError,
-  { data: PostApiStatsAverageGpaByCourseBody },
-  TContext
-> => {
-  const mutationKey = ["postApiStatsAverageGpaByCourse"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiStatsAverageGpaByCourse>>,
-    { data: PostApiStatsAverageGpaByCourseBody }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return postApiStatsAverageGpaByCourse(data, requestOptions)
+export const postApiStatsAverageGpaByCourse = async (postApiStatsAverageGpaByCourseBody: PostApiStatsAverageGpaByCourseBody, options?: RequestInit): Promise<postApiStatsAverageGpaByCourseResponse> => {
+  
+  return customTrainingFetch<postApiStatsAverageGpaByCourseResponse>(getPostApiStatsAverageGpaByCourseUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      postApiStatsAverageGpaByCourseBody,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type PostApiStatsAverageGpaByCourseMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postApiStatsAverageGpaByCourse>>
->
-export type PostApiStatsAverageGpaByCourseMutationBody = PostApiStatsAverageGpaByCourseBody
-export type PostApiStatsAverageGpaByCourseMutationError = unknown
 
-export const usePostApiStatsAverageGpaByCourse = <TError = unknown, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiStatsAverageGpaByCourse>>,
-      TError,
-      { data: PostApiStatsAverageGpaByCourseBody },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postApiStatsAverageGpaByCourse>>,
-  TError,
-  { data: PostApiStatsAverageGpaByCourseBody },
-  TContext
-> => {
-  const mutationOptions = getPostApiStatsAverageGpaByCourseMutationOptions(options)
 
-  return useMutation(mutationOptions, queryClient)
-}
+export const getPostApiStatsAverageGpaByCourseMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsAverageGpaByCourse>>, TError,{data: PostApiStatsAverageGpaByCourseBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof postApiStatsAverageGpaByCourse>>, TError,{data: PostApiStatsAverageGpaByCourseBody}, TContext> => {
 
+const mutationKey = ['postApiStatsAverageGpaByCourse'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiStatsAverageGpaByCourse>>, {data: PostApiStatsAverageGpaByCourseBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postApiStatsAverageGpaByCourse(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostApiStatsAverageGpaByCourseMutationResult = NonNullable<Awaited<ReturnType<typeof postApiStatsAverageGpaByCourse>>>
+    export type PostApiStatsAverageGpaByCourseMutationBody = PostApiStatsAverageGpaByCourseBody
+    export type PostApiStatsAverageGpaByCourseMutationError = unknown
+
+    export const usePostApiStatsAverageGpaByCourse = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsAverageGpaByCourse>>, TError,{data: PostApiStatsAverageGpaByCourseBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postApiStatsAverageGpaByCourse>>,
+        TError,
+        {data: PostApiStatsAverageGpaByCourseBody},
+        TContext
+      > => {
+
+      const mutationOptions = getPostApiStatsAverageGpaByCourseMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 export type postApiStatsGraduationRateByCourseResponse200 = {
   data: PostApiStatsGraduationRateByCourse200
   status: 200
 }
+    
+export type postApiStatsGraduationRateByCourseResponseSuccess = (postApiStatsGraduationRateByCourseResponse200) & {
+  headers: Headers;
+};
+;
 
-export type postApiStatsGraduationRateByCourseResponseSuccess =
-  postApiStatsGraduationRateByCourseResponse200 & {
-    headers: Headers
-  }
-
-export type postApiStatsGraduationRateByCourseResponse =
-  postApiStatsGraduationRateByCourseResponseSuccess
+export type postApiStatsGraduationRateByCourseResponse = (postApiStatsGraduationRateByCourseResponseSuccess)
 
 export const getPostApiStatsGraduationRateByCourseUrl = () => {
+
+
+  
+
   return `/api/stats/graduation-rate-by-course`
 }
 
-export const postApiStatsGraduationRateByCourse = async (
-  postApiStatsGraduationRateByCourseBody: PostApiStatsGraduationRateByCourseBody,
-  options?: RequestInit
-): Promise<postApiStatsGraduationRateByCourseResponse> => {
-  return customTrainingFetch<postApiStatsGraduationRateByCourseResponse>(
-    getPostApiStatsGraduationRateByCourseUrl(),
-    {
-      ...options,
-      method: "POST",
-      headers: { "Content-Type": "application/json", ...options?.headers },
-      body: JSON.stringify(postApiStatsGraduationRateByCourseBody),
-    }
-  )
-}
-
-export const getPostApiStatsGraduationRateByCourseMutationOptions = <
-  TError = unknown,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsGraduationRateByCourse>>,
-    TError,
-    { data: PostApiStatsGraduationRateByCourseBody },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiStatsGraduationRateByCourse>>,
-  TError,
-  { data: PostApiStatsGraduationRateByCourseBody },
-  TContext
-> => {
-  const mutationKey = ["postApiStatsGraduationRateByCourse"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiStatsGraduationRateByCourse>>,
-    { data: PostApiStatsGraduationRateByCourseBody }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return postApiStatsGraduationRateByCourse(data, requestOptions)
+export const postApiStatsGraduationRateByCourse = async (postApiStatsGraduationRateByCourseBody: PostApiStatsGraduationRateByCourseBody, options?: RequestInit): Promise<postApiStatsGraduationRateByCourseResponse> => {
+  
+  return customTrainingFetch<postApiStatsGraduationRateByCourseResponse>(getPostApiStatsGraduationRateByCourseUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      postApiStatsGraduationRateByCourseBody,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type PostApiStatsGraduationRateByCourseMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postApiStatsGraduationRateByCourse>>
->
-export type PostApiStatsGraduationRateByCourseMutationBody = PostApiStatsGraduationRateByCourseBody
-export type PostApiStatsGraduationRateByCourseMutationError = unknown
 
-export const usePostApiStatsGraduationRateByCourse = <TError = unknown, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiStatsGraduationRateByCourse>>,
-      TError,
-      { data: PostApiStatsGraduationRateByCourseBody },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postApiStatsGraduationRateByCourse>>,
-  TError,
-  { data: PostApiStatsGraduationRateByCourseBody },
-  TContext
-> => {
-  const mutationOptions = getPostApiStatsGraduationRateByCourseMutationOptions(options)
 
-  return useMutation(mutationOptions, queryClient)
-}
+export const getPostApiStatsGraduationRateByCourseMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsGraduationRateByCourse>>, TError,{data: PostApiStatsGraduationRateByCourseBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof postApiStatsGraduationRateByCourse>>, TError,{data: PostApiStatsGraduationRateByCourseBody}, TContext> => {
 
+const mutationKey = ['postApiStatsGraduationRateByCourse'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiStatsGraduationRateByCourse>>, {data: PostApiStatsGraduationRateByCourseBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postApiStatsGraduationRateByCourse(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostApiStatsGraduationRateByCourseMutationResult = NonNullable<Awaited<ReturnType<typeof postApiStatsGraduationRateByCourse>>>
+    export type PostApiStatsGraduationRateByCourseMutationBody = PostApiStatsGraduationRateByCourseBody
+    export type PostApiStatsGraduationRateByCourseMutationError = unknown
+
+    export const usePostApiStatsGraduationRateByCourse = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsGraduationRateByCourse>>, TError,{data: PostApiStatsGraduationRateByCourseBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postApiStatsGraduationRateByCourse>>,
+        TError,
+        {data: PostApiStatsGraduationRateByCourseBody},
+        TContext
+      > => {
+
+      const mutationOptions = getPostApiStatsGraduationRateByCourseMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 export type postApiStatsAcademicPerformanceByYearResponse200 = {
   data: PostApiStatsAcademicPerformanceByYear200
   status: 200
 }
+    
+export type postApiStatsAcademicPerformanceByYearResponseSuccess = (postApiStatsAcademicPerformanceByYearResponse200) & {
+  headers: Headers;
+};
+;
 
-export type postApiStatsAcademicPerformanceByYearResponseSuccess =
-  postApiStatsAcademicPerformanceByYearResponse200 & {
-    headers: Headers
-  }
-
-export type postApiStatsAcademicPerformanceByYearResponse =
-  postApiStatsAcademicPerformanceByYearResponseSuccess
+export type postApiStatsAcademicPerformanceByYearResponse = (postApiStatsAcademicPerformanceByYearResponseSuccess)
 
 export const getPostApiStatsAcademicPerformanceByYearUrl = () => {
+
+
+  
+
   return `/api/stats/academic-performance-by-year`
 }
 
-export const postApiStatsAcademicPerformanceByYear = async (
-  postApiStatsAcademicPerformanceByYearBody: PostApiStatsAcademicPerformanceByYearBody,
-  options?: RequestInit
-): Promise<postApiStatsAcademicPerformanceByYearResponse> => {
-  return customTrainingFetch<postApiStatsAcademicPerformanceByYearResponse>(
-    getPostApiStatsAcademicPerformanceByYearUrl(),
-    {
-      ...options,
-      method: "POST",
-      headers: { "Content-Type": "application/json", ...options?.headers },
-      body: JSON.stringify(postApiStatsAcademicPerformanceByYearBody),
-    }
-  )
-}
-
-export const getPostApiStatsAcademicPerformanceByYearMutationOptions = <
-  TError = unknown,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsAcademicPerformanceByYear>>,
-    TError,
-    { data: PostApiStatsAcademicPerformanceByYearBody },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiStatsAcademicPerformanceByYear>>,
-  TError,
-  { data: PostApiStatsAcademicPerformanceByYearBody },
-  TContext
-> => {
-  const mutationKey = ["postApiStatsAcademicPerformanceByYear"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiStatsAcademicPerformanceByYear>>,
-    { data: PostApiStatsAcademicPerformanceByYearBody }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return postApiStatsAcademicPerformanceByYear(data, requestOptions)
+export const postApiStatsAcademicPerformanceByYear = async (postApiStatsAcademicPerformanceByYearBody: PostApiStatsAcademicPerformanceByYearBody, options?: RequestInit): Promise<postApiStatsAcademicPerformanceByYearResponse> => {
+  
+  return customTrainingFetch<postApiStatsAcademicPerformanceByYearResponse>(getPostApiStatsAcademicPerformanceByYearUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      postApiStatsAcademicPerformanceByYearBody,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type PostApiStatsAcademicPerformanceByYearMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postApiStatsAcademicPerformanceByYear>>
->
-export type PostApiStatsAcademicPerformanceByYearMutationBody =
-  PostApiStatsAcademicPerformanceByYearBody
-export type PostApiStatsAcademicPerformanceByYearMutationError = unknown
 
-export const usePostApiStatsAcademicPerformanceByYear = <TError = unknown, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiStatsAcademicPerformanceByYear>>,
-      TError,
-      { data: PostApiStatsAcademicPerformanceByYearBody },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postApiStatsAcademicPerformanceByYear>>,
-  TError,
-  { data: PostApiStatsAcademicPerformanceByYearBody },
-  TContext
-> => {
-  const mutationOptions = getPostApiStatsAcademicPerformanceByYearMutationOptions(options)
 
-  return useMutation(mutationOptions, queryClient)
-}
+export const getPostApiStatsAcademicPerformanceByYearMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsAcademicPerformanceByYear>>, TError,{data: PostApiStatsAcademicPerformanceByYearBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof postApiStatsAcademicPerformanceByYear>>, TError,{data: PostApiStatsAcademicPerformanceByYearBody}, TContext> => {
 
+const mutationKey = ['postApiStatsAcademicPerformanceByYear'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiStatsAcademicPerformanceByYear>>, {data: PostApiStatsAcademicPerformanceByYearBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postApiStatsAcademicPerformanceByYear(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostApiStatsAcademicPerformanceByYearMutationResult = NonNullable<Awaited<ReturnType<typeof postApiStatsAcademicPerformanceByYear>>>
+    export type PostApiStatsAcademicPerformanceByYearMutationBody = PostApiStatsAcademicPerformanceByYearBody
+    export type PostApiStatsAcademicPerformanceByYearMutationError = unknown
+
+    export const usePostApiStatsAcademicPerformanceByYear = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsAcademicPerformanceByYear>>, TError,{data: PostApiStatsAcademicPerformanceByYearBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postApiStatsAcademicPerformanceByYear>>,
+        TError,
+        {data: PostApiStatsAcademicPerformanceByYearBody},
+        TContext
+      > => {
+
+      const mutationOptions = getPostApiStatsAcademicPerformanceByYearMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 export type postApiStatsKpiCardsResponse200 = {
   data: PostApiStatsKpiCards200
   status: 200
 }
+    
+export type postApiStatsKpiCardsResponseSuccess = (postApiStatsKpiCardsResponse200) & {
+  headers: Headers;
+};
+;
 
-export type postApiStatsKpiCardsResponseSuccess = postApiStatsKpiCardsResponse200 & {
-  headers: Headers
-}
-
-export type postApiStatsKpiCardsResponse = postApiStatsKpiCardsResponseSuccess
+export type postApiStatsKpiCardsResponse = (postApiStatsKpiCardsResponseSuccess)
 
 export const getPostApiStatsKpiCardsUrl = () => {
+
+
+  
+
   return `/api/stats/kpi-cards`
 }
 
-export const postApiStatsKpiCards = async (
-  postApiStatsKpiCardsBody: PostApiStatsKpiCardsBody,
-  options?: RequestInit
-): Promise<postApiStatsKpiCardsResponse> => {
-  return customTrainingFetch<postApiStatsKpiCardsResponse>(getPostApiStatsKpiCardsUrl(), {
+export const postApiStatsKpiCards = async (postApiStatsKpiCardsBody: PostApiStatsKpiCardsBody, options?: RequestInit): Promise<postApiStatsKpiCardsResponse> => {
+  
+  return customTrainingFetch<postApiStatsKpiCardsResponse>(getPostApiStatsKpiCardsUrl(),
+  {      
     ...options,
-    method: "POST",
-    headers: { "Content-Type": "application/json", ...options?.headers },
-    body: JSON.stringify(postApiStatsKpiCardsBody),
-  })
-}
-
-export const getPostApiStatsKpiCardsMutationOptions = <
-  TError = unknown,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsKpiCards>>,
-    TError,
-    { data: PostApiStatsKpiCardsBody },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiStatsKpiCards>>,
-  TError,
-  { data: PostApiStatsKpiCardsBody },
-  TContext
-> => {
-  const mutationKey = ["postApiStatsKpiCards"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiStatsKpiCards>>,
-    { data: PostApiStatsKpiCardsBody }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return postApiStatsKpiCards(data, requestOptions)
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      postApiStatsKpiCardsBody,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type PostApiStatsKpiCardsMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postApiStatsKpiCards>>
->
-export type PostApiStatsKpiCardsMutationBody = PostApiStatsKpiCardsBody
-export type PostApiStatsKpiCardsMutationError = unknown
 
-export const usePostApiStatsKpiCards = <TError = unknown, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiStatsKpiCards>>,
-      TError,
-      { data: PostApiStatsKpiCardsBody },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postApiStatsKpiCards>>,
-  TError,
-  { data: PostApiStatsKpiCardsBody },
-  TContext
-> => {
-  const mutationOptions = getPostApiStatsKpiCardsMutationOptions(options)
 
-  return useMutation(mutationOptions, queryClient)
-}
+export const getPostApiStatsKpiCardsMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsKpiCards>>, TError,{data: PostApiStatsKpiCardsBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof postApiStatsKpiCards>>, TError,{data: PostApiStatsKpiCardsBody}, TContext> => {
 
+const mutationKey = ['postApiStatsKpiCards'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiStatsKpiCards>>, {data: PostApiStatsKpiCardsBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postApiStatsKpiCards(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostApiStatsKpiCardsMutationResult = NonNullable<Awaited<ReturnType<typeof postApiStatsKpiCards>>>
+    export type PostApiStatsKpiCardsMutationBody = PostApiStatsKpiCardsBody
+    export type PostApiStatsKpiCardsMutationError = unknown
+
+    export const usePostApiStatsKpiCards = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsKpiCards>>, TError,{data: PostApiStatsKpiCardsBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postApiStatsKpiCards>>,
+        TError,
+        {data: PostApiStatsKpiCardsBody},
+        TContext
+      > => {
+
+      const mutationOptions = getPostApiStatsKpiCardsMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 export type postApiStatsStudentDistributionByProvinceResponse200 = {
   data: PostApiStatsStudentDistributionByProvince200
   status: 200
 }
+    
+export type postApiStatsStudentDistributionByProvinceResponseSuccess = (postApiStatsStudentDistributionByProvinceResponse200) & {
+  headers: Headers;
+};
+;
 
-export type postApiStatsStudentDistributionByProvinceResponseSuccess =
-  postApiStatsStudentDistributionByProvinceResponse200 & {
-    headers: Headers
-  }
-
-export type postApiStatsStudentDistributionByProvinceResponse =
-  postApiStatsStudentDistributionByProvinceResponseSuccess
+export type postApiStatsStudentDistributionByProvinceResponse = (postApiStatsStudentDistributionByProvinceResponseSuccess)
 
 export const getPostApiStatsStudentDistributionByProvinceUrl = () => {
+
+
+  
+
   return `/api/stats/student-distribution-by-province`
 }
 
-export const postApiStatsStudentDistributionByProvince = async (
-  postApiStatsStudentDistributionByProvinceBody: PostApiStatsStudentDistributionByProvinceBody,
-  options?: RequestInit
-): Promise<postApiStatsStudentDistributionByProvinceResponse> => {
-  return customTrainingFetch<postApiStatsStudentDistributionByProvinceResponse>(
-    getPostApiStatsStudentDistributionByProvinceUrl(),
-    {
-      ...options,
-      method: "POST",
-      headers: { "Content-Type": "application/json", ...options?.headers },
-      body: JSON.stringify(postApiStatsStudentDistributionByProvinceBody),
-    }
-  )
-}
-
-export const getPostApiStatsStudentDistributionByProvinceMutationOptions = <
-  TError = unknown,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsStudentDistributionByProvince>>,
-    TError,
-    { data: PostApiStatsStudentDistributionByProvinceBody },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiStatsStudentDistributionByProvince>>,
-  TError,
-  { data: PostApiStatsStudentDistributionByProvinceBody },
-  TContext
-> => {
-  const mutationKey = ["postApiStatsStudentDistributionByProvince"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiStatsStudentDistributionByProvince>>,
-    { data: PostApiStatsStudentDistributionByProvinceBody }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return postApiStatsStudentDistributionByProvince(data, requestOptions)
+export const postApiStatsStudentDistributionByProvince = async (postApiStatsStudentDistributionByProvinceBody: PostApiStatsStudentDistributionByProvinceBody, options?: RequestInit): Promise<postApiStatsStudentDistributionByProvinceResponse> => {
+  
+  return customTrainingFetch<postApiStatsStudentDistributionByProvinceResponse>(getPostApiStatsStudentDistributionByProvinceUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      postApiStatsStudentDistributionByProvinceBody,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type PostApiStatsStudentDistributionByProvinceMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postApiStatsStudentDistributionByProvince>>
->
-export type PostApiStatsStudentDistributionByProvinceMutationBody =
-  PostApiStatsStudentDistributionByProvinceBody
-export type PostApiStatsStudentDistributionByProvinceMutationError = unknown
 
-export const usePostApiStatsStudentDistributionByProvince = <TError = unknown, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiStatsStudentDistributionByProvince>>,
-      TError,
-      { data: PostApiStatsStudentDistributionByProvinceBody },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postApiStatsStudentDistributionByProvince>>,
-  TError,
-  { data: PostApiStatsStudentDistributionByProvinceBody },
-  TContext
-> => {
-  const mutationOptions = getPostApiStatsStudentDistributionByProvinceMutationOptions(options)
 
-  return useMutation(mutationOptions, queryClient)
-}
+export const getPostApiStatsStudentDistributionByProvinceMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsStudentDistributionByProvince>>, TError,{data: PostApiStatsStudentDistributionByProvinceBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof postApiStatsStudentDistributionByProvince>>, TError,{data: PostApiStatsStudentDistributionByProvinceBody}, TContext> => {
 
+const mutationKey = ['postApiStatsStudentDistributionByProvince'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiStatsStudentDistributionByProvince>>, {data: PostApiStatsStudentDistributionByProvinceBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postApiStatsStudentDistributionByProvince(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostApiStatsStudentDistributionByProvinceMutationResult = NonNullable<Awaited<ReturnType<typeof postApiStatsStudentDistributionByProvince>>>
+    export type PostApiStatsStudentDistributionByProvinceMutationBody = PostApiStatsStudentDistributionByProvinceBody
+    export type PostApiStatsStudentDistributionByProvinceMutationError = unknown
+
+    export const usePostApiStatsStudentDistributionByProvince = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsStudentDistributionByProvince>>, TError,{data: PostApiStatsStudentDistributionByProvinceBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postApiStatsStudentDistributionByProvince>>,
+        TError,
+        {data: PostApiStatsStudentDistributionByProvinceBody},
+        TContext
+      > => {
+
+      const mutationOptions = getPostApiStatsStudentDistributionByProvinceMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 export type postApiStatsStudentDistributionByTrainingObjectTypeFilteredResponse200 = {
   data: PostApiStatsStudentDistributionByTrainingObjectTypeFiltered200
   status: 200
 }
+    
+export type postApiStatsStudentDistributionByTrainingObjectTypeFilteredResponseSuccess = (postApiStatsStudentDistributionByTrainingObjectTypeFilteredResponse200) & {
+  headers: Headers;
+};
+;
 
-export type postApiStatsStudentDistributionByTrainingObjectTypeFilteredResponseSuccess =
-  postApiStatsStudentDistributionByTrainingObjectTypeFilteredResponse200 & {
-    headers: Headers
-  }
-
-export type postApiStatsStudentDistributionByTrainingObjectTypeFilteredResponse =
-  postApiStatsStudentDistributionByTrainingObjectTypeFilteredResponseSuccess
+export type postApiStatsStudentDistributionByTrainingObjectTypeFilteredResponse = (postApiStatsStudentDistributionByTrainingObjectTypeFilteredResponseSuccess)
 
 export const getPostApiStatsStudentDistributionByTrainingObjectTypeFilteredUrl = () => {
+
+
+  
+
   return `/api/stats/student-distribution-by-training-object-type-filtered`
 }
 
-export const postApiStatsStudentDistributionByTrainingObjectTypeFiltered = async (
-  postApiStatsStudentDistributionByTrainingObjectTypeFilteredBody: PostApiStatsStudentDistributionByTrainingObjectTypeFilteredBody,
-  options?: RequestInit
-): Promise<postApiStatsStudentDistributionByTrainingObjectTypeFilteredResponse> => {
-  return customTrainingFetch<postApiStatsStudentDistributionByTrainingObjectTypeFilteredResponse>(
-    getPostApiStatsStudentDistributionByTrainingObjectTypeFilteredUrl(),
-    {
-      ...options,
-      method: "POST",
-      headers: { "Content-Type": "application/json", ...options?.headers },
-      body: JSON.stringify(postApiStatsStudentDistributionByTrainingObjectTypeFilteredBody),
-    }
-  )
-}
-
-export const getPostApiStatsStudentDistributionByTrainingObjectTypeFilteredMutationOptions = <
-  TError = unknown,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingObjectTypeFiltered>>,
-    TError,
-    { data: PostApiStatsStudentDistributionByTrainingObjectTypeFilteredBody },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingObjectTypeFiltered>>,
-  TError,
-  { data: PostApiStatsStudentDistributionByTrainingObjectTypeFilteredBody },
-  TContext
-> => {
-  const mutationKey = ["postApiStatsStudentDistributionByTrainingObjectTypeFiltered"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingObjectTypeFiltered>>,
-    { data: PostApiStatsStudentDistributionByTrainingObjectTypeFilteredBody }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return postApiStatsStudentDistributionByTrainingObjectTypeFiltered(data, requestOptions)
+export const postApiStatsStudentDistributionByTrainingObjectTypeFiltered = async (postApiStatsStudentDistributionByTrainingObjectTypeFilteredBody: PostApiStatsStudentDistributionByTrainingObjectTypeFilteredBody, options?: RequestInit): Promise<postApiStatsStudentDistributionByTrainingObjectTypeFilteredResponse> => {
+  
+  return customTrainingFetch<postApiStatsStudentDistributionByTrainingObjectTypeFilteredResponse>(getPostApiStatsStudentDistributionByTrainingObjectTypeFilteredUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      postApiStatsStudentDistributionByTrainingObjectTypeFilteredBody,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type PostApiStatsStudentDistributionByTrainingObjectTypeFilteredMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingObjectTypeFiltered>>
->
-export type PostApiStatsStudentDistributionByTrainingObjectTypeFilteredMutationBody =
-  PostApiStatsStudentDistributionByTrainingObjectTypeFilteredBody
-export type PostApiStatsStudentDistributionByTrainingObjectTypeFilteredMutationError = unknown
 
-export const usePostApiStatsStudentDistributionByTrainingObjectTypeFiltered = <
-  TError = unknown,
-  TContext = unknown,
->(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingObjectTypeFiltered>>,
-      TError,
-      { data: PostApiStatsStudentDistributionByTrainingObjectTypeFilteredBody },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingObjectTypeFiltered>>,
-  TError,
-  { data: PostApiStatsStudentDistributionByTrainingObjectTypeFilteredBody },
-  TContext
-> => {
-  const mutationOptions =
-    getPostApiStatsStudentDistributionByTrainingObjectTypeFilteredMutationOptions(options)
 
-  return useMutation(mutationOptions, queryClient)
-}
+export const getPostApiStatsStudentDistributionByTrainingObjectTypeFilteredMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingObjectTypeFiltered>>, TError,{data: PostApiStatsStudentDistributionByTrainingObjectTypeFilteredBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingObjectTypeFiltered>>, TError,{data: PostApiStatsStudentDistributionByTrainingObjectTypeFilteredBody}, TContext> => {
 
+const mutationKey = ['postApiStatsStudentDistributionByTrainingObjectTypeFiltered'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingObjectTypeFiltered>>, {data: PostApiStatsStudentDistributionByTrainingObjectTypeFilteredBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postApiStatsStudentDistributionByTrainingObjectTypeFiltered(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostApiStatsStudentDistributionByTrainingObjectTypeFilteredMutationResult = NonNullable<Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingObjectTypeFiltered>>>
+    export type PostApiStatsStudentDistributionByTrainingObjectTypeFilteredMutationBody = PostApiStatsStudentDistributionByTrainingObjectTypeFilteredBody
+    export type PostApiStatsStudentDistributionByTrainingObjectTypeFilteredMutationError = unknown
+
+    export const usePostApiStatsStudentDistributionByTrainingObjectTypeFiltered = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingObjectTypeFiltered>>, TError,{data: PostApiStatsStudentDistributionByTrainingObjectTypeFilteredBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingObjectTypeFiltered>>,
+        TError,
+        {data: PostApiStatsStudentDistributionByTrainingObjectTypeFilteredBody},
+        TContext
+      > => {
+
+      const mutationOptions = getPostApiStatsStudentDistributionByTrainingObjectTypeFilteredMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 export type postApiStatsStudentDistributionByTrainingLevelFilteredResponse200 = {
   data: PostApiStatsStudentDistributionByTrainingLevelFiltered200
   status: 200
 }
+    
+export type postApiStatsStudentDistributionByTrainingLevelFilteredResponseSuccess = (postApiStatsStudentDistributionByTrainingLevelFilteredResponse200) & {
+  headers: Headers;
+};
+;
 
-export type postApiStatsStudentDistributionByTrainingLevelFilteredResponseSuccess =
-  postApiStatsStudentDistributionByTrainingLevelFilteredResponse200 & {
-    headers: Headers
-  }
-
-export type postApiStatsStudentDistributionByTrainingLevelFilteredResponse =
-  postApiStatsStudentDistributionByTrainingLevelFilteredResponseSuccess
+export type postApiStatsStudentDistributionByTrainingLevelFilteredResponse = (postApiStatsStudentDistributionByTrainingLevelFilteredResponseSuccess)
 
 export const getPostApiStatsStudentDistributionByTrainingLevelFilteredUrl = () => {
+
+
+  
+
   return `/api/stats/student-distribution-by-training-level-filtered`
 }
 
-export const postApiStatsStudentDistributionByTrainingLevelFiltered = async (
-  postApiStatsStudentDistributionByTrainingLevelFilteredBody: PostApiStatsStudentDistributionByTrainingLevelFilteredBody,
-  options?: RequestInit
-): Promise<postApiStatsStudentDistributionByTrainingLevelFilteredResponse> => {
-  return customTrainingFetch<postApiStatsStudentDistributionByTrainingLevelFilteredResponse>(
-    getPostApiStatsStudentDistributionByTrainingLevelFilteredUrl(),
-    {
-      ...options,
-      method: "POST",
-      headers: { "Content-Type": "application/json", ...options?.headers },
-      body: JSON.stringify(postApiStatsStudentDistributionByTrainingLevelFilteredBody),
-    }
-  )
-}
-
-export const getPostApiStatsStudentDistributionByTrainingLevelFilteredMutationOptions = <
-  TError = unknown,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingLevelFiltered>>,
-    TError,
-    { data: PostApiStatsStudentDistributionByTrainingLevelFilteredBody },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingLevelFiltered>>,
-  TError,
-  { data: PostApiStatsStudentDistributionByTrainingLevelFilteredBody },
-  TContext
-> => {
-  const mutationKey = ["postApiStatsStudentDistributionByTrainingLevelFiltered"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingLevelFiltered>>,
-    { data: PostApiStatsStudentDistributionByTrainingLevelFilteredBody }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return postApiStatsStudentDistributionByTrainingLevelFiltered(data, requestOptions)
+export const postApiStatsStudentDistributionByTrainingLevelFiltered = async (postApiStatsStudentDistributionByTrainingLevelFilteredBody: PostApiStatsStudentDistributionByTrainingLevelFilteredBody, options?: RequestInit): Promise<postApiStatsStudentDistributionByTrainingLevelFilteredResponse> => {
+  
+  return customTrainingFetch<postApiStatsStudentDistributionByTrainingLevelFilteredResponse>(getPostApiStatsStudentDistributionByTrainingLevelFilteredUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      postApiStatsStudentDistributionByTrainingLevelFilteredBody,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type PostApiStatsStudentDistributionByTrainingLevelFilteredMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingLevelFiltered>>
->
-export type PostApiStatsStudentDistributionByTrainingLevelFilteredMutationBody =
-  PostApiStatsStudentDistributionByTrainingLevelFilteredBody
-export type PostApiStatsStudentDistributionByTrainingLevelFilteredMutationError = unknown
 
-export const usePostApiStatsStudentDistributionByTrainingLevelFiltered = <
-  TError = unknown,
-  TContext = unknown,
->(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingLevelFiltered>>,
-      TError,
-      { data: PostApiStatsStudentDistributionByTrainingLevelFilteredBody },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingLevelFiltered>>,
-  TError,
-  { data: PostApiStatsStudentDistributionByTrainingLevelFilteredBody },
-  TContext
-> => {
-  const mutationOptions =
-    getPostApiStatsStudentDistributionByTrainingLevelFilteredMutationOptions(options)
 
-  return useMutation(mutationOptions, queryClient)
-}
+export const getPostApiStatsStudentDistributionByTrainingLevelFilteredMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingLevelFiltered>>, TError,{data: PostApiStatsStudentDistributionByTrainingLevelFilteredBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingLevelFiltered>>, TError,{data: PostApiStatsStudentDistributionByTrainingLevelFilteredBody}, TContext> => {
 
+const mutationKey = ['postApiStatsStudentDistributionByTrainingLevelFiltered'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingLevelFiltered>>, {data: PostApiStatsStudentDistributionByTrainingLevelFilteredBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postApiStatsStudentDistributionByTrainingLevelFiltered(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostApiStatsStudentDistributionByTrainingLevelFilteredMutationResult = NonNullable<Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingLevelFiltered>>>
+    export type PostApiStatsStudentDistributionByTrainingLevelFilteredMutationBody = PostApiStatsStudentDistributionByTrainingLevelFilteredBody
+    export type PostApiStatsStudentDistributionByTrainingLevelFilteredMutationError = unknown
+
+    export const usePostApiStatsStudentDistributionByTrainingLevelFiltered = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingLevelFiltered>>, TError,{data: PostApiStatsStudentDistributionByTrainingLevelFilteredBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingLevelFiltered>>,
+        TError,
+        {data: PostApiStatsStudentDistributionByTrainingLevelFilteredBody},
+        TContext
+      > => {
+
+      const mutationOptions = getPostApiStatsStudentDistributionByTrainingLevelFilteredMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 export type postApiStatsStudentDistributionByTrainingCourseFilteredResponse200 = {
   data: PostApiStatsStudentDistributionByTrainingCourseFiltered200
   status: 200
 }
+    
+export type postApiStatsStudentDistributionByTrainingCourseFilteredResponseSuccess = (postApiStatsStudentDistributionByTrainingCourseFilteredResponse200) & {
+  headers: Headers;
+};
+;
 
-export type postApiStatsStudentDistributionByTrainingCourseFilteredResponseSuccess =
-  postApiStatsStudentDistributionByTrainingCourseFilteredResponse200 & {
-    headers: Headers
-  }
-
-export type postApiStatsStudentDistributionByTrainingCourseFilteredResponse =
-  postApiStatsStudentDistributionByTrainingCourseFilteredResponseSuccess
+export type postApiStatsStudentDistributionByTrainingCourseFilteredResponse = (postApiStatsStudentDistributionByTrainingCourseFilteredResponseSuccess)
 
 export const getPostApiStatsStudentDistributionByTrainingCourseFilteredUrl = () => {
+
+
+  
+
   return `/api/stats/student-distribution-by-training-course-filtered`
 }
 
-export const postApiStatsStudentDistributionByTrainingCourseFiltered = async (
-  postApiStatsStudentDistributionByTrainingCourseFilteredBody: PostApiStatsStudentDistributionByTrainingCourseFilteredBody,
-  options?: RequestInit
-): Promise<postApiStatsStudentDistributionByTrainingCourseFilteredResponse> => {
-  return customTrainingFetch<postApiStatsStudentDistributionByTrainingCourseFilteredResponse>(
-    getPostApiStatsStudentDistributionByTrainingCourseFilteredUrl(),
-    {
-      ...options,
-      method: "POST",
-      headers: { "Content-Type": "application/json", ...options?.headers },
-      body: JSON.stringify(postApiStatsStudentDistributionByTrainingCourseFilteredBody),
-    }
-  )
-}
-
-export const getPostApiStatsStudentDistributionByTrainingCourseFilteredMutationOptions = <
-  TError = unknown,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingCourseFiltered>>,
-    TError,
-    { data: PostApiStatsStudentDistributionByTrainingCourseFilteredBody },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingCourseFiltered>>,
-  TError,
-  { data: PostApiStatsStudentDistributionByTrainingCourseFilteredBody },
-  TContext
-> => {
-  const mutationKey = ["postApiStatsStudentDistributionByTrainingCourseFiltered"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingCourseFiltered>>,
-    { data: PostApiStatsStudentDistributionByTrainingCourseFilteredBody }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return postApiStatsStudentDistributionByTrainingCourseFiltered(data, requestOptions)
+export const postApiStatsStudentDistributionByTrainingCourseFiltered = async (postApiStatsStudentDistributionByTrainingCourseFilteredBody: PostApiStatsStudentDistributionByTrainingCourseFilteredBody, options?: RequestInit): Promise<postApiStatsStudentDistributionByTrainingCourseFilteredResponse> => {
+  
+  return customTrainingFetch<postApiStatsStudentDistributionByTrainingCourseFilteredResponse>(getPostApiStatsStudentDistributionByTrainingCourseFilteredUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      postApiStatsStudentDistributionByTrainingCourseFilteredBody,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type PostApiStatsStudentDistributionByTrainingCourseFilteredMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingCourseFiltered>>
->
-export type PostApiStatsStudentDistributionByTrainingCourseFilteredMutationBody =
-  PostApiStatsStudentDistributionByTrainingCourseFilteredBody
-export type PostApiStatsStudentDistributionByTrainingCourseFilteredMutationError = unknown
 
-export const usePostApiStatsStudentDistributionByTrainingCourseFiltered = <
-  TError = unknown,
-  TContext = unknown,
->(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingCourseFiltered>>,
-      TError,
-      { data: PostApiStatsStudentDistributionByTrainingCourseFilteredBody },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingCourseFiltered>>,
-  TError,
-  { data: PostApiStatsStudentDistributionByTrainingCourseFilteredBody },
-  TContext
-> => {
-  const mutationOptions =
-    getPostApiStatsStudentDistributionByTrainingCourseFilteredMutationOptions(options)
 
-  return useMutation(mutationOptions, queryClient)
-}
+export const getPostApiStatsStudentDistributionByTrainingCourseFilteredMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingCourseFiltered>>, TError,{data: PostApiStatsStudentDistributionByTrainingCourseFilteredBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingCourseFiltered>>, TError,{data: PostApiStatsStudentDistributionByTrainingCourseFilteredBody}, TContext> => {
 
+const mutationKey = ['postApiStatsStudentDistributionByTrainingCourseFiltered'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingCourseFiltered>>, {data: PostApiStatsStudentDistributionByTrainingCourseFilteredBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postApiStatsStudentDistributionByTrainingCourseFiltered(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostApiStatsStudentDistributionByTrainingCourseFilteredMutationResult = NonNullable<Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingCourseFiltered>>>
+    export type PostApiStatsStudentDistributionByTrainingCourseFilteredMutationBody = PostApiStatsStudentDistributionByTrainingCourseFilteredBody
+    export type PostApiStatsStudentDistributionByTrainingCourseFilteredMutationError = unknown
+
+    export const usePostApiStatsStudentDistributionByTrainingCourseFiltered = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingCourseFiltered>>, TError,{data: PostApiStatsStudentDistributionByTrainingCourseFilteredBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingCourseFiltered>>,
+        TError,
+        {data: PostApiStatsStudentDistributionByTrainingCourseFilteredBody},
+        TContext
+      > => {
+
+      const mutationOptions = getPostApiStatsStudentDistributionByTrainingCourseFilteredMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 export type postApiStatsAverageEntryScoreByCourseFilteredResponse200 = {
   data: PostApiStatsAverageEntryScoreByCourseFiltered200
   status: 200
 }
+    
+export type postApiStatsAverageEntryScoreByCourseFilteredResponseSuccess = (postApiStatsAverageEntryScoreByCourseFilteredResponse200) & {
+  headers: Headers;
+};
+;
 
-export type postApiStatsAverageEntryScoreByCourseFilteredResponseSuccess =
-  postApiStatsAverageEntryScoreByCourseFilteredResponse200 & {
-    headers: Headers
-  }
-
-export type postApiStatsAverageEntryScoreByCourseFilteredResponse =
-  postApiStatsAverageEntryScoreByCourseFilteredResponseSuccess
+export type postApiStatsAverageEntryScoreByCourseFilteredResponse = (postApiStatsAverageEntryScoreByCourseFilteredResponseSuccess)
 
 export const getPostApiStatsAverageEntryScoreByCourseFilteredUrl = () => {
+
+
+  
+
   return `/api/stats/average-entry-score-by-course-filtered`
 }
 
-export const postApiStatsAverageEntryScoreByCourseFiltered = async (
-  postApiStatsAverageEntryScoreByCourseFilteredBody: PostApiStatsAverageEntryScoreByCourseFilteredBody,
-  options?: RequestInit
-): Promise<postApiStatsAverageEntryScoreByCourseFilteredResponse> => {
-  return customTrainingFetch<postApiStatsAverageEntryScoreByCourseFilteredResponse>(
-    getPostApiStatsAverageEntryScoreByCourseFilteredUrl(),
-    {
-      ...options,
-      method: "POST",
-      headers: { "Content-Type": "application/json", ...options?.headers },
-      body: JSON.stringify(postApiStatsAverageEntryScoreByCourseFilteredBody),
-    }
-  )
-}
-
-export const getPostApiStatsAverageEntryScoreByCourseFilteredMutationOptions = <
-  TError = unknown,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsAverageEntryScoreByCourseFiltered>>,
-    TError,
-    { data: PostApiStatsAverageEntryScoreByCourseFilteredBody },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiStatsAverageEntryScoreByCourseFiltered>>,
-  TError,
-  { data: PostApiStatsAverageEntryScoreByCourseFilteredBody },
-  TContext
-> => {
-  const mutationKey = ["postApiStatsAverageEntryScoreByCourseFiltered"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiStatsAverageEntryScoreByCourseFiltered>>,
-    { data: PostApiStatsAverageEntryScoreByCourseFilteredBody }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return postApiStatsAverageEntryScoreByCourseFiltered(data, requestOptions)
+export const postApiStatsAverageEntryScoreByCourseFiltered = async (postApiStatsAverageEntryScoreByCourseFilteredBody: PostApiStatsAverageEntryScoreByCourseFilteredBody, options?: RequestInit): Promise<postApiStatsAverageEntryScoreByCourseFilteredResponse> => {
+  
+  return customTrainingFetch<postApiStatsAverageEntryScoreByCourseFilteredResponse>(getPostApiStatsAverageEntryScoreByCourseFilteredUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      postApiStatsAverageEntryScoreByCourseFilteredBody,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type PostApiStatsAverageEntryScoreByCourseFilteredMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postApiStatsAverageEntryScoreByCourseFiltered>>
->
-export type PostApiStatsAverageEntryScoreByCourseFilteredMutationBody =
-  PostApiStatsAverageEntryScoreByCourseFilteredBody
-export type PostApiStatsAverageEntryScoreByCourseFilteredMutationError = unknown
 
-export const usePostApiStatsAverageEntryScoreByCourseFiltered = <
-  TError = unknown,
-  TContext = unknown,
->(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiStatsAverageEntryScoreByCourseFiltered>>,
-      TError,
-      { data: PostApiStatsAverageEntryScoreByCourseFilteredBody },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postApiStatsAverageEntryScoreByCourseFiltered>>,
-  TError,
-  { data: PostApiStatsAverageEntryScoreByCourseFilteredBody },
-  TContext
-> => {
-  const mutationOptions = getPostApiStatsAverageEntryScoreByCourseFilteredMutationOptions(options)
 
-  return useMutation(mutationOptions, queryClient)
-}
+export const getPostApiStatsAverageEntryScoreByCourseFilteredMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsAverageEntryScoreByCourseFiltered>>, TError,{data: PostApiStatsAverageEntryScoreByCourseFilteredBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof postApiStatsAverageEntryScoreByCourseFiltered>>, TError,{data: PostApiStatsAverageEntryScoreByCourseFilteredBody}, TContext> => {
 
+const mutationKey = ['postApiStatsAverageEntryScoreByCourseFiltered'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiStatsAverageEntryScoreByCourseFiltered>>, {data: PostApiStatsAverageEntryScoreByCourseFilteredBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postApiStatsAverageEntryScoreByCourseFiltered(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostApiStatsAverageEntryScoreByCourseFilteredMutationResult = NonNullable<Awaited<ReturnType<typeof postApiStatsAverageEntryScoreByCourseFiltered>>>
+    export type PostApiStatsAverageEntryScoreByCourseFilteredMutationBody = PostApiStatsAverageEntryScoreByCourseFilteredBody
+    export type PostApiStatsAverageEntryScoreByCourseFilteredMutationError = unknown
+
+    export const usePostApiStatsAverageEntryScoreByCourseFiltered = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsAverageEntryScoreByCourseFiltered>>, TError,{data: PostApiStatsAverageEntryScoreByCourseFilteredBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postApiStatsAverageEntryScoreByCourseFiltered>>,
+        TError,
+        {data: PostApiStatsAverageEntryScoreByCourseFilteredBody},
+        TContext
+      > => {
+
+      const mutationOptions = getPostApiStatsAverageEntryScoreByCourseFilteredMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 export type postApiStatsAverageGpaByCourseFilteredResponse200 = {
   data: PostApiStatsAverageGpaByCourseFiltered200
   status: 200
 }
+    
+export type postApiStatsAverageGpaByCourseFilteredResponseSuccess = (postApiStatsAverageGpaByCourseFilteredResponse200) & {
+  headers: Headers;
+};
+;
 
-export type postApiStatsAverageGpaByCourseFilteredResponseSuccess =
-  postApiStatsAverageGpaByCourseFilteredResponse200 & {
-    headers: Headers
-  }
-
-export type postApiStatsAverageGpaByCourseFilteredResponse =
-  postApiStatsAverageGpaByCourseFilteredResponseSuccess
+export type postApiStatsAverageGpaByCourseFilteredResponse = (postApiStatsAverageGpaByCourseFilteredResponseSuccess)
 
 export const getPostApiStatsAverageGpaByCourseFilteredUrl = () => {
+
+
+  
+
   return `/api/stats/average-gpa-by-course-filtered`
 }
 
-export const postApiStatsAverageGpaByCourseFiltered = async (
-  postApiStatsAverageGpaByCourseFilteredBody: PostApiStatsAverageGpaByCourseFilteredBody,
-  options?: RequestInit
-): Promise<postApiStatsAverageGpaByCourseFilteredResponse> => {
-  return customTrainingFetch<postApiStatsAverageGpaByCourseFilteredResponse>(
-    getPostApiStatsAverageGpaByCourseFilteredUrl(),
-    {
-      ...options,
-      method: "POST",
-      headers: { "Content-Type": "application/json", ...options?.headers },
-      body: JSON.stringify(postApiStatsAverageGpaByCourseFilteredBody),
-    }
-  )
-}
-
-export const getPostApiStatsAverageGpaByCourseFilteredMutationOptions = <
-  TError = unknown,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsAverageGpaByCourseFiltered>>,
-    TError,
-    { data: PostApiStatsAverageGpaByCourseFilteredBody },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiStatsAverageGpaByCourseFiltered>>,
-  TError,
-  { data: PostApiStatsAverageGpaByCourseFilteredBody },
-  TContext
-> => {
-  const mutationKey = ["postApiStatsAverageGpaByCourseFiltered"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiStatsAverageGpaByCourseFiltered>>,
-    { data: PostApiStatsAverageGpaByCourseFilteredBody }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return postApiStatsAverageGpaByCourseFiltered(data, requestOptions)
+export const postApiStatsAverageGpaByCourseFiltered = async (postApiStatsAverageGpaByCourseFilteredBody: PostApiStatsAverageGpaByCourseFilteredBody, options?: RequestInit): Promise<postApiStatsAverageGpaByCourseFilteredResponse> => {
+  
+  return customTrainingFetch<postApiStatsAverageGpaByCourseFilteredResponse>(getPostApiStatsAverageGpaByCourseFilteredUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      postApiStatsAverageGpaByCourseFilteredBody,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type PostApiStatsAverageGpaByCourseFilteredMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postApiStatsAverageGpaByCourseFiltered>>
->
-export type PostApiStatsAverageGpaByCourseFilteredMutationBody =
-  PostApiStatsAverageGpaByCourseFilteredBody
-export type PostApiStatsAverageGpaByCourseFilteredMutationError = unknown
 
-export const usePostApiStatsAverageGpaByCourseFiltered = <TError = unknown, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiStatsAverageGpaByCourseFiltered>>,
-      TError,
-      { data: PostApiStatsAverageGpaByCourseFilteredBody },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postApiStatsAverageGpaByCourseFiltered>>,
-  TError,
-  { data: PostApiStatsAverageGpaByCourseFilteredBody },
-  TContext
-> => {
-  const mutationOptions = getPostApiStatsAverageGpaByCourseFilteredMutationOptions(options)
 
-  return useMutation(mutationOptions, queryClient)
-}
+export const getPostApiStatsAverageGpaByCourseFilteredMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsAverageGpaByCourseFiltered>>, TError,{data: PostApiStatsAverageGpaByCourseFilteredBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof postApiStatsAverageGpaByCourseFiltered>>, TError,{data: PostApiStatsAverageGpaByCourseFilteredBody}, TContext> => {
 
+const mutationKey = ['postApiStatsAverageGpaByCourseFiltered'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiStatsAverageGpaByCourseFiltered>>, {data: PostApiStatsAverageGpaByCourseFilteredBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postApiStatsAverageGpaByCourseFiltered(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostApiStatsAverageGpaByCourseFilteredMutationResult = NonNullable<Awaited<ReturnType<typeof postApiStatsAverageGpaByCourseFiltered>>>
+    export type PostApiStatsAverageGpaByCourseFilteredMutationBody = PostApiStatsAverageGpaByCourseFilteredBody
+    export type PostApiStatsAverageGpaByCourseFilteredMutationError = unknown
+
+    export const usePostApiStatsAverageGpaByCourseFiltered = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsAverageGpaByCourseFiltered>>, TError,{data: PostApiStatsAverageGpaByCourseFilteredBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postApiStatsAverageGpaByCourseFiltered>>,
+        TError,
+        {data: PostApiStatsAverageGpaByCourseFilteredBody},
+        TContext
+      > => {
+
+      const mutationOptions = getPostApiStatsAverageGpaByCourseFilteredMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 export type postApiStatsGraduationRateByCourseFilteredResponse200 = {
   data: PostApiStatsGraduationRateByCourseFiltered200
   status: 200
 }
+    
+export type postApiStatsGraduationRateByCourseFilteredResponseSuccess = (postApiStatsGraduationRateByCourseFilteredResponse200) & {
+  headers: Headers;
+};
+;
 
-export type postApiStatsGraduationRateByCourseFilteredResponseSuccess =
-  postApiStatsGraduationRateByCourseFilteredResponse200 & {
-    headers: Headers
-  }
-
-export type postApiStatsGraduationRateByCourseFilteredResponse =
-  postApiStatsGraduationRateByCourseFilteredResponseSuccess
+export type postApiStatsGraduationRateByCourseFilteredResponse = (postApiStatsGraduationRateByCourseFilteredResponseSuccess)
 
 export const getPostApiStatsGraduationRateByCourseFilteredUrl = () => {
+
+
+  
+
   return `/api/stats/graduation-rate-by-course-filtered`
 }
 
-export const postApiStatsGraduationRateByCourseFiltered = async (
-  postApiStatsGraduationRateByCourseFilteredBody: PostApiStatsGraduationRateByCourseFilteredBody,
-  options?: RequestInit
-): Promise<postApiStatsGraduationRateByCourseFilteredResponse> => {
-  return customTrainingFetch<postApiStatsGraduationRateByCourseFilteredResponse>(
-    getPostApiStatsGraduationRateByCourseFilteredUrl(),
-    {
-      ...options,
-      method: "POST",
-      headers: { "Content-Type": "application/json", ...options?.headers },
-      body: JSON.stringify(postApiStatsGraduationRateByCourseFilteredBody),
-    }
-  )
-}
-
-export const getPostApiStatsGraduationRateByCourseFilteredMutationOptions = <
-  TError = unknown,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsGraduationRateByCourseFiltered>>,
-    TError,
-    { data: PostApiStatsGraduationRateByCourseFilteredBody },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiStatsGraduationRateByCourseFiltered>>,
-  TError,
-  { data: PostApiStatsGraduationRateByCourseFilteredBody },
-  TContext
-> => {
-  const mutationKey = ["postApiStatsGraduationRateByCourseFiltered"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiStatsGraduationRateByCourseFiltered>>,
-    { data: PostApiStatsGraduationRateByCourseFilteredBody }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return postApiStatsGraduationRateByCourseFiltered(data, requestOptions)
+export const postApiStatsGraduationRateByCourseFiltered = async (postApiStatsGraduationRateByCourseFilteredBody: PostApiStatsGraduationRateByCourseFilteredBody, options?: RequestInit): Promise<postApiStatsGraduationRateByCourseFilteredResponse> => {
+  
+  return customTrainingFetch<postApiStatsGraduationRateByCourseFilteredResponse>(getPostApiStatsGraduationRateByCourseFilteredUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      postApiStatsGraduationRateByCourseFilteredBody,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type PostApiStatsGraduationRateByCourseFilteredMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postApiStatsGraduationRateByCourseFiltered>>
->
-export type PostApiStatsGraduationRateByCourseFilteredMutationBody =
-  PostApiStatsGraduationRateByCourseFilteredBody
-export type PostApiStatsGraduationRateByCourseFilteredMutationError = unknown
 
-export const usePostApiStatsGraduationRateByCourseFiltered = <TError = unknown, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiStatsGraduationRateByCourseFiltered>>,
-      TError,
-      { data: PostApiStatsGraduationRateByCourseFilteredBody },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postApiStatsGraduationRateByCourseFiltered>>,
-  TError,
-  { data: PostApiStatsGraduationRateByCourseFilteredBody },
-  TContext
-> => {
-  const mutationOptions = getPostApiStatsGraduationRateByCourseFilteredMutationOptions(options)
 
-  return useMutation(mutationOptions, queryClient)
-}
+export const getPostApiStatsGraduationRateByCourseFilteredMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsGraduationRateByCourseFiltered>>, TError,{data: PostApiStatsGraduationRateByCourseFilteredBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof postApiStatsGraduationRateByCourseFiltered>>, TError,{data: PostApiStatsGraduationRateByCourseFilteredBody}, TContext> => {
 
+const mutationKey = ['postApiStatsGraduationRateByCourseFiltered'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiStatsGraduationRateByCourseFiltered>>, {data: PostApiStatsGraduationRateByCourseFilteredBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postApiStatsGraduationRateByCourseFiltered(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostApiStatsGraduationRateByCourseFilteredMutationResult = NonNullable<Awaited<ReturnType<typeof postApiStatsGraduationRateByCourseFiltered>>>
+    export type PostApiStatsGraduationRateByCourseFilteredMutationBody = PostApiStatsGraduationRateByCourseFilteredBody
+    export type PostApiStatsGraduationRateByCourseFilteredMutationError = unknown
+
+    export const usePostApiStatsGraduationRateByCourseFiltered = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsGraduationRateByCourseFiltered>>, TError,{data: PostApiStatsGraduationRateByCourseFilteredBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postApiStatsGraduationRateByCourseFiltered>>,
+        TError,
+        {data: PostApiStatsGraduationRateByCourseFilteredBody},
+        TContext
+      > => {
+
+      const mutationOptions = getPostApiStatsGraduationRateByCourseFilteredMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 export type postApiStatsAcademicPerformanceByYearFilteredResponse200 = {
   data: PostApiStatsAcademicPerformanceByYearFiltered200
   status: 200
 }
+    
+export type postApiStatsAcademicPerformanceByYearFilteredResponseSuccess = (postApiStatsAcademicPerformanceByYearFilteredResponse200) & {
+  headers: Headers;
+};
+;
 
-export type postApiStatsAcademicPerformanceByYearFilteredResponseSuccess =
-  postApiStatsAcademicPerformanceByYearFilteredResponse200 & {
-    headers: Headers
-  }
-
-export type postApiStatsAcademicPerformanceByYearFilteredResponse =
-  postApiStatsAcademicPerformanceByYearFilteredResponseSuccess
+export type postApiStatsAcademicPerformanceByYearFilteredResponse = (postApiStatsAcademicPerformanceByYearFilteredResponseSuccess)
 
 export const getPostApiStatsAcademicPerformanceByYearFilteredUrl = () => {
+
+
+  
+
   return `/api/stats/academic-performance-by-year-filtered`
 }
 
-export const postApiStatsAcademicPerformanceByYearFiltered = async (
-  postApiStatsAcademicPerformanceByYearFilteredBody: PostApiStatsAcademicPerformanceByYearFilteredBody,
-  options?: RequestInit
-): Promise<postApiStatsAcademicPerformanceByYearFilteredResponse> => {
-  return customTrainingFetch<postApiStatsAcademicPerformanceByYearFilteredResponse>(
-    getPostApiStatsAcademicPerformanceByYearFilteredUrl(),
-    {
-      ...options,
-      method: "POST",
-      headers: { "Content-Type": "application/json", ...options?.headers },
-      body: JSON.stringify(postApiStatsAcademicPerformanceByYearFilteredBody),
-    }
-  )
-}
-
-export const getPostApiStatsAcademicPerformanceByYearFilteredMutationOptions = <
-  TError = unknown,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsAcademicPerformanceByYearFiltered>>,
-    TError,
-    { data: PostApiStatsAcademicPerformanceByYearFilteredBody },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiStatsAcademicPerformanceByYearFiltered>>,
-  TError,
-  { data: PostApiStatsAcademicPerformanceByYearFilteredBody },
-  TContext
-> => {
-  const mutationKey = ["postApiStatsAcademicPerformanceByYearFiltered"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiStatsAcademicPerformanceByYearFiltered>>,
-    { data: PostApiStatsAcademicPerformanceByYearFilteredBody }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return postApiStatsAcademicPerformanceByYearFiltered(data, requestOptions)
+export const postApiStatsAcademicPerformanceByYearFiltered = async (postApiStatsAcademicPerformanceByYearFilteredBody: PostApiStatsAcademicPerformanceByYearFilteredBody, options?: RequestInit): Promise<postApiStatsAcademicPerformanceByYearFilteredResponse> => {
+  
+  return customTrainingFetch<postApiStatsAcademicPerformanceByYearFilteredResponse>(getPostApiStatsAcademicPerformanceByYearFilteredUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      postApiStatsAcademicPerformanceByYearFilteredBody,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type PostApiStatsAcademicPerformanceByYearFilteredMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postApiStatsAcademicPerformanceByYearFiltered>>
->
-export type PostApiStatsAcademicPerformanceByYearFilteredMutationBody =
-  PostApiStatsAcademicPerformanceByYearFilteredBody
-export type PostApiStatsAcademicPerformanceByYearFilteredMutationError = unknown
 
-export const usePostApiStatsAcademicPerformanceByYearFiltered = <
-  TError = unknown,
-  TContext = unknown,
->(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiStatsAcademicPerformanceByYearFiltered>>,
-      TError,
-      { data: PostApiStatsAcademicPerformanceByYearFilteredBody },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postApiStatsAcademicPerformanceByYearFiltered>>,
-  TError,
-  { data: PostApiStatsAcademicPerformanceByYearFilteredBody },
-  TContext
-> => {
-  const mutationOptions = getPostApiStatsAcademicPerformanceByYearFilteredMutationOptions(options)
 
-  return useMutation(mutationOptions, queryClient)
-}
+export const getPostApiStatsAcademicPerformanceByYearFilteredMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsAcademicPerformanceByYearFiltered>>, TError,{data: PostApiStatsAcademicPerformanceByYearFilteredBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof postApiStatsAcademicPerformanceByYearFiltered>>, TError,{data: PostApiStatsAcademicPerformanceByYearFilteredBody}, TContext> => {
 
+const mutationKey = ['postApiStatsAcademicPerformanceByYearFiltered'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiStatsAcademicPerformanceByYearFiltered>>, {data: PostApiStatsAcademicPerformanceByYearFilteredBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postApiStatsAcademicPerformanceByYearFiltered(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostApiStatsAcademicPerformanceByYearFilteredMutationResult = NonNullable<Awaited<ReturnType<typeof postApiStatsAcademicPerformanceByYearFiltered>>>
+    export type PostApiStatsAcademicPerformanceByYearFilteredMutationBody = PostApiStatsAcademicPerformanceByYearFilteredBody
+    export type PostApiStatsAcademicPerformanceByYearFilteredMutationError = unknown
+
+    export const usePostApiStatsAcademicPerformanceByYearFiltered = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsAcademicPerformanceByYearFiltered>>, TError,{data: PostApiStatsAcademicPerformanceByYearFilteredBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postApiStatsAcademicPerformanceByYearFiltered>>,
+        TError,
+        {data: PostApiStatsAcademicPerformanceByYearFilteredBody},
+        TContext
+      > => {
+
+      const mutationOptions = getPostApiStatsAcademicPerformanceByYearFilteredMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 export type postApiStatsStudentDistributionByProvinceFilteredResponse200 = {
   data: PostApiStatsStudentDistributionByProvinceFiltered200
   status: 200
 }
+    
+export type postApiStatsStudentDistributionByProvinceFilteredResponseSuccess = (postApiStatsStudentDistributionByProvinceFilteredResponse200) & {
+  headers: Headers;
+};
+;
 
-export type postApiStatsStudentDistributionByProvinceFilteredResponseSuccess =
-  postApiStatsStudentDistributionByProvinceFilteredResponse200 & {
-    headers: Headers
-  }
-
-export type postApiStatsStudentDistributionByProvinceFilteredResponse =
-  postApiStatsStudentDistributionByProvinceFilteredResponseSuccess
+export type postApiStatsStudentDistributionByProvinceFilteredResponse = (postApiStatsStudentDistributionByProvinceFilteredResponseSuccess)
 
 export const getPostApiStatsStudentDistributionByProvinceFilteredUrl = () => {
+
+
+  
+
   return `/api/stats/student-distribution-by-province-filtered`
 }
 
-export const postApiStatsStudentDistributionByProvinceFiltered = async (
-  postApiStatsStudentDistributionByProvinceFilteredBody: PostApiStatsStudentDistributionByProvinceFilteredBody,
-  options?: RequestInit
-): Promise<postApiStatsStudentDistributionByProvinceFilteredResponse> => {
-  return customTrainingFetch<postApiStatsStudentDistributionByProvinceFilteredResponse>(
-    getPostApiStatsStudentDistributionByProvinceFilteredUrl(),
-    {
-      ...options,
-      method: "POST",
-      headers: { "Content-Type": "application/json", ...options?.headers },
-      body: JSON.stringify(postApiStatsStudentDistributionByProvinceFilteredBody),
-    }
-  )
-}
-
-export const getPostApiStatsStudentDistributionByProvinceFilteredMutationOptions = <
-  TError = unknown,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsStudentDistributionByProvinceFiltered>>,
-    TError,
-    { data: PostApiStatsStudentDistributionByProvinceFilteredBody },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiStatsStudentDistributionByProvinceFiltered>>,
-  TError,
-  { data: PostApiStatsStudentDistributionByProvinceFilteredBody },
-  TContext
-> => {
-  const mutationKey = ["postApiStatsStudentDistributionByProvinceFiltered"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiStatsStudentDistributionByProvinceFiltered>>,
-    { data: PostApiStatsStudentDistributionByProvinceFilteredBody }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return postApiStatsStudentDistributionByProvinceFiltered(data, requestOptions)
+export const postApiStatsStudentDistributionByProvinceFiltered = async (postApiStatsStudentDistributionByProvinceFilteredBody: PostApiStatsStudentDistributionByProvinceFilteredBody, options?: RequestInit): Promise<postApiStatsStudentDistributionByProvinceFilteredResponse> => {
+  
+  return customTrainingFetch<postApiStatsStudentDistributionByProvinceFilteredResponse>(getPostApiStatsStudentDistributionByProvinceFilteredUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      postApiStatsStudentDistributionByProvinceFilteredBody,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type PostApiStatsStudentDistributionByProvinceFilteredMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postApiStatsStudentDistributionByProvinceFiltered>>
->
-export type PostApiStatsStudentDistributionByProvinceFilteredMutationBody =
-  PostApiStatsStudentDistributionByProvinceFilteredBody
-export type PostApiStatsStudentDistributionByProvinceFilteredMutationError = unknown
 
-export const usePostApiStatsStudentDistributionByProvinceFiltered = <
-  TError = unknown,
-  TContext = unknown,
->(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiStatsStudentDistributionByProvinceFiltered>>,
-      TError,
-      { data: PostApiStatsStudentDistributionByProvinceFilteredBody },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postApiStatsStudentDistributionByProvinceFiltered>>,
-  TError,
-  { data: PostApiStatsStudentDistributionByProvinceFilteredBody },
-  TContext
-> => {
-  const mutationOptions =
-    getPostApiStatsStudentDistributionByProvinceFilteredMutationOptions(options)
 
-  return useMutation(mutationOptions, queryClient)
-}
+export const getPostApiStatsStudentDistributionByProvinceFilteredMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsStudentDistributionByProvinceFiltered>>, TError,{data: PostApiStatsStudentDistributionByProvinceFilteredBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof postApiStatsStudentDistributionByProvinceFiltered>>, TError,{data: PostApiStatsStudentDistributionByProvinceFilteredBody}, TContext> => {
 
+const mutationKey = ['postApiStatsStudentDistributionByProvinceFiltered'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiStatsStudentDistributionByProvinceFiltered>>, {data: PostApiStatsStudentDistributionByProvinceFilteredBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postApiStatsStudentDistributionByProvinceFiltered(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostApiStatsStudentDistributionByProvinceFilteredMutationResult = NonNullable<Awaited<ReturnType<typeof postApiStatsStudentDistributionByProvinceFiltered>>>
+    export type PostApiStatsStudentDistributionByProvinceFilteredMutationBody = PostApiStatsStudentDistributionByProvinceFilteredBody
+    export type PostApiStatsStudentDistributionByProvinceFilteredMutationError = unknown
+
+    export const usePostApiStatsStudentDistributionByProvinceFiltered = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsStudentDistributionByProvinceFiltered>>, TError,{data: PostApiStatsStudentDistributionByProvinceFilteredBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postApiStatsStudentDistributionByProvinceFiltered>>,
+        TError,
+        {data: PostApiStatsStudentDistributionByProvinceFilteredBody},
+        TContext
+      > => {
+
+      const mutationOptions = getPostApiStatsStudentDistributionByProvinceFilteredMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 export type postApiStatsStudentsOfInterestResponse200 = {
   data: PostApiStatsStudentsOfInterest200
   status: 200
 }
+    
+export type postApiStatsStudentsOfInterestResponseSuccess = (postApiStatsStudentsOfInterestResponse200) & {
+  headers: Headers;
+};
+;
 
-export type postApiStatsStudentsOfInterestResponseSuccess =
-  postApiStatsStudentsOfInterestResponse200 & {
-    headers: Headers
-  }
-
-export type postApiStatsStudentsOfInterestResponse = postApiStatsStudentsOfInterestResponseSuccess
+export type postApiStatsStudentsOfInterestResponse = (postApiStatsStudentsOfInterestResponseSuccess)
 
 export const getPostApiStatsStudentsOfInterestUrl = () => {
+
+
+  
+
   return `/api/stats/students-of-interest`
 }
 
-export const postApiStatsStudentsOfInterest = async (
-  postApiStatsStudentsOfInterestBody: PostApiStatsStudentsOfInterestBody,
-  options?: RequestInit
-): Promise<postApiStatsStudentsOfInterestResponse> => {
-  return customTrainingFetch<postApiStatsStudentsOfInterestResponse>(
-    getPostApiStatsStudentsOfInterestUrl(),
-    {
-      ...options,
-      method: "POST",
-      headers: { "Content-Type": "application/json", ...options?.headers },
-      body: JSON.stringify(postApiStatsStudentsOfInterestBody),
-    }
-  )
-}
-
-export const getPostApiStatsStudentsOfInterestMutationOptions = <
-  TError = unknown,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsStudentsOfInterest>>,
-    TError,
-    { data: PostApiStatsStudentsOfInterestBody },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiStatsStudentsOfInterest>>,
-  TError,
-  { data: PostApiStatsStudentsOfInterestBody },
-  TContext
-> => {
-  const mutationKey = ["postApiStatsStudentsOfInterest"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiStatsStudentsOfInterest>>,
-    { data: PostApiStatsStudentsOfInterestBody }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return postApiStatsStudentsOfInterest(data, requestOptions)
+export const postApiStatsStudentsOfInterest = async (postApiStatsStudentsOfInterestBody: PostApiStatsStudentsOfInterestBody, options?: RequestInit): Promise<postApiStatsStudentsOfInterestResponse> => {
+  
+  return customTrainingFetch<postApiStatsStudentsOfInterestResponse>(getPostApiStatsStudentsOfInterestUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      postApiStatsStudentsOfInterestBody,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type PostApiStatsStudentsOfInterestMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postApiStatsStudentsOfInterest>>
->
-export type PostApiStatsStudentsOfInterestMutationBody = PostApiStatsStudentsOfInterestBody
-export type PostApiStatsStudentsOfInterestMutationError = unknown
 
-export const usePostApiStatsStudentsOfInterest = <TError = unknown, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiStatsStudentsOfInterest>>,
-      TError,
-      { data: PostApiStatsStudentsOfInterestBody },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postApiStatsStudentsOfInterest>>,
-  TError,
-  { data: PostApiStatsStudentsOfInterestBody },
-  TContext
-> => {
-  const mutationOptions = getPostApiStatsStudentsOfInterestMutationOptions(options)
 
-  return useMutation(mutationOptions, queryClient)
-}
+export const getPostApiStatsStudentsOfInterestMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsStudentsOfInterest>>, TError,{data: PostApiStatsStudentsOfInterestBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof postApiStatsStudentsOfInterest>>, TError,{data: PostApiStatsStudentsOfInterestBody}, TContext> => {
 
+const mutationKey = ['postApiStatsStudentsOfInterest'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiStatsStudentsOfInterest>>, {data: PostApiStatsStudentsOfInterestBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postApiStatsStudentsOfInterest(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostApiStatsStudentsOfInterestMutationResult = NonNullable<Awaited<ReturnType<typeof postApiStatsStudentsOfInterest>>>
+    export type PostApiStatsStudentsOfInterestMutationBody = PostApiStatsStudentsOfInterestBody
+    export type PostApiStatsStudentsOfInterestMutationError = unknown
+
+    export const usePostApiStatsStudentsOfInterest = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsStudentsOfInterest>>, TError,{data: PostApiStatsStudentsOfInterestBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postApiStatsStudentsOfInterest>>,
+        TError,
+        {data: PostApiStatsStudentsOfInterestBody},
+        TContext
+      > => {
+
+      const mutationOptions = getPostApiStatsStudentsOfInterestMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 export type postApiStatsAverageGpaByFixedClassResponse200 = {
   data: PostApiStatsAverageGpaByFixedClass200
   status: 200
 }
+    
+export type postApiStatsAverageGpaByFixedClassResponseSuccess = (postApiStatsAverageGpaByFixedClassResponse200) & {
+  headers: Headers;
+};
+;
 
-export type postApiStatsAverageGpaByFixedClassResponseSuccess =
-  postApiStatsAverageGpaByFixedClassResponse200 & {
-    headers: Headers
-  }
-
-export type postApiStatsAverageGpaByFixedClassResponse =
-  postApiStatsAverageGpaByFixedClassResponseSuccess
+export type postApiStatsAverageGpaByFixedClassResponse = (postApiStatsAverageGpaByFixedClassResponseSuccess)
 
 export const getPostApiStatsAverageGpaByFixedClassUrl = () => {
+
+
+  
+
   return `/api/stats/average-gpa-by-fixed-class`
 }
 
-export const postApiStatsAverageGpaByFixedClass = async (
-  postApiStatsAverageGpaByFixedClassBody: PostApiStatsAverageGpaByFixedClassBody,
-  options?: RequestInit
-): Promise<postApiStatsAverageGpaByFixedClassResponse> => {
-  return customTrainingFetch<postApiStatsAverageGpaByFixedClassResponse>(
-    getPostApiStatsAverageGpaByFixedClassUrl(),
-    {
-      ...options,
-      method: "POST",
-      headers: { "Content-Type": "application/json", ...options?.headers },
-      body: JSON.stringify(postApiStatsAverageGpaByFixedClassBody),
-    }
-  )
-}
-
-export const getPostApiStatsAverageGpaByFixedClassMutationOptions = <
-  TError = unknown,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsAverageGpaByFixedClass>>,
-    TError,
-    { data: PostApiStatsAverageGpaByFixedClassBody },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiStatsAverageGpaByFixedClass>>,
-  TError,
-  { data: PostApiStatsAverageGpaByFixedClassBody },
-  TContext
-> => {
-  const mutationKey = ["postApiStatsAverageGpaByFixedClass"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiStatsAverageGpaByFixedClass>>,
-    { data: PostApiStatsAverageGpaByFixedClassBody }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return postApiStatsAverageGpaByFixedClass(data, requestOptions)
+export const postApiStatsAverageGpaByFixedClass = async (postApiStatsAverageGpaByFixedClassBody: PostApiStatsAverageGpaByFixedClassBody, options?: RequestInit): Promise<postApiStatsAverageGpaByFixedClassResponse> => {
+  
+  return customTrainingFetch<postApiStatsAverageGpaByFixedClassResponse>(getPostApiStatsAverageGpaByFixedClassUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      postApiStatsAverageGpaByFixedClassBody,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type PostApiStatsAverageGpaByFixedClassMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postApiStatsAverageGpaByFixedClass>>
->
-export type PostApiStatsAverageGpaByFixedClassMutationBody = PostApiStatsAverageGpaByFixedClassBody
-export type PostApiStatsAverageGpaByFixedClassMutationError = unknown
 
-export const usePostApiStatsAverageGpaByFixedClass = <TError = unknown, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiStatsAverageGpaByFixedClass>>,
-      TError,
-      { data: PostApiStatsAverageGpaByFixedClassBody },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postApiStatsAverageGpaByFixedClass>>,
-  TError,
-  { data: PostApiStatsAverageGpaByFixedClassBody },
-  TContext
-> => {
-  const mutationOptions = getPostApiStatsAverageGpaByFixedClassMutationOptions(options)
 
-  return useMutation(mutationOptions, queryClient)
-}
+export const getPostApiStatsAverageGpaByFixedClassMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsAverageGpaByFixedClass>>, TError,{data: PostApiStatsAverageGpaByFixedClassBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof postApiStatsAverageGpaByFixedClass>>, TError,{data: PostApiStatsAverageGpaByFixedClassBody}, TContext> => {
 
+const mutationKey = ['postApiStatsAverageGpaByFixedClass'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiStatsAverageGpaByFixedClass>>, {data: PostApiStatsAverageGpaByFixedClassBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postApiStatsAverageGpaByFixedClass(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostApiStatsAverageGpaByFixedClassMutationResult = NonNullable<Awaited<ReturnType<typeof postApiStatsAverageGpaByFixedClass>>>
+    export type PostApiStatsAverageGpaByFixedClassMutationBody = PostApiStatsAverageGpaByFixedClassBody
+    export type PostApiStatsAverageGpaByFixedClassMutationError = unknown
+
+    export const usePostApiStatsAverageGpaByFixedClass = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsAverageGpaByFixedClass>>, TError,{data: PostApiStatsAverageGpaByFixedClassBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postApiStatsAverageGpaByFixedClass>>,
+        TError,
+        {data: PostApiStatsAverageGpaByFixedClassBody},
+        TContext
+      > => {
+
+      const mutationOptions = getPostApiStatsAverageGpaByFixedClassMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 export type postApiStatsAverageGpaByTrainingMajorResponse200 = {
   data: PostApiStatsAverageGpaByTrainingMajor200
   status: 200
 }
+    
+export type postApiStatsAverageGpaByTrainingMajorResponseSuccess = (postApiStatsAverageGpaByTrainingMajorResponse200) & {
+  headers: Headers;
+};
+;
 
-export type postApiStatsAverageGpaByTrainingMajorResponseSuccess =
-  postApiStatsAverageGpaByTrainingMajorResponse200 & {
-    headers: Headers
-  }
-
-export type postApiStatsAverageGpaByTrainingMajorResponse =
-  postApiStatsAverageGpaByTrainingMajorResponseSuccess
+export type postApiStatsAverageGpaByTrainingMajorResponse = (postApiStatsAverageGpaByTrainingMajorResponseSuccess)
 
 export const getPostApiStatsAverageGpaByTrainingMajorUrl = () => {
+
+
+  
+
   return `/api/stats/average-gpa-by-training-major`
 }
 
-export const postApiStatsAverageGpaByTrainingMajor = async (
-  postApiStatsAverageGpaByTrainingMajorBody: PostApiStatsAverageGpaByTrainingMajorBody,
-  options?: RequestInit
-): Promise<postApiStatsAverageGpaByTrainingMajorResponse> => {
-  return customTrainingFetch<postApiStatsAverageGpaByTrainingMajorResponse>(
-    getPostApiStatsAverageGpaByTrainingMajorUrl(),
-    {
-      ...options,
-      method: "POST",
-      headers: { "Content-Type": "application/json", ...options?.headers },
-      body: JSON.stringify(postApiStatsAverageGpaByTrainingMajorBody),
-    }
-  )
-}
-
-export const getPostApiStatsAverageGpaByTrainingMajorMutationOptions = <
-  TError = unknown,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsAverageGpaByTrainingMajor>>,
-    TError,
-    { data: PostApiStatsAverageGpaByTrainingMajorBody },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiStatsAverageGpaByTrainingMajor>>,
-  TError,
-  { data: PostApiStatsAverageGpaByTrainingMajorBody },
-  TContext
-> => {
-  const mutationKey = ["postApiStatsAverageGpaByTrainingMajor"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiStatsAverageGpaByTrainingMajor>>,
-    { data: PostApiStatsAverageGpaByTrainingMajorBody }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return postApiStatsAverageGpaByTrainingMajor(data, requestOptions)
+export const postApiStatsAverageGpaByTrainingMajor = async (postApiStatsAverageGpaByTrainingMajorBody: PostApiStatsAverageGpaByTrainingMajorBody, options?: RequestInit): Promise<postApiStatsAverageGpaByTrainingMajorResponse> => {
+  
+  return customTrainingFetch<postApiStatsAverageGpaByTrainingMajorResponse>(getPostApiStatsAverageGpaByTrainingMajorUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      postApiStatsAverageGpaByTrainingMajorBody,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type PostApiStatsAverageGpaByTrainingMajorMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postApiStatsAverageGpaByTrainingMajor>>
->
-export type PostApiStatsAverageGpaByTrainingMajorMutationBody =
-  PostApiStatsAverageGpaByTrainingMajorBody
-export type PostApiStatsAverageGpaByTrainingMajorMutationError = unknown
 
-export const usePostApiStatsAverageGpaByTrainingMajor = <TError = unknown, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiStatsAverageGpaByTrainingMajor>>,
-      TError,
-      { data: PostApiStatsAverageGpaByTrainingMajorBody },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postApiStatsAverageGpaByTrainingMajor>>,
-  TError,
-  { data: PostApiStatsAverageGpaByTrainingMajorBody },
-  TContext
-> => {
-  const mutationOptions = getPostApiStatsAverageGpaByTrainingMajorMutationOptions(options)
 
-  return useMutation(mutationOptions, queryClient)
-}
+export const getPostApiStatsAverageGpaByTrainingMajorMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsAverageGpaByTrainingMajor>>, TError,{data: PostApiStatsAverageGpaByTrainingMajorBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof postApiStatsAverageGpaByTrainingMajor>>, TError,{data: PostApiStatsAverageGpaByTrainingMajorBody}, TContext> => {
 
+const mutationKey = ['postApiStatsAverageGpaByTrainingMajor'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiStatsAverageGpaByTrainingMajor>>, {data: PostApiStatsAverageGpaByTrainingMajorBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postApiStatsAverageGpaByTrainingMajor(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostApiStatsAverageGpaByTrainingMajorMutationResult = NonNullable<Awaited<ReturnType<typeof postApiStatsAverageGpaByTrainingMajor>>>
+    export type PostApiStatsAverageGpaByTrainingMajorMutationBody = PostApiStatsAverageGpaByTrainingMajorBody
+    export type PostApiStatsAverageGpaByTrainingMajorMutationError = unknown
+
+    export const usePostApiStatsAverageGpaByTrainingMajor = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsAverageGpaByTrainingMajor>>, TError,{data: PostApiStatsAverageGpaByTrainingMajorBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postApiStatsAverageGpaByTrainingMajor>>,
+        TError,
+        {data: PostApiStatsAverageGpaByTrainingMajorBody},
+        TContext
+      > => {
+
+      const mutationOptions = getPostApiStatsAverageGpaByTrainingMajorMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 export type postApiStatsSubjectPassFailRateResponse200 = {
   data: PostApiStatsSubjectPassFailRate200
   status: 200
 }
+    
+export type postApiStatsSubjectPassFailRateResponseSuccess = (postApiStatsSubjectPassFailRateResponse200) & {
+  headers: Headers;
+};
+;
 
-export type postApiStatsSubjectPassFailRateResponseSuccess =
-  postApiStatsSubjectPassFailRateResponse200 & {
-    headers: Headers
-  }
-
-export type postApiStatsSubjectPassFailRateResponse = postApiStatsSubjectPassFailRateResponseSuccess
+export type postApiStatsSubjectPassFailRateResponse = (postApiStatsSubjectPassFailRateResponseSuccess)
 
 export const getPostApiStatsSubjectPassFailRateUrl = () => {
+
+
+  
+
   return `/api/stats/subject-pass-fail-rate`
 }
 
-export const postApiStatsSubjectPassFailRate = async (
-  postApiStatsSubjectPassFailRateBody: PostApiStatsSubjectPassFailRateBody,
-  options?: RequestInit
-): Promise<postApiStatsSubjectPassFailRateResponse> => {
-  return customTrainingFetch<postApiStatsSubjectPassFailRateResponse>(
-    getPostApiStatsSubjectPassFailRateUrl(),
-    {
-      ...options,
-      method: "POST",
-      headers: { "Content-Type": "application/json", ...options?.headers },
-      body: JSON.stringify(postApiStatsSubjectPassFailRateBody),
-    }
-  )
-}
-
-export const getPostApiStatsSubjectPassFailRateMutationOptions = <
-  TError = unknown,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsSubjectPassFailRate>>,
-    TError,
-    { data: PostApiStatsSubjectPassFailRateBody },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiStatsSubjectPassFailRate>>,
-  TError,
-  { data: PostApiStatsSubjectPassFailRateBody },
-  TContext
-> => {
-  const mutationKey = ["postApiStatsSubjectPassFailRate"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiStatsSubjectPassFailRate>>,
-    { data: PostApiStatsSubjectPassFailRateBody }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return postApiStatsSubjectPassFailRate(data, requestOptions)
+export const postApiStatsSubjectPassFailRate = async (postApiStatsSubjectPassFailRateBody: PostApiStatsSubjectPassFailRateBody, options?: RequestInit): Promise<postApiStatsSubjectPassFailRateResponse> => {
+  
+  return customTrainingFetch<postApiStatsSubjectPassFailRateResponse>(getPostApiStatsSubjectPassFailRateUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      postApiStatsSubjectPassFailRateBody,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type PostApiStatsSubjectPassFailRateMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postApiStatsSubjectPassFailRate>>
->
-export type PostApiStatsSubjectPassFailRateMutationBody = PostApiStatsSubjectPassFailRateBody
-export type PostApiStatsSubjectPassFailRateMutationError = unknown
 
-export const usePostApiStatsSubjectPassFailRate = <TError = unknown, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiStatsSubjectPassFailRate>>,
-      TError,
-      { data: PostApiStatsSubjectPassFailRateBody },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postApiStatsSubjectPassFailRate>>,
-  TError,
-  { data: PostApiStatsSubjectPassFailRateBody },
-  TContext
-> => {
-  const mutationOptions = getPostApiStatsSubjectPassFailRateMutationOptions(options)
 
-  return useMutation(mutationOptions, queryClient)
-}
+export const getPostApiStatsSubjectPassFailRateMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsSubjectPassFailRate>>, TError,{data: PostApiStatsSubjectPassFailRateBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof postApiStatsSubjectPassFailRate>>, TError,{data: PostApiStatsSubjectPassFailRateBody}, TContext> => {
 
+const mutationKey = ['postApiStatsSubjectPassFailRate'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiStatsSubjectPassFailRate>>, {data: PostApiStatsSubjectPassFailRateBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postApiStatsSubjectPassFailRate(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostApiStatsSubjectPassFailRateMutationResult = NonNullable<Awaited<ReturnType<typeof postApiStatsSubjectPassFailRate>>>
+    export type PostApiStatsSubjectPassFailRateMutationBody = PostApiStatsSubjectPassFailRateBody
+    export type PostApiStatsSubjectPassFailRateMutationError = unknown
+
+    export const usePostApiStatsSubjectPassFailRate = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsSubjectPassFailRate>>, TError,{data: PostApiStatsSubjectPassFailRateBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postApiStatsSubjectPassFailRate>>,
+        TError,
+        {data: PostApiStatsSubjectPassFailRateBody},
+        TContext
+      > => {
+
+      const mutationOptions = getPostApiStatsSubjectPassFailRateMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 export type postApiStatsCurriculumStatisticsResponse200 = {
   data: PostApiStatsCurriculumStatistics200
   status: 200
 }
+    
+export type postApiStatsCurriculumStatisticsResponseSuccess = (postApiStatsCurriculumStatisticsResponse200) & {
+  headers: Headers;
+};
+;
 
-export type postApiStatsCurriculumStatisticsResponseSuccess =
-  postApiStatsCurriculumStatisticsResponse200 & {
-    headers: Headers
-  }
-
-export type postApiStatsCurriculumStatisticsResponse =
-  postApiStatsCurriculumStatisticsResponseSuccess
+export type postApiStatsCurriculumStatisticsResponse = (postApiStatsCurriculumStatisticsResponseSuccess)
 
 export const getPostApiStatsCurriculumStatisticsUrl = () => {
+
+
+  
+
   return `/api/stats/curriculum-statistics`
 }
 
-export const postApiStatsCurriculumStatistics = async (
-  postApiStatsCurriculumStatisticsBody: PostApiStatsCurriculumStatisticsBody,
-  options?: RequestInit
-): Promise<postApiStatsCurriculumStatisticsResponse> => {
-  return customTrainingFetch<postApiStatsCurriculumStatisticsResponse>(
-    getPostApiStatsCurriculumStatisticsUrl(),
-    {
-      ...options,
-      method: "POST",
-      headers: { "Content-Type": "application/json", ...options?.headers },
-      body: JSON.stringify(postApiStatsCurriculumStatisticsBody),
-    }
-  )
-}
-
-export const getPostApiStatsCurriculumStatisticsMutationOptions = <
-  TError = unknown,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsCurriculumStatistics>>,
-    TError,
-    { data: PostApiStatsCurriculumStatisticsBody },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiStatsCurriculumStatistics>>,
-  TError,
-  { data: PostApiStatsCurriculumStatisticsBody },
-  TContext
-> => {
-  const mutationKey = ["postApiStatsCurriculumStatistics"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiStatsCurriculumStatistics>>,
-    { data: PostApiStatsCurriculumStatisticsBody }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return postApiStatsCurriculumStatistics(data, requestOptions)
+export const postApiStatsCurriculumStatistics = async (postApiStatsCurriculumStatisticsBody: PostApiStatsCurriculumStatisticsBody, options?: RequestInit): Promise<postApiStatsCurriculumStatisticsResponse> => {
+  
+  return customTrainingFetch<postApiStatsCurriculumStatisticsResponse>(getPostApiStatsCurriculumStatisticsUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      postApiStatsCurriculumStatisticsBody,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type PostApiStatsCurriculumStatisticsMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postApiStatsCurriculumStatistics>>
->
-export type PostApiStatsCurriculumStatisticsMutationBody = PostApiStatsCurriculumStatisticsBody
-export type PostApiStatsCurriculumStatisticsMutationError = unknown
 
-export const usePostApiStatsCurriculumStatistics = <TError = unknown, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiStatsCurriculumStatistics>>,
-      TError,
-      { data: PostApiStatsCurriculumStatisticsBody },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postApiStatsCurriculumStatistics>>,
-  TError,
-  { data: PostApiStatsCurriculumStatisticsBody },
-  TContext
-> => {
-  const mutationOptions = getPostApiStatsCurriculumStatisticsMutationOptions(options)
 
-  return useMutation(mutationOptions, queryClient)
-}
+export const getPostApiStatsCurriculumStatisticsMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsCurriculumStatistics>>, TError,{data: PostApiStatsCurriculumStatisticsBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof postApiStatsCurriculumStatistics>>, TError,{data: PostApiStatsCurriculumStatisticsBody}, TContext> => {
 
+const mutationKey = ['postApiStatsCurriculumStatistics'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiStatsCurriculumStatistics>>, {data: PostApiStatsCurriculumStatisticsBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postApiStatsCurriculumStatistics(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostApiStatsCurriculumStatisticsMutationResult = NonNullable<Awaited<ReturnType<typeof postApiStatsCurriculumStatistics>>>
+    export type PostApiStatsCurriculumStatisticsMutationBody = PostApiStatsCurriculumStatisticsBody
+    export type PostApiStatsCurriculumStatisticsMutationError = unknown
+
+    export const usePostApiStatsCurriculumStatistics = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsCurriculumStatistics>>, TError,{data: PostApiStatsCurriculumStatisticsBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postApiStatsCurriculumStatistics>>,
+        TError,
+        {data: PostApiStatsCurriculumStatisticsBody},
+        TContext
+      > => {
+
+      const mutationOptions = getPostApiStatsCurriculumStatisticsMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 export type postApiStatsSubjectClassStatisticsResponse200 = {
   data: PostApiStatsSubjectClassStatistics200
   status: 200
 }
+    
+export type postApiStatsSubjectClassStatisticsResponseSuccess = (postApiStatsSubjectClassStatisticsResponse200) & {
+  headers: Headers;
+};
+;
 
-export type postApiStatsSubjectClassStatisticsResponseSuccess =
-  postApiStatsSubjectClassStatisticsResponse200 & {
-    headers: Headers
-  }
-
-export type postApiStatsSubjectClassStatisticsResponse =
-  postApiStatsSubjectClassStatisticsResponseSuccess
+export type postApiStatsSubjectClassStatisticsResponse = (postApiStatsSubjectClassStatisticsResponseSuccess)
 
 export const getPostApiStatsSubjectClassStatisticsUrl = () => {
+
+
+  
+
   return `/api/stats/subject-class-statistics`
 }
 
-export const postApiStatsSubjectClassStatistics = async (
-  postApiStatsSubjectClassStatisticsBody: PostApiStatsSubjectClassStatisticsBody,
-  options?: RequestInit
-): Promise<postApiStatsSubjectClassStatisticsResponse> => {
-  return customTrainingFetch<postApiStatsSubjectClassStatisticsResponse>(
-    getPostApiStatsSubjectClassStatisticsUrl(),
-    {
-      ...options,
-      method: "POST",
-      headers: { "Content-Type": "application/json", ...options?.headers },
-      body: JSON.stringify(postApiStatsSubjectClassStatisticsBody),
-    }
-  )
-}
-
-export const getPostApiStatsSubjectClassStatisticsMutationOptions = <
-  TError = unknown,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsSubjectClassStatistics>>,
-    TError,
-    { data: PostApiStatsSubjectClassStatisticsBody },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiStatsSubjectClassStatistics>>,
-  TError,
-  { data: PostApiStatsSubjectClassStatisticsBody },
-  TContext
-> => {
-  const mutationKey = ["postApiStatsSubjectClassStatistics"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiStatsSubjectClassStatistics>>,
-    { data: PostApiStatsSubjectClassStatisticsBody }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return postApiStatsSubjectClassStatistics(data, requestOptions)
+export const postApiStatsSubjectClassStatistics = async (postApiStatsSubjectClassStatisticsBody: PostApiStatsSubjectClassStatisticsBody, options?: RequestInit): Promise<postApiStatsSubjectClassStatisticsResponse> => {
+  
+  return customTrainingFetch<postApiStatsSubjectClassStatisticsResponse>(getPostApiStatsSubjectClassStatisticsUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      postApiStatsSubjectClassStatisticsBody,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type PostApiStatsSubjectClassStatisticsMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postApiStatsSubjectClassStatistics>>
->
-export type PostApiStatsSubjectClassStatisticsMutationBody = PostApiStatsSubjectClassStatisticsBody
-export type PostApiStatsSubjectClassStatisticsMutationError = unknown
 
-export const usePostApiStatsSubjectClassStatistics = <TError = unknown, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiStatsSubjectClassStatistics>>,
-      TError,
-      { data: PostApiStatsSubjectClassStatisticsBody },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postApiStatsSubjectClassStatistics>>,
-  TError,
-  { data: PostApiStatsSubjectClassStatisticsBody },
-  TContext
-> => {
-  const mutationOptions = getPostApiStatsSubjectClassStatisticsMutationOptions(options)
 
-  return useMutation(mutationOptions, queryClient)
-}
+export const getPostApiStatsSubjectClassStatisticsMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsSubjectClassStatistics>>, TError,{data: PostApiStatsSubjectClassStatisticsBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof postApiStatsSubjectClassStatistics>>, TError,{data: PostApiStatsSubjectClassStatisticsBody}, TContext> => {
 
+const mutationKey = ['postApiStatsSubjectClassStatistics'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiStatsSubjectClassStatistics>>, {data: PostApiStatsSubjectClassStatisticsBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postApiStatsSubjectClassStatistics(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostApiStatsSubjectClassStatisticsMutationResult = NonNullable<Awaited<ReturnType<typeof postApiStatsSubjectClassStatistics>>>
+    export type PostApiStatsSubjectClassStatisticsMutationBody = PostApiStatsSubjectClassStatisticsBody
+    export type PostApiStatsSubjectClassStatisticsMutationError = unknown
+
+    export const usePostApiStatsSubjectClassStatistics = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsSubjectClassStatistics>>, TError,{data: PostApiStatsSubjectClassStatisticsBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postApiStatsSubjectClassStatistics>>,
+        TError,
+        {data: PostApiStatsSubjectClassStatisticsBody},
+        TContext
+      > => {
+
+      const mutationOptions = getPostApiStatsSubjectClassStatisticsMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 export type postApiStatsLecturerWorkloadResponse200 = {
   data: PostApiStatsLecturerWorkload200
   status: 200
 }
+    
+export type postApiStatsLecturerWorkloadResponseSuccess = (postApiStatsLecturerWorkloadResponse200) & {
+  headers: Headers;
+};
+;
 
-export type postApiStatsLecturerWorkloadResponseSuccess =
-  postApiStatsLecturerWorkloadResponse200 & {
-    headers: Headers
-  }
-
-export type postApiStatsLecturerWorkloadResponse = postApiStatsLecturerWorkloadResponseSuccess
+export type postApiStatsLecturerWorkloadResponse = (postApiStatsLecturerWorkloadResponseSuccess)
 
 export const getPostApiStatsLecturerWorkloadUrl = () => {
+
+
+  
+
   return `/api/stats/lecturer-workload`
 }
 
-export const postApiStatsLecturerWorkload = async (
-  postApiStatsLecturerWorkloadBody: PostApiStatsLecturerWorkloadBody,
-  options?: RequestInit
-): Promise<postApiStatsLecturerWorkloadResponse> => {
-  return customTrainingFetch<postApiStatsLecturerWorkloadResponse>(
-    getPostApiStatsLecturerWorkloadUrl(),
-    {
-      ...options,
-      method: "POST",
-      headers: { "Content-Type": "application/json", ...options?.headers },
-      body: JSON.stringify(postApiStatsLecturerWorkloadBody),
-    }
-  )
-}
-
-export const getPostApiStatsLecturerWorkloadMutationOptions = <
-  TError = unknown,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsLecturerWorkload>>,
-    TError,
-    { data: PostApiStatsLecturerWorkloadBody },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiStatsLecturerWorkload>>,
-  TError,
-  { data: PostApiStatsLecturerWorkloadBody },
-  TContext
-> => {
-  const mutationKey = ["postApiStatsLecturerWorkload"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiStatsLecturerWorkload>>,
-    { data: PostApiStatsLecturerWorkloadBody }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return postApiStatsLecturerWorkload(data, requestOptions)
+export const postApiStatsLecturerWorkload = async (postApiStatsLecturerWorkloadBody: PostApiStatsLecturerWorkloadBody, options?: RequestInit): Promise<postApiStatsLecturerWorkloadResponse> => {
+  
+  return customTrainingFetch<postApiStatsLecturerWorkloadResponse>(getPostApiStatsLecturerWorkloadUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      postApiStatsLecturerWorkloadBody,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type PostApiStatsLecturerWorkloadMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postApiStatsLecturerWorkload>>
->
-export type PostApiStatsLecturerWorkloadMutationBody = PostApiStatsLecturerWorkloadBody
-export type PostApiStatsLecturerWorkloadMutationError = unknown
 
-export const usePostApiStatsLecturerWorkload = <TError = unknown, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiStatsLecturerWorkload>>,
-      TError,
-      { data: PostApiStatsLecturerWorkloadBody },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postApiStatsLecturerWorkload>>,
-  TError,
-  { data: PostApiStatsLecturerWorkloadBody },
-  TContext
-> => {
-  const mutationOptions = getPostApiStatsLecturerWorkloadMutationOptions(options)
 
-  return useMutation(mutationOptions, queryClient)
-}
+export const getPostApiStatsLecturerWorkloadMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsLecturerWorkload>>, TError,{data: PostApiStatsLecturerWorkloadBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof postApiStatsLecturerWorkload>>, TError,{data: PostApiStatsLecturerWorkloadBody}, TContext> => {
 
+const mutationKey = ['postApiStatsLecturerWorkload'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiStatsLecturerWorkload>>, {data: PostApiStatsLecturerWorkloadBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postApiStatsLecturerWorkload(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostApiStatsLecturerWorkloadMutationResult = NonNullable<Awaited<ReturnType<typeof postApiStatsLecturerWorkload>>>
+    export type PostApiStatsLecturerWorkloadMutationBody = PostApiStatsLecturerWorkloadBody
+    export type PostApiStatsLecturerWorkloadMutationError = unknown
+
+    export const usePostApiStatsLecturerWorkload = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsLecturerWorkload>>, TError,{data: PostApiStatsLecturerWorkloadBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postApiStatsLecturerWorkload>>,
+        TError,
+        {data: PostApiStatsLecturerWorkloadBody},
+        TContext
+      > => {
+
+      const mutationOptions = getPostApiStatsLecturerWorkloadMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 export type postApiStatsGraduationRankingStatisticsResponse200 = {
   data: PostApiStatsGraduationRankingStatistics200
   status: 200
 }
+    
+export type postApiStatsGraduationRankingStatisticsResponseSuccess = (postApiStatsGraduationRankingStatisticsResponse200) & {
+  headers: Headers;
+};
+;
 
-export type postApiStatsGraduationRankingStatisticsResponseSuccess =
-  postApiStatsGraduationRankingStatisticsResponse200 & {
-    headers: Headers
-  }
-
-export type postApiStatsGraduationRankingStatisticsResponse =
-  postApiStatsGraduationRankingStatisticsResponseSuccess
+export type postApiStatsGraduationRankingStatisticsResponse = (postApiStatsGraduationRankingStatisticsResponseSuccess)
 
 export const getPostApiStatsGraduationRankingStatisticsUrl = () => {
+
+
+  
+
   return `/api/stats/graduation-ranking-statistics`
 }
 
-export const postApiStatsGraduationRankingStatistics = async (
-  postApiStatsGraduationRankingStatisticsBody: PostApiStatsGraduationRankingStatisticsBody,
-  options?: RequestInit
-): Promise<postApiStatsGraduationRankingStatisticsResponse> => {
-  return customTrainingFetch<postApiStatsGraduationRankingStatisticsResponse>(
-    getPostApiStatsGraduationRankingStatisticsUrl(),
-    {
-      ...options,
-      method: "POST",
-      headers: { "Content-Type": "application/json", ...options?.headers },
-      body: JSON.stringify(postApiStatsGraduationRankingStatisticsBody),
-    }
-  )
-}
-
-export const getPostApiStatsGraduationRankingStatisticsMutationOptions = <
-  TError = unknown,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsGraduationRankingStatistics>>,
-    TError,
-    { data: PostApiStatsGraduationRankingStatisticsBody },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiStatsGraduationRankingStatistics>>,
-  TError,
-  { data: PostApiStatsGraduationRankingStatisticsBody },
-  TContext
-> => {
-  const mutationKey = ["postApiStatsGraduationRankingStatistics"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiStatsGraduationRankingStatistics>>,
-    { data: PostApiStatsGraduationRankingStatisticsBody }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return postApiStatsGraduationRankingStatistics(data, requestOptions)
+export const postApiStatsGraduationRankingStatistics = async (postApiStatsGraduationRankingStatisticsBody: PostApiStatsGraduationRankingStatisticsBody, options?: RequestInit): Promise<postApiStatsGraduationRankingStatisticsResponse> => {
+  
+  return customTrainingFetch<postApiStatsGraduationRankingStatisticsResponse>(getPostApiStatsGraduationRankingStatisticsUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      postApiStatsGraduationRankingStatisticsBody,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type PostApiStatsGraduationRankingStatisticsMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postApiStatsGraduationRankingStatistics>>
->
-export type PostApiStatsGraduationRankingStatisticsMutationBody =
-  PostApiStatsGraduationRankingStatisticsBody
-export type PostApiStatsGraduationRankingStatisticsMutationError = unknown
 
-export const usePostApiStatsGraduationRankingStatistics = <TError = unknown, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiStatsGraduationRankingStatistics>>,
-      TError,
-      { data: PostApiStatsGraduationRankingStatisticsBody },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postApiStatsGraduationRankingStatistics>>,
-  TError,
-  { data: PostApiStatsGraduationRankingStatisticsBody },
-  TContext
-> => {
-  const mutationOptions = getPostApiStatsGraduationRankingStatisticsMutationOptions(options)
 
-  return useMutation(mutationOptions, queryClient)
-}
+export const getPostApiStatsGraduationRankingStatisticsMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsGraduationRankingStatistics>>, TError,{data: PostApiStatsGraduationRankingStatisticsBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof postApiStatsGraduationRankingStatistics>>, TError,{data: PostApiStatsGraduationRankingStatisticsBody}, TContext> => {
 
+const mutationKey = ['postApiStatsGraduationRankingStatistics'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiStatsGraduationRankingStatistics>>, {data: PostApiStatsGraduationRankingStatisticsBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postApiStatsGraduationRankingStatistics(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostApiStatsGraduationRankingStatisticsMutationResult = NonNullable<Awaited<ReturnType<typeof postApiStatsGraduationRankingStatistics>>>
+    export type PostApiStatsGraduationRankingStatisticsMutationBody = PostApiStatsGraduationRankingStatisticsBody
+    export type PostApiStatsGraduationRankingStatisticsMutationError = unknown
+
+    export const usePostApiStatsGraduationRankingStatistics = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsGraduationRankingStatistics>>, TError,{data: PostApiStatsGraduationRankingStatisticsBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postApiStatsGraduationRankingStatistics>>,
+        TError,
+        {data: PostApiStatsGraduationRankingStatisticsBody},
+        TContext
+      > => {
+
+      const mutationOptions = getPostApiStatsGraduationRankingStatisticsMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 export type postApiStatsStudentsForAcademicActionResponse200 = {
   data: PostApiStatsStudentsForAcademicAction200
   status: 200
 }
+    
+export type postApiStatsStudentsForAcademicActionResponseSuccess = (postApiStatsStudentsForAcademicActionResponse200) & {
+  headers: Headers;
+};
+;
 
-export type postApiStatsStudentsForAcademicActionResponseSuccess =
-  postApiStatsStudentsForAcademicActionResponse200 & {
-    headers: Headers
-  }
-
-export type postApiStatsStudentsForAcademicActionResponse =
-  postApiStatsStudentsForAcademicActionResponseSuccess
+export type postApiStatsStudentsForAcademicActionResponse = (postApiStatsStudentsForAcademicActionResponseSuccess)
 
 export const getPostApiStatsStudentsForAcademicActionUrl = () => {
+
+
+  
+
   return `/api/stats/students-for-academic-action`
 }
 
-export const postApiStatsStudentsForAcademicAction = async (
-  postApiStatsStudentsForAcademicActionBody: PostApiStatsStudentsForAcademicActionBody,
-  options?: RequestInit
-): Promise<postApiStatsStudentsForAcademicActionResponse> => {
-  return customTrainingFetch<postApiStatsStudentsForAcademicActionResponse>(
-    getPostApiStatsStudentsForAcademicActionUrl(),
-    {
-      ...options,
-      method: "POST",
-      headers: { "Content-Type": "application/json", ...options?.headers },
-      body: JSON.stringify(postApiStatsStudentsForAcademicActionBody),
-    }
-  )
-}
-
-export const getPostApiStatsStudentsForAcademicActionMutationOptions = <
-  TError = unknown,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsStudentsForAcademicAction>>,
-    TError,
-    { data: PostApiStatsStudentsForAcademicActionBody },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiStatsStudentsForAcademicAction>>,
-  TError,
-  { data: PostApiStatsStudentsForAcademicActionBody },
-  TContext
-> => {
-  const mutationKey = ["postApiStatsStudentsForAcademicAction"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiStatsStudentsForAcademicAction>>,
-    { data: PostApiStatsStudentsForAcademicActionBody }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return postApiStatsStudentsForAcademicAction(data, requestOptions)
+export const postApiStatsStudentsForAcademicAction = async (postApiStatsStudentsForAcademicActionBody: PostApiStatsStudentsForAcademicActionBody, options?: RequestInit): Promise<postApiStatsStudentsForAcademicActionResponse> => {
+  
+  return customTrainingFetch<postApiStatsStudentsForAcademicActionResponse>(getPostApiStatsStudentsForAcademicActionUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      postApiStatsStudentsForAcademicActionBody,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type PostApiStatsStudentsForAcademicActionMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postApiStatsStudentsForAcademicAction>>
->
-export type PostApiStatsStudentsForAcademicActionMutationBody =
-  PostApiStatsStudentsForAcademicActionBody
-export type PostApiStatsStudentsForAcademicActionMutationError = unknown
 
-export const usePostApiStatsStudentsForAcademicAction = <TError = unknown, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiStatsStudentsForAcademicAction>>,
-      TError,
-      { data: PostApiStatsStudentsForAcademicActionBody },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postApiStatsStudentsForAcademicAction>>,
-  TError,
-  { data: PostApiStatsStudentsForAcademicActionBody },
-  TContext
-> => {
-  const mutationOptions = getPostApiStatsStudentsForAcademicActionMutationOptions(options)
 
-  return useMutation(mutationOptions, queryClient)
-}
+export const getPostApiStatsStudentsForAcademicActionMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsStudentsForAcademicAction>>, TError,{data: PostApiStatsStudentsForAcademicActionBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof postApiStatsStudentsForAcademicAction>>, TError,{data: PostApiStatsStudentsForAcademicActionBody}, TContext> => {
 
+const mutationKey = ['postApiStatsStudentsForAcademicAction'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiStatsStudentsForAcademicAction>>, {data: PostApiStatsStudentsForAcademicActionBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postApiStatsStudentsForAcademicAction(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostApiStatsStudentsForAcademicActionMutationResult = NonNullable<Awaited<ReturnType<typeof postApiStatsStudentsForAcademicAction>>>
+    export type PostApiStatsStudentsForAcademicActionMutationBody = PostApiStatsStudentsForAcademicActionBody
+    export type PostApiStatsStudentsForAcademicActionMutationError = unknown
+
+    export const usePostApiStatsStudentsForAcademicAction = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsStudentsForAcademicAction>>, TError,{data: PostApiStatsStudentsForAcademicActionBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postApiStatsStudentsForAcademicAction>>,
+        TError,
+        {data: PostApiStatsStudentsForAcademicActionBody},
+        TContext
+      > => {
+
+      const mutationOptions = getPostApiStatsStudentsForAcademicActionMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 export type postApiStatsExamParticipantsBySemesterResponse200 = {
   data: PostApiStatsExamParticipantsBySemester200
   status: 200
 }
+    
+export type postApiStatsExamParticipantsBySemesterResponseSuccess = (postApiStatsExamParticipantsBySemesterResponse200) & {
+  headers: Headers;
+};
+;
 
-export type postApiStatsExamParticipantsBySemesterResponseSuccess =
-  postApiStatsExamParticipantsBySemesterResponse200 & {
-    headers: Headers
-  }
-
-export type postApiStatsExamParticipantsBySemesterResponse =
-  postApiStatsExamParticipantsBySemesterResponseSuccess
+export type postApiStatsExamParticipantsBySemesterResponse = (postApiStatsExamParticipantsBySemesterResponseSuccess)
 
 export const getPostApiStatsExamParticipantsBySemesterUrl = () => {
+
+
+  
+
   return `/api/stats/exam-participants-by-semester`
 }
 
-export const postApiStatsExamParticipantsBySemester = async (
-  postApiStatsExamParticipantsBySemesterBody: PostApiStatsExamParticipantsBySemesterBody,
-  options?: RequestInit
-): Promise<postApiStatsExamParticipantsBySemesterResponse> => {
-  return customTrainingFetch<postApiStatsExamParticipantsBySemesterResponse>(
-    getPostApiStatsExamParticipantsBySemesterUrl(),
-    {
-      ...options,
-      method: "POST",
-      headers: { "Content-Type": "application/json", ...options?.headers },
-      body: JSON.stringify(postApiStatsExamParticipantsBySemesterBody),
-    }
-  )
-}
-
-export const getPostApiStatsExamParticipantsBySemesterMutationOptions = <
-  TError = unknown,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsExamParticipantsBySemester>>,
-    TError,
-    { data: PostApiStatsExamParticipantsBySemesterBody },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiStatsExamParticipantsBySemester>>,
-  TError,
-  { data: PostApiStatsExamParticipantsBySemesterBody },
-  TContext
-> => {
-  const mutationKey = ["postApiStatsExamParticipantsBySemester"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiStatsExamParticipantsBySemester>>,
-    { data: PostApiStatsExamParticipantsBySemesterBody }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return postApiStatsExamParticipantsBySemester(data, requestOptions)
+export const postApiStatsExamParticipantsBySemester = async (postApiStatsExamParticipantsBySemesterBody: PostApiStatsExamParticipantsBySemesterBody, options?: RequestInit): Promise<postApiStatsExamParticipantsBySemesterResponse> => {
+  
+  return customTrainingFetch<postApiStatsExamParticipantsBySemesterResponse>(getPostApiStatsExamParticipantsBySemesterUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      postApiStatsExamParticipantsBySemesterBody,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type PostApiStatsExamParticipantsBySemesterMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postApiStatsExamParticipantsBySemester>>
->
-export type PostApiStatsExamParticipantsBySemesterMutationBody =
-  PostApiStatsExamParticipantsBySemesterBody
-export type PostApiStatsExamParticipantsBySemesterMutationError = unknown
 
-export const usePostApiStatsExamParticipantsBySemester = <TError = unknown, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiStatsExamParticipantsBySemester>>,
-      TError,
-      { data: PostApiStatsExamParticipantsBySemesterBody },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postApiStatsExamParticipantsBySemester>>,
-  TError,
-  { data: PostApiStatsExamParticipantsBySemesterBody },
-  TContext
-> => {
-  const mutationOptions = getPostApiStatsExamParticipantsBySemesterMutationOptions(options)
 
-  return useMutation(mutationOptions, queryClient)
-}
+export const getPostApiStatsExamParticipantsBySemesterMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsExamParticipantsBySemester>>, TError,{data: PostApiStatsExamParticipantsBySemesterBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof postApiStatsExamParticipantsBySemester>>, TError,{data: PostApiStatsExamParticipantsBySemesterBody}, TContext> => {
 
+const mutationKey = ['postApiStatsExamParticipantsBySemester'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiStatsExamParticipantsBySemester>>, {data: PostApiStatsExamParticipantsBySemesterBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postApiStatsExamParticipantsBySemester(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostApiStatsExamParticipantsBySemesterMutationResult = NonNullable<Awaited<ReturnType<typeof postApiStatsExamParticipantsBySemester>>>
+    export type PostApiStatsExamParticipantsBySemesterMutationBody = PostApiStatsExamParticipantsBySemesterBody
+    export type PostApiStatsExamParticipantsBySemesterMutationError = unknown
+
+    export const usePostApiStatsExamParticipantsBySemester = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsExamParticipantsBySemester>>, TError,{data: PostApiStatsExamParticipantsBySemesterBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postApiStatsExamParticipantsBySemester>>,
+        TError,
+        {data: PostApiStatsExamParticipantsBySemesterBody},
+        TContext
+      > => {
+
+      const mutationOptions = getPostApiStatsExamParticipantsBySemesterMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 export type postApiStatsAverageExamScoreTrendResponse200 = {
   data: PostApiStatsAverageExamScoreTrend200
   status: 200
 }
+    
+export type postApiStatsAverageExamScoreTrendResponseSuccess = (postApiStatsAverageExamScoreTrendResponse200) & {
+  headers: Headers;
+};
+;
 
-export type postApiStatsAverageExamScoreTrendResponseSuccess =
-  postApiStatsAverageExamScoreTrendResponse200 & {
-    headers: Headers
-  }
-
-export type postApiStatsAverageExamScoreTrendResponse =
-  postApiStatsAverageExamScoreTrendResponseSuccess
+export type postApiStatsAverageExamScoreTrendResponse = (postApiStatsAverageExamScoreTrendResponseSuccess)
 
 export const getPostApiStatsAverageExamScoreTrendUrl = () => {
+
+
+  
+
   return `/api/stats/average-exam-score-trend`
 }
 
-export const postApiStatsAverageExamScoreTrend = async (
-  postApiStatsAverageExamScoreTrendBody: PostApiStatsAverageExamScoreTrendBody,
-  options?: RequestInit
-): Promise<postApiStatsAverageExamScoreTrendResponse> => {
-  return customTrainingFetch<postApiStatsAverageExamScoreTrendResponse>(
-    getPostApiStatsAverageExamScoreTrendUrl(),
-    {
-      ...options,
-      method: "POST",
-      headers: { "Content-Type": "application/json", ...options?.headers },
-      body: JSON.stringify(postApiStatsAverageExamScoreTrendBody),
-    }
-  )
-}
-
-export const getPostApiStatsAverageExamScoreTrendMutationOptions = <
-  TError = unknown,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsAverageExamScoreTrend>>,
-    TError,
-    { data: PostApiStatsAverageExamScoreTrendBody },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiStatsAverageExamScoreTrend>>,
-  TError,
-  { data: PostApiStatsAverageExamScoreTrendBody },
-  TContext
-> => {
-  const mutationKey = ["postApiStatsAverageExamScoreTrend"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiStatsAverageExamScoreTrend>>,
-    { data: PostApiStatsAverageExamScoreTrendBody }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return postApiStatsAverageExamScoreTrend(data, requestOptions)
+export const postApiStatsAverageExamScoreTrend = async (postApiStatsAverageExamScoreTrendBody: PostApiStatsAverageExamScoreTrendBody, options?: RequestInit): Promise<postApiStatsAverageExamScoreTrendResponse> => {
+  
+  return customTrainingFetch<postApiStatsAverageExamScoreTrendResponse>(getPostApiStatsAverageExamScoreTrendUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      postApiStatsAverageExamScoreTrendBody,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type PostApiStatsAverageExamScoreTrendMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postApiStatsAverageExamScoreTrend>>
->
-export type PostApiStatsAverageExamScoreTrendMutationBody = PostApiStatsAverageExamScoreTrendBody
-export type PostApiStatsAverageExamScoreTrendMutationError = unknown
 
-export const usePostApiStatsAverageExamScoreTrend = <TError = unknown, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiStatsAverageExamScoreTrend>>,
-      TError,
-      { data: PostApiStatsAverageExamScoreTrendBody },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postApiStatsAverageExamScoreTrend>>,
-  TError,
-  { data: PostApiStatsAverageExamScoreTrendBody },
-  TContext
-> => {
-  const mutationOptions = getPostApiStatsAverageExamScoreTrendMutationOptions(options)
 
-  return useMutation(mutationOptions, queryClient)
-}
+export const getPostApiStatsAverageExamScoreTrendMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsAverageExamScoreTrend>>, TError,{data: PostApiStatsAverageExamScoreTrendBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof postApiStatsAverageExamScoreTrend>>, TError,{data: PostApiStatsAverageExamScoreTrendBody}, TContext> => {
 
+const mutationKey = ['postApiStatsAverageExamScoreTrend'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiStatsAverageExamScoreTrend>>, {data: PostApiStatsAverageExamScoreTrendBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postApiStatsAverageExamScoreTrend(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostApiStatsAverageExamScoreTrendMutationResult = NonNullable<Awaited<ReturnType<typeof postApiStatsAverageExamScoreTrend>>>
+    export type PostApiStatsAverageExamScoreTrendMutationBody = PostApiStatsAverageExamScoreTrendBody
+    export type PostApiStatsAverageExamScoreTrendMutationError = unknown
+
+    export const usePostApiStatsAverageExamScoreTrend = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsAverageExamScoreTrend>>, TError,{data: PostApiStatsAverageExamScoreTrendBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postApiStatsAverageExamScoreTrend>>,
+        TError,
+        {data: PostApiStatsAverageExamScoreTrendBody},
+        TContext
+      > => {
+
+      const mutationOptions = getPostApiStatsAverageExamScoreTrendMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 export type postApiStatsQuestionStatisticsResponse200 = {
   data: PostApiStatsQuestionStatistics200
   status: 200
 }
+    
+export type postApiStatsQuestionStatisticsResponseSuccess = (postApiStatsQuestionStatisticsResponse200) & {
+  headers: Headers;
+};
+;
 
-export type postApiStatsQuestionStatisticsResponseSuccess =
-  postApiStatsQuestionStatisticsResponse200 & {
-    headers: Headers
-  }
-
-export type postApiStatsQuestionStatisticsResponse = postApiStatsQuestionStatisticsResponseSuccess
+export type postApiStatsQuestionStatisticsResponse = (postApiStatsQuestionStatisticsResponseSuccess)
 
 export const getPostApiStatsQuestionStatisticsUrl = () => {
+
+
+  
+
   return `/api/stats/question-statistics`
 }
 
-export const postApiStatsQuestionStatistics = async (
-  postApiStatsQuestionStatisticsBody: PostApiStatsQuestionStatisticsBody,
-  options?: RequestInit
-): Promise<postApiStatsQuestionStatisticsResponse> => {
-  return customTrainingFetch<postApiStatsQuestionStatisticsResponse>(
-    getPostApiStatsQuestionStatisticsUrl(),
-    {
-      ...options,
-      method: "POST",
-      headers: { "Content-Type": "application/json", ...options?.headers },
-      body: JSON.stringify(postApiStatsQuestionStatisticsBody),
-    }
-  )
-}
-
-export const getPostApiStatsQuestionStatisticsMutationOptions = <
-  TError = unknown,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsQuestionStatistics>>,
-    TError,
-    { data: PostApiStatsQuestionStatisticsBody },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiStatsQuestionStatistics>>,
-  TError,
-  { data: PostApiStatsQuestionStatisticsBody },
-  TContext
-> => {
-  const mutationKey = ["postApiStatsQuestionStatistics"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiStatsQuestionStatistics>>,
-    { data: PostApiStatsQuestionStatisticsBody }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return postApiStatsQuestionStatistics(data, requestOptions)
+export const postApiStatsQuestionStatistics = async (postApiStatsQuestionStatisticsBody: PostApiStatsQuestionStatisticsBody, options?: RequestInit): Promise<postApiStatsQuestionStatisticsResponse> => {
+  
+  return customTrainingFetch<postApiStatsQuestionStatisticsResponse>(getPostApiStatsQuestionStatisticsUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      postApiStatsQuestionStatisticsBody,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type PostApiStatsQuestionStatisticsMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postApiStatsQuestionStatistics>>
->
-export type PostApiStatsQuestionStatisticsMutationBody = PostApiStatsQuestionStatisticsBody
-export type PostApiStatsQuestionStatisticsMutationError = unknown
 
-export const usePostApiStatsQuestionStatistics = <TError = unknown, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiStatsQuestionStatistics>>,
-      TError,
-      { data: PostApiStatsQuestionStatisticsBody },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postApiStatsQuestionStatistics>>,
-  TError,
-  { data: PostApiStatsQuestionStatisticsBody },
-  TContext
-> => {
-  const mutationOptions = getPostApiStatsQuestionStatisticsMutationOptions(options)
 
-  return useMutation(mutationOptions, queryClient)
-}
+export const getPostApiStatsQuestionStatisticsMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsQuestionStatistics>>, TError,{data: PostApiStatsQuestionStatisticsBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof postApiStatsQuestionStatistics>>, TError,{data: PostApiStatsQuestionStatisticsBody}, TContext> => {
 
+const mutationKey = ['postApiStatsQuestionStatistics'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiStatsQuestionStatistics>>, {data: PostApiStatsQuestionStatisticsBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postApiStatsQuestionStatistics(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostApiStatsQuestionStatisticsMutationResult = NonNullable<Awaited<ReturnType<typeof postApiStatsQuestionStatistics>>>
+    export type PostApiStatsQuestionStatisticsMutationBody = PostApiStatsQuestionStatisticsBody
+    export type PostApiStatsQuestionStatisticsMutationError = unknown
+
+    export const usePostApiStatsQuestionStatistics = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsQuestionStatistics>>, TError,{data: PostApiStatsQuestionStatisticsBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postApiStatsQuestionStatistics>>,
+        TError,
+        {data: PostApiStatsQuestionStatisticsBody},
+        TContext
+      > => {
+
+      const mutationOptions = getPostApiStatsQuestionStatisticsMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 export type postApiStatsHighestIncorrectAnswerRateQuestionsResponse200 = {
   data: PostApiStatsHighestIncorrectAnswerRateQuestions200
   status: 200
 }
+    
+export type postApiStatsHighestIncorrectAnswerRateQuestionsResponseSuccess = (postApiStatsHighestIncorrectAnswerRateQuestionsResponse200) & {
+  headers: Headers;
+};
+;
 
-export type postApiStatsHighestIncorrectAnswerRateQuestionsResponseSuccess =
-  postApiStatsHighestIncorrectAnswerRateQuestionsResponse200 & {
-    headers: Headers
-  }
-
-export type postApiStatsHighestIncorrectAnswerRateQuestionsResponse =
-  postApiStatsHighestIncorrectAnswerRateQuestionsResponseSuccess
+export type postApiStatsHighestIncorrectAnswerRateQuestionsResponse = (postApiStatsHighestIncorrectAnswerRateQuestionsResponseSuccess)
 
 export const getPostApiStatsHighestIncorrectAnswerRateQuestionsUrl = () => {
+
+
+  
+
   return `/api/stats/highest-incorrect-answer-rate-questions`
 }
 
-export const postApiStatsHighestIncorrectAnswerRateQuestions = async (
-  postApiStatsHighestIncorrectAnswerRateQuestionsBody: PostApiStatsHighestIncorrectAnswerRateQuestionsBody,
-  options?: RequestInit
-): Promise<postApiStatsHighestIncorrectAnswerRateQuestionsResponse> => {
-  return customTrainingFetch<postApiStatsHighestIncorrectAnswerRateQuestionsResponse>(
-    getPostApiStatsHighestIncorrectAnswerRateQuestionsUrl(),
-    {
-      ...options,
-      method: "POST",
-      headers: { "Content-Type": "application/json", ...options?.headers },
-      body: JSON.stringify(postApiStatsHighestIncorrectAnswerRateQuestionsBody),
-    }
-  )
-}
-
-export const getPostApiStatsHighestIncorrectAnswerRateQuestionsMutationOptions = <
-  TError = unknown,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsHighestIncorrectAnswerRateQuestions>>,
-    TError,
-    { data: PostApiStatsHighestIncorrectAnswerRateQuestionsBody },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiStatsHighestIncorrectAnswerRateQuestions>>,
-  TError,
-  { data: PostApiStatsHighestIncorrectAnswerRateQuestionsBody },
-  TContext
-> => {
-  const mutationKey = ["postApiStatsHighestIncorrectAnswerRateQuestions"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiStatsHighestIncorrectAnswerRateQuestions>>,
-    { data: PostApiStatsHighestIncorrectAnswerRateQuestionsBody }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return postApiStatsHighestIncorrectAnswerRateQuestions(data, requestOptions)
+export const postApiStatsHighestIncorrectAnswerRateQuestions = async (postApiStatsHighestIncorrectAnswerRateQuestionsBody: PostApiStatsHighestIncorrectAnswerRateQuestionsBody, options?: RequestInit): Promise<postApiStatsHighestIncorrectAnswerRateQuestionsResponse> => {
+  
+  return customTrainingFetch<postApiStatsHighestIncorrectAnswerRateQuestionsResponse>(getPostApiStatsHighestIncorrectAnswerRateQuestionsUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      postApiStatsHighestIncorrectAnswerRateQuestionsBody,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type PostApiStatsHighestIncorrectAnswerRateQuestionsMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postApiStatsHighestIncorrectAnswerRateQuestions>>
->
-export type PostApiStatsHighestIncorrectAnswerRateQuestionsMutationBody =
-  PostApiStatsHighestIncorrectAnswerRateQuestionsBody
-export type PostApiStatsHighestIncorrectAnswerRateQuestionsMutationError = unknown
 
-export const usePostApiStatsHighestIncorrectAnswerRateQuestions = <
-  TError = unknown,
-  TContext = unknown,
->(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiStatsHighestIncorrectAnswerRateQuestions>>,
-      TError,
-      { data: PostApiStatsHighestIncorrectAnswerRateQuestionsBody },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postApiStatsHighestIncorrectAnswerRateQuestions>>,
-  TError,
-  { data: PostApiStatsHighestIncorrectAnswerRateQuestionsBody },
-  TContext
-> => {
-  const mutationOptions = getPostApiStatsHighestIncorrectAnswerRateQuestionsMutationOptions(options)
 
-  return useMutation(mutationOptions, queryClient)
-}
+export const getPostApiStatsHighestIncorrectAnswerRateQuestionsMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsHighestIncorrectAnswerRateQuestions>>, TError,{data: PostApiStatsHighestIncorrectAnswerRateQuestionsBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof postApiStatsHighestIncorrectAnswerRateQuestions>>, TError,{data: PostApiStatsHighestIncorrectAnswerRateQuestionsBody}, TContext> => {
 
+const mutationKey = ['postApiStatsHighestIncorrectAnswerRateQuestions'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiStatsHighestIncorrectAnswerRateQuestions>>, {data: PostApiStatsHighestIncorrectAnswerRateQuestionsBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postApiStatsHighestIncorrectAnswerRateQuestions(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostApiStatsHighestIncorrectAnswerRateQuestionsMutationResult = NonNullable<Awaited<ReturnType<typeof postApiStatsHighestIncorrectAnswerRateQuestions>>>
+    export type PostApiStatsHighestIncorrectAnswerRateQuestionsMutationBody = PostApiStatsHighestIncorrectAnswerRateQuestionsBody
+    export type PostApiStatsHighestIncorrectAnswerRateQuestionsMutationError = unknown
+
+    export const usePostApiStatsHighestIncorrectAnswerRateQuestions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsHighestIncorrectAnswerRateQuestions>>, TError,{data: PostApiStatsHighestIncorrectAnswerRateQuestionsBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postApiStatsHighestIncorrectAnswerRateQuestions>>,
+        TError,
+        {data: PostApiStatsHighestIncorrectAnswerRateQuestionsBody},
+        TContext
+      > => {
+
+      const mutationOptions = getPostApiStatsHighestIncorrectAnswerRateQuestionsMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 export type postApiStatsMostUsedQuestionsResponse200 = {
   data: PostApiStatsMostUsedQuestions200
   status: 200
 }
+    
+export type postApiStatsMostUsedQuestionsResponseSuccess = (postApiStatsMostUsedQuestionsResponse200) & {
+  headers: Headers;
+};
+;
 
-export type postApiStatsMostUsedQuestionsResponseSuccess =
-  postApiStatsMostUsedQuestionsResponse200 & {
-    headers: Headers
-  }
-
-export type postApiStatsMostUsedQuestionsResponse = postApiStatsMostUsedQuestionsResponseSuccess
+export type postApiStatsMostUsedQuestionsResponse = (postApiStatsMostUsedQuestionsResponseSuccess)
 
 export const getPostApiStatsMostUsedQuestionsUrl = () => {
+
+
+  
+
   return `/api/stats/most-used-questions`
 }
 
-export const postApiStatsMostUsedQuestions = async (
-  postApiStatsMostUsedQuestionsBody: PostApiStatsMostUsedQuestionsBody,
-  options?: RequestInit
-): Promise<postApiStatsMostUsedQuestionsResponse> => {
-  return customTrainingFetch<postApiStatsMostUsedQuestionsResponse>(
-    getPostApiStatsMostUsedQuestionsUrl(),
-    {
-      ...options,
-      method: "POST",
-      headers: { "Content-Type": "application/json", ...options?.headers },
-      body: JSON.stringify(postApiStatsMostUsedQuestionsBody),
-    }
-  )
-}
-
-export const getPostApiStatsMostUsedQuestionsMutationOptions = <
-  TError = unknown,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsMostUsedQuestions>>,
-    TError,
-    { data: PostApiStatsMostUsedQuestionsBody },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiStatsMostUsedQuestions>>,
-  TError,
-  { data: PostApiStatsMostUsedQuestionsBody },
-  TContext
-> => {
-  const mutationKey = ["postApiStatsMostUsedQuestions"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiStatsMostUsedQuestions>>,
-    { data: PostApiStatsMostUsedQuestionsBody }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return postApiStatsMostUsedQuestions(data, requestOptions)
+export const postApiStatsMostUsedQuestions = async (postApiStatsMostUsedQuestionsBody: PostApiStatsMostUsedQuestionsBody, options?: RequestInit): Promise<postApiStatsMostUsedQuestionsResponse> => {
+  
+  return customTrainingFetch<postApiStatsMostUsedQuestionsResponse>(getPostApiStatsMostUsedQuestionsUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      postApiStatsMostUsedQuestionsBody,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type PostApiStatsMostUsedQuestionsMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postApiStatsMostUsedQuestions>>
->
-export type PostApiStatsMostUsedQuestionsMutationBody = PostApiStatsMostUsedQuestionsBody
-export type PostApiStatsMostUsedQuestionsMutationError = unknown
 
-export const usePostApiStatsMostUsedQuestions = <TError = unknown, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiStatsMostUsedQuestions>>,
-      TError,
-      { data: PostApiStatsMostUsedQuestionsBody },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postApiStatsMostUsedQuestions>>,
-  TError,
-  { data: PostApiStatsMostUsedQuestionsBody },
-  TContext
-> => {
-  const mutationOptions = getPostApiStatsMostUsedQuestionsMutationOptions(options)
 
-  return useMutation(mutationOptions, queryClient)
-}
+export const getPostApiStatsMostUsedQuestionsMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsMostUsedQuestions>>, TError,{data: PostApiStatsMostUsedQuestionsBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof postApiStatsMostUsedQuestions>>, TError,{data: PostApiStatsMostUsedQuestionsBody}, TContext> => {
 
+const mutationKey = ['postApiStatsMostUsedQuestions'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiStatsMostUsedQuestions>>, {data: PostApiStatsMostUsedQuestionsBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postApiStatsMostUsedQuestions(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostApiStatsMostUsedQuestionsMutationResult = NonNullable<Awaited<ReturnType<typeof postApiStatsMostUsedQuestions>>>
+    export type PostApiStatsMostUsedQuestionsMutationBody = PostApiStatsMostUsedQuestionsBody
+    export type PostApiStatsMostUsedQuestionsMutationError = unknown
+
+    export const usePostApiStatsMostUsedQuestions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsMostUsedQuestions>>, TError,{data: PostApiStatsMostUsedQuestionsBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postApiStatsMostUsedQuestions>>,
+        TError,
+        {data: PostApiStatsMostUsedQuestionsBody},
+        TContext
+      > => {
+
+      const mutationOptions = getPostApiStatsMostUsedQuestionsMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 export type postApiStatsDemographicsResponse200 = {
   data: PostApiStatsDemographics200
   status: 200
 }
+    
+export type postApiStatsDemographicsResponseSuccess = (postApiStatsDemographicsResponse200) & {
+  headers: Headers;
+};
+;
 
-export type postApiStatsDemographicsResponseSuccess = postApiStatsDemographicsResponse200 & {
-  headers: Headers
-}
-
-export type postApiStatsDemographicsResponse = postApiStatsDemographicsResponseSuccess
+export type postApiStatsDemographicsResponse = (postApiStatsDemographicsResponseSuccess)
 
 export const getPostApiStatsDemographicsUrl = () => {
+
+
+  
+
   return `/api/stats/demographics`
 }
 
-export const postApiStatsDemographics = async (
-  postApiStatsDemographicsBody: PostApiStatsDemographicsBody,
-  options?: RequestInit
-): Promise<postApiStatsDemographicsResponse> => {
-  return customTrainingFetch<postApiStatsDemographicsResponse>(getPostApiStatsDemographicsUrl(), {
+export const postApiStatsDemographics = async (postApiStatsDemographicsBody: PostApiStatsDemographicsBody, options?: RequestInit): Promise<postApiStatsDemographicsResponse> => {
+  
+  return customTrainingFetch<postApiStatsDemographicsResponse>(getPostApiStatsDemographicsUrl(),
+  {      
     ...options,
-    method: "POST",
-    headers: { "Content-Type": "application/json", ...options?.headers },
-    body: JSON.stringify(postApiStatsDemographicsBody),
-  })
-}
-
-export const getPostApiStatsDemographicsMutationOptions = <
-  TError = unknown,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsDemographics>>,
-    TError,
-    { data: PostApiStatsDemographicsBody },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiStatsDemographics>>,
-  TError,
-  { data: PostApiStatsDemographicsBody },
-  TContext
-> => {
-  const mutationKey = ["postApiStatsDemographics"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiStatsDemographics>>,
-    { data: PostApiStatsDemographicsBody }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return postApiStatsDemographics(data, requestOptions)
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      postApiStatsDemographicsBody,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type PostApiStatsDemographicsMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postApiStatsDemographics>>
->
-export type PostApiStatsDemographicsMutationBody = PostApiStatsDemographicsBody
-export type PostApiStatsDemographicsMutationError = unknown
 
-export const usePostApiStatsDemographics = <TError = unknown, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiStatsDemographics>>,
-      TError,
-      { data: PostApiStatsDemographicsBody },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postApiStatsDemographics>>,
-  TError,
-  { data: PostApiStatsDemographicsBody },
-  TContext
-> => {
-  const mutationOptions = getPostApiStatsDemographicsMutationOptions(options)
 
-  return useMutation(mutationOptions, queryClient)
-}
+export const getPostApiStatsDemographicsMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsDemographics>>, TError,{data: PostApiStatsDemographicsBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof postApiStatsDemographics>>, TError,{data: PostApiStatsDemographicsBody}, TContext> => {
 
+const mutationKey = ['postApiStatsDemographics'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiStatsDemographics>>, {data: PostApiStatsDemographicsBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postApiStatsDemographics(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostApiStatsDemographicsMutationResult = NonNullable<Awaited<ReturnType<typeof postApiStatsDemographics>>>
+    export type PostApiStatsDemographicsMutationBody = PostApiStatsDemographicsBody
+    export type PostApiStatsDemographicsMutationError = unknown
+
+    export const usePostApiStatsDemographics = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsDemographics>>, TError,{data: PostApiStatsDemographicsBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postApiStatsDemographics>>,
+        TError,
+        {data: PostApiStatsDemographicsBody},
+        TContext
+      > => {
+
+      const mutationOptions = getPostApiStatsDemographicsMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 export type postApiStatsEnrollmentTrendResponse200 = {
   data: PostApiStatsEnrollmentTrend200
   status: 200
 }
+    
+export type postApiStatsEnrollmentTrendResponseSuccess = (postApiStatsEnrollmentTrendResponse200) & {
+  headers: Headers;
+};
+;
 
-export type postApiStatsEnrollmentTrendResponseSuccess = postApiStatsEnrollmentTrendResponse200 & {
-  headers: Headers
-}
-
-export type postApiStatsEnrollmentTrendResponse = postApiStatsEnrollmentTrendResponseSuccess
+export type postApiStatsEnrollmentTrendResponse = (postApiStatsEnrollmentTrendResponseSuccess)
 
 export const getPostApiStatsEnrollmentTrendUrl = () => {
+
+
+  
+
   return `/api/stats/enrollment-trend`
 }
 
-export const postApiStatsEnrollmentTrend = async (
-  postApiStatsEnrollmentTrendBody: PostApiStatsEnrollmentTrendBody,
-  options?: RequestInit
-): Promise<postApiStatsEnrollmentTrendResponse> => {
-  return customTrainingFetch<postApiStatsEnrollmentTrendResponse>(
-    getPostApiStatsEnrollmentTrendUrl(),
-    {
-      ...options,
-      method: "POST",
-      headers: { "Content-Type": "application/json", ...options?.headers },
-      body: JSON.stringify(postApiStatsEnrollmentTrendBody),
-    }
-  )
-}
-
-export const getPostApiStatsEnrollmentTrendMutationOptions = <
-  TError = unknown,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsEnrollmentTrend>>,
-    TError,
-    { data: PostApiStatsEnrollmentTrendBody },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiStatsEnrollmentTrend>>,
-  TError,
-  { data: PostApiStatsEnrollmentTrendBody },
-  TContext
-> => {
-  const mutationKey = ["postApiStatsEnrollmentTrend"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiStatsEnrollmentTrend>>,
-    { data: PostApiStatsEnrollmentTrendBody }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return postApiStatsEnrollmentTrend(data, requestOptions)
+export const postApiStatsEnrollmentTrend = async (postApiStatsEnrollmentTrendBody: PostApiStatsEnrollmentTrendBody, options?: RequestInit): Promise<postApiStatsEnrollmentTrendResponse> => {
+  
+  return customTrainingFetch<postApiStatsEnrollmentTrendResponse>(getPostApiStatsEnrollmentTrendUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      postApiStatsEnrollmentTrendBody,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type PostApiStatsEnrollmentTrendMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postApiStatsEnrollmentTrend>>
->
-export type PostApiStatsEnrollmentTrendMutationBody = PostApiStatsEnrollmentTrendBody
-export type PostApiStatsEnrollmentTrendMutationError = unknown
 
-export const usePostApiStatsEnrollmentTrend = <TError = unknown, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiStatsEnrollmentTrend>>,
-      TError,
-      { data: PostApiStatsEnrollmentTrendBody },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postApiStatsEnrollmentTrend>>,
-  TError,
-  { data: PostApiStatsEnrollmentTrendBody },
-  TContext
-> => {
-  const mutationOptions = getPostApiStatsEnrollmentTrendMutationOptions(options)
 
-  return useMutation(mutationOptions, queryClient)
-}
+export const getPostApiStatsEnrollmentTrendMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsEnrollmentTrend>>, TError,{data: PostApiStatsEnrollmentTrendBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof postApiStatsEnrollmentTrend>>, TError,{data: PostApiStatsEnrollmentTrendBody}, TContext> => {
 
+const mutationKey = ['postApiStatsEnrollmentTrend'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiStatsEnrollmentTrend>>, {data: PostApiStatsEnrollmentTrendBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postApiStatsEnrollmentTrend(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostApiStatsEnrollmentTrendMutationResult = NonNullable<Awaited<ReturnType<typeof postApiStatsEnrollmentTrend>>>
+    export type PostApiStatsEnrollmentTrendMutationBody = PostApiStatsEnrollmentTrendBody
+    export type PostApiStatsEnrollmentTrendMutationError = unknown
+
+    export const usePostApiStatsEnrollmentTrend = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsEnrollmentTrend>>, TError,{data: PostApiStatsEnrollmentTrendBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postApiStatsEnrollmentTrend>>,
+        TError,
+        {data: PostApiStatsEnrollmentTrendBody},
+        TContext
+      > => {
+
+      const mutationOptions = getPostApiStatsEnrollmentTrendMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 export type postApiStatsAdmissionStatisticsByMajorResponse200 = {
   data: PostApiStatsAdmissionStatisticsByMajor200
   status: 200
 }
+    
+export type postApiStatsAdmissionStatisticsByMajorResponseSuccess = (postApiStatsAdmissionStatisticsByMajorResponse200) & {
+  headers: Headers;
+};
+;
 
-export type postApiStatsAdmissionStatisticsByMajorResponseSuccess =
-  postApiStatsAdmissionStatisticsByMajorResponse200 & {
-    headers: Headers
-  }
-
-export type postApiStatsAdmissionStatisticsByMajorResponse =
-  postApiStatsAdmissionStatisticsByMajorResponseSuccess
+export type postApiStatsAdmissionStatisticsByMajorResponse = (postApiStatsAdmissionStatisticsByMajorResponseSuccess)
 
 export const getPostApiStatsAdmissionStatisticsByMajorUrl = () => {
+
+
+  
+
   return `/api/stats/Admission-statistics-by-major`
 }
 
-export const postApiStatsAdmissionStatisticsByMajor = async (
-  postApiStatsAdmissionStatisticsByMajorBody: PostApiStatsAdmissionStatisticsByMajorBody,
-  options?: RequestInit
-): Promise<postApiStatsAdmissionStatisticsByMajorResponse> => {
-  return customTrainingFetch<postApiStatsAdmissionStatisticsByMajorResponse>(
-    getPostApiStatsAdmissionStatisticsByMajorUrl(),
-    {
-      ...options,
-      method: "POST",
-      headers: { "Content-Type": "application/json", ...options?.headers },
-      body: JSON.stringify(postApiStatsAdmissionStatisticsByMajorBody),
-    }
-  )
-}
-
-export const getPostApiStatsAdmissionStatisticsByMajorMutationOptions = <
-  TError = unknown,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsAdmissionStatisticsByMajor>>,
-    TError,
-    { data: PostApiStatsAdmissionStatisticsByMajorBody },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiStatsAdmissionStatisticsByMajor>>,
-  TError,
-  { data: PostApiStatsAdmissionStatisticsByMajorBody },
-  TContext
-> => {
-  const mutationKey = ["postApiStatsAdmissionStatisticsByMajor"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiStatsAdmissionStatisticsByMajor>>,
-    { data: PostApiStatsAdmissionStatisticsByMajorBody }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return postApiStatsAdmissionStatisticsByMajor(data, requestOptions)
+export const postApiStatsAdmissionStatisticsByMajor = async (postApiStatsAdmissionStatisticsByMajorBody: PostApiStatsAdmissionStatisticsByMajorBody, options?: RequestInit): Promise<postApiStatsAdmissionStatisticsByMajorResponse> => {
+  
+  return customTrainingFetch<postApiStatsAdmissionStatisticsByMajorResponse>(getPostApiStatsAdmissionStatisticsByMajorUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      postApiStatsAdmissionStatisticsByMajorBody,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type PostApiStatsAdmissionStatisticsByMajorMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postApiStatsAdmissionStatisticsByMajor>>
->
-export type PostApiStatsAdmissionStatisticsByMajorMutationBody =
-  PostApiStatsAdmissionStatisticsByMajorBody
-export type PostApiStatsAdmissionStatisticsByMajorMutationError = unknown
 
-export const usePostApiStatsAdmissionStatisticsByMajor = <TError = unknown, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiStatsAdmissionStatisticsByMajor>>,
-      TError,
-      { data: PostApiStatsAdmissionStatisticsByMajorBody },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postApiStatsAdmissionStatisticsByMajor>>,
-  TError,
-  { data: PostApiStatsAdmissionStatisticsByMajorBody },
-  TContext
-> => {
-  const mutationOptions = getPostApiStatsAdmissionStatisticsByMajorMutationOptions(options)
 
-  return useMutation(mutationOptions, queryClient)
-}
+export const getPostApiStatsAdmissionStatisticsByMajorMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsAdmissionStatisticsByMajor>>, TError,{data: PostApiStatsAdmissionStatisticsByMajorBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof postApiStatsAdmissionStatisticsByMajor>>, TError,{data: PostApiStatsAdmissionStatisticsByMajorBody}, TContext> => {
 
+const mutationKey = ['postApiStatsAdmissionStatisticsByMajor'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiStatsAdmissionStatisticsByMajor>>, {data: PostApiStatsAdmissionStatisticsByMajorBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postApiStatsAdmissionStatisticsByMajor(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostApiStatsAdmissionStatisticsByMajorMutationResult = NonNullable<Awaited<ReturnType<typeof postApiStatsAdmissionStatisticsByMajor>>>
+    export type PostApiStatsAdmissionStatisticsByMajorMutationBody = PostApiStatsAdmissionStatisticsByMajorBody
+    export type PostApiStatsAdmissionStatisticsByMajorMutationError = unknown
+
+    export const usePostApiStatsAdmissionStatisticsByMajor = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsAdmissionStatisticsByMajor>>, TError,{data: PostApiStatsAdmissionStatisticsByMajorBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postApiStatsAdmissionStatisticsByMajor>>,
+        TError,
+        {data: PostApiStatsAdmissionStatisticsByMajorBody},
+        TContext
+      > => {
+
+      const mutationOptions = getPostApiStatsAdmissionStatisticsByMajorMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 export type postApiStatsStatisticsOfRecordsByDateResponse200 = {
   data: PostApiStatsStatisticsOfRecordsByDate200
   status: 200
 }
+    
+export type postApiStatsStatisticsOfRecordsByDateResponseSuccess = (postApiStatsStatisticsOfRecordsByDateResponse200) & {
+  headers: Headers;
+};
+;
 
-export type postApiStatsStatisticsOfRecordsByDateResponseSuccess =
-  postApiStatsStatisticsOfRecordsByDateResponse200 & {
-    headers: Headers
-  }
-
-export type postApiStatsStatisticsOfRecordsByDateResponse =
-  postApiStatsStatisticsOfRecordsByDateResponseSuccess
+export type postApiStatsStatisticsOfRecordsByDateResponse = (postApiStatsStatisticsOfRecordsByDateResponseSuccess)
 
 export const getPostApiStatsStatisticsOfRecordsByDateUrl = () => {
+
+
+  
+
   return `/api/stats/statistics-of-records-by-date`
 }
 
-export const postApiStatsStatisticsOfRecordsByDate = async (
-  postApiStatsStatisticsOfRecordsByDateBody: PostApiStatsStatisticsOfRecordsByDateBody,
-  options?: RequestInit
-): Promise<postApiStatsStatisticsOfRecordsByDateResponse> => {
-  return customTrainingFetch<postApiStatsStatisticsOfRecordsByDateResponse>(
-    getPostApiStatsStatisticsOfRecordsByDateUrl(),
-    {
-      ...options,
-      method: "POST",
-      headers: { "Content-Type": "application/json", ...options?.headers },
-      body: JSON.stringify(postApiStatsStatisticsOfRecordsByDateBody),
-    }
-  )
-}
-
-export const getPostApiStatsStatisticsOfRecordsByDateMutationOptions = <
-  TError = unknown,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsStatisticsOfRecordsByDate>>,
-    TError,
-    { data: PostApiStatsStatisticsOfRecordsByDateBody },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiStatsStatisticsOfRecordsByDate>>,
-  TError,
-  { data: PostApiStatsStatisticsOfRecordsByDateBody },
-  TContext
-> => {
-  const mutationKey = ["postApiStatsStatisticsOfRecordsByDate"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiStatsStatisticsOfRecordsByDate>>,
-    { data: PostApiStatsStatisticsOfRecordsByDateBody }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return postApiStatsStatisticsOfRecordsByDate(data, requestOptions)
+export const postApiStatsStatisticsOfRecordsByDate = async (postApiStatsStatisticsOfRecordsByDateBody: PostApiStatsStatisticsOfRecordsByDateBody, options?: RequestInit): Promise<postApiStatsStatisticsOfRecordsByDateResponse> => {
+  
+  return customTrainingFetch<postApiStatsStatisticsOfRecordsByDateResponse>(getPostApiStatsStatisticsOfRecordsByDateUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      postApiStatsStatisticsOfRecordsByDateBody,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type PostApiStatsStatisticsOfRecordsByDateMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postApiStatsStatisticsOfRecordsByDate>>
->
-export type PostApiStatsStatisticsOfRecordsByDateMutationBody =
-  PostApiStatsStatisticsOfRecordsByDateBody
-export type PostApiStatsStatisticsOfRecordsByDateMutationError = unknown
 
-export const usePostApiStatsStatisticsOfRecordsByDate = <TError = unknown, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiStatsStatisticsOfRecordsByDate>>,
-      TError,
-      { data: PostApiStatsStatisticsOfRecordsByDateBody },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postApiStatsStatisticsOfRecordsByDate>>,
-  TError,
-  { data: PostApiStatsStatisticsOfRecordsByDateBody },
-  TContext
-> => {
-  const mutationOptions = getPostApiStatsStatisticsOfRecordsByDateMutationOptions(options)
 
-  return useMutation(mutationOptions, queryClient)
-}
+export const getPostApiStatsStatisticsOfRecordsByDateMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsStatisticsOfRecordsByDate>>, TError,{data: PostApiStatsStatisticsOfRecordsByDateBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof postApiStatsStatisticsOfRecordsByDate>>, TError,{data: PostApiStatsStatisticsOfRecordsByDateBody}, TContext> => {
 
+const mutationKey = ['postApiStatsStatisticsOfRecordsByDate'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiStatsStatisticsOfRecordsByDate>>, {data: PostApiStatsStatisticsOfRecordsByDateBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postApiStatsStatisticsOfRecordsByDate(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostApiStatsStatisticsOfRecordsByDateMutationResult = NonNullable<Awaited<ReturnType<typeof postApiStatsStatisticsOfRecordsByDate>>>
+    export type PostApiStatsStatisticsOfRecordsByDateMutationBody = PostApiStatsStatisticsOfRecordsByDateBody
+    export type PostApiStatsStatisticsOfRecordsByDateMutationError = unknown
+
+    export const usePostApiStatsStatisticsOfRecordsByDate = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsStatisticsOfRecordsByDate>>, TError,{data: PostApiStatsStatisticsOfRecordsByDateBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postApiStatsStatisticsOfRecordsByDate>>,
+        TError,
+        {data: PostApiStatsStatisticsOfRecordsByDateBody},
+        TContext
+      > => {
+
+      const mutationOptions = getPostApiStatsStatisticsOfRecordsByDateMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 export type postApiStatsSummaryAdmissionStatisticsResponse200 = {
   data: PostApiStatsSummaryAdmissionStatistics200
   status: 200
 }
+    
+export type postApiStatsSummaryAdmissionStatisticsResponseSuccess = (postApiStatsSummaryAdmissionStatisticsResponse200) & {
+  headers: Headers;
+};
+;
 
-export type postApiStatsSummaryAdmissionStatisticsResponseSuccess =
-  postApiStatsSummaryAdmissionStatisticsResponse200 & {
-    headers: Headers
-  }
-
-export type postApiStatsSummaryAdmissionStatisticsResponse =
-  postApiStatsSummaryAdmissionStatisticsResponseSuccess
+export type postApiStatsSummaryAdmissionStatisticsResponse = (postApiStatsSummaryAdmissionStatisticsResponseSuccess)
 
 export const getPostApiStatsSummaryAdmissionStatisticsUrl = () => {
+
+
+  
+
   return `/api/stats/summary-admission-statistics`
 }
 
-export const postApiStatsSummaryAdmissionStatistics = async (
-  postApiStatsSummaryAdmissionStatisticsBody: PostApiStatsSummaryAdmissionStatisticsBody,
-  options?: RequestInit
-): Promise<postApiStatsSummaryAdmissionStatisticsResponse> => {
-  return customTrainingFetch<postApiStatsSummaryAdmissionStatisticsResponse>(
-    getPostApiStatsSummaryAdmissionStatisticsUrl(),
-    {
-      ...options,
-      method: "POST",
-      headers: { "Content-Type": "application/json", ...options?.headers },
-      body: JSON.stringify(postApiStatsSummaryAdmissionStatisticsBody),
-    }
-  )
-}
-
-export const getPostApiStatsSummaryAdmissionStatisticsMutationOptions = <
-  TError = unknown,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsSummaryAdmissionStatistics>>,
-    TError,
-    { data: PostApiStatsSummaryAdmissionStatisticsBody },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiStatsSummaryAdmissionStatistics>>,
-  TError,
-  { data: PostApiStatsSummaryAdmissionStatisticsBody },
-  TContext
-> => {
-  const mutationKey = ["postApiStatsSummaryAdmissionStatistics"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiStatsSummaryAdmissionStatistics>>,
-    { data: PostApiStatsSummaryAdmissionStatisticsBody }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return postApiStatsSummaryAdmissionStatistics(data, requestOptions)
+export const postApiStatsSummaryAdmissionStatistics = async (postApiStatsSummaryAdmissionStatisticsBody: PostApiStatsSummaryAdmissionStatisticsBody, options?: RequestInit): Promise<postApiStatsSummaryAdmissionStatisticsResponse> => {
+  
+  return customTrainingFetch<postApiStatsSummaryAdmissionStatisticsResponse>(getPostApiStatsSummaryAdmissionStatisticsUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      postApiStatsSummaryAdmissionStatisticsBody,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type PostApiStatsSummaryAdmissionStatisticsMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postApiStatsSummaryAdmissionStatistics>>
->
-export type PostApiStatsSummaryAdmissionStatisticsMutationBody =
-  PostApiStatsSummaryAdmissionStatisticsBody
-export type PostApiStatsSummaryAdmissionStatisticsMutationError = unknown
 
-export const usePostApiStatsSummaryAdmissionStatistics = <TError = unknown, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiStatsSummaryAdmissionStatistics>>,
-      TError,
-      { data: PostApiStatsSummaryAdmissionStatisticsBody },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postApiStatsSummaryAdmissionStatistics>>,
-  TError,
-  { data: PostApiStatsSummaryAdmissionStatisticsBody },
-  TContext
-> => {
-  const mutationOptions = getPostApiStatsSummaryAdmissionStatisticsMutationOptions(options)
 
-  return useMutation(mutationOptions, queryClient)
-}
+export const getPostApiStatsSummaryAdmissionStatisticsMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsSummaryAdmissionStatistics>>, TError,{data: PostApiStatsSummaryAdmissionStatisticsBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof postApiStatsSummaryAdmissionStatistics>>, TError,{data: PostApiStatsSummaryAdmissionStatisticsBody}, TContext> => {
 
+const mutationKey = ['postApiStatsSummaryAdmissionStatistics'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiStatsSummaryAdmissionStatistics>>, {data: PostApiStatsSummaryAdmissionStatisticsBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postApiStatsSummaryAdmissionStatistics(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostApiStatsSummaryAdmissionStatisticsMutationResult = NonNullable<Awaited<ReturnType<typeof postApiStatsSummaryAdmissionStatistics>>>
+    export type PostApiStatsSummaryAdmissionStatisticsMutationBody = PostApiStatsSummaryAdmissionStatisticsBody
+    export type PostApiStatsSummaryAdmissionStatisticsMutationError = unknown
+
+    export const usePostApiStatsSummaryAdmissionStatistics = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsSummaryAdmissionStatistics>>, TError,{data: PostApiStatsSummaryAdmissionStatisticsBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postApiStatsSummaryAdmissionStatistics>>,
+        TError,
+        {data: PostApiStatsSummaryAdmissionStatisticsBody},
+        TContext
+      > => {
+
+      const mutationOptions = getPostApiStatsSummaryAdmissionStatisticsMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 export type postApiStatsScienceTechnologyOverviewResponse200 = {
   data: PostApiStatsScienceTechnologyOverview200
   status: 200
 }
+    
+export type postApiStatsScienceTechnologyOverviewResponseSuccess = (postApiStatsScienceTechnologyOverviewResponse200) & {
+  headers: Headers;
+};
+;
 
-export type postApiStatsScienceTechnologyOverviewResponseSuccess =
-  postApiStatsScienceTechnologyOverviewResponse200 & {
-    headers: Headers
-  }
-
-export type postApiStatsScienceTechnologyOverviewResponse =
-  postApiStatsScienceTechnologyOverviewResponseSuccess
+export type postApiStatsScienceTechnologyOverviewResponse = (postApiStatsScienceTechnologyOverviewResponseSuccess)
 
 export const getPostApiStatsScienceTechnologyOverviewUrl = () => {
+
+
+  
+
   return `/api/stats/science-technology-overview`
 }
 
-export const postApiStatsScienceTechnologyOverview = async (
-  postApiStatsScienceTechnologyOverviewBody: PostApiStatsScienceTechnologyOverviewBody,
-  options?: RequestInit
-): Promise<postApiStatsScienceTechnologyOverviewResponse> => {
-  return customTrainingFetch<postApiStatsScienceTechnologyOverviewResponse>(
-    getPostApiStatsScienceTechnologyOverviewUrl(),
-    {
-      ...options,
-      method: "POST",
-      headers: { "Content-Type": "application/json", ...options?.headers },
-      body: JSON.stringify(postApiStatsScienceTechnologyOverviewBody),
-    }
-  )
-}
-
-export const getPostApiStatsScienceTechnologyOverviewMutationOptions = <
-  TError = unknown,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsScienceTechnologyOverview>>,
-    TError,
-    { data: PostApiStatsScienceTechnologyOverviewBody },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiStatsScienceTechnologyOverview>>,
-  TError,
-  { data: PostApiStatsScienceTechnologyOverviewBody },
-  TContext
-> => {
-  const mutationKey = ["postApiStatsScienceTechnologyOverview"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiStatsScienceTechnologyOverview>>,
-    { data: PostApiStatsScienceTechnologyOverviewBody }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return postApiStatsScienceTechnologyOverview(data, requestOptions)
+export const postApiStatsScienceTechnologyOverview = async (postApiStatsScienceTechnologyOverviewBody: PostApiStatsScienceTechnologyOverviewBody, options?: RequestInit): Promise<postApiStatsScienceTechnologyOverviewResponse> => {
+  
+  return customTrainingFetch<postApiStatsScienceTechnologyOverviewResponse>(getPostApiStatsScienceTechnologyOverviewUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      postApiStatsScienceTechnologyOverviewBody,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type PostApiStatsScienceTechnologyOverviewMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postApiStatsScienceTechnologyOverview>>
->
-export type PostApiStatsScienceTechnologyOverviewMutationBody =
-  PostApiStatsScienceTechnologyOverviewBody
-export type PostApiStatsScienceTechnologyOverviewMutationError = unknown
 
-export const usePostApiStatsScienceTechnologyOverview = <TError = unknown, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiStatsScienceTechnologyOverview>>,
-      TError,
-      { data: PostApiStatsScienceTechnologyOverviewBody },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postApiStatsScienceTechnologyOverview>>,
-  TError,
-  { data: PostApiStatsScienceTechnologyOverviewBody },
-  TContext
-> => {
-  const mutationOptions = getPostApiStatsScienceTechnologyOverviewMutationOptions(options)
 
-  return useMutation(mutationOptions, queryClient)
-}
+export const getPostApiStatsScienceTechnologyOverviewMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsScienceTechnologyOverview>>, TError,{data: PostApiStatsScienceTechnologyOverviewBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof postApiStatsScienceTechnologyOverview>>, TError,{data: PostApiStatsScienceTechnologyOverviewBody}, TContext> => {
 
+const mutationKey = ['postApiStatsScienceTechnologyOverview'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiStatsScienceTechnologyOverview>>, {data: PostApiStatsScienceTechnologyOverviewBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postApiStatsScienceTechnologyOverview(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostApiStatsScienceTechnologyOverviewMutationResult = NonNullable<Awaited<ReturnType<typeof postApiStatsScienceTechnologyOverview>>>
+    export type PostApiStatsScienceTechnologyOverviewMutationBody = PostApiStatsScienceTechnologyOverviewBody
+    export type PostApiStatsScienceTechnologyOverviewMutationError = unknown
+
+    export const usePostApiStatsScienceTechnologyOverview = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsScienceTechnologyOverview>>, TError,{data: PostApiStatsScienceTechnologyOverviewBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postApiStatsScienceTechnologyOverview>>,
+        TError,
+        {data: PostApiStatsScienceTechnologyOverviewBody},
+        TContext
+      > => {
+
+      const mutationOptions = getPostApiStatsScienceTechnologyOverviewMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 export type postApiStatsContractStatisticsByYearResponse200 = {
   data: PostApiStatsContractStatisticsByYear200
   status: 200
 }
+    
+export type postApiStatsContractStatisticsByYearResponseSuccess = (postApiStatsContractStatisticsByYearResponse200) & {
+  headers: Headers;
+};
+;
 
-export type postApiStatsContractStatisticsByYearResponseSuccess =
-  postApiStatsContractStatisticsByYearResponse200 & {
-    headers: Headers
-  }
-
-export type postApiStatsContractStatisticsByYearResponse =
-  postApiStatsContractStatisticsByYearResponseSuccess
+export type postApiStatsContractStatisticsByYearResponse = (postApiStatsContractStatisticsByYearResponseSuccess)
 
 export const getPostApiStatsContractStatisticsByYearUrl = () => {
+
+
+  
+
   return `/api/stats/contract-statistics-by-year`
 }
 
-export const postApiStatsContractStatisticsByYear = async (
-  postApiStatsContractStatisticsByYearBody: PostApiStatsContractStatisticsByYearBody,
-  options?: RequestInit
-): Promise<postApiStatsContractStatisticsByYearResponse> => {
-  return customTrainingFetch<postApiStatsContractStatisticsByYearResponse>(
-    getPostApiStatsContractStatisticsByYearUrl(),
-    {
-      ...options,
-      method: "POST",
-      headers: { "Content-Type": "application/json", ...options?.headers },
-      body: JSON.stringify(postApiStatsContractStatisticsByYearBody),
-    }
-  )
-}
-
-export const getPostApiStatsContractStatisticsByYearMutationOptions = <
-  TError = unknown,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsContractStatisticsByYear>>,
-    TError,
-    { data: PostApiStatsContractStatisticsByYearBody },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiStatsContractStatisticsByYear>>,
-  TError,
-  { data: PostApiStatsContractStatisticsByYearBody },
-  TContext
-> => {
-  const mutationKey = ["postApiStatsContractStatisticsByYear"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiStatsContractStatisticsByYear>>,
-    { data: PostApiStatsContractStatisticsByYearBody }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return postApiStatsContractStatisticsByYear(data, requestOptions)
+export const postApiStatsContractStatisticsByYear = async (postApiStatsContractStatisticsByYearBody: PostApiStatsContractStatisticsByYearBody, options?: RequestInit): Promise<postApiStatsContractStatisticsByYearResponse> => {
+  
+  return customTrainingFetch<postApiStatsContractStatisticsByYearResponse>(getPostApiStatsContractStatisticsByYearUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      postApiStatsContractStatisticsByYearBody,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type PostApiStatsContractStatisticsByYearMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postApiStatsContractStatisticsByYear>>
->
-export type PostApiStatsContractStatisticsByYearMutationBody =
-  PostApiStatsContractStatisticsByYearBody
-export type PostApiStatsContractStatisticsByYearMutationError = unknown
 
-export const usePostApiStatsContractStatisticsByYear = <TError = unknown, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiStatsContractStatisticsByYear>>,
-      TError,
-      { data: PostApiStatsContractStatisticsByYearBody },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postApiStatsContractStatisticsByYear>>,
-  TError,
-  { data: PostApiStatsContractStatisticsByYearBody },
-  TContext
-> => {
-  const mutationOptions = getPostApiStatsContractStatisticsByYearMutationOptions(options)
 
-  return useMutation(mutationOptions, queryClient)
-}
+export const getPostApiStatsContractStatisticsByYearMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsContractStatisticsByYear>>, TError,{data: PostApiStatsContractStatisticsByYearBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof postApiStatsContractStatisticsByYear>>, TError,{data: PostApiStatsContractStatisticsByYearBody}, TContext> => {
 
+const mutationKey = ['postApiStatsContractStatisticsByYear'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiStatsContractStatisticsByYear>>, {data: PostApiStatsContractStatisticsByYearBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postApiStatsContractStatisticsByYear(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostApiStatsContractStatisticsByYearMutationResult = NonNullable<Awaited<ReturnType<typeof postApiStatsContractStatisticsByYear>>>
+    export type PostApiStatsContractStatisticsByYearMutationBody = PostApiStatsContractStatisticsByYearBody
+    export type PostApiStatsContractStatisticsByYearMutationError = unknown
+
+    export const usePostApiStatsContractStatisticsByYear = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsContractStatisticsByYear>>, TError,{data: PostApiStatsContractStatisticsByYearBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postApiStatsContractStatisticsByYear>>,
+        TError,
+        {data: PostApiStatsContractStatisticsByYearBody},
+        TContext
+      > => {
+
+      const mutationOptions = getPostApiStatsContractStatisticsByYearMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 export type postApiStatsProjectStatisticsByYearResponse200 = {
   data: PostApiStatsProjectStatisticsByYear200
   status: 200
 }
+    
+export type postApiStatsProjectStatisticsByYearResponseSuccess = (postApiStatsProjectStatisticsByYearResponse200) & {
+  headers: Headers;
+};
+;
 
-export type postApiStatsProjectStatisticsByYearResponseSuccess =
-  postApiStatsProjectStatisticsByYearResponse200 & {
-    headers: Headers
-  }
-
-export type postApiStatsProjectStatisticsByYearResponse =
-  postApiStatsProjectStatisticsByYearResponseSuccess
+export type postApiStatsProjectStatisticsByYearResponse = (postApiStatsProjectStatisticsByYearResponseSuccess)
 
 export const getPostApiStatsProjectStatisticsByYearUrl = () => {
+
+
+  
+
   return `/api/stats/project-statistics-by-year`
 }
 
-export const postApiStatsProjectStatisticsByYear = async (
-  postApiStatsProjectStatisticsByYearBody: PostApiStatsProjectStatisticsByYearBody,
-  options?: RequestInit
-): Promise<postApiStatsProjectStatisticsByYearResponse> => {
-  return customTrainingFetch<postApiStatsProjectStatisticsByYearResponse>(
-    getPostApiStatsProjectStatisticsByYearUrl(),
-    {
-      ...options,
-      method: "POST",
-      headers: { "Content-Type": "application/json", ...options?.headers },
-      body: JSON.stringify(postApiStatsProjectStatisticsByYearBody),
-    }
-  )
-}
-
-export const getPostApiStatsProjectStatisticsByYearMutationOptions = <
-  TError = unknown,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsProjectStatisticsByYear>>,
-    TError,
-    { data: PostApiStatsProjectStatisticsByYearBody },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiStatsProjectStatisticsByYear>>,
-  TError,
-  { data: PostApiStatsProjectStatisticsByYearBody },
-  TContext
-> => {
-  const mutationKey = ["postApiStatsProjectStatisticsByYear"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiStatsProjectStatisticsByYear>>,
-    { data: PostApiStatsProjectStatisticsByYearBody }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return postApiStatsProjectStatisticsByYear(data, requestOptions)
+export const postApiStatsProjectStatisticsByYear = async (postApiStatsProjectStatisticsByYearBody: PostApiStatsProjectStatisticsByYearBody, options?: RequestInit): Promise<postApiStatsProjectStatisticsByYearResponse> => {
+  
+  return customTrainingFetch<postApiStatsProjectStatisticsByYearResponse>(getPostApiStatsProjectStatisticsByYearUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      postApiStatsProjectStatisticsByYearBody,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type PostApiStatsProjectStatisticsByYearMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postApiStatsProjectStatisticsByYear>>
->
-export type PostApiStatsProjectStatisticsByYearMutationBody =
-  PostApiStatsProjectStatisticsByYearBody
-export type PostApiStatsProjectStatisticsByYearMutationError = unknown
 
-export const usePostApiStatsProjectStatisticsByYear = <TError = unknown, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiStatsProjectStatisticsByYear>>,
-      TError,
-      { data: PostApiStatsProjectStatisticsByYearBody },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postApiStatsProjectStatisticsByYear>>,
-  TError,
-  { data: PostApiStatsProjectStatisticsByYearBody },
-  TContext
-> => {
-  const mutationOptions = getPostApiStatsProjectStatisticsByYearMutationOptions(options)
 
-  return useMutation(mutationOptions, queryClient)
-}
+export const getPostApiStatsProjectStatisticsByYearMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsProjectStatisticsByYear>>, TError,{data: PostApiStatsProjectStatisticsByYearBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof postApiStatsProjectStatisticsByYear>>, TError,{data: PostApiStatsProjectStatisticsByYearBody}, TContext> => {
 
+const mutationKey = ['postApiStatsProjectStatisticsByYear'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiStatsProjectStatisticsByYear>>, {data: PostApiStatsProjectStatisticsByYearBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postApiStatsProjectStatisticsByYear(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostApiStatsProjectStatisticsByYearMutationResult = NonNullable<Awaited<ReturnType<typeof postApiStatsProjectStatisticsByYear>>>
+    export type PostApiStatsProjectStatisticsByYearMutationBody = PostApiStatsProjectStatisticsByYearBody
+    export type PostApiStatsProjectStatisticsByYearMutationError = unknown
+
+    export const usePostApiStatsProjectStatisticsByYear = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsProjectStatisticsByYear>>, TError,{data: PostApiStatsProjectStatisticsByYearBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postApiStatsProjectStatisticsByYear>>,
+        TError,
+        {data: PostApiStatsProjectStatisticsByYearBody},
+        TContext
+      > => {
+
+      const mutationOptions = getPostApiStatsProjectStatisticsByYearMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 export type postApiStatsInnovationsStatisticsByYearResponse200 = {
   data: PostApiStatsInnovationsStatisticsByYear200
   status: 200
 }
+    
+export type postApiStatsInnovationsStatisticsByYearResponseSuccess = (postApiStatsInnovationsStatisticsByYearResponse200) & {
+  headers: Headers;
+};
+;
 
-export type postApiStatsInnovationsStatisticsByYearResponseSuccess =
-  postApiStatsInnovationsStatisticsByYearResponse200 & {
-    headers: Headers
-  }
-
-export type postApiStatsInnovationsStatisticsByYearResponse =
-  postApiStatsInnovationsStatisticsByYearResponseSuccess
+export type postApiStatsInnovationsStatisticsByYearResponse = (postApiStatsInnovationsStatisticsByYearResponseSuccess)
 
 export const getPostApiStatsInnovationsStatisticsByYearUrl = () => {
+
+
+  
+
   return `/api/stats/innovations-statistics-by-year`
 }
 
-export const postApiStatsInnovationsStatisticsByYear = async (
-  postApiStatsInnovationsStatisticsByYearBody: PostApiStatsInnovationsStatisticsByYearBody,
-  options?: RequestInit
-): Promise<postApiStatsInnovationsStatisticsByYearResponse> => {
-  return customTrainingFetch<postApiStatsInnovationsStatisticsByYearResponse>(
-    getPostApiStatsInnovationsStatisticsByYearUrl(),
-    {
-      ...options,
-      method: "POST",
-      headers: { "Content-Type": "application/json", ...options?.headers },
-      body: JSON.stringify(postApiStatsInnovationsStatisticsByYearBody),
-    }
-  )
-}
-
-export const getPostApiStatsInnovationsStatisticsByYearMutationOptions = <
-  TError = unknown,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsInnovationsStatisticsByYear>>,
-    TError,
-    { data: PostApiStatsInnovationsStatisticsByYearBody },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiStatsInnovationsStatisticsByYear>>,
-  TError,
-  { data: PostApiStatsInnovationsStatisticsByYearBody },
-  TContext
-> => {
-  const mutationKey = ["postApiStatsInnovationsStatisticsByYear"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiStatsInnovationsStatisticsByYear>>,
-    { data: PostApiStatsInnovationsStatisticsByYearBody }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return postApiStatsInnovationsStatisticsByYear(data, requestOptions)
+export const postApiStatsInnovationsStatisticsByYear = async (postApiStatsInnovationsStatisticsByYearBody: PostApiStatsInnovationsStatisticsByYearBody, options?: RequestInit): Promise<postApiStatsInnovationsStatisticsByYearResponse> => {
+  
+  return customTrainingFetch<postApiStatsInnovationsStatisticsByYearResponse>(getPostApiStatsInnovationsStatisticsByYearUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      postApiStatsInnovationsStatisticsByYearBody,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type PostApiStatsInnovationsStatisticsByYearMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postApiStatsInnovationsStatisticsByYear>>
->
-export type PostApiStatsInnovationsStatisticsByYearMutationBody =
-  PostApiStatsInnovationsStatisticsByYearBody
-export type PostApiStatsInnovationsStatisticsByYearMutationError = unknown
 
-export const usePostApiStatsInnovationsStatisticsByYear = <TError = unknown, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiStatsInnovationsStatisticsByYear>>,
-      TError,
-      { data: PostApiStatsInnovationsStatisticsByYearBody },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postApiStatsInnovationsStatisticsByYear>>,
-  TError,
-  { data: PostApiStatsInnovationsStatisticsByYearBody },
-  TContext
-> => {
-  const mutationOptions = getPostApiStatsInnovationsStatisticsByYearMutationOptions(options)
 
-  return useMutation(mutationOptions, queryClient)
-}
+export const getPostApiStatsInnovationsStatisticsByYearMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsInnovationsStatisticsByYear>>, TError,{data: PostApiStatsInnovationsStatisticsByYearBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof postApiStatsInnovationsStatisticsByYear>>, TError,{data: PostApiStatsInnovationsStatisticsByYearBody}, TContext> => {
 
+const mutationKey = ['postApiStatsInnovationsStatisticsByYear'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiStatsInnovationsStatisticsByYear>>, {data: PostApiStatsInnovationsStatisticsByYearBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postApiStatsInnovationsStatisticsByYear(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostApiStatsInnovationsStatisticsByYearMutationResult = NonNullable<Awaited<ReturnType<typeof postApiStatsInnovationsStatisticsByYear>>>
+    export type PostApiStatsInnovationsStatisticsByYearMutationBody = PostApiStatsInnovationsStatisticsByYearBody
+    export type PostApiStatsInnovationsStatisticsByYearMutationError = unknown
+
+    export const usePostApiStatsInnovationsStatisticsByYear = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsInnovationsStatisticsByYear>>, TError,{data: PostApiStatsInnovationsStatisticsByYearBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postApiStatsInnovationsStatisticsByYear>>,
+        TError,
+        {data: PostApiStatsInnovationsStatisticsByYearBody},
+        TContext
+      > => {
+
+      const mutationOptions = getPostApiStatsInnovationsStatisticsByYearMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 export type postApiStatsArticlesStatisticsByYearResponse200 = {
   data: PostApiStatsArticlesStatisticsByYear200
   status: 200
 }
+    
+export type postApiStatsArticlesStatisticsByYearResponseSuccess = (postApiStatsArticlesStatisticsByYearResponse200) & {
+  headers: Headers;
+};
+;
 
-export type postApiStatsArticlesStatisticsByYearResponseSuccess =
-  postApiStatsArticlesStatisticsByYearResponse200 & {
-    headers: Headers
-  }
-
-export type postApiStatsArticlesStatisticsByYearResponse =
-  postApiStatsArticlesStatisticsByYearResponseSuccess
+export type postApiStatsArticlesStatisticsByYearResponse = (postApiStatsArticlesStatisticsByYearResponseSuccess)
 
 export const getPostApiStatsArticlesStatisticsByYearUrl = () => {
+
+
+  
+
   return `/api/stats/articles-statistics-by-year`
 }
 
-export const postApiStatsArticlesStatisticsByYear = async (
-  postApiStatsArticlesStatisticsByYearBody: PostApiStatsArticlesStatisticsByYearBody,
-  options?: RequestInit
-): Promise<postApiStatsArticlesStatisticsByYearResponse> => {
-  return customTrainingFetch<postApiStatsArticlesStatisticsByYearResponse>(
-    getPostApiStatsArticlesStatisticsByYearUrl(),
-    {
-      ...options,
-      method: "POST",
-      headers: { "Content-Type": "application/json", ...options?.headers },
-      body: JSON.stringify(postApiStatsArticlesStatisticsByYearBody),
-    }
-  )
-}
-
-export const getPostApiStatsArticlesStatisticsByYearMutationOptions = <
-  TError = unknown,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsArticlesStatisticsByYear>>,
-    TError,
-    { data: PostApiStatsArticlesStatisticsByYearBody },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiStatsArticlesStatisticsByYear>>,
-  TError,
-  { data: PostApiStatsArticlesStatisticsByYearBody },
-  TContext
-> => {
-  const mutationKey = ["postApiStatsArticlesStatisticsByYear"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiStatsArticlesStatisticsByYear>>,
-    { data: PostApiStatsArticlesStatisticsByYearBody }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return postApiStatsArticlesStatisticsByYear(data, requestOptions)
+export const postApiStatsArticlesStatisticsByYear = async (postApiStatsArticlesStatisticsByYearBody: PostApiStatsArticlesStatisticsByYearBody, options?: RequestInit): Promise<postApiStatsArticlesStatisticsByYearResponse> => {
+  
+  return customTrainingFetch<postApiStatsArticlesStatisticsByYearResponse>(getPostApiStatsArticlesStatisticsByYearUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      postApiStatsArticlesStatisticsByYearBody,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type PostApiStatsArticlesStatisticsByYearMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postApiStatsArticlesStatisticsByYear>>
->
-export type PostApiStatsArticlesStatisticsByYearMutationBody =
-  PostApiStatsArticlesStatisticsByYearBody
-export type PostApiStatsArticlesStatisticsByYearMutationError = unknown
 
-export const usePostApiStatsArticlesStatisticsByYear = <TError = unknown, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiStatsArticlesStatisticsByYear>>,
-      TError,
-      { data: PostApiStatsArticlesStatisticsByYearBody },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postApiStatsArticlesStatisticsByYear>>,
-  TError,
-  { data: PostApiStatsArticlesStatisticsByYearBody },
-  TContext
-> => {
-  const mutationOptions = getPostApiStatsArticlesStatisticsByYearMutationOptions(options)
 
-  return useMutation(mutationOptions, queryClient)
-}
+export const getPostApiStatsArticlesStatisticsByYearMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsArticlesStatisticsByYear>>, TError,{data: PostApiStatsArticlesStatisticsByYearBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof postApiStatsArticlesStatisticsByYear>>, TError,{data: PostApiStatsArticlesStatisticsByYearBody}, TContext> => {
 
+const mutationKey = ['postApiStatsArticlesStatisticsByYear'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiStatsArticlesStatisticsByYear>>, {data: PostApiStatsArticlesStatisticsByYearBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postApiStatsArticlesStatisticsByYear(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostApiStatsArticlesStatisticsByYearMutationResult = NonNullable<Awaited<ReturnType<typeof postApiStatsArticlesStatisticsByYear>>>
+    export type PostApiStatsArticlesStatisticsByYearMutationBody = PostApiStatsArticlesStatisticsByYearBody
+    export type PostApiStatsArticlesStatisticsByYearMutationError = unknown
+
+    export const usePostApiStatsArticlesStatisticsByYear = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsArticlesStatisticsByYear>>, TError,{data: PostApiStatsArticlesStatisticsByYearBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postApiStatsArticlesStatisticsByYear>>,
+        TError,
+        {data: PostApiStatsArticlesStatisticsByYearBody},
+        TContext
+      > => {
+
+      const mutationOptions = getPostApiStatsArticlesStatisticsByYearMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 export type postApiStatsFinalExamInfoResponse200 = {
   data: PostApiStatsFinalExamInfo200
   status: 200
 }
+    
+export type postApiStatsFinalExamInfoResponseSuccess = (postApiStatsFinalExamInfoResponse200) & {
+  headers: Headers;
+};
+;
 
-export type postApiStatsFinalExamInfoResponseSuccess = postApiStatsFinalExamInfoResponse200 & {
-  headers: Headers
-}
-
-export type postApiStatsFinalExamInfoResponse = postApiStatsFinalExamInfoResponseSuccess
+export type postApiStatsFinalExamInfoResponse = (postApiStatsFinalExamInfoResponseSuccess)
 
 export const getPostApiStatsFinalExamInfoUrl = () => {
+
+
+  
+
   return `/api/stats/final-exam-info`
 }
 
-export const postApiStatsFinalExamInfo = async (
-  postApiStatsFinalExamInfoBody: PostApiStatsFinalExamInfoBody,
-  options?: RequestInit
-): Promise<postApiStatsFinalExamInfoResponse> => {
-  return customTrainingFetch<postApiStatsFinalExamInfoResponse>(getPostApiStatsFinalExamInfoUrl(), {
+export const postApiStatsFinalExamInfo = async (postApiStatsFinalExamInfoBody: PostApiStatsFinalExamInfoBody, options?: RequestInit): Promise<postApiStatsFinalExamInfoResponse> => {
+  
+  return customTrainingFetch<postApiStatsFinalExamInfoResponse>(getPostApiStatsFinalExamInfoUrl(),
+  {      
     ...options,
-    method: "POST",
-    headers: { "Content-Type": "application/json", ...options?.headers },
-    body: JSON.stringify(postApiStatsFinalExamInfoBody),
-  })
-}
-
-export const getPostApiStatsFinalExamInfoMutationOptions = <
-  TError = unknown,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsFinalExamInfo>>,
-    TError,
-    { data: PostApiStatsFinalExamInfoBody },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiStatsFinalExamInfo>>,
-  TError,
-  { data: PostApiStatsFinalExamInfoBody },
-  TContext
-> => {
-  const mutationKey = ["postApiStatsFinalExamInfo"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiStatsFinalExamInfo>>,
-    { data: PostApiStatsFinalExamInfoBody }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return postApiStatsFinalExamInfo(data, requestOptions)
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      postApiStatsFinalExamInfoBody,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type PostApiStatsFinalExamInfoMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postApiStatsFinalExamInfo>>
->
-export type PostApiStatsFinalExamInfoMutationBody = PostApiStatsFinalExamInfoBody
-export type PostApiStatsFinalExamInfoMutationError = unknown
 
-export const usePostApiStatsFinalExamInfo = <TError = unknown, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiStatsFinalExamInfo>>,
-      TError,
-      { data: PostApiStatsFinalExamInfoBody },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postApiStatsFinalExamInfo>>,
-  TError,
-  { data: PostApiStatsFinalExamInfoBody },
-  TContext
-> => {
-  const mutationOptions = getPostApiStatsFinalExamInfoMutationOptions(options)
 
-  return useMutation(mutationOptions, queryClient)
-}
+export const getPostApiStatsFinalExamInfoMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsFinalExamInfo>>, TError,{data: PostApiStatsFinalExamInfoBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof postApiStatsFinalExamInfo>>, TError,{data: PostApiStatsFinalExamInfoBody}, TContext> => {
 
+const mutationKey = ['postApiStatsFinalExamInfo'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiStatsFinalExamInfo>>, {data: PostApiStatsFinalExamInfoBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postApiStatsFinalExamInfo(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostApiStatsFinalExamInfoMutationResult = NonNullable<Awaited<ReturnType<typeof postApiStatsFinalExamInfo>>>
+    export type PostApiStatsFinalExamInfoMutationBody = PostApiStatsFinalExamInfoBody
+    export type PostApiStatsFinalExamInfoMutationError = unknown
+
+    export const usePostApiStatsFinalExamInfo = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsFinalExamInfo>>, TError,{data: PostApiStatsFinalExamInfoBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postApiStatsFinalExamInfo>>,
+        TError,
+        {data: PostApiStatsFinalExamInfoBody},
+        TContext
+      > => {
+
+      const mutationOptions = getPostApiStatsFinalExamInfoMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 export type postApiStatsStudentCountByAcademicResultsResponse200 = {
   data: PostApiStatsStudentCountByAcademicResults200
   status: 200
 }
+    
+export type postApiStatsStudentCountByAcademicResultsResponseSuccess = (postApiStatsStudentCountByAcademicResultsResponse200) & {
+  headers: Headers;
+};
+;
 
-export type postApiStatsStudentCountByAcademicResultsResponseSuccess =
-  postApiStatsStudentCountByAcademicResultsResponse200 & {
-    headers: Headers
-  }
-
-export type postApiStatsStudentCountByAcademicResultsResponse =
-  postApiStatsStudentCountByAcademicResultsResponseSuccess
+export type postApiStatsStudentCountByAcademicResultsResponse = (postApiStatsStudentCountByAcademicResultsResponseSuccess)
 
 export const getPostApiStatsStudentCountByAcademicResultsUrl = () => {
+
+
+  
+
   return `/api/stats/student-count-by-academic-results`
 }
 
-export const postApiStatsStudentCountByAcademicResults = async (
-  postApiStatsStudentCountByAcademicResultsBody: PostApiStatsStudentCountByAcademicResultsBody,
-  options?: RequestInit
-): Promise<postApiStatsStudentCountByAcademicResultsResponse> => {
-  return customTrainingFetch<postApiStatsStudentCountByAcademicResultsResponse>(
-    getPostApiStatsStudentCountByAcademicResultsUrl(),
-    {
-      ...options,
-      method: "POST",
-      headers: { "Content-Type": "application/json", ...options?.headers },
-      body: JSON.stringify(postApiStatsStudentCountByAcademicResultsBody),
-    }
-  )
-}
-
-export const getPostApiStatsStudentCountByAcademicResultsMutationOptions = <
-  TError = unknown,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsStudentCountByAcademicResults>>,
-    TError,
-    { data: PostApiStatsStudentCountByAcademicResultsBody },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiStatsStudentCountByAcademicResults>>,
-  TError,
-  { data: PostApiStatsStudentCountByAcademicResultsBody },
-  TContext
-> => {
-  const mutationKey = ["postApiStatsStudentCountByAcademicResults"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiStatsStudentCountByAcademicResults>>,
-    { data: PostApiStatsStudentCountByAcademicResultsBody }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return postApiStatsStudentCountByAcademicResults(data, requestOptions)
+export const postApiStatsStudentCountByAcademicResults = async (postApiStatsStudentCountByAcademicResultsBody: PostApiStatsStudentCountByAcademicResultsBody, options?: RequestInit): Promise<postApiStatsStudentCountByAcademicResultsResponse> => {
+  
+  return customTrainingFetch<postApiStatsStudentCountByAcademicResultsResponse>(getPostApiStatsStudentCountByAcademicResultsUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      postApiStatsStudentCountByAcademicResultsBody,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type PostApiStatsStudentCountByAcademicResultsMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postApiStatsStudentCountByAcademicResults>>
->
-export type PostApiStatsStudentCountByAcademicResultsMutationBody =
-  PostApiStatsStudentCountByAcademicResultsBody
-export type PostApiStatsStudentCountByAcademicResultsMutationError = unknown
 
-export const usePostApiStatsStudentCountByAcademicResults = <TError = unknown, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiStatsStudentCountByAcademicResults>>,
-      TError,
-      { data: PostApiStatsStudentCountByAcademicResultsBody },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postApiStatsStudentCountByAcademicResults>>,
-  TError,
-  { data: PostApiStatsStudentCountByAcademicResultsBody },
-  TContext
-> => {
-  const mutationOptions = getPostApiStatsStudentCountByAcademicResultsMutationOptions(options)
 
-  return useMutation(mutationOptions, queryClient)
-}
+export const getPostApiStatsStudentCountByAcademicResultsMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsStudentCountByAcademicResults>>, TError,{data: PostApiStatsStudentCountByAcademicResultsBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof postApiStatsStudentCountByAcademicResults>>, TError,{data: PostApiStatsStudentCountByAcademicResultsBody}, TContext> => {
 
+const mutationKey = ['postApiStatsStudentCountByAcademicResults'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiStatsStudentCountByAcademicResults>>, {data: PostApiStatsStudentCountByAcademicResultsBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postApiStatsStudentCountByAcademicResults(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostApiStatsStudentCountByAcademicResultsMutationResult = NonNullable<Awaited<ReturnType<typeof postApiStatsStudentCountByAcademicResults>>>
+    export type PostApiStatsStudentCountByAcademicResultsMutationBody = PostApiStatsStudentCountByAcademicResultsBody
+    export type PostApiStatsStudentCountByAcademicResultsMutationError = unknown
+
+    export const usePostApiStatsStudentCountByAcademicResults = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsStudentCountByAcademicResults>>, TError,{data: PostApiStatsStudentCountByAcademicResultsBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postApiStatsStudentCountByAcademicResults>>,
+        TError,
+        {data: PostApiStatsStudentCountByAcademicResultsBody},
+        TContext
+      > => {
+
+      const mutationOptions = getPostApiStatsStudentCountByAcademicResultsMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 export type postApiStatsSubjectPassFailRatesResponse200 = {
   data: PostApiStatsSubjectPassFailRates200
   status: 200
 }
+    
+export type postApiStatsSubjectPassFailRatesResponseSuccess = (postApiStatsSubjectPassFailRatesResponse200) & {
+  headers: Headers;
+};
+;
 
-export type postApiStatsSubjectPassFailRatesResponseSuccess =
-  postApiStatsSubjectPassFailRatesResponse200 & {
-    headers: Headers
-  }
-
-export type postApiStatsSubjectPassFailRatesResponse =
-  postApiStatsSubjectPassFailRatesResponseSuccess
+export type postApiStatsSubjectPassFailRatesResponse = (postApiStatsSubjectPassFailRatesResponseSuccess)
 
 export const getPostApiStatsSubjectPassFailRatesUrl = () => {
+
+
+  
+
   return `/api/stats/subject-pass-fail-rates`
 }
 
-export const postApiStatsSubjectPassFailRates = async (
-  postApiStatsSubjectPassFailRatesBody: PostApiStatsSubjectPassFailRatesBody,
-  options?: RequestInit
-): Promise<postApiStatsSubjectPassFailRatesResponse> => {
-  return customTrainingFetch<postApiStatsSubjectPassFailRatesResponse>(
-    getPostApiStatsSubjectPassFailRatesUrl(),
-    {
-      ...options,
-      method: "POST",
-      headers: { "Content-Type": "application/json", ...options?.headers },
-      body: JSON.stringify(postApiStatsSubjectPassFailRatesBody),
-    }
-  )
-}
-
-export const getPostApiStatsSubjectPassFailRatesMutationOptions = <
-  TError = unknown,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsSubjectPassFailRates>>,
-    TError,
-    { data: PostApiStatsSubjectPassFailRatesBody },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiStatsSubjectPassFailRates>>,
-  TError,
-  { data: PostApiStatsSubjectPassFailRatesBody },
-  TContext
-> => {
-  const mutationKey = ["postApiStatsSubjectPassFailRates"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiStatsSubjectPassFailRates>>,
-    { data: PostApiStatsSubjectPassFailRatesBody }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return postApiStatsSubjectPassFailRates(data, requestOptions)
+export const postApiStatsSubjectPassFailRates = async (postApiStatsSubjectPassFailRatesBody: PostApiStatsSubjectPassFailRatesBody, options?: RequestInit): Promise<postApiStatsSubjectPassFailRatesResponse> => {
+  
+  return customTrainingFetch<postApiStatsSubjectPassFailRatesResponse>(getPostApiStatsSubjectPassFailRatesUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      postApiStatsSubjectPassFailRatesBody,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type PostApiStatsSubjectPassFailRatesMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postApiStatsSubjectPassFailRates>>
->
-export type PostApiStatsSubjectPassFailRatesMutationBody = PostApiStatsSubjectPassFailRatesBody
-export type PostApiStatsSubjectPassFailRatesMutationError = unknown
 
-export const usePostApiStatsSubjectPassFailRates = <TError = unknown, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiStatsSubjectPassFailRates>>,
-      TError,
-      { data: PostApiStatsSubjectPassFailRatesBody },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postApiStatsSubjectPassFailRates>>,
-  TError,
-  { data: PostApiStatsSubjectPassFailRatesBody },
-  TContext
-> => {
-  const mutationOptions = getPostApiStatsSubjectPassFailRatesMutationOptions(options)
 
-  return useMutation(mutationOptions, queryClient)
-}
+export const getPostApiStatsSubjectPassFailRatesMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsSubjectPassFailRates>>, TError,{data: PostApiStatsSubjectPassFailRatesBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof postApiStatsSubjectPassFailRates>>, TError,{data: PostApiStatsSubjectPassFailRatesBody}, TContext> => {
 
+const mutationKey = ['postApiStatsSubjectPassFailRates'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiStatsSubjectPassFailRates>>, {data: PostApiStatsSubjectPassFailRatesBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postApiStatsSubjectPassFailRates(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostApiStatsSubjectPassFailRatesMutationResult = NonNullable<Awaited<ReturnType<typeof postApiStatsSubjectPassFailRates>>>
+    export type PostApiStatsSubjectPassFailRatesMutationBody = PostApiStatsSubjectPassFailRatesBody
+    export type PostApiStatsSubjectPassFailRatesMutationError = unknown
+
+    export const usePostApiStatsSubjectPassFailRates = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsSubjectPassFailRates>>, TError,{data: PostApiStatsSubjectPassFailRatesBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postApiStatsSubjectPassFailRates>>,
+        TError,
+        {data: PostApiStatsSubjectPassFailRatesBody},
+        TContext
+      > => {
+
+      const mutationOptions = getPostApiStatsSubjectPassFailRatesMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 export type postApiStatsSubjectsHighFailRatesResponse200 = {
   data: PostApiStatsSubjectsHighFailRates200
   status: 200
 }
+    
+export type postApiStatsSubjectsHighFailRatesResponseSuccess = (postApiStatsSubjectsHighFailRatesResponse200) & {
+  headers: Headers;
+};
+;
 
-export type postApiStatsSubjectsHighFailRatesResponseSuccess =
-  postApiStatsSubjectsHighFailRatesResponse200 & {
-    headers: Headers
-  }
-
-export type postApiStatsSubjectsHighFailRatesResponse =
-  postApiStatsSubjectsHighFailRatesResponseSuccess
+export type postApiStatsSubjectsHighFailRatesResponse = (postApiStatsSubjectsHighFailRatesResponseSuccess)
 
 export const getPostApiStatsSubjectsHighFailRatesUrl = () => {
+
+
+  
+
   return `/api/stats/subjects-high-fail-rates`
 }
 
-export const postApiStatsSubjectsHighFailRates = async (
-  postApiStatsSubjectsHighFailRatesBody: PostApiStatsSubjectsHighFailRatesBody,
-  options?: RequestInit
-): Promise<postApiStatsSubjectsHighFailRatesResponse> => {
-  return customTrainingFetch<postApiStatsSubjectsHighFailRatesResponse>(
-    getPostApiStatsSubjectsHighFailRatesUrl(),
-    {
-      ...options,
-      method: "POST",
-      headers: { "Content-Type": "application/json", ...options?.headers },
-      body: JSON.stringify(postApiStatsSubjectsHighFailRatesBody),
-    }
-  )
-}
-
-export const getPostApiStatsSubjectsHighFailRatesMutationOptions = <
-  TError = unknown,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsSubjectsHighFailRates>>,
-    TError,
-    { data: PostApiStatsSubjectsHighFailRatesBody },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiStatsSubjectsHighFailRates>>,
-  TError,
-  { data: PostApiStatsSubjectsHighFailRatesBody },
-  TContext
-> => {
-  const mutationKey = ["postApiStatsSubjectsHighFailRates"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiStatsSubjectsHighFailRates>>,
-    { data: PostApiStatsSubjectsHighFailRatesBody }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return postApiStatsSubjectsHighFailRates(data, requestOptions)
+export const postApiStatsSubjectsHighFailRates = async (postApiStatsSubjectsHighFailRatesBody: PostApiStatsSubjectsHighFailRatesBody, options?: RequestInit): Promise<postApiStatsSubjectsHighFailRatesResponse> => {
+  
+  return customTrainingFetch<postApiStatsSubjectsHighFailRatesResponse>(getPostApiStatsSubjectsHighFailRatesUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      postApiStatsSubjectsHighFailRatesBody,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type PostApiStatsSubjectsHighFailRatesMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postApiStatsSubjectsHighFailRates>>
->
-export type PostApiStatsSubjectsHighFailRatesMutationBody = PostApiStatsSubjectsHighFailRatesBody
-export type PostApiStatsSubjectsHighFailRatesMutationError = unknown
 
-export const usePostApiStatsSubjectsHighFailRates = <TError = unknown, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiStatsSubjectsHighFailRates>>,
-      TError,
-      { data: PostApiStatsSubjectsHighFailRatesBody },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postApiStatsSubjectsHighFailRates>>,
-  TError,
-  { data: PostApiStatsSubjectsHighFailRatesBody },
-  TContext
-> => {
-  const mutationOptions = getPostApiStatsSubjectsHighFailRatesMutationOptions(options)
 
-  return useMutation(mutationOptions, queryClient)
-}
+export const getPostApiStatsSubjectsHighFailRatesMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsSubjectsHighFailRates>>, TError,{data: PostApiStatsSubjectsHighFailRatesBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof postApiStatsSubjectsHighFailRates>>, TError,{data: PostApiStatsSubjectsHighFailRatesBody}, TContext> => {
 
+const mutationKey = ['postApiStatsSubjectsHighFailRates'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiStatsSubjectsHighFailRates>>, {data: PostApiStatsSubjectsHighFailRatesBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postApiStatsSubjectsHighFailRates(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostApiStatsSubjectsHighFailRatesMutationResult = NonNullable<Awaited<ReturnType<typeof postApiStatsSubjectsHighFailRates>>>
+    export type PostApiStatsSubjectsHighFailRatesMutationBody = PostApiStatsSubjectsHighFailRatesBody
+    export type PostApiStatsSubjectsHighFailRatesMutationError = unknown
+
+    export const usePostApiStatsSubjectsHighFailRates = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsSubjectsHighFailRates>>, TError,{data: PostApiStatsSubjectsHighFailRatesBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postApiStatsSubjectsHighFailRates>>,
+        TError,
+        {data: PostApiStatsSubjectsHighFailRatesBody},
+        TContext
+      > => {
+
+      const mutationOptions = getPostApiStatsSubjectsHighFailRatesMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 export type postApiStatsSubjectsHighAbsentStudentsResponse200 = {
   data: PostApiStatsSubjectsHighAbsentStudents200
   status: 200
 }
+    
+export type postApiStatsSubjectsHighAbsentStudentsResponseSuccess = (postApiStatsSubjectsHighAbsentStudentsResponse200) & {
+  headers: Headers;
+};
+;
 
-export type postApiStatsSubjectsHighAbsentStudentsResponseSuccess =
-  postApiStatsSubjectsHighAbsentStudentsResponse200 & {
-    headers: Headers
-  }
-
-export type postApiStatsSubjectsHighAbsentStudentsResponse =
-  postApiStatsSubjectsHighAbsentStudentsResponseSuccess
+export type postApiStatsSubjectsHighAbsentStudentsResponse = (postApiStatsSubjectsHighAbsentStudentsResponseSuccess)
 
 export const getPostApiStatsSubjectsHighAbsentStudentsUrl = () => {
+
+
+  
+
   return `/api/stats/subjects-high-absent-students`
 }
 
-export const postApiStatsSubjectsHighAbsentStudents = async (
-  postApiStatsSubjectsHighAbsentStudentsBody: PostApiStatsSubjectsHighAbsentStudentsBody,
-  options?: RequestInit
-): Promise<postApiStatsSubjectsHighAbsentStudentsResponse> => {
-  return customTrainingFetch<postApiStatsSubjectsHighAbsentStudentsResponse>(
-    getPostApiStatsSubjectsHighAbsentStudentsUrl(),
-    {
-      ...options,
-      method: "POST",
-      headers: { "Content-Type": "application/json", ...options?.headers },
-      body: JSON.stringify(postApiStatsSubjectsHighAbsentStudentsBody),
-    }
-  )
-}
-
-export const getPostApiStatsSubjectsHighAbsentStudentsMutationOptions = <
-  TError = unknown,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsSubjectsHighAbsentStudents>>,
-    TError,
-    { data: PostApiStatsSubjectsHighAbsentStudentsBody },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiStatsSubjectsHighAbsentStudents>>,
-  TError,
-  { data: PostApiStatsSubjectsHighAbsentStudentsBody },
-  TContext
-> => {
-  const mutationKey = ["postApiStatsSubjectsHighAbsentStudents"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiStatsSubjectsHighAbsentStudents>>,
-    { data: PostApiStatsSubjectsHighAbsentStudentsBody }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return postApiStatsSubjectsHighAbsentStudents(data, requestOptions)
+export const postApiStatsSubjectsHighAbsentStudents = async (postApiStatsSubjectsHighAbsentStudentsBody: PostApiStatsSubjectsHighAbsentStudentsBody, options?: RequestInit): Promise<postApiStatsSubjectsHighAbsentStudentsResponse> => {
+  
+  return customTrainingFetch<postApiStatsSubjectsHighAbsentStudentsResponse>(getPostApiStatsSubjectsHighAbsentStudentsUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      postApiStatsSubjectsHighAbsentStudentsBody,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type PostApiStatsSubjectsHighAbsentStudentsMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postApiStatsSubjectsHighAbsentStudents>>
->
-export type PostApiStatsSubjectsHighAbsentStudentsMutationBody =
-  PostApiStatsSubjectsHighAbsentStudentsBody
-export type PostApiStatsSubjectsHighAbsentStudentsMutationError = unknown
 
-export const usePostApiStatsSubjectsHighAbsentStudents = <TError = unknown, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiStatsSubjectsHighAbsentStudents>>,
-      TError,
-      { data: PostApiStatsSubjectsHighAbsentStudentsBody },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postApiStatsSubjectsHighAbsentStudents>>,
-  TError,
-  { data: PostApiStatsSubjectsHighAbsentStudentsBody },
-  TContext
-> => {
-  const mutationOptions = getPostApiStatsSubjectsHighAbsentStudentsMutationOptions(options)
 
-  return useMutation(mutationOptions, queryClient)
-}
+export const getPostApiStatsSubjectsHighAbsentStudentsMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsSubjectsHighAbsentStudents>>, TError,{data: PostApiStatsSubjectsHighAbsentStudentsBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof postApiStatsSubjectsHighAbsentStudents>>, TError,{data: PostApiStatsSubjectsHighAbsentStudentsBody}, TContext> => {
 
+const mutationKey = ['postApiStatsSubjectsHighAbsentStudents'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiStatsSubjectsHighAbsentStudents>>, {data: PostApiStatsSubjectsHighAbsentStudentsBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postApiStatsSubjectsHighAbsentStudents(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostApiStatsSubjectsHighAbsentStudentsMutationResult = NonNullable<Awaited<ReturnType<typeof postApiStatsSubjectsHighAbsentStudents>>>
+    export type PostApiStatsSubjectsHighAbsentStudentsMutationBody = PostApiStatsSubjectsHighAbsentStudentsBody
+    export type PostApiStatsSubjectsHighAbsentStudentsMutationError = unknown
+
+    export const usePostApiStatsSubjectsHighAbsentStudents = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsSubjectsHighAbsentStudents>>, TError,{data: PostApiStatsSubjectsHighAbsentStudentsBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postApiStatsSubjectsHighAbsentStudents>>,
+        TError,
+        {data: PostApiStatsSubjectsHighAbsentStudentsBody},
+        TContext
+      > => {
+
+      const mutationOptions = getPostApiStatsSubjectsHighAbsentStudentsMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 /**
  * @summary Thống kê số lượng ngân hàng đề chưa có
  */
@@ -5000,197 +4125,161 @@ export type postApiStatsStatisticsExamBankNotYetResponse200 = {
   data: PostApiStatsStatisticsExamBankNotYet200
   status: 200
 }
+    
+export type postApiStatsStatisticsExamBankNotYetResponseSuccess = (postApiStatsStatisticsExamBankNotYetResponse200) & {
+  headers: Headers;
+};
+;
 
-export type postApiStatsStatisticsExamBankNotYetResponseSuccess =
-  postApiStatsStatisticsExamBankNotYetResponse200 & {
-    headers: Headers
-  }
-
-export type postApiStatsStatisticsExamBankNotYetResponse =
-  postApiStatsStatisticsExamBankNotYetResponseSuccess
+export type postApiStatsStatisticsExamBankNotYetResponse = (postApiStatsStatisticsExamBankNotYetResponseSuccess)
 
 export const getPostApiStatsStatisticsExamBankNotYetUrl = () => {
+
+
+  
+
   return `/api/stats/statistics-exam-bank-not-yet`
 }
 
-export const postApiStatsStatisticsExamBankNotYet = async (
-  postApiStatsStatisticsExamBankNotYetBody: PostApiStatsStatisticsExamBankNotYetBody,
-  options?: RequestInit
-): Promise<postApiStatsStatisticsExamBankNotYetResponse> => {
-  return customTrainingFetch<postApiStatsStatisticsExamBankNotYetResponse>(
-    getPostApiStatsStatisticsExamBankNotYetUrl(),
-    {
-      ...options,
-      method: "POST",
-      headers: { "Content-Type": "application/json", ...options?.headers },
-      body: JSON.stringify(postApiStatsStatisticsExamBankNotYetBody),
-    }
-  )
-}
-
-export const getPostApiStatsStatisticsExamBankNotYetMutationOptions = <
-  TError = unknown,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsStatisticsExamBankNotYet>>,
-    TError,
-    { data: PostApiStatsStatisticsExamBankNotYetBody },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiStatsStatisticsExamBankNotYet>>,
-  TError,
-  { data: PostApiStatsStatisticsExamBankNotYetBody },
-  TContext
-> => {
-  const mutationKey = ["postApiStatsStatisticsExamBankNotYet"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiStatsStatisticsExamBankNotYet>>,
-    { data: PostApiStatsStatisticsExamBankNotYetBody }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return postApiStatsStatisticsExamBankNotYet(data, requestOptions)
+export const postApiStatsStatisticsExamBankNotYet = async (postApiStatsStatisticsExamBankNotYetBody: PostApiStatsStatisticsExamBankNotYetBody, options?: RequestInit): Promise<postApiStatsStatisticsExamBankNotYetResponse> => {
+  
+  return customTrainingFetch<postApiStatsStatisticsExamBankNotYetResponse>(getPostApiStatsStatisticsExamBankNotYetUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      postApiStatsStatisticsExamBankNotYetBody,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type PostApiStatsStatisticsExamBankNotYetMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postApiStatsStatisticsExamBankNotYet>>
->
-export type PostApiStatsStatisticsExamBankNotYetMutationBody =
-  PostApiStatsStatisticsExamBankNotYetBody
-export type PostApiStatsStatisticsExamBankNotYetMutationError = unknown
 
-/**
+
+export const getPostApiStatsStatisticsExamBankNotYetMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsStatisticsExamBankNotYet>>, TError,{data: PostApiStatsStatisticsExamBankNotYetBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof postApiStatsStatisticsExamBankNotYet>>, TError,{data: PostApiStatsStatisticsExamBankNotYetBody}, TContext> => {
+
+const mutationKey = ['postApiStatsStatisticsExamBankNotYet'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiStatsStatisticsExamBankNotYet>>, {data: PostApiStatsStatisticsExamBankNotYetBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postApiStatsStatisticsExamBankNotYet(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostApiStatsStatisticsExamBankNotYetMutationResult = NonNullable<Awaited<ReturnType<typeof postApiStatsStatisticsExamBankNotYet>>>
+    export type PostApiStatsStatisticsExamBankNotYetMutationBody = PostApiStatsStatisticsExamBankNotYetBody
+    export type PostApiStatsStatisticsExamBankNotYetMutationError = unknown
+
+    /**
  * @summary Thống kê số lượng ngân hàng đề chưa có
  */
-export const usePostApiStatsStatisticsExamBankNotYet = <TError = unknown, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiStatsStatisticsExamBankNotYet>>,
-      TError,
-      { data: PostApiStatsStatisticsExamBankNotYetBody },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postApiStatsStatisticsExamBankNotYet>>,
-  TError,
-  { data: PostApiStatsStatisticsExamBankNotYetBody },
-  TContext
-> => {
-  const mutationOptions = getPostApiStatsStatisticsExamBankNotYetMutationOptions(options)
+export const usePostApiStatsStatisticsExamBankNotYet = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsStatisticsExamBankNotYet>>, TError,{data: PostApiStatsStatisticsExamBankNotYetBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postApiStatsStatisticsExamBankNotYet>>,
+        TError,
+        {data: PostApiStatsStatisticsExamBankNotYetBody},
+        TContext
+      > => {
 
-  return useMutation(mutationOptions, queryClient)
-}
+      const mutationOptions = getPostApiStatsStatisticsExamBankNotYetMutationOptions(options);
 
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 export type postApiStatsLateGradeSubjectsResponse200 = {
   data: PostApiStatsLateGradeSubjects200
   status: 200
 }
+    
+export type postApiStatsLateGradeSubjectsResponseSuccess = (postApiStatsLateGradeSubjectsResponse200) & {
+  headers: Headers;
+};
+;
 
-export type postApiStatsLateGradeSubjectsResponseSuccess =
-  postApiStatsLateGradeSubjectsResponse200 & {
-    headers: Headers
-  }
-
-export type postApiStatsLateGradeSubjectsResponse = postApiStatsLateGradeSubjectsResponseSuccess
+export type postApiStatsLateGradeSubjectsResponse = (postApiStatsLateGradeSubjectsResponseSuccess)
 
 export const getPostApiStatsLateGradeSubjectsUrl = () => {
+
+
+  
+
   return `/api/stats/late-grade-subjects`
 }
 
-export const postApiStatsLateGradeSubjects = async (
-  postApiStatsLateGradeSubjectsBody: PostApiStatsLateGradeSubjectsBody,
-  options?: RequestInit
-): Promise<postApiStatsLateGradeSubjectsResponse> => {
-  return customTrainingFetch<postApiStatsLateGradeSubjectsResponse>(
-    getPostApiStatsLateGradeSubjectsUrl(),
-    {
-      ...options,
-      method: "POST",
-      headers: { "Content-Type": "application/json", ...options?.headers },
-      body: JSON.stringify(postApiStatsLateGradeSubjectsBody),
-    }
-  )
-}
-
-export const getPostApiStatsLateGradeSubjectsMutationOptions = <
-  TError = unknown,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsLateGradeSubjects>>,
-    TError,
-    { data: PostApiStatsLateGradeSubjectsBody },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiStatsLateGradeSubjects>>,
-  TError,
-  { data: PostApiStatsLateGradeSubjectsBody },
-  TContext
-> => {
-  const mutationKey = ["postApiStatsLateGradeSubjects"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiStatsLateGradeSubjects>>,
-    { data: PostApiStatsLateGradeSubjectsBody }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return postApiStatsLateGradeSubjects(data, requestOptions)
+export const postApiStatsLateGradeSubjects = async (postApiStatsLateGradeSubjectsBody: PostApiStatsLateGradeSubjectsBody, options?: RequestInit): Promise<postApiStatsLateGradeSubjectsResponse> => {
+  
+  return customTrainingFetch<postApiStatsLateGradeSubjectsResponse>(getPostApiStatsLateGradeSubjectsUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      postApiStatsLateGradeSubjectsBody,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type PostApiStatsLateGradeSubjectsMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postApiStatsLateGradeSubjects>>
->
-export type PostApiStatsLateGradeSubjectsMutationBody = PostApiStatsLateGradeSubjectsBody
-export type PostApiStatsLateGradeSubjectsMutationError = unknown
 
-export const usePostApiStatsLateGradeSubjects = <TError = unknown, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiStatsLateGradeSubjects>>,
-      TError,
-      { data: PostApiStatsLateGradeSubjectsBody },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postApiStatsLateGradeSubjects>>,
-  TError,
-  { data: PostApiStatsLateGradeSubjectsBody },
-  TContext
-> => {
-  const mutationOptions = getPostApiStatsLateGradeSubjectsMutationOptions(options)
 
-  return useMutation(mutationOptions, queryClient)
-}
+export const getPostApiStatsLateGradeSubjectsMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsLateGradeSubjects>>, TError,{data: PostApiStatsLateGradeSubjectsBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof postApiStatsLateGradeSubjects>>, TError,{data: PostApiStatsLateGradeSubjectsBody}, TContext> => {
 
+const mutationKey = ['postApiStatsLateGradeSubjects'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiStatsLateGradeSubjects>>, {data: PostApiStatsLateGradeSubjectsBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postApiStatsLateGradeSubjects(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostApiStatsLateGradeSubjectsMutationResult = NonNullable<Awaited<ReturnType<typeof postApiStatsLateGradeSubjects>>>
+    export type PostApiStatsLateGradeSubjectsMutationBody = PostApiStatsLateGradeSubjectsBody
+    export type PostApiStatsLateGradeSubjectsMutationError = unknown
+
+    export const usePostApiStatsLateGradeSubjects = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsLateGradeSubjects>>, TError,{data: PostApiStatsLateGradeSubjectsBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postApiStatsLateGradeSubjects>>,
+        TError,
+        {data: PostApiStatsLateGradeSubjectsBody},
+        TContext
+      > => {
+
+      const mutationOptions = getPostApiStatsLateGradeSubjectsMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 /**
  * @summary Thống kê số lượng ngân hàng đề đã bổ sung / cập nhật
  */
@@ -5198,99 +4287,83 @@ export type postApiStatsExamBankUpdateResponse200 = {
   data: PostApiStatsExamBankUpdate200
   status: 200
 }
+    
+export type postApiStatsExamBankUpdateResponseSuccess = (postApiStatsExamBankUpdateResponse200) & {
+  headers: Headers;
+};
+;
 
-export type postApiStatsExamBankUpdateResponseSuccess = postApiStatsExamBankUpdateResponse200 & {
-  headers: Headers
-}
-
-export type postApiStatsExamBankUpdateResponse = postApiStatsExamBankUpdateResponseSuccess
+export type postApiStatsExamBankUpdateResponse = (postApiStatsExamBankUpdateResponseSuccess)
 
 export const getPostApiStatsExamBankUpdateUrl = () => {
+
+
+  
+
   return `/api/stats/exam-bank-update`
 }
 
-export const postApiStatsExamBankUpdate = async (
-  postApiStatsExamBankUpdateBody: PostApiStatsExamBankUpdateBody,
-  options?: RequestInit
-): Promise<postApiStatsExamBankUpdateResponse> => {
-  return customTrainingFetch<postApiStatsExamBankUpdateResponse>(
-    getPostApiStatsExamBankUpdateUrl(),
-    {
-      ...options,
-      method: "POST",
-      headers: { "Content-Type": "application/json", ...options?.headers },
-      body: JSON.stringify(postApiStatsExamBankUpdateBody),
-    }
-  )
-}
-
-export const getPostApiStatsExamBankUpdateMutationOptions = <
-  TError = unknown,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsExamBankUpdate>>,
-    TError,
-    { data: PostApiStatsExamBankUpdateBody },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiStatsExamBankUpdate>>,
-  TError,
-  { data: PostApiStatsExamBankUpdateBody },
-  TContext
-> => {
-  const mutationKey = ["postApiStatsExamBankUpdate"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiStatsExamBankUpdate>>,
-    { data: PostApiStatsExamBankUpdateBody }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return postApiStatsExamBankUpdate(data, requestOptions)
+export const postApiStatsExamBankUpdate = async (postApiStatsExamBankUpdateBody: PostApiStatsExamBankUpdateBody, options?: RequestInit): Promise<postApiStatsExamBankUpdateResponse> => {
+  
+  return customTrainingFetch<postApiStatsExamBankUpdateResponse>(getPostApiStatsExamBankUpdateUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      postApiStatsExamBankUpdateBody,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type PostApiStatsExamBankUpdateMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postApiStatsExamBankUpdate>>
->
-export type PostApiStatsExamBankUpdateMutationBody = PostApiStatsExamBankUpdateBody
-export type PostApiStatsExamBankUpdateMutationError = unknown
 
-/**
+
+export const getPostApiStatsExamBankUpdateMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsExamBankUpdate>>, TError,{data: PostApiStatsExamBankUpdateBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof postApiStatsExamBankUpdate>>, TError,{data: PostApiStatsExamBankUpdateBody}, TContext> => {
+
+const mutationKey = ['postApiStatsExamBankUpdate'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiStatsExamBankUpdate>>, {data: PostApiStatsExamBankUpdateBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postApiStatsExamBankUpdate(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostApiStatsExamBankUpdateMutationResult = NonNullable<Awaited<ReturnType<typeof postApiStatsExamBankUpdate>>>
+    export type PostApiStatsExamBankUpdateMutationBody = PostApiStatsExamBankUpdateBody
+    export type PostApiStatsExamBankUpdateMutationError = unknown
+
+    /**
  * @summary Thống kê số lượng ngân hàng đề đã bổ sung / cập nhật
  */
-export const usePostApiStatsExamBankUpdate = <TError = unknown, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiStatsExamBankUpdate>>,
-      TError,
-      { data: PostApiStatsExamBankUpdateBody },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postApiStatsExamBankUpdate>>,
-  TError,
-  { data: PostApiStatsExamBankUpdateBody },
-  TContext
-> => {
-  const mutationOptions = getPostApiStatsExamBankUpdateMutationOptions(options)
+export const usePostApiStatsExamBankUpdate = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsExamBankUpdate>>, TError,{data: PostApiStatsExamBankUpdateBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postApiStatsExamBankUpdate>>,
+        TError,
+        {data: PostApiStatsExamBankUpdateBody},
+        TContext
+      > => {
 
-  return useMutation(mutationOptions, queryClient)
-}
+      const mutationOptions = getPostApiStatsExamBankUpdateMutationOptions(options);
 
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 /**
  * @summary Thống kê tỷ lệ đạt và chưa đạt chuẩn ngoại ngữ theo tiến trình
  */
@@ -5298,379 +4371,317 @@ export type postApiStatsLanguageStandardProgressResponse200 = {
   data: PostApiStatsLanguageStandardProgress200
   status: 200
 }
+    
+export type postApiStatsLanguageStandardProgressResponseSuccess = (postApiStatsLanguageStandardProgressResponse200) & {
+  headers: Headers;
+};
+;
 
-export type postApiStatsLanguageStandardProgressResponseSuccess =
-  postApiStatsLanguageStandardProgressResponse200 & {
-    headers: Headers
-  }
-
-export type postApiStatsLanguageStandardProgressResponse =
-  postApiStatsLanguageStandardProgressResponseSuccess
+export type postApiStatsLanguageStandardProgressResponse = (postApiStatsLanguageStandardProgressResponseSuccess)
 
 export const getPostApiStatsLanguageStandardProgressUrl = () => {
+
+
+  
+
   return `/api/stats/language-standard-progress`
 }
 
-export const postApiStatsLanguageStandardProgress = async (
-  postApiStatsLanguageStandardProgressBody: PostApiStatsLanguageStandardProgressBody,
-  options?: RequestInit
-): Promise<postApiStatsLanguageStandardProgressResponse> => {
-  return customTrainingFetch<postApiStatsLanguageStandardProgressResponse>(
-    getPostApiStatsLanguageStandardProgressUrl(),
-    {
-      ...options,
-      method: "POST",
-      headers: { "Content-Type": "application/json", ...options?.headers },
-      body: JSON.stringify(postApiStatsLanguageStandardProgressBody),
-    }
-  )
-}
-
-export const getPostApiStatsLanguageStandardProgressMutationOptions = <
-  TError = unknown,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsLanguageStandardProgress>>,
-    TError,
-    { data: PostApiStatsLanguageStandardProgressBody },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiStatsLanguageStandardProgress>>,
-  TError,
-  { data: PostApiStatsLanguageStandardProgressBody },
-  TContext
-> => {
-  const mutationKey = ["postApiStatsLanguageStandardProgress"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiStatsLanguageStandardProgress>>,
-    { data: PostApiStatsLanguageStandardProgressBody }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return postApiStatsLanguageStandardProgress(data, requestOptions)
+export const postApiStatsLanguageStandardProgress = async (postApiStatsLanguageStandardProgressBody: PostApiStatsLanguageStandardProgressBody, options?: RequestInit): Promise<postApiStatsLanguageStandardProgressResponse> => {
+  
+  return customTrainingFetch<postApiStatsLanguageStandardProgressResponse>(getPostApiStatsLanguageStandardProgressUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      postApiStatsLanguageStandardProgressBody,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type PostApiStatsLanguageStandardProgressMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postApiStatsLanguageStandardProgress>>
->
-export type PostApiStatsLanguageStandardProgressMutationBody =
-  PostApiStatsLanguageStandardProgressBody
-export type PostApiStatsLanguageStandardProgressMutationError = unknown
 
-/**
+
+export const getPostApiStatsLanguageStandardProgressMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsLanguageStandardProgress>>, TError,{data: PostApiStatsLanguageStandardProgressBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof postApiStatsLanguageStandardProgress>>, TError,{data: PostApiStatsLanguageStandardProgressBody}, TContext> => {
+
+const mutationKey = ['postApiStatsLanguageStandardProgress'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiStatsLanguageStandardProgress>>, {data: PostApiStatsLanguageStandardProgressBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postApiStatsLanguageStandardProgress(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostApiStatsLanguageStandardProgressMutationResult = NonNullable<Awaited<ReturnType<typeof postApiStatsLanguageStandardProgress>>>
+    export type PostApiStatsLanguageStandardProgressMutationBody = PostApiStatsLanguageStandardProgressBody
+    export type PostApiStatsLanguageStandardProgressMutationError = unknown
+
+    /**
  * @summary Thống kê tỷ lệ đạt và chưa đạt chuẩn ngoại ngữ theo tiến trình
  */
-export const usePostApiStatsLanguageStandardProgress = <TError = unknown, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiStatsLanguageStandardProgress>>,
-      TError,
-      { data: PostApiStatsLanguageStandardProgressBody },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postApiStatsLanguageStandardProgress>>,
-  TError,
-  { data: PostApiStatsLanguageStandardProgressBody },
-  TContext
-> => {
-  const mutationOptions = getPostApiStatsLanguageStandardProgressMutationOptions(options)
+export const usePostApiStatsLanguageStandardProgress = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsLanguageStandardProgress>>, TError,{data: PostApiStatsLanguageStandardProgressBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postApiStatsLanguageStandardProgress>>,
+        TError,
+        {data: PostApiStatsLanguageStandardProgressBody},
+        TContext
+      > => {
 
-  return useMutation(mutationOptions, queryClient)
-}
+      const mutationOptions = getPostApiStatsLanguageStandardProgressMutationOptions(options);
 
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 export type postApiStatsAdmissionStatisticsResponse200 = {
   data: PostApiStatsAdmissionStatistics200
   status: 200
 }
+    
+export type postApiStatsAdmissionStatisticsResponseSuccess = (postApiStatsAdmissionStatisticsResponse200) & {
+  headers: Headers;
+};
+;
 
-export type postApiStatsAdmissionStatisticsResponseSuccess =
-  postApiStatsAdmissionStatisticsResponse200 & {
-    headers: Headers
-  }
-
-export type postApiStatsAdmissionStatisticsResponse = postApiStatsAdmissionStatisticsResponseSuccess
+export type postApiStatsAdmissionStatisticsResponse = (postApiStatsAdmissionStatisticsResponseSuccess)
 
 export const getPostApiStatsAdmissionStatisticsUrl = () => {
+
+
+  
+
   return `/api/stats/admission-statistics`
 }
 
-export const postApiStatsAdmissionStatistics = async (
-  postApiStatsAdmissionStatisticsBody: PostApiStatsAdmissionStatisticsBody,
-  options?: RequestInit
-): Promise<postApiStatsAdmissionStatisticsResponse> => {
-  return customTrainingFetch<postApiStatsAdmissionStatisticsResponse>(
-    getPostApiStatsAdmissionStatisticsUrl(),
-    {
-      ...options,
-      method: "POST",
-      headers: { "Content-Type": "application/json", ...options?.headers },
-      body: JSON.stringify(postApiStatsAdmissionStatisticsBody),
-    }
-  )
-}
-
-export const getPostApiStatsAdmissionStatisticsMutationOptions = <
-  TError = unknown,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsAdmissionStatistics>>,
-    TError,
-    { data: PostApiStatsAdmissionStatisticsBody },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiStatsAdmissionStatistics>>,
-  TError,
-  { data: PostApiStatsAdmissionStatisticsBody },
-  TContext
-> => {
-  const mutationKey = ["postApiStatsAdmissionStatistics"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiStatsAdmissionStatistics>>,
-    { data: PostApiStatsAdmissionStatisticsBody }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return postApiStatsAdmissionStatistics(data, requestOptions)
+export const postApiStatsAdmissionStatistics = async (postApiStatsAdmissionStatisticsBody: PostApiStatsAdmissionStatisticsBody, options?: RequestInit): Promise<postApiStatsAdmissionStatisticsResponse> => {
+  
+  return customTrainingFetch<postApiStatsAdmissionStatisticsResponse>(getPostApiStatsAdmissionStatisticsUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      postApiStatsAdmissionStatisticsBody,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type PostApiStatsAdmissionStatisticsMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postApiStatsAdmissionStatistics>>
->
-export type PostApiStatsAdmissionStatisticsMutationBody = PostApiStatsAdmissionStatisticsBody
-export type PostApiStatsAdmissionStatisticsMutationError = unknown
 
-export const usePostApiStatsAdmissionStatistics = <TError = unknown, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiStatsAdmissionStatistics>>,
-      TError,
-      { data: PostApiStatsAdmissionStatisticsBody },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postApiStatsAdmissionStatistics>>,
-  TError,
-  { data: PostApiStatsAdmissionStatisticsBody },
-  TContext
-> => {
-  const mutationOptions = getPostApiStatsAdmissionStatisticsMutationOptions(options)
 
-  return useMutation(mutationOptions, queryClient)
-}
+export const getPostApiStatsAdmissionStatisticsMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsAdmissionStatistics>>, TError,{data: PostApiStatsAdmissionStatisticsBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof postApiStatsAdmissionStatistics>>, TError,{data: PostApiStatsAdmissionStatisticsBody}, TContext> => {
 
+const mutationKey = ['postApiStatsAdmissionStatistics'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiStatsAdmissionStatistics>>, {data: PostApiStatsAdmissionStatisticsBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postApiStatsAdmissionStatistics(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostApiStatsAdmissionStatisticsMutationResult = NonNullable<Awaited<ReturnType<typeof postApiStatsAdmissionStatistics>>>
+    export type PostApiStatsAdmissionStatisticsMutationBody = PostApiStatsAdmissionStatisticsBody
+    export type PostApiStatsAdmissionStatisticsMutationError = unknown
+
+    export const usePostApiStatsAdmissionStatistics = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsAdmissionStatistics>>, TError,{data: PostApiStatsAdmissionStatisticsBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postApiStatsAdmissionStatistics>>,
+        TError,
+        {data: PostApiStatsAdmissionStatisticsBody},
+        TContext
+      > => {
+
+      const mutationOptions = getPostApiStatsAdmissionStatisticsMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 export type postApiStatsRetestRatesResponse200 = {
   data: PostApiStatsRetestRates200
   status: 200
 }
+    
+export type postApiStatsRetestRatesResponseSuccess = (postApiStatsRetestRatesResponse200) & {
+  headers: Headers;
+};
+;
 
-export type postApiStatsRetestRatesResponseSuccess = postApiStatsRetestRatesResponse200 & {
-  headers: Headers
-}
-
-export type postApiStatsRetestRatesResponse = postApiStatsRetestRatesResponseSuccess
+export type postApiStatsRetestRatesResponse = (postApiStatsRetestRatesResponseSuccess)
 
 export const getPostApiStatsRetestRatesUrl = () => {
+
+
+  
+
   return `/api/stats/retest-rates`
 }
 
-export const postApiStatsRetestRates = async (
-  postApiStatsRetestRatesBody: PostApiStatsRetestRatesBody,
-  options?: RequestInit
-): Promise<postApiStatsRetestRatesResponse> => {
-  return customTrainingFetch<postApiStatsRetestRatesResponse>(getPostApiStatsRetestRatesUrl(), {
+export const postApiStatsRetestRates = async (postApiStatsRetestRatesBody: PostApiStatsRetestRatesBody, options?: RequestInit): Promise<postApiStatsRetestRatesResponse> => {
+  
+  return customTrainingFetch<postApiStatsRetestRatesResponse>(getPostApiStatsRetestRatesUrl(),
+  {      
     ...options,
-    method: "POST",
-    headers: { "Content-Type": "application/json", ...options?.headers },
-    body: JSON.stringify(postApiStatsRetestRatesBody),
-  })
-}
-
-export const getPostApiStatsRetestRatesMutationOptions = <
-  TError = unknown,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsRetestRates>>,
-    TError,
-    { data: PostApiStatsRetestRatesBody },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiStatsRetestRates>>,
-  TError,
-  { data: PostApiStatsRetestRatesBody },
-  TContext
-> => {
-  const mutationKey = ["postApiStatsRetestRates"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiStatsRetestRates>>,
-    { data: PostApiStatsRetestRatesBody }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return postApiStatsRetestRates(data, requestOptions)
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      postApiStatsRetestRatesBody,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type PostApiStatsRetestRatesMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postApiStatsRetestRates>>
->
-export type PostApiStatsRetestRatesMutationBody = PostApiStatsRetestRatesBody
-export type PostApiStatsRetestRatesMutationError = unknown
 
-export const usePostApiStatsRetestRates = <TError = unknown, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiStatsRetestRates>>,
-      TError,
-      { data: PostApiStatsRetestRatesBody },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postApiStatsRetestRates>>,
-  TError,
-  { data: PostApiStatsRetestRatesBody },
-  TContext
-> => {
-  const mutationOptions = getPostApiStatsRetestRatesMutationOptions(options)
 
-  return useMutation(mutationOptions, queryClient)
-}
+export const getPostApiStatsRetestRatesMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsRetestRates>>, TError,{data: PostApiStatsRetestRatesBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof postApiStatsRetestRates>>, TError,{data: PostApiStatsRetestRatesBody}, TContext> => {
 
+const mutationKey = ['postApiStatsRetestRates'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiStatsRetestRates>>, {data: PostApiStatsRetestRatesBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postApiStatsRetestRates(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostApiStatsRetestRatesMutationResult = NonNullable<Awaited<ReturnType<typeof postApiStatsRetestRates>>>
+    export type PostApiStatsRetestRatesMutationBody = PostApiStatsRetestRatesBody
+    export type PostApiStatsRetestRatesMutationError = unknown
+
+    export const usePostApiStatsRetestRates = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsRetestRates>>, TError,{data: PostApiStatsRetestRatesBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postApiStatsRetestRates>>,
+        TError,
+        {data: PostApiStatsRetestRatesBody},
+        TContext
+      > => {
+
+      const mutationOptions = getPostApiStatsRetestRatesMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 export type postApiStatsRelearnRatesResponse200 = {
   data: PostApiStatsRelearnRates200
   status: 200
 }
+    
+export type postApiStatsRelearnRatesResponseSuccess = (postApiStatsRelearnRatesResponse200) & {
+  headers: Headers;
+};
+;
 
-export type postApiStatsRelearnRatesResponseSuccess = postApiStatsRelearnRatesResponse200 & {
-  headers: Headers
-}
-
-export type postApiStatsRelearnRatesResponse = postApiStatsRelearnRatesResponseSuccess
+export type postApiStatsRelearnRatesResponse = (postApiStatsRelearnRatesResponseSuccess)
 
 export const getPostApiStatsRelearnRatesUrl = () => {
+
+
+  
+
   return `/api/stats/relearn-rates`
 }
 
-export const postApiStatsRelearnRates = async (
-  postApiStatsRelearnRatesBody: PostApiStatsRelearnRatesBody,
-  options?: RequestInit
-): Promise<postApiStatsRelearnRatesResponse> => {
-  return customTrainingFetch<postApiStatsRelearnRatesResponse>(getPostApiStatsRelearnRatesUrl(), {
+export const postApiStatsRelearnRates = async (postApiStatsRelearnRatesBody: PostApiStatsRelearnRatesBody, options?: RequestInit): Promise<postApiStatsRelearnRatesResponse> => {
+  
+  return customTrainingFetch<postApiStatsRelearnRatesResponse>(getPostApiStatsRelearnRatesUrl(),
+  {      
     ...options,
-    method: "POST",
-    headers: { "Content-Type": "application/json", ...options?.headers },
-    body: JSON.stringify(postApiStatsRelearnRatesBody),
-  })
-}
-
-export const getPostApiStatsRelearnRatesMutationOptions = <
-  TError = unknown,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiStatsRelearnRates>>,
-    TError,
-    { data: PostApiStatsRelearnRatesBody },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiStatsRelearnRates>>,
-  TError,
-  { data: PostApiStatsRelearnRatesBody },
-  TContext
-> => {
-  const mutationKey = ["postApiStatsRelearnRates"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiStatsRelearnRates>>,
-    { data: PostApiStatsRelearnRatesBody }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return postApiStatsRelearnRates(data, requestOptions)
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      postApiStatsRelearnRatesBody,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type PostApiStatsRelearnRatesMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postApiStatsRelearnRates>>
->
-export type PostApiStatsRelearnRatesMutationBody = PostApiStatsRelearnRatesBody
-export type PostApiStatsRelearnRatesMutationError = unknown
 
-export const usePostApiStatsRelearnRates = <TError = unknown, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiStatsRelearnRates>>,
-      TError,
-      { data: PostApiStatsRelearnRatesBody },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postApiStatsRelearnRates>>,
-  TError,
-  { data: PostApiStatsRelearnRatesBody },
-  TContext
-> => {
-  const mutationOptions = getPostApiStatsRelearnRatesMutationOptions(options)
 
-  return useMutation(mutationOptions, queryClient)
-}
+export const getPostApiStatsRelearnRatesMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsRelearnRates>>, TError,{data: PostApiStatsRelearnRatesBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof postApiStatsRelearnRates>>, TError,{data: PostApiStatsRelearnRatesBody}, TContext> => {
 
+const mutationKey = ['postApiStatsRelearnRates'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiStatsRelearnRates>>, {data: PostApiStatsRelearnRatesBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postApiStatsRelearnRates(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostApiStatsRelearnRatesMutationResult = NonNullable<Awaited<ReturnType<typeof postApiStatsRelearnRates>>>
+    export type PostApiStatsRelearnRatesMutationBody = PostApiStatsRelearnRatesBody
+    export type PostApiStatsRelearnRatesMutationError = unknown
+
+    export const usePostApiStatsRelearnRates = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiStatsRelearnRates>>, TError,{data: PostApiStatsRelearnRatesBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postApiStatsRelearnRates>>,
+        TError,
+        {data: PostApiStatsRelearnRatesBody},
+        TContext
+      > => {
+
+      const mutationOptions = getPostApiStatsRelearnRatesMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 /**
  * Thêm mới danh sách học viên/sinh viên 
 
@@ -5686,111 +4697,88 @@ export type uploadExcelCreateUserProfileResponse400 = {
   data: UploadExcelCreateUserProfile400
   status: 400
 }
+    
+export type uploadExcelCreateUserProfileResponseSuccess = (uploadExcelCreateUserProfileResponse200) & {
+  headers: Headers;
+};
+export type uploadExcelCreateUserProfileResponseError = (uploadExcelCreateUserProfileResponse400) & {
+  headers: Headers;
+};
 
-export type uploadExcelCreateUserProfileResponseSuccess =
-  uploadExcelCreateUserProfileResponse200 & {
-    headers: Headers
-  }
-export type uploadExcelCreateUserProfileResponseError = uploadExcelCreateUserProfileResponse400 & {
-  headers: Headers
-}
-
-export type uploadExcelCreateUserProfileResponse =
-  | uploadExcelCreateUserProfileResponseSuccess
-  | uploadExcelCreateUserProfileResponseError
+export type uploadExcelCreateUserProfileResponse = (uploadExcelCreateUserProfileResponseSuccess | uploadExcelCreateUserProfileResponseError)
 
 export const getUploadExcelCreateUserProfileUrl = () => {
+
+
+  
+
   return `/api/user-profile/upload-excel-create-user-profile`
 }
 
-export const uploadExcelCreateUserProfile = async (
-  uploadExcelCreateUserProfile: UploadExcelCreateUserProfile,
-  options?: RequestInit
-): Promise<uploadExcelCreateUserProfileResponse> => {
-  const formData = new FormData()
-  formData.append(`file`, uploadExcelCreateUserProfile.file)
-  formData.append(`type`, uploadExcelCreateUserProfile.type)
+export const uploadExcelCreateUserProfile = async (uploadExcelCreateUserProfile: UploadExcelCreateUserProfile, options?: RequestInit): Promise<uploadExcelCreateUserProfileResponse> => {
+    const formData = new FormData();
+formData.append(`file`, uploadExcelCreateUserProfile.file)
+formData.append(`type`, uploadExcelCreateUserProfile.type)
 
-  return customTrainingFetch<uploadExcelCreateUserProfileResponse>(
-    getUploadExcelCreateUserProfileUrl(),
-    {
-      ...options,
-      method: "POST",
-      body: formData,
-    }
-  )
-}
-
-export const getUploadExcelCreateUserProfileMutationOptions = <
-  TError = UploadExcelCreateUserProfile400,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof uploadExcelCreateUserProfile>>,
-    TError,
-    { data: UploadExcelCreateUserProfile },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof uploadExcelCreateUserProfile>>,
-  TError,
-  { data: UploadExcelCreateUserProfile },
-  TContext
-> => {
-  const mutationKey = ["uploadExcelCreateUserProfile"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof uploadExcelCreateUserProfile>>,
-    { data: UploadExcelCreateUserProfile }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return uploadExcelCreateUserProfile(data, requestOptions)
+  return customTrainingFetch<uploadExcelCreateUserProfileResponse>(getUploadExcelCreateUserProfileUrl(),
+  {      
+    ...options,
+    method: 'POST'
+    ,
+    body: 
+      formData,
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type UploadExcelCreateUserProfileMutationResult = NonNullable<
-  Awaited<ReturnType<typeof uploadExcelCreateUserProfile>>
->
-export type UploadExcelCreateUserProfileMutationBody = UploadExcelCreateUserProfile
-export type UploadExcelCreateUserProfileMutationError = UploadExcelCreateUserProfile400
 
-/**
+
+export const getUploadExcelCreateUserProfileMutationOptions = <TError = UploadExcelCreateUserProfile400,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof uploadExcelCreateUserProfile>>, TError,{data: UploadExcelCreateUserProfile}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof uploadExcelCreateUserProfile>>, TError,{data: UploadExcelCreateUserProfile}, TContext> => {
+
+const mutationKey = ['uploadExcelCreateUserProfile'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof uploadExcelCreateUserProfile>>, {data: UploadExcelCreateUserProfile}> = (props) => {
+          const {data} = props ?? {};
+
+          return  uploadExcelCreateUserProfile(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UploadExcelCreateUserProfileMutationResult = NonNullable<Awaited<ReturnType<typeof uploadExcelCreateUserProfile>>>
+    export type UploadExcelCreateUserProfileMutationBody = UploadExcelCreateUserProfile
+    export type UploadExcelCreateUserProfileMutationError = UploadExcelCreateUserProfile400
+
+    /**
  * @summary Upload Excel Create UserProfile
  */
-export const useUploadExcelCreateUserProfile = <
-  TError = UploadExcelCreateUserProfile400,
-  TContext = unknown,
->(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof uploadExcelCreateUserProfile>>,
-      TError,
-      { data: UploadExcelCreateUserProfile },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof uploadExcelCreateUserProfile>>,
-  TError,
-  { data: UploadExcelCreateUserProfile },
-  TContext
-> => {
-  const mutationOptions = getUploadExcelCreateUserProfileMutationOptions(options)
+export const useUploadExcelCreateUserProfile = <TError = UploadExcelCreateUserProfile400,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof uploadExcelCreateUserProfile>>, TError,{data: UploadExcelCreateUserProfile}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof uploadExcelCreateUserProfile>>,
+        TError,
+        {data: UploadExcelCreateUserProfile},
+        TContext
+      > => {
 
-  return useMutation(mutationOptions, queryClient)
-}
+      const mutationOptions = getUploadExcelCreateUserProfileMutationOptions(options);
 
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 /**
  * Cập nhật thông tin học viên/sinh viên
  * @summary Upload Excel Update UserProfile
@@ -5804,110 +4792,87 @@ export type uploadExcelUpdateUserProfileResponse400 = {
   data: UploadExcelUpdateUserProfile400
   status: 400
 }
+    
+export type uploadExcelUpdateUserProfileResponseSuccess = (uploadExcelUpdateUserProfileResponse200) & {
+  headers: Headers;
+};
+export type uploadExcelUpdateUserProfileResponseError = (uploadExcelUpdateUserProfileResponse400) & {
+  headers: Headers;
+};
 
-export type uploadExcelUpdateUserProfileResponseSuccess =
-  uploadExcelUpdateUserProfileResponse200 & {
-    headers: Headers
-  }
-export type uploadExcelUpdateUserProfileResponseError = uploadExcelUpdateUserProfileResponse400 & {
-  headers: Headers
-}
-
-export type uploadExcelUpdateUserProfileResponse =
-  | uploadExcelUpdateUserProfileResponseSuccess
-  | uploadExcelUpdateUserProfileResponseError
+export type uploadExcelUpdateUserProfileResponse = (uploadExcelUpdateUserProfileResponseSuccess | uploadExcelUpdateUserProfileResponseError)
 
 export const getUploadExcelUpdateUserProfileUrl = () => {
+
+
+  
+
   return `/api/user-profile/upload-excel-update-user-profile`
 }
 
-export const uploadExcelUpdateUserProfile = async (
-  uploadExcelUpdateUserProfile: UploadExcelUpdateUserProfile,
-  options?: RequestInit
-): Promise<uploadExcelUpdateUserProfileResponse> => {
-  const formData = new FormData()
-  formData.append(`file`, uploadExcelUpdateUserProfile.file)
+export const uploadExcelUpdateUserProfile = async (uploadExcelUpdateUserProfile: UploadExcelUpdateUserProfile, options?: RequestInit): Promise<uploadExcelUpdateUserProfileResponse> => {
+    const formData = new FormData();
+formData.append(`file`, uploadExcelUpdateUserProfile.file)
 
-  return customTrainingFetch<uploadExcelUpdateUserProfileResponse>(
-    getUploadExcelUpdateUserProfileUrl(),
-    {
-      ...options,
-      method: "POST",
-      body: formData,
-    }
-  )
-}
-
-export const getUploadExcelUpdateUserProfileMutationOptions = <
-  TError = UploadExcelUpdateUserProfile400,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof uploadExcelUpdateUserProfile>>,
-    TError,
-    { data: UploadExcelUpdateUserProfile },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof uploadExcelUpdateUserProfile>>,
-  TError,
-  { data: UploadExcelUpdateUserProfile },
-  TContext
-> => {
-  const mutationKey = ["uploadExcelUpdateUserProfile"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof uploadExcelUpdateUserProfile>>,
-    { data: UploadExcelUpdateUserProfile }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return uploadExcelUpdateUserProfile(data, requestOptions)
+  return customTrainingFetch<uploadExcelUpdateUserProfileResponse>(getUploadExcelUpdateUserProfileUrl(),
+  {      
+    ...options,
+    method: 'POST'
+    ,
+    body: 
+      formData,
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type UploadExcelUpdateUserProfileMutationResult = NonNullable<
-  Awaited<ReturnType<typeof uploadExcelUpdateUserProfile>>
->
-export type UploadExcelUpdateUserProfileMutationBody = UploadExcelUpdateUserProfile
-export type UploadExcelUpdateUserProfileMutationError = UploadExcelUpdateUserProfile400
 
-/**
+
+export const getUploadExcelUpdateUserProfileMutationOptions = <TError = UploadExcelUpdateUserProfile400,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof uploadExcelUpdateUserProfile>>, TError,{data: UploadExcelUpdateUserProfile}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof uploadExcelUpdateUserProfile>>, TError,{data: UploadExcelUpdateUserProfile}, TContext> => {
+
+const mutationKey = ['uploadExcelUpdateUserProfile'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof uploadExcelUpdateUserProfile>>, {data: UploadExcelUpdateUserProfile}> = (props) => {
+          const {data} = props ?? {};
+
+          return  uploadExcelUpdateUserProfile(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UploadExcelUpdateUserProfileMutationResult = NonNullable<Awaited<ReturnType<typeof uploadExcelUpdateUserProfile>>>
+    export type UploadExcelUpdateUserProfileMutationBody = UploadExcelUpdateUserProfile
+    export type UploadExcelUpdateUserProfileMutationError = UploadExcelUpdateUserProfile400
+
+    /**
  * @summary Upload Excel Update UserProfile
  */
-export const useUploadExcelUpdateUserProfile = <
-  TError = UploadExcelUpdateUserProfile400,
-  TContext = unknown,
->(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof uploadExcelUpdateUserProfile>>,
-      TError,
-      { data: UploadExcelUpdateUserProfile },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof uploadExcelUpdateUserProfile>>,
-  TError,
-  { data: UploadExcelUpdateUserProfile },
-  TContext
-> => {
-  const mutationOptions = getUploadExcelUpdateUserProfileMutationOptions(options)
+export const useUploadExcelUpdateUserProfile = <TError = UploadExcelUpdateUserProfile400,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof uploadExcelUpdateUserProfile>>, TError,{data: UploadExcelUpdateUserProfile}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof uploadExcelUpdateUserProfile>>,
+        TError,
+        {data: UploadExcelUpdateUserProfile},
+        TContext
+      > => {
 
-  return useMutation(mutationOptions, queryClient)
-}
+      const mutationOptions = getUploadExcelUpdateUserProfileMutationOptions(options);
 
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 /**
  * Phân chia học viên vào các lớp
  * @summary Class Division
@@ -5921,96 +4886,87 @@ export type classDivisionResponse400 = {
   data: void
   status: 400
 }
+    
+export type classDivisionResponseSuccess = (classDivisionResponse200) & {
+  headers: Headers;
+};
+export type classDivisionResponseError = (classDivisionResponse400) & {
+  headers: Headers;
+};
 
-export type classDivisionResponseSuccess = classDivisionResponse200 & {
-  headers: Headers
-}
-export type classDivisionResponseError = classDivisionResponse400 & {
-  headers: Headers
-}
-
-export type classDivisionResponse = classDivisionResponseSuccess | classDivisionResponseError
+export type classDivisionResponse = (classDivisionResponseSuccess | classDivisionResponseError)
 
 export const getClassDivisionUrl = () => {
+
+
+  
+
   return `/api/fixed-class/upload-excel-update-user-profile`
 }
 
-export const classDivision = async (
-  classDivision: ClassDivision,
-  options?: RequestInit
-): Promise<classDivisionResponse> => {
-  const formData = new FormData()
-  formData.append(`file`, classDivision.file)
+export const classDivision = async (classDivision: ClassDivision, options?: RequestInit): Promise<classDivisionResponse> => {
+    const formData = new FormData();
+formData.append(`file`, classDivision.file)
 
-  return customTrainingFetch<classDivisionResponse>(getClassDivisionUrl(), {
+  return customTrainingFetch<classDivisionResponse>(getClassDivisionUrl(),
+  {      
     ...options,
-    method: "POST",
-    body: formData,
-  })
-}
-
-export const getClassDivisionMutationOptions = <TError = void, TContext = unknown>(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof classDivision>>,
-    TError,
-    { data: ClassDivision },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof classDivision>>,
-  TError,
-  { data: ClassDivision },
-  TContext
-> => {
-  const mutationKey = ["classDivision"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof classDivision>>,
-    { data: ClassDivision }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return classDivision(data, requestOptions)
+    method: 'POST'
+    ,
+    body: 
+      formData,
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type ClassDivisionMutationResult = NonNullable<Awaited<ReturnType<typeof classDivision>>>
-export type ClassDivisionMutationBody = ClassDivision
-export type ClassDivisionMutationError = void
 
-/**
+
+export const getClassDivisionMutationOptions = <TError = void,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof classDivision>>, TError,{data: ClassDivision}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof classDivision>>, TError,{data: ClassDivision}, TContext> => {
+
+const mutationKey = ['classDivision'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof classDivision>>, {data: ClassDivision}> = (props) => {
+          const {data} = props ?? {};
+
+          return  classDivision(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ClassDivisionMutationResult = NonNullable<Awaited<ReturnType<typeof classDivision>>>
+    export type ClassDivisionMutationBody = ClassDivision
+    export type ClassDivisionMutationError = void
+
+    /**
  * @summary Class Division
  */
-export const useClassDivision = <TError = void, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof classDivision>>,
-      TError,
-      { data: ClassDivision },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof classDivision>>,
-  TError,
-  { data: ClassDivision },
-  TContext
-> => {
-  const mutationOptions = getClassDivisionMutationOptions(options)
+export const useClassDivision = <TError = void,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof classDivision>>, TError,{data: ClassDivision}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof classDivision>>,
+        TError,
+        {data: ClassDivision},
+        TContext
+      > => {
 
-  return useMutation(mutationOptions, queryClient)
-}
+      const mutationOptions = getClassDivisionMutationOptions(options);
 
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 export type fixedClassStudentCountResponse200 = {
   data: Blob
   status: 200
@@ -6020,158 +4976,117 @@ export type fixedClassStudentCountResponse400 = {
   data: FixedClassStudentCount400
   status: 400
 }
+    
+export type fixedClassStudentCountResponseSuccess = (fixedClassStudentCountResponse200) & {
+  headers: Headers;
+};
+export type fixedClassStudentCountResponseError = (fixedClassStudentCountResponse400) & {
+  headers: Headers;
+};
 
-export type fixedClassStudentCountResponseSuccess = fixedClassStudentCountResponse200 & {
-  headers: Headers
-}
-export type fixedClassStudentCountResponseError = fixedClassStudentCountResponse400 & {
-  headers: Headers
-}
+export type fixedClassStudentCountResponse = (fixedClassStudentCountResponseSuccess | fixedClassStudentCountResponseError)
 
-export type fixedClassStudentCountResponse =
-  | fixedClassStudentCountResponseSuccess
-  | fixedClassStudentCountResponseError
-
-export const getFixedClassStudentCountUrl = (params: FixedClassStudentCountParams) => {
-  const normalizedParams = new URLSearchParams()
+export const getFixedClassStudentCountUrl = (params: FixedClassStudentCountParams,) => {
+  const normalizedParams = new URLSearchParams();
 
   Object.entries(params || {}).forEach(([key, value]) => {
+    
     if (value !== undefined) {
-      normalizedParams.append(key, value === null ? "null" : value.toString())
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
     }
-  })
+  });
 
-  const stringifiedParams = normalizedParams.toString()
+  const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0
-    ? `/api/fixed-class/fixed-class-student-count?${stringifiedParams}`
-    : `/api/fixed-class/fixed-class-student-count`
+  return stringifiedParams.length > 0 ? `/api/fixed-class/fixed-class-student-count?${stringifiedParams}` : `/api/fixed-class/fixed-class-student-count`
 }
 
-export const fixedClassStudentCount = async (
-  params: FixedClassStudentCountParams,
-  options?: RequestInit
-): Promise<fixedClassStudentCountResponse> => {
-  return customTrainingFetch<fixedClassStudentCountResponse>(getFixedClassStudentCountUrl(params), {
+export const fixedClassStudentCount = async (params: FixedClassStudentCountParams, options?: RequestInit): Promise<fixedClassStudentCountResponse> => {
+  
+  return customTrainingFetch<fixedClassStudentCountResponse>(getFixedClassStudentCountUrl(params),
+  {      
     ...options,
-    method: "GET",
-  })
-}
-
-export const getFixedClassStudentCountQueryKey = (params?: FixedClassStudentCountParams) => {
-  return [`/api/fixed-class/fixed-class-student-count`, ...(params ? [params] : [])] as const
-}
-
-export const getFixedClassStudentCountQueryOptions = <
-  TData = Awaited<ReturnType<typeof fixedClassStudentCount>>,
-  TError = FixedClassStudentCount400,
->(
-  params: FixedClassStudentCountParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof fixedClassStudentCount>>, TError, TData>
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
+    method: 'GET'
+    
+    
   }
+);}
+
+
+
+
+
+export const getFixedClassStudentCountQueryKey = (params?: FixedClassStudentCountParams,) => {
+    return [
+    `/api/fixed-class/fixed-class-student-count`, ...(params ? [params]: [])
+    ] as const;
+    }
+
+    
+export const getFixedClassStudentCountQueryOptions = <TData = Awaited<ReturnType<typeof fixedClassStudentCount>>, TError = FixedClassStudentCount400>(params: FixedClassStudentCountParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof fixedClassStudentCount>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getFixedClassStudentCountQueryKey(params)
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof fixedClassStudentCount>>> = ({ signal }) =>
-    fixedClassStudentCount(params, { signal, ...requestOptions })
+  const queryKey =  queryOptions?.queryKey ?? getFixedClassStudentCountQueryKey(params);
 
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof fixedClassStudentCount>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof fixedClassStudentCount>>> = ({ signal }) => fixedClassStudentCount(params, { signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof fixedClassStudentCount>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type FixedClassStudentCountQueryResult = NonNullable<
-  Awaited<ReturnType<typeof fixedClassStudentCount>>
->
+export type FixedClassStudentCountQueryResult = NonNullable<Awaited<ReturnType<typeof fixedClassStudentCount>>>
 export type FixedClassStudentCountQueryError = FixedClassStudentCount400
 
-export function useFixedClassStudentCount<
-  TData = Awaited<ReturnType<typeof fixedClassStudentCount>>,
-  TError = FixedClassStudentCount400,
->(
-  params: FixedClassStudentCountParams,
-  options: {
-    query: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof fixedClassStudentCount>>, TError, TData>
-    > &
-      Pick<
+
+export function useFixedClassStudentCount<TData = Awaited<ReturnType<typeof fixedClassStudentCount>>, TError = FixedClassStudentCount400>(
+ params: FixedClassStudentCountParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof fixedClassStudentCount>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof fixedClassStudentCount>>,
           TError,
           Awaited<ReturnType<typeof fixedClassStudentCount>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useFixedClassStudentCount<
-  TData = Awaited<ReturnType<typeof fixedClassStudentCount>>,
-  TError = FixedClassStudentCount400,
->(
-  params: FixedClassStudentCountParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof fixedClassStudentCount>>, TError, TData>
-    > &
-      Pick<
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useFixedClassStudentCount<TData = Awaited<ReturnType<typeof fixedClassStudentCount>>, TError = FixedClassStudentCount400>(
+ params: FixedClassStudentCountParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof fixedClassStudentCount>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof fixedClassStudentCount>>,
           TError,
           Awaited<ReturnType<typeof fixedClassStudentCount>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useFixedClassStudentCount<
-  TData = Awaited<ReturnType<typeof fixedClassStudentCount>>,
-  TError = FixedClassStudentCount400,
->(
-  params: FixedClassStudentCountParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof fixedClassStudentCount>>, TError, TData>
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useFixedClassStudentCount<TData = Awaited<ReturnType<typeof fixedClassStudentCount>>, TError = FixedClassStudentCount400>(
+ params: FixedClassStudentCountParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof fixedClassStudentCount>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useFixedClassStudentCount<
-  TData = Awaited<ReturnType<typeof fixedClassStudentCount>>,
-  TError = FixedClassStudentCount400,
->(
-  params: FixedClassStudentCountParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof fixedClassStudentCount>>, TError, TData>
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getFixedClassStudentCountQueryOptions(params, options)
+export function useFixedClassStudentCount<TData = Awaited<ReturnType<typeof fixedClassStudentCount>>, TError = FixedClassStudentCount400>(
+ params: FixedClassStudentCountParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof fixedClassStudentCount>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData, TError>
-  }
+  const queryOptions = getFixedClassStudentCountQueryOptions(params,options)
 
-  query.queryKey = queryOptions.queryKey
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  return query
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
 }
+
+
+
+
 
 /**
  * Lấy danh sách môn dự kiến giảng dạy
@@ -6186,149 +5101,120 @@ export type openSubjectClassResponse400 = {
   data: void
   status: 400
 }
+    
+export type openSubjectClassResponseSuccess = (openSubjectClassResponse200) & {
+  headers: Headers;
+};
+export type openSubjectClassResponseError = (openSubjectClassResponse400) & {
+  headers: Headers;
+};
 
-export type openSubjectClassResponseSuccess = openSubjectClassResponse200 & {
-  headers: Headers
-}
-export type openSubjectClassResponseError = openSubjectClassResponse400 & {
-  headers: Headers
-}
+export type openSubjectClassResponse = (openSubjectClassResponseSuccess | openSubjectClassResponseError)
 
-export type openSubjectClassResponse =
-  | openSubjectClassResponseSuccess
-  | openSubjectClassResponseError
-
-export const getOpenSubjectClassUrl = (params: OpenSubjectClassParams) => {
-  const normalizedParams = new URLSearchParams()
+export const getOpenSubjectClassUrl = (params: OpenSubjectClassParams,) => {
+  const normalizedParams = new URLSearchParams();
 
   Object.entries(params || {}).forEach(([key, value]) => {
+    
     if (value !== undefined) {
-      normalizedParams.append(key, value === null ? "null" : value.toString())
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
     }
-  })
+  });
 
-  const stringifiedParams = normalizedParams.toString()
+  const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0
-    ? `/api/subject-class/open-subject-class?${stringifiedParams}`
-    : `/api/subject-class/open-subject-class`
+  return stringifiedParams.length > 0 ? `/api/subject-class/open-subject-class?${stringifiedParams}` : `/api/subject-class/open-subject-class`
 }
 
-export const openSubjectClass = async (
-  params: OpenSubjectClassParams,
-  options?: RequestInit
-): Promise<openSubjectClassResponse> => {
-  return customTrainingFetch<openSubjectClassResponse>(getOpenSubjectClassUrl(params), {
+export const openSubjectClass = async (params: OpenSubjectClassParams, options?: RequestInit): Promise<openSubjectClassResponse> => {
+  
+  return customTrainingFetch<openSubjectClassResponse>(getOpenSubjectClassUrl(params),
+  {      
     ...options,
-    method: "GET",
-  })
-}
-
-export const getOpenSubjectClassQueryKey = (params?: OpenSubjectClassParams) => {
-  return [`/api/subject-class/open-subject-class`, ...(params ? [params] : [])] as const
-}
-
-export const getOpenSubjectClassQueryOptions = <
-  TData = Awaited<ReturnType<typeof openSubjectClass>>,
-  TError = void,
->(
-  params: OpenSubjectClassParams,
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof openSubjectClass>>, TError, TData>>
-    request?: SecondParameter<typeof customTrainingFetch>
+    method: 'GET'
+    
+    
   }
+);}
+
+
+
+
+
+export const getOpenSubjectClassQueryKey = (params?: OpenSubjectClassParams,) => {
+    return [
+    `/api/subject-class/open-subject-class`, ...(params ? [params]: [])
+    ] as const;
+    }
+
+    
+export const getOpenSubjectClassQueryOptions = <TData = Awaited<ReturnType<typeof openSubjectClass>>, TError = void>(params: OpenSubjectClassParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof openSubjectClass>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getOpenSubjectClassQueryKey(params)
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof openSubjectClass>>> = ({ signal }) =>
-    openSubjectClass(params, { signal, ...requestOptions })
+  const queryKey =  queryOptions?.queryKey ?? getOpenSubjectClassQueryKey(params);
 
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof openSubjectClass>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof openSubjectClass>>> = ({ signal }) => openSubjectClass(params, { signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof openSubjectClass>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type OpenSubjectClassQueryResult = NonNullable<Awaited<ReturnType<typeof openSubjectClass>>>
 export type OpenSubjectClassQueryError = void
 
-export function useOpenSubjectClass<
-  TData = Awaited<ReturnType<typeof openSubjectClass>>,
-  TError = void,
->(
-  params: OpenSubjectClassParams,
-  options: {
-    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof openSubjectClass>>, TError, TData>> &
-      Pick<
+
+export function useOpenSubjectClass<TData = Awaited<ReturnType<typeof openSubjectClass>>, TError = void>(
+ params: OpenSubjectClassParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof openSubjectClass>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof openSubjectClass>>,
           TError,
           Awaited<ReturnType<typeof openSubjectClass>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useOpenSubjectClass<
-  TData = Awaited<ReturnType<typeof openSubjectClass>>,
-  TError = void,
->(
-  params: OpenSubjectClassParams,
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof openSubjectClass>>, TError, TData>> &
-      Pick<
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useOpenSubjectClass<TData = Awaited<ReturnType<typeof openSubjectClass>>, TError = void>(
+ params: OpenSubjectClassParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof openSubjectClass>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof openSubjectClass>>,
           TError,
           Awaited<ReturnType<typeof openSubjectClass>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useOpenSubjectClass<
-  TData = Awaited<ReturnType<typeof openSubjectClass>>,
-  TError = void,
->(
-  params: OpenSubjectClassParams,
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof openSubjectClass>>, TError, TData>>
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useOpenSubjectClass<TData = Awaited<ReturnType<typeof openSubjectClass>>, TError = void>(
+ params: OpenSubjectClassParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof openSubjectClass>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Lấy danh sách môn dự kiến giảng dạy
  */
 
-export function useOpenSubjectClass<
-  TData = Awaited<ReturnType<typeof openSubjectClass>>,
-  TError = void,
->(
-  params: OpenSubjectClassParams,
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof openSubjectClass>>, TError, TData>>
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getOpenSubjectClassQueryOptions(params, options)
+export function useOpenSubjectClass<TData = Awaited<ReturnType<typeof openSubjectClass>>, TError = void>(
+ params: OpenSubjectClassParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof openSubjectClass>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData, TError>
-  }
+  const queryOptions = getOpenSubjectClassQueryOptions(params,options)
 
-  query.queryKey = queryOptions.queryKey
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  return query
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
 }
+
+
+
+
 
 /**
  * Đăng ký lớp môn học cho lớp quản lý
@@ -6343,106 +5229,85 @@ export type enrollFixedClassOnSubjectClassResponse400 = {
   data: void
   status: 400
 }
+    
+export type enrollFixedClassOnSubjectClassResponseSuccess = (enrollFixedClassOnSubjectClassResponse200) & {
+  headers: Headers;
+};
+export type enrollFixedClassOnSubjectClassResponseError = (enrollFixedClassOnSubjectClassResponse400) & {
+  headers: Headers;
+};
 
-export type enrollFixedClassOnSubjectClassResponseSuccess =
-  enrollFixedClassOnSubjectClassResponse200 & {
-    headers: Headers
-  }
-export type enrollFixedClassOnSubjectClassResponseError =
-  enrollFixedClassOnSubjectClassResponse400 & {
-    headers: Headers
-  }
-
-export type enrollFixedClassOnSubjectClassResponse =
-  | enrollFixedClassOnSubjectClassResponseSuccess
-  | enrollFixedClassOnSubjectClassResponseError
+export type enrollFixedClassOnSubjectClassResponse = (enrollFixedClassOnSubjectClassResponseSuccess | enrollFixedClassOnSubjectClassResponseError)
 
 export const getEnrollFixedClassOnSubjectClassUrl = () => {
+
+
+  
+
   return `/api/subject-class/enroll-fixed-class-on-subject-class`
 }
 
-export const enrollFixedClassOnSubjectClass = async (
-  enrollFixedClassOnSubjectClassBody: EnrollFixedClassOnSubjectClassBody,
-  options?: RequestInit
-): Promise<enrollFixedClassOnSubjectClassResponse> => {
-  return customTrainingFetch<enrollFixedClassOnSubjectClassResponse>(
-    getEnrollFixedClassOnSubjectClassUrl(),
-    {
-      ...options,
-      method: "POST",
-      headers: { "Content-Type": "application/json", ...options?.headers },
-      body: JSON.stringify(enrollFixedClassOnSubjectClassBody),
-    }
-  )
-}
-
-export const getEnrollFixedClassOnSubjectClassMutationOptions = <
-  TError = void,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof enrollFixedClassOnSubjectClass>>,
-    TError,
-    { data: EnrollFixedClassOnSubjectClassBody },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof enrollFixedClassOnSubjectClass>>,
-  TError,
-  { data: EnrollFixedClassOnSubjectClassBody },
-  TContext
-> => {
-  const mutationKey = ["enrollFixedClassOnSubjectClass"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof enrollFixedClassOnSubjectClass>>,
-    { data: EnrollFixedClassOnSubjectClassBody }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return enrollFixedClassOnSubjectClass(data, requestOptions)
+export const enrollFixedClassOnSubjectClass = async (enrollFixedClassOnSubjectClassBody: EnrollFixedClassOnSubjectClassBody, options?: RequestInit): Promise<enrollFixedClassOnSubjectClassResponse> => {
+  
+  return customTrainingFetch<enrollFixedClassOnSubjectClassResponse>(getEnrollFixedClassOnSubjectClassUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      enrollFixedClassOnSubjectClassBody,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type EnrollFixedClassOnSubjectClassMutationResult = NonNullable<
-  Awaited<ReturnType<typeof enrollFixedClassOnSubjectClass>>
->
-export type EnrollFixedClassOnSubjectClassMutationBody = EnrollFixedClassOnSubjectClassBody
-export type EnrollFixedClassOnSubjectClassMutationError = void
 
-/**
+
+export const getEnrollFixedClassOnSubjectClassMutationOptions = <TError = void,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof enrollFixedClassOnSubjectClass>>, TError,{data: EnrollFixedClassOnSubjectClassBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof enrollFixedClassOnSubjectClass>>, TError,{data: EnrollFixedClassOnSubjectClassBody}, TContext> => {
+
+const mutationKey = ['enrollFixedClassOnSubjectClass'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof enrollFixedClassOnSubjectClass>>, {data: EnrollFixedClassOnSubjectClassBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  enrollFixedClassOnSubjectClass(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type EnrollFixedClassOnSubjectClassMutationResult = NonNullable<Awaited<ReturnType<typeof enrollFixedClassOnSubjectClass>>>
+    export type EnrollFixedClassOnSubjectClassMutationBody = EnrollFixedClassOnSubjectClassBody
+    export type EnrollFixedClassOnSubjectClassMutationError = void
+
+    /**
  * @summary Đăng ký lớp môn học cho lớp quản lý
  */
-export const useEnrollFixedClassOnSubjectClass = <TError = void, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof enrollFixedClassOnSubjectClass>>,
-      TError,
-      { data: EnrollFixedClassOnSubjectClassBody },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof enrollFixedClassOnSubjectClass>>,
-  TError,
-  { data: EnrollFixedClassOnSubjectClassBody },
-  TContext
-> => {
-  const mutationOptions = getEnrollFixedClassOnSubjectClassMutationOptions(options)
+export const useEnrollFixedClassOnSubjectClass = <TError = void,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof enrollFixedClassOnSubjectClass>>, TError,{data: EnrollFixedClassOnSubjectClassBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof enrollFixedClassOnSubjectClass>>,
+        TError,
+        {data: EnrollFixedClassOnSubjectClassBody},
+        TContext
+      > => {
 
-  return useMutation(mutationOptions, queryClient)
-}
+      const mutationOptions = getEnrollFixedClassOnSubjectClassMutationOptions(options);
 
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 /**
  * Đặt hạn nhập điểm
  * @summary Đặt hạn nhập điểm
@@ -6456,98 +5321,85 @@ export type setScoreDeadLineResponse400 = {
   data: void
   status: 400
 }
+    
+export type setScoreDeadLineResponseSuccess = (setScoreDeadLineResponse200) & {
+  headers: Headers;
+};
+export type setScoreDeadLineResponseError = (setScoreDeadLineResponse400) & {
+  headers: Headers;
+};
 
-export type setScoreDeadLineResponseSuccess = setScoreDeadLineResponse200 & {
-  headers: Headers
-}
-export type setScoreDeadLineResponseError = setScoreDeadLineResponse400 & {
-  headers: Headers
-}
-
-export type setScoreDeadLineResponse =
-  | setScoreDeadLineResponseSuccess
-  | setScoreDeadLineResponseError
+export type setScoreDeadLineResponse = (setScoreDeadLineResponseSuccess | setScoreDeadLineResponseError)
 
 export const getSetScoreDeadLineUrl = () => {
+
+
+  
+
   return `/api/subject-class/set-score-dead-line`
 }
 
-export const setScoreDeadLine = async (
-  setScoreDeadLineBody: SetScoreDeadLineBody,
-  options?: RequestInit
-): Promise<setScoreDeadLineResponse> => {
-  return customTrainingFetch<setScoreDeadLineResponse>(getSetScoreDeadLineUrl(), {
+export const setScoreDeadLine = async (setScoreDeadLineBody: SetScoreDeadLineBody, options?: RequestInit): Promise<setScoreDeadLineResponse> => {
+  
+  return customTrainingFetch<setScoreDeadLineResponse>(getSetScoreDeadLineUrl(),
+  {      
     ...options,
-    method: "POST",
-    headers: { "Content-Type": "application/json", ...options?.headers },
-    body: JSON.stringify(setScoreDeadLineBody),
-  })
-}
-
-export const getSetScoreDeadLineMutationOptions = <TError = void, TContext = unknown>(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof setScoreDeadLine>>,
-    TError,
-    { data: SetScoreDeadLineBody },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof setScoreDeadLine>>,
-  TError,
-  { data: SetScoreDeadLineBody },
-  TContext
-> => {
-  const mutationKey = ["setScoreDeadLine"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof setScoreDeadLine>>,
-    { data: SetScoreDeadLineBody }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return setScoreDeadLine(data, requestOptions)
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      setScoreDeadLineBody,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type SetScoreDeadLineMutationResult = NonNullable<
-  Awaited<ReturnType<typeof setScoreDeadLine>>
->
-export type SetScoreDeadLineMutationBody = SetScoreDeadLineBody
-export type SetScoreDeadLineMutationError = void
 
-/**
+
+export const getSetScoreDeadLineMutationOptions = <TError = void,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof setScoreDeadLine>>, TError,{data: SetScoreDeadLineBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof setScoreDeadLine>>, TError,{data: SetScoreDeadLineBody}, TContext> => {
+
+const mutationKey = ['setScoreDeadLine'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof setScoreDeadLine>>, {data: SetScoreDeadLineBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  setScoreDeadLine(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type SetScoreDeadLineMutationResult = NonNullable<Awaited<ReturnType<typeof setScoreDeadLine>>>
+    export type SetScoreDeadLineMutationBody = SetScoreDeadLineBody
+    export type SetScoreDeadLineMutationError = void
+
+    /**
  * @summary Đặt hạn nhập điểm
  */
-export const useSetScoreDeadLine = <TError = void, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof setScoreDeadLine>>,
-      TError,
-      { data: SetScoreDeadLineBody },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof setScoreDeadLine>>,
-  TError,
-  { data: SetScoreDeadLineBody },
-  TContext
-> => {
-  const mutationOptions = getSetScoreDeadLineMutationOptions(options)
+export const useSetScoreDeadLine = <TError = void,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof setScoreDeadLine>>, TError,{data: SetScoreDeadLineBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof setScoreDeadLine>>,
+        TError,
+        {data: SetScoreDeadLineBody},
+        TContext
+      > => {
 
-  return useMutation(mutationOptions, queryClient)
-}
+      const mutationOptions = getSetScoreDeadLineMutationOptions(options);
 
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 /**
  * Đặt hạn nhập điểm thi
  * @summary Đặt hạn nhập điểm thi
@@ -6561,101 +5413,85 @@ export type setExamScoreDeadLineResponse400 = {
   data: void
   status: 400
 }
+    
+export type setExamScoreDeadLineResponseSuccess = (setExamScoreDeadLineResponse200) & {
+  headers: Headers;
+};
+export type setExamScoreDeadLineResponseError = (setExamScoreDeadLineResponse400) & {
+  headers: Headers;
+};
 
-export type setExamScoreDeadLineResponseSuccess = setExamScoreDeadLineResponse200 & {
-  headers: Headers
-}
-export type setExamScoreDeadLineResponseError = setExamScoreDeadLineResponse400 & {
-  headers: Headers
-}
-
-export type setExamScoreDeadLineResponse =
-  | setExamScoreDeadLineResponseSuccess
-  | setExamScoreDeadLineResponseError
+export type setExamScoreDeadLineResponse = (setExamScoreDeadLineResponseSuccess | setExamScoreDeadLineResponseError)
 
 export const getSetExamScoreDeadLineUrl = () => {
+
+
+  
+
   return `/api/subject-class/set-exam-score-dead-line`
 }
 
-export const setExamScoreDeadLine = async (
-  setExamScoreDeadLineBody: SetExamScoreDeadLineBody,
-  options?: RequestInit
-): Promise<setExamScoreDeadLineResponse> => {
-  return customTrainingFetch<setExamScoreDeadLineResponse>(getSetExamScoreDeadLineUrl(), {
+export const setExamScoreDeadLine = async (setExamScoreDeadLineBody: SetExamScoreDeadLineBody, options?: RequestInit): Promise<setExamScoreDeadLineResponse> => {
+  
+  return customTrainingFetch<setExamScoreDeadLineResponse>(getSetExamScoreDeadLineUrl(),
+  {      
     ...options,
-    method: "POST",
-    headers: { "Content-Type": "application/json", ...options?.headers },
-    body: JSON.stringify(setExamScoreDeadLineBody),
-  })
-}
-
-export const getSetExamScoreDeadLineMutationOptions = <
-  TError = void,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof setExamScoreDeadLine>>,
-    TError,
-    { data: SetExamScoreDeadLineBody },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof setExamScoreDeadLine>>,
-  TError,
-  { data: SetExamScoreDeadLineBody },
-  TContext
-> => {
-  const mutationKey = ["setExamScoreDeadLine"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof setExamScoreDeadLine>>,
-    { data: SetExamScoreDeadLineBody }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return setExamScoreDeadLine(data, requestOptions)
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      setExamScoreDeadLineBody,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type SetExamScoreDeadLineMutationResult = NonNullable<
-  Awaited<ReturnType<typeof setExamScoreDeadLine>>
->
-export type SetExamScoreDeadLineMutationBody = SetExamScoreDeadLineBody
-export type SetExamScoreDeadLineMutationError = void
 
-/**
+
+export const getSetExamScoreDeadLineMutationOptions = <TError = void,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof setExamScoreDeadLine>>, TError,{data: SetExamScoreDeadLineBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof setExamScoreDeadLine>>, TError,{data: SetExamScoreDeadLineBody}, TContext> => {
+
+const mutationKey = ['setExamScoreDeadLine'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof setExamScoreDeadLine>>, {data: SetExamScoreDeadLineBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  setExamScoreDeadLine(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type SetExamScoreDeadLineMutationResult = NonNullable<Awaited<ReturnType<typeof setExamScoreDeadLine>>>
+    export type SetExamScoreDeadLineMutationBody = SetExamScoreDeadLineBody
+    export type SetExamScoreDeadLineMutationError = void
+
+    /**
  * @summary Đặt hạn nhập điểm thi
  */
-export const useSetExamScoreDeadLine = <TError = void, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof setExamScoreDeadLine>>,
-      TError,
-      { data: SetExamScoreDeadLineBody },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof setExamScoreDeadLine>>,
-  TError,
-  { data: SetExamScoreDeadLineBody },
-  TContext
-> => {
-  const mutationOptions = getSetExamScoreDeadLineMutationOptions(options)
+export const useSetExamScoreDeadLine = <TError = void,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof setExamScoreDeadLine>>, TError,{data: SetExamScoreDeadLineBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof setExamScoreDeadLine>>,
+        TError,
+        {data: SetExamScoreDeadLineBody},
+        TContext
+      > => {
 
-  return useMutation(mutationOptions, queryClient)
-}
+      const mutationOptions = getSetExamScoreDeadLineMutationOptions(options);
 
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 /**
  * Import điểm lớp môn học 
 
@@ -6671,104 +5507,88 @@ export type uploadExcelImportScoreResponse400 = {
   data: UploadExcelImportScore400
   status: 400
 }
+    
+export type uploadExcelImportScoreResponseSuccess = (uploadExcelImportScoreResponse200) & {
+  headers: Headers;
+};
+export type uploadExcelImportScoreResponseError = (uploadExcelImportScoreResponse400) & {
+  headers: Headers;
+};
 
-export type uploadExcelImportScoreResponseSuccess = uploadExcelImportScoreResponse200 & {
-  headers: Headers
-}
-export type uploadExcelImportScoreResponseError = uploadExcelImportScoreResponse400 & {
-  headers: Headers
-}
-
-export type uploadExcelImportScoreResponse =
-  | uploadExcelImportScoreResponseSuccess
-  | uploadExcelImportScoreResponseError
+export type uploadExcelImportScoreResponse = (uploadExcelImportScoreResponseSuccess | uploadExcelImportScoreResponseError)
 
 export const getUploadExcelImportScoreUrl = () => {
+
+
+  
+
   return `/api/subject-class/upload-excel-import-score`
 }
 
-export const uploadExcelImportScore = async (
-  uploadExcelImportScore: UploadExcelImportScore,
-  options?: RequestInit
-): Promise<uploadExcelImportScoreResponse> => {
-  const formData = new FormData()
-  formData.append(`file`, uploadExcelImportScore.file)
-  formData.append(`subjectClassId`, uploadExcelImportScore.subjectClassId)
+export const uploadExcelImportScore = async (uploadExcelImportScore: UploadExcelImportScore, options?: RequestInit): Promise<uploadExcelImportScoreResponse> => {
+    const formData = new FormData();
+formData.append(`file`, uploadExcelImportScore.file)
+formData.append(`subjectClassId`, uploadExcelImportScore.subjectClassId)
 
-  return customTrainingFetch<uploadExcelImportScoreResponse>(getUploadExcelImportScoreUrl(), {
+  return customTrainingFetch<uploadExcelImportScoreResponse>(getUploadExcelImportScoreUrl(),
+  {      
     ...options,
-    method: "POST",
-    body: formData,
-  })
-}
-
-export const getUploadExcelImportScoreMutationOptions = <
-  TError = UploadExcelImportScore400,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof uploadExcelImportScore>>,
-    TError,
-    { data: UploadExcelImportScore },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof uploadExcelImportScore>>,
-  TError,
-  { data: UploadExcelImportScore },
-  TContext
-> => {
-  const mutationKey = ["uploadExcelImportScore"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof uploadExcelImportScore>>,
-    { data: UploadExcelImportScore }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return uploadExcelImportScore(data, requestOptions)
+    method: 'POST'
+    ,
+    body: 
+      formData,
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type UploadExcelImportScoreMutationResult = NonNullable<
-  Awaited<ReturnType<typeof uploadExcelImportScore>>
->
-export type UploadExcelImportScoreMutationBody = UploadExcelImportScore
-export type UploadExcelImportScoreMutationError = UploadExcelImportScore400
 
-/**
+
+export const getUploadExcelImportScoreMutationOptions = <TError = UploadExcelImportScore400,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof uploadExcelImportScore>>, TError,{data: UploadExcelImportScore}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof uploadExcelImportScore>>, TError,{data: UploadExcelImportScore}, TContext> => {
+
+const mutationKey = ['uploadExcelImportScore'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof uploadExcelImportScore>>, {data: UploadExcelImportScore}> = (props) => {
+          const {data} = props ?? {};
+
+          return  uploadExcelImportScore(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UploadExcelImportScoreMutationResult = NonNullable<Awaited<ReturnType<typeof uploadExcelImportScore>>>
+    export type UploadExcelImportScoreMutationBody = UploadExcelImportScore
+    export type UploadExcelImportScoreMutationError = UploadExcelImportScore400
+
+    /**
  * @summary Import file nhập điểm
  */
-export const useUploadExcelImportScore = <TError = UploadExcelImportScore400, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof uploadExcelImportScore>>,
-      TError,
-      { data: UploadExcelImportScore },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof uploadExcelImportScore>>,
-  TError,
-  { data: UploadExcelImportScore },
-  TContext
-> => {
-  const mutationOptions = getUploadExcelImportScoreMutationOptions(options)
+export const useUploadExcelImportScore = <TError = UploadExcelImportScore400,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof uploadExcelImportScore>>, TError,{data: UploadExcelImportScore}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof uploadExcelImportScore>>,
+        TError,
+        {data: UploadExcelImportScore},
+        TContext
+      > => {
 
-  return useMutation(mutationOptions, queryClient)
-}
+      const mutationOptions = getUploadExcelImportScoreMutationOptions(options);
 
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 /**
  * @summary Xuất Excel danh sách lớp môn học
  */
@@ -6781,170 +5601,120 @@ export type exportSubjectClassListExcelResponse404 = {
   data: ExportSubjectClassListExcel404
   status: 404
 }
+    
+export type exportSubjectClassListExcelResponseSuccess = (exportSubjectClassListExcelResponse200) & {
+  headers: Headers;
+};
+export type exportSubjectClassListExcelResponseError = (exportSubjectClassListExcelResponse404) & {
+  headers: Headers;
+};
 
-export type exportSubjectClassListExcelResponseSuccess = exportSubjectClassListExcelResponse200 & {
-  headers: Headers
-}
-export type exportSubjectClassListExcelResponseError = exportSubjectClassListExcelResponse404 & {
-  headers: Headers
-}
+export type exportSubjectClassListExcelResponse = (exportSubjectClassListExcelResponseSuccess | exportSubjectClassListExcelResponseError)
 
-export type exportSubjectClassListExcelResponse =
-  | exportSubjectClassListExcelResponseSuccess
-  | exportSubjectClassListExcelResponseError
-
-export const getExportSubjectClassListExcelUrl = (params: ExportSubjectClassListExcelParams) => {
-  const normalizedParams = new URLSearchParams()
+export const getExportSubjectClassListExcelUrl = (params: ExportSubjectClassListExcelParams,) => {
+  const normalizedParams = new URLSearchParams();
 
   Object.entries(params || {}).forEach(([key, value]) => {
+    
     if (value !== undefined) {
-      normalizedParams.append(key, value === null ? "null" : value.toString())
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
     }
-  })
+  });
 
-  const stringifiedParams = normalizedParams.toString()
+  const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0
-    ? `/api/subject-class/export-subject-class-list-excel?${stringifiedParams}`
-    : `/api/subject-class/export-subject-class-list-excel`
+  return stringifiedParams.length > 0 ? `/api/subject-class/export-subject-class-list-excel?${stringifiedParams}` : `/api/subject-class/export-subject-class-list-excel`
 }
 
-export const exportSubjectClassListExcel = async (
-  params: ExportSubjectClassListExcelParams,
-  options?: RequestInit
-): Promise<exportSubjectClassListExcelResponse> => {
-  return customTrainingFetch<exportSubjectClassListExcelResponse>(
-    getExportSubjectClassListExcelUrl(params),
-    {
-      ...options,
-      method: "GET",
-    }
-  )
-}
-
-export const getExportSubjectClassListExcelQueryKey = (
-  params?: ExportSubjectClassListExcelParams
-) => {
-  return [
-    `/api/subject-class/export-subject-class-list-excel`,
-    ...(params ? [params] : []),
-  ] as const
-}
-
-export const getExportSubjectClassListExcelQueryOptions = <
-  TData = Awaited<ReturnType<typeof exportSubjectClassListExcel>>,
-  TError = ExportSubjectClassListExcel404,
->(
-  params: ExportSubjectClassListExcelParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof exportSubjectClassListExcel>>, TError, TData>
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
+export const exportSubjectClassListExcel = async (params: ExportSubjectClassListExcelParams, options?: RequestInit): Promise<exportSubjectClassListExcelResponse> => {
+  
+  return customTrainingFetch<exportSubjectClassListExcelResponse>(getExportSubjectClassListExcelUrl(params),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
   }
+);}
+
+
+
+
+
+export const getExportSubjectClassListExcelQueryKey = (params?: ExportSubjectClassListExcelParams,) => {
+    return [
+    `/api/subject-class/export-subject-class-list-excel`, ...(params ? [params]: [])
+    ] as const;
+    }
+
+    
+export const getExportSubjectClassListExcelQueryOptions = <TData = Awaited<ReturnType<typeof exportSubjectClassListExcel>>, TError = ExportSubjectClassListExcel404>(params: ExportSubjectClassListExcelParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportSubjectClassListExcel>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getExportSubjectClassListExcelQueryKey(params)
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof exportSubjectClassListExcel>>> = ({
-    signal,
-  }) => exportSubjectClassListExcel(params, { signal, ...requestOptions })
+  const queryKey =  queryOptions?.queryKey ?? getExportSubjectClassListExcelQueryKey(params);
 
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof exportSubjectClassListExcel>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof exportSubjectClassListExcel>>> = ({ signal }) => exportSubjectClassListExcel(params, { signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof exportSubjectClassListExcel>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type ExportSubjectClassListExcelQueryResult = NonNullable<
-  Awaited<ReturnType<typeof exportSubjectClassListExcel>>
->
+export type ExportSubjectClassListExcelQueryResult = NonNullable<Awaited<ReturnType<typeof exportSubjectClassListExcel>>>
 export type ExportSubjectClassListExcelQueryError = ExportSubjectClassListExcel404
 
-export function useExportSubjectClassListExcel<
-  TData = Awaited<ReturnType<typeof exportSubjectClassListExcel>>,
-  TError = ExportSubjectClassListExcel404,
->(
-  params: ExportSubjectClassListExcelParams,
-  options: {
-    query: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof exportSubjectClassListExcel>>, TError, TData>
-    > &
-      Pick<
+
+export function useExportSubjectClassListExcel<TData = Awaited<ReturnType<typeof exportSubjectClassListExcel>>, TError = ExportSubjectClassListExcel404>(
+ params: ExportSubjectClassListExcelParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportSubjectClassListExcel>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof exportSubjectClassListExcel>>,
           TError,
           Awaited<ReturnType<typeof exportSubjectClassListExcel>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useExportSubjectClassListExcel<
-  TData = Awaited<ReturnType<typeof exportSubjectClassListExcel>>,
-  TError = ExportSubjectClassListExcel404,
->(
-  params: ExportSubjectClassListExcelParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof exportSubjectClassListExcel>>, TError, TData>
-    > &
-      Pick<
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useExportSubjectClassListExcel<TData = Awaited<ReturnType<typeof exportSubjectClassListExcel>>, TError = ExportSubjectClassListExcel404>(
+ params: ExportSubjectClassListExcelParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportSubjectClassListExcel>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof exportSubjectClassListExcel>>,
           TError,
           Awaited<ReturnType<typeof exportSubjectClassListExcel>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useExportSubjectClassListExcel<
-  TData = Awaited<ReturnType<typeof exportSubjectClassListExcel>>,
-  TError = ExportSubjectClassListExcel404,
->(
-  params: ExportSubjectClassListExcelParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof exportSubjectClassListExcel>>, TError, TData>
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useExportSubjectClassListExcel<TData = Awaited<ReturnType<typeof exportSubjectClassListExcel>>, TError = ExportSubjectClassListExcel404>(
+ params: ExportSubjectClassListExcelParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportSubjectClassListExcel>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Xuất Excel danh sách lớp môn học
  */
 
-export function useExportSubjectClassListExcel<
-  TData = Awaited<ReturnType<typeof exportSubjectClassListExcel>>,
-  TError = ExportSubjectClassListExcel404,
->(
-  params: ExportSubjectClassListExcelParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof exportSubjectClassListExcel>>, TError, TData>
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getExportSubjectClassListExcelQueryOptions(params, options)
+export function useExportSubjectClassListExcel<TData = Awaited<ReturnType<typeof exportSubjectClassListExcel>>, TError = ExportSubjectClassListExcel404>(
+ params: ExportSubjectClassListExcelParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportSubjectClassListExcel>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData, TError>
-  }
+  const queryOptions = getExportSubjectClassListExcelQueryOptions(params,options)
 
-  query.queryKey = queryOptions.queryKey
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  return query
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
 }
+
+
+
+
 
 /**
  * @summary Excel xuất điểm lớp môn học
@@ -6958,165 +5728,120 @@ export type exportSubjectClassScoreResponse404 = {
   data: ExportSubjectClassScore404
   status: 404
 }
+    
+export type exportSubjectClassScoreResponseSuccess = (exportSubjectClassScoreResponse200) & {
+  headers: Headers;
+};
+export type exportSubjectClassScoreResponseError = (exportSubjectClassScoreResponse404) & {
+  headers: Headers;
+};
 
-export type exportSubjectClassScoreResponseSuccess = exportSubjectClassScoreResponse200 & {
-  headers: Headers
-}
-export type exportSubjectClassScoreResponseError = exportSubjectClassScoreResponse404 & {
-  headers: Headers
-}
+export type exportSubjectClassScoreResponse = (exportSubjectClassScoreResponseSuccess | exportSubjectClassScoreResponseError)
 
-export type exportSubjectClassScoreResponse =
-  | exportSubjectClassScoreResponseSuccess
-  | exportSubjectClassScoreResponseError
-
-export const getExportSubjectClassScoreUrl = (params?: ExportSubjectClassScoreParams) => {
-  const normalizedParams = new URLSearchParams()
+export const getExportSubjectClassScoreUrl = (params?: ExportSubjectClassScoreParams,) => {
+  const normalizedParams = new URLSearchParams();
 
   Object.entries(params || {}).forEach(([key, value]) => {
+    
     if (value !== undefined) {
-      normalizedParams.append(key, value === null ? "null" : value.toString())
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
     }
-  })
+  });
 
-  const stringifiedParams = normalizedParams.toString()
+  const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0
-    ? `/api/subject-class/export-subject-class-score?${stringifiedParams}`
-    : `/api/subject-class/export-subject-class-score`
+  return stringifiedParams.length > 0 ? `/api/subject-class/export-subject-class-score?${stringifiedParams}` : `/api/subject-class/export-subject-class-score`
 }
 
-export const exportSubjectClassScore = async (
-  params?: ExportSubjectClassScoreParams,
-  options?: RequestInit
-): Promise<exportSubjectClassScoreResponse> => {
-  return customTrainingFetch<exportSubjectClassScoreResponse>(
-    getExportSubjectClassScoreUrl(params),
-    {
-      ...options,
-      method: "GET",
-    }
-  )
-}
-
-export const getExportSubjectClassScoreQueryKey = (params?: ExportSubjectClassScoreParams) => {
-  return [`/api/subject-class/export-subject-class-score`, ...(params ? [params] : [])] as const
-}
-
-export const getExportSubjectClassScoreQueryOptions = <
-  TData = Awaited<ReturnType<typeof exportSubjectClassScore>>,
-  TError = ExportSubjectClassScore404,
->(
-  params?: ExportSubjectClassScoreParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof exportSubjectClassScore>>, TError, TData>
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
+export const exportSubjectClassScore = async (params?: ExportSubjectClassScoreParams, options?: RequestInit): Promise<exportSubjectClassScoreResponse> => {
+  
+  return customTrainingFetch<exportSubjectClassScoreResponse>(getExportSubjectClassScoreUrl(params),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
   }
+);}
+
+
+
+
+
+export const getExportSubjectClassScoreQueryKey = (params?: ExportSubjectClassScoreParams,) => {
+    return [
+    `/api/subject-class/export-subject-class-score`, ...(params ? [params]: [])
+    ] as const;
+    }
+
+    
+export const getExportSubjectClassScoreQueryOptions = <TData = Awaited<ReturnType<typeof exportSubjectClassScore>>, TError = ExportSubjectClassScore404>(params?: ExportSubjectClassScoreParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportSubjectClassScore>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getExportSubjectClassScoreQueryKey(params)
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof exportSubjectClassScore>>> = ({
-    signal,
-  }) => exportSubjectClassScore(params, { signal, ...requestOptions })
+  const queryKey =  queryOptions?.queryKey ?? getExportSubjectClassScoreQueryKey(params);
 
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof exportSubjectClassScore>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof exportSubjectClassScore>>> = ({ signal }) => exportSubjectClassScore(params, { signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof exportSubjectClassScore>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type ExportSubjectClassScoreQueryResult = NonNullable<
-  Awaited<ReturnType<typeof exportSubjectClassScore>>
->
+export type ExportSubjectClassScoreQueryResult = NonNullable<Awaited<ReturnType<typeof exportSubjectClassScore>>>
 export type ExportSubjectClassScoreQueryError = ExportSubjectClassScore404
 
-export function useExportSubjectClassScore<
-  TData = Awaited<ReturnType<typeof exportSubjectClassScore>>,
-  TError = ExportSubjectClassScore404,
->(
-  params: undefined | ExportSubjectClassScoreParams,
-  options: {
-    query: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof exportSubjectClassScore>>, TError, TData>
-    > &
-      Pick<
+
+export function useExportSubjectClassScore<TData = Awaited<ReturnType<typeof exportSubjectClassScore>>, TError = ExportSubjectClassScore404>(
+ params: undefined |  ExportSubjectClassScoreParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportSubjectClassScore>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof exportSubjectClassScore>>,
           TError,
           Awaited<ReturnType<typeof exportSubjectClassScore>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useExportSubjectClassScore<
-  TData = Awaited<ReturnType<typeof exportSubjectClassScore>>,
-  TError = ExportSubjectClassScore404,
->(
-  params?: ExportSubjectClassScoreParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof exportSubjectClassScore>>, TError, TData>
-    > &
-      Pick<
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useExportSubjectClassScore<TData = Awaited<ReturnType<typeof exportSubjectClassScore>>, TError = ExportSubjectClassScore404>(
+ params?: ExportSubjectClassScoreParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportSubjectClassScore>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof exportSubjectClassScore>>,
           TError,
           Awaited<ReturnType<typeof exportSubjectClassScore>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useExportSubjectClassScore<
-  TData = Awaited<ReturnType<typeof exportSubjectClassScore>>,
-  TError = ExportSubjectClassScore404,
->(
-  params?: ExportSubjectClassScoreParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof exportSubjectClassScore>>, TError, TData>
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useExportSubjectClassScore<TData = Awaited<ReturnType<typeof exportSubjectClassScore>>, TError = ExportSubjectClassScore404>(
+ params?: ExportSubjectClassScoreParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportSubjectClassScore>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Excel xuất điểm lớp môn học
  */
 
-export function useExportSubjectClassScore<
-  TData = Awaited<ReturnType<typeof exportSubjectClassScore>>,
-  TError = ExportSubjectClassScore404,
->(
-  params?: ExportSubjectClassScoreParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof exportSubjectClassScore>>, TError, TData>
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getExportSubjectClassScoreQueryOptions(params, options)
+export function useExportSubjectClassScore<TData = Awaited<ReturnType<typeof exportSubjectClassScore>>, TError = ExportSubjectClassScore404>(
+ params?: ExportSubjectClassScoreParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportSubjectClassScore>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData, TError>
-  }
+  const queryOptions = getExportSubjectClassScoreQueryOptions(params,options)
 
-  query.queryKey = queryOptions.queryKey
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  return query
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
 }
+
+
+
+
 
 /**
  * Lấy danh sách môn học có hssv nợ
@@ -7131,161 +5856,120 @@ export type openSubjectClassRetakeResponse400 = {
   data: void
   status: 400
 }
+    
+export type openSubjectClassRetakeResponseSuccess = (openSubjectClassRetakeResponse200) & {
+  headers: Headers;
+};
+export type openSubjectClassRetakeResponseError = (openSubjectClassRetakeResponse400) & {
+  headers: Headers;
+};
 
-export type openSubjectClassRetakeResponseSuccess = openSubjectClassRetakeResponse200 & {
-  headers: Headers
-}
-export type openSubjectClassRetakeResponseError = openSubjectClassRetakeResponse400 & {
-  headers: Headers
-}
+export type openSubjectClassRetakeResponse = (openSubjectClassRetakeResponseSuccess | openSubjectClassRetakeResponseError)
 
-export type openSubjectClassRetakeResponse =
-  | openSubjectClassRetakeResponseSuccess
-  | openSubjectClassRetakeResponseError
-
-export const getOpenSubjectClassRetakeUrl = (params: OpenSubjectClassRetakeParams) => {
-  const normalizedParams = new URLSearchParams()
+export const getOpenSubjectClassRetakeUrl = (params: OpenSubjectClassRetakeParams,) => {
+  const normalizedParams = new URLSearchParams();
 
   Object.entries(params || {}).forEach(([key, value]) => {
+    
     if (value !== undefined) {
-      normalizedParams.append(key, value === null ? "null" : value.toString())
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
     }
-  })
+  });
 
-  const stringifiedParams = normalizedParams.toString()
+  const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0
-    ? `/api/subject-class/open-subject-class-retake?${stringifiedParams}`
-    : `/api/subject-class/open-subject-class-retake`
+  return stringifiedParams.length > 0 ? `/api/subject-class/open-subject-class-retake?${stringifiedParams}` : `/api/subject-class/open-subject-class-retake`
 }
 
-export const openSubjectClassRetake = async (
-  params: OpenSubjectClassRetakeParams,
-  options?: RequestInit
-): Promise<openSubjectClassRetakeResponse> => {
-  return customTrainingFetch<openSubjectClassRetakeResponse>(getOpenSubjectClassRetakeUrl(params), {
+export const openSubjectClassRetake = async (params: OpenSubjectClassRetakeParams, options?: RequestInit): Promise<openSubjectClassRetakeResponse> => {
+  
+  return customTrainingFetch<openSubjectClassRetakeResponse>(getOpenSubjectClassRetakeUrl(params),
+  {      
     ...options,
-    method: "GET",
-  })
-}
-
-export const getOpenSubjectClassRetakeQueryKey = (params?: OpenSubjectClassRetakeParams) => {
-  return [`/api/subject-class/open-subject-class-retake`, ...(params ? [params] : [])] as const
-}
-
-export const getOpenSubjectClassRetakeQueryOptions = <
-  TData = Awaited<ReturnType<typeof openSubjectClassRetake>>,
-  TError = void,
->(
-  params: OpenSubjectClassRetakeParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassRetake>>, TError, TData>
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
+    method: 'GET'
+    
+    
   }
+);}
+
+
+
+
+
+export const getOpenSubjectClassRetakeQueryKey = (params?: OpenSubjectClassRetakeParams,) => {
+    return [
+    `/api/subject-class/open-subject-class-retake`, ...(params ? [params]: [])
+    ] as const;
+    }
+
+    
+export const getOpenSubjectClassRetakeQueryOptions = <TData = Awaited<ReturnType<typeof openSubjectClassRetake>>, TError = void>(params: OpenSubjectClassRetakeParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassRetake>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getOpenSubjectClassRetakeQueryKey(params)
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof openSubjectClassRetake>>> = ({ signal }) =>
-    openSubjectClassRetake(params, { signal, ...requestOptions })
+  const queryKey =  queryOptions?.queryKey ?? getOpenSubjectClassRetakeQueryKey(params);
 
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof openSubjectClassRetake>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof openSubjectClassRetake>>> = ({ signal }) => openSubjectClassRetake(params, { signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassRetake>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type OpenSubjectClassRetakeQueryResult = NonNullable<
-  Awaited<ReturnType<typeof openSubjectClassRetake>>
->
+export type OpenSubjectClassRetakeQueryResult = NonNullable<Awaited<ReturnType<typeof openSubjectClassRetake>>>
 export type OpenSubjectClassRetakeQueryError = void
 
-export function useOpenSubjectClassRetake<
-  TData = Awaited<ReturnType<typeof openSubjectClassRetake>>,
-  TError = void,
->(
-  params: OpenSubjectClassRetakeParams,
-  options: {
-    query: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassRetake>>, TError, TData>
-    > &
-      Pick<
+
+export function useOpenSubjectClassRetake<TData = Awaited<ReturnType<typeof openSubjectClassRetake>>, TError = void>(
+ params: OpenSubjectClassRetakeParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassRetake>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof openSubjectClassRetake>>,
           TError,
           Awaited<ReturnType<typeof openSubjectClassRetake>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useOpenSubjectClassRetake<
-  TData = Awaited<ReturnType<typeof openSubjectClassRetake>>,
-  TError = void,
->(
-  params: OpenSubjectClassRetakeParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassRetake>>, TError, TData>
-    > &
-      Pick<
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useOpenSubjectClassRetake<TData = Awaited<ReturnType<typeof openSubjectClassRetake>>, TError = void>(
+ params: OpenSubjectClassRetakeParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassRetake>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof openSubjectClassRetake>>,
           TError,
           Awaited<ReturnType<typeof openSubjectClassRetake>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useOpenSubjectClassRetake<
-  TData = Awaited<ReturnType<typeof openSubjectClassRetake>>,
-  TError = void,
->(
-  params: OpenSubjectClassRetakeParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassRetake>>, TError, TData>
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useOpenSubjectClassRetake<TData = Awaited<ReturnType<typeof openSubjectClassRetake>>, TError = void>(
+ params: OpenSubjectClassRetakeParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassRetake>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Lấy danh sách môn học có hssv nợ
  */
 
-export function useOpenSubjectClassRetake<
-  TData = Awaited<ReturnType<typeof openSubjectClassRetake>>,
-  TError = void,
->(
-  params: OpenSubjectClassRetakeParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassRetake>>, TError, TData>
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getOpenSubjectClassRetakeQueryOptions(params, options)
+export function useOpenSubjectClassRetake<TData = Awaited<ReturnType<typeof openSubjectClassRetake>>, TError = void>(
+ params: OpenSubjectClassRetakeParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassRetake>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData, TError>
-  }
+  const queryOptions = getOpenSubjectClassRetakeQueryOptions(params,options)
 
-  query.queryKey = queryOptions.queryKey
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  return query
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
 }
+
+
+
+
 
 /**
  * Lấy danh sách sinh viên nợ môn học
@@ -7300,174 +5984,120 @@ export type openSubjectClassRetakeStudentsResponse400 = {
   data: void
   status: 400
 }
+    
+export type openSubjectClassRetakeStudentsResponseSuccess = (openSubjectClassRetakeStudentsResponse200) & {
+  headers: Headers;
+};
+export type openSubjectClassRetakeStudentsResponseError = (openSubjectClassRetakeStudentsResponse400) & {
+  headers: Headers;
+};
 
-export type openSubjectClassRetakeStudentsResponseSuccess =
-  openSubjectClassRetakeStudentsResponse200 & {
-    headers: Headers
-  }
-export type openSubjectClassRetakeStudentsResponseError =
-  openSubjectClassRetakeStudentsResponse400 & {
-    headers: Headers
-  }
+export type openSubjectClassRetakeStudentsResponse = (openSubjectClassRetakeStudentsResponseSuccess | openSubjectClassRetakeStudentsResponseError)
 
-export type openSubjectClassRetakeStudentsResponse =
-  | openSubjectClassRetakeStudentsResponseSuccess
-  | openSubjectClassRetakeStudentsResponseError
-
-export const getOpenSubjectClassRetakeStudentsUrl = (
-  params: OpenSubjectClassRetakeStudentsParams
-) => {
-  const normalizedParams = new URLSearchParams()
+export const getOpenSubjectClassRetakeStudentsUrl = (params: OpenSubjectClassRetakeStudentsParams,) => {
+  const normalizedParams = new URLSearchParams();
 
   Object.entries(params || {}).forEach(([key, value]) => {
+    
     if (value !== undefined) {
-      normalizedParams.append(key, value === null ? "null" : value.toString())
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
     }
-  })
+  });
 
-  const stringifiedParams = normalizedParams.toString()
+  const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0
-    ? `/api/subject-class/open-subject-class-retake-students?${stringifiedParams}`
-    : `/api/subject-class/open-subject-class-retake-students`
+  return stringifiedParams.length > 0 ? `/api/subject-class/open-subject-class-retake-students?${stringifiedParams}` : `/api/subject-class/open-subject-class-retake-students`
 }
 
-export const openSubjectClassRetakeStudents = async (
-  params: OpenSubjectClassRetakeStudentsParams,
-  options?: RequestInit
-): Promise<openSubjectClassRetakeStudentsResponse> => {
-  return customTrainingFetch<openSubjectClassRetakeStudentsResponse>(
-    getOpenSubjectClassRetakeStudentsUrl(params),
-    {
-      ...options,
-      method: "GET",
-    }
-  )
-}
-
-export const getOpenSubjectClassRetakeStudentsQueryKey = (
-  params?: OpenSubjectClassRetakeStudentsParams
-) => {
-  return [
-    `/api/subject-class/open-subject-class-retake-students`,
-    ...(params ? [params] : []),
-  ] as const
-}
-
-export const getOpenSubjectClassRetakeStudentsQueryOptions = <
-  TData = Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>,
-  TError = void,
->(
-  params: OpenSubjectClassRetakeStudentsParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>, TError, TData>
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
+export const openSubjectClassRetakeStudents = async (params: OpenSubjectClassRetakeStudentsParams, options?: RequestInit): Promise<openSubjectClassRetakeStudentsResponse> => {
+  
+  return customTrainingFetch<openSubjectClassRetakeStudentsResponse>(getOpenSubjectClassRetakeStudentsUrl(params),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
   }
+);}
+
+
+
+
+
+export const getOpenSubjectClassRetakeStudentsQueryKey = (params?: OpenSubjectClassRetakeStudentsParams,) => {
+    return [
+    `/api/subject-class/open-subject-class-retake-students`, ...(params ? [params]: [])
+    ] as const;
+    }
+
+    
+export const getOpenSubjectClassRetakeStudentsQueryOptions = <TData = Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>, TError = void>(params: OpenSubjectClassRetakeStudentsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getOpenSubjectClassRetakeStudentsQueryKey(params)
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>> = ({
-    signal,
-  }) => openSubjectClassRetakeStudents(params, { signal, ...requestOptions })
+  const queryKey =  queryOptions?.queryKey ?? getOpenSubjectClassRetakeStudentsQueryKey(params);
 
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>> = ({ signal }) => openSubjectClassRetakeStudents(params, { signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type OpenSubjectClassRetakeStudentsQueryResult = NonNullable<
-  Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>
->
+export type OpenSubjectClassRetakeStudentsQueryResult = NonNullable<Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>>
 export type OpenSubjectClassRetakeStudentsQueryError = void
 
-export function useOpenSubjectClassRetakeStudents<
-  TData = Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>,
-  TError = void,
->(
-  params: OpenSubjectClassRetakeStudentsParams,
-  options: {
-    query: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>, TError, TData>
-    > &
-      Pick<
+
+export function useOpenSubjectClassRetakeStudents<TData = Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>, TError = void>(
+ params: OpenSubjectClassRetakeStudentsParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>,
           TError,
           Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useOpenSubjectClassRetakeStudents<
-  TData = Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>,
-  TError = void,
->(
-  params: OpenSubjectClassRetakeStudentsParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>, TError, TData>
-    > &
-      Pick<
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useOpenSubjectClassRetakeStudents<TData = Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>, TError = void>(
+ params: OpenSubjectClassRetakeStudentsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>,
           TError,
           Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useOpenSubjectClassRetakeStudents<
-  TData = Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>,
-  TError = void,
->(
-  params: OpenSubjectClassRetakeStudentsParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>, TError, TData>
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useOpenSubjectClassRetakeStudents<TData = Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>, TError = void>(
+ params: OpenSubjectClassRetakeStudentsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Lấy danh sách sinh viên nợ môn học
  */
 
-export function useOpenSubjectClassRetakeStudents<
-  TData = Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>,
-  TError = void,
->(
-  params: OpenSubjectClassRetakeStudentsParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>, TError, TData>
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getOpenSubjectClassRetakeStudentsQueryOptions(params, options)
+export function useOpenSubjectClassRetakeStudents<TData = Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>, TError = void>(
+ params: OpenSubjectClassRetakeStudentsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData, TError>
-  }
+  const queryOptions = getOpenSubjectClassRetakeStudentsQueryOptions(params,options)
 
-  query.queryKey = queryOptions.queryKey
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  return query
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
 }
+
+
+
+
 
 /**
  * Lấy danh sách môn học có hssv cần thi lại
@@ -7482,161 +6112,120 @@ export type openSubjectClassReExamResponse400 = {
   data: OpenSubjectClassReExam400
   status: 400
 }
+    
+export type openSubjectClassReExamResponseSuccess = (openSubjectClassReExamResponse200) & {
+  headers: Headers;
+};
+export type openSubjectClassReExamResponseError = (openSubjectClassReExamResponse400) & {
+  headers: Headers;
+};
 
-export type openSubjectClassReExamResponseSuccess = openSubjectClassReExamResponse200 & {
-  headers: Headers
-}
-export type openSubjectClassReExamResponseError = openSubjectClassReExamResponse400 & {
-  headers: Headers
-}
+export type openSubjectClassReExamResponse = (openSubjectClassReExamResponseSuccess | openSubjectClassReExamResponseError)
 
-export type openSubjectClassReExamResponse =
-  | openSubjectClassReExamResponseSuccess
-  | openSubjectClassReExamResponseError
-
-export const getOpenSubjectClassReExamUrl = (params: OpenSubjectClassReExamParams) => {
-  const normalizedParams = new URLSearchParams()
+export const getOpenSubjectClassReExamUrl = (params: OpenSubjectClassReExamParams,) => {
+  const normalizedParams = new URLSearchParams();
 
   Object.entries(params || {}).forEach(([key, value]) => {
+    
     if (value !== undefined) {
-      normalizedParams.append(key, value === null ? "null" : value.toString())
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
     }
-  })
+  });
 
-  const stringifiedParams = normalizedParams.toString()
+  const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0
-    ? `/api/subject-class/open-subject-class-reexam?${stringifiedParams}`
-    : `/api/subject-class/open-subject-class-reexam`
+  return stringifiedParams.length > 0 ? `/api/subject-class/open-subject-class-reexam?${stringifiedParams}` : `/api/subject-class/open-subject-class-reexam`
 }
 
-export const openSubjectClassReExam = async (
-  params: OpenSubjectClassReExamParams,
-  options?: RequestInit
-): Promise<openSubjectClassReExamResponse> => {
-  return customTrainingFetch<openSubjectClassReExamResponse>(getOpenSubjectClassReExamUrl(params), {
+export const openSubjectClassReExam = async (params: OpenSubjectClassReExamParams, options?: RequestInit): Promise<openSubjectClassReExamResponse> => {
+  
+  return customTrainingFetch<openSubjectClassReExamResponse>(getOpenSubjectClassReExamUrl(params),
+  {      
     ...options,
-    method: "GET",
-  })
-}
-
-export const getOpenSubjectClassReExamQueryKey = (params?: OpenSubjectClassReExamParams) => {
-  return [`/api/subject-class/open-subject-class-reexam`, ...(params ? [params] : [])] as const
-}
-
-export const getOpenSubjectClassReExamQueryOptions = <
-  TData = Awaited<ReturnType<typeof openSubjectClassReExam>>,
-  TError = OpenSubjectClassReExam400,
->(
-  params: OpenSubjectClassReExamParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassReExam>>, TError, TData>
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
+    method: 'GET'
+    
+    
   }
+);}
+
+
+
+
+
+export const getOpenSubjectClassReExamQueryKey = (params?: OpenSubjectClassReExamParams,) => {
+    return [
+    `/api/subject-class/open-subject-class-reexam`, ...(params ? [params]: [])
+    ] as const;
+    }
+
+    
+export const getOpenSubjectClassReExamQueryOptions = <TData = Awaited<ReturnType<typeof openSubjectClassReExam>>, TError = OpenSubjectClassReExam400>(params: OpenSubjectClassReExamParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassReExam>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getOpenSubjectClassReExamQueryKey(params)
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof openSubjectClassReExam>>> = ({ signal }) =>
-    openSubjectClassReExam(params, { signal, ...requestOptions })
+  const queryKey =  queryOptions?.queryKey ?? getOpenSubjectClassReExamQueryKey(params);
 
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof openSubjectClassReExam>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof openSubjectClassReExam>>> = ({ signal }) => openSubjectClassReExam(params, { signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassReExam>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type OpenSubjectClassReExamQueryResult = NonNullable<
-  Awaited<ReturnType<typeof openSubjectClassReExam>>
->
+export type OpenSubjectClassReExamQueryResult = NonNullable<Awaited<ReturnType<typeof openSubjectClassReExam>>>
 export type OpenSubjectClassReExamQueryError = OpenSubjectClassReExam400
 
-export function useOpenSubjectClassReExam<
-  TData = Awaited<ReturnType<typeof openSubjectClassReExam>>,
-  TError = OpenSubjectClassReExam400,
->(
-  params: OpenSubjectClassReExamParams,
-  options: {
-    query: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassReExam>>, TError, TData>
-    > &
-      Pick<
+
+export function useOpenSubjectClassReExam<TData = Awaited<ReturnType<typeof openSubjectClassReExam>>, TError = OpenSubjectClassReExam400>(
+ params: OpenSubjectClassReExamParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassReExam>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof openSubjectClassReExam>>,
           TError,
           Awaited<ReturnType<typeof openSubjectClassReExam>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useOpenSubjectClassReExam<
-  TData = Awaited<ReturnType<typeof openSubjectClassReExam>>,
-  TError = OpenSubjectClassReExam400,
->(
-  params: OpenSubjectClassReExamParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassReExam>>, TError, TData>
-    > &
-      Pick<
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useOpenSubjectClassReExam<TData = Awaited<ReturnType<typeof openSubjectClassReExam>>, TError = OpenSubjectClassReExam400>(
+ params: OpenSubjectClassReExamParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassReExam>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof openSubjectClassReExam>>,
           TError,
           Awaited<ReturnType<typeof openSubjectClassReExam>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useOpenSubjectClassReExam<
-  TData = Awaited<ReturnType<typeof openSubjectClassReExam>>,
-  TError = OpenSubjectClassReExam400,
->(
-  params: OpenSubjectClassReExamParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassReExam>>, TError, TData>
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useOpenSubjectClassReExam<TData = Awaited<ReturnType<typeof openSubjectClassReExam>>, TError = OpenSubjectClassReExam400>(
+ params: OpenSubjectClassReExamParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassReExam>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Lấy danh sách môn học có hssv cần thi lại
  */
 
-export function useOpenSubjectClassReExam<
-  TData = Awaited<ReturnType<typeof openSubjectClassReExam>>,
-  TError = OpenSubjectClassReExam400,
->(
-  params: OpenSubjectClassReExamParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassReExam>>, TError, TData>
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getOpenSubjectClassReExamQueryOptions(params, options)
+export function useOpenSubjectClassReExam<TData = Awaited<ReturnType<typeof openSubjectClassReExam>>, TError = OpenSubjectClassReExam400>(
+ params: OpenSubjectClassReExamParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassReExam>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData, TError>
-  }
+  const queryOptions = getOpenSubjectClassReExamQueryOptions(params,options)
 
-  query.queryKey = queryOptions.queryKey
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  return query
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
 }
+
+
+
+
 
 /**
  * Lấy danh sách sinh viên cần thi lại môn học
@@ -7651,174 +6240,120 @@ export type openSubjectClassReExamStudentsResponse400 = {
   data: void
   status: 400
 }
+    
+export type openSubjectClassReExamStudentsResponseSuccess = (openSubjectClassReExamStudentsResponse200) & {
+  headers: Headers;
+};
+export type openSubjectClassReExamStudentsResponseError = (openSubjectClassReExamStudentsResponse400) & {
+  headers: Headers;
+};
 
-export type openSubjectClassReExamStudentsResponseSuccess =
-  openSubjectClassReExamStudentsResponse200 & {
-    headers: Headers
-  }
-export type openSubjectClassReExamStudentsResponseError =
-  openSubjectClassReExamStudentsResponse400 & {
-    headers: Headers
-  }
+export type openSubjectClassReExamStudentsResponse = (openSubjectClassReExamStudentsResponseSuccess | openSubjectClassReExamStudentsResponseError)
 
-export type openSubjectClassReExamStudentsResponse =
-  | openSubjectClassReExamStudentsResponseSuccess
-  | openSubjectClassReExamStudentsResponseError
-
-export const getOpenSubjectClassReExamStudentsUrl = (
-  params: OpenSubjectClassReExamStudentsParams
-) => {
-  const normalizedParams = new URLSearchParams()
+export const getOpenSubjectClassReExamStudentsUrl = (params: OpenSubjectClassReExamStudentsParams,) => {
+  const normalizedParams = new URLSearchParams();
 
   Object.entries(params || {}).forEach(([key, value]) => {
+    
     if (value !== undefined) {
-      normalizedParams.append(key, value === null ? "null" : value.toString())
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
     }
-  })
+  });
 
-  const stringifiedParams = normalizedParams.toString()
+  const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0
-    ? `/api/subject-class/open-subject-class-reexam-students?${stringifiedParams}`
-    : `/api/subject-class/open-subject-class-reexam-students`
+  return stringifiedParams.length > 0 ? `/api/subject-class/open-subject-class-reexam-students?${stringifiedParams}` : `/api/subject-class/open-subject-class-reexam-students`
 }
 
-export const openSubjectClassReExamStudents = async (
-  params: OpenSubjectClassReExamStudentsParams,
-  options?: RequestInit
-): Promise<openSubjectClassReExamStudentsResponse> => {
-  return customTrainingFetch<openSubjectClassReExamStudentsResponse>(
-    getOpenSubjectClassReExamStudentsUrl(params),
-    {
-      ...options,
-      method: "GET",
-    }
-  )
-}
-
-export const getOpenSubjectClassReExamStudentsQueryKey = (
-  params?: OpenSubjectClassReExamStudentsParams
-) => {
-  return [
-    `/api/subject-class/open-subject-class-reexam-students`,
-    ...(params ? [params] : []),
-  ] as const
-}
-
-export const getOpenSubjectClassReExamStudentsQueryOptions = <
-  TData = Awaited<ReturnType<typeof openSubjectClassReExamStudents>>,
-  TError = void,
->(
-  params: OpenSubjectClassReExamStudentsParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassReExamStudents>>, TError, TData>
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
+export const openSubjectClassReExamStudents = async (params: OpenSubjectClassReExamStudentsParams, options?: RequestInit): Promise<openSubjectClassReExamStudentsResponse> => {
+  
+  return customTrainingFetch<openSubjectClassReExamStudentsResponse>(getOpenSubjectClassReExamStudentsUrl(params),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
   }
+);}
+
+
+
+
+
+export const getOpenSubjectClassReExamStudentsQueryKey = (params?: OpenSubjectClassReExamStudentsParams,) => {
+    return [
+    `/api/subject-class/open-subject-class-reexam-students`, ...(params ? [params]: [])
+    ] as const;
+    }
+
+    
+export const getOpenSubjectClassReExamStudentsQueryOptions = <TData = Awaited<ReturnType<typeof openSubjectClassReExamStudents>>, TError = void>(params: OpenSubjectClassReExamStudentsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassReExamStudents>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getOpenSubjectClassReExamStudentsQueryKey(params)
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof openSubjectClassReExamStudents>>> = ({
-    signal,
-  }) => openSubjectClassReExamStudents(params, { signal, ...requestOptions })
+  const queryKey =  queryOptions?.queryKey ?? getOpenSubjectClassReExamStudentsQueryKey(params);
 
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof openSubjectClassReExamStudents>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof openSubjectClassReExamStudents>>> = ({ signal }) => openSubjectClassReExamStudents(params, { signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassReExamStudents>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type OpenSubjectClassReExamStudentsQueryResult = NonNullable<
-  Awaited<ReturnType<typeof openSubjectClassReExamStudents>>
->
+export type OpenSubjectClassReExamStudentsQueryResult = NonNullable<Awaited<ReturnType<typeof openSubjectClassReExamStudents>>>
 export type OpenSubjectClassReExamStudentsQueryError = void
 
-export function useOpenSubjectClassReExamStudents<
-  TData = Awaited<ReturnType<typeof openSubjectClassReExamStudents>>,
-  TError = void,
->(
-  params: OpenSubjectClassReExamStudentsParams,
-  options: {
-    query: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassReExamStudents>>, TError, TData>
-    > &
-      Pick<
+
+export function useOpenSubjectClassReExamStudents<TData = Awaited<ReturnType<typeof openSubjectClassReExamStudents>>, TError = void>(
+ params: OpenSubjectClassReExamStudentsParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassReExamStudents>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof openSubjectClassReExamStudents>>,
           TError,
           Awaited<ReturnType<typeof openSubjectClassReExamStudents>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useOpenSubjectClassReExamStudents<
-  TData = Awaited<ReturnType<typeof openSubjectClassReExamStudents>>,
-  TError = void,
->(
-  params: OpenSubjectClassReExamStudentsParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassReExamStudents>>, TError, TData>
-    > &
-      Pick<
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useOpenSubjectClassReExamStudents<TData = Awaited<ReturnType<typeof openSubjectClassReExamStudents>>, TError = void>(
+ params: OpenSubjectClassReExamStudentsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassReExamStudents>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof openSubjectClassReExamStudents>>,
           TError,
           Awaited<ReturnType<typeof openSubjectClassReExamStudents>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useOpenSubjectClassReExamStudents<
-  TData = Awaited<ReturnType<typeof openSubjectClassReExamStudents>>,
-  TError = void,
->(
-  params: OpenSubjectClassReExamStudentsParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassReExamStudents>>, TError, TData>
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useOpenSubjectClassReExamStudents<TData = Awaited<ReturnType<typeof openSubjectClassReExamStudents>>, TError = void>(
+ params: OpenSubjectClassReExamStudentsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassReExamStudents>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Lấy danh sách sinh viên cần thi lại môn học
  */
 
-export function useOpenSubjectClassReExamStudents<
-  TData = Awaited<ReturnType<typeof openSubjectClassReExamStudents>>,
-  TError = void,
->(
-  params: OpenSubjectClassReExamStudentsParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassReExamStudents>>, TError, TData>
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getOpenSubjectClassReExamStudentsQueryOptions(params, options)
+export function useOpenSubjectClassReExamStudents<TData = Awaited<ReturnType<typeof openSubjectClassReExamStudents>>, TError = void>(
+ params: OpenSubjectClassReExamStudentsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassReExamStudents>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData, TError>
-  }
+  const queryOptions = getOpenSubjectClassReExamStudentsQueryOptions(params,options)
 
-  query.queryKey = queryOptions.queryKey
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  return query
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
 }
+
+
+
+
 
 /**
  * Xuất danh sách học viên đạt học bổng dưới dạng file Excel (dữ liệu đã được làm phẳng)
@@ -7833,174 +6368,120 @@ export type exportStudentScholarshipExcelResponse404 = {
   data: ExportStudentScholarshipExcel404
   status: 404
 }
+    
+export type exportStudentScholarshipExcelResponseSuccess = (exportStudentScholarshipExcelResponse200) & {
+  headers: Headers;
+};
+export type exportStudentScholarshipExcelResponseError = (exportStudentScholarshipExcelResponse404) & {
+  headers: Headers;
+};
 
-export type exportStudentScholarshipExcelResponseSuccess =
-  exportStudentScholarshipExcelResponse200 & {
-    headers: Headers
-  }
-export type exportStudentScholarshipExcelResponseError =
-  exportStudentScholarshipExcelResponse404 & {
-    headers: Headers
-  }
+export type exportStudentScholarshipExcelResponse = (exportStudentScholarshipExcelResponseSuccess | exportStudentScholarshipExcelResponseError)
 
-export type exportStudentScholarshipExcelResponse =
-  | exportStudentScholarshipExcelResponseSuccess
-  | exportStudentScholarshipExcelResponseError
-
-export const getExportStudentScholarshipExcelUrl = (
-  params: ExportStudentScholarshipExcelParams
-) => {
-  const normalizedParams = new URLSearchParams()
+export const getExportStudentScholarshipExcelUrl = (params: ExportStudentScholarshipExcelParams,) => {
+  const normalizedParams = new URLSearchParams();
 
   Object.entries(params || {}).forEach(([key, value]) => {
+    
     if (value !== undefined) {
-      normalizedParams.append(key, value === null ? "null" : value.toString())
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
     }
-  })
+  });
 
-  const stringifiedParams = normalizedParams.toString()
+  const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0
-    ? `/api/student/export-excel-list-student-scholarship?${stringifiedParams}`
-    : `/api/student/export-excel-list-student-scholarship`
+  return stringifiedParams.length > 0 ? `/api/student/export-excel-list-student-scholarship?${stringifiedParams}` : `/api/student/export-excel-list-student-scholarship`
 }
 
-export const exportStudentScholarshipExcel = async (
-  params: ExportStudentScholarshipExcelParams,
-  options?: RequestInit
-): Promise<exportStudentScholarshipExcelResponse> => {
-  return customTrainingFetch<exportStudentScholarshipExcelResponse>(
-    getExportStudentScholarshipExcelUrl(params),
-    {
-      ...options,
-      method: "GET",
-    }
-  )
-}
-
-export const getExportStudentScholarshipExcelQueryKey = (
-  params?: ExportStudentScholarshipExcelParams
-) => {
-  return [
-    `/api/student/export-excel-list-student-scholarship`,
-    ...(params ? [params] : []),
-  ] as const
-}
-
-export const getExportStudentScholarshipExcelQueryOptions = <
-  TData = Awaited<ReturnType<typeof exportStudentScholarshipExcel>>,
-  TError = ExportStudentScholarshipExcel404,
->(
-  params: ExportStudentScholarshipExcelParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof exportStudentScholarshipExcel>>, TError, TData>
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
+export const exportStudentScholarshipExcel = async (params: ExportStudentScholarshipExcelParams, options?: RequestInit): Promise<exportStudentScholarshipExcelResponse> => {
+  
+  return customTrainingFetch<exportStudentScholarshipExcelResponse>(getExportStudentScholarshipExcelUrl(params),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
   }
+);}
+
+
+
+
+
+export const getExportStudentScholarshipExcelQueryKey = (params?: ExportStudentScholarshipExcelParams,) => {
+    return [
+    `/api/student/export-excel-list-student-scholarship`, ...(params ? [params]: [])
+    ] as const;
+    }
+
+    
+export const getExportStudentScholarshipExcelQueryOptions = <TData = Awaited<ReturnType<typeof exportStudentScholarshipExcel>>, TError = ExportStudentScholarshipExcel404>(params: ExportStudentScholarshipExcelParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportStudentScholarshipExcel>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getExportStudentScholarshipExcelQueryKey(params)
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof exportStudentScholarshipExcel>>> = ({
-    signal,
-  }) => exportStudentScholarshipExcel(params, { signal, ...requestOptions })
+  const queryKey =  queryOptions?.queryKey ?? getExportStudentScholarshipExcelQueryKey(params);
 
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof exportStudentScholarshipExcel>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof exportStudentScholarshipExcel>>> = ({ signal }) => exportStudentScholarshipExcel(params, { signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof exportStudentScholarshipExcel>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type ExportStudentScholarshipExcelQueryResult = NonNullable<
-  Awaited<ReturnType<typeof exportStudentScholarshipExcel>>
->
+export type ExportStudentScholarshipExcelQueryResult = NonNullable<Awaited<ReturnType<typeof exportStudentScholarshipExcel>>>
 export type ExportStudentScholarshipExcelQueryError = ExportStudentScholarshipExcel404
 
-export function useExportStudentScholarshipExcel<
-  TData = Awaited<ReturnType<typeof exportStudentScholarshipExcel>>,
-  TError = ExportStudentScholarshipExcel404,
->(
-  params: ExportStudentScholarshipExcelParams,
-  options: {
-    query: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof exportStudentScholarshipExcel>>, TError, TData>
-    > &
-      Pick<
+
+export function useExportStudentScholarshipExcel<TData = Awaited<ReturnType<typeof exportStudentScholarshipExcel>>, TError = ExportStudentScholarshipExcel404>(
+ params: ExportStudentScholarshipExcelParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportStudentScholarshipExcel>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof exportStudentScholarshipExcel>>,
           TError,
           Awaited<ReturnType<typeof exportStudentScholarshipExcel>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useExportStudentScholarshipExcel<
-  TData = Awaited<ReturnType<typeof exportStudentScholarshipExcel>>,
-  TError = ExportStudentScholarshipExcel404,
->(
-  params: ExportStudentScholarshipExcelParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof exportStudentScholarshipExcel>>, TError, TData>
-    > &
-      Pick<
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useExportStudentScholarshipExcel<TData = Awaited<ReturnType<typeof exportStudentScholarshipExcel>>, TError = ExportStudentScholarshipExcel404>(
+ params: ExportStudentScholarshipExcelParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportStudentScholarshipExcel>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof exportStudentScholarshipExcel>>,
           TError,
           Awaited<ReturnType<typeof exportStudentScholarshipExcel>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useExportStudentScholarshipExcel<
-  TData = Awaited<ReturnType<typeof exportStudentScholarshipExcel>>,
-  TError = ExportStudentScholarshipExcel404,
->(
-  params: ExportStudentScholarshipExcelParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof exportStudentScholarshipExcel>>, TError, TData>
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useExportStudentScholarshipExcel<TData = Awaited<ReturnType<typeof exportStudentScholarshipExcel>>, TError = ExportStudentScholarshipExcel404>(
+ params: ExportStudentScholarshipExcelParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportStudentScholarshipExcel>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Xuất Excel danh sách học bổng của học viên
  */
 
-export function useExportStudentScholarshipExcel<
-  TData = Awaited<ReturnType<typeof exportStudentScholarshipExcel>>,
-  TError = ExportStudentScholarshipExcel404,
->(
-  params: ExportStudentScholarshipExcelParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof exportStudentScholarshipExcel>>, TError, TData>
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getExportStudentScholarshipExcelQueryOptions(params, options)
+export function useExportStudentScholarshipExcel<TData = Awaited<ReturnType<typeof exportStudentScholarshipExcel>>, TError = ExportStudentScholarshipExcel404>(
+ params: ExportStudentScholarshipExcelParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportStudentScholarshipExcel>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData, TError>
-  }
+  const queryOptions = getExportStudentScholarshipExcelQueryOptions(params,options)
 
-  query.queryKey = queryOptions.queryKey
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  return query
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
 }
+
+
+
+
 
 /**
  * Xuất danh sách học viên bị cảnh báo học tập dưới dạng file Excel (dữ liệu đã được làm phẳng)
@@ -8015,174 +6496,120 @@ export type exportStudentAcademicWarningExcelResponse404 = {
   data: ExportStudentAcademicWarningExcel404
   status: 404
 }
+    
+export type exportStudentAcademicWarningExcelResponseSuccess = (exportStudentAcademicWarningExcelResponse200) & {
+  headers: Headers;
+};
+export type exportStudentAcademicWarningExcelResponseError = (exportStudentAcademicWarningExcelResponse404) & {
+  headers: Headers;
+};
 
-export type exportStudentAcademicWarningExcelResponseSuccess =
-  exportStudentAcademicWarningExcelResponse200 & {
-    headers: Headers
-  }
-export type exportStudentAcademicWarningExcelResponseError =
-  exportStudentAcademicWarningExcelResponse404 & {
-    headers: Headers
-  }
+export type exportStudentAcademicWarningExcelResponse = (exportStudentAcademicWarningExcelResponseSuccess | exportStudentAcademicWarningExcelResponseError)
 
-export type exportStudentAcademicWarningExcelResponse =
-  | exportStudentAcademicWarningExcelResponseSuccess
-  | exportStudentAcademicWarningExcelResponseError
-
-export const getExportStudentAcademicWarningExcelUrl = (
-  params: ExportStudentAcademicWarningExcelParams
-) => {
-  const normalizedParams = new URLSearchParams()
+export const getExportStudentAcademicWarningExcelUrl = (params: ExportStudentAcademicWarningExcelParams,) => {
+  const normalizedParams = new URLSearchParams();
 
   Object.entries(params || {}).forEach(([key, value]) => {
+    
     if (value !== undefined) {
-      normalizedParams.append(key, value === null ? "null" : value.toString())
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
     }
-  })
+  });
 
-  const stringifiedParams = normalizedParams.toString()
+  const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0
-    ? `/api/student/export-excel-list-student-academic-warning?${stringifiedParams}`
-    : `/api/student/export-excel-list-student-academic-warning`
+  return stringifiedParams.length > 0 ? `/api/student/export-excel-list-student-academic-warning?${stringifiedParams}` : `/api/student/export-excel-list-student-academic-warning`
 }
 
-export const exportStudentAcademicWarningExcel = async (
-  params: ExportStudentAcademicWarningExcelParams,
-  options?: RequestInit
-): Promise<exportStudentAcademicWarningExcelResponse> => {
-  return customTrainingFetch<exportStudentAcademicWarningExcelResponse>(
-    getExportStudentAcademicWarningExcelUrl(params),
-    {
-      ...options,
-      method: "GET",
-    }
-  )
-}
-
-export const getExportStudentAcademicWarningExcelQueryKey = (
-  params?: ExportStudentAcademicWarningExcelParams
-) => {
-  return [
-    `/api/student/export-excel-list-student-academic-warning`,
-    ...(params ? [params] : []),
-  ] as const
-}
-
-export const getExportStudentAcademicWarningExcelQueryOptions = <
-  TData = Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>,
-  TError = ExportStudentAcademicWarningExcel404,
->(
-  params: ExportStudentAcademicWarningExcelParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>, TError, TData>
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
+export const exportStudentAcademicWarningExcel = async (params: ExportStudentAcademicWarningExcelParams, options?: RequestInit): Promise<exportStudentAcademicWarningExcelResponse> => {
+  
+  return customTrainingFetch<exportStudentAcademicWarningExcelResponse>(getExportStudentAcademicWarningExcelUrl(params),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
   }
+);}
+
+
+
+
+
+export const getExportStudentAcademicWarningExcelQueryKey = (params?: ExportStudentAcademicWarningExcelParams,) => {
+    return [
+    `/api/student/export-excel-list-student-academic-warning`, ...(params ? [params]: [])
+    ] as const;
+    }
+
+    
+export const getExportStudentAcademicWarningExcelQueryOptions = <TData = Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>, TError = ExportStudentAcademicWarningExcel404>(params: ExportStudentAcademicWarningExcelParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getExportStudentAcademicWarningExcelQueryKey(params)
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>> = ({
-    signal,
-  }) => exportStudentAcademicWarningExcel(params, { signal, ...requestOptions })
+  const queryKey =  queryOptions?.queryKey ?? getExportStudentAcademicWarningExcelQueryKey(params);
 
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>> = ({ signal }) => exportStudentAcademicWarningExcel(params, { signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type ExportStudentAcademicWarningExcelQueryResult = NonNullable<
-  Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>
->
+export type ExportStudentAcademicWarningExcelQueryResult = NonNullable<Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>>
 export type ExportStudentAcademicWarningExcelQueryError = ExportStudentAcademicWarningExcel404
 
-export function useExportStudentAcademicWarningExcel<
-  TData = Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>,
-  TError = ExportStudentAcademicWarningExcel404,
->(
-  params: ExportStudentAcademicWarningExcelParams,
-  options: {
-    query: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>, TError, TData>
-    > &
-      Pick<
+
+export function useExportStudentAcademicWarningExcel<TData = Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>, TError = ExportStudentAcademicWarningExcel404>(
+ params: ExportStudentAcademicWarningExcelParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>,
           TError,
           Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useExportStudentAcademicWarningExcel<
-  TData = Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>,
-  TError = ExportStudentAcademicWarningExcel404,
->(
-  params: ExportStudentAcademicWarningExcelParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>, TError, TData>
-    > &
-      Pick<
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useExportStudentAcademicWarningExcel<TData = Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>, TError = ExportStudentAcademicWarningExcel404>(
+ params: ExportStudentAcademicWarningExcelParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>,
           TError,
           Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useExportStudentAcademicWarningExcel<
-  TData = Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>,
-  TError = ExportStudentAcademicWarningExcel404,
->(
-  params: ExportStudentAcademicWarningExcelParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>, TError, TData>
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useExportStudentAcademicWarningExcel<TData = Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>, TError = ExportStudentAcademicWarningExcel404>(
+ params: ExportStudentAcademicWarningExcelParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Xuất Excel danh sách cảnh báo học tập của học viên
  */
 
-export function useExportStudentAcademicWarningExcel<
-  TData = Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>,
-  TError = ExportStudentAcademicWarningExcel404,
->(
-  params: ExportStudentAcademicWarningExcelParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>, TError, TData>
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getExportStudentAcademicWarningExcelQueryOptions(params, options)
+export function useExportStudentAcademicWarningExcel<TData = Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>, TError = ExportStudentAcademicWarningExcel404>(
+ params: ExportStudentAcademicWarningExcelParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportStudentAcademicWarningExcel>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData, TError>
-  }
+  const queryOptions = getExportStudentAcademicWarningExcelQueryOptions(params,options)
 
-  query.queryKey = queryOptions.queryKey
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  return query
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
 }
+
+
+
+
 
 /**
  * Cập nhật trạng thái, điểm học viên theo xử lý học tập
@@ -8197,101 +6624,85 @@ export type updateStudentStatusResponse400 = {
   data: UpdateStudentStatus400
   status: 400
 }
+    
+export type updateStudentStatusResponseSuccess = (updateStudentStatusResponse200) & {
+  headers: Headers;
+};
+export type updateStudentStatusResponseError = (updateStudentStatusResponse400) & {
+  headers: Headers;
+};
 
-export type updateStudentStatusResponseSuccess = updateStudentStatusResponse200 & {
-  headers: Headers
-}
-export type updateStudentStatusResponseError = updateStudentStatusResponse400 & {
-  headers: Headers
-}
-
-export type updateStudentStatusResponse =
-  | updateStudentStatusResponseSuccess
-  | updateStudentStatusResponseError
+export type updateStudentStatusResponse = (updateStudentStatusResponseSuccess | updateStudentStatusResponseError)
 
 export const getUpdateStudentStatusUrl = () => {
+
+
+  
+
   return `/api/student/update-students-status`
 }
 
-export const updateStudentStatus = async (
-  updateStudentStatusBody: UpdateStudentStatusBody,
-  options?: RequestInit
-): Promise<updateStudentStatusResponse> => {
-  return customTrainingFetch<updateStudentStatusResponse>(getUpdateStudentStatusUrl(), {
+export const updateStudentStatus = async (updateStudentStatusBody: UpdateStudentStatusBody, options?: RequestInit): Promise<updateStudentStatusResponse> => {
+  
+  return customTrainingFetch<updateStudentStatusResponse>(getUpdateStudentStatusUrl(),
+  {      
     ...options,
-    method: "POST",
-    headers: { "Content-Type": "application/json", ...options?.headers },
-    body: JSON.stringify(updateStudentStatusBody),
-  })
-}
-
-export const getUpdateStudentStatusMutationOptions = <
-  TError = UpdateStudentStatus400,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof updateStudentStatus>>,
-    TError,
-    { data: UpdateStudentStatusBody },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof updateStudentStatus>>,
-  TError,
-  { data: UpdateStudentStatusBody },
-  TContext
-> => {
-  const mutationKey = ["updateStudentStatus"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof updateStudentStatus>>,
-    { data: UpdateStudentStatusBody }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return updateStudentStatus(data, requestOptions)
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      updateStudentStatusBody,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type UpdateStudentStatusMutationResult = NonNullable<
-  Awaited<ReturnType<typeof updateStudentStatus>>
->
-export type UpdateStudentStatusMutationBody = UpdateStudentStatusBody
-export type UpdateStudentStatusMutationError = UpdateStudentStatus400
 
-/**
+
+export const getUpdateStudentStatusMutationOptions = <TError = UpdateStudentStatus400,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateStudentStatus>>, TError,{data: UpdateStudentStatusBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof updateStudentStatus>>, TError,{data: UpdateStudentStatusBody}, TContext> => {
+
+const mutationKey = ['updateStudentStatus'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateStudentStatus>>, {data: UpdateStudentStatusBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  updateStudentStatus(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateStudentStatusMutationResult = NonNullable<Awaited<ReturnType<typeof updateStudentStatus>>>
+    export type UpdateStudentStatusMutationBody = UpdateStudentStatusBody
+    export type UpdateStudentStatusMutationError = UpdateStudentStatus400
+
+    /**
  * @summary Cập nhật trạng thái, điểm học viên theo xử lý học tập
  */
-export const useUpdateStudentStatus = <TError = UpdateStudentStatus400, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof updateStudentStatus>>,
-      TError,
-      { data: UpdateStudentStatusBody },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof updateStudentStatus>>,
-  TError,
-  { data: UpdateStudentStatusBody },
-  TContext
-> => {
-  const mutationOptions = getUpdateStudentStatusMutationOptions(options)
+export const useUpdateStudentStatus = <TError = UpdateStudentStatus400,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateStudentStatus>>, TError,{data: UpdateStudentStatusBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof updateStudentStatus>>,
+        TError,
+        {data: UpdateStudentStatusBody},
+        TContext
+      > => {
 
-  return useMutation(mutationOptions, queryClient)
-}
+      const mutationOptions = getUpdateStudentStatusMutationOptions(options);
 
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 /**
  * Xuất danh sách học viên đạt học bổng dưới dạng JSON
  * @summary Danh sách học bổng của học viên
@@ -8305,168 +6716,120 @@ export type exportStudentScholarshipJsonResponse404 = {
   data: ExportStudentScholarshipJson404
   status: 404
 }
+    
+export type exportStudentScholarshipJsonResponseSuccess = (exportStudentScholarshipJsonResponse200) & {
+  headers: Headers;
+};
+export type exportStudentScholarshipJsonResponseError = (exportStudentScholarshipJsonResponse404) & {
+  headers: Headers;
+};
 
-export type exportStudentScholarshipJsonResponseSuccess =
-  exportStudentScholarshipJsonResponse200 & {
-    headers: Headers
-  }
-export type exportStudentScholarshipJsonResponseError = exportStudentScholarshipJsonResponse404 & {
-  headers: Headers
-}
+export type exportStudentScholarshipJsonResponse = (exportStudentScholarshipJsonResponseSuccess | exportStudentScholarshipJsonResponseError)
 
-export type exportStudentScholarshipJsonResponse =
-  | exportStudentScholarshipJsonResponseSuccess
-  | exportStudentScholarshipJsonResponseError
-
-export const getExportStudentScholarshipJsonUrl = (params: ExportStudentScholarshipJsonParams) => {
-  const normalizedParams = new URLSearchParams()
+export const getExportStudentScholarshipJsonUrl = (params: ExportStudentScholarshipJsonParams,) => {
+  const normalizedParams = new URLSearchParams();
 
   Object.entries(params || {}).forEach(([key, value]) => {
+    
     if (value !== undefined) {
-      normalizedParams.append(key, value === null ? "null" : value.toString())
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
     }
-  })
+  });
 
-  const stringifiedParams = normalizedParams.toString()
+  const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0
-    ? `/api/student/export-json-list-student-scholarship?${stringifiedParams}`
-    : `/api/student/export-json-list-student-scholarship`
+  return stringifiedParams.length > 0 ? `/api/student/export-json-list-student-scholarship?${stringifiedParams}` : `/api/student/export-json-list-student-scholarship`
 }
 
-export const exportStudentScholarshipJson = async (
-  params: ExportStudentScholarshipJsonParams,
-  options?: RequestInit
-): Promise<exportStudentScholarshipJsonResponse> => {
-  return customTrainingFetch<exportStudentScholarshipJsonResponse>(
-    getExportStudentScholarshipJsonUrl(params),
-    {
-      ...options,
-      method: "GET",
-    }
-  )
-}
-
-export const getExportStudentScholarshipJsonQueryKey = (
-  params?: ExportStudentScholarshipJsonParams
-) => {
-  return [`/api/student/export-json-list-student-scholarship`, ...(params ? [params] : [])] as const
-}
-
-export const getExportStudentScholarshipJsonQueryOptions = <
-  TData = Awaited<ReturnType<typeof exportStudentScholarshipJson>>,
-  TError = ExportStudentScholarshipJson404,
->(
-  params: ExportStudentScholarshipJsonParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof exportStudentScholarshipJson>>, TError, TData>
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
+export const exportStudentScholarshipJson = async (params: ExportStudentScholarshipJsonParams, options?: RequestInit): Promise<exportStudentScholarshipJsonResponse> => {
+  
+  return customTrainingFetch<exportStudentScholarshipJsonResponse>(getExportStudentScholarshipJsonUrl(params),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
   }
+);}
+
+
+
+
+
+export const getExportStudentScholarshipJsonQueryKey = (params?: ExportStudentScholarshipJsonParams,) => {
+    return [
+    `/api/student/export-json-list-student-scholarship`, ...(params ? [params]: [])
+    ] as const;
+    }
+
+    
+export const getExportStudentScholarshipJsonQueryOptions = <TData = Awaited<ReturnType<typeof exportStudentScholarshipJson>>, TError = ExportStudentScholarshipJson404>(params: ExportStudentScholarshipJsonParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportStudentScholarshipJson>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getExportStudentScholarshipJsonQueryKey(params)
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof exportStudentScholarshipJson>>> = ({
-    signal,
-  }) => exportStudentScholarshipJson(params, { signal, ...requestOptions })
+  const queryKey =  queryOptions?.queryKey ?? getExportStudentScholarshipJsonQueryKey(params);
 
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof exportStudentScholarshipJson>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof exportStudentScholarshipJson>>> = ({ signal }) => exportStudentScholarshipJson(params, { signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof exportStudentScholarshipJson>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type ExportStudentScholarshipJsonQueryResult = NonNullable<
-  Awaited<ReturnType<typeof exportStudentScholarshipJson>>
->
+export type ExportStudentScholarshipJsonQueryResult = NonNullable<Awaited<ReturnType<typeof exportStudentScholarshipJson>>>
 export type ExportStudentScholarshipJsonQueryError = ExportStudentScholarshipJson404
 
-export function useExportStudentScholarshipJson<
-  TData = Awaited<ReturnType<typeof exportStudentScholarshipJson>>,
-  TError = ExportStudentScholarshipJson404,
->(
-  params: ExportStudentScholarshipJsonParams,
-  options: {
-    query: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof exportStudentScholarshipJson>>, TError, TData>
-    > &
-      Pick<
+
+export function useExportStudentScholarshipJson<TData = Awaited<ReturnType<typeof exportStudentScholarshipJson>>, TError = ExportStudentScholarshipJson404>(
+ params: ExportStudentScholarshipJsonParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportStudentScholarshipJson>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof exportStudentScholarshipJson>>,
           TError,
           Awaited<ReturnType<typeof exportStudentScholarshipJson>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useExportStudentScholarshipJson<
-  TData = Awaited<ReturnType<typeof exportStudentScholarshipJson>>,
-  TError = ExportStudentScholarshipJson404,
->(
-  params: ExportStudentScholarshipJsonParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof exportStudentScholarshipJson>>, TError, TData>
-    > &
-      Pick<
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useExportStudentScholarshipJson<TData = Awaited<ReturnType<typeof exportStudentScholarshipJson>>, TError = ExportStudentScholarshipJson404>(
+ params: ExportStudentScholarshipJsonParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportStudentScholarshipJson>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof exportStudentScholarshipJson>>,
           TError,
           Awaited<ReturnType<typeof exportStudentScholarshipJson>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useExportStudentScholarshipJson<
-  TData = Awaited<ReturnType<typeof exportStudentScholarshipJson>>,
-  TError = ExportStudentScholarshipJson404,
->(
-  params: ExportStudentScholarshipJsonParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof exportStudentScholarshipJson>>, TError, TData>
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useExportStudentScholarshipJson<TData = Awaited<ReturnType<typeof exportStudentScholarshipJson>>, TError = ExportStudentScholarshipJson404>(
+ params: ExportStudentScholarshipJsonParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportStudentScholarshipJson>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Danh sách học bổng của học viên
  */
 
-export function useExportStudentScholarshipJson<
-  TData = Awaited<ReturnType<typeof exportStudentScholarshipJson>>,
-  TError = ExportStudentScholarshipJson404,
->(
-  params: ExportStudentScholarshipJsonParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof exportStudentScholarshipJson>>, TError, TData>
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getExportStudentScholarshipJsonQueryOptions(params, options)
+export function useExportStudentScholarshipJson<TData = Awaited<ReturnType<typeof exportStudentScholarshipJson>>, TError = ExportStudentScholarshipJson404>(
+ params: ExportStudentScholarshipJsonParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportStudentScholarshipJson>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData, TError>
-  }
+  const queryOptions = getExportStudentScholarshipJsonQueryOptions(params,options)
 
-  query.queryKey = queryOptions.queryKey
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  return query
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
 }
+
+
+
+
 
 /**
  * Xuất danh sách học viên bị cảnh báo học tập dưới dạng JSON
@@ -8481,174 +6844,120 @@ export type exportStudentAcademicWarningJsonResponse404 = {
   data: ExportStudentAcademicWarningJson404
   status: 404
 }
+    
+export type exportStudentAcademicWarningJsonResponseSuccess = (exportStudentAcademicWarningJsonResponse200) & {
+  headers: Headers;
+};
+export type exportStudentAcademicWarningJsonResponseError = (exportStudentAcademicWarningJsonResponse404) & {
+  headers: Headers;
+};
 
-export type exportStudentAcademicWarningJsonResponseSuccess =
-  exportStudentAcademicWarningJsonResponse200 & {
-    headers: Headers
-  }
-export type exportStudentAcademicWarningJsonResponseError =
-  exportStudentAcademicWarningJsonResponse404 & {
-    headers: Headers
-  }
+export type exportStudentAcademicWarningJsonResponse = (exportStudentAcademicWarningJsonResponseSuccess | exportStudentAcademicWarningJsonResponseError)
 
-export type exportStudentAcademicWarningJsonResponse =
-  | exportStudentAcademicWarningJsonResponseSuccess
-  | exportStudentAcademicWarningJsonResponseError
-
-export const getExportStudentAcademicWarningJsonUrl = (
-  params: ExportStudentAcademicWarningJsonParams
-) => {
-  const normalizedParams = new URLSearchParams()
+export const getExportStudentAcademicWarningJsonUrl = (params: ExportStudentAcademicWarningJsonParams,) => {
+  const normalizedParams = new URLSearchParams();
 
   Object.entries(params || {}).forEach(([key, value]) => {
+    
     if (value !== undefined) {
-      normalizedParams.append(key, value === null ? "null" : value.toString())
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
     }
-  })
+  });
 
-  const stringifiedParams = normalizedParams.toString()
+  const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0
-    ? `/api/student/export-json-list-student-academic-warning?${stringifiedParams}`
-    : `/api/student/export-json-list-student-academic-warning`
+  return stringifiedParams.length > 0 ? `/api/student/export-json-list-student-academic-warning?${stringifiedParams}` : `/api/student/export-json-list-student-academic-warning`
 }
 
-export const exportStudentAcademicWarningJson = async (
-  params: ExportStudentAcademicWarningJsonParams,
-  options?: RequestInit
-): Promise<exportStudentAcademicWarningJsonResponse> => {
-  return customTrainingFetch<exportStudentAcademicWarningJsonResponse>(
-    getExportStudentAcademicWarningJsonUrl(params),
-    {
-      ...options,
-      method: "GET",
-    }
-  )
-}
-
-export const getExportStudentAcademicWarningJsonQueryKey = (
-  params?: ExportStudentAcademicWarningJsonParams
-) => {
-  return [
-    `/api/student/export-json-list-student-academic-warning`,
-    ...(params ? [params] : []),
-  ] as const
-}
-
-export const getExportStudentAcademicWarningJsonQueryOptions = <
-  TData = Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>,
-  TError = ExportStudentAcademicWarningJson404,
->(
-  params: ExportStudentAcademicWarningJsonParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>, TError, TData>
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
+export const exportStudentAcademicWarningJson = async (params: ExportStudentAcademicWarningJsonParams, options?: RequestInit): Promise<exportStudentAcademicWarningJsonResponse> => {
+  
+  return customTrainingFetch<exportStudentAcademicWarningJsonResponse>(getExportStudentAcademicWarningJsonUrl(params),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
   }
+);}
+
+
+
+
+
+export const getExportStudentAcademicWarningJsonQueryKey = (params?: ExportStudentAcademicWarningJsonParams,) => {
+    return [
+    `/api/student/export-json-list-student-academic-warning`, ...(params ? [params]: [])
+    ] as const;
+    }
+
+    
+export const getExportStudentAcademicWarningJsonQueryOptions = <TData = Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>, TError = ExportStudentAcademicWarningJson404>(params: ExportStudentAcademicWarningJsonParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getExportStudentAcademicWarningJsonQueryKey(params)
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>> = ({
-    signal,
-  }) => exportStudentAcademicWarningJson(params, { signal, ...requestOptions })
+  const queryKey =  queryOptions?.queryKey ?? getExportStudentAcademicWarningJsonQueryKey(params);
 
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>> = ({ signal }) => exportStudentAcademicWarningJson(params, { signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type ExportStudentAcademicWarningJsonQueryResult = NonNullable<
-  Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>
->
+export type ExportStudentAcademicWarningJsonQueryResult = NonNullable<Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>>
 export type ExportStudentAcademicWarningJsonQueryError = ExportStudentAcademicWarningJson404
 
-export function useExportStudentAcademicWarningJson<
-  TData = Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>,
-  TError = ExportStudentAcademicWarningJson404,
->(
-  params: ExportStudentAcademicWarningJsonParams,
-  options: {
-    query: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>, TError, TData>
-    > &
-      Pick<
+
+export function useExportStudentAcademicWarningJson<TData = Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>, TError = ExportStudentAcademicWarningJson404>(
+ params: ExportStudentAcademicWarningJsonParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>,
           TError,
           Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useExportStudentAcademicWarningJson<
-  TData = Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>,
-  TError = ExportStudentAcademicWarningJson404,
->(
-  params: ExportStudentAcademicWarningJsonParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>, TError, TData>
-    > &
-      Pick<
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useExportStudentAcademicWarningJson<TData = Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>, TError = ExportStudentAcademicWarningJson404>(
+ params: ExportStudentAcademicWarningJsonParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>,
           TError,
           Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useExportStudentAcademicWarningJson<
-  TData = Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>,
-  TError = ExportStudentAcademicWarningJson404,
->(
-  params: ExportStudentAcademicWarningJsonParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>, TError, TData>
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useExportStudentAcademicWarningJson<TData = Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>, TError = ExportStudentAcademicWarningJson404>(
+ params: ExportStudentAcademicWarningJsonParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Danh sách cảnh báo học tập của học viên
  */
 
-export function useExportStudentAcademicWarningJson<
-  TData = Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>,
-  TError = ExportStudentAcademicWarningJson404,
->(
-  params: ExportStudentAcademicWarningJsonParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>, TError, TData>
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getExportStudentAcademicWarningJsonQueryOptions(params, options)
+export function useExportStudentAcademicWarningJson<TData = Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>, TError = ExportStudentAcademicWarningJson404>(
+ params: ExportStudentAcademicWarningJsonParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportStudentAcademicWarningJson>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData, TError>
-  }
+  const queryOptions = getExportStudentAcademicWarningJsonQueryOptions(params,options)
 
-  query.queryKey = queryOptions.queryKey
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  return query
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
 }
+
+
+
+
 
 /**
  * Xuất danh sách học viên bị xử lý học vụ dưới dạng JSON
@@ -8663,174 +6972,120 @@ export type exportStudentAcademicActionJsonResponse404 = {
   data: ExportStudentAcademicActionJson404
   status: 404
 }
+    
+export type exportStudentAcademicActionJsonResponseSuccess = (exportStudentAcademicActionJsonResponse200) & {
+  headers: Headers;
+};
+export type exportStudentAcademicActionJsonResponseError = (exportStudentAcademicActionJsonResponse404) & {
+  headers: Headers;
+};
 
-export type exportStudentAcademicActionJsonResponseSuccess =
-  exportStudentAcademicActionJsonResponse200 & {
-    headers: Headers
-  }
-export type exportStudentAcademicActionJsonResponseError =
-  exportStudentAcademicActionJsonResponse404 & {
-    headers: Headers
-  }
+export type exportStudentAcademicActionJsonResponse = (exportStudentAcademicActionJsonResponseSuccess | exportStudentAcademicActionJsonResponseError)
 
-export type exportStudentAcademicActionJsonResponse =
-  | exportStudentAcademicActionJsonResponseSuccess
-  | exportStudentAcademicActionJsonResponseError
-
-export const getExportStudentAcademicActionJsonUrl = (
-  params: ExportStudentAcademicActionJsonParams
-) => {
-  const normalizedParams = new URLSearchParams()
+export const getExportStudentAcademicActionJsonUrl = (params: ExportStudentAcademicActionJsonParams,) => {
+  const normalizedParams = new URLSearchParams();
 
   Object.entries(params || {}).forEach(([key, value]) => {
+    
     if (value !== undefined) {
-      normalizedParams.append(key, value === null ? "null" : value.toString())
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
     }
-  })
+  });
 
-  const stringifiedParams = normalizedParams.toString()
+  const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0
-    ? `/api/student/export-json-list-student-academic-action?${stringifiedParams}`
-    : `/api/student/export-json-list-student-academic-action`
+  return stringifiedParams.length > 0 ? `/api/student/export-json-list-student-academic-action?${stringifiedParams}` : `/api/student/export-json-list-student-academic-action`
 }
 
-export const exportStudentAcademicActionJson = async (
-  params: ExportStudentAcademicActionJsonParams,
-  options?: RequestInit
-): Promise<exportStudentAcademicActionJsonResponse> => {
-  return customTrainingFetch<exportStudentAcademicActionJsonResponse>(
-    getExportStudentAcademicActionJsonUrl(params),
-    {
-      ...options,
-      method: "GET",
-    }
-  )
-}
-
-export const getExportStudentAcademicActionJsonQueryKey = (
-  params?: ExportStudentAcademicActionJsonParams
-) => {
-  return [
-    `/api/student/export-json-list-student-academic-action`,
-    ...(params ? [params] : []),
-  ] as const
-}
-
-export const getExportStudentAcademicActionJsonQueryOptions = <
-  TData = Awaited<ReturnType<typeof exportStudentAcademicActionJson>>,
-  TError = ExportStudentAcademicActionJson404,
->(
-  params: ExportStudentAcademicActionJsonParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof exportStudentAcademicActionJson>>, TError, TData>
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
+export const exportStudentAcademicActionJson = async (params: ExportStudentAcademicActionJsonParams, options?: RequestInit): Promise<exportStudentAcademicActionJsonResponse> => {
+  
+  return customTrainingFetch<exportStudentAcademicActionJsonResponse>(getExportStudentAcademicActionJsonUrl(params),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
   }
+);}
+
+
+
+
+
+export const getExportStudentAcademicActionJsonQueryKey = (params?: ExportStudentAcademicActionJsonParams,) => {
+    return [
+    `/api/student/export-json-list-student-academic-action`, ...(params ? [params]: [])
+    ] as const;
+    }
+
+    
+export const getExportStudentAcademicActionJsonQueryOptions = <TData = Awaited<ReturnType<typeof exportStudentAcademicActionJson>>, TError = ExportStudentAcademicActionJson404>(params: ExportStudentAcademicActionJsonParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportStudentAcademicActionJson>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getExportStudentAcademicActionJsonQueryKey(params)
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof exportStudentAcademicActionJson>>> = ({
-    signal,
-  }) => exportStudentAcademicActionJson(params, { signal, ...requestOptions })
+  const queryKey =  queryOptions?.queryKey ?? getExportStudentAcademicActionJsonQueryKey(params);
 
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof exportStudentAcademicActionJson>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof exportStudentAcademicActionJson>>> = ({ signal }) => exportStudentAcademicActionJson(params, { signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof exportStudentAcademicActionJson>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type ExportStudentAcademicActionJsonQueryResult = NonNullable<
-  Awaited<ReturnType<typeof exportStudentAcademicActionJson>>
->
+export type ExportStudentAcademicActionJsonQueryResult = NonNullable<Awaited<ReturnType<typeof exportStudentAcademicActionJson>>>
 export type ExportStudentAcademicActionJsonQueryError = ExportStudentAcademicActionJson404
 
-export function useExportStudentAcademicActionJson<
-  TData = Awaited<ReturnType<typeof exportStudentAcademicActionJson>>,
-  TError = ExportStudentAcademicActionJson404,
->(
-  params: ExportStudentAcademicActionJsonParams,
-  options: {
-    query: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof exportStudentAcademicActionJson>>, TError, TData>
-    > &
-      Pick<
+
+export function useExportStudentAcademicActionJson<TData = Awaited<ReturnType<typeof exportStudentAcademicActionJson>>, TError = ExportStudentAcademicActionJson404>(
+ params: ExportStudentAcademicActionJsonParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportStudentAcademicActionJson>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof exportStudentAcademicActionJson>>,
           TError,
           Awaited<ReturnType<typeof exportStudentAcademicActionJson>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useExportStudentAcademicActionJson<
-  TData = Awaited<ReturnType<typeof exportStudentAcademicActionJson>>,
-  TError = ExportStudentAcademicActionJson404,
->(
-  params: ExportStudentAcademicActionJsonParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof exportStudentAcademicActionJson>>, TError, TData>
-    > &
-      Pick<
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useExportStudentAcademicActionJson<TData = Awaited<ReturnType<typeof exportStudentAcademicActionJson>>, TError = ExportStudentAcademicActionJson404>(
+ params: ExportStudentAcademicActionJsonParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportStudentAcademicActionJson>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof exportStudentAcademicActionJson>>,
           TError,
           Awaited<ReturnType<typeof exportStudentAcademicActionJson>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useExportStudentAcademicActionJson<
-  TData = Awaited<ReturnType<typeof exportStudentAcademicActionJson>>,
-  TError = ExportStudentAcademicActionJson404,
->(
-  params: ExportStudentAcademicActionJsonParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof exportStudentAcademicActionJson>>, TError, TData>
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useExportStudentAcademicActionJson<TData = Awaited<ReturnType<typeof exportStudentAcademicActionJson>>, TError = ExportStudentAcademicActionJson404>(
+ params: ExportStudentAcademicActionJsonParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportStudentAcademicActionJson>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Danh sách xử lý học vụ của học viên
  */
 
-export function useExportStudentAcademicActionJson<
-  TData = Awaited<ReturnType<typeof exportStudentAcademicActionJson>>,
-  TError = ExportStudentAcademicActionJson404,
->(
-  params: ExportStudentAcademicActionJsonParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof exportStudentAcademicActionJson>>, TError, TData>
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getExportStudentAcademicActionJsonQueryOptions(params, options)
+export function useExportStudentAcademicActionJson<TData = Awaited<ReturnType<typeof exportStudentAcademicActionJson>>, TError = ExportStudentAcademicActionJson404>(
+ params: ExportStudentAcademicActionJsonParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportStudentAcademicActionJson>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData, TError>
-  }
+  const queryOptions = getExportStudentAcademicActionJsonQueryOptions(params,options)
 
-  query.queryKey = queryOptions.queryKey
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  return query
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
 }
+
+
+
+
 
 /**
  * Xuất danh sách học viên được giảm cảnh báo học tập dưới dạng JSON
@@ -8845,197 +7100,120 @@ export type exportStudentDecreaseAcademicWarningJsonResponse404 = {
   data: ExportStudentDecreaseAcademicWarningJson404
   status: 404
 }
+    
+export type exportStudentDecreaseAcademicWarningJsonResponseSuccess = (exportStudentDecreaseAcademicWarningJsonResponse200) & {
+  headers: Headers;
+};
+export type exportStudentDecreaseAcademicWarningJsonResponseError = (exportStudentDecreaseAcademicWarningJsonResponse404) & {
+  headers: Headers;
+};
 
-export type exportStudentDecreaseAcademicWarningJsonResponseSuccess =
-  exportStudentDecreaseAcademicWarningJsonResponse200 & {
-    headers: Headers
-  }
-export type exportStudentDecreaseAcademicWarningJsonResponseError =
-  exportStudentDecreaseAcademicWarningJsonResponse404 & {
-    headers: Headers
-  }
+export type exportStudentDecreaseAcademicWarningJsonResponse = (exportStudentDecreaseAcademicWarningJsonResponseSuccess | exportStudentDecreaseAcademicWarningJsonResponseError)
 
-export type exportStudentDecreaseAcademicWarningJsonResponse =
-  | exportStudentDecreaseAcademicWarningJsonResponseSuccess
-  | exportStudentDecreaseAcademicWarningJsonResponseError
-
-export const getExportStudentDecreaseAcademicWarningJsonUrl = (
-  params: ExportStudentDecreaseAcademicWarningJsonParams
-) => {
-  const normalizedParams = new URLSearchParams()
+export const getExportStudentDecreaseAcademicWarningJsonUrl = (params: ExportStudentDecreaseAcademicWarningJsonParams,) => {
+  const normalizedParams = new URLSearchParams();
 
   Object.entries(params || {}).forEach(([key, value]) => {
+    
     if (value !== undefined) {
-      normalizedParams.append(key, value === null ? "null" : value.toString())
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
     }
-  })
+  });
 
-  const stringifiedParams = normalizedParams.toString()
+  const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0
-    ? `/api/student/export-json-list-student-decrease-academic-warning?${stringifiedParams}`
-    : `/api/student/export-json-list-student-decrease-academic-warning`
+  return stringifiedParams.length > 0 ? `/api/student/export-json-list-student-decrease-academic-warning?${stringifiedParams}` : `/api/student/export-json-list-student-decrease-academic-warning`
 }
 
-export const exportStudentDecreaseAcademicWarningJson = async (
-  params: ExportStudentDecreaseAcademicWarningJsonParams,
-  options?: RequestInit
-): Promise<exportStudentDecreaseAcademicWarningJsonResponse> => {
-  return customTrainingFetch<exportStudentDecreaseAcademicWarningJsonResponse>(
-    getExportStudentDecreaseAcademicWarningJsonUrl(params),
-    {
-      ...options,
-      method: "GET",
-    }
-  )
-}
-
-export const getExportStudentDecreaseAcademicWarningJsonQueryKey = (
-  params?: ExportStudentDecreaseAcademicWarningJsonParams
-) => {
-  return [
-    `/api/student/export-json-list-student-decrease-academic-warning`,
-    ...(params ? [params] : []),
-  ] as const
-}
-
-export const getExportStudentDecreaseAcademicWarningJsonQueryOptions = <
-  TData = Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>,
-  TError = ExportStudentDecreaseAcademicWarningJson404,
->(
-  params: ExportStudentDecreaseAcademicWarningJsonParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>,
-        TError,
-        TData
-      >
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
+export const exportStudentDecreaseAcademicWarningJson = async (params: ExportStudentDecreaseAcademicWarningJsonParams, options?: RequestInit): Promise<exportStudentDecreaseAcademicWarningJsonResponse> => {
+  
+  return customTrainingFetch<exportStudentDecreaseAcademicWarningJsonResponse>(getExportStudentDecreaseAcademicWarningJsonUrl(params),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
   }
+);}
+
+
+
+
+
+export const getExportStudentDecreaseAcademicWarningJsonQueryKey = (params?: ExportStudentDecreaseAcademicWarningJsonParams,) => {
+    return [
+    `/api/student/export-json-list-student-decrease-academic-warning`, ...(params ? [params]: [])
+    ] as const;
+    }
+
+    
+export const getExportStudentDecreaseAcademicWarningJsonQueryOptions = <TData = Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>, TError = ExportStudentDecreaseAcademicWarningJson404>(params: ExportStudentDecreaseAcademicWarningJsonParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey =
-    queryOptions?.queryKey ?? getExportStudentDecreaseAcademicWarningJsonQueryKey(params)
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>
-  > = ({ signal }) =>
-    exportStudentDecreaseAcademicWarningJson(params, { signal, ...requestOptions })
+  const queryKey =  queryOptions?.queryKey ?? getExportStudentDecreaseAcademicWarningJsonQueryKey(params);
 
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>> = ({ signal }) => exportStudentDecreaseAcademicWarningJson(params, { signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type ExportStudentDecreaseAcademicWarningJsonQueryResult = NonNullable<
-  Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>
->
-export type ExportStudentDecreaseAcademicWarningJsonQueryError =
-  ExportStudentDecreaseAcademicWarningJson404
+export type ExportStudentDecreaseAcademicWarningJsonQueryResult = NonNullable<Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>>
+export type ExportStudentDecreaseAcademicWarningJsonQueryError = ExportStudentDecreaseAcademicWarningJson404
 
-export function useExportStudentDecreaseAcademicWarningJson<
-  TData = Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>,
-  TError = ExportStudentDecreaseAcademicWarningJson404,
->(
-  params: ExportStudentDecreaseAcademicWarningJsonParams,
-  options: {
-    query: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>,
-        TError,
-        TData
-      >
-    > &
-      Pick<
+
+export function useExportStudentDecreaseAcademicWarningJson<TData = Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>, TError = ExportStudentDecreaseAcademicWarningJson404>(
+ params: ExportStudentDecreaseAcademicWarningJsonParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>,
           TError,
           Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useExportStudentDecreaseAcademicWarningJson<
-  TData = Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>,
-  TError = ExportStudentDecreaseAcademicWarningJson404,
->(
-  params: ExportStudentDecreaseAcademicWarningJsonParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>,
-        TError,
-        TData
-      >
-    > &
-      Pick<
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useExportStudentDecreaseAcademicWarningJson<TData = Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>, TError = ExportStudentDecreaseAcademicWarningJson404>(
+ params: ExportStudentDecreaseAcademicWarningJsonParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>,
           TError,
           Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useExportStudentDecreaseAcademicWarningJson<
-  TData = Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>,
-  TError = ExportStudentDecreaseAcademicWarningJson404,
->(
-  params: ExportStudentDecreaseAcademicWarningJsonParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>,
-        TError,
-        TData
-      >
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useExportStudentDecreaseAcademicWarningJson<TData = Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>, TError = ExportStudentDecreaseAcademicWarningJson404>(
+ params: ExportStudentDecreaseAcademicWarningJsonParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Danh sách giảm cảnh báo học tập của học viên
  */
 
-export function useExportStudentDecreaseAcademicWarningJson<
-  TData = Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>,
-  TError = ExportStudentDecreaseAcademicWarningJson404,
->(
-  params: ExportStudentDecreaseAcademicWarningJsonParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>,
-        TError,
-        TData
-      >
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getExportStudentDecreaseAcademicWarningJsonQueryOptions(params, options)
+export function useExportStudentDecreaseAcademicWarningJson<TData = Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>, TError = ExportStudentDecreaseAcademicWarningJson404>(
+ params: ExportStudentDecreaseAcademicWarningJsonParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportStudentDecreaseAcademicWarningJson>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData, TError>
-  }
+  const queryOptions = getExportStudentDecreaseAcademicWarningJsonQueryOptions(params,options)
 
-  query.queryKey = queryOptions.queryKey
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  return query
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
 }
+
+
+
+
 
 /**
  * Trả kết quả học kỳ của học viên, sinh viên dưới dạng JSON
@@ -9055,125 +7233,91 @@ export type calculateStudentSemesterResultJsonResponse500 = {
   data: CalculateStudentSemesterResultJson500
   status: 500
 }
+    
+export type calculateStudentSemesterResultJsonResponseSuccess = (calculateStudentSemesterResultJsonResponse200) & {
+  headers: Headers;
+};
+export type calculateStudentSemesterResultJsonResponseError = (calculateStudentSemesterResultJsonResponse400 | calculateStudentSemesterResultJsonResponse500) & {
+  headers: Headers;
+};
 
-export type calculateStudentSemesterResultJsonResponseSuccess =
-  calculateStudentSemesterResultJsonResponse200 & {
-    headers: Headers
-  }
-export type calculateStudentSemesterResultJsonResponseError = (
-  | calculateStudentSemesterResultJsonResponse400
-  | calculateStudentSemesterResultJsonResponse500
-) & {
-  headers: Headers
-}
+export type calculateStudentSemesterResultJsonResponse = (calculateStudentSemesterResultJsonResponseSuccess | calculateStudentSemesterResultJsonResponseError)
 
-export type calculateStudentSemesterResultJsonResponse =
-  | calculateStudentSemesterResultJsonResponseSuccess
-  | calculateStudentSemesterResultJsonResponseError
-
-export const getCalculateStudentSemesterResultJsonUrl = (
-  params: CalculateStudentSemesterResultJsonParams
-) => {
-  const normalizedParams = new URLSearchParams()
+export const getCalculateStudentSemesterResultJsonUrl = (params: CalculateStudentSemesterResultJsonParams,) => {
+  const normalizedParams = new URLSearchParams();
 
   Object.entries(params || {}).forEach(([key, value]) => {
+    
     if (value !== undefined) {
-      normalizedParams.append(key, value === null ? "null" : value.toString())
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
     }
-  })
+  });
 
-  const stringifiedParams = normalizedParams.toString()
+  const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0
-    ? `/api/student/calculate-student-semester-result-json?${stringifiedParams}`
-    : `/api/student/calculate-student-semester-result-json`
+  return stringifiedParams.length > 0 ? `/api/student/calculate-student-semester-result-json?${stringifiedParams}` : `/api/student/calculate-student-semester-result-json`
 }
 
-export const calculateStudentSemesterResultJson = async (
-  params: CalculateStudentSemesterResultJsonParams,
-  options?: RequestInit
-): Promise<calculateStudentSemesterResultJsonResponse> => {
-  return customTrainingFetch<calculateStudentSemesterResultJsonResponse>(
-    getCalculateStudentSemesterResultJsonUrl(params),
-    {
-      ...options,
-      method: "POST",
-    }
-  )
-}
-
-export const getCalculateStudentSemesterResultJsonMutationOptions = <
-  TError = CalculateStudentSemesterResultJson400 | CalculateStudentSemesterResultJson500,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof calculateStudentSemesterResultJson>>,
-    TError,
-    { params: CalculateStudentSemesterResultJsonParams },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof calculateStudentSemesterResultJson>>,
-  TError,
-  { params: CalculateStudentSemesterResultJsonParams },
-  TContext
-> => {
-  const mutationKey = ["calculateStudentSemesterResultJson"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof calculateStudentSemesterResultJson>>,
-    { params: CalculateStudentSemesterResultJsonParams }
-  > = (props) => {
-    const { params } = props ?? {}
-
-    return calculateStudentSemesterResultJson(params, requestOptions)
+export const calculateStudentSemesterResultJson = async (params: CalculateStudentSemesterResultJsonParams, options?: RequestInit): Promise<calculateStudentSemesterResultJsonResponse> => {
+  
+  return customTrainingFetch<calculateStudentSemesterResultJsonResponse>(getCalculateStudentSemesterResultJsonUrl(params),
+  {      
+    ...options,
+    method: 'POST'
+    
+    
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type CalculateStudentSemesterResultJsonMutationResult = NonNullable<
-  Awaited<ReturnType<typeof calculateStudentSemesterResultJson>>
->
 
-export type CalculateStudentSemesterResultJsonMutationError =
-  | CalculateStudentSemesterResultJson400
-  | CalculateStudentSemesterResultJson500
 
-/**
+export const getCalculateStudentSemesterResultJsonMutationOptions = <TError = CalculateStudentSemesterResultJson400 | CalculateStudentSemesterResultJson500,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof calculateStudentSemesterResultJson>>, TError,{params: CalculateStudentSemesterResultJsonParams}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof calculateStudentSemesterResultJson>>, TError,{params: CalculateStudentSemesterResultJsonParams}, TContext> => {
+
+const mutationKey = ['calculateStudentSemesterResultJson'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof calculateStudentSemesterResultJson>>, {params: CalculateStudentSemesterResultJsonParams}> = (props) => {
+          const {params} = props ?? {};
+
+          return  calculateStudentSemesterResultJson(params,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CalculateStudentSemesterResultJsonMutationResult = NonNullable<Awaited<ReturnType<typeof calculateStudentSemesterResultJson>>>
+    
+    export type CalculateStudentSemesterResultJsonMutationError = CalculateStudentSemesterResultJson400 | CalculateStudentSemesterResultJson500
+
+    /**
  * @summary Tổng kết kết quả học kỳ của học viên, sinh viên
  */
-export const useCalculateStudentSemesterResultJson = <
-  TError = CalculateStudentSemesterResultJson400 | CalculateStudentSemesterResultJson500,
-  TContext = unknown,
->(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof calculateStudentSemesterResultJson>>,
-      TError,
-      { params: CalculateStudentSemesterResultJsonParams },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof calculateStudentSemesterResultJson>>,
-  TError,
-  { params: CalculateStudentSemesterResultJsonParams },
-  TContext
-> => {
-  const mutationOptions = getCalculateStudentSemesterResultJsonMutationOptions(options)
+export const useCalculateStudentSemesterResultJson = <TError = CalculateStudentSemesterResultJson400 | CalculateStudentSemesterResultJson500,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof calculateStudentSemesterResultJson>>, TError,{params: CalculateStudentSemesterResultJsonParams}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof calculateStudentSemesterResultJson>>,
+        TError,
+        {params: CalculateStudentSemesterResultJsonParams},
+        TContext
+      > => {
 
-  return useMutation(mutationOptions, queryClient)
-}
+      const mutationOptions = getCalculateStudentSemesterResultJsonMutationOptions(options);
 
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 /**
  * Trả kết quả năm học của học viên, sinh viên dưới dạng
  * @summary Tổng kết kết quả năm học của học viên, sinh viên
@@ -9192,125 +7336,91 @@ export type calculateStudentSchoolYearResultResponse500 = {
   data: CalculateStudentSchoolYearResult500
   status: 500
 }
+    
+export type calculateStudentSchoolYearResultResponseSuccess = (calculateStudentSchoolYearResultResponse200) & {
+  headers: Headers;
+};
+export type calculateStudentSchoolYearResultResponseError = (calculateStudentSchoolYearResultResponse400 | calculateStudentSchoolYearResultResponse500) & {
+  headers: Headers;
+};
 
-export type calculateStudentSchoolYearResultResponseSuccess =
-  calculateStudentSchoolYearResultResponse200 & {
-    headers: Headers
-  }
-export type calculateStudentSchoolYearResultResponseError = (
-  | calculateStudentSchoolYearResultResponse400
-  | calculateStudentSchoolYearResultResponse500
-) & {
-  headers: Headers
-}
+export type calculateStudentSchoolYearResultResponse = (calculateStudentSchoolYearResultResponseSuccess | calculateStudentSchoolYearResultResponseError)
 
-export type calculateStudentSchoolYearResultResponse =
-  | calculateStudentSchoolYearResultResponseSuccess
-  | calculateStudentSchoolYearResultResponseError
-
-export const getCalculateStudentSchoolYearResultUrl = (
-  params: CalculateStudentSchoolYearResultParams
-) => {
-  const normalizedParams = new URLSearchParams()
+export const getCalculateStudentSchoolYearResultUrl = (params: CalculateStudentSchoolYearResultParams,) => {
+  const normalizedParams = new URLSearchParams();
 
   Object.entries(params || {}).forEach(([key, value]) => {
+    
     if (value !== undefined) {
-      normalizedParams.append(key, value === null ? "null" : value.toString())
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
     }
-  })
+  });
 
-  const stringifiedParams = normalizedParams.toString()
+  const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0
-    ? `/api/student/calculate-student-school-year-result?${stringifiedParams}`
-    : `/api/student/calculate-student-school-year-result`
+  return stringifiedParams.length > 0 ? `/api/student/calculate-student-school-year-result?${stringifiedParams}` : `/api/student/calculate-student-school-year-result`
 }
 
-export const calculateStudentSchoolYearResult = async (
-  params: CalculateStudentSchoolYearResultParams,
-  options?: RequestInit
-): Promise<calculateStudentSchoolYearResultResponse> => {
-  return customTrainingFetch<calculateStudentSchoolYearResultResponse>(
-    getCalculateStudentSchoolYearResultUrl(params),
-    {
-      ...options,
-      method: "POST",
-    }
-  )
-}
-
-export const getCalculateStudentSchoolYearResultMutationOptions = <
-  TError = CalculateStudentSchoolYearResult400 | CalculateStudentSchoolYearResult500,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof calculateStudentSchoolYearResult>>,
-    TError,
-    { params: CalculateStudentSchoolYearResultParams },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof calculateStudentSchoolYearResult>>,
-  TError,
-  { params: CalculateStudentSchoolYearResultParams },
-  TContext
-> => {
-  const mutationKey = ["calculateStudentSchoolYearResult"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof calculateStudentSchoolYearResult>>,
-    { params: CalculateStudentSchoolYearResultParams }
-  > = (props) => {
-    const { params } = props ?? {}
-
-    return calculateStudentSchoolYearResult(params, requestOptions)
+export const calculateStudentSchoolYearResult = async (params: CalculateStudentSchoolYearResultParams, options?: RequestInit): Promise<calculateStudentSchoolYearResultResponse> => {
+  
+  return customTrainingFetch<calculateStudentSchoolYearResultResponse>(getCalculateStudentSchoolYearResultUrl(params),
+  {      
+    ...options,
+    method: 'POST'
+    
+    
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type CalculateStudentSchoolYearResultMutationResult = NonNullable<
-  Awaited<ReturnType<typeof calculateStudentSchoolYearResult>>
->
 
-export type CalculateStudentSchoolYearResultMutationError =
-  | CalculateStudentSchoolYearResult400
-  | CalculateStudentSchoolYearResult500
 
-/**
+export const getCalculateStudentSchoolYearResultMutationOptions = <TError = CalculateStudentSchoolYearResult400 | CalculateStudentSchoolYearResult500,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof calculateStudentSchoolYearResult>>, TError,{params: CalculateStudentSchoolYearResultParams}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof calculateStudentSchoolYearResult>>, TError,{params: CalculateStudentSchoolYearResultParams}, TContext> => {
+
+const mutationKey = ['calculateStudentSchoolYearResult'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof calculateStudentSchoolYearResult>>, {params: CalculateStudentSchoolYearResultParams}> = (props) => {
+          const {params} = props ?? {};
+
+          return  calculateStudentSchoolYearResult(params,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CalculateStudentSchoolYearResultMutationResult = NonNullable<Awaited<ReturnType<typeof calculateStudentSchoolYearResult>>>
+    
+    export type CalculateStudentSchoolYearResultMutationError = CalculateStudentSchoolYearResult400 | CalculateStudentSchoolYearResult500
+
+    /**
  * @summary Tổng kết kết quả năm học của học viên, sinh viên
  */
-export const useCalculateStudentSchoolYearResult = <
-  TError = CalculateStudentSchoolYearResult400 | CalculateStudentSchoolYearResult500,
-  TContext = unknown,
->(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof calculateStudentSchoolYearResult>>,
-      TError,
-      { params: CalculateStudentSchoolYearResultParams },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof calculateStudentSchoolYearResult>>,
-  TError,
-  { params: CalculateStudentSchoolYearResultParams },
-  TContext
-> => {
-  const mutationOptions = getCalculateStudentSchoolYearResultMutationOptions(options)
+export const useCalculateStudentSchoolYearResult = <TError = CalculateStudentSchoolYearResult400 | CalculateStudentSchoolYearResult500,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof calculateStudentSchoolYearResult>>, TError,{params: CalculateStudentSchoolYearResultParams}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof calculateStudentSchoolYearResult>>,
+        TError,
+        {params: CalculateStudentSchoolYearResultParams},
+        TContext
+      > => {
 
-  return useMutation(mutationOptions, queryClient)
-}
+      const mutationOptions = getCalculateStudentSchoolYearResultMutationOptions(options);
 
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 export type debtStatisticsResponse200 = {
   data: Blob
   status: 200
@@ -9320,144 +7430,117 @@ export type debtStatisticsResponse400 = {
   data: DebtStatistics400
   status: 400
 }
+    
+export type debtStatisticsResponseSuccess = (debtStatisticsResponse200) & {
+  headers: Headers;
+};
+export type debtStatisticsResponseError = (debtStatisticsResponse400) & {
+  headers: Headers;
+};
 
-export type debtStatisticsResponseSuccess = debtStatisticsResponse200 & {
-  headers: Headers
-}
-export type debtStatisticsResponseError = debtStatisticsResponse400 & {
-  headers: Headers
-}
+export type debtStatisticsResponse = (debtStatisticsResponseSuccess | debtStatisticsResponseError)
 
-export type debtStatisticsResponse = debtStatisticsResponseSuccess | debtStatisticsResponseError
-
-export const getDebtStatisticsUrl = (params: DebtStatisticsParams) => {
-  const normalizedParams = new URLSearchParams()
+export const getDebtStatisticsUrl = (params: DebtStatisticsParams,) => {
+  const normalizedParams = new URLSearchParams();
 
   Object.entries(params || {}).forEach(([key, value]) => {
+    
     if (value !== undefined) {
-      normalizedParams.append(key, value === null ? "null" : value.toString())
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
     }
-  })
+  });
 
-  const stringifiedParams = normalizedParams.toString()
+  const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0
-    ? `/api/student/debt-statistics?${stringifiedParams}`
-    : `/api/student/debt-statistics`
+  return stringifiedParams.length > 0 ? `/api/student/debt-statistics?${stringifiedParams}` : `/api/student/debt-statistics`
 }
 
-export const debtStatistics = async (
-  params: DebtStatisticsParams,
-  options?: RequestInit
-): Promise<debtStatisticsResponse> => {
-  return customTrainingFetch<debtStatisticsResponse>(getDebtStatisticsUrl(params), {
+export const debtStatistics = async (params: DebtStatisticsParams, options?: RequestInit): Promise<debtStatisticsResponse> => {
+  
+  return customTrainingFetch<debtStatisticsResponse>(getDebtStatisticsUrl(params),
+  {      
     ...options,
-    method: "GET",
-  })
-}
-
-export const getDebtStatisticsQueryKey = (params?: DebtStatisticsParams) => {
-  return [`/api/student/debt-statistics`, ...(params ? [params] : [])] as const
-}
-
-export const getDebtStatisticsQueryOptions = <
-  TData = Awaited<ReturnType<typeof debtStatistics>>,
-  TError = DebtStatistics400,
->(
-  params: DebtStatisticsParams,
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof debtStatistics>>, TError, TData>>
-    request?: SecondParameter<typeof customTrainingFetch>
+    method: 'GET'
+    
+    
   }
+);}
+
+
+
+
+
+export const getDebtStatisticsQueryKey = (params?: DebtStatisticsParams,) => {
+    return [
+    `/api/student/debt-statistics`, ...(params ? [params]: [])
+    ] as const;
+    }
+
+    
+export const getDebtStatisticsQueryOptions = <TData = Awaited<ReturnType<typeof debtStatistics>>, TError = DebtStatistics400>(params: DebtStatisticsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof debtStatistics>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getDebtStatisticsQueryKey(params)
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof debtStatistics>>> = ({ signal }) =>
-    debtStatistics(params, { signal, ...requestOptions })
+  const queryKey =  queryOptions?.queryKey ?? getDebtStatisticsQueryKey(params);
 
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof debtStatistics>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof debtStatistics>>> = ({ signal }) => debtStatistics(params, { signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof debtStatistics>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type DebtStatisticsQueryResult = NonNullable<Awaited<ReturnType<typeof debtStatistics>>>
 export type DebtStatisticsQueryError = DebtStatistics400
 
-export function useDebtStatistics<
-  TData = Awaited<ReturnType<typeof debtStatistics>>,
-  TError = DebtStatistics400,
->(
-  params: DebtStatisticsParams,
-  options: {
-    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof debtStatistics>>, TError, TData>> &
-      Pick<
+
+export function useDebtStatistics<TData = Awaited<ReturnType<typeof debtStatistics>>, TError = DebtStatistics400>(
+ params: DebtStatisticsParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof debtStatistics>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof debtStatistics>>,
           TError,
           Awaited<ReturnType<typeof debtStatistics>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useDebtStatistics<
-  TData = Awaited<ReturnType<typeof debtStatistics>>,
-  TError = DebtStatistics400,
->(
-  params: DebtStatisticsParams,
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof debtStatistics>>, TError, TData>> &
-      Pick<
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useDebtStatistics<TData = Awaited<ReturnType<typeof debtStatistics>>, TError = DebtStatistics400>(
+ params: DebtStatisticsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof debtStatistics>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof debtStatistics>>,
           TError,
           Awaited<ReturnType<typeof debtStatistics>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useDebtStatistics<
-  TData = Awaited<ReturnType<typeof debtStatistics>>,
-  TError = DebtStatistics400,
->(
-  params: DebtStatisticsParams,
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof debtStatistics>>, TError, TData>>
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useDebtStatistics<TData = Awaited<ReturnType<typeof debtStatistics>>, TError = DebtStatistics400>(
+ params: DebtStatisticsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof debtStatistics>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useDebtStatistics<
-  TData = Awaited<ReturnType<typeof debtStatistics>>,
-  TError = DebtStatistics400,
->(
-  params: DebtStatisticsParams,
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof debtStatistics>>, TError, TData>>
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getDebtStatisticsQueryOptions(params, options)
+export function useDebtStatistics<TData = Awaited<ReturnType<typeof debtStatistics>>, TError = DebtStatistics400>(
+ params: DebtStatisticsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof debtStatistics>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData, TError>
-  }
+  const queryOptions = getDebtStatisticsQueryOptions(params,options)
 
-  query.queryKey = queryOptions.queryKey
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  return query
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
 }
+
+
+
+
 
 export type downloadStudentImportTemplateResponse200 = {
   data: Blob
@@ -9473,172 +7556,117 @@ export type downloadStudentImportTemplateResponse500 = {
   data: DownloadStudentImportTemplate500
   status: 500
 }
+    
+export type downloadStudentImportTemplateResponseSuccess = (downloadStudentImportTemplateResponse200) & {
+  headers: Headers;
+};
+export type downloadStudentImportTemplateResponseError = (downloadStudentImportTemplateResponse404 | downloadStudentImportTemplateResponse500) & {
+  headers: Headers;
+};
 
-export type downloadStudentImportTemplateResponseSuccess =
-  downloadStudentImportTemplateResponse200 & {
-    headers: Headers
-  }
-export type downloadStudentImportTemplateResponseError = (
-  | downloadStudentImportTemplateResponse404
-  | downloadStudentImportTemplateResponse500
-) & {
-  headers: Headers
-}
+export type downloadStudentImportTemplateResponse = (downloadStudentImportTemplateResponseSuccess | downloadStudentImportTemplateResponseError)
 
-export type downloadStudentImportTemplateResponse =
-  | downloadStudentImportTemplateResponseSuccess
-  | downloadStudentImportTemplateResponseError
-
-export const getDownloadStudentImportTemplateUrl = (
-  params: DownloadStudentImportTemplateParams
-) => {
-  const normalizedParams = new URLSearchParams()
+export const getDownloadStudentImportTemplateUrl = (params: DownloadStudentImportTemplateParams,) => {
+  const normalizedParams = new URLSearchParams();
 
   Object.entries(params || {}).forEach(([key, value]) => {
+    
     if (value !== undefined) {
-      normalizedParams.append(key, value === null ? "null" : value.toString())
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
     }
-  })
+  });
 
-  const stringifiedParams = normalizedParams.toString()
+  const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0
-    ? `/api/student/download-student-import-template?${stringifiedParams}`
-    : `/api/student/download-student-import-template`
+  return stringifiedParams.length > 0 ? `/api/student/download-student-import-template?${stringifiedParams}` : `/api/student/download-student-import-template`
 }
 
-export const downloadStudentImportTemplate = async (
-  params: DownloadStudentImportTemplateParams,
-  options?: RequestInit
-): Promise<downloadStudentImportTemplateResponse> => {
-  return customTrainingFetch<downloadStudentImportTemplateResponse>(
-    getDownloadStudentImportTemplateUrl(params),
-    {
-      ...options,
-      method: "GET",
-    }
-  )
-}
-
-export const getDownloadStudentImportTemplateQueryKey = (
-  params?: DownloadStudentImportTemplateParams
-) => {
-  return [`/api/student/download-student-import-template`, ...(params ? [params] : [])] as const
-}
-
-export const getDownloadStudentImportTemplateQueryOptions = <
-  TData = Awaited<ReturnType<typeof downloadStudentImportTemplate>>,
-  TError = DownloadStudentImportTemplate404 | DownloadStudentImportTemplate500,
->(
-  params: DownloadStudentImportTemplateParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof downloadStudentImportTemplate>>, TError, TData>
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
+export const downloadStudentImportTemplate = async (params: DownloadStudentImportTemplateParams, options?: RequestInit): Promise<downloadStudentImportTemplateResponse> => {
+  
+  return customTrainingFetch<downloadStudentImportTemplateResponse>(getDownloadStudentImportTemplateUrl(params),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
   }
+);}
+
+
+
+
+
+export const getDownloadStudentImportTemplateQueryKey = (params?: DownloadStudentImportTemplateParams,) => {
+    return [
+    `/api/student/download-student-import-template`, ...(params ? [params]: [])
+    ] as const;
+    }
+
+    
+export const getDownloadStudentImportTemplateQueryOptions = <TData = Awaited<ReturnType<typeof downloadStudentImportTemplate>>, TError = DownloadStudentImportTemplate404 | DownloadStudentImportTemplate500>(params: DownloadStudentImportTemplateParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof downloadStudentImportTemplate>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getDownloadStudentImportTemplateQueryKey(params)
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof downloadStudentImportTemplate>>> = ({
-    signal,
-  }) => downloadStudentImportTemplate(params, { signal, ...requestOptions })
+  const queryKey =  queryOptions?.queryKey ?? getDownloadStudentImportTemplateQueryKey(params);
 
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof downloadStudentImportTemplate>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof downloadStudentImportTemplate>>> = ({ signal }) => downloadStudentImportTemplate(params, { signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof downloadStudentImportTemplate>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type DownloadStudentImportTemplateQueryResult = NonNullable<
-  Awaited<ReturnType<typeof downloadStudentImportTemplate>>
->
-export type DownloadStudentImportTemplateQueryError =
-  | DownloadStudentImportTemplate404
-  | DownloadStudentImportTemplate500
+export type DownloadStudentImportTemplateQueryResult = NonNullable<Awaited<ReturnType<typeof downloadStudentImportTemplate>>>
+export type DownloadStudentImportTemplateQueryError = DownloadStudentImportTemplate404 | DownloadStudentImportTemplate500
 
-export function useDownloadStudentImportTemplate<
-  TData = Awaited<ReturnType<typeof downloadStudentImportTemplate>>,
-  TError = DownloadStudentImportTemplate404 | DownloadStudentImportTemplate500,
->(
-  params: DownloadStudentImportTemplateParams,
-  options: {
-    query: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof downloadStudentImportTemplate>>, TError, TData>
-    > &
-      Pick<
+
+export function useDownloadStudentImportTemplate<TData = Awaited<ReturnType<typeof downloadStudentImportTemplate>>, TError = DownloadStudentImportTemplate404 | DownloadStudentImportTemplate500>(
+ params: DownloadStudentImportTemplateParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof downloadStudentImportTemplate>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof downloadStudentImportTemplate>>,
           TError,
           Awaited<ReturnType<typeof downloadStudentImportTemplate>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useDownloadStudentImportTemplate<
-  TData = Awaited<ReturnType<typeof downloadStudentImportTemplate>>,
-  TError = DownloadStudentImportTemplate404 | DownloadStudentImportTemplate500,
->(
-  params: DownloadStudentImportTemplateParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof downloadStudentImportTemplate>>, TError, TData>
-    > &
-      Pick<
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useDownloadStudentImportTemplate<TData = Awaited<ReturnType<typeof downloadStudentImportTemplate>>, TError = DownloadStudentImportTemplate404 | DownloadStudentImportTemplate500>(
+ params: DownloadStudentImportTemplateParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof downloadStudentImportTemplate>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof downloadStudentImportTemplate>>,
           TError,
           Awaited<ReturnType<typeof downloadStudentImportTemplate>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useDownloadStudentImportTemplate<
-  TData = Awaited<ReturnType<typeof downloadStudentImportTemplate>>,
-  TError = DownloadStudentImportTemplate404 | DownloadStudentImportTemplate500,
->(
-  params: DownloadStudentImportTemplateParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof downloadStudentImportTemplate>>, TError, TData>
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useDownloadStudentImportTemplate<TData = Awaited<ReturnType<typeof downloadStudentImportTemplate>>, TError = DownloadStudentImportTemplate404 | DownloadStudentImportTemplate500>(
+ params: DownloadStudentImportTemplateParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof downloadStudentImportTemplate>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useDownloadStudentImportTemplate<
-  TData = Awaited<ReturnType<typeof downloadStudentImportTemplate>>,
-  TError = DownloadStudentImportTemplate404 | DownloadStudentImportTemplate500,
->(
-  params: DownloadStudentImportTemplateParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof downloadStudentImportTemplate>>, TError, TData>
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getDownloadStudentImportTemplateQueryOptions(params, options)
+export function useDownloadStudentImportTemplate<TData = Awaited<ReturnType<typeof downloadStudentImportTemplate>>, TError = DownloadStudentImportTemplate404 | DownloadStudentImportTemplate500>(
+ params: DownloadStudentImportTemplateParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof downloadStudentImportTemplate>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData, TError>
-  }
+  const queryOptions = getDownloadStudentImportTemplateQueryOptions(params,options)
 
-  query.queryKey = queryOptions.queryKey
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  return query
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
 }
+
+
+
+
 
 export type exportStudentProfilesResponse200 = {
   data: Blob
@@ -9649,98 +7677,82 @@ export type exportStudentProfilesResponse404 = {
   data: ExportStudentProfiles404
   status: 404
 }
+    
+export type exportStudentProfilesResponseSuccess = (exportStudentProfilesResponse200) & {
+  headers: Headers;
+};
+export type exportStudentProfilesResponseError = (exportStudentProfilesResponse404) & {
+  headers: Headers;
+};
 
-export type exportStudentProfilesResponseSuccess = exportStudentProfilesResponse200 & {
-  headers: Headers
-}
-export type exportStudentProfilesResponseError = exportStudentProfilesResponse404 & {
-  headers: Headers
-}
-
-export type exportStudentProfilesResponse =
-  | exportStudentProfilesResponseSuccess
-  | exportStudentProfilesResponseError
+export type exportStudentProfilesResponse = (exportStudentProfilesResponseSuccess | exportStudentProfilesResponseError)
 
 export const getExportStudentProfilesUrl = () => {
+
+
+  
+
   return `/api/student/export-student-profiles`
 }
 
-export const exportStudentProfiles = async (
-  exportStudentProfilesBody: ExportStudentProfilesBody,
-  options?: RequestInit
-): Promise<exportStudentProfilesResponse> => {
-  return customTrainingFetch<exportStudentProfilesResponse>(getExportStudentProfilesUrl(), {
+export const exportStudentProfiles = async (exportStudentProfilesBody: ExportStudentProfilesBody, options?: RequestInit): Promise<exportStudentProfilesResponse> => {
+  
+  return customTrainingFetch<exportStudentProfilesResponse>(getExportStudentProfilesUrl(),
+  {      
     ...options,
-    method: "POST",
-    headers: { "Content-Type": "application/json", ...options?.headers },
-    body: JSON.stringify(exportStudentProfilesBody),
-  })
-}
-
-export const getExportStudentProfilesMutationOptions = <
-  TError = ExportStudentProfiles404,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof exportStudentProfiles>>,
-    TError,
-    { data: ExportStudentProfilesBody },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof exportStudentProfiles>>,
-  TError,
-  { data: ExportStudentProfilesBody },
-  TContext
-> => {
-  const mutationKey = ["exportStudentProfiles"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof exportStudentProfiles>>,
-    { data: ExportStudentProfilesBody }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return exportStudentProfiles(data, requestOptions)
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      exportStudentProfilesBody,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type ExportStudentProfilesMutationResult = NonNullable<
-  Awaited<ReturnType<typeof exportStudentProfiles>>
->
-export type ExportStudentProfilesMutationBody = ExportStudentProfilesBody
-export type ExportStudentProfilesMutationError = ExportStudentProfiles404
 
-export const useExportStudentProfiles = <TError = ExportStudentProfiles404, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof exportStudentProfiles>>,
-      TError,
-      { data: ExportStudentProfilesBody },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof exportStudentProfiles>>,
-  TError,
-  { data: ExportStudentProfilesBody },
-  TContext
-> => {
-  const mutationOptions = getExportStudentProfilesMutationOptions(options)
 
-  return useMutation(mutationOptions, queryClient)
-}
+export const getExportStudentProfilesMutationOptions = <TError = ExportStudentProfiles404,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof exportStudentProfiles>>, TError,{data: ExportStudentProfilesBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof exportStudentProfiles>>, TError,{data: ExportStudentProfilesBody}, TContext> => {
 
+const mutationKey = ['exportStudentProfiles'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof exportStudentProfiles>>, {data: ExportStudentProfilesBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  exportStudentProfiles(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ExportStudentProfilesMutationResult = NonNullable<Awaited<ReturnType<typeof exportStudentProfiles>>>
+    export type ExportStudentProfilesMutationBody = ExportStudentProfilesBody
+    export type ExportStudentProfilesMutationError = ExportStudentProfiles404
+
+    export const useExportStudentProfiles = <TError = ExportStudentProfiles404,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof exportStudentProfiles>>, TError,{data: ExportStudentProfilesBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof exportStudentProfiles>>,
+        TError,
+        {data: ExportStudentProfilesBody},
+        TContext
+      > => {
+
+      const mutationOptions = getExportStudentProfilesMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 export type exportLecturerProfileResponse200 = {
   data: Blob
   status: 200
@@ -9750,98 +7762,82 @@ export type exportLecturerProfileResponse400 = {
   data: ExportLecturerProfile400
   status: 400
 }
+    
+export type exportLecturerProfileResponseSuccess = (exportLecturerProfileResponse200) & {
+  headers: Headers;
+};
+export type exportLecturerProfileResponseError = (exportLecturerProfileResponse400) & {
+  headers: Headers;
+};
 
-export type exportLecturerProfileResponseSuccess = exportLecturerProfileResponse200 & {
-  headers: Headers
-}
-export type exportLecturerProfileResponseError = exportLecturerProfileResponse400 & {
-  headers: Headers
-}
-
-export type exportLecturerProfileResponse =
-  | exportLecturerProfileResponseSuccess
-  | exportLecturerProfileResponseError
+export type exportLecturerProfileResponse = (exportLecturerProfileResponseSuccess | exportLecturerProfileResponseError)
 
 export const getExportLecturerProfileUrl = () => {
+
+
+  
+
   return `/api/lecturer/export-lecturer-profile`
 }
 
-export const exportLecturerProfile = async (
-  exportLecturerProfileBody: ExportLecturerProfileBody,
-  options?: RequestInit
-): Promise<exportLecturerProfileResponse> => {
-  return customTrainingFetch<exportLecturerProfileResponse>(getExportLecturerProfileUrl(), {
+export const exportLecturerProfile = async (exportLecturerProfileBody: ExportLecturerProfileBody, options?: RequestInit): Promise<exportLecturerProfileResponse> => {
+  
+  return customTrainingFetch<exportLecturerProfileResponse>(getExportLecturerProfileUrl(),
+  {      
     ...options,
-    method: "POST",
-    headers: { "Content-Type": "application/json", ...options?.headers },
-    body: JSON.stringify(exportLecturerProfileBody),
-  })
-}
-
-export const getExportLecturerProfileMutationOptions = <
-  TError = ExportLecturerProfile400,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof exportLecturerProfile>>,
-    TError,
-    { data: ExportLecturerProfileBody },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof exportLecturerProfile>>,
-  TError,
-  { data: ExportLecturerProfileBody },
-  TContext
-> => {
-  const mutationKey = ["exportLecturerProfile"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof exportLecturerProfile>>,
-    { data: ExportLecturerProfileBody }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return exportLecturerProfile(data, requestOptions)
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      exportLecturerProfileBody,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type ExportLecturerProfileMutationResult = NonNullable<
-  Awaited<ReturnType<typeof exportLecturerProfile>>
->
-export type ExportLecturerProfileMutationBody = ExportLecturerProfileBody
-export type ExportLecturerProfileMutationError = ExportLecturerProfile400
 
-export const useExportLecturerProfile = <TError = ExportLecturerProfile400, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof exportLecturerProfile>>,
-      TError,
-      { data: ExportLecturerProfileBody },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof exportLecturerProfile>>,
-  TError,
-  { data: ExportLecturerProfileBody },
-  TContext
-> => {
-  const mutationOptions = getExportLecturerProfileMutationOptions(options)
 
-  return useMutation(mutationOptions, queryClient)
-}
+export const getExportLecturerProfileMutationOptions = <TError = ExportLecturerProfile400,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof exportLecturerProfile>>, TError,{data: ExportLecturerProfileBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof exportLecturerProfile>>, TError,{data: ExportLecturerProfileBody}, TContext> => {
 
+const mutationKey = ['exportLecturerProfile'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof exportLecturerProfile>>, {data: ExportLecturerProfileBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  exportLecturerProfile(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ExportLecturerProfileMutationResult = NonNullable<Awaited<ReturnType<typeof exportLecturerProfile>>>
+    export type ExportLecturerProfileMutationBody = ExportLecturerProfileBody
+    export type ExportLecturerProfileMutationError = ExportLecturerProfile400
+
+    export const useExportLecturerProfile = <TError = ExportLecturerProfile400,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof exportLecturerProfile>>, TError,{data: ExportLecturerProfileBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof exportLecturerProfile>>,
+        TError,
+        {data: ExportLecturerProfileBody},
+        TContext
+      > => {
+
+      const mutationOptions = getExportLecturerProfileMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 export type exportDiplomaVerificationResponse200 = {
   data: Blob
   status: 200
@@ -9851,165 +7847,117 @@ export type exportDiplomaVerificationResponse400 = {
   data: ExportDiplomaVerification400
   status: 400
 }
+    
+export type exportDiplomaVerificationResponseSuccess = (exportDiplomaVerificationResponse200) & {
+  headers: Headers;
+};
+export type exportDiplomaVerificationResponseError = (exportDiplomaVerificationResponse400) & {
+  headers: Headers;
+};
 
-export type exportDiplomaVerificationResponseSuccess = exportDiplomaVerificationResponse200 & {
-  headers: Headers
-}
-export type exportDiplomaVerificationResponseError = exportDiplomaVerificationResponse400 & {
-  headers: Headers
-}
+export type exportDiplomaVerificationResponse = (exportDiplomaVerificationResponseSuccess | exportDiplomaVerificationResponseError)
 
-export type exportDiplomaVerificationResponse =
-  | exportDiplomaVerificationResponseSuccess
-  | exportDiplomaVerificationResponseError
-
-export const getExportDiplomaVerificationUrl = (params?: ExportDiplomaVerificationParams) => {
-  const normalizedParams = new URLSearchParams()
+export const getExportDiplomaVerificationUrl = (params?: ExportDiplomaVerificationParams,) => {
+  const normalizedParams = new URLSearchParams();
 
   Object.entries(params || {}).forEach(([key, value]) => {
+    
     if (value !== undefined) {
-      normalizedParams.append(key, value === null ? "null" : value.toString())
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
     }
-  })
+  });
 
-  const stringifiedParams = normalizedParams.toString()
+  const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0
-    ? `/api/diploma-verification/export-diploma-verification?${stringifiedParams}`
-    : `/api/diploma-verification/export-diploma-verification`
+  return stringifiedParams.length > 0 ? `/api/diploma-verification/export-diploma-verification?${stringifiedParams}` : `/api/diploma-verification/export-diploma-verification`
 }
 
-export const exportDiplomaVerification = async (
-  params?: ExportDiplomaVerificationParams,
-  options?: RequestInit
-): Promise<exportDiplomaVerificationResponse> => {
-  return customTrainingFetch<exportDiplomaVerificationResponse>(
-    getExportDiplomaVerificationUrl(params),
-    {
-      ...options,
-      method: "GET",
-    }
-  )
-}
-
-export const getExportDiplomaVerificationQueryKey = (params?: ExportDiplomaVerificationParams) => {
-  return [
-    `/api/diploma-verification/export-diploma-verification`,
-    ...(params ? [params] : []),
-  ] as const
-}
-
-export const getExportDiplomaVerificationQueryOptions = <
-  TData = Awaited<ReturnType<typeof exportDiplomaVerification>>,
-  TError = ExportDiplomaVerification400,
->(
-  params?: ExportDiplomaVerificationParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof exportDiplomaVerification>>, TError, TData>
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
+export const exportDiplomaVerification = async (params?: ExportDiplomaVerificationParams, options?: RequestInit): Promise<exportDiplomaVerificationResponse> => {
+  
+  return customTrainingFetch<exportDiplomaVerificationResponse>(getExportDiplomaVerificationUrl(params),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
   }
+);}
+
+
+
+
+
+export const getExportDiplomaVerificationQueryKey = (params?: ExportDiplomaVerificationParams,) => {
+    return [
+    `/api/diploma-verification/export-diploma-verification`, ...(params ? [params]: [])
+    ] as const;
+    }
+
+    
+export const getExportDiplomaVerificationQueryOptions = <TData = Awaited<ReturnType<typeof exportDiplomaVerification>>, TError = ExportDiplomaVerification400>(params?: ExportDiplomaVerificationParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportDiplomaVerification>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getExportDiplomaVerificationQueryKey(params)
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof exportDiplomaVerification>>> = ({
-    signal,
-  }) => exportDiplomaVerification(params, { signal, ...requestOptions })
+  const queryKey =  queryOptions?.queryKey ?? getExportDiplomaVerificationQueryKey(params);
 
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof exportDiplomaVerification>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof exportDiplomaVerification>>> = ({ signal }) => exportDiplomaVerification(params, { signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof exportDiplomaVerification>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type ExportDiplomaVerificationQueryResult = NonNullable<
-  Awaited<ReturnType<typeof exportDiplomaVerification>>
->
+export type ExportDiplomaVerificationQueryResult = NonNullable<Awaited<ReturnType<typeof exportDiplomaVerification>>>
 export type ExportDiplomaVerificationQueryError = ExportDiplomaVerification400
 
-export function useExportDiplomaVerification<
-  TData = Awaited<ReturnType<typeof exportDiplomaVerification>>,
-  TError = ExportDiplomaVerification400,
->(
-  params: undefined | ExportDiplomaVerificationParams,
-  options: {
-    query: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof exportDiplomaVerification>>, TError, TData>
-    > &
-      Pick<
+
+export function useExportDiplomaVerification<TData = Awaited<ReturnType<typeof exportDiplomaVerification>>, TError = ExportDiplomaVerification400>(
+ params: undefined |  ExportDiplomaVerificationParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportDiplomaVerification>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof exportDiplomaVerification>>,
           TError,
           Awaited<ReturnType<typeof exportDiplomaVerification>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useExportDiplomaVerification<
-  TData = Awaited<ReturnType<typeof exportDiplomaVerification>>,
-  TError = ExportDiplomaVerification400,
->(
-  params?: ExportDiplomaVerificationParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof exportDiplomaVerification>>, TError, TData>
-    > &
-      Pick<
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useExportDiplomaVerification<TData = Awaited<ReturnType<typeof exportDiplomaVerification>>, TError = ExportDiplomaVerification400>(
+ params?: ExportDiplomaVerificationParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportDiplomaVerification>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof exportDiplomaVerification>>,
           TError,
           Awaited<ReturnType<typeof exportDiplomaVerification>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useExportDiplomaVerification<
-  TData = Awaited<ReturnType<typeof exportDiplomaVerification>>,
-  TError = ExportDiplomaVerification400,
->(
-  params?: ExportDiplomaVerificationParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof exportDiplomaVerification>>, TError, TData>
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useExportDiplomaVerification<TData = Awaited<ReturnType<typeof exportDiplomaVerification>>, TError = ExportDiplomaVerification400>(
+ params?: ExportDiplomaVerificationParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportDiplomaVerification>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useExportDiplomaVerification<
-  TData = Awaited<ReturnType<typeof exportDiplomaVerification>>,
-  TError = ExportDiplomaVerification400,
->(
-  params?: ExportDiplomaVerificationParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof exportDiplomaVerification>>, TError, TData>
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getExportDiplomaVerificationQueryOptions(params, options)
+export function useExportDiplomaVerification<TData = Awaited<ReturnType<typeof exportDiplomaVerification>>, TError = ExportDiplomaVerification400>(
+ params?: ExportDiplomaVerificationParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportDiplomaVerification>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData, TError>
-  }
+  const queryOptions = getExportDiplomaVerificationQueryOptions(params,options)
 
-  query.queryKey = queryOptions.queryKey
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  return query
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
 }
+
+
+
+
 
 /**
  * Import điểm rèn luyện lớp biên chế 
@@ -10028,113 +7976,89 @@ export type uploadExcelImportTrainingScoreResponse400 = {
   data: UploadExcelImportTrainingScore400
   status: 400
 }
+    
+export type uploadExcelImportTrainingScoreResponseSuccess = (uploadExcelImportTrainingScoreResponse200) & {
+  headers: Headers;
+};
+export type uploadExcelImportTrainingScoreResponseError = (uploadExcelImportTrainingScoreResponse400) & {
+  headers: Headers;
+};
 
-export type uploadExcelImportTrainingScoreResponseSuccess =
-  uploadExcelImportTrainingScoreResponse200 & {
-    headers: Headers
-  }
-export type uploadExcelImportTrainingScoreResponseError =
-  uploadExcelImportTrainingScoreResponse400 & {
-    headers: Headers
-  }
-
-export type uploadExcelImportTrainingScoreResponse =
-  | uploadExcelImportTrainingScoreResponseSuccess
-  | uploadExcelImportTrainingScoreResponseError
+export type uploadExcelImportTrainingScoreResponse = (uploadExcelImportTrainingScoreResponseSuccess | uploadExcelImportTrainingScoreResponseError)
 
 export const getUploadExcelImportTrainingScoreUrl = () => {
+
+
+  
+
   return `/api/training-score/upload-excel-import-score`
 }
 
-export const uploadExcelImportTrainingScore = async (
-  uploadExcelImportTrainingScore: UploadExcelImportTrainingScore,
-  options?: RequestInit
-): Promise<uploadExcelImportTrainingScoreResponse> => {
-  const formData = new FormData()
-  formData.append(`file`, uploadExcelImportTrainingScore.file)
-  formData.append(`fixedClassId`, uploadExcelImportTrainingScore.fixedClassId)
-  formData.append(`trainingSessionId`, uploadExcelImportTrainingScore.trainingSessionId)
+export const uploadExcelImportTrainingScore = async (uploadExcelImportTrainingScore: UploadExcelImportTrainingScore, options?: RequestInit): Promise<uploadExcelImportTrainingScoreResponse> => {
+    const formData = new FormData();
+formData.append(`file`, uploadExcelImportTrainingScore.file)
+formData.append(`fixedClassId`, uploadExcelImportTrainingScore.fixedClassId)
+formData.append(`trainingSessionId`, uploadExcelImportTrainingScore.trainingSessionId)
 
-  return customTrainingFetch<uploadExcelImportTrainingScoreResponse>(
-    getUploadExcelImportTrainingScoreUrl(),
-    {
-      ...options,
-      method: "POST",
-      body: formData,
-    }
-  )
-}
-
-export const getUploadExcelImportTrainingScoreMutationOptions = <
-  TError = UploadExcelImportTrainingScore400,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof uploadExcelImportTrainingScore>>,
-    TError,
-    { data: UploadExcelImportTrainingScore },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof uploadExcelImportTrainingScore>>,
-  TError,
-  { data: UploadExcelImportTrainingScore },
-  TContext
-> => {
-  const mutationKey = ["uploadExcelImportTrainingScore"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof uploadExcelImportTrainingScore>>,
-    { data: UploadExcelImportTrainingScore }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return uploadExcelImportTrainingScore(data, requestOptions)
+  return customTrainingFetch<uploadExcelImportTrainingScoreResponse>(getUploadExcelImportTrainingScoreUrl(),
+  {      
+    ...options,
+    method: 'POST'
+    ,
+    body: 
+      formData,
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type UploadExcelImportTrainingScoreMutationResult = NonNullable<
-  Awaited<ReturnType<typeof uploadExcelImportTrainingScore>>
->
-export type UploadExcelImportTrainingScoreMutationBody = UploadExcelImportTrainingScore
-export type UploadExcelImportTrainingScoreMutationError = UploadExcelImportTrainingScore400
 
-/**
+
+export const getUploadExcelImportTrainingScoreMutationOptions = <TError = UploadExcelImportTrainingScore400,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof uploadExcelImportTrainingScore>>, TError,{data: UploadExcelImportTrainingScore}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof uploadExcelImportTrainingScore>>, TError,{data: UploadExcelImportTrainingScore}, TContext> => {
+
+const mutationKey = ['uploadExcelImportTrainingScore'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof uploadExcelImportTrainingScore>>, {data: UploadExcelImportTrainingScore}> = (props) => {
+          const {data} = props ?? {};
+
+          return  uploadExcelImportTrainingScore(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UploadExcelImportTrainingScoreMutationResult = NonNullable<Awaited<ReturnType<typeof uploadExcelImportTrainingScore>>>
+    export type UploadExcelImportTrainingScoreMutationBody = UploadExcelImportTrainingScore
+    export type UploadExcelImportTrainingScoreMutationError = UploadExcelImportTrainingScore400
+
+    /**
  * @summary Import file nhập điểm rèn luyện
  */
-export const useUploadExcelImportTrainingScore = <
-  TError = UploadExcelImportTrainingScore400,
-  TContext = unknown,
->(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof uploadExcelImportTrainingScore>>,
-      TError,
-      { data: UploadExcelImportTrainingScore },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof uploadExcelImportTrainingScore>>,
-  TError,
-  { data: UploadExcelImportTrainingScore },
-  TContext
-> => {
-  const mutationOptions = getUploadExcelImportTrainingScoreMutationOptions(options)
+export const useUploadExcelImportTrainingScore = <TError = UploadExcelImportTrainingScore400,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof uploadExcelImportTrainingScore>>, TError,{data: UploadExcelImportTrainingScore}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof uploadExcelImportTrainingScore>>,
+        TError,
+        {data: UploadExcelImportTrainingScore},
+        TContext
+      > => {
 
-  return useMutation(mutationOptions, queryClient)
-}
+      const mutationOptions = getUploadExcelImportTrainingScoreMutationOptions(options);
 
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 export type importPhienBanCTDTResponse200 = {
   data: ImportPhienBanCTDT200
   status: 200
@@ -10144,238 +8068,194 @@ export type importPhienBanCTDTResponse400 = {
   data: ImportPhienBanCTDT400
   status: 400
 }
+    
+export type importPhienBanCTDTResponseSuccess = (importPhienBanCTDTResponse200) & {
+  headers: Headers;
+};
+export type importPhienBanCTDTResponseError = (importPhienBanCTDTResponse400) & {
+  headers: Headers;
+};
 
-export type importPhienBanCTDTResponseSuccess = importPhienBanCTDTResponse200 & {
-  headers: Headers
-}
-export type importPhienBanCTDTResponseError = importPhienBanCTDTResponse400 & {
-  headers: Headers
-}
+export type importPhienBanCTDTResponse = (importPhienBanCTDTResponseSuccess | importPhienBanCTDTResponseError)
 
-export type importPhienBanCTDTResponse =
-  | importPhienBanCTDTResponseSuccess
-  | importPhienBanCTDTResponseError
+export const getImportPhienBanCTDTUrl = (curriculumVersionId: string,) => {
 
-export const getImportPhienBanCTDTUrl = (curriculumVersionId: string) => {
+
+  
+
   return `/api/curriculum/import-phien-ban-ctdt/${curriculumVersionId}`
 }
 
-export const importPhienBanCTDT = async (
-  curriculumVersionId: string,
-  importPhienBanCTDT: ImportPhienBanCTDT,
-  options?: RequestInit
-): Promise<importPhienBanCTDTResponse> => {
-  const formData = new FormData()
-  formData.append(`file`, importPhienBanCTDT.file)
-  if (importPhienBanCTDT.timeout !== undefined && importPhienBanCTDT.timeout !== null) {
-    formData.append(`timeout`, importPhienBanCTDT.timeout.toString())
-  }
+export const importPhienBanCTDT = async (curriculumVersionId: string,
+    importPhienBanCTDT: ImportPhienBanCTDT, options?: RequestInit): Promise<importPhienBanCTDTResponse> => {
+    const formData = new FormData();
+formData.append(`file`, importPhienBanCTDT.file)
+if(importPhienBanCTDT.timeout !== undefined && importPhienBanCTDT.timeout !== null) {
+ formData.append(`timeout`, importPhienBanCTDT.timeout.toString())
+ }
 
-  return customTrainingFetch<importPhienBanCTDTResponse>(
-    getImportPhienBanCTDTUrl(curriculumVersionId),
-    {
-      ...options,
-      method: "POST",
-      body: formData,
+  return customTrainingFetch<importPhienBanCTDTResponse>(getImportPhienBanCTDTUrl(curriculumVersionId),
+  {      
+    ...options,
+    method: 'POST'
+    ,
+    body: 
+      formData,
+  }
+);}
+
+
+
+
+export const getImportPhienBanCTDTMutationOptions = <TError = ImportPhienBanCTDT400,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof importPhienBanCTDT>>, TError,{curriculumVersionId: string;data: ImportPhienBanCTDT}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof importPhienBanCTDT>>, TError,{curriculumVersionId: string;data: ImportPhienBanCTDT}, TContext> => {
+
+const mutationKey = ['importPhienBanCTDT'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof importPhienBanCTDT>>, {curriculumVersionId: string;data: ImportPhienBanCTDT}> = (props) => {
+          const {curriculumVersionId,data} = props ?? {};
+
+          return  importPhienBanCTDT(curriculumVersionId,data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ImportPhienBanCTDTMutationResult = NonNullable<Awaited<ReturnType<typeof importPhienBanCTDT>>>
+    export type ImportPhienBanCTDTMutationBody = ImportPhienBanCTDT
+    export type ImportPhienBanCTDTMutationError = ImportPhienBanCTDT400
+
+    export const useImportPhienBanCTDT = <TError = ImportPhienBanCTDT400,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof importPhienBanCTDT>>, TError,{curriculumVersionId: string;data: ImportPhienBanCTDT}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof importPhienBanCTDT>>,
+        TError,
+        {curriculumVersionId: string;data: ImportPhienBanCTDT},
+        TContext
+      > => {
+
+      const mutationOptions = getImportPhienBanCTDTMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
     }
-  )
-}
-
-export const getImportPhienBanCTDTMutationOptions = <
-  TError = ImportPhienBanCTDT400,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof importPhienBanCTDT>>,
-    TError,
-    { curriculumVersionId: string; data: ImportPhienBanCTDT },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof importPhienBanCTDT>>,
-  TError,
-  { curriculumVersionId: string; data: ImportPhienBanCTDT },
-  TContext
-> => {
-  const mutationKey = ["importPhienBanCTDT"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof importPhienBanCTDT>>,
-    { curriculumVersionId: string; data: ImportPhienBanCTDT }
-  > = (props) => {
-    const { curriculumVersionId, data } = props ?? {}
-
-    return importPhienBanCTDT(curriculumVersionId, data, requestOptions)
-  }
-
-  return { mutationFn, ...mutationOptions }
-}
-
-export type ImportPhienBanCTDTMutationResult = NonNullable<
-  Awaited<ReturnType<typeof importPhienBanCTDT>>
->
-export type ImportPhienBanCTDTMutationBody = ImportPhienBanCTDT
-export type ImportPhienBanCTDTMutationError = ImportPhienBanCTDT400
-
-export const useImportPhienBanCTDT = <TError = ImportPhienBanCTDT400, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof importPhienBanCTDT>>,
-      TError,
-      { curriculumVersionId: string; data: ImportPhienBanCTDT },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof importPhienBanCTDT>>,
-  TError,
-  { curriculumVersionId: string; data: ImportPhienBanCTDT },
-  TContext
-> => {
-  const mutationOptions = getImportPhienBanCTDTMutationOptions(options)
-
-  return useMutation(mutationOptions, queryClient)
-}
-
+    
 export type exportPhienBanCTDTResponse200 = {
   data: Blob
   status: 200
 }
+    
+export type exportPhienBanCTDTResponseSuccess = (exportPhienBanCTDTResponse200) & {
+  headers: Headers;
+};
+;
 
-export type exportPhienBanCTDTResponseSuccess = exportPhienBanCTDTResponse200 & {
-  headers: Headers
-}
+export type exportPhienBanCTDTResponse = (exportPhienBanCTDTResponseSuccess)
 
-export type exportPhienBanCTDTResponse = exportPhienBanCTDTResponseSuccess
+export const getExportPhienBanCTDTUrl = (id: string,) => {
 
-export const getExportPhienBanCTDTUrl = (id: string) => {
+
+  
+
   return `/api/curriculum/export-phien-ban-ctdt/${id}`
 }
 
-export const exportPhienBanCTDT = async (
-  id: string,
-  options?: RequestInit
-): Promise<exportPhienBanCTDTResponse> => {
-  return customTrainingFetch<exportPhienBanCTDTResponse>(getExportPhienBanCTDTUrl(id), {
+export const exportPhienBanCTDT = async (id: string, options?: RequestInit): Promise<exportPhienBanCTDTResponse> => {
+  
+  return customTrainingFetch<exportPhienBanCTDTResponse>(getExportPhienBanCTDTUrl(id),
+  {      
     ...options,
-    method: "GET",
-  })
-}
-
-export const getExportPhienBanCTDTQueryKey = (id?: string) => {
-  return [`/api/curriculum/export-phien-ban-ctdt/${id}`] as const
-}
-
-export const getExportPhienBanCTDTQueryOptions = <
-  TData = Awaited<ReturnType<typeof exportPhienBanCTDT>>,
-  TError = unknown,
->(
-  id: string,
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof exportPhienBanCTDT>>, TError, TData>>
-    request?: SecondParameter<typeof customTrainingFetch>
+    method: 'GET'
+    
+    
   }
+);}
+
+
+
+
+
+export const getExportPhienBanCTDTQueryKey = (id?: string,) => {
+    return [
+    `/api/curriculum/export-phien-ban-ctdt/${id}`
+    ] as const;
+    }
+
+    
+export const getExportPhienBanCTDTQueryOptions = <TData = Awaited<ReturnType<typeof exportPhienBanCTDT>>, TError = unknown>(id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportPhienBanCTDT>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getExportPhienBanCTDTQueryKey(id)
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof exportPhienBanCTDT>>> = ({ signal }) =>
-    exportPhienBanCTDT(id, { signal, ...requestOptions })
+  const queryKey =  queryOptions?.queryKey ?? getExportPhienBanCTDTQueryKey(id);
 
-  return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof exportPhienBanCTDT>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof exportPhienBanCTDT>>> = ({ signal }) => exportPhienBanCTDT(id, { signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof exportPhienBanCTDT>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type ExportPhienBanCTDTQueryResult = NonNullable<
-  Awaited<ReturnType<typeof exportPhienBanCTDT>>
->
+export type ExportPhienBanCTDTQueryResult = NonNullable<Awaited<ReturnType<typeof exportPhienBanCTDT>>>
 export type ExportPhienBanCTDTQueryError = unknown
 
-export function useExportPhienBanCTDT<
-  TData = Awaited<ReturnType<typeof exportPhienBanCTDT>>,
-  TError = unknown,
->(
-  id: string,
-  options: {
-    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof exportPhienBanCTDT>>, TError, TData>> &
-      Pick<
+
+export function useExportPhienBanCTDT<TData = Awaited<ReturnType<typeof exportPhienBanCTDT>>, TError = unknown>(
+ id: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportPhienBanCTDT>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof exportPhienBanCTDT>>,
           TError,
           Awaited<ReturnType<typeof exportPhienBanCTDT>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useExportPhienBanCTDT<
-  TData = Awaited<ReturnType<typeof exportPhienBanCTDT>>,
-  TError = unknown,
->(
-  id: string,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof exportPhienBanCTDT>>, TError, TData>
-    > &
-      Pick<
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useExportPhienBanCTDT<TData = Awaited<ReturnType<typeof exportPhienBanCTDT>>, TError = unknown>(
+ id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportPhienBanCTDT>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof exportPhienBanCTDT>>,
           TError,
           Awaited<ReturnType<typeof exportPhienBanCTDT>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useExportPhienBanCTDT<
-  TData = Awaited<ReturnType<typeof exportPhienBanCTDT>>,
-  TError = unknown,
->(
-  id: string,
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof exportPhienBanCTDT>>, TError, TData>>
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useExportPhienBanCTDT<TData = Awaited<ReturnType<typeof exportPhienBanCTDT>>, TError = unknown>(
+ id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportPhienBanCTDT>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useExportPhienBanCTDT<
-  TData = Awaited<ReturnType<typeof exportPhienBanCTDT>>,
-  TError = unknown,
->(
-  id: string,
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof exportPhienBanCTDT>>, TError, TData>>
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getExportPhienBanCTDTQueryOptions(id, options)
+export function useExportPhienBanCTDT<TData = Awaited<ReturnType<typeof exportPhienBanCTDT>>, TError = unknown>(
+ id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportPhienBanCTDT>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData, TError>
-  }
+  const queryOptions = getExportPhienBanCTDTQueryOptions(id,options)
 
-  query.queryKey = queryOptions.queryKey
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  return query
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
 }
+
+
+
+
 
 export type importPhienBanCTDTSubjectResponse200 = {
   data: ImportPhienBanCTDTSubject200
@@ -10386,123 +8266,95 @@ export type importPhienBanCTDTSubjectResponse400 = {
   data: ImportPhienBanCTDTSubject400
   status: 400
 }
+    
+export type importPhienBanCTDTSubjectResponseSuccess = (importPhienBanCTDTSubjectResponse200) & {
+  headers: Headers;
+};
+export type importPhienBanCTDTSubjectResponseError = (importPhienBanCTDTSubjectResponse400) & {
+  headers: Headers;
+};
 
-export type importPhienBanCTDTSubjectResponseSuccess = importPhienBanCTDTSubjectResponse200 & {
-  headers: Headers
-}
-export type importPhienBanCTDTSubjectResponseError = importPhienBanCTDTSubjectResponse400 & {
-  headers: Headers
-}
-
-export type importPhienBanCTDTSubjectResponse =
-  | importPhienBanCTDTSubjectResponseSuccess
-  | importPhienBanCTDTSubjectResponseError
+export type importPhienBanCTDTSubjectResponse = (importPhienBanCTDTSubjectResponseSuccess | importPhienBanCTDTSubjectResponseError)
 
 export const getImportPhienBanCTDTSubjectUrl = () => {
+
+
+  
+
   return `/api/curriculum-subject/import-phien-ban-ctdt-subject`
 }
 
-export const importPhienBanCTDTSubject = async (
-  importPhienBanCTDTSubjectBody: ImportPhienBanCTDTSubjectBody,
-  options?: RequestInit
-): Promise<importPhienBanCTDTSubjectResponse> => {
-  const formData = new FormData()
-  formData.append(`file`, importPhienBanCTDTSubjectBody.file)
-  formData.append(`trainingObjectTypeId`, importPhienBanCTDTSubjectBody.trainingObjectTypeId)
-  formData.append(`curriculumVersionId`, importPhienBanCTDTSubjectBody.curriculumVersionId)
-  if (
-    importPhienBanCTDTSubjectBody.createNewSubjects !== undefined &&
-    importPhienBanCTDTSubjectBody.createNewSubjects !== null
-  ) {
-    formData.append(`createNewSubjects`, importPhienBanCTDTSubjectBody.createNewSubjects.toString())
-  }
-  if (
-    importPhienBanCTDTSubjectBody.deleteOldData !== undefined &&
-    importPhienBanCTDTSubjectBody.deleteOldData !== null
-  ) {
-    formData.append(`deleteOldData`, importPhienBanCTDTSubjectBody.deleteOldData.toString())
-  }
-  if (
-    importPhienBanCTDTSubjectBody.timeout !== undefined &&
-    importPhienBanCTDTSubjectBody.timeout !== null
-  ) {
-    formData.append(`timeout`, importPhienBanCTDTSubjectBody.timeout.toString())
-  }
+export const importPhienBanCTDTSubject = async (importPhienBanCTDTSubjectBody: ImportPhienBanCTDTSubjectBody, options?: RequestInit): Promise<importPhienBanCTDTSubjectResponse> => {
+    const formData = new FormData();
+formData.append(`file`, importPhienBanCTDTSubjectBody.file)
+formData.append(`trainingObjectTypeId`, importPhienBanCTDTSubjectBody.trainingObjectTypeId)
+formData.append(`curriculumVersionId`, importPhienBanCTDTSubjectBody.curriculumVersionId)
+if(importPhienBanCTDTSubjectBody.createNewSubjects !== undefined && importPhienBanCTDTSubjectBody.createNewSubjects !== null) {
+ formData.append(`createNewSubjects`, importPhienBanCTDTSubjectBody.createNewSubjects.toString())
+ }
+if(importPhienBanCTDTSubjectBody.deleteOldData !== undefined && importPhienBanCTDTSubjectBody.deleteOldData !== null) {
+ formData.append(`deleteOldData`, importPhienBanCTDTSubjectBody.deleteOldData.toString())
+ }
+if(importPhienBanCTDTSubjectBody.timeout !== undefined && importPhienBanCTDTSubjectBody.timeout !== null) {
+ formData.append(`timeout`, importPhienBanCTDTSubjectBody.timeout.toString())
+ }
 
-  return customTrainingFetch<importPhienBanCTDTSubjectResponse>(getImportPhienBanCTDTSubjectUrl(), {
+  return customTrainingFetch<importPhienBanCTDTSubjectResponse>(getImportPhienBanCTDTSubjectUrl(),
+  {      
     ...options,
-    method: "POST",
-    body: formData,
-  })
-}
-
-export const getImportPhienBanCTDTSubjectMutationOptions = <
-  TError = ImportPhienBanCTDTSubject400,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof importPhienBanCTDTSubject>>,
-    TError,
-    { data: ImportPhienBanCTDTSubjectBody },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof importPhienBanCTDTSubject>>,
-  TError,
-  { data: ImportPhienBanCTDTSubjectBody },
-  TContext
-> => {
-  const mutationKey = ["importPhienBanCTDTSubject"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof importPhienBanCTDTSubject>>,
-    { data: ImportPhienBanCTDTSubjectBody }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return importPhienBanCTDTSubject(data, requestOptions)
+    method: 'POST'
+    ,
+    body: 
+      formData,
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type ImportPhienBanCTDTSubjectMutationResult = NonNullable<
-  Awaited<ReturnType<typeof importPhienBanCTDTSubject>>
->
-export type ImportPhienBanCTDTSubjectMutationBody = ImportPhienBanCTDTSubjectBody
-export type ImportPhienBanCTDTSubjectMutationError = ImportPhienBanCTDTSubject400
 
-export const useImportPhienBanCTDTSubject = <
-  TError = ImportPhienBanCTDTSubject400,
-  TContext = unknown,
->(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof importPhienBanCTDTSubject>>,
-      TError,
-      { data: ImportPhienBanCTDTSubjectBody },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof importPhienBanCTDTSubject>>,
-  TError,
-  { data: ImportPhienBanCTDTSubjectBody },
-  TContext
-> => {
-  const mutationOptions = getImportPhienBanCTDTSubjectMutationOptions(options)
 
-  return useMutation(mutationOptions, queryClient)
-}
+export const getImportPhienBanCTDTSubjectMutationOptions = <TError = ImportPhienBanCTDTSubject400,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof importPhienBanCTDTSubject>>, TError,{data: ImportPhienBanCTDTSubjectBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof importPhienBanCTDTSubject>>, TError,{data: ImportPhienBanCTDTSubjectBody}, TContext> => {
 
+const mutationKey = ['importPhienBanCTDTSubject'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof importPhienBanCTDTSubject>>, {data: ImportPhienBanCTDTSubjectBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  importPhienBanCTDTSubject(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ImportPhienBanCTDTSubjectMutationResult = NonNullable<Awaited<ReturnType<typeof importPhienBanCTDTSubject>>>
+    export type ImportPhienBanCTDTSubjectMutationBody = ImportPhienBanCTDTSubjectBody
+    export type ImportPhienBanCTDTSubjectMutationError = ImportPhienBanCTDTSubject400
+
+    export const useImportPhienBanCTDTSubject = <TError = ImportPhienBanCTDTSubject400,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof importPhienBanCTDTSubject>>, TError,{data: ImportPhienBanCTDTSubjectBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof importPhienBanCTDTSubject>>,
+        TError,
+        {data: ImportPhienBanCTDTSubjectBody},
+        TContext
+      > => {
+
+      const mutationOptions = getImportPhienBanCTDTSubjectMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 export type graduationApplicationInitResponse200 = {
   data: GraduationApplicationInit200
   status: 200
@@ -10512,101 +8364,82 @@ export type graduationApplicationInitResponse400 = {
   data: GraduationApplicationInit400
   status: 400
 }
+    
+export type graduationApplicationInitResponseSuccess = (graduationApplicationInitResponse200) & {
+  headers: Headers;
+};
+export type graduationApplicationInitResponseError = (graduationApplicationInitResponse400) & {
+  headers: Headers;
+};
 
-export type graduationApplicationInitResponseSuccess = graduationApplicationInitResponse200 & {
-  headers: Headers
-}
-export type graduationApplicationInitResponseError = graduationApplicationInitResponse400 & {
-  headers: Headers
-}
-
-export type graduationApplicationInitResponse =
-  | graduationApplicationInitResponseSuccess
-  | graduationApplicationInitResponseError
+export type graduationApplicationInitResponse = (graduationApplicationInitResponseSuccess | graduationApplicationInitResponseError)
 
 export const getGraduationApplicationInitUrl = () => {
+
+
+  
+
   return `/api/graduation/application-init`
 }
 
-export const graduationApplicationInit = async (
-  graduationApplicationInitBody: GraduationApplicationInitBody,
-  options?: RequestInit
-): Promise<graduationApplicationInitResponse> => {
-  return customTrainingFetch<graduationApplicationInitResponse>(getGraduationApplicationInitUrl(), {
+export const graduationApplicationInit = async (graduationApplicationInitBody: GraduationApplicationInitBody, options?: RequestInit): Promise<graduationApplicationInitResponse> => {
+  
+  return customTrainingFetch<graduationApplicationInitResponse>(getGraduationApplicationInitUrl(),
+  {      
     ...options,
-    method: "POST",
-    headers: { "Content-Type": "application/json", ...options?.headers },
-    body: JSON.stringify(graduationApplicationInitBody),
-  })
-}
-
-export const getGraduationApplicationInitMutationOptions = <
-  TError = GraduationApplicationInit400,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof graduationApplicationInit>>,
-    TError,
-    { data: GraduationApplicationInitBody },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof graduationApplicationInit>>,
-  TError,
-  { data: GraduationApplicationInitBody },
-  TContext
-> => {
-  const mutationKey = ["graduationApplicationInit"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof graduationApplicationInit>>,
-    { data: GraduationApplicationInitBody }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return graduationApplicationInit(data, requestOptions)
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      graduationApplicationInitBody,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type GraduationApplicationInitMutationResult = NonNullable<
-  Awaited<ReturnType<typeof graduationApplicationInit>>
->
-export type GraduationApplicationInitMutationBody = GraduationApplicationInitBody
-export type GraduationApplicationInitMutationError = GraduationApplicationInit400
 
-export const useGraduationApplicationInit = <
-  TError = GraduationApplicationInit400,
-  TContext = unknown,
->(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof graduationApplicationInit>>,
-      TError,
-      { data: GraduationApplicationInitBody },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof graduationApplicationInit>>,
-  TError,
-  { data: GraduationApplicationInitBody },
-  TContext
-> => {
-  const mutationOptions = getGraduationApplicationInitMutationOptions(options)
 
-  return useMutation(mutationOptions, queryClient)
-}
+export const getGraduationApplicationInitMutationOptions = <TError = GraduationApplicationInit400,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof graduationApplicationInit>>, TError,{data: GraduationApplicationInitBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof graduationApplicationInit>>, TError,{data: GraduationApplicationInitBody}, TContext> => {
 
+const mutationKey = ['graduationApplicationInit'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof graduationApplicationInit>>, {data: GraduationApplicationInitBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  graduationApplicationInit(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type GraduationApplicationInitMutationResult = NonNullable<Awaited<ReturnType<typeof graduationApplicationInit>>>
+    export type GraduationApplicationInitMutationBody = GraduationApplicationInitBody
+    export type GraduationApplicationInitMutationError = GraduationApplicationInit400
+
+    export const useGraduationApplicationInit = <TError = GraduationApplicationInit400,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof graduationApplicationInit>>, TError,{data: GraduationApplicationInitBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof graduationApplicationInit>>,
+        TError,
+        {data: GraduationApplicationInitBody},
+        TContext
+      > => {
+
+      const mutationOptions = getGraduationApplicationInitMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 export type graduationCheckResponse200 = {
   data: GraduationCheck200
   status: 200
@@ -10616,94 +8449,82 @@ export type graduationCheckResponse400 = {
   data: GraduationCheck400
   status: 400
 }
+    
+export type graduationCheckResponseSuccess = (graduationCheckResponse200) & {
+  headers: Headers;
+};
+export type graduationCheckResponseError = (graduationCheckResponse400) & {
+  headers: Headers;
+};
 
-export type graduationCheckResponseSuccess = graduationCheckResponse200 & {
-  headers: Headers
-}
-export type graduationCheckResponseError = graduationCheckResponse400 & {
-  headers: Headers
-}
-
-export type graduationCheckResponse = graduationCheckResponseSuccess | graduationCheckResponseError
+export type graduationCheckResponse = (graduationCheckResponseSuccess | graduationCheckResponseError)
 
 export const getGraduationCheckUrl = () => {
+
+
+  
+
   return `/api/graduation/check`
 }
 
-export const graduationCheck = async (
-  graduationCheckBody: GraduationCheckBody,
-  options?: RequestInit
-): Promise<graduationCheckResponse> => {
-  return customTrainingFetch<graduationCheckResponse>(getGraduationCheckUrl(), {
+export const graduationCheck = async (graduationCheckBody: GraduationCheckBody, options?: RequestInit): Promise<graduationCheckResponse> => {
+  
+  return customTrainingFetch<graduationCheckResponse>(getGraduationCheckUrl(),
+  {      
     ...options,
-    method: "POST",
-    headers: { "Content-Type": "application/json", ...options?.headers },
-    body: JSON.stringify(graduationCheckBody),
-  })
-}
-
-export const getGraduationCheckMutationOptions = <
-  TError = GraduationCheck400,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof graduationCheck>>,
-    TError,
-    { data: GraduationCheckBody },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof graduationCheck>>,
-  TError,
-  { data: GraduationCheckBody },
-  TContext
-> => {
-  const mutationKey = ["graduationCheck"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof graduationCheck>>,
-    { data: GraduationCheckBody }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return graduationCheck(data, requestOptions)
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      graduationCheckBody,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type GraduationCheckMutationResult = NonNullable<Awaited<ReturnType<typeof graduationCheck>>>
-export type GraduationCheckMutationBody = GraduationCheckBody
-export type GraduationCheckMutationError = GraduationCheck400
 
-export const useGraduationCheck = <TError = GraduationCheck400, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof graduationCheck>>,
-      TError,
-      { data: GraduationCheckBody },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof graduationCheck>>,
-  TError,
-  { data: GraduationCheckBody },
-  TContext
-> => {
-  const mutationOptions = getGraduationCheckMutationOptions(options)
 
-  return useMutation(mutationOptions, queryClient)
-}
+export const getGraduationCheckMutationOptions = <TError = GraduationCheck400,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof graduationCheck>>, TError,{data: GraduationCheckBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof graduationCheck>>, TError,{data: GraduationCheckBody}, TContext> => {
 
+const mutationKey = ['graduationCheck'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof graduationCheck>>, {data: GraduationCheckBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  graduationCheck(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type GraduationCheckMutationResult = NonNullable<Awaited<ReturnType<typeof graduationCheck>>>
+    export type GraduationCheckMutationBody = GraduationCheckBody
+    export type GraduationCheckMutationError = GraduationCheck400
+
+    export const useGraduationCheck = <TError = GraduationCheck400,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof graduationCheck>>, TError,{data: GraduationCheckBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof graduationCheck>>,
+        TError,
+        {data: GraduationCheckBody},
+        TContext
+      > => {
+
+      const mutationOptions = getGraduationCheckMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 export type generateDiplomaNumberResponse200 = {
   data: GenerateDiplomaNumber200
   status: 200
@@ -10718,104 +8539,82 @@ export type generateDiplomaNumberResponse404 = {
   data: GenerateDiplomaNumber404
   status: 404
 }
+    
+export type generateDiplomaNumberResponseSuccess = (generateDiplomaNumberResponse200) & {
+  headers: Headers;
+};
+export type generateDiplomaNumberResponseError = (generateDiplomaNumberResponse400 | generateDiplomaNumberResponse404) & {
+  headers: Headers;
+};
 
-export type generateDiplomaNumberResponseSuccess = generateDiplomaNumberResponse200 & {
-  headers: Headers
-}
-export type generateDiplomaNumberResponseError = (
-  | generateDiplomaNumberResponse400
-  | generateDiplomaNumberResponse404
-) & {
-  headers: Headers
-}
-
-export type generateDiplomaNumberResponse =
-  | generateDiplomaNumberResponseSuccess
-  | generateDiplomaNumberResponseError
+export type generateDiplomaNumberResponse = (generateDiplomaNumberResponseSuccess | generateDiplomaNumberResponseError)
 
 export const getGenerateDiplomaNumberUrl = () => {
+
+
+  
+
   return `/api/graduation/generate-diploma-number`
 }
 
-export const generateDiplomaNumber = async (
-  generateDiplomaNumberBody: GenerateDiplomaNumberBody,
-  options?: RequestInit
-): Promise<generateDiplomaNumberResponse> => {
-  return customTrainingFetch<generateDiplomaNumberResponse>(getGenerateDiplomaNumberUrl(), {
+export const generateDiplomaNumber = async (generateDiplomaNumberBody: GenerateDiplomaNumberBody, options?: RequestInit): Promise<generateDiplomaNumberResponse> => {
+  
+  return customTrainingFetch<generateDiplomaNumberResponse>(getGenerateDiplomaNumberUrl(),
+  {      
     ...options,
-    method: "PUT",
-    headers: { "Content-Type": "application/json", ...options?.headers },
-    body: JSON.stringify(generateDiplomaNumberBody),
-  })
-}
-
-export const getGenerateDiplomaNumberMutationOptions = <
-  TError = GenerateDiplomaNumber400 | GenerateDiplomaNumber404,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof generateDiplomaNumber>>,
-    TError,
-    { data: GenerateDiplomaNumberBody },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof generateDiplomaNumber>>,
-  TError,
-  { data: GenerateDiplomaNumberBody },
-  TContext
-> => {
-  const mutationKey = ["generateDiplomaNumber"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof generateDiplomaNumber>>,
-    { data: GenerateDiplomaNumberBody }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return generateDiplomaNumber(data, requestOptions)
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      generateDiplomaNumberBody,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type GenerateDiplomaNumberMutationResult = NonNullable<
-  Awaited<ReturnType<typeof generateDiplomaNumber>>
->
-export type GenerateDiplomaNumberMutationBody = GenerateDiplomaNumberBody
-export type GenerateDiplomaNumberMutationError = GenerateDiplomaNumber400 | GenerateDiplomaNumber404
 
-export const useGenerateDiplomaNumber = <
-  TError = GenerateDiplomaNumber400 | GenerateDiplomaNumber404,
-  TContext = unknown,
->(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof generateDiplomaNumber>>,
-      TError,
-      { data: GenerateDiplomaNumberBody },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof generateDiplomaNumber>>,
-  TError,
-  { data: GenerateDiplomaNumberBody },
-  TContext
-> => {
-  const mutationOptions = getGenerateDiplomaNumberMutationOptions(options)
 
-  return useMutation(mutationOptions, queryClient)
-}
+export const getGenerateDiplomaNumberMutationOptions = <TError = GenerateDiplomaNumber400 | GenerateDiplomaNumber404,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof generateDiplomaNumber>>, TError,{data: GenerateDiplomaNumberBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof generateDiplomaNumber>>, TError,{data: GenerateDiplomaNumberBody}, TContext> => {
 
+const mutationKey = ['generateDiplomaNumber'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof generateDiplomaNumber>>, {data: GenerateDiplomaNumberBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  generateDiplomaNumber(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type GenerateDiplomaNumberMutationResult = NonNullable<Awaited<ReturnType<typeof generateDiplomaNumber>>>
+    export type GenerateDiplomaNumberMutationBody = GenerateDiplomaNumberBody
+    export type GenerateDiplomaNumberMutationError = GenerateDiplomaNumber400 | GenerateDiplomaNumber404
+
+    export const useGenerateDiplomaNumber = <TError = GenerateDiplomaNumber400 | GenerateDiplomaNumber404,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof generateDiplomaNumber>>, TError,{data: GenerateDiplomaNumberBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof generateDiplomaNumber>>,
+        TError,
+        {data: GenerateDiplomaNumberBody},
+        TContext
+      > => {
+
+      const mutationOptions = getGenerateDiplomaNumberMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 export type graduationSessionDecisionResponse200 = {
   data: Blob
   status: 200
@@ -10825,162 +8624,117 @@ export type graduationSessionDecisionResponse404 = {
   data: GraduationSessionDecision404
   status: 404
 }
+    
+export type graduationSessionDecisionResponseSuccess = (graduationSessionDecisionResponse200) & {
+  headers: Headers;
+};
+export type graduationSessionDecisionResponseError = (graduationSessionDecisionResponse404) & {
+  headers: Headers;
+};
 
-export type graduationSessionDecisionResponseSuccess = graduationSessionDecisionResponse200 & {
-  headers: Headers
-}
-export type graduationSessionDecisionResponseError = graduationSessionDecisionResponse404 & {
-  headers: Headers
-}
+export type graduationSessionDecisionResponse = (graduationSessionDecisionResponseSuccess | graduationSessionDecisionResponseError)
 
-export type graduationSessionDecisionResponse =
-  | graduationSessionDecisionResponseSuccess
-  | graduationSessionDecisionResponseError
-
-export const getGraduationSessionDecisionUrl = (params: GraduationSessionDecisionParams) => {
-  const normalizedParams = new URLSearchParams()
+export const getGraduationSessionDecisionUrl = (params: GraduationSessionDecisionParams,) => {
+  const normalizedParams = new URLSearchParams();
 
   Object.entries(params || {}).forEach(([key, value]) => {
+    
     if (value !== undefined) {
-      normalizedParams.append(key, value === null ? "null" : value.toString())
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
     }
-  })
+  });
 
-  const stringifiedParams = normalizedParams.toString()
+  const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0
-    ? `/api/graduation/session-decision?${stringifiedParams}`
-    : `/api/graduation/session-decision`
+  return stringifiedParams.length > 0 ? `/api/graduation/session-decision?${stringifiedParams}` : `/api/graduation/session-decision`
 }
 
-export const graduationSessionDecision = async (
-  params: GraduationSessionDecisionParams,
-  options?: RequestInit
-): Promise<graduationSessionDecisionResponse> => {
-  return customTrainingFetch<graduationSessionDecisionResponse>(
-    getGraduationSessionDecisionUrl(params),
-    {
-      ...options,
-      method: "GET",
-    }
-  )
-}
-
-export const getGraduationSessionDecisionQueryKey = (params?: GraduationSessionDecisionParams) => {
-  return [`/api/graduation/session-decision`, ...(params ? [params] : [])] as const
-}
-
-export const getGraduationSessionDecisionQueryOptions = <
-  TData = Awaited<ReturnType<typeof graduationSessionDecision>>,
-  TError = GraduationSessionDecision404,
->(
-  params: GraduationSessionDecisionParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof graduationSessionDecision>>, TError, TData>
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
+export const graduationSessionDecision = async (params: GraduationSessionDecisionParams, options?: RequestInit): Promise<graduationSessionDecisionResponse> => {
+  
+  return customTrainingFetch<graduationSessionDecisionResponse>(getGraduationSessionDecisionUrl(params),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
   }
+);}
+
+
+
+
+
+export const getGraduationSessionDecisionQueryKey = (params?: GraduationSessionDecisionParams,) => {
+    return [
+    `/api/graduation/session-decision`, ...(params ? [params]: [])
+    ] as const;
+    }
+
+    
+export const getGraduationSessionDecisionQueryOptions = <TData = Awaited<ReturnType<typeof graduationSessionDecision>>, TError = GraduationSessionDecision404>(params: GraduationSessionDecisionParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof graduationSessionDecision>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getGraduationSessionDecisionQueryKey(params)
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof graduationSessionDecision>>> = ({
-    signal,
-  }) => graduationSessionDecision(params, { signal, ...requestOptions })
+  const queryKey =  queryOptions?.queryKey ?? getGraduationSessionDecisionQueryKey(params);
 
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof graduationSessionDecision>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof graduationSessionDecision>>> = ({ signal }) => graduationSessionDecision(params, { signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof graduationSessionDecision>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GraduationSessionDecisionQueryResult = NonNullable<
-  Awaited<ReturnType<typeof graduationSessionDecision>>
->
+export type GraduationSessionDecisionQueryResult = NonNullable<Awaited<ReturnType<typeof graduationSessionDecision>>>
 export type GraduationSessionDecisionQueryError = GraduationSessionDecision404
 
-export function useGraduationSessionDecision<
-  TData = Awaited<ReturnType<typeof graduationSessionDecision>>,
-  TError = GraduationSessionDecision404,
->(
-  params: GraduationSessionDecisionParams,
-  options: {
-    query: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof graduationSessionDecision>>, TError, TData>
-    > &
-      Pick<
+
+export function useGraduationSessionDecision<TData = Awaited<ReturnType<typeof graduationSessionDecision>>, TError = GraduationSessionDecision404>(
+ params: GraduationSessionDecisionParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof graduationSessionDecision>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof graduationSessionDecision>>,
           TError,
           Awaited<ReturnType<typeof graduationSessionDecision>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGraduationSessionDecision<
-  TData = Awaited<ReturnType<typeof graduationSessionDecision>>,
-  TError = GraduationSessionDecision404,
->(
-  params: GraduationSessionDecisionParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof graduationSessionDecision>>, TError, TData>
-    > &
-      Pick<
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGraduationSessionDecision<TData = Awaited<ReturnType<typeof graduationSessionDecision>>, TError = GraduationSessionDecision404>(
+ params: GraduationSessionDecisionParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof graduationSessionDecision>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof graduationSessionDecision>>,
           TError,
           Awaited<ReturnType<typeof graduationSessionDecision>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGraduationSessionDecision<
-  TData = Awaited<ReturnType<typeof graduationSessionDecision>>,
-  TError = GraduationSessionDecision404,
->(
-  params: GraduationSessionDecisionParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof graduationSessionDecision>>, TError, TData>
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGraduationSessionDecision<TData = Awaited<ReturnType<typeof graduationSessionDecision>>, TError = GraduationSessionDecision404>(
+ params: GraduationSessionDecisionParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof graduationSessionDecision>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGraduationSessionDecision<
-  TData = Awaited<ReturnType<typeof graduationSessionDecision>>,
-  TError = GraduationSessionDecision404,
->(
-  params: GraduationSessionDecisionParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof graduationSessionDecision>>, TError, TData>
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGraduationSessionDecisionQueryOptions(params, options)
+export function useGraduationSessionDecision<TData = Awaited<ReturnType<typeof graduationSessionDecision>>, TError = GraduationSessionDecision404>(
+ params: GraduationSessionDecisionParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof graduationSessionDecision>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData, TError>
-  }
+  const queryOptions = getGraduationSessionDecisionQueryOptions(params,options)
 
-  query.queryKey = queryOptions.queryKey
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  return query
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
 }
+
+
+
+
 
 export type statisticsGraduationDecisionResponse200 = {
   data: StatisticsGraduationDecision200Item[]
@@ -10991,165 +8745,117 @@ export type statisticsGraduationDecisionResponse404 = {
   data: StatisticsGraduationDecision404
   status: 404
 }
+    
+export type statisticsGraduationDecisionResponseSuccess = (statisticsGraduationDecisionResponse200) & {
+  headers: Headers;
+};
+export type statisticsGraduationDecisionResponseError = (statisticsGraduationDecisionResponse404) & {
+  headers: Headers;
+};
 
-export type statisticsGraduationDecisionResponseSuccess =
-  statisticsGraduationDecisionResponse200 & {
-    headers: Headers
-  }
-export type statisticsGraduationDecisionResponseError = statisticsGraduationDecisionResponse404 & {
-  headers: Headers
-}
+export type statisticsGraduationDecisionResponse = (statisticsGraduationDecisionResponseSuccess | statisticsGraduationDecisionResponseError)
 
-export type statisticsGraduationDecisionResponse =
-  | statisticsGraduationDecisionResponseSuccess
-  | statisticsGraduationDecisionResponseError
-
-export const getStatisticsGraduationDecisionUrl = (params: StatisticsGraduationDecisionParams) => {
-  const normalizedParams = new URLSearchParams()
+export const getStatisticsGraduationDecisionUrl = (params: StatisticsGraduationDecisionParams,) => {
+  const normalizedParams = new URLSearchParams();
 
   Object.entries(params || {}).forEach(([key, value]) => {
+    
     if (value !== undefined) {
-      normalizedParams.append(key, value === null ? "null" : value.toString())
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
     }
-  })
+  });
 
-  const stringifiedParams = normalizedParams.toString()
+  const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0
-    ? `/api/graduation/statistics?${stringifiedParams}`
-    : `/api/graduation/statistics`
+  return stringifiedParams.length > 0 ? `/api/graduation/statistics?${stringifiedParams}` : `/api/graduation/statistics`
 }
 
-export const statisticsGraduationDecision = async (
-  params: StatisticsGraduationDecisionParams,
-  options?: RequestInit
-): Promise<statisticsGraduationDecisionResponse> => {
-  return customTrainingFetch<statisticsGraduationDecisionResponse>(
-    getStatisticsGraduationDecisionUrl(params),
-    {
-      ...options,
-      method: "GET",
-    }
-  )
-}
-
-export const getStatisticsGraduationDecisionQueryKey = (
-  params?: StatisticsGraduationDecisionParams
-) => {
-  return [`/api/graduation/statistics`, ...(params ? [params] : [])] as const
-}
-
-export const getStatisticsGraduationDecisionQueryOptions = <
-  TData = Awaited<ReturnType<typeof statisticsGraduationDecision>>,
-  TError = StatisticsGraduationDecision404,
->(
-  params: StatisticsGraduationDecisionParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof statisticsGraduationDecision>>, TError, TData>
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
+export const statisticsGraduationDecision = async (params: StatisticsGraduationDecisionParams, options?: RequestInit): Promise<statisticsGraduationDecisionResponse> => {
+  
+  return customTrainingFetch<statisticsGraduationDecisionResponse>(getStatisticsGraduationDecisionUrl(params),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
   }
+);}
+
+
+
+
+
+export const getStatisticsGraduationDecisionQueryKey = (params?: StatisticsGraduationDecisionParams,) => {
+    return [
+    `/api/graduation/statistics`, ...(params ? [params]: [])
+    ] as const;
+    }
+
+    
+export const getStatisticsGraduationDecisionQueryOptions = <TData = Awaited<ReturnType<typeof statisticsGraduationDecision>>, TError = StatisticsGraduationDecision404>(params: StatisticsGraduationDecisionParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof statisticsGraduationDecision>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getStatisticsGraduationDecisionQueryKey(params)
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof statisticsGraduationDecision>>> = ({
-    signal,
-  }) => statisticsGraduationDecision(params, { signal, ...requestOptions })
+  const queryKey =  queryOptions?.queryKey ?? getStatisticsGraduationDecisionQueryKey(params);
 
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof statisticsGraduationDecision>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof statisticsGraduationDecision>>> = ({ signal }) => statisticsGraduationDecision(params, { signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof statisticsGraduationDecision>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type StatisticsGraduationDecisionQueryResult = NonNullable<
-  Awaited<ReturnType<typeof statisticsGraduationDecision>>
->
+export type StatisticsGraduationDecisionQueryResult = NonNullable<Awaited<ReturnType<typeof statisticsGraduationDecision>>>
 export type StatisticsGraduationDecisionQueryError = StatisticsGraduationDecision404
 
-export function useStatisticsGraduationDecision<
-  TData = Awaited<ReturnType<typeof statisticsGraduationDecision>>,
-  TError = StatisticsGraduationDecision404,
->(
-  params: StatisticsGraduationDecisionParams,
-  options: {
-    query: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof statisticsGraduationDecision>>, TError, TData>
-    > &
-      Pick<
+
+export function useStatisticsGraduationDecision<TData = Awaited<ReturnType<typeof statisticsGraduationDecision>>, TError = StatisticsGraduationDecision404>(
+ params: StatisticsGraduationDecisionParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof statisticsGraduationDecision>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof statisticsGraduationDecision>>,
           TError,
           Awaited<ReturnType<typeof statisticsGraduationDecision>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useStatisticsGraduationDecision<
-  TData = Awaited<ReturnType<typeof statisticsGraduationDecision>>,
-  TError = StatisticsGraduationDecision404,
->(
-  params: StatisticsGraduationDecisionParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof statisticsGraduationDecision>>, TError, TData>
-    > &
-      Pick<
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useStatisticsGraduationDecision<TData = Awaited<ReturnType<typeof statisticsGraduationDecision>>, TError = StatisticsGraduationDecision404>(
+ params: StatisticsGraduationDecisionParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof statisticsGraduationDecision>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof statisticsGraduationDecision>>,
           TError,
           Awaited<ReturnType<typeof statisticsGraduationDecision>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useStatisticsGraduationDecision<
-  TData = Awaited<ReturnType<typeof statisticsGraduationDecision>>,
-  TError = StatisticsGraduationDecision404,
->(
-  params: StatisticsGraduationDecisionParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof statisticsGraduationDecision>>, TError, TData>
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useStatisticsGraduationDecision<TData = Awaited<ReturnType<typeof statisticsGraduationDecision>>, TError = StatisticsGraduationDecision404>(
+ params: StatisticsGraduationDecisionParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof statisticsGraduationDecision>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useStatisticsGraduationDecision<
-  TData = Awaited<ReturnType<typeof statisticsGraduationDecision>>,
-  TError = StatisticsGraduationDecision404,
->(
-  params: StatisticsGraduationDecisionParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof statisticsGraduationDecision>>, TError, TData>
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getStatisticsGraduationDecisionQueryOptions(params, options)
+export function useStatisticsGraduationDecision<TData = Awaited<ReturnType<typeof statisticsGraduationDecision>>, TError = StatisticsGraduationDecision404>(
+ params: StatisticsGraduationDecisionParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof statisticsGraduationDecision>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData, TError>
-  }
+  const queryOptions = getStatisticsGraduationDecisionQueryOptions(params,options)
 
-  query.queryKey = queryOptions.queryKey
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  return query
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
 }
+
+
+
+
 
 export type exportGraduationDecisionPptxResponse200 = {
   data: Blob
@@ -11160,118 +8866,92 @@ export type exportGraduationDecisionPptxResponse400 = {
   data: ExportGraduationDecisionPptx400
   status: 400
 }
+    
+export type exportGraduationDecisionPptxResponseSuccess = (exportGraduationDecisionPptxResponse200) & {
+  headers: Headers;
+};
+export type exportGraduationDecisionPptxResponseError = (exportGraduationDecisionPptxResponse400) & {
+  headers: Headers;
+};
 
-export type exportGraduationDecisionPptxResponseSuccess =
-  exportGraduationDecisionPptxResponse200 & {
-    headers: Headers
-  }
-export type exportGraduationDecisionPptxResponseError = exportGraduationDecisionPptxResponse400 & {
-  headers: Headers
-}
-
-export type exportGraduationDecisionPptxResponse =
-  | exportGraduationDecisionPptxResponseSuccess
-  | exportGraduationDecisionPptxResponseError
+export type exportGraduationDecisionPptxResponse = (exportGraduationDecisionPptxResponseSuccess | exportGraduationDecisionPptxResponseError)
 
 export const getExportGraduationDecisionPptxUrl = () => {
+
+
+  
+
   return `/api/graduation/export-graduation-decision-pptx`
 }
 
-export const exportGraduationDecisionPptx = async (
-  exportGraduationDecisionPptxBody: ExportGraduationDecisionPptxBody,
-  options?: RequestInit
-): Promise<exportGraduationDecisionPptxResponse> => {
-  const formData = new FormData()
-  if (exportGraduationDecisionPptxBody.file !== undefined) {
-    formData.append(`file`, exportGraduationDecisionPptxBody.file)
-  }
-  if (exportGraduationDecisionPptxBody.sessionId !== undefined) {
-    formData.append(`sessionId`, exportGraduationDecisionPptxBody.sessionId)
-  }
-  if (
-    exportGraduationDecisionPptxBody.timeout !== undefined &&
-    exportGraduationDecisionPptxBody.timeout !== null
-  ) {
-    formData.append(`timeout`, exportGraduationDecisionPptxBody.timeout.toString())
-  }
+export const exportGraduationDecisionPptx = async (exportGraduationDecisionPptxBody: ExportGraduationDecisionPptxBody, options?: RequestInit): Promise<exportGraduationDecisionPptxResponse> => {
+    const formData = new FormData();
+if(exportGraduationDecisionPptxBody.file !== undefined) {
+ formData.append(`file`, exportGraduationDecisionPptxBody.file)
+ }
+if(exportGraduationDecisionPptxBody.sessionId !== undefined) {
+ formData.append(`sessionId`, exportGraduationDecisionPptxBody.sessionId)
+ }
+if(exportGraduationDecisionPptxBody.timeout !== undefined && exportGraduationDecisionPptxBody.timeout !== null) {
+ formData.append(`timeout`, exportGraduationDecisionPptxBody.timeout.toString())
+ }
 
-  return customTrainingFetch<exportGraduationDecisionPptxResponse>(
-    getExportGraduationDecisionPptxUrl(),
-    {
-      ...options,
-      method: "POST",
-      body: formData,
+  return customTrainingFetch<exportGraduationDecisionPptxResponse>(getExportGraduationDecisionPptxUrl(),
+  {      
+    ...options,
+    method: 'POST'
+    ,
+    body: 
+      formData,
+  }
+);}
+
+
+
+
+export const getExportGraduationDecisionPptxMutationOptions = <TError = ExportGraduationDecisionPptx400,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof exportGraduationDecisionPptx>>, TError,{data: ExportGraduationDecisionPptxBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof exportGraduationDecisionPptx>>, TError,{data: ExportGraduationDecisionPptxBody}, TContext> => {
+
+const mutationKey = ['exportGraduationDecisionPptx'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof exportGraduationDecisionPptx>>, {data: ExportGraduationDecisionPptxBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  exportGraduationDecisionPptx(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ExportGraduationDecisionPptxMutationResult = NonNullable<Awaited<ReturnType<typeof exportGraduationDecisionPptx>>>
+    export type ExportGraduationDecisionPptxMutationBody = ExportGraduationDecisionPptxBody
+    export type ExportGraduationDecisionPptxMutationError = ExportGraduationDecisionPptx400
+
+    export const useExportGraduationDecisionPptx = <TError = ExportGraduationDecisionPptx400,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof exportGraduationDecisionPptx>>, TError,{data: ExportGraduationDecisionPptxBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof exportGraduationDecisionPptx>>,
+        TError,
+        {data: ExportGraduationDecisionPptxBody},
+        TContext
+      > => {
+
+      const mutationOptions = getExportGraduationDecisionPptxMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
     }
-  )
-}
-
-export const getExportGraduationDecisionPptxMutationOptions = <
-  TError = ExportGraduationDecisionPptx400,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof exportGraduationDecisionPptx>>,
-    TError,
-    { data: ExportGraduationDecisionPptxBody },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof exportGraduationDecisionPptx>>,
-  TError,
-  { data: ExportGraduationDecisionPptxBody },
-  TContext
-> => {
-  const mutationKey = ["exportGraduationDecisionPptx"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof exportGraduationDecisionPptx>>,
-    { data: ExportGraduationDecisionPptxBody }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return exportGraduationDecisionPptx(data, requestOptions)
-  }
-
-  return { mutationFn, ...mutationOptions }
-}
-
-export type ExportGraduationDecisionPptxMutationResult = NonNullable<
-  Awaited<ReturnType<typeof exportGraduationDecisionPptx>>
->
-export type ExportGraduationDecisionPptxMutationBody = ExportGraduationDecisionPptxBody
-export type ExportGraduationDecisionPptxMutationError = ExportGraduationDecisionPptx400
-
-export const useExportGraduationDecisionPptx = <
-  TError = ExportGraduationDecisionPptx400,
-  TContext = unknown,
->(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof exportGraduationDecisionPptx>>,
-      TError,
-      { data: ExportGraduationDecisionPptxBody },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof exportGraduationDecisionPptx>>,
-  TError,
-  { data: ExportGraduationDecisionPptxBody },
-  TContext
-> => {
-  const mutationOptions = getExportGraduationDecisionPptxMutationOptions(options)
-
-  return useMutation(mutationOptions, queryClient)
-}
-
+    
 export type exportInternshipProfileResponse200 = {
   data: Blob
   status: 200
@@ -11281,98 +8961,82 @@ export type exportInternshipProfileResponse400 = {
   data: ExportInternshipProfile400
   status: 400
 }
+    
+export type exportInternshipProfileResponseSuccess = (exportInternshipProfileResponse200) & {
+  headers: Headers;
+};
+export type exportInternshipProfileResponseError = (exportInternshipProfileResponse400) & {
+  headers: Headers;
+};
 
-export type exportInternshipProfileResponseSuccess = exportInternshipProfileResponse200 & {
-  headers: Headers
-}
-export type exportInternshipProfileResponseError = exportInternshipProfileResponse400 & {
-  headers: Headers
-}
-
-export type exportInternshipProfileResponse =
-  | exportInternshipProfileResponseSuccess
-  | exportInternshipProfileResponseError
+export type exportInternshipProfileResponse = (exportInternshipProfileResponseSuccess | exportInternshipProfileResponseError)
 
 export const getExportInternshipProfileUrl = () => {
+
+
+  
+
   return `/api/internship/export-internship-profile`
 }
 
-export const exportInternshipProfile = async (
-  exportInternshipProfileBody: ExportInternshipProfileBody,
-  options?: RequestInit
-): Promise<exportInternshipProfileResponse> => {
-  return customTrainingFetch<exportInternshipProfileResponse>(getExportInternshipProfileUrl(), {
+export const exportInternshipProfile = async (exportInternshipProfileBody: ExportInternshipProfileBody, options?: RequestInit): Promise<exportInternshipProfileResponse> => {
+  
+  return customTrainingFetch<exportInternshipProfileResponse>(getExportInternshipProfileUrl(),
+  {      
     ...options,
-    method: "POST",
-    headers: { "Content-Type": "application/json", ...options?.headers },
-    body: JSON.stringify(exportInternshipProfileBody),
-  })
-}
-
-export const getExportInternshipProfileMutationOptions = <
-  TError = ExportInternshipProfile400,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof exportInternshipProfile>>,
-    TError,
-    { data: ExportInternshipProfileBody },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof exportInternshipProfile>>,
-  TError,
-  { data: ExportInternshipProfileBody },
-  TContext
-> => {
-  const mutationKey = ["exportInternshipProfile"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof exportInternshipProfile>>,
-    { data: ExportInternshipProfileBody }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return exportInternshipProfile(data, requestOptions)
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      exportInternshipProfileBody,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type ExportInternshipProfileMutationResult = NonNullable<
-  Awaited<ReturnType<typeof exportInternshipProfile>>
->
-export type ExportInternshipProfileMutationBody = ExportInternshipProfileBody
-export type ExportInternshipProfileMutationError = ExportInternshipProfile400
 
-export const useExportInternshipProfile = <TError = ExportInternshipProfile400, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof exportInternshipProfile>>,
-      TError,
-      { data: ExportInternshipProfileBody },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof exportInternshipProfile>>,
-  TError,
-  { data: ExportInternshipProfileBody },
-  TContext
-> => {
-  const mutationOptions = getExportInternshipProfileMutationOptions(options)
 
-  return useMutation(mutationOptions, queryClient)
-}
+export const getExportInternshipProfileMutationOptions = <TError = ExportInternshipProfile400,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof exportInternshipProfile>>, TError,{data: ExportInternshipProfileBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof exportInternshipProfile>>, TError,{data: ExportInternshipProfileBody}, TContext> => {
 
+const mutationKey = ['exportInternshipProfile'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof exportInternshipProfile>>, {data: ExportInternshipProfileBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  exportInternshipProfile(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ExportInternshipProfileMutationResult = NonNullable<Awaited<ReturnType<typeof exportInternshipProfile>>>
+    export type ExportInternshipProfileMutationBody = ExportInternshipProfileBody
+    export type ExportInternshipProfileMutationError = ExportInternshipProfile400
+
+    export const useExportInternshipProfile = <TError = ExportInternshipProfile400,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof exportInternshipProfile>>, TError,{data: ExportInternshipProfileBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof exportInternshipProfile>>,
+        TError,
+        {data: ExportInternshipProfileBody},
+        TContext
+      > => {
+
+      const mutationOptions = getExportInternshipProfileMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 /**
  * Nhập file excel danh sách phân công giảng dạy
  * @summary Import danh sách phân công giảng dạy
@@ -11386,114 +9050,98 @@ export type importPhanCongGiangDayResponse400 = {
   data: ImportPhanCongGiangDay400
   status: 400
 }
+    
+export type importPhanCongGiangDayResponseSuccess = (importPhanCongGiangDayResponse200) & {
+  headers: Headers;
+};
+export type importPhanCongGiangDayResponseError = (importPhanCongGiangDayResponse400) & {
+  headers: Headers;
+};
 
-export type importPhanCongGiangDayResponseSuccess = importPhanCongGiangDayResponse200 & {
-  headers: Headers
-}
-export type importPhanCongGiangDayResponseError = importPhanCongGiangDayResponse400 & {
-  headers: Headers
-}
-
-export type importPhanCongGiangDayResponse =
-  | importPhanCongGiangDayResponseSuccess
-  | importPhanCongGiangDayResponseError
+export type importPhanCongGiangDayResponse = (importPhanCongGiangDayResponseSuccess | importPhanCongGiangDayResponseError)
 
 export const getImportPhanCongGiangDayUrl = () => {
+
+
+  
+
   return `/api/plan-training/import-phan-cong-giang-day`
 }
 
-export const importPhanCongGiangDay = async (
-  importPhanCongGiangDay: ImportPhanCongGiangDay,
-  options?: RequestInit
-): Promise<importPhanCongGiangDayResponse> => {
-  const formData = new FormData()
-  formData.append(`file`, importPhanCongGiangDay.file)
-  formData.append(`semesterId`, importPhanCongGiangDay.semesterId)
-  formData.append(`trainingObjectTypeId`, importPhanCongGiangDay.trainingObjectTypeId)
-  if (importPhanCongGiangDay.fileType !== undefined) {
-    formData.append(`fileType`, importPhanCongGiangDay.fileType)
-  }
-  if (importPhanCongGiangDay.importType !== undefined) {
-    formData.append(`importType`, importPhanCongGiangDay.importType)
-  }
-  if (importPhanCongGiangDay.type !== undefined) {
-    formData.append(`type`, importPhanCongGiangDay.type)
-  }
+export const importPhanCongGiangDay = async (importPhanCongGiangDay: ImportPhanCongGiangDay, options?: RequestInit): Promise<importPhanCongGiangDayResponse> => {
+    const formData = new FormData();
+formData.append(`file`, importPhanCongGiangDay.file)
+formData.append(`semesterId`, importPhanCongGiangDay.semesterId)
+formData.append(`trainingObjectTypeId`, importPhanCongGiangDay.trainingObjectTypeId)
+if(importPhanCongGiangDay.fileType !== undefined) {
+ formData.append(`fileType`, importPhanCongGiangDay.fileType)
+ }
+if(importPhanCongGiangDay.importType !== undefined) {
+ formData.append(`importType`, importPhanCongGiangDay.importType)
+ }
+if(importPhanCongGiangDay.type !== undefined) {
+ formData.append(`type`, importPhanCongGiangDay.type)
+ }
 
-  return customTrainingFetch<importPhanCongGiangDayResponse>(getImportPhanCongGiangDayUrl(), {
+  return customTrainingFetch<importPhanCongGiangDayResponse>(getImportPhanCongGiangDayUrl(),
+  {      
     ...options,
-    method: "POST",
-    body: formData,
-  })
-}
-
-export const getImportPhanCongGiangDayMutationOptions = <
-  TError = ImportPhanCongGiangDay400,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof importPhanCongGiangDay>>,
-    TError,
-    { data: ImportPhanCongGiangDay },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof importPhanCongGiangDay>>,
-  TError,
-  { data: ImportPhanCongGiangDay },
-  TContext
-> => {
-  const mutationKey = ["importPhanCongGiangDay"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof importPhanCongGiangDay>>,
-    { data: ImportPhanCongGiangDay }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return importPhanCongGiangDay(data, requestOptions)
+    method: 'POST'
+    ,
+    body: 
+      formData,
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type ImportPhanCongGiangDayMutationResult = NonNullable<
-  Awaited<ReturnType<typeof importPhanCongGiangDay>>
->
-export type ImportPhanCongGiangDayMutationBody = ImportPhanCongGiangDay
-export type ImportPhanCongGiangDayMutationError = ImportPhanCongGiangDay400
 
-/**
+
+export const getImportPhanCongGiangDayMutationOptions = <TError = ImportPhanCongGiangDay400,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof importPhanCongGiangDay>>, TError,{data: ImportPhanCongGiangDay}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof importPhanCongGiangDay>>, TError,{data: ImportPhanCongGiangDay}, TContext> => {
+
+const mutationKey = ['importPhanCongGiangDay'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof importPhanCongGiangDay>>, {data: ImportPhanCongGiangDay}> = (props) => {
+          const {data} = props ?? {};
+
+          return  importPhanCongGiangDay(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ImportPhanCongGiangDayMutationResult = NonNullable<Awaited<ReturnType<typeof importPhanCongGiangDay>>>
+    export type ImportPhanCongGiangDayMutationBody = ImportPhanCongGiangDay
+    export type ImportPhanCongGiangDayMutationError = ImportPhanCongGiangDay400
+
+    /**
  * @summary Import danh sách phân công giảng dạy
  */
-export const useImportPhanCongGiangDay = <TError = ImportPhanCongGiangDay400, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof importPhanCongGiangDay>>,
-      TError,
-      { data: ImportPhanCongGiangDay },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof importPhanCongGiangDay>>,
-  TError,
-  { data: ImportPhanCongGiangDay },
-  TContext
-> => {
-  const mutationOptions = getImportPhanCongGiangDayMutationOptions(options)
+export const useImportPhanCongGiangDay = <TError = ImportPhanCongGiangDay400,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof importPhanCongGiangDay>>, TError,{data: ImportPhanCongGiangDay}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof importPhanCongGiangDay>>,
+        TError,
+        {data: ImportPhanCongGiangDay},
+        TContext
+      > => {
 
-  return useMutation(mutationOptions, queryClient)
-}
+      const mutationOptions = getImportPhanCongGiangDayMutationOptions(options);
 
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 export type importLecturerResponse200 = {
   data: ImportLecturer200
   status: 200
@@ -11503,99 +9151,87 @@ export type importLecturerResponse400 = {
   data: ImportLecturer400
   status: 400
 }
+    
+export type importLecturerResponseSuccess = (importLecturerResponse200) & {
+  headers: Headers;
+};
+export type importLecturerResponseError = (importLecturerResponse400) & {
+  headers: Headers;
+};
 
-export type importLecturerResponseSuccess = importLecturerResponse200 & {
-  headers: Headers
-}
-export type importLecturerResponseError = importLecturerResponse400 & {
-  headers: Headers
-}
-
-export type importLecturerResponse = importLecturerResponseSuccess | importLecturerResponseError
+export type importLecturerResponse = (importLecturerResponseSuccess | importLecturerResponseError)
 
 export const getImportLecturerUrl = () => {
+
+
+  
+
   return `/api/import/import-lecturer`
 }
 
-export const importLecturer = async (
-  importLecturerBody: ImportLecturerBody,
-  options?: RequestInit
-): Promise<importLecturerResponse> => {
-  const formData = new FormData()
-  formData.append(`file`, importLecturerBody.file)
-  if (importLecturerBody.timeout !== undefined && importLecturerBody.timeout !== null) {
-    formData.append(`timeout`, importLecturerBody.timeout.toString())
-  }
+export const importLecturer = async (importLecturerBody: ImportLecturerBody, options?: RequestInit): Promise<importLecturerResponse> => {
+    const formData = new FormData();
+formData.append(`file`, importLecturerBody.file)
+if(importLecturerBody.timeout !== undefined && importLecturerBody.timeout !== null) {
+ formData.append(`timeout`, importLecturerBody.timeout.toString())
+ }
 
-  return customTrainingFetch<importLecturerResponse>(getImportLecturerUrl(), {
+  return customTrainingFetch<importLecturerResponse>(getImportLecturerUrl(),
+  {      
     ...options,
-    method: "POST",
-    body: formData,
-  })
-}
-
-export const getImportLecturerMutationOptions = <
-  TError = ImportLecturer400,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof importLecturer>>,
-    TError,
-    { data: ImportLecturerBody },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof importLecturer>>,
-  TError,
-  { data: ImportLecturerBody },
-  TContext
-> => {
-  const mutationKey = ["importLecturer"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof importLecturer>>,
-    { data: ImportLecturerBody }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return importLecturer(data, requestOptions)
+    method: 'POST'
+    ,
+    body: 
+      formData,
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type ImportLecturerMutationResult = NonNullable<Awaited<ReturnType<typeof importLecturer>>>
-export type ImportLecturerMutationBody = ImportLecturerBody
-export type ImportLecturerMutationError = ImportLecturer400
 
-export const useImportLecturer = <TError = ImportLecturer400, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof importLecturer>>,
-      TError,
-      { data: ImportLecturerBody },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof importLecturer>>,
-  TError,
-  { data: ImportLecturerBody },
-  TContext
-> => {
-  const mutationOptions = getImportLecturerMutationOptions(options)
 
-  return useMutation(mutationOptions, queryClient)
-}
+export const getImportLecturerMutationOptions = <TError = ImportLecturer400,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof importLecturer>>, TError,{data: ImportLecturerBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof importLecturer>>, TError,{data: ImportLecturerBody}, TContext> => {
 
+const mutationKey = ['importLecturer'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof importLecturer>>, {data: ImportLecturerBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  importLecturer(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ImportLecturerMutationResult = NonNullable<Awaited<ReturnType<typeof importLecturer>>>
+    export type ImportLecturerMutationBody = ImportLecturerBody
+    export type ImportLecturerMutationError = ImportLecturer400
+
+    export const useImportLecturer = <TError = ImportLecturer400,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof importLecturer>>, TError,{data: ImportLecturerBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof importLecturer>>,
+        TError,
+        {data: ImportLecturerBody},
+        TContext
+      > => {
+
+      const mutationOptions = getImportLecturerMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 export type importStudentResponse200 = {
   data: ImportStudent200
   status: 200
@@ -11605,108 +9241,90 @@ export type importStudentResponse400 = {
   data: ImportStudent400
   status: 400
 }
+    
+export type importStudentResponseSuccess = (importStudentResponse200) & {
+  headers: Headers;
+};
+export type importStudentResponseError = (importStudentResponse400) & {
+  headers: Headers;
+};
 
-export type importStudentResponseSuccess = importStudentResponse200 & {
-  headers: Headers
-}
-export type importStudentResponseError = importStudentResponse400 & {
-  headers: Headers
-}
-
-export type importStudentResponse = importStudentResponseSuccess | importStudentResponseError
+export type importStudentResponse = (importStudentResponseSuccess | importStudentResponseError)
 
 export const getImportStudentUrl = () => {
+
+
+  
+
   return `/api/import/import-student`
 }
 
-export const importStudent = async (
-  importStudentRequest: ImportStudentRequest,
-  options?: RequestInit
-): Promise<importStudentResponse> => {
-  const formData = new FormData()
-  formData.append(`file`, importStudentRequest.file)
-  if (
-    importStudentRequest.createCurriculumVersion !== undefined &&
-    importStudentRequest.createCurriculumVersion !== null
-  ) {
-    formData.append(
-      `createCurriculumVersion`,
-      importStudentRequest.createCurriculumVersion.toString()
-    )
-  }
-  if (importStudentRequest.timeout !== undefined && importStudentRequest.timeout !== null) {
-    formData.append(`timeout`, importStudentRequest.timeout.toString())
-  }
+export const importStudent = async (importStudentRequest: ImportStudentRequest, options?: RequestInit): Promise<importStudentResponse> => {
+    const formData = new FormData();
+formData.append(`file`, importStudentRequest.file)
+if(importStudentRequest.createCurriculumVersion !== undefined && importStudentRequest.createCurriculumVersion !== null) {
+ formData.append(`createCurriculumVersion`, importStudentRequest.createCurriculumVersion.toString())
+ }
+if(importStudentRequest.timeout !== undefined && importStudentRequest.timeout !== null) {
+ formData.append(`timeout`, importStudentRequest.timeout.toString())
+ }
 
-  return customTrainingFetch<importStudentResponse>(getImportStudentUrl(), {
+  return customTrainingFetch<importStudentResponse>(getImportStudentUrl(),
+  {      
     ...options,
-    method: "POST",
-    body: formData,
-  })
-}
-
-export const getImportStudentMutationOptions = <
-  TError = ImportStudent400,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof importStudent>>,
-    TError,
-    { data: ImportStudentRequest },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof importStudent>>,
-  TError,
-  { data: ImportStudentRequest },
-  TContext
-> => {
-  const mutationKey = ["importStudent"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof importStudent>>,
-    { data: ImportStudentRequest }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return importStudent(data, requestOptions)
+    method: 'POST'
+    ,
+    body: 
+      formData,
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type ImportStudentMutationResult = NonNullable<Awaited<ReturnType<typeof importStudent>>>
-export type ImportStudentMutationBody = ImportStudentRequest
-export type ImportStudentMutationError = ImportStudent400
 
-export const useImportStudent = <TError = ImportStudent400, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof importStudent>>,
-      TError,
-      { data: ImportStudentRequest },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof importStudent>>,
-  TError,
-  { data: ImportStudentRequest },
-  TContext
-> => {
-  const mutationOptions = getImportStudentMutationOptions(options)
 
-  return useMutation(mutationOptions, queryClient)
-}
+export const getImportStudentMutationOptions = <TError = ImportStudent400,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof importStudent>>, TError,{data: ImportStudentRequest}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof importStudent>>, TError,{data: ImportStudentRequest}, TContext> => {
 
+const mutationKey = ['importStudent'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof importStudent>>, {data: ImportStudentRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  importStudent(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ImportStudentMutationResult = NonNullable<Awaited<ReturnType<typeof importStudent>>>
+    export type ImportStudentMutationBody = ImportStudentRequest
+    export type ImportStudentMutationError = ImportStudent400
+
+    export const useImportStudent = <TError = ImportStudent400,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof importStudent>>, TError,{data: ImportStudentRequest}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof importStudent>>,
+        TError,
+        {data: ImportStudentRequest},
+        TContext
+      > => {
+
+      const mutationOptions = getImportStudentMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 export type importHeQuanSuResponse200 = {
   data: ImportHeQuanSu200
   status: 200
@@ -11716,99 +9334,87 @@ export type importHeQuanSuResponse400 = {
   data: ImportHeQuanSu400
   status: 400
 }
+    
+export type importHeQuanSuResponseSuccess = (importHeQuanSuResponse200) & {
+  headers: Headers;
+};
+export type importHeQuanSuResponseError = (importHeQuanSuResponse400) & {
+  headers: Headers;
+};
 
-export type importHeQuanSuResponseSuccess = importHeQuanSuResponse200 & {
-  headers: Headers
-}
-export type importHeQuanSuResponseError = importHeQuanSuResponse400 & {
-  headers: Headers
-}
-
-export type importHeQuanSuResponse = importHeQuanSuResponseSuccess | importHeQuanSuResponseError
+export type importHeQuanSuResponse = (importHeQuanSuResponseSuccess | importHeQuanSuResponseError)
 
 export const getImportHeQuanSuUrl = () => {
+
+
+  
+
   return `/api/import/import-he-quan-su`
 }
 
-export const importHeQuanSu = async (
-  importHeQuanSuRequest: ImportHeQuanSuRequest,
-  options?: RequestInit
-): Promise<importHeQuanSuResponse> => {
-  const formData = new FormData()
-  formData.append(`file`, importHeQuanSuRequest.file)
-  if (importHeQuanSuRequest.timeout !== undefined && importHeQuanSuRequest.timeout !== null) {
-    formData.append(`timeout`, importHeQuanSuRequest.timeout.toString())
-  }
+export const importHeQuanSu = async (importHeQuanSuRequest: ImportHeQuanSuRequest, options?: RequestInit): Promise<importHeQuanSuResponse> => {
+    const formData = new FormData();
+formData.append(`file`, importHeQuanSuRequest.file)
+if(importHeQuanSuRequest.timeout !== undefined && importHeQuanSuRequest.timeout !== null) {
+ formData.append(`timeout`, importHeQuanSuRequest.timeout.toString())
+ }
 
-  return customTrainingFetch<importHeQuanSuResponse>(getImportHeQuanSuUrl(), {
+  return customTrainingFetch<importHeQuanSuResponse>(getImportHeQuanSuUrl(),
+  {      
     ...options,
-    method: "POST",
-    body: formData,
-  })
-}
-
-export const getImportHeQuanSuMutationOptions = <
-  TError = ImportHeQuanSu400,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof importHeQuanSu>>,
-    TError,
-    { data: ImportHeQuanSuRequest },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof importHeQuanSu>>,
-  TError,
-  { data: ImportHeQuanSuRequest },
-  TContext
-> => {
-  const mutationKey = ["importHeQuanSu"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof importHeQuanSu>>,
-    { data: ImportHeQuanSuRequest }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return importHeQuanSu(data, requestOptions)
+    method: 'POST'
+    ,
+    body: 
+      formData,
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type ImportHeQuanSuMutationResult = NonNullable<Awaited<ReturnType<typeof importHeQuanSu>>>
-export type ImportHeQuanSuMutationBody = ImportHeQuanSuRequest
-export type ImportHeQuanSuMutationError = ImportHeQuanSu400
 
-export const useImportHeQuanSu = <TError = ImportHeQuanSu400, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof importHeQuanSu>>,
-      TError,
-      { data: ImportHeQuanSuRequest },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof importHeQuanSu>>,
-  TError,
-  { data: ImportHeQuanSuRequest },
-  TContext
-> => {
-  const mutationOptions = getImportHeQuanSuMutationOptions(options)
 
-  return useMutation(mutationOptions, queryClient)
-}
+export const getImportHeQuanSuMutationOptions = <TError = ImportHeQuanSu400,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof importHeQuanSu>>, TError,{data: ImportHeQuanSuRequest}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof importHeQuanSu>>, TError,{data: ImportHeQuanSuRequest}, TContext> => {
 
+const mutationKey = ['importHeQuanSu'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof importHeQuanSu>>, {data: ImportHeQuanSuRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  importHeQuanSu(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ImportHeQuanSuMutationResult = NonNullable<Awaited<ReturnType<typeof importHeQuanSu>>>
+    export type ImportHeQuanSuMutationBody = ImportHeQuanSuRequest
+    export type ImportHeQuanSuMutationError = ImportHeQuanSu400
+
+    export const useImportHeQuanSu = <TError = ImportHeQuanSu400,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof importHeQuanSu>>, TError,{data: ImportHeQuanSuRequest}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof importHeQuanSu>>,
+        TError,
+        {data: ImportHeQuanSuRequest},
+        TContext
+      > => {
+
+      const mutationOptions = getImportHeQuanSuMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 export type importInternshipResponse200 = {
   data: ImportInternship200
   status: 200
@@ -11818,103 +9424,87 @@ export type importInternshipResponse400 = {
   data: ImportInternship400
   status: 400
 }
+    
+export type importInternshipResponseSuccess = (importInternshipResponse200) & {
+  headers: Headers;
+};
+export type importInternshipResponseError = (importInternshipResponse400) & {
+  headers: Headers;
+};
 
-export type importInternshipResponseSuccess = importInternshipResponse200 & {
-  headers: Headers
-}
-export type importInternshipResponseError = importInternshipResponse400 & {
-  headers: Headers
-}
-
-export type importInternshipResponse =
-  | importInternshipResponseSuccess
-  | importInternshipResponseError
+export type importInternshipResponse = (importInternshipResponseSuccess | importInternshipResponseError)
 
 export const getImportInternshipUrl = () => {
+
+
+  
+
   return `/api/import/import-internship`
 }
 
-export const importInternship = async (
-  importInternshipBody: ImportInternshipBody,
-  options?: RequestInit
-): Promise<importInternshipResponse> => {
-  const formData = new FormData()
-  formData.append(`file`, importInternshipBody.file)
-  if (importInternshipBody.timeout !== undefined && importInternshipBody.timeout !== null) {
-    formData.append(`timeout`, importInternshipBody.timeout.toString())
-  }
+export const importInternship = async (importInternshipBody: ImportInternshipBody, options?: RequestInit): Promise<importInternshipResponse> => {
+    const formData = new FormData();
+formData.append(`file`, importInternshipBody.file)
+if(importInternshipBody.timeout !== undefined && importInternshipBody.timeout !== null) {
+ formData.append(`timeout`, importInternshipBody.timeout.toString())
+ }
 
-  return customTrainingFetch<importInternshipResponse>(getImportInternshipUrl(), {
+  return customTrainingFetch<importInternshipResponse>(getImportInternshipUrl(),
+  {      
     ...options,
-    method: "POST",
-    body: formData,
-  })
-}
-
-export const getImportInternshipMutationOptions = <
-  TError = ImportInternship400,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof importInternship>>,
-    TError,
-    { data: ImportInternshipBody },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof importInternship>>,
-  TError,
-  { data: ImportInternshipBody },
-  TContext
-> => {
-  const mutationKey = ["importInternship"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof importInternship>>,
-    { data: ImportInternshipBody }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return importInternship(data, requestOptions)
+    method: 'POST'
+    ,
+    body: 
+      formData,
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type ImportInternshipMutationResult = NonNullable<
-  Awaited<ReturnType<typeof importInternship>>
->
-export type ImportInternshipMutationBody = ImportInternshipBody
-export type ImportInternshipMutationError = ImportInternship400
 
-export const useImportInternship = <TError = ImportInternship400, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof importInternship>>,
-      TError,
-      { data: ImportInternshipBody },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof importInternship>>,
-  TError,
-  { data: ImportInternshipBody },
-  TContext
-> => {
-  const mutationOptions = getImportInternshipMutationOptions(options)
 
-  return useMutation(mutationOptions, queryClient)
-}
+export const getImportInternshipMutationOptions = <TError = ImportInternship400,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof importInternship>>, TError,{data: ImportInternshipBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof importInternship>>, TError,{data: ImportInternshipBody}, TContext> => {
 
+const mutationKey = ['importInternship'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof importInternship>>, {data: ImportInternshipBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  importInternship(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ImportInternshipMutationResult = NonNullable<Awaited<ReturnType<typeof importInternship>>>
+    export type ImportInternshipMutationBody = ImportInternshipBody
+    export type ImportInternshipMutationError = ImportInternship400
+
+    export const useImportInternship = <TError = ImportInternship400,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof importInternship>>, TError,{data: ImportInternshipBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof importInternship>>,
+        TError,
+        {data: ImportInternshipBody},
+        TContext
+      > => {
+
+      const mutationOptions = getImportInternshipMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 /**
  * Duyệt phiếu sửa điểm và cập nhật điểm cho sinh viên
  * @summary Duyệt phiếu sửa điểm
@@ -11933,109 +9523,85 @@ export type approveScoreCorrectionResponse500 = {
   data: ApproveScoreCorrection500
   status: 500
 }
+    
+export type approveScoreCorrectionResponseSuccess = (approveScoreCorrectionResponse200) & {
+  headers: Headers;
+};
+export type approveScoreCorrectionResponseError = (approveScoreCorrectionResponse400 | approveScoreCorrectionResponse500) & {
+  headers: Headers;
+};
 
-export type approveScoreCorrectionResponseSuccess = approveScoreCorrectionResponse200 & {
-  headers: Headers
-}
-export type approveScoreCorrectionResponseError = (
-  | approveScoreCorrectionResponse400
-  | approveScoreCorrectionResponse500
-) & {
-  headers: Headers
-}
-
-export type approveScoreCorrectionResponse =
-  | approveScoreCorrectionResponseSuccess
-  | approveScoreCorrectionResponseError
+export type approveScoreCorrectionResponse = (approveScoreCorrectionResponseSuccess | approveScoreCorrectionResponseError)
 
 export const getApproveScoreCorrectionUrl = () => {
+
+
+  
+
   return `/api/score-correction/approve`
 }
 
-export const approveScoreCorrection = async (
-  approveScoreCorrectionInput: ApproveScoreCorrectionInput,
-  options?: RequestInit
-): Promise<approveScoreCorrectionResponse> => {
-  return customTrainingFetch<approveScoreCorrectionResponse>(getApproveScoreCorrectionUrl(), {
+export const approveScoreCorrection = async (approveScoreCorrectionInput: ApproveScoreCorrectionInput, options?: RequestInit): Promise<approveScoreCorrectionResponse> => {
+  
+  return customTrainingFetch<approveScoreCorrectionResponse>(getApproveScoreCorrectionUrl(),
+  {      
     ...options,
-    method: "POST",
-    headers: { "Content-Type": "application/json", ...options?.headers },
-    body: JSON.stringify(approveScoreCorrectionInput),
-  })
-}
-
-export const getApproveScoreCorrectionMutationOptions = <
-  TError = ApproveScoreCorrection400 | ApproveScoreCorrection500,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof approveScoreCorrection>>,
-    TError,
-    { data: ApproveScoreCorrectionInput },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof approveScoreCorrection>>,
-  TError,
-  { data: ApproveScoreCorrectionInput },
-  TContext
-> => {
-  const mutationKey = ["approveScoreCorrection"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof approveScoreCorrection>>,
-    { data: ApproveScoreCorrectionInput }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return approveScoreCorrection(data, requestOptions)
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      approveScoreCorrectionInput,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type ApproveScoreCorrectionMutationResult = NonNullable<
-  Awaited<ReturnType<typeof approveScoreCorrection>>
->
-export type ApproveScoreCorrectionMutationBody = ApproveScoreCorrectionInput
-export type ApproveScoreCorrectionMutationError =
-  | ApproveScoreCorrection400
-  | ApproveScoreCorrection500
 
-/**
+
+export const getApproveScoreCorrectionMutationOptions = <TError = ApproveScoreCorrection400 | ApproveScoreCorrection500,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof approveScoreCorrection>>, TError,{data: ApproveScoreCorrectionInput}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof approveScoreCorrection>>, TError,{data: ApproveScoreCorrectionInput}, TContext> => {
+
+const mutationKey = ['approveScoreCorrection'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof approveScoreCorrection>>, {data: ApproveScoreCorrectionInput}> = (props) => {
+          const {data} = props ?? {};
+
+          return  approveScoreCorrection(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ApproveScoreCorrectionMutationResult = NonNullable<Awaited<ReturnType<typeof approveScoreCorrection>>>
+    export type ApproveScoreCorrectionMutationBody = ApproveScoreCorrectionInput
+    export type ApproveScoreCorrectionMutationError = ApproveScoreCorrection400 | ApproveScoreCorrection500
+
+    /**
  * @summary Duyệt phiếu sửa điểm
  */
-export const useApproveScoreCorrection = <
-  TError = ApproveScoreCorrection400 | ApproveScoreCorrection500,
-  TContext = unknown,
->(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof approveScoreCorrection>>,
-      TError,
-      { data: ApproveScoreCorrectionInput },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof approveScoreCorrection>>,
-  TError,
-  { data: ApproveScoreCorrectionInput },
-  TContext
-> => {
-  const mutationOptions = getApproveScoreCorrectionMutationOptions(options)
+export const useApproveScoreCorrection = <TError = ApproveScoreCorrection400 | ApproveScoreCorrection500,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof approveScoreCorrection>>, TError,{data: ApproveScoreCorrectionInput}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof approveScoreCorrection>>,
+        TError,
+        {data: ApproveScoreCorrectionInput},
+        TContext
+      > => {
 
-  return useMutation(mutationOptions, queryClient)
-}
+      const mutationOptions = getApproveScoreCorrectionMutationOptions(options);
 
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 /**
  * Phiên điểm chứng chi
  * @summary Phiên điểm chứng chỉ
@@ -12049,101 +9615,85 @@ export type certificateScoreResponse400 = {
   data: CertificateScore400
   status: 400
 }
+    
+export type certificateScoreResponseSuccess = (certificateScoreResponse200) & {
+  headers: Headers;
+};
+export type certificateScoreResponseError = (certificateScoreResponse400) & {
+  headers: Headers;
+};
 
-export type certificateScoreResponseSuccess = certificateScoreResponse200 & {
-  headers: Headers
-}
-export type certificateScoreResponseError = certificateScoreResponse400 & {
-  headers: Headers
-}
-
-export type certificateScoreResponse =
-  | certificateScoreResponseSuccess
-  | certificateScoreResponseError
+export type certificateScoreResponse = (certificateScoreResponseSuccess | certificateScoreResponseError)
 
 export const getCertificateScoreUrl = () => {
+
+
+  
+
   return `/api/archived-score/certificate-score`
 }
 
-export const certificateScore = async (
-  certificateIds: CertificateIds,
-  options?: RequestInit
-): Promise<certificateScoreResponse> => {
-  return customTrainingFetch<certificateScoreResponse>(getCertificateScoreUrl(), {
+export const certificateScore = async (certificateIds: CertificateIds, options?: RequestInit): Promise<certificateScoreResponse> => {
+  
+  return customTrainingFetch<certificateScoreResponse>(getCertificateScoreUrl(),
+  {      
     ...options,
-    method: "POST",
-    headers: { "Content-Type": "application/json", ...options?.headers },
-    body: JSON.stringify(certificateIds),
-  })
-}
-
-export const getCertificateScoreMutationOptions = <
-  TError = CertificateScore400,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof certificateScore>>,
-    TError,
-    { data: CertificateIds },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof certificateScore>>,
-  TError,
-  { data: CertificateIds },
-  TContext
-> => {
-  const mutationKey = ["certificateScore"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof certificateScore>>,
-    { data: CertificateIds }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return certificateScore(data, requestOptions)
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      certificateIds,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type CertificateScoreMutationResult = NonNullable<
-  Awaited<ReturnType<typeof certificateScore>>
->
-export type CertificateScoreMutationBody = CertificateIds
-export type CertificateScoreMutationError = CertificateScore400
 
-/**
+
+export const getCertificateScoreMutationOptions = <TError = CertificateScore400,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof certificateScore>>, TError,{data: CertificateIds}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof certificateScore>>, TError,{data: CertificateIds}, TContext> => {
+
+const mutationKey = ['certificateScore'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof certificateScore>>, {data: CertificateIds}> = (props) => {
+          const {data} = props ?? {};
+
+          return  certificateScore(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CertificateScoreMutationResult = NonNullable<Awaited<ReturnType<typeof certificateScore>>>
+    export type CertificateScoreMutationBody = CertificateIds
+    export type CertificateScoreMutationError = CertificateScore400
+
+    /**
  * @summary Phiên điểm chứng chỉ
  */
-export const useCertificateScore = <TError = CertificateScore400, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof certificateScore>>,
-      TError,
-      { data: CertificateIds },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof certificateScore>>,
-  TError,
-  { data: CertificateIds },
-  TContext
-> => {
-  const mutationOptions = getCertificateScoreMutationOptions(options)
+export const useCertificateScore = <TError = CertificateScore400,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof certificateScore>>, TError,{data: CertificateIds}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof certificateScore>>,
+        TError,
+        {data: CertificateIds},
+        TContext
+      > => {
 
-  return useMutation(mutationOptions, queryClient)
-}
+      const mutationOptions = getCertificateScoreMutationOptions(options);
 
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 /**
  * Cộng điểm giải thưởng
  * @summary Cộng điểm giải thưởng
@@ -12157,93 +9707,85 @@ export type awardScoreResponse400 = {
   data: AwardScore400
   status: 400
 }
+    
+export type awardScoreResponseSuccess = (awardScoreResponse200) & {
+  headers: Headers;
+};
+export type awardScoreResponseError = (awardScoreResponse400) & {
+  headers: Headers;
+};
 
-export type awardScoreResponseSuccess = awardScoreResponse200 & {
-  headers: Headers
-}
-export type awardScoreResponseError = awardScoreResponse400 & {
-  headers: Headers
-}
-
-export type awardScoreResponse = awardScoreResponseSuccess | awardScoreResponseError
+export type awardScoreResponse = (awardScoreResponseSuccess | awardScoreResponseError)
 
 export const getAwardScoreUrl = () => {
+
+
+  
+
   return `/api/archived-score/award-score`
 }
 
-export const awardScore = async (
-  awardIds: AwardIds,
-  options?: RequestInit
-): Promise<awardScoreResponse> => {
-  return customTrainingFetch<awardScoreResponse>(getAwardScoreUrl(), {
+export const awardScore = async (awardIds: AwardIds, options?: RequestInit): Promise<awardScoreResponse> => {
+  
+  return customTrainingFetch<awardScoreResponse>(getAwardScoreUrl(),
+  {      
     ...options,
-    method: "POST",
-    headers: { "Content-Type": "application/json", ...options?.headers },
-    body: JSON.stringify(awardIds),
-  })
-}
-
-export const getAwardScoreMutationOptions = <TError = AwardScore400, TContext = unknown>(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof awardScore>>,
-    TError,
-    { data: AwardIds },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof awardScore>>,
-  TError,
-  { data: AwardIds },
-  TContext
-> => {
-  const mutationKey = ["awardScore"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<Awaited<ReturnType<typeof awardScore>>, { data: AwardIds }> = (
-    props
-  ) => {
-    const { data } = props ?? {}
-
-    return awardScore(data, requestOptions)
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      awardIds,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type AwardScoreMutationResult = NonNullable<Awaited<ReturnType<typeof awardScore>>>
-export type AwardScoreMutationBody = AwardIds
-export type AwardScoreMutationError = AwardScore400
 
-/**
+
+export const getAwardScoreMutationOptions = <TError = AwardScore400,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof awardScore>>, TError,{data: AwardIds}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof awardScore>>, TError,{data: AwardIds}, TContext> => {
+
+const mutationKey = ['awardScore'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof awardScore>>, {data: AwardIds}> = (props) => {
+          const {data} = props ?? {};
+
+          return  awardScore(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type AwardScoreMutationResult = NonNullable<Awaited<ReturnType<typeof awardScore>>>
+    export type AwardScoreMutationBody = AwardIds
+    export type AwardScoreMutationError = AwardScore400
+
+    /**
  * @summary Cộng điểm giải thưởng
  */
-export const useAwardScore = <TError = AwardScore400, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof awardScore>>,
-      TError,
-      { data: AwardIds },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof awardScore>>,
-  TError,
-  { data: AwardIds },
-  TContext
-> => {
-  const mutationOptions = getAwardScoreMutationOptions(options)
+export const useAwardScore = <TError = AwardScore400,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof awardScore>>, TError,{data: AwardIds}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof awardScore>>,
+        TError,
+        {data: AwardIds},
+        TContext
+      > => {
 
-  return useMutation(mutationOptions, queryClient)
-}
+      const mutationOptions = getAwardScoreMutationOptions(options);
 
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 /**
  * Phê duyệt điểm giải thưởng
  * @summary Phê duyệt điểm giải thưởng
@@ -12257,101 +9799,85 @@ export type approveAwardScoreResponse400 = {
   data: ApproveAwardScore400
   status: 400
 }
+    
+export type approveAwardScoreResponseSuccess = (approveAwardScoreResponse200) & {
+  headers: Headers;
+};
+export type approveAwardScoreResponseError = (approveAwardScoreResponse400) & {
+  headers: Headers;
+};
 
-export type approveAwardScoreResponseSuccess = approveAwardScoreResponse200 & {
-  headers: Headers
-}
-export type approveAwardScoreResponseError = approveAwardScoreResponse400 & {
-  headers: Headers
-}
-
-export type approveAwardScoreResponse =
-  | approveAwardScoreResponseSuccess
-  | approveAwardScoreResponseError
+export type approveAwardScoreResponse = (approveAwardScoreResponseSuccess | approveAwardScoreResponseError)
 
 export const getApproveAwardScoreUrl = () => {
+
+
+  
+
   return `/api/archived-score/approve-award-score`
 }
 
-export const approveAwardScore = async (
-  awardIds: AwardIds,
-  options?: RequestInit
-): Promise<approveAwardScoreResponse> => {
-  return customTrainingFetch<approveAwardScoreResponse>(getApproveAwardScoreUrl(), {
+export const approveAwardScore = async (awardIds: AwardIds, options?: RequestInit): Promise<approveAwardScoreResponse> => {
+  
+  return customTrainingFetch<approveAwardScoreResponse>(getApproveAwardScoreUrl(),
+  {      
     ...options,
-    method: "POST",
-    headers: { "Content-Type": "application/json", ...options?.headers },
-    body: JSON.stringify(awardIds),
-  })
-}
-
-export const getApproveAwardScoreMutationOptions = <
-  TError = ApproveAwardScore400,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof approveAwardScore>>,
-    TError,
-    { data: AwardIds },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof approveAwardScore>>,
-  TError,
-  { data: AwardIds },
-  TContext
-> => {
-  const mutationKey = ["approveAwardScore"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof approveAwardScore>>,
-    { data: AwardIds }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return approveAwardScore(data, requestOptions)
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      awardIds,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type ApproveAwardScoreMutationResult = NonNullable<
-  Awaited<ReturnType<typeof approveAwardScore>>
->
-export type ApproveAwardScoreMutationBody = AwardIds
-export type ApproveAwardScoreMutationError = ApproveAwardScore400
 
-/**
+
+export const getApproveAwardScoreMutationOptions = <TError = ApproveAwardScore400,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof approveAwardScore>>, TError,{data: AwardIds}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof approveAwardScore>>, TError,{data: AwardIds}, TContext> => {
+
+const mutationKey = ['approveAwardScore'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof approveAwardScore>>, {data: AwardIds}> = (props) => {
+          const {data} = props ?? {};
+
+          return  approveAwardScore(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ApproveAwardScoreMutationResult = NonNullable<Awaited<ReturnType<typeof approveAwardScore>>>
+    export type ApproveAwardScoreMutationBody = AwardIds
+    export type ApproveAwardScoreMutationError = ApproveAwardScore400
+
+    /**
  * @summary Phê duyệt điểm giải thưởng
  */
-export const useApproveAwardScore = <TError = ApproveAwardScore400, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof approveAwardScore>>,
-      TError,
-      { data: AwardIds },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof approveAwardScore>>,
-  TError,
-  { data: AwardIds },
-  TContext
-> => {
-  const mutationOptions = getApproveAwardScoreMutationOptions(options)
+export const useApproveAwardScore = <TError = ApproveAwardScore400,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof approveAwardScore>>, TError,{data: AwardIds}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof approveAwardScore>>,
+        TError,
+        {data: AwardIds},
+        TContext
+      > => {
 
-  return useMutation(mutationOptions, queryClient)
-}
+      const mutationOptions = getApproveAwardScoreMutationOptions(options);
 
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 /**
  * Thống kê điểm thưởng từ học kỳ đến học kỳ
  * @summary Thống kê điểm thưởng
@@ -12360,96 +9886,83 @@ export type statsArchivedAwardResponse200 = {
   data: StatsArchivedAward200
   status: 200
 }
+    
+export type statsArchivedAwardResponseSuccess = (statsArchivedAwardResponse200) & {
+  headers: Headers;
+};
+;
 
-export type statsArchivedAwardResponseSuccess = statsArchivedAwardResponse200 & {
-  headers: Headers
-}
-
-export type statsArchivedAwardResponse = statsArchivedAwardResponseSuccess
+export type statsArchivedAwardResponse = (statsArchivedAwardResponseSuccess)
 
 export const getStatsArchivedAwardUrl = () => {
+
+
+  
+
   return `/api/archived-score/stats-archived-award`
 }
 
-export const statsArchivedAward = async (
-  statsArchivedAwardInput: StatsArchivedAwardInput,
-  options?: RequestInit
-): Promise<statsArchivedAwardResponse> => {
-  return customTrainingFetch<statsArchivedAwardResponse>(getStatsArchivedAwardUrl(), {
+export const statsArchivedAward = async (statsArchivedAwardInput: StatsArchivedAwardInput, options?: RequestInit): Promise<statsArchivedAwardResponse> => {
+  
+  return customTrainingFetch<statsArchivedAwardResponse>(getStatsArchivedAwardUrl(),
+  {      
     ...options,
-    method: "POST",
-    headers: { "Content-Type": "application/json", ...options?.headers },
-    body: JSON.stringify(statsArchivedAwardInput),
-  })
-}
-
-export const getStatsArchivedAwardMutationOptions = <
-  TError = unknown,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof statsArchivedAward>>,
-    TError,
-    { data: StatsArchivedAwardInput },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof statsArchivedAward>>,
-  TError,
-  { data: StatsArchivedAwardInput },
-  TContext
-> => {
-  const mutationKey = ["statsArchivedAward"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof statsArchivedAward>>,
-    { data: StatsArchivedAwardInput }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return statsArchivedAward(data, requestOptions)
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      statsArchivedAwardInput,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type StatsArchivedAwardMutationResult = NonNullable<
-  Awaited<ReturnType<typeof statsArchivedAward>>
->
-export type StatsArchivedAwardMutationBody = StatsArchivedAwardInput
-export type StatsArchivedAwardMutationError = unknown
 
-/**
+
+export const getStatsArchivedAwardMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof statsArchivedAward>>, TError,{data: StatsArchivedAwardInput}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof statsArchivedAward>>, TError,{data: StatsArchivedAwardInput}, TContext> => {
+
+const mutationKey = ['statsArchivedAward'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof statsArchivedAward>>, {data: StatsArchivedAwardInput}> = (props) => {
+          const {data} = props ?? {};
+
+          return  statsArchivedAward(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type StatsArchivedAwardMutationResult = NonNullable<Awaited<ReturnType<typeof statsArchivedAward>>>
+    export type StatsArchivedAwardMutationBody = StatsArchivedAwardInput
+    export type StatsArchivedAwardMutationError = unknown
+
+    /**
  * @summary Thống kê điểm thưởng
  */
-export const useStatsArchivedAward = <TError = unknown, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof statsArchivedAward>>,
-      TError,
-      { data: StatsArchivedAwardInput },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof statsArchivedAward>>,
-  TError,
-  { data: StatsArchivedAwardInput },
-  TContext
-> => {
-  const mutationOptions = getStatsArchivedAwardMutationOptions(options)
+export const useStatsArchivedAward = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof statsArchivedAward>>, TError,{data: StatsArchivedAwardInput}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof statsArchivedAward>>,
+        TError,
+        {data: StatsArchivedAwardInput},
+        TContext
+      > => {
 
-  return useMutation(mutationOptions, queryClient)
-}
+      const mutationOptions = getStatsArchivedAwardMutationOptions(options);
 
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 /**
  * Xuất file excel thống kê điểm thưởng từ học kỳ đến học kỳ
  * @summary Xuất file thống kê điểm thưởng
@@ -12458,96 +9971,83 @@ export type exportStatsArchivedAwardResponse200 = {
   data: Blob
   status: 200
 }
+    
+export type exportStatsArchivedAwardResponseSuccess = (exportStatsArchivedAwardResponse200) & {
+  headers: Headers;
+};
+;
 
-export type exportStatsArchivedAwardResponseSuccess = exportStatsArchivedAwardResponse200 & {
-  headers: Headers
-}
-
-export type exportStatsArchivedAwardResponse = exportStatsArchivedAwardResponseSuccess
+export type exportStatsArchivedAwardResponse = (exportStatsArchivedAwardResponseSuccess)
 
 export const getExportStatsArchivedAwardUrl = () => {
+
+
+  
+
   return `/api/archived-score/export-stats-archived-award`
 }
 
-export const exportStatsArchivedAward = async (
-  statsArchivedAwardInput: StatsArchivedAwardInput,
-  options?: RequestInit
-): Promise<exportStatsArchivedAwardResponse> => {
-  return customTrainingFetch<exportStatsArchivedAwardResponse>(getExportStatsArchivedAwardUrl(), {
+export const exportStatsArchivedAward = async (statsArchivedAwardInput: StatsArchivedAwardInput, options?: RequestInit): Promise<exportStatsArchivedAwardResponse> => {
+  
+  return customTrainingFetch<exportStatsArchivedAwardResponse>(getExportStatsArchivedAwardUrl(),
+  {      
     ...options,
-    method: "POST",
-    headers: { "Content-Type": "application/json", ...options?.headers },
-    body: JSON.stringify(statsArchivedAwardInput),
-  })
-}
-
-export const getExportStatsArchivedAwardMutationOptions = <
-  TError = unknown,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof exportStatsArchivedAward>>,
-    TError,
-    { data: StatsArchivedAwardInput },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof exportStatsArchivedAward>>,
-  TError,
-  { data: StatsArchivedAwardInput },
-  TContext
-> => {
-  const mutationKey = ["exportStatsArchivedAward"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof exportStatsArchivedAward>>,
-    { data: StatsArchivedAwardInput }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return exportStatsArchivedAward(data, requestOptions)
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      statsArchivedAwardInput,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type ExportStatsArchivedAwardMutationResult = NonNullable<
-  Awaited<ReturnType<typeof exportStatsArchivedAward>>
->
-export type ExportStatsArchivedAwardMutationBody = StatsArchivedAwardInput
-export type ExportStatsArchivedAwardMutationError = unknown
 
-/**
+
+export const getExportStatsArchivedAwardMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof exportStatsArchivedAward>>, TError,{data: StatsArchivedAwardInput}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof exportStatsArchivedAward>>, TError,{data: StatsArchivedAwardInput}, TContext> => {
+
+const mutationKey = ['exportStatsArchivedAward'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof exportStatsArchivedAward>>, {data: StatsArchivedAwardInput}> = (props) => {
+          const {data} = props ?? {};
+
+          return  exportStatsArchivedAward(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ExportStatsArchivedAwardMutationResult = NonNullable<Awaited<ReturnType<typeof exportStatsArchivedAward>>>
+    export type ExportStatsArchivedAwardMutationBody = StatsArchivedAwardInput
+    export type ExportStatsArchivedAwardMutationError = unknown
+
+    /**
  * @summary Xuất file thống kê điểm thưởng
  */
-export const useExportStatsArchivedAward = <TError = unknown, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof exportStatsArchivedAward>>,
-      TError,
-      { data: StatsArchivedAwardInput },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof exportStatsArchivedAward>>,
-  TError,
-  { data: StatsArchivedAwardInput },
-  TContext
-> => {
-  const mutationOptions = getExportStatsArchivedAwardMutationOptions(options)
+export const useExportStatsArchivedAward = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof exportStatsArchivedAward>>, TError,{data: StatsArchivedAwardInput}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof exportStatsArchivedAward>>,
+        TError,
+        {data: StatsArchivedAwardInput},
+        TContext
+      > => {
 
-  return useMutation(mutationOptions, queryClient)
-}
+      const mutationOptions = getExportStatsArchivedAwardMutationOptions(options);
 
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 /**
  * Xuất danh sách điểm chứng chỉ của học viên dưới dạng file Excel
  * @summary Xuất Excel danh sách điểm chứng chỉ
@@ -12561,174 +10061,120 @@ export type exportArchivedCertificateExcelResponse404 = {
   data: ExportArchivedCertificateExcel404
   status: 404
 }
+    
+export type exportArchivedCertificateExcelResponseSuccess = (exportArchivedCertificateExcelResponse200) & {
+  headers: Headers;
+};
+export type exportArchivedCertificateExcelResponseError = (exportArchivedCertificateExcelResponse404) & {
+  headers: Headers;
+};
 
-export type exportArchivedCertificateExcelResponseSuccess =
-  exportArchivedCertificateExcelResponse200 & {
-    headers: Headers
-  }
-export type exportArchivedCertificateExcelResponseError =
-  exportArchivedCertificateExcelResponse404 & {
-    headers: Headers
-  }
+export type exportArchivedCertificateExcelResponse = (exportArchivedCertificateExcelResponseSuccess | exportArchivedCertificateExcelResponseError)
 
-export type exportArchivedCertificateExcelResponse =
-  | exportArchivedCertificateExcelResponseSuccess
-  | exportArchivedCertificateExcelResponseError
-
-export const getExportArchivedCertificateExcelUrl = (
-  params: ExportArchivedCertificateExcelParams
-) => {
-  const normalizedParams = new URLSearchParams()
+export const getExportArchivedCertificateExcelUrl = (params: ExportArchivedCertificateExcelParams,) => {
+  const normalizedParams = new URLSearchParams();
 
   Object.entries(params || {}).forEach(([key, value]) => {
+    
     if (value !== undefined) {
-      normalizedParams.append(key, value === null ? "null" : value.toString())
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
     }
-  })
+  });
 
-  const stringifiedParams = normalizedParams.toString()
+  const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0
-    ? `/api/archived-score/export-archived-certificate-excel?${stringifiedParams}`
-    : `/api/archived-score/export-archived-certificate-excel`
+  return stringifiedParams.length > 0 ? `/api/archived-score/export-archived-certificate-excel?${stringifiedParams}` : `/api/archived-score/export-archived-certificate-excel`
 }
 
-export const exportArchivedCertificateExcel = async (
-  params: ExportArchivedCertificateExcelParams,
-  options?: RequestInit
-): Promise<exportArchivedCertificateExcelResponse> => {
-  return customTrainingFetch<exportArchivedCertificateExcelResponse>(
-    getExportArchivedCertificateExcelUrl(params),
-    {
-      ...options,
-      method: "GET",
-    }
-  )
-}
-
-export const getExportArchivedCertificateExcelQueryKey = (
-  params?: ExportArchivedCertificateExcelParams
-) => {
-  return [
-    `/api/archived-score/export-archived-certificate-excel`,
-    ...(params ? [params] : []),
-  ] as const
-}
-
-export const getExportArchivedCertificateExcelQueryOptions = <
-  TData = Awaited<ReturnType<typeof exportArchivedCertificateExcel>>,
-  TError = ExportArchivedCertificateExcel404,
->(
-  params: ExportArchivedCertificateExcelParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof exportArchivedCertificateExcel>>, TError, TData>
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
+export const exportArchivedCertificateExcel = async (params: ExportArchivedCertificateExcelParams, options?: RequestInit): Promise<exportArchivedCertificateExcelResponse> => {
+  
+  return customTrainingFetch<exportArchivedCertificateExcelResponse>(getExportArchivedCertificateExcelUrl(params),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
   }
+);}
+
+
+
+
+
+export const getExportArchivedCertificateExcelQueryKey = (params?: ExportArchivedCertificateExcelParams,) => {
+    return [
+    `/api/archived-score/export-archived-certificate-excel`, ...(params ? [params]: [])
+    ] as const;
+    }
+
+    
+export const getExportArchivedCertificateExcelQueryOptions = <TData = Awaited<ReturnType<typeof exportArchivedCertificateExcel>>, TError = ExportArchivedCertificateExcel404>(params: ExportArchivedCertificateExcelParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportArchivedCertificateExcel>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getExportArchivedCertificateExcelQueryKey(params)
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof exportArchivedCertificateExcel>>> = ({
-    signal,
-  }) => exportArchivedCertificateExcel(params, { signal, ...requestOptions })
+  const queryKey =  queryOptions?.queryKey ?? getExportArchivedCertificateExcelQueryKey(params);
 
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof exportArchivedCertificateExcel>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof exportArchivedCertificateExcel>>> = ({ signal }) => exportArchivedCertificateExcel(params, { signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof exportArchivedCertificateExcel>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type ExportArchivedCertificateExcelQueryResult = NonNullable<
-  Awaited<ReturnType<typeof exportArchivedCertificateExcel>>
->
+export type ExportArchivedCertificateExcelQueryResult = NonNullable<Awaited<ReturnType<typeof exportArchivedCertificateExcel>>>
 export type ExportArchivedCertificateExcelQueryError = ExportArchivedCertificateExcel404
 
-export function useExportArchivedCertificateExcel<
-  TData = Awaited<ReturnType<typeof exportArchivedCertificateExcel>>,
-  TError = ExportArchivedCertificateExcel404,
->(
-  params: ExportArchivedCertificateExcelParams,
-  options: {
-    query: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof exportArchivedCertificateExcel>>, TError, TData>
-    > &
-      Pick<
+
+export function useExportArchivedCertificateExcel<TData = Awaited<ReturnType<typeof exportArchivedCertificateExcel>>, TError = ExportArchivedCertificateExcel404>(
+ params: ExportArchivedCertificateExcelParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportArchivedCertificateExcel>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof exportArchivedCertificateExcel>>,
           TError,
           Awaited<ReturnType<typeof exportArchivedCertificateExcel>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useExportArchivedCertificateExcel<
-  TData = Awaited<ReturnType<typeof exportArchivedCertificateExcel>>,
-  TError = ExportArchivedCertificateExcel404,
->(
-  params: ExportArchivedCertificateExcelParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof exportArchivedCertificateExcel>>, TError, TData>
-    > &
-      Pick<
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useExportArchivedCertificateExcel<TData = Awaited<ReturnType<typeof exportArchivedCertificateExcel>>, TError = ExportArchivedCertificateExcel404>(
+ params: ExportArchivedCertificateExcelParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportArchivedCertificateExcel>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof exportArchivedCertificateExcel>>,
           TError,
           Awaited<ReturnType<typeof exportArchivedCertificateExcel>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useExportArchivedCertificateExcel<
-  TData = Awaited<ReturnType<typeof exportArchivedCertificateExcel>>,
-  TError = ExportArchivedCertificateExcel404,
->(
-  params: ExportArchivedCertificateExcelParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof exportArchivedCertificateExcel>>, TError, TData>
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useExportArchivedCertificateExcel<TData = Awaited<ReturnType<typeof exportArchivedCertificateExcel>>, TError = ExportArchivedCertificateExcel404>(
+ params: ExportArchivedCertificateExcelParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportArchivedCertificateExcel>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Xuất Excel danh sách điểm chứng chỉ
  */
 
-export function useExportArchivedCertificateExcel<
-  TData = Awaited<ReturnType<typeof exportArchivedCertificateExcel>>,
-  TError = ExportArchivedCertificateExcel404,
->(
-  params: ExportArchivedCertificateExcelParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof exportArchivedCertificateExcel>>, TError, TData>
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getExportArchivedCertificateExcelQueryOptions(params, options)
+export function useExportArchivedCertificateExcel<TData = Awaited<ReturnType<typeof exportArchivedCertificateExcel>>, TError = ExportArchivedCertificateExcel404>(
+ params: ExportArchivedCertificateExcelParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportArchivedCertificateExcel>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData, TError>
-  }
+  const queryOptions = getExportArchivedCertificateExcelQueryOptions(params,options)
 
-  query.queryKey = queryOptions.queryKey
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  return query
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
 }
+
+
+
+
 
 /**
  * Xuất danh sách điểm chứng chỉ theo nhiều khoá học và nhiều loại chứng chỉ
@@ -12743,110 +10189,85 @@ export type exportArchivedCertificateMultiExcelResponse404 = {
   data: ExportArchivedCertificateMultiExcel404
   status: 404
 }
+    
+export type exportArchivedCertificateMultiExcelResponseSuccess = (exportArchivedCertificateMultiExcelResponse200) & {
+  headers: Headers;
+};
+export type exportArchivedCertificateMultiExcelResponseError = (exportArchivedCertificateMultiExcelResponse404) & {
+  headers: Headers;
+};
 
-export type exportArchivedCertificateMultiExcelResponseSuccess =
-  exportArchivedCertificateMultiExcelResponse200 & {
-    headers: Headers
-  }
-export type exportArchivedCertificateMultiExcelResponseError =
-  exportArchivedCertificateMultiExcelResponse404 & {
-    headers: Headers
-  }
-
-export type exportArchivedCertificateMultiExcelResponse =
-  | exportArchivedCertificateMultiExcelResponseSuccess
-  | exportArchivedCertificateMultiExcelResponseError
+export type exportArchivedCertificateMultiExcelResponse = (exportArchivedCertificateMultiExcelResponseSuccess | exportArchivedCertificateMultiExcelResponseError)
 
 export const getExportArchivedCertificateMultiExcelUrl = () => {
+
+
+  
+
   return `/api/archived-score/export-archived-certificate-multi-excel`
 }
 
-export const exportArchivedCertificateMultiExcel = async (
-  exportArchivedCertificateMultiInput: ExportArchivedCertificateMultiInput,
-  options?: RequestInit
-): Promise<exportArchivedCertificateMultiExcelResponse> => {
-  return customTrainingFetch<exportArchivedCertificateMultiExcelResponse>(
-    getExportArchivedCertificateMultiExcelUrl(),
-    {
-      ...options,
-      method: "POST",
-      headers: { "Content-Type": "application/json", ...options?.headers },
-      body: JSON.stringify(exportArchivedCertificateMultiInput),
-    }
-  )
-}
-
-export const getExportArchivedCertificateMultiExcelMutationOptions = <
-  TError = ExportArchivedCertificateMultiExcel404,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof exportArchivedCertificateMultiExcel>>,
-    TError,
-    { data: ExportArchivedCertificateMultiInput },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof exportArchivedCertificateMultiExcel>>,
-  TError,
-  { data: ExportArchivedCertificateMultiInput },
-  TContext
-> => {
-  const mutationKey = ["exportArchivedCertificateMultiExcel"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof exportArchivedCertificateMultiExcel>>,
-    { data: ExportArchivedCertificateMultiInput }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return exportArchivedCertificateMultiExcel(data, requestOptions)
+export const exportArchivedCertificateMultiExcel = async (exportArchivedCertificateMultiInput: ExportArchivedCertificateMultiInput, options?: RequestInit): Promise<exportArchivedCertificateMultiExcelResponse> => {
+  
+  return customTrainingFetch<exportArchivedCertificateMultiExcelResponse>(getExportArchivedCertificateMultiExcelUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      exportArchivedCertificateMultiInput,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type ExportArchivedCertificateMultiExcelMutationResult = NonNullable<
-  Awaited<ReturnType<typeof exportArchivedCertificateMultiExcel>>
->
-export type ExportArchivedCertificateMultiExcelMutationBody = ExportArchivedCertificateMultiInput
-export type ExportArchivedCertificateMultiExcelMutationError =
-  ExportArchivedCertificateMultiExcel404
 
-/**
+
+export const getExportArchivedCertificateMultiExcelMutationOptions = <TError = ExportArchivedCertificateMultiExcel404,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof exportArchivedCertificateMultiExcel>>, TError,{data: ExportArchivedCertificateMultiInput}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof exportArchivedCertificateMultiExcel>>, TError,{data: ExportArchivedCertificateMultiInput}, TContext> => {
+
+const mutationKey = ['exportArchivedCertificateMultiExcel'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof exportArchivedCertificateMultiExcel>>, {data: ExportArchivedCertificateMultiInput}> = (props) => {
+          const {data} = props ?? {};
+
+          return  exportArchivedCertificateMultiExcel(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ExportArchivedCertificateMultiExcelMutationResult = NonNullable<Awaited<ReturnType<typeof exportArchivedCertificateMultiExcel>>>
+    export type ExportArchivedCertificateMultiExcelMutationBody = ExportArchivedCertificateMultiInput
+    export type ExportArchivedCertificateMultiExcelMutationError = ExportArchivedCertificateMultiExcel404
+
+    /**
  * @summary Xuất Excel danh sách điểm chứng chỉ nhiều loại
  */
-export const useExportArchivedCertificateMultiExcel = <
-  TError = ExportArchivedCertificateMultiExcel404,
-  TContext = unknown,
->(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof exportArchivedCertificateMultiExcel>>,
-      TError,
-      { data: ExportArchivedCertificateMultiInput },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof exportArchivedCertificateMultiExcel>>,
-  TError,
-  { data: ExportArchivedCertificateMultiInput },
-  TContext
-> => {
-  const mutationOptions = getExportArchivedCertificateMultiExcelMutationOptions(options)
+export const useExportArchivedCertificateMultiExcel = <TError = ExportArchivedCertificateMultiExcel404,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof exportArchivedCertificateMultiExcel>>, TError,{data: ExportArchivedCertificateMultiInput}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof exportArchivedCertificateMultiExcel>>,
+        TError,
+        {data: ExportArchivedCertificateMultiInput},
+        TContext
+      > => {
 
-  return useMutation(mutationOptions, queryClient)
-}
+      const mutationOptions = getExportArchivedCertificateMultiExcelMutationOptions(options);
 
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 export type createExamsResponse200 = {
   data: CreateExamsResponse
   status: 200
@@ -12856,94 +10277,82 @@ export type createExamsResponse400 = {
   data: CreateExamsBadResponse
   status: 400
 }
+    
+export type createExamsResponseSuccess = (createExamsResponse200) & {
+  headers: Headers;
+};
+export type createExamsResponseError = (createExamsResponse400) & {
+  headers: Headers;
+};
 
-export type createExamsResponseSuccess = createExamsResponse200 & {
-  headers: Headers
-}
-export type createExamsResponseError = createExamsResponse400 & {
-  headers: Headers
-}
-
-export type createExamsResponse = createExamsResponseSuccess | createExamsResponseError
+export type createExamsResponse = (createExamsResponseSuccess | createExamsResponseError)
 
 export const getCreateExamsUrl = () => {
+
+
+  
+
   return `/api/exam`
 }
 
-export const createExams = async (
-  createExamsRequest: CreateExamsRequest,
-  options?: RequestInit
-): Promise<createExamsResponse> => {
-  return customTrainingFetch<createExamsResponse>(getCreateExamsUrl(), {
+export const createExams = async (createExamsRequest: CreateExamsRequest, options?: RequestInit): Promise<createExamsResponse> => {
+  
+  return customTrainingFetch<createExamsResponse>(getCreateExamsUrl(),
+  {      
     ...options,
-    method: "POST",
-    headers: { "Content-Type": "application/json", ...options?.headers },
-    body: JSON.stringify(createExamsRequest),
-  })
-}
-
-export const getCreateExamsMutationOptions = <
-  TError = CreateExamsBadResponse,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof createExams>>,
-    TError,
-    { data: CreateExamsRequest },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof createExams>>,
-  TError,
-  { data: CreateExamsRequest },
-  TContext
-> => {
-  const mutationKey = ["createExams"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof createExams>>,
-    { data: CreateExamsRequest }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return createExams(data, requestOptions)
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      createExamsRequest,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type CreateExamsMutationResult = NonNullable<Awaited<ReturnType<typeof createExams>>>
-export type CreateExamsMutationBody = CreateExamsRequest
-export type CreateExamsMutationError = CreateExamsBadResponse
 
-export const useCreateExams = <TError = CreateExamsBadResponse, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof createExams>>,
-      TError,
-      { data: CreateExamsRequest },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof createExams>>,
-  TError,
-  { data: CreateExamsRequest },
-  TContext
-> => {
-  const mutationOptions = getCreateExamsMutationOptions(options)
 
-  return useMutation(mutationOptions, queryClient)
-}
+export const getCreateExamsMutationOptions = <TError = CreateExamsBadResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createExams>>, TError,{data: CreateExamsRequest}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof createExams>>, TError,{data: CreateExamsRequest}, TContext> => {
 
+const mutationKey = ['createExams'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createExams>>, {data: CreateExamsRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createExams(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateExamsMutationResult = NonNullable<Awaited<ReturnType<typeof createExams>>>
+    export type CreateExamsMutationBody = CreateExamsRequest
+    export type CreateExamsMutationError = CreateExamsBadResponse
+
+    export const useCreateExams = <TError = CreateExamsBadResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createExams>>, TError,{data: CreateExamsRequest}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof createExams>>,
+        TError,
+        {data: CreateExamsRequest},
+        TContext
+      > => {
+
+      const mutationOptions = getCreateExamsMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 export type createNewReExamListResponse200 = {
   data: CreateExamsResponse
   status: 200
@@ -12953,98 +10362,82 @@ export type createNewReExamListResponse400 = {
   data: CreateExamsBadResponse
   status: 400
 }
+    
+export type createNewReExamListResponseSuccess = (createNewReExamListResponse200) & {
+  headers: Headers;
+};
+export type createNewReExamListResponseError = (createNewReExamListResponse400) & {
+  headers: Headers;
+};
 
-export type createNewReExamListResponseSuccess = createNewReExamListResponse200 & {
-  headers: Headers
-}
-export type createNewReExamListResponseError = createNewReExamListResponse400 & {
-  headers: Headers
-}
-
-export type createNewReExamListResponse =
-  | createNewReExamListResponseSuccess
-  | createNewReExamListResponseError
+export type createNewReExamListResponse = (createNewReExamListResponseSuccess | createNewReExamListResponseError)
 
 export const getCreateNewReExamListUrl = () => {
+
+
+  
+
   return `/api/exam/reexam-list`
 }
 
-export const createNewReExamList = async (
-  createReExamsRequest: CreateReExamsRequest,
-  options?: RequestInit
-): Promise<createNewReExamListResponse> => {
-  return customTrainingFetch<createNewReExamListResponse>(getCreateNewReExamListUrl(), {
+export const createNewReExamList = async (createReExamsRequest: CreateReExamsRequest, options?: RequestInit): Promise<createNewReExamListResponse> => {
+  
+  return customTrainingFetch<createNewReExamListResponse>(getCreateNewReExamListUrl(),
+  {      
     ...options,
-    method: "POST",
-    headers: { "Content-Type": "application/json", ...options?.headers },
-    body: JSON.stringify(createReExamsRequest),
-  })
-}
-
-export const getCreateNewReExamListMutationOptions = <
-  TError = CreateExamsBadResponse,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof createNewReExamList>>,
-    TError,
-    { data: CreateReExamsRequest },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof createNewReExamList>>,
-  TError,
-  { data: CreateReExamsRequest },
-  TContext
-> => {
-  const mutationKey = ["createNewReExamList"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof createNewReExamList>>,
-    { data: CreateReExamsRequest }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return createNewReExamList(data, requestOptions)
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      createReExamsRequest,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type CreateNewReExamListMutationResult = NonNullable<
-  Awaited<ReturnType<typeof createNewReExamList>>
->
-export type CreateNewReExamListMutationBody = CreateReExamsRequest
-export type CreateNewReExamListMutationError = CreateExamsBadResponse
 
-export const useCreateNewReExamList = <TError = CreateExamsBadResponse, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof createNewReExamList>>,
-      TError,
-      { data: CreateReExamsRequest },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof createNewReExamList>>,
-  TError,
-  { data: CreateReExamsRequest },
-  TContext
-> => {
-  const mutationOptions = getCreateNewReExamListMutationOptions(options)
 
-  return useMutation(mutationOptions, queryClient)
-}
+export const getCreateNewReExamListMutationOptions = <TError = CreateExamsBadResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createNewReExamList>>, TError,{data: CreateReExamsRequest}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof createNewReExamList>>, TError,{data: CreateReExamsRequest}, TContext> => {
 
+const mutationKey = ['createNewReExamList'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createNewReExamList>>, {data: CreateReExamsRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createNewReExamList(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateNewReExamListMutationResult = NonNullable<Awaited<ReturnType<typeof createNewReExamList>>>
+    export type CreateNewReExamListMutationBody = CreateReExamsRequest
+    export type CreateNewReExamListMutationError = CreateExamsBadResponse
+
+    export const useCreateNewReExamList = <TError = CreateExamsBadResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createNewReExamList>>, TError,{data: CreateReExamsRequest}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof createNewReExamList>>,
+        TError,
+        {data: CreateReExamsRequest},
+        TContext
+      > => {
+
+      const mutationOptions = getCreateNewReExamListMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 export type mergeExamResponse200 = {
   data: MergeExamResponse
   status: 200
@@ -13054,94 +10447,82 @@ export type mergeExamResponse400 = {
   data: MergeExamBadResponse
   status: 400
 }
+    
+export type mergeExamResponseSuccess = (mergeExamResponse200) & {
+  headers: Headers;
+};
+export type mergeExamResponseError = (mergeExamResponse400) & {
+  headers: Headers;
+};
 
-export type mergeExamResponseSuccess = mergeExamResponse200 & {
-  headers: Headers
-}
-export type mergeExamResponseError = mergeExamResponse400 & {
-  headers: Headers
-}
-
-export type mergeExamResponse = mergeExamResponseSuccess | mergeExamResponseError
+export type mergeExamResponse = (mergeExamResponseSuccess | mergeExamResponseError)
 
 export const getMergeExamUrl = () => {
+
+
+  
+
   return `/api/exam/merge`
 }
 
-export const mergeExam = async (
-  mergeExamRequest: MergeExamRequest,
-  options?: RequestInit
-): Promise<mergeExamResponse> => {
-  return customTrainingFetch<mergeExamResponse>(getMergeExamUrl(), {
+export const mergeExam = async (mergeExamRequest: MergeExamRequest, options?: RequestInit): Promise<mergeExamResponse> => {
+  
+  return customTrainingFetch<mergeExamResponse>(getMergeExamUrl(),
+  {      
     ...options,
-    method: "POST",
-    headers: { "Content-Type": "application/json", ...options?.headers },
-    body: JSON.stringify(mergeExamRequest),
-  })
-}
-
-export const getMergeExamMutationOptions = <
-  TError = MergeExamBadResponse,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof mergeExam>>,
-    TError,
-    { data: MergeExamRequest },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof mergeExam>>,
-  TError,
-  { data: MergeExamRequest },
-  TContext
-> => {
-  const mutationKey = ["mergeExam"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof mergeExam>>,
-    { data: MergeExamRequest }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return mergeExam(data, requestOptions)
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      mergeExamRequest,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type MergeExamMutationResult = NonNullable<Awaited<ReturnType<typeof mergeExam>>>
-export type MergeExamMutationBody = MergeExamRequest
-export type MergeExamMutationError = MergeExamBadResponse
 
-export const useMergeExam = <TError = MergeExamBadResponse, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof mergeExam>>,
-      TError,
-      { data: MergeExamRequest },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof mergeExam>>,
-  TError,
-  { data: MergeExamRequest },
-  TContext
-> => {
-  const mutationOptions = getMergeExamMutationOptions(options)
 
-  return useMutation(mutationOptions, queryClient)
-}
+export const getMergeExamMutationOptions = <TError = MergeExamBadResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof mergeExam>>, TError,{data: MergeExamRequest}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof mergeExam>>, TError,{data: MergeExamRequest}, TContext> => {
 
+const mutationKey = ['mergeExam'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof mergeExam>>, {data: MergeExamRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  mergeExam(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type MergeExamMutationResult = NonNullable<Awaited<ReturnType<typeof mergeExam>>>
+    export type MergeExamMutationBody = MergeExamRequest
+    export type MergeExamMutationError = MergeExamBadResponse
+
+    export const useMergeExam = <TError = MergeExamBadResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof mergeExam>>, TError,{data: MergeExamRequest}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof mergeExam>>,
+        TError,
+        {data: MergeExamRequest},
+        TContext
+      > => {
+
+      const mutationOptions = getMergeExamMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 export type unmergeExamResponse200 = {
   data: UnmergeExamResponse
   status: 200
@@ -13151,94 +10532,82 @@ export type unmergeExamResponse400 = {
   data: UnmergeExamBadResponse
   status: 400
 }
+    
+export type unmergeExamResponseSuccess = (unmergeExamResponse200) & {
+  headers: Headers;
+};
+export type unmergeExamResponseError = (unmergeExamResponse400) & {
+  headers: Headers;
+};
 
-export type unmergeExamResponseSuccess = unmergeExamResponse200 & {
-  headers: Headers
-}
-export type unmergeExamResponseError = unmergeExamResponse400 & {
-  headers: Headers
-}
-
-export type unmergeExamResponse = unmergeExamResponseSuccess | unmergeExamResponseError
+export type unmergeExamResponse = (unmergeExamResponseSuccess | unmergeExamResponseError)
 
 export const getUnmergeExamUrl = () => {
+
+
+  
+
   return `/api/exam/unmerge`
 }
 
-export const unmergeExam = async (
-  unmergeExamRequest: UnmergeExamRequest,
-  options?: RequestInit
-): Promise<unmergeExamResponse> => {
-  return customTrainingFetch<unmergeExamResponse>(getUnmergeExamUrl(), {
+export const unmergeExam = async (unmergeExamRequest: UnmergeExamRequest, options?: RequestInit): Promise<unmergeExamResponse> => {
+  
+  return customTrainingFetch<unmergeExamResponse>(getUnmergeExamUrl(),
+  {      
     ...options,
-    method: "POST",
-    headers: { "Content-Type": "application/json", ...options?.headers },
-    body: JSON.stringify(unmergeExamRequest),
-  })
-}
-
-export const getUnmergeExamMutationOptions = <
-  TError = UnmergeExamBadResponse,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof unmergeExam>>,
-    TError,
-    { data: UnmergeExamRequest },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof unmergeExam>>,
-  TError,
-  { data: UnmergeExamRequest },
-  TContext
-> => {
-  const mutationKey = ["unmergeExam"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof unmergeExam>>,
-    { data: UnmergeExamRequest }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return unmergeExam(data, requestOptions)
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      unmergeExamRequest,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type UnmergeExamMutationResult = NonNullable<Awaited<ReturnType<typeof unmergeExam>>>
-export type UnmergeExamMutationBody = UnmergeExamRequest
-export type UnmergeExamMutationError = UnmergeExamBadResponse
 
-export const useUnmergeExam = <TError = UnmergeExamBadResponse, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof unmergeExam>>,
-      TError,
-      { data: UnmergeExamRequest },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof unmergeExam>>,
-  TError,
-  { data: UnmergeExamRequest },
-  TContext
-> => {
-  const mutationOptions = getUnmergeExamMutationOptions(options)
 
-  return useMutation(mutationOptions, queryClient)
-}
+export const getUnmergeExamMutationOptions = <TError = UnmergeExamBadResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof unmergeExam>>, TError,{data: UnmergeExamRequest}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof unmergeExam>>, TError,{data: UnmergeExamRequest}, TContext> => {
 
+const mutationKey = ['unmergeExam'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof unmergeExam>>, {data: UnmergeExamRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  unmergeExam(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UnmergeExamMutationResult = NonNullable<Awaited<ReturnType<typeof unmergeExam>>>
+    export type UnmergeExamMutationBody = UnmergeExamRequest
+    export type UnmergeExamMutationError = UnmergeExamBadResponse
+
+    export const useUnmergeExam = <TError = UnmergeExamBadResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof unmergeExam>>, TError,{data: UnmergeExamRequest}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof unmergeExam>>,
+        TError,
+        {data: UnmergeExamRequest},
+        TContext
+      > => {
+
+      const mutationOptions = getUnmergeExamMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 /**
  * Sinh phách cho danh sách thi
  * @summary Sinh phách cho danh sách thi
@@ -13257,103 +10626,85 @@ export type genExamListCodeResponse404 = {
   data: GenExamListCode404
   status: 404
 }
+    
+export type genExamListCodeResponseSuccess = (genExamListCodeResponse200) & {
+  headers: Headers;
+};
+export type genExamListCodeResponseError = (genExamListCodeResponse400 | genExamListCodeResponse404) & {
+  headers: Headers;
+};
 
-export type genExamListCodeResponseSuccess = genExamListCodeResponse200 & {
-  headers: Headers
-}
-export type genExamListCodeResponseError = (
-  | genExamListCodeResponse400
-  | genExamListCodeResponse404
-) & {
-  headers: Headers
-}
-
-export type genExamListCodeResponse = genExamListCodeResponseSuccess | genExamListCodeResponseError
+export type genExamListCodeResponse = (genExamListCodeResponseSuccess | genExamListCodeResponseError)
 
 export const getGenExamListCodeUrl = () => {
+
+
+  
+
   return `/api/exam-score/gen-exam-list-code`
 }
 
-export const genExamListCode = async (
-  genExamRoomCode: GenExamRoomCode,
-  options?: RequestInit
-): Promise<genExamListCodeResponse> => {
-  return customTrainingFetch<genExamListCodeResponse>(getGenExamListCodeUrl(), {
+export const genExamListCode = async (genExamRoomCode: GenExamRoomCode, options?: RequestInit): Promise<genExamListCodeResponse> => {
+  
+  return customTrainingFetch<genExamListCodeResponse>(getGenExamListCodeUrl(),
+  {      
     ...options,
-    method: "POST",
-    headers: { "Content-Type": "application/json", ...options?.headers },
-    body: JSON.stringify(genExamRoomCode),
-  })
-}
-
-export const getGenExamListCodeMutationOptions = <
-  TError = GenExamListCode400 | GenExamListCode404,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof genExamListCode>>,
-    TError,
-    { data: GenExamRoomCode },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof genExamListCode>>,
-  TError,
-  { data: GenExamRoomCode },
-  TContext
-> => {
-  const mutationKey = ["genExamListCode"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof genExamListCode>>,
-    { data: GenExamRoomCode }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return genExamListCode(data, requestOptions)
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      genExamRoomCode,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type GenExamListCodeMutationResult = NonNullable<Awaited<ReturnType<typeof genExamListCode>>>
-export type GenExamListCodeMutationBody = GenExamRoomCode
-export type GenExamListCodeMutationError = GenExamListCode400 | GenExamListCode404
 
-/**
+
+export const getGenExamListCodeMutationOptions = <TError = GenExamListCode400 | GenExamListCode404,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof genExamListCode>>, TError,{data: GenExamRoomCode}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof genExamListCode>>, TError,{data: GenExamRoomCode}, TContext> => {
+
+const mutationKey = ['genExamListCode'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof genExamListCode>>, {data: GenExamRoomCode}> = (props) => {
+          const {data} = props ?? {};
+
+          return  genExamListCode(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type GenExamListCodeMutationResult = NonNullable<Awaited<ReturnType<typeof genExamListCode>>>
+    export type GenExamListCodeMutationBody = GenExamRoomCode
+    export type GenExamListCodeMutationError = GenExamListCode400 | GenExamListCode404
+
+    /**
  * @summary Sinh phách cho danh sách thi
  */
-export const useGenExamListCode = <
-  TError = GenExamListCode400 | GenExamListCode404,
-  TContext = unknown,
->(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof genExamListCode>>,
-      TError,
-      { data: GenExamRoomCode },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof genExamListCode>>,
-  TError,
-  { data: GenExamRoomCode },
-  TContext
-> => {
-  const mutationOptions = getGenExamListCodeMutationOptions(options)
+export const useGenExamListCode = <TError = GenExamListCode400 | GenExamListCode404,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof genExamListCode>>, TError,{data: GenExamRoomCode}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof genExamListCode>>,
+        TError,
+        {data: GenExamRoomCode},
+        TContext
+      > => {
 
-  return useMutation(mutationOptions, queryClient)
-}
+      const mutationOptions = getGenExamListCodeMutationOptions(options);
 
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 /**
  * Lưu điểm theo phách
  * @summary Lưu điểm theo phách
@@ -13367,97 +10718,85 @@ export type saveExamScoreResponse400 = {
   data: SaveExamScore400
   status: 400
 }
+    
+export type saveExamScoreResponseSuccess = (saveExamScoreResponse200) & {
+  headers: Headers;
+};
+export type saveExamScoreResponseError = (saveExamScoreResponse400) & {
+  headers: Headers;
+};
 
-export type saveExamScoreResponseSuccess = saveExamScoreResponse200 & {
-  headers: Headers
-}
-export type saveExamScoreResponseError = saveExamScoreResponse400 & {
-  headers: Headers
-}
-
-export type saveExamScoreResponse = saveExamScoreResponseSuccess | saveExamScoreResponseError
+export type saveExamScoreResponse = (saveExamScoreResponseSuccess | saveExamScoreResponseError)
 
 export const getSaveExamScoreUrl = () => {
+
+
+  
+
   return `/api/exam-score/save-exam-score`
 }
 
-export const saveExamScore = async (
-  examCodes: ExamCodes,
-  options?: RequestInit
-): Promise<saveExamScoreResponse> => {
-  return customTrainingFetch<saveExamScoreResponse>(getSaveExamScoreUrl(), {
+export const saveExamScore = async (examCodes: ExamCodes, options?: RequestInit): Promise<saveExamScoreResponse> => {
+  
+  return customTrainingFetch<saveExamScoreResponse>(getSaveExamScoreUrl(),
+  {      
     ...options,
-    method: "POST",
-    headers: { "Content-Type": "application/json", ...options?.headers },
-    body: JSON.stringify(examCodes),
-  })
-}
-
-export const getSaveExamScoreMutationOptions = <
-  TError = SaveExamScore400,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof saveExamScore>>,
-    TError,
-    { data: ExamCodes },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof saveExamScore>>,
-  TError,
-  { data: ExamCodes },
-  TContext
-> => {
-  const mutationKey = ["saveExamScore"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof saveExamScore>>,
-    { data: ExamCodes }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return saveExamScore(data, requestOptions)
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      examCodes,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type SaveExamScoreMutationResult = NonNullable<Awaited<ReturnType<typeof saveExamScore>>>
-export type SaveExamScoreMutationBody = ExamCodes
-export type SaveExamScoreMutationError = SaveExamScore400
 
-/**
+
+export const getSaveExamScoreMutationOptions = <TError = SaveExamScore400,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof saveExamScore>>, TError,{data: ExamCodes}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof saveExamScore>>, TError,{data: ExamCodes}, TContext> => {
+
+const mutationKey = ['saveExamScore'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof saveExamScore>>, {data: ExamCodes}> = (props) => {
+          const {data} = props ?? {};
+
+          return  saveExamScore(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type SaveExamScoreMutationResult = NonNullable<Awaited<ReturnType<typeof saveExamScore>>>
+    export type SaveExamScoreMutationBody = ExamCodes
+    export type SaveExamScoreMutationError = SaveExamScore400
+
+    /**
  * @summary Lưu điểm theo phách
  */
-export const useSaveExamScore = <TError = SaveExamScore400, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof saveExamScore>>,
-      TError,
-      { data: ExamCodes },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof saveExamScore>>,
-  TError,
-  { data: ExamCodes },
-  TContext
-> => {
-  const mutationOptions = getSaveExamScoreMutationOptions(options)
+export const useSaveExamScore = <TError = SaveExamScore400,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof saveExamScore>>, TError,{data: ExamCodes}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof saveExamScore>>,
+        TError,
+        {data: ExamCodes},
+        TContext
+      > => {
 
-  return useMutation(mutationOptions, queryClient)
-}
+      const mutationOptions = getSaveExamScoreMutationOptions(options);
 
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 /**
  * Export student semester result to Excel
  * @summary Export Student Semester Result
@@ -13471,107 +10810,85 @@ export type exportStudentSemesterResultResponse404 = {
   data: ExportStudentSemesterResult404
   status: 404
 }
+    
+export type exportStudentSemesterResultResponseSuccess = (exportStudentSemesterResultResponse200) & {
+  headers: Headers;
+};
+export type exportStudentSemesterResultResponseError = (exportStudentSemesterResultResponse404) & {
+  headers: Headers;
+};
 
-export type exportStudentSemesterResultResponseSuccess = exportStudentSemesterResultResponse200 & {
-  headers: Headers
-}
-export type exportStudentSemesterResultResponseError = exportStudentSemesterResultResponse404 & {
-  headers: Headers
-}
-
-export type exportStudentSemesterResultResponse =
-  | exportStudentSemesterResultResponseSuccess
-  | exportStudentSemesterResultResponseError
+export type exportStudentSemesterResultResponse = (exportStudentSemesterResultResponseSuccess | exportStudentSemesterResultResponseError)
 
 export const getExportStudentSemesterResultUrl = () => {
+
+
+  
+
   return `/api/student-result/export-student-semester-result`
 }
 
-export const exportStudentSemesterResult = async (
-  exportStudentSemesterResultBody: ExportStudentSemesterResultBody,
-  options?: RequestInit
-): Promise<exportStudentSemesterResultResponse> => {
-  return customTrainingFetch<exportStudentSemesterResultResponse>(
-    getExportStudentSemesterResultUrl(),
-    {
-      ...options,
-      method: "POST",
-      headers: { "Content-Type": "application/json", ...options?.headers },
-      body: JSON.stringify(exportStudentSemesterResultBody),
-    }
-  )
-}
-
-export const getExportStudentSemesterResultMutationOptions = <
-  TError = ExportStudentSemesterResult404,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof exportStudentSemesterResult>>,
-    TError,
-    { data: ExportStudentSemesterResultBody },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof exportStudentSemesterResult>>,
-  TError,
-  { data: ExportStudentSemesterResultBody },
-  TContext
-> => {
-  const mutationKey = ["exportStudentSemesterResult"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof exportStudentSemesterResult>>,
-    { data: ExportStudentSemesterResultBody }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return exportStudentSemesterResult(data, requestOptions)
+export const exportStudentSemesterResult = async (exportStudentSemesterResultBody: ExportStudentSemesterResultBody, options?: RequestInit): Promise<exportStudentSemesterResultResponse> => {
+  
+  return customTrainingFetch<exportStudentSemesterResultResponse>(getExportStudentSemesterResultUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      exportStudentSemesterResultBody,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type ExportStudentSemesterResultMutationResult = NonNullable<
-  Awaited<ReturnType<typeof exportStudentSemesterResult>>
->
-export type ExportStudentSemesterResultMutationBody = ExportStudentSemesterResultBody
-export type ExportStudentSemesterResultMutationError = ExportStudentSemesterResult404
 
-/**
+
+export const getExportStudentSemesterResultMutationOptions = <TError = ExportStudentSemesterResult404,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof exportStudentSemesterResult>>, TError,{data: ExportStudentSemesterResultBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof exportStudentSemesterResult>>, TError,{data: ExportStudentSemesterResultBody}, TContext> => {
+
+const mutationKey = ['exportStudentSemesterResult'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof exportStudentSemesterResult>>, {data: ExportStudentSemesterResultBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  exportStudentSemesterResult(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ExportStudentSemesterResultMutationResult = NonNullable<Awaited<ReturnType<typeof exportStudentSemesterResult>>>
+    export type ExportStudentSemesterResultMutationBody = ExportStudentSemesterResultBody
+    export type ExportStudentSemesterResultMutationError = ExportStudentSemesterResult404
+
+    /**
  * @summary Export Student Semester Result
  */
-export const useExportStudentSemesterResult = <
-  TError = ExportStudentSemesterResult404,
-  TContext = unknown,
->(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof exportStudentSemesterResult>>,
-      TError,
-      { data: ExportStudentSemesterResultBody },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof exportStudentSemesterResult>>,
-  TError,
-  { data: ExportStudentSemesterResultBody },
-  TContext
-> => {
-  const mutationOptions = getExportStudentSemesterResultMutationOptions(options)
+export const useExportStudentSemesterResult = <TError = ExportStudentSemesterResult404,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof exportStudentSemesterResult>>, TError,{data: ExportStudentSemesterResultBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof exportStudentSemesterResult>>,
+        TError,
+        {data: ExportStudentSemesterResultBody},
+        TContext
+      > => {
 
-  return useMutation(mutationOptions, queryClient)
-}
+      const mutationOptions = getExportStudentSemesterResultMutationOptions(options);
 
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 /**
  * Export student year result to Excel
  * @summary Export Student Year Result
@@ -13585,101 +10902,85 @@ export type exportStudentYearResultResponse404 = {
   data: ExportStudentYearResult404
   status: 404
 }
+    
+export type exportStudentYearResultResponseSuccess = (exportStudentYearResultResponse200) & {
+  headers: Headers;
+};
+export type exportStudentYearResultResponseError = (exportStudentYearResultResponse404) & {
+  headers: Headers;
+};
 
-export type exportStudentYearResultResponseSuccess = exportStudentYearResultResponse200 & {
-  headers: Headers
-}
-export type exportStudentYearResultResponseError = exportStudentYearResultResponse404 & {
-  headers: Headers
-}
-
-export type exportStudentYearResultResponse =
-  | exportStudentYearResultResponseSuccess
-  | exportStudentYearResultResponseError
+export type exportStudentYearResultResponse = (exportStudentYearResultResponseSuccess | exportStudentYearResultResponseError)
 
 export const getExportStudentYearResultUrl = () => {
+
+
+  
+
   return `/api/student-result/export-student-year-result`
 }
 
-export const exportStudentYearResult = async (
-  exportStudentYearResultBody: ExportStudentYearResultBody,
-  options?: RequestInit
-): Promise<exportStudentYearResultResponse> => {
-  return customTrainingFetch<exportStudentYearResultResponse>(getExportStudentYearResultUrl(), {
+export const exportStudentYearResult = async (exportStudentYearResultBody: ExportStudentYearResultBody, options?: RequestInit): Promise<exportStudentYearResultResponse> => {
+  
+  return customTrainingFetch<exportStudentYearResultResponse>(getExportStudentYearResultUrl(),
+  {      
     ...options,
-    method: "POST",
-    headers: { "Content-Type": "application/json", ...options?.headers },
-    body: JSON.stringify(exportStudentYearResultBody),
-  })
-}
-
-export const getExportStudentYearResultMutationOptions = <
-  TError = ExportStudentYearResult404,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof exportStudentYearResult>>,
-    TError,
-    { data: ExportStudentYearResultBody },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof exportStudentYearResult>>,
-  TError,
-  { data: ExportStudentYearResultBody },
-  TContext
-> => {
-  const mutationKey = ["exportStudentYearResult"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof exportStudentYearResult>>,
-    { data: ExportStudentYearResultBody }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return exportStudentYearResult(data, requestOptions)
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      exportStudentYearResultBody,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type ExportStudentYearResultMutationResult = NonNullable<
-  Awaited<ReturnType<typeof exportStudentYearResult>>
->
-export type ExportStudentYearResultMutationBody = ExportStudentYearResultBody
-export type ExportStudentYearResultMutationError = ExportStudentYearResult404
 
-/**
+
+export const getExportStudentYearResultMutationOptions = <TError = ExportStudentYearResult404,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof exportStudentYearResult>>, TError,{data: ExportStudentYearResultBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof exportStudentYearResult>>, TError,{data: ExportStudentYearResultBody}, TContext> => {
+
+const mutationKey = ['exportStudentYearResult'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof exportStudentYearResult>>, {data: ExportStudentYearResultBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  exportStudentYearResult(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ExportStudentYearResultMutationResult = NonNullable<Awaited<ReturnType<typeof exportStudentYearResult>>>
+    export type ExportStudentYearResultMutationBody = ExportStudentYearResultBody
+    export type ExportStudentYearResultMutationError = ExportStudentYearResult404
+
+    /**
  * @summary Export Student Year Result
  */
-export const useExportStudentYearResult = <TError = ExportStudentYearResult404, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof exportStudentYearResult>>,
-      TError,
-      { data: ExportStudentYearResultBody },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof exportStudentYearResult>>,
-  TError,
-  { data: ExportStudentYearResultBody },
-  TContext
-> => {
-  const mutationOptions = getExportStudentYearResultMutationOptions(options)
+export const useExportStudentYearResult = <TError = ExportStudentYearResult404,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof exportStudentYearResult>>, TError,{data: ExportStudentYearResultBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof exportStudentYearResult>>,
+        TError,
+        {data: ExportStudentYearResultBody},
+        TContext
+      > => {
 
-  return useMutation(mutationOptions, queryClient)
-}
+      const mutationOptions = getExportStudentYearResultMutationOptions(options);
 
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 /**
  * Xuất thời khoá biểu ra file Excel theo học kỳ
  * @summary Export Thời Khoá Biểu
@@ -13693,101 +10994,85 @@ export type exportThoiKhoaBieuResponse404 = {
   data: ExportThoiKhoaBieu404
   status: 404
 }
+    
+export type exportThoiKhoaBieuResponseSuccess = (exportThoiKhoaBieuResponse200) & {
+  headers: Headers;
+};
+export type exportThoiKhoaBieuResponseError = (exportThoiKhoaBieuResponse404) & {
+  headers: Headers;
+};
 
-export type exportThoiKhoaBieuResponseSuccess = exportThoiKhoaBieuResponse200 & {
-  headers: Headers
-}
-export type exportThoiKhoaBieuResponseError = exportThoiKhoaBieuResponse404 & {
-  headers: Headers
-}
-
-export type exportThoiKhoaBieuResponse =
-  | exportThoiKhoaBieuResponseSuccess
-  | exportThoiKhoaBieuResponseError
+export type exportThoiKhoaBieuResponse = (exportThoiKhoaBieuResponseSuccess | exportThoiKhoaBieuResponseError)
 
 export const getExportThoiKhoaBieuUrl = () => {
+
+
+  
+
   return `/api/thoi-khoa-bieu/export-thoi-khoa-bieu`
 }
 
-export const exportThoiKhoaBieu = async (
-  exportThoiKhoaBieuBody: ExportThoiKhoaBieuBody,
-  options?: RequestInit
-): Promise<exportThoiKhoaBieuResponse> => {
-  return customTrainingFetch<exportThoiKhoaBieuResponse>(getExportThoiKhoaBieuUrl(), {
+export const exportThoiKhoaBieu = async (exportThoiKhoaBieuBody: ExportThoiKhoaBieuBody, options?: RequestInit): Promise<exportThoiKhoaBieuResponse> => {
+  
+  return customTrainingFetch<exportThoiKhoaBieuResponse>(getExportThoiKhoaBieuUrl(),
+  {      
     ...options,
-    method: "POST",
-    headers: { "Content-Type": "application/json", ...options?.headers },
-    body: JSON.stringify(exportThoiKhoaBieuBody),
-  })
-}
-
-export const getExportThoiKhoaBieuMutationOptions = <
-  TError = ExportThoiKhoaBieu404,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof exportThoiKhoaBieu>>,
-    TError,
-    { data: ExportThoiKhoaBieuBody },
-    TContext
-  >
-  request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof exportThoiKhoaBieu>>,
-  TError,
-  { data: ExportThoiKhoaBieuBody },
-  TContext
-> => {
-  const mutationKey = ["exportThoiKhoaBieu"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof exportThoiKhoaBieu>>,
-    { data: ExportThoiKhoaBieuBody }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return exportThoiKhoaBieu(data, requestOptions)
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      exportThoiKhoaBieuBody,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type ExportThoiKhoaBieuMutationResult = NonNullable<
-  Awaited<ReturnType<typeof exportThoiKhoaBieu>>
->
-export type ExportThoiKhoaBieuMutationBody = ExportThoiKhoaBieuBody
-export type ExportThoiKhoaBieuMutationError = ExportThoiKhoaBieu404
 
-/**
+
+export const getExportThoiKhoaBieuMutationOptions = <TError = ExportThoiKhoaBieu404,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof exportThoiKhoaBieu>>, TError,{data: ExportThoiKhoaBieuBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof exportThoiKhoaBieu>>, TError,{data: ExportThoiKhoaBieuBody}, TContext> => {
+
+const mutationKey = ['exportThoiKhoaBieu'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof exportThoiKhoaBieu>>, {data: ExportThoiKhoaBieuBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  exportThoiKhoaBieu(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ExportThoiKhoaBieuMutationResult = NonNullable<Awaited<ReturnType<typeof exportThoiKhoaBieu>>>
+    export type ExportThoiKhoaBieuMutationBody = ExportThoiKhoaBieuBody
+    export type ExportThoiKhoaBieuMutationError = ExportThoiKhoaBieu404
+
+    /**
  * @summary Export Thời Khoá Biểu
  */
-export const useExportThoiKhoaBieu = <TError = ExportThoiKhoaBieu404, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof exportThoiKhoaBieu>>,
-      TError,
-      { data: ExportThoiKhoaBieuBody },
-      TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof exportThoiKhoaBieu>>,
-  TError,
-  { data: ExportThoiKhoaBieuBody },
-  TContext
-> => {
-  const mutationOptions = getExportThoiKhoaBieuMutationOptions(options)
+export const useExportThoiKhoaBieu = <TError = ExportThoiKhoaBieu404,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof exportThoiKhoaBieu>>, TError,{data: ExportThoiKhoaBieuBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof exportThoiKhoaBieu>>,
+        TError,
+        {data: ExportThoiKhoaBieuBody},
+        TContext
+      > => {
 
-  return useMutation(mutationOptions, queryClient)
-}
+      const mutationOptions = getExportThoiKhoaBieuMutationOptions(options);
 
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 export type getVersionResponse200 = {
   data: GetVersion200
   status: 200
@@ -13797,129 +11082,103 @@ export type getVersionResponse400 = {
   data: GetVersion400
   status: 400
 }
+    
+export type getVersionResponseSuccess = (getVersionResponse200) & {
+  headers: Headers;
+};
+export type getVersionResponseError = (getVersionResponse400) & {
+  headers: Headers;
+};
 
-export type getVersionResponseSuccess = getVersionResponse200 & {
-  headers: Headers
-}
-export type getVersionResponseError = getVersionResponse400 & {
-  headers: Headers
-}
+export type getVersionResponse = (getVersionResponseSuccess | getVersionResponseError)
 
-export type getVersionResponse = getVersionResponseSuccess | getVersionResponseError
+export const getGetVersionUrl = (appCode: string,) => {
 
-export const getGetVersionUrl = (appCode: string) => {
+
+  
+
   return `/api/version/${appCode}`
 }
 
-export const getVersion = async (
-  appCode: string,
-  options?: RequestInit
-): Promise<getVersionResponse> => {
-  return customTrainingFetch<getVersionResponse>(getGetVersionUrl(appCode), {
+export const getVersion = async (appCode: string, options?: RequestInit): Promise<getVersionResponse> => {
+  
+  return customTrainingFetch<getVersionResponse>(getGetVersionUrl(appCode),
+  {      
     ...options,
-    method: "GET",
-  })
-}
-
-export const getGetVersionQueryKey = (appCode?: string) => {
-  return [`/api/version/${appCode}`] as const
-}
-
-export const getGetVersionQueryOptions = <
-  TData = Awaited<ReturnType<typeof getVersion>>,
-  TError = GetVersion400,
->(
-  appCode: string,
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getVersion>>, TError, TData>>
-    request?: SecondParameter<typeof customTrainingFetch>
+    method: 'GET'
+    
+    
   }
+);}
+
+
+
+
+
+export const getGetVersionQueryKey = (appCode?: string,) => {
+    return [
+    `/api/version/${appCode}`
+    ] as const;
+    }
+
+    
+export const getGetVersionQueryOptions = <TData = Awaited<ReturnType<typeof getVersion>>, TError = GetVersion400>(appCode: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getVersion>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getGetVersionQueryKey(appCode)
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getVersion>>> = ({ signal }) =>
-    getVersion(appCode, { signal, ...requestOptions })
+  const queryKey =  queryOptions?.queryKey ?? getGetVersionQueryKey(appCode);
 
-  return { queryKey, queryFn, enabled: !!appCode, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getVersion>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getVersion>>> = ({ signal }) => getVersion(appCode, { signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(appCode), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getVersion>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type GetVersionQueryResult = NonNullable<Awaited<ReturnType<typeof getVersion>>>
 export type GetVersionQueryError = GetVersion400
 
-export function useGetVersion<
-  TData = Awaited<ReturnType<typeof getVersion>>,
-  TError = GetVersion400,
->(
-  appCode: string,
-  options: {
-    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getVersion>>, TError, TData>> &
-      Pick<
+
+export function useGetVersion<TData = Awaited<ReturnType<typeof getVersion>>, TError = GetVersion400>(
+ appCode: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getVersion>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getVersion>>,
           TError,
           Awaited<ReturnType<typeof getVersion>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetVersion<
-  TData = Awaited<ReturnType<typeof getVersion>>,
-  TError = GetVersion400,
->(
-  appCode: string,
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getVersion>>, TError, TData>> &
-      Pick<
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetVersion<TData = Awaited<ReturnType<typeof getVersion>>, TError = GetVersion400>(
+ appCode: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getVersion>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getVersion>>,
           TError,
           Awaited<ReturnType<typeof getVersion>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetVersion<
-  TData = Awaited<ReturnType<typeof getVersion>>,
-  TError = GetVersion400,
->(
-  appCode: string,
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getVersion>>, TError, TData>>
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetVersion<TData = Awaited<ReturnType<typeof getVersion>>, TError = GetVersion400>(
+ appCode: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getVersion>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetVersion<
-  TData = Awaited<ReturnType<typeof getVersion>>,
-  TError = GetVersion400,
->(
-  appCode: string,
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getVersion>>, TError, TData>>
-    request?: SecondParameter<typeof customTrainingFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetVersionQueryOptions(appCode, options)
+export function useGetVersion<TData = Awaited<ReturnType<typeof getVersion>>, TError = GetVersion400>(
+ appCode: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getVersion>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData, TError>
-  }
+  const queryOptions = getGetVersionQueryOptions(appCode,options)
 
-  query.queryKey = queryOptions.queryKey
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  return query
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
 }
