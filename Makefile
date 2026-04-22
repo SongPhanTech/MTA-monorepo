@@ -127,7 +127,7 @@ APP_URL_SUFFIX_ql-ho-so     = /hrm/home
 APP_URL_SUFFIX_tro-ly-ao    = /chatbot/?mode=tro-ly-ao
 
 # Targets
-.PHONY: all clean push deploy release all-be build-all-be build-all-fe ship-fe \
+.PHONY: all clean push deploy release all-be build-all-be build-all-fe ship-fe ship-be \
 	build-% all-% save-docker-images package-cdn _package-fe-cdn-copy
 
 help:
@@ -183,6 +183,8 @@ build-all-fe:
 # Build all FE apps, package them, and deploy to the active SERVER_PROFILE in one shot.
 # Usage: make ship-fe SERVER_PROFILE=swantech_x52
 ship-fe: build-all-fe package-cdn deploy-cdn
+
+ship-be: build-all-be save-docker-images deploy-all-be
 
 all-clients:
 	@for pkg in $(FE_PKGS); do \
