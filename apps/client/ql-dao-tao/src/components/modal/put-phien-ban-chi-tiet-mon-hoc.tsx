@@ -421,8 +421,8 @@ const PutVersionSubjectDetailModal = () => {
       maskClosable={true}
       title={
         subjectVersionId
-          ? `Sửa thông tin chương trình chi tiết môn học - ${subject?.name ?? ""}`
-          : `Thêm thông tin chương trình chi tiết môn học - ${subject?.name ?? ""}`
+          ? `Sửa thông tin phiên bản chương trình chi tiết môn học`
+          : `Thêm thông tin phiên bản  chương trình chi tiết môn học`
       }
       className="w-[80vw]"
       okButtonProps={{ disabled: input?.isLocked }}

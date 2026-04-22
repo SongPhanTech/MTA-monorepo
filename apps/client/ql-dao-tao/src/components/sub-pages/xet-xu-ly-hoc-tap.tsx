@@ -375,7 +375,7 @@ const XetXuLyHocTap = ({ semesterId, trainingObjectTypeId, actionTaken }: XetXuL
                       }}
                     >
                       <BookPlus />
-                      Cập nhật SV
+                      Phê Duyệt
                     </Button>
 
                     <Button
@@ -597,7 +597,7 @@ const XetXuLyHocTap = ({ semesterId, trainingObjectTypeId, actionTaken }: XetXuL
                     >
                       <Button type="primary" disabled={selectedStudents.length === 0}>
                         <BookPlus />
-                        Duyệt
+                        Đưa vào danh sách
                       </Button>
                     </Popconfirm>
                   </Flex>

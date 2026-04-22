@@ -430,7 +430,7 @@ export default function SubjectList() {
                 </Button> */}
                 <Button onClick={handleModal} type="primary">
                   <BookPlus />
-                  Thêm môn học
+                  Thêm mới
                 </Button>
               </Flex>
             </Col>

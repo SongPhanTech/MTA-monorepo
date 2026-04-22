@@ -208,7 +208,7 @@ const ModalChuyenLopLuuBan = () => {
 
   return (
     <PutFormModal
-      title="Chuyển lớp học viên lưu ban"
+      title="Phê duyệt học viên"
       open={isOpen}
       onFinish={handleSubmit}
       onCancel={onClose}
