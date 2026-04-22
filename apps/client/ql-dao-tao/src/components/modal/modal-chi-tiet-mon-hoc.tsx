@@ -850,7 +850,7 @@ export default function ModalChiTietMonHoc() {
             {
               title: "Môn tương đương",
               width: 300,
-              render: (_: any, record: any) => {
+              render: (_, record) => {
                 const equivalentNames =
                   record.equivalencyGroup?.subjects
                     ?.filter((item: any) => item.subjectId !== record.subjectId)
@@ -864,7 +864,7 @@ export default function ModalChiTietMonHoc() {
             {
               title: "Mô tả",
               width: 250,
-              render: (_: any, record: any) => record.equivalencyGroup?.description || "-",
+              render: (_, record) => record.equivalencyGroup?.description || "-",
             },
             {
               title: "Số môn trong nhóm",
