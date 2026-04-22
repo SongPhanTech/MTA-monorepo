@@ -25,9 +25,13 @@ type PutLibrarySubmissionCreateForm = {
   submissionDate?: Date
 }
 
+type Props = {
+  onCreated?: () => void
+}
+
 dayjs.locale("vi")
 
-const PutLibrarySubmissionCreate = () => {
+const PutLibrarySubmissionCreate = ({ onCreated }: Props) => {
   const [form] = Form.useForm<PutLibrarySubmissionCreateForm>()
   const { isOpen, onClose, input } = useDisclosure<{ thesisSessionId?: string }>({
     tag: "PutLibrarySubmissionCreate",
@@ -55,6 +59,7 @@ const PutLibrarySubmissionCreate = () => {
     onSuccess: (res) => {
       if (res) {
         message.success("Tạo đăng ký luận văn cho sinh viên thành công")
+        onCreated?.()
       }
       onClose()
     },
@@ -112,7 +117,6 @@ const PutLibrarySubmissionCreate = () => {
 
   const onOk = async (values?: PutLibrarySubmissionCreateForm) => {
     if (!values?.fixedClassId) return
-
     if (!values?.studentId) return
 
     const thesisProject = await createThesisProject({
@@ -189,7 +193,6 @@ const PutLibrarySubmissionCreate = () => {
           />
         </FormItem>
       </Col>
-
       <Col span={12}>
         <FormItem form={form} name="studentId" label="Sinh viên">
           <Select
@@ -207,7 +210,6 @@ const PutLibrarySubmissionCreate = () => {
           />
         </FormItem>
       </Col>
-
       <Col span={12}>
         <FormItem form={form} name="supervisorId" label="Giảng viên hướng dẫn 1">
           <Select
