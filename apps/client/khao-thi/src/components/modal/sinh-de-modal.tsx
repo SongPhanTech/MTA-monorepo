@@ -76,6 +76,20 @@ const SinhDeModal = () => {
   )
 
   const examFrameworkId = Form.useWatch("examFrameworkId", form)
+  const examTime = Form.useWatch("examTime", form)
+
+  const selectedFramework = useMemo(() => {
+    return examFrameworkData.find((i) => i.id === examFrameworkId)
+  }, [examFrameworkId, examFrameworkData])
+  
+  useEffect(() => {
+    // Nếu user chưa nhập (hoặc đã xoá) thì fallback về thời gian của khung đề
+    if (selectedFramework?.time && (examTime == null || examTime === ("" as any))) {
+      form.setFieldsValue({
+        examTime: selectedFramework.time,
+      })
+    }
+  }, [selectedFramework?.time, examTime, form])
 
   const { data: ExamMatrixData = [] } = useFindManyExamMatrix(
     {
@@ -116,6 +130,7 @@ const SinhDeModal = () => {
         updatedAt: null,
         examDay: values?.examDay ? new Date(values?.examDay).toISOString() : null,
         isGroup: values?.isGroup || true,
+        examTime: values?.examTime ?? selectedFramework?.time,
       })
       if (res?.status === 200) {
         message.success("Tạo đề thành công!")
@@ -185,17 +200,26 @@ const SinhDeModal = () => {
             </FormItem>
           </Col>
           <Col span={12}>
-            <FormItem form={form} name="examFrameworkId" label="Khung đề" required>
-              <Select
-                options={examFrameworkData.map((i) => {
-                  return {
-                    label: i.name,
-                    value: i.id,
-                  }
-                })}
-                placeholder="Chọn khung đề"
-              />
-            </FormItem>
+            <Row gutter={[8, 0]}>
+              <Col flex="4 1 0">
+                <FormItem form={form} name="examFrameworkId" label="Khung đề" required>
+                  <Select
+                    options={examFrameworkData.map((i) => {
+                      return {
+                        label: i.name,
+                        value: i.id,
+                      }
+                    })}
+                    placeholder="Chọn khung đề"
+                  />
+                </FormItem>
+              </Col>
+              <Col flex="1 1 0">
+                <FormItem form={form} name="examTime" label="Thời gian thi" required>
+                  <InputNumber className="w-full" placeholder="Phút" min={1} />
+                </FormItem>
+              </Col>
+            </Row>
           </Col>
           <Col span={12}>
             <FormItem form={form} name="examMatrixId" label="Ma trận đề" required>
