@@ -251,9 +251,7 @@ const PutHoSoBaoVeLv = () => {
       onFinish={onOk}
       onCancel={onClose}
       maskClosable
-      title={
-        isCreateMode ? "Tạo mới hồ sơ bảo vệ luận văn/đồ án" : "Sửa hồ sơ bảo vệ luận văn/đồ án"
-      }
+      title={isCreateMode ? "Tạo mới để xuất hội đồng" : "Sửa để xuất hội đồng"}
       className="w-[720px]"
     >
       <Col span={24} className="rounded-lg bg-slate-50 px-4 py-3 text-sm text-slate-600">
