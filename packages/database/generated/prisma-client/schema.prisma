@@ -3202,6 +3202,7 @@ model SubjectVersion {
   exams                    Exam[]
   examFramework            ExamFramework[]
   scoreLinkSubjectVersion  ScoreLinkSubjectVersion[]
+  certificate              Certificate[]
 
   @@unique([trainingObjectTypeId, name, credit, period, managementOrganizationId])
   @@index([name, trainingObjectTypeId])
@@ -3968,6 +3969,9 @@ model Certificate {
   archivedCertificate ArchivedCertificate[]
   /// môn học có thể phiên điểm
   subjects            CertificateOnSubject[]
+  /// danh sách môn để xét chứng chỉ (e.g. SUM(finalScore * credit) / SUM(credit) > 5)
+  subjectVersions     SubjectVersion[]
+  scoreThreshold      Float                  @default(5)
   isUsingScore        Boolean                @default(true)
 
   @@schema("ql-dao-tao")

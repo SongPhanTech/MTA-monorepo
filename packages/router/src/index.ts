@@ -300,6 +300,13 @@ const NAVIGATION: NavigationType = {
             path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_DIEM_CHUNG_CHI,
             description: "Điểm chứng chỉ",
           },
+
+          {
+            id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_XET_CHUNG_CHI,
+            label: "Xét chứng chỉ",
+            path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_XET_CHUNG_CHI,
+            description: "Xét chứng chỉ",
+          },
           {
             id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_SUA_DIEM,
             label: "Sửa điểm",
