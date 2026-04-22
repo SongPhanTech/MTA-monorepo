@@ -173,115 +173,115 @@ export default function ClassSubject() {
       ...(trainingObjectTypeId ? { trainingObjectTypeId } : {}),
       ...(filters.searchText && filters.searchText !== ""
         ? {
-            OR: [
-              {
-                name: {
-                  contains: filters.searchText,
-                  mode: "insensitive",
-                },
+          OR: [
+            {
+              name: {
+                contains: filters.searchText,
+                mode: "insensitive",
               },
-              {
-                code: {
-                  contains: filters.searchText,
-                  mode: "insensitive",
-                },
+            },
+            {
+              code: {
+                contains: filters.searchText,
+                mode: "insensitive",
               },
-            ],
-          }
+            },
+          ],
+        }
         : {}),
       ...(filters.code && filters.code !== ""
         ? {
-            code: {
-              contains: filters.searchText || filters.code,
-              mode: "insensitive",
-            },
-          }
+          code: {
+            contains: filters.searchText || filters.code,
+            mode: "insensitive",
+          },
+        }
         : {}),
       ...(filters.name && filters.name !== ""
         ? {
-            name: {
-              contains: filters.name,
-              mode: "insensitive",
-            },
-          }
+          name: {
+            contains: filters.name,
+            mode: "insensitive",
+          },
+        }
         : {}),
 
       ...(filters.examType
         ? {
-            examType: {
-              in: filters.examType,
-            },
-          }
+          examType: {
+            in: filters.examType,
+          },
+        }
         : {}),
       ...(filters.fixedClassId
         ? {
-            fixedClasses: {
-              some: {
-                id: filters.fixedClassId,
-              },
+          fixedClasses: {
+            some: {
+              id: filters.fixedClassId,
             },
-          }
+          },
+        }
         : {}),
       ...(filters.mainLecturer
         ? {
-            mainLecturer: {
-              userProfile: filters.mainLecturer
-                ? {
-                    fullname: {
-                      contains: filters.mainLecturer,
-                      mode: "insensitive" as const,
-                    },
-                  }
-                : {},
-            },
-          }
+          mainLecturer: {
+            userProfile: filters.mainLecturer
+              ? {
+                fullname: {
+                  contains: filters.mainLecturer,
+                  mode: "insensitive" as const,
+                },
+              }
+              : {},
+          },
+        }
         : {}),
       ...(filters.enterGradeLecturer
         ? {
-            enterGradeLecturer: {
-              userProfile: filters.enterGradeLecturer
-                ? {
-                    fullname: {
-                      contains: filters.enterGradeLecturer,
-                      mode: "insensitive" as const,
-                    },
-                  }
-                : {},
-            },
-          }
+          enterGradeLecturer: {
+            userProfile: filters.enterGradeLecturer
+              ? {
+                fullname: {
+                  contains: filters.enterGradeLecturer,
+                  mode: "insensitive" as const,
+                },
+              }
+              : {},
+          },
+        }
         : {}),
 
       ...(filters.startDate?.length === 2
         ? {
-            startDate: {
-              gte: dayjs(filters.startDate?.[0], "DD/MM/YYYY").toDate(),
-              lte: dayjs(filters.startDate?.[1], "DD/MM/YYYY").toDate(),
-            },
-          }
+          startDate: {
+            gte: dayjs(filters.startDate?.[0], "DD/MM/YYYY").toDate(),
+            lte: dayjs(filters.startDate?.[1], "DD/MM/YYYY").toDate(),
+          },
+        }
         : {}),
       ...(filters.endDate?.length === 2
         ? {
-            endDate: {
-              gte: dayjs(filters.endDate?.[0], "DD/MM/YYYY").toDate(),
-              lte: dayjs(filters.endDate?.[1], "DD/MM/YYYY").toDate(),
-            },
-          }
+          endDate: {
+            gte: dayjs(filters.endDate?.[0], "DD/MM/YYYY").toDate(),
+            lte: dayjs(filters.endDate?.[1], "DD/MM/YYYY").toDate(),
+          },
+        }
         : {}),
       ...(filters.examDate?.length === 2
         ? {
-            examDate: {
-              gte: dayjs(filters.examDate?.[0], "DD/MM/YYYY").toDate(),
-              lte: dayjs(filters.examDate?.[1], "DD/MM/YYYY").toDate(),
-            },
-          }
+          examDate: {
+            gte: dayjs(filters.examDate?.[0], "DD/MM/YYYY").toDate(),
+            lte: dayjs(filters.examDate?.[1], "DD/MM/YYYY").toDate(),
+          },
+        }
         : {}),
 
       ...(!canReadAll
         ? {
-            mainLecturer: {
-              userProfileId: profileId,
-            },
-          } //Nếu không có quyền xem tất cả thì chỉ được xem lớp do mình giảng dạy
+          mainLecturer: {
+            userProfileId: profileId,
+          },
+        } //Nếu không có quyền xem tất cả thì chỉ được xem lớp do mình giảng dạy
         : {}),
       deletedAt: null,
       cancelled: false,
@@ -580,150 +580,150 @@ export default function ClassSubject() {
                   QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_DS_LOP_MON_HOC,
                   "XEM_TAT_CA"
                 ) && (
-                  <>
-                    {Object.keys(changedExamDates).length > 0 && (
-                      <Button
-                        type="primary"
-                        onClick={handleUpdateExamDates}
-                        className="bg-orange-500 hover:!bg-orange-400"
-                      >
-                        Lưu kế hoạch
-                      </Button>
-                    )}
-                    {selectedRowKeys.length > 0 && <p>(Đang chọn {selectedRowKeys.length} lớp)</p>}
+                    <>
+                      {Object.keys(changedExamDates).length > 0 && (
+                        <Button
+                          type="primary"
+                          onClick={handleUpdateExamDates}
+                          className="bg-orange-500 hover:!bg-orange-400"
+                        >
+                          Lưu kế hoạch
+                        </Button>
+                      )}
+                      {selectedRowKeys.length > 0 && <p>(Đang chọn {selectedRowKeys.length} lớp)</p>}
 
-                    <Button
-                      icon={<DownloadOutlined />}
-                      onClick={handleExportSubjectClassExcel}
-                      type="primary"
-                    >
-                      Xuất Excel
-                    </Button>
-                    {/* {selectedRowKeys.length > 0 && <p>(Đang chọn {selectedRowKeys.length} lớp)</p>} */}
-                    <Popover
-                      content={
-                        <Form
-                          className="max-w-56"
-                          form={form}
-                          initialValues={{
-                            isOverride: false,
-                          }}
-                          onFinish={handleUpdateTime}
-                        >
-                          <FormItem
+                      <Button
+                        icon={<DownloadOutlined />}
+                        onClick={handleExportSubjectClassExcel}
+                        type="primary"
+                      >
+                        Xuất Excel
+                      </Button>
+                      {/* {selectedRowKeys.length > 0 && <p>(Đang chọn {selectedRowKeys.length} lớp)</p>} */}
+                      <Popover
+                        content={
+                          <Form
+                            className="max-w-56"
                             form={form}
-                            name="startPadding"
-                            label="Ngày thi - Ngày bắt đầu"
-                            className="mb-2"
+                            initialValues={{
+                              isOverride: false,
+                            }}
+                            onFinish={handleUpdateTime}
                           >
-                            <InputNumber className="w-full" min={0} step={1} placeholder="14" />
-                          </FormItem>
-                          <FormItem
-                            form={form}
-                            className="mb-2 w-full"
-                            name="endPadding"
-                            label="Ngày thi - Ngày kết thúc"
-                          >
-                            <InputNumber className="w-full" min={0} step={1} placeholder="7" />
-                          </FormItem>
-                          <FormItem
-                            layout="vertical"
-                            form={form}
-                            name="time"
-                            label={
-                              <Tooltip title={"Dành cho những lớp chưa có ngày thi"}>
-                                Thời gian nhập điểm quá trình
-                              </Tooltip>
-                            }
-                            className="italic"
-                          >
-                            <AntdDatePicker.RangePicker
-                              locale={locale}
-                              format="DD/MM/YYYY"
-                              placeholder={["Bắt đầu", "Kết thúc"]}
-                            />
-                          </FormItem>
-                          <FormItem
-                            form={form}
-                            className="mb-2"
-                            name="overwrite"
-                            label="Ghi đè hạn cũ"
-                          >
-                            <Switch className="mx-auto" />
-                          </FormItem>
-                          <Col span={24} className="text-right mt-4">
-                            <Button type="primary" htmlType="submit">
-                              Xác nhận
-                            </Button>
-                          </Col>
-                        </Form>
-                      }
-                      title="Gán hạn nhập điểm quá trình"
-                      trigger="click"
-                      placement="bottomRight"
-                      open={open}
-                      onOpenChange={setOpen}
-                    >
-                      <Button type="primary">Đặt hạn nhập điểm TX/ĐK</Button>
-                    </Popover>
-                    <Popover
-                      content={
-                        <Form
-                          className="max-w-56"
-                          form={formExam}
-                          initialValues={{ isOverride: false }}
-                          onFinish={handleUpdateTimeScore}
-                        >
-                          <FormItem
-                            form={form}
-                            name="endPadding"
-                            label="Ngày kết thúc - Ngày thi"
-                            className="mb-2"
-                          >
-                            <InputNumber className="w-full" min={0} step={0} placeholder="7" />
-                          </FormItem>
-                          <FormItem
-                            className="italic"
-                            layout="vertical"
+                            <FormItem
+                              form={form}
+                              name="startPadding"
+                              label="Ngày thi - Ngày bắt đầu"
+                              className="mb-2"
+                            >
+                              <InputNumber className="w-full" min={0} step={1} placeholder="14" />
+                            </FormItem>
+                            <FormItem
+                              form={form}
+                              className="mb-2 w-full"
+                              name="endPadding"
+                              label="Ngày thi - Ngày kết thúc"
+                            >
+                              <InputNumber className="w-full" min={0} step={1} placeholder="7" />
+                            </FormItem>
+                            <FormItem
+                              layout="vertical"
+                              form={form}
+                              name="time"
+                              label={
+                                <Tooltip title={"Dành cho những lớp chưa có ngày thi"}>
+                                  Thời gian nhập điểm quá trình
+                                </Tooltip>
+                              }
+                              className="italic"
+                            >
+                              <AntdDatePicker.RangePicker
+                                locale={locale}
+                                format="DD/MM/YYYY"
+                                placeholder={["Bắt đầu", "Kết thúc"]}
+                              />
+                            </FormItem>
+                            <FormItem
+                              form={form}
+                              className="mb-2"
+                              name="overwrite"
+                              label="Ghi đè hạn cũ"
+                            >
+                              <Switch className="mx-auto" />
+                            </FormItem>
+                            <Col span={24} className="text-right mt-4">
+                              <Button type="primary" htmlType="submit">
+                                Xác nhận
+                              </Button>
+                            </Col>
+                          </Form>
+                        }
+                        title="Gán hạn nhập điểm quá trình"
+                        trigger="click"
+                        placement="bottomRight"
+                        open={open}
+                        onOpenChange={setOpen}
+                      >
+                        <Button type="primary">Đặt hạn nhập điểm TX/ĐK</Button>
+                      </Popover>
+                      <Popover
+                        content={
+                          <Form
+                            className="max-w-56"
                             form={formExam}
-                            name="endDate"
-                            label={
-                              <Tooltip title={"Dành cho những lớp chưa có ngày thi"}>
-                                Thời gian nhập điểm thi
-                              </Tooltip>
-                            }
+                            initialValues={{ isOverride: false }}
+                            onFinish={handleUpdateTimeScore}
                           >
-                            <DatePicker
-                              format="DD/MM/YYYY"
-                              placeholder="Hạn nhập điểm thi"
-                              className="w-full"
-                            />
-                          </FormItem>
-                          <FormItem
-                            form={form}
-                            className="mb-2"
-                            name="overwrite"
-                            label="Ghi đè hạn cũ"
-                          >
-                            <Switch className="mx-auto" />
-                          </FormItem>
-                          <Col span={24} className="text-right mt-4">
-                            <Button type="primary" htmlType="submit">
-                              Xác nhận
-                            </Button>
-                          </Col>
-                        </Form>
-                      }
-                      title="Gán hạn nhập điểm thi"
-                      trigger="click"
-                      placement="bottomRight"
-                      open={openExam}
-                      onOpenChange={setOpenExam}
-                    >
-                      <Button type="primary">Đặt hạn nhập điểm thi</Button>
-                    </Popover>
-                  </>
-                )}
+                            <FormItem
+                              form={form}
+                              name="endPadding"
+                              label="Ngày kết thúc - Ngày thi"
+                              className="mb-2"
+                            >
+                              <InputNumber className="w-full" min={0} step={0} placeholder="7" />
+                            </FormItem>
+                            <FormItem
+                              className="italic"
+                              layout="vertical"
+                              form={formExam}
+                              name="endDate"
+                              label={
+                                <Tooltip title={"Dành cho những lớp chưa có ngày thi"}>
+                                  Thời gian nhập điểm thi
+                                </Tooltip>
+                              }
+                            >
+                              <DatePicker
+                                format="DD/MM/YYYY"
+                                placeholder="Hạn nhập điểm thi"
+                                className="w-full"
+                              />
+                            </FormItem>
+                            <FormItem
+                              form={form}
+                              className="mb-2"
+                              name="overwrite"
+                              label="Ghi đè hạn cũ"
+                            >
+                              <Switch className="mx-auto" />
+                            </FormItem>
+                            <Col span={24} className="text-right mt-4">
+                              <Button type="primary" htmlType="submit">
+                                Xác nhận
+                              </Button>
+                            </Col>
+                          </Form>
+                        }
+                        title="Gán hạn nhập điểm thi"
+                        trigger="click"
+                        placement="bottomRight"
+                        open={openExam}
+                        onOpenChange={setOpenExam}
+                      >
+                        <Button type="primary">Đặt hạn nhập điểm thi</Button>
+                      </Popover>
+                    </>
+                  )}
               </Flex>
             </Col>
           </Row>
@@ -892,6 +892,10 @@ export default function ClassSubject() {
                 align: "center",
                 type: "date",
                 sorter: true,
+                showSorterTooltip: {
+                  target: 'sorter-icon',
+                  title: 'Nhấp để sắp xếp', // Dòng chữ bạn muốn hiển thị
+                },
                 // render: (record: string) => (record ? dayjs(record).format("DD/MM/YYYY") : ""),
                 render: (_, record) => {
                   if (!canReadAll) {
