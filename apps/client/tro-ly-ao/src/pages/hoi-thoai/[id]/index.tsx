@@ -117,8 +117,8 @@ export default function Page() {
   const [isStoppedByUser, setIsStoppedByUser] = useState(false)
   const timeoutRef = useRef<NodeJS.Timeout | null>(null)
 
-  // Timeout configuration (30 seconds)
-  const API_TIMEOUT_MS = 30000
+  // Timeout configuration (60 seconds)
+  const API_TIMEOUT_MS = 60000
 
   // Initialize selectedDocumentIds from query params
   useEffect(() => {
@@ -183,7 +183,7 @@ export default function Page() {
       timeoutRef.current = setTimeout(() => {
         if (controller && !controller.signal.aborted) {
           controller.abort()
-          message.warning("Yêu cầu đã hết thời gian chờ (30s). Vui lòng thử lại.")
+          message.warning("Yêu cầu đã hết thời gian chờ (60s). Vui lòng thử lại.")
           setLoading(false)
           setIsStreaming(false)
           setAbortController(null)

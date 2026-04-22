@@ -146,16 +146,30 @@ export const numberToWords = (num: number): string => {
 
 export const getMinioUrl = (uri: string | undefined | null) => {
   if (!uri) return ""
-  const isAbsolutePath = uri.startsWith("http") || uri.startsWith("blob")
-  if (isAbsolutePath) return uri
-  // TODO: check env minio domain
-  const url = new URL(
-    uri,
+  if (uri.startsWith("blob")) return uri
+  const publicEndpoint =
     getRuntimeEnv("NEXT_PUBLIC_MINIO_ENDPOINT") ||
-      process?.env?.MINIO_ENDPOINT ||
-      "https://minio.swantech.vn"
-  )
-  return url.href
+    process?.env?.MINIO_ENDPOINT ||
+    "https://minio.swantech.vn"
+  // Nếu là absolute URL nhưng đang trỏ tới host nội bộ không resolve được
+  // (vd minio.mta.swantech.vn) thì rewrite sang public endpoint, giữ nguyên
+  // path + query (signature presigned vẫn hợp lệ vì MinIO cấu hình MINIO_SERVER_URL).
+  if (uri.startsWith("http")) {
+    try {
+      const src = new URL(uri)
+      if (src.hostname === "minio.mta.swantech.vn") {
+        const target = new URL(publicEndpoint)
+        src.protocol = target.protocol
+        src.hostname = target.hostname
+        src.port = target.port
+        return src.toString()
+      }
+    } catch {
+      // noop — trả nguyên uri nếu không parse được
+    }
+    return uri
+  }
+  return new URL(uri, publicEndpoint).href
 }
 
 export function range(start: number, end: number): number[] {
