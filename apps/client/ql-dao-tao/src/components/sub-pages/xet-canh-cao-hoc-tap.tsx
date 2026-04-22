@@ -1,10 +1,7 @@
-import { DownloadOutlined } from "@ant-design/icons"
-import { Button, Col, Flex, Modal, message, Row, Tag, Tooltip } from "antd"
+import { Button, Col, Flex, Row, Tag, Tabs, message } from "antd"
 import dayjs from "dayjs"
 import "dayjs/locale/vi"
-import { queryClient } from "@api/index"
 import Table from "@components/commons/table"
-import TableCollapse from "@components/commons/tableCollapse"
 import DeleteIcon from "@components/icons/delete"
 import EditIcon from "@components/icons/edit"
 import { DEFAULT_PAGINATE_SIZE } from "@constants/constants"
@@ -14,31 +11,23 @@ import useSpinner from "@hooks/spinner"
 import { buildOrgTree } from "@lib/utils"
 import { emptyObjectIf } from "@workspace/constant"
 import {
-  $Enums,
-  type AcademicWarning,
   type FixedClass,
   type Prisma,
-  type Student,
-  type StudentSemesterResult,
   type TrainingCourse,
 } from "@workspace/db/client"
 import {
-  useCreateAcademicWarning,
   useDeleteAcademicWarning,
   useFindManyAcademicWarning,
   useFindManyDM_DonVi,
   useFindManyFixedClass,
   useFindManyTrainingCourse,
 } from "@workspace/db/hooks"
-import {
-  exportStudentAcademicWarningExcel,
-  useExportStudentAcademicWarningJson,
-} from "@workspace/libs/api/training"
 import { whereOrganization } from "@workspace/libs/constants"
-import { saveAs } from "file-saver"
 import { BookPlus } from "lucide-react"
 import { useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
+import GiamCanhCaoHocTap from "./giam-canh-cao-hoc-tap"
+import NangCanhCaoHocTap from "./nang-canh-cao-hoc-tap"
 
 dayjs.locale("vi")
 
@@ -48,8 +37,8 @@ interface XetCanhCaoHocTapProps {
 }
 
 const XetCanhCaoHocTap = ({ semesterId, trainingObjectTypeId }: XetCanhCaoHocTapProps) => {
+  const [activeTab, setActiveTab] = useState("1")
   const [currentPage, setCurrentPage] = useState(1)
-  const [selectedRowKeys, setSelectedRowKeys] = useState<string[]>([])
   const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
   const [filters, setFilters] = useState<FilterProps>({
     code: "",
@@ -97,27 +86,12 @@ const XetCanhCaoHocTap = ({ semesterId, trainingObjectTypeId }: XetCanhCaoHocTap
         : {},
     [filters, isFiltering]
   )
+
   const { showSpinner, hideSpinner } = useSpinner()
-  const { mutateAsync: createAcademicWarning } = useCreateAcademicWarning()
   const { mutateAsync: deleteAcademicWarning } = useDeleteAcademicWarning()
-  const { data: students = [] } = useExportStudentAcademicWarningJson<any[] | { data: any[] }>(
-    { semesterId: semesterId, trainingObjectTypeId },
-    { query: { enabled: !!semesterId && !!trainingObjectTypeId } },
-    queryClient
-  )
 
-  const studentData = useMemo(() => {
-    if (!students) return []
-    if (Array.isArray(students)) return students
-    if (students.data && Array.isArray(students.data)) return students.data
-    return []
-  }, [students])
-
-  const { data: academicWarningData, refetch } = useFindManyAcademicWarning({
-    where: {
-      semesterId: semesterId,
-      ...where,
-    },
+  const { data: academicWarningData } = useFindManyAcademicWarning({
+    where: { semesterId, ...where },
     include: {
       student: {
         include: {
@@ -133,38 +107,13 @@ const XetCanhCaoHocTap = ({ semesterId, trainingObjectTypeId }: XetCanhCaoHocTap
     },
   })
 
-  const filteredStudentData = useMemo(() => {
-    if (!academicWarningData) return studentData
-
-    const studentIdsWithWarnings = new Set(
-      academicWarningData.map((warning: AcademicWarning) => warning.studentId)
-    )
-
-    return studentData.map((record) => ({
-      ...record,
-      students: (record.students || []).filter(
-        (student: Student) => !studentIdsWithWarnings.has(student.id)
-      ),
-    }))
-  }, [studentData, academicWarningData])
-
   const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
-    orderBy: {
-      semesterStart: {
-        startDate: "desc",
-      },
-    },
-    where: {
-      trainingObjectTypeId,
-      active: true,
-      deletedAt: null,
-    },
+    orderBy: { semesterStart: { startDate: "desc" } },
+    where: { trainingObjectTypeId, active: true, deletedAt: null },
   })
 
   const { data: fixedClassData = [] } = useFindManyFixedClass({
-    orderBy: {
-      name: "asc",
-    },
+    orderBy: { name: "asc" },
   })
 
   const { data: manageOrgData = [] } = useFindManyDM_DonVi({
@@ -174,87 +123,14 @@ const XetCanhCaoHocTap = ({ semesterId, trainingObjectTypeId }: XetCanhCaoHocTap
 
   const treeData = buildOrgTree(manageOrgData)
 
-  const { onOpen } = useDisclosure<{
-    id: string
-    semesterId: string
-  }>({
+  const { onOpen } = useDisclosure<{ id: string; semesterId: string }>({
     tag: "PutAcademicWarning",
   })
-
-  const rowSelection = {
-    selectedRowKeys,
-    onChange: (newSelectedRowKeys: React.Key[]) => {
-      setSelectedRowKeys(newSelectedRowKeys as string[])
-    },
-    getCheckboxProps: (record: any) => {
-      const isHeaderRow = Array.isArray(record.students)
-      return {
-        style: isHeaderRow ? { display: "none" } : {},
-      }
-    },
-  }
-
-  const handleApproved = async () => {
-    if (selectedRowKeys.length === 0) {
-      message.warning("Vui lòng chọn ít nhất một sinh viên để duyệt")
-      return
-    }
-
-    const selectedRecords =
-      filteredStudentData?.flatMap((record) =>
-        (record.students || []).filter((student: Student) => selectedRowKeys.includes(student.id))
-      ) || []
-
-    Modal.confirm({
-      title: "Xác nhận duyệt",
-      content: `Bạn có chắc chắn muốn chấp nhận ${selectedRecords.length} sinh viên đã chọn?`,
-      okText: "Xác nhận",
-      cancelText: "Hủy",
-      onOk: async () => {
-        try {
-          showSpinner()
-          const createAcademicWarningPromises = selectedRecords
-            .filter((record) => !!record.studentSemesterResult)
-            .map((record: any) => {
-              const currentLevel = record.studentSemesterResult.academicWarningLevel ?? 0
-              const severity =
-                record.academicWarningRule?.length > 0
-                  ? Math.max(...record.academicWarningRule.map((r: any) => r.severity))
-                  : 1
-
-              return createAcademicWarning({
-                data: {
-                  student: { connect: { id: record.id } },
-                  semester: { connect: { id: semesterId } },
-                  level: currentLevel + severity,
-                  increasedFrom: currentLevel,
-                  description: record.reason,
-                },
-              })
-            })
-
-          await Promise.all(createAcademicWarningPromises)
-          await refetch()
-          setSelectedRowKeys([])
-          message.success("Duyệt thành công")
-        } catch (error) {
-          message.error("Đã xảy ra lỗi khi duyệt")
-          console.error(error)
-        } finally {
-          hideSpinner()
-        }
-      },
-    })
-  }
 
   async function handleDeleteAcademicWarning(id: string) {
     try {
       showSpinner()
-      await deleteAcademicWarning({
-        where: {
-          id,
-        },
-      })
+      await deleteAcademicWarning({ where: { id } })
     } catch (error: any) {
       if (error?.info?.message) {
         message.error(error?.info?.message)
@@ -266,42 +142,17 @@ const XetCanhCaoHocTap = ({ semesterId, trainingObjectTypeId }: XetCanhCaoHocTap
     }
   }
 
-  const handleExportExcel = async () => {
-    try {
-      showSpinner()
-      const res = await exportStudentAcademicWarningExcel({
-        semesterId,
-        trainingObjectTypeId,
-      })
-      if (res.status === 200) {
-        saveAs(res.data, "Danh_sach_canh_cao_hoc_tap.xlsx")
-        message.success("Xuất Excel thành công")
-      } else {
-        message.error("Đã xảy ra lỗi khi xuất Excel")
-      }
-    } catch (error) {
-      console.error("Lỗi khi xuất Excel:", error)
-      message.error("Đã xảy ra lỗi khi xuất Excel")
-    } finally {
-      hideSpinner()
-    }
-  }
-
   return (
     <div>
       <div className="bg-white rounded-lg shadow-sm p-4 mt-4">
         <Row gutter={[16, 0]} className="flex gap-4">
           <Col span={24}>
-            <Row gutter={[16, 16]} align="top" justify="space-between">
-              <Col span={24}>
-                <Flex justify="end">
-                  <Button type="primary" onClick={() => onOpen({ id: "", semesterId })}>
-                    <BookPlus />
-                    Thêm học viên
-                  </Button>
-                </Flex>
-              </Col>
-            </Row>
+            <Flex justify="end">
+              <Button type="primary" onClick={() => onOpen({ id: "", semesterId })}>
+                <BookPlus />
+                Thêm học viên
+              </Button>
+            </Flex>
           </Col>
           <Col span={24}>
             <Table
@@ -376,7 +227,8 @@ const XetCanhCaoHocTap = ({ semesterId, trainingObjectTypeId }: XetCanhCaoHocTap
                   align: "center",
                   type: "tree_select",
                   options: treeData,
-                  render: (__, record) => record?.student?.fixedClass?.managementOrganization?.sTen,
+                  render: (__, record) =>
+                    record?.student?.fixedClass?.managementOrganization?.sTen,
                 },
                 {
                   title: "Mức CCHT",
@@ -384,15 +236,28 @@ const XetCanhCaoHocTap = ({ semesterId, trainingObjectTypeId }: XetCanhCaoHocTap
                   width: 100,
                   align: "center",
                   fixed: "right",
-                  render: (value: number) => <Tag color={getWarningLevelColor(value)}>{value}</Tag>,
+                  render: (value: number) => (
+                    <Tag color={getWarningLevelColor(value)}>{value}</Tag>
+                  ),
                 },
                 {
-                  title: "Nâng Mức CCHT từ",
-                  dataIndex: "increasedFrom",
-                  width: 150,
+                  title: "Thay đổi từ mức",
+                  width: 160,
                   align: "center",
                   fixed: "right",
-                  render: (value: number) => <Tag color={getWarningLevelColor(value)}>{value}</Tag>,
+                  render: (_, record) => {
+                    const isRaise = record.increasedFrom != null
+                    const fromLevel = record.increasedFrom ?? record.decreasedFrom
+                    if (fromLevel == null) return null
+                    return (
+                      <Flex justify="center" align="center" gap={4}>
+                        <Tag color={getWarningLevelColor(fromLevel)}>{fromLevel}</Tag>
+                        <span className={isRaise ? "text-red-500" : "text-green-600"}>
+                          {isRaise ? "↑ Nâng" : "↓ Giảm"}
+                        </span>
+                      </Flex>
+                    )
+                  },
                 },
                 {
                   title: "Ghi chú lý do",
@@ -409,16 +274,11 @@ const XetCanhCaoHocTap = ({ semesterId, trainingObjectTypeId }: XetCanhCaoHocTap
                   width: 100,
                   align: "center",
                   fixed: "right",
-                  render: (_, record) => {
-                    return record?.id ? (
+                  render: (_, record) =>
+                    record?.id ? (
                       <Row className="justify-center gap-2">
                         <EditIcon
-                          onClick={() =>
-                            onOpen({
-                              id: record?.id,
-                              semesterId,
-                            })
-                          }
+                          onClick={() => onOpen({ id: record?.id, semesterId })}
                           className="text-sm text-blue-700 cursor-pointer"
                         />
                         <DeleteIcon
@@ -427,8 +287,7 @@ const XetCanhCaoHocTap = ({ semesterId, trainingObjectTypeId }: XetCanhCaoHocTap
                           }}
                         />
                       </Row>
-                    ) : null
-                  },
+                    ) : null,
                 },
               ]}
               pagination={{
@@ -450,108 +309,32 @@ const XetCanhCaoHocTap = ({ semesterId, trainingObjectTypeId }: XetCanhCaoHocTap
         </Row>
       </div>
       <div className="bg-white rounded-lg shadow-sm p-4 mt-4">
-        <Row gutter={[16, 0]}>
-          <Col span={24}>
-            <Row gutter={[16, 16]} align="top" justify="space-between">
-              <Col span={24}>
-                <Flex justify="end" gap={8}>
-                  <Button type="primary" onClick={handleExportExcel}>
-                    <DownloadOutlined />
-                    Xuất Excel
-                  </Button>
-                  <Button type="primary" onClick={handleApproved}>
-                    <BookPlus />
-                    Duyệt
-                  </Button>
-                </Flex>
-              </Col>
-            </Row>
-          </Col>
-          <Col span={24}>
-            <TableCollapse
-              rowKey="courseId"
-              headerTitleKey="courseName"
-              childrenFieldName="students"
-              defaultExpandAll
-              data={filteredStudentData}
-              rowSelection={rowSelection}
-              columns={[
-                {
-                  title: "Mã sinh viên",
-                  dataIndex: ["code"],
-                  width: 120,
-                  align: "center",
-                  render: (_, record) => record?.userProfile?.code ?? "",
-                },
-                {
-                  title: "Tên sinh viên",
-                  dataIndex: ["userProfile", "fullname"],
-                  width: 200,
-                },
-                {
-                  title: "Ngày sinh",
-                  width: 120,
-                  align: "center",
-                  render: (__, record) => {
-                    const date = record?.userProfile?.dateOfBirth
-                    return date ? dayjs(date).format("DD/MM/YYYY") : ""
-                  },
-                },
-                {
-                  title: "Lớp",
-                  width: 60,
-                  align: "center",
-                  render: (_, record) => {
-                    return (
-                      <Tooltip title={record?.fixedClass?.name}>
-                        {record?.fixedClass?.code || "-"}
-                      </Tooltip>
-                    )
-                  },
-                },
-                {
-                  title: "Học kỳ",
-                  dataIndex: ["studentSemesterResult", "semesterIndexInCourse"],
-                  width: 40,
-                  align: "center",
-                },
-                {
-                  title: "TBHK",
-                  dataIndex: ["studentSemesterResult"],
-                  width: 0,
-                  align: "center",
-                  render: (result?: StudentSemesterResult) =>
-                    result?.baseScore === $Enums.AcademicRankingBaseType.Base10
-                      ? Number(result.gpaBase10)
-                      : Number(result?.gpaBase4 || 0),
-                },
-                {
-                  title: "Lý do",
-                  dataIndex: ["reason"],
-                  width: 200,
-                  align: "center",
-                  render: (value?: string) => value?.split("\n").map((r) => <p>{r}</p>),
-                },
-              ]}
-              pagination={{
-                current: currentPage,
-                pageSize: numberOfPages,
-                total: filteredStudentData.reduce(
-                  (acc, course) => acc + (course.students?.length || 0),
-                  0
-                ),
-                onChange: (page, pageSize) => {
-                  if (numberOfPages === pageSize) {
-                    setCurrentPage(page)
-                  } else {
-                    setCurrentPage(1)
-                    setNumberOfPages(pageSize)
-                  }
-                },
-              }}
-            />
-          </Col>
-        </Row>
+        <Tabs
+          activeKey={activeTab}
+          onChange={setActiveTab}
+          items={[
+            {
+              key: "1",
+              label: "Nâng mức cảnh cáo",
+              children: (
+                <NangCanhCaoHocTap
+                  semesterId={semesterId}
+                  trainingObjectTypeId={trainingObjectTypeId}
+                />
+              ),
+            },
+            {
+              key: "2",
+              label: "Giảm mức cảnh cáo",
+              children: (
+                <GiamCanhCaoHocTap
+                  semesterId={semesterId}
+                  trainingObjectTypeId={trainingObjectTypeId}
+                />
+              ),
+            },
+          ]}
+        />
       </div>
     </div>
   )
