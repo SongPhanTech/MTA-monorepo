@@ -589,7 +589,7 @@ export default function ExamListPage() {
             })),
             align: "center" as const,
             render: (__, record) => {
-              const examType = record?.exam?.subjectVersion?.examType
+              const examType = record?.examType ?? record?.exam?.subjectVersion?.examType
               return examTypeOptions.find((opt) => opt.value === examType)?.label || ""
             },
           },

@@ -76,20 +76,18 @@ const SinhDeModal = () => {
   )
 
   const examFrameworkId = Form.useWatch("examFrameworkId", form)
-  const examTime = Form.useWatch("examTime", form)
 
   const selectedFramework = useMemo(() => {
     return examFrameworkData.find((i) => i.id === examFrameworkId)
   }, [examFrameworkId, examFrameworkData])
-  
+
   useEffect(() => {
-    // Nếu user chưa nhập (hoặc đã xoá) thì fallback về thời gian của khung đề
-    if (selectedFramework?.time && (examTime == null || examTime === ("" as any))) {
+    if (selectedFramework?.time) {
       form.setFieldsValue({
         examTime: selectedFramework.time,
       })
     }
-  }, [selectedFramework?.time, examTime, form])
+  }, [selectedFramework?.time])
 
   const { data: ExamMatrixData = [] } = useFindManyExamMatrix(
     {
@@ -105,7 +103,7 @@ const SinhDeModal = () => {
 
   useEffect(() => {
     form.setFieldsValue({
-      examType: dataExam?.subjectVersion?.examType,
+      examType: form.getFieldValue("examType") || dataExam?.subjectVersion?.examType,
       subjectClassId: dataExam?.subjectClass?.[0]?.id,
       examDay: dataExam?.subjectClass?.[0]?.examDate,
     })
@@ -128,7 +126,7 @@ const SinhDeModal = () => {
         deletedAt: null,
         createdAt: new Date().toISOString(),
         updatedAt: null,
-        examDay: values?.examDay ? new Date(values?.examDay).toISOString() : null,
+        examDay: values?.examDay ? new Date(values?.examDay).toISOString() : undefined,
         isGroup: values?.isGroup || true,
         examTime: values?.examTime ?? selectedFramework?.time,
       })
