@@ -245,6 +245,8 @@ export * from './exportStudentSemesterResult404';
 export * from './exportStudentSemesterResultBody';
 export * from './exportStudentYearResult404';
 export * from './exportStudentYearResultBody';
+export * from './exportStudentsMissingCertificateExcel404';
+export * from './exportStudentsMissingCertificateExcelParams';
 export * from './exportSubjectClassListExcel404';
 export * from './exportSubjectClassListExcelParams';
 export * from './exportSubjectClassScore404';
