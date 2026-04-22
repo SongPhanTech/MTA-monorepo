@@ -138,15 +138,15 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
         curriculumVersionId,
       })
 
-      if (res.status !== 200) {
-        message.error(res.data?.message || "Đăng ký thất bại")
-      }
-
       return res
     },
-    onSuccess: () => {
-      refetchClassesInfo()
-      message.success("Đăng ký thành công")
+    onSuccess: (res) => {
+      if (res?.status === 200) {
+        refetchClassesInfo()
+        message.success("Đăng ký thành công")
+      } else {
+        message.error(res.data?.message || "Đăng ký thất bại")
+      }
     },
     onError: (error: any) => {
       message.error(error?.message || "Đăng ký thất bại")
@@ -416,9 +416,11 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
               render: (_, record) => {
                 const parent = record.$type === "child" ? classToParentMap.get(record.id) : record
 
-                const equivalencies: { code: string; name: string }[] =
+                const equivalencies =
                   parent?.equivalencyGroups
-                    ?.map((e: { subject: { code: string; name: string } }) => e?.subject)
+                    ?.flatMap((eg: any) =>
+                      eg?.equivalencyGroup?.subjects?.map((s: any) => s?.subject)
+                    )
                     ?.filter(Boolean) ?? []
 
                 if (!equivalencies.length) {
@@ -429,7 +431,7 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
                   <div className="flex flex-col gap-1 text-[11px] text-left">
                     <div>
                       <span className="font-semibold text-purple-600">Môn tương đương:</span>
-                      {equivalencies.map((s) => (
+                      {equivalencies.map((s: any) => (
                         <div key={s?.code} className="ml-1 text-gray-700">
                           • {s?.name}
                         </div>

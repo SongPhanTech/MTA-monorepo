@@ -310,11 +310,14 @@ app.openapi(getClassesInfo, async (c) => {
         },
       },
       equivalencyGroups: {
-        select: {
-          subject: {
-            select: {
-              name: true,
-              code: true,
+        include: {
+          equivalencyGroup: {
+            include: {
+              subjects: {
+                include: {
+                  subject: { select: { id: true, name: true, code: true } },
+                },
+              },
             },
           },
         },
@@ -568,7 +571,6 @@ app.openapi(classRegister, async (c) => {
   const allCoRequisiteIds = [
     ...new Set(subjectClasses.flatMap((sc) => sc.subject.coRequisiteSubject.map((p) => p.id))),
   ]
-  const allRequiredIds = [...new Set([...allPrerequisiteIds, ...allCoRequisiteIds])]
 
   if (allPrerequisiteIds.length > 0 || allCoRequisiteIds.length > 0) {
     const passedPrerequisites = await prisma.studentSubjectScore.findMany({
