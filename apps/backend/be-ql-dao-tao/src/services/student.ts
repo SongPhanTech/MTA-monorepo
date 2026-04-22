@@ -357,39 +357,71 @@ export const exportStudentAcademicWarning = async ({
 export async function generateStudentImportTemplate(
   trainingObjectTypeId: string
 ): Promise<ArrayBuffer> {
-  const [provinces, trainingFields, trainingMajors, nationalities, ethnicities, genders] =
-    await Promise.all([
-      prisma.dM_Tinh_New.findMany({
-        where: { bActive: true, bDeleted: false },
-        select: { sTen: true },
-        orderBy: { sTen: "asc" },
-      }),
-      prisma.trainingField.findMany({
-        where: { trainingObjectTypes: { some: { trainingObjectTypeId } } },
-        select: { name: true },
-        orderBy: { name: "asc" },
-      }),
-      prisma.trainingMajor.findMany({
-        where: { trainingObjectTypes: { some: { trainingObjectTypeId } } },
-        select: { name: true },
-        orderBy: { name: "asc" },
-      }),
-      prisma.dM_QuocGia.findMany({
-        where: { bActive: true, bDeleted: false },
-        select: { sTen: true },
-        orderBy: { sTen: "asc" },
-      }),
-      prisma.dM_DanToc.findMany({
-        where: { bActive: true, bDeleted: false },
-        select: { sTen: true },
-        orderBy: { sTen: "asc" },
-      }),
-      prisma.dM_GioiTinh.findMany({
-        where: { bActive: true, bDeleted: false },
-        select: { sTen: true },
-        orderBy: { sTen: "asc" },
-      }),
-    ])
+  const [
+    provinces,
+    trainingFields,
+    trainingMajors,
+    nationalities,
+    ethnicities,
+    genders,
+    fixedClasses,
+    curricula,
+    organizations,
+  ] = await Promise.all([
+    prisma.dM_Tinh_New.findMany({
+      where: { bActive: true, bDeleted: false },
+      select: { sTen: true },
+      orderBy: { sTen: "asc" },
+    }),
+    prisma.trainingField.findMany({
+      where: { trainingObjectTypes: { some: { trainingObjectTypeId } } },
+      select: { name: true },
+      orderBy: { name: "asc" },
+    }),
+    prisma.trainingMajor.findMany({
+      where: { trainingObjectTypes: { some: { trainingObjectTypeId } } },
+      select: { name: true },
+      orderBy: { name: "asc" },
+    }),
+    prisma.dM_QuocGia.findMany({
+      where: { bActive: true, bDeleted: false },
+      select: { sTen: true },
+      orderBy: { sTen: "asc" },
+    }),
+    prisma.dM_DanToc.findMany({
+      where: { bActive: true, bDeleted: false },
+      select: { sTen: true },
+      orderBy: { sTen: "asc" },
+    }),
+    prisma.dM_GioiTinh.findMany({
+      where: { bActive: true, bDeleted: false },
+      select: { sTen: true },
+      orderBy: { sTen: "asc" },
+    }),
+
+    prisma.fixedClass.findMany({
+      where: {
+        active: true,
+        deletedAt: null,
+        trainingCourse: { trainingObjectTypeId },
+      },
+      select: { code: true, name: true },
+      orderBy: { name: "asc" },
+    }),
+    prisma.curriculum.findMany({
+      where: {
+        deletedAt: null,
+        trainingObjectTypeId,
+      },
+      select: { name: true },
+      orderBy: { name: "asc" },
+    }),
+    prisma.dM_DonVi.findMany({
+      where: { bActive: true, bDeleted: false },
+      select: { sTen: true },
+      orderBy: { sTen: "asc" },
+    }),
+  ])
 
   const buffer = await getTemplateBuffer(prisma, "MauImportDSHV.xlsx")
   const template = new XlsxTemplate(buffer)
@@ -413,7 +445,69 @@ export async function generateStudentImportTemplate(
     data: trainingMajors.filter((p) => p.name).map((p) => ({ name: p.name })),
   })
 
-  return template.generate({ type: "arraybuffer" }) as Promise<ArrayBuffer>
+  const generatedArrayBuffer = template.generate({ type: "arraybuffer" }) as ArrayBuffer
+  const workbook = new ExcelJS.Workbook()
+  await workbook.xlsx.load(new Uint8Array(generatedArrayBuffer) as any)
+
+  const sheetLopQL = workbook.getWorksheet("DanhMucLopQuanLi")
+  if (sheetLopQL) {
+    const lopData = fixedClasses.filter((fc) => fc.name)
+    lopData.forEach((fc, index) => {
+      const row = sheetLopQL.getRow(index + 1)
+      row.getCell(1).value = fc.code || ""
+      row.getCell(2).value = fc.name
+      row.commit()
+    })
+  }
+
+  const sheetCTDT = workbook.getWorksheet("DanhMucChuongTrinhDaoTao")
+  if (sheetCTDT) {
+    const ctdtData = curricula.filter((c) => c.name)
+    ctdtData.forEach((c, index) => {
+      const row = sheetCTDT.getRow(index + 2)
+      row.getCell(1).value = c.name
+      row.commit()
+    })
+  }
+
+  const sheetDVQL = workbook.getWorksheet("DanhMucDonViQuanLi")
+  if (sheetDVQL) {
+    const dvqlData = organizations.filter((o) => o.sTen)
+    dvqlData.forEach((o, index) => {
+      const row = sheetDVQL.getRow(index + 2)
+      row.getCell(1).value = o.sTen
+      row.commit()
+    })
+  }
+
+  const mainSheet = workbook.worksheets[0]
+  if (mainSheet) {
+    const dataStartRow = 13
+    const dataEndRow = 1000
+
+    for (let row = dataStartRow; row <= dataEndRow; row++) {
+      mainSheet.getCell(`P${row}`).value = {
+        formula: `IFERROR(INDEX(DanhMucLopQuanLi!$A:$A,MATCH(Q${row},DanhMucLopQuanLi!$B:$B,0)),"")`,
+      }
+      mainSheet.getCell(`Q${row}`).dataValidation = {
+        type: "list",
+        allowBlank: true,
+        formulae: ["DanhMucLopQuanLi!B:B"],
+      }
+      mainSheet.getCell(`T${row}`).dataValidation = {
+        type: "list",
+        allowBlank: true,
+        formulae: ["DanhMucChuongTrinhDaoTao!$A$2:$A$1048576"],
+      }
+      mainSheet.getCell(`U${row}`).dataValidation = {
+        type: "list",
+        allowBlank: true,
+        formulae: ["DanhMucDonViQuanLi!$A$2:$A$511"],
+      }
+    }
+  }
+
+  return workbook.xlsx.writeBuffer() as Promise<ArrayBuffer>
 }
 
 export const exportArchivedCertificate = async ({
