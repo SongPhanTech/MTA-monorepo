@@ -178,7 +178,18 @@ const CriteriaEvaluationSubPage = ({ data }: { data: DataTabEvaluationCriterionT
   const headerSection = (
     <div className="sticky top-0 z-10 bg-white py-2 flex flex-row justify-between items-center gap-2">
       <span className="text-sm font-bold text-green-700">
-        Tiêu chuẩn {data.order}: {data.name}
+        {(() => {
+          const colonIdx = data?.name?.indexOf(": ")
+          if (colonIdx !== undefined && colonIdx !== -1) {
+            return (
+              <>
+                <span className="font-bold">{data?.name?.substring(0, colonIdx + 1)} </span>
+                <span className="font-normal">{data?.name?.substring(colonIdx + 2)}</span>
+              </>
+            )
+          }
+          return data?.name
+        })()}
       </span>
       <div className="flex gap-2 mr-2">
         <ExportCriteriaEvaluation data={data} />
@@ -237,10 +248,20 @@ const CriteriaEvaluationSubPage = ({ data }: { data: DataTabEvaluationCriterionT
                                     }}
                                     className="cursor-pointer flex-1"
                                   >
-                                    <span className="font-bold">
-                                      Tiêu chí {data.order}.{item.order}:{" "}
-                                    </span>
-                                    {item?.name}
+                                    {(() => {
+                                      const colonIdx = item?.name?.indexOf(": ")
+                                      if (colonIdx !== undefined && colonIdx !== -1) {
+                                        return (
+                                          <>
+                                            <span className="font-bold">
+                                              {item?.name?.substring(0, colonIdx + 1)}{" "}
+                                            </span>
+                                            <span>{item?.name?.substring(colonIdx + 2)}</span>
+                                          </>
+                                        )
+                                      }
+                                      return <span className="font-bold">{item?.name}</span>
+                                    })()}
                                   </div>
                                   <div className="flex gap-2 shrink-0">
                                     {item.evaluationCriterion && (

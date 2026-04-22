@@ -59,8 +59,18 @@ export default function CriteriaEvaluationListSubPage({
       <div className="flex flex-col gap-2 w-full">
         <div className="flex items-center justify-between">
           <div>
-            <span className="font-bold">Tiêu chí {index + 1}: </span>
-            {criterion?.name}
+            {(() => {
+              const colonIdx = criterion?.name?.indexOf(": ")
+              if (colonIdx !== undefined && colonIdx !== -1) {
+                return (
+                  <>
+                    <span className="font-bold">{criterion?.name?.substring(0, colonIdx + 1)} </span>
+                    <span>{criterion?.name?.substring(colonIdx + 2)}</span>
+                  </>
+                )
+              }
+              return <span className="font-bold">{criterion?.name}</span>
+            })()}
           </div>
         </div>
         <div className="flex flex-wrap items-center gap-2 text-xs">
