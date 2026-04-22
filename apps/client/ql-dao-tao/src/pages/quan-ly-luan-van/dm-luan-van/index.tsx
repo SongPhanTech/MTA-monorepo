@@ -50,7 +50,7 @@ import {
   Tag,
 } from "antd"
 import { SquarePen } from "lucide-react"
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 import TreeSelect from "@/components/commons/tree-select"
 import {
@@ -151,6 +151,8 @@ export function getSupervisorName(record: any, htmlRender = false, showWorkplace
 }
 const { TextArea } = Input
 
+const NAME_SEARCH_DEBOUNCE_MS = 400
+
 export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
   const orgId = window.contextData?.organizationId
   const [form] = Form.useForm<ThesisProjectForm>()
@@ -159,8 +161,25 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
   const [editingRowKeys, setEditingRowKeys] = useState<string[]>([])
   const [editingValues, setEditingValues] = useState<Record<string, Record<string, any>>>({})
   const [currentPage, setCurrentPage] = useState(1)
+  const [nameKeyword, setNameKeyword] = useState("")
+  const [debouncedNameKeyword, setDebouncedNameKeyword] = useState("")
+  const nameSearchDebounceReady = useRef(false)
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
   const [trainingCourseId, setTrainingCourseId] = useState<string | null>(null)
+
+  useEffect(() => {
+    const id = window.setTimeout(() => {
+      const next = nameKeyword.trim()
+      setDebouncedNameKeyword(next)
+      if (nameSearchDebounceReady.current) {
+        setCurrentPage(1)
+        setEditingRowKeys([])
+      } else {
+        nameSearchDebounceReady.current = true
+      }
+    }, NAME_SEARCH_DEBOUNCE_MS)
+    return () => window.clearTimeout(id)
+  }, [nameKeyword])
   const rowSelection = {
     selectedRowKeys,
     onChange: (newSelectedRowKeys: React.Key[]) => {
@@ -232,7 +251,47 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
   const studentWhere = useMemo(() => {
     if (!searchParams.thesisSessionId) return { id: { in: [] } }
 
-    return {
+    const thesisProjectBaseWhere: Record<string, any> = {
+      thesisSessionId: searchParams.thesisSessionId,
+      thesisType: ThesisType.THESIS,
+      organizationId: searchParams.organizationId || undefined,
+    }
+    const thesisProjectWhere: Record<string, any> = {
+      ...thesisProjectBaseWhere,
+    }
+    if (debouncedNameKeyword) {
+      thesisProjectWhere.OR = [
+        {
+          supervisor: {
+            name: { contains: debouncedNameKeyword, mode: "insensitive" },
+          },
+        },
+        {
+          supervisor: {
+            lecturer: {
+              userProfile: {
+                fullname: { contains: debouncedNameKeyword, mode: "insensitive" },
+              },
+            },
+          },
+        },
+        {
+          coSupervisor: {
+            name: { contains: debouncedNameKeyword, mode: "insensitive" },
+          },
+        },
+        {
+          coSupervisor: {
+            lecturer: {
+              userProfile: {
+                fullname: { contains: debouncedNameKeyword, mode: "insensitive" },
+              },
+            },
+          },
+        },
+      ]
+    }
+    const baseWhere: Record<string, any> = {
       fixedClassId: {
         in:
           searchParams.fixedClassId && searchParams.fixedClassId.length > 0
@@ -241,20 +300,71 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
       },
       thesisRegistrations: {
         some: {
-          thesisProject: {
-            thesisSessionId: searchParams.thesisSessionId,
-            thesisType: ThesisType.THESIS,
-            organizationId: searchParams.organizationId || undefined,
-          },
+          thesisProject: thesisProjectBaseWhere,
         },
       },
     }
-  }, [searchParams, fixedClasses])
+    if (!debouncedNameKeyword) return baseWhere
+    return {
+      ...baseWhere,
+      OR: [
+        {
+          userProfile: {
+            fullname: { contains: debouncedNameKeyword, mode: "insensitive" },
+          },
+        },
+        {
+          thesisRegistrations: {
+            some: {
+              thesisProject: thesisProjectWhere,
+            },
+          },
+        },
+      ],
+    }
+  }, [searchParams, fixedClasses, debouncedNameKeyword])
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: dùng cho searchParams
   const allStudentWhere = useMemo(() => {
     if (!searchParams.thesisSessionId) return { id: { in: [] } }
-    const filter = {
+    const thesisProjectWhere: Record<string, any> = {
+      thesisSessionId: searchParams.thesisSessionId,
+      thesisType: ThesisType.THESIS,
+      organizationId: searchParams.organizationId || undefined,
+    }
+    if (debouncedNameKeyword) {
+      thesisProjectWhere.OR = [
+        {
+          supervisor: {
+            name: { contains: debouncedNameKeyword, mode: "insensitive" },
+          },
+        },
+        {
+          supervisor: {
+            lecturer: {
+              userProfile: {
+                fullname: { contains: debouncedNameKeyword, mode: "insensitive" },
+              },
+            },
+          },
+        },
+        {
+          coSupervisor: {
+            name: { contains: debouncedNameKeyword, mode: "insensitive" },
+          },
+        },
+        {
+          coSupervisor: {
+            lecturer: {
+              userProfile: {
+                fullname: { contains: debouncedNameKeyword, mode: "insensitive" },
+              },
+            },
+          },
+        },
+      ]
+    }
+    const filter: Record<string, any> = {
       fixedClassId: {
         in:
           searchParams.fixedClassId && searchParams.fixedClassId.length > 0
@@ -262,9 +372,25 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
             : fixedClasses?.map((f) => f.id),
       },
     }
-
-    return filter
-  }, [searchParams, fixedClasses])
+    if (!debouncedNameKeyword) return filter
+    return {
+      ...filter,
+      OR: [
+        {
+          userProfile: {
+            fullname: { contains: debouncedNameKeyword, mode: "insensitive" },
+          },
+        },
+        {
+          thesisRegistrations: {
+            some: {
+              thesisProject: thesisProjectWhere,
+            },
+          },
+        },
+      ],
+    }
+  }, [searchParams, fixedClasses, debouncedNameKeyword])
 
   const { data: students = [], refetch: refetchStudents } = useFindManyStudent({
     where: studentWhere,
@@ -616,6 +742,9 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
       message.error("Đã xảy ra lỗi trong lúc tạo dữ liệu mẫu")
     } finally {
       hideSpinner()
+      await refetchStudents()
+      await refetchAllStudentsInClasses()
+      await refetchCount()
     }
   }
 
@@ -1285,6 +1414,15 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                         setCurrentPage(1)
                         setEditingRowKeys([])
                       }}
+                    />
+                  </Form.Item>
+                  <Form.Item label="Tìm kiếm">
+                    <Input
+                      className="w-72"
+                      allowClear
+                      value={nameKeyword}
+                      placeholder="Tên học viên / GVHD"
+                      onChange={(e) => setNameKeyword(e.target.value)}
                     />
                   </Form.Item>
 

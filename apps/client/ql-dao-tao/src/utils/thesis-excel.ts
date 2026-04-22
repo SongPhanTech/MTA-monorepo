@@ -22,6 +22,12 @@ interface ExportOptions {
 
 const resolveSigningDate = (signingDate?: Date | string) =>
   signingDate ? dayjs(signingDate) : dayjs()
+/** Phạm vi chuyên gia khi gom dữ liệu giấy mời chấm LV PB (cán bộ trong / ngoài học viện). */
+type GmcLvPbExpertScope = "all" | "inAcademy" | "outsideAcademy"
+
+/** Cán bộ trong học viện: có liên kết giảng viên (lecturer / lecturerId). Ngoài HV = không có. */
+const isExpertInAcademy = (expert: any) => !!(expert?.lecturer || expert?.lecturerId)
+
 interface GmcLvPbData {
   data: {
     dotXet: string
@@ -1557,71 +1563,32 @@ export const exportKiemTraTienDo = async ({
     hideSpinner()
   }
 }
-export const exportGiayMoiChamLvPb = async ({
-  allStudentsInClasses,
-  showSpinner,
-  hideSpinner,
-  message,
-  signerName,
-  isChief,
-  signingDate,
-}: ExportOptions) => {
-  if (!allStudentsInClasses?.length) {
-    message.error("Không có dữ liệu để tạo giấy mời chấm LV PB")
-    return
-  }
-  try {
-    showSpinner?.()
-    const dataConvert = convertToGmcLvPbData(
-      allStudentsInClasses,
-      signerName,
-      isChief,
-      signingDate
-    )
-    if (dataConvert.length === 0) {
-      message.error("Không có dữ liệu để tạo giấy mời chấm LV PB")
-      return
-    }
-    const payload: ExcelTemplateBody = {
-      head: { data: null },
-      tail: { data: null },
-      fileName: "GiayMoiChamLuanVan",
-      path: "GiayMoiChamLuanVan.xlsx",
-      payload: dataConvert,
-      showGridLines: true,
-    }
-    const response = await excelTemplate(payload)
 
-    if (response.status !== 200) {
-      message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
-      return
-    }
-    const blob = response.data
-    downloadFile(blob, "GiayMoiChamLuanVan.xlsx")
-    message.success("Xuất file thành công")
-  } catch (error) {
-    message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
-  } finally {
-    hideSpinner?.()
-  }
-}
-const downloadFile = (blob: Blob, fileName: string) => {
-  const url = URL.createObjectURL(blob)
-  const link = document.createElement("a")
-  link.href = url
-  link.setAttribute("download", fileName)
-  document.body.appendChild(link)
-  link.click()
-  document.body.removeChild(link)
-  URL.revokeObjectURL(url)
-}
-const convertToGmcLvPbData = (
+export const convertToGmcLvPbData = (
   allStudentsInClasses: any[],
   signerName?: string,
   isChief?: boolean,
-  signingDate?: Date | string
+  signingDate?: Date | string,
+  expertScope: GmcLvPbExpertScope = "all"
 ): GmcLvPbData[] => {
   if (!allStudentsInClasses?.length) return []
+  const parseDateSortValue = (dateStr?: string) => {
+    if (!dateStr) return Number.MAX_SAFE_INTEGER
+    const [ddRaw, mmRaw, yyyyRaw] = dateStr.split("/")
+    const dd = Number.parseInt(ddRaw || "", 10)
+    const mm = Number.parseInt(mmRaw || "", 10)
+    const yyyy = Number.parseInt(yyyyRaw || "", 10)
+    if (!dd || !mm || !yyyy) return Number.MAX_SAFE_INTEGER
+    return yyyy * 10000 + mm * 100 + dd
+  }
+  const parseTimeSortValue = (timeStr?: string) => {
+    if (!timeStr) return Number.MAX_SAFE_INTEGER
+    const [hhRaw, mmRaw] = timeStr.split(":")
+    const hh = Number.parseInt(hhRaw || "", 10)
+    const mm = Number.parseInt(mmRaw || "", 10)
+    if (Number.isNaN(hh) || Number.isNaN(mm)) return Number.MAX_SAFE_INTEGER
+    return hh * 60 + mm
+  }
 
   const expertMap = new Map<string, GmcLvPbData>()
   const expertStudentMap = new Map<string, Set<string>>()
@@ -1647,12 +1614,16 @@ const convertToGmcLvPbData = (
     const projectType: "luận văn" | "đề án" =
       project?.thesisType === ThesisType.THESIS ? "luận văn" : "đề án"
     const chuyennganh =
-      student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || ""
+      student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.summary || ""
 
     const members = project.council?.members || []
     members.forEach((member: any) => {
       const expert = member.expert
       if (!expert?.id) return
+
+      const internal = isExpertInAcademy(expert)
+      if (expertScope === "inAcademy" && !internal) return
+      if (expertScope === "outsideAcademy" && internal) return
 
       if (!expertMap.has(expert.id)) {
         expertMap.set(expert.id, {
@@ -1715,8 +1686,99 @@ const convertToGmcLvPbData = (
     })
   })
 
-  return Array.from(expertMap.values())
+  return Array.from(expertMap.values()).map((expertEntry) => {
+    const sortedRows = [...expertEntry.data.data].sort((a, b) => {
+      const dateDiff = parseDateSortValue(a.ngaybaove) - parseDateSortValue(b.ngaybaove)
+      if (dateDiff !== 0) return dateDiff
+      return parseTimeSortValue(a.giobaove) - parseTimeSortValue(b.giobaove)
+    })
+    sortedRows.forEach((row, index) => {
+      row.stt = index + 1
+    })
+    return {
+      ...expertEntry,
+      data: {
+        ...expertEntry.data,
+        data: sortedRows,
+      },
+    }
+  })
 }
+export const exportGiayMoiChamLvPb = async ({
+  allStudentsInClasses,
+  showSpinner,
+  hideSpinner,
+  message,
+  signerName,
+  isChief,
+  signingDate,
+}: ExportOptions) => {
+  if (!allStudentsInClasses?.length) {
+    message.error("Không có dữ liệu để tạo giấy mời chấm LV PB")
+    return
+  }
+  try {
+    showSpinner?.()
+    const dataTrongHv = convertToGmcLvPbData(
+      allStudentsInClasses,
+      signerName,
+      isChief,
+      signingDate,
+      "inAcademy"
+    )
+    const dataNgoaiHv = convertToGmcLvPbData(
+      allStudentsInClasses,
+      signerName,
+      isChief,
+      signingDate,
+      "outsideAcademy"
+    )
+    if (dataTrongHv.length === 0 && dataNgoaiHv.length === 0) {
+      message.error("Không có dữ liệu để tạo giấy mời chấm LV PB")
+      return
+    }
+    const sheets = [
+      ...(dataTrongHv.length > 0
+        ? [{ sheetName: "Can bo trong hoc vien", payload: dataTrongHv }]
+        : []),
+      ...(dataNgoaiHv.length > 0
+        ? [{ sheetName: "Can bo ngoai hoc vien", payload: dataNgoaiHv }]
+        : []),
+    ]
+    const payload: ExcelTemplateBody = {
+      head: { data: null },
+      tail: { data: null },
+      fileName: "GiayMoiChamLuanVan",
+      path: "GiayMoiChamLuanVan.xlsx",
+      sheets,
+      showGridLines: true,
+    }
+    const response = await excelTemplate(payload)
+
+    if (response.status !== 200) {
+      message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
+      return
+    }
+    const blob = response.data
+    downloadFile(blob, "GiayMoiChamLuanVan.xlsx")
+    message.success("Xuất file thành công")
+  } catch (error) {
+    message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
+  } finally {
+    hideSpinner?.()
+  }
+}
+const downloadFile = (blob: Blob, fileName: string) => {
+  const url = URL.createObjectURL(blob)
+  const link = document.createElement("a")
+  link.href = url
+  link.setAttribute("download", fileName)
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
+  URL.revokeObjectURL(url)
+}
+
 
 export const exportThanhToanHoiDongBaoVe = async ({
   allStudentsInClasses,
