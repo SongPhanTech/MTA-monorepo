@@ -187,20 +187,26 @@ const TableChuongMuc = ({ matrixId }: TableChuongMucProps) => {
     )
   }
 
-  const renderCell = (quantity: number, type?: string | null) => (
-    <div className="flex flex-col items-center gap-0.5">
-      <Tooltip title="Số câu hỏi">
-        <div className="text-sm font-medium">{quantity}</div>
-      </Tooltip>
-      {quantity > 0 && (
-        <div className="text-xs text-gray-500 leading-tight">
-          {type
-            ? (QUESTION_TYPE_LABELS[type as keyof typeof QUESTION_TYPE_LABELS] ?? type)
-            : "Tất cả"}
-        </div>
-      )}
-    </div>
-  )
+  const renderCell = (quantity: number, totalQuestions: number, type?: string | null) => {
+    const percent =
+      totalQuestions > 0 ? Math.round((Number(quantity) / Number(totalQuestions)) * 100) : 0
+
+    return (
+      <div className="flex flex-col items-center gap-0.5">
+        <Tooltip title="Số câu hỏi">
+          <div className="text-sm font-medium">{quantity}</div>
+        </Tooltip>
+        <div className="text-xs text-green-600 leading-tight">{percent}%</div>
+        {quantity > 0 && (
+          <div className="text-xs text-gray-500 leading-tight">
+            {type
+              ? (QUESTION_TYPE_LABELS[type as keyof typeof QUESTION_TYPE_LABELS] ?? type)
+              : "Tất cả"}
+          </div>
+        )}
+      </div>
+    )
+  }
 
   const calculateTotalByDifficulty = (difficult: string) => {
     return knowledgeBlocks.reduce(
@@ -243,7 +249,8 @@ const TableChuongMuc = ({ matrixId }: TableChuongMucProps) => {
             align: "center",
             render: (_, record) => {
               const { quantity, type } = getConfigByDifficult(record.configExams, "D1")
-              return renderCell(quantity, type)
+              const { quantity: totalQuestions } = getTotals(record.configExams)
+              return renderCell(quantity, totalQuestions, type)
             },
           },
           {
@@ -252,7 +259,8 @@ const TableChuongMuc = ({ matrixId }: TableChuongMucProps) => {
             align: "center",
             render: (_, record) => {
               const { quantity, type } = getConfigByDifficult(record.configExams, "D2")
-              return renderCell(quantity, type)
+              const { quantity: totalQuestions } = getTotals(record.configExams)
+              return renderCell(quantity, totalQuestions, type)
             },
           },
           {
@@ -261,7 +269,8 @@ const TableChuongMuc = ({ matrixId }: TableChuongMucProps) => {
             align: "center",
             render: (_, record) => {
               const { quantity, type } = getConfigByDifficult(record.configExams, "D3")
-              return renderCell(quantity, type)
+              const { quantity: totalQuestions } = getTotals(record.configExams)
+              return renderCell(quantity, totalQuestions, type)
             },
           },
           {
@@ -270,7 +279,8 @@ const TableChuongMuc = ({ matrixId }: TableChuongMucProps) => {
             align: "center",
             render: (_, record) => {
               const { quantity, type } = getConfigByDifficult(record.configExams, "D4")
-              return renderCell(quantity, type)
+              const { quantity: totalQuestions } = getTotals(record.configExams)
+              return renderCell(quantity, totalQuestions, type)
             },
           },
           {

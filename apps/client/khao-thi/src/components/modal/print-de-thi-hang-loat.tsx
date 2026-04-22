@@ -27,15 +27,6 @@ export type ExamBankType = Prisma.ExamBankGetPayload<{
         code: true
       }
     }
-    examMatrix: {
-      include: {
-        examFramework: {
-          select: {
-            time: true
-          }
-        }
-      }
-    }
   }
 }>
 
@@ -75,15 +66,6 @@ const PrintBatchExamBank = () => {
             code: true,
           },
         },
-        examMatrix: {
-          include: {
-            examFramework: {
-              select: {
-                time: true,
-              },
-            },
-          },
-        },
       },
       orderBy: {
         examCode: "asc",
@@ -110,10 +92,10 @@ const PrintBatchExamBank = () => {
     })
   }, [exams])
 
-  // Tự động fill thời gian từ examFramework của exam đầu tiên
+  // Tự động fill thời gian từ examTime (API tạo đề) của exam đầu tiên
   useEffect(() => {
-    if (exams.length > 0 && exams[0]?.examMatrix?.examFramework?.time) {
-      setDuration(String(exams[0].examMatrix.examFramework.time))
+    if (exams.length > 0 && exams[0]?.examTime != null) {
+      setDuration(String(exams[0].examTime))
     }
   }, [exams])
 
@@ -154,7 +136,7 @@ const PrintBatchExamBank = () => {
           semesterName: exam?.exam?.semester?.name || "",
           examCode: exam?.examCode || "",
           subjectName: exam?.exam?.subjectVersion?.name || "",
-          duration: duration || exam?.examMatrix?.examFramework?.time || exam?.exam?.duration || 30,
+          duration: duration || exam?.examTime || exam?.exam?.duration || 30,
           teacherName: name,
           isNote:
             exam?.isNote === true
@@ -305,7 +287,7 @@ const PrintBatchExamBank = () => {
                   <div style={{ textAlign: "center", marginBottom: "10px" }}>
                     <strong>
                       Thời gian làm bài:{" "}
-                      {duration || exam?.examMatrix?.examFramework?.time || exam?.exam?.duration}{" "}
+                      {duration || exam?.examTime || exam?.exam?.duration}{" "}
                       phút
                     </strong>
                   </div>

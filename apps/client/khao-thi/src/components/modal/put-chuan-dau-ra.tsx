@@ -33,6 +33,26 @@ const PutChuongMucModal = () => {
   })
 
   const watchedValues = Form.useWatch([], form)
+  const totalQuestions =
+    LEVEL_COLUMNS.reduce<number>((sum, col) => {
+      const quantity = (watchedValues?.[col.key] as ConfigExam | undefined)?.quantity
+      return sum + (typeof quantity === "number" ? quantity : 0)
+    }, 0) || 0
+
+  // Tự động cập nhật tỷ lệ (%) theo số lượng câu hỏi hiện tại
+  useEffect(() => {
+    const patch: any = {}
+    LEVEL_COLUMNS.forEach((col) => {
+      const quantity = (watchedValues?.[col.key] as ConfigExam | undefined)?.quantity ?? 0
+      const percent =
+        totalQuestions > 0 ? (Number(quantity) / totalQuestions) * 100 : 0
+      patch[col.key] = {
+        ...(watchedValues?.[col.key] as any),
+        percent,
+      }
+    })
+    form.setFieldsValue(patch)
+  }, [totalQuestions, watchedValues, form])
 
   const { mutateAsync: createKnowledgeBlock } = useCreateKnowledgeBlock()
 
@@ -243,6 +263,47 @@ const PutChuongMucModal = () => {
                     initialValue={0}
                   >
                     <InputNumber min={0} className="w-full" />
+                  </Form.Item>
+                </Col>
+              ))}
+            </Row>
+          </Col>
+        </Row>
+      </Col>
+
+      <Col span={24}>
+        <Row gutter={12} align="middle">
+          <Col xs={24} sm={6}>
+            Tỷ lệ (%)
+          </Col>
+          <Col xs={24} sm={18}>
+            <Row gutter={12}>
+              {LEVEL_COLUMNS.map((col) => (
+                <Col xs={12} sm={6} key={col.key}>
+                  <Form.Item name={[col.key, "percent"]} style={{ marginBottom: 8 }} initialValue={0}>
+                    <InputNumber
+                      className="w-full"
+                      controls={false}
+                      readOnly
+                      // Hiển thị như 1 ô input bo tròn để đồng bộ UI với các ô phía dưới
+                      style={{
+                        width: "100%",
+                        textAlign: "center",
+                        color: "#16a34a",
+                        fontSize: 12,
+                        borderRadius: 8,
+                      }}
+                      formatter={(value) => {
+                        const n = Number(value)
+                        if (!Number.isFinite(n)) return "0%"
+                        return `${n.toFixed(2)}%`
+                      }}
+                      parser={(value) => {
+                        const raw = (value ?? "").toString().replace("%", "").trim()
+                        const n = Number(raw)
+                        return Number.isFinite(n) ? n : 0
+                      }}
+                    />
                   </Form.Item>
                 </Col>
               ))}

@@ -41,22 +41,13 @@ const PrintExamBank = () => {
             name: true,
           },
         },
-        examMatrix: {
-          include: {
-            examFramework: {
-              select: {
-                time: true,
-              },
-            },
-          },
-        },
       },
     },
     {
       enabled: !!input?.id,
     }
   )
-
+console.log(data)
   const { mutateAsync: fetchGroupedQuestions, data: groupedResponse } = useGetExamBankWithGrouping()
   const groupedData = groupedResponse?.status === 200 ? groupedResponse.data : undefined
 
@@ -68,12 +59,12 @@ const PrintExamBank = () => {
 
   const subjectClassName = data?.subjectClass?.name || ""
 
-  // Tự động fill thời gian từ examFramework
+  // Tự động fill thời gian từ examTime (API tạo đề)
   useEffect(() => {
-    if (data?.examMatrix?.examFramework?.time) {
-      setDuration(String(data.examMatrix.examFramework.time))
+    if (data?.examTime != null) {
+      setDuration(String(data.examTime))
     }
-  }, [data?.examMatrix?.examFramework?.time])
+  }, [data?.examTime])
 
   const { mutateAsync: updateExamBank } = useUpdateExamBank()
 
@@ -107,7 +98,7 @@ const PrintExamBank = () => {
       semesterName: data.exam?.semester?.name || "",
       className: data.subjectClass?.name || "",
       duration: String(
-        duration || data.examMatrix?.examFramework?.time || data.exam?.duration || ""
+        duration || data.examTime || data.exam?.duration || ""
       ),
       isNote:
         data?.isNote === true
@@ -292,7 +283,7 @@ const PrintExamBank = () => {
                   <div style={{ textAlign: "center", marginBottom: "10px" }}>
                     <strong>
                       Thời gian làm bài:{" "}
-                      {duration || data?.examMatrix?.examFramework?.time || data?.exam?.duration}{" "}
+                      {duration || data?.examTime || data?.exam?.duration}{" "}
                       phút
                     </strong>
                   </div>

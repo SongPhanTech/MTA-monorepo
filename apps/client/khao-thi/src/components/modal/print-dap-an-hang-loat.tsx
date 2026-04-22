@@ -35,15 +35,6 @@ type ExamBankQuestionType = Prisma.ExamBankGetPayload<{
         name: true
       }
     }
-    examMatrix: {
-      include: {
-        examFramework: {
-          select: {
-            time: true
-          }
-        }
-      }
-    }
   }
 }>
 
@@ -91,15 +82,6 @@ const PrintBatchExplanation = () => {
             name: true,
           },
         },
-        examMatrix: {
-          include: {
-            examFramework: {
-              select: {
-                time: true,
-              },
-            },
-          },
-        },
       },
       orderBy: {
         examCode: "asc",
@@ -131,10 +113,10 @@ const PrintBatchExplanation = () => {
     })
     return result
   }, [exams])
-  // Tự động fill thời gian từ examFramework của exam đầu tiên
+  // Tự động fill thời gian từ examTime (API tạo đề) của exam đầu tiên
   useEffect(() => {
-    if (exams.length > 0 && exams[0]?.examMatrix?.examFramework?.time) {
-      setDuration(String(exams[0].examMatrix.examFramework.time))
+    if (exams.length > 0 && exams[0]?.examTime != null) {
+      setDuration(String(exams[0].examTime))
     }
   }, [exams])
 
@@ -164,7 +146,7 @@ const PrintBatchExplanation = () => {
           semesterName: exam?.exam?.semester?.name || "",
           examCode: exam?.examCode || "",
           subjectName: exam?.exam?.subjectVersion?.name || "",
-          duration: duration || exam?.examMatrix?.examFramework?.time || exam?.exam?.duration || 30,
+          duration: duration || exam?.examTime || exam?.exam?.duration || 30,
           teacherName: name,
           questions:
             exam?.questions?.map((q, qIndex) => {
@@ -343,7 +325,7 @@ const PrintBatchExplanation = () => {
                   <div style={{ textAlign: "center", marginBottom: "10px" }}>
                     <strong>
                       Thời gian làm bài:{" "}
-                      {duration || exam?.examMatrix?.examFramework?.time || exam?.exam?.duration}{" "}
+                      {duration || exam?.examTime || exam?.exam?.duration}{" "}
                       phút
                     </strong>
                   </div>
