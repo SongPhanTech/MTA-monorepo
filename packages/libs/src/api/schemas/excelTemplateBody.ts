@@ -8,11 +8,19 @@ import type { ExcelTemplateBodyTail } from './excelTemplateBodyTail';
 import type { ExcelTemplateBodyHead } from './excelTemplateBodyHead';
 import type { ExcelTemplateBodyPayloadItem } from './excelTemplateBodyPayloadItem';
 
+/** Một sheet trong file xuất (be-model excel-template khi gửi `sheets`). */
+export type ExcelTemplateBodySheet = {
+  sheetName?: string;
+  payload: ExcelTemplateBodyPayloadItem[];
+};
+
 export type ExcelTemplateBody = {
   tail?: ExcelTemplateBodyTail;
   head?: ExcelTemplateBodyHead;
-  /** Dữ liệu để điền vào template */
-  payload: ExcelTemplateBodyPayloadItem[];
+  /** Dữ liệu điền template — một sheet (chế độ cũ). */
+  payload?: ExcelTemplateBodyPayloadItem[];
+  /** Nhiều sheet trong cùng một file. BE ưu tiên khi có; không gửi cùng lúc với `payload` nếu muốn rõ ràng. */
+  sheets?: ExcelTemplateBodySheet[];
   fileName: string;
   path: string;
   /** Có hiển thị lưới trong Excel hay không */
