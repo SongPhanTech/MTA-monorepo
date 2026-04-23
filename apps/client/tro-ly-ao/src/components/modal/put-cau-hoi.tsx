@@ -2,12 +2,7 @@ import FormItem from "@components/commons/form-item"
 import Select from "@components/commons/select"
 import { cn } from "@lib/utils"
 import { $Enums } from "@workspace/db"
-import {
-  useCreateFAQ,
-  useDeleteFAQ,
-  useFindFirstFAQ,
-  useUpdateFAQ,
-} from "@workspace/db/hooks"
+import { useCreateFAQ, useDeleteFAQ, useFindFirstFAQ, useUpdateFAQ } from "@workspace/db/hooks"
 import {
   fetchGetSimilarDocumentsFqaSimilarAnswerGet,
   fetchGetSimilarDocumentsFqaSimilarQuestionGet,

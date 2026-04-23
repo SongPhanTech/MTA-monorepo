@@ -9730,6 +9730,7 @@ export namespace Prisma {
         status: 'status',
         reviewerId: 'reviewerId',
         deadlineReview: 'deadlineReview',
+        deadlineReviewExternal: 'deadlineReviewExternal',
         currentSituation: 'currentSituation',
         strengths: 'strengths',
         weakness: 'weakness',
@@ -85679,6 +85680,7 @@ export namespace Prisma {
         readonly status: FieldRef<"EvaluationCriterion", 'EvaluationStatus'>;
         readonly reviewerId: FieldRef<"EvaluationCriterion", 'String'>;
         readonly deadlineReview: FieldRef<"EvaluationCriterion", 'DateTime'>;
+        readonly deadlineReviewExternal: FieldRef<"EvaluationCriterion", 'DateTime'>;
         readonly currentSituation: FieldRef<"EvaluationCriterion", 'String'>;
         readonly strengths: FieldRef<"EvaluationCriterion", 'String'>;
         readonly weakness: FieldRef<"EvaluationCriterion", 'String'>;
@@ -297122,6 +297124,7 @@ export namespace Prisma {
         status: $Enums.EvaluationStatus | null
         reviewerId: string | null
         deadlineReview: Date | null
+        deadlineReviewExternal: Date | null
         currentSituation: string | null
         strengths: string | null
         weakness: string | null
@@ -297143,6 +297146,7 @@ export namespace Prisma {
         status: $Enums.EvaluationStatus | null
         reviewerId: string | null
         deadlineReview: Date | null
+        deadlineReviewExternal: Date | null
         currentSituation: string | null
         strengths: string | null
         weakness: string | null
@@ -297164,6 +297168,7 @@ export namespace Prisma {
         status: number
         reviewerId: number
         deadlineReview: number
+        deadlineReviewExternal: number
         currentSituation: number
         strengths: number
         weakness: number
@@ -297186,6 +297191,7 @@ export namespace Prisma {
         status?: true
         reviewerId?: true
         deadlineReview?: true
+        deadlineReviewExternal?: true
         currentSituation?: true
         strengths?: true
         weakness?: true
@@ -297207,6 +297213,7 @@ export namespace Prisma {
         status?: true
         reviewerId?: true
         deadlineReview?: true
+        deadlineReviewExternal?: true
         currentSituation?: true
         strengths?: true
         weakness?: true
@@ -297228,6 +297235,7 @@ export namespace Prisma {
         status?: true
         reviewerId?: true
         deadlineReview?: true
+        deadlineReviewExternal?: true
         currentSituation?: true
         strengths?: true
         weakness?: true
@@ -297316,6 +297324,7 @@ export namespace Prisma {
         status: $Enums.EvaluationStatus
         reviewerId: string | null
         deadlineReview: Date | null
+        deadlineReviewExternal: Date | null
         currentSituation: string
         strengths: string
         weakness: string
@@ -297352,6 +297361,7 @@ export namespace Prisma {
         status?: boolean
         reviewerId?: boolean
         deadlineReview?: boolean
+        deadlineReviewExternal?: boolean
         currentSituation?: boolean
         strengths?: boolean
         weakness?: boolean
@@ -297379,6 +297389,7 @@ export namespace Prisma {
         status?: boolean
         reviewerId?: boolean
         deadlineReview?: boolean
+        deadlineReviewExternal?: boolean
         currentSituation?: boolean
         strengths?: boolean
         weakness?: boolean
@@ -297403,6 +297414,7 @@ export namespace Prisma {
         status?: boolean
         reviewerId?: boolean
         deadlineReview?: boolean
+        deadlineReviewExternal?: boolean
         currentSituation?: boolean
         strengths?: boolean
         weakness?: boolean
@@ -297427,13 +297439,14 @@ export namespace Prisma {
         status?: boolean
         reviewerId?: boolean
         deadlineReview?: boolean
+        deadlineReviewExternal?: boolean
         currentSituation?: boolean
         strengths?: boolean
         weakness?: boolean
         actionPlan?: boolean
         score?: boolean
     };
-    export type EvaluationCriterionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "criterionPeriodId" | "lecturerId" | "deadline" | "status" | "reviewerId" | "deadlineReview" | "currentSituation" | "strengths" | "weakness" | "actionPlan" | "score", ExtArgs["result"]["evaluationCriterion"]>;
+    export type EvaluationCriterionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "criterionPeriodId" | "lecturerId" | "deadline" | "status" | "reviewerId" | "deadlineReview" | "deadlineReviewExternal" | "currentSituation" | "strengths" | "weakness" | "actionPlan" | "score", ExtArgs["result"]["evaluationCriterion"]>;
     export type EvaluationCriterionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         criterionPeriod?: boolean | CriterionPeriodDefaultArgs<ExtArgs>
         lecturer?: boolean | EvaluationCriterion$lecturerArgs<ExtArgs>
@@ -297476,6 +297489,7 @@ export namespace Prisma {
             status: $Enums.EvaluationStatus
             reviewerId: string | null
             deadlineReview: Date | null
+            deadlineReviewExternal: Date | null
             /**
              * 1. Mô tả hiện trạng
              */
@@ -385096,6 +385110,7 @@ export namespace Prisma {
         status?: EnumEvaluationStatusFilter<"EvaluationCriterion"> | $Enums.EvaluationStatus
         reviewerId?: StringNullableFilter<"EvaluationCriterion"> | string | null
         deadlineReview?: DateTimeNullableFilter<"EvaluationCriterion"> | Date | string | null
+        deadlineReviewExternal?: DateTimeNullableFilter<"EvaluationCriterion"> | Date | string | null
         currentSituation?: StringFilter<"EvaluationCriterion"> | string
         strengths?: StringFilter<"EvaluationCriterion"> | string
         weakness?: StringFilter<"EvaluationCriterion"> | string
@@ -385122,6 +385137,7 @@ export namespace Prisma {
         status?: SortOrder
         reviewerId?: SortOrderInput | SortOrder
         deadlineReview?: SortOrderInput | SortOrder
+        deadlineReviewExternal?: SortOrderInput | SortOrder
         currentSituation?: SortOrder
         strengths?: SortOrder
         weakness?: SortOrder
@@ -385152,6 +385168,7 @@ export namespace Prisma {
         status?: EnumEvaluationStatusFilter<"EvaluationCriterion"> | $Enums.EvaluationStatus
         reviewerId?: StringNullableFilter<"EvaluationCriterion"> | string | null
         deadlineReview?: DateTimeNullableFilter<"EvaluationCriterion"> | Date | string | null
+        deadlineReviewExternal?: DateTimeNullableFilter<"EvaluationCriterion"> | Date | string | null
         currentSituation?: StringFilter<"EvaluationCriterion"> | string
         strengths?: StringFilter<"EvaluationCriterion"> | string
         weakness?: StringFilter<"EvaluationCriterion"> | string
@@ -385178,6 +385195,7 @@ export namespace Prisma {
         status?: SortOrder
         reviewerId?: SortOrderInput | SortOrder
         deadlineReview?: SortOrderInput | SortOrder
+        deadlineReviewExternal?: SortOrderInput | SortOrder
         currentSituation?: SortOrder
         strengths?: SortOrder
         weakness?: SortOrder
@@ -385205,6 +385223,7 @@ export namespace Prisma {
         status?: EnumEvaluationStatusWithAggregatesFilter<"EvaluationCriterion"> | $Enums.EvaluationStatus
         reviewerId?: StringNullableWithAggregatesFilter<"EvaluationCriterion"> | string | null
         deadlineReview?: DateTimeNullableWithAggregatesFilter<"EvaluationCriterion"> | Date | string | null
+        deadlineReviewExternal?: DateTimeNullableWithAggregatesFilter<"EvaluationCriterion"> | Date | string | null
         currentSituation?: StringWithAggregatesFilter<"EvaluationCriterion"> | string
         strengths?: StringWithAggregatesFilter<"EvaluationCriterion"> | string
         weakness?: StringWithAggregatesFilter<"EvaluationCriterion"> | string
@@ -417310,6 +417329,7 @@ export namespace Prisma {
         deadline?: Date | string | null
         status?: $Enums.EvaluationStatus
         deadlineReview?: Date | string | null
+        deadlineReviewExternal?: Date | string | null
         currentSituation?: string
         strengths?: string
         weakness?: string
@@ -417336,6 +417356,7 @@ export namespace Prisma {
         status?: $Enums.EvaluationStatus
         reviewerId?: string | null
         deadlineReview?: Date | string | null
+        deadlineReviewExternal?: Date | string | null
         currentSituation?: string
         strengths?: string
         weakness?: string
@@ -417356,6 +417377,7 @@ export namespace Prisma {
         deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         status?: EnumEvaluationStatusFieldUpdateOperationsInput | $Enums.EvaluationStatus
         deadlineReview?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        deadlineReviewExternal?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         currentSituation?: StringFieldUpdateOperationsInput | string
         strengths?: StringFieldUpdateOperationsInput | string
         weakness?: StringFieldUpdateOperationsInput | string
@@ -417382,6 +417404,7 @@ export namespace Prisma {
         status?: EnumEvaluationStatusFieldUpdateOperationsInput | $Enums.EvaluationStatus
         reviewerId?: NullableStringFieldUpdateOperationsInput | string | null
         deadlineReview?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        deadlineReviewExternal?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         currentSituation?: StringFieldUpdateOperationsInput | string
         strengths?: StringFieldUpdateOperationsInput | string
         weakness?: StringFieldUpdateOperationsInput | string
@@ -417405,6 +417428,7 @@ export namespace Prisma {
         status?: $Enums.EvaluationStatus
         reviewerId?: string | null
         deadlineReview?: Date | string | null
+        deadlineReviewExternal?: Date | string | null
         currentSituation?: string
         strengths?: string
         weakness?: string
@@ -417423,6 +417447,7 @@ export namespace Prisma {
         deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         status?: EnumEvaluationStatusFieldUpdateOperationsInput | $Enums.EvaluationStatus
         deadlineReview?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        deadlineReviewExternal?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         currentSituation?: StringFieldUpdateOperationsInput | string
         strengths?: StringFieldUpdateOperationsInput | string
         weakness?: StringFieldUpdateOperationsInput | string
@@ -417444,6 +417469,7 @@ export namespace Prisma {
         status?: EnumEvaluationStatusFieldUpdateOperationsInput | $Enums.EvaluationStatus
         reviewerId?: NullableStringFieldUpdateOperationsInput | string | null
         deadlineReview?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        deadlineReviewExternal?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         currentSituation?: StringFieldUpdateOperationsInput | string
         strengths?: StringFieldUpdateOperationsInput | string
         weakness?: StringFieldUpdateOperationsInput | string
@@ -441245,6 +441271,7 @@ export namespace Prisma {
         status?: SortOrder
         reviewerId?: SortOrder
         deadlineReview?: SortOrder
+        deadlineReviewExternal?: SortOrder
         currentSituation?: SortOrder
         strengths?: SortOrder
         weakness?: SortOrder
@@ -441266,6 +441293,7 @@ export namespace Prisma {
         status?: SortOrder
         reviewerId?: SortOrder
         deadlineReview?: SortOrder
+        deadlineReviewExternal?: SortOrder
         currentSituation?: SortOrder
         strengths?: SortOrder
         weakness?: SortOrder
@@ -441287,6 +441315,7 @@ export namespace Prisma {
         status?: SortOrder
         reviewerId?: SortOrder
         deadlineReview?: SortOrder
+        deadlineReviewExternal?: SortOrder
         currentSituation?: SortOrder
         strengths?: SortOrder
         weakness?: SortOrder
@@ -569331,6 +569360,7 @@ export namespace Prisma {
         deadline?: Date | string | null
         status?: $Enums.EvaluationStatus
         deadlineReview?: Date | string | null
+        deadlineReviewExternal?: Date | string | null
         currentSituation?: string
         strengths?: string
         weakness?: string
@@ -569355,6 +569385,7 @@ export namespace Prisma {
         status?: $Enums.EvaluationStatus
         reviewerId?: string | null
         deadlineReview?: Date | string | null
+        deadlineReviewExternal?: Date | string | null
         currentSituation?: string
         strengths?: string
         weakness?: string
@@ -569457,6 +569488,7 @@ export namespace Prisma {
         deadline?: Date | string | null
         status?: $Enums.EvaluationStatus
         deadlineReview?: Date | string | null
+        deadlineReviewExternal?: Date | string | null
         currentSituation?: string
         strengths?: string
         weakness?: string
@@ -569482,6 +569514,7 @@ export namespace Prisma {
         status?: $Enums.EvaluationStatus
         reviewerId?: string | null
         deadlineReview?: Date | string | null
+        deadlineReviewExternal?: Date | string | null
         currentSituation?: string
         strengths?: string
         weakness?: string
@@ -570488,6 +570521,7 @@ export namespace Prisma {
         status?: EnumEvaluationStatusFilter<"EvaluationCriterion"> | $Enums.EvaluationStatus
         reviewerId?: StringNullableFilter<"EvaluationCriterion"> | string | null
         deadlineReview?: DateTimeNullableFilter<"EvaluationCriterion"> | Date | string | null
+        deadlineReviewExternal?: DateTimeNullableFilter<"EvaluationCriterion"> | Date | string | null
         currentSituation?: StringFilter<"EvaluationCriterion"> | string
         strengths?: StringFilter<"EvaluationCriterion"> | string
         weakness?: StringFilter<"EvaluationCriterion"> | string
@@ -580882,6 +580916,7 @@ export namespace Prisma {
         deadline?: Date | string | null
         status?: $Enums.EvaluationStatus
         deadlineReview?: Date | string | null
+        deadlineReviewExternal?: Date | string | null
         currentSituation?: string
         strengths?: string
         weakness?: string
@@ -580907,6 +580942,7 @@ export namespace Prisma {
         status?: $Enums.EvaluationStatus
         reviewerId?: string | null
         deadlineReview?: Date | string | null
+        deadlineReviewExternal?: Date | string | null
         currentSituation?: string
         strengths?: string
         weakness?: string
@@ -581376,6 +581412,7 @@ export namespace Prisma {
         deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         status?: EnumEvaluationStatusFieldUpdateOperationsInput | $Enums.EvaluationStatus
         deadlineReview?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        deadlineReviewExternal?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         currentSituation?: StringFieldUpdateOperationsInput | string
         strengths?: StringFieldUpdateOperationsInput | string
         weakness?: StringFieldUpdateOperationsInput | string
@@ -581401,6 +581438,7 @@ export namespace Prisma {
         status?: EnumEvaluationStatusFieldUpdateOperationsInput | $Enums.EvaluationStatus
         reviewerId?: NullableStringFieldUpdateOperationsInput | string | null
         deadlineReview?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        deadlineReviewExternal?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         currentSituation?: StringFieldUpdateOperationsInput | string
         strengths?: StringFieldUpdateOperationsInput | string
         weakness?: StringFieldUpdateOperationsInput | string
@@ -581715,6 +581753,7 @@ export namespace Prisma {
         deadline?: Date | string | null
         status?: $Enums.EvaluationStatus
         deadlineReview?: Date | string | null
+        deadlineReviewExternal?: Date | string | null
         currentSituation?: string
         strengths?: string
         weakness?: string
@@ -581739,6 +581778,7 @@ export namespace Prisma {
         status?: $Enums.EvaluationStatus
         reviewerId?: string | null
         deadlineReview?: Date | string | null
+        deadlineReviewExternal?: Date | string | null
         currentSituation?: string
         strengths?: string
         weakness?: string
@@ -581850,6 +581890,7 @@ export namespace Prisma {
         deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         status?: EnumEvaluationStatusFieldUpdateOperationsInput | $Enums.EvaluationStatus
         deadlineReview?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        deadlineReviewExternal?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         currentSituation?: StringFieldUpdateOperationsInput | string
         strengths?: StringFieldUpdateOperationsInput | string
         weakness?: StringFieldUpdateOperationsInput | string
@@ -581874,6 +581915,7 @@ export namespace Prisma {
         status?: EnumEvaluationStatusFieldUpdateOperationsInput | $Enums.EvaluationStatus
         reviewerId?: NullableStringFieldUpdateOperationsInput | string | null
         deadlineReview?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        deadlineReviewExternal?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         currentSituation?: StringFieldUpdateOperationsInput | string
         strengths?: StringFieldUpdateOperationsInput | string
         weakness?: StringFieldUpdateOperationsInput | string
@@ -583235,6 +583277,7 @@ export namespace Prisma {
         deadline?: Date | string | null
         status?: $Enums.EvaluationStatus
         deadlineReview?: Date | string | null
+        deadlineReviewExternal?: Date | string | null
         currentSituation?: string
         strengths?: string
         weakness?: string
@@ -583259,6 +583302,7 @@ export namespace Prisma {
         deadline?: Date | string | null
         status?: $Enums.EvaluationStatus
         deadlineReview?: Date | string | null
+        deadlineReviewExternal?: Date | string | null
         currentSituation?: string
         strengths?: string
         weakness?: string
@@ -657284,6 +657328,7 @@ export namespace Prisma {
         status?: $Enums.EvaluationStatus
         reviewerId?: string | null
         deadlineReview?: Date | string | null
+        deadlineReviewExternal?: Date | string | null
         currentSituation?: string
         strengths?: string
         weakness?: string
@@ -658648,6 +658693,7 @@ export namespace Prisma {
         deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         status?: EnumEvaluationStatusFieldUpdateOperationsInput | $Enums.EvaluationStatus
         deadlineReview?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        deadlineReviewExternal?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         currentSituation?: StringFieldUpdateOperationsInput | string
         strengths?: StringFieldUpdateOperationsInput | string
         weakness?: StringFieldUpdateOperationsInput | string
@@ -658672,6 +658718,7 @@ export namespace Prisma {
         status?: EnumEvaluationStatusFieldUpdateOperationsInput | $Enums.EvaluationStatus
         reviewerId?: NullableStringFieldUpdateOperationsInput | string | null
         deadlineReview?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        deadlineReviewExternal?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         currentSituation?: StringFieldUpdateOperationsInput | string
         strengths?: StringFieldUpdateOperationsInput | string
         weakness?: StringFieldUpdateOperationsInput | string
@@ -658694,6 +658741,7 @@ export namespace Prisma {
         status?: EnumEvaluationStatusFieldUpdateOperationsInput | $Enums.EvaluationStatus
         reviewerId?: NullableStringFieldUpdateOperationsInput | string | null
         deadlineReview?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        deadlineReviewExternal?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         currentSituation?: StringFieldUpdateOperationsInput | string
         strengths?: StringFieldUpdateOperationsInput | string
         weakness?: StringFieldUpdateOperationsInput | string
@@ -658796,6 +658844,7 @@ export namespace Prisma {
         deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         status?: EnumEvaluationStatusFieldUpdateOperationsInput | $Enums.EvaluationStatus
         deadlineReview?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        deadlineReviewExternal?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         currentSituation?: StringFieldUpdateOperationsInput | string
         strengths?: StringFieldUpdateOperationsInput | string
         weakness?: StringFieldUpdateOperationsInput | string
@@ -658821,6 +658870,7 @@ export namespace Prisma {
         status?: EnumEvaluationStatusFieldUpdateOperationsInput | $Enums.EvaluationStatus
         reviewerId?: NullableStringFieldUpdateOperationsInput | string | null
         deadlineReview?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        deadlineReviewExternal?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         currentSituation?: StringFieldUpdateOperationsInput | string
         strengths?: StringFieldUpdateOperationsInput | string
         weakness?: StringFieldUpdateOperationsInput | string
@@ -658843,6 +658893,7 @@ export namespace Prisma {
         status?: EnumEvaluationStatusFieldUpdateOperationsInput | $Enums.EvaluationStatus
         reviewerId?: NullableStringFieldUpdateOperationsInput | string | null
         deadlineReview?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        deadlineReviewExternal?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         currentSituation?: StringFieldUpdateOperationsInput | string
         strengths?: StringFieldUpdateOperationsInput | string
         weakness?: StringFieldUpdateOperationsInput | string
@@ -663471,6 +663522,7 @@ export namespace Prisma {
         deadline?: Date | string | null
         status?: $Enums.EvaluationStatus
         deadlineReview?: Date | string | null
+        deadlineReviewExternal?: Date | string | null
         currentSituation?: string
         strengths?: string
         weakness?: string
@@ -663489,6 +663541,7 @@ export namespace Prisma {
         deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         status?: EnumEvaluationStatusFieldUpdateOperationsInput | $Enums.EvaluationStatus
         deadlineReview?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        deadlineReviewExternal?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         currentSituation?: StringFieldUpdateOperationsInput | string
         strengths?: StringFieldUpdateOperationsInput | string
         weakness?: StringFieldUpdateOperationsInput | string
@@ -663513,6 +663566,7 @@ export namespace Prisma {
         deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         status?: EnumEvaluationStatusFieldUpdateOperationsInput | $Enums.EvaluationStatus
         deadlineReview?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        deadlineReviewExternal?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         currentSituation?: StringFieldUpdateOperationsInput | string
         strengths?: StringFieldUpdateOperationsInput | string
         weakness?: StringFieldUpdateOperationsInput | string
@@ -663535,6 +663589,7 @@ export namespace Prisma {
         deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         status?: EnumEvaluationStatusFieldUpdateOperationsInput | $Enums.EvaluationStatus
         deadlineReview?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        deadlineReviewExternal?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         currentSituation?: StringFieldUpdateOperationsInput | string
         strengths?: StringFieldUpdateOperationsInput | string
         weakness?: StringFieldUpdateOperationsInput | string

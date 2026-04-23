@@ -46,10 +46,10 @@
 2. Đọc nhanh phần Alert giải thích tham số.
 3. **Demo temperature**:
    - Đặt `temperature = 0.1` → **Lưu**.
-   - Quay lại chat, hỏi: *"Viết 3 câu ngắn giới thiệu về nhà trường."* → câu trả lời **bảo thủ, lặp ý**.
+   - Quay lại chat, hỏi: _"Viết 3 câu ngắn giới thiệu về nhà trường."_ → câu trả lời **bảo thủ, lặp ý**.
    - Đổi `temperature = 0.9` → **Lưu** → hỏi **cùng câu** → câu trả lời **sáng tạo, đa dạng hơn**.
 4. **Demo maxTokens**:
-   - Đặt `maxTokens = 40` → Lưu → hỏi *"Giới thiệu chi tiết về quy trình đăng ký học."* → câu trả lời **bị cắt giữa chừng**.
+   - Đặt `maxTokens = 40` → Lưu → hỏi _"Giới thiệu chi tiết về quy trình đăng ký học."_ → câu trả lời **bị cắt giữa chừng**.
 5. Mở Network khi bấm Lưu → show call Prisma `update ChatBotConfig` (`/api/model/chatBotConfig/update`).
 
 ### Reset sau UC2
@@ -82,7 +82,7 @@ File `01-noi-quy.docx` đã APPROVE.
 1. Vào chat → **tắt RAG** (chuyển sang chế độ "Hỏi đáp thông thường" nếu UI có toggle).
 2. Hỏi:
    > Nội quy sử dụng trợ lý ảo của nhà trường có bao nhiêu điều? Nêu tiêu đề từng điều.
-   → LLM bịa / nói chung chung / không biết chi tiết.
+   > → LLM bịa / nói chung chung / không biết chi tiết.
 3. **Bật RAG** lại → hỏi **cùng câu** → trả lời **chính xác 5 điều** kèm tiêu đề.
 
 **Phần B — Xem pipeline trong Network**
@@ -114,11 +114,11 @@ File `01-noi-quy.docx` đã APPROVE.
 1. Vào **Quản trị → Cấu hình → Prompt Hỏi đáp** → dòng **"Hỏi đáp thông thường"** → Chỉnh sửa.
 2. **Demo A — đổi personality**:
    - Paste **Prompt #2 — vui tính** (mục "Prompt templates" dưới) → Lưu.
-   - Chat (tắt RAG) hỏi *"Học máy là gì?"* → LLM trả lời kèm câu đùa.
+   - Chat (tắt RAG) hỏi _"Học máy là gì?"_ → LLM trả lời kèm câu đùa.
 3. **Demo B — giới hạn scope**:
    - Paste **Prompt #3 — strict scope** → Lưu.
-   - Hỏi *"Thời tiết Hà Nội hôm nay thế nào?"* → LLM **từ chối lịch sự** vì ngoài lĩnh vực.
-   - Hỏi *"Quy trình đăng ký học như thế nào?"* → trả lời bình thường.
+   - Hỏi _"Thời tiết Hà Nội hôm nay thế nào?"_ → LLM **từ chối lịch sự** vì ngoài lĩnh vực.
+   - Hỏi _"Quy trình đăng ký học như thế nào?"_ → trả lời bình thường.
 4. **Reset**: Paste **Prompt #1 — mặc định no-RAG** → Lưu.
 
 ### Điểm nói
@@ -133,16 +133,16 @@ File `01-noi-quy.docx` đã APPROVE.
 ### Thao tác
 
 1. Vào **Quản trị → Cấu hình → Prompt Hỏi đáp** → dòng **"Hỏi đáp dựa trên RAG"** → Chỉnh sửa.
-2. Show template có placeholder `{context}` + `{question}` — giải thích: *"khi chat, hệ thống thay `{context}` bằng các chunk retrieve được, thay `{question}` bằng câu hỏi người dùng."*
+2. Show template có placeholder `{context}` + `{question}` — giải thích: _"khi chat, hệ thống thay `{context}` bằng các chunk retrieve được, thay `{question}` bằng câu hỏi người dùng."_
 3. **Demo A — strict grounding** (Prompt #4):
    - Paste + Lưu.
-   - Chat (bật RAG) hỏi *"Học phí học lại môn bao nhiêu tiền?"* (không có trong tài liệu 01) → LLM trả lời **"Tôi không tìm thấy thông tin trong tài liệu."** → chứng minh **không bịa**.
+   - Chat (bật RAG) hỏi _"Học phí học lại môn bao nhiêu tiền?"_ (không có trong tài liệu 01) → LLM trả lời **"Tôi không tìm thấy thông tin trong tài liệu."** → chứng minh **không bịa**.
 4. **Demo B — format output** (Prompt #5):
    - Paste + Lưu.
-   - Hỏi *"Nội quy sử dụng trợ lý ảo gồm những điều gì?"* → kết quả render **Markdown list, in đậm từ khoá**.
+   - Hỏi _"Nội quy sử dụng trợ lý ảo gồm những điều gì?"_ → kết quả render **Markdown list, in đậm từ khoá**.
 5. **Demo C — citation** (Prompt #6):
    - Paste + Lưu.
-   - Hỏi câu trên → cuối câu có *"Tài liệu tham khảo: 01-noi-quy.docx"*.
+   - Hỏi câu trên → cuối câu có _"Tài liệu tham khảo: 01-noi-quy.docx"_.
 6. **Reset**: Paste **Prompt #4 — mặc định RAG** (cũng là Prompt #7 dưới) → Lưu.
 
 ### Điểm nói
@@ -155,41 +155,51 @@ File `01-noi-quy.docx` đã APPROVE.
 ## Câu hỏi demo (copy-paste sẵn)
 
 ### Cho UC 1
+
 ```
 Xin chào, bạn là ai và có thể giúp gì cho tôi?
 ```
 
 ### Cho UC 2 — so sánh temperature
+
 ```
 Viết 3 câu ngắn giới thiệu về nhà trường.
 ```
+
 ```
 Giới thiệu chi tiết về quy trình đăng ký học.
 ```
 
 ### Cho UC 3 — RAG
+
 ```
 Nội quy sử dụng trợ lý ảo của nhà trường có bao nhiêu điều? Nêu tiêu đề từng điều.
 ```
+
 ```
 Điều 4 của nội quy quy định về vấn đề gì?
 ```
 
 ### Cho UC 4 — prompt no-RAG
+
 ```
 Học máy là gì?
 ```
+
 ```
 Thời tiết Hà Nội hôm nay thế nào?
 ```
+
 ```
 Quy trình đăng ký học tại trường như thế nào?
 ```
 
 ### Cho UC 5 — prompt RAG
+
 ```
 Học phí học lại môn bao nhiêu tiền?
 ```
+
 ```
 Nội quy sử dụng trợ lý ảo gồm những điều gì? Tóm tắt ngắn gọn.
 ```
@@ -303,10 +313,10 @@ Dùng lại **Prompt #4**.
 
 ## Troubleshooting nhanh khi demo fail
 
-| Triệu chứng | Nguyên nhân có thể | Xử lý nhanh |
-|---|---|---|
-| Chat không stream, xoay vòng mãi | LLM service down | Check `/api/health`, restart model |
-| Bật RAG nhưng LLM vẫn không biết tài liệu | File chưa APPROVE / chưa index | Mở trang tài liệu verify, approve lại |
-| Đổi prompt xong không có tác dụng | Prompt cache FE | Hard reload `Ctrl+Shift+R`, gõ câu hỏi **mới** (tránh cache response) |
-| Đổi temperature không thấy khác biệt | Câu hỏi quá xác định → model luôn trả lời giống nhau | Dùng câu "sáng tạo": viết bài giới thiệu, viết thơ… |
-| Citation không hiện | Retrieve trả rỗng / document-search lỗi | Check Network tab, xem response `sources` |
+| Triệu chứng                               | Nguyên nhân có thể                                   | Xử lý nhanh                                                           |
+| ----------------------------------------- | ---------------------------------------------------- | --------------------------------------------------------------------- |
+| Chat không stream, xoay vòng mãi          | LLM service down                                     | Check `/api/health`, restart model                                    |
+| Bật RAG nhưng LLM vẫn không biết tài liệu | File chưa APPROVE / chưa index                       | Mở trang tài liệu verify, approve lại                                 |
+| Đổi prompt xong không có tác dụng         | Prompt cache FE                                      | Hard reload `Ctrl+Shift+R`, gõ câu hỏi **mới** (tránh cache response) |
+| Đổi temperature không thấy khác biệt      | Câu hỏi quá xác định → model luôn trả lời giống nhau | Dùng câu "sáng tạo": viết bài giới thiệu, viết thơ…                   |
+| Citation không hiện                       | Retrieve trả rỗng / document-search lỗi              | Check Network tab, xem response `sources`                             |

@@ -84,9 +84,7 @@ function getMenus(
       key,
       label,
       icon: item.icon ? <item.icon /> : undefined,
-      children: item.children
-        ? getMenus(item.children, onDelete, onEdit, onFeedback)
-        : undefined,
+      children: item.children ? getMenus(item.children, onDelete, onEdit, onFeedback) : undefined,
     }
   })
 }

@@ -1,7 +1,7 @@
 # KỊCH BẢN DEMO TỔNG HỢP — TRỢ LÝ ẢO HỌC VIỆN
 
 > File tổng hợp đầy đủ kịch bản demo 5 mô-đun theo đúng thứ tự UC nghiệm thu.
-> Tổng thời lượng: **~60–75 phút**. Có thể rút gọn bằng cách bỏ các phần *(tuỳ chọn)*.
+> Tổng thời lượng: **~60–75 phút**. Có thể rút gọn bằng cách bỏ các phần _(tuỳ chọn)_.
 >
 > Các file nội dung chi tiết đã được gộp vào đây từ:
 > `README.md`, `llm-demo-script.md`, `app-demo-script.md`, `faq-samples.md`,
@@ -55,17 +55,17 @@
 
 ### Dữ liệu cần nạp sẵn (trừ các file test dùng để demo live)
 
-| File | Topic | Dùng cho UC |
-|---|---|---|
-| `01-noi-quy.docx` | `INTERNAL_GUIDELINES_AND_REGULATIONS_OF_THE_ACADEMY` | 1.1, 1.3, 3.3, 4.B-UC11 |
-| `02-quy-dinh.pdf` | `TRAINING_RULES_AND_REGULATIONS` | 1.2, 4.A-UC3 |
-| `03-scan.pdf` | (tuỳ topic) | 1.2 (OCR) |
-| `04-trung-lap.docx` | cùng topic với 01 | 1.3 |
-| `05-quy-che-dao-tao.docx` | `TRAINING_RULES_AND_REGULATIONS` | 4.A-UC3 |
-| `06-quy-che-thi.docx` | `EXAMINATION_RULES_AND_REGULATIONS` | 4.A-UC4 |
-| `07-thong-tin-tuyen-sinh.docx` | `GENERAL_ADMISSIONS_INFORMATION` + `ADMISSIONS_RULES_AND_REGULATIONS` | 4.A-UC1, UC2 |
-| `08-chinh-sach-sv.docx` | `REGULATIONS_POLICIES_AND_BENEFITS_FOR_CIVILIAN_STUDENTS` | 4.A-UC8 |
-| 2 FAQ gốc (ở Phụ lục) | (2 topic khác nhau) | 1.4–1.6 |
+| File                           | Topic                                                                 | Dùng cho UC             |
+| ------------------------------ | --------------------------------------------------------------------- | ----------------------- |
+| `01-noi-quy.docx`              | `INTERNAL_GUIDELINES_AND_REGULATIONS_OF_THE_ACADEMY`                  | 1.1, 1.3, 3.3, 4.B-UC11 |
+| `02-quy-dinh.pdf`              | `TRAINING_RULES_AND_REGULATIONS`                                      | 1.2, 4.A-UC3            |
+| `03-scan.pdf`                  | (tuỳ topic)                                                           | 1.2 (OCR)               |
+| `04-trung-lap.docx`            | cùng topic với 01                                                     | 1.3                     |
+| `05-quy-che-dao-tao.docx`      | `TRAINING_RULES_AND_REGULATIONS`                                      | 4.A-UC3                 |
+| `06-quy-che-thi.docx`          | `EXAMINATION_RULES_AND_REGULATIONS`                                   | 4.A-UC4                 |
+| `07-thong-tin-tuyen-sinh.docx` | `GENERAL_ADMISSIONS_INFORMATION` + `ADMISSIONS_RULES_AND_REGULATIONS` | 4.A-UC1, UC2            |
+| `08-chinh-sach-sv.docx`        | `REGULATIONS_POLICIES_AND_BENEFITS_FOR_CIVILIAN_STUDENTS`             | 4.A-UC8                 |
+| 2 FAQ gốc (ở Phụ lục)          | (2 topic khác nhau)                                                   | 1.4–1.6                 |
 
 ### Cấu hình mặc định (bảng `ChatBotConfig`)
 
@@ -193,7 +193,7 @@
 - **Loại**: cùng loại với FAQ gốc #1.
 - **Câu hỏi**: `Quy trình đăng ký học lại ở trường được thực hiện ra sao?`
 - **Câu trả lời**: `Sinh viên nộp đơn xin học lại tại phòng đào tạo kèm bảng điểm và đóng học phí theo quy định hiện hành, sau đó tham gia lớp đang mở môn tương ứng.`
-- **Kỳ vọng**: modal *"Câu hỏi đã trùng hoặc gần giống một FAQ khác…"* với 2 nút **Vẫn lưu** / **Huỷ**.
+- **Kỳ vọng**: modal _"Câu hỏi đã trùng hoặc gần giống một FAQ khác…"_ với 2 nút **Vẫn lưu** / **Huỷ**.
   - **Huỷ** → rollback (xoá FAQ vừa tạo khỏi DB).
   - **Vẫn lưu** → giữ lại, vào tab **Chờ duyệt**.
 
@@ -202,7 +202,7 @@
 - **Loại**: cùng loại với FAQ gốc #2.
 - **Câu hỏi**: `Thủ tục xin lại thẻ sinh viên khi bị hư hỏng cần làm gì?`
 - **Câu trả lời**: `Khi thẻ sinh viên bị mất hoặc hỏng, sinh viên làm đơn xin cấp lại thẻ tại Phòng Công tác sinh viên, kèm bản sao CCCD và ảnh 3x4. Lệ phí cấp lại được thu theo quy định hiện hành. Thẻ mới trả sau 5 đến 7 ngày làm việc.`
-- **Kỳ vọng**: modal *"Câu trả lời đã trùng hoặc gần giống một FAQ khác…"*. Demo cả 2 lựa chọn.
+- **Kỳ vọng**: modal _"Câu trả lời đã trùng hoặc gần giống một FAQ khác…"_. Demo cả 2 lựa chọn.
 
 ### Ngưỡng & debug
 
@@ -329,9 +329,9 @@
 1. **Quản trị → Cấu hình → Tham số mô hình**.
 2. Đọc Alert giải thích tham số.
 3. **Demo `temperature`**:
-   - `0.1` → câu hỏi *"Viết 3 câu ngắn giới thiệu về nhà trường."* → trả lời bảo thủ, lặp ý.
+   - `0.1` → câu hỏi _"Viết 3 câu ngắn giới thiệu về nhà trường."_ → trả lời bảo thủ, lặp ý.
    - `0.9` → cùng câu hỏi → trả lời sáng tạo, đa dạng.
-4. **Demo `maxTokens`**: đặt `40` → hỏi *"Giới thiệu chi tiết về quy trình đăng ký học."* → trả lời **bị cắt**.
+4. **Demo `maxTokens`**: đặt `40` → hỏi _"Giới thiệu chi tiết về quy trình đăng ký học."_ → trả lời **bị cắt**.
 5. Network khi bấm Lưu → call `/api/model/chatBotConfig/update`.
 
 ### Reset sau demo
@@ -351,12 +351,12 @@
 
 1. **Tắt RAG** (toggle "Hỏi đáp thông thường") → hỏi:
    > Nội quy sử dụng trợ lý ảo của nhà trường có bao nhiêu điều? Nêu tiêu đề từng điều.
-   → LLM bịa / nói chung chung.
+   > → LLM bịa / nói chung chung.
 2. **Bật RAG** → cùng câu → trả lời **chính xác 5 điều**.
 
 ### Phần B — Xem pipeline trong Network
 
-1. Clear Network → hỏi: *"Điều 4 của nội quy quy định về vấn đề gì?"*
+1. Clear Network → hỏi: _"Điều 4 của nội quy quy định về vấn đề gì?"_
 2. Trình tự request:
    - `POST /document-search` → response `[{doc_id, chunk, score}, ...]` top-K.
    - `POST /chat/stream` → body chứa **context chunks** + câu hỏi.
@@ -376,8 +376,8 @@
 ### Thao tác
 
 1. **Quản trị → Cấu hình → Prompt Hỏi đáp** → row **"Hỏi đáp thông thường"** (`code = no-rag`) → Chỉnh sửa.
-2. **Demo A — personality**: paste **Prompt #2 (Vui tính)** → Lưu → chat (tắt RAG) *"Học máy là gì?"* → kèm câu đùa.
-3. **Demo B — strict scope**: paste **Prompt #3** → Lưu → *"Thời tiết Hà Nội hôm nay?"* → bị từ chối; *"Quy trình đăng ký học?"* → trả lời bình thường.
+2. **Demo A — personality**: paste **Prompt #2 (Vui tính)** → Lưu → chat (tắt RAG) _"Học máy là gì?"_ → kèm câu đùa.
+3. **Demo B — strict scope**: paste **Prompt #3** → Lưu → _"Thời tiết Hà Nội hôm nay?"_ → bị từ chối; _"Quy trình đăng ký học?"_ → trả lời bình thường.
 4. **Reset**: paste **Prompt #1** → Lưu.
 
 → Xem nội dung Prompt #1/2/3 ở [Phụ lục C](#phụ-lục-c--prompt-templates).
@@ -388,9 +388,9 @@
 
 1. **Quản trị → Cấu hình → Prompt Hỏi đáp** → row **"Hỏi đáp dựa trên RAG"** (`code = rag`) → Chỉnh sửa.
 2. Giải thích placeholder `{context}` + `{question}`.
-3. **Demo A — strict grounding** (Prompt #4): paste + Lưu → bật RAG → hỏi *"Học phí học lại môn bao nhiêu tiền?"* (ngoài tài liệu) → *"Tôi không tìm thấy thông tin trong tài liệu."*
-4. **Demo B — format Markdown** (Prompt #5): paste + Lưu → hỏi *"Nội quy gồm những điều gì?"* → render bullet + bold.
-5. **Demo C — citation** (Prompt #6): paste + Lưu → hỏi câu trên → cuối trả lời có *"Tài liệu tham khảo: 01-noi-quy.docx"*.
+3. **Demo A — strict grounding** (Prompt #4): paste + Lưu → bật RAG → hỏi _"Học phí học lại môn bao nhiêu tiền?"_ (ngoài tài liệu) → _"Tôi không tìm thấy thông tin trong tài liệu."_
+4. **Demo B — format Markdown** (Prompt #5): paste + Lưu → hỏi _"Nội quy gồm những điều gì?"_ → render bullet + bold.
+5. **Demo C — citation** (Prompt #6): paste + Lưu → hỏi câu trên → cuối trả lời có _"Tài liệu tham khảo: 01-noi-quy.docx"_.
 6. **Reset**: paste **Prompt #4** → Lưu.
 
 → Xem nội dung Prompt #4/5/6 ở [Phụ lục C](#phụ-lục-c--prompt-templates).
@@ -407,17 +407,17 @@
 
 ## 4.A. Chức năng tư vấn tuyển sinh, học tập (UC1–UC9)
 
-| # | UC | Topic | Câu hỏi demo | Kỳ vọng |
-|---|---|---|---|---|
-| 1 | Thông tin chung tuyển sinh | `GENERAL_ADMISSIONS_INFORMATION` | *"Trường mình năm 2026 tuyển bao nhiêu ngành?"* | Dựa tài liệu 07, có citation |
-| 2 | Quy chế tuyển sinh | `ADMISSIONS_RULES_AND_REGULATIONS` | *"Thí sinh diện tuyển thẳng cần điều kiện gì?"* | Dựa tài liệu 07 mục "Quy chế" |
-| 3 | Quy chế đào tạo | `TRAINING_RULES_AND_REGULATIONS` | *"Quy định xét tốt nghiệp như thế nào?"* | Dựa tài liệu 05 |
-| 4 | Quy chế thi | `EXAMINATION_RULES_AND_REGULATIONS` | *"Hình thức xử lý khi gian lận thi?"* | Dựa tài liệu 06 |
-| 5 | Thông tin Học viện | `ACADEMY_INFORMATION` | *"Học viện được thành lập năm nào?"* | Dựa tài liệu giới thiệu HV |
-| 6 | Chương trình đào tạo | `TRAINING_PROGRAMS_INFORMATION` | *"Ngành CNTT đào tạo mấy năm? Có những chuyên ngành nào?"* | Dựa tài liệu CTĐT |
-| 7 | Chính sách HV quân sự | `REGULATIONS_POLICIES_AND_BENEFITS_FOR_MILITARY_CADETS` | *"Học viên quân sự có được hưởng phụ cấp nào?"* | Dựa tài liệu riêng |
-| 8 | Chính sách SV dân sự | `REGULATIONS_POLICIES_AND_BENEFITS_FOR_CIVILIAN_STUDENTS` | *"Học bổng khuyến khích học tập cho SV dân sự?"* | Dựa tài liệu 08 |
-| 9 | FAQ | `FREQUENTLY_ASKED_QUESTIONS` | *"Quy trình đăng ký học lại?"* | Lấy từ bảng FAQ (không phải document) |
+| #   | UC                         | Topic                                                     | Câu hỏi demo                                               | Kỳ vọng                               |
+| --- | -------------------------- | --------------------------------------------------------- | ---------------------------------------------------------- | ------------------------------------- |
+| 1   | Thông tin chung tuyển sinh | `GENERAL_ADMISSIONS_INFORMATION`                          | _"Trường mình năm 2026 tuyển bao nhiêu ngành?"_            | Dựa tài liệu 07, có citation          |
+| 2   | Quy chế tuyển sinh         | `ADMISSIONS_RULES_AND_REGULATIONS`                        | _"Thí sinh diện tuyển thẳng cần điều kiện gì?"_            | Dựa tài liệu 07 mục "Quy chế"         |
+| 3   | Quy chế đào tạo            | `TRAINING_RULES_AND_REGULATIONS`                          | _"Quy định xét tốt nghiệp như thế nào?"_                   | Dựa tài liệu 05                       |
+| 4   | Quy chế thi                | `EXAMINATION_RULES_AND_REGULATIONS`                       | _"Hình thức xử lý khi gian lận thi?"_                      | Dựa tài liệu 06                       |
+| 5   | Thông tin Học viện         | `ACADEMY_INFORMATION`                                     | _"Học viện được thành lập năm nào?"_                       | Dựa tài liệu giới thiệu HV            |
+| 6   | Chương trình đào tạo       | `TRAINING_PROGRAMS_INFORMATION`                           | _"Ngành CNTT đào tạo mấy năm? Có những chuyên ngành nào?"_ | Dựa tài liệu CTĐT                     |
+| 7   | Chính sách HV quân sự      | `REGULATIONS_POLICIES_AND_BENEFITS_FOR_MILITARY_CADETS`   | _"Học viên quân sự có được hưởng phụ cấp nào?"_            | Dựa tài liệu riêng                    |
+| 8   | Chính sách SV dân sự       | `REGULATIONS_POLICIES_AND_BENEFITS_FOR_CIVILIAN_STUDENTS` | _"Học bổng khuyến khích học tập cho SV dân sự?"_           | Dựa tài liệu 08                       |
+| 9   | FAQ                        | `FREQUENTLY_ASKED_QUESTIONS`                              | _"Quy trình đăng ký học lại?"_                             | Lấy từ bảng FAQ (không phải document) |
 
 ### Điểm nhấn
 
@@ -429,11 +429,11 @@
 
 ## 4.B. Hỏi đáp Văn bản hành chính (UC10–UC12)
 
-| # | UC | Topic | Câu hỏi demo |
-|---|---|---|---|
-| 10 | Công tác Đảng, Chính trị | `PARTY_WORK_AND_POLITICAL_WORK` | *"Quy định về sinh hoạt đảng viên dự bị?"* |
-| 11 | Quy định nội bộ | `INTERNAL_GUIDELINES_AND_REGULATIONS_OF_THE_ACADEMY` | *"Nội quy sử dụng thư viện?"* |
-| 12 | Sổ tay giảng viên | `IN_THE_FACULTY_HANDBOOK` | *"Giảng viên mới cần hoàn thành thủ tục gì trong tuần đầu?"* |
+| #   | UC                       | Topic                                                | Câu hỏi demo                                                 |
+| --- | ------------------------ | ---------------------------------------------------- | ------------------------------------------------------------ |
+| 10  | Công tác Đảng, Chính trị | `PARTY_WORK_AND_POLITICAL_WORK`                      | _"Quy định về sinh hoạt đảng viên dự bị?"_                   |
+| 11  | Quy định nội bộ          | `INTERNAL_GUIDELINES_AND_REGULATIONS_OF_THE_ACADEMY` | _"Nội quy sử dụng thư viện?"_                                |
+| 12  | Sổ tay giảng viên        | `IN_THE_FACULTY_HANDBOOK`                            | _"Giảng viên mới cần hoàn thành thủ tục gì trong tuần đầu?"_ |
 
 **Điểm nhấn**: các lĩnh vực **không public trên internet** → giá trị của RAG nội bộ.
 
@@ -471,7 +471,7 @@
 1. Mode **Trích lược** (UI ánh xạ → `ABSTRACTIVE_TEXT_SUMMARIZATION`).
 2. Paste **cùng DOC-1** → **đoạn văn mới** (LLM paraphrase).
 
-> ⚠️ Nhãn UI hiện đang bị **ngược** so với tên kỹ thuật: *"Tóm lược" (UI) = extractive*, *"Trích lược" (UI) = abstractive*. Demo theo **nhãn UI**.
+> ⚠️ Nhãn UI hiện đang bị **ngược** so với tên kỹ thuật: _"Tóm lược" (UI) = extractive_, _"Trích lược" (UI) = abstractive_. Demo theo **nhãn UI**.
 
 **Điểm nhấn**: chạy 2 mode trên **cùng input** → thấy khác biệt rõ.
 
@@ -483,7 +483,7 @@
 
 - Dùng **SSO tập trung** `mta.swantech.vn/api/sso-id`. Admin cấp account qua SSO — trợ lý ảo **không quản lý đăng ký local**.
 - Demo: mở ẩn danh → truy cập trợ lý ảo → auto redirect SSO signin → nhập tài khoản → quay về trợ lý ảo với quyền phù hợp.
-- *"1 tài khoản dùng cho nhiều ứng dụng, bảo mật tập trung."*
+- _"1 tài khoản dùng cho nhiều ứng dụng, bảo mật tập trung."_
 
 ## 5.2. Đăng nhập hệ thống
 
@@ -500,7 +500,7 @@ Sidebar trái hiển thị danh sách hội thoại của user. Demo:
 - **Đổi tên**: icon edit → sửa → lưu.
 - **Xoá**: icon thùng rác → xác nhận.
 - **Chuyển qua hội thoại cũ**: click item → load lại lịch sử.
-- **Follow-up context**: hỏi *"Điều 4 nội quy nói gì?"* → bot trả lời → hỏi *"Còn điều 5?"* → bot hiểu ngữ cảnh.
+- **Follow-up context**: hỏi _"Điều 4 nội quy nói gì?"_ → bot trả lời → hỏi _"Còn điều 5?"_ → bot hiểu ngữ cảnh.
 
 Prisma model `Conversation` có `userId` → đảm bảo user chỉ thấy hội thoại của mình (đa tenant).
 
@@ -526,6 +526,7 @@ Prisma model `Conversation` có `userId` → đảm bảo user chỉ thấy hộ
 > Copy-paste nhanh. 5 câu/topic. Một số câu cố ý **ngoài** tài liệu để demo không bịa.
 
 ### 1. `GENERAL_ADMISSIONS_INFORMATION`
+
 ```
 Trường mình năm 2026 tuyển bao nhiêu ngành?
 Điểm chuẩn năm 2025 ngành Công nghệ thông tin là bao nhiêu?
@@ -535,6 +536,7 @@ Tôi có thể đăng ký nhiều nguyện vọng không?
 ```
 
 ### 2. `ADMISSIONS_RULES_AND_REGULATIONS`
+
 ```
 Thí sinh diện tuyển thẳng cần điều kiện gì?
 Trình tự đăng ký xét tuyển online gồm những bước nào?
@@ -544,6 +546,7 @@ Thí sinh có được rút hồ sơ sau khi đã nộp không?
 ```
 
 ### 3. `TRAINING_RULES_AND_REGULATIONS`
+
 ```
 Quy định xét tốt nghiệp như thế nào?
 Sinh viên đạt điểm F bao nhiêu môn thì bị cảnh báo học vụ?
@@ -553,6 +556,7 @@ Quy định về nghỉ học tạm thời và bảo lưu kết quả?
 ```
 
 ### 4. `EXAMINATION_RULES_AND_REGULATIONS`
+
 ```
 Hình thức xử lý khi gian lận thi cử?
 Sinh viên mang điện thoại vào phòng thi sẽ bị xử lý như thế nào?
@@ -562,6 +566,7 @@ Quy trình phúc khảo bài thi diễn ra trong bao lâu?
 ```
 
 ### 5. `ACADEMY_INFORMATION`
+
 ```
 Học viện được thành lập năm nào?
 Hiệu trưởng hiện nay của Học viện là ai?
@@ -571,6 +576,7 @@ Sứ mệnh và tầm nhìn của Học viện là gì?
 ```
 
 ### 6. `TRAINING_PROGRAMS_INFORMATION`
+
 ```
 Ngành Công nghệ thông tin đào tạo mấy năm? Có những chuyên ngành nào?
 Tổng số tín chỉ yêu cầu cho chương trình cử nhân là bao nhiêu?
@@ -580,6 +586,7 @@ Các học phần đại cương bắt buộc gồm những môn gì?
 ```
 
 ### 7. `REGULATIONS_POLICIES_AND_BENEFITS_FOR_MILITARY_CADETS`
+
 ```
 Học viên quân sự có được hưởng phụ cấp nào?
 Chế độ trang phục và sinh hoạt phí của học viên quân sự ra sao?
@@ -589,6 +596,7 @@ Học viên quân sự có được kết hôn trong thời gian học không?
 ```
 
 ### 8. `REGULATIONS_POLICIES_AND_BENEFITS_FOR_CIVILIAN_STUDENTS`
+
 ```
 Học bổng khuyến khích học tập cho sinh viên dân sự?
 Sinh viên dân sự có được miễn giảm học phí không?
@@ -598,6 +606,7 @@ Quy định về học bổng dành cho sinh viên giỏi và xuất sắc?
 ```
 
 ### 9. `FREQUENTLY_ASKED_QUESTIONS`
+
 ```
 Quy trình đăng ký học lại?
 Làm thế nào để cấp lại thẻ sinh viên bị mất?
@@ -607,6 +616,7 @@ Lịch thi học kỳ được công bố ở đâu?
 ```
 
 ### 10. `PARTY_WORK_AND_POLITICAL_WORK`
+
 ```
 Quy định về sinh hoạt đảng viên dự bị?
 Trình tự xét kết nạp Đảng đối với sinh viên?
@@ -616,6 +626,7 @@ Hình thức khen thưởng đảng viên xuất sắc?
 ```
 
 ### 11. `INTERNAL_GUIDELINES_AND_REGULATIONS_OF_THE_ACADEMY`
+
 ```
 Nội quy sử dụng thư viện?
 Quy định về sử dụng phòng máy tính thực hành?
@@ -625,6 +636,7 @@ Thủ tục đăng ký sử dụng hội trường để tổ chức sự kiện
 ```
 
 ### 12. `IN_THE_FACULTY_HANDBOOK`
+
 ```
 Giảng viên mới cần hoàn thành thủ tục gì trong tuần đầu?
 Định mức giờ giảng tối thiểu của giảng viên một năm là bao nhiêu?
@@ -634,6 +646,7 @@ Quy trình đề xuất đi học nâng cao trình độ?
 ```
 
 ### Câu hỏi **ngoài** phạm vi (demo không bịa)
+
 ```
 Giá vàng SJC hôm nay bao nhiêu?
 Lịch thi đấu World Cup 2030?
@@ -870,37 +883,37 @@ sinh hoạt công dân và hoàn thiện thủ tục nhập học tại Phòng �
 
 ## Phụ lục F — Troubleshooting nhanh
 
-| Triệu chứng | Nguyên nhân | Xử lý |
-|---|---|---|
-| Chat không stream, xoay vòng mãi | LLM service down | Check `api.model/api/health`, restart model |
-| File 04 không báo trùng | File 01 chưa APPROVE / khác topic | Vào `/quan-tri/du-lieu/tai-lieu` verify; Network → `document-reader` xem `document_simmilar` |
-| FAQ không báo trùng | FAQ gốc chưa APPROVE / service QA lỗi | Approve FAQ gốc, check `/fqa/similar-*` |
-| Bật RAG nhưng không biết tài liệu | File chưa APPROVE / chưa index | Approve lại, check vector DB |
-| Đổi prompt xong không có tác dụng | Cache FE | `Ctrl+Shift+R`, gõ câu hỏi mới |
-| Đổi temperature không thấy khác | Câu hỏi quá xác định | Dùng câu "sáng tạo" (viết bài giới thiệu, viết thơ…) |
-| Citation không hiện | Retrieve rỗng | Check Network `document-search`, xem `sources` |
-| Chat trả lời *"Tôi không tìm thấy…"* dù có tài liệu | Chưa APPROVE hoặc sai topic | Kiểm tra trạng thái + topic_ids |
-| Dịch bị giới hạn 2000 ký tự | Giới hạn UI | Cắt bớt input hoặc demo nhiều lần |
-| Tóm lược / trích lược giống nhau | Prompt yếu | Check prompt `EXTRACTIVE_/ABSTRACTIVE_TEXT_SUMMARIZATION` ở `/quan-tri/cau-hinh/prompt-chuc-nang` |
-| Tìm kiếm ngữ nghĩa rỗng | Vector DB trống / `api.doc` down | Check `api.doc/health`, verify doc đã vectorize |
-| Không thấy hội thoại cũ | User khác / session khác | Clear cache, re-login |
-| Feedback không lưu | BE endpoint lỗi | Check Network `/feedback` |
+| Triệu chứng                                         | Nguyên nhân                           | Xử lý                                                                                             |
+| --------------------------------------------------- | ------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| Chat không stream, xoay vòng mãi                    | LLM service down                      | Check `api.model/api/health`, restart model                                                       |
+| File 04 không báo trùng                             | File 01 chưa APPROVE / khác topic     | Vào `/quan-tri/du-lieu/tai-lieu` verify; Network → `document-reader` xem `document_simmilar`      |
+| FAQ không báo trùng                                 | FAQ gốc chưa APPROVE / service QA lỗi | Approve FAQ gốc, check `/fqa/similar-*`                                                           |
+| Bật RAG nhưng không biết tài liệu                   | File chưa APPROVE / chưa index        | Approve lại, check vector DB                                                                      |
+| Đổi prompt xong không có tác dụng                   | Cache FE                              | `Ctrl+Shift+R`, gõ câu hỏi mới                                                                    |
+| Đổi temperature không thấy khác                     | Câu hỏi quá xác định                  | Dùng câu "sáng tạo" (viết bài giới thiệu, viết thơ…)                                              |
+| Citation không hiện                                 | Retrieve rỗng                         | Check Network `document-search`, xem `sources`                                                    |
+| Chat trả lời _"Tôi không tìm thấy…"_ dù có tài liệu | Chưa APPROVE hoặc sai topic           | Kiểm tra trạng thái + topic_ids                                                                   |
+| Dịch bị giới hạn 2000 ký tự                         | Giới hạn UI                           | Cắt bớt input hoặc demo nhiều lần                                                                 |
+| Tóm lược / trích lược giống nhau                    | Prompt yếu                            | Check prompt `EXTRACTIVE_/ABSTRACTIVE_TEXT_SUMMARIZATION` ở `/quan-tri/cau-hinh/prompt-chuc-nang` |
+| Tìm kiếm ngữ nghĩa rỗng                             | Vector DB trống / `api.doc` down      | Check `api.doc/health`, verify doc đã vectorize                                                   |
+| Không thấy hội thoại cũ                             | User khác / session khác              | Clear cache, re-login                                                                             |
+| Feedback không lưu                                  | BE endpoint lỗi                       | Check Network `/feedback`                                                                         |
 
 ---
 
 ## Phụ lục G — Danh sách file demo kèm theo
 
-| File | Mục đích | Dùng cho UC |
-|---|---|---|
-| `01-noi-quy.docx` | Tài liệu DOCX nội quy | 1.1, 1.3, 3.3, 4.B-UC11 |
-| `02-quy-dinh.pdf` | PDF có text layer | 1.2, 4.A-UC3 |
-| `03-scan.pdf` | PDF scan (test OCR) | 1.2 |
-| `04-trung-lap.docx` | Test trùng lặp văn bản | 1.3 |
-| `05-quy-che-dao-tao.docx` | Nguồn UC3 | 4.A-UC3 |
-| `06-quy-che-thi.docx` | Nguồn UC4 | 4.A-UC4 |
-| `07-thong-tin-tuyen-sinh.docx` | Nguồn UC1, UC2 | 4.A-UC1, UC2 |
-| `08-chinh-sach-sv.docx` | Nguồn UC8 | 4.A-UC8 |
-| `DEMO-FULL.md` | (File này) Kịch bản tổng hợp | Toàn bộ |
+| File                           | Mục đích                     | Dùng cho UC             |
+| ------------------------------ | ---------------------------- | ----------------------- |
+| `01-noi-quy.docx`              | Tài liệu DOCX nội quy        | 1.1, 1.3, 3.3, 4.B-UC11 |
+| `02-quy-dinh.pdf`              | PDF có text layer            | 1.2, 4.A-UC3            |
+| `03-scan.pdf`                  | PDF scan (test OCR)          | 1.2                     |
+| `04-trung-lap.docx`            | Test trùng lặp văn bản       | 1.3                     |
+| `05-quy-che-dao-tao.docx`      | Nguồn UC3                    | 4.A-UC3                 |
+| `06-quy-che-thi.docx`          | Nguồn UC4                    | 4.A-UC4                 |
+| `07-thong-tin-tuyen-sinh.docx` | Nguồn UC1, UC2               | 4.A-UC1, UC2            |
+| `08-chinh-sach-sv.docx`        | Nguồn UC8                    | 4.A-UC8                 |
+| `DEMO-FULL.md`                 | (File này) Kịch bản tổng hợp | Toàn bộ                 |
 
 ---
 

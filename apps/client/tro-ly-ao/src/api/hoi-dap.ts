@@ -48,14 +48,11 @@ export async function fetchHoiDapFaq({
   formData.append("prompt", prompt)
   formData.append("conversation_id", conversation_id)
 
-  const response = await fetch(
-    `${getRuntimeEnv("NEXT_PUBLIC_CHAT_BOT_URL")}/hoi_dap_faq`,
-    {
-      method: "POST",
-      body: formData,
-      signal: signal,
-    }
-  )
+  const response = await fetch(`${getRuntimeEnv("NEXT_PUBLIC_CHAT_BOT_URL")}/hoi_dap_faq`, {
+    method: "POST",
+    body: formData,
+    signal: signal,
+  })
 
   if (!response.ok) {
     throw new Error("Lỗi khi gọi API Hỏi Đáp")
@@ -107,15 +104,12 @@ export async function fetchGetFaqAnswer({
   formData.append("topic_id", topic_id)
   formData.append("conversation_id", conversation_id)
 
-  const response = await fetch(
-    `${getRuntimeEnv("NEXT_PUBLIC_CHAT_BOT_URL")}/get_faq_answer`,
-    {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: formData.toString(),
-      signal: signal,
-    }
-  )
+  const response = await fetch(`${getRuntimeEnv("NEXT_PUBLIC_CHAT_BOT_URL")}/get_faq_answer`, {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: formData.toString(),
+    signal: signal,
+  })
 
   if (!response.ok) {
     throw new Error("Lỗi khi lấy câu trả lời FAQ")

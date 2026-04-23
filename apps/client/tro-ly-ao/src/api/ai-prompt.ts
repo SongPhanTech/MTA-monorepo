@@ -19,7 +19,10 @@ const handleJson = async (res: Response) => {
     let msg = `HTTP ${res.status}`
     try {
       const data = await res.json()
-      msg = (data as { detail?: string; message?: string })?.detail ?? (data as { message?: string })?.message ?? msg
+      msg =
+        (data as { detail?: string; message?: string })?.detail ??
+        (data as { message?: string })?.message ??
+        msg
     } catch {}
     throw new Error(msg)
   }

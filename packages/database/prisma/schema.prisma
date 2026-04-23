@@ -5465,6 +5465,7 @@ model EvaluationCriterion {
   reviewer                    EvaluationCouncilMember?     @relation(fields: [reviewerId], references: [id], onDelete: Cascade)
   reviewerId                  String?
   deadlineReview              DateTime?
+  deadlineReviewExternal      DateTime?
   lecturerReview              Lecturer[]                   @relation("EvaluationCriterionLecturerReview")
   evaluationCriterionComments EvaluationCriterionComment[]
   /// 1. Mô tả hiện trạng

@@ -6,7 +6,7 @@ Bộ 4 mẫu copy-paste sẵn cho trang `/xu-ly-van-ban`. Mỗi mẫu kèm kết
 
 ## Mẫu EN-1 — Dịch Anh → Việt (~180 từ)
 
-**Mode UI**: *Dịch văn bản*
+**Mode UI**: _Dịch văn bản_
 
 ```
 Artificial intelligence is transforming higher education in many fundamental ways.
@@ -31,7 +31,7 @@ and expanding the knowledge base over time.
 
 ## Mẫu ZH-1 — Dịch Trung → Việt (~100 từ)
 
-**Mode UI**: *Dịch văn bản*
+**Mode UI**: _Dịch văn bản_
 
 ```
 人工智能正在深刻改变高等教育。大学正在部署智能虚拟助手，
@@ -46,7 +46,7 @@ and expanding the knowledge base over time.
 
 ## Mẫu ERR-1 — Sửa lỗi chính tả
 
-**Mode UI**: *Sửa lỗi chính tả*
+**Mode UI**: _Sửa lỗi chính tả_
 
 ```
 Sinh viên có nhu câù đăng kí học laị liên hệ phòng đào taọ để được hưỡng dẫn.
@@ -63,7 +63,7 @@ Sau khi nộp hồ sơ, sinh viên chờ kết quả xét duyệt trong vòng 3 
 
 ## Mẫu DOC-1 — Tóm tắt (dùng chung cho cả Tóm lược và Trích lược)
 
-**Mode UI**: *Tóm lược* (= extractive) và *Trích lược* (= abstractive) — chạy lần lượt cùng input để so sánh.
+**Mode UI**: _Tóm lược_ (= extractive) và _Trích lược_ (= abstractive) — chạy lần lượt cùng input để so sánh.
 
 ```
 Trong những năm gần đây, việc ứng dụng trí tuệ nhân tạo vào giáo dục đại học
@@ -93,13 +93,13 @@ hiệu quả và bền vững.
 ### Kỳ vọng khi chạy **Tóm lược (extractive)**
 
 - Kết quả là **vài câu được trích nguyên văn** từ bài gốc.
-- Ví dụ: *"Các trường đại học trên thế giới đang triển khai các hệ thống trợ lý ảo thông minh... Những hệ thống này thường kết hợp LLM với kỹ thuật RAG... Cơ chế tiếp nhận phản hồi từ người dùng là yếu tố then chốt giúp liên tục cải thiện chất lượng."*
+- Ví dụ: _"Các trường đại học trên thế giới đang triển khai các hệ thống trợ lý ảo thông minh... Những hệ thống này thường kết hợp LLM với kỹ thuật RAG... Cơ chế tiếp nhận phản hồi từ người dùng là yếu tố then chốt giúp liên tục cải thiện chất lượng."_
 - **Không tạo câu mới**, không paraphrase.
 
 ### Kỳ vọng khi chạy **Trích lược (abstractive)**
 
 - Kết quả là **đoạn văn mới do LLM viết lại**, không copy câu từ bài gốc.
-- Ví dụ: *"Bài viết giới thiệu việc ứng dụng AI vào giáo dục đại học, tập trung vào trợ lý ảo kết hợp RAG để hỗ trợ sinh viên tra cứu. Các nền tảng cũng cung cấp nhiều chức năng như dịch thuật, tóm tắt, tìm kiếm ngữ nghĩa. Thành công của triển khai phụ thuộc vào thiết kế prompt, bảo mật dữ liệu và phản hồi người dùng."*
+- Ví dụ: _"Bài viết giới thiệu việc ứng dụng AI vào giáo dục đại học, tập trung vào trợ lý ảo kết hợp RAG để hỗ trợ sinh viên tra cứu. Các nền tảng cũng cung cấp nhiều chức năng như dịch thuật, tóm tắt, tìm kiếm ngữ nghĩa. Thành công của triển khai phụ thuộc vào thiết kế prompt, bảo mật dữ liệu và phản hồi người dùng."_
 - Văn phong khác, câu từ khác nhưng **giữ được ý chính**.
 
 ---

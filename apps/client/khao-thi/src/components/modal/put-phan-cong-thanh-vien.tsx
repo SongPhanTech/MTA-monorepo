@@ -9,7 +9,6 @@ import { useStore } from "@tanstack/react-store"
 import { $Enums } from "@workspace/db/client"
 import {
   useFindManyEvaluationCouncilMember,
-  useUpsertAnalysisCriterion,
   useUpsertEvaluationCriterion,
 } from "@workspace/db/hooks"
 import { Col, Form, message, Tree } from "antd"
@@ -38,10 +37,7 @@ export default function PutPhanCongThanhVienModal() {
         periodId: selectedEvaluationPeriodId,
       },
       role: {
-        in: [
-          $Enums.EvaluationMemberRole.SPECIALIZED,
-          $Enums.EvaluationMemberRole.NONCOUNCIL_MEMBERS,
-        ],
+        in: [$Enums.EvaluationMemberRole.NONCOUNCIL_MEMBERS],
       },
     },
     include: {
@@ -89,7 +85,6 @@ export default function PutPhanCongThanhVienModal() {
       }))
   }, [input?.tableData, input?.selectedCriteriaIds])
 
-  const { mutateAsync: upsertAnalysisCriterion } = useUpsertAnalysisCriterion()
   const { mutateAsync: upsertEvaluationCriterion } = useUpsertEvaluationCriterion()
 
   const handleFinish = async (values: CriteriaAssignmentModalFormType) => {
@@ -97,34 +92,25 @@ export default function PutPhanCongThanhVienModal() {
       if (!values) return
       showSpinner()
       if (input?.selectedCriteriaIds) {
-        const upsertData = {
-          lecturerId: values.lecturerId,
-          deadline: values.deadline ? dayjs(values.deadline).toISOString() : undefined,
-        }
+        const deadline = values.deadline ? dayjs(values.deadline).toISOString() : undefined
 
         await Promise.all(
-          input.selectedCriteriaIds.flatMap((criterionId) => [
-            upsertAnalysisCriterion({
-              where: {
-                criterionPeriodId: criterionId,
-              },
-              create: {
-                criterionPeriodId: criterionId,
-                ...upsertData,
-              },
-              update: upsertData,
-            }),
+          input.selectedCriteriaIds.map((criterionId) =>
             upsertEvaluationCriterion({
               where: {
                 criterionPeriodId: criterionId,
               },
               create: {
                 criterionPeriodId: criterionId,
-                ...upsertData,
+                deadlineReviewExternal: deadline,
+                lecturerReview: { connect: [{ id: values.lecturerId }] },
               },
-              update: upsertData,
-            }),
-          ])
+              update: {
+                deadlineReviewExternal: deadline,
+                lecturerReview: { set: [{ id: values.lecturerId }] },
+              },
+            })
+          )
         )
 
         message.success("Phân công thành viên phản biện hàng loạt thành công")

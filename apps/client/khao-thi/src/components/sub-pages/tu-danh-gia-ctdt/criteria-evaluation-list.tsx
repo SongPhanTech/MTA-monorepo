@@ -64,7 +64,9 @@ export default function CriteriaEvaluationListSubPage({
               if (colonIdx !== undefined && colonIdx !== -1) {
                 return (
                   <>
-                    <span className="font-bold">{criterion?.name?.substring(0, colonIdx + 1)} </span>
+                    <span className="font-bold">
+                      {criterion?.name?.substring(0, colonIdx + 1)}{" "}
+                    </span>
                     <span>{criterion?.name?.substring(colonIdx + 2)}</span>
                   </>
                 )

@@ -373,7 +373,12 @@ export default function QuestionBankTree({
     }
 
     return convertToTreeNodes(processedData.dataStructure)
-  }, [processedData.dataStructure, onOpenPutQuestionBank, handleDeleteQuestionBank, onOpenNganHangKhungDe])
+  }, [
+    processedData.dataStructure,
+    onOpenPutQuestionBank,
+    handleDeleteQuestionBank,
+    onOpenNganHangKhungDe,
+  ])
 
   const previousSearchRef = useRef<string>("")
 
