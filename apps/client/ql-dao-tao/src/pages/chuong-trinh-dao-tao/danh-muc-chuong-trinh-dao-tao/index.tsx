@@ -10,7 +10,7 @@ import type { FilterProps } from "@constants/type"
 import useSpinner from "@hooks/spinner"
 import DefaultLayout from "@layouts/default-layout"
 import { useSession } from "@workspace/auth/react"
-import type { Prisma, TrainingMajor, TrainingTime } from "@workspace/db/client"
+import { CurriculumVersionType,  Prisma,  TrainingMajor,  TrainingTime } from "@workspace/db/client"
 import {
   useCountCurriculum,
   useFindManyCurriculum,
@@ -265,6 +265,7 @@ export default function TrainingProgramCatalog() {
           id: true,
           active: true,
           curriculumId: true,
+          type: true,
           code: true,
           name: true,
           isLock: true,
@@ -300,6 +301,35 @@ export default function TrainingProgramCatalog() {
     skip: (currentPage - 1) * numberOfPages,
   })
 
+  const sortedCurriculumData = useMemo(() => {
+    const hasFrameworkVersion = (
+      curriculumVersion: {
+        type?: CurriculumVersionType
+      }[] = []
+    ) => curriculumVersion.some((version) => version.type === CurriculumVersionType.FRAMEWORK)
+
+    return [...data]
+      .map((curriculum) => ({
+        ...curriculum,
+        curriculumVersion: [...(curriculum.curriculumVersion || [])].sort((a, b) => {
+          const aPriority = a.type === CurriculumVersionType.FRAMEWORK ? 0 : 1
+          const bPriority = b.type === CurriculumVersionType.FRAMEWORK ? 0 : 1
+
+          if (aPriority !== bPriority) return aPriority - bPriority
+
+          return (a.name || "").localeCompare(b.name || "", "vi")
+        }),
+      }))
+      .sort((a, b) => {
+        const aPriority = hasFrameworkVersion(a.curriculumVersion) ? 0 : 1
+        const bPriority = hasFrameworkVersion(b.curriculumVersion) ? 0 : 1
+
+        if (aPriority !== bPriority) return aPriority - bPriority
+
+        return (a.name || "").localeCompare(b.name || "", "vi")
+      })
+  }, [data])
+
   const { data: count } = useCountCurriculum({ where })
   const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
     orderBy: {
@@ -330,6 +360,7 @@ export default function TrainingProgramCatalog() {
   const { onOpen: onOpenCurriculumVersion } = useDisclosure<{
     curriculumId: string
     versionId: string
+    isFramework?: boolean
   }>({
     tag: "PutCurriculumVersion",
   })
@@ -495,7 +526,7 @@ export default function TrainingProgramCatalog() {
                     if (expandAll) {
                       setExpandedKeys([])
                     } else {
-                      setExpandedKeys(data.map((d) => d.id))
+                      setExpandedKeys(sortedCurriculumData.map((d) => d.id))
                     }
                     setExpandAll(!expandAll)
                   }}
@@ -557,7 +588,9 @@ export default function TrainingProgramCatalog() {
 
               return (
                 <Tooltip title={tooltipContent} placement="top">
-                  <span className="truncate inline-block align-middle">Khung: {displayText}</span>
+                  <span className="truncate inline-flex items-center gap-2 align-middle rounded px-2">
+                    <span>Khung: {displayText}</span>
+                  </span>
                 </Tooltip>
               )
             }}
@@ -572,6 +605,15 @@ export default function TrainingProgramCatalog() {
               },
             }}
             onRowClick={(record) => handleRowClick(record)}
+            rowClassName={(record) => {
+              const row = record as { $type?: "parent" | "child"; type?: CurriculumVersionType }
+
+              if (row.$type === "child" && row.type === CurriculumVersionType.FRAMEWORK) {
+                return "framework-curriculum-version-row"
+              }
+
+              return ""
+            }}
             filters={filters}
             setFilters={(value) => {
               setFilters(value)
@@ -800,23 +842,30 @@ export default function TrainingProgramCatalog() {
                 },
               },
             ]}
-            headerRight={({ id }) => (
-              <div className="flex gap-2.5 w-[85px] items-center">
-                {can(
-                  QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO,
-                  "THEM"
-                ) && (
-                  <CreateIcon
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      onOpenCurriculumVersion({
-                        curriculumId: id,
-                        versionId: "",
-                      })
-                    }}
-                    title="Thêm mới CTĐT toàn khoá"
-                  />
-                )}
+            headerRight={({ id, curriculumVersion = [] }) => {
+              const hasFrameworkVersion = curriculumVersion.some(
+                (version) => version.type === CurriculumVersionType.FRAMEWORK
+              )
+
+              return (
+                <div className="flex gap-2.5 w-[85px] items-center">
+                  {can(
+                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO,
+                    "THEM"
+                  ) &&
+                    !hasFrameworkVersion && (
+                      <CreateIcon
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          onOpenCurriculumVersion({
+                            curriculumId: id,
+                            versionId: "",
+                            isFramework: true,
+                          })
+                        }}
+                        title="Thêm mới CTĐT khung"
+                      />
+                    )}
                 {can(
                   QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO,
                   "SUA"
@@ -846,9 +895,10 @@ export default function TrainingProgramCatalog() {
                     onClick={(e) => e.stopPropagation()}
                   />
                 )}
-              </div>
-            )}
-            data={data}
+                </div>
+              )
+            }}
+            data={sortedCurriculumData}
             scrollable
             maxHeight={"calc(100vh - 290px)"}
             pagination={{
@@ -867,6 +917,13 @@ export default function TrainingProgramCatalog() {
           />
         </Col>
       </Row>
+      <style>
+        {`
+          .framework-curriculum-version-row > td {
+            background-color: #fef9c3 !important;
+          }
+        `}
+      </style>
     </div>
   )
 }
