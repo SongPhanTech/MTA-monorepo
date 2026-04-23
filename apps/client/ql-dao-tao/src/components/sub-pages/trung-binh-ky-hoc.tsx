@@ -61,8 +61,10 @@ const DiemTrungBinhKyHoc = () => {
     // Nếu người dùng chọn sort tên
     if (sorter.field === "name" && sorter.order) {
       return [
-        { userProfile: { fullname: sorter.order } }, // Sắp xếp theo tên người dùng chọn
-        ...DEFAULT_ORDER_BY, // Giữ nguyên logic mặc định làm ưu tiên phụ
+        { userProfile: { firstName: sorter.order } },
+        { userProfile: { lastName: sorter.order } },
+        { fixedClass: { code: "desc" as const } },
+
       ]
     }
     // Mặc định ban đầu
@@ -323,6 +325,10 @@ const DiemTrungBinhKyHoc = () => {
                 fixed: "left",
                 type: "input",
                 sorter: true,
+                showSorterTooltip: {
+                  target: 'sorter-icon',
+                  title: 'Nhấp để sắp xếp', // Dòng chữ bạn muốn hiển thị
+                },
                 render: (__, record) => record?.userProfile?.fullname,
               },
               {

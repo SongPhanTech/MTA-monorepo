@@ -110,6 +110,7 @@ export const useGetSession = <TData = Schemas.Session,>(
 
 export type GetConfigLogsQueryParams = {
   apiId: string;
+  baseUrl: string;
 };
 
 export type GetConfigLogsError = Fetcher.ErrorWrapper<undefined>;
@@ -201,6 +202,7 @@ export type UpdateConfigLogsResponse = void | null;
 
 export type UpdateConfigLogsRequestBody = {
   apiId: string;
+  baseUrl: string;
   enabled: boolean;
 };
 
@@ -798,6 +800,495 @@ export const useThroughput = <TData = ThroughputResponse,>(
     ),
     ...options,
     ...queryOptions,
+  });
+};
+
+export type InsertDeployLogError = Fetcher.ErrorWrapper<undefined>;
+
+export type InsertDeployLogResponse = {
+  ok: boolean;
+};
+
+export type InsertDeployLogRequestBody = {
+  apiId: string;
+  apiName: string;
+  apiVersion: string;
+  revisionName: string;
+  environment: string;
+  action: "deploy" | "undeploy";
+  status: "success" | "pending" | "failed";
+  userName?: string;
+};
+
+export type InsertDeployLogVariables = {
+  body: InsertDeployLogRequestBody;
+} & CommonContext["fetcherOptions"];
+
+export const fetchInsertDeployLog = (
+  variables: InsertDeployLogVariables,
+  signal?: AbortSignal,
+) =>
+  commonFetch<
+    InsertDeployLogResponse,
+    InsertDeployLogError,
+    InsertDeployLogRequestBody,
+    {},
+    {},
+    {}
+  >({
+    url: "/api/apim-logs/deploy-logs",
+    method: "post",
+    ...variables,
+    signal,
+  });
+
+export const useInsertDeployLog = (
+  options?: Omit<
+    reactQuery.UseMutationOptions<
+      InsertDeployLogResponse,
+      InsertDeployLogError,
+      InsertDeployLogVariables
+    >,
+    "mutationFn"
+  >,
+) => {
+  const { fetcherOptions } = useCommonContext();
+  return reactQuery.useMutation<
+    InsertDeployLogResponse,
+    InsertDeployLogError,
+    InsertDeployLogVariables
+  >({
+    mutationFn: (variables: InsertDeployLogVariables) =>
+      fetchInsertDeployLog(deepMerge(fetcherOptions, variables)),
+    ...options,
+  });
+};
+
+export type GetDeployLogsQueryParams = {
+  apiId: string;
+  /**
+   * @default 50
+   */
+  limit?: number | null;
+};
+
+export type GetDeployLogsError = Fetcher.ErrorWrapper<undefined>;
+
+export type GetDeployLogsResponse = {
+  time: string;
+  apiName: string;
+  apiVersion: string;
+  revisionName: string;
+  environment: string;
+  action: string;
+  status: string;
+  userName: string;
+}[];
+
+export type GetDeployLogsVariables = {
+  queryParams: GetDeployLogsQueryParams;
+} & CommonContext["fetcherOptions"];
+
+export const fetchGetDeployLogs = (
+  variables: GetDeployLogsVariables,
+  signal?: AbortSignal,
+) =>
+  commonFetch<
+    GetDeployLogsResponse,
+    GetDeployLogsError,
+    undefined,
+    {},
+    GetDeployLogsQueryParams,
+    {}
+  >({ url: "/api/apim-logs/deploy-logs", method: "get", ...variables, signal });
+
+export function getDeployLogsQuery(variables: GetDeployLogsVariables): {
+  queryKey: reactQuery.QueryKey;
+  queryFn: (options: QueryFnOptions) => Promise<GetDeployLogsResponse>;
+};
+
+export function getDeployLogsQuery(
+  variables: GetDeployLogsVariables | reactQuery.SkipToken,
+): {
+  queryKey: reactQuery.QueryKey;
+  queryFn:
+    | ((options: QueryFnOptions) => Promise<GetDeployLogsResponse>)
+    | reactQuery.SkipToken;
+};
+
+export function getDeployLogsQuery(
+  variables: GetDeployLogsVariables | reactQuery.SkipToken,
+) {
+  return {
+    queryKey: queryKeyFn({
+      path: "/api/apim-logs/deploy-logs",
+      operationId: "getDeployLogs",
+      variables,
+    }),
+    queryFn:
+      variables === reactQuery.skipToken
+        ? reactQuery.skipToken
+        : ({ signal }: QueryFnOptions) => fetchGetDeployLogs(variables, signal),
+  };
+}
+
+export const useSuspenseGetDeployLogs = <TData = GetDeployLogsResponse,>(
+  variables: GetDeployLogsVariables,
+  options?: Omit<
+    reactQuery.UseQueryOptions<
+      GetDeployLogsResponse,
+      GetDeployLogsError,
+      TData
+    >,
+    "queryKey" | "queryFn" | "initialData"
+  >,
+) => {
+  const { queryOptions, fetcherOptions } = useCommonContext(options);
+  return reactQuery.useSuspenseQuery<
+    GetDeployLogsResponse,
+    GetDeployLogsError,
+    TData
+  >({
+    ...getDeployLogsQuery(deepMerge(fetcherOptions, variables)),
+    ...options,
+    ...queryOptions,
+  });
+};
+
+export const useGetDeployLogs = <TData = GetDeployLogsResponse,>(
+  variables: GetDeployLogsVariables | reactQuery.SkipToken,
+  options?: Omit<
+    reactQuery.UseQueryOptions<
+      GetDeployLogsResponse,
+      GetDeployLogsError,
+      TData
+    >,
+    "queryKey" | "queryFn" | "initialData"
+  >,
+) => {
+  const { queryOptions, fetcherOptions } = useCommonContext(options);
+  return reactQuery.useQuery<GetDeployLogsResponse, GetDeployLogsError, TData>({
+    ...getDeployLogsQuery(
+      variables === reactQuery.skipToken
+        ? variables
+        : deepMerge(fetcherOptions, variables),
+    ),
+    ...options,
+    ...queryOptions,
+  });
+};
+
+export type ListApiKeysQueryParams = {
+  apiId: string;
+  status?: "active" | "revoked";
+};
+
+export type ListApiKeysError = Fetcher.ErrorWrapper<undefined>;
+
+export type ListApiKeysResponse = {
+  id: string;
+  apiId: string;
+  keyValue: string;
+  name: string;
+  description: string | null;
+  status: "active" | "revoked";
+  expiresAt: string | null;
+  createdAt: string;
+  createdBy: string;
+  revokedAt: string | null;
+  revokedBy: string | null;
+}[];
+
+export type ListApiKeysVariables = {
+  queryParams: ListApiKeysQueryParams;
+} & CommonContext["fetcherOptions"];
+
+export const fetchListApiKeys = (
+  variables: ListApiKeysVariables,
+  signal?: AbortSignal,
+) =>
+  commonFetch<
+    ListApiKeysResponse,
+    ListApiKeysError,
+    undefined,
+    {},
+    ListApiKeysQueryParams,
+    {}
+  >({ url: "/api/apim-logs/api-keys", method: "get", ...variables, signal });
+
+export function listApiKeysQuery(variables: ListApiKeysVariables): {
+  queryKey: reactQuery.QueryKey;
+  queryFn: (options: QueryFnOptions) => Promise<ListApiKeysResponse>;
+};
+
+export function listApiKeysQuery(
+  variables: ListApiKeysVariables | reactQuery.SkipToken,
+): {
+  queryKey: reactQuery.QueryKey;
+  queryFn:
+    | ((options: QueryFnOptions) => Promise<ListApiKeysResponse>)
+    | reactQuery.SkipToken;
+};
+
+export function listApiKeysQuery(
+  variables: ListApiKeysVariables | reactQuery.SkipToken,
+) {
+  return {
+    queryKey: queryKeyFn({
+      path: "/api/apim-logs/api-keys",
+      operationId: "listApiKeys",
+      variables,
+    }),
+    queryFn:
+      variables === reactQuery.skipToken
+        ? reactQuery.skipToken
+        : ({ signal }: QueryFnOptions) => fetchListApiKeys(variables, signal),
+  };
+}
+
+export const useSuspenseListApiKeys = <TData = ListApiKeysResponse,>(
+  variables: ListApiKeysVariables,
+  options?: Omit<
+    reactQuery.UseQueryOptions<ListApiKeysResponse, ListApiKeysError, TData>,
+    "queryKey" | "queryFn" | "initialData"
+  >,
+) => {
+  const { queryOptions, fetcherOptions } = useCommonContext(options);
+  return reactQuery.useSuspenseQuery<
+    ListApiKeysResponse,
+    ListApiKeysError,
+    TData
+  >({
+    ...listApiKeysQuery(deepMerge(fetcherOptions, variables)),
+    ...options,
+    ...queryOptions,
+  });
+};
+
+export const useListApiKeys = <TData = ListApiKeysResponse,>(
+  variables: ListApiKeysVariables | reactQuery.SkipToken,
+  options?: Omit<
+    reactQuery.UseQueryOptions<ListApiKeysResponse, ListApiKeysError, TData>,
+    "queryKey" | "queryFn" | "initialData"
+  >,
+) => {
+  const { queryOptions, fetcherOptions } = useCommonContext(options);
+  return reactQuery.useQuery<ListApiKeysResponse, ListApiKeysError, TData>({
+    ...listApiKeysQuery(
+      variables === reactQuery.skipToken
+        ? variables
+        : deepMerge(fetcherOptions, variables),
+    ),
+    ...options,
+    ...queryOptions,
+  });
+};
+
+export type CreateApiKeyError = Fetcher.ErrorWrapper<undefined>;
+
+export type CreateApiKeyResponse = {
+  id: string;
+  apiId: string;
+  keyValue: string;
+  name: string;
+  description: string | null;
+  status: "active" | "revoked";
+  expiresAt: string | null;
+  createdAt: string;
+  createdBy: string;
+  revokedAt: string | null;
+  revokedBy: string | null;
+};
+
+export type CreateApiKeyRequestBody = {
+  apiId: string;
+  name: string;
+  description?: string;
+  keyValue: string;
+  /**
+   * @format date-time
+   */
+  expiresAt?: string;
+  createdBy?: string;
+};
+
+export type CreateApiKeyVariables = {
+  body: CreateApiKeyRequestBody;
+} & CommonContext["fetcherOptions"];
+
+export const fetchCreateApiKey = (
+  variables: CreateApiKeyVariables,
+  signal?: AbortSignal,
+) =>
+  commonFetch<
+    CreateApiKeyResponse,
+    CreateApiKeyError,
+    CreateApiKeyRequestBody,
+    {},
+    {},
+    {}
+  >({ url: "/api/apim-logs/api-keys", method: "post", ...variables, signal });
+
+export const useCreateApiKey = (
+  options?: Omit<
+    reactQuery.UseMutationOptions<
+      CreateApiKeyResponse,
+      CreateApiKeyError,
+      CreateApiKeyVariables
+    >,
+    "mutationFn"
+  >,
+) => {
+  const { fetcherOptions } = useCommonContext();
+  return reactQuery.useMutation<
+    CreateApiKeyResponse,
+    CreateApiKeyError,
+    CreateApiKeyVariables
+  >({
+    mutationFn: (variables: CreateApiKeyVariables) =>
+      fetchCreateApiKey(deepMerge(fetcherOptions, variables)),
+    ...options,
+  });
+};
+
+export type RenewApiKeyPathParams = {
+  id: string;
+};
+
+export type RenewApiKeyError = Fetcher.ErrorWrapper<undefined>;
+
+export type RenewApiKeyResponse = {
+  id: string;
+  apiId: string;
+  keyValue: string;
+  name: string;
+  description: string | null;
+  status: "active" | "revoked";
+  expiresAt: string | null;
+  createdAt: string;
+  createdBy: string;
+  revokedAt: string | null;
+  revokedBy: string | null;
+};
+
+export type RenewApiKeyRequestBody = {
+  /**
+   * @format date-time
+   */
+  expiresAt: string;
+};
+
+export type RenewApiKeyVariables = {
+  body: RenewApiKeyRequestBody;
+  pathParams: RenewApiKeyPathParams;
+} & CommonContext["fetcherOptions"];
+
+export const fetchRenewApiKey = (
+  variables: RenewApiKeyVariables,
+  signal?: AbortSignal,
+) =>
+  commonFetch<
+    RenewApiKeyResponse,
+    RenewApiKeyError,
+    RenewApiKeyRequestBody,
+    {},
+    {},
+    RenewApiKeyPathParams
+  >({
+    url: "/api/apim-logs/api-keys/:id/renew",
+    method: "post",
+    ...variables,
+    signal,
+  });
+
+export const useRenewApiKey = (
+  options?: Omit<
+    reactQuery.UseMutationOptions<
+      RenewApiKeyResponse,
+      RenewApiKeyError,
+      RenewApiKeyVariables
+    >,
+    "mutationFn"
+  >,
+) => {
+  const { fetcherOptions } = useCommonContext();
+  return reactQuery.useMutation<
+    RenewApiKeyResponse,
+    RenewApiKeyError,
+    RenewApiKeyVariables
+  >({
+    mutationFn: (variables: RenewApiKeyVariables) =>
+      fetchRenewApiKey(deepMerge(fetcherOptions, variables)),
+    ...options,
+  });
+};
+
+export type RevokeApiKeyPathParams = {
+  id: string;
+};
+
+export type RevokeApiKeyError = Fetcher.ErrorWrapper<undefined>;
+
+export type RevokeApiKeyResponse = {
+  id: string;
+  apiId: string;
+  keyValue: string;
+  name: string;
+  description: string | null;
+  status: "active" | "revoked";
+  expiresAt: string | null;
+  createdAt: string;
+  createdBy: string;
+  revokedAt: string | null;
+  revokedBy: string | null;
+};
+
+export type RevokeApiKeyRequestBody = {
+  revokedBy?: string;
+};
+
+export type RevokeApiKeyVariables = {
+  body?: RevokeApiKeyRequestBody;
+  pathParams: RevokeApiKeyPathParams;
+} & CommonContext["fetcherOptions"];
+
+export const fetchRevokeApiKey = (
+  variables: RevokeApiKeyVariables,
+  signal?: AbortSignal,
+) =>
+  commonFetch<
+    RevokeApiKeyResponse,
+    RevokeApiKeyError,
+    RevokeApiKeyRequestBody,
+    {},
+    {},
+    RevokeApiKeyPathParams
+  >({
+    url: "/api/apim-logs/api-keys/:id/revoke",
+    method: "post",
+    ...variables,
+    signal,
+  });
+
+export const useRevokeApiKey = (
+  options?: Omit<
+    reactQuery.UseMutationOptions<
+      RevokeApiKeyResponse,
+      RevokeApiKeyError,
+      RevokeApiKeyVariables
+    >,
+    "mutationFn"
+  >,
+) => {
+  const { fetcherOptions } = useCommonContext();
+  return reactQuery.useMutation<
+    RevokeApiKeyResponse,
+    RevokeApiKeyError,
+    RevokeApiKeyVariables
+  >({
+    mutationFn: (variables: RevokeApiKeyVariables) =>
+      fetchRevokeApiKey(deepMerge(fetcherOptions, variables)),
+    ...options,
   });
 };
 
@@ -1703,14 +2194,27 @@ export type ExcelTemplateRequestBody = {
     data?: void | null;
   };
   /**
-   * Dữ liệu để điền vào template
+   * Dữ liệu để điền vào template (chế độ cũ: 1 sheet)
    */
-  payload: {
+  payload?: {
     data?: void | null;
     /**
      * Danh sách các ô cần gộp trong sheet, định dạng giống như A1:B2
      */
     mergeCells?: string[];
+  }[];
+  /**
+   * Dữ liệu nhiều sheet. Nếu có thì mỗi phần tử tạo ra 1 sheet trong file xuất.
+   */
+  sheets?: {
+    sheetName?: string;
+    payload: {
+      data?: void | null;
+      /**
+       * Danh sách các ô cần gộp trong sheet, định dạng giống như A1:B2
+       */
+      mergeCells?: string[];
+    }[];
   }[];
   fileName: string;
   path: string;
@@ -1726,6 +2230,8 @@ export type ExcelTemplateRequestBody = {
    * @default true
    */
   wrapText?: boolean;
+  orientation?: "portrait" | "landscape";
+  horizontalCentered?: boolean;
 };
 
 export type ExcelTemplateVariables = {
@@ -2170,6 +2676,7 @@ export type SqlTransactionRequestBody = {
     | "FAQ"
     | "Prompt"
     | "Conversation"
+    | "ConversationFeedback"
     | "Message"
     | "CitationMessage"
     | "Topic"
@@ -2202,6 +2709,7 @@ export type SqlTransactionRequestBody = {
     | "DM_XaPhuong_New"
     | "DM_ViTriCongViec"
     | "PlanTraining"
+    | "PlanTrainingPractice"
     | "PlanTrainingSubject"
     | "StudentScoreConvert"
     | "SubjectScoreConvert"
@@ -2255,6 +2763,7 @@ export type SqlTransactionRequestBody = {
     | "TrainingBlock"
     | "TrainingBlockOnCurriculumVersion"
     | "TrainingTime"
+    | "AvailableTrainingTime"
     | "Certificate"
     | "CertificateOnSubject"
     | "Award"
@@ -2264,6 +2773,7 @@ export type SqlTransactionRequestBody = {
     | "OutputStandard"
     | "OutputStandardOnCurriculum"
     | "Student"
+    | "TrainingActivity"
     | "StudentSemesterResult"
     | "StudentYearResult"
     | "Notification"
@@ -2477,6 +2987,16 @@ export type QueryOperation =
       path: "/api/apim-logs/throughput";
       operationId: "throughput";
       variables: ThroughputVariables | reactQuery.SkipToken;
+    }
+  | {
+      path: "/api/apim-logs/deploy-logs";
+      operationId: "getDeployLogs";
+      variables: GetDeployLogsVariables | reactQuery.SkipToken;
+    }
+  | {
+      path: "/api/apim-logs/api-keys";
+      operationId: "listApiKeys";
+      variables: ListApiKeysVariables | reactQuery.SkipToken;
     }
   | {
       path: "/api/wso2am/applications";

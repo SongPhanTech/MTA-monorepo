@@ -815,6 +815,11 @@ const NAVIGATION: NavigationType = {
             label: "Câu hỏi thường gặp",
             path: ROUTER_PATH.TRO_LY_AO.QUAN_TRI_DU_LIEU_FAQ,
           },
+          {
+            id: TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_DU_LIEU_PHAN_HOI,
+            label: "Phản hồi hội thoại",
+            path: ROUTER_PATH.TRO_LY_AO.QUAN_TRI_DU_LIEU_PHAN_HOI,
+          },
         ],
       },
       {

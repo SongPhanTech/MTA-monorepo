@@ -198,6 +198,11 @@ export default function EvidenceCategory() {
             )}
             columns={[
               {
+                title: "Mã minh chứng",
+                width: 100,
+                render: (_, record) => record?.code || "",
+              },
+              {
                 title: "Tên minh chứng",
                 dataIndex: "evidenceName",
                 width: 200,

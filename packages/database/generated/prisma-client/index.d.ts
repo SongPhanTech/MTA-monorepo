@@ -214,6 +214,11 @@ export type Prompt = $Result.DefaultSelection<Prisma.$PromptPayload>
  */
 export type Conversation = $Result.DefaultSelection<Prisma.$ConversationPayload>
 /**
+ * Model ConversationFeedback
+ * 
+ */
+export type ConversationFeedback = $Result.DefaultSelection<Prisma.$ConversationFeedbackPayload>
+/**
  * Model Message
  * 
  */
@@ -1432,6 +1437,17 @@ export const PermissionType: {
 export type PermissionType = (typeof PermissionType)[keyof typeof PermissionType]
 
 
+export const FeedbackRating: {
+  VERY_BAD: 'VERY_BAD',
+  BAD: 'BAD',
+  NORMAL: 'NORMAL',
+  GOOD: 'GOOD',
+  VERY_GOOD: 'VERY_GOOD'
+};
+
+export type FeedbackRating = (typeof FeedbackRating)[keyof typeof FeedbackRating]
+
+
 export const MessageSender: {
   USER: 'USER',
   BOT: 'BOT'
@@ -1862,7 +1878,8 @@ export const EvaluationMemberRole: {
   MEMBER: 'MEMBER',
   ADVISORY_BOARD: 'ADVISORY_BOARD',
   HEAD_SPECIALIZED: 'HEAD_SPECIALIZED',
-  SPECIALIZED: 'SPECIALIZED'
+  SPECIALIZED: 'SPECIALIZED',
+  NONCOUNCIL_MEMBERS: 'NONCOUNCIL_MEMBERS'
 };
 
 export type EvaluationMemberRole = (typeof EvaluationMemberRole)[keyof typeof EvaluationMemberRole]
@@ -2066,6 +2083,10 @@ export const UserRole: typeof $Enums.UserRole
 export type PermissionType = $Enums.PermissionType
 
 export const PermissionType: typeof $Enums.PermissionType
+
+export type FeedbackRating = $Enums.FeedbackRating
+
+export const FeedbackRating: typeof $Enums.FeedbackRating
 
 export type MessageSender = $Enums.MessageSender
 
@@ -2833,6 +2854,16 @@ export class PrismaClient<
     * ```
     */
   get conversation(): Prisma.ConversationDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.conversationFeedback`: Exposes CRUD operations for the **ConversationFeedback** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ConversationFeedbacks
+    * const conversationFeedbacks = await prisma.conversationFeedback.findMany()
+    * ```
+    */
+  get conversationFeedback(): Prisma.ConversationFeedbackDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.message`: Exposes CRUD operations for the **Message** model.
@@ -5633,6 +5664,7 @@ export namespace Prisma {
     FAQ: 'FAQ',
     Prompt: 'Prompt',
     Conversation: 'Conversation',
+    ConversationFeedback: 'ConversationFeedback',
     Message: 'Message',
     CitationMessage: 'CitationMessage',
     Topic: 'Topic',
@@ -5883,7 +5915,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "config" | "suggestion" | "changeLog" | "userProfile" | "hocHam" | "chucVuChinhQuyen" | "chucVuDang" | "hocVi" | "relative" | "trinhDoLyLuanChinhTri" | "trinhDoQuanLyNhaNuoc" | "ngoaiNgu" | "tinHoc" | "boiDuongQuocPhongAnNinh" | "capBac" | "quaTrinhCongTac" | "quaTrinhCuDiCongTac" | "quaTrinhCuDiDaoTao" | "khenThuong" | "kyLuat" | "doiTuongChinhSach" | "keKhaiTaiSan" | "tiengDanToc" | "chienDau" | "nuocNgoai" | "thuongTat" | "danhHieu" | "quaTrinhHocTap" | "toChucXaHoi" | "quaTrinhLuong" | "group" | "role" | "permission" | "chatBotConfig" | "userSession" | "document" | "documentTopic" | "fAQ" | "prompt" | "conversation" | "message" | "citationMessage" | "topic" | "documentClassification" | "dM_CapBac" | "dM_ChucDanh" | "dM_ChucVu" | "dM_HocHam" | "dM_HocVi" | "dM_ChungChiTinHoc" | "dM_DanToc" | "dM_DonVi" | "dM_DonViHanhChinh" | "dM_KhuVuc_DiaLy" | "dM_NgoaiNgu" | "dM_TonGiao" | "dM_TrinhDoNgoaiNgu" | "dM_TrinhDoTinHoc" | "dM_GioiTinh" | "dM_NhanVien" | "dM_PhanCap_ChatLuong_TrangThietBi" | "dM_PhanLoai_CSKT" | "dM_NhomNguoiDung" | "dM_NhomUngDung" | "dM_QuocGia" | "dM_Tinh" | "dM_Tinh_New" | "dM_QuanHuyen" | "dM_XaPhuong" | "dM_XaPhuong_New" | "dM_ViTriCongViec" | "planTraining" | "planTrainingPractice" | "planTrainingSubject" | "studentScoreConvert" | "subjectScoreConvert" | "studentSubjectScore" | "studentSubjectScoreHistory" | "studentResearchTopic" | "studentInternship" | "archivedCertificateOnStudentSubjectScore" | "archivedCertificate" | "archivedAwardOnStudentSubjectScore" | "archivedAward" | "schoolYear" | "semester" | "milestone" | "trainingLanguage" | "trainingCourse" | "trainingCourseRegulation" | "fixedClass" | "curriculum" | "curriculumVersion" | "subject" | "subjectVersionCategory" | "subjectVersion" | "subjectVersionHistory" | "equivalencyGroup" | "subjectInGroup" | "trainingBlockSubject" | "classRegisterSessionCredit" | "classRegisterSession" | "classRegisterLogs" | "subjectClass" | "subjectClassAttendance" | "subjectClassAttendanceStudent" | "subjectClassHistory" | "subjectClassTime" | "classSchedule" | "scoreCorrectionTicket" | "scoreCorrectionItem" | "trainingObjectType" | "priorityObject" | "trainingType" | "trainingLevel" | "trainingForm" | "trainingLocation" | "building" | "room" | "trainingField" | "trainingFieldOnTrainingObjectType" | "trainingMajor" | "trainingMajorOnTrainingObjectType" | "trainingBlock" | "trainingBlockOnCurriculumVersion" | "trainingTime" | "availableTrainingTime" | "certificate" | "certificateOnSubject" | "award" | "diplomaType" | "scoreConvert" | "loadCategory" | "outputStandard" | "outputStandardOnCurriculum" | "student" | "trainingActivity" | "studentSemesterResult" | "studentYearResult" | "notification" | "documentFile" | "academicActionConfig" | "academicActionRuleSet" | "academicActionCondition" | "studentAcademicDecision" | "trainingScoreSession" | "studentTrainingScore" | "semesterTrainingScore" | "schoolYearTrainingScore" | "lecturerType" | "staffType" | "staffPosition" | "lecturer" | "lecturerHistory" | "researchProject" | "studentResearchRegistration" | "thesisSession" | "thesisProject" | "defenseSession" | "studentThesisRegistration" | "expertProfile" | "decision" | "invitation" | "council" | "councilMember" | "defenseRecord" | "librarySubmission" | "defaultCouncilRolePayAmount" | "defaultSupervisorPayAmount" | "paymentRecord" | "supervisorPaymentRecord" | "evaluationPeriod" | "evaluationStandardSet" | "standardCatalog" | "criterionCatalog" | "evidenceCategory" | "evidence" | "evaluationCriterionComment" | "requirementCriterionCatalog" | "standardPeriod" | "criterionPeriod" | "analysisCriterion" | "evaluationCriterion" | "requirementCriterion" | "analysisFormEvidence" | "evaluationCouncil" | "evaluationCouncilMember" | "evidenceFile" | "surveyObjectType" | "surveyTopic" | "surveyQuestionGroup" | "clusterSurvey" | "survey" | "surveyQuestion" | "specificChoice" | "surveyChoice" | "surveySession" | "surveyResponse" | "questionBank" | "question" | "multipleChoiceOption" | "fillInBlankSlot" | "orderingItem" | "exam" | "examRoom" | "examList" | "examBank" | "examBankQuestion" | "examPaper" | "examFramework" | "examMatrix" | "knowledgeBlock" | "configExam" | "staff" | "staffHistory" | "scholarship" | "scholarshipCriteria" | "scholarshipAward" | "graduationSession" | "studentGraduationApplication" | "applicationDowngraded" | "applicationCheckResult" | "graduationDecision" | "academicRankingConvert" | "graduationRankDowngradeRule" | "graduationRankDowngradeCondition" | "rankingCondition" | "diplomaVerificationApplication" | "scoreLinkSheet" | "scoreLinkSubjectVersion" | "scoreLinkStudent" | "note" | "noteFolder" | "noteTag" | "noteReminder" | "academicWarningRule" | "academicWarning" | "disciplinaryWarning" | "disciplinaryWarningReason" | "feedback" | "dM_TrinhDoHocVan" | "dM_TrinhDoLyLuanChinhTri" | "dM_TrinhDoQuanLyNhaNuoc" | "dM_TinhTrangHonNhan" | "dM_QuanHeThanNhan" | "dM_TrangThaiLamViec" | "dM_HinhThucKhenThuongChinhQuyen" | "dM_HinhThucKhenThuongDang" | "dM_XepLoaiDanhGiaCanBo" | "dM_XepLoaiDanhGiaChatLuongDangVien" | "dM_LoaiHinhCongTac" | "dM_TinhTrangCongTac" | "dM_LoaiTinhTrangCongTac" | "dM_LoaiHinhDiHocTap" | "dM_TinhTrangDiHocTap" | "dM_NuocCuDiHocTap" | "dM_ChucDanhCMNVGiangVien" | "dM_ChucDanhCMNVNghienCuuVien" | "dM_ChucDanhCMNVKySu" | "dM_TruongDaoTaoBacDH" | "dM_ChuyenNganhDaoTaoBacDH" | "dM_ChiHuyQuanLy" | "dM_ChuyenMonKyThuat" | "dM_SucKhoe" | "dM_NhomMau" | "dM_LoaiThuongTat" | "dM_NganhHoc" | "dM_ToChucXaHoi" | "dM_Ngach" | "dM_BacLuong" | "templateFile" | "blockedIp"
+      modelProps: "config" | "suggestion" | "changeLog" | "userProfile" | "hocHam" | "chucVuChinhQuyen" | "chucVuDang" | "hocVi" | "relative" | "trinhDoLyLuanChinhTri" | "trinhDoQuanLyNhaNuoc" | "ngoaiNgu" | "tinHoc" | "boiDuongQuocPhongAnNinh" | "capBac" | "quaTrinhCongTac" | "quaTrinhCuDiCongTac" | "quaTrinhCuDiDaoTao" | "khenThuong" | "kyLuat" | "doiTuongChinhSach" | "keKhaiTaiSan" | "tiengDanToc" | "chienDau" | "nuocNgoai" | "thuongTat" | "danhHieu" | "quaTrinhHocTap" | "toChucXaHoi" | "quaTrinhLuong" | "group" | "role" | "permission" | "chatBotConfig" | "userSession" | "document" | "documentTopic" | "fAQ" | "prompt" | "conversation" | "conversationFeedback" | "message" | "citationMessage" | "topic" | "documentClassification" | "dM_CapBac" | "dM_ChucDanh" | "dM_ChucVu" | "dM_HocHam" | "dM_HocVi" | "dM_ChungChiTinHoc" | "dM_DanToc" | "dM_DonVi" | "dM_DonViHanhChinh" | "dM_KhuVuc_DiaLy" | "dM_NgoaiNgu" | "dM_TonGiao" | "dM_TrinhDoNgoaiNgu" | "dM_TrinhDoTinHoc" | "dM_GioiTinh" | "dM_NhanVien" | "dM_PhanCap_ChatLuong_TrangThietBi" | "dM_PhanLoai_CSKT" | "dM_NhomNguoiDung" | "dM_NhomUngDung" | "dM_QuocGia" | "dM_Tinh" | "dM_Tinh_New" | "dM_QuanHuyen" | "dM_XaPhuong" | "dM_XaPhuong_New" | "dM_ViTriCongViec" | "planTraining" | "planTrainingPractice" | "planTrainingSubject" | "studentScoreConvert" | "subjectScoreConvert" | "studentSubjectScore" | "studentSubjectScoreHistory" | "studentResearchTopic" | "studentInternship" | "archivedCertificateOnStudentSubjectScore" | "archivedCertificate" | "archivedAwardOnStudentSubjectScore" | "archivedAward" | "schoolYear" | "semester" | "milestone" | "trainingLanguage" | "trainingCourse" | "trainingCourseRegulation" | "fixedClass" | "curriculum" | "curriculumVersion" | "subject" | "subjectVersionCategory" | "subjectVersion" | "subjectVersionHistory" | "equivalencyGroup" | "subjectInGroup" | "trainingBlockSubject" | "classRegisterSessionCredit" | "classRegisterSession" | "classRegisterLogs" | "subjectClass" | "subjectClassAttendance" | "subjectClassAttendanceStudent" | "subjectClassHistory" | "subjectClassTime" | "classSchedule" | "scoreCorrectionTicket" | "scoreCorrectionItem" | "trainingObjectType" | "priorityObject" | "trainingType" | "trainingLevel" | "trainingForm" | "trainingLocation" | "building" | "room" | "trainingField" | "trainingFieldOnTrainingObjectType" | "trainingMajor" | "trainingMajorOnTrainingObjectType" | "trainingBlock" | "trainingBlockOnCurriculumVersion" | "trainingTime" | "availableTrainingTime" | "certificate" | "certificateOnSubject" | "award" | "diplomaType" | "scoreConvert" | "loadCategory" | "outputStandard" | "outputStandardOnCurriculum" | "student" | "trainingActivity" | "studentSemesterResult" | "studentYearResult" | "notification" | "documentFile" | "academicActionConfig" | "academicActionRuleSet" | "academicActionCondition" | "studentAcademicDecision" | "trainingScoreSession" | "studentTrainingScore" | "semesterTrainingScore" | "schoolYearTrainingScore" | "lecturerType" | "staffType" | "staffPosition" | "lecturer" | "lecturerHistory" | "researchProject" | "studentResearchRegistration" | "thesisSession" | "thesisProject" | "defenseSession" | "studentThesisRegistration" | "expertProfile" | "decision" | "invitation" | "council" | "councilMember" | "defenseRecord" | "librarySubmission" | "defaultCouncilRolePayAmount" | "defaultSupervisorPayAmount" | "paymentRecord" | "supervisorPaymentRecord" | "evaluationPeriod" | "evaluationStandardSet" | "standardCatalog" | "criterionCatalog" | "evidenceCategory" | "evidence" | "evaluationCriterionComment" | "requirementCriterionCatalog" | "standardPeriod" | "criterionPeriod" | "analysisCriterion" | "evaluationCriterion" | "requirementCriterion" | "analysisFormEvidence" | "evaluationCouncil" | "evaluationCouncilMember" | "evidenceFile" | "surveyObjectType" | "surveyTopic" | "surveyQuestionGroup" | "clusterSurvey" | "survey" | "surveyQuestion" | "specificChoice" | "surveyChoice" | "surveySession" | "surveyResponse" | "questionBank" | "question" | "multipleChoiceOption" | "fillInBlankSlot" | "orderingItem" | "exam" | "examRoom" | "examList" | "examBank" | "examBankQuestion" | "examPaper" | "examFramework" | "examMatrix" | "knowledgeBlock" | "configExam" | "staff" | "staffHistory" | "scholarship" | "scholarshipCriteria" | "scholarshipAward" | "graduationSession" | "studentGraduationApplication" | "applicationDowngraded" | "applicationCheckResult" | "graduationDecision" | "academicRankingConvert" | "graduationRankDowngradeRule" | "graduationRankDowngradeCondition" | "rankingCondition" | "diplomaVerificationApplication" | "scoreLinkSheet" | "scoreLinkSubjectVersion" | "scoreLinkStudent" | "note" | "noteFolder" | "noteTag" | "noteReminder" | "academicWarningRule" | "academicWarning" | "disciplinaryWarning" | "disciplinaryWarningReason" | "feedback" | "dM_TrinhDoHocVan" | "dM_TrinhDoLyLuanChinhTri" | "dM_TrinhDoQuanLyNhaNuoc" | "dM_TinhTrangHonNhan" | "dM_QuanHeThanNhan" | "dM_TrangThaiLamViec" | "dM_HinhThucKhenThuongChinhQuyen" | "dM_HinhThucKhenThuongDang" | "dM_XepLoaiDanhGiaCanBo" | "dM_XepLoaiDanhGiaChatLuongDangVien" | "dM_LoaiHinhCongTac" | "dM_TinhTrangCongTac" | "dM_LoaiTinhTrangCongTac" | "dM_LoaiHinhDiHocTap" | "dM_TinhTrangDiHocTap" | "dM_NuocCuDiHocTap" | "dM_ChucDanhCMNVGiangVien" | "dM_ChucDanhCMNVNghienCuuVien" | "dM_ChucDanhCMNVKySu" | "dM_TruongDaoTaoBacDH" | "dM_ChuyenNganhDaoTaoBacDH" | "dM_ChiHuyQuanLy" | "dM_ChuyenMonKyThuat" | "dM_SucKhoe" | "dM_NhomMau" | "dM_LoaiThuongTat" | "dM_NganhHoc" | "dM_ToChucXaHoi" | "dM_Ngach" | "dM_BacLuong" | "templateFile" | "blockedIp"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -8844,6 +8876,80 @@ export namespace Prisma {
           count: {
             args: Prisma.ConversationCountArgs<ExtArgs>
             result: $Utils.Optional<ConversationCountAggregateOutputType> | number
+          }
+        }
+      }
+      ConversationFeedback: {
+        payload: Prisma.$ConversationFeedbackPayload<ExtArgs>
+        fields: Prisma.ConversationFeedbackFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ConversationFeedbackFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ConversationFeedbackPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ConversationFeedbackFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ConversationFeedbackPayload>
+          }
+          findFirst: {
+            args: Prisma.ConversationFeedbackFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ConversationFeedbackPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ConversationFeedbackFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ConversationFeedbackPayload>
+          }
+          findMany: {
+            args: Prisma.ConversationFeedbackFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ConversationFeedbackPayload>[]
+          }
+          create: {
+            args: Prisma.ConversationFeedbackCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ConversationFeedbackPayload>
+          }
+          createMany: {
+            args: Prisma.ConversationFeedbackCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ConversationFeedbackCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ConversationFeedbackPayload>[]
+          }
+          delete: {
+            args: Prisma.ConversationFeedbackDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ConversationFeedbackPayload>
+          }
+          update: {
+            args: Prisma.ConversationFeedbackUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ConversationFeedbackPayload>
+          }
+          deleteMany: {
+            args: Prisma.ConversationFeedbackDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ConversationFeedbackUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ConversationFeedbackUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ConversationFeedbackPayload>[]
+          }
+          upsert: {
+            args: Prisma.ConversationFeedbackUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ConversationFeedbackPayload>
+          }
+          aggregate: {
+            args: Prisma.ConversationFeedbackAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateConversationFeedback>
+          }
+          groupBy: {
+            args: Prisma.ConversationFeedbackGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ConversationFeedbackGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ConversationFeedbackCountArgs<ExtArgs>
+            result: $Utils.Optional<ConversationFeedbackCountAggregateOutputType> | number
           }
         }
       }
@@ -26143,6 +26249,7 @@ export namespace Prisma {
     fAQ?: FAQOmit
     prompt?: PromptOmit
     conversation?: ConversationOmit
+    conversationFeedback?: ConversationFeedbackOmit
     message?: MessageOmit
     citationMessage?: CitationMessageOmit
     topic?: TopicOmit
@@ -27061,10 +27168,12 @@ export namespace Prisma {
 
   export type ConversationCountOutputType = {
     message: number
+    feedbacks: number
   }
 
   export type ConversationCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     message?: boolean | ConversationCountOutputTypeCountMessageArgs
+    feedbacks?: boolean | ConversationCountOutputTypeCountFeedbacksArgs
   }
 
   // Custom InputTypes
@@ -27083,6 +27192,13 @@ export namespace Prisma {
    */
   export type ConversationCountOutputTypeCountMessageArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: MessageWhereInput
+  }
+
+  /**
+   * ConversationCountOutputType without action
+   */
+  export type ConversationCountOutputTypeCountFeedbacksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ConversationFeedbackWhereInput
   }
 
 
@@ -85158,6 +85274,7 @@ export namespace Prisma {
     session?: boolean | Conversation$sessionArgs<ExtArgs>
     topic?: boolean | Conversation$topicArgs<ExtArgs>
     message?: boolean | Conversation$messageArgs<ExtArgs>
+    feedbacks?: boolean | Conversation$feedbacksArgs<ExtArgs>
     _count?: boolean | ConversationCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["conversation"]>
 
@@ -85218,6 +85335,7 @@ export namespace Prisma {
     session?: boolean | Conversation$sessionArgs<ExtArgs>
     topic?: boolean | Conversation$topicArgs<ExtArgs>
     message?: boolean | Conversation$messageArgs<ExtArgs>
+    feedbacks?: boolean | Conversation$feedbacksArgs<ExtArgs>
     _count?: boolean | ConversationCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ConversationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -85238,6 +85356,7 @@ export namespace Prisma {
       session: Prisma.$UserSessionPayload<ExtArgs> | null
       topic: Prisma.$TopicPayload<ExtArgs> | null
       message: Prisma.$MessagePayload<ExtArgs>[]
+      feedbacks: Prisma.$ConversationFeedbackPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -85650,6 +85769,7 @@ export namespace Prisma {
     session<T extends Conversation$sessionArgs<ExtArgs> = {}>(args?: Subset<T, Conversation$sessionArgs<ExtArgs>>): Prisma__UserSessionClient<$Result.GetResult<Prisma.$UserSessionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     topic<T extends Conversation$topicArgs<ExtArgs> = {}>(args?: Subset<T, Conversation$topicArgs<ExtArgs>>): Prisma__TopicClient<$Result.GetResult<Prisma.$TopicPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     message<T extends Conversation$messageArgs<ExtArgs> = {}>(args?: Subset<T, Conversation$messageArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    feedbacks<T extends Conversation$feedbacksArgs<ExtArgs> = {}>(args?: Subset<T, Conversation$feedbacksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ConversationFeedbackPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -86168,6 +86288,30 @@ export namespace Prisma {
   }
 
   /**
+   * Conversation.feedbacks
+   */
+  export type Conversation$feedbacksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ConversationFeedback
+     */
+    select?: ConversationFeedbackSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ConversationFeedback
+     */
+    omit?: ConversationFeedbackOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ConversationFeedbackInclude<ExtArgs> | null
+    where?: ConversationFeedbackWhereInput
+    orderBy?: ConversationFeedbackOrderByWithRelationInput | ConversationFeedbackOrderByWithRelationInput[]
+    cursor?: ConversationFeedbackWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ConversationFeedbackScalarFieldEnum | ConversationFeedbackScalarFieldEnum[]
+  }
+
+  /**
    * Conversation without action
    */
   export type ConversationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -86183,6 +86327,1209 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: ConversationInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ConversationFeedback
+   */
+
+  export type AggregateConversationFeedback = {
+    _count: ConversationFeedbackCountAggregateOutputType | null
+    _min: ConversationFeedbackMinAggregateOutputType | null
+    _max: ConversationFeedbackMaxAggregateOutputType | null
+  }
+
+  export type ConversationFeedbackMinAggregateOutputType = {
+    id: string | null
+    active: boolean | null
+    description: string | null
+    deletedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    createdBy: string | null
+    rating: $Enums.FeedbackRating | null
+    comment: string | null
+    conversationId: string | null
+    conversationNameSnapshot: string | null
+    topicIdSnapshot: string | null
+    topicNameSnapshot: string | null
+    sessionId: string | null
+  }
+
+  export type ConversationFeedbackMaxAggregateOutputType = {
+    id: string | null
+    active: boolean | null
+    description: string | null
+    deletedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    createdBy: string | null
+    rating: $Enums.FeedbackRating | null
+    comment: string | null
+    conversationId: string | null
+    conversationNameSnapshot: string | null
+    topicIdSnapshot: string | null
+    topicNameSnapshot: string | null
+    sessionId: string | null
+  }
+
+  export type ConversationFeedbackCountAggregateOutputType = {
+    id: number
+    active: number
+    description: number
+    deletedAt: number
+    createdAt: number
+    updatedAt: number
+    createdBy: number
+    rating: number
+    comment: number
+    conversationId: number
+    conversationNameSnapshot: number
+    topicIdSnapshot: number
+    topicNameSnapshot: number
+    messagesSnapshot: number
+    sessionId: number
+    _all: number
+  }
+
+
+  export type ConversationFeedbackMinAggregateInputType = {
+    id?: true
+    active?: true
+    description?: true
+    deletedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+    rating?: true
+    comment?: true
+    conversationId?: true
+    conversationNameSnapshot?: true
+    topicIdSnapshot?: true
+    topicNameSnapshot?: true
+    sessionId?: true
+  }
+
+  export type ConversationFeedbackMaxAggregateInputType = {
+    id?: true
+    active?: true
+    description?: true
+    deletedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+    rating?: true
+    comment?: true
+    conversationId?: true
+    conversationNameSnapshot?: true
+    topicIdSnapshot?: true
+    topicNameSnapshot?: true
+    sessionId?: true
+  }
+
+  export type ConversationFeedbackCountAggregateInputType = {
+    id?: true
+    active?: true
+    description?: true
+    deletedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+    rating?: true
+    comment?: true
+    conversationId?: true
+    conversationNameSnapshot?: true
+    topicIdSnapshot?: true
+    topicNameSnapshot?: true
+    messagesSnapshot?: true
+    sessionId?: true
+    _all?: true
+  }
+
+  export type ConversationFeedbackAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ConversationFeedback to aggregate.
+     */
+    where?: ConversationFeedbackWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ConversationFeedbacks to fetch.
+     */
+    orderBy?: ConversationFeedbackOrderByWithRelationInput | ConversationFeedbackOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ConversationFeedbackWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ConversationFeedbacks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ConversationFeedbacks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ConversationFeedbacks
+    **/
+    _count?: true | ConversationFeedbackCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ConversationFeedbackMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ConversationFeedbackMaxAggregateInputType
+  }
+
+  export type GetConversationFeedbackAggregateType<T extends ConversationFeedbackAggregateArgs> = {
+        [P in keyof T & keyof AggregateConversationFeedback]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateConversationFeedback[P]>
+      : GetScalarType<T[P], AggregateConversationFeedback[P]>
+  }
+
+
+
+
+  export type ConversationFeedbackGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ConversationFeedbackWhereInput
+    orderBy?: ConversationFeedbackOrderByWithAggregationInput | ConversationFeedbackOrderByWithAggregationInput[]
+    by: ConversationFeedbackScalarFieldEnum[] | ConversationFeedbackScalarFieldEnum
+    having?: ConversationFeedbackScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ConversationFeedbackCountAggregateInputType | true
+    _min?: ConversationFeedbackMinAggregateInputType
+    _max?: ConversationFeedbackMaxAggregateInputType
+  }
+
+  export type ConversationFeedbackGroupByOutputType = {
+    id: string
+    active: boolean
+    description: string | null
+    deletedAt: Date | null
+    createdAt: Date
+    updatedAt: Date
+    createdBy: string | null
+    rating: $Enums.FeedbackRating
+    comment: string | null
+    conversationId: string | null
+    conversationNameSnapshot: string | null
+    topicIdSnapshot: string | null
+    topicNameSnapshot: string | null
+    messagesSnapshot: JsonValue | null
+    sessionId: string | null
+    _count: ConversationFeedbackCountAggregateOutputType | null
+    _min: ConversationFeedbackMinAggregateOutputType | null
+    _max: ConversationFeedbackMaxAggregateOutputType | null
+  }
+
+  type GetConversationFeedbackGroupByPayload<T extends ConversationFeedbackGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ConversationFeedbackGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ConversationFeedbackGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ConversationFeedbackGroupByOutputType[P]>
+            : GetScalarType<T[P], ConversationFeedbackGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ConversationFeedbackSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    active?: boolean
+    description?: boolean
+    deletedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    rating?: boolean
+    comment?: boolean
+    conversationId?: boolean
+    conversationNameSnapshot?: boolean
+    topicIdSnapshot?: boolean
+    topicNameSnapshot?: boolean
+    messagesSnapshot?: boolean
+    sessionId?: boolean
+    conversation?: boolean | ConversationFeedback$conversationArgs<ExtArgs>
+  }, ExtArgs["result"]["conversationFeedback"]>
+
+  export type ConversationFeedbackSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    active?: boolean
+    description?: boolean
+    deletedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    rating?: boolean
+    comment?: boolean
+    conversationId?: boolean
+    conversationNameSnapshot?: boolean
+    topicIdSnapshot?: boolean
+    topicNameSnapshot?: boolean
+    messagesSnapshot?: boolean
+    sessionId?: boolean
+    conversation?: boolean | ConversationFeedback$conversationArgs<ExtArgs>
+  }, ExtArgs["result"]["conversationFeedback"]>
+
+  export type ConversationFeedbackSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    active?: boolean
+    description?: boolean
+    deletedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    rating?: boolean
+    comment?: boolean
+    conversationId?: boolean
+    conversationNameSnapshot?: boolean
+    topicIdSnapshot?: boolean
+    topicNameSnapshot?: boolean
+    messagesSnapshot?: boolean
+    sessionId?: boolean
+    conversation?: boolean | ConversationFeedback$conversationArgs<ExtArgs>
+  }, ExtArgs["result"]["conversationFeedback"]>
+
+  export type ConversationFeedbackSelectScalar = {
+    id?: boolean
+    active?: boolean
+    description?: boolean
+    deletedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    rating?: boolean
+    comment?: boolean
+    conversationId?: boolean
+    conversationNameSnapshot?: boolean
+    topicIdSnapshot?: boolean
+    topicNameSnapshot?: boolean
+    messagesSnapshot?: boolean
+    sessionId?: boolean
+  }
+
+  export type ConversationFeedbackOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "rating" | "comment" | "conversationId" | "conversationNameSnapshot" | "topicIdSnapshot" | "topicNameSnapshot" | "messagesSnapshot" | "sessionId", ExtArgs["result"]["conversationFeedback"]>
+  export type ConversationFeedbackInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    conversation?: boolean | ConversationFeedback$conversationArgs<ExtArgs>
+  }
+  export type ConversationFeedbackIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    conversation?: boolean | ConversationFeedback$conversationArgs<ExtArgs>
+  }
+  export type ConversationFeedbackIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    conversation?: boolean | ConversationFeedback$conversationArgs<ExtArgs>
+  }
+
+  export type $ConversationFeedbackPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ConversationFeedback"
+    objects: {
+      conversation: Prisma.$ConversationPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      active: boolean
+      description: string | null
+      deletedAt: Date | null
+      createdAt: Date
+      updatedAt: Date
+      createdBy: string | null
+      rating: $Enums.FeedbackRating
+      comment: string | null
+      conversationId: string | null
+      conversationNameSnapshot: string | null
+      topicIdSnapshot: string | null
+      topicNameSnapshot: string | null
+      messagesSnapshot: Prisma.JsonValue | null
+      sessionId: string | null
+    }, ExtArgs["result"]["conversationFeedback"]>
+    composites: {}
+  }
+
+  type ConversationFeedbackGetPayload<S extends boolean | null | undefined | ConversationFeedbackDefaultArgs> = $Result.GetResult<Prisma.$ConversationFeedbackPayload, S>
+
+  type ConversationFeedbackCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ConversationFeedbackFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ConversationFeedbackCountAggregateInputType | true
+    }
+
+  export interface ConversationFeedbackDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ConversationFeedback'], meta: { name: 'ConversationFeedback' } }
+    /**
+     * Find zero or one ConversationFeedback that matches the filter.
+     * @param {ConversationFeedbackFindUniqueArgs} args - Arguments to find a ConversationFeedback
+     * @example
+     * // Get one ConversationFeedback
+     * const conversationFeedback = await prisma.conversationFeedback.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ConversationFeedbackFindUniqueArgs>(args: SelectSubset<T, ConversationFeedbackFindUniqueArgs<ExtArgs>>): Prisma__ConversationFeedbackClient<$Result.GetResult<Prisma.$ConversationFeedbackPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ConversationFeedback that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ConversationFeedbackFindUniqueOrThrowArgs} args - Arguments to find a ConversationFeedback
+     * @example
+     * // Get one ConversationFeedback
+     * const conversationFeedback = await prisma.conversationFeedback.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ConversationFeedbackFindUniqueOrThrowArgs>(args: SelectSubset<T, ConversationFeedbackFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ConversationFeedbackClient<$Result.GetResult<Prisma.$ConversationFeedbackPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ConversationFeedback that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ConversationFeedbackFindFirstArgs} args - Arguments to find a ConversationFeedback
+     * @example
+     * // Get one ConversationFeedback
+     * const conversationFeedback = await prisma.conversationFeedback.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ConversationFeedbackFindFirstArgs>(args?: SelectSubset<T, ConversationFeedbackFindFirstArgs<ExtArgs>>): Prisma__ConversationFeedbackClient<$Result.GetResult<Prisma.$ConversationFeedbackPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ConversationFeedback that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ConversationFeedbackFindFirstOrThrowArgs} args - Arguments to find a ConversationFeedback
+     * @example
+     * // Get one ConversationFeedback
+     * const conversationFeedback = await prisma.conversationFeedback.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ConversationFeedbackFindFirstOrThrowArgs>(args?: SelectSubset<T, ConversationFeedbackFindFirstOrThrowArgs<ExtArgs>>): Prisma__ConversationFeedbackClient<$Result.GetResult<Prisma.$ConversationFeedbackPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ConversationFeedbacks that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ConversationFeedbackFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ConversationFeedbacks
+     * const conversationFeedbacks = await prisma.conversationFeedback.findMany()
+     * 
+     * // Get first 10 ConversationFeedbacks
+     * const conversationFeedbacks = await prisma.conversationFeedback.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const conversationFeedbackWithIdOnly = await prisma.conversationFeedback.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ConversationFeedbackFindManyArgs>(args?: SelectSubset<T, ConversationFeedbackFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ConversationFeedbackPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ConversationFeedback.
+     * @param {ConversationFeedbackCreateArgs} args - Arguments to create a ConversationFeedback.
+     * @example
+     * // Create one ConversationFeedback
+     * const ConversationFeedback = await prisma.conversationFeedback.create({
+     *   data: {
+     *     // ... data to create a ConversationFeedback
+     *   }
+     * })
+     * 
+     */
+    create<T extends ConversationFeedbackCreateArgs>(args: SelectSubset<T, ConversationFeedbackCreateArgs<ExtArgs>>): Prisma__ConversationFeedbackClient<$Result.GetResult<Prisma.$ConversationFeedbackPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ConversationFeedbacks.
+     * @param {ConversationFeedbackCreateManyArgs} args - Arguments to create many ConversationFeedbacks.
+     * @example
+     * // Create many ConversationFeedbacks
+     * const conversationFeedback = await prisma.conversationFeedback.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ConversationFeedbackCreateManyArgs>(args?: SelectSubset<T, ConversationFeedbackCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ConversationFeedbacks and returns the data saved in the database.
+     * @param {ConversationFeedbackCreateManyAndReturnArgs} args - Arguments to create many ConversationFeedbacks.
+     * @example
+     * // Create many ConversationFeedbacks
+     * const conversationFeedback = await prisma.conversationFeedback.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ConversationFeedbacks and only return the `id`
+     * const conversationFeedbackWithIdOnly = await prisma.conversationFeedback.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ConversationFeedbackCreateManyAndReturnArgs>(args?: SelectSubset<T, ConversationFeedbackCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ConversationFeedbackPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ConversationFeedback.
+     * @param {ConversationFeedbackDeleteArgs} args - Arguments to delete one ConversationFeedback.
+     * @example
+     * // Delete one ConversationFeedback
+     * const ConversationFeedback = await prisma.conversationFeedback.delete({
+     *   where: {
+     *     // ... filter to delete one ConversationFeedback
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ConversationFeedbackDeleteArgs>(args: SelectSubset<T, ConversationFeedbackDeleteArgs<ExtArgs>>): Prisma__ConversationFeedbackClient<$Result.GetResult<Prisma.$ConversationFeedbackPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ConversationFeedback.
+     * @param {ConversationFeedbackUpdateArgs} args - Arguments to update one ConversationFeedback.
+     * @example
+     * // Update one ConversationFeedback
+     * const conversationFeedback = await prisma.conversationFeedback.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ConversationFeedbackUpdateArgs>(args: SelectSubset<T, ConversationFeedbackUpdateArgs<ExtArgs>>): Prisma__ConversationFeedbackClient<$Result.GetResult<Prisma.$ConversationFeedbackPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ConversationFeedbacks.
+     * @param {ConversationFeedbackDeleteManyArgs} args - Arguments to filter ConversationFeedbacks to delete.
+     * @example
+     * // Delete a few ConversationFeedbacks
+     * const { count } = await prisma.conversationFeedback.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ConversationFeedbackDeleteManyArgs>(args?: SelectSubset<T, ConversationFeedbackDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ConversationFeedbacks.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ConversationFeedbackUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ConversationFeedbacks
+     * const conversationFeedback = await prisma.conversationFeedback.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ConversationFeedbackUpdateManyArgs>(args: SelectSubset<T, ConversationFeedbackUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ConversationFeedbacks and returns the data updated in the database.
+     * @param {ConversationFeedbackUpdateManyAndReturnArgs} args - Arguments to update many ConversationFeedbacks.
+     * @example
+     * // Update many ConversationFeedbacks
+     * const conversationFeedback = await prisma.conversationFeedback.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ConversationFeedbacks and only return the `id`
+     * const conversationFeedbackWithIdOnly = await prisma.conversationFeedback.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ConversationFeedbackUpdateManyAndReturnArgs>(args: SelectSubset<T, ConversationFeedbackUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ConversationFeedbackPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ConversationFeedback.
+     * @param {ConversationFeedbackUpsertArgs} args - Arguments to update or create a ConversationFeedback.
+     * @example
+     * // Update or create a ConversationFeedback
+     * const conversationFeedback = await prisma.conversationFeedback.upsert({
+     *   create: {
+     *     // ... data to create a ConversationFeedback
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ConversationFeedback we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ConversationFeedbackUpsertArgs>(args: SelectSubset<T, ConversationFeedbackUpsertArgs<ExtArgs>>): Prisma__ConversationFeedbackClient<$Result.GetResult<Prisma.$ConversationFeedbackPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ConversationFeedbacks.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ConversationFeedbackCountArgs} args - Arguments to filter ConversationFeedbacks to count.
+     * @example
+     * // Count the number of ConversationFeedbacks
+     * const count = await prisma.conversationFeedback.count({
+     *   where: {
+     *     // ... the filter for the ConversationFeedbacks we want to count
+     *   }
+     * })
+    **/
+    count<T extends ConversationFeedbackCountArgs>(
+      args?: Subset<T, ConversationFeedbackCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ConversationFeedbackCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ConversationFeedback.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ConversationFeedbackAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ConversationFeedbackAggregateArgs>(args: Subset<T, ConversationFeedbackAggregateArgs>): Prisma.PrismaPromise<GetConversationFeedbackAggregateType<T>>
+
+    /**
+     * Group by ConversationFeedback.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ConversationFeedbackGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ConversationFeedbackGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ConversationFeedbackGroupByArgs['orderBy'] }
+        : { orderBy?: ConversationFeedbackGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ConversationFeedbackGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetConversationFeedbackGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ConversationFeedback model
+   */
+  readonly fields: ConversationFeedbackFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ConversationFeedback.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ConversationFeedbackClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    conversation<T extends ConversationFeedback$conversationArgs<ExtArgs> = {}>(args?: Subset<T, ConversationFeedback$conversationArgs<ExtArgs>>): Prisma__ConversationClient<$Result.GetResult<Prisma.$ConversationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ConversationFeedback model
+   */
+  interface ConversationFeedbackFieldRefs {
+    readonly id: FieldRef<"ConversationFeedback", 'String'>
+    readonly active: FieldRef<"ConversationFeedback", 'Boolean'>
+    readonly description: FieldRef<"ConversationFeedback", 'String'>
+    readonly deletedAt: FieldRef<"ConversationFeedback", 'DateTime'>
+    readonly createdAt: FieldRef<"ConversationFeedback", 'DateTime'>
+    readonly updatedAt: FieldRef<"ConversationFeedback", 'DateTime'>
+    readonly createdBy: FieldRef<"ConversationFeedback", 'String'>
+    readonly rating: FieldRef<"ConversationFeedback", 'FeedbackRating'>
+    readonly comment: FieldRef<"ConversationFeedback", 'String'>
+    readonly conversationId: FieldRef<"ConversationFeedback", 'String'>
+    readonly conversationNameSnapshot: FieldRef<"ConversationFeedback", 'String'>
+    readonly topicIdSnapshot: FieldRef<"ConversationFeedback", 'String'>
+    readonly topicNameSnapshot: FieldRef<"ConversationFeedback", 'String'>
+    readonly messagesSnapshot: FieldRef<"ConversationFeedback", 'Json'>
+    readonly sessionId: FieldRef<"ConversationFeedback", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ConversationFeedback findUnique
+   */
+  export type ConversationFeedbackFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ConversationFeedback
+     */
+    select?: ConversationFeedbackSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ConversationFeedback
+     */
+    omit?: ConversationFeedbackOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ConversationFeedbackInclude<ExtArgs> | null
+    /**
+     * Filter, which ConversationFeedback to fetch.
+     */
+    where: ConversationFeedbackWhereUniqueInput
+  }
+
+  /**
+   * ConversationFeedback findUniqueOrThrow
+   */
+  export type ConversationFeedbackFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ConversationFeedback
+     */
+    select?: ConversationFeedbackSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ConversationFeedback
+     */
+    omit?: ConversationFeedbackOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ConversationFeedbackInclude<ExtArgs> | null
+    /**
+     * Filter, which ConversationFeedback to fetch.
+     */
+    where: ConversationFeedbackWhereUniqueInput
+  }
+
+  /**
+   * ConversationFeedback findFirst
+   */
+  export type ConversationFeedbackFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ConversationFeedback
+     */
+    select?: ConversationFeedbackSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ConversationFeedback
+     */
+    omit?: ConversationFeedbackOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ConversationFeedbackInclude<ExtArgs> | null
+    /**
+     * Filter, which ConversationFeedback to fetch.
+     */
+    where?: ConversationFeedbackWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ConversationFeedbacks to fetch.
+     */
+    orderBy?: ConversationFeedbackOrderByWithRelationInput | ConversationFeedbackOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ConversationFeedbacks.
+     */
+    cursor?: ConversationFeedbackWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ConversationFeedbacks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ConversationFeedbacks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ConversationFeedbacks.
+     */
+    distinct?: ConversationFeedbackScalarFieldEnum | ConversationFeedbackScalarFieldEnum[]
+  }
+
+  /**
+   * ConversationFeedback findFirstOrThrow
+   */
+  export type ConversationFeedbackFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ConversationFeedback
+     */
+    select?: ConversationFeedbackSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ConversationFeedback
+     */
+    omit?: ConversationFeedbackOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ConversationFeedbackInclude<ExtArgs> | null
+    /**
+     * Filter, which ConversationFeedback to fetch.
+     */
+    where?: ConversationFeedbackWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ConversationFeedbacks to fetch.
+     */
+    orderBy?: ConversationFeedbackOrderByWithRelationInput | ConversationFeedbackOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ConversationFeedbacks.
+     */
+    cursor?: ConversationFeedbackWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ConversationFeedbacks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ConversationFeedbacks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ConversationFeedbacks.
+     */
+    distinct?: ConversationFeedbackScalarFieldEnum | ConversationFeedbackScalarFieldEnum[]
+  }
+
+  /**
+   * ConversationFeedback findMany
+   */
+  export type ConversationFeedbackFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ConversationFeedback
+     */
+    select?: ConversationFeedbackSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ConversationFeedback
+     */
+    omit?: ConversationFeedbackOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ConversationFeedbackInclude<ExtArgs> | null
+    /**
+     * Filter, which ConversationFeedbacks to fetch.
+     */
+    where?: ConversationFeedbackWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ConversationFeedbacks to fetch.
+     */
+    orderBy?: ConversationFeedbackOrderByWithRelationInput | ConversationFeedbackOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ConversationFeedbacks.
+     */
+    cursor?: ConversationFeedbackWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ConversationFeedbacks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ConversationFeedbacks.
+     */
+    skip?: number
+    distinct?: ConversationFeedbackScalarFieldEnum | ConversationFeedbackScalarFieldEnum[]
+  }
+
+  /**
+   * ConversationFeedback create
+   */
+  export type ConversationFeedbackCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ConversationFeedback
+     */
+    select?: ConversationFeedbackSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ConversationFeedback
+     */
+    omit?: ConversationFeedbackOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ConversationFeedbackInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ConversationFeedback.
+     */
+    data: XOR<ConversationFeedbackCreateInput, ConversationFeedbackUncheckedCreateInput>
+  }
+
+  /**
+   * ConversationFeedback createMany
+   */
+  export type ConversationFeedbackCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ConversationFeedbacks.
+     */
+    data: ConversationFeedbackCreateManyInput | ConversationFeedbackCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ConversationFeedback createManyAndReturn
+   */
+  export type ConversationFeedbackCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ConversationFeedback
+     */
+    select?: ConversationFeedbackSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ConversationFeedback
+     */
+    omit?: ConversationFeedbackOmit<ExtArgs> | null
+    /**
+     * The data used to create many ConversationFeedbacks.
+     */
+    data: ConversationFeedbackCreateManyInput | ConversationFeedbackCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ConversationFeedbackIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ConversationFeedback update
+   */
+  export type ConversationFeedbackUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ConversationFeedback
+     */
+    select?: ConversationFeedbackSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ConversationFeedback
+     */
+    omit?: ConversationFeedbackOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ConversationFeedbackInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ConversationFeedback.
+     */
+    data: XOR<ConversationFeedbackUpdateInput, ConversationFeedbackUncheckedUpdateInput>
+    /**
+     * Choose, which ConversationFeedback to update.
+     */
+    where: ConversationFeedbackWhereUniqueInput
+  }
+
+  /**
+   * ConversationFeedback updateMany
+   */
+  export type ConversationFeedbackUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ConversationFeedbacks.
+     */
+    data: XOR<ConversationFeedbackUpdateManyMutationInput, ConversationFeedbackUncheckedUpdateManyInput>
+    /**
+     * Filter which ConversationFeedbacks to update
+     */
+    where?: ConversationFeedbackWhereInput
+    /**
+     * Limit how many ConversationFeedbacks to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ConversationFeedback updateManyAndReturn
+   */
+  export type ConversationFeedbackUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ConversationFeedback
+     */
+    select?: ConversationFeedbackSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ConversationFeedback
+     */
+    omit?: ConversationFeedbackOmit<ExtArgs> | null
+    /**
+     * The data used to update ConversationFeedbacks.
+     */
+    data: XOR<ConversationFeedbackUpdateManyMutationInput, ConversationFeedbackUncheckedUpdateManyInput>
+    /**
+     * Filter which ConversationFeedbacks to update
+     */
+    where?: ConversationFeedbackWhereInput
+    /**
+     * Limit how many ConversationFeedbacks to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ConversationFeedbackIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ConversationFeedback upsert
+   */
+  export type ConversationFeedbackUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ConversationFeedback
+     */
+    select?: ConversationFeedbackSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ConversationFeedback
+     */
+    omit?: ConversationFeedbackOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ConversationFeedbackInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ConversationFeedback to update in case it exists.
+     */
+    where: ConversationFeedbackWhereUniqueInput
+    /**
+     * In case the ConversationFeedback found by the `where` argument doesn't exist, create a new ConversationFeedback with this data.
+     */
+    create: XOR<ConversationFeedbackCreateInput, ConversationFeedbackUncheckedCreateInput>
+    /**
+     * In case the ConversationFeedback was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ConversationFeedbackUpdateInput, ConversationFeedbackUncheckedUpdateInput>
+  }
+
+  /**
+   * ConversationFeedback delete
+   */
+  export type ConversationFeedbackDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ConversationFeedback
+     */
+    select?: ConversationFeedbackSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ConversationFeedback
+     */
+    omit?: ConversationFeedbackOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ConversationFeedbackInclude<ExtArgs> | null
+    /**
+     * Filter which ConversationFeedback to delete.
+     */
+    where: ConversationFeedbackWhereUniqueInput
+  }
+
+  /**
+   * ConversationFeedback deleteMany
+   */
+  export type ConversationFeedbackDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ConversationFeedbacks to delete
+     */
+    where?: ConversationFeedbackWhereInput
+    /**
+     * Limit how many ConversationFeedbacks to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ConversationFeedback.conversation
+   */
+  export type ConversationFeedback$conversationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Conversation
+     */
+    select?: ConversationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Conversation
+     */
+    omit?: ConversationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ConversationInclude<ExtArgs> | null
+    where?: ConversationWhereInput
+  }
+
+  /**
+   * ConversationFeedback without action
+   */
+  export type ConversationFeedbackDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ConversationFeedback
+     */
+    select?: ConversationFeedbackSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ConversationFeedback
+     */
+    omit?: ConversationFeedbackOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ConversationFeedbackInclude<ExtArgs> | null
   }
 
 
@@ -381226,6 +382573,27 @@ export namespace Prisma {
   export type ConversationScalarFieldEnum = (typeof ConversationScalarFieldEnum)[keyof typeof ConversationScalarFieldEnum]
 
 
+  export const ConversationFeedbackScalarFieldEnum: {
+    id: 'id',
+    active: 'active',
+    description: 'description',
+    deletedAt: 'deletedAt',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    createdBy: 'createdBy',
+    rating: 'rating',
+    comment: 'comment',
+    conversationId: 'conversationId',
+    conversationNameSnapshot: 'conversationNameSnapshot',
+    topicIdSnapshot: 'topicIdSnapshot',
+    topicNameSnapshot: 'topicNameSnapshot',
+    messagesSnapshot: 'messagesSnapshot',
+    sessionId: 'sessionId'
+  };
+
+  export type ConversationFeedbackScalarFieldEnum = (typeof ConversationFeedbackScalarFieldEnum)[keyof typeof ConversationFeedbackScalarFieldEnum]
+
+
   export const MessageScalarFieldEnum: {
     id: 'id',
     code: 'code',
@@ -386616,6 +387984,21 @@ export namespace Prisma {
   export type ConversationOrderByRelevanceFieldEnum = (typeof ConversationOrderByRelevanceFieldEnum)[keyof typeof ConversationOrderByRelevanceFieldEnum]
 
 
+  export const ConversationFeedbackOrderByRelevanceFieldEnum: {
+    id: 'id',
+    description: 'description',
+    createdBy: 'createdBy',
+    comment: 'comment',
+    conversationId: 'conversationId',
+    conversationNameSnapshot: 'conversationNameSnapshot',
+    topicIdSnapshot: 'topicIdSnapshot',
+    topicNameSnapshot: 'topicNameSnapshot',
+    sessionId: 'sessionId'
+  };
+
+  export type ConversationFeedbackOrderByRelevanceFieldEnum = (typeof ConversationFeedbackOrderByRelevanceFieldEnum)[keyof typeof ConversationFeedbackOrderByRelevanceFieldEnum]
+
+
   export const MessageOrderByRelevanceFieldEnum: {
     id: 'id',
     code: 'code',
@@ -389853,6 +391236,20 @@ export namespace Prisma {
    * Reference to a field of type 'DocumentStatus[]'
    */
   export type ListEnumDocumentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DocumentStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'FeedbackRating'
+   */
+  export type EnumFeedbackRatingFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FeedbackRating'>
+    
+
+
+  /**
+   * Reference to a field of type 'FeedbackRating[]'
+   */
+  export type ListEnumFeedbackRatingFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FeedbackRating[]'>
     
 
 
@@ -395465,6 +396862,7 @@ export namespace Prisma {
     session?: XOR<UserSessionNullableScalarRelationFilter, UserSessionWhereInput> | null
     topic?: XOR<TopicNullableScalarRelationFilter, TopicWhereInput> | null
     message?: MessageListRelationFilter
+    feedbacks?: ConversationFeedbackListRelationFilter
   }
 
   export type ConversationOrderByWithRelationInput = {
@@ -395484,6 +396882,7 @@ export namespace Prisma {
     session?: UserSessionOrderByWithRelationInput
     topic?: TopicOrderByWithRelationInput
     message?: MessageOrderByRelationAggregateInput
+    feedbacks?: ConversationFeedbackOrderByRelationAggregateInput
     _relevance?: ConversationOrderByRelevanceInput
   }
 
@@ -395507,6 +396906,7 @@ export namespace Prisma {
     session?: XOR<UserSessionNullableScalarRelationFilter, UserSessionWhereInput> | null
     topic?: XOR<TopicNullableScalarRelationFilter, TopicWhereInput> | null
     message?: MessageListRelationFilter
+    feedbacks?: ConversationFeedbackListRelationFilter
   }, "id" | "code">
 
   export type ConversationOrderByWithAggregationInput = {
@@ -395543,6 +396943,112 @@ export namespace Prisma {
     userId?: UuidNullableWithAggregatesFilter<"Conversation"> | string | null
     sessionId?: StringNullableWithAggregatesFilter<"Conversation"> | string | null
     topicId?: StringNullableWithAggregatesFilter<"Conversation"> | string | null
+  }
+
+  export type ConversationFeedbackWhereInput = {
+    AND?: ConversationFeedbackWhereInput | ConversationFeedbackWhereInput[]
+    OR?: ConversationFeedbackWhereInput[]
+    NOT?: ConversationFeedbackWhereInput | ConversationFeedbackWhereInput[]
+    id?: StringFilter<"ConversationFeedback"> | string
+    active?: BoolFilter<"ConversationFeedback"> | boolean
+    description?: StringNullableFilter<"ConversationFeedback"> | string | null
+    deletedAt?: DateTimeNullableFilter<"ConversationFeedback"> | Date | string | null
+    createdAt?: DateTimeFilter<"ConversationFeedback"> | Date | string
+    updatedAt?: DateTimeFilter<"ConversationFeedback"> | Date | string
+    createdBy?: UuidNullableFilter<"ConversationFeedback"> | string | null
+    rating?: EnumFeedbackRatingFilter<"ConversationFeedback"> | $Enums.FeedbackRating
+    comment?: StringNullableFilter<"ConversationFeedback"> | string | null
+    conversationId?: StringNullableFilter<"ConversationFeedback"> | string | null
+    conversationNameSnapshot?: StringNullableFilter<"ConversationFeedback"> | string | null
+    topicIdSnapshot?: StringNullableFilter<"ConversationFeedback"> | string | null
+    topicNameSnapshot?: StringNullableFilter<"ConversationFeedback"> | string | null
+    messagesSnapshot?: JsonNullableFilter<"ConversationFeedback">
+    sessionId?: StringNullableFilter<"ConversationFeedback"> | string | null
+    conversation?: XOR<ConversationNullableScalarRelationFilter, ConversationWhereInput> | null
+  }
+
+  export type ConversationFeedbackOrderByWithRelationInput = {
+    id?: SortOrder
+    active?: SortOrder
+    description?: SortOrderInput | SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    rating?: SortOrder
+    comment?: SortOrderInput | SortOrder
+    conversationId?: SortOrderInput | SortOrder
+    conversationNameSnapshot?: SortOrderInput | SortOrder
+    topicIdSnapshot?: SortOrderInput | SortOrder
+    topicNameSnapshot?: SortOrderInput | SortOrder
+    messagesSnapshot?: SortOrderInput | SortOrder
+    sessionId?: SortOrderInput | SortOrder
+    conversation?: ConversationOrderByWithRelationInput
+    _relevance?: ConversationFeedbackOrderByRelevanceInput
+  }
+
+  export type ConversationFeedbackWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: ConversationFeedbackWhereInput | ConversationFeedbackWhereInput[]
+    OR?: ConversationFeedbackWhereInput[]
+    NOT?: ConversationFeedbackWhereInput | ConversationFeedbackWhereInput[]
+    active?: BoolFilter<"ConversationFeedback"> | boolean
+    description?: StringNullableFilter<"ConversationFeedback"> | string | null
+    deletedAt?: DateTimeNullableFilter<"ConversationFeedback"> | Date | string | null
+    createdAt?: DateTimeFilter<"ConversationFeedback"> | Date | string
+    updatedAt?: DateTimeFilter<"ConversationFeedback"> | Date | string
+    createdBy?: UuidNullableFilter<"ConversationFeedback"> | string | null
+    rating?: EnumFeedbackRatingFilter<"ConversationFeedback"> | $Enums.FeedbackRating
+    comment?: StringNullableFilter<"ConversationFeedback"> | string | null
+    conversationId?: StringNullableFilter<"ConversationFeedback"> | string | null
+    conversationNameSnapshot?: StringNullableFilter<"ConversationFeedback"> | string | null
+    topicIdSnapshot?: StringNullableFilter<"ConversationFeedback"> | string | null
+    topicNameSnapshot?: StringNullableFilter<"ConversationFeedback"> | string | null
+    messagesSnapshot?: JsonNullableFilter<"ConversationFeedback">
+    sessionId?: StringNullableFilter<"ConversationFeedback"> | string | null
+    conversation?: XOR<ConversationNullableScalarRelationFilter, ConversationWhereInput> | null
+  }, "id">
+
+  export type ConversationFeedbackOrderByWithAggregationInput = {
+    id?: SortOrder
+    active?: SortOrder
+    description?: SortOrderInput | SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    rating?: SortOrder
+    comment?: SortOrderInput | SortOrder
+    conversationId?: SortOrderInput | SortOrder
+    conversationNameSnapshot?: SortOrderInput | SortOrder
+    topicIdSnapshot?: SortOrderInput | SortOrder
+    topicNameSnapshot?: SortOrderInput | SortOrder
+    messagesSnapshot?: SortOrderInput | SortOrder
+    sessionId?: SortOrderInput | SortOrder
+    _count?: ConversationFeedbackCountOrderByAggregateInput
+    _max?: ConversationFeedbackMaxOrderByAggregateInput
+    _min?: ConversationFeedbackMinOrderByAggregateInput
+  }
+
+  export type ConversationFeedbackScalarWhereWithAggregatesInput = {
+    AND?: ConversationFeedbackScalarWhereWithAggregatesInput | ConversationFeedbackScalarWhereWithAggregatesInput[]
+    OR?: ConversationFeedbackScalarWhereWithAggregatesInput[]
+    NOT?: ConversationFeedbackScalarWhereWithAggregatesInput | ConversationFeedbackScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ConversationFeedback"> | string
+    active?: BoolWithAggregatesFilter<"ConversationFeedback"> | boolean
+    description?: StringNullableWithAggregatesFilter<"ConversationFeedback"> | string | null
+    deletedAt?: DateTimeNullableWithAggregatesFilter<"ConversationFeedback"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"ConversationFeedback"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"ConversationFeedback"> | Date | string
+    createdBy?: UuidNullableWithAggregatesFilter<"ConversationFeedback"> | string | null
+    rating?: EnumFeedbackRatingWithAggregatesFilter<"ConversationFeedback"> | $Enums.FeedbackRating
+    comment?: StringNullableWithAggregatesFilter<"ConversationFeedback"> | string | null
+    conversationId?: StringNullableWithAggregatesFilter<"ConversationFeedback"> | string | null
+    conversationNameSnapshot?: StringNullableWithAggregatesFilter<"ConversationFeedback"> | string | null
+    topicIdSnapshot?: StringNullableWithAggregatesFilter<"ConversationFeedback"> | string | null
+    topicNameSnapshot?: StringNullableWithAggregatesFilter<"ConversationFeedback"> | string | null
+    messagesSnapshot?: JsonNullableWithAggregatesFilter<"ConversationFeedback">
+    sessionId?: StringNullableWithAggregatesFilter<"ConversationFeedback"> | string | null
   }
 
   export type MessageWhereInput = {
@@ -426620,6 +428126,7 @@ export namespace Prisma {
     session?: UserSessionCreateNestedOneWithoutConversationInput
     topic?: TopicCreateNestedOneWithoutConversationsInput
     message?: MessageCreateNestedManyWithoutConversationInput
+    feedbacks?: ConversationFeedbackCreateNestedManyWithoutConversationInput
   }
 
   export type ConversationUncheckedCreateInput = {
@@ -426636,6 +428143,7 @@ export namespace Prisma {
     sessionId?: string | null
     topicId?: string | null
     message?: MessageUncheckedCreateNestedManyWithoutConversationInput
+    feedbacks?: ConversationFeedbackUncheckedCreateNestedManyWithoutConversationInput
   }
 
   export type ConversationUpdateInput = {
@@ -426652,6 +428160,7 @@ export namespace Prisma {
     session?: UserSessionUpdateOneWithoutConversationNestedInput
     topic?: TopicUpdateOneWithoutConversationsNestedInput
     message?: MessageUpdateManyWithoutConversationNestedInput
+    feedbacks?: ConversationFeedbackUpdateManyWithoutConversationNestedInput
   }
 
   export type ConversationUncheckedUpdateInput = {
@@ -426668,6 +428177,7 @@ export namespace Prisma {
     sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     topicId?: NullableStringFieldUpdateOperationsInput | string | null
     message?: MessageUncheckedUpdateManyWithoutConversationNestedInput
+    feedbacks?: ConversationFeedbackUncheckedUpdateManyWithoutConversationNestedInput
   }
 
   export type ConversationCreateManyInput = {
@@ -426710,6 +428220,131 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     topicId?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type ConversationFeedbackCreateInput = {
+    id?: string
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    rating: $Enums.FeedbackRating
+    comment?: string | null
+    conversationNameSnapshot?: string | null
+    topicIdSnapshot?: string | null
+    topicNameSnapshot?: string | null
+    messagesSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    sessionId?: string | null
+    conversation?: ConversationCreateNestedOneWithoutFeedbacksInput
+  }
+
+  export type ConversationFeedbackUncheckedCreateInput = {
+    id?: string
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    rating: $Enums.FeedbackRating
+    comment?: string | null
+    conversationId?: string | null
+    conversationNameSnapshot?: string | null
+    topicIdSnapshot?: string | null
+    topicNameSnapshot?: string | null
+    messagesSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    sessionId?: string | null
+  }
+
+  export type ConversationFeedbackUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    rating?: EnumFeedbackRatingFieldUpdateOperationsInput | $Enums.FeedbackRating
+    comment?: NullableStringFieldUpdateOperationsInput | string | null
+    conversationNameSnapshot?: NullableStringFieldUpdateOperationsInput | string | null
+    topicIdSnapshot?: NullableStringFieldUpdateOperationsInput | string | null
+    topicNameSnapshot?: NullableStringFieldUpdateOperationsInput | string | null
+    messagesSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    sessionId?: NullableStringFieldUpdateOperationsInput | string | null
+    conversation?: ConversationUpdateOneWithoutFeedbacksNestedInput
+  }
+
+  export type ConversationFeedbackUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    rating?: EnumFeedbackRatingFieldUpdateOperationsInput | $Enums.FeedbackRating
+    comment?: NullableStringFieldUpdateOperationsInput | string | null
+    conversationId?: NullableStringFieldUpdateOperationsInput | string | null
+    conversationNameSnapshot?: NullableStringFieldUpdateOperationsInput | string | null
+    topicIdSnapshot?: NullableStringFieldUpdateOperationsInput | string | null
+    topicNameSnapshot?: NullableStringFieldUpdateOperationsInput | string | null
+    messagesSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    sessionId?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type ConversationFeedbackCreateManyInput = {
+    id?: string
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    rating: $Enums.FeedbackRating
+    comment?: string | null
+    conversationId?: string | null
+    conversationNameSnapshot?: string | null
+    topicIdSnapshot?: string | null
+    topicNameSnapshot?: string | null
+    messagesSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    sessionId?: string | null
+  }
+
+  export type ConversationFeedbackUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    rating?: EnumFeedbackRatingFieldUpdateOperationsInput | $Enums.FeedbackRating
+    comment?: NullableStringFieldUpdateOperationsInput | string | null
+    conversationNameSnapshot?: NullableStringFieldUpdateOperationsInput | string | null
+    topicIdSnapshot?: NullableStringFieldUpdateOperationsInput | string | null
+    topicNameSnapshot?: NullableStringFieldUpdateOperationsInput | string | null
+    messagesSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    sessionId?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type ConversationFeedbackUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    rating?: EnumFeedbackRatingFieldUpdateOperationsInput | $Enums.FeedbackRating
+    comment?: NullableStringFieldUpdateOperationsInput | string | null
+    conversationId?: NullableStringFieldUpdateOperationsInput | string | null
+    conversationNameSnapshot?: NullableStringFieldUpdateOperationsInput | string | null
+    topicIdSnapshot?: NullableStringFieldUpdateOperationsInput | string | null
+    topicNameSnapshot?: NullableStringFieldUpdateOperationsInput | string | null
+    messagesSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    sessionId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type MessageCreateInput = {
@@ -459923,7 +461558,17 @@ export namespace Prisma {
     none?: MessageWhereInput
   }
 
+  export type ConversationFeedbackListRelationFilter = {
+    every?: ConversationFeedbackWhereInput
+    some?: ConversationFeedbackWhereInput
+    none?: ConversationFeedbackWhereInput
+  }
+
   export type MessageOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ConversationFeedbackOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -459978,6 +461623,86 @@ export namespace Prisma {
     topicId?: SortOrder
   }
 
+  export type EnumFeedbackRatingFilter<$PrismaModel = never> = {
+    equals?: $Enums.FeedbackRating | EnumFeedbackRatingFieldRefInput<$PrismaModel>
+    in?: $Enums.FeedbackRating[] | ListEnumFeedbackRatingFieldRefInput<$PrismaModel>
+    notIn?: $Enums.FeedbackRating[] | ListEnumFeedbackRatingFieldRefInput<$PrismaModel>
+    not?: NestedEnumFeedbackRatingFilter<$PrismaModel> | $Enums.FeedbackRating
+  }
+
+  export type ConversationNullableScalarRelationFilter = {
+    is?: ConversationWhereInput | null
+    isNot?: ConversationWhereInput | null
+  }
+
+  export type ConversationFeedbackOrderByRelevanceInput = {
+    fields: ConversationFeedbackOrderByRelevanceFieldEnum | ConversationFeedbackOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
+  }
+
+  export type ConversationFeedbackCountOrderByAggregateInput = {
+    id?: SortOrder
+    active?: SortOrder
+    description?: SortOrder
+    deletedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+    rating?: SortOrder
+    comment?: SortOrder
+    conversationId?: SortOrder
+    conversationNameSnapshot?: SortOrder
+    topicIdSnapshot?: SortOrder
+    topicNameSnapshot?: SortOrder
+    messagesSnapshot?: SortOrder
+    sessionId?: SortOrder
+  }
+
+  export type ConversationFeedbackMaxOrderByAggregateInput = {
+    id?: SortOrder
+    active?: SortOrder
+    description?: SortOrder
+    deletedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+    rating?: SortOrder
+    comment?: SortOrder
+    conversationId?: SortOrder
+    conversationNameSnapshot?: SortOrder
+    topicIdSnapshot?: SortOrder
+    topicNameSnapshot?: SortOrder
+    sessionId?: SortOrder
+  }
+
+  export type ConversationFeedbackMinOrderByAggregateInput = {
+    id?: SortOrder
+    active?: SortOrder
+    description?: SortOrder
+    deletedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+    rating?: SortOrder
+    comment?: SortOrder
+    conversationId?: SortOrder
+    conversationNameSnapshot?: SortOrder
+    topicIdSnapshot?: SortOrder
+    topicNameSnapshot?: SortOrder
+    sessionId?: SortOrder
+  }
+
+  export type EnumFeedbackRatingWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.FeedbackRating | EnumFeedbackRatingFieldRefInput<$PrismaModel>
+    in?: $Enums.FeedbackRating[] | ListEnumFeedbackRatingFieldRefInput<$PrismaModel>
+    notIn?: $Enums.FeedbackRating[] | ListEnumFeedbackRatingFieldRefInput<$PrismaModel>
+    not?: NestedEnumFeedbackRatingWithAggregatesFilter<$PrismaModel> | $Enums.FeedbackRating
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumFeedbackRatingFilter<$PrismaModel>
+    _max?: NestedEnumFeedbackRatingFilter<$PrismaModel>
+  }
+
   export type EnumMessageSenderFilter<$PrismaModel = never> = {
     equals?: $Enums.MessageSender | EnumMessageSenderFieldRefInput<$PrismaModel>
     in?: $Enums.MessageSender[] | ListEnumMessageSenderFieldRefInput<$PrismaModel>
@@ -459989,11 +461714,6 @@ export namespace Prisma {
     every?: CitationMessageWhereInput
     some?: CitationMessageWhereInput
     none?: CitationMessageWhereInput
-  }
-
-  export type ConversationNullableScalarRelationFilter = {
-    is?: ConversationWhereInput | null
-    isNot?: ConversationWhereInput | null
   }
 
   export type CitationMessageOrderByRelationAggregateInput = {
@@ -482063,11 +483783,25 @@ export namespace Prisma {
     connect?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
   }
 
+  export type ConversationFeedbackCreateNestedManyWithoutConversationInput = {
+    create?: XOR<ConversationFeedbackCreateWithoutConversationInput, ConversationFeedbackUncheckedCreateWithoutConversationInput> | ConversationFeedbackCreateWithoutConversationInput[] | ConversationFeedbackUncheckedCreateWithoutConversationInput[]
+    connectOrCreate?: ConversationFeedbackCreateOrConnectWithoutConversationInput | ConversationFeedbackCreateOrConnectWithoutConversationInput[]
+    createMany?: ConversationFeedbackCreateManyConversationInputEnvelope
+    connect?: ConversationFeedbackWhereUniqueInput | ConversationFeedbackWhereUniqueInput[]
+  }
+
   export type MessageUncheckedCreateNestedManyWithoutConversationInput = {
     create?: XOR<MessageCreateWithoutConversationInput, MessageUncheckedCreateWithoutConversationInput> | MessageCreateWithoutConversationInput[] | MessageUncheckedCreateWithoutConversationInput[]
     connectOrCreate?: MessageCreateOrConnectWithoutConversationInput | MessageCreateOrConnectWithoutConversationInput[]
     createMany?: MessageCreateManyConversationInputEnvelope
     connect?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
+  }
+
+  export type ConversationFeedbackUncheckedCreateNestedManyWithoutConversationInput = {
+    create?: XOR<ConversationFeedbackCreateWithoutConversationInput, ConversationFeedbackUncheckedCreateWithoutConversationInput> | ConversationFeedbackCreateWithoutConversationInput[] | ConversationFeedbackUncheckedCreateWithoutConversationInput[]
+    connectOrCreate?: ConversationFeedbackCreateOrConnectWithoutConversationInput | ConversationFeedbackCreateOrConnectWithoutConversationInput[]
+    createMany?: ConversationFeedbackCreateManyConversationInputEnvelope
+    connect?: ConversationFeedbackWhereUniqueInput | ConversationFeedbackWhereUniqueInput[]
   }
 
   export type UserProfileUpdateOneWithoutConversationsNestedInput = {
@@ -482114,6 +483848,20 @@ export namespace Prisma {
     deleteMany?: MessageScalarWhereInput | MessageScalarWhereInput[]
   }
 
+  export type ConversationFeedbackUpdateManyWithoutConversationNestedInput = {
+    create?: XOR<ConversationFeedbackCreateWithoutConversationInput, ConversationFeedbackUncheckedCreateWithoutConversationInput> | ConversationFeedbackCreateWithoutConversationInput[] | ConversationFeedbackUncheckedCreateWithoutConversationInput[]
+    connectOrCreate?: ConversationFeedbackCreateOrConnectWithoutConversationInput | ConversationFeedbackCreateOrConnectWithoutConversationInput[]
+    upsert?: ConversationFeedbackUpsertWithWhereUniqueWithoutConversationInput | ConversationFeedbackUpsertWithWhereUniqueWithoutConversationInput[]
+    createMany?: ConversationFeedbackCreateManyConversationInputEnvelope
+    set?: ConversationFeedbackWhereUniqueInput | ConversationFeedbackWhereUniqueInput[]
+    disconnect?: ConversationFeedbackWhereUniqueInput | ConversationFeedbackWhereUniqueInput[]
+    delete?: ConversationFeedbackWhereUniqueInput | ConversationFeedbackWhereUniqueInput[]
+    connect?: ConversationFeedbackWhereUniqueInput | ConversationFeedbackWhereUniqueInput[]
+    update?: ConversationFeedbackUpdateWithWhereUniqueWithoutConversationInput | ConversationFeedbackUpdateWithWhereUniqueWithoutConversationInput[]
+    updateMany?: ConversationFeedbackUpdateManyWithWhereWithoutConversationInput | ConversationFeedbackUpdateManyWithWhereWithoutConversationInput[]
+    deleteMany?: ConversationFeedbackScalarWhereInput | ConversationFeedbackScalarWhereInput[]
+  }
+
   export type MessageUncheckedUpdateManyWithoutConversationNestedInput = {
     create?: XOR<MessageCreateWithoutConversationInput, MessageUncheckedCreateWithoutConversationInput> | MessageCreateWithoutConversationInput[] | MessageUncheckedCreateWithoutConversationInput[]
     connectOrCreate?: MessageCreateOrConnectWithoutConversationInput | MessageCreateOrConnectWithoutConversationInput[]
@@ -482126,6 +483874,40 @@ export namespace Prisma {
     update?: MessageUpdateWithWhereUniqueWithoutConversationInput | MessageUpdateWithWhereUniqueWithoutConversationInput[]
     updateMany?: MessageUpdateManyWithWhereWithoutConversationInput | MessageUpdateManyWithWhereWithoutConversationInput[]
     deleteMany?: MessageScalarWhereInput | MessageScalarWhereInput[]
+  }
+
+  export type ConversationFeedbackUncheckedUpdateManyWithoutConversationNestedInput = {
+    create?: XOR<ConversationFeedbackCreateWithoutConversationInput, ConversationFeedbackUncheckedCreateWithoutConversationInput> | ConversationFeedbackCreateWithoutConversationInput[] | ConversationFeedbackUncheckedCreateWithoutConversationInput[]
+    connectOrCreate?: ConversationFeedbackCreateOrConnectWithoutConversationInput | ConversationFeedbackCreateOrConnectWithoutConversationInput[]
+    upsert?: ConversationFeedbackUpsertWithWhereUniqueWithoutConversationInput | ConversationFeedbackUpsertWithWhereUniqueWithoutConversationInput[]
+    createMany?: ConversationFeedbackCreateManyConversationInputEnvelope
+    set?: ConversationFeedbackWhereUniqueInput | ConversationFeedbackWhereUniqueInput[]
+    disconnect?: ConversationFeedbackWhereUniqueInput | ConversationFeedbackWhereUniqueInput[]
+    delete?: ConversationFeedbackWhereUniqueInput | ConversationFeedbackWhereUniqueInput[]
+    connect?: ConversationFeedbackWhereUniqueInput | ConversationFeedbackWhereUniqueInput[]
+    update?: ConversationFeedbackUpdateWithWhereUniqueWithoutConversationInput | ConversationFeedbackUpdateWithWhereUniqueWithoutConversationInput[]
+    updateMany?: ConversationFeedbackUpdateManyWithWhereWithoutConversationInput | ConversationFeedbackUpdateManyWithWhereWithoutConversationInput[]
+    deleteMany?: ConversationFeedbackScalarWhereInput | ConversationFeedbackScalarWhereInput[]
+  }
+
+  export type ConversationCreateNestedOneWithoutFeedbacksInput = {
+    create?: XOR<ConversationCreateWithoutFeedbacksInput, ConversationUncheckedCreateWithoutFeedbacksInput>
+    connectOrCreate?: ConversationCreateOrConnectWithoutFeedbacksInput
+    connect?: ConversationWhereUniqueInput
+  }
+
+  export type EnumFeedbackRatingFieldUpdateOperationsInput = {
+    set?: $Enums.FeedbackRating
+  }
+
+  export type ConversationUpdateOneWithoutFeedbacksNestedInput = {
+    create?: XOR<ConversationCreateWithoutFeedbacksInput, ConversationUncheckedCreateWithoutFeedbacksInput>
+    connectOrCreate?: ConversationCreateOrConnectWithoutFeedbacksInput
+    upsert?: ConversationUpsertWithoutFeedbacksInput
+    disconnect?: ConversationWhereInput | boolean
+    delete?: ConversationWhereInput | boolean
+    connect?: ConversationWhereUniqueInput
+    update?: XOR<XOR<ConversationUpdateToOneWithWhereWithoutFeedbacksInput, ConversationUpdateWithoutFeedbacksInput>, ConversationUncheckedUpdateWithoutFeedbacksInput>
   }
 
   export type CitationMessageCreateNestedManyWithoutMessageInput = {
@@ -507220,6 +509002,23 @@ export namespace Prisma {
     _max?: NestedEnumDocumentStatusFilter<$PrismaModel>
   }
 
+  export type NestedEnumFeedbackRatingFilter<$PrismaModel = never> = {
+    equals?: $Enums.FeedbackRating | EnumFeedbackRatingFieldRefInput<$PrismaModel>
+    in?: $Enums.FeedbackRating[] | ListEnumFeedbackRatingFieldRefInput<$PrismaModel>
+    notIn?: $Enums.FeedbackRating[] | ListEnumFeedbackRatingFieldRefInput<$PrismaModel>
+    not?: NestedEnumFeedbackRatingFilter<$PrismaModel> | $Enums.FeedbackRating
+  }
+
+  export type NestedEnumFeedbackRatingWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.FeedbackRating | EnumFeedbackRatingFieldRefInput<$PrismaModel>
+    in?: $Enums.FeedbackRating[] | ListEnumFeedbackRatingFieldRefInput<$PrismaModel>
+    notIn?: $Enums.FeedbackRating[] | ListEnumFeedbackRatingFieldRefInput<$PrismaModel>
+    not?: NestedEnumFeedbackRatingWithAggregatesFilter<$PrismaModel> | $Enums.FeedbackRating
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumFeedbackRatingFilter<$PrismaModel>
+    _max?: NestedEnumFeedbackRatingFilter<$PrismaModel>
+  }
+
   export type NestedEnumMessageSenderFilter<$PrismaModel = never> = {
     equals?: $Enums.MessageSender | EnumMessageSenderFieldRefInput<$PrismaModel>
     in?: $Enums.MessageSender[] | ListEnumMessageSenderFieldRefInput<$PrismaModel>
@@ -512767,6 +514566,7 @@ export namespace Prisma {
     session?: UserSessionCreateNestedOneWithoutConversationInput
     topic?: TopicCreateNestedOneWithoutConversationsInput
     message?: MessageCreateNestedManyWithoutConversationInput
+    feedbacks?: ConversationFeedbackCreateNestedManyWithoutConversationInput
   }
 
   export type ConversationUncheckedCreateWithoutUserInput = {
@@ -512782,6 +514582,7 @@ export namespace Prisma {
     sessionId?: string | null
     topicId?: string | null
     message?: MessageUncheckedCreateNestedManyWithoutConversationInput
+    feedbacks?: ConversationFeedbackUncheckedCreateNestedManyWithoutConversationInput
   }
 
   export type ConversationCreateOrConnectWithoutUserInput = {
@@ -538865,6 +540666,7 @@ export namespace Prisma {
     user?: UserProfileCreateNestedOneWithoutConversationsInput
     topic?: TopicCreateNestedOneWithoutConversationsInput
     message?: MessageCreateNestedManyWithoutConversationInput
+    feedbacks?: ConversationFeedbackCreateNestedManyWithoutConversationInput
   }
 
   export type ConversationUncheckedCreateWithoutSessionInput = {
@@ -538880,6 +540682,7 @@ export namespace Prisma {
     userId?: string | null
     topicId?: string | null
     message?: MessageUncheckedCreateNestedManyWithoutConversationInput
+    feedbacks?: ConversationFeedbackUncheckedCreateNestedManyWithoutConversationInput
   }
 
   export type ConversationCreateOrConnectWithoutSessionInput = {
@@ -542701,6 +544504,50 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type ConversationFeedbackCreateWithoutConversationInput = {
+    id?: string
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    rating: $Enums.FeedbackRating
+    comment?: string | null
+    conversationNameSnapshot?: string | null
+    topicIdSnapshot?: string | null
+    topicNameSnapshot?: string | null
+    messagesSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    sessionId?: string | null
+  }
+
+  export type ConversationFeedbackUncheckedCreateWithoutConversationInput = {
+    id?: string
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    rating: $Enums.FeedbackRating
+    comment?: string | null
+    conversationNameSnapshot?: string | null
+    topicIdSnapshot?: string | null
+    topicNameSnapshot?: string | null
+    messagesSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    sessionId?: string | null
+  }
+
+  export type ConversationFeedbackCreateOrConnectWithoutConversationInput = {
+    where: ConversationFeedbackWhereUniqueInput
+    create: XOR<ConversationFeedbackCreateWithoutConversationInput, ConversationFeedbackUncheckedCreateWithoutConversationInput>
+  }
+
+  export type ConversationFeedbackCreateManyConversationInputEnvelope = {
+    data: ConversationFeedbackCreateManyConversationInput | ConversationFeedbackCreateManyConversationInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserProfileUpsertWithoutConversationsInput = {
     update: XOR<UserProfileUpdateWithoutConversationsInput, UserProfileUncheckedUpdateWithoutConversationsInput>
     create: XOR<UserProfileCreateWithoutConversationsInput, UserProfileUncheckedCreateWithoutConversationsInput>
@@ -543177,6 +545024,123 @@ export namespace Prisma {
     sender?: EnumMessageSenderFilter<"Message"> | $Enums.MessageSender
   }
 
+  export type ConversationFeedbackUpsertWithWhereUniqueWithoutConversationInput = {
+    where: ConversationFeedbackWhereUniqueInput
+    update: XOR<ConversationFeedbackUpdateWithoutConversationInput, ConversationFeedbackUncheckedUpdateWithoutConversationInput>
+    create: XOR<ConversationFeedbackCreateWithoutConversationInput, ConversationFeedbackUncheckedCreateWithoutConversationInput>
+  }
+
+  export type ConversationFeedbackUpdateWithWhereUniqueWithoutConversationInput = {
+    where: ConversationFeedbackWhereUniqueInput
+    data: XOR<ConversationFeedbackUpdateWithoutConversationInput, ConversationFeedbackUncheckedUpdateWithoutConversationInput>
+  }
+
+  export type ConversationFeedbackUpdateManyWithWhereWithoutConversationInput = {
+    where: ConversationFeedbackScalarWhereInput
+    data: XOR<ConversationFeedbackUpdateManyMutationInput, ConversationFeedbackUncheckedUpdateManyWithoutConversationInput>
+  }
+
+  export type ConversationFeedbackScalarWhereInput = {
+    AND?: ConversationFeedbackScalarWhereInput | ConversationFeedbackScalarWhereInput[]
+    OR?: ConversationFeedbackScalarWhereInput[]
+    NOT?: ConversationFeedbackScalarWhereInput | ConversationFeedbackScalarWhereInput[]
+    id?: StringFilter<"ConversationFeedback"> | string
+    active?: BoolFilter<"ConversationFeedback"> | boolean
+    description?: StringNullableFilter<"ConversationFeedback"> | string | null
+    deletedAt?: DateTimeNullableFilter<"ConversationFeedback"> | Date | string | null
+    createdAt?: DateTimeFilter<"ConversationFeedback"> | Date | string
+    updatedAt?: DateTimeFilter<"ConversationFeedback"> | Date | string
+    createdBy?: UuidNullableFilter<"ConversationFeedback"> | string | null
+    rating?: EnumFeedbackRatingFilter<"ConversationFeedback"> | $Enums.FeedbackRating
+    comment?: StringNullableFilter<"ConversationFeedback"> | string | null
+    conversationId?: StringNullableFilter<"ConversationFeedback"> | string | null
+    conversationNameSnapshot?: StringNullableFilter<"ConversationFeedback"> | string | null
+    topicIdSnapshot?: StringNullableFilter<"ConversationFeedback"> | string | null
+    topicNameSnapshot?: StringNullableFilter<"ConversationFeedback"> | string | null
+    messagesSnapshot?: JsonNullableFilter<"ConversationFeedback">
+    sessionId?: StringNullableFilter<"ConversationFeedback"> | string | null
+  }
+
+  export type ConversationCreateWithoutFeedbacksInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    name?: string | null
+    user?: UserProfileCreateNestedOneWithoutConversationsInput
+    session?: UserSessionCreateNestedOneWithoutConversationInput
+    topic?: TopicCreateNestedOneWithoutConversationsInput
+    message?: MessageCreateNestedManyWithoutConversationInput
+  }
+
+  export type ConversationUncheckedCreateWithoutFeedbacksInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    name?: string | null
+    userId?: string | null
+    sessionId?: string | null
+    topicId?: string | null
+    message?: MessageUncheckedCreateNestedManyWithoutConversationInput
+  }
+
+  export type ConversationCreateOrConnectWithoutFeedbacksInput = {
+    where: ConversationWhereUniqueInput
+    create: XOR<ConversationCreateWithoutFeedbacksInput, ConversationUncheckedCreateWithoutFeedbacksInput>
+  }
+
+  export type ConversationUpsertWithoutFeedbacksInput = {
+    update: XOR<ConversationUpdateWithoutFeedbacksInput, ConversationUncheckedUpdateWithoutFeedbacksInput>
+    create: XOR<ConversationCreateWithoutFeedbacksInput, ConversationUncheckedCreateWithoutFeedbacksInput>
+    where?: ConversationWhereInput
+  }
+
+  export type ConversationUpdateToOneWithWhereWithoutFeedbacksInput = {
+    where?: ConversationWhereInput
+    data: XOR<ConversationUpdateWithoutFeedbacksInput, ConversationUncheckedUpdateWithoutFeedbacksInput>
+  }
+
+  export type ConversationUpdateWithoutFeedbacksInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    user?: UserProfileUpdateOneWithoutConversationsNestedInput
+    session?: UserSessionUpdateOneWithoutConversationNestedInput
+    topic?: TopicUpdateOneWithoutConversationsNestedInput
+    message?: MessageUpdateManyWithoutConversationNestedInput
+  }
+
+  export type ConversationUncheckedUpdateWithoutFeedbacksInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    sessionId?: NullableStringFieldUpdateOperationsInput | string | null
+    topicId?: NullableStringFieldUpdateOperationsInput | string | null
+    message?: MessageUncheckedUpdateManyWithoutConversationNestedInput
+  }
+
   export type CitationMessageCreateWithoutMessageInput = {
     id?: string
     code?: string | null
@@ -543230,6 +545194,7 @@ export namespace Prisma {
     user?: UserProfileCreateNestedOneWithoutConversationsInput
     session?: UserSessionCreateNestedOneWithoutConversationInput
     topic?: TopicCreateNestedOneWithoutConversationsInput
+    feedbacks?: ConversationFeedbackCreateNestedManyWithoutConversationInput
   }
 
   export type ConversationUncheckedCreateWithoutMessageInput = {
@@ -543245,6 +545210,7 @@ export namespace Prisma {
     userId?: string | null
     sessionId?: string | null
     topicId?: string | null
+    feedbacks?: ConversationFeedbackUncheckedCreateNestedManyWithoutConversationInput
   }
 
   export type ConversationCreateOrConnectWithoutMessageInput = {
@@ -543311,6 +545277,7 @@ export namespace Prisma {
     user?: UserProfileUpdateOneWithoutConversationsNestedInput
     session?: UserSessionUpdateOneWithoutConversationNestedInput
     topic?: TopicUpdateOneWithoutConversationsNestedInput
+    feedbacks?: ConversationFeedbackUpdateManyWithoutConversationNestedInput
   }
 
   export type ConversationUncheckedUpdateWithoutMessageInput = {
@@ -543326,6 +545293,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     topicId?: NullableStringFieldUpdateOperationsInput | string | null
+    feedbacks?: ConversationFeedbackUncheckedUpdateManyWithoutConversationNestedInput
   }
 
   export type MessageCreateWithoutCitationsInput = {
@@ -543529,6 +545497,7 @@ export namespace Prisma {
     user?: UserProfileCreateNestedOneWithoutConversationsInput
     session?: UserSessionCreateNestedOneWithoutConversationInput
     message?: MessageCreateNestedManyWithoutConversationInput
+    feedbacks?: ConversationFeedbackCreateNestedManyWithoutConversationInput
   }
 
   export type ConversationUncheckedCreateWithoutTopicInput = {
@@ -543544,6 +545513,7 @@ export namespace Prisma {
     userId?: string | null
     sessionId?: string | null
     message?: MessageUncheckedCreateNestedManyWithoutConversationInput
+    feedbacks?: ConversationFeedbackUncheckedCreateNestedManyWithoutConversationInput
   }
 
   export type ConversationCreateOrConnectWithoutTopicInput = {
@@ -656073,6 +658043,7 @@ export namespace Prisma {
     session?: UserSessionUpdateOneWithoutConversationNestedInput
     topic?: TopicUpdateOneWithoutConversationsNestedInput
     message?: MessageUpdateManyWithoutConversationNestedInput
+    feedbacks?: ConversationFeedbackUpdateManyWithoutConversationNestedInput
   }
 
   export type ConversationUncheckedUpdateWithoutUserInput = {
@@ -656088,6 +658059,7 @@ export namespace Prisma {
     sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     topicId?: NullableStringFieldUpdateOperationsInput | string | null
     message?: MessageUncheckedUpdateManyWithoutConversationNestedInput
+    feedbacks?: ConversationFeedbackUncheckedUpdateManyWithoutConversationNestedInput
   }
 
   export type ConversationUncheckedUpdateManyWithoutUserInput = {
@@ -657403,6 +659375,7 @@ export namespace Prisma {
     user?: UserProfileUpdateOneWithoutConversationsNestedInput
     topic?: TopicUpdateOneWithoutConversationsNestedInput
     message?: MessageUpdateManyWithoutConversationNestedInput
+    feedbacks?: ConversationFeedbackUpdateManyWithoutConversationNestedInput
   }
 
   export type ConversationUncheckedUpdateWithoutSessionInput = {
@@ -657418,6 +659391,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     topicId?: NullableStringFieldUpdateOperationsInput | string | null
     message?: MessageUncheckedUpdateManyWithoutConversationNestedInput
+    feedbacks?: ConversationFeedbackUncheckedUpdateManyWithoutConversationNestedInput
   }
 
   export type ConversationUncheckedUpdateManyWithoutSessionInput = {
@@ -657495,6 +659469,23 @@ export namespace Prisma {
     sender: $Enums.MessageSender
   }
 
+  export type ConversationFeedbackCreateManyConversationInput = {
+    id?: string
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    rating: $Enums.FeedbackRating
+    comment?: string | null
+    conversationNameSnapshot?: string | null
+    topicIdSnapshot?: string | null
+    topicNameSnapshot?: string | null
+    messagesSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    sessionId?: string | null
+  }
+
   export type MessageUpdateWithoutConversationInput = {
     id?: StringFieldUpdateOperationsInput | string
     code?: NullableStringFieldUpdateOperationsInput | string | null
@@ -657534,6 +659525,57 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     content?: NullableStringFieldUpdateOperationsInput | string | null
     sender?: EnumMessageSenderFieldUpdateOperationsInput | $Enums.MessageSender
+  }
+
+  export type ConversationFeedbackUpdateWithoutConversationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    rating?: EnumFeedbackRatingFieldUpdateOperationsInput | $Enums.FeedbackRating
+    comment?: NullableStringFieldUpdateOperationsInput | string | null
+    conversationNameSnapshot?: NullableStringFieldUpdateOperationsInput | string | null
+    topicIdSnapshot?: NullableStringFieldUpdateOperationsInput | string | null
+    topicNameSnapshot?: NullableStringFieldUpdateOperationsInput | string | null
+    messagesSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    sessionId?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type ConversationFeedbackUncheckedUpdateWithoutConversationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    rating?: EnumFeedbackRatingFieldUpdateOperationsInput | $Enums.FeedbackRating
+    comment?: NullableStringFieldUpdateOperationsInput | string | null
+    conversationNameSnapshot?: NullableStringFieldUpdateOperationsInput | string | null
+    topicIdSnapshot?: NullableStringFieldUpdateOperationsInput | string | null
+    topicNameSnapshot?: NullableStringFieldUpdateOperationsInput | string | null
+    messagesSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    sessionId?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type ConversationFeedbackUncheckedUpdateManyWithoutConversationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    rating?: EnumFeedbackRatingFieldUpdateOperationsInput | $Enums.FeedbackRating
+    comment?: NullableStringFieldUpdateOperationsInput | string | null
+    conversationNameSnapshot?: NullableStringFieldUpdateOperationsInput | string | null
+    topicIdSnapshot?: NullableStringFieldUpdateOperationsInput | string | null
+    topicNameSnapshot?: NullableStringFieldUpdateOperationsInput | string | null
+    messagesSnapshot?: NullableJsonNullValueInput | InputJsonValue
+    sessionId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type CitationMessageCreateManyMessageInput = {
@@ -657795,6 +659837,7 @@ export namespace Prisma {
     user?: UserProfileUpdateOneWithoutConversationsNestedInput
     session?: UserSessionUpdateOneWithoutConversationNestedInput
     message?: MessageUpdateManyWithoutConversationNestedInput
+    feedbacks?: ConversationFeedbackUpdateManyWithoutConversationNestedInput
   }
 
   export type ConversationUncheckedUpdateWithoutTopicInput = {
@@ -657810,6 +659853,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     message?: MessageUncheckedUpdateManyWithoutConversationNestedInput
+    feedbacks?: ConversationFeedbackUncheckedUpdateManyWithoutConversationNestedInput
   }
 
   export type ConversationUncheckedUpdateManyWithoutTopicInput = {

@@ -882,6 +882,24 @@ exports.Prisma.ConversationScalarFieldEnum = {
   topicId: 'topicId'
 };
 
+exports.Prisma.ConversationFeedbackScalarFieldEnum = {
+  id: 'id',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  rating: 'rating',
+  comment: 'comment',
+  conversationId: 'conversationId',
+  conversationNameSnapshot: 'conversationNameSnapshot',
+  topicIdSnapshot: 'topicIdSnapshot',
+  topicNameSnapshot: 'topicNameSnapshot',
+  messagesSnapshot: 'messagesSnapshot',
+  sessionId: 'sessionId'
+};
+
 exports.Prisma.MessageScalarFieldEnum = {
   id: 'id',
   code: 'code',
@@ -5441,6 +5459,18 @@ exports.Prisma.ConversationOrderByRelevanceFieldEnum = {
   topicId: 'topicId'
 };
 
+exports.Prisma.ConversationFeedbackOrderByRelevanceFieldEnum = {
+  id: 'id',
+  description: 'description',
+  createdBy: 'createdBy',
+  comment: 'comment',
+  conversationId: 'conversationId',
+  conversationNameSnapshot: 'conversationNameSnapshot',
+  topicIdSnapshot: 'topicIdSnapshot',
+  topicNameSnapshot: 'topicNameSnapshot',
+  sessionId: 'sessionId'
+};
+
 exports.Prisma.MessageOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
@@ -7905,6 +7935,14 @@ exports.DocumentStatus = exports.$Enums.DocumentStatus = {
   DENY: 'DENY'
 };
 
+exports.FeedbackRating = exports.$Enums.FeedbackRating = {
+  VERY_BAD: 'VERY_BAD',
+  BAD: 'BAD',
+  NORMAL: 'NORMAL',
+  GOOD: 'GOOD',
+  VERY_GOOD: 'VERY_GOOD'
+};
+
 exports.MessageSender = exports.$Enums.MessageSender = {
   USER: 'USER',
   BOT: 'BOT'
@@ -8245,7 +8283,8 @@ exports.EvaluationMemberRole = exports.$Enums.EvaluationMemberRole = {
   MEMBER: 'MEMBER',
   ADVISORY_BOARD: 'ADVISORY_BOARD',
   HEAD_SPECIALIZED: 'HEAD_SPECIALIZED',
-  SPECIALIZED: 'SPECIALIZED'
+  SPECIALIZED: 'SPECIALIZED',
+  NONCOUNCIL_MEMBERS: 'NONCOUNCIL_MEMBERS'
 };
 
 exports.SurveyObject = exports.$Enums.SurveyObject = {
@@ -8384,6 +8423,7 @@ exports.Prisma.ModelName = {
   FAQ: 'FAQ',
   Prompt: 'Prompt',
   Conversation: 'Conversation',
+  ConversationFeedback: 'ConversationFeedback',
   Message: 'Message',
   CitationMessage: 'CitationMessage',
   Topic: 'Topic',

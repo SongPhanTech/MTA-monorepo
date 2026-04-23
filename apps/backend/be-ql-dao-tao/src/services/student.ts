@@ -354,56 +354,15 @@ export const exportStudentAcademicWarning = async ({
   return buffer
 }
 
-export async function generateStudentImportTemplate(
-  trainingObjectTypeId: string
+// Function for export new template for import student
+export async function _generateStudentImportTemplate(
+  _trainingObjectTypeId: string
 ): Promise<ArrayBuffer> {
-  const [
-    provinces,
-    trainingFields,
-    trainingMajors,
-    nationalities,
-    ethnicities,
-    genders,
-    fixedClasses,
-    curricula,
-    organizations,
-  ] = await Promise.all([
-    prisma.dM_Tinh_New.findMany({
-      where: { bActive: true, bDeleted: false },
-      select: { sTen: true },
-      orderBy: { sTen: "asc" },
-    }),
-    prisma.trainingField.findMany({
-      where: { trainingObjectTypes: { some: { trainingObjectTypeId } } },
-      select: { name: true },
-      orderBy: { name: "asc" },
-    }),
-    prisma.trainingMajor.findMany({
-      where: { trainingObjectTypes: { some: { trainingObjectTypeId } } },
-      select: { name: true },
-      orderBy: { name: "asc" },
-    }),
-    prisma.dM_QuocGia.findMany({
-      where: { bActive: true, bDeleted: false },
-      select: { sTen: true },
-      orderBy: { sTen: "asc" },
-    }),
-    prisma.dM_DanToc.findMany({
-      where: { bActive: true, bDeleted: false },
-      select: { sTen: true },
-      orderBy: { sTen: "asc" },
-    }),
-    prisma.dM_GioiTinh.findMany({
-      where: { bActive: true, bDeleted: false },
-      select: { sTen: true },
-      orderBy: { sTen: "asc" },
-    }),
-
+  const [fixedClasses, curricula, organizations] = await Promise.all([
     prisma.fixedClass.findMany({
       where: {
         active: true,
         deletedAt: null,
-        trainingCourse: { trainingObjectTypeId },
       },
       select: { code: true, name: true },
       orderBy: { name: "asc" },
@@ -411,7 +370,6 @@ export async function generateStudentImportTemplate(
     prisma.curriculum.findMany({
       where: {
         deletedAt: null,
-        trainingObjectTypeId,
       },
       select: { name: true },
       orderBy: { name: "asc" },
@@ -424,30 +382,8 @@ export async function generateStudentImportTemplate(
   ])
 
   const buffer = await getTemplateBuffer(prisma, "MauImportDSHV.xlsx")
-  const template = new XlsxTemplate(buffer)
-
-  template.substitute("DanhMucTinh", {
-    data: provinces.filter((p) => p.sTen).map((p) => ({ name: p.sTen })),
-  })
-  template.substitute("DanhMucNganh", {
-    data: trainingFields.filter((p) => p.name).map((p) => ({ name: p.name })),
-  })
-  template.substitute("DanhMucGioiTinh", {
-    data: genders.filter((p) => p.sTen).map((p) => ({ name: p.sTen })),
-  })
-  template.substitute("DanhMucQuocTich", {
-    data: nationalities.filter((p) => p.sTen).map((p) => ({ name: p.sTen })),
-  })
-  template.substitute("DanhMucDanToc", {
-    data: ethnicities.filter((p) => p.sTen).map((p) => ({ name: p.sTen })),
-  })
-  template.substitute("DanhMucChuyenNganh", {
-    data: trainingMajors.filter((p) => p.name).map((p) => ({ name: p.name })),
-  })
-
-  const generatedArrayBuffer = template.generate({ type: "arraybuffer" }) as ArrayBuffer
   const workbook = new ExcelJS.Workbook()
-  await workbook.xlsx.load(new Uint8Array(generatedArrayBuffer) as any)
+  await workbook.xlsx.load(buffer as any)
 
   const sheetLopQL = workbook.getWorksheet("DanhMucLopQuanLi")
   if (sheetLopQL) {
@@ -483,27 +419,42 @@ export async function generateStudentImportTemplate(
   const mainSheet = workbook.worksheets[0]
   if (mainSheet) {
     const dataStartRow = 13
-    const dataEndRow = 1000
+    const dataEndRow = 250
 
-    for (let row = dataStartRow; row <= dataEndRow; row++) {
-      mainSheet.getCell(`P${row}`).value = {
-        formula: `IFERROR(INDEX(DanhMucLopQuanLi!$A:$A,MATCH(Q${row},DanhMucLopQuanLi!$B:$B,0)),"")`,
+    const lopEndRow = fixedClasses.length || 1
+    const ctdtEndRow = (curricula.length || 0) + 1
+    const dvqlEndRow = (organizations.length || 0) + 1
+
+    const lopFormulaPrefix = `IFERROR(INDEX(DanhMucLopQuanLi!$A$1:$A$${lopEndRow},MATCH(Q`
+    const lopFormulaSuffix = `,DanhMucLopQuanLi!$B$1:$B$${lopEndRow},0)),"")`
+
+    const qValidation: ExcelJS.DataValidation = {
+      type: "list",
+      allowBlank: true,
+      formulae: [`DanhMucLopQuanLi!$B$1:$B$${lopEndRow}`],
+    }
+
+    const tValidation: ExcelJS.DataValidation = {
+      type: "list",
+      allowBlank: true,
+      formulae: [`DanhMucChuongTrinhDaoTao!$A$2:$A$${ctdtEndRow > 1 ? ctdtEndRow : 2}`],
+    }
+
+    const uValidation: ExcelJS.DataValidation = {
+      type: "list",
+      allowBlank: true,
+      formulae: [`DanhMucDonViQuanLi!$A$2:$A$${dvqlEndRow > 1 ? dvqlEndRow : 2}`],
+    }
+
+    for (let r = dataStartRow; r <= dataEndRow; r++) {
+      const row = mainSheet.getRow(r)
+
+      row.getCell("P").value = {
+        formula: `${lopFormulaPrefix}${r}${lopFormulaSuffix}`,
       }
-      mainSheet.getCell(`Q${row}`).dataValidation = {
-        type: "list",
-        allowBlank: true,
-        formulae: ["DanhMucLopQuanLi!B:B"],
-      }
-      mainSheet.getCell(`T${row}`).dataValidation = {
-        type: "list",
-        allowBlank: true,
-        formulae: ["DanhMucChuongTrinhDaoTao!$A$2:$A$1048576"],
-      }
-      mainSheet.getCell(`U${row}`).dataValidation = {
-        type: "list",
-        allowBlank: true,
-        formulae: ["DanhMucDonViQuanLi!$A$2:$A$511"],
-      }
+      row.getCell("Q").dataValidation = qValidation
+      row.getCell("T").dataValidation = tValidation
+      row.getCell("U").dataValidation = uValidation
     }
   }
 

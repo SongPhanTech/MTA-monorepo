@@ -196,6 +196,7 @@ export default {
     "QUAN_TRI_DANH_MUC_CHU_DE": "/quan-tri/danh-muc/chu-de",
     "QUAN_TRI_DANH_MUC_LOAI_TAI_LIEU": "/quan-tri/danh-muc/loai-tai-lieu",
     "QUAN_TRI_DU_LIEU_FAQ": "/quan-tri/du-lieu/faq",
+    "QUAN_TRI_DU_LIEU_PHAN_HOI": "/quan-tri/du-lieu/phan-hoi",
     "QUAN_TRI_DU_LIEU_TAI_LIEU": "/quan-tri/du-lieu/tai-lieu",
     "TIM_KIEM_VAN_BAN": "/tim-kiem-van-ban",
     "TRO_LY_AO": "/tro-ly-ao",

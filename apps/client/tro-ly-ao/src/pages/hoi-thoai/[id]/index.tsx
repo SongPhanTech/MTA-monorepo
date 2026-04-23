@@ -117,8 +117,8 @@ export default function Page() {
   const [isStoppedByUser, setIsStoppedByUser] = useState(false)
   const timeoutRef = useRef<NodeJS.Timeout | null>(null)
 
-  // Timeout configuration (30 seconds)
-  const API_TIMEOUT_MS = 30000
+  // Idle timeout configuration (60 seconds without new data)
+  const API_TIMEOUT_MS = 60000
 
   // Initialize selectedDocumentIds from query params
   useEffect(() => {
@@ -176,19 +176,28 @@ export default function Page() {
       const controller = new AbortController()
       setAbortController(controller)
 
-      // Setup timeout
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current)
-      }
-      timeoutRef.current = setTimeout(() => {
-        if (controller && !controller.signal.aborted) {
-          controller.abort()
-          message.warning("Yêu cầu đã hết thời gian chờ (30s). Vui lòng thử lại.")
-          setLoading(false)
-          setIsStreaming(false)
-          setAbortController(null)
+      const clearRequestTimeout = () => {
+        if (timeoutRef.current) {
+          clearTimeout(timeoutRef.current)
+          timeoutRef.current = null
         }
-      }, API_TIMEOUT_MS)
+      }
+
+      const resetIdleTimeout = () => {
+        clearRequestTimeout()
+        timeoutRef.current = setTimeout(() => {
+          if (controller && !controller.signal.aborted) {
+            controller.abort()
+            message.warning("Không nhận được dữ liệu mới trong 60s. Vui lòng thử lại.")
+            setLoading(false)
+            setIsStreaming(false)
+            setAbortController(null)
+          }
+        }, API_TIMEOUT_MS)
+      }
+
+      // Start idle timeout while waiting for the first response bytes
+      resetIdleTimeout()
 
       try {
         // Chỉ tạo USER message nếu chưa có (khi user gửi từ input)
@@ -275,6 +284,8 @@ export default function Page() {
 
               const { done, value } = await reader.read()
               if (done) break
+
+              resetIdleTimeout()
 
               const chunk = decoder.decode(value, { stream: true })
               accumulatedText += chunk
@@ -419,10 +430,7 @@ export default function Page() {
         setIsStreaming(false)
       } finally {
         // Clear timeout khi hoàn thành
-        if (timeoutRef.current) {
-          clearTimeout(timeoutRef.current)
-          timeoutRef.current = null
-        }
+        clearRequestTimeout()
         setAbortController(null)
       }
     },

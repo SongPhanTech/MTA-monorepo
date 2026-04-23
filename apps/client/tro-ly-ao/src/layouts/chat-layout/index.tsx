@@ -13,6 +13,7 @@ import {
 import { Layout, message, Spin } from "antd"
 import { useRouter } from "next/router"
 import { type ReactNode, useEffect, useState } from "react"
+import { useDisclosure } from "react-hook-disclosure-modal"
 import { useSSOSession } from "@/hooks/useSSOSession"
 import { useUserSession } from "@/hooks/useUserSession"
 import type { ConversationDataFromAPI } from "@/navigations/sider-tro-ly-ao"
@@ -75,6 +76,17 @@ const ChatLayout = ({
   const { mutateAsync: deleteConversation } = useDeleteConversation()
   const { mutateAsync: deleteManyMessages } = useDeleteManyMessage()
   const { mutateAsync: deleteManyCitations } = useDeleteManyCitationMessage()
+
+  const { onOpen: openFeedbackModal } = useDisclosure<{ conversationId: string }>({
+    tag: "FeedbackHoiThoai",
+  })
+
+  const handleFeedback = (id: string) => {
+    if (!id) return
+    const realId = id.split("-")[1]
+    if (!realId) return
+    openFeedbackModal({ conversationId: realId })
+  }
 
   const handleDelete = async (id: string) => {
     if (!id) return
@@ -243,6 +255,7 @@ const ChatLayout = ({
                 items={generateMenusTroLyAo(conversationMenuList)}
                 theme={"light"}
                 onDelete={handleDelete}
+                onFeedback={handleFeedback}
               />
             </div>
           )}

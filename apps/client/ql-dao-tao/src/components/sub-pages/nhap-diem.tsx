@@ -495,7 +495,11 @@ export default function NhapDiem({
                 attendanceScore: item.attendanceScore,
                 midtermScore: item.midtermScore,
               }
-            : { examScore: item.examScore }
+            : {
+                attendanceScore: item.attendanceScore,
+                midtermScore: item.midtermScore,
+                examScore: item.examScore,
+              }
 
         return [
           item.id,
@@ -800,7 +804,7 @@ export default function NhapDiem({
       }
       setRowData(newRowData)
     }
-  }, [dataTable.length])
+  }, [dataTable])
 
   if (!selectedSubjectClassId) {
     return (

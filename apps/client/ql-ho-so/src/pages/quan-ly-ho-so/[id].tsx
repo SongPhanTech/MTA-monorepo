@@ -60,6 +60,7 @@ import { useAbility } from "@workspace/permissions/hooks"
 import ImgCrop from "antd-img-crop"
 import axios from "axios"
 import dayjs from "dayjs"
+import { postFilesSingleStorageType } from "@workspace/libs/api/storage";
 
 dayjs.locale("vi")
 interface itemType {
@@ -416,26 +417,22 @@ export default function UpdateUserPage() {
   }: SubmitForm) => {
     if (!values) return
     if (fileList?.length > 0) {
-      const file: any = fileList[0]
-      const formData = new FormData()
-      formData.append("file", file?.originFileObj)
+      const file = fileList[0].originFileObj
+      // const formData = new FormData()
+      // if (file) formData.append("file", file)
       // const tenantCode = getCookie(c, 'x-tenantcode')
-      const resPresignedUrl = await axios.post(
-        `${getRuntimeEnv("NEXT_PUBLIC_API_UPLOAD_URL")}/Files/single/6?tenantCode=${
-          window.tenantCode || "dev"
-        }&appCode=${getRuntimeEnv("NEXT_PUBLIC_APP_CODE") || "hrm"}`,
-        formData,
+      const { data } = await postFilesSingleStorageType(
+        6,
+        { file },
         {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            "K-TenantCode": window.tenantCode || "dev",
-            "K-AppCode": getRuntimeEnv("NEXT_PUBLIC_APP_CODE") || "hrm",
-          },
+          appCode: getRuntimeEnv("NEXT_PUBLIC_APP_CODE") || "hrm",
+          tenantCode: window.tenantCode || "dev",
         }
       )
-      if (resPresignedUrl?.status === 200 && resPresignedUrl?.data?.fileName) {
+      const filename = data as unknown as { fileName?: string }
+      if (filename?.fileName) {
         form.setFieldsValue({
-          avatar: resPresignedUrl?.data?.fileName,
+          avatar: filename?.fileName,
         })
       }
     }

@@ -11,15 +11,11 @@ export const fetchOCR = async (file: File) => {
     //         'Content-Type': 'multipart/form-data',
     //     },
     // })
-    const response = await axios.post(
-      `${getRuntimeEnv("NEXT_PUBLIC_CHAT_BOT_URL")}/upload`,
-      formData,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      }
-    )
+    const response = await axios.post(`${getRuntimeEnv("NEXT_PUBLIC_CHAT_BOT_URL")}/upload`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
 
     return response.data
   } catch (_error: any) {
@@ -36,9 +32,7 @@ interface OCRResult {
 
 export const getOCRResult = async (taskId: string): Promise<OCRResult> => {
   try {
-    const response = await axios.get(
-      `${getRuntimeEnv("NEXT_PUBLIC_CHAT_BOT_URL")}/result/${taskId}`
-    )
+    const response = await axios.get(`${getRuntimeEnv("NEXT_PUBLIC_CHAT_BOT_URL")}/result/${taskId}`)
     return response.data
   } catch (_error: any) {
     return { task_id: taskId, status: "error", text: "" }

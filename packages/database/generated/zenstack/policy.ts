@@ -9,6 +9,7 @@ import { allFieldsEqual } from "@zenstackhq/runtime/validation";
 import { type PolicyDef, type PermissionCheckerConstraint } from "@zenstackhq/runtime/enhancements/node";
 import { ConfigKey } from "../prisma-client";
 import { PermissionType } from "../prisma-client";
+import { FeedbackRating } from "../prisma-client";
 import { MessageSender } from "../prisma-client";
 import { DocumentStatus } from "../prisma-client";
 import { ScoreConvertStatus } from "../prisma-client";
@@ -857,6 +858,26 @@ const policy: PolicyDef = {
                 update: { guard: Conversation_update, },
                 postUpdate: { guard: Conversation_postUpdate, },
                 delete: { guard: Conversation_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        conversationFeedback: {
+            modelLevel: {
+                read: { guard: ConversationFeedback_read, },
+                create: { guard: ConversationFeedback_create, inputChecker: ConversationFeedback_create_input, },
+                update: { guard: ConversationFeedback_update, },
+                postUpdate: { guard: ConversationFeedback_postUpdate, },
+                delete: { guard: ConversationFeedback_delete, }
             },
             fieldLevel: {
                 read:
@@ -5552,6 +5573,7 @@ const policy: PolicyDef = {
         fAQ: { hasValidation: false },
         prompt: { hasValidation: false },
         conversation: { hasValidation: false },
+        conversationFeedback: { hasValidation: false },
         message: { hasValidation: false },
         citationMessage: { hasValidation: false },
         topic: { hasValidation: false },
@@ -8361,6 +8383,71 @@ function Conversation_delete(context: QueryContext, db: CrudContract): any {
 }
 
 function $check_Conversation_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ConversationFeedback_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_ConversationFeedback_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ConversationFeedback_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_ConversationFeedback_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ConversationFeedback_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function ConversationFeedback_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_ConversationFeedback_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ConversationFeedback_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_ConversationFeedback_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function ConversationFeedback_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_ConversationFeedback_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 

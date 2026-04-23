@@ -1,14 +1,12 @@
 import { ReloadOutlined } from "@ant-design/icons"
-import { queryClient } from "@api/index"
 import FormItem from "@components/commons/form-item"
 import PutFormModal from "@components/commons/put-modal"
 import { DEFAULT_PROMPTS } from "@constants/default-prompts"
 import useSpinner from "@hooks/spinner"
-import { $Enums } from "@workspace/db"
-import { useCreateManyPrompt, useFindFirstPrompt, useUpdateManyPrompt } from "@workspace/db/hooks"
 import { Button, Col, Form, Input, message, Tooltip } from "antd"
 import { useEffect } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
+import { getPromptContent, useAiPromptByCode, useUpsertAiPrompt } from "@/api/ai-prompt"
 
 type PutPromptChucNangFormType = {
   prompt: string
@@ -30,23 +28,14 @@ export default function PutPromptChucNangModal() {
     onClose: form.resetFields,
   })
 
-  const { data: promptData } = useFindFirstPrompt(
-    {
-      where: {
-        code: input?.topicType,
-      },
-    },
-    {
-      enabled: !!input?.topicType,
-    }
-  )
+  const { data: promptData } = useAiPromptByCode(input?.topicType, isOpen)
 
   useEffect(() => {
     if (isOpen) {
       if (promptData) {
         form.setFieldsValue({
-          prompt: promptData.prompt ?? "",
-          description: (promptData as any).description ?? "",
+          prompt: getPromptContent(promptData),
+          description: (promptData.description as string | undefined) ?? "",
         })
       } else {
         form.resetFields()
@@ -54,8 +43,7 @@ export default function PutPromptChucNangModal() {
     }
   }, [isOpen, promptData, form])
 
-  const { mutateAsync: updatePrompt } = useUpdateManyPrompt()
-  const { mutateAsync: createPrompt } = useCreateManyPrompt()
+  const { mutateAsync: upsertPrompt } = useUpsertAiPrompt()
 
   const handleSetDefault = () => {
     if (!input?.topicType) return
@@ -73,29 +61,13 @@ export default function PutPromptChucNangModal() {
 
     try {
       showSpinner()
-      if (!promptData) {
-        await createPrompt({
-          data: {
-            code: input.topicType,
-            prompt: values.prompt,
-            description: values.description,
-            status: $Enums.DocumentStatus.APPROVE,
-          },
-        })
-      } else {
-        await updatePrompt({
-          where: {
-            code: input.topicType,
-          },
-          data: {
-            prompt: values.prompt,
-            description: values.description,
-            status: $Enums.DocumentStatus.APPROVE,
-          },
-        })
-      }
+      await upsertPrompt({
+        code: input.topicType,
+        prompt_content: values.prompt,
+        description: values.description,
+        active: true,
+      })
       message.success("Cập nhật prompt thành công")
-      await queryClient.invalidateQueries({ queryKey: ["Prompt"] })
       onClose()
     } catch (error) {
       console.error("Error updating prompt:", error)

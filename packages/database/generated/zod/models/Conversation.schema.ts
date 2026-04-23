@@ -34,6 +34,7 @@ const relationSchema = z.object({
     session: z.record(z.string(), z.unknown()).optional(),
     topic: z.record(z.string(), z.unknown()).optional(),
     message: z.array(z.unknown()).optional(),
+    feedbacks: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({

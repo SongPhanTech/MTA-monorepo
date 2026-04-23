@@ -75,12 +75,12 @@ const TreeItem = ({
                 `}
         style={{ paddingLeft: `${12 + level * 16}px` }}
       >
-        <div className="flex items-start gap-2.5 min-w-0 flex-1">
+        <div className="flex items-center gap-2.5 min-w-0 flex-1">
           {hasChildren ? (
             <ChevronRight
               size={16}
               className={`
-                                flex-shrink-0 transition-transform duration-200 mt-0.5
+                                flex-shrink-0 transition-transform duration-200
                                 ${isExpanded ? "rotate-90" : ""}
                             `}
             />
@@ -89,7 +89,7 @@ const TreeItem = ({
           )}
 
           {node.icon && (
-            <span className={`flex-shrink-0 mt-0.5 ${isSelected ? "text-white" : "text-gray-500"}`}>
+            <span className={`flex-shrink-0 ${isSelected ? "text-white" : "text-gray-500"}`}>
               {node.icon}
             </span>
           )}

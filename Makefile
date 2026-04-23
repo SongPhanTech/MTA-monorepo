@@ -62,10 +62,10 @@ else ifeq ($(SERVER_PROFILE),local_mta)
 else ifeq ($(SERVER_PROFILE),app2)
   SERVER_HOST      := app2
   SERVER_PASSWORD  := Bancntt@2025
-  BE_DEPLOY_DIR    := ~/mta-deploy
+  BE_DEPLOY_DIR    := ~/app/be
   BE_APP_DIR       := ~/app/be
   FE_APP_DIR       := ~/app/fe
-  FE_COMPOSE_FILE  := app-docker-compose.yml
+  FE_COMPOSE_FILE  := docker-compose.yml
   FE_APP_URL       := http://192.168.100.134
   ONLY_OFFICE_ENDPOINT := http://192.168.100.133:3100
 

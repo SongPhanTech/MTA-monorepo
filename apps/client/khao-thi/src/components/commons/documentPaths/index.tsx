@@ -84,7 +84,7 @@ const DocumentPaths: React.FC<DocumentPathsComponentProps> = ({
     tag: "XemTaiLieu",
   })
 
-  const handlePreviewFile = async (file: UploadedFileItem) => {
+  const handlePreviewFile = (file: UploadedFileItem) => {
     try {
       return onOpenPreview({
         uri: getMinioUrl(file.path),

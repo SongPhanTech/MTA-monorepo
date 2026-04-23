@@ -1,12 +1,12 @@
 import { EditOutlined } from "@ant-design/icons"
 import Table from "@components/commons/table"
 import DefaultLayout from "@layouts/default-layout"
-import { useFindManyPrompt } from "@workspace/db/hooks"
 import { useAbility } from "@workspace/permissions/hooks"
 import { TRO_LY_AO_PERMISSION } from "@workspace/router"
 import { Input, Tag, Tooltip } from "antd"
 import { useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
+import { getPromptContent, useAiPromptList } from "@/api/ai-prompt"
 import { PutPromptChucNang } from "@/components/modal"
 import type { PutPromptChucNangInput } from "@/components/modal/put-prompt-chuc-nang"
 
@@ -50,26 +50,20 @@ function Page() {
     tag: "PutPromptChucNangModal",
   })
 
-  const { data: allPrompts = [] } = useFindManyPrompt({
-    where: {
-      code: {
-        in: SYSTEM_PROMPTS.map((p) => p.type),
-      },
-    },
-  })
+  const { data: allPrompts = [] } = useAiPromptList()
 
   const tableData = useMemo<PromptRecord[]>(() => {
     return SYSTEM_PROMPTS.map((systemPrompt) => {
-      const prompt = allPrompts.find((p) => (p as any).code === systemPrompt.type)
-
+      const prompt = allPrompts.find((p) => p.code === systemPrompt.type)
+      const content = prompt ? getPromptContent(prompt) : undefined
       return {
         id: systemPrompt.type,
         topicType: systemPrompt.type,
         topicName: systemPrompt.name,
         topicId: undefined,
-        hasPrompt: !!prompt,
-        prompt: prompt?.prompt ?? undefined,
-        description: (prompt as any)?.description ?? undefined,
+        hasPrompt: !!content,
+        prompt: content,
+        description: (prompt?.description as string | undefined) ?? undefined,
       }
     })
   }, [allPrompts])

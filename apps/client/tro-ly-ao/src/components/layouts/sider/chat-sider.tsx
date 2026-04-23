@@ -1,4 +1,4 @@
-import { DeleteOutlined, MoreOutlined } from "@ant-design/icons"
+import { CommentOutlined, DeleteOutlined, MoreOutlined } from "@ant-design/icons"
 import type { MenuItem } from "@workspace/router"
 import { Button, Dropdown, Layout, Menu } from "antd"
 import type { ItemType, MenuItemType } from "antd/es/menu/interface"
@@ -13,17 +13,33 @@ interface SiderDefaultLayoutProps {
   items: MenuItem[]
   onDelete?: (id: string) => void
   onEdit?: (id: string) => void
+  onFeedback?: (id: string) => void
 }
 
 function getMenus(
   menus: MenuItem[],
   onDelete?: (id: string) => void,
-  onEdit?: (id: string) => void
+  onEdit?: (id: string) => void,
+  onFeedback?: (id: string) => void
 ): ItemType<MenuItemType>[] {
   return menus.map((item) => {
     const key = item.id
+    const isConversationItem = key.startsWith("history-")
     const dropdownMenu = {
       items: [
+        ...(isConversationItem && onFeedback
+          ? [
+              {
+                key: "feedback",
+                label: (
+                  <span>
+                    <CommentOutlined className="mr-2" />
+                    Phản hồi
+                  </span>
+                ),
+              },
+            ]
+          : []),
         {
           key: "delete",
           label: (
@@ -37,6 +53,8 @@ function getMenus(
       onClick: ({ key: actionKey }: { key: string }) => {
         if (actionKey === "delete") {
           onDelete?.(key)
+        } else if (actionKey === "feedback") {
+          onFeedback?.(key)
         }
       },
     }
@@ -58,7 +76,7 @@ function getMenus(
         type: "group",
         label,
         key,
-        children: getMenus(item.children, onDelete, onEdit),
+        children: getMenus(item.children, onDelete, onEdit, onFeedback),
       }
     }
 
@@ -66,7 +84,9 @@ function getMenus(
       key,
       label,
       icon: item.icon ? <item.icon /> : undefined,
-      children: item.children ? getMenus(item.children, onDelete, onEdit) : undefined,
+      children: item.children
+        ? getMenus(item.children, onDelete, onEdit, onFeedback)
+        : undefined,
     }
   })
 }
@@ -97,7 +117,13 @@ const findOpenKeys = (menus: MenuItem[], currentPath: string | null): string[] =
   return []
 }
 
-const SiderChatLayout = ({ theme, items, onDelete, onEdit }: SiderDefaultLayoutProps) => {
+const SiderChatLayout = ({
+  theme,
+  items,
+  onDelete,
+  onEdit,
+  onFeedback,
+}: SiderDefaultLayoutProps) => {
   const pathname = usePathname()
   const router = useRouter()
   const [openKeys, setOpenKeys] = useState<string[]>(findOpenKeys(items, pathname))
@@ -167,7 +193,7 @@ const SiderChatLayout = ({ theme, items, onDelete, onEdit }: SiderDefaultLayoutP
             selectedKeys={pathname ? [items.find((i) => i.path === pathname)?.id ?? ""] : []}
             openKeys={openKeys}
             onOpenChange={setOpenKeys}
-            items={getMenus(filteredItems, onDelete, onEdit)}
+            items={getMenus(filteredItems, onDelete, onEdit, onFeedback)}
             style={{ background: "transparent" }}
             onClick={({ key }) => {
               const menuItem = findMenuItemByKey(filteredItems, key)
