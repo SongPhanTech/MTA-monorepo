@@ -3115,6 +3115,162 @@ export const useOcrEndpointOcrPost = (
   });
 };
 
+export type GetParamsLlmParamsGetError = Fetcher.ErrorWrapper<undefined>;
+
+export type GetParamsLlmParamsGetResponse = {
+  [key: string]: any;
+};
+
+export type GetParamsLlmParamsGetVariables = ChatContext["fetcherOptions"];
+
+export const fetchGetParamsLlmParamsGet = (
+  variables: GetParamsLlmParamsGetVariables,
+  signal?: AbortSignal,
+) =>
+  chatFetch<
+    GetParamsLlmParamsGetResponse,
+    GetParamsLlmParamsGetError,
+    undefined,
+    {},
+    {},
+    {}
+  >({ url: "/llm-params", method: "get", ...variables, signal });
+
+export function getParamsLlmParamsGetQuery(
+  variables: GetParamsLlmParamsGetVariables,
+): {
+  queryKey: reactQuery.QueryKey;
+  queryFn: (options: QueryFnOptions) => Promise<GetParamsLlmParamsGetResponse>;
+};
+
+export function getParamsLlmParamsGetQuery(
+  variables: GetParamsLlmParamsGetVariables | reactQuery.SkipToken,
+): {
+  queryKey: reactQuery.QueryKey;
+  queryFn:
+    | ((options: QueryFnOptions) => Promise<GetParamsLlmParamsGetResponse>)
+    | reactQuery.SkipToken;
+};
+
+export function getParamsLlmParamsGetQuery(
+  variables: GetParamsLlmParamsGetVariables | reactQuery.SkipToken,
+) {
+  return {
+    queryKey: queryKeyFn({
+      path: "/llm-params",
+      operationId: "getParamsLlmParamsGet",
+      variables,
+    }),
+    queryFn:
+      variables === reactQuery.skipToken
+        ? reactQuery.skipToken
+        : ({ signal }: QueryFnOptions) =>
+            fetchGetParamsLlmParamsGet(variables, signal),
+  };
+}
+
+export const useSuspenseGetParamsLlmParamsGet = <
+  TData = GetParamsLlmParamsGetResponse,
+>(
+  variables: GetParamsLlmParamsGetVariables,
+  options?: Omit<
+    reactQuery.UseQueryOptions<
+      GetParamsLlmParamsGetResponse,
+      GetParamsLlmParamsGetError,
+      TData
+    >,
+    "queryKey" | "queryFn" | "initialData"
+  >,
+) => {
+  const { queryOptions, fetcherOptions } = useChatContext(options);
+  return reactQuery.useSuspenseQuery<
+    GetParamsLlmParamsGetResponse,
+    GetParamsLlmParamsGetError,
+    TData
+  >({
+    ...getParamsLlmParamsGetQuery(deepMerge(fetcherOptions, variables)),
+    ...options,
+    ...queryOptions,
+  });
+};
+
+export const useGetParamsLlmParamsGet = <
+  TData = GetParamsLlmParamsGetResponse,
+>(
+  variables: GetParamsLlmParamsGetVariables | reactQuery.SkipToken,
+  options?: Omit<
+    reactQuery.UseQueryOptions<
+      GetParamsLlmParamsGetResponse,
+      GetParamsLlmParamsGetError,
+      TData
+    >,
+    "queryKey" | "queryFn" | "initialData"
+  >,
+) => {
+  const { queryOptions, fetcherOptions } = useChatContext(options);
+  return reactQuery.useQuery<
+    GetParamsLlmParamsGetResponse,
+    GetParamsLlmParamsGetError,
+    TData
+  >({
+    ...getParamsLlmParamsGetQuery(
+      variables === reactQuery.skipToken
+        ? variables
+        : deepMerge(fetcherOptions, variables),
+    ),
+    ...options,
+    ...queryOptions,
+  });
+};
+
+export type SetParamsLlmParamsPostError = Fetcher.ErrorWrapper<{
+  status: 422;
+  payload: Schemas.HTTPValidationError;
+}>;
+
+export type SetParamsLlmParamsPostResponse = {
+  [key: string]: any;
+};
+
+export type SetParamsLlmParamsPostVariables = {
+  body?: Schemas.LLMParamsUpdate;
+} & ChatContext["fetcherOptions"];
+
+export const fetchSetParamsLlmParamsPost = (
+  variables: SetParamsLlmParamsPostVariables,
+  signal?: AbortSignal,
+) =>
+  chatFetch<
+    SetParamsLlmParamsPostResponse,
+    SetParamsLlmParamsPostError,
+    Schemas.LLMParamsUpdate,
+    {},
+    {},
+    {}
+  >({ url: "/llm-params", method: "post", ...variables, signal });
+
+export const useSetParamsLlmParamsPost = (
+  options?: Omit<
+    reactQuery.UseMutationOptions<
+      SetParamsLlmParamsPostResponse,
+      SetParamsLlmParamsPostError,
+      SetParamsLlmParamsPostVariables
+    >,
+    "mutationFn"
+  >,
+) => {
+  const { fetcherOptions } = useChatContext();
+  return reactQuery.useMutation<
+    SetParamsLlmParamsPostResponse,
+    SetParamsLlmParamsPostError,
+    SetParamsLlmParamsPostVariables
+  >({
+    mutationFn: (variables: SetParamsLlmParamsPostVariables) =>
+      fetchSetParamsLlmParamsPost(deepMerge(fetcherOptions, variables)),
+    ...options,
+  });
+};
+
 export type QueryOperation =
   | {
       path: "/health";
@@ -3164,4 +3320,9 @@ export type QueryOperation =
       path: "/result/{taskId}";
       operationId: "getResultResultTaskIdGet";
       variables: GetResultResultTaskIdGetVariables | reactQuery.SkipToken;
+    }
+  | {
+      path: "/llm-params";
+      operationId: "getParamsLlmParamsGet";
+      variables: GetParamsLlmParamsGetVariables | reactQuery.SkipToken;
     };
