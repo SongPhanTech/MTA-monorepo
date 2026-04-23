@@ -3,6 +3,7 @@ package restorations
 import (
 	"github.com/eduardolat/pgbackweb/internal/database/dbgen"
 	"github.com/eduardolat/pgbackweb/internal/integration"
+	"github.com/eduardolat/pgbackweb/internal/service/backups"
 	"github.com/eduardolat/pgbackweb/internal/service/databases"
 	"github.com/eduardolat/pgbackweb/internal/service/destinations"
 	"github.com/eduardolat/pgbackweb/internal/service/executions"
@@ -14,12 +15,13 @@ type Service struct {
 	executionsService   *executions.Service
 	databasesService    *databases.Service
 	destinationsService *destinations.Service
+	backupsService      *backups.Service
 }
 
 func New(
 	dbgen *dbgen.Queries, ints *integration.Integration,
 	executionsService *executions.Service, databasesService *databases.Service,
-	destinationsService *destinations.Service,
+	destinationsService *destinations.Service, backupsService *backups.Service,
 ) *Service {
 	return &Service{
 		dbgen:               dbgen,
@@ -27,5 +29,6 @@ func New(
 		executionsService:   executionsService,
 		databasesService:    databasesService,
 		destinationsService: destinationsService,
+		backupsService:      backupsService,
 	}
 }

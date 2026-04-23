@@ -92,6 +92,31 @@ func (s *Service) RunRestoration(
 			})
 		}
 		connString = db.DecryptedConnectionString
+
+		// Tự động sao lưu cơ sở dữ liệu đích trước khi phục hồi
+		activeBackups, err := s.backupsService.GetActiveBackupsByDatabaseID(ctx, databaseID.UUID)
+		if err != nil {
+			logger.Error("không thể lấy danh sách sao lưu trước khi phục hồi", logger.KV{
+				"database_id": databaseID.UUID.String(),
+				"error":       err.Error(),
+			})
+		} else if len(activeBackups) > 0 {
+			preBackupID := activeBackups[0].ID
+			logger.Info("đang sao lưu cơ sở dữ liệu trước khi phục hồi", logger.KV{
+				"backup_id":   preBackupID.String(),
+				"database_id": databaseID.UUID.String(),
+			})
+			if err := s.executionsService.RunManualExecution(ctx, preBackupID); err != nil {
+				logger.Error("sao lưu trước khi phục hồi thất bại, vẫn tiếp tục phục hồi", logger.KV{
+					"backup_id": preBackupID.String(),
+					"error":     err.Error(),
+				})
+			}
+		} else {
+			logger.Info("không tìm thấy cấu hình sao lưu đang hoạt động cho cơ sở dữ liệu đích, bỏ qua bước sao lưu trước", logger.KV{
+				"database_id": databaseID.UUID.String(),
+			})
+		}
 	}
 
 	pgVersion, err := s.ints.PGClient.ParseVersion(execution.DatabasePgVersion)

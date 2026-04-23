@@ -40,7 +40,7 @@ func New(
 	authService := auth.New(env, dbgen, usersService)
 	backupsService := backups.New(dbgen, cr, executionsService)
 	restorationsService := restorations.New(
-		dbgen, ints, executionsService, databasesService, destinationsService,
+		dbgen, ints, executionsService, databasesService, destinationsService, backupsService,
 	)
 	milestonesService := milestones.New(dbgen)
 
