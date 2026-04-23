@@ -40,7 +40,11 @@ type ExamFrameworkType = Prisma.ExamFrameworkGetPayload<{
   }
 }>
 
-export default function KhungDeList() {
+interface KhungDeListProps {
+  defaultSubjectVersionId?: string
+}
+
+export default function KhungDeList({ defaultSubjectVersionId }: KhungDeListProps) {
   const examFrameworkId = useStore(store, (s) => s.examFrameworkId)
   const [currentPage, setCurrentPage] = useState(1)
   const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -52,7 +56,10 @@ export default function KhungDeList() {
   const semesterId = useStore(store, (s) => s.semesterId)
   const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
 
-  const { onOpen: onOpenExamFramework } = useDisclosure<{ id: string }>({
+  const { onOpen: onOpenExamFramework } = useDisclosure<{
+    id?: string
+    subjectVersionId?: string
+  }>({
     tag: "ModalTaoKhungDe",
   })
 
@@ -78,6 +85,7 @@ export default function KhungDeList() {
       ? { subjectVersionIdString: filters.subjectVersionIdString }
       : {}),
     ...(trainingObjectTypeId ? { subjectVersion: { trainingObjectTypeId } } : {}),
+    ...(defaultSubjectVersionId ? { subjectVersionId: defaultSubjectVersionId } : {}),
   }
 
   const { data: examFrameworkList = [] } = useFindManyExamFramework({
@@ -164,7 +172,11 @@ export default function KhungDeList() {
               allowClear
             />
 
-            <Button type="primary" icon={<CreateIcon />} onClick={() => onOpenExamFramework()}>
+            <Button
+              type="primary"
+              icon={<CreateIcon />}
+              onClick={() => onOpenExamFramework({ subjectVersionId: defaultSubjectVersionId })}
+            >
               Tạo khung đề
             </Button>
           </div>
