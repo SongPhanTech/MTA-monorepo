@@ -43,11 +43,16 @@ const ThoiKhoaBieuDangKy = (props: ISubjectClassTime) => {
     onMutate: (subjectClassId) => {
       setRemovedIds((prev) => new Set([...prev, subjectClassId]))
     },
-    onSuccess: (res) => {
+    onSuccess: (res, subjectClassId) => {
       if (res?.status === 200) {
         message.success("Huỷ đăng ký thành công")
         onUnregisterSuccess?.()
       } else {
+        setRemovedIds((prev) => {
+          const next = new Set(prev)
+          next.delete(subjectClassId)
+          return next
+        })
         message.error(res.data?.message || "Huỷ đăng ký thất bại")
       }
     },

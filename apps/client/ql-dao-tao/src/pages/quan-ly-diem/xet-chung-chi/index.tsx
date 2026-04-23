@@ -229,9 +229,7 @@ export default function AutoCheckCertificate() {
         align: "center" as const,
         width: 150,
         render: (_: any, record: any) => {
-
-          const scoreRecord = record.subjectClassStudent
-?.find(
+          const scoreRecord = record.subjectClassStudent?.find(
             (s: any) => s.subjectVersionId === sv.id
           )
 

@@ -141,7 +141,6 @@ export function getSupervisorName(record: any, htmlRender = false, showWorkplace
     <span
       title={inAcademy ? "Trong học viện" : "Ngoài học viện"}
       style={{ color: inAcademy ? "#000000" : "#16a34a" }}
-
     >
       {textWithWorkplace}
     </span>
@@ -265,10 +264,11 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
     // 2. Điều kiện cơ bản (Lớp, Đợt xét, Đơn vị)
     andConditions.push({
       fixedClassId: {
-        in: searchParams.fixedClassId && searchParams.fixedClassId.length > 0
-          ? searchParams.fixedClassId
-          : fixedClasses?.map((f) => f.id),
-      }
+        in:
+          searchParams.fixedClassId && searchParams.fixedClassId.length > 0
+            ? searchParams.fixedClassId
+            : fixedClasses?.map((f) => f.id),
+      },
     })
 
     // 3. Logic Filter 5 trường (Từ code chuẩn của bạn)
@@ -276,7 +276,9 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
       andConditions.push({ code: { contains: filters.code, mode: "insensitive" } })
     }
     if (filters.name) {
-      andConditions.push({ userProfile: { fullname: { contains: filters.name, mode: "insensitive" } } })
+      andConditions.push({
+        userProfile: { fullname: { contains: filters.name, mode: "insensitive" } },
+      })
     }
 
     // 4. Điều kiện nằm trong ThesisProject (Title, Supervisor, CoSupervisor)
@@ -294,8 +296,12 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
       thesisProjectConditions.supervisor = {
         OR: [
           { name: { contains: filters.supervisor, mode: "insensitive" } },
-          { lecturer: { userProfile: { fullname: { contains: filters.supervisor, mode: "insensitive" } } } }
-        ]
+          {
+            lecturer: {
+              userProfile: { fullname: { contains: filters.supervisor, mode: "insensitive" } },
+            },
+          },
+        ],
       }
     }
 
@@ -303,17 +309,21 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
       thesisProjectConditions.coSupervisor = {
         OR: [
           { name: { contains: filters.coSupervisor, mode: "insensitive" } },
-          { lecturer: { userProfile: { fullname: { contains: filters.coSupervisor, mode: "insensitive" } } } }
-        ]
+          {
+            lecturer: {
+              userProfile: { fullname: { contains: filters.coSupervisor, mode: "insensitive" } },
+            },
+          },
+        ],
       }
     }
 
     andConditions.push({
       thesisRegistrations: {
         some: {
-          thesisProject: thesisProjectConditions
-        }
-      }
+          thesisProject: thesisProjectConditions,
+        },
+      },
     })
 
     // 5. Thêm logic Tìm kiếm chung (debouncedNameKeyword) nếu có nhập
@@ -326,16 +336,38 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
               some: {
                 thesisProject: {
                   OR: [
-                    { supervisor: { name: { contains: debouncedNameKeyword, mode: "insensitive" } } },
-                    { supervisor: { lecturer: { userProfile: { fullname: { contains: debouncedNameKeyword, mode: "insensitive" } } } } },
-                    { coSupervisor: { name: { contains: debouncedNameKeyword, mode: "insensitive" } } },
-                    { coSupervisor: { lecturer: { userProfile: { fullname: { contains: debouncedNameKeyword, mode: "insensitive" } } } } },
-                  ]
-                }
-              }
-            }
-          }
-        ]
+                    {
+                      supervisor: { name: { contains: debouncedNameKeyword, mode: "insensitive" } },
+                    },
+                    {
+                      supervisor: {
+                        lecturer: {
+                          userProfile: {
+                            fullname: { contains: debouncedNameKeyword, mode: "insensitive" },
+                          },
+                        },
+                      },
+                    },
+                    {
+                      coSupervisor: {
+                        name: { contains: debouncedNameKeyword, mode: "insensitive" },
+                      },
+                    },
+                    {
+                      coSupervisor: {
+                        lecturer: {
+                          userProfile: {
+                            fullname: { contains: debouncedNameKeyword, mode: "insensitive" },
+                          },
+                        },
+                      },
+                    },
+                  ],
+                },
+              },
+            },
+          },
+        ],
       })
     }
 
@@ -700,17 +732,17 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
         type: typeLabel,
         organization: organizationId
           ? {
-            connect: {
-              Id: organizationId,
-            },
-          }
+              connect: {
+                Id: organizationId,
+              },
+            }
           : { disconnect: true },
         thesisSession: thesisSessionId
           ? {
-            connect: {
-              id: thesisSessionId,
-            },
-          }
+              connect: {
+                id: thesisSessionId,
+              },
+            }
           : { disconnect: true },
         thesisType: ThesisType.THESIS,
         librarySubmission: {
@@ -1118,97 +1150,97 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
         }),
     },
 
-      {
-        id: 13,
-        label: "Thanh toán hướng dẫn",
-        onClick: async () =>
-          await exportThanhToanHuongDanTrongHv({
-            allStudentsInClasses,
-            showSpinner,
-            hideSpinner,
-            message,
-            inAcademy: true,
-          }),
-      },
-      {
-        id: 13.1,
-        label: "Thanh toán hướng dẫn - Ngoài HV",
-        onClick: async () =>
-          await exportThanhToanHuongDanTrongHv({
-            allStudentsInClasses,
-            showSpinner,
-            hideSpinner,
-            message,
-            inAcademy: false,
-          }),
-      },
-      {
-        id: 14,
-        label: "Thống kê CBHD LV",
-        onClick: async () =>
-          await exportThongKeCbHdlv({
-            allStudentsInClasses,
-            showSpinner,
-            hideSpinner,
-            message,
-          }),
-      },
-      {
-        id: 15,
-        label: "Thống kê cán bộ tham gia HĐ",
-        onClick: async () =>
-          await exportThongKeCbThamGiaHd({
-            allStudentsInClasses,
-            showSpinner,
-            hideSpinner,
-            message,
-          }),
-      },
-      {
-        id: 15.1,
-        label: "Thống kê cơ quan đơn vị cán bộ (ngoài HV)",
-        onClick: async () =>
-          await exportThongKeCoQuanDonViCanBoNgoaiHv({
-            allStudentsInClasses,
-            showSpinner,
-            hideSpinner,
-            message,
-          }),
-      },
-      {
-        id: 16,
-        label: "Thống kê KQ BV LV",
-        onClick: async () =>
-          await exportKetQuaBaoVeLuanVan({
-            allStudentsInClasses,
-            showSpinner,
-            hideSpinner,
-            message,
-          }),
-      },
-      {
-        id: 19,
-        label: "Danh sách nộp luận văn thư viện",
-        onClick: async () =>
-          await exportDanhSachNopLuanVanThuVien({
-            allStudentsInClasses,
-            showSpinner,
-            hideSpinner,
-            message,
-          }),
-      },
-      {
-        id: 11,
-        label: "Thanh toán hội đồng bảo vệ",
-        onClick: async () =>
-          await exportThanhToanHoiDongBaoVe({
-            allStudentsInClasses,
-            showSpinner,
-            hideSpinner,
-            message,
-          }),
-      },
-    ]
+    {
+      id: 13,
+      label: "Thanh toán hướng dẫn",
+      onClick: async () =>
+        await exportThanhToanHuongDanTrongHv({
+          allStudentsInClasses,
+          showSpinner,
+          hideSpinner,
+          message,
+          inAcademy: true,
+        }),
+    },
+    {
+      id: 13.1,
+      label: "Thanh toán hướng dẫn - Ngoài HV",
+      onClick: async () =>
+        await exportThanhToanHuongDanTrongHv({
+          allStudentsInClasses,
+          showSpinner,
+          hideSpinner,
+          message,
+          inAcademy: false,
+        }),
+    },
+    {
+      id: 14,
+      label: "Thống kê CBHD LV",
+      onClick: async () =>
+        await exportThongKeCbHdlv({
+          allStudentsInClasses,
+          showSpinner,
+          hideSpinner,
+          message,
+        }),
+    },
+    {
+      id: 15,
+      label: "Thống kê cán bộ tham gia HĐ",
+      onClick: async () =>
+        await exportThongKeCbThamGiaHd({
+          allStudentsInClasses,
+          showSpinner,
+          hideSpinner,
+          message,
+        }),
+    },
+    {
+      id: 15.1,
+      label: "Thống kê cơ quan đơn vị cán bộ (ngoài HV)",
+      onClick: async () =>
+        await exportThongKeCoQuanDonViCanBoNgoaiHv({
+          allStudentsInClasses,
+          showSpinner,
+          hideSpinner,
+          message,
+        }),
+    },
+    {
+      id: 16,
+      label: "Thống kê KQ BV LV",
+      onClick: async () =>
+        await exportKetQuaBaoVeLuanVan({
+          allStudentsInClasses,
+          showSpinner,
+          hideSpinner,
+          message,
+        }),
+    },
+    {
+      id: 19,
+      label: "Danh sách nộp luận văn thư viện",
+      onClick: async () =>
+        await exportDanhSachNopLuanVanThuVien({
+          allStudentsInClasses,
+          showSpinner,
+          hideSpinner,
+          message,
+        }),
+    },
+    {
+      id: 11,
+      label: "Thanh toán hội đồng bảo vệ",
+      onClick: async () =>
+        await exportThanhToanHoiDongBaoVe({
+          allStudentsInClasses,
+          showSpinner,
+          hideSpinner,
+          message,
+        }),
+    },
+  ]
 
   const handleExportExcelFromTemplate = async () => {
     if (!selectedPrintTemplateId) {
@@ -1638,7 +1670,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                   }
                   if (record?.thesisRegistrations?.[0]?.thesisProject?.organization) {
                     return (
-                      `${record?.thesisRegistrations?.[0]?.thesisProject?.organization?.sMa || ""
+                      `${
+                        record?.thesisRegistrations?.[0]?.thesisProject?.organization?.sMa || ""
                       } ` || "N/A "
                     )
                   }
@@ -1744,7 +1777,6 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                               label: (
                                 <span
                                   title={hasLecturer ? "Trong học viện" : "Ngoài học viện"}
-
                                   style={{ color: hasLecturer ? "#000000" : "#16a34a" }}
                                 >
                                   {text}
@@ -1819,7 +1851,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       editingValues[record?.id]?.researchTopicAssociated !== undefined
                         ? editingValues[record?.id]?.researchTopicAssociated
                         : record?.thesisRegistrations?.[0]?.thesisProject
-                          ?.researchTopicAssociated || ""
+                            ?.researchTopicAssociated || ""
 
                     return (
                       <div onClick={(e) => e.stopPropagation()}>
@@ -1902,8 +1934,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       editingValues[record?.id]?.councilChairman !== undefined
                         ? editingValues[record?.id]?.councilChairman
                         : record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
-                          (member: CouncilMember) => member.role === CouncilRole.CHAIRMAN
-                        )?.expert?.id || ""
+                            (member: CouncilMember) => member.role === CouncilRole.CHAIRMAN
+                          )?.expert?.id || ""
                     return (
                       <div onClick={(e) => e.stopPropagation()}>
                         <Select
@@ -1920,7 +1952,6 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                                 label: (
                                   <span
                                     title={hasLecturer ? "Trong học viện" : "Ngoài học viện"}
-
                                     style={{ color: hasLecturer ? "#000000" : "#16a34a" }}
                                   >
                                     {text}
@@ -1950,8 +1981,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       editingValues[record?.id]?.councilSecretary !== undefined
                         ? editingValues[record?.id]?.councilSecretary
                         : record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
-                          (member: CouncilMember) => member.role === CouncilRole.SECRETARY
-                        )?.expert?.id || ""
+                            (member: CouncilMember) => member.role === CouncilRole.SECRETARY
+                          )?.expert?.id || ""
                     return (
                       <div onClick={(e) => e.stopPropagation()}>
                         <Select
@@ -1968,7 +1999,6 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                                 label: (
                                   <span
                                     title={hasLecturer ? "Trong học viện" : "Ngoài học viện"}
-
                                     style={{ color: hasLecturer ? "#000000" : "#16a34a" }}
                                   >
                                     {text}
@@ -1998,8 +2028,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       editingValues[record?.id]?.reviewer1 !== undefined
                         ? editingValues[record?.id]?.reviewer1
                         : record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
-                          (member: CouncilMember) => member.role === CouncilRole.REVIEWER_1
-                        )?.expert?.id || ""
+                            (member: CouncilMember) => member.role === CouncilRole.REVIEWER_1
+                          )?.expert?.id || ""
                     return (
                       <div onClick={(e) => e.stopPropagation()}>
                         <Select
@@ -2014,7 +2044,6 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                               label: (
                                 <span
                                   title={hasLecturer ? "Trong học viện" : "Ngoài học viện"}
-
                                   style={{ color: hasLecturer ? "#000000" : "#16a34a" }}
                                 >
                                   {text}
@@ -2042,8 +2071,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       editingValues[record?.id]?.reviewer2 !== undefined
                         ? editingValues[record?.id]?.reviewer2
                         : record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
-                          (member: any) => member.role === CouncilRole.REVIEWER_2
-                        )?.expert?.id || ""
+                            (member: any) => member.role === CouncilRole.REVIEWER_2
+                          )?.expert?.id || ""
                     return (
                       <div onClick={(e) => e.stopPropagation()}>
                         <Select
@@ -2058,7 +2087,6 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                               label: (
                                 <span
                                   title={hasLecturer ? "Trong học viện" : "Ngoài học viện"}
-
                                   style={{ color: hasLecturer ? "#000000" : "#16a34a" }}
                                 >
                                   {text}
@@ -2086,8 +2114,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       editingValues[record?.id]?.councilMember !== undefined
                         ? editingValues[record?.id]?.councilMember
                         : record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
-                          (member: any) => member.role === CouncilRole.MEMBER
-                        )?.expert?.id || ""
+                            (member: any) => member.role === CouncilRole.MEMBER
+                          )?.expert?.id || ""
                     return (
                       <div onClick={(e) => e.stopPropagation()}>
                         <Select
@@ -2102,7 +2130,6 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                               label: (
                                 <span
                                   title={hasLecturer ? "Trong học viện" : "Ngoài học viện"}
-
                                   style={{ color: hasLecturer ? "#16a34a" : "" }}
                                 >
                                   {text}
@@ -2177,8 +2204,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                   }
                   return record?.thesisRegistrations?.[0]?.thesisProject?.defenseDate
                     ? dayjs(record?.thesisRegistrations?.[0]?.thesisProject?.defenseDate).format(
-                      "DD/MM/YYYY"
-                    )
+                        "DD/MM/YYYY"
+                      )
                     : ""
                 },
               },
@@ -2230,7 +2257,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       editingValues[record?.id]?.score !== undefined
                         ? editingValues[record?.id]?.score
                         : record?.thesisRegistrations?.[0]?.thesisProject?.defenseRecord
-                          ?.finalScore || ""
+                            ?.finalScore || ""
 
                     return (
                       <div onClick={(e) => e.stopPropagation()}>

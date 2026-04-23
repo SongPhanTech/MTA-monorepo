@@ -1329,6 +1329,64 @@ export default function StudentGradeSystem() {
     })
   }
 
+  const handleExportPhoiBangCaoHoc = () => {
+    if (!students?.length) {
+      notification.info({ message: "Không có dữ liệu để xuất!" })
+      return
+    }
+
+    const MONTH_EN = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ]
+
+    const allSheetOptions = students.map((student) => {
+      const user = student.userProfile
+      const major = student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor
+      const gD = student.graduationDecision
+
+      const dob = dayjs(user?.dateOfBirth)
+      const graduationDate = gD?.decisionDate ? dayjs(gD.decisionDate) : dayjs()
+
+      const isFemale = user?.gender?.sTen?.toLowerCase() === "nữ"
+      const prefixVi = isFemale ? "Bà" : "Ông"
+      const prefixEn = isFemale ? "Ms" : "Mr"
+
+      return {
+        sheet: `${user?.code} - ${user?.fullname}`,
+        data: {
+          ho_ten_vi: `${prefixVi} ${user?.fullname?.toUpperCase() || ""}`,
+          ho_ten_en: `${prefixEn} ${user?.fullname?.toUpperCase() || ""}`,
+          ngay_sinh_vi: dob.isValid() ? dob.format("DD/MM/YYYY") : "",
+          ngay_sinh_en: dob.isValid() ? `${dob.date()} ${MONTH_EN[dob.month()]} ${dob.year()}` : "",
+          nganh_hoc_vi: major?.name || "",
+          nganh_hoc_en: (major as any)?.englishName?.toUpperCase() || "",
+          ngay_tot_nghiep: `Ngày ${graduationDate.date()} tháng ${
+            graduationDate.month() + 1
+          } năm ${graduationDate.year()}`,
+          so_quyet_dinh: gD?.originalDiplomaNumber || gD?.diplomaNumber || "",
+        },
+      }
+    })
+
+    exportFromTemplate({
+      templateUrl: getMinioUrl("/mta/template/PhoiBangCaoHoc.xlsx"),
+      sheets: allSheetOptions,
+      fileName: "PhoiBangCaoHoc.xlsx",
+      mergeSheetsToOne: true,
+    })
+  }
+
   const subjects: {
     daiHoc: { id: number; name: string; onClick?: () => void }[]
     nganHan: { id: number; name: string }[]
@@ -1356,7 +1414,7 @@ export default function StudentGradeSystem() {
       { id: 17, name: "Quyết định công nhận tốt nghiệp" },
       { id: 18, name: "In PL văn bằng CAO HỌC (2 cột)" },
       { id: 19, name: "In PL văn bằng CAO HỌC (1 cột)" },
-      { id: 20, name: "In phôi bảng CAO HỌC" },
+      { id: 20, name: "In phôi bảng CAO HỌC", onClick: handleExportPhoiBangCaoHoc },
       {
         id: 21,
         name: "Sổ gốc cấp phát văn bằng",
