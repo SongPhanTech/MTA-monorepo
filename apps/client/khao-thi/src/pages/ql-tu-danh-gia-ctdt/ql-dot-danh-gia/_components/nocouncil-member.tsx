@@ -26,7 +26,9 @@ type StandardData = Prisma.StandardPeriodGetPayload<{
   include: {
     criteria: {
       include: {
-        analysisCriterions: true
+        evaluationCriterion: {
+          include: { lecturerReview: true }
+        }
       }
     }
   }
@@ -63,10 +65,7 @@ export default function NoCounCilMemberTab() {
         periodId: selectedEvaluationPeriodId,
       },
       role: {
-        in: [
-          $Enums.EvaluationMemberRole.SPECIALIZED,
-          $Enums.EvaluationMemberRole.NONCOUNCIL_MEMBERS,
-        ],
+        in: [$Enums.EvaluationMemberRole.NONCOUNCIL_MEMBERS],
       },
     },
     include: {
@@ -103,7 +102,11 @@ export default function NoCounCilMemberTab() {
           include: {
             criteria: {
               include: {
-                analysisCriterions: true,
+                evaluationCriterion: {
+                  include: {
+                    lecturerReview: true,
+                  },
+                },
               },
               orderBy: {
                 order: "asc",
@@ -228,16 +231,17 @@ export default function NoCounCilMemberTab() {
   useEffect(() => {
     if (!data?.standards) return
 
-    const formData: Record<string, { lecturerId: string; deadline: any }> = {}
+    const formData: Record<string, { lecturerId: string; deadline: dayjs.Dayjs | undefined }> = {}
 
     data.standards.forEach((standard) => {
       standard.criteria.forEach((criterion) => {
-        if (criterion.analysisCriterions) {
-          const { lecturerId, deadline } = criterion.analysisCriterions
-          if (lecturerId || deadline) {
+        if (criterion.evaluationCriterion) {
+          const { lecturerReview, deadlineReviewExternal } = criterion.evaluationCriterion
+          const lecturerId = lecturerReview?.[0]?.id
+          if (lecturerId || deadlineReviewExternal) {
             formData[criterion.id] = {
               lecturerId: lecturerId || "",
-              deadline: deadline ? dayjs(deadline) : undefined,
+              deadline: deadlineReviewExternal ? dayjs(deadlineReviewExternal) : undefined,
             }
           }
         }
@@ -275,24 +279,6 @@ export default function NoCounCilMemberTab() {
 
       const operations: any[] = dataSubmit.flatMap((item) => [
         {
-          model: "AnalysisCriterion",
-          operation: "upsert",
-          data: {
-            where: {
-              criterionPeriodId: item.id,
-            },
-            create: {
-              criterionPeriodId: item.id,
-              lecturerId: item.lecturerId,
-              deadline: item.deadline,
-            },
-            update: {
-              lecturerId: item.lecturerId,
-              deadline: item.deadline,
-            },
-          },
-        },
-        {
           model: "EvaluationCriterion",
           operation: "upsert",
           data: {
@@ -301,12 +287,12 @@ export default function NoCounCilMemberTab() {
             },
             create: {
               criterionPeriodId: item.id,
-              lecturerId: item.lecturerId,
-              deadline: item.deadline,
+              deadlineReviewExternal: item.deadline,
+              lecturerReview: { connect: [{ id: item.lecturerId }] },
             },
             update: {
-              lecturerId: item.lecturerId,
-              deadline: item.deadline,
+              deadlineReviewExternal: item.deadline,
+              lecturerReview: { set: [{ id: item.lecturerId }] },
             },
           },
         },
@@ -318,7 +304,7 @@ export default function NoCounCilMemberTab() {
               id: selectedEvaluationPeriodId,
             },
             data: {
-              status: $Enums.EvaluationPeriodStatus.ANALYSIS_WRITING,
+              status: $Enums.EvaluationPeriodStatus.CROSS_REVIEW_ASSIGNMENT,
             },
           },
         },
@@ -331,7 +317,7 @@ export default function NoCounCilMemberTab() {
         return
       }
 
-      message.success("Lưu phân công giảng viên đánh giá thành công")
+      message.success("Lưu phân công phản biện ngoài hội đồng thành công")
     } catch (error: any) {
       console.error("Error saving assignment:", error)
       message.error(error.message || "Đã có lỗi xảy ra")

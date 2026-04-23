@@ -787,7 +787,7 @@ app.openapi(classUnregister, async (c) => {
   if (profile.educationAndTraining.length === 0) {
     return c.json({ message: "Bạn không có thông tin học vụ" }, 404)
   }
-  
+
   const studentIds = profile.educationAndTraining.map((item) => item.id)
 
   const studentSubjectScores = await prisma.studentSubjectScore.findMany({
@@ -822,8 +822,7 @@ app.openapi(classUnregister, async (c) => {
   if (studentSubjectScores.length > 0) {
     return c.json(
       {
-        message:
-          "Học phần đã phát sinh dữ liệu (điểm/điểm danh/thi), không thể hủy đăng ký."
+        message: "Học phần đã phát sinh dữ liệu (điểm/điểm danh/thi), không thể hủy đăng ký.",
       },
       400
     )
@@ -841,9 +840,9 @@ app.openapi(classUnregister, async (c) => {
     for (const subjectClassId of subjectClassIds) {
       await tx.studentSubjectScoreHistory.deleteMany({
         where: {
-          studentSubjectScore: { 
-            subjectClassId, 
-            studentId: { in: studentIds } 
+          studentSubjectScore: {
+            subjectClassId,
+            studentId: { in: studentIds },
           },
         },
       })
@@ -851,10 +850,10 @@ app.openapi(classUnregister, async (c) => {
         where: {
           studentId: { in: studentIds },
           subjectClassAttendance: {
-            subjectClassId
-          }
-        }
-      });
+            subjectClassId,
+          },
+        },
+      })
       await tx.studentSubjectScore.deleteMany({
         where: { subjectClassId, studentId: { in: studentIds } },
       })

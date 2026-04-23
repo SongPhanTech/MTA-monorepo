@@ -509,7 +509,7 @@ export default function StudentFixedClassPage() {
               bold: true,
             },
           ],
-        }
+        },
       ]
 
       const ghiChuRows: TableRow[] = [

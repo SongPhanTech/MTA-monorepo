@@ -20093,6 +20093,10 @@ const metadata: ModelMeta = {
                     name: "deadlineReview",
                     type: "DateTime",
                     isOptional: true,
+                }, deadlineReviewExternal: {
+                    name: "deadlineReviewExternal",
+                    type: "DateTime",
+                    isOptional: true,
                 }, lecturerReview: {
                     name: "lecturerReview",
                     type: "Lecturer",

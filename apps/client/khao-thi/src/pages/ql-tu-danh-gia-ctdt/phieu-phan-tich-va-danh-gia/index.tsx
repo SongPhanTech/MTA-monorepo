@@ -3,6 +3,7 @@ import CriteriaAnalysisWrite from "@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va
 import CriteriaEvaluationWrite from "@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/criteria-evaluation"
 import CrossReview from "@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/cross-review"
 import CrossReviewAssignment from "@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/cross-review-assignment"
+import CrossReviewExternal from "@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/cross-review-external"
 import EvaluationPeriod from "@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/evaluation-period"
 import ReviewCriteriaEvaluationAdvisory from "@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/review-criteria-evaluation-advisory"
 import ReviewSecretary from "@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/review-secretary"
@@ -74,6 +75,10 @@ export default function CriteriaAnalysisAndEvaluationPage() {
       councilMember?.role?.includes($Enums.EvaluationMemberRole.SECRETARY) ||
       councilMember?.role?.includes($Enums.EvaluationMemberRole.HEAD_SECRETARY)
 
+    const isNonCouncilMember = councilMember?.role?.includes(
+      $Enums.EvaluationMemberRole.NONCOUNCIL_MEMBERS
+    )
+
     const isCouncilMember = !!councilMember
 
     if (can(KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_VA_DANH_GIA, "THEM")) {
@@ -135,6 +140,15 @@ export default function CriteriaAnalysisAndEvaluationPage() {
         key: "8",
         label: "Báo cáo tiêu chuẩn",
         children: <StandardReports />,
+        disabled: !selectedEvaluationPeriodId,
+      })
+    }
+
+    if (isNonCouncilMember) {
+      tabs.push({
+        key: "9",
+        label: "Phản biện chéo ngoài hội đồng",
+        children: <CrossReviewExternal />,
         disabled: !selectedEvaluationPeriodId,
       })
     }

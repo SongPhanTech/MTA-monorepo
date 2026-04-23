@@ -60,7 +60,7 @@ import { useAbility } from "@workspace/permissions/hooks"
 import ImgCrop from "antd-img-crop"
 import axios from "axios"
 import dayjs from "dayjs"
-import { postFilesSingleStorageType } from "@workspace/libs/api/storage";
+import { postFilesSingleStorageType } from "@workspace/libs/api/storage"
 
 dayjs.locale("vi")
 interface itemType {

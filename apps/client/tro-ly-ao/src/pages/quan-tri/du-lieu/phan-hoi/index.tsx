@@ -11,17 +11,7 @@ import {
 } from "@workspace/db/hooks"
 import { useAbility } from "@workspace/permissions/hooks"
 import { TRO_LY_AO_PERMISSION } from "@workspace/router"
-import {
-  Button,
-  DatePicker,
-  Empty,
-  Input,
-  Modal,
-  Rate,
-  Select,
-  Tooltip,
-  message,
-} from "antd"
+import { Button, DatePicker, Empty, Input, Modal, Rate, Select, Tooltip, message } from "antd"
 import dayjs, { type Dayjs } from "dayjs"
 import { useEffect, useMemo, useState } from "react"
 
@@ -254,10 +244,7 @@ function Page() {
                         onClick={() => setSelected(record as SelectedFeedback)}
                       />
                     </Tooltip>
-                    {can(
-                      TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_DU_LIEU_PHAN_HOI,
-                      "XOA"
-                    ) && (
+                    {can(TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_DU_LIEU_PHAN_HOI, "XOA") && (
                       <Tooltip title="Xoá">
                         <Button
                           type="text"
@@ -332,8 +319,7 @@ function Page() {
             )}
             <div>
               <div className="font-medium mb-2">Lịch sử hội thoại (snapshot):</div>
-              {Array.isArray(selected.messagesSnapshot) &&
-              selected.messagesSnapshot.length > 0 ? (
+              {Array.isArray(selected.messagesSnapshot) && selected.messagesSnapshot.length > 0 ? (
                 <div className="max-h-[400px] overflow-auto space-y-2 pr-1">
                   {selected.messagesSnapshot.map((m: any, i: number) => {
                     const isUser = m.sender === $Enums.MessageSender.USER
@@ -344,9 +330,7 @@ function Page() {
                       >
                         <div
                           className={`max-w-[85%] px-3 py-2 rounded-lg whitespace-pre-wrap text-sm ${
-                            isUser
-                              ? "bg-blue-100 text-gray-800"
-                              : "bg-gray-100 text-gray-800"
+                            isUser ? "bg-blue-100 text-gray-800" : "bg-gray-100 text-gray-800"
                           }`}
                         >
                           <div className="text-xs text-gray-500 mb-1">

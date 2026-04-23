@@ -539,7 +539,11 @@ const ThemTaiLieu = () => {
                 documentBody = await extractPDFTextContent(file.file)
               }
 
-              if (isPDFFile(file.file) && !isTextPdf && (!documentBody || documentBody.trim().length < 50)) {
+              if (
+                isPDFFile(file.file) &&
+                !isTextPdf &&
+                (!documentBody || documentBody.trim().length < 50)
+              ) {
                 console.log("[OCR] PDF không có text, chuyển sang OCR")
                 form.setFieldsValue({
                   files: {
