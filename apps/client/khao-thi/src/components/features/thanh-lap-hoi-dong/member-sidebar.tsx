@@ -13,6 +13,7 @@ export type GroupKey =
   | "leaders"
   | "secretary"
   | "advisory"
+  | "nonCouncilMembers"
   | "specialized"
   | `specialized-${string}`
 
@@ -155,10 +156,12 @@ export function createTreeData(
   leadersCount: number,
   secretaryCount: number,
   advisoryCount: number,
+  nonCouncilMembersCount: number,
   specializedGroups: { key: string; label: string; count: number }[]
 ): TreeNode[] {
   const totalSpecialized = specializedGroups.reduce((sum, g) => sum + g.count, 0)
-  const totalCount = leadersCount + secretaryCount + advisoryCount + totalSpecialized
+  const totalCount =
+    leadersCount + secretaryCount + advisoryCount + nonCouncilMembersCount + totalSpecialized
 
   return [
     {
@@ -183,6 +186,12 @@ export function createTreeData(
       key: "advisory",
       label: "Danh sách Ban tư vấn",
       count: advisoryCount,
+      icon: <MessageSquare size={16} />,
+    },
+    {
+      key: "nonCouncilMembers",
+      label: "Danh sách Thành viên ngoài hội đồng",
+      count: nonCouncilMembersCount,
       icon: <MessageSquare size={16} />,
     },
     {

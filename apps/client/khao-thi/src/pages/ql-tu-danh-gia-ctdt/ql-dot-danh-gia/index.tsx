@@ -6,6 +6,7 @@ import CrossReviewPeriod from "@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia/_compo
 import EvaluationCouncilTab from "@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia/_components/evaluation-council"
 import EvaluationPeriod from "@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia/_components/evaluation-period"
 import EvaluationStandardTab from "@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia/_components/evaluation-standard"
+import NoCounCilMemberTab from "@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia/_components/nocouncil-member"
 import { Store, useStore } from "@tanstack/react-store"
 import { useSession } from "@workspace/auth/react"
 import { $Enums } from "@workspace/db/client"
@@ -128,6 +129,14 @@ export default function EvaluationPeriodTabPage() {
         }
       )
     }
+    // if (isHeadSecretary) {
+    tabs.push({
+      key: "9",
+      label: "Phân công phản biện ngoài hội đồng",
+      children: <NoCounCilMemberTab />,
+      disabled: !selectedEvaluationPeriodId,
+    })
+    // }
     return tabs
   }, [selectedEvaluationPeriodId, councilMember, can])
 
