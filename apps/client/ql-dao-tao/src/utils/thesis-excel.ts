@@ -1177,10 +1177,14 @@ export const exportHosobvlv = async ({
       const nguoiki = signerName || ""
       const text1 = isChief ? "TRƯỞNG PHÒNG SAU ĐẠI HỌC" : "KT. TRƯỞNG PHÒNG SAU ĐẠI HỌC"
       const text2 = isChief ? "" : "PHÓ PHÒNG SAU ĐẠI HỌC"
-      const ngayQDBV = student?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.defenseDecisionDate
-      const soQDBV = student?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.defenseDecisionNumber
+      const ngayQDBV =
+        student?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.defenseDecisionDate
+      const soQDBV =
+        student?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.defenseDecisionNumber
       const dotxetBV = student?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.name
-      const ngaysinh = student?.userProfile?.dateOfBirth ? dayjs(student?.userProfile?.dateOfBirth).format("DD/MM/YYYY") : ""
+      const ngaysinh = student?.userProfile?.dateOfBirth
+        ? dayjs(student?.userProfile?.dateOfBirth).format("DD/MM/YYYY")
+        : ""
       const khoas = student?.fixedClass?.trainingCourse?.name || ""
       // const nguoiKi
       const data = {
@@ -2768,7 +2772,8 @@ const convertToPhuLucQdhdTemplateData = (allStudentsInClasses: any[]): PhuLucQdh
     if (!student?.thesisRegistrations?.[0]?.thesisProject) return
     const majorName =
       student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || "Chưa xác định"
-    const trainingField = student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.trainingField?.name || ""
+    const trainingField =
+      student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.trainingField?.name || ""
     const groupKey = `Ngành ${trainingField} (${majorName})`
     if (!majorMap.has(groupKey)) {
       majorMap.set(groupKey, [])

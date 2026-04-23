@@ -209,9 +209,7 @@ const PutThesisSession = () => {
         </FormItem>
       </Col>
 
-      <Col span={12}>
-
-      </Col>
+      <Col span={12}></Col>
 
       <Col span={12}>
         <Form.Item label="Người ký quyết định giao đề tài" className="mb-0">
