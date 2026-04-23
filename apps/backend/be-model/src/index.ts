@@ -123,7 +123,7 @@ app.all("/api/system/:appcode/*", async (c) => {
     "content-type": "application/json-patch+json",
   }
 
-  const urlProxy = new URL(`${pathProxy}`, `${process.env.SYSTEM_BASE_URL}/api/system/public/`)
+  const urlProxy = new URL(`${pathProxy}`, `${process.env.SYSTEM_BASE_URL}/api/system/`)
   console.log("get session", appCode, headers)
 
   const res = await proxy(urlProxy, {

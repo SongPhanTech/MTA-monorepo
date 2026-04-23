@@ -75,9 +75,9 @@ export default function AutoCheckCertificate() {
               in: selectedCertificate?.subjectVersions?.map((sv) => sv.id) || [],
             },
           },
-          include: {
-            subjectVersion: true,
-          },
+          include: { subjectVersion: true },
+          orderBy: { finalScore: "desc" },
+          distinct: ["subjectVersionId"],
         },
         archivedCertificate: {
           where: {
@@ -95,9 +95,9 @@ export default function AutoCheckCertificate() {
     let totalCredit = 0
 
     selectedCertificate?.subjectVersions?.forEach((sv) => {
-      const scoreRecord = record.studentSubjectScore?.find((s: any) => s.subjectVersionId === sv.id)
+      const scoreRecord = record.subjectClassStudent?.find((s: any) => s.subjectVersionId === sv.id)
       const scoreVal = scoreRecord?.manualFinalScore ?? scoreRecord?.finalScore
-      const score = scoreVal ? Number(scoreVal) : 0
+      const score = scoreVal ? Number(scoreVal?.toNumber()) : 0
       totalScore += score * sv.credit
       totalCredit += sv.credit
     })
@@ -229,10 +229,13 @@ export default function AutoCheckCertificate() {
         align: "center" as const,
         width: 150,
         render: (_: any, record: any) => {
-          const scoreRecord = record.studentSubjectScore?.find(
+
+          const scoreRecord = record.subjectClassStudent
+?.find(
             (s: any) => s.subjectVersionId === sv.id
           )
-          const score = scoreRecord?.manualFinalScore ?? scoreRecord?.finalScore
+
+          const score = scoreRecord?.manualFinalScore ?? scoreRecord?.finalScore?.toNumber()
           return score ?? "-"
         },
       })) || []
