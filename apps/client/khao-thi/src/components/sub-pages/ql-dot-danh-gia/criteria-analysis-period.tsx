@@ -1,6 +1,7 @@
 import CommentList from "@components/commons/comment-list"
 import Select from "@components/commons/select"
 import Table from "@components/commons/table"
+import ExportCriteriaAnalysis from "@components/modal/export-criteria-analysis"
 import type { DataTabType } from "@components/sub-pages/tu-danh-gia-ctdt/criteria-analysis"
 import {
   DEADLINE_OPTIONS,
@@ -18,12 +19,13 @@ import { getDeadlineStatus } from "@/utils/getDeadlineStatus"
 
 const CriteriaAnalysisPeriodSubPage = ({
   data,
-  handleViewAll,
+  allData,
 }: {
   data: DataTabType
   idx: number
   refetch: () => void
   handleViewAll: () => void
+  allData: DataTabType[]
 }) => {
   const [expandedRowKeys, setExpandedRowKeys] = useState<string[]>([])
   const [statusFilter, setStatusFilter] = useState<$Enums.EvaluationCriterionStatus | null>(null)
@@ -92,9 +94,11 @@ const CriteriaAnalysisPeriodSubPage = ({
             value={deadlineFilter}
             onChange={(value) => setDeadlineFilter(value)}
           />
-          {/* <Button type="primary" size="small" onClick={handleViewAll}>
-            Xuất file
-          </Button> */}
+          <ExportCriteriaAnalysis
+            allData={allData}
+            label="Xuất tất cả"
+            fileName="Phieu_phan_tich_tieu_chi_Tat_ca.docx"
+          />
         </div>
       </div>
       {!filteredCriteria || filteredCriteria.length === 0 ? (
