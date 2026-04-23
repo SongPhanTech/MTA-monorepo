@@ -47,90 +47,102 @@ export default function DetailSurveyPage({
       },
       ...(filters.name && filters.name !== ""
         ? {
+          OR: [
+            {
+              code: {
+                contains: filters.name,
+                mode: "insensitive" as const,
+              },
+            },
+            {
+              userProfile: filters.name
+                ? {
+                  fullname: {
+                    contains: filters.name,
+                    mode: "insensitive" as const,
+                  },
+                }
+                : {},
+            },
+          ],
+        }
+        : {}),
+
+      ...(filters.subjectClassName && filters.subjectClassName !== ""
+        ? ({
+          survey: {
+            some: {
+              // BẮT BUỘC: Phải lặp lại điều kiện này để không bị mất lọc theo đợt
+              clusterSurveyId: selectedId,
+
+              subjectClass: {
+                // LOGIC MỚI: Lọc môn Lý thuyết
+                subject: {
+                  type: "Normal" as any, // 'as any' để fix lỗi Enum vs String
+                  numberOfTheory: { gt: 0 },
+                },
+                NOT: {
+                  examType: "Practice" as any
+                },
+                // LOGIC CŨ
+                OR: [
+                  {
+                    code: {
+                      contains: filters.subjectClassName,
+                      mode: "insensitive" as const,
+                    },
+                  },
+                  {
+                    name: {
+                      contains: filters.subjectClassName,
+                      mode: "insensitive" as const,
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        } as any) // 'as any' ở đây để fix lỗi Union Type (lỗi survey lặp lại)
+        : {}),
+      ...(filters.idCardNumber && filters.idCardNumber !== ""
+        ? {
+          userProfile: {
+            idCardNumber: {
+              contains: filters.idCardNumber,
+              mode: "insensitive" as const,
+            },
+          },
+        }
+        : {}),
+      ...(filters.phoneNumber && filters.phoneNumber !== ""
+        ? {
+          userProfile: {
+            phoneNumber: {
+              contains: filters.phoneNumber,
+              mode: "insensitive" as const,
+            },
+          },
+        }
+        : {}),
+      ...(filters.organizationId && filters.organizationId !== ""
+        ? {
+          organization: {
             OR: [
               {
-                code: {
-                  contains: filters.name,
+                sMa: {
+                  contains: filters.organizationId,
                   mode: "insensitive" as const,
                 },
               },
               {
-                userProfile: filters.name
-                  ? {
-                      fullname: {
-                        contains: filters.name,
-                        mode: "insensitive" as const,
-                      },
-                    }
-                  : {},
+                sTen: {
+                  contains: filters.organizationId,
+                  mode: "insensitive" as const,
+                },
               },
             ],
-          }
-        : {}),
-
-      ...(filters.subjectClassName && filters.subjectClassName !== ""
-        ? {
-            survey: {
-              some: {
-                subjectClass: {
-                  OR: [
-                    {
-                      code: {
-                        contains: filters.subjectClassName,
-                        mode: "insensitive" as const,
-                      },
-                    },
-                    {
-                      name: {
-                        contains: filters.subjectClassName,
-                        mode: "insensitive" as const,
-                      },
-                    },
-                  ],
-                },
-              },
-            },
-          }
-        : {}),
-      ...(filters.idCardNumber && filters.idCardNumber !== ""
-        ? {
-            userProfile: {
-              idCardNumber: {
-                contains: filters.idCardNumber,
-                mode: "insensitive" as const,
-              },
-            },
-          }
-        : {}),
-      ...(filters.phoneNumber && filters.phoneNumber !== ""
-        ? {
-            userProfile: {
-              phoneNumber: {
-                contains: filters.phoneNumber,
-                mode: "insensitive" as const,
-              },
-            },
-          }
-        : {}),
-      ...(filters.organizationId && filters.organizationId !== ""
-        ? {
-            organization: {
-              OR: [
-                {
-                  sMa: {
-                    contains: filters.organizationId,
-                    mode: "insensitive" as const,
-                  },
-                },
-                {
-                  sTen: {
-                    contains: filters.organizationId,
-                    mode: "insensitive" as const,
-                  },
-                },
-              ],
-            },
-          }
+          },
+        }
         : {}),
     }),
     [filters, selectedId]
@@ -227,7 +239,14 @@ export default function DetailSurveyPage({
                   dataIndex: "name",
                   type: "input",
                   render: (__, record) => {
-                    return `${record?.code} - ${record?.userProfile?.fullname}`
+                    // Kiểm tra xem có bất kỳ survey nào đã có session (người làm) chưa
+                    const isDone = record.survey?.some((s: any) => s.surveySessions?.length > 0);
+
+                    return (
+                      <span className={cn(isDone ? "text-red-500 font-medium" : "text-black")}>
+                        {`${record?.code} - ${record?.userProfile?.fullname}`}
+                      </span>
+                    );
                   },
                 },
                 {
