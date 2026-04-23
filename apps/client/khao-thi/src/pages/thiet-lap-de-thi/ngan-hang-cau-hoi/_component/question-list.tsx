@@ -57,6 +57,12 @@ export default function QuestionList({ questionBankId }: QuestionListProps) {
     tag: "MoveQuestionModal",
   })
 
+  const { onOpen: onOpenNganHangKhungDe } = useDisclosure<{
+    subjectVersionId?: string
+  }>({
+    tag: "AddNganHangKhungDe",
+  })
+
   const { data: initialValue } = useFindUniqueQuestionBank(
     {
       where: { id: questionBankId },
@@ -248,6 +254,16 @@ export default function QuestionList({ questionBankId }: QuestionListProps) {
                     </Button>
                   </>
                 )}
+                <Button
+                  type="primary"
+                  onClick={() =>
+                    onOpenNganHangKhungDe({
+                      subjectVersionId: initialValue?.subjectVersionId || undefined,
+                    })
+                  }
+                >
+                  Thêm mới khung đề
+                </Button>
                 <Button
                   size="middle"
                   icon={<FileWordOutlined />}

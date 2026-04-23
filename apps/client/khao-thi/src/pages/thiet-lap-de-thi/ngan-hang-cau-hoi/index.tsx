@@ -33,6 +33,13 @@ export default function QuestionBank() {
                   deletedAt: null,
                 },
               },
+              _count: {
+                select: {
+                  examFramework: {
+                    where: { active: true },
+                  },
+                },
+              },
             },
             where: {
               deletedAt: null,
@@ -52,6 +59,10 @@ export default function QuestionBank() {
 
   const { onOpen: onOpenPutQuestionBank } = useDisclosure<PutQuestionBankInput>({
     tag: "PutQuestionBank",
+  })
+
+  const { onOpen: onOpenNganHangKhungDe } = useDisclosure<{ subjectVersionId?: string }>({
+    tag: "AddNganHangKhungDe",
   })
 
   const handleDeleteQuestionBank = async (id: string) => {
@@ -124,6 +135,7 @@ export default function QuestionBank() {
                 allowClear
               />
             </Space>
+
             <Button onClick={() => onOpenPutQuestionBank()} type="primary" size="middle">
               <BookPlus size={15} />
               Ngân hàng câu hỏi mới
@@ -161,6 +173,7 @@ export default function QuestionBank() {
             donViData={donViData}
             onOpenPutQuestionBank={onOpenPutQuestionBank}
             handleDeleteQuestionBank={handleDeleteQuestionBank}
+            onOpenNganHangKhungDe={onOpenNganHangKhungDe}
           />
         </Col>
 

@@ -54,6 +54,7 @@ import AddHuongDanNganHang from "./add-huong-dan-ngan-hang"
 import ModalPrintSurvey from "./modal-print-survey-report"
 import ModalPrintSurveyToFieldReport from "./modal-print-survey-to-fielde-report"
 import ModalPrintDanhSachDoiTuong from "./modal-print-danh-sach-doi-tuong"
+import AddNganHangKhungDe from "./add-ngan-hang-khung-de"
 export {
   ConfirmModal,
   PutSurveyObjectTypeModal,
@@ -111,4 +112,5 @@ export {
   ModalPrintSurvey,
   ModalPrintSurveyToFieldReport,
   ModalPrintDanhSachDoiTuong,
+  AddNganHangKhungDe,
 }
