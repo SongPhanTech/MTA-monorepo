@@ -311,9 +311,7 @@ const PrintExplanation = () => {
                   </div>
                   <div style={{ textAlign: "center", marginBottom: "10px" }}>
                     <strong>
-                      Thời gian làm bài:{" "}
-                      {duration || data?.examTime || data?.exam?.duration}{" "}
-                      phút
+                      Thời gian làm bài: {duration || data?.examTime || data?.exam?.duration} phút
                     </strong>
                   </div>
                 </td>

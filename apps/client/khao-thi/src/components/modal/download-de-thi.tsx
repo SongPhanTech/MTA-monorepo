@@ -47,7 +47,7 @@ const PrintExamBank = () => {
       enabled: !!input?.id,
     }
   )
-console.log(data)
+  console.log(data)
   const { mutateAsync: fetchGroupedQuestions, data: groupedResponse } = useGetExamBankWithGrouping()
   const groupedData = groupedResponse?.status === 200 ? groupedResponse.data : undefined
 
@@ -97,9 +97,7 @@ console.log(data)
       subjectName: data.exam?.subjectVersion?.name || "",
       semesterName: data.exam?.semester?.name || "",
       className: data.subjectClass?.name || "",
-      duration: String(
-        duration || data.examTime || data.exam?.duration || ""
-      ),
+      duration: String(duration || data.examTime || data.exam?.duration || ""),
       isNote:
         data?.isNote === true
           ? `Được sử dụng tài liệu${data?.explain ? ` ${data.explain}` : ""}`
@@ -282,9 +280,7 @@ console.log(data)
                   </div>
                   <div style={{ textAlign: "center", marginBottom: "10px" }}>
                     <strong>
-                      Thời gian làm bài:{" "}
-                      {duration || data?.examTime || data?.exam?.duration}{" "}
-                      phút
+                      Thời gian làm bài: {duration || data?.examTime || data?.exam?.duration} phút
                     </strong>
                   </div>
                 </td>

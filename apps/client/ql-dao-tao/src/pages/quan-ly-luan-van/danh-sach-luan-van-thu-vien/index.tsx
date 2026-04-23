@@ -24,6 +24,7 @@ import PutLibrarySubmission from "@components/modal/put-luan-van-thu-vien"
 import PutLibrarySubmissionCreate from "@components/modal/put-luan-van-thu-vien-create"
 import DeleteIcon from "@components/icons/delete"
 import { StudentThesisRegistration } from "@workspace/db"
+import { useQueryClient } from "@tanstack/react-query"
 
 interface SearchParams {
   thesisSessionId?: string
@@ -40,6 +41,8 @@ export default function LibrarySubmissionPage() {
   const { can } = useAbility()
   const { showSpinner, hideSpinner } = useSpinner()
   const { id: trainingObjectId } = useTrainingObjectTypeStore()
+  const queryClient = useQueryClient()
+
   const { onOpen: openPutLibrarySubmission } = useDisclosure<{
     thesisProjectId: string
   }>({
@@ -102,14 +105,13 @@ export default function LibrarySubmissionPage() {
           }
         : {}),
       ...(filters.code ? { code: { contains: filters.code, mode: "insensitive" as const } } : {}),
-      fixedClassId: {
-        in:
-          searchParams.fixedClassId && searchParams.fixedClassId.length > 0
-            ? searchParams.fixedClassId
-            : fixedClasses?.map((f) => f.id),
-      },
+      // ✅ Chỉ filter fixedClassId khi người dùng chủ động chọn lớp
+      ...(searchParams.fixedClassId && searchParams.fixedClassId.length > 0
+        ? { fixedClassId: { in: searchParams.fixedClassId } }
+        : {}),
       thesisRegistrations: {
         some: {
+          deletedAt: null,
           thesisProject: {
             thesisType: ThesisType.THESIS,
             thesisSessionId: searchParams.thesisSessionId,
@@ -125,7 +127,7 @@ export default function LibrarySubmissionPage() {
         },
       },
     }
-  }, [searchParams, fixedClasses, filters])
+  }, [searchParams, filters])
 
   const { data: students = [], isLoading: isLoadingStudents } = useFindManyStudent({
     where: studentWhere,
@@ -135,6 +137,9 @@ export default function LibrarySubmissionPage() {
       thesisRegistrations: {
         orderBy: {
           updatedAt: "asc",
+        },
+        where: {
+          deletedAt: null,
         },
         include: {
           thesisProject: {
@@ -175,6 +180,11 @@ export default function LibrarySubmissionPage() {
       where: { id: { in: ids } },
       data: { deletedAt: new Date() },
     })
+  }
+
+  // ✅ Callback refetch sau khi tạo mới thành công
+  const handleCreated = () => {
+    queryClient.invalidateQueries()
   }
 
   return (
@@ -403,7 +413,8 @@ export default function LibrarySubmissionPage() {
         </Col>
       </Row>
       <PutLibrarySubmission />
-      <PutLibrarySubmissionCreate />
+      {/* ✅ Truyền callback onCreated */}
+      <PutLibrarySubmissionCreate onCreated={handleCreated} />
     </div>
   )
 }

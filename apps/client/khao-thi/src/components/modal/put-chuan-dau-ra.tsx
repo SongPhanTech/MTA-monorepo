@@ -81,8 +81,7 @@ const PutChuongMucModal = () => {
     const patch: any = {}
     LEVEL_COLUMNS.forEach((col) => {
       const quantity = (watchedValues?.[col.key] as ConfigExamFormValue | undefined)?.quantity ?? 0
-      const percent =
-        totalQuestions > 0 ? Math.trunc((Number(quantity) / totalQuestions) * 100) : 0
+      const percent = totalQuestions > 0 ? Math.trunc((Number(quantity) / totalQuestions) * 100) : 0
       patch[col.key] = {
         ...(watchedValues?.[col.key] as any),
         percent,
@@ -193,7 +192,7 @@ const PutChuongMucModal = () => {
     if (!isQuantityMode) {
       const total = Number(values.totalQuestions ?? 0)
       const sumPercent = LEVEL_COLUMNS.reduce((acc, col) => {
-      const p = Number((values?.[col.key] as ConfigExamFormValue | undefined)?.percent ?? 0)
+        const p = Number((values?.[col.key] as ConfigExamFormValue | undefined)?.percent ?? 0)
         return acc + (Number.isFinite(p) ? p : 0)
       }, 0)
 
@@ -393,11 +392,21 @@ const PutChuongMucModal = () => {
                     <InputNumber
                       min={1}
                       className="w-full"
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          e.preventDefault()
+                          ;(e.currentTarget as HTMLInputElement).blur()
+                        }
+                      }}
                       onFocus={() => {
-                        percentBaseTotalRef.current = Number(form.getFieldValue("totalQuestions") ?? 0)
+                        percentBaseTotalRef.current = Number(
+                          form.getFieldValue("totalQuestions") ?? 0
+                        )
                       }}
                       onBlur={() => {
-                        percentBaseTotalRef.current = Number(form.getFieldValue("totalQuestions") ?? 0)
+                        percentBaseTotalRef.current = Number(
+                          form.getFieldValue("totalQuestions") ?? 0
+                        )
                         recalcQuantitiesFromPercents()
                       }}
                     />
@@ -441,20 +450,46 @@ const PutChuongMucModal = () => {
                         name={[col.key, "percent"]}
                         style={{ marginBottom: 8 }}
                         initialValue={0}
+                        getValueFromEvent={(e) => {
+                          const raw = (e?.target?.value ?? "").toString()
+                          if (raw.trim() === "") return undefined
+                          const n = Number(e?.target?.valueAsNumber ?? raw)
+                          return clamp(toIntPercent(Number.isFinite(n) ? n : 0), 0, 100)
+                        }}
                       >
-                        <InputNumber<number>
+                        <Input
                           className="w-full"
-                          controls={false}
-                          precision={0}
+                          type="number"
                           min={0}
                           max={100}
-                          onChange={(value) => {
-                            syncPercentsTo100(col.key, value)
+                          step={1}
+                          inputMode="numeric"
+                          addonAfter="%"
+                          onChange={(e) => {
+                            const raw = (e.target.value ?? "").toString()
+                            if (raw.trim() === "") return
+                            syncPercentsTo100(
+                              col.key,
+                              Number(e.target.valueAsNumber ?? e.target.value)
+                            )
                           }}
                           onFocus={() => {
-                            percentBaseTotalRef.current = Number(form.getFieldValue("totalQuestions") ?? 0)
+                            percentBaseTotalRef.current = Number(
+                              form.getFieldValue("totalQuestions") ?? 0
+                            )
+                          }}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                              e.preventDefault()
+                              ;(e.currentTarget as HTMLInputElement).blur()
+                              recalcQuantitiesFromPercents()
+                            }
                           }}
                           onBlur={() => {
+                            const cur = form.getFieldValue([col.key, "percent"])
+                            if (cur === undefined || cur === null || cur === "") {
+                              syncPercentsTo100(col.key, 0)
+                            }
                             recalcQuantitiesFromPercents()
                           }}
                           style={{
@@ -463,13 +498,6 @@ const PutChuongMucModal = () => {
                             color: "#16a34a",
                             fontSize: 12,
                             borderRadius: 8,
-                          }}
-                          formatter={(value) => {
-                            return `${toIntPercent(value)}%`
-                          }}
-                          parser={(value) => {
-                            const raw = (value ?? "").toString().replace("%", "").trim()
-                            return toIntPercent(raw)
                           }}
                         />
                       </Form.Item>
@@ -489,7 +517,11 @@ const PutChuongMucModal = () => {
                 <Row gutter={12}>
                   {LEVEL_COLUMNS.map((col) => (
                     <Col xs={12} sm={6} key={col.key}>
-                      <Form.Item name={[col.key, "quantity"]} style={{ marginBottom: 8 }} initialValue={0}>
+                      <Form.Item
+                        name={[col.key, "quantity"]}
+                        style={{ marginBottom: 8 }}
+                        initialValue={0}
+                      >
                         <InputNumber min={0} className="w-full" readOnly />
                       </Form.Item>
                     </Col>
@@ -510,12 +542,22 @@ const PutChuongMucModal = () => {
                 <Row gutter={12}>
                   {LEVEL_COLUMNS.map((col) => (
                     <Col xs={12} sm={6} key={col.key}>
-                      <Form.Item name={[col.key, "quantity"]} style={{ marginBottom: 8 }} initialValue={0}>
+                      <Form.Item
+                        name={[col.key, "quantity"]}
+                        style={{ marginBottom: 8 }}
+                        initialValue={0}
+                      >
                         <InputNumber
                           min={0}
                           className="w-full"
                           onChange={() => {
                             lastEditRef.current = "quantity"
+                          }}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                              e.preventDefault()
+                              ;(e.currentTarget as HTMLInputElement).blur()
+                            }
                           }}
                         />
                       </Form.Item>
@@ -535,25 +577,26 @@ const PutChuongMucModal = () => {
                 <Row gutter={12}>
                   {LEVEL_COLUMNS.map((col) => (
                     <Col xs={12} sm={6} key={col.key}>
-                      <Form.Item name={[col.key, "percent"]} style={{ marginBottom: 8 }} initialValue={0}>
-                        <InputNumber
+                      <Form.Item
+                        name={[col.key, "percent"]}
+                        style={{ marginBottom: 8 }}
+                        initialValue={0}
+                      >
+                        <Input
                           className="w-full"
-                          controls={false}
                           readOnly
-                          precision={0}
+                          type="number"
+                          min={0}
+                          max={100}
+                          step={1}
+                          inputMode="numeric"
+                          addonAfter="%"
                           style={{
                             width: "100%",
                             textAlign: "center",
                             color: "#16a34a",
                             fontSize: 12,
                             borderRadius: 8,
-                          }}
-                          formatter={(value) => {
-                            return `${toIntPercent(value)}%`
-                          }}
-                          parser={(value) => {
-                            const raw = (value ?? "").toString().replace("%", "").trim()
-                            return toIntPercent(raw)
                           }}
                         />
                       </Form.Item>
