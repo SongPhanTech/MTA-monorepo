@@ -179,12 +179,12 @@ const PutThesisSession = () => {
       title={id ? "Chỉnh sửa đợt xét luận văn" : "Thêm mới đợt xét luận văn"}
       className="w-[50vw]"
     >
-      <Col span={12}>
+      <Col span={8}>
         <FormItem form={form} name="name" label="Tên đợt xét luận văn" required>
           <Input placeholder="Nhập tên đợt xét luận văn" />
         </FormItem>
       </Col>
-      <Col span={12}>
+      <Col span={8}>
         <FormItem form={form} name="trainingCourseId" label="Khóa học" required>
           <Select
             placeholder="Chọn khóa học"
@@ -195,8 +195,7 @@ const PutThesisSession = () => {
           />
         </FormItem>
       </Col>
-
-      <Col span={12}>
+      <Col span={8}>
         <FormItem form={form} name="trainingObjectTypeId" label="Đối tượng đào tạo" required>
           <Select
             placeholder="Chọn đối tượng đào tạo"
@@ -209,107 +208,7 @@ const PutThesisSession = () => {
         </FormItem>
       </Col>
 
-      <Col span={12}></Col>
-
-      <Col span={12}>
-        <Form.Item label="Người ký quyết định giao đề tài" className="mb-0">
-          <div className="flex gap-2">
-            <Form.Item name="decisionMakerRole" noStyle>
-              <Select
-                className="w-24"
-                placeholder="PGĐ/GĐ"
-                options={[
-                  { label: "PGĐ", value: "PGĐ" },
-                  { label: "GĐ", value: "GĐ" },
-                ]}
-              />
-            </Form.Item>
-            <Form.Item name="decisionMakerName" noStyle>
-              <Input placeholder="Nhập tên người ký quyết định giao đề tài" />
-            </Form.Item>
-          </div>
-        </Form.Item>
-      </Col>
-
-      <Col span={12}>
-        <Form.Item
-          label="Người ký quyết định thành lập hội đồng bảo vệ luận văn đề án"
-          className="mb-0"
-        >
-          <div className="flex gap-2">
-            <Form.Item name="defenseDecisionMakerRole" noStyle>
-              <Select
-                className="w-24"
-                placeholder="PGĐ/GĐ"
-                options={[
-                  { label: "PGĐ", value: "PGĐ" },
-                  { label: "GĐ", value: "GĐ" },
-                ]}
-              />
-            </Form.Item>
-            <Form.Item name="defenseDecisionMakerName" noStyle>
-              <Input placeholder="Nhập tên người ký quyết định thành lập hội đồng bảo vệ luận văn đề án" />
-            </Form.Item>
-          </div>
-        </Form.Item>
-      </Col>
-
-      <Col span={12}>
-        <FormItem form={form} name="decisionNumber" label="Số quyết định giao đề tài">
-          <Input placeholder="Nhập số quyết định giao đề tài" />
-        </FormItem>
-      </Col>
-
-      <Col span={12}>
-        <FormItem
-          form={form}
-          name="defenseDecisionNumber"
-          label="Số quyết định thành lập hội đồng bảo vệ luận văn đề án"
-        >
-          <Input placeholder="Nhập số quyết định thành lập hội đồng bảo vệ luận văn đề án" />
-        </FormItem>
-      </Col>
-      <Col span={12}>
-        <FormItem form={form} name="decisionDate" label="Ngày quyết định giao đề tài">
-          <DatePicker
-            format={{
-              format: "DD/MM/YYYY",
-              type: "mask",
-            }}
-            className="w-full"
-            placeholder="Chọn ngày quyết định giao đề tài"
-          />
-        </FormItem>
-      </Col>
-      <Col span={12}>
-        <FormItem
-          form={form}
-          name="defenseDecisionDate"
-          label="Ngày quyết định thành lập hội đồng bảo vệ luận văn đề án"
-        >
-          <DatePicker
-            format={{
-              format: "DD/MM/YYYY",
-              type: "mask",
-            }}
-            className="w-full"
-            placeholder="Chọn ngày quyết định thành lập hội đồng bảo vệ luận văn đề án"
-          />
-        </FormItem>
-      </Col>
-
-      <Col span={12}>
-        <FormItem form={form} name="deputy" label="Phó trưởng phòng sau đại học">
-          <Input placeholder="Nhập phó trưởng phòng sau đại học" />
-        </FormItem>
-      </Col>
-
-      <Col span={12}>
-        <FormItem form={form} name="chief" label="Trưởng phòng sau đại học">
-          <Input placeholder="Nhập trưởng phòng sau đại học" />
-        </FormItem>
-      </Col>
-
+      {/* <Col span={12}></Col> */}
       <Col span={12}>
         <FormItem form={form} name="startDate" label="Ngày bắt đầu" required>
           <DatePicker
@@ -339,6 +238,102 @@ const PutThesisSession = () => {
           />
         </FormItem>
       </Col>
+      <Col span={24}>
+        <div className="grid grid-cols-[1fr_auto_1fr] gap-4">
+          <div>
+            <Form.Item label="Người ký quyết định giao đề tài" className="mb-0">
+              <div className="flex gap-2">
+                <Form.Item name="decisionMakerRole" noStyle>
+                  <Select
+                    className="w-24"
+                    placeholder="PGĐ/GĐ"
+                    options={[
+                      { label: "PGĐ", value: "PGĐ" },
+                      { label: "GĐ", value: "GĐ" },
+                    ]}
+                  />
+                </Form.Item>
+                <Form.Item name="decisionMakerName" noStyle>
+                  <Input placeholder="Nhập tên người ký quyết định giao đề tài" />
+                </Form.Item>
+              </div>
+            </Form.Item>
+            <FormItem form={form} name="decisionNumber" label="Số quyết định giao đề tài">
+              <Input placeholder="Nhập số quyết định giao đề tài" />
+            </FormItem>
+            <FormItem form={form} name="decisionDate" label="Ngày quyết định giao đề tài">
+              <DatePicker
+                format={{
+                  format: "DD/MM/YYYY",
+                  type: "mask",
+                }}
+                className="w-full"
+                placeholder="Chọn ngày quyết định giao đề tài"
+              />
+            </FormItem>
+          </div>
+
+          <div className="w-px bg-gray-200 h-full" />
+
+          <div>
+            <Form.Item
+              label="Người ký quyết định thành lập hội đồng bảo vệ luận văn đề án"
+              className="mb-0"
+            >
+              <div className="flex gap-2">
+                <Form.Item name="defenseDecisionMakerRole" noStyle>
+                  <Select
+                    className="w-24"
+                    placeholder="PGĐ/GĐ"
+                    options={[
+                      { label: "PGĐ", value: "PGĐ" },
+                      { label: "GĐ", value: "GĐ" },
+                    ]}
+                  />
+                </Form.Item>
+                <Form.Item name="defenseDecisionMakerName" noStyle>
+                  <Input placeholder="Nhập tên người ký quyết định thành lập hội đồng bảo vệ luận văn đề án" />
+                </Form.Item>
+              </div>
+            </Form.Item>
+            <FormItem
+              form={form}
+              name="defenseDecisionNumber"
+              label="Số quyết định thành lập hội đồng bảo vệ luận văn đề án"
+            >
+              <Input placeholder="Nhập số quyết định thành lập hội đồng bảo vệ luận văn đề án" />
+            </FormItem>
+            <FormItem
+              form={form}
+              name="defenseDecisionDate"
+              label="Ngày quyết định thành lập hội đồng bảo vệ luận văn đề án"
+            >
+              <DatePicker
+                format={{
+                  format: "DD/MM/YYYY",
+                  type: "mask",
+                }}
+                className="w-full"
+                placeholder="Chọn ngày quyết định thành lập hội đồng bảo vệ luận văn đề án"
+              />
+            </FormItem>
+          </div>
+        </div>
+      </Col>
+
+      <Col span={12}>
+        <FormItem form={form} name="deputy" label="Phó trưởng phòng sau đại học">
+          <Input placeholder="Nhập phó trưởng phòng sau đại học" />
+        </FormItem>
+      </Col>
+
+      <Col span={12}>
+        <FormItem form={form} name="chief" label="Trưởng phòng sau đại học">
+          <Input placeholder="Nhập trưởng phòng sau đại học" />
+        </FormItem>
+      </Col>
+
+    
     </PutFormModal>
   )
 }
