@@ -6,12 +6,28 @@ import LopBienCheItem from "./_component/lop-bien-che"
 import useSpinner from "@hooks/spinner"
 import { useTrainingObjectTypeStore } from "@workspace/ui"
 import SubjectClassList from "./_component/SubjectClassList"
+import { useFindFirstFixedClass } from "@workspace/db/hooks" // ← thêm
 
 export default function QuanLyDiemRenLuyen() {
   const [activeTabKey, setActiveTabKey] = useState(0)
   const { showSpinner, hideSpinner } = useSpinner()
   const { id: trainingObjectId } = useTrainingObjectTypeStore()
   const [selectedFixedClass, setSelectedFixedClass] = useState<string | undefined>(undefined)
+  const { data: fixedClassData } = useFindFirstFixedClass(
+    {
+      where: { id: selectedFixedClass },
+      include: {
+        trainingCourse: {
+          include: {
+            scoreConverts: true,
+          },
+        },
+      },
+    },
+    { enabled: !!selectedFixedClass }
+  )
+
+  const scoreConverts = fixedClassData?.trainingCourse?.scoreConverts ?? []
 
   const handleChangeFixedClass = (id: string) => {
     try {
@@ -41,7 +57,10 @@ export default function QuanLyDiemRenLuyen() {
               <SubjectClassList selectedFixedClass={selectedFixedClass} />
             </Col>
             <Col span={24}>
-              <SemesterTrainingScore selectedFixedClass={selectedFixedClass} />
+              <SemesterTrainingScore
+                selectedFixedClass={selectedFixedClass}
+                scoreConverts={scoreConverts}
+              />
             </Col>
           </Row>
         </Col>

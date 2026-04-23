@@ -10,6 +10,7 @@ import { useCountStudent, useFindManyStudent } from "@workspace/db/hooks"
 import { useSemesterStore } from "@workspace/ui"
 import dayjs from "dayjs"
 import { UserProfile } from "@workspace/db"
+import type { ScoreConvert } from "@workspace/db/client"
 import {
   useStudentTrainingTypeOptions,
   useTrainingScoreStatusStatusOptions,
@@ -17,11 +18,13 @@ import {
 import { Save } from "lucide-react"
 import useSpinner from "@hooks/spinner"
 import { sqlTransaction } from "@workspace/libs/api/model"
-// import { useDisclosure } from 'react-hook-disclosure-modal'
+
 export default function SemesterTrainingScore({
   selectedFixedClass,
+  scoreConverts = [],
 }: {
   selectedFixedClass?: string
+  scoreConverts?: ScoreConvert[]
 }) {
   const { showSpinner, hideSpinner } = useSpinner()
   const [form] = Form.useForm<{ list: Record<string, { score: number | null }> }>()
@@ -47,16 +50,19 @@ export default function SemesterTrainingScore({
     getTrainingScoreStatusColor,
   } = useTrainingScoreStatusStatusOptions()
 
+  const getScoreRank = (score: number | null | undefined) => {
+    if (score == null || !scoreConverts?.length) return null
+    return (
+      scoreConverts.find((sc) => score >= Number(sc.base10Min) && score <= Number(sc.base10Max)) ??
+      null
+    )
+  }
+
   const where = useMemo(
     () => ({
       fixedClass: {
         id: selectedFixedClass,
       },
-      // semesterTrainingScore: {
-      //     some: {
-      //         semesterId:semesterId
-      //     }
-      // },
       ...(filters.code
         ? {
             code: {
@@ -135,30 +141,10 @@ export default function SemesterTrainingScore({
     }
   )
 
-  // const { onOpen, onClose } = useDisclosure<{
-  //     tag?: string
-  //     preSelectedValues?: {
-  //         trainingObjectTypeId?: string
-  //         trainingCourseId?: string
-  //         fixedClassId?: string
-  //     }
-  //     id?: string | null
-  // }>({
-  //     tag: 'PutStudentModal',
-  // })
-
-  //  const handleModal = () => {
-  //     onOpen({
-  //         preSelectedValues: {},
-  //     })
-  // }
-
   const handleApproved = async () => {
     try {
       showSpinner()
-
       if (selectedRowKeys?.length === 0) return
-
       const res = await sqlTransaction([
         {
           model: "SemesterTrainingScore" as const,
@@ -180,7 +166,6 @@ export default function SemesterTrainingScore({
         message.success("Phê duyệt điểm rèn luyện thành công")
         refetch()
       }
-
       hideSpinner()
     } catch (error) {
       message.error("Phê duyệt điểm rèn luyện thất bại")
@@ -191,9 +176,7 @@ export default function SemesterTrainingScore({
   const handleRejected = async () => {
     try {
       showSpinner()
-
       if (selectedRowKeys?.length === 0) return
-
       const res = await sqlTransaction([
         {
           model: "SemesterTrainingScore" as const,
@@ -215,7 +198,6 @@ export default function SemesterTrainingScore({
         message.success("Từ chối điểm rèn luyện thành công")
         refetch()
       }
-
       hideSpinner()
     } catch (error) {
       message.error("Từ chối điểm rèn luyện thất bại")
@@ -228,13 +210,12 @@ export default function SemesterTrainingScore({
       showSpinner()
       const dataSubmit = form.getFieldsValue()
       const keys = Object.keys(dataSubmit.list)
-      console.log(Object.values(dataSubmit.list))
 
       const error = Object.values(dataSubmit.list).find(
         (i: any) => Number(i?.score) > 10 || Number(i?.score) < 0
       )
       if (error) {
-        message.error("Vui lòng nhập điểm từ 0 đến 10")
+        message.error("Vui lòng nhập điểm từ 0 đến 10")
         return
       }
       const listCreate: any = []
@@ -262,19 +243,14 @@ export default function SemesterTrainingScore({
           model: "SemesterTrainingScore",
           operation: "createMany",
           data: {
-            data: listCreate.map((t: any) => {
-              return {
-                studentId: t.id,
-                score: t.score,
-                semesterId: semesterId,
-                status: can(
-                  QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_REN_LUYEN,
-                  "XEM_TAT_CA"
-                )
-                  ? "APPROVED"
-                  : "PENDING",
-              }
-            }),
+            data: listCreate.map((t: any) => ({
+              studentId: t.id,
+              score: t.score,
+              semesterId: semesterId,
+              status: can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_REN_LUYEN, "XEM_TAT_CA")
+                ? "APPROVED"
+                : "PENDING",
+            })),
           },
         })
       }
@@ -307,24 +283,19 @@ export default function SemesterTrainingScore({
           refetch()
         }
       }
-
-      // message.success('Lưu điểm rèn luyện học kỳ thành công')
-      // refetch()
-      // setEditableData(new Map())
     } catch (error) {
       message.error("Đã xảy ra lỗi khi lưu điểm rèn luyện học kỳ")
     } finally {
       hideSpinner()
     }
   }
+
   // biome-ignore lint/correctness/useExhaustiveDependencies: <>
   useEffect(() => {
     if (data?.length > 0) {
       form.setFieldsValue({
         list: data.reduce((acc, cur) => {
-          if (!acc) {
-            return {}
-          }
+          if (!acc) return {}
           acc[cur.id] = {
             ...cur,
             score: cur.semesterTrainingScore[0]?.score,
@@ -334,6 +305,19 @@ export default function SemesterTrainingScore({
       })
     }
   }, [data])
+  function ScoreRankCell({
+    recordId,
+    form,
+    getScoreRank,
+  }: {
+    recordId: string
+    form: any
+    getScoreRank: (score: number | null | undefined) => any
+  }) {
+    const score = Form.useWatch(["list", recordId, "score"], form)
+    const rank = getScoreRank(score)
+    return rank ? <Tag color="blue">{rank.classification}</Tag> : <span>--</span>
+  }
   return (
     <Row gutter={[0, 0]}>
       <Col span={24}>
@@ -417,35 +401,40 @@ export default function SemesterTrainingScore({
                   title: "Điểm",
                   width: 150,
                   align: "center",
-                  fixed: "left",
-                  render: (_, record) => {
-                    return (
-                      <Form.Item
-                        className="w-full mb-0"
-                        name={["list", record.id, "score"]}
-                        label=""
-                        rules={[
-                          {
-                            validator: (_, value) =>
-                              value >= 1 && value <= 10
-                                ? Promise.resolve()
-                                : Promise.reject("Chỉ được nhập số từ 1 đến 10"),
-                          },
-                        ]}
-                      >
-                        <InputNumber
-                          style={{ width: "100%" }}
-                          step={1}
-                          controls={false}
-                          onKeyDown={(e) => {
-                            if (e.key === "." || e.key === ",") {
-                              e.preventDefault()
-                            }
-                          }}
-                        />
-                      </Form.Item>
-                    )
-                  },
+                  render: (_, record) => (
+                    <Form.Item
+                      className="w-full mb-0"
+                      name={["list", record.id, "score"]}
+                      label=""
+                      rules={[
+                        {
+                          validator: (_, value) =>
+                            value >= 1 && value <= 10
+                              ? Promise.resolve()
+                              : Promise.reject("Chỉ được nhập số từ 1 đến 10"),
+                        },
+                      ]}
+                    >
+                      <InputNumber
+                        style={{ width: "100%" }}
+                        step={1}
+                        controls={false}
+                        onKeyDown={(e) => {
+                          if (e.key === "." || e.key === ",") {
+                            e.preventDefault()
+                          }
+                        }}
+                      />
+                    </Form.Item>
+                  ),
+                },
+                {
+                  title: "Xếp loại",
+                  width: 120,
+                  align: "center",
+                  render: (_, record) => (
+                    <ScoreRankCell recordId={record.id} form={form} getScoreRank={getScoreRank} />
+                  ),
                 },
                 {
                   title: "Trạng thái",
@@ -471,7 +460,7 @@ export default function SemesterTrainingScore({
                 selectedRowKeys,
                 onChange: (selectedKeys) => setSelectedRowKeys(selectedKeys),
                 getCheckboxProps: (record) => ({
-                  disabled: record.semesterTrainingScore?.length <= 0, // hoặc điều kiện bất kỳ
+                  disabled: record.semesterTrainingScore?.length <= 0,
                 }),
               }}
               data={data}

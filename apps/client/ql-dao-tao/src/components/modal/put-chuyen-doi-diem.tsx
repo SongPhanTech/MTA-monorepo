@@ -99,7 +99,7 @@ const PutConvertScore = () => {
       onFinish={onOk}
       onCancel={onClose}
       maskClosable={true}
-      title={id ? "Chỉnh sửa chuyển đổi điểm" : "Thêm mới chuyển đổi điểm"}
+      title={id ? "Chỉnh sửa xếp loại" : "Thêm mới xếp loại"}
       className="w-[600px]"
     >
       <Col span={12}>
@@ -163,7 +163,7 @@ const PutConvertScore = () => {
           />
         </FormItem>
       </Col>
-      <Col span={12}>
+      {/* <Col span={12}>
         <FormItem form={form} name="base4" label="Điểm hệ 4" required>
           <InputNumber
             type="number"
@@ -174,21 +174,21 @@ const PutConvertScore = () => {
             max={4}
           />
         </FormItem>
-      </Col>
+      </Col> */}
       <Col span={12}>
         <FormItem form={form} name="letter" label="Điểm chữ" required>
           <Input placeholder="Nhập điểm chữ" maxLength={2} style={{ width: "100%" }} />
         </FormItem>
       </Col>
-      <Col span={12}>
+      {/* <Col span={12}>
         <FormItem form={form} name="pass" label="Qua môn" required>
           <Radio.Group>
             <Radio value={true}>Có</Radio>
             <Radio value={false}>Không</Radio>
           </Radio.Group>
         </FormItem>
-      </Col>
-      <Col span={12}>
+      </Col> */}
+      {/* <Col span={12}>
         <FormItem form={form} name="improvementRegister" label="Cho phép cải thiện" required>
           <Radio.Group>
             <Radio value={true}>Có</Radio>
@@ -200,7 +200,7 @@ const PutConvertScore = () => {
         <FormItem form={form} name="active" label="Kích hoạt" valuePropName="checked">
           <Switch defaultValue={true} />
         </FormItem>
-      </Col>
+      </Col> */}
       <Col span={24}>
         <FormItem form={form} name="description" label="Mô tả">
           <Input.TextArea placeholder="Nhập mô tả" />

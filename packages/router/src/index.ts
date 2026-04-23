@@ -505,9 +505,9 @@ const NAVIGATION: NavigationType = {
               },
               {
                 id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_DANH_MUC_CHUYEN_DOI_DIEM,
-                label: "Bảng chuyển đổi điểm",
+                label: "Xếp loại rèn luyện",
                 path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_DANH_MUC_CHUYEN_DOI_DIEM,
-                description: "Bảng chuyển đổi điểm",
+                description: "Xếp loại rèn luyện",
               },
               {
                 id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_XEP_LOAI_HOC_LUC,

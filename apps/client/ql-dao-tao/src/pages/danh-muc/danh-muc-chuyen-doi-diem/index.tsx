@@ -215,15 +215,20 @@ export default function TrainingFieldPage() {
                 dataIndex: "base10Max",
                 align: "center",
               },
-              {
-                title: "Điểm hệ 4",
-                dataIndex: "base4",
-                align: "center",
-              },
+              // {
+              //   title: "Điểm hệ 4",
+              //   dataIndex: "base4",
+              //   align: "center",
+              // },
               {
                 title: "Điểm chữ",
                 align: "center",
                 dataIndex: "letter",
+              },
+              {
+                title: "Loại",
+                align: "center",
+                dataIndex: "classification",
               },
               // {
               //     title: 'Trạng thái',
