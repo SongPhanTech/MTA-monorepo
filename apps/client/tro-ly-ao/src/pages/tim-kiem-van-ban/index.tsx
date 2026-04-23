@@ -15,6 +15,32 @@ const { Title } = Typography
 
 type SearchType = "semantic" | "keyword"
 
+const extractSearchResultIds = (response: unknown): string[] => {
+  if (!response || typeof response !== "object") {
+    return []
+  }
+
+  const payload = response as {
+    document_ids?: unknown
+    results?: unknown
+    success_detail?: unknown
+  }
+
+  if (Array.isArray(payload.document_ids)) {
+    return payload.document_ids.filter((id): id is string => typeof id === "string")
+  }
+
+  if (Array.isArray(payload.results)) {
+    return payload.results.filter((id): id is string => typeof id === "string")
+  }
+
+  if (Array.isArray(payload.success_detail)) {
+    return payload.success_detail.filter((id): id is string => typeof id === "string")
+  }
+
+  return []
+}
+
 export default function Page() {
   const [loading, setLoading] = useState(false)
   const [input, setInput] = useState("")
@@ -64,12 +90,37 @@ export default function Page() {
     .map((id) => documentsData.find((doc) => doc.id === id))
     .filter((doc): doc is NonNullable<typeof doc> => Boolean(doc))
 
-  console.log("Debug search:", { results, documentsData, documents })
-
   const [selectedDocument, setSelectedDocument] = useState<(typeof documents)[0] | undefined>()
   const onDownload = async (url: string, fileName: string) => {
-    const response = await fetch(url)
-    if (!response.ok) return message.error("Lỗi khi tải file")
+    const buildFallbackUrl = (raw: string): string | null => {
+      try {
+        const u = new URL(raw)
+        if (u.hostname !== "minio.mta.swantech.vn") return null
+        u.protocol = "https:"
+        u.hostname = "minio.swantech.vn"
+        u.port = ""
+        return u.toString()
+      } catch {
+        return null
+      }
+    }
+    const fallbackUrl = buildFallbackUrl(url)
+    const primaryUrl = fallbackUrl ?? url
+    const secondaryUrl = fallbackUrl ? url : null
+    let response: Response | null = null
+    try {
+      response = await fetch(primaryUrl)
+    } catch {
+      // network error → thử URL còn lại
+    }
+    if ((!response || !response.ok) && secondaryUrl) {
+      try {
+        response = await fetch(secondaryUrl)
+      } catch {
+        response = null
+      }
+    }
+    if (!response || !response.ok) return message.error("Lỗi khi tải file")
     const blob = await response.blob()
     const blobUrl = window.URL.createObjectURL(blob)
     const link = document.createElement("a")
@@ -92,7 +143,8 @@ export default function Page() {
         searchType === "semantic"
           ? await TimKiemTheoNguNghia(input)
           : await TimKiemTheoTuKhoa(input)
-      setResults(response?.success_detail || [])
+
+      setResults(extractSearchResultIds(response))
     } catch (_error: unknown) {
       message.warning("Không tìm thấy kết quả nào")
       setResults([])

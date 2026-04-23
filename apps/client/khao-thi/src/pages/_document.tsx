@@ -19,7 +19,7 @@ export default class MyDocument extends NextDocument {
         <body>
           <Main />
           <NextScript />
-          <script src={`${getRuntimeEnv("NEXT_PUBLIC_ASSET_PREFIX")}/mta-components.umd.js`} />
+          {/* <script src={`${getRuntimeEnv("NEXT_PUBLIC_ASSET_PREFIX")}/mta-components.umd.js`} /> */}
         </body>
       </Html>
     )

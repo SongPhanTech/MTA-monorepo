@@ -892,6 +892,10 @@ export default function ClassSubject() {
                 align: "center",
                 type: "date",
                 sorter: true,
+                showSorterTooltip: {
+                  target: "sorter-icon",
+                  title: "Nhấp để sắp xếp", // Dòng chữ bạn muốn hiển thị
+                },
                 // render: (record: string) => (record ? dayjs(record).format("DD/MM/YYYY") : ""),
                 render: (_, record) => {
                   if (!canReadAll) {

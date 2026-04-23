@@ -354,66 +354,111 @@ export const exportStudentAcademicWarning = async ({
   return buffer
 }
 
-export async function generateStudentImportTemplate(
-  trainingObjectTypeId: string
+// Function for export new template for import student
+export async function _generateStudentImportTemplate(
+  _trainingObjectTypeId: string
 ): Promise<ArrayBuffer> {
-  const [provinces, trainingFields, trainingMajors, nationalities, ethnicities, genders] =
-    await Promise.all([
-      prisma.dM_Tinh_New.findMany({
-        where: { bActive: true, bDeleted: false },
-        select: { sTen: true },
-        orderBy: { sTen: "asc" },
-      }),
-      prisma.trainingField.findMany({
-        where: { trainingObjectTypes: { some: { trainingObjectTypeId } } },
-        select: { name: true },
-        orderBy: { name: "asc" },
-      }),
-      prisma.trainingMajor.findMany({
-        where: { trainingObjectTypes: { some: { trainingObjectTypeId } } },
-        select: { name: true },
-        orderBy: { name: "asc" },
-      }),
-      prisma.dM_QuocGia.findMany({
-        where: { bActive: true, bDeleted: false },
-        select: { sTen: true },
-        orderBy: { sTen: "asc" },
-      }),
-      prisma.dM_DanToc.findMany({
-        where: { bActive: true, bDeleted: false },
-        select: { sTen: true },
-        orderBy: { sTen: "asc" },
-      }),
-      prisma.dM_GioiTinh.findMany({
-        where: { bActive: true, bDeleted: false },
-        select: { sTen: true },
-        orderBy: { sTen: "asc" },
-      }),
-    ])
+  const [fixedClasses, curricula, organizations] = await Promise.all([
+    prisma.fixedClass.findMany({
+      where: {
+        active: true,
+        deletedAt: null,
+      },
+      select: { code: true, name: true },
+      orderBy: { name: "asc" },
+    }),
+    prisma.curriculum.findMany({
+      where: {
+        deletedAt: null,
+      },
+      select: { name: true },
+      orderBy: { name: "asc" },
+    }),
+    prisma.dM_DonVi.findMany({
+      where: { bActive: true, bDeleted: false },
+      select: { sTen: true },
+      orderBy: { sTen: "asc" },
+    }),
+  ])
 
   const buffer = await getTemplateBuffer(prisma, "MauImportDSHV.xlsx")
-  const template = new XlsxTemplate(buffer)
+  const workbook = new ExcelJS.Workbook()
+  await workbook.xlsx.load(buffer as any)
 
-  template.substitute("DanhMucTinh", {
-    data: provinces.filter((p) => p.sTen).map((p) => ({ name: p.sTen })),
-  })
-  template.substitute("DanhMucNganh", {
-    data: trainingFields.filter((p) => p.name).map((p) => ({ name: p.name })),
-  })
-  template.substitute("DanhMucGioiTinh", {
-    data: genders.filter((p) => p.sTen).map((p) => ({ name: p.sTen })),
-  })
-  template.substitute("DanhMucQuocTich", {
-    data: nationalities.filter((p) => p.sTen).map((p) => ({ name: p.sTen })),
-  })
-  template.substitute("DanhMucDanToc", {
-    data: ethnicities.filter((p) => p.sTen).map((p) => ({ name: p.sTen })),
-  })
-  template.substitute("DanhMucChuyenNganh", {
-    data: trainingMajors.filter((p) => p.name).map((p) => ({ name: p.name })),
-  })
+  const sheetLopQL = workbook.getWorksheet("DanhMucLopQuanLi")
+  if (sheetLopQL) {
+    const lopData = fixedClasses.filter((fc) => fc.name)
+    lopData.forEach((fc, index) => {
+      const row = sheetLopQL.getRow(index + 1)
+      row.getCell(1).value = fc.code || ""
+      row.getCell(2).value = fc.name
+      row.commit()
+    })
+  }
 
-  return template.generate({ type: "arraybuffer" }) as Promise<ArrayBuffer>
+  const sheetCTDT = workbook.getWorksheet("DanhMucChuongTrinhDaoTao")
+  if (sheetCTDT) {
+    const ctdtData = curricula.filter((c) => c.name)
+    ctdtData.forEach((c, index) => {
+      const row = sheetCTDT.getRow(index + 2)
+      row.getCell(1).value = c.name
+      row.commit()
+    })
+  }
+
+  const sheetDVQL = workbook.getWorksheet("DanhMucDonViQuanLi")
+  if (sheetDVQL) {
+    const dvqlData = organizations.filter((o) => o.sTen)
+    dvqlData.forEach((o, index) => {
+      const row = sheetDVQL.getRow(index + 2)
+      row.getCell(1).value = o.sTen
+      row.commit()
+    })
+  }
+
+  const mainSheet = workbook.worksheets[0]
+  if (mainSheet) {
+    const dataStartRow = 13
+    const dataEndRow = 250
+
+    const lopEndRow = fixedClasses.length || 1
+    const ctdtEndRow = (curricula.length || 0) + 1
+    const dvqlEndRow = (organizations.length || 0) + 1
+
+    const lopFormulaPrefix = `IFERROR(INDEX(DanhMucLopQuanLi!$A$1:$A$${lopEndRow},MATCH(Q`
+    const lopFormulaSuffix = `,DanhMucLopQuanLi!$B$1:$B$${lopEndRow},0)),"")`
+
+    const qValidation: ExcelJS.DataValidation = {
+      type: "list",
+      allowBlank: true,
+      formulae: [`DanhMucLopQuanLi!$B$1:$B$${lopEndRow}`],
+    }
+
+    const tValidation: ExcelJS.DataValidation = {
+      type: "list",
+      allowBlank: true,
+      formulae: [`DanhMucChuongTrinhDaoTao!$A$2:$A$${ctdtEndRow > 1 ? ctdtEndRow : 2}`],
+    }
+
+    const uValidation: ExcelJS.DataValidation = {
+      type: "list",
+      allowBlank: true,
+      formulae: [`DanhMucDonViQuanLi!$A$2:$A$${dvqlEndRow > 1 ? dvqlEndRow : 2}`],
+    }
+
+    for (let r = dataStartRow; r <= dataEndRow; r++) {
+      const row = mainSheet.getRow(r)
+
+      row.getCell("P").value = {
+        formula: `${lopFormulaPrefix}${r}${lopFormulaSuffix}`,
+      }
+      row.getCell("Q").dataValidation = qValidation
+      row.getCell("T").dataValidation = tValidation
+      row.getCell("U").dataValidation = uValidation
+    }
+  }
+
+  return workbook.xlsx.writeBuffer() as Promise<ArrayBuffer>
 }
 
 export const exportArchivedCertificate = async ({
@@ -703,6 +748,119 @@ export const exportArchivedCertificateMulti = async ({
   template.substitute(1, {
     data,
     certNames: certNames,
+  })
+
+  const result = (await template.generate({ type: "arraybuffer" })) as ArrayBuffer
+  return result
+}
+export const exportStudentsMissingCertificate = async ({
+  trainingObjectTypeId,
+  trainingCourseId,
+  fixedClassId,
+  certificateId,
+}: {
+  trainingObjectTypeId: string
+  trainingCourseId?: string
+  fixedClassId?: string
+  certificateId?: string
+}) => {
+  const where: any = {
+    deletedAt: null,
+    fixedClass: {
+      trainingCourse: {
+        trainingObjectTypeId,
+        deletedAt: null,
+        active: true,
+      },
+    },
+  }
+
+  if (trainingCourseId) {
+    where.fixedClass.trainingCourseId = trainingCourseId
+  }
+
+  if (fixedClassId) {
+    where.fixedClassId = fixedClassId
+  }
+
+  if (certificateId) {
+    where.archivedCertificate = {
+      none: {
+        certificateId,
+        deletedAt: null,
+      },
+    }
+  }
+
+  const students = await prisma.student.findMany({
+    where,
+    include: {
+      userProfile: true,
+      fixedClass: {
+        include: {
+          trainingCourse: true,
+          curriculumVersion: {
+            include: {
+              curriculum: {
+                include: {
+                  trainingMajor: {
+                    include: {
+                      trainingField: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    orderBy: [{ fixedClass: { name: "asc" } }, { userProfile: { fullname: "asc" } }],
+  })
+
+  if (!students || students.length === 0) {
+    throw new Error("Không có dữ liệu học viên chưa có chứng chỉ để xuất")
+  }
+
+  let certificateName = ""
+  if (certificateId) {
+    const cert = await prisma.certificate.findUnique({
+      where: { id: certificateId },
+      select: { name: true },
+    })
+    certificateName = cert?.name || ""
+  }
+
+  const data = students.map((item, idx) => {
+    const userProfile = item.userProfile
+    const fixedClass = item.fixedClass
+    const curriculum = fixedClass?.curriculumVersion?.curriculum
+    const trainingMajor = curriculum?.trainingMajor
+
+    return {
+      no: idx + 1,
+      studentCode: userProfile?.code || "",
+      studentName: userProfile?.fullname || "",
+      dateOfBirth: userProfile?.dateOfBirth
+        ? `'${dayjs(userProfile.dateOfBirth).tz("Asia/Ho_Chi_Minh").format("DD/MM/YYYY")}`
+        : "",
+      fixedClass: fixedClass?.name || "",
+      trainingCourse: fixedClass?.trainingCourse?.name || "",
+      trainingField: trainingMajor?.trainingField?.name || "",
+      trainingMajorName: trainingMajor?.name || "",
+      placeOfBirth: userProfile?.placeOfBirth || "",
+      idCardNumber: userProfile?.idCardNumber || "",
+      certificateName: certificateName || "Tất cả",
+      status: "Chưa có",
+    }
+  })
+
+  const buffer = await getTemplateBuffer(prisma, "DS_CHUA_CO_DIEM_CHUNG_CHI.xlsx")
+  const template = new XlsxTemplate(buffer)
+
+  template.substitute(1, {
+    data,
+    certificateName: certificateName || "Tất cả",
   })
 
   const result = (await template.generate({ type: "arraybuffer" })) as ArrayBuffer

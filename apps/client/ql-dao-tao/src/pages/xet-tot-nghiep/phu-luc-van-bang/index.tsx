@@ -149,6 +149,7 @@ export default function StudentGradeSystem() {
   const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
   const trainingCourseIds: string[] = useWatch("trainingCourseIds", form)
   const fixedClassIds: string[] = useWatch("fixedClassIds", form)
+  const thesisSessionIds: string[] = useWatch("thesisSessionIds", form)
   const managementOrganizationIds: string[] = useWatch("managementOrganizationIds", form)
   const [page, setPage] = useState(initialPagination.page)
   const [pageSize, setPageSize] = useState(initialPagination.pageSize)
@@ -269,9 +270,27 @@ export default function StudentGradeSystem() {
       take: pageSize,
       skip: (page - 1) * pageSize,
       include: {
-        userProfile: true,
+        userProfile: {
+          include: {
+            gender: true,
+            ethnicity: true,
+            nationality: true,
+          },
+        },
+        graduationDecision: true,
+        thesisRegistrations: {
+          include: {
+            council: true,
+            thesisProject: {
+              include: {
+                defenseRecord: true,
+              },
+            },
+          },
+        },
         fixedClass: {
           include: {
+            managementOrganization: true,
             trainingCourse: {
               include: {
                 scoreConverts: true,
@@ -592,8 +611,14 @@ export default function StudentGradeSystem() {
                   border: true,
                 }, // Tên học phần 2
                 { value: s2?.soTinChi ?? "", align: "center" }, // Số tín chỉ 2
-                { value: s2?.thangDiem10 ? Number(s2.thangDiem10) : "", align: "right" }, // Điểm hệ 10 - 2
-                { value: s2?.thangDiem4 ? Number(s2.thangDiem4) : "", align: "right" }, // Điểm hệ 4 - 2
+                {
+                  value: s2?.thangDiem10 ? Number(s2.thangDiem10) : "",
+                  align: "right",
+                }, // Điểm hệ 10 - 2
+                {
+                  value: s2?.thangDiem4 ? Number(s2.thangDiem4) : "",
+                  align: "right",
+                }, // Điểm hệ 4 - 2
                 { value: s2?.thangDiemChu ?? "", align: "center" }, // Điểm chữ - 2
               ],
             })
@@ -662,7 +687,9 @@ export default function StudentGradeSystem() {
           {
             value: {
               richText: [
-                { text: "Điểm trung bình chung tích lũy toàn khoá (Thang điểm 10): " },
+                {
+                  text: "Điểm trung bình chung tích lũy toàn khoá (Thang điểm 10): ",
+                },
                 { text: String(diemTBHe10), font: { bold: true } },
               ],
             },
@@ -860,7 +887,12 @@ export default function StudentGradeSystem() {
               cells: [
                 { value: stt - 1, align: "center" },
 
-                { value: s1?.tenHocPhan ?? "", colSpan: 1, border: true, wrapText: true }, // Tên học phần
+                {
+                  value: s1?.tenHocPhan ?? "",
+                  colSpan: 1,
+                  border: true,
+                  wrapText: true,
+                }, // Tên học phần
                 { value: s1?.soTinChi ?? "", colSpan: 2, align: "center" }, // Số tín chỉ
                 {
                   value: s1?.thangDiem10 ? Number(s1.thangDiem10) : "",
@@ -941,7 +973,9 @@ export default function StudentGradeSystem() {
             // value: `Điểm TB hệ 10: ${diemTBHe10}`,
             value: {
               richText: [
-                { text: "Điểm trung bình chung tích lũy toàn khoá (Thang điểm 10): " },
+                {
+                  text: "Điểm trung bình chung tích lũy toàn khoá (Thang điểm 10): ",
+                },
                 { text: String(diemTBHe10), font: { bold: true } },
               ],
             },
@@ -957,7 +991,9 @@ export default function StudentGradeSystem() {
           {
             value: {
               richText: [
-                { text: "Điểm trung bình chung tích lũy toàn khoá (Thang điểm 4): " },
+                {
+                  text: "Điểm trung bình chung tích lũy toàn khoá (Thang điểm 4): ",
+                },
                 { text: String(diemTBHe4), font: { bold: true } },
               ],
             },
@@ -970,7 +1006,6 @@ export default function StudentGradeSystem() {
       const xepLoaiRow: TableRow = {
         cells: [
           {
-            // value: `Xếp hạng tốt nghiệp: ${xepLoai}`,
             value: {
               richText: [
                 { text: "Xếp hạng tốt nghiệp: " },
@@ -1087,7 +1122,6 @@ export default function StudentGradeSystem() {
           gapRow,
           tongTinChiRow,
           diemHe10Row,
-          // diemHe4Row,
           xepLoaiRow,
           gapRow,
           dateSignatureRow,
@@ -1118,10 +1152,187 @@ export default function StudentGradeSystem() {
     })
   }
 
+  const handleExportSoGocCapPhatVanBang = () => {
+    console.log("students", students)
+
+    if (!students?.length) {
+      notification.info({ message: "Không có dữ liệu để xuất!" })
+      return
+    }
+    const { date } = form.getFieldsValue()
+    let selectedDate = dayjs(date)
+    if (!selectedDate.isValid()) {
+      selectedDate = dayjs()
+    }
+
+    const courseNames =
+      trainingCourseData
+        ?.filter((e) => trainingCourseIds?.includes(e.id))
+        ?.map((e) => e.name)
+        ?.join(", ") || ""
+
+    const sessionNames =
+      thesisSessionData
+        ?.filter((e) => thesisSessionIds?.includes(e.id))
+        ?.map((e) => e.name)
+        ?.join(", ") || ""
+
+    const firstStudent = students[0]
+    const trainingForm =
+      firstStudent?.fixedClass?.trainingCourse?.trainingObjectType?.trainingForm?.name || ""
+    const graduationDecision = firstStudent?.graduationDecision?.code || ""
+
+    const tableRows = students.map((student, index) => {
+      const gD = student.graduationDecision
+      const tR = student.thesisRegistrations?.[0]
+      const user = student.userProfile
+
+      const subjectScores = student.subjectClassStudent || []
+      const totalCredits = subjectScores.reduce(
+        (acc, item) => acc + (item.subjectVersion?.credit || 0),
+        0
+      )
+      const totalPoints = subjectScores.reduce(
+        (acc, item) => acc + (Number(item.finalScore) || 0) * (item.subjectVersion?.credit || 0),
+        0
+      )
+      const gpa = totalCredits > 0 ? (totalPoints / totalCredits).toFixed(2) : ""
+
+      return {
+        cells: [
+          { value: index + 1, align: "center" as const },
+          { value: user?.fullname || "", wrapText: true },
+          {
+            value: user?.dateOfBirth ? formatDateVN(user.dateOfBirth) : "",
+            align: "center" as const,
+          },
+          { value: user?.idCardNumber || "", align: "center" as const },
+          {
+            value: student.fixedClass?.trainingCourse?.name || "",
+            align: "center" as const,
+          },
+          { value: user?.placeOfBirth || "", wrapText: true },
+          { value: user?.gender?.sTen || "", align: "center" as const },
+          { value: user?.ethnicity?.sTen || "", align: "center" as const },
+          { value: user?.nationality?.sTen || "", align: "center" as const },
+          { value: tR?.council?.code || "", wrapText: true },
+          {
+            value: tR?.council?.proposedDate ? formatDateVN(tR.council.proposedDate) : "",
+            align: "center" as const,
+          },
+          { value: gD?.code || "", wrapText: true },
+          {
+            value: gD?.decisionDate ? dayjs(gD.decisionDate).year() : "",
+            align: "center" as const,
+          },
+          {
+            value: student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || "",
+            wrapText: true,
+          },
+          { value: gD?.diplomaNumber || "", align: "center" as const },
+          { value: gD?.originalDiplomaNumber || "", align: "center" as const },
+          {
+            value: student.fixedClass?.managementOrganization?.sTen || "",
+            wrapText: true,
+          },
+          {
+            value: tR?.thesisProject?.defenseRecord?.finalScore
+              ? Number(tR.thesisProject.defenseRecord.finalScore)
+              : "",
+            align: "center" as const,
+          },
+          { value: gpa, align: "center" as const },
+        ],
+      }
+    })
+
+    const TOTAL_COLUMNS = 19
+    const SIGN_COL = 7
+
+    const gapRow: TableRow = {
+      cells: [{ value: null, colSpan: TOTAL_COLUMNS, border: false }],
+    }
+
+    const dateSignatureRow: TableRow = {
+      cells: [
+        { value: null, colSpan: TOTAL_COLUMNS - SIGN_COL, border: false },
+        {
+          value: `Hà Nội, ngày ${selectedDate.date()} tháng ${
+            selectedDate.month() + 1
+          } năm ${selectedDate.year()}`,
+          colSpan: SIGN_COL,
+          align: "center" as const,
+          italic: true,
+          fontSize: 12,
+          border: false,
+        },
+      ],
+    }
+
+    const titleSignatureRow: TableRow = {
+      cells: [
+        { value: null, colSpan: TOTAL_COLUMNS - SIGN_COL, border: false },
+        {
+          value: "GIÁM ĐỐC",
+          colSpan: SIGN_COL,
+          align: "center" as const,
+          bold: true,
+          fontSize: 13,
+          border: false,
+        },
+      ],
+    }
+
+    const nameSignatureRow: TableRow = {
+      cells: [
+        { value: null, colSpan: TOTAL_COLUMNS - SIGN_COL, border: false },
+        {
+          value: "Trung tướng Lê Minh Thái",
+          colSpan: SIGN_COL,
+          align: "center" as const,
+          bold: true,
+          fontSize: 13,
+          border: false,
+        },
+      ],
+    }
+
+    exportFromTemplate({
+      templateUrl: getMinioUrl("/mta/template/SoGocCapPhatVanBangCaoHoc.xlsx"),
+      sheets: [
+        {
+          sheet: "SoGoc",
+          data: {
+            khoa: courseNames,
+            dot_xet: sessionNames,
+            hinh_thuc_dao_tao: trainingForm,
+            so_van_ban: graduationDecision,
+            ngay_in: formatDateVN(selectedDate.toDate()),
+          },
+          tableStartCell: { row: 11, col: 1 },
+          rows: [
+            ...tableRows,
+            gapRow,
+            dateSignatureRow,
+            titleSignatureRow,
+            ...Array.from({ length: 5 }, () => ({
+              cells: [{ value: null, colSpan: TOTAL_COLUMNS, border: false }],
+            })),
+            nameSignatureRow,
+          ],
+        },
+      ],
+      fileName: "SoGocCapPhatVanBang.xlsx",
+      fontFamily: "Times New Roman",
+      fontSize: 11,
+      mergeSheetsToOne: false,
+    })
+  }
+
   const subjects: {
     daiHoc: { id: number; name: string; onClick?: () => void }[]
     nganHan: { id: number; name: string }[]
-    caoHoc: { id: number; name: string }[]
+    caoHoc: { id: number; name: string; onClick?: () => void }[]
   } = {
     daiHoc: [
       { id: 1, name: "Phụ lục VB (1 cột)", onClick: handleExportPLVB1Col },
@@ -1146,7 +1357,11 @@ export default function StudentGradeSystem() {
       { id: 18, name: "In PL văn bằng CAO HỌC (2 cột)" },
       { id: 19, name: "In PL văn bằng CAO HỌC (1 cột)" },
       { id: 20, name: "In phôi bảng CAO HỌC" },
-      { id: 21, name: "Sổ gốc cấp phát văn bằng" },
+      {
+        id: 21,
+        name: "Sổ gốc cấp phát văn bằng",
+        onClick: handleExportSoGocCapPhatVanBang,
+      },
       { id: 22, name: "Thống kê KQ đào tạo" },
       { id: 23, name: "Thống kê kết quả bảo vệ luận văn" },
       { id: 24, name: "In Danh sách trình chiếu CAO HỌC" },
@@ -1390,6 +1605,7 @@ export default function StudentGradeSystem() {
             {subjects.caoHoc.map((subject, index) => (
               <Button
                 key={index}
+                onClick={subject?.onClick}
                 type="primary"
                 className="h-auto py-2 px-3 text-xs justify-start text-white"
               >

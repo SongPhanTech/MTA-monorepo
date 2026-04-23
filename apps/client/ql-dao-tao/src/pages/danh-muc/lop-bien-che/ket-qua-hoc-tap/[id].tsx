@@ -13,7 +13,6 @@ import {
 } from "@workspace/db/client"
 import {
   useFindManySemester,
-  useFindManyStudentSemesterResult,
   useFindManyStudentSubjectScore,
   useFindManySubjectVersion,
   useFindUniqueStudent,
@@ -632,7 +631,7 @@ export default function StudentScoreClassPage() {
                       Nhập điểm trực tiếp
                     </Button>
                   )}
-                  <Button
+                  {/* <Button
                     type="primary"
                     onClick={() =>
                       onOpen({
@@ -642,7 +641,7 @@ export default function StudentScoreClassPage() {
                     }
                   >
                     In kết quả học tập
-                  </Button>
+                  </Button> */}
 
                   <Button
                     type="primary"

@@ -800,7 +800,7 @@ export default function NhapDiem({
       }
       setRowData(newRowData)
     }
-  }, [dataTable.length])
+  }, [dataTable])
 
   if (!selectedSubjectClassId) {
     return (

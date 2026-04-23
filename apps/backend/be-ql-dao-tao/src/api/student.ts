@@ -12,7 +12,6 @@ import {
 } from "../dto/student-info.dto"
 import {
   exportStudentProfile,
-  generateStudentImportTemplate,
   exportStudentScholarship,
   exportStudentAcademicWarning,
 } from "../services/student"
@@ -976,8 +975,8 @@ const exportStudentProfiles = createRoute({
 })
 
 app.openapi(downloadStudentImportTemplate, async (c) => {
-  const { trainingObjectTypeId } = c.req.valid("query")
-  const result = await generateStudentImportTemplate(trainingObjectTypeId)
+  const { trainingObjectTypeId: _trainingObjectTypeId } = c.req.valid("query")
+  const result = await getTemplateBuffer(prisma, "MauImportDSHV.xlsx")
   const fileName = "MauImportDSHV.xlsx"
   const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
   return c.body(result, 200, {

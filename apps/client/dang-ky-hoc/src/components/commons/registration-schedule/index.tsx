@@ -38,17 +38,18 @@ const ThoiKhoaBieuDangKy = (props: ISubjectClassTime) => {
         curriculumVersionId,
         subjectClassIds: [subjectClassId],
       })
-      if (res.status !== 200) {
-        throw new Error(res.data?.message || "Huỷ đăng ký thất bại")
-      }
       return res
     },
     onMutate: (subjectClassId) => {
       setRemovedIds((prev) => new Set([...prev, subjectClassId]))
     },
-    onSuccess: () => {
-      message.success("Huỷ đăng ký thành công")
-      onUnregisterSuccess?.()
+    onSuccess: (res) => {
+      if (res?.status === 200) {
+        message.success("Huỷ đăng ký thành công")
+        onUnregisterSuccess?.()
+      } else {
+        message.error(res.data?.message || "Huỷ đăng ký thất bại")
+      }
     },
     onError: (error: any, subjectClassId) => {
       setRemovedIds((prev) => {

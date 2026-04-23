@@ -10774,6 +10774,13 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'subjectVersion',
+                }, certificate: {
+                    name: "certificate",
+                    type: "Certificate",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'subjectVersions',
+                    isRelationOwner: true,
                 },
             }, uniqueConstraints: {
                 id: {
@@ -13941,6 +13948,17 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'certificate',
+                }, subjectVersions: {
+                    name: "subjectVersions",
+                    type: "SubjectVersion",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'certificate',
+                    isRelationOwner: true,
+                }, scoreThreshold: {
+                    name: "scoreThreshold",
+                    type: "Float",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 5 }] }],
                 }, isUsingScore: {
                     name: "isUsingScore",
                     type: "Boolean",
@@ -22217,6 +22235,10 @@ const metadata: ModelMeta = {
                     type: "String",
                     isForeignKey: true,
                     relationField: 'exam',
+                }, examTime: {
+                    name: "examTime",
+                    type: "Int",
+                    isOptional: true,
                 }, examCode: {
                     name: "examCode",
                     type: "String",

@@ -2506,6 +2506,7 @@ exports.Prisma.CertificateScalarFieldEnum = {
   name: 'name',
   englishName: 'englishName',
   outputStandardId: 'outputStandardId',
+  scoreThreshold: 'scoreThreshold',
   isUsingScore: 'isUsingScore'
 };
 
@@ -3902,6 +3903,7 @@ exports.Prisma.ExamBankScalarFieldEnum = {
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
   examId: 'examId',
+  examTime: 'examTime',
   examCode: 'examCode',
   subjectClassId: 'subjectClassId',
   explain: 'explain',

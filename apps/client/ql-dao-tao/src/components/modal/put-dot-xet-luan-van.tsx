@@ -208,6 +208,7 @@ const PutThesisSession = () => {
           />
         </FormItem>
       </Col>
+
       <Col span={12}>
 
       </Col>
@@ -323,7 +324,6 @@ const PutThesisSession = () => {
           />
         </FormItem>
       </Col>
-
       <Col span={12}>
         <FormItem form={form} name="endDate" label="Ngày kết thúc" required>
           <DatePicker

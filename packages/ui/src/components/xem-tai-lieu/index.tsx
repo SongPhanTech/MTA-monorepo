@@ -429,8 +429,10 @@ const XemTaiLieu = () => {
     <Modal
       title="Xem tài liệu"
       open={isOpen}
-      className="w-[100vw] top-0"
+      width="100vw"
       style={{
+        top: 0,
+        maxWidth: "100vw",
         display: supportedImageFileTypes.includes(fileType) ? "none" : undefined,
       }}
       onCancel={onClose}
