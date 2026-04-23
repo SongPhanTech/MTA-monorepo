@@ -332,7 +332,7 @@ export default function MonDaLapKeHoach({ type }: { type?: $Enums.SubjectClassTy
               }}
             >
               <Button disabled={!subjectSelected.length} type="primary" danger>
-                Xoá môn ra khỏi KHDK
+                Sửa kế hoạch giảng dạy
               </Button>
             </Popconfirm>
           </Flex>

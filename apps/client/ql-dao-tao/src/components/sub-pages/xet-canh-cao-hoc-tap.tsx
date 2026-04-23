@@ -1,5 +1,5 @@
 import { DownloadOutlined } from "@ant-design/icons"
-import { Button, Col, Flex, Modal, message, Row, Tag, Tooltip } from "antd"
+import { Button, Col, Flex, Input, Modal, message, Row, Tag, Tooltip } from "antd"
 import dayjs from "dayjs"
 import "dayjs/locale/vi"
 import { queryClient } from "@api/index"
@@ -51,6 +51,7 @@ const XetCanhCaoHocTap = ({ semesterId, trainingObjectTypeId }: XetCanhCaoHocTap
   const [currentPage, setCurrentPage] = useState(1)
   const [selectedRowKeys, setSelectedRowKeys] = useState<string[]>([])
   const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
+  const [editedReasons, setEditedReasons] = useState<Record<string, string>>({})
   const [filters, setFilters] = useState<FilterProps>({
     code: "",
     name: "",
@@ -228,7 +229,7 @@ const XetCanhCaoHocTap = ({ semesterId, trainingObjectTypeId }: XetCanhCaoHocTap
                   semester: { connect: { id: semesterId } },
                   level: currentLevel + severity,
                   increasedFrom: currentLevel,
-                  description: record.reason,
+                  description: editedReasons[record.id] ?? record.reason,
                 },
               })
             })
@@ -236,6 +237,7 @@ const XetCanhCaoHocTap = ({ semesterId, trainingObjectTypeId }: XetCanhCaoHocTap
           await Promise.all(createAcademicWarningPromises)
           await refetch()
           setSelectedRowKeys([])
+          setEditedReasons({})
           message.success("Duyệt thành công")
         } catch (error) {
           message.error("Đã xảy ra lỗi khi duyệt")
@@ -404,32 +406,32 @@ const XetCanhCaoHocTap = ({ semesterId, trainingObjectTypeId }: XetCanhCaoHocTap
                     <span className="line-clamp-2">{record?.description}</span>
                   ),
                 },
-                {
-                  title: "Thao tác",
-                  width: 100,
-                  align: "center",
-                  fixed: "right",
-                  render: (_, record) => {
-                    return record?.id ? (
-                      <Row className="justify-center gap-2">
-                        <EditIcon
-                          onClick={() =>
-                            onOpen({
-                              id: record?.id,
-                              semesterId,
-                            })
-                          }
-                          className="text-sm text-blue-700 cursor-pointer"
-                        />
-                        <DeleteIcon
-                          popConfirm={{
-                            onConfirm: () => handleDeleteAcademicWarning(record?.id),
-                          }}
-                        />
-                      </Row>
-                    ) : null
-                  },
-                },
+                // {
+                //   title: "Thao tác",
+                //   width: 100,
+                //   align: "center",
+                //   fixed: "right",
+                //   render: (_, record) => {
+                //     return record?.id ? (
+                //       <Row className="justify-center gap-2">
+                //         <EditIcon
+                //           onClick={() =>
+                //             onOpen({
+                //               id: record?.id,
+                //               semesterId,
+                //             })
+                //           }
+                //           className="text-sm text-blue-700 cursor-pointer"
+                //         />
+                //         <DeleteIcon
+                //           popConfirm={{
+                //             onConfirm: () => handleDeleteAcademicWarning(record?.id),
+                //           }}
+                //         />
+                //       </Row>
+                //     ) : null
+                //   },
+                // },
               ]}
               pagination={{
                 current: currentPage,
@@ -530,7 +532,22 @@ const XetCanhCaoHocTap = ({ semesterId, trainingObjectTypeId }: XetCanhCaoHocTap
                   dataIndex: ["reason"],
                   width: 200,
                   align: "center",
-                  render: (value?: string) => value?.split("\n").map((r) => <p>{r}</p>),
+                  render: (value?: string, record?: any) => {
+                    const currentValue = editedReasons[record?.id] ?? value ?? ""
+                    return (
+                      <Input.TextArea
+                        value={currentValue}
+                        onChange={(e) =>
+                          setEditedReasons((prev) => ({
+                            ...prev,
+                            [record?.id]: e.target.value,
+                          }))
+                        }
+                        autoSize={{ minRows: 1, maxRows: 4 }}
+                        onClick={(e) => e.stopPropagation()}
+                      />
+                    )
+                  },
                 },
               ]}
               pagination={{
