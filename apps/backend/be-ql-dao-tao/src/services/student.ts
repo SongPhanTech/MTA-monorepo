@@ -357,33 +357,34 @@ export const exportStudentAcademicWarning = async ({
 export async function _generateStudentImportTemplate(
   _trainingObjectTypeId: string
 ): Promise<ArrayBuffer> {
-  const [fixedClasses, curricula, organizations, trainingMajors, trainingFields] = await Promise.all([
-    prisma.fixedClass.findMany({
-      where: { active: true, deletedAt: null },
-      select: { code: true, name: true },
-      orderBy: { name: "asc" },
-    }),
-    prisma.curriculum.findMany({
-      where: { deletedAt: null },
-      select: { name: true },
-      orderBy: { name: "asc" },
-    }),
-    prisma.dM_DonVi.findMany({
-      where: { bActive: true, bDeleted: false },
-      select: { sTen: true },
-      orderBy: { sTen: "asc" },
-    }),
-    prisma.trainingMajor.findMany({
-      where: { deletedAt: null },
-      select: { name: true },
-      orderBy: { name: "asc" },
-    }),
-    prisma.trainingField.findMany({
-      where: { deletedAt: null },
-      select: { name: true },
-      orderBy: { name: "asc" },
-    }),
-  ])
+  const [fixedClasses, curricula, organizations, trainingMajors, trainingFields] =
+    await Promise.all([
+      prisma.fixedClass.findMany({
+        where: { active: true, deletedAt: null },
+        select: { code: true, name: true },
+        orderBy: { name: "asc" },
+      }),
+      prisma.curriculum.findMany({
+        where: { deletedAt: null },
+        select: { name: true },
+        orderBy: { name: "asc" },
+      }),
+      prisma.dM_DonVi.findMany({
+        where: { bActive: true, bDeleted: false },
+        select: { sTen: true },
+        orderBy: { sTen: "asc" },
+      }),
+      prisma.trainingMajor.findMany({
+        where: { deletedAt: null },
+        select: { name: true },
+        orderBy: { name: "asc" },
+      }),
+      prisma.trainingField.findMany({
+        where: { deletedAt: null },
+        select: { name: true },
+        orderBy: { name: "asc" },
+      }),
+    ])
 
   const buffer = await getTemplateBuffer(prisma, "MauImportDSHV_v4.xlsx")
   const template = new XlsxTemplate(buffer)
@@ -410,7 +411,6 @@ export async function _generateStudentImportTemplate(
 
   return template.generate({ type: "nodebuffer" }) as any
 }
-
 
 export const exportArchivedCertificate = async ({
   trainingObjectTypeId,
