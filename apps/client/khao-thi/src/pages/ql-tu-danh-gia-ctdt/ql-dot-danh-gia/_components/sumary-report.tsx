@@ -1,15 +1,16 @@
-import { Button, Form, message, Typography } from "antd"
+import { Button, Form, message, Tabs, Typography } from "antd"
 import { useStore } from "@tanstack/react-store"
 import { evaluationPeriodStore } from ".."
 import { useFindUniqueEvaluationPeriod, useUpdateEvaluationPeriod } from "@workspace/db/hooks"
 import type { Prisma } from "@workspace/db/client"
+import { $Enums } from "@workspace/db/client"
 import { RichTextEditor } from "@components/commons/rich-text-editor"
 import { useEffect } from "react"
 import useSpinner from "@hooks/spinner"
 import { queryClient } from "@api/index"
-import { useAbility } from "@workspace/permissions/hooks"
-import { KHAO_THI_PERMISSION } from "@workspace/router"
 import ExportReport from "./export-report"
+import StandarReportsSubPage from "@components/sub-pages/tu-danh-gia-ctdt/standar-reports"
+import type { DataTabEvaluationCriterionType } from "@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/standar-reports"
 
 type SumaryReportEvaluationPeriodType = Prisma.EvaluationPeriodGetPayload<{
   select: {
@@ -23,14 +24,12 @@ type SumaryReportEvaluationPeriodType = Prisma.EvaluationPeriodGetPayload<{
 const SumaryReport = () => {
   const [form] = Form.useForm<SumaryReportEvaluationPeriodType>()
   const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
-  const { can } = useAbility()
 
   const { showSpinner, hideSpinner } = useSpinner()
 
   const { mutateAsync: updateEvaluationPeriod } = useUpdateEvaluationPeriod()
 
   const onFinish = async (values: SumaryReportEvaluationPeriodType) => {
-    console.log(values)
     try {
       if (!values) return
       showSpinner()
@@ -76,6 +75,62 @@ const SumaryReport = () => {
     }
   )
 
+  const { data: standardsData } = useFindUniqueEvaluationPeriod(
+    {
+      where: {
+        id: selectedEvaluationPeriodId,
+      },
+      include: {
+        standards: {
+          include: {
+            criteria: {
+              include: {
+                evaluationCriterion: {
+                  where: {
+                    status: $Enums.EvaluationStatus.COMPLETED,
+                  },
+                  include: {
+                    lecturer: {
+                      include: {
+                        userProfile: {
+                          select: {
+                            fullname: true,
+                          },
+                        },
+                      },
+                    },
+                    evaluationCriterionComments: {
+                      include: {
+                        reviewer: {
+                          select: {
+                            fullname: true,
+                          },
+                        },
+                      },
+                      orderBy: {
+                        createdAt: "desc",
+                      },
+                    },
+                  },
+                },
+              },
+              orderBy: {
+                order: "asc",
+              },
+            },
+          },
+          orderBy: {
+            order: "asc",
+          },
+        },
+      },
+    },
+    {
+      enabled: !!selectedEvaluationPeriodId,
+      refetchOnWindowFocus: false,
+    }
+  )
+
   useEffect(() => {
     if (data) {
       form.setFieldsValue({
@@ -116,6 +171,20 @@ const SumaryReport = () => {
         >
           <RichTextEditor />
         </Form.Item>
+        <Typography.Title level={5}>
+          Phần Ⅱ. TỰ ĐÁNH GIÁ THEO CÁC TIÊU CHUẨN, TIÊU CHÍ
+        </Typography.Title>
+        {standardsData && standardsData.standards.length > 0 && (
+          <Tabs
+            tabPosition="left"
+            tabBarStyle={{ height: "100%", overflow: "auto" }}
+            items={standardsData.standards.map((standard: DataTabEvaluationCriterionType) => ({
+              key: standard.id,
+              label: `Tiêu chuẩn ${standard.order}`,
+              children: <StandarReportsSubPage key={standard.id} data={standard} readOnly />,
+            }))}
+          />
+        )}
         <Typography.Title level={5}>Phần Ⅲ. KẾT LUẬN </Typography.Title>
         <Form.Item name="conclude">
           <RichTextEditor />
