@@ -962,153 +962,161 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
     disabled?: boolean
     onClick: (signer?: SignerPayload) => Promise<unknown>
   }> = [
-      {
-        id: 1,
-        label: "Phụ lục ds luận văn",
-        needSign: true,
-        onClick: async () =>
-          await exportPhuLucDsLuanVan({
-            allStudentsInClasses,
-            showSpinner,
-            hideSpinner,
-            message,
-          }),
+    {
+      id: 1,
+      label: "Phụ lục ds luận văn",
+      needSign: true,
+      onClick: async () =>
+        await exportPhuLucDsLuanVan({
+          allStudentsInClasses,
+          showSpinner,
+          hideSpinner,
+          message,
+        }),
+    },
+    {
+      id: 2,
+      label: "Sao QĐ HDLV",
+      needSign: true,
+      onClick: async (signer?: SignerPayload) =>
+        await exportSaoQDHDLV({
+          allStudentsInClasses,
+          showSpinner,
+          hideSpinner,
+          message,
+          signerName: signer?.signerName,
+          isChief: signer?.isChief,
+          signingDate: signer?.signingDate,
+        }),
+    },
+    {
+      id: 3,
+      label: "Giấy mời HDLV",
+      needSign: true,
+      onClick: async (signer?: SignerPayload) =>
+        await exportGiayMoiHdlv({
+          allStudentsInClasses,
+          showSpinner,
+          hideSpinner,
+          message,
+          isChief: signer?.isChief,
+          signerName: signer?.signerName,
+          signingDate: signer?.signingDate,
+        }),
+    },
+    {
+      id: 4,
+      label: "Kiếm tra tiến độ",
+      onClick: async () =>
+        await exportKiemTraTienDo({
+          allStudentsInClasses,
+          showSpinner,
+          hideSpinner,
+          message,
+        }),
+    },
+    {
+      id: 5,
+      label: "Giấy mời chấm LV PB",
+      needSign: true,
+      onClick: async (signer?: SignerPayload) =>
+        await exportGiayMoiChamLvPb({
+          allStudentsInClasses,
+          showSpinner,
+          hideSpinner,
+          message,
+          signerName: signer?.signerName,
+          isChief: signer?.isChief,
+          signingDate: signer?.signingDate,
+        }),
+    },
+    {
+      id: 6,
+      // disabled: true,
+      label: "Phụ lục QĐHĐ",
+      onClick: async () =>
+        await exportPhuLucQdhdd({
+          allStudentsInClasses,
+          showSpinner,
+          hideSpinner,
+          message,
+        }),
+    },
+    {
+      id: 6.1,
+      label: "Bản sao HDDGLV",
+      needSign: true,
+      onClick: async (signer?: SignerPayload) =>
+        await exportBanSaoHDDGLV({
+          allStudentsInClasses,
+          showSpinner,
+          hideSpinner,
+          message,
+          signerName: signer?.signerName,
+          isChief: signer?.isChief,
+          signingDate: signer?.signingDate,
+        }),
+    },
+    // {
+    //   id: 7,
+    //   label: "Đề xuất hội đồng",
+    //   disabled: true,
+    //   onClick: async () =>
+    //     await exportHDDanhGiaLuanVan({
+    //       allStudentsInClasses,
+    //       showSpinner,
+    //       hideSpinner,
+    //       message,
+    //     }),
+    // },
+    {
+      id: 8,
+      label: "Hồ sơ BV LV",
+      needSign: true,
+      onClick: async (signer?: SignerPayload) =>
+        await exportHosobvlv({
+          allStudentsInClasses,
+          showSpinner,
+          hideSpinner,
+          message,
+          signerName: signer?.signerName,
+          isChief: signer?.isChief,
+        }),
+    },
+    {
+      id: 9,
+      label: "Danh sách bảo vệ",
+      onClick: async () =>
+        await exportDanhSachBaoVe({
+          allStudentsInClasses,
+          showSpinner,
+          hideSpinner,
+          message,
+        }),
+    },
+    {
+      id: 10,
+      label: "Danh sách bảo vệ(Dán PBV)",
+      onClick: async () => {
+        exportDanhSachBaoVeDanNgoaiPhong({
+          allStudentsInClasses,
+          showSpinner,
+          hideSpinner,
+          message,
+        })
       },
-      {
-        id: 2,
-        label: "Sao QĐ HDLV",
-        needSign: true,
-        onClick: async (signer?: SignerPayload) =>
-          await exportSaoQDHDLV({
-            allStudentsInClasses,
-            showSpinner,
-            hideSpinner,
-            message,
-            signerName: signer?.signerName,
-            isChief: signer?.isChief,
-            signingDate: signer?.signingDate,
-          }),
-      },
-      {
-        id: 3,
-        label: "Giấy mời HDLV",
-        needSign: true,
-        onClick: async (signer?: SignerPayload) =>
-          await exportGiayMoiHdlv({
-            allStudentsInClasses,
-            showSpinner,
-            hideSpinner,
-            message,
-            isChief: signer?.isChief,
-            signerName: signer?.signerName,
-            signingDate: signer?.signingDate,
-          }),
-      },
-      {
-        id: 4,
-        label: "Kiếm tra tiến độ",
-        onClick: async () =>
-          await exportKiemTraTienDo({
-            allStudentsInClasses,
-            showSpinner,
-            hideSpinner,
-            message,
-          }),
-      },
-      {
-        id: 5,
-        label: "Giấy mời chấm LV PB",
-        needSign: true,
-        onClick: async (signer?: SignerPayload) =>
-          await exportGiayMoiChamLvPb({
-            allStudentsInClasses,
-            showSpinner,
-            hideSpinner,
-            message,
-            signerName: signer?.signerName,
-            isChief: signer?.isChief,
-            signingDate: signer?.signingDate,
-          }),
-      },
-      {
-        id: 6,
-        // disabled: true,
-        label: "Phụ lục QĐHĐ",
-        onClick: async () =>
-          await exportPhuLucQdhdd({
-            allStudentsInClasses,
-            showSpinner,
-            hideSpinner,
-            message,
-          }),
-      },
-      {
-        id: 6.1,
-        label: "Bản sao HDDGLV",
-        needSign: true,
-        onClick: async (signer?: SignerPayload) =>
-          await exportBanSaoHDDGLV({
-            allStudentsInClasses,
-            showSpinner,
-            hideSpinner,
-            message,
-            signerName: signer?.signerName,
-            isChief: signer?.isChief,
-            signingDate: signer?.signingDate,
-          }),
-      },
-      // {
-      //   id: 7,
-      //   label: "Đề xuất hội đồng",
-      //   disabled: true,
-      //   onClick: async () =>
-      //     await exportHDDanhGiaLuanVan({
-      //       allStudentsInClasses,
-      //       showSpinner,
-      //       hideSpinner,
-      //       message,
-      //     }),
-      // },
-      {
-        id: 8,
-        label: "Hồ sơ BV LV",
-        onClick: async () =>
-          await exportHosobvlv({ allStudentsInClasses, showSpinner, hideSpinner, message }),
-      },
-      {
-        id: 9,
-        label: "Danh sách bảo vệ",
-        onClick: async () =>
-          await exportDanhSachBaoVe({
-            allStudentsInClasses,
-            showSpinner,
-            hideSpinner,
-            message,
-          }),
-      },
-      {
-        id: 10,
-        label: "Danh sách bảo vệ(Dán PBV)",
-        onClick: async () => {
-          exportDanhSachBaoVeDanNgoaiPhong({
-            allStudentsInClasses,
-            showSpinner,
-            hideSpinner,
-            message,
-          })
-        },
-      },
-      {
-        id: 12,
-        label: "Danh sách chuyên gia",
-        onClick: async () =>
-          await exportDsChuyenGia({
-            allStudentsInClasses,
-            showSpinner,
-            hideSpinner,
-            message,
-          }),
-      },
+    },
+    {
+      id: 12,
+      label: "Danh sách chuyên gia",
+      onClick: async () =>
+        await exportDsChuyenGia({
+          allStudentsInClasses,
+          showSpinner,
+          hideSpinner,
+          message,
+        }),
+    },
 
       {
         id: 13,
