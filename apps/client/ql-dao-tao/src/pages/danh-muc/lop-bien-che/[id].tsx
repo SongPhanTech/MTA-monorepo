@@ -499,6 +499,19 @@ export default function StudentFixedClassPage() {
         columnFooterRows.push({ cells: [cell1, cell2, cell3] })
       }
 
+      const thongKeRows: TableRow[] = [
+        {
+          cells: [
+            {
+              value: `Tổng số học phần: ${tongSoHP}, Tổng số tín chỉ: ${tongSoTC}`,
+              border: false,
+              colSpan: 20,
+              bold: true,
+            },
+          ],
+        }
+      ]
+
       const ghiChuRows: TableRow[] = [
         { cells: [{ value: null, border: false }] },
         {
@@ -560,7 +573,7 @@ export default function StudentFixedClassPage() {
               tongSoTC: tongSoTC || null,
             },
             tableStartCell: { row: 9, col: 1 },
-            rows: [...studentRows, ...columnFooterRows, ...ghiChuRows],
+            rows: [...studentRows, ...thongKeRows, ...columnFooterRows, ...ghiChuRows],
           },
         ],
         fileName: `BangDiem-${fixedClass?.name}.xlsx`,
