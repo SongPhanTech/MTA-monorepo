@@ -103,6 +103,10 @@ const SinhDeModal = () => {
     dataExam?.subjectClass?.[0]?.examDate,
   ])
 
+  const selectedFramework = useMemo(() => {
+    return examFrameworkData.find((i) => i.id === examFrameworkId)
+  }, [examFrameworkId, examFrameworkData])
+
   const onOk = async (values: PutMaTranDeInputType) => {
     try {
       if (!values || !selectedExamId) return
@@ -112,6 +116,7 @@ const SinhDeModal = () => {
         isNote: values.isNote || false,
         description: values.explain || undefined,
         id: "",
+        examTime: values?.examTime ?? selectedFramework?.time,
         examId: selectedExamId,
         deletedAt: null,
         createdAt: new Date().toISOString(),

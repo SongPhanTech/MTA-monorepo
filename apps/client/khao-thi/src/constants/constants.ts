@@ -24,6 +24,7 @@ const EVALUATION_MEMBER_ROLE_MAP: Record<$Enums.EvaluationMemberRole, string> = 
   [$Enums.EvaluationMemberRole.ADVISORY_BOARD]: "Ban tư vấn",
   [$Enums.EvaluationMemberRole.HEAD_SPECIALIZED]: "Trưởng nhóm chuyên trách",
   [$Enums.EvaluationMemberRole.SPECIALIZED]: "Nhóm chuyên trách",
+  [$Enums.EvaluationMemberRole.NONCOUNCIL_MEMBERS]: "Thành viên ngoài hội đồng",
 }
 
 const EVALUATION_CRITERION_STATUS_OPTIONS = [
