@@ -5912,7 +5912,8 @@ export namespace $Enums {
         MEMBER: 'MEMBER',
         ADVISORY_BOARD: 'ADVISORY_BOARD',
         HEAD_SPECIALIZED: 'HEAD_SPECIALIZED',
-        SPECIALIZED: 'SPECIALIZED'
+        SPECIALIZED: 'SPECIALIZED',
+        NONCOUNCIL_MEMBERS: 'NONCOUNCIL_MEMBERS'
     };
     export type EvaluationMemberRole = (typeof EvaluationMemberRole)[keyof typeof EvaluationMemberRole];
     export const SurveyQuestionType: {

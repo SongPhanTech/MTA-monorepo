@@ -9,7 +9,7 @@ import {
   useUpdateCertificate,
   useFindManySubjectVersion,
 } from "@workspace/db/hooks"
-import { Col, Form, Input, message, Radio } from "antd"
+import { Col, Form, Input, InputNumber, message, Radio } from "antd"
 import Select from "@components/commons/select"
 import dayjs from "dayjs"
 import "dayjs/locale/vi"
@@ -150,6 +150,11 @@ const PutCertificateScoreModal = () => {
               label: `${item.code} - ${item.name} (${item.credit} TC)`,
             }))}
           />
+        </FormItem>
+      </Col>
+      <Col span={24}>
+        <FormItem form={form} name="scoreThreshold" label="Ngưỡng điểm so sánh">
+          <InputNumber min={0} max={10} precision={1} placeholder="Nhập ngưỡng điểm so sánh" />
         </FormItem>
       </Col>
     </PutFormModal>
