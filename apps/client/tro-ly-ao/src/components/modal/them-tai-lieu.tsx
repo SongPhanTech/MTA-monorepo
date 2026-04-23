@@ -39,6 +39,8 @@ const loadPdfJsLib = async () => {
   return pdfjsLib
 }
 
+const MIN_PDF_TEXT_WORDS = 10
+
 type DocumentFormType = {
   topicIds: string[]
   classificationId?: string
@@ -181,6 +183,52 @@ const ThemTaiLieu = () => {
       console.error("[PDF] Lỗi xác định loại PDF:", error)
       return false
     }
+  }
+
+  const extractPDFTextContent = async (file: File) => {
+    try {
+      const pdfjsLib = await loadPdfJsLib()
+      const fileBuffer = await file.arrayBuffer()
+      const pdfDocument = await pdfjsLib.getDocument({
+        data: fileBuffer,
+      }).promise
+
+      try {
+        const pageTexts: string[] = []
+        for (let pageIndex = 1; pageIndex <= pdfDocument.numPages; pageIndex++) {
+          const page = await pdfDocument.getPage(pageIndex)
+          const textContent = await page.getTextContent()
+          const pageText = textContent.items
+            .map((item: unknown) => {
+              if (!item || typeof item !== "object") return ""
+              const value = (item as { str?: unknown }).str
+              return typeof value === "string" ? value.trim() : ""
+            })
+            .filter(Boolean)
+            .join(" ")
+
+          if (pageText) {
+            pageTexts.push(pageText)
+          }
+        }
+
+        return pageTexts.join("\n").trim()
+      } finally {
+        if (typeof pdfDocument.cleanup === "function") {
+          pdfDocument.cleanup()
+        }
+        if (typeof pdfDocument.destroy === "function") {
+          await pdfDocument.destroy()
+        }
+      }
+    } catch (error) {
+      console.error("[PDF] Lỗi trích xuất text local:", error)
+      return ""
+    }
+  }
+
+  const hasEnoughPdfText = (text: string) => {
+    return text.trim().split(/\s+/).filter(Boolean).length >= MIN_PDF_TEXT_WORDS
   }
 
   const processWithOCR = async (file: File, fileId: string) => {
@@ -359,187 +407,221 @@ const ThemTaiLieu = () => {
       })
       await Promise.all(
         valuesWithId.map(async (file) => {
-          let documentBody = ""
-          let similarScore = 0
-          let similarDocId: string | undefined
-          let needOCR = false
+          try {
+            let documentBody = ""
+            let similarScore = 0
+            let similarDocId: string | undefined
+            let needOCR = false
+            let isTextPdf = false
 
-          if (isImageFile(file.file)) {
-            needOCR = true
-            form.setFieldsValue({
-              files: {
-                ...form.getFieldValue("files"),
-                [file.id]: {
-                  ...file,
-                  progress: 0,
-                  isProcessingOCR: true,
-                },
-              },
-            })
-            documentBody = await processWithOCR(file.file, file.id)
-            console.log(`[OCR] Body sau khi xử lý (length: ${documentBody.length})`)
-          } else if (isPDFFile(file.file)) {
-            const isTextPdf = await isPDFTextDocument(file.file)
-            if (!isTextPdf) {
+            if (isImageFile(file.file)) {
               needOCR = true
-              console.log("[PDF] Xác định PDF ảnh, chuyển sang OCR")
-              documentBody = await processWithOCR(file.file, file.id)
-              console.log(`[OCR] Body sau khi xử lý (length: ${documentBody.length})`)
-            }
-          }
-
-          const { data: resPresignedUrl } = await generatePresignedUrl({
-            path: "tai-lieu",
-            extension: file.file.name.split(".").pop() || "",
-          })
-
-          // Lưu lại MinIO path để sử dụng sau
-          const minioPath = resPresignedUrl.fileName
-
-          await axios.put(resPresignedUrl.url, file.file, {
-            onUploadProgress: (progressEvent) => {
-              const { loaded, total = 1, estimated = 0 } = progressEvent
-              const percent = Math.floor((loaded * 100) / total)
-              const currentFiles = form.getFieldValue("files")
-              const currentFile = currentFiles[file.id]
-
-              // Nếu đang OCR => không update upload progress
-              if (currentFile?.isProcessingOCR) {
-                return
-              }
-
-              form.setFieldsValue({
-                files: {
-                  ...currentFiles,
-                  [file.id]: {
-                    ...currentFile,
-                    url: minioPath,
-                    progress: Math.min(percent, 90),
-                    timeLeft: estimated,
-                  },
-                },
-              })
-            },
-          })
-
-          // Đảm bảo cập nhật URL ngay sau khi upload xong (đề phòng onUploadProgress không được gọi)
-          {
-            const currentFiles = form.getFieldValue("files")
-            const currentFile = currentFiles?.[file.id]
-            if (currentFile && (!currentFile.url || currentFile.url.startsWith("blob:"))) {
-              form.setFieldsValue({
-                files: {
-                  ...currentFiles,
-                  [file.id]: {
-                    ...currentFile,
-                    url: minioPath,
-                  },
-                },
-              })
-            }
-          }
-
-          const currentTopicIds = form.getFieldValue("topicIds")
-
-          if (needOCR && documentBody && documentBody.trim().length > 0) {
-            try {
-              console.log("[OCR] Kiểm tra trùng lặp cho file OCR")
-              pendingAPICallsRef.current++
-              const resReaderDocument = await fetchReadDocumentContentDocumentDocumentReaderPost({
-                body: {
-                  uri_file: resPresignedUrl.fileName,
-                  topic_ids: currentTopicIds,
-                },
-              } as any)
-
-              const similarDocs = resReaderDocument.document_simmilar || []
-              if (similarDocs.length > 0) {
-                similarScore = similarDocs[0].score
-                similarDocId = similarDocs[0].id
-              }
-            } catch (error) {
-              console.error("[OCR] Lỗi khi kiểm tra trùng lặp:", error)
-            } finally {
-              pendingAPICallsRef.current--
-            }
-          }
-
-          if (!needOCR) {
-            try {
-              pendingAPICallsRef.current++
-              const resReaderDocument = await fetchReadDocumentContentDocumentDocumentReaderPost({
-                body: {
-                  uri_file: resPresignedUrl.fileName,
-                  topic_ids: currentTopicIds,
-                },
-              } as any)
-              documentBody = resReaderDocument.body || ""
-              const similarDocs = resReaderDocument.document_simmilar || []
-              const hasSimilarDocument = similarDocs.length > 0
-              similarScore = hasSimilarDocument ? similarDocs[0].score : 0
-              similarDocId = hasSimilarDocument ? similarDocs[0].id : undefined
-            } catch (error) {
-              console.error("[Document Reader] Lỗi khi đọc tài liệu:", error)
-            } finally {
-              pendingAPICallsRef.current--
-            }
-
-            if (isPDFFile(file.file) && (!documentBody || documentBody.trim().length < 50)) {
-              console.log("[OCR] PDF không có text, chuyển sang OCR")
               form.setFieldsValue({
                 files: {
                   ...form.getFieldValue("files"),
                   [file.id]: {
                     ...file,
-                    progress: 90,
+                    progress: 0,
                     isProcessingOCR: true,
                   },
                 },
               })
               documentBody = await processWithOCR(file.file, file.id)
-              needOCR = true
+              console.log(`[OCR] Body sau khi xử lý (length: ${documentBody.length})`)
+            } else if (isPDFFile(file.file)) {
+              isTextPdf = await isPDFTextDocument(file.file)
+              if (!isTextPdf) {
+                needOCR = true
+                console.log("[PDF] Xác định PDF ảnh, chuyển sang OCR")
+                documentBody = await processWithOCR(file.file, file.id)
+                console.log(`[OCR] Body sau khi xử lý (length: ${documentBody.length})`)
+              }
+            }
 
-              if (documentBody && documentBody.trim().length > 0) {
-                try {
-                  console.log("[OCR Fallback] Kiểm tra trùng lặp")
-                  pendingAPICallsRef.current++
-                  const resReaderDocumentRetry =
-                    await fetchReadDocumentContentDocumentDocumentReaderPost({
-                      body: {
-                        uri_file: resPresignedUrl.fileName,
-                        topic_ids: currentTopicIds,
-                      },
-                    } as any)
+            const { data: resPresignedUrl } = await generatePresignedUrl({
+              path: "tai-lieu",
+              extension: file.file.name.split(".").pop() || "",
+            })
 
-                  const similarDocsRetry = resReaderDocumentRetry.document_simmilar || []
-                  if (similarDocsRetry.length > 0) {
-                    similarScore = similarDocsRetry[0].score
-                    similarDocId = similarDocsRetry[0].id
+            // Lưu lại MinIO path để sử dụng sau
+            const minioPath = resPresignedUrl.fileName
+
+            await axios.put(resPresignedUrl.url, file.file, {
+              onUploadProgress: (progressEvent) => {
+                const { loaded, total = 1, estimated = 0 } = progressEvent
+                const percent = Math.floor((loaded * 100) / total)
+                const currentFiles = form.getFieldValue("files")
+                const currentFile = currentFiles[file.id]
+
+                // Nếu đang OCR => không update upload progress
+                if (currentFile?.isProcessingOCR) {
+                  return
+                }
+
+                form.setFieldsValue({
+                  files: {
+                    ...currentFiles,
+                    [file.id]: {
+                      ...currentFile,
+                      url: minioPath,
+                      progress: Math.min(percent, 90),
+                      timeLeft: estimated,
+                    },
+                  },
+                })
+              },
+            })
+
+            // Đảm bảo cập nhật URL ngay sau khi upload xong (đề phòng onUploadProgress không được gọi)
+            {
+              const currentFiles = form.getFieldValue("files")
+              const currentFile = currentFiles?.[file.id]
+              if (currentFile && (!currentFile.url || currentFile.url.startsWith("blob:"))) {
+                form.setFieldsValue({
+                  files: {
+                    ...currentFiles,
+                    [file.id]: {
+                      ...currentFile,
+                      url: minioPath,
+                    },
+                  },
+                })
+              }
+            }
+
+            const currentTopicIds = form.getFieldValue("topicIds")
+
+            if (needOCR && documentBody && documentBody.trim().length > 0) {
+              try {
+                console.log("[OCR] Kiểm tra trùng lặp cho file OCR")
+                pendingAPICallsRef.current++
+                const resReaderDocument = await fetchReadDocumentContentDocumentDocumentReaderPost({
+                  body: {
+                    uri_file: resPresignedUrl.fileName,
+                    topic_ids: currentTopicIds,
+                  },
+                } as any)
+
+                const similarDocs = resReaderDocument.document_simmilar || []
+                if (similarDocs.length > 0) {
+                  similarScore = similarDocs[0].score
+                  similarDocId = similarDocs[0].id
+                }
+              } catch (error) {
+                console.error("[OCR] Lỗi khi kiểm tra trùng lặp:", error)
+              } finally {
+                pendingAPICallsRef.current--
+              }
+            }
+
+            if (!needOCR) {
+              try {
+                pendingAPICallsRef.current++
+                const resReaderDocument = await fetchReadDocumentContentDocumentDocumentReaderPost({
+                  body: {
+                    uri_file: resPresignedUrl.fileName,
+                    topic_ids: currentTopicIds,
+                  },
+                } as any)
+                documentBody = resReaderDocument.body || ""
+                const similarDocs = resReaderDocument.document_simmilar || []
+                const hasSimilarDocument = similarDocs.length > 0
+                similarScore = hasSimilarDocument ? similarDocs[0].score : 0
+                similarDocId = hasSimilarDocument ? similarDocs[0].id : undefined
+              } catch (error) {
+                console.error("[Document Reader] Lỗi khi đọc tài liệu:", error)
+              } finally {
+                pendingAPICallsRef.current--
+              }
+
+              if (isPDFFile(file.file) && isTextPdf && !hasEnoughPdfText(documentBody)) {
+                console.log("[PDF] Server đọc chưa đủ nội dung, fallback đọc text local")
+                documentBody = await extractPDFTextContent(file.file)
+              }
+
+              if (isPDFFile(file.file) && !isTextPdf && (!documentBody || documentBody.trim().length < 50)) {
+                console.log("[OCR] PDF không có text, chuyển sang OCR")
+                form.setFieldsValue({
+                  files: {
+                    ...form.getFieldValue("files"),
+                    [file.id]: {
+                      ...file,
+                      progress: 90,
+                      isProcessingOCR: true,
+                    },
+                  },
+                })
+                documentBody = await processWithOCR(file.file, file.id)
+                needOCR = true
+
+                if (documentBody && documentBody.trim().length > 0) {
+                  try {
+                    console.log("[OCR Fallback] Kiểm tra trùng lặp")
+                    pendingAPICallsRef.current++
+                    const resReaderDocumentRetry =
+                      await fetchReadDocumentContentDocumentDocumentReaderPost({
+                        body: {
+                          uri_file: resPresignedUrl.fileName,
+                          topic_ids: currentTopicIds,
+                        },
+                      } as any)
+
+                    const similarDocsRetry = resReaderDocumentRetry.document_simmilar || []
+                    if (similarDocsRetry.length > 0) {
+                      similarScore = similarDocsRetry[0].score
+                      similarDocId = similarDocsRetry[0].id
+                    }
+                  } catch (error) {
+                    console.error("[OCR Fallback] Lỗi khi kiểm tra trùng lặp:", error)
+                  } finally {
+                    pendingAPICallsRef.current--
                   }
-                } catch (error) {
-                  console.error("[OCR Fallback] Lỗi khi kiểm tra trùng lặp:", error)
-                } finally {
-                  pendingAPICallsRef.current--
                 }
               }
             }
-          }
 
-          const currentFiles = form.getFieldValue("files")
-          const currentFile = currentFiles?.[file.id] || file
-          form.setFieldsValue({
-            files: {
-              ...currentFiles,
-              [file.id]: {
-                ...currentFile,
-                body: documentBody,
-                similar: similarScore,
-                similarDocumentId: similarDocId,
-                progress: 100,
-                isProcessingOCR: false,
+            const currentFiles = form.getFieldValue("files")
+            const currentFile = currentFiles?.[file.id] || file
+            form.setFieldsValue({
+              files: {
+                ...currentFiles,
+                [file.id]: {
+                  ...currentFile,
+                  body: documentBody,
+                  similar: similarScore,
+                  similarDocumentId: similarDocId,
+                  progress: 100,
+                  isProcessingOCR: false,
+                },
               },
-            },
-          })
+            })
+          } catch (error) {
+            console.error("[Upload] Lỗi xử lý tài liệu:", error)
+
+            const currentFiles = form.getFieldValue("files")
+            const currentFile = currentFiles?.[file.id] || file
+            form.setFieldsValue({
+              files: {
+                ...currentFiles,
+                [file.id]: {
+                  ...currentFile,
+                  progress: 0,
+                  isProcessingOCR: false,
+                  ocrStatus:
+                    currentFile?.ocrStatus === "processing" ? "failed" : currentFile?.ocrStatus,
+                },
+              },
+            })
+
+            if (axios.isAxiosError(error) && error.response?.status === 507) {
+              message.error(
+                `Không thể tải "${file.file.name}" lên MinIO vì hệ thống đang hết dung lượng lưu trữ.`
+              )
+              return
+            }
+
+            message.error(`Không thể xử lý tài liệu "${file.file.name}".`)
+          }
         })
       )
     } catch (error) {

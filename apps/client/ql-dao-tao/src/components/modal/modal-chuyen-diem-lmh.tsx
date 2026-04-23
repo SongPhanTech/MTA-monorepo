@@ -305,13 +305,12 @@ const ModalChuyenDiemLopMonHoc = () => {
               dataSource={displayStudents}
               columns={columns}
               rowKey="id"
-              pagination={{
-                pageSize: 10,
-                showSizeChanger: true,
-                pageSizeOptions: ["10", "20", "50", "100"],
-                showTotal: (total) => `Tổng cộng ${total} sinh viên`,
-                position: ["bottomRight"],
-              }}
+              // pagination={{
+              //   pageSize: 10,
+              //   showSizeChanger: true,
+              //   showTotal: (total) => `Tổng cộng ${total} sinh viên`,
+              //   position: ["bottomRight"],
+              // }}
               bordered
             />
           </div>

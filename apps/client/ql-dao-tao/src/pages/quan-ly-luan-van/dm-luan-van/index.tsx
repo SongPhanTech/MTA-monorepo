@@ -141,6 +141,7 @@ export function getSupervisorName(record: any, htmlRender = false, showWorkplace
     <span
       title={inAcademy ? "Trong học viện" : "Ngoài học viện"}
       style={{ color: inAcademy ? "#000000" : "#16a34a" }}
+
     >
       {textWithWorkplace}
     </span>
@@ -1435,7 +1436,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                   </Form.Item>
                   <Form.Item label="Tìm kiếm">
                     <Input
-                      className="w-72"
+                      className="w-48"
                       allowClear
                       value={nameKeyword}
                       placeholder="Tên học viên / GVHD"

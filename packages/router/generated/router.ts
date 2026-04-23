@@ -110,6 +110,7 @@ export default {
     "QUAN_LY_DIEM_THUC_TAP": "/quan-ly-diem/thuc-tap",
     "QUAN_LY_DIEM_TONG_KET_KY_HOC": "/quan-ly-diem/tong-ket-ky-hoc",
     "QUAN_LY_DIEM_TONG_KET_NAM_HOC": "/quan-ly-diem/tong-ket-nam-hoc",
+    "QUAN_LY_DIEM_XET_CHUNG_CHI": "/quan-ly-diem/xet-chung-chi",
     "QUAN_LY_DO_AN_CAU_HINH_THANH_TOAN_DO_AN": "/quan-ly-do-an/cau-hinh-thanh-toan-do-an",
     "QUAN_LY_DO_AN_CAU_HINH_THOI_GIAN_BAO_VE": "/quan-ly-do-an/cau-hinh-thoi-gian-bao-ve",
     "QUAN_LY_DO_AN_DANH_MUC_DO_AN_ID": "/quan-ly-do-an/danh-muc-do-an/[id]",

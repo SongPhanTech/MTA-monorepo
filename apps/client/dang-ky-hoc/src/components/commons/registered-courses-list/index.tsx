@@ -421,7 +421,9 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
                   parent?.equivalencyGroups
                     ?.flatMap((eg: any) => {
                       const targetSide =
-                        eg.side === EquivalencySide.SOURCE ? EquivalencySide.TARGET : EquivalencySide.SOURCE
+                        eg.side === EquivalencySide.SOURCE
+                          ? EquivalencySide.TARGET
+                          : EquivalencySide.SOURCE
                       return eg?.equivalencyGroup?.subjects
                         ?.filter((s: any) => s?.side === targetSide)
                         ?.map((s: any) => s?.subject)
@@ -436,7 +438,7 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
                   <div className="flex flex-col gap-1 text-[11px] text-left">
                     <div>
                       <span className="font-semibold text-purple-600">Môn tương đương:</span>
-                      {equivalencies.map((s) => (
+                      {equivalencies.map((s: { code: string; name: string }) => (
                         <div key={s?.code} className="ml-1 text-gray-700">
                           • {s?.name}
                         </div>
