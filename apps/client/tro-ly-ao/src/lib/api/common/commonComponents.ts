@@ -2676,6 +2676,7 @@ export type SqlTransactionRequestBody = {
     | "FAQ"
     | "Prompt"
     | "Conversation"
+    | "ConversationFeedback"
     | "Message"
     | "CitationMessage"
     | "Topic"
