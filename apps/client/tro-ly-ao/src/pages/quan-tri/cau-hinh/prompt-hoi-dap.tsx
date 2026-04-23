@@ -6,7 +6,7 @@ import { TRO_LY_AO_PERMISSION } from "@workspace/router"
 import { Input, Tag, Tooltip } from "antd"
 import { useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
-import { useFindManyPrompt } from "@/../../../../packages/database/generated/hooks/prompt"
+import { getPromptContent, useAiPromptList } from "@/api/ai-prompt"
 import { PutPromptHoiDap } from "@/components/modal"
 import type { PutPromptHoiDapInput } from "@/components/modal/put-prompt-hoi-dap"
 
@@ -32,22 +32,19 @@ function Page() {
     tag: "PutPromptHoiDapModal",
   })
 
-  const { data: allPrompts = [], isLoading } = useFindManyPrompt({
-    where: {
-      code: { in: SYSTEM_PROMPTS.map((p) => p.code) },
-    },
-  })
+  const { data: allPrompts = [], isLoading } = useAiPromptList()
 
   const tableData = useMemo<PromptRecord[]>(() => {
     return SYSTEM_PROMPTS.map((systemPrompt) => {
       const prompt = allPrompts.find((p) => p.code === systemPrompt.code)
+      const content = prompt ? getPromptContent(prompt) : undefined
       return {
         id: systemPrompt.code,
         code: systemPrompt.code,
         name: systemPrompt.name,
-        hasPrompt: !!prompt,
-        prompt: prompt?.prompt ?? undefined,
-        description: (prompt as any)?.description ?? undefined,
+        hasPrompt: !!content,
+        prompt: content,
+        description: (prompt?.description as string | undefined) ?? undefined,
       }
     })
   }, [allPrompts])

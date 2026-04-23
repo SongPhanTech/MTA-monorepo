@@ -199,16 +199,6 @@ export default function Page() {
       // Start idle timeout while waiting for the first response bytes
       resetIdleTimeout()
 
-      timeoutRef.current = setTimeout(() => {
-        if (controller && !controller.signal.aborted) {
-          controller.abort()
-          message.warning("Không nhận được dữ liệu mới trong 60s. Vui lòng thử lại.")
-          setLoading(false)
-          setIsStreaming(false)
-          setAbortController(null)
-        }
-      }, API_TIMEOUT_MS)
-
       try {
         // Chỉ tạo USER message nếu chưa có (khi user gửi từ input)
         if (!skipUserMessage) {

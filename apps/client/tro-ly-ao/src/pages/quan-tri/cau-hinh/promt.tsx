@@ -1,12 +1,11 @@
 import { DownOutlined, EditOutlined, RightOutlined } from "@ant-design/icons"
 import FormItem from "@components/commons/form-item"
 import DefaultLayout from "@layouts/default-layout"
-import { $Enums } from "@workspace/db"
-import { useCreateManyPrompt, useFindFirstPrompt, useUpdateManyPrompt } from "@workspace/db/hooks"
 import { useAbility } from "@workspace/permissions/hooks"
 import { TRO_LY_AO_PERMISSION } from "@workspace/router"
 import { Input as AntdInput, Button, Col, Form, Input, message, Row } from "antd"
 import { useEffect, useRef, useState } from "react"
+import { getPromptContent, useAiPromptByCode, useUpsertAiPrompt } from "@/api/ai-prompt"
 import { useTopics } from "@/hooks/useTopics"
 
 type PromptFormType = {
@@ -25,7 +24,6 @@ type PromptQuestionAnswerType = {
 
 const PromptQuestionAnswer = ({
   label,
-  topicId,
   topicType,
   hideEditButton,
 }: PromptQuestionAnswerType & { hideEditButton?: boolean }) => {
@@ -36,15 +34,11 @@ const PromptQuestionAnswer = ({
   const previewRef = useRef<HTMLDivElement>(null)
   const [previewHeight, setPreviewHeight] = useState<number>(80)
 
-  const { data: promptData } = useFindFirstPrompt({
-    where: {
-      topicId: topicId,
-    },
-  })
+  const { data: promptData } = useAiPromptByCode(topicType, !!topicType)
 
   useEffect(() => {
     if (promptData) {
-      const promptText = promptData.prompt ?? ""
+      const promptText = getPromptContent(promptData)
       form.setFieldsValue({ prompt: promptText })
       setInitialPrompt(promptText)
       setCurrentPrompt(promptText)
@@ -59,30 +53,15 @@ const PromptQuestionAnswer = ({
     }
   }, [currentPrompt])
 
-  const { mutateAsync: updatePrompt } = useUpdateManyPrompt()
-  const { mutateAsync: createPrompt } = useCreateManyPrompt()
+  const { mutateAsync: upsertPrompt } = useUpsertAiPrompt()
 
   const onFinish = async (values: PromptFormType) => {
     try {
-      if (!promptData) {
-        await createPrompt({
-          data: {
-            prompt: values.prompt,
-            topicId: topicId,
-            status: $Enums.DocumentStatus.APPROVE,
-          },
-        })
-      } else {
-        await updatePrompt({
-          where: {
-            topicId: topicId,
-          },
-          data: {
-            prompt: values.prompt,
-            status: $Enums.DocumentStatus.APPROVE,
-          },
-        })
-      }
+      await upsertPrompt({
+        code: topicType,
+        prompt_content: values.prompt,
+        active: true,
+      })
       message.success("Cập nhật thành công")
       setInitialPrompt(values.prompt)
       setCurrentPrompt(values.prompt)
