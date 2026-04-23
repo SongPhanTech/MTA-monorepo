@@ -1054,8 +1054,16 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
     {
       id: 8,
       label: "Hồ sơ BV LV",
-      onClick: async () =>
-        await exportHosobvlv({ allStudentsInClasses, showSpinner, hideSpinner, message }),
+      needSign: true,
+      onClick: async (signer?: SignerPayload) =>
+        await exportHosobvlv({
+          allStudentsInClasses,
+          showSpinner,
+          hideSpinner,
+          message,
+          signerName: signer?.signerName,
+          isChief: signer?.isChief,
+        }),
     },
     {
       id: 9,
