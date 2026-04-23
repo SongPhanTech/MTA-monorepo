@@ -465,6 +465,7 @@ enum EvaluationMemberRole {
   ADVISORY_BOARD
   HEAD_SPECIALIZED
   SPECIALIZED
+  NONCOUNCIL_MEMBERS
 
   @@schema("khao-thi")
 }
