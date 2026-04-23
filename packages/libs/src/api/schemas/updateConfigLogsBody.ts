@@ -7,5 +7,6 @@
 
 export type UpdateConfigLogsBody = {
   apiId: string;
+  baseUrl: string;
   enabled: boolean;
 };

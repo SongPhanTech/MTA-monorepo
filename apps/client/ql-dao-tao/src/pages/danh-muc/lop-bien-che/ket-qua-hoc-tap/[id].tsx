@@ -13,7 +13,6 @@ import {
 } from "@workspace/db/client"
 import {
   useFindManySemester,
-  useFindManyStudentSemesterResult,
   useFindManyStudentSubjectScore,
   useFindManySubjectVersion,
   useFindUniqueStudent,
@@ -226,7 +225,7 @@ export default function StudentScoreClassPage() {
       0
     )
 
-    // Tính điểm trung bình hệ 10 toàn khóa: tổng (điểm TB kỳ × số tín chỉ kỳ) / tổng số tín chỉ
+    // Tính điểm trung bình hệ 10 toàn khoá: tổng (điểm TB kỳ × số tín chỉ kỳ) / tổng số tín chỉ
     const tongDiemNhanTinChiHe10 = sampleStudentData.hocKis.reduce(
       (acc, curr) => acc + (curr.DiemTBKyHe10 ?? 0) * (curr.SoTinChiKy ?? 0),
       0
@@ -246,7 +245,7 @@ export default function StudentScoreClassPage() {
     const diemTBHe10Row: TableRow = {
       cells: [
         {
-          value: `Điểm trung bình hệ 10 toàn khóa: ${tongdiemhe10}`,
+          value: `Điểm trung bình hệ 10 toàn khoá: ${tongdiemhe10}`,
           colSpan: 18,
           border: false,
         },
@@ -255,7 +254,7 @@ export default function StudentScoreClassPage() {
     const diemTBHe4Row: TableRow = {
       cells: [
         {
-          value: `Điểm trung bình hệ 4 toàn khóa: ${tongdiemhe4}`,
+          value: `Điểm trung bình hệ 4 toàn khoá: ${tongdiemhe4}`,
           colSpan: 18,
           border: false,
         },
@@ -550,23 +549,16 @@ export default function StudentScoreClassPage() {
             },
           },
         },
+        orderBy: [{ subject: { name: "asc" } }, { createdAt: "asc" }],
       },
-      studentSemesterResult: {
-        where: { studentId },
-      },
+      studentSemesterResult: { where: { studentId } },
       trainingCoursesStart: {
-        where: {
-          id: student?.fixedClass?.trainingCourseId ?? undefined,
-        },
-        include: {
-          scoreConverts: true,
-        },
+        where: { id: student?.fixedClass?.trainingCourseId ?? undefined },
+        include: { scoreConverts: true },
       },
       schoolYear: true,
     },
-    orderBy: {
-      startDate: "asc",
-    },
+    orderBy: { startDate: "asc" },
   })
 
   const { convertScore } = useScoreConverter(student?.fixedClass?.trainingCourse.scoreConverts)
@@ -639,7 +631,7 @@ export default function StudentScoreClassPage() {
                       Nhập điểm trực tiếp
                     </Button>
                   )}
-                  <Button
+                  {/* <Button
                     type="primary"
                     onClick={() =>
                       onOpen({
@@ -649,7 +641,7 @@ export default function StudentScoreClassPage() {
                     }
                   >
                     In kết quả học tập
-                  </Button>
+                  </Button> */}
 
                   <Button
                     type="primary"

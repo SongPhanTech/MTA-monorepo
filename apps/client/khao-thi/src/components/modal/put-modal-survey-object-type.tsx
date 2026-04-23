@@ -386,12 +386,12 @@ const PutSurveyObjectTypeModal = () => {
               </FormItem>
             </Col>
             <Col span={12}>
-              <FormItem form={form} name="TrainingCourses" label="Khóa">
+              <FormItem form={form} name="TrainingCourses" label="Khoá">
                 <Select
                   disabled={SubjectClasses?.length > 0}
                   mode="multiple"
                   maxTagCount={"responsive"}
-                  placeholder={"Chọn khóa"}
+                  placeholder={"Chọn khoá"}
                   options={trainingCourses.map((i: TrainingCourse) => ({
                     value: i.id,
                     label: `${i.code || ""} - ${i.name || ""}`,

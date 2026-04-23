@@ -808,6 +808,7 @@ model SubjectVersion extends BaseNoCode {
   exams                    Exam[]
   examFramework            ExamFramework[]
   scoreLinkSubjectVersion  ScoreLinkSubjectVersion[]
+	certificate Certificate[]
 
   @@unique([trainingObjectTypeId, name, credit, period, managementOrganizationId])
   // @@unique([trainingObjectTypeId, codeTkb])

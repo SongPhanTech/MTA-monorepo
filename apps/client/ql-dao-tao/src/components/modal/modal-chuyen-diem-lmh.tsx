@@ -185,7 +185,9 @@ const ModalChuyenDiemLopMonHoc = () => {
     if (studentList.length === 0) {
       message.info("Các lớp môn học đã chọn hiện chưa có sinh viên nào.")
     } else {
-      message.success(`Đã tải danh sách ${studentList.length} bản ghi điểm (có thể trùng sinh viên giữa các lớp).`)
+      message.success(
+        `Đã tải danh sách ${studentList.length} bản ghi điểm (có thể trùng sinh viên giữa các lớp).`
+      )
     }
   }
 
@@ -303,13 +305,12 @@ const ModalChuyenDiemLopMonHoc = () => {
               dataSource={displayStudents}
               columns={columns}
               rowKey="id"
-              pagination={{
-                pageSize: 10,
-                showSizeChanger: true,
-                pageSizeOptions: ["10", "20", "50", "100"],
-                showTotal: (total) => `Tổng cộng ${total} sinh viên`,
-                position: ["bottomRight"],
-              }}
+              // pagination={{
+              //   pageSize: 10,
+              //   showSizeChanger: true,
+              //   showTotal: (total) => `Tổng cộng ${total} sinh viên`,
+              //   position: ["bottomRight"],
+              // }}
               bordered
             />
           </div>

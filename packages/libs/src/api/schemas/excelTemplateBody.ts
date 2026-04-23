@@ -7,16 +7,22 @@
 import type { ExcelTemplateBodyTail } from './excelTemplateBodyTail';
 import type { ExcelTemplateBodyHead } from './excelTemplateBodyHead';
 import type { ExcelTemplateBodyPayloadItem } from './excelTemplateBodyPayloadItem';
+import type { ExcelTemplateBodySheetsItem } from './excelTemplateBodySheetsItem';
+import type { ExcelTemplateBodyOrientation } from './excelTemplateBodyOrientation';
 
 export type ExcelTemplateBody = {
   tail?: ExcelTemplateBodyTail;
   head?: ExcelTemplateBodyHead;
-  /** Dữ liệu để điền vào template */
-  payload: ExcelTemplateBodyPayloadItem[];
+  /** Dữ liệu để điền vào template (chế độ cũ: 1 sheet) */
+  payload?: ExcelTemplateBodyPayloadItem[];
+  /** Dữ liệu nhiều sheet. Nếu có thì mỗi phần tử tạo ra 1 sheet trong file xuất. */
+  sheets?: ExcelTemplateBodySheetsItem[];
   fileName: string;
   path: string;
   /** Có hiển thị lưới trong Excel hay không */
   showGridLines?: boolean;
   /** Có tự động xuống dòng trong ô hay không */
   wrapText?: boolean;
+  orientation?: ExcelTemplateBodyOrientation;
+  horizontalCentered?: boolean;
 };

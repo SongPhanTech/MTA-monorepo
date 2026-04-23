@@ -363,6 +363,15 @@ export default function StudentFixedClassPage() {
           orderBy: { semester: { startDate: "desc" } },
           include: { semester: true },
         },
+        thesisRegistrations: {
+          include: {
+            thesisProject: {
+              include: {
+                defenseRecord: true,
+              },
+            },
+          },
+        },
       },
       orderBy: {
         userProfile: {
@@ -417,18 +426,20 @@ export default function StudentFixedClassPage() {
       const studentRows = data.map((student, index) => {
         const diem: (string | number | null)[] = (subjectsInOrder || []).map((subjectInfo) => {
           const scoreData = (student as any).subjectClassStudent?.find(
-            (score: any) => score.subjectVersion?.subject?.id === subjectInfo.subject.id
+            (score: any) => score.subjectVersionId === subjectInfo.subject.id
           )
           if (scoreData) {
             return scoreData.manualFinalScore ?? scoreData.finalScore
           }
           return null
         })
-        const ccta = (student as any).englishCertificate || null
-        const tbc = (student as any).gpa || null
+        const ccta = student.foreignLangPass ? "Đạt" : ""
+        const tbcData = (student as any).studentSemesterResult?.[0]?.cumulativeGpaBase10
+        const tbc = tbcData ? Number(tbcData) : null
 
-        // !!! TODO: Lấy ĐLV (Điểm luận văn)
-        const dlv = null
+        const thesisReg = (student as any).thesisRegistrations?.[0]
+        const dlvData = thesisReg?.thesisProject?.defenseRecord?.finalScore
+        const dlv = dlvData ? Number(dlvData) : null
         return {
           cells: [
             { value: index + 1, align: "center" as const, border: true },
@@ -490,7 +501,9 @@ export default function StudentFixedClassPage() {
 
       const ghiChuRows: TableRow[] = [
         { cells: [{ value: null, border: false }] },
-        { cells: [{ value: "GHI CHÚ:", border: false, bold: true, colSpan: 10 }] },
+        {
+          cells: [{ value: "GHI CHÚ:", border: false, bold: true, colSpan: 10 }],
+        },
         {
           cells: [
             {
@@ -502,12 +515,26 @@ export default function StudentFixedClassPage() {
           ],
         },
         {
-          cells: [{ value: "2. ' ': Môn chưa lên danh sách thi", border: false, colSpan: 20 }],
+          cells: [
+            {
+              value: "2. ' ': Môn chưa lên danh sách thi",
+              border: false,
+              colSpan: 20,
+            },
+          ],
         },
-        { cells: [{ value: "3. 'Miễn': Môn miễn học", border: false, colSpan: 20 }] },
-        { cells: [{ value: "4. 'HT': Môn hoãn thi", border: false, colSpan: 20 }] },
-        { cells: [{ value: "4. 'CT': Môn cấm thi", border: false, colSpan: 20 }] },
-        { cells: [{ value: "5. 'ĐCT': Môn đình chỉ thi", border: false, colSpan: 20 }] },
+        {
+          cells: [{ value: "3. 'Miễn': Môn miễn học", border: false, colSpan: 20 }],
+        },
+        {
+          cells: [{ value: "4. 'HT': Môn hoãn thi", border: false, colSpan: 20 }],
+        },
+        {
+          cells: [{ value: "4. 'CT': Môn cấm thi", border: false, colSpan: 20 }],
+        },
+        {
+          cells: [{ value: "5. 'ĐCT': Môn đình chỉ thi", border: false, colSpan: 20 }],
+        },
         {
           cells: [
             {
@@ -895,7 +922,7 @@ export default function StudentFixedClassPage() {
           0
         )
 
-        // Tính điểm trung bình hệ 10 toàn khóa: tổng (điểm TB kỳ × số tín chỉ kỳ) / tổng số tín chỉ
+        // Tính điểm trung bình hệ 10 toàn khoá: tổng (điểm TB kỳ × số tín chỉ kỳ) / tổng số tín chỉ
         const tongDiemNhanTinChiHe10 = sampleStudentData.hocKis.reduce(
           (acc: number, curr: IHocKi) => acc + (curr.DiemTBKyHe10 ?? 0) * (curr.SoTinChiKy ?? 0),
           0
@@ -910,12 +937,18 @@ export default function StudentFixedClassPage() {
         const tongdiemhe4 =
           tongtinchi === 0 ? 0 : Number.parseFloat((tongDiemNhanTinChiHe4 / tongtinchi).toFixed(1))
         const totalRow: TableRow = {
-          cells: [{ value: `Tổng tín chỉ: ${tongtinchi}`, colSpan: 18, border: false }],
+          cells: [
+            {
+              value: `Tổng tín chỉ: ${tongtinchi}`,
+              colSpan: 18,
+              border: false,
+            },
+          ],
         }
         const diemTBHe10Row: TableRow = {
           cells: [
             {
-              value: `Điểm trung bình hệ 10 toàn khóa: ${tongdiemhe10}`,
+              value: `Điểm trung bình hệ 10 toàn khoá: ${tongdiemhe10}`,
               colSpan: 18,
               border: false,
             },
@@ -924,7 +957,7 @@ export default function StudentFixedClassPage() {
         const diemTBHe4Row: TableRow = {
           cells: [
             {
-              value: `Điểm trung bình hệ 4 toàn khóa: ${tongdiemhe4}`,
+              value: `Điểm trung bình hệ 4 toàn khoá: ${tongdiemhe4}`,
               colSpan: 18,
               border: false,
             },
@@ -1252,7 +1285,7 @@ export default function StudentFixedClassPage() {
           0
         )
 
-        // Tính điểm trung bình hệ 10 toàn khóa: tổng (điểm TB kỳ × số tín chỉ kỳ) / tổng số tín chỉ
+        // Tính điểm trung bình hệ 10 toàn khoá: tổng (điểm TB kỳ × số tín chỉ kỳ) / tổng số tín chỉ
         const tongDiemNhanTinChiHe10 = sampleStudentData.hocKis.reduce(
           (acc: number, curr: IHocKi) => acc + (curr.DiemTBKyHe10 ?? 0) * (curr.SoTinChiKy ?? 0),
           0
@@ -1267,12 +1300,18 @@ export default function StudentFixedClassPage() {
         const tongdiemhe4 =
           tongtinchi === 0 ? 0 : Number.parseFloat((tongDiemNhanTinChiHe4 / tongtinchi).toFixed(1))
         const totalRow: TableRow = {
-          cells: [{ value: `Tổng tín chỉ: ${tongtinchi}`, colSpan: 18, border: false }],
+          cells: [
+            {
+              value: `Tổng tín chỉ: ${tongtinchi}`,
+              colSpan: 18,
+              border: false,
+            },
+          ],
         }
         const diemTBHe10Row: TableRow = {
           cells: [
             {
-              value: `Điểm trung bình hệ 10 toàn khóa: ${tongdiemhe10}`,
+              value: `Điểm trung bình hệ 10 toàn khoá: ${tongdiemhe10}`,
               colSpan: 18,
               border: false,
             },
@@ -1281,7 +1320,7 @@ export default function StudentFixedClassPage() {
         const diemTBHe4Row: TableRow = {
           cells: [
             {
-              value: `Điểm trung bình hệ 4 toàn khóa: ${tongdiemhe4}`,
+              value: `Điểm trung bình hệ 4 toàn khoá: ${tongdiemhe4}`,
               colSpan: 18,
               border: false,
             },
@@ -2054,11 +2093,6 @@ export default function StudentFixedClassPage() {
                         key: "export-bang-diem-theo-lop-ket-qua-dao-tao-toan-khoa",
                         onClick: async () => await handleExportDiemLop(),
                       },
-                      // {
-                      //     label: 'Test',
-                      //     key: 'test',
-                      //     onClick: async () => await handleTest(),
-                      // },
                     ],
                   }}
                 >

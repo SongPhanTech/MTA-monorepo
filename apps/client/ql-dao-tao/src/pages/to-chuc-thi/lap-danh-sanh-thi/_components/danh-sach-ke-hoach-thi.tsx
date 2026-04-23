@@ -645,6 +645,7 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                 width: 200,
                 render: (_, record) => {
                   const name = record.subjectClass?.[0]?.subject?.name || ""
+                  const credit = record.subjectClass?.[0]?.subject?.credit || 0
                   return (
                     <div className="text-left flex flex-row items-center">
                       <p>
@@ -659,7 +660,7 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                         ) : null}
                       </p>
                       <HighlightText
-                        text={`${name} (${record.subjectClass?.[0]?.subject?.credit || ""})`}
+                        text={`${name} (${credit} TC)`}
                         searchText={filters.searchText}
                       />
                     </div>
@@ -705,7 +706,7 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
               {
                 title: "Hình thức thi",
                 align: "left",
-                width: 80,
+                width: 100,
                 render: (_, record) => {
                   const examTypes: Set<string> = new Set(
                     record?.subjectClass?.map((c: SubjectClass) => getExamTypeLabel(c.examType))
@@ -716,6 +717,20 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                         <div>- {examType}</div>
                       ))}
                     </div>
+                  )
+                },
+              },
+              {
+                title: "Một đầu điểm",
+                align: "center",
+                width: 90,
+                render: (_, record) => {
+                  return (
+                    <Checkbox
+                      checked={record?.subjectClass.every(
+                        (sc: { subject: { onePoint: boolean } }) => sc.subject.onePoint
+                      )}
+                    />
                   )
                 },
               },
@@ -734,7 +749,7 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                 },
               },
               {
-                title: "Khóa nhập ĐQT",
+                title: "Khoá nhập ĐQT",
                 align: "center",
                 width: 90,
                 render: (_, record) => {
@@ -750,7 +765,7 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                 },
               },
               {
-                title: "Khóa DTS",
+                title: "Khoá DTS",
                 align: "center",
                 width: 60,
                 render: (_, record) => {
@@ -782,7 +797,7 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                 },
               },
               {
-                title: "Khóa phách",
+                title: "Khoá phách",
                 align: "center",
                 width: 70,
                 render: (_, record) => {
@@ -807,7 +822,7 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
               {
                 title: "Danh sách phòng",
                 align: "center",
-                width: 350,
+                width: 300,
                 render: (_, record) => {
                   const totalStudents =
                     record.subjectClass?.reduce(

@@ -95,12 +95,12 @@ const EvaluationTable: React.FC = () => {
     {
       key: "6",
       tt: "6",
-      content: "Phân bổ khối lượng học tập hợp lý giữa các học phần trong toàn khóa học.",
+      content: "Phân bổ khối lượng học tập hợp lý giữa các học phần trong toàn khoá học.",
     },
     {
       key: "7",
       tt: "7",
-      content: "Có sự hài hòa giữa thời gian học chính khóa và các hoạt động ngoại khóa.",
+      content: "Có sự hài hòa giữa thời gian học chính khoá và các hoạt động ngoại khoá.",
     },
 
     {

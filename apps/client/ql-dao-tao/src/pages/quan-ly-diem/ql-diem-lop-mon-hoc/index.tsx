@@ -406,7 +406,7 @@ export default function QuanLyDiemLopMonHoc({
           className="-mt-3"
           activeKey={activeKey}
           onChange={(key) => setActiveKey(key)}
-          destroyOnHidden={true}
+          destroyOnHidden={false}
           items={items}
         />
       </Col>

@@ -142,6 +142,7 @@ export type FilterProps = {
   title?: string
   titleEN?: string
   supervisor?: string
+  coSupervisor?: string
   currentStudents?: "asc" | "desc"
   maxStudents?: "asc" | "desc"
   statusThesisProject?: ThesisProjectStatus[]

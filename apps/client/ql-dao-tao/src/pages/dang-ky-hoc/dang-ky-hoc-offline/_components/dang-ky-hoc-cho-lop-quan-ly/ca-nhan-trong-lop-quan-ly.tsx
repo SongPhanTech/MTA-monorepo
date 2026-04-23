@@ -608,7 +608,7 @@ export default function CaNhanTrongLopQuanLy({ hocLai }: RegisterClassProps) {
         <Table
           rowKey="id"
           scrollable
-          maxHeight={"calc(100vh - 380px)"}
+          // maxHeight={"calc(100vh - 380px)"}
           data={students}
           onRow={(record) => ({
             onClick: () => {
@@ -664,13 +664,14 @@ export default function CaNhanTrongLopQuanLy({ hocLai }: RegisterClassProps) {
             {
               title: "Mã",
               dataIndex: "code",
-              fixed: "left",
+              // fixed: "left",
               align: "center",
               width: 100,
             },
             {
               title: "Tên",
               align: "center",
+              fixed: "left",
               width: 200,
               render: (_, record) => <p className="text-left">{record?.userProfile?.fullname}</p>,
             },

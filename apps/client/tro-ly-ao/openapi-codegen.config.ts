@@ -5,7 +5,7 @@ export default defineConfig({
   common: {
     from: {
       source: "url",
-      url: "https://api.model.mta.swantech.vn/openapi",
+      url: "https://mta.swantech.vn/api/model/openapi",
     },
     outputDir: "src/lib/api/common",
     to: async (context) => {
@@ -22,7 +22,7 @@ export default defineConfig({
   qa: {
     from: {
       source: "url",
-      url: "http://14.224.217.69:8010/openapi.json",
+      url: "https://api.doc.chatbot.swantech.vn/openapi.json",
     },
     outputDir: "src/lib/api/qa",
     to: async (context) => {
@@ -39,7 +39,7 @@ export default defineConfig({
   chat: {
     from: {
       source: "url",
-      url: "http://14.224.217.69:8011/openapi.json",
+      url: "https://api.chat.chatbot.swantech.vn/openapi.json",
     },
     outputDir: "src/lib/api/chat",
     to: async (context) => {

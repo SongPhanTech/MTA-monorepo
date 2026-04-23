@@ -70,7 +70,11 @@ export default function Subject() {
       },
     },
     include: {
-      subjectVersion: true,
+      subjectVersion: {
+        where: {
+          ...(trainingObjectTypeId ? { trainingObjectTypeId } : {}),
+        },
+      },
     },
     orderBy: {
       name: "asc" as const,

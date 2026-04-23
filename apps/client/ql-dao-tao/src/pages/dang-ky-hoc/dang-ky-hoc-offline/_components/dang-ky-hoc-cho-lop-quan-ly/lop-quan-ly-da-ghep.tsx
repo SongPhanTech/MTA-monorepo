@@ -241,13 +241,13 @@ export default function LopQuanLyDaGhep() {
             align: "center",
             width: 100,
           },
-          {
-            title: "Khoá học",
-            dataIndex: "trainingCourse",
-            width: 100,
-            align: "center",
-            render: (record) => (record.name ? record.name : ""),
-          },
+          // {
+          //   title: "Khoá học",
+          //   dataIndex: "trainingCourse",
+          //   width: 100,
+          //   align: "center",
+          //   render: (record) => (record.name ? record.name : ""),
+          // },
           {
             title: "Chuyên ngành",
             dataIndex: ["curriculumVersion", "curriculum", "trainingMajor", "name"],

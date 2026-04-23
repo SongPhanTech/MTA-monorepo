@@ -179,8 +179,18 @@ const CriteriaAnalysisSubPage = ({
     <div className="h-[calc(100vh-230px)] overflow-y-auto p-4">
       <div className="flex items-center justify-between mb-3">
         <div className="text-base text-green-700">
-          <span className="font-bold">Tiêu chuẩn {idx}: </span>
-          <span>{data?.name}</span>
+          {(() => {
+            const colonIdx = data?.name?.indexOf(": ")
+            if (colonIdx !== undefined && colonIdx !== -1) {
+              return (
+                <>
+                  <span className="font-bold">{data?.name?.substring(0, colonIdx + 1)} </span>
+                  <span>{data?.name?.substring(colonIdx + 2)}</span>
+                </>
+              )
+            }
+            return <span className="font-bold">{data?.name}</span>
+          })()}
         </div>
         <div className="flex gap-2">
           <Select
@@ -240,10 +250,20 @@ const CriteriaAnalysisSubPage = ({
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1">
                     <div className="text-base flex items-start gap-2 mb-2">
-                      <span className="font-bold whitespace-nowrap">
-                        Tiêu chí {idx}.{item.order}:
-                      </span>
-                      <span className="flex-1">{item?.name}</span>
+                      {(() => {
+                        const colonIdx = item?.name?.indexOf(": ")
+                        if (colonIdx !== undefined && colonIdx !== -1) {
+                          return (
+                            <>
+                              <span className="font-bold whitespace-nowrap">
+                                {item?.name?.substring(0, colonIdx + 1)}
+                              </span>
+                              <span className="flex-1">{item?.name?.substring(colonIdx + 2)}</span>
+                            </>
+                          )
+                        }
+                        return <span className="flex-1 font-bold">{item?.name}</span>
+                      })()}
                     </div>
                     <div className="flex items-center gap-2 flex-wrap">
                       {userRole === "P13" && (

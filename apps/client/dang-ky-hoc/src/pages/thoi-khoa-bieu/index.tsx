@@ -1,38 +1,32 @@
-import Table from "@components/commons/table";
-import ViewIcon from "@components/icons/view";
-import { DEFAULT_PAGINATE_SIZE } from "@constants/constants";
-import type { FilterProps } from "@constants/type";
-import { useExamTypeOptions } from "@hooks/examType";
-import DefaultLayout from "@layouts/default-layout";
-import { formatDate } from "@lib/utils";
-import { useSession } from "@workspace/auth/react";
-import { emptyObjectIf } from "@workspace/constant";
-import type { $Enums, Prisma, SubjectClassTime } from "@workspace/db/client";
+import Table from "@components/commons/table"
+import ViewIcon from "@components/icons/view"
+import { DEFAULT_PAGINATE_SIZE } from "@constants/constants"
+import type { FilterProps } from "@constants/type"
+import { useExamTypeOptions } from "@hooks/examType"
+import DefaultLayout from "@layouts/default-layout"
+import { formatDate } from "@lib/utils"
+import { useSession } from "@workspace/auth/react"
+import { emptyObjectIf } from "@workspace/constant"
+import type { $Enums, Prisma, SubjectClassTime } from "@workspace/db/client"
 import {
   useCountSubjectClass,
   useFindManySemester,
   useFindManySubjectClass,
   useFindUniqueUserProfile,
-} from "@workspace/db/hooks";
-import { dayjs } from "@workspace/ui";
-import { Col, Divider, Row, Select } from "antd";
-import _ from "lodash";
-import type React from "react";
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { useDisclosure } from "react-hook-disclosure-modal";
+} from "@workspace/db/hooks"
+import { dayjs } from "@workspace/ui"
+import { Col, Divider, Row, Select } from "antd"
+import _ from "lodash"
+import type React from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
+import { useDisclosure } from "react-hook-disclosure-modal"
 
-export default function ThoiKhoaBieu({
-  type,
-}: {
-  type?: $Enums.SubjectClassType;
-}) {
-  const { data: me } = useSession();
-  const id = me?.sDM_NhanVienId || "";
-  const [currentPage, setCurrentPage] = useState(1);
-  const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE);
-  const [selectedSemesterId, setSelectedSemesterId] = useState<
-    string | undefined
-  >(undefined);
+export default function ThoiKhoaBieu({ type }: { type?: $Enums.SubjectClassType }) {
+  const { data: me } = useSession()
+  const id = me?.sDM_NhanVienId || ""
+  const [currentPage, setCurrentPage] = useState(1)
+  const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
+  const [selectedSemesterId, setSelectedSemesterId] = useState<string | undefined>(undefined)
   const [filters, setFilters] = useState<FilterProps>({
     code: "",
     name: "",
@@ -43,9 +37,9 @@ export default function ThoiKhoaBieu({
     extraLecturer: undefined,
     examType: undefined,
     room: undefined,
-  });
+  })
 
-  const toDay = dayjs().startOf("day");
+  const toDay = dayjs().startOf("day")
   // const { data: currentSemester } = useFindFirstSemester({
   //   where: {
   //     schoolYear: {
@@ -89,16 +83,16 @@ export default function ThoiKhoaBieu({
     },
     {
       enabled: !!id,
-    },
-  );
+    }
+  )
 
   useEffect(() => {
     if (allSemesters?.[0]?.id && !selectedSemesterId) {
-      setSelectedSemesterId(allSemesters[0].id);
+      setSelectedSemesterId(allSemesters[0].id)
     }
-  }, [allSemesters?.[0]?.id]);
+  }, [allSemesters?.[0]?.id])
 
-  const displaySemester = allSemesters.find((s) => s.id === selectedSemesterId);
+  const displaySemester = allSemesters.find((s) => s.id === selectedSemesterId)
 
   const { data: userProfile } = useFindUniqueUserProfile(
     {
@@ -118,25 +112,20 @@ export default function ThoiKhoaBieu({
         },
       },
     },
-    { enabled: !!id },
-  );
+    { enabled: !!id }
+  )
 
-  const semesterId = selectedSemesterId;
+  const semesterId = selectedSemesterId
   const trainingObjectTypeId =
-    userProfile?.educationAndTraining?.[0]?.fixedClass?.trainingCourse
-      ?.trainingObjectTypeId;
+    userProfile?.educationAndTraining?.[0]?.fixedClass?.trainingCourse?.trainingObjectTypeId
 
-  const { options, getExamTypeLabel } = useExamTypeOptions();
+  const { options, getExamTypeLabel } = useExamTypeOptions()
 
   const where = useMemo(
     () =>
       ({
-        ...(filters.name
-          ? { name: { contains: filters.name, mode: "insensitive" as const } }
-          : {}),
-        ...(filters.code
-          ? { code: { contains: filters.code, mode: "insensitive" as const } }
-          : {}),
+        ...(filters.name ? { name: { contains: filters.name, mode: "insensitive" as const } } : {}),
+        ...(filters.code ? { code: { contains: filters.code, mode: "insensitive" as const } } : {}),
         ...(filters.examType ? { examType: { in: filters.examType } } : {}),
         ...(filters.lecturerId?.length === 1
           ? filters.lecturerId[0]
@@ -189,8 +178,8 @@ export default function ThoiKhoaBieu({
         semesterId,
         type: type,
       }) satisfies Prisma.SubjectClassWhereInput,
-    [filters, semesterId, trainingObjectTypeId, id, type],
-  );
+    [filters, semesterId, trainingObjectTypeId, id, type]
+  )
 
   const { data: subjectClasses = [], refetch } = useFindManySubjectClass(
     {
@@ -219,13 +208,10 @@ export default function ThoiKhoaBieu({
         },
       },
       orderBy: [
-        ...emptyObjectIf(
-          [{ maxStudent: filters.maxStudent }],
-          !!filters.maxStudent,
-        ),
+        ...emptyObjectIf([{ maxStudent: filters.maxStudent }], !!filters.maxStudent),
         ...emptyObjectIf(
           [{ subjectClassStudent: { _count: filters.subjectClassStudent } }],
-          !!filters.subjectClassStudent,
+          !!filters.subjectClassStudent
         ),
         { code: "asc" },
       ],
@@ -235,35 +221,35 @@ export default function ThoiKhoaBieu({
     {
       enabled: !!semesterId && !!trainingObjectTypeId,
       refetchOnWindowFocus: false,
-    },
-  );
+    }
+  )
 
-  const { data: count } = useCountSubjectClass({ where });
+  const { data: count } = useCountSubjectClass({ where })
 
   const debouncedRefetch = useCallback(
     _.debounce(() => refetch(), 500),
-    [],
-  );
+    []
+  )
 
   const handleFilterChange = (key: string, value: string) => {
     setFilters((prev) => {
-      const newFilters = { ...prev, [key]: value };
-      debouncedRefetch();
-      return newFilters;
-    });
-  };
+      const newFilters = { ...prev, [key]: value }
+      debouncedRefetch()
+      return newFilters
+    })
+  }
 
   const { onOpen: onOpenEditSubjectClass } = useDisclosure<{
-    id: string;
-    mode: "edit" | "view";
+    id: string
+    mode: "edit" | "view"
   }>({
     tag: "PutOneSubjectClassModal",
-  });
+  })
 
   const handleSemesterChange = (value: string) => {
-    setSelectedSemesterId(value);
-    setCurrentPage(1);
-  };
+    setSelectedSemesterId(value)
+    setCurrentPage(1)
+  }
 
   return (
     <div>
@@ -307,8 +293,8 @@ export default function ThoiKhoaBieu({
             scrollable
             filters={filters}
             setFilters={(value) => {
-              setFilters(value);
-              setCurrentPage(1);
+              setFilters(value)
+              setCurrentPage(1)
             }}
             columns={[
               {
@@ -337,9 +323,8 @@ export default function ThoiKhoaBieu({
                 render: (_, record) => (
                   <p>
                     {record?.fixedClasses?.reduce(
-                      (acc: number, curr: any) =>
-                        acc + (curr?._count?.students ?? 0),
-                      0,
+                      (acc: number, curr: any) => acc + (curr?._count?.students ?? 0),
+                      0
                     ) ?? 0}
                   </p>
                 ),
@@ -348,15 +333,13 @@ export default function ThoiKhoaBieu({
                 title: "Giảng viên 1",
                 align: "center",
                 type: "input",
-                render: (__, record) =>
-                  record?.mainLecturer?.userProfile?.fullname ?? "-",
+                render: (__, record) => record?.mainLecturer?.userProfile?.fullname ?? "-",
               },
               {
                 title: "Giảng viên 2",
                 align: "center",
                 type: "input",
-                render: (__, record) =>
-                  record?.extraLecturer?.userProfile?.fullname ?? "-",
+                render: (__, record) => record?.extraLecturer?.userProfile?.fullname ?? "-",
               },
               {
                 title: "Hình thức thi",
@@ -364,9 +347,7 @@ export default function ThoiKhoaBieu({
                 width: 150,
                 type: "select",
                 options: options,
-                render: (__, record) => (
-                  <div>{getExamTypeLabel(record?.examType)}</div>
-                ),
+                render: (__, record) => <div>{getExamTypeLabel(record?.examType)}</div>,
               },
               {
                 title: "Khu vực",
@@ -391,8 +372,8 @@ export default function ThoiKhoaBieu({
                     ?.uniqueByKey?.("dayOfWeek")
                     ?.map?.((tkb: SubjectClassTime) => (
                       <p key={tkb.dayOfWeek}>
-                        {tkb.dayOfWeek === 8 ? "CN" : `T${tkb.dayOfWeek}`} -{" "}
-                        {tkb.startPeriod} - {tkb.endPeriod}
+                        {tkb.dayOfWeek === 8 ? "CN" : `T${tkb.dayOfWeek}`} - {tkb.startPeriod} -{" "}
+                        {tkb.endPeriod}
                       </p>
                     )),
               },
@@ -400,8 +381,7 @@ export default function ThoiKhoaBieu({
                 title: "Ngày thi",
                 align: "center",
                 width: 100,
-                render: (_, record) =>
-                  record.examDate ? formatDate(record.examDate) : "",
+                render: (_, record) => (record.examDate ? formatDate(record.examDate) : ""),
               },
               {
                 title: "Thao tác",
@@ -410,9 +390,7 @@ export default function ThoiKhoaBieu({
                 render: (_, record) => (
                   <div className="flex items-center justify-center">
                     <ViewIcon
-                      onClick={() =>
-                        onOpenEditSubjectClass({ id: record.id, mode: "view" })
-                      }
+                      onClick={() => onOpenEditSubjectClass({ id: record.id, mode: "view" })}
                     />
                   </div>
                 ),
@@ -426,10 +404,10 @@ export default function ThoiKhoaBieu({
               total: count,
               onChange: (page, pageSize) => {
                 if (numberOfPages === pageSize) {
-                  setCurrentPage(page);
+                  setCurrentPage(page)
                 } else {
-                  setCurrentPage(1);
-                  setNumberOfPages(pageSize);
+                  setCurrentPage(1)
+                  setNumberOfPages(pageSize)
                 }
               },
             }}
@@ -437,9 +415,9 @@ export default function ThoiKhoaBieu({
         </Col>
       </Row>
     </div>
-  );
+  )
 }
 
 ThoiKhoaBieu.getLayout = function getLayout(page: React.ReactElement) {
-  return <DefaultLayout>{page}</DefaultLayout>;
-};
+  return <DefaultLayout>{page}</DefaultLayout>
+}

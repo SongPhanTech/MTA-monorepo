@@ -246,7 +246,7 @@ export default function KyThi({ setActiveKey }: { setActiveKey: (key: string) =>
                 },
               },
               {
-                title: "Khóa nhập ĐQT",
+                title: "Khoá nhập ĐQT",
                 align: "center",
                 width: 80,
                 render: (_, record) => {
@@ -262,7 +262,7 @@ export default function KyThi({ setActiveKey }: { setActiveKey: (key: string) =>
                 },
               },
               {
-                title: "Khóa DTS",
+                title: "Khoá DTS",
                 align: "center",
                 width: 80,
                 render: (_, record) => {
@@ -293,7 +293,7 @@ export default function KyThi({ setActiveKey }: { setActiveKey: (key: string) =>
                 },
               },
               {
-                title: "Khóa phách",
+                title: "Khoá phách",
                 align: "center",
                 width: 60,
                 render: (_, record) => {

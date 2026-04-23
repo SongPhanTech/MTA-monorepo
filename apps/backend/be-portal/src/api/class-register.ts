@@ -303,6 +303,25 @@ app.openapi(getClassesInfo, async (c) => {
           name: true,
         },
       },
+      coRequisiteSubject: {
+        select: {
+          code: true,
+          name: true,
+        },
+      },
+      equivalencyGroups: {
+        include: {
+          equivalencyGroup: {
+            include: {
+              subjects: {
+                include: {
+                  subject: { select: { id: true, name: true, code: true } },
+                },
+              },
+            },
+          },
+        },
+      },
       subjectClass: {
         where: {
           active: true,
@@ -418,6 +437,9 @@ app.openapi(getClassesInfo, async (c) => {
           ...subjectClass,
           credit: version.credit ?? 0,
           type: subjectVersion?.type,
+          prerequisiteSubject: version.prerequisiteSubject,
+          coRequisiteSubject: version.coRequisiteSubject,
+          equivalencyGroups: version.equivalencyGroups,
         })),
       }
     })
@@ -549,27 +571,54 @@ app.openapi(classRegister, async (c) => {
   const allCoRequisiteIds = [
     ...new Set(subjectClasses.flatMap((sc) => sc.subject.coRequisiteSubject.map((p) => p.id))),
   ]
-  const allRequiredIds = [...new Set([...allPrerequisiteIds, ...allCoRequisiteIds])]
 
-  if (allRequiredIds.length > 0) {
-    const studentHistory = await prisma.studentSubjectScore.findMany({
+  if (allPrerequisiteIds.length > 0 || allCoRequisiteIds.length > 0) {
+    const passedPrerequisites = await prisma.studentSubjectScore.findMany({
       where: {
         studentId,
-        subjectVersionId: { in: allRequiredIds },
+        subjectVersionId: { in: allPrerequisiteIds },
+        finalScore: { gt: 4.0 },
+      },
+      select: { subjectVersionId: true },
+    })
+    const passedPrerequisiteIds = new Set(passedPrerequisites.map((h) => h.subjectVersionId))
+
+    const registeredCoRequisites = await prisma.classRegisterLogs.findMany({
+      where: {
+        studentId,
+        subjectClass: {
+          subjectId: { in: allCoRequisiteIds },
+        },
+      },
+      select: { subjectClass: { select: { subjectId: true } } },
+    })
+    const enrolledCoRequisites = await prisma.studentSubjectScore.findMany({
+      where: {
+        studentId,
+        subjectVersionId: { in: allCoRequisiteIds },
       },
       select: { subjectVersionId: true },
     })
 
-    const takenIds = new Set(studentHistory.map((h) => h.subjectVersionId))
+    const registeredCoRequisiteSubjectIds = new Set([
+      ...registeredCoRequisites.map((r) => r.subjectClass.subjectId).filter(Boolean),
+      ...enrolledCoRequisites.map((r) => r.subjectVersionId),
+      ...subjectClasses.map((sc) => sc.subjectId),
+    ])
 
     for (const sc of subjectClasses) {
-      const missingPrerequisites = sc.subject.prerequisiteSubject.filter((p) => !takenIds.has(p.id))
-      const missingCoRequisites = sc.subject.coRequisiteSubject.filter((p) => !takenIds.has(p.id))
+      const missingPrerequisites = sc.subject.prerequisiteSubject.filter(
+        (p) => !passedPrerequisiteIds.has(p.id)
+      )
+
+      const missingCoRequisites = sc.subject.coRequisiteSubject.filter(
+        (p) => !registeredCoRequisiteSubjectIds.has(p.id)
+      )
 
       if (missingPrerequisites.length > 0) {
         return c.json(
           {
-            message: `Bạn chưa học môn tiên quyết của môn ${sc.subject.name}: ${missingPrerequisites.map((p) => p.name).join(", ")}`,
+            message: `Bạn chưa hoàn thành môn tiên quyết của môn ${sc.subject.name}: ${missingPrerequisites.map((p) => p.name).join(", ")}`,
           },
           400
         )
@@ -578,7 +627,7 @@ app.openapi(classRegister, async (c) => {
       if (missingCoRequisites.length > 0) {
         return c.json(
           {
-            message: `Bạn chưa học môn song hành của môn ${sc.subject.name}: ${missingCoRequisites.map((p) => p.name).join(", ")}`,
+            message: `Bạn chưa đăng ký môn song hành của môn ${sc.subject.name}: ${missingCoRequisites.map((p) => p.name).join(", ")}`,
           },
           400
         )

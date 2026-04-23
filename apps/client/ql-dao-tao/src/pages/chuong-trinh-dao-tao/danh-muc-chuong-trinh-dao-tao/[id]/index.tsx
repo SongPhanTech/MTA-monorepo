@@ -782,7 +782,7 @@ export default function TrainingProgramSubjects() {
               },
               {
                 title: (
-                  <Tooltip title="Số tiết thời khóa biểu">
+                  <Tooltip title="Số tiết thời khoá biểu">
                     <span>Số tiết TKB</span>
                   </Tooltip>
                 ),

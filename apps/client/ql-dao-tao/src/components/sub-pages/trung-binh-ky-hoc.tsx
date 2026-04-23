@@ -64,6 +64,7 @@ const DiemTrungBinhKyHoc = () => {
         { userProfile: { firstName: sorter.order } },
         { userProfile: { lastName: sorter.order } },
         { fixedClass: { code: "desc" as const } },
+
       ]
     }
     // Mặc định ban đầu
@@ -91,36 +92,36 @@ const DiemTrungBinhKyHoc = () => {
       ],
       ...(filters.code
         ? {
-          code: {
-            contains: filters.code,
-            mode: "insensitive" as const,
-          },
-        }
+            code: {
+              contains: filters.code,
+              mode: "insensitive" as const,
+            },
+          }
         : {}),
       ...(filters.name
         ? {
-          userProfile: {
-            fullname: {
-              contains: filters.name,
-              mode: "insensitive" as const,
+            userProfile: {
+              fullname: {
+                contains: filters.name,
+                mode: "insensitive" as const,
+              },
             },
-          },
-        }
+          }
         : {}),
       ...(trainingCourseId || filters.fixedClassId || filters.managementOrganizationId
         ? {
-          fixedClass: {
-            ...(trainingCourseId
-              ? { trainingCourseId }
-              : trainingObjectTypeId
-                ? { trainingCourse: { trainingObjectTypeId } }
+            fixedClass: {
+              ...(trainingCourseId
+                ? { trainingCourseId }
+                : trainingObjectTypeId
+                  ? { trainingCourse: { trainingObjectTypeId } }
+                  : {}),
+              ...(filters.fixedClassId ? { id: filters.fixedClassId } : {}),
+              ...(filters.managementOrganizationId
+                ? { managementOrganizationId: filters.managementOrganizationId }
                 : {}),
-            ...(filters.fixedClassId ? { id: filters.fixedClassId } : {}),
-            ...(filters.managementOrganizationId
-              ? { managementOrganizationId: filters.managementOrganizationId }
-              : {}),
-          },
-        }
+            },
+          }
         : {}),
     }
   }, [filters, semesterId, trainingObjectTypeId, trainingCourseId])
@@ -648,10 +649,15 @@ const DiemTrungBinhKyHoc = () => {
               if (sorterInfo.columnKey === "name" || sorterInfo.field === "name") {
                 setSorter({
                   field: "name",
-                  order: sorterInfo.order === 'ascend' ? 'asc' : sorterInfo.order === 'descend' ? 'desc' : null,
-                });
+                  order:
+                    sorterInfo.order === "ascend"
+                      ? "asc"
+                      : sorterInfo.order === "descend"
+                        ? "desc"
+                        : null,
+                })
               } else {
-                setSorter({ field: null, order: null });
+                setSorter({ field: null, order: null })
               }
             }}
           />

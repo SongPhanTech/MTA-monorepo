@@ -16,6 +16,7 @@ const baseSchema = z.object({
     createdBy: z.string().uuid().nullish(),
     name: z.string(),
     englishName: z.string().nullish(),
+    scoreThreshold: z.number().default(5),
     isUsingScore: z.boolean().default(true),
 }
 ).strict();
@@ -30,6 +31,7 @@ const baseSchemaWithoutDefaults = z.object({
     createdBy: z.string().uuid().nullish(),
     name: z.string(),
     englishName: z.string().nullish(),
+    scoreThreshold: z.number(),
     isUsingScore: z.boolean(),
 }
 ).strict();
@@ -37,6 +39,7 @@ const relationSchema = z.object({
     outputStandard: z.record(z.string(), z.unknown()).optional(),
     archivedCertificate: z.array(z.unknown()).optional(),
     subjects: z.array(z.unknown()).optional(),
+    subjectVersions: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({
@@ -78,6 +81,7 @@ export const CertificatePrismaUpdateSchema = z.object({
     createdBy: z.string().uuid().nullish(),
     name: z.string(),
     englishName: z.string().nullish(),
+    scoreThreshold: z.union([z.number(), z.record(z.string(), z.unknown())]),
     isUsingScore: z.boolean()
 }).partial().passthrough();
 
@@ -86,7 +90,7 @@ export const CertificatePrismaUpdateSchema = z.object({
  * `Certificate` schema for create operations excluding foreign keys and relations.
  */
 export const CertificateCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, isUsingScore: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, scoreThreshold: true, isUsingScore: true
 });
 
 

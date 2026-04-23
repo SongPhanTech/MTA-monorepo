@@ -6,6 +6,7 @@ import { useStore } from "@tanstack/react-store"
 import {
   useFindManyExamPaper,
   useFindManyExamRoom,
+  useFindManyExamList,
   useUpdateManyExamList,
   useUpdateManySubjectClass,
 } from "@workspace/db/hooks"
@@ -15,9 +16,20 @@ import type { SqlTransactionBodyItem } from "@workspace/libs/api/schemas"
 import { getExportSubjectClassScoreUrl, useGenExamListCode } from "@workspace/libs/api/training"
 import { getRuntimeEnv } from "@workspace/libs/utils"
 import { cn } from "@workspace/ui/lib/utils"
-import { AutoComplete, Button, Checkbox, Col, Flex, Form, Input, Modal, message } from "antd"
+import {
+  AutoComplete,
+  Button,
+  Checkbox,
+  Col,
+  Flex,
+  Form,
+  Input,
+  Modal,
+  message,
+  Select,
+} from "antd"
 import { Printer } from "lucide-react"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 
 interface StudentExamFormType {
@@ -40,9 +52,7 @@ export default function SinhPhach() {
 
   const { data: examRooms = [], refetch } = useFindManyExamRoom(
     {
-      where: {
-        examId,
-      },
+      where: { examId },
       include: {
         examList: {
           select: {
@@ -60,29 +70,8 @@ export default function SinhPhach() {
         examList: {
           examRoom: {
             examId,
+            roomId: { not: null },
           },
-        },
-        studentSubjectScore: {
-          examBanned: false,
-          examPostponed: false,
-          OR: [
-            {
-              attendanceScore: {
-                not: null,
-              },
-              midtermScore: {
-                not: null,
-              },
-              subjectVersion: {
-                onePoint: false,
-              },
-            },
-            {
-              subjectVersion: {
-                onePoint: true,
-              },
-            },
-          ],
         },
       },
       include: {
@@ -265,9 +254,17 @@ export default function SinhPhach() {
             }}
             checked={lockExamCode}
           >
-            Khóa sinh phách
+            Khoá sinh phách
           </Checkbox>
           <Flex justify="end" align="center" gap={8}>
+            <AddExamPaperModal
+              examId={examId ?? ""}
+              lockExamCode={lockExamCode}
+              onSuccess={() => {
+                refetch()
+                refreshExamPaper()
+              }}
+            />
             <Button
               type="primary"
               className="bg-orange-500"
@@ -454,5 +451,230 @@ export default function SinhPhach() {
         </Form>
       </Col>
     </div>
+  )
+}
+
+function AddExamPaperModal({
+  examId,
+  lockExamCode,
+  onSuccess,
+}: {
+  examId: string
+  lockExamCode: boolean
+  onSuccess: () => void
+}) {
+  const [open, setOpen] = useState(false)
+  const [selectedExamListId, setSelectedExamListId] = useState<string>()
+  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
+
+  const { data: examPapers = [], refetch: refetchPapers } = useFindManyExamPaper(
+    {
+      where: {
+        examList: {
+          examRoom: {
+            examId,
+            roomId: null,
+          },
+        },
+      },
+      include: {
+        studentSubjectScore: {
+          include: {
+            student: {
+              include: {
+                userProfile: { include: { gender: true } },
+              },
+            },
+          },
+        },
+      },
+    },
+    { enabled: open && !!examId }
+  )
+
+  const { data: examLists = [] } = useFindManyExamList(
+    {
+      where: {
+        examRoom: { examId, roomId: { not: null } },
+      },
+      include: {
+        examRoom: {
+          include: { room: true },
+        },
+      },
+    },
+    { enabled: open && !!examId }
+  )
+
+  const { showSpinner, hideSpinner } = useSpinner()
+
+  const handleSave = async () => {
+    if (!selectedExamListId || selectedRowKeys.length === 0) {
+      message.warning("Vui lòng chọn danh sách thi và ít nhất một thí sinh")
+      return
+    }
+
+    const selectedPapers = examPapers.filter((p) => selectedRowKeys.includes(p.id))
+    const hasBannedOrPostponed = selectedPapers.some(
+      (p) => p.studentSubjectScore?.examBanned || p.studentSubjectScore?.examPostponed
+    )
+
+    if (hasBannedOrPostponed) {
+      Modal.confirm({
+        title: "Xác nhận",
+        content:
+          "Trong danh sách chọn có thí sinh đang bị cấm thi hoặc hoãn thi. Việc thêm vào danh sách thi sẽ tự động huỷ cấm thi/hoãn thi cho các thí sinh này. Bạn có chắc chắn tiếp tục?",
+        onOk: () => performSave(selectedPapers),
+      })
+    } else {
+      performSave(selectedPapers)
+    }
+  }
+
+  const performSave = async (selectedPapers: any[]) => {
+    try {
+      showSpinner()
+      const updateTransactions: SqlTransactionBodyItem[] = []
+
+      selectedPapers.forEach((paper) => {
+        const oldReason =
+          paper.studentSubjectScore?.examBannedReason ||
+          paper.studentSubjectScore?.examPostponedReason
+        const updateDescription = `P13 bổ sung DS thi${oldReason ? ` (HUỶ: ${oldReason})` : ""}`
+
+        updateTransactions.push({
+          model: "StudentSubjectScore",
+          operation: "update",
+          data: {
+            where: { id: paper.studentSubjectScoreId },
+            data: {
+              examBanned: false,
+              examBannedReason: null,
+              examPostponed: false,
+              examPostponedReason: null,
+              description: updateDescription,
+            },
+          },
+        })
+
+        updateTransactions.push({
+          model: "ExamPaper",
+          operation: "update",
+          data: {
+            where: { id: paper.id },
+            data: { examListId: selectedExamListId, description: updateDescription },
+          },
+        })
+      })
+
+      const res = await sqlTransaction(updateTransactions)
+      if (res.status === 200) {
+        message.success("Bổ sung thí sinh thành công")
+        setOpen(false)
+        setSelectedRowKeys([])
+        setSelectedExamListId(undefined)
+        refetchPapers()
+        onSuccess()
+      }
+    } catch (e: any) {
+      message.error(e.message || "Có lỗi xảy ra, vui lòng thử lại sau!")
+    } finally {
+      hideSpinner()
+    }
+  }
+
+  return (
+    <>
+      <Button disabled={lockExamCode} onClick={() => setOpen(true)}>
+        Bổ sung thí sinh
+      </Button>
+      <Modal
+        open={open}
+        onCancel={() => setOpen(false)}
+        onOk={handleSave}
+        title="Bổ sung thí sinh vào danh sách thi"
+        width={1000}
+      >
+        <Flex vertical gap={16} className="mt-4">
+          <Flex align="center" gap={8}>
+            <span className="whitespace-nowrap font-medium">Danh sách thi:</span>
+            <Select
+              className="w-64"
+              value={selectedExamListId}
+              onChange={setSelectedExamListId}
+              placeholder="Chọn danh sách thi"
+              options={examLists.map((el) => ({
+                label: `${el.examRoom?.room?.name || "Không rõ"} (Ca ${el.start})`,
+                value: el.id,
+              }))}
+            />
+          </Flex>
+
+          <Table
+            rowKey="id"
+            rowSelection={{
+              selectedRowKeys,
+              onChange: (keys) => setSelectedRowKeys(keys),
+            }}
+            columns={[
+              {
+                title: "STT",
+                width: 60,
+                align: "center",
+                render: (_, __, index) => index + 1,
+              },
+              {
+                title: "Mã sinh viên",
+                dataIndex: ["studentSubjectScore", "student", "code"],
+              },
+              {
+                title: "Họ và tên",
+                dataIndex: ["studentSubjectScore", "student", "userProfile", "fullname"],
+              },
+              {
+                title: "Giới tính",
+                render: (_, record) => {
+                  return record.studentSubjectScore?.student?.userProfile?.gender.sTen
+                },
+              },
+              {
+                title: "Ngày sinh",
+                render: (_, record) => {
+                  return (
+                    record.studentSubjectScore?.student?.userProfile?.dateOfBirth &&
+                    record.studentSubjectScore?.student?.userProfile?.dateOfBirth?.toLocaleDateString(
+                      "vi-VN"
+                    )
+                  )
+                },
+              },
+              {
+                title: "Cấm thi",
+                align: "center",
+                width: 80,
+                render: (_, record) => (record.studentSubjectScore?.examBanned ? "✅" : ""),
+              },
+              {
+                title: "Lý do cấm thi",
+                render: (_, record) => record.studentSubjectScore?.examBannedReason,
+              },
+              {
+                title: "Hoãn thi",
+                align: "center",
+                width: 80,
+                render: (_, record) => (record.studentSubjectScore?.examPostponed ? "✅" : ""),
+              },
+              {
+                title: "Lý do hoãn thi",
+                render: (_, record) => record.studentSubjectScore?.examPostponedReason,
+              },
+            ]}
+            data={examPapers}
+            pagination={{ hideOnSinglePage: true }}
+            maxHeight={400}
+          />
+        </Flex>
+      </Modal>
+    </>
   )
 }

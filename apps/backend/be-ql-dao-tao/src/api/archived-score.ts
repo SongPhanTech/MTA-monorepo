@@ -6,7 +6,11 @@ import {
   getStatsArchivedAward,
   StatsArchivedResponseSchema,
 } from "../services/stats-archived"
-import { exportArchivedCertificate } from "../services/student"
+import {
+  exportArchivedCertificate,
+  exportArchivedCertificateMulti,
+  exportStudentsMissingCertificate,
+} from "../services/student"
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -563,7 +567,7 @@ const exportArchivedCertificateExcel = createRoute({
       trainingCourseId: z
         .string()
         .optional()
-        .openapi("trainingCourseId", { description: "ID khóa học" }),
+        .openapi("trainingCourseId", { description: "ID khoá học" }),
       fixedClassId: z
         .string()
         .optional()
@@ -609,6 +613,144 @@ app.openapi(exportArchivedCertificateExcel, async (c) => {
     })
 
     const fileName = "Danh_sach_diem_chung_chi.xlsx"
+    const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
+
+    return c.body(buffer, 200, {
+      "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "Content-Disposition": disposition,
+    })
+  } catch (error: any) {
+    return c.json({ message: error.message || "Đã xảy ra lỗi khi xuất Excel" }, 404)
+  }
+})
+
+const exportArchivedCertificateMultiExcel = createRoute({
+  operationId: "exportArchivedCertificateMultiExcel",
+  path: "/export-archived-certificate-multi-excel",
+  tags: ["ArchivedScore"],
+  summary: "Xuất Excel danh sách điểm chứng chỉ nhiều loại",
+  description: "Xuất danh sách điểm chứng chỉ theo nhiều khoá học và nhiều loại chứng chỉ",
+  method: "post",
+  request: {
+    body: {
+      content: {
+        "application/json": {
+          schema: z
+            .object({
+              trainingObjectTypeId: z.string(),
+              trainingCourseIds: z.string().array().min(1),
+              certificateIds: z.string().array().min(1),
+            })
+            .openapi("ExportArchivedCertificateMultiInput"),
+        },
+      },
+    },
+  },
+  responses: {
+    200: {
+      description: "Export danh sách điểm chứng chỉ thành công",
+      content: {
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
+          schema: z.string().openapi({ type: "string", format: "binary" }),
+        },
+      },
+    },
+    404: {
+      description: "Không tìm thấy dữ liệu",
+      content: {
+        "application/json": {
+          schema: z.object({
+            message: z.string(),
+          }),
+        },
+      },
+    },
+  },
+})
+
+app.openapi(exportArchivedCertificateMultiExcel, async (c) => {
+  const { trainingObjectTypeId, trainingCourseIds, certificateIds } = c.req.valid("json")
+
+  try {
+    const buffer = await exportArchivedCertificateMulti({
+      trainingObjectTypeId,
+      trainingCourseIds,
+      certificateIds,
+    })
+
+    const fileName = "Danh_sach_diem_chung_chi_nhieu_loai.xlsx"
+    const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
+
+    return c.body(buffer, 200, {
+      "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "Content-Disposition": disposition,
+    })
+  } catch (error: any) {
+    return c.json({ message: error.message || "Đã xảy ra lỗi khi xuất Excel" }, 404)
+  }
+})
+
+const exportStudentsMissingCertificateExcel = createRoute({
+  operationId: "exportStudentsMissingCertificateExcel",
+  path: "/export-students-missing-certificate-excel",
+  tags: ["ArchivedScore"],
+  summary: "Xuất Excel danh sách sinh viên thiếu chứng chỉ",
+  description: "Xuất danh sách sinh viên chưa có điểm chứng chỉ dưới dạng file Excel",
+  method: "get",
+  request: {
+    query: z.object({
+      trainingObjectTypeId: z
+        .string()
+        .openapi("trainingObjectTypeId", { description: "ID loại đối tượng đào tạo" }),
+      trainingCourseId: z
+        .string()
+        .optional()
+        .openapi("trainingCourseId", { description: "ID khoá học" }),
+      fixedClassId: z
+        .string()
+        .optional()
+        .openapi("fixedClassId", { description: "ID lớp quản lý" }),
+      certificateId: z
+        .string()
+        .optional()
+        .openapi("certificateId", { description: "ID chứng chỉ" }),
+    }),
+  },
+  responses: {
+    200: {
+      description: "Export danh sách sinh viên thiếu chứng chỉ thành công",
+      content: {
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
+          schema: z.string().openapi({ type: "string", format: "binary" }),
+        },
+      },
+    },
+    404: {
+      description: "Không tìm thấy dữ liệu",
+      content: {
+        "application/json": {
+          schema: z.object({
+            message: z.string(),
+          }),
+        },
+      },
+    },
+  },
+})
+
+app.openapi(exportStudentsMissingCertificateExcel, async (c) => {
+  const { trainingObjectTypeId, trainingCourseId, fixedClassId, certificateId } =
+    c.req.valid("query")
+
+  try {
+    const buffer = await exportStudentsMissingCertificate({
+      trainingObjectTypeId,
+      trainingCourseId,
+      fixedClassId,
+      certificateId,
+    })
+
+    const fileName = "Danh_sach_sinh_vien_thieu_chung_chi.xlsx"
     const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
 
     return c.body(buffer, 200, {

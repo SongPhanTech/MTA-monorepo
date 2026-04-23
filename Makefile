@@ -29,7 +29,7 @@ SERVER_PROFILE ?= swan1
 ifeq ($(SERVER_PROFILE),swan1)
   SERVER_HOST      := swan1
   SERVER_PASSWORD  :=
-  BE_DEPLOY_DIR    := ~/mta-deploy
+  BE_DEPLOY_DIR    := ~/mta-be
   BE_APP_DIR       := ~/mta-be
   FE_APP_DIR       := ~/app
   FE_COMPOSE_FILE  := app-docker-compose.yml
@@ -237,7 +237,7 @@ deploy-all-be:
 
 deploy-%:
 	$(DOCKER) save $(REGISTRY)/$(IMG_PREFIX)$*:$(DEV_TAG) | gzip > docker-images/$(IMG_PREFIX)$*.tar.gz
-	$(SCP) -O docker-images/$(IMG_PREFIX)$*.tar.gz $(SERVER_HOST):$(BE_DEPLOY_DIR)/
+	$(SCP) docker-images/$(IMG_PREFIX)$*.tar.gz $(SERVER_HOST):$(BE_DEPLOY_DIR)/docker-images/
 	$(SSH) $(SERVER_HOST) "cd $(BE_DEPLOY_DIR) && \
 	docker load -i docker-images/$(IMG_PREFIX)$*.tar.gz && \
 	docker rm -f $(IMG_PREFIX)$* && \

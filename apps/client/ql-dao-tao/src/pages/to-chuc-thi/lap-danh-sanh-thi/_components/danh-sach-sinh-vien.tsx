@@ -356,7 +356,7 @@ export default function DanhSachSinhVien() {
       queryClient.invalidateQueries({
         queryKey: ["zenstack", "Exam"],
       })
-      lockAfter && message.success("Lấy điểm và khóa điểm thành công")
+      lockAfter && message.success("Lấy điểm và khoá điểm thành công")
     } catch (error: any) {
       message.error(error.message || "Có lỗi xảy ra, vui lòng thử lại sau!")
     } finally {
@@ -687,6 +687,7 @@ export default function DanhSachSinhVien() {
           data: {
             examPostponed: i.examPostponed ?? false,
             examPostponedReason: i.examPostponed ? i.examPostponedReason || null : null,
+            description: i.description ?? null,
           },
         },
       }))
@@ -781,9 +782,9 @@ export default function DanhSachSinhVien() {
                   } catch (error) {}
                 }}
                 disabled={examData?.lockExamSessions || isCreatedExamCode}
-                checked={examData?.subjectClass.every((sc) => sc.isLockScore)}
+                checked={examData?.subjectClass.some((sc) => sc.isLockScore)}
               >
-                2. Khóa nhập ĐQT
+                2. Khoá nhập ĐQT
               </Checkbox>
               <Button
                 type="primary"
@@ -822,7 +823,7 @@ export default function DanhSachSinhVien() {
                 }}
                 checked={examData?.lockExamSessions}
               >
-                4. Khóa DS thi
+                4. Khoá DS thi
               </Checkbox>
               <ExportExamList
                 data={data}
