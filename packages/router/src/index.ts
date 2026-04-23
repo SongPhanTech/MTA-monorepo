@@ -821,6 +821,13 @@ const NAVIGATION: NavigationType = {
         path: ROUTER_PATH.QL_DAO_TAO.LICH_KIEM_TRA_GIANG_DAY,
         description: "Quản lý lịch kiểm tra giảng dạy",
       },
+      {
+        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_KIEM_TRA_GIANG_DAY,
+        label: "Kế hoạch kiểm tra giảng dạy",
+        icon: CalendarRange,
+        path: ROUTER_PATH.QL_DAO_TAO.KE_HOACH_KIEM_TRA_GIANG_DAY,
+        description: "Quản lý kế hoạch kiểm tra giảng dạy",
+      },
     ],
     label: "Quản lý đào tạo",
   },

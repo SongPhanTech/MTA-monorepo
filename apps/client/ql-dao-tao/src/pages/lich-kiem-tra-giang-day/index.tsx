@@ -9,16 +9,19 @@ import {
   useCountClassSchedule,
   useFindManyClassSchedule,
   useUpdateClassSchedule,
+  useUpdateManyClassSchedule,
+  useCreateManyClassSchedule,
 } from "@workspace/db/hooks"
 import { useAbility } from "@workspace/permissions/hooks"
 import { QL_DAO_TAO_PERMISSION } from "@workspace/router"
-import { Button, Col, Flex, message, Row } from "antd"
+import { Button, Col, Flex, message, Row, Popconfirm } from "antd"
 import dayjs from "dayjs"
 import _ from "lodash"
 import type React from "react"
 import { useCallback, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
-
+import { SyncOutlined } from "@ant-design/icons"
+import { type LichKiemTraItem, getFromLocalStorage } from "@constants/ke-hoach-kem-tra"
 export default function LichKiemTraGiangDay() {
   const { can, canSome } = useAbility()
   const [currentPage, setCurrentPage] = useState(1)
@@ -27,7 +30,46 @@ export default function LichKiemTraGiangDay() {
     location: "",
     notes: "",
   })
+  const { mutateAsync: updateManyClassSchedule } = useUpdateManyClassSchedule()
+  const { mutateAsync: createManyClassSchedule } = useCreateManyClassSchedule()
 
+  async function handleSync() {
+    const localData = getFromLocalStorage()
+
+    if (!localData.length) {
+      message.warning("Không có dữ liệu kế hoạch để đồng bộ")
+      return
+    }
+
+    try {
+      showSpinner()
+
+      await updateManyClassSchedule({
+        where: { periodType: "CHECK", deletedAt: null },
+        data: { deletedAt: new Date() },
+      })
+
+      await createManyClassSchedule({
+        data: localData.map((item: LichKiemTraItem) => ({
+          periodType: "CHECK" as const,
+          classDate: new Date(item.classDate),
+          startTime: new Date(item.startTime),
+          endTime: new Date(item.endTime),
+          startPeriod: item.startPeriod,
+          endPeriod: item.endPeriod,
+          location: item.location,
+          notes: item.notes,
+        })),
+      })
+
+      message.success(`Đồng bộ thành công ${localData.length} bản ghi`)
+      refetch()
+    } catch (error: any) {
+      message.error(error?.info?.message ?? "Đồng bộ thất bại")
+    } finally {
+      hideSpinner()
+    }
+  }
   const buildWhere = useCallback(() => {
     return {
       periodType: "CHECK" as const,
@@ -121,6 +163,15 @@ export default function LichKiemTraGiangDay() {
                     Thêm mới
                   </Button>
                 )}
+                <Popconfirm
+                  title="Xác nhận đồng bộ"
+                  description="Toàn bộ dữ liệu hiện tại sẽ đồng bộ với ban kế hoạch. Bạn có chắc chắn?"
+                  onConfirm={handleSync}
+                  okText="Đồng bộ"
+                  cancelText="Hủy"
+                >
+                  <Button icon={<SyncOutlined />}>Đồng bộ</Button>
+                </Popconfirm>
               </Flex>
             </Col>
           </Row>

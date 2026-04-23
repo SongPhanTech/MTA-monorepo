@@ -84,6 +84,7 @@ export default {
     "KE_HOACH_GIAO_DUC": "/ke-hoach-giao-duc",
     "KE_HOACH_HOC_LAI": "/ke-hoach-hoc-lai",
     "KE_HOACH_HUAN_LUYEN": "/ke-hoach-huan-luyen",
+    "KE_HOACH_KIEM_TRA_GIANG_DAY": "/ke-hoach-kiem-tra-giang-day",
     "KE_HOACH_THI_LAI": "/ke-hoach-thi-lai",
     "KHOA_BO_MON_PHAN_CONG_CHUYEN_DE_NGHIEN_CU": "/khoa-bo-mon-phan-cong-chuyen-de-nghien-cu",
     "KHOA_BO_MON_PHAN_CONG_GIANG_DAY": "/khoa-bo-mon-phan-cong-giang-day",
