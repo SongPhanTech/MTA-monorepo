@@ -76,6 +76,41 @@ model Conversation extends Base {
   topic     Topic?       @relation(fields: [topicId], references: [id])
   topicId   String?
   message   Message[]
+  feedbacks ConversationFeedback[]
+  @@schema("tro-ly-ao")
+}
+
+// Phản hồi của người dùng cho 1 hội thoại.
+// Dùng FK lỏng (onDelete: SetNull) + các trường snapshot để bản ghi vẫn được lưu lại
+// khi người dùng xoá hội thoại (admin vẫn xem được lịch sử phản hồi).
+model ConversationFeedback extends BaseNoCode {
+  rating  FeedbackRating
+  comment String?        @db.Text
+
+  conversation   Conversation? @relation(fields: [conversationId], references: [id], onDelete: SetNull)
+  conversationId String?
+
+  // Snapshot tại thời điểm gửi phản hồi (giữ lại khi hội thoại đã bị xoá)
+  conversationNameSnapshot String?
+  topicIdSnapshot          String?
+  topicNameSnapshot        String?
+  messagesSnapshot         Json?
+
+  // Định danh phiên khách (không SSO). Người dùng SSO được lấy qua createdBy (kế thừa từ BaseNoCode).
+  sessionId String?
+
+  @@index([conversationId])
+  @@index([rating])
+  @@index([createdAt])
+  @@schema("tro-ly-ao")
+}
+
+enum FeedbackRating {
+  VERY_BAD
+  BAD
+  NORMAL
+  GOOD
+  VERY_GOOD
   @@schema("tro-ly-ao")
 }
 
