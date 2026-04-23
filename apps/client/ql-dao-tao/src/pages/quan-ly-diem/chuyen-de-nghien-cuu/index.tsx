@@ -4,6 +4,7 @@ import Select from "@components/commons/select"
 import Table from "@components/commons/table"
 import TreeSelect from "@components/commons/tree-select"
 import DefaultLayout from "@layouts/default-layout"
+import { getSupervisorName } from "@pages/quan-ly-luan-van/dm-luan-van"
 import { buildOrgFlat, buildOrgTree } from "@lib/utils"
 import { SubjectVersionType } from "@workspace/db"
 import { $Enums, type Prisma } from "@workspace/db/client"
@@ -667,6 +668,16 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
 
                             globalIndex++
                             const studentCode = e.studentSubjectScore.student?.code
+                            const supervisorName = (getSupervisorName(
+                              e.supervisor,
+                              false,
+                              true
+                            ) as string) || ""
+                            const coSupervisorName = (getSupervisorName(
+                              e.coSupervisor,
+                              false,
+                              true
+                            ) as string) || ""
                             acc[ma_cn].students.push({
                               tt: globalIndex,
                               ten: `${e.studentSubjectScore.student?.userProfile?.fullname}\n${
@@ -676,7 +687,10 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
                                     ).format("DD/MM/YYYY")
                                   : ""
                               }`.trim(),
-                              cbhd: `1.${e.supervisor?.lecturer?.userProfile?.fullname ?? ""}\n2.${e.coSupervisor?.lecturer?.userProfile?.fullname ?? ""}`.trim(),
+                              cbhd:
+                                supervisorName && coSupervisorName
+                                  ? [`1.${supervisorName}`, `2.${coSupervisorName}`].join("\n")
+                                  : supervisorName || coSupervisorName || "",
                               ten_cd: e.name,
                               macd: e.studentSubjectScore.subjectVersion?.code,
                               stc: e.studentSubjectScore.subjectVersion?.credit,
@@ -933,7 +947,7 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
                               data: expertProfilesData.map((profile, idx) => {
                                 return {
                                   tt: idx + 1,
-                                  ho_ten: profile?.name ?? profile?.lecturer?.userProfile?.fullname,
+                                  ho_ten: (getSupervisorName(profile, false, true) as string) || "",
                                   cd_dl:
                                     profile.supervisorResearchTopic.filter((t) => !t.coSupervisorId)
                                       .length +
@@ -1311,21 +1325,7 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
               width: 150,
               align: "left",
               render: (_, record) => {
-                return record?.supervisor?.lecturer
-                  ? [
-                      record?.supervisor?.lecturer?.userProfile.academicRankType?.sMa,
-                      record?.supervisor?.lecturer?.userProfile.academicDegreeType?.sMa,
-                      record?.supervisor?.lecturer?.userProfile.fullname,
-                    ]
-                      .filter(Boolean)
-                      .join(". ")
-                  : [
-                      record?.supervisor?.academicRank,
-                      record?.supervisor?.academicDegree,
-                      record?.supervisor?.name,
-                    ]
-                      .filter(Boolean)
-                      .join(". ")
+                return getSupervisorName(record?.supervisor, true, true)
               },
             },
             {
@@ -1333,21 +1333,7 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
               width: 150,
               align: "left",
               render: (_, record) => {
-                return record?.coSupervisor?.lecturer
-                  ? [
-                      record?.coSupervisor?.lecturer?.userProfile?.academicRankType?.sMa,
-                      record?.coSupervisor?.lecturer?.userProfile?.academicDegreeType?.sMa,
-                      record?.coSupervisor?.lecturer?.userProfile?.fullname,
-                    ]
-                      .filter(Boolean)
-                      .join(". ")
-                  : [
-                      record?.coSupervisor?.academicRank,
-                      record?.coSupervisor?.academicDegree,
-                      record?.coSupervisor?.name,
-                    ]
-                      .filter(Boolean)
-                      .join(". ")
+                return getSupervisorName(record?.coSupervisor, true, true)
               },
             },
             {
