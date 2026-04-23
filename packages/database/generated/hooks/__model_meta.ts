@@ -4587,6 +4587,12 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'conversation',
+                }, feedbacks: {
+                    name: "feedbacks",
+                    type: "ConversationFeedback",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'conversation',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -4595,6 +4601,89 @@ const metadata: ModelMeta = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
+                },
+            },
+        },
+        conversationFeedback: {
+            name: 'ConversationFeedback', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$ConversationFeedback$createdBy,
+                }, rating: {
+                    name: "rating",
+                    type: "FeedbackRating",
+                }, comment: {
+                    name: "comment",
+                    type: "String",
+                    isOptional: true,
+                }, conversation: {
+                    name: "conversation",
+                    type: "Conversation",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'feedbacks',
+                    isRelationOwner: true,
+                    onDeleteAction: 'SetNull',
+                    foreignKeyMapping: { "id": "conversationId" },
+                }, conversationId: {
+                    name: "conversationId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'conversation',
+                }, conversationNameSnapshot: {
+                    name: "conversationNameSnapshot",
+                    type: "String",
+                    isOptional: true,
+                }, topicIdSnapshot: {
+                    name: "topicIdSnapshot",
+                    type: "String",
+                    isOptional: true,
+                }, topicNameSnapshot: {
+                    name: "topicNameSnapshot",
+                    type: "String",
+                    isOptional: true,
+                }, messagesSnapshot: {
+                    name: "messagesSnapshot",
+                    type: "Json",
+                    isOptional: true,
+                }, sessionId: {
+                    name: "sessionId",
+                    type: "String",
+                    isOptional: true,
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
                 },
             },
         },
@@ -27704,6 +27793,10 @@ function $default$Prompt$createdBy(user: any): unknown {
 }
 
 function $default$Conversation$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$ConversationFeedback$createdBy(user: any): unknown {
     return user?.id;
 }
 

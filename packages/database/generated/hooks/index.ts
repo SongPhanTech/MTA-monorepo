@@ -44,6 +44,7 @@ export * from './document-topic';
 export * from './faq';
 export * from './prompt';
 export * from './conversation';
+export * from './conversation-feedback';
 export * from './message';
 export * from './citation-message';
 export * from './topic';

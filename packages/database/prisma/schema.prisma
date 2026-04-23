@@ -65,6 +65,16 @@ enum PermissionType {
   @@schema("ql-nguoi-dung")
 }
 
+enum FeedbackRating {
+  VERY_BAD
+  BAD
+  NORMAL
+  GOOD
+  VERY_GOOD
+
+  @@schema("tro-ly-ao")
+}
+
 enum MessageSender {
   USER
   BOT
@@ -1639,23 +1649,48 @@ model Prompt {
 }
 
 model Conversation {
-  id          String       @id() @default(cuid())
-  code        String?      @unique()
-  active      Boolean      @default(true)
-  description String?      @db.Text()
+  id          String                 @id() @default(cuid())
+  code        String?                @unique()
+  active      Boolean                @default(true)
+  description String?                @db.Text()
   deletedAt   DateTime?
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @default(now()) @updatedAt()
-  createdBy   String?      @db.Uuid()
+  createdAt   DateTime               @default(now())
+  updatedAt   DateTime               @default(now()) @updatedAt()
+  createdBy   String?                @db.Uuid()
   name        String?
-  user        UserProfile? @relation(fields: [userId], references: [id])
-  userId      String?      @db.Uuid()
-  session     UserSession? @relation(fields: [sessionId], references: [id])
+  user        UserProfile?           @relation(fields: [userId], references: [id])
+  userId      String?                @db.Uuid()
+  session     UserSession?           @relation(fields: [sessionId], references: [id])
   sessionId   String?
-  topic       Topic?       @relation(fields: [topicId], references: [id])
+  topic       Topic?                 @relation(fields: [topicId], references: [id])
   topicId     String?
   message     Message[]
+  feedbacks   ConversationFeedback[]
 
+  @@schema("tro-ly-ao")
+}
+
+model ConversationFeedback {
+  id                       String         @id() @default(cuid())
+  active                   Boolean        @default(true)
+  description              String?        @db.Text()
+  deletedAt                DateTime?
+  createdAt                DateTime       @default(now())
+  updatedAt                DateTime       @default(now()) @updatedAt()
+  createdBy                String?        @db.Uuid()
+  rating                   FeedbackRating
+  comment                  String?        @db.Text()
+  conversation             Conversation?  @relation(fields: [conversationId], references: [id], onDelete: SetNull)
+  conversationId           String?
+  conversationNameSnapshot String?
+  topicIdSnapshot          String?
+  topicNameSnapshot        String?
+  messagesSnapshot         Json?
+  sessionId                String?
+
+  @@index([conversationId])
+  @@index([rating])
+  @@index([createdAt])
   @@schema("tro-ly-ao")
 }
 
