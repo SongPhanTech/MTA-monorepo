@@ -137,6 +137,7 @@ const GetClassesInfoResponseSchema = z.array(
           })
         ),
         type: models.TrainingBlockSubjectScalarSchema.shape.type.optional(),
+        subjectClassType: models.SubjectClassScalarSchema.shape.type.optional(),
       })
     ),
   })
@@ -435,6 +436,7 @@ app.openapi(getClassesInfo, async (c) => {
         ...version,
         subjectClass: version.subjectClass.map((subjectClass) => ({
           ...subjectClass,
+          subjectClassType: subjectClass.type,
           credit: version.credit ?? 0,
           type: subjectVersion?.type,
           prerequisiteSubject: version.prerequisiteSubject,

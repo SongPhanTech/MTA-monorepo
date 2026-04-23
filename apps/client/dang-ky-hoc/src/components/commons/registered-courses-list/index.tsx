@@ -7,7 +7,7 @@ import { $Enums } from "@workspace/db"
 import { classRegister, useGetClassesInfo, useGetStudentInfo } from "@workspace/libs/api/portal"
 import type { GetClassesInfo200ItemSubjectClassItem } from "@workspace/libs/api/schemas/getClassesInfo200ItemSubjectClassItem"
 import type { GetClassRegisterSession200ItemCreditLimitItem } from "@workspace/libs/api/schemas/getClassRegisterSession200ItemCreditLimitItem"
-import { Button, Checkbox, message, Popconfirm } from "antd"
+import { Button, Checkbox, message, Popconfirm, Tag } from "antd"
 import dayjs from "dayjs"
 import { CircleAlertIcon, LogOutIcon } from "lucide-react"
 import { useMemo, useState } from "react"
@@ -302,6 +302,20 @@ const DanhSachMonDangKy = (props: ClassRegisterSessionProps) => {
             {
               title: "Tên học phần",
               dataIndex: "name",
+              render: (_, record) => (
+                <p>
+                  {record?.subjectClassType === $Enums.SubjectClassType.RETAKE ? (
+                    <Tag color="blue" className="p-0 px-1">
+                      Học lại
+                    </Tag>
+                  ) : record?.subjectClassType === $Enums.SubjectClassType.REEXAM ? (
+                    <Tag color="yellow" className="p-0 px-1">
+                      Thi lại
+                    </Tag>
+                  ) : null}
+                  {record?.name}
+                </p>
+              ),
             },
             {
               title: "Số TC",
