@@ -54,6 +54,7 @@ import AddHuongDanNganHang from "./add-huong-dan-ngan-hang"
 import ModalPrintSurvey from "./modal-print-survey-report"
 import ModalPrintSurveyToFieldReport from "./modal-print-survey-to-fielde-report"
 import ModalPrintDanhSachDoiTuong from "./modal-print-danh-sach-doi-tuong"
+import PutPhanCongThanhVienModal from "./put-phan-cong-thanh-vien"
 import AddNganHangKhungDe from "./add-ngan-hang-khung-de"
 export {
   ConfirmModal,
@@ -81,6 +82,7 @@ export {
   PutTieuChiMinhChungModal,
   PutTieuChuanTieuChi,
   PutPhanCongHangLoatModal,
+  PutPhanCongThanhVienModal,
   PutPhanCongHangLoatCrossModal,
   ReviewSurveyModal,
   XemTaiLieu,

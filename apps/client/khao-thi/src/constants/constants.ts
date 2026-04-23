@@ -13,6 +13,7 @@ const EVALUATION_MEMBER_ROLE = [
   { label: "Ban tư vấn", value: $Enums.EvaluationMemberRole.ADVISORY_BOARD },
   { label: "Trưởng nhóm chuyên trách", value: $Enums.EvaluationMemberRole.HEAD_SPECIALIZED },
   { label: "Nhóm chuyên trách", value: $Enums.EvaluationMemberRole.SPECIALIZED },
+  { label: "Thành viên ngoài hội đồng", value: $Enums.EvaluationMemberRole.NONCOUNCIL_MEMBERS },
 ]
 
 const EVALUATION_MEMBER_ROLE_MAP: Record<$Enums.EvaluationMemberRole, string> = {

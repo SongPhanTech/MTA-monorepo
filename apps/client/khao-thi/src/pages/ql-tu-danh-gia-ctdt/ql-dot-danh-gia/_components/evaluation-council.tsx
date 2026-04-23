@@ -78,6 +78,7 @@ export default function EvaluationCouncilTab() {
         leaders: [],
         secretary: [],
         advisory: [],
+        nonCouncilMembers: [],
         specialized: {},
       }
     }
@@ -85,6 +86,7 @@ export default function EvaluationCouncilTab() {
     const leaders: CouncilMemberType[] = []
     const secretary: CouncilMemberType[] = []
     const advisory: CouncilMemberType[] = []
+    const nonCouncilMembers: CouncilMemberType[] = []
     const specialized: Record<string, CouncilMemberType[]> = {}
 
     const hasAnyRole = (
@@ -102,6 +104,8 @@ export default function EvaluationCouncilTab() {
         secretary.push(member)
       } else if (hasAnyRole(member, [$Enums.EvaluationMemberRole.ADVISORY_BOARD])) {
         advisory.push(member)
+      } else if (hasAnyRole(member, [$Enums.EvaluationMemberRole.NONCOUNCIL_MEMBERS])) {
+        nonCouncilMembers.push(member)
       } else if (
         hasAnyRole(member, [
           $Enums.EvaluationMemberRole.SPECIALIZED,
@@ -118,7 +122,7 @@ export default function EvaluationCouncilTab() {
       }
     }
 
-    return { leaders, secretary, advisory, specialized }
+    return { leaders, secretary, advisory, nonCouncilMembers, specialized }
   }, [evaluationCouncil?.members])
 
   const treeData = useMemo(() => {
@@ -134,23 +138,26 @@ export default function EvaluationCouncilTab() {
       categorizedMembers.leaders.length,
       categorizedMembers.secretary.length,
       categorizedMembers.advisory.length,
+      categorizedMembers.nonCouncilMembers.length,
       specializedGroups
     )
   }, [categorizedMembers])
 
   const displayedMembers = useMemo((): CouncilMemberType[] => {
-    const { leaders, secretary, advisory, specialized } = categorizedMembers
+    const { leaders, secretary, advisory, nonCouncilMembers, specialized } = categorizedMembers
     const allSpecialized = Object.values(specialized).flat()
 
     switch (selectedGroup) {
       case "all":
-        return [...leaders, ...secretary, ...advisory, ...allSpecialized]
+        return [...leaders, ...secretary, ...advisory, ...nonCouncilMembers, ...allSpecialized]
       case "leaders":
         return leaders
       case "secretary":
         return secretary
       case "advisory":
         return advisory
+      case "nonCouncilMembers":
+        return nonCouncilMembers
       case "specialized":
         return allSpecialized
       default:
