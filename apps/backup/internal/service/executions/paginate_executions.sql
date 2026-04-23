@@ -21,6 +21,12 @@ AND
   sqlc.narg('destination_id')::UUID IS NULL
   OR
   destinations.id = sqlc.narg('destination_id')::UUID
+)
+AND
+(
+  sqlc.narg('is_manual')::BOOLEAN IS NULL
+  OR
+  executions.is_manual = sqlc.narg('is_manual')::BOOLEAN
 );
 
 -- name: ExecutionsServicePaginateExecutions :many
@@ -52,6 +58,12 @@ AND
   sqlc.narg('destination_id')::UUID IS NULL
   OR
   destinations.id = sqlc.narg('destination_id')::UUID
+)
+AND
+(
+  sqlc.narg('is_manual')::BOOLEAN IS NULL
+  OR
+  executions.is_manual = sqlc.narg('is_manual')::BOOLEAN
 )
 ORDER BY executions.started_at DESC
 LIMIT sqlc.arg('limit') OFFSET sqlc.arg('offset');

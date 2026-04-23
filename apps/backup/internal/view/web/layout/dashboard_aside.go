@@ -56,8 +56,14 @@ func dashboardAside() nodx.Node {
 			),
 			dashboardAsideItem(
 				lucide.List,
-				"Lịch sử thực thi",
-				env.PBW_PREFIX+"/dashboard/executions",
+				"Sao lưu tự động",
+				env.PBW_PREFIX+"/dashboard/executions/auto",
+				false,
+			),
+			dashboardAsideItem(
+				lucide.MousePointerClick,
+				"Sao lưu thủ công",
+				env.PBW_PREFIX+"/dashboard/executions/manual",
 				false,
 			),
 			dashboardAsideItem(

@@ -18,8 +18,18 @@ import (
 	"github.com/google/uuid"
 )
 
-// RunExecution runs a backup execution
+// RunExecution runs an automatic (scheduled) backup execution
 func (s *Service) RunExecution(ctx context.Context, backupID uuid.UUID) error {
+	return s.runExecutionInternal(ctx, backupID, false)
+}
+
+// RunManualExecution runs a manually triggered backup execution
+func (s *Service) RunManualExecution(ctx context.Context, backupID uuid.UUID) error {
+	return s.runExecutionInternal(ctx, backupID, true)
+}
+
+// runExecutionInternal runs a backup execution
+func (s *Service) runExecutionInternal(ctx context.Context, backupID uuid.UUID, isManual bool) error {
 	updateExec := func(params dbgen.ExecutionsServiceUpdateExecutionParams) error {
 		if params.Status.String == "success" {
 			s.webhooksService.RunExecutionSuccess(backupID)
@@ -56,6 +66,7 @@ func (s *Service) RunExecution(ctx context.Context, backupID uuid.UUID) error {
 	ex, err := s.CreateExecution(ctx, dbgen.ExecutionsServiceCreateExecutionParams{
 		BackupID: backupID,
 		Status:   "running",
+		IsManual: isManual,
 	})
 	if err != nil {
 		logError(err)

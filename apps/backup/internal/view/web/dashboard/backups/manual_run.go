@@ -21,7 +21,7 @@ func (h *handlers) manualRunHandler(c echo.Context) error {
 	}
 
 	go func() {
-		_ = h.servs.ExecutionsService.RunExecution(context.Background(), backupID)
+		_ = h.servs.ExecutionsService.RunManualExecution(context.Background(), backupID)
 	}()
 
 	return respondhtmx.ToastSuccess(c, "Sao lưu đã được khởi động, kiểm tra lịch sử thực thi sao lưu để biết thêm chi tiết")

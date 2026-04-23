@@ -2,6 +2,7 @@ package executions
 
 import (
 	"context"
+	"database/sql"
 
 	"github.com/eduardolat/pgbackweb/internal/database/dbgen"
 	"github.com/eduardolat/pgbackweb/internal/util/paginateutil"
@@ -14,6 +15,7 @@ type PaginateExecutionsParams struct {
 	DatabaseFilter    uuid.NullUUID
 	DestinationFilter uuid.NullUUID
 	BackupFilter      uuid.NullUUID
+	IsManualFilter    sql.NullBool
 }
 
 func (s *Service) PaginateExecutions(
@@ -27,6 +29,7 @@ func (s *Service) PaginateExecutions(
 			BackupID:      params.BackupFilter,
 			DatabaseID:    params.DatabaseFilter,
 			DestinationID: params.DestinationFilter,
+			IsManual:      params.IsManualFilter,
 		},
 	)
 	if err != nil {
@@ -45,6 +48,7 @@ func (s *Service) PaginateExecutions(
 			BackupID:      params.BackupFilter,
 			DatabaseID:    params.DatabaseFilter,
 			DestinationID: params.DestinationFilter,
+			IsManual:      params.IsManualFilter,
 			Limit:         int32(params.Limit),
 			Offset:        int32(offset),
 		},

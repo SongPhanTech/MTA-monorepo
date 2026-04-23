@@ -20,6 +20,8 @@ func MountRouter(
 	h := newHandlers(servs)
 
 	parent.GET("", h.indexPageHandler)
+	parent.GET("/auto", h.autoExecutionsPageHandler)
+	parent.GET("/manual", h.manualExecutionsPageHandler)
 	parent.GET("/list", h.listExecutionsHandler)
 	parent.GET("/:executionID/download", h.downloadExecutionHandler)
 	parent.DELETE("/:executionID", h.deleteExecutionHandler)

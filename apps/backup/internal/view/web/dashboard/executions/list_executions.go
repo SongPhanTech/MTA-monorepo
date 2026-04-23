@@ -1,6 +1,7 @@
 package executions
 
 import (
+	"database/sql"
 	"fmt"
 	"net/http"
 
@@ -25,7 +26,9 @@ type listExecsQueryData struct {
 	Database    uuid.UUID `query:"database" validate:"omitempty,uuid"`
 	Destination uuid.UUID `query:"destination" validate:"omitempty,uuid"`
 	Backup      uuid.UUID `query:"backup" validate:"omitempty,uuid"`
-	Page        int       `query:"page" validate:"required,min=1"`
+	// is_manual: "" = all, "true" = manual only, "false" = auto only
+	IsManual string `query:"is_manual" validate:"omitempty,oneof=true false"`
+	Page     int    `query:"page" validate:"required,min=1"`
 }
 
 func (h *handlers) listExecutionsHandler(c echo.Context) error {
@@ -50,6 +53,15 @@ func (h *handlers) listExecutionsHandler(c echo.Context) error {
 			BackupFilter: uuid.NullUUID{
 				UUID: queryData.Backup, Valid: queryData.Backup != uuid.Nil,
 			},
+			IsManualFilter: func() sql.NullBool {
+				if queryData.IsManual == "true" {
+					return sql.NullBool{Bool: true, Valid: true}
+				}
+				if queryData.IsManual == "false" {
+					return sql.NullBool{Bool: false, Valid: true}
+				}
+				return sql.NullBool{}
+			}(),
 			Page:  queryData.Page,
 			Limit: 20,
 		},
@@ -132,6 +144,9 @@ func listExecutions(
 				}
 				if queryData.Backup != uuid.Nil {
 					url = strutil.AddQueryParamToUrl(url, "backup", queryData.Backup.String())
+				}
+				if queryData.IsManual != "" {
+					url = strutil.AddQueryParamToUrl(url, "is_manual", queryData.IsManual)
 				}
 				return url
 			}()),
