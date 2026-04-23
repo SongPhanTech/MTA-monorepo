@@ -1,6 +1,7 @@
 import CommentList from "@components/commons/comment-list"
 import { RichTextEditor } from "@components/commons/rich-text-editor"
 import ExportCriteriaEvaluation from "@components/modal/export-criteria-evaluation"
+import ViewMinhChungModal from "@components/modal/view-minh-chung-modal"
 import { getStatusConfig } from "@constants/constants"
 import useSpinner from "@hooks/spinner"
 import {
@@ -16,6 +17,7 @@ import { KHAO_THI_PERMISSION } from "@workspace/router"
 import { Badge, Button, Collapse, Form, message, Tag } from "antd"
 import dayjs from "dayjs"
 import { useEffect, useState } from "react"
+import { useDisclosure } from "react-hook-disclosure-modal"
 import { getDeadlineStatus } from "@/utils/getDeadlineStatus"
 import { queryClient } from "@api/index"
 
@@ -40,6 +42,10 @@ const CriteriaEvaluationSubPage = ({ data }: { data: DataTabEvaluationCriterionT
   const [form] = Form.useForm<PutRequirementCriterion>()
   const [showCommentsCriterionId, setShowCommentsCriterionId] = useState<string | null>(null)
   const [activeCollapseKeys, setActiveCollapseKeys] = useState<string[]>([])
+
+  const { onOpen: openViewMinhChung } = useDisclosure<{ evidenceId: string }>({
+    tag: "ViewMinhChungModal",
+  })
   const { can } = useAbility()
 
   const canEdit = can(
@@ -369,6 +375,7 @@ const CriteriaEvaluationSubPage = ({ data }: { data: DataTabEvaluationCriterionT
                                     id={item.id}
                                     editable={!isCriterionReadOnly}
                                     stickyToolbar={false}
+                                    onEvidenceClick={(id) => openViewMinhChung({ evidenceId: id })}
                                   />
                                 </Form.Item>
 
@@ -380,6 +387,7 @@ const CriteriaEvaluationSubPage = ({ data }: { data: DataTabEvaluationCriterionT
                                     id={item.id}
                                     editable={!isCriterionReadOnly}
                                     stickyToolbar={false}
+                                    onEvidenceClick={(id) => openViewMinhChung({ evidenceId: id })}
                                   />
                                 </Form.Item>
 
@@ -391,6 +399,7 @@ const CriteriaEvaluationSubPage = ({ data }: { data: DataTabEvaluationCriterionT
                                     id={item.id}
                                     editable={!isCriterionReadOnly}
                                     stickyToolbar={false}
+                                    onEvidenceClick={(id) => openViewMinhChung({ evidenceId: id })}
                                   />
                                 </Form.Item>
 
@@ -403,6 +412,7 @@ const CriteriaEvaluationSubPage = ({ data }: { data: DataTabEvaluationCriterionT
                                     editable={!isCriterionReadOnly}
                                     defaultTable={true}
                                     stickyToolbar={false}
+                                    onEvidenceClick={(id) => openViewMinhChung({ evidenceId: id })}
                                   />
                                 </Form.Item>
                                 <Form.Item
@@ -413,6 +423,7 @@ const CriteriaEvaluationSubPage = ({ data }: { data: DataTabEvaluationCriterionT
                                     id={item.id}
                                     editable={!isCriterionReadOnly}
                                     stickyToolbar={false}
+                                    onEvidenceClick={(id) => openViewMinhChung({ evidenceId: id })}
                                   />
                                 </Form.Item>
                               </>

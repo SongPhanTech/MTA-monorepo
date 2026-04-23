@@ -43,6 +43,7 @@ type TextEditorProps = {
   editable?: boolean
   stickyToolbar?: boolean
   defaultTable?: boolean
+  onEvidenceClick?: (evidenceId: string) => void
 }
 
 export function RichTextEditor({
@@ -55,6 +56,7 @@ export function RichTextEditor({
   editable = true,
   stickyToolbar = false,
   defaultTable = false,
+  onEvidenceClick,
 }: TextEditorProps) {
   const editor = useEditor({
     immediatelyRender: false,
@@ -454,8 +456,15 @@ export function RichTextEditor({
     }
   }, [editor, editable])
 
+  const handleEditorClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    const target = e.target as HTMLElement
+    if (target.dataset.type === "evidence" && target.dataset.evidenceId) {
+      onEvidenceClick?.(target.dataset.evidenceId)
+    }
+  }
+
   return (
-    <div className="border rounded-md">
+    <div className="border rounded-md" onClick={handleEditorClick}>
       <div className={stickyToolbar ? "sticky top-0 z-10 bg-white border-b rounded-t-md" : ""}>
         <TextEditorMenuBar editor={editor} id={id} editable={editable} />
       </div>

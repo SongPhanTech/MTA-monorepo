@@ -4,6 +4,7 @@ import type { DataTabEvaluationCriterionType } from "@pages/ql-tu-danh-gia-ctdt/
 import { useUpdateStandardPeriod } from "@workspace/db/hooks"
 import { Button, Collapse, Form, message } from "antd"
 import { useEffect } from "react"
+import { useDisclosure } from "react-hook-disclosure-modal"
 
 export type PutRequirementCriterion = {
   criteria: Record<string, any>
@@ -21,6 +22,10 @@ const StandarReportsSubPage = ({
   readOnly?: boolean
 }) => {
   const [form] = Form.useForm<PutRequirementCriterion>()
+
+  const { onOpen: openViewMinhChung } = useDisclosure<{ evidenceId: string }>({
+    tag: "ViewMinhChungModal",
+  })
 
   const { hideSpinner, showSpinner } = useSpinner()
 
@@ -92,7 +97,11 @@ const StandarReportsSubPage = ({
         <Form form={form} layout="vertical" className="form-evidence">
           {/* Phần mở đầu */}
           <Form.Item label="Mở đầu" name="opening" required>
-            <RichTextEditor id="opening" editable={!readOnly} />
+            <RichTextEditor
+              id="opening"
+              editable={!readOnly}
+              onEvidenceClick={(id) => openViewMinhChung({ evidenceId: id })}
+            />
           </Form.Item>
 
           <Form.List name="criteria">
@@ -118,34 +127,54 @@ const StandarReportsSubPage = ({
                                   label="1. Mô tả hiện trạng"
                                   name={[name, "evaluationCriterion", "currentSituation"]}
                                 >
-                                  <RichTextEditor id={item.id} editable={false} />
+                                  <RichTextEditor
+                                    id={item.id}
+                                    editable={false}
+                                    onEvidenceClick={(id) => openViewMinhChung({ evidenceId: id })}
+                                  />
                                 </Form.Item>
 
                                 <Form.Item
                                   label="2. Điểm mạnh"
                                   name={[name, "evaluationCriterion", "strengths"]}
                                 >
-                                  <RichTextEditor id={item.id} editable={false} />
+                                  <RichTextEditor
+                                    id={item.id}
+                                    editable={false}
+                                    onEvidenceClick={(id) => openViewMinhChung({ evidenceId: id })}
+                                  />
                                 </Form.Item>
 
                                 <Form.Item
                                   label="3. Điểm tồn tại"
                                   name={[name, "evaluationCriterion", "weakness"]}
                                 >
-                                  <RichTextEditor id={item.id} editable={false} />
+                                  <RichTextEditor
+                                    id={item.id}
+                                    editable={false}
+                                    onEvidenceClick={(id) => openViewMinhChung({ evidenceId: id })}
+                                  />
                                 </Form.Item>
 
                                 <Form.Item
                                   label="4. Kế hoạch hành động"
                                   name={[name, "evaluationCriterion", "actionPlan"]}
                                 >
-                                  <RichTextEditor id={item.id} editable={false} />
+                                  <RichTextEditor
+                                    id={item.id}
+                                    editable={false}
+                                    onEvidenceClick={(id) => openViewMinhChung({ evidenceId: id })}
+                                  />
                                 </Form.Item>
                                 <Form.Item
                                   label="5. Tự đánh giá"
                                   name={[name, "evaluationCriterion", "score"]}
                                 >
-                                  <RichTextEditor id={item.id} editable={false} />
+                                  <RichTextEditor
+                                    id={item.id}
+                                    editable={false}
+                                    onEvidenceClick={(id) => openViewMinhChung({ evidenceId: id })}
+                                  />
                                 </Form.Item>
                               </>
                             ),
@@ -164,7 +193,11 @@ const StandarReportsSubPage = ({
 
           {/* Phần kết luận */}
           <Form.Item label="Kết luận" name="conclusion" required>
-            <RichTextEditor id="conclusion" editable={!readOnly} />
+            <RichTextEditor
+              id="conclusion"
+              editable={!readOnly}
+              onEvidenceClick={(id) => openViewMinhChung({ evidenceId: id })}
+            />
           </Form.Item>
         </Form>
       </div>
