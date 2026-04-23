@@ -10,11 +10,7 @@ import { getWarningLevelColor } from "@hooks/getWarningLevelColor"
 import useSpinner from "@hooks/spinner"
 import { buildOrgTree } from "@lib/utils"
 import { emptyObjectIf } from "@workspace/constant"
-import {
-  type FixedClass,
-  type Prisma,
-  type TrainingCourse,
-} from "@workspace/db/client"
+import { type FixedClass, type Prisma, type TrainingCourse } from "@workspace/db/client"
 import {
   useDeleteAcademicWarning,
   useFindManyAcademicWarning,
@@ -227,8 +223,7 @@ const XetCanhCaoHocTap = ({ semesterId, trainingObjectTypeId }: XetCanhCaoHocTap
                   align: "center",
                   type: "tree_select",
                   options: treeData,
-                  render: (__, record) =>
-                    record?.student?.fixedClass?.managementOrganization?.sTen,
+                  render: (__, record) => record?.student?.fixedClass?.managementOrganization?.sTen,
                 },
                 {
                   title: "Mức CCHT",
@@ -236,9 +231,7 @@ const XetCanhCaoHocTap = ({ semesterId, trainingObjectTypeId }: XetCanhCaoHocTap
                   width: 100,
                   align: "center",
                   fixed: "right",
-                  render: (value: number) => (
-                    <Tag color={getWarningLevelColor(value)}>{value}</Tag>
-                  ),
+                  render: (value: number) => <Tag color={getWarningLevelColor(value)}>{value}</Tag>,
                 },
                 {
                   title: "Thay đổi từ mức",
@@ -315,7 +308,7 @@ const XetCanhCaoHocTap = ({ semesterId, trainingObjectTypeId }: XetCanhCaoHocTap
           items={[
             {
               key: "1",
-              label: "Nâng mức cảnh cáo",
+              label: "Nâng mức cảnh báo",
               children: (
                 <NangCanhCaoHocTap
                   semesterId={semesterId}
@@ -325,7 +318,7 @@ const XetCanhCaoHocTap = ({ semesterId, trainingObjectTypeId }: XetCanhCaoHocTap
             },
             {
               key: "2",
-              label: "Giảm mức cảnh cáo",
+              label: "Giảm mức cảnh báo",
               children: (
                 <GiamCanhCaoHocTap
                   semesterId={semesterId}

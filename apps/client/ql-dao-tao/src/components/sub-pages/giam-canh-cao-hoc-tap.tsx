@@ -43,7 +43,7 @@ const GiamCanhCaoHocTap = ({ semesterId, trainingObjectTypeId }: GiamCanhCaoHocT
   }, [decreaseStudents])
 
   const filteredDecreaseStudentData = useMemo(() => {
-    return decreaseStudentData.map((record: any) => ({
+    return decreaseStudentData.map((record) => ({
       ...record,
       students: (record.students || []).filter((s: any) => s.decreaseAcademicWarning),
     }))
@@ -131,19 +131,19 @@ const GiamCanhCaoHocTap = ({ semesterId, trainingObjectTypeId }: GiamCanhCaoHocT
               dataIndex: ["code"],
               width: 120,
               align: "center",
-              render: (_, record) => (record?.userProfile as any)?.code ?? "",
+              render: (_, record) => record?.userProfile?.code ?? "",
             },
             {
               title: "Tên sinh viên",
               width: 200,
-              render: (_, record) => (record?.userProfile as any)?.fullname ?? "",
+              render: (_, record) => record?.userProfile?.fullname ?? "",
             },
             {
               title: "Ngày sinh",
               width: 120,
               align: "center",
               render: (_, record) => {
-                const date = (record?.userProfile as any)?.dateOfBirth
+                const date = record?.userProfile?.dateOfBirth
                 return date ? dayjs(date).format("DD/MM/YYYY") : ""
               },
             },
@@ -194,7 +194,7 @@ const GiamCanhCaoHocTap = ({ semesterId, trainingObjectTypeId }: GiamCanhCaoHocT
             current: currentPage,
             pageSize: numberOfPages,
             total: filteredDecreaseStudentData.reduce(
-              (acc: number, course: any) => acc + (course.students?.length || 0),
+              (acc: number, course) => acc + (course.students?.length || 0),
               0
             ),
             onChange: (page, pageSize) => {
