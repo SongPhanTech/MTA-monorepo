@@ -285,6 +285,7 @@ enum EvaluationMemberRole {
   ADVISORY_BOARD // Ban tư vấn
   HEAD_SPECIALIZED // Trưởng nhóm chuyên trách
   SPECIALIZED // nhóm chuyên trách
+  NONCOUNCIL_MEMBERS // Thành viên không thuộc hội đồng
 
   @@schema("khao-thi")
 }

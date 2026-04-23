@@ -8245,7 +8245,8 @@ exports.EvaluationMemberRole = exports.$Enums.EvaluationMemberRole = {
   MEMBER: 'MEMBER',
   ADVISORY_BOARD: 'ADVISORY_BOARD',
   HEAD_SPECIALIZED: 'HEAD_SPECIALIZED',
-  SPECIALIZED: 'SPECIALIZED'
+  SPECIALIZED: 'SPECIALIZED',
+  NONCOUNCIL_MEMBERS: 'NONCOUNCIL_MEMBERS'
 };
 
 exports.SurveyObject = exports.$Enums.SurveyObject = {
