@@ -311,7 +311,7 @@ export default function MonDaLapKeHoach({ type }: { type?: $Enums.SubjectClassTy
               Xuất kế hoạch
             </Button>
             <Popconfirm
-              title="Bạn có chắc chắn xoá các môn đã lập kế hoạch đã chọn?"
+              title="Bạn có chắc chắn muốn sửa kế hoạch giảng dạy?"
               onConfirm={async () => {
                 try {
                   showSpinner()

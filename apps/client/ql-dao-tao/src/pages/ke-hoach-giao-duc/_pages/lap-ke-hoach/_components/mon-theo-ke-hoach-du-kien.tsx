@@ -116,11 +116,11 @@ export default function MonTheoKeHoachDuKien() {
     try {
       showSpinner()
       await updateTrainingBlockSubject({ where: { id }, data: { deletedAt: new Date() } })
-      message.success("Xoá môn khỏi kế hoạch dự kiến thành công")
+      message.success("Xoá môn khỏi kế hoạch giảng dạy thành công")
       debouncedRefetch()
     } catch (error) {
       console.log(error)
-      message.error("Xoá môn khỏi kế hoạch dự kiến thất bại")
+      message.error("Xoá môn khỏi kế hoạch giảng dạy thất bại")
     } finally {
       hideSpinner()
     }
@@ -354,7 +354,7 @@ export default function MonTheoKeHoachDuKien() {
                     >
                       <DeleteIcon
                         popConfirm={{
-                          title: "Bạn có chắc chắn muốn xoá môn học này khỏi kế hoạch dự kiến?",
+                          title: "Bạn có chắc chắn muốn xoá môn học này khỏi kế hoạch giảng dạy?",
                           onConfirm: () => handleDelete(record.trainingBlockSubjectId),
                           okText: "Xoá",
                           cancelText: "Hủy",
