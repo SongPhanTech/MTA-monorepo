@@ -14,9 +14,11 @@ export type PutRequirementCriterion = {
 const StandarReportsSubPage = ({
   data,
   onRefetch,
+  readOnly = false,
 }: {
   data: DataTabEvaluationCriterionType
   onRefetch?: () => void
+  readOnly?: boolean
 }) => {
   const [form] = Form.useForm<PutRequirementCriterion>()
 
@@ -75,26 +77,22 @@ const StandarReportsSubPage = ({
     }
   }, [data, form])
 
-  const headerSection = (
-    <div className="sticky top-0 z-10 bg-white py-2 flex flex-row justify-between items-center gap-2">
-      <div className="flex ml-auto gap-2 mr-2">
-        {
-          <Button type="primary" size="small" onClick={handleSubmit}>
-            Lưu báo cáo
-          </Button>
-        }
-      </div>
-    </div>
-  )
-
   return (
     <div className="flex flex-col h-[calc(100vh-230px)]">
-      {headerSection}
+      {!readOnly && (
+        <div className="sticky top-0 z-10 bg-white py-2 flex flex-row justify-between items-center gap-2">
+          <div className="flex ml-auto gap-2 mr-2">
+            <Button type="primary" size="small" onClick={handleSubmit}>
+              Lưu báo cáo
+            </Button>
+          </div>
+        </div>
+      )}
       <div className="flex-1 overflow-y-auto overflow-x-hidden px-2">
         <Form form={form} layout="vertical" className="form-evidence">
           {/* Phần mở đầu */}
           <Form.Item label="Mở đầu" name="opening" required>
-            <RichTextEditor id="opening" editable={true} />
+            <RichTextEditor id="opening" editable={!readOnly} />
           </Form.Item>
 
           <Form.List name="criteria">
@@ -166,7 +164,7 @@ const StandarReportsSubPage = ({
 
           {/* Phần kết luận */}
           <Form.Item label="Kết luận" name="conclusion" required>
-            <RichTextEditor id="conclusion" editable={true} />
+            <RichTextEditor id="conclusion" editable={!readOnly} />
           </Form.Item>
         </Form>
       </div>
