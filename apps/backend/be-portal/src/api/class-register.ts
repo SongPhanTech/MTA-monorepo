@@ -198,7 +198,11 @@ app.openapi(getClassesInfo, async (c) => {
         include: {
           fixedClass: {
             include: {
-              trainingCourse: true,
+              trainingCourse: {
+                include: {
+                  semesterStart: true,
+                },
+              },
             },
           },
           studentSemesterResult: true,
@@ -250,7 +254,21 @@ app.openapi(getClassesInfo, async (c) => {
     include: { trainingBlocks: { include: { subjects: { include: { subject: true } } } } },
   })
 
-  const curriculumSubjects = curriculumVersion.trainingBlocks.flatMap((block) => block.subjects)
+  const studentInfo = profile.educationAndTraining[0]
+  const currentSemesterIndex = await prisma.semester.count({
+    where: {
+      startDate: {
+        gte: studentInfo?.fixedClass?.trainingCourse?.semesterStart?.startDate,
+        lte: registerSession.semester?.startDate,
+      },
+      semesterType: { in: [$Enums.SemesterType.FIRST, $Enums.SemesterType.SECOND] },
+      deletedAt: null,
+    },
+  })
+
+  const curriculumSubjects = curriculumVersion.trainingBlocks
+    .flatMap((block) => block.subjects)
+    .filter((item) => item.semester === currentSemesterIndex)
 
   const studentTrainingObjectTypeId =
     registerSession.trainingCourses.find((tc) => tc.trainingObjectTypeId)?.trainingObjectTypeId ??
