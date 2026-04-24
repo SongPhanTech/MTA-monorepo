@@ -74,9 +74,7 @@ export default function CaNhanThiLai() {
   })
 
   const { data: fixedClassData = [] } = useFindManyFixedClass({
-    orderBy: {
-      code: "asc",
-    },
+    orderBy: { code: "asc" },
     where: {
       active: true,
       trainingCourseId: filters.trainingCourseId,

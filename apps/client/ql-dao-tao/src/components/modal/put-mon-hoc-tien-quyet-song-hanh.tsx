@@ -11,6 +11,7 @@ import {
   useFindUniqueSubjectVersion,
   useUpdateSubjectVersion,
 } from "@workspace/db/hooks"
+import { useTrainingObjectTypeStore } from "@workspace/ui"
 import { Col, Modal, message } from "antd"
 import { useEffect, useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
@@ -27,6 +28,7 @@ const PutSubjectTienQuyetSongHanh = () => {
     tag: "PutSubjectTienQuyetSongHanh",
   })
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
+  const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
   const { showSpinner, hideSpinner } = useSpinner()
   const [filters, setFilters] = useState<FilterProps>({
     code: "",
@@ -39,6 +41,9 @@ const PutSubjectTienQuyetSongHanh = () => {
       id: {
         not: input?.id,
       },
+      ...(trainingObjectTypeId && {
+        trainingObjectTypeId,
+      }),
       ...(filters.name && {
         name: {
           contains: filters.name,

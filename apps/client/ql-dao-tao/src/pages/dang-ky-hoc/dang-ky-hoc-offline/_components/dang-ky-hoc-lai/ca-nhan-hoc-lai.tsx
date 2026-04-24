@@ -4,6 +4,7 @@ import { DEFAULT_PAGINATE_SIZE } from "@constants/constants"
 import { useStore } from "@tanstack/react-store"
 import {
   useFindManyFixedClass,
+  useFindManyStudent,
   useFindManyTrainingCourse,
   useFindUniqueSubjectClass,
 } from "@workspace/db/hooks"
@@ -37,24 +38,18 @@ export default function CaNhanHocLai() {
 
   const { data: subjectClassData } = useFindUniqueSubjectClass(
     {
-      where: {
-        id: subjectClassId,
-      },
+      where: { id: subjectClassId },
       select: {
         subjectId: true,
         subjectClassStudent: {
-          where: {
-            deletedAt: null,
-          },
+          where: { deletedAt: null },
           select: {
             studentId: true,
           },
         },
       },
     },
-    {
-      enabled: !!subjectClassId,
-    }
+    { enabled: !!subjectClassId }
   )
 
   const { id: semesterId } = useSemesterStore()
@@ -93,8 +88,47 @@ export default function CaNhanHocLai() {
     },
     { query: { enabled: !!trainingObjectTypeId && !!subjectClassData?.subjectId } }
   )
-
-  // queryKey /api/subject-class/open-subject-class-retake
+  const { data: studentList = [] } = useFindManyStudent(
+    {
+      where: {
+        deletedAt: null,
+        subjectClassStudent: {
+          some: { subjectClassId },
+        },
+        ...(filters.searchText && {
+          userProfile: {
+            fullname: { contains: filters.searchText, mode: "insensitive" },
+          },
+        }),
+        ...((filters.trainingCourseId || filters.fixedClassId) && {
+          fixedClass: {
+            ...(filters.trainingCourseId && {
+              trainingCourseId: {
+                equals: filters.trainingCourseId,
+              },
+            }),
+            ...(filters.fixedClassId && {
+              id: {
+                equals: filters.fixedClassId,
+              },
+            }),
+          },
+        }),
+      },
+      include: {
+        fixedClass: {
+          include: {
+            trainingCourse: true,
+          },
+        },
+        subjectClassStudent: true,
+        userProfile: true,
+      },
+    },
+    {
+      enabled: !!subjectClassId,
+    }
+  )
 
   const handleSaveStudentClass = async () => {
     try {
@@ -174,8 +208,14 @@ export default function CaNhanHocLai() {
     }
   }
 
-  const data = useMemo(() => (res?.status === 200 ? res?.data.data : []), [res])
-  const countData = useMemo(() => (res?.status === 200 ? res?.data.count : 0), [res])
+  const data = useMemo(
+    () => (res?.status === 200 ? [...res.data.data, ...studentList] : [...studentList]),
+    [res, studentList]
+  )
+  const countData = useMemo(
+    () => (res?.status === 200 ? res?.data.count + studentList.length : 0),
+    [res, studentList]
+  )
 
   const debouncedRefetch = useCallback(
     _.debounce(() => {
@@ -329,7 +369,7 @@ export default function CaNhanHocLai() {
               title: "Điểm",
               align: "center",
               width: 50,
-              render: (_, record) => record?.diem_cuoi ?? "-",
+              render: (_, record: any) => record?.diem_cuoi ?? "-",
             },
             {
               title: "Cấm thi",
@@ -349,8 +389,11 @@ export default function CaNhanHocLai() {
               title: "Lý do",
               align: "center",
               width: 120,
-              render: (_, record) =>
-                record?.ly_do_cam_thi ?? record?.ly_do_dinh_chi ?? record?.ly_do_hoan_thi,
+              render: (_, record: any) =>
+                record?.reason ??
+                record?.ly_do_cam_thi ??
+                record?.ly_do_dinh_chi ??
+                record?.ly_do_hoan_thi,
             },
           ]}
           pagination={{

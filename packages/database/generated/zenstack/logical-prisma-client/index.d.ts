@@ -5858,7 +5858,8 @@ export namespace $Enums {
     export type CouncilRole = (typeof CouncilRole)[keyof typeof CouncilRole];
     export const SupervisorRole: {
         SUPERVISOR: 'SUPERVISOR',
-        CO_SUPERVISOR: 'CO_SUPERVISOR'
+        CO_SUPERVISOR: 'CO_SUPERVISOR',
+        SINGLE: 'SINGLE'
     };
     export type SupervisorRole = (typeof SupervisorRole)[keyof typeof SupervisorRole];
     export const PaymentStatus: {
@@ -9296,6 +9297,8 @@ export namespace Prisma {
         endDate: 'endDate',
         trainingObjectTypeId: 'trainingObjectTypeId',
         trainingCourseId: 'trainingCourseId',
+        proposalReport: 'proposalReport',
+        councilReport: 'councilReport',
         decisionNumber: 'decisionNumber',
         decisionMaker: 'decisionMaker',
         decisionDate: 'decisionDate',
@@ -12702,6 +12705,8 @@ export namespace Prisma {
         name: 'name',
         trainingObjectTypeId: 'trainingObjectTypeId',
         trainingCourseId: 'trainingCourseId',
+        proposalReport: 'proposalReport',
+        councilReport: 'councilReport',
         decisionNumber: 'decisionNumber',
         decisionMaker: 'decisionMaker',
         defenseDecisionNumber: 'defenseDecisionNumber',
@@ -75566,6 +75571,8 @@ export namespace Prisma {
         readonly endDate: FieldRef<"ThesisSession", 'DateTime'>;
         readonly trainingObjectTypeId: FieldRef<"ThesisSession", 'String'>;
         readonly trainingCourseId: FieldRef<"ThesisSession", 'String'>;
+        readonly proposalReport: FieldRef<"ThesisSession", 'String'>;
+        readonly councilReport: FieldRef<"ThesisSession", 'String'>;
         readonly decisionNumber: FieldRef<"ThesisSession", 'String'>;
         readonly decisionMaker: FieldRef<"ThesisSession", 'String'>;
         readonly decisionDate: FieldRef<"ThesisSession", 'DateTime'>;
@@ -276802,6 +276809,8 @@ export namespace Prisma {
         endDate: Date | null
         trainingObjectTypeId: string | null
         trainingCourseId: string | null
+        proposalReport: string | null
+        councilReport: string | null
         decisionNumber: string | null
         decisionMaker: string | null
         decisionDate: Date | null
@@ -276827,6 +276836,8 @@ export namespace Prisma {
         endDate: Date | null
         trainingObjectTypeId: string | null
         trainingCourseId: string | null
+        proposalReport: string | null
+        councilReport: string | null
         decisionNumber: string | null
         decisionMaker: string | null
         decisionDate: Date | null
@@ -276852,6 +276863,8 @@ export namespace Prisma {
         endDate: number
         trainingObjectTypeId: number
         trainingCourseId: number
+        proposalReport: number
+        councilReport: number
         decisionNumber: number
         decisionMaker: number
         decisionDate: number
@@ -276878,6 +276891,8 @@ export namespace Prisma {
         endDate?: true
         trainingObjectTypeId?: true
         trainingCourseId?: true
+        proposalReport?: true
+        councilReport?: true
         decisionNumber?: true
         decisionMaker?: true
         decisionDate?: true
@@ -276903,6 +276918,8 @@ export namespace Prisma {
         endDate?: true
         trainingObjectTypeId?: true
         trainingCourseId?: true
+        proposalReport?: true
+        councilReport?: true
         decisionNumber?: true
         decisionMaker?: true
         decisionDate?: true
@@ -276928,6 +276945,8 @@ export namespace Prisma {
         endDate?: true
         trainingObjectTypeId?: true
         trainingCourseId?: true
+        proposalReport?: true
+        councilReport?: true
         decisionNumber?: true
         decisionMaker?: true
         decisionDate?: true
@@ -277020,6 +277039,8 @@ export namespace Prisma {
         endDate: Date
         trainingObjectTypeId: string
         trainingCourseId: string
+        proposalReport: string | null
+        councilReport: string | null
         decisionNumber: string | null
         decisionMaker: string | null
         decisionDate: Date | null
@@ -277060,6 +277081,8 @@ export namespace Prisma {
         endDate?: boolean
         trainingObjectTypeId?: boolean
         trainingCourseId?: boolean
+        proposalReport?: boolean
+        councilReport?: boolean
         decisionNumber?: boolean
         decisionMaker?: boolean
         decisionDate?: boolean
@@ -277089,6 +277112,8 @@ export namespace Prisma {
         endDate?: boolean
         trainingObjectTypeId?: boolean
         trainingCourseId?: boolean
+        proposalReport?: boolean
+        councilReport?: boolean
         decisionNumber?: boolean
         decisionMaker?: boolean
         decisionDate?: boolean
@@ -277116,6 +277141,8 @@ export namespace Prisma {
         endDate?: boolean
         trainingObjectTypeId?: boolean
         trainingCourseId?: boolean
+        proposalReport?: boolean
+        councilReport?: boolean
         decisionNumber?: boolean
         decisionMaker?: boolean
         decisionDate?: boolean
@@ -277143,6 +277170,8 @@ export namespace Prisma {
         endDate?: boolean
         trainingObjectTypeId?: boolean
         trainingCourseId?: boolean
+        proposalReport?: boolean
+        councilReport?: boolean
         decisionNumber?: boolean
         decisionMaker?: boolean
         decisionDate?: boolean
@@ -277154,7 +277183,7 @@ export namespace Prisma {
         topicEntryDeadline?: boolean
         councilDeadline?: boolean
     };
-    export type ThesisSessionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name" | "startDate" | "endDate" | "trainingObjectTypeId" | "trainingCourseId" | "decisionNumber" | "decisionMaker" | "decisionDate" | "defenseDecisionNumber" | "defenseDecisionMaker" | "defenseDecisionDate" | "chief" | "deputy" | "topicEntryDeadline" | "councilDeadline", ExtArgs["result"]["thesisSession"]>;
+    export type ThesisSessionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name" | "startDate" | "endDate" | "trainingObjectTypeId" | "trainingCourseId" | "proposalReport" | "councilReport" | "decisionNumber" | "decisionMaker" | "decisionDate" | "defenseDecisionNumber" | "defenseDecisionMaker" | "defenseDecisionDate" | "chief" | "deputy" | "topicEntryDeadline" | "councilDeadline", ExtArgs["result"]["thesisSession"]>;
     export type ThesisSessionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
         trainingCourse?: boolean | TrainingCourseDefaultArgs<ExtArgs>
@@ -277190,6 +277219,14 @@ export namespace Prisma {
             endDate: Date
             trainingObjectTypeId: string
             trainingCourseId: string
+            /**
+             * Tờ trình đề tài
+             */
+            proposalReport: string | null
+            /**
+             * Tờ trình hội đồng
+             */
+            councilReport: string | null
             /**
              * Số QĐĐT
              */
@@ -382327,6 +382364,8 @@ export namespace Prisma {
         endDate?: DateTimeFilter<"ThesisSession"> | Date | string
         trainingObjectTypeId?: StringFilter<"ThesisSession"> | string
         trainingCourseId?: StringFilter<"ThesisSession"> | string
+        proposalReport?: StringNullableFilter<"ThesisSession"> | string | null
+        councilReport?: StringNullableFilter<"ThesisSession"> | string | null
         decisionNumber?: StringNullableFilter<"ThesisSession"> | string | null
         decisionMaker?: StringNullableFilter<"ThesisSession"> | string | null
         decisionDate?: DateTimeNullableFilter<"ThesisSession"> | Date | string | null
@@ -382355,6 +382394,8 @@ export namespace Prisma {
         endDate?: SortOrder
         trainingObjectTypeId?: SortOrder
         trainingCourseId?: SortOrder
+        proposalReport?: SortOrderInput | SortOrder
+        councilReport?: SortOrderInput | SortOrder
         decisionNumber?: SortOrderInput | SortOrder
         decisionMaker?: SortOrderInput | SortOrder
         decisionDate?: SortOrderInput | SortOrder
@@ -382387,6 +382428,8 @@ export namespace Prisma {
         endDate?: DateTimeFilter<"ThesisSession"> | Date | string
         trainingObjectTypeId?: StringFilter<"ThesisSession"> | string
         trainingCourseId?: StringFilter<"ThesisSession"> | string
+        proposalReport?: StringNullableFilter<"ThesisSession"> | string | null
+        councilReport?: StringNullableFilter<"ThesisSession"> | string | null
         decisionNumber?: StringNullableFilter<"ThesisSession"> | string | null
         decisionMaker?: StringNullableFilter<"ThesisSession"> | string | null
         decisionDate?: DateTimeNullableFilter<"ThesisSession"> | Date | string | null
@@ -382415,6 +382458,8 @@ export namespace Prisma {
         endDate?: SortOrder
         trainingObjectTypeId?: SortOrder
         trainingCourseId?: SortOrder
+        proposalReport?: SortOrderInput | SortOrder
+        councilReport?: SortOrderInput | SortOrder
         decisionNumber?: SortOrderInput | SortOrder
         decisionMaker?: SortOrderInput | SortOrder
         decisionDate?: SortOrderInput | SortOrder
@@ -382446,6 +382491,8 @@ export namespace Prisma {
         endDate?: DateTimeWithAggregatesFilter<"ThesisSession"> | Date | string
         trainingObjectTypeId?: StringWithAggregatesFilter<"ThesisSession"> | string
         trainingCourseId?: StringWithAggregatesFilter<"ThesisSession"> | string
+        proposalReport?: StringNullableWithAggregatesFilter<"ThesisSession"> | string | null
+        councilReport?: StringNullableWithAggregatesFilter<"ThesisSession"> | string | null
         decisionNumber?: StringNullableWithAggregatesFilter<"ThesisSession"> | string | null
         decisionMaker?: StringNullableWithAggregatesFilter<"ThesisSession"> | string | null
         decisionDate?: DateTimeNullableWithAggregatesFilter<"ThesisSession"> | Date | string | null
@@ -414177,6 +414224,8 @@ export namespace Prisma {
         name: string
         startDate: Date | string
         endDate: Date | string
+        proposalReport?: string | null
+        councilReport?: string | null
         decisionNumber?: string | null
         decisionMaker?: string | null
         decisionDate?: Date | string | null
@@ -414205,6 +414254,8 @@ export namespace Prisma {
         endDate: Date | string
         trainingObjectTypeId: string
         trainingCourseId: string
+        proposalReport?: string | null
+        councilReport?: string | null
         decisionNumber?: string | null
         decisionMaker?: string | null
         decisionDate?: Date | string | null
@@ -414229,6 +414280,8 @@ export namespace Prisma {
         name?: StringFieldUpdateOperationsInput | string
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        proposalReport?: NullableStringFieldUpdateOperationsInput | string | null
+        councilReport?: NullableStringFieldUpdateOperationsInput | string | null
         decisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
         decisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
         decisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -414257,6 +414310,8 @@ export namespace Prisma {
         endDate?: DateTimeFieldUpdateOperationsInput | Date | string
         trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
         trainingCourseId?: StringFieldUpdateOperationsInput | string
+        proposalReport?: NullableStringFieldUpdateOperationsInput | string | null
+        councilReport?: NullableStringFieldUpdateOperationsInput | string | null
         decisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
         decisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
         decisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -414283,6 +414338,8 @@ export namespace Prisma {
         endDate: Date | string
         trainingObjectTypeId: string
         trainingCourseId: string
+        proposalReport?: string | null
+        councilReport?: string | null
         decisionNumber?: string | null
         decisionMaker?: string | null
         decisionDate?: Date | string | null
@@ -414306,6 +414363,8 @@ export namespace Prisma {
         name?: StringFieldUpdateOperationsInput | string
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        proposalReport?: NullableStringFieldUpdateOperationsInput | string | null
+        councilReport?: NullableStringFieldUpdateOperationsInput | string | null
         decisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
         decisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
         decisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -414331,6 +414390,8 @@ export namespace Prisma {
         endDate?: DateTimeFieldUpdateOperationsInput | Date | string
         trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
         trainingCourseId?: StringFieldUpdateOperationsInput | string
+        proposalReport?: NullableStringFieldUpdateOperationsInput | string | null
+        councilReport?: NullableStringFieldUpdateOperationsInput | string | null
         decisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
         decisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
         decisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -439386,6 +439447,8 @@ export namespace Prisma {
         endDate?: SortOrder
         trainingObjectTypeId?: SortOrder
         trainingCourseId?: SortOrder
+        proposalReport?: SortOrder
+        councilReport?: SortOrder
         decisionNumber?: SortOrder
         decisionMaker?: SortOrder
         decisionDate?: SortOrder
@@ -439411,6 +439474,8 @@ export namespace Prisma {
         endDate?: SortOrder
         trainingObjectTypeId?: SortOrder
         trainingCourseId?: SortOrder
+        proposalReport?: SortOrder
+        councilReport?: SortOrder
         decisionNumber?: SortOrder
         decisionMaker?: SortOrder
         decisionDate?: SortOrder
@@ -439436,6 +439501,8 @@ export namespace Prisma {
         endDate?: SortOrder
         trainingObjectTypeId?: SortOrder
         trainingCourseId?: SortOrder
+        proposalReport?: SortOrder
+        councilReport?: SortOrder
         decisionNumber?: SortOrder
         decisionMaker?: SortOrder
         decisionDate?: SortOrder
@@ -532218,6 +532285,8 @@ export namespace Prisma {
         name: string
         startDate: Date | string
         endDate: Date | string
+        proposalReport?: string | null
+        councilReport?: string | null
         decisionNumber?: string | null
         decisionMaker?: string | null
         decisionDate?: Date | string | null
@@ -532244,6 +532313,8 @@ export namespace Prisma {
         startDate: Date | string
         endDate: Date | string
         trainingObjectTypeId: string
+        proposalReport?: string | null
+        councilReport?: string | null
         decisionNumber?: string | null
         decisionMaker?: string | null
         decisionDate?: Date | string | null
@@ -532916,6 +532987,8 @@ export namespace Prisma {
         endDate?: DateTimeFilter<"ThesisSession"> | Date | string
         trainingObjectTypeId?: StringFilter<"ThesisSession"> | string
         trainingCourseId?: StringFilter<"ThesisSession"> | string
+        proposalReport?: StringNullableFilter<"ThesisSession"> | string | null
+        councilReport?: StringNullableFilter<"ThesisSession"> | string | null
         decisionNumber?: StringNullableFilter<"ThesisSession"> | string | null
         decisionMaker?: StringNullableFilter<"ThesisSession"> | string | null
         decisionDate?: DateTimeNullableFilter<"ThesisSession"> | Date | string | null
@@ -549798,6 +549871,8 @@ export namespace Prisma {
         name: string
         startDate: Date | string
         endDate: Date | string
+        proposalReport?: string | null
+        councilReport?: string | null
         decisionNumber?: string | null
         decisionMaker?: string | null
         decisionDate?: Date | string | null
@@ -549824,6 +549899,8 @@ export namespace Prisma {
         startDate: Date | string
         endDate: Date | string
         trainingCourseId: string
+        proposalReport?: string | null
+        councilReport?: string | null
         decisionNumber?: string | null
         decisionMaker?: string | null
         decisionDate?: Date | string | null
@@ -573415,6 +573492,8 @@ export namespace Prisma {
         name: string
         startDate: Date | string
         endDate: Date | string
+        proposalReport?: string | null
+        councilReport?: string | null
         decisionNumber?: string | null
         decisionMaker?: string | null
         decisionDate?: Date | string | null
@@ -573442,6 +573521,8 @@ export namespace Prisma {
         endDate: Date | string
         trainingObjectTypeId: string
         trainingCourseId: string
+        proposalReport?: string | null
+        councilReport?: string | null
         decisionNumber?: string | null
         decisionMaker?: string | null
         decisionDate?: Date | string | null
@@ -574402,6 +574483,8 @@ export namespace Prisma {
         name?: StringFieldUpdateOperationsInput | string
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        proposalReport?: NullableStringFieldUpdateOperationsInput | string | null
+        councilReport?: NullableStringFieldUpdateOperationsInput | string | null
         decisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
         decisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
         decisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -574429,6 +574512,8 @@ export namespace Prisma {
         endDate?: DateTimeFieldUpdateOperationsInput | Date | string
         trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
         trainingCourseId?: StringFieldUpdateOperationsInput | string
+        proposalReport?: NullableStringFieldUpdateOperationsInput | string | null
+        councilReport?: NullableStringFieldUpdateOperationsInput | string | null
         decisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
         decisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
         decisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -640863,6 +640948,8 @@ export namespace Prisma {
         startDate: Date | string
         endDate: Date | string
         trainingObjectTypeId: string
+        proposalReport?: string | null
+        councilReport?: string | null
         decisionNumber?: string | null
         decisionMaker?: string | null
         decisionDate?: Date | string | null
@@ -641725,6 +641812,8 @@ export namespace Prisma {
         name?: StringFieldUpdateOperationsInput | string
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        proposalReport?: NullableStringFieldUpdateOperationsInput | string | null
+        councilReport?: NullableStringFieldUpdateOperationsInput | string | null
         decisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
         decisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
         decisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -641751,6 +641840,8 @@ export namespace Prisma {
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: DateTimeFieldUpdateOperationsInput | Date | string
         trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
+        proposalReport?: NullableStringFieldUpdateOperationsInput | string | null
+        councilReport?: NullableStringFieldUpdateOperationsInput | string | null
         decisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
         decisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
         decisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -641776,6 +641867,8 @@ export namespace Prisma {
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: DateTimeFieldUpdateOperationsInput | Date | string
         trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
+        proposalReport?: NullableStringFieldUpdateOperationsInput | string | null
+        councilReport?: NullableStringFieldUpdateOperationsInput | string | null
         decisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
         decisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
         decisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -648022,6 +648115,8 @@ export namespace Prisma {
         startDate: Date | string
         endDate: Date | string
         trainingCourseId: string
+        proposalReport?: string | null
+        councilReport?: string | null
         decisionNumber?: string | null
         decisionMaker?: string | null
         decisionDate?: Date | string | null
@@ -649029,6 +649124,8 @@ export namespace Prisma {
         name?: StringFieldUpdateOperationsInput | string
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        proposalReport?: NullableStringFieldUpdateOperationsInput | string | null
+        councilReport?: NullableStringFieldUpdateOperationsInput | string | null
         decisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
         decisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
         decisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -649055,6 +649152,8 @@ export namespace Prisma {
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: DateTimeFieldUpdateOperationsInput | Date | string
         trainingCourseId?: StringFieldUpdateOperationsInput | string
+        proposalReport?: NullableStringFieldUpdateOperationsInput | string | null
+        councilReport?: NullableStringFieldUpdateOperationsInput | string | null
         decisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
         decisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
         decisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -649080,6 +649179,8 @@ export namespace Prisma {
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: DateTimeFieldUpdateOperationsInput | Date | string
         trainingCourseId?: StringFieldUpdateOperationsInput | string
+        proposalReport?: NullableStringFieldUpdateOperationsInput | string | null
+        councilReport?: NullableStringFieldUpdateOperationsInput | string | null
         decisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
         decisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
         decisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
