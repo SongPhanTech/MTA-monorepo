@@ -10,7 +10,7 @@ import type { FilterProps } from "@constants/type"
 import useSpinner from "@hooks/spinner"
 import DefaultLayout from "@layouts/default-layout"
 import { useSession } from "@workspace/auth/react"
-import { CurriculumVersionType,  Prisma,  TrainingMajor,  TrainingTime } from "@workspace/db/client"
+import { CurriculumVersionType, Prisma, TrainingMajor, TrainingTime } from "@workspace/db/client"
 import {
   useCountCurriculum,
   useFindManyCurriculum,
@@ -293,7 +293,7 @@ export default function TrainingProgramCatalog() {
             },
           },
         },
-        orderBy: { name: "asc" },
+        orderBy: [{ type: "desc" }, { name: "asc" }],
       },
     },
     orderBy: { name: "asc" },
@@ -852,49 +852,48 @@ export default function TrainingProgramCatalog() {
                   {can(
                     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO,
                     "THEM"
-                  ) &&
-                    !hasFrameworkVersion && (
-                      <CreateIcon
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          onOpenCurriculumVersion({
-                            curriculumId: id,
-                            versionId: "",
-                            isFramework: true,
-                          })
-                        }}
-                        title="Thêm mới CTĐT khung"
-                      />
-                    )}
-                {can(
-                  QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO,
-                  "SUA"
-                ) && (
-                  <EditIcon
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      onOpenCurriculum(id)
-                    }}
-                    className="text-sm text-blue-700 cursor-pointer"
-                  />
-                )}
-                {can(
-                  QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO,
-                  "XOA"
-                ) && (
-                  <DeleteIcon
-                    popConfirm={{
-                      onConfirm: (e) => {
-                        handleDeleteCurriculum(id)
-                        e?.stopPropagation()
-                      },
-                      onCancel: (e) => {
-                        e?.stopPropagation()
-                      },
-                    }}
-                    onClick={(e) => e.stopPropagation()}
-                  />
-                )}
+                  ) && (
+                    <CreateIcon
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        onOpenCurriculumVersion({
+                          curriculumId: id,
+                          versionId: "",
+                          isFramework: true,
+                        })
+                      }}
+                      title="Thêm mới CTĐT khung"
+                    />
+                  )}
+                  {can(
+                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO,
+                    "SUA"
+                  ) && (
+                    <EditIcon
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        onOpenCurriculum(id)
+                      }}
+                      className="text-sm text-blue-700 cursor-pointer"
+                    />
+                  )}
+                  {can(
+                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO,
+                    "XOA"
+                  ) && (
+                    <DeleteIcon
+                      popConfirm={{
+                        onConfirm: (e) => {
+                          handleDeleteCurriculum(id)
+                          e?.stopPropagation()
+                        },
+                        onCancel: (e) => {
+                          e?.stopPropagation()
+                        },
+                      }}
+                      onClick={(e) => e.stopPropagation()}
+                    />
+                  )}
                 </div>
               )
             }}

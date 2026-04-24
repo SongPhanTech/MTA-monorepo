@@ -8,6 +8,7 @@ import {
   useFindManyStudent,
   useFindUniqueAcademicWarning,
   useUpdateAcademicWarning,
+  useUpdateStudent,
 } from "@workspace/db/hooks"
 import { Col, Form, Input, InputNumber, message } from "antd"
 import dayjs from "dayjs"
@@ -46,6 +47,7 @@ const PutAcademicWarning = () => {
   const { showSpinner, hideSpinner } = useSpinner()
 
   const { mutateAsync: createAcademicWarning } = useCreateAcademicWarning()
+  const { mutateAsync: updateStudent } = useUpdateStudent()
 
   const { mutateAsync: updateAcademicWarning } = useUpdateAcademicWarning()
   const { data: studentData = [] } = useFindManyStudent({
@@ -90,14 +92,16 @@ const PutAcademicWarning = () => {
       if (input?.id) {
         await updateAcademicWarning({
           data,
-          where: {
-            id: input?.id,
-          },
+          where: { id: input?.id },
         })
         message.success("Cập nhật thành công")
       } else {
         await createAcademicWarning({
           data,
+        })
+        await updateStudent({
+          where: { id: output?.studentId },
+          data: { academicWarningLevel: { increment: data.level } },
         })
         message.success("Thêm mới thành công")
       }

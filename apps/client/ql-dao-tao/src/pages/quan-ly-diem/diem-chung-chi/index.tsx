@@ -696,14 +696,14 @@ export default function ArchivedCertificate() {
                   >
                     Xuất nhiều loại
                   </Button>
-                  <Button
+                  {/* <Button
                     className="ml-3"
                     onClick={handleOpenMissingExportModal}
                     icon={<DownloadOutlined />}
                     type="primary"
                   >
                     Xuất DS SV chưa có CC
-                  </Button>
+                  </Button> */}
                   <Button
                     className="ml-3"
                     onClick={handleOpenReject}

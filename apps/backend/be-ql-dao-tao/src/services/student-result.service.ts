@@ -868,7 +868,8 @@ export const calculateStudentSemesterResult = async (
           isClassMonitor: student.id === student.fixedClass?.classMonitorId, // là lớp trưởng nếu id trùng classMonitorId)
           isUnionLeader: student.id === student.fixedClass?.unionLeaderId, // là bí thư nếu id trùng unionLeaderId)
           entryScore: student.entryScore, // Điểm đầu vào
-          academicWarningLevel: academicWarningForSemester?.level ?? 0, // mức cảnh báo học tập
+          academicWarningLevel:
+            student.academicWarningLevel ?? academicWarningForSemester?.level ?? 0, // mức cảnh báo học tập
           disciplinaryWarningLevel: disciplinaryWarning?.level ?? 0, // mức cảnh cáo học đường
           suspended: student.suspended, // đình chỉ học
           expelled: student.expelled, // đuổi học
@@ -1382,8 +1383,8 @@ export async function calculateStudentYearResult({
     failedCredits: yearFailedCredits,
     conductScore: trainingScore?.score || 8,
     rankId: rank?.id,
-    academicWarningLevel: academicWarning?.level || 0,
-    disciplinaryWarningLevel: disciplinaryWarning?.level || 0,
+    academicWarningLevel: student.academicWarningLevel ?? academicWarning?.level ?? 0,
+    disciplinaryWarningLevel: disciplinaryWarning?.level ?? 0,
     isLastStudyYear: false,
     baseScore: student.fixedClass.trainingCourse.baseScore,
     lowestFinalScore: courseGradeLowest,
