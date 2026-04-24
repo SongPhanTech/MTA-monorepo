@@ -23,10 +23,12 @@ import {
 } from "@workspace/db/hooks"
 import { useAbility } from "@workspace/permissions/hooks"
 import { TRO_LY_AO_PERMISSION } from "@workspace/router"
-import { Button, Input, message, Select, Tabs, Tag, Tooltip } from "antd"
+import { SyncOutlined } from "@ant-design/icons"
+import { Button, Input, message, Modal, Select, Tabs, Tag, Tooltip } from "antd"
 import { useEffect, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 import { deleteVectorRecordHoiDap, reloadBM25 } from "@/api/chunking_and_vectorize"
+import { useIndexAllIndexAllV4Post } from "@/lib/api/chat/chatComponents"
 import { useTopics } from "@/hooks/useTopics"
 import { fetchPresignedGetObject } from "@/lib/api/common/commonComponents"
 
@@ -45,6 +47,7 @@ function Page() {
     pagination: { current: 1, pageSize: 10, total: 10 },
   })
   const [isReloading, setIsReloading] = useState(false)
+  const [isIndexingAll, setIsIndexingAll] = useState(false)
   const [selectedDocumentId, setSelectedDocumentId] = useState<string | null>(null)
 
   const { onOpen: openAddTaiLieu } = useDisclosure({
@@ -132,6 +135,7 @@ function Page() {
 
   const { mutateAsync: deleteDocument } = useDeleteDocument()
   const { mutateAsync: deleteManyDocumentTopic } = useDeleteManyDocumentTopic()
+  const { mutateAsync: indexAllV4 } = useIndexAllIndexAllV4Post()
 
   const onDownload = async (objectName: string, fileName: string) => {
     try {
@@ -232,6 +236,28 @@ function Page() {
     }
   }
 
+  const handleIndexAll = () => {
+    Modal.confirm({
+      title: "Đánh chỉ mục lại toàn bộ tài liệu",
+      content:
+        "Thao tác này sẽ xoá và xây dựng lại toàn bộ chỉ mục vector (Hybrid Search). Quá trình chạy nền và có thể mất vài phút. Tiếp tục?",
+      okText: "Xác nhận",
+      cancelText: "Huỷ",
+      okButtonProps: { danger: true },
+      onOk: async () => {
+        setIsIndexingAll(true)
+        try {
+          await indexAllV4({})
+          message.success("Đã kích hoạt đánh chỉ mục lại. Quá trình đang chạy nền.")
+        } catch (_error) {
+          message.error("Đánh chỉ mục thất bại, vui lòng thử lại sau")
+        } finally {
+          setIsIndexingAll(false)
+        }
+      },
+    })
+  }
+
   const handleReloadBM25 = async () => {
     setIsReloading(true)
     try {
@@ -259,9 +285,23 @@ function Page() {
               <span className="text-xl font-semibold text-gray-700">Danh sách tài liệu</span>
             </div>
             <div className="flex items-center gap-2">
-              <Button icon={<ReloadOutlined />} onClick={handleReloadBM25} loading={isReloading}>
-                Làm mới
-              </Button>
+              <Tooltip title="Reload BM25 index">
+                <Button icon={<ReloadOutlined />} onClick={handleReloadBM25} loading={isReloading}>
+                  Làm mới
+                </Button>
+              </Tooltip>
+              {can(TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_DU_LIEU_TAI_LIEU, "SUA") && (
+                <Tooltip title="Xoá và xây dựng lại toàn bộ chỉ mục vector (chạy nền)">
+                  <Button
+                    icon={<SyncOutlined />}
+                    onClick={handleIndexAll}
+                    loading={isIndexingAll}
+                    danger
+                  >
+                    Đánh chỉ mục lại
+                  </Button>
+                </Tooltip>
+              )}
               {can(TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_DU_LIEU_TAI_LIEU, "THEM") && (
                 <Button onClick={openAddTaiLieu} type="primary">
                   Thêm mới

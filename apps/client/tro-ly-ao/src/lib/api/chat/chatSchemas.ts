@@ -110,6 +110,14 @@ export type HTTPValidationError = {
   detail?: ValidationError[];
 };
 
+export type LLMParamsUpdate = {
+  temperature?: number | null;
+  max_tokens?: number | null;
+  top_p?: number | null;
+  top_k?: number | null;
+  presence_penalty?: number | null;
+};
+
 export type ValidationError = {
   loc: (string | number)[];
   msg: string;

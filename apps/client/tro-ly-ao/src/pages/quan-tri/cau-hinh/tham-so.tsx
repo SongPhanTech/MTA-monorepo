@@ -1,85 +1,68 @@
 import FormItem from "@components/commons/form-item"
 import DefaultLayout from "@layouts/default-layout"
-import {
-  useCreateManyChatBotConfig,
-  useFindManyChatBotConfig,
-  useUpdateChatBotConfig,
-} from "@workspace/db/hooks"
+import { useQueryClient } from "@tanstack/react-query"
 import { useAbility } from "@workspace/permissions/hooks"
 import { TRO_LY_AO_PERMISSION } from "@workspace/router"
 import { Alert, Button, Col, Form, InputNumber, message, Row, Typography } from "antd"
 import { useEffect, useState } from "react"
+import {
+  useGetParamsLlmParamsGet,
+  useSetParamsLlmParamsPost,
+} from "@/lib/api/chat/chatComponents"
 
 const { Paragraph, Text } = Typography
 
-// Mâu tham số cho LLM
+// Mẫu tham số cho LLM (giá trị số, map 1-1 với /llm-params của AI)
 type ParamsType = {
-  temperature?: string
-  topP?: string
-  topK?: string
-  maxTokens?: string
-  presencePenalty?: string
+  temperature?: number
+  topP?: number
+  topK?: number
+  maxTokens?: number
+  presencePenalty?: number
 }
 
 function Page() {
   const { can } = useAbility()
   const [form] = Form.useForm<ParamsType>()
-  const { data: chatbotConfig = [] } = useFindManyChatBotConfig({})
+  const queryClient = useQueryClient()
+  const { data: llmResponse } = useGetParamsLlmParamsGet({})
   const [isEditing, setIsEditing] = useState(false)
   const [initialValues, setInitialValues] = useState<ParamsType | null>(null)
 
   useEffect(() => {
-    if (chatbotConfig) {
-      const values = {
-        temperature: chatbotConfig.find((e) => e.name === "temperature")?.value,
-        topP: chatbotConfig.find((e) => e.name === "topP")?.value,
-        topK: chatbotConfig.find((e) => e.name === "topK")?.value,
-        maxTokens: chatbotConfig.find((e) => e.name === "maxTokens")?.value,
-        presencePenalty: chatbotConfig.find((e) => e.name === "presencePenalty")?.value,
+    const params = (llmResponse as { params?: Record<string, number> } | undefined)?.params
+    if (params) {
+      const values: ParamsType = {
+        temperature: params.temperature,
+        topP: params.top_p,
+        topK: params.top_k,
+        maxTokens: params.max_tokens,
+        presencePenalty: params.presence_penalty,
       }
       form.setFieldsValue(values)
       setInitialValues(values)
     }
-  }, [chatbotConfig, form])
+  }, [llmResponse, form])
 
-  const { mutateAsync: updateChatbotConfig } = useUpdateChatBotConfig()
-  const { mutateAsync: createChatbotConfig } = useCreateManyChatBotConfig()
+  const { mutateAsync: updateLlmParams } = useSetParamsLlmParamsPost()
+
   const onFinish = async (values: ParamsType) => {
     try {
-      const configData = [
-        { name: "temperature", value: values.temperature },
-        { name: "topP", value: values.topP },
-        { name: "topK", value: values.topK },
-        { name: "maxTokens", value: values.maxTokens },
-        { name: "presencePenalty", value: values.presencePenalty },
-      ]
-
-      if (chatbotConfig.length > 0) {
-        await Promise.all(
-          configData.map((item) => {
-            return updateChatbotConfig({
-              where: { name: item.name },
-              data: {
-                value: String(item.value) ?? "",
-              },
-            })
-          })
-        )
-      } else {
-        await createChatbotConfig({
-          data: configData.map((item) => {
-            return {
-              name: item.name,
-              value: String(item.value) ?? "",
-            }
-          }),
-        })
-      }
+      await updateLlmParams({
+        body: {
+          temperature: values.temperature,
+          top_p: values.topP,
+          top_k: values.topK,
+          max_tokens: values.maxTokens,
+          presence_penalty: values.presencePenalty,
+        },
+      })
       message.success("Cập nhật thành công")
       setIsEditing(false)
       setInitialValues(values)
+      await queryClient.invalidateQueries({ queryKey: ["llm-params"] })
     } catch (error) {
-      console.error("Error updating chatbot config:", error)
+      console.error("Error updating LLM params:", error)
       message.error("Cập nhật thất bại, vui lòng thử lại sau")
     }
   }
