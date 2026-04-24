@@ -6,4 +6,4 @@
 
 import { z } from 'zod/v3';
 
-export const SupervisorRoleSchema = z.enum(["SUPERVISOR", "CO_SUPERVISOR"])
+export const SupervisorRoleSchema = z.enum(["SUPERVISOR", "CO_SUPERVISOR", "SINGLE"])

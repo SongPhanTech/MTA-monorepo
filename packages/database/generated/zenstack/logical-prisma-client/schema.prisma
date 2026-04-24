@@ -407,6 +407,7 @@ enum CouncilRole {
 enum SupervisorRole {
   SUPERVISOR
   CO_SUPERVISOR
+  SINGLE
 
   @@schema("ql-dao-tao")
 }
@@ -5318,6 +5319,10 @@ model ThesisSession {
   trainingObjectTypeId  String
   trainingCourse        TrainingCourse     @relation(fields: [trainingCourseId], references: [id])
   trainingCourseId      String
+  /// Tờ trình đề tài
+  proposalReport        String?
+  /// Tờ trình hội đồng
+  councilReport         String?
   /// Số QĐĐT
   decisionNumber        String?
   /// người ký quyết định

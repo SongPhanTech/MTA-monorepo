@@ -17479,6 +17479,14 @@ const metadata: ModelMeta = {
                     type: "String",
                     isForeignKey: true,
                     relationField: 'trainingCourse',
+                }, proposalReport: {
+                    name: "proposalReport",
+                    type: "String",
+                    isOptional: true,
+                }, councilReport: {
+                    name: "councilReport",
+                    type: "String",
+                    isOptional: true,
                 }, decisionNumber: {
                     name: "decisionNumber",
                     type: "String",

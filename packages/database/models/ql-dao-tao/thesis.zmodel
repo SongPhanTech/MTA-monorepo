@@ -33,6 +33,12 @@ model ThesisSession extends Base {
   trainingCourse        TrainingCourse     @relation(fields: [trainingCourseId], references: [id])
   trainingCourseId      String
 
+  /// Tờ trình đề tài
+  proposalReport        String?
+  
+  /// Tờ trình hội đồng
+  councilReport         String?
+  
   /// Số QĐĐT
   decisionNumber        String?
   /// người ký quyết định
@@ -329,6 +335,7 @@ enum CouncilRole {
 enum SupervisorRole {
   SUPERVISOR // Chuyên gia hướng dẫn
   CO_SUPERVISOR // Chuyên gia hướng dẫn phụ
+  SINGLE // Chuyên gia hướng dẫn đơn lẻ
 
   @@schema("ql-dao-tao")
 }
