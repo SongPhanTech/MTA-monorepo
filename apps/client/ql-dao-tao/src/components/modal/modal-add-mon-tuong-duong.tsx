@@ -14,9 +14,11 @@ import { useDisclosure } from "react-hook-disclosure-modal"
 import "dayjs/locale/vi"
 import type { DataNode } from "antd/es/tree"
 import TreeSelect from "@/components/commons/tree-select"
+import { useTrainingObjectTypeStore } from "@workspace/ui"
 export type PutMonHocTuongDuongFormType = SubjectInGroup
 dayjs.locale("vi")
 const PutMonHocTuongDuong = () => {
+  const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
   const [form] = Form.useForm<PutMonHocTuongDuongFormType>()
   const { isOpen, onClose, input } = useDisclosure<{
     subjectVersionId: string
@@ -63,7 +65,19 @@ const PutMonHocTuongDuong = () => {
   }
 
   const { data: subjectVersionData = [] } = useFindManySubject({
-    include: { subjectVersion: true },
+    where: {
+      deletedAt: null,
+    },
+    include: {
+      subjectVersion: {
+        where: {
+          deletedAt: null,
+          ...(trainingObjectTypeId && {
+            trainingObjectTypeId,
+          }),
+        },
+      },
+    },
   })
 
   const { data } = useFindUniqueSubjectVersion(
