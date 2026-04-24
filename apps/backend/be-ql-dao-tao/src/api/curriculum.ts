@@ -6,6 +6,7 @@ import XlsxTemplate from "xlsx-template"
 import { prisma } from ".."
 import { UploadExcelModel } from "../dto/upload-excel.dto"
 import { buildSubjectMapOrThrow, buildTrainingBlockMapOrThrow } from "../utils"
+import { _generateCurriculumImportTemplate } from "../services/curriculum"
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -312,6 +313,60 @@ app.openapi(exportCurriculumVersion, async (c) => {
   const fileName = `CTDT-${data.curriculum.trainingMajor.name}-${data.name}.xlsx`
   const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
 
+  return c.body(result, 200, {
+    "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "Content-Disposition": disposition,
+  })
+})
+
+const downloadCurriculumImportTemplate = createRoute({
+  operationId: "downloadCurriculumImportTemplate",
+  tags: ["Curriculum"],
+  path: "/download-curriculum-template",
+  method: "get",
+  request: {
+    query: z.object({
+      trainingObjectTypeId: z.string().openapi("trainingObjectTypeId", {
+        description: "ID loại đối tượng đào tạo",
+      }),
+    }),
+  },
+  responses: {
+    200: {
+      description: "Download template file with category sheets",
+      content: {
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
+          schema: z.any().openapi({ type: "string", format: "binary" }),
+        },
+      },
+    },
+    404: {
+      description: "Not found",
+      content: {
+        "application/json": {
+          schema: z.object({ message: z.string() }),
+        },
+      },
+    },
+    500: {
+      description: "Internal server error",
+      content: {
+        "application/json": {
+          schema: z.object({
+            message: z.string(),
+            error: z.string().optional(),
+          }),
+        },
+      },
+    },
+  },
+})
+
+app.openapi(downloadCurriculumImportTemplate, async (c) => {
+  const { trainingObjectTypeId } = c.req.valid("query")
+  const result = await _generateCurriculumImportTemplate(trainingObjectTypeId)
+  const fileName = "MauNhapCTDT.xlsx"
+  const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
   return c.body(result, 200, {
     "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     "Content-Disposition": disposition,
