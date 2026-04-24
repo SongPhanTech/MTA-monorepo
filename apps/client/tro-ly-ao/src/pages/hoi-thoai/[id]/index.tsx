@@ -500,6 +500,11 @@ export default function Page() {
   }
 
   useEffect(() => {
+    // KHÔNG override messages khi đang streaming/loading để tránh mất chữ đang render
+    // (vd: khi user chuyển tab browser, React Query refetchOnWindowFocus sẽ trigger
+    // messageList đổi reference -> useEffect chạy -> ghi đè streamed text bằng DB version)
+    if (loading || isStreaming) return
+
     if (messageList) {
       const sortedMessages = [...messageList].sort(
         (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
@@ -539,7 +544,7 @@ export default function Page() {
       })
       setMessages(mappedMessages)
     }
-  }, [messageList])
+  }, [messageList, loading, isStreaming])
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: need to reset when conversation changes
   useEffect(() => {
