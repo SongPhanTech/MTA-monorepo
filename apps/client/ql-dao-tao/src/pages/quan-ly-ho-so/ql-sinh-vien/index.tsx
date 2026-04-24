@@ -295,6 +295,13 @@ export default function UserProfilePageDs() {
         },
       },
       curriculumVersionParallel: true,
+      _count: {
+        select: {
+          subjectClassStudent: true,
+          studentSemesterResult: true,
+          studentYearResult: true,
+        },
+      },
     },
     orderBy: [
       ...(sortDescriptor ? [sortDescriptor] : []),
@@ -422,7 +429,19 @@ export default function UserProfilePageDs() {
   const { mutateAsync: deleteStudent } = useDeleteStudent()
   const { mutateAsync: deleteUserProfile } = useDeleteUserProfile()
 
-  async function handleDelete(id: string, userProfileId: string) {
+  async function handleDelete(record: any) {
+    const id = record.id
+    const userProfileId = record.userProfileId
+    const hasScores =
+      (record._count?.subjectClassStudent || 0) > 0 ||
+      (record._count?.studentSemesterResult || 0) > 0 ||
+      (record._count?.studentYearResult || 0) > 0
+
+    if (hasScores) {
+      message.error("Sinh viên đã có điểm hoặc kết quả học tập, không thể xóa!")
+      return
+    }
+
     try {
       showSpinner()
       await deleteStudent({ where: { id } })
@@ -791,7 +810,7 @@ export default function UserProfilePageDs() {
                     {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_HO_SO_QL_SINH_VIEN, "XOA") && (
                       <DeleteIcon
                         popConfirm={{
-                          onConfirm: () => handleDelete(record.id, record.userProfileId),
+                          onConfirm: () => handleDelete(record),
                         }}
                       />
                     )}
