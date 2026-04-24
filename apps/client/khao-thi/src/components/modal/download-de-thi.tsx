@@ -210,6 +210,25 @@ const PrintExamBank = () => {
             margin: "0 auto",
           }}
         >
+          <style>
+            {`
+              @media print {
+                /* Force all text to black when printing (avoid browser default link blue) */
+                #print-exam-bank, #print-exam-bank * {
+                  color: #000 !important;
+                }
+                #print-exam-bank a,
+                #print-exam-bank a:visited,
+                #print-exam-bank a:hover,
+                #print-exam-bank a:active {
+                  color: #000 !important;
+                  text-decoration: none !important;
+                }
+              }
+            `}
+          </style>
+
+          <div id="print-exam-bank">
           {/* Header */}
           <div style={{ position: "relative", marginBottom: "10px" }}>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -399,6 +418,7 @@ const PrintExamBank = () => {
             }}
           >
             * Giám thị coi thi không giải thích gì thêm
+          </div>
           </div>
         </div>
       </div>
