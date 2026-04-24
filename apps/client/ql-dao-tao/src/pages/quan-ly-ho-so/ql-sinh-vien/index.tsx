@@ -25,6 +25,8 @@ import {
   useFindManyTrainingField,
   useFindManyTrainingMajor,
   useUpdateStudent,
+  useDeleteStudent,
+  useDeleteUserProfile,
 } from "@workspace/db/hooks"
 import {
   downloadStudentImportTemplate,
@@ -417,14 +419,14 @@ export default function UserProfilePageDs() {
       preSelectedValues: {},
     })
   }
-  const { mutateAsync: updateUserProfile } = useUpdateStudent()
-  async function handleDelete(id: string) {
+  const { mutateAsync: deleteStudent } = useDeleteStudent()
+  const { mutateAsync: deleteUserProfile } = useDeleteUserProfile()
+
+  async function handleDelete(id: string, userProfileId: string) {
     try {
       showSpinner()
-      await updateUserProfile({
-        where: { id },
-        data: { deletedAt: new Date() },
-      })
+      await deleteStudent({ where: { id } })
+      await deleteUserProfile({ where: { id: userProfileId } })
       message.success("Xóa thành công")
     } catch (error) {
       console.log(error)
@@ -433,7 +435,6 @@ export default function UserProfilePageDs() {
       hideSpinner()
     }
   }
-
   return (
     <div>
       <Row gutter={[16, 16]}>
@@ -790,7 +791,7 @@ export default function UserProfilePageDs() {
                     {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_HO_SO_QL_SINH_VIEN, "XOA") && (
                       <DeleteIcon
                         popConfirm={{
-                          onConfirm: () => handleDelete(record.id),
+                          onConfirm: () => handleDelete(record.id, record.userProfileId),
                         }}
                       />
                     )}
