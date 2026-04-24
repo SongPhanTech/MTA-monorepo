@@ -198,7 +198,11 @@ app.openapi(getClassesInfo, async (c) => {
         include: {
           fixedClass: {
             include: {
-              trainingCourse: true,
+              trainingCourse: {
+                include: {
+                  semesterStart: true,
+                },
+              },
             },
           },
           studentSemesterResult: true,
@@ -250,7 +254,21 @@ app.openapi(getClassesInfo, async (c) => {
     include: { trainingBlocks: { include: { subjects: { include: { subject: true } } } } },
   })
 
-  const curriculumSubjects = curriculumVersion.trainingBlocks.flatMap((block) => block.subjects)
+  const studentInfo = profile.educationAndTraining[0]
+  const currentSemesterIndex = await prisma.semester.count({
+    where: {
+      startDate: {
+        gte: studentInfo?.fixedClass?.trainingCourse?.semesterStart?.startDate,
+        lte: registerSession.semester?.startDate,
+      },
+      semesterType: { in: [$Enums.SemesterType.FIRST, $Enums.SemesterType.SECOND] },
+      deletedAt: null,
+    },
+  })
+
+  const curriculumSubjects = curriculumVersion.trainingBlocks
+    .flatMap((block) => block.subjects)
+    .filter((item) => item.semester === currentSemesterIndex)
 
   const studentTrainingObjectTypeId =
     registerSession.trainingCourses.find((tc) => tc.trainingObjectTypeId)?.trainingObjectTypeId ??
@@ -627,7 +645,7 @@ app.openapi(classRegister, async (c) => {
       if (missingCoRequisites.length > 0) {
         return c.json(
           {
-            message: `Bạn chưa đăng ký môn song hành của môn ${sc.subject.name}: ${missingCoRequisites.map((p) => p.name).join(", ")}`,
+            message: `Bạn chưa đăng ký môn trước của môn ${sc.subject.name}: ${missingCoRequisites.map((p) => p.name).join(", ")}`,
           },
           400
         )
@@ -787,34 +805,50 @@ app.openapi(classUnregister, async (c) => {
   if (profile.educationAndTraining.length === 0) {
     return c.json({ message: "Bạn không có thông tin học vụ" }, 404)
   }
-  const studentId =
-    profile.educationAndTraining.find(
-      (item) => curriculumVersionId && item.curriculumVersionId === curriculumVersionId
-    )?.id ?? (profile.educationAndTraining[0]?.id as string)
+
+  const studentIds = profile.educationAndTraining.map((item) => item.id)
 
   const studentSubjectScores = await prisma.studentSubjectScore.findMany({
     where: {
-      studentId,
+      studentId: { in: studentIds },
       subjectClassId: { in: subjectClassIds },
-      attendanceScore: { not: null },
-      midtermScore: { not: null },
-      finalScore: { not: null },
-      examPaper: {},
-      studentResearchTopic: {},
-      studentInternship: {},
+      OR: [
+        { attendanceScore: { not: null } },
+        { midtermScore: { not: null } },
+        { finalScore: { not: null } },
+        { examScore: { not: null } },
+        { manualFinalScore: { not: null } },
+        { examPaper: { isNot: null } },
+        { studentResearchTopic: { isNot: null } },
+        { studentInternship: { isNot: null } },
+        {
+          subjectClass: {
+            subjectClassAttendances: {
+              some: {
+                subjectClassAttendanceStudent: {
+                  some: {
+                    studentId: { in: studentIds },
+                  },
+                },
+              },
+            },
+          },
+        },
+      ],
     },
-    include: { studentSubjectScoreHistory: true },
   })
-
   if (studentSubjectScores.length > 0) {
-    return c.json({ message: "Bạn không thể hủy đăng ký lớp học đã có điểm" }, 400)
+    return c.json(
+      {
+        message: "Học phần đã phát sinh dữ liệu (điểm/điểm danh/thi), không thể hủy đăng ký.",
+      },
+      400
+    )
   }
-
   await prisma.$transaction(async (tx) => {
     await tx.classRegisterLogs.deleteMany({
       where: {
-        classRegisterSessionId: sessionId,
-        studentId,
+        studentId: { in: studentIds },
         subjectClassId: {
           in: subjectClassIds,
         },
@@ -824,12 +858,22 @@ app.openapi(classUnregister, async (c) => {
     for (const subjectClassId of subjectClassIds) {
       await tx.studentSubjectScoreHistory.deleteMany({
         where: {
-          studentSubjectScore: { subjectClassId, studentId },
+          studentSubjectScore: {
+            subjectClassId,
+            studentId: { in: studentIds },
+          },
         },
       })
-
+      await tx.subjectClassAttendanceStudent.deleteMany({
+        where: {
+          studentId: { in: studentIds },
+          subjectClassAttendance: {
+            subjectClassId,
+          },
+        },
+      })
       await tx.studentSubjectScore.deleteMany({
-        where: { subjectClassId, studentId },
+        where: { subjectClassId, studentId: { in: studentIds } },
       })
     }
   })

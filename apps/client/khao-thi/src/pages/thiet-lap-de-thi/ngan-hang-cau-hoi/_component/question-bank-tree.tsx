@@ -15,6 +15,11 @@ type DonViType = Prisma.DM_DonViGetPayload<{
         subjectVersion: {
           include: {
             questionBanks: true
+            _count: {
+              select: {
+                examFramework: true
+              }
+            }
           }
         }
       }
@@ -30,6 +35,7 @@ interface QuestionBankTreeProps {
   donViData: DonViType[]
   onOpenPutQuestionBank: (input?: PutQuestionBankInput) => void
   handleDeleteQuestionBank: (id: string) => void
+  onOpenNganHangKhungDe: (input: { subjectVersionId: string }) => void
 }
 
 const OrganizationTitle = memo(({ code, name }: { code: string | null; name: string }) => (
@@ -59,12 +65,16 @@ const SubjectVersionTitle = memo(
     code,
     name,
     versionId,
+    examFrameworkCount,
     onOpenPutQuestionBank,
+    onOpenNganHangKhungDe,
   }: {
     code: string | null
     name: string
     versionId: string
+    examFrameworkCount: number
     onOpenPutQuestionBank: (input?: PutQuestionBankInput) => void
+    onOpenNganHangKhungDe: (input: { subjectVersionId: string }) => void
   }) => {
     const handleAddClick = useCallback(
       (e: React.MouseEvent) => {
@@ -72,6 +82,14 @@ const SubjectVersionTitle = memo(
         onOpenPutQuestionBank({ subjectVersionId: versionId })
       },
       [versionId, onOpenPutQuestionBank]
+    )
+
+    const handleBadgeClick = useCallback(
+      (e: React.MouseEvent) => {
+        e.stopPropagation()
+        onOpenNganHangKhungDe({ subjectVersionId: versionId })
+      },
+      [versionId, onOpenNganHangKhungDe]
     )
 
     return (
@@ -82,6 +100,16 @@ const SubjectVersionTitle = memo(
             {code ? `${code} - ` : ""}
             {name}
           </span>
+          {examFrameworkCount > 0 && (
+            <Tooltip title={`${examFrameworkCount} khung đề`}>
+              <span
+                className="inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 text-xs font-semibold bg-green-100 text-green-700 rounded-full cursor-pointer hover:bg-green-200"
+                onClick={handleBadgeClick}
+              >
+                {examFrameworkCount}
+              </span>
+            </Tooltip>
+          )}
         </Space>
         <Tooltip title="Thêm mới" placement="top">
           <BookPlus
@@ -153,6 +181,7 @@ export default function QuestionBankTree({
   donViData,
   onOpenPutQuestionBank,
   handleDeleteQuestionBank,
+  onOpenNganHangKhungDe,
 }: QuestionBankTreeProps) {
   const processedData = useMemo(() => {
     const normalizedSearch = searchName?.toLowerCase().trim() || ""
@@ -311,7 +340,9 @@ export default function QuestionBankTree({
                 code={node.version.code}
                 name={node.version.name}
                 versionId={node.version.id}
+                examFrameworkCount={node.version._count?.examFramework ?? 0}
                 onOpenPutQuestionBank={onOpenPutQuestionBank}
+                onOpenNganHangKhungDe={onOpenNganHangKhungDe}
               />
             ),
             children: convertToTreeNodes(node.children || []),
@@ -342,7 +373,12 @@ export default function QuestionBankTree({
     }
 
     return convertToTreeNodes(processedData.dataStructure)
-  }, [processedData.dataStructure, onOpenPutQuestionBank, handleDeleteQuestionBank])
+  }, [
+    processedData.dataStructure,
+    onOpenPutQuestionBank,
+    handleDeleteQuestionBank,
+    onOpenNganHangKhungDe,
+  ])
 
   const previousSearchRef = useRef<string>("")
 

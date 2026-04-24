@@ -13,6 +13,7 @@ import DatePicker from "@components/commons/date-picker"
 import type { StudentResearchTopic } from "@workspace/db/client"
 import { FormItem } from "@workspace/ui"
 import { useEffect } from "react"
+import { getSupervisorName } from "@pages/quan-ly-luan-van/dm-luan-van"
 
 dayjs.locale("vi")
 const { TextArea } = Input
@@ -36,6 +37,7 @@ const PutResearchTopicModal = () => {
   const { showSpinner, hideSpinner } = useSpinner()
   const { data: expertProfile = [] } = useFindManyExpertProfile({
     include: {
+      
       lecturer: {
         select: {
           code: true,
@@ -207,17 +209,7 @@ const PutResearchTopicModal = () => {
             <Select
               placeholder="Chọn giảng viên hướng dẫn"
               options={expertProfile.map((item) => ({
-                label: item.lecturer
-                  ? [
-                      item.lecturer?.userProfile.academicRankType?.sMa,
-                      item.lecturer?.userProfile.academicDegreeType?.sMa,
-                      item.lecturer?.userProfile.fullname,
-                    ]
-                      .filter(Boolean)
-                      .join(". ")
-                  : [item.academicRankType?.sMa, item.academicDegreeType?.sMa, item.name]
-                      .filter(Boolean)
-                      .join(". "),
+                label: getSupervisorName(item, true, true),
                 value: item.id,
               }))}
               showSearch
@@ -231,17 +223,7 @@ const PutResearchTopicModal = () => {
             <Select
               placeholder="Chọn giảng viên hướng dẫn"
               options={expertProfile.map((item) => ({
-                label: item.lecturer
-                  ? [
-                      item.lecturer?.userProfile.academicRankType?.sMa,
-                      item.lecturer?.userProfile.academicDegreeType?.sMa,
-                      item.lecturer?.userProfile.fullname,
-                    ]
-                      .filter(Boolean)
-                      .join(". ")
-                  : [item.academicRankType?.sMa, item.academicDegreeType?.sMa, item.name]
-                      .filter(Boolean)
-                      .join(". "),
+                label: getSupervisorName(item, true, true),
                 value: item.id,
               }))}
               showSearch

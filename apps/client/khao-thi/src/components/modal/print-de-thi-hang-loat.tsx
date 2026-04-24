@@ -467,6 +467,25 @@ const PrintBatchExamBank = () => {
         }}
       >
         <div ref={printRef}>
+          <style>
+            {`
+              @media print {
+                /* Force all text to black when printing (avoid browser default link blue) */
+                #print-batch-exam-bank, #print-batch-exam-bank * {
+                  color: #000 !important;
+                }
+                #print-batch-exam-bank a,
+                #print-batch-exam-bank a:visited,
+                #print-batch-exam-bank a:hover,
+                #print-batch-exam-bank a:active {
+                  color: #000 !important;
+                  text-decoration: none !important;
+                }
+              }
+            `}
+          </style>
+
+          <div id="print-batch-exam-bank">
           {exams.length > 0 ? (
             exams.map((exam, index) => renderExamPreview(exam, index))
           ) : (
@@ -474,6 +493,7 @@ const PrintBatchExamBank = () => {
               Không có đề thi nào được chọn
             </div>
           )}
+          </div>
         </div>
       </div>
     </Modal>

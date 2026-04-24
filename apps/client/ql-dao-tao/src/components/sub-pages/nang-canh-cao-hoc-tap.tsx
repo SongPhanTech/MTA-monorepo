@@ -20,6 +20,7 @@ import {
 import { saveAs } from "file-saver"
 import { BookPlus } from "lucide-react"
 import { useMemo, useState } from "react"
+import { useSqlTransaction } from "@workspace/libs/api/model"
 
 dayjs.locale("vi")
 
@@ -34,7 +35,7 @@ const NangCanhCaoHocTap = ({ semesterId, trainingObjectTypeId }: NangCanhCaoHocT
   const [selectedRowKeys, setSelectedRowKeys] = useState<string[]>([])
 
   const { showSpinner, hideSpinner } = useSpinner()
-  const { mutateAsync: createAcademicWarning } = useCreateAcademicWarning()
+  const { mutateAsync: sqlTransaction } = useSqlTransaction()
 
   const { data: students = [] } = useExportStudentAcademicWarningJson<any[] | { data: any[] }>(
     { semesterId, trainingObjectTypeId },
@@ -96,26 +97,40 @@ const NangCanhCaoHocTap = ({ semesterId, trainingObjectTypeId }: NangCanhCaoHocT
       onOk: async () => {
         try {
           showSpinner()
-          const promises = selectedRecords
-            .filter((record) => !!record.studentSemesterResult)
-            .map((record: any) => {
+          await sqlTransaction({
+            data: selectedRecords.flatMap((record: any) => {
               const currentLevel = record.studentSemesterResult.academicWarningLevel ?? 0
               const severity =
                 record.academicWarningRule?.length > 0
                   ? Math.max(...record.academicWarningRule.map((r: any) => r.severity))
                   : 1
-              return createAcademicWarning({
-                data: {
-                  student: { connect: { id: record.id } },
-                  semester: { connect: { id: semesterId } },
-                  level: currentLevel + severity,
-                  increasedFrom: currentLevel,
-                  description: record.reason,
-                },
-              })
-            })
 
-          await Promise.all(promises)
+              return [
+                {
+                  model: "AcademicWarning",
+                  operation: "create",
+                  data: {
+                    data: {
+                      studentId: record.id,
+                      semesterId: semesterId,
+                      level: currentLevel + severity,
+                      increasedFrom: currentLevel,
+                      description: record.reason,
+                    },
+                  },
+                },
+                {
+                  model: "Student",
+                  operation: "update",
+                  data: {
+                    where: { id: record.id },
+                    data: { academicWarningLevel: currentLevel + severity },
+                  },
+                },
+              ]
+            }),
+          })
+
           await refetch()
           setSelectedRowKeys([])
           message.success("Duyệt thành công")

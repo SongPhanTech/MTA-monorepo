@@ -319,6 +319,7 @@ export default function CriteriaAnalysisPeriodList() {
               idx={standard.order}
               refetch={refetch}
               handleViewAll={() => handleViewAll(data?.standards || [])}
+              allData={data?.standards}
             />
           ),
         }

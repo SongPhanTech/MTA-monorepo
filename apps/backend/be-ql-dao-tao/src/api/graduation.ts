@@ -596,7 +596,10 @@ app.openapi(graduationCheck, async (c) => {
       )
       .sort((a, b) => b.score.scoreBase10.cmp(a.score.scoreBase10))
 
-    const electiveCreditsRequired = curriculumVersion.electiveCredits || 0
+    const electiveCreditsRequired = curriculumVersion.trainingBlocks.reduce(
+      (pre, cur) => pre + cur.electiveCreditsRequired,
+      0
+    )
     let accumulatedElectiveCredits = 0
 
     for (const { subject, score } of passedElectives) {
@@ -667,12 +670,9 @@ app.openapi(graduationCheck, async (c) => {
       )
     }
 
-    if (
-      curriculumVersion.electiveCredits &&
-      accumulatedElectiveCredits < curriculumVersion.electiveCredits
-    ) {
+    if (accumulatedElectiveCredits < electiveCreditsRequired) {
       reasons.push(
-        `Chưa đạt số tín chỉ tự chọn (${accumulatedElectiveCredits} < ${curriculumVersion.electiveCredits})`
+        `Chưa đạt số tín chỉ tự chọn (${accumulatedElectiveCredits} < ${electiveCreditsRequired})`
       )
     }
 

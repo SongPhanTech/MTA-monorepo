@@ -17479,6 +17479,14 @@ const metadata: ModelMeta = {
                     type: "String",
                     isForeignKey: true,
                     relationField: 'trainingCourse',
+                }, proposalReport: {
+                    name: "proposalReport",
+                    type: "String",
+                    isOptional: true,
+                }, councilReport: {
+                    name: "councilReport",
+                    type: "String",
+                    isOptional: true,
                 }, decisionNumber: {
                     name: "decisionNumber",
                     type: "String",
@@ -20091,6 +20099,10 @@ const metadata: ModelMeta = {
                     relationField: 'reviewer',
                 }, deadlineReview: {
                     name: "deadlineReview",
+                    type: "DateTime",
+                    isOptional: true,
+                }, deadlineReviewExternal: {
+                    name: "deadlineReviewExternal",
                     type: "DateTime",
                     isOptional: true,
                 }, lecturerReview: {

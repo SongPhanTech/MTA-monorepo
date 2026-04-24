@@ -229,6 +229,25 @@ const PrintExplanation = () => {
             margin: "0 auto",
           }}
         >
+          <style>
+            {`
+              @media print {
+                /* Force all text to black when printing (avoid browser default link blue) */
+                #print-explanation, #print-explanation * {
+                  color: #000 !important;
+                }
+                #print-explanation a,
+                #print-explanation a:visited,
+                #print-explanation a:hover,
+                #print-explanation a:active {
+                  color: #000 !important;
+                  text-decoration: none !important;
+                }
+              }
+            `}
+          </style>
+
+          <div id="print-explanation">
           {/* Header */}
           <div
             style={{
@@ -497,6 +516,7 @@ const PrintExplanation = () => {
               ))}
             </tbody>
           </table>
+          </div>
         </div>
       </div>
     </Modal>

@@ -22,11 +22,20 @@ const SIZE_BODY = 22
 const SIZE_TITLE = 26
 
 interface ExportCriteriaAnalysisProps {
-  data: DataTabType
-  idx: number
+  data?: DataTabType
+  idx?: number
+  allData?: DataTabType[]
+  label?: string
+  fileName?: string
 }
 
-const ExportCriteriaAnalysis = ({ data, idx }: ExportCriteriaAnalysisProps) => {
+const ExportCriteriaAnalysis = ({
+  data,
+  idx = 0,
+  allData,
+  label = "Xuất file",
+  fileName,
+}: ExportCriteriaAnalysisProps) => {
   const cellBorders = {
     top: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
     bottom: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
@@ -61,29 +70,22 @@ const ExportCriteriaAnalysis = ({ data, idx }: ExportCriteriaAnalysisProps) => {
       ...(opts.columnSpan ? { columnSpan: opts.columnSpan } : {}),
       ...(opts.rowSpan ? { rowSpan: opts.rowSpan } : {}),
       ...(opts.width
-        ? {
-            width: {
-              size: opts.width,
-              type: opts.dxa ? WidthType.DXA : WidthType.PERCENTAGE,
-            },
-          }
+        ? { width: { size: opts.width, type: opts.dxa ? WidthType.DXA : WidthType.PERCENTAGE } }
         : {}),
     })
 
-  const calcEvidenceTags = () => {
+  const calcEvidenceTags = (stdData: DataTabType, stdIdx: number) => {
     const map = new Map<string, { tag: string; criterionOrders: number[] }>()
     const result: any[] = []
-    const standardOrder = data.order || idx
+    const standardOrder = stdData.order || stdIdx
 
-    for (const [criterionIdx, criterion] of (data.criteria || []).entries()) {
+    for (const [criterionIdx, criterion] of (stdData.criteria || []).entries()) {
       const analysis = criterion?.analysisCriterions
       if (!analysis) continue
-
       const reqList = analysis.requirementCriterions
       if (!Array.isArray(reqList)) continue
 
       let evidenceCount = 0
-
       for (const req of reqList) {
         const evidencesList = req?.evidences
         if (!Array.isArray(evidencesList)) continue
@@ -104,12 +106,7 @@ const ExportCriteriaAnalysis = ({ data, idx }: ExportCriteriaAnalysisProps) => {
             .map((t) => t.toString().padStart(2, "0"))
             .join(".")
 
-          result.push({
-            ...ev,
-            tag,
-            criterionOrder,
-            criterionOrders: [criterionOrder],
-          })
+          result.push({ ...ev, tag, criterionOrder, criterionOrders: [criterionOrder] })
           map.set(ev.evidenceId, { tag, criterionOrders: [criterionOrder] })
         }
       }
@@ -122,7 +119,6 @@ const ExportCriteriaAnalysis = ({ data, idx }: ExportCriteriaAnalysisProps) => {
     const analysis = criterion?.analysisCriterions
     const requirements = analysis?.requirementCriterions || []
 
-    // Portrait A4: ~9070 DXA usable width (with ~2.5cm margins)
     const COL_YEU_CAU = 1800
     const COL_CAU_HOI = 1800
     const COL_CAN_THU_THAP = 1200
@@ -180,7 +176,6 @@ const ExportCriteriaAnalysis = ({ data, idx }: ExportCriteriaAnalysisProps) => {
         Array.isArray(req.questions) && req.questions.length > 0
           ? req.questions.map((q: string) => cellP(`- ${q}`))
           : [cellP("")]
-
       const evidenceParagraphs =
         Array.isArray(req.evidences) && req.evidences.length > 0
           ? req.evidences.map((ev: any) => cellP(`- ${ev?.evidence?.name || ""}`))
@@ -188,20 +183,11 @@ const ExportCriteriaAnalysis = ({ data, idx }: ExportCriteriaAnalysisProps) => {
 
       return new TableRow({
         children: [
-          makeCell([cellP(`${index + 1}. ${req.name || ""}`)], {
-            width: COL_YEU_CAU,
-            dxa: true,
-          }),
+          makeCell([cellP(`${index + 1}. ${req.name || ""}`)], { width: COL_YEU_CAU, dxa: true }),
           makeCell(questionParagraphs, { width: COL_CAU_HOI, dxa: true }),
           makeCell(evidenceParagraphs, { width: COL_CAN_THU_THAP, dxa: true }),
-          makeCell([cellP(req.evidencePlaces || "")], {
-            width: COL_NOI_THU_THAP,
-            dxa: true,
-          }),
-          makeCell([cellP(req.collectionMethod || "")], {
-            width: COL_PHUONG_PHAP,
-            dxa: true,
-          }),
+          makeCell([cellP(req.evidencePlaces || "")], { width: COL_NOI_THU_THAP, dxa: true }),
+          makeCell([cellP(req.collectionMethod || "")], { width: COL_PHUONG_PHAP, dxa: true }),
           makeCell([cellP("")], { width: COL_GHI_CHU, dxa: true }),
         ],
       })
@@ -232,11 +218,9 @@ const ExportCriteriaAnalysis = ({ data, idx }: ExportCriteriaAnalysisProps) => {
 
   const createEvidenceTable = (
     evidenceList: any[],
-    evidenceMap: Map<string, { tag: string; criterionOrders: number[] }>
+    evidenceMap: Map<string, { tag: string; criterionOrders: number[] }>,
+    standardOrder: number
   ) => {
-    const standardOrder = data.order || idx
-
-    // Group evidences by criterionOrder
     const groups = new Map<number, any[]>()
     for (const ev of evidenceList) {
       const order = ev.criterionOrder
@@ -244,7 +228,6 @@ const ExportCriteriaAnalysis = ({ data, idx }: ExportCriteriaAnalysisProps) => {
       groups.get(order)?.push(ev)
     }
 
-    // Portrait A4: ~9070 DXA usable
     const E_COL_TIEU_CHUAN = 700
     const E_COL_TIEU_CHI = 600
     const E_COL_MA_MC = 1100
@@ -281,12 +264,7 @@ const ExportCriteriaAnalysis = ({ data, idx }: ExportCriteriaAnalysisProps) => {
           { width: E_COL_SO_NGAY, dxa: true }
         ),
         makeCell(
-          [
-            cellP("Nơi ban hành hoặc nhóm, cá nhân thực hiện", {
-              bold: true,
-              center: true,
-            }),
-          ],
+          [cellP("Nơi ban hành hoặc nhóm, cá nhân thực hiện", { bold: true, center: true })],
           { width: E_COL_NOI_BH, dxa: true }
         ),
         makeCell([cellP("Ghi chú", { bold: true, center: true })], {
@@ -313,18 +291,14 @@ const ExportCriteriaAnalysis = ({ data, idx }: ExportCriteriaAnalysisProps) => {
             .filter((o: number) => o !== criterionOrder)
             .map((o: number) => `${standardOrder}.${o}`)
             .join(", ")
-          if (otherCriteria) {
-            note = `Dùng chung với các tiêu chí: ${otherCriteria}`
-          }
+          if (otherCriteria) note = `Dùng chung với các tiêu chí: ${otherCriteria}`
         }
 
         const cells: TableCell[] = []
 
         if (isFirstRow) {
           cells.push(
-            makeCell([cellP(`${standardOrder}`, { center: true })], {
-              rowSpan: totalRows,
-            })
+            makeCell([cellP(`${standardOrder}`, { center: true })], { rowSpan: totalRows })
           )
           isFirstRow = false
         }
@@ -361,109 +335,70 @@ const ExportCriteriaAnalysis = ({ data, idx }: ExportCriteriaAnalysisProps) => {
     })
   }
 
-  const exportToWord = async () => {
-    try {
-      if (!data || !data.criteria || data.criteria.length === 0) {
-        console.error("Không có dữ liệu để xuất")
-        return
-      }
+  const generateStandardSection = (stdData: DataTabType, stdIdx: number): any[] => {
+    const { evidenceMap, evidenceList } = calcEvidenceTags(stdData, stdIdx)
+    const standardOrder = stdData.order || stdIdx
 
-      const { evidenceMap, evidenceList } = calcEvidenceTags()
-      const allChildren: any[] = []
-      const standardOrder = data.order || idx
+    const section: any[] = []
 
-      for (const [cidx, criterion] of data.criteria.entries()) {
-        if (!criterion.analysisCriterions) continue
-        const isFirst = cidx === 0
+    for (const [cidx, criterion] of stdData.criteria.entries()) {
+      if (!criterion.analysisCriterions) continue
 
-        const lecturerName =
-          criterion.analysisCriterions?.lecturer?.userProfile?.fullname ||
-          "............................................."
+      const lecturerName =
+        criterion.analysisCriterions?.lecturer?.userProfile?.fullname ||
+        "............................................."
 
-        // === TIÊU ĐỀ ===
-        allChildren.push(
+      section.push(
+        new Paragraph({
+          alignment: AlignmentType.CENTER,
+          pageBreakBefore: true,
+          children: [
+            new TextRun({ text: "PHIẾU THU THẬP, PHÂN TÍCH", bold: true, size: SIZE_TITLE }),
+          ],
+        }),
+        new Paragraph({
+          alignment: AlignmentType.CENTER,
+          children: [
+            new TextRun({
+              text: "VÀ XỬ LÝ THÔNG TIN, MINH CHỨNG",
+              bold: true,
+              size: SIZE_TITLE,
+            }),
+          ],
+        }),
+        new Paragraph({ children: [new TextRun({ text: "" })] }),
+        new Paragraph({
+          children: [
+            new TextRun({ text: "Nhóm công tác hoặc cá nhân: ", size: SIZE_BODY, bold: true }),
+            new TextRun({ text: lecturerName, size: SIZE_BODY }),
+          ],
+        }),
+        new Paragraph({
+          children: [
+            new TextRun({ text: "Tiêu chuẩn: ", size: SIZE_BODY, bold: true }),
+            new TextRun({ text: `${standardOrder}: ${stdData.name || ""}`, size: SIZE_BODY }),
+          ],
+        }),
+        new Paragraph({
+          children: [
+            new TextRun({ text: "Tiêu chí: ", size: SIZE_BODY, bold: true, italics: true }),
+            new TextRun({
+              text: `${standardOrder}.${criterion.order || cidx + 1}: ${criterion.name || ""}`,
+              italics: true,
+              size: SIZE_BODY,
+            }),
+          ],
+        }),
+        new Paragraph({ children: [new TextRun({ text: "" })] }),
+        createAnalysisTable(criterion),
+        new Paragraph({ children: [new TextRun({ text: "" })] })
+      )
+
+      const criterionOrder = criterion.order || cidx + 1
+      const criterionEvidences = evidenceList.filter((ev) => ev.criterionOrder === criterionOrder)
+      if (criterionEvidences.length > 0) {
+        section.push(
           new Paragraph({
-            alignment: AlignmentType.CENTER,
-            children: [
-              new TextRun({
-                text: "PHIẾU THU THẬP, PHÂN TÍCH",
-                bold: true,
-                size: SIZE_TITLE,
-              }),
-            ],
-          })
-        )
-        allChildren.push(
-          new Paragraph({
-            alignment: AlignmentType.CENTER,
-            children: [
-              new TextRun({
-                text: "VÀ XỬ LÝ THÔNG TIN, MINH CHỨNG",
-                bold: true,
-                size: SIZE_TITLE,
-              }),
-            ],
-          })
-        )
-        allChildren.push(new Paragraph({ children: [new TextRun({ text: "" })] }))
-
-        // === THÔNG TIN HEADER ===
-        allChildren.push(
-          new Paragraph({
-            children: [
-              new TextRun({
-                text: "Nhóm công tác hoặc cá nhân: ",
-                size: SIZE_BODY,
-                bold: true,
-              }),
-              new TextRun({ text: lecturerName, size: SIZE_BODY }),
-            ],
-          })
-        )
-        allChildren.push(
-          new Paragraph({
-            children: [
-              new TextRun({
-                text: "Tiêu chuẩn: ",
-                size: SIZE_BODY,
-                bold: true,
-              }),
-              new TextRun({
-                text: `${standardOrder}: ${data.name || ""}`,
-                size: SIZE_BODY,
-              }),
-            ],
-          })
-        )
-        allChildren.push(
-          new Paragraph({
-            children: [
-              new TextRun({
-                text: "Tiêu chí: ",
-                size: SIZE_BODY,
-                bold: true,
-                italics: true,
-              }),
-              new TextRun({
-                text: `${standardOrder}.${criterion.order || cidx + 1}: ${criterion.name || ""}`,
-                italics: true,
-                size: SIZE_BODY,
-              }),
-            ],
-          })
-        )
-        allChildren.push(new Paragraph({ children: [new TextRun({ text: "" })] }))
-
-        // === BẢNG PHÂN TÍCH TIÊU CHÍ ===
-        allChildren.push(createAnalysisTable(criterion))
-        allChildren.push(new Paragraph({ children: [new TextRun({ text: "" })] }))
-      }
-
-      // === BẢNG DỰ KIẾN CÁC MINH CHỨNG THEO TIÊU CHÍ ===
-      if (evidenceList.length > 0) {
-        allChildren.push(
-          new Paragraph({
-            pageBreakBefore: true,
             alignment: AlignmentType.CENTER,
             children: [
               new TextRun({
@@ -472,36 +407,50 @@ const ExportCriteriaAnalysis = ({ data, idx }: ExportCriteriaAnalysisProps) => {
                 size: SIZE_TITLE,
               }),
             ],
-          })
+          }),
+          new Paragraph({ children: [new TextRun({ text: "" })] }),
+          createEvidenceTable(criterionEvidences, evidenceMap, standardOrder),
+          new Paragraph({ children: [new TextRun({ text: "" })] })
         )
-        allChildren.push(new Paragraph({ children: [new TextRun({ text: "" })] }))
-        allChildren.push(createEvidenceTable(evidenceList, evidenceMap))
       }
+    }
+
+    return section
+  }
+
+  const exportToWord = async () => {
+    try {
+      const standards = allData || (data ? [data] : [])
+      if (standards.length === 0) {
+        console.error("Không có dữ liệu để xuất")
+        return
+      }
+
+      const allChildren: any[] = []
+      for (const [i, std] of standards.entries()) {
+        const stdIdx = allData ? std.order || i + 1 : std.order || idx || i + 1
+        allChildren.push(...generateStandardSection(std, stdIdx))
+      }
+
+      const firstStandardOrder = standards[0].order || 1
+      const outputFileName =
+        fileName ||
+        (allData
+          ? "Phieu_phan_tich_tieu_chi_Tat_ca_tieu_chuan.docx"
+          : `Phieu_phan_tich_tieu_chi_TC${firstStandardOrder}.docx`)
 
       const doc = new Document({
         styles: {
           default: {
-            document: {
-              run: {
-                font: "Times New Roman",
-                size: SIZE_BODY,
-              },
-            },
+            document: { run: { font: "Times New Roman", size: SIZE_BODY } },
           },
         },
         sections: [
           {
             properties: {
               page: {
-                size: {
-                  orientation: PageOrientation.PORTRAIT,
-                },
-                margin: {
-                  top: 720,
-                  bottom: 720,
-                  left: 1134,
-                  right: 1134,
-                },
+                size: { orientation: PageOrientation.PORTRAIT },
+                margin: { top: 720, bottom: 720, left: 1134, right: 1134 },
               },
             },
             children: allChildren,
@@ -510,7 +459,7 @@ const ExportCriteriaAnalysis = ({ data, idx }: ExportCriteriaAnalysisProps) => {
       })
 
       const blob = await Packer.toBlob(doc)
-      saveAs(blob, `Phieu_phan_tich_tieu_chi_TC${standardOrder}.docx`)
+      saveAs(blob, outputFileName)
     } catch (error) {
       console.error("Lỗi khi xuất file Word:", error)
     }
@@ -518,7 +467,7 @@ const ExportCriteriaAnalysis = ({ data, idx }: ExportCriteriaAnalysisProps) => {
 
   return (
     <Button type="primary" size="small" onClick={exportToWord} icon={<DownloadOutlined />}>
-      Xuất file
+      {label}
     </Button>
   )
 }

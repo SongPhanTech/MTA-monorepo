@@ -7,10 +7,15 @@ export const CustomTextStyle = TextStyle.extend({
       ...this.parent?.(), // giữ lại attr gốc (như color)
       id: {
         default: null,
-        parseHTML: (element) => element.getAttribute("id"),
+        parseHTML: (element) =>
+          element.getAttribute("data-evidence-id") || element.getAttribute("id"),
         renderHTML: (attributes) => {
           if (!attributes.id) return {}
-          return { id: attributes.id }
+          return {
+            "data-evidence-id": attributes.id,
+            "data-type": "evidence",
+            style: "cursor: pointer;",
+          }
         },
       },
     }

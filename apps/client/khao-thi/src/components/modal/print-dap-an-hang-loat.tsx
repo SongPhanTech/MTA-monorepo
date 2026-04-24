@@ -534,6 +534,25 @@ const PrintBatchExplanation = () => {
         }}
       >
         <div ref={printRef}>
+          <style>
+            {`
+              @media print {
+                /* Force all text to black when printing (avoid browser default link blue) */
+                #print-batch-explanation, #print-batch-explanation * {
+                  color: #000 !important;
+                }
+                #print-batch-explanation a,
+                #print-batch-explanation a:visited,
+                #print-batch-explanation a:hover,
+                #print-batch-explanation a:active {
+                  color: #000 !important;
+                  text-decoration: none !important;
+                }
+              }
+            `}
+          </style>
+
+          <div id="print-batch-explanation">
           {dataRender.length > 0 ? (
             dataRender.map((exam, index) => renderAnswerPreview(exam, index))
           ) : (
@@ -541,6 +560,7 @@ const PrintBatchExplanation = () => {
               Không có đáp án nào được chọn
             </div>
           )}
+          </div>
         </div>
       </div>
     </Modal>

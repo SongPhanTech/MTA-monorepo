@@ -3,6 +3,7 @@ import CriteriaAnalysisWrite from "@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va
 import CriteriaEvaluationWrite from "@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/criteria-evaluation"
 import CrossReview from "@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/cross-review"
 import CrossReviewAssignment from "@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/cross-review-assignment"
+import CrossReviewExternal from "@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/cross-review-external"
 import EvaluationPeriod from "@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/evaluation-period"
 import ReviewCriteriaEvaluationAdvisory from "@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/review-criteria-evaluation-advisory"
 import ReviewSecretary from "@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-va-danh-gia/_components/review-secretary"
@@ -20,7 +21,7 @@ import { useMemo, useState } from "react"
 export default function CriteriaAnalysisAndEvaluationPage() {
   const [activeKey, setActiveKey] = useState("1")
   const { data: me } = useSession()
-  const idProfile = me?.sDM_NhanVienId || "7247c121-ab5a-4a72-a018-4a4090c7948a"
+  const idProfile = me?.sDM_NhanVienId || "0fac9683-9dc2-4296-a051-7c739e46785f"
 
   const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
   const { can } = useAbility()
@@ -73,6 +74,10 @@ export default function CriteriaAnalysisAndEvaluationPage() {
     const isSecretary =
       councilMember?.role?.includes($Enums.EvaluationMemberRole.SECRETARY) ||
       councilMember?.role?.includes($Enums.EvaluationMemberRole.HEAD_SECRETARY)
+
+    const isNonCouncilMember = councilMember?.role?.includes(
+      $Enums.EvaluationMemberRole.NONCOUNCIL_MEMBERS
+    )
 
     const isCouncilMember = !!councilMember
 
@@ -135,6 +140,15 @@ export default function CriteriaAnalysisAndEvaluationPage() {
         key: "8",
         label: "Báo cáo tiêu chuẩn",
         children: <StandardReports />,
+        disabled: !selectedEvaluationPeriodId,
+      })
+    }
+
+    if (isNonCouncilMember) {
+      tabs.push({
+        key: "9",
+        label: "Phản biện chéo ngoài hội đồng",
+        children: <CrossReviewExternal />,
         disabled: !selectedEvaluationPeriodId,
       })
     }

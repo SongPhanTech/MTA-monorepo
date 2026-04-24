@@ -4,16 +4,16 @@ Bộ file mẫu cho buổi demo UC Nhập/xử lý tài liệu và FAQ.
 
 ## File tài liệu
 
-| File | Dùng để | Kỳ vọng khi upload |
-|---|---|---|
-| `01-noi-quy.docx` | Chứng minh UC xử lý DOCX | Upload → đọc text trực tiếp, không cần OCR |
-| `02-quy-dinh.pdf` | Chứng minh UC xử lý PDF text | Upload → đọc text trực tiếp, không cần OCR |
-| `03-scan.pdf` | **Chứng minh OCR** — PDF ảnh, không có text layer | Upload → hệ thống nhận diện cần OCR, hiện trạng thái "đang chuyển đổi hình ảnh" rồi mới có text |
-| `04-trung-lap.docx` | Chứng minh UC check trùng lặp văn bản | Upload **SAU KHI** đã phê duyệt `01-noi-quy.docx` → hiện cảnh báo độ tương đồng cao |
-| `05-quy-che-dao-tao.docx` | Nguồn tri thức topic `TRAINING_RULES_AND_REGULATIONS` | UC3 - Hỏi đáp quy chế đào tạo |
-| `06-quy-che-thi.docx` | Nguồn tri thức topic `EXAMINATION_RULES_AND_REGULATIONS` | UC4 - Hỏi đáp quy chế thi |
-| `07-thong-tin-tuyen-sinh.docx` | Nguồn tri thức topic `GENERAL_ADMISSIONS_INFORMATION` + `ADMISSIONS_RULES_AND_REGULATIONS` | UC1, UC2 - Tuyển sinh |
-| `08-chinh-sach-sv.docx` | Nguồn tri thức topic `REGULATIONS_POLICIES_AND_BENEFITS_FOR_CIVILIAN_STUDENTS` | UC8 - Chính sách SV dân sự |
+| File                           | Dùng để                                                                                    | Kỳ vọng khi upload                                                                              |
+| ------------------------------ | ------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------- |
+| `01-noi-quy.docx`              | Chứng minh UC xử lý DOCX                                                                   | Upload → đọc text trực tiếp, không cần OCR                                                      |
+| `02-quy-dinh.pdf`              | Chứng minh UC xử lý PDF text                                                               | Upload → đọc text trực tiếp, không cần OCR                                                      |
+| `03-scan.pdf`                  | **Chứng minh OCR** — PDF ảnh, không có text layer                                          | Upload → hệ thống nhận diện cần OCR, hiện trạng thái "đang chuyển đổi hình ảnh" rồi mới có text |
+| `04-trung-lap.docx`            | Chứng minh UC check trùng lặp văn bản                                                      | Upload **SAU KHI** đã phê duyệt `01-noi-quy.docx` → hiện cảnh báo độ tương đồng cao             |
+| `05-quy-che-dao-tao.docx`      | Nguồn tri thức topic `TRAINING_RULES_AND_REGULATIONS`                                      | UC3 - Hỏi đáp quy chế đào tạo                                                                   |
+| `06-quy-che-thi.docx`          | Nguồn tri thức topic `EXAMINATION_RULES_AND_REGULATIONS`                                   | UC4 - Hỏi đáp quy chế thi                                                                       |
+| `07-thong-tin-tuyen-sinh.docx` | Nguồn tri thức topic `GENERAL_ADMISSIONS_INFORMATION` + `ADMISSIONS_RULES_AND_REGULATIONS` | UC1, UC2 - Tuyển sinh                                                                           |
+| `08-chinh-sach-sv.docx`        | Nguồn tri thức topic `REGULATIONS_POLICIES_AND_BENEFITS_FOR_CIVILIAN_STUDENTS`             | UC8 - Chính sách SV dân sự                                                                      |
 
 ### Thứ tự demo được đề xuất
 
@@ -32,6 +32,7 @@ Check trùng lặp gọi `POST /document/document-reader` với payload `{ uri_f
 - Ngưỡng cảnh báo trong code: `similar > 0.8` (xem `them-tai-lieu.tsx:692`).
 
 Nếu không báo trùng, mở DevTools → Network → tìm request `document-reader`:
+
 - `document_simmilar: []` → file 01 chưa vào vector DB (chưa approve) hoặc khác topic.
 - `score < 0.8` → nội dung chưa đủ giống (hãy tạo lại file 04 bằng script ở cuối README).
 

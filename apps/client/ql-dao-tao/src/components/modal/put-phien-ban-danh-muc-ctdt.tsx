@@ -9,6 +9,7 @@ import Tabs from "@components/commons/tabar"
 import useSpinner from "@hooks/spinner"
 import {
   $Enums,
+  CurriculumVersionType,
   type CurriculumVersion,
   type DiplomaType,
   type DocumentFile,
@@ -51,6 +52,7 @@ dayjs.locale("vi")
 type CurriculumVersionInput = {
   curriculumId: string
   versionId: string
+  isFramework?: boolean
 }
 
 export type ModalPreviewUploadInput = {
@@ -240,7 +242,9 @@ const PutCurriculumVersion = () => {
         summary: output.summary,
         learningDiagram: output.learningDiagram,
         guide: output.guide,
+        type: input?.isFramework ? CurriculumVersionType.FRAMEWORK : CurriculumVersionType.FULL_COURSE,
       }
+      
       if (input?.versionId) {
         const updateData = {
           ...baseData,
@@ -408,7 +412,7 @@ const PutCurriculumVersion = () => {
       setDocument(initialValue?.documentFiles)
     }
   }, [initialValue, trainingObjectTypeSelected])
-
+  const text = input?.isFramework ? "khung" : "toàn khóa"
   return (
     <PutFormModal
       open={isOpen}
@@ -416,7 +420,7 @@ const PutCurriculumVersion = () => {
       onFinish={onOk}
       onCancel={onClose}
       // maskClosable={true}
-      title={input?.versionId ? "Sửa CTĐT toàn khoá" : "Thêm CTĐT toàn khoá"}
+      title={input?.versionId ? `Sửa CTĐT ${text}` : `Thêm CTĐT ${text}`}
       className="w-[60vw]"
       style={{ top: 20 }}
       formProps={{

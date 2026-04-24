@@ -40,25 +40,25 @@ Nạp 2 FAQ này trước và phê duyệt để có dữ liệu gốc trong vec
 
 ### Case B — Trùng CÂU HỎI với FAQ gốc #1
 
-- **Loại**: *Đúng loại của FAQ gốc #1 đã chuẩn bị*
+- **Loại**: _Đúng loại của FAQ gốc #1 đã chuẩn bị_
 - **Câu hỏi**: `Quy trình đăng ký học lại ở trường được thực hiện ra sao?`
 - **Câu trả lời**:
   ```
   Sinh viên nộp đơn xin học lại tại phòng đào tạo kèm bảng điểm và đóng học phí theo quy định hiện hành, sau đó tham gia lớp đang mở môn tương ứng.
   ```
-- **Kỳ vọng**: Hệ thống hiện **modal xác nhận** "Phát hiện nội dung trùng lặp" với nội dung *"Câu hỏi đã trùng hoặc gần giống một FAQ khác..."* và 2 nút **"Vẫn lưu"** / **"Hủy"**.
+- **Kỳ vọng**: Hệ thống hiện **modal xác nhận** "Phát hiện nội dung trùng lặp" với nội dung _"Câu hỏi đã trùng hoặc gần giống một FAQ khác..."_ và 2 nút **"Vẫn lưu"** / **"Hủy"**.
   - Nếu chọn **Hủy** → FAQ vừa tạo được rollback (xóa khỏi DB).
   - Nếu chọn **Vẫn lưu** → FAQ được giữ lại, vào tab **Chờ duyệt** như bình thường.
 
 ### Case C — Trùng CÂU TRẢ LỜI với FAQ gốc #2
 
-- **Loại**: *Đúng loại của FAQ gốc #2 đã chuẩn bị*
+- **Loại**: _Đúng loại của FAQ gốc #2 đã chuẩn bị_
 - **Câu hỏi**: `Thủ tục xin lại thẻ sinh viên khi bị hư hỏng cần làm gì?`
 - **Câu trả lời**:
   ```
   Khi thẻ sinh viên bị mất hoặc hỏng, sinh viên làm đơn xin cấp lại thẻ tại Phòng Công tác sinh viên, kèm bản sao CCCD và ảnh 3x4. Lệ phí cấp lại được thu theo quy định hiện hành. Thẻ mới trả sau 5 đến 7 ngày làm việc.
   ```
-- **Kỳ vọng**: Hệ thống hiện **modal xác nhận** với nội dung *"Câu trả lời đã trùng hoặc gần giống một FAQ khác..."*. Demo cả 2 lựa chọn:
+- **Kỳ vọng**: Hệ thống hiện **modal xác nhận** với nội dung _"Câu trả lời đã trùng hoặc gần giống một FAQ khác..."_. Demo cả 2 lựa chọn:
   - **Hủy** → rollback FAQ vừa tạo.
   - **Vẫn lưu** → chấp nhận trùng, FAQ vẫn được giữ.
 

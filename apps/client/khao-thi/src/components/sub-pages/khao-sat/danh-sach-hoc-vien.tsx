@@ -167,6 +167,32 @@ function DanhSachHocVien({
                   },
                 },
               }),
+              ...(filters.statusSurvey && filters.statusSurvey.length === 1
+                ? {
+                    userProfile: {
+                      surveySession:
+                        filters.statusSurvey[0] === true
+                          ? {
+                              // Trường hợp chọn "Đã làm" [true]
+                              some: {
+                                survey: {
+                                  lectureId: lecturer?.id,
+                                  clusterSurveyId: selectedId,
+                                },
+                              },
+                            }
+                          : {
+                              // Trường hợp chọn "Chưa làm" [false]
+                              none: {
+                                survey: {
+                                  lectureId: lecturer?.id,
+                                  clusterSurveyId: selectedId,
+                                },
+                              },
+                            },
+                    },
+                  }
+                : {}),
               ...(filters.dateOfBirth?.length === 2
                 ? {
                     userProfile: {
@@ -244,7 +270,12 @@ function DanhSachHocVien({
         ) : (
           <>
             <Col span={24}>
-              <Flex justify="end">
+              <Flex align="center" justify="space-between">
+                <div className="text-base font-bold uppercase text-gray-900">
+                  Giảng viên: {lecturer?.code} -{" "}
+                  {(lecturer as any)?.userProfile?.fullname || "Chưa xác định"}
+                </div>
+
                 <ExportStudentInSurvey
                   query={where}
                   lecturer={lecturer || null}

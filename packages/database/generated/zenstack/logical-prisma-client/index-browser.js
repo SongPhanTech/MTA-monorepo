@@ -3091,6 +3091,8 @@ exports.Prisma.ThesisSessionScalarFieldEnum = {
   endDate: 'endDate',
   trainingObjectTypeId: 'trainingObjectTypeId',
   trainingCourseId: 'trainingCourseId',
+  proposalReport: 'proposalReport',
+  councilReport: 'councilReport',
   decisionNumber: 'decisionNumber',
   decisionMaker: 'decisionMaker',
   decisionDate: 'decisionDate',
@@ -3551,6 +3553,7 @@ exports.Prisma.EvaluationCriterionScalarFieldEnum = {
   status: 'status',
   reviewerId: 'reviewerId',
   deadlineReview: 'deadlineReview',
+  deadlineReviewExternal: 'deadlineReviewExternal',
   currentSituation: 'currentSituation',
   strengths: 'strengths',
   weakness: 'weakness',
@@ -6774,6 +6777,8 @@ exports.Prisma.ThesisSessionOrderByRelevanceFieldEnum = {
   name: 'name',
   trainingObjectTypeId: 'trainingObjectTypeId',
   trainingCourseId: 'trainingCourseId',
+  proposalReport: 'proposalReport',
+  councilReport: 'councilReport',
   decisionNumber: 'decisionNumber',
   decisionMaker: 'decisionMaker',
   defenseDecisionNumber: 'defenseDecisionNumber',
@@ -8229,7 +8234,8 @@ exports.CouncilRole = exports.$Enums.CouncilRole = {
 
 exports.SupervisorRole = exports.$Enums.SupervisorRole = {
   SUPERVISOR: 'SUPERVISOR',
-  CO_SUPERVISOR: 'CO_SUPERVISOR'
+  CO_SUPERVISOR: 'CO_SUPERVISOR',
+  SINGLE: 'SINGLE'
 };
 
 exports.PaymentStatus = exports.$Enums.PaymentStatus = {

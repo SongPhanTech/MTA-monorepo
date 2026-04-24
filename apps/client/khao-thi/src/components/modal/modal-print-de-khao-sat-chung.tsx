@@ -132,6 +132,10 @@ const ModalPrintExamSurvey = () => {
       }
     >
       <div ref={printRef} className="mx-auto p-6 text-sm leading-relaxed !font-time-news-roman">
+        <div className="flex justify-between items-start mb-2 color-black font-bold text-base">
+          <div className="uppercase">HỌC VIỆN KTQS</div>
+          <div className="italic">Mẫu số 11-ĐBCL</div>
+        </div>
         <div className="text-xl font-bold mb-4 text-center uppercase color-black">
           {survey?.name}
         </div>

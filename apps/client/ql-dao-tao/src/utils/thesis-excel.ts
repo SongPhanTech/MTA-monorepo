@@ -630,7 +630,7 @@ export const exportDanhSachBaoVe = async ({
             ]?.shortname || "",
           lastname: student.userProfile?.lastName || "",
           firstname: student.userProfile?.firstName || "",
-          empty: "",
+          empty: student.userProfile?.phoneNumber || "",
           ngaybaove: student?.thesisRegistrations?.[0]?.thesisProject?.defenseDate
             ? dayjs(student?.thesisRegistrations?.[0]?.thesisProject?.defenseDate).format(
                 "DD/MM/YYYY"
@@ -1150,6 +1150,9 @@ export const exportHosobvlv = async ({
   showSpinner,
   hideSpinner,
   message,
+  isChief,
+  signerName,
+  // signingDate,
 }: ExportOptions) => {
   if (!allStudentsInClasses?.length) {
     message.error("Không có dữ liệu để tạo danh sách bảo vệ LV dán PBV")
@@ -1169,19 +1172,28 @@ export const exportHosobvlv = async ({
       const chutich = thanhvienhoidong?.find((member: any) => member.role === CouncilRole.CHAIRMAN)
       const thuky = thanhvienhoidong?.find((member: any) => member.role === CouncilRole.SECRETARY)
       const uyvien = thanhvienhoidong?.find((member: any) => member.role === CouncilRole.MEMBER)
-      const nguoikiqddt =
-        student?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.defenseDecisionMaker?.trim() ||
-        ""
-      const qddtKyTokens = nguoikiqddt.split(/\s+/).filter(Boolean)
-      const chucVuNguoiKyQddt = qddtKyTokens[0] ?? ""
-      const tenNguoiKyQddt = qddtKyTokens.slice(1).join(" ").trim()
-      const text1 = chucVuNguoiKyQddt === "GĐ" ? "GIÁM ĐỐC" : "KT.GIÁM ĐỐC"
-      const text2 = text1 === "GIÁM ĐỐC" ? "" : "PHÓ GIÁM ĐỐC"
+
+      // const qddtKyTokens = nguoikiqddt.split(/\s+/).filter(Boolean)
+      const nguoiki = signerName || ""
+      const text1 = isChief ? "TRƯỞNG PHÒNG SAU ĐẠI HỌC" : "KT. TRƯỞNG PHÒNG SAU ĐẠI HỌC"
+      const text2 = isChief ? "" : "PHÓ PHÒNG SAU ĐẠI HỌC"
+      const ngayQDBV =
+        student?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.defenseDecisionDate
+      const soQDBV =
+        student?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.defenseDecisionNumber
+      const dotxetBV = student?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.name
+      const ngaysinh = student?.userProfile?.dateOfBirth
+        ? dayjs(student?.userProfile?.dateOfBirth).format("DD/MM/YYYY")
+        : ""
+      const khoas = student?.fixedClass?.trainingCourse?.name || ""
       // const nguoiKi
       const data = {
         tenhocvien: student.userProfile?.fullname || "",
-        type: student.thesisRegistrations?.[0]?.thesisProject?.type,
-        khoa: student?.fixedClass?.trainingCourse?.name || "",
+        soQD: soQDBV || "",
+        ngayQD: ngayQDBV ? dayjs(ngayQDBV).format("DD/MM/YYYY") : "",
+        dotxet: dotxetBV || "",
+        type: student.thesisRegistrations?.[0]?.thesisProject?.type?.trim().toLowerCase(),
+        khoa: `Ngày sinh: ${ngaysinh}, ${khoas}`,
         chuyennganh: student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || "",
         nganh:
           student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.trainingField?.name ||
@@ -1197,7 +1209,7 @@ export const exportHosobvlv = async ({
         chutich: getSupervisorName(chutich?.expert, false, true) || "",
         thuky: getSupervisorName(thuky?.expert, false, true) || "",
         uyvien: getSupervisorName(uyvien?.expert, false, true) || "",
-        nguoiki: tenNguoiKyQddt,
+        nguoiki: nguoiki,
         text1: text1,
         text2: text2,
       }
@@ -2650,7 +2662,7 @@ const convertToBanSaoHDDGLV = (
           nganh: nganh,
           chuyenNganh: chuyenNganh,
           deTai: deTai,
-          dieu1: `Điều 1. Thành lập hội đồng đánh giá ${loaiLuanVan} tốt nghiệp thạc sĩ ngành ${nganh} (${chuyenNganh}) về đề tài "${deTai}". \n     Học viên thực hiện: ${tenhocvien}, sinh ngày ${ngaysinh}, ${khoaHoc} (${nienkhoahoc}). \n     Cán bộ hướng dẫn: ${gvhd}.\n     Chỉ định và mời các đồng chí có tên sau đây tham gia hội đồng:
+          dieu1: `Điều 1. Thành lập hội đồng đánh giá ${loaiLuanVan} tốt nghiệp thạc sĩ ngành ${nganh} (${chuyenNganh}) về đề tài "${deTai}". \n     Học viên thực hiện: ${tenhocvien}, sinh ngày ${ngaysinh}, ${khoaHoc}). \n     Cán bộ hướng dẫn: ${gvhd}.\n     Danh sách các thành viên tham gia Hội đồng:
         `,
           tenHocVien: student.userProfile?.fullname || "",
           ngaySinh: student.userProfile?.dateOfBirth
@@ -2760,17 +2772,20 @@ const convertToPhuLucQdhdTemplateData = (allStudentsInClasses: any[]): PhuLucQdh
     if (!student?.thesisRegistrations?.[0]?.thesisProject) return
     const majorName =
       student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || "Chưa xác định"
-    if (!majorMap.has(majorName)) {
-      majorMap.set(majorName, [])
+    const trainingField =
+      student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.trainingField?.name || ""
+    const groupKey = `Ngành ${trainingField} (${majorName})`
+    if (!majorMap.has(groupKey)) {
+      majorMap.set(groupKey, [])
     }
-    majorMap.get(majorName)?.push(student)
+    majorMap.get(groupKey)?.push(student)
   })
 
   let totalCouncils = 0
   const groupedData: PhuLucQdhdData[] = []
   let majorIndex = 1
 
-  majorMap.forEach((students, majorName) => {
+  majorMap.forEach((students, groupKey) => {
     const validStudents = students.filter(
       (student) =>
         student?.thesisRegistrations?.[0]?.thesisProject &&
@@ -2791,38 +2806,38 @@ const convertToPhuLucQdhdTemplateData = (allStudentsInClasses: any[]): PhuLucQdh
       const reviewer1 = getMember(CouncilRole.REVIEWER_1)
       const reviewer2 = getMember(CouncilRole.REVIEWER_2)
       const member = getMember(CouncilRole.MEMBER)
-
+      const ngaysinh = student.userProfile?.dateOfBirth
+        ? dayjs(student.userProfile.dateOfBirth).format("DD/MM/YYYY")
+        : ""
       return {
         sttHoiDong: (studentIdx + 1).toString(),
-        contentDieu1: `${project?.type} tốt nghiệp thạc sĩ ngành ${student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || ""},Khóa: ${student.fixedClass?.trainingCourse?.name || ""} (${student.fixedClass?.trainingCourse?.academicYear || ""}), Đề tài: ${project?.title || ""}`,
+        contentDieu1: `${project?.type} tốt nghiệp thạc sĩ ngành ${groupKey}, Đề tài: ${project?.title.trim().replace(/\s+/g, " ") || ""}`,
         tenHocVien: student.userProfile?.fullname || "",
-        ngaySinh: student.userProfile?.dateOfBirth
-          ? dayjs(student.userProfile.dateOfBirth).format("DD/MM/YYYY")
-          : "",
+        ngaySinh: `${ngaysinh}, ${student.fixedClass?.trainingCourse?.name || ""} (${student.fixedClass?.trainingCourse?.academicYear || ""})`,
         gvhd1: (getSupervisorName(project?.supervisor, false, true) as string) || "",
         gvhd2: (getSupervisorName(project?.coSupervisor, false, true) as string) || "",
 
         tenChuTich: (getSupervisorName(chairman?.expert, false, true) as string) || "",
-        toChucChuTich: chairman?.expert?.workplace || "Học viện KTQS		",
+        toChucChuTich: chairman?.expert?.workplace || "Học viện KTQS",
 
         tenThuKy: (getSupervisorName(secretary?.expert, false, true) as string) || "",
-        toChucThuKy: secretary?.expert?.workplace || "Học viện KTQS		",
+        toChucThuKy: secretary?.expert?.workplace || "Học viện KTQS",
 
         tenUyVien: (getSupervisorName(member?.expert, false, true) as string) || "",
-        toChucUyVien: member?.expert?.workplace || "Học viện KTQS		",
+        toChucUyVien: member?.expert?.workplace || "Học viện KTQS",
 
         tenPb1: (getSupervisorName(reviewer1?.expert, false, true) as string) || "",
-        toChucPb1: reviewer1?.expert?.workplace || "Học viện KTQS		",
+        toChucPb1: reviewer1?.expert?.workplace || "Học viện KTQS",
 
         tenPb2: (getSupervisorName(reviewer2?.expert, false, true) as string) || "",
-        toChucPb2: reviewer2?.expert?.workplace || "Học viện KTQS		",
+        toChucPb2: reviewer2?.expert?.workplace || "Học viện KTQS",
       }
     })
 
     groupedData.push({
       data: {
         sttChuyenNganh: toRoman(majorIndex),
-        tenChuyenNganh: majorName,
+        tenChuyenNganh: groupKey,
         data: tableRows,
       },
     })

@@ -1806,7 +1806,8 @@ export type CouncilRole = (typeof CouncilRole)[keyof typeof CouncilRole]
 
 export const SupervisorRole: {
   SUPERVISOR: 'SUPERVISOR',
-  CO_SUPERVISOR: 'CO_SUPERVISOR'
+  CO_SUPERVISOR: 'CO_SUPERVISOR',
+  SINGLE: 'SINGLE'
 };
 
 export type SupervisorRole = (typeof SupervisorRole)[keyof typeof SupervisorRole]
@@ -240077,6 +240078,8 @@ export namespace Prisma {
     endDate: Date | null
     trainingObjectTypeId: string | null
     trainingCourseId: string | null
+    proposalReport: string | null
+    councilReport: string | null
     decisionNumber: string | null
     decisionMaker: string | null
     decisionDate: Date | null
@@ -240103,6 +240106,8 @@ export namespace Prisma {
     endDate: Date | null
     trainingObjectTypeId: string | null
     trainingCourseId: string | null
+    proposalReport: string | null
+    councilReport: string | null
     decisionNumber: string | null
     decisionMaker: string | null
     decisionDate: Date | null
@@ -240129,6 +240134,8 @@ export namespace Prisma {
     endDate: number
     trainingObjectTypeId: number
     trainingCourseId: number
+    proposalReport: number
+    councilReport: number
     decisionNumber: number
     decisionMaker: number
     decisionDate: number
@@ -240157,6 +240164,8 @@ export namespace Prisma {
     endDate?: true
     trainingObjectTypeId?: true
     trainingCourseId?: true
+    proposalReport?: true
+    councilReport?: true
     decisionNumber?: true
     decisionMaker?: true
     decisionDate?: true
@@ -240183,6 +240192,8 @@ export namespace Prisma {
     endDate?: true
     trainingObjectTypeId?: true
     trainingCourseId?: true
+    proposalReport?: true
+    councilReport?: true
     decisionNumber?: true
     decisionMaker?: true
     decisionDate?: true
@@ -240209,6 +240220,8 @@ export namespace Prisma {
     endDate?: true
     trainingObjectTypeId?: true
     trainingCourseId?: true
+    proposalReport?: true
+    councilReport?: true
     decisionNumber?: true
     decisionMaker?: true
     decisionDate?: true
@@ -240308,6 +240321,8 @@ export namespace Prisma {
     endDate: Date
     trainingObjectTypeId: string
     trainingCourseId: string
+    proposalReport: string | null
+    councilReport: string | null
     decisionNumber: string | null
     decisionMaker: string | null
     decisionDate: Date | null
@@ -240351,6 +240366,8 @@ export namespace Prisma {
     endDate?: boolean
     trainingObjectTypeId?: boolean
     trainingCourseId?: boolean
+    proposalReport?: boolean
+    councilReport?: boolean
     decisionNumber?: boolean
     decisionMaker?: boolean
     decisionDate?: boolean
@@ -240381,6 +240398,8 @@ export namespace Prisma {
     endDate?: boolean
     trainingObjectTypeId?: boolean
     trainingCourseId?: boolean
+    proposalReport?: boolean
+    councilReport?: boolean
     decisionNumber?: boolean
     decisionMaker?: boolean
     decisionDate?: boolean
@@ -240409,6 +240428,8 @@ export namespace Prisma {
     endDate?: boolean
     trainingObjectTypeId?: boolean
     trainingCourseId?: boolean
+    proposalReport?: boolean
+    councilReport?: boolean
     decisionNumber?: boolean
     decisionMaker?: boolean
     decisionDate?: boolean
@@ -240437,6 +240458,8 @@ export namespace Prisma {
     endDate?: boolean
     trainingObjectTypeId?: boolean
     trainingCourseId?: boolean
+    proposalReport?: boolean
+    councilReport?: boolean
     decisionNumber?: boolean
     decisionMaker?: boolean
     decisionDate?: boolean
@@ -240449,7 +240472,7 @@ export namespace Prisma {
     councilDeadline?: boolean
   }
 
-  export type ThesisSessionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name" | "startDate" | "endDate" | "trainingObjectTypeId" | "trainingCourseId" | "decisionNumber" | "decisionMaker" | "decisionDate" | "defenseDecisionNumber" | "defenseDecisionMaker" | "defenseDecisionDate" | "chief" | "deputy" | "topicEntryDeadline" | "councilDeadline", ExtArgs["result"]["thesisSession"]>
+  export type ThesisSessionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name" | "startDate" | "endDate" | "trainingObjectTypeId" | "trainingCourseId" | "proposalReport" | "councilReport" | "decisionNumber" | "decisionMaker" | "decisionDate" | "defenseDecisionNumber" | "defenseDecisionMaker" | "defenseDecisionDate" | "chief" | "deputy" | "topicEntryDeadline" | "councilDeadline", ExtArgs["result"]["thesisSession"]>
   export type ThesisSessionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
     trainingCourse?: boolean | TrainingCourseDefaultArgs<ExtArgs>
@@ -240486,6 +240509,14 @@ export namespace Prisma {
       endDate: Date
       trainingObjectTypeId: string
       trainingCourseId: string
+      /**
+       * Tờ trình đề tài
+       */
+      proposalReport: string | null
+      /**
+       * Tờ trình hội đồng
+       */
+      councilReport: string | null
       /**
        * Số QĐĐT
        */
@@ -240965,6 +240996,8 @@ export namespace Prisma {
     readonly endDate: FieldRef<"ThesisSession", 'DateTime'>
     readonly trainingObjectTypeId: FieldRef<"ThesisSession", 'String'>
     readonly trainingCourseId: FieldRef<"ThesisSession", 'String'>
+    readonly proposalReport: FieldRef<"ThesisSession", 'String'>
+    readonly councilReport: FieldRef<"ThesisSession", 'String'>
     readonly decisionNumber: FieldRef<"ThesisSession", 'String'>
     readonly decisionMaker: FieldRef<"ThesisSession", 'String'>
     readonly decisionDate: FieldRef<"ThesisSession", 'DateTime'>
@@ -272906,6 +272939,7 @@ export namespace Prisma {
     status: $Enums.EvaluationStatus | null
     reviewerId: string | null
     deadlineReview: Date | null
+    deadlineReviewExternal: Date | null
     currentSituation: string | null
     strengths: string | null
     weakness: string | null
@@ -272928,6 +272962,7 @@ export namespace Prisma {
     status: $Enums.EvaluationStatus | null
     reviewerId: string | null
     deadlineReview: Date | null
+    deadlineReviewExternal: Date | null
     currentSituation: string | null
     strengths: string | null
     weakness: string | null
@@ -272950,6 +272985,7 @@ export namespace Prisma {
     status: number
     reviewerId: number
     deadlineReview: number
+    deadlineReviewExternal: number
     currentSituation: number
     strengths: number
     weakness: number
@@ -272974,6 +273010,7 @@ export namespace Prisma {
     status?: true
     reviewerId?: true
     deadlineReview?: true
+    deadlineReviewExternal?: true
     currentSituation?: true
     strengths?: true
     weakness?: true
@@ -272996,6 +273033,7 @@ export namespace Prisma {
     status?: true
     reviewerId?: true
     deadlineReview?: true
+    deadlineReviewExternal?: true
     currentSituation?: true
     strengths?: true
     weakness?: true
@@ -273018,6 +273056,7 @@ export namespace Prisma {
     status?: true
     reviewerId?: true
     deadlineReview?: true
+    deadlineReviewExternal?: true
     currentSituation?: true
     strengths?: true
     weakness?: true
@@ -273113,6 +273152,7 @@ export namespace Prisma {
     status: $Enums.EvaluationStatus
     reviewerId: string | null
     deadlineReview: Date | null
+    deadlineReviewExternal: Date | null
     currentSituation: string
     strengths: string
     weakness: string
@@ -273152,6 +273192,7 @@ export namespace Prisma {
     status?: boolean
     reviewerId?: boolean
     deadlineReview?: boolean
+    deadlineReviewExternal?: boolean
     currentSituation?: boolean
     strengths?: boolean
     weakness?: boolean
@@ -273180,6 +273221,7 @@ export namespace Prisma {
     status?: boolean
     reviewerId?: boolean
     deadlineReview?: boolean
+    deadlineReviewExternal?: boolean
     currentSituation?: boolean
     strengths?: boolean
     weakness?: boolean
@@ -273205,6 +273247,7 @@ export namespace Prisma {
     status?: boolean
     reviewerId?: boolean
     deadlineReview?: boolean
+    deadlineReviewExternal?: boolean
     currentSituation?: boolean
     strengths?: boolean
     weakness?: boolean
@@ -273230,6 +273273,7 @@ export namespace Prisma {
     status?: boolean
     reviewerId?: boolean
     deadlineReview?: boolean
+    deadlineReviewExternal?: boolean
     currentSituation?: boolean
     strengths?: boolean
     weakness?: boolean
@@ -273237,7 +273281,7 @@ export namespace Prisma {
     score?: boolean
   }
 
-  export type EvaluationCriterionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "criterionPeriodId" | "lecturerId" | "deadline" | "status" | "reviewerId" | "deadlineReview" | "currentSituation" | "strengths" | "weakness" | "actionPlan" | "score", ExtArgs["result"]["evaluationCriterion"]>
+  export type EvaluationCriterionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "criterionPeriodId" | "lecturerId" | "deadline" | "status" | "reviewerId" | "deadlineReview" | "deadlineReviewExternal" | "currentSituation" | "strengths" | "weakness" | "actionPlan" | "score", ExtArgs["result"]["evaluationCriterion"]>
   export type EvaluationCriterionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     criterionPeriod?: boolean | CriterionPeriodDefaultArgs<ExtArgs>
     lecturer?: boolean | EvaluationCriterion$lecturerArgs<ExtArgs>
@@ -273281,6 +273325,7 @@ export namespace Prisma {
       status: $Enums.EvaluationStatus
       reviewerId: string | null
       deadlineReview: Date | null
+      deadlineReviewExternal: Date | null
       /**
        * 1. Mô tả hiện trạng
        */
@@ -273743,6 +273788,7 @@ export namespace Prisma {
     readonly status: FieldRef<"EvaluationCriterion", 'EvaluationStatus'>
     readonly reviewerId: FieldRef<"EvaluationCriterion", 'String'>
     readonly deadlineReview: FieldRef<"EvaluationCriterion", 'DateTime'>
+    readonly deadlineReviewExternal: FieldRef<"EvaluationCriterion", 'DateTime'>
     readonly currentSituation: FieldRef<"EvaluationCriterion", 'String'>
     readonly strengths: FieldRef<"EvaluationCriterion", 'String'>
     readonly weakness: FieldRef<"EvaluationCriterion", 'String'>
@@ -385133,6 +385179,8 @@ export namespace Prisma {
     endDate: 'endDate',
     trainingObjectTypeId: 'trainingObjectTypeId',
     trainingCourseId: 'trainingCourseId',
+    proposalReport: 'proposalReport',
+    councilReport: 'councilReport',
     decisionNumber: 'decisionNumber',
     decisionMaker: 'decisionMaker',
     decisionDate: 'decisionDate',
@@ -385671,6 +385719,7 @@ export namespace Prisma {
     status: 'status',
     reviewerId: 'reviewerId',
     deadlineReview: 'deadlineReview',
+    deadlineReviewExternal: 'deadlineReviewExternal',
     currentSituation: 'currentSituation',
     strengths: 'strengths',
     weakness: 'weakness',
@@ -389650,6 +389699,8 @@ export namespace Prisma {
     name: 'name',
     trainingObjectTypeId: 'trainingObjectTypeId',
     trainingCourseId: 'trainingCourseId',
+    proposalReport: 'proposalReport',
+    councilReport: 'councilReport',
     decisionNumber: 'decisionNumber',
     decisionMaker: 'decisionMaker',
     defenseDecisionNumber: 'defenseDecisionNumber',
@@ -411112,6 +411163,8 @@ export namespace Prisma {
     endDate?: DateTimeFilter<"ThesisSession"> | Date | string
     trainingObjectTypeId?: StringFilter<"ThesisSession"> | string
     trainingCourseId?: StringFilter<"ThesisSession"> | string
+    proposalReport?: StringNullableFilter<"ThesisSession"> | string | null
+    councilReport?: StringNullableFilter<"ThesisSession"> | string | null
     decisionNumber?: StringNullableFilter<"ThesisSession"> | string | null
     decisionMaker?: StringNullableFilter<"ThesisSession"> | string | null
     decisionDate?: DateTimeNullableFilter<"ThesisSession"> | Date | string | null
@@ -411141,6 +411194,8 @@ export namespace Prisma {
     endDate?: SortOrder
     trainingObjectTypeId?: SortOrder
     trainingCourseId?: SortOrder
+    proposalReport?: SortOrderInput | SortOrder
+    councilReport?: SortOrderInput | SortOrder
     decisionNumber?: SortOrderInput | SortOrder
     decisionMaker?: SortOrderInput | SortOrder
     decisionDate?: SortOrderInput | SortOrder
@@ -411174,6 +411229,8 @@ export namespace Prisma {
     endDate?: DateTimeFilter<"ThesisSession"> | Date | string
     trainingObjectTypeId?: StringFilter<"ThesisSession"> | string
     trainingCourseId?: StringFilter<"ThesisSession"> | string
+    proposalReport?: StringNullableFilter<"ThesisSession"> | string | null
+    councilReport?: StringNullableFilter<"ThesisSession"> | string | null
     decisionNumber?: StringNullableFilter<"ThesisSession"> | string | null
     decisionMaker?: StringNullableFilter<"ThesisSession"> | string | null
     decisionDate?: DateTimeNullableFilter<"ThesisSession"> | Date | string | null
@@ -411203,6 +411260,8 @@ export namespace Prisma {
     endDate?: SortOrder
     trainingObjectTypeId?: SortOrder
     trainingCourseId?: SortOrder
+    proposalReport?: SortOrderInput | SortOrder
+    councilReport?: SortOrderInput | SortOrder
     decisionNumber?: SortOrderInput | SortOrder
     decisionMaker?: SortOrderInput | SortOrder
     decisionDate?: SortOrderInput | SortOrder
@@ -411235,6 +411294,8 @@ export namespace Prisma {
     endDate?: DateTimeWithAggregatesFilter<"ThesisSession"> | Date | string
     trainingObjectTypeId?: StringWithAggregatesFilter<"ThesisSession"> | string
     trainingCourseId?: StringWithAggregatesFilter<"ThesisSession"> | string
+    proposalReport?: StringNullableWithAggregatesFilter<"ThesisSession"> | string | null
+    councilReport?: StringNullableWithAggregatesFilter<"ThesisSession"> | string | null
     decisionNumber?: StringNullableWithAggregatesFilter<"ThesisSession"> | string | null
     decisionMaker?: StringNullableWithAggregatesFilter<"ThesisSession"> | string | null
     decisionDate?: DateTimeNullableWithAggregatesFilter<"ThesisSession"> | Date | string | null
@@ -414025,6 +414086,7 @@ export namespace Prisma {
     status?: EnumEvaluationStatusFilter<"EvaluationCriterion"> | $Enums.EvaluationStatus
     reviewerId?: StringNullableFilter<"EvaluationCriterion"> | string | null
     deadlineReview?: DateTimeNullableFilter<"EvaluationCriterion"> | Date | string | null
+    deadlineReviewExternal?: DateTimeNullableFilter<"EvaluationCriterion"> | Date | string | null
     currentSituation?: StringFilter<"EvaluationCriterion"> | string
     strengths?: StringFilter<"EvaluationCriterion"> | string
     weakness?: StringFilter<"EvaluationCriterion"> | string
@@ -414052,6 +414114,7 @@ export namespace Prisma {
     status?: SortOrder
     reviewerId?: SortOrderInput | SortOrder
     deadlineReview?: SortOrderInput | SortOrder
+    deadlineReviewExternal?: SortOrderInput | SortOrder
     currentSituation?: SortOrder
     strengths?: SortOrder
     weakness?: SortOrder
@@ -414083,6 +414146,7 @@ export namespace Prisma {
     status?: EnumEvaluationStatusFilter<"EvaluationCriterion"> | $Enums.EvaluationStatus
     reviewerId?: StringNullableFilter<"EvaluationCriterion"> | string | null
     deadlineReview?: DateTimeNullableFilter<"EvaluationCriterion"> | Date | string | null
+    deadlineReviewExternal?: DateTimeNullableFilter<"EvaluationCriterion"> | Date | string | null
     currentSituation?: StringFilter<"EvaluationCriterion"> | string
     strengths?: StringFilter<"EvaluationCriterion"> | string
     weakness?: StringFilter<"EvaluationCriterion"> | string
@@ -414110,6 +414174,7 @@ export namespace Prisma {
     status?: SortOrder
     reviewerId?: SortOrderInput | SortOrder
     deadlineReview?: SortOrderInput | SortOrder
+    deadlineReviewExternal?: SortOrderInput | SortOrder
     currentSituation?: SortOrder
     strengths?: SortOrder
     weakness?: SortOrder
@@ -414138,6 +414203,7 @@ export namespace Prisma {
     status?: EnumEvaluationStatusWithAggregatesFilter<"EvaluationCriterion"> | $Enums.EvaluationStatus
     reviewerId?: StringNullableWithAggregatesFilter<"EvaluationCriterion"> | string | null
     deadlineReview?: DateTimeNullableWithAggregatesFilter<"EvaluationCriterion"> | Date | string | null
+    deadlineReviewExternal?: DateTimeNullableWithAggregatesFilter<"EvaluationCriterion"> | Date | string | null
     currentSituation?: StringWithAggregatesFilter<"EvaluationCriterion"> | string
     strengths?: StringWithAggregatesFilter<"EvaluationCriterion"> | string
     weakness?: StringWithAggregatesFilter<"EvaluationCriterion"> | string
@@ -444636,6 +444702,8 @@ export namespace Prisma {
     name: string
     startDate: Date | string
     endDate: Date | string
+    proposalReport?: string | null
+    councilReport?: string | null
     decisionNumber?: string | null
     decisionMaker?: string | null
     decisionDate?: Date | string | null
@@ -444665,6 +444733,8 @@ export namespace Prisma {
     endDate: Date | string
     trainingObjectTypeId: string
     trainingCourseId: string
+    proposalReport?: string | null
+    councilReport?: string | null
     decisionNumber?: string | null
     decisionMaker?: string | null
     decisionDate?: Date | string | null
@@ -444690,6 +444760,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    proposalReport?: NullableStringFieldUpdateOperationsInput | string | null
+    councilReport?: NullableStringFieldUpdateOperationsInput | string | null
     decisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
     decisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
     decisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -444719,6 +444791,8 @@ export namespace Prisma {
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     trainingCourseId?: StringFieldUpdateOperationsInput | string
+    proposalReport?: NullableStringFieldUpdateOperationsInput | string | null
+    councilReport?: NullableStringFieldUpdateOperationsInput | string | null
     decisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
     decisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
     decisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -444746,6 +444820,8 @@ export namespace Prisma {
     endDate: Date | string
     trainingObjectTypeId: string
     trainingCourseId: string
+    proposalReport?: string | null
+    councilReport?: string | null
     decisionNumber?: string | null
     decisionMaker?: string | null
     decisionDate?: Date | string | null
@@ -444770,6 +444846,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    proposalReport?: NullableStringFieldUpdateOperationsInput | string | null
+    councilReport?: NullableStringFieldUpdateOperationsInput | string | null
     decisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
     decisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
     decisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -444796,6 +444874,8 @@ export namespace Prisma {
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     trainingCourseId?: StringFieldUpdateOperationsInput | string
+    proposalReport?: NullableStringFieldUpdateOperationsInput | string | null
+    councilReport?: NullableStringFieldUpdateOperationsInput | string | null
     decisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
     decisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
     decisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -447970,6 +448050,7 @@ export namespace Prisma {
     deadline?: Date | string | null
     status?: $Enums.EvaluationStatus
     deadlineReview?: Date | string | null
+    deadlineReviewExternal?: Date | string | null
     currentSituation?: string
     strengths?: string
     weakness?: string
@@ -447997,6 +448078,7 @@ export namespace Prisma {
     status?: $Enums.EvaluationStatus
     reviewerId?: string | null
     deadlineReview?: Date | string | null
+    deadlineReviewExternal?: Date | string | null
     currentSituation?: string
     strengths?: string
     weakness?: string
@@ -448018,6 +448100,7 @@ export namespace Prisma {
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     status?: EnumEvaluationStatusFieldUpdateOperationsInput | $Enums.EvaluationStatus
     deadlineReview?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deadlineReviewExternal?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     currentSituation?: StringFieldUpdateOperationsInput | string
     strengths?: StringFieldUpdateOperationsInput | string
     weakness?: StringFieldUpdateOperationsInput | string
@@ -448045,6 +448128,7 @@ export namespace Prisma {
     status?: EnumEvaluationStatusFieldUpdateOperationsInput | $Enums.EvaluationStatus
     reviewerId?: NullableStringFieldUpdateOperationsInput | string | null
     deadlineReview?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deadlineReviewExternal?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     currentSituation?: StringFieldUpdateOperationsInput | string
     strengths?: StringFieldUpdateOperationsInput | string
     weakness?: StringFieldUpdateOperationsInput | string
@@ -448069,6 +448153,7 @@ export namespace Prisma {
     status?: $Enums.EvaluationStatus
     reviewerId?: string | null
     deadlineReview?: Date | string | null
+    deadlineReviewExternal?: Date | string | null
     currentSituation?: string
     strengths?: string
     weakness?: string
@@ -448088,6 +448173,7 @@ export namespace Prisma {
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     status?: EnumEvaluationStatusFieldUpdateOperationsInput | $Enums.EvaluationStatus
     deadlineReview?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deadlineReviewExternal?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     currentSituation?: StringFieldUpdateOperationsInput | string
     strengths?: StringFieldUpdateOperationsInput | string
     weakness?: StringFieldUpdateOperationsInput | string
@@ -448110,6 +448196,7 @@ export namespace Prisma {
     status?: EnumEvaluationStatusFieldUpdateOperationsInput | $Enums.EvaluationStatus
     reviewerId?: NullableStringFieldUpdateOperationsInput | string | null
     deadlineReview?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deadlineReviewExternal?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     currentSituation?: StringFieldUpdateOperationsInput | string
     strengths?: StringFieldUpdateOperationsInput | string
     weakness?: StringFieldUpdateOperationsInput | string
@@ -471998,6 +472085,8 @@ export namespace Prisma {
     endDate?: SortOrder
     trainingObjectTypeId?: SortOrder
     trainingCourseId?: SortOrder
+    proposalReport?: SortOrder
+    councilReport?: SortOrder
     decisionNumber?: SortOrder
     decisionMaker?: SortOrder
     decisionDate?: SortOrder
@@ -472024,6 +472113,8 @@ export namespace Prisma {
     endDate?: SortOrder
     trainingObjectTypeId?: SortOrder
     trainingCourseId?: SortOrder
+    proposalReport?: SortOrder
+    councilReport?: SortOrder
     decisionNumber?: SortOrder
     decisionMaker?: SortOrder
     decisionDate?: SortOrder
@@ -472050,6 +472141,8 @@ export namespace Prisma {
     endDate?: SortOrder
     trainingObjectTypeId?: SortOrder
     trainingCourseId?: SortOrder
+    proposalReport?: SortOrder
+    councilReport?: SortOrder
     decisionNumber?: SortOrder
     decisionMaker?: SortOrder
     decisionDate?: SortOrder
@@ -474086,6 +474179,7 @@ export namespace Prisma {
     status?: SortOrder
     reviewerId?: SortOrder
     deadlineReview?: SortOrder
+    deadlineReviewExternal?: SortOrder
     currentSituation?: SortOrder
     strengths?: SortOrder
     weakness?: SortOrder
@@ -474108,6 +474202,7 @@ export namespace Prisma {
     status?: SortOrder
     reviewerId?: SortOrder
     deadlineReview?: SortOrder
+    deadlineReviewExternal?: SortOrder
     currentSituation?: SortOrder
     strengths?: SortOrder
     weakness?: SortOrder
@@ -474130,6 +474225,7 @@ export namespace Prisma {
     status?: SortOrder
     reviewerId?: SortOrder
     deadlineReview?: SortOrder
+    deadlineReviewExternal?: SortOrder
     currentSituation?: SortOrder
     strengths?: SortOrder
     weakness?: SortOrder
@@ -571245,6 +571341,8 @@ export namespace Prisma {
     name: string
     startDate: Date | string
     endDate: Date | string
+    proposalReport?: string | null
+    councilReport?: string | null
     decisionNumber?: string | null
     decisionMaker?: string | null
     decisionDate?: Date | string | null
@@ -571272,6 +571370,8 @@ export namespace Prisma {
     startDate: Date | string
     endDate: Date | string
     trainingObjectTypeId: string
+    proposalReport?: string | null
+    councilReport?: string | null
     decisionNumber?: string | null
     decisionMaker?: string | null
     decisionDate?: Date | string | null
@@ -572017,6 +572117,8 @@ export namespace Prisma {
     endDate?: DateTimeFilter<"ThesisSession"> | Date | string
     trainingObjectTypeId?: StringFilter<"ThesisSession"> | string
     trainingCourseId?: StringFilter<"ThesisSession"> | string
+    proposalReport?: StringNullableFilter<"ThesisSession"> | string | null
+    councilReport?: StringNullableFilter<"ThesisSession"> | string | null
     decisionNumber?: StringNullableFilter<"ThesisSession"> | string | null
     decisionMaker?: StringNullableFilter<"ThesisSession"> | string | null
     decisionDate?: DateTimeNullableFilter<"ThesisSession"> | Date | string | null
@@ -589777,6 +589879,8 @@ export namespace Prisma {
     name: string
     startDate: Date | string
     endDate: Date | string
+    proposalReport?: string | null
+    councilReport?: string | null
     decisionNumber?: string | null
     decisionMaker?: string | null
     decisionDate?: Date | string | null
@@ -589804,6 +589908,8 @@ export namespace Prisma {
     startDate: Date | string
     endDate: Date | string
     trainingCourseId: string
+    proposalReport?: string | null
+    councilReport?: string | null
     decisionNumber?: string | null
     decisionMaker?: string | null
     decisionDate?: Date | string | null
@@ -610618,6 +610724,7 @@ export namespace Prisma {
     deadline?: Date | string | null
     status?: $Enums.EvaluationStatus
     deadlineReview?: Date | string | null
+    deadlineReviewExternal?: Date | string | null
     currentSituation?: string
     strengths?: string
     weakness?: string
@@ -610643,6 +610750,7 @@ export namespace Prisma {
     status?: $Enums.EvaluationStatus
     reviewerId?: string | null
     deadlineReview?: Date | string | null
+    deadlineReviewExternal?: Date | string | null
     currentSituation?: string
     strengths?: string
     weakness?: string
@@ -610756,6 +610864,7 @@ export namespace Prisma {
     deadline?: Date | string | null
     status?: $Enums.EvaluationStatus
     deadlineReview?: Date | string | null
+    deadlineReviewExternal?: Date | string | null
     currentSituation?: string
     strengths?: string
     weakness?: string
@@ -610782,6 +610891,7 @@ export namespace Prisma {
     status?: $Enums.EvaluationStatus
     reviewerId?: string | null
     deadlineReview?: Date | string | null
+    deadlineReviewExternal?: Date | string | null
     currentSituation?: string
     strengths?: string
     weakness?: string
@@ -611857,6 +611967,7 @@ export namespace Prisma {
     status?: EnumEvaluationStatusFilter<"EvaluationCriterion"> | $Enums.EvaluationStatus
     reviewerId?: StringNullableFilter<"EvaluationCriterion"> | string | null
     deadlineReview?: DateTimeNullableFilter<"EvaluationCriterion"> | Date | string | null
+    deadlineReviewExternal?: DateTimeNullableFilter<"EvaluationCriterion"> | Date | string | null
     currentSituation?: StringFilter<"EvaluationCriterion"> | string
     strengths?: StringFilter<"EvaluationCriterion"> | string
     weakness?: StringFilter<"EvaluationCriterion"> | string
@@ -614864,6 +614975,8 @@ export namespace Prisma {
     name: string
     startDate: Date | string
     endDate: Date | string
+    proposalReport?: string | null
+    councilReport?: string | null
     decisionNumber?: string | null
     decisionMaker?: string | null
     decisionDate?: Date | string | null
@@ -614892,6 +615005,8 @@ export namespace Prisma {
     endDate: Date | string
     trainingObjectTypeId: string
     trainingCourseId: string
+    proposalReport?: string | null
+    councilReport?: string | null
     decisionNumber?: string | null
     decisionMaker?: string | null
     decisionDate?: Date | string | null
@@ -615910,6 +616025,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    proposalReport?: NullableStringFieldUpdateOperationsInput | string | null
+    councilReport?: NullableStringFieldUpdateOperationsInput | string | null
     decisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
     decisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
     decisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -615938,6 +616055,8 @@ export namespace Prisma {
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     trainingCourseId?: StringFieldUpdateOperationsInput | string
+    proposalReport?: NullableStringFieldUpdateOperationsInput | string | null
+    councilReport?: NullableStringFieldUpdateOperationsInput | string | null
     decisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
     decisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
     decisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -622839,6 +622958,7 @@ export namespace Prisma {
     deadline?: Date | string | null
     status?: $Enums.EvaluationStatus
     deadlineReview?: Date | string | null
+    deadlineReviewExternal?: Date | string | null
     currentSituation?: string
     strengths?: string
     weakness?: string
@@ -622865,6 +622985,7 @@ export namespace Prisma {
     status?: $Enums.EvaluationStatus
     reviewerId?: string | null
     deadlineReview?: Date | string | null
+    deadlineReviewExternal?: Date | string | null
     currentSituation?: string
     strengths?: string
     weakness?: string
@@ -623350,6 +623471,7 @@ export namespace Prisma {
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     status?: EnumEvaluationStatusFieldUpdateOperationsInput | $Enums.EvaluationStatus
     deadlineReview?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deadlineReviewExternal?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     currentSituation?: StringFieldUpdateOperationsInput | string
     strengths?: StringFieldUpdateOperationsInput | string
     weakness?: StringFieldUpdateOperationsInput | string
@@ -623376,6 +623498,7 @@ export namespace Prisma {
     status?: EnumEvaluationStatusFieldUpdateOperationsInput | $Enums.EvaluationStatus
     reviewerId?: NullableStringFieldUpdateOperationsInput | string | null
     deadlineReview?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deadlineReviewExternal?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     currentSituation?: StringFieldUpdateOperationsInput | string
     strengths?: StringFieldUpdateOperationsInput | string
     weakness?: StringFieldUpdateOperationsInput | string
@@ -623719,6 +623842,7 @@ export namespace Prisma {
     deadline?: Date | string | null
     status?: $Enums.EvaluationStatus
     deadlineReview?: Date | string | null
+    deadlineReviewExternal?: Date | string | null
     currentSituation?: string
     strengths?: string
     weakness?: string
@@ -623744,6 +623868,7 @@ export namespace Prisma {
     status?: $Enums.EvaluationStatus
     reviewerId?: string | null
     deadlineReview?: Date | string | null
+    deadlineReviewExternal?: Date | string | null
     currentSituation?: string
     strengths?: string
     weakness?: string
@@ -623867,6 +623992,7 @@ export namespace Prisma {
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     status?: EnumEvaluationStatusFieldUpdateOperationsInput | $Enums.EvaluationStatus
     deadlineReview?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deadlineReviewExternal?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     currentSituation?: StringFieldUpdateOperationsInput | string
     strengths?: StringFieldUpdateOperationsInput | string
     weakness?: StringFieldUpdateOperationsInput | string
@@ -623892,6 +624018,7 @@ export namespace Prisma {
     status?: EnumEvaluationStatusFieldUpdateOperationsInput | $Enums.EvaluationStatus
     reviewerId?: NullableStringFieldUpdateOperationsInput | string | null
     deadlineReview?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deadlineReviewExternal?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     currentSituation?: StringFieldUpdateOperationsInput | string
     strengths?: StringFieldUpdateOperationsInput | string
     weakness?: StringFieldUpdateOperationsInput | string
@@ -625372,6 +625499,7 @@ export namespace Prisma {
     deadline?: Date | string | null
     status?: $Enums.EvaluationStatus
     deadlineReview?: Date | string | null
+    deadlineReviewExternal?: Date | string | null
     currentSituation?: string
     strengths?: string
     weakness?: string
@@ -625397,6 +625525,7 @@ export namespace Prisma {
     deadline?: Date | string | null
     status?: $Enums.EvaluationStatus
     deadlineReview?: Date | string | null
+    deadlineReviewExternal?: Date | string | null
     currentSituation?: string
     strengths?: string
     weakness?: string
@@ -685131,6 +685260,8 @@ export namespace Prisma {
     startDate: Date | string
     endDate: Date | string
     trainingObjectTypeId: string
+    proposalReport?: string | null
+    councilReport?: string | null
     decisionNumber?: string | null
     decisionMaker?: string | null
     decisionDate?: Date | string | null
@@ -686033,6 +686164,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    proposalReport?: NullableStringFieldUpdateOperationsInput | string | null
+    councilReport?: NullableStringFieldUpdateOperationsInput | string | null
     decisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
     decisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
     decisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -686060,6 +686193,8 @@ export namespace Prisma {
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
+    proposalReport?: NullableStringFieldUpdateOperationsInput | string | null
+    councilReport?: NullableStringFieldUpdateOperationsInput | string | null
     decisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
     decisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
     decisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -686086,6 +686221,8 @@ export namespace Prisma {
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
+    proposalReport?: NullableStringFieldUpdateOperationsInput | string | null
+    councilReport?: NullableStringFieldUpdateOperationsInput | string | null
     decisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
     decisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
     decisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -692553,6 +692690,8 @@ export namespace Prisma {
     startDate: Date | string
     endDate: Date | string
     trainingCourseId: string
+    proposalReport?: string | null
+    councilReport?: string | null
     decisionNumber?: string | null
     decisionMaker?: string | null
     decisionDate?: Date | string | null
@@ -693598,6 +693737,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    proposalReport?: NullableStringFieldUpdateOperationsInput | string | null
+    councilReport?: NullableStringFieldUpdateOperationsInput | string | null
     decisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
     decisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
     decisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -693625,6 +693766,8 @@ export namespace Prisma {
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     trainingCourseId?: StringFieldUpdateOperationsInput | string
+    proposalReport?: NullableStringFieldUpdateOperationsInput | string | null
+    councilReport?: NullableStringFieldUpdateOperationsInput | string | null
     decisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
     decisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
     decisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -693651,6 +693794,8 @@ export namespace Prisma {
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     trainingCourseId?: StringFieldUpdateOperationsInput | string
+    proposalReport?: NullableStringFieldUpdateOperationsInput | string | null
+    councilReport?: NullableStringFieldUpdateOperationsInput | string | null
     decisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
     decisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
     decisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -702241,6 +702386,7 @@ export namespace Prisma {
     status?: $Enums.EvaluationStatus
     reviewerId?: string | null
     deadlineReview?: Date | string | null
+    deadlineReviewExternal?: Date | string | null
     currentSituation?: string
     strengths?: string
     weakness?: string
@@ -703652,6 +703798,7 @@ export namespace Prisma {
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     status?: EnumEvaluationStatusFieldUpdateOperationsInput | $Enums.EvaluationStatus
     deadlineReview?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deadlineReviewExternal?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     currentSituation?: StringFieldUpdateOperationsInput | string
     strengths?: StringFieldUpdateOperationsInput | string
     weakness?: StringFieldUpdateOperationsInput | string
@@ -703677,6 +703824,7 @@ export namespace Prisma {
     status?: EnumEvaluationStatusFieldUpdateOperationsInput | $Enums.EvaluationStatus
     reviewerId?: NullableStringFieldUpdateOperationsInput | string | null
     deadlineReview?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deadlineReviewExternal?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     currentSituation?: StringFieldUpdateOperationsInput | string
     strengths?: StringFieldUpdateOperationsInput | string
     weakness?: StringFieldUpdateOperationsInput | string
@@ -703700,6 +703848,7 @@ export namespace Prisma {
     status?: EnumEvaluationStatusFieldUpdateOperationsInput | $Enums.EvaluationStatus
     reviewerId?: NullableStringFieldUpdateOperationsInput | string | null
     deadlineReview?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deadlineReviewExternal?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     currentSituation?: StringFieldUpdateOperationsInput | string
     strengths?: StringFieldUpdateOperationsInput | string
     weakness?: StringFieldUpdateOperationsInput | string
@@ -703809,6 +703958,7 @@ export namespace Prisma {
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     status?: EnumEvaluationStatusFieldUpdateOperationsInput | $Enums.EvaluationStatus
     deadlineReview?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deadlineReviewExternal?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     currentSituation?: StringFieldUpdateOperationsInput | string
     strengths?: StringFieldUpdateOperationsInput | string
     weakness?: StringFieldUpdateOperationsInput | string
@@ -703835,6 +703985,7 @@ export namespace Prisma {
     status?: EnumEvaluationStatusFieldUpdateOperationsInput | $Enums.EvaluationStatus
     reviewerId?: NullableStringFieldUpdateOperationsInput | string | null
     deadlineReview?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deadlineReviewExternal?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     currentSituation?: StringFieldUpdateOperationsInput | string
     strengths?: StringFieldUpdateOperationsInput | string
     weakness?: StringFieldUpdateOperationsInput | string
@@ -703858,6 +704009,7 @@ export namespace Prisma {
     status?: EnumEvaluationStatusFieldUpdateOperationsInput | $Enums.EvaluationStatus
     reviewerId?: NullableStringFieldUpdateOperationsInput | string | null
     deadlineReview?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deadlineReviewExternal?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     currentSituation?: StringFieldUpdateOperationsInput | string
     strengths?: StringFieldUpdateOperationsInput | string
     weakness?: StringFieldUpdateOperationsInput | string
@@ -708646,6 +708798,7 @@ export namespace Prisma {
     deadline?: Date | string | null
     status?: $Enums.EvaluationStatus
     deadlineReview?: Date | string | null
+    deadlineReviewExternal?: Date | string | null
     currentSituation?: string
     strengths?: string
     weakness?: string
@@ -708665,6 +708818,7 @@ export namespace Prisma {
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     status?: EnumEvaluationStatusFieldUpdateOperationsInput | $Enums.EvaluationStatus
     deadlineReview?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deadlineReviewExternal?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     currentSituation?: StringFieldUpdateOperationsInput | string
     strengths?: StringFieldUpdateOperationsInput | string
     weakness?: StringFieldUpdateOperationsInput | string
@@ -708690,6 +708844,7 @@ export namespace Prisma {
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     status?: EnumEvaluationStatusFieldUpdateOperationsInput | $Enums.EvaluationStatus
     deadlineReview?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deadlineReviewExternal?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     currentSituation?: StringFieldUpdateOperationsInput | string
     strengths?: StringFieldUpdateOperationsInput | string
     weakness?: StringFieldUpdateOperationsInput | string
@@ -708713,6 +708868,7 @@ export namespace Prisma {
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     status?: EnumEvaluationStatusFieldUpdateOperationsInput | $Enums.EvaluationStatus
     deadlineReview?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deadlineReviewExternal?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     currentSituation?: StringFieldUpdateOperationsInput | string
     strengths?: StringFieldUpdateOperationsInput | string
     weakness?: StringFieldUpdateOperationsInput | string

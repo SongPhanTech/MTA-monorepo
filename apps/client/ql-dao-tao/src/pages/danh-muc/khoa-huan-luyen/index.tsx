@@ -401,7 +401,7 @@ export default function TrainingCoursePage() {
               },
               {
                 title: "Thao tác",
-                width: 100,
+                width: 120,
                 align: "center",
                 fixed: "right",
                 hidden: !canSome(

@@ -31,6 +31,7 @@ export default function ModalTaoKhungDe() {
 
   const { isOpen, onClose, input } = useDisclosure<{
     id?: string
+    subjectVersionId?: string
   }>({
     tag: "ModalTaoKhungDe",
     onClose: form.resetFields,
@@ -170,6 +171,12 @@ export default function ModalTaoKhungDe() {
       setDocument(examFrameworkData.documentFiles)
     }
   }, [examFrameworkData, id, form])
+
+  useEffect(() => {
+    if (!id && input?.subjectVersionId) {
+      form.setFieldValue("subjectVersionId", input.subjectVersionId)
+    }
+  }, [id, input?.subjectVersionId, form])
 
   return (
     <PutFormModal

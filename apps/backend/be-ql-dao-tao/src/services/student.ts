@@ -354,111 +354,62 @@ export const exportStudentAcademicWarning = async ({
   return buffer
 }
 
-// Function for export new template for import student
 export async function _generateStudentImportTemplate(
   _trainingObjectTypeId: string
 ): Promise<ArrayBuffer> {
-  const [fixedClasses, curricula, organizations] = await Promise.all([
-    prisma.fixedClass.findMany({
-      where: {
-        active: true,
-        deletedAt: null,
-      },
-      select: { code: true, name: true },
-      orderBy: { name: "asc" },
-    }),
-    prisma.curriculum.findMany({
-      where: {
-        deletedAt: null,
-      },
-      select: { name: true },
-      orderBy: { name: "asc" },
-    }),
-    prisma.dM_DonVi.findMany({
-      where: { bActive: true, bDeleted: false },
-      select: { sTen: true },
-      orderBy: { sTen: "asc" },
-    }),
-  ])
+  const [fixedClasses, curricula, organizations, trainingMajors, trainingFields] =
+    await Promise.all([
+      prisma.fixedClass.findMany({
+        where: { active: true, deletedAt: null },
+        select: { code: true, name: true },
+        orderBy: { name: "asc" },
+      }),
+      prisma.curriculum.findMany({
+        where: { deletedAt: null },
+        select: { name: true },
+        orderBy: { name: "asc" },
+      }),
+      prisma.dM_DonVi.findMany({
+        where: { bActive: true, bDeleted: false },
+        select: { sTen: true },
+        orderBy: { sTen: "asc" },
+      }),
+      prisma.trainingMajor.findMany({
+        where: { deletedAt: null },
+        select: { name: true },
+        orderBy: { name: "asc" },
+      }),
+      prisma.trainingField.findMany({
+        where: { deletedAt: null },
+        select: { name: true },
+        orderBy: { name: "asc" },
+      }),
+    ])
 
-  const buffer = await getTemplateBuffer(prisma, "MauImportDSHV.xlsx")
-  const workbook = new ExcelJS.Workbook()
-  await workbook.xlsx.load(buffer as any)
+  const buffer = await getTemplateBuffer(prisma, "MauImportDSHV_v4.xlsx")
+  const template = new XlsxTemplate(buffer)
 
-  const sheetLopQL = workbook.getWorksheet("DanhMucLopQuanLi")
-  if (sheetLopQL) {
-    const lopData = fixedClasses.filter((fc) => fc.name)
-    lopData.forEach((fc, index) => {
-      const row = sheetLopQL.getRow(index + 1)
-      row.getCell(1).value = fc.code || ""
-      row.getCell(2).value = fc.name
-      row.commit()
-    })
-  }
+  template.substitute("DanhMucLopQuanLi", {
+    team: fixedClasses.map((fc) => ({ ma: fc.code || "", ten: fc.name })),
+  })
 
-  const sheetCTDT = workbook.getWorksheet("DanhMucChuongTrinhDaoTao")
-  if (sheetCTDT) {
-    const ctdtData = curricula.filter((c) => c.name)
-    ctdtData.forEach((c, index) => {
-      const row = sheetCTDT.getRow(index + 2)
-      row.getCell(1).value = c.name
-      row.commit()
-    })
-  }
+  template.substitute("DanhMucChuongTrinhDaoTao", {
+    team: curricula.map((c) => ({ ten: c.name })),
+  })
 
-  const sheetDVQL = workbook.getWorksheet("DanhMucDonViQuanLi")
-  if (sheetDVQL) {
-    const dvqlData = organizations.filter((o) => o.sTen)
-    dvqlData.forEach((o, index) => {
-      const row = sheetDVQL.getRow(index + 2)
-      row.getCell(1).value = o.sTen
-      row.commit()
-    })
-  }
+  template.substitute("DanhMucChuyenNganh", {
+    team: trainingMajors.map((tm) => ({ ten: tm.name })),
+  })
 
-  const mainSheet = workbook.worksheets[0]
-  if (mainSheet) {
-    const dataStartRow = 13
-    const dataEndRow = 250
+  template.substitute("DanhMucNganh", {
+    team: trainingFields.map((tf) => ({ ten: tf.name })),
+  })
 
-    const lopEndRow = fixedClasses.length || 1
-    const ctdtEndRow = (curricula.length || 0) + 1
-    const dvqlEndRow = (organizations.length || 0) + 1
+  template.substitute("DanhMucDonViQuanLi", {
+    team: organizations.map((o) => ({ ten: o.sTen })),
+  })
 
-    const lopFormulaPrefix = `IFERROR(INDEX(DanhMucLopQuanLi!$A$1:$A$${lopEndRow},MATCH(Q`
-    const lopFormulaSuffix = `,DanhMucLopQuanLi!$B$1:$B$${lopEndRow},0)),"")`
-
-    const qValidation: ExcelJS.DataValidation = {
-      type: "list",
-      allowBlank: true,
-      formulae: [`DanhMucLopQuanLi!$B$1:$B$${lopEndRow}`],
-    }
-
-    const tValidation: ExcelJS.DataValidation = {
-      type: "list",
-      allowBlank: true,
-      formulae: [`DanhMucChuongTrinhDaoTao!$A$2:$A$${ctdtEndRow > 1 ? ctdtEndRow : 2}`],
-    }
-
-    const uValidation: ExcelJS.DataValidation = {
-      type: "list",
-      allowBlank: true,
-      formulae: [`DanhMucDonViQuanLi!$A$2:$A$${dvqlEndRow > 1 ? dvqlEndRow : 2}`],
-    }
-
-    for (let r = dataStartRow; r <= dataEndRow; r++) {
-      const row = mainSheet.getRow(r)
-
-      row.getCell("P").value = {
-        formula: `${lopFormulaPrefix}${r}${lopFormulaSuffix}`,
-      }
-      row.getCell("Q").dataValidation = qValidation
-      row.getCell("T").dataValidation = tValidation
-      row.getCell("U").dataValidation = uValidation
-    }
-  }
-
-  return workbook.xlsx.writeBuffer() as Promise<ArrayBuffer>
+  return template.generate({ type: "nodebuffer" }) as any
 }
 
 export const exportArchivedCertificate = async ({
