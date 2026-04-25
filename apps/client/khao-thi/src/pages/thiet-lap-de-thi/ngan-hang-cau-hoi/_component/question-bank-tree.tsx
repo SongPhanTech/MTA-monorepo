@@ -297,11 +297,13 @@ export default function QuestionBankTree({
         .filter((node): node is any => node !== null)
     }
 
+    const donViIds = new Set(donViData.map((o) => o.Id))
     const orgTree = buildOrgTree(
       donViData.map((org) => ({
         Id: org.Id,
         sTen: org.sTen,
-        sParentId: org.sParentId,
+        // Nếu parent không có trong filtered list thì coi node này là root
+        sParentId: donViIds.has(org.sParentId ?? "") ? org.sParentId : null,
         sMa: org.sMa,
       }))
     )

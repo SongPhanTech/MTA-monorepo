@@ -23,6 +23,11 @@ export default function QuestionBank() {
   const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
 
   const { data: donViData = [] } = useFindManyDM_DonVi({
+    where: {
+      iLoaiDonVi: {
+        in: [5, 6, 7],
+      },
+    },
     include: {
       subjects: {
         include: {
