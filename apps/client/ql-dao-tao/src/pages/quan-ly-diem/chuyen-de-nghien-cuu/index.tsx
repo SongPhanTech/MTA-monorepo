@@ -668,16 +668,10 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
 
                             globalIndex++
                             const studentCode = e.studentSubjectScore.student?.code
-                            const supervisorName = (getSupervisorName(
-                              e.supervisor,
-                              false,
-                              true
-                            ) as string) || ""
-                            const coSupervisorName = (getSupervisorName(
-                              e.coSupervisor,
-                              false,
-                              true
-                            ) as string) || ""
+                            const supervisorName =
+                              (getSupervisorName(e.supervisor, false, true) as string) || ""
+                            const coSupervisorName =
+                              (getSupervisorName(e.coSupervisor, false, true) as string) || ""
                             acc[ma_cn].students.push({
                               tt: globalIndex,
                               ten: `${e.studentSubjectScore.student?.userProfile?.fullname}\n${
