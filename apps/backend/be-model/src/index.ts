@@ -118,9 +118,9 @@ app.all("/api/system/:appcode/*", async (c) => {
   })()
 
   const headers = {
+    ...c.req.header(),
     "x-clientid": clientId,
     "x-clientsecret": clientSecret,
-    "content-type": "application/json-patch+json",
   }
 
   const urlProxy = new URL(`${pathProxy}`, `${process.env.SYSTEM_BASE_URL}/api/system/`)
