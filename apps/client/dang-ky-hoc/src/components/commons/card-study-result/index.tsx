@@ -46,8 +46,8 @@ const CardStudyResult = (props: CardStudyResultProps) => {
               100,
               Number(
                 ((gpaScore.totalCredits || 0) /
-                  ((subjectScoreData?.requiredCredits ?? 0) +
-                    (subjectScoreData?.electiveCredits ?? 0) || 1)) *
+                  ((curriculumVersion?.requiredCredits ?? 0) +
+                    (curriculumVersion?.electiveCredits ?? 0) || 1)) *
                   100
               )
             ).toFixed(1)}
@@ -69,18 +69,19 @@ const CardStudyResult = (props: CardStudyResultProps) => {
           <div className="flex flex-col justify-between items-start gap-1">
             <div className="text-sm font-semibold">
               {gpaScore.totalCredits}/
-              {(subjectScoreData?.requiredCredits ?? 0) + (subjectScoreData?.electiveCredits ?? 0)}
+              {(curriculumVersion?.requiredCredits ?? 0) +
+                (curriculumVersion?.electiveCredits ?? 0)}
             </div>
 
             <div className="text-xs text-gray-400">
-              {(subjectScoreData?.requiredCredits ?? 0) +
-                (subjectScoreData?.electiveCredits ?? 0) -
+              {(curriculumVersion?.requiredCredits ?? 0) +
+                (curriculumVersion?.electiveCredits ?? 0) -
                 (gpaScore.totalCredits || 0) <=
               0
                 ? "Đã đủ điều kiện để xét tốt nghiệp"
                 : `Còn lại ${
-                    (subjectScoreData?.requiredCredits ?? 0) +
-                    (subjectScoreData?.electiveCredits ?? 0) -
+                    (curriculumVersion?.requiredCredits ?? 0) +
+                    (curriculumVersion?.electiveCredits ?? 0) -
                     (gpaScore.totalCredits || 0)
                   } tín chỉ để đạt điều kiện xét tốt nghiệp`}
             </div>
