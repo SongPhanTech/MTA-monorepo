@@ -12,7 +12,7 @@ export async function _generateCurriculumImportTemplate(
       orderBy: { priority: "asc" },
     }),
     prisma.dM_DonVi.findMany({
-      where: { bActive: true, bDeleted: false, iLoaiDonVi: { in: [2, 3] } },
+      where: { bActive: true, bDeleted: false, iLoaiDonVi: { in: [5, 6, 7] } },
       select: { sMa: true, sTKPUCode: true, sTen: true },
       orderBy: { sTen: "asc" },
     }),
