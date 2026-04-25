@@ -243,9 +243,11 @@ const PutCurriculumVersion = () => {
         summary: output.summary,
         learningDiagram: output.learningDiagram,
         guide: output.guide,
-        type: input?.isFramework ? CurriculumVersionType.FRAMEWORK : CurriculumVersionType.FULL_COURSE,
+        type: input?.isFramework
+          ? CurriculumVersionType.FRAMEWORK
+          : CurriculumVersionType.FULL_COURSE,
       }
-      
+
       if (input?.versionId) {
         const updateData = {
           ...baseData,
