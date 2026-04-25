@@ -42,10 +42,16 @@ const CardStudyResult = (props: CardStudyResultProps) => {
         <div className="flex flex-row justify-between items-center h-full">
           <div className="uppercase">Tín chỉ tích luỹ</div>
           <div className="text-sm text-blue-600">
-            {Number(
+            {/* {Number(
               ((gpaScore.totalCredits || 0) /
                 ((subjectScoreData?.requiredCredits ?? 0) +
                   (subjectScoreData?.electiveCredits ?? 0) || 1)) *
+                100
+            ).toFixed(1)} */}
+            {Number(
+              (((subjectScoreData?.requiredCredits ?? 0) +
+                (subjectScoreData?.electiveCredits ?? 0) || 1) /
+                (gpaScore.totalCredits || 0)) *
                 100
             ).toFixed(1)}
             % Hoàn thành
@@ -56,17 +62,16 @@ const CardStudyResult = (props: CardStudyResultProps) => {
             type="circle"
             size={"small"}
             percent={
-              (gpaScore.totalCredits /
-                ((subjectScoreData?.requiredCredits ?? 0) +
-                  (subjectScoreData?.electiveCredits ?? 0)) || 1) * 100
+              ((subjectScoreData?.requiredCredits ?? 0) +
+                (subjectScoreData?.electiveCredits ?? 0) || 1 / gpaScore.totalCredits) * 100
             }
             format={() => <span>{gpaScore.totalCredits}</span>}
           />
 
           <div className="flex flex-col justify-between items-start h-full flex-1">
             <div className="text-sm font-semibold">
-              {gpaScore.totalCredits}/
-              {(subjectScoreData?.requiredCredits ?? 0) + (subjectScoreData?.electiveCredits ?? 0)}
+              {(subjectScoreData?.requiredCredits ?? 0) + (subjectScoreData?.electiveCredits ?? 0)}/
+              {gpaScore.totalCredits}
             </div>
 
             <div className="text-xs text-gray-400">
