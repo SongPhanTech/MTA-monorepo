@@ -1,3 +1,4 @@
+import { ClearOutlined, DeleteOutlined } from "@ant-design/icons"
 import Table from "@components/commons/table"
 import { examSuspendedReason } from "@constants/constants"
 import useSpinner from "@hooks/spinner"
@@ -9,6 +10,7 @@ import {
   useFindManyExamList,
   useUpdateManyExamList,
   useUpdateManySubjectClass,
+  useUpdateManyExamPaper,
 } from "@workspace/db/hooks"
 import { getUrl } from "@workspace/libs/api/custom-instance"
 import { sqlTransaction } from "@workspace/libs/api/model"
@@ -144,8 +146,10 @@ export default function SinhPhach() {
     })
   }
   const { mutateAsync: updateManyExamList } = useUpdateManyExamList()
+  const { mutateAsync: updateManyExamPaper } = useUpdateManyExamPaper()
   const { mutateAsync: genCode } = useGenExamListCode()
   const { mutateAsync: updateManySubjectClass } = useUpdateManySubjectClass()
+
   const handleGenCode = async () => {
     const res = await genCode({
       data: { examId: examId ?? "" },
@@ -223,39 +227,40 @@ export default function SinhPhach() {
     <div>
       <Col span={24}>
         <Flex justify="space-between" align="center">
-          <Checkbox
-            onChange={async (e) => {
-              await updateManyExamList({
-                where: {
-                  examRoom: {
-                    examId,
-                  },
-                },
-                data: { lockExamCode: e.target.checked },
-              })
-              await updateManySubjectClass({
-                where: {
-                  exam: {
-                    examRooms: {
-                      some: {
-                        examList: {
-                          some: {
-                            id: examId ?? "",
-                          },
-                        },
-                      },
-                    },
-                  },
-                },
-                data: {
-                  isLockExamScore: e.target.checked,
-                },
-              })
-            }}
-            checked={lockExamCode}
-          >
-            Khoá sinh phách
-          </Checkbox>
+          <Flex justify="end" align="center" gap={8}>
+            <Button
+              icon={<ClearOutlined />}
+              danger
+              disabled={lockExamCode}
+              onClick={async () => {
+                await updateManyExamPaper({
+                  where: { examList: { examRoom: { examId } } },
+                  data: { examCode: null },
+                })
+                await updateManyExamList({
+                  where: { examRoom: { examId } },
+                  data: { createdExamCode: false },
+                })
+              }}
+            >
+              Tẩy phách
+            </Button>
+            <Checkbox
+              onChange={async (e) => {
+                await updateManyExamList({
+                  where: { examRoom: { examId } },
+                  data: { lockExamCode: e.target.checked },
+                })
+                await updateManySubjectClass({
+                  where: { exam: { examRooms: { some: { examList: { some: { id: examId } } } } } },
+                  data: { isLockExamScore: e.target.checked },
+                })
+              }}
+              checked={lockExamCode}
+            >
+              Khoá sinh phách
+            </Checkbox>
+          </Flex>
           <Flex justify="end" align="center" gap={8}>
             <AddExamPaperModal
               examId={examId ?? ""}
