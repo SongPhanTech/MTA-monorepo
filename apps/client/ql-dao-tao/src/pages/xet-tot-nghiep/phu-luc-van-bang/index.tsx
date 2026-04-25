@@ -1153,7 +1153,6 @@ export default function StudentGradeSystem() {
   }
 
   const handleExportSoGocCapPhatVanBang = () => {
-    console.log("students", students)
 
     if (!students?.length) {
       notification.info({ message: "Không có dữ liệu để xuất!" })

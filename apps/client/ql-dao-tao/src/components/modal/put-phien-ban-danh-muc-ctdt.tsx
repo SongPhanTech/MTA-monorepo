@@ -42,6 +42,7 @@ import { getMinioUrl } from "@workspace/libs/utils"
 import { Download } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
+import { DownloadCurriculumTemplateButton } from "../ui/download-curriculum-template-button"
 
 export type PutCurriculumVersion = CurriculumVersion & {
   documentFiles?: DocumentFile[]
@@ -619,10 +620,10 @@ const PutCurriculumVersion = () => {
                   <Col span={12}>
                     <FormItem label="Nhập dữ liệu môn học từ file Excel" form={form} name="file">
                       <div className="flex items-center gap-3">
-                        <Button href={getMinioUrl("mta/template/MAU-NHAP_CTDT.xlsx")} type="dashed">
-                          <Download />
-                          Mẫu nhập CTĐT
-                        </Button>
+                        <DownloadCurriculumTemplateButton
+                          trainingObjectTypeId={trainingObjectTypeId}
+                          type="dashed"
+                        />
                         <Button type="primary" onClick={handleFileSelect}>
                           Chọn file Excel
                         </Button>

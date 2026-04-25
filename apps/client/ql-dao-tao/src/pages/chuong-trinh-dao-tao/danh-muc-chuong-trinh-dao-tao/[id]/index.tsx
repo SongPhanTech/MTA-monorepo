@@ -32,6 +32,7 @@ import { useRouter } from "next/router"
 import type React from "react"
 import { useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
+import { DownloadCurriculumTemplateButton } from "@components/ui/download-curriculum-template-button"
 import CreateIcon from "../../../../components/icons/create"
 import { exportPhienBanCTDT } from "@workspace/libs/api/training"
 import { saveAs } from "file-saver"
@@ -500,14 +501,11 @@ export default function TrainingProgramSubjects() {
                       <Download />
                       Mẫu xuất
                     </Button>
-                    <Button
-                      href={getMinioUrl("mta/template/MAU-NHAP_CTDT.xlsx")}
+                    <DownloadCurriculumTemplateButton
+                      trainingObjectTypeId={initialValue?.trainingObjectTypeId}
                       className="text-primary border-primary mr-2"
                       disabled={isLocked}
-                    >
-                      <Download />
-                      Mẫu nhập CTĐT
-                    </Button>
+                    />
                     <Button
                       onClick={() => !isLocked && setImportModalVisible(true)}
                       className="text-primary border-primary mr-2"
