@@ -7,7 +7,7 @@ interface CardStudyResultProps {
     gpa: number
     totalCredits: number
   }
-  subjectScoreData: {
+  curriculumVersion: {
     requiredCredits: number
     electiveCredits: number
   }
@@ -15,7 +15,7 @@ interface CardStudyResultProps {
 }
 
 const CardStudyResult = (props: CardStudyResultProps) => {
-  const { gpaScore, subjectScoreData, academicRanking } = props
+  const { gpaScore, curriculumVersion, academicRanking } = props
 
   return (
     <div className="bg-white rounded-md overflow-hidden border border-gray-200 border-solid flex flex-col">
@@ -60,8 +60,8 @@ const CardStudyResult = (props: CardStudyResultProps) => {
             size={"small"}
             percent={
               (gpaScore.totalCredits /
-                ((subjectScoreData?.requiredCredits ?? 0) +
-                  (subjectScoreData?.electiveCredits ?? 0)) || 1) * 100
+                ((curriculumVersion?.requiredCredits ?? 0) +
+                  (curriculumVersion?.electiveCredits ?? 0)) || 1) * 100
             }
             format={() => <span>{gpaScore.totalCredits}</span>}
           />
