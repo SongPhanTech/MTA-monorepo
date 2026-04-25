@@ -83,9 +83,9 @@ function Page() {
     subjectScoreData?.fixedClass?.trainingCourse?.baseScore
   )
   const gpaScore = useMemo(() => {
-    console.log(subjectScoreData, 'subjectScoreData')
-    console.log(subjectScoreData?.requiredCredits, 'requiredCredits')
-    console.log(subjectScoreData?.electiveCredits, 'electiveCredits')
+    console.log(subjectScoreData, "subjectScoreData")
+    console.log(subjectScoreData?.requiredCredits, "requiredCredits")
+    console.log(subjectScoreData?.electiveCredits, "electiveCredits")
 
     const validSubjects =
       subjectScoreData?.trainingBlocks
