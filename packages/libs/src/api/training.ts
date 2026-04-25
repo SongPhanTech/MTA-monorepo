@@ -67,6 +67,8 @@ import type {
   ExportDiplomaVerificationParams,
   ExportGraduationDecisionPptx400,
   ExportGraduationDecisionPptxBody,
+  ExportGraduationRegisterMaster404,
+  ExportGraduationRegisterMasterBody,
   ExportInternshipProfile400,
   ExportInternshipProfileBody,
   ExportLecturerProfile400,
@@ -9079,6 +9081,91 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       > => {
 
       const mutationOptions = getExportGraduationDecisionPptxMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+export type exportGraduationRegisterMasterResponse200 = {
+  data: Blob
+  status: 200
+}
+
+export type exportGraduationRegisterMasterResponse404 = {
+  data: ExportGraduationRegisterMaster404
+  status: 404
+}
+    
+export type exportGraduationRegisterMasterResponseSuccess = (exportGraduationRegisterMasterResponse200) & {
+  headers: Headers;
+};
+export type exportGraduationRegisterMasterResponseError = (exportGraduationRegisterMasterResponse404) & {
+  headers: Headers;
+};
+
+export type exportGraduationRegisterMasterResponse = (exportGraduationRegisterMasterResponseSuccess | exportGraduationRegisterMasterResponseError)
+
+export const getExportGraduationRegisterMasterUrl = () => {
+
+
+  
+
+  return `/api/graduation/export-graduation-register-master`
+}
+
+export const exportGraduationRegisterMaster = async (exportGraduationRegisterMasterBody: ExportGraduationRegisterMasterBody, options?: RequestInit): Promise<exportGraduationRegisterMasterResponse> => {
+  
+  return customTrainingFetch<exportGraduationRegisterMasterResponse>(getExportGraduationRegisterMasterUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      exportGraduationRegisterMasterBody,)
+  }
+);}
+
+
+
+
+export const getExportGraduationRegisterMasterMutationOptions = <TError = ExportGraduationRegisterMaster404,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof exportGraduationRegisterMaster>>, TError,{data: ExportGraduationRegisterMasterBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof exportGraduationRegisterMaster>>, TError,{data: ExportGraduationRegisterMasterBody}, TContext> => {
+
+const mutationKey = ['exportGraduationRegisterMaster'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof exportGraduationRegisterMaster>>, {data: ExportGraduationRegisterMasterBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  exportGraduationRegisterMaster(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ExportGraduationRegisterMasterMutationResult = NonNullable<Awaited<ReturnType<typeof exportGraduationRegisterMaster>>>
+    export type ExportGraduationRegisterMasterMutationBody = ExportGraduationRegisterMasterBody
+    export type ExportGraduationRegisterMasterMutationError = ExportGraduationRegisterMaster404
+
+    export const useExportGraduationRegisterMaster = <TError = ExportGraduationRegisterMaster404,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof exportGraduationRegisterMaster>>, TError,{data: ExportGraduationRegisterMasterBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof exportGraduationRegisterMaster>>,
+        TError,
+        {data: ExportGraduationRegisterMasterBody},
+        TContext
+      > => {
+
+      const mutationOptions = getExportGraduationRegisterMasterMutationOptions(options);
 
       return useMutation(mutationOptions, queryClient);
     }

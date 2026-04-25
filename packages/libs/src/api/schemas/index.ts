@@ -181,6 +181,8 @@ export * from './exportDiplomaVerification400';
 export * from './exportDiplomaVerificationParams';
 export * from './exportGraduationDecisionPptx400';
 export * from './exportGraduationDecisionPptxBody';
+export * from './exportGraduationRegisterMaster404';
+export * from './exportGraduationRegisterMasterBody';
 export * from './exportInternshipProfile400';
 export * from './exportInternshipProfileBody';
 export * from './exportLecturerProfile400';
