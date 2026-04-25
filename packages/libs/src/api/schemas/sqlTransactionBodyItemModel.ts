@@ -50,6 +50,7 @@ export const SqlTransactionBodyItemModel = {
   FAQ: 'FAQ',
   Prompt: 'Prompt',
   Conversation: 'Conversation',
+  ConversationFeedback: 'ConversationFeedback',
   Message: 'Message',
   CitationMessage: 'CitationMessage',
   Topic: 'Topic',
