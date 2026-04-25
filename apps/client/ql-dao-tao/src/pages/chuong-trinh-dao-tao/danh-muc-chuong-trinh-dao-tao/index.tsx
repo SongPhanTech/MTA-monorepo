@@ -30,6 +30,7 @@ import { useRouter } from "next/router"
 import type React from "react"
 import { useEffect, useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
+import { DownloadCurriculumTemplateButton } from "@components/ui/download-curriculum-template-button"
 
 const SESSION_KEYS = {
   FILTERS: "curriculum-filters",
@@ -538,10 +539,10 @@ export default function TrainingProgramCatalog() {
                   "THEM"
                 ) && (
                   <>
-                    <Button href={getMinioUrl("mta/template/MAU-NHAP_CTDT.xlsx")} type="primary">
-                      <Download />
-                      Mẫu nhập CTĐT
-                    </Button>
+                    <DownloadCurriculumTemplateButton
+                      trainingObjectTypeId={trainingObjectTypeId}
+                      type="primary"
+                    />
                     <Button onClick={handleModal} type="primary">
                       <BookPlus />
                       Thêm CTĐT
