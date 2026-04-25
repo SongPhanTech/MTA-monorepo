@@ -7,7 +7,7 @@ interface CardStudyResultProps {
     gpa: number
     totalCredits: number
   }
-  subjectScoreData: {
+  curriculumVersion: {
     requiredCredits: number
     electiveCredits: number
   }
@@ -15,7 +15,7 @@ interface CardStudyResultProps {
 }
 
 const CardStudyResult = (props: CardStudyResultProps) => {
-  const { gpaScore, subjectScoreData, academicRanking } = props
+  const { gpaScore, curriculumVersion, academicRanking } = props
 
   return (
     <div className="bg-white rounded-md overflow-hidden border border-gray-200 border-solid flex flex-col">
@@ -44,8 +44,8 @@ const CardStudyResult = (props: CardStudyResultProps) => {
           <div className="text-sm text-blue-600">
             {Number(
               ((gpaScore.totalCredits || 0) /
-                ((subjectScoreData?.requiredCredits ?? 0) +
-                  (subjectScoreData?.electiveCredits ?? 0) || 1)) *
+                ((curriculumVersion?.requiredCredits ?? 0) +
+                  (curriculumVersion?.electiveCredits ?? 0) || 1)) *
                 100
             ).toFixed(1)}
             % Hoàn thành
@@ -57,22 +57,23 @@ const CardStudyResult = (props: CardStudyResultProps) => {
             size={"small"}
             percent={
               (gpaScore.totalCredits /
-                ((subjectScoreData?.requiredCredits ?? 0) +
-                  (subjectScoreData?.electiveCredits ?? 0)) || 1) * 100
+                ((curriculumVersion?.requiredCredits ?? 0) +
+                  (curriculumVersion?.electiveCredits ?? 0)) || 1) * 100
             }
             format={() => <span>{gpaScore.totalCredits}</span>}
           />
 
           <div className="flex flex-col justify-between items-start h-full flex-1">
             <div className="text-sm font-semibold">
-              {(subjectScoreData?.requiredCredits ?? 0) + (subjectScoreData?.electiveCredits ?? 0)}/
-              {gpaScore.totalCredits}
+              {gpaScore.totalCredits}/
+              {(curriculumVersion?.requiredCredits ?? 0) +
+                (curriculumVersion?.electiveCredits ?? 0)}
             </div>
 
             <div className="text-xs text-gray-400">
               Còn lại{" "}
-              {(subjectScoreData?.requiredCredits ?? 0) +
-                (subjectScoreData?.electiveCredits ?? 0) -
+              {(curriculumVersion?.requiredCredits ?? 0) +
+                (curriculumVersion?.electiveCredits ?? 0) -
                 gpaScore.totalCredits}{" "}
               tín chỉ để đạt điều kiện xét tốt nghiệp
             </div>
