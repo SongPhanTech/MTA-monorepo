@@ -1,6 +1,5 @@
 import useSpinner from "@hooks/spinner";
 import { downloadCurriculumImportTemplate } from "@workspace/libs/api/training";
-import { getMinioUrl } from "@workspace/libs/utils";
 import { Button, message } from "antd";
 import type { ButtonProps } from "antd";
 import { saveAs } from "file-saver";
