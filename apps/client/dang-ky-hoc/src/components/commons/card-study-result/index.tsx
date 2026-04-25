@@ -42,11 +42,14 @@ const CardStudyResult = (props: CardStudyResultProps) => {
         <div className="flex flex-row justify-between items-center h-full">
           <div className="uppercase">Tín chỉ tích luỹ</div>
           <div className="text-sm text-blue-600">
-            {Number(
-              ((gpaScore.totalCredits || 0) /
-                ((curriculumVersion?.requiredCredits ?? 0) +
-                  (curriculumVersion?.electiveCredits ?? 0) || 1)) *
-                100
+            {Math.min(
+              100,
+              Number(
+                ((gpaScore.totalCredits || 0) /
+                  ((subjectScoreData?.requiredCredits ?? 0) +
+                    (subjectScoreData?.electiveCredits ?? 0) || 1)) *
+                  100
+              )
             ).toFixed(1)}
             % Hoàn thành
           </div>
@@ -63,19 +66,23 @@ const CardStudyResult = (props: CardStudyResultProps) => {
             format={() => <span>{gpaScore.totalCredits}</span>}
           />
 
-          <div className="flex flex-col justify-between items-start h-full flex-1">
+          <div className="flex flex-col justify-between items-start gap-1">
             <div className="text-sm font-semibold">
               {gpaScore.totalCredits}/
-              {(curriculumVersion?.requiredCredits ?? 0) +
-                (curriculumVersion?.electiveCredits ?? 0)}
+              {(subjectScoreData?.requiredCredits ?? 0) + (subjectScoreData?.electiveCredits ?? 0)}
             </div>
 
             <div className="text-xs text-gray-400">
-              Còn lại{" "}
-              {(curriculumVersion?.requiredCredits ?? 0) +
-                (curriculumVersion?.electiveCredits ?? 0) -
-                gpaScore.totalCredits}{" "}
-              tín chỉ để đạt điều kiện xét tốt nghiệp
+              {(subjectScoreData?.requiredCredits ?? 0) +
+                (subjectScoreData?.electiveCredits ?? 0) -
+                (gpaScore.totalCredits || 0) <=
+              0
+                ? "Đã đủ điều kiện để xét tốt nghiệp"
+                : `Còn lại ${
+                    (subjectScoreData?.requiredCredits ?? 0) +
+                    (subjectScoreData?.electiveCredits ?? 0) -
+                    (gpaScore.totalCredits || 0)
+                  } tín chỉ để đạt điều kiện xét tốt nghiệp`}
             </div>
           </div>
         </div>
