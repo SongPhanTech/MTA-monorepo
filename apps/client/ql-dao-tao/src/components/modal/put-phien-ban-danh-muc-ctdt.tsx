@@ -71,9 +71,7 @@ const PutCurriculumVersion = () => {
   const [importFile, setImportFile] = useState<File | null>(null)
 
   const { data: trainingObjectTypeSelected } = useFindUniqueTrainingObjectType(
-    {
-      where: { id: trainingObjectTypeId },
-    },
+    { where: { id: trainingObjectTypeId } },
     {
       enabled: !!trainingObjectTypeId,
       refetchOnWindowFocus: false,
@@ -243,9 +241,10 @@ const PutCurriculumVersion = () => {
         summary: output.summary,
         learningDiagram: output.learningDiagram,
         guide: output.guide,
-        type: input?.isFramework
-          ? CurriculumVersionType.FRAMEWORK
-          : CurriculumVersionType.FULL_COURSE,
+        type:
+          output.type || input?.isFramework
+            ? CurriculumVersionType.FRAMEWORK
+            : CurriculumVersionType.FULL_COURSE,
       }
 
       if (input?.versionId) {
@@ -410,6 +409,7 @@ const PutCurriculumVersion = () => {
     if (initialValue && trainingObjectTypeSelected) {
       form.setFieldsValue({
         ...initialValue,
+        type: initialValue?.type || CurriculumVersionType.FULL_COURSE,
         trainingLevelId: trainingObjectTypeSelected.trainingLevelId,
       })
       setDocument(initialValue?.documentFiles)
@@ -603,11 +603,25 @@ const PutCurriculumVersion = () => {
                       />
                     </FormItem>
                   </Col>
-                  <Col span={12}>
-                    <FormItem form={form} name="description" label="Mô tả">
-                      <Input.TextArea placeholder="Nhập mô tả" />
-                    </FormItem>
-                  </Col>
+                  {input?.versionId && (
+                    <Col span={12}>
+                      <FormItem form={form} name="type" label="Loại" required>
+                        <Select
+                          options={[
+                            {
+                              value: CurriculumVersionType.FULL_COURSE,
+                              label: "KẾ HOẠCH CHI TIẾT",
+                            },
+                            {
+                              value: CurriculumVersionType.FRAMEWORK,
+                              label: "KHUNG",
+                            },
+                          ]}
+                        />
+                      </FormItem>
+                    </Col>
+                  )}
+
                   {input?.versionId && (
                     <Col span={12}>
                       <FormItem form={form} name="active" label="Trạng thái" required>
@@ -618,6 +632,11 @@ const PutCurriculumVersion = () => {
                       </FormItem>
                     </Col>
                   )}
+                  <Col span={24}>
+                    <FormItem form={form} name="description" label="Mô tả">
+                      <Input.TextArea placeholder="Nhập mô tả" />
+                    </FormItem>
+                  </Col>
 
                   <Col span={12}>
                     <FormItem label="Nhập dữ liệu môn học từ file Excel" form={form} name="file">

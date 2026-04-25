@@ -740,7 +740,7 @@ export default function DanhMucDoAn() {
                   return (
                     <LectureTreeSelect
                       className="w-full"
-                      value={currentValue || undefined}
+                      value={currentValue || ""}
                       placeholder="Chọn GVHD1"
                       ignoreLectureIds={
                         [
@@ -755,7 +755,9 @@ export default function DanhMucDoAn() {
                     />
                   )
                 }
-                return formatLecturerName(record?.primarySupervisor)
+                return record?.primarySupervisor
+                  ? formatLecturerName(record?.primarySupervisor)
+                  : ""
               },
             },
             {
@@ -786,7 +788,9 @@ export default function DanhMucDoAn() {
                     />
                   )
                 }
-                return formatLecturerName(record?.secondarySupervisor)
+                return record?.secondarySupervisor
+                  ? formatLecturerName(record?.secondarySupervisor)
+                  : ""
               },
             },
             {
@@ -1232,41 +1236,41 @@ export default function DanhMucDoAn() {
                 return formatTime(record?.defenseSession?.startTime)
               },
             },
-            {
-              title: "Điểm bảo vệ",
-              width: 150,
-              align: "left",
-              dataIndex: "defenseRecordFinalScore",
-              render: (_, record) => {
-                const scoreValue = record?.defenseRecord?.finalScore
+            // {
+            //   title: "Điểm bảo vệ",
+            //   width: 150,
+            //   align: "left",
+            //   dataIndex: "defenseRecordFinalScore",
+            //   render: (_, record) => {
+            //     const scoreValue = record?.defenseRecord?.finalScore
 
-                if (editingRowKeys.includes(record?.id)) {
-                  const currentValue =
-                    editingValues[record.id]?.defenseRecordFinalScore ?? scoreValue
+            //     if (editingRowKeys.includes(record?.id)) {
+            //       const currentValue =
+            //         editingValues[record.id]?.defenseRecordFinalScore ?? scoreValue
 
-                  return (
-                    <InputNumber
-                      className="w-28"
-                      value={
-                        currentValue === null || currentValue === undefined
-                          ? undefined
-                          : currentValue
-                      }
-                      placeholder="Nhập điểm"
-                      onChange={(value) =>
-                        handleEditChange(record?.id, "defenseRecordFinalScore", value)
-                      }
-                    />
-                  )
-                }
+            //       return (
+            //         <InputNumber
+            //           className="w-28"
+            //           value={
+            //             currentValue === null || currentValue === undefined
+            //               ? undefined
+            //               : currentValue
+            //           }
+            //           placeholder="Nhập điểm"
+            //           onChange={(value) =>
+            //             handleEditChange(record?.id, "defenseRecordFinalScore", value)
+            //           }
+            //         />
+            //       )
+            //     }
 
-                if (scoreValue === null || scoreValue === undefined) {
-                  return ""
-                }
+            //     if (scoreValue === null || scoreValue === undefined) {
+            //       return ""
+            //     }
 
-                return Number(scoreValue).toFixedSmart(2)
-              },
-            },
+            //     return Number(scoreValue).toFixedSmart(2)
+            //   },
+            // },
             {
               title: "Chỉnh sửa đồ án",
               width: 200,
