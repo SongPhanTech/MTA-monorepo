@@ -13,7 +13,7 @@ import { $Enums } from "@workspace/db/client"
 import {
   useCreateEvaluationCriterionComment,
   useUpdateAnalysisCriterion,
-  useUpdateEvaluationCriterion,
+  useUpsertEvaluationCriterion,
 } from "@workspace/db/hooks"
 import { useAbility } from "@workspace/permissions/hooks"
 import { KHAO_THI_PERMISSION } from "@workspace/router"
@@ -49,7 +49,7 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx }: Props) => {
 
   const { mutateAsync: updateAnalysisCriterion } = useUpdateAnalysisCriterion()
   const { mutateAsync: createEvaluationCriterionComment } = useCreateEvaluationCriterionComment()
-  const { mutateAsync: updateEvaluationCriterion } = useUpdateEvaluationCriterion()
+  const { mutateAsync: upsertEvaluationCriterion } = useUpsertEvaluationCriterion()
 
   const toggleCommentRow = (recordId: string) => {
     setExpandedRowKeys((prev) =>
@@ -125,7 +125,8 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx }: Props) => {
 
   const handleApproveCriterionAnalysisFinal = async (
     analysisCriterionId: string,
-    criterionPeriodId: string
+    criterionPeriodId: string,
+    lecturerId?: string | null
   ) => {
     try {
       showSpinner()
@@ -138,11 +139,16 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx }: Props) => {
         },
       })
 
-      await updateEvaluationCriterion({
+      await upsertEvaluationCriterion({
         where: {
           criterionPeriodId: criterionPeriodId,
         },
-        data: {
+        create: {
+          criterionPeriodId: criterionPeriodId,
+          lecturerId: lecturerId,
+          status: $Enums.EvaluationStatus.PENDING,
+        },
+        update: {
           status: $Enums.EvaluationStatus.PENDING,
         },
       })
@@ -200,11 +206,16 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx }: Props) => {
                   status: $Enums.EvaluationCriterionStatus.COMPLETED,
                 },
               }),
-              updateEvaluationCriterion({
+              upsertEvaluationCriterion({
                 where: {
                   criterionPeriodId: item.id,
                 },
-                data: {
+                create: {
+                  criterionPeriodId: item.id,
+                  lecturerId: item.analysisCriterions?.lecturerId,
+                  status: $Enums.EvaluationStatus.PENDING,
+                },
+                update: {
                   status: $Enums.EvaluationStatus.PENDING,
                 },
               }),
@@ -320,7 +331,8 @@ const ReviewCriteriaAnalysisSubPage = ({ data, idx }: Props) => {
                           e?.stopPropagation()
                           handleApproveCriterionAnalysisFinal(
                             item.analysisCriterions?.id as string,
-                            item.id
+                            item.id,
+                            item.analysisCriterions?.lecturerId
                           )
                         }}
                         onCancel={(e) => {
