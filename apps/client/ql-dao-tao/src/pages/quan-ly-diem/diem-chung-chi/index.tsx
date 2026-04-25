@@ -53,7 +53,6 @@ export default function ArchivedCertificate() {
   const [exportCertificateId, setExportCertificateId] = useState<string | undefined>()
   const [isMultiExportModalOpen, setIsMultiExportModalOpen] = useState(false)
   const [exportTrainingCourseIds, setExportTrainingCourseIds] = useState<string[]>([])
-  const [exportCertificateIds, setExportCertificateIds] = useState<string[]>([])
   const [isMissingExportModalOpen, setIsMissingExportModalOpen] = useState(false)
 
   const { showSpinner, hideSpinner } = useSpinner()
@@ -384,14 +383,12 @@ export default function ArchivedCertificate() {
 
   const handleOpenMultiExportModal = () => {
     setExportTrainingCourseIds([])
-    setExportCertificateIds([])
     setIsMultiExportModalOpen(true)
   }
 
   const handleCloseMultiExportModal = () => {
     setIsMultiExportModalOpen(false)
     setExportTrainingCourseIds([])
-    setExportCertificateIds([])
   }
 
   const handleOpenMissingExportModal = () => {
@@ -478,8 +475,10 @@ export default function ArchivedCertificate() {
       return
     }
 
-    if (!exportCertificateIds.length) {
-      message.warning("Vui lòng chọn ít nhất một loại chứng chỉ")
+    const allCertificateIds = certificateData.map((item: any) => item.id)
+
+    if (!allCertificateIds.length) {
+      message.warning("Không có loại chứng chỉ nào để xuất")
       return
     }
 
@@ -511,7 +510,7 @@ export default function ArchivedCertificate() {
       const res = await exportArchivedCertificateMultiExcel({
         trainingObjectTypeId,
         trainingCourseIds: exportTrainingCourseIds,
-        certificateIds: exportCertificateIds,
+        certificateIds: allCertificateIds,
       })
 
       if (res.status === 200) {
@@ -694,7 +693,7 @@ export default function ArchivedCertificate() {
                     icon={<DownloadOutlined />}
                     type="primary"
                   >
-                    Xuất nhiều loại
+                    Chi tiết
                   </Button>
                   {/* <Button
                     className="ml-3"
@@ -1070,7 +1069,7 @@ export default function ArchivedCertificate() {
         okText="Xuất Excel"
         cancelText="Hủy"
         okButtonProps={{
-          disabled: !exportTrainingCourseIds.length || !exportCertificateIds.length,
+          disabled: !exportTrainingCourseIds.length || !certificateData.length,
         }}
       >
         <Flex vertical gap={12} className="mt-4">
@@ -1088,25 +1087,6 @@ export default function ArchivedCertificate() {
               }))}
               value={exportTrainingCourseIds}
               onChange={(values) => setExportTrainingCourseIds(values)}
-              allowClear
-              showSearch
-              optionFilterProp="label"
-            />
-          </div>
-          <div>
-            <div className="mb-1 text-sm font-medium">
-              Loại chứng chỉ <span className="text-red-500">*</span>
-            </div>
-            <Select
-              className="w-full"
-              mode="multiple"
-              placeholder="Chọn một hoặc nhiều loại chứng chỉ"
-              options={certificateData.map((item: any) => ({
-                label: item.name,
-                value: item.id,
-              }))}
-              value={exportCertificateIds}
-              onChange={(values) => setExportCertificateIds(values)}
               allowClear
               showSearch
               optionFilterProp="label"
