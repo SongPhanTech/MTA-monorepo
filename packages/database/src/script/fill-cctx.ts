@@ -3,44 +3,6 @@ import { PrismaClient } from "../../generated/prisma-client"
 
 const prisma = new PrismaClient()
 
-// THI VIẾT: only fill attandance and midterm
-const subjectClassIds = await prisma.subjectClass.findMany({
-  where: {
-    examType: "OfflineWritten",
-    subject: { onePoint: false },
-    fixedClasses: {
-      some: {
-        trainingCourseId: "cmo0ui5z4000cmp01ryih8bxn",
-      },
-    },
-    semesterId: "cmmlxqqmt01gpmy01t4i3iw9a",
-  },
-})
-
-console.log("lớp thi viết", subjectClassIds.length)
-
-const whereCondition = {
-  subjectClassId: {
-    in: subjectClassIds.map((c) => c.id),
-  },
-  attendanceScore: null,
-  midtermScore: null,
-  examScore: null,
-  examBanned: false,
-  examPostponed: false,
-}
-
-const count = await prisma.studentSubjectScore.count({
-  where: whereCondition,
-})
-
-console.log(`Found ${count} records to update`)
-
-const scoresToUpdate = await prisma.studentSubjectScore.findMany({
-  where: whereCondition,
-  select: { id: true },
-})
-
 const getRandomScore = () => {
   // Generate random score between 6.0 and 10.0 with 0.5 increments
   const steps = Math.floor(Math.random() * 9) // 0 to 8
@@ -48,39 +10,78 @@ const getRandomScore = () => {
 }
 
 const chunkSize = 1000
-for (let i = 0; i < scoresToUpdate.length; i += chunkSize) {
-  const chunk = scoresToUpdate.slice(i, i + chunkSize)
 
-  await prisma.$executeRawUnsafe(`
-        UPDATE "ql-dao-tao"."StudentSubjectScore" AS sss
-        SET
-            "attendanceScore" = data."attendanceScore"::double precision,
-            "midtermScore" = data."midtermScore"::double precision,
-            "updatedAt" = NOW()
-        FROM (
-            VALUES
-            ${chunk
-              .map(
-                (u) => `(
-                        '${u.id}',
-                        ${getRandomScore()},
-                        ${getRandomScore()}
-                    )`
-              )
-              .join(",\n")}
-        ) AS data("id", "attendanceScore", "midtermScore")
-        WHERE sss.id = data.id;
-    `)
+// THI VIẾT: only fill attandance and midterm
+// const subjectClassIds = await prisma.subjectClass.findMany({
+//   where: {
+//     examType: "OfflineWritten",
+//     subject: { onePoint: false },
+//     fixedClasses: {
+//       some: {
+//         trainingCourseId: "cmof74ob400ssom01z807n5ha",
+//       },
+//     },
+//     // semesterId: "cmmlxqqmt01gpmy01t4i3iw9a",
+//   },
+// })
 
-  console.log(
-    `Updated ${Math.min(i + chunkSize, scoresToUpdate.length)} / ${scoresToUpdate.length} records...`
-  )
-}
+// console.log("lớp thi viết", subjectClassIds.length)
 
-await prisma.subjectClass.updateMany({
-  where: { id: { in: subjectClassIds.map((c) => c.id) } },
-  data: { enteredScore: true },
-})
+// const whereCondition = {
+//   subjectClassId: {
+//     in: subjectClassIds.map((c) => c.id),
+//   },
+//   attendanceScore: null,
+//   midtermScore: null,
+//   examScore: null,
+//   examBanned: false,
+//   examPostponed: false,
+// }
+
+// const count = await prisma.studentSubjectScore.count({
+//   where: whereCondition,
+// })
+
+// console.log(`Found ${count} records to update`)
+
+// const scoresToUpdate = await prisma.studentSubjectScore.findMany({
+//   where: whereCondition,
+//   select: { id: true },
+// })
+
+// for (let i = 0; i < scoresToUpdate.length; i += chunkSize) {
+//   const chunk = scoresToUpdate.slice(i, i + chunkSize)
+
+//   await prisma.$executeRawUnsafe(`
+//         UPDATE "ql-dao-tao"."StudentSubjectScore" AS sss
+//         SET
+//             "attendanceScore" = data."attendanceScore"::double precision,
+//             "midtermScore" = data."midtermScore"::double precision,
+//             "updatedAt" = NOW()
+//         FROM (
+//             VALUES
+//             ${chunk
+//               .map(
+//                 (u) => `(
+//                         '${u.id}',
+//                         ${getRandomScore()},
+//                         ${getRandomScore()}
+//                     )`
+//               )
+//               .join(",\n")}
+//         ) AS data("id", "attendanceScore", "midtermScore")
+//         WHERE sss.id = data.id;
+//     `)
+
+//   console.log(
+//     `Updated ${Math.min(i + chunkSize, scoresToUpdate.length)} / ${scoresToUpdate.length} records...`
+//   )
+// }
+
+// await prisma.subjectClass.updateMany({
+//   where: { id: { in: subjectClassIds.map((c) => c.id) } },
+//   data: { enteredScore: true },
+// })
 
 // THI KHÁC
 const classes = await prisma.subjectClass.findMany({
@@ -91,10 +92,10 @@ const classes = await prisma.subjectClass.findMany({
     examType: { not: "OfflineWritten" },
     fixedClasses: {
       some: {
-        trainingCourseId: "cmo0ui5z4000cmp01ryih8bxn",
+        trainingCourseId: "cmof74ob400ssom01z807n5ha",
       },
     },
-    semesterId: "cmmlxqqmt01gpmy01t4i3iw9a",
+    // semesterId: "cmmlxqqmt01gpmy01t4i3iw9a",
   },
 })
 

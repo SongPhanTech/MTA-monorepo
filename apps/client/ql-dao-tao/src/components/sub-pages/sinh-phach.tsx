@@ -135,9 +135,16 @@ export default function SinhPhach() {
   const lockExamCode = examRooms.every((er) => er.examList.every((el) => el.lockExamCode))
 
   const handleSave = () => {
+    const isScored = examPapers.some((p) => p.studentSubjectScore.examScore !== null)
+    if (isScored) {
+      message.error("Phách đã được nhập điểm")
+      return
+    }
     Modal.confirm({
       title: "Xác nhận",
-      content: "Bạn có chắc chắn muốn sinh phách không?",
+      content: isScored
+        ? "Phách đã được nhập điểm, bạn có chắc chắn muốn sinh phách lại không?"
+        : "Bạn có chắc chắn muốn sinh phách không?",
       okText: "Xác nhận",
       cancelText: "Hủy",
       onOk: async () => {
