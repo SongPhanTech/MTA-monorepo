@@ -33,7 +33,7 @@ function Page() {
   const curriculumVersionId = userProfile?.educationAndTraining?.[0]?.curriculumVersionId ?? ""
   const studentId = userProfile?.educationAndTraining?.[0]?.id ?? ""
   const fixedClassId = userProfile?.educationAndTraining?.[0]?.fixedClassId ?? ""
-  const { data: subjectScoreData } = useFindUniqueCurriculumVersion(
+  const { data: curriculumVersion } = useFindUniqueCurriculumVersion(
     {
       where: {
         id: curriculumVersionId,
@@ -75,16 +75,16 @@ function Page() {
   )
 
   const { convertScore } = useScoreConverter(
-    subjectScoreData?.fixedClass?.trainingCourse?.scoreConverts
+    curriculumVersion?.fixedClass?.trainingCourse?.scoreConverts
   )
 
   const { convertAcademicRanking } = useAcademicRankingConverter(
-    subjectScoreData?.fixedClass?.trainingCourse?.academicRankingConvert,
-    subjectScoreData?.fixedClass?.trainingCourse?.baseScore
+    curriculumVersion?.fixedClass?.trainingCourse?.academicRankingConvert,
+    curriculumVersion?.fixedClass?.trainingCourse?.baseScore
   )
   const gpaScore = useMemo(() => {
     const validSubjects =
-      subjectScoreData?.trainingBlocks
+      curriculumVersion?.trainingBlocks
         .flatMap((block) => block.subjects)
         .filter((subjectItem) => subjectItem.useForFinalScore === true) || []
 
@@ -107,7 +107,7 @@ function Page() {
 
     const gpa = totalCredits > 0 ? totalWeightedScore / totalCredits : 0
     return { gpa, totalCredits }
-  }, [subjectScoreData, convertScore])
+  }, [curriculumVersion, convertScore])
 
   return (
     <div>
@@ -130,9 +130,9 @@ function Page() {
         <Col xs={24} md={6} className="flex flex-col gap-4">
           <CardStudyResult
             gpaScore={gpaScore}
-            subjectScoreData={{
-              requiredCredits: subjectScoreData?.requiredCredits ?? 0,
-              electiveCredits: subjectScoreData?.electiveCredits ?? 0,
+            curriculumVersion={{
+              requiredCredits: curriculumVersion?.requiredCredits ?? 0,
+              electiveCredits: curriculumVersion?.electiveCredits ?? 0,
             }}
             academicRanking={convertAcademicRanking(gpaScore.gpa).classification || "-"}
           />

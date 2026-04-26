@@ -332,8 +332,6 @@ const PutThesisSession = () => {
           <Input placeholder="Nhập trưởng phòng sau đại học" />
         </FormItem>
       </Col>
-
-    
     </PutFormModal>
   )
 }

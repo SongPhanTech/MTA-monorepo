@@ -37,7 +37,6 @@ const PutResearchTopicModal = () => {
   const { showSpinner, hideSpinner } = useSpinner()
   const { data: expertProfile = [] } = useFindManyExpertProfile({
     include: {
-      
       lecturer: {
         select: {
           code: true,

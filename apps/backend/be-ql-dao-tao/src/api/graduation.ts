@@ -18,6 +18,9 @@ import { getTemplateBuffer } from "@workspace/libs/server"
 import { chunk, genOriginalDiplomaNumber } from "@workspace/libs/utils"
 import Decimal from "decimal.js"
 import { Automizer } from "pptx-automizer"
+import dayjs from "dayjs"
+import customParseFormat from "dayjs/plugin/customParseFormat"
+dayjs.extend(customParseFormat)
 import XlsxTemplate from "xlsx-template"
 import { prisma } from ".."
 import { UploadExcelModel } from "../dto/upload-excel.dto"
@@ -1415,6 +1418,232 @@ app.openapi(exportGraduationDecisionPptx, async (c) => {
 
   return c.body(webStream as any, 200, {
     "Content-Type": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+    "Content-Disposition": disposition,
+  })
+})
+
+const exportGraduationRegisterMaster = createRoute({
+  operationId: "exportGraduationRegisterMaster",
+  tags: ["Graduation"],
+  path: "/export-graduation-register-master",
+  method: "post",
+  request: {
+    body: {
+      content: {
+        "application/json": {
+          schema: z.object({
+            trainingObjectTypeId: z.string().describe("ID loại đối tượng đào tạo"),
+            trainingCourseIds: z.array(z.string()).optional(),
+            fixedClassIds: z.array(z.string()).optional(),
+            thesisSessionIds: z.array(z.string()).optional(),
+            managementOrganizationId: z.string().optional(),
+            printDate: z.string().optional().describe("ISO date string"),
+            signerName: z.string().optional(),
+          }),
+        },
+      },
+    },
+  },
+  responses: {
+    200: {
+      description: "Export graduation register master file",
+      content: {
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
+          schema: z.any().openapi({ type: "string", format: "binary" }),
+        },
+      },
+    },
+    404: {
+      description: "Not found",
+      content: {
+        "application/json": {
+          schema: z.object({ message: z.string() }),
+        },
+      },
+    },
+  },
+})
+
+app.openapi(exportGraduationRegisterMaster, async (c) => {
+  const {
+    trainingObjectTypeId,
+    trainingCourseIds,
+    fixedClassIds,
+    thesisSessionIds,
+    managementOrganizationId,
+    printDate,
+    signerName,
+  } = c.req.valid("json")
+
+  const students = await prisma.student.findMany({
+    where: {
+      fixedClass: {
+        trainingCourse: {
+          trainingObjectTypeId,
+        },
+        ...(trainingCourseIds?.length && { trainingCourseId: { in: trainingCourseIds } }),
+        ...(fixedClassIds?.length && { id: { in: fixedClassIds } }),
+        ...(managementOrganizationId && { managementOrganizationId }),
+      },
+      ...(thesisSessionIds?.length && {
+            thesisRegistrations: {
+              some: {
+                thesisProject: {
+                  thesisSessionId: { in: thesisSessionIds },
+                },
+              },
+            },
+          }
+        ),
+      deletedAt: null,
+    },
+    include: {
+      userProfile: {
+        include: {
+          gender: true,
+          ethnicity: true,
+          nationality: true,
+        },
+      },
+      fixedClass: {
+        include: {
+          trainingCourse: {
+            include: {
+              trainingObjectType: {
+                include: {
+                  trainingForm: true,
+                },
+              },
+            },
+          },
+          curriculumVersion: {
+            include: {
+              curriculum: {
+                include: {
+                  trainingMajor: true,
+                },
+              },
+            },
+          },
+          managementOrganization: true,
+        },
+      },
+      graduationDecision: true,
+      thesisRegistrations: {
+        where: {
+          ...(thesisSessionIds?.length && {
+            thesisProject: {
+              thesisSessionId: { in: thesisSessionIds },
+            },
+          }),
+        },
+        include: {
+          council: true,
+          thesisProject: {
+            include: {
+              defenseRecord: true,
+            },
+          },
+        },
+        orderBy: { createdAt: "desc" },
+        take: 1,
+      },
+    },
+  })
+  console.log(students)
+  if (!students.length) {
+    return c.json({ message: "Không tìm thấy dữ liệu sinh viên phù hợp" }, 404)
+  }
+
+  const [courses, sessions, trainingObjectType] = await Promise.all([
+    prisma.trainingCourse.findMany({
+      where: { id: { in: trainingCourseIds || [] } },
+      select: { name: true },
+    }),
+    prisma.thesisSession.findMany({
+      where: { id: { in: thesisSessionIds || [] } },
+      select: { name: true },
+    }),
+    prisma.trainingObjectType.findUniqueOrThrow({
+      where: { id: trainingObjectTypeId },
+      include: { trainingForm: true },
+    }),
+  ])
+
+  const courseNames = courses.map((e) => e.name).join(", ")
+  const sessionNames = sessions.map((e) => e.name).join(", ")
+  const trainingForm = trainingObjectType.trainingForm?.name || ""
+
+  let selectedDate = printDate ? dayjs(printDate, "DD/MM/YYYY") : dayjs()
+  if (!selectedDate.isValid()) {
+    selectedDate = dayjs()
+  }
+  const ngayInText = `ngày ${selectedDate.date()} tháng ${selectedDate.month() + 1} năm ${selectedDate.year()}`
+
+  const tableRows = students.map((student, index) => {
+    const gD = student.graduationDecision
+    const tR = student.thesisRegistrations?.[0]
+    const user = student.userProfile
+
+    return {
+      stt: index + 1,
+      hoTen: user?.fullname || "",
+      ngaySinh: user?.dateOfBirth ? dayjs(user.dateOfBirth).format("DD/MM/YYYY") : "",
+      soDinhDanh: user?.idCardNumber || "",
+      khoa: student.fixedClass?.trainingCourse?.name || "",
+      noiSinh: user?.placeOfBirth || "",
+      gioiTinh: user?.gender?.sTen || "",
+      danToc: user?.ethnicity?.sTen || "",
+      quocTich: user?.nationality?.sTen || "",
+      "quyDinhHĐDGLV/ĐATN": tR?.council?.code || "",
+      ngayBaoVe: tR?.council?.proposedDate
+        ? dayjs(tR.council.proposedDate).format("DD/MM/YYYY")
+        : "",
+      quyDinhTotNghiep: gD?.code || "",
+      namTN: gD?.decisionDate ? dayjs(gD.decisionDate).year() : "",
+      nganhDaoTao: student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || "",
+      chuyenNganh: "",
+      soHieuVanBang: gD?.diplomaNumber || "",
+      soVaoSoGoc: gD?.originalDiplomaNumber || "",
+      nguoiNhanVanBang: "",
+      ghiChu: "",
+    }
+  })
+
+  const buffer = await getTemplateBuffer(prisma, "SoGocCapPhatVanBangCaoHoc_v1.xlsx")
+  const template = new XlsxTemplate(buffer)
+
+  let chucVi = "GIÁM ĐỐC"
+  let nguoiKy = "Trung tướng Lê Minh Thái"
+
+  if (signerName) {
+    const parts = signerName.split(",").map((s) => s.trim())
+    if (parts.length >= 2) {
+      chucVi = parts?.[0] || ""
+      nguoiKy = parts?.[1] || ""
+    } else {
+      nguoiKy = signerName
+    }
+  }
+
+  template.substitute("PD", {
+    khoa: courseNames,
+    dot_xet: sessionNames,
+    hinh_thuc_dao_tao: trainingForm,
+    so_van_ban: students[0]?.graduationDecision?.code || "",
+    ngay_in: ngayInText,
+    chuc_vi: chucVi.toUpperCase(),
+    nguoi_ky: nguoiKy,
+    data: tableRows,
+  })
+
+  const result = template.generate({ type: "nodebuffer" }) as any
+
+  const fileName = "SoGocCapPhatVanBang.xlsx"
+  const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
+
+  return c.body(result, 200, {
+    "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     "Content-Disposition": disposition,
   })
 })

@@ -10,7 +10,7 @@ import {
 import { getUrl } from "@workspace/libs/api/custom-instance"
 import { getExportSubjectClassScoreUrl, useSaveExamScore } from "@workspace/libs/api/training"
 import { getRuntimeEnv } from "@workspace/libs/utils"
-import { Badge, Button, Col, Flex, Form, InputNumber, Modal, message } from "antd"
+import { Badge, Button, Col, Flex, Form, Input, InputNumber, Modal, message } from "antd"
 import { Printer } from "lucide-react"
 import { useEffect, useMemo } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
@@ -236,6 +236,7 @@ export default function NhapDiemPhach() {
                         ]}
                       >
                         <InputNumber
+                          keyboard={false}
                           style={{ width: "100%" }}
                           step={0.1}
                           controls={false}
@@ -251,6 +252,25 @@ export default function NhapDiemPhach() {
                             const num = Number(value)
                             if (Number.isNaN(num)) return ""
                             return num > 10 ? (num / 10).toFixedSmart(2) : num.toString()
+                          }}
+                          className="score-input"
+                          onKeyDown={(e) => {
+                            if (e.key === "ArrowUp" || e.key === "ArrowDown") {
+                              e.preventDefault()
+                              const inputs = document.querySelectorAll(".score-input input")
+
+                              const inputsArray = Array.from(inputs)
+                              const currentIndex = inputsArray.indexOf(e.target as Element)
+
+                              if (e.key === "ArrowUp" && currentIndex > 0) {
+                                ;(inputsArray[currentIndex - 1] as HTMLInputElement).focus()
+                              } else if (
+                                e.key === "ArrowDown" &&
+                                currentIndex < inputsArray.length - 1
+                              ) {
+                                ;(inputsArray[currentIndex + 1] as HTMLInputElement).focus()
+                              }
+                            }
                           }}
                         />
                       </Form.Item>

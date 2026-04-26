@@ -3,6 +3,7 @@ import Select from "@components/commons/select"
 import Table from "@components/commons/table"
 import TableCollapse from "@components/commons/tableCollapse"
 import { ExportDiplomaAppendix } from "@components/ui/export-button"
+import useSpinner from "@hooks/spinner"
 import DefaultLayout from "@layouts/default-layout"
 import { buildOrgTree, formatDateVN } from "@lib/utils"
 import type { Semester, Student } from "@workspace/db"
@@ -29,13 +30,15 @@ import {
   useFindManyTrainingCourse,
   useFindManyTrainingObjectType,
 } from "@workspace/db/hooks"
+import { exportGraduationRegisterMaster } from "@workspace/libs/api/training"
 import { whereOrganization } from "@workspace/libs/constants"
 import { exportFromTemplate, TableRow } from "@workspace/libs/template-excel"
 import { fuzzyMatch, getMinioUrl } from "@workspace/libs/utils"
 import { useTrainingObjectTypeStore } from "@workspace/ui"
-import { Button, DatePicker, Form, Input, notification, TreeSelect } from "antd"
+import { Button, DatePicker, Form, Input, message, notification, TreeSelect } from "antd"
 import { useWatch } from "antd/es/form/Form"
 import dayjs from "dayjs"
+import { saveAs } from "file-saver"
 import type React from "react"
 import { useEffect, useMemo, useState } from "react"
 
@@ -57,6 +60,7 @@ type TTrainingCourse = TrainingCourse & {
       name: string
     } | null
   } | null
+  semesterStart?: Semester | null
 }
 
 type TFixedClass = {
@@ -146,6 +150,7 @@ export type StudentGradeSystemForm = {
 
 export default function StudentGradeSystem() {
   const [form] = Form.useForm<StudentGradeSystemForm>()
+  const { showSpinner, hideSpinner } = useSpinner()
   const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
   const trainingCourseIds: string[] = useWatch("trainingCourseIds", form)
   const fixedClassIds: string[] = useWatch("fixedClassIds", form)
@@ -1152,181 +1157,33 @@ export default function StudentGradeSystem() {
     })
   }
 
-  const handleExportSoGocCapPhatVanBang = () => {
-    console.log("students", students)
-
-    if (!students?.length) {
-      notification.info({ message: "Không có dữ liệu để xuất!" })
+  const handleExportSoGocCapPhatVanBang = async () => {
+    if (!trainingObjectTypeId) {
+      message.warning("Vui lòng chọn loại đối tượng đào tạo")
       return
     }
-    const { date } = form.getFieldsValue()
-    let selectedDate = dayjs(date)
-    if (!selectedDate.isValid()) {
-      selectedDate = dayjs()
+
+    const payload = {
+      trainingObjectTypeId,
+      trainingCourseIds: trainingCourseIds,
+      fixedClassIds: fixedClassIds,
+      thesisSessionIds: thesisSessionIds,
+      managementOrganizationIds: managementOrganizationIds,
+      printDate: new Date().toISOString(),
     }
 
-    const courseNames =
-      trainingCourseData
-        ?.filter((e) => trainingCourseIds?.includes(e.id))
-        ?.map((e) => e.name)
-        ?.join(", ") || ""
+    try {
+      showSpinner()
+      const res = await exportGraduationRegisterMaster(payload)
 
-    const sessionNames =
-      thesisSessionData
-        ?.filter((e) => thesisSessionIds?.includes(e.id))
-        ?.map((e) => e.name)
-        ?.join(", ") || ""
-
-    const firstStudent = students[0]
-    const trainingForm =
-      firstStudent?.fixedClass?.trainingCourse?.trainingObjectType?.trainingForm?.name || ""
-    const graduationDecision = firstStudent?.graduationDecision?.code || ""
-
-    const tableRows = students.map((student, index) => {
-      const gD = student.graduationDecision
-      const tR = student.thesisRegistrations?.[0]
-      const user = student.userProfile
-
-      const subjectScores = student.subjectClassStudent || []
-      const totalCredits = subjectScores.reduce(
-        (acc, item) => acc + (item.subjectVersion?.credit || 0),
-        0
-      )
-      const totalPoints = subjectScores.reduce(
-        (acc, item) => acc + (Number(item.finalScore) || 0) * (item.subjectVersion?.credit || 0),
-        0
-      )
-      const gpa = totalCredits > 0 ? (totalPoints / totalCredits).toFixed(2) : ""
-
-      return {
-        cells: [
-          { value: index + 1, align: "center" as const },
-          { value: user?.fullname || "", wrapText: true },
-          {
-            value: user?.dateOfBirth ? formatDateVN(user.dateOfBirth) : "",
-            align: "center" as const,
-          },
-          { value: user?.idCardNumber || "", align: "center" as const },
-          {
-            value: student.fixedClass?.trainingCourse?.name || "",
-            align: "center" as const,
-          },
-          { value: user?.placeOfBirth || "", wrapText: true },
-          { value: user?.gender?.sTen || "", align: "center" as const },
-          { value: user?.ethnicity?.sTen || "", align: "center" as const },
-          { value: user?.nationality?.sTen || "", align: "center" as const },
-          { value: tR?.council?.code || "", wrapText: true },
-          {
-            value: tR?.council?.proposedDate ? formatDateVN(tR.council.proposedDate) : "",
-            align: "center" as const,
-          },
-          { value: gD?.code || "", wrapText: true },
-          {
-            value: gD?.decisionDate ? dayjs(gD.decisionDate).year() : "",
-            align: "center" as const,
-          },
-          {
-            value: student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || "",
-            wrapText: true,
-          },
-          { value: gD?.diplomaNumber || "", align: "center" as const },
-          { value: gD?.originalDiplomaNumber || "", align: "center" as const },
-          {
-            value: student.fixedClass?.managementOrganization?.sTen || "",
-            wrapText: true,
-          },
-          {
-            value: tR?.thesisProject?.defenseRecord?.finalScore
-              ? Number(tR.thesisProject.defenseRecord.finalScore)
-              : "",
-            align: "center" as const,
-          },
-          { value: gpa, align: "center" as const },
-        ],
+      if (res.status === 200) {
+        saveAs(res.data, "SoGocCapPhatVanBangCaoHoc.xlsx")
       }
-    })
-
-    const TOTAL_COLUMNS = 19
-    const SIGN_COL = 7
-
-    const gapRow: TableRow = {
-      cells: [{ value: null, colSpan: TOTAL_COLUMNS, border: false }],
+    } catch (error: any) {
+      message.error(error.message || "Đã xảy ra lỗi, vui lòng kiểm tra lại")
+    } finally {
+      hideSpinner()
     }
-
-    const dateSignatureRow: TableRow = {
-      cells: [
-        { value: null, colSpan: TOTAL_COLUMNS - SIGN_COL, border: false },
-        {
-          value: `Hà Nội, ngày ${selectedDate.date()} tháng ${
-            selectedDate.month() + 1
-          } năm ${selectedDate.year()}`,
-          colSpan: SIGN_COL,
-          align: "center" as const,
-          italic: true,
-          fontSize: 12,
-          border: false,
-        },
-      ],
-    }
-
-    const titleSignatureRow: TableRow = {
-      cells: [
-        { value: null, colSpan: TOTAL_COLUMNS - SIGN_COL, border: false },
-        {
-          value: "GIÁM ĐỐC",
-          colSpan: SIGN_COL,
-          align: "center" as const,
-          bold: true,
-          fontSize: 13,
-          border: false,
-        },
-      ],
-    }
-
-    const nameSignatureRow: TableRow = {
-      cells: [
-        { value: null, colSpan: TOTAL_COLUMNS - SIGN_COL, border: false },
-        {
-          value: "Trung tướng Lê Minh Thái",
-          colSpan: SIGN_COL,
-          align: "center" as const,
-          bold: true,
-          fontSize: 13,
-          border: false,
-        },
-      ],
-    }
-
-    exportFromTemplate({
-      templateUrl: getMinioUrl("/mta/template/SoGocCapPhatVanBangCaoHoc.xlsx"),
-      sheets: [
-        {
-          sheet: "SoGoc",
-          data: {
-            khoa: courseNames,
-            dot_xet: sessionNames,
-            hinh_thuc_dao_tao: trainingForm,
-            so_van_ban: graduationDecision,
-            ngay_in: formatDateVN(selectedDate.toDate()),
-          },
-          tableStartCell: { row: 11, col: 1 },
-          rows: [
-            ...tableRows,
-            gapRow,
-            dateSignatureRow,
-            titleSignatureRow,
-            ...Array.from({ length: 5 }, () => ({
-              cells: [{ value: null, colSpan: TOTAL_COLUMNS, border: false }],
-            })),
-            nameSignatureRow,
-          ],
-        },
-      ],
-      fileName: "SoGocCapPhatVanBang.xlsx",
-      fontFamily: "Times New Roman",
-      fontSize: 11,
-      mergeSheetsToOne: false,
-    })
   }
 
   const handleExportPhoiBangCaoHoc = () => {
@@ -1387,9 +1244,114 @@ export default function StudentGradeSystem() {
     })
   }
 
+  const handleExportPhoiBangNganHan = () => {
+    if (!students?.length) {
+      notification.info({ message: "Không có dữ liệu để xuất!" })
+      return
+    }
+
+    const MONTH_EN = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ]
+
+    const allSheetOptions = students.map((student) => {
+      const user = student.userProfile
+      const major = (student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor || {}) as any
+      const gD = student.graduationDecision
+      const course = student.fixedClass?.trainingCourse as any
+
+      const dob = dayjs(user?.dateOfBirth)
+      const formDate = form.getFieldValue("date")
+      const printDate = formDate ? dayjs(formDate) : dayjs()
+
+      const startDate = course?.semesterStart?.startDate
+        ? dayjs(course.semesterStart.startDate)
+        : dayjs(student.fixedClass?.createdAt)
+      const endDate = course?.semesterStart?.endDate
+        ? dayjs(course.semesterStart.endDate)
+        : gD?.decisionDate
+          ? dayjs(gD.decisionDate)
+          : dayjs()
+
+      const subjectScores = student.subjectClassStudent || []
+      const totalCredits = subjectScores.reduce(
+        (acc, item) => acc + (item.subjectVersion?.credit || 0),
+        0
+      )
+      const totalPoints = subjectScores.reduce(
+        (acc, item) => acc + (Number(item.finalScore) || 0) * (item.subjectVersion?.credit || 0),
+        0
+      )
+      const gpa = totalCredits > 0 ? totalPoints / totalCredits : 0
+
+      const scoreConverts = student.fixedClass?.trainingCourse?.scoreConverts || []
+      const xepLoaiVi = getScoreClassification(gpa, scoreConverts)
+
+      const classificationMappingEn: Record<string, string> = {
+        "Xuất sắc": "Excellent",
+        Giỏi: "Very Good",
+        Khá: "Good",
+        "Trung bình khá": "Fairly Good",
+        "Trung bình": "Average",
+        Yếu: "Poor",
+      }
+      const xepLoaiEn = classificationMappingEn[xepLoaiVi] || ""
+
+      return {
+        sheet: `${user?.code} - ${user?.fullname}`,
+        data: {
+          ho_te_en: user?.fullname?.toUpperCase() || "",
+          ho_ten_vi: user?.fullname?.toUpperCase() || "",
+          ngay_sinh_vi: dob.isValid() ? dob.format("DD/MM/YYYY") : "",
+          ngay_sinh_en: dob.isValid() ? `${dob.date()} ${MONTH_EN[dob.month()]} ${dob.year()}` : "",
+
+          ngay_bat_dau_vi: startDate?.isValid() ? startDate.format("DD/MM/YYYY") : "",
+          ngay_bat_dau_en: startDate?.isValid()
+            ? `${startDate.date()} ${MONTH_EN[startDate.month()]} ${startDate.year()}`
+            : "",
+
+          ngay_ket_thuc_vi: endDate?.isValid() ? endDate.format("DD/MM/YYYY") : "",
+          ngay_ket_thuc_en: endDate?.isValid()
+            ? `${endDate.date()} ${MONTH_EN[endDate.month()]} ${endDate.year()}`
+            : "",
+
+          hoc_luc_vi: xepLoaiVi,
+          hoc_luc_en: xepLoaiEn,
+
+          so_quyet_dinh: gD?.code || "",
+
+          ngay_in_vi: printDate.isValid()
+            ? `Ngày ${printDate.date()} tháng ${printDate.month() + 1} năm ${printDate.year()}`
+            : "",
+          ngay_in_en: printDate.isValid()
+            ? `${MONTH_EN[printDate.month()]} ${printDate.date()}, ${printDate.year()}`
+            : "",
+        },
+      }
+    })
+
+    exportFromTemplate({
+      templateUrl: getMinioUrl("/mta/template/PhoiBangNganHan.xlsx"),
+      sheets: allSheetOptions,
+      fileName: "PhoiBangNganHan.xlsx",
+      mergeSheetsToOne: true,
+    })
+  }
+
   const subjects: {
     daiHoc: { id: number; name: string; onClick?: () => void }[]
-    nganHan: { id: number; name: string }[]
+    nganHan: { id: number; name: string; onClick?: () => void }[]
     caoHoc: { id: number; name: string; onClick?: () => void }[]
   } = {
     daiHoc: [
@@ -1400,7 +1362,11 @@ export default function StudentGradeSystem() {
     ],
     nganHan: [
       { id: 5, name: "Bảng điểm ngắn hạn SDH" },
-      { id: 6, name: "In phôi bảng ngắn hạn SDH (Anh)" },
+      {
+        id: 6,
+        name: "In phôi bảng ngắn hạn SDH (Anh)",
+        onClick: handleExportPhoiBangNganHan,
+      },
       { id: 7, name: "In phôi bảng ngắn/DÀI hạn SDH (Mỹ)" },
       { id: 8, name: "In quyết định tốt nghiệp ngắn hạn (ĐẠI HÀN) SDH" },
       { id: 9, name: "Bảng điểm ĐẠI HÀN SDH (2 cột)" },
@@ -1414,7 +1380,11 @@ export default function StudentGradeSystem() {
       { id: 17, name: "Quyết định công nhận tốt nghiệp" },
       { id: 18, name: "In PL văn bằng CAO HỌC (2 cột)" },
       { id: 19, name: "In PL văn bằng CAO HỌC (1 cột)" },
-      { id: 20, name: "In phôi bảng CAO HỌC", onClick: handleExportPhoiBangCaoHoc },
+      {
+        id: 20,
+        name: "In phôi bảng CAO HỌC",
+        onClick: handleExportPhoiBangCaoHoc,
+      },
       {
         id: 21,
         name: "Sổ gốc cấp phát văn bằng",
@@ -1648,6 +1618,7 @@ export default function StudentGradeSystem() {
             {subjects.nganHan.map((subject, index) => (
               <Button
                 key={index}
+                onClick={subject?.onClick}
                 type="primary"
                 className="h-auto py-2 px-3 text-xs justify-start text-white"
               >
