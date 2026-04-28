@@ -1244,7 +1244,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
 
   const handleExportExcelFromTemplate = async () => {
     if (!selectedPrintTemplateId) {
-      message.warning("Vui lòng chọn mẫu in trước khi xuất excel.")
+      message.warning("Vui lòng chọn mẫu in trước khi xuất file.")
       return
     }
 
@@ -1257,7 +1257,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
     if (selected.needSign) {
       const thesisSessionId = searchParams.thesisSessionId?.trim()
       if (!thesisSessionId) {
-        message.warning("Vui lòng chọn đợt xét trước khi xuất Excel.")
+        message.warning("Vui lòng chọn đợt xét trước khi xuất file.")
         return
       }
       const session = thesisSessionData?.find((s) => s.id === thesisSessionId)
@@ -1572,7 +1572,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       onClick={handleExportExcelFromTemplate}
                       disabled={!selectedPrintTemplateId}
                     >
-                      Xuất Excel
+                      Xuất file
                     </Button>
                   )}
                   <Form.Item
