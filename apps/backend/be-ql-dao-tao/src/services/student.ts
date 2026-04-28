@@ -368,8 +368,8 @@ export async function _generateStudentImportTemplate(
         select: { code: true, name: true },
         orderBy: { name: "asc" },
       }),
-      prisma.curriculum.findMany({
-        where: { trainingObjectTypeId, deletedAt: null },
+      prisma.curriculumVersion.findMany({
+        where: {trainingObjectTypeId, active: true, deletedAt: null },
         select: { name: true },
         orderBy: { name: "asc" },
       }),
