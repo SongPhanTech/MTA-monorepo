@@ -8,6 +8,7 @@ import { getMinioUrl } from "@workspace/libs/utils"
 import { dayjs } from "@workspace/ui"
 import { toRoman } from "./romans"
 import { getSupervisorName } from "../pages/quan-ly-luan-van/dm-luan-van/index"
+import { docxTemplate } from "./docx-template"
 interface ExportOptions {
   allStudentsInClasses: any[]
   showSpinner: () => void
@@ -1376,6 +1377,7 @@ export const exportSaoQDHDLV = async ({
           ngayQD: ngayQD,
           thangQD: thangQD,
           namQD: namQD,
+          type: type || "",
           khoa: student?.fixedClass?.trainingCourse?.name || "",
           dieu1: dieu1,
           dieu2: dieu2,
@@ -1394,22 +1396,35 @@ export const exportSaoQDHDLV = async ({
           data: data,
         }
       })
-    const payload: ExcelTemplateBody = {
-      head: { data: null },
-      tail: { data: null },
-      fileName: "BanSaoQDHuongDanLuanVan",
-      path: "BanSaoQDHuongDanLuanVan.xlsx",
-      payload: allSheetOptions?.filter((item) => item !== null) ?? [],
-      showGridLines: true,
-      wrapText: true,
+    // const payload: ExcelTemplateBody = {
+    //   head: { data: null },
+    //   tail: { data: null },
+    //   fileName: "BanSaoQDHuongDanLuanVan",
+    //   path: "BanSaoQDHuongDanLuanVan.xlsx",
+    //   payload: allSheetOptions?.filter((item) => item !== null) ?? [],
+    //   showGridLines: true,
+    //   wrapText: true,
+    // }
+    const validItems = allSheetOptions?.filter((item) => item !== null) ?? []
+    if (validItems.length === 0) {
+      message.error("Không có học viên hợp lệ để xuất")
+      return
     }
-    const response = await excelTemplate(payload)
+
+    const payload = {
+      fileName: "BanSaoQDHuongDanLuanVan.docx",
+      path: "BanSaoQDHuongDanLuanVan.docx",
+      data: {
+        items: validItems.map((item) => item!.data),
+      },
+    }
+    const response = await docxTemplate(payload)
     if (response.status !== 200) {
       message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
       return
     }
     const blob = response.data
-    downloadFile(blob, "BanSaoQDHuongDanLuanVan.xlsx")
+    downloadFile(blob, "BanSaoQDHuongDanLuanVan.docx")
     message.success("Xuất file thành công")
   } catch (error) {
     message.error("Vui lòng kiểm tra lại dữ liệu")
