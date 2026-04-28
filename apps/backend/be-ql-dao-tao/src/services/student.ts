@@ -355,17 +355,21 @@ export const exportStudentAcademicWarning = async ({
 }
 
 export async function _generateStudentImportTemplate(
-  _trainingObjectTypeId: string
+  trainingObjectTypeId: string
 ): Promise<ArrayBuffer> {
   const [fixedClasses, curricula, organizations, trainingMajors, trainingFields] =
     await Promise.all([
       prisma.fixedClass.findMany({
-        where: { active: true, deletedAt: null },
+        where: { active: true, trainingCourse: {
+          trainingObjectTypeId,
+          active: true,
+          deletedAt: null
+        }, deletedAt: null },
         select: { code: true, name: true },
         orderBy: { name: "asc" },
       }),
-      prisma.curriculum.findMany({
-        where: { deletedAt: null },
+      prisma.curriculumVersion.findMany({
+        where: {trainingObjectTypeId, active: true, deletedAt: null },
         select: { name: true },
         orderBy: { name: "asc" },
       }),
@@ -375,12 +379,30 @@ export async function _generateStudentImportTemplate(
         orderBy: { sTen: "asc" },
       }),
       prisma.trainingMajor.findMany({
-        where: { deletedAt: null },
+        where: { 
+          trainingObjectTypes: {
+            some: {
+              trainingObjectTypeId,
+              deletedAt: null,
+              active: true
+            }
+          }, 
+          deletedAt: null 
+        },
         select: { name: true },
         orderBy: { name: "asc" },
       }),
       prisma.trainingField.findMany({
-        where: { deletedAt: null },
+        where: { 
+          trainingObjectTypes: {
+            some: {
+              trainingObjectTypeId,
+              deletedAt: null,
+              active: true
+            }
+          }, 
+          deletedAt: null 
+        },
         select: { name: true },
         orderBy: { name: "asc" },
       }),
