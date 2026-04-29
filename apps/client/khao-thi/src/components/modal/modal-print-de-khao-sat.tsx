@@ -1,8 +1,8 @@
 import { PrinterOutlined } from "@ant-design/icons"
 import { useFindUniqueClusterSurvey } from "@workspace/db/hooks"
-import { Button, Col, Input, Modal, Row, Table } from "antd"
+import { Button, Col, Input, Modal, Radio, Row, Table } from "antd"
 import dayjs from "dayjs"
-import { useRef } from "react"
+import { useRef, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 import { useReactToPrint } from "react-to-print"
 
@@ -10,6 +10,7 @@ dayjs.locale("vi")
 
 const ModalPrintExamClusterSurvey = () => {
   const printRef = useRef<HTMLDivElement>(null)
+  const [selectedAnswers, setSelectedAnswers] = useState<Record<string, string>>({})
   const { isOpen, onClose, input } = useDisclosure<{
     id: string
   }>({
@@ -22,7 +23,11 @@ const ModalPrintExamClusterSurvey = () => {
     },
     include: {
       surveyChoice: true,
-      surveyQuestion: true,
+      surveyQuestion: {
+        include: {
+          specificChoice: true,
+        },
+      },
       surveys: true,
     },
   })
@@ -141,6 +146,7 @@ const ModalPrintExamClusterSurvey = () => {
               <Table
                 rowKey="id"
                 dataSource={[{ id: "abc" }]}
+                className="custom-red-table"
                 columns={data.surveyChoice.map((i) => {
                   return {
                     title: `${i?.description} ${i?.requireExplanation === true ? "*" : ""}`,
@@ -164,6 +170,7 @@ const ModalPrintExamClusterSurvey = () => {
               <Table
                 rowKey="id"
                 dataSource={data?.surveyQuestion || []}
+                className="custom-red-table"
                 pagination={false}
                 columns={[
                   {
@@ -176,7 +183,40 @@ const ModalPrintExamClusterSurvey = () => {
                     title: "Nội dung phản hồi",
                     dataIndex: "content",
                     render: (_, record) => {
-                      return (
+                      const isSpecificSingleChoice =
+                        record?.type === "SINGLE_CHOICE" && record?.specificChoice?.length > 0
+                      const isEssay = record?.type === "ESSAY"
+
+                      return isSpecificSingleChoice || isEssay ? (
+                        <div>
+                          <div
+                            dangerouslySetInnerHTML={{
+                              __html: record?.name,
+                            }}
+                          />
+
+                          {isSpecificSingleChoice ? (
+                            <Radio.Group
+                              className="w-full gap-x-2 flex"
+                              value={selectedAnswers[record?.id]}
+                              onChange={(e) =>
+                                setSelectedAnswers((prev) => ({
+                                  ...prev,
+                                  [record?.id]: e.target.value,
+                                }))
+                              }
+                            >
+                              {data?.surveyChoice.map((choice, index: number) => (
+                                <Radio key={choice?.id} value={choice?.id} className="relative">
+                                  {record?.specificChoice[index]?.description}
+                                </Radio>
+                              ))}
+                            </Radio.Group>
+                          ) : (
+                            <Input.TextArea placeholder="Nhập câu trả lời" />
+                          )}
+                        </div>
+                      ) : (
                         <div
                           dangerouslySetInnerHTML={{
                             __html: record?.name,
@@ -184,27 +224,44 @@ const ModalPrintExamClusterSurvey = () => {
                         />
                       )
                     },
+                    onCell: (record: any) => ({
+                      colSpan:
+                        record?.type === "ESSAY" ||
+                        (record?.type === "SINGLE_CHOICE" && record?.specificChoice?.length > 0)
+                          ? 2
+                          : 1,
+                    }),
                   },
                   {
                     title: "Mức phản hồi",
                     dataIndex: "level",
                     width: 200,
                     align: "center",
+                    onCell: (record: any) => ({
+                      colSpan:
+                        record?.type === "ESSAY" ||
+                        (record?.type === "SINGLE_CHOICE" && record?.specificChoice?.length > 0)
+                          ? 0
+                          : 1,
+                    }),
                     render: (_, record) => {
-                      return record?.type === "SINGLE_CHOICE" ? (
-                        <div className="w-full flex items-center justify-center gap-x-2">
-                          {data?.surveyChoice.map((i) => {
-                            return (
-                              <div className="flex items-center justify-center">
-                                <Button className="flex items-center justify-center w-6 h-6 border-solid border-[1px] border-[#ed9e9e] text-[#ea1212] text-[12px]">
-                                  {i?.answer}
-                                </Button>
-                              </div>
-                            )
-                          })}
-                        </div>
-                      ) : (
-                        <Input.TextArea placeholder="Nhập câu trả lời" />
+                      return (
+                        <Radio.Group
+                          className="w-full gap-x-2 flex"
+                          value={selectedAnswers[record?.id]}
+                          onChange={(e) =>
+                            setSelectedAnswers((prev) => ({
+                              ...prev,
+                              [record?.id]: e.target.value,
+                            }))
+                          }
+                        >
+                          {data?.surveyChoice.map((i) => (
+                            <Radio.Button key={i?.id} value={i?.id}>
+                              {i?.answer}
+                            </Radio.Button>
+                          ))}
+                        </Radio.Group>
                       )
                     },
                   },
@@ -217,6 +274,88 @@ const ModalPrintExamClusterSurvey = () => {
       </div>
       <style>
         {`
+                    .custom-red-table .ant-table-thead > tr > th {
+                        background: #fff !important;
+                        border: 0.5px solid red !important;
+                    }
+
+                    .custom-red-table .ant-table,
+                    .custom-red-table .ant-table-container,
+                    .custom-red-table .ant-table-content table,
+                    .custom-red-table .ant-table-cell {
+                        border: 0.5px solid red !important;
+                    }
+
+                    .custom-red-table .ant-radio-inner {
+                        border: 0.5px solid red !important;
+                        background: white !important;
+                        box-shadow: none !important;
+                    }
+
+                    .custom-red-table .ant-radio-checked .ant-radio-inner {
+                        border-color: red !important;
+                        background: white !important;
+                    }
+
+                    .custom-red-table .ant-radio-checked .ant-radio-inner::after {
+                        background: red !important;
+                        transform: scale(1) !important;
+                    }
+
+                    .custom-red-table .ant-radio-wrapper:hover .ant-radio-inner,
+                    .custom-red-table .ant-radio-input:focus + .ant-radio-inner {
+                        border-color: red !important;
+                        box-shadow: none !important;
+                    }
+
+                    .custom-red-table .ant-radio-input:focus {
+                        outline: none !important;
+                    }
+
+                    .custom-red-table .ant-radio-button-wrapper {
+                        border: 0.5px solid red !important;
+                        color: red !important;
+                        background: #fff !important;
+                        border-radius: 6px;
+                        margin-right: 8px;
+                        line-height: 22px;
+                        height: 24px;
+                        min-width: 32px;
+                        text-align: center;
+                        padding-inline: 6px;
+                    }
+
+                    .custom-red-table .ant-radio-button-wrapper::before {
+                        display: none !important;
+                    }
+
+                    .custom-red-table .ant-radio-button-wrapper-checked {
+                        background: red !important;
+                        border-color: red !important;
+                        color: #fff !important;
+                        box-shadow: none !important;
+                    }
+
+                    .custom-red-table .ant-radio-button-wrapper-checked:hover {
+                        background: red !important;
+                        border-color: red !important;
+                        color: #fff !important;
+                    }
+
+                    .custom-red-table textarea,
+                    .custom-red-table .ant-input {
+                        border: 0.5px solid red !important;
+                        box-shadow: none !important;
+                    }
+
+                    .custom-red-table textarea:focus,
+                    .custom-red-table .ant-input:focus,
+                    .custom-red-table .ant-input-focused {
+                        border: 0.5px solid red !important;
+                        box-shadow: none !important;
+                        outline: none !important;
+                    }
+
                     @media print {
                     .color-black {
                         color: #000 !important;
