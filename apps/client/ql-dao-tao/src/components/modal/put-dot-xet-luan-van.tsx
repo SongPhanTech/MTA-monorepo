@@ -126,6 +126,8 @@ const PutThesisSession = () => {
         startDate: output.startDate ? dayjs(output.startDate).toDate() : new Date(),
         trainingObjectTypeId: output.trainingObjectTypeId,
         trainingCourseId: output.trainingCourseId,
+        proposalReport: output.proposalReport?.trim() || undefined,
+        councilReport: output.councilReport?.trim() || undefined,
         decisionNumber: output.decisionNumber,
         decisionMaker,
         decisionDate: output.decisionDate ? dayjs(output.decisionDate).toDate() : new Date(),
@@ -236,6 +238,16 @@ const PutThesisSession = () => {
             }}
             placeholder="Chọn ngày kết thúc"
           />
+        </FormItem>
+      </Col>
+      <Col span={12}>
+        <FormItem form={form} name="proposalReport" label="Tờ trình đề tài">
+          <Input placeholder="Nhập tờ trình đề tài" />
+        </FormItem>
+      </Col>
+      <Col span={12}>
+        <FormItem form={form} name="councilReport" label="Tờ trình hội đồng">
+          <Input placeholder="Nhập tờ trình hội đồng" />
         </FormItem>
       </Col>
       <Col span={24}>
