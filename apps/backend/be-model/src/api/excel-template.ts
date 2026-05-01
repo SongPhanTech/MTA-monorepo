@@ -56,8 +56,6 @@ app.openapi(
                   description: "Có tự động xuống dòng trong ô hay không",
                   default: true,
                 }),
-                orientation: z.enum(["portrait", "landscape"]).optional(),
-                horizontalCentered: z.boolean().optional(),
               })
               .superRefine((data, ctx) => {
                 const hasPayload = Array.isArray(data.payload) && data.payload.length > 0
@@ -151,8 +149,6 @@ app.openapi(
       wrapText = false,
       head,
       tail,
-      orientation,
-      horizontalCentered,
     } = c.req.valid("json")
     const res = await fetch(getMinioUrl(`/mta/template/${path}`))
     const buffer = await res.arrayBuffer()
@@ -279,6 +275,57 @@ app.openapi(
       return currentRowInCopy
     }
 
+    /** Giữ margin, scale, fit-to-page, khổ giấy, v.v. từ sheet template (không copy printArea — layout sheet gộp khác template). */
+    const applyTemplatePageSetup = (
+      source: ExcelJS.Worksheet | undefined,
+      target: ExcelJS.Worksheet
+    ) => {
+      if (!source) return
+      const src = source.pageSetup
+      if (!src) return
+      const dst = target.pageSetup
+
+      if (src.margins) {
+        dst.margins = { ...dst.margins, ...src.margins }
+      }
+
+      const pageSetupKeys: (keyof ExcelJS.PageSetup)[] = [
+        "orientation",
+        "horizontalDpi",
+        "verticalDpi",
+        "fitToPage",
+        "fitToWidth",
+        "fitToHeight",
+        "scale",
+        "pageOrder",
+        "blackAndWhite",
+        "draft",
+        "cellComments",
+        "errors",
+        "paperSize",
+        "showRowColHeaders",
+        "showGridLines",
+        "firstPageNumber",
+        "horizontalCentered",
+        "verticalCentered",
+        "printTitlesRow",
+        "printTitlesColumn",
+      ]
+      for (const key of pageSetupKeys) {
+        const value = src[key]
+        if (value !== undefined && value !== null) {
+          ;(dst as Record<string, unknown>)[key as string] = value
+        }
+      }
+
+      if (source.headerFooter) {
+        target.headerFooter = {
+          ...target.headerFooter,
+          ...source.headerFooter,
+        }
+      }
+    }
+
     const applySheetConfig = async (
       targetSheet: ExcelJS.Worksheet,
       payloadItems: z.infer<typeof payloadItemSchema>[]
@@ -340,17 +387,11 @@ app.openapi(
       const lastDataRow = getLastUsedDataRow(targetSheet)
       const maxColumn = Math.max(targetSheet.columnCount, 1)
       const maxColumnLetter = toColumnLetter(maxColumn)
-      const applyPrintDefaults = () => {
-        targetSheet.pageSetup.paperSize = 9
-        targetSheet.pageSetup.fitToPage = false
-        targetSheet.pageSetup.scale = 100
-        if (orientation) {
-          targetSheet.pageSetup.orientation = orientation
-        }
-        if (horizontalCentered !== undefined) {
-          targetSheet.pageSetup.horizontalCentered = horizontalCentered
-        }
-      }
+
+      const templatePageSource =
+        generatedSheets[0]?.worksheet ?? headSheet ?? tailSheet
+      applyTemplatePageSetup(templatePageSource, targetSheet)
+
       if (finalMarkerRows.length > 0) {
         const uniqueBreakRows = [...new Set(finalMarkerRows)].sort((a, b) => a - b)
         for (const markerRow of uniqueBreakRows) {
@@ -359,7 +400,6 @@ app.openapi(
           targetSheet.getRow(markerRow - 1).addPageBreak()
         }
         targetSheet.pageSetup.printArea = `A1:${maxColumnLetter}${lastDataRow}`
-        applyPrintDefaults()
       }
     }
 
