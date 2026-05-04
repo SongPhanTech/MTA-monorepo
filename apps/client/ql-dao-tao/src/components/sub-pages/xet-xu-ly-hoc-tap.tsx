@@ -179,8 +179,6 @@ const XetXuLyHocTap = ({ semesterId, trainingObjectTypeId, actionTaken }: XetXuL
       actionTaken,
       ...where,
     },
-    take: numberOfPages,
-    skip: (currentPage - 1) * numberOfPages,
   })
 
   const { mutateAsync: deleteStudentAcademicDecision } = useDeleteStudentAcademicDecision()
@@ -238,17 +236,46 @@ const XetXuLyHocTap = ({ semesterId, trainingObjectTypeId, actionTaken }: XetXuL
   }, [students])
 
   const filteredStudentData = useMemo(() => {
-    if (!data) return studentData
-
-    const studentIdsWithDecisions = new Set(data.map((decision: any) => decision.studentId))
+    const studentIdsWithDecisions = data
+      ? new Set(data.map((decision: any) => decision.studentId))
+      : new Set()
 
     return studentData.map((record) => ({
       ...record,
       students: (record.students || []).filter(
-        (student: any) => !studentIdsWithDecisions.has(student.id)
+        (student: any) =>
+          !studentIdsWithDecisions.has(student.id) && !!student.studentSemesterResult // Chỉ lấy những sinh viên có kết quả học tập trong học kỳ này
       ),
     }))
   }, [studentData, data])
+
+  const { pagedStudentData, totalStudentsCount } = useMemo(() => {
+    const allStudents = filteredStudentData.flatMap((group) =>
+      (group.students || []).map((student: any) => ({
+        ...student,
+        _parent: group,
+      }))
+    )
+
+    const total = allStudents.length
+    const start = (currentPage - 1) * numberOfPages
+    const end = start + numberOfPages
+    const slicedStudents = allStudents.slice(start, end)
+
+    const groupsMap = new Map<string, any>()
+    for (const student of slicedStudents) {
+      const parent = student._parent
+      if (!groupsMap.has(parent.courseId)) {
+        groupsMap.set(parent.courseId, { ...parent, students: [] })
+      }
+      groupsMap.get(parent.courseId).students.push(student)
+    }
+
+    return {
+      pagedStudentData: Array.from(groupsMap.values()),
+      totalStudentsCount: total,
+    }
+  }, [filteredStudentData, currentPage, numberOfPages])
 
   const updateSelectedStudents = useMemo(() => {
     return (keys: React.Key[]) => {
@@ -574,7 +601,7 @@ const XetXuLyHocTap = ({ semesterId, trainingObjectTypeId, actionTaken }: XetXuL
                   }
                 },
                 showTotal: (total, range) =>
-                  `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
+                  `${range[0]} - ${range[1]} trong tổng số ${total} sinh viên`,
               }}
             />
           </Col>
@@ -607,7 +634,7 @@ const XetXuLyHocTap = ({ semesterId, trainingObjectTypeId, actionTaken }: XetXuL
           </Col>
           <Col span={24}>
             <TableCollapse
-              rowKey="id"
+              rowKey="courseId"
               headerTitleKey="courseName"
               childrenFieldName="students"
               defaultExpandAll
@@ -693,14 +720,11 @@ const XetXuLyHocTap = ({ semesterId, trainingObjectTypeId, actionTaken }: XetXuL
                   },
                 },
               ]}
-              data={filteredStudentData}
+              data={pagedStudentData}
               pagination={{
                 current: currentPage,
                 pageSize: numberOfPages,
-                total: filteredStudentData.reduce(
-                  (acc: number, course: any) => acc + (course.students?.length || 0),
-                  0
-                ),
+                total: totalStudentsCount,
                 onChange: (page, pageSize) => {
                   if (numberOfPages === pageSize) {
                     setCurrentPage(page)
@@ -709,6 +733,8 @@ const XetXuLyHocTap = ({ semesterId, trainingObjectTypeId, actionTaken }: XetXuL
                     setNumberOfPages(pageSize)
                   }
                 },
+                showTotal: (total, range) =>
+                  `${range[0]} - ${range[1]} trong tổng số ${total} sinh viên`,
               }}
             />
           </Col>
