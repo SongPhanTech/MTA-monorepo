@@ -242,9 +242,10 @@ const PutCurriculumVersion = () => {
         learningDiagram: output.learningDiagram,
         guide: output.guide,
         type:
-          output.type || input?.isFramework
+          output.type ||
+          (input?.isFramework
             ? CurriculumVersionType.FRAMEWORK
-            : CurriculumVersionType.FULL_COURSE,
+            : CurriculumVersionType.FULL_COURSE),
       }
 
       if (input?.versionId) {
