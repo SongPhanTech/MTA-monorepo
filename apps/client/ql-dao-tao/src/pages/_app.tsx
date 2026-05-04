@@ -86,7 +86,7 @@ function App({ Component, pageProps }: AppProps) {
           onLoaderFinished={onRouteDone}
         />
         <Head>
-          <title>Học viện khoa học quân sự</title>
+          <title>Học viện kỹ thuật quân sự</title>
         </Head>
         <ConfigProvider theme={lightThemeCustom}>
           <QueryClientProvider client={queryClient}>
