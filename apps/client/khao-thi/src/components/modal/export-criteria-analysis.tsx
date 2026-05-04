@@ -335,6 +335,51 @@ const ExportCriteriaAnalysis = ({
     })
   }
 
+  const createSignatureSection = (): any[] => {
+    const noBorder = { style: BorderStyle.NONE, size: 0, color: "FFFFFF" }
+    const noBorders = { top: noBorder, bottom: noBorder, left: noBorder, right: noBorder }
+    const sigCell = (text: string, opts: { bold?: boolean; italics?: boolean } = {}) =>
+      new Paragraph({
+        alignment: AlignmentType.CENTER,
+        children: [new TextRun({ text, size: SIZE_BODY, bold: opts.bold, italics: opts.italics })],
+      })
+
+    return [
+      new Paragraph({ children: [new TextRun({ text: "" })] }),
+      new Table({
+        width: { size: 100, type: WidthType.PERCENTAGE },
+        borders: {
+          top: noBorder,
+          bottom: noBorder,
+          left: noBorder,
+          right: noBorder,
+          insideHorizontal: noBorder,
+          insideVertical: noBorder,
+        },
+        rows: [
+          new TableRow({
+            children: [
+              new TableCell({
+                borders: noBorders,
+                width: { size: 50, type: WidthType.PERCENTAGE },
+                children: [new Paragraph({ children: [new TextRun({ text: "" })] })],
+              }),
+              new TableCell({
+                borders: noBorders,
+                width: { size: 50, type: WidthType.PERCENTAGE },
+                children: [
+                  sigCell("......., ngày ...... tháng ...... năm 20......", { italics: true }),
+                  sigCell("TRƯỞNG NHÓM CÔNG TÁC", { bold: true }),
+                  sigCell("(Ký, ghi rõ họ tên)", { italics: true }),
+                ],
+              }),
+            ],
+          }),
+        ],
+      }),
+    ]
+  }
+
   const generateStandardSection = (stdData: DataTabType, stdIdx: number): any[] => {
     const { evidenceMap, evidenceList } = calcEvidenceTags(stdData, stdIdx)
     const standardOrder = stdData.order || stdIdx
@@ -375,15 +420,18 @@ const ExportCriteriaAnalysis = ({
         }),
         new Paragraph({
           children: [
-            new TextRun({ text: "Tiêu chuẩn: ", size: SIZE_BODY, bold: true }),
-            new TextRun({ text: `${standardOrder}: ${stdData.name || ""}`, size: SIZE_BODY }),
+            new TextRun({ text: "Tiêu chuẩn ", size: SIZE_BODY, bold: true }),
+            new TextRun({
+              text: `${standardOrder}: ${(stdData.name || "").replace(/^Tiêu chuẩn\s+\d+[:.]\s*/i, "")}`,
+              size: SIZE_BODY,
+            }),
           ],
         }),
         new Paragraph({
           children: [
-            new TextRun({ text: "Tiêu chí: ", size: SIZE_BODY, bold: true, italics: true }),
+            new TextRun({ text: "Tiêu chí ", size: SIZE_BODY, bold: true, italics: true }),
             new TextRun({
-              text: `${standardOrder}.${criterion.order || cidx + 1}: ${criterion.name || ""}`,
+              text: `${standardOrder}.${criterion.order || cidx + 1}: ${(criterion.name || "").replace(/^Tiêu chí\s+[\d.]+[:.]\s*/i, "")}`,
               italics: true,
               size: SIZE_BODY,
             }),
@@ -413,6 +461,8 @@ const ExportCriteriaAnalysis = ({
           new Paragraph({ children: [new TextRun({ text: "" })] })
         )
       }
+
+      section.push(...createSignatureSection())
     }
 
     return section
