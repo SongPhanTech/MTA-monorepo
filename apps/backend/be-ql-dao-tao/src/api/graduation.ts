@@ -21,6 +21,7 @@ import { Automizer } from "pptx-automizer";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 dayjs.extend(customParseFormat);
+import ExcelJS from "exceljs";
 import XlsxTemplate from "xlsx-template";
 import { prisma } from "..";
 import { UploadExcelModel } from "../dto/upload-excel.dto";
@@ -1696,7 +1697,7 @@ app.openapi(exportGraduationRegisterMaster, async (c) => {
     }),
     prisma.thesisSession.findMany({
       where: { id: { in: thesisSessionIds || [] } },
-      select: { name: true },
+      select: { id: true, name: true },
     }),
     prisma.trainingObjectType.findUniqueOrThrow({
       where: { id: trainingObjectTypeId },
@@ -1705,92 +1706,12 @@ app.openapi(exportGraduationRegisterMaster, async (c) => {
   ]);
 
   const courseNames = courses.map((e) => e.name).join(", ");
-  const sessionNames = sessions.map((e) => e.name).join(", ");
   const trainingForm = trainingObjectType.trainingForm?.name || "";
   let selectedDate = printDate ? dayjs(printDate, "DD/MM/YYYY") : dayjs();
   if (!selectedDate.isValid()) {
     selectedDate = dayjs();
   }
   const ngayInText = `ngày ${selectedDate.date()} tháng ${selectedDate.month() + 1} năm ${selectedDate.year()}`;
-
-  const tableRows = students.map((student, index) => {
-    const gD = student.graduationDecision;
-    const tR = student.thesisRegistrations?.[0];
-    const user = student.userProfile;
-    const thesisSession = tR?.thesisProject?.thesisSession;
-
-    let calculatedTBC = 0;
-    if (student.subjectClassStudent && student.subjectClassStudent.length > 0) {
-      const bestScoreMap = new Map();
-      for (const record of student.subjectClassStudent) {
-        const newScore = record.manualFinalScore ?? (record.finalScore ? Number(record.finalScore) : null);
-        if (newScore === null) continue;
-        
-        const existing = bestScoreMap.get(record.subjectVersionId);
-        const isRetake = record.subjectClass?.type === "RETAKE" || record.subjectClass?.type === "REEXAM";
-        
-        if (!existing || newScore > existing.score || isRetake) {
-          bestScoreMap.set(record.subjectVersionId, { 
-            score: newScore, 
-            credit: record.subjectVersion?.credit || 0 
-          });
-        }
-      }
-
-      let totalScore = 0;
-      let totalCredit = 0;
-      for (const item of bestScoreMap.values()) {
-        totalScore += item.score * item.credit;
-        totalCredit += item.credit;
-      }
-      if (totalCredit > 0) {
-        calculatedTBC = totalScore / totalCredit;
-      }
-    }
-
-    const tbcFinal = gD?.finalGpa ? Number(gD.finalGpa).toFixed(2) : (calculatedTBC > 0 ? calculatedTBC.toFixed(2) : "");
-
-    return {
-      stt: index + 1,
-      hoTen: user?.fullname || "",
-      ngaySinh: user?.dateOfBirth
-        ? dayjs(user.dateOfBirth).format("DD/MM/YYYY")
-        : "",
-      soDinhDanh: user?.idCardNumber || "",
-      khoa: student.fixedClass?.trainingCourse?.name || "",
-      noiSinh: user?.placeOfBirth || "",
-      gioiTinh: user?.gender?.sTen || "",
-      danToc: user?.ethnicity?.sTen || "",
-      quocTich: user?.nationality?.sTen || "",
-      "quyetDinhHDDGLV/ĐATN": thesisSession?.defenseDecisionNumber || "",
-      ngayBaoVe: thesisSession?.startDate
-        ? dayjs(thesisSession.startDate).format("DD/MM/YYYY")
-        : "",
-      quyetDinhTotNghiep: gD?.code || "",
-      namTN: student.universityGraduationYear || "",
-      nganhDaoTao:
-        student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor
-          ?.trainingField?.name || "",
-      chuyenNganh:
-        student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor
-          ?.name || "",
-      soHieuVanBang: gD?.diplomaNumber || "",
-      soVaoSoGoc: gD?.originalDiplomaNumber || "",
-      coQuanDonVi:
-        student.fixedClass?.managementOrganization?.sTenVietTat || "",
-      diemLVDATN:
-        tR?.thesisProject?.defenseRecord?.finalScore?.toFixed(2) || "",
-      diemTBC: tbcFinal || "",
-      nguoiNhanVanBang: "",
-      ghiChu: "",
-    };
-  });
-
-  const buffer = await getTemplateBuffer(
-    prisma,
-    "SoGocCapPhatVanBangCaoHoc_v2.xlsx",
-  );
-  const template = new XlsxTemplate(buffer);
 
   let chucVi = "GIÁM ĐỐC";
   let nguoiKy = "Trung tướng Lê Minh Thái";
@@ -1805,23 +1726,172 @@ app.openapi(exportGraduationRegisterMaster, async (c) => {
     }
   }
 
-  template.substitute("PD", {
-    khoa: courseNames,
-    dot_xet: sessionNames,
-    hinh_thuc_dao_tao: trainingForm,
-    so_van_ban: students[0]?.graduationDecision?.code || "",
-    ngay_in: ngayInText,
-    chuc_vi: chucVi.toUpperCase(),
-    nguoi_ky: nguoiKy,
-    data: tableRows,
-  });
+  const calcTBC = (subjectClassStudent: typeof students[number]["subjectClassStudent"]) => {
+    if (!subjectClassStudent?.length) return 0;
+    const bestScoreMap = new Map<string, { score: number; credit: number }>();
+    for (const record of subjectClassStudent) {
+      const newScore = record.manualFinalScore ?? (record.finalScore ? Number(record.finalScore) : null);
+      if (newScore === null) continue;
+      const existing = bestScoreMap.get(record.subjectVersionId);
+      const isRetake = record.subjectClass?.type === "RETAKE" || record.subjectClass?.type === "REEXAM";
+      if (!existing || newScore > existing.score || isRetake) {
+        bestScoreMap.set(record.subjectVersionId, {
+          score: newScore,
+          credit: record.subjectVersion?.credit || 0,
+        });
+      }
+    }
+    let totalScore = 0;
+    let totalCredit = 0;
+    for (const item of bestScoreMap.values()) {
+      totalScore += item.score * item.credit;
+      totalCredit += item.credit;
+    }
+    return totalCredit > 0 ? totalScore / totalCredit : 0;
+  };
 
-  const result = template.generate({ type: "nodebuffer" }) as any;
+  const buildRow = (student: typeof students[number], index: number) => {
+    const gD = student.graduationDecision;
+    const tR = student.thesisRegistrations?.[0];
+    const user = student.userProfile;
+    const thesisSession = tR?.thesisProject?.thesisSession;
+    const calculatedTBC = calcTBC(student.subjectClassStudent);
+    const tbcFinal = gD?.finalGpa
+      ? Number(gD.finalGpa).toFixed(2)
+      : calculatedTBC > 0
+        ? calculatedTBC.toFixed(2)
+        : "";
+    return {
+      stt: index + 1,
+      hoTen: user?.fullname || "",
+      ngaySinh: user?.dateOfBirth ? dayjs(user.dateOfBirth).format("DD/MM/YYYY") : "",
+      soDinhDanh: user?.idCardNumber || "",
+      khoa: student.fixedClass?.trainingCourse?.name || "",
+      noiSinh: user?.placeOfBirth || "",
+      gioiTinh: user?.gender?.sTen || "",
+      danToc: user?.ethnicity?.sTen || "",
+      quyetDinhTuyenSinh: student?.fixedClass?.trainingCourse?.admissionDecision || "",
+      quocTich: user?.nationality?.sTen || "",
+      "quyetDinhHDDGLV/ĐATN": thesisSession?.defenseDecisionNumber || "",
+      ngayBaoVe: thesisSession?.startDate ? dayjs(thesisSession.startDate).format("DD/MM/YYYY") : "",
+      quyetDinhTotNghiep: gD?.code || "",
+      namTN: student.universityGraduationYear || "",
+      nganhDaoTao: student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.trainingField?.name || "",
+      chuyenNganh: student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || "",
+      soHieuVanBang: gD?.diplomaNumber || "",
+      soVaoSoGoc: gD?.originalDiplomaNumber || "",
+      coQuanDonVi: student.fixedClass?.managementOrganization?.sTenVietTat || "",
+      diemLVDATN: tR?.thesisProject?.defenseRecord?.finalScore?.toFixed(2) || "",
+      diemTBC: tbcFinal || "",
+      nguoiNhanVanBang: "",
+      ghiChu: "",
+    };
+  };
+
+  const renderSheet = async (
+    sessionName: string,
+    sessionStudents: typeof students,
+  ): Promise<Buffer> => {
+    const buf = await getTemplateBuffer(prisma, "SoGocCapPhatVanBangCaoHoc_v4.xlsx");
+    const tpl = new XlsxTemplate(buf);
+    const rows = sessionStudents.map((s, i) => buildRow(s, i));
+    tpl.substitute("PD", {
+      khoa: courseNames,
+      dot_xet: sessionName,
+      hinh_thuc_dao_tao: trainingForm,
+      so_van_ban: sessionStudents[0]?.graduationDecision?.code || "",
+      ngay_in: ngayInText,
+      chuc_vi: chucVi.toUpperCase(),
+      nguoi_ky: nguoiKy,
+      data: rows,
+    });
+    return tpl.generate({ type: "nodebuffer" }) as any;
+  };
+
+  let sessionGroups: { id: string; name: string; students: typeof students }[];
+
+  if (sessions.length > 0) {
+    const studentsBySession = new Map<string, typeof students>();
+    for (const session of sessions) {
+      studentsBySession.set(session.id, []);
+    }
+    for (const student of students) {
+      const sessionId = student.thesisRegistrations?.[0]?.thesisProject?.thesisSessionId;
+      if (sessionId && studentsBySession.has(sessionId)) {
+        studentsBySession.get(sessionId)!.push(student);
+      }
+    }
+    sessionGroups = sessions.map((s) => ({
+      id: s.id,
+      name: s.name,
+      students: studentsBySession.get(s.id) || [],
+    }));
+  } else {
+    sessionGroups = [{ id: "all", name: "Tất cả", students }];
+  }
+
+  const outputWorkbook = new ExcelJS.Workbook();
+
+  for (const group of sessionGroups) {
+    if (!group.students.length) continue;
+
+    const sheetBuffer = await renderSheet(group.name, group.students);
+
+    const tmpWorkbook = new ExcelJS.Workbook();
+    await tmpWorkbook.xlsx.load(sheetBuffer as any);
+
+    const sourceSheet = tmpWorkbook.getWorksheet("PD") ?? tmpWorkbook.worksheets[0];
+    if (!sourceSheet) continue;
+
+    const sheetName = group.name.substring(0, 31).replace(/[\\\?\*\/\[\]]/g, "");
+    const destSheet = outputWorkbook.addWorksheet(sheetName);
+
+    for (let i = 1; i <= sourceSheet.columnCount; i++) {
+      const srcCol = sourceSheet.getColumn(i);
+      const destCol = destSheet.getColumn(i);
+      if (srcCol.width) {
+        destCol.width = srcCol.width;
+      }
+    }
+
+    sourceSheet.eachRow({ includeEmpty: true }, (row, rowNumber) => {
+      const destRow = destSheet.getRow(rowNumber);
+      destRow.height = row.height;
+
+      row.eachCell({ includeEmpty: true }, (cell, colNumber) => {
+        const destCell = destRow.getCell(colNumber);
+
+        if (cell.master === cell) {
+          destCell.value = cell.value;
+        }
+
+        if (cell.style) {
+          destCell.style = JSON.parse(JSON.stringify(cell.style));
+        }
+      });
+    });
+
+    const merges = sourceSheet.model.merges || [];
+    merges.forEach((m) => {
+      try {
+        destSheet.mergeCells(m);
+      } catch (err) {
+      }
+    });
+
+    destSheet.pageSetup = JSON.parse(JSON.stringify(sourceSheet.pageSetup || {}));
+  }
+
+  if (outputWorkbook.worksheets.length === 0) {
+    return c.json({ message: "Không có dữ liệu sinh viên trong các đợt xét đã chọn" }, 404);
+  }
+
+  const result = await outputWorkbook.xlsx.writeBuffer();
 
   const fileName = "SoGocCapPhatVanBang.xlsx";
   const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`;
 
-  return c.body(result, 200, {
+  return c.body(result as any, 200, {
     "Content-Type":
       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     "Content-Disposition": disposition,
