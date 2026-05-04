@@ -1,7 +1,6 @@
 import CommentList from "@components/commons/comment-list"
 import { RichTextEditor } from "@components/commons/rich-text-editor"
 import ExportCriteriaEvaluation from "@components/modal/export-criteria-evaluation"
-import ViewMinhChungModal from "@components/modal/view-minh-chung-modal"
 import { getStatusConfig } from "@constants/constants"
 import useSpinner from "@hooks/spinner"
 import {
@@ -58,6 +57,7 @@ const CriteriaEvaluationSubPage = ({ data }: { data: DataTabEvaluationCriterionT
   const currentStatus =
     data?.criteria?.[0]?.evaluationCriterion?.status || $Enums.EvaluationStatus.LOCK
 
+  // Lưu đánh giá tiêu chí
   const handleSubmit = async () => {
     const dataSubmit = form.getFieldsValue()
 
@@ -91,6 +91,7 @@ const CriteriaEvaluationSubPage = ({ data }: { data: DataTabEvaluationCriterionT
         }
       )
     }
+
     try {
       showSpinner()
       const res = await sqlTransaction(listSqlTransaction)
@@ -110,7 +111,11 @@ const CriteriaEvaluationSubPage = ({ data }: { data: DataTabEvaluationCriterionT
     }
   }
 
-  const handleCriterionSubmit = async (criterionId: string) => {
+  // Nộp phiếu đánh giá tiêu chí — tự động lưu nội dung trước khi đổi trạng thái
+  const handleCriterionSubmit = async (criterionId: string, fieldIndex: number) => {
+    const allCriteria = form.getFieldValue("criteria")
+    const criterionData = allCriteria?.[fieldIndex]?.evaluationCriterion
+
     try {
       showSpinner()
       const res = await sqlTransaction([
@@ -119,7 +124,14 @@ const CriteriaEvaluationSubPage = ({ data }: { data: DataTabEvaluationCriterionT
           operation: "update",
           data: {
             where: { id: criterionId },
-            data: { status: $Enums.EvaluationStatus.SUBMITTED },
+            data: {
+              currentSituation: criterionData?.currentSituation || "",
+              strengths: criterionData?.strengths || "",
+              weakness: criterionData?.weakness || "",
+              actionPlan: criterionData?.actionPlan || "",
+              score: criterionData?.score || "",
+              status: $Enums.EvaluationStatus.SUBMITTED,
+            },
           },
         },
       ])
@@ -238,22 +250,9 @@ const CriteriaEvaluationSubPage = ({ data }: { data: DataTabEvaluationCriterionT
                         items={[
                           {
                             label: (
-                              <div
-                                className="flex flex-col w-full pr-2 gap-1"
-                                onClick={(e) => e.stopPropagation()}
-                              >
+                              <div className="flex flex-col w-full pr-2 gap-1">
                                 <div className="flex items-center justify-between gap-2">
-                                  <div
-                                    onClick={(e) => {
-                                      e.stopPropagation()
-                                      setActiveCollapseKeys((prev) =>
-                                        prev.includes(item.id)
-                                          ? prev.filter((k) => k !== item.id)
-                                          : [...prev, item.id]
-                                      )
-                                    }}
-                                    className="cursor-pointer flex-1"
-                                  >
+                                  <div className="cursor-pointer flex-1">
                                     {(() => {
                                       const colonIdx = item?.name?.indexOf(": ")
                                       if (colonIdx !== undefined && colonIdx !== -1) {
@@ -269,7 +268,10 @@ const CriteriaEvaluationSubPage = ({ data }: { data: DataTabEvaluationCriterionT
                                       return <span className="font-bold">{item?.name}</span>
                                     })()}
                                   </div>
-                                  <div className="flex gap-2 shrink-0">
+                                  <div
+                                    className="flex gap-2 shrink-0"
+                                    onClick={(e) => e.stopPropagation()}
+                                  >
                                     {item.evaluationCriterion && (
                                       <Badge
                                         count={
@@ -323,7 +325,8 @@ const CriteriaEvaluationSubPage = ({ data }: { data: DataTabEvaluationCriterionT
                                           size="small"
                                           onClick={() =>
                                             handleCriterionSubmit(
-                                              item.evaluationCriterion?.id ?? ""
+                                              item.evaluationCriterion?.id ?? "",
+                                              name
                                             )
                                           }
                                         >

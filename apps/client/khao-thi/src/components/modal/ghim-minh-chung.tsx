@@ -24,7 +24,7 @@ const PinEvidenceToPeriod = () => {
   })
 
   const { showSpinner, hideSpinner } = useSpinner()
-  const [items, setItems] = useState<ItemProps>({ value: "", label: "" })
+  const [items, setItems] = useState<ItemProps[]>([])
   const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
   const { data: me } = useSession()
   const idProfile = me?.sDM_NhanVienId
@@ -34,7 +34,9 @@ const PinEvidenceToPeriod = () => {
       showSpinner()
 
       if (input?.id) {
-        input.changeValue(items)
+        for (const item of items) {
+          input.changeValue(item)
+        }
       }
       onClose()
     } catch (error: any) {
@@ -104,8 +106,9 @@ const PinEvidenceToPeriod = () => {
       className="w-[700px]"
     >
       <Col span={24}>
-        <Form.Item name="evidences" label="Minh chứng" required>
+        <Form.Item name="evidences" label="Minh chứng">
           <Select
+            mode="multiple"
             placeholder="Chọn minh chứng"
             options={listEvidence?.map((i) => {
               return {
@@ -114,8 +117,11 @@ const PinEvidenceToPeriod = () => {
                 key: i.id,
               }
             })}
-            onChange={(value, option: any) => {
-              setItems(option)
+            onChange={(_value, option) => {
+              const opts = (Array.isArray(option) ? option : [option]).filter(
+                (o): o is ItemProps => !!o
+              )
+              setItems(opts)
             }}
           />
         </Form.Item>
