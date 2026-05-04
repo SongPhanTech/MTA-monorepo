@@ -2,12 +2,42 @@
 
 ## ✏️Tech stack
 
-Auth: Asgardeo, WSO2
+~~Auth: Asgardeo, WSO2~~
 Validation: Zod
 Database: PostgreSQL
 ORM: Prisma, Zenstack
-Backend: Hono, Bun, OpenTelemetry
+Backend: Hono, Bun
 Frontend: React, Nextjs, Tailwindcss, Antd, Tanstack Query
+
+## Cấu trúc Monorepo
+
+apps/ -> Các ứng dụng
+backend/ -> Các backend (Honojs, Bun)
+be-exchange/ -> Cung cấp API cho phân hệ Chỉ huy, Điều hành
+be-khao-thi/ -> API nghiệp vụ Khảo thí: import đề, khảo sát, tự đánh giá CTĐT,...
+be-model/ -> CRUD models, auth middleware, minio service,...
+be-portal/ -> Cung cấp API cho Cổng sinh viên(Đăng ký học, xem TKB, KQHT) (Triển khai internet)
+be-ql-dao-tao -> API nghiệp vụ đào tạo: Import SV, GV, CTĐT, tổng kết học kỳ, năm học, xét tốt nghiệp,...
+be-ql-dao-tao-shared -> API cho bên thứ 3 (sMTA - ứng dụng trên điện thoại cho SV)
+backup/ -> Source code service backup Postgres
+client/ -> Các client (Nextjs)
+dang-ky-hoc/ -> Cổng sinh viên (Triển khai internet)
+khao-thi/ -> Khảo thí
+ql-dao-tao/ -> Quản lý đào tạo
+ql-ho-so/ -> Quản lý hồ sơ
+tro-ly-ao/ -> Trợ lý ảo - Chatbot
+packages/
+auth/ -> Auth utils - fetch session, login, logout, register, JwtVerify, ...
+constant/ -> Common constants
+database/ -> Database schema, generated tanstack query hooks, prisma client...Somme script to seed data, fill score, delete training course data, ...
+libs/ -> Common libs - fetch wrapper, generated hooks from openapi (by orval), utils function, parse excel files, ...
+permissions/ -> Permissions utils for RBAC
+router/ -> Script to generate router paths from project folder structures, need to manual map route to permission.
+ui/ -> Common UI components
+pnpm-workspace.yaml
+package.json
+Makefile -> Contains commands for building and deploying the monorepo
+README.md
 
 ## ✏️Yêu cầu
 

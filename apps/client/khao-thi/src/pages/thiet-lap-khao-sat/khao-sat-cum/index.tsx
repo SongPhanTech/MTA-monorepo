@@ -47,6 +47,7 @@ export default function ClussterSurveyPage() {
             setSurvey={(value) => {
               setLecturer(value)
             }}
+            onNavigateToParticipants={() => setActiveKey("3")}
           />
         ),
         disabled: !selectedId,

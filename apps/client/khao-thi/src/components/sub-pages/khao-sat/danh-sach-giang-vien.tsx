@@ -3,29 +3,25 @@ import Table from "@components/commons/table"
 import type { FilterProps } from "@components/commons/typeFilter"
 import ExportLecturerInSurvey from "@components/modal/export-list-lecturer-in-survey"
 import { DEFAULT_PAGINATE_SIZE } from "@constants/constants"
-import useSpinner from "@hooks/spinner"
 import { cn } from "@lib/utils"
 import type { LectuerType } from "@pages/thiet-lap-khao-sat/khao-sat-cum"
-import { useCountLecturer, useFindManyLecturer, useUpdateSurvey } from "@workspace/db/hooks"
-import { useAbility } from "@workspace/permissions/hooks"
+import { $Enums } from "@workspace/db/client"
+import { useCountLecturer, useFindManyLecturer } from "@workspace/db/hooks"
 import { Col, Flex, Row, Skeleton } from "antd"
 import dayjs from "dayjs"
-import { useRouter } from "next/router"
 import { useMemo, useState } from "react"
 
 export default function DetailSurveyPage({
   selectedId,
   surveyId,
   setSurvey,
+  onNavigateToParticipants,
 }: {
   selectedId: string
   surveyId: string
   setSurvey: (value: LectuerType) => void
+  onNavigateToParticipants?: () => void
 }) {
-  const { can, canSome } = useAbility()
-
-  const { showSpinner, hideSpinner } = useSpinner()
-  const router = useRouter()
   const [currentPage, setCurrentPage] = useState(1)
   const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
   const [filters, setFilters] = useState<FilterProps>({
@@ -43,6 +39,12 @@ export default function DetailSurveyPage({
       survey: {
         some: {
           clusterSurveyId: selectedId,
+          subjectClass: {
+            subject: {
+              type: $Enums.SubjectVersionType.Normal,
+              numberOfTheory: { gt: 0 },
+            },
+          },
         },
       },
       ...(filters.name && filters.name !== ""
@@ -74,16 +76,7 @@ export default function DetailSurveyPage({
               some: {
                 // BẮT BUỘC: Phải lặp lại điều kiện này để không bị mất lọc theo đợt
                 clusterSurveyId: selectedId,
-
                 subjectClass: {
-                  // LOGIC MỚI: Lọc môn Lý thuyết
-                  subject: {
-                    type: "Normal" as any, // 'as any' để fix lỗi Enum vs String
-                    numberOfTheory: { gt: 0 },
-                  },
-                  NOT: {
-                    examType: "Practice" as any,
-                  },
                   // LOGIC CŨ
                   OR: [
                     {
@@ -185,8 +178,6 @@ export default function DetailSurveyPage({
     }
   )
 
-  const { mutateAsync: updateSurvey } = useUpdateSurvey()
-
   const { data: count } = useCountLecturer({
     where: {
       ...where,
@@ -222,6 +213,10 @@ export default function DetailSurveyPage({
                 return {
                   onClick: () => {
                     setSurvey(record as LectuerType)
+                  },
+                  onDoubleClick: () => {
+                    setSurvey(record as LectuerType)
+                    onNavigateToParticipants?.()
                   },
                   className: cn(surveyId === record.id ? "bg-orange-200" : ""),
                 }
