@@ -1288,22 +1288,20 @@ export const exportGiayMoiHdlv = async ({
         data: data,
       }
     })
-    const payload: ExcelTemplateBody = {
-      head: { data: null },
-      tail: { data: null },
+    const payload = {
       fileName: "GiayMoiHDLV",
-      path: "GiayMoiHDLV.xlsx",
-      payload: allSheetOptions?.filter((item) => item !== null) ?? [],
-      showGridLines: true,
-      wrapText: true,
+      path: "GiayMoiHDLV.docx",
+      data: {
+        items: allSheetOptions?.filter((item) => item !== null).map((item) => item!.data) ?? [],
+      },
     }
-    const response = await excelTemplate(payload)
+    const response = await docxTemplate(payload)
     if (response.status !== 200) {
       message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
       return
     }
     const blob = response.data
-    downloadFile(blob, "GiayMoiHDLV.xlsx")
+    downloadFile(blob, "GiayMoiHDLV.docx")
     message.success("Xuất file thành công")
   } catch (error) {
     message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
@@ -1781,22 +1779,22 @@ export const exportGiayMoiChamLvPb = async ({
         ? [{ sheetName: "Can bo ngoai hoc vien", payload: dataNgoaiHv }]
         : []),
     ]
-    const payload: ExcelTemplateBody = {
-      head: { data: null },
-      tail: { data: null },
+    const items = [...dataTrongHv, ...dataNgoaiHv].map((item) => item.data)
+    const payload = {
       fileName: "GiayMoiChamLuanVan",
-      path: "GiayMoiChamLuanVan.xlsx",
-      sheets,
-      showGridLines: true,
+      path: "GiayMoiChamLuanVan.docx",
+      data: {
+        items: items,
+      },
     }
-    const response = await excelTemplate(payload)
+    const response = await docxTemplate(payload)
 
     if (response.status !== 200) {
       message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
       return
     }
     const blob = response.data
-    downloadFile(blob, "GiayMoiChamLuanVan.xlsx")
+    downloadFile(blob, "GiayMoiChamLuanVan.docx")
     message.success("Xuất file thành công")
   } catch (error) {
     message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
