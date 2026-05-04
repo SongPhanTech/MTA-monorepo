@@ -314,7 +314,7 @@ const WordImportModal: React.FC = () => {
     const valid = [
       0, 0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.25, 2.5, 2.75, 3, 3.25, 3.5, 3.75, 4, 4.25, 4.5,
       4.75, 5, 5.25, 5.5, 5.75, 6, 6.25, 6.5, 6.75, 7, 7.25, 7.5, 7.75, 8, 8.25, 8.5, 8.75, 9, 9.25,
-      9.5, 9.75,
+      9.5, 9.75, 10,
     ]
 
     if (!valid.includes(Number(decimal.toFixed(2)))) {
@@ -494,27 +494,27 @@ const WordImportModal: React.FC = () => {
         lines: { text: string; images: { name: string; blob: Blob }[] }[]
       }[] = []
       let currentBlock: { text: string; images: { name: string; blob: Blob }[] }[] = []
+      let foundFirstQuestion = false
 
       for (const line of lines) {
         const trimmed = line.text.replace(/\s+/g, " ").trim()
-        if (!trimmed) {
-          // Dòng trống - bỏ qua hoặc thêm vào block hiện tại
-          if (currentBlock.length > 0) {
-            currentBlock.push(line)
-          }
-          continue
-        }
 
         // Kiểm tra xem dòng này có phải bắt đầu câu hỏi mới không
         if (/^Câu\s+\d+\s*:/i.test(trimmed)) {
+          foundFirstQuestion = true
           // Lưu block cũ
           if (currentBlock.length > 0) {
             questionBlocks.push({ lines: currentBlock })
           }
           currentBlock = [line]
-        } else {
-          currentBlock.push(line)
+        } else if (foundFirstQuestion) {
+          if (!trimmed && currentBlock.length > 0) {
+            currentBlock.push(line)
+          } else if (trimmed) {
+            currentBlock.push(line)
+          }
         }
+        // Bỏ qua tất cả dòng trước câu hỏi đầu tiên (phần header hướng dẫn)
       }
 
       // Lưu block cuối

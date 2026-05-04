@@ -24,7 +24,6 @@ type ImportedKnowledgeBlock = {
     difficult: Difficult
     quantity: number
     type?: QuestionType | null
-    point: number
   }[]
 }
 const getQuestionTypeLabel = (type?: string | null) => {
@@ -34,23 +33,20 @@ const getQuestionTypeLabel = (type?: string | null) => {
 
 const renderQuantityWithPoint = (exams: ImportedKnowledgeBlock["exams"], difficult: string) => {
   const exam = exams.find((e) => e.difficult === difficult)
-  if (!exam) return "0 (0)"
-  return `${exam.quantity} (${exam.point})`
+  if (!exam) return "0"
+  return `${exam.quantity}`
 }
 
-const parseQuantityAndPoint = (value: unknown): { quantity: number; point: number } | null => {
+const parseQuantity = (value: unknown): number | null => {
   if (value == null) return null
 
   const text = String(value).trim()
   if (!text) return null
 
-  const match = text.match(/(\d+)\s*\(\s*(\d+)\s*[đd]\s*\)/i)
-  if (!match) return null
+  const num = Number(text)
+  if (!Number.isNaN(num) && num >= 0) return num
 
-  return {
-    quantity: Number(match[1]),
-    point: Number(match[2]),
-  }
+  return null
 }
 
 const parseQuestionType = (value?: string | null): QuestionType | null => {
@@ -139,13 +135,12 @@ const ModalImportCDR = () => {
 
     const imported: ImportedKnowledgeBlock[] = rows.map((row, index) => {
       const exams = LEVEL_COLUMNS.reduce<ImportedKnowledgeBlock["exams"]>((acc, col) => {
-        const parsed = parseQuantityAndPoint(getExcelCell(row, col.label))
-        if (!parsed) return acc
+        const quantity = parseQuantity(getExcelCell(row, col.label))
+        if (quantity === null) return acc
 
         acc.push({
           difficult: col.difficult,
-          quantity: parsed.quantity,
-          point: parsed.point,
+          quantity,
           type: parseQuestionType(getExcelCell(row, "Loại câu hỏi")),
         })
 
@@ -216,7 +211,7 @@ const ModalImportCDR = () => {
                   difficult: e.difficult,
                   quantity: e.quantity,
                   type: e.type ?? null,
-                  point: e.point,
+                  point: 0,
                 })),
               },
             },
