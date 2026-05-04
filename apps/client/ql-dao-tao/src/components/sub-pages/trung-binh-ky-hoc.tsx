@@ -129,6 +129,18 @@ const DiemTrungBinhKyHoc = () => {
     {
       where,
       include: {
+        academicWarning: {
+          where: { semesterId },
+          select: { level: true },
+          orderBy: { createdAt: "desc" },
+          take: 1,
+        },
+        disciplinaryWarning: {
+          where: { semesterId },
+          select: { level: true },
+          orderBy: { createdAt: "desc" },
+          take: 1,
+        },
         studentSemesterResult: {
           where: { semesterId },
           include: { rank: true },
@@ -571,17 +583,23 @@ const DiemTrungBinhKyHoc = () => {
               },
               {
                 title: "Mức cảnh báo học tập",
-                dataIndex: ["studentSemesterResult", "0", "academicWarningLevel"],
+                dataIndex: ["academicWarning", "0", "level"],
                 width: 100,
                 align: "center",
-                render: (value: number) => <Tag color={getWarningLevelColor(value)}>{value}</Tag>,
+                render: (value: number) => {
+                  const level = value ?? 0
+                  return <Tag color={getWarningLevelColor(level)}>{level}</Tag>
+                },
               },
               {
                 title: "Mức cảnh cáo học đường",
-                dataIndex: ["studentSemesterResult", "0", "disciplinaryWarningLevel"],
+                dataIndex: ["disciplinaryWarning", "0", "level"],
                 width: 120,
                 align: "center",
-                render: (value: number) => <Tag color={getWarningLevelColor(value)}>{value}</Tag>,
+                render: (value: number) => {
+                  const level = value ?? 0
+                  return <Tag color={getWarningLevelColor(level)}>{level}</Tag>
+                },
               },
               {
                 title: "Đình chỉ học",
