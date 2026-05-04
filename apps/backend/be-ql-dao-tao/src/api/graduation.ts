@@ -98,18 +98,18 @@ app.openapi(graduationApplicationInit, async (c) => {
   if (students.length === 0) {
     return c.json({ message: "Không tìm thấy sinh viên chưa tốt nghiệp" }, 400);
   }
+const result = await prisma.studentGraduationApplication.createMany({
+  data: students.map((s) => ({
+    studentId: s.id,
+    sessionId: session.id,
+  })),
+  skipDuplicates: true,
+});
 
-  const count = await prisma.studentGraduationApplication.createMany({
-    data: students.map((s) => {
-      return {
-        studentId: s.id,
-        sessionId: session.id,
-      };
-    }),
-    skipDuplicates: true,
-  });
-
-  return c.json({ message: `Đã tạo ${count} đơn xét tốt nghiệp` }, 200);
+return c.json(
+  { message: `Đã tạo ${result.count} đơn xét tốt nghiệp` },
+  200
+);
 });
 
 const GraduationCheckResult = z
