@@ -910,3 +910,28 @@ export const fetchBuffer = async (url: string): Promise<Buffer> => {
   const arrayBuffer = await response.arrayBuffer()
   return Buffer.from(arrayBuffer)
 }
+
+export const parseSignerInfo = (signerStr: string) => {
+  if (!signerStr) {
+    return {
+      chuc_vi: "GIÁM ĐỐC",
+      chuc_vi_ky_thay: "",
+      quan_ham: "Trung tướng",
+      ten_day_du: "Lê Minh Thái",
+    };
+  }
+
+  const parts = signerStr.split(",").map((p) => p.trim());
+  const role = parts[0] || "";
+  const rank = parts[1] || "";
+  const nameWithDegree = parts[2] || "";
+
+  const isDirector = role.toLowerCase() === "giám đốc";
+
+  return {
+    chuc_vi: isDirector ? "GIÁM ĐỐC" : "KT. GIÁM ĐỐC",
+    chuc_vi_ky_thay: isDirector ? "" : role.toUpperCase(),
+    quan_ham: rank,
+    ten_day_du: nameWithDegree,
+  };
+};

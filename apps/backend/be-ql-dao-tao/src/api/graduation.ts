@@ -31,6 +31,7 @@ import {
   criteriaFieldLabels,
   criteriaOperatorLabels,
 } from "@workspace/libs/constants";
+import { parseSignerInfo } from "../utils";
 
 const app = new OpenAPIHono({ strict: false });
 
@@ -1713,18 +1714,7 @@ app.openapi(exportGraduationRegisterMaster, async (c) => {
   }
   const ngayInText = `ngày ${selectedDate.date()} tháng ${selectedDate.month() + 1} năm ${selectedDate.year()}`;
 
-  let chucVi = "GIÁM ĐỐC";
-  let nguoiKy = "Trung tướng Lê Minh Thái";
-
-  if (signerName) {
-    const parts = signerName.split(",").map((s) => s.trim());
-    if (parts.length >= 2) {
-      chucVi = parts?.[0] || "";
-      nguoiKy = parts?.[1] || "";
-    } else {
-      nguoiKy = signerName;
-    }
-  }
+  const signerInfo = parseSignerInfo(signerName || "");
 
   const calcTBC = (subjectClassStudent: typeof students[number]["subjectClassStudent"]) => {
     if (!subjectClassStudent?.length) return 0;
@@ -1792,7 +1782,7 @@ app.openapi(exportGraduationRegisterMaster, async (c) => {
     sessionName: string,
     sessionStudents: typeof students,
   ): Promise<Buffer> => {
-    const buf = await getTemplateBuffer(prisma, "SoGocCapPhatVanBangCaoHoc_v4.xlsx");
+    const buf = await getTemplateBuffer(prisma, "SoGocCapPhatVanBangCaoHoc_v5.xlsx");
     const tpl = new XlsxTemplate(buf);
     const rows = sessionStudents.map((s, i) => buildRow(s, i));
     tpl.substitute("PD", {
@@ -1801,8 +1791,7 @@ app.openapi(exportGraduationRegisterMaster, async (c) => {
       hinh_thuc_dao_tao: trainingForm,
       so_van_ban: sessionStudents[0]?.graduationDecision?.code || "",
       ngay_in: ngayInText,
-      chuc_vi: chucVi.toUpperCase(),
-      nguoi_ky: nguoiKy,
+      ...signerInfo,
       data: rows,
     });
     return tpl.generate({ type: "nodebuffer" }) as any;
