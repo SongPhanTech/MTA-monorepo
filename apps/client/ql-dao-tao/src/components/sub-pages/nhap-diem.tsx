@@ -1062,8 +1062,6 @@ export default function NhapDiem({
                       dataForCalc?.student?.fixedClass?.trainingCourse?.scoreConverts || []
                     )
                   : null
-
-              // ✅ Graduation: nếu điểm thi < scoreToPassGraduation thì hệ 4 = 0, chữ = F
               const scoreToPassGraduation =
                 dataForCalc?.student?.fixedClass?.trainingCourse?.scoreToPassGraduation ?? 5.5
               const failGraduation =
