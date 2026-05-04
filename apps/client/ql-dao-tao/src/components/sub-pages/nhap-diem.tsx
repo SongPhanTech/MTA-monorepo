@@ -172,6 +172,7 @@ export default function NhapDiem({
                     coef_3: true,
                     scoreToTakeExam: true,
                     scoreToPass: true,
+                    scoreToPassGraduation: true,
                     maxReExamScore: true,
                     reduceReExamScore: true,
                     examScoreToPass: true,
@@ -481,8 +482,14 @@ export default function NhapDiem({
               )
             : null
 
-        const finalScoreBase4 = scoreConvertResult?.base4
-        const letter = scoreConvertResult?.letter
+        // Graduation: nếu điểm thi < scoreToPassGraduation thì hệ 4 = 0, chữ = F
+        const scoreToPassGraduation =
+          dataForCalc?.student?.fixedClass?.trainingCourse?.scoreToPassGraduation ?? 5.5
+        const failGraduation =
+          isGraduation && item.examScore != null && item.examScore < scoreToPassGraduation
+
+        const finalScoreBase4 = failGraduation ? 0 : scoreConvertResult?.base4
+        const letter = failGraduation ? "F" : scoreConvertResult?.letter
 
         const scoreInfo = !score
           ? {
@@ -553,6 +560,7 @@ export default function NhapDiem({
           select: {
             onePoint: true,
             credit: true,
+            type: true,
             managementOrganization: {
               select: {
                 sTen: true,
@@ -703,6 +711,8 @@ export default function NhapDiem({
     )
   }, [dataDetailSubjectClass, can, score])
 
+  const isGraduation = dataDetailSubjectClass?.subject?.type === "Graduation"
+
   const { onOpen: openXemTaiLieu } = useDisclosure<{
     uri: string
     name?: string
@@ -784,6 +794,12 @@ export default function NhapDiem({
                 cur.student?.fixedClass?.trainingCourse?.scoreConverts || []
               )
             : null
+
+        const scoreToPassGraduation =
+          cur.student?.fixedClass?.trainingCourse?.scoreToPassGraduation ?? 5.5
+        const failGraduation =
+          isGraduation && cur.examScore != null && cur.examScore < scoreToPassGraduation
+
         newRowData[cur.id] = {
           attendanceScore: cur.attendanceScore,
           midtermScore: cur.midtermScore,
@@ -795,8 +811,8 @@ export default function NhapDiem({
           examPostponedReason: cur.examPostponedReason,
           scoreToTakeExam: cur.student?.fixedClass?.trainingCourse?.scoreToTakeExam,
           finalScore: cur.finalScore,
-          finalScoreBase4: scoreConvertResult?.base4,
-          letter: scoreConvertResult?.letter,
+          finalScoreBase4: failGraduation ? 0 : scoreConvertResult?.base4,
+          letter: failGraduation ? "F" : scoreConvertResult?.letter,
           suspended: cur.suspended,
           suspendedReason: cur.suspendedReason,
           isChanged: false,
@@ -804,7 +820,7 @@ export default function NhapDiem({
       }
       setRowData(newRowData)
     }
-  }, [dataTable])
+  }, [dataTable, isGraduation])
 
   if (!selectedSubjectClassId) {
     return (
@@ -1047,8 +1063,14 @@ export default function NhapDiem({
                     )
                   : null
 
-              const finalScoreBase4 = scoreConvertResult?.base4
-              const letter = scoreConvertResult?.letter
+              // ✅ Graduation: nếu điểm thi < scoreToPassGraduation thì hệ 4 = 0, chữ = F
+              const scoreToPassGraduation =
+                dataForCalc?.student?.fixedClass?.trainingCourse?.scoreToPassGraduation ?? 5.5
+              const failGraduation =
+                isGraduation && examScore != null && examScore < scoreToPassGraduation
+
+              const finalScoreBase4 = failGraduation ? 0 : scoreConvertResult?.base4
+              const letter = failGraduation ? "F" : scoreConvertResult?.letter
               const newFinalScore = changed.examBanned ? 0 : finalScore
 
               const currentRow = pendingRowUpdatesRef.current[changedId] ?? rowData[changedId] ?? {}
