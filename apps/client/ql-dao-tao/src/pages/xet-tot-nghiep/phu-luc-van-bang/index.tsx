@@ -139,6 +139,31 @@ const formItemLayout = {
   wrapperCol: { flex: "1" },
 };
 
+const parseSignerInfo = (signerStr: string) => {
+  if (!signerStr) {
+    return {
+      chuc_vi: "",
+      chuc_vi_ky_thay: "",
+      quan_ham: "",
+      ten_day_du: "",
+    };
+  }
+
+  const parts = signerStr.split(",").map((p) => p.trim());
+  const role = parts[0] || "";
+  const rank = parts[1] || "";
+  const nameWithDegree = parts[2] || "";
+
+  const isDirector = role.toLowerCase() === "giám đốc";
+
+  return {
+    chuc_vi: isDirector ? "GIÁM ĐỐC" : "KT. GIÁM ĐỐC",
+    chuc_vi_ky_thay: isDirector ? "" : role.toUpperCase(),
+    quan_ham: rank,
+    ten_day_du: nameWithDegree,
+  };
+};
+
 const initialPagination = {
   page: 1,
   pageSize: 10,
@@ -1268,11 +1293,17 @@ export default function StudentGradeSystem() {
       const prefixVi = isFemale ? "Bà" : "Ông";
       const prefixEn = isFemale ? "Ms" : "Mr";
 
+      const signerInfo = parseSignerInfo(signerName || "");
+
       return {
         sheet: `${user?.code} - ${user?.fullname}`,
         data: {
           ho_ten_vi: `${prefixVi} ${user?.fullname?.toUpperCase() || ""}`,
-          ho_ten_en: `${prefixEn} ${user?.fullname?.toUpperCase() || ""}`,
+          ho_ten_en: `${prefixEn} ${user?.fullname
+            ?.toUpperCase()
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .replace(/Đ/g, "D") || ""}`,
           ngay_sinh_vi: dob.isValid() ? dob.format("DD/MM/YYYY") : "",
           ngay_sinh_en: dob.isValid()
             ? `${dob.date()} ${MONTH_EN[dob.month()]} ${dob.year()}`
@@ -1283,6 +1314,7 @@ export default function StudentGradeSystem() {
             graduationDate.month() + 1
           } năm ${graduationDate.year()}`,
           so_quyet_dinh: gD?.originalDiplomaNumber || gD?.diplomaNumber || "",
+          ...signerInfo,
         },
       };
     });
@@ -1361,12 +1393,13 @@ export default function StudentGradeSystem() {
         Yếu: "Poor",
       };
       const xepLoaiEn = classificationMappingEn[xepLoaiVi] || "";
-      console.log("gender", gender);
+
+      const signerInfo = parseSignerInfo(signerName || "");
 
       return {
         sheet: `${user?.code} - ${user?.fullname}`,
         data: {
-          ho_te_en: (gender === "Nữ"
+          ho_ten_en: (gender === "Nữ"
             ? "MS. " + user?.fullname?.toUpperCase()
             : "MR. " + user?.fullname?.toUpperCase()
           )
@@ -1404,12 +1437,13 @@ export default function StudentGradeSystem() {
           ngay_in_en: printDate.isValid()
             ? `${MONTH_EN[printDate.month()]} ${printDate.date()}, ${printDate.year()}`
             : "",
+          ...signerInfo,
         },
       };
     });
 
     exportFromTemplate({
-      templateUrl: getMinioUrl("/mta/template/PhoiBangNganHan.xlsx"),
+      templateUrl: getMinioUrl("/mta/template/PhoiBangNganHan_v1.xlsx"),
       sheets: allSheetOptions,
       fileName: "PhoiBangNganHan.xlsx",
       mergeSheetsToOne: true,
@@ -1661,7 +1695,7 @@ export default function StudentGradeSystem() {
                 <Input
                   type="text"
                   className="h-8 text-xs flex-1 w-full"
-                  placeholder="Giám đốc, Trung tướng Lê Minh Thái"
+                  placeholder="Giám đốc, Trung tướng, GS.TS Lê Minh Thái"
                 />
               </FormItem>
             </div>
