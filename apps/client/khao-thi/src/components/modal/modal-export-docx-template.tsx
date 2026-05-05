@@ -7,7 +7,10 @@ import { useDisclosure } from "react-hook-disclosure-modal"
 import { getMinioUrl } from "@workspace/libs/utils"
 import { saveFile } from "@/utils/saveFile"
 
-export type SurveyDocxTemplateVariant = "KHOA" | "BO_MON" | "GIANG_VIEN"
+import {
+  SURVEY_DOCX_TEMPLATE_VARIANT_LABEL,
+  type SurveyDocxTemplateVariant,
+} from "@/constants/constants"
 
 // Use the same MinIO helper as other template-based exports in this app.
 const TEMPLATE_KEYS: Record<SurveyDocxTemplateVariant, string> = {
@@ -21,6 +24,13 @@ type AnswerItem = {
   answer: string
   description: string
   count: number
+}
+
+type AnswerWithPercent = Omit<AnswerItem, "count"> & {
+  total: number
+  percent: number
+  countRaw: number
+  count: string
 }
 
 type ModalExportDocxTemplateInput = {
@@ -44,7 +54,7 @@ type ModalExportDocxTemplateInput = {
 
 const calcPercent = (answers: AnswerItem[]) => {
   const total = (answers || []).reduce((s, i) => s + Number(i?.count || 0), 0)
-  return (answers || []).map((i) => {
+  return (answers || []).map((i): AnswerWithPercent => {
     const count = Number(i?.count || 0)
     const percent = total === 0 ? 0 : Number(((count / total) * 100).toFixed(2))
     return {
@@ -61,7 +71,7 @@ const formatCell = ({ percent, count, total }: { percent: number; count: number;
   `${percent}% (${count}/${total})`
 
 const getCellByOrder = (
-  items: Array<{ answer: string; percent: number; total: number; countRaw: number; count: string }>,
+  items: AnswerWithPercent[],
   order: number
 ) => {
   const found = items.find((p) => Number(p.answer) === order)
@@ -71,12 +81,20 @@ const getCellByOrder = (
   return formatCell({ percent: 0, count: 0, total })
 }
 
-const buildAverageRow = (questions: ModalExportDocxTemplateInput["questions"]) => {
+type AverageRow = {
+  id: string
+  name: string
+  answers: AnswerItem[]
+}
+
+const buildAverageRow = (
+  questions: ModalExportDocxTemplateInput["questions"]
+): AverageRow | null => {
   if (!questions?.length) return null
   const first = questions[0]
   if (!first?.answers?.length) return null
 
-  const base = first.answers.map((a) => ({
+  const base: AnswerItem[] = first.answers.map((a) => ({
     ...a,
     count: 0,
   }))
@@ -107,17 +125,16 @@ const buildDocxData = (input: ModalExportDocxTemplateInput) => {
         ...a,
         description: a.description || "",
       })),
-      // Useful for fixed-column templates (1..5)
-      muc1: getCellByOrder(answersWithPercent as any, 1),
-      muc2: getCellByOrder(answersWithPercent as any, 2),
-      muc3: getCellByOrder(answersWithPercent as any, 3),
-      muc4: getCellByOrder(answersWithPercent as any, 4),
-      muc5: getCellByOrder(answersWithPercent as any, 5),
+      muc1: getCellByOrder(answersWithPercent, 1),
+      muc2: getCellByOrder(answersWithPercent, 2),
+      muc3: getCellByOrder(answersWithPercent, 3),
+      muc4: getCellByOrder(answersWithPercent, 4),
+      muc5: getCellByOrder(answersWithPercent, 5),
     }
   })
 
   const avgRow = buildAverageRow(input.questions)
-  const dgtbAnswers = avgRow ? calcPercent(avgRow.answers as AnswerItem[]) : []
+  const dgtbAnswers = avgRow ? calcPercent(avgRow.answers) : []
 
   return {
     ...input,
@@ -126,11 +143,11 @@ const buildDocxData = (input: ModalExportDocxTemplateInput) => {
     dgtb: {
       ...avgRow,
       answers: dgtbAnswers,
-      muc1: getCellByOrder(dgtbAnswers as any, 1),
-      muc2: getCellByOrder(dgtbAnswers as any, 2),
-      muc3: getCellByOrder(dgtbAnswers as any, 3),
-      muc4: getCellByOrder(dgtbAnswers as any, 4),
-      muc5: getCellByOrder(dgtbAnswers as any, 5),
+      muc1: getCellByOrder(dgtbAnswers, 1),
+      muc2: getCellByOrder(dgtbAnswers, 2),
+      muc3: getCellByOrder(dgtbAnswers, 3),
+      muc4: getCellByOrder(dgtbAnswers, 4),
+      muc5: getCellByOrder(dgtbAnswers, 5),
     },
     lecturerName: input.lecturerName,
     lecturerCode: input.lecturerCode,
@@ -151,12 +168,6 @@ const defaultFileName = (variant: SurveyDocxTemplateVariant, surveyName?: string
   return `Bao_cao_khao_sat_khoa_${name || "bao_cao"}.docx`
 }
 
-const variantLabel: Record<SurveyDocxTemplateVariant, string> = {
-  GIANG_VIEN: "Giảng viên",
-  BO_MON: "Bộ môn",
-  KHOA: "Khoa",
-}
-
 const ModalExportDocxTemplate = () => {
   const { isOpen, onClose, input } = useDisclosure<ModalExportDocxTemplateInput>({
     tag: "ModalExportDocxTemplate",
@@ -167,7 +178,6 @@ const ModalExportDocxTemplate = () => {
   useEffect(() => {
     if (!isOpen) return
     if (!input) return
-    console.log("[ModalExportDocxTemplate] input", input)
   }, [isOpen, input])
 
   const templateUrl = useMemo(() => {
@@ -182,7 +192,7 @@ const ModalExportDocxTemplate = () => {
 
   const title = useMemo(() => {
     if (!input) return "Xuất file Word"
-    return `Xuất báo cáo khảo sát (${variantLabel[input.variant]})`
+    return `Xuất báo cáo khảo sát (${SURVEY_DOCX_TEMPLATE_VARIANT_LABEL[input.variant]})`
   }, [input])
 
   const handleDownload = async () => {
@@ -211,9 +221,8 @@ const ModalExportDocxTemplate = () => {
       saveFile(fileName, doc)
       onClose()
     } catch (e) {
-      console.error("[ModalExportDocxTemplate] export failed", e)
-      const errText = e instanceof Error ? e.message : String(e)
-      message.error(`Không thể xuất file Word: ${errText}`)
+      console.error(e)
+      message.error(`Không thể xuất file Word`)
     } finally {
       setIsDownloading(false)
     }
