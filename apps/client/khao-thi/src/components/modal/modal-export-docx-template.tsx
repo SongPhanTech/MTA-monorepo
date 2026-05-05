@@ -1,6 +1,7 @@
 import { DownloadOutlined } from "@ant-design/icons"
 import { Button, Flex, Modal, message } from "antd"
 import { TemplateHandler } from "easy-template-x"
+import PizZip from "pizzip"
 import { useEffect, useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 import { getMinioUrl } from "@workspace/libs/utils"
@@ -56,15 +57,8 @@ const calcPercent = (answers: AnswerItem[]) => {
   })
 }
 
-const formatCell = ({
-  percent,
-  count,
-  total,
-}: {
-  percent: number
-  count: number
-  total: number
-}) => `${percent}% (${count}/${total})`
+const formatCell = ({ percent, count, total }: { percent: number; count: number; total: number }) =>
+  `${percent}% (${count}/${total})`
 
 const getCellByOrder = (
   items: Array<{ answer: string; percent: number; total: number; countRaw: number; count: string }>,
@@ -203,30 +197,17 @@ const ModalExportDocxTemplate = () => {
         return
       }
 
-      const contentType = res.headers.get("content-type") || ""
-      const templateBlob = await res.blob()
-      const templateBuffer = await templateBlob.arrayBuffer()
-      const bytes = new Uint8Array(templateBuffer)
-      // .docx is a zip => must start with "PK"
-      const isZip = bytes.length >= 2 && bytes[0] === 0x50 && bytes[1] === 0x4b
-      if (!isZip) {
-        const preview = new TextDecoder().decode(bytes.slice(0, 200))
-        throw new Error(
-          `File mẫu không phải .docx hợp lệ (content-type: ${contentType || "unknown"}). ` +
-            `URL: ${templateUrl}. Preview: ${preview}`
-        )
-      }
-
+      const templateBuffer = await res.arrayBuffer()
       const payload = buildDocxData(input)
-      console.log("[ModalExportDocxTemplate] export", {
-        variant: input.variant,
-        templateUrl,
-        fileName,
-        payload,
+
+      const repaired = new PizZip(templateBuffer).generate({ type: "arraybuffer" })
+      const repairedBlob = new Blob([repaired], {
+        type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
       })
 
       const handler = new TemplateHandler()
-      const doc = await handler.process(templateBlob, payload)
+      const doc = await handler.process(repairedBlob, payload)
+
       saveFile(fileName, doc)
       onClose()
     } catch (e) {
@@ -249,7 +230,12 @@ const ModalExportDocxTemplate = () => {
       footer={
         <Flex justify="flex-end" gap={8}>
           <Button onClick={onClose}>Đóng</Button>
-          <Button type="primary" icon={<DownloadOutlined />} onClick={handleDownload} loading={isDownloading}>
+          <Button
+            type="primary"
+            icon={<DownloadOutlined />}
+            onClick={handleDownload}
+            loading={isDownloading}
+          >
             Tải xuống
           </Button>
         </Flex>
@@ -263,4 +249,3 @@ const ModalExportDocxTemplate = () => {
 }
 
 export default ModalExportDocxTemplate
-
