@@ -1,4 +1,4 @@
-import { DownOutlined, FileExcelOutlined, PrinterOutlined } from "@ant-design/icons"
+import { DownOutlined, FileExcelOutlined, FileWordOutlined, PrinterOutlined } from "@ant-design/icons"
 import HtmlTruncate from "@components/commons/html-truncate"
 import Table from "@components/commons/table"
 import useSpinner from "@hooks/spinner"
@@ -51,6 +51,9 @@ function SurveyOrganizationReport({
   const { showSpinner, hideSpinner } = useSpinner()
   const { onOpen } = useDisclosure({
     tag: "ModalPrintSurveyOrganization",
+  })
+  const { onOpen: onOpenExportDocx } = useDisclosure({
+    tag: "ModalExportDocxTemplate",
   })
 
   const { data: dataLevel } = useGetClusterSurveyStatisticsForOrganization(selectedId as string, {
@@ -467,6 +470,24 @@ function SurveyOrganizationReport({
                             dataLevel?.data?.data?.questions,
                             dataLevel?.data?.data
                           )
+                        },
+                      },
+                      {
+                        key: "export-docx",
+                        icon: <FileWordOutlined />,
+                        label: "Xuất Word",
+                        onClick: () => {
+                          const hasDepartment = Boolean(departmentName)
+                          onOpenExportDocx({
+                            variant: hasDepartment ? "BO_MON" : "KHOA",
+                            surveyName,
+                            trainingObjectTypeName,
+                            organizationName,
+                            organizationCode,
+                            departmentName,
+                            departmentCode,
+                            questions: dataLevel?.data?.data?.questions || [],
+                          })
                         },
                       },
                       {

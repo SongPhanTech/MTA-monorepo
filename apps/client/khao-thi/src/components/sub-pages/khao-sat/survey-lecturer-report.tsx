@@ -1,4 +1,4 @@
-import { DownOutlined, FileExcelOutlined, PrinterOutlined } from "@ant-design/icons"
+import { DownOutlined, FileExcelOutlined, FileWordOutlined, PrinterOutlined } from "@ant-design/icons"
 import HtmlTruncate from "@components/commons/html-truncate"
 import Table from "@components/commons/table"
 import useSpinner from "@hooks/spinner"
@@ -55,6 +55,9 @@ function SurveylecturerReport({
   const { showSpinner, hideSpinner } = useSpinner()
   const { onOpen } = useDisclosure({
     tag: "ModalPrintSurveylecturer",
+  })
+  const { onOpen: onOpenExportDocx } = useDisclosure({
+    tag: "ModalExportDocxTemplate",
   })
 
   const { data: dataLevel } = useGetClusterSurveyStatisticsForLecturer(selectedId as string, {
@@ -451,6 +454,25 @@ function SurveylecturerReport({
                         },
                       },
                       {
+                        key: "export-docx",
+                        icon: <FileWordOutlined />,
+                        label: "Xuất Word",
+                        onClick: () => {
+                          onOpenExportDocx({
+                            variant: "GIANG_VIEN",
+                            surveyName,
+                            trainingObjectTypeName,
+                            lecturerName,
+                            lecturerCode,
+                            departmentName,
+                            departmentCode,
+                            organizationName,
+                            organizationCode,
+                            questions: dataLevel?.data?.data?.questions,
+                          })
+                        },
+                      },
+                      {
                         key: "print",
                         icon: <PrinterOutlined />,
                         label: "In báo cáo",
@@ -458,16 +480,12 @@ function SurveylecturerReport({
                           onOpen({
                             surveyName,
                             trainingObjectTypeName,
-
                             lecturerName,
                             lecturerCode,
-
                             departmentName,
                             departmentCode,
-
                             organizationName,
                             organizationCode,
-
                             questions: dataLevel?.data?.data?.questions,
                             chartOption: dataBarchart,
                           })
