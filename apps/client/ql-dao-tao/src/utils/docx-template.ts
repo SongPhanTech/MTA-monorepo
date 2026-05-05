@@ -1,15 +1,15 @@
-import { customModelFetch } from "@workspace/libs/api/custom-instance";
+import { customModelFetch } from "@workspace/libs/api/custom-instance"
 
 export interface DocxTemplateBody {
-  fileName: string;
-  path: string;
-  data: Record<string, unknown>;
+  fileName: string
+  path: string
+  data: Record<string, unknown>
 }
 
 export interface CustomModelResponse<T> {
-  status: number;
-  data: T;
-  headers: Headers;
+  status: number
+  data: T
+  headers: Headers
 }
 
 export const docxTemplate = (body: DocxTemplateBody): Promise<CustomModelResponse<Blob>> => {
@@ -19,5 +19,5 @@ export const docxTemplate = (body: DocxTemplateBody): Promise<CustomModelRespons
       "Content-Type": "application/json",
     },
     body: JSON.stringify(body),
-  });
-};
+  })
+}
