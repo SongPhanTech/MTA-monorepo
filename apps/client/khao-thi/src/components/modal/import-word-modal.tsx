@@ -200,6 +200,15 @@ const WordImportModal: React.FC = () => {
 
   const cleanQuestionText = (text: string) => normalizeWordQuestionText(text)
 
+  const splitQuestionContentAndOptionLines = (lines: string[]) => {
+    const optionLineRegex = /^\s*[A-D]\.\s*/i
+
+    return {
+      questionLines: lines.filter((line) => !optionLineRegex.test(line)),
+      optionLines: lines.filter((line) => optionLineRegex.test(line)),
+    }
+  }
+
   const mapQuestionTypeFromText = (raw: string): QuestionType | undefined => {
     const value = raw.trim().toUpperCase().replace(/\s+/g, "")
 
@@ -599,7 +608,9 @@ const WordImportModal: React.FC = () => {
           }
         }
 
-        const rawQuestionText = normalizeWordQuestionText(contentLines.join("\n"))
+        const previewQuestionText = normalizeWordQuestionText(contentLines.join("\n"))
+        const { questionLines, optionLines } = splitQuestionContentAndOptionLines(contentLines)
+        const rawQuestionText = normalizeWordQuestionText(questionLines.join("\n"))
         const answerTextRaw = normalizeWordQuestionText(answerLines.join("\n"))
 
         const question: any = {
@@ -610,13 +621,13 @@ const WordImportModal: React.FC = () => {
           pointRaw: headerInfo.point,
           point: pointCheck.isInvalid ? undefined : point,
           pointStatus: pointCheck.color,
+          previewContent: previewQuestionText,
         }
 
         if (type === QuestionType.SINGLE_CHOICE || type === QuestionType.MULTIPLE_CHOICE) {
-          question.content = rawQuestionText
+          question.content = cleanQuestionText(rawQuestionText)
 
-          question.optionsRaw = contentLines
-            .filter((l) => /^\s*[A-D]\.\s*/i.test(l))
+          question.optionsRaw = optionLines
             .map((line) => {
               const match = line.match(/^([A-D])\.\s*(.+)$/i)
               return {
@@ -647,12 +658,11 @@ const WordImportModal: React.FC = () => {
           }
           question.explanation = answerTextRaw
         } else if (type === QuestionType.ORDERING) {
-          question.content = rawQuestionText
+          question.content = cleanQuestionText(rawQuestionText)
           question.explanation = answerTextRaw
           question.answer = answerTextRaw
 
-          question.optionsRaw = contentLines
-            .filter((l) => /^[A-D]\.\s*/i.test(l))
+          question.optionsRaw = optionLines
             .map((line) => {
               const match = line.match(/^([A-D])\.\s*(.+)$/i)
               return {
@@ -723,7 +733,7 @@ const WordImportModal: React.FC = () => {
       width: 350,
       type: "input",
       render: (text: string, record: any) => {
-        let html = text
+        let html = record.previewContent || text
 
         html = renderContentWithImagePlaceholders(html, record.contentImagesRaw || [])
 
