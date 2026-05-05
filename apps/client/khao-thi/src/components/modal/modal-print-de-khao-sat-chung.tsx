@@ -104,11 +104,11 @@ const ModalPrintExamSurvey = () => {
             .custom-red-table .ant-table,
             .custom-red-table .ant-table-container,
             .custom-red-table .ant-table-content table {
-             border: 2px solid red !important;
+             border: 2px solid #6bac79 !important;
             }
 
             .custom-red-table .ant-table-cell {
-            border: 1px solid red !important;
+            border: 1px solid #6bac79 !important;
             }
 
         }
@@ -203,7 +203,7 @@ const ModalPrintExamSurvey = () => {
                     align: "center",
                     render: () => (
                       <div className="flex items-center justify-center">
-                        <Button className="flex items-center justify-center w-6 h-6 border-solid border-[1px] border-[#ed9e9e] text-[#ea1212] text-[12px]">
+                        <Button className="flex items-center justify-center w-6 h-6 border-solid border-[1px] border-[#b0d2bb] text-[#6bac79] text-[12px]">
                           {i?.answer}
                         </Button>
                       </div>
@@ -302,9 +302,13 @@ const ModalPrintExamSurvey = () => {
                     render: (_, record, qIndex) => {
                       return (
                         record?.type === "SINGLE_CHOICE" && (
-                          <Radio.Group className="w-full gap-x-2 flex">
+                          <Radio.Group className="w-full gap-x-2 flex ">
                             {survey?.surveyChoice.map((i) => (
-                              <Radio.Button key={i?.id} value={i?.id}>
+                              <Radio.Button
+                                key={i?.id}
+                                value={i?.id}
+                                className="border-[#b0d2bb] text-[#6bac79]"
+                              >
                                 {i?.answer}
                               </Radio.Button>
                             ))}
@@ -351,7 +355,7 @@ const ModalPrintExamSurvey = () => {
                                                     {data?.surveyChoice.map((i) => {
                                                         return (
                                                             <div className="flex items-center justify-center">
-                                                                <Button className="flex items-center justify-center w-6 h-6 border-solid border-[1px] border-[#ed9e9e] text-[#ea1212] text-[12px]">
+                                                                <Button className="flex items-center justify-center w-6 h-6 border-solid border-[1px] border-[#b0d2bb] text-[#6bac79] text-[12px]">
                                                                     {i?.answer}
                                                                 </Button>
                                                             </div>
@@ -374,12 +378,12 @@ const ModalPrintExamSurvey = () => {
         {`
                     .custom-red-table .ant-table-thead > tr > th {
                         background: #fff !important;
-                        border: 0.5px solid red !important;
+                        border: 0.5px solid #6bac79 !important;
                     }
 
                     .custom-red-table .group-row > td {
                         background: #fff !important;
-                        border: 0.5px solid red !important;
+                        border: 0.5px solid #6bac79 !important;
                         font-weight: 700;
                     }
 
@@ -387,28 +391,28 @@ const ModalPrintExamSurvey = () => {
                     .custom-red-table .ant-table-container,
                     .custom-red-table .ant-table-content table,
                     .custom-red-table .ant-table-cell {
-                        border: 0.5px solid red !important;
+                        border: 0.5px solid #6bac79 !important;
                     }
 
                     .custom-red-table .ant-radio-inner {
-                        border: 0.5px solid red !important;
+                        border: 0.5px solid #6bac79 !important;
                         background: white !important;
                         box-shadow: none !important;
                     }
 
                     .custom-red-table .ant-radio-checked .ant-radio-inner {
-                    border-color: red !important;
+                    border-color: #6bac79 !important;
                     background: white !important;
                     }
 
                     .custom-red-table .ant-radio-checked .ant-radio-inner::after {
-                        background: red !important;
+                        background: #6bac79 !important;
                         transform: scale(1) !important;
                     }
 
                     .custom-red-table .ant-radio-wrapper:hover .ant-radio-inner,
                     .custom-red-table .ant-radio-input:focus + .ant-radio-inner {
-                        border-color: red !important;
+                        border-color: #6bac79 !important;
                         box-shadow: none !important;
                     }
 
@@ -416,16 +420,26 @@ const ModalPrintExamSurvey = () => {
                         outline: none !important;
                     }
 
+                    .custom-red-table .ant-radio-button-wrapper {
+                        border-color: #6bac79 !important;
+                    }
+
+                    .custom-red-table .ant-radio-button-wrapper-checked {
+                        background: #6bac79 !important;
+                        border-color: #6bac79 !important;
+                        color: #ffffff !important;
+                    }
+
                     .custom-red-table textarea,
                     .custom-red-table .ant-input {
-                        border: 0.5px solid red !important;
+                        border: 0.5px solid #6bac79 !important;
                         box-shadow: none !important;
                     }
 
                     .custom-red-table textarea:focus,
                     .custom-red-table .ant-input:focus,
                     .custom-red-table .ant-input-focused {
-                        border: 0.5px solid red !important;
+                        border: 0.5px solid #6bac79 !important;
                         box-shadow: none !important;
                         outline: none !important;
                     }
