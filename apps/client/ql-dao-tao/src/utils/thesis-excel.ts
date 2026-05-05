@@ -545,8 +545,8 @@ export const exportThongKeCbHdlv = async ({
 
   const tenkhoa =
     allStudentsInClasses?.length > 0
-      ? allStudentsInClasses[0]?.thesisRegistrations?.[0]?.thesisProject?.thesisSession
-          ?.trainingCourse?.name
+      ? allStudentsInClasses[0]?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor
+          ?.organization?.sTen || ""
       : ""
   const data = dataMapping?.map((item, index) => {
     return {
