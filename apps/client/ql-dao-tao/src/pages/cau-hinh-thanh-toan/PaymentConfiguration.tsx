@@ -21,6 +21,7 @@ const RoleType: Map<SupervisorRole | CouncilRole, string> = new Map([
   [CouncilRole.MEMBER, "Ủy viên"],
   [SupervisorRole.SUPERVISOR, "Chuyên gia hướng dẫn (GVHD1)"],
   [SupervisorRole.CO_SUPERVISOR, "Chuyên gia hướng dẫn phụ (GVHD2)"],
+  [SupervisorRole.SINGLE, "Chuyên gia hướng dẫn độc lập"],
 ])
 
 const COUNCIL_PLACEHOLDER_ROLES: { roleName: string; role: CouncilRole }[] = [
@@ -34,6 +35,7 @@ const COUNCIL_PLACEHOLDER_ROLES: { roleName: string; role: CouncilRole }[] = [
 const SUPERVISOR_PLACEHOLDER_ROLES: { roleName: string; role: SupervisorRole }[] = [
   { roleName: "Chuyên gia hướng dẫn (GVHD1)", role: SupervisorRole.SUPERVISOR },
   { roleName: "Chuyên gia hướng dẫn phụ (GVHD2)", role: SupervisorRole.CO_SUPERVISOR },
+  { roleName: "Chuyên gia hướng dẫn độc lập", role: SupervisorRole.SINGLE },
 ]
 
 const PAY_AMOUNT_CELL_DEFS = [
@@ -196,6 +198,7 @@ export default function PaymentConfigurationPage({ isThesis }: { isThesis: boole
       "Ủy viên",
       "Chuyên gia hướng dẫn (GVHD1)",
       "Chuyên gia hướng dẫn phụ (GVHD2)",
+      "Chuyên gia hướng dẫn độc lập",
     ]
     const result = roleOrder
       .map((name) => map.get(name))
