@@ -16,6 +16,7 @@ import { KHAO_THI_PERMISSION } from "@workspace/router"
 import { Col, Row, Tabs, type TabsProps } from "antd"
 import { useMemo, useState } from "react"
 import SumaryReport from "./_components/sumary-report"
+import CrossReviewNoCouncilMember from "./_components/cross-review-nocouncil-member"
 
 export type EvaluationPeriodStoreState = {
   selectedEvaluationPeriodId?: string
@@ -59,6 +60,12 @@ export default function EvaluationPeriodTabPage() {
     }
   )
 
+  const isHeadSecretary = councilMember?.role?.includes($Enums.EvaluationMemberRole.HEAD_SECRETARY)
+  const isVicePeresident = councilMember?.role?.includes($Enums.EvaluationMemberRole.VICE_PRESIDENT)
+  const isNonCouncilMember = councilMember?.role?.includes(
+    $Enums.EvaluationMemberRole.NONCOUNCIL_MEMBERS
+  )
+
   const tabItems = useMemo(() => {
     const tabs: TabsProps["items"] = [
       {
@@ -67,10 +74,6 @@ export default function EvaluationPeriodTabPage() {
         children: <EvaluationPeriod />,
       },
     ]
-
-    const isHeadSecretary = councilMember?.role?.includes(
-      $Enums.EvaluationMemberRole.HEAD_SECRETARY
-    )
 
     if (can(KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA, "THEM")) {
       tabs.push(
@@ -91,6 +94,7 @@ export default function EvaluationPeriodTabPage() {
 
     if (
       isHeadSecretary ||
+      isVicePeresident ||
       can(KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA, "XEM")
     ) {
       tabs.push({
@@ -129,14 +133,25 @@ export default function EvaluationPeriodTabPage() {
         }
       )
     }
-    // if (isHeadSecretary) {
-    tabs.push({
-      key: "9",
-      label: "Phân công phản biện ngoài hội đồng",
-      children: <NoCounCilMemberTab />,
-      disabled: !selectedEvaluationPeriodId,
-    })
-    // }
+
+    if (isHeadSecretary) {
+      tabs.push({
+        key: "9",
+        label: "Phân công phản biện ngoài hội đồng",
+        children: <NoCounCilMemberTab />,
+        disabled: !selectedEvaluationPeriodId,
+      })
+    }
+
+    if (isNonCouncilMember) {
+      tabs.push({
+        key: "10",
+        label: "Phản biện ngoài hội đồng",
+        children: <CrossReviewNoCouncilMember />,
+        disabled: !selectedEvaluationPeriodId,
+      })
+    }
+
     return tabs
   }, [selectedEvaluationPeriodId, councilMember, can])
 
