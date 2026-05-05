@@ -323,6 +323,18 @@ interface HDDanhGiaLuanVanTemplateData {
   tail: HDDanhGiaLuanVanTail
   data: HDDanhGiaLuanVanData[]
 }
+const formatThesisDate = (date?: Date | string | null) => {
+  if (!date) return ""
+  const d = dayjs(date)
+  const day = d.date() 
+  const month = d.month() + 1 
+  const year = d.year()
+
+  const dayStr = day.toString()
+  const monthStr = (month === 1 || month === 2) ? month.toString().padStart(2, "0") : month.toString()
+
+  return `${dayStr}/${monthStr}/${year}`
+}
 
 export const exportPhuLucDsLuanVan = async ({
   allStudentsInClasses,
