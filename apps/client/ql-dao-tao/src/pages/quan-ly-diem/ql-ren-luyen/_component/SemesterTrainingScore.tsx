@@ -1,7 +1,7 @@
 import Table from "@components/commons/table"
 import { Button, Col, Flex, Form, InputNumber, message, Row, Tag } from "antd"
 import { FilterProps } from "@constants/type"
-import { Key, useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { DEFAULT_PAGINATE_SIZE } from "@constants/constants"
 import { useAbility } from "@workspace/permissions/hooks"
 import { useRouter } from "next/router"
@@ -17,7 +17,7 @@ import {
 import { Save } from "lucide-react"
 import useSpinner from "@hooks/spinner"
 import { sqlTransaction } from "@workspace/libs/api/model"
-// import { useDisclosure } from 'react-hook-disclosure-modal'
+
 export default function SemesterTrainingScore({
   selectedFixedClass,
 }: {
@@ -27,7 +27,7 @@ export default function SemesterTrainingScore({
   const [form] = Form.useForm<{ list: Record<string, { score: number | null }> }>()
   const router = useRouter()
   const { id: semesterId } = useSemesterStore()
-  const { can, canSome } = useAbility()
+  const { can } = useAbility()
   const [currentPage, setCurrentPage] = useState(1)
   const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
   const [filters, setFilters] = useState<FilterProps>({
@@ -35,7 +35,7 @@ export default function SemesterTrainingScore({
     name: "",
     idCardNumber: "",
   })
-  const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([])
+
   const {
     options: studentTrainingTypeOptions,
     getStudentTrainingTypeLabel,
@@ -52,11 +52,6 @@ export default function SemesterTrainingScore({
       fixedClass: {
         id: selectedFixedClass,
       },
-      // semesterTrainingScore: {
-      //     some: {
-      //         semesterId:semesterId
-      //     }
-      // },
       ...(filters.code
         ? {
             code: {
@@ -135,108 +130,20 @@ export default function SemesterTrainingScore({
     }
   )
 
-  // const { onOpen, onClose } = useDisclosure<{
-  //     tag?: string
-  //     preSelectedValues?: {
-  //         trainingObjectTypeId?: string
-  //         trainingCourseId?: string
-  //         fixedClassId?: string
-  //     }
-  //     id?: string | null
-  // }>({
-  //     tag: 'PutStudentModal',
-  // })
-
-  //  const handleModal = () => {
-  //     onOpen({
-  //         preSelectedValues: {},
-  //     })
-  // }
-
-  const handleApproved = async () => {
-    try {
-      showSpinner()
-
-      if (selectedRowKeys?.length === 0) return
-
-      const res = await sqlTransaction([
-        {
-          model: "SemesterTrainingScore" as const,
-          operation: "updateMany",
-          data: {
-            where: {
-              studentId: {
-                in: selectedRowKeys,
-              },
-              semesterId,
-            },
-            data: {
-              status: "APPROVED",
-            },
-          },
-        },
-      ])
-      if (res?.status === 200) {
-        message.success("Phê duyệt điểm rèn luyện thành công")
-        refetch()
-      }
-
-      hideSpinner()
-    } catch (error) {
-      message.error("Phê duyệt điểm rèn luyện thất bại")
-      hideSpinner()
-    }
-  }
-
-  const handleRejected = async () => {
-    try {
-      showSpinner()
-
-      if (selectedRowKeys?.length === 0) return
-
-      const res = await sqlTransaction([
-        {
-          model: "SemesterTrainingScore" as const,
-          operation: "updateMany",
-          data: {
-            where: {
-              studentId: {
-                in: selectedRowKeys,
-              },
-              semesterId,
-            },
-            data: {
-              status: "REJECTED",
-            },
-          },
-        },
-      ])
-      if (res?.status === 200) {
-        message.success("Từ chối điểm rèn luyện thành công")
-        refetch()
-      }
-
-      hideSpinner()
-    } catch (error) {
-      message.error("Từ chối điểm rèn luyện thất bại")
-      hideSpinner()
-    }
-  }
-
   const handleSave = async () => {
     try {
       showSpinner()
       const dataSubmit = form.getFieldsValue()
       const keys = Object.keys(dataSubmit.list)
-      console.log(Object.values(dataSubmit.list))
 
       const error = Object.values(dataSubmit.list).find(
         (i: any) => Number(i?.score) > 10 || Number(i?.score) < 0
       )
       if (error) {
-        message.error("Vui lòng nhập điểm từ 0 đến 10")
+        message.error("Vui lòng nhập điểm từ 0 đến 10")
         return
       }
+
       const listCreate: any = []
       const listUpdate: any = []
 
@@ -256,28 +163,23 @@ export default function SemesterTrainingScore({
         }
       })
 
-      let listTransaction: any = []
+      const listTransaction: any = []
+
       if (listCreate.length > 0) {
         listTransaction.push({
           model: "SemesterTrainingScore",
           operation: "createMany",
           data: {
-            data: listCreate.map((t: any) => {
-              return {
-                studentId: t.id,
-                score: t.score,
-                semesterId: semesterId,
-                status: can(
-                  QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_REN_LUYEN,
-                  "XEM_TAT_CA"
-                )
-                  ? "APPROVED"
-                  : "PENDING",
-              }
-            }),
+            data: listCreate.map((t: any) => ({
+              studentId: t.id,
+              score: t.score,
+              semesterId: semesterId,
+              status: "APPROVED",
+            })),
           },
         })
       }
+
       if (listUpdate.length > 0) {
         listUpdate.forEach((t: any) => {
           listTransaction.push({
@@ -289,17 +191,13 @@ export default function SemesterTrainingScore({
               },
               data: {
                 score: t.score,
-                status: can(
-                  QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_REN_LUYEN,
-                  "XEM_TAT_CA"
-                )
-                  ? "APPROVED"
-                  : "PENDING",
+                status: "APPROVED",
               },
             },
           })
         })
       }
+
       if (listTransaction.length > 0) {
         const res = await sqlTransaction(listTransaction)
         if (res?.status === 200) {
@@ -307,24 +205,19 @@ export default function SemesterTrainingScore({
           refetch()
         }
       }
-
-      // message.success('Lưu điểm rèn luyện học kỳ thành công')
-      // refetch()
-      // setEditableData(new Map())
     } catch (error) {
       message.error("Đã xảy ra lỗi khi lưu điểm rèn luyện học kỳ")
     } finally {
       hideSpinner()
     }
   }
+
   // biome-ignore lint/correctness/useExhaustiveDependencies: <>
   useEffect(() => {
     if (data?.length > 0) {
       form.setFieldsValue({
         list: data.reduce((acc, cur) => {
-          if (!acc) {
-            return {}
-          }
+          if (!acc) return {}
           acc[cur.id] = {
             ...cur,
             score: cur.semesterTrainingScore[0]?.score,
@@ -334,30 +227,11 @@ export default function SemesterTrainingScore({
       })
     }
   }, [data])
+
   return (
     <Row gutter={[0, 0]}>
       <Col span={24}>
         <Flex justify="end" align="center">
-          {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_REN_LUYEN, "XEM_TAT_CA") && (
-            <>
-              <Button
-                type="default"
-                className="mr-3"
-                disabled={selectedRowKeys.length === 0}
-                onClick={handleRejected}
-              >
-                Từ chối
-              </Button>
-              <Button
-                type="primary"
-                className="mr-3"
-                disabled={selectedRowKeys.length === 0}
-                onClick={handleApproved}
-              >
-                Phê duyệt
-              </Button>
-            </>
-          )}
           {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_REN_LUYEN, "SUA") && (
             <Button type="primary" onClick={handleSave}>
               <Save stroke="white" />
@@ -418,62 +292,53 @@ export default function SemesterTrainingScore({
                   width: 150,
                   align: "center",
                   fixed: "left",
-                  render: (_, record) => {
-                    return (
-                      <Form.Item
-                        className="w-full mb-0"
-                        name={["list", record.id, "score"]}
-                        label=""
-                        rules={[
-                          {
-                            validator: (_, value) =>
-                              value >= 1 && value <= 10
-                                ? Promise.resolve()
-                                : Promise.reject("Chỉ được nhập số từ 1 đến 10"),
-                          },
-                        ]}
-                      >
-                        <InputNumber
-                          style={{ width: "100%" }}
-                          step={1}
-                          controls={false}
-                          onKeyDown={(e) => {
-                            if (e.key === "." || e.key === ",") {
-                              e.preventDefault()
-                            }
-                          }}
-                        />
-                      </Form.Item>
-                    )
-                  },
+                  render: (_, record) => (
+                    <Form.Item
+                      className="w-full mb-0"
+                      name={["list", record.id, "score"]}
+                      label=""
+                      rules={[
+                        {
+                          validator: (_, value) =>
+                            value >= 1 && value <= 10
+                              ? Promise.resolve()
+                              : Promise.reject("Chỉ được nhập số từ 1 đến 10"),
+                        },
+                      ]}
+                    >
+                      <InputNumber
+                        style={{ width: "100%" }}
+                        step={1}
+                        controls={false}
+                        onKeyDown={(e) => {
+                          if (e.key === "." || e.key === ",") {
+                            e.preventDefault()
+                          }
+                        }}
+                      />
+                    </Form.Item>
+                  ),
                 },
-                {
-                  title: "Trạng thái",
-                  align: "center",
-                  dataIndex: "name",
-                  width: 150,
-                  render: (_, record) =>
-                    record?.semesterTrainingScore?.length > 0 ? (
-                      <Tag
-                        color={getTrainingScoreStatusColor(
-                          record?.semesterTrainingScore[0]?.status
-                        )}
-                      >
-                        {getTrainingScoreStatusLabel(record?.semesterTrainingScore[0]?.status)}
-                      </Tag>
-                    ) : (
-                      "--"
-                    ),
-                },
+                // {
+                //   title: "Trạng thái",
+                //   align: "center",
+                //   dataIndex: "name",
+                //   width: 150,
+                //   render: (_, record) =>
+                //     record?.semesterTrainingScore?.length > 0 ? (
+                //       <Tag
+                //         color={getTrainingScoreStatusColor(
+                //           record?.semesterTrainingScore[0]?.status
+                //         )}
+                //       >
+                //         {getTrainingScoreStatusLabel(record?.semesterTrainingScore[0]?.status)}
+                //       </Tag>
+                //     ) : (
+                //       "--"
+                //     ),
+                // },
               ]}
               rowKey="id"
-              rowSelection={{
-                selectedRowKeys,
-                onChange: (selectedKeys) => setSelectedRowKeys(selectedKeys),
-                getCheckboxProps: (record) => ({
-                  disabled: record.semesterTrainingScore?.length <= 0, // hoặc điều kiện bất kỳ
-                }),
-              }}
               data={data}
               pagination={false}
             />
