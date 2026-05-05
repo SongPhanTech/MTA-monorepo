@@ -1207,7 +1207,7 @@ export default function StudentGradeSystem() {
       {
         id: 21,
         name: "Sổ gốc cấp phát văn bằng",
-        onClick: () => handleCommonExport(exportHandlers.soGocCapPhatVanBang),
+        onClick: () => handleCommonExport(exportHandlers.soGoc),
       },
       { id: 22, name: "Thống kê KQ đào tạo" },
       { id: 23, name: "Thống kê kết quả bảo vệ luận văn" },
