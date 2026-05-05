@@ -172,6 +172,7 @@ export default function NhapDiem({
                     coef_3: true,
                     scoreToTakeExam: true,
                     scoreToPass: true,
+                    scoreToPassGraduation: true,
                     maxReExamScore: true,
                     reduceReExamScore: true,
                     examScoreToPass: true,
@@ -422,16 +423,17 @@ export default function NhapDiem({
       importedData.map((item) => {
         const scoreToTakeExam = rowData[item.id]?.scoreToTakeExam
         // TODO: fix not work if directly uncheck exam banned
-        const isExamBanned =
-          !!rowData[item.id]?.examBannedReason ||
-          (item.attendanceScore !== null &&
-            scoreToTakeExam !== null &&
-            scoreToTakeExam !== undefined &&
-            item.attendanceScore < scoreToTakeExam) ||
-          (item.midtermScore !== null &&
-            scoreToTakeExam !== null &&
-            scoreToTakeExam !== undefined &&
-            item.midtermScore < scoreToTakeExam)
+        const isExamBanned = isGraduation
+          ? !!rowData[item.id]?.examBannedReason
+          : !!rowData[item.id]?.examBannedReason ||
+            (item.attendanceScore !== null &&
+              scoreToTakeExam !== null &&
+              scoreToTakeExam !== undefined &&
+              item.attendanceScore < scoreToTakeExam) ||
+            (item.midtermScore !== null &&
+              scoreToTakeExam !== null &&
+              scoreToTakeExam !== undefined &&
+              item.midtermScore < scoreToTakeExam)
 
         if (dataDetailSubjectClass?.subject.onePoint) {
           item.attendanceScore = item.examScore
@@ -481,8 +483,14 @@ export default function NhapDiem({
               )
             : null
 
-        const finalScoreBase4 = scoreConvertResult?.base4
-        const letter = scoreConvertResult?.letter
+        // Graduation: nếu điểm thi < scoreToPassGraduation thì hệ 4 = 0, chữ = F
+        const scoreToPassGraduation =
+          dataForCalc?.student?.fixedClass?.trainingCourse?.scoreToPassGraduation ?? 5.5
+        const failGraduation =
+          isGraduation && finalScore != null && finalScore < scoreToPassGraduation
+
+        const finalScoreBase4 = failGraduation ? 0 : scoreConvertResult?.base4
+        const letter = failGraduation ? "F" : scoreConvertResult?.letter
 
         const scoreInfo = !score
           ? {
@@ -553,10 +561,17 @@ export default function NhapDiem({
           select: {
             onePoint: true,
             credit: true,
+            type: true,
             managementOrganization: {
               select: {
                 sTen: true,
               },
+            },
+            trainingBlocks: {
+              select: {
+                graduation: true,
+              },
+              take: 1,
             },
           },
         },
@@ -703,6 +718,8 @@ export default function NhapDiem({
     )
   }, [dataDetailSubjectClass, can, score])
 
+  const isGraduation = dataDetailSubjectClass?.subject?.trainingBlocks?.[0]?.graduation === true
+
   const { onOpen: openXemTaiLieu } = useDisclosure<{
     uri: string
     name?: string
@@ -784,6 +801,12 @@ export default function NhapDiem({
                 cur.student?.fixedClass?.trainingCourse?.scoreConverts || []
               )
             : null
+
+        const scoreToPassGraduation =
+          cur.student?.fixedClass?.trainingCourse?.scoreToPassGraduation ?? 5.5
+        const finalScoreNumber = cur.finalScore != null ? Number(cur.finalScore) : null
+        const failGraduation =
+          isGraduation && finalScoreNumber != null && finalScoreNumber < scoreToPassGraduation
         newRowData[cur.id] = {
           attendanceScore: cur.attendanceScore,
           midtermScore: cur.midtermScore,
@@ -795,8 +818,8 @@ export default function NhapDiem({
           examPostponedReason: cur.examPostponedReason,
           scoreToTakeExam: cur.student?.fixedClass?.trainingCourse?.scoreToTakeExam,
           finalScore: cur.finalScore,
-          finalScoreBase4: scoreConvertResult?.base4,
-          letter: scoreConvertResult?.letter,
+          finalScoreBase4: failGraduation ? 0 : scoreConvertResult?.base4,
+          letter: failGraduation ? "F" : scoreConvertResult?.letter,
           suspended: cur.suspended,
           suspendedReason: cur.suspendedReason,
           isChanged: false,
@@ -804,7 +827,7 @@ export default function NhapDiem({
       }
       setRowData(newRowData)
     }
-  }, [dataTable])
+  }, [dataTable, isGraduation])
 
   if (!selectedSubjectClassId) {
     return (
@@ -997,15 +1020,16 @@ export default function NhapDiem({
                   : (cur.midtermScore ?? null)
 
               const scoreToTakeExam = cur.scoreToTakeExam ?? null
-              const isExamBanned =
-                !!changed.examBannedReason ||
-                !!cur.examBannedReason ||
-                (attendanceScore !== null &&
-                  scoreToTakeExam !== null &&
-                  attendanceScore < scoreToTakeExam) ||
-                (midtermScore !== null &&
-                  scoreToTakeExam !== null &&
-                  midtermScore < scoreToTakeExam)
+              const isExamBanned = isGraduation
+                ? !!changed.examBannedReason || !!cur.examBannedReason
+                : !!changed.examBannedReason ||
+                  !!cur.examBannedReason ||
+                  (attendanceScore !== null &&
+                    scoreToTakeExam !== null &&
+                    attendanceScore < scoreToTakeExam) ||
+                  (midtermScore !== null &&
+                    scoreToTakeExam !== null &&
+                    midtermScore < scoreToTakeExam)
 
               const dataForCalc = dataTable.find((i) => i.id === changedId)
               if (!dataForCalc) return
@@ -1046,10 +1070,15 @@ export default function NhapDiem({
                       dataForCalc?.student?.fixedClass?.trainingCourse?.scoreConverts || []
                     )
                   : null
+              const scoreToPassGraduation =
+                dataForCalc?.student?.fixedClass?.trainingCourse?.scoreToPassGraduation ?? 5.5
 
-              const finalScoreBase4 = scoreConvertResult?.base4
-              const letter = scoreConvertResult?.letter
-              const newFinalScore = changed.examBanned ? 0 : finalScore
+              const failGraduation =
+                isGraduation && finalScore != null && finalScore < scoreToPassGraduation
+
+              const finalScoreBase4 = failGraduation ? 0 : scoreConvertResult?.base4
+              const letter = failGraduation ? "F" : scoreConvertResult?.letter
+              const newFinalScore = isExamBanned ? 0 : finalScore
 
               const currentRow = pendingRowUpdatesRef.current[changedId] ?? rowData[changedId] ?? {}
               pendingRowUpdatesRef.current[changedId] = {

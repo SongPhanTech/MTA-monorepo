@@ -21,6 +21,7 @@ import { Automizer } from "pptx-automizer";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 dayjs.extend(customParseFormat);
+import ExcelJS from "exceljs";
 import XlsxTemplate from "xlsx-template";
 import { prisma } from "..";
 import { UploadExcelModel } from "../dto/upload-excel.dto";
@@ -30,6 +31,7 @@ import {
   criteriaFieldLabels,
   criteriaOperatorLabels,
 } from "@workspace/libs/constants";
+import { parseSignerInfo, generateExcelFromTemplate, getScoreClassification } from "../utils";
 
 const app = new OpenAPIHono({ strict: false });
 
@@ -97,18 +99,18 @@ app.openapi(graduationApplicationInit, async (c) => {
   if (students.length === 0) {
     return c.json({ message: "Không tìm thấy sinh viên chưa tốt nghiệp" }, 400);
   }
+const result = await prisma.studentGraduationApplication.createMany({
+  data: students.map((s) => ({
+    studentId: s.id,
+    sessionId: session.id,
+  })),
+  skipDuplicates: true,
+});
 
-  const count = await prisma.studentGraduationApplication.createMany({
-    data: students.map((s) => {
-      return {
-        studentId: s.id,
-        sessionId: session.id,
-      };
-    }),
-    skipDuplicates: true,
-  });
-
-  return c.json({ message: `Đã tạo ${count} đơn xét tốt nghiệp` }, 200);
+return c.json(
+  { message: `Đã tạo ${result.count} đơn xét tốt nghiệp` },
+  200
+);
 });
 
 const GraduationCheckResult = z
@@ -1696,7 +1698,7 @@ app.openapi(exportGraduationRegisterMaster, async (c) => {
     }),
     prisma.thesisSession.findMany({
       where: { id: { in: thesisSessionIds || [] } },
-      select: { name: true },
+      select: { id: true, name: true },
     }),
     prisma.trainingObjectType.findUniqueOrThrow({
       where: { id: trainingObjectTypeId },
@@ -1705,7 +1707,6 @@ app.openapi(exportGraduationRegisterMaster, async (c) => {
   ]);
 
   const courseNames = courses.map((e) => e.name).join(", ");
-  const sessionNames = sessions.map((e) => e.name).join(", ");
   const trainingForm = trainingObjectType.trainingForm?.name || "";
   let selectedDate = printDate ? dayjs(printDate, "DD/MM/YYYY") : dayjs();
   if (!selectedDate.isValid()) {
@@ -1713,119 +1714,593 @@ app.openapi(exportGraduationRegisterMaster, async (c) => {
   }
   const ngayInText = `ngày ${selectedDate.date()} tháng ${selectedDate.month() + 1} năm ${selectedDate.year()}`;
 
-  const tableRows = students.map((student, index) => {
+  const signerInfo = parseSignerInfo(signerName || "");
+
+  const calcTBC = (subjectClassStudent: typeof students[number]["subjectClassStudent"]) => {
+    if (!subjectClassStudent?.length) return 0;
+    const bestScoreMap = new Map<string, { score: number; credit: number }>();
+    for (const record of subjectClassStudent) {
+      const newScore = record.manualFinalScore ?? (record.finalScore ? Number(record.finalScore) : null);
+      if (newScore === null) continue;
+      const existing = bestScoreMap.get(record.subjectVersionId);
+      const isRetake = record.subjectClass?.type === "RETAKE" || record.subjectClass?.type === "REEXAM";
+      if (!existing || newScore > existing.score || isRetake) {
+        bestScoreMap.set(record.subjectVersionId, {
+          score: newScore,
+          credit: record.subjectVersion?.credit || 0,
+        });
+      }
+    }
+    let totalScore = 0;
+    let totalCredit = 0;
+    for (const item of bestScoreMap.values()) {
+      totalScore += item.score * item.credit;
+      totalCredit += item.credit;
+    }
+    return totalCredit > 0 ? totalScore / totalCredit : 0;
+  };
+
+  const buildRow = (student: typeof students[number], index: number) => {
     const gD = student.graduationDecision;
     const tR = student.thesisRegistrations?.[0];
     const user = student.userProfile;
     const thesisSession = tR?.thesisProject?.thesisSession;
-
-    let calculatedTBC = 0;
-    if (student.subjectClassStudent && student.subjectClassStudent.length > 0) {
-      const bestScoreMap = new Map();
-      for (const record of student.subjectClassStudent) {
-        const newScore = record.manualFinalScore ?? (record.finalScore ? Number(record.finalScore) : null);
-        if (newScore === null) continue;
-        
-        const existing = bestScoreMap.get(record.subjectVersionId);
-        const isRetake = record.subjectClass?.type === "RETAKE" || record.subjectClass?.type === "REEXAM";
-        
-        if (!existing || newScore > existing.score || isRetake) {
-          bestScoreMap.set(record.subjectVersionId, { 
-            score: newScore, 
-            credit: record.subjectVersion?.credit || 0 
-          });
-        }
-      }
-
-      let totalScore = 0;
-      let totalCredit = 0;
-      for (const item of bestScoreMap.values()) {
-        totalScore += item.score * item.credit;
-        totalCredit += item.credit;
-      }
-      if (totalCredit > 0) {
-        calculatedTBC = totalScore / totalCredit;
-      }
-    }
-
-    const tbcFinal = gD?.finalGpa ? Number(gD.finalGpa).toFixed(2) : (calculatedTBC > 0 ? calculatedTBC.toFixed(2) : "");
-
+    const calculatedTBC = calcTBC(student.subjectClassStudent);
+    const tbcFinal = gD?.finalGpa
+      ? Number(gD.finalGpa).toFixed(2)
+      : calculatedTBC > 0
+        ? calculatedTBC.toFixed(2)
+        : "";
     return {
       stt: index + 1,
       hoTen: user?.fullname || "",
-      ngaySinh: user?.dateOfBirth
-        ? dayjs(user.dateOfBirth).format("DD/MM/YYYY")
-        : "",
+      ngaySinh: user?.dateOfBirth ? dayjs(user.dateOfBirth).format("DD/MM/YYYY") : "",
       soDinhDanh: user?.idCardNumber || "",
       khoa: student.fixedClass?.trainingCourse?.name || "",
       noiSinh: user?.placeOfBirth || "",
       gioiTinh: user?.gender?.sTen || "",
       danToc: user?.ethnicity?.sTen || "",
+      quyetDinhTuyenSinh: student?.fixedClass?.trainingCourse?.admissionDecision || "",
       quocTich: user?.nationality?.sTen || "",
       "quyetDinhHDDGLV/ĐATN": thesisSession?.defenseDecisionNumber || "",
-      ngayBaoVe: thesisSession?.startDate
-        ? dayjs(thesisSession.startDate).format("DD/MM/YYYY")
-        : "",
+      ngayBaoVe: thesisSession?.startDate ? dayjs(thesisSession.startDate).format("DD/MM/YYYY") : "",
       quyetDinhTotNghiep: gD?.code || "",
       namTN: student.universityGraduationYear || "",
-      nganhDaoTao:
-        student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor
-          ?.trainingField?.name || "",
-      chuyenNganh:
-        student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor
-          ?.name || "",
+      nganhDaoTao: student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.trainingField?.name || "",
+      chuyenNganh: student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || "",
       soHieuVanBang: gD?.diplomaNumber || "",
       soVaoSoGoc: gD?.originalDiplomaNumber || "",
-      coQuanDonVi:
-        student.fixedClass?.managementOrganization?.sTenVietTat || "",
-      diemLVDATN:
-        tR?.thesisProject?.defenseRecord?.finalScore?.toFixed(2) || "",
+      coQuanDonVi: student.fixedClass?.managementOrganization?.sTenVietTat || "",
+      diemLVDATN: tR?.thesisProject?.defenseRecord?.finalScore?.toFixed(2) || "",
       diemTBC: tbcFinal || "",
       nguoiNhanVanBang: "",
       ghiChu: "",
     };
-  });
+  };
 
-  const buffer = await getTemplateBuffer(
-    prisma,
-    "SoGocCapPhatVanBangCaoHoc_v2.xlsx",
-  );
-  const template = new XlsxTemplate(buffer);
+  const renderSheet = async (
+    sessionName: string,
+    sessionStudents: typeof students,
+  ): Promise<Buffer> => {
+    const buf = await getTemplateBuffer(prisma, "SoGocCapPhatVanBangCaoHoc_v5.xlsx");
+    const tpl = new XlsxTemplate(buf);
+    const rows = sessionStudents.map((s, i) => buildRow(s, i));
+    tpl.substitute("PD", {
+      khoa: courseNames,
+      dot_xet: sessionName,
+      hinh_thuc_dao_tao: trainingForm,
+      so_van_ban: sessionStudents[0]?.graduationDecision?.code || "",
+      ngay_in: ngayInText,
+      ...signerInfo,
+      data: rows,
+    });
+    return tpl.generate({ type: "nodebuffer" }) as any;
+  };
 
-  let chucVi = "GIÁM ĐỐC";
-  let nguoiKy = "Trung tướng Lê Minh Thái";
+  let sessionGroups: { id: string; name: string; students: typeof students }[];
 
-  if (signerName) {
-    const parts = signerName.split(",").map((s) => s.trim());
-    if (parts.length >= 2) {
-      chucVi = parts?.[0] || "";
-      nguoiKy = parts?.[1] || "";
-    } else {
-      nguoiKy = signerName;
+  if (sessions.length > 0) {
+    const studentsBySession = new Map<string, typeof students>();
+    for (const session of sessions) {
+      studentsBySession.set(session.id, []);
     }
+    for (const student of students) {
+      const sessionId = student.thesisRegistrations?.[0]?.thesisProject?.thesisSessionId;
+      if (sessionId && studentsBySession.has(sessionId)) {
+        studentsBySession.get(sessionId)!.push(student);
+      }
+    }
+    sessionGroups = sessions.map((s) => ({
+      id: s.id,
+      name: s.name,
+      students: studentsBySession.get(s.id) || [],
+    }));
+  } else {
+    sessionGroups = [{ id: "all", name: "Tất cả", students }];
   }
 
-  template.substitute("PD", {
-    khoa: courseNames,
-    dot_xet: sessionNames,
-    hinh_thuc_dao_tao: trainingForm,
-    so_van_ban: students[0]?.graduationDecision?.code || "",
-    ngay_in: ngayInText,
-    chuc_vi: chucVi.toUpperCase(),
-    nguoi_ky: nguoiKy,
-    data: tableRows,
-  });
+  const outputWorkbook = new ExcelJS.Workbook();
 
-  const result = template.generate({ type: "nodebuffer" }) as any;
+  for (const group of sessionGroups) {
+    if (!group.students.length) continue;
+
+    const sheetBuffer = await renderSheet(group.name, group.students);
+
+    const tmpWorkbook = new ExcelJS.Workbook();
+    await tmpWorkbook.xlsx.load(sheetBuffer as any);
+
+    const sourceSheet = tmpWorkbook.getWorksheet("PD") ?? tmpWorkbook.worksheets[0];
+    if (!sourceSheet) continue;
+
+    const sheetName = group.name.substring(0, 31).replace(/[\\\?\*\/\[\]]/g, "");
+    const destSheet = outputWorkbook.addWorksheet(sheetName);
+
+    for (let i = 1; i <= sourceSheet.columnCount; i++) {
+      const srcCol = sourceSheet.getColumn(i);
+      const destCol = destSheet.getColumn(i);
+      if (srcCol.width) {
+        destCol.width = srcCol.width;
+      }
+    }
+
+    sourceSheet.eachRow({ includeEmpty: true }, (row, rowNumber) => {
+      const destRow = destSheet.getRow(rowNumber);
+      destRow.height = row.height;
+
+      row.eachCell({ includeEmpty: true }, (cell, colNumber) => {
+        const destCell = destRow.getCell(colNumber);
+
+        if (cell.master === cell) {
+          destCell.value = cell.value;
+        }
+
+        if (cell.style) {
+          destCell.style = JSON.parse(JSON.stringify(cell.style));
+        }
+      });
+    });
+
+    const merges = sourceSheet.model.merges || [];
+    merges.forEach((m) => {
+      try {
+        destSheet.mergeCells(m);
+      } catch (err) {
+      }
+    });
+
+    destSheet.pageSetup = JSON.parse(JSON.stringify(sourceSheet.pageSetup || {}));
+  }
+
+  if (outputWorkbook.worksheets.length === 0) {
+    return c.json({ message: "Không có dữ liệu sinh viên trong các đợt xét đã chọn" }, 404);
+  }
+
+  const result = await outputWorkbook.xlsx.writeBuffer();
 
   const fileName = "SoGocCapPhatVanBang.xlsx";
   const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`;
 
-  return c.body(result, 200, {
+  return c.body(result as any, 200, {
     "Content-Type":
       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     "Content-Disposition": disposition,
   });
+});
+
+const exportPhoiBangCaoHoc = createRoute({
+  operationId: "exportPhoiBangCaoHoc",
+  tags: ["Graduation"],
+  path: "/export-phoi-bang-cao-hoc",
+  method: "post",
+  request: {
+    body: {
+      content: {
+        "application/json": {
+          schema: z.object({
+            trainingObjectTypeId: z.string().optional(),
+            trainingCourseIds: z.array(z.string()).optional(),
+            fixedClassIds: z.array(z.string()).optional(),
+            thesisSessionIds: z.array(z.string()).optional(),
+            managementOrganizationId: z.string().optional(),
+            printDate: z.string().optional(),
+            signerName: z.string().optional(),
+          }),
+        },
+      },
+    },
+  },
+  responses: {
+    200: {
+      description: "Export thành công",
+      content: {
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
+          schema: z.any().openapi({ type: "string", format: "binary" }),
+        },
+      },
+    },
+    404: {
+      description: "Không tìm thấy dữ liệu",
+      content: {
+        "application/json": {
+          schema: z.object({ message: z.string() }),
+        },
+      },
+    },
+  },
+});
+
+app.openapi(exportPhoiBangCaoHoc, async (c) => {
+  const {
+    trainingObjectTypeId,
+    trainingCourseIds,
+    fixedClassIds,
+    thesisSessionIds,
+    managementOrganizationId,
+    signerName,
+  } = c.req.valid("json");
+
+  const students = await prisma.student.findMany({
+    where: {
+      fixedClass: {
+        ...(trainingObjectTypeId && {
+          trainingCourse: {
+            trainingObjectTypeId,
+          },
+        }),
+        ...(trainingCourseIds?.length && {
+          trainingCourseId: { in: trainingCourseIds },
+        }),
+        ...(fixedClassIds?.length && { id: { in: fixedClassIds } }),
+        ...(managementOrganizationId && { managementOrganizationId }),
+      },
+      ...(thesisSessionIds?.length && {
+        thesisRegistrations: {
+          some: {
+            thesisProject: {
+              thesisSessionId: { in: thesisSessionIds },
+            },
+          },
+        },
+      }),
+      deletedAt: null,
+      active: true,
+    },
+    include: {
+      userProfile: {
+        include: {
+          gender: true,
+        },
+      },
+      graduationDecision: true,
+      fixedClass: {
+        include: {
+          curriculumVersion: {
+            include: {
+              curriculum: {
+                include: {
+                  trainingMajor: true,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  });
+
+  if (!students.length) {
+    return c.json({ message: "Không tìm thấy dữ liệu sinh viên phù hợp" }, 404);
+  }
+
+  const MONTH_EN = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",  
+    "October",
+    "November",
+    "December",
+  ];
+
+  const signerInfo = parseSignerInfo(signerName || "");
+
+  const payload = students.map((student) => {
+    const user = student.userProfile;
+    const major = student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor;
+    const gD = student.graduationDecision;
+
+    const dob = dayjs(user?.dateOfBirth);
+    const graduationDate = gD?.decisionDate ? dayjs(gD.decisionDate) : dayjs();
+
+    const isFemale = user?.gender?.sTen?.toLowerCase() === "nữ";
+    const prefixVi = isFemale ? "Bà" : "Ông";
+    const prefixEn = isFemale ? "Ms" : "Mr";
+
+    let ngay_sinh_vi = "";
+    if (dob.isValid()) {
+      const day = dob.date().toString().padStart(2, "0");
+      const month = dob.month() + 1;
+      const monthStr = (month === 1 || month === 2) ? month.toString().padStart(2, "0") : month.toString();
+      ngay_sinh_vi = `${day}/${monthStr}/${dob.year()}`;
+    }
+
+    return {
+      data: {
+        ho_ten_vi: `${prefixVi} ${user?.fullname?.toUpperCase() || ""}`,
+        ho_ten_en: `${prefixEn} ${
+          user?.fullname
+            ?.toUpperCase()
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .replace(/Đ/g, "D") || ""
+        }`,
+        ngay_sinh_vi,
+        ngay_sinh_en: dob.isValid() ? `${dob.date()} ${MONTH_EN[dob.month()]} ${dob.year()}` : "",
+        nganh_hoc_vi: major?.name || "",
+        nganh_hoc_en: (major as any)?.englishName?.toUpperCase() || "",
+        ngay_tn: graduationDate.date(),
+        thang_tn: graduationDate.month() + 1,
+        nam_tn: graduationDate.year(),
+        ngay_tot_nghiep: `Ngày ${graduationDate.date()} tháng ${
+          graduationDate.month() + 1
+        } năm ${graduationDate.year()}`,
+        so_quyet_dinh: gD?.diplomaNumber || "",
+        ...signerInfo,
+        ho_ten_nguoi_ky: signerInfo.ten_day_du,
+      },
+    };
+  });
+
+  try {
+    const templateBuffer = await getTemplateBuffer(prisma, "PhoiBangCaoHoc_v1.xlsx");
+    const result = await generateExcelFromTemplate(templateBuffer, payload, {
+      showGridLines: true,
+      wrapText: true,
+    });
+
+    const fileName = "PhoiBangCaoHoc.xlsx";
+    const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`;
+
+    return c.body(result as any, 200, {
+      "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "Content-Disposition": disposition,
+    });
+  } catch (error: any) {
+    console.error("Error generating Excel:", error.message);
+    return c.json({ message: "Lỗi khi xuất file Excel" }, 500);
+  }
+});
+
+const exportPhoiBangNganHan = createRoute({
+  operationId: "exportPhoiBangNganHan",
+  tags: ["Graduation"],
+  path: "/export-phoi-bang-ngan-han",
+  method: "post",
+  request: {
+    body: {
+      content: {
+        "application/json": {
+          schema: z.object({
+            trainingObjectTypeId: z.string().optional(),
+            trainingCourseIds: z.array(z.string()).optional(),
+            fixedClassIds: z.array(z.string()).optional(),
+            thesisSessionIds: z.array(z.string()).optional(),
+            managementOrganizationId: z.string().optional(),
+            printDate: z.string().optional(),
+            signerName: z.string().optional(),
+          }),
+        },
+      },
+    },
+  },
+  responses: {
+    200: {
+      description: "Export thành công",
+      content: {
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
+          schema: z.any().openapi({ type: "string", format: "binary" }),
+        },
+      },
+    },
+    404: {
+      description: "Không tìm thấy dữ liệu",
+      content: {
+        "application/json": {
+          schema: z.object({ message: z.string() }),
+        },
+      },
+    },
+  },
+});
+
+app.openapi(exportPhoiBangNganHan, async (c) => {
+  const {
+    trainingObjectTypeId,
+    trainingCourseIds,
+    fixedClassIds,
+    thesisSessionIds,
+    managementOrganizationId,
+    printDate,
+    signerName,
+  } = c.req.valid("json");
+
+  const students = await prisma.student.findMany({
+    where: {
+      fixedClass: {
+        ...(trainingObjectTypeId && {
+          trainingCourse: {
+            trainingObjectTypeId,
+          },
+        }),
+        ...(trainingCourseIds?.length && {
+          trainingCourseId: { in: trainingCourseIds },
+        }),
+        ...(fixedClassIds?.length && { id: { in: fixedClassIds } }),
+        ...(managementOrganizationId && { managementOrganizationId }),
+      },
+      ...(thesisSessionIds?.length && {
+        thesisRegistrations: {
+          some: {
+            thesisProject: {
+              thesisSessionId: { in: thesisSessionIds },
+            },
+          },
+        },
+      }),
+      deletedAt: null,
+      active: true,
+    },
+    include: {
+      userProfile: {
+        include: {
+          gender: true,
+        },
+      },
+      graduationDecision: true,
+      fixedClass: {
+        include: {
+          trainingCourse: {
+            include: {
+              semesterStart: true,
+              scoreConverts: {
+                where: { deletedAt: null, active: true },
+              },
+            },
+          },
+        },
+      },
+      subjectClassStudent: {
+        where: { deletedAt: null, active: true },
+        include: {
+          subjectVersion: true,
+        },
+      },
+    },
+  });
+
+  if (!students.length) {
+    return c.json({ message: "Không tìm thấy dữ liệu sinh viên phù hợp" }, 404);
+  }
+
+  const MONTH_EN = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December",
+  ];
+
+  const signerInfo = parseSignerInfo(signerName || "");
+  const pDate = printDate ? dayjs(printDate) : dayjs();
+
+  const payload = students.map((student) => {
+    const user = student.userProfile;
+    const gD = student.graduationDecision;
+    const course = student.fixedClass?.trainingCourse;
+
+    const dob = dayjs(user?.dateOfBirth);
+    const startDate = course?.semesterStart?.startDate
+      ? dayjs(course.semesterStart.startDate)
+      : dayjs(student.fixedClass?.createdAt);
+    const endDate = course?.semesterStart?.endDate
+      ? dayjs(course.semesterStart.endDate)
+      : gD?.decisionDate
+      ? dayjs(gD.decisionDate)
+      : dayjs();
+
+    const subjectScores = student.subjectClassStudent || [];
+    const totalCredits = subjectScores.reduce(
+      (acc, item) => acc + (item.subjectVersion?.credit || 0),
+      0,
+    );
+    const totalPoints = subjectScores.reduce(
+      (acc, item) =>
+        acc + (Number(item.finalScore) || 0) * (item.subjectVersion?.credit || 0),
+      0,
+    );
+    const gpa = totalCredits > 0 ? totalPoints / totalCredits : 0;
+
+    const scoreConverts = course?.scoreConverts || [];
+    const xepLoaiVi = getScoreClassification(gpa, scoreConverts);
+
+    const classificationMappingEn: Record<string, string> = {
+      "Xuất sắc": "Excellent",
+      "Giỏi": "Very Good",
+      "Khá": "Good",
+      "Trung bình khá": "Fairly Good",
+      "Trung bình": "Average",
+      "Yếu": "Poor",
+    };
+    const xepLoaiEn = classificationMappingEn[xepLoaiVi] || "";
+
+    const isFemale = user?.gender?.sTen?.toLowerCase() === "nữ";
+    const prefixEn = isFemale ? "Ms " : "Mr ";
+
+    let ngay_sinh_vi = "";
+    if (dob.isValid()) {
+      const day = dob.date().toString().padStart(2, "0");
+      const month = dob.month() + 1;
+      const monthStr = (month === 1 || month === 2) ? month.toString().padStart(2, "0") : month.toString();
+      ngay_sinh_vi = `${day}/${monthStr}/${dob.year()}`;
+    }
+
+    return {
+      data: {
+        ho_ten_vi: user?.fullname?.toUpperCase() || "",
+        ho_ten_en: `${prefixEn}${
+          user?.fullname
+            ?.toUpperCase()
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .replace(/Đ/g, "D") || ""
+        }`,
+        ngay_sinh_vi,
+        ngay_sinh_en: dob.isValid() ? `${dob.date()} ${MONTH_EN[dob.month()]} ${dob.year()}` : "",
+
+        ngay_bat_dau_vi: startDate.isValid() ? startDate.format("DD/MM/YYYY") : "",
+        ngay_bat_dau_en: startDate.isValid() ? `${startDate.date()} ${MONTH_EN[startDate.month()]} ${startDate.year()}` : "",
+
+        ngay_ket_thuc_vi: endDate.isValid() ? endDate.format("DD/MM/YYYY") : "",
+        ngay_ket_thuc_en: endDate.isValid() ? `${endDate.date()} ${MONTH_EN[endDate.month()]} ${endDate.year()}` : "",
+
+        hoc_luc_vi: xepLoaiVi,
+        hoc_luc_en: xepLoaiEn,
+
+        so_quyet_dinh: gD?.diplomaNumber || "",
+
+        ngay_in_vi: pDate.isValid() ? `Ngày ${pDate.date()} tháng ${pDate.month() + 1} năm ${pDate.year()}` : "",
+        ngay_in_en: pDate.isValid() ? `${MONTH_EN[pDate.month()]} ${pDate.date()}, ${pDate.year()}` : "",
+
+        ngay_tn: pDate.date(),
+        thang_tn: pDate.month() + 1,
+        nam_tn: pDate.year(),
+
+        ...signerInfo,
+        ho_ten_nguoi_ky: signerInfo.ten_day_du,
+      },
+    };
+  });
+
+  try {
+    const templateBuffer = await getTemplateBuffer(prisma, "PhoiBangNganHan_v2.xlsx");
+    const result = await generateExcelFromTemplate(templateBuffer, payload, {
+      showGridLines: true,
+      wrapText: true,
+    });
+
+    const fileName = "PhoiBangNganHan.xlsx";
+    const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`;
+
+    return c.body(result as any, 200, {
+      "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "Content-Disposition": disposition,
+    });
+  } catch (error: any) {
+    console.error("Error generating Excel:", error.message);
+    return c.json({ message: "Lỗi khi xuất file Excel" }, 500);
+  }
 });
 
 export default app;

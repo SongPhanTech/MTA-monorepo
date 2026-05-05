@@ -24,7 +24,6 @@ import { saveAs } from "file-saver"
 
 // Font size constants (half-points: 32 = 16pt, 28 = 14pt, 26 = 13pt)
 const SIZE_BODY = 26
-const SIZE_DESC = 26
 
 interface ExportCriteriaEvaluationProps {
   data: DataTabEvaluationCriterionType
@@ -266,181 +265,6 @@ const ExportCriteriaEvaluation = ({ data }: ExportCriteriaEvaluationProps) => {
     return paragraphs
   }
 
-  const exportDanhSachMinhchung = (dataTable: any[]) => {
-    const title = new Paragraph({
-      alignment: AlignmentType.CENTER,
-      children: [new TextRun({ text: "MỤC LỤC DANH MỤC MINH CHỨNG", bold: true, size: SIZE_BODY })],
-    })
-
-    // Portrait A4: ~9070 DXA usable
-    const COL_STT = 460
-    const COL_MA = 1470
-    const COL_TEN = 3170
-    const COL_NGAY = 1810
-    const COL_NOI = 1350
-    const COL_GHI = 910
-
-    const headerRow = new TableRow({
-      children: [
-        new TableCell({
-          width: { size: COL_STT, type: WidthType.DXA },
-          children: [
-            new Paragraph({
-              alignment: AlignmentType.CENTER,
-              children: [new TextRun({ text: "STT", bold: true, size: SIZE_BODY })],
-            }),
-          ],
-        }),
-        new TableCell({
-          width: { size: COL_MA, type: WidthType.DXA },
-          children: [
-            new Paragraph({
-              alignment: AlignmentType.CENTER,
-              children: [new TextRun({ text: "Mã minh chứng", bold: true, size: SIZE_BODY })],
-            }),
-          ],
-        }),
-        new TableCell({
-          width: { size: COL_TEN, type: WidthType.DXA },
-          children: [
-            new Paragraph({
-              alignment: AlignmentType.CENTER,
-              children: [
-                new TextRun({
-                  text: "Tên minh chứng",
-                  bold: true,
-                  size: SIZE_BODY,
-                }),
-              ],
-            }),
-          ],
-        }),
-        new TableCell({
-          width: { size: COL_NGAY, type: WidthType.DXA },
-          children: [
-            new Paragraph({
-              alignment: AlignmentType.CENTER,
-              children: [
-                new TextRun({
-                  text: "Số, ngày ban hành",
-                  bold: true,
-                  size: SIZE_BODY,
-                }),
-              ],
-            }),
-          ],
-        }),
-        new TableCell({
-          width: { size: COL_NOI, type: WidthType.DXA },
-          children: [
-            new Paragraph({
-              alignment: AlignmentType.CENTER,
-              children: [new TextRun({ text: "Nơi ban hành", bold: true, size: SIZE_BODY })],
-            }),
-          ],
-        }),
-        new TableCell({
-          width: { size: COL_GHI, type: WidthType.DXA },
-          children: [
-            new Paragraph({
-              alignment: AlignmentType.CENTER,
-              children: [new TextRun({ text: "Ghi chú", bold: true, size: SIZE_BODY })],
-            }),
-          ],
-        }),
-      ],
-    })
-
-    const dataRows = dataTable.map(
-      (item: any, index: number) =>
-        new TableRow({
-          children: [
-            new TableCell({
-              children: [
-                new Paragraph({
-                  alignment: AlignmentType.CENTER,
-                  children: [new TextRun({ text: `${index + 1}`, size: SIZE_BODY })],
-                }),
-              ],
-            }),
-            new TableCell({
-              children: [
-                new Paragraph({
-                  alignment: AlignmentType.CENTER,
-                  children: [
-                    new TextRun({
-                      text: `PM.${item?.tag || ""}`,
-                      size: SIZE_BODY,
-                    }),
-                  ],
-                }),
-              ],
-            }),
-            new TableCell({
-              children: [
-                new Paragraph({
-                  children: [
-                    new TextRun({
-                      text: item?.evidence?.name || "",
-                      size: SIZE_BODY,
-                    }),
-                  ],
-                }),
-              ],
-            }),
-            new TableCell({
-              children: [
-                new Paragraph({
-                  children: [
-                    new TextRun({
-                      text: item?.evidence?.information || "",
-                      size: SIZE_BODY,
-                    }),
-                  ],
-                }),
-              ],
-            }),
-            new TableCell({
-              children: [
-                new Paragraph({
-                  children: [
-                    new TextRun({
-                      text: item?.evidence?.issuer || "",
-                      size: SIZE_BODY,
-                    }),
-                  ],
-                }),
-              ],
-            }),
-            new TableCell({
-              children: [
-                new Paragraph({
-                  children: [new TextRun({ text: "", size: SIZE_BODY })],
-                }),
-              ],
-            }),
-          ],
-        })
-    )
-
-    const table = new Table({
-      width: { size: 100, type: WidthType.PERCENTAGE },
-      layout: TableLayoutType.FIXED,
-      columnWidths: [COL_STT, COL_MA, COL_TEN, COL_NGAY, COL_NOI, COL_GHI],
-      borders: {
-        top: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
-        bottom: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
-        left: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
-        right: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
-        insideHorizontal: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
-        insideVertical: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
-      },
-      rows: [headerRow, ...dataRows],
-    })
-
-    return [title, new Paragraph(""), table]
-  }
-
   const CalcevidenceTags = (criteria: any[]) => {
     const map = new Map<string, string>()
     const result: any[] = []
@@ -661,9 +485,9 @@ const ExportCriteriaEvaluation = ({ data }: ExportCriteriaEvaluationProps) => {
         allChildren.push(
           new Paragraph({
             children: [
-              new TextRun({ text: "Tiêu chuẩn: ", size: SIZE_BODY, bold: true }),
+              new TextRun({ text: "Tiêu chuẩn ", size: SIZE_BODY, bold: true }),
               new TextRun({
-                text: `${data.order}: ${data.name || ""}`,
+                text: `${data.order}: ${(data.name || "").replace(/^Tiêu chuẩn\s+\d+[:.]\s*/i, "")}`,
                 size: SIZE_BODY,
               }),
             ],
@@ -674,7 +498,7 @@ const ExportCriteriaEvaluation = ({ data }: ExportCriteriaEvaluationProps) => {
             children: [
               new TextRun({ text: "Tiêu chí: ", size: SIZE_BODY, italics: true }),
               new TextRun({
-                text: `${data.order}.${criterion.order || idx + 1}: ${criterion.name || ""}`,
+                text: `${data.order}.${criterion.order || idx + 1}: ${(criterion.name || "").replace(/^Tiêu chí\s+[\d.]+[:.]\s*/i, "")}`,
                 italics: true,
                 size: SIZE_BODY,
               }),
@@ -758,12 +582,89 @@ const ExportCriteriaEvaluation = ({ data }: ExportCriteriaEvaluationProps) => {
           criterionData?.evaluationCriterion?.score || criterion?.evaluationCriterion?.score || ""
         console.log("--- 5. TỰ ĐÁNH GIÁ ---", scoreRaw)
 
+        const scoreText = scoreRaw.replace(/<[^>]*>/g, "").trim()
+        const isKhongDat = /không\s*đạt|KĐ\b/i.test(scoreText)
+        const isDat = !isKhongDat && /đạt|\bĐ\b/i.test(scoreText)
+
+        const cellBorderScore = {
+          top: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
+          bottom: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
+          left: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
+          right: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
+        }
+
         allChildren.push(
           new Paragraph({
-            children: [new TextRun({ text: "5. Tự đánh giá: ", bold: true, size: SIZE_BODY })],
+            children: [
+              new TextRun({ text: "5. Tự đánh giá: ", bold: true, size: SIZE_BODY }),
+              new TextRun({ text: "Mức đạt được của tiêu chí:", size: SIZE_BODY }),
+            ],
+          }),
+          new Paragraph({
+            children: [
+              new TextRun({ text: "Đánh dấu (×) vào ô tương ứng dưới đây:", italics: true, size: SIZE_BODY }),
+            ],
+          }),
+          new Table({
+            width: { size: 50, type: WidthType.PERCENTAGE },
+            borders: {
+              top: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
+              bottom: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
+              left: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
+              right: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
+              insideHorizontal: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
+              insideVertical: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
+            },
+            rows: [
+              new TableRow({
+                children: [
+                  new TableCell({
+                    borders: cellBorderScore,
+                    width: { size: 50, type: WidthType.PERCENTAGE },
+                    children: [
+                      new Paragraph({
+                        alignment: AlignmentType.CENTER,
+                        children: [new TextRun({ text: "Không đạt (K)", bold: true, size: SIZE_BODY })],
+                      }),
+                    ],
+                  }),
+                  new TableCell({
+                    borders: cellBorderScore,
+                    width: { size: 50, type: WidthType.PERCENTAGE },
+                    children: [
+                      new Paragraph({
+                        alignment: AlignmentType.CENTER,
+                        children: [new TextRun({ text: "Đạt (Đ)", bold: true, size: SIZE_BODY })],
+                      }),
+                    ],
+                  }),
+                ],
+              }),
+              new TableRow({
+                children: [
+                  new TableCell({
+                    borders: cellBorderScore,
+                    children: [
+                      new Paragraph({
+                        alignment: AlignmentType.CENTER,
+                        children: [new TextRun({ text: isKhongDat ? "×" : "", size: SIZE_BODY })],
+                      }),
+                    ],
+                  }),
+                  new TableCell({
+                    borders: cellBorderScore,
+                    children: [
+                      new Paragraph({
+                        alignment: AlignmentType.CENTER,
+                        children: [new TextRun({ text: isDat ? "×" : "", size: SIZE_BODY })],
+                      }),
+                    ],
+                  }),
+                ],
+              }),
+            ],
           })
         )
-        allChildren.push(...(await htmlToParagraphs(processHtmlContent(scoreRaw, evidenceTags))))
         allChildren.push(new Paragraph({ children: [new TextRun({ text: "" })] }))
         allChildren.push(new Paragraph({ children: [new TextRun({ text: "" })] }))
 
@@ -798,22 +699,6 @@ const ExportCriteriaEvaluation = ({ data }: ExportCriteriaEvaluationProps) => {
               },
             },
             children: allChildren,
-          },
-          {
-            properties: {
-              page: {
-                size: {
-                  orientation: PageOrientation.PORTRAIT,
-                },
-                margin: {
-                  top: 720,
-                  bottom: 720,
-                  left: 1417,
-                  right: 1417,
-                },
-              },
-            },
-            children: evidenceList.length > 0 ? exportDanhSachMinhchung(evidenceList) : [],
           },
         ],
       })

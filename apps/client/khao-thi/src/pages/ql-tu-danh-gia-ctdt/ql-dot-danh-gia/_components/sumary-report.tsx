@@ -6,6 +6,7 @@ import type { Prisma } from "@workspace/db/client"
 import { $Enums } from "@workspace/db/client"
 import { RichTextEditor } from "@components/commons/rich-text-editor"
 import { useEffect } from "react"
+import { useDisclosure } from "react-hook-disclosure-modal"
 import useSpinner from "@hooks/spinner"
 import { queryClient } from "@api/index"
 import ExportReport from "./export-report"
@@ -24,6 +25,10 @@ type SumaryReportEvaluationPeriodType = Prisma.EvaluationPeriodGetPayload<{
 const SumaryReport = () => {
   const [form] = Form.useForm<SumaryReportEvaluationPeriodType>()
   const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
+
+  const { onOpen: openViewMinhChung } = useDisclosure<{ evidenceId: string }>({
+    tag: "ViewMinhChungModal",
+  })
 
   const { showSpinner, hideSpinner } = useSpinner()
 
@@ -160,16 +165,16 @@ const SumaryReport = () => {
         </div>
         <Typography.Title level={5}>Phần Ⅰ. KHÁI QUÁT </Typography.Title>
         <Form.Item label="1. Đặt vấn đề" name="overviewProblem">
-          <RichTextEditor />
+          <RichTextEditor onEvidenceClick={(id) => openViewMinhChung({ evidenceId: id })} />
         </Form.Item>
         <Form.Item label="2. Tổng quan chung" name="overviewGeneral">
-          <RichTextEditor />
+          <RichTextEditor onEvidenceClick={(id) => openViewMinhChung({ evidenceId: id })} />
         </Form.Item>
         <Form.Item
           label="3. Kết quả rà soát việc đáp ứng quy định về chuẩn chương trình đào tạo"
           name="overviewResults"
         >
-          <RichTextEditor />
+          <RichTextEditor onEvidenceClick={(id) => openViewMinhChung({ evidenceId: id })} />
         </Form.Item>
         <Typography.Title level={5}>
           Phần Ⅱ. TỰ ĐÁNH GIÁ THEO CÁC TIÊU CHUẨN, TIÊU CHÍ
@@ -187,7 +192,7 @@ const SumaryReport = () => {
         )}
         <Typography.Title level={5}>Phần Ⅲ. KẾT LUẬN </Typography.Title>
         <Form.Item name="conclude">
-          <RichTextEditor />
+          <RichTextEditor onEvidenceClick={(id) => openViewMinhChung({ evidenceId: id })} />
         </Form.Item>
       </Form>
     </div>

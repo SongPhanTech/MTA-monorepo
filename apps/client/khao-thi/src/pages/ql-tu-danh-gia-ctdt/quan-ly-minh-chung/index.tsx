@@ -5,17 +5,73 @@ import DeleteIcon from "@components/icons/delete"
 import EditIcon from "@components/icons/edit"
 import useSpinner from "@hooks/spinner"
 import EvaluateLayout from "@layouts/evaluate-layout"
+import { DownloadOutlined, EyeOutlined, PaperClipOutlined } from "@ant-design/icons"
 import {
   useDeleteEvidence,
   useDeleteEvidenceCategory,
   useFindManyEvidenceCategory,
 } from "@workspace/db/hooks"
+import type { EvidenceFile } from "@workspace/db"
+import type { XemBangChungFilesInput } from "@components/modal/xem-bang-chung-files-modal"
+import { getMinioUrl, getRuntimeEnv } from "@workspace/libs/utils"
 import { useAbility } from "@workspace/permissions/hooks"
 import { KHAO_THI_PERMISSION } from "@workspace/router"
 import { Button, Col, Flex, Input, message, Row, Tooltip } from "antd"
 import { BookPlus } from "lucide-react"
 import { useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
+import { FILE_SHOW_LIMIT } from "@constants/constants"
+
+function FileItem({
+  file,
+  onPreview,
+}: {
+  file: EvidenceFile
+  onPreview: (file: EvidenceFile) => void
+}) {
+  const handleDownload = async (e: React.MouseEvent) => {
+    e.stopPropagation()
+    try {
+      const url = `${getRuntimeEnv("NEXT_PUBLIC_MINIO_ENDPOINT")}/${file.path}`
+      const response = await fetch(url)
+      const blob = await response.blob()
+      const blobUrl = URL.createObjectURL(blob)
+      const a = document.createElement("a")
+      a.href = blobUrl
+      a.download = file.name
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+      URL.revokeObjectURL(blobUrl)
+    } catch {
+      message.error("Không thể tải file")
+    }
+  }
+
+  return (
+    <div className="flex items-center gap-1 border border-solid border-[#D1D5DB] rounded px-2 py-1 bg-white w-[200px]">
+      <PaperClipOutlined className="text-gray-500 text-xs flex-shrink-0" />
+      <Tooltip title={file.name}>
+        <span className="truncate text-xs flex-1 w-0">{file.name}</span>
+      </Tooltip>
+      <Tooltip title="Xem trước">
+        <EyeOutlined
+          className="text-blue-500 text-xs flex-shrink-0 cursor-pointer ml-1"
+          onClick={(e) => {
+            e.stopPropagation()
+            onPreview(file)
+          }}
+        />
+      </Tooltip>
+      <Tooltip title="Tải xuống">
+        <DownloadOutlined
+          className="text-gray-500 text-xs flex-shrink-0 cursor-pointer ml-1"
+          onClick={handleDownload}
+        />
+      </Tooltip>
+    </div>
+  )
+}
 
 export default function EvidenceCategory() {
   const { can, canSome } = useAbility()
@@ -52,10 +108,31 @@ export default function EvidenceCategory() {
       evidences: {
         where,
         orderBy: [{ name: "desc" }],
+        include: { evidenceFile: true },
       },
     },
     orderBy: [{ name: "desc" }],
   })
+
+  const { onOpen: onOpenBangChungFiles } = useDisclosure<XemBangChungFilesInput>({
+    tag: "XemBangChungFilesModal",
+  })
+
+  const { onOpen: onOpenPreview } = useDisclosure<{
+    uri: string
+    name?: string
+    mimeType?: string
+  }>({
+    tag: "XemTaiLieu",
+  })
+
+  const handlePreviewFile = (file: EvidenceFile) => {
+    onOpenPreview({
+      uri: getMinioUrl(file.path),
+      name: file.name,
+      mimeType: file.name.split(".").pop() || file.mimeType || "",
+    })
+  }
 
   const { onOpen: onOpenPutEvidenceCategory } = useDisclosure<string>({
     tag: "PutEvidenceCategory",
@@ -226,6 +303,34 @@ export default function EvidenceCategory() {
                 width: 120,
                 align: "left",
                 render: (_, record) => (record?.issuer ? record.issuer : ""),
+              },
+              {
+                title: "Bằng chứng",
+                width: 220,
+                align: "left",
+                render: (_, record) => {
+                  const files: EvidenceFile[] = record?.evidenceFile ?? []
+                  if (!files.length) return null
+                  const visible = files.slice(0, FILE_SHOW_LIMIT)
+                  const remaining = files.length - FILE_SHOW_LIMIT
+                  return (
+                    <div className="flex flex-col gap-1">
+                      {visible.map((file) => (
+                        <FileItem key={file.id} file={file} onPreview={handlePreviewFile} />
+                      ))}
+                      {remaining > 0 && (
+                        <span
+                          className="text-green-600 cursor-pointer text-xs text-right"
+                          onClick={() =>
+                            onOpenBangChungFiles({ files, evidenceName: record?.name ?? "" })
+                          }
+                        >
+                          Xem thêm ({remaining})
+                        </span>
+                      )}
+                    </div>
+                  )
+                },
               },
               {
                 title: "Ghi chú",

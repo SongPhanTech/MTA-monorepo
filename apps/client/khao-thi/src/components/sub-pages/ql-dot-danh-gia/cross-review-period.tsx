@@ -2,6 +2,7 @@ import { RichTextEditor } from "@components/commons/rich-text-editor"
 import type { DataTabCrossReviewPeriodType } from "@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia/_components/cross-review"
 import { Collapse, Form } from "antd"
 import { useEffect } from "react"
+import { useDisclosure } from "react-hook-disclosure-modal"
 
 export type PutRequirementCriterion = {
   criteria: Record<string, any>
@@ -11,6 +12,10 @@ export type PutRequirementCriterion = {
 
 export default function CrossReviewPeriodSubPage({ data }: { data: DataTabCrossReviewPeriodType }) {
   const [form] = Form.useForm<PutRequirementCriterion>()
+
+  const { onOpen: openViewMinhChung } = useDisclosure<{ evidenceId: string }>({
+    tag: "ViewMinhChungModal",
+  })
 
   useEffect(() => {
     if (data) {
@@ -38,7 +43,7 @@ export default function CrossReviewPeriodSubPage({ data }: { data: DataTabCrossR
       <div className="flex-1 overflow-y-auto overflow-x-hidden px-2">
         <Form form={form} layout="vertical" className="form-evidence">
           <Form.Item label="Mở đầu" name="opening">
-            <RichTextEditor id="opening" editable={false} />
+            <RichTextEditor id="opening" editable={false} onEvidenceClick={(id) => openViewMinhChung({ evidenceId: id })} />
           </Form.Item>
 
           <Form.List name="criteria">
@@ -64,35 +69,35 @@ export default function CrossReviewPeriodSubPage({ data }: { data: DataTabCrossR
                                   label="1. Mô tả hiện trạng"
                                   name={[name, "evaluationCriterion", "currentSituation"]}
                                 >
-                                  <RichTextEditor id={item.id} editable={false} />
+                                  <RichTextEditor id={item.id} editable={false} onEvidenceClick={(id) => openViewMinhChung({ evidenceId: id })} />
                                 </Form.Item>
 
                                 <Form.Item
                                   label="2. Điểm mạnh"
                                   name={[name, "evaluationCriterion", "strengths"]}
                                 >
-                                  <RichTextEditor id={item.id} editable={false} />
+                                  <RichTextEditor id={item.id} editable={false} onEvidenceClick={(id) => openViewMinhChung({ evidenceId: id })} />
                                 </Form.Item>
 
                                 <Form.Item
                                   label="3. Điểm tồn tại"
                                   name={[name, "evaluationCriterion", "weakness"]}
                                 >
-                                  <RichTextEditor id={item.id} editable={false} />
+                                  <RichTextEditor id={item.id} editable={false} onEvidenceClick={(id) => openViewMinhChung({ evidenceId: id })} />
                                 </Form.Item>
 
                                 <Form.Item
                                   label="4. Kế hoạch hành động"
                                   name={[name, "evaluationCriterion", "actionPlan"]}
                                 >
-                                  <RichTextEditor id={item.id} editable={false} />
+                                  <RichTextEditor id={item.id} editable={false} onEvidenceClick={(id) => openViewMinhChung({ evidenceId: id })} />
                                 </Form.Item>
 
                                 <Form.Item
                                   label="5. Tự đánh giá"
                                   name={[name, "evaluationCriterion", "score"]}
                                 >
-                                  <RichTextEditor id={item.id} editable={false} />
+                                  <RichTextEditor id={item.id} editable={false} onEvidenceClick={(id) => openViewMinhChung({ evidenceId: id })} />
                                 </Form.Item>
                               </>
                             ),
@@ -110,7 +115,7 @@ export default function CrossReviewPeriodSubPage({ data }: { data: DataTabCrossR
           </Form.List>
 
           <Form.Item label="Kết luận" name="conclusion">
-            <RichTextEditor id="conclusion" editable={false} />
+            <RichTextEditor id="conclusion" editable={false} onEvidenceClick={(id) => openViewMinhChung({ evidenceId: id })} />
           </Form.Item>
         </Form>
       </div>

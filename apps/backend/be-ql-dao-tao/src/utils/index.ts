@@ -1,5 +1,7 @@
 import { $Enums, type PrismaClient } from "@workspace/db"
 import { HTTPException } from "hono/http-exception"
+import ExcelJS from "exceljs"
+import XlsxTemplate from "xlsx-template"
 
 export function parseDate(input?: number | string | Date): Date | null {
   if (!input) return null
@@ -910,3 +912,279 @@ export const fetchBuffer = async (url: string): Promise<Buffer> => {
   const arrayBuffer = await response.arrayBuffer()
   return Buffer.from(arrayBuffer)
 }
+
+export const parseSignerInfo = (signerStr: string) => {
+  if (!signerStr) {
+    return {
+      chuc_vi: "GIÁM ĐỐC",
+      chuc_vi_ky_thay: "",
+      quan_ham: "Trung tướng",
+      ten_day_du: "Lê Minh Thái",
+    };
+  }
+
+  const parts = signerStr.split(",").map((p) => p.trim());
+  const role = parts[0] || "";
+  const rank = parts[1] || "";
+  const nameWithDegree = parts[2] || "";
+
+  const isDirector = role.toLowerCase() === "giám đốc" || role.toLowerCase() === "gd";
+
+  return {
+    chuc_vi: isDirector ? "GIÁM ĐỐC" : "KT. GIÁM ĐỐC",
+    chuc_vi_ky_thay: isDirector ? "" : role.toUpperCase(),
+    quan_ham: rank,
+    ten_day_du: nameWithDegree,
+  };
+};
+
+export const generateExcelFromTemplate = async (
+  templateBuffer: Buffer,
+  payload: { data: any }[],
+  options: { showGridLines?: boolean; wrapText?: boolean } = {}
+) => {
+  const PAGE_BREAK_MARKER = "ngắt trang";
+  const { showGridLines = true, wrapText = true } = options;
+
+  const normalizeCellValue = (value: ExcelJS.CellValue | null | undefined): string => {
+    if (value === null || value === undefined) return "";
+    if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") {
+      return String(value).trim().toLowerCase();
+    }
+    if (value instanceof Date) {
+      return value.toISOString().trim().toLowerCase();
+    }
+    if (typeof value === "object") {
+      if ("richText" in value && Array.isArray(value.richText)) {
+        return value.richText
+          .map((part) => part.text)
+          .join("")
+          .trim()
+          .toLowerCase();
+      }
+      if ("text" in value && typeof value.text === "string") {
+        return value.text.trim().toLowerCase();
+      }
+      if ("result" in value && value.result !== undefined && value.result !== null) {
+        return String(value.result).trim().toLowerCase();
+      }
+    }
+    return "";
+  };
+
+  const toColumnLetter = (columnNumber: number) => {
+    let result = "";
+    let current = columnNumber;
+    while (current > 0) {
+      const remainder = (current - 1) % 26;
+      result = String.fromCharCode(65 + remainder) + result;
+      current = Math.floor((current - 1) / 26);
+    }
+    return result || "A";
+  };
+
+  const getLastUsedDataRow = (sheet: ExcelJS.Worksheet) => {
+    const n = sheet.rowCount;
+    for (let r = n; r >= 1; r--) {
+      const row = sheet.getRow(r);
+      let has = false;
+      row.eachCell({ includeEmpty: false }, () => {
+        has = true;
+      });
+      if (has) return r;
+    }
+    return 1;
+  };
+
+  const copySheetContent = (
+    sourceSheet: ExcelJS.Worksheet,
+    targetSheet: ExcelJS.Worksheet,
+    startRow: number
+  ) => {
+    const rowOffset = startRow - 1;
+    let currentRowInCopy = startRow;
+
+    const lastRow = sourceSheet.lastRow ? sourceSheet.lastRow.number : 0;
+    
+    for (let r = 1; r <= lastRow; r++) {
+      const row = sourceSheet.getRow(r);
+      const newRow = targetSheet.getRow(currentRowInCopy);
+      
+      if (row.height !== undefined) newRow.height = row.height;
+      if (row.hidden) newRow.hidden = true;
+      if (row.outlineLevel !== undefined) newRow.outlineLevel = row.outlineLevel;
+      
+      if (row.style) {
+        newRow.style = { ...row.style };
+      }
+
+      row.eachCell({ includeEmpty: true }, (cell, colNumber) => {
+        const newCell = newRow.getCell(colNumber);
+        newCell.value = cell.value;
+        
+        if (cell.style) {
+          newCell.style = {
+            font: cell.font ? { ...cell.font } : undefined,
+            alignment: cell.alignment ? { ...cell.alignment } : undefined,
+            border: cell.border ? { ...cell.border } : undefined,
+            fill: cell.fill ? { ...cell.fill } : undefined,
+            numFmt: cell.numFmt,
+            protection: cell.protection ? { ...cell.protection } : undefined,
+          } as ExcelJS.Style;
+
+          if (wrapText && newCell.alignment) {
+            newCell.alignment.wrapText = true;
+          }
+        }
+      });
+
+      newRow.commit();
+      currentRowInCopy++;
+    }
+
+    if (sourceSheet.model.merges) {
+      for (const merge of sourceSheet.model.merges) {
+        const [topLeft, bottomRight] = merge.split(":");
+        const topMatch = topLeft?.match(/([A-Z]+)(\d+)/);
+        const bottomMatch = bottomRight?.match(/([A-Z]+)(\d+)/);
+
+        if (topMatch && bottomMatch && topMatch[2] && bottomMatch[2]) {
+          const startRowNum = Number.parseInt(topMatch[2], 10) + rowOffset;
+          const endRowNum = Number.parseInt(bottomMatch[2], 10) + rowOffset;
+          const startCol = topMatch[1];
+          const endCol = bottomMatch[1];
+          targetSheet.mergeCells(`${startCol}${startRowNum}:${endCol}${endRowNum}`);
+        }
+      }
+    }
+
+    sourceSheet.getImages().forEach((image) => {
+      const imgData = sourceSheet.workbook.getImage(Number(image.imageId));
+      const newImageId = targetSheet.workbook.addImage({
+        buffer: imgData.buffer as any,
+        extension: imgData.extension,
+      });
+
+      const { editAs, range } = image;
+      if (range) {
+        const newRange = {
+          tl: { col: range.tl.col, row: range.tl.row + rowOffset },
+          br: { col: range.br.col, row: range.br.row + rowOffset },
+        };
+        targetSheet.addImage(newImageId, {
+          tl: newRange.tl,
+          br: newRange.br,
+          editAs: editAs as any,
+        });
+      }
+    });
+
+    return currentRowInCopy;
+  };
+
+  const applyTemplatePageSetup = (source: ExcelJS.Worksheet | undefined, target: ExcelJS.Worksheet) => {
+    if (!source) return;
+    const src = source.pageSetup;
+    if (!src) return;
+    const dst = target.pageSetup;
+
+    if (src.margins) {
+      dst.margins = { ...dst.margins, ...src.margins };
+    }
+
+    const pageSetupKeys: (keyof ExcelJS.PageSetup)[] = [
+      "orientation", "horizontalDpi", "verticalDpi", "fitToPage", "fitToWidth", "fitToHeight",
+      "scale", "pageOrder", "blackAndWhite", "draft", "cellComments", "errors", "paperSize",
+      "showRowColHeaders", "showGridLines", "firstPageNumber", "horizontalCentered",
+      "verticalCentered", "printTitlesRow", "printTitlesColumn",
+    ];
+    for (const key of pageSetupKeys) {
+      const value = src[key];
+      if (value !== undefined && value !== null) {
+        (dst as Record<string, unknown>)[key as string] = value;
+      }
+    }
+
+    if (source.headerFooter) {
+      target.headerFooter = { ...target.headerFooter, ...source.headerFooter };
+    }
+
+    if (source.views) {
+      target.views = source.views;
+    }
+  };
+
+  const mergedWorkbook = new ExcelJS.Workbook();
+  const outputSheet = mergedWorkbook.addWorksheet("Merged");
+  outputSheet.views = [{ showGridLines }];
+
+  const generatedSheets: ExcelJS.Worksheet[] = [];
+  for (const item of payload) {
+    const template = new XlsxTemplate(templateBuffer);
+    template.substitute(1, item.data);
+    const sheetBuffer = await template.generate({ type: "nodebuffer" });
+    const workbook = new ExcelJS.Workbook();
+    await workbook.xlsx.load(sheetBuffer as any);
+    const worksheet = workbook.getWorksheet(1) || workbook.worksheets[0];
+    if (worksheet) generatedSheets.push(worksheet);
+  }
+
+  let currentRow = 1;
+  for (const sourceSheet of generatedSheets) {
+    currentRow = copySheetContent(sourceSheet, outputSheet, currentRow);
+  }
+
+  if (generatedSheets.length > 0) {
+    generatedSheets[0].columns.forEach((col, index) => {
+      if (!col) return;
+      const dest = outputSheet.getColumn(index + 1);
+      if (col.width) dest.width = col.width;
+      if (col.hidden) dest.hidden = true;
+    });
+    applyTemplatePageSetup(generatedSheets[0], outputSheet);
+  }
+
+  const finalMarkerRows: number[] = [];
+  for (let rowNumber = 1; rowNumber <= outputSheet.rowCount; rowNumber++) {
+    const row = outputSheet.getRow(rowNumber);
+    let hasPageBreakMarker = false;
+    row.eachCell({ includeEmpty: true }, (cell) => {
+      if (normalizeCellValue(cell.value) === PAGE_BREAK_MARKER) {
+        hasPageBreakMarker = true;
+        cell.value = null;
+      }
+    });
+
+    if (hasPageBreakMarker) {
+      row.hidden = true;
+      finalMarkerRows.push(rowNumber);
+    }
+    row.commit();
+  }
+
+  const lastDataRow = getLastUsedDataRow(outputSheet);
+  const maxColumn = Math.max(outputSheet.columnCount, 1);
+  const maxColumnLetter = toColumnLetter(maxColumn);
+
+  if (finalMarkerRows.length > 0) {
+    const uniqueBreakRows = [...new Set(finalMarkerRows)].sort((a, b) => a - b);
+    for (const markerRow of uniqueBreakRows) {
+      if (markerRow > 1 && markerRow <= lastDataRow) {
+        outputSheet.getRow(markerRow - 1).addPageBreak();
+      }
+    }
+    outputSheet.pageSetup.printArea = `A1:${maxColumnLetter}${lastDataRow}`;
+  }
+
+  return await mergedWorkbook.xlsx.writeBuffer();
+};
+export const getScoreClassification = (
+  finalScore: number,
+  scoreConverts: { base10Min: number; base10Max: number; classification: string }[] = []
+) => {
+  const matched = scoreConverts.find(
+    (range) => finalScore >= range.base10Min && finalScore <= range.base10Max
+  );
+
+  return matched?.classification ?? "";
+};

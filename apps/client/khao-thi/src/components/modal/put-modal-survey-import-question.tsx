@@ -19,8 +19,16 @@ export type PutSurveyQuestionType = SurveyQuestion
 type ImportedQuestion = {
   content: string
   type: SurveyQuestionType
+  specificChoice?: Array<{
+    answer: string
+    description: string | null
+  }>
 }
 function detectQuestionType(text: string): SurveyQuestionType {
+  if (/\(\s*TN\*\s*\)/i.test(text)) {
+    return SurveyQuestionType.SINGLE_CHOICE
+  }
+
   if (/\(\s*TN\s*\)/i.test(text)) {
     return SurveyQuestionType.SINGLE_CHOICE
   }
@@ -35,7 +43,7 @@ function detectQuestionType(text: string): SurveyQuestionType {
 
 function joinRunsWithSpace(runs: any[]): string {
   let text = ""
-  let prevEndedWithChar = false
+  let prevChunk = ""
 
   for (const r of runs) {
     const t = r?.["w:t"]
@@ -44,15 +52,25 @@ function joinRunsWithSpace(runs: any[]): string {
 
     if (!value) continue
 
-    const startsWithPunctuation = /^[.,!?;:]/.test(value)
-    const endsWithChar = /[A-Za-zÀ-ỹ0-9]$/.test(value)
+    const prevEndsWithWord = /[A-Za-zÀ-ỹ]$/.test(prevChunk)
+    const currentStartsWithWord = /^[A-Za-zÀ-ỹ]/.test(value)
+    const prevHasTrailingSpace = /\s$/.test(prevChunk)
+    const currentHasLeadingSpace = /^\s/.test(value)
+    const shouldInsertSpace =
+      text.length > 0 &&
+      prevEndsWithWord &&
+      currentStartsWithWord &&
+      !prevHasTrailingSpace &&
+      !currentHasLeadingSpace &&
+      prevChunk.trim().length > 1 &&
+      value.trim().length > 1
 
-    if (text && prevEndedWithChar && !startsWithPunctuation) {
+    if (shouldInsertSpace) {
       text += " "
     }
 
     text += value
-    prevEndedWithChar = endsWithChar
+    prevChunk = value
   }
 
   return text.trim()
@@ -62,8 +80,8 @@ function stripLeadingIndex(text: string): string {
   return (
     text
       .trim()
-      // remove (TN) / (TL)
-      .replace(/\(\s*(TN|TL)\s*\)/gi, "")
+      // remove (TN) / (TN*) / (TL)
+      .replace(/\(\s*(TN\*|TN|TL)\s*\)/gi, "")
       // dấu . hoặc - đứng một mình
       .replace(/^[.-]\s*/, "")
       // 1. , 1.1 , 1.2.3 , 01.02
@@ -76,6 +94,89 @@ function stripLeadingIndex(text: string): string {
       .replace(/^(Câu|Câu hỏi)\s*\d+\s*[:-]?\s*/i, "")
       .trim()
   )
+}
+
+function isQuestionStartLine(text: string): boolean {
+  return /\(\s*(TN\*|TN|TL)\s*\)/i.test(text)
+}
+
+function parseSpecificChoiceLine(text: string): {
+  answer: string
+  description: string | null
+} | null {
+  const match = text.match(/^((?:#\d+)|[A-Z])\s*[.)]\s*(.+?)\s*(?:\((.*?)\))?\s*$/i)
+  if (!match) return null
+
+  const answer = match[2]?.trim()
+  const rawDescription = match[3]?.trim() ?? ""
+  const description = rawDescription.trim()
+
+  return {
+    answer,
+    description: description || null,
+  }
+}
+
+function splitQuestionAndInlineChoices(text: string): {
+  questionContent: string
+  inlineChoices: Array<{
+    answer: string
+    description: string | null
+  }>
+} {
+  const firstChoiceMatch = text.match(/(?:#\d+|[A-Z])\s*[.)]\s*/i)
+  if (!firstChoiceMatch || firstChoiceMatch.index === undefined) {
+    return {
+      questionContent: text.trim(),
+      inlineChoices: [],
+    }
+  }
+
+  const firstChoiceMarker = /(?:#\d+|[A-Z])\s*[.)]\s*/i.exec(text.slice(firstChoiceMatch.index))
+  if (!firstChoiceMarker || firstChoiceMarker.index === undefined) {
+    return {
+      questionContent: text.trim(),
+      inlineChoices: [],
+    }
+  }
+
+  const firstChoiceStart = firstChoiceMatch.index + firstChoiceMarker.index
+  const questionContent = text.slice(0, firstChoiceStart).trim()
+  const choicesPart = text.slice(firstChoiceStart).trim()
+
+  const inlineChoices: Array<{
+    answer: string
+    description: string | null
+  }> = []
+
+  const hasNumberedChoices = /#\d+\s*[.)]\s*/.test(choicesPart)
+  const choiceRegex = hasNumberedChoices
+    ? /(#\d+)\s*[.)]\s*([\s\S]*?)(?=(?:#\d+\s*[.)]\s*)|$)/g
+    : /([A-Z])\s*[.)]\s*([\s\S]*?)(?=(?:[A-Z]\s*[.)]\s*)|$)/g
+  const choiceMatches = [...choicesPart.matchAll(choiceRegex)]
+
+  for (const match of choiceMatches) {
+    const answer = match[2]?.trim()
+    if (!answer) continue
+
+    const choiceText = `${match[1]}. ${answer}`
+    const parsedChoice = parseSpecificChoiceLine(choiceText)
+    if (parsedChoice?.answer) {
+      inlineChoices.push(parsedChoice)
+    }
+  }
+
+  if (!questionContent || !inlineChoices.length) {
+    return {
+      questionContent: text.trim(),
+      inlineChoices: [],
+    }
+  }
+
+  return {
+    questionContent,
+    inlineChoices,
+  }
 }
 
 const PutSurveyImportQuestionModal = () => {
@@ -129,30 +230,74 @@ const PutSurveyImportQuestionModal = () => {
         return
       }
 
-      const questions: ImportedQuestion[] = []
-
+      const lines: string[] = []
       for (const p of paragraphs) {
         const runs = Array.isArray(p["w:r"]) ? p["w:r"] : [p["w:r"]]
         const rawText = joinRunsWithSpace(runs)
-
-        if (!rawText) continue
-
-        const type = detectQuestionType(rawText)
-        const content = stripLeadingIndex(rawText)
-
-        if (!content) continue
-
-        questions.push({
-          content,
-          type,
-        })
+        if (rawText) {
+          lines.push(rawText)
+        }
       }
 
-      if (!questions.length) {
+      const questions: ImportedQuestion[] = []
+      let currentQuestion: ImportedQuestion | null = null
+      let currentIsSpecialSingleChoice = false
+
+      for (const rawText of lines) {
+        const isQuestionLine = isQuestionStartLine(rawText)
+
+        if (isQuestionLine) {
+          if (currentQuestion?.content) {
+            questions.push(currentQuestion)
+          }
+
+          const isSpecial = /\(\s*TN\*\s*\)/i.test(rawText)
+          const type = detectQuestionType(rawText)
+          const strippedContent = stripLeadingIndex(rawText)
+          if (!strippedContent) {
+            currentQuestion = null
+            currentIsSpecialSingleChoice = false
+            continue
+          }
+
+          const { questionContent, inlineChoices } =
+            isSpecial && type === SurveyQuestionType.SINGLE_CHOICE
+              ? splitQuestionAndInlineChoices(strippedContent)
+              : { questionContent: strippedContent, inlineChoices: [] }
+
+          currentQuestion = {
+            content: questionContent,
+            type,
+            specificChoice: inlineChoices,
+          }
+          currentIsSpecialSingleChoice = isSpecial && type === SurveyQuestionType.SINGLE_CHOICE
+          continue
+        }
+
+        if (!currentQuestion) continue
+
+        if (currentIsSpecialSingleChoice) {
+          const parsedChoice = parseSpecificChoiceLine(rawText)
+          if (parsedChoice) {
+            currentQuestion.specificChoice?.push(parsedChoice)
+          }
+        }
+      }
+
+      if (currentQuestion?.content) {
+        questions.push(currentQuestion)
+      }
+
+      const normalizedQuestions = questions.map((q) => ({
+        ...q,
+        specificChoice: q.specificChoice?.length ? q.specificChoice : undefined,
+      }))
+
+      if (!normalizedQuestions.length) {
         message.error("Không có câu hỏi hợp lệ")
         return
       }
-      const uniqueQuestions = questions.filter(
+      const uniqueQuestions = normalizedQuestions.filter(
         (q, index, arr) => arr.findIndex((x) => x.content === q.content) === index
       )
 
@@ -183,20 +328,29 @@ const PutSurveyImportQuestionModal = () => {
     try {
       showSpinner()
 
-      const res = await sqlTransaction([
-        {
-          model: "SurveyQuestion",
-          operation: "createMany",
+      const createOperations = selectedQuestions.map((i) => ({
+        model: "SurveyQuestion" as const,
+        operation: "create" as const,
+        data: {
           data: {
-            data: selectedQuestions.map((i) => ({
-              name: i.content,
-              surveyQuestionGroupId: output.surveyQuestionGroupId,
-              type: i.type,
-              description: null,
-            })),
+            name: i.content,
+            surveyQuestionGroupId: output.surveyQuestionGroupId,
+            type: i.type,
+            description: null,
+            ...(i.type === SurveyQuestionType.SINGLE_CHOICE && i.specificChoice?.length
+              ? {
+                  specificChoice: {
+                    createMany: {
+                      data: i.specificChoice,
+                    },
+                  },
+                }
+              : {}),
           },
         },
-      ])
+      }))
+
+      const res = await sqlTransaction(createOperations)
       if (res?.status !== 200) {
         message.error("Có lỗi xảy ra khi thêm mới câu hỏi")
         return

@@ -69,11 +69,13 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
           {
             name: "Đã làm",
             type: "bar",
+            color: "#9aa3e0",
             data: data?.data.map((i) => i.taken),
           },
           {
             name: "Tổng",
             type: "bar",
+            color: "#028850",
             data: data?.data.map((i) => i.total),
           },
         ],
@@ -88,7 +90,8 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
     answerDescriptions: GetSurveyStatistics200QuestionsItemAnswersItem[]
   ) {
     // Map answer -> description
-    const color = ["#dd0b31", "#ea8585", "#ffc769", "#4b50db", "#028850"]
+    // Moderately pale palette (nhạt vừa) to reduce glare but keep contrast
+    const color = ["#ff4d52", "#ea8585", "#ffd977", "#9aa3e0", "#028850"]
     const answerMap: Record<string, string> = {}
     answerDescriptions.forEach((a) => {
       answerMap[a.answer] = a.description as string

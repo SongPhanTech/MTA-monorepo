@@ -200,6 +200,15 @@ const WordImportModal: React.FC = () => {
 
   const cleanQuestionText = (text: string) => normalizeWordQuestionText(text)
 
+  const splitQuestionContentAndOptionLines = (lines: string[]) => {
+    const optionLineRegex = /^\s*[A-D]\.\s*/i
+
+    return {
+      questionLines: lines.filter((line) => !optionLineRegex.test(line)),
+      optionLines: lines.filter((line) => optionLineRegex.test(line)),
+    }
+  }
+
   const mapQuestionTypeFromText = (raw: string): QuestionType | undefined => {
     const value = raw.trim().toUpperCase().replace(/\s+/g, "")
 
@@ -314,7 +323,7 @@ const WordImportModal: React.FC = () => {
     const valid = [
       0, 0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.25, 2.5, 2.75, 3, 3.25, 3.5, 3.75, 4, 4.25, 4.5,
       4.75, 5, 5.25, 5.5, 5.75, 6, 6.25, 6.5, 6.75, 7, 7.25, 7.5, 7.75, 8, 8.25, 8.5, 8.75, 9, 9.25,
-      9.5, 9.75,
+      9.5, 9.75, 10,
     ]
 
     if (!valid.includes(Number(decimal.toFixed(2)))) {
@@ -494,27 +503,27 @@ const WordImportModal: React.FC = () => {
         lines: { text: string; images: { name: string; blob: Blob }[] }[]
       }[] = []
       let currentBlock: { text: string; images: { name: string; blob: Blob }[] }[] = []
+      let foundFirstQuestion = false
 
       for (const line of lines) {
         const trimmed = line.text.replace(/\s+/g, " ").trim()
-        if (!trimmed) {
-          // Dòng trống - bỏ qua hoặc thêm vào block hiện tại
-          if (currentBlock.length > 0) {
-            currentBlock.push(line)
-          }
-          continue
-        }
 
         // Kiểm tra xem dòng này có phải bắt đầu câu hỏi mới không
         if (/^Câu\s+\d+\s*:/i.test(trimmed)) {
+          foundFirstQuestion = true
           // Lưu block cũ
           if (currentBlock.length > 0) {
             questionBlocks.push({ lines: currentBlock })
           }
           currentBlock = [line]
-        } else {
-          currentBlock.push(line)
+        } else if (foundFirstQuestion) {
+          if (!trimmed && currentBlock.length > 0) {
+            currentBlock.push(line)
+          } else if (trimmed) {
+            currentBlock.push(line)
+          }
         }
+        // Bỏ qua tất cả dòng trước câu hỏi đầu tiên (phần header hướng dẫn)
       }
 
       // Lưu block cuối
@@ -599,7 +608,9 @@ const WordImportModal: React.FC = () => {
           }
         }
 
-        const rawQuestionText = normalizeWordQuestionText(contentLines.join("\n"))
+        const previewQuestionText = normalizeWordQuestionText(contentLines.join("\n"))
+        const { questionLines, optionLines } = splitQuestionContentAndOptionLines(contentLines)
+        const rawQuestionText = normalizeWordQuestionText(questionLines.join("\n"))
         const answerTextRaw = normalizeWordQuestionText(answerLines.join("\n"))
 
         const question: any = {
@@ -610,13 +621,13 @@ const WordImportModal: React.FC = () => {
           pointRaw: headerInfo.point,
           point: pointCheck.isInvalid ? undefined : point,
           pointStatus: pointCheck.color,
+          previewContent: previewQuestionText,
         }
 
         if (type === QuestionType.SINGLE_CHOICE || type === QuestionType.MULTIPLE_CHOICE) {
-          question.content = rawQuestionText
+          question.content = cleanQuestionText(rawQuestionText)
 
-          question.optionsRaw = contentLines
-            .filter((l) => /^\s*[A-D]\.\s*/i.test(l))
+          question.optionsRaw = optionLines
             .map((line) => {
               const match = line.match(/^([A-D])\.\s*(.+)$/i)
               return {
@@ -647,12 +658,11 @@ const WordImportModal: React.FC = () => {
           }
           question.explanation = answerTextRaw
         } else if (type === QuestionType.ORDERING) {
-          question.content = rawQuestionText
+          question.content = cleanQuestionText(rawQuestionText)
           question.explanation = answerTextRaw
           question.answer = answerTextRaw
 
-          question.optionsRaw = contentLines
-            .filter((l) => /^[A-D]\.\s*/i.test(l))
+          question.optionsRaw = optionLines
             .map((line) => {
               const match = line.match(/^([A-D])\.\s*(.+)$/i)
               return {
@@ -723,7 +733,7 @@ const WordImportModal: React.FC = () => {
       width: 350,
       type: "input",
       render: (text: string, record: any) => {
-        let html = text
+        let html = record.previewContent || text
 
         html = renderContentWithImagePlaceholders(html, record.contentImagesRaw || [])
 

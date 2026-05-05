@@ -231,7 +231,7 @@ function DanhSachDoiTuong({ selectedId }: { selectedId: Survey | null }) {
             </Dropdown>
 
             <Button
-              color="blue"
+              color="primary"
               onClick={() => {
                 setFilters({ ...filters, isStudent: "all" })
               }}
@@ -241,7 +241,7 @@ function DanhSachDoiTuong({ selectedId }: { selectedId: Survey | null }) {
               Tất cả
             </Button>
             <Button
-              color="purple"
+              color="primary"
               onClick={() => {
                 setFilters({ ...filters, isStudent: "student" })
               }}
@@ -251,7 +251,7 @@ function DanhSachDoiTuong({ selectedId }: { selectedId: Survey | null }) {
               Học viên
             </Button>
             <Button
-              color="pink"
+              color="primary"
               onClick={() => {
                 setFilters({ ...filters, isStudent: "lecturer" })
               }}

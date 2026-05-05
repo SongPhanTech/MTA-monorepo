@@ -8,7 +8,6 @@ import type { ExcelTemplateBodyTail } from './excelTemplateBodyTail';
 import type { ExcelTemplateBodyHead } from './excelTemplateBodyHead';
 import type { ExcelTemplateBodyPayloadItem } from './excelTemplateBodyPayloadItem';
 import type { ExcelTemplateBodySheetsItem } from './excelTemplateBodySheetsItem';
-import type { ExcelTemplateBodyOrientation } from './excelTemplateBodyOrientation';
 
 export type ExcelTemplateBody = {
   tail?: ExcelTemplateBodyTail;
@@ -23,6 +22,4 @@ export type ExcelTemplateBody = {
   showGridLines?: boolean;
   /** Có tự động xuống dòng trong ô hay không */
   wrapText?: boolean;
-  orientation?: ExcelTemplateBodyOrientation;
-  horizontalCentered?: boolean;
 };

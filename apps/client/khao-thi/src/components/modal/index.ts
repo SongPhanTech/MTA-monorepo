@@ -57,6 +57,7 @@ import ModalPrintDanhSachDoiTuong from "./modal-print-danh-sach-doi-tuong"
 import PutPhanCongThanhVienModal from "./put-phan-cong-thanh-vien"
 import AddNganHangKhungDe from "./add-ngan-hang-khung-de"
 import ViewMinhChungModal from "./view-minh-chung-modal"
+import XemBangChungFilesModal from "./xem-bang-chung-files-modal"
 export {
   ConfirmModal,
   PutSurveyObjectTypeModal,
@@ -117,4 +118,5 @@ export {
   ModalPrintDanhSachDoiTuong,
   AddNganHangKhungDe,
   ViewMinhChungModal,
+  XemBangChungFilesModal,
 }

@@ -38,6 +38,7 @@ import type {
   CountRequestsParams,
   CreateApiKey200,
   CreateApiKeyBody,
+  DocxTemplateBody,
   ErrorRate200Item,
   ErrorRateParams,
   ExcelTemplateBody,
@@ -2560,6 +2561,84 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       > => {
 
       const mutationOptions = getExcelTemplateMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+export type docxTemplateResponse200 = {
+  data: Blob
+  status: 200
+}
+    
+export type docxTemplateResponseSuccess = (docxTemplateResponse200) & {
+  headers: Headers;
+};
+;
+
+export type docxTemplateResponse = (docxTemplateResponseSuccess)
+
+export const getDocxTemplateUrl = () => {
+
+
+  
+
+  return `/api/docx-template`
+}
+
+export const docxTemplate = async (docxTemplateBody: DocxTemplateBody, options?: RequestInit): Promise<docxTemplateResponse> => {
+  
+  return customModelFetch<docxTemplateResponse>(getDocxTemplateUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      docxTemplateBody,)
+  }
+);}
+
+
+
+
+export const getDocxTemplateMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof docxTemplate>>, TError,{data: DocxTemplateBody}, TContext>, request?: SecondParameter<typeof customModelFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof docxTemplate>>, TError,{data: DocxTemplateBody}, TContext> => {
+
+const mutationKey = ['docxTemplate'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof docxTemplate>>, {data: DocxTemplateBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  docxTemplate(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DocxTemplateMutationResult = NonNullable<Awaited<ReturnType<typeof docxTemplate>>>
+    export type DocxTemplateMutationBody = DocxTemplateBody
+    export type DocxTemplateMutationError = unknown
+
+    export const useDocxTemplate = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof docxTemplate>>, TError,{data: DocxTemplateBody}, TContext>, request?: SecondParameter<typeof customModelFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof docxTemplate>>,
+        TError,
+        {data: DocxTemplateBody},
+        TContext
+      > => {
+
+      const mutationOptions = getDocxTemplateMutationOptions(options);
 
       return useMutation(mutationOptions, queryClient);
     }

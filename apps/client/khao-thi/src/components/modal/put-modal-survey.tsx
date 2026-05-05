@@ -477,7 +477,13 @@ const PutSurveyModal = () => {
                 form={form}
                 name="endDate"
                 label="Thời gian kết thúc"
-                rules={[{ validator: validateEndDate }]}
+                rules={[
+                  {
+                    required: true,
+                    message: "Vui lòng chọn thời gian kết thúc",
+                  },
+                  { validator: validateEndDate },
+                ]}
               >
                 <DatePicker format="DD/MM/YYYY" className="w-full" />
               </FormItem>

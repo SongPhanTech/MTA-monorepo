@@ -1,4 +1,5 @@
 import { TextStyle } from "@tiptap/extension-text-style"
+import { Plugin, PluginKey } from "@tiptap/pm/state"
 
 // Kế thừa TextStyle để thêm id
 export const CustomTextStyle = TextStyle.extend({
@@ -19,5 +20,26 @@ export const CustomTextStyle = TextStyle.extend({
         },
       },
     }
+  },
+
+  addProseMirrorPlugins() {
+    return [
+      new Plugin({
+        key: new PluginKey("evidenceMarkNonInclusive"),
+        appendTransaction(_transactions, _oldState, newState) {
+          const { storedMarks } = newState
+          if (!storedMarks) return null
+          const hasEvidenceMark = storedMarks.some(
+            (m) => m.type.name === "textStyle" && m.attrs.id
+          )
+          if (!hasEvidenceMark) return null
+          const tr = newState.tr
+          tr.setStoredMarks(
+            storedMarks.filter((m) => !(m.type.name === "textStyle" && m.attrs.id))
+          )
+          return tr
+        },
+      }),
+    ]
   },
 })

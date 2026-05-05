@@ -198,7 +198,7 @@ const ReviewSurveyModal = () => {
                         align: "center",
                         render: () => (
                           <div className="flex items-center justify-center">
-                            <Button className="flex items-center justify-center w-6 h-6 border-solid border-[1px] border-[#ed9e9e] text-[#ea1212] text-[12px]">
+                            <Button className="flex items-center justify-center w-6 h-6 border-solid border-[1px] border-[#b0d2bb] text-[#6bac79] text-[12px]">
                               {i?.answer}
                             </Button>
                           </div>
@@ -374,7 +374,7 @@ const ReviewSurveyModal = () => {
         {`
                     .custom-red-table .ant-table-thead > tr > th {
                         background: #fff !important;
-                        border: 0.5px solid red !important;
+                      border: 0.5px solid #6bac79 !important;
                     }
                         .custom-red-table .group-row > td {
                         background: #fff !important;
@@ -385,35 +385,35 @@ const ReviewSurveyModal = () => {
                     .custom-red-table .ant-table-container,
                     .custom-red-table .ant-table-content table,
                     .custom-red-table .ant-table-cell {
-                        border: 0.5px solid red !important;
+                      border: 0.5px solid #6bac79 !important;
                     }
 
                     .custom-red-table .ant-radio-button-wrapper {
-                        border: 0.5px solid red !important;
+                      border: 0.5px solid #6bac79 !important;
                         box-shadow: none !important;
                     }
 
                     
                     .custom-red-table .ant-radio-button-wrapper-checked {
-                        background: #ff0000 !important;
-                        border-color: #ff0000 !important;
+                      background: #6bac79 !important;
+                      border-color: #6bac79 !important;
                         color: #ffffff !important;
                     }
 
                     .custom-red-table .ant-radio-button-wrapper-checked::before {
-                        background-color: #ff0000 !important;
+                      background-color: #6bac79 !important;
                     }
 
                     .custom-red-table textarea,
                     .custom-red-table .ant-input {
-                        border: 0.5px solid red !important;
+                      border: 0.5px solid #6bac79 !important;
                         box-shadow: none !important;
                     }
 
                     .custom-red-table textarea:focus,
                     .custom-red-table .ant-input:focus,
                     .custom-red-table .ant-input-focused {
-                        border: 0.5px solid red !important;
+                      border: 0.5px solid #6bac79 !important;
                         box-shadow: none !important;
                         outline: none !important;
                     }
@@ -422,24 +422,24 @@ const ReviewSurveyModal = () => {
                     }
 
                     .custom-red-table .ant-radio-inner {
-                        border: 1px solid red !important;
+                      border: 1px solid #6bac79 !important;
                         background: white !important;
                     }
 
                     .custom-red-table .ant-radio-checked .ant-radio-inner::after {
-                        background: red !important;
+                      background: #6bac79 !important;
                     }
 
                     .custom-red-table .ant-radio-button-wrapper {
-                        border: 1px solid red !important;
-                        color: red !important;
+                      border: 1px solid #6bac79 !important;
+                      color: #6bac79 !important;
                         background: white !important;
                     }
 
                     .custom-red-table .ant-radio-button-wrapper-checked {
-                        background: red !important;
+                      background: #6bac79 !important;
                         color: white !important;
-                        border-color: red !important;
+                      border-color: #6bac79 !important;
                     }
                 `}
       </style>

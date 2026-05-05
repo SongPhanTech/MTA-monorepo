@@ -2141,14 +2141,12 @@ const getScholarship = async (
 }
 
 const CheckDecreaseAcademicWarning = (
-  student: StudentInfoCheck,
+  previousLevel: number,
   hasAcademicWarningThisTerm: boolean
 ): boolean => {
-  const academicWarningLevel = student.mucCanhCaoHocTap ?? 0
+  if (previousLevel <= 0) return false
 
-  if (academicWarningLevel <= 0) return false
-
-  return academicWarningLevel >= 1 && !hasAcademicWarningThisTerm
+  return previousLevel >= 1 && !hasAcademicWarningThisTerm
 }
 const fetchStudentSemesterResult = async (studentId: string, semesterId: string) => {
   return await prisma.studentSemesterResult.findFirst({
@@ -2537,7 +2535,61 @@ export const resultCourseStudentDecreaseAcademicWarning = async (
   semesterId: string
 ): Promise<CourseStudentDecreaseAcademicWarningResult[]> => {
   const courseMap: Record<string, CourseStudentDecreaseAcademicWarningResult> = {}
+  const currentSemester = await prisma.semester.findUnique({
+    where: { id: semesterId },
+    select: { id: true, startDate: true },
+  })
+
+  if (!currentSemester) {
+    return []
+  }
+
+  const previousSemester = await prisma.semester.findFirst({
+    where: {
+      startDate: { lt: currentSemester.startDate },
+      semesterType: { in: [SemesterType.FIRST, SemesterType.SECOND] },
+      deletedAt: null,
+      active: true,
+    },
+    orderBy: { startDate: "desc" },
+    select: { id: true },
+  })
+
+  if (!previousSemester) {
+    return []
+  }
+
   const courseIds = new Set(students.map((student) => student.khoaId))
+  const studentIds = students.map((student) => student.id)
+
+  const allWarningsInPreviousSemester = await prisma.academicWarning.findMany({
+    where: {
+      semesterId: previousSemester.id,
+      deletedAt: null,
+      active: true,
+    },
+    select: {
+      studentId: true,
+      level: true,
+    },
+  })
+
+  const warningStudentIds = allWarningsInPreviousSemester.map(w => w.studentId)
+  const enrolledWarningStudents = await prisma.student.findMany({
+    where: {
+      id: { in: warningStudentIds },
+      status: "ENROLLED",
+    },
+    select: { id: true },
+  })
+  const enrolledWarningStudentIds = enrolledWarningStudents.map(s => s.id)
+
+  const previousWarningMap = new Map<string, number>(
+    allWarningsInPreviousSemester
+      .filter(w => enrolledWarningStudentIds.includes(w.studentId))
+      .map(w => [w.studentId, w.level])
+  )
+
   const warningCriteriaList = await prisma.academicWarningRule.findMany({
     where: {
       trainingCourseId: { in: Array.from(courseIds) },
@@ -2545,17 +2597,63 @@ export const resultCourseStudentDecreaseAcademicWarning = async (
       active: true,
     },
   })
+
+  const inputWarningStudents = students.filter((student) => previousWarningMap.has(student.id))
+  const additionalWarningStudentIds = enrolledWarningStudentIds.filter(
+    (id) => !studentIds.includes(id)
+  )
+
+  const additionalWarningStudents = await prisma.student.findMany({
+      where: {
+        id: { in: additionalWarningStudentIds },
+      },
+      include: {
+        userProfile: true,
+        fixedClass: {
+          include: {
+            trainingCourse: {
+              include: {
+                trainingObjectType: true,
+              },
+            },
+            curriculumVersion: {
+              include: {
+                curriculum: {
+                  include: {
+                    trainingMajor: {
+                      include: {
+                        trainingField: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    })
+
+  const studentsToProcess = [
+    ...inputWarningStudents,
+    ...additionalWarningStudents,
+  ]
+
   await Promise.all(
-    students.map(async (student) => {
-      const courseId = student.khoaId
+    studentsToProcess.map(async (student: any) => {
+      const courseId = student.fixedClass?.trainingCourse?.id || student.khoaId
+      if (!courseId) {
+        return
+      }
+      
       if (!courseMap[courseId]) {
         courseMap[courseId] = {
           courseId,
-          courseName: student.khoa,
+          courseName: student.fixedClass?.trainingCourse?.name || student.khoa || "",
           students: [],
         }
       }
-      const trainingCourseId = student.khoaId
+      const trainingCourseId = courseId
       const studentSemesterResult = await fetchStudentSemesterResult(student.id, semesterId)
 
       if (!studentSemesterResult) return
@@ -2566,9 +2664,12 @@ export const resultCourseStudentDecreaseAcademicWarning = async (
         warningCriteriaList
       )
 
+      const previousLevel = previousWarningMap.get(student.id) ?? 0
+      const hasWarningThisTerm = checkAcademicWarningResult.length > 0
+
       const decreaseAcademicWarning = CheckDecreaseAcademicWarning(
-        student,
-        checkAcademicWarningResult.length > 0
+        previousLevel,
+        hasWarningThisTerm
       )
 
       if (!decreaseAcademicWarning) return
