@@ -45,7 +45,7 @@ function SurveyToFieldReport({ selectedId }: { selectedId: string }) {
 
   function convertToStackChartData(data: any[]) {
     // Map answer -> description
-    const color = ["#dd0b31", "#ea8585", "#ffc769", "#4b50db", "#028850"]
+    const color = ["#ff4d52", "#ea8585", "#ffd977", "#9aa3e0", "#028850"]
     // const answerMap: Record<string, string> = {}
     // answerDescriptions.forEach((a) => {
     //     answerMap[a.answer] = a.description as string
