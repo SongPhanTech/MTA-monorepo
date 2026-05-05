@@ -1199,36 +1199,30 @@ export const exportHosobvlv = async ({
       const soQDBV =
         student?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.defenseDecisionNumber
       const dotxetBV = student?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.name
-      const ngaysinh = student?.userProfile?.dateOfBirth
-        ? dayjs(student?.userProfile?.dateOfBirth).format("DD/MM/YYYY")
-        : ""
+      const ngaysinh = formatThesisDate(student?.userProfile?.dateOfBirth)
       const khoas = student?.fixedClass?.trainingCourse?.name || ""
       // const nguoiKi
       const data = {
         tenhocvien: student.userProfile?.fullname || "",
         soQD: soQDBV || "",
-        ngayQD: ngayQDBV ? dayjs(ngayQDBV).format("DD/MM/YYYY") : "",
+        ngayQD: formatThesisDate(ngayQDBV),
         dotxet: dotxetBV || "",
-        type: student.thesisRegistrations?.[0]?.thesisProject?.type?.trim().toLowerCase(),
-        khoa: `Ngày sinh: ${ngaysinh}, ${khoas}`,
+        type: student.thesisRegistrations?.[0]?.thesisProject?.type?.trim().toLowerCase() || "luận văn",
+        khoa: `Ngày sinh: ${ngaysinh || ""}, ${khoas || ""}`,
         chuyennganh: student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || "",
         nganh:
           student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.trainingField?.name ||
           "",
         detai: `Đề tài: "${student?.thesisRegistrations?.[0]?.thesisProject?.title || ""}"`,
-        ngaybaove: student?.thesisRegistrations?.[0]?.thesisProject?.defenseDate
-          ? dayjs(student?.thesisRegistrations?.[0]?.thesisProject?.defenseDate).format(
-              "DD/MM/YYYY"
-            )
-          : "",
+        ngaybaove: formatThesisDate(student?.thesisRegistrations?.[0]?.thesisProject?.defenseDate),
         phanbien1: getSupervisorName(phanbien1?.expert, false, true) || "",
         phanbien2: getSupervisorName(phanbien2?.expert, false, true) || "",
         chutich: getSupervisorName(chutich?.expert, false, true) || "",
         thuky: getSupervisorName(thuky?.expert, false, true) || "",
         uyvien: getSupervisorName(uyvien?.expert, false, true) || "",
-        nguoiki: nguoiki,
-        text1: text1,
-        text2: text2,
+        nguoiki: nguoiki || "",
+        text1: text1 || "",
+        text2: text2 || "",
       }
       return {
         // sheet: `${student.userProfile?.code}`,
@@ -1237,22 +1231,20 @@ export const exportHosobvlv = async ({
         // rows: [gapRow],
       }
     })
-    const payload: ExcelTemplateBody = {
-      head: { data: null },
-      tail: { data: null },
-      fileName: "HoSoBVLVTN.",
-      path: "HoSoBVLVTN.xlsx",
-      payload: allSheetOptions?.filter((item) => item !== null) ?? [],
-      showGridLines: true,
-      wrapText: true,
+    const payload = {
+      fileName: "Hosobvlv",
+      path: "Hosobvlv.docx",
+      data: {
+        items: allSheetOptions?.filter((item) => item !== null).map((item) => item!.data) ?? [],
+      },
     }
-    const response = await excelTemplate(payload)
+    const response = await docxTemplate(payload)
     if (response.status !== 200) {
       message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
       return
     }
     const blob = response.data
-    downloadFile(blob, "Hosobvlv.xlsx")
+    downloadFile(blob, "Hosobvlv.docx")
     message.success("Xuất file thành công")
   } catch (error) {
     message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
@@ -1304,22 +1296,20 @@ export const exportGiayMoiHdlv = async ({
         data: data,
       }
     })
-    const payload: ExcelTemplateBody = {
-      head: { data: null },
-      tail: { data: null },
+    const payload = {
       fileName: "GiayMoiHDLV",
-      path: "GiayMoiHDLV.xlsx",
-      payload: allSheetOptions?.filter((item) => item !== null) ?? [],
-      showGridLines: true,
-      wrapText: true,
+      path: "GiayMoiHDLV.docx",
+      data: {
+        items: allSheetOptions?.filter((item) => item !== null).map((item) => item!.data) ?? [],
+      },
     }
-    const response = await excelTemplate(payload)
+    const response = await docxTemplate(payload)
     if (response.status !== 200) {
       message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
       return
     }
     const blob = response.data
-    downloadFile(blob, "GiayMoiHDLV.xlsx")
+    downloadFile(blob, "GiayMoiHDLV.docx")
     message.success("Xuất file thành công")
   } catch (error) {
     message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
@@ -1797,22 +1787,22 @@ export const exportGiayMoiChamLvPb = async ({
         ? [{ sheetName: "Can bo ngoai hoc vien", payload: dataNgoaiHv }]
         : []),
     ]
-    const payload: ExcelTemplateBody = {
-      head: { data: null },
-      tail: { data: null },
+    const items = [...dataTrongHv, ...dataNgoaiHv].map((item) => item.data)
+    const payload = {
       fileName: "GiayMoiChamLuanVan",
-      path: "GiayMoiChamLuanVan.xlsx",
-      sheets,
-      showGridLines: true,
+      path: "GiayMoiChamLuanVan.docx",
+      data: {
+        items: items,
+      },
     }
-    const response = await excelTemplate(payload)
+    const response = await docxTemplate(payload)
 
     if (response.status !== 200) {
       message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
       return
     }
     const blob = response.data
-    downloadFile(blob, "GiayMoiChamLuanVan.xlsx")
+    downloadFile(blob, "GiayMoiChamLuanVan.docx")
     message.success("Xuất file thành công")
   } catch (error) {
     message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
@@ -2634,26 +2624,24 @@ export const exportBanSaoHDDGLV = async ({
       signingDate
     )
 
-    if (!dataConvert) {
+    if (!dataConvert || dataConvert.length === 0) {
       message.error("Chưa có dữ liệu để xuất bản sao hội đồng bảo vệ luan van")
       return
     }
-    const payload: ExcelTemplateBody = {
-      head: { data: null },
-      tail: { data: null },
+    const payload = {
       fileName: "BanSaoHoiDongDanhGiaLuanVan",
-      path: "BanSaoHoiDongDanhGiaLuanVan.xlsx",
-      payload: dataConvert,
-      showGridLines: true,
-      wrapText: true,
+      path: "BanSaoHoiDongDanhGiaLuanVan.docx",
+      data: {
+        items: dataConvert.map((item: banSaoHDDGLV) => item.data),
+      },
     }
-    const response = await excelTemplate(payload)
+    const response = await docxTemplate(payload)
     if (response.status !== 200) {
       message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
       return []
     }
     const blob = response.data
-    downloadFile(blob, "BanSaoHoiDongDanhGiaLuanVan.xlsx")
+    downloadFile(blob, "BanSaoHoiDongDanhGiaLuanVan.docx")
     message.success("Xuất file thành công")
   } catch (error) {
     message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
@@ -2709,12 +2697,14 @@ const convertToBanSaoHDDGLV = (
         student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || ""
       const deTai = project?.title || ""
       const tenhocvien = student.userProfile?.fullname || ""
-      const ngaysinh = student.userProfile?.dateOfBirth
-        ? dayjs(student.userProfile.dateOfBirth).format("DD/MM/YYYY")
-        : ""
+      const ngaysinh = formatThesisDate(student.userProfile?.dateOfBirth)
       const khoaHoc = student.fixedClass?.trainingCourse?.name || ""
       const nienkhoahoc = student.fixedClass?.trainingCourse?.academicYear || ""
       const gvhd = [gvhd1, gvhd2].filter(Boolean).join("; ")
+
+      const m = qdDate ? qdDate.month() + 1 : null
+      const thangTlVal = m ? ((m === 1 || m === 2) ? m.toString().padStart(2, "0") : m.toString()) : ""
+
       return {
         data: {
           text1: chucVuNguoiKyQddt === "GĐ" ? "GIÁM ĐỐC" : "KT.GIÁM ĐỐC",
@@ -2725,12 +2715,13 @@ const convertToBanSaoHDDGLV = (
           nguoiki2: signerName || "",
 
           soQd: session?.defenseDecisionNumber || "",
-          ngayTl: qdDate ? qdDate.format("DD") : "",
-          thangTl: qdDate ? qdDate.format("MM") : "",
+          ngayTl: qdDate ? qdDate.date().toString() : "",
+          thangTl: thangTlVal,
           namTl: qdDate ? qdDate.format("YYYY") : "",
           khoa: session?.trainingCourse?.name || "",
           dotXet: session?.name || "",
           loaiLuanVan: loaiLuanVan,
+          councilReport: session?.councilReport || "",
 
           nganh: nganh,
           chuyenNganh: chuyenNganh,
@@ -2778,35 +2769,44 @@ export const exportPhuLucQdhdd = async ({
       message.error("Chưa có dữ liệu để xuất phụ lục QĐHĐ")
       return []
     }
-    const payloadRows = dataConvert.data.flatMap((major) =>
-      major.data.data.map((row, rowIdx) => ({
-        data: {
-          sttChuyenNganh: rowIdx === 0 ? major.data.sttChuyenNganh : "",
-          tenChuyenNganh: rowIdx === 0 ? major.data.tenChuyenNganh : "",
-          data: row,
-        },
+    const payloadRows = dataConvert.data.flatMap((major: PhuLucQdhdData) =>
+      major.data.data.map((row: PhuLucQdhdTable, rowIdx: number) => ({
+        sttChuyenNganh: rowIdx === 0 ? major.data.sttChuyenNganh : "",
+        tenChuyenNganh: rowIdx === 0 ? major.data.tenChuyenNganh : "",
+        sttHoiDong: row.sttHoiDong,
+        contentDieu1: row.contentDieu1,
+        tenHocVien: row.tenHocVien,
+        ngaySinh: row.ngaySinh,
+        gvhd1: row.gvhd1,
+        gvhd2: row.gvhd2,
+        tenChuTich: row.tenChuTich,
+        toChucChuTich: row.toChucChuTich,
+        tenThuKy: row.tenThuKy,
+        toChucThuKy: row.toChucThuKy,
+        tenUyVien: row.tenUyVien,
+        toChucUyVien: row.toChucUyVien,
+        tenPb1: row.tenPb1,
+        toChucPb1: row.toChucPb1,
+        tenPb2: row.tenPb2,
+        toChucPb2: row.toChucPb2,
       }))
     )
-    if (!payloadRows.length) {
-      message.error("Chưa có dữ liệu để xuất phụ lục QĐHĐ")
-      return []
-    }
-    const payload: ExcelTemplateBody = {
-      head: { data: dataConvert.head.data },
-      tail: { data: dataConvert.tail.data },
+    const payload = {
       fileName: "PhuLucQdhd",
-      path: "PhuLucQDHoiDong.xlsx",
-      payload: payloadRows,
-      showGridLines: true,
-      wrapText: true,
+      path: "PhuLucQDHoiDong.docx",
+      data: {
+        ...dataConvert.head.data,
+        ...dataConvert.tail.data,
+        items: payloadRows,
+      },
     }
-    const response = await excelTemplate(payload)
+    const response = await docxTemplate(payload)
     if (response.status !== 200) {
       message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
       return []
     }
     const blob = response.data
-    downloadFile(blob, "PhuLucQdhd.xlsx")
+    downloadFile(blob, "PhuLucQdhd.docx")
     message.success("Xuất file thành công")
   } catch (error) {
     message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
@@ -2879,9 +2879,7 @@ const convertToPhuLucQdhdTemplateData = (allStudentsInClasses: any[]): PhuLucQdh
       const reviewer1 = getMember(CouncilRole.REVIEWER_1)
       const reviewer2 = getMember(CouncilRole.REVIEWER_2)
       const member = getMember(CouncilRole.MEMBER)
-      const ngaysinh = student.userProfile?.dateOfBirth
-        ? dayjs(student.userProfile.dateOfBirth).format("DD/MM/YYYY")
-        : ""
+      const ngaysinh = formatThesisDate(student.userProfile?.dateOfBirth)
       return {
         sttHoiDong: (studentIdx + 1).toString(),
         contentDieu1: `${project?.type} tốt nghiệp thạc sĩ ngành ${groupKey}, Đề tài: ${project?.title.trim().replace(/\s+/g, " ") || ""}`,
@@ -3220,15 +3218,13 @@ const convertToHDDanhGiaLuanVanTemplateData = (
       return {
         stt: sIdx + 1,
         maHv: student.userProfile?.code || "",
-        ngaySinh: student.userProfile?.dateOfBirth
-          ? dayjs(student.userProfile.dateOfBirth).format("DD/MM/YYYY")
-          : "",
+        ngaySinh: formatThesisDate(student.userProfile?.dateOfBirth),
         hocVienCanBoHuongDan: hvCbhd,
         deTai: project?.title || "",
         gioBaoVe: project?.defenseSession?.startTime
           ? dayjs(project.defenseSession.startTime).format("HH:mm")
           : "",
-        ngayBaoVe: project?.defenseDate ? dayjs(project.defenseDate).format("DD/MM/YYYY") : "",
+        ngayBaoVe: formatThesisDate(project?.defenseDate),
         diaDiem: project?.room?.name || "",
         tenChuTich: findMemberName(CouncilRole.CHAIRMAN),
         tenThuKy: findMemberName(CouncilRole.SECRETARY),
@@ -3256,8 +3252,8 @@ const convertToHDDanhGiaLuanVanTemplateData = (
       tongSoHocVien: allStudentsInClasses.filter(
         (student) => student?.thesisRegistrations?.[0]?.thesisProject != null
       ).length,
-      ngay: now.format("DD"),
-      thang: now.format("MM"),
+      ngay: now.date().toString(),
+      thang: (now.month() + 1 === 1 || now.month() + 1 === 2) ? (now.month() + 1).toString().padStart(2, "0") : (now.month() + 1).toString(),
       nam: now.format("YYYY"),
     },
     data: groupedData,

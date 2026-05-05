@@ -379,10 +379,10 @@ export default function ExportReport({
     const parser = new DOMParser()
     const doc = parser.parseFromString(html || "", "text/html")
 
-    const spans = doc.querySelectorAll("span[id]")
+    const spans = doc.querySelectorAll("span[data-evidence-id]")
 
     spans.forEach((span) => {
-      const id = span.getAttribute("id")
+      const id = span.getAttribute("data-evidence-id")
       if (id && evidenceTags.has(id)) {
         span.textContent = evidenceTags.get(id) || ""
         span.removeAttribute("style")
