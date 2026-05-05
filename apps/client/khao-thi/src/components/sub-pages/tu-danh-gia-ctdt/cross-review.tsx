@@ -12,6 +12,7 @@ import { sqlTransaction } from "@workspace/libs/api/model"
 import { Badge, Button, Card, Collapse, Form, message, Tag } from "antd"
 import dayjs from "dayjs"
 import { useEffect, useState } from "react"
+import { useDisclosure } from "react-hook-disclosure-modal"
 import { getDeadlineStatus } from "@/utils/getDeadlineStatus"
 
 export type PutRequirementCriterion = {
@@ -37,6 +38,10 @@ export default function CrossReviewSubPage({
 
   const { data: me } = useSession()
   const idProfile = me?.sDM_NhanVienId || "7247c121-ab5a-4a72-a018-4a4090c7948a"
+
+  const { onOpen: openViewMinhChung } = useDisclosure<{ evidenceId: string }>({
+    tag: "ViewMinhChungModal",
+  })
 
   const { hideSpinner, showSpinner } = useSpinner()
 
@@ -218,6 +223,7 @@ export default function CrossReviewSubPage({
             strengths: item.evaluationCriterion?.strengths || "",
             weakness: item.evaluationCriterion?.weakness || "",
             actionPlan: item.evaluationCriterion?.actionPlan || "",
+            score: item.evaluationCriterion?.score || "",
           },
         })),
       })
@@ -228,7 +234,7 @@ export default function CrossReviewSubPage({
     (c) =>
       c.evaluationCriterion &&
       c.evaluationCriterion.status !== $Enums.EvaluationStatus.PENDING &&
-      c.evaluationCriterion.status !== $Enums.EvaluationStatus.APPROVED
+      c.evaluationCriterion.status !== $Enums.EvaluationStatus.COMPLETED
   )
 
   return (
@@ -265,10 +271,7 @@ export default function CrossReviewSubPage({
                         items={[
                           {
                             label: (
-                              <div
-                                className="flex flex-col w-full pr-2 gap-1"
-                                onClick={(e) => e.stopPropagation()}
-                              >
+                              <div className="flex flex-col w-full pr-2 gap-1">
                                 <div className="flex items-center justify-between gap-2">
                                   <div
                                     onClick={(e) => {
@@ -287,35 +290,38 @@ export default function CrossReviewSubPage({
                                   </div>
                                   {item.evaluationCriterion &&
                                     criterionStatus !== $Enums.EvaluationStatus.PENDING &&
-                                    criterionStatus !== $Enums.EvaluationStatus.APPROVED && (
-                                      <Badge
-                                        count={
-                                          item.evaluationCriterion?.evaluationCriterionComments
-                                            ?.length || 0
-                                        }
-                                        size="small"
-                                      >
-                                        <Button
-                                          type="primary"
+                                    criterionStatus !== $Enums.EvaluationStatus.COMPLETED && (
+                                      <div onClick={(e) => e.stopPropagation()}>
+                                        <Badge
+                                          count={
+                                            item.evaluationCriterion?.evaluationCriterionComments
+                                              ?.length || 0
+                                          }
                                           size="small"
-                                          className="bg-yellow-400"
-                                          onClick={() => {
-                                            const id = item.evaluationCriterion?.id
-                                            const isOpen = showCommentsCriterionId === id
-                                            setShowCommentsCriterionId(isOpen ? null : id || null)
-                                            if (!isOpen && id) {
-                                              setOpenCollapseKeys((prev) => ({
-                                                ...prev,
-                                                [item.id]: true,
-                                              }))
-                                            }
-                                          }}
                                         >
-                                          {showCommentsCriterionId === item.evaluationCriterion?.id
-                                            ? "Đóng"
-                                            : "Gửi ý kiến phản biện"}
-                                        </Button>
-                                      </Badge>
+                                          <Button
+                                            type="primary"
+                                            size="small"
+                                            className="bg-yellow-400"
+                                            onClick={() => {
+                                              const id = item.evaluationCriterion?.id
+                                              const isOpen = showCommentsCriterionId === id
+                                              setShowCommentsCriterionId(isOpen ? null : id || null)
+                                              if (!isOpen && id) {
+                                                setOpenCollapseKeys((prev) => ({
+                                                  ...prev,
+                                                  [item.id]: true,
+                                                }))
+                                              }
+                                            }}
+                                          >
+                                            {showCommentsCriterionId ===
+                                            item.evaluationCriterion?.id
+                                              ? "Đóng"
+                                              : "Gửi ý kiến phản biện"}
+                                          </Button>
+                                        </Badge>
+                                      </div>
                                     )}
                                 </div>
                                 <div className="flex gap-3 items-center mt-1 flex-wrap">
@@ -390,28 +396,34 @@ export default function CrossReviewSubPage({
                                   label="1. Mô tả hiện trạng"
                                   name={[name, "evaluationCriterion", "currentSituation"]}
                                 >
-                                  <RichTextEditor id={item.id} editable={false} />
+                                  <RichTextEditor id={item.id} editable={false} onEvidenceClick={(id) => openViewMinhChung({ evidenceId: id })} />
                                 </Form.Item>
 
                                 <Form.Item
                                   label="2. Điểm mạnh"
                                   name={[name, "evaluationCriterion", "strengths"]}
                                 >
-                                  <RichTextEditor id={item.id} editable={false} />
+                                  <RichTextEditor id={item.id} editable={false} onEvidenceClick={(id) => openViewMinhChung({ evidenceId: id })} />
                                 </Form.Item>
 
                                 <Form.Item
                                   label="3. Điểm tồn tại"
                                   name={[name, "evaluationCriterion", "weakness"]}
                                 >
-                                  <RichTextEditor id={item.id} editable={false} />
+                                  <RichTextEditor id={item.id} editable={false} onEvidenceClick={(id) => openViewMinhChung({ evidenceId: id })} />
                                 </Form.Item>
 
                                 <Form.Item
                                   label="4. Kế hoạch hành động"
                                   name={[name, "evaluationCriterion", "actionPlan"]}
                                 >
-                                  <RichTextEditor id={item.id} editable={false} />
+                                  <RichTextEditor id={item.id} editable={false} onEvidenceClick={(id) => openViewMinhChung({ evidenceId: id })} />
+                                </Form.Item>
+                                <Form.Item
+                                  label="5. Tự đánh giá"
+                                  name={[name, "evaluationCriterion", "score"]}
+                                >
+                                  <RichTextEditor id={item.id} editable={false} onEvidenceClick={(id) => openViewMinhChung({ evidenceId: id })} />
                                 </Form.Item>
                               </>
                             ),
