@@ -7,6 +7,7 @@ import { $Enums } from "@workspace/db/client"
 import { Badge, Button, Collapse, Form, Tag } from "antd"
 import dayjs from "dayjs"
 import { useEffect, useState } from "react"
+import { useDisclosure } from "react-hook-disclosure-modal"
 import { getDeadlineStatus } from "@/utils/getDeadlineStatus"
 
 export type PutRequirementCriterion = {
@@ -24,6 +25,10 @@ export default function CriteriaEvaluationListSubPage({
 }) {
   const [form] = Form.useForm<PutRequirementCriterion>()
   const [showComments, setShowComments] = useState<Record<string, boolean>>({})
+
+  const { onOpen: openViewMinhChung } = useDisclosure<{ evidenceId: string }>({
+    tag: "ViewMinhChungModal",
+  })
 
   useEffect(() => {
     if (data) {
@@ -151,6 +156,7 @@ export default function CriteriaEvaluationListSubPage({
                                 <RichTextEditor
                                   id={`${criterion.id}-currentSituation`}
                                   editable={false}
+                                  onEvidenceClick={(id) => openViewMinhChung({ evidenceId: id })}
                                 />
                               </Form.Item>
 
@@ -158,14 +164,22 @@ export default function CriteriaEvaluationListSubPage({
                                 label="2. Điểm mạnh"
                                 name={[index, "evaluationCriterion", "strengths"]}
                               >
-                                <RichTextEditor id={`${criterion.id}-strengths`} editable={false} />
+                                <RichTextEditor
+                                  id={`${criterion.id}-strengths`}
+                                  editable={false}
+                                  onEvidenceClick={(id) => openViewMinhChung({ evidenceId: id })}
+                                />
                               </Form.Item>
 
                               <Form.Item
                                 label="3. Điểm tồn tại"
                                 name={[index, "evaluationCriterion", "weakness"]}
                               >
-                                <RichTextEditor id={`${criterion.id}-weakness`} editable={false} />
+                                <RichTextEditor
+                                  id={`${criterion.id}-weakness`}
+                                  editable={false}
+                                  onEvidenceClick={(id) => openViewMinhChung({ evidenceId: id })}
+                                />
                               </Form.Item>
 
                               <Form.Item
@@ -175,6 +189,7 @@ export default function CriteriaEvaluationListSubPage({
                                 <RichTextEditor
                                   id={`${criterion.id}-actionPlan`}
                                   editable={false}
+                                  onEvidenceClick={(id) => openViewMinhChung({ evidenceId: id })}
                                 />
                               </Form.Item>
                             </>
