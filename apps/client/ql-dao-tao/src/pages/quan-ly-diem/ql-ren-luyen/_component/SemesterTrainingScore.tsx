@@ -291,7 +291,7 @@ export default function SemesterTrainingScore({
                   title: "Điểm",
                   width: 150,
                   align: "center",
-                  fixed: "left",
+                  //  fixed: "left",
                   render: (_, record) => (
                     <Form.Item
                       className="w-full mb-0"
