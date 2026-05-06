@@ -13,6 +13,8 @@ import {
   CouncilProposalStatus,
   CouncilRole,
   FixedClassType,
+  PaymentStatus,
+  SupervisorRole,
   ThesisProjectStatus,
   ThesisType,
 } from "@workspace/db/client"
@@ -21,8 +23,11 @@ import {
   useCountStudent,
   useCreatePaymentRecord,
   useCreateStudentThesisRegistration,
+  useCreateSupervisorPaymentRecord,
   useCreateThesisProject,
+  useDeleteSupervisorPaymentRecord,
   useFindManyDefaultCouncilRolePayAmount,
+  useFindManyDefaultSupervisorPayAmount,
   useFindManyDefenseSession,
   useFindManyDM_DonVi,
   useFindManyExpertProfile,
@@ -51,8 +56,9 @@ import {
   Space,
   Tag,
 } from "antd"
+import Decimal from "decimal.js"
 import { SquarePen } from "lucide-react"
-import { useEffect, useMemo, useRef, useState } from "react"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 import TreeSelect from "@/components/commons/tree-select"
 import {
@@ -668,6 +674,9 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
   const { mutateAsync: updateThesisProject } = useUpdateThesisProject()
   const { mutateAsync: createPaymentRecord } = useCreatePaymentRecord()
   const { data: defaultCouncilPayAmounts = [] } = useFindManyDefaultCouncilRolePayAmount()
+  const { data: defaultSupervisorPayAmounts = [] } = useFindManyDefaultSupervisorPayAmount()
+  const { mutateAsync: createSupervisorPaymentRecord } = useCreateSupervisorPaymentRecord()
+  const { mutateAsync: deleteSupervisorPaymentRecord } = useDeleteSupervisorPaymentRecord()
   const isWithinGvhdSupervisorEditWindow = (): boolean => {
     const deadline = selectedThesisSession?.topicEntryDeadline
     if (!deadline) return true
@@ -813,7 +822,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
     }
 
     showSpinner()
-    if (role === "Khoa") {
+    /* P7 và Khoa đều chỉnh GVHD trên bảng; cần kiểm tra hạn và gửi supervisor/coSupervisor trong payload */
+    if (role === "Khoa" || role === "P7") {
       for (const studentId of selectedRowKeys) {
         const rowData = editingValues[studentId.toString()]
         if (!rowData) continue
@@ -902,7 +912,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
           },
         }
 
-        if (role === "Khoa") {
+        if (role === "Khoa" || role === "P7") {
           payload.supervisor = rowData.supervisor
             ? { connect: { id: rowData.supervisor } }
             : { disconnect: true }
@@ -989,6 +999,230 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
   const [signRole, setSignRole] = useState<"chief" | "deputy">("chief")
   const [signingDate, setSigningDate] = useState<ReturnType<typeof dayjs>>(dayjs())
   const [signMoneyAmount, setSignMoneyAmount] = useState<number>(100000)
+
+  const readDecimalAmount = (v: unknown): number => {
+    if (v == null) return 0
+    if (typeof v === "number") return v
+    if (typeof v === "string") return Number(v) || 0
+    if (typeof (v as { toNumber?: () => number }).toNumber === "function") {
+      return (v as { toNumber: () => number }).toNumber()
+    }
+    return Number(v) || 0
+  }
+
+  const getDefaultSupervisorPay = (
+    role: SupervisorRole,
+    inAcademy: boolean,
+    thesisDesc: "THESIS" | "PROJECT"
+  ) => {
+    const row =
+      defaultSupervisorPayAmounts.find(
+        (x) => x.role === role && x.inAcademy === inAcademy && x.description === thesisDesc
+      ) ||
+      defaultSupervisorPayAmounts.find(
+        (x) => x.role === role && x.inAcademy === inAcademy && !x.description
+      )
+    return row ? readDecimalAmount(row.amount) : 0
+  }
+
+  const ensureSupervisorPaymentsForExport = useCallback(
+    async (project: any, exportFilterInAcademy?: boolean) => {
+      if (!project?.id) return
+
+      const thesisDesc: "THESIS" | "PROJECT" =
+        project.thesisType === ThesisType.THESIS ? "THESIS" : "PROJECT"
+
+      const isMatchInAcademy = (expert: any) => {
+        const hasLecturer = !!(expert?.lecturer || expert?.lecturerId)
+        if (exportFilterInAcademy === true) return hasLecturer
+        if (exportFilterInAcademy === false) return !hasLecturer
+        return true
+      }
+
+      const supExpert =
+        project.supervisor && isMatchInAcademy(project.supervisor) ? project.supervisor : null
+      const coExpert =
+        project.coSupervisor && isMatchInAcademy(project.coSupervisor) ? project.coSupervisor : null
+
+      if (!supExpert && !coExpert) return
+
+      const paymentAmount = (p: any) => readDecimalAmount(p?.amount)
+
+      const deletePaymentHard = async (id?: string | null) => {
+        if (!id) return
+        try {
+          await deleteSupervisorPaymentRecord({ where: { id } })
+        } catch {
+          // đã xoá hoặc không tồn tại
+        }
+      }
+
+      const oldSupPayId = project.supervisorPaymentId as string | undefined
+      const oldCoPayId = project.coSupervisorPaymentId as string | undefined
+      const oldSinglePayId = project.singleSupervisorPaymentId as string | undefined
+
+      if (supExpert && coExpert) {
+        const inAcSup = !!(supExpert.lecturer || supExpert.lecturerId)
+        const inAcCo = !!(coExpert.lecturer || coExpert.lecturerId)
+        const amtSup = getDefaultSupervisorPay(SupervisorRole.SUPERVISOR, inAcSup, thesisDesc)
+        const amtCo = getDefaultSupervisorPay(SupervisorRole.CO_SUPERVISOR, inAcCo, thesisDesc)
+
+        const supMissing =
+          !project.supervisorPaymentId || paymentAmount(project.supervisorPayment) <= 0
+        const coMissing =
+          !project.coSupervisorPaymentId || paymentAmount(project.coSupervisorPayment) <= 0
+        const mustClearSingle = !!oldSinglePayId
+
+        if (!supMissing && !coMissing && !mustClearSingle) return
+
+        if (!supMissing && !coMissing && mustClearSingle) {
+          await updateThesisProject({
+            where: { id: project.id },
+            data: {
+              singleSupervisorPayment: { disconnect: true },
+            },
+          })
+          if (oldSinglePayId) await deletePaymentHard(oldSinglePayId)
+          project.singleSupervisorPaymentId = null
+          project.singleSupervisorPayment = null
+          return
+        }
+
+        let newSupId = oldSupPayId
+        let newCoId = oldCoPayId
+
+        if (supMissing) {
+          const created = await createSupervisorPaymentRecord({
+            data: {
+              amount: new Decimal(amtSup),
+              status: PaymentStatus.PENDING,
+              thesisProjects: { connect: { id: project.id } },
+            },
+          })
+          if (!created?.id) return
+          newSupId = created.id
+        }
+
+        if (coMissing) {
+          const created = await createSupervisorPaymentRecord({
+            data: {
+              amount: new Decimal(amtCo),
+              status: PaymentStatus.PENDING,
+              coThesisProjects: { connect: { id: project.id } },
+            },
+          })
+          if (!created?.id) return
+          newCoId = created.id
+        }
+
+        await updateThesisProject({
+          where: { id: project.id },
+          data: {
+            singleSupervisorPayment: { disconnect: true },
+            supervisorPayment: newSupId ? { connect: { id: newSupId } } : { disconnect: true },
+            coSupervisorPayment: newCoId ? { connect: { id: newCoId } } : { disconnect: true },
+          },
+        })
+
+        if (mustClearSingle && oldSinglePayId) {
+          await deletePaymentHard(oldSinglePayId)
+        }
+        if (supMissing && oldSupPayId && newSupId && oldSupPayId !== newSupId) {
+          await deletePaymentHard(oldSupPayId)
+        }
+        if (coMissing && oldCoPayId && newCoId && oldCoPayId !== newCoId) {
+          await deletePaymentHard(oldCoPayId)
+        }
+
+        project.singleSupervisorPaymentId = null
+        project.singleSupervisorPayment = null
+        project.supervisorPaymentId = newSupId
+        project.coSupervisorPaymentId = newCoId
+        project.supervisorPayment = newSupId
+          ? { ...(project.supervisorPayment || {}), id: newSupId, amount: amtSup }
+          : null
+        project.coSupervisorPayment = newCoId
+          ? { ...(project.coSupervisorPayment || {}), id: newCoId, amount: amtCo }
+          : null
+        return
+      }
+
+      const expert = supExpert || coExpert
+      if (!expert) return
+
+      const inAc = !!(expert.lecturer || expert.lecturerId)
+      const amtSingle = getDefaultSupervisorPay(SupervisorRole.SINGLE, inAc, thesisDesc)
+
+      const singleMissing =
+        !project.singleSupervisorPaymentId || paymentAmount(project.singleSupervisorPayment) <= 0
+      const mustClearDual = !!(oldSupPayId || oldCoPayId)
+
+      if (!singleMissing && !mustClearDual) return
+
+      if (!singleMissing && mustClearDual) {
+        await updateThesisProject({
+          where: { id: project.id },
+          data: {
+            supervisorPayment: { disconnect: true },
+            coSupervisorPayment: { disconnect: true },
+          },
+        })
+        if (oldSupPayId) await deletePaymentHard(oldSupPayId)
+        if (oldCoPayId) await deletePaymentHard(oldCoPayId)
+        project.supervisorPaymentId = null
+        project.coSupervisorPaymentId = null
+        project.supervisorPayment = null
+        project.coSupervisorPayment = null
+        return
+      }
+
+      let newSingleId = oldSinglePayId
+
+      if (singleMissing) {
+        const created = await createSupervisorPaymentRecord({
+          data: {
+            amount: new Decimal(amtSingle),
+            status: PaymentStatus.PENDING,
+            singleSupervisorPayment: { connect: { id: project.id } },
+          },
+        })
+        if (!created?.id) return
+        newSingleId = created.id
+      }
+
+      await updateThesisProject({
+        where: { id: project.id },
+        data: {
+          supervisorPayment: { disconnect: true },
+          coSupervisorPayment: { disconnect: true },
+          singleSupervisorPayment: newSingleId
+            ? { connect: { id: newSingleId } }
+            : { disconnect: true },
+        },
+      })
+
+      if (oldSupPayId) await deletePaymentHard(oldSupPayId)
+      if (oldCoPayId) await deletePaymentHard(oldCoPayId)
+      if (singleMissing && oldSinglePayId && newSingleId && oldSinglePayId !== newSingleId) {
+        await deletePaymentHard(oldSinglePayId)
+      }
+
+      project.supervisorPaymentId = null
+      project.coSupervisorPaymentId = null
+      project.supervisorPayment = null
+      project.coSupervisorPayment = null
+      project.singleSupervisorPaymentId = newSingleId
+      project.singleSupervisorPayment = newSingleId
+        ? { ...(project.singleSupervisorPayment || {}), id: newSingleId, amount: amtSingle }
+        : null
+    },
+    [
+      createSupervisorPaymentRecord,
+      defaultSupervisorPayAmounts,
+      deleteSupervisorPaymentRecord,
+      updateThesisProject,
+    ]
+  )
 
   type SignerPayload = {
     signerName: string
@@ -1183,6 +1417,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
           hideSpinner,
           message,
           inAcademy: true,
+          ensureSupervisorPaymentsForExport,
         }),
     },
     {
@@ -1195,6 +1430,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
           hideSpinner,
           message,
           inAcademy: false,
+          ensureSupervisorPaymentsForExport,
         }),
     },
     {
