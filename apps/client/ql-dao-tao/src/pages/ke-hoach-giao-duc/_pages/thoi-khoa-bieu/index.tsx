@@ -513,7 +513,7 @@ export default function ThoiKhoaBieu({
           <Affix offsetTop={105} style={{ zIndex: 1000 }}>
             <Flex gap={4} justify="end">
               <TreeSelectDepartment
-                className="w-[300px]"
+                className="w-[300px] mb-2"
                 rootId={!khoaBoMon ? "0" : orgId}
                 onChange={(val) => handleFilterChange("organization", val)}
               />
