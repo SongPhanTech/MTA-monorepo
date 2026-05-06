@@ -7,4 +7,5 @@
 
 export type ValidateUserSurveyParams = {
 studentCode: string;
+surveyId?: string;
 };

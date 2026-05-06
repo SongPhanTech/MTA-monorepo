@@ -312,6 +312,44 @@ app.openapi(sinhdethuCong, async (c) => {
     return result
   }
 
+  function shuffleWithConstraints(questions: any[]): any[] {
+    const arr = [...questions]
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]]
+    }
+
+    const hasImage = (q: any): boolean =>
+      typeof q.content === "string" && q.content.includes("<img")
+
+    const result: any[] = []
+    const remaining = [...arr]
+
+    while (remaining.length > 0) {
+      const prev = result[result.length - 1]
+      let pickedIdx = -1
+
+      for (let i = 0; i < remaining.length; i++) {
+        const candidate = remaining[i]
+        const sameBlock =
+          prev?.knowledgeBlockId &&
+          candidate.knowledgeBlockId === prev.knowledgeBlockId
+        const bothHaveImage = prev && hasImage(prev) && hasImage(candidate)
+
+        if (!sameBlock && !bothHaveImage) {
+          pickedIdx = i
+          break
+        }
+      }
+
+      if (pickedIdx === -1) pickedIdx = 0
+      result.push(remaining[pickedIdx])
+      remaining.splice(pickedIdx, 1)
+    }
+
+    return result
+  }
+
   const matrixData: any = await prisma.knowledgeBlock.findMany({
     where: {
       examMatrixId: body?.examMatrixId,
@@ -347,6 +385,8 @@ app.openapi(sinhdethuCong, async (c) => {
       }
     }
   }
+
+  questions = shuffleWithConstraints(questions)
 
   await prisma.examBank.create({
     data: {

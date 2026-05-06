@@ -1,4 +1,9 @@
-import { DownOutlined, FileExcelOutlined, PrinterOutlined } from "@ant-design/icons"
+import {
+  DownOutlined,
+  FileExcelOutlined,
+  FileWordOutlined,
+  PrinterOutlined,
+} from "@ant-design/icons"
 import HtmlTruncate from "@components/commons/html-truncate"
 import Table from "@components/commons/table"
 import useSpinner from "@hooks/spinner"
@@ -9,6 +14,7 @@ import { Button, Col, Dropdown, Empty, Row, Typography } from "antd"
 import ReactECharts from "echarts-for-react"
 import ExcelJS from "exceljs"
 import { saveAs } from "file-saver"
+import { exportSurveyDocxTemplate } from "@/utils/export-survey-docx-template"
 import { useRouter } from "next/router"
 import { useMemo } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
@@ -33,6 +39,8 @@ function SurveyOrganizationReport({
   organizationId,
   surveyName,
   trainingObjectTypeName,
+  semesterName,
+  trainingSystemName,
   organizationCode,
   organizationName,
   departmentName,
@@ -42,6 +50,8 @@ function SurveyOrganizationReport({
   organizationId: string
   surveyName?: string
   trainingObjectTypeName?: string
+  semesterName?: string
+  trainingSystemName?: string
   organizationCode?: string
   organizationName?: string
   departmentName?: string
@@ -52,7 +62,6 @@ function SurveyOrganizationReport({
   const { onOpen } = useDisclosure({
     tag: "ModalPrintSurveyOrganization",
   })
-
   const { data: dataLevel } = useGetClusterSurveyStatisticsForOrganization(selectedId as string, {
     organizationId,
   })
@@ -467,6 +476,31 @@ function SurveyOrganizationReport({
                             dataLevel?.data?.data?.questions,
                             dataLevel?.data?.data
                           )
+                        },
+                      },
+                      {
+                        key: "export-docx",
+                        icon: <FileWordOutlined />,
+                        label: "Xuất Word",
+                        onClick: async () => {
+                          const hasDepartment = Boolean(departmentName)
+                          showSpinner()
+                          try {
+                            await exportSurveyDocxTemplate({
+                              variant: hasDepartment ? "BO_MON" : "KHOA",
+                              surveyName,
+                              trainingObjectTypeName,
+                              semesterName,
+                              trainingSystemName,
+                              organizationName,
+                              organizationCode,
+                              departmentName,
+                              departmentCode,
+                              questions: dataLevel?.data?.data?.questions || [],
+                            })
+                          } finally {
+                            hideSpinner()
+                          }
                         },
                       },
                       {

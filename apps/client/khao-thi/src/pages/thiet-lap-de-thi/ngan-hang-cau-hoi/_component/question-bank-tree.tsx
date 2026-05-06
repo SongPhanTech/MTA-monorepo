@@ -298,14 +298,25 @@ export default function QuestionBankTree({
     }
 
     const donViIds = new Set(donViData.map((o) => o.Id))
+    // Tập các org có ít nhất một child org trong dataset
+    const orgsThatAreParents = new Set(
+      donViData
+        .filter((org) => org.sParentId && donViIds.has(org.sParentId))
+        .map((org) => org.sParentId as string)
+    )
     const orgTree = buildOrgTree(
-      donViData.map((org) => ({
-        Id: org.Id,
-        sTen: org.sTen,
-        // Nếu parent không có trong filtered list thì coi node này là root
-        sParentId: donViIds.has(org.sParentId ?? "") ? org.sParentId : null,
-        sMa: org.sMa,
-      }))
+      donViData
+        .filter((org) => {
+          if (!org.sParentId || donViIds.has(org.sParentId)) return true
+          // Parent không trong dataset → chỉ giữ lại nếu org này có subjects hoặc có child org trong dataset
+          return orgsThatAreParents.has(org.Id) || (org.subjects && org.subjects.length > 0)
+        })
+        .map((org) => ({
+          Id: org.Id,
+          sTen: org.sTen,
+          sParentId: donViIds.has(org.sParentId ?? "") ? org.sParentId : null,
+          sMa: org.sMa,
+        }))
     )
 
     const dataStructure = buildDataStructure(orgTree)

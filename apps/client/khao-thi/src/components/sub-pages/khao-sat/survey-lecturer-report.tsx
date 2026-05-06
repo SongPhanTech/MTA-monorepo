@@ -1,4 +1,9 @@
-import { DownOutlined, FileExcelOutlined, PrinterOutlined } from "@ant-design/icons"
+import {
+  DownOutlined,
+  FileExcelOutlined,
+  FileWordOutlined,
+  PrinterOutlined,
+} from "@ant-design/icons"
 import HtmlTruncate from "@components/commons/html-truncate"
 import Table from "@components/commons/table"
 import useSpinner from "@hooks/spinner"
@@ -9,6 +14,7 @@ import { Button, Col, Dropdown, Empty, Row, Typography } from "antd"
 import ReactECharts from "echarts-for-react"
 import ExcelJS from "exceljs"
 import { saveAs } from "file-saver"
+import { exportSurveyDocxTemplate } from "@/utils/export-survey-docx-template"
 import { useRouter } from "next/router"
 import { useMemo } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
@@ -33,6 +39,8 @@ function SurveylecturerReport({
   lectureId,
   surveyName,
   trainingObjectTypeName,
+  semesterName,
+  trainingSystemName,
   organizationCode,
   organizationName,
   lecturerName,
@@ -44,6 +52,8 @@ function SurveylecturerReport({
   lectureId: string
   surveyName: string
   trainingObjectTypeName?: string
+  semesterName?: string
+  trainingSystemName?: string
   organizationCode?: string
   organizationName?: string
   lecturerName?: string
@@ -56,7 +66,6 @@ function SurveylecturerReport({
   const { onOpen } = useDisclosure({
     tag: "ModalPrintSurveylecturer",
   })
-
   const { data: dataLevel } = useGetClusterSurveyStatisticsForLecturer(selectedId as string, {
     lectureId,
   })
@@ -451,6 +460,32 @@ function SurveylecturerReport({
                         },
                       },
                       {
+                        key: "export-docx",
+                        icon: <FileWordOutlined />,
+                        label: "Xuất Word",
+                        onClick: async () => {
+                          showSpinner()
+                          try {
+                            await exportSurveyDocxTemplate({
+                              variant: "GIANG_VIEN",
+                              surveyName,
+                              trainingObjectTypeName,
+                              semesterName,
+                              trainingSystemName,
+                              lecturerName,
+                              lecturerCode,
+                              departmentName,
+                              departmentCode,
+                              organizationName,
+                              organizationCode,
+                              questions: dataLevel?.data?.data?.questions,
+                            })
+                          } finally {
+                            hideSpinner()
+                          }
+                        },
+                      },
+                      {
                         key: "print",
                         icon: <PrinterOutlined />,
                         label: "In báo cáo",
@@ -458,16 +493,12 @@ function SurveylecturerReport({
                           onOpen({
                             surveyName,
                             trainingObjectTypeName,
-
                             lecturerName,
                             lecturerCode,
-
                             departmentName,
                             departmentCode,
-
                             organizationName,
                             organizationCode,
-
                             questions: dataLevel?.data?.data?.questions,
                             chartOption: dataBarchart,
                           })
