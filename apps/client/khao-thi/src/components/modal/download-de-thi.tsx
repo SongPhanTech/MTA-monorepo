@@ -4,14 +4,16 @@ import { useFindUniqueExamBank, useUpdateExamBank } from "@workspace/db/hooks"
 import { useGetExamBankWithGrouping } from "@workspace/libs/api/exam"
 import { getMinioUrl } from "@workspace/libs/utils"
 import { Button, Flex, Input, Modal } from "antd"
-import { TemplateHandler } from "easy-template-x"
+import { TemplateData, TemplateHandler } from "easy-template-x"
 import { useEffect, useRef, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 import { useReactToPrint } from "react-to-print"
 import { convertHtmlBreaks, saveFile } from "@/utils/saveFile"
+import { useSession } from "@workspace/auth/react"
 
 const PrintExamBank = () => {
-  const [name, setName] = useState("Nguyễn Văn A")
+  const { data: me } = useSession()
+  const [name, setName] = useState(me?.fullName || "")  
   const [duration, setDuration] = useState("")
   const [isExporting, setIsExporting] = useState(false)
   const { isOpen, onClose, input } = useDisclosure<{
@@ -68,7 +70,6 @@ const PrintExamBank = () => {
 
   const subjectClassName = data?.subjectClass?.name || ""
 
-  // Tự động fill thời gian từ examFramework
   useEffect(() => {
     if (data?.examMatrix?.examFramework?.time) {
       setDuration(String(data.examMatrix.examFramework.time))
@@ -88,6 +89,7 @@ const PrintExamBank = () => {
   const year = examDate.getFullYear()
 
   const handleDownload = async () => {
+    setIsExporting(true)
     if (!data || !groupedData) return
     const templateUrl = groupedData.isGroup
       ? getMinioUrl("mta/template/template-de-thi-tieu-de.docx")
@@ -119,7 +121,7 @@ const PrintExamBank = () => {
       teacherName: name,
     }
 
-    const templateData = groupedData.isGroup
+    const templateData: TemplateData = groupedData.isGroup
       ? {
           ...baseTemplateData,
           listQuestionChoice: (groupedData.listQuestionChoice ?? []).map(mapQuestion),
@@ -136,6 +138,7 @@ const PrintExamBank = () => {
     const doc = await handler.process(templateFile, templateData)
     saveFile(`De-Thi-${data?.exam?.subjectVersion?.name}.docx`, doc)
     setHasDownloaded(true)
+    setIsExporting(false)
   }
 
   const handleClose = async () => {
