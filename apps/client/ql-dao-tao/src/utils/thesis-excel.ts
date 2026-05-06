@@ -191,20 +191,27 @@ interface KqbvlvTable {
 }
 interface banSaoHDDGLV {
   data: {
+    text1: string
+    text2: string
+    nguoiki1: string
+    text3: string
+    text4: string
+    nguoiki2: string
     soQd: string
     ngayTl: string
-    dieu1: string
     thangTl: string
     namTl: string
     khoa: string
     dotXet: string
     loaiLuanVan: string
+    councilReport: string
+    deTai: string
     nganh: string
     chuyenNganh: string
-    deTai: string
     tenHocVien: string
     ngaySinh: string
     khoaHoc: string
+    nienkhoahoc: string
     gvhd: string
     tenChuTich: string
     toChucChuTich: string
@@ -243,9 +250,12 @@ interface PhuLucQdhdData {
 }
 interface PhuLucQdhdTable {
   sttHoiDong: string
-  contentDieu1: string
+  loaiLuanVan: string
+  nganh: string
+  tenDeTai: string
   tenHocVien: string
   ngaySinh: string
+  khoaHoc: string
   gvhd1: string
   gvhd2: string
   tenChuTich: string
@@ -323,17 +333,27 @@ interface HDDanhGiaLuanVanTemplateData {
   tail: HDDanhGiaLuanVanTail
   data: HDDanhGiaLuanVanData[]
 }
-const formatThesisDate = (date?: Date | string | null) => {
-  if (!date) return ""
+const formatDocDate = (date?: Date | string | null) => {
+  if (!date) return { day: "", month: "", year: "" }
   const d = dayjs(date)
   const day = d.date()
   const month = d.month() + 1
   const year = d.year()
 
   const dayStr = day.toString()
-  const monthStr = month === 1 || month === 2 ? month.toString().padStart(2, "0") : month.toString()
+  const monthStr =
+    month === 1 || month === 2 ? month.toString().padStart(2, "0") : month.toString()
 
-  return `${dayStr}/${monthStr}/${year}`
+  return {
+    day: dayStr,
+    month: monthStr,
+    year: year.toString(),
+  }
+}
+
+const formatBirthDate = (date?: Date | string | null) => {
+  if (!date) return ""
+  return dayjs(date).format("DD/MM/YYYY")
 }
 
 export const exportPhuLucDsLuanVan = async ({
@@ -1211,23 +1231,28 @@ export const exportHosobvlv = async ({
       const soQDBV =
         student?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.defenseDecisionNumber
       const dotxetBV = student?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.name
-      const ngaysinh = formatThesisDate(student?.userProfile?.dateOfBirth)
+      const ngaysinh = formatBirthDate(student?.userProfile?.dateOfBirth)
       const khoas = student?.fixedClass?.trainingCourse?.name || ""
       // const nguoiKi
       const data = {
         tenhocvien: student.userProfile?.fullname || "",
         soQD: soQDBV || "",
-        ngayQD: formatThesisDate(ngayQDBV),
+        // ngayQD: formatThesisDate(ngayQDBV),
+        ngayQD: ngayQDBV ? dayjs(ngayQDBV).format("DD/MM/YYYY") : "",
         dotxet: dotxetBV || "",
         type:
           student.thesisRegistrations?.[0]?.thesisProject?.type?.trim().toLowerCase() || "luận văn",
-        khoa: `Ngày sinh: ${ngaysinh || ""}, ${khoas || ""}`,
+        khoa: `${khoas || ""}`,
         chuyennganh: student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || "",
         nganh:
           student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.trainingField?.name ||
           "",
-        detai: `Đề tài: "${student?.thesisRegistrations?.[0]?.thesisProject?.title || ""}"`,
-        ngaybaove: formatThesisDate(student?.thesisRegistrations?.[0]?.thesisProject?.defenseDate),
+        detai: `${student?.thesisRegistrations?.[0]?.thesisProject?.title || ""}`,
+        ngaybaove: student?.thesisRegistrations?.[0]?.thesisProject?.defenseDate
+          ? dayjs(student?.thesisRegistrations?.[0]?.thesisProject?.defenseDate).format(
+              "DD/MM/YYYY"
+            )
+          : "",
         phanbien1: getSupervisorName(phanbien1?.expert, false, true) || "",
         phanbien2: getSupervisorName(phanbien2?.expert, false, true) || "",
         chutich: getSupervisorName(chutich?.expert, false, true) || "",
@@ -1344,10 +1369,7 @@ export const exportSaoQDHDLV = async ({
     return
   }
   showSpinner()
-  const now = resolveSigningDate(signingDate)
-  const ngayHT = now.format("DD")
-  const thangHT = now.format("M")
-  const namHT = now.format("YYYY")
+  const { day: ngayHT, month: thangHT, year: namHT } = formatDocDate(signingDate)
   try {
     const allSheetOptions = allStudentsInClasses
       ?.filter((s) => s?.thesisRegistrations?.[0]?.thesisProject)
@@ -1363,15 +1385,9 @@ export const exportSaoQDHDLV = async ({
         const chuyennganh = major?.name || ""
         const detai = thesisProject.title || ""
         const hoten = student?.userProfile?.fullname || ""
-        const ngayQD = thesisProject?.thesisSession?.decisionDate
-          ? dayjs(thesisProject?.thesisSession?.decisionDate).format("DD")
-          : ""
-        const thangQD = thesisProject?.thesisSession?.decisionDate
-          ? dayjs(thesisProject?.thesisSession?.decisionDate).format("M")
-          : ""
-        const namQD = thesisProject?.thesisSession?.decisionDate
-          ? dayjs(thesisProject?.thesisSession?.decisionDate).format("YYYY")
-          : ""
+        
+        const { day: ngayQD, month: thangQD, year: namQD } = formatDocDate(thesisProject?.thesisSession?.decisionDate)
+
         const canbohuongdan1 = `1. ${getSupervisorName(supervisor, false, true)}`
         const canbohuongdan2 = coSupervisor
           ? `2. ${getSupervisorName(coSupervisor, false, true)}`
@@ -1385,11 +1401,11 @@ export const exportSaoQDHDLV = async ({
         const tenNguoiKyQddt = qddtKyTokens.slice(1).join(" ").trim()
         const text1 = chucVuNguoiKyQddt === "GĐ" ? "GIÁM ĐỐC" : "KT.GIÁM ĐỐC"
         const text2 = text1 === "GIÁM ĐỐC" ? "" : "PHÓ GIÁM ĐỐC"
-        const dieu1 = `Điều 1: Giao đề tài ${type} tốt nghiệp và cán hộ hướng dẫn ngành ${nganh} (${chuyennganh}) về đề tài "${detai}".
-        Học viên thực hiện: ${hoten}, ${khoa.name}(${khoa.academicYear}). 
-        Cán bộ hướng dẫn: ${canbohuongdan1} 
-                              ${canbohuongdan2}`
-        const dieu2 = `Điều 2: ${khoaquanli} tổ chức triển khai cho cán bộ hướng dẫn và học viên thực hiện theo quy định.`
+        // const dieu1 = `Điều 1: Giao đề tài ${type} tốt nghiệp và cán hộ hướng dẫn ngành ${nganh} (${chuyennganh}) về đề tài "${detai}".
+        // Học viên thực hiện: ${hoten}, ${khoa.name}(${khoa.academicYear}). 
+        // Cán bộ hướng dẫn: ${canbohuongdan1} 
+        //                       ${canbohuongdan2}`
+        // const dieu2 = `Điều 2: ${khoaquanli} tổ chức triển khai cho cán bộ hướng dẫn và học viên thực hiện theo quy định.`
         const data = {
           soQD:
             student?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.decisionNumber || "",
@@ -1398,8 +1414,14 @@ export const exportSaoQDHDLV = async ({
           namQD: namQD,
           type: type || "",
           khoa: student?.fixedClass?.trainingCourse?.name || "",
-          dieu1: dieu1,
-          dieu2: dieu2,
+          nganh: nganh,
+          chuyennganh: chuyennganh,
+          detai: detai,
+          hoten: hoten,
+          khoaHoc: `${khoa.name}(${khoa.academicYear})`,
+          canbohuongdan1: canbohuongdan1,
+          canbohuongdan2: canbohuongdan2,
+          khoaquanli: khoaquanli,
           text1: text1,
           text2: text2,
           nguoiky1: tenNguoiKyQddt,
@@ -2709,17 +2731,12 @@ const convertToBanSaoHDDGLV = (
         student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || ""
       const deTai = project?.title || ""
       const tenhocvien = student.userProfile?.fullname || ""
-      const ngaysinh = formatThesisDate(student.userProfile?.dateOfBirth)
+      const ngaysinh = formatBirthDate(student.userProfile?.dateOfBirth)
       const khoaHoc = student.fixedClass?.trainingCourse?.name || ""
       const nienkhoahoc = student.fixedClass?.trainingCourse?.academicYear || ""
       const gvhd = [gvhd1, gvhd2].filter(Boolean).join("; ")
 
-      const m = qdDate ? qdDate.month() + 1 : null
-      const thangTlVal = m
-        ? m === 1 || m === 2
-          ? m.toString().padStart(2, "0")
-          : m.toString()
-        : ""
+      const { day: ngayTlVal, month: thangTlVal } = formatDocDate(session?.defenseDecisionDate)
 
       return {
         data: {
@@ -2731,7 +2748,7 @@ const convertToBanSaoHDDGLV = (
           nguoiki2: signerName || "",
 
           soQd: session?.defenseDecisionNumber || "",
-          ngayTl: qdDate ? qdDate.date().toString() : "",
+          ngayTl: ngayTlVal,
           thangTl: thangTlVal,
           namTl: qdDate ? qdDate.format("YYYY") : "",
           khoa: session?.trainingCourse?.name || "",
@@ -2739,17 +2756,14 @@ const convertToBanSaoHDDGLV = (
           loaiLuanVan: loaiLuanVan,
           councilReport: session?.councilReport || "",
 
+          deTai: deTai,
           nganh: nganh,
           chuyenNganh: chuyenNganh,
-          deTai: deTai,
-          dieu1: `Điều 1. Thành lập hội đồng đánh giá ${loaiLuanVan} tốt nghiệp thạc sĩ ngành ${nganh} (${chuyenNganh}) về đề tài "${deTai}". \n     Học viên thực hiện: ${tenhocvien}, sinh ngày ${ngaysinh}, ${khoaHoc}). \n     Cán bộ hướng dẫn: ${gvhd}.\n     Danh sách các thành viên tham gia Hội đồng:
-        `,
-          tenHocVien: student.userProfile?.fullname || "",
-          ngaySinh: student.userProfile?.dateOfBirth
-            ? dayjs(student.userProfile.dateOfBirth).format("DD/MM/YYYY")
-            : "",
-          khoaHoc: student.fixedClass?.trainingCourse?.name || "",
-          gvhd: [gvhd1, gvhd2].filter(Boolean).join("; "),
+          tenHocVien: tenhocvien,
+          ngaySinh: ngaysinh,
+          khoaHoc: khoaHoc,
+          nienkhoahoc: nienkhoahoc,
+          gvhd: gvhd,
           tenChuTich: (getSupervisorName(chairman?.expert, false, true) as string) || "",
           toChucChuTich: chairman?.expert?.workplace || "HVKTQS",
 
@@ -2790,9 +2804,12 @@ export const exportPhuLucQdhdd = async ({
         sttChuyenNganh: rowIdx === 0 ? major.data.sttChuyenNganh : "",
         tenChuyenNganh: rowIdx === 0 ? major.data.tenChuyenNganh : "",
         sttHoiDong: row.sttHoiDong,
-        contentDieu1: row.contentDieu1,
+        loaiLuanVan: row.loaiLuanVan,
+        nganh: row.nganh,
+        tenDeTai: row.tenDeTai,
         tenHocVien: row.tenHocVien,
         ngaySinh: row.ngaySinh,
+        khoaHoc: row.khoaHoc,
         gvhd1: row.gvhd1,
         gvhd2: row.gvhd2,
         tenChuTich: row.tenChuTich,
@@ -2895,12 +2912,16 @@ const convertToPhuLucQdhdTemplateData = (allStudentsInClasses: any[]): PhuLucQdh
       const reviewer1 = getMember(CouncilRole.REVIEWER_1)
       const reviewer2 = getMember(CouncilRole.REVIEWER_2)
       const member = getMember(CouncilRole.MEMBER)
-      const ngaysinh = formatThesisDate(student.userProfile?.dateOfBirth)
+      const ngaySinhStr = formatBirthDate(student.userProfile?.dateOfBirth)
+      const khoaHocStr = `${student.fixedClass?.trainingCourse?.name || ""} (${student.fixedClass?.trainingCourse?.academicYear || ""})`
       return {
         sttHoiDong: (studentIdx + 1).toString(),
-        contentDieu1: `${project?.type} tốt nghiệp thạc sĩ ngành ${groupKey}, Đề tài: ${project?.title.trim().replace(/\s+/g, " ") || ""}`,
+        loaiLuanVan: project?.type || "Luận văn",
+        nganh: groupKey,
+        tenDeTai: project?.title.trim().replace(/\s+/g, " ") || "",
         tenHocVien: student.userProfile?.fullname || "",
-        ngaySinh: `${ngaysinh}, ${student.fixedClass?.trainingCourse?.name || ""} (${student.fixedClass?.trainingCourse?.academicYear || ""})`,
+        ngaySinh: ngaySinhStr,
+        khoaHoc: khoaHocStr,
         gvhd1: (getSupervisorName(project?.supervisor, false, true) as string) || "",
         gvhd2: (getSupervisorName(project?.coSupervisor, false, true) as string) || "",
 
@@ -3243,13 +3264,13 @@ const convertToHDDanhGiaLuanVanTemplateData = (
       return {
         stt: sIdx + 1,
         maHv: student.userProfile?.code || "",
-        ngaySinh: formatThesisDate(student.userProfile?.dateOfBirth),
+        ngaySinh: formatBirthDate(student.userProfile?.dateOfBirth),
         hocVienCanBoHuongDan: hvCbhd,
         deTai: project?.title || "",
         gioBaoVe: project?.defenseSession?.startTime
           ? dayjs(project.defenseSession.startTime).format("HH:mm")
           : "",
-        ngayBaoVe: formatThesisDate(project?.defenseDate),
+        ngayBaoVe: project?.defenseDate ? dayjs(project.defenseDate).format("DD/MM/YYYY") : "",
         diaDiem: project?.room?.name || "",
         tenChuTich: findMemberName(CouncilRole.CHAIRMAN),
         tenThuKy: findMemberName(CouncilRole.SECRETARY),
