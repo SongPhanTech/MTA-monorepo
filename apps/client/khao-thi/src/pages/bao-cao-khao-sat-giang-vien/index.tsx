@@ -7,19 +7,37 @@ import {
   useFindManyClusterSurvey,
   useFindManyDM_DonVi,
   useFindManyLecturer,
-  useFindManySemester,
+  useFindUniqueSemester,
   useFindUniqueTrainingObjectType,
 } from "@workspace/db/hooks"
-// import OrganizationSurveyReport from '@/components/sub-pages/khao-sat/bao-cao-don-vi'
-// import ClusterSurveyReport from '@components/sub-pages/khao-sat/bao-cao-cum'
-// import LecturerSurveyReport from '@components/sub-pages/khao-sat/bao-cao-giang-vien'
-// import SurveyReport from '@components/sub-pages/khao-sat/bao-cao'
+
 import { useSemesterStore, useTrainingObjectTypeStore } from "@workspace/ui"
 import { Col, Flex, Row, Skeleton, Tree } from "antd"
 import { useMemo, useState } from "react"
-// import ClusterSurveyReport from '@components/sub-pages/khao-sat/bao-cao-cum';
+
 import OrganizationSurveyReport from "@/components/sub-pages/khao-sat/bao-cao-don-vi"
 import { getRuntimeEnv } from "@workspace/libs"
+import { $Enums } from "@workspace/db/client"
+
+/**
+ * Nhãn hệ đào tạo cho mẫu báo cáo — chỉ theo `TrainingObjectType.type` (không đoán qua tên/regex).
+ * Quốc tế: không đưa chữ "Quốc tế" vào mẫu → trả về rỗng.
+ */
+function trainingSystemNameFromDbType(type: $Enums.TrainingObjectTypes | undefined): string {
+  if (type == null) {
+    return ""
+  }
+  if (type === $Enums.TrainingObjectTypes.MILITARY) {
+    return "Quân sự"
+  }
+  if (type === $Enums.TrainingObjectTypes.CIVILIAN) {
+    return "Dân sự"
+  }
+  if (type === $Enums.TrainingObjectTypes.INTERNATIONAL_MILITARY) {
+    return ""
+  }
+  return ""
+}
 
 function buildOrgAndLectureTree(
   list: Array<any>,
@@ -67,29 +85,26 @@ export default function BaoCaoGiangVien() {
   const { id: semesterId } = useSemesterStore()
   const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
 
-  const { data: semesters = [] } = useFindManySemester()
-  const semesterName = useMemo(() => {
-    if (!semesterId) return ""
-    const found = semesters.find((s: any) => (s?.id ?? s?.Id) === semesterId)
-    return found?.name ?? ""
-  }, [semesters, semesterId])
+  const { data: semester } = useFindUniqueSemester(
+    {
+      where: { id: semesterId },
+      select: { name: true },
+    },
+    { enabled: !!semesterId }
+  )
+  const semesterName = semester?.name ?? ""
 
   const { data: trainingObjectType } = useFindUniqueTrainingObjectType(
     {
       where: { id: trainingObjectTypeId },
-      select: { name: true },
+      select: { name: true, type: true },
     },
     {
       enabled: !!trainingObjectTypeId,
     }
   )
-  const trainingObjectTypeName = useMemo(() => trainingObjectType?.name ?? "", [trainingObjectType])
-  const trainingSystemName = useMemo(() => {
-    const v = (trainingObjectTypeName || "").toLocaleLowerCase("vi-VN")
-    if (/(quân\s*sự|quan\s*su|\bqs\b)/i.test(v)) return "Quân sự"
-    if (/(dân\s*sự|dan\s*su|\bds\b)/i.test(v)) return "Dân sự"
-    return ""
-  }, [trainingObjectTypeName])
+  const trainingObjectTypeName = trainingObjectType?.name ?? ""
+  const trainingSystemName = trainingSystemNameFromDbType(trainingObjectType?.type)
 
   const { data = [], refetch } = useFindManyClusterSurvey({
     where: {
@@ -397,7 +412,16 @@ export default function BaoCaoGiangVien() {
       // )
     }
     return
-  }, [filters, selectedItem, trainingObjectTypeName])
+  }, [
+    filters,
+    selectedItem,
+    trainingObjectTypeName,
+    trainingSystemName,
+    semesterName,
+    semesterId,
+    trainingObjectTypeId,
+    organizations,
+  ])
   return (
     <Row gutter={[16, 4]}>
       <Col span={24}>
