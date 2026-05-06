@@ -66,19 +66,25 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
           data: data?.data.map((i) => i.name),
         },
         series: [
-          {
-            name: "Đã làm",
-            type: "bar",
-            color: "#9aa3e0",
-            data: data?.data.map((i) => i.taken),
-          },
-          {
-            name: "Tổng",
-            type: "bar",
-            color: "#028850",
-            data: data?.data.map((i) => i.total),
-          },
-        ],
+  {
+    name: "Đã làm",
+    type: "bar",
+    color: "#7F95C9",
+    itemStyle: {
+      borderRadius:0,
+    },
+    data: data?.data.map((i) => i.taken),
+  },
+  {
+    name: "Tổng",
+    type: "bar",
+    color: "#5FAE8C",
+    itemStyle: {
+      borderRadius:0,
+    },
+    data: data?.data.map((i) => i.total),
+  },
+]
       }
     }
     return {}
@@ -89,21 +95,17 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
     data: CriteriaItem[],
     answerDescriptions: GetSurveyStatistics200QuestionsItemAnswersItem[]
   ) {
-    // Map answer -> description
-    // Moderately pale palette (nhạt vừa) to reduce glare but keep contrast
-    const color = ["#ff4d52", "#ea8585", "#ffd977", "#9aa3e0", "#028850"]
+
+    const color = ["#D46A6A", "#E2A4A4", "#E6CF7A", "#7F95C9", "#5FAE8C"]
     const answerMap: Record<string, string> = {}
     answerDescriptions.forEach((a) => {
       answerMap[a.answer] = a.description as string
     })
 
-    // Các đáp án theo thứ tự tăng dần 1 → 5
     const answerKeys = answerDescriptions.map((a) => a.answer).sort((a, b) => Number(a) - Number(b))
 
-    // Trục Y: danh sách Câu hỏi
     const categories = data.map((item) => item.name)
 
-    // Series stack bar
     const series = answerKeys.map((answer, index: number) => ({
       name: answerMap[answer],
       type: "bar" as const,
@@ -124,8 +126,8 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
   const dataBarchart = useMemo(() => {
     let label: string[] = []
     if (dataLevel?.status === 200 && dataLevel?.data?.questions?.length) {
-      label = dataLevel?.data?.questions?.map((item, index) => `Câu hỏi ${index + 1}`)
-      const { categories, series } = convertToStackChartData(
+      label = dataLevel?.data?.questions?.map((_item, index) => `Câu hỏi ${index + 1}`)
+      const { series } = convertToStackChartData(
         dataLevel?.data?.questions,
         dataLevel?.data?.questions[0]?.answers
       )
@@ -134,8 +136,7 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
         tooltip: {
           trigger: "axis",
           axisPointer: {
-            // Use axis to trigger tooltip
-            type: "shadow", // 'shadow' as default; can also be 'line' or 'shadow'
+            type: "shadow",
           },
         },
         legend: {},
@@ -553,7 +554,7 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
                     },
                     {
                       title: "Đối tượng",
-                      render: (_, record, index) => {
+                      render: (_, record) => {
                         return record?.name
                       },
                     },
@@ -561,7 +562,7 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
                       title: "Trạng thái",
                       align: "center",
                       width: 200,
-                      render: (_, record, index) => {
+                      render: (_, record) => {
                         return `${record?.taken || 0}/${record?.total || 0}`
                       },
                     },
