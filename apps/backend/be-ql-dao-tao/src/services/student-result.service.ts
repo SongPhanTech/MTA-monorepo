@@ -2704,6 +2704,7 @@ export const resultCourseStudentDecreaseAcademicWarning = async (
             ?.trainingField?.id || "",
         reason: student.lyDoXepLoai || "",
         decreaseAcademicWarning: true,
+        previousAcademicWarningLevel: previousLevel,
         fixedClass: {
           code: studentSemesterResult.student.fixedClass?.code || null,
           name: studentSemesterResult.student.fixedClass?.name || "",
