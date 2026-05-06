@@ -9,14 +9,9 @@ import {
   useFindManyLecturer,
   useFindUniqueTrainingObjectType,
 } from "@workspace/db/hooks"
-// import OrganizationSurveyReport from '@/components/sub-pages/khao-sat/bao-cao-don-vi'
-// import ClusterSurveyReport from '@components/sub-pages/khao-sat/bao-cao-cum'
-// import LecturerSurveyReport from '@components/sub-pages/khao-sat/bao-cao-giang-vien'
-// import SurveyReport from '@components/sub-pages/khao-sat/bao-cao'
 import { useSemesterStore, useTrainingObjectTypeStore } from "@workspace/ui"
 import { Col, Flex, Row, Skeleton, Tree } from "antd"
 import { useMemo, useState } from "react"
-// import ClusterSurveyReport from '@components/sub-pages/khao-sat/bao-cao-cum';
 import OrganizationSurveyReport from "@/components/sub-pages/khao-sat/bao-cao-don-vi"
 import { getRuntimeEnv } from "@workspace/libs"
 
