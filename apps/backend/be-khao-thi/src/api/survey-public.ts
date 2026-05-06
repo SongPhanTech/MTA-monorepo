@@ -279,6 +279,17 @@ app.openapi(savePublicSurvey, async (c) => {
 
       studentId = student.id
       profileId = student.userProfileId
+
+      const existingSession = await prisma.surveySession.findFirst({
+        where: {
+          surveyId,
+          studentId: student.id,
+        },
+      })
+
+      if (existingSession) {
+        return c.json({ message: "Bạn đã hoàn thành bài khảo sát này" }, 400)
+      }
     }
   }
 
@@ -329,6 +340,7 @@ const validateUserSurvey = createRoute({
   request: {
     query: z.object({
       studentCode: z.string(),
+      surveyId: z.string().optional(),
     }),
   },
   responses: {
@@ -367,7 +379,7 @@ const validateUserSurvey = createRoute({
 })
 
 app.openapi(validateUserSurvey, async (c) => {
-  const { studentCode } = c.req.valid("query")
+  const { studentCode, surveyId } = c.req.valid("query")
 
   if (!studentCode) {
     return c.json({ message: "Vui lý nhập mã SV" }, 400)
@@ -378,6 +390,19 @@ app.openapi(validateUserSurvey, async (c) => {
   })
   if (!student) {
     return c.json({ message: "Mã SV không tồn tại" }, 404)
+  }
+
+  if (surveyId) {
+    const existingSession = await prisma.surveySession.findFirst({
+      where: {
+        surveyId,
+        studentId: student.id,
+      },
+    })
+
+    if (existingSession) {
+      return c.json({ message: "Bạn đã hoàn thành bài khảo sát này" }, 400)
+    }
   }
 
   return c.json({ studentCode, exists: true }, 200)
