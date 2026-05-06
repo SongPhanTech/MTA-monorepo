@@ -1,3 +1,4 @@
+import { queryClient } from "@api/index"
 import PutFormModal from "@components/commons/put-modal"
 import {
   DEFAULT_PAGINATE_SIZE,
@@ -5,13 +6,14 @@ import {
   GENDER_MEAN,
 } from "@constants/constants"
 import useSpinner from "@hooks/spinner"
-import type { Student } from "@workspace/db/client"
+import { StudentStatus, type Student } from "@workspace/db/client"
 import {
   useCountStudent,
   useFindManyStudent,
   useFindUniqueFixedClass,
   useUpdateManyStudent,
 } from "@workspace/db/hooks"
+import { sqlTransaction } from "@workspace/libs/api/model"
 import { Button, Col, Divider, Flex, Form, Input, message, Row, Tag, Tooltip } from "antd"
 import dayjs from "dayjs"
 import "dayjs/locale/vi"
@@ -21,6 +23,7 @@ import { ArrowBigLeftDash, ArrowBigRightDash, Search } from "lucide-react"
 import { useRouter } from "next/router"
 import { useCallback, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
+import { SqlTransactionBodyItem } from "@workspace/libs/api/schemas"
 
 dayjs.locale("vi")
 
@@ -225,20 +228,54 @@ const AddStudentToFixedClassModal = () => {
   }
 
   const updateStudent = async () => {
-    await updateManyUserProfile({
-      where: {
-        id: {
-          in: selectedRowKeys,
+    if (!selectedRowKeys || selectedRowKeys.length === 0) {
+      message.warning("Vui lòng chọn ít nhất một sinh viên để cập nhật");
+      return;
+    }
+    const cvId = fixedClass?.curriculumVersionId;
+
+    const ops: SqlTransactionBodyItem[] = [
+      {
+        model: "Student", // Không cần "as const" nữa vì Type đã quy định rõ
+        operation: "updateMany",
+        data: {
+          where: { id: { in: selectedRowKeys } },
+          data: { fixedClassId },
         },
       },
-      data: {
-        fixedClassId: fixedClassId,
-        curriculumVersionId: fixedClass?.curriculumVersionId,
-      },
-    })
-    message.success("Cập nhật thành công")
-    onCloseModalConfirm()
-  }
+    ];
+
+    if (cvId) {
+      ops.push({
+        model: "Student",
+        operation: "updateMany",
+        data: {
+          where: {
+            id: { in: selectedRowKeys },
+            status: { not: StudentStatus.DEFERRED_STUDY },
+          },
+          data: { curriculumVersionId: cvId, status: StudentStatus.ENROLLED },
+        },
+      });
+    }
+
+    try {
+      const res = await sqlTransaction(ops);
+
+      if (res.status !== 200) {
+        throw new Error("Failed with status: " + res.status);
+      }
+
+      await queryClient.invalidateQueries({
+        queryKey: ["zenstack", "Student"],
+      });
+      message.success("Cập nhật thành công");
+      onCloseModalConfirm();
+    } catch (error) {
+      console.error("Lỗi khi cập nhật sinh viên:", error);
+      message.error("Cập nhật thất bại, vui lòng thử lại!");
+    }
+  };
 
   const handleAddStudentToClass = async () => {
     try {
@@ -258,7 +295,7 @@ const AddStudentToFixedClassModal = () => {
           message.success("Cập nhật thành công")
         } else {
           // await updateStudent()
-          onOpenModalConfirm("Thay đổi CTĐT cho tất cả các sinh viên này?")
+          onOpenModalConfirm("Thay đổi CTĐT cho tất cả các sinh viên này, sinh viên bảo lưu sẽ không được thay đổi CTĐT?")
         }
       }
       setSelectedRowKeysInClass([])
