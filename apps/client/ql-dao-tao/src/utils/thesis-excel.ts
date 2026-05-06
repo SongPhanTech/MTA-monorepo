@@ -529,7 +529,7 @@ export const getExpertSupervisionStats = (allStudentsInClasses: any[]) => {
 
   const expertStatsMap = new Map<string, any>()
 
-  const updateStats = (expert: any, amount: any, role: "GVHD1" | "GVHD2") => {
+  const updateStats = (expert: any, amount: any, role: "GVHD1" | "GVHD2" | "SINGLE") => {
     if (!expert) return
 
     const expertId = expert.id
@@ -545,6 +545,7 @@ export const getExpertSupervisionStats = (allStudentsInClasses: any[]) => {
         tennganhang: expert?.bankName || expert?.lecturer?.userProfile?.bankName || "",
         GVHD1Student: 0,
         GVHD2Student: 0,
+        singleStudent: 0,
         totalPayment: 0,
       }
       expertStatsMap.set(expertId, stats)
@@ -554,8 +555,10 @@ export const getExpertSupervisionStats = (allStudentsInClasses: any[]) => {
 
     if (role === "GVHD1") {
       stats.GVHD1Student += 1
-    } else {
+    } else if (role === "GVHD2") {
       stats.GVHD2Student += 1
+    } else {
+      stats.singleStudent += 1
     }
   }
   for (const student of allStudentsInClasses) {
@@ -563,12 +566,19 @@ export const getExpertSupervisionStats = (allStudentsInClasses: any[]) => {
       const project = registration.thesisProject
       if (!project) continue
 
-      if (project.supervisor) {
-        updateStats(project.supervisor, project.supervisorPayment?.amount, "GVHD1")
-      }
+      const hasSupervisor = !!project.supervisor
+      const hasCoSupervisor = !!project.coSupervisor
 
-      if (project.coSupervisor) {
+      if (hasSupervisor && hasCoSupervisor) {
+        updateStats(project.supervisor, project.supervisorPayment?.amount, "GVHD1")
         updateStats(project.coSupervisor, project.coSupervisorPayment?.amount, "GVHD2")
+      } else if (hasSupervisor || hasCoSupervisor) {
+        const singleExpert = project.supervisor || project.coSupervisor
+        const singleAmount =
+          project.singleSupervisorPayment?.amount ||
+          project.supervisorPayment?.amount ||
+          project.coSupervisorPayment?.amount
+        updateStats(singleExpert, singleAmount, "SINGLE")
       }
     }
   }
@@ -601,13 +611,14 @@ export const exportThongKeCbHdlv = async ({
       ? allStudentsInClasses[0]?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor
           ?.organization?.sTen || ""
       : ""
+  const tongSoDocLap = dataMapping?.reduce((acc, item) => acc + (item.singleStudent || 0), 0)
   const data = dataMapping?.map((item, index) => {
     return {
       stt: index + 1,
       gvhd: item.name,
       donvi: item.sDonvi,
-      tongsohv: item.GVHD1Student + item.GVHD2Student || 0,
-      doclap: 0,
+      tongsohv: item.GVHD1Student + item.GVHD2Student + item.singleStudent || 0,
+      doclap: item.singleStudent || 0,
       gvhd1: item.GVHD1Student,
       gvhd2: item.GVHD2Student,
       thanhtoan: item.totalPayment,
@@ -630,9 +641,10 @@ export const exportThongKeCbHdlv = async ({
             thang: thang,
             nam: nam,
             tongsohocvien: dataMapping?.reduce(
-              (acc, item) => acc + item.GVHD1Student + item.GVHD2Student,
+              (acc, item) => acc + item.GVHD1Student + item.GVHD2Student + item.singleStudent,
               0
             ),
+            tongsodoclap: tongSoDocLap,
             tongsohd1: dataMapping?.reduce((acc, item) => acc + item.GVHD1Student, 0),
             tongsohd2: dataMapping?.reduce((acc, item) => acc + item.GVHD2Student, 0),
             tongsotien: dataMapping?.reduce((acc, item) => acc + item.totalPayment, 0),
