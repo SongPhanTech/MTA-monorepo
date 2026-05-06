@@ -67,10 +67,7 @@ const calcPercent = (answers: AnswerItem[]) => {
 const formatCell = ({ percent, count, total }: { percent: number; count: number; total: number }) =>
   `${percent}% (${count}/${total})`
 
-const getCellByOrder = (
-  items: AnswerWithPercent[],
-  order: number
-) => {
+const getCellByOrder = (items: AnswerWithPercent[], order: number) => {
   // Prefer matching by numeric answer value (1..5)
   const foundByAnswer = items.find((p) => Number(p.answer) === order)
   if (foundByAnswer) return foundByAnswer.count

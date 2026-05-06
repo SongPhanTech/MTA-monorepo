@@ -13,7 +13,7 @@ import { useSession } from "@workspace/auth/react"
 
 const PrintExamBank = () => {
   const { data: me } = useSession()
-  const [name, setName] = useState(me?.fullName || "")  
+  const [name, setName] = useState(me?.fullName || "")
   const [duration, setDuration] = useState("")
   const [isExporting, setIsExporting] = useState(false)
   const { isOpen, onClose, input } = useDisclosure<{
