@@ -6,16 +6,13 @@ import {
 } from "@ant-design/icons"
 import HtmlTruncate from "@components/commons/html-truncate"
 import Table from "@components/commons/table"
-import useSpinner from "@hooks/spinner"
 import { useGetSurveyStatisticsToField } from "@workspace/libs/api/exam"
 import type { GetSurveyStatistics200QuestionsItemAnswersItem } from "@workspace/libs/api/schemas"
 import { Button, Col, Dropdown, Empty, Row, Typography } from "antd"
 import { Document, Table as DocxTable, Packer, Paragraph, TableCell, TableRow, TextRun } from "docx"
-// @ts-nocheck
 import ReactECharts from "echarts-for-react"
 import ExcelJS from "exceljs"
 import { saveAs } from "file-saver"
-import { useRouter } from "next/router"
 import { useMemo } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 
@@ -35,8 +32,6 @@ type AnswerItem = {
 
 type AnswerWithPercent = AnswerItem & { percent: number; total: number }
 function SurveyToFieldReport({ selectedId }: { selectedId: string }) {
-  const router = useRouter()
-  const { showSpinner, hideSpinner } = useSpinner()
   const { onOpen } = useDisclosure({
     tag: "ModalPrintSurveyToFieldReport",
   })
@@ -44,22 +39,9 @@ function SurveyToFieldReport({ selectedId }: { selectedId: string }) {
   const { data: dataLevel } = useGetSurveyStatisticsToField(selectedId as string)
 
   function convertToStackChartData(data: any[]) {
-    // Map answer -> description
-    const color = ["#ff4d52", "#ea8585", "#ffd977", "#9aa3e0", "#028850"]
-    // const answerMap: Record<string, string> = {}
-    // answerDescriptions.forEach((a) => {
-    //     answerMap[a.answer] = a.description as string
-    // })
-
-    // // Các đáp án theo thứ tự tăng dần 1 → 5
-    // const answerKeys = answerDescriptions
-    //     .map((a) => a.answer)
-    //     .sort((a, b) => Number(a) - Number(b))
-
-    // Trục Y: danh sách Lĩnh vực
+    const color = ["#D46A6A", "#E2A4A4", "#E6CF7A", "#7F95C9", "#5FAE8C"]
     const categories = data.map((item) => item.groupName)
 
-    // Series stack bar
     const series = data[0]?.answers.map((i: any, index: number) => ({
       name: i?.description,
       type: "bar" as const,
@@ -80,14 +62,13 @@ function SurveyToFieldReport({ selectedId }: { selectedId: string }) {
   const dataBarchart = useMemo(() => {
     let label: string[] = []
     if (dataLevel?.status === 200 && dataLevel?.data?.data?.length) {
-      label = dataLevel?.data?.data?.map((item: any, index: number) => `Lĩnh vực ${index + 1}`)
-      const { categories, series } = convertToStackChartData(dataLevel?.data?.data)
+      label = dataLevel?.data?.data?.map((_item: any, index: number) => `Lĩnh vực ${index + 1}`)
+      const { series } = convertToStackChartData(dataLevel?.data?.data)
       return {
         tooltip: {
           trigger: "axis",
           axisPointer: {
-            // Use axis to trigger tooltip
-            type: "shadow", // 'shadow' as default; can also be 'line' or 'shadow'
+            type: "shadow",
           },
         },
         legend: {},
@@ -111,11 +92,9 @@ function SurveyToFieldReport({ selectedId }: { selectedId: string }) {
   }, [dataLevel])
 
   const exportTemplate = async (name: string, dataTableInfo: any) => {
-    // Tạo workbook mới
     const workbook = new ExcelJS.Workbook()
     const worksheet = workbook.addWorksheet("BaoCaoKhaoSat")
 
-    // Thiết lập style
     const golbalFontStyle = {
       name: "Times New Roman",
     }
@@ -204,7 +183,6 @@ function SurveyToFieldReport({ selectedId }: { selectedId: string }) {
     worksheet.getCell(`A${rowIndex}`).value = "Thống kê theo từng Lĩnh vực"
     worksheet.getCell(`A${rowIndex}`).style = headerSubtitleStyle1
 
-    // Thêm tiêu đề bảng
     const headerRow = worksheet.getRow(rowIndex + 2)
     headerRow.values = dataTableInfo[0]?.answers?.length
       ? [
@@ -219,7 +197,6 @@ function SurveyToFieldReport({ selectedId }: { selectedId: string }) {
       cell.style = tableHeaderStyle
     })
 
-    // Điều chỉnh độ rộng cột
     worksheet.columns = [
       { width: 10 },
       { width: 30 },
@@ -244,7 +221,6 @@ function SurveyToFieldReport({ selectedId }: { selectedId: string }) {
       })
     }
 
-    // Xuất file
     const buffer = await workbook.xlsx.writeBuffer()
     saveAs(new Blob([buffer]), `Bao_cao_khao_sat_theo_linh_vuc_${name || ""}.xlsx`)
   }
@@ -357,8 +333,6 @@ function SurveyToFieldReport({ selectedId }: { selectedId: string }) {
           }),
         ],
       })
-
-    // ===== BẢNG THEO CÂU HỎI =====
     const answerHeaders = dataTable?.[0]?.answers?.map((a: any) => a.description) || []
 
     const questionRows = [
@@ -431,46 +405,6 @@ function SurveyToFieldReport({ selectedId }: { selectedId: string }) {
   return (
     <div>
       <Row gutter={[16, 8]}>
-        {/* {dataLevel?.status === 200 && dataLevel?.data?.data?.length > 0 && (
-                    <Col span={24}>
-                        <div className="bg-white h-full flex flex-col">
-                            <div className="px-4 pb-4 flex justify-between">
-                                <Title level={4}>Thống kê chung</Title>
-                            </div>
-                            <div className="flex-1">
-                                <ReactECharts option={dataInfo} className="w-full min-h-[400px]" />
-                                <Table
-                                    columns={[
-                                        {
-                                            title: 'STT',
-                                            width: 60,
-                                            align: 'center',
-                                            fixed: 'left',
-                                            render: (_, __, index) => index + 1,
-                                        },
-                                        {
-                                            title: 'Đối tượng',
-                                            render: (_, record, index) => {
-                                                return record?.name
-                                            },
-                                        },
-                                        {
-                                            title: 'Trạng thái',
-                                            align: 'center',
-                                            width: 200,
-                                            render: (_, record, index) => {
-                                                return `${record?.taken || 0}/${record?.total || 0}`
-                                            },
-                                        },
-                                    ]}
-                                    dataSource={data?.data}
-                                    pagination={false}
-                                />
-                            </div>
-                        </div>
-                    </Col>
-                )}  */}
-
         <Col span={24}>
           <div className="bg-white h-full flex flex-col">
             <div className="p-4 flex justify-between">
