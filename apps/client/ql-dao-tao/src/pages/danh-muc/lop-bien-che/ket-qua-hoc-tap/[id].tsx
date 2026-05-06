@@ -977,7 +977,11 @@ export default function StudentScoreClassPage() {
                         </span>
                       )
                     }
-                    return <span className="line-clamp-1">{value}</span>
+                    return (
+                      <Tooltip title={value}>
+                        <span className="line-clamp-2">{value}</span>
+                      </Tooltip>
+                    )
                   },
                 },
                 {

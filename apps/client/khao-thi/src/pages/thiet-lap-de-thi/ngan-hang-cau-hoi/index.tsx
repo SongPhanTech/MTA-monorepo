@@ -1,8 +1,8 @@
 import DefaultLayout from "@layouts/default-layout"
 import { useFindManyDM_DonVi } from "@workspace/db/hooks"
 import { useTrainingObjectTypeStore } from "@workspace/ui"
-import { Button, Col, Flex, Input, message, Row, Space } from "antd"
-import { BookOpen, BookPlus, Building2, Database, FileText } from "lucide-react"
+import { Col, Flex, Input, message, Row, Space } from "antd"
+import { BookOpen, Building2, Database, FileText } from "lucide-react"
 import { type Key, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 import QuestionBankTree from "./_component/question-bank-tree"
@@ -140,11 +140,6 @@ export default function QuestionBank() {
                 allowClear
               />
             </Space>
-
-            <Button onClick={() => onOpenPutQuestionBank()} type="primary" size="middle">
-              <BookPlus size={15} />
-              Ngân hàng câu hỏi mới
-            </Button>
           </Flex>
         </Col>
 

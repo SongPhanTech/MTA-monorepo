@@ -8,9 +8,11 @@ import { useEffect, useRef, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 import { useReactToPrint } from "react-to-print"
 import { convertHtmlBreaks, saveFile } from "@/utils/saveFile"
+import { useSession } from "@workspace/auth/react"
 
 const PrintExplanation = () => {
-  const [name, setName] = useState("Nguyễn Văn A")
+  const { data: me } = useSession()
+  const [name, setName] = useState(me?.fullName || "")
   const [duration, setDuration] = useState("")
   const { isOpen, onClose, input } = useDisclosure<{
     id: string
