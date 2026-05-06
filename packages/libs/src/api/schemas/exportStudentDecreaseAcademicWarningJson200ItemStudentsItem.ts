@@ -33,4 +33,6 @@ export type ExportStudentDecreaseAcademicWarningJson200ItemStudentsItem = {
   /** Thông tin lớp học */
   fixedClass: ExportStudentDecreaseAcademicWarningJson200ItemStudentsItemFixedClass;
   decreaseAcademicWarning: boolean;
+  /** Mức cảnh báo học tập từ kỳ trước */
+  previousAcademicWarningLevel: number;
 };
