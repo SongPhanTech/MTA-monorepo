@@ -3148,6 +3148,7 @@ exports.Prisma.ThesisProjectScalarFieldEnum = {
   coSupervisorName: 'coSupervisorName',
   coSupervisorId: 'coSupervisorId',
   coSupervisorPaymentId: 'coSupervisorPaymentId',
+  singlePayment: 'singlePayment',
   CHUTICH: 'CHUTICH',
   THUKY: 'THUKY',
   PHANBIEN1: 'PHANBIEN1',

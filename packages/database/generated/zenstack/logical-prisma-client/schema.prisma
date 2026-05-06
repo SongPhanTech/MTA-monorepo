@@ -5405,6 +5405,7 @@ model ThesisProject {
   coSupervisorId          String?
   coSupervisorPayment     SupervisorPaymentRecord?    @relation("CoSupervisorToSupervisorPayment", fields: [coSupervisorPaymentId], references: [id])
   coSupervisorPaymentId   String?
+  singlePayment           Decimal?
   CHUTICH                 String?
   THUKY                   String?
   PHANBIEN1               String?

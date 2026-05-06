@@ -9353,6 +9353,7 @@ export namespace Prisma {
         coSupervisorName: 'coSupervisorName',
         coSupervisorId: 'coSupervisorId',
         coSupervisorPaymentId: 'coSupervisorPaymentId',
+        singlePayment: 'singlePayment',
         CHUTICH: 'CHUTICH',
         THUKY: 'THUKY',
         PHANBIEN1: 'PHANBIEN1',
@@ -76013,6 +76014,7 @@ export namespace Prisma {
         readonly coSupervisorName: FieldRef<"ThesisProject", 'String'>;
         readonly coSupervisorId: FieldRef<"ThesisProject", 'String'>;
         readonly coSupervisorPaymentId: FieldRef<"ThesisProject", 'String'>;
+        readonly singlePayment: FieldRef<"ThesisProject", 'Decimal'>;
         readonly CHUTICH: FieldRef<"ThesisProject", 'String'>;
         readonly THUKY: FieldRef<"ThesisProject", 'String'>;
         readonly PHANBIEN1: FieldRef<"ThesisProject", 'String'>;
@@ -277704,11 +277706,13 @@ export namespace Prisma {
     export type ThesisProjectAvgAggregateOutputType = {
         firstCheckProgress: number | null
         secondCheckProgress: number | null
+        singlePayment: Decimal | null
         maxStudents: number | null
     };
     export type ThesisProjectSumAggregateOutputType = {
         firstCheckProgress: number | null
         secondCheckProgress: number | null
+        singlePayment: Decimal | null
         maxStudents: number | null
     };
     export type ThesisProjectMinAggregateOutputType = {
@@ -277754,6 +277758,7 @@ export namespace Prisma {
         coSupervisorName: string | null
         coSupervisorId: string | null
         coSupervisorPaymentId: string | null
+        singlePayment: Decimal | null
         CHUTICH: string | null
         THUKY: string | null
         PHANBIEN1: string | null
@@ -277813,6 +277818,7 @@ export namespace Prisma {
         coSupervisorName: string | null
         coSupervisorId: string | null
         coSupervisorPaymentId: string | null
+        singlePayment: Decimal | null
         CHUTICH: string | null
         THUKY: string | null
         PHANBIEN1: string | null
@@ -277872,6 +277878,7 @@ export namespace Prisma {
         coSupervisorName: number
         coSupervisorId: number
         coSupervisorPaymentId: number
+        singlePayment: number
         CHUTICH: number
         THUKY: number
         PHANBIEN1: number
@@ -277892,11 +277899,13 @@ export namespace Prisma {
     export type ThesisProjectAvgAggregateInputType = {
         firstCheckProgress?: true
         secondCheckProgress?: true
+        singlePayment?: true
         maxStudents?: true
     };
     export type ThesisProjectSumAggregateInputType = {
         firstCheckProgress?: true
         secondCheckProgress?: true
+        singlePayment?: true
         maxStudents?: true
     };
     export type ThesisProjectMinAggregateInputType = {
@@ -277942,6 +277951,7 @@ export namespace Prisma {
         coSupervisorName?: true
         coSupervisorId?: true
         coSupervisorPaymentId?: true
+        singlePayment?: true
         CHUTICH?: true
         THUKY?: true
         PHANBIEN1?: true
@@ -278001,6 +278011,7 @@ export namespace Prisma {
         coSupervisorName?: true
         coSupervisorId?: true
         coSupervisorPaymentId?: true
+        singlePayment?: true
         CHUTICH?: true
         THUKY?: true
         PHANBIEN1?: true
@@ -278060,6 +278071,7 @@ export namespace Prisma {
         coSupervisorName?: true
         coSupervisorId?: true
         coSupervisorPaymentId?: true
+        singlePayment?: true
         CHUTICH?: true
         THUKY?: true
         PHANBIEN1?: true
@@ -278200,6 +278212,7 @@ export namespace Prisma {
         coSupervisorName: string | null
         coSupervisorId: string | null
         coSupervisorPaymentId: string | null
+        singlePayment: Decimal | null
         CHUTICH: string | null
         THUKY: string | null
         PHANBIEN1: string | null
@@ -278276,6 +278289,7 @@ export namespace Prisma {
         coSupervisorName?: boolean
         coSupervisorId?: boolean
         coSupervisorPaymentId?: boolean
+        singlePayment?: boolean
         CHUTICH?: boolean
         THUKY?: boolean
         PHANBIEN1?: boolean
@@ -278353,6 +278367,7 @@ export namespace Prisma {
         coSupervisorName?: boolean
         coSupervisorId?: boolean
         coSupervisorPaymentId?: boolean
+        singlePayment?: boolean
         CHUTICH?: boolean
         THUKY?: boolean
         PHANBIEN1?: boolean
@@ -278425,6 +278440,7 @@ export namespace Prisma {
         coSupervisorName?: boolean
         coSupervisorId?: boolean
         coSupervisorPaymentId?: boolean
+        singlePayment?: boolean
         CHUTICH?: boolean
         THUKY?: boolean
         PHANBIEN1?: boolean
@@ -278497,6 +278513,7 @@ export namespace Prisma {
         coSupervisorName?: boolean
         coSupervisorId?: boolean
         coSupervisorPaymentId?: boolean
+        singlePayment?: boolean
         CHUTICH?: boolean
         THUKY?: boolean
         PHANBIEN1?: boolean
@@ -278513,7 +278530,7 @@ export namespace Prisma {
         projectStart?: boolean
         projectEnd?: boolean
     };
-    export type ThesisProjectOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "title" | "titleEN" | "summary" | "objectives" | "scope" | "methodology" | "expectedResults" | "requirements" | "technologies" | "thesisType" | "status" | "language" | "type" | "isLock" | "editProject" | "researchTopicAssociated" | "firstCheckProgress" | "secondCheckProgress" | "isEligibleForDefense" | "primarySupervisorId" | "secondarySupervisorId" | "thirdSupervisorId" | "isProductProject" | "isGroupProject" | "isLanguage" | "externalUnit" | "subjectClassId" | "thesisSessionId" | "supervisorName" | "supervisorId" | "supervisorPaymentId" | "coSupervisorName" | "coSupervisorId" | "coSupervisorPaymentId" | "CHUTICH" | "THUKY" | "PHANBIEN1" | "PHANBIEN2" | "UYVIEN3" | "organizationId" | "maxStudents" | "councilId" | "roomId" | "defenseDate" | "defenseSessionId" | "registrationStart" | "registrationEnd" | "projectStart" | "projectEnd", ExtArgs["result"]["thesisProject"]>;
+    export type ThesisProjectOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "title" | "titleEN" | "summary" | "objectives" | "scope" | "methodology" | "expectedResults" | "requirements" | "technologies" | "thesisType" | "status" | "language" | "type" | "isLock" | "editProject" | "researchTopicAssociated" | "firstCheckProgress" | "secondCheckProgress" | "isEligibleForDefense" | "primarySupervisorId" | "secondarySupervisorId" | "thirdSupervisorId" | "isProductProject" | "isGroupProject" | "isLanguage" | "externalUnit" | "subjectClassId" | "thesisSessionId" | "supervisorName" | "supervisorId" | "supervisorPaymentId" | "coSupervisorName" | "coSupervisorId" | "coSupervisorPaymentId" | "singlePayment" | "CHUTICH" | "THUKY" | "PHANBIEN1" | "PHANBIEN2" | "UYVIEN3" | "organizationId" | "maxStudents" | "councilId" | "roomId" | "defenseDate" | "defenseSessionId" | "registrationStart" | "registrationEnd" | "projectStart" | "projectEnd", ExtArgs["result"]["thesisProject"]>;
     export type ThesisProjectInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         primarySupervisor?: boolean | ThesisProject$primarySupervisorArgs<ExtArgs>
         secondarySupervisor?: boolean | ThesisProject$secondarySupervisorArgs<ExtArgs>
@@ -278643,6 +278660,7 @@ export namespace Prisma {
             coSupervisorName: string | null
             coSupervisorId: string | null
             coSupervisorPaymentId: string | null
+            singlePayment: Prisma.Decimal | null
             CHUTICH: string | null
             THUKY: string | null
             PHANBIEN1: string | null
@@ -382550,6 +382568,7 @@ export namespace Prisma {
         coSupervisorName?: StringNullableFilter<"ThesisProject"> | string | null
         coSupervisorId?: StringNullableFilter<"ThesisProject"> | string | null
         coSupervisorPaymentId?: StringNullableFilter<"ThesisProject"> | string | null
+        singlePayment?: DecimalNullableFilter<"ThesisProject"> | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: StringNullableFilter<"ThesisProject"> | string | null
         THUKY?: StringNullableFilter<"ThesisProject"> | string | null
         PHANBIEN1?: StringNullableFilter<"ThesisProject"> | string | null
@@ -382626,6 +382645,7 @@ export namespace Prisma {
         coSupervisorName?: SortOrderInput | SortOrder
         coSupervisorId?: SortOrderInput | SortOrder
         coSupervisorPaymentId?: SortOrderInput | SortOrder
+        singlePayment?: SortOrderInput | SortOrder
         CHUTICH?: SortOrderInput | SortOrder
         THUKY?: SortOrderInput | SortOrder
         PHANBIEN1?: SortOrderInput | SortOrder
@@ -382706,6 +382726,7 @@ export namespace Prisma {
         coSupervisorName?: StringNullableFilter<"ThesisProject"> | string | null
         coSupervisorId?: StringNullableFilter<"ThesisProject"> | string | null
         coSupervisorPaymentId?: StringNullableFilter<"ThesisProject"> | string | null
+        singlePayment?: DecimalNullableFilter<"ThesisProject"> | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: StringNullableFilter<"ThesisProject"> | string | null
         THUKY?: StringNullableFilter<"ThesisProject"> | string | null
         PHANBIEN1?: StringNullableFilter<"ThesisProject"> | string | null
@@ -382782,6 +382803,7 @@ export namespace Prisma {
         coSupervisorName?: SortOrderInput | SortOrder
         coSupervisorId?: SortOrderInput | SortOrder
         coSupervisorPaymentId?: SortOrderInput | SortOrder
+        singlePayment?: SortOrderInput | SortOrder
         CHUTICH?: SortOrderInput | SortOrder
         THUKY?: SortOrderInput | SortOrder
         PHANBIEN1?: SortOrderInput | SortOrder
@@ -382849,6 +382871,7 @@ export namespace Prisma {
         coSupervisorName?: StringNullableWithAggregatesFilter<"ThesisProject"> | string | null
         coSupervisorId?: StringNullableWithAggregatesFilter<"ThesisProject"> | string | null
         coSupervisorPaymentId?: StringNullableWithAggregatesFilter<"ThesisProject"> | string | null
+        singlePayment?: DecimalNullableWithAggregatesFilter<"ThesisProject"> | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: StringNullableWithAggregatesFilter<"ThesisProject"> | string | null
         THUKY?: StringNullableWithAggregatesFilter<"ThesisProject"> | string | null
         PHANBIEN1?: StringNullableWithAggregatesFilter<"ThesisProject"> | string | null
@@ -414437,6 +414460,7 @@ export namespace Prisma {
         externalUnit?: boolean
         supervisorName?: string | null
         coSupervisorName?: string | null
+        singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
         PHANBIEN1?: string | null
@@ -414509,6 +414533,7 @@ export namespace Prisma {
         coSupervisorName?: string | null
         coSupervisorId?: string | null
         coSupervisorPaymentId?: string | null
+        singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
         PHANBIEN1?: string | null
@@ -414563,6 +414588,7 @@ export namespace Prisma {
         externalUnit?: BoolFieldUpdateOperationsInput | boolean
         supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
+        singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
         PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
@@ -414635,6 +414661,7 @@ export namespace Prisma {
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
         PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
@@ -414698,6 +414725,7 @@ export namespace Prisma {
         coSupervisorName?: string | null
         coSupervisorId?: string | null
         coSupervisorPaymentId?: string | null
+        singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
         PHANBIEN1?: string | null
@@ -414748,6 +414776,7 @@ export namespace Prisma {
         externalUnit?: BoolFieldUpdateOperationsInput | boolean
         supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
+        singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
         PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
@@ -414803,6 +414832,7 @@ export namespace Prisma {
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
         PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
@@ -439598,6 +439628,7 @@ export namespace Prisma {
         coSupervisorName?: SortOrder
         coSupervisorId?: SortOrder
         coSupervisorPaymentId?: SortOrder
+        singlePayment?: SortOrder
         CHUTICH?: SortOrder
         THUKY?: SortOrder
         PHANBIEN1?: SortOrder
@@ -439617,6 +439648,7 @@ export namespace Prisma {
     export type ThesisProjectAvgOrderByAggregateInput = {
         firstCheckProgress?: SortOrder
         secondCheckProgress?: SortOrder
+        singlePayment?: SortOrder
         maxStudents?: SortOrder
     };
     export type ThesisProjectMaxOrderByAggregateInput = {
@@ -439662,6 +439694,7 @@ export namespace Prisma {
         coSupervisorName?: SortOrder
         coSupervisorId?: SortOrder
         coSupervisorPaymentId?: SortOrder
+        singlePayment?: SortOrder
         CHUTICH?: SortOrder
         THUKY?: SortOrder
         PHANBIEN1?: SortOrder
@@ -439721,6 +439754,7 @@ export namespace Prisma {
         coSupervisorName?: SortOrder
         coSupervisorId?: SortOrder
         coSupervisorPaymentId?: SortOrder
+        singlePayment?: SortOrder
         CHUTICH?: SortOrder
         THUKY?: SortOrder
         PHANBIEN1?: SortOrder
@@ -439740,6 +439774,7 @@ export namespace Prisma {
     export type ThesisProjectSumOrderByAggregateInput = {
         firstCheckProgress?: SortOrder
         secondCheckProgress?: SortOrder
+        singlePayment?: SortOrder
         maxStudents?: SortOrder
     };
     export type EnumThesisTypeWithAggregatesFilter<$PrismaModel = never> = {
@@ -511764,6 +511799,7 @@ export namespace Prisma {
         externalUnit?: boolean
         supervisorName?: string | null
         coSupervisorName?: string | null
+        singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
         PHANBIEN1?: string | null
@@ -511835,6 +511871,7 @@ export namespace Prisma {
         coSupervisorName?: string | null
         coSupervisorId?: string | null
         coSupervisorPaymentId?: string | null
+        singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
         PHANBIEN1?: string | null
@@ -512346,6 +512383,7 @@ export namespace Prisma {
         coSupervisorName?: StringNullableFilter<"ThesisProject"> | string | null
         coSupervisorId?: StringNullableFilter<"ThesisProject"> | string | null
         coSupervisorPaymentId?: StringNullableFilter<"ThesisProject"> | string | null
+        singlePayment?: DecimalNullableFilter<"ThesisProject"> | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: StringNullableFilter<"ThesisProject"> | string | null
         THUKY?: StringNullableFilter<"ThesisProject"> | string | null
         PHANBIEN1?: StringNullableFilter<"ThesisProject"> | string | null
@@ -543433,6 +543471,7 @@ export namespace Prisma {
         externalUnit?: boolean
         supervisorName?: string | null
         coSupervisorName?: string | null
+        singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
         PHANBIEN1?: string | null
@@ -543503,6 +543542,7 @@ export namespace Prisma {
         coSupervisorName?: string | null
         coSupervisorId?: string | null
         coSupervisorPaymentId?: string | null
+        singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
         PHANBIEN1?: string | null
@@ -552176,6 +552216,7 @@ export namespace Prisma {
         externalUnit?: boolean
         supervisorName?: string | null
         coSupervisorName?: string | null
+        singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
         PHANBIEN1?: string | null
@@ -552247,6 +552288,7 @@ export namespace Prisma {
         coSupervisorName?: string | null
         coSupervisorId?: string | null
         coSupervisorPaymentId?: string | null
+        singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
         PHANBIEN1?: string | null
@@ -569637,6 +569679,7 @@ export namespace Prisma {
         externalUnit?: boolean
         supervisorName?: string | null
         coSupervisorName?: string | null
+        singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
         PHANBIEN1?: string | null
@@ -569707,6 +569750,7 @@ export namespace Prisma {
         coSupervisorName?: string | null
         coSupervisorId?: string | null
         coSupervisorPaymentId?: string | null
+        singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
         PHANBIEN1?: string | null
@@ -569769,6 +569813,7 @@ export namespace Prisma {
         externalUnit?: boolean
         supervisorName?: string | null
         coSupervisorName?: string | null
+        singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
         PHANBIEN1?: string | null
@@ -569839,6 +569884,7 @@ export namespace Prisma {
         coSupervisorName?: string | null
         coSupervisorId?: string | null
         coSupervisorPaymentId?: string | null
+        singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
         PHANBIEN1?: string | null
@@ -572831,6 +572877,7 @@ export namespace Prisma {
         externalUnit?: boolean
         supervisorName?: string | null
         coSupervisorName?: string | null
+        singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
         PHANBIEN1?: string | null
@@ -572901,6 +572948,7 @@ export namespace Prisma {
         coSupervisorName?: string | null
         coSupervisorId?: string | null
         coSupervisorPaymentId?: string | null
+        singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
         PHANBIEN1?: string | null
@@ -575131,6 +575179,7 @@ export namespace Prisma {
         externalUnit?: boolean
         supervisorName?: string | null
         coSupervisorName?: string | null
+        singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
         PHANBIEN1?: string | null
@@ -575202,6 +575251,7 @@ export namespace Prisma {
         coSupervisorName?: string | null
         coSupervisorId?: string | null
         coSupervisorPaymentId?: string | null
+        singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
         PHANBIEN1?: string | null
@@ -575510,6 +575560,7 @@ export namespace Prisma {
         externalUnit?: boolean
         supervisorName?: string | null
         coSupervisorName?: string | null
+        singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
         PHANBIEN1?: string | null
@@ -575581,6 +575632,7 @@ export namespace Prisma {
         coSupervisorName?: string | null
         coSupervisorId?: string | null
         coSupervisorPaymentId?: string | null
+        singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
         PHANBIEN1?: string | null
@@ -575997,6 +576049,7 @@ export namespace Prisma {
         externalUnit?: BoolFieldUpdateOperationsInput | boolean
         supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
+        singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
         PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
@@ -576068,6 +576121,7 @@ export namespace Prisma {
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
         PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
@@ -576449,6 +576503,7 @@ export namespace Prisma {
         externalUnit?: boolean
         supervisorName?: string | null
         coSupervisorName?: string | null
+        singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
         PHANBIEN1?: string | null
@@ -576519,6 +576574,7 @@ export namespace Prisma {
         coSupervisorName?: string | null
         coSupervisorId?: string | null
         coSupervisorPaymentId?: string | null
+        singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
         PHANBIEN1?: string | null
@@ -576581,6 +576637,7 @@ export namespace Prisma {
         externalUnit?: boolean
         supervisorName?: string | null
         coSupervisorName?: string | null
+        singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
         PHANBIEN1?: string | null
@@ -576651,6 +576708,7 @@ export namespace Prisma {
         supervisorPaymentId?: string | null
         coSupervisorName?: string | null
         coSupervisorPaymentId?: string | null
+        singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
         PHANBIEN1?: string | null
@@ -576713,6 +576771,7 @@ export namespace Prisma {
         externalUnit?: boolean
         supervisorName?: string | null
         coSupervisorName?: string | null
+        singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
         PHANBIEN1?: string | null
@@ -576783,6 +576842,7 @@ export namespace Prisma {
         coSupervisorName?: string | null
         coSupervisorId?: string | null
         coSupervisorPaymentId?: string | null
+        singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
         PHANBIEN1?: string | null
@@ -577676,6 +577736,7 @@ export namespace Prisma {
         externalUnit?: boolean
         supervisorName?: string | null
         coSupervisorName?: string | null
+        singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
         PHANBIEN1?: string | null
@@ -577747,6 +577808,7 @@ export namespace Prisma {
         coSupervisorName?: string | null
         coSupervisorId?: string | null
         coSupervisorPaymentId?: string | null
+        singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
         PHANBIEN1?: string | null
@@ -577826,6 +577888,7 @@ export namespace Prisma {
         externalUnit?: BoolFieldUpdateOperationsInput | boolean
         supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
+        singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
         PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
@@ -577897,6 +577960,7 @@ export namespace Prisma {
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
         PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
@@ -578065,6 +578129,7 @@ export namespace Prisma {
         externalUnit?: boolean
         supervisorName?: string | null
         coSupervisorName?: string | null
+        singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
         PHANBIEN1?: string | null
@@ -578136,6 +578201,7 @@ export namespace Prisma {
         coSupervisorName?: string | null
         coSupervisorId?: string | null
         coSupervisorPaymentId?: string | null
+        singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
         PHANBIEN1?: string | null
@@ -578666,6 +578732,7 @@ export namespace Prisma {
         externalUnit?: boolean
         supervisorName?: string | null
         coSupervisorName?: string | null
+        singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
         PHANBIEN1?: string | null
@@ -578737,6 +578804,7 @@ export namespace Prisma {
         coSupervisorName?: string | null
         coSupervisorId?: string | null
         coSupervisorPaymentId?: string | null
+        singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
         PHANBIEN1?: string | null
@@ -578883,6 +578951,7 @@ export namespace Prisma {
         externalUnit?: BoolFieldUpdateOperationsInput | boolean
         supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
+        singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
         PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
@@ -578954,6 +579023,7 @@ export namespace Prisma {
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
         PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
@@ -579020,6 +579090,7 @@ export namespace Prisma {
         externalUnit?: boolean
         supervisorName?: string | null
         coSupervisorName?: string | null
+        singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
         PHANBIEN1?: string | null
@@ -579091,6 +579162,7 @@ export namespace Prisma {
         coSupervisorName?: string | null
         coSupervisorId?: string | null
         coSupervisorPaymentId?: string | null
+        singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
         PHANBIEN1?: string | null
@@ -579237,6 +579309,7 @@ export namespace Prisma {
         externalUnit?: BoolFieldUpdateOperationsInput | boolean
         supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
+        singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
         PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
@@ -579308,6 +579381,7 @@ export namespace Prisma {
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
         PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
@@ -579443,6 +579517,7 @@ export namespace Prisma {
         externalUnit?: boolean
         supervisorName?: string | null
         coSupervisorName?: string | null
+        singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
         PHANBIEN1?: string | null
@@ -579513,6 +579588,7 @@ export namespace Prisma {
         coSupervisorName?: string | null
         coSupervisorId?: string | null
         coSupervisorPaymentId?: string | null
+        singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
         PHANBIEN1?: string | null
@@ -579575,6 +579651,7 @@ export namespace Prisma {
         externalUnit?: boolean
         supervisorName?: string | null
         coSupervisorName?: string | null
+        singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
         PHANBIEN1?: string | null
@@ -579645,6 +579722,7 @@ export namespace Prisma {
         supervisorPaymentId?: string | null
         coSupervisorName?: string | null
         coSupervisorId?: string | null
+        singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
         PHANBIEN1?: string | null
@@ -621412,6 +621490,7 @@ export namespace Prisma {
         coSupervisorName?: string | null
         coSupervisorId?: string | null
         coSupervisorPaymentId?: string | null
+        singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
         PHANBIEN1?: string | null
@@ -622335,6 +622414,7 @@ export namespace Prisma {
         externalUnit?: BoolFieldUpdateOperationsInput | boolean
         supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
+        singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
         PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
@@ -622406,6 +622486,7 @@ export namespace Prisma {
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
         PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
@@ -622468,6 +622549,7 @@ export namespace Prisma {
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
         PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
@@ -646183,6 +646265,7 @@ export namespace Prisma {
         coSupervisorName?: string | null
         coSupervisorId?: string | null
         coSupervisorPaymentId?: string | null
+        singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
         PHANBIEN1?: string | null
@@ -646590,6 +646673,7 @@ export namespace Prisma {
         externalUnit?: BoolFieldUpdateOperationsInput | boolean
         supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
+        singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
         PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
@@ -646660,6 +646744,7 @@ export namespace Prisma {
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
         PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
@@ -646722,6 +646807,7 @@ export namespace Prisma {
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
         PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
@@ -650893,6 +650979,7 @@ export namespace Prisma {
         coSupervisorName?: string | null
         coSupervisorId?: string | null
         coSupervisorPaymentId?: string | null
+        singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
         PHANBIEN1?: string | null
@@ -651289,6 +651376,7 @@ export namespace Prisma {
         externalUnit?: BoolFieldUpdateOperationsInput | boolean
         supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
+        singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
         PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
@@ -651360,6 +651448,7 @@ export namespace Prisma {
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
         PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
@@ -651422,6 +651511,7 @@ export namespace Prisma {
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
         PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
@@ -657504,6 +657594,7 @@ export namespace Prisma {
         coSupervisorName?: string | null
         coSupervisorId?: string | null
         coSupervisorPaymentId?: string | null
+        singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
         PHANBIEN1?: string | null
@@ -657562,6 +657653,7 @@ export namespace Prisma {
         coSupervisorName?: string | null
         coSupervisorId?: string | null
         coSupervisorPaymentId?: string | null
+        singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
         PHANBIEN1?: string | null
@@ -659035,6 +659127,7 @@ export namespace Prisma {
         externalUnit?: BoolFieldUpdateOperationsInput | boolean
         supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
+        singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
         PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
@@ -659105,6 +659198,7 @@ export namespace Prisma {
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
         PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
@@ -659167,6 +659261,7 @@ export namespace Prisma {
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
         PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
@@ -659217,6 +659312,7 @@ export namespace Prisma {
         externalUnit?: BoolFieldUpdateOperationsInput | boolean
         supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
+        singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
         PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
@@ -659287,6 +659383,7 @@ export namespace Prisma {
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
         PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
@@ -659349,6 +659446,7 @@ export namespace Prisma {
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
         PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
@@ -659479,6 +659577,7 @@ export namespace Prisma {
         coSupervisorName?: string | null
         coSupervisorId?: string | null
         coSupervisorPaymentId?: string | null
+        singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
         PHANBIEN1?: string | null
@@ -659529,6 +659628,7 @@ export namespace Prisma {
         externalUnit?: BoolFieldUpdateOperationsInput | boolean
         supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
+        singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
         PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
@@ -659599,6 +659699,7 @@ export namespace Prisma {
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
         PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
@@ -659661,6 +659762,7 @@ export namespace Prisma {
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
         PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
@@ -659852,6 +659954,7 @@ export namespace Prisma {
         coSupervisorName?: string | null
         coSupervisorId?: string | null
         coSupervisorPaymentId?: string | null
+        singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
         PHANBIEN1?: string | null
@@ -659901,6 +660004,7 @@ export namespace Prisma {
         externalUnit?: BoolFieldUpdateOperationsInput | boolean
         supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
+        singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
         PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
@@ -659972,6 +660076,7 @@ export namespace Prisma {
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
         PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
@@ -660034,6 +660139,7 @@ export namespace Prisma {
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
         PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
@@ -660091,6 +660197,7 @@ export namespace Prisma {
         coSupervisorName?: string | null
         coSupervisorId?: string | null
         coSupervisorPaymentId?: string | null
+        singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
         PHANBIEN1?: string | null
@@ -660149,6 +660256,7 @@ export namespace Prisma {
         supervisorPaymentId?: string | null
         coSupervisorName?: string | null
         coSupervisorPaymentId?: string | null
+        singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
         PHANBIEN1?: string | null
@@ -660207,6 +660315,7 @@ export namespace Prisma {
         coSupervisorName?: string | null
         coSupervisorId?: string | null
         coSupervisorPaymentId?: string | null
+        singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
         PHANBIEN1?: string | null
@@ -660430,6 +660539,7 @@ export namespace Prisma {
         externalUnit?: BoolFieldUpdateOperationsInput | boolean
         supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
+        singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
         PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
@@ -660500,6 +660610,7 @@ export namespace Prisma {
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
         PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
@@ -660562,6 +660673,7 @@ export namespace Prisma {
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
         PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
@@ -660612,6 +660724,7 @@ export namespace Prisma {
         externalUnit?: BoolFieldUpdateOperationsInput | boolean
         supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
+        singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
         PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
@@ -660682,6 +660795,7 @@ export namespace Prisma {
         supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
         PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
@@ -660744,6 +660858,7 @@ export namespace Prisma {
         supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
         PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
@@ -660794,6 +660909,7 @@ export namespace Prisma {
         externalUnit?: BoolFieldUpdateOperationsInput | boolean
         supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
+        singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
         PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
@@ -660864,6 +660980,7 @@ export namespace Prisma {
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
         PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
@@ -660926,6 +661043,7 @@ export namespace Prisma {
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
         PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
@@ -661598,6 +661716,7 @@ export namespace Prisma {
         coSupervisorName?: string | null
         coSupervisorId?: string | null
         coSupervisorPaymentId?: string | null
+        singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
         PHANBIEN1?: string | null
@@ -661659,6 +661778,7 @@ export namespace Prisma {
         externalUnit?: BoolFieldUpdateOperationsInput | boolean
         supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
+        singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
         PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
@@ -661730,6 +661850,7 @@ export namespace Prisma {
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
         PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
@@ -661792,6 +661913,7 @@ export namespace Prisma {
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
         PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
@@ -662177,6 +662299,7 @@ export namespace Prisma {
         coSupervisorName?: string | null
         coSupervisorId?: string | null
         coSupervisorPaymentId?: string | null
+        singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
         PHANBIEN1?: string | null
@@ -662235,6 +662358,7 @@ export namespace Prisma {
         supervisorPaymentId?: string | null
         coSupervisorName?: string | null
         coSupervisorId?: string | null
+        singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
         PHANBIEN1?: string | null
@@ -662285,6 +662409,7 @@ export namespace Prisma {
         externalUnit?: BoolFieldUpdateOperationsInput | boolean
         supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
+        singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
         PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
@@ -662355,6 +662480,7 @@ export namespace Prisma {
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
         PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
@@ -662417,6 +662543,7 @@ export namespace Prisma {
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
         PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
@@ -662467,6 +662594,7 @@ export namespace Prisma {
         externalUnit?: BoolFieldUpdateOperationsInput | boolean
         supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
+        singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
         PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
@@ -662537,6 +662665,7 @@ export namespace Prisma {
         supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
         PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
@@ -662599,6 +662728,7 @@ export namespace Prisma {
         supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
         PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null

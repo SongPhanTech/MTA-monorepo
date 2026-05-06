@@ -17807,6 +17807,10 @@ const metadata: ModelMeta = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'coSupervisorPayment',
+                }, singlePayment: {
+                    name: "singlePayment",
+                    type: "Decimal",
+                    isOptional: true,
                 }, CHUTICH: {
                     name: "CHUTICH",
                     type: "String",

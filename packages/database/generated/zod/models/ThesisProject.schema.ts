@@ -8,6 +8,8 @@ import { z } from 'zod/v3';
 import { ThesisType, ThesisProjectStatus } from '../../zenstack/models';
 import { ThesisTypeSchema } from '../enums/ThesisType.schema';
 import { ThesisProjectStatusSchema } from '../enums/ThesisProjectStatus.schema';
+import { DecimalSchema } from '../common';
+import { Decimal } from 'decimal.js';
 const baseSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
@@ -42,6 +44,7 @@ const baseSchema = z.object({
     externalUnit: z.boolean().default(false),
     supervisorName: z.string().nullish(),
     coSupervisorName: z.string().nullish(),
+    singlePayment: DecimalSchema.nullish(),
     CHUTICH: z.string().nullish(),
     THUKY: z.string().nullish(),
     PHANBIEN1: z.string().nullish(),
@@ -89,6 +92,7 @@ const baseSchemaWithoutDefaults = z.object({
     externalUnit: z.boolean(),
     supervisorName: z.string().nullish(),
     coSupervisorName: z.string().nullish(),
+    singlePayment: DecimalSchema.nullish(),
     CHUTICH: z.string().nullish(),
     THUKY: z.string().nullish(),
     PHANBIEN1: z.string().nullish(),
@@ -196,6 +200,7 @@ export const ThesisProjectPrismaUpdateSchema = z.object({
     externalUnit: z.boolean(),
     supervisorName: z.string().nullish(),
     coSupervisorName: z.string().nullish(),
+    singlePayment: DecimalSchema.nullish(),
     CHUTICH: z.string().nullish(),
     THUKY: z.string().nullish(),
     PHANBIEN1: z.string().nullish(),
