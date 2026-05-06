@@ -32,6 +32,11 @@ interface ExportOptions {
     amount: number | string | { toNumber?: () => number }
     inAcademy: boolean
   }>
+  /** Trước khi xuất: tạo/ghi đè thanh toán GVHD theo cấu hình mặc định + chuẩn hoá single/dual */
+  ensureSupervisorPaymentsForExport?: (
+    project: any,
+    exportFilterInAcademy?: boolean
+  ) => Promise<void>
 }
 
 const resolveSigningDate = (signingDate?: Date | string) =>
@@ -524,7 +529,7 @@ export const getExpertSupervisionStats = (allStudentsInClasses: any[]) => {
 
   const expertStatsMap = new Map<string, any>()
 
-  const updateStats = (expert: any, amount: any, role: "GVHD1" | "GVHD2") => {
+  const updateStats = (expert: any, amount: any, role: "GVHD1" | "GVHD2" | "SINGLE") => {
     if (!expert) return
 
     const expertId = expert.id
@@ -540,6 +545,7 @@ export const getExpertSupervisionStats = (allStudentsInClasses: any[]) => {
         tennganhang: expert?.bankName || expert?.lecturer?.userProfile?.bankName || "",
         GVHD1Student: 0,
         GVHD2Student: 0,
+        singleStudent: 0,
         totalPayment: 0,
       }
       expertStatsMap.set(expertId, stats)
@@ -549,8 +555,10 @@ export const getExpertSupervisionStats = (allStudentsInClasses: any[]) => {
 
     if (role === "GVHD1") {
       stats.GVHD1Student += 1
-    } else {
+    } else if (role === "GVHD2") {
       stats.GVHD2Student += 1
+    } else {
+      stats.singleStudent += 1
     }
   }
   for (const student of allStudentsInClasses) {
@@ -558,12 +566,19 @@ export const getExpertSupervisionStats = (allStudentsInClasses: any[]) => {
       const project = registration.thesisProject
       if (!project) continue
 
-      if (project.supervisor) {
-        updateStats(project.supervisor, project.supervisorPayment?.amount, "GVHD1")
-      }
+      const hasSupervisor = !!project.supervisor
+      const hasCoSupervisor = !!project.coSupervisor
 
-      if (project.coSupervisor) {
+      if (hasSupervisor && hasCoSupervisor) {
+        updateStats(project.supervisor, project.supervisorPayment?.amount, "GVHD1")
         updateStats(project.coSupervisor, project.coSupervisorPayment?.amount, "GVHD2")
+      } else if (hasSupervisor || hasCoSupervisor) {
+        const singleExpert = project.supervisor || project.coSupervisor
+        const singleAmount =
+          project.singleSupervisorPayment?.amount ||
+          project.supervisorPayment?.amount ||
+          project.coSupervisorPayment?.amount
+        updateStats(singleExpert, singleAmount, "SINGLE")
       }
     }
   }
@@ -596,13 +611,14 @@ export const exportThongKeCbHdlv = async ({
       ? allStudentsInClasses[0]?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor
           ?.organization?.sTen || ""
       : ""
+  const tongSoDocLap = dataMapping?.reduce((acc, item) => acc + (item.singleStudent || 0), 0)
   const data = dataMapping?.map((item, index) => {
     return {
       stt: index + 1,
       gvhd: item.name,
       donvi: item.sDonvi,
-      tongsohv: item.GVHD1Student + item.GVHD2Student || 0,
-      doclap: 0,
+      tongsohv: item.GVHD1Student + item.GVHD2Student + item.singleStudent || 0,
+      doclap: item.singleStudent || 0,
       gvhd1: item.GVHD1Student,
       gvhd2: item.GVHD2Student,
       thanhtoan: item.totalPayment,
@@ -625,9 +641,10 @@ export const exportThongKeCbHdlv = async ({
             thang: thang,
             nam: nam,
             tongsohocvien: dataMapping?.reduce(
-              (acc, item) => acc + item.GVHD1Student + item.GVHD2Student,
+              (acc, item) => acc + item.GVHD1Student + item.GVHD2Student + item.singleStudent,
               0
             ),
+            tongsodoclap: tongSoDocLap,
             tongsohd1: dataMapping?.reduce((acc, item) => acc + item.GVHD1Student, 0),
             tongsohd2: dataMapping?.reduce((acc, item) => acc + item.GVHD2Student, 0),
             tongsotien: dataMapping?.reduce((acc, item) => acc + item.totalPayment, 0),
@@ -2358,6 +2375,7 @@ export const exportThanhToanHuongDanTrongHv = async ({
   hideSpinner,
   message,
   inAcademy,
+  ensureSupervisorPaymentsForExport,
 }: ExportOptions) => {
   if (!allStudentsInClasses?.length) {
     message.error("Không có dữ liệu để xuất thanh toán hướng dẫn")
@@ -2365,7 +2383,11 @@ export const exportThanhToanHuongDanTrongHv = async ({
   }
   try {
     showSpinner?.()
-    const dataConvert = convertToThanhToanHuongDanTrongHvData(allStudentsInClasses, inAcademy)
+    const dataConvert = await convertToThanhToanHuongDanTrongHvData(
+      allStudentsInClasses,
+      inAcademy,
+      ensureSupervisorPaymentsForExport
+    )
     if (dataConvert.length === 0) {
       message.error("Chưa có dữ liệu để xuất thanh toán hướng dẫn")
       return []
@@ -2395,20 +2417,27 @@ export const exportThanhToanHuongDanTrongHv = async ({
     hideSpinner?.()
   }
 }
-const convertToThanhToanHuongDanTrongHvData = (
+const convertToThanhToanHuongDanTrongHvData = async (
   allStudentsInClasses: any[],
-  inAcademy?: boolean
-): ThanhToanHuongDanTrongHvData[] => {
+  inAcademy?: boolean,
+  ensureSupervisorPaymentsForExport?: (
+    project: any,
+    exportFilterInAcademy?: boolean
+  ) => Promise<void>
+): Promise<ThanhToanHuongDanTrongHvData[]> => {
   if (!allStudentsInClasses?.length) {
     return []
   }
-
   const now = dayjs()
   const organizationMap = new Map<string, ThanhToanHuongDanTrongHvData>()
 
-  allStudentsInClasses.forEach((student) => {
+  for (const student of allStudentsInClasses) {
     const project = student?.thesisRegistrations?.[0]?.thesisProject
-    if (!project) return
+    if (!project) continue
+
+    if (ensureSupervisorPaymentsForExport) {
+      await ensureSupervisorPaymentsForExport(project, inAcademy)
+    }
 
     const isMatchInAcademy = (expert: any) => {
       const hasLecturer = !!(expert?.lecturer || expert?.lecturerId)
@@ -2417,22 +2446,44 @@ const convertToThanhToanHuongDanTrongHvData = (
       return true
     }
 
-    const supervisorRows = [
-      {
-        expert: project.supervisor,
-        amount: Number(project.supervisorPayment?.amount || 0),
-        bankAccountNumber: project.supervisor?.bankAccountNumber || "",
-        bankName: project.supervisor?.bankName || "",
-      },
-      {
-        expert: project.coSupervisor,
-        amount: Number(project.coSupervisorPayment?.amount || 0),
-        bankAccountNumber: project.coSupervisor?.bankAccountNumber || "",
-        bankName: project.coSupervisor?.bankName || "",
-      },
-    ].filter((item) => item.expert && isMatchInAcademy(item.expert))
+    const supervisorRows: Array<{
+      expert: any
+      amount: number
+      bankAccountNumber: string
+      bankName: string
+    }> = []
 
-    if (!supervisorRows.length) return
+    if (project.singleSupervisorPaymentId || project.singleSupervisorPayment) {
+      const candidates = [project.supervisor, project.coSupervisor].filter(Boolean)
+      const expert = candidates.find((x) => isMatchInAcademy(x)) || candidates[0]
+      if (expert && isMatchInAcademy(expert)) {
+        supervisorRows.push({
+          expert,
+          amount: Number(project.singleSupervisorPayment?.amount || 0),
+          bankAccountNumber: expert.bankAccountNumber || "",
+          bankName: expert.bankName || "",
+        })
+      }
+    } else {
+      if (project.supervisor && isMatchInAcademy(project.supervisor)) {
+        supervisorRows.push({
+          expert: project.supervisor,
+          amount: Number(project.supervisorPayment?.amount || 0),
+          bankAccountNumber: project.supervisor.bankAccountNumber || "",
+          bankName: project.supervisor.bankName || "",
+        })
+      }
+      if (project.coSupervisor && isMatchInAcademy(project.coSupervisor)) {
+        supervisorRows.push({
+          expert: project.coSupervisor,
+          amount: Number(project.coSupervisorPayment?.amount || 0),
+          bankAccountNumber: project.coSupervisor.bankAccountNumber || "",
+          bankName: project.coSupervisor.bankName || "",
+        })
+      }
+    }
+
+    if (!supervisorRows.length) continue
 
     const orgName = project.organization?.sTen || "Chưa có đơn vị"
 
@@ -2479,7 +2530,8 @@ const convertToThanhToanHuongDanTrongHvData = (
     const amounts = supervisorRows.map((item) => item.amount)
     const totalAmount = amounts.reduce((sum, amount) => sum + amount, 0)
     const tienThanhToan = totalAmount === 0 ? 0 : totalAmount
-    const thongTinThanhToan = totalAmount === 0 ? "" : amounts.join("\n")
+    const thongTinThanhToan =
+      totalAmount === 0 ? "" : amounts.map((a) => formatAmountWithComma(a)).join("\n")
     const thongTinStk = supervisorRows.map((item) => item.bankAccountNumber).join("\n")
     const thongTinBank = supervisorRows.map((item) => item.bankName).join("\n")
     currentGroup.data.data.push({
@@ -2498,7 +2550,7 @@ const convertToThanhToanHuongDanTrongHvData = (
     currentGroup.data.soHocVien = currentGroup.data.data.length.toString()
     currentGroup.data.tongTienSo += tienThanhToan || 0
     currentGroup.data.tongTienChu = Number(currentGroup.data.tongTienSo).toVndWord("đồng")
-  })
+  }
 
   return Array.from(organizationMap.values())
 }
@@ -3271,6 +3323,8 @@ const convertToHDDanhGiaLuanVanTemplateData = (
           ? dayjs(project.defenseSession.startTime).format("HH:mm")
           : "",
         ngayBaoVe: project?.defenseDate ? dayjs(project.defenseDate).format("DD/MM/YYYY") : "",
+
+
         diaDiem: project?.room?.name || "",
         tenChuTich: findMemberName(CouncilRole.CHAIRMAN),
         tenThuKy: findMemberName(CouncilRole.SECRETARY),
