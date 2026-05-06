@@ -236,3 +236,11 @@ export {
   EVALUATION_MEMBER_ROLE_MAP,
   FILE_SHOW_LIMIT,
 }
+
+export type SurveyDocxTemplateVariant = "KHOA" | "BO_MON" | "GIANG_VIEN"
+
+export const SURVEY_DOCX_TEMPLATE_VARIANT_LABEL: Record<SurveyDocxTemplateVariant, string> = {
+  GIANG_VIEN: "Giảng viên",
+  BO_MON: "Bộ môn",
+  KHOA: "Khoa",
+}

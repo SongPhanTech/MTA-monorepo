@@ -7,13 +7,37 @@ import {
   useFindManyClusterSurvey,
   useFindManyDM_DonVi,
   useFindManyLecturer,
+  useFindUniqueSemester,
   useFindUniqueTrainingObjectType,
 } from "@workspace/db/hooks"
+
 import { useSemesterStore, useTrainingObjectTypeStore } from "@workspace/ui"
 import { Col, Flex, Row, Skeleton, Tree } from "antd"
 import { useMemo, useState } from "react"
+
 import OrganizationSurveyReport from "@/components/sub-pages/khao-sat/bao-cao-don-vi"
 import { getRuntimeEnv } from "@workspace/libs"
+import { $Enums } from "@workspace/db/client"
+
+/**
+ * Nhãn hệ đào tạo cho mẫu báo cáo — chỉ theo `TrainingObjectType.type` (không đoán qua tên/regex).
+ * Quốc tế: không đưa chữ "Quốc tế" vào mẫu → trả về rỗng.
+ */
+function trainingSystemNameFromDbType(type: $Enums.TrainingObjectTypes | undefined): string {
+  if (type == null) {
+    return ""
+  }
+  if (type === $Enums.TrainingObjectTypes.MILITARY) {
+    return "Quân sự"
+  }
+  if (type === $Enums.TrainingObjectTypes.CIVILIAN) {
+    return "Dân sự"
+  }
+  if (type === $Enums.TrainingObjectTypes.INTERNATIONAL_MILITARY) {
+    return ""
+  }
+  return ""
+}
 
 function buildOrgAndLectureTree(
   list: Array<any>,
@@ -61,16 +85,26 @@ export default function BaoCaoGiangVien() {
   const { id: semesterId } = useSemesterStore()
   const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
 
+  const { data: semester } = useFindUniqueSemester(
+    {
+      where: { id: semesterId },
+      select: { name: true },
+    },
+    { enabled: !!semesterId }
+  )
+  const semesterName = semester?.name ?? ""
+
   const { data: trainingObjectType } = useFindUniqueTrainingObjectType(
     {
       where: { id: trainingObjectTypeId },
-      select: { name: true },
+      select: { name: true, type: true },
     },
     {
       enabled: !!trainingObjectTypeId,
     }
   )
-  const trainingObjectTypeName = useMemo(() => trainingObjectType?.name ?? "", [trainingObjectType])
+  const trainingObjectTypeName = trainingObjectType?.name ?? ""
+  const trainingSystemName = trainingSystemNameFromDbType(trainingObjectType?.type)
 
   const { data = [], refetch } = useFindManyClusterSurvey({
     where: {
@@ -300,6 +334,8 @@ export default function BaoCaoGiangVien() {
             organizationId={selectedItem.id}
             surveyName={filters?.surveyName}
             trainingObjectTypeName={trainingObjectTypeName}
+            semesterName={semesterName}
+            trainingSystemName={trainingSystemName}
             organizationName={
               selectedItem.iCapDonVi === 3 ? selectedItem.parent?.sTen : selectedItem.sTen
             }
@@ -315,14 +351,19 @@ export default function BaoCaoGiangVien() {
       if (selectedItem?.id && !selectedItem?.iCapDonVi) {
         const org = selectedItem.organization
         const isDepartment = org?.iCapDonVi === 3
+        const parentOrg = isDepartment
+          ? organizations.find((o: any) => o?.Id === org?.sParentId || o?.id === org?.sParentId)
+          : null
         return (
           <SurveylecturerReport
             selectedId={filters?.clusterId}
             lectureId={selectedItem?.id}
             surveyName={filters?.surveyName}
             trainingObjectTypeName={trainingObjectTypeName}
-            organizationName={isDepartment ? org.parent?.sTen : org?.sTen}
-            organizationCode={isDepartment ? org.parent?.sMa : org?.sMa}
+            semesterName={semesterName}
+            trainingSystemName={trainingSystemName}
+            organizationName={isDepartment ? parentOrg?.sTen : org?.sTen}
+            organizationCode={isDepartment ? parentOrg?.sMa : org?.sMa}
             lecturerName={selectedItem?.userProfile?.fullName}
             lecturerCode={selectedItem?.code}
             departmentName={isDepartment ? org?.sTen : ""}
@@ -371,7 +412,16 @@ export default function BaoCaoGiangVien() {
       // )
     }
     return
-  }, [filters, selectedItem, trainingObjectTypeName])
+  }, [
+    filters,
+    selectedItem,
+    trainingObjectTypeName,
+    trainingSystemName,
+    semesterName,
+    semesterId,
+    trainingObjectTypeId,
+    organizations,
+  ])
   return (
     <Row gutter={[16, 4]}>
       <Col span={24}>

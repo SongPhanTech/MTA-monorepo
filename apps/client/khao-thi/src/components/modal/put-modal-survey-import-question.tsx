@@ -11,7 +11,6 @@ import { sqlTransaction } from "@workspace/libs/api/model"
 import { PizZip } from "@workspace/libs/docxjs"
 import { Button, Col, Form, message, Table, Upload } from "antd"
 import { XMLParser } from "fast-xml-parser"
-import type { Key } from "react"
 import { useEffect, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 
@@ -189,7 +188,6 @@ const PutSurveyImportQuestionModal = () => {
     onClose: form.resetFields,
   })
   const [importedQuestions, setImportedQuestions] = useState<ImportedQuestion[]>([])
-  const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([])
 
   const { showSpinner, hideSpinner } = useSpinner()
   const { getSurveyQuestionTypeLabel } = useSurveyQuestionTypeOptions()
@@ -302,7 +300,6 @@ const PutSurveyImportQuestionModal = () => {
       )
 
       setImportedQuestions(uniqueQuestions)
-      setSelectedRowKeys([])
     } catch (err) {
       console.error(err)
       message.error("Lỗi khi đọc file Word")
@@ -316,12 +313,10 @@ const PutSurveyImportQuestionModal = () => {
       message.warning("Vui lòng chọn nhóm câu hỏi khảo sát")
       return
     }
-    const selectedQuestions = selectedRowKeys
-      .map((key) => importedQuestions[Number(key)])
-      .filter(Boolean)
+    const selectedQuestions = importedQuestions
 
     if (!selectedQuestions.length) {
-      message.warning("Vui lòng chọn ít nhất một câu hỏi")
+      message.warning("Chưa có câu hỏi nào để import")
       return
     }
 
@@ -437,10 +432,6 @@ const PutSurveyImportQuestionModal = () => {
                 rowKey="key"
                 dataSource={tableData}
                 pagination={false}
-                rowSelection={{
-                  selectedRowKeys,
-                  onChange: (keys: Key[]) => setSelectedRowKeys(keys),
-                }}
                 columns={[
                   {
                     title: "STT",
