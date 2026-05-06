@@ -17807,6 +17807,24 @@ const metadata: ModelMeta = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'coSupervisorPayment',
+                }, singleSupervisorPayment: {
+                    name: "singleSupervisorPayment",
+                    type: "SupervisorPaymentRecord",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'singleSupervisorPayment',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "singleSupervisorPaymentId" },
+                }, singleSupervisorPaymentId: {
+                    name: "singleSupervisorPaymentId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'singleSupervisorPayment',
+                }, singlePayment: {
+                    name: "singlePayment",
+                    type: "Decimal",
+                    isOptional: true,
                 }, CHUTICH: {
                     name: "CHUTICH",
                     type: "String",
@@ -19097,6 +19115,12 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'coSupervisorPayment',
+                }, singleSupervisorPayment: {
+                    name: "singleSupervisorPayment",
+                    type: "ThesisProject",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'singleSupervisorPayment',
                 },
             }, uniqueConstraints: {
                 id: {

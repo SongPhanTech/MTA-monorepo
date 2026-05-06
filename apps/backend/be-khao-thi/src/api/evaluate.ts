@@ -123,7 +123,13 @@ app.openapi(calcEvidenceTagsRoute, async (c) => {
     for (const [o2, criterion] of standard.criteria.entries()) {
       let evidenceCount = 0
       const ev = criterion.evaluationCriterion
-      const htmlFields = [ev?.currentSituation, ev?.strengths, ev?.weakness, ev?.actionPlan, ev?.score]
+      const htmlFields = [
+        ev?.currentSituation,
+        ev?.strengths,
+        ev?.weakness,
+        ev?.actionPlan,
+        ev?.score,
+      ]
 
       for (const html of htmlFields) {
         for (const evidenceId of extractSpanIds(html)) {

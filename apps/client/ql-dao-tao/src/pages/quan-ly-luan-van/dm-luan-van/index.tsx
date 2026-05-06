@@ -19,8 +19,10 @@ import {
 import { queryClient } from "@api/index"
 import {
   useCountStudent,
+  useCreatePaymentRecord,
   useCreateStudentThesisRegistration,
   useCreateThesisProject,
+  useFindManyDefaultCouncilRolePayAmount,
   useFindManyDefenseSession,
   useFindManyDM_DonVi,
   useFindManyExpertProfile,
@@ -76,7 +78,7 @@ import {
 } from "@/utils/thesis-excel"
 import type { FilterProps } from "@constants/type"
 
-function formatDefenseSessionClock(startTime: Date | string | null | undefined): string {
+export function formatDefenseSessionClock(startTime: Date | string | null | undefined): string {
   if (startTime === null || startTime === undefined) {
     return ""
   }
@@ -664,6 +666,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
   const { mutateAsync: createThesisProject } = useCreateThesisProject()
   const { mutateAsync: createStudentThesisRegistration } = useCreateStudentThesisRegistration()
   const { mutateAsync: updateThesisProject } = useUpdateThesisProject()
+  const { mutateAsync: createPaymentRecord } = useCreatePaymentRecord()
+  const { data: defaultCouncilPayAmounts = [] } = useFindManyDefaultCouncilRolePayAmount()
   const isWithinGvhdSupervisorEditWindow = (): boolean => {
     const deadline = selectedThesisSession?.topicEntryDeadline
     if (!deadline) return true
@@ -984,19 +988,28 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
   )
   const [signRole, setSignRole] = useState<"chief" | "deputy">("chief")
   const [signingDate, setSigningDate] = useState<ReturnType<typeof dayjs>>(dayjs())
+  const [signMoneyAmount, setSignMoneyAmount] = useState<number>(100000)
 
-  type SignerPayload = { signerName: string; isChief: boolean; signingDate?: Date }
+  type SignerPayload = {
+    signerName: string
+    isChief: boolean
+    signingDate?: Date
+    moneyAmount?: number
+  }
 
   const buttonList: Array<{
     id: number
     label: string
+    needModal?: boolean
     needSign?: boolean
+    needMoney?: boolean
     disabled?: boolean
     onClick: (signer?: SignerPayload) => Promise<unknown>
   }> = [
     {
       id: 1,
       label: "Phụ lục ds luận văn",
+      needModal: true,
       needSign: true,
       onClick: async () =>
         await exportPhuLucDsLuanVan({
@@ -1009,6 +1022,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
     {
       id: 2,
       label: "Sao QĐ HDLV",
+      needModal: true,
       needSign: true,
       onClick: async (signer?: SignerPayload) =>
         await exportSaoQDHDLV({
@@ -1024,6 +1038,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
     {
       id: 3,
       label: "Giấy mời HDLV",
+      needModal: true,
       needSign: true,
       onClick: async (signer?: SignerPayload) =>
         await exportGiayMoiHdlv({
@@ -1050,6 +1065,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
     {
       id: 5,
       label: "Giấy mời chấm LV PB",
+      needModal: true,
       needSign: true,
       onClick: async (signer?: SignerPayload) =>
         await exportGiayMoiChamLvPb({
@@ -1077,6 +1093,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
     {
       id: 6.1,
       label: "Bản sao HDDGLV",
+      needModal: true,
       needSign: true,
       onClick: async (signer?: SignerPayload) =>
         await exportBanSaoHDDGLV({
@@ -1104,6 +1121,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
     {
       id: 8,
       label: "Hồ sơ BV LV",
+      needModal: true,
       needSign: true,
       onClick: async (signer?: SignerPayload) =>
         await exportHosobvlv({
@@ -1141,12 +1159,17 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
     {
       id: 12,
       label: "Danh sách chuyên gia",
-      onClick: async () =>
+      needModal: true,
+      needMoney: true,
+      needSign: false,
+      onClick: async (signer?: SignerPayload) =>
         await exportDsChuyenGia({
           allStudentsInClasses,
           showSpinner,
           hideSpinner,
           message,
+          moneyAmount: signer?.moneyAmount,
+          signingDate: signer?.signingDate,
         }),
     },
 
@@ -1238,6 +1261,16 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
           showSpinner,
           hideSpinner,
           message,
+          defaultCouncilPayAmounts,
+          createCouncilPaymentRecord: async ({ councilMemberId, amount }) =>
+            await createPaymentRecord({
+              data: {
+                amount,
+                councilMember: {
+                  connect: { id: councilMemberId },
+                },
+              },
+            }),
         }),
     },
   ]
@@ -1254,7 +1287,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
       return
     }
 
-    if (selected.needSign) {
+    if (selected.needModal) {
       const thesisSessionId = searchParams.thesisSessionId?.trim()
       if (!thesisSessionId) {
         message.warning("Vui lòng chọn đợt xét trước khi xuất file.")
@@ -1267,6 +1300,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
       }
       setSignRole(session.chief?.trim() ? "chief" : "deputy")
       setSigningDate(dayjs())
+      setSignMoneyAmount(100000)
       setPendingSignExportTemplateId(selectedPrintTemplateId)
       setSignModalOpen(true)
       return
@@ -1277,6 +1311,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
 
   const handleConfirmSignExport = async () => {
     if (!pendingSignExportTemplateId) return
+    const selected = buttonList.find((i) => String(i.id) === pendingSignExportTemplateId)
+    if (!selected?.onClick) return
     const session = selectedThesisSession
     if (!session) {
       message.warning("Không tìm thấy thông tin đợt xét.")
@@ -1286,20 +1322,23 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
     const deputyName = (session.deputy ?? "").trim()
     const signerName = signRole === "chief" ? chiefName : deputyName
     const isChief = signRole === "chief" ? true : false
-    if (!signerName) {
+    if (selected.needSign && !signerName) {
       message.warning(
         `Chưa có họ tên ${signRole === "chief" ? "Trưởng phòng" : "Phó phòng"} sau đại học trong đợt xét.`
       )
       return
     }
-    const selected = buttonList.find((i) => String(i.id) === pendingSignExportTemplateId)
-    if (!selected?.onClick) return
+    if (selected.needMoney && (!signMoneyAmount || signMoneyAmount <= 0)) {
+      message.warning("Vui lòng nhập số tiền hợp lệ.")
+      return
+    }
     setSignModalOpen(false)
     setPendingSignExportTemplateId(null)
     await selected.onClick({
-      signerName,
-      isChief,
+      signerName: selected.needSign ? signerName : "",
+      isChief: selected.needSign ? isChief : false,
       signingDate: signingDate?.toDate?.() ?? undefined,
+      moneyAmount: selected.needMoney ? (signMoneyAmount ?? undefined) : undefined,
     })
   }
 
@@ -1307,6 +1346,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
     setSignModalOpen(false)
     setPendingSignExportTemplateId(null)
     setSigningDate(dayjs())
+    setSignMoneyAmount(100000)
   }
 
   const handleAssignDates = async () => {
@@ -1350,11 +1390,12 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
 
   const chiefDisplay = selectedThesisSession?.chief?.trim() || "(chưa nhập)"
   const deputyDisplay = selectedThesisSession?.deputy?.trim() || "(chưa nhập)"
+  const pendingSignExport = buttonList.find((i) => String(i.id) === pendingSignExportTemplateId)
 
   return (
     <div>
       <Modal
-        title="Chọn người ký"
+        title="Tham số xuất file"
         open={signModalOpen}
         onCancel={handleCancelSignModal}
         footer={[
@@ -1371,18 +1412,22 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
         <p className="mb-3 text-gray-600">
           Đợt xét hiện tại: {selectedThesisSession?.name ?? "—"}.
         </p>
-        <Radio.Group
-          value={signRole}
-          onChange={(e) => setSignRole(e.target.value)}
-          className="flex flex-col gap-3"
-        >
-          <Radio value="chief">
-            Trưởng phòng sau đại học: <strong>{chiefDisplay}</strong>
-          </Radio>
-          <Radio value="deputy">
-            Phó phòng sau đại học: <strong>{deputyDisplay}</strong>
-          </Radio>
-        </Radio.Group>
+        {pendingSignExport?.needSign ? (
+          <>
+            <Radio.Group
+              value={signRole}
+              onChange={(e) => setSignRole(e.target.value)}
+              className="flex flex-col gap-3"
+            >
+              <Radio value="chief">
+                Trưởng phòng sau đại học: <strong>{chiefDisplay}</strong>
+              </Radio>
+              <Radio value="deputy">
+                Phó phòng sau đại học: <strong>{deputyDisplay}</strong>
+              </Radio>
+            </Radio.Group>
+          </>
+        ) : null}
         <div className="mt-4">
           <div className="mb-2 text-gray-700">Thời gian ký</div>
           <DatePicker
@@ -1393,6 +1438,23 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
             placeholder="Chọn thời gian ký"
           />
         </div>
+
+        {pendingSignExport?.needMoney ? (
+          <div className="mt-4">
+            <div className="mb-2 text-gray-700">Số tiền (VNĐ)</div>
+            <InputNumber
+              className="w-full"
+              min={0}
+              value={signMoneyAmount}
+              placeholder="Nhập số tiền"
+              formatter={(value) =>
+                value ? value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : ""
+              }
+              parser={(value) => Number(value?.replace(/\$\s?|(,*)/g, "") || 0)}
+              onChange={(value) => setSignMoneyAmount(typeof value === "number" ? value : 100000)}
+            />
+          </div>
+        ) : null}
       </Modal>
       <Row gutter={[8, 0]}>
         <Col span={24}>
@@ -1474,7 +1536,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       }}
                     />
                   </Form.Item>
-                  <Form.Item label="Tìm kiếm">
+                  {/* <Form.Item label="Tìm kiếm">
                     <Input
                       className="w-48"
                       allowClear
@@ -1482,7 +1544,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       placeholder="Tên học viên / GVHD"
                       onChange={(e) => setNameKeyword(e.target.value)}
                     />
-                  </Form.Item>
+                  </Form.Item> */}
 
                   <Form.Item className="flex justify-end gap-3">
                     {role === "P7" && (
@@ -1680,7 +1742,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
               },
               {
                 title: "Mã sinh viên",
-                width: 100,
+                width: 120,
                 fixed: "left",
                 dataIndex: "code",
                 type: "input",
@@ -1700,8 +1762,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
               },
               {
                 title: "Ngày sinh",
-                width: 100,
-                dataIndex: "name",
+                width: 120,
+                dataIndex: "dateOfBirth",
                 align: "center",
                 render: (_, record) => {
                   return record?.userProfile?.dateOfBirth
@@ -1721,7 +1783,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
               {
                 title: "Đề tài",
                 width: 350,
-                fixed: "left",
+                // fixed: "left",
                 type: "input",
                 dataIndex: "title",
                 render: (_, record) => {
@@ -1754,7 +1816,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
               {
                 title: "GVHD 1",
                 width: 200,
-                fixed: "left",
+                // fixed: "left",
                 type: "input",
                 dataIndex: "supervisor",
                 render: (_, record) => {
@@ -1799,7 +1861,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
               {
                 title: "GVHD 2",
                 width: 200,
-                fixed: "left",
+                // fixed: "left",
                 type: "input",
                 dataIndex: "coSupervisor",
                 render: (_, record) => {

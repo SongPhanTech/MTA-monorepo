@@ -248,189 +248,209 @@ const PrintExplanation = () => {
           </style>
 
           <div id="print-explanation">
-          {/* Header */}
-          <div
-            style={{
-              position: "relative",
-              marginBottom: "10px",
-            }}
-          >
+            {/* Header */}
             <div
               style={{
-                display: "flex",
-                justifyContent: "space-between",
+                position: "relative",
+                marginBottom: "10px",
               }}
             >
-              <div style={{ fontWeight: "bold", whiteSpace: "nowrap" }}>
-                BAN KHẢO THÍ & ĐBCLGD-ĐT
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                }}
+              >
+                <div style={{ fontWeight: "bold", whiteSpace: "nowrap" }}>
+                  BAN KHẢO THÍ & ĐBCLGD-ĐT
+                </div>
+                <div style={{ fontWeight: "bold" }}>{data?.exam?.semester?.name || "HKI"}</div>
               </div>
-              <div style={{ fontWeight: "bold" }}>{data?.exam?.semester?.name || "HKI"}</div>
+              <div
+                style={{
+                  position: "absolute",
+                  left: "55%",
+                  top: "0",
+                  transform: "translateX(-50%)",
+                  fontWeight: "bold",
+                }}
+              >
+                PHIẾU ĐỀ THI
+              </div>
             </div>
+
+            {/* Class info */}
             <div
               style={{
-                position: "absolute",
-                left: "55%",
-                top: "0",
-                transform: "translateX(-50%)",
-                fontWeight: "bold",
+                textAlign: "center",
+                marginBottom: "10px",
+                marginLeft: "10%",
               }}
             >
-              PHIẾU ĐỀ THI
+              <span style={{ fontWeight: "normal" }}>(Dùng cho lớp: {subjectClassName})</span>
             </div>
-          </div>
 
-          {/* Class info */}
-          <div
-            style={{
-              textAlign: "center",
-              marginBottom: "10px",
-              marginLeft: "10%",
-            }}
-          >
-            <span style={{ fontWeight: "normal" }}>(Dùng cho lớp: {subjectClassName})</span>
-          </div>
+            {/* Date */}
+            <div
+              style={{
+                textAlign: "right",
+                fontStyle: "italic",
+                marginBottom: "15px",
+              }}
+            >
+              Ngày {day} tháng {month} năm {year}
+            </div>
 
-          {/* Date */}
-          <div
-            style={{
-              textAlign: "right",
-              fontStyle: "italic",
-              marginBottom: "15px",
-            }}
-          >
-            Ngày {day} tháng {month} năm {year}
-          </div>
-
-          {/* Main info table */}
-          <table
-            style={{
-              width: "100%",
-              border: "1px solid black",
-              borderCollapse: "collapse",
-              marginBottom: "20px",
-            }}
-          >
-            <tbody>
-              <tr>
-                <td
-                  style={{
-                    border: "1px solid black",
-                    padding: "10px",
-                    width: "25%",
-                    textAlign: "center",
-                    verticalAlign: "middle",
-                  }}
-                >
-                  <strong>Giáo viên ra đề</strong>
-                </td>
-                <td
-                  style={{
-                    border: "1px solid black",
-                    padding: "10px",
-                    width: "50%",
-                    verticalAlign: "middle",
-                  }}
-                >
-                  <div style={{ textAlign: "center", marginBottom: "5px" }}>
-                    <strong>Đề thi số : {data?.examCode || "001"}</strong>
-                  </div>
-                  <div style={{ textAlign: "center", marginBottom: "5px" }}>
-                    <strong>Học phần: {data?.exam?.subjectVersion?.name || ""}</strong>
-                  </div>
-                  <div style={{ textAlign: "center", marginBottom: "10px" }}>
-                    <strong>
-                      Thời gian làm bài:{" "}
-                      {duration || data?.examMatrix?.examFramework?.time || data?.exam?.duration}{" "}
-                      phút
-                    </strong>
-                  </div>
-                </td>
-                <td
-                  style={{
-                    border: "1px solid black",
-                    padding: "10px",
-                    width: "25%",
-                    textAlign: "center",
-                    verticalAlign: "middle",
-                  }}
-                >
-                  <div style={{ marginBottom: "5px" }}>
-                    <strong>Ban Khảo thi</strong>
-                  </div>
-                  <div style={{ marginBottom: "5px" }}>
-                    <strong>& ĐBCLGD-ĐT</strong>
-                  </div>
-                  <div style={{ fontStyle: "italic" }}>{name}</div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-
-          {/* Questions and Answers Table */}
-          <table
-            style={{
-              width: "100%",
-              border: "1px solid black",
-              borderCollapse: "collapse",
-              marginBottom: "20px",
-            }}
-          >
-            <thead>
-              <tr>
-                <th
-                  style={{
-                    border: "1px solid black",
-                    padding: "15px",
-                    width: "85%",
-                    textAlign: "center",
-                    fontWeight: "bold",
-                  }}
-                >
-                  Nội dung câu hỏi và đáp án
-                </th>
-                <th
-                  style={{
-                    border: "1px solid black",
-                    padding: "15px",
-                    width: "15%",
-                    textAlign: "center",
-                    fontWeight: "bold",
-                  }}
-                >
-                  Điểm
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {data?.questions?.map((q, index: number) => (
-                <tr key={q?.id}>
+            {/* Main info table */}
+            <table
+              style={{
+                width: "100%",
+                border: "1px solid black",
+                borderCollapse: "collapse",
+                marginBottom: "20px",
+              }}
+            >
+              <tbody>
+                <tr>
                   <td
                     style={{
                       border: "1px solid black",
-                      padding: "15px",
+                      padding: "10px",
+                      width: "25%",
+                      textAlign: "center",
+                      verticalAlign: "middle",
                     }}
                   >
-                    <div
+                    <strong>Giáo viên ra đề</strong>
+                  </td>
+                  <td
+                    style={{
+                      border: "1px solid black",
+                      padding: "10px",
+                      width: "50%",
+                      verticalAlign: "middle",
+                    }}
+                  >
+                    <div style={{ textAlign: "center", marginBottom: "5px" }}>
+                      <strong>Đề thi số : {data?.examCode || "001"}</strong>
+                    </div>
+                    <div style={{ textAlign: "center", marginBottom: "5px" }}>
+                      <strong>Học phần: {data?.exam?.subjectVersion?.name || ""}</strong>
+                    </div>
+                    <div style={{ textAlign: "center", marginBottom: "10px" }}>
+                      <strong>
+                        Thời gian làm bài:{" "}
+                        {duration || data?.examMatrix?.examFramework?.time || data?.exam?.duration}{" "}
+                        phút
+                      </strong>
+                    </div>
+                  </td>
+                  <td
+                    style={{
+                      border: "1px solid black",
+                      padding: "10px",
+                      width: "25%",
+                      textAlign: "center",
+                      verticalAlign: "middle",
+                    }}
+                  >
+                    <div style={{ marginBottom: "5px" }}>
+                      <strong>Ban Khảo thi</strong>
+                    </div>
+                    <div style={{ marginBottom: "5px" }}>
+                      <strong>& ĐBCLGD-ĐT</strong>
+                    </div>
+                    <div style={{ fontStyle: "italic" }}>{name}</div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+            {/* Questions and Answers Table */}
+            <table
+              style={{
+                width: "100%",
+                border: "1px solid black",
+                borderCollapse: "collapse",
+                marginBottom: "20px",
+              }}
+            >
+              <thead>
+                <tr>
+                  <th
+                    style={{
+                      border: "1px solid black",
+                      padding: "15px",
+                      width: "85%",
+                      textAlign: "center",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    Nội dung câu hỏi và đáp án
+                  </th>
+                  <th
+                    style={{
+                      border: "1px solid black",
+                      padding: "15px",
+                      width: "15%",
+                      textAlign: "center",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    Điểm
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {data?.questions?.map((q, index: number) => (
+                  <tr key={q?.id}>
+                    <td
                       style={{
-                        marginBottom: "12px",
+                        border: "1px solid black",
+                        padding: "15px",
                       }}
                     >
-                      <strong>
-                        Câu {q?.order || index + 1}({Number(q?.question?.point || 0).toFixed(1)}{" "}
-                        điểm):
-                      </strong>{" "}
-                      <span
-                        dangerouslySetInnerHTML={{
-                          __html: renderWithMath(q?.question?.content || "")
-                            .replace(/<p[^>]*>/g, "")
-                            .replace(/<\/p>/g, " ")
-                            .trim(),
+                      <div
+                        style={{
+                          marginBottom: "12px",
                         }}
-                      />
-                      {q?.question?.multipleChoiceOptions &&
-                        q?.question?.multipleChoiceOptions?.length > 0 && (
+                      >
+                        <strong>
+                          Câu {q?.order || index + 1}({Number(q?.question?.point || 0).toFixed(1)}{" "}
+                          điểm):
+                        </strong>{" "}
+                        <span
+                          dangerouslySetInnerHTML={{
+                            __html: renderWithMath(q?.question?.content || "")
+                              .replace(/<p[^>]*>/g, "")
+                              .replace(/<\/p>/g, " ")
+                              .trim(),
+                          }}
+                        />
+                        {q?.question?.multipleChoiceOptions &&
+                          q?.question?.multipleChoiceOptions?.length > 0 && (
+                            <div>
+                              {q.question.multipleChoiceOptions.map((option) => (
+                                <div
+                                  key={option?.id}
+                                  style={{
+                                    marginLeft: "20px",
+                                    color: "#000",
+                                    fontWeight: "normal",
+                                  }}
+                                >
+                                  <span
+                                    dangerouslySetInnerHTML={{
+                                      __html: renderWithMath(option?.content || ""),
+                                    }}
+                                  />
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                        {q?.question?.orderingItems && q?.question?.orderingItems?.length > 0 && (
                           <div>
-                            {q.question.multipleChoiceOptions.map((option) => (
+                            {q.question.orderingItems.map((option) => (
                               <div
                                 key={option?.id}
                                 style={{
@@ -448,74 +468,54 @@ const PrintExplanation = () => {
                             ))}
                           </div>
                         )}
-                      {q?.question?.orderingItems && q?.question?.orderingItems?.length > 0 && (
-                        <div>
-                          {q.question.orderingItems.map((option) => (
-                            <div
-                              key={option?.id}
-                              style={{
-                                marginLeft: "20px",
-                                color: "#000",
-                                fontWeight: "normal",
-                              }}
-                            >
-                              <span
-                                dangerouslySetInnerHTML={{
-                                  __html: renderWithMath(option?.content || ""),
-                                }}
-                              />
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                    <div style={{ marginTop: "8px" }}>
-                      <strong>Đáp án:</strong>{" "}
-                      {q?.question?.multipleChoiceOptions &&
-                      q?.question?.multipleChoiceOptions?.length > 0 ? (
-                        <span
-                          dangerouslySetInnerHTML={{
-                            __html: renderWithMath(
-                              q.question.multipleChoiceOptions
-                                .filter((option) => option?.isCorrect)
-                                .map((option) => option?.content || "")
-                                .join(", ")
-                            ),
-                          }}
-                        />
-                      ) : q?.question?.orderingItems && q?.question?.orderingItems?.length > 0 ? (
-                        <span>
-                          {q.question.orderingItems
-                            .sort((a, b) => (a?.correctOrder || 0) - (b?.correctOrder || 0))
-                            .map((_, idx) => String.fromCharCode(65 + idx))
-                            .join(" -> ")}
-                        </span>
-                      ) : (
-                        <span
-                          dangerouslySetInnerHTML={{
-                            __html: renderWithMath(q?.question?.explanation || "")
-                              .replace(/<p[^>]*>/g, "")
-                              .replace(/<\/p>/g, " ")
-                              .trim(),
-                          }}
-                        />
-                      )}
-                    </div>
-                  </td>
-                  <td
-                    style={{
-                      border: "1px solid black",
-                      padding: "10px",
-                      textAlign: "center",
-                      verticalAlign: "middle",
-                    }}
-                  >
-                    {Number(q?.question?.point || 0).toFixed(1)}đ
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                      </div>
+                      <div style={{ marginTop: "8px" }}>
+                        <strong>Đáp án:</strong>{" "}
+                        {q?.question?.multipleChoiceOptions &&
+                        q?.question?.multipleChoiceOptions?.length > 0 ? (
+                          <span
+                            dangerouslySetInnerHTML={{
+                              __html: renderWithMath(
+                                q.question.multipleChoiceOptions
+                                  .filter((option) => option?.isCorrect)
+                                  .map((option) => option?.content || "")
+                                  .join(", ")
+                              ),
+                            }}
+                          />
+                        ) : q?.question?.orderingItems && q?.question?.orderingItems?.length > 0 ? (
+                          <span>
+                            {q.question.orderingItems
+                              .sort((a, b) => (a?.correctOrder || 0) - (b?.correctOrder || 0))
+                              .map((_, idx) => String.fromCharCode(65 + idx))
+                              .join(" -> ")}
+                          </span>
+                        ) : (
+                          <span
+                            dangerouslySetInnerHTML={{
+                              __html: renderWithMath(q?.question?.explanation || "")
+                                .replace(/<p[^>]*>/g, "")
+                                .replace(/<\/p>/g, " ")
+                                .trim(),
+                            }}
+                          />
+                        )}
+                      </div>
+                    </td>
+                    <td
+                      style={{
+                        border: "1px solid black",
+                        padding: "10px",
+                        textAlign: "center",
+                        verticalAlign: "middle",
+                      }}
+                    >
+                      {Number(q?.question?.point || 0).toFixed(1)}đ
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
       </div>

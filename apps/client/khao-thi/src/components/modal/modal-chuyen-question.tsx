@@ -23,7 +23,7 @@ interface MoveQuestionForm {
 
 const MoveQuestionModal = () => {
   const [form] = Form.useForm<any>()
-  const [keepOld, setKeepOld] = useState(false)
+  const [keepOld, setKeepOld] = useState(true)
 
   const { isOpen, onClose, input } = useDisclosure<{
     questionIds: string[]
@@ -32,7 +32,7 @@ const MoveQuestionModal = () => {
     tag: "MoveQuestionModal",
     onClose: () => {
       form.resetFields()
-      setKeepOld(false)
+      setKeepOld(true)
     },
   })
 

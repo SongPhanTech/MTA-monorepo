@@ -627,15 +627,14 @@ const WordImportModal: React.FC = () => {
         if (type === QuestionType.SINGLE_CHOICE || type === QuestionType.MULTIPLE_CHOICE) {
           question.content = cleanQuestionText(rawQuestionText)
 
-          question.optionsRaw = optionLines
-            .map((line) => {
-              const match = line.match(/^([A-D])\.\s*(.+)$/i)
-              return {
-                label: match?.[1]?.toUpperCase(),
-                content: match?.[2] || "",
-                isCorrect: false,
-              }
-            })
+          question.optionsRaw = optionLines.map((line) => {
+            const match = line.match(/^([A-D])\.\s*(.+)$/i)
+            return {
+              label: match?.[1]?.toUpperCase(),
+              content: match?.[2] || "",
+              isCorrect: false,
+            }
+          })
 
           if (type === QuestionType.SINGLE_CHOICE) {
             // Đáp án dạng: "D. Liên Xô" hoặc chỉ "D"
@@ -662,14 +661,13 @@ const WordImportModal: React.FC = () => {
           question.explanation = answerTextRaw
           question.answer = answerTextRaw
 
-          question.optionsRaw = optionLines
-            .map((line) => {
-              const match = line.match(/^([A-D])\.\s*(.+)$/i)
-              return {
-                label: match?.[1]?.toUpperCase(),
-                content: match?.[2] || "",
-              }
-            })
+          question.optionsRaw = optionLines.map((line) => {
+            const match = line.match(/^([A-D])\.\s*(.+)$/i)
+            return {
+              label: match?.[1]?.toUpperCase(),
+              content: match?.[2] || "",
+            }
+          })
         } else if (type === QuestionType.FILL_IN_BLANK) {
           question.content = cleanQuestionText(rawQuestionText)
           question.explanation = answerTextRaw

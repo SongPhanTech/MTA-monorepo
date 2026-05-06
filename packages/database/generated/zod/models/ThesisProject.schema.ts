@@ -8,6 +8,8 @@ import { z } from 'zod/v3';
 import { ThesisType, ThesisProjectStatus } from '../../zenstack/models';
 import { ThesisTypeSchema } from '../enums/ThesisType.schema';
 import { ThesisProjectStatusSchema } from '../enums/ThesisProjectStatus.schema';
+import { DecimalSchema } from '../common';
+import { Decimal } from 'decimal.js';
 const baseSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
@@ -42,6 +44,7 @@ const baseSchema = z.object({
     externalUnit: z.boolean().default(false),
     supervisorName: z.string().nullish(),
     coSupervisorName: z.string().nullish(),
+    singlePayment: DecimalSchema.nullish(),
     CHUTICH: z.string().nullish(),
     THUKY: z.string().nullish(),
     PHANBIEN1: z.string().nullish(),
@@ -89,6 +92,7 @@ const baseSchemaWithoutDefaults = z.object({
     externalUnit: z.boolean(),
     supervisorName: z.string().nullish(),
     coSupervisorName: z.string().nullish(),
+    singlePayment: DecimalSchema.nullish(),
     CHUTICH: z.string().nullish(),
     THUKY: z.string().nullish(),
     PHANBIEN1: z.string().nullish(),
@@ -112,6 +116,7 @@ const relationSchema = z.object({
     supervisorPayment: z.record(z.string(), z.unknown()).optional(),
     coSupervisor: z.record(z.string(), z.unknown()).optional(),
     coSupervisorPayment: z.record(z.string(), z.unknown()).optional(),
+    singleSupervisorPayment: z.record(z.string(), z.unknown()).optional(),
     organization: z.record(z.string(), z.unknown()).optional(),
     council: z.record(z.string(), z.unknown()).optional(),
     room: z.record(z.string(), z.unknown()).optional(),
@@ -132,6 +137,7 @@ const fkSchema = z.object({
     supervisorPaymentId: z.string().nullish(),
     coSupervisorId: z.string().nullish(),
     coSupervisorPaymentId: z.string().nullish(),
+    singleSupervisorPaymentId: z.string().nullish(),
     organizationId: z.string().uuid().nullish(),
     councilId: z.string().nullish(),
     roomId: z.string().nullish(),
@@ -196,6 +202,7 @@ export const ThesisProjectPrismaUpdateSchema = z.object({
     externalUnit: z.boolean(),
     supervisorName: z.string().nullish(),
     coSupervisorName: z.string().nullish(),
+    singlePayment: DecimalSchema.nullish(),
     CHUTICH: z.string().nullish(),
     THUKY: z.string().nullish(),
     PHANBIEN1: z.string().nullish(),

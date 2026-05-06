@@ -38,4 +38,3 @@ await prismaNew.examRoom.updateMany({
 //     subjectClassId: null,
 //   },
 // })
-

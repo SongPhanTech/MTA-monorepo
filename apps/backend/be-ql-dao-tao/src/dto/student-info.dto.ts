@@ -232,6 +232,7 @@ export const StudentAcademicActionResult = StudentResultBase.extend({
 
 export const StudentDecreaseAcademicWarningResult = StudentResultBase.extend({
   decreaseAcademicWarning: z.literal(true),
+  previousAcademicWarningLevel: z.number().describe("Mức cảnh báo học tập từ kỳ trước"),
 })
 
 export const CourseStudentScholarshipResult = z.object({

@@ -1427,6 +1427,45 @@ app.openapi(sinhdetudong, async (c) => {
 
     return result
   }
+
+  function shuffleWithConstraints(questions: any[]): any[] {
+    const arr = [...questions]
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]]
+    }
+
+    const hasImage = (q: any): boolean =>
+      typeof q.content === "string" && q.content.includes("<img")
+
+    const result: any[] = []
+    const remaining = [...arr]
+
+    while (remaining.length > 0) {
+      const prev = result[result.length - 1]
+      let pickedIdx = -1
+
+      for (let i = 0; i < remaining.length; i++) {
+        const candidate = remaining[i]
+        const sameBlock =
+          prev?.knowledgeBlockId &&
+          candidate.knowledgeBlockId === prev.knowledgeBlockId
+        const bothHaveImage = prev && hasImage(prev) && hasImage(candidate)
+
+        if (!sameBlock && !bothHaveImage) {
+          pickedIdx = i
+          break
+        }
+      }
+
+      if (pickedIdx === -1) pickedIdx = 0
+      result.push(remaining[pickedIdx])
+      remaining.splice(pickedIdx, 1)
+    }
+
+    return result
+  }
+
   const matrixData: any = await prisma.knowledgeBlock.findMany({
     where: {
       examMatrixId: body?.examMatrixId,
@@ -1447,19 +1486,21 @@ app.openapi(sinhdetudong, async (c) => {
     )
   }
   if (body?.quantity > 0) {
+    const usedQuestionIds = new Set<string>()
+
     for (let t = 0; t < body?.quantity; t++) {
       let questions: any = []
 
       for (const knowledgeBlock of matrixData) {
         if (knowledgeBlock.configExams.length) {
           for (const configExam of knowledgeBlock.configExams) {
-            const listRamdom = knowledgeBlock.questions.filter(
+            const pool = knowledgeBlock.questions.filter(
               (i: any) =>
                 i?.difficult === configExam.difficult &&
                 (configExam.type == null || i?.type === configExam.type)
             )
 
-            if (listRamdom.length < configExam.quantity) {
+            if (pool.length < configExam.quantity) {
               return c.json(
                 {
                   message: "Không đúng số câu hỏi",
@@ -1467,11 +1508,28 @@ app.openapi(sinhdetudong, async (c) => {
                 400
               )
             }
-            const selected = getRandomItems(listRamdom, configExam.quantity)
+
+            const unused = pool.filter((q: any) => !usedQuestionIds.has(q.id))
+            const used = pool.filter((q: any) => usedQuestionIds.has(q.id))
+
+            let selected: any[]
+            if (unused.length >= configExam.quantity) {
+              selected = getRandomItems(unused, configExam.quantity)
+            } else {
+              const fromUnused = getRandomItems(unused, unused.length)
+              const stillNeeded = configExam.quantity - fromUnused.length
+              const fromUsed = getRandomItems(used, stillNeeded)
+              selected = [...fromUnused, ...fromUsed]
+            }
+
+            selected.forEach((q: any) => usedQuestionIds.add(q.id))
             questions = [...questions, ...selected]
           }
         }
       }
+
+      questions = shuffleWithConstraints(questions)
+
       await prisma.examBank.create({
         data: {
           examCode: `${body?.examCode}_${body?.codeFrom + t}`,

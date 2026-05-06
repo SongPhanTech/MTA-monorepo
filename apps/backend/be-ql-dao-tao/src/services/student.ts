@@ -360,16 +360,20 @@ export async function _generateStudentImportTemplate(
   const [fixedClasses, curricula, organizations, trainingMajors, trainingFields] =
     await Promise.all([
       prisma.fixedClass.findMany({
-        where: { active: true, trainingCourse: {
-          trainingObjectTypeId,
+        where: {
           active: true,
-          deletedAt: null
-        }, deletedAt: null },
+          trainingCourse: {
+            trainingObjectTypeId,
+            active: true,
+            deletedAt: null,
+          },
+          deletedAt: null,
+        },
         select: { code: true, name: true },
         orderBy: { name: "asc" },
       }),
       prisma.curriculumVersion.findMany({
-        where: {trainingObjectTypeId, active: true, deletedAt: null },
+        where: { trainingObjectTypeId, active: true, deletedAt: null },
         select: { name: true },
         orderBy: { name: "asc" },
       }),
@@ -379,29 +383,29 @@ export async function _generateStudentImportTemplate(
         orderBy: { sTen: "asc" },
       }),
       prisma.trainingMajor.findMany({
-        where: { 
+        where: {
           trainingObjectTypes: {
             some: {
               trainingObjectTypeId,
               deletedAt: null,
-              active: true
-            }
-          }, 
-          deletedAt: null 
+              active: true,
+            },
+          },
+          deletedAt: null,
         },
         select: { name: true },
         orderBy: { name: "asc" },
       }),
       prisma.trainingField.findMany({
-        where: { 
+        where: {
           trainingObjectTypes: {
             some: {
               trainingObjectTypeId,
               deletedAt: null,
-              active: true
-            }
-          }, 
-          deletedAt: null 
+              active: true,
+            },
+          },
+          deletedAt: null,
         },
         select: { name: true },
         orderBy: { name: "asc" },

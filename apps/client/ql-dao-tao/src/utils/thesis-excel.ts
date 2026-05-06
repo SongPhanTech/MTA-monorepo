@@ -7,7 +7,10 @@ import { exportFromTemplate, type TableRow } from "@workspace/libs/template-exce
 import { getMinioUrl } from "@workspace/libs/utils"
 import { dayjs } from "@workspace/ui"
 import { toRoman } from "./romans"
-import { getSupervisorName } from "../pages/quan-ly-luan-van/dm-luan-van/index"
+import {
+  formatDefenseSessionClock,
+  getSupervisorName,
+} from "../pages/quan-ly-luan-van/dm-luan-van/index"
 import { docxTemplate } from "./docx-template"
 interface ExportOptions {
   allStudentsInClasses: any[]
@@ -19,24 +22,22 @@ interface ExportOptions {
   signerName?: string
   isChief?: boolean
   signingDate?: Date | string
+  moneyAmount?: number
+  createCouncilPaymentRecord?: (payload: {
+    councilMemberId: string
+    amount: number
+  }) => Promise<unknown>
+  defaultCouncilPayAmounts?: Array<{
+    role: CouncilRole
+    amount: number | string | { toNumber?: () => number }
+    inAcademy: boolean
+  }>
 }
 
 const resolveSigningDate = (signingDate?: Date | string) =>
   signingDate ? dayjs(signingDate) : dayjs()
-
-// Format ngày tháng theo quy tắc Tháng 1, 2 ghi 01, 02; từ tháng 3 trở đi thì 1 số (3, 4... 12).
-const formatThesisDate = (date?: Date | string | null) => {
-  if (!date) return ""
-  const d = dayjs(date)
-  const day = d.date() 
-  const month = d.month() + 1 
-  const year = d.year()
-
-  const dayStr = day.toString()
-  const monthStr = (month === 1 || month === 2) ? month.toString().padStart(2, "0") : month.toString()
-
-  return `${dayStr}/${monthStr}/${year}`
-}
+const formatAmountWithComma = (amount: number) =>
+  Number(amount || 0).toLocaleString("en-US", { maximumFractionDigits: 0 })
 /** Phạm vi chuyên gia khi gom dữ liệu giấy mời chấm LV PB (cán bộ trong / ngoài học viện). */
 type GmcLvPbExpertScope = "all" | "inAcademy" | "outsideAcademy"
 
@@ -78,7 +79,7 @@ interface TthdbvData {
     chuyenNganh: string
     khoaQuanLi: string
     data: TthdbvTable[]
-    tongTienBangSo: number
+    tongTienBangSo: string
     tongTienBangChu: string
   }
 }
@@ -89,6 +90,7 @@ interface TthdbvTable {
   thongTinThanhToan: string
   thongTinStk: string
   thongTinNganHang: string
+  empty: string
 }
 
 interface DsnlvtvData {
@@ -320,6 +322,18 @@ interface HDDanhGiaLuanVanTemplateData {
   head: HDDanhGiaLuanVanHead
   tail: HDDanhGiaLuanVanTail
   data: HDDanhGiaLuanVanData[]
+}
+const formatThesisDate = (date?: Date | string | null) => {
+  if (!date) return ""
+  const d = dayjs(date)
+  const day = d.date()
+  const month = d.month() + 1
+  const year = d.year()
+
+  const dayStr = day.toString()
+  const monthStr = month === 1 || month === 2 ? month.toString().padStart(2, "0") : month.toString()
+
+  return `${dayStr}/${monthStr}/${year}`
 }
 
 export const exportPhuLucDsLuanVan = async ({
@@ -1205,7 +1219,8 @@ export const exportHosobvlv = async ({
         soQD: soQDBV || "",
         ngayQD: formatThesisDate(ngayQDBV),
         dotxet: dotxetBV || "",
-        type: student.thesisRegistrations?.[0]?.thesisProject?.type?.trim().toLowerCase() || "luận văn",
+        type:
+          student.thesisRegistrations?.[0]?.thesisProject?.type?.trim().toLowerCase() || "luận văn",
         khoa: `Ngày sinh: ${ngaysinh || ""}, ${khoas || ""}`,
         chuyennganh: student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || "",
         nganh:
@@ -1824,6 +1839,8 @@ export const exportThanhToanHoiDongBaoVe = async ({
   showSpinner,
   hideSpinner,
   message,
+  createCouncilPaymentRecord,
+  defaultCouncilPayAmounts = [],
 }: ExportOptions) => {
   if (!allStudentsInClasses?.length) {
     message.error("Không có dữ liệu để tạo thanh toán hội đồng bảo vệ")
@@ -1831,7 +1848,11 @@ export const exportThanhToanHoiDongBaoVe = async ({
   }
   try {
     showSpinner?.()
-    const dataConvert = convertToTthdbvData(allStudentsInClasses)
+    const dataConvert = await convertToTthdbvData(
+      allStudentsInClasses,
+      createCouncilPaymentRecord,
+      defaultCouncilPayAmounts
+    )
     if (dataConvert.length === 0) {
       message.error("Chưa có dữ liệu để tạo thanh toán hội đồng bảo vệ")
       return
@@ -1867,7 +1888,18 @@ const tenDoiTuong = {
     shortname: "QSQT",
   },
 }
-const convertToTthdbvData = (allStudentsInClasses: any[]): TthdbvData[] => {
+const convertToTthdbvData = async (
+  allStudentsInClasses: any[],
+  createCouncilPaymentRecord?: (payload: {
+    councilMemberId: string
+    amount: number
+  }) => Promise<unknown>,
+  defaultCouncilPayAmounts: Array<{
+    role: CouncilRole
+    amount: number | string | { toNumber?: () => number }
+    inAcademy: boolean
+  }> = []
+): Promise<TthdbvData[]> => {
   if (!allStudentsInClasses?.length) return []
 
   const now = dayjs()
@@ -1880,10 +1912,11 @@ const convertToTthdbvData = (allStudentsInClasses: any[]): TthdbvData[] => {
   const majorMap = new Map<string, any[]>()
   let khoaquanli = ""
 
-  studentsWithProject.forEach((student) => {
+  const createdCouncilPaymentIds = new Set<string>()
+  for (const student of studentsWithProject) {
     const project = student?.thesisRegistrations?.[0]?.thesisProject
     const council = project?.council?.members
-    if (!project || !council?.length) return
+    if (!project || !council?.length) continue
 
     const majorName = student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || ""
     if (!khoaquanli) {
@@ -1924,7 +1957,7 @@ const convertToTthdbvData = (allStudentsInClasses: any[]): TthdbvData[] => {
     const nhLines: string[] = []
     let studentTotal = 0
 
-    sortedMembers.forEach((m: any) => {
+    for (const m of sortedMembers) {
       const expert = m.expert
       let rolePrefix = "UV"
       let roleSuffix = ""
@@ -1938,9 +1971,31 @@ const convertToTthdbvData = (allStudentsInClasses: any[]): TthdbvData[] => {
       const name = (getSupervisorName(expert, false, true) as string) || ""
       hdLines.push(`${rolePrefix}: ${name || ""}${org}${roleSuffix}`)
 
-      const rawAmount = Number(m.payment?.amount || 0)
+      let rawAmount = Number(m.payment?.amount || 0)
+      const hasPaymentRecord = !!m.payment
+      if (!hasPaymentRecord && m.id && !createdCouncilPaymentIds.has(m.id)) {
+        const inAcademy = !!expert?.lecturerId
+        const defaultPay = defaultCouncilPayAmounts.find(
+          (x) => x.role === m.role && x.inAcademy === inAcademy
+        )
+        const defaultAmount =
+          typeof defaultPay?.amount === "number"
+            ? defaultPay.amount
+            : typeof defaultPay?.amount === "string"
+              ? Number(defaultPay.amount)
+              : Number(defaultPay?.amount?.toNumber?.() || 0)
+        if (createCouncilPaymentRecord && defaultAmount > 0) {
+          await createCouncilPaymentRecord({
+            councilMemberId: m.id,
+            amount: defaultAmount,
+          })
+          rawAmount = defaultAmount
+          m.payment = { amount: defaultAmount }
+          createdCouncilPaymentIds.add(m.id)
+        }
+      }
       studentTotal += rawAmount
-      ttLines.push(rawAmount.toLocaleString("vi-VN").replace(/\./g, " "))
+      ttLines.push(formatAmountWithComma(rawAmount))
       const bankNumber =
         expert?.lecturer?.userProfile?.bankAccountNumber ||
         expert?.bankAccountNumber ||
@@ -1950,7 +2005,7 @@ const convertToTthdbvData = (allStudentsInClasses: any[]): TthdbvData[] => {
         expert?.lecturer?.userProfile?.bankName || expert?.bankName || "Chưa có thông tin"
 
       nhLines.push(bankName || "")
-    })
+    }
 
     const tableRow = {
       thongTinBaoVe,
@@ -1963,7 +2018,7 @@ const convertToTthdbvData = (allStudentsInClasses: any[]): TthdbvData[] => {
 
     if (!majorMap.has(majorName)) majorMap.set(majorName, [])
     majorMap.get(majorName)?.push(tableRow)
-  })
+  }
 
   return Array.from(majorMap.entries()).map(([majorName, items]) => {
     const firstItem = studentsWithProject.find(
@@ -1986,7 +2041,7 @@ const convertToTthdbvData = (allStudentsInClasses: any[]): TthdbvData[] => {
         dotXet: dotXet,
         chuyenNganh: majorName,
         khoaQuanLi: khoaquanli,
-        tongTienBangSo: tongTienSo,
+        tongTienBangSo: formatAmountWithComma(tongTienSo),
         nguoiki: nguoiki,
         tongTienBangChu: Number(tongTienSo).toVndWord("đồng"),
         data: items.map((item, index) => ({
@@ -1996,6 +2051,7 @@ const convertToTthdbvData = (allStudentsInClasses: any[]): TthdbvData[] => {
           thongTinThanhToan: item.thongTinThanhToan,
           thongTinStk: item.thongTinStk,
           thongTinNganHang: item.thongTinNganHang,
+          empty: "",
         })),
       },
     }
@@ -2659,7 +2715,11 @@ const convertToBanSaoHDDGLV = (
       const gvhd = [gvhd1, gvhd2].filter(Boolean).join("; ")
 
       const m = qdDate ? qdDate.month() + 1 : null
-      const thangTlVal = m ? ((m === 1 || m === 2) ? m.toString().padStart(2, "0") : m.toString()) : ""
+      const thangTlVal = m
+        ? m === 1 || m === 2
+          ? m.toString().padStart(2, "0")
+          : m.toString()
+        : ""
 
       return {
         data: {
@@ -2882,14 +2942,16 @@ export const exportDsChuyenGia = async ({
   showSpinner,
   hideSpinner,
   message,
+  moneyAmount,
+  signingDate,
 }: ExportOptions) => {
   if (!allStudentsInClasses?.length) {
     message.error("Không có dữ liệu để xuất danh sách chuyên gia")
     return []
   }
   try {
-    const dataConvert = convertToDsChuyenGiaData(allStudentsInClasses)
-    if (!dataConvert) {
+    const dataConvert = convertToDsChuyenGiaData(allStudentsInClasses, moneyAmount, signingDate)
+    if (!dataConvert.length) {
       message.error("Chưa có dữ liệu để xuất danh sách chuyên gia")
       return []
     }
@@ -2899,7 +2961,7 @@ export const exportDsChuyenGia = async ({
       tail: { data: null },
       fileName: "DsChuyenGia",
       path: "DanhSachChuyenGia.xlsx",
-      payload: [dataConvert],
+      payload: dataConvert,
       showGridLines: true,
       wrapText: true,
     }
@@ -2917,87 +2979,138 @@ export const exportDsChuyenGia = async ({
     hideSpinner?.()
   }
 }
-const convertToDsChuyenGiaData = (allStudentsInClasses: any[]): DsChuyenGiaData => {
+const convertToDsChuyenGiaData = (
+  allStudentsInClasses: any[],
+  moneyAmount?: number,
+  signingDate?: Date | string
+): DsChuyenGiaData[] => {
   if (!allStudentsInClasses?.length) {
-    return {
-      data: {
-        ngay: "",
-        thang: "",
-        nam: "",
-        diaDiem: "",
-        thoiGian: "",
-        tongTienSo: "0",
-        soChuyenGia: 0,
-        tongTienChu: "0",
-        nguoiki: "",
-        data: [],
-      },
-    }
+    return []
   }
 
-  const expertAggregator = new Map<string, any>()
-  const now = dayjs()
-  let nguoiki = ""
+  const slotGroups = new Map<
+    string,
+    { students: any[]; defenseDate: string; defenseTime: string; defenseRoom: string }
+  >()
+  const now = resolveSigningDate(signingDate)
 
   allStudentsInClasses.forEach((student) => {
     const project = student?.thesisRegistrations?.[0]?.thesisProject
     if (!project) return
-
-    const members = project.council?.members || []
-    nguoiki = project.thesisSession?.chief?.trim() || ""
-    members.forEach((member: any) => {
-      const expert = member.expert
-      if (!expert || expert.lecturerId || expert.lecturer) return
-
-      const expertId = expert.id
-      const amount = Number(member.payment?.amount || 0)
-
-      if (!expertAggregator.has(expertId)) {
-        expertAggregator.set(expertId, {
-          tenChuyenGia: (getSupervisorName(expert, false, true) as string) || "",
-          chucVu: expert.position || expert.lecturer?.userProfile?.position || "",
-          donViQuanLi: expert.organization || expert.workplace || "",
-          soTienRaw: 0,
-          stk: expert.bankAccountNumber || "",
-          ngangHang: expert.bankName || "",
-        })
-      }
-
-      const current = expertAggregator.get(expertId)
-      current.soTienRaw += amount
-    })
-  })
-
-  let totalSum = 0
-  const tableData: DsChuyenGiaTable[] = Array.from(expertAggregator.values()).map((item, index) => {
-    totalSum += item.soTienRaw
-    return {
-      stt: (index + 1).toString(),
-      tenChuyenGia: item.tenChuyenGia,
-      chucVu: item.chucVu,
-      donViQuanLi: item.donViQuanLi,
-      soTien: item.soTienRaw.toLocaleString("vi-VN"),
-      stk: item.stk,
-      ngangHang: item.ngangHang,
-      kiNhan: "",
+    const defenseDate = project.defenseDate ? dayjs(project.defenseDate).format("DD/MM/YYYY") : ""
+    const defenseTime = formatDefenseSessionClock(project.defenseSession?.startTime)
+    const defenseRoom = project.room?.name || project.room?.code || project.roomId || ""
+    const slotKey = `${defenseDate}|${defenseTime}|${defenseRoom}`
+    if (!slotGroups.has(slotKey)) {
+      slotGroups.set(slotKey, {
+        students: [],
+        defenseDate,
+        defenseTime,
+        defenseRoom,
+      })
     }
+    slotGroups.get(slotKey)?.students.push(student)
   })
 
-  return {
-    data: {
-      nguoiki: nguoiki,
-      ngay: now.date().toString(),
-      thang: (now.month() + 1 === 1 || now.month() + 1 === 2) ? (now.month() + 1).toString().padStart(2, "0") : (now.month() + 1).toString(),
-      nam: now.format("YYYY"),
-      diaDiem: "",
-      // thoiGian: `Ngày ${now.format("DD")} tháng ${now.format("MM")} năm ${now.format("YYYY")}`,
-      thoiGian: "",
-      tongTienSo: totalSum.toLocaleString("vi-VN"),
-      soChuyenGia: tableData.length,
-      tongTienChu: Number(totalSum).toVndWord("đồng"),
-      data: tableData,
-    },
-  }
+  const sortedSlotGroups = Array.from(slotGroups.values()).sort((a, b) => {
+    const aDate = a.defenseDate ? dayjs(a.defenseDate, "DD/MM/YYYY") : null
+    const bDate = b.defenseDate ? dayjs(b.defenseDate, "DD/MM/YYYY") : null
+    const nowStart = now.startOf("day")
+
+    if (aDate && bDate) {
+      const aDiff = Math.abs(aDate.startOf("day").diff(nowStart, "day"))
+      const bDiff = Math.abs(bDate.startOf("day").diff(nowStart, "day"))
+      if (aDiff !== bDiff) return aDiff - bDiff
+      if (!aDate.isSame(bDate, "day")) return aDate.valueOf() - bDate.valueOf()
+    } else if (aDate || bDate) {
+      return aDate ? -1 : 1
+    }
+
+    if (a.defenseTime !== b.defenseTime) {
+      return a.defenseTime.localeCompare(b.defenseTime)
+    }
+
+    return a.defenseRoom.localeCompare(b.defenseRoom)
+  })
+
+  return sortedSlotGroups.map(
+    ({ defenseDate, defenseTime, defenseRoom, students: studentsInSlot }) => {
+      const expertAggregator = new Map<string, any>()
+      let nguoiki = ""
+
+      studentsInSlot.forEach((student) => {
+        const project = student?.thesisRegistrations?.[0]?.thesisProject
+        if (!project) return
+        const members = project.council?.members || []
+        nguoiki = project.thesisSession?.chief?.trim() || nguoiki
+
+        members.forEach((member: any) => {
+          const expert = member.expert
+          if (!expert || expert.lecturerId || expert.lecturer) return
+
+          const expertId = expert.id
+          const amount = Number(member.payment?.amount || 0)
+
+          if (!expertAggregator.has(expertId)) {
+            expertAggregator.set(expertId, {
+              tenChuyenGia: (getSupervisorName(expert, false, true) as string) || "",
+              chucVu: expert.position || expert.lecturer?.userProfile?.position || "",
+              donViQuanLi: expert.organization || expert.workplace || "",
+              soTienRaw: 0,
+              stk: expert.bankAccountNumber || "",
+              ngangHang: expert.bankName || "",
+            })
+          }
+
+          const current = expertAggregator.get(expertId)
+          current.soTienRaw += amount
+        })
+      })
+
+      let totalSumFromData = 0
+      const tableData: DsChuyenGiaTable[] = Array.from(expertAggregator.values()).map(
+        (item, index) => {
+          totalSumFromData += item.soTienRaw
+          const guestAmount =
+            typeof moneyAmount === "number" && Number.isFinite(moneyAmount) && moneyAmount > 0
+              ? moneyAmount
+              : item.soTienRaw
+          return {
+            stt: (index + 1).toString(),
+            tenChuyenGia: item.tenChuyenGia,
+            chucVu: item.chucVu,
+            donViQuanLi: item.donViQuanLi,
+            //todo: đổi định dạng tiền sang dấu phẩy ngăn cách hàng nghìn
+            soTien: formatAmountWithComma(guestAmount),
+            stk: item.stk,
+            ngangHang: item.ngangHang,
+            kiNhan: "",
+          }
+        }
+      )
+      const hasGuestAmount =
+        typeof moneyAmount === "number" && Number.isFinite(moneyAmount) && moneyAmount > 0
+      const totalSum = hasGuestAmount
+        ? (moneyAmount as number) * tableData.length
+        : totalSumFromData
+
+      return {
+        data: {
+          nguoiki: nguoiki,
+          ngay: now.format("DD"),
+          thang: now.format("MM"),
+          nam: now.format("YYYY"),
+          diaDiem: defenseRoom,
+          thoiGian: [defenseDate, defenseTime].filter(Boolean).join(" "),
+          //todo: đổi định dạng tổng tiền sang dấu phẩy ngăn cách hàng nghìn
+          tongTienSo: formatAmountWithComma(totalSum),
+          soChuyenGia: tableData.length,
+          tongTienChu: Number(totalSum).toVndWord("đồng"),
+          data: tableData,
+        },
+      }
+    }
+  )
 }
 export const exportHDDanhGiaLuanVan = async ({
   allStudentsInClasses,
@@ -3165,7 +3278,10 @@ const convertToHDDanhGiaLuanVanTemplateData = (
         (student) => student?.thesisRegistrations?.[0]?.thesisProject != null
       ).length,
       ngay: now.date().toString(),
-      thang: (now.month() + 1 === 1 || now.month() + 1 === 2) ? (now.month() + 1).toString().padStart(2, "0") : (now.month() + 1).toString(),
+      thang:
+        now.month() + 1 === 1 || now.month() + 1 === 2
+          ? (now.month() + 1).toString().padStart(2, "0")
+          : (now.month() + 1).toString(),
       nam: now.format("YYYY"),
     },
     data: groupedData,

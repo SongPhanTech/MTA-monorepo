@@ -29,14 +29,10 @@ export const CustomTextStyle = TextStyle.extend({
         appendTransaction(_transactions, _oldState, newState) {
           const { storedMarks } = newState
           if (!storedMarks) return null
-          const hasEvidenceMark = storedMarks.some(
-            (m) => m.type.name === "textStyle" && m.attrs.id
-          )
+          const hasEvidenceMark = storedMarks.some((m) => m.type.name === "textStyle" && m.attrs.id)
           if (!hasEvidenceMark) return null
           const tr = newState.tr
-          tr.setStoredMarks(
-            storedMarks.filter((m) => !(m.type.name === "textStyle" && m.attrs.id))
-          )
+          tr.setStoredMarks(storedMarks.filter((m) => !(m.type.name === "textStyle" && m.attrs.id)))
           return tr
         },
       }),

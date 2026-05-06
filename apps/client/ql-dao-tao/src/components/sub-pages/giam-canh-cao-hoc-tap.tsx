@@ -82,13 +82,13 @@ const GiamCanhCaoHocTap = ({ semesterId, trainingObjectTypeId }: GiamCanhCaoHocT
           const promises = selectedRecords
             .filter((record: any) => !!record.studentSemesterResult)
             .map((record: any) => {
-              const currentLevel = record.studentSemesterResult?.academicWarningLevel ?? 0
+              const previousLevel = record.previousAcademicWarningLevel ?? 0
               return createAcademicWarning({
                 data: {
                   student: { connect: { id: record.id } },
                   semester: { connect: { id: semesterId } },
-                  level: Math.max(0, currentLevel - 1),
-                  decreasedFrom: currentLevel,
+                  level: Math.max(0, previousLevel - 1),
+                  decreasedFrom: previousLevel,
                   description: record.reason,
                 },
               })
@@ -175,11 +175,13 @@ const GiamCanhCaoHocTap = ({ semesterId, trainingObjectTypeId }: GiamCanhCaoHocT
             },
             {
               title: "Mức CCHT hiện tại",
-              dataIndex: ["studentSemesterResult", "academicWarningLevel"],
+              dataIndex: ["previousAcademicWarningLevel"],
               width: 130,
               align: "center",
               render: (value: number) => (
-                <Tag color={getWarningLevelColor(value)}>{value ?? 0}</Tag>
+                <Tag color={getWarningLevelColor(Math.max(0, (value ?? 0) - 1))}>
+                  {Math.max(0, (value ?? 0) - 1)}
+                </Tag>
               ),
             },
             {

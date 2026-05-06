@@ -486,13 +486,13 @@ const PrintBatchExamBank = () => {
           </style>
 
           <div id="print-batch-exam-bank">
-          {exams.length > 0 ? (
-            exams.map((exam, index) => renderExamPreview(exam, index))
-          ) : (
-            <div style={{ textAlign: "center", padding: "40px" }}>
-              Không có đề thi nào được chọn
-            </div>
-          )}
+            {exams.length > 0 ? (
+              exams.map((exam, index) => renderExamPreview(exam, index))
+            ) : (
+              <div style={{ textAlign: "center", padding: "40px" }}>
+                Không có đề thi nào được chọn
+              </div>
+            )}
           </div>
         </div>
       </div>

@@ -8,7 +8,11 @@ export async function _generateCurriculumImportTemplate(
   const [trainingBlocks, organizations] = await Promise.all([
     prisma.trainingBlock.findMany({
       where: { active: true, deletedAt: null, trainingObjectTypeId },
-      select: { name: true, priority: true, curriculumVersions: { select: { electiveCreditsRequired: true } } },
+      select: {
+        name: true,
+        priority: true,
+        curriculumVersions: { select: { electiveCreditsRequired: true } },
+      },
       orderBy: { priority: "asc" },
     }),
     prisma.dM_DonVi.findMany({
@@ -24,7 +28,9 @@ export async function _generateCurriculumImportTemplate(
   template.substitute("KKT_TU_CHON", {
     team: trainingBlocks.map((tb) => ({
       name: tb.name,
-      so_tc: tb.curriculumVersions.map((cv) => cv.electiveCreditsRequired).reduce((a, b) => a + b, 0),
+      so_tc: tb.curriculumVersions
+        .map((cv) => cv.electiveCreditsRequired)
+        .reduce((a, b) => a + b, 0),
     })),
   })
 
@@ -35,8 +41,6 @@ export async function _generateCurriculumImportTemplate(
       name: o.sTen || "",
     })),
   })
-
-
 
   return template.generate({ type: "nodebuffer" }) as any
 }

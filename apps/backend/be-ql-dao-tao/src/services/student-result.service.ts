@@ -2574,7 +2574,7 @@ export const resultCourseStudentDecreaseAcademicWarning = async (
     },
   })
 
-  const warningStudentIds = allWarningsInPreviousSemester.map(w => w.studentId)
+  const warningStudentIds = allWarningsInPreviousSemester.map((w) => w.studentId)
   const enrolledWarningStudents = await prisma.student.findMany({
     where: {
       id: { in: warningStudentIds },
@@ -2582,12 +2582,12 @@ export const resultCourseStudentDecreaseAcademicWarning = async (
     },
     select: { id: true },
   })
-  const enrolledWarningStudentIds = enrolledWarningStudents.map(s => s.id)
+  const enrolledWarningStudentIds = enrolledWarningStudents.map((s) => s.id)
 
   const previousWarningMap = new Map<string, number>(
     allWarningsInPreviousSemester
-      .filter(w => enrolledWarningStudentIds.includes(w.studentId))
-      .map(w => [w.studentId, w.level])
+      .filter((w) => enrolledWarningStudentIds.includes(w.studentId))
+      .map((w) => [w.studentId, w.level])
   )
 
   const warningCriteriaList = await prisma.academicWarningRule.findMany({
@@ -2604,26 +2604,25 @@ export const resultCourseStudentDecreaseAcademicWarning = async (
   )
 
   const additionalWarningStudents = await prisma.student.findMany({
-      where: {
-        id: { in: additionalWarningStudentIds },
-      },
-      include: {
-        userProfile: true,
-        fixedClass: {
-          include: {
-            trainingCourse: {
-              include: {
-                trainingObjectType: true,
-              },
+    where: {
+      id: { in: additionalWarningStudentIds },
+    },
+    include: {
+      userProfile: true,
+      fixedClass: {
+        include: {
+          trainingCourse: {
+            include: {
+              trainingObjectType: true,
             },
-            curriculumVersion: {
-              include: {
-                curriculum: {
-                  include: {
-                    trainingMajor: {
-                      include: {
-                        trainingField: true,
-                      },
+          },
+          curriculumVersion: {
+            include: {
+              curriculum: {
+                include: {
+                  trainingMajor: {
+                    include: {
+                      trainingField: true,
                     },
                   },
                 },
@@ -2632,12 +2631,10 @@ export const resultCourseStudentDecreaseAcademicWarning = async (
           },
         },
       },
-    })
+    },
+  })
 
-  const studentsToProcess = [
-    ...inputWarningStudents,
-    ...additionalWarningStudents,
-  ]
+  const studentsToProcess = [...inputWarningStudents, ...additionalWarningStudents]
 
   await Promise.all(
     studentsToProcess.map(async (student: any) => {
@@ -2645,7 +2642,7 @@ export const resultCourseStudentDecreaseAcademicWarning = async (
       if (!courseId) {
         return
       }
-      
+
       if (!courseMap[courseId]) {
         courseMap[courseId] = {
           courseId,
@@ -2704,6 +2701,7 @@ export const resultCourseStudentDecreaseAcademicWarning = async (
             ?.trainingField?.id || "",
         reason: student.lyDoXepLoai || "",
         decreaseAcademicWarning: true,
+        previousAcademicWarningLevel: previousLevel,
         fixedClass: {
           code: studentSemesterResult.student.fixedClass?.code || null,
           name: studentSemesterResult.student.fixedClass?.name || "",
