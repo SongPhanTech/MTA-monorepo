@@ -9,6 +9,7 @@ import { Button, Col, Dropdown, Empty, Row, Typography } from "antd"
 import ReactECharts from "echarts-for-react"
 import ExcelJS from "exceljs"
 import { saveAs } from "file-saver"
+import { exportSurveyDocxTemplate } from "@/utils/export-survey-docx-template"
 import { useRouter } from "next/router"
 import { useMemo } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
@@ -33,6 +34,8 @@ function SurveyOrganizationReport({
   organizationId,
   surveyName,
   trainingObjectTypeName,
+  semesterName,
+  trainingSystemName,
   organizationCode,
   organizationName,
   departmentName,
@@ -42,6 +45,8 @@ function SurveyOrganizationReport({
   organizationId: string
   surveyName?: string
   trainingObjectTypeName?: string
+  semesterName?: string
+  trainingSystemName?: string
   organizationCode?: string
   organizationName?: string
   departmentName?: string
@@ -52,10 +57,6 @@ function SurveyOrganizationReport({
   const { onOpen } = useDisclosure({
     tag: "ModalPrintSurveyOrganization",
   })
-  const { onOpen: onOpenExportDocx } = useDisclosure({
-    tag: "ModalExportDocxTemplate",
-  })
-
   const { data: dataLevel } = useGetClusterSurveyStatisticsForOrganization(selectedId as string, {
     organizationId,
   })
@@ -476,18 +477,25 @@ function SurveyOrganizationReport({
                         key: "export-docx",
                         icon: <FileWordOutlined />,
                         label: "Xuất Word",
-                        onClick: () => {
+                        onClick: async () => {
                           const hasDepartment = Boolean(departmentName)
-                          onOpenExportDocx({
-                            variant: hasDepartment ? "BO_MON" : "KHOA",
-                            surveyName,
-                            trainingObjectTypeName,
-                            organizationName,
-                            organizationCode,
-                            departmentName,
-                            departmentCode,
-                            questions: dataLevel?.data?.data?.questions || [],
-                          })
+                          showSpinner()
+                          try {
+                            await exportSurveyDocxTemplate({
+                              variant: hasDepartment ? "BO_MON" : "KHOA",
+                              surveyName,
+                              trainingObjectTypeName,
+                              semesterName,
+                              trainingSystemName,
+                              organizationName,
+                              organizationCode,
+                              departmentName,
+                              departmentCode,
+                              questions: dataLevel?.data?.data?.questions || [],
+                            })
+                          } finally {
+                            hideSpinner()
+                          }
                         },
                       },
                       {

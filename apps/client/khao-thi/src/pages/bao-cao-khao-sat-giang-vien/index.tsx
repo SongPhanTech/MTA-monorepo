@@ -7,6 +7,7 @@ import {
   useFindManyClusterSurvey,
   useFindManyDM_DonVi,
   useFindManyLecturer,
+  useFindManySemester,
   useFindUniqueTrainingObjectType,
 } from "@workspace/db/hooks"
 // import OrganizationSurveyReport from '@/components/sub-pages/khao-sat/bao-cao-don-vi'
@@ -66,6 +67,13 @@ export default function BaoCaoGiangVien() {
   const { id: semesterId } = useSemesterStore()
   const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
 
+  const { data: semesters = [] } = useFindManySemester()
+  const semesterName = useMemo(() => {
+    if (!semesterId) return ""
+    const found = semesters.find((s: any) => (s?.id ?? s?.Id) === semesterId)
+    return found?.name ?? ""
+  }, [semesters, semesterId])
+
   const { data: trainingObjectType } = useFindUniqueTrainingObjectType(
     {
       where: { id: trainingObjectTypeId },
@@ -76,6 +84,12 @@ export default function BaoCaoGiangVien() {
     }
   )
   const trainingObjectTypeName = useMemo(() => trainingObjectType?.name ?? "", [trainingObjectType])
+  const trainingSystemName = useMemo(() => {
+    const v = (trainingObjectTypeName || "").toLocaleLowerCase("vi-VN")
+    if (/(quân\s*sự|quan\s*su|\bqs\b)/i.test(v)) return "Quân sự"
+    if (/(dân\s*sự|dan\s*su|\bds\b)/i.test(v)) return "Dân sự"
+    return ""
+  }, [trainingObjectTypeName])
 
   const { data = [], refetch } = useFindManyClusterSurvey({
     where: {
@@ -305,6 +319,8 @@ export default function BaoCaoGiangVien() {
             organizationId={selectedItem.id}
             surveyName={filters?.surveyName}
             trainingObjectTypeName={trainingObjectTypeName}
+            semesterName={semesterName}
+            trainingSystemName={trainingSystemName}
             organizationName={
               selectedItem.iCapDonVi === 3 ? selectedItem.parent?.sTen : selectedItem.sTen
             }
@@ -326,6 +342,8 @@ export default function BaoCaoGiangVien() {
             lectureId={selectedItem?.id}
             surveyName={filters?.surveyName}
             trainingObjectTypeName={trainingObjectTypeName}
+            semesterName={semesterName}
+            trainingSystemName={trainingSystemName}
             organizationName={isDepartment ? org.parent?.sTen : org?.sTen}
             organizationCode={isDepartment ? org.parent?.sMa : org?.sMa}
             lecturerName={selectedItem?.userProfile?.fullName}

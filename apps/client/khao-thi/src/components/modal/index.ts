@@ -16,7 +16,6 @@ import ModalPrintDotDanhGia from "./modal-print-dot-danh-gia"
 import ModalPrintExamBank from "./modal-print-exam-bank"
 import ModalPrintSurveylecturer from "./modal-print-survey-lecturer-report"
 import ModalPrintSurveyOrganization from "./modal-print-survey-organization-report"
-import ModalExportDocxTemplate from "./modal-export-docx-template"
 import QuestionListByKnowledgeBlockModal from "./modal-question-by-knowledge"
 import ModalSinhDeThiTuDong from "./modal-sinh-de-thi-tu-dong"
 import PickQuestionFromBankModal from "./pick-question-from-bank-modal"
@@ -112,7 +111,6 @@ export {
   ModalPrintSurveyOrganization,
   PutBoTieuChuanModal,
   ModalPrintSurveylecturer,
-  ModalExportDocxTemplate,
   ModalImportCDR,
   AddHuongDanNganHang,
   ModalPrintSurvey,

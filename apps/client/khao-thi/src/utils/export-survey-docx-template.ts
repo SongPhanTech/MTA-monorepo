@@ -1,28 +1,23 @@
-import { DownloadOutlined } from "@ant-design/icons"
-import { Button, Flex, Modal, message } from "antd"
+import { message } from "antd"
 import { TemplateHandler } from "easy-template-x"
 import PizZip from "pizzip"
-import { useEffect, useMemo, useState } from "react"
-import { useDisclosure } from "react-hook-disclosure-modal"
 import { getMinioUrl } from "@workspace/libs/utils"
 import { saveFile } from "@/utils/saveFile"
 
-import {
-  SURVEY_DOCX_TEMPLATE_VARIANT_LABEL,
-  type SurveyDocxTemplateVariant,
-} from "@/constants/constants"
+import type { SurveyDocxTemplateVariant } from "@/constants/constants"
 
-// Use the same MinIO helper as other template-based exports in this app.
 const TEMPLATE_KEYS: Record<SurveyDocxTemplateVariant, string> = {
   GIANG_VIEN: "mta/template/TongHopPhieuGiangVien.docx",
   KHOA: "mta/template/TongHopPhieuKhoa.docx",
-  BO_MON: "mta/template/TongHopPhieuBomom.docx",
+  BO_MON: "mta/template/TongHopPhieuBomon.docx",
 }
+
+const toUpperVi = (value?: string) => (value || "").trim().toLocaleUpperCase("vi-VN")
 
 type AnswerItem = {
   id: string
   answer: string
-  description: string
+  description?: string | null
   count: number
 }
 
@@ -33,11 +28,13 @@ type AnswerWithPercent = Omit<AnswerItem, "count"> & {
   count: string
 }
 
-type ModalExportDocxTemplateInput = {
+export type ExportSurveyDocxTemplateInput = {
   variant: SurveyDocxTemplateVariant
 
   surveyName?: string
   trainingObjectTypeName?: string
+  semesterName?: string
+  trainingSystemName?: string
 
   lecturerName?: string
   lecturerCode?: string
@@ -74,8 +71,13 @@ const getCellByOrder = (
   items: AnswerWithPercent[],
   order: number
 ) => {
-  const found = items.find((p) => Number(p.answer) === order)
-  if (found) return found.count
+  // Prefer matching by numeric answer value (1..5)
+  const foundByAnswer = items.find((p) => Number(p.answer) === order)
+  if (foundByAnswer) return foundByAnswer.count
+
+  // Fallback: match by position (same as UI rendering order)
+  const foundByIndex = items[order - 1]
+  if (foundByIndex) return foundByIndex.count
 
   const total = items[0]?.total ?? 0
   return formatCell({ percent: 0, count: 0, total })
@@ -88,22 +90,30 @@ type AverageRow = {
 }
 
 const buildAverageRow = (
-  questions: ModalExportDocxTemplateInput["questions"]
+  questions: ExportSurveyDocxTemplateInput["questions"]
 ): AverageRow | null => {
   if (!questions?.length) return null
   const first = questions[0]
   if (!first?.answers?.length) return null
 
-  const base: AnswerItem[] = first.answers.map((a) => ({
-    ...a,
-    count: 0,
-  }))
+  // Cộng theo giá trị answer để không phụ thuộc thứ tự mảng
+  const acc = new Map<string, AnswerItem>()
+  first.answers.forEach((a) => {
+    acc.set(String(a.answer), { ...a, count: 0 })
+  })
 
   questions.forEach((q) => {
-    q.answers?.forEach((a, idx) => {
-      base[idx].count = Number(base[idx].count || 0) + Number(a?.count || 0)
+    q.answers?.forEach((a) => {
+      const key = String(a.answer)
+      const cur = acc.get(key) ?? { ...a, count: 0 }
+      cur.count = Number(cur.count || 0) + Number(a?.count || 0)
+      acc.set(key, cur)
     })
   })
+
+  const base: AnswerItem[] = first.answers.map(
+    (a) => acc.get(String(a.answer)) ?? { ...a, count: 0 }
+  )
 
   return {
     id: "DGTB",
@@ -112,10 +122,12 @@ const buildAverageRow = (
   }
 }
 
-const buildDocxData = (input: ModalExportDocxTemplateInput) => {
+const buildDocxData = (input: ExportSurveyDocxTemplateInput) => {
   if (!input) return {}
 
-  const dataRows = input.questions.map((q, idx) => {
+  const questions = input.questions || []
+
+  const dataRows = questions.map((q, idx) => {
     const answersWithPercent = calcPercent(q.answers || [])
 
     return {
@@ -133,7 +145,7 @@ const buildDocxData = (input: ModalExportDocxTemplateInput) => {
     }
   })
 
-  const avgRow = buildAverageRow(input.questions)
+  const avgRow = buildAverageRow(questions)
   const dgtbAnswers = avgRow ? calcPercent(avgRow.answers) : []
 
   return {
@@ -149,15 +161,22 @@ const buildDocxData = (input: ModalExportDocxTemplateInput) => {
       muc4: getCellByOrder(dgtbAnswers, 4),
       muc5: getCellByOrder(dgtbAnswers, 5),
     },
+    dgtb1: getCellByOrder(dgtbAnswers, 1),
+    dgtb2: getCellByOrder(dgtbAnswers, 2),
+    dgtb3: getCellByOrder(dgtbAnswers, 3),
+    dgtb4: getCellByOrder(dgtbAnswers, 4),
+    dgtb5: getCellByOrder(dgtbAnswers, 5),
     lecturerName: input.lecturerName,
     lecturerCode: input.lecturerCode,
     departmentName: input.departmentName,
     departmentCode: input.departmentCode,
     organizationName: input.organizationName,
     organizationCode: input.organizationCode,
-    surveyName: input.surveyName,
-    trainingObjectTypeName: input.trainingObjectTypeName,
-    soTieuChi: input.questions.length,
+    surveyName: toUpperVi(input.surveyName),
+    trainingObjectTypeName: toUpperVi(input.trainingObjectTypeName),
+    semesterName: toUpperVi(input.semesterName),
+    trainingSystemName: toUpperVi(input.trainingSystemName),
+    soTieuChi: questions.length,
   }
 }
 
@@ -168,93 +187,39 @@ const defaultFileName = (variant: SurveyDocxTemplateVariant, surveyName?: string
   return `Bao_cao_khao_sat_khoa_${name || "bao_cao"}.docx`
 }
 
-const ModalExportDocxTemplate = () => {
-  const { isOpen, onClose, input } = useDisclosure<ModalExportDocxTemplateInput>({
-    tag: "ModalExportDocxTemplate",
-  })
+export async function exportSurveyDocxTemplate(input: ExportSurveyDocxTemplateInput) {
+  const templateUrl = getMinioUrl(TEMPLATE_KEYS[input.variant])
+  const fileName = input.fileName || defaultFileName(input.variant, input.surveyName)
 
-  const [isDownloading, setIsDownloading] = useState(false)
-
-  useEffect(() => {
-    if (!isOpen) return
-    if (!input) return
-  }, [isOpen, input])
-
-  const templateUrl = useMemo(() => {
-    if (!input) return ""
-    return getMinioUrl(TEMPLATE_KEYS[input.variant])
-  }, [input])
-
-  const fileName = useMemo(() => {
-    if (!input) return ""
-    return input.fileName || defaultFileName(input.variant, input.surveyName)
-  }, [input])
-
-  const title = useMemo(() => {
-    if (!input) return "Xuất file Word"
-    return `Xuất báo cáo khảo sát (${SURVEY_DOCX_TEMPLATE_VARIANT_LABEL[input.variant]})`
-  }, [input])
-
-  const handleDownload = async () => {
-    if (!input) return
-    if (!templateUrl) return
-
-    setIsDownloading(true)
-    try {
-      const res = await fetch(templateUrl)
-      if (!res.ok) {
-        message.error("Không tải được file mẫu")
-        return
-      }
-
-      const templateBuffer = await res.arrayBuffer()
-      const payload = buildDocxData(input)
-
-      const repaired = new PizZip(templateBuffer).generate({ type: "arraybuffer" })
-      const repairedBlob = new Blob([repaired], {
-        type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-      })
-
-      const handler = new TemplateHandler()
-      const doc = await handler.process(repairedBlob, payload)
-
-      saveFile(fileName, doc)
-      onClose()
-    } catch (e) {
-      console.error(e)
-      message.error(`Không thể xuất file Word`)
-    } finally {
-      setIsDownloading(false)
-    }
+  if (!templateUrl) {
+    message.error("Không xác định được đường dẫn file mẫu")
+    return
   }
 
-  if (!input) return null
+  try {
+    const res = await fetch(templateUrl)
+    if (!res.ok) {
+      message.error("Không tải được file mẫu")
+      return
+    }
 
-  return (
-    <Modal
-      open={isOpen}
-      onCancel={onClose}
-      title={title}
-      destroyOnClose
-      footer={
-        <Flex justify="flex-end" gap={8}>
-          <Button onClick={onClose}>Đóng</Button>
-          <Button
-            type="primary"
-            icon={<DownloadOutlined />}
-            onClick={handleDownload}
-            loading={isDownloading}
-          >
-            Tải xuống
-          </Button>
-        </Flex>
-      }
-    >
-      <div className="text-sm text-gray-600">
-        Bấm <b>Tải xuống</b> để xuất file Word theo mẫu.
-      </div>
-    </Modal>
-  )
+    const templateBuffer = await res.arrayBuffer()
+    const payload = buildDocxData({
+      ...input,
+      questions: input.questions || [],
+    })
+
+    const repaired = new PizZip(templateBuffer).generate({ type: "arraybuffer" })
+    const repairedBlob = new Blob([repaired], {
+      type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    })
+
+    const handler = new TemplateHandler()
+    const doc = await handler.process(repairedBlob, payload)
+
+    saveFile(fileName, doc)
+  } catch (e) {
+    console.error(e)
+    message.error(`Không thể xuất file Word`)
+  }
 }
-
-export default ModalExportDocxTemplate

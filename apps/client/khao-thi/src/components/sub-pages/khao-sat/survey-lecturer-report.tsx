@@ -9,6 +9,7 @@ import { Button, Col, Dropdown, Empty, Row, Typography } from "antd"
 import ReactECharts from "echarts-for-react"
 import ExcelJS from "exceljs"
 import { saveAs } from "file-saver"
+import { exportSurveyDocxTemplate } from "@/utils/export-survey-docx-template"
 import { useRouter } from "next/router"
 import { useMemo } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
@@ -33,6 +34,8 @@ function SurveylecturerReport({
   lectureId,
   surveyName,
   trainingObjectTypeName,
+  semesterName,
+  trainingSystemName,
   organizationCode,
   organizationName,
   lecturerName,
@@ -44,6 +47,8 @@ function SurveylecturerReport({
   lectureId: string
   surveyName: string
   trainingObjectTypeName?: string
+  semesterName?: string
+  trainingSystemName?: string
   organizationCode?: string
   organizationName?: string
   lecturerName?: string
@@ -56,10 +61,6 @@ function SurveylecturerReport({
   const { onOpen } = useDisclosure({
     tag: "ModalPrintSurveylecturer",
   })
-  const { onOpen: onOpenExportDocx } = useDisclosure({
-    tag: "ModalExportDocxTemplate",
-  })
-
   const { data: dataLevel } = useGetClusterSurveyStatisticsForLecturer(selectedId as string, {
     lectureId,
   })
@@ -457,19 +458,26 @@ function SurveylecturerReport({
                         key: "export-docx",
                         icon: <FileWordOutlined />,
                         label: "Xuất Word",
-                        onClick: () => {
-                          onOpenExportDocx({
-                            variant: "GIANG_VIEN",
-                            surveyName,
-                            trainingObjectTypeName,
-                            lecturerName,
-                            lecturerCode,
-                            departmentName,
-                            departmentCode,
-                            organizationName,
-                            organizationCode,
-                            questions: dataLevel?.data?.data?.questions,
-                          })
+                        onClick: async () => {
+                          showSpinner()
+                          try {
+                            await exportSurveyDocxTemplate({
+                              variant: "GIANG_VIEN",
+                              surveyName,
+                              trainingObjectTypeName,
+                              semesterName,
+                              trainingSystemName,
+                              lecturerName,
+                              lecturerCode,
+                              departmentName,
+                              departmentCode,
+                              organizationName,
+                              organizationCode,
+                              questions: dataLevel?.data?.data?.questions,
+                            })
+                          } finally {
+                            hideSpinner()
+                          }
                         },
                       },
                       {
