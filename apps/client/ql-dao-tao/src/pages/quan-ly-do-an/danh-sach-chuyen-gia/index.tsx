@@ -36,6 +36,7 @@ export default function ExpertProfile() {
 
   const where = useMemo(
     () => ({
+      deletedAt: null,
       projectExpert: true,
       ...(filters.code ? { code: { contains: filters.code, mode: "insensitive" as const } } : {}),
       ...(filters.name ? { name: { contains: filters.name, mode: "insensitive" as const } } : {}),
@@ -130,10 +131,7 @@ export default function ExpertProfile() {
   })
 
   const { data: count } = useCountExpertProfile({
-    where: {
-      ...where,
-      deletedAt: null,
-    },
+    where,
   })
 
   const { onOpen } = useDisclosure<PutExpertProfileProps>({
@@ -162,6 +160,10 @@ export default function ExpertProfile() {
       })
       message.success("Xóa thành công")
     } catch (error: any) {
+      if (error?.code === "P2004") {
+        message.success("Xóa thành công")
+        return
+      }
       if (error?.info?.message) {
         message.error(error?.info?.message)
         return

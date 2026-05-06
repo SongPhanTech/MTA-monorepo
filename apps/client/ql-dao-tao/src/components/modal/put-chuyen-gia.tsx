@@ -36,7 +36,7 @@ const PutExpertProfile = () => {
   const [search, setSearch] = useState("")
   const [selectedLecturerId, setSelectedLecturerId] = useState<string | undefined>()
   const { data: expert } = useFindUniqueExpertProfile(
-    { where: { id: input?.id } },
+    { where: { id: input?.id, deletedAt: null } },
     { enabled: !!input?.id }
   )
 
@@ -117,6 +117,7 @@ const PutExpertProfile = () => {
               eligiblePresident: output.eligiblePresident,
               bankAccountNumber: output.bankAccountNumber,
               bankName: output.bankName,
+              deletedAt: null,
             }
           : {
               academicRankTypeId: output.academicRankTypeId,
@@ -131,6 +132,7 @@ const PutExpertProfile = () => {
               eligiblePresident: output.eligiblePresident,
               bankAccountNumber: output.bankAccountNumber,
               bankName: output.bankName,
+              deletedAt: null,
             }
         await updateExpertProfile({
           where: { id: input?.id },
@@ -145,6 +147,7 @@ const PutExpertProfile = () => {
               ...(input?.thesisExpert ? { thesisExpert: true } : { projectExpert: true }),
               bankAccountNumber: output.bankAccountNumber,
               bankName: output.bankName,
+              deletedAt: null,
             },
             create: {
               name: selectedLecturer.userProfile.fullname || null,
