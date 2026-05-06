@@ -18774,6 +18774,21 @@ const metadata: ModelMeta = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'coSupervisorPayment',
+                }, singleSupervisorPayment: {
+                    name: "singleSupervisorPayment",
+                    type: "SupervisorPaymentRecord",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "SingleSupervisorPayment" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'singleSupervisorPayment',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "singleSupervisorPaymentId" },
+                }, singleSupervisorPaymentId: {
+                    name: "singleSupervisorPaymentId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'singleSupervisorPayment',
                 }, singlePayment: {
                     name: "singlePayment",
                     type: "Decimal",
@@ -20153,6 +20168,13 @@ const metadata: ModelMeta = {
                     isArray: true,
                     attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "CoSupervisorToSupervisorPayment" }] }],
                     backLink: 'coSupervisorPayment',
+                }, singleSupervisorPayment: {
+                    name: "singleSupervisorPayment",
+                    type: "ThesisProject",
+                    isDataModel: true,
+                    isArray: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "SingleSupervisorPayment" }] }],
+                    backLink: 'singleSupervisorPayment',
                 },
             }, uniqueConstraints: {
                 id: {

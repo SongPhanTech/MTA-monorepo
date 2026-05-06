@@ -44,7 +44,7 @@ function applyPageBreaks(docxBuffer: Buffer): Buffer {
     let data = docxBuffer.slice(dataStart, dataStart + compSize)
 
     if (compMethod === 8) data = inflateRawSync(data)
-    
+
     if (name === "word/document.xml") {
       let xml = data.toString("utf8")
       xml = xml.replace(/<w:p\b[^>]*>(?:(?!<\/w:p>).)*ngắt trang.*?<\/w:p>/g, () => {

@@ -1338,7 +1338,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
       signerName: selected.needSign ? signerName : "",
       isChief: selected.needSign ? isChief : false,
       signingDate: signingDate?.toDate?.() ?? undefined,
-      moneyAmount: selected.needMoney ? signMoneyAmount ?? undefined : undefined,
+      moneyAmount: selected.needMoney ? (signMoneyAmount ?? undefined) : undefined,
     })
   }
 
@@ -1426,19 +1426,19 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                 Phó phòng sau đại học: <strong>{deputyDisplay}</strong>
               </Radio>
             </Radio.Group>
-            </>
+          </>
         ) : null}
-            <div className="mt-4">
-              <div className="mb-2 text-gray-700">Thời gian ký</div>
-              <DatePicker
-                className="w-full"
-                format="DD/MM/YYYY"
-                value={signingDate}
-                onChange={(value) => setSigningDate(value || dayjs())}
-                placeholder="Chọn thời gian ký"
-              />
-            </div>
-         
+        <div className="mt-4">
+          <div className="mb-2 text-gray-700">Thời gian ký</div>
+          <DatePicker
+            className="w-full"
+            format="DD/MM/YYYY"
+            value={signingDate}
+            onChange={(value) => setSigningDate(value || dayjs())}
+            placeholder="Chọn thời gian ký"
+          />
+        </div>
+
         {pendingSignExport?.needMoney ? (
           <div className="mt-4">
             <div className="mb-2 text-gray-700">Số tiền (VNĐ)</div>

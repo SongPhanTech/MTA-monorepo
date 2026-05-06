@@ -229,196 +229,196 @@ const PrintExamBank = () => {
           </style>
 
           <div id="print-exam-bank">
-          {/* Header */}
-          <div style={{ position: "relative", marginBottom: "10px" }}>
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <div style={{ fontWeight: "bold", whiteSpace: "nowrap" }}>
-                BAN KHẢO THÍ & ĐBCLGD-ĐT
+            {/* Header */}
+            <div style={{ position: "relative", marginBottom: "10px" }}>
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <div style={{ fontWeight: "bold", whiteSpace: "nowrap" }}>
+                  BAN KHẢO THÍ & ĐBCLGD-ĐT
+                </div>
+                <div style={{ fontWeight: "bold" }}>{data?.exam?.semester?.name}</div>
               </div>
-              <div style={{ fontWeight: "bold" }}>{data?.exam?.semester?.name}</div>
+              <div
+                style={{
+                  position: "absolute",
+                  left: "55%",
+                  top: "0",
+                  transform: "translateX(-50%)",
+                  fontWeight: "bold",
+                }}
+              >
+                PHIẾU ĐỀ THI
+              </div>
             </div>
+
+            {/* Class info */}
             <div
               style={{
-                position: "absolute",
-                left: "55%",
-                top: "0",
-                transform: "translateX(-50%)",
+                textAlign: "center",
+                marginBottom: "10px",
+                marginLeft: "10%",
+              }}
+            >
+              <span style={{ fontWeight: "normal" }}>(Dùng cho lớp: {subjectClassName})</span>
+            </div>
+
+            {/* Date */}
+            <div
+              style={{
+                textAlign: "right",
+                fontStyle: "italic",
+                marginBottom: "15px",
+              }}
+            >
+              Ngày {day} tháng {month} năm {year}
+            </div>
+
+            {/* Main info table */}
+            <table
+              style={{
+                width: "100%",
+                border: "1px solid black",
+                borderCollapse: "collapse",
+                marginBottom: "20px",
+              }}
+            >
+              <tbody>
+                <tr>
+                  <td
+                    style={{
+                      border: "1px solid black",
+                      padding: "10px",
+                      width: "25%",
+                      textAlign: "center",
+                      verticalAlign: "middle",
+                    }}
+                  >
+                    <strong>Giáo viên ra đề</strong>
+                  </td>
+                  <td
+                    style={{
+                      border: "1px solid black",
+                      padding: "10px",
+                      width: "50%",
+                      verticalAlign: "middle",
+                    }}
+                  >
+                    <div style={{ textAlign: "center", marginBottom: "5px" }}>
+                      <strong>Đề thi số: {data?.examCode}</strong>
+                    </div>
+                    <div style={{ textAlign: "center", marginBottom: "5px" }}>
+                      <strong>Học phần: {data?.exam?.subjectVersion?.name}</strong>
+                    </div>
+                    <div style={{ textAlign: "center", marginBottom: "10px" }}>
+                      <strong>
+                        Thời gian làm bài:{" "}
+                        {duration || data?.examMatrix?.examFramework?.time || data?.exam?.duration}{" "}
+                        phút
+                      </strong>
+                    </div>
+                  </td>
+                  <td
+                    style={{
+                      border: "1px solid black",
+                      padding: "10px",
+                      width: "25%",
+                      textAlign: "center",
+                      verticalAlign: "middle",
+                    }}
+                  >
+                    <div style={{ marginBottom: "5px" }}>
+                      <strong>BAN KHẢO THÍ & ĐBCLGD-ĐT</strong>
+                    </div>
+                    <div style={{ fontStyle: "italic" }}>{name}</div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+            {/* Questions */}
+            <div style={{ marginBottom: "30px" }}>
+              {groupedData?.isGroup ? (
+                <div>
+                  <div className="font-semibold mb-2">I. Phần trắc nghiệm</div>
+                  {groupedData.listQuestionChoice?.map((q: any, qIndex: number) => (
+                    <div key={q?.id} style={{ marginBottom: "15px" }}>
+                      <div>
+                        <strong>
+                          Câu {qIndex + 1}({Number(q?.question?.point || 0).toFixed(1)} điểm):
+                        </strong>{" "}
+                        <span
+                          dangerouslySetInnerHTML={{
+                            __html: renderWithMath(q?.question?.content || "")
+                              .replace(/<p[^>]*>/g, "")
+                              .replace(/<\/p>/g, " ")
+                              .trim(),
+                          }}
+                        />
+                      </div>
+                    </div>
+                  ))}
+                  <div className="font-semibold mb-2">II. Phần tự luận</div>
+                  {groupedData.listQuestionEssay?.map((q: any, qIndex: number) => (
+                    <div key={q?.id} style={{ marginBottom: "15px" }}>
+                      <div>
+                        <strong>
+                          Câu {(groupedData.listQuestionChoice?.length ?? 0) + qIndex + 1}(
+                          {Number(q?.question?.point || 0).toFixed(1)} điểm):
+                        </strong>{" "}
+                        <span
+                          dangerouslySetInnerHTML={{
+                            __html: renderWithMath(q?.question?.content || "")
+                              .replace(/<p[^>]*>/g, "")
+                              .replace(/<\/p>/g, " ")
+                              .trim(),
+                          }}
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div>
+                  {groupedData?.questions?.map((q: any, index: number) => (
+                    <div key={q?.id} style={{ marginBottom: "15px" }}>
+                      <div>
+                        <strong>
+                          Câu {index + 1}({Number(q?.question?.point || 0).toFixed(1)} điểm):
+                        </strong>{" "}
+                        <span
+                          dangerouslySetInnerHTML={{
+                            __html: renderWithMath(q?.question?.content || "")
+                              .replace(/<p[^>]*>/g, "")
+                              .replace(/<\/p>/g, " ")
+                              .trim(),
+                          }}
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Footer */}
+            <div style={{ textAlign: "center", marginTop: "40px" }}>
+              <div style={{ fontWeight: "bold", marginBottom: "10px" }}>-----HẾT-----</div>
+              <div style={{ fontStyle: "italic", marginBottom: "20px" }}>
+                {data?.isNote === true
+                  ? `(Được sử dụng tài liệu${data?.explain ? ` ${data.explain}` : ""})`
+                  : `(Không được sử dụng tài liệu${data?.explain ? ` ${data.explain}` : ""})`}
+              </div>
+            </div>
+
+            {/* Note */}
+            <div
+              style={{
+                marginTop: "30px",
+                fontStyle: "italic",
                 fontWeight: "bold",
               }}
             >
-              PHIẾU ĐỀ THI
+              * Giám thị coi thi không giải thích gì thêm
             </div>
-          </div>
-
-          {/* Class info */}
-          <div
-            style={{
-              textAlign: "center",
-              marginBottom: "10px",
-              marginLeft: "10%",
-            }}
-          >
-            <span style={{ fontWeight: "normal" }}>(Dùng cho lớp: {subjectClassName})</span>
-          </div>
-
-          {/* Date */}
-          <div
-            style={{
-              textAlign: "right",
-              fontStyle: "italic",
-              marginBottom: "15px",
-            }}
-          >
-            Ngày {day} tháng {month} năm {year}
-          </div>
-
-          {/* Main info table */}
-          <table
-            style={{
-              width: "100%",
-              border: "1px solid black",
-              borderCollapse: "collapse",
-              marginBottom: "20px",
-            }}
-          >
-            <tbody>
-              <tr>
-                <td
-                  style={{
-                    border: "1px solid black",
-                    padding: "10px",
-                    width: "25%",
-                    textAlign: "center",
-                    verticalAlign: "middle",
-                  }}
-                >
-                  <strong>Giáo viên ra đề</strong>
-                </td>
-                <td
-                  style={{
-                    border: "1px solid black",
-                    padding: "10px",
-                    width: "50%",
-                    verticalAlign: "middle",
-                  }}
-                >
-                  <div style={{ textAlign: "center", marginBottom: "5px" }}>
-                    <strong>Đề thi số: {data?.examCode}</strong>
-                  </div>
-                  <div style={{ textAlign: "center", marginBottom: "5px" }}>
-                    <strong>Học phần: {data?.exam?.subjectVersion?.name}</strong>
-                  </div>
-                  <div style={{ textAlign: "center", marginBottom: "10px" }}>
-                    <strong>
-                      Thời gian làm bài:{" "}
-                      {duration || data?.examMatrix?.examFramework?.time || data?.exam?.duration}{" "}
-                      phút
-                    </strong>
-                  </div>
-                </td>
-                <td
-                  style={{
-                    border: "1px solid black",
-                    padding: "10px",
-                    width: "25%",
-                    textAlign: "center",
-                    verticalAlign: "middle",
-                  }}
-                >
-                  <div style={{ marginBottom: "5px" }}>
-                    <strong>BAN KHẢO THÍ & ĐBCLGD-ĐT</strong>
-                  </div>
-                  <div style={{ fontStyle: "italic" }}>{name}</div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-
-          {/* Questions */}
-          <div style={{ marginBottom: "30px" }}>
-            {groupedData?.isGroup ? (
-              <div>
-                <div className="font-semibold mb-2">I. Phần trắc nghiệm</div>
-                {groupedData.listQuestionChoice?.map((q: any, qIndex: number) => (
-                  <div key={q?.id} style={{ marginBottom: "15px" }}>
-                    <div>
-                      <strong>
-                        Câu {qIndex + 1}({Number(q?.question?.point || 0).toFixed(1)} điểm):
-                      </strong>{" "}
-                      <span
-                        dangerouslySetInnerHTML={{
-                          __html: renderWithMath(q?.question?.content || "")
-                            .replace(/<p[^>]*>/g, "")
-                            .replace(/<\/p>/g, " ")
-                            .trim(),
-                        }}
-                      />
-                    </div>
-                  </div>
-                ))}
-                <div className="font-semibold mb-2">II. Phần tự luận</div>
-                {groupedData.listQuestionEssay?.map((q: any, qIndex: number) => (
-                  <div key={q?.id} style={{ marginBottom: "15px" }}>
-                    <div>
-                      <strong>
-                        Câu {(groupedData.listQuestionChoice?.length ?? 0) + qIndex + 1}(
-                        {Number(q?.question?.point || 0).toFixed(1)} điểm):
-                      </strong>{" "}
-                      <span
-                        dangerouslySetInnerHTML={{
-                          __html: renderWithMath(q?.question?.content || "")
-                            .replace(/<p[^>]*>/g, "")
-                            .replace(/<\/p>/g, " ")
-                            .trim(),
-                        }}
-                      />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div>
-                {groupedData?.questions?.map((q: any, index: number) => (
-                  <div key={q?.id} style={{ marginBottom: "15px" }}>
-                    <div>
-                      <strong>
-                        Câu {index + 1}({Number(q?.question?.point || 0).toFixed(1)} điểm):
-                      </strong>{" "}
-                      <span
-                        dangerouslySetInnerHTML={{
-                          __html: renderWithMath(q?.question?.content || "")
-                            .replace(/<p[^>]*>/g, "")
-                            .replace(/<\/p>/g, " ")
-                            .trim(),
-                        }}
-                      />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* Footer */}
-          <div style={{ textAlign: "center", marginTop: "40px" }}>
-            <div style={{ fontWeight: "bold", marginBottom: "10px" }}>-----HẾT-----</div>
-            <div style={{ fontStyle: "italic", marginBottom: "20px" }}>
-              {data?.isNote === true
-                ? `(Được sử dụng tài liệu${data?.explain ? ` ${data.explain}` : ""})`
-                : `(Không được sử dụng tài liệu${data?.explain ? ` ${data.explain}` : ""})`}
-            </div>
-          </div>
-
-          {/* Note */}
-          <div
-            style={{
-              marginTop: "30px",
-              fontStyle: "italic",
-              fontWeight: "bold",
-            }}
-          >
-            * Giám thị coi thi không giải thích gì thêm
-          </div>
           </div>
         </div>
       </div>

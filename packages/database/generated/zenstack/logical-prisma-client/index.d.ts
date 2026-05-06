@@ -9353,6 +9353,7 @@ export namespace Prisma {
         coSupervisorName: 'coSupervisorName',
         coSupervisorId: 'coSupervisorId',
         coSupervisorPaymentId: 'coSupervisorPaymentId',
+        singleSupervisorPaymentId: 'singleSupervisorPaymentId',
         singlePayment: 'singlePayment',
         CHUTICH: 'CHUTICH',
         THUKY: 'THUKY',
@@ -12744,6 +12745,7 @@ export namespace Prisma {
         coSupervisorName: 'coSupervisorName',
         coSupervisorId: 'coSupervisorId',
         coSupervisorPaymentId: 'coSupervisorPaymentId',
+        singleSupervisorPaymentId: 'singleSupervisorPaymentId',
         CHUTICH: 'CHUTICH',
         THUKY: 'THUKY',
         PHANBIEN1: 'PHANBIEN1',
@@ -75938,6 +75940,7 @@ export namespace Prisma {
         supervisorPayment<T extends ThesisProject$supervisorPaymentArgs<ExtArgs> = {}>(args?: Subset<T, ThesisProject$supervisorPaymentArgs<ExtArgs>>): Prisma__SupervisorPaymentRecordClient<$Result.GetResult<Prisma.$SupervisorPaymentRecordPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         coSupervisor<T extends ThesisProject$coSupervisorArgs<ExtArgs> = {}>(args?: Subset<T, ThesisProject$coSupervisorArgs<ExtArgs>>): Prisma__ExpertProfileClient<$Result.GetResult<Prisma.$ExpertProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         coSupervisorPayment<T extends ThesisProject$coSupervisorPaymentArgs<ExtArgs> = {}>(args?: Subset<T, ThesisProject$coSupervisorPaymentArgs<ExtArgs>>): Prisma__SupervisorPaymentRecordClient<$Result.GetResult<Prisma.$SupervisorPaymentRecordPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        singleSupervisorPayment<T extends ThesisProject$singleSupervisorPaymentArgs<ExtArgs> = {}>(args?: Subset<T, ThesisProject$singleSupervisorPaymentArgs<ExtArgs>>): Prisma__SupervisorPaymentRecordClient<$Result.GetResult<Prisma.$SupervisorPaymentRecordPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         organization<T extends ThesisProject$organizationArgs<ExtArgs> = {}>(args?: Subset<T, ThesisProject$organizationArgs<ExtArgs>>): Prisma__DM_DonViClient<$Result.GetResult<Prisma.$DM_DonViPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         council<T extends ThesisProject$councilArgs<ExtArgs> = {}>(args?: Subset<T, ThesisProject$councilArgs<ExtArgs>>): Prisma__CouncilClient<$Result.GetResult<Prisma.$CouncilPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         room<T extends ThesisProject$roomArgs<ExtArgs> = {}>(args?: Subset<T, ThesisProject$roomArgs<ExtArgs>>): Prisma__RoomClient<$Result.GetResult<Prisma.$RoomPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
@@ -76014,6 +76017,7 @@ export namespace Prisma {
         readonly coSupervisorName: FieldRef<"ThesisProject", 'String'>;
         readonly coSupervisorId: FieldRef<"ThesisProject", 'String'>;
         readonly coSupervisorPaymentId: FieldRef<"ThesisProject", 'String'>;
+        readonly singleSupervisorPaymentId: FieldRef<"ThesisProject", 'String'>;
         readonly singlePayment: FieldRef<"ThesisProject", 'Decimal'>;
         readonly CHUTICH: FieldRef<"ThesisProject", 'String'>;
         readonly THUKY: FieldRef<"ThesisProject", 'String'>;
@@ -81021,6 +81025,7 @@ export namespace Prisma {
         readonly [Symbol.toStringTag]: "PrismaPromise";
         thesisProjects<T extends SupervisorPaymentRecord$thesisProjectsArgs<ExtArgs> = {}>(args?: Subset<T, SupervisorPaymentRecord$thesisProjectsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ThesisProjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         coThesisProjects<T extends SupervisorPaymentRecord$coThesisProjectsArgs<ExtArgs> = {}>(args?: Subset<T, SupervisorPaymentRecord$coThesisProjectsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ThesisProjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        singleSupervisorPayment<T extends SupervisorPaymentRecord$singleSupervisorPaymentArgs<ExtArgs> = {}>(args?: Subset<T, SupervisorPaymentRecord$singleSupervisorPaymentArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ThesisProjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         /**
          * Attaches callbacks for the resolution and/or rejection of the Promise.
          * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -145246,10 +145251,12 @@ export namespace Prisma {
     export type SupervisorPaymentRecordCountOutputType = {
         thesisProjects: number
         coThesisProjects: number
+        singleSupervisorPayment: number
     };
     export type SupervisorPaymentRecordCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         thesisProjects?: boolean | SupervisorPaymentRecordCountOutputTypeCountThesisProjectsArgs
         coThesisProjects?: boolean | SupervisorPaymentRecordCountOutputTypeCountCoThesisProjectsArgs
+        singleSupervisorPayment?: boolean | SupervisorPaymentRecordCountOutputTypeCountSingleSupervisorPaymentArgs
     };
     /**
      * SupervisorPaymentRecordCountOutputType without action
@@ -145270,6 +145277,12 @@ export namespace Prisma {
      * SupervisorPaymentRecordCountOutputType without action
      */
     export type SupervisorPaymentRecordCountOutputTypeCountCoThesisProjectsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: ThesisProjectWhereInput
+    };
+    /**
+     * SupervisorPaymentRecordCountOutputType without action
+     */
+    export type SupervisorPaymentRecordCountOutputTypeCountSingleSupervisorPaymentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         where?: ThesisProjectWhereInput
     };
     /**
@@ -277758,6 +277771,7 @@ export namespace Prisma {
         coSupervisorName: string | null
         coSupervisorId: string | null
         coSupervisorPaymentId: string | null
+        singleSupervisorPaymentId: string | null
         singlePayment: Decimal | null
         CHUTICH: string | null
         THUKY: string | null
@@ -277818,6 +277832,7 @@ export namespace Prisma {
         coSupervisorName: string | null
         coSupervisorId: string | null
         coSupervisorPaymentId: string | null
+        singleSupervisorPaymentId: string | null
         singlePayment: Decimal | null
         CHUTICH: string | null
         THUKY: string | null
@@ -277878,6 +277893,7 @@ export namespace Prisma {
         coSupervisorName: number
         coSupervisorId: number
         coSupervisorPaymentId: number
+        singleSupervisorPaymentId: number
         singlePayment: number
         CHUTICH: number
         THUKY: number
@@ -277951,6 +277967,7 @@ export namespace Prisma {
         coSupervisorName?: true
         coSupervisorId?: true
         coSupervisorPaymentId?: true
+        singleSupervisorPaymentId?: true
         singlePayment?: true
         CHUTICH?: true
         THUKY?: true
@@ -278011,6 +278028,7 @@ export namespace Prisma {
         coSupervisorName?: true
         coSupervisorId?: true
         coSupervisorPaymentId?: true
+        singleSupervisorPaymentId?: true
         singlePayment?: true
         CHUTICH?: true
         THUKY?: true
@@ -278071,6 +278089,7 @@ export namespace Prisma {
         coSupervisorName?: true
         coSupervisorId?: true
         coSupervisorPaymentId?: true
+        singleSupervisorPaymentId?: true
         singlePayment?: true
         CHUTICH?: true
         THUKY?: true
@@ -278212,6 +278231,7 @@ export namespace Prisma {
         coSupervisorName: string | null
         coSupervisorId: string | null
         coSupervisorPaymentId: string | null
+        singleSupervisorPaymentId: string | null
         singlePayment: Decimal | null
         CHUTICH: string | null
         THUKY: string | null
@@ -278289,6 +278309,7 @@ export namespace Prisma {
         coSupervisorName?: boolean
         coSupervisorId?: boolean
         coSupervisorPaymentId?: boolean
+        singleSupervisorPaymentId?: boolean
         singlePayment?: boolean
         CHUTICH?: boolean
         THUKY?: boolean
@@ -278314,6 +278335,7 @@ export namespace Prisma {
         supervisorPayment?: boolean | ThesisProject$supervisorPaymentArgs<ExtArgs>
         coSupervisor?: boolean | ThesisProject$coSupervisorArgs<ExtArgs>
         coSupervisorPayment?: boolean | ThesisProject$coSupervisorPaymentArgs<ExtArgs>
+        singleSupervisorPayment?: boolean | ThesisProject$singleSupervisorPaymentArgs<ExtArgs>
         organization?: boolean | ThesisProject$organizationArgs<ExtArgs>
         council?: boolean | ThesisProject$councilArgs<ExtArgs>
         room?: boolean | ThesisProject$roomArgs<ExtArgs>
@@ -278367,6 +278389,7 @@ export namespace Prisma {
         coSupervisorName?: boolean
         coSupervisorId?: boolean
         coSupervisorPaymentId?: boolean
+        singleSupervisorPaymentId?: boolean
         singlePayment?: boolean
         CHUTICH?: boolean
         THUKY?: boolean
@@ -278392,6 +278415,7 @@ export namespace Prisma {
         supervisorPayment?: boolean | ThesisProject$supervisorPaymentArgs<ExtArgs>
         coSupervisor?: boolean | ThesisProject$coSupervisorArgs<ExtArgs>
         coSupervisorPayment?: boolean | ThesisProject$coSupervisorPaymentArgs<ExtArgs>
+        singleSupervisorPayment?: boolean | ThesisProject$singleSupervisorPaymentArgs<ExtArgs>
         organization?: boolean | ThesisProject$organizationArgs<ExtArgs>
         council?: boolean | ThesisProject$councilArgs<ExtArgs>
         room?: boolean | ThesisProject$roomArgs<ExtArgs>
@@ -278440,6 +278464,7 @@ export namespace Prisma {
         coSupervisorName?: boolean
         coSupervisorId?: boolean
         coSupervisorPaymentId?: boolean
+        singleSupervisorPaymentId?: boolean
         singlePayment?: boolean
         CHUTICH?: boolean
         THUKY?: boolean
@@ -278465,6 +278490,7 @@ export namespace Prisma {
         supervisorPayment?: boolean | ThesisProject$supervisorPaymentArgs<ExtArgs>
         coSupervisor?: boolean | ThesisProject$coSupervisorArgs<ExtArgs>
         coSupervisorPayment?: boolean | ThesisProject$coSupervisorPaymentArgs<ExtArgs>
+        singleSupervisorPayment?: boolean | ThesisProject$singleSupervisorPaymentArgs<ExtArgs>
         organization?: boolean | ThesisProject$organizationArgs<ExtArgs>
         council?: boolean | ThesisProject$councilArgs<ExtArgs>
         room?: boolean | ThesisProject$roomArgs<ExtArgs>
@@ -278513,6 +278539,7 @@ export namespace Prisma {
         coSupervisorName?: boolean
         coSupervisorId?: boolean
         coSupervisorPaymentId?: boolean
+        singleSupervisorPaymentId?: boolean
         singlePayment?: boolean
         CHUTICH?: boolean
         THUKY?: boolean
@@ -278530,7 +278557,7 @@ export namespace Prisma {
         projectStart?: boolean
         projectEnd?: boolean
     };
-    export type ThesisProjectOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "title" | "titleEN" | "summary" | "objectives" | "scope" | "methodology" | "expectedResults" | "requirements" | "technologies" | "thesisType" | "status" | "language" | "type" | "isLock" | "editProject" | "researchTopicAssociated" | "firstCheckProgress" | "secondCheckProgress" | "isEligibleForDefense" | "primarySupervisorId" | "secondarySupervisorId" | "thirdSupervisorId" | "isProductProject" | "isGroupProject" | "isLanguage" | "externalUnit" | "subjectClassId" | "thesisSessionId" | "supervisorName" | "supervisorId" | "supervisorPaymentId" | "coSupervisorName" | "coSupervisorId" | "coSupervisorPaymentId" | "singlePayment" | "CHUTICH" | "THUKY" | "PHANBIEN1" | "PHANBIEN2" | "UYVIEN3" | "organizationId" | "maxStudents" | "councilId" | "roomId" | "defenseDate" | "defenseSessionId" | "registrationStart" | "registrationEnd" | "projectStart" | "projectEnd", ExtArgs["result"]["thesisProject"]>;
+    export type ThesisProjectOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "title" | "titleEN" | "summary" | "objectives" | "scope" | "methodology" | "expectedResults" | "requirements" | "technologies" | "thesisType" | "status" | "language" | "type" | "isLock" | "editProject" | "researchTopicAssociated" | "firstCheckProgress" | "secondCheckProgress" | "isEligibleForDefense" | "primarySupervisorId" | "secondarySupervisorId" | "thirdSupervisorId" | "isProductProject" | "isGroupProject" | "isLanguage" | "externalUnit" | "subjectClassId" | "thesisSessionId" | "supervisorName" | "supervisorId" | "supervisorPaymentId" | "coSupervisorName" | "coSupervisorId" | "coSupervisorPaymentId" | "singleSupervisorPaymentId" | "singlePayment" | "CHUTICH" | "THUKY" | "PHANBIEN1" | "PHANBIEN2" | "UYVIEN3" | "organizationId" | "maxStudents" | "councilId" | "roomId" | "defenseDate" | "defenseSessionId" | "registrationStart" | "registrationEnd" | "projectStart" | "projectEnd", ExtArgs["result"]["thesisProject"]>;
     export type ThesisProjectInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         primarySupervisor?: boolean | ThesisProject$primarySupervisorArgs<ExtArgs>
         secondarySupervisor?: boolean | ThesisProject$secondarySupervisorArgs<ExtArgs>
@@ -278541,6 +278568,7 @@ export namespace Prisma {
         supervisorPayment?: boolean | ThesisProject$supervisorPaymentArgs<ExtArgs>
         coSupervisor?: boolean | ThesisProject$coSupervisorArgs<ExtArgs>
         coSupervisorPayment?: boolean | ThesisProject$coSupervisorPaymentArgs<ExtArgs>
+        singleSupervisorPayment?: boolean | ThesisProject$singleSupervisorPaymentArgs<ExtArgs>
         organization?: boolean | ThesisProject$organizationArgs<ExtArgs>
         council?: boolean | ThesisProject$councilArgs<ExtArgs>
         room?: boolean | ThesisProject$roomArgs<ExtArgs>
@@ -278561,6 +278589,7 @@ export namespace Prisma {
         supervisorPayment?: boolean | ThesisProject$supervisorPaymentArgs<ExtArgs>
         coSupervisor?: boolean | ThesisProject$coSupervisorArgs<ExtArgs>
         coSupervisorPayment?: boolean | ThesisProject$coSupervisorPaymentArgs<ExtArgs>
+        singleSupervisorPayment?: boolean | ThesisProject$singleSupervisorPaymentArgs<ExtArgs>
         organization?: boolean | ThesisProject$organizationArgs<ExtArgs>
         council?: boolean | ThesisProject$councilArgs<ExtArgs>
         room?: boolean | ThesisProject$roomArgs<ExtArgs>
@@ -278576,6 +278605,7 @@ export namespace Prisma {
         supervisorPayment?: boolean | ThesisProject$supervisorPaymentArgs<ExtArgs>
         coSupervisor?: boolean | ThesisProject$coSupervisorArgs<ExtArgs>
         coSupervisorPayment?: boolean | ThesisProject$coSupervisorPaymentArgs<ExtArgs>
+        singleSupervisorPayment?: boolean | ThesisProject$singleSupervisorPaymentArgs<ExtArgs>
         organization?: boolean | ThesisProject$organizationArgs<ExtArgs>
         council?: boolean | ThesisProject$councilArgs<ExtArgs>
         room?: boolean | ThesisProject$roomArgs<ExtArgs>
@@ -278599,6 +278629,7 @@ export namespace Prisma {
              */
             coSupervisor: Prisma.$ExpertProfilePayload<ExtArgs> | null
             coSupervisorPayment: Prisma.$SupervisorPaymentRecordPayload<ExtArgs> | null
+            singleSupervisorPayment: Prisma.$SupervisorPaymentRecordPayload<ExtArgs> | null
             /**
              * Đơn vị quản lý
              */
@@ -278660,6 +278691,7 @@ export namespace Prisma {
             coSupervisorName: string | null
             coSupervisorId: string | null
             coSupervisorPaymentId: string | null
+            singleSupervisorPaymentId: string | null
             singlePayment: Prisma.Decimal | null
             CHUTICH: string | null
             THUKY: string | null
@@ -279211,6 +279243,24 @@ export namespace Prisma {
      * ThesisProject.coSupervisorPayment
      */
     export type ThesisProject$coSupervisorPaymentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the SupervisorPaymentRecord
+         */
+        select?: SupervisorPaymentRecordSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the SupervisorPaymentRecord
+         */
+        omit?: SupervisorPaymentRecordOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: SupervisorPaymentRecordInclude<ExtArgs> | null
+        where?: SupervisorPaymentRecordWhereInput
+    };
+    /**
+     * ThesisProject.singleSupervisorPayment
+     */
+    export type ThesisProject$singleSupervisorPaymentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         /**
          * Select specific fields to fetch from the SupervisorPaymentRecord
          */
@@ -288577,6 +288627,7 @@ export namespace Prisma {
         transactionCode?: boolean
         thesisProjects?: boolean | SupervisorPaymentRecord$thesisProjectsArgs<ExtArgs>
         coThesisProjects?: boolean | SupervisorPaymentRecord$coThesisProjectsArgs<ExtArgs>
+        singleSupervisorPayment?: boolean | SupervisorPaymentRecord$singleSupervisorPaymentArgs<ExtArgs>
         _count?: boolean | SupervisorPaymentRecordCountOutputTypeDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["supervisorPaymentRecord"]>;
     export type SupervisorPaymentRecordSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -288625,6 +288676,7 @@ export namespace Prisma {
     export type SupervisorPaymentRecordInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         thesisProjects?: boolean | SupervisorPaymentRecord$thesisProjectsArgs<ExtArgs>
         coThesisProjects?: boolean | SupervisorPaymentRecord$coThesisProjectsArgs<ExtArgs>
+        singleSupervisorPayment?: boolean | SupervisorPaymentRecord$singleSupervisorPaymentArgs<ExtArgs>
         _count?: boolean | SupervisorPaymentRecordCountOutputTypeDefaultArgs<ExtArgs>
     };
     export type SupervisorPaymentRecordIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {};
@@ -288634,6 +288686,7 @@ export namespace Prisma {
         objects: {
             thesisProjects: Prisma.$ThesisProjectPayload<ExtArgs>[]
             coThesisProjects: Prisma.$ThesisProjectPayload<ExtArgs>[]
+            singleSupervisorPayment: Prisma.$ThesisProjectPayload<ExtArgs>[]
         }
         scalars: $Extensions.GetPayloadResult<{
             id: string
@@ -289051,6 +289104,29 @@ export namespace Prisma {
      * SupervisorPaymentRecord.coThesisProjects
      */
     export type SupervisorPaymentRecord$coThesisProjectsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ThesisProject
+         */
+        select?: ThesisProjectSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ThesisProject
+         */
+        omit?: ThesisProjectOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ThesisProjectInclude<ExtArgs> | null
+        where?: ThesisProjectWhereInput
+        orderBy?: ThesisProjectOrderByWithRelationInput | ThesisProjectOrderByWithRelationInput[]
+        cursor?: ThesisProjectWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: ThesisProjectScalarFieldEnum | ThesisProjectScalarFieldEnum[]
+    };
+    /**
+     * SupervisorPaymentRecord.singleSupervisorPayment
+     */
+    export type SupervisorPaymentRecord$singleSupervisorPaymentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         /**
          * Select specific fields to fetch from the ThesisProject
          */
@@ -382568,6 +382644,7 @@ export namespace Prisma {
         coSupervisorName?: StringNullableFilter<"ThesisProject"> | string | null
         coSupervisorId?: StringNullableFilter<"ThesisProject"> | string | null
         coSupervisorPaymentId?: StringNullableFilter<"ThesisProject"> | string | null
+        singleSupervisorPaymentId?: StringNullableFilter<"ThesisProject"> | string | null
         singlePayment?: DecimalNullableFilter<"ThesisProject"> | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: StringNullableFilter<"ThesisProject"> | string | null
         THUKY?: StringNullableFilter<"ThesisProject"> | string | null
@@ -382593,6 +382670,7 @@ export namespace Prisma {
         supervisorPayment?: XOR<SupervisorPaymentRecordNullableScalarRelationFilter, SupervisorPaymentRecordWhereInput> | null
         coSupervisor?: XOR<ExpertProfileNullableScalarRelationFilter, ExpertProfileWhereInput> | null
         coSupervisorPayment?: XOR<SupervisorPaymentRecordNullableScalarRelationFilter, SupervisorPaymentRecordWhereInput> | null
+        singleSupervisorPayment?: XOR<SupervisorPaymentRecordNullableScalarRelationFilter, SupervisorPaymentRecordWhereInput> | null
         organization?: XOR<DM_DonViNullableScalarRelationFilter, DM_DonViWhereInput> | null
         council?: XOR<CouncilNullableScalarRelationFilter, CouncilWhereInput> | null
         room?: XOR<RoomNullableScalarRelationFilter, RoomWhereInput> | null
@@ -382645,6 +382723,7 @@ export namespace Prisma {
         coSupervisorName?: SortOrderInput | SortOrder
         coSupervisorId?: SortOrderInput | SortOrder
         coSupervisorPaymentId?: SortOrderInput | SortOrder
+        singleSupervisorPaymentId?: SortOrderInput | SortOrder
         singlePayment?: SortOrderInput | SortOrder
         CHUTICH?: SortOrderInput | SortOrder
         THUKY?: SortOrderInput | SortOrder
@@ -382670,6 +382749,7 @@ export namespace Prisma {
         supervisorPayment?: SupervisorPaymentRecordOrderByWithRelationInput
         coSupervisor?: ExpertProfileOrderByWithRelationInput
         coSupervisorPayment?: SupervisorPaymentRecordOrderByWithRelationInput
+        singleSupervisorPayment?: SupervisorPaymentRecordOrderByWithRelationInput
         organization?: DM_DonViOrderByWithRelationInput
         council?: CouncilOrderByWithRelationInput
         room?: RoomOrderByWithRelationInput
@@ -382726,6 +382806,7 @@ export namespace Prisma {
         coSupervisorName?: StringNullableFilter<"ThesisProject"> | string | null
         coSupervisorId?: StringNullableFilter<"ThesisProject"> | string | null
         coSupervisorPaymentId?: StringNullableFilter<"ThesisProject"> | string | null
+        singleSupervisorPaymentId?: StringNullableFilter<"ThesisProject"> | string | null
         singlePayment?: DecimalNullableFilter<"ThesisProject"> | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: StringNullableFilter<"ThesisProject"> | string | null
         THUKY?: StringNullableFilter<"ThesisProject"> | string | null
@@ -382751,6 +382832,7 @@ export namespace Prisma {
         supervisorPayment?: XOR<SupervisorPaymentRecordNullableScalarRelationFilter, SupervisorPaymentRecordWhereInput> | null
         coSupervisor?: XOR<ExpertProfileNullableScalarRelationFilter, ExpertProfileWhereInput> | null
         coSupervisorPayment?: XOR<SupervisorPaymentRecordNullableScalarRelationFilter, SupervisorPaymentRecordWhereInput> | null
+        singleSupervisorPayment?: XOR<SupervisorPaymentRecordNullableScalarRelationFilter, SupervisorPaymentRecordWhereInput> | null
         organization?: XOR<DM_DonViNullableScalarRelationFilter, DM_DonViWhereInput> | null
         council?: XOR<CouncilNullableScalarRelationFilter, CouncilWhereInput> | null
         room?: XOR<RoomNullableScalarRelationFilter, RoomWhereInput> | null
@@ -382803,6 +382885,7 @@ export namespace Prisma {
         coSupervisorName?: SortOrderInput | SortOrder
         coSupervisorId?: SortOrderInput | SortOrder
         coSupervisorPaymentId?: SortOrderInput | SortOrder
+        singleSupervisorPaymentId?: SortOrderInput | SortOrder
         singlePayment?: SortOrderInput | SortOrder
         CHUTICH?: SortOrderInput | SortOrder
         THUKY?: SortOrderInput | SortOrder
@@ -382871,6 +382954,7 @@ export namespace Prisma {
         coSupervisorName?: StringNullableWithAggregatesFilter<"ThesisProject"> | string | null
         coSupervisorId?: StringNullableWithAggregatesFilter<"ThesisProject"> | string | null
         coSupervisorPaymentId?: StringNullableWithAggregatesFilter<"ThesisProject"> | string | null
+        singleSupervisorPaymentId?: StringNullableWithAggregatesFilter<"ThesisProject"> | string | null
         singlePayment?: DecimalNullableWithAggregatesFilter<"ThesisProject"> | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: StringNullableWithAggregatesFilter<"ThesisProject"> | string | null
         THUKY?: StringNullableWithAggregatesFilter<"ThesisProject"> | string | null
@@ -384082,6 +384166,7 @@ export namespace Prisma {
         transactionCode?: StringNullableFilter<"SupervisorPaymentRecord"> | string | null
         thesisProjects?: ThesisProjectListRelationFilter
         coThesisProjects?: ThesisProjectListRelationFilter
+        singleSupervisorPayment?: ThesisProjectListRelationFilter
     };
     export type SupervisorPaymentRecordOrderByWithRelationInput = {
         id?: SortOrder
@@ -384098,6 +384183,7 @@ export namespace Prisma {
         transactionCode?: SortOrderInput | SortOrder
         thesisProjects?: ThesisProjectOrderByRelationAggregateInput
         coThesisProjects?: ThesisProjectOrderByRelationAggregateInput
+        singleSupervisorPayment?: ThesisProjectOrderByRelationAggregateInput
         _relevance?: SupervisorPaymentRecordOrderByRelevanceInput
     };
     export type SupervisorPaymentRecordWhereUniqueInput = Prisma.AtLeast<{
@@ -384118,6 +384204,7 @@ export namespace Prisma {
         transactionCode?: StringNullableFilter<"SupervisorPaymentRecord"> | string | null
         thesisProjects?: ThesisProjectListRelationFilter
         coThesisProjects?: ThesisProjectListRelationFilter
+        singleSupervisorPayment?: ThesisProjectListRelationFilter
     }, "id" | "code">;
     export type SupervisorPaymentRecordOrderByWithAggregationInput = {
         id?: SortOrder
@@ -414481,6 +414568,7 @@ export namespace Prisma {
         supervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutThesisProjectsInput
         coSupervisor?: ExpertProfileCreateNestedOneWithoutCoSupervisedThesesInput
         coSupervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutCoThesisProjectsInput
+        singleSupervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutSingleSupervisorPaymentInput
         organization?: DM_DonViCreateNestedOneWithoutThesisProjectsInput
         council?: CouncilCreateNestedOneWithoutThesisInput
         room?: RoomCreateNestedOneWithoutThesisProjectInput
@@ -414533,6 +414621,7 @@ export namespace Prisma {
         coSupervisorName?: string | null
         coSupervisorId?: string | null
         coSupervisorPaymentId?: string | null
+        singleSupervisorPaymentId?: string | null
         singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
@@ -414609,6 +414698,7 @@ export namespace Prisma {
         supervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutThesisProjectsNestedInput
         coSupervisor?: ExpertProfileUpdateOneWithoutCoSupervisedThesesNestedInput
         coSupervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutCoThesisProjectsNestedInput
+        singleSupervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutSingleSupervisorPaymentNestedInput
         organization?: DM_DonViUpdateOneWithoutThesisProjectsNestedInput
         council?: CouncilUpdateOneWithoutThesisNestedInput
         room?: RoomUpdateOneWithoutThesisProjectNestedInput
@@ -414661,6 +414751,7 @@ export namespace Prisma {
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        singleSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
@@ -414725,6 +414816,7 @@ export namespace Prisma {
         coSupervisorName?: string | null
         coSupervisorId?: string | null
         coSupervisorPaymentId?: string | null
+        singleSupervisorPaymentId?: string | null
         singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
@@ -414832,6 +414924,7 @@ export namespace Prisma {
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        singleSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
@@ -416196,6 +416289,7 @@ export namespace Prisma {
         transactionCode?: string | null
         thesisProjects?: ThesisProjectCreateNestedManyWithoutSupervisorPaymentInput
         coThesisProjects?: ThesisProjectCreateNestedManyWithoutCoSupervisorPaymentInput
+        singleSupervisorPayment?: ThesisProjectCreateNestedManyWithoutSingleSupervisorPaymentInput
     };
     export type SupervisorPaymentRecordUncheckedCreateInput = {
         id?: string
@@ -416212,6 +416306,7 @@ export namespace Prisma {
         transactionCode?: string | null
         thesisProjects?: ThesisProjectUncheckedCreateNestedManyWithoutSupervisorPaymentInput
         coThesisProjects?: ThesisProjectUncheckedCreateNestedManyWithoutCoSupervisorPaymentInput
+        singleSupervisorPayment?: ThesisProjectUncheckedCreateNestedManyWithoutSingleSupervisorPaymentInput
     };
     export type SupervisorPaymentRecordUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -416228,6 +416323,7 @@ export namespace Prisma {
         transactionCode?: NullableStringFieldUpdateOperationsInput | string | null
         thesisProjects?: ThesisProjectUpdateManyWithoutSupervisorPaymentNestedInput
         coThesisProjects?: ThesisProjectUpdateManyWithoutCoSupervisorPaymentNestedInput
+        singleSupervisorPayment?: ThesisProjectUpdateManyWithoutSingleSupervisorPaymentNestedInput
     };
     export type SupervisorPaymentRecordUncheckedUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -416244,6 +416340,7 @@ export namespace Prisma {
         transactionCode?: NullableStringFieldUpdateOperationsInput | string | null
         thesisProjects?: ThesisProjectUncheckedUpdateManyWithoutSupervisorPaymentNestedInput
         coThesisProjects?: ThesisProjectUncheckedUpdateManyWithoutCoSupervisorPaymentNestedInput
+        singleSupervisorPayment?: ThesisProjectUncheckedUpdateManyWithoutSingleSupervisorPaymentNestedInput
     };
     export type SupervisorPaymentRecordCreateManyInput = {
         id?: string
@@ -439628,6 +439725,7 @@ export namespace Prisma {
         coSupervisorName?: SortOrder
         coSupervisorId?: SortOrder
         coSupervisorPaymentId?: SortOrder
+        singleSupervisorPaymentId?: SortOrder
         singlePayment?: SortOrder
         CHUTICH?: SortOrder
         THUKY?: SortOrder
@@ -439694,6 +439792,7 @@ export namespace Prisma {
         coSupervisorName?: SortOrder
         coSupervisorId?: SortOrder
         coSupervisorPaymentId?: SortOrder
+        singleSupervisorPaymentId?: SortOrder
         singlePayment?: SortOrder
         CHUTICH?: SortOrder
         THUKY?: SortOrder
@@ -439754,6 +439853,7 @@ export namespace Prisma {
         coSupervisorName?: SortOrder
         coSupervisorId?: SortOrder
         coSupervisorPaymentId?: SortOrder
+        singleSupervisorPaymentId?: SortOrder
         singlePayment?: SortOrder
         CHUTICH?: SortOrder
         THUKY?: SortOrder
@@ -464336,6 +464436,11 @@ export namespace Prisma {
         connectOrCreate?: SupervisorPaymentRecordCreateOrConnectWithoutCoThesisProjectsInput
         connect?: SupervisorPaymentRecordWhereUniqueInput
     };
+    export type SupervisorPaymentRecordCreateNestedOneWithoutSingleSupervisorPaymentInput = {
+        create?: XOR<SupervisorPaymentRecordCreateWithoutSingleSupervisorPaymentInput, SupervisorPaymentRecordUncheckedCreateWithoutSingleSupervisorPaymentInput>
+        connectOrCreate?: SupervisorPaymentRecordCreateOrConnectWithoutSingleSupervisorPaymentInput
+        connect?: SupervisorPaymentRecordWhereUniqueInput
+    };
     export type DM_DonViCreateNestedOneWithoutThesisProjectsInput = {
         create?: XOR<DM_DonViCreateWithoutThesisProjectsInput, DM_DonViUncheckedCreateWithoutThesisProjectsInput>
         connectOrCreate?: DM_DonViCreateOrConnectWithoutThesisProjectsInput
@@ -464486,6 +464591,15 @@ export namespace Prisma {
         delete?: SupervisorPaymentRecordWhereInput | boolean
         connect?: SupervisorPaymentRecordWhereUniqueInput
         update?: XOR<XOR<SupervisorPaymentRecordUpdateToOneWithWhereWithoutCoThesisProjectsInput, SupervisorPaymentRecordUpdateWithoutCoThesisProjectsInput>, SupervisorPaymentRecordUncheckedUpdateWithoutCoThesisProjectsInput>
+    };
+    export type SupervisorPaymentRecordUpdateOneWithoutSingleSupervisorPaymentNestedInput = {
+        create?: XOR<SupervisorPaymentRecordCreateWithoutSingleSupervisorPaymentInput, SupervisorPaymentRecordUncheckedCreateWithoutSingleSupervisorPaymentInput>
+        connectOrCreate?: SupervisorPaymentRecordCreateOrConnectWithoutSingleSupervisorPaymentInput
+        upsert?: SupervisorPaymentRecordUpsertWithoutSingleSupervisorPaymentInput
+        disconnect?: SupervisorPaymentRecordWhereInput | boolean
+        delete?: SupervisorPaymentRecordWhereInput | boolean
+        connect?: SupervisorPaymentRecordWhereUniqueInput
+        update?: XOR<XOR<SupervisorPaymentRecordUpdateToOneWithWhereWithoutSingleSupervisorPaymentInput, SupervisorPaymentRecordUpdateWithoutSingleSupervisorPaymentInput>, SupervisorPaymentRecordUncheckedUpdateWithoutSingleSupervisorPaymentInput>
     };
     export type DM_DonViUpdateOneWithoutThesisProjectsNestedInput = {
         create?: XOR<DM_DonViCreateWithoutThesisProjectsInput, DM_DonViUncheckedCreateWithoutThesisProjectsInput>
@@ -465557,6 +465671,12 @@ export namespace Prisma {
         createMany?: ThesisProjectCreateManyCoSupervisorPaymentInputEnvelope
         connect?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
     };
+    export type ThesisProjectCreateNestedManyWithoutSingleSupervisorPaymentInput = {
+        create?: XOR<ThesisProjectCreateWithoutSingleSupervisorPaymentInput, ThesisProjectUncheckedCreateWithoutSingleSupervisorPaymentInput> | ThesisProjectCreateWithoutSingleSupervisorPaymentInput[] | ThesisProjectUncheckedCreateWithoutSingleSupervisorPaymentInput[]
+        connectOrCreate?: ThesisProjectCreateOrConnectWithoutSingleSupervisorPaymentInput | ThesisProjectCreateOrConnectWithoutSingleSupervisorPaymentInput[]
+        createMany?: ThesisProjectCreateManySingleSupervisorPaymentInputEnvelope
+        connect?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
+    };
     export type ThesisProjectUncheckedCreateNestedManyWithoutSupervisorPaymentInput = {
         create?: XOR<ThesisProjectCreateWithoutSupervisorPaymentInput, ThesisProjectUncheckedCreateWithoutSupervisorPaymentInput> | ThesisProjectCreateWithoutSupervisorPaymentInput[] | ThesisProjectUncheckedCreateWithoutSupervisorPaymentInput[]
         connectOrCreate?: ThesisProjectCreateOrConnectWithoutSupervisorPaymentInput | ThesisProjectCreateOrConnectWithoutSupervisorPaymentInput[]
@@ -465567,6 +465687,12 @@ export namespace Prisma {
         create?: XOR<ThesisProjectCreateWithoutCoSupervisorPaymentInput, ThesisProjectUncheckedCreateWithoutCoSupervisorPaymentInput> | ThesisProjectCreateWithoutCoSupervisorPaymentInput[] | ThesisProjectUncheckedCreateWithoutCoSupervisorPaymentInput[]
         connectOrCreate?: ThesisProjectCreateOrConnectWithoutCoSupervisorPaymentInput | ThesisProjectCreateOrConnectWithoutCoSupervisorPaymentInput[]
         createMany?: ThesisProjectCreateManyCoSupervisorPaymentInputEnvelope
+        connect?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
+    };
+    export type ThesisProjectUncheckedCreateNestedManyWithoutSingleSupervisorPaymentInput = {
+        create?: XOR<ThesisProjectCreateWithoutSingleSupervisorPaymentInput, ThesisProjectUncheckedCreateWithoutSingleSupervisorPaymentInput> | ThesisProjectCreateWithoutSingleSupervisorPaymentInput[] | ThesisProjectUncheckedCreateWithoutSingleSupervisorPaymentInput[]
+        connectOrCreate?: ThesisProjectCreateOrConnectWithoutSingleSupervisorPaymentInput | ThesisProjectCreateOrConnectWithoutSingleSupervisorPaymentInput[]
+        createMany?: ThesisProjectCreateManySingleSupervisorPaymentInputEnvelope
         connect?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
     };
     export type ThesisProjectUpdateManyWithoutSupervisorPaymentNestedInput = {
@@ -465595,6 +465721,19 @@ export namespace Prisma {
         updateMany?: ThesisProjectUpdateManyWithWhereWithoutCoSupervisorPaymentInput | ThesisProjectUpdateManyWithWhereWithoutCoSupervisorPaymentInput[]
         deleteMany?: ThesisProjectScalarWhereInput | ThesisProjectScalarWhereInput[]
     };
+    export type ThesisProjectUpdateManyWithoutSingleSupervisorPaymentNestedInput = {
+        create?: XOR<ThesisProjectCreateWithoutSingleSupervisorPaymentInput, ThesisProjectUncheckedCreateWithoutSingleSupervisorPaymentInput> | ThesisProjectCreateWithoutSingleSupervisorPaymentInput[] | ThesisProjectUncheckedCreateWithoutSingleSupervisorPaymentInput[]
+        connectOrCreate?: ThesisProjectCreateOrConnectWithoutSingleSupervisorPaymentInput | ThesisProjectCreateOrConnectWithoutSingleSupervisorPaymentInput[]
+        upsert?: ThesisProjectUpsertWithWhereUniqueWithoutSingleSupervisorPaymentInput | ThesisProjectUpsertWithWhereUniqueWithoutSingleSupervisorPaymentInput[]
+        createMany?: ThesisProjectCreateManySingleSupervisorPaymentInputEnvelope
+        set?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
+        disconnect?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
+        delete?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
+        connect?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
+        update?: ThesisProjectUpdateWithWhereUniqueWithoutSingleSupervisorPaymentInput | ThesisProjectUpdateWithWhereUniqueWithoutSingleSupervisorPaymentInput[]
+        updateMany?: ThesisProjectUpdateManyWithWhereWithoutSingleSupervisorPaymentInput | ThesisProjectUpdateManyWithWhereWithoutSingleSupervisorPaymentInput[]
+        deleteMany?: ThesisProjectScalarWhereInput | ThesisProjectScalarWhereInput[]
+    };
     export type ThesisProjectUncheckedUpdateManyWithoutSupervisorPaymentNestedInput = {
         create?: XOR<ThesisProjectCreateWithoutSupervisorPaymentInput, ThesisProjectUncheckedCreateWithoutSupervisorPaymentInput> | ThesisProjectCreateWithoutSupervisorPaymentInput[] | ThesisProjectUncheckedCreateWithoutSupervisorPaymentInput[]
         connectOrCreate?: ThesisProjectCreateOrConnectWithoutSupervisorPaymentInput | ThesisProjectCreateOrConnectWithoutSupervisorPaymentInput[]
@@ -465619,6 +465758,19 @@ export namespace Prisma {
         connect?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
         update?: ThesisProjectUpdateWithWhereUniqueWithoutCoSupervisorPaymentInput | ThesisProjectUpdateWithWhereUniqueWithoutCoSupervisorPaymentInput[]
         updateMany?: ThesisProjectUpdateManyWithWhereWithoutCoSupervisorPaymentInput | ThesisProjectUpdateManyWithWhereWithoutCoSupervisorPaymentInput[]
+        deleteMany?: ThesisProjectScalarWhereInput | ThesisProjectScalarWhereInput[]
+    };
+    export type ThesisProjectUncheckedUpdateManyWithoutSingleSupervisorPaymentNestedInput = {
+        create?: XOR<ThesisProjectCreateWithoutSingleSupervisorPaymentInput, ThesisProjectUncheckedCreateWithoutSingleSupervisorPaymentInput> | ThesisProjectCreateWithoutSingleSupervisorPaymentInput[] | ThesisProjectUncheckedCreateWithoutSingleSupervisorPaymentInput[]
+        connectOrCreate?: ThesisProjectCreateOrConnectWithoutSingleSupervisorPaymentInput | ThesisProjectCreateOrConnectWithoutSingleSupervisorPaymentInput[]
+        upsert?: ThesisProjectUpsertWithWhereUniqueWithoutSingleSupervisorPaymentInput | ThesisProjectUpsertWithWhereUniqueWithoutSingleSupervisorPaymentInput[]
+        createMany?: ThesisProjectCreateManySingleSupervisorPaymentInputEnvelope
+        set?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
+        disconnect?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
+        delete?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
+        connect?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
+        update?: ThesisProjectUpdateWithWhereUniqueWithoutSingleSupervisorPaymentInput | ThesisProjectUpdateWithWhereUniqueWithoutSingleSupervisorPaymentInput[]
+        updateMany?: ThesisProjectUpdateManyWithWhereWithoutSingleSupervisorPaymentInput | ThesisProjectUpdateManyWithWhereWithoutSingleSupervisorPaymentInput[]
         deleteMany?: ThesisProjectScalarWhereInput | ThesisProjectScalarWhereInput[]
     };
     export type SchoolYearCreateNestedOneWithoutEvaluationPeriodInput = {
@@ -511820,6 +511972,7 @@ export namespace Prisma {
         supervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutThesisProjectsInput
         coSupervisor?: ExpertProfileCreateNestedOneWithoutCoSupervisedThesesInput
         coSupervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutCoThesisProjectsInput
+        singleSupervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutSingleSupervisorPaymentInput
         council?: CouncilCreateNestedOneWithoutThesisInput
         room?: RoomCreateNestedOneWithoutThesisProjectInput
         defenseSession?: DefenseSessionCreateNestedOneWithoutThesisProjectInput
@@ -511871,6 +512024,7 @@ export namespace Prisma {
         coSupervisorName?: string | null
         coSupervisorId?: string | null
         coSupervisorPaymentId?: string | null
+        singleSupervisorPaymentId?: string | null
         singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
@@ -512383,6 +512537,7 @@ export namespace Prisma {
         coSupervisorName?: StringNullableFilter<"ThesisProject"> | string | null
         coSupervisorId?: StringNullableFilter<"ThesisProject"> | string | null
         coSupervisorPaymentId?: StringNullableFilter<"ThesisProject"> | string | null
+        singleSupervisorPaymentId?: StringNullableFilter<"ThesisProject"> | string | null
         singlePayment?: DecimalNullableFilter<"ThesisProject"> | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: StringNullableFilter<"ThesisProject"> | string | null
         THUKY?: StringNullableFilter<"ThesisProject"> | string | null
@@ -543491,6 +543646,7 @@ export namespace Prisma {
         supervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutThesisProjectsInput
         coSupervisor?: ExpertProfileCreateNestedOneWithoutCoSupervisedThesesInput
         coSupervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutCoThesisProjectsInput
+        singleSupervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutSingleSupervisorPaymentInput
         organization?: DM_DonViCreateNestedOneWithoutThesisProjectsInput
         council?: CouncilCreateNestedOneWithoutThesisInput
         room?: RoomCreateNestedOneWithoutThesisProjectInput
@@ -543542,6 +543698,7 @@ export namespace Prisma {
         coSupervisorName?: string | null
         coSupervisorId?: string | null
         coSupervisorPaymentId?: string | null
+        singleSupervisorPaymentId?: string | null
         singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
@@ -552237,6 +552394,7 @@ export namespace Prisma {
         supervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutThesisProjectsInput
         coSupervisor?: ExpertProfileCreateNestedOneWithoutCoSupervisedThesesInput
         coSupervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutCoThesisProjectsInput
+        singleSupervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutSingleSupervisorPaymentInput
         organization?: DM_DonViCreateNestedOneWithoutThesisProjectsInput
         council?: CouncilCreateNestedOneWithoutThesisInput
         defenseSession?: DefenseSessionCreateNestedOneWithoutThesisProjectInput
@@ -552288,6 +552446,7 @@ export namespace Prisma {
         coSupervisorName?: string | null
         coSupervisorId?: string | null
         coSupervisorPaymentId?: string | null
+        singleSupervisorPaymentId?: string | null
         singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
@@ -569699,6 +569858,7 @@ export namespace Prisma {
         supervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutThesisProjectsInput
         coSupervisor?: ExpertProfileCreateNestedOneWithoutCoSupervisedThesesInput
         coSupervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutCoThesisProjectsInput
+        singleSupervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutSingleSupervisorPaymentInput
         organization?: DM_DonViCreateNestedOneWithoutThesisProjectsInput
         council?: CouncilCreateNestedOneWithoutThesisInput
         room?: RoomCreateNestedOneWithoutThesisProjectInput
@@ -569750,6 +569910,7 @@ export namespace Prisma {
         coSupervisorName?: string | null
         coSupervisorId?: string | null
         coSupervisorPaymentId?: string | null
+        singleSupervisorPaymentId?: string | null
         singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
@@ -569833,6 +569994,7 @@ export namespace Prisma {
         supervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutThesisProjectsInput
         coSupervisor?: ExpertProfileCreateNestedOneWithoutCoSupervisedThesesInput
         coSupervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutCoThesisProjectsInput
+        singleSupervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutSingleSupervisorPaymentInput
         organization?: DM_DonViCreateNestedOneWithoutThesisProjectsInput
         council?: CouncilCreateNestedOneWithoutThesisInput
         room?: RoomCreateNestedOneWithoutThesisProjectInput
@@ -569884,6 +570046,7 @@ export namespace Prisma {
         coSupervisorName?: string | null
         coSupervisorId?: string | null
         coSupervisorPaymentId?: string | null
+        singleSupervisorPaymentId?: string | null
         singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
@@ -572897,6 +573060,7 @@ export namespace Prisma {
         supervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutThesisProjectsInput
         coSupervisor?: ExpertProfileCreateNestedOneWithoutCoSupervisedThesesInput
         coSupervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutCoThesisProjectsInput
+        singleSupervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutSingleSupervisorPaymentInput
         organization?: DM_DonViCreateNestedOneWithoutThesisProjectsInput
         council?: CouncilCreateNestedOneWithoutThesisInput
         room?: RoomCreateNestedOneWithoutThesisProjectInput
@@ -572948,6 +573112,7 @@ export namespace Prisma {
         coSupervisorName?: string | null
         coSupervisorId?: string | null
         coSupervisorPaymentId?: string | null
+        singleSupervisorPaymentId?: string | null
         singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
@@ -573676,6 +573841,7 @@ export namespace Prisma {
         paymentDate?: Date | string | null
         transactionCode?: string | null
         coThesisProjects?: ThesisProjectCreateNestedManyWithoutCoSupervisorPaymentInput
+        singleSupervisorPayment?: ThesisProjectCreateNestedManyWithoutSingleSupervisorPaymentInput
     };
     export type SupervisorPaymentRecordUncheckedCreateWithoutThesisProjectsInput = {
         id?: string
@@ -573691,6 +573857,7 @@ export namespace Prisma {
         paymentDate?: Date | string | null
         transactionCode?: string | null
         coThesisProjects?: ThesisProjectUncheckedCreateNestedManyWithoutCoSupervisorPaymentInput
+        singleSupervisorPayment?: ThesisProjectUncheckedCreateNestedManyWithoutSingleSupervisorPaymentInput
     };
     export type SupervisorPaymentRecordCreateOrConnectWithoutThesisProjectsInput = {
         where: SupervisorPaymentRecordWhereUniqueInput
@@ -573786,6 +573953,7 @@ export namespace Prisma {
         paymentDate?: Date | string | null
         transactionCode?: string | null
         thesisProjects?: ThesisProjectCreateNestedManyWithoutSupervisorPaymentInput
+        singleSupervisorPayment?: ThesisProjectCreateNestedManyWithoutSingleSupervisorPaymentInput
     };
     export type SupervisorPaymentRecordUncheckedCreateWithoutCoThesisProjectsInput = {
         id?: string
@@ -573801,10 +573969,47 @@ export namespace Prisma {
         paymentDate?: Date | string | null
         transactionCode?: string | null
         thesisProjects?: ThesisProjectUncheckedCreateNestedManyWithoutSupervisorPaymentInput
+        singleSupervisorPayment?: ThesisProjectUncheckedCreateNestedManyWithoutSingleSupervisorPaymentInput
     };
     export type SupervisorPaymentRecordCreateOrConnectWithoutCoThesisProjectsInput = {
         where: SupervisorPaymentRecordWhereUniqueInput
         create: XOR<SupervisorPaymentRecordCreateWithoutCoThesisProjectsInput, SupervisorPaymentRecordUncheckedCreateWithoutCoThesisProjectsInput>
+    };
+    export type SupervisorPaymentRecordCreateWithoutSingleSupervisorPaymentInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        amount: Decimal | DecimalJsLike | number | string
+        status?: $Enums.PaymentStatus
+        paymentDate?: Date | string | null
+        transactionCode?: string | null
+        thesisProjects?: ThesisProjectCreateNestedManyWithoutSupervisorPaymentInput
+        coThesisProjects?: ThesisProjectCreateNestedManyWithoutCoSupervisorPaymentInput
+    };
+    export type SupervisorPaymentRecordUncheckedCreateWithoutSingleSupervisorPaymentInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        amount: Decimal | DecimalJsLike | number | string
+        status?: $Enums.PaymentStatus
+        paymentDate?: Date | string | null
+        transactionCode?: string | null
+        thesisProjects?: ThesisProjectUncheckedCreateNestedManyWithoutSupervisorPaymentInput
+        coThesisProjects?: ThesisProjectUncheckedCreateNestedManyWithoutCoSupervisorPaymentInput
+    };
+    export type SupervisorPaymentRecordCreateOrConnectWithoutSingleSupervisorPaymentInput = {
+        where: SupervisorPaymentRecordWhereUniqueInput
+        create: XOR<SupervisorPaymentRecordCreateWithoutSingleSupervisorPaymentInput, SupervisorPaymentRecordUncheckedCreateWithoutSingleSupervisorPaymentInput>
     };
     export type DM_DonViCreateWithoutThesisProjectsInput = {
         Id?: string
@@ -574677,6 +574882,7 @@ export namespace Prisma {
         paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         transactionCode?: NullableStringFieldUpdateOperationsInput | string | null
         coThesisProjects?: ThesisProjectUpdateManyWithoutCoSupervisorPaymentNestedInput
+        singleSupervisorPayment?: ThesisProjectUpdateManyWithoutSingleSupervisorPaymentNestedInput
     };
     export type SupervisorPaymentRecordUncheckedUpdateWithoutThesisProjectsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -574692,6 +574898,7 @@ export namespace Prisma {
         paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         transactionCode?: NullableStringFieldUpdateOperationsInput | string | null
         coThesisProjects?: ThesisProjectUncheckedUpdateManyWithoutCoSupervisorPaymentNestedInput
+        singleSupervisorPayment?: ThesisProjectUncheckedUpdateManyWithoutSingleSupervisorPaymentNestedInput
     };
     export type ExpertProfileUpsertWithoutCoSupervisedThesesInput = {
         update: XOR<ExpertProfileUpdateWithoutCoSupervisedThesesInput, ExpertProfileUncheckedUpdateWithoutCoSupervisedThesesInput>
@@ -574797,6 +575004,7 @@ export namespace Prisma {
         paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         transactionCode?: NullableStringFieldUpdateOperationsInput | string | null
         thesisProjects?: ThesisProjectUpdateManyWithoutSupervisorPaymentNestedInput
+        singleSupervisorPayment?: ThesisProjectUpdateManyWithoutSingleSupervisorPaymentNestedInput
     };
     export type SupervisorPaymentRecordUncheckedUpdateWithoutCoThesisProjectsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -574812,6 +575020,48 @@ export namespace Prisma {
         paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         transactionCode?: NullableStringFieldUpdateOperationsInput | string | null
         thesisProjects?: ThesisProjectUncheckedUpdateManyWithoutSupervisorPaymentNestedInput
+        singleSupervisorPayment?: ThesisProjectUncheckedUpdateManyWithoutSingleSupervisorPaymentNestedInput
+    };
+    export type SupervisorPaymentRecordUpsertWithoutSingleSupervisorPaymentInput = {
+        update: XOR<SupervisorPaymentRecordUpdateWithoutSingleSupervisorPaymentInput, SupervisorPaymentRecordUncheckedUpdateWithoutSingleSupervisorPaymentInput>
+        create: XOR<SupervisorPaymentRecordCreateWithoutSingleSupervisorPaymentInput, SupervisorPaymentRecordUncheckedCreateWithoutSingleSupervisorPaymentInput>
+        where?: SupervisorPaymentRecordWhereInput
+    };
+    export type SupervisorPaymentRecordUpdateToOneWithWhereWithoutSingleSupervisorPaymentInput = {
+        where?: SupervisorPaymentRecordWhereInput
+        data: XOR<SupervisorPaymentRecordUpdateWithoutSingleSupervisorPaymentInput, SupervisorPaymentRecordUncheckedUpdateWithoutSingleSupervisorPaymentInput>
+    };
+    export type SupervisorPaymentRecordUpdateWithoutSingleSupervisorPaymentInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+        status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+        paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        transactionCode?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisProjects?: ThesisProjectUpdateManyWithoutSupervisorPaymentNestedInput
+        coThesisProjects?: ThesisProjectUpdateManyWithoutCoSupervisorPaymentNestedInput
+    };
+    export type SupervisorPaymentRecordUncheckedUpdateWithoutSingleSupervisorPaymentInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+        status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+        paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        transactionCode?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisProjects?: ThesisProjectUncheckedUpdateManyWithoutSupervisorPaymentNestedInput
+        coThesisProjects?: ThesisProjectUncheckedUpdateManyWithoutCoSupervisorPaymentNestedInput
     };
     export type DM_DonViUpsertWithoutThesisProjectsInput = {
         update: XOR<DM_DonViUpdateWithoutThesisProjectsInput, DM_DonViUncheckedUpdateWithoutThesisProjectsInput>
@@ -575200,6 +575450,7 @@ export namespace Prisma {
         supervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutThesisProjectsInput
         coSupervisor?: ExpertProfileCreateNestedOneWithoutCoSupervisedThesesInput
         coSupervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutCoThesisProjectsInput
+        singleSupervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutSingleSupervisorPaymentInput
         organization?: DM_DonViCreateNestedOneWithoutThesisProjectsInput
         council?: CouncilCreateNestedOneWithoutThesisInput
         room?: RoomCreateNestedOneWithoutThesisProjectInput
@@ -575251,6 +575502,7 @@ export namespace Prisma {
         coSupervisorName?: string | null
         coSupervisorId?: string | null
         coSupervisorPaymentId?: string | null
+        singleSupervisorPaymentId?: string | null
         singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
@@ -575581,6 +575833,7 @@ export namespace Prisma {
         supervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutThesisProjectsInput
         coSupervisor?: ExpertProfileCreateNestedOneWithoutCoSupervisedThesesInput
         coSupervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutCoThesisProjectsInput
+        singleSupervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutSingleSupervisorPaymentInput
         organization?: DM_DonViCreateNestedOneWithoutThesisProjectsInput
         council?: CouncilCreateNestedOneWithoutThesisInput
         room?: RoomCreateNestedOneWithoutThesisProjectInput
@@ -575632,6 +575885,7 @@ export namespace Prisma {
         coSupervisorName?: string | null
         coSupervisorId?: string | null
         coSupervisorPaymentId?: string | null
+        singleSupervisorPaymentId?: string | null
         singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
@@ -576070,6 +576324,7 @@ export namespace Prisma {
         supervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutThesisProjectsNestedInput
         coSupervisor?: ExpertProfileUpdateOneWithoutCoSupervisedThesesNestedInput
         coSupervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutCoThesisProjectsNestedInput
+        singleSupervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutSingleSupervisorPaymentNestedInput
         organization?: DM_DonViUpdateOneWithoutThesisProjectsNestedInput
         council?: CouncilUpdateOneWithoutThesisNestedInput
         room?: RoomUpdateOneWithoutThesisProjectNestedInput
@@ -576121,6 +576376,7 @@ export namespace Prisma {
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        singleSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
@@ -576523,6 +576779,7 @@ export namespace Prisma {
         supervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutThesisProjectsInput
         coSupervisor?: ExpertProfileCreateNestedOneWithoutCoSupervisedThesesInput
         coSupervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutCoThesisProjectsInput
+        singleSupervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutSingleSupervisorPaymentInput
         organization?: DM_DonViCreateNestedOneWithoutThesisProjectsInput
         council?: CouncilCreateNestedOneWithoutThesisInput
         room?: RoomCreateNestedOneWithoutThesisProjectInput
@@ -576574,6 +576831,7 @@ export namespace Prisma {
         coSupervisorName?: string | null
         coSupervisorId?: string | null
         coSupervisorPaymentId?: string | null
+        singleSupervisorPaymentId?: string | null
         singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
@@ -576657,6 +576915,7 @@ export namespace Prisma {
         supervisor?: ExpertProfileCreateNestedOneWithoutSupervisedThesesInput
         supervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutThesisProjectsInput
         coSupervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutCoThesisProjectsInput
+        singleSupervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutSingleSupervisorPaymentInput
         organization?: DM_DonViCreateNestedOneWithoutThesisProjectsInput
         council?: CouncilCreateNestedOneWithoutThesisInput
         room?: RoomCreateNestedOneWithoutThesisProjectInput
@@ -576708,6 +576967,7 @@ export namespace Prisma {
         supervisorPaymentId?: string | null
         coSupervisorName?: string | null
         coSupervisorPaymentId?: string | null
+        singleSupervisorPaymentId?: string | null
         singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
@@ -576791,6 +577051,7 @@ export namespace Prisma {
         supervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutThesisProjectsInput
         coSupervisor?: ExpertProfileCreateNestedOneWithoutCoSupervisedThesesInput
         coSupervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutCoThesisProjectsInput
+        singleSupervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutSingleSupervisorPaymentInput
         organization?: DM_DonViCreateNestedOneWithoutThesisProjectsInput
         council?: CouncilCreateNestedOneWithoutThesisInput
         room?: RoomCreateNestedOneWithoutThesisProjectInput
@@ -576842,6 +577103,7 @@ export namespace Prisma {
         coSupervisorName?: string | null
         coSupervisorId?: string | null
         coSupervisorPaymentId?: string | null
+        singleSupervisorPaymentId?: string | null
         singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
@@ -577757,6 +578019,7 @@ export namespace Prisma {
         supervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutThesisProjectsInput
         coSupervisor?: ExpertProfileCreateNestedOneWithoutCoSupervisedThesesInput
         coSupervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutCoThesisProjectsInput
+        singleSupervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutSingleSupervisorPaymentInput
         organization?: DM_DonViCreateNestedOneWithoutThesisProjectsInput
         council?: CouncilCreateNestedOneWithoutThesisInput
         room?: RoomCreateNestedOneWithoutThesisProjectInput
@@ -577808,6 +578071,7 @@ export namespace Prisma {
         coSupervisorName?: string | null
         coSupervisorId?: string | null
         coSupervisorPaymentId?: string | null
+        singleSupervisorPaymentId?: string | null
         singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
@@ -577909,6 +578173,7 @@ export namespace Prisma {
         supervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutThesisProjectsNestedInput
         coSupervisor?: ExpertProfileUpdateOneWithoutCoSupervisedThesesNestedInput
         coSupervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutCoThesisProjectsNestedInput
+        singleSupervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutSingleSupervisorPaymentNestedInput
         organization?: DM_DonViUpdateOneWithoutThesisProjectsNestedInput
         council?: CouncilUpdateOneWithoutThesisNestedInput
         room?: RoomUpdateOneWithoutThesisProjectNestedInput
@@ -577960,6 +578225,7 @@ export namespace Prisma {
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        singleSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
@@ -578150,6 +578416,7 @@ export namespace Prisma {
         supervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutThesisProjectsInput
         coSupervisor?: ExpertProfileCreateNestedOneWithoutCoSupervisedThesesInput
         coSupervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutCoThesisProjectsInput
+        singleSupervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutSingleSupervisorPaymentInput
         organization?: DM_DonViCreateNestedOneWithoutThesisProjectsInput
         room?: RoomCreateNestedOneWithoutThesisProjectInput
         defenseSession?: DefenseSessionCreateNestedOneWithoutThesisProjectInput
@@ -578201,6 +578468,7 @@ export namespace Prisma {
         coSupervisorName?: string | null
         coSupervisorId?: string | null
         coSupervisorPaymentId?: string | null
+        singleSupervisorPaymentId?: string | null
         singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
@@ -578753,6 +579021,7 @@ export namespace Prisma {
         supervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutThesisProjectsInput
         coSupervisor?: ExpertProfileCreateNestedOneWithoutCoSupervisedThesesInput
         coSupervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutCoThesisProjectsInput
+        singleSupervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutSingleSupervisorPaymentInput
         organization?: DM_DonViCreateNestedOneWithoutThesisProjectsInput
         council?: CouncilCreateNestedOneWithoutThesisInput
         room?: RoomCreateNestedOneWithoutThesisProjectInput
@@ -578804,6 +579073,7 @@ export namespace Prisma {
         coSupervisorName?: string | null
         coSupervisorId?: string | null
         coSupervisorPaymentId?: string | null
+        singleSupervisorPaymentId?: string | null
         singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
@@ -578972,6 +579242,7 @@ export namespace Prisma {
         supervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutThesisProjectsNestedInput
         coSupervisor?: ExpertProfileUpdateOneWithoutCoSupervisedThesesNestedInput
         coSupervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutCoThesisProjectsNestedInput
+        singleSupervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutSingleSupervisorPaymentNestedInput
         organization?: DM_DonViUpdateOneWithoutThesisProjectsNestedInput
         council?: CouncilUpdateOneWithoutThesisNestedInput
         room?: RoomUpdateOneWithoutThesisProjectNestedInput
@@ -579023,6 +579294,7 @@ export namespace Prisma {
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        singleSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
@@ -579111,6 +579383,7 @@ export namespace Prisma {
         supervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutThesisProjectsInput
         coSupervisor?: ExpertProfileCreateNestedOneWithoutCoSupervisedThesesInput
         coSupervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutCoThesisProjectsInput
+        singleSupervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutSingleSupervisorPaymentInput
         organization?: DM_DonViCreateNestedOneWithoutThesisProjectsInput
         council?: CouncilCreateNestedOneWithoutThesisInput
         room?: RoomCreateNestedOneWithoutThesisProjectInput
@@ -579162,6 +579435,7 @@ export namespace Prisma {
         coSupervisorName?: string | null
         coSupervisorId?: string | null
         coSupervisorPaymentId?: string | null
+        singleSupervisorPaymentId?: string | null
         singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
@@ -579330,6 +579604,7 @@ export namespace Prisma {
         supervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutThesisProjectsNestedInput
         coSupervisor?: ExpertProfileUpdateOneWithoutCoSupervisedThesesNestedInput
         coSupervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutCoThesisProjectsNestedInput
+        singleSupervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutSingleSupervisorPaymentNestedInput
         organization?: DM_DonViUpdateOneWithoutThesisProjectsNestedInput
         council?: CouncilUpdateOneWithoutThesisNestedInput
         room?: RoomUpdateOneWithoutThesisProjectNestedInput
@@ -579381,6 +579656,7 @@ export namespace Prisma {
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        singleSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
@@ -579537,6 +579813,7 @@ export namespace Prisma {
         supervisor?: ExpertProfileCreateNestedOneWithoutSupervisedThesesInput
         coSupervisor?: ExpertProfileCreateNestedOneWithoutCoSupervisedThesesInput
         coSupervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutCoThesisProjectsInput
+        singleSupervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutSingleSupervisorPaymentInput
         organization?: DM_DonViCreateNestedOneWithoutThesisProjectsInput
         council?: CouncilCreateNestedOneWithoutThesisInput
         room?: RoomCreateNestedOneWithoutThesisProjectInput
@@ -579588,6 +579865,7 @@ export namespace Prisma {
         coSupervisorName?: string | null
         coSupervisorId?: string | null
         coSupervisorPaymentId?: string | null
+        singleSupervisorPaymentId?: string | null
         singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
@@ -579671,6 +579949,7 @@ export namespace Prisma {
         supervisor?: ExpertProfileCreateNestedOneWithoutSupervisedThesesInput
         supervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutThesisProjectsInput
         coSupervisor?: ExpertProfileCreateNestedOneWithoutCoSupervisedThesesInput
+        singleSupervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutSingleSupervisorPaymentInput
         organization?: DM_DonViCreateNestedOneWithoutThesisProjectsInput
         council?: CouncilCreateNestedOneWithoutThesisInput
         room?: RoomCreateNestedOneWithoutThesisProjectInput
@@ -579722,6 +580001,7 @@ export namespace Prisma {
         supervisorPaymentId?: string | null
         coSupervisorName?: string | null
         coSupervisorId?: string | null
+        singleSupervisorPaymentId?: string | null
         singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
@@ -579751,6 +580031,142 @@ export namespace Prisma {
         data: ThesisProjectCreateManyCoSupervisorPaymentInput | ThesisProjectCreateManyCoSupervisorPaymentInput[]
         skipDuplicates?: boolean
     };
+    export type ThesisProjectCreateWithoutSingleSupervisorPaymentInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        title?: string | null
+        titleEN?: string | null
+        summary?: string | null
+        objectives?: string | null
+        scope?: string | null
+        methodology?: string | null
+        expectedResults?: string | null
+        requirements?: string | null
+        technologies?: string | null
+        thesisType?: $Enums.ThesisType
+        status?: $Enums.ThesisProjectStatus
+        language?: string | null
+        type?: string | null
+        isLock?: boolean
+        editProject?: string | null
+        researchTopicAssociated?: string | null
+        firstCheckProgress?: number | null
+        secondCheckProgress?: number | null
+        isEligibleForDefense?: boolean
+        isProductProject?: boolean
+        isGroupProject?: boolean
+        isLanguage?: boolean
+        externalUnit?: boolean
+        supervisorName?: string | null
+        coSupervisorName?: string | null
+        singlePayment?: Decimal | DecimalJsLike | number | string | null
+        CHUTICH?: string | null
+        THUKY?: string | null
+        PHANBIEN1?: string | null
+        PHANBIEN2?: string | null
+        UYVIEN3?: string | null
+        maxStudents?: number | null
+        defenseDate?: Date | string | null
+        registrationStart?: Date | string | null
+        registrationEnd?: Date | string | null
+        projectStart?: Date | string | null
+        projectEnd?: Date | string | null
+        primarySupervisor?: LecturerCreateNestedOneWithoutPrimarySupervisorThesisProjectInput
+        secondarySupervisor?: LecturerCreateNestedOneWithoutSecondarySupervisorThesisProjectInput
+        thirdSupervisor?: ExpertProfileCreateNestedOneWithoutThirdSupervisedThesesInput
+        subjectClass?: SubjectClassCreateNestedOneWithoutThesisProjectsInput
+        thesisSession?: ThesisSessionCreateNestedOneWithoutThesisProjectInput
+        supervisor?: ExpertProfileCreateNestedOneWithoutSupervisedThesesInput
+        supervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutThesisProjectsInput
+        coSupervisor?: ExpertProfileCreateNestedOneWithoutCoSupervisedThesesInput
+        coSupervisorPayment?: SupervisorPaymentRecordCreateNestedOneWithoutCoThesisProjectsInput
+        organization?: DM_DonViCreateNestedOneWithoutThesisProjectsInput
+        council?: CouncilCreateNestedOneWithoutThesisInput
+        room?: RoomCreateNestedOneWithoutThesisProjectInput
+        defenseSession?: DefenseSessionCreateNestedOneWithoutThesisProjectInput
+        defenseRecord?: DefenseRecordCreateNestedOneWithoutThesisInput
+        librarySubmission?: LibrarySubmissionCreateNestedOneWithoutThesisInput
+        decisions?: DecisionCreateNestedManyWithoutThesisProjectInput
+        registrations?: StudentThesisRegistrationCreateNestedManyWithoutThesisProjectInput
+    };
+    export type ThesisProjectUncheckedCreateWithoutSingleSupervisorPaymentInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        title?: string | null
+        titleEN?: string | null
+        summary?: string | null
+        objectives?: string | null
+        scope?: string | null
+        methodology?: string | null
+        expectedResults?: string | null
+        requirements?: string | null
+        technologies?: string | null
+        thesisType?: $Enums.ThesisType
+        status?: $Enums.ThesisProjectStatus
+        language?: string | null
+        type?: string | null
+        isLock?: boolean
+        editProject?: string | null
+        researchTopicAssociated?: string | null
+        firstCheckProgress?: number | null
+        secondCheckProgress?: number | null
+        isEligibleForDefense?: boolean
+        primarySupervisorId?: string | null
+        secondarySupervisorId?: string | null
+        thirdSupervisorId?: string | null
+        isProductProject?: boolean
+        isGroupProject?: boolean
+        isLanguage?: boolean
+        externalUnit?: boolean
+        subjectClassId?: string | null
+        thesisSessionId?: string | null
+        supervisorName?: string | null
+        supervisorId?: string | null
+        supervisorPaymentId?: string | null
+        coSupervisorName?: string | null
+        coSupervisorId?: string | null
+        coSupervisorPaymentId?: string | null
+        singlePayment?: Decimal | DecimalJsLike | number | string | null
+        CHUTICH?: string | null
+        THUKY?: string | null
+        PHANBIEN1?: string | null
+        PHANBIEN2?: string | null
+        UYVIEN3?: string | null
+        organizationId?: string | null
+        maxStudents?: number | null
+        councilId?: string | null
+        roomId?: string | null
+        defenseDate?: Date | string | null
+        defenseSessionId?: string | null
+        registrationStart?: Date | string | null
+        registrationEnd?: Date | string | null
+        projectStart?: Date | string | null
+        projectEnd?: Date | string | null
+        defenseRecord?: DefenseRecordUncheckedCreateNestedOneWithoutThesisInput
+        librarySubmission?: LibrarySubmissionUncheckedCreateNestedOneWithoutThesisInput
+        decisions?: DecisionUncheckedCreateNestedManyWithoutThesisProjectInput
+        registrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutThesisProjectInput
+    };
+    export type ThesisProjectCreateOrConnectWithoutSingleSupervisorPaymentInput = {
+        where: ThesisProjectWhereUniqueInput
+        create: XOR<ThesisProjectCreateWithoutSingleSupervisorPaymentInput, ThesisProjectUncheckedCreateWithoutSingleSupervisorPaymentInput>
+    };
+    export type ThesisProjectCreateManySingleSupervisorPaymentInputEnvelope = {
+        data: ThesisProjectCreateManySingleSupervisorPaymentInput | ThesisProjectCreateManySingleSupervisorPaymentInput[]
+        skipDuplicates?: boolean
+    };
     export type ThesisProjectUpsertWithWhereUniqueWithoutSupervisorPaymentInput = {
         where: ThesisProjectWhereUniqueInput
         update: XOR<ThesisProjectUpdateWithoutSupervisorPaymentInput, ThesisProjectUncheckedUpdateWithoutSupervisorPaymentInput>
@@ -579776,6 +580192,19 @@ export namespace Prisma {
     export type ThesisProjectUpdateManyWithWhereWithoutCoSupervisorPaymentInput = {
         where: ThesisProjectScalarWhereInput
         data: XOR<ThesisProjectUpdateManyMutationInput, ThesisProjectUncheckedUpdateManyWithoutCoSupervisorPaymentInput>
+    };
+    export type ThesisProjectUpsertWithWhereUniqueWithoutSingleSupervisorPaymentInput = {
+        where: ThesisProjectWhereUniqueInput
+        update: XOR<ThesisProjectUpdateWithoutSingleSupervisorPaymentInput, ThesisProjectUncheckedUpdateWithoutSingleSupervisorPaymentInput>
+        create: XOR<ThesisProjectCreateWithoutSingleSupervisorPaymentInput, ThesisProjectUncheckedCreateWithoutSingleSupervisorPaymentInput>
+    };
+    export type ThesisProjectUpdateWithWhereUniqueWithoutSingleSupervisorPaymentInput = {
+        where: ThesisProjectWhereUniqueInput
+        data: XOR<ThesisProjectUpdateWithoutSingleSupervisorPaymentInput, ThesisProjectUncheckedUpdateWithoutSingleSupervisorPaymentInput>
+    };
+    export type ThesisProjectUpdateManyWithWhereWithoutSingleSupervisorPaymentInput = {
+        where: ThesisProjectScalarWhereInput
+        data: XOR<ThesisProjectUpdateManyMutationInput, ThesisProjectUncheckedUpdateManyWithoutSingleSupervisorPaymentInput>
     };
     export type SchoolYearCreateWithoutEvaluationPeriodInput = {
         id?: string
@@ -621490,6 +621919,7 @@ export namespace Prisma {
         coSupervisorName?: string | null
         coSupervisorId?: string | null
         coSupervisorPaymentId?: string | null
+        singleSupervisorPaymentId?: string | null
         singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
@@ -622435,6 +622865,7 @@ export namespace Prisma {
         supervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutThesisProjectsNestedInput
         coSupervisor?: ExpertProfileUpdateOneWithoutCoSupervisedThesesNestedInput
         coSupervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutCoThesisProjectsNestedInput
+        singleSupervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutSingleSupervisorPaymentNestedInput
         council?: CouncilUpdateOneWithoutThesisNestedInput
         room?: RoomUpdateOneWithoutThesisProjectNestedInput
         defenseSession?: DefenseSessionUpdateOneWithoutThesisProjectNestedInput
@@ -622486,6 +622917,7 @@ export namespace Prisma {
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        singleSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
@@ -622549,6 +622981,7 @@ export namespace Prisma {
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        singleSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
@@ -646265,6 +646698,7 @@ export namespace Prisma {
         coSupervisorName?: string | null
         coSupervisorId?: string | null
         coSupervisorPaymentId?: string | null
+        singleSupervisorPaymentId?: string | null
         singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
@@ -646693,6 +647127,7 @@ export namespace Prisma {
         supervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutThesisProjectsNestedInput
         coSupervisor?: ExpertProfileUpdateOneWithoutCoSupervisedThesesNestedInput
         coSupervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutCoThesisProjectsNestedInput
+        singleSupervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutSingleSupervisorPaymentNestedInput
         organization?: DM_DonViUpdateOneWithoutThesisProjectsNestedInput
         council?: CouncilUpdateOneWithoutThesisNestedInput
         room?: RoomUpdateOneWithoutThesisProjectNestedInput
@@ -646744,6 +647179,7 @@ export namespace Prisma {
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        singleSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
@@ -646807,6 +647243,7 @@ export namespace Prisma {
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        singleSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
@@ -650979,6 +651416,7 @@ export namespace Prisma {
         coSupervisorName?: string | null
         coSupervisorId?: string | null
         coSupervisorPaymentId?: string | null
+        singleSupervisorPaymentId?: string | null
         singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
@@ -651397,6 +651835,7 @@ export namespace Prisma {
         supervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutThesisProjectsNestedInput
         coSupervisor?: ExpertProfileUpdateOneWithoutCoSupervisedThesesNestedInput
         coSupervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutCoThesisProjectsNestedInput
+        singleSupervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutSingleSupervisorPaymentNestedInput
         organization?: DM_DonViUpdateOneWithoutThesisProjectsNestedInput
         council?: CouncilUpdateOneWithoutThesisNestedInput
         defenseSession?: DefenseSessionUpdateOneWithoutThesisProjectNestedInput
@@ -651448,6 +651887,7 @@ export namespace Prisma {
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        singleSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
@@ -651511,6 +651951,7 @@ export namespace Prisma {
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        singleSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
@@ -657594,6 +658035,7 @@ export namespace Prisma {
         coSupervisorName?: string | null
         coSupervisorId?: string | null
         coSupervisorPaymentId?: string | null
+        singleSupervisorPaymentId?: string | null
         singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
@@ -657653,6 +658095,7 @@ export namespace Prisma {
         coSupervisorName?: string | null
         coSupervisorId?: string | null
         coSupervisorPaymentId?: string | null
+        singleSupervisorPaymentId?: string | null
         singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
@@ -659147,6 +659590,7 @@ export namespace Prisma {
         supervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutThesisProjectsNestedInput
         coSupervisor?: ExpertProfileUpdateOneWithoutCoSupervisedThesesNestedInput
         coSupervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutCoThesisProjectsNestedInput
+        singleSupervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutSingleSupervisorPaymentNestedInput
         organization?: DM_DonViUpdateOneWithoutThesisProjectsNestedInput
         council?: CouncilUpdateOneWithoutThesisNestedInput
         room?: RoomUpdateOneWithoutThesisProjectNestedInput
@@ -659198,6 +659642,7 @@ export namespace Prisma {
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        singleSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
@@ -659261,6 +659706,7 @@ export namespace Prisma {
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        singleSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
@@ -659332,6 +659778,7 @@ export namespace Prisma {
         supervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutThesisProjectsNestedInput
         coSupervisor?: ExpertProfileUpdateOneWithoutCoSupervisedThesesNestedInput
         coSupervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutCoThesisProjectsNestedInput
+        singleSupervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutSingleSupervisorPaymentNestedInput
         organization?: DM_DonViUpdateOneWithoutThesisProjectsNestedInput
         council?: CouncilUpdateOneWithoutThesisNestedInput
         room?: RoomUpdateOneWithoutThesisProjectNestedInput
@@ -659383,6 +659830,7 @@ export namespace Prisma {
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        singleSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
@@ -659446,6 +659894,7 @@ export namespace Prisma {
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        singleSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
@@ -659577,6 +660026,7 @@ export namespace Prisma {
         coSupervisorName?: string | null
         coSupervisorId?: string | null
         coSupervisorPaymentId?: string | null
+        singleSupervisorPaymentId?: string | null
         singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
@@ -659648,6 +660098,7 @@ export namespace Prisma {
         supervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutThesisProjectsNestedInput
         coSupervisor?: ExpertProfileUpdateOneWithoutCoSupervisedThesesNestedInput
         coSupervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutCoThesisProjectsNestedInput
+        singleSupervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutSingleSupervisorPaymentNestedInput
         organization?: DM_DonViUpdateOneWithoutThesisProjectsNestedInput
         council?: CouncilUpdateOneWithoutThesisNestedInput
         room?: RoomUpdateOneWithoutThesisProjectNestedInput
@@ -659699,6 +660150,7 @@ export namespace Prisma {
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        singleSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
@@ -659762,6 +660214,7 @@ export namespace Prisma {
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        singleSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
@@ -659954,6 +660407,7 @@ export namespace Prisma {
         coSupervisorName?: string | null
         coSupervisorId?: string | null
         coSupervisorPaymentId?: string | null
+        singleSupervisorPaymentId?: string | null
         singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
@@ -660025,6 +660479,7 @@ export namespace Prisma {
         supervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutThesisProjectsNestedInput
         coSupervisor?: ExpertProfileUpdateOneWithoutCoSupervisedThesesNestedInput
         coSupervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutCoThesisProjectsNestedInput
+        singleSupervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutSingleSupervisorPaymentNestedInput
         organization?: DM_DonViUpdateOneWithoutThesisProjectsNestedInput
         council?: CouncilUpdateOneWithoutThesisNestedInput
         room?: RoomUpdateOneWithoutThesisProjectNestedInput
@@ -660076,6 +660531,7 @@ export namespace Prisma {
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        singleSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
@@ -660139,6 +660595,7 @@ export namespace Prisma {
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        singleSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
@@ -660197,6 +660654,7 @@ export namespace Prisma {
         coSupervisorName?: string | null
         coSupervisorId?: string | null
         coSupervisorPaymentId?: string | null
+        singleSupervisorPaymentId?: string | null
         singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
@@ -660256,6 +660714,7 @@ export namespace Prisma {
         supervisorPaymentId?: string | null
         coSupervisorName?: string | null
         coSupervisorPaymentId?: string | null
+        singleSupervisorPaymentId?: string | null
         singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
@@ -660315,6 +660774,7 @@ export namespace Prisma {
         coSupervisorName?: string | null
         coSupervisorId?: string | null
         coSupervisorPaymentId?: string | null
+        singleSupervisorPaymentId?: string | null
         singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
@@ -660559,6 +661019,7 @@ export namespace Prisma {
         supervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutThesisProjectsNestedInput
         coSupervisor?: ExpertProfileUpdateOneWithoutCoSupervisedThesesNestedInput
         coSupervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutCoThesisProjectsNestedInput
+        singleSupervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutSingleSupervisorPaymentNestedInput
         organization?: DM_DonViUpdateOneWithoutThesisProjectsNestedInput
         council?: CouncilUpdateOneWithoutThesisNestedInput
         room?: RoomUpdateOneWithoutThesisProjectNestedInput
@@ -660610,6 +661071,7 @@ export namespace Prisma {
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        singleSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
@@ -660673,6 +661135,7 @@ export namespace Prisma {
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        singleSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
@@ -660744,6 +661207,7 @@ export namespace Prisma {
         supervisor?: ExpertProfileUpdateOneWithoutSupervisedThesesNestedInput
         supervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutThesisProjectsNestedInput
         coSupervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutCoThesisProjectsNestedInput
+        singleSupervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutSingleSupervisorPaymentNestedInput
         organization?: DM_DonViUpdateOneWithoutThesisProjectsNestedInput
         council?: CouncilUpdateOneWithoutThesisNestedInput
         room?: RoomUpdateOneWithoutThesisProjectNestedInput
@@ -660795,6 +661259,7 @@ export namespace Prisma {
         supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        singleSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
@@ -660858,6 +661323,7 @@ export namespace Prisma {
         supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        singleSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
@@ -660929,6 +661395,7 @@ export namespace Prisma {
         supervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutThesisProjectsNestedInput
         coSupervisor?: ExpertProfileUpdateOneWithoutCoSupervisedThesesNestedInput
         coSupervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutCoThesisProjectsNestedInput
+        singleSupervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutSingleSupervisorPaymentNestedInput
         organization?: DM_DonViUpdateOneWithoutThesisProjectsNestedInput
         council?: CouncilUpdateOneWithoutThesisNestedInput
         room?: RoomUpdateOneWithoutThesisProjectNestedInput
@@ -660980,6 +661447,7 @@ export namespace Prisma {
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        singleSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
@@ -661043,6 +661511,7 @@ export namespace Prisma {
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        singleSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
@@ -661716,6 +662185,7 @@ export namespace Prisma {
         coSupervisorName?: string | null
         coSupervisorId?: string | null
         coSupervisorPaymentId?: string | null
+        singleSupervisorPaymentId?: string | null
         singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
@@ -661799,6 +662269,7 @@ export namespace Prisma {
         supervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutThesisProjectsNestedInput
         coSupervisor?: ExpertProfileUpdateOneWithoutCoSupervisedThesesNestedInput
         coSupervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutCoThesisProjectsNestedInput
+        singleSupervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutSingleSupervisorPaymentNestedInput
         organization?: DM_DonViUpdateOneWithoutThesisProjectsNestedInput
         room?: RoomUpdateOneWithoutThesisProjectNestedInput
         defenseSession?: DefenseSessionUpdateOneWithoutThesisProjectNestedInput
@@ -661850,6 +662321,7 @@ export namespace Prisma {
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        singleSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
@@ -661913,6 +662385,7 @@ export namespace Prisma {
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        singleSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
@@ -662299,6 +662772,7 @@ export namespace Prisma {
         coSupervisorName?: string | null
         coSupervisorId?: string | null
         coSupervisorPaymentId?: string | null
+        singleSupervisorPaymentId?: string | null
         singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
@@ -662358,6 +662832,67 @@ export namespace Prisma {
         supervisorPaymentId?: string | null
         coSupervisorName?: string | null
         coSupervisorId?: string | null
+        singleSupervisorPaymentId?: string | null
+        singlePayment?: Decimal | DecimalJsLike | number | string | null
+        CHUTICH?: string | null
+        THUKY?: string | null
+        PHANBIEN1?: string | null
+        PHANBIEN2?: string | null
+        UYVIEN3?: string | null
+        organizationId?: string | null
+        maxStudents?: number | null
+        councilId?: string | null
+        roomId?: string | null
+        defenseDate?: Date | string | null
+        defenseSessionId?: string | null
+        registrationStart?: Date | string | null
+        registrationEnd?: Date | string | null
+        projectStart?: Date | string | null
+        projectEnd?: Date | string | null
+    };
+    export type ThesisProjectCreateManySingleSupervisorPaymentInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        title?: string | null
+        titleEN?: string | null
+        summary?: string | null
+        objectives?: string | null
+        scope?: string | null
+        methodology?: string | null
+        expectedResults?: string | null
+        requirements?: string | null
+        technologies?: string | null
+        thesisType?: $Enums.ThesisType
+        status?: $Enums.ThesisProjectStatus
+        language?: string | null
+        type?: string | null
+        isLock?: boolean
+        editProject?: string | null
+        researchTopicAssociated?: string | null
+        firstCheckProgress?: number | null
+        secondCheckProgress?: number | null
+        isEligibleForDefense?: boolean
+        primarySupervisorId?: string | null
+        secondarySupervisorId?: string | null
+        thirdSupervisorId?: string | null
+        isProductProject?: boolean
+        isGroupProject?: boolean
+        isLanguage?: boolean
+        externalUnit?: boolean
+        subjectClassId?: string | null
+        thesisSessionId?: string | null
+        supervisorName?: string | null
+        supervisorId?: string | null
+        supervisorPaymentId?: string | null
+        coSupervisorName?: string | null
+        coSupervisorId?: string | null
+        coSupervisorPaymentId?: string | null
         singlePayment?: Decimal | DecimalJsLike | number | string | null
         CHUTICH?: string | null
         THUKY?: string | null
@@ -662429,6 +662964,7 @@ export namespace Prisma {
         supervisor?: ExpertProfileUpdateOneWithoutSupervisedThesesNestedInput
         coSupervisor?: ExpertProfileUpdateOneWithoutCoSupervisedThesesNestedInput
         coSupervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutCoThesisProjectsNestedInput
+        singleSupervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutSingleSupervisorPaymentNestedInput
         organization?: DM_DonViUpdateOneWithoutThesisProjectsNestedInput
         council?: CouncilUpdateOneWithoutThesisNestedInput
         room?: RoomUpdateOneWithoutThesisProjectNestedInput
@@ -662480,6 +663016,7 @@ export namespace Prisma {
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        singleSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
@@ -662543,6 +663080,7 @@ export namespace Prisma {
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        singleSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
@@ -662614,6 +663152,7 @@ export namespace Prisma {
         supervisor?: ExpertProfileUpdateOneWithoutSupervisedThesesNestedInput
         supervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutThesisProjectsNestedInput
         coSupervisor?: ExpertProfileUpdateOneWithoutCoSupervisedThesesNestedInput
+        singleSupervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutSingleSupervisorPaymentNestedInput
         organization?: DM_DonViUpdateOneWithoutThesisProjectsNestedInput
         council?: CouncilUpdateOneWithoutThesisNestedInput
         room?: RoomUpdateOneWithoutThesisProjectNestedInput
@@ -662665,6 +663204,7 @@ export namespace Prisma {
         supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        singleSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null
@@ -662728,6 +663268,195 @@ export namespace Prisma {
         supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        singleSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+        CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
+        THUKY?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN2?: NullableStringFieldUpdateOperationsInput | string | null
+        UYVIEN3?: NullableStringFieldUpdateOperationsInput | string | null
+        organizationId?: NullableStringFieldUpdateOperationsInput | string | null
+        maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
+        councilId?: NullableStringFieldUpdateOperationsInput | string | null
+        roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        defenseSessionId?: NullableStringFieldUpdateOperationsInput | string | null
+        registrationStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        registrationEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        projectStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        projectEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    };
+    export type ThesisProjectUpdateWithoutSingleSupervisorPaymentInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        title?: NullableStringFieldUpdateOperationsInput | string | null
+        titleEN?: NullableStringFieldUpdateOperationsInput | string | null
+        summary?: NullableStringFieldUpdateOperationsInput | string | null
+        objectives?: NullableStringFieldUpdateOperationsInput | string | null
+        scope?: NullableStringFieldUpdateOperationsInput | string | null
+        methodology?: NullableStringFieldUpdateOperationsInput | string | null
+        expectedResults?: NullableStringFieldUpdateOperationsInput | string | null
+        requirements?: NullableStringFieldUpdateOperationsInput | string | null
+        technologies?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
+        status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
+        language?: NullableStringFieldUpdateOperationsInput | string | null
+        type?: NullableStringFieldUpdateOperationsInput | string | null
+        isLock?: BoolFieldUpdateOperationsInput | boolean
+        editProject?: NullableStringFieldUpdateOperationsInput | string | null
+        researchTopicAssociated?: NullableStringFieldUpdateOperationsInput | string | null
+        firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+        secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+        isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
+        isProductProject?: BoolFieldUpdateOperationsInput | boolean
+        isGroupProject?: BoolFieldUpdateOperationsInput | boolean
+        isLanguage?: BoolFieldUpdateOperationsInput | boolean
+        externalUnit?: BoolFieldUpdateOperationsInput | boolean
+        supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
+        singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+        CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
+        THUKY?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN2?: NullableStringFieldUpdateOperationsInput | string | null
+        UYVIEN3?: NullableStringFieldUpdateOperationsInput | string | null
+        maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
+        defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        registrationStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        registrationEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        projectStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        projectEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        primarySupervisor?: LecturerUpdateOneWithoutPrimarySupervisorThesisProjectNestedInput
+        secondarySupervisor?: LecturerUpdateOneWithoutSecondarySupervisorThesisProjectNestedInput
+        thirdSupervisor?: ExpertProfileUpdateOneWithoutThirdSupervisedThesesNestedInput
+        subjectClass?: SubjectClassUpdateOneWithoutThesisProjectsNestedInput
+        thesisSession?: ThesisSessionUpdateOneWithoutThesisProjectNestedInput
+        supervisor?: ExpertProfileUpdateOneWithoutSupervisedThesesNestedInput
+        supervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutThesisProjectsNestedInput
+        coSupervisor?: ExpertProfileUpdateOneWithoutCoSupervisedThesesNestedInput
+        coSupervisorPayment?: SupervisorPaymentRecordUpdateOneWithoutCoThesisProjectsNestedInput
+        organization?: DM_DonViUpdateOneWithoutThesisProjectsNestedInput
+        council?: CouncilUpdateOneWithoutThesisNestedInput
+        room?: RoomUpdateOneWithoutThesisProjectNestedInput
+        defenseSession?: DefenseSessionUpdateOneWithoutThesisProjectNestedInput
+        defenseRecord?: DefenseRecordUpdateOneWithoutThesisNestedInput
+        librarySubmission?: LibrarySubmissionUpdateOneWithoutThesisNestedInput
+        decisions?: DecisionUpdateManyWithoutThesisProjectNestedInput
+        registrations?: StudentThesisRegistrationUpdateManyWithoutThesisProjectNestedInput
+    };
+    export type ThesisProjectUncheckedUpdateWithoutSingleSupervisorPaymentInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        title?: NullableStringFieldUpdateOperationsInput | string | null
+        titleEN?: NullableStringFieldUpdateOperationsInput | string | null
+        summary?: NullableStringFieldUpdateOperationsInput | string | null
+        objectives?: NullableStringFieldUpdateOperationsInput | string | null
+        scope?: NullableStringFieldUpdateOperationsInput | string | null
+        methodology?: NullableStringFieldUpdateOperationsInput | string | null
+        expectedResults?: NullableStringFieldUpdateOperationsInput | string | null
+        requirements?: NullableStringFieldUpdateOperationsInput | string | null
+        technologies?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
+        status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
+        language?: NullableStringFieldUpdateOperationsInput | string | null
+        type?: NullableStringFieldUpdateOperationsInput | string | null
+        isLock?: BoolFieldUpdateOperationsInput | boolean
+        editProject?: NullableStringFieldUpdateOperationsInput | string | null
+        researchTopicAssociated?: NullableStringFieldUpdateOperationsInput | string | null
+        firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+        secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+        isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
+        primarySupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        secondarySupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        thirdSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        isProductProject?: BoolFieldUpdateOperationsInput | boolean
+        isGroupProject?: BoolFieldUpdateOperationsInput | boolean
+        isLanguage?: BoolFieldUpdateOperationsInput | boolean
+        externalUnit?: BoolFieldUpdateOperationsInput | boolean
+        subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+        CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
+        THUKY?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN1?: NullableStringFieldUpdateOperationsInput | string | null
+        PHANBIEN2?: NullableStringFieldUpdateOperationsInput | string | null
+        UYVIEN3?: NullableStringFieldUpdateOperationsInput | string | null
+        organizationId?: NullableStringFieldUpdateOperationsInput | string | null
+        maxStudents?: NullableIntFieldUpdateOperationsInput | number | null
+        councilId?: NullableStringFieldUpdateOperationsInput | string | null
+        roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        defenseSessionId?: NullableStringFieldUpdateOperationsInput | string | null
+        registrationStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        registrationEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        projectStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        projectEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        defenseRecord?: DefenseRecordUncheckedUpdateOneWithoutThesisNestedInput
+        librarySubmission?: LibrarySubmissionUncheckedUpdateOneWithoutThesisNestedInput
+        decisions?: DecisionUncheckedUpdateManyWithoutThesisProjectNestedInput
+        registrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutThesisProjectNestedInput
+    };
+    export type ThesisProjectUncheckedUpdateManyWithoutSingleSupervisorPaymentInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        title?: NullableStringFieldUpdateOperationsInput | string | null
+        titleEN?: NullableStringFieldUpdateOperationsInput | string | null
+        summary?: NullableStringFieldUpdateOperationsInput | string | null
+        objectives?: NullableStringFieldUpdateOperationsInput | string | null
+        scope?: NullableStringFieldUpdateOperationsInput | string | null
+        methodology?: NullableStringFieldUpdateOperationsInput | string | null
+        expectedResults?: NullableStringFieldUpdateOperationsInput | string | null
+        requirements?: NullableStringFieldUpdateOperationsInput | string | null
+        technologies?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisType?: EnumThesisTypeFieldUpdateOperationsInput | $Enums.ThesisType
+        status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
+        language?: NullableStringFieldUpdateOperationsInput | string | null
+        type?: NullableStringFieldUpdateOperationsInput | string | null
+        isLock?: BoolFieldUpdateOperationsInput | boolean
+        editProject?: NullableStringFieldUpdateOperationsInput | string | null
+        researchTopicAssociated?: NullableStringFieldUpdateOperationsInput | string | null
+        firstCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+        secondCheckProgress?: NullableIntFieldUpdateOperationsInput | number | null
+        isEligibleForDefense?: BoolFieldUpdateOperationsInput | boolean
+        primarySupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        secondarySupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        thirdSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        isProductProject?: BoolFieldUpdateOperationsInput | boolean
+        isGroupProject?: BoolFieldUpdateOperationsInput | boolean
+        isLanguage?: BoolFieldUpdateOperationsInput | boolean
+        externalUnit?: BoolFieldUpdateOperationsInput | boolean
+        subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorName?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorName?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        coSupervisorPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
         singlePayment?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
         CHUTICH?: NullableStringFieldUpdateOperationsInput | string | null
         THUKY?: NullableStringFieldUpdateOperationsInput | string | null

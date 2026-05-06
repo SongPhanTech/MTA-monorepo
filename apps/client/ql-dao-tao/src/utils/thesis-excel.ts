@@ -326,12 +326,12 @@ interface HDDanhGiaLuanVanTemplateData {
 const formatThesisDate = (date?: Date | string | null) => {
   if (!date) return ""
   const d = dayjs(date)
-  const day = d.date() 
-  const month = d.month() + 1 
+  const day = d.date()
+  const month = d.month() + 1
   const year = d.year()
 
   const dayStr = day.toString()
-  const monthStr = (month === 1 || month === 2) ? month.toString().padStart(2, "0") : month.toString()
+  const monthStr = month === 1 || month === 2 ? month.toString().padStart(2, "0") : month.toString()
 
   return `${dayStr}/${monthStr}/${year}`
 }
@@ -1219,7 +1219,8 @@ export const exportHosobvlv = async ({
         soQD: soQDBV || "",
         ngayQD: formatThesisDate(ngayQDBV),
         dotxet: dotxetBV || "",
-        type: student.thesisRegistrations?.[0]?.thesisProject?.type?.trim().toLowerCase() || "luận văn",
+        type:
+          student.thesisRegistrations?.[0]?.thesisProject?.type?.trim().toLowerCase() || "luận văn",
         khoa: `Ngày sinh: ${ngaysinh || ""}, ${khoas || ""}`,
         chuyennganh: student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || "",
         nganh:
@@ -2013,7 +2014,6 @@ const convertToTthdbvData = async (
       thongTinStk: stkLines.join("\n"),
       thongTinNganHang: nhLines.join("\n"),
       rawAmount: studentTotal,
-
     }
 
     if (!majorMap.has(majorName)) majorMap.set(majorName, [])
@@ -2715,7 +2715,11 @@ const convertToBanSaoHDDGLV = (
       const gvhd = [gvhd1, gvhd2].filter(Boolean).join("; ")
 
       const m = qdDate ? qdDate.month() + 1 : null
-      const thangTlVal = m ? ((m === 1 || m === 2) ? m.toString().padStart(2, "0") : m.toString()) : ""
+      const thangTlVal = m
+        ? m === 1 || m === 2
+          ? m.toString().padStart(2, "0")
+          : m.toString()
+        : ""
 
       return {
         data: {
@@ -2984,7 +2988,10 @@ const convertToDsChuyenGiaData = (
     return []
   }
 
-  const slotGroups = new Map<string, { students: any[]; defenseDate: string; defenseTime: string; defenseRoom: string }>()
+  const slotGroups = new Map<
+    string,
+    { students: any[]; defenseDate: string; defenseTime: string; defenseRoom: string }
+  >()
   const now = resolveSigningDate(signingDate)
 
   allStudentsInClasses.forEach((student) => {
@@ -3026,78 +3033,84 @@ const convertToDsChuyenGiaData = (
     return a.defenseRoom.localeCompare(b.defenseRoom)
   })
 
-  return sortedSlotGroups.map(({ defenseDate, defenseTime, defenseRoom, students: studentsInSlot }) => {
-    const expertAggregator = new Map<string, any>()
-    let nguoiki = ""
+  return sortedSlotGroups.map(
+    ({ defenseDate, defenseTime, defenseRoom, students: studentsInSlot }) => {
+      const expertAggregator = new Map<string, any>()
+      let nguoiki = ""
 
-    studentsInSlot.forEach((student) => {
-      const project = student?.thesisRegistrations?.[0]?.thesisProject
-      if (!project) return
-      const members = project.council?.members || []
-      nguoiki = project.thesisSession?.chief?.trim() || nguoiki
+      studentsInSlot.forEach((student) => {
+        const project = student?.thesisRegistrations?.[0]?.thesisProject
+        if (!project) return
+        const members = project.council?.members || []
+        nguoiki = project.thesisSession?.chief?.trim() || nguoiki
 
-      members.forEach((member: any) => {
-        const expert = member.expert
-        if (!expert || expert.lecturerId || expert.lecturer) return
+        members.forEach((member: any) => {
+          const expert = member.expert
+          if (!expert || expert.lecturerId || expert.lecturer) return
 
-        const expertId = expert.id
-        const amount = Number(member.payment?.amount || 0)
+          const expertId = expert.id
+          const amount = Number(member.payment?.amount || 0)
 
-        if (!expertAggregator.has(expertId)) {
-          expertAggregator.set(expertId, {
-            tenChuyenGia: (getSupervisorName(expert, false, true) as string) || "",
-            chucVu: expert.position || expert.lecturer?.userProfile?.position || "",
-            donViQuanLi: expert.organization || expert.workplace || "",
-            soTienRaw: 0,
-            stk: expert.bankAccountNumber || "",
-            ngangHang: expert.bankName || "",
-          })
-        }
+          if (!expertAggregator.has(expertId)) {
+            expertAggregator.set(expertId, {
+              tenChuyenGia: (getSupervisorName(expert, false, true) as string) || "",
+              chucVu: expert.position || expert.lecturer?.userProfile?.position || "",
+              donViQuanLi: expert.organization || expert.workplace || "",
+              soTienRaw: 0,
+              stk: expert.bankAccountNumber || "",
+              ngangHang: expert.bankName || "",
+            })
+          }
 
-        const current = expertAggregator.get(expertId)
-        current.soTienRaw += amount
+          const current = expertAggregator.get(expertId)
+          current.soTienRaw += amount
+        })
       })
-    })
 
-    let totalSumFromData = 0
-    const tableData: DsChuyenGiaTable[] = Array.from(expertAggregator.values()).map((item, index) => {
-      totalSumFromData += item.soTienRaw
-      const guestAmount =
+      let totalSumFromData = 0
+      const tableData: DsChuyenGiaTable[] = Array.from(expertAggregator.values()).map(
+        (item, index) => {
+          totalSumFromData += item.soTienRaw
+          const guestAmount =
+            typeof moneyAmount === "number" && Number.isFinite(moneyAmount) && moneyAmount > 0
+              ? moneyAmount
+              : item.soTienRaw
+          return {
+            stt: (index + 1).toString(),
+            tenChuyenGia: item.tenChuyenGia,
+            chucVu: item.chucVu,
+            donViQuanLi: item.donViQuanLi,
+            //todo: đổi định dạng tiền sang dấu phẩy ngăn cách hàng nghìn
+            soTien: formatAmountWithComma(guestAmount),
+            stk: item.stk,
+            ngangHang: item.ngangHang,
+            kiNhan: "",
+          }
+        }
+      )
+      const hasGuestAmount =
         typeof moneyAmount === "number" && Number.isFinite(moneyAmount) && moneyAmount > 0
-          ? moneyAmount
-          : item.soTienRaw
-      return {
-        stt: (index + 1).toString(),
-        tenChuyenGia: item.tenChuyenGia,
-        chucVu: item.chucVu,
-        donViQuanLi: item.donViQuanLi,
-        //todo: đổi định dạng tiền sang dấu phẩy ngăn cách hàng nghìn
-        soTien: formatAmountWithComma(guestAmount),
-        stk: item.stk,
-        ngangHang: item.ngangHang,
-        kiNhan: "",
-      }
-    })
-    const hasGuestAmount =
-      typeof moneyAmount === "number" && Number.isFinite(moneyAmount) && moneyAmount > 0
-    const totalSum = hasGuestAmount ? (moneyAmount as number) * tableData.length : totalSumFromData
+      const totalSum = hasGuestAmount
+        ? (moneyAmount as number) * tableData.length
+        : totalSumFromData
 
-    return {
-      data: {
-        nguoiki: nguoiki,
-        ngay: now.format("DD"),
-        thang: now.format("MM"),
-        nam: now.format("YYYY"),
-        diaDiem: defenseRoom,
-        thoiGian: [defenseDate, defenseTime].filter(Boolean).join(" "),
-        //todo: đổi định dạng tổng tiền sang dấu phẩy ngăn cách hàng nghìn
-        tongTienSo: formatAmountWithComma(totalSum),
-        soChuyenGia: tableData.length,
-        tongTienChu: Number(totalSum).toVndWord("đồng"),
-        data: tableData,
-      },
+      return {
+        data: {
+          nguoiki: nguoiki,
+          ngay: now.format("DD"),
+          thang: now.format("MM"),
+          nam: now.format("YYYY"),
+          diaDiem: defenseRoom,
+          thoiGian: [defenseDate, defenseTime].filter(Boolean).join(" "),
+          //todo: đổi định dạng tổng tiền sang dấu phẩy ngăn cách hàng nghìn
+          tongTienSo: formatAmountWithComma(totalSum),
+          soChuyenGia: tableData.length,
+          tongTienChu: Number(totalSum).toVndWord("đồng"),
+          data: tableData,
+        },
+      }
     }
-  })
+  )
 }
 export const exportHDDanhGiaLuanVan = async ({
   allStudentsInClasses,
@@ -3265,7 +3278,10 @@ const convertToHDDanhGiaLuanVanTemplateData = (
         (student) => student?.thesisRegistrations?.[0]?.thesisProject != null
       ).length,
       ngay: now.date().toString(),
-      thang: (now.month() + 1 === 1 || now.month() + 1 === 2) ? (now.month() + 1).toString().padStart(2, "0") : (now.month() + 1).toString(),
+      thang:
+        now.month() + 1 === 1 || now.month() + 1 === 2
+          ? (now.month() + 1).toString().padStart(2, "0")
+          : (now.month() + 1).toString(),
       nam: now.format("YYYY"),
     },
     data: groupedData,

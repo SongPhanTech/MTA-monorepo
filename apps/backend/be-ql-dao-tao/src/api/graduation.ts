@@ -1,39 +1,36 @@
-import { Readable } from "node:stream";
-import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi";
+import { Readable } from "node:stream"
+import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
 import {
   AcademicActionType,
   ApplicationStatus,
   RankingContext,
   StudentStatus,
   SubjectRequirementType,
-} from "@workspace/db";
+} from "@workspace/db"
 import {
   AcademicRankingConvertScalarSchema,
   DiplomaTypeScalarSchema,
   GraduationRankDowngradeConditionScalarSchema,
   TrainingMajorScalarSchema,
-} from "@workspace/db/zod/models";
-import { getFilesEmployeeUserIdImage } from "@workspace/libs/api/system-share";
-import { getTemplateBuffer } from "@workspace/libs/server";
-import { chunk, genOriginalDiplomaNumber } from "@workspace/libs/utils";
-import Decimal from "decimal.js";
-import { Automizer } from "pptx-automizer";
-import dayjs from "dayjs";
-import customParseFormat from "dayjs/plugin/customParseFormat";
-dayjs.extend(customParseFormat);
-import ExcelJS from "exceljs";
-import XlsxTemplate from "xlsx-template";
-import { prisma } from "..";
-import { UploadExcelModel } from "../dto/upload-excel.dto";
-import { evaluateCondition } from "../services/student-result.service";
-import type { StudentDataContext } from "../types/student-context";
-import {
-  criteriaFieldLabels,
-  criteriaOperatorLabels,
-} from "@workspace/libs/constants";
-import { parseSignerInfo, generateExcelFromTemplate, getScoreClassification } from "../utils";
+} from "@workspace/db/zod/models"
+import { getFilesEmployeeUserIdImage } from "@workspace/libs/api/system-share"
+import { getTemplateBuffer } from "@workspace/libs/server"
+import { chunk, genOriginalDiplomaNumber } from "@workspace/libs/utils"
+import Decimal from "decimal.js"
+import { Automizer } from "pptx-automizer"
+import dayjs from "dayjs"
+import customParseFormat from "dayjs/plugin/customParseFormat"
+dayjs.extend(customParseFormat)
+import ExcelJS from "exceljs"
+import XlsxTemplate from "xlsx-template"
+import { prisma } from ".."
+import { UploadExcelModel } from "../dto/upload-excel.dto"
+import { evaluateCondition } from "../services/student-result.service"
+import type { StudentDataContext } from "../types/student-context"
+import { criteriaFieldLabels, criteriaOperatorLabels } from "@workspace/libs/constants"
+import { parseSignerInfo, generateExcelFromTemplate, getScoreClassification } from "../utils"
 
-const app = new OpenAPIHono({ strict: false });
+const app = new OpenAPIHono({ strict: false })
 
 const graduationApplicationInit = createRoute({
   operationId: "graduationApplicationInit",
@@ -52,7 +49,7 @@ const graduationApplicationInit = createRoute({
             })
             .refine(
               (data) => data.trainingCourseId || data.fixedClassId,
-              "Cần chọn Khoá hoặc Lớp quản lý",
+              "Cần chọn Khoá hoặc Lớp quản lý"
             ),
         },
       },
@@ -76,14 +73,14 @@ const graduationApplicationInit = createRoute({
       },
     },
   },
-});
+})
 
 app.openapi(graduationApplicationInit, async (c) => {
-  const { sessionId, trainingCourseId, fixedClassId } = c.req.valid("json");
+  const { sessionId, trainingCourseId, fixedClassId } = c.req.valid("json")
 
   const session = await prisma.graduationSession.findUniqueOrThrow({
     where: { id: sessionId },
-  });
+  })
 
   const students = await prisma.student.findMany({
     where: {
@@ -94,24 +91,21 @@ app.openapi(graduationApplicationInit, async (c) => {
         in: [StudentStatus.ENROLLED, StudentStatus.PENDING_GRADUATION_REVIEW],
       },
     },
-  });
+  })
 
   if (students.length === 0) {
-    return c.json({ message: "Không tìm thấy sinh viên chưa tốt nghiệp" }, 400);
+    return c.json({ message: "Không tìm thấy sinh viên chưa tốt nghiệp" }, 400)
   }
-const result = await prisma.studentGraduationApplication.createMany({
-  data: students.map((s) => ({
-    studentId: s.id,
-    sessionId: session.id,
-  })),
-  skipDuplicates: true,
-});
+  const result = await prisma.studentGraduationApplication.createMany({
+    data: students.map((s) => ({
+      studentId: s.id,
+      sessionId: session.id,
+    })),
+    skipDuplicates: true,
+  })
 
-return c.json(
-  { message: `Đã tạo ${result.count} đơn xét tốt nghiệp` },
-  200
-);
-});
+  return c.json({ message: `Đã tạo ${result.count} đơn xét tốt nghiệp` }, 200)
+})
 
 const GraduationCheckResult = z
   .object({
@@ -129,7 +123,7 @@ const GraduationCheckResult = z
       })
       .optional(),
   })
-  .openapi("GraduationCheckResult");
+  .openapi("GraduationCheckResult")
 
 const graduationCheck = createRoute({
   operationId: "graduationCheck",
@@ -172,10 +166,10 @@ const graduationCheck = createRoute({
       },
     },
   },
-});
+})
 
 app.openapi(graduationCheck, async (c) => {
-  const { sessionId, applicationIds } = c.req.valid("json");
+  const { sessionId, applicationIds } = c.req.valid("json")
 
   const session = await prisma.graduationSession.findUniqueOrThrow({
     where: { id: sessionId },
@@ -194,9 +188,9 @@ app.openapi(graduationCheck, async (c) => {
         include: { certificates: true },
       },
     },
-  });
+  })
 
-  const results: z.infer<typeof GraduationCheckResult>[] = [];
+  const results: z.infer<typeof GraduationCheckResult>[] = []
 
   const curriculumSelect = {
     requiredCredits: true,
@@ -208,7 +202,7 @@ app.openapi(graduationCheck, async (c) => {
     //   include: { outputStandard: { include: { certificates: true } } },
     //   where: { deletedAt: null, active: true, isRequired: true },
     // },
-  };
+  }
 
   for (const [idx, application] of session.applications.entries()) {
     const student = await prisma.student.findFirstOrThrow({
@@ -254,7 +248,7 @@ app.openapi(graduationCheck, async (c) => {
           },
         },
       },
-    });
+    })
 
     if (!student.fixedClass) {
       results.push({
@@ -263,12 +257,11 @@ app.openapi(graduationCheck, async (c) => {
         reason: "Sinh viên không có lớp quản lý",
         trainingMajor: null,
         diplomaType: null,
-      });
-      continue;
+      })
+      continue
     }
 
-    const curriculumVersion =
-      student.curriculumVersion || student.fixedClass.curriculumVersion;
+    const curriculumVersion = student.curriculumVersion || student.fixedClass.curriculumVersion
 
     if (!curriculumVersion) {
       results.push({
@@ -277,32 +270,30 @@ app.openapi(graduationCheck, async (c) => {
         reason: "Sinh viên không có CTĐT",
         trainingMajor: null,
         diplomaType: null,
-      });
-      continue;
+      })
+      continue
     }
 
-    const reasons: string[] = [];
+    const reasons: string[] = []
 
     // Kiểm tra chuẩn đầu ra
     const lackOfOutputStandard = session.outputStandard.filter((standard) => {
       const notCompleted = standard.certificates.every((cert) => {
         const archived = student.archivedCertificate.find(
-          (archived) => archived.certificateId === cert.id,
-        );
-        return !archived;
-      });
-      return notCompleted;
-    });
+          (archived) => archived.certificateId === cert.id
+        )
+        return !archived
+      })
+      return notCompleted
+    })
 
     if (lackOfOutputStandard.length > 0) {
       reasons.push(
-        `Chưa đạt chuẩn đầu ra: ${lackOfOutputStandard.map((standard) => standard.name).join(", ")}`,
-      );
+        `Chưa đạt chuẩn đầu ra: ${lackOfOutputStandard.map((standard) => standard.name).join(", ")}`
+      )
     }
 
-    const curriculumSubjects = curriculumVersion.trainingBlocks.flatMap(
-      ({ subjects }) => subjects,
-    );
+    const curriculumSubjects = curriculumVersion.trainingBlocks.flatMap(({ subjects }) => subjects)
 
     const {
       scoreToPass,
@@ -311,21 +302,17 @@ app.openapi(graduationCheck, async (c) => {
       baseScore,
       scoreToRetain,
       scoreConverts,
-    } = student.fixedClass.trainingCourse;
+    } = student.fixedClass.trainingCourse
 
     // Kiểm tra các môn có lỗi (hoãn thi, cấm thi, đình chỉ, học lại)
     const subjectScoresWithIssues = await prisma.studentSubjectScore.findMany({
       where: {
         studentId: application.studentId,
         deletedAt: null,
-        OR: [
-          { examBanned: true },
-          { suspended: true },
-          { finalScore: { lt: scoreToPass } },
-        ],
+        OR: [{ examBanned: true }, { suspended: true }, { finalScore: { lt: scoreToPass } }],
       },
       include: { subjectVersion: true },
-    });
+    })
 
     const subjectScores = await prisma.studentSubjectScore.findMany({
       where: {
@@ -338,32 +325,23 @@ app.openapi(graduationCheck, async (c) => {
         },
       },
       include: { subjectVersion: true },
-    });
+    })
 
-    let totalDebtCredit = 0;
+    let totalDebtCredit = 0
     for (const score of subjectScoresWithIssues) {
-      totalDebtCredit += score.subjectVersion.credit;
+      totalDebtCredit += score.subjectVersion.credit
 
-      const passedScore = subjectScores.find(
-        (s) => s.subjectVersionId === score.subjectVersionId,
-      );
-      if (
-        passedScore?.finalScore &&
-        passedScore.finalScore.toNumber() >= scoreToPass
-      ) {
-        continue;
+      const passedScore = subjectScores.find((s) => s.subjectVersionId === score.subjectVersionId)
+      if (passedScore?.finalScore && passedScore.finalScore.toNumber() >= scoreToPass) {
+        continue
       }
 
       if (score.examBanned && score.examBannedReason) {
-        reasons.push(
-          `Môn ${score.subjectVersion.name}: ${score.examBannedReason}`,
-        );
+        reasons.push(`Môn ${score.subjectVersion.name}: ${score.examBannedReason}`)
       }
 
       if (score.suspended && score.suspendedReason) {
-        reasons.push(
-          `Môn ${score.subjectVersion.name}: ${score.suspendedReason}`,
-        );
+        reasons.push(`Môn ${score.subjectVersion.name}: ${score.suspendedReason}`)
       }
     }
 
@@ -381,10 +359,7 @@ app.openapi(graduationCheck, async (c) => {
             ],
           },
           {
-            OR: [
-              { manualFinalScore: { not: null } },
-              { finalScore: { not: null } },
-            ],
+            OR: [{ manualFinalScore: { not: null } }, { finalScore: { not: null } }],
           },
         ],
         deletedAt: null,
@@ -395,48 +370,43 @@ app.openapi(graduationCheck, async (c) => {
       },
       include: { subjectVersion: true },
       orderBy: { createdAt: "asc" },
-    });
+    })
 
     // Chọn điểm cao nhất cho mỗi môn (kết quả môn đạt)
     const subjectScoresMap = new Map<
       string,
       (typeof rawSubjectScores)[number] & {
-        scoreBase10: Decimal;
-        scoreBase4: Decimal;
-        canImprove: boolean;
+        scoreBase10: Decimal
+        scoreBase4: Decimal
+        canImprove: boolean
       }
-    >();
+    >()
 
     for (const subjectScore of rawSubjectScores) {
-      const scoreBase10 = new Decimal(
-        subjectScore.manualFinalScore ?? subjectScore.finalScore!,
-      );
+      const scoreBase10 = new Decimal(subjectScore.manualFinalScore ?? subjectScore.finalScore!)
 
       if (subjectScore.repeated && scoreBase10.lt(scoreToRetain)) {
-        continue;
+        continue
       }
 
       const scoreConvert = scoreConverts.find(
         (s) =>
-          new Decimal(s.base10Min).lte(scoreBase10) &&
-          new Decimal(s.base10Max).gte(scoreBase10),
-      );
-      const scoreBase4 = new Decimal(scoreConvert?.base4 || 0);
+          new Decimal(s.base10Min).lte(scoreBase10) && new Decimal(s.base10Max).gte(scoreBase10)
+      )
+      const scoreBase4 = new Decimal(scoreConvert?.base4 || 0)
 
       const subjectInCurriculum = curriculumSubjects.find(
-        (subject) => subject.subjectId === subjectScore.subjectVersionId,
-      );
+        (subject) => subject.subjectId === subjectScore.subjectVersionId
+      )
 
       if (
-        (subjectInCurriculum?.graduation &&
-          scoreBase10.gte(scoreToPassGraduation)) ||
-        (subjectInCurriculum?.useForFinalScore &&
-          scoreBase10.gte(scoreToPassConditional)) ||
+        (subjectInCurriculum?.graduation && scoreBase10.gte(scoreToPassGraduation)) ||
+        (subjectInCurriculum?.useForFinalScore && scoreBase10.gte(scoreToPassConditional)) ||
         scoreBase10.gte(scoreToPass)
       ) {
-        const entry = subjectScoresMap.get(subjectScore.subjectVersionId);
+        const entry = subjectScoresMap.get(subjectScore.subjectVersionId)
         if (entry && entry.scoreBase10.gte(scoreBase10)) {
-          continue;
+          continue
         }
 
         subjectScoresMap.set(subjectScore.subjectVersionId, {
@@ -444,7 +414,7 @@ app.openapi(graduationCheck, async (c) => {
           scoreBase10,
           scoreBase4,
           canImprove: scoreConvert?.improvementRegister || false,
-        });
+        })
       }
     }
 
@@ -464,23 +434,23 @@ app.openapi(graduationCheck, async (c) => {
       include: {
         subjects: { include: { subject: { select: { credit: true } } } },
       },
-    });
+    })
 
     type SubjectScore = (typeof rawSubjectScores)[number] & {
-      scoreBase10: Decimal;
-      scoreBase4: Decimal;
-      canImprove: boolean;
-    };
+      scoreBase10: Decimal
+      scoreBase4: Decimal
+      canImprove: boolean
+    }
 
     // kết quả những môn sẽ dùng để tính điểm tích luỹ
-    const finalScores = new Map<string, SubjectScore>();
+    const finalScores = new Map<string, SubjectScore>()
 
     // kết quả những môn bổ sung kiến thức (chỉ ghi nhận "Đạt")
-    const markDoneScores = new Map<string, SubjectScore>();
+    const markDoneScores = new Map<string, SubjectScore>()
 
     // những môn trong CTĐT chưa đạt nhưng đã được xử lý bởi nhóm tương đương
-    const processedSubjects = new Set<string>();
-    const processedEquivalencyGroups = new Set<string>();
+    const processedSubjects = new Set<string>()
+    const processedEquivalencyGroups = new Set<string>()
 
     for (const subject of curriculumSubjects) {
       if (
@@ -488,153 +458,138 @@ app.openapi(graduationCheck, async (c) => {
         markDoneScores.has(subject.subjectId) ||
         processedSubjects.has(subject.subjectId)
       ) {
-        continue;
+        continue
       }
 
-      const subjectScore = subjectScoresMap.get(subject.subjectId);
+      const subjectScore = subjectScoresMap.get(subject.subjectId)
       if (subjectScore) {
         // Môn điều kiện (useForFinalScore=false) chỉ ghi nhận Đạt, không tính GPA
         if (!subject.useForFinalScore) {
-          markDoneScores.set(subject.subjectId, subjectScore);
+          markDoneScores.set(subject.subjectId, subjectScore)
         } else {
-          finalScores.set(subject.subjectId, subjectScore);
+          finalScores.set(subject.subjectId, subjectScore)
         }
-        continue;
+        continue
       }
 
       const equivGroups = equivalencyGroups
-        .filter(({ subjects }) =>
-          subjects.some(({ subjectId }) => subjectId === subject.subjectId),
-        )
-        .filter(({ id }) => !processedEquivalencyGroups.has(id));
+        .filter(({ subjects }) => subjects.some(({ subjectId }) => subjectId === subject.subjectId))
+        .filter(({ id }) => !processedEquivalencyGroups.has(id))
 
       if (!subjectScore && !equivGroups.length) {
         // Môn tự chọn chưa học → bỏ qua, để bước check tín chỉ tự chọn xử lý
-        if (subject.type === SubjectRequirementType.Optional) continue;
+        if (subject.type === SubjectRequirementType.Optional) continue
 
         // Môn bắt buộc chưa đạt
         if (subject.type === SubjectRequirementType.Mandatory) {
-          reasons.push(`Chưa đạt môn bắt buộc (${subject.subject.name})`);
+          reasons.push(`Chưa đạt môn bắt buộc (${subject.subject.name})`)
         }
-        continue;
+        continue
       }
 
-      let hasEquivalencyGroup = false;
+      let hasEquivalencyGroup = false
       for (const equivGroup of equivGroups) {
-        processedEquivalencyGroups.add(equivGroup.id);
+        processedEquivalencyGroups.add(equivGroup.id)
 
         const equivalencyGroupSubject = equivGroup.subjects.find(
-          ({ subjectId }) => subject.subjectId === subjectId,
-        );
-        if (!equivalencyGroupSubject) continue;
+          ({ subjectId }) => subject.subjectId === subjectId
+        )
+        if (!equivalencyGroupSubject) continue
 
-        const side = equivalencyGroupSubject.side;
+        const side = equivalencyGroupSubject.side
 
-        const curriculumSide = equivGroup.subjects.filter(
-          (s) => s.side === side,
-        );
-        const otherSide = equivGroup.subjects.filter((s) => s.side !== side);
+        const curriculumSide = equivGroup.subjects.filter((s) => s.side === side)
+        const otherSide = equivGroup.subjects.filter((s) => s.side !== side)
 
         type ScoreResult = (typeof curriculumSide)[number] & {
-          score: SubjectScore | undefined;
-        };
+          score: SubjectScore | undefined
+        }
 
         const curriculumSideResult: ScoreResult[] = curriculumSide.map((s) => ({
           ...s,
           score: subjectScoresMap.get(s.subjectId),
-        }));
+        }))
 
         const otherSideResult: ScoreResult[] = otherSide
           .map((s) => ({
             ...s,
             score: subjectScoresMap.get(s.subjectId),
           }))
-          .filter((r) => r.score);
+          .filter((r) => r.score)
 
         if (otherSideResult.length < otherSide.length) {
-          continue;
+          continue
         }
 
         if (curriculumSideResult.some((r) => !r.score)) {
-          hasEquivalencyGroup = true;
+          hasEquivalencyGroup = true
           for (const result of curriculumSideResult) {
             if (result.score) {
-              finalScores.delete(result.subjectId);
-              markDoneScores.delete(result.subjectId);
+              finalScores.delete(result.subjectId)
+              markDoneScores.delete(result.subjectId)
             } else {
-              processedSubjects.add(result.subjectId);
+              processedSubjects.add(result.subjectId)
             }
           }
           for (const result of otherSideResult) {
-            if (!result.score) continue;
+            if (!result.score) continue
             //Khi equivalency thay thế, cũng phân biệt useForFinalScore
             const otherSubjectInCurriculum = curriculumSubjects.find(
-              (s) => s.subjectId === result.subjectId,
-            );
-            if (
-              otherSubjectInCurriculum &&
-              !otherSubjectInCurriculum.useForFinalScore
-            ) {
-              markDoneScores.set(result.subjectId, result.score);
+              (s) => s.subjectId === result.subjectId
+            )
+            if (otherSubjectInCurriculum && !otherSubjectInCurriculum.useForFinalScore) {
+              markDoneScores.set(result.subjectId, result.score)
             } else {
-              finalScores.set(result.subjectId, result.score);
+              finalScores.set(result.subjectId, result.score)
             }
           }
-          break;
+          break
         }
 
         const calcScore = (scoreResults: ScoreResult[]) => {
-          let totalScore = new Decimal(0);
-          let totalCredit = 0;
+          let totalScore = new Decimal(0)
+          let totalCredit = 0
           for (const scoreResult of scoreResults) {
-            const credit = scoreResult.subject.credit;
+            const credit = scoreResult.subject.credit
             totalScore = totalScore.add(
-              (scoreResult.score?.scoreBase10 || new Decimal(0)).mul(credit),
-            );
-            totalCredit += credit;
+              (scoreResult.score?.scoreBase10 || new Decimal(0)).mul(credit)
+            )
+            totalCredit += credit
           }
-          return totalScore.div(totalCredit);
-        };
+          return totalScore.div(totalCredit)
+        }
 
-        const curriculumSideScore = calcScore(curriculumSideResult);
-        const otherSideScore = calcScore(otherSideResult);
+        const curriculumSideScore = calcScore(curriculumSideResult)
+        const otherSideScore = calcScore(otherSideResult)
 
         if (curriculumSideScore.lte(otherSideScore)) {
-          hasEquivalencyGroup = true;
+          hasEquivalencyGroup = true
           for (const result of otherSideResult) {
-            if (!result.score) continue;
+            if (!result.score) continue
             const otherSubjectInCurriculum = curriculumSubjects.find(
-              (s) => s.subjectId === result.subjectId,
-            );
-            if (
-              otherSubjectInCurriculum &&
-              !otherSubjectInCurriculum.useForFinalScore
-            ) {
-              markDoneScores.set(result.subjectId, result.score);
+              (s) => s.subjectId === result.subjectId
+            )
+            if (otherSubjectInCurriculum && !otherSubjectInCurriculum.useForFinalScore) {
+              markDoneScores.set(result.subjectId, result.score)
             } else {
-              finalScores.set(result.subjectId, result.score);
+              finalScores.set(result.subjectId, result.score)
             }
           }
         }
 
-        if (hasEquivalencyGroup) break;
+        if (hasEquivalencyGroup) break
       }
 
-      if (
-        !hasEquivalencyGroup &&
-        subject.type === SubjectRequirementType.Mandatory
-      ) {
-        reasons.push(`Chưa đạt môn bắt buộc (${subject.subject.name})`);
+      if (!hasEquivalencyGroup && subject.type === SubjectRequirementType.Mandatory) {
+        reasons.push(`Chưa đạt môn bắt buộc (${subject.subject.name})`)
       }
     }
 
     // Kiểm tra & lọc tín chỉ tự chọn
     // Chỉ xét các môn tự chọn trong CTĐT, loại những môn đã được equivalency xử lý
     const electiveSubjects = curriculumSubjects.filter(
-      (s) =>
-        s.type === SubjectRequirementType.Optional &&
-        !processedSubjects.has(s.subjectId),
-    );
+      (s) => s.type === SubjectRequirementType.Optional && !processedSubjects.has(s.subjectId)
+    )
 
     // Lấy các môn tự chọn đã đạt, sort theo điểm cao nhất trước
     const passedElectives = electiveSubjects
@@ -644,70 +599,64 @@ app.openapi(graduationCheck, async (c) => {
       }))
       .filter(
         (
-          s,
+          s
         ): s is {
-          subject: typeof s.subject;
-          score: NonNullable<typeof s.score>;
-        } => s.score !== undefined,
+          subject: typeof s.subject
+          score: NonNullable<typeof s.score>
+        } => s.score !== undefined
       )
-      .sort((a, b) => b.score.scoreBase10.cmp(a.score.scoreBase10));
+      .sort((a, b) => b.score.scoreBase10.cmp(a.score.scoreBase10))
 
     const electiveCreditsRequired = curriculumVersion.trainingBlocks.reduce(
       (pre, cur) => pre + cur.electiveCreditsRequired,
-      0,
-    );
-    let accumulatedElectiveCredits = 0;
+      0
+    )
+    let accumulatedElectiveCredits = 0
 
     for (const { subject, score } of passedElectives) {
       if (accumulatedElectiveCredits >= electiveCreditsRequired) {
         // Môn tự chọn vượt quá → chuyển sang markDoneScores, không tính GPA
-        finalScores.delete(subject.subjectId);
-        markDoneScores.set(subject.subjectId, score);
+        finalScores.delete(subject.subjectId)
+        markDoneScores.set(subject.subjectId, score)
       } else {
-        accumulatedElectiveCredits += subject.subject.credit;
+        accumulatedElectiveCredits += subject.subject.credit
       }
     }
 
     if (accumulatedElectiveCredits < electiveCreditsRequired) {
       reasons.push(
-        `Chưa đủ tín chỉ tự chọn (${accumulatedElectiveCredits}/${electiveCreditsRequired} TC)`,
-      );
+        `Chưa đủ tín chỉ tự chọn (${accumulatedElectiveCredits}/${electiveCreditsRequired} TC)`
+      )
     }
 
     // Tính GPA & tổng tín chỉ tích luỹ (sau khi đã lọc elective)
-    let totalScoreBase10 = new Decimal(0);
-    let totalScoreBase4 = new Decimal(0);
-    let totalPassCredit = 0;
-    let courseGradeLowest = Number.POSITIVE_INFINITY;
-    let graduationCourseGradeLowest = Number.POSITIVE_INFINITY;
+    let totalScoreBase10 = new Decimal(0)
+    let totalScoreBase4 = new Decimal(0)
+    let totalPassCredit = 0
+    let courseGradeLowest = Number.POSITIVE_INFINITY
+    let graduationCourseGradeLowest = Number.POSITIVE_INFINITY
 
     for (const [subjectId, score] of finalScores) {
-      const credit = score.subjectVersion.credit;
-      totalScoreBase10 = totalScoreBase10.add(score.scoreBase10.mul(credit));
-      totalScoreBase4 = totalScoreBase4.add(score.scoreBase4.mul(credit));
-      totalPassCredit += credit;
+      const credit = score.subjectVersion.credit
+      totalScoreBase10 = totalScoreBase10.add(score.scoreBase10.mul(credit))
+      totalScoreBase4 = totalScoreBase4.add(score.scoreBase4.mul(credit))
+      totalPassCredit += credit
 
       // Điểm thấp nhất trong tất cả môn tính GPA
       if (score.scoreBase10.lt(courseGradeLowest)) {
-        courseGradeLowest = score.scoreBase10.toNumber();
+        courseGradeLowest = score.scoreBase10.toNumber()
       }
 
       // Điểm thấp nhất trong các môn tốt nghiệp (graduation = true)
-      const subjectInCurriculum = curriculumSubjects.find(
-        (s) => s.subjectId === subjectId,
-      );
-      if (
-        subjectInCurriculum?.graduation &&
-        score.scoreBase10.lt(graduationCourseGradeLowest)
-      ) {
-        graduationCourseGradeLowest = score.scoreBase10.toNumber();
+      const subjectInCurriculum = curriculumSubjects.find((s) => s.subjectId === subjectId)
+      if (subjectInCurriculum?.graduation && score.scoreBase10.lt(graduationCourseGradeLowest)) {
+        graduationCourseGradeLowest = score.scoreBase10.toNumber()
       }
     }
 
     // Nếu không có môn nào → reset về 0 thay vì Infinity
-    if (courseGradeLowest === Number.POSITIVE_INFINITY) courseGradeLowest = 0;
-    if (graduationCourseGradeLowest === Number.POSITIVE_INFINITY)
-      graduationCourseGradeLowest = 0;
+    if (courseGradeLowest === Number.POSITIVE_INFINITY) courseGradeLowest = 0
+    if (graduationCourseGradeLowest === Number.POSITIVE_INFINITY) graduationCourseGradeLowest = 0
 
     await prisma.studentGraduationApplication.update({
       where: { id: application.id },
@@ -723,57 +672,45 @@ app.openapi(graduationCheck, async (c) => {
           })),
         },
       },
-    });
+    })
 
     // Kiểm tra tổng tín chỉ tích luỹ
-    if (
-      curriculumVersion.requiredCredits &&
-      totalPassCredit < curriculumVersion.requiredCredits
-    ) {
+    if (curriculumVersion.requiredCredits && totalPassCredit < curriculumVersion.requiredCredits) {
       reasons.push(
-        `Chưa đạt số tín chỉ bắt buộc (${totalPassCredit} < ${curriculumVersion.requiredCredits})`,
-      );
+        `Chưa đạt số tín chỉ bắt buộc (${totalPassCredit} < ${curriculumVersion.requiredCredits})`
+      )
     }
 
     if (accumulatedElectiveCredits < electiveCreditsRequired) {
       reasons.push(
-        `Chưa đạt số tín chỉ tự chọn (${accumulatedElectiveCredits} < ${electiveCreditsRequired})`,
-      );
+        `Chưa đạt số tín chỉ tự chọn (${accumulatedElectiveCredits} < ${electiveCreditsRequired})`
+      )
     }
 
     const cumulativeBase10 = totalPassCredit
-      ? totalScoreBase10
-          .div(totalPassCredit)
-          .toDecimalPlaces(2, Decimal.ROUND_HALF_UP)
-      : new Decimal(0);
+      ? totalScoreBase10.div(totalPassCredit).toDecimalPlaces(2, Decimal.ROUND_HALF_UP)
+      : new Decimal(0)
     const cumulativeBase4 = totalPassCredit
-      ? totalScoreBase4
-          .div(totalPassCredit)
-          .toDecimalPlaces(2, Decimal.ROUND_HALF_UP)
-      : new Decimal(0);
+      ? totalScoreBase4.div(totalPassCredit).toDecimalPlaces(2, Decimal.ROUND_HALF_UP)
+      : new Decimal(0)
 
-    const rankLevels =
-      student.fixedClass?.trainingCourse.academicRankingConvert;
+    const rankLevels = student.fixedClass?.trainingCourse.academicRankingConvert
     if (!rankLevels?.length) {
-      reasons.push("Không có hạng xếp loại");
+      reasons.push("Không có hạng xếp loại")
     }
 
-    const CUMULATIVE_GPA = (
-      baseScore === "Base10" ? cumulativeBase10 : cumulativeBase4
-    ).toNumber();
+    const CUMULATIVE_GPA = (baseScore === "Base10" ? cumulativeBase10 : cumulativeBase4).toNumber()
 
-    const semesterRegisteredCredits =
-      student.studentSemesterResult[0]?.passedCredits || 0;
-    const semesterFailedCredits =
-      student.studentSemesterResult[0]?.failedCredits || 0;
-    let repeatYearCount = 0;
-    let suspensionCount = 0;
+    const semesterRegisteredCredits = student.studentSemesterResult[0]?.passedCredits || 0
+    const semesterFailedCredits = student.studentSemesterResult[0]?.failedCredits || 0
+    let repeatYearCount = 0
+    let suspensionCount = 0
     for (const decision of student.studentAcademicDecision) {
       if (decision.actionTaken === AcademicActionType.REPEAT_YEAR) {
-        repeatYearCount++;
+        repeatYearCount++
       }
       if (decision.actionTaken === AcademicActionType.SUSPENSION) {
-        suspensionCount++;
+        suspensionCount++
       }
     }
 
@@ -792,8 +729,7 @@ app.openapi(graduationCheck, async (c) => {
       GRADUATION_COURSE_GRADE_LOWEST: graduationCourseGradeLowest,
 
       SEMESTER_REGISTERED_CREDITS: semesterRegisteredCredits,
-      SEMESTER_PASSED_CREDITS:
-        student.studentSemesterResult[0]?.passedCredits || 0,
+      SEMESTER_PASSED_CREDITS: student.studentSemesterResult[0]?.passedCredits || 0,
       SEMESTER_FAILED_CREDITS: semesterFailedCredits,
       FAILED_CREDITS_PERCENT: semesterRegisteredCredits
         ? (semesterFailedCredits / semesterRegisteredCredits) * 100
@@ -817,7 +753,7 @@ app.openapi(graduationCheck, async (c) => {
       IS_STUDY_DURATION_EXCEEDED: false,
       IS_DEBT_SUBJECT_CONSECUTIVE: false,
       HAS_IMPROVEMENT_REGISTRATION: false,
-    };
+    }
     // Nếu có lý do thất bại → không xét xếp loại
     if (reasons.length > 0) {
       results.push({
@@ -828,19 +764,18 @@ app.openapi(graduationCheck, async (c) => {
         reason: reasons.join("\n"),
         trainingMajor: curriculumVersion.curriculum.trainingMajor,
         diplomaType: curriculumVersion.diplomaType,
-      });
-      continue;
+      })
+      continue
     }
 
     // Xếp loại tốt nghiệp
-    const sortedRankLevels =
-      student.fixedClass.trainingCourse.academicRankingConvert;
+    const sortedRankLevels = student.fixedClass.trainingCourse.academicRankingConvert
 
     for (const [rankIdx, rank] of sortedRankLevels.entries()) {
       const eligibilityResults = await Promise.all(
         rank.rankingCondition.map(async (rule) => {
-          const passed = evaluateCondition(studentDataContext, rule);
-          const actualValue = Number(studentDataContext[rule.field]);
+          const passed = evaluateCondition(studentDataContext, rule)
+          const actualValue = Number(studentDataContext[rule.field])
           try {
             await prisma.applicationCheckResult.upsert({
               where: {
@@ -856,39 +791,35 @@ app.openapi(graduationCheck, async (c) => {
                 actualValue,
               },
               update: { passed, actualValue },
-            });
+            })
           } catch (e) {
-            console.log(e);
+            console.log(e)
           }
-          return passed;
-        }),
-      );
-      const isEligible = eligibilityResults.every((p) => p);
+          return passed
+        })
+      )
+      const isEligible = eligibilityResults.every((p) => p)
 
       const isCorrectScore =
         rank.baseScore === "Base10"
-          ? cumulativeBase10.gte(rank.base10Min || 0) &&
-            cumulativeBase10.lte(rank.base10Max || 0)
-          : cumulativeBase4.gte(rank.base4Min || 0) &&
-            cumulativeBase4.lte(rank.base4Max || 0);
+          ? cumulativeBase10.gte(rank.base10Min || 0) && cumulativeBase10.lte(rank.base10Max || 0)
+          : cumulativeBase4.gte(rank.base4Min || 0) && cumulativeBase4.lte(rank.base4Max || 0)
 
-      const eligibleRank = isEligible && isCorrectScore ? rank : null;
+      const eligibleRank = isEligible && isCorrectScore ? rank : null
 
       if (eligibleRank) {
         const downgrade = eligibleRank.downgradeRules.find(({ conditions }) =>
-          conditions.every((rule) =>
-            evaluateCondition(studentDataContext, rule),
-          ),
-        );
+          conditions.every((rule) => evaluateCondition(studentDataContext, rule))
+        )
 
-        const rankDowngrade = sortedRankLevels[rankIdx + 1] || null;
+        const rankDowngrade = sortedRankLevels[rankIdx + 1] || null
 
         if (downgrade) {
           const reason = `Bị hạ bậc: ${downgrade.conditions
             .map((rule) => {
-              return `${criteriaFieldLabels[rule.field]} ${criteriaOperatorLabels[rule.operator]} ${rule.value}`;
+              return `${criteriaFieldLabels[rule.field]} ${criteriaOperatorLabels[rule.operator]} ${rule.value}`
             })
-            .join("\n")}`;
+            .join("\n")}`
           results.push({
             applicationId: application.id,
             graduation: !!rankDowngrade,
@@ -901,8 +832,8 @@ app.openapi(graduationCheck, async (c) => {
               from: rank,
               conditions: downgrade.conditions,
             },
-          });
-          break;
+          })
+          break
         }
 
         results.push({
@@ -913,8 +844,8 @@ app.openapi(graduationCheck, async (c) => {
           reason: "",
           trainingMajor: curriculumVersion.curriculum.trainingMajor,
           diplomaType: curriculumVersion.diplomaType,
-        });
-        break;
+        })
+        break
       }
     }
 
@@ -927,7 +858,7 @@ app.openapi(graduationCheck, async (c) => {
         reason: "Không thoả mãn xếp loại nào",
         trainingMajor: curriculumVersion.curriculum.trainingMajor,
         diplomaType: curriculumVersion.diplomaType,
-      });
+      })
     }
   }
 
@@ -944,11 +875,11 @@ app.openapi(graduationCheck, async (c) => {
         reason: result.reason,
         status: ApplicationStatus.IN_REVIEW,
       },
-    });
+    })
   }
 
-  return c.json({ results }, 200);
-});
+  return c.json({ results }, 200)
+})
 const generateDiplomaNumber = createRoute({
   operationId: "generateDiplomaNumber",
   tags: ["Graduation"],
@@ -970,13 +901,13 @@ const generateDiplomaNumber = createRoute({
               .string()
               .nullish()
               .transform((val) => {
-                if (val == null) return [];
+                if (val == null) return []
 
                 return val
                   .split(/[\s,;]+/)
                   .map((v) => v.trim())
                   .filter(Boolean)
-                  .map(Number);
+                  .map(Number)
               })
               .refine((arr) => arr.every((n) => !Number.isNaN(n)), {
                 message: "Danh sách bỏ qua phải là số",
@@ -1016,11 +947,10 @@ const generateDiplomaNumber = createRoute({
       },
     },
   },
-});
+})
 
 app.openapi(generateDiplomaNumber, async (c) => {
-  const { field, sessionId, prefix, suffix, start, maxLength, rewrite, skip } =
-    c.req.valid("json");
+  const { field, sessionId, prefix, suffix, start, maxLength, rewrite, skip } = c.req.valid("json")
 
   const decisions = await prisma.graduationDecision.findMany({
     where: {
@@ -1028,23 +958,20 @@ app.openapi(generateDiplomaNumber, async (c) => {
       ...(rewrite ? {} : { [field]: null }),
     },
     select: { id: true },
-    orderBy: [
-      { [field]: "asc" },
-      { student: { userProfile: { firstName: "asc" } } },
-    ],
-  });
+    orderBy: [{ [field]: "asc" }, { student: { userProfile: { firstName: "asc" } } }],
+  })
 
   if (decisions.length === 0) {
-    return c.json({ count: 0 }, 200);
+    return c.json({ count: 0 }, 200)
   }
 
-  const generatedNumbers: string[] = [];
-  let currentNumber = start;
-  let i = 0;
+  const generatedNumbers: string[] = []
+  let currentNumber = start
+  let i = 0
   while (i < decisions.length) {
     if (skip?.includes(currentNumber)) {
-      currentNumber++;
-      continue;
+      currentNumber++
+      continue
     }
 
     generatedNumbers.push(
@@ -1053,11 +980,11 @@ app.openapi(generateDiplomaNumber, async (c) => {
         suffix,
         currentNumber,
         maxLength,
-      }),
-    );
+      })
+    )
 
-    currentNumber++;
-    i++;
+    currentNumber++
+    i++
   }
 
   const existing = await prisma.graduationDecision.findMany({
@@ -1066,7 +993,7 @@ app.openapi(generateDiplomaNumber, async (c) => {
       ...(rewrite ? { application: { sessionId: { not: sessionId } } } : {}),
     },
     select: { [field]: true },
-  });
+  })
 
   if (existing.length > 0) {
     return c.json(
@@ -1077,31 +1004,31 @@ app.openapi(generateDiplomaNumber, async (c) => {
           .map((e) => e[field])
           .filter((num) => !!num)
           .map((num) => {
-            let serialStr = num as unknown as string;
+            let serialStr = num as unknown as string
             if (prefix) {
               serialStr = serialStr.startsWith(prefix)
                 ? serialStr.substring(prefix.length)
-                : serialStr;
+                : serialStr
             }
             if (suffix) {
               serialStr = serialStr.endsWith(suffix)
                 ? serialStr.slice(0, -suffix.length)
-                : serialStr;
+                : serialStr
             }
-            return Number.parseInt(serialStr, 10);
+            return Number.parseInt(serialStr, 10)
           })
           .filter((num) => !Number.isNaN(num)),
       },
-      400,
-    );
+      400
+    )
   }
 
   const updates = decisions.map((decision, index) =>
     prisma.graduationDecision.update({
       where: { id: decision.id },
       data: { [field]: generatedNumbers[index] },
-    }),
-  );
+    })
+  )
 
   if (rewrite) {
     const result = await prisma.$transaction([
@@ -1113,13 +1040,13 @@ app.openapi(generateDiplomaNumber, async (c) => {
         data: { [field]: null },
       }),
       ...updates,
-    ]);
-    return c.json({ count: result[0]?.count }, 200);
+    ])
+    return c.json({ count: result[0]?.count }, 200)
   }
 
-  const result = await prisma.$transaction(updates);
-  return c.json({ count: result.length }, 200);
-});
+  const result = await prisma.$transaction(updates)
+  return c.json({ count: result.length }, 200)
+})
 
 const graduationSessionDecision = createRoute({
   operationId: "graduationSessionDecision",
@@ -1149,10 +1076,10 @@ const graduationSessionDecision = createRoute({
       },
     },
   },
-});
+})
 
 app.openapi(graduationSessionDecision, async (c) => {
-  const { sessionId } = c.req.valid("query");
+  const { sessionId } = c.req.valid("query")
 
   const graduationDecisions = await prisma.graduationDecision.findMany({
     where: { application: { sessionId } },
@@ -1180,14 +1107,14 @@ app.openapi(graduationSessionDecision, async (c) => {
         },
       },
     },
-  });
+  })
 
   const data = graduationDecisions.map((graduationDecision, idx) => {
     const curriculumVersion =
       graduationDecision.student.curriculumVersion ||
-      graduationDecision.student.fixedClass?.curriculumVersion;
+      graduationDecision.student.fixedClass?.curriculumVersion
 
-    const dateOfBirth = graduationDecision.student.userProfile.dateOfBirth;
+    const dateOfBirth = graduationDecision.student.userProfile.dateOfBirth
 
     return {
       no: idx + 1,
@@ -1198,43 +1125,35 @@ app.openapi(graduationSessionDecision, async (c) => {
       fullname: graduationDecision.student.userProfile.fullname,
       FULLNAME: graduationDecision.student.userProfile.fullname?.toUpperCase(),
       gender: graduationDecision.student.userProfile.gender?.sTen,
-      dayOfBirth: dateOfBirth
-        ? dateOfBirth.getDate().toString().padStart(2, "0")
-        : null,
-      monthOfBirth: dateOfBirth
-        ? (dateOfBirth.getMonth() + 1).toString().padStart(2, "0")
-        : null,
-      mmmOfBirth: dateOfBirth
-        ? dateOfBirth.toLocaleString("en-US", { month: "short" })
-        : null,
+      dayOfBirth: dateOfBirth ? dateOfBirth.getDate().toString().padStart(2, "0") : null,
+      monthOfBirth: dateOfBirth ? (dateOfBirth.getMonth() + 1).toString().padStart(2, "0") : null,
+      mmmOfBirth: dateOfBirth ? dateOfBirth.toLocaleString("en-US", { month: "short" }) : null,
       yearOfBirth: dateOfBirth ? dateOfBirth.getFullYear() : null,
       trainingMajor: graduationDecision.trainingMajor?.name,
       classification: graduationDecision.finalRanking.classification,
-      classificationEnglish:
-        graduationDecision.finalRanking.classificationEnglish,
+      classificationEnglish: graduationDecision.finalRanking.classificationEnglish,
       trainingType: curriculumVersion?.trainingType?.name,
       diplomaType: graduationDecision.diplomaType?.name,
       diplomaTypeEnglish: graduationDecision.diplomaType?.englishName,
-    };
-  });
+    }
+  })
 
-  const buffer = await getTemplateBuffer(prisma, "DANH_SACH_TOT_NGHIEP");
+  const buffer = await getTemplateBuffer(prisma, "DANH_SACH_TOT_NGHIEP")
 
-  const template = new XlsxTemplate(buffer);
+  const template = new XlsxTemplate(buffer)
 
-  template.substitute(1, { data });
+  template.substitute(1, { data })
 
-  const result = await template.generate({ type: "arraybuffer" });
+  const result = await template.generate({ type: "arraybuffer" })
 
-  const fileName = "DANH_SACH_TOT_NGHIEP.xlsx";
-  const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`;
+  const fileName = "DANH_SACH_TOT_NGHIEP.xlsx"
+  const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
 
   return c.body(result, 200, {
-    "Content-Type":
-      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     "Content-Disposition": disposition,
-  });
-});
+  })
+})
 
 const statisticsGraduationDecision = createRoute({
   operationId: "statisticsGraduationDecision",
@@ -1256,7 +1175,7 @@ const statisticsGraduationDecision = createRoute({
               count: z.number(),
               year: z.number(),
               classification: z.string(),
-            }),
+            })
           ),
         },
       },
@@ -1270,13 +1189,11 @@ const statisticsGraduationDecision = createRoute({
       },
     },
   },
-});
+})
 
 app.openapi(statisticsGraduationDecision, async (c) => {
-  const { trainingObjectTypeId } = c.req.valid("query");
-  const res = await prisma.$queryRaw<
-    { count: number; year: number; classification: string }[]
-  >`
+  const { trainingObjectTypeId } = c.req.valid("query")
+  const res = await prisma.$queryRaw<{ count: number; year: number; classification: string }[]>`
             select count("GraduationDecision"."studentId"),
             date_part('year', "decisionDate") as year,
             ARC."classification"              as classification
@@ -1286,16 +1203,16 @@ app.openapi(statisticsGraduationDecision, async (c) => {
                 inner join "ql-dao-tao"."GraduationSession" GS on GS.id = SGA."sessionId"
         where GS."trainingObjectTypeId" = ${trainingObjectTypeId}
         group by date_part('year', "decisionDate"), classification;
-    `;
+    `
   return c.json(
     res.map((item) => ({
       count: item.count ? Number(item.count) : 0,
       year: item.year ? Number(item.year) : 0,
       classification: item.classification,
     })),
-    200,
-  );
-});
+    200
+  )
+})
 
 const exportGraduationDecisionPptx = createRoute({
   operationId: "exportGraduationDecisionPptx",
@@ -1318,10 +1235,9 @@ const exportGraduationDecisionPptx = createRoute({
     200: {
       description: "Success",
       content: {
-        "application/vnd.openxmlformats-officedocument.presentationml.presentation":
-          {
-            schema: z.any().openapi({ type: "string", format: "binary" }),
-          },
+        "application/vnd.openxmlformats-officedocument.presentationml.presentation": {
+          schema: z.any().openapi({ type: "string", format: "binary" }),
+        },
       },
     },
     400: {
@@ -1335,10 +1251,10 @@ const exportGraduationDecisionPptx = createRoute({
       },
     },
   },
-});
+})
 
 app.openapi(exportGraduationDecisionPptx, async (c) => {
-  const { sessionId, timeout, file } = c.req.valid("form");
+  const { sessionId, timeout, file } = c.req.valid("form")
 
   const decisions = await prisma.graduationDecision.findMany({
     where: { application: { sessionId } },
@@ -1366,34 +1282,34 @@ app.openapi(exportGraduationDecisionPptx, async (c) => {
         },
       },
     },
-  });
+  })
 
-  const bufferTemplate = await getTemplateBuffer(prisma, "SLIDE_TN");
+  const bufferTemplate = await getTemplateBuffer(prisma, "SLIDE_TN")
 
   const automizer = new Automizer({
     // templateDir: './templates',
     // outputDir: './templates',
     removeExistingSlides: true,
-  });
+  })
 
   // automizer.load(bufferTemplate, 'slide_TN')
   // const pres = automizer.loadRoot('slide_TN.pptx').load('slide_TN.pptx', 'main')
 
-  const pres = automizer.loadRoot(bufferTemplate).load(bufferTemplate, "main");
+  const pres = automizer.loadRoot(bufferTemplate).load(bufferTemplate, "main")
 
-  const info = await pres.getInfo();
-  const slideNumbers = info.slidesByTemplate("main").map((s) => s.number);
+  const info = await pres.getInfo()
+  const slideNumbers = info.slidesByTemplate("main").map((s) => s.number)
 
-  const templateBaseIndex = slideNumbers[0];
-  const templateIndex = slideNumbers[1];
-  const listIndex = slideNumbers[2];
+  const templateBaseIndex = slideNumbers[0]
+  const templateIndex = slideNumbers[1]
+  const listIndex = slideNumbers[2]
   if (!templateBaseIndex || !templateIndex || !listIndex) {
-    return c.json({ message: "Template not found" }, 400);
+    return c.json({ message: "Template not found" }, 400)
   }
 
-  pres.addSlide("main", templateBaseIndex);
+  pres.addSlide("main", templateBaseIndex)
 
-  const chunkSize = 26;
+  const chunkSize = 26
   for (const c of chunk(decisions, chunkSize)) {
     for (const decision of c) {
       pres.addSlide("main", templateIndex, (slide) => {
@@ -1402,7 +1318,7 @@ app.openapi(exportGraduationDecisionPptx, async (c) => {
           y: 2,
           w: 3,
           h: 4,
-        };
+        }
 
         //! some how slide.generate runs before slide.modify
 
@@ -1430,39 +1346,30 @@ app.openapi(exportGraduationDecisionPptx, async (c) => {
           //     }
           // }
 
-          const textNodes = xml.getElementsByTagName("a:t");
+          const textNodes = xml.getElementsByTagName("a:t")
           for (const t of textNodes) {
             t.textContent = t.textContent
-              .replace(
-                "{{fullname}}",
-                decision.student.userProfile.fullname?.toUpperCase() || "",
-              )
-              .replace(
-                "{{field}}",
-                decision.trainingMajor?.trainingField.name.toUpperCase() || "",
-              )
+              .replace("{{fullname}}", decision.student.userProfile.fullname?.toUpperCase() || "")
+              .replace("{{field}}", decision.trainingMajor?.trainingField.name.toUpperCase() || "")
               .replace(
                 "{{classification}}",
-                decision.finalRanking?.classification.toUpperCase() || "",
-              );
+                decision.finalRanking?.classification.toUpperCase() || ""
+              )
           }
-        });
+        })
 
         slide.generate(async (pSlide, pptxGenJs) => {
-          const res = await getFilesEmployeeUserIdImage(
-            decision.student.userProfile.id,
-            {
-              fullName: decision.student.userProfile.fullname || "",
-              tenantCode: "dev",
-            },
-          );
-          const blob = res.data as unknown as Blob;
+          const res = await getFilesEmployeeUserIdImage(decision.student.userProfile.id, {
+            fullName: decision.student.userProfile.fullname || "",
+            tenantCode: "dev",
+          })
+          const blob = res.data as unknown as Blob
 
           if (blob && blob.size > 0) {
-            const arrayBuffer = await blob.arrayBuffer();
+            const arrayBuffer = await blob.arrayBuffer()
 
-            const buffer = Buffer.from(arrayBuffer).toBase64();
-            const data = `image/png;base64,${buffer}`;
+            const buffer = Buffer.from(arrayBuffer).toBase64()
+            const data = `image/png;base64,${buffer}`
 
             // const res = await getFilesDownloadAppCodeFileName(
             //     'lms',
@@ -1481,54 +1388,47 @@ app.openapi(exportGraduationDecisionPptx, async (c) => {
               data,
               // path: 'https://randomuser.me/api/portraits/lego/6.jpg',
               ...coords,
-            });
+            })
           }
-        });
-      });
+        })
+      })
     }
     pres.addSlide("main", listIndex, (slide) => {
       const list1 = c
         .slice(0, chunkSize / 2)
-        .map(
-          (d, i) =>
-            `${i + 1}. ${d.student.userProfile.fullname?.toUpperCase()}` || "",
-        )
-        .join("\n");
+        .map((d, i) => `${i + 1}. ${d.student.userProfile.fullname?.toUpperCase()}` || "")
+        .join("\n")
       const list2 = c
         .slice(chunkSize / 2)
         .map(
           (d, i) =>
-            `${chunkSize / 2 + i + 1}. ${d.student.userProfile.fullname?.toUpperCase()}` ||
-            "",
+            `${chunkSize / 2 + i + 1}. ${d.student.userProfile.fullname?.toUpperCase()}` || ""
         )
-        .join("\n");
+        .join("\n")
       slide.modify((xml) => {
-        const textNodes = xml.getElementsByTagName("a:t");
+        const textNodes = xml.getElementsByTagName("a:t")
         for (const t of textNodes) {
-          t.textContent = t.textContent
-            .replace("{{list1}}", list1)
-            .replace("{{list2}}", list2);
+          t.textContent = t.textContent.replace("{{list1}}", list1).replace("{{list2}}", list2)
         }
-      });
-    });
+      })
+    })
   }
 
   const nodeStream = (await pres.stream({
     type: "nodebuffer",
     compression: "DEFLATE",
-  })) as Readable;
-  const webStream = Readable.toWeb(nodeStream);
+  })) as Readable
+  const webStream = Readable.toWeb(nodeStream)
   // await pres.write('generated.pptx')
 
-  const fileName = "slide_TN.pptx";
-  const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`;
+  const fileName = "slide_TN.pptx"
+  const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
 
   return c.body(webStream as any, 200, {
-    "Content-Type":
-      "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+    "Content-Type": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
     "Content-Disposition": disposition,
-  });
-});
+  })
+})
 
 const exportGraduationRegisterMaster = createRoute({
   operationId: "exportGraduationRegisterMaster",
@@ -1540,9 +1440,7 @@ const exportGraduationRegisterMaster = createRoute({
       content: {
         "application/json": {
           schema: z.object({
-            trainingObjectTypeId: z
-              .string()
-              .describe("ID loại đối tượng đào tạo"),
+            trainingObjectTypeId: z.string().describe("ID loại đối tượng đào tạo"),
             trainingCourseIds: z.array(z.string()).optional(),
             fixedClassIds: z.array(z.string()).optional(),
             thesisSessionIds: z.array(z.string()).optional(),
@@ -1572,7 +1470,7 @@ const exportGraduationRegisterMaster = createRoute({
       },
     },
   },
-});
+})
 
 app.openapi(exportGraduationRegisterMaster, async (c) => {
   const {
@@ -1583,7 +1481,7 @@ app.openapi(exportGraduationRegisterMaster, async (c) => {
     managementOrganizationId,
     printDate,
     signerName,
-  } = c.req.valid("json");
+  } = c.req.valid("json")
 
   const students = await prisma.student.findMany({
     where: {
@@ -1686,9 +1584,9 @@ app.openapi(exportGraduationRegisterMaster, async (c) => {
         },
       },
     },
-  });
+  })
   if (!students.length) {
-    return c.json({ message: "Không tìm thấy dữ liệu sinh viên phù hợp" }, 404);
+    return c.json({ message: "Không tìm thấy dữ liệu sinh viên phù hợp" }, 404)
   }
 
   const [courses, sessions, trainingObjectType] = await Promise.all([
@@ -1704,53 +1602,55 @@ app.openapi(exportGraduationRegisterMaster, async (c) => {
       where: { id: trainingObjectTypeId },
       include: { trainingForm: true },
     }),
-  ]);
+  ])
 
-  const courseNames = courses.map((e) => e.name).join(", ");
-  const trainingForm = trainingObjectType.trainingForm?.name || "";
-  let selectedDate = printDate ? dayjs(printDate, "DD/MM/YYYY") : dayjs();
+  const courseNames = courses.map((e) => e.name).join(", ")
+  const trainingForm = trainingObjectType.trainingForm?.name || ""
+  let selectedDate = printDate ? dayjs(printDate, "DD/MM/YYYY") : dayjs()
   if (!selectedDate.isValid()) {
-    selectedDate = dayjs();
+    selectedDate = dayjs()
   }
-  const ngayInText = `ngày ${selectedDate.date()} tháng ${selectedDate.month() + 1} năm ${selectedDate.year()}`;
+  const ngayInText = `ngày ${selectedDate.date()} tháng ${selectedDate.month() + 1} năm ${selectedDate.year()}`
 
-  const signerInfo = parseSignerInfo(signerName || "");
+  const signerInfo = parseSignerInfo(signerName || "")
 
-  const calcTBC = (subjectClassStudent: typeof students[number]["subjectClassStudent"]) => {
-    if (!subjectClassStudent?.length) return 0;
-    const bestScoreMap = new Map<string, { score: number; credit: number }>();
+  const calcTBC = (subjectClassStudent: (typeof students)[number]["subjectClassStudent"]) => {
+    if (!subjectClassStudent?.length) return 0
+    const bestScoreMap = new Map<string, { score: number; credit: number }>()
     for (const record of subjectClassStudent) {
-      const newScore = record.manualFinalScore ?? (record.finalScore ? Number(record.finalScore) : null);
-      if (newScore === null) continue;
-      const existing = bestScoreMap.get(record.subjectVersionId);
-      const isRetake = record.subjectClass?.type === "RETAKE" || record.subjectClass?.type === "REEXAM";
+      const newScore =
+        record.manualFinalScore ?? (record.finalScore ? Number(record.finalScore) : null)
+      if (newScore === null) continue
+      const existing = bestScoreMap.get(record.subjectVersionId)
+      const isRetake =
+        record.subjectClass?.type === "RETAKE" || record.subjectClass?.type === "REEXAM"
       if (!existing || newScore > existing.score || isRetake) {
         bestScoreMap.set(record.subjectVersionId, {
           score: newScore,
           credit: record.subjectVersion?.credit || 0,
-        });
+        })
       }
     }
-    let totalScore = 0;
-    let totalCredit = 0;
+    let totalScore = 0
+    let totalCredit = 0
     for (const item of bestScoreMap.values()) {
-      totalScore += item.score * item.credit;
-      totalCredit += item.credit;
+      totalScore += item.score * item.credit
+      totalCredit += item.credit
     }
-    return totalCredit > 0 ? totalScore / totalCredit : 0;
-  };
+    return totalCredit > 0 ? totalScore / totalCredit : 0
+  }
 
-  const buildRow = (student: typeof students[number], index: number) => {
-    const gD = student.graduationDecision;
-    const tR = student.thesisRegistrations?.[0];
-    const user = student.userProfile;
-    const thesisSession = tR?.thesisProject?.thesisSession;
-    const calculatedTBC = calcTBC(student.subjectClassStudent);
+  const buildRow = (student: (typeof students)[number], index: number) => {
+    const gD = student.graduationDecision
+    const tR = student.thesisRegistrations?.[0]
+    const user = student.userProfile
+    const thesisSession = tR?.thesisProject?.thesisSession
+    const calculatedTBC = calcTBC(student.subjectClassStudent)
     const tbcFinal = gD?.finalGpa
       ? Number(gD.finalGpa).toFixed(2)
       : calculatedTBC > 0
         ? calculatedTBC.toFixed(2)
-        : "";
+        : ""
     return {
       stt: index + 1,
       hoTen: user?.fullname || "",
@@ -1763,10 +1663,13 @@ app.openapi(exportGraduationRegisterMaster, async (c) => {
       quyetDinhTuyenSinh: student?.fixedClass?.trainingCourse?.admissionDecision || "",
       quocTich: user?.nationality?.sTen || "",
       "quyetDinhHDDGLV/ĐATN": thesisSession?.defenseDecisionNumber || "",
-      ngayBaoVe: thesisSession?.startDate ? dayjs(thesisSession.startDate).format("DD/MM/YYYY") : "",
+      ngayBaoVe: thesisSession?.startDate
+        ? dayjs(thesisSession.startDate).format("DD/MM/YYYY")
+        : "",
       quyetDinhTotNghiep: gD?.code || "",
       namTN: student.universityGraduationYear || "",
-      nganhDaoTao: student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.trainingField?.name || "",
+      nganhDaoTao:
+        student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.trainingField?.name || "",
       chuyenNganh: student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || "",
       soHieuVanBang: gD?.diplomaNumber || "",
       soVaoSoGoc: gD?.originalDiplomaNumber || "",
@@ -1775,16 +1678,16 @@ app.openapi(exportGraduationRegisterMaster, async (c) => {
       diemTBC: tbcFinal || "",
       nguoiNhanVanBang: "",
       ghiChu: "",
-    };
-  };
+    }
+  }
 
   const renderSheet = async (
     sessionName: string,
-    sessionStudents: typeof students,
+    sessionStudents: typeof students
   ): Promise<Buffer> => {
-    const buf = await getTemplateBuffer(prisma, "SoGocCapPhatVanBangCaoHoc_v5.xlsx");
-    const tpl = new XlsxTemplate(buf);
-    const rows = sessionStudents.map((s, i) => buildRow(s, i));
+    const buf = await getTemplateBuffer(prisma, "SoGocCapPhatVanBangCaoHoc_v5.xlsx")
+    const tpl = new XlsxTemplate(buf)
+    const rows = sessionStudents.map((s, i) => buildRow(s, i))
     tpl.substitute("PD", {
       khoa: courseNames,
       dot_xet: sessionName,
@@ -1793,99 +1696,97 @@ app.openapi(exportGraduationRegisterMaster, async (c) => {
       ngay_in: ngayInText,
       ...signerInfo,
       data: rows,
-    });
-    return tpl.generate({ type: "nodebuffer" }) as any;
-  };
+    })
+    return tpl.generate({ type: "nodebuffer" }) as any
+  }
 
-  let sessionGroups: { id: string; name: string; students: typeof students }[];
+  let sessionGroups: { id: string; name: string; students: typeof students }[]
 
   if (sessions.length > 0) {
-    const studentsBySession = new Map<string, typeof students>();
+    const studentsBySession = new Map<string, typeof students>()
     for (const session of sessions) {
-      studentsBySession.set(session.id, []);
+      studentsBySession.set(session.id, [])
     }
     for (const student of students) {
-      const sessionId = student.thesisRegistrations?.[0]?.thesisProject?.thesisSessionId;
+      const sessionId = student.thesisRegistrations?.[0]?.thesisProject?.thesisSessionId
       if (sessionId && studentsBySession.has(sessionId)) {
-        studentsBySession.get(sessionId)!.push(student);
+        studentsBySession.get(sessionId)!.push(student)
       }
     }
     sessionGroups = sessions.map((s) => ({
       id: s.id,
       name: s.name,
       students: studentsBySession.get(s.id) || [],
-    }));
+    }))
   } else {
-    sessionGroups = [{ id: "all", name: "Tất cả", students }];
+    sessionGroups = [{ id: "all", name: "Tất cả", students }]
   }
 
-  const outputWorkbook = new ExcelJS.Workbook();
+  const outputWorkbook = new ExcelJS.Workbook()
 
   for (const group of sessionGroups) {
-    if (!group.students.length) continue;
+    if (!group.students.length) continue
 
-    const sheetBuffer = await renderSheet(group.name, group.students);
+    const sheetBuffer = await renderSheet(group.name, group.students)
 
-    const tmpWorkbook = new ExcelJS.Workbook();
-    await tmpWorkbook.xlsx.load(sheetBuffer as any);
+    const tmpWorkbook = new ExcelJS.Workbook()
+    await tmpWorkbook.xlsx.load(sheetBuffer as any)
 
-    const sourceSheet = tmpWorkbook.getWorksheet("PD") ?? tmpWorkbook.worksheets[0];
-    if (!sourceSheet) continue;
+    const sourceSheet = tmpWorkbook.getWorksheet("PD") ?? tmpWorkbook.worksheets[0]
+    if (!sourceSheet) continue
 
-    const sheetName = group.name.substring(0, 31).replace(/[\\\?\*\/\[\]]/g, "");
-    const destSheet = outputWorkbook.addWorksheet(sheetName);
+    const sheetName = group.name.substring(0, 31).replace(/[\\\?\*\/\[\]]/g, "")
+    const destSheet = outputWorkbook.addWorksheet(sheetName)
 
     for (let i = 1; i <= sourceSheet.columnCount; i++) {
-      const srcCol = sourceSheet.getColumn(i);
-      const destCol = destSheet.getColumn(i);
+      const srcCol = sourceSheet.getColumn(i)
+      const destCol = destSheet.getColumn(i)
       if (srcCol.width) {
-        destCol.width = srcCol.width;
+        destCol.width = srcCol.width
       }
     }
 
     sourceSheet.eachRow({ includeEmpty: true }, (row, rowNumber) => {
-      const destRow = destSheet.getRow(rowNumber);
-      destRow.height = row.height;
+      const destRow = destSheet.getRow(rowNumber)
+      destRow.height = row.height
 
       row.eachCell({ includeEmpty: true }, (cell, colNumber) => {
-        const destCell = destRow.getCell(colNumber);
+        const destCell = destRow.getCell(colNumber)
 
         if (cell.master === cell) {
-          destCell.value = cell.value;
+          destCell.value = cell.value
         }
 
         if (cell.style) {
-          destCell.style = JSON.parse(JSON.stringify(cell.style));
+          destCell.style = JSON.parse(JSON.stringify(cell.style))
         }
-      });
-    });
+      })
+    })
 
-    const merges = sourceSheet.model.merges || [];
+    const merges = sourceSheet.model.merges || []
     merges.forEach((m) => {
       try {
-        destSheet.mergeCells(m);
-      } catch (err) {
-      }
-    });
+        destSheet.mergeCells(m)
+      } catch (err) {}
+    })
 
-    destSheet.pageSetup = JSON.parse(JSON.stringify(sourceSheet.pageSetup || {}));
+    destSheet.pageSetup = JSON.parse(JSON.stringify(sourceSheet.pageSetup || {}))
   }
 
   if (outputWorkbook.worksheets.length === 0) {
-    return c.json({ message: "Không có dữ liệu sinh viên trong các đợt xét đã chọn" }, 404);
+    return c.json({ message: "Không có dữ liệu sinh viên trong các đợt xét đã chọn" }, 404)
   }
 
-  const result = await outputWorkbook.xlsx.writeBuffer();
+  const result = await outputWorkbook.xlsx.writeBuffer()
 
-  const fileName = "SoGocCapPhatVanBang.xlsx";
-  const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`;
+  const fileName = "SoGocCapPhatVanBang.xlsx"
+  const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
 
   return c.body(result as any, 200, {
-    "Content-Type":
-      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     "Content-Disposition": disposition,
-  });
-});
+  })
+})
 
 const exportPhoiBangCaoHoc = createRoute({
   operationId: "exportPhoiBangCaoHoc",
@@ -1927,7 +1828,7 @@ const exportPhoiBangCaoHoc = createRoute({
       },
     },
   },
-});
+})
 
 app.openapi(exportPhoiBangCaoHoc, async (c) => {
   const {
@@ -1937,7 +1838,7 @@ app.openapi(exportPhoiBangCaoHoc, async (c) => {
     thesisSessionIds,
     managementOrganizationId,
     signerName,
-  } = c.req.valid("json");
+  } = c.req.valid("json")
 
   const students = await prisma.student.findMany({
     where: {
@@ -1986,10 +1887,10 @@ app.openapi(exportPhoiBangCaoHoc, async (c) => {
         },
       },
     },
-  });
+  })
 
   if (!students.length) {
-    return c.json({ message: "Không tìm thấy dữ liệu sinh viên phù hợp" }, 404);
+    return c.json({ message: "Không tìm thấy dữ liệu sinh viên phù hợp" }, 404)
   }
 
   const MONTH_EN = [
@@ -2001,32 +1902,33 @@ app.openapi(exportPhoiBangCaoHoc, async (c) => {
     "June",
     "July",
     "August",
-    "September",  
+    "September",
     "October",
     "November",
     "December",
-  ];
+  ]
 
-  const signerInfo = parseSignerInfo(signerName || "");
+  const signerInfo = parseSignerInfo(signerName || "")
 
   const payload = students.map((student) => {
-    const user = student.userProfile;
-    const major = student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor;
-    const gD = student.graduationDecision;
+    const user = student.userProfile
+    const major = student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor
+    const gD = student.graduationDecision
 
-    const dob = dayjs(user?.dateOfBirth);
-    const graduationDate = gD?.decisionDate ? dayjs(gD.decisionDate) : dayjs();
+    const dob = dayjs(user?.dateOfBirth)
+    const graduationDate = gD?.decisionDate ? dayjs(gD.decisionDate) : dayjs()
 
-    const isFemale = user?.gender?.sTen?.toLowerCase() === "nữ";
-    const prefixVi = isFemale ? "Bà" : "Ông";
-    const prefixEn = isFemale ? "Ms" : "Mr";
+    const isFemale = user?.gender?.sTen?.toLowerCase() === "nữ"
+    const prefixVi = isFemale ? "Bà" : "Ông"
+    const prefixEn = isFemale ? "Ms" : "Mr"
 
-    let ngay_sinh_vi = "";
+    let ngay_sinh_vi = ""
     if (dob.isValid()) {
-      const day = dob.date().toString().padStart(2, "0");
-      const month = dob.month() + 1;
-      const monthStr = (month === 1 || month === 2) ? month.toString().padStart(2, "0") : month.toString();
-      ngay_sinh_vi = `${day}/${monthStr}/${dob.year()}`;
+      const day = dob.date().toString().padStart(2, "0")
+      const month = dob.month() + 1
+      const monthStr =
+        month === 1 || month === 2 ? month.toString().padStart(2, "0") : month.toString()
+      ngay_sinh_vi = `${day}/${monthStr}/${dob.year()}`
     }
 
     return {
@@ -2053,28 +1955,28 @@ app.openapi(exportPhoiBangCaoHoc, async (c) => {
         ...signerInfo,
         ho_ten_nguoi_ky: signerInfo.ten_day_du,
       },
-    };
-  });
+    }
+  })
 
   try {
-    const templateBuffer = await getTemplateBuffer(prisma, "PhoiBangCaoHoc_v1.xlsx");
+    const templateBuffer = await getTemplateBuffer(prisma, "PhoiBangCaoHoc_v1.xlsx")
     const result = await generateExcelFromTemplate(templateBuffer, payload, {
       showGridLines: true,
       wrapText: true,
-    });
+    })
 
-    const fileName = "PhoiBangCaoHoc.xlsx";
-    const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`;
+    const fileName = "PhoiBangCaoHoc.xlsx"
+    const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
 
     return c.body(result as any, 200, {
       "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       "Content-Disposition": disposition,
-    });
+    })
   } catch (error: any) {
-    console.error("Error generating Excel:", error.message);
-    return c.json({ message: "Lỗi khi xuất file Excel" }, 500);
+    console.error("Error generating Excel:", error.message)
+    return c.json({ message: "Lỗi khi xuất file Excel" }, 500)
   }
-});
+})
 
 const exportPhoiBangNganHan = createRoute({
   operationId: "exportPhoiBangNganHan",
@@ -2116,7 +2018,7 @@ const exportPhoiBangNganHan = createRoute({
       },
     },
   },
-});
+})
 
 app.openapi(exportPhoiBangNganHan, async (c) => {
   const {
@@ -2127,7 +2029,7 @@ app.openapi(exportPhoiBangNganHan, async (c) => {
     managementOrganizationId,
     printDate,
     signerName,
-  } = c.req.valid("json");
+  } = c.req.valid("json")
 
   const students = await prisma.student.findMany({
     where: {
@@ -2181,69 +2083,79 @@ app.openapi(exportPhoiBangNganHan, async (c) => {
         },
       },
     },
-  });
+  })
 
   if (!students.length) {
-    return c.json({ message: "Không tìm thấy dữ liệu sinh viên phù hợp" }, 404);
+    return c.json({ message: "Không tìm thấy dữ liệu sinh viên phù hợp" }, 404)
   }
 
   const MONTH_EN = [
-    "January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December",
-  ];
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ]
 
-  const signerInfo = parseSignerInfo(signerName || "");
-  const pDate = printDate ? dayjs(printDate) : dayjs();
+  const signerInfo = parseSignerInfo(signerName || "")
+  const pDate = printDate ? dayjs(printDate) : dayjs()
 
   const payload = students.map((student) => {
-    const user = student.userProfile;
-    const gD = student.graduationDecision;
-    const course = student.fixedClass?.trainingCourse;
+    const user = student.userProfile
+    const gD = student.graduationDecision
+    const course = student.fixedClass?.trainingCourse
 
-    const dob = dayjs(user?.dateOfBirth);
+    const dob = dayjs(user?.dateOfBirth)
     const startDate = course?.semesterStart?.startDate
       ? dayjs(course.semesterStart.startDate)
-      : dayjs(student.fixedClass?.createdAt);
+      : dayjs(student.fixedClass?.createdAt)
     const endDate = course?.semesterStart?.endDate
       ? dayjs(course.semesterStart.endDate)
       : gD?.decisionDate
-      ? dayjs(gD.decisionDate)
-      : dayjs();
+        ? dayjs(gD.decisionDate)
+        : dayjs()
 
-    const subjectScores = student.subjectClassStudent || [];
+    const subjectScores = student.subjectClassStudent || []
     const totalCredits = subjectScores.reduce(
       (acc, item) => acc + (item.subjectVersion?.credit || 0),
-      0,
-    );
+      0
+    )
     const totalPoints = subjectScores.reduce(
-      (acc, item) =>
-        acc + (Number(item.finalScore) || 0) * (item.subjectVersion?.credit || 0),
-      0,
-    );
-    const gpa = totalCredits > 0 ? totalPoints / totalCredits : 0;
+      (acc, item) => acc + (Number(item.finalScore) || 0) * (item.subjectVersion?.credit || 0),
+      0
+    )
+    const gpa = totalCredits > 0 ? totalPoints / totalCredits : 0
 
-    const scoreConverts = course?.scoreConverts || [];
-    const xepLoaiVi = getScoreClassification(gpa, scoreConverts);
+    const scoreConverts = course?.scoreConverts || []
+    const xepLoaiVi = getScoreClassification(gpa, scoreConverts)
 
     const classificationMappingEn: Record<string, string> = {
       "Xuất sắc": "Excellent",
-      "Giỏi": "Very Good",
-      "Khá": "Good",
+      Giỏi: "Very Good",
+      Khá: "Good",
       "Trung bình khá": "Fairly Good",
       "Trung bình": "Average",
-      "Yếu": "Poor",
-    };
-    const xepLoaiEn = classificationMappingEn[xepLoaiVi] || "";
+      Yếu: "Poor",
+    }
+    const xepLoaiEn = classificationMappingEn[xepLoaiVi] || ""
 
-    const isFemale = user?.gender?.sTen?.toLowerCase() === "nữ";
-    const prefixEn = isFemale ? "Ms " : "Mr ";
+    const isFemale = user?.gender?.sTen?.toLowerCase() === "nữ"
+    const prefixEn = isFemale ? "Ms " : "Mr "
 
-    let ngay_sinh_vi = "";
+    let ngay_sinh_vi = ""
     if (dob.isValid()) {
-      const day = dob.date().toString().padStart(2, "0");
-      const month = dob.month() + 1;
-      const monthStr = (month === 1 || month === 2) ? month.toString().padStart(2, "0") : month.toString();
-      ngay_sinh_vi = `${day}/${monthStr}/${dob.year()}`;
+      const day = dob.date().toString().padStart(2, "0")
+      const month = dob.month() + 1
+      const monthStr =
+        month === 1 || month === 2 ? month.toString().padStart(2, "0") : month.toString()
+      ngay_sinh_vi = `${day}/${monthStr}/${dob.year()}`
     }
 
     return {
@@ -2260,18 +2172,26 @@ app.openapi(exportPhoiBangNganHan, async (c) => {
         ngay_sinh_en: dob.isValid() ? `${dob.date()} ${MONTH_EN[dob.month()]} ${dob.year()}` : "",
 
         ngay_bat_dau_vi: startDate.isValid() ? startDate.format("DD/MM/YYYY") : "",
-        ngay_bat_dau_en: startDate.isValid() ? `${startDate.date()} ${MONTH_EN[startDate.month()]} ${startDate.year()}` : "",
+        ngay_bat_dau_en: startDate.isValid()
+          ? `${startDate.date()} ${MONTH_EN[startDate.month()]} ${startDate.year()}`
+          : "",
 
         ngay_ket_thuc_vi: endDate.isValid() ? endDate.format("DD/MM/YYYY") : "",
-        ngay_ket_thuc_en: endDate.isValid() ? `${endDate.date()} ${MONTH_EN[endDate.month()]} ${endDate.year()}` : "",
+        ngay_ket_thuc_en: endDate.isValid()
+          ? `${endDate.date()} ${MONTH_EN[endDate.month()]} ${endDate.year()}`
+          : "",
 
         hoc_luc_vi: xepLoaiVi,
         hoc_luc_en: xepLoaiEn,
 
         so_quyet_dinh: gD?.diplomaNumber || "",
 
-        ngay_in_vi: pDate.isValid() ? `Ngày ${pDate.date()} tháng ${pDate.month() + 1} năm ${pDate.year()}` : "",
-        ngay_in_en: pDate.isValid() ? `${MONTH_EN[pDate.month()]} ${pDate.date()}, ${pDate.year()}` : "",
+        ngay_in_vi: pDate.isValid()
+          ? `Ngày ${pDate.date()} tháng ${pDate.month() + 1} năm ${pDate.year()}`
+          : "",
+        ngay_in_en: pDate.isValid()
+          ? `${MONTH_EN[pDate.month()]} ${pDate.date()}, ${pDate.year()}`
+          : "",
 
         ngay_tn: pDate.date(),
         thang_tn: pDate.month() + 1,
@@ -2280,27 +2200,27 @@ app.openapi(exportPhoiBangNganHan, async (c) => {
         ...signerInfo,
         ho_ten_nguoi_ky: signerInfo.ten_day_du,
       },
-    };
-  });
+    }
+  })
 
   try {
-    const templateBuffer = await getTemplateBuffer(prisma, "PhoiBangNganHan_v2.xlsx");
+    const templateBuffer = await getTemplateBuffer(prisma, "PhoiBangNganHan_v2.xlsx")
     const result = await generateExcelFromTemplate(templateBuffer, payload, {
       showGridLines: true,
       wrapText: true,
-    });
+    })
 
-    const fileName = "PhoiBangNganHan.xlsx";
-    const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`;
+    const fileName = "PhoiBangNganHan.xlsx"
+    const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
 
     return c.body(result as any, 200, {
       "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       "Content-Disposition": disposition,
-    });
+    })
   } catch (error: any) {
-    console.error("Error generating Excel:", error.message);
-    return c.json({ message: "Lỗi khi xuất file Excel" }, 500);
+    console.error("Error generating Excel:", error.message)
+    return c.json({ message: "Lỗi khi xuất file Excel" }, 500)
   }
-});
+})
 
-export default app;
+export default app

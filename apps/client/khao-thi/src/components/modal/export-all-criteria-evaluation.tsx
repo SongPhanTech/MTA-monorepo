@@ -78,9 +78,18 @@ const ExportAllCriteriaEvaluation = ({ standards }: ExportAllCriteriaEvaluationP
           newStyle.bold = true
         if (el.tagName === "I" || el.tagName === "EM" || el.style.fontStyle === "italic")
           newStyle.italics = true
-        if (el.tagName === "U" || el.tagName === "INS" || el.style.textDecoration.includes("underline"))
+        if (
+          el.tagName === "U" ||
+          el.tagName === "INS" ||
+          el.style.textDecoration.includes("underline")
+        )
           newStyle.underline = { type: "single" } as any
-        if (el.tagName === "S" || el.tagName === "STRIKE" || el.tagName === "DEL" || el.style.textDecoration.includes("line-through"))
+        if (
+          el.tagName === "S" ||
+          el.tagName === "STRIKE" ||
+          el.tagName === "DEL" ||
+          el.style.textDecoration.includes("line-through")
+        )
           newStyle.strike = true
         if (el.tagName === "SUB") newStyle.subScript = true
         if (el.tagName === "SUP") newStyle.superScript = true
@@ -134,7 +143,9 @@ const ExportAllCriteriaEvaluation = ({ standards }: ExportAllCriteriaEvaluationP
           }
         } else if (el.tagName === "TABLE") {
           const rows: TableRow[] = []
-          const trs = Array.from(el.querySelectorAll(":scope > tbody > tr, :scope > thead > tr, :scope > tr"))
+          const trs = Array.from(
+            el.querySelectorAll(":scope > tbody > tr, :scope > thead > tr, :scope > tr")
+          )
           const cellBorders = {
             top: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
             bottom: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
@@ -150,7 +161,10 @@ const ExportAllCriteriaEvaluation = ({ standards }: ExportAllCriteriaEvaluationP
               const cellChildren = await htmlToParagraphs(DOMPurify.sanitize(td.innerHTML), true)
               cells.push(
                 new TableCell({
-                  children: cellChildren.length > 0 ? (cellChildren as Paragraph[]) : [new Paragraph({ children: [new TextRun({ text: "", size: SIZE_BODY })] })],
+                  children:
+                    cellChildren.length > 0
+                      ? (cellChildren as Paragraph[])
+                      : [new Paragraph({ children: [new TextRun({ text: "", size: SIZE_BODY })] })],
                   columnSpan: colspan > 1 ? colspan : undefined,
                   rowSpan: rowspan > 1 ? rowspan : undefined,
                   verticalAlign: VerticalAlign.CENTER,
@@ -282,7 +296,12 @@ const ExportAllCriteriaEvaluation = ({ standards }: ExportAllCriteriaEvaluationP
       new TableCell({
         width: { size: width, type: WidthType.DXA },
         borders: cellB,
-        children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text, bold: true, size: SIZE_BODY })] })],
+        children: [
+          new Paragraph({
+            alignment: AlignmentType.CENTER,
+            children: [new TextRun({ text, bold: true, size: SIZE_BODY })],
+          }),
+        ],
       })
 
     const headerRow = new TableRow({
@@ -300,18 +319,65 @@ const ExportAllCriteriaEvaluation = ({ standards }: ExportAllCriteriaEvaluationP
       (item: any, index: number) =>
         new TableRow({
           children: [
-            new TableCell({ borders: cellB, children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: `${index + 1}`, size: SIZE_BODY })] })] }),
-            new TableCell({ borders: cellB, children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: `PM.${item?.tag || ""}`, size: SIZE_BODY })] })] }),
-            new TableCell({ borders: cellB, children: [new Paragraph({ children: [new TextRun({ text: item?.evidence?.name || "", size: SIZE_BODY })] })] }),
-            new TableCell({ borders: cellB, children: [new Paragraph({ children: [new TextRun({ text: item?.evidence?.information || "", size: SIZE_BODY })] })] }),
-            new TableCell({ borders: cellB, children: [new Paragraph({ children: [new TextRun({ text: item?.evidence?.issuer || "", size: SIZE_BODY })] })] }),
-            new TableCell({ borders: cellB, children: [new Paragraph({ children: [new TextRun({ text: "", size: SIZE_BODY })] })] }),
+            new TableCell({
+              borders: cellB,
+              children: [
+                new Paragraph({
+                  alignment: AlignmentType.CENTER,
+                  children: [new TextRun({ text: `${index + 1}`, size: SIZE_BODY })],
+                }),
+              ],
+            }),
+            new TableCell({
+              borders: cellB,
+              children: [
+                new Paragraph({
+                  alignment: AlignmentType.CENTER,
+                  children: [new TextRun({ text: `PM.${item?.tag || ""}`, size: SIZE_BODY })],
+                }),
+              ],
+            }),
+            new TableCell({
+              borders: cellB,
+              children: [
+                new Paragraph({
+                  children: [new TextRun({ text: item?.evidence?.name || "", size: SIZE_BODY })],
+                }),
+              ],
+            }),
+            new TableCell({
+              borders: cellB,
+              children: [
+                new Paragraph({
+                  children: [
+                    new TextRun({ text: item?.evidence?.information || "", size: SIZE_BODY }),
+                  ],
+                }),
+              ],
+            }),
+            new TableCell({
+              borders: cellB,
+              children: [
+                new Paragraph({
+                  children: [new TextRun({ text: item?.evidence?.issuer || "", size: SIZE_BODY })],
+                }),
+              ],
+            }),
+            new TableCell({
+              borders: cellB,
+              children: [new Paragraph({ children: [new TextRun({ text: "", size: SIZE_BODY })] })],
+            }),
           ],
         })
     )
 
     return [
-      new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: "MỤC LỤC DANH MỤC MINH CHỨNG", bold: true, size: SIZE_BODY })] }),
+      new Paragraph({
+        alignment: AlignmentType.CENTER,
+        children: [
+          new TextRun({ text: "MỤC LỤC DANH MỤC MINH CHỨNG", bold: true, size: SIZE_BODY }),
+        ],
+      }),
       new Paragraph({ children: [new TextRun({ text: "" })] }),
       new Table({
         width: { size: 100, type: WidthType.PERCENTAGE },
@@ -339,10 +405,15 @@ const ExportAllCriteriaEvaluation = ({ standards }: ExportAllCriteriaEvaluationP
     insideVertical: { style: BorderStyle.NONE, size: 0, color: "FFFFFF" },
   }
 
-  const cellP = (text: string, opts: { bold?: boolean; italics?: boolean; center?: boolean; size?: number } = {}) =>
+  const cellP = (
+    text: string,
+    opts: { bold?: boolean; italics?: boolean; center?: boolean; size?: number } = {}
+  ) =>
     new Paragraph({
       alignment: opts.center ? AlignmentType.CENTER : AlignmentType.LEFT,
-      children: [new TextRun({ text, bold: opts.bold, italics: opts.italics, size: opts.size ?? SIZE_BODY })],
+      children: [
+        new TextRun({ text, bold: opts.bold, italics: opts.italics, size: opts.size ?? SIZE_BODY }),
+      ],
     })
 
   const createSignatureTable = () =>
@@ -368,7 +439,9 @@ const ExportAllCriteriaEvaluation = ({ standards }: ExportAllCriteriaEvaluationP
               children: [
                 new Paragraph({
                   alignment: AlignmentType.CENTER,
-                  children: [new TextRun({ text: "......., ngày ... tháng ... năm 20...", size: 28 })],
+                  children: [
+                    new TextRun({ text: "......., ngày ... tháng ... năm 20...", size: 28 }),
+                  ],
                 }),
                 cellP("Người viết", { bold: true, center: true, size: 28 }),
                 new Paragraph({
@@ -405,12 +478,22 @@ const ExportAllCriteriaEvaluation = ({ standards }: ExportAllCriteriaEvaluationP
             new TableCell({
               borders: cellBorderScore,
               width: { size: 50, type: WidthType.PERCENTAGE },
-              children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: "Không đạt (K)", bold: true, size: SIZE_BODY })] })],
+              children: [
+                new Paragraph({
+                  alignment: AlignmentType.CENTER,
+                  children: [new TextRun({ text: "Không đạt (K)", bold: true, size: SIZE_BODY })],
+                }),
+              ],
             }),
             new TableCell({
               borders: cellBorderScore,
               width: { size: 50, type: WidthType.PERCENTAGE },
-              children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: "Đạt (Đ)", bold: true, size: SIZE_BODY })] })],
+              children: [
+                new Paragraph({
+                  alignment: AlignmentType.CENTER,
+                  children: [new TextRun({ text: "Đạt (Đ)", bold: true, size: SIZE_BODY })],
+                }),
+              ],
             }),
           ],
         }),
@@ -418,11 +501,21 @@ const ExportAllCriteriaEvaluation = ({ standards }: ExportAllCriteriaEvaluationP
           children: [
             new TableCell({
               borders: cellBorderScore,
-              children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: isKhongDat ? "×" : "", size: SIZE_BODY })] })],
+              children: [
+                new Paragraph({
+                  alignment: AlignmentType.CENTER,
+                  children: [new TextRun({ text: isKhongDat ? "×" : "", size: SIZE_BODY })],
+                }),
+              ],
             }),
             new TableCell({
               borders: cellBorderScore,
-              children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: isDat ? "×" : "", size: SIZE_BODY })] })],
+              children: [
+                new Paragraph({
+                  alignment: AlignmentType.CENTER,
+                  children: [new TextRun({ text: isDat ? "×" : "", size: SIZE_BODY })],
+                }),
+              ],
             }),
           ],
         }),
@@ -521,9 +614,14 @@ const ExportAllCriteriaEvaluation = ({ standards }: ExportAllCriteriaEvaluationP
           // 1. Mô tả hiện trạng
           const currentSituation =
             criterionData?.evaluationCriterion?.currentSituation ||
-            criterion?.evaluationCriterion?.currentSituation || ""
+            criterion?.evaluationCriterion?.currentSituation ||
+            ""
           allChildren.push(
-            new Paragraph({ children: [new TextRun({ text: "1. Mô tả hiện trạng ", bold: true, size: SIZE_BODY })] }),
+            new Paragraph({
+              children: [
+                new TextRun({ text: "1. Mô tả hiện trạng ", bold: true, size: SIZE_BODY }),
+              ],
+            }),
             ...(await htmlToParagraphs(processHtmlContent(currentSituation, evidenceTags))),
             new Paragraph({ children: [new TextRun({ text: "" })] })
           )
@@ -531,9 +629,12 @@ const ExportAllCriteriaEvaluation = ({ standards }: ExportAllCriteriaEvaluationP
           // 2. Điểm mạnh
           const strengths =
             criterionData?.evaluationCriterion?.strengths ||
-            criterion?.evaluationCriterion?.strengths || ""
+            criterion?.evaluationCriterion?.strengths ||
+            ""
           allChildren.push(
-            new Paragraph({ children: [new TextRun({ text: "2. Điểm mạnh ", bold: true, size: SIZE_BODY })] }),
+            new Paragraph({
+              children: [new TextRun({ text: "2. Điểm mạnh ", bold: true, size: SIZE_BODY })],
+            }),
             ...(await htmlToParagraphs(processHtmlContent(strengths, evidenceTags))),
             new Paragraph({ children: [new TextRun({ text: "" })] })
           )
@@ -541,9 +642,12 @@ const ExportAllCriteriaEvaluation = ({ standards }: ExportAllCriteriaEvaluationP
           // 3. Điểm tồn tại
           const weakness =
             criterionData?.evaluationCriterion?.weakness ||
-            criterion?.evaluationCriterion?.weakness || ""
+            criterion?.evaluationCriterion?.weakness ||
+            ""
           allChildren.push(
-            new Paragraph({ children: [new TextRun({ text: "3. Điểm tồn tại ", bold: true, size: SIZE_BODY })] }),
+            new Paragraph({
+              children: [new TextRun({ text: "3. Điểm tồn tại ", bold: true, size: SIZE_BODY })],
+            }),
             ...(await htmlToParagraphs(processHtmlContent(weakness, evidenceTags))),
             new Paragraph({ children: [new TextRun({ text: "" })] })
           )
@@ -551,17 +655,21 @@ const ExportAllCriteriaEvaluation = ({ standards }: ExportAllCriteriaEvaluationP
           // 4. Kế hoạch hành động
           const actionPlan =
             criterionData?.evaluationCriterion?.actionPlan ||
-            criterion?.evaluationCriterion?.actionPlan || ""
+            criterion?.evaluationCriterion?.actionPlan ||
+            ""
           allChildren.push(
-            new Paragraph({ children: [new TextRun({ text: "4. Kế hoạch hành động ", bold: true, size: SIZE_BODY })] }),
+            new Paragraph({
+              children: [
+                new TextRun({ text: "4. Kế hoạch hành động ", bold: true, size: SIZE_BODY }),
+              ],
+            }),
             ...(await htmlToParagraphs(processHtmlContent(actionPlan, evidenceTags))),
             new Paragraph({ children: [new TextRun({ text: "" })] })
           )
 
           // 5. Tự đánh giá
           const scoreRaw =
-            criterionData?.evaluationCriterion?.score ||
-            criterion?.evaluationCriterion?.score || ""
+            criterionData?.evaluationCriterion?.score || criterion?.evaluationCriterion?.score || ""
           const scoreText = scoreRaw.replace(/<[^>]*>/g, "").trim()
           const isKhongDat = /không\s*đạt|KĐ\b/i.test(scoreText)
           const isDat = !isKhongDat && /đạt|\bĐ\b/i.test(scoreText)
@@ -574,7 +682,13 @@ const ExportAllCriteriaEvaluation = ({ standards }: ExportAllCriteriaEvaluationP
               ],
             }),
             new Paragraph({
-              children: [new TextRun({ text: "Đánh dấu (×) vào ô tương ứng dưới đây:", italics: true, size: SIZE_BODY })],
+              children: [
+                new TextRun({
+                  text: "Đánh dấu (×) vào ô tương ứng dưới đây:",
+                  italics: true,
+                  size: SIZE_BODY,
+                }),
+              ],
             }),
             createScoreTable(isKhongDat, isDat),
             new Paragraph({ children: [new TextRun({ text: "" })] }),

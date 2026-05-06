@@ -42,6 +42,7 @@ const baseSchemaWithoutDefaults = z.object({
 const relationSchema = z.object({
     thesisProjects: z.array(z.unknown()).optional(),
     coThesisProjects: z.array(z.unknown()).optional(),
+    singleSupervisorPayment: z.array(z.unknown()).optional(),
 }
 );
 

@@ -602,7 +602,11 @@ const ExportCriteriaEvaluation = ({ data }: ExportCriteriaEvaluationProps) => {
           }),
           new Paragraph({
             children: [
-              new TextRun({ text: "Đánh dấu (×) vào ô tương ứng dưới đây:", italics: true, size: SIZE_BODY }),
+              new TextRun({
+                text: "Đánh dấu (×) vào ô tương ứng dưới đây:",
+                italics: true,
+                size: SIZE_BODY,
+              }),
             ],
           }),
           new Table({
@@ -624,7 +628,9 @@ const ExportCriteriaEvaluation = ({ data }: ExportCriteriaEvaluationProps) => {
                     children: [
                       new Paragraph({
                         alignment: AlignmentType.CENTER,
-                        children: [new TextRun({ text: "Không đạt (K)", bold: true, size: SIZE_BODY })],
+                        children: [
+                          new TextRun({ text: "Không đạt (K)", bold: true, size: SIZE_BODY }),
+                        ],
                       }),
                     ],
                   }),

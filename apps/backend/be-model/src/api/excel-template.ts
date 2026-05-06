@@ -388,8 +388,7 @@ app.openapi(
       const maxColumn = Math.max(targetSheet.columnCount, 1)
       const maxColumnLetter = toColumnLetter(maxColumn)
 
-      const templatePageSource =
-        generatedSheets[0]?.worksheet ?? headSheet ?? tailSheet
+      const templatePageSource = generatedSheets[0]?.worksheet ?? headSheet ?? tailSheet
       applyTemplatePageSetup(templatePageSource, targetSheet)
 
       if (finalMarkerRows.length > 0) {

@@ -553,13 +553,13 @@ const PrintBatchExplanation = () => {
           </style>
 
           <div id="print-batch-explanation">
-          {dataRender.length > 0 ? (
-            dataRender.map((exam, index) => renderAnswerPreview(exam, index))
-          ) : (
-            <div style={{ textAlign: "center", padding: "40px" }}>
-              Không có đáp án nào được chọn
-            </div>
-          )}
+            {dataRender.length > 0 ? (
+              dataRender.map((exam, index) => renderAnswerPreview(exam, index))
+            ) : (
+              <div style={{ textAlign: "center", padding: "40px" }}>
+                Không có đáp án nào được chọn
+              </div>
+            )}
           </div>
         </div>
       </div>
