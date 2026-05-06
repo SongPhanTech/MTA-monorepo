@@ -336,6 +336,9 @@ export default function BaoCaoGiangVien() {
       if (selectedItem?.id && !selectedItem?.iCapDonVi) {
         const org = selectedItem.organization
         const isDepartment = org?.iCapDonVi === 3
+        const parentOrg = isDepartment
+          ? organizations.find((o: any) => o?.Id === org?.sParentId || o?.id === org?.sParentId)
+          : null
         return (
           <SurveylecturerReport
             selectedId={filters?.clusterId}
@@ -344,8 +347,8 @@ export default function BaoCaoGiangVien() {
             trainingObjectTypeName={trainingObjectTypeName}
             semesterName={semesterName}
             trainingSystemName={trainingSystemName}
-            organizationName={isDepartment ? org.parent?.sTen : org?.sTen}
-            organizationCode={isDepartment ? org.parent?.sMa : org?.sMa}
+            organizationName={isDepartment ? parentOrg?.sTen : org?.sTen}
+            organizationCode={isDepartment ? parentOrg?.sMa : org?.sMa}
             lecturerName={selectedItem?.userProfile?.fullName}
             lecturerCode={selectedItem?.code}
             departmentName={isDepartment ? org?.sTen : ""}
