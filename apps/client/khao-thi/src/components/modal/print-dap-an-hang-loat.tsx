@@ -9,6 +9,7 @@ import { useEffect, useMemo, useRef, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 import { useReactToPrint } from "react-to-print"
 import { convertHtmlBreaks, saveFile } from "@/utils/saveFile"
+import { useSession } from "@workspace/auth/react"
 
 type ExamBankQuestionType = Prisma.ExamBankGetPayload<{
   include: {
@@ -48,7 +49,8 @@ type ExamBankQuestionType = Prisma.ExamBankGetPayload<{
 }>
 
 const PrintBatchExplanation = () => {
-  const [name, setName] = useState("Nguyễn Văn A")
+  const { data: me } = useSession()
+  const [name, setName] = useState(me?.fullName || "")
   const [duration, setDuration] = useState("")
   const { isOpen, onClose, input } = useDisclosure<{
     ids: string[]
