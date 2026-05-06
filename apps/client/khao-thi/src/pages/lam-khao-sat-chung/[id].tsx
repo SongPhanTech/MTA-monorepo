@@ -23,8 +23,8 @@ type PutSurveySession = SurveySession & {
 }
 
 type GroupedSurveyQuestion = {
-  id: string // group id
-  name: string // group name
+  id: string
+  name: string
   children: {
     id: string
     name: string
@@ -41,7 +41,6 @@ function TakeTestPage() {
   const { showSpinner, hideSpinner } = useSpinner()
   const [startAt, setStartAt] = useState<Date>(new Date())
   const id = router.query.id as string
-  // const surveyObjectTypeId = router.query.surveyObjectTypeId as string
 
   const [form] = Form.useForm<PutSurveySession>()
   const [formUser] = Form.useForm<PutUser>()
@@ -51,7 +50,6 @@ function TakeTestPage() {
   const [isOpen, setIsOpen] = useState(false)
   const [isDone, setIsDone] = useState(false)
 
-  // const { data } =  useGetPublicSurvey(id)
   const { mutateAsync: createSavePublicSurvey } = useSavePublicSurvey()
   const dataTest = useMemo(() => {
     const groupedMap = (survey?.surveyQuestion ?? []).reduce<Record<string, GroupedSurveyQuestion>>(
@@ -79,25 +77,12 @@ function TakeTestPage() {
       {}
     )
 
-    // Chuyển thành array
     const grouped: GroupedSurveyQuestion[] = Object.values(groupedMap).map((i: any, index) => {
       return { ...i, name: `${index + 1}. ${i.name}` }
     })
 
     return grouped || []
-    // return classGroups
   }, [survey?.surveyQuestion])
-  // const [expandedRowKeys, setExpandedRowKeys] = useState<React.Key[]>([])
-
-  // const handleChange = (questionId: string, value: any) => {
-  //     const choice = survey?.surveyChoice.find((i) => i.id === value)
-  //     if (choice?.requireExplanation) {
-  //         setExpandedRowKeys((prev) => (prev.includes(questionId) ? prev : [...prev, questionId]))
-  //     }
-  // }
-  // const requireExplanation = useMemo(() => {
-  //     return survey?.surveyChoice?.filter((i: any) => !!i?.requireExplanation).map((i) => i.id)
-  // }, [survey])
 
   async function onOk() {
     const dataSubmit = form.getFieldsValue()
@@ -115,13 +100,6 @@ function TakeTestPage() {
       return
     }
 
-    // const reason = dataSubmit?.responses.filter(
-    //     (i: any) => requireExplanation?.includes(i?.surveyChoiceId) && !i.explanation
-    // )
-    // if (reason.length) {
-    //     message.error('Bạn chưa nhập lý do cho những khảo sát đặc biệt')
-    //     return
-    // }
     try {
       showSpinner()
       const res = await createSavePublicSurvey({
@@ -129,7 +107,6 @@ function TakeTestPage() {
           startedAt: new Date(startAt).toISOString(),
           surveyId: id,
           studentCode,
-          // surveyObjectTypeId: surveyObjectTypeId,
           responses: dataSubmit?.responses?.map((i, index) => {
             return {
               surveyQuestionId: survey?.surveyQuestion[index]?.id,
@@ -179,17 +156,18 @@ function TakeTestPage() {
   const CheckUser = async () => {
     try {
       const studentCode = formUser.getFieldValue("code")
-      const res = await validateUserSurvey({ studentCode })
+      const res = await validateUserSurvey({ studentCode, surveyId: id })
       if (res.status === 200) {
         setAnonymous(true)
         setIsOpen(false)
+      } else {
+        message.error(res?.data?.message || "Đã xảy ra lỗi")
       }
     } catch (error) {
       console.log(error)
     }
   }
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: <>
   useEffect(() => {
     if (id) {
       fetchData()
@@ -228,7 +206,6 @@ function TakeTestPage() {
                   <span>
                     {survey?.lectureInfo?.lastName || ""} {survey?.lectureInfo?.firstName || ""}
                   </span>
-                  {/* <span className="w-full mb-1 h-6 border-[0px] border-b-[1px] border-dotted border-black" /> */}
                 </div>
               </Col>
               <Col span={12}>
@@ -237,40 +214,33 @@ function TakeTestPage() {
                   <span>
                     {survey?.subjectClass?.code || ""} {survey?.subjectClass?.name || ""}
                   </span>
-                  {/* <span className="w-full mb-1 h-6 border-[0px] border-b-[1px] border-dotted border-black" /> */}
                 </div>
               </Col>
               <Col span={12}>
                 <div className="flex items-end">
                   <div className="!w-fit whitespace-nowrap">Khoa (Viện): </div>
                   <span>{survey?.lectureInfo?.organization || ""}</span>
-                  {/* <span className="w-full mb-1 h-6 border-[0px] border-b-[1px] border-dotted border-black" /> */}
                 </div>
               </Col>
               <Col span={6}>
                 <div className="flex items-end">
                   <div className="!w-fit whitespace-nowrap">Bộ môn: </div>
-                  {/* <span className="w-full mb-1 h-6 border-[0px] border-b-[1px] border-dotted border-black" /> */}
                 </div>
               </Col>
               <Col span={6}>
                 <div className="flex items-end">
                   <div className="!w-fit whitespace-nowrap">Lớp: </div>
-                  {/* <span className="w-full mb-1 h-6 border-[0px] border-b-[1px] border-dotted border-black" /> */}
                 </div>
               </Col>
               <Col span={12}>
                 <div className="flex items-end">
                   <div className="!w-fit whitespace-nowrap">Ngày lấy ý kiến: </div>
-                  {/* <span>{dayjs(new Date()).format('DD/MM/YYYY')}</span> */}
-                  {/* <span className="w-full mb-1 h-6 border-[0px] border-b-[1px] border-dotted border-black" /> */}
                 </div>
               </Col>
               <Col span={12}>
                 <div className="flex items-end">
                   <div className="!w-fit whitespace-nowrap">Học kỳ: </div>
                   <span>{survey?.semester?.name || ""}</span>
-                  {/* <span className="w-full mb-1 h-6 border-[0px] border-b-[1px] border-dotted border-black" /> */}
                 </div>
               </Col>
               <Col span={24}>
