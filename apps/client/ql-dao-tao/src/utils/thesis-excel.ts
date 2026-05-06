@@ -2416,9 +2416,6 @@ const convertToThanhToanHuongDanTrongHvData = async (
   if (!allStudentsInClasses?.length) {
     return []
   }
-  console.log("allStudentsInClasses", allStudentsInClasses)
-  console.log("inAcademy", inAcademy)
-
   const now = dayjs()
   const organizationMap = new Map<string, ThanhToanHuongDanTrongHvData>()
 
@@ -3314,6 +3311,8 @@ const convertToHDDanhGiaLuanVanTemplateData = (
           ? dayjs(project.defenseSession.startTime).format("HH:mm")
           : "",
         ngayBaoVe: project?.defenseDate ? dayjs(project.defenseDate).format("DD/MM/YYYY") : "",
+
+
         diaDiem: project?.room?.name || "",
         tenChuTich: findMemberName(CouncilRole.CHAIRMAN),
         tenThuKy: findMemberName(CouncilRole.SECRETARY),

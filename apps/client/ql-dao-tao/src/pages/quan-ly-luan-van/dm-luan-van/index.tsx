@@ -1026,23 +1026,14 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
   }
 
   const ensureSupervisorPaymentsForExport = useCallback(
-    async (project: any, exportFilterInAcademy?: boolean) => {
+    async (project: any, _exportFilterInAcademy?: boolean) => {
       if (!project?.id) return
 
       const thesisDesc: "THESIS" | "PROJECT" =
         project.thesisType === ThesisType.THESIS ? "THESIS" : "PROJECT"
 
-      const isMatchInAcademy = (expert: any) => {
-        const hasLecturer = !!(expert?.lecturer || expert?.lecturerId)
-        if (exportFilterInAcademy === true) return hasLecturer
-        if (exportFilterInAcademy === false) return !hasLecturer
-        return true
-      }
-
-      const supExpert =
-        project.supervisor && isMatchInAcademy(project.supervisor) ? project.supervisor : null
-      const coExpert =
-        project.coSupervisor && isMatchInAcademy(project.coSupervisor) ? project.coSupervisor : null
+      const supExpert = project.supervisor || null
+      const coExpert = project.coSupervisor || null
 
       if (!supExpert && !coExpert) return
 
