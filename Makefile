@@ -6,6 +6,8 @@ RELEASE_TAG := release
 COMPOSE_CMD := docker compose up
 IMG_PREFIX := mta-
 
+# TK Promox root/Abc@12345
+
 # ─────────────────────────────────────────────────────────────────────────────
 # Server Profiles
 # Usage: make <target> SERVER_PROFILE=<profile>
@@ -23,7 +25,7 @@ IMG_PREFIX := mta-
 #   ONLY_OFFICE_ENDPOINT – OnlyOffice server URL injected as
 #                          NEXT_PUBLIC_ONLY_OFFICE_ENDPOINT at build time
 # ─────────────────────────────────────────────────────────────────────────────
-SERVER_PROFILE ?= swan1
+SERVER_PROFILE ?= app
 
 # ── Profile: swan1 ────────────────────────────────────────────────────────────
 ifeq ($(SERVER_PROFILE),swan1)
@@ -59,9 +61,9 @@ else ifeq ($(SERVER_PROFILE),local_mta)
   ONLY_OFFICE_ENDPOINT := http://192.168.0.102:3100
 
 # ── Profile: app2 ─────────────────────────────────────────────────────────────
-else ifeq ($(SERVER_PROFILE),app2)
-  SERVER_HOST      := app2
-  SERVER_PASSWORD  := Bancntt@2025
+else ifeq ($(SERVER_PROFILE),app)
+  SERVER_HOST      := app
+  SERVER_PASSWORD  := 1
   BE_DEPLOY_DIR    := ~/app/be
   BE_APP_DIR       := ~/app/be
   FE_APP_DIR       := ~/app/fe
@@ -182,7 +184,7 @@ build-all-fe:
 
 # Build all FE apps, package them, and deploy to the active SERVER_PROFILE in one shot.
 # Usage: make ship-fe SERVER_PROFILE=swantech_x52
-ship-fe: build-all-fe package-cdn deploy-cdn
+ship-fe: build-all-fe ƒ deploy-cdn
 ship-be: build-all-be save-docker-images deploy-all-be
 
 all-clients:
@@ -203,7 +205,7 @@ package-cdn:
 	@rm -rf cdn cdn.zip
 	@mkdir -p cdn
 	@for pkg in $(FE_PKGS); do \
-		$(MAKE) _package-fe-cdn-copy PACKAGE=$$pkg; \
+		$(MAKE) _package-fe-cdn-copy PACKAGE=$$pkg;
 	done
 	@zip -r -q cdn.zip cdn
 
