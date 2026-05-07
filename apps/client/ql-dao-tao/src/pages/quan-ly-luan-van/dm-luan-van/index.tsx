@@ -464,6 +464,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
       thesisRegistrations: {
         include: {
           thesisProject: {
+            
             include: {
               council: {
                 include: {
@@ -533,7 +534,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
         curriculumVersion: {
           include: {
             curriculum: {
-              include: { managementOrganization: true },
+              include: { managementOrganization: true, trainingMajor: { include: { organization: true } } },
             },
           },
         },
@@ -726,7 +727,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
     showSpinner()
     const createPromises = allStudentsInClasses?.map(async (student) => {
       const fixedClassType = student.fixedClass?.classType
-      const organizationId = student.curriculumVersion?.curriculum?.managementOrganizationId
+      const organizationId = student.curriculumVersion?.curriculum?.trainingMajor?.organization?.Id
       const typeLabel = fixedClassType === FixedClassType.APPLICATION ? "Đề án" : "Luận văn"
       const hasThesisRegistration = student.thesisRegistrations?.some(
         (registration) =>
