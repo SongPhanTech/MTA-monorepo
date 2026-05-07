@@ -791,6 +791,12 @@ const PutTrainingCourseModal = () => {
             <Input placeholder="Mã/số QĐ" readOnly={isRegulationLocked} />
           </FormItem>
         </Col>
+        {/* //TODO: khi nào migrate xong thì bỏ cmt
+        // <Col span={8}>
+        //   <FormItem form={form} name="admissionDecisionNumber" label="Số QĐ trúng tuyển">
+        //     <Input placeholder="Số QĐ" readOnly={isRegulationLocked} />
+        //   </FormItem>
+        // </Col> */}
       </Row>
 
       <Row gutter={[10, 10]} className="px-6">

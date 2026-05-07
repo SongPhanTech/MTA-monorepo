@@ -375,6 +375,13 @@ export default function TrainingCoursePage() {
                 dataIndex: "admissionDecision",
                 width: 150,
               },
+              //TODO: khi nào migrate xong thì bỏ cmt
+              // {
+              //   title: "Số QĐ trúng tuyển",
+              //   align: "center",
+              //   dataIndex: "admissionDecisionNumber",
+              //   width: 150,
+              // },
               {
                 title: "Số QĐ công nhận SV",
                 align: "center",
