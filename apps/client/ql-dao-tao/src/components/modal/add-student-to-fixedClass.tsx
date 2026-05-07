@@ -240,7 +240,7 @@ const AddStudentToFixedClassModal = () => {
         operation: "updateMany",
         data: {
           where: { id: { in: selectedRowKeys } },
-          data: { fixedClassId },
+          data: { fixedClassId, status: StudentStatus.ENROLLED },
         },
       },
     ];
@@ -254,7 +254,7 @@ const AddStudentToFixedClassModal = () => {
             id: { in: selectedRowKeys },
             status: { not: StudentStatus.DEFERRED_STUDY },
           },
-          data: { curriculumVersionId: cvId, status: StudentStatus.ENROLLED },
+          data: { curriculumVersionId: cvId },
         },
       });
     }
