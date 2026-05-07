@@ -1403,7 +1403,7 @@ export default function StudentGradeSystem() {
                 <Input
                   type="text"
                   className="h-8 text-xs flex-1 w-full"
-                  placeholder="Giám đốc, Trung tướng, GS.TS Lê Minh Thái"
+                  placeholder="GĐ, Trung tướng, GS.TS Lê Minh Thái"
                 />
               </FormItem>
             </div>

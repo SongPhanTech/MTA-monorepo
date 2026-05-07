@@ -1277,17 +1277,17 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
           signingDate: signer?.signingDate,
         }),
     },
-    {
-      id: 4,
-      label: "Kiếm tra tiến độ",
-      onClick: async () =>
-        await exportKiemTraTienDo({
-          allStudentsInClasses,
-          showSpinner,
-          hideSpinner,
-          message,
-        }),
-    },
+    // {
+    //   id: 4,
+    //   label: "Kiếm tra tiến độ",
+    //   onClick: async () =>
+    //     await exportKiemTraTienDo({
+    //       allStudentsInClasses,
+    //       showSpinner,
+    //       hideSpinner,
+    //       message,
+    //     }),
+    // },
     {
       id: 5,
       label: "Giấy mời chấm LV PB",
@@ -1913,6 +1913,26 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                     >
                       Đề xuất hội đồng
                     </Button>
+
+                    
+                  )}
+                  {role === "Khoa" && (
+                    <Button
+                      type="primary"
+                      onClick={async () => {
+                        
+                          await exportKiemTraTienDo({
+                            allStudentsInClasses,
+                            showSpinner,
+                            hideSpinner,
+                            message,
+                          })
+                      }}
+                    >
+                      Kiểm tra tiến độ
+                    </Button>
+
+                    
                   )}
                 </Space>
               </Col>
