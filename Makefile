@@ -183,6 +183,7 @@ build-all-fe:
 # Build all FE apps, package them, and deploy to the active SERVER_PROFILE in one shot.
 # Usage: make ship-fe SERVER_PROFILE=swantech_x52
 ship-fe: build-all-fe package-cdn deploy-cdn
+ship-be: build-all-be save-docker-images deploy-all-be
 
 all-clients:
 	@for pkg in $(FE_PKGS); do \
