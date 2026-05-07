@@ -233,18 +233,16 @@ const AddStudentToFixedClassModal = () => {
       return;
     }
     const cvId = fixedClass?.curriculumVersionId;
-
     const ops: SqlTransactionBodyItem[] = [
       {
-        model: "Student", // Không cần "as const" nữa vì Type đã quy định rõ
+        model: "Student",
         operation: "updateMany",
         data: {
           where: { id: { in: selectedRowKeys } },
-          data: { fixedClassId, status: StudentStatus.ENROLLED },
+          data: { fixedClassId },
         },
       },
-    ];
-
+    ]
     if (cvId) {
       ops.push({
         model: "Student",
@@ -258,7 +256,18 @@ const AddStudentToFixedClassModal = () => {
         },
       });
     }
-
+    ops.push({
+        model: "Student",
+        operation: "updateMany",
+        data: {
+          where: {
+            id: { in: selectedRowKeys },
+            status: StudentStatus.DEFERRED_STUDY,
+          },
+          data: { status: StudentStatus.ENROLLED },
+        },
+      });
+    
     try {
       const res = await sqlTransaction(ops);
 
