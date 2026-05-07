@@ -149402,6 +149402,7 @@ export namespace Prisma {
     admissionDecision: string | null
     studentRecognitionDecision: string | null
     regulation: string | null
+    admissionDecisionNumber: string | null
     trainingLanguageId: string | null
     isGeneralInfoLocked: boolean | null
     isRegulationLocked: boolean | null
@@ -149446,6 +149447,7 @@ export namespace Prisma {
     admissionDecision: string | null
     studentRecognitionDecision: string | null
     regulation: string | null
+    admissionDecisionNumber: string | null
     trainingLanguageId: string | null
     isGeneralInfoLocked: boolean | null
     isRegulationLocked: boolean | null
@@ -149490,6 +149492,7 @@ export namespace Prisma {
     admissionDecision: number
     studentRecognitionDecision: number
     regulation: number
+    admissionDecisionNumber: number
     trainingLanguageId: number
     isGeneralInfoLocked: number
     isRegulationLocked: number
@@ -149578,6 +149581,7 @@ export namespace Prisma {
     admissionDecision?: true
     studentRecognitionDecision?: true
     regulation?: true
+    admissionDecisionNumber?: true
     trainingLanguageId?: true
     isGeneralInfoLocked?: true
     isRegulationLocked?: true
@@ -149622,6 +149626,7 @@ export namespace Prisma {
     admissionDecision?: true
     studentRecognitionDecision?: true
     regulation?: true
+    admissionDecisionNumber?: true
     trainingLanguageId?: true
     isGeneralInfoLocked?: true
     isRegulationLocked?: true
@@ -149666,6 +149671,7 @@ export namespace Prisma {
     admissionDecision?: true
     studentRecognitionDecision?: true
     regulation?: true
+    admissionDecisionNumber?: true
     trainingLanguageId?: true
     isGeneralInfoLocked?: true
     isRegulationLocked?: true
@@ -149797,6 +149803,7 @@ export namespace Prisma {
     admissionDecision: string | null
     studentRecognitionDecision: string | null
     regulation: string | null
+    admissionDecisionNumber: string | null
     trainingLanguageId: string | null
     isGeneralInfoLocked: boolean
     isRegulationLocked: boolean
@@ -149860,6 +149867,7 @@ export namespace Prisma {
     admissionDecision?: boolean
     studentRecognitionDecision?: boolean
     regulation?: boolean
+    admissionDecisionNumber?: boolean
     trainingLanguageId?: boolean
     isGeneralInfoLocked?: boolean
     isRegulationLocked?: boolean
@@ -149924,6 +149932,7 @@ export namespace Prisma {
     admissionDecision?: boolean
     studentRecognitionDecision?: boolean
     regulation?: boolean
+    admissionDecisionNumber?: boolean
     trainingLanguageId?: boolean
     isGeneralInfoLocked?: boolean
     isRegulationLocked?: boolean
@@ -149971,6 +149980,7 @@ export namespace Prisma {
     admissionDecision?: boolean
     studentRecognitionDecision?: boolean
     regulation?: boolean
+    admissionDecisionNumber?: boolean
     trainingLanguageId?: boolean
     isGeneralInfoLocked?: boolean
     isRegulationLocked?: boolean
@@ -150018,6 +150028,7 @@ export namespace Prisma {
     admissionDecision?: boolean
     studentRecognitionDecision?: boolean
     regulation?: boolean
+    admissionDecisionNumber?: boolean
     trainingLanguageId?: boolean
     isGeneralInfoLocked?: boolean
     isRegulationLocked?: boolean
@@ -150038,7 +150049,7 @@ export namespace Prisma {
     trainingObjectTypeId?: boolean
   }
 
-  export type TrainingCourseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name" | "semesterStartId" | "startYear" | "endYear" | "academicYear" | "maxTrainingTime" | "isRetakeExam" | "admissionQuota" | "admittedStudent" | "enrolledStudent" | "admissionStartDate" | "admissionEndDate" | "admissionDecision" | "studentRecognitionDecision" | "regulation" | "trainingLanguageId" | "isGeneralInfoLocked" | "isRegulationLocked" | "isScoreConfigLocked" | "baseScore" | "coef_1" | "coef_2" | "coef_3" | "scoreToTakeExam" | "examScoreToPass" | "scoreToPass" | "scoreToPassConditional" | "scoreToTakeGraduation" | "scoreToPassGraduation" | "maxReExamScore" | "reduceReExamScore" | "scoreToRetain" | "trainingObjectTypeId", ExtArgs["result"]["trainingCourse"]>
+  export type TrainingCourseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name" | "semesterStartId" | "startYear" | "endYear" | "academicYear" | "maxTrainingTime" | "isRetakeExam" | "admissionQuota" | "admittedStudent" | "enrolledStudent" | "admissionStartDate" | "admissionEndDate" | "admissionDecision" | "studentRecognitionDecision" | "regulation" | "admissionDecisionNumber" | "trainingLanguageId" | "isGeneralInfoLocked" | "isRegulationLocked" | "isScoreConfigLocked" | "baseScore" | "coef_1" | "coef_2" | "coef_3" | "scoreToTakeExam" | "examScoreToPass" | "scoreToPass" | "scoreToPassConditional" | "scoreToTakeGraduation" | "scoreToPassGraduation" | "maxReExamScore" | "reduceReExamScore" | "scoreToRetain" | "trainingObjectTypeId", ExtArgs["result"]["trainingCourse"]>
   export type TrainingCourseInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     semesterStart?: boolean | SemesterDefaultArgs<ExtArgs>
     trainingLanguage?: boolean | TrainingCourse$trainingLanguageArgs<ExtArgs>
@@ -150143,6 +150154,7 @@ export namespace Prisma {
        * Số quy chế đào tạo
        */
       regulation: string | null
+      admissionDecisionNumber: string | null
       trainingLanguageId: string | null
       /**
        * khoá sửa tham số của "Thông tin chung"
@@ -150644,6 +150656,7 @@ export namespace Prisma {
     readonly admissionDecision: FieldRef<"TrainingCourse", 'String'>
     readonly studentRecognitionDecision: FieldRef<"TrainingCourse", 'String'>
     readonly regulation: FieldRef<"TrainingCourse", 'String'>
+    readonly admissionDecisionNumber: FieldRef<"TrainingCourse", 'String'>
     readonly trainingLanguageId: FieldRef<"TrainingCourse", 'String'>
     readonly isGeneralInfoLocked: FieldRef<"TrainingCourse", 'Boolean'>
     readonly isRegulationLocked: FieldRef<"TrainingCourse", 'Boolean'>
@@ -383799,6 +383812,7 @@ export namespace Prisma {
     admissionDecision: 'admissionDecision',
     studentRecognitionDecision: 'studentRecognitionDecision',
     regulation: 'regulation',
+    admissionDecisionNumber: 'admissionDecisionNumber',
     trainingLanguageId: 'trainingLanguageId',
     isGeneralInfoLocked: 'isGeneralInfoLocked',
     isRegulationLocked: 'isRegulationLocked',
@@ -388848,6 +388862,7 @@ export namespace Prisma {
     admissionDecision: 'admissionDecision',
     studentRecognitionDecision: 'studentRecognitionDecision',
     regulation: 'regulation',
+    admissionDecisionNumber: 'admissionDecisionNumber',
     trainingLanguageId: 'trainingLanguageId',
     trainingObjectTypeId: 'trainingObjectTypeId'
   };
@@ -402859,6 +402874,7 @@ export namespace Prisma {
     admissionDecision?: StringNullableFilter<"TrainingCourse"> | string | null
     studentRecognitionDecision?: StringNullableFilter<"TrainingCourse"> | string | null
     regulation?: StringNullableFilter<"TrainingCourse"> | string | null
+    admissionDecisionNumber?: StringNullableFilter<"TrainingCourse"> | string | null
     trainingLanguageId?: StringNullableFilter<"TrainingCourse"> | string | null
     isGeneralInfoLocked?: BoolFilter<"TrainingCourse"> | boolean
     isRegulationLocked?: BoolFilter<"TrainingCourse"> | boolean
@@ -402922,6 +402938,7 @@ export namespace Prisma {
     admissionDecision?: SortOrderInput | SortOrder
     studentRecognitionDecision?: SortOrderInput | SortOrder
     regulation?: SortOrderInput | SortOrder
+    admissionDecisionNumber?: SortOrderInput | SortOrder
     trainingLanguageId?: SortOrderInput | SortOrder
     isGeneralInfoLocked?: SortOrder
     isRegulationLocked?: SortOrder
@@ -402989,6 +403006,7 @@ export namespace Prisma {
     admissionDecision?: StringNullableFilter<"TrainingCourse"> | string | null
     studentRecognitionDecision?: StringNullableFilter<"TrainingCourse"> | string | null
     regulation?: StringNullableFilter<"TrainingCourse"> | string | null
+    admissionDecisionNumber?: StringNullableFilter<"TrainingCourse"> | string | null
     trainingLanguageId?: StringNullableFilter<"TrainingCourse"> | string | null
     isGeneralInfoLocked?: BoolFilter<"TrainingCourse"> | boolean
     isRegulationLocked?: BoolFilter<"TrainingCourse"> | boolean
@@ -403052,6 +403070,7 @@ export namespace Prisma {
     admissionDecision?: SortOrderInput | SortOrder
     studentRecognitionDecision?: SortOrderInput | SortOrder
     regulation?: SortOrderInput | SortOrder
+    admissionDecisionNumber?: SortOrderInput | SortOrder
     trainingLanguageId?: SortOrderInput | SortOrder
     isGeneralInfoLocked?: SortOrder
     isRegulationLocked?: SortOrder
@@ -403104,6 +403123,7 @@ export namespace Prisma {
     admissionDecision?: StringNullableWithAggregatesFilter<"TrainingCourse"> | string | null
     studentRecognitionDecision?: StringNullableWithAggregatesFilter<"TrainingCourse"> | string | null
     regulation?: StringNullableWithAggregatesFilter<"TrainingCourse"> | string | null
+    admissionDecisionNumber?: StringNullableWithAggregatesFilter<"TrainingCourse"> | string | null
     trainingLanguageId?: StringNullableWithAggregatesFilter<"TrainingCourse"> | string | null
     isGeneralInfoLocked?: BoolWithAggregatesFilter<"TrainingCourse"> | boolean
     isRegulationLocked?: BoolWithAggregatesFilter<"TrainingCourse"> | boolean
@@ -435243,6 +435263,7 @@ export namespace Prisma {
     admissionDecision?: string | null
     studentRecognitionDecision?: string | null
     regulation?: string | null
+    admissionDecisionNumber?: string | null
     isGeneralInfoLocked?: boolean
     isRegulationLocked?: boolean
     isScoreConfigLocked?: boolean
@@ -435304,6 +435325,7 @@ export namespace Prisma {
     admissionDecision?: string | null
     studentRecognitionDecision?: string | null
     regulation?: string | null
+    admissionDecisionNumber?: string | null
     trainingLanguageId?: string | null
     isGeneralInfoLocked?: boolean
     isRegulationLocked?: boolean
@@ -435363,6 +435385,7 @@ export namespace Prisma {
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
     isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
     isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
     isScoreConfigLocked?: BoolFieldUpdateOperationsInput | boolean
@@ -435424,6 +435447,7 @@ export namespace Prisma {
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLanguageId?: NullableStringFieldUpdateOperationsInput | string | null
     isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
     isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
@@ -435484,6 +435508,7 @@ export namespace Prisma {
     admissionDecision?: string | null
     studentRecognitionDecision?: string | null
     regulation?: string | null
+    admissionDecisionNumber?: string | null
     trainingLanguageId?: string | null
     isGeneralInfoLocked?: boolean
     isRegulationLocked?: boolean
@@ -435527,6 +435552,7 @@ export namespace Prisma {
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
     isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
     isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
     isScoreConfigLocked?: BoolFieldUpdateOperationsInput | boolean
@@ -435569,6 +435595,7 @@ export namespace Prisma {
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLanguageId?: NullableStringFieldUpdateOperationsInput | string | null
     isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
     isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
@@ -466206,6 +466233,7 @@ export namespace Prisma {
     admissionDecision?: SortOrder
     studentRecognitionDecision?: SortOrder
     regulation?: SortOrder
+    admissionDecisionNumber?: SortOrder
     trainingLanguageId?: SortOrder
     isGeneralInfoLocked?: SortOrder
     isRegulationLocked?: SortOrder
@@ -466271,6 +466299,7 @@ export namespace Prisma {
     admissionDecision?: SortOrder
     studentRecognitionDecision?: SortOrder
     regulation?: SortOrder
+    admissionDecisionNumber?: SortOrder
     trainingLanguageId?: SortOrder
     isGeneralInfoLocked?: SortOrder
     isRegulationLocked?: SortOrder
@@ -466315,6 +466344,7 @@ export namespace Prisma {
     admissionDecision?: SortOrder
     studentRecognitionDecision?: SortOrder
     regulation?: SortOrder
+    admissionDecisionNumber?: SortOrder
     trainingLanguageId?: SortOrder
     isGeneralInfoLocked?: SortOrder
     isRegulationLocked?: SortOrder
@@ -560306,6 +560336,7 @@ export namespace Prisma {
     admissionDecision?: string | null
     studentRecognitionDecision?: string | null
     regulation?: string | null
+    admissionDecisionNumber?: string | null
     isGeneralInfoLocked?: boolean
     isRegulationLocked?: boolean
     isScoreConfigLocked?: boolean
@@ -560366,6 +560397,7 @@ export namespace Prisma {
     admissionDecision?: string | null
     studentRecognitionDecision?: string | null
     regulation?: string | null
+    admissionDecisionNumber?: string | null
     trainingLanguageId?: string | null
     isGeneralInfoLocked?: boolean
     isRegulationLocked?: boolean
@@ -560632,6 +560664,7 @@ export namespace Prisma {
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
     isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
     isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
     isScoreConfigLocked?: BoolFieldUpdateOperationsInput | boolean
@@ -560692,6 +560725,7 @@ export namespace Prisma {
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLanguageId?: NullableStringFieldUpdateOperationsInput | string | null
     isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
     isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
@@ -560925,6 +560959,7 @@ export namespace Prisma {
     admissionDecision?: string | null
     studentRecognitionDecision?: string | null
     regulation?: string | null
+    admissionDecisionNumber?: string | null
     isGeneralInfoLocked?: boolean
     isRegulationLocked?: boolean
     isScoreConfigLocked?: boolean
@@ -560985,6 +561020,7 @@ export namespace Prisma {
     admissionDecision?: string | null
     studentRecognitionDecision?: string | null
     regulation?: string | null
+    admissionDecisionNumber?: string | null
     trainingLanguageId?: string | null
     isGeneralInfoLocked?: boolean
     isRegulationLocked?: boolean
@@ -561213,6 +561249,7 @@ export namespace Prisma {
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
     isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
     isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
     isScoreConfigLocked?: BoolFieldUpdateOperationsInput | boolean
@@ -561273,6 +561310,7 @@ export namespace Prisma {
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLanguageId?: NullableStringFieldUpdateOperationsInput | string | null
     isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
     isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
@@ -568701,6 +568739,7 @@ export namespace Prisma {
     admissionDecision?: string | null
     studentRecognitionDecision?: string | null
     regulation?: string | null
+    admissionDecisionNumber?: string | null
     isGeneralInfoLocked?: boolean
     isRegulationLocked?: boolean
     isScoreConfigLocked?: boolean
@@ -568760,6 +568799,7 @@ export namespace Prisma {
     admissionDecision?: string | null
     studentRecognitionDecision?: string | null
     regulation?: string | null
+    admissionDecisionNumber?: string | null
     trainingLanguageId?: string | null
     isGeneralInfoLocked?: boolean
     isRegulationLocked?: boolean
@@ -569718,6 +569758,7 @@ export namespace Prisma {
     admissionDecision?: StringNullableFilter<"TrainingCourse"> | string | null
     studentRecognitionDecision?: StringNullableFilter<"TrainingCourse"> | string | null
     regulation?: StringNullableFilter<"TrainingCourse"> | string | null
+    admissionDecisionNumber?: StringNullableFilter<"TrainingCourse"> | string | null
     trainingLanguageId?: StringNullableFilter<"TrainingCourse"> | string | null
     isGeneralInfoLocked?: BoolFilter<"TrainingCourse"> | boolean
     isRegulationLocked?: BoolFilter<"TrainingCourse"> | boolean
@@ -570405,6 +570446,7 @@ export namespace Prisma {
     admissionDecision?: string | null
     studentRecognitionDecision?: string | null
     regulation?: string | null
+    admissionDecisionNumber?: string | null
     isGeneralInfoLocked?: boolean
     isRegulationLocked?: boolean
     isScoreConfigLocked?: boolean
@@ -570465,6 +570507,7 @@ export namespace Prisma {
     admissionDecision?: string | null
     studentRecognitionDecision?: string | null
     regulation?: string | null
+    admissionDecisionNumber?: string | null
     isGeneralInfoLocked?: boolean
     isRegulationLocked?: boolean
     isScoreConfigLocked?: boolean
@@ -572442,6 +572485,7 @@ export namespace Prisma {
     admissionDecision?: string | null
     studentRecognitionDecision?: string | null
     regulation?: string | null
+    admissionDecisionNumber?: string | null
     isGeneralInfoLocked?: boolean
     isRegulationLocked?: boolean
     isScoreConfigLocked?: boolean
@@ -572502,6 +572546,7 @@ export namespace Prisma {
     admissionDecision?: string | null
     studentRecognitionDecision?: string | null
     regulation?: string | null
+    admissionDecisionNumber?: string | null
     trainingLanguageId?: string | null
     isGeneralInfoLocked?: boolean
     isRegulationLocked?: boolean
@@ -572576,6 +572621,7 @@ export namespace Prisma {
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
     isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
     isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
     isScoreConfigLocked?: BoolFieldUpdateOperationsInput | boolean
@@ -572636,6 +572682,7 @@ export namespace Prisma {
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLanguageId?: NullableStringFieldUpdateOperationsInput | string | null
     isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
     isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
@@ -573004,6 +573051,7 @@ export namespace Prisma {
     admissionDecision?: string | null
     studentRecognitionDecision?: string | null
     regulation?: string | null
+    admissionDecisionNumber?: string | null
     isGeneralInfoLocked?: boolean
     isRegulationLocked?: boolean
     isScoreConfigLocked?: boolean
@@ -573064,6 +573112,7 @@ export namespace Prisma {
     admissionDecision?: string | null
     studentRecognitionDecision?: string | null
     regulation?: string | null
+    admissionDecisionNumber?: string | null
     trainingLanguageId?: string | null
     isGeneralInfoLocked?: boolean
     isRegulationLocked?: boolean
@@ -574212,6 +574261,7 @@ export namespace Prisma {
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
     isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
     isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
     isScoreConfigLocked?: BoolFieldUpdateOperationsInput | boolean
@@ -574272,6 +574322,7 @@ export namespace Prisma {
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLanguageId?: NullableStringFieldUpdateOperationsInput | string | null
     isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
     isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
@@ -575584,6 +575635,7 @@ export namespace Prisma {
     admissionDecision?: string | null
     studentRecognitionDecision?: string | null
     regulation?: string | null
+    admissionDecisionNumber?: string | null
     isGeneralInfoLocked?: boolean
     isRegulationLocked?: boolean
     isScoreConfigLocked?: boolean
@@ -575644,6 +575696,7 @@ export namespace Prisma {
     admissionDecision?: string | null
     studentRecognitionDecision?: string | null
     regulation?: string | null
+    admissionDecisionNumber?: string | null
     trainingLanguageId?: string | null
     isGeneralInfoLocked?: boolean
     isRegulationLocked?: boolean
@@ -576550,6 +576603,7 @@ export namespace Prisma {
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
     isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
     isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
     isScoreConfigLocked?: BoolFieldUpdateOperationsInput | boolean
@@ -576610,6 +576664,7 @@ export namespace Prisma {
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLanguageId?: NullableStringFieldUpdateOperationsInput | string | null
     isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
     isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
@@ -581492,6 +581547,7 @@ export namespace Prisma {
     admissionDecision?: string | null
     studentRecognitionDecision?: string | null
     regulation?: string | null
+    admissionDecisionNumber?: string | null
     isGeneralInfoLocked?: boolean
     isRegulationLocked?: boolean
     isScoreConfigLocked?: boolean
@@ -581552,6 +581608,7 @@ export namespace Prisma {
     admissionDecision?: string | null
     studentRecognitionDecision?: string | null
     regulation?: string | null
+    admissionDecisionNumber?: string | null
     trainingLanguageId?: string | null
     isGeneralInfoLocked?: boolean
     isRegulationLocked?: boolean
@@ -589350,6 +589407,7 @@ export namespace Prisma {
     admissionDecision?: string | null
     studentRecognitionDecision?: string | null
     regulation?: string | null
+    admissionDecisionNumber?: string | null
     isGeneralInfoLocked?: boolean
     isRegulationLocked?: boolean
     isScoreConfigLocked?: boolean
@@ -589410,6 +589468,7 @@ export namespace Prisma {
     admissionDecision?: string | null
     studentRecognitionDecision?: string | null
     regulation?: string | null
+    admissionDecisionNumber?: string | null
     trainingLanguageId?: string | null
     isGeneralInfoLocked?: boolean
     isRegulationLocked?: boolean
@@ -597125,6 +597184,7 @@ export namespace Prisma {
     admissionDecision?: string | null
     studentRecognitionDecision?: string | null
     regulation?: string | null
+    admissionDecisionNumber?: string | null
     isGeneralInfoLocked?: boolean
     isRegulationLocked?: boolean
     isScoreConfigLocked?: boolean
@@ -597185,6 +597245,7 @@ export namespace Prisma {
     admissionDecision?: string | null
     studentRecognitionDecision?: string | null
     regulation?: string | null
+    admissionDecisionNumber?: string | null
     trainingLanguageId?: string | null
     isGeneralInfoLocked?: boolean
     isRegulationLocked?: boolean
@@ -597259,6 +597320,7 @@ export namespace Prisma {
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
     isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
     isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
     isScoreConfigLocked?: BoolFieldUpdateOperationsInput | boolean
@@ -597319,6 +597381,7 @@ export namespace Prisma {
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLanguageId?: NullableStringFieldUpdateOperationsInput | string | null
     isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
     isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
@@ -602991,6 +603054,7 @@ export namespace Prisma {
     admissionDecision?: string | null
     studentRecognitionDecision?: string | null
     regulation?: string | null
+    admissionDecisionNumber?: string | null
     isGeneralInfoLocked?: boolean
     isRegulationLocked?: boolean
     isScoreConfigLocked?: boolean
@@ -603051,6 +603115,7 @@ export namespace Prisma {
     admissionDecision?: string | null
     studentRecognitionDecision?: string | null
     regulation?: string | null
+    admissionDecisionNumber?: string | null
     trainingLanguageId?: string | null
     isGeneralInfoLocked?: boolean
     isRegulationLocked?: boolean
@@ -603533,6 +603598,7 @@ export namespace Prisma {
     admissionDecision?: string | null
     studentRecognitionDecision?: string | null
     regulation?: string | null
+    admissionDecisionNumber?: string | null
     isGeneralInfoLocked?: boolean
     isRegulationLocked?: boolean
     isScoreConfigLocked?: boolean
@@ -603593,6 +603659,7 @@ export namespace Prisma {
     admissionDecision?: string | null
     studentRecognitionDecision?: string | null
     regulation?: string | null
+    admissionDecisionNumber?: string | null
     trainingLanguageId?: string | null
     isGeneralInfoLocked?: boolean
     isRegulationLocked?: boolean
@@ -604797,6 +604864,7 @@ export namespace Prisma {
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
     isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
     isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
     isScoreConfigLocked?: BoolFieldUpdateOperationsInput | boolean
@@ -604857,6 +604925,7 @@ export namespace Prisma {
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLanguageId?: NullableStringFieldUpdateOperationsInput | string | null
     isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
     isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
@@ -606110,6 +606179,7 @@ export namespace Prisma {
     admissionDecision?: string | null
     studentRecognitionDecision?: string | null
     regulation?: string | null
+    admissionDecisionNumber?: string | null
     isGeneralInfoLocked?: boolean
     isRegulationLocked?: boolean
     isScoreConfigLocked?: boolean
@@ -606170,6 +606240,7 @@ export namespace Prisma {
     admissionDecision?: string | null
     studentRecognitionDecision?: string | null
     regulation?: string | null
+    admissionDecisionNumber?: string | null
     trainingLanguageId?: string | null
     isGeneralInfoLocked?: boolean
     isRegulationLocked?: boolean
@@ -606330,6 +606401,7 @@ export namespace Prisma {
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
     isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
     isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
     isScoreConfigLocked?: BoolFieldUpdateOperationsInput | boolean
@@ -606390,6 +606462,7 @@ export namespace Prisma {
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLanguageId?: NullableStringFieldUpdateOperationsInput | string | null
     isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
     isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
@@ -614371,6 +614444,7 @@ export namespace Prisma {
     admissionDecision?: string | null
     studentRecognitionDecision?: string | null
     regulation?: string | null
+    admissionDecisionNumber?: string | null
     isGeneralInfoLocked?: boolean
     isRegulationLocked?: boolean
     isScoreConfigLocked?: boolean
@@ -614431,6 +614505,7 @@ export namespace Prisma {
     admissionDecision?: string | null
     studentRecognitionDecision?: string | null
     regulation?: string | null
+    admissionDecisionNumber?: string | null
     trainingLanguageId?: string | null
     isGeneralInfoLocked?: boolean
     isRegulationLocked?: boolean
@@ -614722,6 +614797,7 @@ export namespace Prisma {
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
     isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
     isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
     isScoreConfigLocked?: BoolFieldUpdateOperationsInput | boolean
@@ -614782,6 +614858,7 @@ export namespace Prisma {
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLanguageId?: NullableStringFieldUpdateOperationsInput | string | null
     isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
     isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
@@ -627270,6 +627347,7 @@ export namespace Prisma {
     admissionDecision?: string | null
     studentRecognitionDecision?: string | null
     regulation?: string | null
+    admissionDecisionNumber?: string | null
     isGeneralInfoLocked?: boolean
     isRegulationLocked?: boolean
     isScoreConfigLocked?: boolean
@@ -627330,6 +627408,7 @@ export namespace Prisma {
     admissionDecision?: string | null
     studentRecognitionDecision?: string | null
     regulation?: string | null
+    admissionDecisionNumber?: string | null
     trainingLanguageId?: string | null
     isGeneralInfoLocked?: boolean
     isRegulationLocked?: boolean
@@ -638861,6 +638940,7 @@ export namespace Prisma {
     admissionDecision?: string | null
     studentRecognitionDecision?: string | null
     regulation?: string | null
+    admissionDecisionNumber?: string | null
     isGeneralInfoLocked?: boolean
     isRegulationLocked?: boolean
     isScoreConfigLocked?: boolean
@@ -638921,6 +639001,7 @@ export namespace Prisma {
     admissionDecision?: string | null
     studentRecognitionDecision?: string | null
     regulation?: string | null
+    admissionDecisionNumber?: string | null
     trainingLanguageId?: string | null
     isGeneralInfoLocked?: boolean
     isRegulationLocked?: boolean
@@ -639081,6 +639162,7 @@ export namespace Prisma {
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
     isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
     isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
     isScoreConfigLocked?: BoolFieldUpdateOperationsInput | boolean
@@ -639141,6 +639223,7 @@ export namespace Prisma {
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLanguageId?: NullableStringFieldUpdateOperationsInput | string | null
     isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
     isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
@@ -640102,6 +640185,7 @@ export namespace Prisma {
     admissionDecision?: string | null
     studentRecognitionDecision?: string | null
     regulation?: string | null
+    admissionDecisionNumber?: string | null
     isGeneralInfoLocked?: boolean
     isRegulationLocked?: boolean
     isScoreConfigLocked?: boolean
@@ -640162,6 +640246,7 @@ export namespace Prisma {
     admissionDecision?: string | null
     studentRecognitionDecision?: string | null
     regulation?: string | null
+    admissionDecisionNumber?: string | null
     trainingLanguageId?: string | null
     isGeneralInfoLocked?: boolean
     isRegulationLocked?: boolean
@@ -640360,6 +640445,7 @@ export namespace Prisma {
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
     isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
     isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
     isScoreConfigLocked?: BoolFieldUpdateOperationsInput | boolean
@@ -640420,6 +640506,7 @@ export namespace Prisma {
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLanguageId?: NullableStringFieldUpdateOperationsInput | string | null
     isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
     isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
@@ -643571,6 +643658,7 @@ export namespace Prisma {
     admissionDecision?: string | null
     studentRecognitionDecision?: string | null
     regulation?: string | null
+    admissionDecisionNumber?: string | null
     isGeneralInfoLocked?: boolean
     isRegulationLocked?: boolean
     isScoreConfigLocked?: boolean
@@ -643631,6 +643719,7 @@ export namespace Prisma {
     admissionDecision?: string | null
     studentRecognitionDecision?: string | null
     regulation?: string | null
+    admissionDecisionNumber?: string | null
     trainingLanguageId?: string | null
     isGeneralInfoLocked?: boolean
     isRegulationLocked?: boolean
@@ -644153,6 +644242,7 @@ export namespace Prisma {
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
     isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
     isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
     isScoreConfigLocked?: BoolFieldUpdateOperationsInput | boolean
@@ -644213,6 +644303,7 @@ export namespace Prisma {
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLanguageId?: NullableStringFieldUpdateOperationsInput | string | null
     isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
     isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
@@ -648548,6 +648639,7 @@ export namespace Prisma {
     admissionDecision?: string | null
     studentRecognitionDecision?: string | null
     regulation?: string | null
+    admissionDecisionNumber?: string | null
     isGeneralInfoLocked?: boolean
     isRegulationLocked?: boolean
     isScoreConfigLocked?: boolean
@@ -648608,6 +648700,7 @@ export namespace Prisma {
     admissionDecision?: string | null
     studentRecognitionDecision?: string | null
     regulation?: string | null
+    admissionDecisionNumber?: string | null
     trainingLanguageId?: string | null
     isGeneralInfoLocked?: boolean
     isRegulationLocked?: boolean
@@ -648719,6 +648812,7 @@ export namespace Prisma {
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
     isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
     isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
     isScoreConfigLocked?: BoolFieldUpdateOperationsInput | boolean
@@ -648779,6 +648873,7 @@ export namespace Prisma {
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLanguageId?: NullableStringFieldUpdateOperationsInput | string | null
     isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
     isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
@@ -683716,6 +683811,7 @@ export namespace Prisma {
     admissionDecision?: string | null
     studentRecognitionDecision?: string | null
     regulation?: string | null
+    admissionDecisionNumber?: string | null
     trainingLanguageId?: string | null
     isGeneralInfoLocked?: boolean
     isRegulationLocked?: boolean
@@ -684193,6 +684289,7 @@ export namespace Prisma {
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
     isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
     isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
     isScoreConfigLocked?: BoolFieldUpdateOperationsInput | boolean
@@ -684252,6 +684349,7 @@ export namespace Prisma {
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLanguageId?: NullableStringFieldUpdateOperationsInput | string | null
     isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
     isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
@@ -684311,6 +684409,7 @@ export namespace Prisma {
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLanguageId?: NullableStringFieldUpdateOperationsInput | string | null
     isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
     isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
@@ -685237,6 +685336,7 @@ export namespace Prisma {
     admissionDecision?: string | null
     studentRecognitionDecision?: string | null
     regulation?: string | null
+    admissionDecisionNumber?: string | null
     isGeneralInfoLocked?: boolean
     isRegulationLocked?: boolean
     isScoreConfigLocked?: boolean
@@ -685318,6 +685418,7 @@ export namespace Prisma {
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
     isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
     isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
     isScoreConfigLocked?: BoolFieldUpdateOperationsInput | boolean
@@ -685378,6 +685479,7 @@ export namespace Prisma {
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
     isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
     isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
     isScoreConfigLocked?: BoolFieldUpdateOperationsInput | boolean
@@ -685437,6 +685539,7 @@ export namespace Prisma {
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
     isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
     isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
     isScoreConfigLocked?: BoolFieldUpdateOperationsInput | boolean
@@ -690948,6 +691051,7 @@ export namespace Prisma {
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
     isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
     isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
     isScoreConfigLocked?: BoolFieldUpdateOperationsInput | boolean
@@ -691008,6 +691112,7 @@ export namespace Prisma {
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLanguageId?: NullableStringFieldUpdateOperationsInput | string | null
     isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
     isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
@@ -691067,6 +691172,7 @@ export namespace Prisma {
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLanguageId?: NullableStringFieldUpdateOperationsInput | string | null
     isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
     isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
@@ -692982,6 +693088,7 @@ export namespace Prisma {
     admissionDecision?: string | null
     studentRecognitionDecision?: string | null
     regulation?: string | null
+    admissionDecisionNumber?: string | null
     trainingLanguageId?: string | null
     isGeneralInfoLocked?: boolean
     isRegulationLocked?: boolean
@@ -693383,6 +693490,7 @@ export namespace Prisma {
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
     isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
     isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
     isScoreConfigLocked?: BoolFieldUpdateOperationsInput | boolean
@@ -693443,6 +693551,7 @@ export namespace Prisma {
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLanguageId?: NullableStringFieldUpdateOperationsInput | string | null
     isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
     isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
@@ -693502,6 +693611,7 @@ export namespace Prisma {
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLanguageId?: NullableStringFieldUpdateOperationsInput | string | null
     isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
     isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
@@ -701212,6 +701322,7 @@ export namespace Prisma {
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
     isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
     isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
     isScoreConfigLocked?: BoolFieldUpdateOperationsInput | boolean
@@ -701272,6 +701383,7 @@ export namespace Prisma {
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLanguageId?: NullableStringFieldUpdateOperationsInput | string | null
     isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
     isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
@@ -701331,6 +701443,7 @@ export namespace Prisma {
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLanguageId?: NullableStringFieldUpdateOperationsInput | string | null
     isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
     isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
@@ -710113,6 +710226,7 @@ export namespace Prisma {
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
     isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
     isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
     isScoreConfigLocked?: BoolFieldUpdateOperationsInput | boolean
@@ -710173,6 +710287,7 @@ export namespace Prisma {
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLanguageId?: NullableStringFieldUpdateOperationsInput | string | null
     isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
     isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
@@ -710232,6 +710347,7 @@ export namespace Prisma {
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLanguageId?: NullableStringFieldUpdateOperationsInput | string | null
     isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
     isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean

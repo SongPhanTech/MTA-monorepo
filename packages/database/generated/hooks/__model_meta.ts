@@ -9571,6 +9571,10 @@ const metadata: ModelMeta = {
                     name: "regulation",
                     type: "String",
                     isOptional: true,
+                }, admissionDecisionNumber: {
+                    name: "admissionDecisionNumber",
+                    type: "String",
+                    isOptional: true,
                 }, trainingLanguage: {
                     name: "trainingLanguage",
                     type: "TrainingLanguage",

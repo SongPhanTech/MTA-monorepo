@@ -1821,6 +1821,7 @@ exports.Prisma.TrainingCourseScalarFieldEnum = {
   admissionDecision: 'admissionDecision',
   studentRecognitionDecision: 'studentRecognitionDecision',
   regulation: 'regulation',
+  admissionDecisionNumber: 'admissionDecisionNumber',
   trainingLanguageId: 'trainingLanguageId',
   isGeneralInfoLocked: 'isGeneralInfoLocked',
   isRegulationLocked: 'isRegulationLocked',
@@ -6036,6 +6037,7 @@ exports.Prisma.TrainingCourseOrderByRelevanceFieldEnum = {
   admissionDecision: 'admissionDecision',
   studentRecognitionDecision: 'studentRecognitionDecision',
   regulation: 'regulation',
+  admissionDecisionNumber: 'admissionDecisionNumber',
   trainingLanguageId: 'trainingLanguageId',
   trainingObjectTypeId: 'trainingObjectTypeId'
 };

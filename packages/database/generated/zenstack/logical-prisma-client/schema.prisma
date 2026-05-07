@@ -3236,6 +3236,7 @@ model TrainingCourse {
   studentRecognitionDecision String?
   /// Số quy chế đào tạo
   regulation                 String?
+  admissionDecisionNumber    String?
   trainingLanguage           TrainingLanguage?          @relation(fields: [trainingLanguageId], references: [id])
   trainingLanguageId         String?
   /// khoá sửa tham số của "Thông tin chung"
