@@ -35,7 +35,8 @@ export default function ExportReport({
     MEMBER: "Thành viên",
     ADVISORY_BOARD: "Ban tư vấn",
     HEAD_SPECIALIZED: "Trưởng nhóm chuyên trách",
-    SPECIALIZED: "nhóm chuyên trách",
+    SPECIALIZED: "Nhóm chuyên trách",
+    NONCOUNCIL_MEMBERS: "Thành viên ngoài hội đồng",
   }
   const rgbToHex = (rgb: string): string | undefined => {
     const match = rgb.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/)
@@ -258,15 +259,61 @@ export default function ExportReport({
   }
 
   const htmlToParagraphs = async (
-    container: HTMLElement
-  ): Promise<(Paragraph | Table | Paragraph)[]> => {
-    const nodes = Array.from(container.childNodes)
+    container: HTMLElement,
+    isInsideTable = false
+  ): Promise<(Paragraph | Table)[]> => {
+    const paragraphs: (Paragraph | Table)[] = []
 
-    const paragraphs: (Paragraph | Table | Paragraph)[] = []
+    const extractRuns = (n: Node, currentStyle: any = { size: 28 }): TextRun[] => {
+      const runs: TextRun[] = []
+      if (n.nodeType === Node.TEXT_NODE) {
+        if (n.textContent) runs.push(new TextRun({ text: n.textContent, ...currentStyle }))
+      } else if (n.nodeType === Node.ELEMENT_NODE) {
+        const el = n as HTMLElement
+        const newStyle = { ...currentStyle }
+        if (el.tagName === "B" || el.tagName === "STRONG" || el.style.fontWeight === "bold")
+          newStyle.bold = true
+        if (el.tagName === "I" || el.tagName === "EM" || el.style.fontStyle === "italic")
+          newStyle.italics = true
+        if (
+          el.tagName === "U" ||
+          el.tagName === "INS" ||
+          el.style.textDecoration.includes("underline")
+        )
+          newStyle.underline = { type: "single" } as any
+        if (
+          el.tagName === "S" ||
+          el.tagName === "STRIKE" ||
+          el.tagName === "DEL" ||
+          el.style.textDecoration.includes("line-through")
+        )
+          newStyle.strike = true
+        const cColor = normalizeColor(el.style.color)
+        if (cColor) newStyle.color = cColor
+        el.childNodes.forEach((child) => runs.push(...extractRuns(child, newStyle)))
+      }
+      return runs
+    }
 
-    for (const node of nodes) {
-      if (node.nodeType === Node.ELEMENT_NODE) {
+    const cellBorders = {
+      top: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
+      bottom: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
+      left: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
+      right: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
+    }
+
+    const traverse = async (node: Node) => {
+      if (node.nodeType === Node.TEXT_NODE && node.textContent?.trim()) {
+        paragraphs.push(
+          new Paragraph({
+            indent: isInsideTable ? undefined : { firstLine: 720 },
+            alignment: isInsideTable ? AlignmentType.LEFT : AlignmentType.JUSTIFIED,
+            children: [new TextRun({ text: node.textContent, size: 28 })],
+          })
+        )
+      } else if (node.nodeType === Node.ELEMENT_NODE) {
         const el = node as HTMLElement
+
         if (el.tagName === "IMG") {
           const src = el.getAttribute("src")
           if (src && /^https?:\/\//i.test(src)) {
@@ -279,8 +326,9 @@ export default function ExportReport({
                 reader.onerror = reject
                 reader.readAsDataURL(blob)
               })
-              const uint8Array = Uint8Array.from(atob(base64.split(",")[1]), (c) => c.charCodeAt(0))
-
+              const uint8Array = Uint8Array.from(atob(base64.split(",")[1]), (c) =>
+                c.charCodeAt(0)
+              )
               paragraphs.push(
                 new Paragraph({
                   alignment: AlignmentType.CENTER,
@@ -296,80 +344,66 @@ export default function ExportReport({
               console.error("Lỗi tải ảnh:", err)
             }
           }
-        }
-
-        if (el.tagName === "TABLE") {
+        } else if (el.tagName === "TABLE") {
           const rows: TableRow[] = []
-          const trs = Array.from(el.querySelectorAll("tr"))
+          const trs = Array.from(
+            el.querySelectorAll(":scope > tbody > tr, :scope > thead > tr, :scope > tr")
+          )
           for (const tr of trs) {
             const cells: TableCell[] = []
-            const tds = Array.from(tr.querySelectorAll("td, th"))
+            const tds = Array.from(tr.querySelectorAll(":scope > td, :scope > th"))
             for (const td of tds) {
-              const cellChildren = await htmlToParagraphs(td as HTMLElement)
+              const colspan = Number.parseInt(td.getAttribute("colspan") || "1", 10)
+              const rowspan = Number.parseInt(td.getAttribute("rowspan") || "1", 10)
+              const cellChildren = await htmlToParagraphs(td as HTMLElement, true)
               cells.push(
                 new TableCell({
-                  children: cellChildren as Paragraph[],
-                  width: { size: 100 / tds.length, type: WidthType.PERCENTAGE },
+                  children:
+                    cellChildren.length > 0
+                      ? (cellChildren as Paragraph[])
+                      : [new Paragraph({ children: [new TextRun({ text: "", size: 28 })] })],
+                  columnSpan: colspan > 1 ? colspan : undefined,
+                  rowSpan: rowspan > 1 ? rowspan : undefined,
                   verticalAlign: VerticalAlign.CENTER,
+                  borders: cellBorders,
+                  margins: { top: 80, bottom: 80, left: 80, right: 80 },
                 })
               )
             }
             rows.push(new TableRow({ children: cells }))
           }
-
           paragraphs.push(
             new Table({
               rows,
               width: { size: 100, type: WidthType.PERCENTAGE },
             })
           )
-        }
-
-        if (el.tagName === "P") {
+        } else if (
+          el.tagName === "P" ||
+          el.tagName === "DIV" ||
+          el.tagName === "LI" ||
+          /^H[1-6]$/.test(el.tagName) ||
+          el.tagName === "SPAN"
+        ) {
           const runs: TextRun[] = []
-          el.childNodes.forEach(async (child) => {
-            if (child.nodeType === Node.TEXT_NODE) {
-              runs.push(new TextRun({ text: child.textContent || "", size: 28 }))
-            } else if (child.nodeType === Node.ELEMENT_NODE) {
-              const c = child as HTMLElement
-              runs.push(
-                new TextRun({
-                  text: c.textContent || "",
-                  bold: c.tagName === "B" || c.tagName === "STRONG",
-                  italics: c.tagName === "I" || c.tagName === "EM",
-                  color: normalizeColor(c.style.color),
-                  size: 28,
-                })
-              )
-            }
-          })
+          el.childNodes.forEach((child) => runs.push(...extractRuns(child, { size: 28 })))
           paragraphs.push(
             new Paragraph({
-              indent: { firstLine: 720 },
-              alignment: AlignmentType.JUSTIFIED,
-              children: runs,
+              indent: isInsideTable ? undefined : { firstLine: 720 },
+              alignment: isInsideTable ? AlignmentType.LEFT : AlignmentType.JUSTIFIED,
+              children: runs.length > 0 ? runs : [new TextRun({ text: "", size: 28 })],
             })
           )
-        }
-
-        if (el.tagName === "SPAN") {
-          paragraphs.push(
-            new Paragraph({
-              indent: { firstLine: 720 },
-              alignment: AlignmentType.JUSTIFIED,
-              children: [
-                new TextRun({
-                  text: el.textContent || "",
-                  color: el.style.color || undefined,
-                  bold: el.style.fontWeight === "bold",
-                  italics: el.style.fontStyle === "italic",
-                  size: 28,
-                }),
-              ],
-            })
-          )
+        } else {
+          for (let i = 0; i < el.childNodes.length; i++) {
+            await traverse(el.childNodes[i])
+          }
         }
       }
+    }
+
+    for (const node of Array.from(container.childNodes)) {
+      await traverse(node)
     }
 
     return paragraphs
@@ -574,7 +608,7 @@ export default function ExportReport({
                 heading: HeadingLevel.HEADING_1,
                 children: [
                   new TextRun({
-                    text: `Tiêu chuẩn ${idx + 1}: ${standard.name}`,
+                    text: `Tiêu chuẩn ${idx + 1}: ${(standard.name || "").replace(/^Tiêu chuẩn\s+\d+[:.]\s*/i, "")}`,
                     bold: true,
                     size: 28,
                     color: "000000",
@@ -613,7 +647,7 @@ export default function ExportReport({
                   heading: HeadingLevel.HEADING_2,
                   children: [
                     new TextRun({
-                      text: `Tiêu chí ${idx + 1}.${cIdx + 1}: ${criterion.name}`,
+                      text: `Tiêu chí ${idx + 1}.${cIdx + 1}: ${(criterion.name || "").replace(/^Tiêu chí\s+[\d.]+[:.]\s*/i, "")}`,
                       size: 28,
                       italics: true,
                       color: "000000",
@@ -700,23 +734,103 @@ export default function ExportReport({
                   processHtmlContent(criterion?.evaluationCriterion?.actionPlan || "", evidenceTags)
                 ))
               )
+              const scoreRaw = criterion?.evaluationCriterion?.score || ""
+              const scoreText = scoreRaw.replace(/<[^>]*>/g, "").trim()
+              const isKhongDat = /không\s*đạt|KĐ\b/i.test(scoreText)
+              const isDat = !isKhongDat && /đạt|\bĐ\b/i.test(scoreText)
+              const cellBorderScore = {
+                top: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
+                bottom: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
+                left: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
+                right: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
+              }
+
               children.push(
                 new Paragraph({
                   indent: { firstLine: 720 },
                   alignment: AlignmentType.JUSTIFIED,
                   children: [
+                    new TextRun({ text: "5. Tự đánh giá: ", bold: true, size: 28 }),
+                    new TextRun({ text: "Mức đạt được của tiêu chí:", size: 28 }),
+                  ],
+                }),
+                new Paragraph({
+                  indent: { firstLine: 720 },
+                  children: [
                     new TextRun({
-                      text: "5. Tự đánh giá",
+                      text: "Đánh dấu (×) vào ô tương ứng dưới đây:",
                       italics: true,
                       size: 28,
                     }),
                   ],
+                }),
+                new Table({
+                  width: { size: 50, type: WidthType.PERCENTAGE },
+                  borders: {
+                    top: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
+                    bottom: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
+                    left: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
+                    right: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
+                    insideHorizontal: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
+                    insideVertical: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
+                  },
+                  rows: [
+                    new TableRow({
+                      children: [
+                        new TableCell({
+                          borders: cellBorderScore,
+                          width: { size: 50, type: WidthType.PERCENTAGE },
+                          children: [
+                            new Paragraph({
+                              alignment: AlignmentType.CENTER,
+                              children: [
+                                new TextRun({ text: "Không đạt (K)", bold: true, size: 28 }),
+                              ],
+                            }),
+                          ],
+                        }),
+                        new TableCell({
+                          borders: cellBorderScore,
+                          width: { size: 50, type: WidthType.PERCENTAGE },
+                          children: [
+                            new Paragraph({
+                              alignment: AlignmentType.CENTER,
+                              children: [
+                                new TextRun({ text: "Đạt (Đ)", bold: true, size: 28 }),
+                              ],
+                            }),
+                          ],
+                        }),
+                      ],
+                    }),
+                    new TableRow({
+                      children: [
+                        new TableCell({
+                          borders: cellBorderScore,
+                          children: [
+                            new Paragraph({
+                              alignment: AlignmentType.CENTER,
+                              children: [
+                                new TextRun({ text: isKhongDat ? "×" : "", size: 28 }),
+                              ],
+                            }),
+                          ],
+                        }),
+                        new TableCell({
+                          borders: cellBorderScore,
+                          children: [
+                            new Paragraph({
+                              alignment: AlignmentType.CENTER,
+                              children: [
+                                new TextRun({ text: isDat ? "×" : "", size: 28 }),
+                              ],
+                            }),
+                          ],
+                        }),
+                      ],
+                    }),
+                  ],
                 })
-              )
-              children.push(
-                ...(await htmlToParagraphs(
-                  processHtmlContent(criterion?.evaluationCriterion?.score || "", evidenceTags)
-                ))
               )
             }
 
