@@ -18654,12 +18654,14 @@ const metadata: ModelMeta = {
                 }, expertId: {
                     name: "expertId",
                     type: "String",
+                    isOptional: true,
                     isForeignKey: true,
                     relationField: 'expert',
                 }, expert: {
                     name: "expert",
                     type: "ExpertProfile",
                     isDataModel: true,
+                    isOptional: true,
                     backLink: 'councilMemberships',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "expertId" },
@@ -18683,9 +18685,6 @@ const metadata: ModelMeta = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
-                }, councilId_expertId: {
-                    name: "councilId_expertId",
-                    fields: ["councilId", "expertId"]
                 },
             },
         },

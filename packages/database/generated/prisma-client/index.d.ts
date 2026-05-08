@@ -251596,7 +251596,7 @@ export namespace Prisma {
     createdBy: string | null
     role: $Enums.CouncilRole
     councilId: string
-    expertId: string
+    expertId: string | null
     _count: CouncilMemberCountAggregateOutputType | null
     _min: CouncilMemberMinAggregateOutputType | null
     _max: CouncilMemberMaxAggregateOutputType | null
@@ -251629,7 +251629,7 @@ export namespace Prisma {
     councilId?: boolean
     expertId?: boolean
     council?: boolean | CouncilDefaultArgs<ExtArgs>
-    expert?: boolean | ExpertProfileDefaultArgs<ExtArgs>
+    expert?: boolean | CouncilMember$expertArgs<ExtArgs>
     payment?: boolean | CouncilMember$paymentArgs<ExtArgs>
     invitations?: boolean | CouncilMember$invitationsArgs<ExtArgs>
   }, ExtArgs["result"]["councilMember"]>
@@ -251647,7 +251647,7 @@ export namespace Prisma {
     councilId?: boolean
     expertId?: boolean
     council?: boolean | CouncilDefaultArgs<ExtArgs>
-    expert?: boolean | ExpertProfileDefaultArgs<ExtArgs>
+    expert?: boolean | CouncilMember$expertArgs<ExtArgs>
   }, ExtArgs["result"]["councilMember"]>
 
   export type CouncilMemberSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -251663,7 +251663,7 @@ export namespace Prisma {
     councilId?: boolean
     expertId?: boolean
     council?: boolean | CouncilDefaultArgs<ExtArgs>
-    expert?: boolean | ExpertProfileDefaultArgs<ExtArgs>
+    expert?: boolean | CouncilMember$expertArgs<ExtArgs>
   }, ExtArgs["result"]["councilMember"]>
 
   export type CouncilMemberSelectScalar = {
@@ -251683,24 +251683,24 @@ export namespace Prisma {
   export type CouncilMemberOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "role" | "councilId" | "expertId", ExtArgs["result"]["councilMember"]>
   export type CouncilMemberInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     council?: boolean | CouncilDefaultArgs<ExtArgs>
-    expert?: boolean | ExpertProfileDefaultArgs<ExtArgs>
+    expert?: boolean | CouncilMember$expertArgs<ExtArgs>
     payment?: boolean | CouncilMember$paymentArgs<ExtArgs>
     invitations?: boolean | CouncilMember$invitationsArgs<ExtArgs>
   }
   export type CouncilMemberIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     council?: boolean | CouncilDefaultArgs<ExtArgs>
-    expert?: boolean | ExpertProfileDefaultArgs<ExtArgs>
+    expert?: boolean | CouncilMember$expertArgs<ExtArgs>
   }
   export type CouncilMemberIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     council?: boolean | CouncilDefaultArgs<ExtArgs>
-    expert?: boolean | ExpertProfileDefaultArgs<ExtArgs>
+    expert?: boolean | CouncilMember$expertArgs<ExtArgs>
   }
 
   export type $CouncilMemberPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "CouncilMember"
     objects: {
       council: Prisma.$CouncilPayload<ExtArgs>
-      expert: Prisma.$ExpertProfilePayload<ExtArgs>
+      expert: Prisma.$ExpertProfilePayload<ExtArgs> | null
       payment: Prisma.$PaymentRecordPayload<ExtArgs> | null
       invitations: Prisma.$InvitationPayload<ExtArgs> | null
     }
@@ -251715,7 +251715,7 @@ export namespace Prisma {
       createdBy: string | null
       role: $Enums.CouncilRole
       councilId: string
-      expertId: string
+      expertId: string | null
     }, ExtArgs["result"]["councilMember"]>
     composites: {}
   }
@@ -252111,7 +252111,7 @@ export namespace Prisma {
   export interface Prisma__CouncilMemberClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     council<T extends CouncilDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CouncilDefaultArgs<ExtArgs>>): Prisma__CouncilClient<$Result.GetResult<Prisma.$CouncilPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    expert<T extends ExpertProfileDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ExpertProfileDefaultArgs<ExtArgs>>): Prisma__ExpertProfileClient<$Result.GetResult<Prisma.$ExpertProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    expert<T extends CouncilMember$expertArgs<ExtArgs> = {}>(args?: Subset<T, CouncilMember$expertArgs<ExtArgs>>): Prisma__ExpertProfileClient<$Result.GetResult<Prisma.$ExpertProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     payment<T extends CouncilMember$paymentArgs<ExtArgs> = {}>(args?: Subset<T, CouncilMember$paymentArgs<ExtArgs>>): Prisma__PaymentRecordClient<$Result.GetResult<Prisma.$PaymentRecordPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     invitations<T extends CouncilMember$invitationsArgs<ExtArgs> = {}>(args?: Subset<T, CouncilMember$invitationsArgs<ExtArgs>>): Prisma__InvitationClient<$Result.GetResult<Prisma.$InvitationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
@@ -252547,6 +252547,25 @@ export namespace Prisma {
      * Limit how many CouncilMembers to delete.
      */
     limit?: number
+  }
+
+  /**
+   * CouncilMember.expert
+   */
+  export type CouncilMember$expertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExpertProfile
+     */
+    select?: ExpertProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExpertProfile
+     */
+    omit?: ExpertProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExpertProfileInclude<ExtArgs> | null
+    where?: ExpertProfileWhereInput
   }
 
   /**
@@ -412490,9 +412509,9 @@ export namespace Prisma {
     createdBy?: UuidNullableFilter<"CouncilMember"> | string | null
     role?: EnumCouncilRoleFilter<"CouncilMember"> | $Enums.CouncilRole
     councilId?: StringFilter<"CouncilMember"> | string
-    expertId?: StringFilter<"CouncilMember"> | string
+    expertId?: StringNullableFilter<"CouncilMember"> | string | null
     council?: XOR<CouncilScalarRelationFilter, CouncilWhereInput>
-    expert?: XOR<ExpertProfileScalarRelationFilter, ExpertProfileWhereInput>
+    expert?: XOR<ExpertProfileNullableScalarRelationFilter, ExpertProfileWhereInput> | null
     payment?: XOR<PaymentRecordNullableScalarRelationFilter, PaymentRecordWhereInput> | null
     invitations?: XOR<InvitationNullableScalarRelationFilter, InvitationWhereInput> | null
   }
@@ -412508,7 +412527,7 @@ export namespace Prisma {
     createdBy?: SortOrderInput | SortOrder
     role?: SortOrder
     councilId?: SortOrder
-    expertId?: SortOrder
+    expertId?: SortOrderInput | SortOrder
     council?: CouncilOrderByWithRelationInput
     expert?: ExpertProfileOrderByWithRelationInput
     payment?: PaymentRecordOrderByWithRelationInput
@@ -412519,7 +412538,6 @@ export namespace Prisma {
   export type CouncilMemberWhereUniqueInput = Prisma.AtLeast<{
     id?: string
     code?: string
-    councilId_expertId?: CouncilMemberCouncilIdExpertIdCompoundUniqueInput
     AND?: CouncilMemberWhereInput | CouncilMemberWhereInput[]
     OR?: CouncilMemberWhereInput[]
     NOT?: CouncilMemberWhereInput | CouncilMemberWhereInput[]
@@ -412531,12 +412549,12 @@ export namespace Prisma {
     createdBy?: UuidNullableFilter<"CouncilMember"> | string | null
     role?: EnumCouncilRoleFilter<"CouncilMember"> | $Enums.CouncilRole
     councilId?: StringFilter<"CouncilMember"> | string
-    expertId?: StringFilter<"CouncilMember"> | string
+    expertId?: StringNullableFilter<"CouncilMember"> | string | null
     council?: XOR<CouncilScalarRelationFilter, CouncilWhereInput>
-    expert?: XOR<ExpertProfileScalarRelationFilter, ExpertProfileWhereInput>
+    expert?: XOR<ExpertProfileNullableScalarRelationFilter, ExpertProfileWhereInput> | null
     payment?: XOR<PaymentRecordNullableScalarRelationFilter, PaymentRecordWhereInput> | null
     invitations?: XOR<InvitationNullableScalarRelationFilter, InvitationWhereInput> | null
-  }, "id" | "code" | "councilId_expertId">
+  }, "id" | "code">
 
   export type CouncilMemberOrderByWithAggregationInput = {
     id?: SortOrder
@@ -412549,7 +412567,7 @@ export namespace Prisma {
     createdBy?: SortOrderInput | SortOrder
     role?: SortOrder
     councilId?: SortOrder
-    expertId?: SortOrder
+    expertId?: SortOrderInput | SortOrder
     _count?: CouncilMemberCountOrderByAggregateInput
     _max?: CouncilMemberMaxOrderByAggregateInput
     _min?: CouncilMemberMinOrderByAggregateInput
@@ -412569,7 +412587,7 @@ export namespace Prisma {
     createdBy?: UuidNullableWithAggregatesFilter<"CouncilMember"> | string | null
     role?: EnumCouncilRoleWithAggregatesFilter<"CouncilMember"> | $Enums.CouncilRole
     councilId?: StringWithAggregatesFilter<"CouncilMember"> | string
-    expertId?: StringWithAggregatesFilter<"CouncilMember"> | string
+    expertId?: StringNullableWithAggregatesFilter<"CouncilMember"> | string | null
   }
 
   export type DefenseRecordWhereInput = {
@@ -446250,7 +446268,7 @@ export namespace Prisma {
     createdBy?: string | null
     role: $Enums.CouncilRole
     council: CouncilCreateNestedOneWithoutMembersInput
-    expert: ExpertProfileCreateNestedOneWithoutCouncilMembershipsInput
+    expert?: ExpertProfileCreateNestedOneWithoutCouncilMembershipsInput
     payment?: PaymentRecordCreateNestedOneWithoutCouncilMemberInput
     invitations?: InvitationCreateNestedOneWithoutCouncilMemberInput
   }
@@ -446266,7 +446284,7 @@ export namespace Prisma {
     createdBy?: string | null
     role: $Enums.CouncilRole
     councilId: string
-    expertId: string
+    expertId?: string | null
     payment?: PaymentRecordUncheckedCreateNestedOneWithoutCouncilMemberInput
     invitations?: InvitationUncheckedCreateNestedOneWithoutCouncilMemberInput
   }
@@ -446282,7 +446300,7 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumCouncilRoleFieldUpdateOperationsInput | $Enums.CouncilRole
     council?: CouncilUpdateOneRequiredWithoutMembersNestedInput
-    expert?: ExpertProfileUpdateOneRequiredWithoutCouncilMembershipsNestedInput
+    expert?: ExpertProfileUpdateOneWithoutCouncilMembershipsNestedInput
     payment?: PaymentRecordUpdateOneWithoutCouncilMemberNestedInput
     invitations?: InvitationUpdateOneWithoutCouncilMemberNestedInput
   }
@@ -446298,7 +446316,7 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumCouncilRoleFieldUpdateOperationsInput | $Enums.CouncilRole
     councilId?: StringFieldUpdateOperationsInput | string
-    expertId?: StringFieldUpdateOperationsInput | string
+    expertId?: NullableStringFieldUpdateOperationsInput | string | null
     payment?: PaymentRecordUncheckedUpdateOneWithoutCouncilMemberNestedInput
     invitations?: InvitationUncheckedUpdateOneWithoutCouncilMemberNestedInput
   }
@@ -446314,7 +446332,7 @@ export namespace Prisma {
     createdBy?: string | null
     role: $Enums.CouncilRole
     councilId: string
-    expertId: string
+    expertId?: string | null
   }
 
   export type CouncilMemberUpdateManyMutationInput = {
@@ -446340,7 +446358,7 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumCouncilRoleFieldUpdateOperationsInput | $Enums.CouncilRole
     councilId?: StringFieldUpdateOperationsInput | string
-    expertId?: StringFieldUpdateOperationsInput | string
+    expertId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type DefenseRecordCreateInput = {
@@ -473048,11 +473066,6 @@ export namespace Prisma {
     isNot?: CouncilWhereInput
   }
 
-  export type ExpertProfileScalarRelationFilter = {
-    is?: ExpertProfileWhereInput
-    isNot?: ExpertProfileWhereInput
-  }
-
   export type PaymentRecordNullableScalarRelationFilter = {
     is?: PaymentRecordWhereInput | null
     isNot?: PaymentRecordWhereInput | null
@@ -473067,11 +473080,6 @@ export namespace Prisma {
     fields: CouncilMemberOrderByRelevanceFieldEnum | CouncilMemberOrderByRelevanceFieldEnum[]
     sort: SortOrder
     search: string
-  }
-
-  export type CouncilMemberCouncilIdExpertIdCompoundUniqueInput = {
-    councilId: string
-    expertId: string
   }
 
   export type CouncilMemberCountOrderByAggregateInput = {
@@ -501192,10 +501200,12 @@ export namespace Prisma {
     update?: XOR<XOR<CouncilUpdateToOneWithWhereWithoutMembersInput, CouncilUpdateWithoutMembersInput>, CouncilUncheckedUpdateWithoutMembersInput>
   }
 
-  export type ExpertProfileUpdateOneRequiredWithoutCouncilMembershipsNestedInput = {
+  export type ExpertProfileUpdateOneWithoutCouncilMembershipsNestedInput = {
     create?: XOR<ExpertProfileCreateWithoutCouncilMembershipsInput, ExpertProfileUncheckedCreateWithoutCouncilMembershipsInput>
     connectOrCreate?: ExpertProfileCreateOrConnectWithoutCouncilMembershipsInput
     upsert?: ExpertProfileUpsertWithoutCouncilMembershipsInput
+    disconnect?: ExpertProfileWhereInput | boolean
+    delete?: ExpertProfileWhereInput | boolean
     connect?: ExpertProfileWhereUniqueInput
     update?: XOR<XOR<ExpertProfileUpdateToOneWithWhereWithoutCouncilMembershipsInput, ExpertProfileUpdateWithoutCouncilMembershipsInput>, ExpertProfileUncheckedUpdateWithoutCouncilMembershipsInput>
   }
@@ -619706,7 +619716,7 @@ export namespace Prisma {
     createdBy?: UuidNullableFilter<"CouncilMember"> | string | null
     role?: EnumCouncilRoleFilter<"CouncilMember"> | $Enums.CouncilRole
     councilId?: StringFilter<"CouncilMember"> | string
-    expertId?: StringFilter<"CouncilMember"> | string
+    expertId?: StringNullableFilter<"CouncilMember"> | string | null
   }
 
   export type DocumentFileCreateWithoutDecisionInput = {
@@ -620096,7 +620106,7 @@ export namespace Prisma {
     createdBy?: string | null
     role: $Enums.CouncilRole
     council: CouncilCreateNestedOneWithoutMembersInput
-    expert: ExpertProfileCreateNestedOneWithoutCouncilMembershipsInput
+    expert?: ExpertProfileCreateNestedOneWithoutCouncilMembershipsInput
     payment?: PaymentRecordCreateNestedOneWithoutCouncilMemberInput
   }
 
@@ -620111,7 +620121,7 @@ export namespace Prisma {
     createdBy?: string | null
     role: $Enums.CouncilRole
     councilId: string
-    expertId: string
+    expertId?: string | null
     payment?: PaymentRecordUncheckedCreateNestedOneWithoutCouncilMemberInput
   }
 
@@ -620142,7 +620152,7 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumCouncilRoleFieldUpdateOperationsInput | $Enums.CouncilRole
     council?: CouncilUpdateOneRequiredWithoutMembersNestedInput
-    expert?: ExpertProfileUpdateOneRequiredWithoutCouncilMembershipsNestedInput
+    expert?: ExpertProfileUpdateOneWithoutCouncilMembershipsNestedInput
     payment?: PaymentRecordUpdateOneWithoutCouncilMemberNestedInput
   }
 
@@ -620157,7 +620167,7 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumCouncilRoleFieldUpdateOperationsInput | $Enums.CouncilRole
     councilId?: StringFieldUpdateOperationsInput | string
-    expertId?: StringFieldUpdateOperationsInput | string
+    expertId?: NullableStringFieldUpdateOperationsInput | string | null
     payment?: PaymentRecordUncheckedUpdateOneWithoutCouncilMemberNestedInput
   }
 
@@ -620360,7 +620370,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     role: $Enums.CouncilRole
-    expert: ExpertProfileCreateNestedOneWithoutCouncilMembershipsInput
+    expert?: ExpertProfileCreateNestedOneWithoutCouncilMembershipsInput
     payment?: PaymentRecordCreateNestedOneWithoutCouncilMemberInput
     invitations?: InvitationCreateNestedOneWithoutCouncilMemberInput
   }
@@ -620375,7 +620385,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     role: $Enums.CouncilRole
-    expertId: string
+    expertId?: string | null
     payment?: PaymentRecordUncheckedCreateNestedOneWithoutCouncilMemberInput
     invitations?: InvitationUncheckedCreateNestedOneWithoutCouncilMemberInput
   }
@@ -621624,7 +621634,7 @@ export namespace Prisma {
     createdBy?: string | null
     role: $Enums.CouncilRole
     council: CouncilCreateNestedOneWithoutMembersInput
-    expert: ExpertProfileCreateNestedOneWithoutCouncilMembershipsInput
+    expert?: ExpertProfileCreateNestedOneWithoutCouncilMembershipsInput
     invitations?: InvitationCreateNestedOneWithoutCouncilMemberInput
   }
 
@@ -621639,7 +621649,7 @@ export namespace Prisma {
     createdBy?: string | null
     role: $Enums.CouncilRole
     councilId: string
-    expertId: string
+    expertId?: string | null
     invitations?: InvitationUncheckedCreateNestedOneWithoutCouncilMemberInput
   }
 
@@ -621670,7 +621680,7 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumCouncilRoleFieldUpdateOperationsInput | $Enums.CouncilRole
     council?: CouncilUpdateOneRequiredWithoutMembersNestedInput
-    expert?: ExpertProfileUpdateOneRequiredWithoutCouncilMembershipsNestedInput
+    expert?: ExpertProfileUpdateOneWithoutCouncilMembershipsNestedInput
     invitations?: InvitationUpdateOneWithoutCouncilMemberNestedInput
   }
 
@@ -621685,7 +621695,7 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumCouncilRoleFieldUpdateOperationsInput | $Enums.CouncilRole
     councilId?: StringFieldUpdateOperationsInput | string
-    expertId?: StringFieldUpdateOperationsInput | string
+    expertId?: NullableStringFieldUpdateOperationsInput | string | null
     invitations?: InvitationUncheckedUpdateOneWithoutCouncilMemberNestedInput
   }
 
@@ -707437,7 +707447,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     role: $Enums.CouncilRole
-    expertId: string
+    expertId?: string | null
   }
 
   export type ThesisProjectUpdateWithoutCouncilInput = {
@@ -707641,7 +707651,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumCouncilRoleFieldUpdateOperationsInput | $Enums.CouncilRole
-    expert?: ExpertProfileUpdateOneRequiredWithoutCouncilMembershipsNestedInput
+    expert?: ExpertProfileUpdateOneWithoutCouncilMembershipsNestedInput
     payment?: PaymentRecordUpdateOneWithoutCouncilMemberNestedInput
     invitations?: InvitationUpdateOneWithoutCouncilMemberNestedInput
   }
@@ -707656,7 +707666,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumCouncilRoleFieldUpdateOperationsInput | $Enums.CouncilRole
-    expertId?: StringFieldUpdateOperationsInput | string
+    expertId?: NullableStringFieldUpdateOperationsInput | string | null
     payment?: PaymentRecordUncheckedUpdateOneWithoutCouncilMemberNestedInput
     invitations?: InvitationUncheckedUpdateOneWithoutCouncilMemberNestedInput
   }
@@ -707671,7 +707681,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumCouncilRoleFieldUpdateOperationsInput | $Enums.CouncilRole
-    expertId?: StringFieldUpdateOperationsInput | string
+    expertId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type DocumentFileCreateManyDefenseRecordInput = {

@@ -5103,12 +5103,11 @@ model CouncilMember {
   role        CouncilRole
   councilId   String
   council     Council        @relation(fields: [councilId], references: [id])
-  expertId    String
-  expert      ExpertProfile  @relation(fields: [expertId], references: [id])
+  expertId    String?
+  expert      ExpertProfile? @relation(fields: [expertId], references: [id])
   payment     PaymentRecord?
   invitations Invitation?
 
-  @@unique([councilId, expertId])
   @@schema("ql-dao-tao")
 }
 
