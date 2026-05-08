@@ -914,12 +914,18 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
         }
 
         if (role === "Khoa" || role === "P7") {
-          payload.supervisor = rowData.supervisor
-            ? { connect: { id: rowData.supervisor } }
-            : { disconnect: true }
-          payload.coSupervisor = rowData.coSupervisor
-            ? { connect: { id: rowData.coSupervisor } }
-            : { disconnect: true }
+          if (rowData.supervisor !== undefined) {
+            payload.supervisor =
+              rowData.supervisor === null
+                ? { disconnect: true }
+                : { connect: { id: rowData.supervisor } }
+          }
+          if (rowData.coSupervisor !== undefined) {
+            payload.coSupervisor =
+              rowData.coSupervisor === null
+                ? { disconnect: true }
+                : { connect: { id: rowData.coSupervisor } }
+          }
         }
 
         return await updateThesisProject({
@@ -2064,19 +2070,22 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
               {
                 title: "GVHD 1",
                 width: 200,
-                // fixed: "left",
                 type: "input",
                 dataIndex: "supervisor",
                 render: (_, record) => {
                   if (editingRowKeys.includes(record?.id)) {
-                    const currentValue =
-                      editingValues[record?.id]?.supervisor !== undefined
-                        ? editingValues[record?.id]?.supervisor
-                        : record?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.id || ""
+                    const hasEditedSupervisor = Object.prototype.hasOwnProperty.call(
+                      editingValues[record?.id] || {},
+                      "supervisor"
+                    )
+                    const currentValue = hasEditedSupervisor
+                      ? editingValues[record?.id]?.supervisor
+                      : record?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.id || ""
                     return (
                       <div onClick={(e) => e.stopPropagation()}>
                         <Select
                           className="w-full"
+                          allowClear
                           dropdownMatchSelectWidth={false}
                           dropdownStyle={{ minWidth: 200 }}
                           disabled={!isWithinGvhdSupervisorEditWindow()}
@@ -2095,8 +2104,14 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                               value: item.id,
                             }
                           })}
-                          value={currentValue || undefined}
-                          onChange={(value) => handleEditChange(record?.id, "supervisor", value)}
+                          value={currentValue === null ? undefined : (currentValue || undefined)}
+                          onChange={(value) =>
+                            handleEditChange(
+                              record?.id,
+                              "supervisor",
+                              value === undefined ? null : value
+                            )
+                          }
                         />
                       </div>
                     )
@@ -2114,14 +2129,18 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                 dataIndex: "coSupervisor",
                 render: (_, record) => {
                   if (editingRowKeys.includes(record?.id)) {
-                    const currentValue =
-                      editingValues[record?.id]?.coSupervisor !== undefined
-                        ? editingValues[record?.id]?.coSupervisor
-                        : record?.thesisRegistrations?.[0]?.thesisProject?.coSupervisor?.id || ""
+                    const hasEditedCoSupervisor = Object.prototype.hasOwnProperty.call(
+                      editingValues[record?.id] || {},
+                      "coSupervisor"
+                    )
+                    const currentValue = hasEditedCoSupervisor
+                      ? editingValues[record?.id]?.coSupervisor
+                      : record?.thesisRegistrations?.[0]?.thesisProject?.coSupervisor?.id || ""
 
                     return (
                       <div onClick={(e) => e.stopPropagation()}>
                         <Select
+                          allowClear
                           dropdownMatchSelectWidth={false}
                           dropdownStyle={{ minWidth: 200 }}
                           className="w-full"
@@ -2141,8 +2160,14 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                               value: item.id,
                             }
                           })}
-                          value={currentValue || undefined}
-                          onChange={(value) => handleEditChange(record?.id, "coSupervisor", value)}
+                          value={currentValue === null ? undefined : (currentValue || undefined)}
+                          onChange={(value) =>
+                            handleEditChange(
+                              record?.id,
+                              "coSupervisor",
+                              value === undefined ? null : value
+                            )
+                          }
                         />
                       </div>
                     )
