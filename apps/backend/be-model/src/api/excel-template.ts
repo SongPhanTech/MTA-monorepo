@@ -48,6 +48,7 @@ app.openapi(
                   }),
                 fileName: z.string(),
                 path: z.string(),
+                prefix: z.string().nullable().optional(),
                 showGridLines: z.boolean().optional().openapi({
                   description: "Có hiển thị lưới trong Excel hay không",
                   default: false,
@@ -145,12 +146,15 @@ app.openapi(
       path,
       payload,
       sheets,
+      prefix,
       showGridLines = false,
       wrapText = false,
       head,
       tail,
     } = c.req.valid("json")
-    const res = await fetch(getMinioUrl(`/mta/template/${path}`))
+    const templatePrefix = (prefix ?? "/mta/template").replace(/\/+$/, "")
+    const templatePath = path.replace(/^\/+/, "")
+    const res = await fetch(getMinioUrl(`${templatePrefix}/${templatePath}`))
     const buffer = await res.arrayBuffer()
     const nodeBuffer = Buffer.from(buffer)
     const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
