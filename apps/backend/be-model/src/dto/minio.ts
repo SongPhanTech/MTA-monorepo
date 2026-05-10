@@ -8,7 +8,7 @@ export const ListObjectDtoSchema = z
   .object({
     path: z.string().optional(),
     startAfter: z.string().optional(),
-    limit: z.number(),
+    limit: z.coerce.number(),
   })
   .openapi("ListObjectDto")
 

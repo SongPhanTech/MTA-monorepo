@@ -653,6 +653,12 @@ const NAVIGATION: NavigationType = {
             path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_LUAN_VAN_CAU_HINH_THANH_TOAN_LUAN_VAN,
             description: "Cấu hình thanh toán",
           },
+          {
+            id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_LUAN_VAN_QUAN_LY_MAU_BIEU,
+            label: "Quản lý mẫu biểu",
+            path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_LUAN_VAN_QUAN_LY_MAU_BIEU,
+            description: "Quản lý mẫu biểu",
+          },
         ],
       },
       {
