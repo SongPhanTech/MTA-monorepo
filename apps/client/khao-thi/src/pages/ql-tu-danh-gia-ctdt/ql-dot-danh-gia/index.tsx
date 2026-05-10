@@ -25,7 +25,6 @@ export type EvaluationPeriodStoreState = {
 export const evaluationPeriodStore = new Store<EvaluationPeriodStoreState>({
   selectedEvaluationPeriodId: undefined,
 })
-
 export default function EvaluationPeriodTabPage() {
   const [activeKey, setActiveKey] = useState("1")
   const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
@@ -134,14 +133,12 @@ export default function EvaluationPeriodTabPage() {
       )
     }
 
-    if (isHeadSecretary) {
-      tabs.push({
-        key: "9",
-        label: "Phân công phản biện ngoài hội đồng",
-        children: <NoCounCilMemberTab />,
-        disabled: !selectedEvaluationPeriodId,
-      })
-    }
+    tabs.push({
+      key: "9",
+      label: "Phân công phản biện ngoài hội đồng",
+      children: <NoCounCilMemberTab />,
+      disabled: !selectedEvaluationPeriodId,
+    })
 
     if (isNonCouncilMember) {
       tabs.push({

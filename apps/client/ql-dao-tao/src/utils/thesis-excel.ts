@@ -601,13 +601,15 @@ export const exportThongKeCbHdlv = async ({
   const ngay = ngayhientai.split("/")[0]
   const thang = ngayhientai.split("/")[1]
   const nam = ngayhientai.split("/")[2]
+  console.log("ngayhientai", allStudentsInClasses)
+  // const studenEnable = allStudentsInClasses?.filter((student) => student.thesisRegistrations > 0);
   const tendot =
-    allStudentsInClasses?.length > 0
+  allStudentsInClasses?.length > 0
       ? allStudentsInClasses[0]?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.name
       : ""
 
   const tenkhoa =
-    allStudentsInClasses?.length > 0
+  allStudentsInClasses?.length > 0
       ? allStudentsInClasses[0]?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor
           ?.organization?.sTen || ""
       : ""
@@ -635,8 +637,8 @@ export const exportThongKeCbHdlv = async ({
       payload: [
         {
           data: {
-            tendot: tendot || "",
-            tenkhoa: tenkhoa,
+            tendot: tendot.trim().toUpperCase() || "",
+            tenkhoa: tenkhoa.trim().toUpperCase() || "",
             ngay: ngay,
             thang: thang,
             nam: nam,

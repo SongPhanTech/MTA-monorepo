@@ -108,7 +108,6 @@ export default function ExpertProfile() {
     }),
     [filters]
   )
-
   const { data: expertProfileData } = useFindManyExpertProfile({
     where,
     include: {
@@ -116,6 +115,7 @@ export default function ExpertProfile() {
       academicRankType: true,
       lecturer: {
         include: {
+          organization: true,
           userProfile: {
             include: {
               rank: true,
@@ -129,7 +129,6 @@ export default function ExpertProfile() {
     take: numberOfPages,
     skip: (currentPage - 1) * numberOfPages,
   })
-
   const { data: count } = useCountExpertProfile({
     where,
   })
@@ -239,19 +238,21 @@ export default function ExpertProfile() {
                   record.lecturer?.userProfile?.academicDegreeType?.sMa ||
                   record?.academicDegreeType?.sMa,
               },
-              {
-                title: "Chuyên ngành",
-                dataIndex: "specialization",
-                width: 150,
-                align: "center",
-                type: "input",
-              },
+              // {
+              //   title: "Chuyên ngành",
+              //   dataIndex: "specialization",
+              //   width: 150,
+              //   align: "center",
+              //   type: "input",
+              // },
               {
                 title: "Đơn vị công tác",
                 dataIndex: "workplace",
                 width: 150,
                 align: "center",
                 type: "input",
+                render: (__, record) =>
+                  `${record.lecturer ? record.lecturer?.organization?.sMa + "-" + record.lecturer?.organization?.sTen : record?.workplace}`,
               },
               {
                 title: "Số điện thoại",
@@ -266,6 +267,26 @@ export default function ExpertProfile() {
                 width: 150,
                 align: "center",
                 type: "input",
+              },
+              {
+                title: "Tên ngân hàng",
+                dataIndex: "bankName",
+                width: 100,
+                align: "center",
+                type: "input",
+                render: (__, record) =>
+                  record?.bankName || record?.lecturer?.userProfile?.bankName || "",
+              },
+              {
+                title: "STK",
+                dataIndex: "bankAccountNumber",
+                width: 100,
+                align: "center",
+                type: "input",
+                render: (__, record) =>
+                  record?.bankAccountNumber ||
+                  record?.lecturer?.userProfile?.bankAccountNumber ||
+                  "",
               },
               {
                 title: "Thao tác",

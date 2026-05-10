@@ -489,7 +489,9 @@ model TrainingCourse extends Base {
   studentRecognitionDecision String?
   /// Số quy chế đào tạo
   regulation                 String?
-
+  // Số QĐ trúng tuyển
+  admissionDecisionNumber    String?
+  
   trainingLanguage           TrainingLanguage?          @relation(fields: [trainingLanguageId], references: [id])
   trainingLanguageId         String?
   /// khoá sửa tham số của "Thông tin chung"

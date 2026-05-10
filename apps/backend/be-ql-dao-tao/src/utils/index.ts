@@ -928,11 +928,11 @@ export const parseSignerInfo = (signerStr: string) => {
   const rank = parts[1] || ""
   const nameWithDegree = parts[2] || ""
 
-  const isDirector = role.toLowerCase() === "giám đốc" || role.toLowerCase() === "gd"
+  const isDirector = role.toLowerCase() === "giám đốc" || role.toLowerCase() === "gđ"
 
   return {
     chuc_vi: isDirector ? "GIÁM ĐỐC" : "KT. GIÁM ĐỐC",
-    chuc_vi_ky_thay: isDirector ? "" : role.toUpperCase(),
+    chuc_vi_ky_thay: isDirector ? "" : "PHÓ GIÁM ĐỐC",
     quan_ham: rank,
     ten_day_du: nameWithDegree,
   }

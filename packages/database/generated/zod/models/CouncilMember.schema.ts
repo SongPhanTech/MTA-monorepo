@@ -32,14 +32,14 @@ const baseSchemaWithoutDefaults = z.object({
 ).strict();
 const relationSchema = z.object({
     council: z.record(z.string(), z.unknown()),
-    expert: z.record(z.string(), z.unknown()),
+    expert: z.record(z.string(), z.unknown()).optional(),
     payment: z.record(z.string(), z.unknown()).optional(),
     invitations: z.record(z.string(), z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({
     councilId: z.string(),
-    expertId: z.string(),
+    expertId: z.string().nullish(),
 }
 );
 
