@@ -139,7 +139,7 @@ export default function SettingClass() {
       (thesis) => thesis.council?.members.filter((m) => m.expert).map((m) => m.expert) || []
     )
 
-    const uniqueExperts = Array.from(new Map(allExperts.map((exp) => [exp.id, exp])).values())
+    const uniqueExperts = Array.from(new Map(allExperts.map((exp) => [exp?.id, exp])).values())
 
     return uniqueExperts
   }, [subjectClass])
@@ -575,10 +575,10 @@ export default function SettingClass() {
 
   useEffect(() => {
     if (experts.length) {
-      setRightData(experts)
+      setRightData(experts as ExpertProfile[])
 
       const filtered = (expertProfileData || []).filter(
-        (item) => !experts.some((exp) => exp.id === item.id)
+        (item) => !experts.some((exp) => exp?.id === item.id)
       )
       setLeftData(filtered)
     } else {

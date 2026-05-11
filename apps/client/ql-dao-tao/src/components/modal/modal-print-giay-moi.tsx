@@ -125,16 +125,16 @@ const ModalPrintInvitation = () => {
               <div className="mt-4 text-[20px]">Giám đốc học viện kỹ thuật quân sự</div>
               <div className="text-left font-normal normal-case text-[18px] indent-6">
                 Trân trọng kính mời Ông/bà:{" "}
-                <strong className="uppercase">{invitation.councilMember.expert.name}</strong> tham
-                gia hội đồng phản biện luận văn
+                <strong className="uppercase">{invitation?.councilMember?.expert?.name}</strong>{" "}
+                tham gia hội đồng phản biện luận văn
               </div>
               <div className="text-left font-normal normal-case text-[18px] indent-6">Ngành:</div>
               <div className="text-left font-normal normal-case text-[18px] indent-6">
-                Đề tài: {invitation.councilMember.council.thesis?.[0].title}
+                Đề tài: {invitation?.councilMember?.council?.thesis?.[0]?.title}
               </div>
               <div className="text-left font-normal normal-case text-[18px] indent-6">
                 Người thực hiện:{" "}
-                {invitation.councilMember.council.thesis?.[0].registrations
+                {invitation?.councilMember?.council?.thesis?.[0]?.registrations
                   .map((registration) => {
                     const fullname = registration.student?.userProfile?.fullname
                     const dateOfBirth = registration.student?.userProfile?.dateOfBirth

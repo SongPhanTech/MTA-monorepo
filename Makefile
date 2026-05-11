@@ -25,7 +25,7 @@ IMG_PREFIX := mta-
 #   ONLY_OFFICE_ENDPOINT – OnlyOffice server URL injected as
 #                          NEXT_PUBLIC_ONLY_OFFICE_ENDPOINT at build time
 # ─────────────────────────────────────────────────────────────────────────────
-SERVER_PROFILE ?= app
+SERVER_PROFILE ?= swan1
 
 # ── Profile: swan1 ────────────────────────────────────────────────────────────
 ifeq ($(SERVER_PROFILE),swan1)
@@ -184,7 +184,7 @@ build-all-fe:
 
 # Build all FE apps, package them, and deploy to the active SERVER_PROFILE in one shot.
 # Usage: make ship-fe SERVER_PROFILE=swantech_x52
-ship-fe: build-all-fe ƒ deploy-cdn
+ship-fe: build-all-fe package-cdn deploy-cdn
 ship-be: build-all-be save-docker-images deploy-all-be
 
 all-clients:

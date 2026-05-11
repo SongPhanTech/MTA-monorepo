@@ -266,10 +266,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
   const studentWhere = useMemo(() => {
     if (!searchParams.thesisSessionId) return { id: { in: [] } }
 
-    // 1. Khởi tạo mảng điều kiện
     const andConditions: any[] = []
 
-    // 2. Điều kiện cơ bản (Lớp, Đợt xét, Đơn vị)
     andConditions.push({
       fixedClassId: {
         in:
@@ -279,7 +277,6 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
       },
     })
 
-    // 3. Logic Filter 5 trường (Từ code chuẩn của bạn)
     if (filters.code) {
       andConditions.push({ code: { contains: filters.code, mode: "insensitive" } })
     }
@@ -289,7 +286,6 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
       })
     }
 
-    // 4. Điều kiện nằm trong ThesisProject (Title, Supervisor, CoSupervisor)
     const thesisProjectConditions: any = {
       thesisSessionId: searchParams.thesisSessionId,
       thesisType: ThesisType.THESIS,
@@ -334,7 +330,6 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
       },
     })
 
-    // 5. Thêm logic Tìm kiếm chung (debouncedNameKeyword) nếu có nhập
     if (debouncedNameKeyword) {
       andConditions.push({
         OR: [
@@ -823,7 +818,6 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
     }
 
     showSpinner()
-    /* P7 và Khoa đều chỉnh GVHD trên bảng; cần kiểm tra hạn và gửi supervisor/coSupervisor trong payload */
     if (role === "Khoa" || role === "P7") {
       for (const studentId of selectedRowKeys) {
         const rowData = editingValues[studentId.toString()]
@@ -879,11 +873,6 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
           organization: rowData.organization
             ? { connect: { Id: rowData.organization } }
             : { disconnect: true },
-          room: rowData.room ? { connect: { id: rowData.room } } : { disconnect: true },
-          defenseSession: rowData.defenseSession
-            ? { connect: { id: rowData.defenseSession } }
-            : { disconnect: true },
-
           council: {
             upsert: {
               create: {
@@ -912,14 +901,37 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
             },
           },
         }
-
         if (role === "Khoa" || role === "P7") {
-          payload.supervisor = rowData.supervisor
-            ? { connect: { id: rowData.supervisor } }
-            : { disconnect: true }
-          payload.coSupervisor = rowData.coSupervisor
-            ? { connect: { id: rowData.coSupervisor } }
-            : { disconnect: true }
+          const normalizedSupervisor =
+            rowData.supervisor === "" ? null : rowData.supervisor 
+          const normalizedCoSupervisor =
+            rowData.coSupervisor === "" ? null : rowData.coSupervisor
+
+          if (normalizedSupervisor !== undefined) {
+            payload.supervisor =
+              normalizedSupervisor === null
+                ? { disconnect: true }
+                : { connect: { id: normalizedSupervisor } }
+          }
+          if (normalizedCoSupervisor !== undefined) {
+            payload.coSupervisor =
+              normalizedCoSupervisor === null
+                ? { disconnect: true }
+                : { connect: { id: normalizedCoSupervisor } }
+          }
+        }
+        const normalizedRoom = rowData.room === "" ? null : (rowData.room ?? undefined)
+        const normalizedDefenseSession =
+          rowData.defenseSession === "" ? null : (rowData.defenseSession ?? undefined)
+        if (normalizedRoom !== undefined) {
+          payload.room =
+            normalizedRoom === null ? { disconnect: true } : { connect: { id: normalizedRoom } }
+        }
+        if (normalizedDefenseSession !== undefined) {
+          payload.defenseSession =
+            normalizedDefenseSession === null
+              ? { disconnect: true }
+              : { connect: { id: normalizedDefenseSession } }
         }
 
         return await updateThesisProject({
@@ -1277,17 +1289,17 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
           signingDate: signer?.signingDate,
         }),
     },
-    {
-      id: 4,
-      label: "Kiếm tra tiến độ",
-      onClick: async () =>
-        await exportKiemTraTienDo({
-          allStudentsInClasses,
-          showSpinner,
-          hideSpinner,
-          message,
-        }),
-    },
+    // {
+    //   id: 4,
+    //   label: "Kiếm tra tiến độ",
+    //   onClick: async () =>
+    //     await exportKiemTraTienDo({
+    //       allStudentsInClasses,
+    //       showSpinner,
+    //       hideSpinner,
+    //       message,
+    //     }),
+    // },
     {
       id: 5,
       label: "Giấy mời chấm LV PB",
@@ -1913,6 +1925,26 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                     >
                       Đề xuất hội đồng
                     </Button>
+
+                    
+                  )}
+                  {role === "Khoa" && (
+                    <Button
+                      type="primary"
+                      onClick={async () => {
+                        
+                          await exportKiemTraTienDo({
+                            allStudentsInClasses,
+                            showSpinner,
+                            hideSpinner,
+                            message,
+                          })
+                      }}
+                    >
+                      Kiểm tra tiến độ
+                    </Button>
+
+                    
                   )}
                 </Space>
               </Col>
@@ -2044,19 +2076,22 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
               {
                 title: "GVHD 1",
                 width: 200,
-                // fixed: "left",
                 type: "input",
                 dataIndex: "supervisor",
                 render: (_, record) => {
                   if (editingRowKeys.includes(record?.id)) {
-                    const currentValue =
-                      editingValues[record?.id]?.supervisor !== undefined
-                        ? editingValues[record?.id]?.supervisor
-                        : record?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.id || ""
+                    const hasEditedSupervisor = Object.prototype.hasOwnProperty.call(
+                      editingValues[record?.id] || {},
+                      "supervisor"
+                    )
+                    const currentValue = hasEditedSupervisor
+                      ? editingValues[record?.id]?.supervisor
+                      : record?.thesisRegistrations?.[0]?.thesisProject?.supervisor?.id || ""
                     return (
                       <div onClick={(e) => e.stopPropagation()}>
                         <Select
                           className="w-full"
+                          allowClear
                           dropdownMatchSelectWidth={false}
                           dropdownStyle={{ minWidth: 200 }}
                           disabled={!isWithinGvhdSupervisorEditWindow()}
@@ -2075,8 +2110,14 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                               value: item.id,
                             }
                           })}
-                          value={currentValue || undefined}
-                          onChange={(value) => handleEditChange(record?.id, "supervisor", value)}
+                          value={currentValue === null ? undefined : (currentValue || undefined)}
+                          onChange={(value) =>
+                            handleEditChange(
+                              record?.id,
+                              "supervisor",
+                              value === undefined ? null : value
+                            )
+                          }
                         />
                       </div>
                     )
@@ -2094,14 +2135,18 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                 dataIndex: "coSupervisor",
                 render: (_, record) => {
                   if (editingRowKeys.includes(record?.id)) {
-                    const currentValue =
-                      editingValues[record?.id]?.coSupervisor !== undefined
-                        ? editingValues[record?.id]?.coSupervisor
-                        : record?.thesisRegistrations?.[0]?.thesisProject?.coSupervisor?.id || ""
+                    const hasEditedCoSupervisor = Object.prototype.hasOwnProperty.call(
+                      editingValues[record?.id] || {},
+                      "coSupervisor"
+                    )
+                    const currentValue = hasEditedCoSupervisor
+                      ? editingValues[record?.id]?.coSupervisor
+                      : record?.thesisRegistrations?.[0]?.thesisProject?.coSupervisor?.id || ""
 
                     return (
                       <div onClick={(e) => e.stopPropagation()}>
                         <Select
+                          allowClear
                           dropdownMatchSelectWidth={false}
                           dropdownStyle={{ minWidth: 200 }}
                           className="w-full"
@@ -2121,8 +2166,14 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                               value: item.id,
                             }
                           })}
-                          value={currentValue || undefined}
-                          onChange={(value) => handleEditChange(record?.id, "coSupervisor", value)}
+                          value={currentValue === null ? undefined : (currentValue || undefined)}
+                          onChange={(value) =>
+                            handleEditChange(
+                              record?.id,
+                              "coSupervisor",
+                              value === undefined ? null : value
+                            )
+                          }
                         />
                       </div>
                     )
@@ -2220,15 +2271,19 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                 dataIndex: "councilChairman",
                 render: (_, record) => {
                   if (editingRowKeys.includes(record?.id)) {
-                    const currentValue =
-                      editingValues[record?.id]?.councilChairman !== undefined
-                        ? editingValues[record?.id]?.councilChairman
-                        : record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
-                            (member: CouncilMember) => member.role === CouncilRole.CHAIRMAN
-                          )?.expert?.id || ""
+                    const hasEditedCouncilChairman = Object.prototype.hasOwnProperty.call(
+                      editingValues[record?.id] || {},
+                      "councilChairman"
+                    )
+                    const currentValue = hasEditedCouncilChairman
+                      ? editingValues[record?.id]?.councilChairman
+                      : record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
+                          (member: CouncilMember) => member.role === CouncilRole.CHAIRMAN
+                        )?.expert?.id || ""
                     return (
                       <div onClick={(e) => e.stopPropagation()}>
                         <Select
+                          allowClear
                           dropdownMatchSelectWidth={false}
                           dropdownStyle={{ minWidth: 200 }}
                           className="w-full"
@@ -2250,9 +2305,13 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                                 value: item.id,
                               }
                             })}
-                          value={currentValue || ""}
+                          value={currentValue === null ? undefined : (currentValue || undefined)}
                           onChange={(value) =>
-                            handleEditChange(record?.id, "councilChairman", value)
+                            handleEditChange(
+                              record?.id,
+                              "councilChairman",
+                              value === undefined ? null : value
+                            )
                           }
                         />
                       </div>
@@ -2267,15 +2326,19 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                 dataIndex: "councilSecretary",
                 render: (_, record) => {
                   if (editingRowKeys.includes(record?.id)) {
-                    const currentValue =
-                      editingValues[record?.id]?.councilSecretary !== undefined
-                        ? editingValues[record?.id]?.councilSecretary
-                        : record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
-                            (member: CouncilMember) => member.role === CouncilRole.SECRETARY
-                          )?.expert?.id || ""
+                    const hasEditedCouncilSecretary = Object.prototype.hasOwnProperty.call(
+                      editingValues[record?.id] || {},
+                      "councilSecretary"
+                    )
+                    const currentValue = hasEditedCouncilSecretary
+                      ? editingValues[record?.id]?.councilSecretary
+                      : record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
+                          (member: CouncilMember) => member.role === CouncilRole.SECRETARY
+                        )?.expert?.id || ""
                     return (
                       <div onClick={(e) => e.stopPropagation()}>
                         <Select
+                          allowClear
                           className="w-full"
                           dropdownMatchSelectWidth={false}
                           dropdownStyle={{ minWidth: 200 }}
@@ -2297,9 +2360,13 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                                 value: item.id,
                               }
                             })}
-                          value={currentValue || ""}
+                          value={currentValue === null ? undefined : (currentValue || undefined)}
                           onChange={(value) =>
-                            handleEditChange(record?.id, "councilSecretary", value)
+                            handleEditChange(
+                              record?.id,
+                              "councilSecretary",
+                              value === undefined ? null : value
+                            )
                           }
                         />
                       </div>
@@ -2314,15 +2381,19 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                 dataIndex: "reviewer1",
                 render: (_, record) => {
                   if (editingRowKeys.includes(record?.id)) {
-                    const currentValue =
-                      editingValues[record?.id]?.reviewer1 !== undefined
-                        ? editingValues[record?.id]?.reviewer1
-                        : record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
-                            (member: CouncilMember) => member.role === CouncilRole.REVIEWER_1
-                          )?.expert?.id || ""
+                    const hasEditedReviewer1 = Object.prototype.hasOwnProperty.call(
+                      editingValues[record?.id] || {},
+                      "reviewer1"
+                    )
+                    const currentValue = hasEditedReviewer1
+                      ? editingValues[record?.id]?.reviewer1
+                      : record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
+                          (member: CouncilMember) => member.role === CouncilRole.REVIEWER_1
+                        )?.expert?.id || ""
                     return (
                       <div onClick={(e) => e.stopPropagation()}>
                         <Select
+                          allowClear
                           className="w-full"
                           dropdownMatchSelectWidth={false}
                           dropdownStyle={{ minWidth: 200 }}
@@ -2342,8 +2413,14 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                               value: item.id,
                             }
                           })}
-                          value={currentValue || ""}
-                          onChange={(value) => handleEditChange(record?.id, "reviewer1", value)}
+                          value={currentValue === null ? undefined : (currentValue || undefined)}
+                          onChange={(value) =>
+                            handleEditChange(
+                              record?.id,
+                              "reviewer1",
+                              value === undefined ? null : value
+                            )
+                          }
                         />
                       </div>
                     )
@@ -2357,15 +2434,19 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                 dataIndex: "reviewer2",
                 render: (_, record) => {
                   if (editingRowKeys.includes(record?.id)) {
-                    const currentValue =
-                      editingValues[record?.id]?.reviewer2 !== undefined
-                        ? editingValues[record?.id]?.reviewer2
-                        : record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
-                            (member: any) => member.role === CouncilRole.REVIEWER_2
-                          )?.expert?.id || ""
+                    const hasEditedReviewer2 = Object.prototype.hasOwnProperty.call(
+                      editingValues[record?.id] || {},
+                      "reviewer2"
+                    )
+                    const currentValue = hasEditedReviewer2
+                      ? editingValues[record?.id]?.reviewer2
+                      : record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
+                          (member: any) => member.role === CouncilRole.REVIEWER_2
+                        )?.expert?.id || ""
                     return (
                       <div onClick={(e) => e.stopPropagation()}>
                         <Select
+                          allowClear
                           className="w-full"
                           dropdownMatchSelectWidth={false}
                           dropdownStyle={{ minWidth: 200 }}
@@ -2385,8 +2466,14 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                               value: item.id,
                             }
                           })}
-                          value={currentValue || ""}
-                          onChange={(value) => handleEditChange(record?.id, "reviewer2", value)}
+                          value={currentValue === null ? undefined : (currentValue || undefined)}
+                          onChange={(value) =>
+                            handleEditChange(
+                              record?.id,
+                              "reviewer2",
+                              value === undefined ? null : value
+                            )
+                          }
                         />
                       </div>
                     )
@@ -2400,15 +2487,19 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                 dataIndex: "councilMember",
                 render: (_, record) => {
                   if (editingRowKeys.includes(record?.id)) {
-                    const currentValue =
-                      editingValues[record?.id]?.councilMember !== undefined
-                        ? editingValues[record?.id]?.councilMember
-                        : record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
-                            (member: any) => member.role === CouncilRole.MEMBER
-                          )?.expert?.id || ""
+                    const hasEditedCouncilMember = Object.prototype.hasOwnProperty.call(
+                      editingValues[record?.id] || {},
+                      "councilMember"
+                    )
+                    const currentValue = hasEditedCouncilMember
+                      ? editingValues[record?.id]?.councilMember
+                      : record?.thesisRegistrations?.[0]?.thesisProject?.council?.members?.find(
+                          (member: any) => member.role === CouncilRole.MEMBER
+                        )?.expert?.id || ""
                     return (
                       <div onClick={(e) => e.stopPropagation()}>
                         <Select
+                          allowClear
                           className="w-full"
                           dropdownMatchSelectWidth={false}
                           dropdownStyle={{ minWidth: 200 }}
@@ -2428,8 +2519,14 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                               value: item.id,
                             }
                           })}
-                          value={currentValue || ""}
-                          onChange={(value) => handleEditChange(record?.id, "councilMember", value)}
+                          value={currentValue === null ? undefined : (currentValue || undefined)}
+                          onChange={(value) =>
+                            handleEditChange(
+                              record?.id,
+                              "councilMember",
+                              value === undefined ? null : value
+                            )
+                          }
                         />
                       </div>
                     )
@@ -2443,23 +2540,29 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                 dataIndex: "room",
                 render: (text: string, record: any) => {
                   if (editingRowKeys.includes(record?.id)) {
-                    const currentValue =
-                      editingValues[record?.id]?.room !== undefined
-                        ? editingValues[record?.id]?.room
-                        : record?.thesisRegistrations?.[0]?.thesisProject?.room?.name || ""
+                    const hasEditedRoom = Object.prototype.hasOwnProperty.call(
+                      editingValues[record?.id] || {},
+                      "room"
+                    )
+                    const currentValue = hasEditedRoom
+                      ? editingValues[record?.id]?.room
+                      : record?.thesisRegistrations?.[0]?.thesisProject?.room?.id || ""
                     return (
                       <div onClick={(e) => e.stopPropagation()}>
                         <Select
+                          allowClear
                           dropdownMatchSelectWidth={false}
                           dropdownStyle={{ minWidth: 200 }}
                           disabled={!isWithinCouncilEditWindow()}
                           className="w-full"
-                          value={currentValue || ""}
+                          value={currentValue === null ? undefined : (currentValue || undefined)}
                           options={roomData?.map((item) => ({
                             label: item.name,
                             value: item.id,
                           }))}
-                          onChange={(value) => handleEditChange(record?.id, "room", value)}
+                          onChange={(value) =>
+                            handleEditChange(record?.id, "room", value === undefined ? null : value)
+                          }
                         />
                       </div>
                     )
@@ -2506,18 +2609,22 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                 dataIndex: "defenseSession",
                 render: (_, record) => {
                   if (editingRowKeys.includes(record?.id)) {
-                    const currentValue =
-                      editingValues[record?.id]?.defenseSession !== undefined
-                        ? editingValues[record?.id]?.defenseSession
-                        : record?.thesisRegistrations?.[0]?.thesisProject?.defenseSession?.id || ""
+                    const hasEditedDefenseSession = Object.prototype.hasOwnProperty.call(
+                      editingValues[record?.id] || {},
+                      "defenseSession"
+                    )
+                    const currentValue = hasEditedDefenseSession
+                      ? editingValues[record?.id]?.defenseSession
+                      : record?.thesisRegistrations?.[0]?.thesisProject?.defenseSession?.id || ""
 
                     return (
                       <div onClick={(e) => e.stopPropagation()}>
                         <Select
+                          allowClear
                           className="w-full"
                           dropdownMatchSelectWidth={false}
                           dropdownStyle={{ minWidth: 100 }}
-                          value={currentValue || undefined}
+                          value={currentValue === null ? undefined : (currentValue || undefined)}
                           disabled={!isWithinCouncilEditWindow()}
                           placeholder="Chọn thời gian bảo vệ"
                           options={defenseSessionData?.map((item) => ({
@@ -2525,7 +2632,11 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                             value: item.id,
                           }))}
                           onChange={(value) =>
-                            handleEditChange(record?.id, "defenseSession", value)
+                            handleEditChange(
+                              record?.id,
+                              "defenseSession",
+                              value === undefined ? null : value
+                            )
                           }
                         />
                       </div>
@@ -2569,7 +2680,6 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                   )
                 },
               },
-
               // {
               //   title: "Trạng thái",
               //   width: 100,

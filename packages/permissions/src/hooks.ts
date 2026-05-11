@@ -327,7 +327,6 @@ const listRouter = [
   {
     id: "bac-luong",
     label: "Bậc lương",
-
     path: ROUTER_PATH.QL_HO_SO.DANH_MUC_HO_SO_BAC_LUONG,
     description: "Bậc lương",
   },

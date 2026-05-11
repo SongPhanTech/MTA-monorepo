@@ -135,6 +135,7 @@ export default {
     "QUAN_LY_LUAN_VAN_DM_LUAN_VAN": "/quan-ly-luan-van/dm-luan-van",
     "QUAN_LY_LUAN_VAN_QL_DOT_XET_LUAN_VAN_CAU_HINH_HOI_DONG_ID": "/quan-ly-luan-van/ql-dot-xet-luan-van/cau-hinh-hoi-dong/[id]",
     "QUAN_LY_LUAN_VAN_QL_DOT_XET_LUAN_VAN": "/quan-ly-luan-van/ql-dot-xet-luan-van",
+    "QUAN_LY_LUAN_VAN_QUAN_LY_MAU_BIEU": "/quan-ly-luan-van/quan-ly-mau-bieu",
     "THONG_BAO": "/thong-bao",
     "THONG_KE_HOC_LAI": "/thong-ke-hoc-lai",
     "THONG_KE_THI_LAI": "/thong-ke-thi-lai",

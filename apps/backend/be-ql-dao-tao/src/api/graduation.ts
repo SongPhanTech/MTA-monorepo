@@ -1660,6 +1660,8 @@ app.openapi(exportGraduationRegisterMaster, async (c) => {
       noiSinh: user?.placeOfBirth || "",
       gioiTinh: user?.gender?.sTen || "",
       danToc: user?.ethnicity?.sTen || "",
+      //TODO: add admission decision
+     // quyetDinhTuyenSinh: student?.fixedClass?.trainingCourse?.admissionDecisionNumber || "",
       quyetDinhTuyenSinh: student?.fixedClass?.trainingCourse?.admissionDecision || "",
       quocTich: user?.nationality?.sTen || "",
       "quyetDinhHDDGLV/ĐATN": thesisSession?.defenseDecisionNumber || "",
