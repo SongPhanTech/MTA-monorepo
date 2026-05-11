@@ -40,6 +40,11 @@ export async function exportStudentProfile({ trainingCourseId }: { trainingCours
           gender: { select: { sTen: true } },
           ethnicity: { select: { sTen: true } },
           provinceHometown: { select: { sTen: true } },
+          newProvinceOfBirth: {
+            select: {
+              sTen: true,
+            },
+          },
           nationality: { select: { sTen: true } },
           officerNumber: true,
           rank: { select: { sTen: true } },

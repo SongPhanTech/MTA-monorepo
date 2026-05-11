@@ -327,7 +327,7 @@ export function useSuspenseCountThesisSession<TArgs extends Prisma.ThesisSession
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('ThesisSession', `${endpoint}/thesisSession/count`, args, options, fetch);
 }
 
-export function useCheckThesisSession<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; name?: string; trainingObjectTypeId?: string; trainingCourseId?: string; proposalReport?: string; councilReport?: string; decisionNumber?: string; decisionMaker?: string; defenseDecisionNumber?: string; defenseDecisionMaker?: string; chief?: string; deputy?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckThesisSession<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; name?: string; trainingObjectTypeId?: string; trainingCourseId?: string; proposalReport?: string; councilReport?: string; graduationReport?: string; decisionNumber?: string; decisionMaker?: string; defenseDecisionNumber?: string; defenseDecisionMaker?: string; chief?: string; deputy?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('ThesisSession', `${endpoint}/thesisSession/check`, args, options, fetch);
 }

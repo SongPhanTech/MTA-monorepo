@@ -104,11 +104,11 @@ const ModalPrintExamSurvey = () => {
             .custom-red-table .ant-table,
             .custom-red-table .ant-table-container,
             .custom-red-table .ant-table-content table {
-             border: 2px solid #6bac79 !important;
+             border: 2px solid red !important;
             }
 
             .custom-red-table .ant-table-cell {
-            border: 1px solid #6bac79 !important;
+            border: 1px solid red !important;
             }
 
         }
@@ -203,7 +203,7 @@ const ModalPrintExamSurvey = () => {
                     align: "center",
                     render: () => (
                       <div className="flex items-center justify-center">
-                        <Button className="flex items-center justify-center w-6 h-6 border-solid border-[1px] border-[#b0d2bb] text-[#6bac79] text-[12px]">
+                        <Button className="flex items-center justify-center w-6 h-6 border-solid border-[1px] border-[#ed9e9e] text-[#ea1212]  text-[12px]">
                           {i?.answer}
                         </Button>
                       </div>
@@ -248,7 +248,7 @@ const ModalPrintExamSurvey = () => {
                             }}
                           />
 
-                          <Input.TextArea placeholder="Nhập câu trả lời" />
+                          <Input.TextArea placeholder="Nhập câu trả lời" className="pointer-events-none" />
                         </div>
                       ) : record?.specificChoice?.length > 0 ? (
                         <div>
@@ -258,7 +258,7 @@ const ModalPrintExamSurvey = () => {
                             }}
                           />
 
-                          <Radio.Group className="w-full gap-x-2 flex">
+                          <Radio.Group className="w-full gap-x-2 flex pointer-events-none">
                             {survey?.surveyChoice.map((i, index: number) => (
                               <Radio key={i?.id} value={i?.id} className="relative">
                                 <div>{record?.specificChoice[index]?.description}</div>
@@ -302,13 +302,9 @@ const ModalPrintExamSurvey = () => {
                     render: (_, record, qIndex) => {
                       return (
                         record?.type === "SINGLE_CHOICE" && (
-                          <Radio.Group className="w-full gap-x-2 flex ">
+                          <Radio.Group className="w-full gap-x-2 flex pointer-events-none">
                             {survey?.surveyChoice.map((i) => (
-                              <Radio.Button
-                                key={i?.id}
-                                value={i?.id}
-                                className="border-[#b0d2bb] text-[#6bac79]"
-                              >
+                              <Radio.Button key={i?.id} value={i?.id}>
                                 {i?.answer}
                               </Radio.Button>
                             ))}
@@ -355,7 +351,7 @@ const ModalPrintExamSurvey = () => {
                                                     {data?.surveyChoice.map((i) => {
                                                         return (
                                                             <div className="flex items-center justify-center">
-                                                                <Button className="flex items-center justify-center w-6 h-6 border-solid border-[1px] border-[#b0d2bb] text-[#6bac79] text-[12px]">
+                                                                <Button className="flex items-center justify-center w-6 h-6 border-solid border-[1px] border-[#b0d2bb] text-[#red] text-[12px]">
                                                                     {i?.answer}
                                                                 </Button>
                                                             </div>
@@ -363,7 +359,7 @@ const ModalPrintExamSurvey = () => {
                                                     })}
                                                 </div>
                                             ) : (
-                                                <Input.TextArea placeholder="Nhập câu trả lời" />
+                                                <Input.TextArea placeholder="Nhập câu trả lời" className="pointer-events-none" />
                                             )
                                         },
                                     },
@@ -378,12 +374,12 @@ const ModalPrintExamSurvey = () => {
         {`
                     .custom-red-table .ant-table-thead > tr > th {
                         background: #fff !important;
-                        border: 0.5px solid #6bac79 !important;
+                        border: 0.5px solid #red !important;
                     }
 
                     .custom-red-table .group-row > td {
                         background: #fff !important;
-                        border: 0.5px solid #6bac79 !important;
+                        border: 0.5px solid #red !important;
                         font-weight: 700;
                     }
 
@@ -391,28 +387,28 @@ const ModalPrintExamSurvey = () => {
                     .custom-red-table .ant-table-container,
                     .custom-red-table .ant-table-content table,
                     .custom-red-table .ant-table-cell {
-                        border: 0.5px solid #6bac79 !important;
+                        border: 0.5px solid #red !important;
                     }
 
                     .custom-red-table .ant-radio-inner {
-                        border: 0.5px solid #6bac79 !important;
+                        border: 0.5px solid #red !important;
                         background: white !important;
                         box-shadow: none !important;
                     }
 
                     .custom-red-table .ant-radio-checked .ant-radio-inner {
-                    border-color: #6bac79 !important;
+                    border-color: #red !important;
                     background: white !important;
                     }
 
                     .custom-red-table .ant-radio-checked .ant-radio-inner::after {
-                        background: #6bac79 !important;
+                        background: #red !important;
                         transform: scale(1) !important;
                     }
 
                     .custom-red-table .ant-radio-wrapper:hover .ant-radio-inner,
                     .custom-red-table .ant-radio-input:focus + .ant-radio-inner {
-                        border-color: #6bac79 !important;
+                        border-color: #red !important;
                         box-shadow: none !important;
                     }
 
@@ -421,25 +417,25 @@ const ModalPrintExamSurvey = () => {
                     }
 
                     .custom-red-table .ant-radio-button-wrapper {
-                        border-color: #6bac79 !important;
+                        border-color: #red !important;
                     }
 
                     .custom-red-table .ant-radio-button-wrapper-checked {
-                        background: #6bac79 !important;
-                        border-color: #6bac79 !important;
+                        background: #red !important;
+                        border-color: #red !important;
                         color: #ffffff !important;
                     }
 
                     .custom-red-table textarea,
                     .custom-red-table .ant-input {
-                        border: 0.5px solid #6bac79 !important;
+                        border: 0.5px solid #red !important;
                         box-shadow: none !important;
                     }
 
                     .custom-red-table textarea:focus,
                     .custom-red-table .ant-input:focus,
                     .custom-red-table .ant-input-focused {
-                        border: 0.5px solid #6bac79 !important;
+                        border: 0.5px solid #red !important;
                         box-shadow: none !important;
                         outline: none !important;
                     }

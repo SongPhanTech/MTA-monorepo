@@ -47,6 +47,8 @@ export type ListOfundefinedAllOfDataItemEducationAndTrainingItemTrainingCourse =
   studentRecognitionDecision?: string | null;
   /** @nullable */
   regulation?: string | null;
+  /** @nullable */
+  admissionDecisionNumber?: string | null;
   isGeneralInfoLocked?: boolean;
   isRegulationLocked?: boolean;
   isScoreConfigLocked?: boolean;

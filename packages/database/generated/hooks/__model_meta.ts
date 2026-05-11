@@ -17491,6 +17491,10 @@ const metadata: ModelMeta = {
                     name: "councilReport",
                     type: "String",
                     isOptional: true,
+                }, graduationReport: {
+                    name: "graduationReport",
+                    type: "String",
+                    isOptional: true,
                 }, decisionNumber: {
                     name: "decisionNumber",
                     type: "String",
@@ -22914,7 +22918,7 @@ const metadata: ModelMeta = {
                     attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, point: {
                     name: "point",
-                    type: "Int",
+                    type: "Float",
                     attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, knowledgeBlock: {
                     name: "knowledgeBlock",

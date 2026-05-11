@@ -19,10 +19,10 @@ type ImportedKnowledgeBlock = {
   key: number
   code: string
   name: string
-  description?: string | null
   exams: {
     difficult: Difficult
     quantity: number
+    point: number
     type?: QuestionType | null
   }[]
 }
@@ -34,17 +34,30 @@ const getQuestionTypeLabel = (type?: string | null) => {
 const renderQuantityWithPoint = (exams: ImportedKnowledgeBlock["exams"], difficult: string) => {
   const exam = exams.find((e) => e.difficult === difficult)
   if (!exam) return "0"
-  return `${exam.quantity}`
+  return exam.point ? `${exam.quantity} (${exam.point})` : `${exam.quantity}`
 }
 
-const parseQuantity = (value: unknown): number | null => {
+const parseFloat_ = (text: string): number => {
+  return parseFloat(text.replace(",", "."))
+}
+
+const parseExamCell = (value: unknown): { quantity: number; point: number } | null => {
   if (value == null) return null
 
   const text = String(value).trim()
   if (!text) return null
 
-  const num = Number(text)
-  if (!Number.isNaN(num) && num >= 0) return num
+  // Format: "1 (0.25)" or "1 (0,25)"
+  const match = text.match(/^(\d+)\s*\(([0-9.,]+)\)$/)
+  if (match) {
+    const quantity = parseInt(match[1], 10)
+    const point = parseFloat_(match[2])
+    if (!Number.isNaN(quantity) && !Number.isNaN(point)) return { quantity, point }
+  }
+
+  // Plain number
+  const num = parseFloat_(text)
+  if (!Number.isNaN(num) && num >= 0) return { quantity: Math.round(num), point: 0 }
 
   return null
 }
@@ -135,12 +148,13 @@ const ModalImportCDR = () => {
 
     const imported: ImportedKnowledgeBlock[] = rows.map((row, index) => {
       const exams = LEVEL_COLUMNS.reduce<ImportedKnowledgeBlock["exams"]>((acc, col) => {
-        const quantity = parseQuantity(getExcelCell(row, col.label))
-        if (quantity === null) return acc
+        const parsed = parseExamCell(getExcelCell(row, col.label))
+        if (parsed === null) return acc
 
         acc.push({
           difficult: col.difficult,
-          quantity,
+          quantity: parsed.quantity,
+          point: parsed.point,
           type: parseQuestionType(getExcelCell(row, "Loại câu hỏi")),
         })
 
@@ -153,7 +167,6 @@ const ModalImportCDR = () => {
         key: index,
         name: String(getExcelCell(row, "Chuẩn đầu ra") ?? "").trim(),
         code: normalizeOutcomeCode(rawCode),
-        description: String(getExcelCell(row, "Mô tả") ?? "").trim() || null,
         exams,
       }
     })
@@ -204,14 +217,13 @@ const ModalImportCDR = () => {
             data: {
               code: item.code,
               name: item.name,
-              description: item.description ?? undefined,
               examMatrixId: input.matrixId,
               configExams: {
                 create: item.exams.map((e) => ({
                   difficult: e.difficult,
                   quantity: e.quantity,
                   type: e.type ?? null,
-                  point: 0,
+                  point: e.point,
                 })),
               },
             },
@@ -302,12 +314,6 @@ const ModalImportCDR = () => {
               render: (_: any, r: ImportedKnowledgeBlock) =>
                 renderQuantityWithPoint(r.exams, col.difficult),
             })),
-
-            {
-              title: "Mô tả",
-              dataIndex: "description",
-              width: 100,
-            },
           ]}
         />
       )}

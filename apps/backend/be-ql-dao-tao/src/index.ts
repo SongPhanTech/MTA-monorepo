@@ -87,8 +87,8 @@ app.route("/api/training-field", TrainingFieldApp)
 app.route("/api/room", RoomApp)
 app.route("/api/stats", Stats)
 
-// TODO!: remove `/check`
-app.use("/api/check/*", jwtAuth("lms"))
+// // TODO!: remove `/check`
+// app.use("/api/*", jwtAuth("lms"))
 
 setupOpenApi(app)
 

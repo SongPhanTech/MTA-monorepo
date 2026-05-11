@@ -2733,7 +2733,7 @@ export type listObjectsResponseSuccess = (listObjectsResponse200) & {
 
 export type listObjectsResponse = (listObjectsResponseSuccess)
 
-export const getListObjectsUrl = (params: ListObjectsParams,) => {
+export const getListObjectsUrl = (params?: ListObjectsParams,) => {
   const normalizedParams = new URLSearchParams();
 
   Object.entries(params || {}).forEach(([key, value]) => {
@@ -2748,7 +2748,7 @@ export const getListObjectsUrl = (params: ListObjectsParams,) => {
   return stringifiedParams.length > 0 ? `/api/minio?${stringifiedParams}` : `/api/minio`
 }
 
-export const listObjects = async (params: ListObjectsParams, options?: RequestInit): Promise<listObjectsResponse> => {
+export const listObjects = async (params?: ListObjectsParams, options?: RequestInit): Promise<listObjectsResponse> => {
   
   return customModelFetch<listObjectsResponse>(getListObjectsUrl(params),
   {      
@@ -2770,7 +2770,7 @@ export const getListObjectsQueryKey = (params?: ListObjectsParams,) => {
     }
 
     
-export const getListObjectsQueryOptions = <TData = Awaited<ReturnType<typeof listObjects>>, TError = unknown>(params: ListObjectsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listObjects>>, TError, TData>>, request?: SecondParameter<typeof customModelFetch>}
+export const getListObjectsQueryOptions = <TData = Awaited<ReturnType<typeof listObjects>>, TError = unknown>(params?: ListObjectsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listObjects>>, TError, TData>>, request?: SecondParameter<typeof customModelFetch>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -2793,7 +2793,7 @@ export type ListObjectsQueryError = unknown
 
 
 export function useListObjects<TData = Awaited<ReturnType<typeof listObjects>>, TError = unknown>(
- params: ListObjectsParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof listObjects>>, TError, TData>> & Pick<
+ params: undefined |  ListObjectsParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof listObjects>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof listObjects>>,
           TError,
@@ -2803,7 +2803,7 @@ export function useListObjects<TData = Awaited<ReturnType<typeof listObjects>>, 
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useListObjects<TData = Awaited<ReturnType<typeof listObjects>>, TError = unknown>(
- params: ListObjectsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listObjects>>, TError, TData>> & Pick<
+ params?: ListObjectsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listObjects>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof listObjects>>,
           TError,
@@ -2813,12 +2813,12 @@ export function useListObjects<TData = Awaited<ReturnType<typeof listObjects>>, 
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useListObjects<TData = Awaited<ReturnType<typeof listObjects>>, TError = unknown>(
- params: ListObjectsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listObjects>>, TError, TData>>, request?: SecondParameter<typeof customModelFetch>}
+ params?: ListObjectsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listObjects>>, TError, TData>>, request?: SecondParameter<typeof customModelFetch>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
 export function useListObjects<TData = Awaited<ReturnType<typeof listObjects>>, TError = unknown>(
- params: ListObjectsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listObjects>>, TError, TData>>, request?: SecondParameter<typeof customModelFetch>}
+ params?: ListObjectsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listObjects>>, TError, TData>>, request?: SecondParameter<typeof customModelFetch>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 

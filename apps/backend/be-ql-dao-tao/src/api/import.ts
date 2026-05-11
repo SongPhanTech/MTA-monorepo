@@ -594,7 +594,7 @@ app.openapi(importStudent, async (c) => {
 
   const provinceMap = await buildNewProvinceMapOrThrow(
     prisma,
-    data.students.map((student) => student.provinceHometown)
+    data.students.map((student) => student.newProvinceOfBirth)
   )
 
   const rankMap = await buildRankMapOrThrow(
@@ -920,7 +920,7 @@ app.openapi(importStudent, async (c) => {
             genderId: student.gender ? genderMap.get(student.gender) : null,
             ethnicityId: ethnicityMap.get(student.ethnicity ?? "") || null,
             nationalityId: nationalityMap.get(student.nationality ?? "") || null,
-            newProvinceHometownId: provinceMap.get(student.provinceHometown ?? "") || null,
+            newProvinceOfBirthId: provinceMap.get(student.newProvinceOfBirth ?? "") || null,
             phoneNumber: student.phoneNumber,
             officerNumber: student.officerNumber,
             rankId: rankMap.get(student.rank ?? "") || null,

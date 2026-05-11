@@ -38,6 +38,8 @@ model ThesisSession extends Base {
 
   /// Tờ trình hội đồng
   councilReport         String?
+  /// Tờ trình tốt nghiệp
+  graduationReport      String?
 
   /// Số QĐĐT
   decisionNumber        String?

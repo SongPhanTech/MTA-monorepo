@@ -28,7 +28,14 @@ import { UploadExcelModel } from "../dto/upload-excel.dto"
 import { evaluateCondition } from "../services/student-result.service"
 import type { StudentDataContext } from "../types/student-context"
 import { criteriaFieldLabels, criteriaOperatorLabels } from "@workspace/libs/constants"
-import { parseSignerInfo, generateExcelFromTemplate, getScoreClassification } from "../utils"
+import {
+  parseSignerInfo,
+  generateExcelFromTemplate,
+  getScoreClassification,
+  getReportDateParts,
+  formatScore,
+  copyWorksheet,
+} from "../utils"
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -1647,9 +1654,9 @@ app.openapi(exportGraduationRegisterMaster, async (c) => {
     const thesisSession = tR?.thesisProject?.thesisSession
     const calculatedTBC = calcTBC(student.subjectClassStudent)
     const tbcFinal = gD?.finalGpa
-      ? Number(gD.finalGpa).toFixed(2)
+      ? formatScore(gD.finalGpa, 2)
       : calculatedTBC > 0
-        ? calculatedTBC.toFixed(2)
+        ? formatScore(calculatedTBC, 2)
         : ""
     return {
       stt: index + 1,
@@ -1660,9 +1667,7 @@ app.openapi(exportGraduationRegisterMaster, async (c) => {
       noiSinh: user?.placeOfBirth || "",
       gioiTinh: user?.gender?.sTen || "",
       danToc: user?.ethnicity?.sTen || "",
-      //TODO: add admission decision
-     // quyetDinhTuyenSinh: student?.fixedClass?.trainingCourse?.admissionDecisionNumber || "",
-      quyetDinhTuyenSinh: student?.fixedClass?.trainingCourse?.admissionDecision || "",
+      quyetDinhTrungTuyen: student?.fixedClass?.trainingCourse?.admissionDecision || "",
       quocTich: user?.nationality?.sTen || "",
       "quyetDinhHDDGLV/ĐATN": thesisSession?.defenseDecisionNumber || "",
       ngayBaoVe: thesisSession?.startDate
@@ -1676,7 +1681,7 @@ app.openapi(exportGraduationRegisterMaster, async (c) => {
       soHieuVanBang: gD?.diplomaNumber || "",
       soVaoSoGoc: gD?.originalDiplomaNumber || "",
       coQuanDonVi: student.fixedClass?.managementOrganization?.sTenVietTat || "",
-      diemLVDATN: tR?.thesisProject?.defenseRecord?.finalScore?.toFixed(2) || "",
+      diemLVDATN: formatScore(tR?.thesisProject?.defenseRecord?.finalScore, 2),
       diemTBC: tbcFinal || "",
       nguoiNhanVanBang: "",
       ghiChu: "",
@@ -1687,7 +1692,7 @@ app.openapi(exportGraduationRegisterMaster, async (c) => {
     sessionName: string,
     sessionStudents: typeof students
   ): Promise<Buffer> => {
-    const buf = await getTemplateBuffer(prisma, "SoGocCapPhatVanBangCaoHoc_v5.xlsx")
+    const buf = await getTemplateBuffer(prisma, "SoGocCapPhatVanBangCaoHoc_v6.xlsx")
     const tpl = new XlsxTemplate(buf)
     const rows = sessionStudents.map((s, i) => buildRow(s, i))
     tpl.substitute("PD", {
@@ -1895,21 +1900,6 @@ app.openapi(exportPhoiBangCaoHoc, async (c) => {
     return c.json({ message: "Không tìm thấy dữ liệu sinh viên phù hợp" }, 404)
   }
 
-  const MONTH_EN = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ]
-
   const signerInfo = parseSignerInfo(signerName || "")
 
   const payload = students.map((student) => {
@@ -1917,21 +1907,13 @@ app.openapi(exportPhoiBangCaoHoc, async (c) => {
     const major = student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor
     const gD = student.graduationDecision
 
-    const dob = dayjs(user?.dateOfBirth)
-    const graduationDate = gD?.decisionDate ? dayjs(gD.decisionDate) : dayjs()
+    const dobParts = getReportDateParts(user?.dateOfBirth)
+    const graduationDateParts =
+      getReportDateParts(gD?.decisionDate) || getReportDateParts(new Date())
 
     const isFemale = user?.gender?.sTen?.toLowerCase() === "nữ"
     const prefixVi = isFemale ? "Bà" : "Ông"
     const prefixEn = isFemale ? "Ms" : "Mr"
-
-    let ngay_sinh_vi = ""
-    if (dob.isValid()) {
-      const day = dob.date().toString().padStart(2, "0")
-      const month = dob.month() + 1
-      const monthStr =
-        month === 1 || month === 2 ? month.toString().padStart(2, "0") : month.toString()
-      ngay_sinh_vi = `${day}/${monthStr}/${dob.year()}`
-    }
 
     return {
       data: {
@@ -1943,16 +1925,16 @@ app.openapi(exportPhoiBangCaoHoc, async (c) => {
             .replace(/[\u0300-\u036f]/g, "")
             .replace(/Đ/g, "D") || ""
         }`,
-        ngay_sinh_vi,
-        ngay_sinh_en: dob.isValid() ? `${dob.date()} ${MONTH_EN[dob.month()]} ${dob.year()}` : "",
+        ngay_sinh_vi: dobParts?.day ? `${dobParts.day}/${dobParts.monthVi}/${dobParts.year}` : "",
+        ngay_sinh_en: dobParts?.day ? `${dobParts.day} ${dobParts.monthEn} ${dobParts.year}` : "",
         nganh_hoc_vi: major?.name || "",
         nganh_hoc_en: (major as any)?.englishName?.toUpperCase() || "",
-        ngay_tn: graduationDate.date(),
-        thang_tn: graduationDate.month() + 1,
-        nam_tn: graduationDate.year(),
-        ngay_tot_nghiep: `Ngày ${graduationDate.date()} tháng ${
-          graduationDate.month() + 1
-        } năm ${graduationDate.year()}`,
+        ngay_tn: graduationDateParts?.day || "",
+        thang_tn: graduationDateParts?.monthVi || "",
+        nam_tn: graduationDateParts?.year || "",
+        ngay_tot_nghiep: graduationDateParts?.day
+          ? `Ngày ${graduationDateParts.day} tháng ${graduationDateParts.monthVi} năm ${graduationDateParts.year}`
+          : "",
         so_quyet_dinh: gD?.diplomaNumber || "",
         ...signerInfo,
         ho_ten_nguoi_ky: signerInfo.ten_day_du,
@@ -2068,6 +2050,15 @@ app.openapi(exportPhoiBangNganHan, async (c) => {
       graduationDecision: true,
       fixedClass: {
         include: {
+          curriculumVersion: {
+            include: {
+              curriculum: {
+                include: {
+                  trainingMajor: true,
+                },
+              },
+            },
+          },
           trainingCourse: {
             include: {
               semesterStart: true,
@@ -2091,38 +2082,21 @@ app.openapi(exportPhoiBangNganHan, async (c) => {
     return c.json({ message: "Không tìm thấy dữ liệu sinh viên phù hợp" }, 404)
   }
 
-  const MONTH_EN = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ]
-
   const signerInfo = parseSignerInfo(signerName || "")
-  const pDate = printDate ? dayjs(printDate) : dayjs()
 
   const payload = students.map((student) => {
     const user = student.userProfile
     const gD = student.graduationDecision
     const course = student.fixedClass?.trainingCourse
 
-    const dob = dayjs(user?.dateOfBirth)
-    const startDate = course?.semesterStart?.startDate
-      ? dayjs(course.semesterStart.startDate)
-      : dayjs(student.fixedClass?.createdAt)
-    const endDate = course?.semesterStart?.endDate
-      ? dayjs(course.semesterStart.endDate)
-      : gD?.decisionDate
-        ? dayjs(gD.decisionDate)
-        : dayjs()
+    const dobParts = getReportDateParts(user?.dateOfBirth)
+    const startDateParts = getReportDateParts(
+      course?.semesterStart?.startDate || student.fixedClass?.createdAt
+    )
+    const endDateParts = getReportDateParts(
+      course?.semesterStart?.endDate || gD?.decisionDate || new Date()
+    )
+    const pDateParts = getReportDateParts(printDate || new Date())
 
     const subjectScores = student.subjectClassStudent || []
     const totalCredits = subjectScores.reduce(
@@ -2149,20 +2123,12 @@ app.openapi(exportPhoiBangNganHan, async (c) => {
     const xepLoaiEn = classificationMappingEn[xepLoaiVi] || ""
 
     const isFemale = user?.gender?.sTen?.toLowerCase() === "nữ"
+    const prefixVi = isFemale ? "Bà " : "Ông "
     const prefixEn = isFemale ? "Ms " : "Mr "
-
-    let ngay_sinh_vi = ""
-    if (dob.isValid()) {
-      const day = dob.date().toString().padStart(2, "0")
-      const month = dob.month() + 1
-      const monthStr =
-        month === 1 || month === 2 ? month.toString().padStart(2, "0") : month.toString()
-      ngay_sinh_vi = `${day}/${monthStr}/${dob.year()}`
-    }
 
     return {
       data: {
-        ho_ten_vi: user?.fullname?.toUpperCase() || "",
+        ho_ten_vi: `${prefixVi}${user?.fullname?.toUpperCase() || ""}`,
         ho_ten_en: `${prefixEn}${
           user?.fullname
             ?.toUpperCase()
@@ -2170,34 +2136,41 @@ app.openapi(exportPhoiBangNganHan, async (c) => {
             .replace(/[\u0300-\u036f]/g, "")
             .replace(/Đ/g, "D") || ""
         }`,
-        ngay_sinh_vi,
-        ngay_sinh_en: dob.isValid() ? `${dob.date()} ${MONTH_EN[dob.month()]} ${dob.year()}` : "",
-
-        ngay_bat_dau_vi: startDate.isValid() ? startDate.format("DD/MM/YYYY") : "",
-        ngay_bat_dau_en: startDate.isValid()
-          ? `${startDate.date()} ${MONTH_EN[startDate.month()]} ${startDate.year()}`
+        ngay_sinh_vi: dobParts?.day ? `${dobParts.day}/${dobParts.monthVi}/${dobParts.year}` : "",
+        ngay_sinh_en: dobParts?.day ? `${dobParts.day} ${dobParts.monthEn} ${dobParts.year}` : "",
+        chuyen_nganh_vi:
+          student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name?.toUpperCase() ||
+          "",
+        chuyen_nganh_en:
+          student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.englishName?.toUpperCase() ||
+          "",
+        ngay_bat_dau_vi: startDateParts?.day
+          ? `${startDateParts.day}/${startDateParts.monthVi}/${startDateParts.year}`
+          : "",
+        ngay_bat_dau_en: startDateParts?.day
+          ? `${startDateParts.day} ${startDateParts.monthEn} ${startDateParts.year}`
           : "",
 
-        ngay_ket_thuc_vi: endDate.isValid() ? endDate.format("DD/MM/YYYY") : "",
-        ngay_ket_thuc_en: endDate.isValid()
-          ? `${endDate.date()} ${MONTH_EN[endDate.month()]} ${endDate.year()}`
+        ngay_ket_thuc_vi: endDateParts?.day
+          ? `${endDateParts.day}/${endDateParts.monthVi}/${endDateParts.year}`
+          : "",
+        ngay_ket_thuc_en: endDateParts?.day
+          ? `${endDateParts.day} ${endDateParts.monthEn} ${endDateParts.year}`
           : "",
 
         hoc_luc_vi: xepLoaiVi,
         hoc_luc_en: xepLoaiEn,
 
-        so_quyet_dinh: gD?.diplomaNumber || "",
-
-        ngay_in_vi: pDate.isValid()
-          ? `Ngày ${pDate.date()} tháng ${pDate.month() + 1} năm ${pDate.year()}`
+        ngay_in_vi: pDateParts?.day
+          ? `Ngày ${pDateParts.day} tháng ${pDateParts.monthVi} năm ${pDateParts.year}`
           : "",
-        ngay_in_en: pDate.isValid()
-          ? `${MONTH_EN[pDate.month()]} ${pDate.date()}, ${pDate.year()}`
+        ngay_in_en: pDateParts?.day
+          ? `${pDateParts.monthEn} ${pDateParts.day}, ${pDateParts.year}`
           : "",
 
-        ngay_tn: pDate.date(),
-        thang_tn: pDate.month() + 1,
-        nam_tn: pDate.year(),
+        ngay_tn: pDateParts?.day || "",
+        thang_tn: pDateParts?.monthVi || "",
+        nam_tn: pDateParts?.year || "",
 
         ...signerInfo,
         ho_ten_nguoi_ky: signerInfo.ten_day_du,
@@ -2206,7 +2179,7 @@ app.openapi(exportPhoiBangNganHan, async (c) => {
   })
 
   try {
-    const templateBuffer = await getTemplateBuffer(prisma, "PhoiBangNganHan_v2.xlsx")
+    const templateBuffer = await getTemplateBuffer(prisma, "PhoiBangNganHan_v4.xlsx")
     const result = await generateExcelFromTemplate(templateBuffer, payload, {
       showGridLines: true,
       wrapText: true,
@@ -2223,6 +2196,647 @@ app.openapi(exportPhoiBangNganHan, async (c) => {
     console.error("Error generating Excel:", error.message)
     return c.json({ message: "Lỗi khi xuất file Excel" }, 500)
   }
+})
+
+const exportPhuLucVanBangCaoHoc = createRoute({
+  operationId: "exportPhuLucVanBangCaoHoc",
+  tags: ["Graduation"],
+  path: "/export-phu-luc-van-bang-cao-hoc",
+  method: "post",
+  request: {
+    body: {
+      content: {
+        "application/json": {
+          schema: z.object({
+            trainingObjectTypeId: z.string().optional(),
+            trainingCourseIds: z.array(z.string()).optional(),
+            fixedClassIds: z.array(z.string()).optional(),
+            thesisSessionIds: z.array(z.string()).optional(),
+            managementOrganizationId: z.string().optional(),
+            printDate: z.string().optional(),
+            signerName: z.string().optional(),
+          }),
+        },
+      },
+    },
+  },
+  responses: {
+    200: {
+      description: "Export thành công",
+      content: {
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
+          schema: z.any().openapi({ type: "string", format: "binary" }),
+        },
+      },
+    },
+    404: {
+      description: "Không tìm thấy dữ liệu",
+      content: {
+        "application/json": {
+          schema: z.object({ message: z.string() }),
+        },
+      },
+    },
+  },
+})
+
+app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
+  const {
+    trainingObjectTypeId,
+    trainingCourseIds,
+    fixedClassIds,
+    thesisSessionIds,
+    managementOrganizationId,
+    printDate,
+    signerName,
+  } = c.req.valid("json")
+
+  const students = await prisma.student.findMany({
+    where: {
+      fixedClass: {
+        ...(trainingObjectTypeId && {
+          trainingCourse: {
+            trainingObjectTypeId,
+          },
+        }),
+        ...(trainingCourseIds?.length && {
+          trainingCourseId: { in: trainingCourseIds },
+        }),
+        ...(fixedClassIds?.length && { id: { in: fixedClassIds } }),
+        ...(managementOrganizationId && { managementOrganizationId }),
+      },
+      ...(thesisSessionIds?.length && {
+        thesisRegistrations: {
+          some: {
+            thesisProject: {
+              thesisSessionId: { in: thesisSessionIds },
+            },
+          },
+        },
+      }),
+      deletedAt: null,
+      active: true,
+    },
+    include: {
+      userProfile: {
+        include: {
+          gender: true,
+        },
+      },
+      graduationDecision: true,
+      fixedClass: {
+        include: {
+          trainingCourse: {
+            include: {
+              trainingObjectType: {
+                include: {
+                  trainingForm: true,
+                },
+              },
+              scoreConverts: true,
+            },
+          },
+          curriculumVersion: {
+            include: {
+              trainingTime: true,
+              curriculum: {
+                include: {
+                  trainingMajor: {
+                    include: {
+                      trainingField: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      thesisRegistrations: {
+        where: { deletedAt: null },
+        include: {
+          thesisProject: {
+            include: {
+              primarySupervisor: { include: { userProfile: true } },
+              secondarySupervisor: { include: { userProfile: true } },
+              thirdSupervisor: true,
+              defenseRecord: true,
+              thesisSession: true,
+            },
+          },
+          council: {
+            include: {
+              members: {
+                include: {
+                  expert: {
+                    include: {
+                      lecturer: { include: { userProfile: true } },
+                      academicDegreeType: true,
+                      academicRankType: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        orderBy: { createdAt: "desc" },
+        take: 1,
+      },
+      subjectClassStudent: {
+        where: { deletedAt: null, active: true },
+        include: {
+          subjectVersion: {
+            include: {
+              subject: true,
+            },
+          },
+        },
+      },
+      studentYearResult: {
+        where: { deletedAt: null },
+        orderBy: { studyYear: "desc" },
+      },
+    },
+  })
+
+  if (!students.length) {
+    return c.json({ message: "Không tìm thấy dữ liệu sinh viên phù hợp" }, 404)
+  }
+
+  const signerInfo = parseSignerInfo(signerName || "")
+  const pDateParts = getReportDateParts(printDate || new Date())
+
+  const councilRoleVi: Record<string, string> = {
+    CHAIRMAN: "Chủ tịch",
+    SECRETARY: "Thư ký",
+    REVIEWER_1: "Phản biện 1",
+    REVIEWER_2: "Phản biện 2",
+    MEMBER: "Ủy viên",
+  }
+
+  const trainingObjectTypeShort: Record<string, string> = {
+    "Định hướng ứng dụng": "ƯD",
+    "Định hướng nghiên cứu": "NC",
+  }
+
+  const groups = new Map<string, typeof students>()
+  for (const student of students) {
+    const major = student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor
+    const majorCode = major?.code || "Major"
+    const typeName = student.fixedClass?.trainingCourse?.trainingObjectType?.name || ""
+    let typeCode = typeName
+    for (const [key, value] of Object.entries(trainingObjectTypeShort)) {
+      if (typeName.includes(key)) {
+        typeCode = value
+        break
+      }
+    }
+    const courseName = student.fixedClass?.trainingCourse?.name || "Course"
+
+    const sheetName = `${majorCode}-${typeCode}-${courseName}`
+      .substring(0, 31)
+      .replace(/[\\\?\*\/\[\]]/g, "")
+    if (!groups.has(sheetName)) {
+      groups.set(sheetName, [])
+    }
+    groups.get(sheetName)!.push(student)
+  }
+
+  const finalWorkbook = new ExcelJS.Workbook()
+
+  for (const [sheetName, groupStudents] of groups.entries()) {
+    const payloads = groupStudents.map((student) => {
+      const user = student.userProfile
+      const gD = student.graduationDecision
+      const tR = student.thesisRegistrations?.[0]
+      const tP = tR?.thesisProject
+      const course = student.fixedClass?.trainingCourse
+      const major = student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor
+      const curriculumVersion = student.fixedClass?.curriculumVersion
+
+      const dobParts = getReportDateParts(user?.dateOfBirth)
+      const startDateParts = getReportDateParts(course?.admissionStartDate || student.fixedClass?.createdAt)
+      const endDateParts = getReportDateParts(course?.admissionEndDate || gD?.decisionDate || new Date())
+      const enrollDateParts = getReportDateParts(student.from || student.fixedClass?.createdAt)
+      const defenseDateParts = getReportDateParts(tP?.defenseDate || tP?.thesisSession?.startDate)
+
+      let totalCredits = 0
+      let totalPoints10 = 0
+      let totalPoints4 = 0
+
+      const subjectRows = (student.subjectClassStudent || []).map((record, idx) => {
+        const score = record.manualFinalScore ?? (record.finalScore ? Number(record.finalScore) : null)
+        const credits = record.subjectVersion?.credit || 0
+        
+        const scoreConverts = course?.scoreConverts || []
+        const conversion = scoreConverts.find(
+          (c) => score !== null && score >= c.base10Min && score <= c.base10Max
+        )
+
+        if (credits) {
+          totalCredits += credits
+          totalPoints10 += (score || 0) * credits
+          if (conversion) {
+            totalPoints4 += conversion.base4 * credits
+          }
+        }
+
+        return {
+          stt: idx + 1,
+          ten_hoc_phan: record.subjectVersion?.subject?.name || "",
+          stc: credits,
+          diem_he_10: formatScore(score, 1),
+          diem_he_4: formatScore(conversion?.base4, 1),
+          diem_he_chu: conversion ? conversion.letter : "",
+        }
+      })
+
+      const lastYearResult = student.studentYearResult?.find((r) => r.isLastStudyYear)
+      const gpa10 = lastYearResult
+        ? Number(lastYearResult.cumulativeGpaBase10)
+        : totalCredits > 0
+          ? totalPoints10 / totalCredits
+          : 0
+      const gpa4 = lastYearResult
+        ? Number(lastYearResult.cumulativeGpaBase4)
+        : totalCredits > 0
+          ? totalPoints4 / totalCredits
+          : 0
+      const councilMembers = (tR?.council?.members || []).map((m) => {
+        const expert = m.expert
+        const rank = expert?.academicRankType?.sTen || ""
+        const degree = expert?.academicDegreeType?.sTen || ""
+        
+        const title = [rank, degree].filter(Boolean).join(".")
+        
+        return {
+          chuc_vi: title || "",
+          ten_day_du: expert?.name || "",
+          don_vi: expert?.organization || "",
+          vai_tro_hoi_dong: councilRoleVi[m.role] || m.role,
+        }
+      })
+
+      const supervisors = [
+        tP?.primarySupervisor?.userProfile?.fullname,
+        tP?.secondarySupervisor?.userProfile?.fullname,
+        tP?.thirdSupervisor?.name,
+      ]
+        .filter(Boolean)
+        .join("; ")
+
+      return {
+        data: {
+          so_quyet_dinh: gD?.diplomaNumber || "",
+          ho_ten_hoc_vien: user?.fullname?.toUpperCase() || "",
+          ma_hoc_vien: student.code || "",
+          ngay_sinh: dobParts?.dateVi || "",
+          gioi_tinh: user?.gender?.sTen || "",
+          so_dinh_danh_ca_nhan: user?.idCardNumber || "",
+          noi_sinh: user?.placeOfBirth || "",
+          khoa: course?.name || "",
+          start_date: startDateParts?.dateVi || "",
+          end_date: endDateParts?.dateVi || "",
+          ngay_nhap_hoc: enrollDateParts?.dateVi || "",
+          nganh: major?.trainingField?.name || "",
+          chuyen_nganh: major?.name || "",
+          thoi_gian_dao_tao: curriculumVersion?.trainingTime?.name || "24 tháng",
+          ngon_ngu_dao_tao: "Tiếng Việt",
+          hinh_thuc_dao_tao: course?.trainingObjectType?.trainingForm?.name || "",
+          dinh_huong: course?.trainingObjectType?.name?.toLowerCase()?.includes("nghiên cứu") 
+            ? "nghiên cứu" 
+            : course?.trainingObjectType?.name?.toLowerCase()?.includes("ứng dụng") 
+              ? "ứng dụng" 
+              : "",
+          
+          data: subjectRows,
+          tong_so_tc: totalCredits,
+          diem_tb_he_10: formatScore(gpa10, 2),
+          diem_tb_he_4: formatScore(gpa4, 2),
+          
+          ten_de_an_tot_nghiep: tP?.title || "",
+          danh_sach_can_bo_huong_dan: supervisors,
+          ngay_bao_ve: defenseDateParts?.fullVi || "",
+          
+          ngay_in: pDateParts?.day || "",
+          thang_in: pDateParts?.monthVi || "",
+          nam_in: pDateParts?.year || "",
+          page_break: "ngắt trang",
+          ...signerInfo,
+          ten_nguoi_ky: signerInfo.ten_day_du,
+          chuc_vi_tl: (signerInfo as any).chuc_vi_ky_thay || "",
+        },
+        group: councilMembers
+      }
+    })
+
+    const templateBuffer = await getTemplateBuffer(prisma, "PhuLucVanBangCaoHoc_v14.xlsx")
+    const groupBuffer = await generateExcelFromTemplate(templateBuffer, payloads, {
+      showGridLines: true,
+      wrapText: true,
+    })
+
+    const groupWorkbook = new ExcelJS.Workbook()
+    await groupWorkbook.xlsx.load(groupBuffer as any)
+    const sourceSheet = groupWorkbook.getWorksheet("Merged") || groupWorkbook.worksheets[0]
+    
+    if (sourceSheet) {
+      const destSheet = finalWorkbook.addWorksheet(sheetName)
+      copyWorksheet(sourceSheet, destSheet)
+    }
+  }
+
+  const result = await finalWorkbook.xlsx.writeBuffer()
+  const fileName = "PhuLucVanBangCaoHoc.xlsx"
+  const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
+
+  return c.body(result as any, 200, {
+    "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "Content-Disposition": disposition,
+  })
+})
+
+const exportPhuLucVanBangNganHan = createRoute({
+  operationId: "exportPhuLucVanBangNganHan",
+  tags: ["Graduation"],
+  path: "/export-phu-luc-van-bang-ngan-han",
+  method: "post",
+  request: {
+    body: {
+      content: {
+        "application/json": {
+          schema: z.object({
+            trainingObjectTypeId: z.string().optional(),
+            trainingCourseIds: z.array(z.string()).optional(),
+            fixedClassIds: z.array(z.string()).optional(),
+            thesisSessionIds: z.array(z.string()).optional(),
+            managementOrganizationId: z.string().optional(),
+            printDate: z.string().optional(),
+            signerName: z.string().optional(),
+          }),
+        },
+      },
+    },
+  },
+  responses: {
+    200: {
+      description: "Export thành công",
+      content: {
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
+          schema: z.any().openapi({ type: "string", format: "binary" }),
+        },
+      },
+    },
+    404: {
+      description: "Không tìm thấy dữ liệu",
+      content: {
+        "application/json": {
+          schema: z.object({ message: z.string() }),
+        },
+      },
+    },
+  },
+})
+
+app.openapi(exportPhuLucVanBangNganHan, async (c: any) => {
+  const {
+    trainingObjectTypeId,
+    trainingCourseIds,
+    fixedClassIds,
+    thesisSessionIds,
+    managementOrganizationId,
+    printDate,
+    signerName,
+  } = c.req.valid("json")
+
+  const students = await prisma.student.findMany({
+    where: {
+      fixedClass: {
+        ...(trainingObjectTypeId && {
+          trainingCourse: {
+            trainingObjectTypeId,
+          },
+        }),
+        ...(trainingCourseIds?.length && {
+          trainingCourseId: { in: trainingCourseIds },
+        }),
+        ...(fixedClassIds?.length && { id: { in: fixedClassIds } }),
+        ...(managementOrganizationId && { managementOrganizationId }),
+      },
+      ...(thesisSessionIds?.length && {
+        thesisRegistrations: {
+          some: {
+            thesisProject: {
+              thesisSessionId: { in: thesisSessionIds },
+            },
+          },
+        },
+      }),
+      deletedAt: null,
+      active: true,
+    },
+    include: {
+      userProfile: {
+        include: {
+          gender: true,
+        },
+      },
+      graduationDecision: true,
+      fixedClass: {
+        include: {
+          trainingCourse: {
+            include: {
+              trainingObjectType: {
+                include: {
+                  trainingForm: true,
+                },
+              },
+              scoreConverts: true,
+            },
+          },
+          curriculumVersion: {
+            include: {
+              trainingTime: true,
+              curriculum: {
+                include: {
+                  trainingMajor: {
+                    include: {
+                      trainingField: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      subjectClassStudent: {
+        where: { deletedAt: null, active: true },
+        include: {
+          subjectVersion: {
+            include: {
+              subject: true,
+            },
+          },
+        },
+      },
+      studentYearResult: {
+        where: { deletedAt: null },
+        orderBy: { studyYear: "desc" },
+      },
+    },
+  })
+
+  if (!students.length) {
+    return c.json({ message: "Không tìm thấy dữ liệu sinh viên phù hợp" }, 404)
+  }
+
+  const signerInfo = parseSignerInfo(signerName || "")
+  const pDateParts = getReportDateParts(printDate || new Date())
+
+  const trainingObjectTypeShort: Record<string, string> = {
+    "Định hướng ứng dụng": "ƯD",
+    "Định hướng nghiên cứu": "NC",
+  }
+
+  const getClassification = (score: number) => {
+    if (score >= 9.0) return "Xuất sắc"
+    if (score >= 8.0) return "Giỏi"
+    if (score >= 7.0) return "Khá"
+    if (score >= 5.0) return "Trung bình"
+    return "Yếu"
+  }
+
+  const groups = new Map<string, typeof students>()
+  for (const student of students) {
+    const major = student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor
+    const majorCode = major?.code || "Major"
+    const typeName = student.fixedClass?.trainingCourse?.trainingObjectType?.name || ""
+    let typeCode = typeName
+    for (const [key, value] of Object.entries(trainingObjectTypeShort)) {
+      if (typeName.includes(key)) {
+        typeCode = value
+        break
+      }
+    }
+    const courseName = student.fixedClass?.trainingCourse?.name || "Course"
+
+    const sheetName = `${majorCode}-${typeCode}-${courseName}`
+      .substring(0, 31)
+      .replace(/[\\\?\*\/\[\]]/g, "")
+    if (!groups.has(sheetName)) {
+      groups.set(sheetName, [])
+    }
+    groups.get(sheetName)!.push(student)
+  }
+
+  const finalWorkbook = new ExcelJS.Workbook()
+
+  for (const [sheetName, groupStudents] of groups.entries()) {
+    const payloads = groupStudents.map((student) => {
+      const user = student.userProfile
+      const gD = student.graduationDecision
+      const course = student.fixedClass?.trainingCourse
+      const major = student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor
+      const curriculumVersion = student.fixedClass?.curriculumVersion
+
+      const dobParts = getReportDateParts(user?.dateOfBirth)
+      const startDateParts = getReportDateParts(course?.admissionStartDate || student.fixedClass?.createdAt)
+      const enrollDateParts = getReportDateParts(student.from || student.fixedClass?.createdAt)
+
+      let totalCredits = 0
+      let totalPoints10 = 0
+
+      const allSubjects = (student.subjectClassStudent || []).map((record) => {
+        const score = record.manualFinalScore ?? (record.finalScore ? Number(record.finalScore) : null)
+        const credits = record.subjectVersion?.credit || 0
+        
+        if (credits) {
+          totalCredits += credits
+          totalPoints10 += (score || 0) * credits
+        }
+
+        return {
+          ten_hoc_phan: record.subjectVersion?.subject?.name || "",
+          stc: credits,
+          diem_he_10: formatScore(score, 1),
+          type: record.subjectVersion?.type
+        }
+      })
+
+      const gradTypes = ["Graduation", "Thesis", "Project"]
+      const normalSubjectsRaw = allSubjects.filter(s => !gradTypes.includes(s.type || ""))
+      const graduationSubjectsRaw = allSubjects.filter(s => gradTypes.includes(s.type || ""))
+
+      const subjectRows = normalSubjectsRaw.map((s, idx) => ({ ...s, stt: idx + 1 }))
+      const graduationSubjects = graduationSubjectsRaw.map((s, idx) => ({ ...s, stt: idx + 1 }))
+
+      const lastYearResult = student.studentYearResult?.find((r) => r.isLastStudyYear)
+      const gpa10 = lastYearResult
+        ? Number(lastYearResult.cumulativeGpaBase10)
+        : totalCredits > 0
+          ? totalPoints10 / totalCredits
+          : 0
+
+      return {
+        data: {
+          so_quyet_dinh: gD?.diplomaNumber || "",
+          ten_hoc_vien: user?.fullname?.toUpperCase() || "",
+          ma_hoc_vien: student.code || "",
+          ngay_sinh: dobParts?.dateVi || "",
+          gioi_tinh: user?.gender?.sTen || "",
+          so_dinh_danh_ca_nhan: user?.idCardNumber || "",
+          noi_sinh: user?.placeOfBirth || "",
+          khoa: course?.name || "",
+          start_date: startDateParts?.dateVi || "",
+          ngay_nhap_hoc: enrollDateParts?.dateVi || "",
+          nganh: major?.trainingField?.name || "",
+          chuyen_nganh_chuyen_sau: major?.name || "",
+          thoi_gian_dao_tao: curriculumVersion?.trainingTime?.name || "24 tháng",
+          ngon_ngu_dao_tao: "Tiếng Việt",
+          hinh_thuc_dao_tao: course?.trainingObjectType?.trainingForm?.name || "",
+          
+          data: subjectRows,
+          diem_tb_tn: formatScore(gpa10, 2),
+          hoc_luc: getClassification(gpa10),
+          
+          ngay_in: pDateParts?.day || "",
+          thang_in: pDateParts?.monthVi || "",
+          nam_in: pDateParts?.year || "",
+          page_break: "ngắt trang",
+          ...signerInfo,
+          ten_nguoi_ky: signerInfo.ten_day_du,
+          chuc_vi_tl: (signerInfo as any).chuc_vi_ky_thay || "",
+        },
+        group: graduationSubjects
+      }
+    })
+
+    const templateBuffer = await getTemplateBuffer(prisma, "PhuLucVanBangNganHan_v5.xlsx")
+    const groupBuffer = await generateExcelFromTemplate(templateBuffer, payloads, {
+      showGridLines: true,
+      wrapText: true,
+    })
+
+    const groupWorkbook = new ExcelJS.Workbook()
+    await groupWorkbook.xlsx.load(groupBuffer as any)
+    const sourceSheet = groupWorkbook.getWorksheet("Merged") || groupWorkbook.worksheets[0]
+    
+    if (sourceSheet) {
+      const destSheet = finalWorkbook.addWorksheet(sheetName)
+      copyWorksheet(sourceSheet, destSheet)
+    }
+  }
+
+  const result = await finalWorkbook.xlsx.writeBuffer()
+  const fileName = "PhuLucVanBangNganHan.xlsx"
+  const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
+
+  return c.body(result as any, 200, {
+    "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "Content-Disposition": disposition,
+  })
 })
 
 export default app

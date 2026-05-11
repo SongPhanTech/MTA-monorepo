@@ -157,7 +157,7 @@ export default function StudentGraduationApplication() {
                 include: {
                   ethnicity: true,
                   gender: true,
-                  newProvinceHometown: true,
+                  newProvinceOfBirth: true,
                 },
               },
               fixedClass: true,
@@ -767,7 +767,7 @@ export default function StudentGraduationApplication() {
                           width: 100,
                           align: "center",
                           render: (_, record) =>
-                            record?.student?.userProfile?.newProvinceHometown?.sTen,
+                            record?.student?.userProfile?.newProvinceOfBirth?.sTen,
                         },
                         {
                           title: "Dân tộc",
