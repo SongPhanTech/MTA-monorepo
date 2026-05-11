@@ -28,7 +28,12 @@ import { UploadExcelModel } from "../dto/upload-excel.dto"
 import { evaluateCondition } from "../services/student-result.service"
 import type { StudentDataContext } from "../types/student-context"
 import { criteriaFieldLabels, criteriaOperatorLabels } from "@workspace/libs/constants"
-import { parseSignerInfo, generateExcelFromTemplate, getScoreClassification } from "../utils"
+import {
+  parseSignerInfo,
+  generateExcelFromTemplate,
+  getScoreClassification,
+  getReportDateParts,
+} from "../utils"
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -1660,9 +1665,7 @@ app.openapi(exportGraduationRegisterMaster, async (c) => {
       noiSinh: user?.placeOfBirth || "",
       gioiTinh: user?.gender?.sTen || "",
       danToc: user?.ethnicity?.sTen || "",
-      //TODO: add admission decision
-     // quyetDinhTuyenSinh: student?.fixedClass?.trainingCourse?.admissionDecisionNumber || "",
-      quyetDinhTuyenSinh: student?.fixedClass?.trainingCourse?.admissionDecision || "",
+      quyetDinhTrungTuyen: student?.fixedClass?.trainingCourse?.admissionDecision || "",
       quocTich: user?.nationality?.sTen || "",
       "quyetDinhHDDGLV/ĐATN": thesisSession?.defenseDecisionNumber || "",
       ngayBaoVe: thesisSession?.startDate
@@ -1687,7 +1690,7 @@ app.openapi(exportGraduationRegisterMaster, async (c) => {
     sessionName: string,
     sessionStudents: typeof students
   ): Promise<Buffer> => {
-    const buf = await getTemplateBuffer(prisma, "SoGocCapPhatVanBangCaoHoc_v5.xlsx")
+    const buf = await getTemplateBuffer(prisma, "SoGocCapPhatVanBangCaoHoc_v6.xlsx")
     const tpl = new XlsxTemplate(buf)
     const rows = sessionStudents.map((s, i) => buildRow(s, i))
     tpl.substitute("PD", {
@@ -1895,21 +1898,6 @@ app.openapi(exportPhoiBangCaoHoc, async (c) => {
     return c.json({ message: "Không tìm thấy dữ liệu sinh viên phù hợp" }, 404)
   }
 
-  const MONTH_EN = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ]
-
   const signerInfo = parseSignerInfo(signerName || "")
 
   const payload = students.map((student) => {
@@ -1917,21 +1905,13 @@ app.openapi(exportPhoiBangCaoHoc, async (c) => {
     const major = student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor
     const gD = student.graduationDecision
 
-    const dob = dayjs(user?.dateOfBirth)
-    const graduationDate = gD?.decisionDate ? dayjs(gD.decisionDate) : dayjs()
+    const dobParts = getReportDateParts(user?.dateOfBirth)
+    const graduationDateParts =
+      getReportDateParts(gD?.decisionDate) || getReportDateParts(new Date())
 
     const isFemale = user?.gender?.sTen?.toLowerCase() === "nữ"
     const prefixVi = isFemale ? "Bà" : "Ông"
     const prefixEn = isFemale ? "Ms" : "Mr"
-
-    let ngay_sinh_vi = ""
-    if (dob.isValid()) {
-      const day = dob.date().toString().padStart(2, "0")
-      const month = dob.month() + 1
-      const monthStr =
-        month === 1 || month === 2 ? month.toString().padStart(2, "0") : month.toString()
-      ngay_sinh_vi = `${day}/${monthStr}/${dob.year()}`
-    }
 
     return {
       data: {
@@ -1943,16 +1923,16 @@ app.openapi(exportPhoiBangCaoHoc, async (c) => {
             .replace(/[\u0300-\u036f]/g, "")
             .replace(/Đ/g, "D") || ""
         }`,
-        ngay_sinh_vi,
-        ngay_sinh_en: dob.isValid() ? `${dob.date()} ${MONTH_EN[dob.month()]} ${dob.year()}` : "",
+        ngay_sinh_vi: dobParts?.day ? `${dobParts.day}/${dobParts.monthVi}/${dobParts.year}` : "",
+        ngay_sinh_en: dobParts?.day ? `${dobParts.day} ${dobParts.monthEn} ${dobParts.year}` : "",
         nganh_hoc_vi: major?.name || "",
         nganh_hoc_en: (major as any)?.englishName?.toUpperCase() || "",
-        ngay_tn: graduationDate.date(),
-        thang_tn: graduationDate.month() + 1,
-        nam_tn: graduationDate.year(),
-        ngay_tot_nghiep: `Ngày ${graduationDate.date()} tháng ${
-          graduationDate.month() + 1
-        } năm ${graduationDate.year()}`,
+        ngay_tn: graduationDateParts?.day || "",
+        thang_tn: graduationDateParts?.monthVi || "",
+        nam_tn: graduationDateParts?.year || "",
+        ngay_tot_nghiep: graduationDateParts?.day
+          ? `Ngày ${graduationDateParts.day} tháng ${graduationDateParts.monthVi} năm ${graduationDateParts.year}`
+          : "",
         so_quyet_dinh: gD?.diplomaNumber || "",
         ...signerInfo,
         ho_ten_nguoi_ky: signerInfo.ten_day_du,
@@ -2068,6 +2048,15 @@ app.openapi(exportPhoiBangNganHan, async (c) => {
       graduationDecision: true,
       fixedClass: {
         include: {
+          curriculumVersion: {
+            include: {
+              curriculum: {
+                include: {
+                  trainingMajor: true,
+                },
+              },
+            },
+          },
           trainingCourse: {
             include: {
               semesterStart: true,
@@ -2091,38 +2080,21 @@ app.openapi(exportPhoiBangNganHan, async (c) => {
     return c.json({ message: "Không tìm thấy dữ liệu sinh viên phù hợp" }, 404)
   }
 
-  const MONTH_EN = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ]
-
   const signerInfo = parseSignerInfo(signerName || "")
-  const pDate = printDate ? dayjs(printDate) : dayjs()
 
   const payload = students.map((student) => {
     const user = student.userProfile
     const gD = student.graduationDecision
     const course = student.fixedClass?.trainingCourse
 
-    const dob = dayjs(user?.dateOfBirth)
-    const startDate = course?.semesterStart?.startDate
-      ? dayjs(course.semesterStart.startDate)
-      : dayjs(student.fixedClass?.createdAt)
-    const endDate = course?.semesterStart?.endDate
-      ? dayjs(course.semesterStart.endDate)
-      : gD?.decisionDate
-        ? dayjs(gD.decisionDate)
-        : dayjs()
+    const dobParts = getReportDateParts(user?.dateOfBirth)
+    const startDateParts = getReportDateParts(
+      course?.semesterStart?.startDate || student.fixedClass?.createdAt
+    )
+    const endDateParts = getReportDateParts(
+      course?.semesterStart?.endDate || gD?.decisionDate || new Date()
+    )
+    const pDateParts = getReportDateParts(printDate || new Date())
 
     const subjectScores = student.subjectClassStudent || []
     const totalCredits = subjectScores.reduce(
@@ -2149,20 +2121,12 @@ app.openapi(exportPhoiBangNganHan, async (c) => {
     const xepLoaiEn = classificationMappingEn[xepLoaiVi] || ""
 
     const isFemale = user?.gender?.sTen?.toLowerCase() === "nữ"
+    const prefixVi = isFemale ? "Bà " : "Ông "
     const prefixEn = isFemale ? "Ms " : "Mr "
-
-    let ngay_sinh_vi = ""
-    if (dob.isValid()) {
-      const day = dob.date().toString().padStart(2, "0")
-      const month = dob.month() + 1
-      const monthStr =
-        month === 1 || month === 2 ? month.toString().padStart(2, "0") : month.toString()
-      ngay_sinh_vi = `${day}/${monthStr}/${dob.year()}`
-    }
 
     return {
       data: {
-        ho_ten_vi: user?.fullname?.toUpperCase() || "",
+        ho_ten_vi: `${prefixVi}${user?.fullname?.toUpperCase() || ""}`,
         ho_ten_en: `${prefixEn}${
           user?.fullname
             ?.toUpperCase()
@@ -2170,34 +2134,41 @@ app.openapi(exportPhoiBangNganHan, async (c) => {
             .replace(/[\u0300-\u036f]/g, "")
             .replace(/Đ/g, "D") || ""
         }`,
-        ngay_sinh_vi,
-        ngay_sinh_en: dob.isValid() ? `${dob.date()} ${MONTH_EN[dob.month()]} ${dob.year()}` : "",
-
-        ngay_bat_dau_vi: startDate.isValid() ? startDate.format("DD/MM/YYYY") : "",
-        ngay_bat_dau_en: startDate.isValid()
-          ? `${startDate.date()} ${MONTH_EN[startDate.month()]} ${startDate.year()}`
+        ngay_sinh_vi: dobParts?.day ? `${dobParts.day}/${dobParts.monthVi}/${dobParts.year}` : "",
+        ngay_sinh_en: dobParts?.day ? `${dobParts.day} ${dobParts.monthEn} ${dobParts.year}` : "",
+        chuyen_nganh_vi:
+          student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name?.toUpperCase() ||
+          "",
+        chuyen_nganh_en:
+          student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.englishName?.toUpperCase() ||
+          "",
+        ngay_bat_dau_vi: startDateParts?.day
+          ? `${startDateParts.day}/${startDateParts.monthVi}/${startDateParts.year}`
+          : "",
+        ngay_bat_dau_en: startDateParts?.day
+          ? `${startDateParts.day} ${startDateParts.monthEn} ${startDateParts.year}`
           : "",
 
-        ngay_ket_thuc_vi: endDate.isValid() ? endDate.format("DD/MM/YYYY") : "",
-        ngay_ket_thuc_en: endDate.isValid()
-          ? `${endDate.date()} ${MONTH_EN[endDate.month()]} ${endDate.year()}`
+        ngay_ket_thuc_vi: endDateParts?.day
+          ? `${endDateParts.day}/${endDateParts.monthVi}/${endDateParts.year}`
+          : "",
+        ngay_ket_thuc_en: endDateParts?.day
+          ? `${endDateParts.day} ${endDateParts.monthEn} ${endDateParts.year}`
           : "",
 
         hoc_luc_vi: xepLoaiVi,
         hoc_luc_en: xepLoaiEn,
 
-        so_quyet_dinh: gD?.diplomaNumber || "",
-
-        ngay_in_vi: pDate.isValid()
-          ? `Ngày ${pDate.date()} tháng ${pDate.month() + 1} năm ${pDate.year()}`
+        ngay_in_vi: pDateParts?.day
+          ? `Ngày ${pDateParts.day} tháng ${pDateParts.monthVi} năm ${pDateParts.year}`
           : "",
-        ngay_in_en: pDate.isValid()
-          ? `${MONTH_EN[pDate.month()]} ${pDate.date()}, ${pDate.year()}`
+        ngay_in_en: pDateParts?.day
+          ? `${pDateParts.monthEn} ${pDateParts.day}, ${pDateParts.year}`
           : "",
 
-        ngay_tn: pDate.date(),
-        thang_tn: pDate.month() + 1,
-        nam_tn: pDate.year(),
+        ngay_tn: pDateParts?.day || "",
+        thang_tn: pDateParts?.monthVi || "",
+        nam_tn: pDateParts?.year || "",
 
         ...signerInfo,
         ho_ten_nguoi_ky: signerInfo.ten_day_du,
@@ -2206,7 +2177,7 @@ app.openapi(exportPhoiBangNganHan, async (c) => {
   })
 
   try {
-    const templateBuffer = await getTemplateBuffer(prisma, "PhoiBangNganHan_v2.xlsx")
+    const templateBuffer = await getTemplateBuffer(prisma, "PhoiBangNganHan_v4.xlsx")
     const result = await generateExcelFromTemplate(templateBuffer, payload, {
       showGridLines: true,
       wrapText: true,

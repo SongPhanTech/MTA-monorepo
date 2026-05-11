@@ -2,6 +2,7 @@ import { $Enums, type PrismaClient } from "@workspace/db"
 import { HTTPException } from "hono/http-exception"
 import ExcelJS from "exceljs"
 import XlsxTemplate from "xlsx-template"
+import dayjs from "dayjs"
 
 export function parseDate(input?: number | string | Date): Date | null {
   if (!input) return null
@@ -33,6 +34,35 @@ export const getCurrentDateForReport = () => {
   const month = String(currentDate.getMonth() + 1).padStart(2, "0") // Tháng bắt đầu từ 0
   const year = currentDate.getFullYear()
   return { date, month, year }
+}
+
+export const MONTH_EN = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+]
+
+export const getReportDateParts = (date?: Date | dayjs.Dayjs | string | number | null) => {
+  const d = dayjs(date)
+  if (!d.isValid()) return null
+
+  const day = d.date().toString().padStart(2, "0")
+  const monthRaw = d.month() + 1
+  const monthVi =
+    monthRaw === 1 || monthRaw === 2 ? monthRaw.toString().padStart(2, "0") : monthRaw.toString()
+  const monthEn = MONTH_EN[d.month()]
+  const year = d.year().toString()
+
+  return { day, monthRaw, monthVi, monthEn, year }
 }
 
 export const buildGenderMapOrThrow = async (
@@ -928,7 +958,7 @@ export const parseSignerInfo = (signerStr: string) => {
   const rank = parts[1] || ""
   const nameWithDegree = parts[2] || ""
 
-  const isDirector = role.toLowerCase() === "giám đốc" || role.toLowerCase() === "gđ"
+  const isDirector = role.toLowerCase() === "giám đốc";
 
   return {
     chuc_vi: isDirector ? "GIÁM ĐỐC" : "KT. GIÁM ĐỐC",
@@ -1014,8 +1044,8 @@ export const generateExcelFromTemplate = async (
       if (row.hidden) newRow.hidden = true
       if (row.outlineLevel !== undefined) newRow.outlineLevel = row.outlineLevel
 
-      if (row.style) {
-        newRow.style = { ...row.style }
+      if ((row as any).style) {
+        (newRow as any).style = { ...(row as any).style }
       }
 
       row.eachCell({ includeEmpty: true }, (cell, colNumber) => {
@@ -1042,8 +1072,9 @@ export const generateExcelFromTemplate = async (
       currentRowInCopy++
     }
 
-    if (sourceSheet.model.merges) {
-      for (const merge of sourceSheet.model.merges) {
+    const merges = sourceSheet.model?.merges
+    if (merges) {
+      for (const merge of merges) {
         const [topLeft, bottomRight] = merge.split(":")
         const topMatch = topLeft?.match(/([A-Z]+)(\d+)/)
         const bottomMatch = bottomRight?.match(/([A-Z]+)(\d+)/)
@@ -1060,16 +1091,19 @@ export const generateExcelFromTemplate = async (
 
     sourceSheet.getImages().forEach((image) => {
       const imgData = sourceSheet.workbook.getImage(Number(image.imageId))
+      if (!imgData) return
+
       const newImageId = targetSheet.workbook.addImage({
         buffer: imgData.buffer as any,
         extension: imgData.extension,
       })
 
-      const { editAs, range } = image
+      const { range } = image
       if (range) {
+        const editAs = (range as any).editAs
         const newRange = {
-          tl: { col: range.tl.col, row: range.tl.row + rowOffset },
-          br: { col: range.br.col, row: range.br.row + rowOffset },
+          tl: { ...range.tl, row: range.tl.row + rowOffset, nativeRow: (range.tl as any).nativeRow + rowOffset } as any,
+          br: { ...range.br, row: range.br.row + rowOffset, nativeRow: (range.br as any).nativeRow + rowOffset } as any,
         }
         targetSheet.addImage(newImageId, {
           tl: newRange.tl,
@@ -1154,7 +1188,7 @@ export const generateExcelFromTemplate = async (
   }
 
   if (generatedSheets.length > 0) {
-    generatedSheets[0].columns.forEach((col, index) => {
+    generatedSheets?.[0]?.columns?.forEach((col, index) => {
       if (!col) return
       const dest = outputSheet.getColumn(index + 1)
       if (col.width) dest.width = col.width
