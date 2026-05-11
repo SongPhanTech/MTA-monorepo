@@ -77,7 +77,7 @@ app.route("/api/excel-import-export", ExcelImportExportApp)
 app.route("/api/excel-template", ExcelTemplateApp)
 app.route("/api/docx-template", DocxTemplateApp)
 // TODO!: remove `/check`
-app.use("/api/check/*", jwtAuth("lms"))
+app.use("/api/*", jwtAuth("lms"))
 // setupAuth(app)
 app.all("/api/system/:appcode/*", async (c) => {
   const appCode = c.req.param("appcode")
