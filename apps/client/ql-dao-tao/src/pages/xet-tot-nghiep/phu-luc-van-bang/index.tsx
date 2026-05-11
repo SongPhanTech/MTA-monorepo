@@ -257,15 +257,6 @@ export default function StudentGradeSystem() {
   const { data: dm_DonVi = [] } = useFindManyDM_DonVi({
     where: {
       ...whereOrganization,
-      ...(fixedClassIds?.length && {
-        fixedClass: {
-          some: {
-            id: {
-              in: fixedClassIds,
-            },
-          },
-        },
-      }),
     },
   })
 
