@@ -79,11 +79,12 @@ const TableChuongMuc = ({ matrixId }: TableChuongMucProps) => {
   const getConfigByDifficult = (
     configExams: ConfigExam[],
     difficult: string
-  ): { quantity: number; type?: string | null } => {
+  ): { quantity: number; type?: string | null; point: number } => {
     const config = configExams?.find((c) => c.difficult === difficult)
     return {
       quantity: config?.quantity || 0,
       type: config?.type,
+      point: config?.point || 0,
     }
   }
 
@@ -187,17 +188,23 @@ const TableChuongMuc = ({ matrixId }: TableChuongMucProps) => {
     )
   }
 
-  const renderCell = (quantity: number, type?: string | null) => (
+  const renderCell = (quantity: number, type?: string | null, point?: number) => (
     <div className="flex flex-col items-center gap-0.5">
-      <Tooltip title="Số câu hỏi">
-        <div className="text-sm font-medium">{quantity}</div>
-      </Tooltip>
-      {quantity > 0 && (
-        <div className="text-xs text-gray-500 leading-tight">
-          {type
-            ? (QUESTION_TYPE_LABELS[type as keyof typeof QUESTION_TYPE_LABELS] ?? type)
-            : "Tất cả"}
-        </div>
+      {quantity > 0 ? (
+        <>
+          <Tooltip title="Số câu hỏi (điểm/câu)">
+            <div className="text-sm font-medium">
+              {quantity} ({point ?? 0})
+            </div>
+          </Tooltip>
+          <div className="text-xs text-gray-500 leading-tight">
+            {type
+              ? (QUESTION_TYPE_LABELS[type as keyof typeof QUESTION_TYPE_LABELS] ?? type)
+              : "Tất cả"}
+          </div>
+        </>
+      ) : (
+        <div className="text-sm font-medium">0</div>
       )}
     </div>
   )
@@ -242,8 +249,8 @@ const TableChuongMuc = ({ matrixId }: TableChuongMucProps) => {
             width: 80,
             align: "center",
             render: (_, record) => {
-              const { quantity, type } = getConfigByDifficult(record.configExams, "D1")
-              return renderCell(quantity, type)
+              const { quantity, type, point } = getConfigByDifficult(record.configExams, "D1")
+              return renderCell(quantity, type, point)
             },
           },
           {
@@ -251,8 +258,8 @@ const TableChuongMuc = ({ matrixId }: TableChuongMucProps) => {
             width: 80,
             align: "center",
             render: (_, record) => {
-              const { quantity, type } = getConfigByDifficult(record.configExams, "D2")
-              return renderCell(quantity, type)
+              const { quantity, type, point } = getConfigByDifficult(record.configExams, "D2")
+              return renderCell(quantity, type, point)
             },
           },
           {
@@ -260,8 +267,8 @@ const TableChuongMuc = ({ matrixId }: TableChuongMucProps) => {
             width: 100,
             align: "center",
             render: (_, record) => {
-              const { quantity, type } = getConfigByDifficult(record.configExams, "D3")
-              return renderCell(quantity, type)
+              const { quantity, type, point } = getConfigByDifficult(record.configExams, "D3")
+              return renderCell(quantity, type, point)
             },
           },
           {
@@ -269,8 +276,8 @@ const TableChuongMuc = ({ matrixId }: TableChuongMucProps) => {
             width: 120,
             align: "center",
             render: (_, record) => {
-              const { quantity, type } = getConfigByDifficult(record.configExams, "D4")
-              return renderCell(quantity, type)
+              const { quantity, type, point } = getConfigByDifficult(record.configExams, "D4")
+              return renderCell(quantity, type, point)
             },
           },
           {

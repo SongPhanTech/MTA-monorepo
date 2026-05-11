@@ -24171,7 +24171,7 @@ const metadata = {
                     attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, point: {
                     name: "point",
-                    type: "Int",
+                    type: "Float",
                     attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, knowledgeBlock: {
                     name: "knowledgeBlock",

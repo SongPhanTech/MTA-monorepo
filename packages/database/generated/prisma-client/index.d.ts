@@ -311193,7 +311193,7 @@ export namespace Prisma {
     readonly difficult: FieldRef<"ConfigExam", 'Difficult'>
     readonly type: FieldRef<"ConfigExam", 'QuestionType'>
     readonly quantity: FieldRef<"ConfigExam", 'Int'>
-    readonly point: FieldRef<"ConfigExam", 'Int'>
+    readonly point: FieldRef<"ConfigExam", 'Float'>
     readonly knowledgeBlockId: FieldRef<"ConfigExam", 'String'>
   }
     
@@ -417345,7 +417345,7 @@ export namespace Prisma {
     difficult?: EnumDifficultFilter<"ConfigExam"> | $Enums.Difficult
     type?: EnumQuestionTypeNullableFilter<"ConfigExam"> | $Enums.QuestionType | null
     quantity?: IntFilter<"ConfigExam"> | number
-    point?: IntFilter<"ConfigExam"> | number
+    point?: FloatFilter<"ConfigExam"> | number
     knowledgeBlockId?: StringFilter<"ConfigExam"> | string
     knowledgeBlock?: XOR<KnowledgeBlockScalarRelationFilter, KnowledgeBlockWhereInput>
   }
@@ -417383,7 +417383,7 @@ export namespace Prisma {
     difficult?: EnumDifficultFilter<"ConfigExam"> | $Enums.Difficult
     type?: EnumQuestionTypeNullableFilter<"ConfigExam"> | $Enums.QuestionType | null
     quantity?: IntFilter<"ConfigExam"> | number
-    point?: IntFilter<"ConfigExam"> | number
+    point?: FloatFilter<"ConfigExam"> | number
     knowledgeBlockId?: StringFilter<"ConfigExam"> | string
     knowledgeBlock?: XOR<KnowledgeBlockScalarRelationFilter, KnowledgeBlockWhereInput>
   }, "id" | "code">
@@ -417424,7 +417424,7 @@ export namespace Prisma {
     difficult?: EnumDifficultWithAggregatesFilter<"ConfigExam"> | $Enums.Difficult
     type?: EnumQuestionTypeNullableWithAggregatesFilter<"ConfigExam"> | $Enums.QuestionType | null
     quantity?: IntWithAggregatesFilter<"ConfigExam"> | number
-    point?: IntWithAggregatesFilter<"ConfigExam"> | number
+    point?: FloatWithAggregatesFilter<"ConfigExam"> | number
     knowledgeBlockId?: StringWithAggregatesFilter<"ConfigExam"> | string
   }
 
@@ -451726,7 +451726,7 @@ export namespace Prisma {
     difficult?: EnumDifficultFieldUpdateOperationsInput | $Enums.Difficult
     type?: NullableEnumQuestionTypeFieldUpdateOperationsInput | $Enums.QuestionType | null
     quantity?: IntFieldUpdateOperationsInput | number
-    point?: IntFieldUpdateOperationsInput | number
+    point?: FloatFieldUpdateOperationsInput | number
     knowledgeBlock?: KnowledgeBlockUpdateOneRequiredWithoutConfigExamsNestedInput
   }
 
@@ -451742,7 +451742,7 @@ export namespace Prisma {
     difficult?: EnumDifficultFieldUpdateOperationsInput | $Enums.Difficult
     type?: NullableEnumQuestionTypeFieldUpdateOperationsInput | $Enums.QuestionType | null
     quantity?: IntFieldUpdateOperationsInput | number
-    point?: IntFieldUpdateOperationsInput | number
+    point?: FloatFieldUpdateOperationsInput | number
     knowledgeBlockId?: StringFieldUpdateOperationsInput | string
   }
 
@@ -451774,7 +451774,7 @@ export namespace Prisma {
     difficult?: EnumDifficultFieldUpdateOperationsInput | $Enums.Difficult
     type?: NullableEnumQuestionTypeFieldUpdateOperationsInput | $Enums.QuestionType | null
     quantity?: IntFieldUpdateOperationsInput | number
-    point?: IntFieldUpdateOperationsInput | number
+    point?: FloatFieldUpdateOperationsInput | number
   }
 
   export type ConfigExamUncheckedUpdateManyInput = {
@@ -451789,7 +451789,7 @@ export namespace Prisma {
     difficult?: EnumDifficultFieldUpdateOperationsInput | $Enums.Difficult
     type?: NullableEnumQuestionTypeFieldUpdateOperationsInput | $Enums.QuestionType | null
     quantity?: IntFieldUpdateOperationsInput | number
-    point?: IntFieldUpdateOperationsInput | number
+    point?: FloatFieldUpdateOperationsInput | number
     knowledgeBlockId?: StringFieldUpdateOperationsInput | string
   }
 
@@ -636618,7 +636618,7 @@ export namespace Prisma {
     difficult?: EnumDifficultFilter<"ConfigExam"> | $Enums.Difficult
     type?: EnumQuestionTypeNullableFilter<"ConfigExam"> | $Enums.QuestionType | null
     quantity?: IntFilter<"ConfigExam"> | number
-    point?: IntFilter<"ConfigExam"> | number
+    point?: FloatFilter<"ConfigExam"> | number
     knowledgeBlockId?: StringFilter<"ConfigExam"> | string
   }
 
@@ -713503,7 +713503,7 @@ export namespace Prisma {
     difficult?: EnumDifficultFieldUpdateOperationsInput | $Enums.Difficult
     type?: NullableEnumQuestionTypeFieldUpdateOperationsInput | $Enums.QuestionType | null
     quantity?: IntFieldUpdateOperationsInput | number
-    point?: IntFieldUpdateOperationsInput | number
+    point?: FloatFieldUpdateOperationsInput | number
   }
 
   export type ConfigExamUncheckedUpdateWithoutKnowledgeBlockInput = {
@@ -713518,7 +713518,7 @@ export namespace Prisma {
     difficult?: EnumDifficultFieldUpdateOperationsInput | $Enums.Difficult
     type?: NullableEnumQuestionTypeFieldUpdateOperationsInput | $Enums.QuestionType | null
     quantity?: IntFieldUpdateOperationsInput | number
-    point?: IntFieldUpdateOperationsInput | number
+    point?: FloatFieldUpdateOperationsInput | number
   }
 
   export type ConfigExamUncheckedUpdateManyWithoutKnowledgeBlockInput = {
@@ -713533,7 +713533,7 @@ export namespace Prisma {
     difficult?: EnumDifficultFieldUpdateOperationsInput | $Enums.Difficult
     type?: NullableEnumQuestionTypeFieldUpdateOperationsInput | $Enums.QuestionType | null
     quantity?: IntFieldUpdateOperationsInput | number
-    point?: IntFieldUpdateOperationsInput | number
+    point?: FloatFieldUpdateOperationsInput | number
   }
 
   export type FixedClassCreateManyStaffManagementInput = {

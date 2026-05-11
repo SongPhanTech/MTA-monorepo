@@ -328,7 +328,7 @@ export function useSuspenseCountConfigExam<TArgs extends Prisma.ConfigExamCountA
 }
 import type { Difficult, QuestionType } from '../zenstack/models';
 
-export function useCheckConfigExam<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; difficult?: Difficult; type?: QuestionType; quantity?: number; point?: number; knowledgeBlockId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckConfigExam<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; difficult?: Difficult; type?: QuestionType; quantity?: number; knowledgeBlockId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('ConfigExam', `${endpoint}/configExam/check`, args, options, fetch);
 }

@@ -65,6 +65,7 @@ const PutChuongMucModal = () => {
           formData[levelColumn.key] = {
             type: config.type,
             quantity: config.quantity,
+            point: config.point,
           }
         }
       })
@@ -82,6 +83,7 @@ const PutChuongMucModal = () => {
         difficult: level.difficult,
         type: levelData.type,
         quantity: levelData.quantity,
+        point: levelData.point ?? 0,
       })
 
       return acc
@@ -271,6 +273,34 @@ const PutChuongMucModal = () => {
                         options={QUESTION_TYPE_OPTIONS}
                         disabled={isDisabled}
                       />
+                    </Form.Item>
+                  </Col>
+                )
+              })}
+            </Row>
+          </Col>
+        </Row>
+      </Col>
+
+      <Col span={24}>
+        <Row gutter={12} align="middle">
+          <Col xs={24} sm={6}>
+            Điểm
+          </Col>
+          <Col xs={24} sm={18}>
+            <Row gutter={12}>
+              {LEVEL_COLUMNS.map((col) => {
+                const quantity = (watchedValues?.[col.key] as ConfigExam)?.quantity
+                const isDisabled = !quantity || quantity === 0
+
+                return (
+                  <Col xs={12} sm={6} key={col.key}>
+                    <Form.Item
+                      name={[col.key, "point"]}
+                      style={{ marginBottom: 8 }}
+                      initialValue={1}
+                    >
+                      <InputNumber min={0} className="w-full" disabled={isDisabled} />
                     </Form.Item>
                   </Col>
                 )

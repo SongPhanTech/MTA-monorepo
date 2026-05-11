@@ -6146,7 +6146,7 @@ model ConfigExam {
   difficult        Difficult
   type             QuestionType?
   quantity         Int            @default(0)
-  point            Int            @default(0)
+  point            Float          @default(0)
   knowledgeBlock   KnowledgeBlock @relation(fields: [knowledgeBlockId], references: [id])
   knowledgeBlockId String
 
