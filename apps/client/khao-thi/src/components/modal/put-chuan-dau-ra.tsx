@@ -244,7 +244,16 @@ const PutChuongMucModal = () => {
                     style={{ marginBottom: 8 }}
                     initialValue={0}
                   >
-                    <InputNumber min={0} className="w-full" />
+                    <InputNumber
+                      min={0}
+                      className="w-full"
+                      onChange={(value) => {
+                        if (!value || value === 0) {
+                          form.setFieldValue([col.key, "type"], undefined)
+                          form.setFieldValue([col.key, "point"], undefined)
+                        }
+                      }}
+                    />
                   </Form.Item>
                 </Col>
               ))}
