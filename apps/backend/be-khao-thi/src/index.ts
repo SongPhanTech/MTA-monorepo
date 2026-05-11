@@ -14,6 +14,7 @@ import surveyApp from "./api/survey"
 import surveyPublicApp from "./api/survey-public"
 import { checkIp } from "./middlewares/check-ip"
 import { setupOpenApi } from "./utils/openapi"
+// import { jwtAuth } from "@workspace/auth/hono"
 
 export const prisma: PrismaClient = new PrismaClient()
 
@@ -57,8 +58,7 @@ const audience = config.keycloak.clientId
 // public
 app.route("/api/survey", surveyPublicApp)
 
-// TODO!: uncomment
-// app.use('/api/*', jwtAuth('ems'))
+// app.use("/api/*", jwtAuth("ems"))
 
 setupOpenApi(app)
 

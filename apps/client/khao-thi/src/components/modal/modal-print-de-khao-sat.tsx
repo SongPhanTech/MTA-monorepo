@@ -10,7 +10,7 @@ dayjs.locale("vi")
 
 const ModalPrintExamClusterSurvey = () => {
   const printRef = useRef<HTMLDivElement>(null)
-  const [selectedAnswers, setSelectedAnswers] = useState<Record<string, string>>({})
+  const [selectedAnswers] = useState<Record<string, string>>({})
   const { isOpen, onClose, input } = useDisclosure<{
     id: string
   }>({
@@ -74,6 +74,10 @@ const ModalPrintExamClusterSurvey = () => {
       }
     >
       <div ref={printRef} className="mx-auto p-6 text-sm leading-relaxed !font-time-news-roman">
+        <div className="flex justify-between items-start mb-2 color-black font-bold text-base">
+          <div className="uppercase">HỌC VIỆN KTQS</div>
+          <div className="italic">Mẫu số 11-ĐBCL</div>
+        </div>
         <div className="text-xl font-bold mb-4 text-center uppercase color-black">{data?.name}</div>
         <Row gutter={[0, 2]} className="mb-3 color-black">
           <Col span={12}>
@@ -197,14 +201,8 @@ const ModalPrintExamClusterSurvey = () => {
 
                           {isSpecificSingleChoice ? (
                             <Radio.Group
-                              className="w-full gap-x-2 flex"
+                              className="w-full gap-x-2 flex pointer-events-none"
                               value={selectedAnswers[record?.id]}
-                              onChange={(e) =>
-                                setSelectedAnswers((prev) => ({
-                                  ...prev,
-                                  [record?.id]: e.target.value,
-                                }))
-                              }
                             >
                               {data?.surveyChoice.map((choice, index: number) => (
                                 <Radio key={choice?.id} value={choice?.id} className="relative">
@@ -213,7 +211,7 @@ const ModalPrintExamClusterSurvey = () => {
                               ))}
                             </Radio.Group>
                           ) : (
-                            <Input.TextArea placeholder="Nhập câu trả lời" />
+                            <Input.TextArea placeholder="Nhập câu trả lời" className="pointer-events-none" />
                           )}
                         </div>
                       ) : (
@@ -247,14 +245,8 @@ const ModalPrintExamClusterSurvey = () => {
                     render: (_, record) => {
                       return (
                         <Radio.Group
-                          className="w-full gap-x-2 flex"
+                          className="w-full gap-x-2 flex pointer-events-none"
                           value={selectedAnswers[record?.id]}
-                          onChange={(e) =>
-                            setSelectedAnswers((prev) => ({
-                              ...prev,
-                              [record?.id]: e.target.value,
-                            }))
-                          }
                         >
                           {data?.surveyChoice.map((i) => (
                             <Radio.Button key={i?.id} value={i?.id}>
@@ -284,6 +276,9 @@ const ModalPrintExamClusterSurvey = () => {
                     .custom-red-table .ant-table-content table,
                     .custom-red-table .ant-table-cell {
                         border: 0.5px solid red !important;
+                        border-radius: 0 !important;
+                        box-shadow: none !important;
+                        background: #fff !important;
                     }
 
                     .custom-red-table .ant-radio-inner {
@@ -342,10 +337,18 @@ const ModalPrintExamClusterSurvey = () => {
                         color: #fff !important;
                     }
 
+                    .custom-red-table .ant-table-tbody > tr > td,
+                    .custom-red-table .ant-table-tbody > tr:hover > td,
+                    .custom-red-table .ant-table-tbody > tr.ant-table-row:hover > td {
+                        background: #fff !important;
+                        box-shadow: none !important;
+                    }
+
                     .custom-red-table textarea,
                     .custom-red-table .ant-input {
                         border: 0.5px solid red !important;
                         box-shadow: none !important;
+                        background: #fff !important;
                     }
 
                     .custom-red-table textarea:focus,
