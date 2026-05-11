@@ -34,6 +34,8 @@ import {
   exportGraduationRegisterMaster,
   exportPhoiBangCaoHoc,
   exportPhoiBangNganHan,
+  exportPhuLucVanBangCaoHoc,
+  exportPhuLucVanBangNganHan,
 } from "@workspace/libs/api/training"
 import { whereOrganization } from "@workspace/libs/constants"
 import { exportFromTemplate, TableRow } from "@workspace/libs/template-excel"
@@ -180,6 +182,14 @@ const exportHandlers: Record<string, TExportConfig> = {
   phoiBangNganHan: {
     api: exportPhoiBangNganHan,
     fileName: "PhoiBangNganHan.xlsx",
+  },
+  phuLucVanBangNganHan: {
+    api: exportPhuLucVanBangNganHan,
+    fileName: "PhuLucVanBangNganHan.xlsx",
+  },
+  phuLucVanBangCaoHoc: {
+    api: exportPhuLucVanBangCaoHoc,
+    fileName: "PhuLucVanBangCaoHoc.xlsx",
   },
 }
 
@@ -1177,6 +1187,11 @@ export default function StudentGradeSystem() {
         name: "In phôi bằng ngắn hạn SDH (Anh)",
         onClick: () => handleCommonExport(exportHandlers.phoiBangNganHan),
       },
+      {
+        id: 7,
+        name: "Phụ lục văn bằng ngắn hạn",
+        onClick: () => handleCommonExport(exportHandlers.phuLucVanBangNganHan),
+      }
       // { id: 7, name: "In phôi bảng ngắn/DÀI hạn SDH (Mỹ)" },
       // { id: 8, name: "In quyết định tốt nghiệp ngắn hạn (ĐẠI HÀN) SDH" },
       // { id: 9, name: "Bảng điểm ĐẠI HÀN SDH (2 cột)" },
@@ -1200,6 +1215,11 @@ export default function StudentGradeSystem() {
         name: "Sổ gốc cấp phát văn bằng",
         onClick: () => handleCommonExport(exportHandlers.soGoc),
       },
+      {
+        id: 22,
+        name: "Phụ lục văn bằng cao học",
+        onClick: () => handleCommonExport(exportHandlers.phuLucVanBangCaoHoc),
+      }
       // { id: 22, name: "Thống kê KQ đào tạo" },
       // { id: 23, name: "Thống kê kết quả bảo vệ luận văn" },
       // { id: 24, name: "In Danh sách trình chiếu CAO HỌC" },
