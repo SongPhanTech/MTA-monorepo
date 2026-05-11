@@ -10,4 +10,6 @@ export interface PresignedUrlDto {
   extension: string;
   /** @nullable */
   name?: string | null;
+  /** @nullable */
+  flat?: boolean | null;
 }
