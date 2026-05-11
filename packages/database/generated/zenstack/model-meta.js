@@ -18433,6 +18433,10 @@ const metadata = {
                     name: "councilReport",
                     type: "String",
                     isOptional: true,
+                }, graduationReport: {
+                    name: "graduationReport",
+                    type: "String",
+                    isOptional: true,
                 }, decisionNumber: {
                     name: "decisionNumber",
                     type: "String",
