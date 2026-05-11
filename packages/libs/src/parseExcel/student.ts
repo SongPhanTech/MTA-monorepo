@@ -354,7 +354,7 @@ export const parseSheetStudent = (file: ArrayBufferLike) => {
     gender: "G", // Giới tính
     ethnicity: "H", // Dân tộc
     nationality: "I", // Quốc tịch
-    provinceHometown: "J", // Nơi sinh
+    newProvinceOfBirth: "J", // Nơi sinh
     idCardNumber: "K", // CCCD
     phoneNumber: "L", // Số ĐT
     admissionCombination: "M", // Khối xét tuyển
@@ -512,7 +512,7 @@ export const parseSheetStudent = (file: ArrayBufferLike) => {
         gender: row[cols.gender]?.trim(),
         ethnicity: row[cols.ethnicity]?.trim(),
         nationality: row[cols.nationality]?.trim(),
-        provinceHometown: row[cols.provinceHometown]?.trim(),
+        newProvinceOfBirth: row[cols.newProvinceOfBirth]?.trim(),
         idCardNumber: idCardNumber as string,
         phoneNumber,
         admissionCombination: row[cols.admissionCombination]?.trim(),
