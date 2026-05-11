@@ -1,16 +1,29 @@
+import { UploadOutlined } from "@ant-design/icons"
 import Table from "@components/commons/table"
-import ViewIcon from "@components/icons/view"
 import { DEFAULT_PAGINATE_SIZE } from "@constants/constants"
 import useSpinner from "@hooks/spinner"
 import DefaultLayout from "@layouts/default-layout"
-import { presignedGetObject, useListObjects } from "@workspace/libs/api/model"
+import { generatePresignedUrl, presignedGetObject, useListObjects } from "@workspace/libs/api/model"
 import type { BucketItemDto } from "@workspace/libs/api/schemas"
-import { Button, Col, Flex, message, Row, Tag, Tooltip } from "antd"
+import { Button, Col, Flex, message, Row, Tag, Tooltip, Upload } from "antd"
+import axios from "axios"
 import dayjs from "dayjs"
-import { RefreshCcw } from "lucide-react"
+import { Download, RefreshCcw } from "lucide-react"
 import { useMemo, useState } from "react"
 
 const LUAN_VAN_PREFIX = "luan-van/"
+const LUAN_VAN_PATH = "luan-van"
+const MAX_UPLOAD_SIZE_MB = 50
+const ACCEPT_EXTENSIONS = ".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.zip,.rar,.txt,.jpg,.jpeg,.png"
+
+const splitFileName = (fileName: string) => {
+  const lastDot = fileName.lastIndexOf(".")
+  if (lastDot <= 0) return { baseName: fileName, extension: "" }
+  return {
+    baseName: fileName.slice(0, lastDot),
+    extension: fileName.slice(lastDot + 1),
+  }
+}
 
 const formatBytes = (bytes?: number) => {
   if (bytes === undefined || bytes === null) return ""
@@ -41,6 +54,7 @@ export default function QuanLyMauBieu() {
   const [pageSize, setPageSize] = useState<number>(DEFAULT_PAGINATE_SIZE)
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [cursorStack, setCursorStack] = useState<(string | undefined)[]>([undefined])
+  const [uploading, setUploading] = useState<boolean>(false)
 
   const { showSpinner, hideSpinner } = useSpinner()
 
@@ -123,17 +137,94 @@ export default function QuanLyMauBieu() {
     }
   }
 
+  const handleDownload = async (objectName?: string) => {
+    if (!objectName) return
+    try {
+      showSpinner()
+      const res = await presignedGetObject({ objectName })
+      const response = await fetch(res.data.url)
+      if (!response.ok) throw new Error(`HTTP ${response.status}`)
+      const blob = await response.blob()
+      const blobUrl = URL.createObjectURL(blob)
+      const downloadName = stripPrefix(objectName) || objectName
+      const anchor = document.createElement("a")
+      anchor.href = blobUrl
+      anchor.download = downloadName
+      document.body.appendChild(anchor)
+      anchor.click()
+      document.body.removeChild(anchor)
+      URL.revokeObjectURL(blobUrl)
+    } catch (error) {
+      console.error(error)
+      message.error("Không thể tải file. Vui lòng thử lại.")
+    } finally {
+      hideSpinner()
+    }
+  }
+
+  const uploadSingle = async (file: File) => {
+    const { baseName, extension } = splitFileName(file.name)
+    const resPresignedUrl = await generatePresignedUrl({
+      path: LUAN_VAN_PATH,
+      extension,
+      name: baseName || undefined,
+      flat: true,
+    })
+
+    await axios.put(resPresignedUrl.data.url, file, {
+      headers: { "Content-Type": file.type || "application/octet-stream" },
+    })
+  }
+
+  const handleUpload = async (file: File) => {
+    try {
+      setUploading(true)
+      showSpinner()
+      await uploadSingle(file)
+      message.success(`Đã tải lên "${file.name}".`)
+      setCursorStack([undefined])
+      setCurrentPage(1)
+      await refetch()
+    } catch (error) {
+      console.error(error)
+      message.error(`Không thể tải lên "${file.name}". Vui lòng thử lại.`)
+    } finally {
+      setUploading(false)
+      hideSpinner()
+    }
+  }
+
   return (
     <div>
       <Row gutter={[16, 16]}>
         <Col span={24}>
           <Flex justify="space-between" align="center">
             <h2 className="text-base font-semibold m-0">
-              Mẫu biểu / Tài liệu trong <Tag color="blue">mta/{LUAN_VAN_PREFIX}</Tag>
+              Quản lý mẫu biểu/tài liệu phòng sau đại học
             </h2>
-            <Button icon={<RefreshCcw size={14} />} onClick={handleReload} loading={isFetching}>
-              Tải lại
-            </Button>
+            <Flex gap={8}>
+              <Upload
+                multiple
+                accept={ACCEPT_EXTENSIONS}
+                showUploadList={false}
+                beforeUpload={(file: File) => {
+                  const isValidSize = file.size / 1024 / 1024 < MAX_UPLOAD_SIZE_MB
+                  if (!isValidSize) {
+                    message.error(`"${file.name}" vượt quá ${MAX_UPLOAD_SIZE_MB}MB.`)
+                    return Upload.LIST_IGNORE
+                  }
+                  handleUpload(file)
+                  return false
+                }}
+              >
+                <Button type="primary" icon={<UploadOutlined />} loading={uploading}>
+                  Tải file lên
+                </Button>
+              </Upload>
+              <Button icon={<RefreshCcw size={14} />} onClick={handleReload} loading={isFetching}>
+                Tải lại
+              </Button>
+            </Flex>
           </Flex>
         </Col>
 
@@ -198,7 +289,14 @@ export default function QuanLyMauBieu() {
                   if (!record.name) return null
                   return (
                     <Flex justify="center">
-                      <ViewIcon title="Xem / Tải file" onClick={() => handleOpen(record.name)} />
+                      <Tooltip title="Tải file xuống">
+                        <Button
+                          type="text"
+                          size="small"
+                          icon={<Download size={16} />}
+                          onClick={() => handleDownload(record.name)}
+                        />
+                      </Tooltip>
                     </Flex>
                   )
                 },

@@ -1184,7 +1184,7 @@ export default function StudentGradeSystem() {
       // { id: 5, name: "Bảng điểm ngắn hạn SDH" },
       {
         id: 6,
-        name: "In phôi bằng ngắn hạn SDH (Anh)",
+        name: "In phôi bằng ngắn hạn SĐH",
         onClick: () => handleCommonExport(exportHandlers.phoiBangNganHan),
       },
       {
@@ -1202,7 +1202,7 @@ export default function StudentGradeSystem() {
       // { id: 14, name: "PL Đề nghị công nhận tốt nghiệp" },
       // { id: 15, name: "Xác nhận thông tin HV làm văn bằng" },
       // { id: 16, name: "PL Quyết định tốt nghiệp CAO HỌC" },
-      // { id: 17, name: "Quyết định công nhận tốt nghiệp" },
+      { id: 17, name: "Quyết định công nhận tốt nghiệp" },
       // { id: 18, name: "In PL văn bằng CAO HỌC (2 cột)" },
       // { id: 19, name: "In PL văn bằng CAO HỌC (1 cột)" },
       {

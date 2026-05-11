@@ -1,7 +1,12 @@
 import { z } from "zod"
 
 export const PresignedUrlDtoSchema = z
-  .object({ path: z.string(), extension: z.string(), name: z.string().nullish() })
+  .object({
+    path: z.string(),
+    extension: z.string(),
+    name: z.string().nullish(),
+    flat: z.boolean().nullish(),
+  })
   .openapi("PresignedUrlDto")
 
 export const ListObjectDtoSchema = z
