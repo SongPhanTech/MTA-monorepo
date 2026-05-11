@@ -3,6 +3,7 @@ import { HTTPException } from "hono/http-exception"
 import ExcelJS from "exceljs"
 import XlsxTemplate from "xlsx-template"
 import dayjs from "dayjs"
+import Decimal from "decimal.js"
 
 export function parseDate(input?: number | string | Date): Date | null {
   if (!input) return null
@@ -62,7 +63,10 @@ export const getReportDateParts = (date?: Date | dayjs.Dayjs | string | number |
   const monthEn = MONTH_EN[d.month()]
   const year = d.year().toString()
 
-  return { day, monthRaw, monthVi, monthEn, year }
+  const dateVi = `${day}/${monthVi}/${year}`
+  const fullVi = `ngày ${day} tháng ${monthVi} năm ${year}`
+
+  return { day, monthRaw, monthVi, monthEn, year, dateVi, fullVi }
 }
 
 export const buildGenderMapOrThrow = async (
@@ -866,7 +870,6 @@ export const buildPositionMapOrThrow = async (
   names: (string | undefined)[]
 ) => {
   const uniqNames = Array.from(new Set(names.filter((name): name is string => Boolean(name))))
-  console.log(uniqNames)
 
   const existing = await prisma.dM_ChucVu.findMany({
     where: { sTen: { in: uniqNames } },
@@ -1034,7 +1037,7 @@ export const generateExcelFromTemplate = async (
     const rowOffset = startRow - 1
     let currentRowInCopy = startRow
 
-    const lastRow = sourceSheet.lastRow ? sourceSheet.lastRow.number : 0
+    const lastRow = sourceSheet.rowCount
 
     for (let r = 1; r <= lastRow; r++) {
       const row = sourceSheet.getRow(r)
@@ -1174,7 +1177,7 @@ export const generateExcelFromTemplate = async (
   const generatedSheets: ExcelJS.Worksheet[] = []
   for (const item of payload) {
     const template = new XlsxTemplate(templateBuffer)
-    template.substitute(1, item.data)
+    template.substitute(1, { ...item.data, group: (item as any).group })
     const sheetBuffer = await template.generate({ type: "nodebuffer" })
     const workbook = new ExcelJS.Workbook()
     await workbook.xlsx.load(sheetBuffer as any)
@@ -1183,8 +1186,13 @@ export const generateExcelFromTemplate = async (
   }
 
   let currentRow = 1
-  for (const sourceSheet of generatedSheets) {
+  for (let i = 0; i < generatedSheets.length; i++) {
+    const sourceSheet = generatedSheets[i]
+    if (!sourceSheet) continue
     currentRow = copySheetContent(sourceSheet, outputSheet, currentRow)
+    if (i < generatedSheets.length - 1) {
+      outputSheet.getRow(currentRow - 1).addPageBreak()
+    }
   }
 
   if (generatedSheets.length > 0) {
@@ -1202,7 +1210,8 @@ export const generateExcelFromTemplate = async (
     const row = outputSheet.getRow(rowNumber)
     let hasPageBreakMarker = false
     row.eachCell({ includeEmpty: true }, (cell) => {
-      if (normalizeCellValue(cell.value) === PAGE_BREAK_MARKER) {
+      const val = normalizeCellValue(cell.value)
+      if (val === PAGE_BREAK_MARKER ) {
         hasPageBreakMarker = true
         cell.value = null
       }
@@ -1227,10 +1236,56 @@ export const generateExcelFromTemplate = async (
       }
     }
     outputSheet.pageSetup.printArea = `A1:${maxColumnLetter}${lastDataRow}`
+    outputSheet.pageSetup.fitToPage = true
+    outputSheet.pageSetup.fitToWidth = 1
+    outputSheet.pageSetup.fitToHeight = 0 
   }
 
   return await mergedWorkbook.xlsx.writeBuffer()
 }
+
+export const copyWorksheet = (sourceSheet: ExcelJS.Worksheet, destSheet: ExcelJS.Worksheet) => {
+  for (let i = 1; i <= sourceSheet.columnCount; i++) {
+    const srcCol = sourceSheet.getColumn(i)
+    const destCol = destSheet.getColumn(i)
+    if (srcCol.width) destCol.width = srcCol.width
+  }
+
+  sourceSheet.eachRow({ includeEmpty: true }, (row, rowNumber) => {
+    const destRow = destSheet.getRow(rowNumber)
+    destRow.height = row.height
+    row.eachCell({ includeEmpty: true }, (cell, colNumber) => {
+      const destCell = destRow.getCell(colNumber)
+      if (cell.master === cell) {
+        destCell.value = cell.value
+      }
+      if (cell.style) {
+        destCell.style = JSON.parse(JSON.stringify(cell.style))
+      }
+    })
+  })
+
+  const sourceBreaks = (sourceSheet as any)._rowBreaks || []
+  sourceBreaks.forEach((br: any) => {
+    if (br && br.main) {
+      destSheet.getRow(br.main).addPageBreak()
+    }
+  })
+
+  if (sourceSheet.pageSetup) {
+    destSheet.pageSetup = JSON.parse(JSON.stringify(sourceSheet.pageSetup))
+    destSheet.pageSetup.fitToHeight = 0
+    destSheet.pageSetup.fitToPage = true
+  }
+
+  const merges = (sourceSheet.model as any).merges || []
+  merges.forEach((m: string) => {
+    try {
+      destSheet.mergeCells(m)
+    } catch (err) {}
+  })
+}
+
 export const getScoreClassification = (
   finalScore: number,
   scoreConverts: { base10Min: number; base10Max: number; classification: string }[] = []
@@ -1240,4 +1295,11 @@ export const getScoreClassification = (
   )
 
   return matched?.classification ?? ""
+}
+
+export const formatScore = (score: Decimal | number | string | null | undefined, precision = 2) => {
+  if (score === null || score === undefined || score === "") return ""
+  const num = typeof score === "string" ? parseFloat(score) : Number(score)
+  if (isNaN(num)) return ""
+  return num.toFixed(precision).replace(".", ",")
 }
