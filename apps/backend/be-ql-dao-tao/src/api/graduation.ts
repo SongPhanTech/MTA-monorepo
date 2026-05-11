@@ -34,7 +34,7 @@ import {
   getScoreClassification,
   getReportDateParts,
   formatScore,
-  copyWorksheet,
+  generateExcelMultiSheet,
 } from "../utils"
 
 const app = new OpenAPIHono({ strict: false })
@@ -2403,9 +2403,7 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
     groups.get(sheetName)!.push(student)
   }
 
-  const finalWorkbook = new ExcelJS.Workbook()
-
-  for (const [sheetName, groupStudents] of groups.entries()) {
+  const sheetData = Array.from(groups.entries()).map(([sheetName, groupStudents]) => {
     const payloads = groupStudents.map((student) => {
       const user = student.userProfile
       const gD = student.graduationDecision
@@ -2531,23 +2529,11 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
       }
     })
 
-    const templateBuffer = await getTemplateBuffer(prisma, "PhuLucVanBangCaoHoc_v14.xlsx")
-    const groupBuffer = await generateExcelFromTemplate(templateBuffer, payloads, {
-      showGridLines: true,
-      wrapText: true,
-    })
+    return { sheetName, payload: payloads }
+  })
 
-    const groupWorkbook = new ExcelJS.Workbook()
-    await groupWorkbook.xlsx.load(groupBuffer as any)
-    const sourceSheet = groupWorkbook.getWorksheet("Merged") || groupWorkbook.worksheets[0]
-    
-    if (sourceSheet) {
-      const destSheet = finalWorkbook.addWorksheet(sheetName)
-      copyWorksheet(sourceSheet, destSheet)
-    }
-  }
-
-  const result = await finalWorkbook.xlsx.writeBuffer()
+  const templateBuffer = await getTemplateBuffer(prisma, "PhuLucVanBangCaoHoc_v14.xlsx")
+  const result = await generateExcelMultiSheet(templateBuffer, sheetData)
   const fileName = "PhuLucVanBangCaoHoc.xlsx"
   const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
 
@@ -2731,9 +2717,7 @@ app.openapi(exportPhuLucVanBangNganHan, async (c: any) => {
     groups.get(sheetName)!.push(student)
   }
 
-  const finalWorkbook = new ExcelJS.Workbook()
-
-  for (const [sheetName, groupStudents] of groups.entries()) {
+  const sheetData = Array.from(groups.entries()).map(([sheetName, groupStudents]) => {
     const payloads = groupStudents.map((student) => {
       const user = student.userProfile
       const gD = student.graduationDecision
@@ -2813,23 +2797,11 @@ app.openapi(exportPhuLucVanBangNganHan, async (c: any) => {
       }
     })
 
-    const templateBuffer = await getTemplateBuffer(prisma, "PhuLucVanBangNganHan_v5.xlsx")
-    const groupBuffer = await generateExcelFromTemplate(templateBuffer, payloads, {
-      showGridLines: true,
-      wrapText: true,
-    })
+    return { sheetName, payload: payloads }
+  })
 
-    const groupWorkbook = new ExcelJS.Workbook()
-    await groupWorkbook.xlsx.load(groupBuffer as any)
-    const sourceSheet = groupWorkbook.getWorksheet("Merged") || groupWorkbook.worksheets[0]
-    
-    if (sourceSheet) {
-      const destSheet = finalWorkbook.addWorksheet(sheetName)
-      copyWorksheet(sourceSheet, destSheet)
-    }
-  }
-
-  const result = await finalWorkbook.xlsx.writeBuffer()
+  const templateBuffer = await getTemplateBuffer(prisma, "PhuLucVanBangNganHan_v5.xlsx")
+  const result = await generateExcelMultiSheet(templateBuffer, sheetData)
   const fileName = "PhuLucVanBangNganHan.xlsx"
   const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
 

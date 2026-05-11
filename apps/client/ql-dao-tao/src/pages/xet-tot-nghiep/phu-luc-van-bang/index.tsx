@@ -202,6 +202,7 @@ export default function StudentGradeSystem() {
   const thesisSessionIds: string[] = useWatch("thesisSessionIds", form)
   const managementOrganizationIds: string[] = useWatch("managementOrganizationIds", form)
   const signerName: string = useWatch("signer", form)
+  const printDate: string = useWatch("date", form)
   const [page, setPage] = useState(initialPagination.page)
   const [pageSize, setPageSize] = useState(initialPagination.pageSize)
   const [viewResult, setViewResult] = useState(false)
@@ -267,6 +268,15 @@ export default function StudentGradeSystem() {
   const { data: dm_DonVi = [] } = useFindManyDM_DonVi({
     where: {
       ...whereOrganization,
+      ...(fixedClassIds?.length && {
+        fixedClass: {
+          some: {
+            id: {
+              in: fixedClassIds,
+            },
+          },
+        },
+      }),
     },
   })
 
@@ -1151,7 +1161,7 @@ export default function StudentGradeSystem() {
       fixedClassIds,
       thesisSessionIds,
       managementOrganizationId: managementOrganizationIds?.[0],
-      printDate: new Date().toISOString(),
+      printDate,
       signerName: signerName || "",
     }
 
