@@ -18,6 +18,8 @@ export type ExcelTemplateBody = {
   sheets?: ExcelTemplateBodySheetsItem[];
   fileName: string;
   path: string;
+  /** @nullable */
+  prefix?: string | null;
   /** Có hiển thị lưới trong Excel hay không */
   showGridLines?: boolean;
   /** Có tự động xuống dòng trong ô hay không */

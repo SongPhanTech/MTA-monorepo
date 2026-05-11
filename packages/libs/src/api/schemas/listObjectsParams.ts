@@ -8,5 +8,8 @@
 export type ListObjectsParams = {
 path?: string;
 startAfter?: string;
-limit: number;
+/**
+ * @nullable
+ */
+limit?: number | null;
 };
