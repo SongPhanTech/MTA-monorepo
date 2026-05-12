@@ -79,9 +79,12 @@ export class MinIOService {
     path: folder,
     extension,
     name = randomUUIDv7(),
+    flat,
   }: PresignedUrlDto): Promise<UrlDto> {
-    const dateFolder = dayjs().format("YYYY-MM-DD")
-    const path = `${folder}/${dateFolder}/${name}${extension ? `.${extension}` : ""}`
+    const fileName = `${name}${extension ? `.${extension}` : ""}`
+    const path = flat
+      ? `${folder}/${fileName}`
+      : `${folder}/${dayjs().format("YYYY-MM-DD")}/${fileName}`
     const url = await this.minioClient.presignedPutObject(this.bucketName, path, 3600)
 
     return { url, fileName: `${this.bucketName}/${path}` }

@@ -34,6 +34,8 @@ import {
   exportGraduationRegisterMaster,
   exportPhoiBangCaoHoc,
   exportPhoiBangNganHan,
+  exportPhuLucVanBangCaoHoc,
+  exportPhuLucVanBangNganHan,
 } from "@workspace/libs/api/training"
 import { whereOrganization } from "@workspace/libs/constants"
 import { exportFromTemplate, TableRow } from "@workspace/libs/template-excel"
@@ -181,6 +183,14 @@ const exportHandlers: Record<string, TExportConfig> = {
     api: exportPhoiBangNganHan,
     fileName: "PhoiBangNganHan.xlsx",
   },
+  phuLucVanBangNganHan: {
+    api: exportPhuLucVanBangNganHan,
+    fileName: "PhuLucVanBangNganHan.xlsx",
+  },
+  phuLucVanBangCaoHoc: {
+    api: exportPhuLucVanBangCaoHoc,
+    fileName: "PhuLucVanBangCaoHoc.xlsx",
+  },
 }
 
 export default function StudentGradeSystem() {
@@ -192,6 +202,7 @@ export default function StudentGradeSystem() {
   const thesisSessionIds: string[] = useWatch("thesisSessionIds", form)
   const managementOrganizationIds: string[] = useWatch("managementOrganizationIds", form)
   const signerName: string = useWatch("signer", form)
+  const printDate: string = useWatch("date", form)
   const [page, setPage] = useState(initialPagination.page)
   const [pageSize, setPageSize] = useState(initialPagination.pageSize)
   const [viewResult, setViewResult] = useState(false)
@@ -611,7 +622,7 @@ export default function StudentGradeSystem() {
     }
     const TOTAL_COLUMNS = 12
     const SIGN_COL = 6
-    const MAX_ROWS = 50
+    const MAX_ROWS = 500
 
     const allSheetOptions = studentsWithSemesters.map((student) => {
       const scoreConverts = student.fixedClass?.trainingCourse?.scoreConverts || []
@@ -883,7 +894,7 @@ export default function StudentGradeSystem() {
     }
     const TOTAL_COLUMNS = 10
     const SIGN_COL = 6
-    const MAX_ROWS = 50
+    const MAX_ROWS = 500
 
     const allSheetOptions = studentsWithSemesters.map((student) => {
       const scoreConverts = student.fixedClass?.trainingCourse?.scoreConverts || []
@@ -1150,7 +1161,7 @@ export default function StudentGradeSystem() {
       fixedClassIds,
       thesisSessionIds,
       managementOrganizationId: managementOrganizationIds?.[0],
-      printDate: new Date().toISOString(),
+      printDate,
       signerName: signerName || "",
     }
 
@@ -1183,8 +1194,13 @@ export default function StudentGradeSystem() {
       // { id: 5, name: "Bảng điểm ngắn hạn SDH" },
       {
         id: 6,
-        name: "In phôi bằng ngắn hạn SDH (Anh)",
+        name: "In phôi bằng ngắn hạn SĐH",
         onClick: () => handleCommonExport(exportHandlers.phoiBangNganHan),
+      },
+      {
+        id: 7,
+        name: "Phụ lục văn bằng ngắn hạn",
+        onClick: () => handleCommonExport(exportHandlers.phuLucVanBangNganHan),
       },
       // { id: 7, name: "In phôi bảng ngắn/DÀI hạn SDH (Mỹ)" },
       // { id: 8, name: "In quyết định tốt nghiệp ngắn hạn (ĐẠI HÀN) SDH" },
@@ -1196,7 +1212,7 @@ export default function StudentGradeSystem() {
       // { id: 14, name: "PL Đề nghị công nhận tốt nghiệp" },
       // { id: 15, name: "Xác nhận thông tin HV làm văn bằng" },
       // { id: 16, name: "PL Quyết định tốt nghiệp CAO HỌC" },
-      // { id: 17, name: "Quyết định công nhận tốt nghiệp" },
+      { id: 17, name: "Quyết định công nhận tốt nghiệp" },
       // { id: 18, name: "In PL văn bằng CAO HỌC (2 cột)" },
       // { id: 19, name: "In PL văn bằng CAO HỌC (1 cột)" },
       {
@@ -1208,6 +1224,11 @@ export default function StudentGradeSystem() {
         id: 21,
         name: "Sổ gốc cấp phát văn bằng",
         onClick: () => handleCommonExport(exportHandlers.soGoc),
+      },
+      {
+        id: 22,
+        name: "Phụ lục văn bằng cao học",
+        onClick: () => handleCommonExport(exportHandlers.phuLucVanBangCaoHoc),
       },
       // { id: 22, name: "Thống kê KQ đào tạo" },
       // { id: 23, name: "Thống kê kết quả bảo vệ luận văn" },

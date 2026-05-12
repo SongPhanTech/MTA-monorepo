@@ -77,6 +77,10 @@ import type {
   ExportPhoiBangCaoHocBody,
   ExportPhoiBangNganHan404,
   ExportPhoiBangNganHanBody,
+  ExportPhuLucVanBangCaoHoc404,
+  ExportPhuLucVanBangCaoHocBody,
+  ExportPhuLucVanBangNganHan404,
+  ExportPhuLucVanBangNganHanBody,
   ExportStudentAcademicActionJson200Item,
   ExportStudentAcademicActionJson404,
   ExportStudentAcademicActionJsonParams,
@@ -9340,6 +9344,176 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       > => {
 
       const mutationOptions = getExportPhoiBangNganHanMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+export type exportPhuLucVanBangCaoHocResponse200 = {
+  data: Blob
+  status: 200
+}
+
+export type exportPhuLucVanBangCaoHocResponse404 = {
+  data: ExportPhuLucVanBangCaoHoc404
+  status: 404
+}
+    
+export type exportPhuLucVanBangCaoHocResponseSuccess = (exportPhuLucVanBangCaoHocResponse200) & {
+  headers: Headers;
+};
+export type exportPhuLucVanBangCaoHocResponseError = (exportPhuLucVanBangCaoHocResponse404) & {
+  headers: Headers;
+};
+
+export type exportPhuLucVanBangCaoHocResponse = (exportPhuLucVanBangCaoHocResponseSuccess | exportPhuLucVanBangCaoHocResponseError)
+
+export const getExportPhuLucVanBangCaoHocUrl = () => {
+
+
+  
+
+  return `/api/graduation/export-phu-luc-van-bang-cao-hoc`
+}
+
+export const exportPhuLucVanBangCaoHoc = async (exportPhuLucVanBangCaoHocBody: ExportPhuLucVanBangCaoHocBody, options?: RequestInit): Promise<exportPhuLucVanBangCaoHocResponse> => {
+  
+  return customTrainingFetch<exportPhuLucVanBangCaoHocResponse>(getExportPhuLucVanBangCaoHocUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      exportPhuLucVanBangCaoHocBody,)
+  }
+);}
+
+
+
+
+export const getExportPhuLucVanBangCaoHocMutationOptions = <TError = ExportPhuLucVanBangCaoHoc404,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof exportPhuLucVanBangCaoHoc>>, TError,{data: ExportPhuLucVanBangCaoHocBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof exportPhuLucVanBangCaoHoc>>, TError,{data: ExportPhuLucVanBangCaoHocBody}, TContext> => {
+
+const mutationKey = ['exportPhuLucVanBangCaoHoc'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof exportPhuLucVanBangCaoHoc>>, {data: ExportPhuLucVanBangCaoHocBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  exportPhuLucVanBangCaoHoc(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ExportPhuLucVanBangCaoHocMutationResult = NonNullable<Awaited<ReturnType<typeof exportPhuLucVanBangCaoHoc>>>
+    export type ExportPhuLucVanBangCaoHocMutationBody = ExportPhuLucVanBangCaoHocBody
+    export type ExportPhuLucVanBangCaoHocMutationError = ExportPhuLucVanBangCaoHoc404
+
+    export const useExportPhuLucVanBangCaoHoc = <TError = ExportPhuLucVanBangCaoHoc404,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof exportPhuLucVanBangCaoHoc>>, TError,{data: ExportPhuLucVanBangCaoHocBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof exportPhuLucVanBangCaoHoc>>,
+        TError,
+        {data: ExportPhuLucVanBangCaoHocBody},
+        TContext
+      > => {
+
+      const mutationOptions = getExportPhuLucVanBangCaoHocMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
+export type exportPhuLucVanBangNganHanResponse200 = {
+  data: Blob
+  status: 200
+}
+
+export type exportPhuLucVanBangNganHanResponse404 = {
+  data: ExportPhuLucVanBangNganHan404
+  status: 404
+}
+    
+export type exportPhuLucVanBangNganHanResponseSuccess = (exportPhuLucVanBangNganHanResponse200) & {
+  headers: Headers;
+};
+export type exportPhuLucVanBangNganHanResponseError = (exportPhuLucVanBangNganHanResponse404) & {
+  headers: Headers;
+};
+
+export type exportPhuLucVanBangNganHanResponse = (exportPhuLucVanBangNganHanResponseSuccess | exportPhuLucVanBangNganHanResponseError)
+
+export const getExportPhuLucVanBangNganHanUrl = () => {
+
+
+  
+
+  return `/api/graduation/export-phu-luc-van-bang-ngan-han`
+}
+
+export const exportPhuLucVanBangNganHan = async (exportPhuLucVanBangNganHanBody: ExportPhuLucVanBangNganHanBody, options?: RequestInit): Promise<exportPhuLucVanBangNganHanResponse> => {
+  
+  return customTrainingFetch<exportPhuLucVanBangNganHanResponse>(getExportPhuLucVanBangNganHanUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      exportPhuLucVanBangNganHanBody,)
+  }
+);}
+
+
+
+
+export const getExportPhuLucVanBangNganHanMutationOptions = <TError = ExportPhuLucVanBangNganHan404,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof exportPhuLucVanBangNganHan>>, TError,{data: ExportPhuLucVanBangNganHanBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof exportPhuLucVanBangNganHan>>, TError,{data: ExportPhuLucVanBangNganHanBody}, TContext> => {
+
+const mutationKey = ['exportPhuLucVanBangNganHan'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof exportPhuLucVanBangNganHan>>, {data: ExportPhuLucVanBangNganHanBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  exportPhuLucVanBangNganHan(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ExportPhuLucVanBangNganHanMutationResult = NonNullable<Awaited<ReturnType<typeof exportPhuLucVanBangNganHan>>>
+    export type ExportPhuLucVanBangNganHanMutationBody = ExportPhuLucVanBangNganHanBody
+    export type ExportPhuLucVanBangNganHanMutationError = ExportPhuLucVanBangNganHan404
+
+    export const useExportPhuLucVanBangNganHan = <TError = ExportPhuLucVanBangNganHan404,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof exportPhuLucVanBangNganHan>>, TError,{data: ExportPhuLucVanBangNganHanBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof exportPhuLucVanBangNganHan>>,
+        TError,
+        {data: ExportPhuLucVanBangNganHanBody},
+        TContext
+      > => {
+
+      const mutationOptions = getExportPhuLucVanBangNganHanMutationOptions(options);
 
       return useMutation(mutationOptions, queryClient);
     }

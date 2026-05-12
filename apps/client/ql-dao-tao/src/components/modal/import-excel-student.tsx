@@ -355,8 +355,8 @@ const ImportStudentModal = ({ visible, onCancel }: ImportStudentModalProps) => {
           },
           {
             title: "Nơi sinh (Tỉnh)",
-            dataIndex: "provinceHometown",
-            key: "provinceHometown",
+            dataIndex: "newProvinceOfBirth",
+            key: "newProvinceOfBirth",
             width: 150,
           },
           {

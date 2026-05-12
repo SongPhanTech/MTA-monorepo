@@ -55,6 +55,13 @@ model ThesisSession extends Base {
   /// Ngày QĐBVLV
   defenseDecisionDate   DateTime?
 
+  // Số QĐ tốt nghiệp
+  graduationNumber String?
+  /// Người ký QĐ tốt nghiệp
+  graduationDecisionMaker  String?
+  /// Ngày QĐ tốt nghiệp
+  graduationDecisionDate   DateTime?
+
   /// Trưởng phòng sau đại học
   chief                 String?
 
