@@ -1244,6 +1244,228 @@ export const generateExcelFromTemplate = async (
   return await mergedWorkbook.xlsx.writeBuffer()
 }
 
+export const generateExcelMultiSheet = async (
+  templateBuffer: Buffer,
+  sheets: { sheetName?: string; payload: { data: any; group?: any }[] }[],
+  options: { showGridLines?: boolean; wrapText?: boolean } = {}
+) => {
+  const PAGE_BREAK_MARKER = "ngắt trang"
+  const { showGridLines = true, wrapText = true } = options
+
+  const normalizeCellValue = (value: ExcelJS.CellValue | null | undefined): string => {
+    if (value === null || value === undefined) return ""
+    if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") {
+      return String(value).trim().toLowerCase()
+    }
+    if (value instanceof Date) {
+      return value.toISOString().trim().toLowerCase()
+    }
+    if (typeof value === "object") {
+      if ("richText" in value && Array.isArray(value.richText)) {
+        return value.richText.map((part) => part.text).join("").trim().toLowerCase()
+      }
+      if ("text" in value && typeof value.text === "string") {
+        return value.text.trim().toLowerCase()
+      }
+      if ("result" in value && value.result !== undefined && value.result !== null) {
+        return String(value.result).trim().toLowerCase()
+      }
+    }
+    return ""
+  }
+
+  const toColumnLetter = (columnNumber: number) => {
+    let result = ""
+    let current = columnNumber
+    while (current > 0) {
+      const remainder = (current - 1) % 26
+      result = String.fromCharCode(65 + remainder) + result
+      current = Math.floor((current - 1) / 26)
+    }
+    return result || "A"
+  }
+
+  const getLastUsedDataRow = (sheet: ExcelJS.Worksheet) => {
+    const n = sheet.rowCount
+    for (let r = n; r >= 1; r--) {
+      const row = sheet.getRow(r)
+      let has = false
+      row.eachCell({ includeEmpty: false }, () => {
+        has = true
+      })
+      if (has) return r
+    }
+    return 1
+  }
+
+  const copySheetContent = (
+    sourceSheet: ExcelJS.Worksheet,
+    targetSheet: ExcelJS.Worksheet,
+    startRow: number
+  ) => {
+    const rowOffset = startRow - 1
+    let currentRowInCopy = startRow
+    const lastRow = sourceSheet.rowCount
+
+    for (let r = 1; r <= lastRow; r++) {
+      const row = sourceSheet.getRow(r)
+      const newRow = targetSheet.getRow(currentRowInCopy)
+      if (row.height !== undefined) newRow.height = row.height
+      if (row.hidden) newRow.hidden = true
+      if (row.outlineLevel !== undefined) newRow.outlineLevel = row.outlineLevel
+
+      row.eachCell({ includeEmpty: true }, (cell, colNumber) => {
+        const newCell = newRow.getCell(colNumber)
+        newCell.value = cell.value
+        if (cell.style) {
+          newCell.style = JSON.parse(JSON.stringify(cell.style))
+          if (wrapText && newCell.alignment) {
+            newCell.alignment.wrapText = true
+          }
+        }
+      })
+      currentRowInCopy++
+    }
+
+    const merges = sourceSheet.model?.merges
+    if (merges) {
+      for (const merge of merges) {
+        const [topLeft, bottomRight] = merge.split(":")
+        const topMatch = topLeft?.match(/([A-Z]+)(\d+)/)
+        const bottomMatch = bottomRight?.match(/([A-Z]+)(\d+)/)
+        if (topMatch && bottomMatch && topMatch[2] && bottomMatch[2]) {
+          const startRowNum = Number.parseInt(topMatch[2], 10) + rowOffset
+          const endRowNum = Number.parseInt(bottomMatch[2], 10) + rowOffset
+          targetSheet.mergeCells(`${topMatch[1]}${startRowNum}:${bottomMatch[1]}${endRowNum}`)
+        }
+      }
+    }
+
+    sourceSheet.getImages().forEach((image) => {
+      const imgData = sourceSheet.workbook.getImage(Number(image.imageId))
+      if (!imgData) return
+      const newImageId = targetSheet.workbook.addImage({
+        buffer: imgData.buffer as any,
+        extension: imgData.extension,
+      })
+      const { range } = image
+      if (range) {
+        const newRange = {
+          tl: { ...range.tl, row: range.tl.row + rowOffset, nativeRow: (range.tl as any).nativeRow + rowOffset } as any,
+          br: { ...range.br, row: range.br.row + rowOffset, nativeRow: (range.br as any).nativeRow + rowOffset } as any,
+        }
+        targetSheet.addImage(newImageId, { tl: newRange.tl, br: newRange.br, editAs: (range as any).editAs })
+      }
+    })
+
+    return currentRowInCopy
+  }
+
+  const applyTemplatePageSetup = (source: ExcelJS.Worksheet | undefined, target: ExcelJS.Worksheet) => {
+    if (!source) return
+    const src = source.pageSetup
+    if (!src) return
+    const dst = target.pageSetup
+    if (src.margins) dst.margins = { ...dst.margins, ...src.margins }
+
+    const pageSetupKeys: (keyof ExcelJS.PageSetup)[] = [
+      "orientation", "horizontalDpi", "verticalDpi", "fitToPage", "fitToWidth", "fitToHeight",
+      "scale", "pageOrder", "blackAndWhite", "draft", "cellComments", "errors", "paperSize",
+      "showRowColHeaders", "showGridLines", "firstPageNumber", "horizontalCentered", "verticalCentered",
+      "printTitlesRow", "printTitlesColumn",
+    ]
+    for (const key of pageSetupKeys) {
+      const value = src[key]
+      if (value !== undefined && value !== null) {
+        ;(dst as Record<string, unknown>)[key as string] = value
+      }
+    }
+    target.headerFooter = {
+      oddHeader: "",
+      oddFooter: "",
+      evenHeader: "",
+      evenFooter: "",
+      firstHeader: "",
+      firstFooter: "",
+    }
+  }
+
+  const mergedWorkbook = new ExcelJS.Workbook()
+  const usedSheetNames = new Set<string>()
+
+  for (let idx = 0; idx < sheets.length; idx++) {
+    const sheetData = sheets[idx]
+    let name = sheetData?.sheetName || `Sheet${idx + 1}`
+    name = name.replace(/[\\/?*:[\]]/g, "_").slice(0, 31)
+    let suffix = 1
+    let finalName = name
+    while (usedSheetNames.has(finalName)) {
+      const sText = `_${suffix}`
+      finalName = `${name.slice(0, 31 - sText.length)}${sText}`
+      suffix++
+    }
+    usedSheetNames.add(finalName)
+    const targetSheet = mergedWorkbook.addWorksheet(finalName)
+    targetSheet.views = [{ showGridLines }]
+
+    const generatedSheets: ExcelJS.Worksheet[] = []
+    for (const item of sheetData.payload) {
+      const template = new XlsxTemplate(templateBuffer)
+      template.substitute(1, { ...item.data, group: item.group })
+      const sheetBuffer = await template.generate({ type: "nodebuffer" })
+      const workbook = new ExcelJS.Workbook()
+      await workbook.xlsx.load(sheetBuffer as any)
+      const worksheet = workbook.getWorksheet(1) || workbook.worksheets[0]
+      if (worksheet) generatedSheets.push(worksheet)
+    }
+
+    let currentRow = 1
+    for (const sourceSheet of generatedSheets) {
+      currentRow = copySheetContent(sourceSheet, targetSheet, currentRow)
+    }
+
+    if (generatedSheets.length > 0) {
+      generatedSheets[0].columns?.forEach((col, index) => {
+        if (!col) return
+        const dest = targetSheet.getColumn(index + 1)
+        if (col.width) dest.width = col.width
+        if (col.hidden) dest.hidden = true
+      })
+      applyTemplatePageSetup(generatedSheets[0], targetSheet)
+    }
+
+    const finalMarkerRows: number[] = []
+    for (let rowNumber = 1; rowNumber <= targetSheet.rowCount; rowNumber++) {
+      const row = targetSheet.getRow(rowNumber)
+      let hasMarker = false
+      row.eachCell({ includeEmpty: true }, (cell) => {
+        if (normalizeCellValue(cell.value) === PAGE_BREAK_MARKER) {
+          hasMarker = true
+          cell.value = null
+        }
+      })
+      if (hasMarker) {
+        row.hidden = true
+        finalMarkerRows.push(rowNumber)
+      }
+    }
+
+    const lastDataRow = getLastUsedDataRow(targetSheet)
+    const maxColumnLetter = toColumnLetter(targetSheet.columnCount || 1)
+    if (finalMarkerRows.length > 0) {
+      const uniqueBreakRows = [...new Set(finalMarkerRows)].sort((a, b) => a - b)
+      for (const markerRow of uniqueBreakRows) {
+        if (markerRow > 1 && markerRow <= lastDataRow) {
+          targetSheet.getRow(markerRow - 1).addPageBreak()
+        }
+      }
+      targetSheet.pageSetup.printArea = `A1:${maxColumnLetter}${lastDataRow}`
+    }
+  }
+
+  return await mergedWorkbook.xlsx.writeBuffer()
+}
+
 export const copyWorksheet = (sourceSheet: ExcelJS.Worksheet, destSheet: ExcelJS.Worksheet) => {
   for (let i = 1; i <= sourceSheet.columnCount; i++) {
     const srcCol = sourceSheet.getColumn(i)

@@ -202,6 +202,7 @@ export default function StudentGradeSystem() {
   const thesisSessionIds: string[] = useWatch("thesisSessionIds", form)
   const managementOrganizationIds: string[] = useWatch("managementOrganizationIds", form)
   const signerName: string = useWatch("signer", form)
+  const printDate: string = useWatch("date", form)
   const [page, setPage] = useState(initialPagination.page)
   const [pageSize, setPageSize] = useState(initialPagination.pageSize)
   const [viewResult, setViewResult] = useState(false)
@@ -267,6 +268,15 @@ export default function StudentGradeSystem() {
   const { data: dm_DonVi = [] } = useFindManyDM_DonVi({
     where: {
       ...whereOrganization,
+      ...(fixedClassIds?.length && {
+        fixedClass: {
+          some: {
+            id: {
+              in: fixedClassIds,
+            },
+          },
+        },
+      }),
     },
   })
 
@@ -612,7 +622,7 @@ export default function StudentGradeSystem() {
     }
     const TOTAL_COLUMNS = 12
     const SIGN_COL = 6
-    const MAX_ROWS = 50
+    const MAX_ROWS = 500
 
     const allSheetOptions = studentsWithSemesters.map((student) => {
       const scoreConverts = student.fixedClass?.trainingCourse?.scoreConverts || []
@@ -884,7 +894,7 @@ export default function StudentGradeSystem() {
     }
     const TOTAL_COLUMNS = 10
     const SIGN_COL = 6
-    const MAX_ROWS = 50
+    const MAX_ROWS = 500
 
     const allSheetOptions = studentsWithSemesters.map((student) => {
       const scoreConverts = student.fixedClass?.trainingCourse?.scoreConverts || []
@@ -1151,7 +1161,7 @@ export default function StudentGradeSystem() {
       fixedClassIds,
       thesisSessionIds,
       managementOrganizationId: managementOrganizationIds?.[0],
-      printDate: new Date().toISOString(),
+      printDate,
       signerName: signerName || "",
     }
 
@@ -1191,7 +1201,7 @@ export default function StudentGradeSystem() {
         id: 7,
         name: "Phụ lục văn bằng ngắn hạn",
         onClick: () => handleCommonExport(exportHandlers.phuLucVanBangNganHan),
-      }
+      },
       // { id: 7, name: "In phôi bảng ngắn/DÀI hạn SDH (Mỹ)" },
       // { id: 8, name: "In quyết định tốt nghiệp ngắn hạn (ĐẠI HÀN) SDH" },
       // { id: 9, name: "Bảng điểm ĐẠI HÀN SDH (2 cột)" },
@@ -1219,7 +1229,7 @@ export default function StudentGradeSystem() {
         id: 22,
         name: "Phụ lục văn bằng cao học",
         onClick: () => handleCommonExport(exportHandlers.phuLucVanBangCaoHoc),
-      }
+      },
       // { id: 22, name: "Thống kê KQ đào tạo" },
       // { id: 23, name: "Thống kê kết quả bảo vệ luận văn" },
       // { id: 24, name: "In Danh sách trình chiếu CAO HỌC" },
