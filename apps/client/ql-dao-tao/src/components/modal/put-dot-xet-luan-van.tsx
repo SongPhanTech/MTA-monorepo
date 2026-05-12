@@ -128,6 +128,7 @@ const PutThesisSession = () => {
         trainingCourseId: output.trainingCourseId,
         proposalReport: output.proposalReport?.trim() || undefined,
         councilReport: output.councilReport?.trim() || undefined,
+        graduationReport: output.graduationReport?.trim() || undefined,
         decisionNumber: output.decisionNumber,
         decisionMaker,
         decisionDate: output.decisionDate ? dayjs(output.decisionDate).toDate() : new Date(),
@@ -179,7 +180,7 @@ const PutThesisSession = () => {
       onCancel={onClose}
       maskClosable={true}
       title={id ? "Chỉnh sửa đợt xét luận văn" : "Thêm mới đợt xét luận văn"}
-      className="w-[50vw]"
+      className="w-[70vw]"
     >
       <Col span={8}>
         <FormItem form={form} name="name" label="Tên đợt xét luận văn" required>
@@ -240,14 +241,19 @@ const PutThesisSession = () => {
           />
         </FormItem>
       </Col>
-      <Col span={12}>
+      <Col span={8}>
         <FormItem form={form} name="proposalReport" label="Tờ trình đề tài">
-          <Input placeholder="Nhập tờ trình đề tài" />
+          <Input placeholder="số 906/TTr-SĐH ngày 07/10/2024" />
         </FormItem>
       </Col>
-      <Col span={12}>
+      <Col span={8}>
         <FormItem form={form} name="councilReport" label="Tờ trình hội đồng">
-          <Input placeholder="Nhập tờ trình hội đồng" />
+          <Input placeholder="số 406/TTr-SĐH ngày 30/5/2025" />
+        </FormItem>
+      </Col>
+      <Col span={8}>
+        <FormItem form={form} name="graduationReport" label="Tờ trình tốt nghiệp">
+          <Input placeholder="số 581/TTr-SĐH ngày 27/6/2025" />
         </FormItem>
       </Col>
       <Col span={24}>
@@ -271,7 +277,7 @@ const PutThesisSession = () => {
               </div>
             </Form.Item>
             <FormItem form={form} name="decisionNumber" label="Số quyết định giao đề tài">
-              <Input placeholder="Nhập số quyết định giao đề tài" />
+              <Input placeholder="5663/QĐ-HV" />
             </FormItem>
             <FormItem form={form} name="decisionDate" label="Ngày quyết định giao đề tài">
               <DatePicker
@@ -313,7 +319,7 @@ const PutThesisSession = () => {
               name="defenseDecisionNumber"
               label="Số quyết định thành lập hội đồng bảo vệ luận văn đề án"
             >
-              <Input placeholder="Nhập số quyết định thành lập hội đồng bảo vệ luận văn đề án" />
+              <Input placeholder="2954/QĐ-HV" />
             </FormItem>
             <FormItem
               form={form}
