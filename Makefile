@@ -205,7 +205,7 @@ package-cdn:
 	@rm -rf cdn cdn.zip
 	@mkdir -p cdn
 	@for pkg in $(FE_PKGS); do \
-		$(MAKE) _package-fe-cdn-copy PACKAGE=$$pkg;
+		$(MAKE) _package-fe-cdn-copy PACKAGE=$$pkg; \
 	done
 	@zip -r -q cdn.zip cdn
 
