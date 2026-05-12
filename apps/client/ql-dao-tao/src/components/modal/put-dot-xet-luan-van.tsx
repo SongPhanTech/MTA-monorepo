@@ -23,6 +23,8 @@ type PutThesisSessionForm = PutThesisSession & {
   decisionMakerName?: string
   defenseDecisionMakerRole?: "PGĐ" | "GĐ"
   defenseDecisionMakerName?: string
+  graduationDecisionMakerRole?: "PGĐ" | "GĐ"
+  graduationDecisionMakerName?: string
 }
 dayjs.locale("vi")
 
@@ -46,6 +48,7 @@ const PutThesisSession = () => {
       const {
         decisionMaker: _decisionMaker,
         defenseDecisionMaker: _defenseDecisionMaker,
+        graduationDecisionMaker: _graduationDecisionMaker,
         ...sessionRest
       } = thesisSession
       const decisionMaker = thesisSession.decisionMaker?.trim() ?? ""
@@ -59,6 +62,13 @@ const PutThesisSession = () => {
       const defenseDecisionMakerName = defenseDecisionMakerRole
         ? defRest.join(" ").trim()
         : defenseDecisionMakerRaw
+      const graduationDecisionMakerRaw = thesisSession.graduationDecisionMaker?.trim() ?? ""
+      const [gradFirst, ...gradRest] = graduationDecisionMakerRaw.split(" ")
+      const graduationDecisionMakerRole =
+        gradFirst === "PGĐ" || gradFirst === "GĐ" ? gradFirst : undefined
+      const graduationDecisionMakerName = graduationDecisionMakerRole
+        ? gradRest.join(" ").trim()
+        : graduationDecisionMakerRaw
       form.setFieldsValue({
         ...sessionRest,
         trainingCourseId: thesisSession.trainingCourseId,
@@ -77,6 +87,12 @@ const PutThesisSession = () => {
         defenseDecisionDate: thesisSession.defenseDecisionDate
           ? dayjs(thesisSession.defenseDecisionDate)
           : undefined,
+        graduationNumber: thesisSession.graduationNumber,
+        graduationDecisionMakerRole,
+        graduationDecisionMakerName,
+        graduationDecisionDate: thesisSession.graduationDecisionDate
+          ? dayjs(thesisSession.graduationDecisionDate)
+          : undefined,
       })
       setTrainingObjectId(thesisSession.trainingObjectTypeId)
     } else {
@@ -85,6 +101,8 @@ const PutThesisSession = () => {
         decisionMakerName: undefined,
         defenseDecisionMakerRole: undefined,
         defenseDecisionMakerName: undefined,
+        graduationDecisionMakerRole: undefined,
+        graduationDecisionMakerName: undefined,
       })
     }
   }, [thesisSession, form])
@@ -121,6 +139,13 @@ const PutThesisSession = () => {
         .filter(Boolean)
         .join(" ")
         .trim()
+      const graduationDecisionMaker = [
+        output.graduationDecisionMakerRole,
+        output.graduationDecisionMakerName,
+      ]
+        .filter(Boolean)
+        .join(" ")
+        .trim()
       const payload = {
         name: output.name.trim(),
         startDate: output.startDate ? dayjs(output.startDate).toDate() : new Date(),
@@ -137,6 +162,11 @@ const PutThesisSession = () => {
         defenseDecisionDate: output.defenseDecisionDate
           ? dayjs(output.defenseDecisionDate).toDate()
           : new Date(),
+        graduationNumber: output.graduationNumber?.trim() || undefined,
+        graduationDecisionMaker: graduationDecisionMaker || undefined,
+        graduationDecisionDate: output.graduationDecisionDate
+          ? dayjs(output.graduationDecisionDate).toDate()
+          : undefined,
         chief: output.chief,
         deputy: output.deputy?.trim() || undefined,
         endDate: output.endDate ? dayjs(output.endDate).toDate() : new Date(),
@@ -241,23 +271,9 @@ const PutThesisSession = () => {
           />
         </FormItem>
       </Col>
-      <Col span={8}>
-        <FormItem form={form} name="proposalReport" label="Tờ trình đề tài">
-          <Input placeholder="số 906/TTr-SĐH ngày 07/10/2024" />
-        </FormItem>
-      </Col>
-      <Col span={8}>
-        <FormItem form={form} name="councilReport" label="Tờ trình hội đồng">
-          <Input placeholder="số 406/TTr-SĐH ngày 30/5/2025" />
-        </FormItem>
-      </Col>
-      <Col span={8}>
-        <FormItem form={form} name="graduationReport" label="Tờ trình tốt nghiệp">
-          <Input placeholder="số 581/TTr-SĐH ngày 27/6/2025" />
-        </FormItem>
-      </Col>
+     
       <Col span={24}>
-        <div className="grid grid-cols-[1fr_auto_1fr] gap-4">
+        <div className="grid grid-cols-1 xl:grid-cols-[1fr_auto_1fr_auto_1fr] gap-4">
           <div>
             <Form.Item label="Người ký quyết định giao đề tài" className="mb-0">
               <div className="flex gap-2">
@@ -266,8 +282,8 @@ const PutThesisSession = () => {
                     className="w-24"
                     placeholder="PGĐ/GĐ"
                     options={[
-                      { label: "PGĐ", value: "PGĐ" },
-                      { label: "GĐ", value: "GĐ" },
+                      { label: "PGĐ", value: "Phó Giám Đốc" },
+                      { label: "GĐ", value: "Giám Đốc" },
                     ]}
                   />
                 </Form.Item>
@@ -289,9 +305,12 @@ const PutThesisSession = () => {
                 placeholder="Chọn ngày quyết định giao đề tài"
               />
             </FormItem>
+            <FormItem form={form} name="proposalReport" label="Tờ trình đề tài">
+          <Input placeholder="số 906/TTr-SĐH ngày 07/10/2024" />
+        </FormItem>
           </div>
 
-          <div className="w-px bg-gray-200 h-full" />
+          <div className="hidden xl:block w-px bg-gray-200 min-h-full self-stretch" />
 
           <div>
             <Form.Item
@@ -335,6 +354,47 @@ const PutThesisSession = () => {
                 placeholder="Chọn ngày quyết định thành lập hội đồng bảo vệ luận văn đề án"
               />
             </FormItem>
+            <FormItem form={form} name="councilReport" label="Tờ trình hội đồng">
+          <Input placeholder="số 406/TTr-SĐH ngày 30/5/2025" />
+        </FormItem>
+          </div>
+
+          <div className="hidden xl:block w-px bg-gray-200 min-h-full self-stretch" />
+
+          <div>
+            <Form.Item label="Người ký quyết định tốt nghiệp" className="mb-0">
+              <div className="flex gap-2">
+                <Form.Item name="graduationDecisionMakerRole" noStyle>
+                  <Select
+                    className="w-24"
+                    placeholder="PGĐ/GĐ"
+                    options={[
+                      { label: "PGĐ", value: "PGĐ" },
+                      { label: "GĐ", value: "GĐ" },
+                    ]}
+                  />
+                </Form.Item>
+                <Form.Item name="graduationDecisionMakerName" noStyle>
+                  <Input placeholder="Nhập tên người ký quyết định tốt nghiệp" />
+                </Form.Item>
+              </div>
+            </Form.Item>
+            <FormItem form={form} name="graduationNumber" label="Số quyết định tốt nghiệp">
+              <Input placeholder="Nhập số quyết định tốt nghiệp" />
+            </FormItem>
+            <FormItem form={form} name="graduationDecisionDate" label="Ngày quyết định tốt nghiệp">
+              <DatePicker
+                format={{
+                  format: "DD/MM/YYYY",
+                  type: "mask",
+                }}
+                className="w-full"
+                placeholder="Chọn ngày quyết định tốt nghiệp"
+              />
+            </FormItem>
+            <FormItem form={form} name="graduationReport" label="Tờ trình tốt nghiệp">
+          <Input placeholder="số 581/TTr-SĐH ngày 27/6/2025" />
+        </FormItem>
           </div>
         </div>
       </Col>
