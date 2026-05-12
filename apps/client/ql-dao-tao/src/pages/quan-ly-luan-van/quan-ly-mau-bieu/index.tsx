@@ -9,10 +9,12 @@ import { Button, Col, Flex, message, Row, Tag, Tooltip, Upload } from "antd"
 import axios from "axios"
 import dayjs from "dayjs"
 import { Download, RefreshCcw } from "lucide-react"
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 
 const LUAN_VAN_PREFIX = "luan-van/"
 const LUAN_VAN_PATH = "luan-van"
+/** Lấy toàn bộ object trong prefix; phân trang chỉ ở FE (số lượng mẫu biểu nhỏ). */
+const LIST_ALL_OBJECTS_LIMIT = 10_000
 const MAX_UPLOAD_SIZE_MB = 50
 const ACCEPT_EXTENSIONS = ".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.zip,.rar,.txt,.jpg,.jpeg,.png"
 
@@ -53,20 +55,16 @@ const normalizeBucketItems = (value: unknown): BucketItemDto[] => {
 export default function QuanLyMauBieu() {
   const [pageSize, setPageSize] = useState<number>(DEFAULT_PAGINATE_SIZE)
   const [currentPage, setCurrentPage] = useState<number>(1)
-  const [cursorStack, setCursorStack] = useState<(string | undefined)[]>([undefined])
   const [uploading, setUploading] = useState<boolean>(false)
 
   const { showSpinner, hideSpinner } = useSpinner()
 
-  const startAfter = cursorStack[cursorStack.length - 1]
-
   const queryParams = useMemo(
     () => ({
       path: LUAN_VAN_PREFIX,
-      limit: pageSize,
-      ...(startAfter ? { startAfter } : {}),
+      limit: LIST_ALL_OBJECTS_LIMIT,
     }),
-    [pageSize, startAfter]
+    []
   )
 
   const { data, isFetching, refetch } = useListObjects(queryParams, {
@@ -75,7 +73,7 @@ export default function QuanLyMauBieu() {
     },
   })
 
-  const items = useMemo(
+  const allItems = useMemo(
     () =>
       normalizeBucketItems(data?.data).map((item) => ({
         ...item,
@@ -83,42 +81,20 @@ export default function QuanLyMauBieu() {
       })),
     [data]
   )
-  const hasNext = items.length === pageSize
-  const estimatedTotal = (currentPage - 1) * pageSize + items.length + (hasNext ? 1 : 0)
 
-  const goToPage = (nextPage: number, nextSize: number) => {
-    if (nextSize !== pageSize) {
-      setPageSize(nextSize)
-      setCursorStack([undefined])
-      setCurrentPage(1)
-      return
-    }
+  const totalCount = allItems.length
+  const maxPage = Math.max(1, Math.ceil(totalCount / pageSize) || 1)
 
-    if (nextPage === currentPage) return
+  useEffect(() => {
+    if (currentPage > maxPage) setCurrentPage(maxPage)
+  }, [currentPage, maxPage])
 
-    if (nextPage === currentPage + 1) {
-      const last = items[items.length - 1]
-      const lastName = last?.name || last?.prefix
-      if (!lastName) return
-      setCursorStack((prev) => [...prev, lastName])
-      setCurrentPage(nextPage)
-      return
-    }
-
-    if (nextPage === currentPage - 1) {
-      setCursorStack((prev) => prev.slice(0, -1))
-      setCurrentPage(nextPage)
-      return
-    }
-
-    if (nextPage === 1) {
-      setCursorStack([undefined])
-      setCurrentPage(1)
-    }
-  }
+  const items = useMemo(() => {
+    const start = (currentPage - 1) * pageSize
+    return allItems.slice(start, start + pageSize)
+  }, [allItems, currentPage, pageSize])
 
   const handleReload = () => {
-    setCursorStack([undefined])
     setCurrentPage(1)
     refetch()
   }
@@ -182,7 +158,6 @@ export default function QuanLyMauBieu() {
       showSpinner()
       await uploadSingle(file)
       message.success(`Đã tải lên "${file.name}".`)
-      setCursorStack([undefined])
       setCurrentPage(1)
       await refetch()
     } catch (error) {
@@ -278,7 +253,7 @@ export default function QuanLyMauBieu() {
                 width: 170,
                 align: "center",
                 render: (value: Date | string | undefined) =>
-                  value ? dayjs(value).format("DD/MM/YYYY HH:mm") : "",
+                  value ? dayjs(value).format(" HH:mm DD/MM/YYYY") : "",
               },
               {
                 title: "Thao tác",
@@ -305,12 +280,17 @@ export default function QuanLyMauBieu() {
             pagination={{
               current: currentPage,
               pageSize,
-              total: estimatedTotal,
-              showTotal: (_total, range) =>
-                hasNext
-                  ? `${range[0]} - ${range[1]} (còn nữa)`
-                  : `${range[0]} - ${range[1]} trong tổng số ${(currentPage - 1) * pageSize + items.length} bản ghi`,
-              onChange: (page, size) => goToPage(page, size),
+              total: totalCount,
+              showTotal: (total, range) =>
+                `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
+              onChange: (page, size) => {
+                if (size !== pageSize) {
+                  setPageSize(size)
+                  setCurrentPage(1)
+                } else {
+                  setCurrentPage(page)
+                }
+              },
             }}
           />
         </Col>
