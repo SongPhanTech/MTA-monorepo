@@ -18461,6 +18461,18 @@ const metadata = {
                     name: "defenseDecisionDate",
                     type: "DateTime",
                     isOptional: true,
+                }, graduationNumber: {
+                    name: "graduationNumber",
+                    type: "String",
+                    isOptional: true,
+                }, graduationDecisionMaker: {
+                    name: "graduationDecisionMaker",
+                    type: "String",
+                    isOptional: true,
+                }, graduationDecisionDate: {
+                    name: "graduationDecisionDate",
+                    type: "DateTime",
+                    isOptional: true,
                 }, chief: {
                     name: "chief",
                     type: "String",
