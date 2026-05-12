@@ -5305,48 +5305,53 @@ model StudentResearchRegistration {
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)
 model ThesisSession {
-  id                    String             @id() @default(cuid())
-  code                  String?            @unique()
-  active                Boolean            @default(true)
-  description           String?            @db.Text()
-  deletedAt             DateTime?
-  createdAt             DateTime           @default(now())
-  updatedAt             DateTime           @default(now()) @updatedAt()
-  createdBy             String?            @default("") @db.Uuid()
-  name                  String
-  startDate             DateTime
-  endDate               DateTime
-  trainingObjectType    TrainingObjectType @relation(fields: [trainingObjectTypeId], references: [id])
-  trainingObjectTypeId  String
-  trainingCourse        TrainingCourse     @relation(fields: [trainingCourseId], references: [id])
-  trainingCourseId      String
+  id                      String             @id() @default(cuid())
+  code                    String?            @unique()
+  active                  Boolean            @default(true)
+  description             String?            @db.Text()
+  deletedAt               DateTime?
+  createdAt               DateTime           @default(now())
+  updatedAt               DateTime           @default(now()) @updatedAt()
+  createdBy               String?            @default("") @db.Uuid()
+  name                    String
+  startDate               DateTime
+  endDate                 DateTime
+  trainingObjectType      TrainingObjectType @relation(fields: [trainingObjectTypeId], references: [id])
+  trainingObjectTypeId    String
+  trainingCourse          TrainingCourse     @relation(fields: [trainingCourseId], references: [id])
+  trainingCourseId        String
   /// Tờ trình đề tài
-  proposalReport        String?
+  proposalReport          String?
   /// Tờ trình hội đồng
-  councilReport         String?
+  councilReport           String?
   /// Tờ trình tốt nghiệp
-  graduationReport      String?
+  graduationReport        String?
   /// Số QĐĐT
-  decisionNumber        String?
+  decisionNumber          String?
   /// người ký quyết định
-  decisionMaker         String?
+  decisionMaker           String?
   /// Ngày QĐĐT
-  decisionDate          DateTime?
+  decisionDate            DateTime?
   /// Số QĐBVLV
-  defenseDecisionNumber String?
+  defenseDecisionNumber   String?
   /// người ký QĐBVLV
-  defenseDecisionMaker  String?
+  defenseDecisionMaker    String?
   /// Ngày QĐBVLV
-  defenseDecisionDate   DateTime?
+  defenseDecisionDate     DateTime?
+  graduationNumber        String?
+  /// Người ký QĐ tốt nghiệp
+  graduationDecisionMaker String?
+  /// Ngày QĐ tốt nghiệp
+  graduationDecisionDate  DateTime?
   /// Trưởng phòng sau đại học
-  chief                 String?
+  chief                   String?
   /// Phó phòng sau đại học
-  deputy                String?
+  deputy                  String?
   /// Hạn nhập đề tài
-  topicEntryDeadline    DateTime?
+  topicEntryDeadline      DateTime?
   /// Hạn nhập hội đồng
-  councilDeadline       DateTime?
-  thesisProject         ThesisProject[]
+  councilDeadline         DateTime?
+  thesisProject           ThesisProject[]
 
   @@schema("ql-dao-tao")
 }
