@@ -982,7 +982,7 @@ export default function NhapDiem({
                       ),
                       name: "Phiếu điểm nháp",
                       mimeType: "xlsx",
-                      convertTo: "pdf",
+                      // convertTo: "pdf",
                     })
                   }
                 >
