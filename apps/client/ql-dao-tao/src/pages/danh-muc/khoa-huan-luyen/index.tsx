@@ -375,7 +375,7 @@ export default function TrainingCoursePage() {
                 dataIndex: "admissionDecision",
                 width: 150,
               },
-              
+
               {
                 title: "Số QĐ trúng tuyển",
                 align: "center",

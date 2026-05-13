@@ -4,8 +4,11 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
+import type { ExportLecturerProfileBodyFilters } from './exportLecturerProfileBodyFilters';
 
 export type ExportLecturerProfileBody = {
-  /** @nullable */
-  lecturerIds?: string[] | null;
+  isSelectAll?: boolean;
+  lecturerIds?: string[];
+  excludedIds?: string[];
+  filters?: ExportLecturerProfileBodyFilters;
 };

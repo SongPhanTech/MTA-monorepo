@@ -17,6 +17,7 @@ import {
   useFindManyLecturerType,
 } from "@workspace/db/hooks"
 import { exportLecturerProfile } from "@workspace/libs/api/training"
+import useSpinner from "@hooks/spinner"
 import { whereOrganization } from "@workspace/libs/constants"
 import { useAbility } from "@workspace/permissions/hooks"
 import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from "@workspace/router"
@@ -32,7 +33,16 @@ import { useDisclosure } from "react-hook-disclosure-modal"
 dayjs.locale("vi")
 
 export default function UserProfilePageLecture() {
-  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
+  const { showSpinner, hideSpinner } = useSpinner()
+  const [selection, setSelection] = useState<{
+    isSelectAll: boolean
+    selectedIds: React.Key[]
+    excludedIds: React.Key[]
+  }>({
+    isSelectAll: false,
+    selectedIds: [],
+    excludedIds: [],
+  })
   const { can, canSome } = useAbility()
   const [currentPage, setCurrentPage] = useState(1)
   const [importModalVisible, setImportModalVisible] = useState(false)
@@ -243,12 +253,32 @@ export default function UserProfilePageLecture() {
   }
 
   const handleExportLecturers = async () => {
-    const { status, data } = await exportLecturerProfile({
-      lecturerIds: selectedRowKeys as string[],
-    })
+    showSpinner()
+    try {
+      const { status, data } = await exportLecturerProfile({
+        isSelectAll: selection.isSelectAll,
+        lecturerIds: selection.selectedIds as string[],
+        excludedIds: selection.excludedIds as string[],
+        filters: {
+          code: filters.code,
+          name: filters.name,
+          dateOfBirth: filters.dateOfBirth?.map((d) => dayjs(d).format("DD/MM/YYYY")),
+          academicRankType: filters.academicRankType,
+          academicDegreeType: filters.academicDegreeType,
+          organization: filters.organization || (!canXemTatCa ? (orgIds as string[]) : undefined),
+          gender: filters.gender,
+          rankId: filters.rankId,
+          officerNumber: filters.officerNumber,
+          lecturerType: filters.lecturerType,
+          idCardNumber: filters.idCardNumber,
+        },
+      })
 
-    if (status === 200) {
-      saveAs(data, "danh_sach_GV.xlsx")
+      if (status === 200) {
+        saveAs(data, "danh_sach_GV.xlsx")
+      }
+    } finally {
+      hideSpinner()
     }
   }
 
@@ -263,7 +293,15 @@ export default function UserProfilePageLecture() {
       <Row gutter={[16, 16]}>
         <Col span={24}>
           <Row gutter={[16, 16]} align="middle" justify="end" className="gap-1">
-            {selectedRowKeys.length > 0 && <p>(Đang chọn {selectedRowKeys.length} GV)</p>}
+            {(selection.isSelectAll || selection.selectedIds.length > 0) && (
+              <p>
+                (Đang chọn{" "}
+                {selection.isSelectAll
+                  ? (count || 0) - selection.excludedIds.length
+                  : selection.selectedIds.length}{" "}
+                GV)
+              </p>
+            )}
             <Button type="primary" onClick={handleExportLecturers} icon={<TableOutlined />}>
               Xuất DS GV
             </Button>
@@ -284,25 +322,63 @@ export default function UserProfilePageLecture() {
               onCancel={() => setImportModalVisible(false)}
             />
             <ExportTemplateLecturer />
-            {/* <Button onClick={handleModal} type="primary">
-                                    Thêm mới
-                                </Button> */}
           </Row>
         </Col>
         <Col span={24}>
           <Table
             className="h-[calc(100vh-250px)]"
             rowSelection={{
-              selectedRowKeys,
-              preserveSelectedRowKeys: true,
-              onChange: (keys) => {
-                setSelectedRowKeys(keys)
+              selectedRowKeys: selection.isSelectAll
+                ? (lecturerData
+                    .map((item) => item.id)
+                    .filter(
+                      (id) => !selection.excludedIds.includes(id as React.Key)
+                    ) as React.Key[])
+                : selection.selectedIds,
+              onSelect: (record, selected) => {
+                if (selection.isSelectAll) {
+                  if (!selected) {
+                    setSelection((prev) => ({
+                      ...prev,
+                      excludedIds: [...prev.excludedIds, record.id as React.Key],
+                    }))
+                  } else {
+                    setSelection((prev) => ({
+                      ...prev,
+                      excludedIds: prev.excludedIds.filter((id) => id !== record.id),
+                    }))
+                  }
+                } else {
+                  if (selected) {
+                    setSelection((prev) => ({
+                      ...prev,
+                      selectedIds: [...prev.selectedIds, record.id as React.Key],
+                    }))
+                  } else {
+                    setSelection((prev) => ({
+                      ...prev,
+                      selectedIds: prev.selectedIds.filter((id) => id !== record.id),
+                    }))
+                  }
+                }
+              },
+              onSelectAll: (selected) => {
+                setSelection({
+                  isSelectAll: selected,
+                  selectedIds: [],
+                  excludedIds: [],
+                })
               },
             }}
             filters={filters}
             setFilters={(value) => {
               setFilters(value)
               setCurrentPage(1)
+              setSelection({
+                isSelectAll: false,
+                selectedIds: [],
+                excludedIds: [],
+              })
             }}
             columns={[
               {
@@ -406,61 +482,6 @@ export default function UserProfilePageLecture() {
                 width: 120,
                 render: (__, record) => record?.lecturerType?.name || "",
               },
-
-              // {
-              //     title: 'Lớp giảng dạy',
-              //     dataIndex: 'mainSubjectClasses',
-              //     align: 'center',
-              //     width: 200,
-              //     render: (__, record: any) => {
-              //         return record?.mainSubjectClasses.length ? (
-              //             <TextTruncate
-              //                 arr={record?.mainSubjectClasses.map((i: any) => {
-              //                     return { key: i?.id, label: i?.name }
-              //                 })}
-              //                 key="mainSubjectClasses"
-              //             />
-              //         ) : (
-              //             ''
-              //         )
-              //     },
-              // },
-              // {
-              //     title: 'Lớp trợ giảng',
-              //     dataIndex: 'extraSubjectClasses',
-              //     align: 'center',
-              //     width: 200,
-              //     render: (__, record) => {
-              //         return record?.extraSubjectClasses.length ? (
-              //             <TextTruncate
-              //                 arr={record?.extraSubjectClasses.map((i: any) => {
-              //                     return { key: i?.id, label: i?.name }
-              //                 })}
-              //                 key="extraSubjectClasses"
-              //             />
-              //         ) : (
-              //             ''
-              //         )
-              //     },
-              // },
-              // {
-              //     title: 'Lớp được quản lý',
-              //     dataIndex: 'manageFixedClass',
-              //     align: 'center',
-              //     width: 200,
-              //     render: (__, record) => {
-              //         return record?.manageFixedClass.length ? (
-              //             <TextTruncate
-              //                 arr={record?.manageFixedClass.map((i: any) => {
-              //                     return { key: i?.id, label: i?.name }
-              //                 })}
-              //                 key="manageFixedClass"
-              //             />
-              //         ) : (
-              //             ''
-              //         )
-              //     },
-              // },
               {
                 title: "Thao tác",
                 width: 100,

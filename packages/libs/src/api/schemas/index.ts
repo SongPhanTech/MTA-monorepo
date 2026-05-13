@@ -189,6 +189,7 @@ export * from './exportInternshipProfile400';
 export * from './exportInternshipProfileBody';
 export * from './exportLecturerProfile400';
 export * from './exportLecturerProfileBody';
+export * from './exportLecturerProfileBodyFilters';
 export * from './exportListParameter';
 export * from './exportListParameterPagingRequestDto';
 export * from './exportListParameterSummaryData';
