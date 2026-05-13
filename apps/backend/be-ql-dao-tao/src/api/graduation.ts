@@ -14,7 +14,7 @@ import {
   TrainingMajorScalarSchema,
 } from "@workspace/db/zod/models"
 import { getFilesEmployeeUserIdImage } from "@workspace/libs/api/system-share"
-import { getTemplateBuffer } from "@workspace/libs/server"
+import { getLuanVanTemplateBuffer, getTemplateBuffer } from "@workspace/libs/server"
 import { chunk, genOriginalDiplomaNumber } from "@workspace/libs/utils"
 import Decimal from "decimal.js"
 import { Automizer } from "pptx-automizer"
@@ -1692,7 +1692,7 @@ app.openapi(exportGraduationRegisterMaster, async (c) => {
     sessionName: string,
     sessionStudents: typeof students
   ): Promise<Buffer> => {
-    const buf = await getTemplateBuffer(prisma, "SoGocCapPhatVanBangCaoHoc_v6.xlsx")
+    const buf = await getLuanVanTemplateBuffer(prisma, "SoGocCapPhatVanBangCaoHoc_v6.xlsx")
     const tpl = new XlsxTemplate(buf)
     const rows = sessionStudents.map((s, i) => buildRow(s, i))
     tpl.substitute("PD", {
@@ -1943,7 +1943,7 @@ app.openapi(exportPhoiBangCaoHoc, async (c) => {
   })
 
   try {
-    const templateBuffer = await getTemplateBuffer(prisma, "PhoiBangCaoHoc_v1.xlsx")
+    const templateBuffer = await getLuanVanTemplateBuffer(prisma, "PhoiBangCaoHoc_v1.xlsx")
     const result = await generateExcelFromTemplate(templateBuffer, payload, {
       showGridLines: true,
       wrapText: true,
@@ -2179,7 +2179,7 @@ app.openapi(exportPhoiBangNganHan, async (c) => {
   })
 
   try {
-    const templateBuffer = await getTemplateBuffer(prisma, "PhoiBangNganHan_v4.xlsx")
+    const templateBuffer = await getLuanVanTemplateBuffer(prisma, "PhoiBangNganHan_v4.xlsx")
     const result = await generateExcelFromTemplate(templateBuffer, payload, {
       showGridLines: true,
       wrapText: true,
@@ -2412,13 +2412,10 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
       const course = student.fixedClass?.trainingCourse
       const major = student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor
       const curriculumVersion = student.fixedClass?.curriculumVersion
-
+      const academicYear = course?.academicYear
       const dobParts = getReportDateParts(user?.dateOfBirth)
-      const startDateParts = getReportDateParts(course?.admissionStartDate || student.fixedClass?.createdAt)
-      const endDateParts = getReportDateParts(course?.admissionEndDate || gD?.decisionDate || new Date())
       const enrollDateParts = getReportDateParts(student.from || student.fixedClass?.createdAt)
       const defenseDateParts = getReportDateParts(tP?.defenseDate || tP?.thesisSession?.startDate)
-
       let totalCredits = 0
       let totalPoints10 = 0
       let totalPoints4 = 0
@@ -2494,8 +2491,6 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
           so_dinh_danh_ca_nhan: user?.idCardNumber || "",
           noi_sinh: user?.placeOfBirth || "",
           khoa: course?.name || "",
-          start_date: startDateParts?.dateVi || "",
-          end_date: endDateParts?.dateVi || "",
           ngay_nhap_hoc: enrollDateParts?.dateVi || "",
           nganh: major?.trainingField?.name || "",
           chuyen_nganh: major?.name || "",
@@ -2507,7 +2502,7 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
             : course?.trainingObjectType?.name?.toLowerCase()?.includes("ứng dụng") 
               ? "ứng dụng" 
               : "",
-          
+          academic_year: academicYear || "",
           data: subjectRows,
           tong_so_tc: totalCredits,
           diem_tb_he_10: formatScore(gpa10, 2),
@@ -2532,7 +2527,7 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
     return { sheetName, payload: payloads }
   })
 
-  const templateBuffer = await getTemplateBuffer(prisma, "PhuLucVanBangCaoHoc_v14.xlsx")
+  const templateBuffer = await getLuanVanTemplateBuffer(prisma, "PhuLucVanBangCaoHoc_v15.xlsx")
   const result = await generateExcelMultiSheet(templateBuffer, sheetData)
   const fileName = "PhuLucVanBangCaoHoc.xlsx"
   const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
@@ -2724,9 +2719,8 @@ app.openapi(exportPhuLucVanBangNganHan, async (c: any) => {
       const course = student.fixedClass?.trainingCourse
       const major = student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor
       const curriculumVersion = student.fixedClass?.curriculumVersion
-
+      const academicYear = course?.academicYear
       const dobParts = getReportDateParts(user?.dateOfBirth)
-      const startDateParts = getReportDateParts(course?.admissionStartDate || student.fixedClass?.createdAt)
       const enrollDateParts = getReportDateParts(student.from || student.fixedClass?.createdAt)
 
       let totalCredits = 0
@@ -2773,14 +2767,13 @@ app.openapi(exportPhuLucVanBangNganHan, async (c: any) => {
           so_dinh_danh_ca_nhan: user?.idCardNumber || "",
           noi_sinh: user?.placeOfBirth || "",
           khoa: course?.name || "",
-          start_date: startDateParts?.dateVi || "",
+          academic_year: academicYear || "",
           ngay_nhap_hoc: enrollDateParts?.dateVi || "",
           nganh: major?.trainingField?.name || "",
           chuyen_nganh_chuyen_sau: major?.name || "",
           thoi_gian_dao_tao: curriculumVersion?.trainingTime?.name || "24 tháng",
           ngon_ngu_dao_tao: "Tiếng Việt",
-          hinh_thuc_dao_tao: course?.trainingObjectType?.trainingForm?.name || "",
-          
+          hinh_thuc_dao_tao: course?.trainingObjectType?.trainingForm?.name || "", 
           data: subjectRows,
           diem_tb_tn: formatScore(gpa10, 2),
           hoc_luc: getClassification(gpa10),
@@ -2800,7 +2793,7 @@ app.openapi(exportPhuLucVanBangNganHan, async (c: any) => {
     return { sheetName, payload: payloads }
   })
 
-  const templateBuffer = await getTemplateBuffer(prisma, "PhuLucVanBangNganHan_v5.xlsx")
+  const templateBuffer = await getLuanVanTemplateBuffer(prisma, "PhuLucVanBangNganHan_v6.xlsx")
   const result = await generateExcelMultiSheet(templateBuffer, sheetData)
   const fileName = "PhuLucVanBangNganHan.xlsx"
   const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`

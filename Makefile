@@ -6,7 +6,7 @@ RELEASE_TAG := release
 COMPOSE_CMD := docker compose up
 IMG_PREFIX := mta-
 
-# TK Promox root/Abc@12345
+# TK Promox (192.168.100.100) root/Abc@12345
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Server Profiles
@@ -205,7 +205,7 @@ package-cdn:
 	@rm -rf cdn cdn.zip
 	@mkdir -p cdn
 	@for pkg in $(FE_PKGS); do \
-		$(MAKE) _package-fe-cdn-copy PACKAGE=$$pkg;
+		$(MAKE) _package-fe-cdn-copy PACKAGE=$$pkg; \
 	done
 	@zip -r -q cdn.zip cdn
 

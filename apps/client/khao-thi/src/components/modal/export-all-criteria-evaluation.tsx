@@ -44,11 +44,20 @@ const ExportAllCriteriaEvaluation = ({ standards }: ExportAllCriteriaEvaluationP
   const normalizeColor = (color: string): string | undefined => {
     if (!color) return undefined
     const map: Record<string, string> = {
+      black: "000000",
+      white: "FFFFFF",
       gray: "808080",
+      grey: "808080",
       red: "FF0000",
       green: "008000",
       blue: "0000FF",
       orange: "FFA500",
+      yellow: "FFFF00",
+      purple: "800080",
+      pink: "FFC0CB",
+      brown: "A52A2A",
+      cyan: "00FFFF",
+      magenta: "FF00FF",
     }
     if (map[color.toLowerCase()]) return map[color.toLowerCase()]
     if (color.startsWith("rgb")) return rgbToHex(color)
