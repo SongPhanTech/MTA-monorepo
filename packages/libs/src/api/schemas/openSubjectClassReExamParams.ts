@@ -13,13 +13,15 @@ import type { ViewAll } from './viewAll';
 
 export type OpenSubjectClassReExamParams = {
 /**
- * @nullable
+ * @minimum 1
+ * @maximum 100
  */
-page?: number | null;
+page?: number;
 /**
- * @nullable
+ * @minimum 1
+ * @maximum 100
  */
-limit?: number | null;
+limit?: number;
 trainingCourseId: TrainingCourseId;
 trainingMajorId?: TrainingMajorId;
 search?: Search;
