@@ -9,6 +9,7 @@ const app = new OpenAPIHono({ strict: false })
 const docxTemplateSchema = z.object({
   fileName: z.string(),
   path: z.string(),
+  prefix: z.string().nullable().optional(),
   data: z.record(z.unknown()),
 })
 
@@ -130,18 +131,28 @@ app.openapi(
     },
   }),
   async (c) => {
-    const { fileName, path, data } = c.req.valid("json")
+    const { fileName, path, data, prefix } = c.req.valid("json")
     try {
-      const res = await fetch(getMinioUrl(`/mta/template/${path}`))
+      const templatePrefix = (prefix ?? "/mta/luan-van").replace(/\/+$/, "")
+      const templatePath = path.replace(/^\/+/, "")
+
+      let res = await fetch(getMinioUrl(`${templatePrefix}/${templatePath}`))
+
+      if (!res.ok && templatePrefix !== "/mta/template") {
+        res = await fetch(getMinioUrl(`/mta/template/${templatePath}`))
+      }
+
       if (!res.ok) return c.json({ message: "Không tìm thấy template trên MinIO" }, 404)
 
       const buffer = await res.arrayBuffer()
+      const nodeBuffer = Buffer.from(buffer)
+      const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
+
       const handler = new TemplateHandler()
-      const renderedBuffer = await handler.process(buffer, data as TemplateData)
+      const renderedBuffer = await handler.process(nodeBuffer, data as TemplateData)
 
       const finalBuffer = applyPageBreaks(Buffer.from(renderedBuffer))
 
-      const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
       return c.body(new Uint8Array(finalBuffer), 200, {
         "Content-Type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
         "Content-Disposition": disposition,

@@ -3,6 +3,7 @@ import { customModelFetch } from "@workspace/libs/api/custom-instance"
 export interface DocxTemplateBody {
   fileName: string
   path: string
+  prefix?: string
   data: Record<string, unknown>
 }
 
