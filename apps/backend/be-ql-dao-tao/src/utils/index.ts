@@ -1409,7 +1409,7 @@ export const generateExcelMultiSheet = async (
     targetSheet.views = [{ showGridLines }]
 
     const generatedSheets: ExcelJS.Worksheet[] = []
-    for (const item of sheetData.payload) {
+    for (const item of sheetData?.payload || []) {
       const template = new XlsxTemplate(templateBuffer)
       template.substitute(1, { ...item.data, group: item.group })
       const sheetBuffer = await template.generate({ type: "nodebuffer" })
@@ -1425,7 +1425,7 @@ export const generateExcelMultiSheet = async (
     }
 
     if (generatedSheets.length > 0) {
-      generatedSheets[0].columns?.forEach((col, index) => {
+      generatedSheets?.[0]?.columns?.forEach((col, index) => {
         if (!col) return
         const dest = targetSheet.getColumn(index + 1)
         if (col.width) dest.width = col.width

@@ -25,3 +25,26 @@ export const getTemplateBuffer = async (prisma: PrismaClient, templateCode: stri
 
   return nodeBuffer
 }
+
+export const getLuanVanTemplateBuffer = async (prisma: PrismaClient, templateCode: string) => {
+  const templateFile = await prisma.templateFile.findUnique({
+    where: { code: templateCode },
+  })
+
+  const fallbackPath = templateCode.endsWith(".xlsx")
+    ? `/mta/luan-van/${templateCode}`
+    : `/mta/luan-van/${templateCode}.xlsx`
+  const url = getMinioUrl(templateFile?.path || fallbackPath)
+
+  const res = await fetch(url)
+
+  if (!res.ok) {
+    throw new Error(`Failed to fetch template: ${res.status} ${res.statusText}`)
+  }
+
+  const buffer = await res.arrayBuffer()
+  const nodeBuffer: Buffer<ArrayBuffer> = Buffer.from(buffer)
+
+  return nodeBuffer
+}
+  
