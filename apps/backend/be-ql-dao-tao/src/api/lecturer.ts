@@ -16,7 +16,24 @@ const exportLecturerProfile = createRoute({
       content: {
         "application/json": {
           schema: z.object({
-            lecturerIds: z.string().array().nullish(),
+            isSelectAll: z.boolean().optional(),
+            lecturerIds: z.string().uuid().array().optional(),
+            excludedIds: z.string().uuid().array().optional(),
+            filters: z
+              .object({
+                code: z.string().optional(),
+                name: z.string().optional(),
+                dateOfBirth: z.string().array().optional(),
+                academicRankType: z.string().uuid().array().optional(),
+                academicDegreeType: z.string().uuid().array().optional(),
+                organization: z.string().uuid().array().optional(),
+                gender: z.string().uuid().array().optional(),
+                rankId: z.string().uuid().array().optional(),
+                officerNumber: z.string().optional(),
+                lecturerType: z.string().uuid().array().optional(),
+                idCardNumber: z.string().optional(),
+              })
+              .optional(),
           }),
         },
       },
@@ -45,12 +62,130 @@ const exportLecturerProfile = createRoute({
 })
 
 app.openapi(exportLecturerProfile, async (c) => {
-  const { lecturerIds } = c.req.valid("json")
+  const { isSelectAll, lecturerIds, excludedIds, filters } = c.req.valid("json")
+
+  let where: any = { deletedAt: null }
+
+  if (isSelectAll) {
+    if (filters) {
+      where = {
+        ...where,
+        ...(filters.code
+          ? {
+              code: {
+                contains: filters.code,
+                mode: "insensitive",
+              },
+            }
+          : {}),
+        ...(filters.name
+          ? {
+              userProfile: {
+                fullname: {
+                  contains: filters.name,
+                  mode: "insensitive",
+                },
+              },
+            }
+          : {}),
+        ...(filters.idCardNumber
+          ? {
+              userProfile: {
+                idCardNumber: {
+                  contains: filters.idCardNumber,
+                  mode: "insensitive",
+                },
+              },
+            }
+          : {}),
+        ...(filters.gender?.length
+          ? {
+              userProfile: {
+                genderId: {
+                  in: filters.gender,
+                },
+              },
+            }
+          : {}),
+        ...(filters.dateOfBirth?.length === 2
+          ? {
+              userProfile: {
+                dateOfBirth: {
+                  gte: dayjs(filters.dateOfBirth[0], "DD/MM/YYYY").toDate(),
+                  lte: dayjs(filters.dateOfBirth[1], "DD/MM/YYYY").toDate(),
+                },
+              },
+            }
+          : {}),
+        ...(filters.officerNumber
+          ? {
+              userProfile: {
+                officerNumber: {
+                  contains: filters.officerNumber,
+                  mode: "insensitive",
+                },
+              },
+            }
+          : {}),
+        ...(filters.academicRankType?.length
+          ? {
+              userProfile: {
+                academicRankTypeId: {
+                  in: filters.academicRankType,
+                },
+              },
+            }
+          : {}),
+        ...(filters.academicDegreeType?.length
+          ? {
+              userProfile: {
+                academicDegreeTypeId: {
+                  in: filters.academicDegreeType,
+                },
+              },
+            }
+          : {}),
+        ...(filters.rankId?.length
+          ? {
+              userProfile: {
+                rankId: {
+                  in: filters.rankId,
+                },
+              },
+            }
+          : {}),
+        ...(filters.lecturerType?.length
+          ? {
+              lecturerTypeId: {
+                in: filters.lecturerType,
+              },
+            }
+          : {}),
+        ...(filters.organization?.length
+          ? {
+              organizationId: {
+                in: filters.organization,
+              },
+            }
+          : {}),
+      }
+    }
+
+    if (excludedIds?.length) {
+      where = {
+        ...where,
+        id: { notIn: excludedIds },
+      }
+    }
+  } else {
+    where = {
+      ...where,
+      id: { in: lecturerIds || [] },
+    }
+  }
 
   const lecturers = await prisma.lecturer.findMany({
-    where: {
-      ...(lecturerIds?.length ? { id: { in: lecturerIds } } : {}),
-    },
+    where,
     include: {
       lecturerType: true,
       organization: true,
@@ -63,6 +198,11 @@ app.openapi(exportLecturerProfile, async (c) => {
         },
       },
     },
+    orderBy: {
+      userProfile: {
+        firstName: "asc",
+      },
+    },
   })
 
   const data = lecturers.map((lecturer, idx) => ({
@@ -73,16 +213,16 @@ app.openapi(exportLecturerProfile, async (c) => {
       ? `'${dayjs(lecturer.userProfile.dateOfBirth).format("DD/MM/YYYY")}`
       : "",
     gender: lecturer.userProfile?.gender?.sTen,
-    type: lecturer.lecturerType.name,
-    academicRank: lecturer.userProfile?.academicRankType?.sTen,
-    academicDegree: lecturer.userProfile?.academicDegreeType?.sTen,
-    facultyOrganization: lecturer.organization.sTen,
-    departmentOrganization: lecturer.organization.sTen,
-    address: lecturer.userProfile?.currentAddress,
-    phoneNumber: lecturer.userProfile?.phoneNumber,
-    email: lecturer.userProfile?.email,
-    idCardNumber: lecturer.userProfile?.idCardNumber,
-    note: lecturer.description,
+    type: lecturer.lecturerType?.name || "",
+    academicRank: lecturer.userProfile?.academicRankType?.sTen || "",
+    academicDegree: lecturer.userProfile?.academicDegreeType?.sTen || "",
+    facultyOrganization: lecturer.organization?.sTen || "",
+    departmentOrganization: lecturer.organization?.sTen || "",
+    address: lecturer.userProfile?.currentAddress || "",
+    phoneNumber: lecturer.userProfile?.phoneNumber || "",
+    email: lecturer.userProfile?.email || "",
+    idCardNumber: lecturer.userProfile?.idCardNumber || "",
+    note: lecturer.description || "",
   }))
 
   const buffer = await getTemplateBuffer(prisma, "DANH_SACH_GV")
