@@ -10,6 +10,7 @@ import type { Semester, Student } from "@workspace/db"
 import type {
   CurriculumVersion,
   FixedClass,
+  GraduationDecision,
   ScoreConvert,
   StudentSubjectScore,
   SubjectClass,
@@ -40,10 +41,11 @@ import {
 import { whereOrganization } from "@workspace/libs/constants"
 import { exportFromTemplate, TableRow } from "@workspace/libs/template-excel"
 import { fuzzyMatch, getMinioUrl } from "@workspace/libs/utils"
+import { docxTemplate } from "../../../utils/docx-template"
 import { useTrainingObjectTypeStore } from "@workspace/ui"
-import { Button, DatePicker, Form, Input, message, notification, TreeSelect } from "antd"
+import { Button, DatePicker, Form, Input, InputNumber, message, Modal, notification, Radio, TreeSelect } from "antd"
 import { useWatch } from "antd/es/form/Form"
-import dayjs from "dayjs"
+import dayjs, { Dayjs } from "dayjs"
 import { saveAs } from "file-saver"
 import type React from "react"
 import { useEffect, useMemo, useState } from "react"
@@ -87,6 +89,10 @@ type TUserProfile = {
   userProfile: UserProfile
 }
 
+type TGraduationDecision = {
+  graduationDecision?: Pick<GraduationDecision, "diplomaNumber" | "originalDiplomaNumber"> | null
+}
+
 type TExportPayload = {
   trainingObjectTypeId: string
   trainingCourseIds?: string[]
@@ -112,7 +118,8 @@ export interface ISemesterGroup {
 
 export type TStudentWithSubjects = Student &
   TFixedClass &
-  TUserProfile & {
+  TUserProfile &
+  TGraduationDecision & {
     subjectClassStudent: (StudentSubjectScore & {
       subjectVersion: SubjectVersion & {
         trainingBlocks?: Array<{
@@ -207,6 +214,9 @@ export default function StudentGradeSystem() {
   const [pageSize, setPageSize] = useState(initialPagination.pageSize)
   const [viewResult, setViewResult] = useState(false)
   const [selectedStudent, setSelectedStudent] = useState<TStudentWithSemesters | null>(null)
+  const [signModalOpen, setSignModalOpen] = useState(false)
+  const [signRole, setSignRole] = useState<"chief" | "deputy">("deputy")
+  const [signingDate, setSigningDate] = useState<Dayjs>(dayjs())
   const { data: trainingObjectTypes = [] } = useFindManyTrainingObjectType({
     where: { active: true },
   })
@@ -264,6 +274,11 @@ export default function StudentGradeSystem() {
       enabled: !!trainingObjectTypeId || trainingCourseData?.length > 0,
     }
   )
+
+  const selectedThesisSession = useMemo(() => {
+    const selectedSessionId = thesisSessionIds?.[0]
+    return thesisSessionData.find((s) => s.id === selectedSessionId)
+  }, [thesisSessionIds, thesisSessionData])
 
   const { data: dm_DonVi = [] } = useFindManyDM_DonVi({
     where: {
@@ -1179,6 +1194,180 @@ export default function StudentGradeSystem() {
     }
   }
 
+  const formatSpecialDate = (date: dayjs.Dayjs | string | Date | null | undefined) => {
+    if (!date) return ""
+    const d = dayjs(date)
+    const day = d.date()
+    const month = d.month() + 1
+    const year = d.year()
+
+    let monthStr = String(month)
+    if (month === 1 || month === 2) {
+      monthStr = "0" + month
+    }
+
+    return `${day}/${monthStr}/${year}`
+  }
+
+  const handleExportQuyetDinhCongNhan = async () => {
+    if (!studentsWithSemesters?.length) {
+      notification.info({ message: "Không có dữ liệu để xuất!" })
+      return
+    }
+
+    const selectedSessionId = thesisSessionIds?.[0]
+    const session = thesisSessionData.find((s) => s.id === selectedSessionId)
+    if (!session) {
+      message.warning("Vui lòng chọn đợt xét trước khi xuất file.")
+      return
+    }
+
+    setSignRole(session.chief?.trim() ? "chief" : "deputy")
+    const sidebarDate = form.getFieldValue("date")
+    setSigningDate(sidebarDate ? dayjs(sidebarDate) : dayjs())
+    setSignModalOpen(true)
+  }
+
+  const handleConfirmSignExport = async () => {
+    const selectedSessionId = thesisSessionIds?.[0]
+    const session = thesisSessionData.find((s) => s.id === selectedSessionId)
+    if (!session) return
+
+    const signerNameTS = signRole === "chief" ? (session.chief || "") : (session.deputy || "")
+    if (!signerNameTS.trim()) {
+      message.warning(`Chưa có họ tên ${signRole === "chief" ? "Trưởng phòng" : "Phó phòng"} sau đại học trong đợt xét.`)
+      return
+    }
+
+    setSignModalOpen(false)
+    form.setFieldValue("date", signingDate)
+    await doExportQuyetDinhCongNhan(signerNameTS, signingDate)
+  }
+
+  const doExportQuyetDinhCongNhan = async (signerNameTS: string, dateTS: Dayjs) => {
+    const selectedSessionId = thesisSessionIds?.[0]
+    const session = thesisSessionData.find((s) => s.id === selectedSessionId)
+
+    let effectiveSignerName = signerName
+    if (!effectiveSignerName && session?.graduationDecisionMaker) {
+      effectiveSignerName = session.graduationDecisionMaker
+    }
+
+    const parts = (effectiveSignerName || "").split(",").map((s) => s.trim())
+    let titlePart = ""
+    let rankPart = ""
+    let namePart = ""
+
+    if (parts.length >= 3) {
+      titlePart = parts[0]
+      rankPart = parts[1]
+      namePart = parts[2]
+    } else if (parts.length === 2) {
+      titlePart = parts[0]
+      namePart = parts[1]
+    } else {
+      const match = (effectiveSignerName || "").match(/^(PGD|GD|GĐ|Phó Giám đốc|Giám đốc)\s+(.*)$/i)
+      if (match) {
+        titlePart = match[1]
+        namePart = match[2]
+      } else {
+        titlePart = effectiveSignerName?.includes(" ") ? "" : (effectiveSignerName || "")
+        namePart = effectiveSignerName?.includes(" ") ? (effectiveSignerName || "") : ""
+      }
+    }
+
+    const rawTitle = titlePart.toUpperCase()
+    let signerTitle = "GIÁM ĐỐC"
+    let signerSubTitle = ""
+
+    if (rawTitle === "PGD" || rawTitle === "PHÓ GIÁM ĐỐC") {
+      signerTitle = "KT. GIÁM ĐỐC"
+      signerSubTitle = "PHÓ GIÁM ĐỐC"
+    } else if (rawTitle === "GD" || rawTitle === "GĐ" || rawTitle === "GIÁM ĐỐC") {
+      signerTitle = "GIÁM ĐỐC"
+      signerSubTitle = ""
+    } else if (rawTitle) {
+      signerTitle = rawTitle
+    }
+
+    const signerRankName = [rankPart, namePart].filter(Boolean).join(" ")
+
+    const dateQD = session?.graduationDecisionDate ? dayjs(session.graduationDecisionDate) : dayjs()
+    const ngayQD  = String(dateQD.date())
+    const thangQD = String(dateQD.month() + 1)
+    const namQD   = String(dateQD.year())
+
+    const ngayTS  = String(dateTS.date())
+    const thangTS = String(dateTS.month() + 1)
+    const namTS   = String(dateTS.year())
+
+    let soToTrinh = session?.graduationReport || ""
+    let ngayToTrinh = ""
+    if (soToTrinh.toLowerCase().includes(" ngày ")) {
+      const reportParts = soToTrinh.split(/ ngày /i)
+      soToTrinh = reportParts[0].trim()
+      ngayToTrinh = reportParts[1].trim()
+    }
+
+    const items = studentsWithSemesters.map((student) => {
+      const course = student.fixedClass?.trainingCourse
+      let nienKhoaStr = ""
+      if (course?.academicYear) {
+        nienKhoaStr = `(${course.academicYear})`
+      } else if (course?.startYear) {
+        nienKhoaStr = `(${course.startYear}${course.endYear ? ` - ${course.endYear}` : ""})`
+      }
+
+      return {
+        hoTen:       student.userProfile.fullname,
+        ngaySinh:    formatSpecialDate(student.userProfile.dateOfBirth ?? ""),
+        chuyenNganh: student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name ?? "",
+        tenKhoa:     course ? `${course.name} ${nienKhoaStr}`.trim() : "",
+        soVanBang:   student.graduationDecision?.originalDiplomaNumber ?? student.graduationDecision?.diplomaNumber ?? "",
+      }
+    })
+
+    try {
+      showSpinner()
+      const res = await docxTemplate({
+        fileName: "QuyetDinhCongNhanTotNghiep.docx",
+        path:     "QuyetDinhCongNhanTotNghiep.docx",
+        prefix:   "/mta/template",
+        data: {
+          soQD:         session?.graduationNumber || "",
+          ngayQD,
+          thangQD,
+          namQD,
+          dot:          session?.name || "",
+          namHoc:       "", 
+          ngayHop:      session?.graduationDecisionDate ? formatSpecialDate(session.graduationDecisionDate.toString()) : "",
+          soToTrinh,
+          ngayToTrinh,
+          signerTitle,
+          signerSubTitle,
+          signerRankName,
+          signerNameTS,
+          ngayTS,
+          thangTS,
+          namTS,
+          items,
+        },
+      })
+      if (res && res.status >= 200 && res.status < 300) {
+        saveAs(res.data, "QuyetDinhCongNhanTotNghiep.docx")
+      } else {
+        const errorDetail = res ? `Status: ${res.status}` : "No response"
+        message.error(`Xuất file thất bại: ${errorDetail}`)
+      }
+    } catch (error: unknown) {
+      console.error("Lỗi xuất file:", error)
+      const msg = error instanceof Error ? error.message : JSON.stringify(error)
+      message.error(`Lỗi: ${msg}`)
+    } finally {
+      hideSpinner()
+    }
+  }
+
   const subjects: {
     daiHoc: { id: number; name: string; onClick?: () => void }[]
     nganHan: { id: number; name: string; onClick?: () => Promise<void> }[]
@@ -1212,7 +1401,11 @@ export default function StudentGradeSystem() {
       // { id: 14, name: "PL Đề nghị công nhận tốt nghiệp" },
       // { id: 15, name: "Xác nhận thông tin HV làm văn bằng" },
       // { id: 16, name: "PL Quyết định tốt nghiệp CAO HỌC" },
-      { id: 17, name: "Quyết định công nhận tốt nghiệp" },
+      {
+        id: 17,
+        name: "Quyết định công nhận tốt nghiệp",
+        onClick: handleExportQuyetDinhCongNhan,
+      },
       // { id: 18, name: "In PL văn bằng CAO HỌC (2 cột)" },
       // { id: 19, name: "In PL văn bằng CAO HỌC (1 cột)" },
       {
@@ -1598,6 +1791,48 @@ export default function StudentGradeSystem() {
           </div>
         )}
       </div>
+
+      <Modal
+        title="Tham số xuất file"
+        open={signModalOpen}
+        onCancel={() => setSignModalOpen(false)}
+        footer={[
+          <Button key="cancel" onClick={() => setSignModalOpen(false)}>
+            Hủy
+          </Button>,
+          <Button key="ok" type="primary" onClick={() => void handleConfirmSignExport()}>
+            Xác nhận
+          </Button>,
+        ]}
+        destroyOnClose
+        maskClosable={false}
+      >
+        <p className="mb-3 text-gray-600">
+          Đợt xét hiện tại: {selectedThesisSession?.name ?? "—"}.
+        </p>
+        <Radio.Group
+          value={signRole}
+          onChange={(e) => setSignRole(e.target.value)}
+          className="flex flex-col gap-3"
+        >
+          <Radio value="chief">
+            Trưởng phòng sau đại học: <strong>{selectedThesisSession?.chief?.trim() || "(chưa nhập)"}</strong>
+          </Radio>
+          <Radio value="deputy">
+            Phó phòng sau đại học: <strong>{selectedThesisSession?.deputy?.trim() || "(chưa nhập)"}</strong>
+          </Radio>
+        </Radio.Group>
+        <div className="mt-4">
+          <div className="mb-2 text-gray-700">Ngày in</div>
+          <DatePicker
+            className="w-full h-8"
+            format="DD/MM/YYYY"
+            value={signingDate}
+            onChange={(value) => setSigningDate(value || dayjs())}
+            placeholder="Chọn thời gian ký"
+          />
+        </div>
+      </Modal>
     </div>
   )
 }
