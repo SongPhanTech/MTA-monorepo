@@ -260,8 +260,17 @@ export default function UserProfilePageLecture() {
         lecturerIds: selection.selectedIds as string[],
         excludedIds: selection.excludedIds as string[],
         filters: {
-          ...filters,
+          code: filters.code,
+          name: filters.name,
+          dateOfBirth: filters.dateOfBirth?.map((d) => dayjs(d).format("DD/MM/YYYY")),
+          academicRankType: filters.academicRankType,
+          academicDegreeType: filters.academicDegreeType,
           organization: filters.organization || (!canXemTatCa ? (orgIds as string[]) : undefined),
+          gender: filters.gender,
+          rankId: filters.rankId,
+          officerNumber: filters.officerNumber,
+          lecturerType: filters.lecturerType,
+          idCardNumber: filters.idCardNumber,
         },
       })
 
