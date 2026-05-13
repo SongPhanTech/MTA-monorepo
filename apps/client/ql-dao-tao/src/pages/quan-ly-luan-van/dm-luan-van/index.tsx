@@ -459,7 +459,6 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
       thesisRegistrations: {
         include: {
           thesisProject: {
-            
             include: {
               council: {
                 include: {
@@ -529,7 +528,10 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
         curriculumVersion: {
           include: {
             curriculum: {
-              include: { managementOrganization: true, trainingMajor: { include: { organization: true } } },
+              include: {
+                managementOrganization: true,
+                trainingMajor: { include: { organization: true } },
+              },
             },
           },
         },
@@ -902,10 +904,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
           },
         }
         if (role === "Khoa" || role === "P7") {
-          const normalizedSupervisor =
-            rowData.supervisor === "" ? null : rowData.supervisor 
-          const normalizedCoSupervisor =
-            rowData.coSupervisor === "" ? null : rowData.coSupervisor
+          const normalizedSupervisor = rowData.supervisor === "" ? null : rowData.supervisor
+          const normalizedCoSupervisor = rowData.coSupervisor === "" ? null : rowData.coSupervisor
 
           if (normalizedSupervisor !== undefined) {
             payload.supervisor =
@@ -1925,26 +1925,21 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                     >
                       Đề xuất hội đồng
                     </Button>
-
-                    
                   )}
                   {role === "Khoa" && (
                     <Button
                       type="primary"
                       onClick={async () => {
-                        
-                          await exportKiemTraTienDo({
-                            allStudentsInClasses,
-                            showSpinner,
-                            hideSpinner,
-                            message,
-                          })
+                        await exportKiemTraTienDo({
+                          allStudentsInClasses,
+                          showSpinner,
+                          hideSpinner,
+                          message,
+                        })
                       }}
                     >
                       Kiểm tra tiến độ
                     </Button>
-
-                    
                   )}
                 </Space>
               </Col>
@@ -2110,7 +2105,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                               value: item.id,
                             }
                           })}
-                          value={currentValue === null ? undefined : (currentValue || undefined)}
+                          value={currentValue === null ? undefined : currentValue || undefined}
                           onChange={(value) =>
                             handleEditChange(
                               record?.id,
@@ -2166,7 +2161,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                               value: item.id,
                             }
                           })}
-                          value={currentValue === null ? undefined : (currentValue || undefined)}
+                          value={currentValue === null ? undefined : currentValue || undefined}
                           onChange={(value) =>
                             handleEditChange(
                               record?.id,
@@ -2305,7 +2300,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                                 value: item.id,
                               }
                             })}
-                          value={currentValue === null ? undefined : (currentValue || undefined)}
+                          value={currentValue === null ? undefined : currentValue || undefined}
                           onChange={(value) =>
                             handleEditChange(
                               record?.id,
@@ -2360,7 +2355,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                                 value: item.id,
                               }
                             })}
-                          value={currentValue === null ? undefined : (currentValue || undefined)}
+                          value={currentValue === null ? undefined : currentValue || undefined}
                           onChange={(value) =>
                             handleEditChange(
                               record?.id,
@@ -2413,7 +2408,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                               value: item.id,
                             }
                           })}
-                          value={currentValue === null ? undefined : (currentValue || undefined)}
+                          value={currentValue === null ? undefined : currentValue || undefined}
                           onChange={(value) =>
                             handleEditChange(
                               record?.id,
@@ -2466,7 +2461,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                               value: item.id,
                             }
                           })}
-                          value={currentValue === null ? undefined : (currentValue || undefined)}
+                          value={currentValue === null ? undefined : currentValue || undefined}
                           onChange={(value) =>
                             handleEditChange(
                               record?.id,
@@ -2519,7 +2514,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                               value: item.id,
                             }
                           })}
-                          value={currentValue === null ? undefined : (currentValue || undefined)}
+                          value={currentValue === null ? undefined : currentValue || undefined}
                           onChange={(value) =>
                             handleEditChange(
                               record?.id,
@@ -2555,7 +2550,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           dropdownStyle={{ minWidth: 200 }}
                           disabled={!isWithinCouncilEditWindow()}
                           className="w-full"
-                          value={currentValue === null ? undefined : (currentValue || undefined)}
+                          value={currentValue === null ? undefined : currentValue || undefined}
                           options={roomData?.map((item) => ({
                             label: item.name,
                             value: item.id,
@@ -2624,7 +2619,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           className="w-full"
                           dropdownMatchSelectWidth={false}
                           dropdownStyle={{ minWidth: 100 }}
-                          value={currentValue === null ? undefined : (currentValue || undefined)}
+                          value={currentValue === null ? undefined : currentValue || undefined}
                           disabled={!isWithinCouncilEditWindow()}
                           placeholder="Chọn thời gian bảo vệ"
                           options={defenseSessionData?.map((item) => ({

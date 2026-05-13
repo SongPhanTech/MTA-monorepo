@@ -346,8 +346,7 @@ const formatDocDate = (date?: Date | string | null) => {
   const year = d.year()
 
   const dayStr = day.toString()
-  const monthStr =
-    month === 1 || month === 2 ? month.toString().padStart(2, "0") : month.toString()
+  const monthStr = month === 1 || month === 2 ? month.toString().padStart(2, "0") : month.toString()
 
   return {
     day: dayStr,
@@ -604,12 +603,12 @@ export const exportThongKeCbHdlv = async ({
   console.log("ngayhientai", allStudentsInClasses)
   // const studenEnable = allStudentsInClasses?.filter((student) => student.thesisRegistrations > 0);
   const tendot =
-  allStudentsInClasses?.length > 0
+    allStudentsInClasses?.length > 0
       ? allStudentsInClasses[0]?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.name
       : ""
 
   const tenkhoa =
-  allStudentsInClasses?.length > 0
+    allStudentsInClasses?.length > 0
       ? allStudentsInClasses[0]?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor
           ?.organization?.sTen || ""
       : ""
@@ -1404,8 +1403,12 @@ export const exportSaoQDHDLV = async ({
         const chuyennganh = major?.name || ""
         const detai = thesisProject.title || ""
         const hoten = student?.userProfile?.fullname || ""
-        
-        const { day: ngayQD, month: thangQD, year: namQD } = formatDocDate(thesisProject?.thesisSession?.decisionDate)
+
+        const {
+          day: ngayQD,
+          month: thangQD,
+          year: namQD,
+        } = formatDocDate(thesisProject?.thesisSession?.decisionDate)
 
         const canbohuongdan1 = `1. ${getSupervisorName(supervisor, false, true)}`
         const canbohuongdan2 = coSupervisor
@@ -1421,8 +1424,8 @@ export const exportSaoQDHDLV = async ({
         const text1 = chucVuNguoiKyQddt === "GĐ" ? "GIÁM ĐỐC" : "KT.GIÁM ĐỐC"
         const text2 = text1 === "GIÁM ĐỐC" ? "" : "PHÓ GIÁM ĐỐC"
         // const dieu1 = `Điều 1: Giao đề tài ${type} tốt nghiệp và cán hộ hướng dẫn ngành ${nganh} (${chuyennganh}) về đề tài "${detai}".
-        // Học viên thực hiện: ${hoten}, ${khoa.name}(${khoa.academicYear}). 
-        // Cán bộ hướng dẫn: ${canbohuongdan1} 
+        // Học viên thực hiện: ${hoten}, ${khoa.name}(${khoa.academicYear}).
+        // Cán bộ hướng dẫn: ${canbohuongdan1}
         //                       ${canbohuongdan2}`
         // const dieu2 = `Điều 2: ${khoaquanli} tổ chức triển khai cho cán bộ hướng dẫn và học viên thực hiện theo quy định.`
         const data = {
@@ -3325,7 +3328,6 @@ const convertToHDDanhGiaLuanVanTemplateData = (
           ? dayjs(project.defenseSession.startTime).format("HH:mm")
           : "",
         ngayBaoVe: project?.defenseDate ? dayjs(project.defenseDate).format("DD/MM/YYYY") : "",
-
 
         diaDiem: project?.room?.name || "",
         tenChuTich: findMemberName(CouncilRole.CHAIRMAN),

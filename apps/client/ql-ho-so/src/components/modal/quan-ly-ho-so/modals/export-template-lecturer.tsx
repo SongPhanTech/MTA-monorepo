@@ -5,11 +5,9 @@ import { saveAs } from "file-saver"
 
 const ExportTemplateLecturer = () => {
   const exportTemplate = async () => {
-    // Tạo workbook mới
     const workbook = new ExcelJS.Workbook()
     const worksheet = workbook.addWorksheet("Danh sách giảng viên")
 
-    // Thiết lập style
     const golbalFontStyle = {
       name: "Times New Roman",
     }
@@ -68,7 +66,6 @@ const ExportTemplateLecturer = () => {
     worksheet.getCell("A2").value = "Danh sách giảng viên"
     worksheet.getCell("A2").style = headerTitleStyle
 
-    // Thêm tiêu đề bảng
     const headerRow = worksheet.getRow(4)
     headerRow.values = [
       "STT",
@@ -91,7 +88,6 @@ const ExportTemplateLecturer = () => {
       cell.style = tableHeaderStyle
     })
 
-    // Điều chỉnh độ rộng cột
     worksheet.columns = [
       { width: 10 },
       { width: 20 },
@@ -110,7 +106,6 @@ const ExportTemplateLecturer = () => {
       { width: 20 },
     ]
 
-    // Xuất file
     const buffer = await workbook.xlsx.writeBuffer()
     saveAs(new Blob([buffer]), "Mau_nhap_giang_vien_vien.xlsx")
   }
