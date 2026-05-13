@@ -229,10 +229,10 @@ const AddStudentToFixedClassModal = () => {
 
   const updateStudent = async () => {
     if (!selectedRowKeys || selectedRowKeys.length === 0) {
-      message.warning("Vui lòng chọn ít nhất một sinh viên để cập nhật");
-      return;
+      message.warning("Vui lòng chọn ít nhất một sinh viên để cập nhật")
+      return
     }
-    const cvId = fixedClass?.curriculumVersionId;
+    const cvId = fixedClass?.curriculumVersionId
     const ops: SqlTransactionBodyItem[] = [
       {
         model: "Student",
@@ -254,37 +254,37 @@ const AddStudentToFixedClassModal = () => {
           },
           data: { curriculumVersionId: cvId },
         },
-      });
+      })
     }
     ops.push({
-        model: "Student",
-        operation: "updateMany",
-        data: {
-          where: {
-            id: { in: selectedRowKeys },
-            status: StudentStatus.DEFERRED_STUDY,
-          },
-          data: { status: StudentStatus.ENROLLED },
+      model: "Student",
+      operation: "updateMany",
+      data: {
+        where: {
+          id: { in: selectedRowKeys },
+          status: StudentStatus.DEFERRED_STUDY,
         },
-      });
-    
+        data: { status: StudentStatus.ENROLLED },
+      },
+    })
+
     try {
-      const res = await sqlTransaction(ops);
+      const res = await sqlTransaction(ops)
 
       if (res.status !== 200) {
-        throw new Error("Failed with status: " + res.status);
+        throw new Error("Failed with status: " + res.status)
       }
 
       await queryClient.invalidateQueries({
         queryKey: ["zenstack", "Student"],
-      });
-      message.success("Cập nhật thành công");
-      onCloseModalConfirm();
+      })
+      message.success("Cập nhật thành công")
+      onCloseModalConfirm()
     } catch (error) {
-      console.error("Lỗi khi cập nhật sinh viên:", error);
-      message.error("Cập nhật thất bại, vui lòng thử lại!");
+      console.error("Lỗi khi cập nhật sinh viên:", error)
+      message.error("Cập nhật thất bại, vui lòng thử lại!")
     }
-  };
+  }
 
   const handleAddStudentToClass = async () => {
     try {
@@ -304,7 +304,9 @@ const AddStudentToFixedClassModal = () => {
           message.success("Cập nhật thành công")
         } else {
           // await updateStudent()
-          onOpenModalConfirm("Thay đổi CTĐT cho tất cả các sinh viên này, sinh viên bảo lưu sẽ không được thay đổi CTĐT?")
+          onOpenModalConfirm(
+            "Thay đổi CTĐT cho tất cả các sinh viên này, sinh viên bảo lưu sẽ không được thay đổi CTĐT?"
+          )
         }
       }
       setSelectedRowKeysInClass([])

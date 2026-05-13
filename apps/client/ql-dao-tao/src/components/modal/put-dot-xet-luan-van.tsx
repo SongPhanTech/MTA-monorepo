@@ -271,7 +271,7 @@ const PutThesisSession = () => {
           />
         </FormItem>
       </Col>
-     
+
       <Col span={24}>
         <div className="grid grid-cols-1 xl:grid-cols-[1fr_auto_1fr_auto_1fr] gap-4">
           <div>
@@ -306,8 +306,8 @@ const PutThesisSession = () => {
               />
             </FormItem>
             <FormItem form={form} name="proposalReport" label="Tờ trình đề tài">
-          <Input placeholder="số 906/TTr-SĐH ngày 07/10/2024" />
-        </FormItem>
+              <Input placeholder="số 906/TTr-SĐH ngày 07/10/2024" />
+            </FormItem>
           </div>
 
           <div className="hidden xl:block w-px bg-gray-200 min-h-full self-stretch" />
@@ -355,8 +355,8 @@ const PutThesisSession = () => {
               />
             </FormItem>
             <FormItem form={form} name="councilReport" label="Tờ trình hội đồng">
-          <Input placeholder="số 406/TTr-SĐH ngày 30/5/2025" />
-        </FormItem>
+              <Input placeholder="số 406/TTr-SĐH ngày 30/5/2025" />
+            </FormItem>
           </div>
 
           <div className="hidden xl:block w-px bg-gray-200 min-h-full self-stretch" />
@@ -393,8 +393,8 @@ const PutThesisSession = () => {
               />
             </FormItem>
             <FormItem form={form} name="graduationReport" label="Tờ trình tốt nghiệp">
-          <Input placeholder="số 581/TTr-SĐH ngày 27/6/2025" />
-        </FormItem>
+              <Input placeholder="số 581/TTr-SĐH ngày 27/6/2025" />
+            </FormItem>
           </div>
         </div>
       </Col>
