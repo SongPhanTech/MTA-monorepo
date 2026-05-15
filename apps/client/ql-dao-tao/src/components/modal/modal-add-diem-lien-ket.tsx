@@ -12,6 +12,7 @@ import {
   type ScoreLinkSubjectVersion,
 } from "@workspace/db"
 import {
+  useCreateManyStudentSubjectScore,
   useCreateScoreLinkSheet,
   useFindManyFixedClass,
   useFindManySchoolYear,
@@ -135,6 +136,23 @@ const PutScoreLinkSheetModal = () => {
     },
   })
   const { mutateAsync: updateManyScoreLinkStudent } = useUpdateManyScoreLinkStudent()
+  const { mutateAsync: createManyStudentSubjectScore } = useCreateManyStudentSubjectScore()
+
+  const createDiemLienKetScores = async (sheet: PutScoreLinkSheet) => {
+    const data = sheet.scoreLinkSubjectVersions.flatMap((sv) =>
+      sv.scoreLinkStudents.map((ss) => ({
+        studentId: ss.studentId,
+        subjectVersionId: sv.subjectVersionId,
+        semesterId: sheet.semesterId,
+        finalScore: ss.score,
+        description: "Điểm liên kết",
+      }))
+    )
+
+    if (data.length === 0) return
+
+    await createManyStudentSubjectScore({ data })
+  }
   const { mutateAsync: updateScoreLinkSheet } = useUpdateScoreLinkSheet({
     onSuccess: () => {
       message.success(messages.success.edit)
@@ -244,6 +262,10 @@ const PutScoreLinkSheetModal = () => {
           },
         })
 
+        if (scoreLinkSheetDetail && scoreLinkSheetDetail.status !== ScoreLinkStatus.APPROVED) {
+          await createDiemLienKetScores(scoreLinkSheetDetail)
+        }
+
         return
       }
 
@@ -263,6 +285,13 @@ const PutScoreLinkSheetModal = () => {
             status: values.status,
           },
         })
+
+        if (
+          values.status === ScoreLinkStatus.APPROVED &&
+          scoreLinkSheetDetail.status !== ScoreLinkStatus.APPROVED
+        ) {
+          await createDiemLienKetScores(values)
+        }
 
         if (toDelete.length > 0) {
           await updateScoreLinkSheet({
