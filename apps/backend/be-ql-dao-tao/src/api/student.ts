@@ -562,7 +562,11 @@ app.openapi(exportDecreaseAcademicWarningJson, async (c) => {
   if (!students || students.length === 0) {
     return c.json({ message: "Không có sinh viên nào trong danh sách" }, 404)
   }
-  const filteredStudents = await resultCourseStudentDecreaseAcademicWarning(students, semesterId)
+  const filteredStudents = await resultCourseStudentDecreaseAcademicWarning(
+    students,
+    semesterId,
+    trainingObjectTypeId
+  )
   return c.json(filteredStudents, 200)
 })
 

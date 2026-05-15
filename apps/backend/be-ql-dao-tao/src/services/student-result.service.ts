@@ -2532,7 +2532,8 @@ export const resultCourseStudentAcademicAction = async (
 
 export const resultCourseStudentDecreaseAcademicWarning = async (
   students: StudentInfoCheck[],
-  semesterId: string
+  semesterId: string,
+  trainingObjectTypeId?: string
 ): Promise<CourseStudentDecreaseAcademicWarningResult[]> => {
   const courseMap: Record<string, CourseStudentDecreaseAcademicWarningResult> = {}
   const currentSemester = await prisma.semester.findUnique({
@@ -2606,6 +2607,9 @@ export const resultCourseStudentDecreaseAcademicWarning = async (
   const additionalWarningStudents = await prisma.student.findMany({
     where: {
       id: { in: additionalWarningStudentIds },
+      ...(trainingObjectTypeId
+        ? { fixedClass: { trainingCourse: { trainingObjectTypeId } } }
+        : {}),
     },
     include: {
       userProfile: true,
