@@ -258,13 +258,13 @@ app.openapi(exportCurriculumVersion, async (c) => {
           examTypeLabel = "Thi viết"
           break
         case $Enums.ExamType.OnlineWritten:
-          examTypeLabel = "Viết trực tuyến"
+          examTypeLabel = "Trực tuyến"
           break
         case $Enums.ExamType.Oral:
-          examTypeLabel = "Thi vấn đáp"
+          examTypeLabel = "Vấn đáp"
           break
         case $Enums.ExamType.Practice:
-          examTypeLabel = "Thực hành"
+          examTypeLabel = "Thực hành - Thí nghiệm"
           break
         case $Enums.ExamType.Project:
           examTypeLabel = "Đồ án"
