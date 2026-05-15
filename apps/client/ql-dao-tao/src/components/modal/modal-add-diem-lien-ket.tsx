@@ -179,17 +179,24 @@ const PutScoreLinkSheetModal = () => {
     },
   })
   const fixedClassId = Form.useWatch("fixedClassId", form)
+  const semesterId = Form.useWatch("semesterId", form)
   const { data: subjectVersions = [], isFetching: isFetchingSubjectVersions } =
     useFindManySubjectVersion(
       {
         where: {
           deletedAt: null,
           ...(trainingObjectTypeId ? { trainingObjectTypeId } : {}),
+          subjectClass: {
+            some: {
+              semesterId,
+              fixedClasses: { some: { id: fixedClassId } },
+            },
+          },
         },
         orderBy: { createdAt: "desc" },
       },
       {
-        enabled: !!trainingObjectTypeId,
+        enabled: !!trainingObjectTypeId && !!fixedClassId && !!semesterId,
       }
     )
 
@@ -399,7 +406,7 @@ const PutScoreLinkSheetModal = () => {
       className="w-[60vw] justify-between"
       okButtonProps={{
         className: isView && !canApprove ? "hidden" : "",
-        disabled: statusSheet === ScoreLinkStatus.APPROVED,
+        disabled: isView && statusSheet === ScoreLinkStatus.APPROVED,
       }}
       cancelText={isView ? "Đóng" : "Hủy"}
       okText={isView ? (canApprove ? "Phê duyệt" : undefined) : isEdit ? "Cập nhật" : "Thêm mới"}
@@ -458,7 +465,7 @@ const PutScoreLinkSheetModal = () => {
         </Col>
 
         <Col span={isCreate ? 12 : 8}>
-          <FormItem form={form} name="semesterId" label="Kỳ học">
+          <FormItem form={form} name="semesterId" label="Kỳ học" required>
             <TreeSelectAnt
               disabled={isView}
               showSearch
@@ -469,6 +476,10 @@ const PutScoreLinkSheetModal = () => {
               treeData={treeDataSemester}
               filterTreeNode={filterTreeNode}
               treeNodeFilterProp="title"
+              onChange={() => {
+                form.setFieldValue("scoreLinkSubjectVersions", [])
+                setSelectedSubjectId(undefined)
+              }}
             />
           </FormItem>
         </Col>
@@ -508,13 +519,18 @@ const PutScoreLinkSheetModal = () => {
                           onChange={(value) => setSelectedSubjectId(value)}
                           placeholder="Chọn môn"
                           className="w-full"
-                          disabled={!trainingObjectTypeId || !fixedClassId || isView}
+                          disabled={!trainingObjectTypeId || !fixedClassId || !semesterId || isView}
                         />
                       </Col>
                       <Col span={12}>
                         <Button
                           type="dashed"
-                          disabled={!trainingObjectTypeId || !fixedClassId || !selectedSubjectId}
+                          disabled={
+                            !trainingObjectTypeId ||
+                            !fixedClassId ||
+                            !semesterId ||
+                            !selectedSubjectId
+                          }
                           icon={<PlusOutlined />}
                           className="mb-2"
                           onClick={() => {
