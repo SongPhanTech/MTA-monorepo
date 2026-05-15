@@ -26,10 +26,11 @@ import dayjs from "dayjs"
 import _ from "lodash"
 import { Check, X } from "lucide-react"
 import { useRouter } from "next/router"
-import { useMemo, useState } from "react"
+import { useCallback, useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 
 dayjs.locale("vi")
+
 export interface IMonHoc {
   TenMonhoc: string
   MaMH?: string
@@ -50,9 +51,10 @@ export interface IHocKi {
   DiemTBKyHe4?: number
   monHocs?: IMonHoc[]
 }
+
 export default function StudentScoreClassPage() {
   const router = useRouter()
-  const { can, canSome } = useAbility()
+  const { can } = useAbility()
   const [expandAll, setExpandAll] = useState(true)
   const studentId = router.query.id as string
   const [semesterId, setSemesterId] = useState<string>()
@@ -61,22 +63,6 @@ export default function StudentScoreClassPage() {
   >()
   const [filters, setFilters] = useState<FilterProps>({
     name: "",
-  })
-
-  const { onOpen } = useDisclosure<{
-    dataTable: any
-    dataStudent: any
-  }>({
-    tag: "ModalPrintToKQHT",
-  })
-
-  const { onOpen: onOpenModalAddScore } = useDisclosure<{
-    id: string
-    list: string[]
-    studentId: string
-    subjectClassStudent: StudentSubjectScore
-  }>({
-    tag: "PutAddOlympicScoreModal",
   })
 
   const { onOpen: onOpenModalAddCertificate } = useDisclosure<{
@@ -94,247 +80,6 @@ export default function StudentScoreClassPage() {
       refetch()
     },
   })
-  const exportTemplate = async () => {
-    const hocKis: IHocKi[] = []
-    if (data.length > 0) {
-      data.forEach((item) => {
-        const monhoc: IMonHoc[] = []
-        item.subjectClasses.forEach((subjectClass) => {
-          subjectClass.subjectClassStudent.forEach((subjectClassStudent) => {
-            monhoc.push({
-              TenMonhoc: subjectClass.subject.name,
-              MaMH: subjectClass.subject.code?.slice(0, 2) ?? "",
-              soTC: subjectClass.subject.credit,
-              diemhe10:
-                subjectClassStudent?.manualFinalScore ||
-                subjectClassStudent?.finalScore?.toNumber() ||
-                0,
-              diemhe4:
-                convertScore(
-                  subjectClassStudent?.manualFinalScore ||
-                    subjectClassStudent?.finalScore?.toNumber() ||
-                    0
-                ).base4 ?? 0,
-              diemchu:
-                convertScore(
-                  subjectClassStudent?.manualFinalScore ??
-                    subjectClassStudent?.finalScore?.toNumber() ??
-                    0
-                ).letter ?? "",
-              ghichu: subjectClassStudent.description ?? "",
-            })
-          })
-        })
-        const tongSoTinChi = monhoc.reduce((acc, curr) => acc + (curr.soTC ?? 0), 0)
-
-        const tongDiemNhanTinChiHe10 = monhoc.reduce(
-          (acc, curr) => acc + (curr.diemhe10 ?? 0) * (curr.soTC ?? 0),
-          0
-        )
-        const tongDiemNhanTinChiHe4 = monhoc.reduce(
-          (acc, curr) => acc + (curr.diemhe4 ?? 0) * (curr.soTC ?? 0),
-          0
-        )
-
-        const diemTBHe10_Raw = tongSoTinChi === 0 ? 0 : tongDiemNhanTinChiHe10 / tongSoTinChi
-        const diemTBHe4_Raw = tongSoTinChi === 0 ? 0 : tongDiemNhanTinChiHe4 / tongSoTinChi
-
-        const diemTBHe10 = Number.parseFloat(diemTBHe10_Raw.toFixed(1))
-        const diemTBHe4 = Number.parseFloat(diemTBHe4_Raw.toFixed(1))
-
-        hocKis.push({
-          TenHocKi: `${item.code}-${item.name}-${item.schoolYear?.name}`,
-          SoTinChiKy: tongSoTinChi,
-          DiemTBKyHe10: diemTBHe10,
-          DiemTBKyHe4: diemTBHe4,
-          monHocs: monhoc,
-        })
-      })
-    }
-    const sampleStudentData = {
-      fullname: student?.userProfile?.fullname,
-      dateOfBirth: student?.userProfile?.dateOfBirth,
-      maSV: student?.code,
-      // TODO: check htdt
-      htdt: student?.fixedClass?.trainingCourse.trainingObjectType.name,
-      nganh: student?.curriculumVersion?.curriculum.trainingMajor.name,
-      lop: student?.fixedClass?.trainingCourse?.name,
-      hocKis: hocKis,
-    }
-
-    const tableRows = sampleStudentData.hocKis.flatMap((hocKi) => {
-      const hocKiRow: TableRow = {
-        cells: [
-          {
-            value: hocKi.TenHocKi ?? "",
-            colSpan: 19,
-            bold: true,
-            align: "left",
-            border: true,
-          },
-        ],
-      }
-      const monHocRows: TableRow[] =
-        hocKi?.monHocs?.map((monHoc: IMonHoc, index: number) => ({
-          cells: [
-            { value: index + 1 },
-            { value: monHoc.TenMonhoc ?? "", colSpan: 6, border: true },
-            { value: monHoc.MaMH ?? "" },
-            { value: monHoc.soTC, align: "center" },
-            { value: monHoc.diem01 ?? 0, align: "right" },
-            { value: monHoc.diem02 ?? 0, align: "right" },
-            { value: monHoc.diem07 ?? 0, align: "right" },
-            { value: null },
-            { value: null },
-            { value: monHoc.diemhe10 ?? 0, align: "right" },
-            { value: monHoc.diemhe4 ?? 0, align: "right" },
-            { value: monHoc.diemchu ?? "", align: "center" },
-            { value: null },
-            { value: monHoc.ghichu ?? "" },
-          ],
-        })) ?? []
-
-      // Dòng trung bình học kỳ
-      const trungBinhRow: TableRow = {
-        cells: [
-          { value: null },
-          { value: "Điểm trung bình học kỳ:", colSpan: 6, bold: true, align: "center" },
-          { value: null }, // Cột 7
-          { value: hocKi.SoTinChiKy ?? 0, bold: true, align: "center" }, // Cột 8
-          { value: null }, // Cột 9
-          { value: null }, // Cột 10
-          { value: null }, // Cột 11
-          { value: null }, // Cột 12
-          { value: null }, // Cột 13
-          { value: hocKi.DiemTBKyHe10 ?? 0, bold: true, align: "right" }, // Cột 14
-          { value: hocKi.DiemTBKyHe4 ?? 0, bold: true, align: "right" }, // Cột 15
-          { value: null }, // Cột 16
-          { value: null }, // Cột 17
-          { value: null }, // Cột 18
-        ],
-      }
-
-      return [hocKiRow, ...monHocRows, trungBinhRow]
-    })
-
-    const gapRow: TableRow = {
-      cells: [{ value: null, colSpan: 18, border: false }],
-    }
-    const tongtinchi = sampleStudentData.hocKis.reduce(
-      (acc, curr) => acc + (curr.SoTinChiKy ?? 0),
-      0
-    )
-
-    // Tính điểm trung bình hệ 10 toàn khoá: tổng (điểm TB kỳ × số tín chỉ kỳ) / tổng số tín chỉ
-    const tongDiemNhanTinChiHe10 = sampleStudentData.hocKis.reduce(
-      (acc, curr) => acc + (curr.DiemTBKyHe10 ?? 0) * (curr.SoTinChiKy ?? 0),
-      0
-    )
-    const tongDiemNhanTinChiHe4 = sampleStudentData.hocKis.reduce(
-      (acc, curr) => acc + (curr.DiemTBKyHe4 ?? 0) * (curr.SoTinChiKy ?? 0),
-      0
-    )
-
-    const tongdiemhe10 =
-      tongtinchi === 0 ? 0 : Number.parseFloat((tongDiemNhanTinChiHe10 / tongtinchi).toFixed(1))
-    const tongdiemhe4 =
-      tongtinchi === 0 ? 0 : Number.parseFloat((tongDiemNhanTinChiHe4 / tongtinchi).toFixed(1))
-    const totalRow: TableRow = {
-      cells: [{ value: `Tổng tín chỉ: ${tongtinchi}`, colSpan: 18, border: false }],
-    }
-    const diemTBHe10Row: TableRow = {
-      cells: [
-        {
-          value: `Điểm trung bình hệ 10 toàn khoá: ${tongdiemhe10}`,
-          colSpan: 18,
-          border: false,
-        },
-      ],
-    }
-    const diemTBHe4Row: TableRow = {
-      cells: [
-        {
-          value: `Điểm trung bình hệ 4 toàn khoá: ${tongdiemhe4}`,
-          colSpan: 18,
-          border: false,
-        },
-      ],
-    }
-    const xeploai = convertScore(tongdiemhe10).classification
-    const xepLoaiRow: TableRow = {
-      cells: [{ value: `Xếp loại: ${xeploai}`, colSpan: 18, border: false }],
-    }
-
-    const dateSignatureRow: TableRow = {
-      cells: [
-        { value: null, colSpan: 12, border: false }, // Ô trống bên trái
-        {
-          value: `Hà Nội, ngày ${new Date().getDate()} tháng ${new Date().getMonth() + 1} năm ${new Date().getFullYear()}`,
-          colSpan: 6,
-          border: false,
-          align: "center",
-        },
-      ],
-    }
-
-    const titleSignatureRow: TableRow = {
-      cells: [
-        { value: null, colSpan: 12, border: false },
-        {
-          value: "  KT. TRƯỞNG PHÒNG \n PHÓ TRƯỞNG PHÒNG",
-          colSpan: 6,
-          border: false,
-          align: "center",
-          bold: true,
-        },
-      ],
-    }
-    const nameSignatureRow: TableRow = {
-      cells: [
-        { value: null, colSpan: 12, border: false }, // Ô trống bên trái
-        {
-          value: "Đại tá, TS Nguyễn Văn Bình												",
-          colSpan: 6,
-          border: false,
-          align: "center",
-          bold: true,
-        },
-      ],
-    }
-    exportFromTemplate({
-      templateUrl: getMinioUrl("/mta/template/quatrinh.xlsx"),
-      sheets: [
-        {
-          sheet: "BaoCaoDiem",
-          data: {
-            fullname: sampleStudentData.fullname ?? "",
-            dateOfBirth: sampleStudentData.dateOfBirth
-              ? dayjs(sampleStudentData.dateOfBirth).format("DD/MM/YYYY")
-              : "",
-            htdt: sampleStudentData.htdt ?? "",
-            maSV: sampleStudentData.maSV ?? "",
-            nganh: sampleStudentData.nganh ?? "",
-            lop: sampleStudentData.lop ?? "",
-          },
-          tableStartCell: { row: 11, col: 1 },
-          rows: [
-            ...tableRows,
-            gapRow,
-            gapRow,
-            totalRow,
-            diemTBHe10Row,
-            diemTBHe4Row,
-            xepLoaiRow,
-            dateSignatureRow,
-            titleSignatureRow,
-            nameSignatureRow,
-          ],
-          hiddenColumns: ["M", "N", "R", "J", "K", "L"],
-        },
-      ],
-      fileName: `BDCN-${sampleStudentData.fullname}.xlsx`,
-    })
-  }
 
   const { data: student } = useFindUniqueStudent(
     {
@@ -367,9 +112,21 @@ export default function StudentScoreClassPage() {
         },
       },
     },
-    {
-      enabled: !!studentId,
-    }
+    { enabled: !!studentId }
+  )
+
+  const { convertScore } = useScoreConverter(student?.fixedClass?.trainingCourse.scoreConverts)
+  const scoreToPassGraduation = student?.fixedClass?.trainingCourse?.scoreToPassGraduation ?? 5.5
+  const convertScoreWithGraduation = useCallback(
+    (score: number | null | undefined, isGraduation: boolean) => {
+      if (score == null) return null
+      const failGraduation = isGraduation && score < scoreToPassGraduation
+      if (failGraduation) {
+        return { base4: 0, letter: "F", pass: false, classification: undefined }
+      }
+      return convertScore(score)
+    },
+    [convertScore, scoreToPassGraduation]
   )
 
   const { data: manualScoreData = [] } = useFindManyStudentSubjectScore(
@@ -394,42 +151,18 @@ export default function StudentScoreClassPage() {
         },
       },
     },
-    {
-      enabled: !!studentId,
-    }
+    { enabled: !!studentId }
   )
 
   const subjectVersionWhere: Prisma.SubjectVersionWhereInput = useMemo(() => {
     return {
-      ...(filters.code
-        ? {
-            code: {
-              contains: filters.code,
-              mode: "insensitive",
-            },
-          }
-        : {}),
-      ...(filters.name
-        ? {
-            name: {
-              contains: filters.name,
-              mode: "insensitive",
-            },
-          }
-        : {}),
+      ...(filters.code ? { code: { contains: filters.code, mode: "insensitive" } } : {}),
+      ...(filters.name ? { name: { contains: filters.name, mode: "insensitive" } } : {}),
       ...(filters.creditCmp
         ? {
             credit: {
-              ...(filters.creditCmp.gte
-                ? {
-                    gte: Number(filters.creditCmp.gte),
-                  }
-                : {}),
-              ...(filters.creditCmp.lte
-                ? {
-                    lte: Number(filters.creditCmp.lte),
-                  }
-                : {}),
+              ...(filters.creditCmp.gte ? { gte: Number(filters.creditCmp.gte) } : {}),
+              ...(filters.creditCmp.lte ? { lte: Number(filters.creditCmp.lte) } : {}),
             },
           }
         : {}),
@@ -443,14 +176,10 @@ export default function StudentScoreClassPage() {
         ? {
             attendanceScore: {
               ...(filters.attendanceScoreCmp.gte
-                ? {
-                    gte: Number(filters.attendanceScoreCmp.gte),
-                  }
+                ? { gte: Number(filters.attendanceScoreCmp.gte) }
                 : {}),
               ...(filters.attendanceScoreCmp.lte
-                ? {
-                    lte: Number(filters.attendanceScoreCmp.lte),
-                  }
+                ? { lte: Number(filters.attendanceScoreCmp.lte) }
                 : {}),
             },
           }
@@ -458,48 +187,24 @@ export default function StudentScoreClassPage() {
       ...(filters.midtermScoreCmp
         ? {
             midtermScore: {
-              ...(filters.midtermScoreCmp.gte
-                ? {
-                    gte: Number(filters.midtermScoreCmp.gte),
-                  }
-                : {}),
-              ...(filters.midtermScoreCmp.lte
-                ? {
-                    lte: Number(filters.midtermScoreCmp.lte),
-                  }
-                : {}),
+              ...(filters.midtermScoreCmp.gte ? { gte: Number(filters.midtermScoreCmp.gte) } : {}),
+              ...(filters.midtermScoreCmp.lte ? { lte: Number(filters.midtermScoreCmp.lte) } : {}),
             },
           }
         : {}),
       ...(filters.examScoreCmp
         ? {
             examScore: {
-              ...(filters.examScoreCmp.gte
-                ? {
-                    gte: Number(filters.examScoreCmp.gte),
-                  }
-                : {}),
-              ...(filters.examScoreCmp.lte
-                ? {
-                    lte: Number(filters.examScoreCmp.lte),
-                  }
-                : {}),
+              ...(filters.examScoreCmp.gte ? { gte: Number(filters.examScoreCmp.gte) } : {}),
+              ...(filters.examScoreCmp.lte ? { lte: Number(filters.examScoreCmp.lte) } : {}),
             },
           }
         : {}),
       ...(filters.finalScoreCmp
         ? {
             finalScore: {
-              ...(filters.finalScoreCmp.gte
-                ? {
-                    gte: Number(filters.finalScoreCmp.gte),
-                  }
-                : {}),
-              ...(filters.finalScoreCmp.lte
-                ? {
-                    lte: Number(filters.finalScoreCmp.lte),
-                  }
-                : {}),
+              ...(filters.finalScoreCmp.gte ? { gte: Number(filters.finalScoreCmp.gte) } : {}),
+              ...(filters.finalScoreCmp.lte ? { lte: Number(filters.finalScoreCmp.lte) } : {}),
             },
           }
         : {}),
@@ -512,40 +217,31 @@ export default function StudentScoreClassPage() {
       subjectClasses: {
         some: {
           subject: subjectVersionWhere,
-          ...(subjectClassTypeFilter
-            ? {
-                type: subjectClassTypeFilter,
-              }
-            : {}),
-          subjectClassStudent: {
-            some: subjectScoreWhere,
-          },
+          ...(subjectClassTypeFilter ? { type: subjectClassTypeFilter } : {}),
+          subjectClassStudent: { some: subjectScoreWhere },
         },
       },
     },
     include: {
       subjectClasses: {
         where: {
-          ...(subjectClassTypeFilter
-            ? {
-                type: subjectClassTypeFilter,
-              }
-            : {}),
-          subjectClassStudent: {
-            some: subjectScoreWhere,
-          },
+          ...(subjectClassTypeFilter ? { type: subjectClassTypeFilter } : {}),
+          subjectClassStudent: { some: subjectScoreWhere },
         },
         include: {
-          subject: true,
+          subject: {
+            include: {
+              trainingBlocks: {
+                select: { graduation: true },
+                take: 1,
+              },
+            },
+          },
           subjectClassStudent: {
             where: subjectScoreWhere,
             include: {
-              certificates: {
-                include: { archivedCertificate: true },
-              },
-              awards: {
-                include: { archivedAward: true },
-              },
+              certificates: { include: { archivedCertificate: true } },
+              awards: { include: { archivedAward: true } },
             },
           },
         },
@@ -561,9 +257,6 @@ export default function StudentScoreClassPage() {
     orderBy: { startDate: "asc" },
   })
 
-  const { convertScore } = useScoreConverter(student?.fixedClass?.trainingCourse.scoreConverts)
-
-  // Transform data: thêm summary row vào cuối mỗi học kỳ
   const dataWithSummary = useMemo(() => {
     return data
       .filter((s) => !semesterId || semesterId === s.id)
@@ -584,6 +277,220 @@ export default function StudentScoreClassPage() {
         }
       })
   }, [data, semesterId])
+
+  const exportTemplate = async () => {
+    const hocKis: IHocKi[] = []
+    if (data.length > 0) {
+      data.forEach((item) => {
+        const monhoc: IMonHoc[] = []
+        item.subjectClasses.forEach((subjectClass) => {
+          subjectClass.subjectClassStudent.forEach((subjectClassStudent) => {
+            const rawScore =
+              subjectClassStudent?.manualFinalScore ||
+              subjectClassStudent?.finalScore?.toNumber() ||
+              0
+
+            const isGraduation = subjectClass?.subject?.trainingBlocks?.[0]?.graduation === true
+            const converted = convertScoreWithGraduation(rawScore, isGraduation)
+
+            monhoc.push({
+              TenMonhoc: subjectClass.subject.name,
+              MaMH: subjectClass.subject.code?.slice(0, 2) ?? "",
+              soTC: subjectClass.subject.credit,
+              diemhe10: rawScore,
+              diemhe4: converted?.base4 ?? 0,
+              diemchu: converted?.letter ?? "",
+              ghichu: subjectClassStudent.description ?? "",
+            })
+          })
+        })
+
+        const tongSoTinChi = monhoc.reduce((acc, curr) => acc + (curr.soTC ?? 0), 0)
+        const tongDiemNhanTinChiHe10 = monhoc.reduce(
+          (acc, curr) => acc + (curr.diemhe10 ?? 0) * (curr.soTC ?? 0),
+          0
+        )
+        const tongDiemNhanTinChiHe4 = monhoc.reduce(
+          (acc, curr) => acc + (curr.diemhe4 ?? 0) * (curr.soTC ?? 0),
+          0
+        )
+        const diemTBHe10 = Number.parseFloat(
+          (tongSoTinChi === 0 ? 0 : tongDiemNhanTinChiHe10 / tongSoTinChi).toFixed(1)
+        )
+        const diemTBHe4 = Number.parseFloat(
+          (tongSoTinChi === 0 ? 0 : tongDiemNhanTinChiHe4 / tongSoTinChi).toFixed(1)
+        )
+
+        hocKis.push({
+          TenHocKi: `${item.code}-${item.name}-${item.schoolYear?.name}`,
+          SoTinChiKy: tongSoTinChi,
+          DiemTBKyHe10: diemTBHe10,
+          DiemTBKyHe4: diemTBHe4,
+          monHocs: monhoc,
+        })
+      })
+    }
+
+    const sampleStudentData = {
+      fullname: student?.userProfile?.fullname,
+      dateOfBirth: student?.userProfile?.dateOfBirth,
+      maSV: student?.code,
+      htdt: student?.fixedClass?.trainingCourse.trainingObjectType.name,
+      nganh: student?.curriculumVersion?.curriculum.trainingMajor.name,
+      lop: student?.fixedClass?.trainingCourse?.name,
+      hocKis,
+    }
+
+    const tableRows = sampleStudentData.hocKis.flatMap((hocKi) => {
+      const hocKiRow: TableRow = {
+        cells: [
+          { value: hocKi.TenHocKi ?? "", colSpan: 19, bold: true, align: "left", border: true },
+        ],
+      }
+      const monHocRows: TableRow[] =
+        hocKi?.monHocs?.map((monHoc: IMonHoc, index: number) => ({
+          cells: [
+            { value: index + 1 },
+            { value: monHoc.TenMonhoc ?? "", colSpan: 6, border: true },
+            { value: monHoc.MaMH ?? "" },
+            { value: monHoc.soTC, align: "center" },
+            { value: monHoc.diem01 ?? 0, align: "right" },
+            { value: monHoc.diem02 ?? 0, align: "right" },
+            { value: monHoc.diem07 ?? 0, align: "right" },
+            { value: null },
+            { value: null },
+            { value: monHoc.diemhe10 ?? 0, align: "right" },
+            { value: monHoc.diemhe4 ?? 0, align: "right" },
+            { value: monHoc.diemchu ?? "", align: "center" },
+            { value: null },
+            { value: monHoc.ghichu ?? "" },
+          ],
+        })) ?? []
+
+      const trungBinhRow: TableRow = {
+        cells: [
+          { value: null },
+          { value: "Điểm trung bình học kỳ:", colSpan: 6, bold: true, align: "center" },
+          { value: null },
+          { value: hocKi.SoTinChiKy ?? 0, bold: true, align: "center" },
+          { value: null },
+          { value: null },
+          { value: null },
+          { value: null },
+          { value: null },
+          { value: hocKi.DiemTBKyHe10 ?? 0, bold: true, align: "right" },
+          { value: hocKi.DiemTBKyHe4 ?? 0, bold: true, align: "right" },
+          { value: null },
+          { value: null },
+          { value: null },
+        ],
+      }
+
+      return [hocKiRow, ...monHocRows, trungBinhRow]
+    })
+
+    const gapRow: TableRow = { cells: [{ value: null, colSpan: 18, border: false }] }
+    const tongtinchi = sampleStudentData.hocKis.reduce(
+      (acc, curr) => acc + (curr.SoTinChiKy ?? 0),
+      0
+    )
+    const tongDiemNhanTinChiHe10 = sampleStudentData.hocKis.reduce(
+      (acc, curr) => acc + (curr.DiemTBKyHe10 ?? 0) * (curr.SoTinChiKy ?? 0),
+      0
+    )
+    const tongDiemNhanTinChiHe4 = sampleStudentData.hocKis.reduce(
+      (acc, curr) => acc + (curr.DiemTBKyHe4 ?? 0) * (curr.SoTinChiKy ?? 0),
+      0
+    )
+    const tongdiemhe10 =
+      tongtinchi === 0 ? 0 : Number.parseFloat((tongDiemNhanTinChiHe10 / tongtinchi).toFixed(1))
+    const tongdiemhe4 =
+      tongtinchi === 0 ? 0 : Number.parseFloat((tongDiemNhanTinChiHe4 / tongtinchi).toFixed(1))
+
+    const xeploai = convertScore(tongdiemhe10).classification
+
+    exportFromTemplate({
+      templateUrl: getMinioUrl("/mta/template/quatrinh.xlsx"),
+      sheets: [
+        {
+          sheet: "BaoCaoDiem",
+          data: {
+            fullname: sampleStudentData.fullname ?? "",
+            dateOfBirth: sampleStudentData.dateOfBirth
+              ? dayjs(sampleStudentData.dateOfBirth).format("DD/MM/YYYY")
+              : "",
+            htdt: sampleStudentData.htdt ?? "",
+            maSV: sampleStudentData.maSV ?? "",
+            nganh: sampleStudentData.nganh ?? "",
+            lop: sampleStudentData.lop ?? "",
+          },
+          tableStartCell: { row: 11, col: 1 },
+          rows: [
+            ...tableRows,
+            gapRow,
+            gapRow,
+            { cells: [{ value: `Tổng tín chỉ: ${tongtinchi}`, colSpan: 18, border: false }] },
+            {
+              cells: [
+                {
+                  value: `Điểm trung bình hệ 10 toàn khoá: ${tongdiemhe10}`,
+                  colSpan: 18,
+                  border: false,
+                },
+              ],
+            },
+            {
+              cells: [
+                {
+                  value: `Điểm trung bình hệ 4 toàn khoá: ${tongdiemhe4}`,
+                  colSpan: 18,
+                  border: false,
+                },
+              ],
+            },
+            { cells: [{ value: `Xếp loại: ${xeploai}`, colSpan: 18, border: false }] },
+            {
+              cells: [
+                { value: null, colSpan: 12, border: false },
+                {
+                  value: `Hà Nội, ngày ${new Date().getDate()} tháng ${new Date().getMonth() + 1} năm ${new Date().getFullYear()}`,
+                  colSpan: 6,
+                  border: false,
+                  align: "center",
+                },
+              ],
+            },
+            {
+              cells: [
+                { value: null, colSpan: 12, border: false },
+                {
+                  value: "  KT. TRƯỞNG PHÒNG \n PHÓ TRƯỞNG PHÒNG",
+                  colSpan: 6,
+                  border: false,
+                  align: "center",
+                  bold: true,
+                },
+              ],
+            },
+            {
+              cells: [
+                { value: null, colSpan: 12, border: false },
+                {
+                  value: "Đại tá, TS Nguyễn Văn Bình",
+                  colSpan: 6,
+                  border: false,
+                  align: "center",
+                  bold: true,
+                },
+              ],
+            },
+          ],
+          hiddenColumns: ["M", "N", "R", "J", "K", "L"],
+        },
+      ],
+      fileName: `BDCN-${sampleStudentData.fullname}.xlsx`,
+    })
+  }
 
   return (
     <DefaultLayout
@@ -616,6 +523,7 @@ export default function StudentScoreClassPage() {
             .filter(Boolean)
             .join(" - ")}
         </Divider>
+
         <Row gutter={[16, 16]}>
           <Col span={24}>
             {/* Row nút thêm */}
@@ -631,24 +539,7 @@ export default function StudentScoreClassPage() {
                       Nhập điểm trực tiếp
                     </Button>
                   )}
-                  {/* <Button
-                    type="primary"
-                    onClick={() =>
-                      onOpen({
-                        dataTable: data,
-                        dataStudent: student,
-                      })
-                    }
-                  >
-                    In kết quả học tập
-                  </Button> */}
-
-                  <Button
-                    type="primary"
-                    onClick={() => {
-                      exportTemplate()
-                    }}
-                  >
+                  <Button type="primary" onClick={() => exportTemplate()}>
                     Xuất bảng điểm cá nhân (Mẫu P2)
                   </Button>
                 </Flex>
@@ -662,9 +553,7 @@ export default function StudentScoreClassPage() {
               <div className="flex items-center gap-2">
                 <Select
                   value={semesterId}
-                  onChange={(v) => {
-                    setSemesterId(v)
-                  }}
+                  onChange={(v) => setSemesterId(v)}
                   placeholder="Chọn kỳ học"
                   className="w-64"
                   options={data.map((s) => ({
@@ -674,9 +563,7 @@ export default function StudentScoreClassPage() {
                 />
                 <Button
                   type={subjectClassTypeFilter === undefined ? "primary" : "default"}
-                  onClick={() => {
-                    setSubjectClassTypeFilter(undefined)
-                  }}
+                  onClick={() => setSubjectClassTypeFilter(undefined)}
                 >
                   Tất cả
                 </Button>
@@ -686,13 +573,13 @@ export default function StudentScoreClassPage() {
                       ? "primary"
                       : "default"
                   }
-                  onClick={() => {
+                  onClick={() =>
                     setSubjectClassTypeFilter((prev) =>
                       prev === $Enums.SubjectClassType.RETAKE
                         ? undefined
                         : $Enums.SubjectClassType.RETAKE
                     )
-                  }}
+                  }
                 >
                   Học lại
                 </Button>
@@ -702,13 +589,13 @@ export default function StudentScoreClassPage() {
                       ? "primary"
                       : "default"
                   }
-                  onClick={() => {
+                  onClick={() =>
                     setSubjectClassTypeFilter((prev) =>
                       prev === $Enums.SubjectClassType.REEXAM
                         ? undefined
                         : $Enums.SubjectClassType.REEXAM
                     )
-                  }}
+                  }
                 >
                   Thi lại
                 </Button>
@@ -726,9 +613,7 @@ export default function StudentScoreClassPage() {
                 </p>
               )}
               headerColumn={[
-                {
-                  colSpan: 1,
-                },
+                { colSpan: 1 },
                 {
                   render: (_, { code, name, schoolYear }) => (
                     <p className="font-medium text-base">
@@ -746,9 +631,7 @@ export default function StudentScoreClassPage() {
                 // },
               ]}
               filters={filters}
-              setFilters={(value) => {
-                setFilters(value)
-              }}
+              setFilters={(value) => setFilters(value)}
               childrenFieldName="subjectClasses"
               defaultExpandAll={expandAll}
               columns={[
@@ -759,9 +642,7 @@ export default function StudentScoreClassPage() {
                   type: "input",
                   fixed: "left",
                   width: 120,
-                  render: (_, record: any) => {
-                    return record?.subject?.code || ""
-                  },
+                  render: (_, record: any) => record?.subject?.code || "",
                 },
                 {
                   title: "Tên môn học",
@@ -774,24 +655,22 @@ export default function StudentScoreClassPage() {
                     value: item.name,
                   })),
                   width: 200,
-                  render: (value: string, record: any) => {
-                    return (
-                      <div className="flex flex-row items-center text-left">
-                        <p>
-                          {record?.type === $Enums.SubjectClassType.RETAKE ? (
-                            <Tag color={"blue"} className="p-0 px-1">
-                              Học lại
-                            </Tag>
-                          ) : record?.type === $Enums.SubjectClassType.REEXAM ? (
-                            <Tag color={"yellow"} className="p-0 px-1">
-                              Thi lại
-                            </Tag>
-                          ) : null}
-                        </p>
-                        {value}
-                      </div>
-                    )
-                  },
+                  render: (value: string, record: any) => (
+                    <div className="flex flex-row items-center text-left">
+                      <p>
+                        {record?.type === $Enums.SubjectClassType.RETAKE ? (
+                          <Tag color="blue" className="p-0 px-1">
+                            Học lại
+                          </Tag>
+                        ) : record?.type === $Enums.SubjectClassType.REEXAM ? (
+                          <Tag color="yellow" className="p-0 px-1">
+                            Thi lại
+                          </Tag>
+                        ) : null}
+                      </p>
+                      {value}
+                    </div>
+                  ),
                 },
                 {
                   title: "Điểm TX",
@@ -862,12 +741,10 @@ export default function StudentScoreClassPage() {
                     if (record.$isSummary) return null
                     const arr: { finalScore: number }[] =
                       record.subjectClassStudent?.[0]?.certificates.map(
-                        (i: { archivedCertificate: ArchivedCertificate }) => {
-                          return {
-                            ...i,
-                            finalScore: Number(i?.archivedCertificate?.finalScore) || 0,
-                          }
-                        }
+                        (i: { archivedCertificate: ArchivedCertificate }) => ({
+                          ...i,
+                          finalScore: Number(i?.archivedCertificate?.finalScore) || 0,
+                        })
                       )
                     return arr?.length > 0 ? _.maxBy(arr, "finalScore")?.finalScore : ""
                   },
@@ -878,9 +755,7 @@ export default function StudentScoreClassPage() {
                   dataIndex: "creditCmp",
                   type: "cmp",
                   width: 100,
-                  render: (_, record) => {
-                    return record?.subject?.credit
-                  },
+                  render: (_, record) => record?.subject?.credit,
                 },
                 {
                   title: "Điểm hệ 10",
@@ -889,12 +764,8 @@ export default function StudentScoreClassPage() {
                   type: "cmp",
                   width: 100,
                   render: (_, record) => {
-                    const subjectClassStudent = record?.subjectClassStudent?.[0]
-                    return (
-                      subjectClassStudent?.manualFinalScore ??
-                      subjectClassStudent?.finalScore?.toNumber() ??
-                      ""
-                    )
+                    const s = record?.subjectClassStudent?.[0]
+                    return s?.manualFinalScore ?? s?.finalScore?.toNumber() ?? ""
                   },
                 },
                 {
@@ -902,13 +773,14 @@ export default function StudentScoreClassPage() {
                   align: "center",
                   dataIndex: "finalScore4",
                   width: 100,
-                  render: (_, record) => {
-                    const subjectClassStudent = record?.subjectClassStudent?.[0]
-                    const score =
-                      subjectClassStudent?.manualFinalScore ||
-                      subjectClassStudent?.finalScore?.toNumber()
-                    if (score === undefined || score === null) return null
-                    return score !== undefined ? convertScore(score).base4 : ""
+                  render: (_, record: any) => {
+                    if (record.$isSummary) return null
+                    const s = record?.subjectClassStudent?.[0]
+                    const score = s?.manualFinalScore ?? s?.finalScore?.toNumber()
+                    if (score == null) return null
+                    // THÊM: graduation logic — đồng nhất với NhapDiem
+                    const isGraduation = record?.subject?.trainingBlocks?.[0]?.graduation === true
+                    return convertScoreWithGraduation(score, isGraduation)?.base4 ?? ""
                   },
                 },
                 {
@@ -919,15 +791,11 @@ export default function StudentScoreClassPage() {
                     if (record.$isSummary) {
                       return <b>{record.semesterResult.rank?.name || ""}</b>
                     }
-                    const subjectClassStudent = record?.subjectClassStudent?.[0]
-
-                    const score =
-                      subjectClassStudent?.manualFinalScore ??
-                      subjectClassStudent?.finalScore?.toNumber()
-
-                    if (score === null || score === undefined) return null
-
-                    return convertScore(score).letter
+                    const s = record?.subjectClassStudent?.[0]
+                    const score = s?.manualFinalScore ?? s?.finalScore?.toNumber()
+                    if (score == null) return null
+                    const isGraduation = record?.subject?.trainingBlocks?.[0]?.graduation === true
+                    return convertScoreWithGraduation(score, isGraduation)?.letter ?? ""
                   },
                 },
                 {
@@ -935,24 +803,14 @@ export default function StudentScoreClassPage() {
                   align: "center",
                   width: 100,
                   render: (_: any, record) => {
-                    // if (record.$isSummary) {
-                    //     return (
-                    //         <b>
-                    //             Đạt: {record.semesterResult.passedCredits}/{record.semesterResult.registeredCredits}
-                    //         </b>
-                    //     )
-                    // }
-                    const subjectClassStudent = record.subjectClassStudent?.[0]
-                    const score =
-                      subjectClassStudent?.manualFinalScore ??
-                      subjectClassStudent?.finalScore?.toNumber()
-
-                    if (score === undefined || score === null) return null
-                    const result = convertScore(score)
-
+                    const s = record.subjectClassStudent?.[0]
+                    const score = s?.manualFinalScore ?? s?.finalScore?.toNumber()
+                    if (score == null) return null
+                    const isGraduation = record?.subject?.trainingBlocks?.[0]?.graduation === true
+                    const result = convertScoreWithGraduation(score, isGraduation)
                     return (
                       <div className="flex items-center justify-center">
-                        {result.pass ? (
+                        {result?.pass ? (
                           <Check size={18} color="green" />
                         ) : (
                           <X size={18} color="red" />
@@ -1037,11 +895,10 @@ export default function StudentScoreClassPage() {
                 },
               ]}
               data={dataWithSummary}
-              pagination={{
-                hideOnSinglePage: true,
-              }}
+              pagination={{ hideOnSinglePage: true }}
             />
           </Col>
+
           <Col span={24}>
             <h3 className="text-lg font-bold">Danh sách điểm phiên</h3>
             <Table

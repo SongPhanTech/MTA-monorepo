@@ -383,35 +383,107 @@ export default function StudentFixedClassPage() {
       enabled: !!fixedClassId,
     }
   )
-  const handleTest = () => {
-    const testRows: TableRow[] = [
-      {
-        cells: [
-          { value: "Test", colSpan: 10, rowSpan: 2, border: true },
-          { value: "Test", border: true },
-          { value: "Test", border: true },
-        ],
-      },
-      {
-        cells: [
-          { value: "Test", border: true },
-          { value: "Test", border: true },
-          { value: "Test", border: true },
-        ],
-      },
-    ]
-    exportFromTemplate({
-      templateUrl: getMinioUrl("/mta/template/Bangdiemtheolop.xlsx"),
-      sheets: [
-        {
-          sheet: "BaoCaoDiem",
-          rows: testRows,
-          tableStartCell: { row: 9, col: 1 },
-        },
-      ],
-      fileName: "Test.xlsx",
-    })
+
+  const { convertScore } = useScoreConverter(data?.[0]?.fixedClass?.trainingCourse?.scoreConverts)
+  const scoreToPassGraduation = data?.[0]?.fixedClass?.trainingCourse?.scoreToPassGraduation ?? 5.5
+
+  const convertScoreWithGraduation = useCallback(
+    (score: number | null | undefined, isGraduation: boolean) => {
+      if (score == null) return null
+      if (isGraduation && score < scoreToPassGraduation) {
+        return { base4: 0, letter: "F", pass: false, classification: undefined }
+      }
+      return convertScore(score)
+    },
+    [convertScore, scoreToPassGraduation]
+  )
+
+  const debouncedRefetch = useCallback(
+    _.debounce(() => {
+      refetch()
+    }, 500),
+    []
+  )
+  const { onOpen } = useDisclosure<{
+    id: string
+  }>({
+    tag: "AddStudentToFixedClassModal",
+  })
+
+  const { onOpen: onOpenPrint } = useDisclosure<{
+    dataTable: Student[]
+    dataFixedClass: any
+  }>({
+    tag: "ModalPrintToDSHV",
+  })
+
+  const { onOpen: onOpenStandardOutput } = useDisclosure<{
+    id: string
+  }>({
+    tag: "PutChuanDauRaModal",
+  })
+
+  const { showSpinner, hideSpinner } = useSpinner()
+
+  const handleModal = () => {
+    onOpen({ id: fixedClassId })
   }
+
+  const handleModalPrint = () => {
+    onOpenPrint({ dataFixedClass: fixedClass, dataTable: data })
+  }
+
+  const { mutateAsync: updateUserProfile } = useUpdateStudent()
+  const { mutateAsync: updateManyUserProfile } = useUpdateManyStudent()
+  async function handleDelete(id: string) {
+    try {
+      showSpinner()
+      await updateUserProfile({
+        where: { id },
+        data: { fixedClassId: null },
+      })
+      setSelectedRowKeys([])
+    } catch (error: any) {
+      if (error?.info?.message) {
+        message.error(error?.info?.message)
+        return
+      }
+      message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
+    } finally {
+      hideSpinner()
+    }
+  }
+
+  async function handleDeleteMulti() {
+    try {
+      showSpinner()
+      if (selectedRowKeys?.length > 0) {
+        await updateManyUserProfile({
+          where: { id: { in: selectedRowKeys } },
+          data: { fixedClassId: null },
+        })
+      }
+      setOpen(false)
+      setSelectedRowKeys([])
+    } catch (error: any) {
+      if (error?.info?.message) {
+        message.error(error?.info?.message)
+        return
+      }
+      message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
+    } finally {
+      hideSpinner()
+    }
+  }
+
+  const handleCancel = () => {
+    setOpen(false)
+  }
+
+  const showPopconfirm = () => {
+    setOpen(true)
+  }
+
   const handleExportDiemLop = async () => {
     showSpinner()
     try {
@@ -586,105 +658,6 @@ export default function StudentFixedClassPage() {
     }
   }
 
-  const debouncedRefetch = useCallback(
-    _.debounce(() => {
-      refetch()
-    }, 500),
-    []
-  )
-  const { onOpen } = useDisclosure<{
-    id: string
-  }>({
-    tag: "AddStudentToFixedClassModal",
-  })
-
-  const { onOpen: onOpenPrint } = useDisclosure<{
-    dataTable: Student[]
-    dataFixedClass: any
-  }>({
-    tag: "ModalPrintToDSHV",
-  })
-
-  const { onOpen: onOpenStandardOutput } = useDisclosure<{
-    id: string
-  }>({
-    tag: "PutChuanDauRaModal",
-  })
-
-  // TODO!: anh TUẤN sửa
-  // const { onOpen: onOpenUpdate } = useDisclosure<{
-  //     tag?: string
-  //     preSelectedValues?: {
-  //         trainingObjectTypeId?: string
-  //         trainingCourseId?: string
-  //         fixedClassId?: string
-  //     }
-  //     id: string | null
-  // }>({
-  //     tag: 'PutStudentModal',
-  // })
-
-  const { showSpinner, hideSpinner } = useSpinner()
-
-  const handleModal = () => {
-    onOpen({ id: fixedClassId })
-  }
-
-  const handleModalPrint = () => {
-    onOpenPrint({ dataFixedClass: fixedClass, dataTable: data })
-  }
-
-  const { mutateAsync: updateUserProfile } = useUpdateStudent()
-  const { mutateAsync: updateManyUserProfile } = useUpdateManyStudent()
-  async function handleDelete(id: string) {
-    try {
-      showSpinner()
-      await updateUserProfile({
-        where: { id },
-        data: { fixedClassId: null },
-      })
-      setSelectedRowKeys([])
-    } catch (error: any) {
-      if (error?.info?.message) {
-        message.error(error?.info?.message)
-        return
-      }
-      message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
-    } finally {
-      hideSpinner()
-    }
-  }
-
-  async function handleDeleteMulti() {
-    try {
-      showSpinner()
-      if (selectedRowKeys?.length > 0) {
-        await updateManyUserProfile({
-          where: { id: { in: selectedRowKeys } },
-          data: { fixedClassId: null },
-        })
-      }
-      setOpen(false)
-      setSelectedRowKeys([])
-    } catch (error: any) {
-      if (error?.info?.message) {
-        message.error(error?.info?.message)
-        return
-      }
-      message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
-    } finally {
-      hideSpinner()
-    }
-  }
-
-  const handleCancel = () => {
-    setOpen(false)
-  }
-
-  const showPopconfirm = () => {
-    setOpen(true)
-  }
-
   const handleExportCaNhan = async () => {
     const result: any[] = []
     showSpinner()
@@ -721,7 +694,14 @@ export default function StudentFixedClassPage() {
                         studentId: item.id,
                       },
                       include: {
-                        subjectVersion: true,
+                        subjectVersion: {
+                          include: {
+                            trainingBlocks: {
+                              select: { graduation: true },
+                              take: 1,
+                            },
+                          },
+                        },
                         certificates: {
                           include: {
                             archivedCertificate: true,
@@ -798,7 +778,10 @@ export default function StudentFixedClassPage() {
                     0
 
                   if (bestAttempt && bestAttempt.semesterId === semester.id) {
-                    const diemchu: string = convertScore(currentScore).letter ?? ""
+                    const isGraduation =
+                      subjectClassStudent.subjectVersion?.trainingBlocks?.[0]?.graduation === true
+                    const converted = convertScoreWithGraduation(currentScore, isGraduation)
+                    const diemchu: string = converted?.letter ?? ""
 
                     if (diemchu.toUpperCase() < "F") {
                       monhoc.push({
@@ -806,7 +789,7 @@ export default function StudentFixedClassPage() {
                         MaMH: subjectClassStudent.subjectVersion.code?.slice(0, 2) ?? "",
                         soTC: subjectClassStudent.subjectVersion.credit,
                         diemhe10: currentScore,
-                        diemhe4: convertScore(currentScore).base4 ?? 0,
+                        diemhe4: converted?.base4 ?? 0,
                         diemchu: diemchu,
                         ghichu: subjectClassStudent.description ?? "",
                       })
@@ -900,6 +883,7 @@ export default function StudentFixedClassPage() {
             })) ?? []
 
           // Dòng trung bình học kỳ
+
           const trungBinhRow: TableRow = {
             cells: [
               { value: null },
@@ -1094,7 +1078,14 @@ export default function StudentFixedClassPage() {
                         studentId: item.id,
                       },
                       include: {
-                        subjectVersion: true,
+                        subjectVersion: {
+                          include: {
+                            trainingBlocks: {
+                              select: { graduation: true },
+                              take: 1,
+                            },
+                          },
+                        },
                         certificates: {
                           include: {
                             archivedCertificate: true,
@@ -1145,26 +1136,22 @@ export default function StudentFixedClassPage() {
               // Vòng lặp này CHỈ DÙNG ĐỂ gom các môn học
               semester.subjectClasses.forEach((subjectClass: any) => {
                 subjectClass.subjectClassStudent.forEach((subjectClassStudent: any) => {
+                  const rawScore =
+                    subjectClassStudent?.manualFinalScore ||
+                    Number(subjectClassStudent?.finalScore) ||
+                    0
+
+                  const isGraduation =
+                    subjectClassStudent.subjectVersion?.trainingBlocks?.[0]?.graduation === true
+                  const converted = convertScoreWithGraduation(rawScore, isGraduation)
+
                   monhoc.push({
                     TenMonhoc: subjectClassStudent.subjectVersion.name,
                     MaMH: subjectClassStudent.subjectVersion.code?.slice(0, 2) ?? "",
                     soTC: subjectClassStudent.subjectVersion.credit,
-                    diemhe10:
-                      subjectClassStudent?.manualFinalScore ||
-                      Number(subjectClassStudent?.finalScore) ||
-                      0,
-                    diemhe4:
-                      convertScore(
-                        subjectClassStudent?.manualFinalScore ||
-                          Number(subjectClassStudent?.finalScore) ||
-                          0
-                      ).base4 ?? 0,
-                    diemchu:
-                      convertScore(
-                        subjectClassStudent?.manualFinalScore ||
-                          Number(subjectClassStudent?.finalScore) ||
-                          0
-                      ).letter ?? "",
+                    diemhe10: rawScore,
+                    diemhe4: converted?.base4 ?? 0,
+                    diemchu: converted?.letter ?? "",
                     ghichu: subjectClassStudent.description ?? "",
                   })
                 })
@@ -1383,7 +1370,7 @@ export default function StudentFixedClassPage() {
           ],
         }
         return {
-          sheet: `${sampleStudentData.maSV} - ${sampleStudentData.fullname}`, // Tên sheet tạm duy nhất
+          sheet: `${sampleStudentData.maSV} - ${sampleStudentData.fullname}`,
           data: {
             fullname: sampleStudentData.fullname,
             dateOfBirth: sampleStudentData.dateOfBirth,
@@ -1417,6 +1404,10 @@ export default function StudentFixedClassPage() {
       hideSpinner()
     }
   }
+
+  // ─── handleExportBangDiem ─────────────────────────────────────────────────────
+  // Sửa: dùng convertScoreWithGraduation thay vì convertScore trực tiếp
+  // Sửa: gọi convert 1 lần duy nhất trên mỗi điểm thay vì 2-3 lần
   const handleExportBangDiem = async () => {
     const result: any[] = []
     showSpinner()
@@ -1453,7 +1444,14 @@ export default function StudentFixedClassPage() {
                         studentId: item.id,
                       },
                       include: {
-                        subjectVersion: true,
+                        subjectVersion: {
+                          include: {
+                            trainingBlocks: {
+                              select: { graduation: true },
+                              take: 1,
+                            },
+                          },
+                        },
                         certificates: {
                           include: {
                             archivedCertificate: true,
@@ -1501,26 +1499,21 @@ export default function StudentFixedClassPage() {
               const monhoc: IMonHoc[] = []
               semester.subjectClasses.forEach((subjectClass: any) => {
                 subjectClass.subjectClassStudent.forEach((subjectClassStudent: any) => {
+                  const rawScore =
+                    subjectClassStudent?.manualFinalScore ||
+                    Number(subjectClassStudent?.finalScore) ||
+                    0
+                  const isGraduation =
+                    subjectClassStudent.subjectVersion?.trainingBlocks?.[0]?.graduation === true
+                  const converted = convertScoreWithGraduation(rawScore, isGraduation)
+
                   monhoc.push({
                     TenMonhoc: subjectClassStudent.subjectVersion.name,
                     MaMH: subjectClassStudent.subjectVersion.code?.slice(0, 2) ?? "",
                     soTC: subjectClassStudent.subjectVersion.credit,
-                    diemhe10:
-                      subjectClassStudent?.manualFinalScore ||
-                      Number(subjectClassStudent?.finalScore) ||
-                      0,
-                    diemhe4:
-                      convertScore(
-                        subjectClassStudent?.manualFinalScore ||
-                          Number(subjectClassStudent?.finalScore) ||
-                          0
-                      ).base4 ?? 0,
-                    diemchu:
-                      convertScore(
-                        subjectClassStudent?.manualFinalScore ||
-                          Number(subjectClassStudent?.finalScore) ||
-                          0
-                      ).letter ?? "",
+                    diemhe10: rawScore,
+                    diemhe4: converted?.base4 ?? 0,
+                    diemchu: converted?.letter ?? "",
                     ghichu: subjectClassStudent.description ?? "",
                   })
                 })
@@ -1738,7 +1731,6 @@ export default function StudentFixedClassPage() {
       hideSpinner()
     }
   }
-  const { convertScore } = useScoreConverter(data?.[0]?.fixedClass?.trainingCourse?.scoreConverts)
 
   return (
     <div>
