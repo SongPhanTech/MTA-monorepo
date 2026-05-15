@@ -509,7 +509,7 @@ export const exportPhuLucDsLuanVan = async ({
       ],
     }
     await exportFromTemplate({
-      templateUrl: getMinioUrl("mta/template/PhuLucDanhSachLuanVan.xlsx"),
+      templateUrl: getMinioUrl("mta/luan-van/PhuLucDanhSachLuanVan.xlsx"),
       sheets: [
         {
           sheet: "PhuLucDanhSachLuanVan",
@@ -648,6 +648,7 @@ export const exportThongKeCbHdlv = async ({
       tail: { data: null },
       fileName: "ThongKeCanBoHuongDan",
       path: "ThongKeCanBoHuongDan.xlsx",
+      prefix: "mta/luan-van",
       payload: [
         {
           data: {
@@ -751,6 +752,7 @@ export const exportDanhSachBaoVe = async ({
       tail: { data: null },
       fileName: "DanhSachBaoVe",
       path: "DanhSachBaoVe.xlsx",
+      prefix: "mta/luan-van",
       payload: [
         {
           data: {
@@ -1305,6 +1307,7 @@ export const exportHosobvlv = async ({
     const payload = {
       fileName: "Hosobvlv",
       path: "Hosobvlv.docx",
+      prefix: "mta/luan-van",
       data: {
         items: allSheetOptions?.filter((item) => item !== null).map((item) => item!.data) ?? [],
       },
@@ -1370,6 +1373,7 @@ export const exportGiayMoiHdlv = async ({
     const payload = {
       fileName: "GiayMoiHDLV",
       path: "GiayMoiHDLV.docx",
+      prefix: "mta/luan-van",
       data: {
         items: allSheetOptions?.filter((item) => item !== null).map((item) => item!.data) ?? [],
       },
@@ -1498,6 +1502,7 @@ export const exportSaoQDHDLV = async ({
     const payload = {
       fileName: "BanSaoQDHuongDanLuanVan.docx",
       path: "BanSaoQDHuongDanLuanVan.docx",
+      prefix: "mta/luan-van",
       data: {
         councilReport: items[0]?.councilReport || "",
         proposalReport: items[0]?.proposalReport || "",
@@ -1667,7 +1672,7 @@ export const exportKiemTraTienDo = async ({
       ],
     }
     await exportFromTemplate({
-      templateUrl: getMinioUrl("mta/template/KiemTraTienDoLuanVan.xlsx"),
+      templateUrl: getMinioUrl("mta/luan-van/KiemTraTienDoLuanVan.xlsx"),
       sheets: [
         {
           sheet: "Detai",
@@ -1871,6 +1876,7 @@ export const exportGiayMoiChamLvPb = async ({
     const payload = {
       fileName: "GiayMoiChamLuanVan",
       path: "GiayMoiChamLuanVan.docx",
+      prefix: "mta/luan-van",
       data: {
         items: items,
       },
@@ -1929,6 +1935,7 @@ export const exportThanhToanHoiDongBaoVe = async ({
       tail: { data: null },
       fileName: "ThanhToanHoiDongBaoVe",
       path: "ThanhToanHoiDongBV.xlsx",
+      prefix: "mta/luan-van",
       payload: dataConvert,
       showGridLines: true,
     }
@@ -2147,6 +2154,7 @@ export const exportDanhSachNopLuanVanThuVien = async ({
       tail: { data: null },
       fileName: "DanhSachNopLuanVanThuVien",
       path: "DanhSachNopLuanVanThuVien.xlsx",
+      prefix: "mta/luan-van",
       payload: [dataConvert],
       showGridLines: true,
       wrapText: true,
@@ -2258,6 +2266,7 @@ export const exportThongKeCbThamGiaHd = async ({
       tail: { data: null },
       fileName: "ThongKeCbThamGiaHd",
       path: "ThongKeCanBoHoiDong.xlsx",
+      prefix: "mta/luan-van",
       payload: dataConvert,
       showGridLines: true,
       wrapText: true,
@@ -2427,6 +2436,7 @@ export const exportThanhToanHuongDanTrongHv = async ({
       tail: { data: null },
       fileName: fileName,
       path: path,
+      prefix: "mta/luan-van",
       payload: dataConvert,
       showGridLines: true,
       wrapText: true,
@@ -2605,6 +2615,7 @@ export const exportKetQuaBaoVeLuanVan = async ({
       tail: { data: null },
       fileName: "KetQuaBaoVeLuanVan",
       path: "KetQuaBaoVeLuanVan.xlsx",
+      prefix: "mta/luan-van",
       payload: [dataConvert],
       showGridLines: true,
       wrapText: true,
@@ -2745,6 +2756,7 @@ export const exportBanSaoHDDGLV = async ({
     const payload = {
       fileName: "BanSaoHoiDongDanhGiaLuanVan",
       path: "BanSaoHoiDongDanhGiaLuanVan.docx",
+      prefix: "mta/luan-van",
       data: {
         items: dataConvert.map((item: banSaoHDDGLV) => item.data),
       },
@@ -2910,6 +2922,7 @@ export const exportPhuLucQdhdd = async ({
     const payload = {
       fileName: "PhuLucQdhd",
       path: "PhuLucQDHoiDong.docx",
+      prefix: "mta/luan-van",
       data: {
         ...dataConvert.head.data,
         ...dataConvert.tail.data,
@@ -3065,6 +3078,7 @@ export const exportDsChuyenGia = async ({
       tail: { data: null },
       fileName: "DsChuyenGia",
       path: "DanhSachChuyenGia.xlsx",
+      prefix: "mta/luan-van",
       payload: dataConvert,
       showGridLines: true,
       wrapText: true,
@@ -3247,6 +3261,7 @@ export const exportHDDanhGiaLuanVan = async ({
       tail: { data: dataConvert.tail },
       fileName: "HDDanhGiaLuanVan",
       path: "DeNghiHDDanhGiaLuanVan.xlsx",
+      prefix: "mta/luan-van",
       payload: dataConvert.data.map((org) => ({
         data: {
           tenDonViQuanLi: org.tenDonViQuanLi,
@@ -3535,6 +3550,7 @@ export const exportThongKeCoQuanDonViCanBoNgoaiHv = async ({
       tail: { data: null },
       fileName: "ThongKeCoQuanDonViCanBoNgoaiHv",
       path: "ThongKeCoQuanDonViCanBoNgoaiHv.xlsx",
+      prefix: "mta/luan-van",
       payload: [{ data: data }],
       showGridLines: true,
       wrapText: true,
