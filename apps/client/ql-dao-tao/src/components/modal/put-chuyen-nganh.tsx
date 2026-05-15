@@ -7,6 +7,7 @@ import { buildOrgTree } from "@lib/utils"
 import type { TrainingField, TrainingMajor, TrainingObjectType } from "@workspace/db/client"
 import {
   useCreateTrainingMajor,
+  useFindManyCurriculum,
   useFindManyDM_DonVi,
   useFindManyTrainingField,
   useFindUniqueTrainingMajor,
@@ -49,6 +50,17 @@ const PutTrainingMajorModal = () => {
         },
       },
     })
+
+  const { data: curriculumsByMajor = [] } = useFindManyCurriculum(
+    {
+      where: { trainingMajorId: id },
+      select: { trainingObjectTypeId: true },
+    },
+    { enabled: !!id }
+  )
+  const lockedTrainingObjectTypeIds = new Set(
+    curriculumsByMajor.map((i: { trainingObjectTypeId: string }) => i.trainingObjectTypeId)
+  )
 
   const { data: organizations = [] } = useFindManyDM_DonVi({
     where: whereOrganization,
@@ -194,9 +206,13 @@ const PutTrainingMajorModal = () => {
             maxTagCount={"responsive"}
             placeholder="Chọn đối tượng đào tạo"
             options={trainingObjectTypeData.map((i: TrainingObjectType) => {
+              const isLocked = lockedTrainingObjectTypeIds.has(i.id)
               return {
                 value: i.id,
-                label: i.name,
+                label: isLocked
+                  ? `${i.name} (đã có trong CTĐT)`
+                  : i.name,
+                disabled: isLocked,
               }
             })}
             disabled={targetDisabled}
