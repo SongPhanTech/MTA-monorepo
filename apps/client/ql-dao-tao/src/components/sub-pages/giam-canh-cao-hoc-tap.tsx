@@ -6,8 +6,13 @@ import TableCollapse from "@components/commons/tableCollapse"
 import { DEFAULT_PAGINATE_SIZE } from "@constants/constants"
 import { getWarningLevelColor } from "@hooks/getWarningLevelColor"
 import useSpinner from "@hooks/spinner"
-import { $Enums, type StudentSemesterResult } from "@workspace/db/client"
-import { useCreateAcademicWarning } from "@workspace/db/hooks"
+import {
+  $Enums,
+  type AcademicWarning,
+  type Student,
+  type StudentSemesterResult,
+} from "@workspace/db/client"
+import { useCreateAcademicWarning, useFindManyAcademicWarning } from "@workspace/db/hooks"
 import { useExportStudentDecreaseAcademicWarningJson } from "@workspace/libs/api/training"
 import { BookPlus } from "lucide-react"
 import { useMemo, useState } from "react"
@@ -35,6 +40,13 @@ const GiamCanhCaoHocTap = ({ semesterId, trainingObjectTypeId }: GiamCanhCaoHocT
     queryClient
   )
 
+  const { data: academicWarningData, refetch } = useFindManyAcademicWarning({
+    where: {
+      semesterId,
+      student: { fixedClass: { trainingCourse: { trainingObjectTypeId } } },
+    },
+  })
+
   const decreaseStudentData = useMemo(() => {
     if (!decreaseStudents) return []
     if (Array.isArray(decreaseStudents)) return decreaseStudents
@@ -43,11 +55,17 @@ const GiamCanhCaoHocTap = ({ semesterId, trainingObjectTypeId }: GiamCanhCaoHocT
   }, [decreaseStudents])
 
   const filteredDecreaseStudentData = useMemo(() => {
+    const studentIdsWithWarnings = new Set(
+      (academicWarningData ?? []).map((warning: AcademicWarning) => warning.studentId)
+    )
     return decreaseStudentData.map((record) => ({
       ...record,
-      students: (record.students || []).filter((s: any) => s.decreaseAcademicWarning),
+      students: (record.students || []).filter(
+        (s: Student & { decreaseAcademicWarning?: boolean }) =>
+          s.decreaseAcademicWarning && !studentIdsWithWarnings.has(s.id)
+      ),
     }))
-  }, [decreaseStudentData])
+  }, [decreaseStudentData, academicWarningData])
 
   const rowSelection = {
     selectedRowKeys,
@@ -95,6 +113,7 @@ const GiamCanhCaoHocTap = ({ semesterId, trainingObjectTypeId }: GiamCanhCaoHocT
             })
 
           await Promise.all(promises)
+          await refetch()
           setSelectedRowKeys([])
           message.success("Duyệt giảm cảnh cáo thành công")
         } catch (error) {
@@ -179,9 +198,7 @@ const GiamCanhCaoHocTap = ({ semesterId, trainingObjectTypeId }: GiamCanhCaoHocT
               width: 130,
               align: "center",
               render: (value: number) => (
-                <Tag color={getWarningLevelColor(Math.max(0, (value ?? 0) - 1))}>
-                  {Math.max(0, (value ?? 0) - 1)}
-                </Tag>
+                <Tag color={getWarningLevelColor(value ?? 0)}>{value ?? 0}</Tag>
               ),
             },
             {
