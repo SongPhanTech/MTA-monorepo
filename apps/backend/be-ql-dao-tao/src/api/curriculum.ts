@@ -230,7 +230,7 @@ app.openapi(exportCurriculumVersion, async (c) => {
       let typeLabel = ""
       switch (subj.type) {
         case $Enums.SubjectVersionType.Normal:
-          typeLabel = "Lý thuyết"
+          typeLabel = "Thường"
           break
         case $Enums.SubjectVersionType.Practice:
           typeLabel = "Thực hành"
@@ -239,7 +239,7 @@ app.openapi(exportCurriculumVersion, async (c) => {
           typeLabel = "Thực tập"
           break
         case $Enums.SubjectVersionType.Research:
-          typeLabel = "Nghiên cứu"
+          typeLabel = "Chuyên đề nghiên cứu"
           break
         case $Enums.SubjectVersionType.Project:
           typeLabel = "Đồ án"
@@ -248,7 +248,7 @@ app.openapi(exportCurriculumVersion, async (c) => {
           typeLabel = "Luận văn"
           break
         case $Enums.SubjectVersionType.Graduation:
-          typeLabel = "Tốt nghiệp"
+          typeLabel = "Thi tốt nghiệp"
           break
       }
 
@@ -282,7 +282,7 @@ app.openapi(exportCurriculumVersion, async (c) => {
         isCondition: !s.useForFinalScore ? "1" : "",
         type: typeLabel,
         code: subj.code,
-        organization: subj.managementOrganization?.sTen || "",
+        organization: subj.managementOrganization?.sMa || "",
         credit: subj.credit,
         structure: subj.period,
         totalPeriod: subj.period,
