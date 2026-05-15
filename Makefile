@@ -6,7 +6,7 @@ RELEASE_TAG := release
 COMPOSE_CMD := docker compose up
 IMG_PREFIX := mta-
 
-# TK Promox (192.168.100.100) root/Abc@12345
+# TK Promox (192.168.100.100:8006) root/Abc@12345
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Server Profiles

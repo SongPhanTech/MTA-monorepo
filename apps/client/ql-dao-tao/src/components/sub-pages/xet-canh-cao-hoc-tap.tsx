@@ -87,7 +87,19 @@ const XetCanhCaoHocTap = ({ semesterId, trainingObjectTypeId }: XetCanhCaoHocTap
   const { mutateAsync: deleteAcademicWarning } = useDeleteAcademicWarning()
 
   const { data: academicWarningData } = useFindManyAcademicWarning({
-    where: { semesterId, ...where },
+    where: {
+      semesterId,
+      AND: [
+        {
+          student: {
+            fixedClass: {
+              trainingCourse: { trainingObjectTypeId },
+            },
+          },
+        },
+        where,
+      ],
+    },
     include: {
       student: {
         include: {
@@ -109,6 +121,7 @@ const XetCanhCaoHocTap = ({ semesterId, trainingObjectTypeId }: XetCanhCaoHocTap
   })
 
   const { data: fixedClassData = [] } = useFindManyFixedClass({
+    where: { trainingCourse: { trainingObjectTypeId } },
     orderBy: { name: "asc" },
   })
 
