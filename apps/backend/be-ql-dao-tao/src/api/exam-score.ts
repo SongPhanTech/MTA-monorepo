@@ -242,6 +242,9 @@ app.openapi(saveExamScore, async (c) => {
           subjectClass: {
             select: { type: true },
           },
+          subjectVersion: {
+            select: { onePoint: true },
+          },
           certificates: {
             select: {
               archivedCertificate: {
@@ -332,14 +335,17 @@ app.openapi(saveExamScore, async (c) => {
 
   const updates = examPapers.map((p) => {
     const examScore = Number(map.get(p.id)) >= 0 ? Number(map.get(p.id)) : null
+    const isOnePoint = !!p.studentSubjectScore.subjectVersion?.onePoint
+    const attendanceScore = isOnePoint ? examScore : p.studentSubjectScore.attendanceScore
+    const midtermScore = isOnePoint ? examScore : p.studentSubjectScore.midtermScore
 
     const finalScore = calcFinalScore(
       p.studentSubjectScore.student.fixedClass?.trainingCourse || defaultCoef,
-      { ...p.studentSubjectScore, examScore },
+      { ...p.studentSubjectScore, attendanceScore, midtermScore, examScore },
       p.studentSubjectScore.subjectClass?.type || $Enums.SubjectClassType.NORMAL
     )
 
-    return { examPaperId: p.id, examScore, finalScore }
+    return { examPaperId: p.id, examScore, attendanceScore, midtermScore, finalScore }
   })
 
   await prisma.$transaction(async (tx) => {
@@ -347,6 +353,8 @@ app.openapi(saveExamScore, async (c) => {
           UPDATE "ql-dao-tao"."StudentSubjectScore" AS sss
           SET
               "examScore" = data."examScore",
+              "attendanceScore" = data."attendanceScore",
+              "midtermScore" = data."midtermScore",
               "finalScore" = data."finalScore",
               "updatedAt" = NOW()
           FROM (
@@ -356,11 +364,13 @@ app.openapi(saveExamScore, async (c) => {
                   (u) => `(
                           '${u.examPaperId}',
                           ${u.examScore === null ? "NULL::double precision" : u.examScore},
+                          ${u.attendanceScore === null ? "NULL::double precision" : u.attendanceScore},
+                          ${u.midtermScore === null ? "NULL::double precision" : u.midtermScore},
                           ${u.finalScore === null ? "NULL::double precision" : u.finalScore}
                       )`
                 )
                 .join(",\n")}
-          ) AS data("examPaperId", "examScore", "finalScore")
+          ) AS data("examPaperId", "examScore", "attendanceScore", "midtermScore", "finalScore")
           JOIN "khao-thi"."ExamPaper" AS es
               ON es."id" = data."examPaperId"
           WHERE sss."id" = es."studentSubjectScoreId";
