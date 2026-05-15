@@ -245,7 +245,7 @@ app.openapi(exportCurriculumVersion, async (c) => {
           typeLabel = "Đồ án"
           break
         case $Enums.SubjectVersionType.Thesis:
-          typeLabel = "Luận văn"
+          typeLabel = "Luận văn-Đề án"
           break
         case $Enums.SubjectVersionType.Graduation:
           typeLabel = "Thi tốt nghiệp"
