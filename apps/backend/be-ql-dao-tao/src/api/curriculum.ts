@@ -255,13 +255,13 @@ app.openapi(exportCurriculumVersion, async (c) => {
       let examTypeLabel = ""
       switch (subj.examType) {
         case $Enums.ExamType.OfflineWritten:
-          examTypeLabel = "Viết"
+          examTypeLabel = "Thi viết"
           break
         case $Enums.ExamType.OnlineWritten:
           examTypeLabel = "Viết trực tuyến"
           break
         case $Enums.ExamType.Oral:
-          examTypeLabel = "Vấn đáp"
+          examTypeLabel = "Thi vấn đáp"
           break
         case $Enums.ExamType.Practice:
           examTypeLabel = "Thực hành"
