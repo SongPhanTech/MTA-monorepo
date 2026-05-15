@@ -1,4 +1,4 @@
-import { SafetyCertificateOutlined } from "@ant-design/icons"
+import { DownloadOutlined, SafetyCertificateOutlined } from "@ant-design/icons"
 import Select from "@components/commons/select"
 import Table from "@components/commons/table"
 import TableCollapse from "@components/commons/tableCollapse"
@@ -21,7 +21,7 @@ import { exportFromTemplate, type TableRow } from "@workspace/libs/template-exce
 import { getMinioUrl } from "@workspace/libs/utils"
 import { useAbility } from "@workspace/permissions/hooks"
 import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from "@workspace/router"
-import { Button, Col, Divider, Flex, Row, Tag, Tooltip } from "antd"
+import { Button, Col, Divider, Dropdown, Flex, Row, Tag, Tooltip } from "antd"
 import dayjs from "dayjs"
 import _ from "lodash"
 import { Check, X } from "lucide-react"
@@ -89,6 +89,9 @@ export default function StudentScoreClassPage() {
         curriculumVersion: {
           include: {
             trainingLevel: true,
+            trainingLanguage: true,
+            trainingTime: true,
+            trainingType: true,
             curriculum: {
               include: {
                 trainingMajor: {
@@ -492,6 +495,187 @@ export default function StudentScoreClassPage() {
     })
   }
 
+  const handleExportQuaTrinh = async () => {
+    const hocKis: IHocKi[] = []
+    if (data.length > 0) {
+      data.forEach((semester) => {
+        const monhoc: IMonHoc[] = []
+        semester.subjectClasses.forEach((subjectClass) => {
+          subjectClass.subjectClassStudent.forEach((subjectClassStudent) => {
+            const rawScore =
+              subjectClassStudent?.manualFinalScore ||
+              subjectClassStudent?.finalScore?.toNumber() ||
+              0
+
+            const isGraduation = subjectClass?.subject?.trainingBlocks?.[0]?.graduation === true
+            const converted = convertScoreWithGraduation(rawScore, isGraduation)
+
+            monhoc.push({
+              TenMonhoc: subjectClass.subject.name,
+              soTC: subjectClass.subject.credit,
+              diemhe10: rawScore,
+              diemhe4: converted?.base4 ?? 0,
+              diemchu: converted?.letter ?? "",
+            })
+          })
+        })
+
+        const tongSoTinChi = monhoc.reduce((acc, curr) => acc + (curr.soTC ?? 0), 0)
+        const tongDiemNhanTinChiHe10 = monhoc.reduce(
+          (acc, curr) => acc + (curr.diemhe10 ?? 0) * (curr.soTC ?? 0),
+          0
+        )
+        const tongDiemNhanTinChiHe4 = monhoc.reduce(
+          (acc, curr) => acc + (curr.diemhe4 ?? 0) * (curr.soTC ?? 0),
+          0
+        )
+        const diemTBHe10 = Number.parseFloat(
+          (tongSoTinChi === 0 ? 0 : tongDiemNhanTinChiHe10 / tongSoTinChi).toFixed(1)
+        )
+        const diemTBHe4 = Number.parseFloat(
+          (tongSoTinChi === 0 ? 0 : tongDiemNhanTinChiHe4 / tongSoTinChi).toFixed(1)
+        )
+
+        hocKis.push({
+          TenHocKi: `${semester.code}-${semester.name}-${semester.schoolYear?.name}`,
+          SoTinChiKy: tongSoTinChi,
+          DiemTBKyHe10: diemTBHe10,
+          DiemTBKyHe4: diemTBHe4,
+          monHocs: monhoc,
+        })
+      })
+    }
+
+    const sampleStudentData = {
+      hoVaTen: student?.userProfile?.fullname,
+      ngaySinh: student?.userProfile?.dateOfBirth,
+      maSinhVien: student?.code,
+      ngayNhapHoc: student?.fixedClass?.trainingCourse.admissionStartDate,
+      ngonNguDaoTao: student?.curriculumVersion?.trainingLanguage?.name,
+      thoiGianDaoTao: student?.curriculumVersion?.trainingTime?.name,
+      nganhDaoTao: student?.curriculumVersion?.curriculum?.trainingMajor?.trainingField?.name,
+      trinhDoDaoTao: student?.curriculumVersion?.trainingLevel?.name,
+      chuyenNganh: student?.curriculumVersion?.curriculum.trainingMajor.name,
+      hinhThucDaoTao: student?.curriculumVersion?.trainingType?.name,
+      // lop: student?.fixedClass?.trainingCourse?.name,
+      hocKis,
+    }
+
+    const tableRows = sampleStudentData.hocKis.flatMap((hocKi) => {
+      const hocKiRow: TableRow = {
+        cells: [
+          { value: hocKi.TenHocKi ?? "", colSpan: 11, bold: true, align: "left", border: true },
+        ],
+      }
+      const monHocRows: TableRow[] =
+        hocKi?.monHocs?.map((monHoc: IMonHoc, index: number) => ({
+          cells: [
+            { value: index + 1, align: "center" },
+            { value: monHoc.TenMonhoc ?? "", colSpan: 6, border: true },
+            { value: monHoc.soTC, align: "center" },
+            { value: monHoc.diemhe10 ?? 0, align: "right" },
+            { value: monHoc.diemhe4 ?? 0, align: "right" },
+            { value: monHoc.diemchu ?? "", align: "center" },
+          ],
+        })) ?? []
+
+      const trungBinhRow: TableRow = {
+        cells: [
+          { value: null },
+          { value: "Điểm trung bình học kỳ:", colSpan: 6, bold: true, align: "center" },
+          { value: hocKi.SoTinChiKy ?? 0, bold: true, align: "center" },
+          { value: hocKi.DiemTBKyHe10 ?? 0, bold: true, align: "center" },
+          { value: hocKi.DiemTBKyHe4 ?? 0, bold: true, align: "center" },
+          // { value: null },
+        ],
+      }
+
+      return [...monHocRows]
+    })
+
+    const gapRow: TableRow = { cells: [{ value: null, colSpan: 9, border: false }] }
+
+    exportFromTemplate({
+      templateUrl: getMinioUrl("/mta/template/BangDiemQuaTrinh.xlsx"),
+      sheets: [
+        {
+          sheet: "BaoCaoDiem",
+          data: {
+            hoVaTen: sampleStudentData.hoVaTen ?? "",
+            ngaySinh: sampleStudentData.ngaySinh
+              ? dayjs(sampleStudentData.ngaySinh).format("DD/MM/YYYY")
+              : "",
+            maSinhVien: sampleStudentData.maSinhVien ?? "",
+            ngayNhapHoc: sampleStudentData.ngayNhapHoc
+              ? dayjs(sampleStudentData.ngayNhapHoc).format("DD/MM/YYYY")
+              : "",
+            ngonNguDaoTao: sampleStudentData.ngonNguDaoTao ?? "",
+            thoiGianDaoTao: sampleStudentData.thoiGianDaoTao ?? "",
+            nganhDaoTao: sampleStudentData.nganhDaoTao ?? "",
+            trinhDoDaoTao: sampleStudentData.trinhDoDaoTao ?? "",
+            chuyenNganh: sampleStudentData.chuyenNganh ?? "",
+            hinhThucDaoTao: sampleStudentData.hinhThucDaoTao ?? "",
+            // lop: sampleStudentData.lop ?? "",
+          },
+          tableStartCell: { row: 14, col: 1 },
+          rows: [
+            ...tableRows,
+            gapRow,
+            gapRow,
+            {
+              cells: [
+                { value: null, colSpan: 5, border: false },
+                {
+                  value: `Hà Nội, ngày ${new Date().getDate()} tháng ${new Date().getMonth() + 1} năm ${new Date().getFullYear()}`,
+                  colSpan: 6,
+                  border: false,
+                  align: "center",
+                },
+              ],
+            },
+            {
+              cells: [
+                { value: null, colSpan: 5, border: false },
+                {
+                  value: "  TL. GIÁM ĐỐC",
+                  colSpan: 6,
+                  border: false,
+                  align: "center",
+                  bold: true,
+                },
+              ],
+            },
+            {
+              cells: [
+                { value: null, colSpan: 5, border: false },
+                {
+                  value: "  KT. TRƯỞNG PHÒNG ĐÀO TẠO",
+                  colSpan: 6,
+                  border: false,
+                  align: "center",
+                  bold: true,
+                },
+              ],
+            },
+            {
+              cells: [
+                { value: null, colSpan: 5, border: false },
+                {
+                  value: "  PHÓ TRƯỞNG PHÒNG",
+                  colSpan: 6,
+                  border: false,
+                  align: "center",
+                  bold: true,
+                },
+              ],
+            },
+          ],
+        },
+      ],
+      fileName: `BDQT-${sampleStudentData.hoVaTen}.xlsx`,
+    })
+  }
+
   return (
     <DefaultLayout
       breadcrumbList={[
@@ -539,9 +723,25 @@ export default function StudentScoreClassPage() {
                       Nhập điểm trực tiếp
                     </Button>
                   )}
-                  <Button type="primary" onClick={() => exportTemplate()}>
-                    Xuất bảng điểm cá nhân (Mẫu P2)
-                  </Button>
+                  <Dropdown
+                    menu={{
+                      items: [
+                        {
+                          label: "Bảng điểm quá trình",
+                          key: "export-bang-diem-qua-trinh",
+                          onClick: async () => await handleExportQuaTrinh(),
+                        },
+                      ],
+                    }}
+                  >
+                    <Button
+                      type="primary"
+                      icon={<DownloadOutlined />}
+                      onClick={() => exportTemplate()}
+                    >
+                      Xuất bảng điểm cá nhân (Mẫu P2)
+                    </Button>
+                  </Dropdown>
                 </Flex>
               </Col>
             </Row>
