@@ -144,7 +144,7 @@ const PutScoreLinkSheetModal = () => {
         studentId: ss.studentId,
         subjectVersionId: sv.subjectVersionId,
         semesterId: sheet.semesterId,
-        finalScore: ss.score,
+        manualFinalScore: ss.score,
         description: "Điểm liên kết",
       }))
     )
