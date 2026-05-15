@@ -8,7 +8,6 @@ import useSpinner from "@hooks/spinner"
 import { useTrainingObjectTypeStore } from "@workspace/ui"
 
 export default function QuanLyDiemRenLuyenTheoNam() {
-  const [activeTabKey, setActiveTabKey] = useState(0)
   const { showSpinner, hideSpinner } = useSpinner()
   const { id: trainingObjectId } = useTrainingObjectTypeStore()
   const [selectedFixedClass, setSelectedFixedClass] = useState<string | undefined>(undefined)
