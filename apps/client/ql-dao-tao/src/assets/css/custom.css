@@ -94,7 +94,7 @@
 }
 
 .ant-table-content {
-  outline: 1px solid #f0f0f0;
+  outline: 1px solid #ccc;
   overflow: auto !important;
 }
 .ant-table-container {

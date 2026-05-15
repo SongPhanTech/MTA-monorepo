@@ -24,7 +24,6 @@ import "dayjs/locale/vi"
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 
-// Mỗi dòng trong table có rowId duy nhất (cho phép 1 SV chọn nhiều lần)
 type SelectedStudentRow = {
   rowId: string
   studentId: string
@@ -101,19 +100,16 @@ const PutCertificateArchivedModal = () => {
     },
     { enabled: !!trainingObjectTypeId }
   )
-  // Lấy certificateId từ form
   const fixedClassId = Form.useWatch("fixedClassesId", form)
   const trainingCoursesId = Form.useWatch("trainingCoursesId", form)
   const studentFormData = Form.useWatch("student", form) ?? {}
 
-  // Lấy danh sách FixedClass
   const { data: fixedClasses = [] } = useFindManyFixedClass({
     where: {
       trainingCourseId: trainingCoursesId ?? undefined,
     },
   })
 
-  // Build where condition for student query
   const studentWhere = useMemo(() => {
     return {
       fixedClass: {
@@ -123,7 +119,6 @@ const PutCertificateArchivedModal = () => {
     }
   }, [trainingCoursesId, fixedClassId])
 
-  // Lấy danh sách sinh viên cho dropdown chọn
   const { data: studentData = [] } = useFindManyStudent(
     {
       where: studentWhere || {},
@@ -146,7 +141,6 @@ const PutCertificateArchivedModal = () => {
     { enabled: !!trainingObjectTypeId }
   )
 
-  // Thêm sinh viên vào danh sách đã chọn
   const handleAddStudent = useCallback(
     (studentId: string) => {
       const student = studentData.find((s: any) => s.id === studentId)
@@ -168,11 +162,9 @@ const PutCertificateArchivedModal = () => {
     [studentData, rowCounter]
   )
 
-  // Xoá dòng khỏi danh sách
   const handleRemoveRow = useCallback(
     (rowId: string) => {
       setSelectedStudents((prev) => prev.filter((r) => r.rowId !== rowId))
-      // Xoá form data của dòng đó
       const currentStudent = form.getFieldValue("student") || {}
       delete currentStudent[rowId]
       form.setFieldValue("student", currentStudent)
@@ -239,16 +231,13 @@ const PutCertificateArchivedModal = () => {
         // })
         // message.success('Cập nhật thành công')
       } else {
-        // Xử lý thêm mới cho nhiều sinh viên
 
         const createdCertificates: any[] = []
 
-        // Tạo chứng chỉ cho từng dòng đã chọn
         for (const row of selectedStudents) {
           const studentDataForRow = studentFormData[row.rowId]
           if (!studentDataForRow?.certificateId) continue
 
-          // Lấy file đã upload cho dòng này
           const studentFiles = studentDataForRow.documentFiles || []
 
           const result = await createArchivedCertificate({
@@ -282,7 +271,6 @@ const PutCertificateArchivedModal = () => {
         }
 
         message.success(`Đã thêm mới ${createdCertificates.length} chứng chỉ`)
-        // refetch() lại danh sách level
         queryClient.invalidateQueries({
           queryKey: ["ArchivedCertificate"],
         })
@@ -290,7 +278,6 @@ const PutCertificateArchivedModal = () => {
         return
       }
 
-      // refetch() lại danh sách level
       queryClient.invalidateQueries({
         queryKey: ["ArchivedCertificate"],
       })
@@ -308,21 +295,11 @@ const PutCertificateArchivedModal = () => {
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <>
   useEffect(() => {
-    // if () {
-    //     // form.setFieldsValue({
-    //     //     ...initialData,
-    //     //     documentFiles: initialData.documentFiles,
-    //     //     trainingCoursesId: initialData?.student?.fixedClass?.trainingCourseId || '',
-    //     //     fixedClassesId: initialData?.student?.fixedClassId || '',
-    //     // })
-    //     // setDocument(initialData.documentFiles)
-    // } else {
     form.setFieldsValue({
       documentFiles: [],
     })
     setDocumentFiles([])
 
-    // }
   }, [])
 
   return (
@@ -362,7 +339,6 @@ const PutCertificateArchivedModal = () => {
         </FormItem>
       </Col>
 
-      {/* Bảng chọn sinh viên - chỉ hiện khi thêm mới */}
       {!id && (
         <Col span={24} className="mb-4">
           <div className="flex justify-between items-center mb-2">
@@ -379,7 +355,6 @@ const PutCertificateArchivedModal = () => {
             </div>
           </div>
 
-          {/* Input chọn sinh viên */}
           <div className="mb-3">
             <Select
               showSearch
@@ -399,7 +374,6 @@ const PutCertificateArchivedModal = () => {
             />
           </div>
 
-          {/* Table danh sách đã chọn */}
           {selectedStudents.length > 0 && (
             <Table
               rowKey="rowId"
@@ -567,14 +541,6 @@ const PutCertificateArchivedModal = () => {
                     <FormItem
                       form={form}
                       name={["student", record.rowId, "issuedBy"]}
-                      // rules={[
-                      //     {
-                      //         required:
-                      //             !!studentFormData?.[record.rowId]
-                      //                 ?.certificateId,
-                      //         message: 'Vui lòng nhập nơi cấp',
-                      //     },
-                      // ]}
                     >
                       <Input variant="underlined" className="w-full" placeholder="Nhập nơi cấp" />
                     </FormItem>
@@ -600,10 +566,6 @@ const PutCertificateArchivedModal = () => {
                       name={["student", record.rowId, "issuedDate"]}
                       dependencies={[["student", record.rowId, "expiredDate"]]}
                       rules={[
-                        {
-                          required: !!studentFormData?.[record.rowId]?.certificateId,
-                          message: "Vui lòng nhập ngày cấp",
-                        },
                         ({ getFieldValue }) => ({
                           validator(_, value) {
                             const expiredDate = getFieldValue([
@@ -638,10 +600,6 @@ const PutCertificateArchivedModal = () => {
                       name={["student", record.rowId, "expiredDate"]}
                       dependencies={[["student", record.rowId, "issuedDate"]]}
                       rules={[
-                        {
-                          required: !!studentFormData?.[record.rowId]?.certificateId,
-                          message: "Vui lòng nhập ngày hết hạn",
-                        },
                         ({ getFieldValue }) => ({
                           validator(_, value) {
                             const issuedDate = getFieldValue([
@@ -697,28 +655,6 @@ const PutCertificateArchivedModal = () => {
           )}
         </Col>
       )}
-
-      {/* Select đơn sinh viên cho trường hợp edit */}
-      {/* {id && (
-                <Col span={24} className="mb-4">
-                    <FormItem form={form} name="studentId" label="Học viên, sinh viên" required>
-                        <Select
-                            showSearch
-                            style={{ width: '100%' }}
-                            placeholder="Chọn sinh viên"
-                            options={studentData.map((item) => ({
-                                label: `${item.userProfile?.code || ''} - ${item.userProfile?.fullname}`,
-                                value: item.id,
-                            }))}
-                            filterOption={(input, option) =>
-                                String(option?.label ?? '')
-                                    .toLowerCase()
-                                    .includes(input.toLowerCase())
-                            }
-                        />
-                    </FormItem>
-                </Col>
-            )} */}
 
       {id && (
         <Col span={24} className="mb-3">

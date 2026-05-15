@@ -710,11 +710,13 @@ export default function StudentScoreClassPage() {
 
         <Row gutter={[16, 16]}>
           <Col span={24}>
-            {/* Row nút thêm */}
             <Row gutter={[8, 8]} align="top" justify="space-between">
-              {/* Hàng chứa các button */}
               <Col xs={24}>
-                <Flex justify="end" wrap="wrap" gap="8px" className="mt-1">
+                <Flex justify="space-between" wrap="wrap" gap="8px" className="mt-1">
+                  <div>
+                    <h3 className="text-lg font-bold">Kết quả học tập theo kỳ</h3>
+                  </div>
+                  <div className="flex flex-row gap-2">
                   {can(
                     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_SV_HV_CHUYEN_TRUONG,
                     "THEM"
@@ -748,7 +750,6 @@ export default function StudentScoreClassPage() {
           </Col>
 
           <Col span={24}>
-            <h3 className="text-lg font-bold">Kết quả học tập theo kỳ</h3>
             <Flex justify="space-between">
               <div className="flex items-center gap-2">
                 <Select
@@ -877,7 +878,7 @@ export default function StudentScoreClassPage() {
                   align: "center",
                   dataIndex: "attendanceScoreCmp",
                   type: "cmp",
-                  width: 100,
+                  width: 80,
                   render: (_, record) => {
                     if (record.$isSummary) return null
                     return record?.subjectClassStudent?.[0]?.attendanceScore
@@ -888,7 +889,7 @@ export default function StudentScoreClassPage() {
                   align: "center",
                   dataIndex: "midtermScoreCmp",
                   type: "cmp",
-                  width: 100,
+                  width: 80,
                   render: (_, record: any) => {
                     if (record.$isSummary) return null
                     return record?.subjectClassStudent?.[0]?.midtermScore
@@ -899,7 +900,7 @@ export default function StudentScoreClassPage() {
                   align: "center",
                   dataIndex: "examScoreCmp",
                   type: "cmp",
-                  width: 100,
+                  width: 80,
                   render: (_, record: any) => {
                     if (record.$isSummary) return null
                     return record?.subjectClassStudent?.[0]?.examScore
@@ -908,7 +909,7 @@ export default function StudentScoreClassPage() {
                 {
                   title: "Điểm cộng",
                   align: "center",
-                  width: 100,
+                  width: 80,
                   render: (_, record: any) => {
                     if (record.$isSummary) return null
                     const totalBonus = record.subjectClassStudent?.[0]?.awards.reduce(
@@ -972,13 +973,12 @@ export default function StudentScoreClassPage() {
                   title: "Điểm hệ 4",
                   align: "center",
                   dataIndex: "finalScore4",
-                  width: 100,
+                  width: 80,
                   render: (_, record: any) => {
                     if (record.$isSummary) return null
                     const s = record?.subjectClassStudent?.[0]
                     const score = s?.manualFinalScore ?? s?.finalScore?.toNumber()
                     if (score == null) return null
-                    // THÊM: graduation logic — đồng nhất với NhapDiem
                     const isGraduation = record?.subject?.trainingBlocks?.[0]?.graduation === true
                     return convertScoreWithGraduation(score, isGraduation)?.base4 ?? ""
                   },
@@ -986,7 +986,7 @@ export default function StudentScoreClassPage() {
                 {
                   title: "Điểm hệ chữ",
                   align: "center",
-                  width: 120,
+                  width: 80,
                   render: (_, record: any) => {
                     if (record.$isSummary) {
                       return <b>{record.semesterResult.rank?.name || ""}</b>
@@ -1053,25 +1053,6 @@ export default function StudentScoreClassPage() {
                     if (id?.startsWith?.("summary-")) return null
                     return (
                       <Row className="justify-center gap-2">
-                        {/* <Tooltip title="Cộng điểm">
-                                                <BookCheckIcon
-                                                    className="cursor-pointer hover:text-blue-500"
-                                                    size={16}
-                                                    onClick={() => {
-                                                        const currentAwards =
-                                                            subjectClassStudent?.[0]?.awards || []
-                                                        onOpenModalAddScore({
-                                                            id: subjectClassStudent?.[0]?.id,
-                                                            studentId: studentId,
-                                                            list: currentAwards.map(
-                                                                (i: any) => i.archivedAwardId
-                                                            ),
-                                                            subjectClassStudent:
-                                                                subjectClassStudent?.[0],
-                                                        })
-                                                    }}
-                                                />
-                                            </Tooltip> */}
 
                         <Tooltip title="Thêm chứng chỉ">
                           <SafetyCertificateOutlined
@@ -1102,8 +1083,6 @@ export default function StudentScoreClassPage() {
           <Col span={24}>
             <h3 className="text-lg font-bold">Danh sách điểm phiên</h3>
             <Table
-              // filters={filters}
-              // setFilters={setFilters}
               columns={[
                 {
                   title: "STT",

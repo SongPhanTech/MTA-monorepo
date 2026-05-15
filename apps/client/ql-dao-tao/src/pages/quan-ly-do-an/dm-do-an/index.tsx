@@ -157,13 +157,47 @@ export default function DanhMucDoAn() {
     include: {
       subjectClass: { include: { subject: true } },
       primarySupervisor: {
-        include: { userProfile: true },
+        include: {
+          userProfile: {
+            include: {
+              academicRankType: true,
+              academicDegreeType: true,
+              level: true,
+              rank: true,
+              positionCPV: true,
+            },
+          },
+        },
       },
       secondarySupervisor: {
-        include: { userProfile: true },
+        include: {
+          userProfile: {
+            include: {
+              academicRankType: true,
+              academicDegreeType: true,
+              level: true,
+              positionCPV: true,
+            },
+          },
+        },
       },
       thirdSupervisor: {
-        include: { lecturer: { include: { userProfile: true } } },
+        include: {
+          lecturer: {
+            include: {
+              userProfile: {
+                include: {
+                  academicRankType: true,
+                  academicDegreeType: true,
+                  level: true,
+                  rank: true,
+                  positionCPV: true,
+                },
+              },
+              organization: true,
+            },
+          },
+        },
       },
       registrations: {
         include: {
@@ -729,112 +763,176 @@ export default function DanhMucDoAn() {
               },
             },
             {
-              title: "GVHD1",
-              width: 250,
-              align: "left",
-              dataIndex: "primarySupervisorId",
-              render: (_, record) => {
-                if (editingRowKeys.includes(record?.id)) {
-                  const currentValue =
-                    editingValues[record?.id]?.primarySupervisorId ?? record?.primarySupervisorId
-                  return (
-                    <LectureTreeSelect
-                      className="w-full"
-                      value={currentValue || ""}
-                      placeholder="Chọn GVHD1"
-                      ignoreLectureIds={
-                        [
-                          editingValues[record?.id]?.secondarySupervisorId ||
-                            record?.secondarySupervisorId,
-                        ].filter(Boolean) as string[]
-                      }
-                      organizationId={record?.subjectClass?.subject?.managementOrganizationId}
-                      onChange={(value) =>
-                        handleEditChange(record?.id, "primarySupervisorId", value)
-                      }
-                    />
-                  )
-                }
-                return record?.primarySupervisor
-                  ? formatLecturerName(record?.primarySupervisor)
-                  : ""
-              },
-            },
-            {
-              title: "GVHD2",
-              width: 250,
-              align: "left",
-              dataIndex: "secondarySupervisorId",
-              render: (_, record) => {
-                if (editingRowKeys.includes(record?.id)) {
-                  const currentValue =
-                    editingValues[record?.id]?.secondarySupervisorId ??
-                    record?.secondarySupervisorId
-                  return (
-                    <LectureTreeSelect
-                      className="w-full"
-                      value={currentValue || undefined}
-                      placeholder="Chọn GVHD2"
-                      ignoreLectureIds={
-                        [
-                          editingValues[record?.id]?.primarySupervisorId ||
-                            record?.primarySupervisorId,
-                        ].filter(Boolean) as string[]
-                      }
-                      organizationId={record?.subjectClass?.subject?.managementOrganizationId}
-                      onChange={(value) =>
-                        handleEditChange(record?.id, "secondarySupervisorId", value)
-                      }
-                    />
-                  )
-                }
-                return record?.secondarySupervisor
-                  ? formatLecturerName(record?.secondarySupervisor)
-                  : ""
-              },
-            },
-            {
-              title: "GVHD3",
-              width: 250,
-              align: "left",
-              dataIndex: "thirdSupervisorId",
-              render: (_, record) => {
-                if (editingRowKeys.includes(record?.id)) {
-                  const displayValue = editingValues[record?.id]?.thirdSupervisorName ?? ""
-                  return (
-                    <AutoComplete
-                      className="w-full"
-                      value={displayValue}
-                      placeholder="Nhập tên GVHD3"
-                      allowClear
-                      options={expertProfiles
-                        .filter((item) => {
-                          const name = item.lecturer?.userProfile?.fullname || item.name || ""
-                          return name.toLowerCase().includes(displayValue.toLowerCase())
-                        })
-                        .map((item: any) => ({
-                          label: item.lecturer?.userProfile?.fullname || item.name,
-                          value: item.lecturer?.userProfile?.fullname || item.name || "",
-                          expertId: item.id,
-                        }))}
-                      onChange={(val) => {
-                        handleEditChange(record?.id, "thirdSupervisorName", val)
-                        handleEditChange(record?.id, "thirdSupervisorId", undefined)
-                      }}
-                      onSelect={(_val, option) => {
-                        handleEditChange(record?.id, "thirdSupervisorName", _val)
-                        handleEditChange(record?.id, "thirdSupervisorId", option.expertId)
-                      }}
-                      onClear={() => {
-                        handleEditChange(record?.id, "thirdSupervisorName", "")
-                        handleEditChange(record?.id, "thirdSupervisorId", undefined)
-                      }}
-                    />
-                  )
-                }
-                const expert = record?.thirdSupervisor
-                return expert?.lecturer?.userProfile?.fullname || expert?.name || ""
-              },
+              title: "Giảng viên hướng dẫn",
+              children: [
+                {
+                  title: "Họ tên,học hàm,học vị",
+                  width: 280,
+                  align: "left" as const,
+                  render: (_: any, record: any) => {
+                    const getSupervisorName = (profile: any) =>
+                      [
+                        profile?.rank?.sMa,
+                        ",",
+                        profile?.academicRankType?.sMa,
+                        ",",
+                        profile?.academicDegreeType?.sMa,
+                        ",",
+
+                        profile?.fullname,
+                      ]
+                        .filter(Boolean)
+                        .join(" ")
+
+                    if (editingRowKeys.includes(record?.id)) {
+                      return (
+                        <div className="flex flex-col gap-2">
+                          <div className="flex items-center gap-1">
+                            <span className="text-xs text-gray-400 shrink-0">1.</span>
+                            <LectureTreeSelect
+                              className="w-full"
+                              value={
+                                editingValues[record?.id]?.primarySupervisorId ??
+                                record?.primarySupervisorId ??
+                                ""
+                              }
+                              placeholder="Chọn GVHD1"
+                              ignoreLectureIds={
+                                [
+                                  editingValues[record?.id]?.secondarySupervisorId ||
+                                    record?.secondarySupervisorId,
+                                ].filter(Boolean) as string[]
+                              }
+                              organizationId={
+                                record?.subjectClass?.subject?.managementOrganizationId
+                              }
+                              onChange={(value: any) =>
+                                handleEditChange(record?.id, "primarySupervisorId", value)
+                              }
+                            />
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <span className="text-xs text-gray-400 shrink-0">2.</span>
+                            <LectureTreeSelect
+                              className="w-full"
+                              value={
+                                editingValues[record?.id]?.secondarySupervisorId ??
+                                record?.secondarySupervisorId ??
+                                undefined
+                              }
+                              placeholder="Chọn GVHD2"
+                              ignoreLectureIds={
+                                [
+                                  editingValues[record?.id]?.primarySupervisorId ||
+                                    record?.primarySupervisorId,
+                                ].filter(Boolean) as string[]
+                              }
+                              organizationId={
+                                record?.subjectClass?.subject?.managementOrganizationId
+                              }
+                              onChange={(value: any) =>
+                                handleEditChange(record?.id, "secondarySupervisorId", value)
+                              }
+                            />
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <span className="text-xs text-gray-400 shrink-0">3.</span>
+                            <AutoComplete
+                              className="w-full"
+                              value={editingValues[record?.id]?.thirdSupervisorName ?? ""}
+                              placeholder="Nhập tên GVHD3"
+                              allowClear
+                              options={expertProfiles
+                                .filter((item) => {
+                                  const name =
+                                    item.lecturer?.userProfile?.fullname || item.name || ""
+                                  const displayValue =
+                                    editingValues[record?.id]?.thirdSupervisorName ?? ""
+                                  return name.toLowerCase().includes(displayValue.toLowerCase())
+                                })
+                                .map((item: any) => ({
+                                  label: item.lecturer?.userProfile?.fullname || item.name,
+                                  value: item.lecturer?.userProfile?.fullname || item.name || "",
+                                  expertId: item.id,
+                                }))}
+                              onChange={(val) => {
+                                handleEditChange(record?.id, "thirdSupervisorName", val)
+                                handleEditChange(record?.id, "thirdSupervisorId", undefined)
+                              }}
+                              onSelect={(_val: any, option: any) => {
+                                handleEditChange(record?.id, "thirdSupervisorName", _val)
+                                handleEditChange(record?.id, "thirdSupervisorId", option.expertId)
+                              }}
+                              onClear={() => {
+                                handleEditChange(record?.id, "thirdSupervisorName", "")
+                                handleEditChange(record?.id, "thirdSupervisorId", undefined)
+                              }}
+                            />
+                          </div>
+                        </div>
+                      )
+                    }
+
+                    return (
+                      <div className="flex flex-col gap-1">
+                        {record?.primarySupervisor && (
+                          <div>HD 1: {getSupervisorName(record.primarySupervisor.userProfile)}</div>
+                        )}
+                        {record?.secondarySupervisor && (
+                          <div>
+                            HD 2: {getSupervisorName(record.secondarySupervisor.userProfile)}
+                          </div>
+                        )}
+                        {record?.thirdSupervisor && (
+                          <div>
+                            HD 3:{" "}
+                            {getSupervisorName(record.thirdSupervisor.lecturer?.userProfile) ||
+                              record.thirdSupervisor.name}
+                          </div>
+                        )}
+                      </div>
+                    )
+                  },
+                },
+                {
+                  title: "Chức vụ",
+                  width: 160,
+                  align: "left" as const,
+                  render: (_: any, record: any) => (
+                    <div className="flex flex-col gap-1">
+                      {record?.primarySupervisor && (
+                        <div>{record.primarySupervisor.userProfile?.positionCPV?.sTen || ""}</div>
+                      )}
+                      {record?.secondarySupervisor && (
+                        <div>{record.secondarySupervisor.userProfile?.positionCPV?.sTen || ""}</div>
+                      )}
+                      {record?.thirdSupervisor && (
+                        <div>
+                          {record.thirdSupervisor.lecturer?.userProfile?.positionCPV?.sTen || ""}
+                        </div>
+                      )}
+                    </div>
+                  ),
+                },
+                {
+                  title: "Đơn vị",
+                  width: 180,
+                  align: "left" as const,
+                  render: (_: any, record: any) => (
+                    <div className="flex flex-col gap-1">
+                      {record?.primarySupervisor && (
+                        <div>{record.primarySupervisor.organization?.sMa || ""}</div>
+                      )}
+                      {record?.secondarySupervisor && (
+                        <div>{record.secondarySupervisor.organization?.sMa || ""}</div>
+                      )}
+                      {record?.thirdSupervisor && (
+                        <div>{record.thirdSupervisor.lecturer?.organization?.sMa || ""}</div>
+                      )}
+                    </div>
+                  ),
+                },
+              ],
             },
             {
               title: "Đồ án sản phẩm",
