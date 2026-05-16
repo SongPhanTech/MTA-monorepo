@@ -10,7 +10,7 @@ import useSpinner from "@hooks/spinner"
 import { createId, type Difficult, QuestionType } from "@workspace/db"
 import { useFindManyKnowledgeBlock } from "@workspace/db/hooks"
 import { generatePresignedUrl, sqlTransaction } from "@workspace/libs/api/model"
-import { env } from "@workspace/libs/utils"
+import { env, getRuntimeEnv } from "@workspace/libs/utils"
 import { Button, Col, Form, Modal, message, Radio, Row, Select } from "antd"
 import { XMLParser } from "fast-xml-parser"
 import PizZip from "pizzip"
@@ -351,12 +351,16 @@ const WordImportModal: React.FC = () => {
           extension,
         })
 
-        await fetch(resPresignedUrl.data.url, {
+        const uploadRes = await fetch(resPresignedUrl.data.url, {
           method: "PUT",
           body: img.blob,
         })
 
-        const imageUrl = `${env.NEXT_PUBLIC_MINIO_ENDPOINT}/${resPresignedUrl.data.fileName}`
+        if (!uploadRes.ok) {
+          throw new Error(`Upload ảnh thất bại: ${uploadRes.status}`)
+        }
+
+        const imageUrl = `${getRuntimeEnv("NEXT_PUBLIC_MINIO_ENDPOINT")}/${resPresignedUrl.data.fileName}`
         result = result.replace(img.name, `<img src="${imageUrl}" style="max-width: 100%;" />`)
       } catch (error) {
         console.error(`Failed to upload image ${img.name}:`, error)
