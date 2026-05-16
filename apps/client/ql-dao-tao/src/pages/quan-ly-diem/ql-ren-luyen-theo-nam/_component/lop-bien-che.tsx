@@ -26,10 +26,8 @@ const LopBienCheItem: React.FC<LopBienCheItemProps> = ({
   const { data: session } = useSession()
   const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
 
-  // Kiểm tra quyền XEM_TAT_CA
   const canViewAll = can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_REN_LUYEN, "XEM_TAT_CA")
 
-  // Lấy thông tin Lecturer của user hiện tại (nếu có)
   const { data: currentLecturer, isLoading: isLoadingLecturer } = useFindUniqueLecturer(
     {
       where: {
@@ -41,7 +39,6 @@ const LopBienCheItem: React.FC<LopBienCheItemProps> = ({
     }
   )
 
-  // Lấy thông tin Staff của user hiện tại (nếu có)
   const { data: currentStaff, isLoading: isLoadingStaff } = useFindUniqueStaff(
     {
       where: {
@@ -53,7 +50,6 @@ const LopBienCheItem: React.FC<LopBienCheItemProps> = ({
     }
   )
 
-  // Xác định xem user có phải là người quản lý lớp hay không
   const isManager = !canViewAll && (!!currentLecturer?.id || !!currentStaff?.id)
 
   const { data: trainingCourses = [] } = useFindManyTrainingCourse({
@@ -69,7 +65,6 @@ const LopBienCheItem: React.FC<LopBienCheItemProps> = ({
     },
   })
 
-  // Xây dựng điều kiện filter cho FixedClass
   const buildFixedClassWhere = () => {
     const baseWhere = {
       trainingCourse: {
@@ -79,12 +74,10 @@ const LopBienCheItem: React.FC<LopBienCheItemProps> = ({
       name: className ? { contains: className } : undefined,
     }
 
-    // Nếu có quyền xem tất cả -> không filter thêm
     if (canViewAll) {
       return baseWhere
     }
 
-    // Nếu không có quyền xem tất cả -> filter theo lecturer hoặc staff
     const orConditions: any[] = []
 
     if (currentLecturer?.id) {
@@ -95,11 +88,10 @@ const LopBienCheItem: React.FC<LopBienCheItemProps> = ({
       orConditions.push({ staffManagementId: currentStaff.id })
     }
 
-    // Nếu không có lecturer và staff thì trả về điều kiện không khớp gì
     if (orConditions.length === 0) {
       return {
         ...baseWhere,
-        id: "no-match", // Điều kiện không khớp
+        id: "no-match",
       }
     }
 
@@ -109,12 +101,10 @@ const LopBienCheItem: React.FC<LopBienCheItemProps> = ({
     }
   }
 
-  // Lấy danh sách Fixed Classes
   const { data: fixedClasses = [], isLoading: fixedClassesLoading } = useFindManyFixedClass({
     where: buildFixedClassWhere(),
   })
 
-  // Tạo cấu trúc cây từ dữ liệu
   const treeData = trainingCourses
     .map((course) => {
       const children = fixedClasses
@@ -152,6 +142,7 @@ const LopBienCheItem: React.FC<LopBienCheItemProps> = ({
             treeData={treeData}
             showLine
             blockNode
+            expandAction="click"
             onSelect={(selectedKeys) => {
               if (selectedKeys.length > 0) {
                 const selectedKey = selectedKeys[0] as string

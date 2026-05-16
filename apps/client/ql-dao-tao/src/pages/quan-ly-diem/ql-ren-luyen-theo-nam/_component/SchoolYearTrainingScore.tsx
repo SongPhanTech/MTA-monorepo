@@ -4,20 +4,19 @@ import { FilterProps } from "@constants/type"
 import { Key, useEffect, useMemo, useState } from "react"
 import { DEFAULT_PAGINATE_SIZE } from "@constants/constants"
 import { useAbility } from "@workspace/permissions/hooks"
-import { useRouter } from "next/router"
 import { QL_DAO_TAO_PERMISSION } from "@workspace/router"
-import { useCountStudent, useFindManySchoolYear, useFindManyStudent } from "@workspace/db/hooks"
-import dayjs from "dayjs"
-import { SchoolYear, UserProfile } from "@workspace/db"
+import { useFindManySchoolYear, useFindManyStudent } from "@workspace/db/hooks"
+import { SchoolYear } from "@workspace/db"
 import {
-  useStudentTrainingTypeOptions,
   useTrainingScoreStatusStatusOptions,
 } from "@hooks/studentTrainingType"
 import { Save } from "lucide-react"
 import useSpinner from "@hooks/spinner"
 import { sqlTransaction } from "@workspace/libs/api/model"
 import Select from "@components/commons/select"
-// import { useDisclosure } from 'react-hook-disclosure-modal'
+import dayjs from "dayjs"
+import { SemesterType, UserProfile } from "@workspace/db/client"
+
 export default function SchoolYearTrainingScore({
   selectedFixedClass,
 }: {
@@ -26,22 +25,15 @@ export default function SchoolYearTrainingScore({
   const { showSpinner, hideSpinner } = useSpinner()
   const [schoolYearId, setSchoolYearId] = useState<string>()
   const [form] = Form.useForm<{ list: Record<string, { score: number | null }> }>()
-  const router = useRouter()
-  const { can, canSome } = useAbility()
+  const { can } = useAbility()
   const [currentPage, setCurrentPage] = useState(1)
-  const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
+  const [numberOfPages, _setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
   const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([])
   const [filters, setFilters] = useState<FilterProps>({
     code: "",
     name: "",
   })
   const {
-    options: studentTrainingTypeOptions,
-    getStudentTrainingTypeLabel,
-    getStudentTrainingTypeColor,
-  } = useStudentTrainingTypeOptions()
-  const {
-    statusOptions: trainingScoreStatusOptions,
     getTrainingScoreStatusLabel,
     getTrainingScoreStatusColor,
   } = useTrainingScoreStatusStatusOptions()
@@ -109,29 +101,23 @@ export default function SchoolYearTrainingScore({
             schoolYearId,
           },
         },
+        semesterTrainingScore: {
+          where: {
+            semester: {
+              schoolYearId,
+              semesterType: SemesterType.SECOND
+            },
+          },
+        },
       },
       orderBy: [{ createdAt: "desc" }],
-      // take: numberOfPages,
-      // skip: (currentPage - 1) * numberOfPages,
     },
     {
       enabled: !!selectedFixedClass && !!schoolYearId,
     }
   )
 
-  const { data: count, refetch: refetchCount } = useCountStudent(
-    {
-      where: {
-        ...where,
-        deletedAt: null,
-      },
-    },
-    {
-      enabled: !!selectedFixedClass && !!schoolYearId,
-    }
-  )
-
-  const { data: schoolYears = [], isLoading: schoolYearLoading } = useFindManySchoolYear({
+  const { data: schoolYears = [] } = useFindManySchoolYear({
     orderBy: { startDate: "desc" },
     include: {
       semesters: {
@@ -139,92 +125,6 @@ export default function SchoolYearTrainingScore({
       },
     },
   })
-
-  // const { onOpen, onClose } = useDisclosure<{
-  //     tag?: string
-  //     preSelectedValues?: {
-  //         trainingObjectTypeId?: string
-  //         trainingCourseId?: string
-  //         fixedClassId?: string
-  //     }
-  //     id?: string | null
-  // }>({
-  //     tag: 'PutStudentModal',
-  // })
-
-  //  const handleModal = () => {
-  //     onOpen({
-  //         preSelectedValues: {},
-  //     })
-  // }
-
-  const handleApproved = async () => {
-    try {
-      showSpinner()
-      if (selectedRowKeys?.length === 0) return
-      const res = await sqlTransaction([
-        {
-          model: "SchoolYearTrainingScore" as const,
-          operation: "updateMany",
-          data: {
-            where: {
-              studentId: {
-                in: selectedRowKeys,
-              },
-              schoolYearId,
-            },
-            data: {
-              status: "APPROVED",
-            },
-          },
-        },
-      ])
-      if (res?.status === 200) {
-        message.success("Phê duyệt điểm rèn luyện thành công")
-        refetch()
-      }
-
-      hideSpinner()
-    } catch (error) {
-      message.error("Phê duyệt điểm rèn luyện thất bại")
-      hideSpinner()
-    }
-  }
-
-  const handleRejected = async () => {
-    try {
-      showSpinner()
-
-      if (selectedRowKeys?.length === 0) return
-
-      const res = await sqlTransaction([
-        {
-          model: "SchoolYearTrainingScore" as const,
-          operation: "updateMany",
-          data: {
-            where: {
-              studentId: {
-                in: selectedRowKeys,
-              },
-              schoolYearId,
-            },
-            data: {
-              status: "REJECTED",
-            },
-          },
-        },
-      ])
-      if (res?.status === 200) {
-        message.success("Từ chối điểm rèn luyện thành công")
-        refetch()
-      }
-
-      hideSpinner()
-    } catch (error) {
-      message.error("Từ chối điểm rèn luyện thất bại")
-      hideSpinner()
-    }
-  }
 
   const handleSave = async () => {
     try {
@@ -234,7 +134,6 @@ export default function SchoolYearTrainingScore({
 
       showSpinner()
       const dataSubmit = form.getFieldsValue()
-      const keys = Object.keys(dataSubmit.list)
       const error = Object.entries(dataSubmit.list).find((i: any) => Number(i?.score) > 10)
       if (error) {
         return
@@ -309,23 +208,15 @@ export default function SchoolYearTrainingScore({
         }
       }
 
-      // message.success('Lưu điểm rèn luyện năm học thành công')
-      // refetch()
-      // setEditableData(new Map())
     } catch (error) {
       message.error("Đã xảy ra lỗi khi lưu điểm rèn luyện năm học")
     } finally {
       hideSpinner()
     }
   }
-  // biome-ignore lint/correctness/useExhaustiveDependencies: <>
+
   useEffect(() => {
     if (data?.length > 0) {
-      const list = data.map((i) => {
-        return {
-          score: i.schoolYearTrainingScore[0]?.score,
-        }
-      })
       form.setFieldsValue({
         list: data.reduce((acc, cur) => {
           if (!acc) {
@@ -333,13 +224,13 @@ export default function SchoolYearTrainingScore({
           }
           acc[cur.id] = {
             ...cur,
-            score: cur.schoolYearTrainingScore[0]?.score,
+            score: cur.schoolYearTrainingScore[0]?.score ?? cur.semesterTrainingScore?.[0]?.score,
           }
           return acc
         }, {} as any),
       })
     }
-  }, [data])
+  }, [data, form])
   return (
     <Row gutter={[0, 0]}>
       <Col span={24}>
@@ -361,26 +252,6 @@ export default function SchoolYearTrainingScore({
             />
           </div>
           <Flex justify="end" align="center">
-            {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_REN_LUYEN, "XEM_TAT_CA") && (
-              <>
-                <Button
-                  type="default"
-                  className="mr-3"
-                  disabled={selectedRowKeys.length === 0}
-                  onClick={handleRejected}
-                >
-                  Từ chối
-                </Button>
-                <Button
-                  type="primary"
-                  className="mr-3"
-                  disabled={selectedRowKeys.length === 0}
-                  onClick={handleApproved}
-                >
-                  Phê duyệt
-                </Button>
-              </>
-            )}
             {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_REN_LUYEN_THEO_NAM, "SUA") && (
               <Button type="primary" onClick={handleSave}>
                 <Save stroke="white" />
@@ -403,7 +274,7 @@ export default function SchoolYearTrainingScore({
                 selectedRowKeys,
                 onChange: (selectedKeys) => setSelectedRowKeys(selectedKeys),
                 getCheckboxProps: (record) => ({
-                  disabled: record.schoolYearTrainingScore?.length <= 0, // hoặc điều kiện bất kỳ
+                  disabled: record.schoolYearTrainingScore?.length <= 0,
                 }),
               }}
               columns={[
