@@ -1207,7 +1207,18 @@ app.openapi(importPhanCongGiangDay, async (c) => {
     {
       message: "Tải danh sách thành công",
       time: endTime - startTime,
-      data: danhSachLopMonHoc.uniqueByKey("code"),
+      data: (() => {
+        const examDateByCode = new Map<string, Date>()
+        for (const item of danhSachLopMonHoc) {
+          if (item.examDate && !examDateByCode.has(item.code)) {
+            examDateByCode.set(item.code, item.examDate)
+          }
+        }
+        return danhSachLopMonHoc.uniqueByKey("code").map((item) => ({
+          ...item,
+          examDate: item.examDate ?? examDateByCode.get(item.code) ?? null,
+        }))
+      })(),
       error: errorImport,
     },
     200
