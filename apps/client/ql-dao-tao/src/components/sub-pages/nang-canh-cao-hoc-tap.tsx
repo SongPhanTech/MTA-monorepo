@@ -133,6 +133,9 @@ const NangCanhCaoHocTap = ({ semesterId, trainingObjectTypeId }: NangCanhCaoHocT
 
           await refetch()
           setSelectedRowKeys([])
+          queryClient.invalidateQueries({
+            queryKey: ["AcademicWarning"],
+          })
           message.success("Duyệt thành công")
         } catch (error) {
           message.error("Đã xảy ra lỗi khi duyệt")

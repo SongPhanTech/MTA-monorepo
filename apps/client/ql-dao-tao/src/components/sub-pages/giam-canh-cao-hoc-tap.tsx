@@ -115,6 +115,9 @@ const GiamCanhCaoHocTap = ({ semesterId, trainingObjectTypeId }: GiamCanhCaoHocT
           await Promise.all(promises)
           await refetch()
           setSelectedRowKeys([])
+          queryClient.invalidateQueries({
+            queryKey: ["AcademicWarning"],
+          })
           message.success("Duyệt giảm cảnh cáo thành công")
         } catch (error) {
           message.error("Đã xảy ra lỗi khi duyệt")
