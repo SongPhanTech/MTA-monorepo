@@ -70,6 +70,9 @@ const XetHocBong = ({ semesterId, trainingObjectTypeId }: XetHocBongProps) => {
             some: {
               semesterId,
               student: {
+                ...(trainingObjectTypeId
+                  ? { fixedClass: { trainingCourse: { trainingObjectTypeId } } }
+                  : {}),
                 ...(filters.code && filters.code !== ""
                   ? {
                       code: {
@@ -98,7 +101,7 @@ const XetHocBong = ({ semesterId, trainingObjectTypeId }: XetHocBongProps) => {
         },
       },
     }),
-    [semesterId, filters.name, filters.code, filters.scholarship]
+    [semesterId, trainingObjectTypeId, filters.name, filters.code, filters.scholarship]
   )
 
   const [isModalVisible, setIsModalVisible] = useState(false)
@@ -160,6 +163,9 @@ const XetHocBong = ({ semesterId, trainingObjectTypeId }: XetHocBongProps) => {
             },
             where: {
               student: {
+                ...(trainingObjectTypeId
+                  ? { fixedClass: { trainingCourse: { trainingObjectTypeId } } }
+                  : {}),
                 ...(filters.code && filters.code !== ""
                   ? {
                       code: { contains: filters.code, mode: "insensitive" },

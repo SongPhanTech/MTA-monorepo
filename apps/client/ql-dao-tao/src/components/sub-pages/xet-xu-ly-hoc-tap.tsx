@@ -131,6 +131,9 @@ const XetXuLyHocTap = ({ semesterId, trainingObjectTypeId, actionTaken }: XetXuL
                       },
                     }
                   : {}),
+                ...(trainingObjectTypeId
+                  ? { trainingCourse: { trainingObjectTypeId } }
+                  : {}),
               },
             },
             ...(filters.status ? { status: { in: filters.status } } : {}),
@@ -151,6 +154,9 @@ const XetXuLyHocTap = ({ semesterId, trainingObjectTypeId, actionTaken }: XetXuL
       where: {
         semesterId,
         actionTaken,
+        ...(trainingObjectTypeId
+          ? { student: { fixedClass: { trainingCourse: { trainingObjectTypeId } } } }
+          : {}),
         ...where,
       },
       include: {

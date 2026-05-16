@@ -42,6 +42,7 @@ const XetCanhCaoHocDuong = ({ semesterId }: XetCanhCaoHocDuongProps) => {
     managementOrganizationId: "",
   })
   const { showSpinner, hideSpinner } = useSpinner()
+  const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
 
   const where = useMemo(
     () => ({
@@ -93,11 +94,15 @@ const XetCanhCaoHocDuong = ({ semesterId }: XetCanhCaoHocDuongProps) => {
                 },
               }
             : {}),
+          ...(trainingObjectTypeId
+            ? { trainingCourse: { trainingObjectTypeId } }
+            : {}),
         },
       },
     }),
     [
       semesterId,
+      trainingObjectTypeId,
       filters.code,
       filters.name,
       filters.fixedClassId,
@@ -181,7 +186,6 @@ const XetCanhCaoHocDuong = ({ semesterId }: XetCanhCaoHocDuongProps) => {
       hideSpinner()
     }
   }
-  const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
   const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
     orderBy: {
       semesterStart: {
