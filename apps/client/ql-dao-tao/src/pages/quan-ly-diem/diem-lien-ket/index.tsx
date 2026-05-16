@@ -187,7 +187,7 @@ export default function ScoreLinkPage() {
         ),
       },
     ],
-    [canView, canEdit, canDelete, onOpen]
+    [canView, canEdit, canDelete]
   )
 
   const handleDeleteScoreLink = async (id: string) => {

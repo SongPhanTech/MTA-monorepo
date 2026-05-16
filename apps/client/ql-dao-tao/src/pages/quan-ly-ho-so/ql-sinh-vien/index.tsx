@@ -214,7 +214,13 @@ export default function UserProfilePageDs() {
               id: filters.fixedClassId,
             },
           }
-        : {}),
+        : filters.fixedClass
+          ? {
+              fixedClass: {
+                id: { in: filters.fixedClass },
+              },
+            }
+          : {}),
       ...(filters.trainingMajors || filters.trainingField
         ? {
             fixedClass: {
