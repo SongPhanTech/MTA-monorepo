@@ -109,10 +109,17 @@ const ExportTemplateLecturer = () => {
       { width: 20 },
       { width: 20 },
     ]
+    ;["B", "L", "N"].forEach((col) => {
+      worksheet.getColumn(col).numFmt = "@"
 
+      worksheet.getColumn(col).alignment = {
+        horizontal: "left",
+        vertical: "middle",
+      }
+    })
     // Xuất file
     const buffer = await workbook.xlsx.writeBuffer()
-    saveAs(new Blob([buffer]), "Mau_nhap_giang_vien_vien.xlsx")
+    saveAs(new Blob([buffer]), "Mau_nhap_giang_vien.xlsx")
   }
 
   return (
