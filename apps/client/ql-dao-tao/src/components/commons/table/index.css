@@ -10,7 +10,7 @@
   padding: 10px 12px !important;
   border-radius: 0 !important;
   border-right: 1px solid rgb(204, 204, 204) !important;
-  font-size: 14px !important;
+  font-size: 12px !important;
 }
 
 .ant-table-thead > tr > th:last-child {
@@ -20,7 +20,7 @@
 .ant-table-tbody > tr > td {
   border-right: 1px solid rgb(204, 204, 204) !important;
   border-bottom: 1px solid rgb(204, 204, 204) !important;
-  font-size: 14px;
+  font-size: 12px;
 }
 
 .ant-table-tbody > tr > td:last-child {
