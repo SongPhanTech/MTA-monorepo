@@ -18,6 +18,7 @@ import { exportSurveyDocxTemplate } from "@/utils/export-survey-docx-template"
 import { useRouter } from "next/router"
 import { useMemo } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
+import { exportSummary } from "@/utils/export-summary"
 
 const { Title } = Typography
 
@@ -498,6 +499,19 @@ function SurveyOrganizationReport({
                               departmentCode,
                               questions: dataLevel?.data?.data?.questions || [],
                             })
+                          } finally {
+                            hideSpinner()
+                          }
+                        },
+                      },
+                      {
+                        key: "export-summary-docx",
+                        icon: <FileWordOutlined />,
+                        label: "Xuất Tổng kết",
+                        onClick: async () => {
+                          showSpinner()
+                          try {
+                            await exportSummary(organizationId, selectedId, organizationName)
                           } finally {
                             hideSpinner()
                           }
