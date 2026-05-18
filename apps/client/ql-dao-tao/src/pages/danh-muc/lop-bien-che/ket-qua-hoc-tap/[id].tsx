@@ -717,33 +717,34 @@ export default function StudentScoreClassPage() {
                     <h3 className="text-lg font-bold">Kết quả học tập theo kỳ</h3>
                   </div>
                   <div className="flex flex-row gap-2">
-                  {can(
-                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_SV_HV_CHUYEN_TRUONG,
-                    "THEM"
-                  ) && (
-                    <Button type="primary" onClick={() => onOpenModalNhapDiem(studentId)}>
-                      Nhập điểm trực tiếp
-                    </Button>
-                  )}
-                  <Dropdown
-                    menu={{
-                      items: [
-                        {
-                          label: "Bảng điểm quá trình",
-                          key: "export-bang-diem-qua-trinh",
-                          onClick: async () => await handleExportQuaTrinh(),
-                        },
-                      ],
-                    }}
-                  >
-                    <Button
-                      type="primary"
-                      icon={<DownloadOutlined />}
-                      onClick={() => exportTemplate()}
+                    {can(
+                      QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_SV_HV_CHUYEN_TRUONG,
+                      "THEM"
+                    ) && (
+                      <Button type="primary" onClick={() => onOpenModalNhapDiem(studentId)}>
+                        Nhập điểm trực tiếp
+                      </Button>
+                    )}
+                    <Dropdown
+                      menu={{
+                        items: [
+                          {
+                            label: "Bảng điểm quá trình",
+                            key: "export-bang-diem-qua-trinh",
+                            onClick: async () => await handleExportQuaTrinh(),
+                          },
+                        ],
+                      }}
                     >
-                      Xuất bảng điểm cá nhân (Mẫu P2)
-                    </Button>
-                  </Dropdown>
+                      <Button
+                        type="primary"
+                        icon={<DownloadOutlined />}
+                        onClick={() => exportTemplate()}
+                      >
+                        Xuất bảng điểm cá nhân (Mẫu P2)
+                      </Button>
+                    </Dropdown>
+                  </div>
                 </Flex>
               </Col>
             </Row>
@@ -1053,7 +1054,6 @@ export default function StudentScoreClassPage() {
                     if (id?.startsWith?.("summary-")) return null
                     return (
                       <Row className="justify-center gap-2">
-
                         <Tooltip title="Thêm chứng chỉ">
                           <SafetyCertificateOutlined
                             className="cursor-pointer hover:text-green-500"
