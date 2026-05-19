@@ -99,7 +99,8 @@ import type {
   NhanVienPatchDto,
   PagingRequestDto,
   PostFilesSingleStorageTypeBody,
-  PostFilesSingleStorageTypeParams
+  PostFilesSingleStorageTypeParams,
+  UnitInfoEditDto
 } from './schemas';
 
 import { customSystemShareFetch } from './custom-instance';
@@ -1470,6 +1471,84 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       return useMutation(mutationOptions, queryClient);
     }
     
+export type postNhanviensAllResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type postNhanviensAllResponseSuccess = (postNhanviensAllResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postNhanviensAllResponse = (postNhanviensAllResponseSuccess)
+
+export const getPostNhanviensAllUrl = () => {
+
+
+  
+
+  return `/Nhanviens/all`
+}
+
+export const postNhanviensAll = async (pagingRequestDto: PagingRequestDto, options?: RequestInit): Promise<postNhanviensAllResponse> => {
+  
+  return customSystemShareFetch<postNhanviensAllResponse>(getPostNhanviensAllUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json-patch+json', ...options?.headers },
+    body: JSON.stringify(
+      pagingRequestDto,)
+  }
+);}
+
+
+
+
+export const getPostNhanviensAllMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postNhanviensAll>>, TError,{data: PagingRequestDto}, TContext>, request?: SecondParameter<typeof customSystemShareFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof postNhanviensAll>>, TError,{data: PagingRequestDto}, TContext> => {
+
+const mutationKey = ['postNhanviensAll'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postNhanviensAll>>, {data: PagingRequestDto}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postNhanviensAll(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostNhanviensAllMutationResult = NonNullable<Awaited<ReturnType<typeof postNhanviensAll>>>
+    export type PostNhanviensAllMutationBody = PagingRequestDto
+    export type PostNhanviensAllMutationError = unknown
+
+    export const usePostNhanviensAll = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postNhanviensAll>>, TError,{data: PagingRequestDto}, TContext>, request?: SecondParameter<typeof customSystemShareFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postNhanviensAll>>,
+        TError,
+        {data: PagingRequestDto},
+        TContext
+      > => {
+
+      const mutationOptions = getPostNhanviensAllMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 export type postNhanviensTreelistResponse200 = {
   data: void
   status: 200
@@ -1928,6 +2007,234 @@ export function useGetNhanviensHealthz<TData = Awaited<ReturnType<typeof getNhan
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
   const queryOptions = getGetNhanviensHealthzQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+
+/**
+ * Thiết lập tham số biến môi trường
+ * @summary Thông tin đơn vị - Tham số
+ */
+export type getUnitInfosInfoResponse200 = {
+  data: UnitInfoEditDto
+  status: 200
+}
+    
+export type getUnitInfosInfoResponseSuccess = (getUnitInfosInfoResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getUnitInfosInfoResponse = (getUnitInfosInfoResponseSuccess)
+
+export const getGetUnitInfosInfoUrl = () => {
+
+
+  
+
+  return `/UnitInfos/info`
+}
+
+export const getUnitInfosInfo = async ( options?: RequestInit): Promise<getUnitInfosInfoResponse> => {
+  
+  return customSystemShareFetch<getUnitInfosInfoResponse>(getGetUnitInfosInfoUrl(),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+
+
+
+
+
+export const getGetUnitInfosInfoQueryKey = () => {
+    return [
+    `/UnitInfos/info`
+    ] as const;
+    }
+
+    
+export const getGetUnitInfosInfoQueryOptions = <TData = Awaited<ReturnType<typeof getUnitInfosInfo>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUnitInfosInfo>>, TError, TData>>, request?: SecondParameter<typeof customSystemShareFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetUnitInfosInfoQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getUnitInfosInfo>>> = ({ signal }) => getUnitInfosInfo({ signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getUnitInfosInfo>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetUnitInfosInfoQueryResult = NonNullable<Awaited<ReturnType<typeof getUnitInfosInfo>>>
+export type GetUnitInfosInfoQueryError = unknown
+
+
+export function useGetUnitInfosInfo<TData = Awaited<ReturnType<typeof getUnitInfosInfo>>, TError = unknown>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUnitInfosInfo>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getUnitInfosInfo>>,
+          TError,
+          Awaited<ReturnType<typeof getUnitInfosInfo>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customSystemShareFetch>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetUnitInfosInfo<TData = Awaited<ReturnType<typeof getUnitInfosInfo>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUnitInfosInfo>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getUnitInfosInfo>>,
+          TError,
+          Awaited<ReturnType<typeof getUnitInfosInfo>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customSystemShareFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetUnitInfosInfo<TData = Awaited<ReturnType<typeof getUnitInfosInfo>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUnitInfosInfo>>, TError, TData>>, request?: SecondParameter<typeof customSystemShareFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Thông tin đơn vị - Tham số
+ */
+
+export function useGetUnitInfosInfo<TData = Awaited<ReturnType<typeof getUnitInfosInfo>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUnitInfosInfo>>, TError, TData>>, request?: SecondParameter<typeof customSystemShareFetch>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetUnitInfosInfoQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+
+/**
+ * Kiểm tra tình trạng API
+ * @summary Kiểm tra tình trạng API
+ */
+export type getUnitInfosHealthzResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type getUnitInfosHealthzResponseSuccess = (getUnitInfosHealthzResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getUnitInfosHealthzResponse = (getUnitInfosHealthzResponseSuccess)
+
+export const getGetUnitInfosHealthzUrl = () => {
+
+
+  
+
+  return `/UnitInfos/healthz`
+}
+
+export const getUnitInfosHealthz = async ( options?: RequestInit): Promise<getUnitInfosHealthzResponse> => {
+  
+  return customSystemShareFetch<getUnitInfosHealthzResponse>(getGetUnitInfosHealthzUrl(),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+
+
+
+
+
+export const getGetUnitInfosHealthzQueryKey = () => {
+    return [
+    `/UnitInfos/healthz`
+    ] as const;
+    }
+
+    
+export const getGetUnitInfosHealthzQueryOptions = <TData = Awaited<ReturnType<typeof getUnitInfosHealthz>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUnitInfosHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemShareFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetUnitInfosHealthzQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getUnitInfosHealthz>>> = ({ signal }) => getUnitInfosHealthz({ signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getUnitInfosHealthz>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetUnitInfosHealthzQueryResult = NonNullable<Awaited<ReturnType<typeof getUnitInfosHealthz>>>
+export type GetUnitInfosHealthzQueryError = unknown
+
+
+export function useGetUnitInfosHealthz<TData = Awaited<ReturnType<typeof getUnitInfosHealthz>>, TError = unknown>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUnitInfosHealthz>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getUnitInfosHealthz>>,
+          TError,
+          Awaited<ReturnType<typeof getUnitInfosHealthz>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customSystemShareFetch>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetUnitInfosHealthz<TData = Awaited<ReturnType<typeof getUnitInfosHealthz>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUnitInfosHealthz>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getUnitInfosHealthz>>,
+          TError,
+          Awaited<ReturnType<typeof getUnitInfosHealthz>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customSystemShareFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetUnitInfosHealthz<TData = Awaited<ReturnType<typeof getUnitInfosHealthz>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUnitInfosHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemShareFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Kiểm tra tình trạng API
+ */
+
+export function useGetUnitInfosHealthz<TData = Awaited<ReturnType<typeof getUnitInfosHealthz>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUnitInfosHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemShareFetch>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetUnitInfosHealthzQueryOptions(options)
 
   const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 

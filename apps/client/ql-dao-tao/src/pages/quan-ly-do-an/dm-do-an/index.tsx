@@ -901,14 +901,18 @@ export default function DanhMucDoAn() {
                   render: (_: any, record: any) => (
                     <div className="flex flex-col gap-1">
                       {record?.primarySupervisor && (
-                        <div>{record.primarySupervisor.userProfile?.positionCPV?.sTen || ""}</div>
+                        <div>
+                          {record.primarySupervisor.userProfile?.positionCPV?.sTen || "---"}
+                        </div>
                       )}
                       {record?.secondarySupervisor && (
-                        <div>{record.secondarySupervisor.userProfile?.positionCPV?.sTen || ""}</div>
+                        <div>
+                          {record.secondarySupervisor.userProfile?.positionCPV?.sTen || "---"}
+                        </div>
                       )}
                       {record?.thirdSupervisor && (
                         <div>
-                          {record.thirdSupervisor.lecturer?.userProfile?.positionCPV?.sTen || ""}
+                          {record.thirdSupervisor.lecturer?.userProfile?.positionCPV?.sTen || "---"}
                         </div>
                       )}
                     </div>
@@ -921,13 +925,13 @@ export default function DanhMucDoAn() {
                   render: (_: any, record: any) => (
                     <div className="flex flex-col gap-1">
                       {record?.primarySupervisor && (
-                        <div>{record.primarySupervisor.organization?.sMa || ""}</div>
+                        <div>{record.primarySupervisor.organization?.sMa || "---"}</div>
                       )}
                       {record?.secondarySupervisor && (
-                        <div>{record.secondarySupervisor.organization?.sMa || ""}</div>
+                        <div>{record.secondarySupervisor.organization?.sMa || "---"}</div>
                       )}
                       {record?.thirdSupervisor && (
-                        <div>{record.thirdSupervisor.lecturer?.organization?.sMa || ""}</div>
+                        <div>{record.thirdSupervisor.lecturer?.organization?.sMa || "---"}</div>
                       )}
                     </div>
                   ),
