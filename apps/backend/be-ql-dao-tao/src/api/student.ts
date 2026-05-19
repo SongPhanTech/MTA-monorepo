@@ -641,7 +641,8 @@ const debtStatistics = createRoute({
   request: {
     query: z.object({
       trainingObjectTypeId: z.string(),
-      trainingCourseId: z.string(),
+      trainingCourseId: z.string().optional(),
+      semesterId: z.string().optional(),
       date: z.coerce.date().optional(),
     }),
   },
@@ -654,37 +655,45 @@ const debtStatistics = createRoute({
         },
       },
     },
-    400: {
-      description: "Bad request",
-      content: {
-        "application/json": {
-          schema: z.object({
-            message: z.string(),
-          }),
-        },
-      },
-    },
   },
 })
 
 app.openapi(debtStatistics, async (c) => {
-  const { trainingObjectTypeId, trainingCourseId, date = new Date() } = c.req.valid("query")
+  const {
+    trainingObjectTypeId,
+    trainingCourseId: rawCourseId,
+    semesterId,
+    date: queryDate,
+  } = c.req.valid("query")
+
+  const trainingCourseId = rawCourseId || null
+
+  let date = queryDate || new Date()
+  if (semesterId) {
+    const sem = await prisma.semester.findUnique({
+      where: { id: semesterId },
+      select: { endDate: true },
+    })
+    if (sem?.endDate) date = sem.endDate
+  }
 
   const trainingObjectType = await prisma.trainingObjectType.findUniqueOrThrow({
     where: { id: trainingObjectTypeId },
     select: { name: true },
   })
 
-  const trainingCourse = await prisma.trainingCourse.findUniqueOrThrow({
-    where: { id: trainingCourseId },
-    select: { name: true },
-  })
+  const trainingCourse = trainingCourseId
+    ? await prisma.trainingCourse.findUnique({
+        where: { id: trainingCourseId },
+        select: { name: true },
+      })
+    : null
 
   type Result = {
     studentId: string
     studentCode: string
     fullname: string
-    dateOfBirth: string
+    dateOfBirth: Date | null
     fixedClassCode: string
     subjectCode: string
     subjectName: string
@@ -780,9 +789,9 @@ app.openapi(debtStatistics, async (c) => {
     studentId: string
     studentCode: string
     fullname: string
-    dateOfBirth: string
+    dateOfBirth: Date | null
     fixedClassCode: string
-    subjects: DebtSubject[]
+    subjects: Record<string, DebtSubject>
   }
 
   const studentDebtMap = res.reduce(
@@ -821,35 +830,17 @@ app.openapi(debtStatistics, async (c) => {
       }
 
       acc[studentId].subjects[subjectCode].attempts.push({ semesterCode, finalScore })
-
       return acc
     },
-    {} as Record<
-      string,
-      {
-        studentId: string
-        studentCode: string
-        fullname: string
-        dateOfBirth: string
-        fixedClassCode: string
-        subjects: Record<string, DebtSubject>
-      }
-    >
+    {} as Record<string, StudentDebtSummary>
   )
 
-  const debtSummary: StudentDebtSummary[] = Object.values(studentDebtMap).map((student) => ({
-    ...student,
-    subjects: Object.values(student.subjects),
-  }))
+  const rows = Object.values(studentDebtMap).flatMap((s) => {
+    const subjectsArray = Object.values(s.subjects)
+    const totalDebtSubject = subjectsArray.length
+    const totalDebtCredit = subjectsArray.reduce((sum, sub) => sum + sub.subjectCredit, 0)
 
-  const rows = debtSummary.flatMap((s) => {
-    const totalDebtSubject = s.subjects.length
-    const totalDebtCredit = Object.values(s.subjects).reduce(
-      (acc, subject) => acc + subject.subjectCredit,
-      0
-    )
-
-    return s.subjects.map((subject) => {
+    return subjectsArray.map((subject) => {
       const finalScores = subject.attempts.map((attempt) => attempt.finalScore)
       let type = "THI LẠI"
       let note = "Đã thi trượt 1 lần"
@@ -865,7 +856,7 @@ app.openapi(debtStatistics, async (c) => {
       return {
         studentCode: s.studentCode,
         fullname: s.fullname,
-        dateOfBirth: s.dateOfBirth ? dayjs(s.dateOfBirth).format("DD/MM/YYYY") : "",
+        birthday: s.dateOfBirth ? dayjs(s.dateOfBirth).format("DD/MM/YYYY") : "",
         fixedClassCode: s.fixedClassCode,
         totalDebtSubject,
         totalDebtCredit,
@@ -873,7 +864,7 @@ app.openapi(debtStatistics, async (c) => {
         subjectName: subject.subjectName,
         subjectCredit: subject.subjectCredit,
         semesters: subject.attempts.map((attempt) => attempt.semesterCode).join("/"),
-        finalScores: subject.attempts.map((attempt) => String(attempt.finalScore)).join("/"),
+        finalScores: subject.attempts.map((attempt) => String(attempt.finalScore ?? "0")).join("/"),
         type,
         note,
       }
@@ -886,14 +877,14 @@ app.openapi(debtStatistics, async (c) => {
 
   template.substitute(sheetName, {
     ĐTĐT: trainingObjectType.name,
-    KHOÁ: trainingCourse.name,
+    KHOÁ: trainingCourse?.name || "Tất cả các khoá",
     DATE: dayjs(date).format("DD/MM/YYYY"),
     data: rows.map((r, idx) => ({ no: idx + 1, ...r })),
   })
 
   const result = await template.generate({ type: "arraybuffer" })
 
-  const fileName = `thong_ke_no_${trainingObjectType.name}_${trainingCourse.name}.xlsx`
+  const fileName = `thong_ke_no_${trainingObjectType.name}_${trainingCourse?.name || "tat_ca"}.xlsx`
   const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
 
   return c.body(result, 200, {

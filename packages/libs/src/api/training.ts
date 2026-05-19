@@ -49,7 +49,6 @@ import type {
   CreateExamsRequest,
   CreateExamsResponse,
   CreateReExamsRequest,
-  DebtStatistics400,
   DebtStatisticsParams,
   DownloadCurriculumImportTemplate404,
   DownloadCurriculumImportTemplate500,
@@ -7440,20 +7439,13 @@ export type debtStatisticsResponse200 = {
   data: Blob
   status: 200
 }
-
-export type debtStatisticsResponse400 = {
-  data: DebtStatistics400
-  status: 400
-}
     
 export type debtStatisticsResponseSuccess = (debtStatisticsResponse200) & {
   headers: Headers;
 };
-export type debtStatisticsResponseError = (debtStatisticsResponse400) & {
-  headers: Headers;
-};
+;
 
-export type debtStatisticsResponse = (debtStatisticsResponseSuccess | debtStatisticsResponseError)
+export type debtStatisticsResponse = (debtStatisticsResponseSuccess)
 
 export const getDebtStatisticsUrl = (params: DebtStatisticsParams,) => {
   const normalizedParams = new URLSearchParams();
@@ -7492,7 +7484,7 @@ export const getDebtStatisticsQueryKey = (params?: DebtStatisticsParams,) => {
     }
 
     
-export const getDebtStatisticsQueryOptions = <TData = Awaited<ReturnType<typeof debtStatistics>>, TError = DebtStatistics400>(params: DebtStatisticsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof debtStatistics>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+export const getDebtStatisticsQueryOptions = <TData = Awaited<ReturnType<typeof debtStatistics>>, TError = unknown>(params: DebtStatisticsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof debtStatistics>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -7511,10 +7503,10 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
 }
 
 export type DebtStatisticsQueryResult = NonNullable<Awaited<ReturnType<typeof debtStatistics>>>
-export type DebtStatisticsQueryError = DebtStatistics400
+export type DebtStatisticsQueryError = unknown
 
 
-export function useDebtStatistics<TData = Awaited<ReturnType<typeof debtStatistics>>, TError = DebtStatistics400>(
+export function useDebtStatistics<TData = Awaited<ReturnType<typeof debtStatistics>>, TError = unknown>(
  params: DebtStatisticsParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof debtStatistics>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof debtStatistics>>,
@@ -7524,7 +7516,7 @@ export function useDebtStatistics<TData = Awaited<ReturnType<typeof debtStatisti
       >, request?: SecondParameter<typeof customTrainingFetch>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useDebtStatistics<TData = Awaited<ReturnType<typeof debtStatistics>>, TError = DebtStatistics400>(
+export function useDebtStatistics<TData = Awaited<ReturnType<typeof debtStatistics>>, TError = unknown>(
  params: DebtStatisticsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof debtStatistics>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof debtStatistics>>,
@@ -7534,12 +7526,12 @@ export function useDebtStatistics<TData = Awaited<ReturnType<typeof debtStatisti
       >, request?: SecondParameter<typeof customTrainingFetch>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useDebtStatistics<TData = Awaited<ReturnType<typeof debtStatistics>>, TError = DebtStatistics400>(
+export function useDebtStatistics<TData = Awaited<ReturnType<typeof debtStatistics>>, TError = unknown>(
  params: DebtStatisticsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof debtStatistics>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useDebtStatistics<TData = Awaited<ReturnType<typeof debtStatistics>>, TError = DebtStatistics400>(
+export function useDebtStatistics<TData = Awaited<ReturnType<typeof debtStatistics>>, TError = unknown>(
  params: DebtStatisticsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof debtStatistics>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {

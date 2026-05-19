@@ -46,16 +46,12 @@ export default function ThongKeNoHocLai() {
       message.error("Vui lòng chọn ĐTĐT")
       return
     }
-    if (!trainingCourseId) {
-      message.error("Vui lòng chọn khoá đào tạo")
-      return
-    }
     try {
       setLoading(true)
-      // TODO: cho chọn ngày hoặc lấy ngày từ HK đang chọn
       const { status, headers, data } = await debtStatistics({
         trainingObjectTypeId: trainingObjectTypeId,
         trainingCourseId,
+        semesterId,
       })
       if (status === 200) {
         const filename = getFilenameFromContentDisposition(

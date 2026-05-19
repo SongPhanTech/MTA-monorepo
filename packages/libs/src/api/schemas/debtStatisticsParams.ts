@@ -7,7 +7,8 @@
 
 export type DebtStatisticsParams = {
 trainingObjectTypeId: string;
-trainingCourseId: string;
+trainingCourseId?: string;
+semesterId?: string;
 /**
  * @nullable
  */
