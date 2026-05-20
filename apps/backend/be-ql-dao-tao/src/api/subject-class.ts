@@ -10,6 +10,7 @@ import { EnrollFixedClassOnSubjectClass, OpenSubjectClass } from "../dto/subject
 import { UploadExcelModel } from "../dto/upload-excel.dto"
 import { ListOf } from "../zod/base"
 import { fieldDesc } from "../dto/openapi-helpers"
+import { ErrorMessageResponseSchema, ExcelBinaryResponseSchema } from "../dto/common-response.dto"
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -128,9 +129,7 @@ const setScoreDeadLine = createRoute({
     200: {
       content: {
         "application/json": {
-          schema: z.object({
-            message: z.string(),
-          }),
+          schema: ErrorMessageResponseSchema,
         },
       },
       description: "Đặt hạn thành công",
@@ -172,9 +171,7 @@ const setExamScoreDeadLine = createRoute({
     200: {
       content: {
         "application/json": {
-          schema: z.object({
-            message: z.string(),
-          }),
+          schema: ErrorMessageResponseSchema,
         },
       },
       description: "Đặt hạn thành công",
@@ -222,9 +219,7 @@ const uploadExcelImportScore = createRoute({
     400: {
       content: {
         "application/json": {
-          schema: z.object({
-            message: z.string(),
-          }),
+          schema: ErrorMessageResponseSchema,
         },
       },
       description: "Invalid file upload",
@@ -255,7 +250,7 @@ const exportSubjectClassScore = createRoute({
       description: "Export thành công",
       content: {
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
-          schema: z.any().openapi({ type: "string", format: "binary" }),
+          schema: ExcelBinaryResponseSchema,
         },
       },
     },
@@ -263,7 +258,7 @@ const exportSubjectClassScore = createRoute({
       description: "Không tìm thấy lớp môn học.",
       content: {
         "application/json": {
-          schema: z.object({ message: z.string() }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },
@@ -299,7 +294,7 @@ const exportSubjectClassListExcel = createRoute({
       description: "Xuất danh sách lớp môn học thành công",
       content: {
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
-          schema: z.any().openapi({ type: "string", format: "binary" }),
+          schema: ExcelBinaryResponseSchema,
         },
       },
     },
@@ -307,9 +302,7 @@ const exportSubjectClassListExcel = createRoute({
       description: "Không tìm thấy dữ liệu",
       content: {
         "application/json": {
-          schema: z.object({
-            message: z.string(),
-          }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },

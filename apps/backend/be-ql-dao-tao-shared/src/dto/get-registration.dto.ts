@@ -22,7 +22,11 @@ export const GetRegistrationResponse = SuccessResponseSchema.extend({
   students_code: z.string().openapi(fieldDesc("Mã sinh viên đã tra cứu.", "21000001")),
   class_reg: z
     .array(z.string())
-    .openapi(fieldDesc("Danh sách mã lớp học phần đã đăng ký (SubjectClass.code) trong kỳ tương ứng.")),
+    .openapi(
+      fieldDesc(
+        "Danh sách mã lớp học phần đã đăng ký (SubjectClass.code) trong học kỳ class_terms."
+      )
+    ),
 }).openapi("GetRegistrationResponse")
 
 export const GetRegistrationErrorResponse = z

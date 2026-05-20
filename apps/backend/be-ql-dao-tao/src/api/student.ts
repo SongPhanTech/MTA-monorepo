@@ -25,6 +25,12 @@ import {
   resultCourseStudentDecreaseAcademicWarning,
   resultCourseStudentScholarship,
 } from "../services/student-result.service"
+import {
+  CountMessageResponseSchema,
+  ErrorDetailResponseSchema,
+  ErrorMessageResponseSchema,
+  ExcelBinaryResponseSchema,
+} from "../dto/common-response.dto"
 import { fieldDesc } from "../dto/openapi-helpers"
 
 const app = new OpenAPIHono({ strict: false })
@@ -59,9 +65,7 @@ const tongKetHocKyHVSV = createRoute({
       description: "Invalid semester ID",
       content: {
         "application/json": {
-          schema: z.object({
-            message: z.string(),
-          }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },
@@ -69,9 +73,7 @@ const tongKetHocKyHVSV = createRoute({
       description: "Server error during calculation",
       content: {
         "application/json": {
-          schema: z.object({
-            message: z.string(),
-          }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },
@@ -108,9 +110,7 @@ const tongKetNamHocHVSV = createRoute({
       description: "Invalid",
       content: {
         "application/json": {
-          schema: z.object({
-            message: z.string(),
-          }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },
@@ -118,9 +118,7 @@ const tongKetNamHocHVSV = createRoute({
       description: "Server error during calculation",
       content: {
         "application/json": {
-          schema: z.object({
-            message: z.string(),
-          }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },
@@ -161,9 +159,7 @@ const exportScholarshipJson = createRoute({
       description: "Not found",
       content: {
         "application/json": {
-          schema: z.object({
-            message: z.string(),
-          }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },
@@ -204,9 +200,7 @@ const exportScholarshipExcel = createRoute({
       description: "Not found",
       content: {
         "application/json": {
-          schema: z.object({
-            message: z.string(),
-          }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },
@@ -258,9 +252,7 @@ const exportAcademicWarningExcel = createRoute({
       description: "Not found",
       content: {
         "application/json": {
-          schema: z.object({
-            message: z.string(),
-          }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },
@@ -308,9 +300,7 @@ const exportAcademicWarningJson = createRoute({
       description: "Not found",
       content: {
         "application/json": {
-          schema: z.object({
-            message: z.string(),
-          }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },
@@ -357,9 +347,7 @@ const exportAcademicActionJson = createRoute({
       description: "Not found",
       content: {
         "application/json": {
-          schema: z.object({
-            message: z.string(),
-          }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },
@@ -396,9 +384,7 @@ const exportDecreaseAcademicWarningJson = createRoute({
       description: "Not found",
       content: {
         "application/json": {
-          schema: z.object({
-            message: z.string(),
-          }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },
@@ -454,10 +440,7 @@ const PheDuyetLuuBan = createRoute({
       description: "Cập nhật trạng thái, điểm học viên theo xử lý học tập",
       content: {
         "application/json": {
-          schema: z.object({
-            message: z.string(),
-            count: z.number(),
-          }),
+          schema: CountMessageResponseSchema,
         },
       },
     },
@@ -465,9 +448,7 @@ const PheDuyetLuuBan = createRoute({
       description: "Bad request",
       content: {
         "application/json": {
-          schema: z.object({
-            message: z.string(),
-          }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },
@@ -690,7 +671,7 @@ const debtStatistics = createRoute({
       description: "Export thống kê nợ",
       content: {
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
-          schema: z.any().openapi({ type: "string", format: "binary" }),
+          schema: ExcelBinaryResponseSchema,
         },
       },
     },
@@ -953,7 +934,7 @@ const downloadStudentImportTemplate = createRoute({
       description: "File mẫu Excel import học viên",
       content: {
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
-          schema: z.any().openapi({ type: "string", format: "binary" }),
+          schema: ExcelBinaryResponseSchema,
         },
       },
     },
@@ -961,7 +942,7 @@ const downloadStudentImportTemplate = createRoute({
       description: "Not found",
       content: {
         "application/json": {
-          schema: z.object({ message: z.string() }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },
@@ -969,10 +950,7 @@ const downloadStudentImportTemplate = createRoute({
       description: "Internal server error",
       content: {
         "application/json": {
-          schema: z.object({
-            message: z.string(),
-            error: z.string().optional(),
-          }),
+          schema: ErrorDetailResponseSchema,
         },
       },
     },
@@ -1008,7 +986,7 @@ const exportStudentProfiles = createRoute({
       description: "File Excel hồ sơ học viên",
       content: {
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
-          schema: z.any().openapi({ type: "string", format: "binary" }),
+          schema: ExcelBinaryResponseSchema,
         },
       },
     },
@@ -1016,7 +994,7 @@ const exportStudentProfiles = createRoute({
       description: "Not found",
       content: {
         "application/json": {
-          schema: z.object({ message: z.string() }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },

@@ -1,5 +1,6 @@
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
 import { exportThoiKhoaBieu } from "../services/thoi-khoa-bieu"
+import { ErrorMessageResponseSchema, ExcelBinaryResponseSchema } from "../dto/common-response.dto"
 import { fieldDesc } from "../dto/openapi-helpers"
 
 const app = new OpenAPIHono()
@@ -39,7 +40,7 @@ const exportThoiKhoaBieuRoute = createRoute({
       description: "File Excel thời khoá biểu",
       content: {
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
-          schema: z.any().openapi({ type: "string", format: "binary" }),
+          schema: ExcelBinaryResponseSchema,
         },
       },
     },
@@ -47,7 +48,7 @@ const exportThoiKhoaBieuRoute = createRoute({
       description: "Not Found",
       content: {
         "application/json": {
-          schema: z.object({ message: z.string() }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },

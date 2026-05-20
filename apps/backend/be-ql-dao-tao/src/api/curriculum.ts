@@ -7,6 +7,13 @@ import { prisma } from ".."
 import { UploadExcelModel } from "../dto/upload-excel.dto"
 import { buildSubjectMapOrThrow, buildTrainingBlockMapOrThrow } from "../utils"
 import { _generateCurriculumImportTemplate } from "../services/curriculum"
+import {
+  ErrorDetailResponseSchema,
+  ErrorMessageResponseSchema,
+  ExcelBinaryResponseSchema,
+  SheetParseErrorResponseSchema,
+  SuccessMessageResponseSchema,
+} from "../dto/common-response.dto"
 import { fieldDesc } from "../dto/openapi-helpers"
 
 const app = new OpenAPIHono({ strict: false })
@@ -41,7 +48,7 @@ const importCurriculumVersion = createRoute({
       description: "Import He quan su successfully",
       content: {
         "application/json": {
-          schema: z.object({ message: z.string() }),
+          schema: SuccessMessageResponseSchema,
         },
       },
     },
@@ -49,10 +56,9 @@ const importCurriculumVersion = createRoute({
       description: "Invalid file type",
       content: {
         "application/json": {
-          schema: z.object({
-            message: z.string(),
-            errors: z.array(zParseSheetError).optional(),
-          }),
+          schema: SheetParseErrorResponseSchema(zParseSheetError).openapi(
+            "CurriculumImportErrorResponse"
+          ),
         },
       },
     },
@@ -355,7 +361,7 @@ const downloadCurriculumImportTemplate = createRoute({
       description: "File mẫu Excel CTĐT",
       content: {
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
-          schema: z.any().openapi({ type: "string", format: "binary" }),
+          schema: ExcelBinaryResponseSchema,
         },
       },
     },
@@ -363,7 +369,7 @@ const downloadCurriculumImportTemplate = createRoute({
       description: "Not found",
       content: {
         "application/json": {
-          schema: z.object({ message: z.string() }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },
@@ -371,10 +377,7 @@ const downloadCurriculumImportTemplate = createRoute({
       description: "Internal server error",
       content: {
         "application/json": {
-          schema: z.object({
-            message: z.string(),
-            error: z.string().optional(),
-          }),
+          schema: ErrorDetailResponseSchema,
         },
       },
     },

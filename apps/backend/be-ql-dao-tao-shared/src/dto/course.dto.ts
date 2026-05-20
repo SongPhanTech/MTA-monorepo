@@ -99,7 +99,9 @@ export const ClassDetailsSchema = z
 export type ClassDetails = z.infer<typeof ClassDetailsSchema>
 
 export const OpenCourseResponse = SuccessResponseSchema.extend({
-  data: z.array(ClassDetailsSchema),
+  data: z
+    .array(ClassDetailsSchema)
+    .openapi(fieldDesc("Danh sách lớp học phần mở đăng ký tín chỉ.")),
 }).openapi("OpenCourseResponse")
 
 export type OpenCourseResponse = z.infer<typeof OpenCourseResponse>

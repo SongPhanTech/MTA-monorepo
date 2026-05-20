@@ -40,5 +40,5 @@ export const GetListSubjectItem = z
   .openapi("GetListSubjectItem")
 
 export const GetListSubjectResponse = SuccessResponseSchema.extend({
-  data: z.array(GetListSubjectItem),
+  data: z.array(GetListSubjectItem).openapi(fieldDesc("Danh sách học phần (SubjectVersion).")),
 }).openapi("GetListSubjectResponse")

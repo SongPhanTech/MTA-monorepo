@@ -6,6 +6,10 @@ import { read, utils, type WorkSheet } from "xlsx"
 import { prisma } from ".."
 import { UploadExcelModel } from "../dto/upload-excel.dto"
 import { fieldDesc } from "../dto/openapi-helpers"
+import {
+  ErrorMessageResponseSchema,
+  PlanTrainingImportResultSchema,
+} from "../dto/common-response.dto"
 import { ExamType } from "@workspace/db/client"
 
 dayjs.extend(customParseFormat)
@@ -50,15 +54,7 @@ const importPhanCongGiangDay = createRoute({
     200: {
       content: {
         "application/json": {
-          schema: z.object({
-            message: z.string(),
-            time: z.number(),
-            error: z.array(
-              z.object({
-                message: z.string(),
-              })
-            ),
-          }),
+          schema: PlanTrainingImportResultSchema,
         },
       },
       description: "Tải danh sách thành công",
@@ -66,9 +62,7 @@ const importPhanCongGiangDay = createRoute({
     400: {
       content: {
         "application/json": {
-          schema: z.object({
-            message: z.string(),
-          }),
+          schema: ErrorMessageResponseSchema,
         },
       },
       description: "Invalid file upload",

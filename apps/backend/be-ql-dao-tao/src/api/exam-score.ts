@@ -2,6 +2,7 @@ import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
 import { $Enums, Prisma } from "@workspace/db"
 import { calcFinalScore } from "@workspace/libs/utils"
 import { prisma } from ".."
+import { ErrorMessageResponseSchema, SuccessBooleanResponseSchema } from "../dto/common-response.dto"
 import { fieldDesc } from "../dto/openapi-helpers"
 
 const app = new OpenAPIHono({ strict: false })
@@ -35,11 +36,7 @@ const genExamListCode = createRoute({
       description: "Generate Exam List code result",
       content: {
         "application/json": {
-          schema: z
-            .object({
-              success: z.boolean(),
-              message: z.string(),
-            })
+          schema: SuccessBooleanResponseSchema
             .openapi("gen-exam-list-code-result"),
         },
       },
@@ -48,9 +45,7 @@ const genExamListCode = createRoute({
       description: "failed",
       content: {
         "application/json": {
-          schema: z.object({
-            message: z.string(),
-          }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },
@@ -58,9 +53,7 @@ const genExamListCode = createRoute({
       description: "Not found",
       content: {
         "application/json": {
-          schema: z.object({
-            message: z.string(),
-          }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },
@@ -211,11 +204,7 @@ const saveExamScore = createRoute({
       description: "Save exam codes result",
       content: {
         "application/json": {
-          schema: z
-            .object({
-              success: z.boolean(),
-              message: z.string(),
-            })
+          schema: SuccessBooleanResponseSchema
             .openapi("SaveExamCodesResult"),
         },
       },
@@ -224,9 +213,7 @@ const saveExamScore = createRoute({
       description: "Invalid request",
       content: {
         "application/json": {
-          schema: z.object({
-            message: z.string(),
-          }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },

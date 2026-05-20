@@ -25,5 +25,7 @@ export const DepartmentItem = z
   .openapi("DepartmentItem")
 
 export const GetAllDepartmentResponse = SuccessResponseSchema.extend({
-  department_list: z.array(DepartmentItem),
+  department_list: z
+    .array(DepartmentItem)
+    .openapi(fieldDesc("Danh sách đơn vị tổ chức (DM_DonVi), có thứ tự và mã cây.")),
 }).openapi("GetAllDepartmentResponse")

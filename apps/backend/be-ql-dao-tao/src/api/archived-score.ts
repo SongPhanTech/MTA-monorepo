@@ -11,6 +11,11 @@ import {
   exportArchivedCertificateMulti,
   exportStudentsMissingCertificate,
 } from "../services/student"
+import {
+  ErrorMessageResponseSchema,
+  ExcelBinaryResponseSchema,
+  SuccessBooleanResponseSchema,
+} from "../dto/common-response.dto"
 import { fieldDesc } from "../dto/openapi-helpers"
 
 const app = new OpenAPIHono({ strict: false })
@@ -47,12 +52,7 @@ const certificateScore = createRoute({
       description: "Success",
       content: {
         "application/json": {
-          schema: z
-            .object({
-              success: z.boolean(),
-              message: z.string(),
-            })
-            .openapi("CertificateIdsResult"),
+          schema: SuccessBooleanResponseSchema.openapi("CertificateIdsResult"),
         },
       },
     },
@@ -60,9 +60,7 @@ const certificateScore = createRoute({
       description: "Invalid request",
       content: {
         "application/json": {
-          schema: z.object({
-            message: z.string(),
-          }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },
@@ -201,7 +199,14 @@ const awardScore = createRoute({
     body: {
       content: {
         "application/json": {
-          schema: z.object({ archivedAwardIds: z.string().array() }).openapi("AwardIds"),
+          schema: z
+            .object({
+              archivedAwardIds: z
+                .string()
+                .array()
+                .openapi(fieldDesc("Danh sách ID phiên giải thưởng.")),
+            })
+            .openapi("AwardIds"),
         },
       },
     },
@@ -211,12 +216,7 @@ const awardScore = createRoute({
       description: "Success",
       content: {
         "application/json": {
-          schema: z
-            .object({
-              success: z.boolean(),
-              message: z.string(),
-            })
-            .openapi("AwardIdsResult"),
+          schema: SuccessBooleanResponseSchema.openapi("AwardIdsResult"),
         },
       },
     },
@@ -224,9 +224,7 @@ const awardScore = createRoute({
       description: "Invalid request",
       content: {
         "application/json": {
-          schema: z.object({
-            message: z.string(),
-          }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },
@@ -397,7 +395,14 @@ const approveAwardScore = createRoute({
     body: {
       content: {
         "application/json": {
-          schema: z.object({ archivedAwardIds: z.string().array() }).openapi("AwardIds"),
+          schema: z
+            .object({
+              archivedAwardIds: z
+                .string()
+                .array()
+                .openapi(fieldDesc("Danh sách ID phiên giải thưởng.")),
+            })
+            .openapi("AwardIds"),
         },
       },
     },
@@ -407,12 +412,7 @@ const approveAwardScore = createRoute({
       description: "Success",
       content: {
         "application/json": {
-          schema: z
-            .object({
-              success: z.boolean(),
-              message: z.string(),
-            })
-            .openapi("AwardIdsResult"),
+          schema: SuccessBooleanResponseSchema.openapi("AwardIdsResult"),
         },
       },
     },
@@ -420,9 +420,7 @@ const approveAwardScore = createRoute({
       description: "Invalid request",
       content: {
         "application/json": {
-          schema: z.object({
-            message: z.string(),
-          }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },
@@ -499,9 +497,9 @@ const statsArchivedAward = createRoute({
         "application/json": {
           schema: z
             .object({
-              fromSemesterId: z.string(),
-              toSemesterId: z.string(),
-              trainingCourseId: z.string(),
+              fromSemesterId: z.string().openapi(fieldDesc("ID học kỳ bắt đầu.")),
+              toSemesterId: z.string().openapi(fieldDesc("ID học kỳ kết thúc.")),
+              trainingCourseId: z.string().openapi(fieldDesc("ID khóa học.")),
             })
             .openapi("StatsArchivedAwardInput"),
         },
@@ -543,9 +541,9 @@ const exportStatsArchivedAwardRoute = createRoute({
         "application/json": {
           schema: z
             .object({
-              fromSemesterId: z.string(),
-              toSemesterId: z.string(),
-              trainingCourseId: z.string(),
+              fromSemesterId: z.string().openapi(fieldDesc("ID học kỳ bắt đầu.")),
+              toSemesterId: z.string().openapi(fieldDesc("ID học kỳ kết thúc.")),
+              trainingCourseId: z.string().openapi(fieldDesc("ID khóa học.")),
             })
             .openapi("StatsArchivedAwardInput"),
         },
@@ -557,7 +555,7 @@ const exportStatsArchivedAwardRoute = createRoute({
       description: "Success",
       content: {
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
-          schema: z.any().openapi({ type: "string", format: "binary" }),
+          schema: ExcelBinaryResponseSchema,
         },
       },
     },
@@ -613,7 +611,7 @@ const exportArchivedCertificateExcel = createRoute({
       description: "Export danh sách điểm chứng chỉ thành công",
       content: {
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
-          schema: z.string().openapi({ type: "string", format: "binary" }),
+          schema: ExcelBinaryResponseSchema,
         },
       },
     },
@@ -621,9 +619,7 @@ const exportArchivedCertificateExcel = createRoute({
       description: "Không tìm thấy dữ liệu",
       content: {
         "application/json": {
-          schema: z.object({
-            message: z.string(),
-          }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },
@@ -685,7 +681,7 @@ const exportArchivedCertificateMultiExcel = createRoute({
       description: "Export danh sách điểm chứng chỉ thành công",
       content: {
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
-          schema: z.string().openapi({ type: "string", format: "binary" }),
+          schema: ExcelBinaryResponseSchema,
         },
       },
     },
@@ -693,9 +689,7 @@ const exportArchivedCertificateMultiExcel = createRoute({
       description: "Không tìm thấy dữ liệu",
       content: {
         "application/json": {
-          schema: z.object({
-            message: z.string(),
-          }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },
@@ -759,7 +753,7 @@ const exportStudentsMissingCertificateExcel = createRoute({
       description: "Export danh sách sinh viên thiếu chứng chỉ thành công",
       content: {
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
-          schema: z.string().openapi({ type: "string", format: "binary" }),
+          schema: ExcelBinaryResponseSchema,
         },
       },
     },
@@ -767,9 +761,7 @@ const exportStudentsMissingCertificateExcel = createRoute({
       description: "Không tìm thấy dữ liệu",
       content: {
         "application/json": {
-          schema: z.object({
-            message: z.string(),
-          }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },

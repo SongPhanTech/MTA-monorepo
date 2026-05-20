@@ -2,6 +2,12 @@ import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
 import { $Enums, Prisma } from "@workspace/db"
 import { prisma } from ".."
 import { ListOf, PaginationQuerySchema } from "../zod/base"
+import {
+  OpenSubjectClassRetakeItemSchema,
+  ReExamStudentItemSchema,
+  RetakeStudentItemSchema,
+} from "../dto/re-subject-class.dto"
+import { ErrorMessageResponseSchema } from "../dto/common-response.dto"
 import { fieldDesc } from "../dto/openapi-helpers"
 
 const app = new OpenAPIHono({ strict: false })
@@ -54,20 +60,7 @@ const openSubjectClassRetake = createRoute({
     200: {
       content: {
         "application/json": {
-          schema: ListOf(
-            z
-              .object({
-                id: z.string(),
-                code: z.string(),
-                name: z.string(),
-                trainingObjectTypeId: z.string().nullable(),
-                trainingMajorId: z.string().nullable(),
-                trainingCourseId: z.string().nullable(),
-                trainingBlockSubjectId: z.string(),
-                count: z.number(),
-              })
-              .openapi("OpenSubjectClassRetakeResponse")
-          ),
+          schema: ListOf(OpenSubjectClassRetakeItemSchema),
         },
       },
       description: "Danh sách phân công giảng dạy thành công",
@@ -105,37 +98,7 @@ const openSubjectClassRetakeStudents = createRoute({
     200: {
       content: {
         "application/json": {
-          schema: ListOf(
-            z
-              .object({
-                id: z.string(),
-                code: z.string(),
-                userProfile: z.object({
-                  fullname: z.string(),
-                }),
-                fixedClass: z.object({
-                  code: z.string(),
-                  trainingCourse: z.object({
-                    name: z.string(),
-                  }),
-                }),
-                studentId: z.string(),
-                thuong_xuyen: z.number(),
-                dinh_ky: z.number(),
-                diem_cuoi: z.number().nullable(),
-                withdrew: z.boolean(),
-                mien_thi: z.boolean(),
-                reason: z.string().nullable(),
-                hoan_thi: z.boolean(),
-                ly_do_hoan_thi: z.string().nullable(),
-                cam_thi: z.boolean(),
-                ly_do_cam_thi: z.string().nullable(),
-                dinh_chi: z.boolean(),
-                ly_do_dinh_chi: z.string().nullable(),
-                truot_mon: z.boolean(),
-              })
-              .openapi("OpenSubjectClassRetakeStudentsResponse")
-          ),
+          schema: ListOf(RetakeStudentItemSchema),
         },
       },
       description: "Danh sách phân công giảng dạy thành công",
@@ -194,20 +157,7 @@ const openSubjectClassReExam = createRoute({
     200: {
       content: {
         "application/json": {
-          schema: ListOf(
-            z
-              .object({
-                id: z.string(),
-                code: z.string(),
-                name: z.string(),
-                trainingObjectTypeId: z.string().nullable(),
-                trainingMajorId: z.string().nullable(),
-                trainingCourseId: z.string().nullable(),
-                trainingBlockSubjectId: z.string(),
-                count: z.number(),
-              })
-              .openapi("OpenSubjectClassReExamResponse")
-          ),
+          schema: ListOf(OpenSubjectClassRetakeItemSchema.openapi("OpenSubjectClassReExamResponse")),
         },
       },
       description: "Danh sách môn học cần thi lại",
@@ -215,9 +165,7 @@ const openSubjectClassReExam = createRoute({
     400: {
       content: {
         "application/json": {
-          schema: z.object({
-            message: z.string(),
-          }),
+          schema: ErrorMessageResponseSchema,
         },
       },
       description: "Yêu cầu không hợp lệ",
@@ -251,30 +199,7 @@ const openSubjectClassReExamStudents = createRoute({
     200: {
       content: {
         "application/json": {
-          schema: ListOf(
-            z
-              .object({
-                id: z.string(),
-                code: z.string(),
-                userProfile: z.object({
-                  fullname: z.string(),
-                }),
-                fixedClass: z.object({
-                  code: z.string(),
-                  trainingCourse: z.object({
-                    name: z.string(),
-                  }),
-                }),
-                studentId: z.string(),
-                diem_cuoi: z.number().nullable(),
-                withdrew: z.boolean(),
-                mien_thi: z.boolean(),
-                hoan_thi: z.boolean(),
-                ly_do_hoan_thi: z.string().nullable(),
-                truot_mon: z.boolean(),
-              })
-              .openapi("OpenSubjectClassReExamStudentsResponse")
-          ),
+          schema: ListOf(ReExamStudentItemSchema),
         },
       },
       description: "Danh sách sinh viên cần thi lại môn học",

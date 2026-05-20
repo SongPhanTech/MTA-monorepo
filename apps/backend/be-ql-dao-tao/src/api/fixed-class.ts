@@ -5,6 +5,7 @@ import XlsxTemplate from "xlsx-template"
 import { prisma } from ".."
 import { UploadExcelModel } from "../dto/upload-excel.dto"
 import { fieldDesc } from "../dto/openapi-helpers"
+import { ErrorMessageResponseSchema } from "../dto/common-response.dto"
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -136,9 +137,7 @@ const fixedClassStudentCount = createRoute({
       description: "Bad request",
       content: {
         "application/json": {
-          schema: z.object({
-            message: z.string(),
-          }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },

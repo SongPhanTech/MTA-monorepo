@@ -9,6 +9,11 @@ import { prisma } from ".."
 import { UploadExcelModel } from "../dto/upload-excel.dto"
 import { buildSubjectMapOrThrow, buildTrainingBlockMapOrThrow } from "../utils"
 import { $Enums } from "@workspace/db"
+import {
+  ErrorMessageResponseSchema,
+  SheetParseErrorResponseSchema,
+  SuccessMessageResponseSchema,
+} from "../dto/common-response.dto"
 import { fieldDesc } from "../dto/openapi-helpers"
 const app = new OpenAPIHono({ strict: false })
 
@@ -49,7 +54,7 @@ const importCurriculumVersion = createRoute({
       description: "Import successfully",
       content: {
         "application/json": {
-          schema: z.object({ message: z.string() }),
+          schema: SuccessMessageResponseSchema,
         },
       },
     },
@@ -57,10 +62,9 @@ const importCurriculumVersion = createRoute({
       description: "Invalid file type",
       content: {
         "application/json": {
-          schema: z.object({
-            message: z.string(),
-            errors: z.array(zParseSheetError).optional(),
-          }),
+          schema: SheetParseErrorResponseSchema(zParseSheetError).openapi(
+            "CurriculumSubjectImportErrorResponse"
+          ),
         },
       },
     },
