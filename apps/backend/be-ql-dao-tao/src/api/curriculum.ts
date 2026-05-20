@@ -7,6 +7,7 @@ import { prisma } from ".."
 import { UploadExcelModel } from "../dto/upload-excel.dto"
 import { buildSubjectMapOrThrow, buildTrainingBlockMapOrThrow } from "../utils"
 import { _generateCurriculumImportTemplate } from "../services/curriculum"
+import { fieldDesc } from "../dto/openapi-helpers"
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -15,13 +16,21 @@ const importCurriculumVersion = createRoute({
   tags: ["Curriculum"],
   path: "/import-phien-ban-ctdt/{curriculumVersionId}",
   method: "post",
+  summary: "Import phiên bản CTĐT",
+  description: `Import toàn bộ khối và môn vào phiên bản CTĐT (thay thế cấu trúc cũ).
+
+**Bảng dữ liệu nguồn:** CurriculumVersion, TrainingBlockOnCurriculumVersion, TrainingBlockSubject.
+
+**Tham số:** curriculumVersionId (path), file, timeout.`,
   request: {
-    params: z.object({ curriculumVersionId: z.string() }),
+    params: z.object({
+      curriculumVersionId: z.string().openapi(fieldDesc("ID phiên bản CTĐT.")),
+    }),
     body: {
       content: {
         "multipart/form-data": {
           schema: UploadExcelModel.extend({
-            timeout: z.coerce.number().default(30),
+            timeout: z.coerce.number().default(30).openapi(fieldDesc("Timeout (giây).", 30)),
           }).openapi("ImportPhienBanCTDT"),
         },
       },
@@ -160,8 +169,14 @@ const exportCurriculumVersion = createRoute({
   tags: ["Curriculum"],
   path: "/export-phien-ban-ctdt/{id}",
   method: "get",
+  summary: "Xuất phiên bản CTĐT",
+  description: `Xuất Excel cấu trúc môn học của phiên bản CTĐT.
+
+**Bảng dữ liệu nguồn:** CurriculumVersion, TrainingBlockOnCurriculumVersion, TrainingBlockSubject, SubjectVersion.
+
+**Tham số:** id (path) — ID phiên bản CTĐT.`,
   request: {
-    params: z.object({ id: z.string() }),
+    params: z.object({ id: z.string().openapi(fieldDesc("ID CurriculumVersion.")) }),
   },
   responses: {
     200: {
@@ -173,7 +188,7 @@ const exportCurriculumVersion = createRoute({
           },
         },
       },
-      description: "The export result",
+      description: "File Excel CTĐT",
     },
   },
 })
@@ -324,16 +339,20 @@ const downloadCurriculumImportTemplate = createRoute({
   tags: ["Curriculum"],
   path: "/download-curriculum-template",
   method: "get",
+  summary: "Tải mẫu import CTĐT",
+  description: `Tải file Excel mẫu import chương trình đào tạo.
+
+**Bảng dữ liệu nguồn:** TrainingBlock, SubjectVersion (sheet mẫu).
+
+**Tham số:** trainingObjectTypeId (query).`,
   request: {
     query: z.object({
-      trainingObjectTypeId: z.string().openapi("trainingObjectTypeId", {
-        description: "ID loại đối tượng đào tạo",
-      }),
+      trainingObjectTypeId: z.string().openapi(fieldDesc("ID hệ đào tạo.")),
     }),
   },
   responses: {
     200: {
-      description: "Download template file with category sheets",
+      description: "File mẫu Excel CTĐT",
       content: {
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
           schema: z.any().openapi({ type: "string", format: "binary" }),

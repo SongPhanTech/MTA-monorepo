@@ -25,6 +25,7 @@ import {
   resultCourseStudentDecreaseAcademicWarning,
   resultCourseStudentScholarship,
 } from "../services/student-result.service"
+import { fieldDesc } from "../dto/openapi-helpers"
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -33,14 +34,16 @@ const tongKetHocKyHVSV = createRoute({
   path: "/calculate-student-semester-result-json",
   tags: ["Student"],
   summary: "Tổng kết kết quả học kỳ của học viên, sinh viên",
-  description: "Trả kết quả học kỳ của học viên, sinh viên dưới dạng JSON",
+  description: `Tổng kết kết quả học kỳ học viên/sinh viên (JSON).
+
+**Bảng dữ liệu nguồn:** Student, StudentSubjectScore, Semester.
+
+**Tham số:** semesterId, trainingCourseId (query).`,
   method: "post",
   request: {
     query: z.object({
-      semesterId: z.string().openapi("semesterId", {
-        description: "ID của kỳ học",
-      }),
-      trainingCourseId: z.string(),
+      semesterId: z.string().openapi(fieldDesc("ID học kỳ.")),
+      trainingCourseId: z.string().openapi(fieldDesc("ID khóa học.")),
     }),
   },
   responses: {
@@ -80,12 +83,16 @@ const tongKetNamHocHVSV = createRoute({
   path: "/calculate-student-school-year-result",
   tags: ["Student"],
   summary: "Tổng kết kết quả năm học của học viên, sinh viên",
-  description: "Trả kết quả năm học của học viên, sinh viên dưới dạng",
+  description: `Tổng kết kết quả năm học (JSON).
+
+**Bảng dữ liệu nguồn:** Student, StudentSubjectScore, SchoolYear.
+
+**Tham số:** semesterId, trainingCourseId (query).`,
   method: "post",
   request: {
     query: z.object({
-      semesterId: z.string(),
-      trainingCourseId: z.string(),
+      semesterId: z.string().openapi(fieldDesc("ID học kỳ (cuối năm).")),
+      trainingCourseId: z.string().openapi(fieldDesc("ID khóa học.")),
     }),
   },
   responses: {
@@ -125,7 +132,11 @@ const exportScholarshipJson = createRoute({
   path: "/export-json-list-student-scholarship",
   tags: ["Student"],
   summary: "Danh sách học bổng của học viên",
-  description: "Xuất danh sách học viên đạt học bổng dưới dạng JSON",
+  description: `Danh sách học viên đạt học bổng (JSON).
+
+**Bảng dữ liệu nguồn:** Student, ScholarshipDecision.
+
+**Tham số:** semesterId, trainingObjectTypeId.`,
   method: "get",
   request: {
     query: z.object({
@@ -164,8 +175,11 @@ const exportScholarshipExcel = createRoute({
   path: "/export-excel-list-student-scholarship",
   tags: ["Student"],
   summary: "Xuất Excel danh sách học bổng của học viên",
-  description:
-    "Xuất danh sách học viên đạt học bổng dưới dạng file Excel (dữ liệu đã được làm phẳng)",
+  description: `Xuất Excel học viên đạt học bổng.
+
+**Bảng dữ liệu nguồn:** Student, ScholarshipDecision.
+
+**Tham số:** semesterId, trainingObjectTypeId.`,
   method: "get",
   request: {
     query: z.object({
@@ -215,8 +229,11 @@ const exportAcademicWarningExcel = createRoute({
   path: "/export-excel-list-student-academic-warning",
   tags: ["Student"],
   summary: "Xuất Excel danh sách cảnh báo học tập của học viên",
-  description:
-    "Xuất danh sách học viên bị cảnh báo học tập dưới dạng file Excel (dữ liệu đã được làm phẳng)",
+  description: `Xuất Excel học viên bị cảnh báo học tập.
+
+**Bảng dữ liệu nguồn:** Student, AcademicWarning.
+
+**Tham số:** semesterId, trainingObjectTypeId.`,
   method: "get",
   request: {
     query: z.object({
@@ -266,7 +283,11 @@ const exportAcademicWarningJson = createRoute({
   path: "/export-json-list-student-academic-warning",
   tags: ["Student"],
   summary: "Danh sách cảnh báo học tập của học viên",
-  description: "Xuất danh sách học viên bị cảnh báo học tập dưới dạng JSON",
+  description: `Danh sách cảnh báo học tập (JSON).
+
+**Bảng dữ liệu nguồn:** Student, AcademicWarning.
+
+**Tham số:** semesterId, trainingObjectTypeId.`,
   method: "get",
   request: {
     query: z.object({
@@ -301,7 +322,11 @@ const exportAcademicActionJson = createRoute({
   path: "/export-json-list-student-academic-action",
   tags: ["Student"],
   summary: "Danh sách xử lý học vụ của học viên",
-  description: "Xuất danh sách học viên bị xử lý học vụ dưới dạng JSON",
+  description: `Danh sách xử lý học vụ (JSON).
+
+**Bảng dữ liệu nguồn:** Student, AcademicAction, AcademicDecision.
+
+**Tham số:** semesterId, trainingObjectTypeId, academicActionType.`,
   method: "get",
   request: {
     query: z.object({
@@ -346,7 +371,11 @@ const exportDecreaseAcademicWarningJson = createRoute({
   path: "/export-json-list-student-decrease-academic-warning",
   tags: ["Student"],
   summary: "Danh sách giảm cảnh báo học tập của học viên",
-  description: "Xuất danh sách học viên được giảm cảnh báo học tập dưới dạng JSON",
+  description: `Danh sách giảm cảnh báo học tập (JSON).
+
+**Bảng dữ liệu nguồn:** Student, AcademicWarning.
+
+**Tham số:** semesterId, trainingObjectTypeId.`,
   method: "get",
   request: {
     query: z.object({
@@ -381,7 +410,11 @@ const PheDuyetLuuBan = createRoute({
   path: "/update-students-status",
   tags: ["Student"],
   summary: "Cập nhật trạng thái, điểm học viên theo xử lý học tập",
-  description: "Cập nhật trạng thái, điểm học viên theo xử lý học tập",
+  description: `Phê duyệt / cập nhật trạng thái học viên theo quyết định học vụ.
+
+**Bảng dữ liệu nguồn:** AcademicDecision, Student, FixedClass.
+
+**Tham số:** decisionIds, academicActionType, classChanges.`,
   method: "post",
   request: {
     body: {
@@ -638,12 +671,18 @@ const debtStatistics = createRoute({
   tags: ["Student"],
   path: "/debt-statistics",
   method: "get",
+  summary: "Xuất thống kê nợ môn",
+  description: `Xuất Excel học viên nợ học phần / tín chỉ.
+
+**Bảng dữ liệu nguồn:** Student, StudentSubjectScore, SubjectVersion.
+
+**Tham số:** trainingObjectTypeId, trainingCourseId, semesterId, date.`,
   request: {
     query: z.object({
-      trainingObjectTypeId: z.string(),
-      trainingCourseId: z.string().optional(),
-      semesterId: z.string().optional(),
-      date: z.coerce.date().optional(),
+      trainingObjectTypeId: z.string().openapi(fieldDesc("ID hệ đào tạo.")),
+      trainingCourseId: z.string().optional().openapi(fieldDesc("ID khóa (tùy chọn).")),
+      semesterId: z.string().optional().openapi(fieldDesc("ID HK — lấy ngày cuối kỳ.")),
+      date: z.coerce.date().optional().openapi(fieldDesc("Ngày chốt nợ (mặc định hôm nay).")),
     }),
   },
   responses: {
@@ -898,16 +937,20 @@ const downloadStudentImportTemplate = createRoute({
   tags: ["Student"],
   path: "/download-student-import-template",
   method: "get",
+  summary: "Tải mẫu import học viên",
+  description: `Tải file Excel mẫu import học viên.
+
+**Bảng dữ liệu nguồn:** (file mẫu, không ghi DB).
+
+**Tham số:** trainingObjectTypeId (query).`,
   request: {
     query: z.object({
-      trainingObjectTypeId: z.string().openapi("trainingObjectTypeId", {
-        description: "ID loại đối tượng đào tạo",
-      }),
+      trainingObjectTypeId: z.string().openapi(fieldDesc("ID hệ đào tạo.")),
     }),
   },
   responses: {
     200: {
-      description: "Download template file with category sheets",
+      description: "File mẫu Excel import học viên",
       content: {
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
           schema: z.any().openapi({ type: "string", format: "binary" }),
@@ -941,18 +984,28 @@ const exportStudentProfiles = createRoute({
   tags: ["Student"],
   path: "/export-student-profiles",
   method: "post",
+  summary: "Xuất hồ sơ học viên",
+  description: `Xuất Excel hồ sơ học viên theo khóa.
+
+**Bảng dữ liệu nguồn:** Student, UserProfile, FixedClass.
+
+**Tham số:** trainingCourseId.`,
   request: {
     body: {
       content: {
         "application/json": {
-          schema: z.object({ trainingCourseId: z.string() }),
+          schema: z
+            .object({
+              trainingCourseId: z.string().openapi(fieldDesc("ID khóa học.")),
+            })
+            .openapi("ExportStudentProfilesRequest"),
         },
       },
     },
   },
   responses: {
     200: {
-      description: "Success",
+      description: "File Excel hồ sơ học viên",
       content: {
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
           schema: z.any().openapi({ type: "string", format: "binary" }),

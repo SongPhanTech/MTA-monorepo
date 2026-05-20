@@ -1,5 +1,6 @@
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
 import { exportStudentSemesterResult } from "../services/student-result"
+import { fieldDesc } from "../dto/openapi-helpers"
 
 const app = new OpenAPIHono()
 
@@ -8,23 +9,29 @@ const exportStudentSemesterResultRoute = createRoute({
   tags: ["Student Result"],
   path: "/export-student-semester-result",
   method: "post",
-  summary: "Export Student Semester Result",
-  description: "Export student semester result to Excel",
+  summary: "Xuất KQHT theo học kỳ",
+  description: `Xuất file Excel kết quả học tập học kỳ.
+
+**Bảng dữ liệu nguồn:** Student, StudentSubjectScore, Semester, TrainingObjectType.
+
+**Tham số:** semesterId, trainingObjectTypeId.`,
   request: {
     body: {
       content: {
         "application/json": {
-          schema: z.object({
-            semesterId: z.string(),
-            trainingObjectTypeId: z.string(),
-          }),
+          schema: z
+            .object({
+              semesterId: z.string().openapi(fieldDesc("ID học kỳ (Semester).")),
+              trainingObjectTypeId: z.string().openapi(fieldDesc("ID hệ đào tạo (TrainingObjectType).")),
+            })
+            .openapi("ExportStudentSemesterResultRequest"),
         },
       },
     },
   },
   responses: {
     200: {
-      description: "Success",
+      description: "File Excel kết quả học tập",
       content: {
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
           schema: z.any().openapi({ type: "string", format: "binary" }),

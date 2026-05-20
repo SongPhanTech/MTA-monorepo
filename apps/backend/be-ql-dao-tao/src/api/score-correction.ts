@@ -3,6 +3,7 @@ import { $Enums } from "@workspace/db"
 import { calcFinalScore } from "@workspace/libs/utils"
 import Decimal from "decimal.js"
 import { prisma } from ".."
+import { fieldDesc } from "../dto/openapi-helpers"
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -11,7 +12,11 @@ const approveScoreCorrection = createRoute({
   path: "/approve",
   tags: ["ScoreCorrection"],
   summary: "Duyệt phiếu sửa điểm",
-  description: "Duyệt phiếu sửa điểm và cập nhật điểm cho sinh viên",
+  description: `Duyệt phiếu sửa điểm và ghi đè điểm học phần cho học viên.
+
+**Bảng dữ liệu nguồn:** ScoreCorrectionTicket, ScoreCorrectionItem, StudentSubjectScore.
+
+**Tham số:** ticketId — ID phiếu sửa điểm.`,
   method: "post",
   request: {
     body: {
@@ -19,7 +24,7 @@ const approveScoreCorrection = createRoute({
         "application/json": {
           schema: z
             .object({
-              ticketId: z.string(),
+              ticketId: z.string().openapi(fieldDesc("ID phiếu sửa điểm (ScoreCorrectionTicket).")),
             })
             .openapi("ApproveScoreCorrectionInput"),
         },
@@ -28,12 +33,12 @@ const approveScoreCorrection = createRoute({
   },
   responses: {
     200: {
-      description: "Success",
+      description: "Duyệt thành công",
       content: {
         "application/json": {
           schema: z.object({
-            success: z.boolean(),
-            message: z.string(),
+            success: z.boolean().openapi(fieldDesc("true nếu thành công.")),
+            message: z.string().openapi(fieldDesc("Thông báo kết quả.")),
           }),
         },
       },

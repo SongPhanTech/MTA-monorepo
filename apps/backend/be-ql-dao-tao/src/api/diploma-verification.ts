@@ -4,6 +4,7 @@ import { getTemplateBuffer } from "@workspace/libs/server"
 import dayjs from "dayjs"
 import XlsxTemplate from "xlsx-template"
 import { prisma } from ".."
+import { fieldDesc } from "../dto/openapi-helpers"
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -12,15 +13,21 @@ const exportDiplomaVerification = createRoute({
   tags: ["DiplomaVerification"],
   path: "/export-diploma-verification",
   method: "get",
+  summary: "Xuất xác minh văn bằng",
+  description: `Xuất Excel danh sách hồ sơ xác minh văn bằng trong khoảng thời gian.
+
+**Bảng dữ liệu nguồn:** DiplomaVerificationApplication.
+
+**Tham số:** startDate, endDate (query).`,
   request: {
     query: z.object({
-      startDate: z.coerce.date(),
-      endDate: z.coerce.date(),
+      startDate: z.coerce.date().openapi(fieldDesc("Từ ngày (lọc createdAt).")),
+      endDate: z.coerce.date().openapi(fieldDesc("Đến ngày.")),
     }),
   },
   responses: {
     200: {
-      description: "Success",
+      description: "File Excel xác minh văn bằng",
       content: {
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
           schema: z.any().openapi({ type: "string", format: "binary" }),

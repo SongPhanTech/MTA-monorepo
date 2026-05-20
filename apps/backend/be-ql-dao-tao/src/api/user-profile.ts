@@ -7,21 +7,25 @@ import { prisma } from ".."
 import { UploadExcelModel } from "../dto/upload-excel.dto"
 import { parseDate } from "../utils"
 import { ListOf } from "../zod/base"
+import { fieldDesc } from "../dto/openapi-helpers"
 
 const uploadExcelCreateUserProfile = createRoute({
   operationId: "uploadExcelCreateUserProfile",
   path: "/upload-excel-create-user-profile",
   method: "post",
-  description:
-    "Thêm mới danh sách học viên/sinh viên \n\n [type] là mã của loại đối tượng cần tạo, lấy trong bảng UserType",
+  summary: "Tạo hồ sơ từ Excel",
+  description: `Thêm mới học viên/sinh viên từ file Excel.
+
+**Bảng dữ liệu nguồn:** UserProfile, UserType.
+
+**Tham số:** file, type — mã loại đối tượng (UserType).`,
   tags: ["UserProfile"],
-  summary: "Upload Excel Create UserProfile",
   request: {
     body: {
       content: {
         "multipart/form-data": {
           schema: UploadExcelModel.extend({
-            type: z.string(), // loại thông tin
+            type: z.string().openapi(fieldDesc("Mã loại đối tượng (UserType).")),
           }).openapi("uploadExcelCreateUserProfile"),
         },
       },
@@ -51,9 +55,13 @@ const uploadExcelUpdateUserProfile = createRoute({
   operationId: "uploadExcelUpdateUserProfile",
   path: "/upload-excel-update-user-profile",
   method: "post",
-  description: "Cập nhật thông tin học viên/sinh viên",
+  summary: "Cập nhật hồ sơ từ Excel",
+  description: `Cập nhật thông tin học viên/sinh viên từ Excel.
+
+**Bảng dữ liệu nguồn:** UserProfile.
+
+**Tham số:** file.`,
   tags: ["UserProfile"],
-  summary: "Upload Excel Update UserProfile",
   request: {
     body: {
       content: {

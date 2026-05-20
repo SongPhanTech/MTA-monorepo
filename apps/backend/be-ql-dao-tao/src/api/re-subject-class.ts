@@ -2,6 +2,7 @@ import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
 import { $Enums, Prisma } from "@workspace/db"
 import { prisma } from ".."
 import { ListOf, PaginationQuerySchema } from "../zod/base"
+import { fieldDesc } from "../dto/openapi-helpers"
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -9,9 +10,13 @@ const openSubjectClassRetake = createRoute({
   operationId: "openSubjectClassRetake",
   path: "/open-subject-class-retake",
   method: "get",
-  description: "Lấy danh sách môn học có hssv nợ",
+  summary: "Môn học lại (học viên nợ)",
+  description: `Danh sách học phần có học viên cần học lại.
+
+**Bảng dữ liệu nguồn:** SubjectVersion, StudentSubjectScore, TrainingBlockSubject.
+
+**Tham số:** phân trang + trainingCourseId, trainingMajorId, search, trainingObjectTypeId, semesterId, viewAll.`,
   tags: ["SubjectClass"],
-  summary: "Lấy danh sách môn học có hssv nợ",
   request: {
     query: PaginationQuerySchema.extend({
       trainingCourseId: z.string().openapi("trainingCourseId", {
@@ -77,19 +82,23 @@ const openSubjectClassRetakeStudents = createRoute({
   operationId: "openSubjectClassRetakeStudents",
   path: "/open-subject-class-retake-students",
   method: "get",
-  description: "Lấy danh sách sinh viên nợ môn học",
+  summary: "Học viên nợ môn (học lại)",
+  description: `Chi tiết học viên nợ từng học phần (học lại).
+
+**Bảng dữ liệu nguồn:** Student, StudentSubjectScore, SubjectVersion.
+
+**Tham số:** subjectVersionId, trainingCourseId, fixedClassId, search, trainingObjectTypeId, semesterId, page, pageSize.`,
   tags: ["SubjectClass"],
-  summary: "Lấy danh sách sinh viên nợ môn học",
   request: {
     query: z.object({
-      subjectVersionId: z.string(),
-      trainingCourseId: z.string().optional(),
-      fixedClassId: z.string().optional(),
-      search: z.string().optional(),
-      trainingObjectTypeId: z.string(),
-      semesterId: z.string().optional(),
-      page: z.number({ coerce: true }).default(1),
-      pageSize: z.number({ coerce: true }).default(10),
+      subjectVersionId: z.string().openapi(fieldDesc("ID phiên bản môn.")),
+      trainingCourseId: z.string().optional().openapi(fieldDesc("ID khóa học.")),
+      fixedClassId: z.string().optional().openapi(fieldDesc("ID lớp niên chế.")),
+      search: z.string().optional().openapi(fieldDesc("Từ khóa mã/tên HV.")),
+      trainingObjectTypeId: z.string().openapi(fieldDesc("ID hệ đào tạo.")),
+      semesterId: z.string().optional().openapi(fieldDesc("ID học kỳ.")),
+      page: z.number({ coerce: true }).default(1).openapi(fieldDesc("Trang.", 1)),
+      pageSize: z.number({ coerce: true }).default(10).openapi(fieldDesc("Số bản ghi/trang.", 10)),
     }),
   },
   responses: {
@@ -141,9 +150,13 @@ const openSubjectClassReExam = createRoute({
   operationId: "openSubjectClassReExam",
   path: "/open-subject-class-reexam",
   method: "get",
-  description: "Lấy danh sách môn học có hssv cần thi lại",
+  summary: "Môn cần thi lại",
+  description: `Danh sách học phần có học viên cần thi lại.
+
+**Bảng dữ liệu nguồn:** SubjectVersion, StudentSubjectScore.
+
+**Tham số:** giống API học lại (phân trang + bộ lọc).`,
   tags: ["SubjectClass"],
-  summary: "Lấy danh sách môn học có hssv cần thi lại",
   request: {
     query: PaginationQuerySchema.extend({
       trainingCourseId: z.string().openapi("trainingCourseId", {
@@ -216,18 +229,22 @@ const openSubjectClassReExamStudents = createRoute({
   operationId: "openSubjectClassReExamStudents",
   path: "/open-subject-class-reexam-students",
   method: "get",
-  description: "Lấy danh sách sinh viên cần thi lại môn học",
+  summary: "Học viên thi lại môn",
+  description: `Chi tiết học viên cần thi lại từng học phần.
+
+**Bảng dữ liệu nguồn:** Student, StudentSubjectScore.
+
+**Tham số:** subjectVersionId, trainingCourseId, fixedClassId, search, trainingObjectTypeId, page, pageSize.`,
   tags: ["SubjectClass"],
-  summary: "Lấy danh sách sinh viên cần thi lại môn học",
   request: {
     query: z.object({
-      subjectVersionId: z.string(),
-      trainingCourseId: z.string().optional(),
-      fixedClassId: z.string().optional(),
-      search: z.string().optional(),
-      trainingObjectTypeId: z.string(),
-      page: z.number({ coerce: true }).default(1),
-      pageSize: z.number({ coerce: true }).default(10),
+      subjectVersionId: z.string().openapi(fieldDesc("ID phiên bản môn.")),
+      trainingCourseId: z.string().optional().openapi(fieldDesc("ID khóa.")),
+      fixedClassId: z.string().optional().openapi(fieldDesc("ID lớp NC.")),
+      search: z.string().optional().openapi(fieldDesc("Từ khóa.")),
+      trainingObjectTypeId: z.string().openapi(fieldDesc("ID hệ ĐT.")),
+      page: z.number({ coerce: true }).default(1).openapi(fieldDesc("Trang.", 1)),
+      pageSize: z.number({ coerce: true }).default(10).openapi(fieldDesc("Page size.", 10)),
     }),
   },
   responses: {

@@ -3,6 +3,7 @@ import { getTemplateBuffer } from "@workspace/libs/server"
 import dayjs from "dayjs"
 import XlsxTemplate from "xlsx-template"
 import { prisma } from ".."
+import { fieldDesc } from "../dto/openapi-helpers"
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -11,37 +12,76 @@ const exportLecturerProfile = createRoute({
   tags: ["Lecturer"],
   path: "/export-lecturer-profile",
   method: "post",
+  summary: "Xuất hồ sơ giảng viên",
+  description: `Xuất Excel danh sách giảng viên theo bộ lọc hoặc danh sách ID.
+
+**Bảng dữ liệu nguồn:** Lecturer, UserProfile.
+
+**Tham số:** isSelectAll, lecturerIds, excludedIds, filters.`,
   request: {
     body: {
       content: {
         "application/json": {
-          schema: z.object({
-            isSelectAll: z.boolean().optional(),
-            lecturerIds: z.string().uuid().array().optional(),
-            excludedIds: z.string().uuid().array().optional(),
-            filters: z
-              .object({
-                code: z.string().optional(),
-                name: z.string().optional(),
-                dateOfBirth: z.string().array().optional(),
-                academicRankType: z.string().uuid().array().optional(),
-                academicDegreeType: z.string().uuid().array().optional(),
-                organization: z.string().uuid().array().optional(),
-                gender: z.string().uuid().array().optional(),
-                rankId: z.string().uuid().array().optional(),
-                officerNumber: z.string().optional(),
-                lecturerType: z.string().uuid().array().optional(),
-                idCardNumber: z.string().optional(),
-              })
-              .optional(),
-          }),
+          schema: z
+            .object({
+              isSelectAll: z.boolean().optional().openapi(fieldDesc("Chọn tất cả theo filters.")),
+              lecturerIds: z
+                .string()
+                .uuid()
+                .array()
+                .optional()
+                .openapi(fieldDesc("Danh sách ID giảng viên xuất.")),
+              excludedIds: z
+                .string()
+                .uuid()
+                .array()
+                .optional()
+                .openapi(fieldDesc("ID loại trừ khi isSelectAll.")),
+              filters: z
+                .object({
+                  code: z.string().optional().openapi(fieldDesc("Lọc mã GV.")),
+                  name: z.string().optional().openapi(fieldDesc("Lọc họ tên.")),
+                  dateOfBirth: z.string().array().optional().openapi(fieldDesc("Khoảng ngày sinh.")),
+                  academicRankType: z
+                    .string()
+                    .uuid()
+                    .array()
+                    .optional()
+                    .openapi(fieldDesc("Học hàm.")),
+                  academicDegreeType: z
+                    .string()
+                    .uuid()
+                    .array()
+                    .optional()
+                    .openapi(fieldDesc("Học vị.")),
+                  organization: z
+                    .string()
+                    .uuid()
+                    .array()
+                    .optional()
+                    .openapi(fieldDesc("Đơn vị.")),
+                  gender: z.string().uuid().array().optional().openapi(fieldDesc("Giới tính.")),
+                  rankId: z.string().uuid().array().optional().openapi(fieldDesc("Cấp bậc.")),
+                  officerNumber: z.string().optional().openapi(fieldDesc("Số hiệu sĩ quan.")),
+                  lecturerType: z
+                    .string()
+                    .uuid()
+                    .array()
+                    .optional()
+                    .openapi(fieldDesc("Loại giảng viên.")),
+                  idCardNumber: z.string().optional().openapi(fieldDesc("CCCD.")),
+                })
+                .optional()
+                .openapi(fieldDesc("Bộ lọc khi isSelectAll = true.")),
+            })
+            .openapi("ExportLecturerProfileRequest"),
         },
       },
     },
   },
   responses: {
     200: {
-      description: "Export list of lecturer profile as .xlsx",
+      description: "File Excel hồ sơ giảng viên",
       content: {
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
           schema: z.any().openapi({ type: "string", format: "binary" }),

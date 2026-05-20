@@ -1,5 +1,11 @@
-import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
+import { createRoute, OpenAPIHono } from "@hono/zod-openapi"
 import { prisma } from ".."
+import {
+  GetListTeacherRequest,
+  GetListTeacherResponse,
+  GetTeacherDetailRequest,
+  GetTeacherDetailResponse,
+} from "../dto/lecturer.dto"
 
 const app: OpenAPIHono = new OpenAPIHono({ strict: false })
 
@@ -8,16 +14,17 @@ const getListTeacher = createRoute({
   tags: ["Teacher"],
   path: "get-list-teacher",
   summary: "2.16. Lấy danh sách hồ sơ giảng viên",
+  description: `Tìm kiếm giảng viên theo từ khóa.
+
+**Bảng dữ liệu nguồn:** Lecturer, UserProfile, Organization (DM_DonVi), DM_QuanHam, DM_ChucVu.
+
+**Tham số:** key_word — lọc theo họ (lastName).`,
   method: "post",
   request: {
     body: {
       content: {
         "application/json": {
-          schema: z
-            .object({
-              key_word: z.string().optional(),
-            })
-            .openapi("GetListTeacherRequest"),
+          schema: GetListTeacherRequest,
         },
       },
     },
@@ -27,25 +34,7 @@ const getListTeacher = createRoute({
       description: "Thành công",
       content: {
         "application/json": {
-          schema: z
-            .object({
-              result_code: z.string(),
-              result_desc: z.string(),
-              data: z.array(
-                z.object({
-                  teacher_code: z.string().nullish(),
-                  teacher: z.string(),
-                  department_code: z.string().nullish(),
-                  department_name: z.string(),
-                  rank_name: z.string(),
-                  position_name: z.string(),
-                  phone_number: z.string(),
-                  working_number: z.string(),
-                  working_mail: z.string(),
-                })
-              ),
-            })
-            .openapi("GetListTeacherResponse"),
+          schema: GetListTeacherResponse,
         },
       },
     },
@@ -108,8 +97,8 @@ app.openapi(getListTeacher, async (c) => {
 
   return c.json(
     {
-      result_code: "0000",
-      result_desc: "success",
+      result_code: "000" as const,
+      result_desc: "success" as const,
       data,
     },
     200
@@ -121,16 +110,17 @@ const getTeacherDetail = createRoute({
   tags: ["TeacherDetail"],
   path: "get-teacher-detail",
   summary: "2.17 Lấy hồ sơ giảng viên",
+  description: `Chi tiết một giảng viên theo mã.
+
+**Bảng dữ liệu nguồn:** Lecturer, UserProfile, Organization.
+
+**Tham số:** teacher_code — mã giảng viên (Lecturer.code).`,
   method: "post",
   request: {
     body: {
       content: {
         "application/json": {
-          schema: z
-            .object({
-              teacher_code: z.string(),
-            })
-            .openapi("GetTeacherDetailRequest"),
+          schema: GetTeacherDetailRequest,
         },
       },
     },
@@ -140,21 +130,7 @@ const getTeacherDetail = createRoute({
       description: "Thành công",
       content: {
         "application/json": {
-          schema: z
-            .object({
-              result_code: z.string(),
-              result_desc: z.string(),
-              teacher_code: z.string().nullable(),
-              teacher: z.string(),
-              department_code: z.string().nullable(),
-              department_name: z.string(),
-              rank_name: z.string(),
-              position_name: z.string(),
-              phone_number: z.string(),
-              working_phone: z.string(),
-              working_mail: z.string(),
-            })
-            .openapi("GetTeacherDetailResponse"),
+          schema: GetTeacherDetailResponse,
         },
       },
     },
@@ -187,8 +163,8 @@ app.openapi(getTeacherDetail, async (c) => {
     },
   })
   const res = {
-    result_code: "000",
-    result_desc: "success",
+    result_code: "000" as const,
+    result_desc: "success" as const,
     teacher_code: lecturer?.code ?? null,
     teacher: `${lecturer?.userProfile.lastName} ${lecturer?.userProfile.firstName}`,
     department_code: lecturer?.organization?.sMa ?? null,

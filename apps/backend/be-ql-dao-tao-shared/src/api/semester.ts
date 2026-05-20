@@ -1,22 +1,29 @@
-import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
+import { createRoute, OpenAPIHono } from "@hono/zod-openapi"
 import { prisma } from ".."
+import {
+  GetAllYearResponse,
+  GetSemesterRequest,
+  GetSemesterResponse,
+} from "../dto/semester.dto"
 
 const app: OpenAPIHono = new OpenAPIHono({ strict: false })
+
 const getSemester = createRoute({
   operationId: "get-class-terms",
   tags: ["Semester"],
   path: "get-class-terms",
   summary: "2.11. Lấy thông tin kì học",
+  description: `Danh sách học kỳ theo năm học.
+
+**Bảng dữ liệu nguồn:** SchoolYear, Semester.
+
+**Tham số:** year — lọc theo tên năm học (tùy chọn).`,
   method: "post",
   request: {
     body: {
       content: {
         "application/json": {
-          schema: z
-            .object({
-              year: z.string().optional(),
-            })
-            .openapi("GetSemesterRequest"),
+          schema: GetSemesterRequest,
         },
       },
     },
@@ -26,20 +33,7 @@ const getSemester = createRoute({
       description: "Thành công",
       content: {
         "application/json": {
-          schema: z
-            .object({
-              result_code: z.string(),
-              result_desc: z.string(),
-              data: z.array(
-                z.object({
-                  year_code: z.string(),
-                  year_name: z.string(),
-                  class_terms: z.string(),
-                  class_terms_code: z.string(),
-                })
-              ),
-            })
-            .openapi("GetSemesterResponse"),
+          schema: GetSemesterResponse,
         },
       },
     },
@@ -85,24 +79,18 @@ const getAllYear = createRoute({
   tags: ["SchoolYear"],
   path: "get-all-year",
   summary: "2.10. Lấy danh sách năm học",
+  description: `Danh sách tất cả năm học.
+
+**Bảng dữ liệu nguồn:** SchoolYear.
+
+**Không có tham số đầu vào.**`,
   method: "post",
   responses: {
     200: {
       description: "Thành công",
       content: {
         "application/json": {
-          schema: z
-            .object({
-              result_code: z.string(),
-              result_desc: z.string(),
-              data: z.array(
-                z.object({
-                  year_code: z.string(),
-                  year: z.string(),
-                })
-              ),
-            })
-            .openapi("GetAllYearResponse"),
+          schema: GetAllYearResponse,
         },
       },
     },

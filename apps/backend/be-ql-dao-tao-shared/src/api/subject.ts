@@ -1,6 +1,7 @@
-import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
+import { createRoute, OpenAPIHono } from "@hono/zod-openapi"
 import type { $Enums } from "@workspace/db"
 import { prisma } from ".."
+import { GetListSubjectRequest, GetListSubjectResponse } from "../dto/subject.dto"
 
 const app: OpenAPIHono = new OpenAPIHono({ strict: false })
 
@@ -9,16 +10,17 @@ const getListSubject = createRoute({
   tags: ["Subject"],
   path: "get-list-subject",
   summary: "2.15. Lấy danh sách môn học",
+  description: `Danh sách học phần / phiên bản môn học.
+
+**Bảng dữ liệu nguồn:** SubjectVersion.
+
+**Tham số:** key_word — tìm theo mã hoặc tên môn.`,
   method: "post",
   request: {
     body: {
       content: {
         "application/json": {
-          schema: z
-            .object({
-              key_word: z.string().optional(),
-            })
-            .openapi("GetListSubjectRequest"),
+          schema: GetListSubjectRequest,
         },
       },
     },
@@ -28,22 +30,7 @@ const getListSubject = createRoute({
       description: "Thành công",
       content: {
         "application/json": {
-          schema: z
-            .object({
-              result_code: z.string(),
-              result_desc: z.string(),
-              data: z.array(
-                z.object({
-                  subject_code: z.string().nullish(),
-                  subject_name: z.string(),
-                  courser: z.number(),
-                  class_credit_hour: z.number(),
-                  dvht: z.number(),
-                  description: z.string(),
-                })
-              ),
-            })
-            .openapi("GetListSubjectResponse"),
+          schema: GetListSubjectResponse,
         },
       },
     },
@@ -85,18 +72,19 @@ app.openapi(getListSubject, async (c) => {
     Other: "Hình thức khác",
     Practice: "Thực hành",
     Project: "Đồ án",
+    OnlineWritten: "Thi viết trực tuyến",
   }
 
   return c.json(
     {
-      result_code: "000",
-      result_desc: "success",
+      result_code: "000" as const,
+      result_desc: "success" as const,
       data: res.map((item) => ({
         subject_code: item.code,
         subject_name: item.name,
-        courser: item.period,
+        courser: item.period ?? 0,
         class_credit_hour: item.credit,
-        dvht: Math.floor(item.period / 15),
+        dvht: Math.floor((item.period ?? 0) / 15),
         description: desExamType[item.examType],
       })),
     },

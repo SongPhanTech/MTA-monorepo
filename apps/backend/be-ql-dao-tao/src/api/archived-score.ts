@@ -11,6 +11,7 @@ import {
   exportArchivedCertificateMulti,
   exportStudentsMissingCertificate,
 } from "../services/student"
+import { fieldDesc } from "../dto/openapi-helpers"
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -19,14 +20,23 @@ const certificateScore = createRoute({
   path: "/certificate-score",
   tags: ["ArchivedScore"],
   summary: "Phiên điểm chứng chỉ",
-  description: "Phiên điểm chứng chi",
+  description: `Tính / ghi điểm từ phiên chứng chỉ đã lưu trữ.
+
+**Bảng dữ liệu nguồn:** ArchivedCertificate, Certificate, StudentSubjectScore.
+
+**Tham số:** archivedCertificateIds.`,
   method: "post",
   request: {
     body: {
       content: {
         "application/json": {
           schema: z
-            .object({ archivedCertificateIds: z.string().array() })
+            .object({
+              archivedCertificateIds: z
+                .string()
+                .array()
+                .openapi(fieldDesc("Danh sách ID phiên chứng chỉ.")),
+            })
             .openapi("CertificateIds"),
         },
       },
@@ -181,7 +191,11 @@ const awardScore = createRoute({
   path: "/award-score",
   tags: ["ArchivedScore"],
   summary: "Cộng điểm giải thưởng",
-  description: "Cộng điểm giải thưởng",
+  description: `Cộng điểm thưởng từ giải thưởng đã lưu trữ.
+
+**Bảng dữ liệu nguồn:** ArchivedAward, StudentSubjectScore.
+
+**Tham số:** xem schema body.`,
   method: "post",
   request: {
     body: {
@@ -373,7 +387,11 @@ const approveAwardScore = createRoute({
   path: "/approve-award-score",
   tags: ["ArchivedScore"],
   summary: "Phê duyệt điểm giải thưởng",
-  description: "Phê duyệt điểm giải thưởng",
+  description: `Phê duyệt phiên cộng điểm giải thưởng.
+
+**Bảng dữ liệu nguồn:** ArchivedAward, Award.
+
+**Tham số:** xem schema body.`,
   method: "post",
   request: {
     body: {
@@ -469,7 +487,11 @@ const statsArchivedAward = createRoute({
   path: "/stats-archived-award",
   tags: ["ArchivedScore"],
   summary: "Thống kê điểm thưởng",
-  description: "Thống kê điểm thưởng từ học kỳ đến học kỳ",
+  description: `Thống kê điểm thưởng giữa hai học kỳ.
+
+**Bảng dữ liệu nguồn:** ArchivedAward, Semester.
+
+**Tham số:** xem schema body.`,
   method: "post",
   request: {
     body: {
@@ -509,7 +531,11 @@ const exportStatsArchivedAwardRoute = createRoute({
   path: "/export-stats-archived-award",
   tags: ["ArchivedScore"],
   summary: "Xuất file thống kê điểm thưởng",
-  description: "Xuất file excel thống kê điểm thưởng từ học kỳ đến học kỳ",
+  description: `Xuất Excel thống kê điểm thưởng theo khoảng học kỳ.
+
+**Bảng dữ liệu nguồn:** ArchivedAward, Semester.
+
+**Tham số:** xem schema body.`,
   method: "post",
   request: {
     body: {
@@ -557,7 +583,11 @@ const exportArchivedCertificateExcel = createRoute({
   path: "/export-archived-certificate-excel",
   tags: ["ArchivedScore"],
   summary: "Xuất Excel danh sách điểm chứng chỉ",
-  description: "Xuất danh sách điểm chứng chỉ của học viên dưới dạng file Excel",
+  description: `Xuất Excel điểm chứng chỉ đã lưu trữ.
+
+**Bảng dữ liệu nguồn:** ArchivedCertificate, Student.
+
+**Tham số:** query — xem schema.`,
   method: "get",
   request: {
     query: z.object({
@@ -629,7 +659,11 @@ const exportArchivedCertificateMultiExcel = createRoute({
   path: "/export-archived-certificate-multi-excel",
   tags: ["ArchivedScore"],
   summary: "Xuất Excel danh sách điểm chứng chỉ nhiều loại",
-  description: "Xuất danh sách điểm chứng chỉ theo nhiều khoá học và nhiều loại chứng chỉ",
+  description: `Xuất Excel điểm chứng chỉ nhiều khóa / nhiều loại.
+
+**Bảng dữ liệu nguồn:** ArchivedCertificate, Certificate, TrainingCourse.
+
+**Tham số:** body — xem schema.`,
   method: "post",
   request: {
     body: {
@@ -695,7 +729,11 @@ const exportStudentsMissingCertificateExcel = createRoute({
   path: "/export-students-missing-certificate-excel",
   tags: ["ArchivedScore"],
   summary: "Xuất Excel danh sách sinh viên thiếu chứng chỉ",
-  description: "Xuất danh sách sinh viên chưa có điểm chứng chỉ dưới dạng file Excel",
+  description: `Xuất Excel học viên thiếu điểm chứng chỉ.
+
+**Bảng dữ liệu nguồn:** Student, ArchivedCertificate, Certificate.
+
+**Tham số:** query — xem schema.`,
   method: "get",
   request: {
     query: z.object({

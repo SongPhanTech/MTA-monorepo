@@ -9,15 +9,18 @@ import { $Enums, type AcademicActionType, Prisma } from "@workspace/db"
 import { HTTPException } from "hono/http-exception"
 import { prisma } from ".."
 import { RequestSchema } from "../dto/training-coure.dto"
+import {
+  PreviewOnlyRequestSchema,
+  PreviewWithManagementOrgRequestSchema,
+  PreviewWithSemesterRequestSchema,
+  StudentsOfInterestRequestSchema,
+  StatBaseResponseSchema,
+} from "../dto/stats-openapi.dto"
+import { fieldDesc } from "../dto/openapi-helpers"
 
 const app = new OpenAPIHono({ strict: false })
 
-const StatBaseSchema = z.object({
-  summary: z.record(z.string(), z.any()),
-  count: z.number(),
-  preview: z.boolean().default(false),
-  labels: z.array(z.string()).optional(),
-})
+const StatBaseSchema = StatBaseResponseSchema
 type StatType = "By_Course" | "By_Curriculum" | "By_Major"
 type StatRow = {
   Type: StatType
@@ -44,14 +47,14 @@ app.openapi(
   createRoute({
     method: "post",
     path: "/student-distribution-by-training-object-type",
+    summary: "Phân bổ SV theo hệ đào tạo",
+    description: "Thống kê số học viên theo từng hệ đào tạo (Ban Giám đốc).\n\n**Bảng dữ liệu nguồn:** TrainingObjectType, Student.\n\n**Tham số:** preview — dữ liệu mẫu khi true.",
     tags: ["Stats"],
     request: {
       body: {
         content: {
           "application/json": {
-            schema: z.object({
-              preview: z.boolean().default(false),
-            }),
+            schema: PreviewOnlyRequestSchema,
           },
         },
       },
@@ -124,14 +127,14 @@ app.openapi(
   createRoute({
     method: "post",
     path: "/student-distribution-by-training-level",
+    summary: "Phân bổ SV theo bậc đào tạo",
+    description: "Thống kê số học viên theo bậc đào tạo.\n\n**Bảng dữ liệu nguồn:** TrainingLevel, Student.\n\n**Tham số:** preview.",
     tags: ["Stats"],
     request: {
       body: {
         content: {
           "application/json": {
-            schema: z.object({
-              preview: z.boolean().default(false),
-            }),
+            schema: PreviewOnlyRequestSchema,
           },
         },
       },
@@ -216,14 +219,14 @@ app.openapi(
   createRoute({
     method: "post",
     path: "/student-distribution-by-training-course",
+    summary: "Phân bổ SV theo khóa học",
+    description: "Thống kê số học viên theo khóa / niên khóa.\n\n**Bảng dữ liệu nguồn:** TrainingCourse, Student.\n\n**Tham số:** preview.",
     tags: ["Stats"],
     request: {
       body: {
         content: {
           "application/json": {
-            schema: z.object({
-              preview: z.boolean().default(false),
-            }),
+            schema: PreviewOnlyRequestSchema,
           },
         },
       },
@@ -295,13 +298,13 @@ app.openapi(
   createRoute({
     method: "post",
     path: "/average-entry-score-by-course",
+    summary: "Điểm đầu vào TB theo khóa",
+    description: "Điểm trung bình đầu vào theo khóa học.\n\n**Bảng dữ liệu nguồn:** Student, TrainingCourse.\n\n**Tham số:** preview.",
     request: {
       body: {
         content: {
           "application/json": {
-            schema: z.object({
-              preview: z.boolean().default(false),
-            }),
+            schema: PreviewOnlyRequestSchema,
           },
         },
       },
@@ -383,14 +386,14 @@ app.openapi(
   createRoute({
     method: "post",
     path: "/average-gpa-by-course",
+    summary: "GPA trung bình theo khóa",
+    description: "GPA trung bình theo khóa học.\n\n**Bảng dữ liệu nguồn:** Student, TrainingCourse.\n\n**Tham số:** preview.",
     tags: ["Stats"],
     request: {
       body: {
         content: {
           "application/json": {
-            schema: z.object({
-              preview: z.boolean().default(false),
-            }),
+            schema: PreviewOnlyRequestSchema,
           },
         },
       },
@@ -467,14 +470,14 @@ app.openapi(
   createRoute({
     method: "post",
     path: "/graduation-rate-by-course",
+    summary: "Tỷ lệ tốt nghiệp theo khóa",
+    description: "Tỷ lệ tốt nghiệp theo khóa.\n\n**Bảng dữ liệu nguồn:** Student, TrainingCourse.\n\n**Tham số:** preview.",
     tags: ["Stats"],
     request: {
       body: {
         content: {
           "application/json": {
-            schema: z.object({
-              preview: z.boolean().default(false),
-            }),
+            schema: PreviewOnlyRequestSchema,
           },
         },
       },
@@ -547,14 +550,14 @@ app.openapi(
   createRoute({
     method: "post",
     path: "/academic-performance-by-year",
+    summary: "Thành tích học tập theo năm",
+    description: "Phân loại thành tích học tập theo năm học.\n\n**Bảng dữ liệu nguồn:** Student, StudentSubjectScore.\n\n**Tham số:** preview.",
     tags: ["Stats"],
     request: {
       body: {
         content: {
           "application/json": {
-            schema: z.object({
-              preview: z.boolean().default(false),
-            }),
+            schema: PreviewOnlyRequestSchema,
           },
         },
       },
@@ -648,14 +651,14 @@ app.openapi(
   createRoute({
     method: "post",
     path: "/kpi-cards",
+    summary: "Thẻ KPI tổng quan",
+    description: "Các chỉ số KPI tổng hợp cho dashboard.\n\n**Bảng dữ liệu nguồn:** Student, SubjectClass, TrainingCourse (tùy metric).\n\n**Tham số:** preview.",
     tags: ["Stats"],
     request: {
       body: {
         content: {
           "application/json": {
-            schema: z.object({
-              preview: z.boolean().default(false),
-            }),
+            schema: PreviewOnlyRequestSchema,
           },
         },
       },
@@ -748,14 +751,14 @@ app.openapi(
   createRoute({
     method: "post",
     path: "/student-distribution-by-province",
+    summary: "Phân bổ SV theo tỉnh/thành",
+    description: "Số học viên theo tỉnh/thành phố.\n\n**Bảng dữ liệu nguồn:** Student, UserProfile, Province.\n\n**Tham số:** preview.",
     tags: ["Stats"],
     request: {
       body: {
         content: {
           "application/json": {
-            schema: z.object({
-              preview: z.boolean().default(false),
-            }),
+            schema: PreviewOnlyRequestSchema,
           },
         },
       },
@@ -829,18 +832,14 @@ app.openapi(
   createRoute({
     method: "post",
     path: "/student-distribution-by-training-object-type-filtered",
+    summary: "Phân bổ SV theo hệ (lọc đơn vị)",
+    description: "Phân bổ theo hệ đào tạo, lọc theo đơn vị quản lý.\n\n**Bảng dữ liệu nguồn:** TrainingObjectType, Student, ManagementOrganization.\n\n**Tham số:** preview, managementOrganizationId.",
     tags: ["Stats"],
     request: {
       body: {
         content: {
           "application/json": {
-            schema: z.object({
-              preview: z.boolean().default(false),
-              managementOrganizationId: z
-                .string()
-                .uuid()
-                .describe("DM_DonVi.Id - ID đơn vị quản lý"),
-            }),
+            schema: PreviewWithManagementOrgRequestSchema,
           },
         },
       },
@@ -933,18 +932,14 @@ app.openapi(
   createRoute({
     method: "post",
     path: "/student-distribution-by-training-level-filtered",
+    summary: "Phân bổ SV theo bậc (lọc đơn vị)",
+    description: "Phân bổ theo bậc đào tạo, lọc theo đơn vị quản lý.\n\n**Bảng dữ liệu nguồn:** TrainingLevel, Student, ManagementOrganization.\n\n**Tham số:** preview, managementOrganizationId.",
     tags: ["Stats"],
     request: {
       body: {
         content: {
           "application/json": {
-            schema: z.object({
-              preview: z.boolean().default(false),
-              managementOrganizationId: z
-                .string()
-                .uuid()
-                .describe("DM_DonVi.Id - ID đơn vị quản lý"),
-            }),
+            schema: PreviewWithManagementOrgRequestSchema,
           },
         },
       },
@@ -1048,18 +1043,14 @@ app.openapi(
   createRoute({
     method: "post",
     path: "/student-distribution-by-training-course-filtered",
+    summary: "Phân bổ SV theo khóa (lọc đơn vị)",
+    description: "Phân bổ theo khóa, lọc theo đơn vị quản lý.\n\n**Bảng dữ liệu nguồn:** TrainingCourse, Student, ManagementOrganization.\n\n**Tham số:** preview, managementOrganizationId.",
     tags: ["Stats"],
     request: {
       body: {
         content: {
           "application/json": {
-            schema: z.object({
-              preview: z.boolean().default(false),
-              managementOrganizationId: z
-                .string()
-                .uuid()
-                .describe("DM_DonVi.Id - ID đơn vị quản lý"),
-            }),
+            schema: PreviewWithManagementOrgRequestSchema,
           },
         },
       },
@@ -1149,18 +1140,14 @@ app.openapi(
   createRoute({
     method: "post",
     path: "/average-entry-score-by-course-filtered",
+    summary: "Điểm đầu vào TB (lọc đơn vị)",
+    description: "Điểm đầu vào trung bình theo khóa, lọc đơn vị.\n\n**Bảng dữ liệu nguồn:** Student, TrainingCourse, ManagementOrganization.\n\n**Tham số:** preview, managementOrganizationId.",
     tags: ["Stats"],
     request: {
       body: {
         content: {
           "application/json": {
-            schema: z.object({
-              preview: z.boolean().default(false),
-              managementOrganizationId: z
-                .string()
-                .uuid()
-                .describe("DM_DonVi.Id - ID đơn vị quản lý"),
-            }),
+            schema: PreviewWithManagementOrgRequestSchema,
           },
         },
       },
@@ -1256,18 +1243,14 @@ app.openapi(
   createRoute({
     method: "post",
     path: "/average-gpa-by-course-filtered",
+    summary: "GPA TB theo khóa (lọc đơn vị)",
+    description: "GPA trung bình theo khóa, lọc đơn vị.\n\n**Bảng dữ liệu nguồn:** Student, TrainingCourse, ManagementOrganization.\n\n**Tham số:** preview, managementOrganizationId.",
     tags: ["Stats"],
     request: {
       body: {
         content: {
           "application/json": {
-            schema: z.object({
-              preview: z.boolean().default(false),
-              managementOrganizationId: z
-                .string()
-                .uuid()
-                .describe("DM_DonVi.Id - ID đơn vị quản lý"),
-            }),
+            schema: PreviewWithManagementOrgRequestSchema,
           },
         },
       },
@@ -1363,18 +1346,14 @@ app.openapi(
   createRoute({
     method: "post",
     path: "/graduation-rate-by-course-filtered",
+    summary: "Tỷ lệ TN theo khóa (lọc đơn vị)",
+    description: "Tỷ lệ tốt nghiệp theo khóa, lọc đơn vị.\n\n**Bảng dữ liệu nguồn:** Student, TrainingCourse, ManagementOrganization.\n\n**Tham số:** preview, managementOrganizationId.",
     tags: ["Stats"],
     request: {
       body: {
         content: {
           "application/json": {
-            schema: z.object({
-              preview: z.boolean().default(false),
-              managementOrganizationId: z
-                .string()
-                .uuid()
-                .describe("DM_DonVi.Id - ID đơn vị quản lý"),
-            }),
+            schema: PreviewWithManagementOrgRequestSchema,
           },
         },
       },
@@ -1464,18 +1443,14 @@ app.openapi(
   createRoute({
     method: "post",
     path: "/academic-performance-by-year-filtered",
+    summary: "Thành tích HT theo năm (lọc ĐV)",
+    description: "Thành tích học tập theo năm, lọc đơn vị quản lý.\n\n**Bảng dữ liệu nguồn:** Student, StudentSubjectScore, ManagementOrganization.\n\n**Tham số:** preview, managementOrganizationId.",
     tags: ["Stats"],
     request: {
       body: {
         content: {
           "application/json": {
-            schema: z.object({
-              preview: z.boolean().default(false),
-              managementOrganizationId: z
-                .string()
-                .uuid()
-                .describe("DM_DonVi.Id - ID đơn vị quản lý"),
-            }),
+            schema: PreviewWithManagementOrgRequestSchema,
           },
         },
       },
@@ -1590,18 +1565,14 @@ app.openapi(
   createRoute({
     method: "post",
     path: "/student-distribution-by-province-filtered",
+    summary: "Phân bổ SV theo tỉnh (lọc ĐV)",
+    description: "Phân bổ theo tỉnh/thành, lọc đơn vị quản lý.\n\n**Bảng dữ liệu nguồn:** Student, UserProfile, Province, ManagementOrganization.\n\n**Tham số:** preview, managementOrganizationId.",
     tags: ["Stats"],
     request: {
       body: {
         content: {
           "application/json": {
-            schema: z.object({
-              preview: z.boolean().default(false),
-              managementOrganizationId: z
-                .string()
-                .uuid()
-                .describe("DM_DonVi.Id - ID đơn vị quản lý"),
-            }),
+            schema: PreviewWithManagementOrgRequestSchema,
           },
         },
       },
@@ -1693,17 +1664,14 @@ app.openapi(
   createRoute({
     method: "post",
     path: "/students-of-interest",
+    summary: "Học viên cần quan tâm",
+    description: "Danh sách học viên có nguy cơ học tập (cảnh báo, nợ tín chỉ, GPA thấp).\n\n**Bảng dữ liệu nguồn:** Student, StudentSubjectScore, UserProfile.\n\n**Tham số:** preview, warningLevel, debtCredits, gpaThreshold.",
     tags: ["Stats"],
     request: {
       body: {
         content: {
           "application/json": {
-            schema: z.object({
-              preview: z.boolean().default(false),
-              warningLevel: z.string().optional(),
-              debtCredits: z.string().optional(),
-              gpaThreshold: z.string().optional(),
-            }),
+            schema: StudentsOfInterestRequestSchema,
           },
         },
       },
@@ -1811,14 +1779,14 @@ app.openapi(
   createRoute({
     method: "post",
     path: "/average-gpa-by-fixed-class",
+    summary: "GPA TB theo lớp niên chế",
+    description: "GPA trung bình theo lớp quản lý (niên chế).\n\n**Bảng dữ liệu nguồn:** FixedClass, Student.\n\n**Tham số:** preview.",
     tags: ["Stats"],
     request: {
       body: {
         content: {
           "application/json": {
-            schema: z.object({
-              preview: z.boolean().default(false),
-            }),
+            schema: PreviewOnlyRequestSchema,
           },
         },
       },
@@ -1885,14 +1853,14 @@ app.openapi(
   createRoute({
     method: "post",
     path: "/average-gpa-by-training-major",
+    summary: "GPA TB theo ngành",
+    description: "GPA trung bình theo ngành đào tạo.\n\n**Bảng dữ liệu nguồn:** TrainingMajor, Student, Curriculum.\n\n**Tham số:** preview.",
     tags: ["Stats"],
     request: {
       body: {
         content: {
           "application/json": {
-            schema: z.object({
-              preview: z.boolean().default(false),
-            }),
+            schema: PreviewOnlyRequestSchema,
           },
         },
       },
@@ -1960,14 +1928,14 @@ app.openapi(
   createRoute({
     method: "post",
     path: "/subject-pass-fail-rate",
+    summary: "Tỷ lệ đậu/rớt môn",
+    description: "Tỷ lệ đậu / trượt theo học phần.\n\n**Bảng dữ liệu nguồn:** StudentSubjectScore, SubjectClass, SubjectVersion.\n\n**Tham số:** preview.",
     tags: ["Stats"],
     request: {
       body: {
         content: {
           "application/json": {
-            schema: z.object({
-              preview: z.boolean().default(false),
-            }),
+            schema: PreviewOnlyRequestSchema,
           },
         },
       },
@@ -2040,14 +2008,14 @@ app.openapi(
   createRoute({
     method: "post",
     path: "/curriculum-statistics",
+    summary: "Thống kê chương trình đào tạo",
+    description: "Số liệu tổng hợp về CTĐT / phiên bản CTĐT.\n\n**Bảng dữ liệu nguồn:** Curriculum, CurriculumVersion, TrainingBlockSubject.\n\n**Tham số:** preview.",
     tags: ["Stats"],
     request: {
       body: {
         content: {
           "application/json": {
-            schema: z.object({
-              preview: z.boolean().default(false),
-            }),
+            schema: PreviewOnlyRequestSchema,
           },
         },
       },
@@ -2109,15 +2077,14 @@ app.openapi(
   createRoute({
     method: "post",
     path: "/subject-class-statistics",
+    summary: "Thống kê lớp học phần",
+    description: "Thống kê lớp học phần theo học kỳ.\n\n**Bảng dữ liệu nguồn:** SubjectClass, Semester, StudentSubjectScore.\n\n**Tham số:** preview, semesterId.",
     tags: ["Stats"],
     request: {
       body: {
         content: {
           "application/json": {
-            schema: z.object({
-              preview: z.boolean().default(false),
-              semesterId: z.string().describe("Semester.id - ID học kỳ"),
-            }),
+            schema: PreviewWithSemesterRequestSchema,
           },
         },
       },
@@ -2215,14 +2182,14 @@ app.openapi(
   createRoute({
     method: "post",
     path: "/lecturer-workload",
+    summary: "Khối lượng giảng dạy GV",
+    description: "Thống kê giờ / lớp giảng viên phụ trách.\n\n**Bảng dữ liệu nguồn:** Lecturer, SubjectClass, ClassSchedule.\n\n**Tham số:** preview.",
     tags: ["Stats"],
     request: {
       body: {
         content: {
           "application/json": {
-            schema: z.object({
-              preview: z.boolean().default(false),
-            }),
+            schema: PreviewOnlyRequestSchema,
           },
         },
       },
@@ -2297,14 +2264,14 @@ app.openapi(
   createRoute({
     method: "post",
     path: "/graduation-ranking-statistics",
+    summary: "Xếp hạng tốt nghiệp",
+    description: "Thống kê xếp loại / xếp hạng tốt nghiệp.\n\n**Bảng dữ liệu nguồn:** Student, GraduationApplication.\n\n**Tham số:** preview.",
     tags: ["Stats"],
     request: {
       body: {
         content: {
           "application/json": {
-            schema: z.object({
-              preview: z.boolean().default(false),
-            }),
+            schema: PreviewOnlyRequestSchema,
           },
         },
       },
@@ -2370,14 +2337,14 @@ app.openapi(
   createRoute({
     method: "post",
     path: "/students-for-academic-action",
+    summary: "SV chờ xử lý học vụ",
+    description: "Học viên cần xử lý học vụ (cảnh báo, buộc thôi học, …).\n\n**Bảng dữ liệu nguồn:** Student, AcademicAction.\n\n**Tham số:** preview.",
     tags: ["Stats"],
     request: {
       body: {
         content: {
           "application/json": {
-            schema: z.object({
-              preview: z.boolean().default(false),
-            }),
+            schema: PreviewOnlyRequestSchema,
           },
         },
       },
@@ -2451,15 +2418,14 @@ app.openapi(
   createRoute({
     method: "post",
     path: "/exam-participants-by-semester",
+    summary: "Số SV thi theo học kỳ",
+    description: "Số lượng học viên tham gia thi theo học kỳ.\n\n**Bảng dữ liệu nguồn:** Exam, ExamSession, StudentSubjectScore, Semester.\n\n**Tham số:** preview, semesterId.",
     tags: ["Stats"],
     request: {
       body: {
         content: {
           "application/json": {
-            schema: z.object({
-              preview: z.boolean().default(false),
-              semesterId: z.string().describe("Semester.id - ID học kỳ"),
-            }),
+            schema: PreviewWithSemesterRequestSchema,
           },
         },
       },
@@ -2519,14 +2485,14 @@ app.openapi(
   createRoute({
     method: "post",
     path: "/average-exam-score-trend",
+    summary: "Xu hướng điểm thi TB",
+    description: "Xu hướng điểm thi trung bình theo thời gian / học kỳ.\n\n**Bảng dữ liệu nguồn:** StudentSubjectScore, Exam.\n\n**Tham số:** preview.",
     tags: ["Stats"],
     request: {
       body: {
         content: {
           "application/json": {
-            schema: z.object({
-              preview: z.boolean().default(false),
-            }),
+            schema: PreviewOnlyRequestSchema,
           },
         },
       },
@@ -2612,14 +2578,14 @@ app.openapi(
   createRoute({
     method: "post",
     path: "/question-statistics",
+    summary: "Thống kê câu hỏi đề thi",
+    description: "Thống kê câu hỏi trong ngân hàng đề.\n\n**Bảng dữ liệu nguồn:** Question, ExamQuestion.\n\n**Tham số:** preview.",
     tags: ["Stats"],
     request: {
       body: {
         content: {
           "application/json": {
-            schema: z.object({
-              preview: z.boolean().default(false),
-            }),
+            schema: PreviewOnlyRequestSchema,
           },
         },
       },
@@ -2791,14 +2757,14 @@ app.openapi(
   createRoute({
     method: "post",
     path: "/highest-incorrect-answer-rate-questions",
+    summary: "Câu hỏi sai nhiều nhất",
+    description: "Câu hỏi có tỷ lệ trả lời sai cao nhất.\n\n**Bảng dữ liệu nguồn:** Question, ExamAnswer.\n\n**Tham số:** preview.",
     tags: ["Stats"],
     request: {
       body: {
         content: {
           "application/json": {
-            schema: z.object({
-              preview: z.boolean().default(false),
-            }),
+            schema: PreviewOnlyRequestSchema,
           },
         },
       },
@@ -2868,14 +2834,14 @@ app.openapi(
   createRoute({
     method: "post",
     path: "/most-used-questions",
+    summary: "Câu hỏi dùng nhiều nhất",
+    description: "Câu hỏi được sử dụng nhiều nhất trong đề thi.\n\n**Bảng dữ liệu nguồn:** Question, ExamQuestion.\n\n**Tham số:** preview.",
     tags: ["Stats"],
     request: {
       body: {
         content: {
           "application/json": {
-            schema: z.object({
-              preview: z.boolean().default(false),
-            }),
+            schema: PreviewOnlyRequestSchema,
           },
         },
       },
@@ -2942,14 +2908,14 @@ app.openapi(
   createRoute({
     method: "post",
     path: "/demographics",
+    summary: "Thống kê nhân khẩu học",
+    description: "Phân bổ giới tính, độ tuổi, vùng miền học viên.\n\n**Bảng dữ liệu nguồn:** Student, UserProfile.\n\n**Tham số:** preview.",
     tags: ["Stats"],
     request: {
       body: {
         content: {
           "application/json": {
-            schema: z.object({
-              preview: z.boolean().default(false),
-            }),
+            schema: PreviewOnlyRequestSchema,
           },
         },
       },
@@ -3092,14 +3058,14 @@ app.openapi(
   createRoute({
     method: "post",
     path: "/enrollment-trend",
+    summary: "Xu hướng tuyển sinh / nhập học",
+    description: "Xu hướng số lượng nhập học theo thời gian.\n\n**Bảng dữ liệu nguồn:** Student, TrainingCourse.\n\n**Tham số:** preview.",
     tags: ["Stats"],
     request: {
       body: {
         content: {
           "application/json": {
-            schema: z.object({
-              preview: z.boolean().default(false),
-            }),
+            schema: PreviewOnlyRequestSchema,
           },
         },
       },
@@ -3185,14 +3151,14 @@ app.openapi(
   createRoute({
     method: "post",
     path: "/Admission-statistics-by-major",
+    summary: "Tuyển sinh theo ngành",
+    description: "Thống kê tuyển sinh theo ngành đào tạo.\n\n**Bảng dữ liệu nguồn:** TrainingMajor, Student, TrainingCourse.\n\n**Tham số:** preview.",
     tags: ["Stats"],
     request: {
       body: {
         content: {
           "application/json": {
-            schema: z.object({
-              preview: z.boolean().default(false),
-            }),
+            schema: PreviewOnlyRequestSchema,
           },
         },
       },
@@ -3269,6 +3235,8 @@ app.openapi(
   createRoute({
     method: "post",
     path: "/statistics-of-records-by-date",
+    summary: "Hồ sơ theo ngày",
+    description: "Số hồ sơ / bản ghi tạo theo ngày.\n\n**Bảng dữ liệu nguồn:** (theo loại hồ sơ trong handler).\n\n**Tham số:** preview.",
     tags: ["Stats"],
     request: {
       body: {
@@ -3345,14 +3313,14 @@ app.openapi(
   createRoute({
     method: "post",
     path: "/summary-admission-statistics",
+    summary: "Tổng hợp tuyển sinh",
+    description: "Bảng tổng hợp chỉ tiêu — trúng tuyển — nhập học.\n\n**Bảng dữ liệu nguồn:** Student, TrainingLevel, TrainingObjectType.\n\n**Tham số:** preview.",
     tags: ["Stats"],
     request: {
       body: {
         content: {
           "application/json": {
-            schema: z.object({
-              preview: z.boolean().default(false),
-            }),
+            schema: PreviewOnlyRequestSchema,
           },
         },
       },
@@ -3444,14 +3412,14 @@ app.openapi(
   createRoute({
     method: "post",
     path: "/science-technology-overview",
+    summary: "Tổng quan KH&CN",
+    description: "Tổng quan hoạt động khoa học công nghệ.\n\n**Bảng dữ liệu nguồn:** ScienceProject, Contract, Article (tùy metric).\n\n**Tham số:** preview.",
     tags: ["Stats"],
     request: {
       body: {
         content: {
           "application/json": {
-            schema: z.object({
-              preview: z.boolean().default(false),
-            }),
+            schema: PreviewOnlyRequestSchema,
           },
         },
       },
@@ -3509,14 +3477,14 @@ app.openapi(
   createRoute({
     method: "post",
     path: "/contract-statistics-by-year",
+    summary: "Hợp đồng KH theo năm",
+    description: "Thống kê hợp đồng nghiên cứu theo năm.\n\n**Bảng dữ liệu nguồn:** Contract.\n\n**Tham số:** preview.",
     tags: ["Stats"],
     request: {
       body: {
         content: {
           "application/json": {
-            schema: z.object({
-              preview: z.boolean().default(false),
-            }),
+            schema: PreviewOnlyRequestSchema,
           },
         },
       },
@@ -3582,14 +3550,14 @@ app.openapi(
   createRoute({
     method: "post",
     path: "/project-statistics-by-year",
+    summary: "Đề tài KH theo năm",
+    description: "Thống kê đề tài / dự án theo năm.\n\n**Bảng dữ liệu nguồn:** ScienceProject.\n\n**Tham số:** preview.",
     tags: ["Stats"],
     request: {
       body: {
         content: {
           "application/json": {
-            schema: z.object({
-              preview: z.boolean().default(false),
-            }),
+            schema: PreviewOnlyRequestSchema,
           },
         },
       },
@@ -3655,14 +3623,14 @@ app.openapi(
   createRoute({
     method: "post",
     path: "/innovations-statistics-by-year",
+    summary: "Sáng kiến theo năm",
+    description: "Thống kê sáng kiến, cải tiến theo năm.\n\n**Bảng dữ liệu nguồn:** Innovation.\n\n**Tham số:** preview.",
     tags: ["Stats"],
     request: {
       body: {
         content: {
           "application/json": {
-            schema: z.object({
-              preview: z.boolean().default(false),
-            }),
+            schema: PreviewOnlyRequestSchema,
           },
         },
       },
@@ -3725,14 +3693,14 @@ app.openapi(
   createRoute({
     method: "post",
     path: "/articles-statistics-by-year",
+    summary: "Bài báo KH theo năm",
+    description: "Thống kê bài báo khoa học theo năm.\n\n**Bảng dữ liệu nguồn:** Article.\n\n**Tham số:** preview.",
     tags: ["Stats"],
     request: {
       body: {
         content: {
           "application/json": {
-            schema: z.object({
-              preview: z.boolean().default(false),
-            }),
+            schema: PreviewOnlyRequestSchema,
           },
         },
       },
@@ -3795,14 +3763,14 @@ app.openapi(
   createRoute({
     method: "post",
     path: "/final-exam-info",
+    summary: "Thông tin thi cuối kỳ",
+    description: "Thống kê lịch / quy mô thi cuối kỳ.\n\n**Bảng dữ liệu nguồn:** Exam, SubjectClass, Semester.\n\n**Tham số:** preview.",
     tags: ["Stats"],
     request: {
       body: {
         content: {
           "application/json": {
-            schema: z.object({
-              preview: z.boolean().default(false),
-            }),
+            schema: PreviewOnlyRequestSchema,
           },
         },
       },
@@ -3858,6 +3826,8 @@ app.openapi(
   createRoute({
     method: "post",
     path: "/student-count-by-academic-results",
+    summary: "Số SV theo học lực",
+    description: "Số học viên theo xếp loại học lực.\n\n**Bảng dữ liệu nguồn:** Student, StudentSubjectScore.\n\n**Tham số:** preview.",
     tags: ["Stats"],
     request: {
       body: {
@@ -3927,6 +3897,8 @@ app.openapi(
   createRoute({
     method: "post",
     path: "/subject-pass-fail-rates",
+    summary: "Tỷ lệ đậu/rớt (nhiều môn)",
+    description: "Tỷ lệ đậu/rớt theo danh sách học phần.\n\n**Bảng dữ liệu nguồn:** StudentSubjectScore, SubjectVersion.\n\n**Tham số:** preview.",
     tags: ["Stats"],
     request: {
       body: {
@@ -4007,6 +3979,8 @@ app.openapi(
   createRoute({
     method: "post",
     path: "/subjects-high-fail-rates",
+    summary: "Môn tỷ lệ trượt cao",
+    description: "Học phần có tỷ lệ trượt cao nhất.\n\n**Bảng dữ liệu nguồn:** StudentSubjectScore, SubjectVersion.\n\n**Tham số:** preview.",
     tags: ["Stats"],
     request: {
       body: {
@@ -4083,6 +4057,8 @@ app.openapi(
   createRoute({
     method: "post",
     path: "/subjects-high-absent-students",
+    summary: "Môn vắng thi nhiều",
+    description: "Học phần có nhiều học viên vắng thi.\n\n**Bảng dữ liệu nguồn:** StudentSubjectScore, Exam.\n\n**Tham số:** preview.",
     tags: ["Stats"],
     request: {
       body: {
@@ -4247,6 +4223,8 @@ app.openapi(
   createRoute({
     method: "post",
     path: "/late-grade-subjects",
+    summary: "Môn nhập điểm trễ",
+    description: "Học phần nhập điểm quá hạn.\n\n**Bảng dữ liệu nguồn:** SubjectClass, StudentSubjectScore.\n\n**Tham số:** preview.",
     tags: ["Stats"],
     request: {
       body: {
@@ -4523,6 +4501,8 @@ app.openapi(
   createRoute({
     method: "post",
     path: "/admission-statistics",
+    summary: "Thống kê tuyển sinh chi tiết",
+    description: "Bảng tuyển sinh theo năm, đối tượng, bậc (chỉ tiêu, trúng tuyển, nhập học).\n\n**Bảng dữ liệu nguồn:** Student, TrainingLevel, TrainingObjectType, TrainingCourse.\n\n**Tham số:** preview, labels, trainingLevelNames, includeEmpty.",
     tags: ["Stats"],
     request: {
       body: {
@@ -4648,6 +4628,8 @@ app.openapi(
   createRoute({
     method: "post",
     path: "/retest-rates",
+    summary: "Tỷ lệ thi lại",
+    description: "Tỷ lệ học viên thi lại theo học phần / khóa.\n\n**Bảng dữ liệu nguồn:** StudentSubjectScore, SubjectClass.\n\n**Tham số:** preview và bộ lọc trong body (xem schema).",
     tags: ["Stats"],
     request: {
       body: {
@@ -4937,6 +4919,8 @@ app.openapi(
   createRoute({
     method: "post",
     path: "/relearn-rates",
+    summary: "Tỷ lệ học lại",
+    description: "Tỷ lệ học viên học lại môn.\n\n**Bảng dữ liệu nguồn:** StudentSubjectScore, ReSubjectClass.\n\n**Tham số:** preview và bộ lọc trong body (xem schema).",
     tags: ["Stats"],
     request: {
       body: {

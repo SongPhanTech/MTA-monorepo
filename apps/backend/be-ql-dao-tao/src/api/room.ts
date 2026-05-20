@@ -1,34 +1,41 @@
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
 import { prisma } from ".."
+import { fieldDesc } from "../dto/openapi-helpers"
 
 const app = new OpenAPIHono({ strict: false })
+
+const RoomItemSchema = z.object({
+  id: z.string().openapi(fieldDesc("ID phòng (Room).")),
+  name: z.string().openapi(fieldDesc("Tên phòng học.")),
+  code: z.string().nullable().openapi(fieldDesc("Mã phòng.")),
+})
 
 const getRoom = createRoute({
   operationId: "room",
   tags: ["Room"],
   path: "",
   method: "get",
+  summary: "Danh sách phòng học",
+  description: `Lấy toàn bộ phòng học kèm thông tin tòa nhà.
+
+**Bảng dữ liệu nguồn:** Room, Building.
+
+**Tham số:** không có.`,
   responses: {
     200: {
-      description: "List of room",
+      description: "Thành công",
       content: {
         "application/json": {
-          schema: z.array(
-            z.object({
-              id: z.string(),
-              name: z.string(),
-              code: z.string().nullable(),
-            })
-          ),
+          schema: z.array(RoomItemSchema),
         },
       },
     },
     400: {
-      description: "Get fail",
+      description: "Lỗi truy vấn",
       content: {
         "application/json": {
           schema: z.object({
-            message: z.string(),
+            message: z.string().openapi(fieldDesc("Thông báo lỗi.")),
           }),
         },
       },

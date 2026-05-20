@@ -1,5 +1,6 @@
-import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
+import { createRoute, OpenAPIHono } from "@hono/zod-openapi"
 import { prisma } from ".."
+import { GetAllDepartmentResponse } from "../dto/department.dto"
 
 const app: OpenAPIHono = new OpenAPIHono({ strict: false })
 function buildDeptCodeTree(code: string): string {
@@ -30,30 +31,18 @@ const getAllDepartment = createRoute({
   tags: ["Department"],
   path: "get-all-department",
   summary: "2.7. Danh sách đơn vị",
+  description: `Lấy toàn bộ cây đơn vị tổ chức (khoa, bộ môn, …).
+
+**Bảng dữ liệu nguồn:** DM_DonVi (schema ql-danh-muc / he-thong).
+
+**Không có tham số đầu vào.**`,
   method: "post",
   responses: {
     200: {
       description: "Thành công",
       content: {
         "application/json": {
-          schema: z.object({
-            result_code: z.string(),
-            result_desc: z.string(),
-            department_list: z.array(
-              z.object({
-                gid: z.number(),
-                dept_code: z.string(),
-                dept_name: z.string(),
-                dept_full_name: z.string(),
-                dept_email: z.string(),
-                dept_address: z.string(),
-                dept_order: z.string(),
-                dept_level: z.number(),
-                dept_parent_id: z.string().nullable(),
-                dept_code_build_tree: z.string(),
-              })
-            ),
-          }),
+          schema: GetAllDepartmentResponse,
         },
       },
     },
@@ -69,7 +58,7 @@ app.openapi(getAllDepartment, async (c) => {
       iSTT: true,
       sParentId: true,
       sTenVietTat: true,
-      sCode: true, // hierarchical path
+      sCode: true,
     },
   })
 

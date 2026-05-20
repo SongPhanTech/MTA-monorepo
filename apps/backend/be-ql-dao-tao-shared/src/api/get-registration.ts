@@ -1,27 +1,29 @@
-import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
+import { createRoute, OpenAPIHono } from "@hono/zod-openapi"
 import { prisma } from ".."
+import {
+  GetRegistrationErrorResponse,
+  GetRegistrationRequest,
+  GetRegistrationResponse,
+} from "../dto/get-registration.dto"
 
 const app: OpenAPIHono = new OpenAPIHono({ strict: false })
-const ErrorResponse = z.object({
-  result_code: z.string(),
-  result_desc: z.string(),
-})
+
 const getRegistration = createRoute({
   operationId: "get-registration",
   tags: ["Get Registration"],
   path: "get-registration",
   summary: "2.5 Lấy danh sách học phần đã đăng kí",
+  description: `Trả về mã các lớp học phần sinh viên đã đăng ký trong một học kỳ.
+
+**Bảng dữ liệu nguồn:** Student, ClassRegisterSession, Semester, ClassRegisterLogs, SubjectClass.
+
+**Tham số:** class_terms (tên học kỳ), students_code (mã SV).`,
   method: "post",
   request: {
     body: {
       content: {
         "application/json": {
-          schema: z
-            .object({
-              class_terms: z.string(),
-              students_code: z.string(),
-            })
-            .openapi("GetRegistrationRequest"),
+          schema: GetRegistrationRequest,
         },
       },
     },
@@ -31,22 +33,15 @@ const getRegistration = createRoute({
       description: "Thành công",
       content: {
         "application/json": {
-          schema: z
-            .object({
-              result_code: z.string(),
-              result_desc: z.string(),
-              students_code: z.string(),
-              class_reg: z.array(z.string()),
-            })
-            .openapi("GetRegistrationResponse"),
+          schema: GetRegistrationResponse,
         },
       },
     },
     404: {
-      description: "Not found",
+      description: "Không tìm thấy sinh viên hoặc đợt đăng ký",
       content: {
         "application/json": {
-          schema: ErrorResponse,
+          schema: GetRegistrationErrorResponse,
         },
       },
     },
@@ -106,8 +101,8 @@ app.openapi(getRegistration, async (c) => {
 
   return c.json(
     {
-      result_code: "000",
-      result_desc: "success",
+      result_code: "000" as const,
+      result_desc: "success" as const,
       students_code,
       class_reg: logs.map((l) => l.subjectClass.code),
     },

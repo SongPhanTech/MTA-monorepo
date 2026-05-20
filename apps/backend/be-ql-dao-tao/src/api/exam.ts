@@ -1,6 +1,7 @@
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
 import { $Enums, createId } from "@workspace/db"
 import { prisma } from ".."
+import { fieldDesc } from "../dto/openapi-helpers"
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -9,15 +10,23 @@ const createNewExamList = createRoute({
   tags: ["Exam"],
   path: "",
   method: "post",
+  summary: "Lên danh sách thi",
+  description: `Tạo kỳ thi / danh sách thi từ các lớp học phần chưa có examId.
+
+**Bảng dữ liệu nguồn:** SubjectClass, Exam, SubjectClassStudent.
+
+**Tham số:** isGroupBySubject, trainingObjectTypeId, semesterId.`,
   request: {
     body: {
       content: {
         "application/json": {
           schema: z
             .object({
-              isGroupBySubject: z.boolean(),
-              trainingObjectTypeId: z.string(),
-              semesterId: z.string(),
+              isGroupBySubject: z
+                .boolean()
+                .openapi(fieldDesc("true = gộp nhiều lớp cùng môn vào một kỳ thi.")),
+              trainingObjectTypeId: z.string().openapi(fieldDesc("ID hệ đào tạo.")),
+              semesterId: z.string().openapi(fieldDesc("ID học kỳ.")),
             })
             .openapi("CreateExamsRequest"),
         },
@@ -158,14 +167,20 @@ const createNewReExamList = createRoute({
   tags: ["Exam"],
   path: "/reexam-list",
   method: "post",
+  summary: "Lên danh sách thi lại",
+  description: `Tạo danh sách thi lại cho lớp RETAKE/REEXAM.
+
+**Bảng dữ liệu nguồn:** SubjectClass, Exam, StudentSubjectScore.
+
+**Tham số:** trainingObjectTypeId, semesterId.`,
   request: {
     body: {
       content: {
         "application/json": {
           schema: z
             .object({
-              trainingObjectTypeId: z.string(),
-              semesterId: z.string(),
+              trainingObjectTypeId: z.string().openapi(fieldDesc("ID hệ đào tạo.")),
+              semesterId: z.string().openapi(fieldDesc("ID học kỳ.")),
             })
             .openapi("CreateReExamsRequest"),
         },
@@ -307,13 +322,22 @@ const mergeExam = createRoute({
   tags: ["Exam"],
   path: "/merge",
   method: "post",
+  summary: "Ghép kỳ thi",
+  description: `Gộp nhiều kỳ thi thành một.
+
+**Bảng dữ liệu nguồn:** Exam, SubjectClass.
+
+**Tham số:** examIds — tối thiểu 2 ID kỳ thi.`,
   request: {
     body: {
       content: {
         "application/json": {
           schema: z
             .object({
-              examIds: z.array(z.string()).min(2),
+              examIds: z
+                .array(z.string())
+                .min(2)
+                .openapi(fieldDesc("Danh sách ID kỳ thi cần ghép.")),
             })
             .openapi("MergeExamRequest"),
         },
@@ -430,13 +454,19 @@ const unmergeExam = createRoute({
   tags: ["Exam"],
   path: "/unmerge",
   method: "post",
+  summary: "Tách kỳ thi",
+  description: `Tách kỳ thi đã ghép thành các kỳ thi riêng.
+
+**Bảng dữ liệu nguồn:** Exam, SubjectClass.
+
+**Tham số:** examId — ID kỳ thi đã ghép.`,
   request: {
     body: {
       content: {
         "application/json": {
           schema: z
             .object({
-              examId: z.string(),
+              examId: z.string().openapi(fieldDesc("ID kỳ thi cần tách.")),
             })
             .openapi("UnmergeExamRequest"),
         },

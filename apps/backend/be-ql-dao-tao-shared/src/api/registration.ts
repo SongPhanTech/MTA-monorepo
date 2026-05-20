@@ -10,7 +10,11 @@ const registration = createRoute({
   path: "/registration",
   tags: ["Registration"],
   summary: "2.3 2.4. Đăng ký/Huỷ đăng ký học phần",
-  description: "2.3 2.4. Đăng ký/Huỷ đăng ký học phần",
+  description: `Đăng ký hoặc hủy đăng ký một hoặc nhiều lớp học phần trong đợt đang mở.
+
+**Bảng dữ liệu nguồn:** Student, ClassRegisterSession, SubjectClass, ClassRegisterLogs.
+
+**Tham số:** students_code, class_data (danh sách SubjectClass.id), type_res (R=đăng ký, C=hủy).`,
   method: "post",
   request: {
     body: {

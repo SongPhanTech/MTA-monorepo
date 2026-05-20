@@ -36,6 +36,7 @@ import {
   formatScore,
   generateExcelMultiSheet,
 } from "../utils"
+import { fieldDesc } from "../dto/openapi-helpers"
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -44,15 +45,21 @@ const graduationApplicationInit = createRoute({
   tags: ["Graduation"],
   path: "/application-init",
   method: "post",
+  summary: "Khởi tạo đơn xét TN",
+  description: `Tạo hồ sơ xét tốt nghiệp cho học viên trong khóa/lớp.
+
+**Bảng dữ liệu nguồn:** GraduationSession, Student, StudentGraduationApplication.
+
+**Tham số:** sessionId, trainingCourseId hoặc fixedClassId.`,
   request: {
     body: {
       content: {
         "application/json": {
           schema: z
             .object({
-              sessionId: z.string(),
-              trainingCourseId: z.string().optional(),
-              fixedClassId: z.string().optional(),
+              sessionId: z.string().openapi(fieldDesc("ID đợt xét tốt nghiệp.")),
+              trainingCourseId: z.string().optional().openapi(fieldDesc("ID khóa (một trong hai).")),
+              fixedClassId: z.string().optional().openapi(fieldDesc("ID lớp NC (một trong hai).")),
             })
             .refine(
               (data) => data.trainingCourseId || data.fixedClassId,
@@ -137,17 +144,25 @@ const graduationCheck = createRoute({
   tags: ["Graduation"],
   path: "/check",
   method: "post",
+  summary: "Xét điều kiện tốt nghiệp",
+  description: `Kiểm tra điều kiện tốt nghiệp cho danh sách đơn.
+
+**Bảng dữ liệu nguồn:** StudentGraduationApplication, Student, CurriculumVersion.
+
+**Tham số:** sessionId, applicationIds (rỗng = xét tất cả).`,
   request: {
     body: {
       content: {
         "application/json": {
           schema: z.object({
-            sessionId: z.string(),
+            sessionId: z.string().openapi(fieldDesc("ID đợt xét TN.")),
             applicationIds: z
               .array(z.string())
               .default([])
               .optional()
-              .describe("Không truyền hoặc truyền mảng rỗng sẽ xét hết"),
+              .openapi(
+                fieldDesc("Danh sách ID đơn; không truyền hoặc [] = xét hết trong đợt.")
+              ),
           }),
         },
       },
@@ -892,6 +907,12 @@ const generateDiplomaNumber = createRoute({
   tags: ["Graduation"],
   path: "/generate-diploma-number",
   method: "put",
+  summary: "Cấp số hiệu bằng",
+  description: `Sinh / gán số hiệu bằng gốc cho học viên tốt nghiệp.
+
+**Bảng dữ liệu nguồn:** StudentGraduationApplication, Diploma.
+
+**Tham số:** xem schema body.`,
   request: {
     body: {
       content: {
@@ -1060,9 +1081,15 @@ const graduationSessionDecision = createRoute({
   tags: ["Graduation"],
   path: "/session-decision",
   method: "get",
+  summary: "Quyết định đợt tốt nghiệp",
+  description: `Lấy thông tin quyết định tốt nghiệp của đợt.
+
+**Bảng dữ liệu nguồn:** GraduationSession, GraduationDecision.
+
+**Tham số:** sessionId (query).`,
   request: {
     query: z.object({
-      sessionId: z.string(),
+      sessionId: z.string().openapi(fieldDesc("ID đợt xét TN.")),
     }),
   },
   responses: {
@@ -1167,9 +1194,15 @@ const statisticsGraduationDecision = createRoute({
   tags: ["Graduation"],
   path: "/statistics",
   method: "get",
+  summary: "Thống kê quyết định TN",
+  description: `Thống kê số liệu quyết định tốt nghiệp theo hệ.
+
+**Bảng dữ liệu nguồn:** GraduationDecision, StudentGraduationApplication.
+
+**Tham số:** trainingObjectTypeId (query).`,
   request: {
     query: z.object({
-      trainingObjectTypeId: z.string(),
+      trainingObjectTypeId: z.string().openapi(fieldDesc("ID hệ đào tạo.")),
     }),
   },
   responses: {
@@ -1226,6 +1259,12 @@ const exportGraduationDecisionPptx = createRoute({
   tags: ["Graduation"],
   path: "/export-graduation-decision-pptx",
   method: "post",
+  summary: "Xuất QĐ TN PowerPoint",
+  description: `Xuất file PPTX quyết định tốt nghiệp.
+
+**Bảng dữ liệu nguồn:** GraduationDecision, GraduationSession.
+
+**Tham số:** multipart body — xem schema.`,
   request: {
     body: {
       content: {
@@ -1442,6 +1481,12 @@ const exportGraduationRegisterMaster = createRoute({
   tags: ["Graduation"],
   path: "/export-graduation-register-master",
   method: "post",
+  summary: "Xuất sổ đăng ký TN",
+  description: `Xuất Excel sổ đăng ký tốt nghiệp (master).
+
+**Bảng dữ liệu nguồn:** StudentGraduationApplication, Student, Diploma.
+
+**Tham số:** body JSON — xem schema.`,
   request: {
     body: {
       content: {
@@ -1800,6 +1845,12 @@ const exportPhoiBangCaoHoc = createRoute({
   tags: ["Graduation"],
   path: "/export-phoi-bang-cao-hoc",
   method: "post",
+  summary: "Xuất phôi bằng cao học",
+  description: `Xuất phôi bằng tốt nghiệp cao học.
+
+**Bảng dữ liệu nguồn:** StudentGraduationApplication, Diploma, UserProfile.
+
+**Tham số:** body — xem schema.`,
   request: {
     body: {
       content: {
@@ -1967,6 +2018,12 @@ const exportPhoiBangNganHan = createRoute({
   tags: ["Graduation"],
   path: "/export-phoi-bang-ngan-han",
   method: "post",
+  summary: "Xuất phôi bằng ngắn hạn",
+  description: `Xuất phôi bằng tốt nghiệp hệ ngắn hạn.
+
+**Bảng dữ liệu nguồn:** StudentGraduationApplication, Diploma.
+
+**Tham số:** body — xem schema.`,
   request: {
     body: {
       content: {
@@ -2203,6 +2260,12 @@ const exportPhuLucVanBangCaoHoc = createRoute({
   tags: ["Graduation"],
   path: "/export-phu-luc-van-bang-cao-hoc",
   method: "post",
+  summary: "Phụ lục VB cao học",
+  description: `Xuất phụ lục văn bằng cao học.
+
+**Bảng dữ liệu nguồn:** StudentSubjectScore, StudentGraduationApplication.
+
+**Tham số:** body — xem schema.`,
   request: {
     body: {
       content: {
@@ -2543,6 +2606,12 @@ const exportPhuLucVanBangNganHan = createRoute({
   tags: ["Graduation"],
   path: "/export-phu-luc-van-bang-ngan-han",
   method: "post",
+  summary: "Phụ lục VB ngắn hạn",
+  description: `Xuất phụ lục văn bằng hệ ngắn hạn.
+
+**Bảng dữ liệu nguồn:** StudentSubjectScore, StudentGraduationApplication.
+
+**Tham số:** body — xem schema.`,
   request: {
     body: {
       content: {

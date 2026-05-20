@@ -1,5 +1,6 @@
-import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
+import { createRoute, OpenAPIHono } from "@hono/zod-openapi"
 import { prisma } from ".."
+import { GetClassRequest, GetClassResponse } from "../dto/class-fixed.dto"
 
 const app: OpenAPIHono = new OpenAPIHono({ strict: false })
 
@@ -8,16 +9,17 @@ const getClassFixed = createRoute({
   tags: ["Class"],
   path: "get-class",
   summary: "2.12. Lấy thông tin lớp niên chế",
+  description: `Lấy danh sách lớp niên chế (lớp cố định).
+
+**Bảng dữ liệu nguồn:** FixedClass, CurriculumVersion, Curriculum, TrainingMajor, TrainingCourse, LecturerManagement, UserProfile.
+
+**Tham số:** key_word — lọc theo tên lớp.`,
   method: "post",
   request: {
     body: {
       content: {
         "application/json": {
-          schema: z
-            .object({
-              key_word: z.string().optional(),
-            })
-            .openapi("GetClassRequest"),
+          schema: GetClassRequest,
         },
       },
     },
@@ -27,21 +29,7 @@ const getClassFixed = createRoute({
       description: "Thành công",
       content: {
         "application/json": {
-          schema: z
-            .object({
-              result_code: z.string(),
-              result_desc: z.string(),
-              data: z.array(
-                z.object({
-                  class_code: z.string(),
-                  class_name: z.string(),
-                  major: z.string(),
-                  teacher: z.string(),
-                  scholastic_name: z.string(),
-                })
-              ),
-            })
-            .openapi("GetClassResponse"),
+          schema: GetClassResponse,
         },
       },
     },
