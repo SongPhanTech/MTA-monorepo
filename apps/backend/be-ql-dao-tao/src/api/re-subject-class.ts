@@ -22,7 +22,7 @@ const openSubjectClassRetake = createRoute({
 **Bảng dữ liệu nguồn:** SubjectVersion, StudentSubjectScore, TrainingBlockSubject.
 
 **Tham số:** phân trang + trainingCourseId, trainingMajorId, search, trainingObjectTypeId, semesterId, viewAll.`,
-  tags: ["SubjectClass"],
+  tags: ["SubjectClass — Lớp học phần"],
   request: {
     query: PaginationQuerySchema.extend({
       trainingCourseId: z.string().openapi("trainingCourseId", {
@@ -81,7 +81,7 @@ const openSubjectClassRetakeStudents = createRoute({
 **Bảng dữ liệu nguồn:** Student, StudentSubjectScore, SubjectVersion.
 
 **Tham số:** subjectVersionId, trainingCourseId, fixedClassId, search, trainingObjectTypeId, semesterId, page, pageSize.`,
-  tags: ["SubjectClass"],
+  tags: ["SubjectClass — Lớp học phần"],
   request: {
     query: z.object({
       subjectVersionId: z.string().openapi(fieldDesc("ID phiên bản môn.")),
@@ -119,7 +119,7 @@ const openSubjectClassReExam = createRoute({
 **Bảng dữ liệu nguồn:** SubjectVersion, StudentSubjectScore.
 
 **Tham số:** giống API học lại (phân trang + bộ lọc).`,
-  tags: ["SubjectClass"],
+  tags: ["SubjectClass — Lớp học phần"],
   request: {
     query: PaginationQuerySchema.extend({
       trainingCourseId: z.string().openapi("trainingCourseId", {
@@ -183,7 +183,7 @@ const openSubjectClassReExamStudents = createRoute({
 **Bảng dữ liệu nguồn:** Student, StudentSubjectScore.
 
 **Tham số:** subjectVersionId, trainingCourseId, fixedClassId, search, trainingObjectTypeId, page, pageSize.`,
-  tags: ["SubjectClass"],
+  tags: ["SubjectClass — Lớp học phần"],
   request: {
     query: z.object({
       subjectVersionId: z.string().openapi(fieldDesc("ID phiên bản môn.")),

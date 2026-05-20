@@ -10,7 +10,7 @@ const app = new OpenAPIHono({ strict: false })
 const genExamListCode = createRoute({
   operationId: "gen-exam-list-code",
   path: "/gen-exam-list-code",
-  tags: ["Exam"],
+  tags: ["Exam — Kỳ thi"],
   summary: "Sinh phách danh sách thi",
   description: `Sinh số phách cho các bài thi trong kỳ thi.
 
@@ -175,7 +175,7 @@ app.openapi(genExamListCode, async (c) => {
 const saveExamScore = createRoute({
   operationId: "save-exam-score",
   path: "/save-exam-score",
-  tags: ["Exam"],
+  tags: ["Exam — Kỳ thi"],
   summary: "Lưu điểm theo phách",
   description: `Cập nhật điểm thi theo danh sách phách.
 

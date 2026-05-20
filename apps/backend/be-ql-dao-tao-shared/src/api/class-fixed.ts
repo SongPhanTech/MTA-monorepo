@@ -6,7 +6,7 @@ const app: OpenAPIHono = new OpenAPIHono({ strict: false })
 
 const getClassFixed = createRoute({
   operationId: "get-class",
-  tags: ["Class"],
+  tags: ["Class — Lớp niên chế"],
   path: "get-class",
   summary: "2.12. Lấy thông tin lớp niên chế",
   description: `Lấy danh sách lớp niên chế (lớp cố định).

@@ -8,7 +8,7 @@ const app = new OpenAPIHono()
 
 const getVersionRoute = createRoute({
   operationId: "getVersion",
-  tags: ["Version"],
+  tags: ["Version — Phiên bản ứng dụng"],
   method: "get",
   path: "/{appCode}",
   summary: "Phiên bản ứng dụng MTA",

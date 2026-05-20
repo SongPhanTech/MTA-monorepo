@@ -10,7 +10,7 @@ const app: OpenAPIHono = new OpenAPIHono({ strict: false })
 
 const getSemester = createRoute({
   operationId: "get-class-terms",
-  tags: ["Semester"],
+  tags: ["Semester — Học kỳ"],
   path: "get-class-terms",
   summary: "2.11. Lấy thông tin kì học",
   description: `Danh sách học kỳ theo năm học.
@@ -76,7 +76,7 @@ app.openapi(getSemester, async (c) => {
 
 const getAllYear = createRoute({
   operationId: "get-all-year",
-  tags: ["SchoolYear"],
+  tags: ["SchoolYear — Năm học"],
   path: "get-all-year",
   summary: "2.10. Lấy danh sách năm học",
   description: `Danh sách tất cả năm học.

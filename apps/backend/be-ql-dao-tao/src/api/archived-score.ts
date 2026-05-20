@@ -23,7 +23,7 @@ const app = new OpenAPIHono({ strict: false })
 const certificateScore = createRoute({
   operationId: "certificate-score",
   path: "/certificate-score",
-  tags: ["ArchivedScore"],
+  tags: ["ArchivedScore — Điểm chứng chỉ / Thưởng"],
   summary: "Phiên điểm chứng chỉ",
   description: `Tính / ghi điểm từ phiên chứng chỉ đã lưu trữ.
 
@@ -187,7 +187,7 @@ app.openapi(certificateScore, async (c) => {
 const awardScore = createRoute({
   operationId: "award-score",
   path: "/award-score",
-  tags: ["ArchivedScore"],
+  tags: ["ArchivedScore — Điểm chứng chỉ / Thưởng"],
   summary: "Cộng điểm giải thưởng",
   description: `Cộng điểm thưởng từ giải thưởng đã lưu trữ.
 
@@ -383,7 +383,7 @@ app.openapi(awardScore, async (c) => {
 const approveAwardScore = createRoute({
   operationId: "approve-award-score",
   path: "/approve-award-score",
-  tags: ["ArchivedScore"],
+  tags: ["ArchivedScore — Điểm chứng chỉ / Thưởng"],
   summary: "Phê duyệt điểm giải thưởng",
   description: `Phê duyệt phiên cộng điểm giải thưởng.
 
@@ -483,7 +483,7 @@ app.openapi(approveAwardScore, async (c) => {
 const statsArchivedAward = createRoute({
   operationId: "stats-archived-award",
   path: "/stats-archived-award",
-  tags: ["ArchivedScore"],
+  tags: ["ArchivedScore — Điểm chứng chỉ / Thưởng"],
   summary: "Thống kê điểm thưởng",
   description: `Thống kê điểm thưởng giữa hai học kỳ.
 
@@ -527,7 +527,7 @@ app.openapi(statsArchivedAward, async (c) => {
 const exportStatsArchivedAwardRoute = createRoute({
   operationId: "export-stats-archived-award",
   path: "/export-stats-archived-award",
-  tags: ["ArchivedScore"],
+  tags: ["ArchivedScore — Điểm chứng chỉ / Thưởng"],
   summary: "Xuất file thống kê điểm thưởng",
   description: `Xuất Excel thống kê điểm thưởng theo khoảng học kỳ.
 
@@ -579,7 +579,7 @@ app.openapi(exportStatsArchivedAwardRoute, async (c) => {
 const exportArchivedCertificateExcel = createRoute({
   operationId: "exportArchivedCertificateExcel",
   path: "/export-archived-certificate-excel",
-  tags: ["ArchivedScore"],
+  tags: ["ArchivedScore — Điểm chứng chỉ / Thưởng"],
   summary: "Xuất Excel danh sách điểm chứng chỉ",
   description: `Xuất Excel điểm chứng chỉ đã lưu trữ.
 
@@ -653,7 +653,7 @@ app.openapi(exportArchivedCertificateExcel, async (c) => {
 const exportArchivedCertificateMultiExcel = createRoute({
   operationId: "exportArchivedCertificateMultiExcel",
   path: "/export-archived-certificate-multi-excel",
-  tags: ["ArchivedScore"],
+  tags: ["ArchivedScore — Điểm chứng chỉ / Thưởng"],
   summary: "Xuất Excel danh sách điểm chứng chỉ nhiều loại",
   description: `Xuất Excel điểm chứng chỉ nhiều khóa / nhiều loại.
 
@@ -721,7 +721,7 @@ app.openapi(exportArchivedCertificateMultiExcel, async (c) => {
 const exportStudentsMissingCertificateExcel = createRoute({
   operationId: "exportStudentsMissingCertificateExcel",
   path: "/export-students-missing-certificate-excel",
-  tags: ["ArchivedScore"],
+  tags: ["ArchivedScore — Điểm chứng chỉ / Thưởng"],
   summary: "Xuất Excel danh sách sinh viên thiếu chứng chỉ",
   description: `Xuất Excel học viên thiếu điểm chứng chỉ.
 

@@ -7,7 +7,7 @@ const app: OpenAPIHono = new OpenAPIHono({ strict: false })
 
 const getListSubject = createRoute({
   operationId: "get-list-subject",
-  tags: ["Subject"],
+  tags: ["Subject — Môn học"],
   path: "get-list-subject",
   summary: "2.15. Lấy danh sách môn học",
   description: `Danh sách học phần / phiên bản môn học.

@@ -7,7 +7,7 @@ const app = new OpenAPIHono()
 
 const exportStudentYearResultRoute = createRoute({
   operationId: "exportStudentYearResult",
-  tags: ["Student Result"],
+  tags: ["Student Result — Kết quả học tập"],
   path: "/export-student-year-result",
   method: "post",
   summary: "Xuất KQHT theo năm học",

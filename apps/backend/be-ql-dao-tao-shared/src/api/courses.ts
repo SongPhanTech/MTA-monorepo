@@ -17,7 +17,7 @@ const app: OpenAPIHono = new OpenAPIHono({ strict: false })
 const getOpenCourses = createRoute({
   operationId: "get-open-courses",
   path: "/registration/open-courses",
-  tags: ["Courses"],
+  tags: ["Courses — Lớp học phần"],
   summary: "2.1. Học phần mở đăng ký tín chỉ",
   description: `Danh sách lớp học phần sinh viên có thể đăng ký trong đợt đang mở.
 
@@ -309,7 +309,7 @@ app.openapi(getOpenCourses, async (c) => {
 const getCoursesDetail = createRoute({
   operationId: "get-courses-detail",
   path: "/registration/courses_detail",
-  tags: ["Courses"],
+  tags: ["Courses — Lớp học phần"],
   summary: "2.2. Chi tiết học phần",
   description: `Chi tiết một lớp học phần: phòng, giảng viên, lịch học, danh sách SV đã đăng ký.
 

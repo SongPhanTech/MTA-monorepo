@@ -11,7 +11,7 @@ const app = new OpenAPIHono({ strict: false })
 
 const exportInternshipProfile = createRoute({
   operationId: "exportInternshipProfile",
-  tags: ["Internship"],
+  tags: ["Internship — Thực tập"],
   path: "/export-internship-profile",
   method: "post",
   summary: "Xuất danh sách thực tập",

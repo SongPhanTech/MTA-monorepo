@@ -10,7 +10,7 @@ const app: OpenAPIHono = new OpenAPIHono({ strict: false })
 
 const getRegistration = createRoute({
   operationId: "get-registration",
-  tags: ["Get Registration"],
+  tags: ["Get Registration — Lịch sử đăng ký"],
   path: "get-registration",
   summary: "2.5 Lấy danh sách học phần đã đăng kí",
   description: `Trả về mã các lớp học phần sinh viên đã đăng ký trong một học kỳ.

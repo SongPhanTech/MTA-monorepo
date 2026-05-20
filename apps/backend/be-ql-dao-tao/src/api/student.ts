@@ -38,7 +38,7 @@ const app = new OpenAPIHono({ strict: false })
 const tongKetHocKyHVSV = createRoute({
   operationId: "calculateStudentSemesterResultJson",
   path: "/calculate-student-semester-result-json",
-  tags: ["Student"],
+  tags: ["Student — Học viên / Sinh viên"],
   summary: "Tổng kết kết quả học kỳ của học viên, sinh viên",
   description: `Tổng kết kết quả học kỳ học viên/sinh viên (JSON).
 
@@ -83,7 +83,7 @@ const tongKetHocKyHVSV = createRoute({
 const tongKetNamHocHVSV = createRoute({
   operationId: "calculateStudentSchoolYearResult",
   path: "/calculate-student-school-year-result",
-  tags: ["Student"],
+  tags: ["Student — Học viên / Sinh viên"],
   summary: "Tổng kết kết quả năm học của học viên, sinh viên",
   description: `Tổng kết kết quả năm học (JSON).
 
@@ -128,7 +128,7 @@ const tongKetNamHocHVSV = createRoute({
 const exportScholarshipJson = createRoute({
   operationId: "exportStudentScholarshipJson",
   path: "/export-json-list-student-scholarship",
-  tags: ["Student"],
+  tags: ["Student — Học viên / Sinh viên"],
   summary: "Danh sách học bổng của học viên",
   description: `Danh sách học viên đạt học bổng (JSON).
 
@@ -169,7 +169,7 @@ const exportScholarshipJson = createRoute({
 const exportScholarshipExcel = createRoute({
   operationId: "exportStudentScholarshipExcel",
   path: "/export-excel-list-student-scholarship",
-  tags: ["Student"],
+  tags: ["Student — Học viên / Sinh viên"],
   summary: "Xuất Excel danh sách học bổng của học viên",
   description: `Xuất Excel học viên đạt học bổng.
 
@@ -221,7 +221,7 @@ app.openapi(exportScholarshipExcel, async (c) => {
 const exportAcademicWarningExcel = createRoute({
   operationId: "exportStudentAcademicWarningExcel",
   path: "/export-excel-list-student-academic-warning",
-  tags: ["Student"],
+  tags: ["Student — Học viên / Sinh viên"],
   summary: "Xuất Excel danh sách cảnh báo học tập của học viên",
   description: `Xuất Excel học viên bị cảnh báo học tập.
 
@@ -273,7 +273,7 @@ app.openapi(exportAcademicWarningExcel, async (c) => {
 const exportAcademicWarningJson = createRoute({
   operationId: "exportStudentAcademicWarningJson",
   path: "/export-json-list-student-academic-warning",
-  tags: ["Student"],
+  tags: ["Student — Học viên / Sinh viên"],
   summary: "Danh sách cảnh báo học tập của học viên",
   description: `Danh sách cảnh báo học tập (JSON).
 
@@ -310,7 +310,7 @@ const exportAcademicWarningJson = createRoute({
 const exportAcademicActionJson = createRoute({
   operationId: "exportStudentAcademicActionJson",
   path: "/export-json-list-student-academic-action",
-  tags: ["Student"],
+  tags: ["Student — Học viên / Sinh viên"],
   summary: "Danh sách xử lý học vụ của học viên",
   description: `Danh sách xử lý học vụ (JSON).
 
@@ -357,7 +357,7 @@ const exportAcademicActionJson = createRoute({
 const exportDecreaseAcademicWarningJson = createRoute({
   operationId: "exportStudentDecreaseAcademicWarningJson",
   path: "/export-json-list-student-decrease-academic-warning",
-  tags: ["Student"],
+  tags: ["Student — Học viên / Sinh viên"],
   summary: "Danh sách giảm cảnh báo học tập của học viên",
   description: `Danh sách giảm cảnh báo học tập (JSON).
 
@@ -394,7 +394,7 @@ const exportDecreaseAcademicWarningJson = createRoute({
 const PheDuyetLuuBan = createRoute({
   operationId: "updateStudentStatus",
   path: "/update-students-status",
-  tags: ["Student"],
+  tags: ["Student — Học viên / Sinh viên"],
   summary: "Cập nhật trạng thái, điểm học viên theo xử lý học tập",
   description: `Phê duyệt / cập nhật trạng thái học viên theo quyết định học vụ.
 
@@ -649,7 +649,7 @@ app.openapi(tongKetNamHocHVSV, async (c) => {
 
 const debtStatistics = createRoute({
   operationId: "debt-statistics",
-  tags: ["Student"],
+  tags: ["Student — Học viên / Sinh viên"],
   path: "/debt-statistics",
   method: "get",
   summary: "Xuất thống kê nợ môn",
@@ -915,7 +915,7 @@ app.openapi(debtStatistics, async (c) => {
 
 const downloadStudentImportTemplate = createRoute({
   operationId: "downloadStudentImportTemplate",
-  tags: ["Student"],
+  tags: ["Student — Học viên / Sinh viên"],
   path: "/download-student-import-template",
   method: "get",
   summary: "Tải mẫu import học viên",
@@ -959,7 +959,7 @@ const downloadStudentImportTemplate = createRoute({
 
 const exportStudentProfiles = createRoute({
   operationId: "exportStudentProfiles",
-  tags: ["Student"],
+  tags: ["Student — Học viên / Sinh viên"],
   path: "/export-student-profiles",
   method: "post",
   summary: "Xuất hồ sơ học viên",

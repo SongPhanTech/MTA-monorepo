@@ -39,7 +39,7 @@ function scoreConverter(scoreRanges: ScoreConvert[] = []) {
 
 const getStudentScore = createRoute({
   operationId: "get-student-score",
-  tags: ["Score"],
+  tags: ["Score — Bảng điểm"],
   path: "get-student-score",
   summary: "2.18. Lấy điểm sinh viên",
   description: `Bảng điểm sinh viên theo học kỳ và từng học phần.

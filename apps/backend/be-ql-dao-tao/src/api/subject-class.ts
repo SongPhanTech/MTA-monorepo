@@ -24,7 +24,7 @@ const openSubjectClass = createRoute({
 **Bảng dữ liệu nguồn:** SubjectVersion, TrainingBlockSubject, FixedClass, Student.
 
 **Tham số:** semesterId, trainingCourseId, trainingMajorId, search, trainingObjectTypeId, nextSemester, fixedClassId.`,
-  tags: ["SubjectClass"],
+  tags: ["SubjectClass — Lớp học phần"],
   request: {
     query: z.object({
       semesterId: z.string().openapi(fieldDesc("ID học kỳ.")),
@@ -64,7 +64,7 @@ const enrollFixedClassOnSubjectClass = createRoute({
 **Bảng dữ liệu nguồn:** SubjectClass, Student, FixedClass.
 
 **Tham số:** fixedClassIds, subjectClassId.`,
-  tags: ["SubjectClass"],
+  tags: ["SubjectClass — Lớp học phần"],
   request: {
     body: {
       content: {
@@ -106,7 +106,7 @@ const setScoreDeadLine = createRoute({
 **Bảng dữ liệu nguồn:** SubjectClass.
 
 **Tham số:** startPadding, endPadding, startDate, endDate, classIds, trainingObjectTypeId, semesterId, overwrite.`,
-  tags: ["SubjectClass"],
+  tags: ["SubjectClass — Lớp học phần"],
   request: {
     body: {
       content: {
@@ -150,7 +150,7 @@ const setExamScoreDeadLine = createRoute({
 **Bảng dữ liệu nguồn:** SubjectClass.
 
 **Tham số:** endPadding, endDate, classIds, trainingObjectTypeId, semesterId, overwrite.`,
-  tags: ["SubjectClass"],
+  tags: ["SubjectClass — Lớp học phần"],
   request: {
     body: {
       content: {
@@ -192,7 +192,7 @@ const uploadExcelImportScore = createRoute({
 **Bảng dữ liệu nguồn:** StudentSubjectScore, SubjectClass.
 
 **Tham số:** file, subjectClassId.`,
-  tags: ["SubjectClass"],
+  tags: ["SubjectClass — Lớp học phần"],
   request: {
     body: {
       content: {
@@ -231,7 +231,7 @@ const exportSubjectClassScore = createRoute({
   operationId: "export-subject-class-score",
   path: "/export-subject-class-score",
   method: "get",
-  tags: ["SubjectClass"],
+  tags: ["SubjectClass — Lớp học phần"],
   summary: "Xuất điểm lớp HP",
   description: `Xuất Excel bảng điểm lớp học phần hoặc theo kỳ thi.
 
@@ -269,7 +269,7 @@ const exportSubjectClassListExcel = createRoute({
   operationId: "exportSubjectClassListExcel",
   path: "/export-subject-class-list-excel",
   method: "get",
-  tags: ["SubjectClass"],
+  tags: ["SubjectClass — Lớp học phần"],
   summary: "Xuất danh sách lớp HP",
   description: `Xuất Excel danh sách lớp học phần.
 

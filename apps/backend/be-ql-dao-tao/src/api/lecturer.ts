@@ -10,7 +10,7 @@ const app = new OpenAPIHono({ strict: false })
 
 const exportLecturerProfile = createRoute({
   operationId: "exportLecturerProfile",
-  tags: ["Lecturer"],
+  tags: ["Lecturer — Giảng viên"],
   path: "/export-lecturer-profile",
   method: "post",
   summary: "Xuất hồ sơ giảng viên",

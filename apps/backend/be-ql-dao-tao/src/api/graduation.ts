@@ -53,7 +53,7 @@ const app = new OpenAPIHono({ strict: false })
 
 const graduationApplicationInit = createRoute({
   operationId: "graduationApplicationInit",
-  tags: ["Graduation"],
+  tags: ["Graduation — Tốt nghiệp"],
   path: "/application-init",
   method: "post",
   summary: "Khởi tạo đơn xét TN",
@@ -171,7 +171,7 @@ const GraduationCheckResponseSchema = z
 
 const graduationCheck = createRoute({
   operationId: "graduationCheck",
-  tags: ["Graduation"],
+  tags: ["Graduation — Tốt nghiệp"],
   path: "/check",
   method: "post",
   summary: "Xét điều kiện tốt nghiệp",
@@ -932,7 +932,7 @@ app.openapi(graduationCheck, async (c) => {
 })
 const generateDiplomaNumber = createRoute({
   operationId: "generateDiplomaNumber",
-  tags: ["Graduation"],
+  tags: ["Graduation — Tốt nghiệp"],
   path: "/generate-diploma-number",
   method: "put",
   summary: "Cấp số hiệu bằng",
@@ -1102,7 +1102,7 @@ app.openapi(generateDiplomaNumber, async (c) => {
 
 const graduationSessionDecision = createRoute({
   operationId: "graduationSessionDecision",
-  tags: ["Graduation"],
+  tags: ["Graduation — Tốt nghiệp"],
   path: "/session-decision",
   method: "get",
   summary: "Quyết định đợt tốt nghiệp",
@@ -1215,7 +1215,7 @@ app.openapi(graduationSessionDecision, async (c) => {
 
 const statisticsGraduationDecision = createRoute({
   operationId: "statisticsGraduationDecision",
-  tags: ["Graduation"],
+  tags: ["Graduation — Tốt nghiệp"],
   path: "/statistics",
   method: "get",
   summary: "Thống kê quyết định TN",
@@ -1274,7 +1274,7 @@ app.openapi(statisticsGraduationDecision, async (c) => {
 
 const exportGraduationDecisionPptx = createRoute({
   operationId: "exportGraduationDecisionPptx",
-  tags: ["Graduation"],
+  tags: ["Graduation — Tốt nghiệp"],
   path: "/export-graduation-decision-pptx",
   method: "post",
   summary: "Xuất QĐ TN PowerPoint",
@@ -1494,7 +1494,7 @@ app.openapi(exportGraduationDecisionPptx, async (c) => {
 
 const exportGraduationRegisterMaster = createRoute({
   operationId: "exportGraduationRegisterMaster",
-  tags: ["Graduation"],
+  tags: ["Graduation — Tốt nghiệp"],
   path: "/export-graduation-register-master",
   method: "post",
   summary: "Xuất sổ đăng ký TN",
@@ -1858,7 +1858,7 @@ app.openapi(exportGraduationRegisterMaster, async (c) => {
 
 const exportPhoiBangCaoHoc = createRoute({
   operationId: "exportPhoiBangCaoHoc",
-  tags: ["Graduation"],
+  tags: ["Graduation — Tốt nghiệp"],
   path: "/export-phoi-bang-cao-hoc",
   method: "post",
   summary: "Xuất phôi bằng cao học",
@@ -2031,7 +2031,7 @@ app.openapi(exportPhoiBangCaoHoc, async (c) => {
 
 const exportPhoiBangNganHan = createRoute({
   operationId: "exportPhoiBangNganHan",
-  tags: ["Graduation"],
+  tags: ["Graduation — Tốt nghiệp"],
   path: "/export-phoi-bang-ngan-han",
   method: "post",
   summary: "Xuất phôi bằng ngắn hạn",
@@ -2273,7 +2273,7 @@ app.openapi(exportPhoiBangNganHan, async (c) => {
 
 const exportPhuLucVanBangCaoHoc = createRoute({
   operationId: "exportPhuLucVanBangCaoHoc",
-  tags: ["Graduation"],
+  tags: ["Graduation — Tốt nghiệp"],
   path: "/export-phu-luc-van-bang-cao-hoc",
   method: "post",
   summary: "Phụ lục VB cao học",
@@ -2619,7 +2619,7 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
 
 const exportPhuLucVanBangNganHan = createRoute({
   operationId: "exportPhuLucVanBangNganHan",
-  tags: ["Graduation"],
+  tags: ["Graduation — Tốt nghiệp"],
   path: "/export-phu-luc-van-bang-ngan-han",
   method: "post",
   summary: "Phụ lục VB ngắn hạn",

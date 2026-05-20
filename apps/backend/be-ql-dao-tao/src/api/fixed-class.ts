@@ -19,7 +19,7 @@ const classDivision = createRoute({
 **Bảng dữ liệu nguồn:** FixedClass, UserProfile, Student.
 
 **Tham số:** file — file Excel danh sách (cột mã HV, mã lớp).`,
-  tags: ["FixedClass"],
+  tags: ["FixedClass — Lớp niên chế"],
   request: {
     body: {
       content: {
@@ -109,7 +109,7 @@ app.openapi(classDivision, async (c) => {
 
 const fixedClassStudentCount = createRoute({
   operationId: "fixed-class-student-count",
-  tags: ["FixedClass"],
+  tags: ["FixedClass — Lớp niên chế"],
   path: "/fixed-class-student-count",
   method: "get",
   summary: "Xuất quân số theo khóa",

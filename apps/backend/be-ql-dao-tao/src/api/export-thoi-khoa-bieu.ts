@@ -7,7 +7,7 @@ const app = new OpenAPIHono()
 
 const exportThoiKhoaBieuRoute = createRoute({
   operationId: "exportThoiKhoaBieu",
-  tags: ["ThoiKhoaBieu"],
+  tags: ["ThoiKhoaBieu — Thời khóa biểu"],
   path: "/export-thoi-khoa-bieu",
   method: "post",
   summary: "Xuất thời khóa biểu Excel",

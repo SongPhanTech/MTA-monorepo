@@ -8,7 +8,7 @@ const app: OpenAPIHono = new OpenAPIHono({ strict: false })
 const registration = createRoute({
   operationId: "registration",
   path: "/registration",
-  tags: ["Registration"],
+  tags: ["Registration — Đăng ký học phần"],
   summary: "2.3 2.4. Đăng ký/Huỷ đăng ký học phần",
   description: `Đăng ký hoặc hủy đăng ký một hoặc nhiều lớp học phần trong đợt đang mở.
 
