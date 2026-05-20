@@ -11,6 +11,11 @@ const postStudentSchedule = createRoute({
   path: "/schedules",
   tags: ["Schedules"],
   summary: "2.6. Thời khoá biểu",
+  description: `Thời khóa biểu các lớp học phần sinh viên đã học trong một học kỳ.
+
+**Bảng dữ liệu nguồn:** SubjectClass, SubjectClassStudent, Student, Semester, Subject, SubjectClassTime, Room.
+
+**Tham số:** class_terms (tên học kỳ), students_code (mã SV).`,
   method: "post",
   request: {
     body: {

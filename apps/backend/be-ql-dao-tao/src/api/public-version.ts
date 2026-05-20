@@ -2,6 +2,7 @@ import { createRoute, OpenAPIHono } from "@hono/zod-openapi"
 import { z } from "zod"
 import { getVersionApps } from "../services/version-service"
 import { APP_SECRET_MAP } from "../config/mta.config"
+import { fieldDesc } from "../dto/openapi-helpers"
 
 const app = new OpenAPIHono()
 
@@ -10,34 +11,35 @@ const getVersionRoute = createRoute({
   tags: ["Version"],
   method: "get",
   path: "/{appCode}",
+  summary: "Phiên bản ứng dụng MTA",
+  description: `Lấy thông tin phiên bản client từ dịch vụ MTA theo mã ứng dụng.
 
+**Bảng dữ liệu nguồn:** không dùng Prisma (gọi API MTA).
+
+**Tham số:** appCode — mã ứng dụng (path).`,
   request: {
     params: z.object({
       appCode: z.string().openapi({
-        param: {
-          name: "appCode",
-          in: "path",
-        },
+        param: { name: "appCode", in: "path" },
+        ...fieldDesc("Mã ứng dụng (khóa trong APP_SECRET_MAP).", "ql-dao-tao"),
       }),
     }),
   },
-
   responses: {
     200: {
-      description: "Get version success",
+      description: "Thành công",
       content: {
         "application/json": {
-          schema: z.any(),
+          schema: z.any().openapi({ description: "Payload phiên bản từ MTA." }),
         },
       },
     },
-
     400: {
-      description: "Invalid app code",
+      description: "Mã ứng dụng không hợp lệ",
       content: {
         "application/json": {
           schema: z.object({
-            message: z.string(),
+            message: z.union([z.string(), z.array(z.any())]).openapi(fieldDesc("Chi tiết lỗi.")),
           }),
         },
       },

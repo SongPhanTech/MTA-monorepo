@@ -18,7 +18,11 @@ const getListSessionRegistration = createRoute({
   path: "/get-list-session-registration",
   tags: ["Registration Session"],
   summary: "2.8. Lấy đợt đăng ký học",
-  description: "2.8. Lấy đợt đăng ký học",
+  description: `Danh sách đợt đăng ký học phần (theo từ khóa và trạng thái mở/đóng).
+
+**Bảng dữ liệu nguồn:** ClassRegisterSession.
+
+**Tham số:** key_word, session_status (1=mở, 2=đóng).`,
   method: "post",
   request: {
     body: {
@@ -128,7 +132,11 @@ const getDetailSessionRegistration = createRoute({
   path: "/get-detail-session-registration",
   tags: ["Registration Session"],
   summary: "2.9. Lấy chi tiết đợt đăng ký học",
-  description: "2.9. Lấy chi tiết đợt đăng ký học",
+  description: `Chi tiết đợt đăng ký: thời gian, học phí/tín chỉ, khóa được phép, hạn mức tín chỉ theo điểm.
+
+**Bảng dữ liệu nguồn:** ClassRegisterSession, TrainingCourse, CreditLimit.
+
+**Tham số:** session_code — mã đợt.`,
   method: "post",
   request: {
     body: {

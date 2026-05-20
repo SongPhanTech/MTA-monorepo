@@ -1,5 +1,6 @@
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
 import { exportThoiKhoaBieu } from "../services/thoi-khoa-bieu"
+import { fieldDesc } from "../dto/openapi-helpers"
 
 const app = new OpenAPIHono()
 
@@ -8,18 +9,27 @@ const exportThoiKhoaBieuRoute = createRoute({
   tags: ["ThoiKhoaBieu"],
   path: "/export-thoi-khoa-bieu",
   method: "post",
-  summary: "Export Thời Khoá Biểu",
-  description: "Xuất thời khoá biểu ra file Excel theo học kỳ",
+  summary: "Xuất thời khóa biểu Excel",
+  description: `Xuất thời khóa biểu lớp học phần ra Excel.
+
+**Bảng dữ liệu nguồn:** SubjectClass, ClassSchedule, SubjectClassTime, Semester.
+
+**Tham số:** semesterId, trainingObjectTypeId, trainingCourseId (tùy chọn), type (NORMAL | RETAKE | REEXAM).`,
   request: {
     body: {
       content: {
         "application/json": {
-          schema: z.object({
-            semesterId: z.string(),
-            trainingObjectTypeId: z.string(),
-            trainingCourseId: z.string().optional(),
-            type: z.enum(["NORMAL", "RETAKE", "REEXAM"]).optional(),
-          }),
+          schema: z
+            .object({
+              semesterId: z.string().openapi(fieldDesc("ID học kỳ.")),
+              trainingObjectTypeId: z.string().openapi(fieldDesc("ID hệ đào tạo.")),
+              trainingCourseId: z.string().optional().openapi(fieldDesc("ID khóa học (lọc tùy chọn).")),
+              type: z
+                .enum(["NORMAL", "RETAKE", "REEXAM"])
+                .optional()
+                .openapi(fieldDesc("Loại lớp học phần.")),
+            })
+            .openapi("ExportThoiKhoaBieuRequest"),
         },
       },
     },

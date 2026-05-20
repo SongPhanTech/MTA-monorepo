@@ -5,6 +5,7 @@ import customParseFormat from "dayjs/plugin/customParseFormat"
 import { read, utils, type WorkSheet } from "xlsx"
 import { prisma } from ".."
 import { UploadExcelModel } from "../dto/upload-excel.dto"
+import { fieldDesc } from "../dto/openapi-helpers"
 import { ExamType } from "@workspace/db/client"
 
 dayjs.extend(customParseFormat)
@@ -14,21 +15,32 @@ const importPhanCongGiangDay = createRoute({
   operationId: "importPhanCongGiangDay",
   path: "/import-phan-cong-giang-day",
   method: "post",
-  description: "Nhập file excel danh sách phân công giảng dạy",
+  summary: "Import phân công giảng dạy",
+  description: `Nhập Excel phân công giảng dạy / TKB lớp học phần.
+
+**Bảng dữ liệu nguồn:** SubjectClass, ClassSchedule, Lecturer, Room, FixedClass.
+
+**Tham số:** file, semesterId, trainingObjectTypeId, fileType, importType, type.`,
   tags: ["PlanTraining"],
-  summary: "Import danh sách phân công giảng dạy",
   request: {
     body: {
       content: {
         "multipart/form-data": {
           schema: UploadExcelModel.extend({
-            semesterId: z.string(), // loại thông tin
-            trainingObjectTypeId: z.string(), // loại thông tin
+            semesterId: z.string().openapi(fieldDesc("ID học kỳ.")),
+            trainingObjectTypeId: z.string().openapi(fieldDesc("ID hệ đào tạo.")),
             fileType: z
               .enum(["THONG_KE_GIAO_VIEN_GIANG_DAY", "TKB_THEO_LOP_HOC_PHAN"])
-              .default("THONG_KE_GIAO_VIEN_GIANG_DAY"), // loại thông tin
-            importType: z.enum(["TAO_MOI", "CAP_NHAT", "XEM_TRUOC"]).default("CAP_NHAT"), // loại thông tin
-            type: z.nativeEnum($Enums.SubjectClassType).optional(),
+              .default("THONG_KE_GIAO_VIEN_GIANG_DAY")
+              .openapi(fieldDesc("Loại file mẫu import.")),
+            importType: z
+              .enum(["TAO_MOI", "CAP_NHAT", "XEM_TRUOC"])
+              .default("CAP_NHAT")
+              .openapi(fieldDesc("TAO_MOI | CAP_NHAT | XEM_TRUOC.")),
+            type: z
+              .nativeEnum($Enums.SubjectClassType)
+              .optional()
+              .openapi(fieldDesc("Loại lớp học phần.")),
           }).openapi("importPhanCongGiangDay"),
         },
       },

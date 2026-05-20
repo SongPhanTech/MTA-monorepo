@@ -4,6 +4,7 @@ import { read, utils } from "xlsx"
 import XlsxTemplate from "xlsx-template"
 import { prisma } from ".."
 import { UploadExcelModel } from "../dto/upload-excel.dto"
+import { fieldDesc } from "../dto/openapi-helpers"
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -11,9 +12,13 @@ const classDivision = createRoute({
   operationId: "classDivision",
   path: "/upload-excel-update-user-profile",
   method: "post",
-  description: "Phân chia học viên vào các lớp",
+  summary: "Phân lớp học viên từ Excel",
+  description: `Import Excel gán học viên vào lớp niên chế (quản lý).
+
+**Bảng dữ liệu nguồn:** FixedClass, UserProfile, Student.
+
+**Tham số:** file — file Excel danh sách (cột mã HV, mã lớp).`,
   tags: ["FixedClass"],
-  summary: "Class Division",
   request: {
     body: {
       content: {
@@ -106,15 +111,21 @@ const fixedClassStudentCount = createRoute({
   tags: ["FixedClass"],
   path: "/fixed-class-student-count",
   method: "get",
+  summary: "Xuất quân số theo khóa",
+  description: `Xuất Excel thống kê quân số học viên theo lớp niên chế trong khóa.
+
+**Bảng dữ liệu nguồn:** FixedClass, Student, TrainingCourse, TrainingObjectType.
+
+**Tham số:** trainingObjectTypeId, trainingCourseId (query).`,
   request: {
     query: z.object({
-      trainingObjectTypeId: z.string(),
-      trainingCourseId: z.string(),
+      trainingObjectTypeId: z.string().openapi(fieldDesc("ID hệ đào tạo.")),
+      trainingCourseId: z.string().openapi(fieldDesc("ID khóa học.")),
     }),
   },
   responses: {
     200: {
-      description: "Export quân số học viên theo khoá",
+      description: "File Excel quân số theo khóa",
       content: {
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
           schema: z.any().openapi({ type: "string", format: "binary" }),

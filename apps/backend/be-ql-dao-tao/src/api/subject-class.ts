@@ -9,6 +9,7 @@ import { prisma } from ".."
 import { EnrollFixedClassOnSubjectClass, OpenSubjectClass } from "../dto/subject-class.dto"
 import { UploadExcelModel } from "../dto/upload-excel.dto"
 import { ListOf } from "../zod/base"
+import { fieldDesc } from "../dto/openapi-helpers"
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -16,22 +17,25 @@ const openSubjectClass = createRoute({
   operationId: "openSubjectClass",
   path: "/open-subject-class",
   method: "get",
-  description: "Lấy danh sách môn dự kiến giảng dạy",
+  summary: "Môn dự kiến mở lớp HP",
+  description: `Danh sách học phần có thể mở lớp học phần theo học kỳ / khóa.
+
+**Bảng dữ liệu nguồn:** SubjectVersion, TrainingBlockSubject, FixedClass, Student.
+
+**Tham số:** semesterId, trainingCourseId, trainingMajorId, search, trainingObjectTypeId, nextSemester, fixedClassId.`,
   tags: ["SubjectClass"],
-  summary: "Lấy danh sách môn dự kiến giảng dạy",
   request: {
     query: z.object({
-      semesterId: z.string(),
-      trainingCourseId: z.string(),
-      trainingMajorId: z.string().optional(),
-      search: z.string().optional(),
-      trainingObjectTypeId: z.string(),
+      semesterId: z.string().openapi(fieldDesc("ID học kỳ.")),
+      trainingCourseId: z.string().openapi(fieldDesc("ID khóa học.")),
+      trainingMajorId: z.string().optional().openapi(fieldDesc("ID ngành (lọc).")),
+      search: z.string().optional().openapi(fieldDesc("Từ khóa mã/tên môn.")),
+      trainingObjectTypeId: z.string().openapi(fieldDesc("ID hệ đào tạo.")),
       nextSemester: z
-        .number({
-          coerce: true,
-        })
-        .default(0),
-      fixedClassId: z.string().optional(),
+        .number({ coerce: true })
+        .default(0)
+        .openapi(fieldDesc("0 = HK hiện tại; 1 = HK kế tiếp.", 0)),
+      fixedClassId: z.string().optional().openapi(fieldDesc("Lọc theo lớp niên chế.")),
     }),
   },
   responses: {
@@ -53,9 +57,13 @@ const enrollFixedClassOnSubjectClass = createRoute({
   operationId: "enrollFixedClassOnSubjectClass",
   path: "/enroll-fixed-class-on-subject-class",
   method: "post",
-  description: "Đăng ký lớp môn học cho lớp quản lý",
+  summary: "Gán lớp NC vào lớp HP",
+  description: `Đăng ký học viên lớp niên chế vào lớp học phần.
+
+**Bảng dữ liệu nguồn:** SubjectClass, Student, FixedClass.
+
+**Tham số:** fixedClassIds, subjectClassId.`,
   tags: ["SubjectClass"],
-  summary: "Đăng ký lớp môn học cho lớp quản lý",
   request: {
     body: {
       content: {
@@ -91,9 +99,13 @@ const setScoreDeadLine = createRoute({
   operationId: "setScoreDeadLine",
   path: "/set-score-dead-line",
   method: "post",
-  description: "Đặt hạn nhập điểm",
-  tags: ["SubjectClass"],
   summary: "Đặt hạn nhập điểm",
+  description: `Thiết lập hạn nhập điểm quá trình cho lớp học phần.
+
+**Bảng dữ liệu nguồn:** SubjectClass.
+
+**Tham số:** startPadding, endPadding, startDate, endDate, classIds, trainingObjectTypeId, semesterId, overwrite.`,
+  tags: ["SubjectClass"],
   request: {
     body: {
       content: {
@@ -133,9 +145,13 @@ const setExamScoreDeadLine = createRoute({
   operationId: "setExamScoreDeadLine",
   path: "/set-exam-score-dead-line",
   method: "post",
-  description: "Đặt hạn nhập điểm thi",
-  tags: ["SubjectClass"],
   summary: "Đặt hạn nhập điểm thi",
+  description: `Thiết lập hạn nhập điểm thi cho lớp học phần.
+
+**Bảng dữ liệu nguồn:** SubjectClass.
+
+**Tham số:** endPadding, endDate, classIds, trainingObjectTypeId, semesterId, overwrite.`,
+  tags: ["SubjectClass"],
   request: {
     body: {
       content: {
@@ -173,15 +189,19 @@ const uploadExcelImportScore = createRoute({
   operationId: "uploadExcelImportScore",
   path: "/upload-excel-import-score",
   method: "post",
-  description: "Import điểm lớp môn học \n\n [subjectClassId] là id của lớp học",
+  summary: "Import điểm lớp HP",
+  description: `Nhập điểm lớp học phần từ Excel.
+
+**Bảng dữ liệu nguồn:** StudentSubjectScore, SubjectClass.
+
+**Tham số:** file, subjectClassId.`,
   tags: ["SubjectClass"],
-  summary: "Import file nhập điểm",
   request: {
     body: {
       content: {
         "multipart/form-data": {
           schema: UploadExcelModel.extend({
-            subjectClassId: z.string(), // loại thông tin
+            subjectClassId: z.string().openapi(fieldDesc("ID lớp học phần.")),
           }).openapi("uploadExcelImportScore"),
         },
       },
@@ -217,7 +237,12 @@ const exportSubjectClassScore = createRoute({
   path: "/export-subject-class-score",
   method: "get",
   tags: ["SubjectClass"],
-  summary: "Excel xuất điểm lớp môn học",
+  summary: "Xuất điểm lớp HP",
+  description: `Xuất Excel bảng điểm lớp học phần hoặc theo kỳ thi.
+
+**Bảng dữ liệu nguồn:** SubjectClass, StudentSubjectScore, Exam.
+
+**Tham số:** id (lớp HP), examId, type (query).`,
   request: {
     query: z.object({
       id: z.string().optional().openapi("id", { description: "ID của lớp môn học" }),
@@ -250,7 +275,12 @@ const exportSubjectClassListExcel = createRoute({
   path: "/export-subject-class-list-excel",
   method: "get",
   tags: ["SubjectClass"],
-  summary: "Xuất Excel danh sách lớp môn học",
+  summary: "Xuất danh sách lớp HP",
+  description: `Xuất Excel danh sách lớp học phần.
+
+**Bảng dữ liệu nguồn:** SubjectClass, Semester, FixedClass.
+
+**Tham số:** trainingObjectTypeId, semesterId, fixedClassId, searchText.`,
   request: {
     query: z.object({
       trainingObjectTypeId: z.string().openapi("trainingObjectTypeId", {

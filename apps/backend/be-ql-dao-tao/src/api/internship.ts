@@ -4,6 +4,7 @@ import dayjs from "dayjs"
 import ExcelJS from "exceljs"
 import XlsxTemplate from "xlsx-template"
 import { prisma } from ".."
+import { fieldDesc } from "../dto/openapi-helpers"
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -12,20 +13,32 @@ const exportInternshipProfile = createRoute({
   tags: ["Internship"],
   path: "/export-internship-profile",
   method: "post",
+  summary: "Xuất danh sách thực tập",
+  description: `Xuất Excel hồ sơ thực tập học viên.
+
+**Bảng dữ liệu nguồn:** StudentInternship, StudentSubjectScore, Lecturer, UserProfile.
+
+**Tham số:** internshipIds — danh sách ID (null/empty = tất cả).`,
   request: {
     body: {
       content: {
         "application/json": {
-          schema: z.object({
-            internshipIds: z.string().array().nullish(),
-          }),
+          schema: z
+            .object({
+              internshipIds: z
+                .string()
+                .array()
+                .nullish()
+                .openapi(fieldDesc("ID bản ghi thực tập; bỏ trống = xuất tất cả.")),
+            })
+            .openapi("ExportInternshipProfileRequest"),
         },
       },
     },
   },
   responses: {
     200: {
-      description: "Export list of internship profile as .xlsx",
+      description: "File Excel danh sách thực tập",
       content: {
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
           schema: z.any().openapi({ type: "string", format: "binary" }),

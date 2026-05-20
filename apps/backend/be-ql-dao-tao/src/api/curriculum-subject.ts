@@ -9,6 +9,7 @@ import { prisma } from ".."
 import { UploadExcelModel } from "../dto/upload-excel.dto"
 import { buildSubjectMapOrThrow, buildTrainingBlockMapOrThrow } from "../utils"
 import { $Enums } from "@workspace/db"
+import { fieldDesc } from "../dto/openapi-helpers"
 const app = new OpenAPIHono({ strict: false })
 
 const importCurriculumVersion = createRoute({
@@ -16,16 +17,28 @@ const importCurriculumVersion = createRoute({
   tags: ["Curriculum"],
   path: "/import-phien-ban-ctdt-subject",
   method: "post",
+  summary: "Import môn vào CTĐT",
+  description: `Import khối kiến thức và môn học vào phiên bản CTĐT.
+
+**Bảng dữ liệu nguồn:** CurriculumVersion, TrainingBlockOnCurriculumVersion, TrainingBlockSubject, SubjectVersion.
+
+**Tham số:** file, trainingObjectTypeId, curriculumVersionId, createNewSubjects, deleteOldData, timeout.`,
   request: {
     body: {
       content: {
         "multipart/form-data": {
           schema: UploadExcelModel.extend({
-            trainingObjectTypeId: z.string(),
-            curriculumVersionId: z.string(),
-            createNewSubjects: z.coerce.boolean().default(false),
-            deleteOldData: z.coerce.boolean().default(false),
-            timeout: z.coerce.number().default(30),
+            trainingObjectTypeId: z.string().openapi(fieldDesc("ID hệ đào tạo.")),
+            curriculumVersionId: z.string().openapi(fieldDesc("ID phiên bản CTĐT.")),
+            createNewSubjects: z.coerce
+              .boolean()
+              .default(false)
+              .openapi(fieldDesc("Tạo môn mới nếu chưa có.", false)),
+            deleteOldData: z.coerce
+              .boolean()
+              .default(false)
+              .openapi(fieldDesc("Xóa dữ liệu khối/môn cũ trước import.", false)),
+            timeout: z.coerce.number().default(30).openapi(fieldDesc("Timeout transaction (giây).", 30)),
           }),
         },
       },

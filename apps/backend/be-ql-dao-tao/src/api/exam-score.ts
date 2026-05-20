@@ -2,6 +2,7 @@ import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
 import { $Enums, Prisma } from "@workspace/db"
 import { calcFinalScore } from "@workspace/libs/utils"
 import { prisma } from ".."
+import { fieldDesc } from "../dto/openapi-helpers"
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -9,8 +10,12 @@ const genExamListCode = createRoute({
   operationId: "gen-exam-list-code",
   path: "/gen-exam-list-code",
   tags: ["Exam"],
-  summary: "Sinh phách cho danh sách thi",
-  description: "Sinh phách cho danh sách thi",
+  summary: "Sinh phách danh sách thi",
+  description: `Sinh số phách cho các bài thi trong kỳ thi.
+
+**Bảng dữ liệu nguồn:** Exam, ExamRoom, ExamList, ExamPaper.
+
+**Tham số:** examId.`,
   method: "post",
   request: {
     body: {
@@ -18,9 +23,7 @@ const genExamListCode = createRoute({
         "application/json": {
           schema: z
             .object({
-              examId: z.string().openapi("examId", {
-                description: "ID kỳ thi",
-              }),
+              examId: z.string().openapi(fieldDesc("ID kỳ thi (Exam).")),
             })
             .openapi("gen-exam-room-code"),
         },
@@ -181,7 +184,11 @@ const saveExamScore = createRoute({
   path: "/save-exam-score",
   tags: ["Exam"],
   summary: "Lưu điểm theo phách",
-  description: "Lưu điểm theo phách",
+  description: `Cập nhật điểm thi theo danh sách phách.
+
+**Bảng dữ liệu nguồn:** ExamPaper, StudentSubjectScore.
+
+**Tham số:** mảng { id, score } — id bài thi/phách, score điểm.`,
   method: "post",
   request: {
     body: {
@@ -190,8 +197,8 @@ const saveExamScore = createRoute({
           schema: z
             .array(
               z.object({
-                id: z.string(),
-                score: z.number().nullish(),
+                id: z.string().openapi(fieldDesc("ID exam paper / phách.")),
+                score: z.number().nullish().openapi(fieldDesc("Điểm thi.")),
               })
             )
             .openapi("ExamCodes"),

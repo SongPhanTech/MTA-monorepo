@@ -11,6 +11,7 @@ import {
 import { splitFullName } from "@workspace/libs/utils"
 import { prisma } from ".."
 import { UploadExcelModel } from "../dto/upload-excel.dto"
+import { fieldDesc } from "../dto/openapi-helpers"
 import type { ErrorExtra } from "../types/error-extra"
 import {
   buildCurriculumMapOrThrow,
@@ -36,12 +37,21 @@ const importLecturer = createRoute({
   tags: ["Import"],
   path: "/import-lecturer",
   method: "post",
+  summary: "Import giảng viên Excel",
+  description: `Nhập danh sách giảng viên từ file Excel.
+
+**Bảng dữ liệu nguồn:** Lecturer, UserProfile, ManagementOrganization.
+
+**Tham số:** file, timeout (giây, mặc định 30).`,
   request: {
     body: {
       content: {
         "multipart/form-data": {
           schema: UploadExcelModel.extend({
-            timeout: z.coerce.number().default(30),
+            timeout: z.coerce
+              .number()
+              .default(30)
+              .openapi(fieldDesc("Timeout transaction (giây).", 30)),
           }),
         },
       },
@@ -500,6 +510,12 @@ const importStudent = createRoute({
   tags: ["Student"],
   path: "/import-student",
   method: "post",
+  summary: "Import học viên Excel",
+  description: `Nhập danh sách học viên / sinh viên từ Excel.
+
+**Bảng dữ liệu nguồn:** Student, UserProfile, FixedClass, TrainingCourse.
+
+**Tham số:** file và các trường mở rộng trong schema multipart.`,
   request: {
     body: {
       content: {
@@ -1107,6 +1123,12 @@ const importHeQuanSu = createRoute({
   tags: ["Student"],
   path: "/import-he-quan-su",
   method: "post",
+  summary: "Import hệ quân sự",
+  description: `Import dữ liệu hệ quân sự từ Excel.
+
+**Bảng dữ liệu nguồn:** Student, UserProfile, TrainingObjectType.
+
+**Tham số:** file và trường trong schema multipart.`,
   request: {
     body: {
       content: {
@@ -1296,6 +1318,12 @@ const importInternship = createRoute({
   tags: ["Import"],
   path: "/import-internship",
   method: "post",
+  summary: "Import thực tập Excel",
+  description: `Nhập hồ sơ thực tập học viên từ Excel.
+
+**Bảng dữ liệu nguồn:** StudentInternship, StudentSubjectScore.
+
+**Tham số:** file và trường trong schema multipart.`,
   request: {
     body: {
       content: {

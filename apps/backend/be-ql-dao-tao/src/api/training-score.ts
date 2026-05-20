@@ -2,21 +2,24 @@ import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
 import { read, utils } from "xlsx"
 import { prisma } from ".."
 import { UploadExcelModel } from "../dto/upload-excel.dto"
+import { fieldDesc } from "../dto/openapi-helpers"
 
 const app = new OpenAPIHono({ strict: false })
 
 const exportExcelListStudentFixedClassTrainingPoint = createRoute({
   operationId: "exportStudentFixedClassExcelTrainingPoint",
   path: "/export-xlsx-list-student-fixed-class-training-point",
-  description: "Xuất file xlsx danh sách sinh viên trong lớp biên chế",
+  summary: "Xuất điểm rèn luyện lớp NC",
+  description: `Xuất Excel danh sách học viên và điểm rèn luyện theo lớp niên chế.
+
+**Bảng dữ liệu nguồn:** FixedClass, Student, TrainingScore.
+
+**Tham số:** fixedClassId (query).`,
   tags: ["TrainingPoint"],
-  summary: "Xuất file xlsx danh sách sinh viên trong lớp biên chế",
   method: "get",
   request: {
     query: z.object({
-      fixedClassId: z.string().openapi("fixedClassId", {
-        description: "ID của lớp biên chế",
-      }),
+      fixedClassId: z.string().openapi(fieldDesc("ID lớp niên chế (FixedClass).")),
     }),
   },
   responses: {
@@ -55,17 +58,20 @@ const uploadExcelImportTrainingScore = createRoute({
   operationId: "uploadExcelImportTrainingScore",
   path: "/upload-excel-import-score",
   method: "post",
-  description:
-    "Import điểm rèn luyện lớp biên chế \n\n [fixedClassId] là id của lớp biên chế, \n\n [trainingSessionId] là id của đợt đánh giá",
+  summary: "Import điểm rèn luyện",
+  description: `Nhập điểm rèn luyện lớp niên chế từ Excel.
+
+**Bảng dữ liệu nguồn:** TrainingScore, FixedClass, TrainingSession.
+
+**Tham số:** file, fixedClassId, trainingSessionId.`,
   tags: ["TrainingPoint"],
-  summary: "Import file nhập điểm rèn luyện",
   request: {
     body: {
       content: {
         "multipart/form-data": {
           schema: UploadExcelModel.extend({
-            fixedClassId: z.string(), // loại thông tin
-            trainingSessionId: z.string(), // loại thông tin
+            fixedClassId: z.string().openapi(fieldDesc("ID lớp niên chế.")),
+            trainingSessionId: z.string().openapi(fieldDesc("ID đợt đánh giá rèn luyện.")),
           }).openapi("uploadExcelImportTrainingScore"),
         },
       },

@@ -42,6 +42,11 @@ const getStudentScore = createRoute({
   tags: ["Score"],
   path: "get-student-score",
   summary: "2.18. Lấy điểm sinh viên",
+  description: `Bảng điểm sinh viên theo học kỳ và từng học phần.
+
+**Bảng dữ liệu nguồn:** Student, Semester, SubjectClass, SubjectClassStudent, SubjectVersion, ScoreConvert, ArchivedAward, ArchivedCertificate.
+
+**Tham số:** student_code — mã sinh viên.`,
   method: "post",
   request: {
     body: {

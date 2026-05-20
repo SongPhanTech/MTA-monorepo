@@ -14,7 +14,11 @@ const getSpecialized = createRoute({
   path: "/get-specialized",
   tags: ["Specialized"],
   summary: "2.13 2.14. Lấy thông tin phân ngành, chuyên ngành đào tạo",
-  description: "2.13 2.14. Lấy thông tin phân ngành, chuyên ngành đào tạo",
+  description: `Danh sách ngành/chuyên ngành và phiên bản chương trình đào tạo.
+
+**Bảng dữ liệu nguồn:** CurriculumVersion, Curriculum, TrainingMajor, FixedClass, TrainingCourse.
+
+**Tham số:** key_word (tên ngành), specialized_code (mã ngành).`,
   method: "post",
   request: {
     body: {

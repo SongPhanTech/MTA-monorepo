@@ -19,7 +19,11 @@ const getOpenCourses = createRoute({
   path: "/registration/open-courses",
   tags: ["Courses"],
   summary: "2.1. Học phần mở đăng ký tín chỉ",
-  description: "2.1. Học phần mở đăng ký tín chỉ",
+  description: `Danh sách lớp học phần sinh viên có thể đăng ký trong đợt đang mở.
+
+**Bảng dữ liệu nguồn:** Student, FixedClass, ClassRegisterSession, SubjectVersion, SubjectClass, SubjectClassTime, CurriculumVersion, ClassRegisterLogs.
+
+**Tham số chính:** students_code (bắt buộc), session_code, program_code, type_program, key_word, type.`,
   method: "post",
   request: {
     body: {
@@ -307,7 +311,11 @@ const getCoursesDetail = createRoute({
   path: "/registration/courses_detail",
   tags: ["Courses"],
   summary: "2.2. Chi tiết học phần",
-  description: "2.2. Chi tiết học phần",
+  description: `Chi tiết một lớp học phần: phòng, giảng viên, lịch học, danh sách SV đã đăng ký.
+
+**Bảng dữ liệu nguồn:** SubjectClass, Subject, Semester, Room, Building, SubjectClassTime, ClassRegisterLogs.
+
+**Tham số:** class_id — ID lớp học phần.`,
   method: "post",
   request: {
     body: {
