@@ -10,6 +10,27 @@ import { HTTPException } from "hono/http-exception"
 import { prisma } from ".."
 import { RequestSchema } from "../dto/training-coure.dto"
 import {
+  ActiveCurriculaStatsSchema,
+  FixedClassAvgGpaSchema,
+  IdNameCountSchema,
+  LecturerWorkloadSchema,
+  NameCountSchema,
+  OverviewDashboardStatsSchema,
+  ProvinceCountSchema,
+  RankingCountSchema,
+  SchoolYearGpaDistributionSchema,
+  StudentOfInterestSchema,
+  SubjectClassStatsSchema,
+  SubjectPassFailSchema,
+  TrainingCourseAvgEntryScoreSchema,
+  TrainingCourseAvgGpaSchema,
+  TrainingCourseCountSchema,
+  TrainingCourseGraduationRateSchema,
+  TrainingLevelCountSchema,
+  TrainingMajorAvgGpaSchema,
+  TrainingObjectTypeCountSchema,
+} from "../dto/stats-response.dto"
+import {
   PreviewOnlyRequestSchema,
   PreviewWithManagementOrgRequestSchema,
   PreviewWithSemesterRequestSchema,
@@ -33,14 +54,16 @@ type StatRow = {
   Value: number
 }
 const StatRowSchema = z.object({
-  Type: z.enum(["By_Course", "By_Curriculum", "By_Major"]),
-  id: z.string(),
-  Name: z.string(),
-  PeriodId: z.string(),
-  PeriodCode: z.string(),
-  TotalStudents: z.number(),
-  Count: z.number(),
-  Value: z.number(),
+  Type: z
+    .enum(["By_Course", "By_Curriculum", "By_Major"])
+    .openapi(fieldDesc("Nhóm thống kê: theo khóa / CTĐT / ngành.")),
+  id: z.string().openapi(fieldDesc("ID đối tượng thống kê.")),
+  Name: z.string().openapi(fieldDesc("Tên hiển thị (khóa, CTĐT, ngành).")),
+  PeriodId: z.string().openapi(fieldDesc("ID kỳ / học kỳ.")),
+  PeriodCode: z.string().openapi(fieldDesc("Mã kỳ (vd. 2024_HK1).")),
+  TotalStudents: z.number().openapi(fieldDesc("Tổng số học viên trong nhóm.")),
+  Count: z.number().openapi(fieldDesc("Số lượng (thi lại, vắng, …).")),
+  Value: z.number().openapi(fieldDesc("Giá trị tỷ lệ / trung bình tính toán.")),
 })
 // Ban Giám đốc (BGĐ)
 app.openapi(
@@ -65,13 +88,7 @@ app.openapi(
         content: {
           "application/json": {
             schema: StatBaseSchema.extend({
-              data: z.array(
-                z.object({
-                  trainingObjectTypeId: z.string(),
-                  name: z.string(),
-                  count: z.number(),
-                })
-              ),
+              data: z.array(TrainingObjectTypeCountSchema),
             }),
           },
         },
@@ -145,13 +162,7 @@ app.openapi(
         content: {
           "application/json": {
             schema: StatBaseSchema.extend({
-              data: z.array(
-                z.object({
-                  trainingLevelId: z.string(),
-                  name: z.string(),
-                  count: z.number(),
-                })
-              ),
+              data: z.array(TrainingLevelCountSchema),
             }),
           },
         },
@@ -237,13 +248,7 @@ app.openapi(
         content: {
           "application/json": {
             schema: StatBaseSchema.extend({
-              data: z.array(
-                z.object({
-                  trainingCourseId: z.string(),
-                  name: z.string(),
-                  count: z.number(),
-                })
-              ),
+              data: z.array(TrainingCourseCountSchema),
             }),
           },
         },
@@ -316,13 +321,7 @@ app.openapi(
         content: {
           "application/json": {
             schema: StatBaseSchema.extend({
-              data: z.array(
-                z.object({
-                  trainingCourseId: z.string(),
-                  name: z.string(),
-                  avgEntryScore: z.number(),
-                })
-              ),
+              data: z.array(TrainingCourseAvgEntryScoreSchema),
             }),
           },
         },
@@ -404,13 +403,7 @@ app.openapi(
         content: {
           "application/json": {
             schema: StatBaseSchema.extend({
-              data: z.array(
-                z.object({
-                  trainingCourseId: z.string(),
-                  name: z.string(),
-                  avgGpa: z.number(),
-                })
-              ),
+              data: z.array(TrainingCourseAvgGpaSchema),
             }),
           },
         },
@@ -488,13 +481,7 @@ app.openapi(
         content: {
           "application/json": {
             schema: StatBaseSchema.extend({
-              data: z.array(
-                z.object({
-                  trainingCourseId: z.string(),
-                  name: z.string(),
-                  graduationRate: z.number(),
-                })
-              ),
+              data: z.array(TrainingCourseGraduationRateSchema),
             }),
           },
         },
@@ -568,17 +555,7 @@ app.openapi(
         content: {
           "application/json": {
             schema: StatBaseSchema.extend({
-              data: z.array(
-                z.object({
-                  schoolYearId: z.string(),
-                  name: z.string(),
-                  excellent: z.number(),
-                  good: z.number(),
-                  fair: z.number(),
-                  average: z.number(),
-                  weak: z.number(),
-                })
-              ),
+              data: z.array(SchoolYearGpaDistributionSchema),
             }),
           },
         },
@@ -669,15 +646,7 @@ app.openapi(
         content: {
           "application/json": {
             schema: StatBaseSchema.extend({
-              data: z.array(
-                z.object({
-                  totalStudents: z.number(),
-                  totalLecturers: z.number(),
-                  studentLecturerRatio: z.number(),
-                  activeCurricula: z.number(),
-                  academicWarningRate: z.number(),
-                })
-              ),
+              data: z.array(OverviewDashboardStatsSchema),
             }),
           },
         },
@@ -769,13 +738,7 @@ app.openapi(
         content: {
           "application/json": {
             schema: StatBaseSchema.extend({
-              data: z.array(
-                z.object({
-                  provinceId: z.string(),
-                  name: z.string(),
-                  count: z.number(),
-                })
-              ),
+              data: z.array(ProvinceCountSchema),
             }),
           },
         },
@@ -850,13 +813,7 @@ app.openapi(
         content: {
           "application/json": {
             schema: StatBaseSchema.extend({
-              data: z.array(
-                z.object({
-                  trainingObjectTypeId: z.string(),
-                  name: z.string(),
-                  count: z.number(),
-                })
-              ),
+              data: z.array(TrainingObjectTypeCountSchema),
             }),
           },
         },
@@ -950,13 +907,7 @@ app.openapi(
         content: {
           "application/json": {
             schema: StatBaseSchema.extend({
-              data: z.array(
-                z.object({
-                  trainingLevelId: z.string(),
-                  name: z.string(),
-                  count: z.number(),
-                })
-              ),
+              data: z.array(TrainingLevelCountSchema),
             }),
           },
         },
@@ -1061,13 +1012,7 @@ app.openapi(
         content: {
           "application/json": {
             schema: StatBaseSchema.extend({
-              data: z.array(
-                z.object({
-                  trainingCourseId: z.string(),
-                  name: z.string(),
-                  count: z.number(),
-                })
-              ),
+              data: z.array(TrainingCourseCountSchema),
             }),
           },
         },
@@ -1158,13 +1103,7 @@ app.openapi(
         content: {
           "application/json": {
             schema: StatBaseSchema.extend({
-              data: z.array(
-                z.object({
-                  trainingCourseId: z.string(),
-                  name: z.string(),
-                  avgEntryScore: z.number(),
-                })
-              ),
+              data: z.array(TrainingCourseAvgEntryScoreSchema),
             }),
           },
         },
@@ -1262,13 +1201,7 @@ app.openapi(
         content: {
           "application/json": {
             schema: StatBaseSchema.extend({
-              data: z.array(
-                z.object({
-                  trainingCourseId: z.string(),
-                  name: z.string(),
-                  avgGpa: z.number(),
-                })
-              ),
+              data: z.array(TrainingCourseAvgGpaSchema),
             }),
           },
         },
@@ -1364,13 +1297,7 @@ app.openapi(
         content: {
           "application/json": {
             schema: StatBaseSchema.extend({
-              data: z.array(
-                z.object({
-                  trainingCourseId: z.string(),
-                  name: z.string(),
-                  graduationRate: z.number(),
-                })
-              ),
+              data: z.array(TrainingCourseGraduationRateSchema),
             }),
           },
         },
@@ -1461,17 +1388,7 @@ app.openapi(
         content: {
           "application/json": {
             schema: StatBaseSchema.extend({
-              data: z.array(
-                z.object({
-                  schoolYearId: z.string(),
-                  name: z.string(),
-                  excellent: z.number(),
-                  good: z.number(),
-                  fair: z.number(),
-                  average: z.number(),
-                  weak: z.number(),
-                })
-              ),
+              data: z.array(SchoolYearGpaDistributionSchema),
             }),
           },
         },
@@ -1583,13 +1500,7 @@ app.openapi(
         content: {
           "application/json": {
             schema: StatBaseSchema.extend({
-              data: z.array(
-                z.object({
-                  provinceId: z.string(),
-                  name: z.string(),
-                  count: z.number(),
-                })
-              ),
+              data: z.array(ProvinceCountSchema),
             }),
           },
         },
@@ -1682,15 +1593,7 @@ app.openapi(
         content: {
           "application/json": {
             schema: StatBaseSchema.extend({
-              data: z.array(
-                z.object({
-                  id: z.string(),
-                  name: z.string(),
-                  academicWarningLevel: z.number(),
-                  cumulativeDebtCredits: z.number(),
-                  gpa: z.number(),
-                })
-              ),
+              data: z.array(StudentOfInterestSchema),
             }),
           },
         },
@@ -1797,13 +1700,7 @@ app.openapi(
         content: {
           "application/json": {
             schema: StatBaseSchema.extend({
-              data: z.array(
-                z.object({
-                  fixedClassId: z.string(),
-                  name: z.string(),
-                  avgGpa: z.number(),
-                })
-              ),
+              data: z.array(FixedClassAvgGpaSchema),
             }),
           },
         },
@@ -1871,13 +1768,7 @@ app.openapi(
         content: {
           "application/json": {
             schema: StatBaseSchema.extend({
-              data: z.array(
-                z.object({
-                  trainingMajorId: z.string(),
-                  name: z.string(),
-                  avgGpa: z.number(),
-                })
-              ),
+              data: z.array(TrainingMajorAvgGpaSchema),
             }),
           },
         },
@@ -1946,14 +1837,7 @@ app.openapi(
         content: {
           "application/json": {
             schema: StatBaseSchema.extend({
-              data: z.array(
-                z.object({
-                  subjectVersionId: z.string(),
-                  name: z.string(),
-                  passed: z.number(),
-                  failed: z.number(),
-                })
-              ),
+              data: z.array(SubjectPassFailSchema),
             }),
           },
         },
@@ -2026,12 +1910,7 @@ app.openapi(
         content: {
           "application/json": {
             schema: StatBaseSchema.extend({
-              data: z.array(
-                z.object({
-                  activeCurricula: z.number(),
-                  activeCurriculumVersions: z.number(),
-                })
-              ),
+              data: z.array(ActiveCurriculaStatsSchema),
             }),
           },
         },
@@ -2095,20 +1974,7 @@ app.openapi(
         content: {
           "application/json": {
             schema: StatBaseSchema.extend({
-              data: z.array(
-                z.object({
-                  totalClasses: z.number(),
-                  classes: z.array(
-                    z.object({
-                      id: z.string(),
-                      name: z.string(),
-                      fillRate: z.number(),
-                      failureRate: z.number(),
-                    })
-                  ),
-                  labels: z.array(z.string()),
-                })
-              ),
+              data: z.array(SubjectClassStatsSchema),
             }),
           },
         },
@@ -2200,14 +2066,7 @@ app.openapi(
         content: {
           "application/json": {
             schema: StatBaseSchema.extend({
-              data: z.array(
-                z.object({
-                  lecturerId: z.string(),
-                  name: z.string(),
-                  classCount: z.number(),
-                  totalPeriods: z.number(),
-                })
-              ),
+              data: z.array(LecturerWorkloadSchema),
             }),
           },
         },
@@ -2282,12 +2141,7 @@ app.openapi(
         content: {
           "application/json": {
             schema: StatBaseSchema.extend({
-              data: z.array(
-                z.object({
-                  ranking: z.string(),
-                  count: z.number(),
-                })
-              ),
+              data: z.array(RankingCountSchema),
             }),
           },
         },
@@ -3430,12 +3284,7 @@ app.openapi(
         content: {
           "application/json": {
             schema: StatBaseSchema.extend({
-              data: z.array(
-                z.object({
-                  name: z.string(),
-                  count: z.number(),
-                })
-              ),
+              data: z.array(NameCountSchema),
             }),
           },
         },
@@ -3495,13 +3344,7 @@ app.openapi(
         content: {
           "application/json": {
             schema: StatBaseSchema.extend({
-              data: z.array(
-                z.object({
-                  id: z.string(),
-                  name: z.string(),
-                  count: z.number(),
-                })
-              ),
+              data: z.array(IdNameCountSchema),
             }),
           },
         },
@@ -3568,13 +3411,7 @@ app.openapi(
         content: {
           "application/json": {
             schema: StatBaseSchema.extend({
-              data: z.array(
-                z.object({
-                  id: z.string(),
-                  name: z.string(),
-                  count: z.number(),
-                })
-              ),
+              data: z.array(IdNameCountSchema),
             }),
           },
         },
@@ -3641,13 +3478,7 @@ app.openapi(
         content: {
           "application/json": {
             schema: StatBaseSchema.extend({
-              data: z.array(
-                z.object({
-                  id: z.string(),
-                  name: z.string(),
-                  count: z.number(),
-                })
-              ),
+              data: z.array(IdNameCountSchema),
             }),
           },
         },
@@ -3711,13 +3542,7 @@ app.openapi(
         content: {
           "application/json": {
             schema: StatBaseSchema.extend({
-              data: z.array(
-                z.object({
-                  id: z.string(),
-                  name: z.string(),
-                  count: z.number(),
-                })
-              ),
+              data: z.array(IdNameCountSchema),
             }),
           },
         },
@@ -3781,12 +3606,7 @@ app.openapi(
         content: {
           "application/json": {
             schema: StatBaseSchema.extend({
-              data: z.array(
-                z.object({
-                  name: z.string(),
-                  count: z.number(),
-                })
-              ),
+              data: z.array(NameCountSchema),
             }),
           },
         },
@@ -4647,14 +4467,20 @@ app.openapi(
         description: "Dữ liệu thi lại tính toán động",
         content: {
           "application/json": {
-            schema: z.object({
-              success: z.boolean(),
-              data: z.object({
-                By_Course: z.array(StatRowSchema),
-                By_Curriculum: z.array(StatRowSchema),
-                By_Major: z.array(StatRowSchema),
-              }),
-            }),
+            schema: z
+              .object({
+                success: z.boolean().openapi(fieldDesc("true = truy vấn thành công.", true)),
+                data: z
+                  .object({
+                    By_Course: z.array(StatRowSchema),
+                    By_Curriculum: z.array(StatRowSchema),
+                    By_Major: z.array(StatRowSchema),
+                  })
+                  .openapi({
+                    description: "Dữ liệu thi lại / học lại nhóm theo khóa, CTĐT, ngành.",
+                  }),
+              })
+              .openapi("RetestRelearnRatesResponse"),
           },
         },
       },
@@ -4938,14 +4764,20 @@ app.openapi(
         description: "Dữ liệu học lại tính toán động",
         content: {
           "application/json": {
-            schema: z.object({
-              success: z.boolean(),
-              data: z.object({
-                By_Course: z.array(StatRowSchema),
-                By_Curriculum: z.array(StatRowSchema),
-                By_Major: z.array(StatRowSchema),
-              }),
-            }),
+            schema: z
+              .object({
+                success: z.boolean().openapi(fieldDesc("true = truy vấn thành công.", true)),
+                data: z
+                  .object({
+                    By_Course: z.array(StatRowSchema),
+                    By_Curriculum: z.array(StatRowSchema),
+                    By_Major: z.array(StatRowSchema),
+                  })
+                  .openapi({
+                    description: "Dữ liệu thi lại / học lại nhóm theo khóa, CTĐT, ngành.",
+                  }),
+              })
+              .openapi("RetestRelearnRatesResponse"),
           },
         },
       },

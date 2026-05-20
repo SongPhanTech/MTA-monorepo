@@ -3,6 +3,7 @@ import { read, utils } from "xlsx"
 import { prisma } from ".."
 import { UploadExcelModel } from "../dto/upload-excel.dto"
 import { fieldDesc } from "../dto/openapi-helpers"
+import { ErrorMessageResponseSchema } from "../dto/common-response.dto"
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -35,9 +36,7 @@ const exportExcelListStudentFixedClassTrainingPoint = createRoute({
       description: "Invalid file upload",
       content: {
         "application/json": {
-          schema: z.object({
-            message: z.string(),
-          }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },
@@ -45,9 +44,7 @@ const exportExcelListStudentFixedClassTrainingPoint = createRoute({
       description: "Not found",
       content: {
         "application/json": {
-          schema: z.object({
-            message: z.string(),
-          }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },
@@ -92,9 +89,7 @@ const uploadExcelImportTrainingScore = createRoute({
     400: {
       content: {
         "application/json": {
-          schema: z.object({
-            message: z.string(),
-          }),
+          schema: ErrorMessageResponseSchema,
         },
       },
       description: "Invalid file upload",

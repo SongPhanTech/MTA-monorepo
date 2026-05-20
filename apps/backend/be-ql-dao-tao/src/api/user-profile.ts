@@ -8,6 +8,7 @@ import { UploadExcelModel } from "../dto/upload-excel.dto"
 import { parseDate } from "../utils"
 import { ListOf } from "../zod/base"
 import { fieldDesc } from "../dto/openapi-helpers"
+import { ErrorMessageResponseSchema } from "../dto/common-response.dto"
 
 const uploadExcelCreateUserProfile = createRoute({
   operationId: "uploadExcelCreateUserProfile",
@@ -41,9 +42,7 @@ const uploadExcelCreateUserProfile = createRoute({
     400: {
       content: {
         "application/json": {
-          schema: z.object({
-            message: z.string(),
-          }),
+          schema: ErrorMessageResponseSchema,
         },
       },
       description: "Invalid file upload",
@@ -81,9 +80,7 @@ const uploadExcelUpdateUserProfile = createRoute({
     400: {
       content: {
         "application/json": {
-          schema: z.object({
-            message: z.string(),
-          }),
+          schema: ErrorMessageResponseSchema,
         },
       },
       description: "Invalid file upload",

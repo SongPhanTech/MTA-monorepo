@@ -46,7 +46,7 @@ export const SessionInfo = z
 export type SessionInfo = z.infer<typeof SessionInfo>
 
 export const RegistrationSessionResponse = SuccessResponseSchema.extend({
-  data: z.array(SessionInfo),
+  data: z.array(SessionInfo).openapi(fieldDesc("Danh sách đợt đăng ký (ClassRegisterSession).")),
 }).openapi("RegistrationSessionResponse")
 
 export const RegistrationSessionDetailRequest = z

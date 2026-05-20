@@ -3,6 +3,7 @@ import { $Enums } from "@workspace/db"
 import { calcFinalScore } from "@workspace/libs/utils"
 import Decimal from "decimal.js"
 import { prisma } from ".."
+import { SuccessBooleanResponseSchema } from "../dto/common-response.dto"
 import { fieldDesc } from "../dto/openapi-helpers"
 
 const app = new OpenAPIHono({ strict: false })
@@ -36,10 +37,7 @@ const approveScoreCorrection = createRoute({
       description: "Duyệt thành công",
       content: {
         "application/json": {
-          schema: z.object({
-            success: z.boolean().openapi(fieldDesc("true nếu thành công.")),
-            message: z.string().openapi(fieldDesc("Thông báo kết quả.")),
-          }),
+          schema: SuccessBooleanResponseSchema,
         },
       },
     },
@@ -47,10 +45,7 @@ const approveScoreCorrection = createRoute({
       description: "Error",
       content: {
         "application/json": {
-          schema: z.object({
-            success: z.boolean(),
-            message: z.string(),
-          }),
+          schema: SuccessBooleanResponseSchema,
         },
       },
     },
@@ -58,10 +53,7 @@ const approveScoreCorrection = createRoute({
       description: "Internal Server Error",
       content: {
         "application/json": {
-          schema: z.object({
-            success: z.boolean(),
-            message: z.string(),
-          }),
+          schema: SuccessBooleanResponseSchema,
         },
       },
     },

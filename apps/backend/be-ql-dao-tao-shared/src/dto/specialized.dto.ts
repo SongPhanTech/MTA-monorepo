@@ -49,5 +49,5 @@ export const SpecializedInfo = z
 export type SpecializedInfo = z.infer<typeof SpecializedInfo>
 
 export const SpecializedResponse = SuccessResponseSchema.extend({
-  data: z.array(SpecializedInfo),
+  data: z.array(SpecializedInfo).openapi(fieldDesc("Danh sách ngành / chuyên ngành (TrainingMajor).")),
 }).openapi("SpecializedResponse")

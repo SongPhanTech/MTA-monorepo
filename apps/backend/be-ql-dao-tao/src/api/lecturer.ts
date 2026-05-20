@@ -4,6 +4,7 @@ import dayjs from "dayjs"
 import XlsxTemplate from "xlsx-template"
 import { prisma } from ".."
 import { fieldDesc } from "../dto/openapi-helpers"
+import { ErrorMessageResponseSchema } from "../dto/common-response.dto"
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -92,9 +93,7 @@ const exportLecturerProfile = createRoute({
       description: "Bad request",
       content: {
         "application/json": {
-          schema: z.object({
-            message: z.string(),
-          }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },

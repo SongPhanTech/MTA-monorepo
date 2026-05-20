@@ -11,6 +11,11 @@ import {
 import { splitFullName } from "@workspace/libs/utils"
 import { prisma } from ".."
 import { UploadExcelModel } from "../dto/upload-excel.dto"
+import {
+  ErrorMessageResponseSchema,
+  ImportErrorResponseSchema,
+  ImportJobResponseSchema,
+} from "../dto/common-response.dto"
 import { fieldDesc } from "../dto/openapi-helpers"
 import type { ErrorExtra } from "../types/error-extra"
 import {
@@ -62,7 +67,7 @@ const importLecturer = createRoute({
       description: "Import successfully",
       content: {
         "application/json": {
-          schema: z.object({ message: z.string(), time: z.number() }),
+          schema: ImportJobResponseSchema,
         },
       },
     },
@@ -70,10 +75,7 @@ const importLecturer = createRoute({
       description: "Invalid file type",
       content: {
         "application/json": {
-          schema: z.object({
-            message: z.string(),
-            errors: z.array(zParseSheetError).optional(),
-          }),
+          schema: ImportErrorResponseSchema,
         },
       },
     },
@@ -536,7 +538,7 @@ const importStudent = createRoute({
       description: "Import Student successfully",
       content: {
         "application/json": {
-          schema: z.object({ message: z.string(), time: z.number() }),
+          schema: ImportJobResponseSchema,
         },
       },
     },
@@ -544,10 +546,7 @@ const importStudent = createRoute({
       description: "Invalid file type",
       content: {
         "application/json": {
-          schema: z.object({
-            message: z.string(),
-            errors: z.array(zParseSheetError).optional(),
-          }),
+          schema: ImportErrorResponseSchema,
         },
       },
     },
@@ -1145,7 +1144,7 @@ const importHeQuanSu = createRoute({
       description: "Import He quan su successfully",
       content: {
         "application/json": {
-          schema: z.object({ message: z.string(), time: z.number() }),
+          schema: ImportJobResponseSchema,
         },
       },
     },
@@ -1153,10 +1152,7 @@ const importHeQuanSu = createRoute({
       description: "Invalid file type",
       content: {
         "application/json": {
-          schema: z.object({
-            message: z.string(),
-            errors: z.array(zParseSheetError).optional(),
-          }),
+          schema: ImportErrorResponseSchema,
         },
       },
     },
@@ -1340,7 +1336,7 @@ const importInternship = createRoute({
       description: "Import internships successfully",
       content: {
         "application/json": {
-          schema: z.object({ message: z.string(), time: z.number() }),
+          schema: ImportJobResponseSchema,
         },
       },
     },
@@ -1348,10 +1344,7 @@ const importInternship = createRoute({
       description: "Invalid file type",
       content: {
         "application/json": {
-          schema: z.object({
-            message: z.string(),
-            errors: z.array(zParseSheetError).optional(),
-          }),
+          schema: ImportErrorResponseSchema,
         },
       },
     },

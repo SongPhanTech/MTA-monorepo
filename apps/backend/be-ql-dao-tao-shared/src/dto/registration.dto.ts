@@ -20,14 +20,14 @@ export const RegistrationRequest = z
   .openapi("RegistrationRequest")
 
 export const RegistrationResponse = SuccessResponseSchema.extend({
-  students_code: z.string().openapi(fieldDesc("Mã sinh viên.", "21000001")),
+  students_code: z.string().openapi(fieldDesc("Mã sinh viên đã thực hiện đăng ký / hủy.", "21000001")),
   class_valid: z
     .array(z.string())
-    .openapi(fieldDesc("Các lớp xử lý thành công (SubjectClass.id).")),
+    .openapi(fieldDesc("ID lớp học phần xử lý thành công (SubjectClass.id).")),
   class_invalid: z
     .array(z.string())
-    .openapi(fieldDesc("Các lớp xử lý thất bại (SubjectClass.id).")),
+    .openapi(fieldDesc("ID lớp học phần xử lý thất bại (SubjectClass.id).")),
   invalid_desc: z
     .string()
-    .openapi(fieldDesc("Mô tả lỗi gộp cho các lớp thất bại.", "Lớp đã đủ số lượng")),
+    .openapi(fieldDesc("Mô tả lỗi gộp cho các lớp trong class_invalid.", "Lớp đã đủ số lượng")),
 }).openapi("RegistrationResponse")

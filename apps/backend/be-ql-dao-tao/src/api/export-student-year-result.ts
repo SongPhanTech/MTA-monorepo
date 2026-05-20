@@ -1,5 +1,6 @@
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
 import { exportStudentYearResult } from "../services/student-result"
+import { ErrorMessageResponseSchema, ExcelBinaryResponseSchema } from "../dto/common-response.dto"
 import { fieldDesc } from "../dto/openapi-helpers"
 
 const app = new OpenAPIHono()
@@ -35,7 +36,7 @@ const exportStudentYearResultRoute = createRoute({
       description: "File Excel kết quả năm học",
       content: {
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
-          schema: z.any().openapi({ type: "string", format: "binary" }),
+          schema: ExcelBinaryResponseSchema,
         },
       },
     },
@@ -43,7 +44,7 @@ const exportStudentYearResultRoute = createRoute({
       description: "Not Found",
       content: {
         "application/json": {
-          schema: z.object({ message: z.string() }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },

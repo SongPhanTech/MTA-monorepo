@@ -40,7 +40,7 @@ export const TeacherListItem = z
   .openapi("TeacherListItem")
 
 export const GetListTeacherResponse = SuccessResponseSchema.extend({
-  data: z.array(TeacherListItem),
+  data: z.array(TeacherListItem).openapi(fieldDesc("Danh sách giảng viên thỏa từ khóa tìm kiếm.")),
 }).openapi("GetListTeacherResponse")
 
 export const GetTeacherDetailRequest = z

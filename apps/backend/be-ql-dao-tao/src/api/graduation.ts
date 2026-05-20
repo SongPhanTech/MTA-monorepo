@@ -37,6 +37,17 @@ import {
   generateExcelMultiSheet,
 } from "../utils"
 import { fieldDesc } from "../dto/openapi-helpers"
+import {
+  CountOnlyResponseSchema,
+  ErrorMessageResponseSchema,
+  ExcelBinaryResponseSchema,
+  SuccessMessageResponseSchema,
+} from "../dto/common-response.dto"
+import {
+  GraduationClassificationCountSchema,
+  GraduationConflictResponseSchema,
+  PptxBinaryResponseSchema,
+} from "../dto/graduation-response.dto"
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -74,7 +85,7 @@ const graduationApplicationInit = createRoute({
       description: "Graduation application initialized successfully",
       content: {
         "application/json": {
-          schema: z.object({ message: z.string() }),
+          schema: SuccessMessageResponseSchema,
         },
       },
     },
@@ -82,7 +93,7 @@ const graduationApplicationInit = createRoute({
       description: "Graduation application initialization failed",
       content: {
         "application/json": {
-          schema: z.object({ message: z.string() }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },
@@ -123,21 +134,40 @@ app.openapi(graduationApplicationInit, async (c) => {
 
 const GraduationCheckResult = z
   .object({
-    applicationId: z.string(),
-    graduation: z.boolean(),
-    reason: z.string(),
-    gpa: z.number().nullish(),
-    rank: AcademicRankingConvertScalarSchema.nullish(),
-    trainingMajor: TrainingMajorScalarSchema.nullable(),
-    diplomaType: DiplomaTypeScalarSchema.nullable(),
+    applicationId: z.string().openapi(fieldDesc("ID đơn xét tốt nghiệp (GraduationApplication).")),
+    graduation: z.boolean().openapi(fieldDesc("true = đủ điều kiện tốt nghiệp.")),
+    reason: z.string().openapi(fieldDesc("Lý do đạt / không đạt.")),
+    gpa: z.number().nullish().openapi(fieldDesc("GPA tích lũy (nếu có).")),
+    rank: AcademicRankingConvertScalarSchema.nullish().openapi(
+      fieldDesc("Xếp loại tốt nghiệp dự kiến.")
+    ),
+    trainingMajor: TrainingMajorScalarSchema.nullable().openapi(
+      fieldDesc("Ngành đào tạo (TrainingMajor).")
+    ),
+    diplomaType: DiplomaTypeScalarSchema.nullable().openapi(
+      fieldDesc("Loại bằng / văn bằng (DiplomaType).")
+    ),
     downgraded: z
       .object({
-        from: AcademicRankingConvertScalarSchema,
-        conditions: z.array(GraduationRankDowngradeConditionScalarSchema),
+        from: AcademicRankingConvertScalarSchema.openapi(
+          fieldDesc("Xếp loại trước khi hạ.")
+        ),
+        conditions: z
+          .array(GraduationRankDowngradeConditionScalarSchema)
+          .openapi(fieldDesc("Điều kiện dẫn đến hạ xếp loại.")),
       })
-      .optional(),
+      .optional()
+      .openapi(fieldDesc("Thông tin hạ xếp loại (nếu áp dụng).")),
   })
   .openapi("GraduationCheckResult")
+
+const GraduationCheckResponseSchema = z
+  .object({
+    results: GraduationCheckResult.array().openapi(
+      fieldDesc("Kết quả xét từng đơn tốt nghiệp.")
+    ),
+  })
+  .openapi("GraduationCheckResponse")
 
 const graduationCheck = createRoute({
   operationId: "graduationCheck",
@@ -173,9 +203,7 @@ const graduationCheck = createRoute({
       description: "Graduation check successfully",
       content: {
         "application/json": {
-          schema: z.object({
-            results: GraduationCheckResult.array(),
-          }),
+          schema: GraduationCheckResponseSchema,
         },
       },
     },
@@ -183,7 +211,7 @@ const graduationCheck = createRoute({
       description: "Graduation check failed",
       content: {
         "application/json": {
-          schema: z.object({ message: z.string() }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },
@@ -950,7 +978,7 @@ const generateDiplomaNumber = createRoute({
       description: "Successfully",
       content: {
         "application/json": {
-          schema: z.object({ count: z.number() }),
+          schema: CountOnlyResponseSchema,
         },
       },
     },
@@ -958,7 +986,7 @@ const generateDiplomaNumber = createRoute({
       description: "Not found",
       content: {
         "application/json": {
-          schema: z.object({ message: z.string() }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },
@@ -966,11 +994,7 @@ const generateDiplomaNumber = createRoute({
       description: "Bad Request",
       content: {
         "application/json": {
-          schema: z.object({
-            message: z.string(),
-            existing: z.array(z.string()).optional(),
-            shouldSkip: z.array(z.number()).optional(),
-          }),
+          schema: GraduationConflictResponseSchema,
         },
       },
     },
@@ -1097,7 +1121,7 @@ const graduationSessionDecision = createRoute({
       description: "Success",
       content: {
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
-          schema: z.any().openapi({ type: "string", format: "binary" }),
+          schema: ExcelBinaryResponseSchema,
         },
       },
     },
@@ -1105,7 +1129,7 @@ const graduationSessionDecision = createRoute({
       description: "Not found",
       content: {
         "application/json": {
-          schema: z.object({ message: z.string() }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },
@@ -1210,13 +1234,7 @@ const statisticsGraduationDecision = createRoute({
       description: "Successfully",
       content: {
         "application/json": {
-          schema: z.array(
-            z.object({
-              count: z.number(),
-              year: z.number(),
-              classification: z.string(),
-            })
-          ),
+          schema: z.array(GraduationClassificationCountSchema),
         },
       },
     },
@@ -1224,7 +1242,7 @@ const statisticsGraduationDecision = createRoute({
       description: "Not found",
       content: {
         "application/json": {
-          schema: z.object({ message: z.string() }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },
@@ -1282,7 +1300,7 @@ const exportGraduationDecisionPptx = createRoute({
       description: "Success",
       content: {
         "application/vnd.openxmlformats-officedocument.presentationml.presentation": {
-          schema: z.any().openapi({ type: "string", format: "binary" }),
+          schema: PptxBinaryResponseSchema,
         },
       },
     },
@@ -1290,9 +1308,7 @@ const exportGraduationDecisionPptx = createRoute({
       description: "Bad request",
       content: {
         "application/json": {
-          schema: z.object({
-            message: z.string(),
-          }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },
@@ -1509,7 +1525,7 @@ const exportGraduationRegisterMaster = createRoute({
       description: "Export graduation register master file",
       content: {
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
-          schema: z.any().openapi({ type: "string", format: "binary" }),
+          schema: ExcelBinaryResponseSchema,
         },
       },
     },
@@ -1517,7 +1533,7 @@ const exportGraduationRegisterMaster = createRoute({
       description: "Not found",
       content: {
         "application/json": {
-          schema: z.object({ message: z.string() }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },
@@ -1873,7 +1889,7 @@ const exportPhoiBangCaoHoc = createRoute({
       description: "Export thành công",
       content: {
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
-          schema: z.any().openapi({ type: "string", format: "binary" }),
+          schema: ExcelBinaryResponseSchema,
         },
       },
     },
@@ -1881,7 +1897,7 @@ const exportPhoiBangCaoHoc = createRoute({
       description: "Không tìm thấy dữ liệu",
       content: {
         "application/json": {
-          schema: z.object({ message: z.string() }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },
@@ -2046,7 +2062,7 @@ const exportPhoiBangNganHan = createRoute({
       description: "Export thành công",
       content: {
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
-          schema: z.any().openapi({ type: "string", format: "binary" }),
+          schema: ExcelBinaryResponseSchema,
         },
       },
     },
@@ -2054,7 +2070,7 @@ const exportPhoiBangNganHan = createRoute({
       description: "Không tìm thấy dữ liệu",
       content: {
         "application/json": {
-          schema: z.object({ message: z.string() }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },
@@ -2288,7 +2304,7 @@ const exportPhuLucVanBangCaoHoc = createRoute({
       description: "Export thành công",
       content: {
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
-          schema: z.any().openapi({ type: "string", format: "binary" }),
+          schema: ExcelBinaryResponseSchema,
         },
       },
     },
@@ -2296,7 +2312,7 @@ const exportPhuLucVanBangCaoHoc = createRoute({
       description: "Không tìm thấy dữ liệu",
       content: {
         "application/json": {
-          schema: z.object({ message: z.string() }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },
@@ -2634,7 +2650,7 @@ const exportPhuLucVanBangNganHan = createRoute({
       description: "Export thành công",
       content: {
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
-          schema: z.any().openapi({ type: "string", format: "binary" }),
+          schema: ExcelBinaryResponseSchema,
         },
       },
     },
@@ -2642,7 +2658,7 @@ const exportPhuLucVanBangNganHan = createRoute({
       description: "Không tìm thấy dữ liệu",
       content: {
         "application/json": {
-          schema: z.object({ message: z.string() }),
+          schema: ErrorMessageResponseSchema,
         },
       },
     },

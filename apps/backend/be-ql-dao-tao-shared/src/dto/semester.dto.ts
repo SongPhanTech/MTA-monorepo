@@ -26,7 +26,9 @@ export const GetSemesterItem = z
   .openapi("GetSemesterItem")
 
 export const GetSemesterResponse = SuccessResponseSchema.extend({
-  data: z.array(GetSemesterItem),
+  data: z
+    .array(GetSemesterItem)
+    .openapi(fieldDesc("Danh sách học kỳ theo năm học (SchoolYear → Semester).")),
 }).openapi("GetSemesterResponse")
 
 export const GetAllYearItem = z
@@ -37,5 +39,5 @@ export const GetAllYearItem = z
   .openapi("GetAllYearItem")
 
 export const GetAllYearResponse = SuccessResponseSchema.extend({
-  data: z.array(GetAllYearItem),
+  data: z.array(GetAllYearItem).openapi(fieldDesc("Danh sách tất cả năm học (SchoolYear).")),
 }).openapi("GetAllYearResponse")

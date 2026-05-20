@@ -2,27 +2,30 @@ import { z } from "@hono/zod-openapi"
 import { getTemplateBuffer } from "@workspace/libs/server"
 import dayjs from "dayjs"
 import XlsxTemplate from "xlsx-template"
+import { fieldDesc } from "../dto/openapi-helpers"
 import { prisma } from ".."
 
 const StatsArchivedAwardItemSchema = z.object({
-  studentCode: z.string(),
-  studentName: z.string(),
-  dateOfBirth: z.date().nullable(),
-  classCode: z.string(),
-  className: z.string(),
-  awardName: z.string(),
-  awardDate: z.date(),
-  receivedSemester: z.string(),
-  bonusScore: z.number().nullable(),
-  subjectName: z.string().nullable(),
-  subjectSemester: z.string().nullable(),
-  subjectScore: z.number().nullable(),
+  studentCode: z.string().openapi(fieldDesc("Mã học viên (Student.code).")),
+  studentName: z.string().openapi(fieldDesc("Họ tên (UserProfile.fullname).")),
+  dateOfBirth: z.date().nullable().openapi(fieldDesc("Ngày sinh.")),
+  classCode: z.string().openapi(fieldDesc("Mã lớp niên chế (FixedClass.code).")),
+  className: z.string().openapi(fieldDesc("Tên lớp niên chế.")),
+  awardName: z.string().openapi(fieldDesc("Tên giải thưởng (Award.name).")),
+  awardDate: z.date().openapi(fieldDesc("Ngày đạt giải (ArchivedAward.date).")),
+  receivedSemester: z.string().openapi(fieldDesc("Học kỳ nhận giải.")),
+  bonusScore: z.number().nullable().openapi(fieldDesc("Điểm cộng thưởng.")),
+  subjectName: z.string().nullable().openapi(fieldDesc("Tên học phần được cộng điểm.")),
+  subjectSemester: z.string().nullable().openapi(fieldDesc("Học kỳ của học phần.")),
+  subjectScore: z.number().nullable().openapi(fieldDesc("Điểm học phần sau cộng.")),
 })
 
 export const StatsArchivedResponseSchema = z.object({
-  fromSemester: z.string(),
-  toSemester: z.string(),
-  data: StatsArchivedAwardItemSchema.array(),
+  fromSemester: z.string().openapi(fieldDesc("Tên học kỳ bắt đầu.")),
+  toSemester: z.string().openapi(fieldDesc("Tên học kỳ kết thúc.")),
+  data: z
+    .array(StatsArchivedAwardItemSchema)
+    .openapi(fieldDesc("Danh sách học viên có điểm thưởng trong khoảng học kỳ.")),
 })
 
 export type StatsArchivedResponse = z.infer<typeof StatsArchivedResponseSchema>

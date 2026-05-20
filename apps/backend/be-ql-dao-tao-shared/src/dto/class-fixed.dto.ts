@@ -43,5 +43,5 @@ export const GetClassItem = z
   .openapi("GetClassItem")
 
 export const GetClassResponse = SuccessResponseSchema.extend({
-  data: z.array(GetClassItem),
+  data: z.array(GetClassItem).openapi(fieldDesc("Danh sách lớp niên chế (FixedClass).")),
 }).openapi("GetClassResponse")
