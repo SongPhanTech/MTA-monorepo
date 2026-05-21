@@ -688,6 +688,9 @@ importers:
       '@hono/zod-openapi':
         specifier: 'catalog:'
         version: 0.18.4(hono@4.10.6)(zod@3.25.76)
+      '@scalar/core':
+        specifier: 0.1.1
+        version: 0.1.1
       '@scalar/hono-api-reference':
         specifier: 'catalog:'
         version: 0.5.184(hono@4.10.6)
@@ -706,6 +709,9 @@ importers:
       decimal.js:
         specifier: 'catalog:'
         version: 10.6.0
+      docx:
+        specifier: 'catalog:'
+        version: 9.5.1
       docxtemplater:
         specifier: 'catalog:'
         version: 3.65.2
@@ -767,6 +773,9 @@ importers:
       '@hono/zod-openapi':
         specifier: 'catalog:'
         version: 0.18.4(hono@4.10.6)(zod@3.25.76)
+      '@scalar/core':
+        specifier: 0.1.1
+        version: 0.1.1
       '@scalar/hono-api-reference':
         specifier: 'catalog:'
         version: 0.5.184(hono@4.10.6)
@@ -785,6 +794,9 @@ importers:
       decimal.js:
         specifier: 'catalog:'
         version: 10.6.0
+      docx:
+        specifier: 'catalog:'
+        version: 9.5.1
       hono:
         specifier: 'catalog:'
         version: 4.10.6
@@ -11998,7 +12010,7 @@ snapshots:
   '@types/glob@7.2.0':
     dependencies:
       '@types/minimatch': 6.0.0
-      '@types/node': 20.19.25
+      '@types/node': 24.10.1
 
   '@types/hast@3.0.4':
     dependencies:
@@ -12083,7 +12095,7 @@ snapshots:
 
   '@types/through@0.0.33':
     dependencies:
-      '@types/node': 20.19.25
+      '@types/node': 24.10.1
 
   '@types/tinycolor2@1.4.6': {}
 
