@@ -42,33 +42,8 @@ const ModalPrintToKQHT = () => {
             graduationDecision: {
               select: { finalGpa: true },
             },
-            graduationApplications: {
-              orderBy: {
-                createdAt: "desc",
-              },
-              take: 1,
-              select: {
-                gpaScore: {
-                  select: {
-                    id: true,
-                    subjectVersionId: true,
-                    manualFinalScore: true,
-                    finalScore: true,
-                  },
-                },
-                supplementaryScore: {
-                  select: {
-                    id: true,
-                    subjectVersionId: true,
-                    manualFinalScore: true,
-                    finalScore: true,
-                  },
-                },
-              },
-            },
           },
         },
-
         curriculum: {
           include: {
             trainingMajor: {
@@ -134,8 +109,6 @@ const ModalPrintToKQHT = () => {
             : 0
           : 0
 
-  const graduationApplication = subjectScoreData?.students?.[0]?.graduationApplications?.[0]
-
   const toScoreNumber = (value: unknown) => {
     if (typeof value === "number") return value
     if (typeof value === "string") return Number(value) || 0
@@ -145,30 +118,32 @@ const ModalPrintToKQHT = () => {
     }
     return 0
   }
-
   const scoreBySubjectVersionId = new Map<string, any>()
-
-  ;[
-    ...(graduationApplication?.gpaScore ?? []),
-    ...(graduationApplication?.supplementaryScore ?? []),
-  ].forEach((scoreItem: any) => {
-    const incomingScore = toScoreNumber(scoreItem?.manualFinalScore ?? scoreItem?.finalScore)
-
-    const subjectVersionId = scoreItem?.subjectVersionId
-    if (subjectVersionId) {
-      const current = scoreBySubjectVersionId.get(subjectVersionId)
-      const currentScore = toScoreNumber(current?.manualFinalScore ?? current?.finalScore)
-      if (!current || incomingScore > currentScore) {
-        scoreBySubjectVersionId.set(subjectVersionId, scoreItem)
-      }
-    }
+  input?.dataTable?.forEach((semester: any) => {
+    semester?.subjectClasses?.forEach((subjectClass: any) => {
+      subjectClass?.subjectClassStudent?.forEach((scoreItem: any) => {
+        const subjectVersionId = scoreItem?.subjectVersionId
+        if (subjectVersionId) {
+          const incomingScore = toScoreNumber(scoreItem?.manualFinalScore ?? scoreItem?.finalScore)
+          const current = scoreBySubjectVersionId.get(subjectVersionId)
+          const currentScore = toScoreNumber(current?.manualFinalScore ?? current?.finalScore)
+          if (!current || incomingScore > currentScore) {
+            scoreBySubjectVersionId.set(subjectVersionId, scoreItem)
+          }
+        }
+      })
+    })
   })
-
-  const supplementaryBySubjectVersionId = new Set(
-    (graduationApplication?.supplementaryScore ?? [])
-      .map((item) => item?.subjectVersionId)
-      .filter((id): id is string => Boolean(id))
-  )
+  const supplementaryBySubjectVersionId = new Set<string>()
+  input?.dataTable?.forEach((semester: any) => {
+    semester?.subjectClasses?.forEach((subjectClass: any) => {
+      subjectClass?.subjectClassStudent?.forEach((scoreItem: any) => {
+        if (scoreItem?.isImproving && scoreItem?.subjectVersionId) {
+          supplementaryBySubjectVersionId.add(scoreItem.subjectVersionId)
+        }
+      })
+    })
+  })
 
   const handlePrint = useReactToPrint({
     contentRef: printRef,
@@ -256,7 +231,6 @@ const ModalPrintToKQHT = () => {
       title={
         <div className="flex items-center justify-between w-[95%]">
           <span>Kết quả học tập</span>
-          {/* TODO: Làm select chọn trưởng phòng đào tạo */}
           <Input
             placeholder="Nhập tên người ký"
             value={signerName}
@@ -336,18 +310,12 @@ const ModalPrintToKQHT = () => {
             </thead>
             <tbody>
               {(() => {
-                // Tách môn học thành 2 nhóm: thường và tốt nghiệp
                 const regularSubjects: any[] = []
                 const graduationSubjects: any[] = []
 
                 const sortedSubjects = (subjectScoreData?.trainingBlocks ?? [])
                   .flatMap((block) => block.subjects ?? [])
                   .filter((subjectItem) => subjectItem.useForFinalScore === true)
-                  // .filter(
-                  //   (subjectItem) =>
-                  //     !subjectItem.subject.studentSubjectScore?.[0]?.graduationSupplementaryScore
-                  //       ?.length
-                  // )
                   .sort((a, b) => {
                     const semesterA = a.semester ?? Number.MAX_SAFE_INTEGER
                     const semesterB = b.semester ?? Number.MAX_SAFE_INTEGER
@@ -359,19 +327,12 @@ const ModalPrintToKQHT = () => {
 
                 sortedSubjects.forEach((subjectItem, index: number) => {
                   if (subjectItem.graduation) {
-                    graduationSubjects.push({
-                      subjectItem,
-                      index,
-                    })
+                    graduationSubjects.push({ subjectItem, index })
                   } else {
-                    regularSubjects.push({
-                      subjectItem,
-                      index,
-                    })
+                    regularSubjects.push({ subjectItem, index })
                   }
                 })
 
-                // Render các môn thường trước
                 const regularRows = regularSubjects?.map(({ subjectItem }, originalIndex) => {
                   const subject = subjectItem.subject
                   const score = scoreBySubjectVersionId.get(subjectItem.subjectId)
@@ -412,7 +373,6 @@ const ModalPrintToKQHT = () => {
                   )
                 })
 
-                // Render các môn tốt nghiệp sau (sử dụng flatMap)
                 const graduationRows = [
                   graduationSubjects.length > 0 ? (
                     <tr key="graduation-header">
@@ -461,7 +421,6 @@ const ModalPrintToKQHT = () => {
                   }),
                 ].filter(Boolean)
 
-                // Kết hợp cả 2 và giữ nguyên STT
                 return [...regularRows, ...graduationRows]
               })()}
             </tbody>
@@ -473,13 +432,10 @@ const ModalPrintToKQHT = () => {
               <div className="italic min-w-32">Tổng số tín chỉ:</div>
               <span className="font-bold">
                 {(() => {
-                  // Tính tổng số tín chỉ chỉ bao gồm các môn có useForFinalScore = true và print = true
-                  // TODO: Chưa tính các học phần bổ sung kiến thức, in nghiêng
                   const totalCredits = subjectScoreData?.trainingBlocks
                     .flatMap((block) => block.subjects)
                     .filter(
                       (subjectItem) =>
-                        // subjectItem.print === true &&
                         subjectItem.useForFinalScore === true &&
                         !supplementaryBySubjectVersionId.has(subjectItem.subjectId)
                     )
@@ -525,7 +481,6 @@ const ModalPrintToKQHT = () => {
           <p>- Hệ thống điểm được quy định theo:</p>
 
           <div className="mt-2 text-sm">
-            {/* Sắp xếp dữ liệu theo thứ tự từ cao xuống thấp */}
             {(() => {
               const sortedData = [
                 ...(subjectScoreData?.fixedClass?.trainingCourse?.scoreConverts ?? []),
@@ -533,7 +488,6 @@ const ModalPrintToKQHT = () => {
 
               return (
                 <>
-                  {/* Dòng Thang điểm chữ */}
                   <div className="grid grid-cols-[minmax(120px,1fr)_repeat(9,minmax(40px,1fr))] gap-x-2 mb-2 items-center">
                     <div className="font-medium">Thang điểm chữ</div>
                     {sortedData.map((item) => (
@@ -543,7 +497,6 @@ const ModalPrintToKQHT = () => {
                     ))}
                   </div>
 
-                  {/* Dòng Thang điểm 4 */}
                   <div className="grid grid-cols-[minmax(120px,1fr)_repeat(9,minmax(40px,1fr))] gap-x-2 mb-2 items-center">
                     <div className="font-medium">Thang điểm 4</div>
                     {sortedData.map((item) => (
@@ -553,7 +506,6 @@ const ModalPrintToKQHT = () => {
                     ))}
                   </div>
 
-                  {/* Dòng Thang điểm 10 */}
                   <div className="grid grid-cols-[minmax(120px,1fr)_repeat(9,minmax(40px,1fr))] gap-x-2 items-center">
                     <div className="font-medium">Thang điểm 10</div>
                     {sortedData.map((item) => (
