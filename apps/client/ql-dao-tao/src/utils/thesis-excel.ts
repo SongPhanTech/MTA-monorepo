@@ -1260,7 +1260,7 @@ export const exportHosobvlv = async ({
       // const qddtKyTokens = nguoikiqddt.split(/\s+/).filter(Boolean)
       const nguoiki = signerName || ""
       const text1 = isChief ? "TRƯỞNG PHÒNG SAU ĐẠI HỌC" : "KT. TRƯỞNG PHÒNG SAU ĐẠI HỌC"
-      const text2 = isChief ? "" : "PHÓ PHÒNG SAU ĐẠI HỌC"
+      const text2 = isChief ? "" : "PHÓ TRƯỞNG PHÒNG SAU ĐẠI HỌC"
       const ngayQDBV =
         student?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.defenseDecisionDate
       const soQDBV =
@@ -1363,7 +1363,7 @@ export const exportGiayMoiHdlv = async ({
           `Tên đề tài: "${student?.thesisRegistrations?.[0]?.thesisProject?.title.trim()}"` || "",
         type: student?.thesisRegistrations?.[0]?.thesisProject?.type.trim().toLowerCase(),
         text1: isChief ? "TRƯỞNG PHÒNG SAU ĐẠI HỌC" : "KT. TRƯỞNG PHÒNG SAU ĐẠI HỌC",
-        text2: isChief ? "" : "PHÓ PHÒNG SAU ĐẠI HỌC",
+        text2: isChief ? "" : "PHÓ TRƯỞNG PHÒNG SAU ĐẠI HỌC",
         nguoiky1: signerName || "",
       }
       return {
@@ -1472,7 +1472,7 @@ export const exportSaoQDHDLV = async ({
           text2: text2,
           nguoiky1: tenNguoiKyQddt,
           text3: isChief ? "TRƯỞNG PHÒNG SAU ĐẠI HỌC" : "KT. TRƯỞNG PHÒNG SAU ĐẠI HỌC",
-          text4: isChief ? "" : "PHÓ PHÒNG SAU ĐẠI HỌC",
+          text4: isChief ? "" : "PHÓ TRƯỞNG PHÒNG SAU ĐẠI HỌC",
           nguoiki2: signerName,
           ngay: ngayHT,
           thang: thangHT,
@@ -1762,7 +1762,7 @@ export const convertToGmcLvPbData = (
             type: projectType,
             tongSoHocVien: 0,
             text1: isChief ? "TRƯỞNG PHÒNG SAU ĐẠI HỌC" : "KT. TRƯỞNG PHÒNG SAU ĐẠI HỌC",
-            text2: isChief ? "" : "PHÓ PHÒNG SAU ĐẠI HỌC",
+            text2: isChief ? "" : "PHÓ TRƯỞNG PHÒNG SAU ĐẠI HỌC",
             nguoiki: signerName || "",
             tenThanhVien: (getSupervisorName(expert, false, true) as string) || "",
             data: [],
@@ -2839,7 +2839,7 @@ const convertToBanSaoHDDGLV = (
           text2: chucVuNguoiKyQddt === "GĐ" ? "" : "PHÓ GIÁM ĐỐC",
           nguoiki1: tenNguoiKyQddt,
           text3: isChief ? "TRƯỞNG PHÒNG SAU ĐẠI HỌC" : "KT. TRƯỞNG PHÒNG SAU ĐẠI HỌC",
-          text4: isChief ? "" : "PHÓ PHÒNG SAU ĐẠI HỌC",
+          text4: isChief ? "" : "PHÓ TRƯỞNG PHÒNG SAU ĐẠI HỌC",
           nguoiki2: signerName || "",
 
           soQd: session?.defenseDecisionNumber || "",
