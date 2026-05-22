@@ -1,7 +1,7 @@
 import { PrinterOutlined } from "@ant-design/icons"
 import { useScoreConverter } from "@hooks/scoreConverter"
-import { SubjectRequirementType } from "@workspace/db/client"
-import { useFindUniqueCurriculumVersion } from "@workspace/db/hooks"
+import { $Enums, SubjectRequirementType } from "@workspace/db/client"
+import { useFindManySemester, useFindUniqueCurriculumVersion } from "@workspace/db/hooks"
 import { useAcademicRankingConverter } from "@workspace/libs/hook/academicRankingConvert"
 import { Button, Input, Modal } from "antd"
 import dayjs from "dayjs"
@@ -24,6 +24,52 @@ const ModalPrintToKQHT = () => {
   const { isOpen, onClose, input } = useDisclosure<ModalPrintToKQHTInput>({
     tag: "ModalPrintToKQHT",
   })
+
+  const studentId = input?.dataStudent?.id
+  const trainingCourseId = input?.dataStudent?.fixedClass?.trainingCourseId
+
+  const { data: dataTable } = useFindManySemester(
+    {
+      where: {
+        subjectClasses: {
+          some: {
+            subjectClassStudent: {
+              some: { studentId },
+            },
+          },
+        },
+      },
+      include: {
+        subjectClasses: {
+          where: {
+            subjectClassStudent: {
+              some: { studentId },
+            },
+          },
+          include: {
+            subjectClassStudent: {
+              where: { studentId },
+              include: {
+                subjectVersion: true,
+                certificates: { include: { archivedCertificate: true } },
+                awards: {
+                  where: { status: $Enums.ArchivedCertificateStatus.APPROVED },
+                  include: { archivedAward: true },
+                },
+              },
+            },
+          },
+        },
+        trainingCoursesStart: {
+          where: { id: trainingCourseId ?? undefined },
+          include: { scoreConverts: true },
+        },
+        schoolYear: true,
+      },
+      orderBy: { createdAt: "asc" },
+    },
+    { enabled: !!studentId }
+  )
 
   const { data: subjectScoreData } = useFindUniqueCurriculumVersion(
     {
@@ -119,7 +165,7 @@ const ModalPrintToKQHT = () => {
     return 0
   }
   const scoreBySubjectVersionId = new Map<string, any>()
-  input?.dataTable?.forEach((semester: any) => {
+  dataTable?.forEach((semester: any) => {
     semester?.subjectClasses?.forEach((subjectClass: any) => {
       subjectClass?.subjectClassStudent?.forEach((scoreItem: any) => {
         const subjectVersionId = scoreItem?.subjectVersionId
@@ -135,7 +181,7 @@ const ModalPrintToKQHT = () => {
     })
   })
   const supplementaryBySubjectVersionId = new Set<string>()
-  input?.dataTable?.forEach((semester: any) => {
+  dataTable?.forEach((semester: any) => {
     semester?.subjectClasses?.forEach((subjectClass: any) => {
       subjectClass?.subjectClassStudent?.forEach((scoreItem: any) => {
         if (scoreItem?.isImproving && scoreItem?.subjectVersionId) {

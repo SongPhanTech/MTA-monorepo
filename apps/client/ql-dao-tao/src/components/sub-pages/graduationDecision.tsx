@@ -6,14 +6,12 @@ import EditIcon from "@components/icons/edit"
 import { DEFAULT_PAGINATE_SIZE } from "@constants/constants"
 import type { FilterProps } from "@constants/type"
 import useSpinner from "@hooks/spinner"
-import { $Enums } from "@workspace/db"
 import { ApplicationStatus, type Prisma } from "@workspace/db/client"
 import {
   useCountGraduationDecision,
   useDeleteGraduationDecision,
   useFindManyDiplomaType,
   useFindManyGraduationDecision,
-  useFindManySemester,
   useUpdateStudentGraduationApplication,
 } from "@workspace/db/hooks"
 import type { GenerateDiplomaNumberBody } from "@workspace/libs/api/schemas"
@@ -63,7 +61,6 @@ const classificationCategory: Record<string, string> = {
 export default function GraduationDecision({ sessionId }: GraduationDecisionProps) {
   const [currentPage, setCurrentPage] = useState(1)
   const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
-  const [student, setStudent] = useState<any>(null)
   const [filters, setFilters] = useState<FilterProps>({
     code: "",
     name: "",
@@ -392,74 +389,11 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
   }
 
   const { onOpen: onOpenPhuLucVanBang } = useDisclosure<{
-    dataTable: any
     dataStudent: any
   }>({
     tag: "ModalPrintToKQHT",
   })
 
-  const { data: dataTable } = useFindManySemester(
-    {
-      where: {
-        subjectClasses: {
-          some: {
-            subjectClassStudent: {
-              some: {
-                studentId: student?.id,
-              },
-            },
-          },
-        },
-      },
-      include: {
-        subjectClasses: {
-          where: {
-            subjectClassStudent: {
-              some: {
-                studentId: student?.id,
-              },
-            },
-          },
-          include: {
-            subjectClassStudent: {
-              where: {
-                studentId: student?.id,
-              },
-              include: {
-                subjectVersion: true,
-                certificates: {
-                  include: {
-                    archivedCertificate: true,
-                  },
-                },
-                awards: {
-                  where: {
-                    status: $Enums.ArchivedCertificateStatus.APPROVED,
-                  },
-                  include: {
-                    archivedAward: true,
-                  },
-                },
-              },
-            },
-          },
-        },
-        trainingCoursesStart: {
-          where: {
-            id: student?.fixedClass?.trainingCourseId ?? undefined,
-          },
-          include: {
-            scoreConverts: true,
-          },
-        },
-        schoolYear: true,
-      },
-      orderBy: {
-        createdAt: "asc",
-      },
-    },
-    { enabled: !!student?.id }
-  )
   return (
     <div className="bg-white rounded-lg shadow-sm px-4">
       <Flex align="center" justify="space-between" className="mt-4">
@@ -806,10 +740,8 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
                       <BookCheckIcon
                         onClick={(e) => {
                           e.stopPropagation()
-                          setStudent(record?.student)
                           onOpenPhuLucVanBang({
                             dataStudent: record?.student,
-                            dataTable,
                           })
                         }}
                         size={16}
