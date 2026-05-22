@@ -1,7 +1,10 @@
 import Table from "@components/commons/table"
-import { Button, Col, Flex, Form, InputNumber, message, Row, Tag } from "antd"
+import ScoreInputCell, {
+  ScoreInputHandle,
+} from "@components/commons/score-input-cell"
+import { Button, Col, Flex, Form, message, Row } from "antd"
 import { FilterProps } from "@constants/type"
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import { DEFAULT_PAGINATE_SIZE } from "@constants/constants"
 import { useAbility } from "@workspace/permissions/hooks"
 import { useRouter } from "next/router"
@@ -35,6 +38,7 @@ export default function SemesterTrainingScore({
     name: "",
     idCardNumber: "",
   })
+  const inputRefs = useRef<Array<ScoreInputHandle>>([])
 
   const {
     options: studentTrainingTypeOptions,
@@ -214,6 +218,7 @@ export default function SemesterTrainingScore({
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <>
   useEffect(() => {
+    inputRefs.current = []
     if (data?.length > 0) {
       form.setFieldsValue({
         list: data.reduce((acc, cur) => {
@@ -292,31 +297,12 @@ export default function SemesterTrainingScore({
                   width: 150,
                   align: "center",
                   //  fixed: "left",
-                  render: (_, record) => (
-                    <Form.Item
-                      className="w-full mb-0"
-                      name={["list", record.id, "score"]}
-                      label=""
-                      rules={[
-                        {
-                          validator: (_, value) =>
-                            value >= 1 && value <= 10
-                              ? Promise.resolve()
-                              : Promise.reject("Chỉ được nhập số từ 1 đến 10"),
-                        },
-                      ]}
-                    >
-                      <InputNumber
-                        style={{ width: "100%" }}
-                        step={1}
-                        controls={false}
-                        onKeyDown={(e) => {
-                          if (e.key === "." || e.key === ",") {
-                            e.preventDefault()
-                          }
-                        }}
-                      />
-                    </Form.Item>
+                  render: (_, record, index) => (
+                    <ScoreInputCell
+                      rowId={record.id}
+                      rowIndex={index}
+                      inputRefs={inputRefs}
+                    />
                   ),
                 },
                 // {

@@ -76,7 +76,8 @@
         "tailwind-merge": "catalog:",
         "tippy.js": "catalog:",
         "xlsx": "catalog:",
-        "zod": "catalog:"
+        "zod": "catalog:",
+        "@tanstack/react-hotkeys": "catalog:"
     },
     "devDependencies": {
         "@types/file-saver": "catalog:",
