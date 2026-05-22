@@ -22,7 +22,6 @@ import dayjs from "dayjs"
 import { Search } from "lucide-react"
 import { Key, useCallback, useState } from "react"
 import FilterSelect from "./filter-select"
-import "./index.css"
 import clsx from "clsx"
 
 dayjs.locale("vi")
