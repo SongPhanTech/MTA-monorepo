@@ -1,11 +1,14 @@
 import { HomeOutlined } from "@ant-design/icons"
 import logo_mta from "@assets/images/logo_mta.png"
+import ForbiddenPage from "@components/commons/403"
 import SiderDefaultLayout from "@components/layouts/sider"
 import { useMenuList } from "@hooks/menu-list"
 import { cn } from "@lib/utils"
+import { useStoreState } from "@redux/hook"
 import { CONFIG_KEY } from "@workspace/constant"
 import { useFindUniqueConfig } from "@workspace/db/hooks"
-import { getDynamicBreadcrumb } from "@workspace/permissions/hooks"
+import { getDynamicBreadcrumb, useAbility } from "@workspace/permissions/hooks"
+import { type TRO_LY_AO_PERMISSION } from "@workspace/router"
 import { WidgetChatbot } from "@workspace/ui"
 import { Breadcrumb, Layout, Spin, theme } from "antd"
 import Image from "next/image"
@@ -32,11 +35,13 @@ const DefaultLayout = ({
   className,
   breadcrumbList,
   unLayout = false,
+  permission,
 }: {
   children: ReactNode
   className?: string
   breadcrumbList?: breadcrumListProps[]
   unLayout?: boolean
+  permission?: TRO_LY_AO_PERMISSION
 }) => {
   // SSO Authentication check - sử dụng hook riêng
   const { status, signIn, refetch } = useSSOSession()
@@ -101,7 +106,12 @@ const DefaultLayout = ({
 
   // Chỉ render content (và gọi useMenuList/usePermissions) SAU KHI đã authenticated
   return (
-    <DefaultLayoutContent className={className} breadcrumbList={breadcrumbList} unLayout={unLayout}>
+    <DefaultLayoutContent
+      className={className}
+      breadcrumbList={breadcrumbList}
+      unLayout={unLayout}
+      permission={permission}
+    >
       {children}
     </DefaultLayoutContent>
   )
@@ -117,16 +127,23 @@ const DefaultLayoutContent = ({
   className,
   breadcrumbList,
   unLayout = false,
+  permission,
 }: {
   children: ReactNode
   className?: string
   breadcrumbList?: breadcrumListProps[]
   unLayout?: boolean
+  permission?: TRO_LY_AO_PERMISSION
 }) => {
   const menus = useMenuList()
   const router = useRouter()
   const currentPath = router.pathname
   const breadcrumb = getDynamicBreadcrumb("TRO_LY_AO", currentPath)
+  const { can } = useAbility()
+  const isUpdateAbility = useStoreState((state) => state.appState.isUpdateAbility)
+  // Cho phép truy cập nếu page không yêu cầu quyền; ngược lại chờ ability load xong rồi check XEM
+  const isAbilityReady = !permission || isUpdateAbility
+  const hasViewPermission = !permission || can(permission, "XEM")
   const [collapsed, setCollapsed] = useState(() => {
     return typeof window !== "undefined" && localStorage.getItem("collapsed") === "true"
   })
@@ -243,22 +260,52 @@ const DefaultLayoutContent = ({
             <HeaderApp />
           </Header>
           <Content className="mx-2 mt-20">
-            {unLayout ? (
-              children
-            ) : (
-              <div
-                className={cn(
-                  "min-h-[calc(100vh-64px-24px)] bg-white rounded-lg shadow-sm p-4",
-                  className
-                )}
-                style={{
-                  background: colorBgContainer,
-                }}
-              >
-                <WidgetChatbot />
-                {children}
-              </div>
-            )}
+            {(() => {
+              // Đang tải quyền — hiển thị spin, tránh nháy ForbiddenPage
+              if (!isAbilityReady) {
+                return (
+                  <div className="min-h-[calc(100vh-64px-24px)] flex items-center justify-center">
+                    <Spin size="large" />
+                  </div>
+                )
+              }
+
+              // Đã tải xong nhưng không có quyền XEM
+              if (!hasViewPermission) {
+                return (
+                  <div
+                    className={cn(
+                      "min-h-[calc(100vh-64px-24px)] bg-white rounded-lg shadow-sm p-4",
+                      className
+                    )}
+                    style={{
+                      background: colorBgContainer,
+                    }}
+                  >
+                    <ForbiddenPage />
+                  </div>
+                )
+              }
+
+              if (unLayout) {
+                return children
+              }
+
+              return (
+                <div
+                  className={cn(
+                    "min-h-[calc(100vh-64px-24px)] bg-white rounded-lg shadow-sm p-4",
+                    className
+                  )}
+                  style={{
+                    background: colorBgContainer,
+                  }}
+                >
+                  <WidgetChatbot />
+                  {children}
+                </div>
+              )
+            })()}
           </Content>
         </Layout>
       </Layout>

@@ -184,7 +184,10 @@ function Page() {
 }
 Page.getLayout = function getLayout(page: React.ReactElement) {
   return (
-    <DefaultLayout breadcrumbList={[{ title: "Quản trị" }, { title: "Cấu hình Prompt" }]}>
+    <DefaultLayout
+      permission={TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_CAU_HINH_PROMPT_CHUC_NANG}
+      breadcrumbList={[{ title: "Quản trị" }, { title: "Cấu hình Prompt" }]}
+    >
       {page}
     </DefaultLayout>
   )
