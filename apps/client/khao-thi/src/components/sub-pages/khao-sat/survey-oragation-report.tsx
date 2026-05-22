@@ -366,29 +366,38 @@ function SurveyOrganizationReport({
       const response = await fetch(getMinioUrl("mta/template/TongKetPhieuKhoa.docx"))
 
       const templateFile = await response.arrayBuffer()
-
-      const handler = new TemplateHandler()
-
       const templateData = {
-        organizationName: selectedItem?.sTen,
+        organizationName: selectedItem?.title || "",
 
         data:
           selectedItem?.children?.map((boMon: any) => ({
-            boMon: boMon?.sTen,
+            boMon: boMon?.title,
 
-            lecturers:
-              boMon?.children?.map((gv: any) => ({
-                GV: gv?.title,
+            hasLecturers: (boMon?.children?.length || 0) > 0,
 
-                muc1: gv?.muc1 || 0,
-                muc2: gv?.muc2 || 0,
-                muc3: gv?.muc3 || 0,
-                muc4: gv?.muc4 || 0,
-                muc5: gv?.muc5 || 0,
-              })) || [],
+            data1:
+              boMon?.children?.map((gv: any) => {
+                const total =
+                  (gv?.muc1 || 0) +
+                  (gv?.muc2 || 0) +
+                  (gv?.muc3 || 0) +
+                  (gv?.muc4 || 0) +
+                  (gv?.muc5 || 0)
+
+                return {
+                  GV: gv?.title,
+
+                  muc1: total ? `${(((gv?.muc1 || 0) * 100) / total).toFixed(2)}%` : "0%",
+                  muc2: total ? `${(((gv?.muc2 || 0) * 100) / total).toFixed(2)}%` : "0%",
+                  muc3: total ? `${(((gv?.muc3 || 0) * 100) / total).toFixed(2)}%` : "0%",
+                  muc4: total ? `${(((gv?.muc4 || 0) * 100) / total).toFixed(2)}%` : "0%",
+                  muc5: total ? `${(((gv?.muc5 || 0) * 100) / total).toFixed(2)}%` : "0%",
+                }
+              }) || [],
           })) || [],
       }
       console.log("data", templateData)
+      const handler = new TemplateHandler()
       const doc = await handler.process(templateFile, templateData)
 
       saveAs(new Blob([doc]), `TongKet_${organizationName || "BaoCao"}.docx`)
