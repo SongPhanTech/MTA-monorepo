@@ -7,7 +7,10 @@ import {
 import HtmlTruncate from "@components/commons/html-truncate"
 import Table from "@components/commons/table"
 import useSpinner from "@hooks/spinner"
-import { useGetClusterSurveyStatisticsForOrganization } from "@workspace/libs/api/exam"
+import {
+  getClusterSurveyInfoDepartment,
+  useGetClusterSurveyStatisticsForOrganization,
+} from "@workspace/libs/api/exam"
 import type { GetSurveyStatistics200QuestionsItemAnswersItem } from "@workspace/libs/api/schemas"
 import { Button, Col, Dropdown, Empty, Row, Typography } from "antd"
 // @ts-nocheck
@@ -18,7 +21,9 @@ import { exportSurveyDocxTemplate } from "@/utils/export-survey-docx-template"
 import { useRouter } from "next/router"
 import { useMemo } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
-import { exportSummary } from "@/utils/export-summary"
+import { getMinioUrl } from "@workspace/libs"
+import { message } from "antd"
+import { TemplateHandler } from "easy-template-x"
 
 const { Title } = Typography
 
@@ -46,6 +51,7 @@ function SurveyOrganizationReport({
   organizationName,
   departmentName,
   departmentCode,
+  selectedItem,
 }: {
   selectedId: string
   organizationId: string
@@ -57,6 +63,7 @@ function SurveyOrganizationReport({
   organizationName?: string
   departmentName?: string
   departmentCode?: string
+  selectedItem?: any
 }) {
   const router = useRouter()
   const { showSpinner, hideSpinner } = useSpinner()
@@ -354,6 +361,43 @@ function SurveyOrganizationReport({
     saveAs(new Blob([buffer]), `Bao_cao_khao_sat_${name || ""}.xlsx`)
   }
 
+  const exportSummaryDocx = async (selectedItem: any) => {
+    try {
+      const response = await fetch(getMinioUrl("mta/template/TongKetPhieuKhoa.docx"))
+
+      const templateFile = await response.arrayBuffer()
+
+      const handler = new TemplateHandler()
+
+      const templateData = {
+        organizationName: selectedItem?.sTen,
+
+        data:
+          selectedItem?.children?.map((boMon: any) => ({
+            boMon: boMon?.sTen,
+
+            lecturers:
+              boMon?.children?.map((gv: any) => ({
+                GV: gv?.title,
+
+                muc1: gv?.muc1 || 0,
+                muc2: gv?.muc2 || 0,
+                muc3: gv?.muc3 || 0,
+                muc4: gv?.muc4 || 0,
+                muc5: gv?.muc5 || 0,
+              })) || [],
+          })) || [],
+      }
+      console.log("data", templateData)
+      const doc = await handler.process(templateFile, templateData)
+
+      saveAs(new Blob([doc]), `TongKet_${organizationName || "BaoCao"}.docx`)
+    } catch (error) {
+      console.error(error)
+      message.error("Xuất file thất bại")
+    }
+  }
+
   function calculatePercent(items: AnswerItem[]): AnswerWithPercent[] {
     const total = items.reduce((sum, item) => sum + item.count, 0)
     return items.map((item) => ({
@@ -511,7 +555,7 @@ function SurveyOrganizationReport({
                         onClick: async () => {
                           showSpinner()
                           try {
-                            await exportSummary(organizationId, selectedId, organizationName)
+                            await exportSummaryDocx(selectedItem)
                           } finally {
                             hideSpinner()
                           }
