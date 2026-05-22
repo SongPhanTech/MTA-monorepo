@@ -152,6 +152,7 @@ const LopBienCheItem: React.FC<LopBienCheItemProps> = ({
             treeData={treeData}
             showLine
             blockNode
+            expandAction="click"
             onSelect={(selectedKeys) => {
               if (selectedKeys.length > 0) {
                 const selectedKey = selectedKeys[0] as string

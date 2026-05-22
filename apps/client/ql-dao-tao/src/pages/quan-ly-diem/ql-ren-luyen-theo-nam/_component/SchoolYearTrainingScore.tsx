@@ -1,15 +1,16 @@
 import Table from "@components/commons/table"
-import { Button, Col, Flex, Form, InputNumber, message, Row, Tag } from "antd"
+import ScoreInputCell, {
+  ScoreInputHandle,
+} from "@components/commons/score-input-cell"
+import { Button, Col, Flex, Form, message, Row } from "antd"
 import { FilterProps } from "@constants/type"
-import { Key, useEffect, useMemo, useState } from "react"
+import { Key, useEffect, useMemo, useRef, useState } from "react"
 import { DEFAULT_PAGINATE_SIZE } from "@constants/constants"
 import { useAbility } from "@workspace/permissions/hooks"
 import { QL_DAO_TAO_PERMISSION } from "@workspace/router"
 import { useFindManySchoolYear, useFindManyStudent } from "@workspace/db/hooks"
 import { SchoolYear } from "@workspace/db"
-import {
-  useTrainingScoreStatusStatusOptions,
-} from "@hooks/studentTrainingType"
+import { useTrainingScoreStatusStatusOptions } from "@hooks/studentTrainingType"
 import { Save } from "lucide-react"
 import useSpinner from "@hooks/spinner"
 import { sqlTransaction } from "@workspace/libs/api/model"
@@ -33,10 +34,9 @@ export default function SchoolYearTrainingScore({
     code: "",
     name: "",
   })
-  const {
-    getTrainingScoreStatusLabel,
-    getTrainingScoreStatusColor,
-  } = useTrainingScoreStatusStatusOptions()
+  const inputRefs = useRef<Array<ScoreInputHandle>>([])
+  const { getTrainingScoreStatusLabel, getTrainingScoreStatusColor } =
+    useTrainingScoreStatusStatusOptions()
 
   const where = useMemo(
     () => ({
@@ -105,7 +105,7 @@ export default function SchoolYearTrainingScore({
           where: {
             semester: {
               schoolYearId,
-              semesterType: SemesterType.SECOND
+              semesterType: SemesterType.SECOND,
             },
           },
         },
@@ -207,7 +207,6 @@ export default function SchoolYearTrainingScore({
           refetch()
         }
       }
-
     } catch (error) {
       message.error("Đã xảy ra lỗi khi lưu điểm rèn luyện năm học")
     } finally {
@@ -216,6 +215,7 @@ export default function SchoolYearTrainingScore({
   }
 
   useEffect(() => {
+    inputRefs.current = []
     if (data?.length > 0) {
       form.setFieldsValue({
         list: data.reduce((acc, cur) => {
@@ -319,54 +319,32 @@ export default function SchoolYearTrainingScore({
                   title: "Điểm",
                   width: 150,
                   align: "center",
-                  fixed: "left",
-                  render: (_, record) => {
-                    return (
-                      <Form.Item
-                        className="w-full mb-0"
-                        name={["list", record.id, "score"]}
-                        label=""
-                        rules={[
-                          {
-                            validator: (_, value) =>
-                              value >= 1 && value <= 10
-                                ? Promise.resolve()
-                                : Promise.reject("Chỉ được nhập số từ 1 đến 10"),
-                          },
-                        ]}
-                      >
-                        <InputNumber
-                          style={{ width: "100%" }}
-                          step={1}
-                          controls={false}
-                          onKeyDown={(e) => {
-                            if (e.key === "." || e.key === ",") {
-                              e.preventDefault()
-                            }
-                          }}
-                        />
-                      </Form.Item>
-                    )
-                  },
+                  render: (_, record, index) => (
+                    <ScoreInputCell
+                      rowId={record.id}
+                      rowIndex={index}
+                      inputRefs={inputRefs}
+                    />
+                  ),
                 },
-                {
-                  title: "Trạng thái",
-                  align: "center",
-                  dataIndex: "name",
-                  width: 150,
-                  render: (_, record) =>
-                    record?.schoolYearTrainingScore?.length > 0 ? (
-                      <Tag
-                        color={getTrainingScoreStatusColor(
-                          record?.schoolYearTrainingScore[0]?.status
-                        )}
-                      >
-                        {getTrainingScoreStatusLabel(record?.schoolYearTrainingScore[0]?.status)}
-                      </Tag>
-                    ) : (
-                      "--"
-                    ),
-                },
+                // {
+                //   title: "Trạng thái",
+                //   align: "center",
+                //   dataIndex: "name",
+                //   width: 150,
+                //   render: (_, record) =>
+                //     record?.schoolYearTrainingScore?.length > 0 ? (
+                //       <Tag
+                //         color={getTrainingScoreStatusColor(
+                //           record?.schoolYearTrainingScore[0]?.status
+                //         )}
+                //       >
+                //         {getTrainingScoreStatusLabel(record?.schoolYearTrainingScore[0]?.status)}
+                //       </Tag>
+                //     ) : (
+                //       "--"
+                //     ),
+                // },
               ]}
               rowKey="id"
               // rowSelection={{
