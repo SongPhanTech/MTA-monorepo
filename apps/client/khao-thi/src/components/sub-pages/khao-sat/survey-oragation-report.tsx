@@ -21,9 +21,22 @@ import { exportSurveyDocxTemplate } from "@/utils/export-survey-docx-template"
 import { useRouter } from "next/router"
 import { useMemo } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
-import { getMinioUrl } from "@workspace/libs"
+import { getMinioUrl } from "@workspace/libs/utils"
 import { message } from "antd"
 import { TemplateHandler } from "easy-template-x"
+import {
+  AlignmentType,
+  BorderStyle,
+  Document,
+  Packer,
+  Paragraph,
+  Table as DocxTable,
+  TableCell,
+  TableRow,
+  TextRun,
+  WidthType,
+  VerticalAlign,
+} from "docx"
 
 const { Title } = Typography
 
@@ -361,46 +374,283 @@ function SurveyOrganizationReport({
     saveAs(new Blob([buffer]), `Bao_cao_khao_sat_${name || ""}.xlsx`)
   }
 
+  // const exportSummaryDocx = async (selectedItem: any) => {
+  //   try {
+  //     const response = await fetch(getMinioUrl("mta/template/TongHopKhoa.docx"))
+
+  //     const templateFile = await response.arrayBuffer()
+  //     const templateData = {
+  //       organizationName: selectedItem?.title || "",
+
+  //       data:
+  //         selectedItem?.children?.map((boMon: any) => ({
+  //           boMon: boMon?.title,
+
+  //           data1:
+  //             boMon?.children?.map((gv: any) => {
+  //               const total =
+  //                 (gv?.muc1 || 0) +
+  //                 (gv?.muc2 || 0) +
+  //                 (gv?.muc3 || 0) +
+  //                 (gv?.muc4 || 0) +
+  //                 (gv?.muc5 || 0)
+
+  //               return {
+  //                 GV: gv?.title,
+
+  //                 muc1: total ? `${(((gv?.muc1 || 0) * 100) / total).toFixed(1)}%` : "0%",
+
+  //                 muc2: total ? `${(((gv?.muc2 || 0) * 100) / total).toFixed(1)}%` : "0%",
+
+  //                 muc3: total ? `${(((gv?.muc3 || 0) * 100) / total).toFixed(1)}%` : "0%",
+
+  //                 muc4: total ? `${(((gv?.muc4 || 0) * 100) / total).toFixed(1)}%` : "0%",
+
+  //                 muc5: total ? `${(((gv?.muc5 || 0) * 100) / total).toFixed(1)}%` : "0%",
+  //               }
+  //             }) || [],
+  //         })) || [],
+  //     }
+  //     console.log("data", templateData)
+  //     const handler = new TemplateHandler()
+  //     const doc = await handler.process(templateFile, templateData)
+
+  //     saveAs(new Blob([doc]), `TongKet_${organizationName || "BaoCao"}.docx`)
+  //   } catch (error) {
+  //     console.error(error)
+  //     message.error("Xuất file thất bại")
+  //   }
+  // }
+
   const exportSummaryDocx = async (selectedItem: any) => {
     try {
-      const response = await fetch(getMinioUrl("mta/template/TongKetPhieuKhoa.docx"))
+      const rows: TableRow[] = []
 
-      const templateFile = await response.arrayBuffer()
-      const templateData = {
-        organizationName: selectedItem?.title || "",
+      // HEADER
+      rows.push(
+        new TableRow({
+          children: [
+            new TableCell({
+              rowSpan: 2,
+              width: {
+                size: 2500,
+                type: WidthType.DXA,
+              },
+              verticalAlign: VerticalAlign.CENTER,
+              children: [
+                new Paragraph({
+                  alignment: AlignmentType.CENTER,
+                  children: [
+                    new TextRun({
+                      text: "BỘ MÔN/\nGIẢNG VIÊN",
+                      bold: true,
+                    }),
+                  ],
+                }),
+              ],
+            }),
 
-        data:
-          selectedItem?.children?.map((boMon: any) => ({
-            boMon: boMon?.title,
+            new TableCell({
+              columnSpan: 5,
+              verticalAlign: VerticalAlign.CENTER,
+              children: [
+                new Paragraph({
+                  alignment: AlignmentType.CENTER,
+                  children: [
+                    new TextRun({
+                      text: "KẾT QUẢ ĐÁNH GIÁ (%)",
+                      bold: true,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+          ],
+        })
+      )
 
-            hasLecturers: (boMon?.children?.length || 0) > 0,
+      rows.push(
+        new TableRow({
+          children: [
+            "RẤT KHÔNG HÀI LÒNG",
+            "KHÔNG HÀI LÒNG",
+            "PHÂN VÂN",
+            "HÀI LÒNG",
+            "RẤT HÀI LÒNG",
+          ].map(
+            (item) =>
+              new TableCell({
+                verticalAlign: VerticalAlign.CENTER,
+                children: [
+                  new Paragraph({
+                    alignment: AlignmentType.CENTER,
+                    children: [
+                      new TextRun({
+                        text: item,
+                        bold: true,
+                      }),
+                    ],
+                  }),
+                ],
+              })
+          ),
+        })
+      )
 
-            data1:
-              boMon?.children?.map((gv: any) => {
-                const total =
-                  (gv?.muc1 || 0) +
-                  (gv?.muc2 || 0) +
-                  (gv?.muc3 || 0) +
-                  (gv?.muc4 || 0) +
-                  (gv?.muc5 || 0)
+      // DATA
+      selectedItem?.children?.forEach((boMon: any) => {
+        // DÒNG BỘ MÔN
+        rows.push(
+          new TableRow({
+            children: [
+              new TableCell({
+                verticalAlign: VerticalAlign.CENTER,
+                columnSpan: 6,
+                children: [
+                  new Paragraph({
+                    children: [
+                      new TextRun({
+                        text: boMon?.title || "",
+                        bold: true,
+                      }),
+                    ],
+                  }),
+                ],
+              }),
+            ],
+          })
+        )
 
-                return {
-                  GV: gv?.title,
+        // DÒNG GIẢNG VIÊN
+        boMon?.children?.forEach((gv: any) => {
+          const total =
+            (gv?.muc1 || 0) + (gv?.muc2 || 0) + (gv?.muc3 || 0) + (gv?.muc4 || 0) + (gv?.muc5 || 0)
 
-                  muc1: total ? `${(((gv?.muc1 || 0) * 100) / total).toFixed(2)}%` : "0%",
-                  muc2: total ? `${(((gv?.muc2 || 0) * 100) / total).toFixed(2)}%` : "0%",
-                  muc3: total ? `${(((gv?.muc3 || 0) * 100) / total).toFixed(2)}%` : "0%",
-                  muc4: total ? `${(((gv?.muc4 || 0) * 100) / total).toFixed(2)}%` : "0%",
-                  muc5: total ? `${(((gv?.muc5 || 0) * 100) / total).toFixed(2)}%` : "0%",
-                }
-              }) || [],
-          })) || [],
-      }
-      console.log("data", templateData)
-      const handler = new TemplateHandler()
-      const doc = await handler.process(templateFile, templateData)
+          const percent = (value: number) =>
+            total ? `${((value * 100) / total).toFixed(1)}%` : "0%"
 
-      saveAs(new Blob([doc]), `TongKet_${organizationName || "BaoCao"}.docx`)
+          rows.push(
+            new TableRow({
+              children: [
+                gv?.title || "",
+                percent(gv?.muc1 || 0),
+                percent(gv?.muc2 || 0),
+                percent(gv?.muc3 || 0),
+                percent(gv?.muc4 || 0),
+                percent(gv?.muc5 || 0),
+              ].map(
+                (text) =>
+                  new TableCell({
+                    verticalAlign: VerticalAlign.CENTER,
+                    children: [
+                      new Paragraph({
+                        children: [
+                          new TextRun({
+                            text,
+                          }),
+                        ],
+                      }),
+                    ],
+                  })
+              ),
+            })
+          )
+        })
+      })
+
+      const doc = new Document({
+        sections: [
+          {
+            children: [
+              new Paragraph({
+                alignment: AlignmentType.CENTER,
+                spacing: {
+                  after: 200,
+                },
+                children: [
+                  new TextRun({
+                    text: "TỔNG HỢP SỐ LIỆU VỀ HOẠT ĐỘNG GIẢNG DẠY CỦA GIẢNG VIÊN",
+                    bold: true,
+                    size: 28,
+                  }),
+                ],
+              }),
+
+              new Paragraph({
+                alignment: AlignmentType.CENTER,
+                spacing: {
+                  after: 300,
+                },
+                children: [
+                  new TextRun({
+                    text: selectedItem?.title || "",
+                    bold: true,
+                    size: 26,
+                  }),
+                ],
+              }),
+
+              new Paragraph({
+                spacing: {
+                  after: 200,
+                },
+                children: [
+                  new TextRun({
+                    text: "A. Các lớp kỹ sư quân sự",
+                    bold: true,
+                  }),
+                ],
+              }),
+
+              new DocxTable({
+                width: {
+                  size: 100,
+                  type: WidthType.PERCENTAGE,
+                },
+
+                rows,
+
+                borders: {
+                  top: {
+                    style: BorderStyle.SINGLE,
+                    size: 1,
+                    color: "000000",
+                  },
+                  bottom: {
+                    style: BorderStyle.SINGLE,
+                    size: 1,
+                    color: "000000",
+                  },
+                  left: {
+                    style: BorderStyle.SINGLE,
+                    size: 1,
+                    color: "000000",
+                  },
+                  right: {
+                    style: BorderStyle.SINGLE,
+                    size: 1,
+                    color: "000000",
+                  },
+                  insideHorizontal: {
+                    style: BorderStyle.SINGLE,
+                    size: 1,
+                    color: "000000",
+                  },
+                  insideVertical: {
+                    style: BorderStyle.SINGLE,
+                    size: 1,
+                    color: "000000",
+                  },
+                },
+              }),
+            ],
+          },
+        ],
+      })
+
+      const blob = await Packer.toBlob(doc)
+
+      saveAs(blob, `TongKet_${selectedItem?.title || "BaoCao"}.docx`)
     } catch (error) {
       console.error(error)
       message.error("Xuất file thất bại")

@@ -345,8 +345,6 @@ export default function BaoCaoGiangVien() {
             departmentName={selectedItem.iCapDonVi === 3 ? selectedItem.sTen : ""}
             departmentCode={selectedItem.iCapDonVi === 3 ? selectedItem.sMa : ""}
             selectedItem={selectedItem}
-            trainingObjectTypeId={trainingObjectTypeId}
-            semesterId={semesterId}
           />
         )
       }
