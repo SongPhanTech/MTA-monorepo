@@ -183,62 +183,19 @@ const PutCertificateArchivedModal = () => {
       showSpinner()
 
       if (id) {
-        // await updateArchivedCertificate({
-        //     data: {
-        //         studentId: id,
-        //         certificateId: rest.certificateId,
-        //         finalScore: rest.finalScore || 0,
-        //         score: rest.score,
-        //         issuedBy: rest.issuedBy,
-        //         issuedDate: rest.issuedDate,
-        //         expiredDate: rest.expiredDate,
-        //         documentFiles: {
-        //             upsert: (rest.documentFiles || [])
-        //                 .filter((file) => !!file.id)
-        //                 .map((file) => ({
-        //                     where: { id: file.id },
-        //                     create: {
-        //                         name: file.name,
-        //                         path: file.path,
-        //                         mimeType: file.mimeType,
-        //                         size: file.size,
-        //                         curriculum: { connect: { id } },
-        //                     },
-        //                     update: {
-        //                         name: file.name,
-        //                         path: file.path,
-        //                         mimeType: file.mimeType,
-        //                         size: file.size,
-        //                     },
-        //                 })),
-        //             create: (rest.documentFiles || [])
-        //                 .filter((file) => !file.id)
-        //                 .map((file) => ({
-        //                     name: file.name,
-        //                     path: file.path,
-        //                     mimeType: file.mimeType,
-        //                     size: file.size,
-        //                 })),
-        //             disconnect: document
-        //                 .filter(
-        //                     (existing) =>
-        //                         !rest.documentFiles?.some((f) => f.id === existing.id)
-        //                 )
-        //                 .map((file) => ({ id: file.id })),
-        //         },
-        //     },
-        //     where: { id: id },
-        // })
-        // message.success('Cập nhật thành công')
       } else {
-
         const createdCertificates: any[] = []
+        const latestStudentFormData = form.getFieldValue("student") || {}
 
         for (const row of selectedStudents) {
-          const studentDataForRow = studentFormData[row.rowId]
+          const studentDataForRow =
+            latestStudentFormData[row.rowId] || studentFormData[row.rowId] || {}
           if (!studentDataForRow?.certificateId) continue
 
-          const studentFiles = studentDataForRow.documentFiles || []
+          const studentFiles =
+            form.getFieldValue(["student", row.rowId, "documentFiles"]) ||
+            studentDataForRow.documentFiles ||
+            []
 
           const result = await createArchivedCertificate({
             data: {
@@ -299,7 +256,6 @@ const PutCertificateArchivedModal = () => {
       documentFiles: [],
     })
     setDocumentFiles([])
-
   }, [])
 
   return (
@@ -538,10 +494,7 @@ const PutCertificateArchivedModal = () => {
                   width: 150,
                   align: "center",
                   render: (_, record) => (
-                    <FormItem
-                      form={form}
-                      name={["student", record.rowId, "issuedBy"]}
-                    >
+                    <FormItem form={form} name={["student", record.rowId, "issuedBy"]}>
                       <Input variant="underlined" className="w-full" placeholder="Nhập nơi cấp" />
                     </FormItem>
                   ),

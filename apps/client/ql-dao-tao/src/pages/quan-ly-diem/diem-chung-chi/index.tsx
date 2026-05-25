@@ -592,69 +592,6 @@ export default function ArchivedCertificate() {
         <Row gutter={[16, 16]} align="top" justify="space-between">
           <Col span={4}>
             <Flex gap={8}>
-              {/* <Select
-                className="w-full"
-                placeholder="Chọn khoá học"
-                options={trainingCourseData
-                  .filter((trainingCourse: TrainingCourse) => {
-                    if (!filters.fixedClassId) return true
-
-                    const selectedFixedClass = fixedClassData.find(
-                      (fixedClass: FixedClass) => fixedClass.id === filters.fixedClassId
-                    )
-
-                    return selectedFixedClass?.trainingCourseId === trainingCourse.id
-                  })
-                  .map((i: TrainingCourse) => ({
-                    value: i.id,
-                    label: i.name,
-                  }))}
-                onChange={(val) =>
-                  setFilters({
-                    ...filters,
-                    trainingCourseId: val,
-                  })
-                }
-                value={filters.trainingCourseId}
-                allowClear
-              />
-              <Select
-                className="w-full"
-                placeholder="Chọn lớp quản lý"
-                options={fixedClassData.map((i: FixedClass) => ({
-                  value: i.id,
-                  label: i.name,
-                }))}
-                onChange={(val) => {
-                  const selectedFixedClass = fixedClassData.find(
-                    (fixedClass: FixedClass) => fixedClass.id === val
-                  )
-
-                  setFilters({
-                    ...filters,
-                    fixedClassId: val,
-                    trainingCourseId: selectedFixedClass?.trainingCourseId,
-                  })
-                }}
-                value={filters.fixedClassId}
-                allowClear
-              />
-              <Select
-                className="w-full"
-                placeholder="Chọn chứng chỉ"
-                options={certificatesData.map((i: any) => ({
-                  value: i.id,
-                  label: i.name,
-                }))}
-                onChange={(val) =>
-                  setFilters({
-                    ...filters,
-                    certificateId: val,
-                  })
-                }
-                value={filters.certificateId}
-                allowClear
-              /> */}
               <Input
                 className="w-full"
                 placeholder="Tìm số quyết định"
@@ -719,28 +656,6 @@ export default function ArchivedCertificate() {
                   >
                     Phê duyệt
                   </Button>
-                  {/* <Button
-                    className="ml-3"
-                    onClick={() => {
-                      if (selectedRowKeys.length === 0) {
-                        message.warning("Vui lòng chọn ít nhất một học viên")
-                        return
-                      }
-                      const studentNames = dataTable
-                        .filter((s: any) => selectedRowKeys.includes(s.id))
-                        .map((s: any) =>
-                          `${s?.userProfile?.lastName || ""} ${s?.userProfile?.firstName || ""}`.trim()
-                        )
-                      onOpenConvertCertificate({
-                        studentIds: selectedRowKeys as string[],
-                        studentNames,
-                      })
-                    }}
-                    disabled={!selectedRowKeys.length}
-                    type="default"
-                  >
-                    Chuyển đổi CC → Điểm
-                  </Button> */}
                 </>
               )}
               {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_DIEM_CHUNG_CHI, "THEM") && (

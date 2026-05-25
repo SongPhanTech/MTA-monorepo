@@ -1,7 +1,12 @@
 import Table from "@components/commons/table"
 // import DeleteIcon from '@components/icons/delete'
 // import EditIcon from '@components/icons/edit'
-import { CloseOutlined, PaperClipOutlined, UploadOutlined } from "@ant-design/icons"
+import {
+  CloseOutlined,
+  DownloadOutlined,
+  PaperClipOutlined,
+  UploadOutlined,
+} from "@ant-design/icons"
 import { useArchivedCertificateStatusOptions } from "@hooks/paymentStatus"
 import useSpinner from "@hooks/spinner"
 import { formatDate, formatDateVN } from "@lib/utils"
@@ -9,23 +14,13 @@ import { $Enums, ArchivedCertificate } from "@workspace/db/client"
 import { useUpdateArchivedCertificate } from "@workspace/db/hooks"
 import { generatePresignedUrl } from "@workspace/libs/api/model"
 import { getMinioUrl } from "@workspace/libs/utils"
-// import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
-import {
-  Button,
-  DatePicker,
-  Flex,
-  InputNumber,
-  Modal,
-  Switch,
-  Tag,
-  Tooltip,
-  Upload,
-  message,
-} from "antd"
+import { Button, Flex, InputNumber, Modal, Switch, Tag, Tooltip, Upload, message } from "antd"
 import axios from "axios"
+import { saveAs } from "file-saver"
 import dayjs from "dayjs"
 import { useEffect, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
+import DatePicker from "@components/commons/date-picker"
 
 interface StudentCertificatesInput {
   studentId: string
@@ -85,7 +80,7 @@ const ModalDanhSachChungChi = () => {
 
   const { mutateAsync: updateArchivedCertificate } = useUpdateArchivedCertificate()
 
-  const [showLanguageScoreColumns, setShowLanguageScoreColumns] = useState(false)
+  const [showLanguageScoreColumns, setShowLanguageScoreColumns] = useState(true)
   const [displayCertificates, setDisplayCertificates] = useState<any[]>([])
   const [editingCertId, setEditingCertId] = useState<string | null>(null)
   const [draftValues, setDraftValues] = useState<DraftValues>({})
@@ -285,6 +280,7 @@ const ModalDanhSachChungChi = () => {
           },
           {
             title: "Tên chứng chỉ",
+            width: 150,
             dataIndex: "name",
             align: "center",
             render: (__, cert) => cert?.certificate?.name || "",
@@ -293,7 +289,7 @@ const ModalDanhSachChungChi = () => {
             title: "Điểm chứng chỉ",
             dataIndex: "score",
             align: "center",
-            width: 100,
+            width: 120,
             render: (score: number, cert: ArchivedCertificate) =>
               cert.status === "APPROVED" ? score : renderEditableNumber(score, cert, "score"),
           },
@@ -385,6 +381,20 @@ const ModalDanhSachChungChi = () => {
                           {file.name}
                         </span>
                       </Tooltip>
+                      <DownloadOutlined
+                        className="cursor-pointer text-blue-500 text-[12px] flex-shrink-0"
+                        onClick={async (e) => {
+                          e.stopPropagation()
+                          try {
+                            const res = await axios.get(getMinioUrl(file.path), {
+                              responseType: "blob",
+                            })
+                            saveAs(res.data, file.name)
+                          } catch {
+                            message.error(`Không thể tải ${file.name}`)
+                          }
+                        }}
+                      />
                       {isEditing && (
                         <CloseOutlined
                           className="cursor-pointer text-red-500 text-[10px] flex-shrink-0"
@@ -464,46 +474,6 @@ const ModalDanhSachChungChi = () => {
               )
             },
           },
-          // {
-          //     title: 'Thao tác',
-          //     width: 150,
-          //     align: 'center',
-          //     hidden: !canSome(
-          //         QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_QL_DIEM_CONG,
-          //         'SUA',
-          //         'XOA'
-          //     ),
-          //     render: (_, cert) => {
-          //         return (
-          //             <Row className="justify-center gap-2">
-          //                 {can(
-          //                     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_QL_DIEM_CONG,
-          //                     'SUA'
-          //                 ) &&
-          //                     cert.status === 'PENDING' && (
-          //                         <EditIcon
-          //                             onClick={() => {
-          //                                 onOpenEdit(cert.id)
-          //                                 // onClose()
-          //                             }}
-          //                             className="text-sm text-blue-700 cursor-pointer"
-          //                         />
-          //                     )}
-          //                 {can(
-          //                     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_QL_DIEM_CONG,
-          //                     'XOA'
-          //                 ) &&
-          //                     cert.status === 'PENDING' && (
-          //                         <DeleteIcon
-          //                             popConfirm={{
-          //                                 onConfirm: () => handleDelete(cert.id),
-          //                             }}
-          //                         />
-          //                     )}
-          //             </Row>
-          //         )
-          //     },
-          // },
         ]}
       />
     </Modal>
