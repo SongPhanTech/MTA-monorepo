@@ -31,13 +31,13 @@ const PutCertificateOnSubjectScoreModal = () => {
 
   const { mutateAsync: createCertificateOnSubject } = useCreateCertificateOnSubject()
   const { mutateAsync: updateCertificateOnSubject } = useUpdateCertificateOnSubject()
-  async function onOk({ ...rest }: PutCertificateOnSubject) {
+  async function onOk({ ...rest }: PutCertificateOnSubject & { subjectId: string | string[] }) {
     try {
       showSpinner()
       if (input?.id) {
         await updateCertificateOnSubject({
           data: {
-            subjectId: rest.subjectId,
+            subjectId: Array.isArray(rest.subjectId) ? rest.subjectId[0] : rest.subjectId,
             certificateId: rest.certificateId,
             finalScore: rest.finalScore,
           },
@@ -45,9 +45,17 @@ const PutCertificateOnSubjectScoreModal = () => {
         })
         message.success("Cập nhật thành công")
       } else {
-        await createCertificateOnSubject({
-          data: rest,
-        })
+        const subjectIds = Array.isArray(rest.subjectId) ? rest.subjectId : [rest.subjectId]
+        await Promise.all(
+          subjectIds.map((subjectId) =>
+            createCertificateOnSubject({
+              data: {
+                ...rest,
+                subjectId,
+              },
+            })
+          )
+        )
         message.success("Thêm mới thành công")
       }
       // refetch() lại danh sách level
@@ -83,14 +91,13 @@ const PutCertificateOnSubjectScoreModal = () => {
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <>
   useEffect(() => {
-    console.log("level", input?.certificateId)
-
     if (level) {
       setTargetDisabled(false)
       form.setFieldsValue({
         ...level,
+        subjectId: level.subjectId ? [level.subjectId] : [],
         certificateId: input?.certificateId,
-      })
+      } as any)
     } else {
       form.setFieldsValue({
         active: true,
@@ -126,6 +133,7 @@ const PutCertificateOnSubjectScoreModal = () => {
         <FormItem form={form} name="subjectId" label="Môn được quy đổi" required>
           <Select
             allowClear
+            mode="multiple"
             style={{ width: "100%" }}
             placeholder="Chọn môn học"
             options={subjectData.map((item: Subject) => ({

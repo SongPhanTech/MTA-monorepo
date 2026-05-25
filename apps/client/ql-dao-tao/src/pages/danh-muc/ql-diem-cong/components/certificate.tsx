@@ -79,7 +79,7 @@ export default function Certificate() {
   async function handleDeleteCertificateOnSubject(id: string) {
     try {
       showSpinner()
-      await updateCertificate({
+      await updateCertificateOnSubject({
         where: {
           id,
         },
@@ -127,14 +127,6 @@ export default function Certificate() {
       archivedCertificate: true,
     },
     orderBy: [
-      // ...emptyObjectIf(
-      //     [
-      //         {
-      //             finalScore: filters.finalScore,
-      //         },
-      //     ],
-      //     !!filters.finalScore
-      // ),
       {
         createdAt: "desc",
       },
@@ -142,13 +134,6 @@ export default function Certificate() {
     take: numberOfPages,
     skip: (currentPage - 1) * numberOfPages,
   })
-
-  const debouncedRefetch = useCallback(
-    _.debounce(() => {
-      refetch()
-    }, 500),
-    []
-  )
 
   const { data: count } = useCountCertificate({
     where: {
@@ -171,18 +156,6 @@ export default function Certificate() {
                 )}
               </Flex>
             </Col>
-
-            {/* <Col span={6}>
-                            <Flex justify="end" gap={4}>
-                                <Button type="primary" className="h-[40px]">
-                                    Thêm mới
-                                </Button>
-                                <Button type="primary" className="h-[40px]">
-                                    <EditIcon stroke="white" />
-                                    Nhập từ file danh sách
-                                </Button>
-                            </Flex>
-                        </Col> */}
           </Row>
         </Col>
 
