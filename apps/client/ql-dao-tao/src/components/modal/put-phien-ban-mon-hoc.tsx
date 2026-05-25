@@ -495,8 +495,8 @@ const PutVersionSubjectModal = () => {
     >
       <Row gutter={[16, 16]} ref={modalContentRef}>
         <Col span={4}>
-          <FormItem form={form} name="code" label="Mã môn học" required>
-            <Input placeholder="Mã môn học" readOnly={input?.isLocked} />
+          <FormItem form={form} name="code" label="Mã học phần" required>
+            <Input placeholder="Mã học phần" readOnly={input?.isLocked} />
           </FormItem>
         </Col>
         <Col span={4}>
@@ -505,8 +505,8 @@ const PutVersionSubjectModal = () => {
           </FormItem>
         </Col>
         <Col span={8}>
-          <FormItem form={form} name="name" label="Tên môn học" required>
-            <Input placeholder="Tên môn học" readOnly={input?.isLocked} />
+          <FormItem form={form} name="name" label="Tên học phần" required>
+            <Input placeholder="Tên học phần" readOnly={input?.isLocked} />
           </FormItem>
         </Col>
         <Col span={8}>
@@ -780,7 +780,7 @@ const PutVersionSubjectModal = () => {
 
           <Row gutter={[24, 16]}>
             <Col span={8}>
-              <div className="font-semibold text-blue-600 mb-2">Đề cương chi tiết</div>
+              <div className="font-semibold text-blue-600 mb-2">Đề cương học phần</div>
               <FormItem form={form} name="syllabusDocs" label="" className="mb-0">
                 <DocumentPaths
                   form={form}
