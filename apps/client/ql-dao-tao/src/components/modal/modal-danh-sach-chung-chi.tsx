@@ -11,7 +11,11 @@ import { useArchivedCertificateStatusOptions } from "@hooks/paymentStatus"
 import useSpinner from "@hooks/spinner"
 import { formatDate, formatDateVN } from "@lib/utils"
 import { $Enums, ArchivedCertificate } from "@workspace/db/client"
-import { useUpdateArchivedCertificate } from "@workspace/db/hooks"
+import { useFindManyCertificate, useUpdateArchivedCertificate } from "@workspace/db/hooks"
+import {
+  confirmViolations,
+  useCertificateExpirationCheck,
+} from "./utils/check-certificate-expiration"
 import { generatePresignedUrl } from "@workspace/libs/api/model"
 import { getMinioUrl } from "@workspace/libs/utils"
 import { Button, Flex, InputNumber, Modal, Switch, Tag, Tooltip, Upload, message } from "antd"
@@ -79,6 +83,13 @@ const ModalDanhSachChungChi = () => {
   })
 
   const { mutateAsync: updateArchivedCertificate } = useUpdateArchivedCertificate()
+
+  const { data: certificateForCheck = [] } = useFindManyCertificate({
+    include: {
+      subjects: { include: { subject: true } },
+    },
+  })
+  const { runCheck } = useCertificateExpirationCheck(certificateForCheck as any)
 
   const [showLanguageScoreColumns, setShowLanguageScoreColumns] = useState(true)
   const [displayCertificates, setDisplayCertificates] = useState<any[]>([])
@@ -167,6 +178,24 @@ const ModalDanhSachChungChi = () => {
     if (!draft) return
 
     try {
+      const cert = displayCertificates.find((c) => c.id === certId)
+      if (cert?.certificateId && draft.expiredDate) {
+        const violations = await runCheck([
+          {
+            studentId: cert.studentId || input?.studentId || "",
+            studentName: input?.studentName || "",
+            studentFixedClassId:
+              cert.student?.fixedClassId ?? cert.student?.fixedClass?.id ?? null,
+            certificateId: cert.certificateId,
+            expiredDate: draft.expiredDate.toDate(),
+          },
+        ])
+        if (violations.length > 0) {
+          const proceed = await confirmViolations(violations)
+          if (!proceed) return
+        }
+      }
+
       showSpinner()
       const saveData = {
         score: draft.score || 0,
