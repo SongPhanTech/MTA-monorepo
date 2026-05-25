@@ -58,7 +58,7 @@ export function buildReferenceExportDocxScript(docxFilename: string): string {
   var BTN_ID = "mta-export-docx-btn";
   var DOCX_FILENAME = ${JSON.stringify(docxFilename)};
   var LOGO_WRAP_ID = "mta-sidebar-logo-wrap";
-  var LOGO_URL = "https://static.vecteezy.com/system/resources/thumbnails/057/068/323/small/single-fresh-red-strawberry-on-table-green-background-food-fruit-sweet-macro-juicy-plant-image-photo.jpg";
+  var LOGO_URL = "https://drive.google.com/file/d/1AbnqKtWeNvfoSVUhelQcnzbjaVuKM-IW/view?usp=sharing";
 
   function getExportUrl() {
     return new URL(EXPORT_PATH, window.location.href).href;
