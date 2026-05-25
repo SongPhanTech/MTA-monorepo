@@ -109,7 +109,7 @@ app.openapi(classDivision, async (c) => {
 
 const fixedClassStudentCount = createRoute({
   operationId: "fixed-class-student-count",
-  tags: ["FixedClass — Lớp niên chế"],
+  tags: ["Lớp niên chế"],
   path: "/fixed-class-student-count",
   method: "get",
   summary: "Xuất quân số theo khóa",

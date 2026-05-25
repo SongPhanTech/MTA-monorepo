@@ -158,7 +158,7 @@ app.openapi(createNewExamList, async (c) => {
 
 const createNewReExamList = createRoute({
   operationId: "create-new-re-exam-list",
-  tags: ["Exam — Kỳ thi"],
+  tags: ["Kỳ thi"],
   path: "/reexam-list",
   method: "post",
   summary: "Lên danh sách thi lại",
@@ -306,7 +306,7 @@ app.openapi(createNewReExamList, async (c) => {
 
 const mergeExam = createRoute({
   operationId: "merge-exam",
-  tags: ["Exam — Kỳ thi"],
+  tags: ["Kỳ thi"],
   path: "/merge",
   method: "post",
   summary: "Ghép kỳ thi",
@@ -431,7 +431,7 @@ app.openapi(mergeExam, async (c) => {
 
 const unmergeExam = createRoute({
   operationId: "unmerge-exam",
-  tags: ["Exam — Kỳ thi"],
+  tags: ["Kỳ thi"],
   path: "/unmerge",
   method: "post",
   summary: "Tách kỳ thi",

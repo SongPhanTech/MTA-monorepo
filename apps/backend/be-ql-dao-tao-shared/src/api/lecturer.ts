@@ -11,7 +11,7 @@ const app: OpenAPIHono = new OpenAPIHono({ strict: false })
 
 const getListTeacher = createRoute({
   operationId: "get-list-teacher",
-  tags: ["Teacher — Giảng viên"],
+  tags: ["Giảng viên"],
   path: "get-list-teacher",
   summary: "2.16. Lấy danh sách hồ sơ giảng viên",
   description: `Tìm kiếm giảng viên theo từ khóa.
@@ -107,7 +107,7 @@ app.openapi(getListTeacher, async (c) => {
 
 const getTeacherDetail = createRoute({
   operationId: "get-teacher-detail",
-  tags: ["TeacherDetail — Hồ sơ giảng viên"],
+  tags: ["Hồ sơ giảng viên "],
   path: "get-teacher-detail",
   summary: "2.17 Lấy hồ sơ giảng viên",
   description: `Chi tiết một giảng viên theo mã.

@@ -11,7 +11,7 @@ const app = new OpenAPIHono({ strict: false })
 const approveScoreCorrection = createRoute({
   operationId: "approve-score-correction",
   path: "/approve",
-  tags: ["ScoreCorrection — Sửa điểm"],
+  tags: ["Sửa điểm"],
   summary: "Duyệt phiếu sửa điểm",
   description: `Duyệt phiếu sửa điểm và ghi đè điểm học phần cho học viên.
 

@@ -12,7 +12,7 @@ const app: OpenAPIHono = new OpenAPIHono({ strict: false })
 const getSpecialized = createRoute({
   operationId: "getSpecialized",
   path: "/get-specialized",
-  tags: ["Specialized — Ngành đào tạo"],
+  tags: ["Ngành đào tạo"],
   summary: "2.13 2.14. Lấy thông tin phân ngành, chuyên ngành đào tạo",
   description: `Danh sách ngành/chuyên ngành và phiên bản chương trình đào tạo.
 

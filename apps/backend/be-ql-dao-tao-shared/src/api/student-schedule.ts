@@ -9,7 +9,7 @@ const app: OpenAPIHono = new OpenAPIHono({ strict: false })
 const postStudentSchedule = createRoute({
   operationId: "schedules",
   path: "/schedules",
-  tags: ["Schedules — Thời khóa biểu"],
+  tags: ["Thời khóa biểu"],
   summary: "2.6. Thời khoá biểu",
   description: `Thời khóa biểu các lớp học phần sinh viên đã học trong một học kỳ.
 

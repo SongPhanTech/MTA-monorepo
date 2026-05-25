@@ -16,7 +16,7 @@ const app: OpenAPIHono = new OpenAPIHono({ strict: false })
 const getListSessionRegistration = createRoute({
   operationId: "getListSessionRegistration",
   path: "/get-list-session-registration",
-  tags: ["Registration Session — Đợt đăng ký"],
+  tags: ["Đợt đăng ký"],
   summary: "2.8. Lấy đợt đăng ký học",
   description: `Danh sách đợt đăng ký học phần (theo từ khóa và trạng thái mở/đóng).
 
@@ -130,7 +130,7 @@ app.openapi(getListSessionRegistration, async (c) => {
 const getDetailSessionRegistration = createRoute({
   operationId: "getDetailSessionRegistration",
   path: "/get-detail-session-registration",
-  tags: ["Registration Session — Đợt đăng ký"],
+  tags: ["Đợt đăng ký"],
   summary: "2.9. Lấy chi tiết đợt đăng ký học",
   description: `Chi tiết đợt đăng ký: thời gian, học phí/tín chỉ, khóa được phép, hạn mức tín chỉ theo điểm.
 

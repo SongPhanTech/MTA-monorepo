@@ -175,7 +175,7 @@ app.openapi(genExamListCode, async (c) => {
 const saveExamScore = createRoute({
   operationId: "save-exam-score",
   path: "/save-exam-score",
-  tags: ["Exam — Kỳ thi"],
+  tags: ["Kỳ thi"],
   summary: "Lưu điểm theo phách",
   description: `Cập nhật điểm thi theo danh sách phách.
 

@@ -172,7 +172,7 @@ app.openapi(importCurriculumVersion, async (c) => {
 
 const exportCurriculumVersion = createRoute({
   operationId: "export-phien-ban-CTDT",
-  tags: ["Curriculum — Chương trình đào tạo"],
+  tags: ["Chương trình đào tạo"],
   path: "/export-phien-ban-ctdt/{id}",
   method: "get",
   summary: "Xuất phiên bản CTĐT",
@@ -342,7 +342,7 @@ app.openapi(exportCurriculumVersion, async (c) => {
 
 const downloadCurriculumImportTemplate = createRoute({
   operationId: "downloadCurriculumImportTemplate",
-  tags: ["Curriculum — Chương trình đào tạo"],
+  tags: ["Chương trình đào tạo"],
   path: "/download-curriculum-template",
   method: "get",
   summary: "Tải mẫu import CTĐT",

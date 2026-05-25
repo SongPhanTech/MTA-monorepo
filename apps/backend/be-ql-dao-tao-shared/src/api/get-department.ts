@@ -28,7 +28,7 @@ function getDeptLevelFromHierarchy(code: string): number {
 
 const getAllDepartment = createRoute({
   operationId: "get-all-department",
-  tags: ["Department — Đơn vị / Khoa"],
+  tags: ["Đơn vị / Khoa"],
   path: "get-all-department",
   summary: "2.7. Danh sách đơn vị",
   description: `Lấy toàn bộ cây đơn vị tổ chức (khoa, bộ môn, …).

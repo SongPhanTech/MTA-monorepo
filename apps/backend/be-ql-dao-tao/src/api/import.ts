@@ -509,7 +509,7 @@ app.openapi(importLecturer, async (c) => {
 
 const importStudent = createRoute({
   operationId: "import-student",
-  tags: ["Student — Học viên / Sinh viên"],
+  tags: ["Học viên / Sinh viên"],
   path: "/import-student",
   method: "post",
   summary: "Import học viên Excel",
@@ -1119,7 +1119,7 @@ app.openapi(importStudent, async (c) => {
 
 const importHeQuanSu = createRoute({
   operationId: "import-he-quan-su",
-  tags: ["Student — Học viên / Sinh viên"],
+  tags: ["Học viên / Sinh viên"],
   path: "/import-he-quan-su",
   method: "post",
   summary: "Import hệ quân sự",
@@ -1311,7 +1311,7 @@ app.openapi(importHeQuanSu, async (c) => {
 
 const importInternship = createRoute({
   operationId: "import-internship",
-  tags: ["Import — Nhập dữ liệu"],
+  tags: ["Nhập dữ liệu"],
   path: "/import-internship",
   method: "post",
   summary: "Import thực tập Excel",

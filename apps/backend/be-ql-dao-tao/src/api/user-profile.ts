@@ -20,7 +20,7 @@ const uploadExcelCreateUserProfile = createRoute({
 **Bảng dữ liệu nguồn:** UserProfile, UserType.
 
 **Tham số:** file, type — mã loại đối tượng (UserType).`,
-  tags: ["UserProfile — Hồ sơ người dùng"],
+  tags: ["Hồ sơ người dùng"],
   request: {
     body: {
       content: {
@@ -60,7 +60,7 @@ const uploadExcelUpdateUserProfile = createRoute({
 **Bảng dữ liệu nguồn:** UserProfile.
 
 **Tham số:** file.`,
-  tags: ["UserProfile — Hồ sơ người dùng"],
+  tags: ["Hồ sơ người dùng"],
   request: {
     body: {
       content: {

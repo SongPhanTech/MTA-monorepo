@@ -16,7 +16,7 @@ const exportExcelListStudentFixedClassTrainingPoint = createRoute({
 **Bảng dữ liệu nguồn:** FixedClass, Student, TrainingScore.
 
 **Tham số:** fixedClassId (query).`,
-  tags: ["TrainingPoint — Điểm rèn luyện"],
+  tags: ["Điểm rèn luyện"],
   method: "get",
   request: {
     query: z.object({
@@ -61,7 +61,7 @@ const uploadExcelImportTrainingScore = createRoute({
 **Bảng dữ liệu nguồn:** TrainingScore, FixedClass, TrainingSession.
 
 **Tham số:** file, fixedClassId, trainingSessionId.`,
-  tags: ["TrainingPoint — Điểm rèn luyện"],
+  tags: ["Điểm rèn luyện"],
   request: {
     body: {
       content: {
