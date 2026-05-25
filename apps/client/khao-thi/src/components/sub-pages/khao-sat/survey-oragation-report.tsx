@@ -9,6 +9,8 @@ import Table from "@components/commons/table"
 import useSpinner from "@hooks/spinner"
 import {
   getClusterSurveyInfoDepartment,
+  getClusterSurveyStatisticsForLecturer,
+  useGetClusterSurveyStatisticsForLecturer,
   useGetClusterSurveyStatisticsForOrganization,
 } from "@workspace/libs/api/exam"
 import type { GetSurveyStatistics200QuestionsItemAnswersItem } from "@workspace/libs/api/schemas"
@@ -421,10 +423,97 @@ function SurveyOrganizationReport({
   //     message.error("Xuất file thất bại")
   //   }
   // }
+  function getAnswerPercent(answers: any[] = []) {
+    const answersWithPercent = calculatePercent(aggregateAnswersByAnswer(answers))
+    const getPercent = (answer: string) =>
+      `${answersWithPercent.find((i) => String(i.answer) === answer)?.percent || 0}%`
+
+    return {
+      muc1: getPercent("1"),
+      muc2: getPercent("2"),
+      muc3: getPercent("3"),
+      muc4: getPercent("4"),
+      muc5: getPercent("5"),
+    }
+  }
+  function aggregateAnswersByAnswer(answers: any[] = []): AnswerItem[] {
+    const answerMap = new Map<string, AnswerItem>()
+
+    answers.forEach((item) => {
+      const answer = String(item?.answer || "")
+      if (!answer) return
+
+      const count = Number(item?.count || 0)
+      const current = answerMap.get(answer)
+      if (current) {
+        current.count += count
+        return
+      }
+
+      answerMap.set(answer, {
+        id: item?.id || answer,
+        answer,
+        description: item?.description || "",
+        count,
+      })
+    })
+
+    return Array.from(answerMap.values()).sort((a, b) => Number(a.answer) - Number(b.answer))
+  }
+
+  function isLecturerNode(item: any) {
+    return Boolean(item?.id && !item?.iCapDonVi)
+  }
+
+  function getLecturerNodes(item: any): any[] {
+    if (!item?.children?.length) return []
+
+    return item.children.flatMap((child: any) => {
+      if (isLecturerNode(child)) return [child]
+      return getLecturerNodes(child)
+    })
+  }
+
+  function getSummaryGroups(item: any) {
+    const children = item?.children || []
+    const organizationChildren = children.filter((child: any) => child?.iCapDonVi)
+    const directLecturers = children.filter(isLecturerNode)
+    const groups = organizationChildren.map((organization: any) => ({
+      title: organization?.title || "",
+      lecturers: getLecturerNodes(organization),
+    }))
+
+    if (directLecturers.length) {
+      groups.unshift({
+        title: item?.title || "",
+        lecturers: directLecturers,
+      })
+    }
+
+    return groups.filter((group: any) => group.lecturers.length)
+  }
+
+  async function getLecturerAnswersForSummary(lecturer: any) {
+    if (lecturer?.answers?.length) return lecturer.answers
+    if (lecturer?.questions?.length) {
+      return lecturer.questions.flatMap((question: any) => question?.answers || [])
+    }
+
+    const response = await getClusterSurveyStatisticsForLecturer(selectedId as string, {
+      lectureId: lecturer.id,
+    })
+
+    if (response?.status !== 200) return []
+
+    return (
+      response?.data?.data?.questions?.flatMap((question: any) => question?.answers || []) || []
+    )
+  }
 
   const exportSummaryDocx = async (selectedItem: any) => {
     try {
       const rows: TableRow[] = []
+      const summaryGroups = getSummaryGroups(selectedItem)
 
       // HEADER
       rows.push(
@@ -523,21 +612,17 @@ function SurveyOrganizationReport({
 
         // DÒNG GIẢNG VIÊN
         boMon?.children?.forEach((gv: any) => {
-          const total =
-            (gv?.muc1 || 0) + (gv?.muc2 || 0) + (gv?.muc3 || 0) + (gv?.muc4 || 0) + (gv?.muc5 || 0)
-
-          const percent = (value: number) =>
-            total ? `${((value * 100) / total).toFixed(1)}%` : "0%"
+          const percentData = getAnswerPercent(gv?.answers || gv?.questions?.[0]?.answers || [])
 
           rows.push(
             new TableRow({
               children: [
                 gv?.title || "",
-                percent(gv?.muc1 || 0),
-                percent(gv?.muc2 || 0),
-                percent(gv?.muc3 || 0),
-                percent(gv?.muc4 || 0),
-                percent(gv?.muc5 || 0),
+                percentData.muc1,
+                percentData.muc2,
+                percentData.muc3,
+                percentData.muc4,
+                percentData.muc5,
               ].map(
                 (text) =>
                   new TableCell({
@@ -770,6 +855,20 @@ function SurveyOrganizationReport({
                   trigger={["click"]}
                   menu={{
                     items: [
+                      selectedItem?.iCapDonVi &&
+                        selectedItem?.iCapDonVi !== 3 && {
+                          key: "export-summary-docx",
+                          icon: <FileWordOutlined />,
+                          label: "Tổng kết Khoa/Viện",
+                          onClick: async () => {
+                            showSpinner()
+                            try {
+                              await exportSummaryDocx(selectedItem)
+                            } finally {
+                              hideSpinner()
+                            }
+                          },
+                        },
                       {
                         key: "export",
                         icon: <FileExcelOutlined />,
@@ -802,19 +901,6 @@ function SurveyOrganizationReport({
                               departmentCode,
                               questions: dataLevel?.data?.data?.questions || [],
                             })
-                          } finally {
-                            hideSpinner()
-                          }
-                        },
-                      },
-                      {
-                        key: "export-summary-docx",
-                        icon: <FileWordOutlined />,
-                        label: "Xuất Tổng kết",
-                        onClick: async () => {
-                          showSpinner()
-                          try {
-                            await exportSummaryDocx(selectedItem)
                           } finally {
                             hideSpinner()
                           }
