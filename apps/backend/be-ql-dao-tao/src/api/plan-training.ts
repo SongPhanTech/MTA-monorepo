@@ -25,7 +25,7 @@ const importPhanCongGiangDay = createRoute({
 **Bảng dữ liệu nguồn:** SubjectClass, ClassSchedule, Lecturer, Room, FixedClass.
 
 **Tham số:** file, semesterId, trainingObjectTypeId, fileType, importType, type.`,
-  tags: ["PlanTraining — Phân công giảng dạy"],
+  tags: ["Phân công giảng dạy"],
   request: {
     body: {
       content: {

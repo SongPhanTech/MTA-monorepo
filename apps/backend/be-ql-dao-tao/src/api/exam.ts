@@ -8,7 +8,7 @@ const app = new OpenAPIHono({ strict: false })
 
 const createNewExamList = createRoute({
   operationId: "create-exams",
-  tags: ["Exam — Kỳ thi"],
+  tags: ["Kỳ thi"],
   path: "",
   method: "post",
   summary: "Lên danh sách thi",

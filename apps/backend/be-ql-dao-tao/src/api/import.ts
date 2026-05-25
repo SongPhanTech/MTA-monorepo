@@ -39,7 +39,7 @@ const app = new OpenAPIHono({ strict: false })
 
 const importLecturer = createRoute({
   operationId: "import-lecturer",
-  tags: ["Import — Nhập dữ liệu"],
+  tags: ["Nhập dữ liệu"],
   path: "/import-lecturer",
   method: "post",
   summary: "Import giảng viên Excel",

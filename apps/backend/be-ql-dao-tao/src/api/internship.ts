@@ -11,7 +11,7 @@ const app = new OpenAPIHono({ strict: false })
 
 const exportInternshipProfile = createRoute({
   operationId: "exportInternshipProfile",
-  tags: ["Internship — Thực tập"],
+  tags: ["Thực tập"],
   path: "/export-internship-profile",
   method: "post",
   summary: "Xuất danh sách thực tập",
@@ -80,7 +80,8 @@ app.openapi(exportInternshipProfile, async (c) => {
         },
       },
       supervisor: {
-        include: {
+        include: {    
+                
           lecturer: {
             include: {
               userProfile: {
@@ -95,6 +96,7 @@ app.openapi(exportInternshipProfile, async (c) => {
       },
       coSupervisor: {
         include: {
+
           lecturer: {
             include: {
               userProfile: {

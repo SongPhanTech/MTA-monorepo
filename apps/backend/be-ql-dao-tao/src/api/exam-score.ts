@@ -10,7 +10,7 @@ const app = new OpenAPIHono({ strict: false })
 const genExamListCode = createRoute({
   operationId: "gen-exam-list-code",
   path: "/gen-exam-list-code",
-  tags: ["Exam — Kỳ thi"],
+  tags: ["Kỳ thi"],
   summary: "Sinh phách danh sách thi",
   description: `Sinh số phách cho các bài thi trong kỳ thi.
 

@@ -19,7 +19,7 @@ const classDivision = createRoute({
 **Bảng dữ liệu nguồn:** FixedClass, UserProfile, Student.
 
 **Tham số:** file — file Excel danh sách (cột mã HV, mã lớp).`,
-  tags: ["FixedClass — Lớp niên chế"],
+  tags: ["Lớp niên chế"],
   request: {
     body: {
       content: {

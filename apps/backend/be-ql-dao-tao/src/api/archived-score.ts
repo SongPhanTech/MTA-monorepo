@@ -23,7 +23,7 @@ const app = new OpenAPIHono({ strict: false })
 const certificateScore = createRoute({
   operationId: "certificate-score",
   path: "/certificate-score",
-  tags: ["ArchivedScore — Điểm chứng chỉ / Thưởng"],
+  tags: ["Điểm chứng chỉ / Thưởng"],
   summary: "Phiên điểm chứng chỉ",
   description: `Tính / ghi điểm từ phiên chứng chỉ đã lưu trữ.
 

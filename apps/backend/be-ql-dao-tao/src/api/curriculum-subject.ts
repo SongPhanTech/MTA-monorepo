@@ -19,7 +19,7 @@ const app = new OpenAPIHono({ strict: false })
 
 const importCurriculumVersion = createRoute({
   operationId: "import-phien-ban-CTDT-Subject",
-  tags: ["Curriculum — Chương trình đào tạo"],
+  tags: ["Chương trình đào tạo"],
   path: "/import-phien-ban-ctdt-subject",
   method: "post",
   summary: "Import môn vào CTĐT",

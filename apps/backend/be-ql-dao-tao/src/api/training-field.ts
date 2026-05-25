@@ -23,7 +23,7 @@ const TrainingFieldItemSchema = z.object({
 
 const getTrainingField = createRoute({
   operationId: "training-field",
-  tags: ["TrainingField — Lĩnh vực đào tạo"],
+  tags: ["Lĩnh vực đào tạo"],
   path: "",
   method: "get",
   summary: "Danh sách lĩnh vực đào tạo",

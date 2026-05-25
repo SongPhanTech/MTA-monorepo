@@ -11,7 +11,7 @@ const app = new OpenAPIHono({ strict: false })
 
 const exportDiplomaVerification = createRoute({
   operationId: "exportDiplomaVerification",
-  tags: ["DiplomaVerification — Xác minh văn bằng"],
+  tags: ["Xác minh văn bằng"],
   path: "/export-diploma-verification",
   method: "get",
   summary: "Xuất xác minh văn bằng",

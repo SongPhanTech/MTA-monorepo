@@ -53,7 +53,7 @@ const app = new OpenAPIHono({ strict: false })
 
 const graduationApplicationInit = createRoute({
   operationId: "graduationApplicationInit",
-  tags: ["Graduation — Tốt nghiệp"],
+  tags: ["Tốt nghiệp"],
   path: "/application-init",
   method: "post",
   summary: "Khởi tạo đơn xét TN",

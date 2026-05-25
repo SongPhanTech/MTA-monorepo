@@ -12,7 +12,7 @@ const RoomItemSchema = z.object({
 
 const getRoom = createRoute({
   operationId: "room",
-  tags: ["Room — Phòng học"],
+  tags: ["Phòng học"],
   path: "",
   method: "get",
   summary: "Danh sách phòng học",
