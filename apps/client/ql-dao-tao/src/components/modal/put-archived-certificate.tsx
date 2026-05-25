@@ -23,6 +23,10 @@ import dayjs from "dayjs"
 import "dayjs/locale/vi"
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
+import {
+  confirmViolations,
+  useCertificateExpirationCheck,
+} from "./utils/check-certificate-expiration"
 
 type SelectedStudentRow = {
   rowId: string
@@ -30,6 +34,7 @@ type SelectedStudentRow = {
   code: string
   fullname: string
   dateOfBirth: Date | string | null
+  fixedClassId: string | null
 }
 
 export type PutArchivedCertificate = {
@@ -89,6 +94,7 @@ const PutCertificateArchivedModal = () => {
       },
     },
   })
+  const { runCheck } = useCertificateExpirationCheck(certificate as any)
   const { data: trainingCourses = [] } = useFindManyTrainingCourse(
     {
       where: { trainingObjectTypeId },
@@ -156,6 +162,7 @@ const PutCertificateArchivedModal = () => {
           code: student.userProfile?.code || "",
           fullname: student.userProfile?.fullname || "",
           dateOfBirth: student.userProfile?.dateOfBirth || null,
+          fixedClassId: student.fixedClassId ?? student.fixedClass?.id ?? null,
         },
       ])
     },
@@ -180,12 +187,33 @@ const PutCertificateArchivedModal = () => {
       }
 
       await form.validateFields()
-      showSpinner()
 
       if (id) {
       } else {
-        const createdCertificates: any[] = []
         const latestStudentFormData = form.getFieldValue("student") || {}
+
+        const itemsForCheck = selectedStudents
+          .map((row) => {
+            const data = latestStudentFormData[row.rowId] || studentFormData[row.rowId] || {}
+            if (!data?.certificateId) return null
+            return {
+              studentId: row.studentId,
+              studentName: row.fullname,
+              studentFixedClassId: row.fixedClassId,
+              certificateId: data.certificateId as string,
+              expiredDate: data.expiredDate ? data.expiredDate.toDate() : null,
+            }
+          })
+          .filter((x): x is NonNullable<typeof x> => !!x)
+
+        const violations = await runCheck(itemsForCheck)
+        if (violations.length > 0) {
+          const proceed = await confirmViolations(violations)
+          if (!proceed) return
+        }
+
+        showSpinner()
+        const createdCertificates: any[] = []
 
         for (const row of selectedStudents) {
           const studentDataForRow =

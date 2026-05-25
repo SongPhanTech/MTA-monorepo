@@ -186,9 +186,6 @@ const PutOneSubjectClassModal = () => {
     }
   )
 
-  const mainLecturerForm = Form.useWatch("lecturerId", form)
-  const extraLecturerForm = Form.useWatch("extraLecturerId", form)
-
   const { data: dataTable = [], refetch } = useFindManyStudentSubjectScore(
     {
       where: {
