@@ -41,6 +41,7 @@ export interface IMonHoc {
   diemhe10?: number
   diemhe4?: number
   diemchu?: string
+  pass?: boolean
   ghichu?: string
 }
 
@@ -497,6 +498,7 @@ export default function StudentScoreClassPage() {
 
   const handleExportQuaTrinh = async () => {
     const hocKis: IHocKi[] = []
+    let stt = 1
     if (data.length > 0) {
       data.forEach((semester) => {
         const monhoc: IMonHoc[] = []
@@ -516,6 +518,7 @@ export default function StudentScoreClassPage() {
               diemhe10: rawScore,
               diemhe4: converted?.base4 ?? 0,
               diemchu: converted?.letter ?? "",
+              pass: converted?.pass ?? false,
             })
           })
         })
@@ -568,16 +571,20 @@ export default function StudentScoreClassPage() {
         ],
       }
       const monHocRows: TableRow[] =
-        hocKi?.monHocs?.map((monHoc: IMonHoc, index: number) => ({
-          cells: [
-            { value: index + 1, align: "center" },
-            { value: monHoc.TenMonhoc ?? "", colSpan: 6, border: true },
-            { value: monHoc.soTC, align: "center" },
-            { value: monHoc.diemhe10 ?? 0, align: "right" },
-            { value: monHoc.diemhe4 ?? 0, align: "right" },
-            { value: monHoc.diemchu ?? "", align: "center" },
-          ],
-        })) ?? []
+        hocKi?.monHocs?.map((monHoc: IMonHoc) => {
+          const isFail = monHoc.pass === false
+          const cellStyle = isFail ? { bgColor: "FFFFC7CE", color: "FFFF0000" } : {}
+          return {
+            cells: [
+              { value: stt++, align: "center", ...cellStyle },
+              { value: monHoc.TenMonhoc ?? "", colSpan: 6, border: true, ...cellStyle },
+              { value: monHoc.soTC, align: "center", ...cellStyle },
+              { value: monHoc.diemhe10 ?? 0, align: "right", ...cellStyle },
+              { value: monHoc.diemhe4 ?? 0, align: "right", ...cellStyle },
+              { value: monHoc.diemchu ?? "", align: "center", ...cellStyle },
+            ],
+          }
+        }) ?? []
 
       const trungBinhRow: TableRow = {
         cells: [
@@ -725,7 +732,7 @@ export default function StudentScoreClassPage() {
                         Nhập điểm trực tiếp
                       </Button>
                     )}
-                    <Dropdown
+                    {/* <Dropdown
                       menu={{
                         items: [
                           {
@@ -735,15 +742,22 @@ export default function StudentScoreClassPage() {
                           },
                         ],
                       }}
+                    > */}
+                    <Button
+                      type="primary"
+                      icon={<DownloadOutlined />}
+                      onClick={() => exportTemplate()}
                     >
-                      <Button
-                        type="primary"
-                        icon={<DownloadOutlined />}
-                        onClick={() => exportTemplate()}
-                      >
-                        Xuất bảng điểm cá nhân (Mẫu P2)
-                      </Button>
-                    </Dropdown>
+                      Xuất bảng điểm cá nhân (Mẫu P2)
+                    </Button>
+                    <Button
+                      type="primary"
+                      icon={<DownloadOutlined />}
+                      onClick={() => handleExportQuaTrinh()}
+                    >
+                      Bảng điểm quá trình
+                    </Button>
+                    {/* </Dropdown> */}
                   </div>
                 </Flex>
               </Col>
