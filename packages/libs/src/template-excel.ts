@@ -15,6 +15,7 @@ export interface TableCell {
   wrapText?: boolean
   border?: boolean
   color?: string
+  numFmt?: string
 }
 
 export interface TableRow {
@@ -247,6 +248,9 @@ async function handleExcelJSDefault(
         for (const cellData of rowData.cells) {
           const cell = excelRow.getCell(currentCol)
           cell.value = sanitizeExcelCellValue(cellData.value) as ExcelJS.CellValue
+          if (cellData.numFmt) {
+            cell.numFmt = cellData.numFmt
+          }
 
           // Style
           cell.alignment = {

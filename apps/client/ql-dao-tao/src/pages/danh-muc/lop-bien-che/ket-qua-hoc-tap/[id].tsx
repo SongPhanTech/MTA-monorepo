@@ -319,10 +319,10 @@ export default function StudentScoreClassPage() {
           0
         )
         const diemTBHe10 = Number.parseFloat(
-          (tongSoTinChi === 0 ? 0 : tongDiemNhanTinChiHe10 / tongSoTinChi).toFixed(1)
+          (tongSoTinChi === 0 ? 0 : tongDiemNhanTinChiHe10 / tongSoTinChi).toFixed(2)
         )
         const diemTBHe4 = Number.parseFloat(
-          (tongSoTinChi === 0 ? 0 : tongDiemNhanTinChiHe4 / tongSoTinChi).toFixed(1)
+          (tongSoTinChi === 0 ? 0 : tongDiemNhanTinChiHe4 / tongSoTinChi).toFixed(2)
         )
 
         hocKis.push({
@@ -345,53 +345,87 @@ export default function StudentScoreClassPage() {
       hocKis,
     }
 
-    const tableRows = sampleStudentData.hocKis.flatMap((hocKi) => {
-      const hocKiRow: TableRow = {
+    const TABLE_START_ROW = 11
+    let cursor = TABLE_START_ROW
+    const tableRows: TableRow[] = []
+
+    for (const hocKi of sampleStudentData.hocKis) {
+      tableRows.push({
         cells: [
           { value: hocKi.TenHocKi ?? "", colSpan: 19, bold: true, align: "left", border: true },
         ],
-      }
-      const monHocRows: TableRow[] =
-        hocKi?.monHocs?.map((monHoc: IMonHoc, index: number) => ({
+      })
+      cursor += 1
+
+      const firstMonRow = cursor
+      const monHocs = hocKi?.monHocs ?? []
+      monHocs.forEach((monHoc: IMonHoc, index: number) => {
+        tableRows.push({
           cells: [
             { value: index + 1 },
             { value: monHoc.TenMonhoc ?? "", colSpan: 6, border: true },
             { value: monHoc.MaMH ?? "" },
             { value: monHoc.soTC, align: "center" },
-            { value: monHoc.diem01 ?? 0, align: "right" },
-            { value: monHoc.diem02 ?? 0, align: "right" },
-            { value: monHoc.diem07 ?? 0, align: "right" },
+            { value: monHoc.diem01 ?? 0, align: "right", numFmt: "0.00" },
+            { value: monHoc.diem02 ?? 0, align: "right", numFmt: "0.00" },
+            { value: monHoc.diem07 ?? 0, align: "right", numFmt: "0.00" },
             { value: null },
             { value: null },
-            { value: monHoc.diemhe10 ?? 0, align: "right" },
-            { value: monHoc.diemhe4 ?? 0, align: "right" },
+            { value: monHoc.diemhe10 ?? 0, align: "right", numFmt: "0.00" },
+            { value: monHoc.diemhe4 ?? 0, align: "right", numFmt: "0.00" },
             { value: monHoc.diemchu ?? "", align: "center" },
             { value: null },
             { value: monHoc.ghichu ?? "" },
           ],
-        })) ?? []
+        })
+        cursor += 1
+      })
+      const lastMonRow = cursor - 1
+      const hasMon = monHocs.length > 0 && lastMonRow >= firstMonRow
+      const sumStcFormula = `SUM(I${firstMonRow}:I${lastMonRow})`
+      const tbHe10Formula = `IFERROR(SUMPRODUCT(I${firstMonRow}:I${lastMonRow},O${firstMonRow}:O${lastMonRow})/${sumStcFormula},0)`
+      const tbHe4Formula = `IFERROR(SUMPRODUCT(I${firstMonRow}:I${lastMonRow},P${firstMonRow}:P${lastMonRow})/${sumStcFormula},0)`
 
-      const trungBinhRow: TableRow = {
+      tableRows.push({
         cells: [
           { value: null },
           { value: "Điểm trung bình học kỳ:", colSpan: 6, bold: true, align: "center" },
           { value: null },
-          { value: hocKi.SoTinChiKy ?? 0, bold: true, align: "center" },
+          {
+            value: hasMon
+              ? { formula: sumStcFormula, result: hocKi.SoTinChiKy ?? 0 }
+              : 0,
+            bold: true,
+            align: "center",
+          },
           { value: null },
           { value: null },
           { value: null },
           { value: null },
           { value: null },
-          { value: hocKi.DiemTBKyHe10 ?? 0, bold: true, align: "right" },
-          { value: hocKi.DiemTBKyHe4 ?? 0, bold: true, align: "right" },
+          {
+            value: hasMon
+              ? { formula: tbHe10Formula, result: hocKi.DiemTBKyHe10 ?? 0 }
+              : 0,
+            bold: true,
+            align: "right",
+            numFmt: "0.00",
+          },
+          {
+            value: hasMon
+              ? { formula: tbHe4Formula, result: hocKi.DiemTBKyHe4 ?? 0 }
+              : 0,
+            bold: true,
+            align: "right",
+            numFmt: "0.00",
+          },
           { value: null },
           { value: null },
           { value: null },
         ],
-      }
-
-      return [hocKiRow, ...monHocRows, trungBinhRow]
-    })
+      })
+      cursor += 1
+    }
 
     const gapRow: TableRow = { cells: [{ value: null, colSpan: 18, border: false }] }
     const tongtinchi = sampleStudentData.hocKis.reduce(
