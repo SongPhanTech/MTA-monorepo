@@ -3865,6 +3865,7 @@ model TrainingMajor {
   createdBy                    String?                             @db.Uuid()
   name                         String
   englishName                  String?
+  shortName                    String?
   summary                      String
   /// Số tín chỉ chuyên ngành
   numberCreditsMajor           Int                                 @default(0)

@@ -8675,6 +8675,7 @@ export namespace Prisma {
         createdBy: 'createdBy',
         name: 'name',
         englishName: 'englishName',
+        shortName: 'shortName',
         summary: 'summary',
         numberCreditsMajor: 'numberCreditsMajor',
         numberCreditsRequired: 'numberCreditsRequired',
@@ -12366,6 +12367,7 @@ export namespace Prisma {
         createdBy: 'createdBy',
         name: 'name',
         englishName: 'englishName',
+        shortName: 'shortName',
         summary: 'summary',
         organizationId: 'organizationId',
         secondOrganizationId: 'secondOrganizationId',
@@ -61887,6 +61889,7 @@ export namespace Prisma {
         readonly createdBy: FieldRef<"TrainingMajor", 'String'>;
         readonly name: FieldRef<"TrainingMajor", 'String'>;
         readonly englishName: FieldRef<"TrainingMajor", 'String'>;
+        readonly shortName: FieldRef<"TrainingMajor", 'String'>;
         readonly summary: FieldRef<"TrainingMajor", 'String'>;
         readonly numberCreditsMajor: FieldRef<"TrainingMajor", 'Int'>;
         readonly numberCreditsRequired: FieldRef<"TrainingMajor", 'Int'>;
@@ -247515,6 +247518,7 @@ export namespace Prisma {
         createdBy: string | null
         name: string | null
         englishName: string | null
+        shortName: string | null
         summary: string | null
         numberCreditsMajor: number | null
         numberCreditsRequired: number | null
@@ -247535,6 +247539,7 @@ export namespace Prisma {
         createdBy: string | null
         name: string | null
         englishName: string | null
+        shortName: string | null
         summary: string | null
         numberCreditsMajor: number | null
         numberCreditsRequired: number | null
@@ -247555,6 +247560,7 @@ export namespace Prisma {
         createdBy: number
         name: number
         englishName: number
+        shortName: number
         summary: number
         numberCreditsMajor: number
         numberCreditsRequired: number
@@ -247586,6 +247592,7 @@ export namespace Prisma {
         createdBy?: true
         name?: true
         englishName?: true
+        shortName?: true
         summary?: true
         numberCreditsMajor?: true
         numberCreditsRequired?: true
@@ -247606,6 +247613,7 @@ export namespace Prisma {
         createdBy?: true
         name?: true
         englishName?: true
+        shortName?: true
         summary?: true
         numberCreditsMajor?: true
         numberCreditsRequired?: true
@@ -247626,6 +247634,7 @@ export namespace Prisma {
         createdBy?: true
         name?: true
         englishName?: true
+        shortName?: true
         summary?: true
         numberCreditsMajor?: true
         numberCreditsRequired?: true
@@ -247727,6 +247736,7 @@ export namespace Prisma {
         createdBy: string | null
         name: string
         englishName: string | null
+        shortName: string | null
         summary: string
         numberCreditsMajor: number
         numberCreditsRequired: number
@@ -247764,6 +247774,7 @@ export namespace Prisma {
         createdBy?: boolean
         name?: boolean
         englishName?: boolean
+        shortName?: boolean
         summary?: boolean
         numberCreditsMajor?: boolean
         numberCreditsRequired?: boolean
@@ -247795,6 +247806,7 @@ export namespace Prisma {
         createdBy?: boolean
         name?: boolean
         englishName?: boolean
+        shortName?: boolean
         summary?: boolean
         numberCreditsMajor?: boolean
         numberCreditsRequired?: boolean
@@ -247819,6 +247831,7 @@ export namespace Prisma {
         createdBy?: boolean
         name?: boolean
         englishName?: boolean
+        shortName?: boolean
         summary?: boolean
         numberCreditsMajor?: boolean
         numberCreditsRequired?: boolean
@@ -247843,6 +247856,7 @@ export namespace Prisma {
         createdBy?: boolean
         name?: boolean
         englishName?: boolean
+        shortName?: boolean
         summary?: boolean
         numberCreditsMajor?: boolean
         numberCreditsRequired?: boolean
@@ -247852,7 +247866,7 @@ export namespace Prisma {
         thirdOrganizationId?: boolean
         trainingFieldId?: boolean
     };
-    export type TrainingMajorOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name" | "englishName" | "summary" | "numberCreditsMajor" | "numberCreditsRequired" | "numberCreditsElective" | "organizationId" | "secondOrganizationId" | "thirdOrganizationId" | "trainingFieldId", ExtArgs["result"]["trainingMajor"]>;
+    export type TrainingMajorOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name" | "englishName" | "shortName" | "summary" | "numberCreditsMajor" | "numberCreditsRequired" | "numberCreditsElective" | "organizationId" | "secondOrganizationId" | "thirdOrganizationId" | "trainingFieldId", ExtArgs["result"]["trainingMajor"]>;
     export type TrainingMajorInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         organization?: boolean | DM_DonViDefaultArgs<ExtArgs>
         secondOrganization?: boolean | TrainingMajor$secondOrganizationArgs<ExtArgs>
@@ -247903,6 +247917,7 @@ export namespace Prisma {
             createdBy: string | null
             name: string
             englishName: string | null
+            shortName: string | null
             summary: string
             /**
              * Số tín chỉ chuyên ngành
@@ -378458,6 +378473,7 @@ export namespace Prisma {
         createdBy?: UuidNullableFilter<"TrainingMajor"> | string | null
         name?: StringFilter<"TrainingMajor"> | string
         englishName?: StringNullableFilter<"TrainingMajor"> | string | null
+        shortName?: StringNullableFilter<"TrainingMajor"> | string | null
         summary?: StringFilter<"TrainingMajor"> | string
         numberCreditsMajor?: IntFilter<"TrainingMajor"> | number
         numberCreditsRequired?: IntFilter<"TrainingMajor"> | number
@@ -378488,6 +378504,7 @@ export namespace Prisma {
         createdBy?: SortOrderInput | SortOrder
         name?: SortOrder
         englishName?: SortOrderInput | SortOrder
+        shortName?: SortOrderInput | SortOrder
         summary?: SortOrder
         numberCreditsMajor?: SortOrder
         numberCreditsRequired?: SortOrder
@@ -378522,6 +378539,7 @@ export namespace Prisma {
         createdBy?: UuidNullableFilter<"TrainingMajor"> | string | null
         name?: StringFilter<"TrainingMajor"> | string
         englishName?: StringNullableFilter<"TrainingMajor"> | string | null
+        shortName?: StringNullableFilter<"TrainingMajor"> | string | null
         summary?: StringFilter<"TrainingMajor"> | string
         numberCreditsMajor?: IntFilter<"TrainingMajor"> | number
         numberCreditsRequired?: IntFilter<"TrainingMajor"> | number
@@ -378552,6 +378570,7 @@ export namespace Prisma {
         createdBy?: SortOrderInput | SortOrder
         name?: SortOrder
         englishName?: SortOrderInput | SortOrder
+        shortName?: SortOrderInput | SortOrder
         summary?: SortOrder
         numberCreditsMajor?: SortOrder
         numberCreditsRequired?: SortOrder
@@ -378580,6 +378599,7 @@ export namespace Prisma {
         createdBy?: UuidNullableWithAggregatesFilter<"TrainingMajor"> | string | null
         name?: StringWithAggregatesFilter<"TrainingMajor"> | string
         englishName?: StringNullableWithAggregatesFilter<"TrainingMajor"> | string | null
+        shortName?: StringNullableWithAggregatesFilter<"TrainingMajor"> | string | null
         summary?: StringWithAggregatesFilter<"TrainingMajor"> | string
         numberCreditsMajor?: IntWithAggregatesFilter<"TrainingMajor"> | number
         numberCreditsRequired?: IntWithAggregatesFilter<"TrainingMajor"> | number
@@ -409861,6 +409881,7 @@ export namespace Prisma {
         createdBy?: string | null
         name: string
         englishName?: string | null
+        shortName?: string | null
         summary: string
         numberCreditsMajor?: number
         numberCreditsRequired?: number
@@ -409887,6 +409908,7 @@ export namespace Prisma {
         createdBy?: string | null
         name: string
         englishName?: string | null
+        shortName?: string | null
         summary: string
         numberCreditsMajor?: number
         numberCreditsRequired?: number
@@ -409913,6 +409935,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
+        shortName?: NullableStringFieldUpdateOperationsInput | string | null
         summary?: StringFieldUpdateOperationsInput | string
         numberCreditsMajor?: IntFieldUpdateOperationsInput | number
         numberCreditsRequired?: IntFieldUpdateOperationsInput | number
@@ -409939,6 +409962,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
+        shortName?: NullableStringFieldUpdateOperationsInput | string | null
         summary?: StringFieldUpdateOperationsInput | string
         numberCreditsMajor?: IntFieldUpdateOperationsInput | number
         numberCreditsRequired?: IntFieldUpdateOperationsInput | number
@@ -409965,6 +409989,7 @@ export namespace Prisma {
         createdBy?: string | null
         name: string
         englishName?: string | null
+        shortName?: string | null
         summary: string
         numberCreditsMajor?: number
         numberCreditsRequired?: number
@@ -409985,6 +410010,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
+        shortName?: NullableStringFieldUpdateOperationsInput | string | null
         summary?: StringFieldUpdateOperationsInput | string
         numberCreditsMajor?: IntFieldUpdateOperationsInput | number
         numberCreditsRequired?: IntFieldUpdateOperationsInput | number
@@ -410001,6 +410027,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
+        shortName?: NullableStringFieldUpdateOperationsInput | string | null
         summary?: StringFieldUpdateOperationsInput | string
         numberCreditsMajor?: IntFieldUpdateOperationsInput | number
         numberCreditsRequired?: IntFieldUpdateOperationsInput | number
@@ -436935,6 +436962,7 @@ export namespace Prisma {
         createdBy?: SortOrder
         name?: SortOrder
         englishName?: SortOrder
+        shortName?: SortOrder
         summary?: SortOrder
         numberCreditsMajor?: SortOrder
         numberCreditsRequired?: SortOrder
@@ -436960,6 +436988,7 @@ export namespace Prisma {
         createdBy?: SortOrder
         name?: SortOrder
         englishName?: SortOrder
+        shortName?: SortOrder
         summary?: SortOrder
         numberCreditsMajor?: SortOrder
         numberCreditsRequired?: SortOrder
@@ -436980,6 +437009,7 @@ export namespace Prisma {
         createdBy?: SortOrder
         name?: SortOrder
         englishName?: SortOrder
+        shortName?: SortOrder
         summary?: SortOrder
         numberCreditsMajor?: SortOrder
         numberCreditsRequired?: SortOrder
@@ -511865,6 +511895,7 @@ export namespace Prisma {
         createdBy?: string | null
         name: string
         englishName?: string | null
+        shortName?: string | null
         summary: string
         numberCreditsMajor?: number
         numberCreditsRequired?: number
@@ -511890,6 +511921,7 @@ export namespace Prisma {
         createdBy?: string | null
         name: string
         englishName?: string | null
+        shortName?: string | null
         summary: string
         numberCreditsMajor?: number
         numberCreditsRequired?: number
@@ -511923,6 +511955,7 @@ export namespace Prisma {
         createdBy?: string | null
         name: string
         englishName?: string | null
+        shortName?: string | null
         summary: string
         numberCreditsMajor?: number
         numberCreditsRequired?: number
@@ -511948,6 +511981,7 @@ export namespace Prisma {
         createdBy?: string | null
         name: string
         englishName?: string | null
+        shortName?: string | null
         summary: string
         numberCreditsMajor?: number
         numberCreditsRequired?: number
@@ -511981,6 +512015,7 @@ export namespace Prisma {
         createdBy?: string | null
         name: string
         englishName?: string | null
+        shortName?: string | null
         summary: string
         numberCreditsMajor?: number
         numberCreditsRequired?: number
@@ -512006,6 +512041,7 @@ export namespace Prisma {
         createdBy?: string | null
         name: string
         englishName?: string | null
+        shortName?: string | null
         summary: string
         numberCreditsMajor?: number
         numberCreditsRequired?: number
@@ -512571,6 +512607,7 @@ export namespace Prisma {
         createdBy?: UuidNullableFilter<"TrainingMajor"> | string | null
         name?: StringFilter<"TrainingMajor"> | string
         englishName?: StringNullableFilter<"TrainingMajor"> | string | null
+        shortName?: StringNullableFilter<"TrainingMajor"> | string | null
         summary?: StringFilter<"TrainingMajor"> | string
         numberCreditsMajor?: IntFilter<"TrainingMajor"> | number
         numberCreditsRequired?: IntFilter<"TrainingMajor"> | number
@@ -535802,6 +535839,7 @@ export namespace Prisma {
         createdBy?: string | null
         name: string
         englishName?: string | null
+        shortName?: string | null
         summary: string
         numberCreditsMajor?: number
         numberCreditsRequired?: number
@@ -535827,6 +535865,7 @@ export namespace Prisma {
         createdBy?: string | null
         name: string
         englishName?: string | null
+        shortName?: string | null
         summary: string
         numberCreditsMajor?: number
         numberCreditsRequired?: number
@@ -536200,6 +536239,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
+        shortName?: NullableStringFieldUpdateOperationsInput | string | null
         summary?: StringFieldUpdateOperationsInput | string
         numberCreditsMajor?: IntFieldUpdateOperationsInput | number
         numberCreditsRequired?: IntFieldUpdateOperationsInput | number
@@ -536225,6 +536265,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
+        shortName?: NullableStringFieldUpdateOperationsInput | string | null
         summary?: StringFieldUpdateOperationsInput | string
         numberCreditsMajor?: IntFieldUpdateOperationsInput | number
         numberCreditsRequired?: IntFieldUpdateOperationsInput | number
@@ -553030,6 +553071,7 @@ export namespace Prisma {
         createdBy?: string | null
         name: string
         englishName?: string | null
+        shortName?: string | null
         summary: string
         numberCreditsMajor?: number
         numberCreditsRequired?: number
@@ -553055,6 +553097,7 @@ export namespace Prisma {
         createdBy?: string | null
         name: string
         englishName?: string | null
+        shortName?: string | null
         summary: string
         numberCreditsMajor?: number
         numberCreditsRequired?: number
@@ -554646,6 +554689,7 @@ export namespace Prisma {
         createdBy?: string | null
         name: string
         englishName?: string | null
+        shortName?: string | null
         summary: string
         numberCreditsMajor?: number
         numberCreditsRequired?: number
@@ -554671,6 +554715,7 @@ export namespace Prisma {
         createdBy?: string | null
         name: string
         englishName?: string | null
+        shortName?: string | null
         summary: string
         numberCreditsMajor?: number
         numberCreditsRequired?: number
@@ -554777,6 +554822,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
+        shortName?: NullableStringFieldUpdateOperationsInput | string | null
         summary?: StringFieldUpdateOperationsInput | string
         numberCreditsMajor?: IntFieldUpdateOperationsInput | number
         numberCreditsRequired?: IntFieldUpdateOperationsInput | number
@@ -554802,6 +554848,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
+        shortName?: NullableStringFieldUpdateOperationsInput | string | null
         summary?: StringFieldUpdateOperationsInput | string
         numberCreditsMajor?: IntFieldUpdateOperationsInput | number
         numberCreditsRequired?: IntFieldUpdateOperationsInput | number
@@ -576934,6 +576981,7 @@ export namespace Prisma {
         createdBy?: string | null
         name: string
         englishName?: string | null
+        shortName?: string | null
         summary: string
         numberCreditsMajor?: number
         numberCreditsRequired?: number
@@ -576959,6 +577007,7 @@ export namespace Prisma {
         createdBy?: string | null
         name: string
         englishName?: string | null
+        shortName?: string | null
         summary: string
         numberCreditsMajor?: number
         numberCreditsRequired?: number
@@ -585255,6 +585304,7 @@ export namespace Prisma {
         createdBy?: string | null
         name: string
         englishName?: string | null
+        shortName?: string | null
         summary: string
         numberCreditsMajor?: number
         numberCreditsRequired?: number
@@ -585280,6 +585330,7 @@ export namespace Prisma {
         createdBy?: string | null
         name: string
         englishName?: string | null
+        shortName?: string | null
         summary: string
         numberCreditsMajor?: number
         numberCreditsRequired?: number
@@ -598077,6 +598128,7 @@ export namespace Prisma {
         createdBy?: string | null
         name: string
         englishName?: string | null
+        shortName?: string | null
         summary: string
         numberCreditsMajor?: number
         numberCreditsRequired?: number
@@ -598102,6 +598154,7 @@ export namespace Prisma {
         createdBy?: string | null
         name: string
         englishName?: string | null
+        shortName?: string | null
         summary: string
         numberCreditsMajor?: number
         numberCreditsRequired?: number
@@ -598754,6 +598807,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
+        shortName?: NullableStringFieldUpdateOperationsInput | string | null
         summary?: StringFieldUpdateOperationsInput | string
         numberCreditsMajor?: IntFieldUpdateOperationsInput | number
         numberCreditsRequired?: IntFieldUpdateOperationsInput | number
@@ -598779,6 +598833,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
+        shortName?: NullableStringFieldUpdateOperationsInput | string | null
         summary?: StringFieldUpdateOperationsInput | string
         numberCreditsMajor?: IntFieldUpdateOperationsInput | number
         numberCreditsRequired?: IntFieldUpdateOperationsInput | number
@@ -599832,6 +599887,7 @@ export namespace Prisma {
         createdBy?: string | null
         name: string
         englishName?: string | null
+        shortName?: string | null
         summary: string
         numberCreditsMajor?: number
         numberCreditsRequired?: number
@@ -599857,6 +599913,7 @@ export namespace Prisma {
         createdBy?: string | null
         name: string
         englishName?: string | null
+        shortName?: string | null
         summary: string
         numberCreditsMajor?: number
         numberCreditsRequired?: number
@@ -600391,6 +600448,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
+        shortName?: NullableStringFieldUpdateOperationsInput | string | null
         summary?: StringFieldUpdateOperationsInput | string
         numberCreditsMajor?: IntFieldUpdateOperationsInput | number
         numberCreditsRequired?: IntFieldUpdateOperationsInput | number
@@ -600416,6 +600474,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
+        shortName?: NullableStringFieldUpdateOperationsInput | string | null
         summary?: StringFieldUpdateOperationsInput | string
         numberCreditsMajor?: IntFieldUpdateOperationsInput | number
         numberCreditsRequired?: IntFieldUpdateOperationsInput | number
@@ -622076,6 +622135,7 @@ export namespace Prisma {
         createdBy?: string | null
         name: string
         englishName?: string | null
+        shortName?: string | null
         summary: string
         numberCreditsMajor?: number
         numberCreditsRequired?: number
@@ -622095,6 +622155,7 @@ export namespace Prisma {
         createdBy?: string | null
         name: string
         englishName?: string | null
+        shortName?: string | null
         summary: string
         numberCreditsMajor?: number
         numberCreditsRequired?: number
@@ -622114,6 +622175,7 @@ export namespace Prisma {
         createdBy?: string | null
         name: string
         englishName?: string | null
+        shortName?: string | null
         summary: string
         numberCreditsMajor?: number
         numberCreditsRequired?: number
@@ -622810,6 +622872,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
+        shortName?: NullableStringFieldUpdateOperationsInput | string | null
         summary?: StringFieldUpdateOperationsInput | string
         numberCreditsMajor?: IntFieldUpdateOperationsInput | number
         numberCreditsRequired?: IntFieldUpdateOperationsInput | number
@@ -622835,6 +622898,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
+        shortName?: NullableStringFieldUpdateOperationsInput | string | null
         summary?: StringFieldUpdateOperationsInput | string
         numberCreditsMajor?: IntFieldUpdateOperationsInput | number
         numberCreditsRequired?: IntFieldUpdateOperationsInput | number
@@ -622860,6 +622924,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
+        shortName?: NullableStringFieldUpdateOperationsInput | string | null
         summary?: StringFieldUpdateOperationsInput | string
         numberCreditsMajor?: IntFieldUpdateOperationsInput | number
         numberCreditsRequired?: IntFieldUpdateOperationsInput | number
@@ -622879,6 +622944,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
+        shortName?: NullableStringFieldUpdateOperationsInput | string | null
         summary?: StringFieldUpdateOperationsInput | string
         numberCreditsMajor?: IntFieldUpdateOperationsInput | number
         numberCreditsRequired?: IntFieldUpdateOperationsInput | number
@@ -622904,6 +622970,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
+        shortName?: NullableStringFieldUpdateOperationsInput | string | null
         summary?: StringFieldUpdateOperationsInput | string
         numberCreditsMajor?: IntFieldUpdateOperationsInput | number
         numberCreditsRequired?: IntFieldUpdateOperationsInput | number
@@ -622929,6 +622996,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
+        shortName?: NullableStringFieldUpdateOperationsInput | string | null
         summary?: StringFieldUpdateOperationsInput | string
         numberCreditsMajor?: IntFieldUpdateOperationsInput | number
         numberCreditsRequired?: IntFieldUpdateOperationsInput | number
@@ -622948,6 +623016,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
+        shortName?: NullableStringFieldUpdateOperationsInput | string | null
         summary?: StringFieldUpdateOperationsInput | string
         numberCreditsMajor?: IntFieldUpdateOperationsInput | number
         numberCreditsRequired?: IntFieldUpdateOperationsInput | number
@@ -622973,6 +623042,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
+        shortName?: NullableStringFieldUpdateOperationsInput | string | null
         summary?: StringFieldUpdateOperationsInput | string
         numberCreditsMajor?: IntFieldUpdateOperationsInput | number
         numberCreditsRequired?: IntFieldUpdateOperationsInput | number
@@ -622998,6 +623068,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
+        shortName?: NullableStringFieldUpdateOperationsInput | string | null
         summary?: StringFieldUpdateOperationsInput | string
         numberCreditsMajor?: IntFieldUpdateOperationsInput | number
         numberCreditsRequired?: IntFieldUpdateOperationsInput | number
@@ -652421,6 +652492,7 @@ export namespace Prisma {
         createdBy?: string | null
         name: string
         englishName?: string | null
+        shortName?: string | null
         summary: string
         numberCreditsMajor?: number
         numberCreditsRequired?: number
@@ -652509,6 +652581,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
+        shortName?: NullableStringFieldUpdateOperationsInput | string | null
         summary?: StringFieldUpdateOperationsInput | string
         numberCreditsMajor?: IntFieldUpdateOperationsInput | number
         numberCreditsRequired?: IntFieldUpdateOperationsInput | number
@@ -652534,6 +652607,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
+        shortName?: NullableStringFieldUpdateOperationsInput | string | null
         summary?: StringFieldUpdateOperationsInput | string
         numberCreditsMajor?: IntFieldUpdateOperationsInput | number
         numberCreditsRequired?: IntFieldUpdateOperationsInput | number
@@ -652559,6 +652633,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
+        shortName?: NullableStringFieldUpdateOperationsInput | string | null
         summary?: StringFieldUpdateOperationsInput | string
         numberCreditsMajor?: IntFieldUpdateOperationsInput | number
         numberCreditsRequired?: IntFieldUpdateOperationsInput | number
@@ -661226,6 +661301,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
+        shortName?: NullableStringFieldUpdateOperationsInput | string | null
         summary?: StringFieldUpdateOperationsInput | string
         numberCreditsMajor?: IntFieldUpdateOperationsInput | number
         numberCreditsRequired?: IntFieldUpdateOperationsInput | number
@@ -661251,6 +661327,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
+        shortName?: NullableStringFieldUpdateOperationsInput | string | null
         summary?: StringFieldUpdateOperationsInput | string
         numberCreditsMajor?: IntFieldUpdateOperationsInput | number
         numberCreditsRequired?: IntFieldUpdateOperationsInput | number
@@ -661276,6 +661353,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
+        shortName?: NullableStringFieldUpdateOperationsInput | string | null
         summary?: StringFieldUpdateOperationsInput | string
         numberCreditsMajor?: IntFieldUpdateOperationsInput | number
         numberCreditsRequired?: IntFieldUpdateOperationsInput | number
@@ -665132,6 +665210,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
+        shortName?: NullableStringFieldUpdateOperationsInput | string | null
         summary?: StringFieldUpdateOperationsInput | string
         numberCreditsMajor?: IntFieldUpdateOperationsInput | number
         numberCreditsRequired?: IntFieldUpdateOperationsInput | number
@@ -665157,6 +665236,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
+        shortName?: NullableStringFieldUpdateOperationsInput | string | null
         summary?: StringFieldUpdateOperationsInput | string
         numberCreditsMajor?: IntFieldUpdateOperationsInput | number
         numberCreditsRequired?: IntFieldUpdateOperationsInput | number
@@ -665182,6 +665262,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
+        shortName?: NullableStringFieldUpdateOperationsInput | string | null
         summary?: StringFieldUpdateOperationsInput | string
         numberCreditsMajor?: IntFieldUpdateOperationsInput | number
         numberCreditsRequired?: IntFieldUpdateOperationsInput | number

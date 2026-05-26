@@ -14165,6 +14165,10 @@ const metadata = {
                     name: "englishName",
                     type: "String",
                     isOptional: true,
+                }, shortName: {
+                    name: "shortName",
+                    type: "String",
+                    isOptional: true,
                 }, summary: {
                     name: "summary",
                     type: "String",
