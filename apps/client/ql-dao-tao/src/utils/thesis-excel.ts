@@ -1262,19 +1262,20 @@ export const exportHosobvlv = async ({
       const text1 = isChief ? "TRƯỞNG PHÒNG SAU ĐẠI HỌC" : "KT. TRƯỞNG PHÒNG SAU ĐẠI HỌC"
       const text2 = isChief ? "" : "PHÓ TRƯỞNG PHÒNG SAU ĐẠI HỌC"
       const ngayQDBV =
-        student?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.defenseDecisionDate
+      formatBirthDate(student?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.defenseDecisionDate || "")
       const soQDBV =
         student?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.defenseDecisionNumber
       const dotxetBV = student?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.name
       const ngaysinh = formatBirthDate(student?.userProfile?.dateOfBirth)
       const khoas = student?.fixedClass?.trainingCourse?.name || ""
+      const ngaybaove = formatBirthDate(student?.thesisRegistrations?.[0]?.thesisProject?.defenseDate || "")
       // const nguoiKi
       const data = {
         tenhocvien: student.userProfile?.fullname || "",
         soQD: soQDBV || "",
-        // ngayQD: formatThesisDate(ngayQDBV),
-        ngayQD: ngayQDBV ? dayjs(ngayQDBV).format("DD/MM/YYYY") : "",
+        ngayQD: ngayQDBV || "",
         dotxet: dotxetBV || "",
+        ngaysinh: ngaysinh || "",
         type:
           student.thesisRegistrations?.[0]?.thesisProject?.type?.trim().toLowerCase() || "luận văn",
         khoa: `${khoas || ""}`,
@@ -1283,11 +1284,7 @@ export const exportHosobvlv = async ({
           student?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.trainingField?.name ||
           "",
         detai: `${student?.thesisRegistrations?.[0]?.thesisProject?.title || ""}`,
-        ngaybaove: student?.thesisRegistrations?.[0]?.thesisProject?.defenseDate
-          ? dayjs(student?.thesisRegistrations?.[0]?.thesisProject?.defenseDate).format(
-              "DD/MM/YYYY"
-            )
-          : "",
+        ngaybaove: ngaybaove || "",
         phanbien1: getSupervisorName(phanbien1?.expert, false, true) || "",
         phanbien2: getSupervisorName(phanbien2?.expert, false, true) || "",
         chutich: getSupervisorName(chutich?.expert, false, true) || "",

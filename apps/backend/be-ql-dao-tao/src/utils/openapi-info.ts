@@ -2,7 +2,7 @@ import type { Context } from "hono"
 
 export const OPENAPI_INFO_DESCRIPTION = `## Giới thiệu
 
-Tài liệu mô tả toàn bộ các API phục vụ hệ thống **Quản lý Đào tạo nội bộ** của Học viện Kỹ thuật Mật mã (MTA).
+Tài liệu mô tả toàn bộ các API phục vụ hệ thống **Quản lý Đào tạo nội bộ** của Học viện Kỹ thuật Quân sự (MTA).
 
 Bộ API này được sử dụng bởi các cán bộ quản lý đào tạo, giảng viên và hệ thống nghiệp vụ nội bộ, bao gồm:
 

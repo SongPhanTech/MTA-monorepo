@@ -2,7 +2,7 @@ import type { Context } from "hono"
 
 export const OPENAPI_INFO_DESCRIPTION = `## Giới thiệu
 
-Tài liệu mô tả toàn bộ các API **Shared** phục vụ hệ thống Quản lý Đào tạo của Học viện Kỹ thuật Mật mã (MTA).
+Tài liệu mô tả toàn bộ các API **Shared** phục vụ hệ thống Quản lý Đào tạo của Học viện Kỹ thuật Quân sự (MTA).
 
 Bộ API này cung cấp dữ liệu cho ứng dụng di động và các hệ thống tích hợp bên thứ ba, bao gồm:
 
