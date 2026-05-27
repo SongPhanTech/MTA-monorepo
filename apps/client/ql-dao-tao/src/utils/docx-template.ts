@@ -22,3 +22,18 @@ export const docxTemplate = (body: DocxTemplateBody): Promise<CustomModelRespons
     body: JSON.stringify(body),
   })
 }
+
+export const previewDocxTemplate = (
+  body: DocxTemplateBody & { previewKey: string }
+): Promise<CustomModelResponse<{ path: string; fileType: string }>> => {
+  return customModelFetch<CustomModelResponse<{ path: string; fileType: string }>>(
+    "/api/docx-template/preview",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    }
+  )
+}

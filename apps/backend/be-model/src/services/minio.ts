@@ -94,6 +94,13 @@ export class MinIOService {
     return this.listObjectsWithLimit(this.bucketName, path, limit, startAfter)
   }
 
+  async putObject(objectName: string, buffer: Buffer, contentType: string): Promise<UrlDto> {
+    await this.minioClient.putObject(this.bucketName, objectName, buffer, buffer.length, {
+      "Content-Type": contentType,
+    })
+    return { url: "", fileName: `${this.bucketName}/${objectName}` }
+  }
+
   async presignedGetObject(objectName: string): Promise<UrlDto> {
     const url = await this.minioClient.presignedGetObject(this.bucketName, objectName, 3600)
     return { url, fileName: objectName }
