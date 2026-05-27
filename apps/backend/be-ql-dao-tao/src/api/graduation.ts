@@ -3093,4 +3093,153 @@ app.openapi(getPhuLucIXData, async (c) => {
   )
 })
 
+const getDanhSachKySuData = createRoute({
+  operationId: "getDanhSachKySuData",
+  tags: ["Tốt nghiệp"],
+  path: "/danh-sach-ky-su-data",
+  method: "get",
+  summary: "Dữ liệu DS học viên kỹ sư quân sự được công nhận TN",
+  description:
+    "Trả về dữ liệu JSON đã group theo ngành → chuyên ngành → học viên (graduation=true) để FE fill vào template DOCX bằng easy-template-x.",
+  request: {
+    query: z.object({
+      sessionId: z.string().openapi(fieldDesc("ID đợt xét TN.")),
+    }),
+  },
+  responses: {
+    200: {
+      description: "OK",
+      content: {
+        "application/json": {
+          schema: z.object({ data: z.record(z.unknown()) }),
+        },
+      },
+    },
+    404: {
+      description: "Không tìm thấy đợt",
+      content: {
+        "application/json": {
+          schema: ErrorMessageResponseSchema,
+        },
+      },
+    },
+  },
+})
+
+app.openapi(getDanhSachKySuData, async (c) => {
+  const { sessionId } = c.req.valid("query")
+
+  const session = await prisma.graduationSession.findUnique({
+    where: { id: sessionId },
+    include: { trainingCourse: true },
+  })
+
+  if (!session) return c.json({ message: "Không tìm thấy đợt xét tốt nghiệp" }, 404)
+
+  const applications = await prisma.studentGraduationApplication.findMany({
+    where: { sessionId, graduation: true, deletedAt: null },
+    include: {
+      rank: true,
+      downgraded: true,
+      trainingMajor: { include: { trainingField: true } },
+      student: {
+        include: {
+          fixedClass: { include: { trainingCourse: true } },
+          userProfile: {
+            include: { gender: true, ethnicity: true, newProvinceOfBirth: true },
+          },
+        },
+      },
+    },
+    orderBy: { createdAt: "asc" },
+  })
+
+  // chuẩn hoá: bỏ dấu + đ->d + thường (dùng để nhận diện "hạ mức" trong reason)
+  const normalize = (s?: string | null) =>
+    (s ?? "")
+      .normalize("NFD")
+      .replace(/[̀-ͯ]/g, "")
+      .replace(/[đĐ]/g, "d")
+      .toLowerCase()
+
+  const nganhKey = (a: (typeof applications)[number]) => a.trainingMajor?.trainingField?.name ?? ""
+  const chuyenNganhKey = (a: (typeof applications)[number]) => a.trainingMajor?.name ?? ""
+  const hoTenOf = (a: (typeof applications)[number]) => a.student.userProfile?.fullname ?? ""
+
+  // Sort ngành A→Z, rồi chuyên ngành A→Z, rồi tên HV — để STT chạy liên tục 1..n đúng thứ tự nhóm
+  const sortedApplications = [...applications].sort(
+    (a, b) =>
+      nganhKey(a).localeCompare(nganhKey(b), "vi") ||
+      chuyenNganhKey(a).localeCompare(chuyenNganhKey(b), "vi") ||
+      hoTenOf(a).localeCompare(hoTenOf(b), "vi")
+  )
+
+  type HocVien = {
+    stt: number
+    hoTen: string
+    ngaySinh: string
+    gioiTinh: string
+    danToc: string
+    noiSinh: string
+    diemTBTL: string
+    xepHang: string
+    ghiChu: string
+  }
+  type NhomChuyenNganh = { chuyenNganh: string; hocViens: HocVien[] }
+  type NhomNganh = { nganh: string; chuyenNganhs: NhomChuyenNganh[] }
+
+  const danhSach: NhomNganh[] = []
+  sortedApplications.forEach((app, idx) => {
+    const u = app.student.userProfile
+    const nganh = nganhKey(app)
+    const chuyenNganh = chuyenNganhKey(app)
+
+    const hocVien: HocVien = {
+      stt: idx + 1,
+      hoTen: u?.fullname ?? "",
+      ngaySinh: u?.dateOfBirth ? dayjs(u.dateOfBirth).format("DD/MM/YYYY") : "",
+      gioiTinh: u?.gender?.sTen ?? "",
+      danToc: u?.ethnicity?.sTen ?? "",
+      noiSinh: u?.newProvinceOfBirth?.sTen ?? u?.placeOfBirth ?? "",
+      diemTBTL: formatScore(app.gpa, 2),
+      xepHang: app.rank?.classification ?? "",
+      ghiChu:
+        app.downgraded || app.rankDowngraded || /ha bac|ha muc/.test(normalize(app.reason))
+          ? "Hạ mức"
+          : (app.reason ?? ""),
+    }
+
+    let nhomNganh = danhSach[danhSach.length - 1]
+    if (!nhomNganh || nhomNganh.nganh !== nganh) {
+      nhomNganh = { nganh, chuyenNganhs: [] }
+      danhSach.push(nhomNganh)
+    }
+    let nhomChuyenNganh = nhomNganh.chuyenNganhs[nhomNganh.chuyenNganhs.length - 1]
+    if (!nhomChuyenNganh || nhomChuyenNganh.chuyenNganh !== chuyenNganh) {
+      nhomChuyenNganh = { chuyenNganh, hocViens: [] }
+      nhomNganh.chuyenNganhs.push(nhomChuyenNganh)
+    }
+    nhomChuyenNganh.hocViens.push(hocVien)
+  })
+
+  return c.json(
+    {
+      data: {
+        tongHV: sortedApplications.length,
+        khoa: (
+          session.trainingCourse?.name ??
+          applications[0]?.student.fixedClass?.trainingCourse?.name ??
+          ""
+        )
+          .replace(/^\s*kho[áa]\s*/i, "")
+          .trim(),
+        namXet: dayjs(session.sessionDate).year(),
+        ngayBaoCao: dayjs(session.sessionDate).format("DD/MM/YYYY"),
+        danhSach,
+      },
+    },
+    200
+  )
+})
+
 export default app

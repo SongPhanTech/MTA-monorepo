@@ -135,6 +135,8 @@ import type {
   GenExamListCodeResult,
   GenExamRoomCode,
   GenerateDiplomaNumberBody,
+  GetDanhSachKySuData200,
+  GetDanhSachKySuDataParams,
   GetPhuLucIXData200,
   GetPhuLucIXDataParams,
   GetVersion200,
@@ -12940,6 +12942,169 @@ export function useGetPhuLucIXData<
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
   const queryOptions = getGetPhuLucIXDataQueryOptions(params, options)
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
+
+  query.queryKey = queryOptions.queryKey
+
+  return query
+}
+
+/**
+ * Trả về dữ liệu JSON đã group theo ngành → chuyên ngành → học viên (graduation=true) để FE fill vào template DOCX bằng easy-template-x.
+ * @summary Dữ liệu DS học viên kỹ sư quân sự được công nhận TN
+ */
+export type getDanhSachKySuDataResponse200 = {
+  data: GetDanhSachKySuData200
+  status: 200
+}
+
+export type getDanhSachKySuDataResponse404 = {
+  data: ErrorMessageResponse
+  status: 404
+}
+
+export type getDanhSachKySuDataResponseSuccess = getDanhSachKySuDataResponse200 & {
+  headers: Headers
+}
+export type getDanhSachKySuDataResponseError = getDanhSachKySuDataResponse404 & {
+  headers: Headers
+}
+
+export type getDanhSachKySuDataResponse =
+  | getDanhSachKySuDataResponseSuccess
+  | getDanhSachKySuDataResponseError
+
+export const getGetDanhSachKySuDataUrl = (params: GetDanhSachKySuDataParams) => {
+  const normalizedParams = new URLSearchParams()
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? "null" : value.toString())
+    }
+  })
+
+  const stringifiedParams = normalizedParams.toString()
+
+  return stringifiedParams.length > 0
+    ? `/api/graduation/danh-sach-ky-su-data?${stringifiedParams}`
+    : `/api/graduation/danh-sach-ky-su-data`
+}
+
+export const getDanhSachKySuData = async (
+  params: GetDanhSachKySuDataParams,
+  options?: RequestInit
+): Promise<getDanhSachKySuDataResponse> => {
+  return customTrainingFetch<getDanhSachKySuDataResponse>(getGetDanhSachKySuDataUrl(params), {
+    ...options,
+    method: "GET",
+  })
+}
+
+export const getGetDanhSachKySuDataQueryKey = (params?: GetDanhSachKySuDataParams) => {
+  return [`/api/graduation/danh-sach-ky-su-data`, ...(params ? [params] : [])] as const
+}
+
+export const getGetDanhSachKySuDataQueryOptions = <
+  TData = Awaited<ReturnType<typeof getDanhSachKySuData>>,
+  TError = ErrorMessageResponse,
+>(
+  params: GetDanhSachKySuDataParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDanhSachKySuData>>, TError, TData>>
+    request?: SecondParameter<typeof customTrainingFetch>
+  }
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {}
+
+  const queryKey = queryOptions?.queryKey ?? getGetDanhSachKySuDataQueryKey(params)
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getDanhSachKySuData>>> = ({ signal }) =>
+    getDanhSachKySuData(params, { signal, ...requestOptions })
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getDanhSachKySuData>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetDanhSachKySuDataQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getDanhSachKySuData>>
+>
+export type GetDanhSachKySuDataQueryError = ErrorMessageResponse
+
+export function useGetDanhSachKySuData<
+  TData = Awaited<ReturnType<typeof getDanhSachKySuData>>,
+  TError = ErrorMessageResponse,
+>(
+  params: GetDanhSachKySuDataParams,
+  options: {
+    query: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getDanhSachKySuData>>, TError, TData>
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getDanhSachKySuData>>,
+          TError,
+          Awaited<ReturnType<typeof getDanhSachKySuData>>
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customTrainingFetch>
+  },
+  queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDanhSachKySuData<
+  TData = Awaited<ReturnType<typeof getDanhSachKySuData>>,
+  TError = ErrorMessageResponse,
+>(
+  params: GetDanhSachKySuDataParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getDanhSachKySuData>>, TError, TData>
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getDanhSachKySuData>>,
+          TError,
+          Awaited<ReturnType<typeof getDanhSachKySuData>>
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customTrainingFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDanhSachKySuData<
+  TData = Awaited<ReturnType<typeof getDanhSachKySuData>>,
+  TError = ErrorMessageResponse,
+>(
+  params: GetDanhSachKySuDataParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDanhSachKySuData>>, TError, TData>>
+    request?: SecondParameter<typeof customTrainingFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Dữ liệu DS học viên kỹ sư quân sự được công nhận TN
+ */
+
+export function useGetDanhSachKySuData<
+  TData = Awaited<ReturnType<typeof getDanhSachKySuData>>,
+  TError = ErrorMessageResponse,
+>(
+  params: GetDanhSachKySuDataParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getDanhSachKySuData>>, TError, TData>>
+    request?: SecondParameter<typeof customTrainingFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getGetDanhSachKySuDataQueryOptions(params, options)
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>
