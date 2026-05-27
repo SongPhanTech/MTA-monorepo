@@ -24,7 +24,10 @@ const exportThoiKhoaBieuRoute = createRoute({
             .object({
               semesterId: z.string().openapi(fieldDesc("ID học kỳ.")),
               trainingObjectTypeId: z.string().openapi(fieldDesc("ID hệ đào tạo.")),
-              trainingCourseId: z.string().optional().openapi(fieldDesc("ID khóa học (lọc tùy chọn).")),
+              trainingCourseId: z
+                .string()
+                .optional()
+                .openapi(fieldDesc("ID khóa học (lọc tùy chọn).")),
               type: z
                 .enum(["NORMAL", "RETAKE", "REEXAM"])
                 .optional()

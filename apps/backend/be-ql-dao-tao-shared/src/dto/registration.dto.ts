@@ -20,7 +20,9 @@ export const RegistrationRequest = z
   .openapi("RegistrationRequest")
 
 export const RegistrationResponse = SuccessResponseSchema.extend({
-  students_code: z.string().openapi(fieldDesc("Mã sinh viên đã thực hiện đăng ký / hủy.", "21000001")),
+  students_code: z
+    .string()
+    .openapi(fieldDesc("Mã sinh viên đã thực hiện đăng ký / hủy.", "21000001")),
   class_valid: z
     .array(z.string())
     .openapi(fieldDesc("ID lớp học phần xử lý thành công (SubjectClass.id).")),

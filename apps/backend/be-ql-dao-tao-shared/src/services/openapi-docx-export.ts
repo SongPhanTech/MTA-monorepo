@@ -110,10 +110,18 @@ function parametersTable(parameters: unknown[]): Table | null {
   if (!parameters.length) return null
   const header = new TableRow({
     children: [
-      new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Tên", bold: true })] })] }),
-      new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Vị trí", bold: true })] })] }),
-      new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Bắt buộc", bold: true })] })] }),
-      new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Mô tả", bold: true })] })] }),
+      new TableCell({
+        children: [new Paragraph({ children: [new TextRun({ text: "Tên", bold: true })] })],
+      }),
+      new TableCell({
+        children: [new Paragraph({ children: [new TextRun({ text: "Vị trí", bold: true })] })],
+      }),
+      new TableCell({
+        children: [new Paragraph({ children: [new TextRun({ text: "Bắt buộc", bold: true })] })],
+      }),
+      new TableCell({
+        children: [new Paragraph({ children: [new TextRun({ text: "Mô tả", bold: true })] })],
+      }),
     ],
   })
   const rows = parameters.map((param) => {
@@ -167,8 +175,10 @@ function collectOperations(doc: OpenApiDoc): Array<{
   items.sort((a, b) => {
     if (a.tag !== b.tag) return a.tag.localeCompare(b.tag, "vi")
     if (a.path !== b.path) return a.path.localeCompare(b.path)
-    return METHOD_ORDER.indexOf(a.method as (typeof METHOD_ORDER)[number]) -
+    return (
+      METHOD_ORDER.indexOf(a.method as (typeof METHOD_ORDER)[number]) -
       METHOD_ORDER.indexOf(b.method as (typeof METHOD_ORDER)[number])
+    )
   })
   return items
 }

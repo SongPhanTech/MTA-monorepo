@@ -95,7 +95,7 @@ export default function TrainingBlock() {
       if (!setMap.has(item.trainingBlockId)) {
         setMap.set(item.trainingBlockId, new Set())
       }
-      ;(item.subjects as any[] ?? []).forEach((s: any) => {
+      ;((item.subjects as any[]) ?? []).forEach((s: any) => {
         if (s.subjectId) setMap.get(item.trainingBlockId)!.add(s.subjectId)
       })
     })

@@ -248,7 +248,10 @@ const ModalPrintExamSurvey = () => {
                             }}
                           />
 
-                          <Input.TextArea placeholder="Nhập câu trả lời" className="pointer-events-none" />
+                          <Input.TextArea
+                            placeholder="Nhập câu trả lời"
+                            className="pointer-events-none"
+                          />
                         </div>
                       ) : record?.specificChoice?.length > 0 ? (
                         <div>

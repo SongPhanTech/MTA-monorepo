@@ -8,10 +8,7 @@ export const GetSemesterRequest = z
       .string()
       .optional()
       .openapi(
-        fieldDesc(
-          "Từ khóa lọc năm học theo tên (SchoolYear.name), không bắt buộc.",
-          "2025-2026"
-        )
+        fieldDesc("Từ khóa lọc năm học theo tên (SchoolYear.name), không bắt buộc.", "2025-2026")
       ),
   })
   .openapi("GetSemesterRequest")

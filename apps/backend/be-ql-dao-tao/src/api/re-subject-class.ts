@@ -157,7 +157,9 @@ const openSubjectClassReExam = createRoute({
     200: {
       content: {
         "application/json": {
-          schema: ListOf(OpenSubjectClassRetakeItemSchema.openapi("OpenSubjectClassReExamResponse")),
+          schema: ListOf(
+            OpenSubjectClassRetakeItemSchema.openapi("OpenSubjectClassReExamResponse")
+          ),
         },
       },
       description: "Danh sách môn học cần thi lại",

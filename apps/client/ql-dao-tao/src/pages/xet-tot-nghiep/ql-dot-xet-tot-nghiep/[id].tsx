@@ -24,12 +24,18 @@ import {
   useUpdateStudentGraduationApplication,
 } from "@workspace/db/hooks"
 import { sqlTransaction } from "@workspace/libs/api/model"
-import { graduationApplicationInit, useGraduationCheck } from "@workspace/libs/api/training"
+import {
+  getPhuLucIXData,
+  graduationApplicationInit,
+  useGraduationCheck,
+} from "@workspace/libs/api/training"
 import { ROUTER_PATH } from "@workspace/router"
 import { Button, Col, Flex, Modal, message, Row, Tag, Tooltip } from "antd"
 import type { TableRowSelection } from "antd/es/table/interface"
 import dayjs from "dayjs"
-import { BookPlus, SearchCheck, X } from "lucide-react"
+import { saveAs } from "file-saver"
+import { BookPlus, Download, SearchCheck, X } from "lucide-react"
+import { docxTemplate } from "../../../utils/docx-template"
 import { useRouter } from "next/router"
 import type React from "react"
 import { useMemo, useState } from "react"
@@ -346,6 +352,34 @@ export default function StudentGraduationApplication() {
     }
   }
 
+  const handleExportPhuLucIX = async () => {
+    try {
+      showSpinner()
+      const res = await getPhuLucIXData({ sessionId: graduationSessionId })
+      if (res.status !== 200) {
+        message.error(res.data?.message || "Không lấy được dữ liệu danh sách")
+        return
+      }
+      const { data } = res.data
+      const exportRes = await docxTemplate({
+        fileName: "Phu_luc_IX.docx",
+        path: "Phu_luc_IX.docx",
+        prefix: "/mta/template",
+        data: data as Record<string, unknown>,
+      })
+      if (exportRes && exportRes.status >= 200 && exportRes.status < 300) {
+        saveAs(exportRes.data, "Phu_luc_IX.docx")
+      } else {
+        message.error(`Xuất file thất bại: Status ${exportRes?.status}`)
+      }
+    } catch (error: unknown) {
+      const msg = error instanceof Error ? error.message : JSON.stringify(error)
+      message.error(`Lỗi xuất file: ${msg}`)
+    } finally {
+      hideSpinner()
+    }
+  }
+
   const { mutateAsync: graduationCheck } = useGraduationCheck()
   const handleMutationGraduationCheck = async () => {
     try {
@@ -550,6 +584,10 @@ export default function StudentGraduationApplication() {
             <Flex align="center" justify="space-between" className="px-4">
               <h2 className="text-xl font-bold">{initialValue?.name}</h2>
               <div className="flex align-middle items-center gap-2">
+                <Button type="primary" onClick={handleExportPhuLucIX}>
+                  <Download />
+                  Tải Phụ lục IX
+                </Button>
                 <Button
                   type="primary"
                   className="mr-8"

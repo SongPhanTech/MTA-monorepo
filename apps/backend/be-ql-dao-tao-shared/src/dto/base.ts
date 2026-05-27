@@ -7,18 +7,13 @@ export const PaginationQuerySchema = z
       .number({ coerce: true })
       .optional()
       .openapi(fieldDesc("Số trang (phân trang, nếu API hỗ trợ).", 1)),
-    limit: z
-      .number({ coerce: true })
-      .optional()
-      .openapi(fieldDesc("Số bản ghi mỗi trang.", 20)),
+    limit: z.number({ coerce: true }).optional().openapi(fieldDesc("Số bản ghi mỗi trang.", 20)),
   })
   .openapi("PaginationQuery")
 
 export const ListOf = <T extends z.ZodTypeAny>(itemSchema: T) =>
   PaginationQuerySchema.extend({
-    data: z
-      .array(itemSchema)
-      .openapi(fieldDesc("Danh sách bản ghi trang hiện tại.")),
+    data: z.array(itemSchema).openapi(fieldDesc("Danh sách bản ghi trang hiện tại.")),
     count: z.number().openapi(fieldDesc("Tổng số bản ghi thỏa điều kiện.", 100)),
   }).openapi(`ListOf${itemSchema._def.openapi?._internal?.refId}`)
 

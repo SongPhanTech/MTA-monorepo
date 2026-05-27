@@ -21,7 +21,9 @@ export const StudentScheduleItem = z
     class_id: z.string().openapi(fieldDesc("Mã lớp học phần (SubjectClass.code).", "LHP001")),
     class_time: z
       .string()
-      .openapi(fieldDesc("Lịch học: Thứ - tiết bắt đầu - tiết kết thúc (SubjectClassTime).", "T2 - 1 - 3")),
+      .openapi(
+        fieldDesc("Lịch học: Thứ - tiết bắt đầu - tiết kết thúc (SubjectClassTime).", "T2 - 1 - 3")
+      ),
     class_classroom: z.string().openapi(fieldDesc("Tên phòng học (Room.name).", "A1-201")),
   })
   .openapi("StudentScheduleItem")

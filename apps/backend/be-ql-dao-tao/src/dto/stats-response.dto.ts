@@ -117,9 +117,7 @@ export const SubjectPassFailSchema = z
 export const ActiveCurriculaStatsSchema = z
   .object({
     activeCurricula: z.number().openapi(fieldDesc("Số CTĐT đang hoạt động.")),
-    activeCurriculumVersions: z
-      .number()
-      .openapi(fieldDesc("Số phiên bản CTĐT đang hoạt động.")),
+    activeCurriculumVersions: z.number().openapi(fieldDesc("Số phiên bản CTĐT đang hoạt động.")),
   })
   .openapi("ActiveCurriculaStats")
 
@@ -135,9 +133,7 @@ export const SubjectClassFillItemSchema = z
 export const SubjectClassStatsSchema = z
   .object({
     totalClasses: z.number().openapi(fieldDesc("Tổng số lớp học phần.")),
-    classes: z
-      .array(SubjectClassFillItemSchema)
-      .openapi(fieldDesc("Chi tiết từng lớp học phần.")),
+    classes: z.array(SubjectClassFillItemSchema).openapi(fieldDesc("Chi tiết từng lớp học phần.")),
     labels: z.array(z.string()).openapi(fieldDesc("Nhãn cột biểu đồ.")),
   })
   .openapi("SubjectClassStats")

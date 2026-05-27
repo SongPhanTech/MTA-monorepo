@@ -131,9 +131,7 @@ const XetXuLyHocTap = ({ semesterId, trainingObjectTypeId, actionTaken }: XetXuL
                       },
                     }
                   : {}),
-                ...(trainingObjectTypeId
-                  ? { trainingCourse: { trainingObjectTypeId } }
-                  : {}),
+                ...(trainingObjectTypeId ? { trainingCourse: { trainingObjectTypeId } } : {}),
               },
             },
             ...(filters.status ? { status: { in: filters.status } } : {}),

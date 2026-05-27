@@ -8,13 +8,15 @@ import type { GetSurveyObjectsIsStudent } from './getSurveyObjectsIsStudent';
 
 export type GetSurveyObjectsParams = {
 /**
- * @nullable
+ * @minimum 1
+ * @maximum 100
  */
-page?: number | null;
+page?: number;
 /**
- * @nullable
+ * @minimum 1
+ * @maximum 100
  */
-limit?: number | null;
+limit?: number;
 id: string;
 fullname?: string;
 organizationId?: string[];

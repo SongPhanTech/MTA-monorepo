@@ -26,7 +26,9 @@ export const OpenSubjectClass = z
           fixedClassSemester: z.number().openapi(fieldDesc("Học kỳ của lớp niên chế.")),
           fixedClassCode: z.string().openapi(fieldDesc("Mã lớp niên chế.")),
           trainingCourseId: z.string().openapi(fieldDesc("ID khóa học (TrainingCourse).")),
-          curriculumVersionId: z.string().openapi(fieldDesc("ID phiên bản CTĐT (CurriculumVersion).")),
+          curriculumVersionId: z
+            .string()
+            .openapi(fieldDesc("ID phiên bản CTĐT (CurriculumVersion).")),
           curriculumVersionName: z.string().openapi(fieldDesc("Tên phiên bản CTĐT.")),
           curriculumVersionCode: z.string().openapi(fieldDesc("Mã phiên bản CTĐT.")),
         })

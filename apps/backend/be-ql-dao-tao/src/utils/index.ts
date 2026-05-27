@@ -961,7 +961,7 @@ export const parseSignerInfo = (signerStr: string) => {
   const rank = parts[1] || ""
   const nameWithDegree = parts[2] || ""
 
-  const isDirector = role.toLowerCase() === "giám đốc";
+  const isDirector = role.toLowerCase() === "giám đốc"
 
   return {
     chuc_vi: isDirector ? "GIÁM ĐỐC" : "KT. GIÁM ĐỐC",
@@ -1048,7 +1048,7 @@ export const generateExcelFromTemplate = async (
       if (row.outlineLevel !== undefined) newRow.outlineLevel = row.outlineLevel
 
       if ((row as any).style) {
-        (newRow as any).style = { ...(row as any).style }
+        ;(newRow as any).style = { ...(row as any).style }
       }
 
       row.eachCell({ includeEmpty: true }, (cell, colNumber) => {
@@ -1105,8 +1105,16 @@ export const generateExcelFromTemplate = async (
       if (range) {
         const editAs = (range as any).editAs
         const newRange = {
-          tl: { ...range.tl, row: range.tl.row + rowOffset, nativeRow: (range.tl as any).nativeRow + rowOffset } as any,
-          br: { ...range.br, row: range.br.row + rowOffset, nativeRow: (range.br as any).nativeRow + rowOffset } as any,
+          tl: {
+            ...range.tl,
+            row: range.tl.row + rowOffset,
+            nativeRow: (range.tl as any).nativeRow + rowOffset,
+          } as any,
+          br: {
+            ...range.br,
+            row: range.br.row + rowOffset,
+            nativeRow: (range.br as any).nativeRow + rowOffset,
+          } as any,
         }
         targetSheet.addImage(newImageId, {
           tl: newRange.tl,
@@ -1211,7 +1219,7 @@ export const generateExcelFromTemplate = async (
     let hasPageBreakMarker = false
     row.eachCell({ includeEmpty: true }, (cell) => {
       const val = normalizeCellValue(cell.value)
-      if (val === PAGE_BREAK_MARKER ) {
+      if (val === PAGE_BREAK_MARKER) {
         hasPageBreakMarker = true
         cell.value = null
       }
@@ -1238,7 +1246,7 @@ export const generateExcelFromTemplate = async (
     outputSheet.pageSetup.printArea = `A1:${maxColumnLetter}${lastDataRow}`
     outputSheet.pageSetup.fitToPage = true
     outputSheet.pageSetup.fitToWidth = 1
-    outputSheet.pageSetup.fitToHeight = 0 
+    outputSheet.pageSetup.fitToHeight = 0
   }
 
   return await mergedWorkbook.xlsx.writeBuffer()
@@ -1262,7 +1270,11 @@ export const generateExcelMultiSheet = async (
     }
     if (typeof value === "object") {
       if ("richText" in value && Array.isArray(value.richText)) {
-        return value.richText.map((part) => part.text).join("").trim().toLowerCase()
+        return value.richText
+          .map((part) => part.text)
+          .join("")
+          .trim()
+          .toLowerCase()
       }
       if ("text" in value && typeof value.text === "string") {
         return value.text.trim().toLowerCase()
@@ -1351,17 +1363,32 @@ export const generateExcelMultiSheet = async (
       const { range } = image
       if (range) {
         const newRange = {
-          tl: { ...range.tl, row: range.tl.row + rowOffset, nativeRow: (range.tl as any).nativeRow + rowOffset } as any,
-          br: { ...range.br, row: range.br.row + rowOffset, nativeRow: (range.br as any).nativeRow + rowOffset } as any,
+          tl: {
+            ...range.tl,
+            row: range.tl.row + rowOffset,
+            nativeRow: (range.tl as any).nativeRow + rowOffset,
+          } as any,
+          br: {
+            ...range.br,
+            row: range.br.row + rowOffset,
+            nativeRow: (range.br as any).nativeRow + rowOffset,
+          } as any,
         }
-        targetSheet.addImage(newImageId, { tl: newRange.tl, br: newRange.br, editAs: (range as any).editAs })
+        targetSheet.addImage(newImageId, {
+          tl: newRange.tl,
+          br: newRange.br,
+          editAs: (range as any).editAs,
+        })
       }
     })
 
     return currentRowInCopy
   }
 
-  const applyTemplatePageSetup = (source: ExcelJS.Worksheet | undefined, target: ExcelJS.Worksheet) => {
+  const applyTemplatePageSetup = (
+    source: ExcelJS.Worksheet | undefined,
+    target: ExcelJS.Worksheet
+  ) => {
     if (!source) return
     const src = source.pageSetup
     if (!src) return
@@ -1369,10 +1396,26 @@ export const generateExcelMultiSheet = async (
     if (src.margins) dst.margins = { ...dst.margins, ...src.margins }
 
     const pageSetupKeys: (keyof ExcelJS.PageSetup)[] = [
-      "orientation", "horizontalDpi", "verticalDpi", "fitToPage", "fitToWidth", "fitToHeight",
-      "scale", "pageOrder", "blackAndWhite", "draft", "cellComments", "errors", "paperSize",
-      "showRowColHeaders", "showGridLines", "firstPageNumber", "horizontalCentered", "verticalCentered",
-      "printTitlesRow", "printTitlesColumn",
+      "orientation",
+      "horizontalDpi",
+      "verticalDpi",
+      "fitToPage",
+      "fitToWidth",
+      "fitToHeight",
+      "scale",
+      "pageOrder",
+      "blackAndWhite",
+      "draft",
+      "cellComments",
+      "errors",
+      "paperSize",
+      "showRowColHeaders",
+      "showGridLines",
+      "firstPageNumber",
+      "horizontalCentered",
+      "verticalCentered",
+      "printTitlesRow",
+      "printTitlesColumn",
     ]
     for (const key of pageSetupKeys) {
       const value = src[key]

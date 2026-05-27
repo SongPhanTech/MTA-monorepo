@@ -9,5 +9,7 @@ import type { DocxTemplateBodyData } from './docxTemplateBodyData';
 export type DocxTemplateBody = {
   fileName: string;
   path: string;
+  /** @nullable */
+  prefix?: string | null;
   data: DocxTemplateBodyData;
 };

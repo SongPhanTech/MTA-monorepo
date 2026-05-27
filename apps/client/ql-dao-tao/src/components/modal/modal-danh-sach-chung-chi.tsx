@@ -184,8 +184,7 @@ const ModalDanhSachChungChi = () => {
           {
             studentId: cert.studentId || input?.studentId || "",
             studentName: input?.studentName || "",
-            studentFixedClassId:
-              cert.student?.fixedClassId ?? cert.student?.fixedClass?.id ?? null,
+            studentFixedClassId: cert.student?.fixedClassId ?? cert.student?.fixedClass?.id ?? null,
             certificateId: cert.certificateId,
             expiredDate: draft.expiredDate.toDate(),
           },

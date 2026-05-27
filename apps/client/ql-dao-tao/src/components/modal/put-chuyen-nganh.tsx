@@ -209,9 +209,7 @@ const PutTrainingMajorModal = () => {
               const isLocked = lockedTrainingObjectTypeIds.has(i.id)
               return {
                 value: i.id,
-                label: isLocked
-                  ? `${i.name} (đã có trong CTĐT)`
-                  : i.name,
+                label: isLocked ? `${i.name} (đã có trong CTĐT)` : i.name,
                 disabled: isLocked,
               }
             })}
@@ -264,7 +262,7 @@ const PutTrainingMajorModal = () => {
         </FormItem>
       </Col>
       <Col span={12}>
-        <FormItem form={form} name="summary" label="Viết tắt" required>
+        <FormItem form={form} name="shortName" label="Viết tắt" required>
           <Input placeholder="Nhập viết tắt" />
         </FormItem>
       </Col>

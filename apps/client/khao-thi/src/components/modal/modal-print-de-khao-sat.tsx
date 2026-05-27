@@ -211,7 +211,10 @@ const ModalPrintExamClusterSurvey = () => {
                               ))}
                             </Radio.Group>
                           ) : (
-                            <Input.TextArea placeholder="Nhập câu trả lời" className="pointer-events-none" />
+                            <Input.TextArea
+                              placeholder="Nhập câu trả lời"
+                              className="pointer-events-none"
+                            />
                           )}
                         </div>
                       ) : (

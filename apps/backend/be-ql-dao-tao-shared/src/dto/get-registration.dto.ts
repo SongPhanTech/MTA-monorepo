@@ -12,9 +12,7 @@ export const GetRegistrationRequest = z
           "2025-2026 HK1"
         )
       ),
-    students_code: z
-      .string()
-      .openapi(fieldDesc("Mã sinh viên (Student.code).", "21000001")),
+    students_code: z.string().openapi(fieldDesc("Mã sinh viên (Student.code).", "21000001")),
   })
   .openapi("GetRegistrationRequest")
 

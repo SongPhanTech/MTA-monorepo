@@ -31,7 +31,9 @@ export const SpecializedInfo = z
       .openapi(fieldDesc("Tên ngành đào tạo (TrainingMajor.name).", "Công nghệ thông tin")),
     scholastic: z
       .string()
-      .openapi(fieldDesc("Tên khóa học liên quan (TrainingCourse.name), nối bằng dấu phẩy.", "K65")),
+      .openapi(
+        fieldDesc("Tên khóa học liên quan (TrainingCourse.name), nối bằng dấu phẩy.", "K65")
+      ),
     specialized_info: z
       .string()
       .nullable()
@@ -49,5 +51,7 @@ export const SpecializedInfo = z
 export type SpecializedInfo = z.infer<typeof SpecializedInfo>
 
 export const SpecializedResponse = SuccessResponseSchema.extend({
-  data: z.array(SpecializedInfo).openapi(fieldDesc("Danh sách ngành / chuyên ngành (TrainingMajor).")),
+  data: z
+    .array(SpecializedInfo)
+    .openapi(fieldDesc("Danh sách ngành / chuyên ngành (TrainingMajor).")),
 }).openapi("SpecializedResponse")

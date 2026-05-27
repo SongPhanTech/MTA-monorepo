@@ -43,7 +43,18 @@ import { exportFromTemplate, TableRow } from "@workspace/libs/template-excel"
 import { fuzzyMatch, getMinioUrl } from "@workspace/libs/utils"
 import { docxTemplate } from "../../../utils/docx-template"
 import { useTrainingObjectTypeStore } from "@workspace/ui"
-import { Button, DatePicker, Form, Input, InputNumber, message, Modal, notification, Radio, TreeSelect } from "antd"
+import {
+  Button,
+  DatePicker,
+  Form,
+  Input,
+  InputNumber,
+  message,
+  Modal,
+  notification,
+  Radio,
+  TreeSelect,
+} from "antd"
 import { useWatch } from "antd/es/form/Form"
 import dayjs, { Dayjs } from "dayjs"
 import { saveAs } from "file-saver"
@@ -1233,9 +1244,11 @@ export default function StudentGradeSystem() {
     const session = thesisSessionData.find((s) => s.id === selectedSessionId)
     if (!session) return
 
-    const signerNameTS = signRole === "chief" ? (session.chief || "") : (session.deputy || "")
+    const signerNameTS = signRole === "chief" ? session.chief || "" : session.deputy || ""
     if (!signerNameTS.trim()) {
-      message.warning(`Chưa có họ tên ${signRole === "chief" ? "Trưởng phòng" : "Phó phòng"} sau đại học trong đợt xét.`)
+      message.warning(
+        `Chưa có họ tên ${signRole === "chief" ? "Trưởng phòng" : "Phó phòng"} sau đại học trong đợt xét.`
+      )
       return
     }
 
@@ -1271,8 +1284,8 @@ export default function StudentGradeSystem() {
         titlePart = match[1]
         namePart = match[2]
       } else {
-        titlePart = effectiveSignerName?.includes(" ") ? "" : (effectiveSignerName || "")
-        namePart = effectiveSignerName?.includes(" ") ? (effectiveSignerName || "") : ""
+        titlePart = effectiveSignerName?.includes(" ") ? "" : effectiveSignerName || ""
+        namePart = effectiveSignerName?.includes(" ") ? effectiveSignerName || "" : ""
       }
     }
 
@@ -1293,13 +1306,13 @@ export default function StudentGradeSystem() {
     const signerRankName = [rankPart, namePart].filter(Boolean).join(" ")
 
     const dateQD = session?.graduationDecisionDate ? dayjs(session.graduationDecisionDate) : dayjs()
-    const ngayQD  = String(dateQD.date())
+    const ngayQD = String(dateQD.date())
     const thangQD = String(dateQD.month() + 1)
-    const namQD   = String(dateQD.year())
+    const namQD = String(dateQD.year())
 
-    const ngayTS  = String(dateTS.date())
+    const ngayTS = String(dateTS.date())
     const thangTS = String(dateTS.month() + 1)
-    const namTS   = String(dateTS.year())
+    const namTS = String(dateTS.year())
 
     let soToTrinh = session?.graduationReport || ""
     let ngayToTrinh = ""
@@ -1319,11 +1332,14 @@ export default function StudentGradeSystem() {
       }
 
       return {
-        hoTen:       student.userProfile.fullname,
-        ngaySinh:    formatSpecialDate(student.userProfile.dateOfBirth ?? ""),
+        hoTen: student.userProfile.fullname,
+        ngaySinh: formatSpecialDate(student.userProfile.dateOfBirth ?? ""),
         chuyenNganh: student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name ?? "",
-        tenKhoa:     course ? `${course.name} ${nienKhoaStr}`.trim() : "",
-        soVanBang:   student.graduationDecision?.originalDiplomaNumber ?? student.graduationDecision?.diplomaNumber ?? "",
+        tenKhoa: course ? `${course.name} ${nienKhoaStr}`.trim() : "",
+        soVanBang:
+          student.graduationDecision?.originalDiplomaNumber ??
+          student.graduationDecision?.diplomaNumber ??
+          "",
       }
     })
 
@@ -1331,16 +1347,18 @@ export default function StudentGradeSystem() {
       showSpinner()
       const res = await docxTemplate({
         fileName: "QuyetDinhCongNhanTotNghiep.docx",
-        path:     "QuyetDinhCongNhanTotNghiep.docx",
-        prefix:   "/mta/template",
+        path: "QuyetDinhCongNhanTotNghiep.docx",
+        prefix: "/mta/template",
         data: {
-          soQD:         session?.graduationNumber || "",
+          soQD: session?.graduationNumber || "",
           ngayQD,
           thangQD,
           namQD,
-          dot:          session?.name || "",
-          namHoc:       "", 
-          ngayHop:      session?.graduationDecisionDate ? formatSpecialDate(session.graduationDecisionDate.toString()) : "",
+          dot: session?.name || "",
+          namHoc: "",
+          ngayHop: session?.graduationDecisionDate
+            ? formatSpecialDate(session.graduationDecisionDate.toString())
+            : "",
           soToTrinh,
           ngayToTrinh,
           signerTitle,
@@ -1816,10 +1834,12 @@ export default function StudentGradeSystem() {
           className="flex flex-col gap-3"
         >
           <Radio value="chief">
-            Trưởng phòng sau đại học: <strong>{selectedThesisSession?.chief?.trim() || "(chưa nhập)"}</strong>
+            Trưởng phòng sau đại học:{" "}
+            <strong>{selectedThesisSession?.chief?.trim() || "(chưa nhập)"}</strong>
           </Radio>
           <Radio value="deputy">
-            Phó phòng sau đại học: <strong>{selectedThesisSession?.deputy?.trim() || "(chưa nhập)"}</strong>
+            Phó phòng sau đại học:{" "}
+            <strong>{selectedThesisSession?.deputy?.trim() || "(chưa nhập)"}</strong>
           </Radio>
         </Radio.Group>
         <div className="mt-4">

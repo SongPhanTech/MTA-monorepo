@@ -22,12 +22,12 @@ export const GetListSubjectItem = z
       .string()
       .nullish()
       .openapi(fieldDesc("Mã học phần / phiên bản môn (SubjectVersion.code).", "TIN001")),
-    subject_name: z.string().openapi(fieldDesc("Tên học phần (SubjectVersion.name).", "Tin học đại cương")),
+    subject_name: z
+      .string()
+      .openapi(fieldDesc("Tên học phần (SubjectVersion.name).", "Tin học đại cương")),
     courser: z.number().nullish().openapi(fieldDesc("Số tiết học (SubjectVersion.period).", 45)),
     class_credit_hour: z.number().openapi(fieldDesc("Số tín chỉ (SubjectVersion.credit).", 3)),
-    dvht: z
-      .number()
-      .openapi(fieldDesc("Đơn vị học trình ≈ period / 15 (quy đổi nội bộ).", 3)),
+    dvht: z.number().openapi(fieldDesc("Đơn vị học trình ≈ period / 15 (quy đổi nội bộ).", 3)),
     description: z
       .string()
       .openapi(

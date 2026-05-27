@@ -1,7 +1,10 @@
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
 import { $Enums, createId } from "@workspace/db"
 import { prisma } from ".."
-import { ErrorMessageResponseSchema, SuccessBooleanResponseSchema } from "../dto/common-response.dto"
+import {
+  ErrorMessageResponseSchema,
+  SuccessBooleanResponseSchema,
+} from "../dto/common-response.dto"
 import { fieldDesc } from "../dto/openapi-helpers"
 
 const app = new OpenAPIHono({ strict: false })
@@ -39,8 +42,7 @@ const createNewExamList = createRoute({
       description: "Lên danh sách thi thành công",
       content: {
         "application/json": {
-          schema: SuccessBooleanResponseSchema
-            .openapi("CreateExamsResponse"),
+          schema: SuccessBooleanResponseSchema.openapi("CreateExamsResponse"),
         },
       },
     },
@@ -48,8 +50,7 @@ const createNewExamList = createRoute({
       description: "Lên danh sách thi thất bại",
       content: {
         "application/json": {
-          schema: ErrorMessageResponseSchema
-            .openapi("CreateExamsBadResponse"),
+          schema: ErrorMessageResponseSchema.openapi("CreateExamsBadResponse"),
         },
       },
     },
@@ -186,8 +187,7 @@ const createNewReExamList = createRoute({
       description: "Lên danh sách thi lại thành công",
       content: {
         "application/json": {
-          schema: SuccessBooleanResponseSchema
-            .openapi("CreateExamsResponse"),
+          schema: SuccessBooleanResponseSchema.openapi("CreateExamsResponse"),
         },
       },
     },
@@ -195,8 +195,7 @@ const createNewReExamList = createRoute({
       description: "Lên danh sách thi lại thất bại",
       content: {
         "application/json": {
-          schema: ErrorMessageResponseSchema
-            .openapi("CreateExamsBadResponse"),
+          schema: ErrorMessageResponseSchema.openapi("CreateExamsBadResponse"),
         },
       },
     },
@@ -336,8 +335,7 @@ const mergeExam = createRoute({
       description: "Ghép kỳ thi thành công",
       content: {
         "application/json": {
-          schema: SuccessBooleanResponseSchema
-            .openapi("MergeExamResponse"),
+          schema: SuccessBooleanResponseSchema.openapi("MergeExamResponse"),
         },
       },
     },
@@ -345,8 +343,7 @@ const mergeExam = createRoute({
       description: "Ghép kỳ thi thất bại",
       content: {
         "application/json": {
-          schema: ErrorMessageResponseSchema
-            .openapi("MergeExamBadResponse"),
+          schema: ErrorMessageResponseSchema.openapi("MergeExamBadResponse"),
         },
       },
     },
@@ -458,8 +455,7 @@ const unmergeExam = createRoute({
       description: "Tách kỳ thi thành công",
       content: {
         "application/json": {
-          schema: SuccessBooleanResponseSchema
-            .openapi("UnmergeExamResponse"),
+          schema: SuccessBooleanResponseSchema.openapi("UnmergeExamResponse"),
         },
       },
     },
@@ -467,8 +463,7 @@ const unmergeExam = createRoute({
       description: "Tách kỳ thi thất bại",
       content: {
         "application/json": {
-          schema: ErrorMessageResponseSchema
-            .openapi("UnmergeExamBadResponse"),
+          schema: ErrorMessageResponseSchema.openapi("UnmergeExamBadResponse"),
         },
       },
     },

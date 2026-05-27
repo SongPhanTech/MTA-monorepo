@@ -6,9 +6,15 @@ export const DepartmentItem = z
   .object({
     gid: z.number().openapi(fieldDesc("Số thứ tự trong danh sách trả về (không lưu DB).", 1)),
     dept_code: z.string().openapi(fieldDesc("Mã đơn vị (DM_DonVi.sMa).", "K_CNTT")),
-    dept_name: z.string().openapi(fieldDesc("Tên viết tắt đơn vị (DM_DonVi.sTenVietTat).", "K.CNTT")),
-    dept_full_name: z.string().openapi(fieldDesc("Tên đầy đủ đơn vị (DM_DonVi.sTen).", "Khoa Công nghệ thông tin")),
-    dept_email: z.string().openapi(fieldDesc("Email đơn vị (hiện chưa map từ DB, trả về rỗng).", "")),
+    dept_name: z
+      .string()
+      .openapi(fieldDesc("Tên viết tắt đơn vị (DM_DonVi.sTenVietTat).", "K.CNTT")),
+    dept_full_name: z
+      .string()
+      .openapi(fieldDesc("Tên đầy đủ đơn vị (DM_DonVi.sTen).", "Khoa Công nghệ thông tin")),
+    dept_email: z
+      .string()
+      .openapi(fieldDesc("Email đơn vị (hiện chưa map từ DB, trả về rỗng).", "")),
     dept_address: z.string().openapi(fieldDesc("Địa chỉ đơn vị (DM_DonVi.sDiaChi).", "")),
     dept_order: z.string().openapi(fieldDesc("Thứ tự hiển thị (DM_DonVi.iSTT).", "1")),
     dept_level: z

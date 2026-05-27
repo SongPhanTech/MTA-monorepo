@@ -79,9 +79,7 @@ function findViolations(
   for (const item of items) {
     if (!item.expiredDate) continue
     const cert = certificates.find((c) => c.id === item.certificateId)
-    const certSubjectIds = new Set(
-      (cert?.subjects ?? []).map((s) => s.subjectId).filter(Boolean)
-    )
+    const certSubjectIds = new Set((cert?.subjects ?? []).map((s) => s.subjectId).filter(Boolean))
     if (certSubjectIds.size === 0) continue
 
     for (const sch of schedules) {
@@ -128,11 +126,7 @@ export function useCertificateExpirationCheck(certificates: CertificateForCheck[
     if (isFetching) return
     if (scheduleData === undefined) return
 
-    const violations = findViolations(
-      (scheduleData as any[]) ?? [],
-      itemsRef.current,
-      certificates
-    )
+    const violations = findViolations((scheduleData as any[]) ?? [], itemsRef.current, certificates)
     const resolve = resolverRef.current
     resolverRef.current = null
     setArgs(null)
@@ -168,9 +162,8 @@ export function confirmViolations(violations: Violation[]): Promise<boolean> {
             {violations.map((v, idx) => (
               <li key={idx} className="mb-1">
                 Học viên <b>{v.studentName}</b>: chứng chỉ hết hạn{" "}
-                <b>{dayjs(v.expiredDate).format("DD/MM/YYYY")}</b> nhưng môn{" "}
-                <b>{v.subjectName}</b> có lịch học ngày{" "}
-                <b>{dayjs(v.classDate).format("DD/MM/YYYY")}</b>.
+                <b>{dayjs(v.expiredDate).format("DD/MM/YYYY")}</b> nhưng môn <b>{v.subjectName}</b>{" "}
+                có lịch học ngày <b>{dayjs(v.classDate).format("DD/MM/YYYY")}</b>.
               </li>
             ))}
           </ul>

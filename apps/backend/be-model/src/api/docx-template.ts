@@ -9,8 +9,7 @@ const app = new OpenAPIHono({ strict: false })
 
 const minioService = new MinIOService()
 
-const DOCX_CONTENT_TYPE =
-  "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+const DOCX_CONTENT_TYPE = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
 
 const docxTemplateSchema = z.object({
   fileName: z.string(),

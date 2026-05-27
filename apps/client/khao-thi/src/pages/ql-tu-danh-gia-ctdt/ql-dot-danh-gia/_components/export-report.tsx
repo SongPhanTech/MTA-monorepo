@@ -335,9 +335,7 @@ export default function ExportReport({
                 reader.onerror = reject
                 reader.readAsDataURL(blob)
               })
-              const uint8Array = Uint8Array.from(atob(base64.split(",")[1]), (c) =>
-                c.charCodeAt(0)
-              )
+              const uint8Array = Uint8Array.from(atob(base64.split(",")[1]), (c) => c.charCodeAt(0))
               paragraphs.push(
                 new Paragraph({
                   alignment: AlignmentType.CENTER,
@@ -804,9 +802,7 @@ export default function ExportReport({
                           children: [
                             new Paragraph({
                               alignment: AlignmentType.CENTER,
-                              children: [
-                                new TextRun({ text: "Đạt (Đ)", bold: true, size: 28 }),
-                              ],
+                              children: [new TextRun({ text: "Đạt (Đ)", bold: true, size: 28 })],
                             }),
                           ],
                         }),
@@ -819,9 +815,7 @@ export default function ExportReport({
                           children: [
                             new Paragraph({
                               alignment: AlignmentType.CENTER,
-                              children: [
-                                new TextRun({ text: isKhongDat ? "×" : "", size: 28 }),
-                              ],
+                              children: [new TextRun({ text: isKhongDat ? "×" : "", size: 28 })],
                             }),
                           ],
                         }),
@@ -830,9 +824,7 @@ export default function ExportReport({
                           children: [
                             new Paragraph({
                               alignment: AlignmentType.CENTER,
-                              children: [
-                                new TextRun({ text: isDat ? "×" : "", size: 28 }),
-                              ],
+                              children: [new TextRun({ text: isDat ? "×" : "", size: 28 })],
                             }),
                           ],
                         }),

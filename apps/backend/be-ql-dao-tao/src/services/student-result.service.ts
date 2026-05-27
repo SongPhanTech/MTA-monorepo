@@ -2607,9 +2607,7 @@ export const resultCourseStudentDecreaseAcademicWarning = async (
   const additionalWarningStudents = await prisma.student.findMany({
     where: {
       id: { in: additionalWarningStudentIds },
-      ...(trainingObjectTypeId
-        ? { fixedClass: { trainingCourse: { trainingObjectTypeId } } }
-        : {}),
+      ...(trainingObjectTypeId ? { fixedClass: { trainingCourse: { trainingObjectTypeId } } } : {}),
     },
     include: {
       userProfile: true,

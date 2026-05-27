@@ -23,7 +23,9 @@ const exportStudentSemesterResultRoute = createRoute({
           schema: z
             .object({
               semesterId: z.string().openapi(fieldDesc("ID học kỳ (Semester).")),
-              trainingObjectTypeId: z.string().openapi(fieldDesc("ID hệ đào tạo (TrainingObjectType).")),
+              trainingObjectTypeId: z
+                .string()
+                .openapi(fieldDesc("ID hệ đào tạo (TrainingObjectType).")),
             })
             .openapi("ExportStudentSemesterResultRequest"),
         },

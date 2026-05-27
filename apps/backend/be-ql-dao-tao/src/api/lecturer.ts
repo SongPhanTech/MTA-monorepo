@@ -42,7 +42,11 @@ const exportLecturerProfile = createRoute({
                 .object({
                   code: z.string().optional().openapi(fieldDesc("Lọc mã GV.")),
                   name: z.string().optional().openapi(fieldDesc("Lọc họ tên.")),
-                  dateOfBirth: z.string().array().optional().openapi(fieldDesc("Khoảng ngày sinh.")),
+                  dateOfBirth: z
+                    .string()
+                    .array()
+                    .optional()
+                    .openapi(fieldDesc("Khoảng ngày sinh.")),
                   academicRankType: z
                     .string()
                     .uuid()
@@ -55,12 +59,7 @@ const exportLecturerProfile = createRoute({
                     .array()
                     .optional()
                     .openapi(fieldDesc("Học vị.")),
-                  organization: z
-                    .string()
-                    .uuid()
-                    .array()
-                    .optional()
-                    .openapi(fieldDesc("Đơn vị.")),
+                  organization: z.string().uuid().array().optional().openapi(fieldDesc("Đơn vị.")),
                   gender: z.string().uuid().array().optional().openapi(fieldDesc("Giới tính.")),
                   rankId: z.string().uuid().array().optional().openapi(fieldDesc("Cấp bậc.")),
                   officerNumber: z.string().optional().openapi(fieldDesc("Số hiệu sĩ quan.")),

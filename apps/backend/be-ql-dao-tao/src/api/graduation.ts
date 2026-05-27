@@ -69,7 +69,10 @@ const graduationApplicationInit = createRoute({
           schema: z
             .object({
               sessionId: z.string().openapi(fieldDesc("ID đợt xét tốt nghiệp.")),
-              trainingCourseId: z.string().optional().openapi(fieldDesc("ID khóa (một trong hai).")),
+              trainingCourseId: z
+                .string()
+                .optional()
+                .openapi(fieldDesc("ID khóa (một trong hai).")),
               fixedClassId: z.string().optional().openapi(fieldDesc("ID lớp NC (một trong hai).")),
             })
             .refine(
@@ -149,9 +152,7 @@ const GraduationCheckResult = z
     ),
     downgraded: z
       .object({
-        from: AcademicRankingConvertScalarSchema.openapi(
-          fieldDesc("Xếp loại trước khi hạ.")
-        ),
+        from: AcademicRankingConvertScalarSchema.openapi(fieldDesc("Xếp loại trước khi hạ.")),
         conditions: z
           .array(GraduationRankDowngradeConditionScalarSchema)
           .openapi(fieldDesc("Điều kiện dẫn đến hạ xếp loại.")),
@@ -163,14 +164,12 @@ const GraduationCheckResult = z
 
 const GraduationCheckResponseSchema = z
   .object({
-    results: GraduationCheckResult.array().openapi(
-      fieldDesc("Kết quả xét từng đơn tốt nghiệp.")
-    ),
+    results: GraduationCheckResult.array().openapi(fieldDesc("Kết quả xét từng đơn tốt nghiệp.")),
   })
   .openapi("GraduationCheckResponse")
 
 const graduationCheck = createRoute({
-  operationId: "graduationCheck", 
+  operationId: "graduationCheck",
   tags: ["Tốt nghiệp"],
   path: "/check",
   method: "post",
@@ -190,9 +189,7 @@ const graduationCheck = createRoute({
               .array(z.string())
               .default([])
               .optional()
-              .openapi(
-                fieldDesc("Danh sách ID đơn; không truyền hoặc [] = xét hết trong đợt.")
-              ),
+              .openapi(fieldDesc("Danh sách ID đơn; không truyền hoặc [] = xét hết trong đợt.")),
           }),
         },
       },
@@ -2500,9 +2497,10 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
       let totalPoints4 = 0
 
       const subjectRows = (student.subjectClassStudent || []).map((record, idx) => {
-        const score = record.manualFinalScore ?? (record.finalScore ? Number(record.finalScore) : null)
+        const score =
+          record.manualFinalScore ?? (record.finalScore ? Number(record.finalScore) : null)
         const credits = record.subjectVersion?.credit || 0
-        
+
         const scoreConverts = course?.scoreConverts || []
         const conversion = scoreConverts.find(
           (c) => score !== null && score >= c.base10Min && score <= c.base10Max
@@ -2541,9 +2539,9 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
         const expert = m.expert
         const rank = expert?.academicRankType?.sTen || ""
         const degree = expert?.academicDegreeType?.sTen || ""
-        
+
         const title = [rank, degree].filter(Boolean).join(".")
-        
+
         return {
           chuc_vi: title || "",
           ten_day_du: expert?.name || "",
@@ -2576,21 +2574,21 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
           thoi_gian_dao_tao: curriculumVersion?.trainingTime?.name || "24 tháng",
           ngon_ngu_dao_tao: "Tiếng Việt",
           hinh_thuc_dao_tao: course?.trainingObjectType?.trainingForm?.name || "",
-          dinh_huong: course?.trainingObjectType?.name?.toLowerCase()?.includes("nghiên cứu") 
-            ? "nghiên cứu" 
-            : course?.trainingObjectType?.name?.toLowerCase()?.includes("ứng dụng") 
-              ? "ứng dụng" 
+          dinh_huong: course?.trainingObjectType?.name?.toLowerCase()?.includes("nghiên cứu")
+            ? "nghiên cứu"
+            : course?.trainingObjectType?.name?.toLowerCase()?.includes("ứng dụng")
+              ? "ứng dụng"
               : "",
           academic_year: academicYear || "",
           data: subjectRows,
           tong_so_tc: totalCredits,
           diem_tb_he_10: formatScore(gpa10, 2),
           diem_tb_he_4: formatScore(gpa4, 2),
-          
+
           ten_de_an_tot_nghiep: tP?.title || "",
           danh_sach_can_bo_huong_dan: supervisors,
           ngay_bao_ve: defenseDateParts?.fullVi || "",
-          
+
           ngay_in: pDateParts?.day || "",
           thang_in: pDateParts?.monthVi || "",
           nam_in: pDateParts?.year || "",
@@ -2599,7 +2597,7 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
           ten_nguoi_ky: signerInfo.ten_day_du,
           chuc_vi_tl: (signerInfo as any).chuc_vi_ky_thay || "",
         },
-        group: councilMembers
+        group: councilMembers,
       }
     })
 
@@ -2812,9 +2810,10 @@ app.openapi(exportPhuLucVanBangNganHan, async (c: any) => {
       let totalPoints10 = 0
 
       const allSubjects = (student.subjectClassStudent || []).map((record) => {
-        const score = record.manualFinalScore ?? (record.finalScore ? Number(record.finalScore) : null)
+        const score =
+          record.manualFinalScore ?? (record.finalScore ? Number(record.finalScore) : null)
         const credits = record.subjectVersion?.credit || 0
-        
+
         if (credits) {
           totalCredits += credits
           totalPoints10 += (score || 0) * credits
@@ -2824,13 +2823,13 @@ app.openapi(exportPhuLucVanBangNganHan, async (c: any) => {
           ten_hoc_phan: record.subjectVersion?.subject?.name || "",
           stc: credits,
           diem_he_10: formatScore(score, 1),
-          type: record.subjectVersion?.type
+          type: record.subjectVersion?.type,
         }
       })
 
       const gradTypes = ["Graduation", "Thesis", "Project"]
-      const normalSubjectsRaw = allSubjects.filter(s => !gradTypes.includes(s.type || ""))
-      const graduationSubjectsRaw = allSubjects.filter(s => gradTypes.includes(s.type || ""))
+      const normalSubjectsRaw = allSubjects.filter((s) => !gradTypes.includes(s.type || ""))
+      const graduationSubjectsRaw = allSubjects.filter((s) => gradTypes.includes(s.type || ""))
 
       const subjectRows = normalSubjectsRaw.map((s, idx) => ({ ...s, stt: idx + 1 }))
       const graduationSubjects = graduationSubjectsRaw.map((s, idx) => ({ ...s, stt: idx + 1 }))
@@ -2858,11 +2857,11 @@ app.openapi(exportPhuLucVanBangNganHan, async (c: any) => {
           chuyen_nganh_chuyen_sau: major?.name || "",
           thoi_gian_dao_tao: curriculumVersion?.trainingTime?.name || "24 tháng",
           ngon_ngu_dao_tao: "Tiếng Việt",
-          hinh_thuc_dao_tao: course?.trainingObjectType?.trainingForm?.name || "", 
+          hinh_thuc_dao_tao: course?.trainingObjectType?.trainingForm?.name || "",
           data: subjectRows,
           diem_tb_tn: formatScore(gpa10, 2),
           hoc_luc: getClassification(gpa10),
-          
+
           ngay_in: pDateParts?.day || "",
           thang_in: pDateParts?.monthVi || "",
           nam_in: pDateParts?.year || "",
@@ -2871,7 +2870,7 @@ app.openapi(exportPhuLucVanBangNganHan, async (c: any) => {
           ten_nguoi_ky: signerInfo.ten_day_du,
           chuc_vi_tl: (signerInfo as any).chuc_vi_ky_thay || "",
         },
-        group: graduationSubjects
+        group: graduationSubjects,
       }
     })
 
@@ -2887,6 +2886,170 @@ app.openapi(exportPhuLucVanBangNganHan, async (c: any) => {
     "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     "Content-Disposition": disposition,
   })
+})
+
+const getPhuLucIXData = createRoute({
+  operationId: "getPhuLucIXData",
+  tags: ["Tốt nghiệp"],
+  path: "/phu-luc-ix-data",
+  method: "get",
+  summary: "Dữ liệu Phụ lục IX - DS học viên đề nghị tốt nghiệp",
+  description:
+    "Trả về dữ liệu JSON (tiêu đề + danh sách học viên graduation=true) để FE fill vào template DOCX bằng easy-template-x.",
+  request: {
+    query: z.object({
+      sessionId: z.string().openapi(fieldDesc("ID đợt xét TN.")),
+    }),
+  },
+  responses: {
+    200: {
+      description: "OK",
+      content: {
+        "application/json": {
+          schema: z.object({ data: z.record(z.unknown()) }),
+        },
+      },
+    },
+    404: {
+      description: "Không tìm thấy đợt",
+      content: {
+        "application/json": {
+          schema: ErrorMessageResponseSchema,
+        },
+      },
+    },
+  },
+})
+
+app.openapi(getPhuLucIXData, async (c) => {
+  const { sessionId } = c.req.valid("query")
+
+  const session = await prisma.graduationSession.findUnique({
+    where: { id: sessionId },
+    include: { trainingCourse: true },
+  })
+
+  if (!session) return c.json({ message: "Không tìm thấy đợt xét tốt nghiệp" }, 404)
+
+  const applications = await prisma.studentGraduationApplication.findMany({
+    where: { sessionId, graduation: true, deletedAt: null },
+    include: {
+      rank: true,
+      trainingMajor: true,
+      downgraded: true,
+      student: {
+        include: {
+          fixedClass: {
+            include: {
+              trainingCourse: true,
+              curriculumVersion: {
+                include: {
+                  trainingBlocks: {
+                    include: {
+                      subjects: {
+                        include: {
+                          subject: {
+                            include: {
+                              studentSubjectScore: {
+                                where: {
+                                  student: {
+                                    graduationApplications: { some: { sessionId } },
+                                  },
+                                },
+                              },
+                            },
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+          userProfile: {
+            include: { gender: true, ethnicity: true, newProvinceOfBirth: true },
+          },
+        },
+      },
+    },
+    orderBy: { createdAt: "asc" },
+  })
+
+  // Gom các học viên cùng chuyên ngành liền nhau (STT vẫn chạy liên tục 1..n)
+  const majorKey = (a: (typeof applications)[number]) =>
+    a.trainingMajor?.shortName ?? a.trainingMajor?.name ?? ""
+  const sortedApplications = [...applications].sort((a, b) =>
+    majorKey(a).localeCompare(majorKey(b), "vi")
+  )
+
+  const danhSach = sortedApplications.map((app, idx) => {
+    const u = app.student.userProfile
+
+    // Điểm các môn tốt nghiệp lấy ĐÚNG nguồn như màn "Chi tiết kết quả học tập":
+    // môn trong CTĐT -> subject.studentSubjectScore.finalScore của chính SV này.
+    // KHÔNG lọc theo cờ `graduation` (NN/CTĐ-CTCT thường không bật cờ này),
+    // nhận diện theo tên đặc trưng đầy đủ "thi tốt nghiệp ...".
+    const allSubjects = (app.student.fixedClass?.curriculumVersion?.trainingBlocks ?? []).flatMap(
+      (b) => b.subjects
+    )
+    // chuẩn hoá: bỏ dấu + đ->d + thường, tránh lệch unicode khi so tên môn tiếng Việt
+    const normalize = (s?: string | null) =>
+      (s ?? "")
+        .normalize("NFD")
+        .replace(/[̀-ͯ]/g, "")
+        .replace(/[đĐ]/g, "d")
+        .toLowerCase()
+    const scoreOf = (kw: string[]) => {
+      const sub = allSubjects.find((s) => {
+        const name = normalize(s.subject.name)
+        return kw.some((k) => name.includes(k))
+      })
+      const best = (sub?.subject.studentSubjectScore ?? [])
+        .filter((ss) => ss.studentId === app.studentId && ss.finalScore != null)
+        .sort((a, b) => Number(b.finalScore) - Number(a.finalScore))[0]
+      return best?.finalScore ?? null
+    }
+
+    return {
+      stt: idx + 1,
+      hoTen: u?.fullname ?? "",
+      ngaySinh: u?.dateOfBirth ? dayjs(u.dateOfBirth).format("DD/MM/YYYY") : "",
+      chuyenNganh: app.trainingMajor?.shortName ?? app.trainingMajor?.name ?? "",
+      gioiTinh: u?.gender?.sTen ?? "",
+      danToc: u?.ethnicity?.sTen ?? "",
+      noiSinh: u?.newProvinceOfBirth?.sTen ?? u?.placeOfBirth ?? "",
+      diemTBTL: formatScore(app.gpa, 2),
+      diemDATN: formatScore(scoreOf(["do an tot nghiep", "luan van"]), 1),
+      diemNN: formatScore(scoreOf(["tot nghiep ngoai ngu"]), 1),
+      diemCTDCTCT: formatScore(scoreOf(["tot nghiep ctd", "tot nghiep ctct", "ctd-ctct"]), 1),
+      xepHang: app.rank?.classification ?? "",
+      ghiChu:
+        app.downgraded || app.rankDowngraded || /ha bac|ha muc/.test(normalize(app.reason))
+          ? "Hạ mức"
+          : (app.reason ?? ""),
+    }
+  })
+
+  return c.json(
+    {
+      data: {
+        tongHV: danhSach.length,
+        // template đã có sẵn chữ "KHOÁ" -> bỏ tiền tố "Khoá/Khóa" thừa trong tên
+        khoa: (
+          session.trainingCourse?.name ??
+          applications[0]?.student.fixedClass?.trainingCourse?.name ??
+          ""
+        )
+          .replace(/^\s*kho[áa]\s*/i, "")
+          .trim(),
+        namXet: dayjs(session.sessionDate).year(),
+        ngayBaoCao: dayjs(session.sessionDate).format("DD/MM/YYYY"),
+        danhSach,
+      },
+    },
+    200
+  )
 })
 
 export default app

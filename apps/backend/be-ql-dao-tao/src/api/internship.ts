@@ -80,8 +80,7 @@ app.openapi(exportInternshipProfile, async (c) => {
         },
       },
       supervisor: {
-        include: {    
-                
+        include: {
           lecturer: {
             include: {
               userProfile: {
@@ -96,7 +95,6 @@ app.openapi(exportInternshipProfile, async (c) => {
       },
       coSupervisor: {
         include: {
-
           lecturer: {
             include: {
               userProfile: {

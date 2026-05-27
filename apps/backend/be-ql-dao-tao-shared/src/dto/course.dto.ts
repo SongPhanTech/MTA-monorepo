@@ -38,7 +38,9 @@ export const OpenCoursesRequest = z
       .nativeEnum(TYPE_PROGRAM)
       .optional()
       .default(TYPE_PROGRAM.IN_CURRICULUM)
-      .openapi(fieldDesc("Lọc học phần: 0 = ngoài khung CTĐT; 1 = trong khung CTĐT của sinh viên.")),
+      .openapi(
+        fieldDesc("Lọc học phần: 0 = ngoài khung CTĐT; 1 = trong khung CTĐT của sinh viên.")
+      ),
     key_word: z
       .string()
       .optional()
@@ -85,10 +87,17 @@ export const ClassDetailsSchema = z
     class_credit_hour: z.number().openapi(fieldDesc("Số tín chỉ (SubjectVersion.credit).", 3)),
     class_tuition: z
       .number()
-      .openapi(fieldDesc("Học phí dự kiến = credit × ClassRegisterSession.tuitionPerCredit.", 900000)),
+      .openapi(
+        fieldDesc("Học phí dự kiến = credit × ClassRegisterSession.tuitionPerCredit.", 900000)
+      ),
     class_time: z
       .string()
-      .openapi(fieldDesc("Lịch học gộp: Thứ(tiết bắt đầu-tiết kết thúc), từ SubjectClassTime.", "T2(1-3), T4(4-6)")),
+      .openapi(
+        fieldDesc(
+          "Lịch học gộp: Thứ(tiết bắt đầu-tiết kết thúc), từ SubjectClassTime.",
+          "T2(1-3), T4(4-6)"
+        )
+      ),
     class_exam_date: z
       .date()
       .nullable()
@@ -108,7 +117,9 @@ export type OpenCourseResponse = z.infer<typeof OpenCourseResponse>
 
 export const CoursesDetailRequest = z
   .object({
-    class_id: z.string().openapi(fieldDesc("ID lớp học phần cần xem chi tiết (SubjectClass.id).", "clxxx")),
+    class_id: z
+      .string()
+      .openapi(fieldDesc("ID lớp học phần cần xem chi tiết (SubjectClass.id).", "clxxx")),
   })
   .openapi("CoursesDetailRequest")
 
@@ -125,7 +136,9 @@ export const StudyScheduleItem = z
   .object({
     study_date: z
       .string()
-      .openapi(fieldDesc("Thứ trong tuần (SubjectClassTime.dayOfWeek): 2–7 = T2–T7, 8 = Chủ nhật.", "2")),
+      .openapi(
+        fieldDesc("Thứ trong tuần (SubjectClassTime.dayOfWeek): 2–7 = T2–T7, 8 = Chủ nhật.", "2")
+      ),
     study_period_start: z
       .number()
       .openapi(fieldDesc("Tiết học bắt đầu (SubjectClassTime.startPeriod).", 1)),
@@ -146,8 +159,15 @@ export const CoursesDetailResponse = SuccessResponseSchema.extend({
   exam_type: z
     .nativeEnum(EXAM_TYPE)
     .nullable()
-    .openapi(fieldDesc("Hình thức thi: 1=Vấn đáp, 2=Viết, 3=Trực tuyến/TN, 4=Trắc nghiệm, 5=Khác, 6=Thi viết online.")),
-  teacher_1: z.string().nullable().openapi(fieldDesc("Giảng viên chính (học hàm + họ tên).", "PGS.TS Nguyễn Văn A")),
+    .openapi(
+      fieldDesc(
+        "Hình thức thi: 1=Vấn đáp, 2=Viết, 3=Trực tuyến/TN, 4=Trắc nghiệm, 5=Khác, 6=Thi viết online."
+      )
+    ),
+  teacher_1: z
+    .string()
+    .nullable()
+    .openapi(fieldDesc("Giảng viên chính (học hàm + họ tên).", "PGS.TS Nguyễn Văn A")),
   teacher_2: z.string().nullable().openapi(fieldDesc("Giảng viên phụ.", "ThS. Trần Văn B")),
   study_schedules: z
     .array(StudyScheduleItem)

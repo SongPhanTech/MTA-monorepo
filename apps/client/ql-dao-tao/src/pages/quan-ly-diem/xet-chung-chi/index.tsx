@@ -98,9 +98,14 @@ export default function AutoCheckCertificate() {
     selectedCertificate?.subjectVersions?.forEach((sv) => {
       const scoreRecord = record.subjectClassStudent?.find((s: any) => s.subjectVersionId === sv.id)
       const scoreVal = scoreRecord?.manualFinalScore ?? scoreRecord?.finalScore
-      const score = scoreVal != null
-        ? Number(typeof scoreVal === "object" && typeof scoreVal.toNumber === "function" ? scoreVal.toNumber() : scoreVal)
-        : 0
+      const score =
+        scoreVal != null
+          ? Number(
+              typeof scoreVal === "object" && typeof scoreVal.toNumber === "function"
+                ? scoreVal.toNumber()
+                : scoreVal
+            )
+          : 0
       if (score === 0) hasZeroScore = true
       totalScore += score * sv.credit
       totalCredit += sv.credit
@@ -238,9 +243,12 @@ export default function AutoCheckCertificate() {
           )
 
           const rawScore = scoreRecord?.manualFinalScore ?? scoreRecord?.finalScore
-          const score = rawScore != null
-            ? (typeof rawScore === "object" && typeof rawScore.toNumber === "function" ? rawScore.toNumber() : rawScore)
-            : null
+          const score =
+            rawScore != null
+              ? typeof rawScore === "object" && typeof rawScore.toNumber === "function"
+                ? rawScore.toNumber()
+                : rawScore
+              : null
           return score ?? "-"
         },
       })) || []

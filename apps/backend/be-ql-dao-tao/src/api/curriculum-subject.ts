@@ -43,7 +43,10 @@ const importCurriculumVersion = createRoute({
               .boolean()
               .default(false)
               .openapi(fieldDesc("Xóa dữ liệu khối/môn cũ trước import.", false)),
-            timeout: z.coerce.number().default(30).openapi(fieldDesc("Timeout transaction (giây).", 30)),
+            timeout: z.coerce
+              .number()
+              .default(30)
+              .openapi(fieldDesc("Timeout transaction (giây).", 30)),
           }),
         },
       },

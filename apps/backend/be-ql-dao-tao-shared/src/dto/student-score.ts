@@ -19,7 +19,10 @@ export const StudentScoreNotFoundResponse = z
 
 export const StudentScoreItem = z
   .object({
-    subject_code: z.string().nullish().openapi(fieldDesc("Mã học phần (SubjectVersion.code).", "TIN001")),
+    subject_code: z
+      .string()
+      .nullish()
+      .openapi(fieldDesc("Mã học phần (SubjectVersion.code).", "TIN001")),
     subject_name: z.string().openapi(fieldDesc("Tên học phần.", "Tin học")),
     class_id: z.string().openapi(fieldDesc("ID lớp học phần (SubjectClass.id).", "clxxx")),
     attendanceScore: z
@@ -43,10 +46,7 @@ export const StudentScoreItem = z
       .number()
       .nullish()
       .openapi(fieldDesc("Điểm quy đổi thang 4 (ScoreConvert).", 3.5)),
-    grade_letter: z
-      .string()
-      .nullish()
-      .openapi(fieldDesc("Điểm chữ (ScoreConvert.letter).", "B+")),
+    grade_letter: z.string().nullish().openapi(fieldDesc("Điểm chữ (ScoreConvert.letter).", "B+")),
     pass: z.boolean().openapi(fieldDesc("Đạt / không đạt môn (ScoreConvert.pass).", true)),
     bonusScore: z
       .number()

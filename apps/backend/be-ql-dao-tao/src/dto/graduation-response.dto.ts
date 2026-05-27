@@ -4,10 +4,7 @@ import { fieldDesc } from "./openapi-helpers"
 export const GraduationConflictResponseSchema = z
   .object({
     message: z.string().openapi(fieldDesc("Thông báo lỗi xung đột dữ liệu.")),
-    existing: z
-      .array(z.string())
-      .optional()
-      .openapi(fieldDesc("Danh sách mã / ID đã tồn tại.")),
+    existing: z.array(z.string()).optional().openapi(fieldDesc("Danh sách mã / ID đã tồn tại.")),
     shouldSkip: z
       .array(z.number())
       .optional()
@@ -23,10 +20,8 @@ export const GraduationClassificationCountSchema = z
   })
   .openapi("GraduationClassificationCount")
 
-export const PptxBinaryResponseSchema = z
-  .string()
-  .openapi({
-    type: "string",
-    format: "binary",
-    description: "File PowerPoint (.pptx) — tải về qua header Content-Disposition.",
-  })
+export const PptxBinaryResponseSchema = z.string().openapi({
+  type: "string",
+  format: "binary",
+  description: "File PowerPoint (.pptx) — tải về qua header Content-Disposition.",
+})

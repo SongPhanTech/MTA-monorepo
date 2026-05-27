@@ -1,10 +1,6 @@
 import { createRoute, OpenAPIHono } from "@hono/zod-openapi"
 import { prisma } from ".."
-import {
-  GetAllYearResponse,
-  GetSemesterRequest,
-  GetSemesterResponse,
-} from "../dto/semester.dto"
+import { GetAllYearResponse, GetSemesterRequest, GetSemesterResponse } from "../dto/semester.dto"
 
 const app: OpenAPIHono = new OpenAPIHono({ strict: false })
 

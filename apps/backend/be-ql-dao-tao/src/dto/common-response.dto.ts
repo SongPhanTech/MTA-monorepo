@@ -64,10 +64,7 @@ export const ImportJobResponseSchema = z
 export const ImportErrorResponseSchema = z
   .object({
     message: z.string().openapi(fieldDesc("Thông báo lỗi tổng quát.")),
-    errors: z
-      .array(z.any())
-      .optional()
-      .openapi(fieldDesc("Chi tiết lỗi từng dòng (parse Excel).")),
+    errors: z.array(z.any()).optional().openapi(fieldDesc("Chi tiết lỗi từng dòng (parse Excel).")),
   })
   .openapi("ImportErrorResponse")
 
@@ -81,10 +78,8 @@ export const SheetParseErrorResponseSchema = <T extends z.ZodTypeAny>(errorItemS
       .openapi(fieldDesc("Lỗi từng dòng / ô trên file Excel.")),
   })
 
-export const ExcelBinaryResponseSchema = z
-  .string()
-  .openapi({
-    type: "string",
-    format: "binary",
-    description: "File Excel (.xlsx) — tải về qua header Content-Disposition.",
-  })
+export const ExcelBinaryResponseSchema = z.string().openapi({
+  type: "string",
+  format: "binary",
+  description: "File Excel (.xlsx) — tải về qua header Content-Disposition.",
+})

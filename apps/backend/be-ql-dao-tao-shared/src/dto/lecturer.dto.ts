@@ -18,7 +18,10 @@ export const GetListTeacherRequest = z
 
 export const TeacherListItem = z
   .object({
-    teacher_code: z.string().nullish().openapi(fieldDesc("Mã giảng viên (Lecturer.code).", "GV001")),
+    teacher_code: z
+      .string()
+      .nullish()
+      .openapi(fieldDesc("Mã giảng viên (Lecturer.code).", "GV001")),
     teacher: z.string().openapi(fieldDesc("Họ tên đầy đủ (UserProfile.fullname).", "Nguyễn Văn A")),
     department_code: z
       .string()
@@ -31,11 +34,15 @@ export const TeacherListItem = z
     position_name: z
       .string()
       .openapi(fieldDesc("Chức vụ Đảng / chức danh (DM_ChucVu.sTen).", "Giảng viên")),
-    phone_number: z.string().openapi(fieldDesc("Số điện thoại (UserProfile.phoneNumber).", "0901234567")),
+    phone_number: z
+      .string()
+      .openapi(fieldDesc("Số điện thoại (UserProfile.phoneNumber).", "0901234567")),
     working_number: z
       .string()
       .openapi(fieldDesc("Số điện thoại công tác (trùng phoneNumber).", "0901234567")),
-    working_mail: z.string().openapi(fieldDesc("Email công tác (UserProfile.email).", "gv@mta.edu.vn")),
+    working_mail: z
+      .string()
+      .openapi(fieldDesc("Email công tác (UserProfile.email).", "gv@mta.edu.vn")),
   })
   .openapi("TeacherListItem")
 
@@ -45,7 +52,9 @@ export const GetListTeacherResponse = SuccessResponseSchema.extend({
 
 export const GetTeacherDetailRequest = z
   .object({
-    teacher_code: z.string().openapi(fieldDesc("Mã giảng viên cần tra cứu (Lecturer.code).", "GV001")),
+    teacher_code: z
+      .string()
+      .openapi(fieldDesc("Mã giảng viên cần tra cứu (Lecturer.code).", "GV001")),
   })
   .openapi("GetTeacherDetailRequest")
 

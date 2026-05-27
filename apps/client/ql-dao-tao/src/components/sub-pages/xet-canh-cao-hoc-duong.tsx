@@ -94,9 +94,7 @@ const XetCanhCaoHocDuong = ({ semesterId }: XetCanhCaoHocDuongProps) => {
                 },
               }
             : {}),
-          ...(trainingObjectTypeId
-            ? { trainingCourse: { trainingObjectTypeId } }
-            : {}),
+          ...(trainingObjectTypeId ? { trainingCourse: { trainingObjectTypeId } } : {}),
         },
       },
     }),

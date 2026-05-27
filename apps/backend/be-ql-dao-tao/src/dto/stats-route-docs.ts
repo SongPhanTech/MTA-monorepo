@@ -1,8 +1,5 @@
 /** Mô tả OpenAPI (summary + description) theo path — dùng trong stats.ts */
-export const STATS_ROUTE_DOCS: Record<
-  string,
-  { summary: string; description: string }
-> = {
+export const STATS_ROUTE_DOCS: Record<string, { summary: string; description: string }> = {
   "/student-distribution-by-training-object-type": {
     summary: "Phân bổ SV theo hệ đào tạo",
     description: `Thống kê số học viên theo từng hệ đào tạo (Ban Giám đốc).

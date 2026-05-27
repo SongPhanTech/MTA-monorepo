@@ -795,7 +795,7 @@ export const Table = <T extends AnyObject>({
                 placeholder="0"
                 type="number"
                 value={
-                    // @ts-expect-error
+                  // @ts-expect-error
                   filtersTable[item.dataIndex as keyof FilterProps]?.gte as string
                 }
                 onChange={(e) => {
@@ -815,7 +815,7 @@ export const Table = <T extends AnyObject>({
                 placeholder="10"
                 type="number"
                 value={
-                    // @ts-expect-error
+                  // @ts-expect-error
                   filtersTable[item.dataIndex as keyof FilterProps]?.lte as string
                 }
                 onChange={(e) => {
@@ -889,7 +889,7 @@ export const Table = <T extends AnyObject>({
         id={id}
         rowKey={rowKey}
         size="small"
-      className="mt-2"
+        className="mt-2"
         rowSelection={rowSelection}
         columns={
           columns.map((column) => ({

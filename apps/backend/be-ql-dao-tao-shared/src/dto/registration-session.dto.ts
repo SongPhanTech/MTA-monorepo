@@ -12,18 +12,15 @@ export const RegistrationSessionRequest = z
     key_word: z
       .string()
       .optional()
-      .openapi(
-        fieldDesc(
-          "Từ khóa tìm theo tên đợt đăng ký (ClassRegisterSession.name).",
-          "Đợt 1"
-        )
-      ),
+      .openapi(fieldDesc("Từ khóa tìm theo tên đợt đăng ký (ClassRegisterSession.name).", "Đợt 1")),
     session_status: z
       .nativeEnum(SESSION_STATUS)
       .describe("1: Đang mở đợt đăng ký, 2: Đóng đợt đăng ký")
       .optional()
       .openapi(
-        fieldDesc("Trạng thái đợt: 1 = đang mở (trong khoảng startDate–endDate); 2 = đã đóng hoặc chưa mở.")
+        fieldDesc(
+          "Trạng thái đợt: 1 = đang mở (trong khoảng startDate–endDate); 2 = đã đóng hoặc chưa mở."
+        )
       ),
   })
   .openapi("RegistrationSessionRequest")
@@ -34,12 +31,14 @@ export const SessionInfo = z
       .string()
       .nullable()
       .openapi(fieldDesc("Mã đợt đăng ký (ClassRegisterSession.code).", "DK_HK1_2526")),
-    session_name: z.string().openapi(fieldDesc("Tên đợt (ClassRegisterSession.name).", "Đăng ký HK1")),
-    session_start: z.date().openapi(fieldDesc("Thời gian bắt đầu (ClassRegisterSession.startDate).")),
+    session_name: z
+      .string()
+      .openapi(fieldDesc("Tên đợt (ClassRegisterSession.name).", "Đăng ký HK1")),
+    session_start: z
+      .date()
+      .openapi(fieldDesc("Thời gian bắt đầu (ClassRegisterSession.startDate).")),
     session_end: z.date().openapi(fieldDesc("Thời gian kết thúc (ClassRegisterSession.endDate).")),
-    session_status: z
-      .nativeEnum(SESSION_STATUS)
-      .openapi(fieldDesc("1 = đang mở; 2 = đã đóng.")),
+    session_status: z.nativeEnum(SESSION_STATUS).openapi(fieldDesc("1 = đang mở; 2 = đã đóng.")),
   })
   .openapi("SessionInfo")
 
@@ -53,7 +52,9 @@ export const RegistrationSessionDetailRequest = z
   .object({
     session_code: z
       .string()
-      .openapi(fieldDesc("Mã đợt đăng ký cần xem chi tiết (ClassRegisterSession.code).", "DK_HK1_2526")),
+      .openapi(
+        fieldDesc("Mã đợt đăng ký cần xem chi tiết (ClassRegisterSession.code).", "DK_HK1_2526")
+      ),
   })
   .openapi("RegistrationSessionDetailRequest")
 
@@ -76,7 +77,9 @@ export const RegistrationSessionDetailResponse = SuccessResponseSchema.extend({
   session_status: z.nativeEnum(SESSION_STATUS).openapi(fieldDesc("1 = mở; 2 = đóng.")),
   money: z
     .number()
-    .openapi(fieldDesc("Đơn giá học phín/tín chỉ (ClassRegisterSession.tuitionPerCredit).", 300000)),
+    .openapi(
+      fieldDesc("Đơn giá học phín/tín chỉ (ClassRegisterSession.tuitionPerCredit).", 300000)
+    ),
   list_scholastic_code: z
     .array(z.string())
     .openapi(fieldDesc("Danh sách tên khóa được phép đăng ký (TrainingCourse.name).")),

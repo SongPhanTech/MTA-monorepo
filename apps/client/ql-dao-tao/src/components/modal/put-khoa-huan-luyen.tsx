@@ -545,7 +545,7 @@ const PutTrainingCourseModal = () => {
         scoreToPassConditional: selectedTrainingCourse.scoreToPassConditional,
         scoreToTakeGraduation: selectedTrainingCourse.scoreToTakeGraduation,
         scoreToPassGraduation: selectedTrainingCourse.scoreToPassGraduation,
-       // maxTrainingTime: selectedTrainingCourse.maxTrainingTime,
+        // maxTrainingTime: selectedTrainingCourse.maxTrainingTime,
         // regulation: selectedTrainingCourse.regulation,
         trainingCourseRegulation: selectedTrainingCourse.trainingCourseRegulation,
         baseScore: selectedTrainingCourse.baseScore,

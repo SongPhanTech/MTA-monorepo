@@ -2,7 +2,10 @@ import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
 import { $Enums, Prisma } from "@workspace/db"
 import { calcFinalScore } from "@workspace/libs/utils"
 import { prisma } from ".."
-import { ErrorMessageResponseSchema, SuccessBooleanResponseSchema } from "../dto/common-response.dto"
+import {
+  ErrorMessageResponseSchema,
+  SuccessBooleanResponseSchema,
+} from "../dto/common-response.dto"
 import { fieldDesc } from "../dto/openapi-helpers"
 
 const app = new OpenAPIHono({ strict: false })
@@ -36,8 +39,7 @@ const genExamListCode = createRoute({
       description: "Generate Exam List code result",
       content: {
         "application/json": {
-          schema: SuccessBooleanResponseSchema
-            .openapi("gen-exam-list-code-result"),
+          schema: SuccessBooleanResponseSchema.openapi("gen-exam-list-code-result"),
         },
       },
     },
@@ -204,8 +206,7 @@ const saveExamScore = createRoute({
       description: "Save exam codes result",
       content: {
         "application/json": {
-          schema: SuccessBooleanResponseSchema
-            .openapi("SaveExamCodesResult"),
+          schema: SuccessBooleanResponseSchema.openapi("SaveExamCodesResult"),
         },
       },
     },

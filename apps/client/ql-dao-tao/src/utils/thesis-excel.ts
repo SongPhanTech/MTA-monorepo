@@ -1261,14 +1261,17 @@ export const exportHosobvlv = async ({
       const nguoiki = signerName || ""
       const text1 = isChief ? "TRƯỞNG PHÒNG SAU ĐẠI HỌC" : "KT. TRƯỞNG PHÒNG SAU ĐẠI HỌC"
       const text2 = isChief ? "" : "PHÓ TRƯỞNG PHÒNG SAU ĐẠI HỌC"
-      const ngayQDBV =
-      formatBirthDate(student?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.defenseDecisionDate || "")
+      const ngayQDBV = formatBirthDate(
+        student?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.defenseDecisionDate || ""
+      )
       const soQDBV =
         student?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.defenseDecisionNumber
       const dotxetBV = student?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.name
       const ngaysinh = formatBirthDate(student?.userProfile?.dateOfBirth)
       const khoas = student?.fixedClass?.trainingCourse?.name || ""
-      const ngaybaove = formatBirthDate(student?.thesisRegistrations?.[0]?.thesisProject?.defenseDate || "")
+      const ngaybaove = formatBirthDate(
+        student?.thesisRegistrations?.[0]?.thesisProject?.defenseDate || ""
+      )
       // const nguoiKi
       const data = {
         tenhocvien: student.userProfile?.fullname || "",

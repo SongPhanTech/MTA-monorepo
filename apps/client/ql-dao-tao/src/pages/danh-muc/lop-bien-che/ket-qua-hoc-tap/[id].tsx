@@ -392,9 +392,7 @@ export default function StudentScoreClassPage() {
           { value: "Điểm trung bình học kỳ:", colSpan: 6, bold: true, align: "center" },
           { value: null },
           {
-            value: hasMon
-              ? { formula: sumStcFormula, result: hocKi.SoTinChiKy ?? 0 }
-              : 0,
+            value: hasMon ? { formula: sumStcFormula, result: hocKi.SoTinChiKy ?? 0 } : 0,
             bold: true,
             align: "center",
           },
@@ -404,17 +402,13 @@ export default function StudentScoreClassPage() {
           { value: null },
           { value: null },
           {
-            value: hasMon
-              ? { formula: tbHe10Formula, result: hocKi.DiemTBKyHe10 ?? 0 }
-              : 0,
+            value: hasMon ? { formula: tbHe10Formula, result: hocKi.DiemTBKyHe10 ?? 0 } : 0,
             bold: true,
             align: "right",
             numFmt: "0.00",
           },
           {
-            value: hasMon
-              ? { formula: tbHe4Formula, result: hocKi.DiemTBKyHe4 ?? 0 }
-              : 0,
+            value: hasMon ? { formula: tbHe4Formula, result: hocKi.DiemTBKyHe4 ?? 0 } : 0,
             bold: true,
             align: "right",
             numFmt: "0.00",

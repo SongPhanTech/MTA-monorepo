@@ -22,10 +22,7 @@ export const PreviewWithSemesterRequestSchema = PreviewOnlyRequestSchema.extend(
 }).openapi("StatsPreviewWithSemesterRequest")
 
 export const StudentsOfInterestRequestSchema = PreviewOnlyRequestSchema.extend({
-  warningLevel: z
-    .string()
-    .optional()
-    .openapi(fieldDesc("Mức cảnh báo học tập (lọc tùy chọn).")),
+  warningLevel: z.string().optional().openapi(fieldDesc("Mức cảnh báo học tập (lọc tùy chọn).")),
   debtCredits: z.string().optional().openapi(fieldDesc("Ngưỡng tín chỉ nợ (lọc tùy chọn).")),
   gpaThreshold: z.string().optional().openapi(fieldDesc("Ngưỡng GPA (lọc tùy chọn).")),
 }).openapi("StatsStudentsOfInterestRequest")

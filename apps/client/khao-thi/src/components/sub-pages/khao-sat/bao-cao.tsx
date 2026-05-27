@@ -66,25 +66,25 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
           data: data?.data.map((i) => i.name),
         },
         series: [
-  {
-    name: "Đã làm",
-    type: "bar",
-    color: "#7F95C9",
-    itemStyle: {
-      borderRadius:0,
-    },
-    data: data?.data.map((i) => i.taken),
-  },
-  {
-    name: "Tổng",
-    type: "bar",
-    color: "#5FAE8C",
-    itemStyle: {
-      borderRadius:0,
-    },
-    data: data?.data.map((i) => i.total),
-  },
-]
+          {
+            name: "Đã làm",
+            type: "bar",
+            color: "#7F95C9",
+            itemStyle: {
+              borderRadius: 0,
+            },
+            data: data?.data.map((i) => i.taken),
+          },
+          {
+            name: "Tổng",
+            type: "bar",
+            color: "#5FAE8C",
+            itemStyle: {
+              borderRadius: 0,
+            },
+            data: data?.data.map((i) => i.total),
+          },
+        ],
       }
     }
     return {}
@@ -95,7 +95,6 @@ function SurveyReport({ selectedId }: { selectedId: string }) {
     data: CriteriaItem[],
     answerDescriptions: GetSurveyStatistics200QuestionsItemAnswersItem[]
   ) {
-
     const color = ["#D46A6A", "#E2A4A4", "#E6CF7A", "#7F95C9", "#5FAE8C"]
     const answerMap: Record<string, string> = {}
     answerDescriptions.forEach((a) => {

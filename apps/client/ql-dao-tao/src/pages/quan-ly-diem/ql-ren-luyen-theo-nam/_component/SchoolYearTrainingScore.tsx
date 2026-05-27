@@ -1,7 +1,5 @@
 import Table from "@components/commons/table"
-import ScoreInputCell, {
-  ScoreInputHandle,
-} from "@components/commons/score-input-cell"
+import ScoreInputCell, { ScoreInputHandle } from "@components/commons/score-input-cell"
 import { Button, Col, Flex, Form, message, Row } from "antd"
 import { FilterProps } from "@constants/type"
 import { Key, useEffect, useMemo, useRef, useState } from "react"
@@ -320,11 +318,7 @@ export default function SchoolYearTrainingScore({
                   width: 150,
                   align: "center",
                   render: (_, record, index) => (
-                    <ScoreInputCell
-                      rowId={record.id}
-                      rowIndex={index}
-                      inputRefs={inputRefs}
-                    />
+                    <ScoreInputCell rowId={record.id} rowIndex={index} inputRefs={inputRefs} />
                   ),
                 },
                 // {

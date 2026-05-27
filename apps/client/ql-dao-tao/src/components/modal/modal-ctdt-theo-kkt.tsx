@@ -8,10 +8,7 @@ import { Drawer, Tabs, Tag, Tooltip } from "antd"
 import { useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 import { BookOpen, GraduationCap } from "lucide-react"
-import {
-  useCountTrainingBlockSubject,
-  useFindManyTrainingBlockSubject,
-} from "@workspace/db/hooks"
+import { useCountTrainingBlockSubject, useFindManyTrainingBlockSubject } from "@workspace/db/hooks"
 interface DrawerPayload {
   trainingBlockId: string
   trainingBlockName?: string
@@ -47,7 +44,11 @@ function CurriculumVersionTab({
     { enabled: !!trainingBlockId && isOpen }
   )
 
-  const { data = [], isLoading, isFetching } = useFindManyTrainingBlockOnCurriculumVersion(
+  const {
+    data = [],
+    isLoading,
+    isFetching,
+  } = useFindManyTrainingBlockOnCurriculumVersion(
     {
       where,
       include: {
@@ -142,19 +143,12 @@ function CurriculumVersionTab({
           align: "center",
           width: 180,
           render: (_: any, record: any) => record?.curriculum?.trainingMajor?.name || "—",
-        }
-       
+        },
       ]}
     />
   )
 }
-function SubjectTab({
-  trainingBlockId,
-  isOpen,
-}: {
-  trainingBlockId: string
-  isOpen: boolean
-}) {
+function SubjectTab({ trainingBlockId, isOpen }: { trainingBlockId: string; isOpen: boolean }) {
   const [currentPage, setCurrentPage] = useState(1)
   const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
   const [filters, setFilters] = useState<Record<string, any>>({
@@ -191,7 +185,11 @@ function SubjectTab({
     { enabled: !!trainingBlockId && isOpen }
   )
 
-  const { data = [], isLoading, isFetching } = useFindManyTrainingBlockOnCurriculumVersion(
+  const {
+    data = [],
+    isLoading,
+    isFetching,
+  } = useFindManyTrainingBlockOnCurriculumVersion(
     {
       where,
       include: {
@@ -272,7 +270,7 @@ function SubjectTab({
             ) : (
               <Tag color="orange">Tự chọn</Tag>
             ),
-        }
+        },
       ]}
     />
   )
@@ -294,12 +292,7 @@ const ModalCurriculumVersionByTrainingBlock = () => {
           Chương trình đào tạo
         </span>
       ),
-      children: (
-        <CurriculumVersionTab
-          trainingBlockId={trainingBlockId}
-          isOpen={isOpen}
-        />
-      ),
+      children: <CurriculumVersionTab trainingBlockId={trainingBlockId} isOpen={isOpen} />,
     },
     {
       key: "subjects",
@@ -309,12 +302,7 @@ const ModalCurriculumVersionByTrainingBlock = () => {
           Học phần
         </span>
       ),
-      children: (
-        <SubjectTab
-          trainingBlockId={trainingBlockId}
-          isOpen={isOpen}
-        />
-      ),
+      children: <SubjectTab trainingBlockId={trainingBlockId} isOpen={isOpen} />,
     },
   ]
 
@@ -326,9 +314,7 @@ const ModalCurriculumVersionByTrainingBlock = () => {
         <div>
           <div className="text-base font-semibold">Chi tiết khối kiến thức</div>
           {trainingBlockName && (
-            <div className="text-sm text-gray-500 font-normal mt-0.5">
-              {trainingBlockName}
-            </div>
+            <div className="text-sm text-gray-500 font-normal mt-0.5">{trainingBlockName}</div>
           )}
         </div>
       }
@@ -336,10 +322,7 @@ const ModalCurriculumVersionByTrainingBlock = () => {
       destroyOnClose
       footer={null}
     >
-      <Tabs
-        defaultActiveKey={defaultTab ?? "curriculumVersions"}
-        items={tabItems}
-      />
+      <Tabs defaultActiveKey={defaultTab ?? "curriculumVersions"} items={tabItems} />
     </Drawer>
   )
 }

@@ -47,4 +47,3 @@ export const getLuanVanTemplateBuffer = async (prisma: PrismaClient, templateCod
 
   return nodeBuffer
 }
-  

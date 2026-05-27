@@ -7,13 +7,15 @@
 
 export type GetSurveysOfProfileParams = {
 /**
- * @nullable
+ * @minimum 1
+ * @maximum 100
  */
-page?: number | null;
+page?: number;
 /**
- * @nullable
+ * @minimum 1
+ * @maximum 100
  */
-limit?: number | null;
+limit?: number;
 name?: string;
 code?: string;
 taken?: boolean;

@@ -315,8 +315,8 @@ app.openapi(sinhdethuCong, async (c) => {
   function shuffleWithConstraints(questions: any[]): any[] {
     const arr = [...questions]
     for (let i = arr.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [arr[i], arr[j]] = [arr[j], arr[i]]
+      const j = Math.floor(Math.random() * (i + 1))
+      ;[arr[i], arr[j]] = [arr[j], arr[i]]
     }
 
     const hasImage = (q: any): boolean =>
@@ -332,8 +332,7 @@ app.openapi(sinhdethuCong, async (c) => {
       for (let i = 0; i < remaining.length; i++) {
         const candidate = remaining[i]
         const sameBlock =
-          prev?.knowledgeBlockId &&
-          candidate.knowledgeBlockId === prev.knowledgeBlockId
+          prev?.knowledgeBlockId && candidate.knowledgeBlockId === prev.knowledgeBlockId
         const bothHaveImage = prev && hasImage(prev) && hasImage(candidate)
 
         if (!sameBlock && !bothHaveImage) {
