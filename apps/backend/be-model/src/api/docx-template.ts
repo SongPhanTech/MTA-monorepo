@@ -89,6 +89,17 @@ function applyPageBreaks(docxBuffer: Buffer): Buffer {
       xml = xml.replace(/<w:p\b[^>]*>(?:(?!<\/w:p>).)*ngắt trang.*?<\/w:p>/g, () => {
         return '<w:p><w:r><w:br w:type="page"/></w:r></w:p>'
       })
+      // Boi dam + gach chan cac doan duoc danh dau bang marker \uE000..\uE001 (do BE boc vao value).
+      xml = xml.replace(/<w:r\b([^>]*)>([\s\S]*?)<\/w:r>/g, (full, attrs, inner) => {
+        if (!inner.includes("\uE000")) return full
+        let body = inner.replace(/[\uE000\uE001]/g, "")
+        if (/<w:rPr\b[^>]*>/.test(body)) {
+          body = body.replace(/<\/w:rPr>/, '<w:b/><w:u w:val="single"/></w:rPr>')
+        } else {
+          body = `<w:rPr><w:b/><w:u w:val="single"/></w:rPr>${body}`
+        }
+        return `<w:r${attrs}>${body}</w:r>`
+      })
       data = Buffer.from(xml, "utf8")
     }
 

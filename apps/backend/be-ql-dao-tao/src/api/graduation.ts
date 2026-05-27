@@ -3011,6 +3011,47 @@ app.openapi(getPhuLucIXData, async (c) => {
       return best?.finalScore ?? null
     }
 
+    // Điểm các môn tốt nghiệp (giữ dạng thô để vừa format vừa so với ngưỡng hạ bậc)
+    const sDATN = scoreOf(["do an tot nghiep", "luan van"])
+    const sNN = scoreOf(["tot nghiep ngoai ngu"])
+    const sCTDCTCT = scoreOf(["tot nghiep ctd", "tot nghiep ctct", "ctd-ctct"])
+
+    // Nếu HV bị hạ bậc bởi điều kiện "Điểm học phần tốt nghiệp thấp nhất" -> bôi đậm + gạch chân
+    // các ô điểm học phần TN thoả ngưỡng. Marker \uE000…\uE001 được be-model nhận diện để định dạng.
+    // ApplicationDowngraded không được lưu DB nên chỉ còn nguồn là chuỗi `reason`
+    // (vd "Bị hạ bậc: ...\nĐiểm học phần tốt nghiệp thấp nhất ≤ 9") -> parse từ đó.
+    const gradGradeCond = (() => {
+      const reason = app.reason ?? ""
+      const label = criteriaFieldLabels.GRADUATION_COURSE_GRADE_LOWEST
+      const escaped = label.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
+      const m = reason.match(new RegExp(`${escaped}\\s*([><≥≤=])\\s*([\\d.,]+)`))
+      if (!m?.[1] || !m[2]) return null
+      const value = parseFloat(m[2].replace(",", "."))
+      if (Number.isNaN(value)) return null
+      return { op: m[1], value }
+    })()
+    const satisfies = (score: Decimal | null) => {
+      if (!gradGradeCond || score == null) return false
+      const x = Number(score)
+      const { op, value } = gradGradeCond
+      switch (op) {
+        case ">":
+          return x > value
+        case "≥":
+          return x >= value
+        case "<":
+          return x < value
+        case "≤":
+          return x <= value
+        case "=":
+          return x === value
+        default:
+          return false
+      }
+    }
+    const mark = (formatted: string, on: boolean) =>
+      on && formatted ? `\uE000${formatted}\uE001` : formatted
+
     return {
       stt: idx + 1,
       hoTen: u?.fullname ?? "",
@@ -3020,9 +3061,9 @@ app.openapi(getPhuLucIXData, async (c) => {
       danToc: u?.ethnicity?.sTen ?? "",
       noiSinh: u?.newProvinceOfBirth?.sTen ?? u?.placeOfBirth ?? "",
       diemTBTL: formatScore(app.gpa, 2),
-      diemDATN: formatScore(scoreOf(["do an tot nghiep", "luan van"]), 1),
-      diemNN: formatScore(scoreOf(["tot nghiep ngoai ngu"]), 1),
-      diemCTDCTCT: formatScore(scoreOf(["tot nghiep ctd", "tot nghiep ctct", "ctd-ctct"]), 1),
+      diemDATN: mark(formatScore(sDATN, 1), satisfies(sDATN)),
+      diemNN: mark(formatScore(sNN, 1), satisfies(sNN)),
+      diemCTDCTCT: mark(formatScore(sCTDCTCT, 1), satisfies(sCTDCTCT)),
       xepHang: app.rank?.classification ?? "",
       ghiChu:
         app.downgraded || app.rankDowngraded || /ha bac|ha muc/.test(normalize(app.reason))

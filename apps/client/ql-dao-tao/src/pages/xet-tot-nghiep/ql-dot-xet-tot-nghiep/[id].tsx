@@ -301,8 +301,6 @@ export default function StudentGraduationApplication() {
     })
   }, [studentGraduationApplicationData, requiredCertificateIds])
 
-  console.log("data: ", data)
-
   const { onOpen } = useDisclosure<{
     id: string | null
     graduationSessionId: string | undefined
