@@ -4,6 +4,7 @@
 // import LecturerSurveyReport from '@components/sub-pages/khao-sat/bao-cao-giang-vien'
 import DetailSurveyPage from "@components/sub-pages/khao-sat/danh-sach-giang-vien"
 import DanhSachHocVien from "@components/sub-pages/khao-sat/danh-sach-hoc-vien"
+import DanhSachHocVienToanDot from "@components/sub-pages/khao-sat/danh-sach-hoc-vien-toan-dot"
 import ClusterSurveyEssay from "@components/sub-pages/khao-sat/liet-ke-cum"
 import TabDotKhaoSatCum from "@components/sub-pages/khat-sat-cum"
 import DefaultLayout from "@layouts/default-layout"
@@ -54,9 +55,15 @@ export default function ClussterSurveyPage() {
       },
       {
         key: "3",
-        label: "Danh sách người làm khảo sát",
+        label: "Danh sách người làm khảo sát theo giảng viên",
         children: <DanhSachHocVien lecturer={lecturer} selectedId={selectedId} />,
         disabled: !lecturer?.id,
+      },
+      {
+        key: "4",
+        label: "Danh sách người làm khảo sát toàn đợt",
+        children: <DanhSachHocVienToanDot selectedId={selectedId} />,
+        disabled: !selectedId,
       },
       // {
       //     key: '4',
@@ -111,7 +118,7 @@ export default function ClussterSurveyPage() {
       //     disabled: !sublectClass?.surveyId,
       // },
       {
-        key: "4",
+        key: "5",
         label: "Liệt kê câu hỏi tự luận",
         children: (
           <ClusterSurveyEssay selectedId={selectedId || ""} lecturerId={lecturer?.id || ""} />
