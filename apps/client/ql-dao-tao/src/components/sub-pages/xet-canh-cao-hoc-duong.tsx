@@ -18,13 +18,16 @@ import {
   useFindManyTrainingCourse,
   useUpdateDisciplinaryWarning,
   useUpdateStudent,
+  useFindManySemester
 } from "@workspace/db/hooks"
 import { whereOrganization } from "@workspace/libs/constants"
 import { useTrainingObjectTypeStore } from "@workspace/ui"
 import { BookPlus } from "lucide-react"
 import { useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
-
+import { Download } from "lucide-react"
+import { saveAs } from "file-saver"
+import { docxTemplate } from "../../../src/utils/docx-template"
 dayjs.locale("vi")
 
 interface XetCanhCaoHocDuongProps {
@@ -108,33 +111,64 @@ const XetCanhCaoHocDuong = ({ semesterId }: XetCanhCaoHocDuongProps) => {
       filters.managementOrganizationId,
     ]
   )
-
-  const { data } = useFindManyDisciplinaryWarning(
-    {
-      where,
-      include: {
-        student: {
-          include: {
-            fixedClass: {
-              include: {
-                trainingCourse: true,
-                managementOrganization: true,
+const { data: allSemesters = [] } = useFindManySemester({
+  orderBy: { startDate: "asc" },
+})
+const currentSemester = allSemesters.find((s:any) => s.id === semesterId)
+const { data } = useFindManyDisciplinaryWarning(
+  {
+    where: {
+      ...where,
+      deletedAt: null, 
+    },
+    include: {
+      student: {
+        include: {
+          fixedClass: {
+            include: {
+              trainingCourse: true,
+              managementOrganization: true,
+            },
+          },
+          userProfile: true,
+        },
+      },
+      reasonDetails: true,
+    },
+    orderBy: { createdAt: "desc" },
+    take: numberOfPages,
+    skip: (currentPage - 1) * numberOfPages,
+  },
+  { enabled: !!semesterId }
+)
+const { data: allData = [] } = useFindManyDisciplinaryWarning(
+  {
+    where: {
+      deletedAt: null,
+      ...(trainingObjectTypeId
+        ? {
+            student: {
+              curriculumVersion: {
+                trainingObjectTypeId,
               },
             },
-            userProfile: true,
-          },
-        },
-        reasonDetails: true,
-      },
-      orderBy: {
-        createdAt: "desc",
-      },
-      take: numberOfPages,
-      skip: (currentPage - 1) * numberOfPages,
+          }
+        : {}),
     },
-    { enabled: !!semesterId }
-  )
-
+    include: {
+      semester: true,
+      student: {
+        include: {
+          fixedClass: true,
+          userProfile: true,
+        },
+      },
+      reasonDetails: true,
+    },
+    orderBy: [{ semester: { startDate: "asc" } }, { createdAt: "asc" }],
+  },
+  { enabled: !!semesterId }
+)
   const { data: count } = useCountDisciplinaryWarning(
     {
       where: {
@@ -208,27 +242,90 @@ const XetCanhCaoHocDuong = ({ semesterId }: XetCanhCaoHocDuongProps) => {
     orderBy: [{ iSTT: "asc" }, { sTen: "asc" }],
   })
   const treeData = buildOrgTree(manageOrgData)
+const handleExportPhuLucII = async () => {
+  if (!allData || allData.length === 0) {
+    message.warning("Không có dữ liệu để xuất")
+    return
+  }
 
+  try {
+    showSpinner()
+
+    const grouped = allData.reduce(
+      (acc, item) => {
+        const key = item.semesterId ?? "unknown"
+        if (!acc[key]) {
+          acc[key] = {
+            semesterName: item.semester?.name || key,
+            students: [],
+          }
+        }
+        acc[key].students.push(item)
+        return acc
+      },
+      {} as Record<string, { semesterName: string; students: typeof allData }>
+    )
+
+  let globalIndex = 0
+
+const semesters = Object.values(grouped).map((group) => ({
+  semesterName: group.semesterName,
+  students: group.students.map((item) => ({
+    index: ++globalIndex,
+    fullname: item.student?.userProfile?.fullname || "",
+    birthday: item.student?.userProfile?.dateOfBirth
+      ? dayjs(item.student.userProfile.dateOfBirth).format("DD/MM/YYYY")
+      : "",
+    donVi: item.student?.fixedClass?.managementOrganizationId || "",
+    className: item.student?.fixedClass?.name || "",
+    level: item.level,
+  })),
+}))
+
+    const mappedData = {
+      semesterInfo: currentSemester?.name,
+      reportDate: dayjs().format("DD/MM/YYYY"),
+      semesters,
+    }
+
+    const exportRes = await docxTemplate({
+      fileName: "Phu_luc_II_CCHĐ.docx",
+      path: "Phu_luc_II_CCHĐ.docx",
+      prefix: "/mta/template",
+      data: mappedData as Record<string, unknown>,
+    })
+
+    if (exportRes && exportRes.status >= 200 && exportRes.status < 300) {
+      saveAs(exportRes.data, "Phu_luc_II_CCHĐ.docx")
+    } else {
+      message.error(`Xuất file thất bại: Status ${exportRes?.status}`)
+    }
+  } catch (error: unknown) {
+    const msg = error instanceof Error ? error.message : JSON.stringify(error)
+    message.error(`Lỗi xuất file: ${msg}`)
+  } finally {
+    hideSpinner()
+  }
+}
   return (
     <div className="bg-white rounded-lg shadow-sm p-4 mt-4">
       <Row gutter={[16, 0]}>
         <Col span={24}>
           <Row gutter={[16, 16]} align="top" justify="space-between">
             <Col span={24}>
-              <Flex justify="end">
-                <Button
-                  type="primary"
-                  onClick={() =>
-                    onOpenPutDisciplinaryWarning({
-                      id: "",
-                      semesterId: semesterId,
-                    })
-                  }
-                >
-                  <BookPlus />
-                  Thêm học viên
-                </Button>
-              </Flex>
+           <Flex justify="end" gap={8}>
+  <Button type="primary" onClick={handleExportPhuLucII}>
+    <Download />
+    Tải Phụ lục II
+  </Button>
+  <Button
+    type="primary"
+    onClick={() => onOpenPutDisciplinaryWarning({ id: "", semesterId })}
+  >
+    <BookPlus />
+    Thêm học viên
+  </Button>
+</Flex>
             </Col>
           </Row>
         </Col>

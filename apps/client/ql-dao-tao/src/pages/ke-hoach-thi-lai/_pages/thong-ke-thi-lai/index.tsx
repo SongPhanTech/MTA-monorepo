@@ -41,41 +41,37 @@ export default function ThongKeNoThiLai() {
   const [subjectVersionId, setSubjectVersionId] = useState<string>()
   const [loading, setLoading] = useState(false)
 
-  const downloadStatsFile = async () => {
-    if (!trainingObjectTypeId) {
-      message.error("Vui lòng chọn ĐTĐT")
-      return
-    }
-    if (!trainingCourseId) {
-      message.error("Vui lòng chọn khoá đào tạo")
-      return
-    }
-    try {
-      setLoading(true)
-      // TODO: cho chọn ngày hoặc lấy ngày từ HK đang chọn
-      const { status, headers, data } = await debtStatistics({
-        trainingObjectTypeId: trainingObjectTypeId,
-        trainingCourseId,
-      })
-      if (status === 200) {
-        const filename = getFilenameFromContentDisposition(
-          headers.get("content-disposition") as string
-        )
-        const blob = new Blob([data], { type: headers.get("content-type") as string })
-        const url = window.URL.createObjectURL(blob)
-        const link = document.createElement("a")
-        link.href = url
-        link.download = filename || "thong-ke-no.xlsx"
-        link.click()
-        window.URL.revokeObjectURL(url)
-      }
-    } catch (error) {
-      console.error(error)
-      message.error("Lỗi khi tải file")
-    } finally {
-      setLoading(false)
-    }
-  }
+ const downloadStatsFile = async () => {
+     if (!trainingObjectTypeId) {
+       message.error("Vui lòng chọn ĐTĐT")
+       return
+     }
+     try {
+       setLoading(true)
+       const { status, headers, data } = await debtStatistics({
+         trainingObjectTypeId: trainingObjectTypeId,
+         trainingCourseId,
+         semesterId,
+       })
+       if (status === 200) {
+         const filename = getFilenameFromContentDisposition(
+           headers.get("content-disposition") as string
+         )
+         const blob = new Blob([data], { type: headers.get("content-type") as string })
+         const url = window.URL.createObjectURL(blob)
+         const link = document.createElement("a")
+         link.href = url
+         link.download = filename || "thong-ke-no.xlsx"
+         link.click()
+         window.URL.revokeObjectURL(url)
+       }
+     } catch (error) {
+       console.error(error)
+       message.error("Lỗi khi tải file")
+     } finally {
+       setLoading(false)
+     }
+   }
 
   const { data: res } = useOpenSubjectClassReExam(
     {
