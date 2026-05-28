@@ -15,6 +15,7 @@ import {
   useFindManySemester,
   useFindManyStudentSubjectScore,
   useFindManySubjectVersion,
+  useFindUniqueTrainingObjectType,
   useFindUniqueStudent,
 } from "@workspace/db/hooks"
 import { exportFromTemplate, type TableRow } from "@workspace/libs/template-excel"
@@ -28,6 +29,7 @@ import { Check, X } from "lucide-react"
 import { useRouter } from "next/router"
 import { useCallback, useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
+import { useTrainingObjectTypeStore } from "@workspace/ui"
 
 dayjs.locale("vi")
 
@@ -56,6 +58,7 @@ export interface IHocKi {
 export default function StudentScoreClassPage() {
   const router = useRouter()
   const { can } = useAbility()
+  const { id: selectedTrainingObjectTypeId } = useTrainingObjectTypeStore()
   const [expandAll, setExpandAll] = useState(true)
   const studentId = router.query.id as string
   const [semesterId, setSemesterId] = useState<string>()
@@ -118,6 +121,31 @@ export default function StudentScoreClassPage() {
     },
     { enabled: !!studentId }
   )
+
+  const { data: selectedTrainingObjectType } = useFindUniqueTrainingObjectType(
+    {
+      where: { id: selectedTrainingObjectTypeId ?? undefined },
+    },
+    { enabled: !!selectedTrainingObjectTypeId }
+  )
+
+  const transcript = useMemo(() => {
+    const trainingObjectTypeName =
+      selectedTrainingObjectType?.name ?? student?.fixedClass?.trainingCourse?.trainingObjectType?.name ?? ""
+
+    if (trainingObjectTypeName.includes("Đại học")) {
+      return " (Mẫu P2)"
+    }
+
+    if (trainingObjectTypeName.includes("Cao học")) {
+      return " (Mẫu P7)"
+    }
+
+    return ""
+  }, [
+    selectedTrainingObjectType?.name,
+    student?.fixedClass?.trainingCourse?.trainingObjectType?.name,
+  ])
 
   const { convertScore } = useScoreConverter(student?.fixedClass?.trainingCourse.scoreConverts)
   const scoreToPassGraduation = student?.fixedClass?.trainingCourse?.scoreToPassGraduation ?? 5.5
@@ -533,7 +561,7 @@ export default function StudentScoreClassPage() {
       cursor += 1
     }
 
-    const gapRow: TableRow = { cells: [{ value: null, colSpan: 18, border: false }] }
+    const gapRow: TableRow = { cells: [{ value: null, colSpan: 19, border: false }] }
     const tongtinchi = sampleStudentData.hocKis.reduce(
       (acc, curr) => acc + (curr.SoTinChiKy ?? 0),
       0
@@ -573,12 +601,12 @@ export default function StudentScoreClassPage() {
             ...tableRows,
             gapRow,
             gapRow,
-            { cells: [{ value: `Tổng tín chỉ: ${tongtinchi}`, colSpan: 18, border: false }] },
+            { cells: [{ value: `Tổng tín chỉ: ${tongtinchi}`, colSpan: 19, border: false }] },
             {
               cells: [
                 {
                   value: `Điểm trung bình hệ 10 toàn khoá: ${tongdiemhe10}`,
-                  colSpan: 18,
+                  colSpan: 19,
                   border: false,
                 },
               ],
@@ -587,15 +615,15 @@ export default function StudentScoreClassPage() {
               cells: [
                 {
                   value: `Điểm trung bình hệ 4 toàn khoá: ${tongdiemhe4}`,
-                  colSpan: 18,
+                  colSpan: 19,
                   border: false,
                 },
               ],
             },
-            { cells: [{ value: `Xếp loại: ${xeploai}`, colSpan: 18, border: false }] },
+            { cells: [{ value: `Xếp loại: ${xeploai}`, colSpan: 19, border: false }] },
             {
               cells: [
-                { value: null, colSpan: 12, border: false },
+                { value: null, colSpan: 13, border: false },
                 {
                   value: `Hà Nội, ngày ${new Date().getDate()} tháng ${new Date().getMonth() + 1} năm ${new Date().getFullYear()}`,
                   colSpan: 6,
@@ -606,9 +634,9 @@ export default function StudentScoreClassPage() {
             },
             {
               cells: [
-                { value: null, colSpan: 12, border: false },
+                { value: null, colSpan: 13, border: false },
                 {
-                  value: "  KT. TRƯỞNG PHÒNG \n PHÓ TRƯỞNG PHÒNG",
+                  value: "  KT. TRƯỞNG PHÒNG",
                   colSpan: 6,
                   border: false,
                   align: "center",
@@ -618,7 +646,19 @@ export default function StudentScoreClassPage() {
             },
             {
               cells: [
-                { value: null, colSpan: 12, border: false },
+                { value: null, colSpan: 13, border: false },
+                {
+                  value: "  PHÓ TRƯỞNG PHÒNG",
+                  colSpan: 6,
+                  border: false,
+                  align: "center",
+                  bold: true,
+                },
+              ],
+            },
+            {
+              cells: [
+                { value: null, colSpan: 13, border: false },
                 {
                   value: "Đại tá, TS Nguyễn Văn Bình",
                   colSpan: 6,
@@ -628,6 +668,266 @@ export default function StudentScoreClassPage() {
                 },
               ],
             },
+          ],
+          hiddenColumns: ["M", "N", "R", "J", "K", "L"],
+        },
+      ],
+      fileName: `BDCN-${sampleStudentData.fullname}.xlsx`,
+    })
+  }
+
+  const exportTemplateP7 = async () => {
+    const hocKis: IHocKi[] = []
+    if (data.length > 0) {
+      data.forEach((item) => {
+        const monhoc: IMonHoc[] = []
+        item.subjectClasses.forEach((subjectClass) => {
+          subjectClass.subjectClassStudent.forEach((subjectClassStudent) => {
+            const rawScore =
+              subjectClassStudent?.manualFinalScore ||
+              subjectClassStudent?.finalScore?.toNumber() ||
+              0
+
+            const isGraduation = subjectClass?.subject?.trainingBlocks?.[0]?.graduation === true
+            const converted = convertScoreWithGraduation(rawScore, isGraduation)
+
+            monhoc.push({
+              TenMonhoc: subjectClass.subject.name,
+              MaMH: subjectClass.subject.code?.slice(0, 2) ?? "",
+              soTC: subjectClass.subject.credit,
+              diemhe10: rawScore,
+              diemhe4: converted?.base4 ?? 0,
+              diemchu: converted?.letter ?? "",
+              ghichu: subjectClassStudent.description ?? "",
+            })
+          })
+        })
+
+        const tongSoTinChi = monhoc.reduce((acc, curr) => acc + (curr.soTC ?? 0), 0)
+        const tongDiemNhanTinChiHe10 = monhoc.reduce(
+          (acc, curr) => acc + (curr.diemhe10 ?? 0) * (curr.soTC ?? 0),
+          0
+        )
+        const tongDiemNhanTinChiHe4 = monhoc.reduce(
+          (acc, curr) => acc + (curr.diemhe4 ?? 0) * (curr.soTC ?? 0),
+          0
+        )
+        const diemTBHe10 = Number.parseFloat(
+          (tongSoTinChi === 0 ? 0 : tongDiemNhanTinChiHe10 / tongSoTinChi).toFixed(2)
+        )
+        const diemTBHe4 = Number.parseFloat(
+          (tongSoTinChi === 0 ? 0 : tongDiemNhanTinChiHe4 / tongSoTinChi).toFixed(2)
+        )
+
+        hocKis.push({
+          TenHocKi: `${item.code}-${item.name}-${item.schoolYear?.name}`,
+          SoTinChiKy: tongSoTinChi,
+          DiemTBKyHe10: diemTBHe10,
+          DiemTBKyHe4: diemTBHe4,
+          monHocs: monhoc,
+        })
+      })
+    }
+
+    const sampleStudentData = {
+      fullname: student?.userProfile?.fullname,
+      dateOfBirth: student?.userProfile?.dateOfBirth,
+      maSV: student?.code,
+      htdt: student?.fixedClass?.trainingCourse.trainingObjectType.name,
+      nganh: student?.curriculumVersion?.curriculum.trainingMajor.name,
+      lop: student?.fixedClass?.trainingCourse?.name,
+      hocKis,
+    }
+
+    const TABLE_START_ROW = 11
+    let cursor = TABLE_START_ROW
+    const tableRows: TableRow[] = []
+
+    for (const hocKi of sampleStudentData.hocKis) {
+      tableRows.push({
+        cells: [
+          { value: hocKi.TenHocKi ?? "", colSpan: 19, bold: true, align: "left", border: true },
+        ],
+      })
+      cursor += 1
+
+      const firstMonRow = cursor
+      const monHocs = hocKi?.monHocs ?? []
+      monHocs.forEach((monHoc: IMonHoc, index: number) => {
+        tableRows.push({
+          cells: [
+            { value: index + 1 },
+            { value: monHoc.TenMonhoc ?? "", colSpan: 6, border: true },
+            { value: monHoc.MaMH ?? "" },
+            { value: monHoc.soTC, align: "center" },
+            { value: monHoc.diem01 ?? 0, align: "right", numFmt: "0.00" },
+            { value: monHoc.diem02 ?? 0, align: "right", numFmt: "0.00" },
+            { value: monHoc.diem07 ?? 0, align: "right", numFmt: "0.00" },
+            { value: null },
+            { value: null },
+            { value: monHoc.diemhe10 ?? 0, align: "right", numFmt: "0.00" },
+            { value: monHoc.diemhe4 ?? 0, align: "right", numFmt: "0.00" },
+            { value: monHoc.diemchu ?? "", align: "center" },
+            { value: null },
+            { value: monHoc.ghichu ?? "" },
+          ],
+        })
+        cursor += 1
+      })
+      const lastMonRow = cursor - 1
+      const hasMon = monHocs.length > 0 && lastMonRow >= firstMonRow
+      const sumStcFormula = `SUM(I${firstMonRow}:I${lastMonRow})`
+      const tbHe10Formula = `IFERROR(SUMPRODUCT(I${firstMonRow}:I${lastMonRow},O${firstMonRow}:O${lastMonRow})/${sumStcFormula},0)`
+      const tbHe4Formula = `IFERROR(SUMPRODUCT(I${firstMonRow}:I${lastMonRow},P${firstMonRow}:P${lastMonRow})/${sumStcFormula},0)`
+
+      tableRows.push({
+        cells: [
+          { value: null },
+          { value: "Điểm trung bình học kỳ:", colSpan: 6, bold: true, align: "center" },
+          { value: null },
+          {
+            value: hasMon
+              ? { formula: sumStcFormula, result: hocKi.SoTinChiKy ?? 0 }
+              : 0,
+            bold: true,
+            align: "center",
+          },
+          { value: null },
+          { value: null },
+          { value: null },
+          { value: null },
+          { value: null },
+          {
+            value: hasMon
+              ? { formula: tbHe10Formula, result: hocKi.DiemTBKyHe10 ?? 0 }
+              : 0,
+            bold: true,
+            align: "right",
+            numFmt: "0.00",
+          },
+          {
+            value: hasMon
+              ? { formula: tbHe4Formula, result: hocKi.DiemTBKyHe4 ?? 0 }
+              : 0,
+            bold: true,
+            align: "right",
+            numFmt: "0.00",
+          },
+          { value: null },
+          { value: null },
+          { value: null },
+        ],
+      })
+      cursor += 1
+    }
+
+    const gapRow: TableRow = { cells: [{ value: null, colSpan: 19, border: false }] }
+    const tongtinchi = sampleStudentData.hocKis.reduce(
+      (acc, curr) => acc + (curr.SoTinChiKy ?? 0),
+      0
+    )
+    const tongDiemNhanTinChiHe10 = sampleStudentData.hocKis.reduce(
+      (acc, curr) => acc + (curr.DiemTBKyHe10 ?? 0) * (curr.SoTinChiKy ?? 0),
+      0
+    )
+    const tongDiemNhanTinChiHe4 = sampleStudentData.hocKis.reduce(
+      (acc, curr) => acc + (curr.DiemTBKyHe4 ?? 0) * (curr.SoTinChiKy ?? 0),
+      0
+    )
+    const tongdiemhe10 =
+      tongtinchi === 0 ? 0 : Number.parseFloat((tongDiemNhanTinChiHe10 / tongtinchi).toFixed(1))
+    const tongdiemhe4 =
+      tongtinchi === 0 ? 0 : Number.parseFloat((tongDiemNhanTinChiHe4 / tongtinchi).toFixed(1))
+
+    const xeploai = convertScore(tongdiemhe10).classification
+
+    exportFromTemplate({
+      templateUrl: getMinioUrl("/mta/template/quatrinh(mauP7).xlsx"),
+      sheets: [
+        {
+          sheet: "BaoCaoDiem",
+          data: {
+            fullname: sampleStudentData.fullname ?? "",
+            dateOfBirth: sampleStudentData.dateOfBirth
+              ? dayjs(sampleStudentData.dateOfBirth).format("DD/MM/YYYY")
+              : "",
+            htdt: sampleStudentData.htdt ?? "",
+            maSV: sampleStudentData.maSV ?? "",
+            nganh: sampleStudentData.nganh ?? "",
+            lop: sampleStudentData.lop ?? "",
+          },
+          tableStartCell: { row: 11, col: 1 },
+          rows: [
+            ...tableRows,
+            gapRow,
+            gapRow,
+            { cells: [{ value: `Tổng tín chỉ: ${tongtinchi}`, colSpan: 19, border: false }] },
+            {
+              cells: [
+                {
+                  value: `Điểm trung bình hệ 10 toàn khoá: ${tongdiemhe10}`,
+                  colSpan: 19,
+                  border: false,
+                },
+              ],
+            },
+            {
+              cells: [
+                {
+                  value: `Điểm trung bình hệ 4 toàn khoá: ${tongdiemhe4}`,
+                  colSpan: 19,
+                  border: false,
+                },
+              ],
+            },
+            { cells: [{ value: `Xếp loại: ${xeploai}`, colSpan: 19, border: false }] },
+            {
+              cells: [
+                { value: null, colSpan: 13, border: false },
+                {
+                  value: `Hà Nội, ngày ${new Date().getDate()} tháng ${new Date().getMonth() + 1} năm ${new Date().getFullYear()}`,
+                  colSpan: 6,
+                  border: false,
+                  align: "center",
+                },
+              ],
+            },
+            // {
+            //   cells: [
+            //     { value: null, colSpan: 13, border: false },
+            //     {
+            //       value: "  KT. TRƯỞNG PHÒNG",
+            //       colSpan: 6,
+            //       border: false,
+            //       align: "center",
+            //       bold: true,
+            //     },
+            //   ],
+            // },
+            // {
+            //   cells: [
+            //     { value: null, colSpan: 13, border: false },
+            //     {
+            //       value: "  PHÓ TRƯỞNG PHÒNG",
+            //       colSpan: 6,
+            //       border: false,
+            //       align: "center",
+            //       bold: true,
+            //     },
+            //   ],
+            // },
+            // {
+            //   cells: [
+            //     { value: null, colSpan: 13, border: false },
+            //     {
+            //       value: "Đại tá, TS Nguyễn Văn Bình",
+            //       colSpan: 6,
+            //       border: false,
+            //       align: "center",
+            //       bold: true,
+            //     },
+            //   ],
+            // },
           ],
           hiddenColumns: ["M", "N", "R", "J", "K", "L"],
         },
@@ -857,9 +1157,9 @@ export default function StudentScoreClassPage() {
                     <Button
                       type="primary"
                       icon={<DownloadOutlined />}
-                      onClick={() => exportTemplate()}
+                      onClick={transcript === " (Mẫu P7)" ? exportTemplateP7 : exportTemplate}
                     >
-                      Xuất bảng điểm cá nhân (Mẫu P2)
+                      Xuất bảng điểm cá nhân{transcript}
                     </Button>
                     <Button
                       type="primary"
