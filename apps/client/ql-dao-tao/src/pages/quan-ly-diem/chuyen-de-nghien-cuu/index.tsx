@@ -582,6 +582,7 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
                         path: "QD_GiaoChuyenDe.xlsx",
                         showGridLines: true,
                         wrapText: true,
+                        prefix: "mta/luan-van",
                         payload: [
                           {
                             data: {
@@ -730,6 +731,7 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
                         path: "PL_ChuyenDeNghienCuu.xlsx",
                         showGridLines: true,
                         wrapText: true,
+                        prefix: "mta/luan-van",
                         payload: payload.map((item, idx) => ({
                           data: {
                             chuyen_nganh: `       ${(idx + 1).toRoman()}. ${item.chuyen_nganh}: ${item.students.length} học viên.`,
@@ -933,6 +935,7 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
                         path: "TK_TaiGiangDayCuaGiangVien.xlsx",
                         showGridLines: true,
                         wrapText: true,
+                        prefix: "mta/luan-van",
                         payload: [
                           {
                             data: {
@@ -1153,6 +1156,7 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
                         path: "TK_SoLuongChuyenDeHocVien.xlsx",
                         showGridLines: true,
                         wrapText: true,
+                        prefix: "mta/luan-van",
                         payload: [
                           {
                             data: {
