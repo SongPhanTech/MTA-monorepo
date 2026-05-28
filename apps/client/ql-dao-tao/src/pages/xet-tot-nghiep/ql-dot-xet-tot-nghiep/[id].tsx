@@ -496,7 +496,7 @@ export default function StudentGraduationApplication() {
             data: { status: ApplicationStatus.APPROVED },
           })
           await updateManyStudent({
-            where: { id: { in: graduationRecords.map((record) => record.id) } },
+            where: { id: { in: graduationRecords.map((record) => record.student.id) } },
             data: { status: StudentStatus.GRADUATED },
           })
           await refetch()
@@ -582,10 +582,6 @@ export default function StudentGraduationApplication() {
             <Flex align="center" justify="space-between" className="px-4">
               <h2 className="text-xl font-bold">{initialValue?.name}</h2>
               <div className="flex align-middle items-center gap-2">
-                <Button type="primary" onClick={handleExportPhuLucIX}>
-                  <Download />
-                  Tải Phụ lục IX
-                </Button>
                 <Button
                   type="primary"
                   className="mr-8"
@@ -665,6 +661,10 @@ export default function StudentGraduationApplication() {
                       </Col>
                       <Col span={12}>
                         <Flex justify="end" gap={4} className="ml-auto">
+                          <Button type="primary" onClick={handleExportPhuLucIX}>
+                            <Download />
+                            Tải Phụ lục IX
+                          </Button>
                           <Button
                             onClick={handleRejectAll}
                             type="primary"

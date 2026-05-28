@@ -18,6 +18,7 @@ import type { GenerateDiplomaNumberBody } from "@workspace/libs/api/schemas"
 import {
   exportGraduationDecisionPptx,
   generateDiplomaNumber,
+  getDanhSachTotNghiepData,
   graduationSessionDecision,
 } from "@workspace/libs/api/training"
 import { exportFromTemplate } from "@workspace/libs/template-excel"
@@ -38,11 +39,12 @@ import {
 } from "antd"
 import dayjs from "dayjs"
 import { saveAs } from "file-saver"
-import { BookCheckIcon, FileDown, Presentation, Sheet } from "lucide-react"
+import { BookCheckIcon, Download, FileDown, Presentation, Sheet } from "lucide-react"
 import { useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 import { removeVietnameseTones } from "@/utils/removeVietnamese"
 import { formatDate } from "@lib/utils"
+import { docxTemplate } from "@/utils/docx-template"
 
 interface GraduationDecisionProps {
   sessionId: string
@@ -394,6 +396,35 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
     tag: "ModalPrintToKQHT",
   })
 
+  const handleExportDanhSachTN = async () => {
+    try {
+      showSpinner()
+      const res = await getDanhSachTotNghiepData({ sessionId })
+      if (res.status !== 200) {
+        message.error(res.data?.message || "Không lấy được dữ liệu danh sách")
+        return
+      }
+
+      const { data } = res.data
+      const exportRes = await docxTemplate({
+        fileName: "Danh_sach_cong_nhan_tot_nghiep.docx",
+        path: "DS_HV_TN.docx",
+        prefix: "/mta/template",
+        data: data,
+      })
+
+      if (exportRes && exportRes.status >= 200 && exportRes.status < 300) {
+        saveAs(exportRes.data, "Phu_luc_IX.docx")
+      } else {
+        message.error(`Xuất file thất bại: Status ${exportRes?.status}`)
+      }
+    } catch (error) {
+      message.error("Đã xảy ra lỗi khi xuất file, vui lòng thử lại")
+    } finally {
+      hideSpinner()
+    }
+  }
+
   return (
     <div className="bg-white rounded-lg shadow-sm px-4">
       <Flex align="center" justify="space-between" className="mt-4">
@@ -551,6 +582,10 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
           </Popover>
         </div>
         <div className="flex align-middle items-center gap-2">
+          <Button type="primary" onClick={handleExportDanhSachTN}>
+            <Download />
+            Xuất danh sách công nhận tốt nghiệp
+          </Button>
           <Button
             type="primary"
             onClick={() => handleExportTemplate()}

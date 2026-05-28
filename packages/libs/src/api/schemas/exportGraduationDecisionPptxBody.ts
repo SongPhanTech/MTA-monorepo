@@ -59,7 +59,9 @@ Các endpoint xuất file (Excel, PowerPoint, PDF) trả về **blob binary** v�
 - Các endpoint **Import** nhận file Excel (`.xlsx`) qua `multipart/form-data`, trả về báo cáo kết quả từng dòng (thành công / lỗi).
  * OpenAPI spec version: 1.0.0
  */
-import type { UploadExcel } from './uploadExcel';
-import type { ExportGraduationDecisionPptxBodyAllOf } from './exportGraduationDecisionPptxBodyAllOf';
 
-export type ExportGraduationDecisionPptxBody = UploadExcel & ExportGraduationDecisionPptxBodyAllOf;
+export type ExportGraduationDecisionPptxBody = {
+  sessionId?: string;
+  /** @nullable */
+  timeout?: number | null;
+};

@@ -1284,7 +1284,7 @@ const exportGraduationDecisionPptx = createRoute({
     body: {
       content: {
         "multipart/form-data": {
-          schema: UploadExcelModel.partial().extend({
+          schema: z.object({
             sessionId: z.string().optional(),
             timeout: z.coerce.number().default(30),
           }),
@@ -1313,7 +1313,7 @@ const exportGraduationDecisionPptx = createRoute({
 })
 
 app.openapi(exportGraduationDecisionPptx, async (c) => {
-  const { sessionId, timeout, file } = c.req.valid("form")
+  const { sessionId, timeout } = c.req.valid("form")
 
   const decisions = await prisma.graduationDecision.findMany({
     where: { application: { sessionId } },
@@ -2893,7 +2893,7 @@ const getPhuLucIXData = createRoute({
   tags: ["Tốt nghiệp"],
   path: "/phu-luc-ix-data",
   method: "get",
-  summary: "Dữ liệu Phụ lục IX - DS học viên đề nghị tốt nghiệp",
+  summary: "Phụ lục IX - DS học viên đề nghị tốt nghiệp",
   description:
     "Trả về dữ liệu JSON (tiêu đề + danh sách học viên graduation=true) để FE fill vào template DOCX bằng easy-template-x.",
   request: {
@@ -3093,12 +3093,12 @@ app.openapi(getPhuLucIXData, async (c) => {
   )
 })
 
-const getDanhSachKySuData = createRoute({
-  operationId: "getDanhSachKySuData",
+const getDanhSachTotNghiepData = createRoute({
+  operationId: "getDanhSachTotNghiepData",
   tags: ["Tốt nghiệp"],
-  path: "/danh-sach-ky-su-data",
+  path: "/danh-sach-tot-nghiep-data",
   method: "get",
-  summary: "Dữ liệu DS học viên kỹ sư quân sự được công nhận TN",
+  summary: "DS học viên được công nhận TN",
   description:
     "Trả về dữ liệu JSON đã group theo ngành → chuyên ngành → học viên (graduation=true) để FE fill vào template DOCX bằng easy-template-x.",
   request: {
@@ -3126,7 +3126,7 @@ const getDanhSachKySuData = createRoute({
   },
 })
 
-app.openapi(getDanhSachKySuData, async (c) => {
+app.openapi(getDanhSachTotNghiepData, async (c) => {
   const { sessionId } = c.req.valid("query")
 
   const session = await prisma.graduationSession.findUnique({
@@ -3137,7 +3137,7 @@ app.openapi(getDanhSachKySuData, async (c) => {
   if (!session) return c.json({ message: "Không tìm thấy đợt xét tốt nghiệp" }, 404)
 
   const applications = await prisma.studentGraduationApplication.findMany({
-    where: { sessionId, graduation: true, deletedAt: null },
+    where: { sessionId, graduation: true, status: ApplicationStatus.APPROVED, deletedAt: null },
     include: {
       rank: true,
       downgraded: true,
@@ -3181,6 +3181,8 @@ app.openapi(getDanhSachKySuData, async (c) => {
     gioiTinh: string
     danToc: string
     noiSinh: string
+    nganh: string
+    chuyenNganh: string
     diemTBTL: string
     xepHang: string
     ghiChu: string
@@ -3201,6 +3203,8 @@ app.openapi(getDanhSachKySuData, async (c) => {
       gioiTinh: u?.gender?.sTen ?? "",
       danToc: u?.ethnicity?.sTen ?? "",
       noiSinh: u?.newProvinceOfBirth?.sTen ?? u?.placeOfBirth ?? "",
+      nganh,
+      chuyenNganh,
       diemTBTL: formatScore(app.gpa, 2),
       xepHang: app.rank?.classification ?? "",
       ghiChu:
@@ -3222,10 +3226,14 @@ app.openapi(getDanhSachKySuData, async (c) => {
     nhomChuyenNganh.hocViens.push(hocVien)
   })
 
+  // mảng phẳng để FE fill template DOCX bảng phẳng bằng 1 loop {#hocViens}...{/hocViens}
+  const hocViens = danhSach.flatMap((n) => n.chuyenNganhs.flatMap((cn) => cn.hocViens))
+
   return c.json(
     {
       data: {
         tongHV: sortedApplications.length,
+        hocViens,
         khoa: (
           session.trainingCourse?.name ??
           applications[0]?.student.fixedClass?.trainingCourse?.name ??
@@ -3234,8 +3242,6 @@ app.openapi(getDanhSachKySuData, async (c) => {
           .replace(/^\s*kho[áa]\s*/i, "")
           .trim(),
         namXet: dayjs(session.sessionDate).year(),
-        ngayBaoCao: dayjs(session.sessionDate).format("DD/MM/YYYY"),
-        danhSach,
       },
     },
     200
