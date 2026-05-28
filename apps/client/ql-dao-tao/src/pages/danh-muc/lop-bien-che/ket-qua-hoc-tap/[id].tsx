@@ -736,7 +736,7 @@ export default function StudentScoreClassPage() {
     const xeploai = convertScore(tongdiemhe10).classification
 
     exportFromTemplate({
-      templateUrl: getMinioUrl("/mta/template/quatrinh(mauP7).xlsx"),
+      templateUrl: getMinioUrl("/mta/luan-van/BangDiemCaNhan(MauP7).xlsx"),
       sheets: [
         {
           sheet: "BaoCaoDiem",
