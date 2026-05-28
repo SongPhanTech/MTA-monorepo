@@ -81,6 +81,7 @@ export default function NhapDiem({
     []
   )
   const [importModalVisible, setImportModalVisible] = useState(false)
+  const [manualEnableLockPrint, setManualEnableLockPrint] = useState(false)
   const [filterTable, setFilterTable] = useState<FilterTable>({
     fullname: "",
     fixedClassCode: "",
@@ -542,7 +543,7 @@ export default function NhapDiem({
     }
   }
 
-  const { data: dataDetailSubjectClass } = useFindUniqueSubjectClass(
+  const { data: dataDetailSubjectClass, refetch: refetchSubjectClass } = useFindUniqueSubjectClass(
     {
       where: {
         id: selectedSubjectClassId,
@@ -774,6 +775,14 @@ export default function NhapDiem({
       onOk: async () => {
         const isSuccess = await lockExam(selectedSubjectClassId)
         if (isSuccess) {
+          try {
+            setManualEnableLockPrint(false)
+            await refetchSubjectClass?.()
+            queryClient.invalidateQueries({ queryKey: ["zenstack", "SubjectClass"] })
+          } catch (e) {
+            console.error("Refetch SubjectClass failed", e)
+          }
+
           const baseUrl =
             getRuntimeEnv("NEXT_PUBLIC_API_LMS_BASE_URL") || "https://api.daotao.mta.swantech.vn"
           const exportUrl = getExportSubjectClassScoreUrl({ id: selectedSubjectClassId })
@@ -782,12 +791,19 @@ export default function NhapDiem({
             uri: getUrl(baseUrl, exportUrl),
             name: "Phiếu điểm",
             mimeType: "xlsx",
-            convertTo: "pdf",
+            // convertTo: "pdf",
           })
         }
       },
     })
   }
+
+  const isLockAndPrintDisabled =
+    !selectedSubjectClassId ||
+    (!manualEnableLockPrint &&
+      (!dataDetailSubjectClass?.enteredExamScore ||
+        dataDetailSubjectClass?.isLockExamScore ||
+        dataDetailSubjectClass?.scoreSubmitted))
 
   useEffect(() => {
     if (dataTable.length > 0) {
@@ -828,6 +844,10 @@ export default function NhapDiem({
       setRowData(newRowData)
     }
   }, [dataTable, isGraduation])
+
+  useEffect(() => {
+    setManualEnableLockPrint(false)
+  }, [selectedSubjectClassId])
 
   if (!selectedSubjectClassId) {
     return (
@@ -876,7 +896,7 @@ export default function NhapDiem({
             <>
               <Button
                 onClick={() => setImportModalVisible(true)}
-                disabled={!selectedSubjectClassId || role !== "GV" || disabledForm}
+                disabled={!selectedSubjectClassId || role !== "GV" || disabledForm && !manualEnableLockPrint}
                 className="w-full flex justify-start"
               >
                 <FileUp />
@@ -953,12 +973,14 @@ export default function NhapDiem({
               can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_THI, "IN_PHIEU_DIEM")) && (
               <>
                 <Button
-                  disabled={
-                    !selectedSubjectClassId ||
-                    !dataDetailSubjectClass?.enteredExamScore ||
-                    dataDetailSubjectClass?.isLockExamScore ||
-                    dataDetailSubjectClass?.scoreSubmitted
-                  }
+                  type={manualEnableLockPrint ? "primary" : "default"}
+                  onClick={() => setManualEnableLockPrint((prev) => !prev)}
+                  disabled={!selectedSubjectClassId}
+                >
+                  {manualEnableLockPrint ? "Tắt mở khoá in" : "Bật mở khoá in"}
+                </Button>
+                <Button
+                  disabled={isLockAndPrintDisabled}
                   onClick={() => handlePrint()}
                 >
                   <Printer />
@@ -991,7 +1013,7 @@ export default function NhapDiem({
                 </Button>
               </>
             )}
-          <Button type="primary" disabled={disabledForm} onClick={handleSave}>
+          <Button type="primary" disabled={disabledForm && !manualEnableLockPrint} onClick={handleSave}>
             <Save stroke="white" />
             Lưu
           </Button>
@@ -1186,7 +1208,7 @@ export default function NhapDiem({
                 width: 100,
                 align: "center",
                 render: (_, record) => {
-                  const readOnly = role !== "GV" || score === "THI" || disabledForm
+                  const readOnly = role !== "GV" || score === "THI" || (disabledForm && !manualEnableLockPrint)
                   return (
                     <ScoreInputCell
                       recordId={record.id}
@@ -1220,7 +1242,7 @@ export default function NhapDiem({
                 width: 100,
                 align: "center",
                 render: (_, record) => {
-                  const readOnly = role !== "GV" || score === "THI" || disabledForm
+                  const readOnly = role !== "GV" || score === "THI" || (disabledForm && !manualEnableLockPrint)
                   return (
                     <ScoreInputCell
                       recordId={record.id}
@@ -1266,7 +1288,7 @@ export default function NhapDiem({
                       fieldType="thi"
                       isActive={activeCell === `${id}|examScore`}
                       displayValue={rowData[id]?.examScore ?? ""}
-                      readOnly={disabledForm}
+                      readOnly={disabledForm && !manualEnableLockPrint}
                       formFieldName={["list", id, "examScore"]}
                       inputId={`score-thi-${id}`}
                       validateRule={{
@@ -1319,7 +1341,7 @@ export default function NhapDiem({
                 render: (_, record) => (
                   <Checkbox
                     checked={!!rowData[record.id]?.examBanned}
-                    disabled={score === "THI" || disabledForm}
+                    disabled={score === "THI" || (disabledForm && !manualEnableLockPrint)}
                     onChange={(e) => {
                       setRowData((prev) => ({
                         ...prev,
@@ -1348,7 +1370,7 @@ export default function NhapDiem({
                       ...prev,
                       [record.id]: { ...prev[record.id], examBannedReason: val, isChanged: true },
                     }))
-                  if (disabledForm) {
+                  if (disabledForm && !manualEnableLockPrint) {
                     return (
                       <Input.TextArea
                         value={value}
@@ -1384,7 +1406,7 @@ export default function NhapDiem({
                     disabled={
                       (dataDetailSubjectClass?.examType === "OfflineWritten" && role !== "P13") ||
                       score === "TX/ĐK" ||
-                      disabledForm
+                      (disabledForm && !manualEnableLockPrint)
                     }
                     onChange={(e) => {
                       setRowData((prev) => ({
@@ -1418,7 +1440,7 @@ export default function NhapDiem({
                         isChanged: true,
                       },
                     }))
-                  if (disabledForm) {
+                  if (disabledForm && !manualEnableLockPrint) {
                     return (
                       <Input.TextArea
                         value={value}
@@ -1454,7 +1476,7 @@ export default function NhapDiem({
                     disabled={
                       (dataDetailSubjectClass?.examType === "OfflineWritten" && role !== "P13") ||
                       score === "TX/ĐK" ||
-                      disabledForm
+                      (disabledForm && !manualEnableLockPrint)
                     }
                     onChange={(e) => {
                       setRowData((prev) => ({
@@ -1484,7 +1506,7 @@ export default function NhapDiem({
                       ...prev,
                       [record.id]: { ...prev[record.id], suspendedReason: val, isChanged: true },
                     }))
-                  if (disabledForm) {
+                  if (disabledForm && !manualEnableLockPrint) {
                     return (
                       <Input.TextArea
                         value={value}
@@ -1517,8 +1539,8 @@ export default function NhapDiem({
                 render: (_, record) => (
                   <Input
                     value={rowData[record.id]?.description ?? undefined}
-                    readOnly={disabledForm}
-                    variant={disabledForm ? "borderless" : "underlined"}
+                    readOnly={disabledForm && !manualEnableLockPrint}
+                    variant={disabledForm && !manualEnableLockPrint ? "borderless" : "underlined"}
                     placeholder="Nhập ghi chú"
                     style={{ width: "100%" }}
                     className="bg-transparent"
