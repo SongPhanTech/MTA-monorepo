@@ -135,6 +135,8 @@ import type {
   GenExamListCodeResult,
   GenExamRoomCode,
   GenerateDiplomaNumberBody,
+  GetDanhSachHVChuaTotNghiepTA200,
+  GetDanhSachHVChuaTotNghiepTAParams,
   GetDanhSachTotNghiepData200,
   GetDanhSachTotNghiepDataParams,
   GetPhuLucIXData200,
@@ -13110,6 +13112,182 @@ export function useGetDanhSachTotNghiepData<
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
   const queryOptions = getGetDanhSachTotNghiepDataQueryOptions(params, options)
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
+
+  query.queryKey = queryOptions.queryKey
+
+  return query
+}
+
+/**
+ * Trả về danh sách học viên chưa được công nhận tốt nghiệp (graduation=false) do chưa đạt chuẩn đầu ra ngoại ngữ và học phần tốt nghiệp ngoại ngữ
+ * @summary Phụ lục XI - DS học viên chưa được công nhận TN
+ */
+export type getDanhSachHVChuaTotNghiepTAResponse200 = {
+  data: GetDanhSachHVChuaTotNghiepTA200
+  status: 200
+}
+
+export type getDanhSachHVChuaTotNghiepTAResponse404 = {
+  data: ErrorMessageResponse
+  status: 404
+}
+
+export type getDanhSachHVChuaTotNghiepTAResponseSuccess =
+  getDanhSachHVChuaTotNghiepTAResponse200 & {
+    headers: Headers
+  }
+export type getDanhSachHVChuaTotNghiepTAResponseError = getDanhSachHVChuaTotNghiepTAResponse404 & {
+  headers: Headers
+}
+
+export type getDanhSachHVChuaTotNghiepTAResponse =
+  | getDanhSachHVChuaTotNghiepTAResponseSuccess
+  | getDanhSachHVChuaTotNghiepTAResponseError
+
+export const getGetDanhSachHVChuaTotNghiepTAUrl = (params: GetDanhSachHVChuaTotNghiepTAParams) => {
+  const normalizedParams = new URLSearchParams()
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? "null" : value.toString())
+    }
+  })
+
+  const stringifiedParams = normalizedParams.toString()
+
+  return stringifiedParams.length > 0
+    ? `/api/graduation/danh-sach-chua-tot-nghiep-data?${stringifiedParams}`
+    : `/api/graduation/danh-sach-chua-tot-nghiep-data`
+}
+
+export const getDanhSachHVChuaTotNghiepTA = async (
+  params: GetDanhSachHVChuaTotNghiepTAParams,
+  options?: RequestInit
+): Promise<getDanhSachHVChuaTotNghiepTAResponse> => {
+  return customTrainingFetch<getDanhSachHVChuaTotNghiepTAResponse>(
+    getGetDanhSachHVChuaTotNghiepTAUrl(params),
+    {
+      ...options,
+      method: "GET",
+    }
+  )
+}
+
+export const getGetDanhSachHVChuaTotNghiepTAQueryKey = (
+  params?: GetDanhSachHVChuaTotNghiepTAParams
+) => {
+  return [`/api/graduation/danh-sach-chua-tot-nghiep-data`, ...(params ? [params] : [])] as const
+}
+
+export const getGetDanhSachHVChuaTotNghiepTAQueryOptions = <
+  TData = Awaited<ReturnType<typeof getDanhSachHVChuaTotNghiepTA>>,
+  TError = ErrorMessageResponse,
+>(
+  params: GetDanhSachHVChuaTotNghiepTAParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getDanhSachHVChuaTotNghiepTA>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+  }
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {}
+
+  const queryKey = queryOptions?.queryKey ?? getGetDanhSachHVChuaTotNghiepTAQueryKey(params)
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getDanhSachHVChuaTotNghiepTA>>> = ({
+    signal,
+  }) => getDanhSachHVChuaTotNghiepTA(params, { signal, ...requestOptions })
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getDanhSachHVChuaTotNghiepTA>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetDanhSachHVChuaTotNghiepTAQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getDanhSachHVChuaTotNghiepTA>>
+>
+export type GetDanhSachHVChuaTotNghiepTAQueryError = ErrorMessageResponse
+
+export function useGetDanhSachHVChuaTotNghiepTA<
+  TData = Awaited<ReturnType<typeof getDanhSachHVChuaTotNghiepTA>>,
+  TError = ErrorMessageResponse,
+>(
+  params: GetDanhSachHVChuaTotNghiepTAParams,
+  options: {
+    query: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getDanhSachHVChuaTotNghiepTA>>, TError, TData>
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getDanhSachHVChuaTotNghiepTA>>,
+          TError,
+          Awaited<ReturnType<typeof getDanhSachHVChuaTotNghiepTA>>
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customTrainingFetch>
+  },
+  queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDanhSachHVChuaTotNghiepTA<
+  TData = Awaited<ReturnType<typeof getDanhSachHVChuaTotNghiepTA>>,
+  TError = ErrorMessageResponse,
+>(
+  params: GetDanhSachHVChuaTotNghiepTAParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getDanhSachHVChuaTotNghiepTA>>, TError, TData>
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getDanhSachHVChuaTotNghiepTA>>,
+          TError,
+          Awaited<ReturnType<typeof getDanhSachHVChuaTotNghiepTA>>
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof customTrainingFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDanhSachHVChuaTotNghiepTA<
+  TData = Awaited<ReturnType<typeof getDanhSachHVChuaTotNghiepTA>>,
+  TError = ErrorMessageResponse,
+>(
+  params: GetDanhSachHVChuaTotNghiepTAParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getDanhSachHVChuaTotNghiepTA>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Phụ lục XI - DS học viên chưa được công nhận TN
+ */
+
+export function useGetDanhSachHVChuaTotNghiepTA<
+  TData = Awaited<ReturnType<typeof getDanhSachHVChuaTotNghiepTA>>,
+  TError = ErrorMessageResponse,
+>(
+  params: GetDanhSachHVChuaTotNghiepTAParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getDanhSachHVChuaTotNghiepTA>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getGetDanhSachHVChuaTotNghiepTAQueryOptions(params, options)
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>

@@ -25,12 +25,13 @@ import {
 } from "@workspace/db/hooks"
 import { sqlTransaction } from "@workspace/libs/api/model"
 import {
+  getDanhSachHVChuaTotNghiepTA,
   getPhuLucIXData,
   graduationApplicationInit,
   useGraduationCheck,
 } from "@workspace/libs/api/training"
 import { ROUTER_PATH } from "@workspace/router"
-import { Button, Col, Flex, Modal, message, Row, Tag, Tooltip } from "antd"
+import { Button, Col, Dropdown, Flex, Modal, message, Row, Tag, Tooltip } from "antd"
 import type { TableRowSelection } from "antd/es/table/interface"
 import dayjs from "dayjs"
 import { saveAs } from "file-saver"
@@ -331,24 +332,6 @@ export default function StudentGraduationApplication() {
   const { mutateAsync: updateManyStudentGraduationApplication } =
     useUpdateManyStudentGraduationApplication()
   const { mutateAsync: updateManyStudent } = useUpdateManyStudent()
-  async function handleDelete(id: string) {
-    try {
-      showSpinner()
-      await updateStudentGraduationApplication({
-        where: { id },
-        data: { deletedAt: new Date() },
-      })
-      message.success("Xóa thành công")
-    } catch (error: any) {
-      if (error?.info?.message) {
-        message.error(error?.info?.message)
-        return
-      }
-      message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
-    } finally {
-      hideSpinner()
-    }
-  }
 
   const handleExportPhuLucIX = async () => {
     try {
@@ -367,6 +350,34 @@ export default function StudentGraduationApplication() {
       })
       if (exportRes && exportRes.status >= 200 && exportRes.status < 300) {
         saveAs(exportRes.data, "Phu_luc_IX.docx")
+      } else {
+        message.error(`Xuất file thất bại: Status ${exportRes?.status}`)
+      }
+    } catch (error: unknown) {
+      const msg = error instanceof Error ? error.message : JSON.stringify(error)
+      message.error(`Lỗi xuất file: ${msg}`)
+    } finally {
+      hideSpinner()
+    }
+  }
+
+  const handleExportPhuLucXI = async () => {
+    try {
+      showSpinner()
+      const res = await getDanhSachHVChuaTotNghiepTA({ sessionId: graduationSessionId })
+      if (res.status !== 200) {
+        message.error(res.data?.message || "Không lấy được dữ liệu danh sách")
+        return
+      }
+      const { data } = res.data
+      const exportRes = await docxTemplate({
+        fileName: "Phu_luc_XI.docx",
+        path: "Phu_luc_XI.docx",
+        prefix: "/mta/template",
+        data: data,
+      })
+      if (exportRes && exportRes.status >= 200 && exportRes.status < 300) {
+        saveAs(exportRes.data, "Phu_luc_XI.docx")
       } else {
         message.error(`Xuất file thất bại: Status ${exportRes?.status}`)
       }
@@ -661,10 +672,27 @@ export default function StudentGraduationApplication() {
                       </Col>
                       <Col span={12}>
                         <Flex justify="end" gap={4} className="ml-auto">
-                          <Button type="primary" onClick={handleExportPhuLucIX}>
-                            <Download />
-                            Tải Phụ lục IX
-                          </Button>
+                          <Dropdown
+                            menu={{
+                              items: [
+                                {
+                                  key: "1",
+                                  label: "Tải Phụ lục IX",
+                                  onClick: handleExportPhuLucIX,
+                                },
+                                {
+                                  key: "2",
+                                  label: "Tải Phụ lục XI",
+                                  onClick: handleExportPhuLucXI,
+                                },
+                              ],
+                            }}
+                          >
+                            <Button type="primary">
+                              <Download />
+                              Tải phụ lục
+                            </Button>
+                          </Dropdown>
                           <Button
                             onClick={handleRejectAll}
                             type="primary"

@@ -1568,3 +1568,24 @@ export const formatScore = (score: Decimal | number | string | null | undefined,
   if (isNaN(num)) return ""
   return num.toFixed(precision).replace(".", ",")
 }
+
+const classificationShortMap: Record<string, string> = {
+  "xuat sac": "XS",
+  gioi: "Giỏi",
+  kha: "Khá",
+  "trung binh kha": "TB Khá",
+  "trung binh": "TB",
+  yeu: "Yếu",
+  kem: "Kém",
+}
+
+export const shortenClassification = (classification?: string | null) => {
+  if (!classification) return ""
+  const key = classification
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .replace(/[đĐ]/g, "d")
+    .trim()
+    .toLowerCase()
+  return classificationShortMap[key] ?? classification
+}

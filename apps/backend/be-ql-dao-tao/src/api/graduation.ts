@@ -35,6 +35,7 @@ import {
   getReportDateParts,
   formatScore,
   generateExcelMultiSheet,
+  shortenClassification,
 } from "../utils"
 import { fieldDesc } from "../dto/openapi-helpers"
 import {
@@ -2947,19 +2948,7 @@ app.openapi(getPhuLucIXData, async (c) => {
                   trainingBlocks: {
                     include: {
                       subjects: {
-                        include: {
-                          subject: {
-                            include: {
-                              studentSubjectScore: {
-                                where: {
-                                  student: {
-                                    graduationApplications: { some: { sessionId } },
-                                  },
-                                },
-                              },
-                            },
-                          },
-                        },
+                        include: { subject: true },
                       },
                     },
                   },
@@ -2975,6 +2964,33 @@ app.openapi(getPhuLucIXData, async (c) => {
     },
     orderBy: { createdAt: "asc" },
   })
+
+  const studentIds = applications.map((a) => a.studentId)
+  const allScores = studentIds.length
+    ? await prisma.studentSubjectScore.findMany({
+        where: {
+          studentId: { in: studentIds },
+          finalScore: { not: null },
+          deletedAt: null,
+        },
+        select: { studentId: true, subjectVersionId: true, finalScore: true },
+      })
+    : []
+
+  const scoreMap = new Map<string, Map<string, number>>()
+  for (const s of allScores) {
+    if (s.finalScore == null) continue
+    const score = Number(s.finalScore)
+    let inner = scoreMap.get(s.studentId)
+    if (!inner) {
+      inner = new Map()
+      scoreMap.set(s.studentId, inner)
+    }
+    const prev = inner.get(s.subjectVersionId)
+    if (prev == null || score > prev) {
+      inner.set(s.subjectVersionId, score)
+    }
+  }
 
   // Gom các học viên cùng chuyên ngành liền nhau (STT vẫn chạy liên tục 1..n)
   const majorKey = (a: (typeof applications)[number]) =>
@@ -3000,15 +3016,15 @@ app.openapi(getPhuLucIXData, async (c) => {
         .replace(/[̀-ͯ]/g, "")
         .replace(/[đĐ]/g, "d")
         .toLowerCase()
+    const studentScores = scoreMap.get(app.studentId)
     const scoreOf = (kw: string[]) => {
       const sub = allSubjects.find((s) => {
         const name = normalize(s.subject.name)
         return kw.some((k) => name.includes(k))
       })
-      const best = (sub?.subject.studentSubjectScore ?? [])
-        .filter((ss) => ss.studentId === app.studentId && ss.finalScore != null)
-        .sort((a, b) => Number(b.finalScore) - Number(a.finalScore))[0]
-      return best?.finalScore ?? null
+      if (!sub) return null
+      const v = studentScores?.get(sub.subjectId)
+      return v == null ? null : new Decimal(v)
     }
 
     // Điểm các môn tốt nghiệp (giữ dạng thô để vừa format vừa so với ngưỡng hạ bậc)
@@ -3064,7 +3080,7 @@ app.openapi(getPhuLucIXData, async (c) => {
       diemDATN: mark(formatScore(sDATN, 1), satisfies(sDATN)),
       diemNN: mark(formatScore(sNN, 1), satisfies(sNN)),
       diemCTDCTCT: mark(formatScore(sCTDCTCT, 1), satisfies(sCTDCTCT)),
-      xepHang: app.rank?.classification ?? "",
+      xepHang: shortenClassification(app.rank?.classification),
       ghiChu:
         app.downgraded || app.rankDowngraded || /ha bac|ha muc/.test(normalize(app.reason))
           ? "Hạ mức"
@@ -3206,7 +3222,7 @@ app.openapi(getDanhSachTotNghiepData, async (c) => {
       nganh,
       chuyenNganh,
       diemTBTL: formatScore(app.gpa, 2),
-      xepHang: app.rank?.classification ?? "",
+      xepHang: shortenClassification(app.rank?.classification),
       ghiChu:
         app.downgraded || app.rankDowngraded || /ha bac|ha muc/.test(normalize(app.reason))
           ? "Hạ mức"
@@ -3242,6 +3258,176 @@ app.openapi(getDanhSachTotNghiepData, async (c) => {
           .replace(/^\s*kho[áa]\s*/i, "")
           .trim(),
         namXet: dayjs(session.sessionDate).year(),
+      },
+    },
+    200
+  )
+})
+
+const getDanhSachHVChuaTotNghiepTA = createRoute({
+  operationId: "getDanhSachHVChuaTotNghiepTA",
+  tags: ["Tốt nghiệp"],
+  path: "/danh-sach-chua-tot-nghiep-data",
+  method: "get",
+  summary: "Phụ lục XI - DS học viên chưa được công nhận TN",
+  description:
+    "Trả về danh sách học viên chưa được công nhận tốt nghiệp (graduation=false) do chưa đạt chuẩn đầu ra ngoại ngữ và học phần tốt nghiệp ngoại ngữ",
+  request: {
+    query: z.object({
+      sessionId: z.string().openapi(fieldDesc("ID đợt xét TN.")),
+    }),
+  },
+  responses: {
+    200: {
+      description: "OK",
+      content: {
+        "application/json": {
+          schema: z.object({ data: z.record(z.unknown()) }),
+        },
+      },
+    },
+    404: {
+      description: "Không tìm thấy đợt",
+      content: {
+        "application/json": {
+          schema: ErrorMessageResponseSchema,
+        },
+      },
+    },
+  },
+})
+
+app.openapi(getDanhSachHVChuaTotNghiepTA, async (c) => {
+  const { sessionId } = c.req.valid("query")
+
+  const session = await prisma.graduationSession.findUnique({
+    where: { id: sessionId },
+    include: { trainingCourse: true },
+  })
+
+  if (!session) return c.json({ message: "Không tìm thấy đợt xét tốt nghiệp" }, 404)
+
+  const applications = await prisma.studentGraduationApplication.findMany({
+    where: { sessionId, graduation: { not: true }, deletedAt: null },
+    include: {
+      trainingMajor: true,
+      student: {
+        include: {
+          fixedClass: {
+            include: {
+              trainingCourse: true,
+              curriculumVersion: {
+                include: {
+                  trainingBlocks: {
+                    include: {
+                      subjects: {
+                        include: { subject: true },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+          userProfile: {
+            include: { gender: true, ethnicity: true, newProvinceOfBirth: true },
+          },
+        },
+      },
+    },
+    orderBy: { createdAt: "asc" },
+  })
+
+  const studentIds = applications.map((a) => a.studentId)
+  const allScores = studentIds.length
+    ? await prisma.studentSubjectScore.findMany({
+        where: {
+          studentId: { in: studentIds },
+          finalScore: { not: null },
+          deletedAt: null,
+        },
+        select: { studentId: true, subjectVersionId: true, finalScore: true },
+      })
+    : []
+
+  const scoreMap = new Map<string, Map<string, number>>()
+  for (const s of allScores) {
+    if (s.finalScore == null) continue
+    const score = Number(s.finalScore)
+    let inner = scoreMap.get(s.studentId)
+    if (!inner) {
+      inner = new Map()
+      scoreMap.set(s.studentId, inner)
+    }
+    const prev = inner.get(s.subjectVersionId)
+    if (prev == null || score > prev) {
+      inner.set(s.subjectVersionId, score)
+    }
+  }
+
+  const majorKey = (a: (typeof applications)[number]) =>
+    a.trainingMajor?.shortName ?? a.trainingMajor?.name ?? ""
+  const sortedApplications = [...applications].sort((a, b) =>
+    majorKey(a).localeCompare(majorKey(b), "vi")
+  )
+
+  const normalize = (s?: string | null) =>
+    (s ?? "")
+      .normalize("NFD")
+      .replace(/[̀-ͯ]/g, "")
+      .replace(/[đĐ]/g, "d")
+      .toLowerCase()
+
+  const danhSach = sortedApplications.map((app, idx) => {
+    const u = app.student.userProfile
+
+    const allSubjects = (app.student.fixedClass?.curriculumVersion?.trainingBlocks ?? []).flatMap(
+      (b) => b.subjects
+    )
+    const studentScores = scoreMap.get(app.studentId)
+    const scoreOf = (kw: string[]) => {
+      const sub = allSubjects.find((s) => {
+        const name = normalize(s.subject.name)
+        return kw.some((k) => name.includes(k))
+      })
+      if (!sub) return null
+      return studentScores?.get(sub.subjectId) ?? null
+    }
+
+    const sDATN = scoreOf(["do an tot nghiep", "luan van"])
+    const sNN = scoreOf(["tot nghiep ngoai ngu"])
+    const sCTDCTCT = scoreOf(["tot nghiep ctd", "tot nghiep ctct", "ctd-ctct"])
+
+    return {
+      stt: idx + 1,
+      hoTen: u?.fullname ?? "",
+      ngaySinh: u?.dateOfBirth ? dayjs(u.dateOfBirth).format("DD/MM/YYYY") : "",
+      chuyenNganh: app.trainingMajor?.shortName,
+      gioiTinh: u?.gender?.sTen ?? "",
+      danToc: u?.ethnicity?.sTen ?? "",
+      noiSinh: u?.newProvinceOfBirth?.sTen ?? u?.placeOfBirth ?? "",
+      diemTBTL: formatScore(app.gpa, 2),
+      diemDATN: formatScore(sDATN, 1),
+      diemNN: formatScore(sNN, 1),
+      diemCTDCTCT: formatScore(sCTDCTCT, 1),
+      xepHang: "Chưa xếp hạng",
+      ghiChu: app.reason ?? "",
+    }
+  })
+
+  return c.json(
+    {
+      data: {
+        tongHV: danhSach.length,
+        khoa: (
+          session.trainingCourse?.name ??
+          applications[0]?.student.fixedClass?.trainingCourse?.name ??
+          ""
+        )
+          .replace(/^\s*kho[áa]\s*/i, "")
+          .trim(),
+        namXet: dayjs(session.sessionDate).year(),
+        danhSach,
       },
     },
     200
