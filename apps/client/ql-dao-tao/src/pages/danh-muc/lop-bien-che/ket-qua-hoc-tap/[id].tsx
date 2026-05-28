@@ -239,6 +239,39 @@ export default function StudentScoreClassPage() {
                 select: { graduation: true },
                 take: 1,
               },
+              prerequisiteSubject: {
+                select: {
+                  id: true,
+                  code: true,
+                  name: true,
+                },
+              },
+              dependentSubject: {
+                select: {
+                  id: true,
+                  code: true,
+                  name: true,
+                },
+              },
+              coRequisiteSubject: {
+                select: {
+                  id: true,
+                  code: true,
+                  name: true,
+                },
+              },
+              depCoRequisiteSubject: {
+                select: {
+                  id: true,
+                  code: true,
+                  name: true,
+                },
+              },
+              equivalencyGroups: {
+                select: {
+                  equivalencyGroupId: true,
+                },
+              },
             },
           },
           subjectClassStudent: {
@@ -281,6 +314,85 @@ export default function StudentScoreClassPage() {
         }
       })
   }, [data, semesterId])
+
+ const sortSubjectClassesForExport = (subjectClasses: any[]) => {
+  if (!subjectClasses?.length) return []
+
+  const prereqMap = new Map<string, Set<string>>()
+
+  const items = subjectClasses.map((subjectClass, index) => ({
+    subjectClass,
+    originalIndex: index,
+    id: subjectClass?.subject?.id,
+    subject: subjectClass?.subject,
+  }))
+
+  const parent = new Map<string, string>()
+  const find = (i: string): string => {
+    if (!parent.has(i)) parent.set(i, i)
+    if (parent.get(i) !== i) parent.set(i, find(parent.get(i)!))
+    return parent.get(i)!
+  }
+  const union = (i: string, j: string) => {
+    const rootI = find(i)
+    const rootJ = find(j)
+    if (rootI !== rootJ) parent.set(rootI, rootJ)
+  }
+
+  items.forEach(({ id, subject }) => {
+    if (!id || !subject) return
+
+    const prereqIds = (subject.prerequisiteSubject || [])
+      .map((x: any) => x?.id)
+      .filter(Boolean)
+    prereqMap.set(id, new Set(prereqIds))
+
+    const relations = [
+      ...prereqIds,
+      ...(subject.dependentSubject || []).map((x: any) => x?.id),
+      ...(subject.coRequisiteSubject || []).map((x: any) => x?.id),
+      ...(subject.depCoRequisiteSubject || []).map((x: any) => x?.id)
+    ]
+
+    const eqGroups = (subject.equivalencyGroups || []).map((x: any) => x?.equivalencyGroupId)
+
+    ;[...relations, ...eqGroups].forEach((relId) => {
+      if (relId) union(id, relId)
+    })
+  })
+
+  const groupMinIndex = new Map<string, number>()
+  items.forEach((item) => {
+    if (!item.id) return
+    const groupId = find(item.id)
+    const currentMin = groupMinIndex.get(groupId) ?? Infinity
+    groupMinIndex.set(groupId, Math.min(currentMin, item.originalIndex))
+  })
+
+  const sortedItems = [...items].sort((a, b) => {
+    if (!a.id || !b.id) return 0
+
+    const groupA = find(a.id)
+    const groupB = find(b.id)
+
+    if (groupA !== groupB) {
+      return (groupMinIndex.get(groupA) ?? 0) - (groupMinIndex.get(groupB) ?? 0)
+    }
+
+    const aPrereqs = prereqMap.get(a.id)
+    const bPrereqs = prereqMap.get(b.id)
+
+    if (aPrereqs?.has(b.id)) return 1
+    if (bPrereqs?.has(a.id)) return -1
+
+    return (
+      a.originalIndex - b.originalIndex ||
+      String(a.subject?.code || "").localeCompare(String(b.subject?.code || ""))
+    )
+  })
+
+  return sortedItems.map((item) => item.subjectClass).filter(Boolean)
+}
 
   const exportTemplate = async () => {
     const hocKis: IHocKi[] = []
@@ -525,57 +637,52 @@ export default function StudentScoreClassPage() {
   }
 
   const handleExportQuaTrinh = async () => {
-    const hocKis: IHocKi[] = []
     let stt = 1
-    if (data.length > 0) {
-      data.forEach((semester) => {
-        const monhoc: IMonHoc[] = []
-        semester.subjectClasses.forEach((subjectClass) => {
-          subjectClass.subjectClassStudent.forEach((subjectClassStudent) => {
-            const rawScore =
-              subjectClassStudent?.manualFinalScore ||
-              subjectClassStudent?.finalScore?.toNumber() ||
-              0
+    const monhocList: IMonHoc[] = []
 
-            const isGraduation = subjectClass?.subject?.trainingBlocks?.[0]?.graduation === true
-            const converted = convertScoreWithGraduation(rawScore, isGraduation)
+    const allSubjectClasses = data.flatMap((semester) => semester.subjectClasses)
 
-            monhoc.push({
-              TenMonhoc: subjectClass.subject.name,
-              soTC: subjectClass.subject.credit,
-              diemhe10: rawScore,
-              diemhe4: converted?.base4 ?? 0,
-              diemchu: converted?.letter ?? "",
-              pass: converted?.pass ?? false,
-            })
-          })
-        })
+    const latestSubjectClassesMap = new Map()
+    allSubjectClasses.forEach((subjectClass: any) => {
+      if (subjectClass.$isSummary) return
 
-        const tongSoTinChi = monhoc.reduce((acc, curr) => acc + (curr.soTC ?? 0), 0)
-        const tongDiemNhanTinChiHe10 = monhoc.reduce(
-          (acc, curr) => acc + (curr.diemhe10 ?? 0) * (curr.soTC ?? 0),
+      const subjectId = subjectClass?.subject?.id
+      if (subjectId) {
+        latestSubjectClassesMap.set(subjectId, subjectClass)
+      }
+    })
+    
+    const uniqueSubjectClasses = Array.from(latestSubjectClassesMap.values())
+
+    const orderedSubjectClasses = sortSubjectClassesForExport(uniqueSubjectClasses)
+
+    orderedSubjectClasses.forEach((subjectClass) => {
+      subjectClass.subjectClassStudent.forEach((subjectClassStudent: any) => {
+        const rawScore =
+          subjectClassStudent?.manualFinalScore ||
+          subjectClassStudent?.finalScore?.toNumber() ||
           0
-        )
-        const tongDiemNhanTinChiHe4 = monhoc.reduce(
-          (acc, curr) => acc + (curr.diemhe4 ?? 0) * (curr.soTC ?? 0),
-          0
-        )
-        const diemTBHe10 = Number.parseFloat(
-          (tongSoTinChi === 0 ? 0 : tongDiemNhanTinChiHe10 / tongSoTinChi).toFixed(1)
-        )
-        const diemTBHe4 = Number.parseFloat(
-          (tongSoTinChi === 0 ? 0 : tongDiemNhanTinChiHe4 / tongSoTinChi).toFixed(1)
-        )
 
-        hocKis.push({
-          TenHocKi: `${semester.code}-${semester.name}-${semester.schoolYear?.name}`,
-          SoTinChiKy: tongSoTinChi,
-          DiemTBKyHe10: diemTBHe10,
-          DiemTBKyHe4: diemTBHe4,
-          monHocs: monhoc,
+        const isGraduation = subjectClass?.subject?.trainingBlocks?.[0]?.graduation === true
+        const converted = convertScoreWithGraduation(rawScore, isGraduation)
+
+        let tenMonHoc = subjectClass.subject.name
+        if (subjectClass.type === $Enums.SubjectClassType.RETAKE) {
+          tenMonHoc += " (Học lại)"
+        } else if (subjectClass.type === $Enums.SubjectClassType.REEXAM) {
+          tenMonHoc += " (Thi lại)"
+        }
+
+        monhocList.push({
+          TenMonhoc: tenMonHoc,
+          soTC: subjectClass.subject.credit,
+          diemhe10: rawScore,
+          diemhe4: converted?.base4 ?? 0,
+          diemchu: converted?.letter ?? "",
+          pass: converted?.pass ?? false,
         })
       })
-    }
+    })
 
     const sampleStudentData = {
       hoVaTen: student?.userProfile?.fullname,
@@ -588,44 +695,21 @@ export default function StudentScoreClassPage() {
       trinhDoDaoTao: student?.curriculumVersion?.trainingLevel?.name,
       chuyenNganh: student?.curriculumVersion?.curriculum.trainingMajor.name,
       hinhThucDaoTao: student?.curriculumVersion?.trainingType?.name,
-      // lop: student?.fixedClass?.trainingCourse?.name,
-      hocKis,
     }
 
-    const tableRows = sampleStudentData.hocKis.flatMap((hocKi) => {
-      const hocKiRow: TableRow = {
+    const tableRows: TableRow[] = monhocList.map((monHoc: IMonHoc) => {
+      const isFail = monHoc.pass === false
+      const cellStyle = isFail ? { bgColor: "FFFFC7CE", color: "FFFF0000" } : {}
+      return {
         cells: [
-          { value: hocKi.TenHocKi ?? "", colSpan: 11, bold: true, align: "left", border: true },
+          { value: stt++, align: "center", ...cellStyle },
+          { value: monHoc.TenMonhoc ?? "", colSpan: 6, border: true, ...cellStyle },
+          { value: monHoc.soTC, align: "center", ...cellStyle },
+          { value: monHoc.diemhe10 ?? 0, align: "right", ...cellStyle },
+          { value: monHoc.diemhe4 ?? 0, align: "right", ...cellStyle },
+          { value: monHoc.diemchu ?? "", align: "center", ...cellStyle },
         ],
       }
-      const monHocRows: TableRow[] =
-        hocKi?.monHocs?.map((monHoc: IMonHoc) => {
-          const isFail = monHoc.pass === false
-          const cellStyle = isFail ? { bgColor: "FFFFC7CE", color: "FFFF0000" } : {}
-          return {
-            cells: [
-              { value: stt++, align: "center", ...cellStyle },
-              { value: monHoc.TenMonhoc ?? "", colSpan: 6, border: true, ...cellStyle },
-              { value: monHoc.soTC, align: "center", ...cellStyle },
-              { value: monHoc.diemhe10 ?? 0, align: "right", ...cellStyle },
-              { value: monHoc.diemhe4 ?? 0, align: "right", ...cellStyle },
-              { value: monHoc.diemchu ?? "", align: "center", ...cellStyle },
-            ],
-          }
-        }) ?? []
-
-      const trungBinhRow: TableRow = {
-        cells: [
-          { value: null },
-          { value: "Điểm trung bình học kỳ:", colSpan: 6, bold: true, align: "center" },
-          { value: hocKi.SoTinChiKy ?? 0, bold: true, align: "center" },
-          { value: hocKi.DiemTBKyHe10 ?? 0, bold: true, align: "center" },
-          { value: hocKi.DiemTBKyHe4 ?? 0, bold: true, align: "center" },
-          // { value: null },
-        ],
-      }
-
-      return [...monHocRows]
     })
 
     const gapRow: TableRow = { cells: [{ value: null, colSpan: 9, border: false }] }
@@ -650,7 +734,6 @@ export default function StudentScoreClassPage() {
             trinhDoDaoTao: sampleStudentData.trinhDoDaoTao ?? "",
             chuyenNganh: sampleStudentData.chuyenNganh ?? "",
             hinhThucDaoTao: sampleStudentData.hinhThucDaoTao ?? "",
-            // lop: sampleStudentData.lop ?? "",
           },
           tableStartCell: { row: 14, col: 1 },
           rows: [
