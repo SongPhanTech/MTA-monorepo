@@ -65,4 +65,6 @@ export interface ExportStudentSemesterResultRequest {
   semesterId: string;
   /** ID hệ đào tạo (TrainingObjectType). */
   trainingObjectTypeId: string;
+  /** ID lớp học (FixedClass). */
+  fixedClassId?: string;
 }

@@ -259,7 +259,11 @@ const DiemTrungBinhKyHoc = () => {
     }
 
     const res = await exportExcel({
-      data: { semesterId, trainingObjectTypeId },
+      data: {
+        semesterId,
+        trainingObjectTypeId,
+        ...(filters.fixedClassId ? { fixedClassId: filters.fixedClassId } : {}),
+      },
     })
 
     if (res.status === 200) {

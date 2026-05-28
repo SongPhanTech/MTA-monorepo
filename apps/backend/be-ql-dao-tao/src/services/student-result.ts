@@ -38,9 +38,11 @@ import { prisma } from ".."
 export async function exportStudentSemesterResult({
   semesterId,
   trainingObjectTypeId,
+  fixedClassId,
 }: {
   semesterId: string
   trainingObjectTypeId: string
+  fixedClassId?: string
 }) {
   const semester = await prisma.semester.findUniqueOrThrow({
     where: { id: semesterId },
@@ -54,6 +56,7 @@ export async function exportStudentSemesterResult({
     where: {
       semesterId,
       student: {
+        ...(fixedClassId ? { fixedClassId } : {}),
         fixedClass: {
           trainingCourse: {
             trainingObjectTypeId,

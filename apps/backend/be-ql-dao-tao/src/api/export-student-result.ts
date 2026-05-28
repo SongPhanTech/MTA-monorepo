@@ -26,6 +26,7 @@ const exportStudentSemesterResultRoute = createRoute({
               trainingObjectTypeId: z
                 .string()
                 .openapi(fieldDesc("ID hệ đào tạo (TrainingObjectType).")),
+              fixedClassId: z.string().optional().openapi(fieldDesc("ID lớp học (FixedClass).")),
             })
             .openapi("ExportStudentSemesterResultRequest"),
         },
@@ -53,9 +54,13 @@ const exportStudentSemesterResultRoute = createRoute({
 })
 
 app.openapi(exportStudentSemesterResultRoute, async (c) => {
-  const { semesterId, trainingObjectTypeId } = c.req.valid("json")
+  const { semesterId, trainingObjectTypeId, fixedClassId } = c.req.valid("json")
 
-  const result = await exportStudentSemesterResult({ semesterId, trainingObjectTypeId })
+  const result = await exportStudentSemesterResult({
+    semesterId,
+    trainingObjectTypeId,
+    fixedClassId,
+  })
 
   const fileName = "KET_QUA_HOC_TAP_HK.xlsx"
   const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`

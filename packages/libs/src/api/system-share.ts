@@ -69,7 +69,10 @@ API này cho phép các ứng dụng truy cập từ client hoặc server thông
 4. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-import { useMutation, useQuery } from "@tanstack/react-query"
+import {
+  useMutation,
+  useQuery
+} from '@tanstack/react-query';
 import type {
   DataTag,
   DefinedInitialDataOptions,
@@ -82,8 +85,8 @@ import type {
   UseMutationOptions,
   UseMutationResult,
   UseQueryOptions,
-  UseQueryResult,
-} from "@tanstack/react-query"
+  UseQueryResult
+} from '@tanstack/react-query';
 
 import type {
   AddNewRequestDto,
@@ -97,15 +100,18 @@ import type {
   PagingRequestDto,
   PostFilesSingleStorageTypeBody,
   PostFilesSingleStorageTypeParams,
-  UnitInfoEditDto,
-} from "./schemas"
+  UnitInfoEditDto
+} from './schemas';
 
-import { customSystemShareFetch } from "./custom-instance"
-type AwaitedInput<T> = PromiseLike<T> | T
+import { customSystemShareFetch } from './custom-instance';
+type AwaitedInput<T> = PromiseLike<T> | T;
 
-type Awaited<O> = O extends AwaitedInput<infer T> ? T : never
+      type Awaited<O> = O extends AwaitedInput<infer T> ? T : never;
 
-type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
+
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
 
 /**
  * Hiển thị ảnh
@@ -115,195 +121,134 @@ export type getFilesImageStorageTypeFileNameResponse200 = {
   data: void
   status: 200
 }
+    
+export type getFilesImageStorageTypeFileNameResponseSuccess = (getFilesImageStorageTypeFileNameResponse200) & {
+  headers: Headers;
+};
+;
 
-export type getFilesImageStorageTypeFileNameResponseSuccess =
-  getFilesImageStorageTypeFileNameResponse200 & {
-    headers: Headers
-  }
+export type getFilesImageStorageTypeFileNameResponse = (getFilesImageStorageTypeFileNameResponseSuccess)
 
-export type getFilesImageStorageTypeFileNameResponse =
-  getFilesImageStorageTypeFileNameResponseSuccess
-
-export const getGetFilesImageStorageTypeFileNameUrl = (
-  storageType: number,
-  fileName: string,
-  params?: GetFilesImageStorageTypeFileNameParams
-) => {
-  const normalizedParams = new URLSearchParams()
+export const getGetFilesImageStorageTypeFileNameUrl = (storageType: number,
+    fileName: string,
+    params?: GetFilesImageStorageTypeFileNameParams,) => {
+  const normalizedParams = new URLSearchParams();
 
   Object.entries(params || {}).forEach(([key, value]) => {
+    
     if (value !== undefined) {
-      normalizedParams.append(key, value === null ? "null" : value.toString())
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
     }
-  })
+  });
 
-  const stringifiedParams = normalizedParams.toString()
+  const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0
-    ? `/Files/image/${storageType}/${fileName}?${stringifiedParams}`
-    : `/Files/image/${storageType}/${fileName}`
+  return stringifiedParams.length > 0 ? `/Files/image/${storageType}/${fileName}?${stringifiedParams}` : `/Files/image/${storageType}/${fileName}`
 }
 
-export const getFilesImageStorageTypeFileName = async (
-  storageType: number,
-  fileName: string,
-  params?: GetFilesImageStorageTypeFileNameParams,
-  options?: RequestInit
-): Promise<getFilesImageStorageTypeFileNameResponse> => {
-  return customSystemShareFetch<getFilesImageStorageTypeFileNameResponse>(
-    getGetFilesImageStorageTypeFileNameUrl(storageType, fileName, params),
-    {
-      ...options,
-      method: "GET",
-    }
-  )
-}
-
-export const getGetFilesImageStorageTypeFileNameQueryKey = (
-  storageType?: number,
-  fileName?: string,
-  params?: GetFilesImageStorageTypeFileNameParams
-) => {
-  return [`/Files/image/${storageType}/${fileName}`, ...(params ? [params] : [])] as const
-}
-
-export const getGetFilesImageStorageTypeFileNameQueryOptions = <
-  TData = Awaited<ReturnType<typeof getFilesImageStorageTypeFileName>>,
-  TError = unknown,
->(
-  storageType: number,
-  fileName: string,
-  params?: GetFilesImageStorageTypeFileNameParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getFilesImageStorageTypeFileName>>, TError, TData>
-    >
-    request?: SecondParameter<typeof customSystemShareFetch>
+export const getFilesImageStorageTypeFileName = async (storageType: number,
+    fileName: string,
+    params?: GetFilesImageStorageTypeFileNameParams, options?: RequestInit): Promise<getFilesImageStorageTypeFileNameResponse> => {
+  
+  return customSystemShareFetch<getFilesImageStorageTypeFileNameResponse>(getGetFilesImageStorageTypeFileNameUrl(storageType,fileName,params),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
   }
+);}
+
+
+
+
+
+export const getGetFilesImageStorageTypeFileNameQueryKey = (storageType?: number,
+    fileName?: string,
+    params?: GetFilesImageStorageTypeFileNameParams,) => {
+    return [
+    `/Files/image/${storageType}/${fileName}`, ...(params ? [params]: [])
+    ] as const;
+    }
+
+    
+export const getGetFilesImageStorageTypeFileNameQueryOptions = <TData = Awaited<ReturnType<typeof getFilesImageStorageTypeFileName>>, TError = unknown>(storageType: number,
+    fileName: string,
+    params?: GetFilesImageStorageTypeFileNameParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFilesImageStorageTypeFileName>>, TError, TData>>, request?: SecondParameter<typeof customSystemShareFetch>}
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey =
-    queryOptions?.queryKey ??
-    getGetFilesImageStorageTypeFileNameQueryKey(storageType, fileName, params)
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getFilesImageStorageTypeFileName>>> = ({
-    signal,
-  }) =>
-    getFilesImageStorageTypeFileName(storageType, fileName, params, { signal, ...requestOptions })
+  const queryKey =  queryOptions?.queryKey ?? getGetFilesImageStorageTypeFileNameQueryKey(storageType,fileName,params);
 
-  return {
-    queryKey,
-    queryFn,
-    enabled: !!(storageType && fileName),
-    ...queryOptions,
-  } as UseQueryOptions<
-    Awaited<ReturnType<typeof getFilesImageStorageTypeFileName>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getFilesImageStorageTypeFileName>>> = ({ signal }) => getFilesImageStorageTypeFileName(storageType,fileName,params, { signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(storageType && fileName), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getFilesImageStorageTypeFileName>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetFilesImageStorageTypeFileNameQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getFilesImageStorageTypeFileName>>
->
+export type GetFilesImageStorageTypeFileNameQueryResult = NonNullable<Awaited<ReturnType<typeof getFilesImageStorageTypeFileName>>>
 export type GetFilesImageStorageTypeFileNameQueryError = unknown
 
-export function useGetFilesImageStorageTypeFileName<
-  TData = Awaited<ReturnType<typeof getFilesImageStorageTypeFileName>>,
-  TError = unknown,
->(
-  storageType: number,
-  fileName: string,
-  params: undefined | GetFilesImageStorageTypeFileNameParams,
-  options: {
-    query: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getFilesImageStorageTypeFileName>>, TError, TData>
-    > &
-      Pick<
+
+export function useGetFilesImageStorageTypeFileName<TData = Awaited<ReturnType<typeof getFilesImageStorageTypeFileName>>, TError = unknown>(
+ storageType: number,
+    fileName: string,
+    params: undefined |  GetFilesImageStorageTypeFileNameParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFilesImageStorageTypeFileName>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getFilesImageStorageTypeFileName>>,
           TError,
           Awaited<ReturnType<typeof getFilesImageStorageTypeFileName>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof customSystemShareFetch>
-  },
-  queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetFilesImageStorageTypeFileName<
-  TData = Awaited<ReturnType<typeof getFilesImageStorageTypeFileName>>,
-  TError = unknown,
->(
-  storageType: number,
-  fileName: string,
-  params?: GetFilesImageStorageTypeFileNameParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getFilesImageStorageTypeFileName>>, TError, TData>
-    > &
-      Pick<
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customSystemShareFetch>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetFilesImageStorageTypeFileName<TData = Awaited<ReturnType<typeof getFilesImageStorageTypeFileName>>, TError = unknown>(
+ storageType: number,
+    fileName: string,
+    params?: GetFilesImageStorageTypeFileNameParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFilesImageStorageTypeFileName>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getFilesImageStorageTypeFileName>>,
           TError,
           Awaited<ReturnType<typeof getFilesImageStorageTypeFileName>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof customSystemShareFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetFilesImageStorageTypeFileName<
-  TData = Awaited<ReturnType<typeof getFilesImageStorageTypeFileName>>,
-  TError = unknown,
->(
-  storageType: number,
-  fileName: string,
-  params?: GetFilesImageStorageTypeFileNameParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getFilesImageStorageTypeFileName>>, TError, TData>
-    >
-    request?: SecondParameter<typeof customSystemShareFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customSystemShareFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetFilesImageStorageTypeFileName<TData = Awaited<ReturnType<typeof getFilesImageStorageTypeFileName>>, TError = unknown>(
+ storageType: number,
+    fileName: string,
+    params?: GetFilesImageStorageTypeFileNameParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFilesImageStorageTypeFileName>>, TError, TData>>, request?: SecondParameter<typeof customSystemShareFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Lấy ảnh mẫu của báo cáo
  */
 
-export function useGetFilesImageStorageTypeFileName<
-  TData = Awaited<ReturnType<typeof getFilesImageStorageTypeFileName>>,
-  TError = unknown,
->(
-  storageType: number,
-  fileName: string,
-  params?: GetFilesImageStorageTypeFileNameParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getFilesImageStorageTypeFileName>>, TError, TData>
-    >
-    request?: SecondParameter<typeof customSystemShareFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetFilesImageStorageTypeFileNameQueryOptions(
-    storageType,
-    fileName,
-    params,
-    options
-  )
+export function useGetFilesImageStorageTypeFileName<TData = Awaited<ReturnType<typeof getFilesImageStorageTypeFileName>>, TError = unknown>(
+ storageType: number,
+    fileName: string,
+    params?: GetFilesImageStorageTypeFileNameParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFilesImageStorageTypeFileName>>, TError, TData>>, request?: SecondParameter<typeof customSystemShareFetch>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData, TError>
-  }
+  const queryOptions = getGetFilesImageStorageTypeFileNameQueryOptions(storageType,fileName,params,options)
 
-  query.queryKey = queryOptions.queryKey
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  return query
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
 }
+
+
+
+
 
 /**
  * Lấy ảnh nhân viên
@@ -313,172 +258,126 @@ export type getFilesEmployeeUserIdImageResponse200 = {
   data: void
   status: 200
 }
+    
+export type getFilesEmployeeUserIdImageResponseSuccess = (getFilesEmployeeUserIdImageResponse200) & {
+  headers: Headers;
+};
+;
 
-export type getFilesEmployeeUserIdImageResponseSuccess = getFilesEmployeeUserIdImageResponse200 & {
-  headers: Headers
-}
+export type getFilesEmployeeUserIdImageResponse = (getFilesEmployeeUserIdImageResponseSuccess)
 
-export type getFilesEmployeeUserIdImageResponse = getFilesEmployeeUserIdImageResponseSuccess
-
-export const getGetFilesEmployeeUserIdImageUrl = (
-  userId: string,
-  params?: GetFilesEmployeeUserIdImageParams
-) => {
-  const normalizedParams = new URLSearchParams()
+export const getGetFilesEmployeeUserIdImageUrl = (userId: string,
+    params?: GetFilesEmployeeUserIdImageParams,) => {
+  const normalizedParams = new URLSearchParams();
 
   Object.entries(params || {}).forEach(([key, value]) => {
+    
     if (value !== undefined) {
-      normalizedParams.append(key, value === null ? "null" : value.toString())
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
     }
-  })
+  });
 
-  const stringifiedParams = normalizedParams.toString()
+  const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0
-    ? `/Files/employee/${userId}/image?${stringifiedParams}`
-    : `/Files/employee/${userId}/image`
+  return stringifiedParams.length > 0 ? `/Files/employee/${userId}/image?${stringifiedParams}` : `/Files/employee/${userId}/image`
 }
 
-export const getFilesEmployeeUserIdImage = async (
-  userId: string,
-  params?: GetFilesEmployeeUserIdImageParams,
-  options?: RequestInit
-): Promise<getFilesEmployeeUserIdImageResponse> => {
-  return customSystemShareFetch<getFilesEmployeeUserIdImageResponse>(
-    getGetFilesEmployeeUserIdImageUrl(userId, params),
-    {
-      ...options,
-      method: "GET",
-    }
-  )
-}
-
-export const getGetFilesEmployeeUserIdImageQueryKey = (
-  userId?: string,
-  params?: GetFilesEmployeeUserIdImageParams
-) => {
-  return [`/Files/employee/${userId}/image`, ...(params ? [params] : [])] as const
-}
-
-export const getGetFilesEmployeeUserIdImageQueryOptions = <
-  TData = Awaited<ReturnType<typeof getFilesEmployeeUserIdImage>>,
-  TError = unknown,
->(
-  userId: string,
-  params?: GetFilesEmployeeUserIdImageParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getFilesEmployeeUserIdImage>>, TError, TData>
-    >
-    request?: SecondParameter<typeof customSystemShareFetch>
+export const getFilesEmployeeUserIdImage = async (userId: string,
+    params?: GetFilesEmployeeUserIdImageParams, options?: RequestInit): Promise<getFilesEmployeeUserIdImageResponse> => {
+  
+  return customSystemShareFetch<getFilesEmployeeUserIdImageResponse>(getGetFilesEmployeeUserIdImageUrl(userId,params),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
   }
+);}
+
+
+
+
+
+export const getGetFilesEmployeeUserIdImageQueryKey = (userId?: string,
+    params?: GetFilesEmployeeUserIdImageParams,) => {
+    return [
+    `/Files/employee/${userId}/image`, ...(params ? [params]: [])
+    ] as const;
+    }
+
+    
+export const getGetFilesEmployeeUserIdImageQueryOptions = <TData = Awaited<ReturnType<typeof getFilesEmployeeUserIdImage>>, TError = unknown>(userId: string,
+    params?: GetFilesEmployeeUserIdImageParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFilesEmployeeUserIdImage>>, TError, TData>>, request?: SecondParameter<typeof customSystemShareFetch>}
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getGetFilesEmployeeUserIdImageQueryKey(userId, params)
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getFilesEmployeeUserIdImage>>> = ({
-    signal,
-  }) => getFilesEmployeeUserIdImage(userId, params, { signal, ...requestOptions })
+  const queryKey =  queryOptions?.queryKey ?? getGetFilesEmployeeUserIdImageQueryKey(userId,params);
 
-  return { queryKey, queryFn, enabled: !!userId, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getFilesEmployeeUserIdImage>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getFilesEmployeeUserIdImage>>> = ({ signal }) => getFilesEmployeeUserIdImage(userId,params, { signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(userId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getFilesEmployeeUserIdImage>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetFilesEmployeeUserIdImageQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getFilesEmployeeUserIdImage>>
->
+export type GetFilesEmployeeUserIdImageQueryResult = NonNullable<Awaited<ReturnType<typeof getFilesEmployeeUserIdImage>>>
 export type GetFilesEmployeeUserIdImageQueryError = unknown
 
-export function useGetFilesEmployeeUserIdImage<
-  TData = Awaited<ReturnType<typeof getFilesEmployeeUserIdImage>>,
-  TError = unknown,
->(
-  userId: string,
-  params: undefined | GetFilesEmployeeUserIdImageParams,
-  options: {
-    query: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getFilesEmployeeUserIdImage>>, TError, TData>
-    > &
-      Pick<
+
+export function useGetFilesEmployeeUserIdImage<TData = Awaited<ReturnType<typeof getFilesEmployeeUserIdImage>>, TError = unknown>(
+ userId: string,
+    params: undefined |  GetFilesEmployeeUserIdImageParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFilesEmployeeUserIdImage>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getFilesEmployeeUserIdImage>>,
           TError,
           Awaited<ReturnType<typeof getFilesEmployeeUserIdImage>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof customSystemShareFetch>
-  },
-  queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetFilesEmployeeUserIdImage<
-  TData = Awaited<ReturnType<typeof getFilesEmployeeUserIdImage>>,
-  TError = unknown,
->(
-  userId: string,
-  params?: GetFilesEmployeeUserIdImageParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getFilesEmployeeUserIdImage>>, TError, TData>
-    > &
-      Pick<
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customSystemShareFetch>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetFilesEmployeeUserIdImage<TData = Awaited<ReturnType<typeof getFilesEmployeeUserIdImage>>, TError = unknown>(
+ userId: string,
+    params?: GetFilesEmployeeUserIdImageParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFilesEmployeeUserIdImage>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getFilesEmployeeUserIdImage>>,
           TError,
           Awaited<ReturnType<typeof getFilesEmployeeUserIdImage>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof customSystemShareFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetFilesEmployeeUserIdImage<
-  TData = Awaited<ReturnType<typeof getFilesEmployeeUserIdImage>>,
-  TError = unknown,
->(
-  userId: string,
-  params?: GetFilesEmployeeUserIdImageParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getFilesEmployeeUserIdImage>>, TError, TData>
-    >
-    request?: SecondParameter<typeof customSystemShareFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customSystemShareFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetFilesEmployeeUserIdImage<TData = Awaited<ReturnType<typeof getFilesEmployeeUserIdImage>>, TError = unknown>(
+ userId: string,
+    params?: GetFilesEmployeeUserIdImageParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFilesEmployeeUserIdImage>>, TError, TData>>, request?: SecondParameter<typeof customSystemShareFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Lấy ảnh nhân viên
  */
 
-export function useGetFilesEmployeeUserIdImage<
-  TData = Awaited<ReturnType<typeof getFilesEmployeeUserIdImage>>,
-  TError = unknown,
->(
-  userId: string,
-  params?: GetFilesEmployeeUserIdImageParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getFilesEmployeeUserIdImage>>, TError, TData>
-    >
-    request?: SecondParameter<typeof customSystemShareFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetFilesEmployeeUserIdImageQueryOptions(userId, params, options)
+export function useGetFilesEmployeeUserIdImage<TData = Awaited<ReturnType<typeof getFilesEmployeeUserIdImage>>, TError = unknown>(
+ userId: string,
+    params?: GetFilesEmployeeUserIdImageParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFilesEmployeeUserIdImage>>, TError, TData>>, request?: SecondParameter<typeof customSystemShareFetch>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData, TError>
-  }
+  const queryOptions = getGetFilesEmployeeUserIdImageQueryOptions(userId,params,options)
 
-  query.queryKey = queryOptions.queryKey
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  return query
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
 }
+
+
+
+
 
 /**
  * Hiển thị ảnh avatar theo tên viết tắt
@@ -488,159 +387,118 @@ export type getFilesAvatarInitialsResponse200 = {
   data: void
   status: 200
 }
+    
+export type getFilesAvatarInitialsResponseSuccess = (getFilesAvatarInitialsResponse200) & {
+  headers: Headers;
+};
+;
 
-export type getFilesAvatarInitialsResponseSuccess = getFilesAvatarInitialsResponse200 & {
-  headers: Headers
-}
+export type getFilesAvatarInitialsResponse = (getFilesAvatarInitialsResponseSuccess)
 
-export type getFilesAvatarInitialsResponse = getFilesAvatarInitialsResponseSuccess
-
-export const getGetFilesAvatarInitialsUrl = (params?: GetFilesAvatarInitialsParams) => {
-  const normalizedParams = new URLSearchParams()
+export const getGetFilesAvatarInitialsUrl = (params?: GetFilesAvatarInitialsParams,) => {
+  const normalizedParams = new URLSearchParams();
 
   Object.entries(params || {}).forEach(([key, value]) => {
+    
     if (value !== undefined) {
-      normalizedParams.append(key, value === null ? "null" : value.toString())
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
     }
-  })
+  });
 
-  const stringifiedParams = normalizedParams.toString()
+  const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0
-    ? `/Files/avatar-initials?${stringifiedParams}`
-    : `/Files/avatar-initials`
+  return stringifiedParams.length > 0 ? `/Files/avatar-initials?${stringifiedParams}` : `/Files/avatar-initials`
 }
 
-export const getFilesAvatarInitials = async (
-  params?: GetFilesAvatarInitialsParams,
-  options?: RequestInit
-): Promise<getFilesAvatarInitialsResponse> => {
-  return customSystemShareFetch<getFilesAvatarInitialsResponse>(
-    getGetFilesAvatarInitialsUrl(params),
-    {
-      ...options,
-      method: "GET",
-    }
-  )
-}
-
-export const getGetFilesAvatarInitialsQueryKey = (params?: GetFilesAvatarInitialsParams) => {
-  return [`/Files/avatar-initials`, ...(params ? [params] : [])] as const
-}
-
-export const getGetFilesAvatarInitialsQueryOptions = <
-  TData = Awaited<ReturnType<typeof getFilesAvatarInitials>>,
-  TError = unknown,
->(
-  params?: GetFilesAvatarInitialsParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getFilesAvatarInitials>>, TError, TData>
-    >
-    request?: SecondParameter<typeof customSystemShareFetch>
+export const getFilesAvatarInitials = async (params?: GetFilesAvatarInitialsParams, options?: RequestInit): Promise<getFilesAvatarInitialsResponse> => {
+  
+  return customSystemShareFetch<getFilesAvatarInitialsResponse>(getGetFilesAvatarInitialsUrl(params),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
   }
+);}
+
+
+
+
+
+export const getGetFilesAvatarInitialsQueryKey = (params?: GetFilesAvatarInitialsParams,) => {
+    return [
+    `/Files/avatar-initials`, ...(params ? [params]: [])
+    ] as const;
+    }
+
+    
+export const getGetFilesAvatarInitialsQueryOptions = <TData = Awaited<ReturnType<typeof getFilesAvatarInitials>>, TError = unknown>(params?: GetFilesAvatarInitialsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFilesAvatarInitials>>, TError, TData>>, request?: SecondParameter<typeof customSystemShareFetch>}
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getGetFilesAvatarInitialsQueryKey(params)
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getFilesAvatarInitials>>> = ({ signal }) =>
-    getFilesAvatarInitials(params, { signal, ...requestOptions })
+  const queryKey =  queryOptions?.queryKey ?? getGetFilesAvatarInitialsQueryKey(params);
 
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getFilesAvatarInitials>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getFilesAvatarInitials>>> = ({ signal }) => getFilesAvatarInitials(params, { signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getFilesAvatarInitials>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetFilesAvatarInitialsQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getFilesAvatarInitials>>
->
+export type GetFilesAvatarInitialsQueryResult = NonNullable<Awaited<ReturnType<typeof getFilesAvatarInitials>>>
 export type GetFilesAvatarInitialsQueryError = unknown
 
-export function useGetFilesAvatarInitials<
-  TData = Awaited<ReturnType<typeof getFilesAvatarInitials>>,
-  TError = unknown,
->(
-  params: undefined | GetFilesAvatarInitialsParams,
-  options: {
-    query: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getFilesAvatarInitials>>, TError, TData>
-    > &
-      Pick<
+
+export function useGetFilesAvatarInitials<TData = Awaited<ReturnType<typeof getFilesAvatarInitials>>, TError = unknown>(
+ params: undefined |  GetFilesAvatarInitialsParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFilesAvatarInitials>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getFilesAvatarInitials>>,
           TError,
           Awaited<ReturnType<typeof getFilesAvatarInitials>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof customSystemShareFetch>
-  },
-  queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetFilesAvatarInitials<
-  TData = Awaited<ReturnType<typeof getFilesAvatarInitials>>,
-  TError = unknown,
->(
-  params?: GetFilesAvatarInitialsParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getFilesAvatarInitials>>, TError, TData>
-    > &
-      Pick<
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customSystemShareFetch>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetFilesAvatarInitials<TData = Awaited<ReturnType<typeof getFilesAvatarInitials>>, TError = unknown>(
+ params?: GetFilesAvatarInitialsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFilesAvatarInitials>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getFilesAvatarInitials>>,
           TError,
           Awaited<ReturnType<typeof getFilesAvatarInitials>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof customSystemShareFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetFilesAvatarInitials<
-  TData = Awaited<ReturnType<typeof getFilesAvatarInitials>>,
-  TError = unknown,
->(
-  params?: GetFilesAvatarInitialsParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getFilesAvatarInitials>>, TError, TData>
-    >
-    request?: SecondParameter<typeof customSystemShareFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customSystemShareFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetFilesAvatarInitials<TData = Awaited<ReturnType<typeof getFilesAvatarInitials>>, TError = unknown>(
+ params?: GetFilesAvatarInitialsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFilesAvatarInitials>>, TError, TData>>, request?: SecondParameter<typeof customSystemShareFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Lấy avatar khởi tạo
  */
 
-export function useGetFilesAvatarInitials<
-  TData = Awaited<ReturnType<typeof getFilesAvatarInitials>>,
-  TError = unknown,
->(
-  params?: GetFilesAvatarInitialsParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getFilesAvatarInitials>>, TError, TData>
-    >
-    request?: SecondParameter<typeof customSystemShareFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetFilesAvatarInitialsQueryOptions(params, options)
+export function useGetFilesAvatarInitials<TData = Awaited<ReturnType<typeof getFilesAvatarInitials>>, TError = unknown>(
+ params?: GetFilesAvatarInitialsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFilesAvatarInitials>>, TError, TData>>, request?: SecondParameter<typeof customSystemShareFetch>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData, TError>
-  }
+  const queryOptions = getGetFilesAvatarInitialsQueryOptions(params,options)
 
-  query.queryKey = queryOptions.queryKey
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  return query
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
 }
+
+
+
+
 
 /**
  * Upload single file
@@ -650,140 +508,97 @@ export type postFilesSingleStorageTypeResponse200 = {
   data: void
   status: 200
 }
+    
+export type postFilesSingleStorageTypeResponseSuccess = (postFilesSingleStorageTypeResponse200) & {
+  headers: Headers;
+};
+;
 
-export type postFilesSingleStorageTypeResponseSuccess = postFilesSingleStorageTypeResponse200 & {
-  headers: Headers
-}
+export type postFilesSingleStorageTypeResponse = (postFilesSingleStorageTypeResponseSuccess)
 
-export type postFilesSingleStorageTypeResponse = postFilesSingleStorageTypeResponseSuccess
-
-export const getPostFilesSingleStorageTypeUrl = (
-  storageType: number,
-  params?: PostFilesSingleStorageTypeParams
-) => {
-  const normalizedParams = new URLSearchParams()
+export const getPostFilesSingleStorageTypeUrl = (storageType: number,
+    params?: PostFilesSingleStorageTypeParams,) => {
+  const normalizedParams = new URLSearchParams();
 
   Object.entries(params || {}).forEach(([key, value]) => {
+    
     if (value !== undefined) {
-      normalizedParams.append(key, value === null ? "null" : value.toString())
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
     }
-  })
+  });
 
-  const stringifiedParams = normalizedParams.toString()
+  const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0
-    ? `/Files/single/${storageType}?${stringifiedParams}`
-    : `/Files/single/${storageType}`
+  return stringifiedParams.length > 0 ? `/Files/single/${storageType}?${stringifiedParams}` : `/Files/single/${storageType}`
 }
 
-export const postFilesSingleStorageType = async (
-  storageType: number,
-  postFilesSingleStorageTypeBody: PostFilesSingleStorageTypeBody,
-  params?: PostFilesSingleStorageTypeParams,
-  options?: RequestInit
-): Promise<postFilesSingleStorageTypeResponse> => {
-  const formData = new FormData()
-  if (postFilesSingleStorageTypeBody.file !== undefined) {
-    formData.append(`file`, postFilesSingleStorageTypeBody.file)
+export const postFilesSingleStorageType = async (storageType: number,
+    postFilesSingleStorageTypeBody: PostFilesSingleStorageTypeBody,
+    params?: PostFilesSingleStorageTypeParams, options?: RequestInit): Promise<postFilesSingleStorageTypeResponse> => {
+    const formData = new FormData();
+if(postFilesSingleStorageTypeBody.file !== undefined) {
+ formData.append(`file`, postFilesSingleStorageTypeBody.file)
+ }
+
+  return customSystemShareFetch<postFilesSingleStorageTypeResponse>(getPostFilesSingleStorageTypeUrl(storageType,params),
+  {      
+    ...options,
+    method: 'POST'
+    ,
+    body: 
+      formData,
   }
+);}
 
-  return customSystemShareFetch<postFilesSingleStorageTypeResponse>(
-    getPostFilesSingleStorageTypeUrl(storageType, params),
-    {
-      ...options,
-      method: "POST",
-      body: formData,
-    }
-  )
-}
 
-export const getPostFilesSingleStorageTypeMutationOptions = <
-  TError = unknown,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postFilesSingleStorageType>>,
-    TError,
-    {
-      storageType: number
-      data: PostFilesSingleStorageTypeBody
-      params?: PostFilesSingleStorageTypeParams
-    },
-    TContext
-  >
-  request?: SecondParameter<typeof customSystemShareFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postFilesSingleStorageType>>,
-  TError,
-  {
-    storageType: number
-    data: PostFilesSingleStorageTypeBody
-    params?: PostFilesSingleStorageTypeParams
-  },
-  TContext
-> => {
-  const mutationKey = ["postFilesSingleStorageType"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postFilesSingleStorageType>>,
-    {
-      storageType: number
-      data: PostFilesSingleStorageTypeBody
-      params?: PostFilesSingleStorageTypeParams
-    }
-  > = (props) => {
-    const { storageType, data, params } = props ?? {}
 
-    return postFilesSingleStorageType(storageType, data, params, requestOptions)
-  }
+export const getPostFilesSingleStorageTypeMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postFilesSingleStorageType>>, TError,{storageType: number;data: PostFilesSingleStorageTypeBody;params?: PostFilesSingleStorageTypeParams}, TContext>, request?: SecondParameter<typeof customSystemShareFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof postFilesSingleStorageType>>, TError,{storageType: number;data: PostFilesSingleStorageTypeBody;params?: PostFilesSingleStorageTypeParams}, TContext> => {
 
-  return { mutationFn, ...mutationOptions }
-}
+const mutationKey = ['postFilesSingleStorageType'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
-export type PostFilesSingleStorageTypeMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postFilesSingleStorageType>>
->
-export type PostFilesSingleStorageTypeMutationBody = PostFilesSingleStorageTypeBody
-export type PostFilesSingleStorageTypeMutationError = unknown
+      
 
-/**
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postFilesSingleStorageType>>, {storageType: number;data: PostFilesSingleStorageTypeBody;params?: PostFilesSingleStorageTypeParams}> = (props) => {
+          const {storageType,data,params} = props ?? {};
+
+          return  postFilesSingleStorageType(storageType,data,params,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostFilesSingleStorageTypeMutationResult = NonNullable<Awaited<ReturnType<typeof postFilesSingleStorageType>>>
+    export type PostFilesSingleStorageTypeMutationBody = PostFilesSingleStorageTypeBody
+    export type PostFilesSingleStorageTypeMutationError = unknown
+
+    /**
  * @summary Upload single file
  */
-export const usePostFilesSingleStorageType = <TError = unknown, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postFilesSingleStorageType>>,
-      TError,
-      {
-        storageType: number
-        data: PostFilesSingleStorageTypeBody
-        params?: PostFilesSingleStorageTypeParams
-      },
-      TContext
-    >
-    request?: SecondParameter<typeof customSystemShareFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postFilesSingleStorageType>>,
-  TError,
-  {
-    storageType: number
-    data: PostFilesSingleStorageTypeBody
-    params?: PostFilesSingleStorageTypeParams
-  },
-  TContext
-> => {
-  const mutationOptions = getPostFilesSingleStorageTypeMutationOptions(options)
+export const usePostFilesSingleStorageType = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postFilesSingleStorageType>>, TError,{storageType: number;data: PostFilesSingleStorageTypeBody;params?: PostFilesSingleStorageTypeParams}, TContext>, request?: SecondParameter<typeof customSystemShareFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postFilesSingleStorageType>>,
+        TError,
+        {storageType: number;data: PostFilesSingleStorageTypeBody;params?: PostFilesSingleStorageTypeParams},
+        TContext
+      > => {
 
-  return useMutation(mutationOptions, queryClient)
-}
+      const mutationOptions = getPostFilesSingleStorageTypeMutationOptions(options);
 
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 /**
  * Xóa single file
  * @summary Xóa single file
@@ -792,137 +607,93 @@ export type deleteFilesDeleteSingleStorageTypeFileNameResponse200 = {
   data: void
   status: 200
 }
+    
+export type deleteFilesDeleteSingleStorageTypeFileNameResponseSuccess = (deleteFilesDeleteSingleStorageTypeFileNameResponse200) & {
+  headers: Headers;
+};
+;
 
-export type deleteFilesDeleteSingleStorageTypeFileNameResponseSuccess =
-  deleteFilesDeleteSingleStorageTypeFileNameResponse200 & {
-    headers: Headers
-  }
+export type deleteFilesDeleteSingleStorageTypeFileNameResponse = (deleteFilesDeleteSingleStorageTypeFileNameResponseSuccess)
 
-export type deleteFilesDeleteSingleStorageTypeFileNameResponse =
-  deleteFilesDeleteSingleStorageTypeFileNameResponseSuccess
-
-export const getDeleteFilesDeleteSingleStorageTypeFileNameUrl = (
-  storageType: number,
-  fileName: string,
-  params?: DeleteFilesDeleteSingleStorageTypeFileNameParams
-) => {
-  const normalizedParams = new URLSearchParams()
+export const getDeleteFilesDeleteSingleStorageTypeFileNameUrl = (storageType: number,
+    fileName: string,
+    params?: DeleteFilesDeleteSingleStorageTypeFileNameParams,) => {
+  const normalizedParams = new URLSearchParams();
 
   Object.entries(params || {}).forEach(([key, value]) => {
+    
     if (value !== undefined) {
-      normalizedParams.append(key, value === null ? "null" : value.toString())
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
     }
-  })
+  });
 
-  const stringifiedParams = normalizedParams.toString()
+  const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0
-    ? `/Files/delete-single/${storageType}/${fileName}?${stringifiedParams}`
-    : `/Files/delete-single/${storageType}/${fileName}`
+  return stringifiedParams.length > 0 ? `/Files/delete-single/${storageType}/${fileName}?${stringifiedParams}` : `/Files/delete-single/${storageType}/${fileName}`
 }
 
-export const deleteFilesDeleteSingleStorageTypeFileName = async (
-  storageType: number,
-  fileName: string,
-  params?: DeleteFilesDeleteSingleStorageTypeFileNameParams,
-  options?: RequestInit
-): Promise<deleteFilesDeleteSingleStorageTypeFileNameResponse> => {
-  return customSystemShareFetch<deleteFilesDeleteSingleStorageTypeFileNameResponse>(
-    getDeleteFilesDeleteSingleStorageTypeFileNameUrl(storageType, fileName, params),
-    {
-      ...options,
-      method: "DELETE",
-    }
-  )
-}
-
-export const getDeleteFilesDeleteSingleStorageTypeFileNameMutationOptions = <
-  TError = unknown,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof deleteFilesDeleteSingleStorageTypeFileName>>,
-    TError,
-    {
-      storageType: number
-      fileName: string
-      params?: DeleteFilesDeleteSingleStorageTypeFileNameParams
-    },
-    TContext
-  >
-  request?: SecondParameter<typeof customSystemShareFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof deleteFilesDeleteSingleStorageTypeFileName>>,
-  TError,
-  {
-    storageType: number
-    fileName: string
-    params?: DeleteFilesDeleteSingleStorageTypeFileNameParams
-  },
-  TContext
-> => {
-  const mutationKey = ["deleteFilesDeleteSingleStorageTypeFileName"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof deleteFilesDeleteSingleStorageTypeFileName>>,
-    {
-      storageType: number
-      fileName: string
-      params?: DeleteFilesDeleteSingleStorageTypeFileNameParams
-    }
-  > = (props) => {
-    const { storageType, fileName, params } = props ?? {}
-
-    return deleteFilesDeleteSingleStorageTypeFileName(storageType, fileName, params, requestOptions)
+export const deleteFilesDeleteSingleStorageTypeFileName = async (storageType: number,
+    fileName: string,
+    params?: DeleteFilesDeleteSingleStorageTypeFileNameParams, options?: RequestInit): Promise<deleteFilesDeleteSingleStorageTypeFileNameResponse> => {
+  
+  return customSystemShareFetch<deleteFilesDeleteSingleStorageTypeFileNameResponse>(getDeleteFilesDeleteSingleStorageTypeFileNameUrl(storageType,fileName,params),
+  {      
+    ...options,
+    method: 'DELETE'
+    
+    
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type DeleteFilesDeleteSingleStorageTypeFileNameMutationResult = NonNullable<
-  Awaited<ReturnType<typeof deleteFilesDeleteSingleStorageTypeFileName>>
->
 
-export type DeleteFilesDeleteSingleStorageTypeFileNameMutationError = unknown
 
-/**
+export const getDeleteFilesDeleteSingleStorageTypeFileNameMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteFilesDeleteSingleStorageTypeFileName>>, TError,{storageType: number;fileName: string;params?: DeleteFilesDeleteSingleStorageTypeFileNameParams}, TContext>, request?: SecondParameter<typeof customSystemShareFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof deleteFilesDeleteSingleStorageTypeFileName>>, TError,{storageType: number;fileName: string;params?: DeleteFilesDeleteSingleStorageTypeFileNameParams}, TContext> => {
+
+const mutationKey = ['deleteFilesDeleteSingleStorageTypeFileName'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteFilesDeleteSingleStorageTypeFileName>>, {storageType: number;fileName: string;params?: DeleteFilesDeleteSingleStorageTypeFileNameParams}> = (props) => {
+          const {storageType,fileName,params} = props ?? {};
+
+          return  deleteFilesDeleteSingleStorageTypeFileName(storageType,fileName,params,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteFilesDeleteSingleStorageTypeFileNameMutationResult = NonNullable<Awaited<ReturnType<typeof deleteFilesDeleteSingleStorageTypeFileName>>>
+    
+    export type DeleteFilesDeleteSingleStorageTypeFileNameMutationError = unknown
+
+    /**
  * @summary Xóa single file
  */
-export const useDeleteFilesDeleteSingleStorageTypeFileName = <TError = unknown, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof deleteFilesDeleteSingleStorageTypeFileName>>,
-      TError,
-      {
-        storageType: number
-        fileName: string
-        params?: DeleteFilesDeleteSingleStorageTypeFileNameParams
-      },
-      TContext
-    >
-    request?: SecondParameter<typeof customSystemShareFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof deleteFilesDeleteSingleStorageTypeFileName>>,
-  TError,
-  {
-    storageType: number
-    fileName: string
-    params?: DeleteFilesDeleteSingleStorageTypeFileNameParams
-  },
-  TContext
-> => {
-  const mutationOptions = getDeleteFilesDeleteSingleStorageTypeFileNameMutationOptions(options)
+export const useDeleteFilesDeleteSingleStorageTypeFileName = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteFilesDeleteSingleStorageTypeFileName>>, TError,{storageType: number;fileName: string;params?: DeleteFilesDeleteSingleStorageTypeFileNameParams}, TContext>, request?: SecondParameter<typeof customSystemShareFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof deleteFilesDeleteSingleStorageTypeFileName>>,
+        TError,
+        {storageType: number;fileName: string;params?: DeleteFilesDeleteSingleStorageTypeFileNameParams},
+        TContext
+      > => {
 
-  return useMutation(mutationOptions, queryClient)
-}
+      const mutationOptions = getDeleteFilesDeleteSingleStorageTypeFileNameMutationOptions(options);
 
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 /**
  * Kiểm tra tình trạng API
  * @summary Kiểm tra tình trạng API
@@ -931,1414 +702,1209 @@ export type getFilesHealthzResponse200 = {
   data: void
   status: 200
 }
+    
+export type getFilesHealthzResponseSuccess = (getFilesHealthzResponse200) & {
+  headers: Headers;
+};
+;
 
-export type getFilesHealthzResponseSuccess = getFilesHealthzResponse200 & {
-  headers: Headers
-}
-
-export type getFilesHealthzResponse = getFilesHealthzResponseSuccess
+export type getFilesHealthzResponse = (getFilesHealthzResponseSuccess)
 
 export const getGetFilesHealthzUrl = () => {
+
+
+  
+
   return `/Files/healthz`
 }
 
-export const getFilesHealthz = async (options?: RequestInit): Promise<getFilesHealthzResponse> => {
-  return customSystemShareFetch<getFilesHealthzResponse>(getGetFilesHealthzUrl(), {
+export const getFilesHealthz = async ( options?: RequestInit): Promise<getFilesHealthzResponse> => {
+  
+  return customSystemShareFetch<getFilesHealthzResponse>(getGetFilesHealthzUrl(),
+  {      
     ...options,
-    method: "GET",
-  })
-}
+    method: 'GET'
+    
+    
+  }
+);}
+
+
+
+
 
 export const getGetFilesHealthzQueryKey = () => {
-  return [`/Files/healthz`] as const
-}
+    return [
+    `/Files/healthz`
+    ] as const;
+    }
 
-export const getGetFilesHealthzQueryOptions = <
-  TData = Awaited<ReturnType<typeof getFilesHealthz>>,
-  TError = unknown,
->(options?: {
-  query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getFilesHealthz>>, TError, TData>>
-  request?: SecondParameter<typeof customSystemShareFetch>
-}) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {}
+    
+export const getGetFilesHealthzQueryOptions = <TData = Awaited<ReturnType<typeof getFilesHealthz>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFilesHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemShareFetch>}
+) => {
 
-  const queryKey = queryOptions?.queryKey ?? getGetFilesHealthzQueryKey()
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getFilesHealthz>>> = ({ signal }) =>
-    getFilesHealthz({ signal, ...requestOptions })
+  const queryKey =  queryOptions?.queryKey ?? getGetFilesHealthzQueryKey();
 
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getFilesHealthz>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getFilesHealthz>>> = ({ signal }) => getFilesHealthz({ signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getFilesHealthz>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type GetFilesHealthzQueryResult = NonNullable<Awaited<ReturnType<typeof getFilesHealthz>>>
 export type GetFilesHealthzQueryError = unknown
 
-export function useGetFilesHealthz<
-  TData = Awaited<ReturnType<typeof getFilesHealthz>>,
-  TError = unknown,
->(
-  options: {
-    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getFilesHealthz>>, TError, TData>> &
-      Pick<
+
+export function useGetFilesHealthz<TData = Awaited<ReturnType<typeof getFilesHealthz>>, TError = unknown>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFilesHealthz>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getFilesHealthz>>,
           TError,
           Awaited<ReturnType<typeof getFilesHealthz>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof customSystemShareFetch>
-  },
-  queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetFilesHealthz<
-  TData = Awaited<ReturnType<typeof getFilesHealthz>>,
-  TError = unknown,
->(
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getFilesHealthz>>, TError, TData>> &
-      Pick<
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customSystemShareFetch>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetFilesHealthz<TData = Awaited<ReturnType<typeof getFilesHealthz>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFilesHealthz>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getFilesHealthz>>,
           TError,
           Awaited<ReturnType<typeof getFilesHealthz>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof customSystemShareFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetFilesHealthz<
-  TData = Awaited<ReturnType<typeof getFilesHealthz>>,
-  TError = unknown,
->(
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getFilesHealthz>>, TError, TData>>
-    request?: SecondParameter<typeof customSystemShareFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customSystemShareFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetFilesHealthz<TData = Awaited<ReturnType<typeof getFilesHealthz>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFilesHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemShareFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Kiểm tra tình trạng API
  */
 
-export function useGetFilesHealthz<
-  TData = Awaited<ReturnType<typeof getFilesHealthz>>,
-  TError = unknown,
->(
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getFilesHealthz>>, TError, TData>>
-    request?: SecondParameter<typeof customSystemShareFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetFilesHealthz<TData = Awaited<ReturnType<typeof getFilesHealthz>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFilesHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemShareFetch>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
   const queryOptions = getGetFilesHealthzQueryOptions(options)
 
-  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData, TError>
-  }
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  query.queryKey = queryOptions.queryKey
+  query.queryKey = queryOptions.queryKey ;
 
-  return query
+  return query;
 }
+
+
+
+
 
 export type getNhanviensResponse200 = {
   data: void
   status: 200
 }
+    
+export type getNhanviensResponseSuccess = (getNhanviensResponse200) & {
+  headers: Headers;
+};
+;
 
-export type getNhanviensResponseSuccess = getNhanviensResponse200 & {
-  headers: Headers
-}
-
-export type getNhanviensResponse = getNhanviensResponseSuccess
+export type getNhanviensResponse = (getNhanviensResponseSuccess)
 
 export const getGetNhanviensUrl = () => {
+
+
+  
+
   return `/Nhanviens`
 }
 
-export const getNhanviens = async (options?: RequestInit): Promise<getNhanviensResponse> => {
-  return customSystemShareFetch<getNhanviensResponse>(getGetNhanviensUrl(), {
+export const getNhanviens = async ( options?: RequestInit): Promise<getNhanviensResponse> => {
+  
+  return customSystemShareFetch<getNhanviensResponse>(getGetNhanviensUrl(),
+  {      
     ...options,
-    method: "GET",
-  })
-}
+    method: 'GET'
+    
+    
+  }
+);}
+
+
+
+
 
 export const getGetNhanviensQueryKey = () => {
-  return [`/Nhanviens`] as const
-}
+    return [
+    `/Nhanviens`
+    ] as const;
+    }
 
-export const getGetNhanviensQueryOptions = <
-  TData = Awaited<ReturnType<typeof getNhanviens>>,
-  TError = unknown,
->(options?: {
-  query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getNhanviens>>, TError, TData>>
-  request?: SecondParameter<typeof customSystemShareFetch>
-}) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {}
+    
+export const getGetNhanviensQueryOptions = <TData = Awaited<ReturnType<typeof getNhanviens>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNhanviens>>, TError, TData>>, request?: SecondParameter<typeof customSystemShareFetch>}
+) => {
 
-  const queryKey = queryOptions?.queryKey ?? getGetNhanviensQueryKey()
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getNhanviens>>> = ({ signal }) =>
-    getNhanviens({ signal, ...requestOptions })
+  const queryKey =  queryOptions?.queryKey ?? getGetNhanviensQueryKey();
 
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getNhanviens>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getNhanviens>>> = ({ signal }) => getNhanviens({ signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getNhanviens>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type GetNhanviensQueryResult = NonNullable<Awaited<ReturnType<typeof getNhanviens>>>
 export type GetNhanviensQueryError = unknown
 
+
 export function useGetNhanviens<TData = Awaited<ReturnType<typeof getNhanviens>>, TError = unknown>(
-  options: {
-    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getNhanviens>>, TError, TData>> &
-      Pick<
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNhanviens>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getNhanviens>>,
           TError,
           Awaited<ReturnType<typeof getNhanviens>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof customSystemShareFetch>
-  },
-  queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customSystemShareFetch>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetNhanviens<TData = Awaited<ReturnType<typeof getNhanviens>>, TError = unknown>(
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getNhanviens>>, TError, TData>> &
-      Pick<
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNhanviens>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getNhanviens>>,
           TError,
           Awaited<ReturnType<typeof getNhanviens>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof customSystemShareFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customSystemShareFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetNhanviens<TData = Awaited<ReturnType<typeof getNhanviens>>, TError = unknown>(
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getNhanviens>>, TError, TData>>
-    request?: SecondParameter<typeof customSystemShareFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNhanviens>>, TError, TData>>, request?: SecondParameter<typeof customSystemShareFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
 export function useGetNhanviens<TData = Awaited<ReturnType<typeof getNhanviens>>, TError = unknown>(
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getNhanviens>>, TError, TData>>
-    request?: SecondParameter<typeof customSystemShareFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNhanviens>>, TError, TData>>, request?: SecondParameter<typeof customSystemShareFetch>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
   const queryOptions = getGetNhanviensQueryOptions(options)
 
-  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData, TError>
-  }
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  query.queryKey = queryOptions.queryKey
+  query.queryKey = queryOptions.queryKey ;
 
-  return query
+  return query;
 }
+
+
+
+
 
 export type postNhanviensIdResponse200 = {
   data: void
   status: 200
 }
+    
+export type postNhanviensIdResponseSuccess = (postNhanviensIdResponse200) & {
+  headers: Headers;
+};
+;
 
-export type postNhanviensIdResponseSuccess = postNhanviensIdResponse200 & {
-  headers: Headers
-}
+export type postNhanviensIdResponse = (postNhanviensIdResponseSuccess)
 
-export type postNhanviensIdResponse = postNhanviensIdResponseSuccess
+export const getPostNhanviensIdUrl = (id: string,) => {
 
-export const getPostNhanviensIdUrl = (id: string) => {
+
+  
+
   return `/Nhanviens/${id}`
 }
 
-export const postNhanviensId = async (
-  id: string,
-  nhanVienPatchDto: NhanVienPatchDto,
-  options?: RequestInit
-): Promise<postNhanviensIdResponse> => {
-  return customSystemShareFetch<postNhanviensIdResponse>(getPostNhanviensIdUrl(id), {
+export const postNhanviensId = async (id: string,
+    nhanVienPatchDto: NhanVienPatchDto, options?: RequestInit): Promise<postNhanviensIdResponse> => {
+  
+  return customSystemShareFetch<postNhanviensIdResponse>(getPostNhanviensIdUrl(id),
+  {      
     ...options,
-    method: "POST",
-    headers: { "Content-Type": "application/json-patch+json", ...options?.headers },
-    body: JSON.stringify(nhanVienPatchDto),
-  })
-}
-
-export const getPostNhanviensIdMutationOptions = <TError = unknown, TContext = unknown>(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postNhanviensId>>,
-    TError,
-    { id: string; data: NhanVienPatchDto },
-    TContext
-  >
-  request?: SecondParameter<typeof customSystemShareFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postNhanviensId>>,
-  TError,
-  { id: string; data: NhanVienPatchDto },
-  TContext
-> => {
-  const mutationKey = ["postNhanviensId"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postNhanviensId>>,
-    { id: string; data: NhanVienPatchDto }
-  > = (props) => {
-    const { id, data } = props ?? {}
-
-    return postNhanviensId(id, data, requestOptions)
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json-patch+json', ...options?.headers },
+    body: JSON.stringify(
+      nhanVienPatchDto,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type PostNhanviensIdMutationResult = NonNullable<Awaited<ReturnType<typeof postNhanviensId>>>
-export type PostNhanviensIdMutationBody = NhanVienPatchDto
-export type PostNhanviensIdMutationError = unknown
 
-export const usePostNhanviensId = <TError = unknown, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postNhanviensId>>,
-      TError,
-      { id: string; data: NhanVienPatchDto },
-      TContext
-    >
-    request?: SecondParameter<typeof customSystemShareFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postNhanviensId>>,
-  TError,
-  { id: string; data: NhanVienPatchDto },
-  TContext
-> => {
-  const mutationOptions = getPostNhanviensIdMutationOptions(options)
 
-  return useMutation(mutationOptions, queryClient)
-}
+export const getPostNhanviensIdMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postNhanviensId>>, TError,{id: string;data: NhanVienPatchDto}, TContext>, request?: SecondParameter<typeof customSystemShareFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof postNhanviensId>>, TError,{id: string;data: NhanVienPatchDto}, TContext> => {
 
+const mutationKey = ['postNhanviensId'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postNhanviensId>>, {id: string;data: NhanVienPatchDto}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  postNhanviensId(id,data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostNhanviensIdMutationResult = NonNullable<Awaited<ReturnType<typeof postNhanviensId>>>
+    export type PostNhanviensIdMutationBody = NhanVienPatchDto
+    export type PostNhanviensIdMutationError = unknown
+
+    export const usePostNhanviensId = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postNhanviensId>>, TError,{id: string;data: NhanVienPatchDto}, TContext>, request?: SecondParameter<typeof customSystemShareFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postNhanviensId>>,
+        TError,
+        {id: string;data: NhanVienPatchDto},
+        TContext
+      > => {
+
+      const mutationOptions = getPostNhanviensIdMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 export type getNhanviensEditIdResponse200 = {
   data: void
   status: 200
 }
+    
+export type getNhanviensEditIdResponseSuccess = (getNhanviensEditIdResponse200) & {
+  headers: Headers;
+};
+;
 
-export type getNhanviensEditIdResponseSuccess = getNhanviensEditIdResponse200 & {
-  headers: Headers
-}
+export type getNhanviensEditIdResponse = (getNhanviensEditIdResponseSuccess)
 
-export type getNhanviensEditIdResponse = getNhanviensEditIdResponseSuccess
+export const getGetNhanviensEditIdUrl = (id: string,) => {
 
-export const getGetNhanviensEditIdUrl = (id: string) => {
+
+  
+
   return `/Nhanviens/edit/${id}`
 }
 
-export const getNhanviensEditId = async (
-  id: string,
-  options?: RequestInit
-): Promise<getNhanviensEditIdResponse> => {
-  return customSystemShareFetch<getNhanviensEditIdResponse>(getGetNhanviensEditIdUrl(id), {
+export const getNhanviensEditId = async (id: string, options?: RequestInit): Promise<getNhanviensEditIdResponse> => {
+  
+  return customSystemShareFetch<getNhanviensEditIdResponse>(getGetNhanviensEditIdUrl(id),
+  {      
     ...options,
-    method: "GET",
-  })
-}
-
-export const getGetNhanviensEditIdQueryKey = (id?: string) => {
-  return [`/Nhanviens/edit/${id}`] as const
-}
-
-export const getGetNhanviensEditIdQueryOptions = <
-  TData = Awaited<ReturnType<typeof getNhanviensEditId>>,
-  TError = unknown,
->(
-  id: string,
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getNhanviensEditId>>, TError, TData>>
-    request?: SecondParameter<typeof customSystemShareFetch>
+    method: 'GET'
+    
+    
   }
+);}
+
+
+
+
+
+export const getGetNhanviensEditIdQueryKey = (id?: string,) => {
+    return [
+    `/Nhanviens/edit/${id}`
+    ] as const;
+    }
+
+    
+export const getGetNhanviensEditIdQueryOptions = <TData = Awaited<ReturnType<typeof getNhanviensEditId>>, TError = unknown>(id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNhanviensEditId>>, TError, TData>>, request?: SecondParameter<typeof customSystemShareFetch>}
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getGetNhanviensEditIdQueryKey(id)
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getNhanviensEditId>>> = ({ signal }) =>
-    getNhanviensEditId(id, { signal, ...requestOptions })
+  const queryKey =  queryOptions?.queryKey ?? getGetNhanviensEditIdQueryKey(id);
 
-  return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getNhanviensEditId>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getNhanviensEditId>>> = ({ signal }) => getNhanviensEditId(id, { signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getNhanviensEditId>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetNhanviensEditIdQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getNhanviensEditId>>
->
+export type GetNhanviensEditIdQueryResult = NonNullable<Awaited<ReturnType<typeof getNhanviensEditId>>>
 export type GetNhanviensEditIdQueryError = unknown
 
-export function useGetNhanviensEditId<
-  TData = Awaited<ReturnType<typeof getNhanviensEditId>>,
-  TError = unknown,
->(
-  id: string,
-  options: {
-    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getNhanviensEditId>>, TError, TData>> &
-      Pick<
+
+export function useGetNhanviensEditId<TData = Awaited<ReturnType<typeof getNhanviensEditId>>, TError = unknown>(
+ id: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNhanviensEditId>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getNhanviensEditId>>,
           TError,
           Awaited<ReturnType<typeof getNhanviensEditId>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof customSystemShareFetch>
-  },
-  queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetNhanviensEditId<
-  TData = Awaited<ReturnType<typeof getNhanviensEditId>>,
-  TError = unknown,
->(
-  id: string,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getNhanviensEditId>>, TError, TData>
-    > &
-      Pick<
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customSystemShareFetch>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetNhanviensEditId<TData = Awaited<ReturnType<typeof getNhanviensEditId>>, TError = unknown>(
+ id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNhanviensEditId>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getNhanviensEditId>>,
           TError,
           Awaited<ReturnType<typeof getNhanviensEditId>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof customSystemShareFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetNhanviensEditId<
-  TData = Awaited<ReturnType<typeof getNhanviensEditId>>,
-  TError = unknown,
->(
-  id: string,
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getNhanviensEditId>>, TError, TData>>
-    request?: SecondParameter<typeof customSystemShareFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customSystemShareFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetNhanviensEditId<TData = Awaited<ReturnType<typeof getNhanviensEditId>>, TError = unknown>(
+ id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNhanviensEditId>>, TError, TData>>, request?: SecondParameter<typeof customSystemShareFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetNhanviensEditId<
-  TData = Awaited<ReturnType<typeof getNhanviensEditId>>,
-  TError = unknown,
->(
-  id: string,
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getNhanviensEditId>>, TError, TData>>
-    request?: SecondParameter<typeof customSystemShareFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetNhanviensEditIdQueryOptions(id, options)
+export function useGetNhanviensEditId<TData = Awaited<ReturnType<typeof getNhanviensEditId>>, TError = unknown>(
+ id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNhanviensEditId>>, TError, TData>>, request?: SecondParameter<typeof customSystemShareFetch>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData, TError>
-  }
+  const queryOptions = getGetNhanviensEditIdQueryOptions(id,options)
 
-  query.queryKey = queryOptions.queryKey
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  return query
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
 }
+
+
+
+
 
 export type getNhanviensDuplicateIdResponse200 = {
   data: void
   status: 200
 }
+    
+export type getNhanviensDuplicateIdResponseSuccess = (getNhanviensDuplicateIdResponse200) & {
+  headers: Headers;
+};
+;
 
-export type getNhanviensDuplicateIdResponseSuccess = getNhanviensDuplicateIdResponse200 & {
-  headers: Headers
-}
+export type getNhanviensDuplicateIdResponse = (getNhanviensDuplicateIdResponseSuccess)
 
-export type getNhanviensDuplicateIdResponse = getNhanviensDuplicateIdResponseSuccess
+export const getGetNhanviensDuplicateIdUrl = (id: string,) => {
 
-export const getGetNhanviensDuplicateIdUrl = (id: string) => {
+
+  
+
   return `/Nhanviens/duplicate/${id}`
 }
 
-export const getNhanviensDuplicateId = async (
-  id: string,
-  options?: RequestInit
-): Promise<getNhanviensDuplicateIdResponse> => {
-  return customSystemShareFetch<getNhanviensDuplicateIdResponse>(
-    getGetNhanviensDuplicateIdUrl(id),
-    {
-      ...options,
-      method: "GET",
-    }
-  )
-}
-
-export const getGetNhanviensDuplicateIdQueryKey = (id?: string) => {
-  return [`/Nhanviens/duplicate/${id}`] as const
-}
-
-export const getGetNhanviensDuplicateIdQueryOptions = <
-  TData = Awaited<ReturnType<typeof getNhanviensDuplicateId>>,
-  TError = unknown,
->(
-  id: string,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getNhanviensDuplicateId>>, TError, TData>
-    >
-    request?: SecondParameter<typeof customSystemShareFetch>
+export const getNhanviensDuplicateId = async (id: string, options?: RequestInit): Promise<getNhanviensDuplicateIdResponse> => {
+  
+  return customSystemShareFetch<getNhanviensDuplicateIdResponse>(getGetNhanviensDuplicateIdUrl(id),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
   }
+);}
+
+
+
+
+
+export const getGetNhanviensDuplicateIdQueryKey = (id?: string,) => {
+    return [
+    `/Nhanviens/duplicate/${id}`
+    ] as const;
+    }
+
+    
+export const getGetNhanviensDuplicateIdQueryOptions = <TData = Awaited<ReturnType<typeof getNhanviensDuplicateId>>, TError = unknown>(id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNhanviensDuplicateId>>, TError, TData>>, request?: SecondParameter<typeof customSystemShareFetch>}
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getGetNhanviensDuplicateIdQueryKey(id)
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getNhanviensDuplicateId>>> = ({
-    signal,
-  }) => getNhanviensDuplicateId(id, { signal, ...requestOptions })
+  const queryKey =  queryOptions?.queryKey ?? getGetNhanviensDuplicateIdQueryKey(id);
 
-  return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getNhanviensDuplicateId>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getNhanviensDuplicateId>>> = ({ signal }) => getNhanviensDuplicateId(id, { signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getNhanviensDuplicateId>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetNhanviensDuplicateIdQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getNhanviensDuplicateId>>
->
+export type GetNhanviensDuplicateIdQueryResult = NonNullable<Awaited<ReturnType<typeof getNhanviensDuplicateId>>>
 export type GetNhanviensDuplicateIdQueryError = unknown
 
-export function useGetNhanviensDuplicateId<
-  TData = Awaited<ReturnType<typeof getNhanviensDuplicateId>>,
-  TError = unknown,
->(
-  id: string,
-  options: {
-    query: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getNhanviensDuplicateId>>, TError, TData>
-    > &
-      Pick<
+
+export function useGetNhanviensDuplicateId<TData = Awaited<ReturnType<typeof getNhanviensDuplicateId>>, TError = unknown>(
+ id: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNhanviensDuplicateId>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getNhanviensDuplicateId>>,
           TError,
           Awaited<ReturnType<typeof getNhanviensDuplicateId>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof customSystemShareFetch>
-  },
-  queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetNhanviensDuplicateId<
-  TData = Awaited<ReturnType<typeof getNhanviensDuplicateId>>,
-  TError = unknown,
->(
-  id: string,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getNhanviensDuplicateId>>, TError, TData>
-    > &
-      Pick<
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customSystemShareFetch>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetNhanviensDuplicateId<TData = Awaited<ReturnType<typeof getNhanviensDuplicateId>>, TError = unknown>(
+ id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNhanviensDuplicateId>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getNhanviensDuplicateId>>,
           TError,
           Awaited<ReturnType<typeof getNhanviensDuplicateId>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof customSystemShareFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetNhanviensDuplicateId<
-  TData = Awaited<ReturnType<typeof getNhanviensDuplicateId>>,
-  TError = unknown,
->(
-  id: string,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getNhanviensDuplicateId>>, TError, TData>
-    >
-    request?: SecondParameter<typeof customSystemShareFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customSystemShareFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetNhanviensDuplicateId<TData = Awaited<ReturnType<typeof getNhanviensDuplicateId>>, TError = unknown>(
+ id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNhanviensDuplicateId>>, TError, TData>>, request?: SecondParameter<typeof customSystemShareFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetNhanviensDuplicateId<
-  TData = Awaited<ReturnType<typeof getNhanviensDuplicateId>>,
-  TError = unknown,
->(
-  id: string,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getNhanviensDuplicateId>>, TError, TData>
-    >
-    request?: SecondParameter<typeof customSystemShareFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetNhanviensDuplicateIdQueryOptions(id, options)
+export function useGetNhanviensDuplicateId<TData = Awaited<ReturnType<typeof getNhanviensDuplicateId>>, TError = unknown>(
+ id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNhanviensDuplicateId>>, TError, TData>>, request?: SecondParameter<typeof customSystemShareFetch>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData, TError>
-  }
+  const queryOptions = getGetNhanviensDuplicateIdQueryOptions(id,options)
 
-  query.queryKey = queryOptions.queryKey
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  return query
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
 }
+
+
+
+
 
 export type getNhanviensNewResponse200 = {
   data: void
   status: 200
 }
+    
+export type getNhanviensNewResponseSuccess = (getNhanviensNewResponse200) & {
+  headers: Headers;
+};
+;
 
-export type getNhanviensNewResponseSuccess = getNhanviensNewResponse200 & {
-  headers: Headers
-}
-
-export type getNhanviensNewResponse = getNhanviensNewResponseSuccess
+export type getNhanviensNewResponse = (getNhanviensNewResponseSuccess)
 
 export const getGetNhanviensNewUrl = () => {
+
+
+  
+
   return `/Nhanviens/new`
 }
 
-export const getNhanviensNew = async (options?: RequestInit): Promise<getNhanviensNewResponse> => {
-  return customSystemShareFetch<getNhanviensNewResponse>(getGetNhanviensNewUrl(), {
+export const getNhanviensNew = async ( options?: RequestInit): Promise<getNhanviensNewResponse> => {
+  
+  return customSystemShareFetch<getNhanviensNewResponse>(getGetNhanviensNewUrl(),
+  {      
     ...options,
-    method: "GET",
-  })
-}
+    method: 'GET'
+    
+    
+  }
+);}
+
+
+
+
 
 export const getGetNhanviensNewQueryKey = () => {
-  return [`/Nhanviens/new`] as const
-}
+    return [
+    `/Nhanviens/new`
+    ] as const;
+    }
 
-export const getGetNhanviensNewQueryOptions = <
-  TData = Awaited<ReturnType<typeof getNhanviensNew>>,
-  TError = unknown,
->(options?: {
-  query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getNhanviensNew>>, TError, TData>>
-  request?: SecondParameter<typeof customSystemShareFetch>
-}) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {}
+    
+export const getGetNhanviensNewQueryOptions = <TData = Awaited<ReturnType<typeof getNhanviensNew>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNhanviensNew>>, TError, TData>>, request?: SecondParameter<typeof customSystemShareFetch>}
+) => {
 
-  const queryKey = queryOptions?.queryKey ?? getGetNhanviensNewQueryKey()
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getNhanviensNew>>> = ({ signal }) =>
-    getNhanviensNew({ signal, ...requestOptions })
+  const queryKey =  queryOptions?.queryKey ?? getGetNhanviensNewQueryKey();
 
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getNhanviensNew>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getNhanviensNew>>> = ({ signal }) => getNhanviensNew({ signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getNhanviensNew>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type GetNhanviensNewQueryResult = NonNullable<Awaited<ReturnType<typeof getNhanviensNew>>>
 export type GetNhanviensNewQueryError = unknown
 
-export function useGetNhanviensNew<
-  TData = Awaited<ReturnType<typeof getNhanviensNew>>,
-  TError = unknown,
->(
-  options: {
-    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getNhanviensNew>>, TError, TData>> &
-      Pick<
+
+export function useGetNhanviensNew<TData = Awaited<ReturnType<typeof getNhanviensNew>>, TError = unknown>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNhanviensNew>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getNhanviensNew>>,
           TError,
           Awaited<ReturnType<typeof getNhanviensNew>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof customSystemShareFetch>
-  },
-  queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetNhanviensNew<
-  TData = Awaited<ReturnType<typeof getNhanviensNew>>,
-  TError = unknown,
->(
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getNhanviensNew>>, TError, TData>> &
-      Pick<
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customSystemShareFetch>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetNhanviensNew<TData = Awaited<ReturnType<typeof getNhanviensNew>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNhanviensNew>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getNhanviensNew>>,
           TError,
           Awaited<ReturnType<typeof getNhanviensNew>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof customSystemShareFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetNhanviensNew<
-  TData = Awaited<ReturnType<typeof getNhanviensNew>>,
-  TError = unknown,
->(
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getNhanviensNew>>, TError, TData>>
-    request?: SecondParameter<typeof customSystemShareFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customSystemShareFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetNhanviensNew<TData = Awaited<ReturnType<typeof getNhanviensNew>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNhanviensNew>>, TError, TData>>, request?: SecondParameter<typeof customSystemShareFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetNhanviensNew<
-  TData = Awaited<ReturnType<typeof getNhanviensNew>>,
-  TError = unknown,
->(
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getNhanviensNew>>, TError, TData>>
-    request?: SecondParameter<typeof customSystemShareFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetNhanviensNew<TData = Awaited<ReturnType<typeof getNhanviensNew>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNhanviensNew>>, TError, TData>>, request?: SecondParameter<typeof customSystemShareFetch>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
   const queryOptions = getGetNhanviensNewQueryOptions(options)
 
-  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData, TError>
-  }
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  query.queryKey = queryOptions.queryKey
+  query.queryKey = queryOptions.queryKey ;
 
-  return query
+  return query;
 }
+
+
+
+
 
 export type postNhanviensNewResponse200 = {
   data: void
   status: 200
 }
+    
+export type postNhanviensNewResponseSuccess = (postNhanviensNewResponse200) & {
+  headers: Headers;
+};
+;
 
-export type postNhanviensNewResponseSuccess = postNhanviensNewResponse200 & {
-  headers: Headers
-}
-
-export type postNhanviensNewResponse = postNhanviensNewResponseSuccess
+export type postNhanviensNewResponse = (postNhanviensNewResponseSuccess)
 
 export const getPostNhanviensNewUrl = () => {
+
+
+  
+
   return `/Nhanviens/new`
 }
 
-export const postNhanviensNew = async (
-  addNewRequestDto: AddNewRequestDto,
-  options?: RequestInit
-): Promise<postNhanviensNewResponse> => {
-  return customSystemShareFetch<postNhanviensNewResponse>(getPostNhanviensNewUrl(), {
+export const postNhanviensNew = async (addNewRequestDto: AddNewRequestDto, options?: RequestInit): Promise<postNhanviensNewResponse> => {
+  
+  return customSystemShareFetch<postNhanviensNewResponse>(getPostNhanviensNewUrl(),
+  {      
     ...options,
-    method: "POST",
-    headers: { "Content-Type": "application/json-patch+json", ...options?.headers },
-    body: JSON.stringify(addNewRequestDto),
-  })
-}
-
-export const getPostNhanviensNewMutationOptions = <TError = unknown, TContext = unknown>(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postNhanviensNew>>,
-    TError,
-    { data: AddNewRequestDto },
-    TContext
-  >
-  request?: SecondParameter<typeof customSystemShareFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postNhanviensNew>>,
-  TError,
-  { data: AddNewRequestDto },
-  TContext
-> => {
-  const mutationKey = ["postNhanviensNew"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postNhanviensNew>>,
-    { data: AddNewRequestDto }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return postNhanviensNew(data, requestOptions)
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json-patch+json', ...options?.headers },
+    body: JSON.stringify(
+      addNewRequestDto,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type PostNhanviensNewMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postNhanviensNew>>
->
-export type PostNhanviensNewMutationBody = AddNewRequestDto
-export type PostNhanviensNewMutationError = unknown
 
-export const usePostNhanviensNew = <TError = unknown, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postNhanviensNew>>,
-      TError,
-      { data: AddNewRequestDto },
-      TContext
-    >
-    request?: SecondParameter<typeof customSystemShareFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postNhanviensNew>>,
-  TError,
-  { data: AddNewRequestDto },
-  TContext
-> => {
-  const mutationOptions = getPostNhanviensNewMutationOptions(options)
 
-  return useMutation(mutationOptions, queryClient)
-}
+export const getPostNhanviensNewMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postNhanviensNew>>, TError,{data: AddNewRequestDto}, TContext>, request?: SecondParameter<typeof customSystemShareFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof postNhanviensNew>>, TError,{data: AddNewRequestDto}, TContext> => {
 
+const mutationKey = ['postNhanviensNew'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postNhanviensNew>>, {data: AddNewRequestDto}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postNhanviensNew(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostNhanviensNewMutationResult = NonNullable<Awaited<ReturnType<typeof postNhanviensNew>>>
+    export type PostNhanviensNewMutationBody = AddNewRequestDto
+    export type PostNhanviensNewMutationError = unknown
+
+    export const usePostNhanviensNew = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postNhanviensNew>>, TError,{data: AddNewRequestDto}, TContext>, request?: SecondParameter<typeof customSystemShareFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postNhanviensNew>>,
+        TError,
+        {data: AddNewRequestDto},
+        TContext
+      > => {
+
+      const mutationOptions = getPostNhanviensNewMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 export type postNhanviensListResponse200 = {
   data: void
   status: 200
 }
+    
+export type postNhanviensListResponseSuccess = (postNhanviensListResponse200) & {
+  headers: Headers;
+};
+;
 
-export type postNhanviensListResponseSuccess = postNhanviensListResponse200 & {
-  headers: Headers
-}
-
-export type postNhanviensListResponse = postNhanviensListResponseSuccess
+export type postNhanviensListResponse = (postNhanviensListResponseSuccess)
 
 export const getPostNhanviensListUrl = () => {
+
+
+  
+
   return `/Nhanviens/list`
 }
 
-export const postNhanviensList = async (
-  pagingRequestDto: PagingRequestDto,
-  options?: RequestInit
-): Promise<postNhanviensListResponse> => {
-  return customSystemShareFetch<postNhanviensListResponse>(getPostNhanviensListUrl(), {
+export const postNhanviensList = async (pagingRequestDto: PagingRequestDto, options?: RequestInit): Promise<postNhanviensListResponse> => {
+  
+  return customSystemShareFetch<postNhanviensListResponse>(getPostNhanviensListUrl(),
+  {      
     ...options,
-    method: "POST",
-    headers: { "Content-Type": "application/json-patch+json", ...options?.headers },
-    body: JSON.stringify(pagingRequestDto),
-  })
-}
-
-export const getPostNhanviensListMutationOptions = <
-  TError = unknown,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postNhanviensList>>,
-    TError,
-    { data: PagingRequestDto },
-    TContext
-  >
-  request?: SecondParameter<typeof customSystemShareFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postNhanviensList>>,
-  TError,
-  { data: PagingRequestDto },
-  TContext
-> => {
-  const mutationKey = ["postNhanviensList"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postNhanviensList>>,
-    { data: PagingRequestDto }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return postNhanviensList(data, requestOptions)
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json-patch+json', ...options?.headers },
+    body: JSON.stringify(
+      pagingRequestDto,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type PostNhanviensListMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postNhanviensList>>
->
-export type PostNhanviensListMutationBody = PagingRequestDto
-export type PostNhanviensListMutationError = unknown
 
-export const usePostNhanviensList = <TError = unknown, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postNhanviensList>>,
-      TError,
-      { data: PagingRequestDto },
-      TContext
-    >
-    request?: SecondParameter<typeof customSystemShareFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postNhanviensList>>,
-  TError,
-  { data: PagingRequestDto },
-  TContext
-> => {
-  const mutationOptions = getPostNhanviensListMutationOptions(options)
 
-  return useMutation(mutationOptions, queryClient)
-}
+export const getPostNhanviensListMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postNhanviensList>>, TError,{data: PagingRequestDto}, TContext>, request?: SecondParameter<typeof customSystemShareFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof postNhanviensList>>, TError,{data: PagingRequestDto}, TContext> => {
 
+const mutationKey = ['postNhanviensList'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postNhanviensList>>, {data: PagingRequestDto}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postNhanviensList(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostNhanviensListMutationResult = NonNullable<Awaited<ReturnType<typeof postNhanviensList>>>
+    export type PostNhanviensListMutationBody = PagingRequestDto
+    export type PostNhanviensListMutationError = unknown
+
+    export const usePostNhanviensList = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postNhanviensList>>, TError,{data: PagingRequestDto}, TContext>, request?: SecondParameter<typeof customSystemShareFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postNhanviensList>>,
+        TError,
+        {data: PagingRequestDto},
+        TContext
+      > => {
+
+      const mutationOptions = getPostNhanviensListMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 export type postNhanviensAllResponse200 = {
   data: void
   status: 200
 }
+    
+export type postNhanviensAllResponseSuccess = (postNhanviensAllResponse200) & {
+  headers: Headers;
+};
+;
 
-export type postNhanviensAllResponseSuccess = postNhanviensAllResponse200 & {
-  headers: Headers
-}
-
-export type postNhanviensAllResponse = postNhanviensAllResponseSuccess
+export type postNhanviensAllResponse = (postNhanviensAllResponseSuccess)
 
 export const getPostNhanviensAllUrl = () => {
+
+
+  
+
   return `/Nhanviens/all`
 }
 
-export const postNhanviensAll = async (
-  pagingRequestDto: PagingRequestDto,
-  options?: RequestInit
-): Promise<postNhanviensAllResponse> => {
-  return customSystemShareFetch<postNhanviensAllResponse>(getPostNhanviensAllUrl(), {
+export const postNhanviensAll = async (pagingRequestDto: PagingRequestDto, options?: RequestInit): Promise<postNhanviensAllResponse> => {
+  
+  return customSystemShareFetch<postNhanviensAllResponse>(getPostNhanviensAllUrl(),
+  {      
     ...options,
-    method: "POST",
-    headers: { "Content-Type": "application/json-patch+json", ...options?.headers },
-    body: JSON.stringify(pagingRequestDto),
-  })
-}
-
-export const getPostNhanviensAllMutationOptions = <TError = unknown, TContext = unknown>(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postNhanviensAll>>,
-    TError,
-    { data: PagingRequestDto },
-    TContext
-  >
-  request?: SecondParameter<typeof customSystemShareFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postNhanviensAll>>,
-  TError,
-  { data: PagingRequestDto },
-  TContext
-> => {
-  const mutationKey = ["postNhanviensAll"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postNhanviensAll>>,
-    { data: PagingRequestDto }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return postNhanviensAll(data, requestOptions)
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json-patch+json', ...options?.headers },
+    body: JSON.stringify(
+      pagingRequestDto,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type PostNhanviensAllMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postNhanviensAll>>
->
-export type PostNhanviensAllMutationBody = PagingRequestDto
-export type PostNhanviensAllMutationError = unknown
 
-export const usePostNhanviensAll = <TError = unknown, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postNhanviensAll>>,
-      TError,
-      { data: PagingRequestDto },
-      TContext
-    >
-    request?: SecondParameter<typeof customSystemShareFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postNhanviensAll>>,
-  TError,
-  { data: PagingRequestDto },
-  TContext
-> => {
-  const mutationOptions = getPostNhanviensAllMutationOptions(options)
 
-  return useMutation(mutationOptions, queryClient)
-}
+export const getPostNhanviensAllMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postNhanviensAll>>, TError,{data: PagingRequestDto}, TContext>, request?: SecondParameter<typeof customSystemShareFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof postNhanviensAll>>, TError,{data: PagingRequestDto}, TContext> => {
 
+const mutationKey = ['postNhanviensAll'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postNhanviensAll>>, {data: PagingRequestDto}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postNhanviensAll(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostNhanviensAllMutationResult = NonNullable<Awaited<ReturnType<typeof postNhanviensAll>>>
+    export type PostNhanviensAllMutationBody = PagingRequestDto
+    export type PostNhanviensAllMutationError = unknown
+
+    export const usePostNhanviensAll = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postNhanviensAll>>, TError,{data: PagingRequestDto}, TContext>, request?: SecondParameter<typeof customSystemShareFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postNhanviensAll>>,
+        TError,
+        {data: PagingRequestDto},
+        TContext
+      > => {
+
+      const mutationOptions = getPostNhanviensAllMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 export type postNhanviensTreelistResponse200 = {
   data: void
   status: 200
 }
+    
+export type postNhanviensTreelistResponseSuccess = (postNhanviensTreelistResponse200) & {
+  headers: Headers;
+};
+;
 
-export type postNhanviensTreelistResponseSuccess = postNhanviensTreelistResponse200 & {
-  headers: Headers
-}
-
-export type postNhanviensTreelistResponse = postNhanviensTreelistResponseSuccess
+export type postNhanviensTreelistResponse = (postNhanviensTreelistResponseSuccess)
 
 export const getPostNhanviensTreelistUrl = () => {
+
+
+  
+
   return `/Nhanviens/treelist`
 }
 
-export const postNhanviensTreelist = async (
-  pagingRequestDto: PagingRequestDto,
-  options?: RequestInit
-): Promise<postNhanviensTreelistResponse> => {
-  return customSystemShareFetch<postNhanviensTreelistResponse>(getPostNhanviensTreelistUrl(), {
+export const postNhanviensTreelist = async (pagingRequestDto: PagingRequestDto, options?: RequestInit): Promise<postNhanviensTreelistResponse> => {
+  
+  return customSystemShareFetch<postNhanviensTreelistResponse>(getPostNhanviensTreelistUrl(),
+  {      
     ...options,
-    method: "POST",
-    headers: { "Content-Type": "application/json-patch+json", ...options?.headers },
-    body: JSON.stringify(pagingRequestDto),
-  })
-}
-
-export const getPostNhanviensTreelistMutationOptions = <
-  TError = unknown,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postNhanviensTreelist>>,
-    TError,
-    { data: PagingRequestDto },
-    TContext
-  >
-  request?: SecondParameter<typeof customSystemShareFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postNhanviensTreelist>>,
-  TError,
-  { data: PagingRequestDto },
-  TContext
-> => {
-  const mutationKey = ["postNhanviensTreelist"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postNhanviensTreelist>>,
-    { data: PagingRequestDto }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return postNhanviensTreelist(data, requestOptions)
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json-patch+json', ...options?.headers },
+    body: JSON.stringify(
+      pagingRequestDto,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type PostNhanviensTreelistMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postNhanviensTreelist>>
->
-export type PostNhanviensTreelistMutationBody = PagingRequestDto
-export type PostNhanviensTreelistMutationError = unknown
 
-export const usePostNhanviensTreelist = <TError = unknown, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postNhanviensTreelist>>,
-      TError,
-      { data: PagingRequestDto },
-      TContext
-    >
-    request?: SecondParameter<typeof customSystemShareFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postNhanviensTreelist>>,
-  TError,
-  { data: PagingRequestDto },
-  TContext
-> => {
-  const mutationOptions = getPostNhanviensTreelistMutationOptions(options)
 
-  return useMutation(mutationOptions, queryClient)
-}
+export const getPostNhanviensTreelistMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postNhanviensTreelist>>, TError,{data: PagingRequestDto}, TContext>, request?: SecondParameter<typeof customSystemShareFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof postNhanviensTreelist>>, TError,{data: PagingRequestDto}, TContext> => {
 
+const mutationKey = ['postNhanviensTreelist'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postNhanviensTreelist>>, {data: PagingRequestDto}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postNhanviensTreelist(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostNhanviensTreelistMutationResult = NonNullable<Awaited<ReturnType<typeof postNhanviensTreelist>>>
+    export type PostNhanviensTreelistMutationBody = PagingRequestDto
+    export type PostNhanviensTreelistMutationError = unknown
+
+    export const usePostNhanviensTreelist = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postNhanviensTreelist>>, TError,{data: PagingRequestDto}, TContext>, request?: SecondParameter<typeof customSystemShareFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postNhanviensTreelist>>,
+        TError,
+        {data: PagingRequestDto},
+        TContext
+      > => {
+
+      const mutationOptions = getPostNhanviensTreelistMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 export type postNhanviensSummaryResponse200 = {
   data: void
   status: 200
 }
+    
+export type postNhanviensSummaryResponseSuccess = (postNhanviensSummaryResponse200) & {
+  headers: Headers;
+};
+;
 
-export type postNhanviensSummaryResponseSuccess = postNhanviensSummaryResponse200 & {
-  headers: Headers
-}
-
-export type postNhanviensSummaryResponse = postNhanviensSummaryResponseSuccess
+export type postNhanviensSummaryResponse = (postNhanviensSummaryResponseSuccess)
 
 export const getPostNhanviensSummaryUrl = () => {
+
+
+  
+
   return `/Nhanviens/summary`
 }
 
-export const postNhanviensSummary = async (
-  pagingRequestDto: PagingRequestDto,
-  options?: RequestInit
-): Promise<postNhanviensSummaryResponse> => {
-  return customSystemShareFetch<postNhanviensSummaryResponse>(getPostNhanviensSummaryUrl(), {
+export const postNhanviensSummary = async (pagingRequestDto: PagingRequestDto, options?: RequestInit): Promise<postNhanviensSummaryResponse> => {
+  
+  return customSystemShareFetch<postNhanviensSummaryResponse>(getPostNhanviensSummaryUrl(),
+  {      
     ...options,
-    method: "POST",
-    headers: { "Content-Type": "application/json-patch+json", ...options?.headers },
-    body: JSON.stringify(pagingRequestDto),
-  })
-}
-
-export const getPostNhanviensSummaryMutationOptions = <
-  TError = unknown,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postNhanviensSummary>>,
-    TError,
-    { data: PagingRequestDto },
-    TContext
-  >
-  request?: SecondParameter<typeof customSystemShareFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postNhanviensSummary>>,
-  TError,
-  { data: PagingRequestDto },
-  TContext
-> => {
-  const mutationKey = ["postNhanviensSummary"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postNhanviensSummary>>,
-    { data: PagingRequestDto }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return postNhanviensSummary(data, requestOptions)
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json-patch+json', ...options?.headers },
+    body: JSON.stringify(
+      pagingRequestDto,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type PostNhanviensSummaryMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postNhanviensSummary>>
->
-export type PostNhanviensSummaryMutationBody = PagingRequestDto
-export type PostNhanviensSummaryMutationError = unknown
 
-export const usePostNhanviensSummary = <TError = unknown, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postNhanviensSummary>>,
-      TError,
-      { data: PagingRequestDto },
-      TContext
-    >
-    request?: SecondParameter<typeof customSystemShareFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postNhanviensSummary>>,
-  TError,
-  { data: PagingRequestDto },
-  TContext
-> => {
-  const mutationOptions = getPostNhanviensSummaryMutationOptions(options)
 
-  return useMutation(mutationOptions, queryClient)
-}
+export const getPostNhanviensSummaryMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postNhanviensSummary>>, TError,{data: PagingRequestDto}, TContext>, request?: SecondParameter<typeof customSystemShareFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof postNhanviensSummary>>, TError,{data: PagingRequestDto}, TContext> => {
 
+const mutationKey = ['postNhanviensSummary'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postNhanviensSummary>>, {data: PagingRequestDto}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postNhanviensSummary(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostNhanviensSummaryMutationResult = NonNullable<Awaited<ReturnType<typeof postNhanviensSummary>>>
+    export type PostNhanviensSummaryMutationBody = PagingRequestDto
+    export type PostNhanviensSummaryMutationError = unknown
+
+    export const usePostNhanviensSummary = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postNhanviensSummary>>, TError,{data: PagingRequestDto}, TContext>, request?: SecondParameter<typeof customSystemShareFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postNhanviensSummary>>,
+        TError,
+        {data: PagingRequestDto},
+        TContext
+      > => {
+
+      const mutationOptions = getPostNhanviensSummaryMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 export type getNhanviensGetbyidIdResponse200 = {
   data: void
   status: 200
 }
+    
+export type getNhanviensGetbyidIdResponseSuccess = (getNhanviensGetbyidIdResponse200) & {
+  headers: Headers;
+};
+;
 
-export type getNhanviensGetbyidIdResponseSuccess = getNhanviensGetbyidIdResponse200 & {
-  headers: Headers
-}
+export type getNhanviensGetbyidIdResponse = (getNhanviensGetbyidIdResponseSuccess)
 
-export type getNhanviensGetbyidIdResponse = getNhanviensGetbyidIdResponseSuccess
-
-export const getGetNhanviensGetbyidIdUrl = (id: string, params?: GetNhanviensGetbyidIdParams) => {
-  const normalizedParams = new URLSearchParams()
+export const getGetNhanviensGetbyidIdUrl = (id: string,
+    params?: GetNhanviensGetbyidIdParams,) => {
+  const normalizedParams = new URLSearchParams();
 
   Object.entries(params || {}).forEach(([key, value]) => {
+    
     if (value !== undefined) {
-      normalizedParams.append(key, value === null ? "null" : value.toString())
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
     }
-  })
+  });
 
-  const stringifiedParams = normalizedParams.toString()
+  const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0
-    ? `/Nhanviens/getbyid/${id}?${stringifiedParams}`
-    : `/Nhanviens/getbyid/${id}`
+  return stringifiedParams.length > 0 ? `/Nhanviens/getbyid/${id}?${stringifiedParams}` : `/Nhanviens/getbyid/${id}`
 }
 
-export const getNhanviensGetbyidId = async (
-  id: string,
-  params?: GetNhanviensGetbyidIdParams,
-  options?: RequestInit
-): Promise<getNhanviensGetbyidIdResponse> => {
-  return customSystemShareFetch<getNhanviensGetbyidIdResponse>(
-    getGetNhanviensGetbyidIdUrl(id, params),
-    {
-      ...options,
-      method: "GET",
-    }
-  )
-}
-
-export const getGetNhanviensGetbyidIdQueryKey = (
-  id?: string,
-  params?: GetNhanviensGetbyidIdParams
-) => {
-  return [`/Nhanviens/getbyid/${id}`, ...(params ? [params] : [])] as const
-}
-
-export const getGetNhanviensGetbyidIdQueryOptions = <
-  TData = Awaited<ReturnType<typeof getNhanviensGetbyidId>>,
-  TError = unknown,
->(
-  id: string,
-  params?: GetNhanviensGetbyidIdParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getNhanviensGetbyidId>>, TError, TData>
-    >
-    request?: SecondParameter<typeof customSystemShareFetch>
+export const getNhanviensGetbyidId = async (id: string,
+    params?: GetNhanviensGetbyidIdParams, options?: RequestInit): Promise<getNhanviensGetbyidIdResponse> => {
+  
+  return customSystemShareFetch<getNhanviensGetbyidIdResponse>(getGetNhanviensGetbyidIdUrl(id,params),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
   }
+);}
+
+
+
+
+
+export const getGetNhanviensGetbyidIdQueryKey = (id?: string,
+    params?: GetNhanviensGetbyidIdParams,) => {
+    return [
+    `/Nhanviens/getbyid/${id}`, ...(params ? [params]: [])
+    ] as const;
+    }
+
+    
+export const getGetNhanviensGetbyidIdQueryOptions = <TData = Awaited<ReturnType<typeof getNhanviensGetbyidId>>, TError = unknown>(id: string,
+    params?: GetNhanviensGetbyidIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNhanviensGetbyidId>>, TError, TData>>, request?: SecondParameter<typeof customSystemShareFetch>}
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getGetNhanviensGetbyidIdQueryKey(id, params)
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getNhanviensGetbyidId>>> = ({ signal }) =>
-    getNhanviensGetbyidId(id, params, { signal, ...requestOptions })
+  const queryKey =  queryOptions?.queryKey ?? getGetNhanviensGetbyidIdQueryKey(id,params);
 
-  return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getNhanviensGetbyidId>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getNhanviensGetbyidId>>> = ({ signal }) => getNhanviensGetbyidId(id,params, { signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getNhanviensGetbyidId>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetNhanviensGetbyidIdQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getNhanviensGetbyidId>>
->
+export type GetNhanviensGetbyidIdQueryResult = NonNullable<Awaited<ReturnType<typeof getNhanviensGetbyidId>>>
 export type GetNhanviensGetbyidIdQueryError = unknown
 
-export function useGetNhanviensGetbyidId<
-  TData = Awaited<ReturnType<typeof getNhanviensGetbyidId>>,
-  TError = unknown,
->(
-  id: string,
-  params: undefined | GetNhanviensGetbyidIdParams,
-  options: {
-    query: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getNhanviensGetbyidId>>, TError, TData>
-    > &
-      Pick<
+
+export function useGetNhanviensGetbyidId<TData = Awaited<ReturnType<typeof getNhanviensGetbyidId>>, TError = unknown>(
+ id: string,
+    params: undefined |  GetNhanviensGetbyidIdParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNhanviensGetbyidId>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getNhanviensGetbyidId>>,
           TError,
           Awaited<ReturnType<typeof getNhanviensGetbyidId>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof customSystemShareFetch>
-  },
-  queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetNhanviensGetbyidId<
-  TData = Awaited<ReturnType<typeof getNhanviensGetbyidId>>,
-  TError = unknown,
->(
-  id: string,
-  params?: GetNhanviensGetbyidIdParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getNhanviensGetbyidId>>, TError, TData>
-    > &
-      Pick<
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customSystemShareFetch>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetNhanviensGetbyidId<TData = Awaited<ReturnType<typeof getNhanviensGetbyidId>>, TError = unknown>(
+ id: string,
+    params?: GetNhanviensGetbyidIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNhanviensGetbyidId>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getNhanviensGetbyidId>>,
           TError,
           Awaited<ReturnType<typeof getNhanviensGetbyidId>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof customSystemShareFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetNhanviensGetbyidId<
-  TData = Awaited<ReturnType<typeof getNhanviensGetbyidId>>,
-  TError = unknown,
->(
-  id: string,
-  params?: GetNhanviensGetbyidIdParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getNhanviensGetbyidId>>, TError, TData>
-    >
-    request?: SecondParameter<typeof customSystemShareFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customSystemShareFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetNhanviensGetbyidId<TData = Awaited<ReturnType<typeof getNhanviensGetbyidId>>, TError = unknown>(
+ id: string,
+    params?: GetNhanviensGetbyidIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNhanviensGetbyidId>>, TError, TData>>, request?: SecondParameter<typeof customSystemShareFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetNhanviensGetbyidId<
-  TData = Awaited<ReturnType<typeof getNhanviensGetbyidId>>,
-  TError = unknown,
->(
-  id: string,
-  params?: GetNhanviensGetbyidIdParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getNhanviensGetbyidId>>, TError, TData>
-    >
-    request?: SecondParameter<typeof customSystemShareFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetNhanviensGetbyidIdQueryOptions(id, params, options)
+export function useGetNhanviensGetbyidId<TData = Awaited<ReturnType<typeof getNhanviensGetbyidId>>, TError = unknown>(
+ id: string,
+    params?: GetNhanviensGetbyidIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNhanviensGetbyidId>>, TError, TData>>, request?: SecondParameter<typeof customSystemShareFetch>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData, TError>
-  }
+  const queryOptions = getGetNhanviensGetbyidIdQueryOptions(id,params,options)
 
-  query.queryKey = queryOptions.queryKey
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  return query
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
 }
+
+
+
+
 
 export type postNhanviensExportdataResponse200 = {
   data: void
   status: 200
 }
+    
+export type postNhanviensExportdataResponseSuccess = (postNhanviensExportdataResponse200) & {
+  headers: Headers;
+};
+;
 
-export type postNhanviensExportdataResponseSuccess = postNhanviensExportdataResponse200 & {
-  headers: Headers
-}
-
-export type postNhanviensExportdataResponse = postNhanviensExportdataResponseSuccess
+export type postNhanviensExportdataResponse = (postNhanviensExportdataResponseSuccess)
 
 export const getPostNhanviensExportdataUrl = () => {
+
+
+  
+
   return `/Nhanviens/exportdata`
 }
 
-export const postNhanviensExportdata = async (
-  exportListParameter: ExportListParameter,
-  options?: RequestInit
-): Promise<postNhanviensExportdataResponse> => {
-  return customSystemShareFetch<postNhanviensExportdataResponse>(getPostNhanviensExportdataUrl(), {
+export const postNhanviensExportdata = async (exportListParameter: ExportListParameter, options?: RequestInit): Promise<postNhanviensExportdataResponse> => {
+  
+  return customSystemShareFetch<postNhanviensExportdataResponse>(getPostNhanviensExportdataUrl(),
+  {      
     ...options,
-    method: "POST",
-    headers: { "Content-Type": "application/json-patch+json", ...options?.headers },
-    body: JSON.stringify(exportListParameter),
-  })
-}
-
-export const getPostNhanviensExportdataMutationOptions = <
-  TError = unknown,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postNhanviensExportdata>>,
-    TError,
-    { data: ExportListParameter },
-    TContext
-  >
-  request?: SecondParameter<typeof customSystemShareFetch>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postNhanviensExportdata>>,
-  TError,
-  { data: ExportListParameter },
-  TContext
-> => {
-  const mutationKey = ["postNhanviensExportdata"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postNhanviensExportdata>>,
-    { data: ExportListParameter }
-  > = (props) => {
-    const { data } = props ?? {}
-
-    return postNhanviensExportdata(data, requestOptions)
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json-patch+json', ...options?.headers },
+    body: JSON.stringify(
+      exportListParameter,)
   }
+);}
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type PostNhanviensExportdataMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postNhanviensExportdata>>
->
-export type PostNhanviensExportdataMutationBody = ExportListParameter
-export type PostNhanviensExportdataMutationError = unknown
 
-export const usePostNhanviensExportdata = <TError = unknown, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postNhanviensExportdata>>,
-      TError,
-      { data: ExportListParameter },
-      TContext
-    >
-    request?: SecondParameter<typeof customSystemShareFetch>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postNhanviensExportdata>>,
-  TError,
-  { data: ExportListParameter },
-  TContext
-> => {
-  const mutationOptions = getPostNhanviensExportdataMutationOptions(options)
 
-  return useMutation(mutationOptions, queryClient)
-}
+export const getPostNhanviensExportdataMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postNhanviensExportdata>>, TError,{data: ExportListParameter}, TContext>, request?: SecondParameter<typeof customSystemShareFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof postNhanviensExportdata>>, TError,{data: ExportListParameter}, TContext> => {
 
+const mutationKey = ['postNhanviensExportdata'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postNhanviensExportdata>>, {data: ExportListParameter}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postNhanviensExportdata(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostNhanviensExportdataMutationResult = NonNullable<Awaited<ReturnType<typeof postNhanviensExportdata>>>
+    export type PostNhanviensExportdataMutationBody = ExportListParameter
+    export type PostNhanviensExportdataMutationError = unknown
+
+    export const usePostNhanviensExportdata = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postNhanviensExportdata>>, TError,{data: ExportListParameter}, TContext>, request?: SecondParameter<typeof customSystemShareFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postNhanviensExportdata>>,
+        TError,
+        {data: ExportListParameter},
+        TContext
+      > => {
+
+      const mutationOptions = getPostNhanviensExportdataMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    
 /**
  * Kiểm tra tình trạng API
  * @summary Kiểm tra tình trạng API
@@ -2347,130 +1913,111 @@ export type getNhanviensHealthzResponse200 = {
   data: void
   status: 200
 }
+    
+export type getNhanviensHealthzResponseSuccess = (getNhanviensHealthzResponse200) & {
+  headers: Headers;
+};
+;
 
-export type getNhanviensHealthzResponseSuccess = getNhanviensHealthzResponse200 & {
-  headers: Headers
-}
-
-export type getNhanviensHealthzResponse = getNhanviensHealthzResponseSuccess
+export type getNhanviensHealthzResponse = (getNhanviensHealthzResponseSuccess)
 
 export const getGetNhanviensHealthzUrl = () => {
+
+
+  
+
   return `/Nhanviens/healthz`
 }
 
-export const getNhanviensHealthz = async (
-  options?: RequestInit
-): Promise<getNhanviensHealthzResponse> => {
-  return customSystemShareFetch<getNhanviensHealthzResponse>(getGetNhanviensHealthzUrl(), {
+export const getNhanviensHealthz = async ( options?: RequestInit): Promise<getNhanviensHealthzResponse> => {
+  
+  return customSystemShareFetch<getNhanviensHealthzResponse>(getGetNhanviensHealthzUrl(),
+  {      
     ...options,
-    method: "GET",
-  })
-}
+    method: 'GET'
+    
+    
+  }
+);}
+
+
+
+
 
 export const getGetNhanviensHealthzQueryKey = () => {
-  return [`/Nhanviens/healthz`] as const
+    return [
+    `/Nhanviens/healthz`
+    ] as const;
+    }
+
+    
+export const getGetNhanviensHealthzQueryOptions = <TData = Awaited<ReturnType<typeof getNhanviensHealthz>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNhanviensHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemShareFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetNhanviensHealthzQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getNhanviensHealthz>>> = ({ signal }) => getNhanviensHealthz({ signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getNhanviensHealthz>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export const getGetNhanviensHealthzQueryOptions = <
-  TData = Awaited<ReturnType<typeof getNhanviensHealthz>>,
-  TError = unknown,
->(options?: {
-  query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getNhanviensHealthz>>, TError, TData>>
-  request?: SecondParameter<typeof customSystemShareFetch>
-}) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {}
-
-  const queryKey = queryOptions?.queryKey ?? getGetNhanviensHealthzQueryKey()
-
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getNhanviensHealthz>>> = ({ signal }) =>
-    getNhanviensHealthz({ signal, ...requestOptions })
-
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getNhanviensHealthz>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetNhanviensHealthzQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getNhanviensHealthz>>
->
+export type GetNhanviensHealthzQueryResult = NonNullable<Awaited<ReturnType<typeof getNhanviensHealthz>>>
 export type GetNhanviensHealthzQueryError = unknown
 
-export function useGetNhanviensHealthz<
-  TData = Awaited<ReturnType<typeof getNhanviensHealthz>>,
-  TError = unknown,
->(
-  options: {
-    query: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getNhanviensHealthz>>, TError, TData>
-    > &
-      Pick<
+
+export function useGetNhanviensHealthz<TData = Awaited<ReturnType<typeof getNhanviensHealthz>>, TError = unknown>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNhanviensHealthz>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getNhanviensHealthz>>,
           TError,
           Awaited<ReturnType<typeof getNhanviensHealthz>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof customSystemShareFetch>
-  },
-  queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetNhanviensHealthz<
-  TData = Awaited<ReturnType<typeof getNhanviensHealthz>>,
-  TError = unknown,
->(
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getNhanviensHealthz>>, TError, TData>
-    > &
-      Pick<
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customSystemShareFetch>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetNhanviensHealthz<TData = Awaited<ReturnType<typeof getNhanviensHealthz>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNhanviensHealthz>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getNhanviensHealthz>>,
           TError,
           Awaited<ReturnType<typeof getNhanviensHealthz>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof customSystemShareFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetNhanviensHealthz<
-  TData = Awaited<ReturnType<typeof getNhanviensHealthz>>,
-  TError = unknown,
->(
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getNhanviensHealthz>>, TError, TData>>
-    request?: SecondParameter<typeof customSystemShareFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customSystemShareFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetNhanviensHealthz<TData = Awaited<ReturnType<typeof getNhanviensHealthz>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNhanviensHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemShareFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Kiểm tra tình trạng API
  */
 
-export function useGetNhanviensHealthz<
-  TData = Awaited<ReturnType<typeof getNhanviensHealthz>>,
-  TError = unknown,
->(
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getNhanviensHealthz>>, TError, TData>>
-    request?: SecondParameter<typeof customSystemShareFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetNhanviensHealthz<TData = Awaited<ReturnType<typeof getNhanviensHealthz>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNhanviensHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemShareFetch>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
   const queryOptions = getGetNhanviensHealthzQueryOptions(options)
 
-  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData, TError>
-  }
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  query.queryKey = queryOptions.queryKey
+  query.queryKey = queryOptions.queryKey ;
 
-  return query
+  return query;
 }
+
+
+
+
 
 /**
  * Thiết lập tham số biến môi trường
@@ -2480,124 +2027,111 @@ export type getUnitInfosInfoResponse200 = {
   data: UnitInfoEditDto
   status: 200
 }
+    
+export type getUnitInfosInfoResponseSuccess = (getUnitInfosInfoResponse200) & {
+  headers: Headers;
+};
+;
 
-export type getUnitInfosInfoResponseSuccess = getUnitInfosInfoResponse200 & {
-  headers: Headers
-}
-
-export type getUnitInfosInfoResponse = getUnitInfosInfoResponseSuccess
+export type getUnitInfosInfoResponse = (getUnitInfosInfoResponseSuccess)
 
 export const getGetUnitInfosInfoUrl = () => {
+
+
+  
+
   return `/UnitInfos/info`
 }
 
-export const getUnitInfosInfo = async (
-  options?: RequestInit
-): Promise<getUnitInfosInfoResponse> => {
-  return customSystemShareFetch<getUnitInfosInfoResponse>(getGetUnitInfosInfoUrl(), {
+export const getUnitInfosInfo = async ( options?: RequestInit): Promise<getUnitInfosInfoResponse> => {
+  
+  return customSystemShareFetch<getUnitInfosInfoResponse>(getGetUnitInfosInfoUrl(),
+  {      
     ...options,
-    method: "GET",
-  })
-}
+    method: 'GET'
+    
+    
+  }
+);}
+
+
+
+
 
 export const getGetUnitInfosInfoQueryKey = () => {
-  return [`/UnitInfos/info`] as const
-}
+    return [
+    `/UnitInfos/info`
+    ] as const;
+    }
 
-export const getGetUnitInfosInfoQueryOptions = <
-  TData = Awaited<ReturnType<typeof getUnitInfosInfo>>,
-  TError = unknown,
->(options?: {
-  query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getUnitInfosInfo>>, TError, TData>>
-  request?: SecondParameter<typeof customSystemShareFetch>
-}) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {}
+    
+export const getGetUnitInfosInfoQueryOptions = <TData = Awaited<ReturnType<typeof getUnitInfosInfo>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUnitInfosInfo>>, TError, TData>>, request?: SecondParameter<typeof customSystemShareFetch>}
+) => {
 
-  const queryKey = queryOptions?.queryKey ?? getGetUnitInfosInfoQueryKey()
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getUnitInfosInfo>>> = ({ signal }) =>
-    getUnitInfosInfo({ signal, ...requestOptions })
+  const queryKey =  queryOptions?.queryKey ?? getGetUnitInfosInfoQueryKey();
 
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getUnitInfosInfo>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getUnitInfosInfo>>> = ({ signal }) => getUnitInfosInfo({ signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getUnitInfosInfo>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type GetUnitInfosInfoQueryResult = NonNullable<Awaited<ReturnType<typeof getUnitInfosInfo>>>
 export type GetUnitInfosInfoQueryError = unknown
 
-export function useGetUnitInfosInfo<
-  TData = Awaited<ReturnType<typeof getUnitInfosInfo>>,
-  TError = unknown,
->(
-  options: {
-    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getUnitInfosInfo>>, TError, TData>> &
-      Pick<
+
+export function useGetUnitInfosInfo<TData = Awaited<ReturnType<typeof getUnitInfosInfo>>, TError = unknown>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUnitInfosInfo>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getUnitInfosInfo>>,
           TError,
           Awaited<ReturnType<typeof getUnitInfosInfo>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof customSystemShareFetch>
-  },
-  queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetUnitInfosInfo<
-  TData = Awaited<ReturnType<typeof getUnitInfosInfo>>,
-  TError = unknown,
->(
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getUnitInfosInfo>>, TError, TData>> &
-      Pick<
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customSystemShareFetch>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetUnitInfosInfo<TData = Awaited<ReturnType<typeof getUnitInfosInfo>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUnitInfosInfo>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getUnitInfosInfo>>,
           TError,
           Awaited<ReturnType<typeof getUnitInfosInfo>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof customSystemShareFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetUnitInfosInfo<
-  TData = Awaited<ReturnType<typeof getUnitInfosInfo>>,
-  TError = unknown,
->(
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getUnitInfosInfo>>, TError, TData>>
-    request?: SecondParameter<typeof customSystemShareFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customSystemShareFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetUnitInfosInfo<TData = Awaited<ReturnType<typeof getUnitInfosInfo>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUnitInfosInfo>>, TError, TData>>, request?: SecondParameter<typeof customSystemShareFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Thông tin đơn vị - Tham số
  */
 
-export function useGetUnitInfosInfo<
-  TData = Awaited<ReturnType<typeof getUnitInfosInfo>>,
-  TError = unknown,
->(
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getUnitInfosInfo>>, TError, TData>>
-    request?: SecondParameter<typeof customSystemShareFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetUnitInfosInfo<TData = Awaited<ReturnType<typeof getUnitInfosInfo>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUnitInfosInfo>>, TError, TData>>, request?: SecondParameter<typeof customSystemShareFetch>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
   const queryOptions = getGetUnitInfosInfoQueryOptions(options)
 
-  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData, TError>
-  }
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  query.queryKey = queryOptions.queryKey
+  query.queryKey = queryOptions.queryKey ;
 
-  return query
+  return query;
 }
+
+
+
+
 
 /**
  * Kiểm tra tình trạng API
@@ -2607,127 +2141,104 @@ export type getUnitInfosHealthzResponse200 = {
   data: void
   status: 200
 }
+    
+export type getUnitInfosHealthzResponseSuccess = (getUnitInfosHealthzResponse200) & {
+  headers: Headers;
+};
+;
 
-export type getUnitInfosHealthzResponseSuccess = getUnitInfosHealthzResponse200 & {
-  headers: Headers
-}
-
-export type getUnitInfosHealthzResponse = getUnitInfosHealthzResponseSuccess
+export type getUnitInfosHealthzResponse = (getUnitInfosHealthzResponseSuccess)
 
 export const getGetUnitInfosHealthzUrl = () => {
+
+
+  
+
   return `/UnitInfos/healthz`
 }
 
-export const getUnitInfosHealthz = async (
-  options?: RequestInit
-): Promise<getUnitInfosHealthzResponse> => {
-  return customSystemShareFetch<getUnitInfosHealthzResponse>(getGetUnitInfosHealthzUrl(), {
+export const getUnitInfosHealthz = async ( options?: RequestInit): Promise<getUnitInfosHealthzResponse> => {
+  
+  return customSystemShareFetch<getUnitInfosHealthzResponse>(getGetUnitInfosHealthzUrl(),
+  {      
     ...options,
-    method: "GET",
-  })
-}
+    method: 'GET'
+    
+    
+  }
+);}
+
+
+
+
 
 export const getGetUnitInfosHealthzQueryKey = () => {
-  return [`/UnitInfos/healthz`] as const
+    return [
+    `/UnitInfos/healthz`
+    ] as const;
+    }
+
+    
+export const getGetUnitInfosHealthzQueryOptions = <TData = Awaited<ReturnType<typeof getUnitInfosHealthz>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUnitInfosHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemShareFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetUnitInfosHealthzQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getUnitInfosHealthz>>> = ({ signal }) => getUnitInfosHealthz({ signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getUnitInfosHealthz>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export const getGetUnitInfosHealthzQueryOptions = <
-  TData = Awaited<ReturnType<typeof getUnitInfosHealthz>>,
-  TError = unknown,
->(options?: {
-  query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getUnitInfosHealthz>>, TError, TData>>
-  request?: SecondParameter<typeof customSystemShareFetch>
-}) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {}
-
-  const queryKey = queryOptions?.queryKey ?? getGetUnitInfosHealthzQueryKey()
-
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getUnitInfosHealthz>>> = ({ signal }) =>
-    getUnitInfosHealthz({ signal, ...requestOptions })
-
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getUnitInfosHealthz>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetUnitInfosHealthzQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getUnitInfosHealthz>>
->
+export type GetUnitInfosHealthzQueryResult = NonNullable<Awaited<ReturnType<typeof getUnitInfosHealthz>>>
 export type GetUnitInfosHealthzQueryError = unknown
 
-export function useGetUnitInfosHealthz<
-  TData = Awaited<ReturnType<typeof getUnitInfosHealthz>>,
-  TError = unknown,
->(
-  options: {
-    query: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getUnitInfosHealthz>>, TError, TData>
-    > &
-      Pick<
+
+export function useGetUnitInfosHealthz<TData = Awaited<ReturnType<typeof getUnitInfosHealthz>>, TError = unknown>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUnitInfosHealthz>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getUnitInfosHealthz>>,
           TError,
           Awaited<ReturnType<typeof getUnitInfosHealthz>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof customSystemShareFetch>
-  },
-  queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetUnitInfosHealthz<
-  TData = Awaited<ReturnType<typeof getUnitInfosHealthz>>,
-  TError = unknown,
->(
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getUnitInfosHealthz>>, TError, TData>
-    > &
-      Pick<
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customSystemShareFetch>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetUnitInfosHealthz<TData = Awaited<ReturnType<typeof getUnitInfosHealthz>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUnitInfosHealthz>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getUnitInfosHealthz>>,
           TError,
           Awaited<ReturnType<typeof getUnitInfosHealthz>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof customSystemShareFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetUnitInfosHealthz<
-  TData = Awaited<ReturnType<typeof getUnitInfosHealthz>>,
-  TError = unknown,
->(
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getUnitInfosHealthz>>, TError, TData>>
-    request?: SecondParameter<typeof customSystemShareFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customSystemShareFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetUnitInfosHealthz<TData = Awaited<ReturnType<typeof getUnitInfosHealthz>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUnitInfosHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemShareFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Kiểm tra tình trạng API
  */
 
-export function useGetUnitInfosHealthz<
-  TData = Awaited<ReturnType<typeof getUnitInfosHealthz>>,
-  TError = unknown,
->(
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getUnitInfosHealthz>>, TError, TData>>
-    request?: SecondParameter<typeof customSystemShareFetch>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetUnitInfosHealthz<TData = Awaited<ReturnType<typeof getUnitInfosHealthz>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUnitInfosHealthz>>, TError, TData>>, request?: SecondParameter<typeof customSystemShareFetch>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
   const queryOptions = getGetUnitInfosHealthzQueryOptions(options)
 
-  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData, TError>
-  }
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  query.queryKey = queryOptions.queryKey
+  query.queryKey = queryOptions.queryKey ;
 
-  return query
+  return query;
 }
