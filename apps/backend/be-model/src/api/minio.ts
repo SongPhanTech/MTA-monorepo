@@ -89,6 +89,32 @@ app.openapi(
 
 app.openapi(
   createRoute({
+    operationId: "deleteObject",
+    path: "/",
+    method: "delete",
+    request: {
+      query: z.object({ objectName: z.string() }).openapi("DeleteObjectDto"),
+    },
+    responses: {
+      200: {
+        description: "Delete object successfully",
+        content: {
+          "application/json": {
+            schema: z.object({ success: z.boolean() }),
+          },
+        },
+      },
+    },
+  }),
+  async (c) => {
+    const { objectName } = c.req.valid("query")
+    await minioService.remove(objectName)
+    return c.json({ success: true }, 200)
+  }
+)
+
+app.openapi(
+  createRoute({
     operationId: "convertDocument",
     path: "/convert-document",
     method: "get",

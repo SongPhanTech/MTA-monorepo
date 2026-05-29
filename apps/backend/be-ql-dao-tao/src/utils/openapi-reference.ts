@@ -1,5 +1,14 @@
 /** CSS + script inject vào Scalar Reference — nút xuất DOCX tại mục Giới thiệu. */
 
+import { getMinioUrl } from "@workspace/libs/utils"
+
+/** Logo công ty trên MinIO (bucket public / path tương đối endpoint). */
+export const REFERENCE_LOGO_MINIO_PATH = "mta/image/logoCty.jpg"
+
+export function getReferenceLogoUrl() {
+  return getMinioUrl(REFERENCE_LOGO_MINIO_PATH)
+}
+
 export const REFERENCE_EXPORT_DOCX_CSS = `
 .mta-export-docx-wrap {
   margin: 1rem 0 1.5rem;
@@ -51,13 +60,13 @@ export const REFERENCE_EXPORT_DOCX_CSS = `
 }
 `
 
-/** Script chèn nút tải DOCX vào vùng mô tả / Giới thiệu và chèn logo trang ở đầu menu sidebar trái. */
-export const REFERENCE_EXPORT_DOCX_SCRIPT = `
+export function buildReferenceExportDocxScript(logoUrl: string) {
+  return `
 (function () {
   var EXPORT_PATH = "./openapi/export-docx";
   var BTN_ID = "mta-export-docx-btn";
   var LOGO_WRAP_ID = "mta-sidebar-logo-wrap";
-  var LOGO_URL = "https://drive.google.com/file/d/1AbnqKtWeNvfoSVUhelQcnzbjaVuKM-IW/view?usp=sharing";
+  var LOGO_URL = ${JSON.stringify(logoUrl)};
 
   function getExportUrl() {
     return new URL(EXPORT_PATH, window.location.href).href;
@@ -294,10 +303,11 @@ export const REFERENCE_EXPORT_DOCX_SCRIPT = `
   });
 })();
 `
+}
 
 export function injectReferenceExportDocx(html: string): string {
   const styleBlock = `<style>${REFERENCE_EXPORT_DOCX_CSS}</style>`
-  const scriptBlock = `<script>${REFERENCE_EXPORT_DOCX_SCRIPT}</script>`
+  const scriptBlock = `<script>${buildReferenceExportDocxScript(getReferenceLogoUrl())}</script>`
   if (html.includes("</head>")) {
     html = html.replace("</head>", `${styleBlock}</head>`)
   }
