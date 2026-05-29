@@ -3042,6 +3042,45 @@ export function usePresignedGetObject<TData = Awaited<ReturnType<typeof presigne
 
 
 
+export type deleteObjectResponse200 = {
+  data: { success: boolean }
+  status: 200
+}
+
+export type deleteObjectResponseSuccess = (deleteObjectResponse200) & {
+  headers: Headers;
+};
+
+export type deleteObjectResponse = (deleteObjectResponseSuccess)
+
+export const getDeleteObjectUrl = (params: PresignedGetObjectParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/minio?${stringifiedParams}` : `/api/minio`
+}
+
+export const deleteObject = async (params: PresignedGetObjectParams, options?: RequestInit): Promise<deleteObjectResponse> => {
+  
+  return customModelFetch<deleteObjectResponse>(getDeleteObjectUrl(params),
+  {      
+    ...options,
+    method: 'DELETE'
+    
+    
+  }
+);}
+
+
+
 
 export type convertDocumentResponse200 = {
   data: ConvertDocument200

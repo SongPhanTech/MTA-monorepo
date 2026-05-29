@@ -2099,6 +2099,7 @@ const convertToTthdbvData = async (
         nam: now.format("YYYY"),
         khoa: firstItem?.fixedClass?.trainingCourse?.name || "",
         dotXet: dotXet,
+        soQDBVLV: project?.thesisSession?.defenseDecisionNumber || "",
         chuyenNganh: majorName,
         khoaQuanLi: khoaquanli,
         tongTienBangSo: formatAmountWithComma(tongTienSo),

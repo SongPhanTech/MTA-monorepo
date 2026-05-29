@@ -876,6 +876,17 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
                                   userProfile: {
                                     select: {
                                       fullname: true,
+                                      academicRankType: {
+                                        select: {
+                                          sMa: true,
+                                        },
+                                      },
+                                      academicDegreeType: {
+                                        select: {
+                                          sMa: true,
+                                        },
+                                      },
+
                                     },
                                   },
                                 },
@@ -930,58 +941,86 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
                         }
                       }>[]
 
+                      const inAcademyExperts = expertProfilesData.filter(
+                        (profile) => profile.lecturerId != null
+                      )
+                      const outAcademyExperts = expertProfilesData.filter(
+                        (profile) => profile.lecturerId == null
+                      )
+
+                      const mapExpertRows = (
+                        profiles: typeof expertProfilesData
+                      ) =>
+                        profiles.map((profile, idx) => ({
+                          tt: idx + 1,
+                          ho_ten: (getSupervisorName(profile, false, true) as string) || "",
+                          cd_dl:
+                            profile.supervisorResearchTopic.filter((t) => !t.coSupervisorId)
+                              .length +
+                            profile.coSupervisorResearchTopic.filter((t) => !t.supervisorId)
+                              .length,
+                          tc_dl:
+                            profile.supervisorResearchTopic
+                              .filter((t) => !t.coSupervisorId)
+                              .map((e) => e.studentSubjectScore.subjectVersion.credit)
+                              .reduce((a, b) => a + b, 0) +
+                            profile.coSupervisorResearchTopic
+                              .filter((t) => !t.supervisorId)
+                              .map((e) => e.studentSubjectScore.subjectVersion.credit)
+                              .reduce((a, b) => a + b, 0),
+                          cd_dhd:
+                            profile.coSupervisorResearchTopic.filter((t) => !!t.supervisorId)
+                              .length +
+                            profile.supervisorResearchTopic.filter((t) => !!t.coSupervisorId)
+                              .length,
+                          tc_dhd:
+                            profile.coSupervisorResearchTopic
+                              .filter((t) => !!t.supervisorId)
+                              .map((e) => e.studentSubjectScore.subjectVersion.credit)
+                              .reduce((a, b) => a + b, 0) +
+                            profile.supervisorResearchTopic
+                              .filter((t) => !!t.coSupervisorId)
+                              .map((e) => e.studentSubjectScore.subjectVersion.credit)
+                              .reduce((a, b) => a + b, 0),
+                          cd_tong: `=E${9 + idx}+C${9 + idx}`,
+                          tai_tong: `=D${9 + idx}*H${9 + idx}+(F${9 + idx}*H${9 + idx}/2)`,
+                          dinh_muc: 3.75,
+                          ghi_chu: "",
+                        }))
+
+                      const sheetHeaderData = {
+                        khoa: khoaVaKyData?.[0]?.name?.toUpperCase?.(),
+                        hoc_ky: khoaVaKyData?.[1]?.name?.toUpperCase?.(),
+                      }
+
                       const res = await excelTemplate({
                         fileName: "TK_TaiGiangDayCuaGiangVien.xlsx",
                         path: "TK_TaiGiangDayCuaGiangVien.xlsx",
                         showGridLines: true,
                         wrapText: true,
                         prefix: "mta/luan-van",
-                        payload: [
+                        sheets: [
                           {
-                            data: {
-                              khoa: khoaVaKyData?.[0]?.name?.toUpperCase?.(),
-                              hoc_ky: khoaVaKyData?.[1]?.name?.toUpperCase?.(),
-                              data: expertProfilesData.map((profile, idx) => {
-                                return {
-                                  tt: idx + 1,
-                                  ho_ten: (getSupervisorName(profile, false, true) as string) || "",
-                                  cd_dl:
-                                    profile.supervisorResearchTopic.filter((t) => !t.coSupervisorId)
-                                      .length +
-                                    profile.coSupervisorResearchTopic.filter((t) => !t.supervisorId)
-                                      .length,
-                                  tc_dl:
-                                    profile.supervisorResearchTopic
-                                      .filter((t) => !t.coSupervisorId)
-                                      .map((e) => e.studentSubjectScore.subjectVersion.credit)
-                                      .reduce((a, b) => a + b, 0) +
-                                    profile.coSupervisorResearchTopic
-                                      .filter((t) => !t.supervisorId)
-                                      .map((e) => e.studentSubjectScore.subjectVersion.credit)
-                                      .reduce((a, b) => a + b, 0),
-                                  cd_dhd:
-                                    profile.coSupervisorResearchTopic.filter(
-                                      (t) => !!t.supervisorId
-                                    ).length +
-                                    profile.supervisorResearchTopic.filter(
-                                      (t) => !!t.coSupervisorId
-                                    ).length,
-                                  tc_dhd:
-                                    profile.coSupervisorResearchTopic
-                                      .filter((t) => !!t.supervisorId)
-                                      .map((e) => e.studentSubjectScore.subjectVersion.credit)
-                                      .reduce((a, b) => a + b, 0) +
-                                    profile.supervisorResearchTopic
-                                      .filter((t) => !!t.coSupervisorId)
-                                      .map((e) => e.studentSubjectScore.subjectVersion.credit)
-                                      .reduce((a, b) => a + b, 0),
-                                  cd_tong: `=E${9 + idx}+C${9 + idx}`,
-                                  tai_tong: `=D${9 + idx}*H${9 + idx}+(F${9 + idx}*H${9 + idx}/2)`,
-                                  dinh_muc: 3.75,
-                                  ghi_chu: "",
-                                }
-                              }),
-                            },
+                            sheetName: "Chuyên gia trong HV",
+                            payload: [
+                              {
+                                data: {
+                                  ...sheetHeaderData,
+                                  data: mapExpertRows(inAcademyExperts),
+                                },
+                              },
+                            ],
+                          },
+                          {
+                            sheetName: "Chuyên gia ngoài HV",
+                            payload: [
+                              {
+                                data: {
+                                  ...sheetHeaderData,
+                                  data: mapExpertRows(outAcademyExperts),
+                                },
+                              },
+                            ],
                           },
                         ],
                       })
