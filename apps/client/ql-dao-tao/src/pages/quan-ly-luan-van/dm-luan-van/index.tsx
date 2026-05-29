@@ -556,6 +556,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
         thesisRegistrations: {
           include: {
             thesisProject: {
+              // where: { thesisSession: { id: searchParams.thesisSessionId } },
               include: {
                 defenseSession: true,
                 thesisSession: {
@@ -1252,6 +1253,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
       onClick: async () =>
         await exportPhuLucDsLuanVan({
           allStudentsInClasses,
+          thesisSessionId: searchParams.thesisSessionId,
           showSpinner,
           hideSpinner,
           message,
@@ -1265,6 +1267,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
       onClick: async (signer?: SignerPayload) =>
         await exportSaoQDHDLV({
           allStudentsInClasses,
+          thesisSessionId: searchParams.thesisSessionId,
           showSpinner,
           hideSpinner,
           message,
@@ -1281,6 +1284,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
       onClick: async (signer?: SignerPayload) =>
         await exportGiayMoiHdlv({
           allStudentsInClasses,
+          thesisSessionId: searchParams.thesisSessionId,
           showSpinner,
           hideSpinner,
           message,
@@ -1308,6 +1312,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
       onClick: async (signer?: SignerPayload) =>
         await exportGiayMoiChamLvPb({
           allStudentsInClasses,
+          thesisSessionId: searchParams.thesisSessionId,
           showSpinner,
           hideSpinner,
           message,
@@ -1323,6 +1328,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
       onClick: async () =>
         await exportPhuLucQdhdd({
           allStudentsInClasses,
+          thesisSessionId: searchParams.thesisSessionId,
           showSpinner,
           hideSpinner,
           message,
@@ -1336,6 +1342,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
       onClick: async (signer?: SignerPayload) =>
         await exportBanSaoHDDGLV({
           allStudentsInClasses,
+          thesisSessionId: searchParams.thesisSessionId,
           showSpinner,
           hideSpinner,
           message,
@@ -1364,6 +1371,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
       onClick: async (signer?: SignerPayload) =>
         await exportHosobvlv({
           allStudentsInClasses,
+          thesisSessionId: searchParams.thesisSessionId,
           showSpinner,
           hideSpinner,
           message,
@@ -1377,6 +1385,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
       onClick: async () =>
         await exportDanhSachBaoVe({
           allStudentsInClasses,
+          thesisSessionId: searchParams.thesisSessionId,
           showSpinner,
           hideSpinner,
           message,
@@ -1388,11 +1397,34 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
       onClick: async () => {
         exportDanhSachBaoVeDanNgoaiPhong({
           allStudentsInClasses,
+          thesisSessionId: searchParams.thesisSessionId,
           showSpinner,
           hideSpinner,
           message,
         })
       },
+    },
+    {
+      id: 11,
+      label: "Thanh toán hội đồng bảo vệ",
+      onClick: async () =>
+        await exportThanhToanHoiDongBaoVe({
+          allStudentsInClasses,
+          thesisSessionId: searchParams.thesisSessionId,
+          showSpinner,
+          hideSpinner,
+          message,
+          defaultCouncilPayAmounts,
+          createCouncilPaymentRecord: async ({ councilMemberId, amount }) =>
+            await createPaymentRecord({
+              data: {
+                amount,
+                councilMember: {
+                  connect: { id: councilMemberId },
+                },
+              },
+            }),
+        }),
     },
     {
       id: 12,
@@ -1404,6 +1436,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
         await exportDsChuyenGia({
           allStudentsInClasses,
           showSpinner,
+          thesisSessionId: searchParams.thesisSessionId,
           hideSpinner,
           message,
           moneyAmount: signer?.moneyAmount,
@@ -1418,6 +1451,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
         await exportThanhToanHuongDanTrongHv({
           allStudentsInClasses,
           showSpinner,
+          thesisSessionId: searchParams.thesisSessionId,
           hideSpinner,
           message,
           inAcademy: true,
@@ -1431,6 +1465,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
         await exportThanhToanHuongDanTrongHv({
           allStudentsInClasses,
           showSpinner,
+          thesisSessionId: searchParams.thesisSessionId,
           hideSpinner,
           message,
           inAcademy: false,
@@ -1444,6 +1479,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
         await exportThongKeCbHdlv({
           allStudentsInClasses,
           showSpinner,
+          thesisSessionId: searchParams.thesisSessionId,
           hideSpinner,
           message,
         }),
@@ -1455,6 +1491,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
         await exportThongKeCbThamGiaHd({
           allStudentsInClasses,
           showSpinner,
+          thesisSessionId: searchParams.thesisSessionId,
           hideSpinner,
           message,
         }),
@@ -1465,6 +1502,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
       onClick: async () =>
         await exportThongKeCoQuanDonViCanBoNgoaiHv({
           allStudentsInClasses,
+          thesisSessionId: searchParams.thesisSessionId,
           showSpinner,
           hideSpinner,
           message,
@@ -1476,6 +1514,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
       onClick: async () =>
         await exportKetQuaBaoVeLuanVan({
           allStudentsInClasses,
+          thesisSessionId: searchParams.thesisSessionId,
           showSpinner,
           hideSpinner,
           message,
@@ -1487,30 +1526,10 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
       onClick: async () =>
         await exportDanhSachNopLuanVanThuVien({
           allStudentsInClasses,
+          thesisSessionId: searchParams.thesisSessionId,
           showSpinner,
           hideSpinner,
           message,
-        }),
-    },
-    {
-      id: 11,
-      label: "Thanh toán hội đồng bảo vệ",
-      onClick: async () =>
-        await exportThanhToanHoiDongBaoVe({
-          allStudentsInClasses,
-          showSpinner,
-          hideSpinner,
-          message,
-          defaultCouncilPayAmounts,
-          createCouncilPaymentRecord: async ({ councilMemberId, amount }) =>
-            await createPaymentRecord({
-              data: {
-                amount,
-                councilMember: {
-                  connect: { id: councilMemberId },
-                },
-              },
-            }),
         }),
     },
   ]
@@ -1917,6 +1936,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       onClick={async () => {
                         await exportHDDanhGiaLuanVan({
                           allStudentsInClasses,
+                          thesisSessionId: searchParams.thesisSessionId,
                           showSpinner,
                           hideSpinner,
                           message,
@@ -1932,6 +1952,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       onClick={async () => {
                         await exportKiemTraTienDo({
                           allStudentsInClasses,
+                          thesisSessionId: searchParams.thesisSessionId,
                           showSpinner,
                           hideSpinner,
                           message,

@@ -13,6 +13,7 @@ import {
 } from "../pages/quan-ly-luan-van/dm-luan-van/index"
 import { docxTemplate } from "./docx-template"
 interface ExportOptions {
+  thesisSessionId?: string
   allStudentsInClasses: any[]
   showSpinner: () => void
   hideSpinner: () => void
@@ -339,31 +340,31 @@ interface HDDanhGiaLuanVanTemplateData {
   data: HDDanhGiaLuanVanData[]
 }
 
-
-const formatDay = (day: number) => day.toString().padStart(2, "0"); // Luôn hiển thị 01-09
-const formatMonth = (month: number) => (month === 1 || month === 2) ? `0${month}` : month.toString(); // Chỉ thêm 0 cho tháng 1, 2
+const formatDay = (day: number) => day.toString().padStart(2, "0") // Luôn hiển thị 01-09
+const formatMonth = (month: number) => (month === 1 || month === 2 ? `0${month}` : month.toString()) // Chỉ thêm 0 cho tháng 1, 2
 
 export const formatDocDate = (date?: Date | string | null) => {
-  if (!date) return { day: "", month: "", year: "" };
-  const d = dayjs(date);
+  if (!date) return { day: "", month: "", year: "" }
+  const d = dayjs(date)
 
   return {
     day: formatDay(d.date()),
     month: formatMonth(d.month() + 1),
     year: d.year().toString(),
-  };
-};
+  }
+}
 
 export const formatBirthDate = (date?: Date | string | null) => {
-  if (!date) return "";
-  const d = dayjs(date);
+  if (!date) return ""
+  const d = dayjs(date)
 
-  return `${formatDay(d.date())}/${formatMonth(d.month() + 1)}/${d.year()}`;
-};
+  return `${formatDay(d.date())}/${formatMonth(d.month() + 1)}/${d.year()}`
+}
 
 export const exportPhuLucDsLuanVan = async ({
   allStudentsInClasses,
   showSpinner,
+  thesisSessionId,
   hideSpinner,
   message,
 }: ExportOptions) => {
@@ -380,19 +381,17 @@ export const exportPhuLucDsLuanVan = async ({
     let soQD = ""
     let ngayQD = ""
     allStudentsInClasses.forEach((student) => {
-      dotxet = dotxet || student?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.name || ""
-      const thesisProject = student?.thesisRegistrations?.[0]?.thesisProject
-      soQD =
-        soQD ||
-        student?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.decisionNumber ||
-        ""
-      ngayQD =
-        ngayQD || student?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.decisionDate
-          ? dayjs(
-              student?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.decisionDate
-            ).format("DD/MM/YYYY")
-          : ""
+      const thesisProject = student?.thesisRegistrations?.find(
+        (reg: any) => reg?.thesisProject?.thesisSession?.id === thesisSessionId
+      )?.thesisProject
       if (!thesisProject) return
+      dotxet = dotxet || thesisProject?.thesisSession?.name || ""
+      soQD = soQD || thesisProject?.thesisSession?.decisionNumber || ""
+      ngayQD =
+        ngayQD ||
+        (thesisProject?.thesisSession?.decisionDate
+          ? dayjs(thesisProject.thesisSession.decisionDate).format("DD/MM/YYYY")
+          : "")
       const majorName =
         student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.trainingField?.name || ""
       const specializationName =
@@ -516,7 +515,7 @@ export const exportPhuLucDsLuanVan = async ({
     })
     message.success("Xuất file thành công")
   } catch (error) {
-    console.log("error", error)
+    console.error("error", error)
     message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
   } finally {
     hideSpinner()
@@ -601,7 +600,6 @@ export const exportThongKeCbHdlv = async ({
   const ngay = ngayhientai.split("/")[0]
   const thang = ngayhientai.split("/")[1]
   const nam = ngayhientai.split("/")[2]
-  console.log("ngayhientai", allStudentsInClasses)
   // const studenEnable = allStudentsInClasses?.filter((student) => student.thesisRegistrations > 0);
   const tendot =
     allStudentsInClasses?.length > 0
@@ -714,7 +712,6 @@ export const exportDanhSachBaoVe = async ({
         }
       })
       .filter(Boolean)
-    // console.log("allStudentsInClasses",allStudentsInClasses)
     const dotxet =
       allStudentsInClasses
         ?.map((student) =>
@@ -1512,6 +1509,7 @@ export const exportSaoQDHDLV = async ({
 
 export const exportKiemTraTienDo = async ({
   allStudentsInClasses,
+  thesisSessionId,
   showSpinner,
   hideSpinner,
   message,
@@ -1526,9 +1524,11 @@ export const exportKiemTraTienDo = async ({
     let dotxet = ""
 
     allStudentsInClasses.forEach((student) => {
-      dotxet = dotxet || student?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.name || ""
-      const thesisProject = student?.thesisRegistrations?.[0]?.thesisProject
-      if (!thesisProject || !thesisProject.supervisor) return
+      const thesisProject = student?.thesisRegistrations?.find(
+        (reg: any) => reg?.thesisProject?.thesisSession?.id === thesisSessionId
+      )?.thesisProject
+      if (!thesisProject) return
+      dotxet = dotxet || thesisProject?.thesisSession?.name || ""
       const organizationId = thesisProject.organization?.Id || ""
       const organizationName = thesisProject.organization?.sTen || "Chưa có đơn vị"
       const organizationCode = thesisProject.organization?.sCode || ""
@@ -1895,6 +1895,7 @@ const downloadFile = (blob: Blob, fileName: string) => {
 
 export const exportThanhToanHoiDongBaoVe = async ({
   allStudentsInClasses,
+  thesisSessionId,
   showSpinner,
   hideSpinner,
   message,
@@ -1909,6 +1910,7 @@ export const exportThanhToanHoiDongBaoVe = async ({
     showSpinner?.()
     const dataConvert = await convertToTthdbvData(
       allStudentsInClasses,
+      thesisSessionId,
       createCouncilPaymentRecord,
       defaultCouncilPayAmounts
     )
@@ -1948,8 +1950,21 @@ const tenDoiTuong = {
     shortname: "QSQT",
   },
 }
+
+const getThesisProjectWithCouncilBySessionId = (student: any, thesisSessionId?: string) => {
+  if (!thesisSessionId) return undefined
+
+  const thesisProject = student?.thesisRegistrations?.find(
+    (reg: any) => reg?.thesisProject?.thesisSession?.id === thesisSessionId
+  )?.thesisProject
+
+  if (!thesisProject?.council?.members?.length) return undefined
+  return thesisProject
+}
+
 const convertToTthdbvData = async (
   allStudentsInClasses: any[],
+  thesisSessionId?: string,
   createCouncilPaymentRecord?: (payload: {
     councilMemberId: string
     amount: number
@@ -1961,20 +1976,18 @@ const convertToTthdbvData = async (
   }> = []
 ): Promise<TthdbvData[]> => {
   if (!allStudentsInClasses?.length) return []
-
   const now = dayjs()
   const studentsWithProject = allStudentsInClasses.filter((student) => {
-    const project = student?.thesisRegistrations?.[0]?.thesisProject
-    return Boolean(project?.council?.members?.length)
+    return Boolean(getThesisProjectWithCouncilBySessionId(student, thesisSessionId))
   })
   if (!studentsWithProject.length) return []
-
+  console.log("studentsWithProject", studentsWithProject)
   const majorMap = new Map<string, any[]>()
   let khoaquanli = ""
 
   const createdCouncilPaymentIds = new Set<string>()
   for (const student of studentsWithProject) {
-    const project = student?.thesisRegistrations?.[0]?.thesisProject
+    const project = getThesisProjectWithCouncilBySessionId(student, thesisSessionId)
     const council = project?.council?.members
     if (!project || !council?.length) continue
 
@@ -2395,6 +2408,7 @@ const convertToThongKeCbThamGiaHdData = (allStudentsInClasses: any[]): ThongKeCb
 }
 export const exportThanhToanHuongDanTrongHv = async ({
   allStudentsInClasses,
+  thesisSessionId,
   showSpinner,
   hideSpinner,
   message,
@@ -2409,6 +2423,7 @@ export const exportThanhToanHuongDanTrongHv = async ({
     showSpinner?.()
     const dataConvert = await convertToThanhToanHuongDanTrongHvData(
       allStudentsInClasses,
+      thesisSessionId,
       inAcademy,
       ensureSupervisorPaymentsForExport
     )
@@ -2444,6 +2459,7 @@ export const exportThanhToanHuongDanTrongHv = async ({
 }
 const convertToThanhToanHuongDanTrongHvData = async (
   allStudentsInClasses: any[],
+  thesisSessionId?: string,
   inAcademy?: boolean,
   ensureSupervisorPaymentsForExport?: (
     project: any,
@@ -2455,8 +2471,11 @@ const convertToThanhToanHuongDanTrongHvData = async (
   }
   const now = dayjs()
   const organizationMap = new Map<string, ThanhToanHuongDanTrongHvData>()
-
-  for (const student of allStudentsInClasses) {
+  const studentsWithProject = allStudentsInClasses.filter((student) => {
+    return Boolean(getThesisProjectWithCouncilBySessionId(student, thesisSessionId))
+  })
+  if (!studentsWithProject.length) return []
+  for (const student of studentsWithProject) {
     const project = student?.thesisRegistrations?.[0]?.thesisProject
     if (!project) continue
 
@@ -3044,6 +3063,7 @@ const convertToPhuLucQdhdTemplateData = (allStudentsInClasses: any[]): PhuLucQdh
 export const exportDsChuyenGia = async ({
   allStudentsInClasses,
   showSpinner,
+  thesisSessionId,
   hideSpinner,
   message,
   moneyAmount,
@@ -3053,8 +3073,14 @@ export const exportDsChuyenGia = async ({
     message.error("Không có dữ liệu để xuất danh sách chuyên gia")
     return []
   }
+
   try {
-    const dataConvert = convertToDsChuyenGiaData(allStudentsInClasses, moneyAmount, signingDate)
+    const dataConvert = convertToDsChuyenGiaData(
+      allStudentsInClasses,
+      thesisSessionId,
+      moneyAmount,
+      signingDate
+    )
     if (!dataConvert.length) {
       message.error("Chưa có dữ liệu để xuất danh sách chuyên gia")
       return []
@@ -3086,6 +3112,7 @@ export const exportDsChuyenGia = async ({
 }
 const convertToDsChuyenGiaData = (
   allStudentsInClasses: any[],
+  thesisSessionId?: string,
   moneyAmount?: number,
   signingDate?: Date | string
 ): DsChuyenGiaData[] => {
@@ -3100,7 +3127,9 @@ const convertToDsChuyenGiaData = (
   const now = resolveSigningDate(signingDate)
 
   allStudentsInClasses.forEach((student) => {
-    const project = student?.thesisRegistrations?.[0]?.thesisProject
+    const project = student?.thesisRegistrations?.find(
+      (reg: any) => reg?.thesisProject?.thesisSession?.id === thesisSessionId
+    )?.thesisProject
     if (!project) return
     const defenseDate = project.defenseDate ? dayjs(project.defenseDate).format("DD/MM/YYYY") : ""
     const defenseTime = formatDefenseSessionClock(project.defenseSession?.startTime)
