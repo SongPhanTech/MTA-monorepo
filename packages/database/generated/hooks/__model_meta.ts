@@ -9916,6 +9916,34 @@ const metadata: ModelMeta = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'unionLeader',
+                }, deputyUnionSecretary: {
+                    name: "deputyUnionSecretary",
+                    type: "Student",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'deputyUnionSecretaryOf',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "deputyUnionSecretaryId" },
+                }, deputyUnionSecretaryId: {
+                    name: "deputyUnionSecretaryId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'deputyUnionSecretary',
+                }, unionSecretary: {
+                    name: "unionSecretary",
+                    type: "Student",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'unionSecretaryOf',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "unionSecretaryId" },
+                }, unionSecretaryId: {
+                    name: "unionSecretaryId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'unionSecretary',
                 }, trainingCourse: {
                     name: "trainingCourse",
                     type: "TrainingCourse",
@@ -10043,12 +10071,6 @@ const metadata: ModelMeta = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
-                }, classMonitorId: {
-                    name: "classMonitorId",
-                    fields: ["classMonitorId"]
-                }, unionLeaderId: {
-                    name: "unionLeaderId",
-                    fields: ["unionLeaderId"]
                 }, curriculumVersionId: {
                     name: "curriculumVersionId",
                     fields: ["curriculumVersionId"]
@@ -14748,14 +14770,26 @@ const metadata: ModelMeta = {
                     name: "classMonitor",
                     type: "FixedClass",
                     isDataModel: true,
-                    isOptional: true,
+                    isArray: true,
                     backLink: 'classMonitor',
                 }, unionLeaderOf: {
                     name: "unionLeaderOf",
                     type: "FixedClass",
                     isDataModel: true,
-                    isOptional: true,
+                    isArray: true,
                     backLink: 'unionLeader',
+                }, deputyUnionSecretaryOf: {
+                    name: "deputyUnionSecretaryOf",
+                    type: "FixedClass",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'deputyUnionSecretary',
+                }, unionSecretaryOf: {
+                    name: "unionSecretaryOf",
+                    type: "FixedClass",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'unionSecretary',
                 }, fixedClass: {
                     name: "fixedClass",
                     type: "FixedClass",

@@ -8143,6 +8143,8 @@ export namespace Prisma {
         graduated: 'graduated',
         classMonitorId: 'classMonitorId',
         unionLeaderId: 'unionLeaderId',
+        deputyUnionSecretaryId: 'deputyUnionSecretaryId',
+        unionSecretaryId: 'unionSecretaryId',
         trainingCourseId: 'trainingCourseId',
         managementOrganizationId: 'managementOrganizationId',
         lecturerManagementId: 'lecturerManagementId',
@@ -12059,6 +12061,8 @@ export namespace Prisma {
         summary: 'summary',
         classMonitorId: 'classMonitorId',
         unionLeaderId: 'unionLeaderId',
+        deputyUnionSecretaryId: 'deputyUnionSecretaryId',
+        unionSecretaryId: 'unionSecretaryId',
         trainingCourseId: 'trainingCourseId',
         managementOrganizationId: 'managementOrganizationId',
         lecturerManagementId: 'lecturerManagementId',
@@ -49709,6 +49713,8 @@ export namespace Prisma {
         readonly [Symbol.toStringTag]: "PrismaPromise";
         classMonitor<T extends FixedClass$classMonitorArgs<ExtArgs> = {}>(args?: Subset<T, FixedClass$classMonitorArgs<ExtArgs>>): Prisma__StudentClient<$Result.GetResult<Prisma.$StudentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         unionLeader<T extends FixedClass$unionLeaderArgs<ExtArgs> = {}>(args?: Subset<T, FixedClass$unionLeaderArgs<ExtArgs>>): Prisma__StudentClient<$Result.GetResult<Prisma.$StudentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        deputyUnionSecretary<T extends FixedClass$deputyUnionSecretaryArgs<ExtArgs> = {}>(args?: Subset<T, FixedClass$deputyUnionSecretaryArgs<ExtArgs>>): Prisma__StudentClient<$Result.GetResult<Prisma.$StudentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        unionSecretary<T extends FixedClass$unionSecretaryArgs<ExtArgs> = {}>(args?: Subset<T, FixedClass$unionSecretaryArgs<ExtArgs>>): Prisma__StudentClient<$Result.GetResult<Prisma.$StudentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         trainingCourse<T extends TrainingCourseDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TrainingCourseDefaultArgs<ExtArgs>>): Prisma__TrainingCourseClient<$Result.GetResult<Prisma.$TrainingCoursePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
         managementOrganization<T extends FixedClass$managementOrganizationArgs<ExtArgs> = {}>(args?: Subset<T, FixedClass$managementOrganizationArgs<ExtArgs>>): Prisma__DM_DonViClient<$Result.GetResult<Prisma.$DM_DonViPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         lecturerManagement<T extends FixedClass$lecturerManagementArgs<ExtArgs> = {}>(args?: Subset<T, FixedClass$lecturerManagementArgs<ExtArgs>>): Prisma__LecturerClient<$Result.GetResult<Prisma.$LecturerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
@@ -49760,6 +49766,8 @@ export namespace Prisma {
         readonly graduated: FieldRef<"FixedClass", 'Boolean'>;
         readonly classMonitorId: FieldRef<"FixedClass", 'String'>;
         readonly unionLeaderId: FieldRef<"FixedClass", 'String'>;
+        readonly deputyUnionSecretaryId: FieldRef<"FixedClass", 'String'>;
+        readonly unionSecretaryId: FieldRef<"FixedClass", 'String'>;
         readonly trainingCourseId: FieldRef<"FixedClass", 'String'>;
         readonly managementOrganizationId: FieldRef<"FixedClass", 'String'>;
         readonly lecturerManagementId: FieldRef<"FixedClass", 'String'>;
@@ -67248,8 +67256,10 @@ export namespace Prisma {
         readonly [Symbol.toStringTag]: "PrismaPromise";
         trainingLocation<T extends Student$trainingLocationArgs<ExtArgs> = {}>(args?: Subset<T, Student$trainingLocationArgs<ExtArgs>>): Prisma__TrainingLocationClient<$Result.GetResult<Prisma.$TrainingLocationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         priorityObject<T extends Student$priorityObjectArgs<ExtArgs> = {}>(args?: Subset<T, Student$priorityObjectArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PriorityObjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
-        classMonitor<T extends Student$classMonitorArgs<ExtArgs> = {}>(args?: Subset<T, Student$classMonitorArgs<ExtArgs>>): Prisma__FixedClassClient<$Result.GetResult<Prisma.$FixedClassPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
-        unionLeaderOf<T extends Student$unionLeaderOfArgs<ExtArgs> = {}>(args?: Subset<T, Student$unionLeaderOfArgs<ExtArgs>>): Prisma__FixedClassClient<$Result.GetResult<Prisma.$FixedClassPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        classMonitor<T extends Student$classMonitorArgs<ExtArgs> = {}>(args?: Subset<T, Student$classMonitorArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FixedClassPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        unionLeaderOf<T extends Student$unionLeaderOfArgs<ExtArgs> = {}>(args?: Subset<T, Student$unionLeaderOfArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FixedClassPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        deputyUnionSecretaryOf<T extends Student$deputyUnionSecretaryOfArgs<ExtArgs> = {}>(args?: Subset<T, Student$deputyUnionSecretaryOfArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FixedClassPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        unionSecretaryOf<T extends Student$unionSecretaryOfArgs<ExtArgs> = {}>(args?: Subset<T, Student$unionSecretaryOfArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FixedClassPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         fixedClass<T extends Student$fixedClassArgs<ExtArgs> = {}>(args?: Subset<T, Student$fixedClassArgs<ExtArgs>>): Prisma__FixedClassClient<$Result.GetResult<Prisma.$FixedClassPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         subjectClassStudent<T extends Student$subjectClassStudentArgs<ExtArgs> = {}>(args?: Subset<T, Student$subjectClassStudentArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentSubjectScorePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         userProfile<T extends UserProfileDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserProfileDefaultArgs<ExtArgs>>): Prisma__UserProfileClient<$Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
@@ -144307,6 +144317,10 @@ export namespace Prisma {
      */
     export type StudentCountOutputType = {
         priorityObject: number
+        classMonitor: number
+        unionLeaderOf: number
+        deputyUnionSecretaryOf: number
+        unionSecretaryOf: number
         subjectClassStudent: number
         studentTrainingScore: number
         studentSemesterResult: number
@@ -144335,6 +144349,10 @@ export namespace Prisma {
     };
     export type StudentCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         priorityObject?: boolean | StudentCountOutputTypeCountPriorityObjectArgs
+        classMonitor?: boolean | StudentCountOutputTypeCountClassMonitorArgs
+        unionLeaderOf?: boolean | StudentCountOutputTypeCountUnionLeaderOfArgs
+        deputyUnionSecretaryOf?: boolean | StudentCountOutputTypeCountDeputyUnionSecretaryOfArgs
+        unionSecretaryOf?: boolean | StudentCountOutputTypeCountUnionSecretaryOfArgs
         subjectClassStudent?: boolean | StudentCountOutputTypeCountSubjectClassStudentArgs
         studentTrainingScore?: boolean | StudentCountOutputTypeCountStudentTrainingScoreArgs
         studentSemesterResult?: boolean | StudentCountOutputTypeCountStudentSemesterResultArgs
@@ -144375,6 +144393,30 @@ export namespace Prisma {
      */
     export type StudentCountOutputTypeCountPriorityObjectArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         where?: PriorityObjectWhereInput
+    };
+    /**
+     * StudentCountOutputType without action
+     */
+    export type StudentCountOutputTypeCountClassMonitorArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: FixedClassWhereInput
+    };
+    /**
+     * StudentCountOutputType without action
+     */
+    export type StudentCountOutputTypeCountUnionLeaderOfArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: FixedClassWhereInput
+    };
+    /**
+     * StudentCountOutputType without action
+     */
+    export type StudentCountOutputTypeCountDeputyUnionSecretaryOfArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: FixedClassWhereInput
+    };
+    /**
+     * StudentCountOutputType without action
+     */
+    export type StudentCountOutputTypeCountUnionSecretaryOfArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: FixedClassWhereInput
     };
     /**
      * StudentCountOutputType without action
@@ -221479,6 +221521,8 @@ export namespace Prisma {
         graduated: boolean | null
         classMonitorId: string | null
         unionLeaderId: string | null
+        deputyUnionSecretaryId: string | null
+        unionSecretaryId: string | null
         trainingCourseId: string | null
         managementOrganizationId: string | null
         lecturerManagementId: string | null
@@ -221502,6 +221546,8 @@ export namespace Prisma {
         graduated: boolean | null
         classMonitorId: string | null
         unionLeaderId: string | null
+        deputyUnionSecretaryId: string | null
+        unionSecretaryId: string | null
         trainingCourseId: string | null
         managementOrganizationId: string | null
         lecturerManagementId: string | null
@@ -221525,6 +221571,8 @@ export namespace Prisma {
         graduated: number
         classMonitorId: number
         unionLeaderId: number
+        deputyUnionSecretaryId: number
+        unionSecretaryId: number
         trainingCourseId: number
         managementOrganizationId: number
         lecturerManagementId: number
@@ -221555,6 +221603,8 @@ export namespace Prisma {
         graduated?: true
         classMonitorId?: true
         unionLeaderId?: true
+        deputyUnionSecretaryId?: true
+        unionSecretaryId?: true
         trainingCourseId?: true
         managementOrganizationId?: true
         lecturerManagementId?: true
@@ -221578,6 +221628,8 @@ export namespace Prisma {
         graduated?: true
         classMonitorId?: true
         unionLeaderId?: true
+        deputyUnionSecretaryId?: true
+        unionSecretaryId?: true
         trainingCourseId?: true
         managementOrganizationId?: true
         lecturerManagementId?: true
@@ -221601,6 +221653,8 @@ export namespace Prisma {
         graduated?: true
         classMonitorId?: true
         unionLeaderId?: true
+        deputyUnionSecretaryId?: true
+        unionSecretaryId?: true
         trainingCourseId?: true
         managementOrganizationId?: true
         lecturerManagementId?: true
@@ -221705,6 +221759,8 @@ export namespace Prisma {
         graduated: boolean
         classMonitorId: string | null
         unionLeaderId: string | null
+        deputyUnionSecretaryId: string | null
+        unionSecretaryId: string | null
         trainingCourseId: string
         managementOrganizationId: string | null
         lecturerManagementId: string | null
@@ -221745,6 +221801,8 @@ export namespace Prisma {
         graduated?: boolean
         classMonitorId?: boolean
         unionLeaderId?: boolean
+        deputyUnionSecretaryId?: boolean
+        unionSecretaryId?: boolean
         trainingCourseId?: boolean
         managementOrganizationId?: boolean
         lecturerManagementId?: boolean
@@ -221754,6 +221812,8 @@ export namespace Prisma {
         planTrainingSubjectId?: boolean
         classMonitor?: boolean | FixedClass$classMonitorArgs<ExtArgs>
         unionLeader?: boolean | FixedClass$unionLeaderArgs<ExtArgs>
+        deputyUnionSecretary?: boolean | FixedClass$deputyUnionSecretaryArgs<ExtArgs>
+        unionSecretary?: boolean | FixedClass$unionSecretaryArgs<ExtArgs>
         trainingCourse?: boolean | TrainingCourseDefaultArgs<ExtArgs>
         managementOrganization?: boolean | FixedClass$managementOrganizationArgs<ExtArgs>
         lecturerManagement?: boolean | FixedClass$lecturerManagementArgs<ExtArgs>
@@ -221782,6 +221842,8 @@ export namespace Prisma {
         graduated?: boolean
         classMonitorId?: boolean
         unionLeaderId?: boolean
+        deputyUnionSecretaryId?: boolean
+        unionSecretaryId?: boolean
         trainingCourseId?: boolean
         managementOrganizationId?: boolean
         lecturerManagementId?: boolean
@@ -221791,6 +221853,8 @@ export namespace Prisma {
         planTrainingSubjectId?: boolean
         classMonitor?: boolean | FixedClass$classMonitorArgs<ExtArgs>
         unionLeader?: boolean | FixedClass$unionLeaderArgs<ExtArgs>
+        deputyUnionSecretary?: boolean | FixedClass$deputyUnionSecretaryArgs<ExtArgs>
+        unionSecretary?: boolean | FixedClass$unionSecretaryArgs<ExtArgs>
         trainingCourse?: boolean | TrainingCourseDefaultArgs<ExtArgs>
         managementOrganization?: boolean | FixedClass$managementOrganizationArgs<ExtArgs>
         lecturerManagement?: boolean | FixedClass$lecturerManagementArgs<ExtArgs>
@@ -221813,6 +221877,8 @@ export namespace Prisma {
         graduated?: boolean
         classMonitorId?: boolean
         unionLeaderId?: boolean
+        deputyUnionSecretaryId?: boolean
+        unionSecretaryId?: boolean
         trainingCourseId?: boolean
         managementOrganizationId?: boolean
         lecturerManagementId?: boolean
@@ -221822,6 +221888,8 @@ export namespace Prisma {
         planTrainingSubjectId?: boolean
         classMonitor?: boolean | FixedClass$classMonitorArgs<ExtArgs>
         unionLeader?: boolean | FixedClass$unionLeaderArgs<ExtArgs>
+        deputyUnionSecretary?: boolean | FixedClass$deputyUnionSecretaryArgs<ExtArgs>
+        unionSecretary?: boolean | FixedClass$unionSecretaryArgs<ExtArgs>
         trainingCourse?: boolean | TrainingCourseDefaultArgs<ExtArgs>
         managementOrganization?: boolean | FixedClass$managementOrganizationArgs<ExtArgs>
         lecturerManagement?: boolean | FixedClass$lecturerManagementArgs<ExtArgs>
@@ -221844,6 +221912,8 @@ export namespace Prisma {
         graduated?: boolean
         classMonitorId?: boolean
         unionLeaderId?: boolean
+        deputyUnionSecretaryId?: boolean
+        unionSecretaryId?: boolean
         trainingCourseId?: boolean
         managementOrganizationId?: boolean
         lecturerManagementId?: boolean
@@ -221852,10 +221922,12 @@ export namespace Prisma {
         classType?: boolean
         planTrainingSubjectId?: boolean
     };
-    export type FixedClassOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name" | "summary" | "startYear" | "graduated" | "classMonitorId" | "unionLeaderId" | "trainingCourseId" | "managementOrganizationId" | "lecturerManagementId" | "staffManagementId" | "curriculumVersionId" | "classType" | "planTrainingSubjectId", ExtArgs["result"]["fixedClass"]>;
+    export type FixedClassOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name" | "summary" | "startYear" | "graduated" | "classMonitorId" | "unionLeaderId" | "deputyUnionSecretaryId" | "unionSecretaryId" | "trainingCourseId" | "managementOrganizationId" | "lecturerManagementId" | "staffManagementId" | "curriculumVersionId" | "classType" | "planTrainingSubjectId", ExtArgs["result"]["fixedClass"]>;
     export type FixedClassInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         classMonitor?: boolean | FixedClass$classMonitorArgs<ExtArgs>
         unionLeader?: boolean | FixedClass$unionLeaderArgs<ExtArgs>
+        deputyUnionSecretary?: boolean | FixedClass$deputyUnionSecretaryArgs<ExtArgs>
+        unionSecretary?: boolean | FixedClass$unionSecretaryArgs<ExtArgs>
         trainingCourse?: boolean | TrainingCourseDefaultArgs<ExtArgs>
         managementOrganization?: boolean | FixedClass$managementOrganizationArgs<ExtArgs>
         lecturerManagement?: boolean | FixedClass$lecturerManagementArgs<ExtArgs>
@@ -221872,6 +221944,8 @@ export namespace Prisma {
     export type FixedClassIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         classMonitor?: boolean | FixedClass$classMonitorArgs<ExtArgs>
         unionLeader?: boolean | FixedClass$unionLeaderArgs<ExtArgs>
+        deputyUnionSecretary?: boolean | FixedClass$deputyUnionSecretaryArgs<ExtArgs>
+        unionSecretary?: boolean | FixedClass$unionSecretaryArgs<ExtArgs>
         trainingCourse?: boolean | TrainingCourseDefaultArgs<ExtArgs>
         managementOrganization?: boolean | FixedClass$managementOrganizationArgs<ExtArgs>
         lecturerManagement?: boolean | FixedClass$lecturerManagementArgs<ExtArgs>
@@ -221882,6 +221956,8 @@ export namespace Prisma {
     export type FixedClassIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         classMonitor?: boolean | FixedClass$classMonitorArgs<ExtArgs>
         unionLeader?: boolean | FixedClass$unionLeaderArgs<ExtArgs>
+        deputyUnionSecretary?: boolean | FixedClass$deputyUnionSecretaryArgs<ExtArgs>
+        unionSecretary?: boolean | FixedClass$unionSecretaryArgs<ExtArgs>
         trainingCourse?: boolean | TrainingCourseDefaultArgs<ExtArgs>
         managementOrganization?: boolean | FixedClass$managementOrganizationArgs<ExtArgs>
         lecturerManagement?: boolean | FixedClass$lecturerManagementArgs<ExtArgs>
@@ -221894,6 +221970,8 @@ export namespace Prisma {
         objects: {
             classMonitor: Prisma.$StudentPayload<ExtArgs> | null
             unionLeader: Prisma.$StudentPayload<ExtArgs> | null
+            deputyUnionSecretary: Prisma.$StudentPayload<ExtArgs> | null
+            unionSecretary: Prisma.$StudentPayload<ExtArgs> | null
             trainingCourse: Prisma.$TrainingCoursePayload<ExtArgs>
             managementOrganization: Prisma.$DM_DonViPayload<ExtArgs> | null
             lecturerManagement: Prisma.$LecturerPayload<ExtArgs> | null
@@ -221921,6 +221999,8 @@ export namespace Prisma {
             graduated: boolean
             classMonitorId: string | null
             unionLeaderId: string | null
+            deputyUnionSecretaryId: string | null
+            unionSecretaryId: string | null
             trainingCourseId: string
             managementOrganizationId: string | null
             lecturerManagementId: string | null
@@ -222334,6 +222414,42 @@ export namespace Prisma {
      * FixedClass.unionLeader
      */
     export type FixedClass$unionLeaderArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the Student
+         */
+        select?: StudentSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the Student
+         */
+        omit?: StudentOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: StudentInclude<ExtArgs> | null
+        where?: StudentWhereInput
+    };
+    /**
+     * FixedClass.deputyUnionSecretary
+     */
+    export type FixedClass$deputyUnionSecretaryArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the Student
+         */
+        select?: StudentSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the Student
+         */
+        omit?: StudentOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: StudentInclude<ExtArgs> | null
+        where?: StudentWhereInput
+    };
+    /**
+     * FixedClass.unionSecretary
+     */
+    export type FixedClass$unionSecretaryArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         /**
          * Select specific fields to fetch from the Student
          */
@@ -258497,6 +258613,8 @@ export namespace Prisma {
         priorityObject?: boolean | Student$priorityObjectArgs<ExtArgs>
         classMonitor?: boolean | Student$classMonitorArgs<ExtArgs>
         unionLeaderOf?: boolean | Student$unionLeaderOfArgs<ExtArgs>
+        deputyUnionSecretaryOf?: boolean | Student$deputyUnionSecretaryOfArgs<ExtArgs>
+        unionSecretaryOf?: boolean | Student$unionSecretaryOfArgs<ExtArgs>
         fixedClass?: boolean | Student$fixedClassArgs<ExtArgs>
         subjectClassStudent?: boolean | Student$subjectClassStudentArgs<ExtArgs>
         userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
@@ -258686,6 +258804,8 @@ export namespace Prisma {
         priorityObject?: boolean | Student$priorityObjectArgs<ExtArgs>
         classMonitor?: boolean | Student$classMonitorArgs<ExtArgs>
         unionLeaderOf?: boolean | Student$unionLeaderOfArgs<ExtArgs>
+        deputyUnionSecretaryOf?: boolean | Student$deputyUnionSecretaryOfArgs<ExtArgs>
+        unionSecretaryOf?: boolean | Student$unionSecretaryOfArgs<ExtArgs>
         fixedClass?: boolean | Student$fixedClassArgs<ExtArgs>
         subjectClassStudent?: boolean | Student$subjectClassStudentArgs<ExtArgs>
         userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
@@ -258743,8 +258863,10 @@ export namespace Prisma {
              * đối tượng ưu tiên
              */
             priorityObject: Prisma.$PriorityObjectPayload<ExtArgs>[]
-            classMonitor: Prisma.$FixedClassPayload<ExtArgs> | null
-            unionLeaderOf: Prisma.$FixedClassPayload<ExtArgs> | null
+            classMonitor: Prisma.$FixedClassPayload<ExtArgs>[]
+            unionLeaderOf: Prisma.$FixedClassPayload<ExtArgs>[]
+            deputyUnionSecretaryOf: Prisma.$FixedClassPayload<ExtArgs>[]
+            unionSecretaryOf: Prisma.$FixedClassPayload<ExtArgs>[]
             fixedClass: Prisma.$FixedClassPayload<ExtArgs> | null
             subjectClassStudent: Prisma.$StudentSubjectScorePayload<ExtArgs>[]
             userProfile: Prisma.$UserProfilePayload<ExtArgs>
@@ -259315,6 +259437,11 @@ export namespace Prisma {
          */
         include?: FixedClassInclude<ExtArgs> | null
         where?: FixedClassWhereInput
+        orderBy?: FixedClassOrderByWithRelationInput | FixedClassOrderByWithRelationInput[]
+        cursor?: FixedClassWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: FixedClassScalarFieldEnum | FixedClassScalarFieldEnum[]
     };
     /**
      * Student.unionLeaderOf
@@ -259333,6 +259460,57 @@ export namespace Prisma {
          */
         include?: FixedClassInclude<ExtArgs> | null
         where?: FixedClassWhereInput
+        orderBy?: FixedClassOrderByWithRelationInput | FixedClassOrderByWithRelationInput[]
+        cursor?: FixedClassWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: FixedClassScalarFieldEnum | FixedClassScalarFieldEnum[]
+    };
+    /**
+     * Student.deputyUnionSecretaryOf
+     */
+    export type Student$deputyUnionSecretaryOfArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the FixedClass
+         */
+        select?: FixedClassSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the FixedClass
+         */
+        omit?: FixedClassOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: FixedClassInclude<ExtArgs> | null
+        where?: FixedClassWhereInput
+        orderBy?: FixedClassOrderByWithRelationInput | FixedClassOrderByWithRelationInput[]
+        cursor?: FixedClassWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: FixedClassScalarFieldEnum | FixedClassScalarFieldEnum[]
+    };
+    /**
+     * Student.unionSecretaryOf
+     */
+    export type Student$unionSecretaryOfArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the FixedClass
+         */
+        select?: FixedClassSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the FixedClass
+         */
+        omit?: FixedClassOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: FixedClassInclude<ExtArgs> | null
+        where?: FixedClassWhereInput
+        orderBy?: FixedClassOrderByWithRelationInput | FixedClassOrderByWithRelationInput[]
+        cursor?: FixedClassWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: FixedClassScalarFieldEnum | FixedClassScalarFieldEnum[]
     };
     /**
      * Student.fixedClass
@@ -374879,6 +375057,8 @@ export namespace Prisma {
         graduated?: BoolFilter<"FixedClass"> | boolean
         classMonitorId?: StringNullableFilter<"FixedClass"> | string | null
         unionLeaderId?: StringNullableFilter<"FixedClass"> | string | null
+        deputyUnionSecretaryId?: StringNullableFilter<"FixedClass"> | string | null
+        unionSecretaryId?: StringNullableFilter<"FixedClass"> | string | null
         trainingCourseId?: StringFilter<"FixedClass"> | string
         managementOrganizationId?: UuidNullableFilter<"FixedClass"> | string | null
         lecturerManagementId?: StringNullableFilter<"FixedClass"> | string | null
@@ -374888,6 +375068,8 @@ export namespace Prisma {
         planTrainingSubjectId?: StringNullableFilter<"FixedClass"> | string | null
         classMonitor?: XOR<StudentNullableScalarRelationFilter, StudentWhereInput> | null
         unionLeader?: XOR<StudentNullableScalarRelationFilter, StudentWhereInput> | null
+        deputyUnionSecretary?: XOR<StudentNullableScalarRelationFilter, StudentWhereInput> | null
+        unionSecretary?: XOR<StudentNullableScalarRelationFilter, StudentWhereInput> | null
         trainingCourse?: XOR<TrainingCourseScalarRelationFilter, TrainingCourseWhereInput>
         managementOrganization?: XOR<DM_DonViNullableScalarRelationFilter, DM_DonViWhereInput> | null
         lecturerManagement?: XOR<LecturerNullableScalarRelationFilter, LecturerWhereInput> | null
@@ -374915,6 +375097,8 @@ export namespace Prisma {
         graduated?: SortOrder
         classMonitorId?: SortOrderInput | SortOrder
         unionLeaderId?: SortOrderInput | SortOrder
+        deputyUnionSecretaryId?: SortOrderInput | SortOrder
+        unionSecretaryId?: SortOrderInput | SortOrder
         trainingCourseId?: SortOrder
         managementOrganizationId?: SortOrderInput | SortOrder
         lecturerManagementId?: SortOrderInput | SortOrder
@@ -374924,6 +375108,8 @@ export namespace Prisma {
         planTrainingSubjectId?: SortOrderInput | SortOrder
         classMonitor?: StudentOrderByWithRelationInput
         unionLeader?: StudentOrderByWithRelationInput
+        deputyUnionSecretary?: StudentOrderByWithRelationInput
+        unionSecretary?: StudentOrderByWithRelationInput
         trainingCourse?: TrainingCourseOrderByWithRelationInput
         managementOrganization?: DM_DonViOrderByWithRelationInput
         lecturerManagement?: LecturerOrderByWithRelationInput
@@ -374940,8 +375126,6 @@ export namespace Prisma {
     export type FixedClassWhereUniqueInput = Prisma.AtLeast<{
         id?: string
         code?: string
-        classMonitorId?: string
-        unionLeaderId?: string
         curriculumVersionId?: string
         name_trainingCourseId_curriculumVersionId?: FixedClassNameTrainingCourseIdCurriculumVersionIdCompoundUniqueInput
         AND?: FixedClassWhereInput | FixedClassWhereInput[]
@@ -374957,6 +375141,10 @@ export namespace Prisma {
         summary?: StringNullableFilter<"FixedClass"> | string | null
         startYear?: IntNullableFilter<"FixedClass"> | number | null
         graduated?: BoolFilter<"FixedClass"> | boolean
+        classMonitorId?: StringNullableFilter<"FixedClass"> | string | null
+        unionLeaderId?: StringNullableFilter<"FixedClass"> | string | null
+        deputyUnionSecretaryId?: StringNullableFilter<"FixedClass"> | string | null
+        unionSecretaryId?: StringNullableFilter<"FixedClass"> | string | null
         trainingCourseId?: StringFilter<"FixedClass"> | string
         managementOrganizationId?: UuidNullableFilter<"FixedClass"> | string | null
         lecturerManagementId?: StringNullableFilter<"FixedClass"> | string | null
@@ -374965,6 +375153,8 @@ export namespace Prisma {
         planTrainingSubjectId?: StringNullableFilter<"FixedClass"> | string | null
         classMonitor?: XOR<StudentNullableScalarRelationFilter, StudentWhereInput> | null
         unionLeader?: XOR<StudentNullableScalarRelationFilter, StudentWhereInput> | null
+        deputyUnionSecretary?: XOR<StudentNullableScalarRelationFilter, StudentWhereInput> | null
+        unionSecretary?: XOR<StudentNullableScalarRelationFilter, StudentWhereInput> | null
         trainingCourse?: XOR<TrainingCourseScalarRelationFilter, TrainingCourseWhereInput>
         managementOrganization?: XOR<DM_DonViNullableScalarRelationFilter, DM_DonViWhereInput> | null
         lecturerManagement?: XOR<LecturerNullableScalarRelationFilter, LecturerWhereInput> | null
@@ -374976,7 +375166,7 @@ export namespace Prisma {
         surveyObjectTypes?: SurveyObjectTypeListRelationFilter
         scoreLinkSheets?: ScoreLinkSheetListRelationFilter
         planTrainingSubject?: XOR<PlanTrainingSubjectNullableScalarRelationFilter, PlanTrainingSubjectWhereInput> | null
-    }, "id" | "code" | "classMonitorId" | "unionLeaderId" | "curriculumVersionId" | "name_trainingCourseId_curriculumVersionId">;
+    }, "id" | "code" | "curriculumVersionId" | "name_trainingCourseId_curriculumVersionId">;
     export type FixedClassOrderByWithAggregationInput = {
         id?: SortOrder
         code?: SortOrderInput | SortOrder
@@ -374992,6 +375182,8 @@ export namespace Prisma {
         graduated?: SortOrder
         classMonitorId?: SortOrderInput | SortOrder
         unionLeaderId?: SortOrderInput | SortOrder
+        deputyUnionSecretaryId?: SortOrderInput | SortOrder
+        unionSecretaryId?: SortOrderInput | SortOrder
         trainingCourseId?: SortOrder
         managementOrganizationId?: SortOrderInput | SortOrder
         lecturerManagementId?: SortOrderInput | SortOrder
@@ -375023,6 +375215,8 @@ export namespace Prisma {
         graduated?: BoolWithAggregatesFilter<"FixedClass"> | boolean
         classMonitorId?: StringNullableWithAggregatesFilter<"FixedClass"> | string | null
         unionLeaderId?: StringNullableWithAggregatesFilter<"FixedClass"> | string | null
+        deputyUnionSecretaryId?: StringNullableWithAggregatesFilter<"FixedClass"> | string | null
+        unionSecretaryId?: StringNullableWithAggregatesFilter<"FixedClass"> | string | null
         trainingCourseId?: StringWithAggregatesFilter<"FixedClass"> | string
         managementOrganizationId?: UuidNullableWithAggregatesFilter<"FixedClass"> | string | null
         lecturerManagementId?: StringNullableWithAggregatesFilter<"FixedClass"> | string | null
@@ -379822,8 +380016,10 @@ export namespace Prisma {
         militaryTrainingPass?: BoolFilter<"Student"> | boolean
         trainingLocation?: XOR<TrainingLocationNullableScalarRelationFilter, TrainingLocationWhereInput> | null
         priorityObject?: PriorityObjectListRelationFilter
-        classMonitor?: XOR<FixedClassNullableScalarRelationFilter, FixedClassWhereInput> | null
-        unionLeaderOf?: XOR<FixedClassNullableScalarRelationFilter, FixedClassWhereInput> | null
+        classMonitor?: FixedClassListRelationFilter
+        unionLeaderOf?: FixedClassListRelationFilter
+        deputyUnionSecretaryOf?: FixedClassListRelationFilter
+        unionSecretaryOf?: FixedClassListRelationFilter
         fixedClass?: XOR<FixedClassNullableScalarRelationFilter, FixedClassWhereInput> | null
         subjectClassStudent?: StudentSubjectScoreListRelationFilter
         userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
@@ -379903,8 +380099,10 @@ export namespace Prisma {
         militaryTrainingPass?: SortOrder
         trainingLocation?: TrainingLocationOrderByWithRelationInput
         priorityObject?: PriorityObjectOrderByRelationAggregateInput
-        classMonitor?: FixedClassOrderByWithRelationInput
-        unionLeaderOf?: FixedClassOrderByWithRelationInput
+        classMonitor?: FixedClassOrderByRelationAggregateInput
+        unionLeaderOf?: FixedClassOrderByRelationAggregateInput
+        deputyUnionSecretaryOf?: FixedClassOrderByRelationAggregateInput
+        unionSecretaryOf?: FixedClassOrderByRelationAggregateInput
         fixedClass?: FixedClassOrderByWithRelationInput
         subjectClassStudent?: StudentSubjectScoreOrderByRelationAggregateInput
         userProfile?: UserProfileOrderByWithRelationInput
@@ -379988,8 +380186,10 @@ export namespace Prisma {
         militaryTrainingPass?: BoolFilter<"Student"> | boolean
         trainingLocation?: XOR<TrainingLocationNullableScalarRelationFilter, TrainingLocationWhereInput> | null
         priorityObject?: PriorityObjectListRelationFilter
-        classMonitor?: XOR<FixedClassNullableScalarRelationFilter, FixedClassWhereInput> | null
-        unionLeaderOf?: XOR<FixedClassNullableScalarRelationFilter, FixedClassWhereInput> | null
+        classMonitor?: FixedClassListRelationFilter
+        unionLeaderOf?: FixedClassListRelationFilter
+        deputyUnionSecretaryOf?: FixedClassListRelationFilter
+        unionSecretaryOf?: FixedClassListRelationFilter
         fixedClass?: XOR<FixedClassNullableScalarRelationFilter, FixedClassWhereInput> | null
         subjectClassStudent?: StudentSubjectScoreListRelationFilter
         userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
@@ -405835,6 +406035,8 @@ export namespace Prisma {
         classType?: $Enums.FixedClassType
         classMonitor?: StudentCreateNestedOneWithoutClassMonitorInput
         unionLeader?: StudentCreateNestedOneWithoutUnionLeaderOfInput
+        deputyUnionSecretary?: StudentCreateNestedOneWithoutDeputyUnionSecretaryOfInput
+        unionSecretary?: StudentCreateNestedOneWithoutUnionSecretaryOfInput
         trainingCourse: TrainingCourseCreateNestedOneWithoutFixedClassInput
         managementOrganization?: DM_DonViCreateNestedOneWithoutFixedClassInput
         lecturerManagement?: LecturerCreateNestedOneWithoutManageFixedClassInput
@@ -405862,6 +406064,8 @@ export namespace Prisma {
         graduated?: boolean
         classMonitorId?: string | null
         unionLeaderId?: string | null
+        deputyUnionSecretaryId?: string | null
+        unionSecretaryId?: string | null
         trainingCourseId: string
         managementOrganizationId?: string | null
         lecturerManagementId?: string | null
@@ -405891,6 +406095,8 @@ export namespace Prisma {
         classType?: EnumFixedClassTypeFieldUpdateOperationsInput | $Enums.FixedClassType
         classMonitor?: StudentUpdateOneWithoutClassMonitorNestedInput
         unionLeader?: StudentUpdateOneWithoutUnionLeaderOfNestedInput
+        deputyUnionSecretary?: StudentUpdateOneWithoutDeputyUnionSecretaryOfNestedInput
+        unionSecretary?: StudentUpdateOneWithoutUnionSecretaryOfNestedInput
         trainingCourse?: TrainingCourseUpdateOneRequiredWithoutFixedClassNestedInput
         managementOrganization?: DM_DonViUpdateOneWithoutFixedClassNestedInput
         lecturerManagement?: LecturerUpdateOneWithoutManageFixedClassNestedInput
@@ -405918,6 +406124,8 @@ export namespace Prisma {
         graduated?: BoolFieldUpdateOperationsInput | boolean
         classMonitorId?: NullableStringFieldUpdateOperationsInput | string | null
         unionLeaderId?: NullableStringFieldUpdateOperationsInput | string | null
+        deputyUnionSecretaryId?: NullableStringFieldUpdateOperationsInput | string | null
+        unionSecretaryId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingCourseId?: StringFieldUpdateOperationsInput | string
         managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerManagementId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -405946,6 +406154,8 @@ export namespace Prisma {
         graduated?: boolean
         classMonitorId?: string | null
         unionLeaderId?: string | null
+        deputyUnionSecretaryId?: string | null
+        unionSecretaryId?: string | null
         trainingCourseId: string
         managementOrganizationId?: string | null
         lecturerManagementId?: string | null
@@ -405984,6 +406194,8 @@ export namespace Prisma {
         graduated?: BoolFieldUpdateOperationsInput | boolean
         classMonitorId?: NullableStringFieldUpdateOperationsInput | string | null
         unionLeaderId?: NullableStringFieldUpdateOperationsInput | string | null
+        deputyUnionSecretaryId?: NullableStringFieldUpdateOperationsInput | string | null
+        unionSecretaryId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingCourseId?: StringFieldUpdateOperationsInput | string
         managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerManagementId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -411363,8 +411575,10 @@ export namespace Prisma {
         militaryTrainingPass?: boolean
         trainingLocation?: TrainingLocationCreateNestedOneWithoutStudentsInput
         priorityObject?: PriorityObjectCreateNestedManyWithoutStudentsInput
-        classMonitor?: FixedClassCreateNestedOneWithoutClassMonitorInput
-        unionLeaderOf?: FixedClassCreateNestedOneWithoutUnionLeaderInput
+        classMonitor?: FixedClassCreateNestedManyWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassCreateNestedManyWithoutUnionLeaderInput
+        deputyUnionSecretaryOf?: FixedClassCreateNestedManyWithoutDeputyUnionSecretaryInput
+        unionSecretaryOf?: FixedClassCreateNestedManyWithoutUnionSecretaryInput
         fixedClass?: FixedClassCreateNestedOneWithoutStudentsInput
         subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutStudentInput
         userProfile: UserProfileCreateNestedOneWithoutEducationAndTrainingInput
@@ -411443,8 +411657,10 @@ export namespace Prisma {
         strengthTrainingPass?: boolean
         militaryTrainingPass?: boolean
         priorityObject?: PriorityObjectUncheckedCreateNestedManyWithoutStudentsInput
-        classMonitor?: FixedClassUncheckedCreateNestedOneWithoutClassMonitorInput
-        unionLeaderOf?: FixedClassUncheckedCreateNestedOneWithoutUnionLeaderInput
+        classMonitor?: FixedClassUncheckedCreateNestedManyWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassUncheckedCreateNestedManyWithoutUnionLeaderInput
+        deputyUnionSecretaryOf?: FixedClassUncheckedCreateNestedManyWithoutDeputyUnionSecretaryInput
+        unionSecretaryOf?: FixedClassUncheckedCreateNestedManyWithoutUnionSecretaryInput
         subjectClassStudent?: StudentSubjectScoreUncheckedCreateNestedManyWithoutStudentInput
         studentTrainingScore?: StudentTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutStudentInput
@@ -411513,8 +411729,10 @@ export namespace Prisma {
         militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         trainingLocation?: TrainingLocationUpdateOneWithoutStudentsNestedInput
         priorityObject?: PriorityObjectUpdateManyWithoutStudentsNestedInput
-        classMonitor?: FixedClassUpdateOneWithoutClassMonitorNestedInput
-        unionLeaderOf?: FixedClassUpdateOneWithoutUnionLeaderNestedInput
+        classMonitor?: FixedClassUpdateManyWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUpdateManyWithoutUnionLeaderNestedInput
+        deputyUnionSecretaryOf?: FixedClassUpdateManyWithoutDeputyUnionSecretaryNestedInput
+        unionSecretaryOf?: FixedClassUpdateManyWithoutUnionSecretaryNestedInput
         fixedClass?: FixedClassUpdateOneWithoutStudentsNestedInput
         subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutStudentNestedInput
         userProfile?: UserProfileUpdateOneRequiredWithoutEducationAndTrainingNestedInput
@@ -411593,8 +411811,10 @@ export namespace Prisma {
         strengthTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         priorityObject?: PriorityObjectUncheckedUpdateManyWithoutStudentsNestedInput
-        classMonitor?: FixedClassUncheckedUpdateOneWithoutClassMonitorNestedInput
-        unionLeaderOf?: FixedClassUncheckedUpdateOneWithoutUnionLeaderNestedInput
+        classMonitor?: FixedClassUncheckedUpdateManyWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUncheckedUpdateManyWithoutUnionLeaderNestedInput
+        deputyUnionSecretaryOf?: FixedClassUncheckedUpdateManyWithoutDeputyUnionSecretaryNestedInput
+        unionSecretaryOf?: FixedClassUncheckedUpdateManyWithoutUnionSecretaryNestedInput
         subjectClassStudent?: StudentSubjectScoreUncheckedUpdateManyWithoutStudentNestedInput
         studentTrainingScore?: StudentTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutStudentNestedInput
@@ -434571,6 +434791,8 @@ export namespace Prisma {
         graduated?: SortOrder
         classMonitorId?: SortOrder
         unionLeaderId?: SortOrder
+        deputyUnionSecretaryId?: SortOrder
+        unionSecretaryId?: SortOrder
         trainingCourseId?: SortOrder
         managementOrganizationId?: SortOrder
         lecturerManagementId?: SortOrder
@@ -434597,6 +434819,8 @@ export namespace Prisma {
         graduated?: SortOrder
         classMonitorId?: SortOrder
         unionLeaderId?: SortOrder
+        deputyUnionSecretaryId?: SortOrder
+        unionSecretaryId?: SortOrder
         trainingCourseId?: SortOrder
         managementOrganizationId?: SortOrder
         lecturerManagementId?: SortOrder
@@ -434620,6 +434844,8 @@ export namespace Prisma {
         graduated?: SortOrder
         classMonitorId?: SortOrder
         unionLeaderId?: SortOrder
+        deputyUnionSecretaryId?: SortOrder
+        unionSecretaryId?: SortOrder
         trainingCourseId?: SortOrder
         managementOrganizationId?: SortOrder
         lecturerManagementId?: SortOrder
@@ -455898,6 +456124,16 @@ export namespace Prisma {
         connectOrCreate?: StudentCreateOrConnectWithoutUnionLeaderOfInput
         connect?: StudentWhereUniqueInput
     };
+    export type StudentCreateNestedOneWithoutDeputyUnionSecretaryOfInput = {
+        create?: XOR<StudentCreateWithoutDeputyUnionSecretaryOfInput, StudentUncheckedCreateWithoutDeputyUnionSecretaryOfInput>
+        connectOrCreate?: StudentCreateOrConnectWithoutDeputyUnionSecretaryOfInput
+        connect?: StudentWhereUniqueInput
+    };
+    export type StudentCreateNestedOneWithoutUnionSecretaryOfInput = {
+        create?: XOR<StudentCreateWithoutUnionSecretaryOfInput, StudentUncheckedCreateWithoutUnionSecretaryOfInput>
+        connectOrCreate?: StudentCreateOrConnectWithoutUnionSecretaryOfInput
+        connect?: StudentWhereUniqueInput
+    };
     export type TrainingCourseCreateNestedOneWithoutFixedClassInput = {
         create?: XOR<TrainingCourseCreateWithoutFixedClassInput, TrainingCourseUncheckedCreateWithoutFixedClassInput>
         connectOrCreate?: TrainingCourseCreateOrConnectWithoutFixedClassInput
@@ -456002,6 +456238,24 @@ export namespace Prisma {
         delete?: StudentWhereInput | boolean
         connect?: StudentWhereUniqueInput
         update?: XOR<XOR<StudentUpdateToOneWithWhereWithoutUnionLeaderOfInput, StudentUpdateWithoutUnionLeaderOfInput>, StudentUncheckedUpdateWithoutUnionLeaderOfInput>
+    };
+    export type StudentUpdateOneWithoutDeputyUnionSecretaryOfNestedInput = {
+        create?: XOR<StudentCreateWithoutDeputyUnionSecretaryOfInput, StudentUncheckedCreateWithoutDeputyUnionSecretaryOfInput>
+        connectOrCreate?: StudentCreateOrConnectWithoutDeputyUnionSecretaryOfInput
+        upsert?: StudentUpsertWithoutDeputyUnionSecretaryOfInput
+        disconnect?: StudentWhereInput | boolean
+        delete?: StudentWhereInput | boolean
+        connect?: StudentWhereUniqueInput
+        update?: XOR<XOR<StudentUpdateToOneWithWhereWithoutDeputyUnionSecretaryOfInput, StudentUpdateWithoutDeputyUnionSecretaryOfInput>, StudentUncheckedUpdateWithoutDeputyUnionSecretaryOfInput>
+    };
+    export type StudentUpdateOneWithoutUnionSecretaryOfNestedInput = {
+        create?: XOR<StudentCreateWithoutUnionSecretaryOfInput, StudentUncheckedCreateWithoutUnionSecretaryOfInput>
+        connectOrCreate?: StudentCreateOrConnectWithoutUnionSecretaryOfInput
+        upsert?: StudentUpsertWithoutUnionSecretaryOfInput
+        disconnect?: StudentWhereInput | boolean
+        delete?: StudentWhereInput | boolean
+        connect?: StudentWhereUniqueInput
+        update?: XOR<XOR<StudentUpdateToOneWithWhereWithoutUnionSecretaryOfInput, StudentUpdateWithoutUnionSecretaryOfInput>, StudentUncheckedUpdateWithoutUnionSecretaryOfInput>
     };
     export type TrainingCourseUpdateOneRequiredWithoutFixedClassNestedInput = {
         create?: XOR<TrainingCourseCreateWithoutFixedClassInput, TrainingCourseUncheckedCreateWithoutFixedClassInput>
@@ -461256,15 +461510,29 @@ export namespace Prisma {
         connectOrCreate?: PriorityObjectCreateOrConnectWithoutStudentsInput | PriorityObjectCreateOrConnectWithoutStudentsInput[]
         connect?: PriorityObjectWhereUniqueInput | PriorityObjectWhereUniqueInput[]
     };
-    export type FixedClassCreateNestedOneWithoutClassMonitorInput = {
-        create?: XOR<FixedClassCreateWithoutClassMonitorInput, FixedClassUncheckedCreateWithoutClassMonitorInput>
-        connectOrCreate?: FixedClassCreateOrConnectWithoutClassMonitorInput
-        connect?: FixedClassWhereUniqueInput
+    export type FixedClassCreateNestedManyWithoutClassMonitorInput = {
+        create?: XOR<FixedClassCreateWithoutClassMonitorInput, FixedClassUncheckedCreateWithoutClassMonitorInput> | FixedClassCreateWithoutClassMonitorInput[] | FixedClassUncheckedCreateWithoutClassMonitorInput[]
+        connectOrCreate?: FixedClassCreateOrConnectWithoutClassMonitorInput | FixedClassCreateOrConnectWithoutClassMonitorInput[]
+        createMany?: FixedClassCreateManyClassMonitorInputEnvelope
+        connect?: FixedClassWhereUniqueInput | FixedClassWhereUniqueInput[]
     };
-    export type FixedClassCreateNestedOneWithoutUnionLeaderInput = {
-        create?: XOR<FixedClassCreateWithoutUnionLeaderInput, FixedClassUncheckedCreateWithoutUnionLeaderInput>
-        connectOrCreate?: FixedClassCreateOrConnectWithoutUnionLeaderInput
-        connect?: FixedClassWhereUniqueInput
+    export type FixedClassCreateNestedManyWithoutUnionLeaderInput = {
+        create?: XOR<FixedClassCreateWithoutUnionLeaderInput, FixedClassUncheckedCreateWithoutUnionLeaderInput> | FixedClassCreateWithoutUnionLeaderInput[] | FixedClassUncheckedCreateWithoutUnionLeaderInput[]
+        connectOrCreate?: FixedClassCreateOrConnectWithoutUnionLeaderInput | FixedClassCreateOrConnectWithoutUnionLeaderInput[]
+        createMany?: FixedClassCreateManyUnionLeaderInputEnvelope
+        connect?: FixedClassWhereUniqueInput | FixedClassWhereUniqueInput[]
+    };
+    export type FixedClassCreateNestedManyWithoutDeputyUnionSecretaryInput = {
+        create?: XOR<FixedClassCreateWithoutDeputyUnionSecretaryInput, FixedClassUncheckedCreateWithoutDeputyUnionSecretaryInput> | FixedClassCreateWithoutDeputyUnionSecretaryInput[] | FixedClassUncheckedCreateWithoutDeputyUnionSecretaryInput[]
+        connectOrCreate?: FixedClassCreateOrConnectWithoutDeputyUnionSecretaryInput | FixedClassCreateOrConnectWithoutDeputyUnionSecretaryInput[]
+        createMany?: FixedClassCreateManyDeputyUnionSecretaryInputEnvelope
+        connect?: FixedClassWhereUniqueInput | FixedClassWhereUniqueInput[]
+    };
+    export type FixedClassCreateNestedManyWithoutUnionSecretaryInput = {
+        create?: XOR<FixedClassCreateWithoutUnionSecretaryInput, FixedClassUncheckedCreateWithoutUnionSecretaryInput> | FixedClassCreateWithoutUnionSecretaryInput[] | FixedClassUncheckedCreateWithoutUnionSecretaryInput[]
+        connectOrCreate?: FixedClassCreateOrConnectWithoutUnionSecretaryInput | FixedClassCreateOrConnectWithoutUnionSecretaryInput[]
+        createMany?: FixedClassCreateManyUnionSecretaryInputEnvelope
+        connect?: FixedClassWhereUniqueInput | FixedClassWhereUniqueInput[]
     };
     export type FixedClassCreateNestedOneWithoutStudentsInput = {
         create?: XOR<FixedClassCreateWithoutStudentsInput, FixedClassUncheckedCreateWithoutStudentsInput>
@@ -461450,15 +461718,29 @@ export namespace Prisma {
         connectOrCreate?: PriorityObjectCreateOrConnectWithoutStudentsInput | PriorityObjectCreateOrConnectWithoutStudentsInput[]
         connect?: PriorityObjectWhereUniqueInput | PriorityObjectWhereUniqueInput[]
     };
-    export type FixedClassUncheckedCreateNestedOneWithoutClassMonitorInput = {
-        create?: XOR<FixedClassCreateWithoutClassMonitorInput, FixedClassUncheckedCreateWithoutClassMonitorInput>
-        connectOrCreate?: FixedClassCreateOrConnectWithoutClassMonitorInput
-        connect?: FixedClassWhereUniqueInput
+    export type FixedClassUncheckedCreateNestedManyWithoutClassMonitorInput = {
+        create?: XOR<FixedClassCreateWithoutClassMonitorInput, FixedClassUncheckedCreateWithoutClassMonitorInput> | FixedClassCreateWithoutClassMonitorInput[] | FixedClassUncheckedCreateWithoutClassMonitorInput[]
+        connectOrCreate?: FixedClassCreateOrConnectWithoutClassMonitorInput | FixedClassCreateOrConnectWithoutClassMonitorInput[]
+        createMany?: FixedClassCreateManyClassMonitorInputEnvelope
+        connect?: FixedClassWhereUniqueInput | FixedClassWhereUniqueInput[]
     };
-    export type FixedClassUncheckedCreateNestedOneWithoutUnionLeaderInput = {
-        create?: XOR<FixedClassCreateWithoutUnionLeaderInput, FixedClassUncheckedCreateWithoutUnionLeaderInput>
-        connectOrCreate?: FixedClassCreateOrConnectWithoutUnionLeaderInput
-        connect?: FixedClassWhereUniqueInput
+    export type FixedClassUncheckedCreateNestedManyWithoutUnionLeaderInput = {
+        create?: XOR<FixedClassCreateWithoutUnionLeaderInput, FixedClassUncheckedCreateWithoutUnionLeaderInput> | FixedClassCreateWithoutUnionLeaderInput[] | FixedClassUncheckedCreateWithoutUnionLeaderInput[]
+        connectOrCreate?: FixedClassCreateOrConnectWithoutUnionLeaderInput | FixedClassCreateOrConnectWithoutUnionLeaderInput[]
+        createMany?: FixedClassCreateManyUnionLeaderInputEnvelope
+        connect?: FixedClassWhereUniqueInput | FixedClassWhereUniqueInput[]
+    };
+    export type FixedClassUncheckedCreateNestedManyWithoutDeputyUnionSecretaryInput = {
+        create?: XOR<FixedClassCreateWithoutDeputyUnionSecretaryInput, FixedClassUncheckedCreateWithoutDeputyUnionSecretaryInput> | FixedClassCreateWithoutDeputyUnionSecretaryInput[] | FixedClassUncheckedCreateWithoutDeputyUnionSecretaryInput[]
+        connectOrCreate?: FixedClassCreateOrConnectWithoutDeputyUnionSecretaryInput | FixedClassCreateOrConnectWithoutDeputyUnionSecretaryInput[]
+        createMany?: FixedClassCreateManyDeputyUnionSecretaryInputEnvelope
+        connect?: FixedClassWhereUniqueInput | FixedClassWhereUniqueInput[]
+    };
+    export type FixedClassUncheckedCreateNestedManyWithoutUnionSecretaryInput = {
+        create?: XOR<FixedClassCreateWithoutUnionSecretaryInput, FixedClassUncheckedCreateWithoutUnionSecretaryInput> | FixedClassCreateWithoutUnionSecretaryInput[] | FixedClassUncheckedCreateWithoutUnionSecretaryInput[]
+        connectOrCreate?: FixedClassCreateOrConnectWithoutUnionSecretaryInput | FixedClassCreateOrConnectWithoutUnionSecretaryInput[]
+        createMany?: FixedClassCreateManyUnionSecretaryInputEnvelope
+        connect?: FixedClassWhereUniqueInput | FixedClassWhereUniqueInput[]
     };
     export type StudentSubjectScoreUncheckedCreateNestedManyWithoutStudentInput = {
         create?: XOR<StudentSubjectScoreCreateWithoutStudentInput, StudentSubjectScoreUncheckedCreateWithoutStudentInput> | StudentSubjectScoreCreateWithoutStudentInput[] | StudentSubjectScoreUncheckedCreateWithoutStudentInput[]
@@ -461638,23 +461920,57 @@ export namespace Prisma {
         updateMany?: PriorityObjectUpdateManyWithWhereWithoutStudentsInput | PriorityObjectUpdateManyWithWhereWithoutStudentsInput[]
         deleteMany?: PriorityObjectScalarWhereInput | PriorityObjectScalarWhereInput[]
     };
-    export type FixedClassUpdateOneWithoutClassMonitorNestedInput = {
-        create?: XOR<FixedClassCreateWithoutClassMonitorInput, FixedClassUncheckedCreateWithoutClassMonitorInput>
-        connectOrCreate?: FixedClassCreateOrConnectWithoutClassMonitorInput
-        upsert?: FixedClassUpsertWithoutClassMonitorInput
-        disconnect?: FixedClassWhereInput | boolean
-        delete?: FixedClassWhereInput | boolean
-        connect?: FixedClassWhereUniqueInput
-        update?: XOR<XOR<FixedClassUpdateToOneWithWhereWithoutClassMonitorInput, FixedClassUpdateWithoutClassMonitorInput>, FixedClassUncheckedUpdateWithoutClassMonitorInput>
+    export type FixedClassUpdateManyWithoutClassMonitorNestedInput = {
+        create?: XOR<FixedClassCreateWithoutClassMonitorInput, FixedClassUncheckedCreateWithoutClassMonitorInput> | FixedClassCreateWithoutClassMonitorInput[] | FixedClassUncheckedCreateWithoutClassMonitorInput[]
+        connectOrCreate?: FixedClassCreateOrConnectWithoutClassMonitorInput | FixedClassCreateOrConnectWithoutClassMonitorInput[]
+        upsert?: FixedClassUpsertWithWhereUniqueWithoutClassMonitorInput | FixedClassUpsertWithWhereUniqueWithoutClassMonitorInput[]
+        createMany?: FixedClassCreateManyClassMonitorInputEnvelope
+        set?: FixedClassWhereUniqueInput | FixedClassWhereUniqueInput[]
+        disconnect?: FixedClassWhereUniqueInput | FixedClassWhereUniqueInput[]
+        delete?: FixedClassWhereUniqueInput | FixedClassWhereUniqueInput[]
+        connect?: FixedClassWhereUniqueInput | FixedClassWhereUniqueInput[]
+        update?: FixedClassUpdateWithWhereUniqueWithoutClassMonitorInput | FixedClassUpdateWithWhereUniqueWithoutClassMonitorInput[]
+        updateMany?: FixedClassUpdateManyWithWhereWithoutClassMonitorInput | FixedClassUpdateManyWithWhereWithoutClassMonitorInput[]
+        deleteMany?: FixedClassScalarWhereInput | FixedClassScalarWhereInput[]
     };
-    export type FixedClassUpdateOneWithoutUnionLeaderNestedInput = {
-        create?: XOR<FixedClassCreateWithoutUnionLeaderInput, FixedClassUncheckedCreateWithoutUnionLeaderInput>
-        connectOrCreate?: FixedClassCreateOrConnectWithoutUnionLeaderInput
-        upsert?: FixedClassUpsertWithoutUnionLeaderInput
-        disconnect?: FixedClassWhereInput | boolean
-        delete?: FixedClassWhereInput | boolean
-        connect?: FixedClassWhereUniqueInput
-        update?: XOR<XOR<FixedClassUpdateToOneWithWhereWithoutUnionLeaderInput, FixedClassUpdateWithoutUnionLeaderInput>, FixedClassUncheckedUpdateWithoutUnionLeaderInput>
+    export type FixedClassUpdateManyWithoutUnionLeaderNestedInput = {
+        create?: XOR<FixedClassCreateWithoutUnionLeaderInput, FixedClassUncheckedCreateWithoutUnionLeaderInput> | FixedClassCreateWithoutUnionLeaderInput[] | FixedClassUncheckedCreateWithoutUnionLeaderInput[]
+        connectOrCreate?: FixedClassCreateOrConnectWithoutUnionLeaderInput | FixedClassCreateOrConnectWithoutUnionLeaderInput[]
+        upsert?: FixedClassUpsertWithWhereUniqueWithoutUnionLeaderInput | FixedClassUpsertWithWhereUniqueWithoutUnionLeaderInput[]
+        createMany?: FixedClassCreateManyUnionLeaderInputEnvelope
+        set?: FixedClassWhereUniqueInput | FixedClassWhereUniqueInput[]
+        disconnect?: FixedClassWhereUniqueInput | FixedClassWhereUniqueInput[]
+        delete?: FixedClassWhereUniqueInput | FixedClassWhereUniqueInput[]
+        connect?: FixedClassWhereUniqueInput | FixedClassWhereUniqueInput[]
+        update?: FixedClassUpdateWithWhereUniqueWithoutUnionLeaderInput | FixedClassUpdateWithWhereUniqueWithoutUnionLeaderInput[]
+        updateMany?: FixedClassUpdateManyWithWhereWithoutUnionLeaderInput | FixedClassUpdateManyWithWhereWithoutUnionLeaderInput[]
+        deleteMany?: FixedClassScalarWhereInput | FixedClassScalarWhereInput[]
+    };
+    export type FixedClassUpdateManyWithoutDeputyUnionSecretaryNestedInput = {
+        create?: XOR<FixedClassCreateWithoutDeputyUnionSecretaryInput, FixedClassUncheckedCreateWithoutDeputyUnionSecretaryInput> | FixedClassCreateWithoutDeputyUnionSecretaryInput[] | FixedClassUncheckedCreateWithoutDeputyUnionSecretaryInput[]
+        connectOrCreate?: FixedClassCreateOrConnectWithoutDeputyUnionSecretaryInput | FixedClassCreateOrConnectWithoutDeputyUnionSecretaryInput[]
+        upsert?: FixedClassUpsertWithWhereUniqueWithoutDeputyUnionSecretaryInput | FixedClassUpsertWithWhereUniqueWithoutDeputyUnionSecretaryInput[]
+        createMany?: FixedClassCreateManyDeputyUnionSecretaryInputEnvelope
+        set?: FixedClassWhereUniqueInput | FixedClassWhereUniqueInput[]
+        disconnect?: FixedClassWhereUniqueInput | FixedClassWhereUniqueInput[]
+        delete?: FixedClassWhereUniqueInput | FixedClassWhereUniqueInput[]
+        connect?: FixedClassWhereUniqueInput | FixedClassWhereUniqueInput[]
+        update?: FixedClassUpdateWithWhereUniqueWithoutDeputyUnionSecretaryInput | FixedClassUpdateWithWhereUniqueWithoutDeputyUnionSecretaryInput[]
+        updateMany?: FixedClassUpdateManyWithWhereWithoutDeputyUnionSecretaryInput | FixedClassUpdateManyWithWhereWithoutDeputyUnionSecretaryInput[]
+        deleteMany?: FixedClassScalarWhereInput | FixedClassScalarWhereInput[]
+    };
+    export type FixedClassUpdateManyWithoutUnionSecretaryNestedInput = {
+        create?: XOR<FixedClassCreateWithoutUnionSecretaryInput, FixedClassUncheckedCreateWithoutUnionSecretaryInput> | FixedClassCreateWithoutUnionSecretaryInput[] | FixedClassUncheckedCreateWithoutUnionSecretaryInput[]
+        connectOrCreate?: FixedClassCreateOrConnectWithoutUnionSecretaryInput | FixedClassCreateOrConnectWithoutUnionSecretaryInput[]
+        upsert?: FixedClassUpsertWithWhereUniqueWithoutUnionSecretaryInput | FixedClassUpsertWithWhereUniqueWithoutUnionSecretaryInput[]
+        createMany?: FixedClassCreateManyUnionSecretaryInputEnvelope
+        set?: FixedClassWhereUniqueInput | FixedClassWhereUniqueInput[]
+        disconnect?: FixedClassWhereUniqueInput | FixedClassWhereUniqueInput[]
+        delete?: FixedClassWhereUniqueInput | FixedClassWhereUniqueInput[]
+        connect?: FixedClassWhereUniqueInput | FixedClassWhereUniqueInput[]
+        update?: FixedClassUpdateWithWhereUniqueWithoutUnionSecretaryInput | FixedClassUpdateWithWhereUniqueWithoutUnionSecretaryInput[]
+        updateMany?: FixedClassUpdateManyWithWhereWithoutUnionSecretaryInput | FixedClassUpdateManyWithWhereWithoutUnionSecretaryInput[]
+        deleteMany?: FixedClassScalarWhereInput | FixedClassScalarWhereInput[]
     };
     export type FixedClassUpdateOneWithoutStudentsNestedInput = {
         create?: XOR<FixedClassCreateWithoutStudentsInput, FixedClassUncheckedCreateWithoutStudentsInput>
@@ -462044,23 +462360,57 @@ export namespace Prisma {
         updateMany?: PriorityObjectUpdateManyWithWhereWithoutStudentsInput | PriorityObjectUpdateManyWithWhereWithoutStudentsInput[]
         deleteMany?: PriorityObjectScalarWhereInput | PriorityObjectScalarWhereInput[]
     };
-    export type FixedClassUncheckedUpdateOneWithoutClassMonitorNestedInput = {
-        create?: XOR<FixedClassCreateWithoutClassMonitorInput, FixedClassUncheckedCreateWithoutClassMonitorInput>
-        connectOrCreate?: FixedClassCreateOrConnectWithoutClassMonitorInput
-        upsert?: FixedClassUpsertWithoutClassMonitorInput
-        disconnect?: FixedClassWhereInput | boolean
-        delete?: FixedClassWhereInput | boolean
-        connect?: FixedClassWhereUniqueInput
-        update?: XOR<XOR<FixedClassUpdateToOneWithWhereWithoutClassMonitorInput, FixedClassUpdateWithoutClassMonitorInput>, FixedClassUncheckedUpdateWithoutClassMonitorInput>
+    export type FixedClassUncheckedUpdateManyWithoutClassMonitorNestedInput = {
+        create?: XOR<FixedClassCreateWithoutClassMonitorInput, FixedClassUncheckedCreateWithoutClassMonitorInput> | FixedClassCreateWithoutClassMonitorInput[] | FixedClassUncheckedCreateWithoutClassMonitorInput[]
+        connectOrCreate?: FixedClassCreateOrConnectWithoutClassMonitorInput | FixedClassCreateOrConnectWithoutClassMonitorInput[]
+        upsert?: FixedClassUpsertWithWhereUniqueWithoutClassMonitorInput | FixedClassUpsertWithWhereUniqueWithoutClassMonitorInput[]
+        createMany?: FixedClassCreateManyClassMonitorInputEnvelope
+        set?: FixedClassWhereUniqueInput | FixedClassWhereUniqueInput[]
+        disconnect?: FixedClassWhereUniqueInput | FixedClassWhereUniqueInput[]
+        delete?: FixedClassWhereUniqueInput | FixedClassWhereUniqueInput[]
+        connect?: FixedClassWhereUniqueInput | FixedClassWhereUniqueInput[]
+        update?: FixedClassUpdateWithWhereUniqueWithoutClassMonitorInput | FixedClassUpdateWithWhereUniqueWithoutClassMonitorInput[]
+        updateMany?: FixedClassUpdateManyWithWhereWithoutClassMonitorInput | FixedClassUpdateManyWithWhereWithoutClassMonitorInput[]
+        deleteMany?: FixedClassScalarWhereInput | FixedClassScalarWhereInput[]
     };
-    export type FixedClassUncheckedUpdateOneWithoutUnionLeaderNestedInput = {
-        create?: XOR<FixedClassCreateWithoutUnionLeaderInput, FixedClassUncheckedCreateWithoutUnionLeaderInput>
-        connectOrCreate?: FixedClassCreateOrConnectWithoutUnionLeaderInput
-        upsert?: FixedClassUpsertWithoutUnionLeaderInput
-        disconnect?: FixedClassWhereInput | boolean
-        delete?: FixedClassWhereInput | boolean
-        connect?: FixedClassWhereUniqueInput
-        update?: XOR<XOR<FixedClassUpdateToOneWithWhereWithoutUnionLeaderInput, FixedClassUpdateWithoutUnionLeaderInput>, FixedClassUncheckedUpdateWithoutUnionLeaderInput>
+    export type FixedClassUncheckedUpdateManyWithoutUnionLeaderNestedInput = {
+        create?: XOR<FixedClassCreateWithoutUnionLeaderInput, FixedClassUncheckedCreateWithoutUnionLeaderInput> | FixedClassCreateWithoutUnionLeaderInput[] | FixedClassUncheckedCreateWithoutUnionLeaderInput[]
+        connectOrCreate?: FixedClassCreateOrConnectWithoutUnionLeaderInput | FixedClassCreateOrConnectWithoutUnionLeaderInput[]
+        upsert?: FixedClassUpsertWithWhereUniqueWithoutUnionLeaderInput | FixedClassUpsertWithWhereUniqueWithoutUnionLeaderInput[]
+        createMany?: FixedClassCreateManyUnionLeaderInputEnvelope
+        set?: FixedClassWhereUniqueInput | FixedClassWhereUniqueInput[]
+        disconnect?: FixedClassWhereUniqueInput | FixedClassWhereUniqueInput[]
+        delete?: FixedClassWhereUniqueInput | FixedClassWhereUniqueInput[]
+        connect?: FixedClassWhereUniqueInput | FixedClassWhereUniqueInput[]
+        update?: FixedClassUpdateWithWhereUniqueWithoutUnionLeaderInput | FixedClassUpdateWithWhereUniqueWithoutUnionLeaderInput[]
+        updateMany?: FixedClassUpdateManyWithWhereWithoutUnionLeaderInput | FixedClassUpdateManyWithWhereWithoutUnionLeaderInput[]
+        deleteMany?: FixedClassScalarWhereInput | FixedClassScalarWhereInput[]
+    };
+    export type FixedClassUncheckedUpdateManyWithoutDeputyUnionSecretaryNestedInput = {
+        create?: XOR<FixedClassCreateWithoutDeputyUnionSecretaryInput, FixedClassUncheckedCreateWithoutDeputyUnionSecretaryInput> | FixedClassCreateWithoutDeputyUnionSecretaryInput[] | FixedClassUncheckedCreateWithoutDeputyUnionSecretaryInput[]
+        connectOrCreate?: FixedClassCreateOrConnectWithoutDeputyUnionSecretaryInput | FixedClassCreateOrConnectWithoutDeputyUnionSecretaryInput[]
+        upsert?: FixedClassUpsertWithWhereUniqueWithoutDeputyUnionSecretaryInput | FixedClassUpsertWithWhereUniqueWithoutDeputyUnionSecretaryInput[]
+        createMany?: FixedClassCreateManyDeputyUnionSecretaryInputEnvelope
+        set?: FixedClassWhereUniqueInput | FixedClassWhereUniqueInput[]
+        disconnect?: FixedClassWhereUniqueInput | FixedClassWhereUniqueInput[]
+        delete?: FixedClassWhereUniqueInput | FixedClassWhereUniqueInput[]
+        connect?: FixedClassWhereUniqueInput | FixedClassWhereUniqueInput[]
+        update?: FixedClassUpdateWithWhereUniqueWithoutDeputyUnionSecretaryInput | FixedClassUpdateWithWhereUniqueWithoutDeputyUnionSecretaryInput[]
+        updateMany?: FixedClassUpdateManyWithWhereWithoutDeputyUnionSecretaryInput | FixedClassUpdateManyWithWhereWithoutDeputyUnionSecretaryInput[]
+        deleteMany?: FixedClassScalarWhereInput | FixedClassScalarWhereInput[]
+    };
+    export type FixedClassUncheckedUpdateManyWithoutUnionSecretaryNestedInput = {
+        create?: XOR<FixedClassCreateWithoutUnionSecretaryInput, FixedClassUncheckedCreateWithoutUnionSecretaryInput> | FixedClassCreateWithoutUnionSecretaryInput[] | FixedClassUncheckedCreateWithoutUnionSecretaryInput[]
+        connectOrCreate?: FixedClassCreateOrConnectWithoutUnionSecretaryInput | FixedClassCreateOrConnectWithoutUnionSecretaryInput[]
+        upsert?: FixedClassUpsertWithWhereUniqueWithoutUnionSecretaryInput | FixedClassUpsertWithWhereUniqueWithoutUnionSecretaryInput[]
+        createMany?: FixedClassCreateManyUnionSecretaryInputEnvelope
+        set?: FixedClassWhereUniqueInput | FixedClassWhereUniqueInput[]
+        disconnect?: FixedClassWhereUniqueInput | FixedClassWhereUniqueInput[]
+        delete?: FixedClassWhereUniqueInput | FixedClassWhereUniqueInput[]
+        connect?: FixedClassWhereUniqueInput | FixedClassWhereUniqueInput[]
+        update?: FixedClassUpdateWithWhereUniqueWithoutUnionSecretaryInput | FixedClassUpdateWithWhereUniqueWithoutUnionSecretaryInput[]
+        updateMany?: FixedClassUpdateManyWithWhereWithoutUnionSecretaryInput | FixedClassUpdateManyWithWhereWithoutUnionSecretaryInput[]
+        deleteMany?: FixedClassScalarWhereInput | FixedClassScalarWhereInput[]
     };
     export type StudentSubjectScoreUncheckedUpdateManyWithoutStudentNestedInput = {
         create?: XOR<StudentSubjectScoreCreateWithoutStudentInput, StudentSubjectScoreUncheckedCreateWithoutStudentInput> | StudentSubjectScoreCreateWithoutStudentInput[] | StudentSubjectScoreUncheckedCreateWithoutStudentInput[]
@@ -477507,8 +477857,10 @@ export namespace Prisma {
         militaryTrainingPass?: boolean
         trainingLocation?: TrainingLocationCreateNestedOneWithoutStudentsInput
         priorityObject?: PriorityObjectCreateNestedManyWithoutStudentsInput
-        classMonitor?: FixedClassCreateNestedOneWithoutClassMonitorInput
-        unionLeaderOf?: FixedClassCreateNestedOneWithoutUnionLeaderInput
+        classMonitor?: FixedClassCreateNestedManyWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassCreateNestedManyWithoutUnionLeaderInput
+        deputyUnionSecretaryOf?: FixedClassCreateNestedManyWithoutDeputyUnionSecretaryInput
+        unionSecretaryOf?: FixedClassCreateNestedManyWithoutUnionSecretaryInput
         fixedClass?: FixedClassCreateNestedOneWithoutStudentsInput
         subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutStudentInput
         registrationArea?: DM_KhuVuc_DiaLyCreateNestedOneWithoutStudentInput
@@ -477585,8 +477937,10 @@ export namespace Prisma {
         strengthTrainingPass?: boolean
         militaryTrainingPass?: boolean
         priorityObject?: PriorityObjectUncheckedCreateNestedManyWithoutStudentsInput
-        classMonitor?: FixedClassUncheckedCreateNestedOneWithoutClassMonitorInput
-        unionLeaderOf?: FixedClassUncheckedCreateNestedOneWithoutUnionLeaderInput
+        classMonitor?: FixedClassUncheckedCreateNestedManyWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassUncheckedCreateNestedManyWithoutUnionLeaderInput
+        deputyUnionSecretaryOf?: FixedClassUncheckedCreateNestedManyWithoutDeputyUnionSecretaryInput
+        unionSecretaryOf?: FixedClassUncheckedCreateNestedManyWithoutUnionSecretaryInput
         subjectClassStudent?: StudentSubjectScoreUncheckedCreateNestedManyWithoutStudentInput
         studentTrainingScore?: StudentTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutStudentInput
@@ -511638,6 +511992,8 @@ export namespace Prisma {
         classType?: $Enums.FixedClassType
         classMonitor?: StudentCreateNestedOneWithoutClassMonitorInput
         unionLeader?: StudentCreateNestedOneWithoutUnionLeaderOfInput
+        deputyUnionSecretary?: StudentCreateNestedOneWithoutDeputyUnionSecretaryOfInput
+        unionSecretary?: StudentCreateNestedOneWithoutUnionSecretaryOfInput
         trainingCourse: TrainingCourseCreateNestedOneWithoutFixedClassInput
         lecturerManagement?: LecturerCreateNestedOneWithoutManageFixedClassInput
         staffManagement?: StaffCreateNestedOneWithoutFixedClassInput
@@ -511664,6 +512020,8 @@ export namespace Prisma {
         graduated?: boolean
         classMonitorId?: string | null
         unionLeaderId?: string | null
+        deputyUnionSecretaryId?: string | null
+        unionSecretaryId?: string | null
         trainingCourseId: string
         lecturerManagementId?: string | null
         staffManagementId?: string | null
@@ -512457,6 +512815,8 @@ export namespace Prisma {
         graduated?: BoolFilter<"FixedClass"> | boolean
         classMonitorId?: StringNullableFilter<"FixedClass"> | string | null
         unionLeaderId?: StringNullableFilter<"FixedClass"> | string | null
+        deputyUnionSecretaryId?: StringNullableFilter<"FixedClass"> | string | null
+        unionSecretaryId?: StringNullableFilter<"FixedClass"> | string | null
         trainingCourseId?: StringFilter<"FixedClass"> | string
         managementOrganizationId?: UuidNullableFilter<"FixedClass"> | string | null
         lecturerManagementId?: StringNullableFilter<"FixedClass"> | string | null
@@ -512831,8 +513191,10 @@ export namespace Prisma {
         militaryTrainingPass?: boolean
         trainingLocation?: TrainingLocationCreateNestedOneWithoutStudentsInput
         priorityObject?: PriorityObjectCreateNestedManyWithoutStudentsInput
-        classMonitor?: FixedClassCreateNestedOneWithoutClassMonitorInput
-        unionLeaderOf?: FixedClassCreateNestedOneWithoutUnionLeaderInput
+        classMonitor?: FixedClassCreateNestedManyWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassCreateNestedManyWithoutUnionLeaderInput
+        deputyUnionSecretaryOf?: FixedClassCreateNestedManyWithoutDeputyUnionSecretaryInput
+        unionSecretaryOf?: FixedClassCreateNestedManyWithoutUnionSecretaryInput
         fixedClass?: FixedClassCreateNestedOneWithoutStudentsInput
         subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutStudentInput
         userProfile: UserProfileCreateNestedOneWithoutEducationAndTrainingInput
@@ -512909,8 +513271,10 @@ export namespace Prisma {
         strengthTrainingPass?: boolean
         militaryTrainingPass?: boolean
         priorityObject?: PriorityObjectUncheckedCreateNestedManyWithoutStudentsInput
-        classMonitor?: FixedClassUncheckedCreateNestedOneWithoutClassMonitorInput
-        unionLeaderOf?: FixedClassUncheckedCreateNestedOneWithoutUnionLeaderInput
+        classMonitor?: FixedClassUncheckedCreateNestedManyWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassUncheckedCreateNestedManyWithoutUnionLeaderInput
+        deputyUnionSecretaryOf?: FixedClassUncheckedCreateNestedManyWithoutDeputyUnionSecretaryInput
+        unionSecretaryOf?: FixedClassUncheckedCreateNestedManyWithoutUnionSecretaryInput
         subjectClassStudent?: StudentSubjectScoreUncheckedCreateNestedManyWithoutStudentInput
         studentTrainingScore?: StudentTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutStudentInput
@@ -523109,6 +523473,8 @@ export namespace Prisma {
         classType?: $Enums.FixedClassType
         classMonitor?: StudentCreateNestedOneWithoutClassMonitorInput
         unionLeader?: StudentCreateNestedOneWithoutUnionLeaderOfInput
+        deputyUnionSecretary?: StudentCreateNestedOneWithoutDeputyUnionSecretaryOfInput
+        unionSecretary?: StudentCreateNestedOneWithoutUnionSecretaryOfInput
         trainingCourse: TrainingCourseCreateNestedOneWithoutFixedClassInput
         managementOrganization?: DM_DonViCreateNestedOneWithoutFixedClassInput
         lecturerManagement?: LecturerCreateNestedOneWithoutManageFixedClassInput
@@ -523135,6 +523501,8 @@ export namespace Prisma {
         graduated?: boolean
         classMonitorId?: string | null
         unionLeaderId?: string | null
+        deputyUnionSecretaryId?: string | null
+        unionSecretaryId?: string | null
         trainingCourseId: string
         managementOrganizationId?: string | null
         lecturerManagementId?: string | null
@@ -523283,8 +523651,10 @@ export namespace Prisma {
         militaryTrainingPass?: boolean
         trainingLocation?: TrainingLocationCreateNestedOneWithoutStudentsInput
         priorityObject?: PriorityObjectCreateNestedManyWithoutStudentsInput
-        classMonitor?: FixedClassCreateNestedOneWithoutClassMonitorInput
-        unionLeaderOf?: FixedClassCreateNestedOneWithoutUnionLeaderInput
+        classMonitor?: FixedClassCreateNestedManyWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassCreateNestedManyWithoutUnionLeaderInput
+        deputyUnionSecretaryOf?: FixedClassCreateNestedManyWithoutDeputyUnionSecretaryInput
+        unionSecretaryOf?: FixedClassCreateNestedManyWithoutUnionSecretaryInput
         fixedClass?: FixedClassCreateNestedOneWithoutStudentsInput
         subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutStudentInput
         userProfile: UserProfileCreateNestedOneWithoutEducationAndTrainingInput
@@ -523362,8 +523732,10 @@ export namespace Prisma {
         strengthTrainingPass?: boolean
         militaryTrainingPass?: boolean
         priorityObject?: PriorityObjectUncheckedCreateNestedManyWithoutStudentsInput
-        classMonitor?: FixedClassUncheckedCreateNestedOneWithoutClassMonitorInput
-        unionLeaderOf?: FixedClassUncheckedCreateNestedOneWithoutUnionLeaderInput
+        classMonitor?: FixedClassUncheckedCreateNestedManyWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassUncheckedCreateNestedManyWithoutUnionLeaderInput
+        deputyUnionSecretaryOf?: FixedClassUncheckedCreateNestedManyWithoutDeputyUnionSecretaryInput
+        unionSecretaryOf?: FixedClassUncheckedCreateNestedManyWithoutUnionSecretaryInput
         subjectClassStudent?: StudentSubjectScoreUncheckedCreateNestedManyWithoutStudentInput
         studentTrainingScore?: StudentTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutStudentInput
@@ -523558,8 +523930,10 @@ export namespace Prisma {
         militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         trainingLocation?: TrainingLocationUpdateOneWithoutStudentsNestedInput
         priorityObject?: PriorityObjectUpdateManyWithoutStudentsNestedInput
-        classMonitor?: FixedClassUpdateOneWithoutClassMonitorNestedInput
-        unionLeaderOf?: FixedClassUpdateOneWithoutUnionLeaderNestedInput
+        classMonitor?: FixedClassUpdateManyWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUpdateManyWithoutUnionLeaderNestedInput
+        deputyUnionSecretaryOf?: FixedClassUpdateManyWithoutDeputyUnionSecretaryNestedInput
+        unionSecretaryOf?: FixedClassUpdateManyWithoutUnionSecretaryNestedInput
         fixedClass?: FixedClassUpdateOneWithoutStudentsNestedInput
         subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutStudentNestedInput
         userProfile?: UserProfileUpdateOneRequiredWithoutEducationAndTrainingNestedInput
@@ -523637,8 +524011,10 @@ export namespace Prisma {
         strengthTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         priorityObject?: PriorityObjectUncheckedUpdateManyWithoutStudentsNestedInput
-        classMonitor?: FixedClassUncheckedUpdateOneWithoutClassMonitorNestedInput
-        unionLeaderOf?: FixedClassUncheckedUpdateOneWithoutUnionLeaderNestedInput
+        classMonitor?: FixedClassUncheckedUpdateManyWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUncheckedUpdateManyWithoutUnionLeaderNestedInput
+        deputyUnionSecretaryOf?: FixedClassUncheckedUpdateManyWithoutDeputyUnionSecretaryNestedInput
+        unionSecretaryOf?: FixedClassUncheckedUpdateManyWithoutUnionSecretaryNestedInput
         subjectClassStudent?: StudentSubjectScoreUncheckedUpdateManyWithoutStudentNestedInput
         studentTrainingScore?: StudentTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutStudentNestedInput
@@ -524307,8 +524683,10 @@ export namespace Prisma {
         militaryTrainingPass?: boolean
         trainingLocation?: TrainingLocationCreateNestedOneWithoutStudentsInput
         priorityObject?: PriorityObjectCreateNestedManyWithoutStudentsInput
-        classMonitor?: FixedClassCreateNestedOneWithoutClassMonitorInput
-        unionLeaderOf?: FixedClassCreateNestedOneWithoutUnionLeaderInput
+        classMonitor?: FixedClassCreateNestedManyWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassCreateNestedManyWithoutUnionLeaderInput
+        deputyUnionSecretaryOf?: FixedClassCreateNestedManyWithoutDeputyUnionSecretaryInput
+        unionSecretaryOf?: FixedClassCreateNestedManyWithoutUnionSecretaryInput
         fixedClass?: FixedClassCreateNestedOneWithoutStudentsInput
         userProfile: UserProfileCreateNestedOneWithoutEducationAndTrainingInput
         registrationArea?: DM_KhuVuc_DiaLyCreateNestedOneWithoutStudentInput
@@ -524386,8 +524764,10 @@ export namespace Prisma {
         strengthTrainingPass?: boolean
         militaryTrainingPass?: boolean
         priorityObject?: PriorityObjectUncheckedCreateNestedManyWithoutStudentsInput
-        classMonitor?: FixedClassUncheckedCreateNestedOneWithoutClassMonitorInput
-        unionLeaderOf?: FixedClassUncheckedCreateNestedOneWithoutUnionLeaderInput
+        classMonitor?: FixedClassUncheckedCreateNestedManyWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassUncheckedCreateNestedManyWithoutUnionLeaderInput
+        deputyUnionSecretaryOf?: FixedClassUncheckedCreateNestedManyWithoutDeputyUnionSecretaryInput
+        unionSecretaryOf?: FixedClassUncheckedCreateNestedManyWithoutUnionSecretaryInput
         studentTrainingScore?: StudentTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutStudentInput
         studentYearResult?: StudentYearResultUncheckedCreateNestedManyWithoutStudentInput
@@ -525270,8 +525650,10 @@ export namespace Prisma {
         militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         trainingLocation?: TrainingLocationUpdateOneWithoutStudentsNestedInput
         priorityObject?: PriorityObjectUpdateManyWithoutStudentsNestedInput
-        classMonitor?: FixedClassUpdateOneWithoutClassMonitorNestedInput
-        unionLeaderOf?: FixedClassUpdateOneWithoutUnionLeaderNestedInput
+        classMonitor?: FixedClassUpdateManyWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUpdateManyWithoutUnionLeaderNestedInput
+        deputyUnionSecretaryOf?: FixedClassUpdateManyWithoutDeputyUnionSecretaryNestedInput
+        unionSecretaryOf?: FixedClassUpdateManyWithoutUnionSecretaryNestedInput
         fixedClass?: FixedClassUpdateOneWithoutStudentsNestedInput
         userProfile?: UserProfileUpdateOneRequiredWithoutEducationAndTrainingNestedInput
         registrationArea?: DM_KhuVuc_DiaLyUpdateOneWithoutStudentNestedInput
@@ -525349,8 +525731,10 @@ export namespace Prisma {
         strengthTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         priorityObject?: PriorityObjectUncheckedUpdateManyWithoutStudentsNestedInput
-        classMonitor?: FixedClassUncheckedUpdateOneWithoutClassMonitorNestedInput
-        unionLeaderOf?: FixedClassUncheckedUpdateOneWithoutUnionLeaderNestedInput
+        classMonitor?: FixedClassUncheckedUpdateManyWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUncheckedUpdateManyWithoutUnionLeaderNestedInput
+        deputyUnionSecretaryOf?: FixedClassUncheckedUpdateManyWithoutDeputyUnionSecretaryNestedInput
+        unionSecretaryOf?: FixedClassUncheckedUpdateManyWithoutUnionSecretaryNestedInput
         studentTrainingScore?: StudentTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutStudentNestedInput
         studentYearResult?: StudentYearResultUncheckedUpdateManyWithoutStudentNestedInput
@@ -528138,8 +528522,10 @@ export namespace Prisma {
         militaryTrainingPass?: boolean
         trainingLocation?: TrainingLocationCreateNestedOneWithoutStudentsInput
         priorityObject?: PriorityObjectCreateNestedManyWithoutStudentsInput
-        classMonitor?: FixedClassCreateNestedOneWithoutClassMonitorInput
-        unionLeaderOf?: FixedClassCreateNestedOneWithoutUnionLeaderInput
+        classMonitor?: FixedClassCreateNestedManyWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassCreateNestedManyWithoutUnionLeaderInput
+        deputyUnionSecretaryOf?: FixedClassCreateNestedManyWithoutDeputyUnionSecretaryInput
+        unionSecretaryOf?: FixedClassCreateNestedManyWithoutUnionSecretaryInput
         fixedClass?: FixedClassCreateNestedOneWithoutStudentsInput
         subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutStudentInput
         userProfile: UserProfileCreateNestedOneWithoutEducationAndTrainingInput
@@ -528217,8 +528603,10 @@ export namespace Prisma {
         strengthTrainingPass?: boolean
         militaryTrainingPass?: boolean
         priorityObject?: PriorityObjectUncheckedCreateNestedManyWithoutStudentsInput
-        classMonitor?: FixedClassUncheckedCreateNestedOneWithoutClassMonitorInput
-        unionLeaderOf?: FixedClassUncheckedCreateNestedOneWithoutUnionLeaderInput
+        classMonitor?: FixedClassUncheckedCreateNestedManyWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassUncheckedCreateNestedManyWithoutUnionLeaderInput
+        deputyUnionSecretaryOf?: FixedClassUncheckedCreateNestedManyWithoutDeputyUnionSecretaryInput
+        unionSecretaryOf?: FixedClassUncheckedCreateNestedManyWithoutUnionSecretaryInput
         subjectClassStudent?: StudentSubjectScoreUncheckedCreateNestedManyWithoutStudentInput
         studentTrainingScore?: StudentTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutStudentInput
@@ -528452,8 +528840,10 @@ export namespace Prisma {
         militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         trainingLocation?: TrainingLocationUpdateOneWithoutStudentsNestedInput
         priorityObject?: PriorityObjectUpdateManyWithoutStudentsNestedInput
-        classMonitor?: FixedClassUpdateOneWithoutClassMonitorNestedInput
-        unionLeaderOf?: FixedClassUpdateOneWithoutUnionLeaderNestedInput
+        classMonitor?: FixedClassUpdateManyWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUpdateManyWithoutUnionLeaderNestedInput
+        deputyUnionSecretaryOf?: FixedClassUpdateManyWithoutDeputyUnionSecretaryNestedInput
+        unionSecretaryOf?: FixedClassUpdateManyWithoutUnionSecretaryNestedInput
         fixedClass?: FixedClassUpdateOneWithoutStudentsNestedInput
         subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutStudentNestedInput
         userProfile?: UserProfileUpdateOneRequiredWithoutEducationAndTrainingNestedInput
@@ -528531,8 +528921,10 @@ export namespace Prisma {
         strengthTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         priorityObject?: PriorityObjectUncheckedUpdateManyWithoutStudentsNestedInput
-        classMonitor?: FixedClassUncheckedUpdateOneWithoutClassMonitorNestedInput
-        unionLeaderOf?: FixedClassUncheckedUpdateOneWithoutUnionLeaderNestedInput
+        classMonitor?: FixedClassUncheckedUpdateManyWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUncheckedUpdateManyWithoutUnionLeaderNestedInput
+        deputyUnionSecretaryOf?: FixedClassUncheckedUpdateManyWithoutDeputyUnionSecretaryNestedInput
+        unionSecretaryOf?: FixedClassUncheckedUpdateManyWithoutUnionSecretaryNestedInput
         subjectClassStudent?: StudentSubjectScoreUncheckedUpdateManyWithoutStudentNestedInput
         studentTrainingScore?: StudentTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutStudentNestedInput
@@ -528904,8 +529296,10 @@ export namespace Prisma {
         militaryTrainingPass?: boolean
         trainingLocation?: TrainingLocationCreateNestedOneWithoutStudentsInput
         priorityObject?: PriorityObjectCreateNestedManyWithoutStudentsInput
-        classMonitor?: FixedClassCreateNestedOneWithoutClassMonitorInput
-        unionLeaderOf?: FixedClassCreateNestedOneWithoutUnionLeaderInput
+        classMonitor?: FixedClassCreateNestedManyWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassCreateNestedManyWithoutUnionLeaderInput
+        deputyUnionSecretaryOf?: FixedClassCreateNestedManyWithoutDeputyUnionSecretaryInput
+        unionSecretaryOf?: FixedClassCreateNestedManyWithoutUnionSecretaryInput
         fixedClass?: FixedClassCreateNestedOneWithoutStudentsInput
         subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutStudentInput
         userProfile: UserProfileCreateNestedOneWithoutEducationAndTrainingInput
@@ -528983,8 +529377,10 @@ export namespace Prisma {
         strengthTrainingPass?: boolean
         militaryTrainingPass?: boolean
         priorityObject?: PriorityObjectUncheckedCreateNestedManyWithoutStudentsInput
-        classMonitor?: FixedClassUncheckedCreateNestedOneWithoutClassMonitorInput
-        unionLeaderOf?: FixedClassUncheckedCreateNestedOneWithoutUnionLeaderInput
+        classMonitor?: FixedClassUncheckedCreateNestedManyWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassUncheckedCreateNestedManyWithoutUnionLeaderInput
+        deputyUnionSecretaryOf?: FixedClassUncheckedCreateNestedManyWithoutDeputyUnionSecretaryInput
+        unionSecretaryOf?: FixedClassUncheckedCreateNestedManyWithoutUnionSecretaryInput
         subjectClassStudent?: StudentSubjectScoreUncheckedCreateNestedManyWithoutStudentInput
         studentTrainingScore?: StudentTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutStudentInput
@@ -529214,8 +529610,10 @@ export namespace Prisma {
         militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         trainingLocation?: TrainingLocationUpdateOneWithoutStudentsNestedInput
         priorityObject?: PriorityObjectUpdateManyWithoutStudentsNestedInput
-        classMonitor?: FixedClassUpdateOneWithoutClassMonitorNestedInput
-        unionLeaderOf?: FixedClassUpdateOneWithoutUnionLeaderNestedInput
+        classMonitor?: FixedClassUpdateManyWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUpdateManyWithoutUnionLeaderNestedInput
+        deputyUnionSecretaryOf?: FixedClassUpdateManyWithoutDeputyUnionSecretaryNestedInput
+        unionSecretaryOf?: FixedClassUpdateManyWithoutUnionSecretaryNestedInput
         fixedClass?: FixedClassUpdateOneWithoutStudentsNestedInput
         subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutStudentNestedInput
         userProfile?: UserProfileUpdateOneRequiredWithoutEducationAndTrainingNestedInput
@@ -529293,8 +529691,10 @@ export namespace Prisma {
         strengthTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         priorityObject?: PriorityObjectUncheckedUpdateManyWithoutStudentsNestedInput
-        classMonitor?: FixedClassUncheckedUpdateOneWithoutClassMonitorNestedInput
-        unionLeaderOf?: FixedClassUncheckedUpdateOneWithoutUnionLeaderNestedInput
+        classMonitor?: FixedClassUncheckedUpdateManyWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUncheckedUpdateManyWithoutUnionLeaderNestedInput
+        deputyUnionSecretaryOf?: FixedClassUncheckedUpdateManyWithoutDeputyUnionSecretaryNestedInput
+        unionSecretaryOf?: FixedClassUncheckedUpdateManyWithoutUnionSecretaryNestedInput
         subjectClassStudent?: StudentSubjectScoreUncheckedUpdateManyWithoutStudentNestedInput
         studentTrainingScore?: StudentTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutStudentNestedInput
@@ -532201,6 +532601,8 @@ export namespace Prisma {
         classType?: $Enums.FixedClassType
         classMonitor?: StudentCreateNestedOneWithoutClassMonitorInput
         unionLeader?: StudentCreateNestedOneWithoutUnionLeaderOfInput
+        deputyUnionSecretary?: StudentCreateNestedOneWithoutDeputyUnionSecretaryOfInput
+        unionSecretary?: StudentCreateNestedOneWithoutUnionSecretaryOfInput
         managementOrganization?: DM_DonViCreateNestedOneWithoutFixedClassInput
         lecturerManagement?: LecturerCreateNestedOneWithoutManageFixedClassInput
         staffManagement?: StaffCreateNestedOneWithoutFixedClassInput
@@ -532227,6 +532629,8 @@ export namespace Prisma {
         graduated?: boolean
         classMonitorId?: string | null
         unionLeaderId?: string | null
+        deputyUnionSecretaryId?: string | null
+        unionSecretaryId?: string | null
         managementOrganizationId?: string | null
         lecturerManagementId?: string | null
         staffManagementId?: string | null
@@ -533790,7 +534194,9 @@ export namespace Prisma {
         militaryTrainingPass?: boolean
         trainingLocation?: TrainingLocationCreateNestedOneWithoutStudentsInput
         priorityObject?: PriorityObjectCreateNestedManyWithoutStudentsInput
-        unionLeaderOf?: FixedClassCreateNestedOneWithoutUnionLeaderInput
+        unionLeaderOf?: FixedClassCreateNestedManyWithoutUnionLeaderInput
+        deputyUnionSecretaryOf?: FixedClassCreateNestedManyWithoutDeputyUnionSecretaryInput
+        unionSecretaryOf?: FixedClassCreateNestedManyWithoutUnionSecretaryInput
         fixedClass?: FixedClassCreateNestedOneWithoutStudentsInput
         subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutStudentInput
         userProfile: UserProfileCreateNestedOneWithoutEducationAndTrainingInput
@@ -533869,7 +534275,9 @@ export namespace Prisma {
         strengthTrainingPass?: boolean
         militaryTrainingPass?: boolean
         priorityObject?: PriorityObjectUncheckedCreateNestedManyWithoutStudentsInput
-        unionLeaderOf?: FixedClassUncheckedCreateNestedOneWithoutUnionLeaderInput
+        unionLeaderOf?: FixedClassUncheckedCreateNestedManyWithoutUnionLeaderInput
+        deputyUnionSecretaryOf?: FixedClassUncheckedCreateNestedManyWithoutDeputyUnionSecretaryInput
+        unionSecretaryOf?: FixedClassUncheckedCreateNestedManyWithoutUnionSecretaryInput
         subjectClassStudent?: StudentSubjectScoreUncheckedCreateNestedManyWithoutStudentInput
         studentTrainingScore?: StudentTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutStudentInput
@@ -533942,7 +534350,9 @@ export namespace Prisma {
         militaryTrainingPass?: boolean
         trainingLocation?: TrainingLocationCreateNestedOneWithoutStudentsInput
         priorityObject?: PriorityObjectCreateNestedManyWithoutStudentsInput
-        classMonitor?: FixedClassCreateNestedOneWithoutClassMonitorInput
+        classMonitor?: FixedClassCreateNestedManyWithoutClassMonitorInput
+        deputyUnionSecretaryOf?: FixedClassCreateNestedManyWithoutDeputyUnionSecretaryInput
+        unionSecretaryOf?: FixedClassCreateNestedManyWithoutUnionSecretaryInput
         fixedClass?: FixedClassCreateNestedOneWithoutStudentsInput
         subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutStudentInput
         userProfile: UserProfileCreateNestedOneWithoutEducationAndTrainingInput
@@ -534021,7 +534431,9 @@ export namespace Prisma {
         strengthTrainingPass?: boolean
         militaryTrainingPass?: boolean
         priorityObject?: PriorityObjectUncheckedCreateNestedManyWithoutStudentsInput
-        classMonitor?: FixedClassUncheckedCreateNestedOneWithoutClassMonitorInput
+        classMonitor?: FixedClassUncheckedCreateNestedManyWithoutClassMonitorInput
+        deputyUnionSecretaryOf?: FixedClassUncheckedCreateNestedManyWithoutDeputyUnionSecretaryInput
+        unionSecretaryOf?: FixedClassUncheckedCreateNestedManyWithoutUnionSecretaryInput
         subjectClassStudent?: StudentSubjectScoreUncheckedCreateNestedManyWithoutStudentInput
         studentTrainingScore?: StudentTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutStudentInput
@@ -534052,6 +534464,318 @@ export namespace Prisma {
     export type StudentCreateOrConnectWithoutUnionLeaderOfInput = {
         where: StudentWhereUniqueInput
         create: XOR<StudentCreateWithoutUnionLeaderOfInput, StudentUncheckedCreateWithoutUnionLeaderOfInput>
+    };
+    export type StudentCreateWithoutDeputyUnionSecretaryOfInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        note?: string | null
+        from?: Date | string | null
+        to?: Date | string | null
+        registerNumber?: string | null
+        doctoralCode?: string | null
+        admissionCombination?: string | null
+        entryScore?: number | null
+        competencyScore?: number | null
+        department?: string | null
+        departmentAddress?: string | null
+        careerYear?: number | null
+        universitySchool?: string | null
+        universityTrainingType?: string | null
+        universityGraduationYear?: number | null
+        universityMajor?: string | null
+        universityRank?: string | null
+        basic?: number | null
+        facility?: number | null
+        foreignLanguage?: string | null
+        priorityReason?: string | null
+        unionLeader?: string | null
+        status?: $Enums.StudentStatus
+        academicWarningLevel?: number
+        disciplinaryWarningLevel?: number
+        suspended?: boolean
+        expelled?: boolean
+        foreignLangPass?: boolean
+        ITCertificationPass?: boolean
+        strengthTrainingPass?: boolean
+        militaryTrainingPass?: boolean
+        trainingLocation?: TrainingLocationCreateNestedOneWithoutStudentsInput
+        priorityObject?: PriorityObjectCreateNestedManyWithoutStudentsInput
+        classMonitor?: FixedClassCreateNestedManyWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassCreateNestedManyWithoutUnionLeaderInput
+        unionSecretaryOf?: FixedClassCreateNestedManyWithoutUnionSecretaryInput
+        fixedClass?: FixedClassCreateNestedOneWithoutStudentsInput
+        subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutStudentInput
+        userProfile: UserProfileCreateNestedOneWithoutEducationAndTrainingInput
+        registrationArea?: DM_KhuVuc_DiaLyCreateNestedOneWithoutStudentInput
+        curriculumVersion?: CurriculumVersionCreateNestedOneWithoutStudentsInput
+        curriculumVersionParallel?: CurriculumVersionCreateNestedOneWithoutStudentCurriculumVersionParallelInput
+        studentTrainingScore?: StudentTrainingScoreCreateNestedManyWithoutStudentInput
+        studentSemesterResult?: StudentSemesterResultCreateNestedManyWithoutStudentInput
+        studentYearResult?: StudentYearResultCreateNestedManyWithoutStudentInput
+        scholarshipAwards?: ScholarshipAwardCreateNestedManyWithoutStudentInput
+        archivedCertificate?: ArchivedCertificateCreateNestedManyWithoutStudentInput
+        archivedAward?: ArchivedAwardCreateNestedManyWithoutStudentInput
+        academicWarning?: AcademicWarningCreateNestedManyWithoutStudentInput
+        disciplinaryWarning?: DisciplinaryWarningCreateNestedManyWithoutStudentInput
+        studentAcademicDecision?: StudentAcademicDecisionCreateNestedManyWithoutStudentInput
+        graduationApplications?: StudentGraduationApplicationCreateNestedManyWithoutStudentInput
+        graduationDecision?: GraduationDecisionCreateNestedOneWithoutStudentInput
+        surveySessions?: SurveySessionCreateNestedManyWithoutStudentInput
+        notifications?: NotificationCreateNestedManyWithoutTargetStudentsInput
+        researchRegistrations?: StudentResearchRegistrationCreateNestedManyWithoutStudentInput
+        thesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutStudentInput
+        diplomaVerificationApplication?: DiplomaVerificationApplicationCreateNestedManyWithoutStudentInput
+        studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
+        scoreLinkStudent?: ScoreLinkStudentCreateNestedManyWithoutStudentInput
+        classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
+        notes?: NoteCreateNestedManyWithoutStudentInput
+        noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
+        semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutStudentInput
+        schoolYearTrainingScore?: SchoolYearTrainingScoreCreateNestedManyWithoutStudentInput
+        subjectClassAttendanceStudent?: SubjectClassAttendanceStudentCreateNestedManyWithoutStudentInput
+        trainingActivity?: TrainingActivityCreateNestedManyWithoutStudentInput
+    };
+    export type StudentUncheckedCreateWithoutDeputyUnionSecretaryOfInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        note?: string | null
+        from?: Date | string | null
+        to?: Date | string | null
+        registerNumber?: string | null
+        doctoralCode?: string | null
+        admissionCombination?: string | null
+        entryScore?: number | null
+        competencyScore?: number | null
+        department?: string | null
+        departmentAddress?: string | null
+        careerYear?: number | null
+        universitySchool?: string | null
+        universityTrainingType?: string | null
+        universityGraduationYear?: number | null
+        universityMajor?: string | null
+        universityRank?: string | null
+        basic?: number | null
+        facility?: number | null
+        foreignLanguage?: string | null
+        priorityReason?: string | null
+        trainingLocationId?: string | null
+        unionLeader?: string | null
+        status?: $Enums.StudentStatus
+        fixedClassId?: string | null
+        userProfileId: string
+        registrationAreaId?: string | null
+        curriculumVersionId?: string | null
+        curriculumVersionParallelId?: string | null
+        academicWarningLevel?: number
+        disciplinaryWarningLevel?: number
+        suspended?: boolean
+        expelled?: boolean
+        foreignLangPass?: boolean
+        ITCertificationPass?: boolean
+        strengthTrainingPass?: boolean
+        militaryTrainingPass?: boolean
+        priorityObject?: PriorityObjectUncheckedCreateNestedManyWithoutStudentsInput
+        classMonitor?: FixedClassUncheckedCreateNestedManyWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassUncheckedCreateNestedManyWithoutUnionLeaderInput
+        unionSecretaryOf?: FixedClassUncheckedCreateNestedManyWithoutUnionSecretaryInput
+        subjectClassStudent?: StudentSubjectScoreUncheckedCreateNestedManyWithoutStudentInput
+        studentTrainingScore?: StudentTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
+        studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutStudentInput
+        studentYearResult?: StudentYearResultUncheckedCreateNestedManyWithoutStudentInput
+        scholarshipAwards?: ScholarshipAwardUncheckedCreateNestedManyWithoutStudentInput
+        archivedCertificate?: ArchivedCertificateUncheckedCreateNestedManyWithoutStudentInput
+        archivedAward?: ArchivedAwardUncheckedCreateNestedManyWithoutStudentInput
+        academicWarning?: AcademicWarningUncheckedCreateNestedManyWithoutStudentInput
+        disciplinaryWarning?: DisciplinaryWarningUncheckedCreateNestedManyWithoutStudentInput
+        studentAcademicDecision?: StudentAcademicDecisionUncheckedCreateNestedManyWithoutStudentInput
+        graduationApplications?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutStudentInput
+        graduationDecision?: GraduationDecisionUncheckedCreateNestedOneWithoutStudentInput
+        surveySessions?: SurveySessionUncheckedCreateNestedManyWithoutStudentInput
+        notifications?: NotificationUncheckedCreateNestedManyWithoutTargetStudentsInput
+        researchRegistrations?: StudentResearchRegistrationUncheckedCreateNestedManyWithoutStudentInput
+        thesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentInput
+        diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedCreateNestedManyWithoutStudentInput
+        studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
+        scoreLinkStudent?: ScoreLinkStudentUncheckedCreateNestedManyWithoutStudentInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
+        notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
+        noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
+        semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
+        schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
+        subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedCreateNestedManyWithoutStudentInput
+        trainingActivity?: TrainingActivityUncheckedCreateNestedManyWithoutStudentInput
+    };
+    export type StudentCreateOrConnectWithoutDeputyUnionSecretaryOfInput = {
+        where: StudentWhereUniqueInput
+        create: XOR<StudentCreateWithoutDeputyUnionSecretaryOfInput, StudentUncheckedCreateWithoutDeputyUnionSecretaryOfInput>
+    };
+    export type StudentCreateWithoutUnionSecretaryOfInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        note?: string | null
+        from?: Date | string | null
+        to?: Date | string | null
+        registerNumber?: string | null
+        doctoralCode?: string | null
+        admissionCombination?: string | null
+        entryScore?: number | null
+        competencyScore?: number | null
+        department?: string | null
+        departmentAddress?: string | null
+        careerYear?: number | null
+        universitySchool?: string | null
+        universityTrainingType?: string | null
+        universityGraduationYear?: number | null
+        universityMajor?: string | null
+        universityRank?: string | null
+        basic?: number | null
+        facility?: number | null
+        foreignLanguage?: string | null
+        priorityReason?: string | null
+        unionLeader?: string | null
+        status?: $Enums.StudentStatus
+        academicWarningLevel?: number
+        disciplinaryWarningLevel?: number
+        suspended?: boolean
+        expelled?: boolean
+        foreignLangPass?: boolean
+        ITCertificationPass?: boolean
+        strengthTrainingPass?: boolean
+        militaryTrainingPass?: boolean
+        trainingLocation?: TrainingLocationCreateNestedOneWithoutStudentsInput
+        priorityObject?: PriorityObjectCreateNestedManyWithoutStudentsInput
+        classMonitor?: FixedClassCreateNestedManyWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassCreateNestedManyWithoutUnionLeaderInput
+        deputyUnionSecretaryOf?: FixedClassCreateNestedManyWithoutDeputyUnionSecretaryInput
+        fixedClass?: FixedClassCreateNestedOneWithoutStudentsInput
+        subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutStudentInput
+        userProfile: UserProfileCreateNestedOneWithoutEducationAndTrainingInput
+        registrationArea?: DM_KhuVuc_DiaLyCreateNestedOneWithoutStudentInput
+        curriculumVersion?: CurriculumVersionCreateNestedOneWithoutStudentsInput
+        curriculumVersionParallel?: CurriculumVersionCreateNestedOneWithoutStudentCurriculumVersionParallelInput
+        studentTrainingScore?: StudentTrainingScoreCreateNestedManyWithoutStudentInput
+        studentSemesterResult?: StudentSemesterResultCreateNestedManyWithoutStudentInput
+        studentYearResult?: StudentYearResultCreateNestedManyWithoutStudentInput
+        scholarshipAwards?: ScholarshipAwardCreateNestedManyWithoutStudentInput
+        archivedCertificate?: ArchivedCertificateCreateNestedManyWithoutStudentInput
+        archivedAward?: ArchivedAwardCreateNestedManyWithoutStudentInput
+        academicWarning?: AcademicWarningCreateNestedManyWithoutStudentInput
+        disciplinaryWarning?: DisciplinaryWarningCreateNestedManyWithoutStudentInput
+        studentAcademicDecision?: StudentAcademicDecisionCreateNestedManyWithoutStudentInput
+        graduationApplications?: StudentGraduationApplicationCreateNestedManyWithoutStudentInput
+        graduationDecision?: GraduationDecisionCreateNestedOneWithoutStudentInput
+        surveySessions?: SurveySessionCreateNestedManyWithoutStudentInput
+        notifications?: NotificationCreateNestedManyWithoutTargetStudentsInput
+        researchRegistrations?: StudentResearchRegistrationCreateNestedManyWithoutStudentInput
+        thesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutStudentInput
+        diplomaVerificationApplication?: DiplomaVerificationApplicationCreateNestedManyWithoutStudentInput
+        studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
+        scoreLinkStudent?: ScoreLinkStudentCreateNestedManyWithoutStudentInput
+        classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
+        notes?: NoteCreateNestedManyWithoutStudentInput
+        noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
+        semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutStudentInput
+        schoolYearTrainingScore?: SchoolYearTrainingScoreCreateNestedManyWithoutStudentInput
+        subjectClassAttendanceStudent?: SubjectClassAttendanceStudentCreateNestedManyWithoutStudentInput
+        trainingActivity?: TrainingActivityCreateNestedManyWithoutStudentInput
+    };
+    export type StudentUncheckedCreateWithoutUnionSecretaryOfInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        note?: string | null
+        from?: Date | string | null
+        to?: Date | string | null
+        registerNumber?: string | null
+        doctoralCode?: string | null
+        admissionCombination?: string | null
+        entryScore?: number | null
+        competencyScore?: number | null
+        department?: string | null
+        departmentAddress?: string | null
+        careerYear?: number | null
+        universitySchool?: string | null
+        universityTrainingType?: string | null
+        universityGraduationYear?: number | null
+        universityMajor?: string | null
+        universityRank?: string | null
+        basic?: number | null
+        facility?: number | null
+        foreignLanguage?: string | null
+        priorityReason?: string | null
+        trainingLocationId?: string | null
+        unionLeader?: string | null
+        status?: $Enums.StudentStatus
+        fixedClassId?: string | null
+        userProfileId: string
+        registrationAreaId?: string | null
+        curriculumVersionId?: string | null
+        curriculumVersionParallelId?: string | null
+        academicWarningLevel?: number
+        disciplinaryWarningLevel?: number
+        suspended?: boolean
+        expelled?: boolean
+        foreignLangPass?: boolean
+        ITCertificationPass?: boolean
+        strengthTrainingPass?: boolean
+        militaryTrainingPass?: boolean
+        priorityObject?: PriorityObjectUncheckedCreateNestedManyWithoutStudentsInput
+        classMonitor?: FixedClassUncheckedCreateNestedManyWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassUncheckedCreateNestedManyWithoutUnionLeaderInput
+        deputyUnionSecretaryOf?: FixedClassUncheckedCreateNestedManyWithoutDeputyUnionSecretaryInput
+        subjectClassStudent?: StudentSubjectScoreUncheckedCreateNestedManyWithoutStudentInput
+        studentTrainingScore?: StudentTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
+        studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutStudentInput
+        studentYearResult?: StudentYearResultUncheckedCreateNestedManyWithoutStudentInput
+        scholarshipAwards?: ScholarshipAwardUncheckedCreateNestedManyWithoutStudentInput
+        archivedCertificate?: ArchivedCertificateUncheckedCreateNestedManyWithoutStudentInput
+        archivedAward?: ArchivedAwardUncheckedCreateNestedManyWithoutStudentInput
+        academicWarning?: AcademicWarningUncheckedCreateNestedManyWithoutStudentInput
+        disciplinaryWarning?: DisciplinaryWarningUncheckedCreateNestedManyWithoutStudentInput
+        studentAcademicDecision?: StudentAcademicDecisionUncheckedCreateNestedManyWithoutStudentInput
+        graduationApplications?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutStudentInput
+        graduationDecision?: GraduationDecisionUncheckedCreateNestedOneWithoutStudentInput
+        surveySessions?: SurveySessionUncheckedCreateNestedManyWithoutStudentInput
+        notifications?: NotificationUncheckedCreateNestedManyWithoutTargetStudentsInput
+        researchRegistrations?: StudentResearchRegistrationUncheckedCreateNestedManyWithoutStudentInput
+        thesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentInput
+        diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedCreateNestedManyWithoutStudentInput
+        studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
+        scoreLinkStudent?: ScoreLinkStudentUncheckedCreateNestedManyWithoutStudentInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
+        notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
+        noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
+        semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
+        schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
+        subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedCreateNestedManyWithoutStudentInput
+        trainingActivity?: TrainingActivityUncheckedCreateNestedManyWithoutStudentInput
+    };
+    export type StudentCreateOrConnectWithoutUnionSecretaryOfInput = {
+        where: StudentWhereUniqueInput
+        create: XOR<StudentCreateWithoutUnionSecretaryOfInput, StudentUncheckedCreateWithoutUnionSecretaryOfInput>
     };
     export type TrainingCourseCreateWithoutFixedClassInput = {
         id?: string
@@ -534410,8 +535134,10 @@ export namespace Prisma {
         militaryTrainingPass?: boolean
         trainingLocation?: TrainingLocationCreateNestedOneWithoutStudentsInput
         priorityObject?: PriorityObjectCreateNestedManyWithoutStudentsInput
-        classMonitor?: FixedClassCreateNestedOneWithoutClassMonitorInput
-        unionLeaderOf?: FixedClassCreateNestedOneWithoutUnionLeaderInput
+        classMonitor?: FixedClassCreateNestedManyWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassCreateNestedManyWithoutUnionLeaderInput
+        deputyUnionSecretaryOf?: FixedClassCreateNestedManyWithoutDeputyUnionSecretaryInput
+        unionSecretaryOf?: FixedClassCreateNestedManyWithoutUnionSecretaryInput
         subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutStudentInput
         userProfile: UserProfileCreateNestedOneWithoutEducationAndTrainingInput
         registrationArea?: DM_KhuVuc_DiaLyCreateNestedOneWithoutStudentInput
@@ -534488,8 +535214,10 @@ export namespace Prisma {
         strengthTrainingPass?: boolean
         militaryTrainingPass?: boolean
         priorityObject?: PriorityObjectUncheckedCreateNestedManyWithoutStudentsInput
-        classMonitor?: FixedClassUncheckedCreateNestedOneWithoutClassMonitorInput
-        unionLeaderOf?: FixedClassUncheckedCreateNestedOneWithoutUnionLeaderInput
+        classMonitor?: FixedClassUncheckedCreateNestedManyWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassUncheckedCreateNestedManyWithoutUnionLeaderInput
+        deputyUnionSecretaryOf?: FixedClassUncheckedCreateNestedManyWithoutDeputyUnionSecretaryInput
+        unionSecretaryOf?: FixedClassUncheckedCreateNestedManyWithoutUnionSecretaryInput
         subjectClassStudent?: StudentSubjectScoreUncheckedCreateNestedManyWithoutStudentInput
         studentTrainingScore?: StudentTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutStudentInput
@@ -534945,7 +535673,9 @@ export namespace Prisma {
         militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         trainingLocation?: TrainingLocationUpdateOneWithoutStudentsNestedInput
         priorityObject?: PriorityObjectUpdateManyWithoutStudentsNestedInput
-        unionLeaderOf?: FixedClassUpdateOneWithoutUnionLeaderNestedInput
+        unionLeaderOf?: FixedClassUpdateManyWithoutUnionLeaderNestedInput
+        deputyUnionSecretaryOf?: FixedClassUpdateManyWithoutDeputyUnionSecretaryNestedInput
+        unionSecretaryOf?: FixedClassUpdateManyWithoutUnionSecretaryNestedInput
         fixedClass?: FixedClassUpdateOneWithoutStudentsNestedInput
         subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutStudentNestedInput
         userProfile?: UserProfileUpdateOneRequiredWithoutEducationAndTrainingNestedInput
@@ -535024,7 +535754,9 @@ export namespace Prisma {
         strengthTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         priorityObject?: PriorityObjectUncheckedUpdateManyWithoutStudentsNestedInput
-        unionLeaderOf?: FixedClassUncheckedUpdateOneWithoutUnionLeaderNestedInput
+        unionLeaderOf?: FixedClassUncheckedUpdateManyWithoutUnionLeaderNestedInput
+        deputyUnionSecretaryOf?: FixedClassUncheckedUpdateManyWithoutDeputyUnionSecretaryNestedInput
+        unionSecretaryOf?: FixedClassUncheckedUpdateManyWithoutUnionSecretaryNestedInput
         subjectClassStudent?: StudentSubjectScoreUncheckedUpdateManyWithoutStudentNestedInput
         studentTrainingScore?: StudentTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutStudentNestedInput
@@ -535102,7 +535834,9 @@ export namespace Prisma {
         militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         trainingLocation?: TrainingLocationUpdateOneWithoutStudentsNestedInput
         priorityObject?: PriorityObjectUpdateManyWithoutStudentsNestedInput
-        classMonitor?: FixedClassUpdateOneWithoutClassMonitorNestedInput
+        classMonitor?: FixedClassUpdateManyWithoutClassMonitorNestedInput
+        deputyUnionSecretaryOf?: FixedClassUpdateManyWithoutDeputyUnionSecretaryNestedInput
+        unionSecretaryOf?: FixedClassUpdateManyWithoutUnionSecretaryNestedInput
         fixedClass?: FixedClassUpdateOneWithoutStudentsNestedInput
         subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutStudentNestedInput
         userProfile?: UserProfileUpdateOneRequiredWithoutEducationAndTrainingNestedInput
@@ -535181,7 +535915,331 @@ export namespace Prisma {
         strengthTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         priorityObject?: PriorityObjectUncheckedUpdateManyWithoutStudentsNestedInput
-        classMonitor?: FixedClassUncheckedUpdateOneWithoutClassMonitorNestedInput
+        classMonitor?: FixedClassUncheckedUpdateManyWithoutClassMonitorNestedInput
+        deputyUnionSecretaryOf?: FixedClassUncheckedUpdateManyWithoutDeputyUnionSecretaryNestedInput
+        unionSecretaryOf?: FixedClassUncheckedUpdateManyWithoutUnionSecretaryNestedInput
+        subjectClassStudent?: StudentSubjectScoreUncheckedUpdateManyWithoutStudentNestedInput
+        studentTrainingScore?: StudentTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
+        studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutStudentNestedInput
+        studentYearResult?: StudentYearResultUncheckedUpdateManyWithoutStudentNestedInput
+        scholarshipAwards?: ScholarshipAwardUncheckedUpdateManyWithoutStudentNestedInput
+        archivedCertificate?: ArchivedCertificateUncheckedUpdateManyWithoutStudentNestedInput
+        archivedAward?: ArchivedAwardUncheckedUpdateManyWithoutStudentNestedInput
+        academicWarning?: AcademicWarningUncheckedUpdateManyWithoutStudentNestedInput
+        disciplinaryWarning?: DisciplinaryWarningUncheckedUpdateManyWithoutStudentNestedInput
+        studentAcademicDecision?: StudentAcademicDecisionUncheckedUpdateManyWithoutStudentNestedInput
+        graduationApplications?: StudentGraduationApplicationUncheckedUpdateManyWithoutStudentNestedInput
+        graduationDecision?: GraduationDecisionUncheckedUpdateOneWithoutStudentNestedInput
+        surveySessions?: SurveySessionUncheckedUpdateManyWithoutStudentNestedInput
+        notifications?: NotificationUncheckedUpdateManyWithoutTargetStudentsNestedInput
+        researchRegistrations?: StudentResearchRegistrationUncheckedUpdateManyWithoutStudentNestedInput
+        thesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentNestedInput
+        diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedUpdateManyWithoutStudentNestedInput
+        studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
+        scoreLinkStudent?: ScoreLinkStudentUncheckedUpdateManyWithoutStudentNestedInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
+        notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
+        noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
+        semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
+        schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
+        subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedUpdateManyWithoutStudentNestedInput
+        trainingActivity?: TrainingActivityUncheckedUpdateManyWithoutStudentNestedInput
+    };
+    export type StudentUpsertWithoutDeputyUnionSecretaryOfInput = {
+        update: XOR<StudentUpdateWithoutDeputyUnionSecretaryOfInput, StudentUncheckedUpdateWithoutDeputyUnionSecretaryOfInput>
+        create: XOR<StudentCreateWithoutDeputyUnionSecretaryOfInput, StudentUncheckedCreateWithoutDeputyUnionSecretaryOfInput>
+        where?: StudentWhereInput
+    };
+    export type StudentUpdateToOneWithWhereWithoutDeputyUnionSecretaryOfInput = {
+        where?: StudentWhereInput
+        data: XOR<StudentUpdateWithoutDeputyUnionSecretaryOfInput, StudentUncheckedUpdateWithoutDeputyUnionSecretaryOfInput>
+    };
+    export type StudentUpdateWithoutDeputyUnionSecretaryOfInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        note?: NullableStringFieldUpdateOperationsInput | string | null
+        from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+        admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+        entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        department?: NullableStringFieldUpdateOperationsInput | string | null
+        departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+        universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+        universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+        universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+        universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+        universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+        basic?: NullableFloatFieldUpdateOperationsInput | number | null
+        facility?: NullableFloatFieldUpdateOperationsInput | number | null
+        foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+        priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
+        unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
+        status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
+        academicWarningLevel?: IntFieldUpdateOperationsInput | number
+        disciplinaryWarningLevel?: IntFieldUpdateOperationsInput | number
+        suspended?: BoolFieldUpdateOperationsInput | boolean
+        expelled?: BoolFieldUpdateOperationsInput | boolean
+        foreignLangPass?: BoolFieldUpdateOperationsInput | boolean
+        ITCertificationPass?: BoolFieldUpdateOperationsInput | boolean
+        strengthTrainingPass?: BoolFieldUpdateOperationsInput | boolean
+        militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
+        trainingLocation?: TrainingLocationUpdateOneWithoutStudentsNestedInput
+        priorityObject?: PriorityObjectUpdateManyWithoutStudentsNestedInput
+        classMonitor?: FixedClassUpdateManyWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUpdateManyWithoutUnionLeaderNestedInput
+        unionSecretaryOf?: FixedClassUpdateManyWithoutUnionSecretaryNestedInput
+        fixedClass?: FixedClassUpdateOneWithoutStudentsNestedInput
+        subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutStudentNestedInput
+        userProfile?: UserProfileUpdateOneRequiredWithoutEducationAndTrainingNestedInput
+        registrationArea?: DM_KhuVuc_DiaLyUpdateOneWithoutStudentNestedInput
+        curriculumVersion?: CurriculumVersionUpdateOneWithoutStudentsNestedInput
+        curriculumVersionParallel?: CurriculumVersionUpdateOneWithoutStudentCurriculumVersionParallelNestedInput
+        studentTrainingScore?: StudentTrainingScoreUpdateManyWithoutStudentNestedInput
+        studentSemesterResult?: StudentSemesterResultUpdateManyWithoutStudentNestedInput
+        studentYearResult?: StudentYearResultUpdateManyWithoutStudentNestedInput
+        scholarshipAwards?: ScholarshipAwardUpdateManyWithoutStudentNestedInput
+        archivedCertificate?: ArchivedCertificateUpdateManyWithoutStudentNestedInput
+        archivedAward?: ArchivedAwardUpdateManyWithoutStudentNestedInput
+        academicWarning?: AcademicWarningUpdateManyWithoutStudentNestedInput
+        disciplinaryWarning?: DisciplinaryWarningUpdateManyWithoutStudentNestedInput
+        studentAcademicDecision?: StudentAcademicDecisionUpdateManyWithoutStudentNestedInput
+        graduationApplications?: StudentGraduationApplicationUpdateManyWithoutStudentNestedInput
+        graduationDecision?: GraduationDecisionUpdateOneWithoutStudentNestedInput
+        surveySessions?: SurveySessionUpdateManyWithoutStudentNestedInput
+        notifications?: NotificationUpdateManyWithoutTargetStudentsNestedInput
+        researchRegistrations?: StudentResearchRegistrationUpdateManyWithoutStudentNestedInput
+        thesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutStudentNestedInput
+        diplomaVerificationApplication?: DiplomaVerificationApplicationUpdateManyWithoutStudentNestedInput
+        studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
+        scoreLinkStudent?: ScoreLinkStudentUpdateManyWithoutStudentNestedInput
+        classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
+        notes?: NoteUpdateManyWithoutStudentNestedInput
+        noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
+        semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutStudentNestedInput
+        schoolYearTrainingScore?: SchoolYearTrainingScoreUpdateManyWithoutStudentNestedInput
+        subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUpdateManyWithoutStudentNestedInput
+        trainingActivity?: TrainingActivityUpdateManyWithoutStudentNestedInput
+    };
+    export type StudentUncheckedUpdateWithoutDeputyUnionSecretaryOfInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        note?: NullableStringFieldUpdateOperationsInput | string | null
+        from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+        admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+        entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        department?: NullableStringFieldUpdateOperationsInput | string | null
+        departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+        universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+        universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+        universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+        universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+        universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+        basic?: NullableFloatFieldUpdateOperationsInput | number | null
+        facility?: NullableFloatFieldUpdateOperationsInput | number | null
+        foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+        priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
+        unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
+        status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
+        fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
+        userProfileId?: StringFieldUpdateOperationsInput | string
+        registrationAreaId?: NullableStringFieldUpdateOperationsInput | string | null
+        curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+        curriculumVersionParallelId?: NullableStringFieldUpdateOperationsInput | string | null
+        academicWarningLevel?: IntFieldUpdateOperationsInput | number
+        disciplinaryWarningLevel?: IntFieldUpdateOperationsInput | number
+        suspended?: BoolFieldUpdateOperationsInput | boolean
+        expelled?: BoolFieldUpdateOperationsInput | boolean
+        foreignLangPass?: BoolFieldUpdateOperationsInput | boolean
+        ITCertificationPass?: BoolFieldUpdateOperationsInput | boolean
+        strengthTrainingPass?: BoolFieldUpdateOperationsInput | boolean
+        militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
+        priorityObject?: PriorityObjectUncheckedUpdateManyWithoutStudentsNestedInput
+        classMonitor?: FixedClassUncheckedUpdateManyWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUncheckedUpdateManyWithoutUnionLeaderNestedInput
+        unionSecretaryOf?: FixedClassUncheckedUpdateManyWithoutUnionSecretaryNestedInput
+        subjectClassStudent?: StudentSubjectScoreUncheckedUpdateManyWithoutStudentNestedInput
+        studentTrainingScore?: StudentTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
+        studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutStudentNestedInput
+        studentYearResult?: StudentYearResultUncheckedUpdateManyWithoutStudentNestedInput
+        scholarshipAwards?: ScholarshipAwardUncheckedUpdateManyWithoutStudentNestedInput
+        archivedCertificate?: ArchivedCertificateUncheckedUpdateManyWithoutStudentNestedInput
+        archivedAward?: ArchivedAwardUncheckedUpdateManyWithoutStudentNestedInput
+        academicWarning?: AcademicWarningUncheckedUpdateManyWithoutStudentNestedInput
+        disciplinaryWarning?: DisciplinaryWarningUncheckedUpdateManyWithoutStudentNestedInput
+        studentAcademicDecision?: StudentAcademicDecisionUncheckedUpdateManyWithoutStudentNestedInput
+        graduationApplications?: StudentGraduationApplicationUncheckedUpdateManyWithoutStudentNestedInput
+        graduationDecision?: GraduationDecisionUncheckedUpdateOneWithoutStudentNestedInput
+        surveySessions?: SurveySessionUncheckedUpdateManyWithoutStudentNestedInput
+        notifications?: NotificationUncheckedUpdateManyWithoutTargetStudentsNestedInput
+        researchRegistrations?: StudentResearchRegistrationUncheckedUpdateManyWithoutStudentNestedInput
+        thesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentNestedInput
+        diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedUpdateManyWithoutStudentNestedInput
+        studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
+        scoreLinkStudent?: ScoreLinkStudentUncheckedUpdateManyWithoutStudentNestedInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
+        notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
+        noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
+        semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
+        schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
+        subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUncheckedUpdateManyWithoutStudentNestedInput
+        trainingActivity?: TrainingActivityUncheckedUpdateManyWithoutStudentNestedInput
+    };
+    export type StudentUpsertWithoutUnionSecretaryOfInput = {
+        update: XOR<StudentUpdateWithoutUnionSecretaryOfInput, StudentUncheckedUpdateWithoutUnionSecretaryOfInput>
+        create: XOR<StudentCreateWithoutUnionSecretaryOfInput, StudentUncheckedCreateWithoutUnionSecretaryOfInput>
+        where?: StudentWhereInput
+    };
+    export type StudentUpdateToOneWithWhereWithoutUnionSecretaryOfInput = {
+        where?: StudentWhereInput
+        data: XOR<StudentUpdateWithoutUnionSecretaryOfInput, StudentUncheckedUpdateWithoutUnionSecretaryOfInput>
+    };
+    export type StudentUpdateWithoutUnionSecretaryOfInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        note?: NullableStringFieldUpdateOperationsInput | string | null
+        from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+        admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+        entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        department?: NullableStringFieldUpdateOperationsInput | string | null
+        departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+        universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+        universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+        universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+        universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+        universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+        basic?: NullableFloatFieldUpdateOperationsInput | number | null
+        facility?: NullableFloatFieldUpdateOperationsInput | number | null
+        foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+        priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
+        unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
+        status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
+        academicWarningLevel?: IntFieldUpdateOperationsInput | number
+        disciplinaryWarningLevel?: IntFieldUpdateOperationsInput | number
+        suspended?: BoolFieldUpdateOperationsInput | boolean
+        expelled?: BoolFieldUpdateOperationsInput | boolean
+        foreignLangPass?: BoolFieldUpdateOperationsInput | boolean
+        ITCertificationPass?: BoolFieldUpdateOperationsInput | boolean
+        strengthTrainingPass?: BoolFieldUpdateOperationsInput | boolean
+        militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
+        trainingLocation?: TrainingLocationUpdateOneWithoutStudentsNestedInput
+        priorityObject?: PriorityObjectUpdateManyWithoutStudentsNestedInput
+        classMonitor?: FixedClassUpdateManyWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUpdateManyWithoutUnionLeaderNestedInput
+        deputyUnionSecretaryOf?: FixedClassUpdateManyWithoutDeputyUnionSecretaryNestedInput
+        fixedClass?: FixedClassUpdateOneWithoutStudentsNestedInput
+        subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutStudentNestedInput
+        userProfile?: UserProfileUpdateOneRequiredWithoutEducationAndTrainingNestedInput
+        registrationArea?: DM_KhuVuc_DiaLyUpdateOneWithoutStudentNestedInput
+        curriculumVersion?: CurriculumVersionUpdateOneWithoutStudentsNestedInput
+        curriculumVersionParallel?: CurriculumVersionUpdateOneWithoutStudentCurriculumVersionParallelNestedInput
+        studentTrainingScore?: StudentTrainingScoreUpdateManyWithoutStudentNestedInput
+        studentSemesterResult?: StudentSemesterResultUpdateManyWithoutStudentNestedInput
+        studentYearResult?: StudentYearResultUpdateManyWithoutStudentNestedInput
+        scholarshipAwards?: ScholarshipAwardUpdateManyWithoutStudentNestedInput
+        archivedCertificate?: ArchivedCertificateUpdateManyWithoutStudentNestedInput
+        archivedAward?: ArchivedAwardUpdateManyWithoutStudentNestedInput
+        academicWarning?: AcademicWarningUpdateManyWithoutStudentNestedInput
+        disciplinaryWarning?: DisciplinaryWarningUpdateManyWithoutStudentNestedInput
+        studentAcademicDecision?: StudentAcademicDecisionUpdateManyWithoutStudentNestedInput
+        graduationApplications?: StudentGraduationApplicationUpdateManyWithoutStudentNestedInput
+        graduationDecision?: GraduationDecisionUpdateOneWithoutStudentNestedInput
+        surveySessions?: SurveySessionUpdateManyWithoutStudentNestedInput
+        notifications?: NotificationUpdateManyWithoutTargetStudentsNestedInput
+        researchRegistrations?: StudentResearchRegistrationUpdateManyWithoutStudentNestedInput
+        thesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutStudentNestedInput
+        diplomaVerificationApplication?: DiplomaVerificationApplicationUpdateManyWithoutStudentNestedInput
+        studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
+        scoreLinkStudent?: ScoreLinkStudentUpdateManyWithoutStudentNestedInput
+        classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
+        notes?: NoteUpdateManyWithoutStudentNestedInput
+        noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
+        semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutStudentNestedInput
+        schoolYearTrainingScore?: SchoolYearTrainingScoreUpdateManyWithoutStudentNestedInput
+        subjectClassAttendanceStudent?: SubjectClassAttendanceStudentUpdateManyWithoutStudentNestedInput
+        trainingActivity?: TrainingActivityUpdateManyWithoutStudentNestedInput
+    };
+    export type StudentUncheckedUpdateWithoutUnionSecretaryOfInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        note?: NullableStringFieldUpdateOperationsInput | string | null
+        from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+        admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+        entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        department?: NullableStringFieldUpdateOperationsInput | string | null
+        departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+        universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+        universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+        universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+        universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+        universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+        basic?: NullableFloatFieldUpdateOperationsInput | number | null
+        facility?: NullableFloatFieldUpdateOperationsInput | number | null
+        foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+        priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
+        unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
+        status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
+        fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
+        userProfileId?: StringFieldUpdateOperationsInput | string
+        registrationAreaId?: NullableStringFieldUpdateOperationsInput | string | null
+        curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+        curriculumVersionParallelId?: NullableStringFieldUpdateOperationsInput | string | null
+        academicWarningLevel?: IntFieldUpdateOperationsInput | number
+        disciplinaryWarningLevel?: IntFieldUpdateOperationsInput | number
+        suspended?: BoolFieldUpdateOperationsInput | boolean
+        expelled?: BoolFieldUpdateOperationsInput | boolean
+        foreignLangPass?: BoolFieldUpdateOperationsInput | boolean
+        ITCertificationPass?: BoolFieldUpdateOperationsInput | boolean
+        strengthTrainingPass?: BoolFieldUpdateOperationsInput | boolean
+        militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
+        priorityObject?: PriorityObjectUncheckedUpdateManyWithoutStudentsNestedInput
+        classMonitor?: FixedClassUncheckedUpdateManyWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUncheckedUpdateManyWithoutUnionLeaderNestedInput
+        deputyUnionSecretaryOf?: FixedClassUncheckedUpdateManyWithoutDeputyUnionSecretaryNestedInput
         subjectClassStudent?: StudentSubjectScoreUncheckedUpdateManyWithoutStudentNestedInput
         studentTrainingScore?: StudentTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutStudentNestedInput
@@ -536917,6 +537975,8 @@ export namespace Prisma {
         classType?: $Enums.FixedClassType
         classMonitor?: StudentCreateNestedOneWithoutClassMonitorInput
         unionLeader?: StudentCreateNestedOneWithoutUnionLeaderOfInput
+        deputyUnionSecretary?: StudentCreateNestedOneWithoutDeputyUnionSecretaryOfInput
+        unionSecretary?: StudentCreateNestedOneWithoutUnionSecretaryOfInput
         trainingCourse: TrainingCourseCreateNestedOneWithoutFixedClassInput
         managementOrganization?: DM_DonViCreateNestedOneWithoutFixedClassInput
         lecturerManagement?: LecturerCreateNestedOneWithoutManageFixedClassInput
@@ -536943,6 +538003,8 @@ export namespace Prisma {
         graduated?: boolean
         classMonitorId?: string | null
         unionLeaderId?: string | null
+        deputyUnionSecretaryId?: string | null
+        unionSecretaryId?: string | null
         trainingCourseId: string
         managementOrganizationId?: string | null
         lecturerManagementId?: string | null
@@ -537000,8 +538062,10 @@ export namespace Prisma {
         militaryTrainingPass?: boolean
         trainingLocation?: TrainingLocationCreateNestedOneWithoutStudentsInput
         priorityObject?: PriorityObjectCreateNestedManyWithoutStudentsInput
-        classMonitor?: FixedClassCreateNestedOneWithoutClassMonitorInput
-        unionLeaderOf?: FixedClassCreateNestedOneWithoutUnionLeaderInput
+        classMonitor?: FixedClassCreateNestedManyWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassCreateNestedManyWithoutUnionLeaderInput
+        deputyUnionSecretaryOf?: FixedClassCreateNestedManyWithoutDeputyUnionSecretaryInput
+        unionSecretaryOf?: FixedClassCreateNestedManyWithoutUnionSecretaryInput
         fixedClass?: FixedClassCreateNestedOneWithoutStudentsInput
         subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutStudentInput
         userProfile: UserProfileCreateNestedOneWithoutEducationAndTrainingInput
@@ -537078,8 +538142,10 @@ export namespace Prisma {
         strengthTrainingPass?: boolean
         militaryTrainingPass?: boolean
         priorityObject?: PriorityObjectUncheckedCreateNestedManyWithoutStudentsInput
-        classMonitor?: FixedClassUncheckedCreateNestedOneWithoutClassMonitorInput
-        unionLeaderOf?: FixedClassUncheckedCreateNestedOneWithoutUnionLeaderInput
+        classMonitor?: FixedClassUncheckedCreateNestedManyWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassUncheckedCreateNestedManyWithoutUnionLeaderInput
+        deputyUnionSecretaryOf?: FixedClassUncheckedCreateNestedManyWithoutDeputyUnionSecretaryInput
+        unionSecretaryOf?: FixedClassUncheckedCreateNestedManyWithoutUnionSecretaryInput
         subjectClassStudent?: StudentSubjectScoreUncheckedCreateNestedManyWithoutStudentInput
         studentTrainingScore?: StudentTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutStudentInput
@@ -537156,8 +538222,10 @@ export namespace Prisma {
         militaryTrainingPass?: boolean
         trainingLocation?: TrainingLocationCreateNestedOneWithoutStudentsInput
         priorityObject?: PriorityObjectCreateNestedManyWithoutStudentsInput
-        classMonitor?: FixedClassCreateNestedOneWithoutClassMonitorInput
-        unionLeaderOf?: FixedClassCreateNestedOneWithoutUnionLeaderInput
+        classMonitor?: FixedClassCreateNestedManyWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassCreateNestedManyWithoutUnionLeaderInput
+        deputyUnionSecretaryOf?: FixedClassCreateNestedManyWithoutDeputyUnionSecretaryInput
+        unionSecretaryOf?: FixedClassCreateNestedManyWithoutUnionSecretaryInput
         fixedClass?: FixedClassCreateNestedOneWithoutStudentsInput
         subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutStudentInput
         userProfile: UserProfileCreateNestedOneWithoutEducationAndTrainingInput
@@ -537234,8 +538302,10 @@ export namespace Prisma {
         strengthTrainingPass?: boolean
         militaryTrainingPass?: boolean
         priorityObject?: PriorityObjectUncheckedCreateNestedManyWithoutStudentsInput
-        classMonitor?: FixedClassUncheckedCreateNestedOneWithoutClassMonitorInput
-        unionLeaderOf?: FixedClassUncheckedCreateNestedOneWithoutUnionLeaderInput
+        classMonitor?: FixedClassUncheckedCreateNestedManyWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassUncheckedCreateNestedManyWithoutUnionLeaderInput
+        deputyUnionSecretaryOf?: FixedClassUncheckedCreateNestedManyWithoutDeputyUnionSecretaryInput
+        unionSecretaryOf?: FixedClassUncheckedCreateNestedManyWithoutUnionSecretaryInput
         subjectClassStudent?: StudentSubjectScoreUncheckedCreateNestedManyWithoutStudentInput
         studentTrainingScore?: StudentTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutStudentInput
@@ -537781,6 +538851,8 @@ export namespace Prisma {
         classType?: EnumFixedClassTypeFieldUpdateOperationsInput | $Enums.FixedClassType
         classMonitor?: StudentUpdateOneWithoutClassMonitorNestedInput
         unionLeader?: StudentUpdateOneWithoutUnionLeaderOfNestedInput
+        deputyUnionSecretary?: StudentUpdateOneWithoutDeputyUnionSecretaryOfNestedInput
+        unionSecretary?: StudentUpdateOneWithoutUnionSecretaryOfNestedInput
         trainingCourse?: TrainingCourseUpdateOneRequiredWithoutFixedClassNestedInput
         managementOrganization?: DM_DonViUpdateOneWithoutFixedClassNestedInput
         lecturerManagement?: LecturerUpdateOneWithoutManageFixedClassNestedInput
@@ -537807,6 +538879,8 @@ export namespace Prisma {
         graduated?: BoolFieldUpdateOperationsInput | boolean
         classMonitorId?: NullableStringFieldUpdateOperationsInput | string | null
         unionLeaderId?: NullableStringFieldUpdateOperationsInput | string | null
+        deputyUnionSecretaryId?: NullableStringFieldUpdateOperationsInput | string | null
+        unionSecretaryId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingCourseId?: StringFieldUpdateOperationsInput | string
         managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerManagementId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -542585,8 +543659,10 @@ export namespace Prisma {
         militaryTrainingPass?: boolean
         trainingLocation?: TrainingLocationCreateNestedOneWithoutStudentsInput
         priorityObject?: PriorityObjectCreateNestedManyWithoutStudentsInput
-        classMonitor?: FixedClassCreateNestedOneWithoutClassMonitorInput
-        unionLeaderOf?: FixedClassCreateNestedOneWithoutUnionLeaderInput
+        classMonitor?: FixedClassCreateNestedManyWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassCreateNestedManyWithoutUnionLeaderInput
+        deputyUnionSecretaryOf?: FixedClassCreateNestedManyWithoutDeputyUnionSecretaryInput
+        unionSecretaryOf?: FixedClassCreateNestedManyWithoutUnionSecretaryInput
         fixedClass?: FixedClassCreateNestedOneWithoutStudentsInput
         subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutStudentInput
         userProfile: UserProfileCreateNestedOneWithoutEducationAndTrainingInput
@@ -542664,8 +543740,10 @@ export namespace Prisma {
         strengthTrainingPass?: boolean
         militaryTrainingPass?: boolean
         priorityObject?: PriorityObjectUncheckedCreateNestedManyWithoutStudentsInput
-        classMonitor?: FixedClassUncheckedCreateNestedOneWithoutClassMonitorInput
-        unionLeaderOf?: FixedClassUncheckedCreateNestedOneWithoutUnionLeaderInput
+        classMonitor?: FixedClassUncheckedCreateNestedManyWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassUncheckedCreateNestedManyWithoutUnionLeaderInput
+        deputyUnionSecretaryOf?: FixedClassUncheckedCreateNestedManyWithoutDeputyUnionSecretaryInput
+        unionSecretaryOf?: FixedClassUncheckedCreateNestedManyWithoutUnionSecretaryInput
         subjectClassStudent?: StudentSubjectScoreUncheckedCreateNestedManyWithoutStudentInput
         studentTrainingScore?: StudentTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutStudentInput
@@ -542910,8 +543988,10 @@ export namespace Prisma {
         militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         trainingLocation?: TrainingLocationUpdateOneWithoutStudentsNestedInput
         priorityObject?: PriorityObjectUpdateManyWithoutStudentsNestedInput
-        classMonitor?: FixedClassUpdateOneWithoutClassMonitorNestedInput
-        unionLeaderOf?: FixedClassUpdateOneWithoutUnionLeaderNestedInput
+        classMonitor?: FixedClassUpdateManyWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUpdateManyWithoutUnionLeaderNestedInput
+        deputyUnionSecretaryOf?: FixedClassUpdateManyWithoutDeputyUnionSecretaryNestedInput
+        unionSecretaryOf?: FixedClassUpdateManyWithoutUnionSecretaryNestedInput
         fixedClass?: FixedClassUpdateOneWithoutStudentsNestedInput
         subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutStudentNestedInput
         userProfile?: UserProfileUpdateOneRequiredWithoutEducationAndTrainingNestedInput
@@ -542989,8 +544069,10 @@ export namespace Prisma {
         strengthTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         priorityObject?: PriorityObjectUncheckedUpdateManyWithoutStudentsNestedInput
-        classMonitor?: FixedClassUncheckedUpdateOneWithoutClassMonitorNestedInput
-        unionLeaderOf?: FixedClassUncheckedUpdateOneWithoutUnionLeaderNestedInput
+        classMonitor?: FixedClassUncheckedUpdateManyWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUncheckedUpdateManyWithoutUnionLeaderNestedInput
+        deputyUnionSecretaryOf?: FixedClassUncheckedUpdateManyWithoutDeputyUnionSecretaryNestedInput
+        unionSecretaryOf?: FixedClassUncheckedUpdateManyWithoutUnionSecretaryNestedInput
         subjectClassStudent?: StudentSubjectScoreUncheckedUpdateManyWithoutStudentNestedInput
         studentTrainingScore?: StudentTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutStudentNestedInput
@@ -543739,6 +544821,8 @@ export namespace Prisma {
         classType?: $Enums.FixedClassType
         classMonitor?: StudentCreateNestedOneWithoutClassMonitorInput
         unionLeader?: StudentCreateNestedOneWithoutUnionLeaderOfInput
+        deputyUnionSecretary?: StudentCreateNestedOneWithoutDeputyUnionSecretaryOfInput
+        unionSecretary?: StudentCreateNestedOneWithoutUnionSecretaryOfInput
         trainingCourse: TrainingCourseCreateNestedOneWithoutFixedClassInput
         managementOrganization?: DM_DonViCreateNestedOneWithoutFixedClassInput
         lecturerManagement?: LecturerCreateNestedOneWithoutManageFixedClassInput
@@ -543765,6 +544849,8 @@ export namespace Prisma {
         graduated?: boolean
         classMonitorId?: string | null
         unionLeaderId?: string | null
+        deputyUnionSecretaryId?: string | null
+        unionSecretaryId?: string | null
         trainingCourseId: string
         managementOrganizationId?: string | null
         lecturerManagementId?: string | null
@@ -546376,8 +547462,10 @@ export namespace Prisma {
         militaryTrainingPass?: boolean
         trainingLocation?: TrainingLocationCreateNestedOneWithoutStudentsInput
         priorityObject?: PriorityObjectCreateNestedManyWithoutStudentsInput
-        classMonitor?: FixedClassCreateNestedOneWithoutClassMonitorInput
-        unionLeaderOf?: FixedClassCreateNestedOneWithoutUnionLeaderInput
+        classMonitor?: FixedClassCreateNestedManyWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassCreateNestedManyWithoutUnionLeaderInput
+        deputyUnionSecretaryOf?: FixedClassCreateNestedManyWithoutDeputyUnionSecretaryInput
+        unionSecretaryOf?: FixedClassCreateNestedManyWithoutUnionSecretaryInput
         fixedClass?: FixedClassCreateNestedOneWithoutStudentsInput
         subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutStudentInput
         userProfile: UserProfileCreateNestedOneWithoutEducationAndTrainingInput
@@ -546455,8 +547543,10 @@ export namespace Prisma {
         strengthTrainingPass?: boolean
         militaryTrainingPass?: boolean
         priorityObject?: PriorityObjectUncheckedCreateNestedManyWithoutStudentsInput
-        classMonitor?: FixedClassUncheckedCreateNestedOneWithoutClassMonitorInput
-        unionLeaderOf?: FixedClassUncheckedCreateNestedOneWithoutUnionLeaderInput
+        classMonitor?: FixedClassUncheckedCreateNestedManyWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassUncheckedCreateNestedManyWithoutUnionLeaderInput
+        deputyUnionSecretaryOf?: FixedClassUncheckedCreateNestedManyWithoutDeputyUnionSecretaryInput
+        unionSecretaryOf?: FixedClassUncheckedCreateNestedManyWithoutUnionSecretaryInput
         subjectClassStudent?: StudentSubjectScoreUncheckedCreateNestedManyWithoutStudentInput
         studentTrainingScore?: StudentTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutStudentInput
@@ -546572,8 +547662,10 @@ export namespace Prisma {
         militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         trainingLocation?: TrainingLocationUpdateOneWithoutStudentsNestedInput
         priorityObject?: PriorityObjectUpdateManyWithoutStudentsNestedInput
-        classMonitor?: FixedClassUpdateOneWithoutClassMonitorNestedInput
-        unionLeaderOf?: FixedClassUpdateOneWithoutUnionLeaderNestedInput
+        classMonitor?: FixedClassUpdateManyWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUpdateManyWithoutUnionLeaderNestedInput
+        deputyUnionSecretaryOf?: FixedClassUpdateManyWithoutDeputyUnionSecretaryNestedInput
+        unionSecretaryOf?: FixedClassUpdateManyWithoutUnionSecretaryNestedInput
         fixedClass?: FixedClassUpdateOneWithoutStudentsNestedInput
         subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutStudentNestedInput
         userProfile?: UserProfileUpdateOneRequiredWithoutEducationAndTrainingNestedInput
@@ -546651,8 +547743,10 @@ export namespace Prisma {
         strengthTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         priorityObject?: PriorityObjectUncheckedUpdateManyWithoutStudentsNestedInput
-        classMonitor?: FixedClassUncheckedUpdateOneWithoutClassMonitorNestedInput
-        unionLeaderOf?: FixedClassUncheckedUpdateOneWithoutUnionLeaderNestedInput
+        classMonitor?: FixedClassUncheckedUpdateManyWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUncheckedUpdateManyWithoutUnionLeaderNestedInput
+        deputyUnionSecretaryOf?: FixedClassUncheckedUpdateManyWithoutDeputyUnionSecretaryNestedInput
+        unionSecretaryOf?: FixedClassUncheckedUpdateManyWithoutUnionSecretaryNestedInput
         subjectClassStudent?: StudentSubjectScoreUncheckedUpdateManyWithoutStudentNestedInput
         studentTrainingScore?: StudentTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutStudentNestedInput
@@ -551080,8 +552174,10 @@ export namespace Prisma {
         strengthTrainingPass?: boolean
         militaryTrainingPass?: boolean
         trainingLocation?: TrainingLocationCreateNestedOneWithoutStudentsInput
-        classMonitor?: FixedClassCreateNestedOneWithoutClassMonitorInput
-        unionLeaderOf?: FixedClassCreateNestedOneWithoutUnionLeaderInput
+        classMonitor?: FixedClassCreateNestedManyWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassCreateNestedManyWithoutUnionLeaderInput
+        deputyUnionSecretaryOf?: FixedClassCreateNestedManyWithoutDeputyUnionSecretaryInput
+        unionSecretaryOf?: FixedClassCreateNestedManyWithoutUnionSecretaryInput
         fixedClass?: FixedClassCreateNestedOneWithoutStudentsInput
         subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutStudentInput
         userProfile: UserProfileCreateNestedOneWithoutEducationAndTrainingInput
@@ -551159,8 +552255,10 @@ export namespace Prisma {
         ITCertificationPass?: boolean
         strengthTrainingPass?: boolean
         militaryTrainingPass?: boolean
-        classMonitor?: FixedClassUncheckedCreateNestedOneWithoutClassMonitorInput
-        unionLeaderOf?: FixedClassUncheckedCreateNestedOneWithoutUnionLeaderInput
+        classMonitor?: FixedClassUncheckedCreateNestedManyWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassUncheckedCreateNestedManyWithoutUnionLeaderInput
+        deputyUnionSecretaryOf?: FixedClassUncheckedCreateNestedManyWithoutDeputyUnionSecretaryInput
+        unionSecretaryOf?: FixedClassUncheckedCreateNestedManyWithoutUnionSecretaryInput
         subjectClassStudent?: StudentSubjectScoreUncheckedCreateNestedManyWithoutStudentInput
         studentTrainingScore?: StudentTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutStudentInput
@@ -551755,8 +552853,10 @@ export namespace Prisma {
         strengthTrainingPass?: boolean
         militaryTrainingPass?: boolean
         priorityObject?: PriorityObjectCreateNestedManyWithoutStudentsInput
-        classMonitor?: FixedClassCreateNestedOneWithoutClassMonitorInput
-        unionLeaderOf?: FixedClassCreateNestedOneWithoutUnionLeaderInput
+        classMonitor?: FixedClassCreateNestedManyWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassCreateNestedManyWithoutUnionLeaderInput
+        deputyUnionSecretaryOf?: FixedClassCreateNestedManyWithoutDeputyUnionSecretaryInput
+        unionSecretaryOf?: FixedClassCreateNestedManyWithoutUnionSecretaryInput
         fixedClass?: FixedClassCreateNestedOneWithoutStudentsInput
         subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutStudentInput
         userProfile: UserProfileCreateNestedOneWithoutEducationAndTrainingInput
@@ -551834,8 +552934,10 @@ export namespace Prisma {
         strengthTrainingPass?: boolean
         militaryTrainingPass?: boolean
         priorityObject?: PriorityObjectUncheckedCreateNestedManyWithoutStudentsInput
-        classMonitor?: FixedClassUncheckedCreateNestedOneWithoutClassMonitorInput
-        unionLeaderOf?: FixedClassUncheckedCreateNestedOneWithoutUnionLeaderInput
+        classMonitor?: FixedClassUncheckedCreateNestedManyWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassUncheckedCreateNestedManyWithoutUnionLeaderInput
+        deputyUnionSecretaryOf?: FixedClassUncheckedCreateNestedManyWithoutDeputyUnionSecretaryInput
+        unionSecretaryOf?: FixedClassUncheckedCreateNestedManyWithoutUnionSecretaryInput
         subjectClassStudent?: StudentSubjectScoreUncheckedCreateNestedManyWithoutStudentInput
         studentTrainingScore?: StudentTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutStudentInput
@@ -557614,6 +558716,8 @@ export namespace Prisma {
         graduated?: boolean
         classType?: $Enums.FixedClassType
         unionLeader?: StudentCreateNestedOneWithoutUnionLeaderOfInput
+        deputyUnionSecretary?: StudentCreateNestedOneWithoutDeputyUnionSecretaryOfInput
+        unionSecretary?: StudentCreateNestedOneWithoutUnionSecretaryOfInput
         trainingCourse: TrainingCourseCreateNestedOneWithoutFixedClassInput
         managementOrganization?: DM_DonViCreateNestedOneWithoutFixedClassInput
         lecturerManagement?: LecturerCreateNestedOneWithoutManageFixedClassInput
@@ -557640,6 +558744,8 @@ export namespace Prisma {
         startYear?: number | null
         graduated?: boolean
         unionLeaderId?: string | null
+        deputyUnionSecretaryId?: string | null
+        unionSecretaryId?: string | null
         trainingCourseId: string
         managementOrganizationId?: string | null
         lecturerManagementId?: string | null
@@ -557657,6 +558763,10 @@ export namespace Prisma {
         where: FixedClassWhereUniqueInput
         create: XOR<FixedClassCreateWithoutClassMonitorInput, FixedClassUncheckedCreateWithoutClassMonitorInput>
     };
+    export type FixedClassCreateManyClassMonitorInputEnvelope = {
+        data: FixedClassCreateManyClassMonitorInput | FixedClassCreateManyClassMonitorInput[]
+        skipDuplicates?: boolean
+    };
     export type FixedClassCreateWithoutUnionLeaderInput = {
         id?: string
         code?: string | null
@@ -557672,6 +558782,8 @@ export namespace Prisma {
         graduated?: boolean
         classType?: $Enums.FixedClassType
         classMonitor?: StudentCreateNestedOneWithoutClassMonitorInput
+        deputyUnionSecretary?: StudentCreateNestedOneWithoutDeputyUnionSecretaryOfInput
+        unionSecretary?: StudentCreateNestedOneWithoutUnionSecretaryOfInput
         trainingCourse: TrainingCourseCreateNestedOneWithoutFixedClassInput
         managementOrganization?: DM_DonViCreateNestedOneWithoutFixedClassInput
         lecturerManagement?: LecturerCreateNestedOneWithoutManageFixedClassInput
@@ -557698,6 +558810,8 @@ export namespace Prisma {
         startYear?: number | null
         graduated?: boolean
         classMonitorId?: string | null
+        deputyUnionSecretaryId?: string | null
+        unionSecretaryId?: string | null
         trainingCourseId: string
         managementOrganizationId?: string | null
         lecturerManagementId?: string | null
@@ -557715,6 +558829,142 @@ export namespace Prisma {
         where: FixedClassWhereUniqueInput
         create: XOR<FixedClassCreateWithoutUnionLeaderInput, FixedClassUncheckedCreateWithoutUnionLeaderInput>
     };
+    export type FixedClassCreateManyUnionLeaderInputEnvelope = {
+        data: FixedClassCreateManyUnionLeaderInput | FixedClassCreateManyUnionLeaderInput[]
+        skipDuplicates?: boolean
+    };
+    export type FixedClassCreateWithoutDeputyUnionSecretaryInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        name: string
+        summary?: string | null
+        startYear?: number | null
+        graduated?: boolean
+        classType?: $Enums.FixedClassType
+        classMonitor?: StudentCreateNestedOneWithoutClassMonitorInput
+        unionLeader?: StudentCreateNestedOneWithoutUnionLeaderOfInput
+        unionSecretary?: StudentCreateNestedOneWithoutUnionSecretaryOfInput
+        trainingCourse: TrainingCourseCreateNestedOneWithoutFixedClassInput
+        managementOrganization?: DM_DonViCreateNestedOneWithoutFixedClassInput
+        lecturerManagement?: LecturerCreateNestedOneWithoutManageFixedClassInput
+        staffManagement?: StaffCreateNestedOneWithoutFixedClassInput
+        students?: StudentCreateNestedManyWithoutFixedClassInput
+        curriculumVersion?: CurriculumVersionCreateNestedOneWithoutFixedClassInput
+        subjectClasses?: SubjectClassCreateNestedManyWithoutFixedClassesInput
+        notifications?: NotificationCreateNestedManyWithoutTargetClassesInput
+        surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutFixedClassesInput
+        scoreLinkSheets?: ScoreLinkSheetCreateNestedManyWithoutFixedClassInput
+        planTrainingSubject?: PlanTrainingSubjectCreateNestedOneWithoutFixedClassInput
+    };
+    export type FixedClassUncheckedCreateWithoutDeputyUnionSecretaryInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        name: string
+        summary?: string | null
+        startYear?: number | null
+        graduated?: boolean
+        classMonitorId?: string | null
+        unionLeaderId?: string | null
+        unionSecretaryId?: string | null
+        trainingCourseId: string
+        managementOrganizationId?: string | null
+        lecturerManagementId?: string | null
+        staffManagementId?: string | null
+        curriculumVersionId?: string | null
+        classType?: $Enums.FixedClassType
+        planTrainingSubjectId?: string | null
+        students?: StudentUncheckedCreateNestedManyWithoutFixedClassInput
+        subjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutFixedClassesInput
+        notifications?: NotificationUncheckedCreateNestedManyWithoutTargetClassesInput
+        surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutFixedClassesInput
+        scoreLinkSheets?: ScoreLinkSheetUncheckedCreateNestedManyWithoutFixedClassInput
+    };
+    export type FixedClassCreateOrConnectWithoutDeputyUnionSecretaryInput = {
+        where: FixedClassWhereUniqueInput
+        create: XOR<FixedClassCreateWithoutDeputyUnionSecretaryInput, FixedClassUncheckedCreateWithoutDeputyUnionSecretaryInput>
+    };
+    export type FixedClassCreateManyDeputyUnionSecretaryInputEnvelope = {
+        data: FixedClassCreateManyDeputyUnionSecretaryInput | FixedClassCreateManyDeputyUnionSecretaryInput[]
+        skipDuplicates?: boolean
+    };
+    export type FixedClassCreateWithoutUnionSecretaryInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        name: string
+        summary?: string | null
+        startYear?: number | null
+        graduated?: boolean
+        classType?: $Enums.FixedClassType
+        classMonitor?: StudentCreateNestedOneWithoutClassMonitorInput
+        unionLeader?: StudentCreateNestedOneWithoutUnionLeaderOfInput
+        deputyUnionSecretary?: StudentCreateNestedOneWithoutDeputyUnionSecretaryOfInput
+        trainingCourse: TrainingCourseCreateNestedOneWithoutFixedClassInput
+        managementOrganization?: DM_DonViCreateNestedOneWithoutFixedClassInput
+        lecturerManagement?: LecturerCreateNestedOneWithoutManageFixedClassInput
+        staffManagement?: StaffCreateNestedOneWithoutFixedClassInput
+        students?: StudentCreateNestedManyWithoutFixedClassInput
+        curriculumVersion?: CurriculumVersionCreateNestedOneWithoutFixedClassInput
+        subjectClasses?: SubjectClassCreateNestedManyWithoutFixedClassesInput
+        notifications?: NotificationCreateNestedManyWithoutTargetClassesInput
+        surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutFixedClassesInput
+        scoreLinkSheets?: ScoreLinkSheetCreateNestedManyWithoutFixedClassInput
+        planTrainingSubject?: PlanTrainingSubjectCreateNestedOneWithoutFixedClassInput
+    };
+    export type FixedClassUncheckedCreateWithoutUnionSecretaryInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        name: string
+        summary?: string | null
+        startYear?: number | null
+        graduated?: boolean
+        classMonitorId?: string | null
+        unionLeaderId?: string | null
+        deputyUnionSecretaryId?: string | null
+        trainingCourseId: string
+        managementOrganizationId?: string | null
+        lecturerManagementId?: string | null
+        staffManagementId?: string | null
+        curriculumVersionId?: string | null
+        classType?: $Enums.FixedClassType
+        planTrainingSubjectId?: string | null
+        students?: StudentUncheckedCreateNestedManyWithoutFixedClassInput
+        subjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutFixedClassesInput
+        notifications?: NotificationUncheckedCreateNestedManyWithoutTargetClassesInput
+        surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutFixedClassesInput
+        scoreLinkSheets?: ScoreLinkSheetUncheckedCreateNestedManyWithoutFixedClassInput
+    };
+    export type FixedClassCreateOrConnectWithoutUnionSecretaryInput = {
+        where: FixedClassWhereUniqueInput
+        create: XOR<FixedClassCreateWithoutUnionSecretaryInput, FixedClassUncheckedCreateWithoutUnionSecretaryInput>
+    };
+    export type FixedClassCreateManyUnionSecretaryInputEnvelope = {
+        data: FixedClassCreateManyUnionSecretaryInput | FixedClassCreateManyUnionSecretaryInput[]
+        skipDuplicates?: boolean
+    };
     export type FixedClassCreateWithoutStudentsInput = {
         id?: string
         code?: string | null
@@ -557731,6 +558981,8 @@ export namespace Prisma {
         classType?: $Enums.FixedClassType
         classMonitor?: StudentCreateNestedOneWithoutClassMonitorInput
         unionLeader?: StudentCreateNestedOneWithoutUnionLeaderOfInput
+        deputyUnionSecretary?: StudentCreateNestedOneWithoutDeputyUnionSecretaryOfInput
+        unionSecretary?: StudentCreateNestedOneWithoutUnionSecretaryOfInput
         trainingCourse: TrainingCourseCreateNestedOneWithoutFixedClassInput
         managementOrganization?: DM_DonViCreateNestedOneWithoutFixedClassInput
         lecturerManagement?: LecturerCreateNestedOneWithoutManageFixedClassInput
@@ -557757,6 +559009,8 @@ export namespace Prisma {
         graduated?: boolean
         classMonitorId?: string | null
         unionLeaderId?: string | null
+        deputyUnionSecretaryId?: string | null
+        unionSecretaryId?: string | null
         trainingCourseId: string
         managementOrganizationId?: string | null
         lecturerManagementId?: string | null
@@ -559665,131 +560919,57 @@ export namespace Prisma {
         createdBy?: UuidNullableFilter<"PriorityObject"> | string | null
         name?: StringFilter<"PriorityObject"> | string
     };
-    export type FixedClassUpsertWithoutClassMonitorInput = {
+    export type FixedClassUpsertWithWhereUniqueWithoutClassMonitorInput = {
+        where: FixedClassWhereUniqueInput
         update: XOR<FixedClassUpdateWithoutClassMonitorInput, FixedClassUncheckedUpdateWithoutClassMonitorInput>
         create: XOR<FixedClassCreateWithoutClassMonitorInput, FixedClassUncheckedCreateWithoutClassMonitorInput>
-        where?: FixedClassWhereInput
     };
-    export type FixedClassUpdateToOneWithWhereWithoutClassMonitorInput = {
-        where?: FixedClassWhereInput
+    export type FixedClassUpdateWithWhereUniqueWithoutClassMonitorInput = {
+        where: FixedClassWhereUniqueInput
         data: XOR<FixedClassUpdateWithoutClassMonitorInput, FixedClassUncheckedUpdateWithoutClassMonitorInput>
     };
-    export type FixedClassUpdateWithoutClassMonitorInput = {
-        id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
-        active?: BoolFieldUpdateOperationsInput | boolean
-        description?: NullableStringFieldUpdateOperationsInput | string | null
-        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-        name?: StringFieldUpdateOperationsInput | string
-        summary?: NullableStringFieldUpdateOperationsInput | string | null
-        startYear?: NullableIntFieldUpdateOperationsInput | number | null
-        graduated?: BoolFieldUpdateOperationsInput | boolean
-        classType?: EnumFixedClassTypeFieldUpdateOperationsInput | $Enums.FixedClassType
-        unionLeader?: StudentUpdateOneWithoutUnionLeaderOfNestedInput
-        trainingCourse?: TrainingCourseUpdateOneRequiredWithoutFixedClassNestedInput
-        managementOrganization?: DM_DonViUpdateOneWithoutFixedClassNestedInput
-        lecturerManagement?: LecturerUpdateOneWithoutManageFixedClassNestedInput
-        staffManagement?: StaffUpdateOneWithoutFixedClassNestedInput
-        students?: StudentUpdateManyWithoutFixedClassNestedInput
-        curriculumVersion?: CurriculumVersionUpdateOneWithoutFixedClassNestedInput
-        subjectClasses?: SubjectClassUpdateManyWithoutFixedClassesNestedInput
-        notifications?: NotificationUpdateManyWithoutTargetClassesNestedInput
-        surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutFixedClassesNestedInput
-        scoreLinkSheets?: ScoreLinkSheetUpdateManyWithoutFixedClassNestedInput
-        planTrainingSubject?: PlanTrainingSubjectUpdateOneWithoutFixedClassNestedInput
+    export type FixedClassUpdateManyWithWhereWithoutClassMonitorInput = {
+        where: FixedClassScalarWhereInput
+        data: XOR<FixedClassUpdateManyMutationInput, FixedClassUncheckedUpdateManyWithoutClassMonitorInput>
     };
-    export type FixedClassUncheckedUpdateWithoutClassMonitorInput = {
-        id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
-        active?: BoolFieldUpdateOperationsInput | boolean
-        description?: NullableStringFieldUpdateOperationsInput | string | null
-        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-        name?: StringFieldUpdateOperationsInput | string
-        summary?: NullableStringFieldUpdateOperationsInput | string | null
-        startYear?: NullableIntFieldUpdateOperationsInput | number | null
-        graduated?: BoolFieldUpdateOperationsInput | boolean
-        unionLeaderId?: NullableStringFieldUpdateOperationsInput | string | null
-        trainingCourseId?: StringFieldUpdateOperationsInput | string
-        managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
-        lecturerManagementId?: NullableStringFieldUpdateOperationsInput | string | null
-        staffManagementId?: NullableStringFieldUpdateOperationsInput | string | null
-        curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
-        classType?: EnumFixedClassTypeFieldUpdateOperationsInput | $Enums.FixedClassType
-        planTrainingSubjectId?: NullableStringFieldUpdateOperationsInput | string | null
-        students?: StudentUncheckedUpdateManyWithoutFixedClassNestedInput
-        subjectClasses?: SubjectClassUncheckedUpdateManyWithoutFixedClassesNestedInput
-        notifications?: NotificationUncheckedUpdateManyWithoutTargetClassesNestedInput
-        surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutFixedClassesNestedInput
-        scoreLinkSheets?: ScoreLinkSheetUncheckedUpdateManyWithoutFixedClassNestedInput
-    };
-    export type FixedClassUpsertWithoutUnionLeaderInput = {
+    export type FixedClassUpsertWithWhereUniqueWithoutUnionLeaderInput = {
+        where: FixedClassWhereUniqueInput
         update: XOR<FixedClassUpdateWithoutUnionLeaderInput, FixedClassUncheckedUpdateWithoutUnionLeaderInput>
         create: XOR<FixedClassCreateWithoutUnionLeaderInput, FixedClassUncheckedCreateWithoutUnionLeaderInput>
-        where?: FixedClassWhereInput
     };
-    export type FixedClassUpdateToOneWithWhereWithoutUnionLeaderInput = {
-        where?: FixedClassWhereInput
+    export type FixedClassUpdateWithWhereUniqueWithoutUnionLeaderInput = {
+        where: FixedClassWhereUniqueInput
         data: XOR<FixedClassUpdateWithoutUnionLeaderInput, FixedClassUncheckedUpdateWithoutUnionLeaderInput>
     };
-    export type FixedClassUpdateWithoutUnionLeaderInput = {
-        id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
-        active?: BoolFieldUpdateOperationsInput | boolean
-        description?: NullableStringFieldUpdateOperationsInput | string | null
-        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-        name?: StringFieldUpdateOperationsInput | string
-        summary?: NullableStringFieldUpdateOperationsInput | string | null
-        startYear?: NullableIntFieldUpdateOperationsInput | number | null
-        graduated?: BoolFieldUpdateOperationsInput | boolean
-        classType?: EnumFixedClassTypeFieldUpdateOperationsInput | $Enums.FixedClassType
-        classMonitor?: StudentUpdateOneWithoutClassMonitorNestedInput
-        trainingCourse?: TrainingCourseUpdateOneRequiredWithoutFixedClassNestedInput
-        managementOrganization?: DM_DonViUpdateOneWithoutFixedClassNestedInput
-        lecturerManagement?: LecturerUpdateOneWithoutManageFixedClassNestedInput
-        staffManagement?: StaffUpdateOneWithoutFixedClassNestedInput
-        students?: StudentUpdateManyWithoutFixedClassNestedInput
-        curriculumVersion?: CurriculumVersionUpdateOneWithoutFixedClassNestedInput
-        subjectClasses?: SubjectClassUpdateManyWithoutFixedClassesNestedInput
-        notifications?: NotificationUpdateManyWithoutTargetClassesNestedInput
-        surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutFixedClassesNestedInput
-        scoreLinkSheets?: ScoreLinkSheetUpdateManyWithoutFixedClassNestedInput
-        planTrainingSubject?: PlanTrainingSubjectUpdateOneWithoutFixedClassNestedInput
+    export type FixedClassUpdateManyWithWhereWithoutUnionLeaderInput = {
+        where: FixedClassScalarWhereInput
+        data: XOR<FixedClassUpdateManyMutationInput, FixedClassUncheckedUpdateManyWithoutUnionLeaderInput>
     };
-    export type FixedClassUncheckedUpdateWithoutUnionLeaderInput = {
-        id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
-        active?: BoolFieldUpdateOperationsInput | boolean
-        description?: NullableStringFieldUpdateOperationsInput | string | null
-        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-        name?: StringFieldUpdateOperationsInput | string
-        summary?: NullableStringFieldUpdateOperationsInput | string | null
-        startYear?: NullableIntFieldUpdateOperationsInput | number | null
-        graduated?: BoolFieldUpdateOperationsInput | boolean
-        classMonitorId?: NullableStringFieldUpdateOperationsInput | string | null
-        trainingCourseId?: StringFieldUpdateOperationsInput | string
-        managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
-        lecturerManagementId?: NullableStringFieldUpdateOperationsInput | string | null
-        staffManagementId?: NullableStringFieldUpdateOperationsInput | string | null
-        curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
-        classType?: EnumFixedClassTypeFieldUpdateOperationsInput | $Enums.FixedClassType
-        planTrainingSubjectId?: NullableStringFieldUpdateOperationsInput | string | null
-        students?: StudentUncheckedUpdateManyWithoutFixedClassNestedInput
-        subjectClasses?: SubjectClassUncheckedUpdateManyWithoutFixedClassesNestedInput
-        notifications?: NotificationUncheckedUpdateManyWithoutTargetClassesNestedInput
-        surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutFixedClassesNestedInput
-        scoreLinkSheets?: ScoreLinkSheetUncheckedUpdateManyWithoutFixedClassNestedInput
+    export type FixedClassUpsertWithWhereUniqueWithoutDeputyUnionSecretaryInput = {
+        where: FixedClassWhereUniqueInput
+        update: XOR<FixedClassUpdateWithoutDeputyUnionSecretaryInput, FixedClassUncheckedUpdateWithoutDeputyUnionSecretaryInput>
+        create: XOR<FixedClassCreateWithoutDeputyUnionSecretaryInput, FixedClassUncheckedCreateWithoutDeputyUnionSecretaryInput>
+    };
+    export type FixedClassUpdateWithWhereUniqueWithoutDeputyUnionSecretaryInput = {
+        where: FixedClassWhereUniqueInput
+        data: XOR<FixedClassUpdateWithoutDeputyUnionSecretaryInput, FixedClassUncheckedUpdateWithoutDeputyUnionSecretaryInput>
+    };
+    export type FixedClassUpdateManyWithWhereWithoutDeputyUnionSecretaryInput = {
+        where: FixedClassScalarWhereInput
+        data: XOR<FixedClassUpdateManyMutationInput, FixedClassUncheckedUpdateManyWithoutDeputyUnionSecretaryInput>
+    };
+    export type FixedClassUpsertWithWhereUniqueWithoutUnionSecretaryInput = {
+        where: FixedClassWhereUniqueInput
+        update: XOR<FixedClassUpdateWithoutUnionSecretaryInput, FixedClassUncheckedUpdateWithoutUnionSecretaryInput>
+        create: XOR<FixedClassCreateWithoutUnionSecretaryInput, FixedClassUncheckedCreateWithoutUnionSecretaryInput>
+    };
+    export type FixedClassUpdateWithWhereUniqueWithoutUnionSecretaryInput = {
+        where: FixedClassWhereUniqueInput
+        data: XOR<FixedClassUpdateWithoutUnionSecretaryInput, FixedClassUncheckedUpdateWithoutUnionSecretaryInput>
+    };
+    export type FixedClassUpdateManyWithWhereWithoutUnionSecretaryInput = {
+        where: FixedClassScalarWhereInput
+        data: XOR<FixedClassUpdateManyMutationInput, FixedClassUncheckedUpdateManyWithoutUnionSecretaryInput>
     };
     export type FixedClassUpsertWithoutStudentsInput = {
         update: XOR<FixedClassUpdateWithoutStudentsInput, FixedClassUncheckedUpdateWithoutStudentsInput>
@@ -559816,6 +560996,8 @@ export namespace Prisma {
         classType?: EnumFixedClassTypeFieldUpdateOperationsInput | $Enums.FixedClassType
         classMonitor?: StudentUpdateOneWithoutClassMonitorNestedInput
         unionLeader?: StudentUpdateOneWithoutUnionLeaderOfNestedInput
+        deputyUnionSecretary?: StudentUpdateOneWithoutDeputyUnionSecretaryOfNestedInput
+        unionSecretary?: StudentUpdateOneWithoutUnionSecretaryOfNestedInput
         trainingCourse?: TrainingCourseUpdateOneRequiredWithoutFixedClassNestedInput
         managementOrganization?: DM_DonViUpdateOneWithoutFixedClassNestedInput
         lecturerManagement?: LecturerUpdateOneWithoutManageFixedClassNestedInput
@@ -559842,6 +561024,8 @@ export namespace Prisma {
         graduated?: BoolFieldUpdateOperationsInput | boolean
         classMonitorId?: NullableStringFieldUpdateOperationsInput | string | null
         unionLeaderId?: NullableStringFieldUpdateOperationsInput | string | null
+        deputyUnionSecretaryId?: NullableStringFieldUpdateOperationsInput | string | null
+        unionSecretaryId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingCourseId?: StringFieldUpdateOperationsInput | string
         managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerManagementId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -561021,8 +562205,10 @@ export namespace Prisma {
         militaryTrainingPass?: boolean
         trainingLocation?: TrainingLocationCreateNestedOneWithoutStudentsInput
         priorityObject?: PriorityObjectCreateNestedManyWithoutStudentsInput
-        classMonitor?: FixedClassCreateNestedOneWithoutClassMonitorInput
-        unionLeaderOf?: FixedClassCreateNestedOneWithoutUnionLeaderInput
+        classMonitor?: FixedClassCreateNestedManyWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassCreateNestedManyWithoutUnionLeaderInput
+        deputyUnionSecretaryOf?: FixedClassCreateNestedManyWithoutDeputyUnionSecretaryInput
+        unionSecretaryOf?: FixedClassCreateNestedManyWithoutUnionSecretaryInput
         fixedClass?: FixedClassCreateNestedOneWithoutStudentsInput
         subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutStudentInput
         userProfile: UserProfileCreateNestedOneWithoutEducationAndTrainingInput
@@ -561100,8 +562286,10 @@ export namespace Prisma {
         strengthTrainingPass?: boolean
         militaryTrainingPass?: boolean
         priorityObject?: PriorityObjectUncheckedCreateNestedManyWithoutStudentsInput
-        classMonitor?: FixedClassUncheckedCreateNestedOneWithoutClassMonitorInput
-        unionLeaderOf?: FixedClassUncheckedCreateNestedOneWithoutUnionLeaderInput
+        classMonitor?: FixedClassUncheckedCreateNestedManyWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassUncheckedCreateNestedManyWithoutUnionLeaderInput
+        deputyUnionSecretaryOf?: FixedClassUncheckedCreateNestedManyWithoutDeputyUnionSecretaryInput
+        unionSecretaryOf?: FixedClassUncheckedCreateNestedManyWithoutUnionSecretaryInput
         subjectClassStudent?: StudentSubjectScoreUncheckedCreateNestedManyWithoutStudentInput
         studentTrainingScore?: StudentTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutStudentInput
@@ -561182,8 +562370,10 @@ export namespace Prisma {
         militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         trainingLocation?: TrainingLocationUpdateOneWithoutStudentsNestedInput
         priorityObject?: PriorityObjectUpdateManyWithoutStudentsNestedInput
-        classMonitor?: FixedClassUpdateOneWithoutClassMonitorNestedInput
-        unionLeaderOf?: FixedClassUpdateOneWithoutUnionLeaderNestedInput
+        classMonitor?: FixedClassUpdateManyWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUpdateManyWithoutUnionLeaderNestedInput
+        deputyUnionSecretaryOf?: FixedClassUpdateManyWithoutDeputyUnionSecretaryNestedInput
+        unionSecretaryOf?: FixedClassUpdateManyWithoutUnionSecretaryNestedInput
         fixedClass?: FixedClassUpdateOneWithoutStudentsNestedInput
         subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutStudentNestedInput
         userProfile?: UserProfileUpdateOneRequiredWithoutEducationAndTrainingNestedInput
@@ -561261,8 +562451,10 @@ export namespace Prisma {
         strengthTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         priorityObject?: PriorityObjectUncheckedUpdateManyWithoutStudentsNestedInput
-        classMonitor?: FixedClassUncheckedUpdateOneWithoutClassMonitorNestedInput
-        unionLeaderOf?: FixedClassUncheckedUpdateOneWithoutUnionLeaderNestedInput
+        classMonitor?: FixedClassUncheckedUpdateManyWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUncheckedUpdateManyWithoutUnionLeaderNestedInput
+        deputyUnionSecretaryOf?: FixedClassUncheckedUpdateManyWithoutDeputyUnionSecretaryNestedInput
+        unionSecretaryOf?: FixedClassUncheckedUpdateManyWithoutUnionSecretaryNestedInput
         subjectClassStudent?: StudentSubjectScoreUncheckedUpdateManyWithoutStudentNestedInput
         studentTrainingScore?: StudentTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutStudentNestedInput
@@ -561330,8 +562522,10 @@ export namespace Prisma {
         militaryTrainingPass?: boolean
         trainingLocation?: TrainingLocationCreateNestedOneWithoutStudentsInput
         priorityObject?: PriorityObjectCreateNestedManyWithoutStudentsInput
-        classMonitor?: FixedClassCreateNestedOneWithoutClassMonitorInput
-        unionLeaderOf?: FixedClassCreateNestedOneWithoutUnionLeaderInput
+        classMonitor?: FixedClassCreateNestedManyWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassCreateNestedManyWithoutUnionLeaderInput
+        deputyUnionSecretaryOf?: FixedClassCreateNestedManyWithoutDeputyUnionSecretaryInput
+        unionSecretaryOf?: FixedClassCreateNestedManyWithoutUnionSecretaryInput
         fixedClass?: FixedClassCreateNestedOneWithoutStudentsInput
         subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutStudentInput
         userProfile: UserProfileCreateNestedOneWithoutEducationAndTrainingInput
@@ -561409,8 +562603,10 @@ export namespace Prisma {
         strengthTrainingPass?: boolean
         militaryTrainingPass?: boolean
         priorityObject?: PriorityObjectUncheckedCreateNestedManyWithoutStudentsInput
-        classMonitor?: FixedClassUncheckedCreateNestedOneWithoutClassMonitorInput
-        unionLeaderOf?: FixedClassUncheckedCreateNestedOneWithoutUnionLeaderInput
+        classMonitor?: FixedClassUncheckedCreateNestedManyWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassUncheckedCreateNestedManyWithoutUnionLeaderInput
+        deputyUnionSecretaryOf?: FixedClassUncheckedCreateNestedManyWithoutDeputyUnionSecretaryInput
+        unionSecretaryOf?: FixedClassUncheckedCreateNestedManyWithoutUnionSecretaryInput
         subjectClassStudent?: StudentSubjectScoreUncheckedCreateNestedManyWithoutStudentInput
         studentTrainingScore?: StudentTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         studentYearResult?: StudentYearResultUncheckedCreateNestedManyWithoutStudentInput
@@ -561617,8 +562813,10 @@ export namespace Prisma {
         militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         trainingLocation?: TrainingLocationUpdateOneWithoutStudentsNestedInput
         priorityObject?: PriorityObjectUpdateManyWithoutStudentsNestedInput
-        classMonitor?: FixedClassUpdateOneWithoutClassMonitorNestedInput
-        unionLeaderOf?: FixedClassUpdateOneWithoutUnionLeaderNestedInput
+        classMonitor?: FixedClassUpdateManyWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUpdateManyWithoutUnionLeaderNestedInput
+        deputyUnionSecretaryOf?: FixedClassUpdateManyWithoutDeputyUnionSecretaryNestedInput
+        unionSecretaryOf?: FixedClassUpdateManyWithoutUnionSecretaryNestedInput
         fixedClass?: FixedClassUpdateOneWithoutStudentsNestedInput
         subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutStudentNestedInput
         userProfile?: UserProfileUpdateOneRequiredWithoutEducationAndTrainingNestedInput
@@ -561696,8 +562894,10 @@ export namespace Prisma {
         strengthTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         priorityObject?: PriorityObjectUncheckedUpdateManyWithoutStudentsNestedInput
-        classMonitor?: FixedClassUncheckedUpdateOneWithoutClassMonitorNestedInput
-        unionLeaderOf?: FixedClassUncheckedUpdateOneWithoutUnionLeaderNestedInput
+        classMonitor?: FixedClassUncheckedUpdateManyWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUncheckedUpdateManyWithoutUnionLeaderNestedInput
+        deputyUnionSecretaryOf?: FixedClassUncheckedUpdateManyWithoutDeputyUnionSecretaryNestedInput
+        unionSecretaryOf?: FixedClassUncheckedUpdateManyWithoutUnionSecretaryNestedInput
         subjectClassStudent?: StudentSubjectScoreUncheckedUpdateManyWithoutStudentNestedInput
         studentTrainingScore?: StudentTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         studentYearResult?: StudentYearResultUncheckedUpdateManyWithoutStudentNestedInput
@@ -561901,8 +563101,10 @@ export namespace Prisma {
         militaryTrainingPass?: boolean
         trainingLocation?: TrainingLocationCreateNestedOneWithoutStudentsInput
         priorityObject?: PriorityObjectCreateNestedManyWithoutStudentsInput
-        classMonitor?: FixedClassCreateNestedOneWithoutClassMonitorInput
-        unionLeaderOf?: FixedClassCreateNestedOneWithoutUnionLeaderInput
+        classMonitor?: FixedClassCreateNestedManyWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassCreateNestedManyWithoutUnionLeaderInput
+        deputyUnionSecretaryOf?: FixedClassCreateNestedManyWithoutDeputyUnionSecretaryInput
+        unionSecretaryOf?: FixedClassCreateNestedManyWithoutUnionSecretaryInput
         fixedClass?: FixedClassCreateNestedOneWithoutStudentsInput
         subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutStudentInput
         userProfile: UserProfileCreateNestedOneWithoutEducationAndTrainingInput
@@ -561980,8 +563182,10 @@ export namespace Prisma {
         strengthTrainingPass?: boolean
         militaryTrainingPass?: boolean
         priorityObject?: PriorityObjectUncheckedCreateNestedManyWithoutStudentsInput
-        classMonitor?: FixedClassUncheckedCreateNestedOneWithoutClassMonitorInput
-        unionLeaderOf?: FixedClassUncheckedCreateNestedOneWithoutUnionLeaderInput
+        classMonitor?: FixedClassUncheckedCreateNestedManyWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassUncheckedCreateNestedManyWithoutUnionLeaderInput
+        deputyUnionSecretaryOf?: FixedClassUncheckedCreateNestedManyWithoutDeputyUnionSecretaryInput
+        unionSecretaryOf?: FixedClassUncheckedCreateNestedManyWithoutUnionSecretaryInput
         subjectClassStudent?: StudentSubjectScoreUncheckedCreateNestedManyWithoutStudentInput
         studentTrainingScore?: StudentTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutStudentInput
@@ -562160,8 +563364,10 @@ export namespace Prisma {
         militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         trainingLocation?: TrainingLocationUpdateOneWithoutStudentsNestedInput
         priorityObject?: PriorityObjectUpdateManyWithoutStudentsNestedInput
-        classMonitor?: FixedClassUpdateOneWithoutClassMonitorNestedInput
-        unionLeaderOf?: FixedClassUpdateOneWithoutUnionLeaderNestedInput
+        classMonitor?: FixedClassUpdateManyWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUpdateManyWithoutUnionLeaderNestedInput
+        deputyUnionSecretaryOf?: FixedClassUpdateManyWithoutDeputyUnionSecretaryNestedInput
+        unionSecretaryOf?: FixedClassUpdateManyWithoutUnionSecretaryNestedInput
         fixedClass?: FixedClassUpdateOneWithoutStudentsNestedInput
         subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutStudentNestedInput
         userProfile?: UserProfileUpdateOneRequiredWithoutEducationAndTrainingNestedInput
@@ -562239,8 +563445,10 @@ export namespace Prisma {
         strengthTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         priorityObject?: PriorityObjectUncheckedUpdateManyWithoutStudentsNestedInput
-        classMonitor?: FixedClassUncheckedUpdateOneWithoutClassMonitorNestedInput
-        unionLeaderOf?: FixedClassUncheckedUpdateOneWithoutUnionLeaderNestedInput
+        classMonitor?: FixedClassUncheckedUpdateManyWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUncheckedUpdateManyWithoutUnionLeaderNestedInput
+        deputyUnionSecretaryOf?: FixedClassUncheckedUpdateManyWithoutDeputyUnionSecretaryNestedInput
+        unionSecretaryOf?: FixedClassUncheckedUpdateManyWithoutUnionSecretaryNestedInput
         subjectClassStudent?: StudentSubjectScoreUncheckedUpdateManyWithoutStudentNestedInput
         studentTrainingScore?: StudentTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutStudentNestedInput
@@ -562513,6 +563721,8 @@ export namespace Prisma {
         classType?: $Enums.FixedClassType
         classMonitor?: StudentCreateNestedOneWithoutClassMonitorInput
         unionLeader?: StudentCreateNestedOneWithoutUnionLeaderOfInput
+        deputyUnionSecretary?: StudentCreateNestedOneWithoutDeputyUnionSecretaryOfInput
+        unionSecretary?: StudentCreateNestedOneWithoutUnionSecretaryOfInput
         trainingCourse: TrainingCourseCreateNestedOneWithoutFixedClassInput
         managementOrganization?: DM_DonViCreateNestedOneWithoutFixedClassInput
         lecturerManagement?: LecturerCreateNestedOneWithoutManageFixedClassInput
@@ -562539,6 +563749,8 @@ export namespace Prisma {
         graduated?: boolean
         classMonitorId?: string | null
         unionLeaderId?: string | null
+        deputyUnionSecretaryId?: string | null
+        unionSecretaryId?: string | null
         trainingCourseId: string
         managementOrganizationId?: string | null
         lecturerManagementId?: string | null
@@ -562596,8 +563808,10 @@ export namespace Prisma {
         militaryTrainingPass?: boolean
         trainingLocation?: TrainingLocationCreateNestedOneWithoutStudentsInput
         priorityObject?: PriorityObjectCreateNestedManyWithoutStudentsInput
-        classMonitor?: FixedClassCreateNestedOneWithoutClassMonitorInput
-        unionLeaderOf?: FixedClassCreateNestedOneWithoutUnionLeaderInput
+        classMonitor?: FixedClassCreateNestedManyWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassCreateNestedManyWithoutUnionLeaderInput
+        deputyUnionSecretaryOf?: FixedClassCreateNestedManyWithoutDeputyUnionSecretaryInput
+        unionSecretaryOf?: FixedClassCreateNestedManyWithoutUnionSecretaryInput
         fixedClass?: FixedClassCreateNestedOneWithoutStudentsInput
         subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutStudentInput
         userProfile: UserProfileCreateNestedOneWithoutEducationAndTrainingInput
@@ -562675,8 +563889,10 @@ export namespace Prisma {
         strengthTrainingPass?: boolean
         militaryTrainingPass?: boolean
         priorityObject?: PriorityObjectUncheckedCreateNestedManyWithoutStudentsInput
-        classMonitor?: FixedClassUncheckedCreateNestedOneWithoutClassMonitorInput
-        unionLeaderOf?: FixedClassUncheckedCreateNestedOneWithoutUnionLeaderInput
+        classMonitor?: FixedClassUncheckedCreateNestedManyWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassUncheckedCreateNestedManyWithoutUnionLeaderInput
+        deputyUnionSecretaryOf?: FixedClassUncheckedCreateNestedManyWithoutDeputyUnionSecretaryInput
+        unionSecretaryOf?: FixedClassUncheckedCreateNestedManyWithoutUnionSecretaryInput
         subjectClassStudent?: StudentSubjectScoreUncheckedCreateNestedManyWithoutStudentInput
         studentTrainingScore?: StudentTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutStudentInput
@@ -565924,8 +567140,10 @@ export namespace Prisma {
         militaryTrainingPass?: boolean
         trainingLocation?: TrainingLocationCreateNestedOneWithoutStudentsInput
         priorityObject?: PriorityObjectCreateNestedManyWithoutStudentsInput
-        classMonitor?: FixedClassCreateNestedOneWithoutClassMonitorInput
-        unionLeaderOf?: FixedClassCreateNestedOneWithoutUnionLeaderInput
+        classMonitor?: FixedClassCreateNestedManyWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassCreateNestedManyWithoutUnionLeaderInput
+        deputyUnionSecretaryOf?: FixedClassCreateNestedManyWithoutDeputyUnionSecretaryInput
+        unionSecretaryOf?: FixedClassCreateNestedManyWithoutUnionSecretaryInput
         fixedClass?: FixedClassCreateNestedOneWithoutStudentsInput
         subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutStudentInput
         userProfile: UserProfileCreateNestedOneWithoutEducationAndTrainingInput
@@ -566003,8 +567221,10 @@ export namespace Prisma {
         strengthTrainingPass?: boolean
         militaryTrainingPass?: boolean
         priorityObject?: PriorityObjectUncheckedCreateNestedManyWithoutStudentsInput
-        classMonitor?: FixedClassUncheckedCreateNestedOneWithoutClassMonitorInput
-        unionLeaderOf?: FixedClassUncheckedCreateNestedOneWithoutUnionLeaderInput
+        classMonitor?: FixedClassUncheckedCreateNestedManyWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassUncheckedCreateNestedManyWithoutUnionLeaderInput
+        deputyUnionSecretaryOf?: FixedClassUncheckedCreateNestedManyWithoutDeputyUnionSecretaryInput
+        unionSecretaryOf?: FixedClassUncheckedCreateNestedManyWithoutUnionSecretaryInput
         subjectClassStudent?: StudentSubjectScoreUncheckedCreateNestedManyWithoutStudentInput
         studentTrainingScore?: StudentTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutStudentInput
@@ -566305,8 +567525,10 @@ export namespace Prisma {
         militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         trainingLocation?: TrainingLocationUpdateOneWithoutStudentsNestedInput
         priorityObject?: PriorityObjectUpdateManyWithoutStudentsNestedInput
-        classMonitor?: FixedClassUpdateOneWithoutClassMonitorNestedInput
-        unionLeaderOf?: FixedClassUpdateOneWithoutUnionLeaderNestedInput
+        classMonitor?: FixedClassUpdateManyWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUpdateManyWithoutUnionLeaderNestedInput
+        deputyUnionSecretaryOf?: FixedClassUpdateManyWithoutDeputyUnionSecretaryNestedInput
+        unionSecretaryOf?: FixedClassUpdateManyWithoutUnionSecretaryNestedInput
         fixedClass?: FixedClassUpdateOneWithoutStudentsNestedInput
         subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutStudentNestedInput
         userProfile?: UserProfileUpdateOneRequiredWithoutEducationAndTrainingNestedInput
@@ -566384,8 +567606,10 @@ export namespace Prisma {
         strengthTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         priorityObject?: PriorityObjectUncheckedUpdateManyWithoutStudentsNestedInput
-        classMonitor?: FixedClassUncheckedUpdateOneWithoutClassMonitorNestedInput
-        unionLeaderOf?: FixedClassUncheckedUpdateOneWithoutUnionLeaderNestedInput
+        classMonitor?: FixedClassUncheckedUpdateManyWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUncheckedUpdateManyWithoutUnionLeaderNestedInput
+        deputyUnionSecretaryOf?: FixedClassUncheckedUpdateManyWithoutDeputyUnionSecretaryNestedInput
+        unionSecretaryOf?: FixedClassUncheckedUpdateManyWithoutUnionSecretaryNestedInput
         subjectClassStudent?: StudentSubjectScoreUncheckedUpdateManyWithoutStudentNestedInput
         studentTrainingScore?: StudentTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutStudentNestedInput
@@ -566984,8 +568208,10 @@ export namespace Prisma {
         militaryTrainingPass?: boolean
         trainingLocation?: TrainingLocationCreateNestedOneWithoutStudentsInput
         priorityObject?: PriorityObjectCreateNestedManyWithoutStudentsInput
-        classMonitor?: FixedClassCreateNestedOneWithoutClassMonitorInput
-        unionLeaderOf?: FixedClassCreateNestedOneWithoutUnionLeaderInput
+        classMonitor?: FixedClassCreateNestedManyWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassCreateNestedManyWithoutUnionLeaderInput
+        deputyUnionSecretaryOf?: FixedClassCreateNestedManyWithoutDeputyUnionSecretaryInput
+        unionSecretaryOf?: FixedClassCreateNestedManyWithoutUnionSecretaryInput
         fixedClass?: FixedClassCreateNestedOneWithoutStudentsInput
         subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutStudentInput
         userProfile: UserProfileCreateNestedOneWithoutEducationAndTrainingInput
@@ -567063,8 +568289,10 @@ export namespace Prisma {
         strengthTrainingPass?: boolean
         militaryTrainingPass?: boolean
         priorityObject?: PriorityObjectUncheckedCreateNestedManyWithoutStudentsInput
-        classMonitor?: FixedClassUncheckedCreateNestedOneWithoutClassMonitorInput
-        unionLeaderOf?: FixedClassUncheckedCreateNestedOneWithoutUnionLeaderInput
+        classMonitor?: FixedClassUncheckedCreateNestedManyWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassUncheckedCreateNestedManyWithoutUnionLeaderInput
+        deputyUnionSecretaryOf?: FixedClassUncheckedCreateNestedManyWithoutDeputyUnionSecretaryInput
+        unionSecretaryOf?: FixedClassUncheckedCreateNestedManyWithoutUnionSecretaryInput
         subjectClassStudent?: StudentSubjectScoreUncheckedCreateNestedManyWithoutStudentInput
         studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutStudentInput
         studentYearResult?: StudentYearResultUncheckedCreateNestedManyWithoutStudentInput
@@ -567182,8 +568410,10 @@ export namespace Prisma {
         militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         trainingLocation?: TrainingLocationUpdateOneWithoutStudentsNestedInput
         priorityObject?: PriorityObjectUpdateManyWithoutStudentsNestedInput
-        classMonitor?: FixedClassUpdateOneWithoutClassMonitorNestedInput
-        unionLeaderOf?: FixedClassUpdateOneWithoutUnionLeaderNestedInput
+        classMonitor?: FixedClassUpdateManyWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUpdateManyWithoutUnionLeaderNestedInput
+        deputyUnionSecretaryOf?: FixedClassUpdateManyWithoutDeputyUnionSecretaryNestedInput
+        unionSecretaryOf?: FixedClassUpdateManyWithoutUnionSecretaryNestedInput
         fixedClass?: FixedClassUpdateOneWithoutStudentsNestedInput
         subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutStudentNestedInput
         userProfile?: UserProfileUpdateOneRequiredWithoutEducationAndTrainingNestedInput
@@ -567261,8 +568491,10 @@ export namespace Prisma {
         strengthTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         priorityObject?: PriorityObjectUncheckedUpdateManyWithoutStudentsNestedInput
-        classMonitor?: FixedClassUncheckedUpdateOneWithoutClassMonitorNestedInput
-        unionLeaderOf?: FixedClassUncheckedUpdateOneWithoutUnionLeaderNestedInput
+        classMonitor?: FixedClassUncheckedUpdateManyWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUncheckedUpdateManyWithoutUnionLeaderNestedInput
+        deputyUnionSecretaryOf?: FixedClassUncheckedUpdateManyWithoutDeputyUnionSecretaryNestedInput
+        unionSecretaryOf?: FixedClassUncheckedUpdateManyWithoutUnionSecretaryNestedInput
         subjectClassStudent?: StudentSubjectScoreUncheckedUpdateManyWithoutStudentNestedInput
         studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutStudentNestedInput
         studentYearResult?: StudentYearResultUncheckedUpdateManyWithoutStudentNestedInput
@@ -567398,8 +568630,10 @@ export namespace Prisma {
         militaryTrainingPass?: boolean
         trainingLocation?: TrainingLocationCreateNestedOneWithoutStudentsInput
         priorityObject?: PriorityObjectCreateNestedManyWithoutStudentsInput
-        classMonitor?: FixedClassCreateNestedOneWithoutClassMonitorInput
-        unionLeaderOf?: FixedClassCreateNestedOneWithoutUnionLeaderInput
+        classMonitor?: FixedClassCreateNestedManyWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassCreateNestedManyWithoutUnionLeaderInput
+        deputyUnionSecretaryOf?: FixedClassCreateNestedManyWithoutDeputyUnionSecretaryInput
+        unionSecretaryOf?: FixedClassCreateNestedManyWithoutUnionSecretaryInput
         fixedClass?: FixedClassCreateNestedOneWithoutStudentsInput
         subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutStudentInput
         userProfile: UserProfileCreateNestedOneWithoutEducationAndTrainingInput
@@ -567477,8 +568711,10 @@ export namespace Prisma {
         strengthTrainingPass?: boolean
         militaryTrainingPass?: boolean
         priorityObject?: PriorityObjectUncheckedCreateNestedManyWithoutStudentsInput
-        classMonitor?: FixedClassUncheckedCreateNestedOneWithoutClassMonitorInput
-        unionLeaderOf?: FixedClassUncheckedCreateNestedOneWithoutUnionLeaderInput
+        classMonitor?: FixedClassUncheckedCreateNestedManyWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassUncheckedCreateNestedManyWithoutUnionLeaderInput
+        deputyUnionSecretaryOf?: FixedClassUncheckedCreateNestedManyWithoutDeputyUnionSecretaryInput
+        unionSecretaryOf?: FixedClassUncheckedCreateNestedManyWithoutUnionSecretaryInput
         subjectClassStudent?: StudentSubjectScoreUncheckedCreateNestedManyWithoutStudentInput
         studentTrainingScore?: StudentTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutStudentInput
@@ -567632,8 +568868,10 @@ export namespace Prisma {
         militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         trainingLocation?: TrainingLocationUpdateOneWithoutStudentsNestedInput
         priorityObject?: PriorityObjectUpdateManyWithoutStudentsNestedInput
-        classMonitor?: FixedClassUpdateOneWithoutClassMonitorNestedInput
-        unionLeaderOf?: FixedClassUpdateOneWithoutUnionLeaderNestedInput
+        classMonitor?: FixedClassUpdateManyWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUpdateManyWithoutUnionLeaderNestedInput
+        deputyUnionSecretaryOf?: FixedClassUpdateManyWithoutDeputyUnionSecretaryNestedInput
+        unionSecretaryOf?: FixedClassUpdateManyWithoutUnionSecretaryNestedInput
         fixedClass?: FixedClassUpdateOneWithoutStudentsNestedInput
         subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutStudentNestedInput
         userProfile?: UserProfileUpdateOneRequiredWithoutEducationAndTrainingNestedInput
@@ -567711,8 +568949,10 @@ export namespace Prisma {
         strengthTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         priorityObject?: PriorityObjectUncheckedUpdateManyWithoutStudentsNestedInput
-        classMonitor?: FixedClassUncheckedUpdateOneWithoutClassMonitorNestedInput
-        unionLeaderOf?: FixedClassUncheckedUpdateOneWithoutUnionLeaderNestedInput
+        classMonitor?: FixedClassUncheckedUpdateManyWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUncheckedUpdateManyWithoutUnionLeaderNestedInput
+        deputyUnionSecretaryOf?: FixedClassUncheckedUpdateManyWithoutDeputyUnionSecretaryNestedInput
+        unionSecretaryOf?: FixedClassUncheckedUpdateManyWithoutUnionSecretaryNestedInput
         subjectClassStudent?: StudentSubjectScoreUncheckedUpdateManyWithoutStudentNestedInput
         studentTrainingScore?: StudentTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutStudentNestedInput
@@ -567820,8 +569060,10 @@ export namespace Prisma {
         militaryTrainingPass?: boolean
         trainingLocation?: TrainingLocationCreateNestedOneWithoutStudentsInput
         priorityObject?: PriorityObjectCreateNestedManyWithoutStudentsInput
-        classMonitor?: FixedClassCreateNestedOneWithoutClassMonitorInput
-        unionLeaderOf?: FixedClassCreateNestedOneWithoutUnionLeaderInput
+        classMonitor?: FixedClassCreateNestedManyWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassCreateNestedManyWithoutUnionLeaderInput
+        deputyUnionSecretaryOf?: FixedClassCreateNestedManyWithoutDeputyUnionSecretaryInput
+        unionSecretaryOf?: FixedClassCreateNestedManyWithoutUnionSecretaryInput
         fixedClass?: FixedClassCreateNestedOneWithoutStudentsInput
         subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutStudentInput
         userProfile: UserProfileCreateNestedOneWithoutEducationAndTrainingInput
@@ -567899,8 +569141,10 @@ export namespace Prisma {
         strengthTrainingPass?: boolean
         militaryTrainingPass?: boolean
         priorityObject?: PriorityObjectUncheckedCreateNestedManyWithoutStudentsInput
-        classMonitor?: FixedClassUncheckedCreateNestedOneWithoutClassMonitorInput
-        unionLeaderOf?: FixedClassUncheckedCreateNestedOneWithoutUnionLeaderInput
+        classMonitor?: FixedClassUncheckedCreateNestedManyWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassUncheckedCreateNestedManyWithoutUnionLeaderInput
+        deputyUnionSecretaryOf?: FixedClassUncheckedCreateNestedManyWithoutDeputyUnionSecretaryInput
+        unionSecretaryOf?: FixedClassUncheckedCreateNestedManyWithoutUnionSecretaryInput
         subjectClassStudent?: StudentSubjectScoreUncheckedCreateNestedManyWithoutStudentInput
         studentTrainingScore?: StudentTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutStudentInput
@@ -568026,8 +569270,10 @@ export namespace Prisma {
         militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         trainingLocation?: TrainingLocationUpdateOneWithoutStudentsNestedInput
         priorityObject?: PriorityObjectUpdateManyWithoutStudentsNestedInput
-        classMonitor?: FixedClassUpdateOneWithoutClassMonitorNestedInput
-        unionLeaderOf?: FixedClassUpdateOneWithoutUnionLeaderNestedInput
+        classMonitor?: FixedClassUpdateManyWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUpdateManyWithoutUnionLeaderNestedInput
+        deputyUnionSecretaryOf?: FixedClassUpdateManyWithoutDeputyUnionSecretaryNestedInput
+        unionSecretaryOf?: FixedClassUpdateManyWithoutUnionSecretaryNestedInput
         fixedClass?: FixedClassUpdateOneWithoutStudentsNestedInput
         subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutStudentNestedInput
         userProfile?: UserProfileUpdateOneRequiredWithoutEducationAndTrainingNestedInput
@@ -568105,8 +569351,10 @@ export namespace Prisma {
         strengthTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         priorityObject?: PriorityObjectUncheckedUpdateManyWithoutStudentsNestedInput
-        classMonitor?: FixedClassUncheckedUpdateOneWithoutClassMonitorNestedInput
-        unionLeaderOf?: FixedClassUncheckedUpdateOneWithoutUnionLeaderNestedInput
+        classMonitor?: FixedClassUncheckedUpdateManyWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUncheckedUpdateManyWithoutUnionLeaderNestedInput
+        deputyUnionSecretaryOf?: FixedClassUncheckedUpdateManyWithoutDeputyUnionSecretaryNestedInput
+        unionSecretaryOf?: FixedClassUncheckedUpdateManyWithoutUnionSecretaryNestedInput
         subjectClassStudent?: StudentSubjectScoreUncheckedUpdateManyWithoutStudentNestedInput
         studentTrainingScore?: StudentTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutStudentNestedInput
@@ -569323,6 +570571,8 @@ export namespace Prisma {
         classType?: $Enums.FixedClassType
         classMonitor?: StudentCreateNestedOneWithoutClassMonitorInput
         unionLeader?: StudentCreateNestedOneWithoutUnionLeaderOfInput
+        deputyUnionSecretary?: StudentCreateNestedOneWithoutDeputyUnionSecretaryOfInput
+        unionSecretary?: StudentCreateNestedOneWithoutUnionSecretaryOfInput
         trainingCourse: TrainingCourseCreateNestedOneWithoutFixedClassInput
         managementOrganization?: DM_DonViCreateNestedOneWithoutFixedClassInput
         staffManagement?: StaffCreateNestedOneWithoutFixedClassInput
@@ -569349,6 +570599,8 @@ export namespace Prisma {
         graduated?: boolean
         classMonitorId?: string | null
         unionLeaderId?: string | null
+        deputyUnionSecretaryId?: string | null
+        unionSecretaryId?: string | null
         trainingCourseId: string
         managementOrganizationId?: string | null
         staffManagementId?: string | null
@@ -572563,8 +573815,10 @@ export namespace Prisma {
         militaryTrainingPass?: boolean
         trainingLocation?: TrainingLocationCreateNestedOneWithoutStudentsInput
         priorityObject?: PriorityObjectCreateNestedManyWithoutStudentsInput
-        classMonitor?: FixedClassCreateNestedOneWithoutClassMonitorInput
-        unionLeaderOf?: FixedClassCreateNestedOneWithoutUnionLeaderInput
+        classMonitor?: FixedClassCreateNestedManyWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassCreateNestedManyWithoutUnionLeaderInput
+        deputyUnionSecretaryOf?: FixedClassCreateNestedManyWithoutDeputyUnionSecretaryInput
+        unionSecretaryOf?: FixedClassCreateNestedManyWithoutUnionSecretaryInput
         fixedClass?: FixedClassCreateNestedOneWithoutStudentsInput
         subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutStudentInput
         userProfile: UserProfileCreateNestedOneWithoutEducationAndTrainingInput
@@ -572642,8 +573896,10 @@ export namespace Prisma {
         strengthTrainingPass?: boolean
         militaryTrainingPass?: boolean
         priorityObject?: PriorityObjectUncheckedCreateNestedManyWithoutStudentsInput
-        classMonitor?: FixedClassUncheckedCreateNestedOneWithoutClassMonitorInput
-        unionLeaderOf?: FixedClassUncheckedCreateNestedOneWithoutUnionLeaderInput
+        classMonitor?: FixedClassUncheckedCreateNestedManyWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassUncheckedCreateNestedManyWithoutUnionLeaderInput
+        deputyUnionSecretaryOf?: FixedClassUncheckedCreateNestedManyWithoutDeputyUnionSecretaryInput
+        unionSecretaryOf?: FixedClassUncheckedCreateNestedManyWithoutUnionSecretaryInput
         subjectClassStudent?: StudentSubjectScoreUncheckedCreateNestedManyWithoutStudentInput
         studentTrainingScore?: StudentTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutStudentInput
@@ -572852,8 +574108,10 @@ export namespace Prisma {
         militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         trainingLocation?: TrainingLocationUpdateOneWithoutStudentsNestedInput
         priorityObject?: PriorityObjectUpdateManyWithoutStudentsNestedInput
-        classMonitor?: FixedClassUpdateOneWithoutClassMonitorNestedInput
-        unionLeaderOf?: FixedClassUpdateOneWithoutUnionLeaderNestedInput
+        classMonitor?: FixedClassUpdateManyWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUpdateManyWithoutUnionLeaderNestedInput
+        deputyUnionSecretaryOf?: FixedClassUpdateManyWithoutDeputyUnionSecretaryNestedInput
+        unionSecretaryOf?: FixedClassUpdateManyWithoutUnionSecretaryNestedInput
         fixedClass?: FixedClassUpdateOneWithoutStudentsNestedInput
         subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutStudentNestedInput
         userProfile?: UserProfileUpdateOneRequiredWithoutEducationAndTrainingNestedInput
@@ -572931,8 +574189,10 @@ export namespace Prisma {
         strengthTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         priorityObject?: PriorityObjectUncheckedUpdateManyWithoutStudentsNestedInput
-        classMonitor?: FixedClassUncheckedUpdateOneWithoutClassMonitorNestedInput
-        unionLeaderOf?: FixedClassUncheckedUpdateOneWithoutUnionLeaderNestedInput
+        classMonitor?: FixedClassUncheckedUpdateManyWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUncheckedUpdateManyWithoutUnionLeaderNestedInput
+        deputyUnionSecretaryOf?: FixedClassUncheckedUpdateManyWithoutDeputyUnionSecretaryNestedInput
+        unionSecretaryOf?: FixedClassUncheckedUpdateManyWithoutUnionSecretaryNestedInput
         subjectClassStudent?: StudentSubjectScoreUncheckedUpdateManyWithoutStudentNestedInput
         studentTrainingScore?: StudentTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutStudentNestedInput
@@ -575884,8 +577144,10 @@ export namespace Prisma {
         militaryTrainingPass?: boolean
         trainingLocation?: TrainingLocationCreateNestedOneWithoutStudentsInput
         priorityObject?: PriorityObjectCreateNestedManyWithoutStudentsInput
-        classMonitor?: FixedClassCreateNestedOneWithoutClassMonitorInput
-        unionLeaderOf?: FixedClassCreateNestedOneWithoutUnionLeaderInput
+        classMonitor?: FixedClassCreateNestedManyWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassCreateNestedManyWithoutUnionLeaderInput
+        deputyUnionSecretaryOf?: FixedClassCreateNestedManyWithoutDeputyUnionSecretaryInput
+        unionSecretaryOf?: FixedClassCreateNestedManyWithoutUnionSecretaryInput
         fixedClass?: FixedClassCreateNestedOneWithoutStudentsInput
         subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutStudentInput
         userProfile: UserProfileCreateNestedOneWithoutEducationAndTrainingInput
@@ -575963,8 +577225,10 @@ export namespace Prisma {
         strengthTrainingPass?: boolean
         militaryTrainingPass?: boolean
         priorityObject?: PriorityObjectUncheckedCreateNestedManyWithoutStudentsInput
-        classMonitor?: FixedClassUncheckedCreateNestedOneWithoutClassMonitorInput
-        unionLeaderOf?: FixedClassUncheckedCreateNestedOneWithoutUnionLeaderInput
+        classMonitor?: FixedClassUncheckedCreateNestedManyWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassUncheckedCreateNestedManyWithoutUnionLeaderInput
+        deputyUnionSecretaryOf?: FixedClassUncheckedCreateNestedManyWithoutDeputyUnionSecretaryInput
+        unionSecretaryOf?: FixedClassUncheckedCreateNestedManyWithoutUnionSecretaryInput
         subjectClassStudent?: StudentSubjectScoreUncheckedCreateNestedManyWithoutStudentInput
         studentTrainingScore?: StudentTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutStudentInput
@@ -576365,8 +577629,10 @@ export namespace Prisma {
         militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         trainingLocation?: TrainingLocationUpdateOneWithoutStudentsNestedInput
         priorityObject?: PriorityObjectUpdateManyWithoutStudentsNestedInput
-        classMonitor?: FixedClassUpdateOneWithoutClassMonitorNestedInput
-        unionLeaderOf?: FixedClassUpdateOneWithoutUnionLeaderNestedInput
+        classMonitor?: FixedClassUpdateManyWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUpdateManyWithoutUnionLeaderNestedInput
+        deputyUnionSecretaryOf?: FixedClassUpdateManyWithoutDeputyUnionSecretaryNestedInput
+        unionSecretaryOf?: FixedClassUpdateManyWithoutUnionSecretaryNestedInput
         fixedClass?: FixedClassUpdateOneWithoutStudentsNestedInput
         subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutStudentNestedInput
         userProfile?: UserProfileUpdateOneRequiredWithoutEducationAndTrainingNestedInput
@@ -576444,8 +577710,10 @@ export namespace Prisma {
         strengthTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         priorityObject?: PriorityObjectUncheckedUpdateManyWithoutStudentsNestedInput
-        classMonitor?: FixedClassUncheckedUpdateOneWithoutClassMonitorNestedInput
-        unionLeaderOf?: FixedClassUncheckedUpdateOneWithoutUnionLeaderNestedInput
+        classMonitor?: FixedClassUncheckedUpdateManyWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUncheckedUpdateManyWithoutUnionLeaderNestedInput
+        deputyUnionSecretaryOf?: FixedClassUncheckedUpdateManyWithoutDeputyUnionSecretaryNestedInput
+        unionSecretaryOf?: FixedClassUncheckedUpdateManyWithoutUnionSecretaryNestedInput
         subjectClassStudent?: StudentSubjectScoreUncheckedUpdateManyWithoutStudentNestedInput
         studentTrainingScore?: StudentTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutStudentNestedInput
@@ -585487,6 +586755,8 @@ export namespace Prisma {
         classType?: $Enums.FixedClassType
         classMonitor?: StudentCreateNestedOneWithoutClassMonitorInput
         unionLeader?: StudentCreateNestedOneWithoutUnionLeaderOfInput
+        deputyUnionSecretary?: StudentCreateNestedOneWithoutDeputyUnionSecretaryOfInput
+        unionSecretary?: StudentCreateNestedOneWithoutUnionSecretaryOfInput
         trainingCourse: TrainingCourseCreateNestedOneWithoutFixedClassInput
         managementOrganization?: DM_DonViCreateNestedOneWithoutFixedClassInput
         lecturerManagement?: LecturerCreateNestedOneWithoutManageFixedClassInput
@@ -585513,6 +586783,8 @@ export namespace Prisma {
         graduated?: boolean
         classMonitorId?: string | null
         unionLeaderId?: string | null
+        deputyUnionSecretaryId?: string | null
+        unionSecretaryId?: string | null
         trainingCourseId: string
         managementOrganizationId?: string | null
         lecturerManagementId?: string | null
@@ -588813,8 +590085,10 @@ export namespace Prisma {
         militaryTrainingPass?: boolean
         trainingLocation?: TrainingLocationCreateNestedOneWithoutStudentsInput
         priorityObject?: PriorityObjectCreateNestedManyWithoutStudentsInput
-        classMonitor?: FixedClassCreateNestedOneWithoutClassMonitorInput
-        unionLeaderOf?: FixedClassCreateNestedOneWithoutUnionLeaderInput
+        classMonitor?: FixedClassCreateNestedManyWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassCreateNestedManyWithoutUnionLeaderInput
+        deputyUnionSecretaryOf?: FixedClassCreateNestedManyWithoutDeputyUnionSecretaryInput
+        unionSecretaryOf?: FixedClassCreateNestedManyWithoutUnionSecretaryInput
         fixedClass?: FixedClassCreateNestedOneWithoutStudentsInput
         subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutStudentInput
         userProfile: UserProfileCreateNestedOneWithoutEducationAndTrainingInput
@@ -588892,8 +590166,10 @@ export namespace Prisma {
         strengthTrainingPass?: boolean
         militaryTrainingPass?: boolean
         priorityObject?: PriorityObjectUncheckedCreateNestedManyWithoutStudentsInput
-        classMonitor?: FixedClassUncheckedCreateNestedOneWithoutClassMonitorInput
-        unionLeaderOf?: FixedClassUncheckedCreateNestedOneWithoutUnionLeaderInput
+        classMonitor?: FixedClassUncheckedCreateNestedManyWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassUncheckedCreateNestedManyWithoutUnionLeaderInput
+        deputyUnionSecretaryOf?: FixedClassUncheckedCreateNestedManyWithoutDeputyUnionSecretaryInput
+        unionSecretaryOf?: FixedClassUncheckedCreateNestedManyWithoutUnionSecretaryInput
         subjectClassStudent?: StudentSubjectScoreUncheckedCreateNestedManyWithoutStudentInput
         studentTrainingScore?: StudentTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutStudentInput
@@ -589470,8 +590746,10 @@ export namespace Prisma {
         militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         trainingLocation?: TrainingLocationUpdateOneWithoutStudentsNestedInput
         priorityObject?: PriorityObjectUpdateManyWithoutStudentsNestedInput
-        classMonitor?: FixedClassUpdateOneWithoutClassMonitorNestedInput
-        unionLeaderOf?: FixedClassUpdateOneWithoutUnionLeaderNestedInput
+        classMonitor?: FixedClassUpdateManyWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUpdateManyWithoutUnionLeaderNestedInput
+        deputyUnionSecretaryOf?: FixedClassUpdateManyWithoutDeputyUnionSecretaryNestedInput
+        unionSecretaryOf?: FixedClassUpdateManyWithoutUnionSecretaryNestedInput
         fixedClass?: FixedClassUpdateOneWithoutStudentsNestedInput
         subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutStudentNestedInput
         userProfile?: UserProfileUpdateOneRequiredWithoutEducationAndTrainingNestedInput
@@ -589549,8 +590827,10 @@ export namespace Prisma {
         strengthTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         priorityObject?: PriorityObjectUncheckedUpdateManyWithoutStudentsNestedInput
-        classMonitor?: FixedClassUncheckedUpdateOneWithoutClassMonitorNestedInput
-        unionLeaderOf?: FixedClassUncheckedUpdateOneWithoutUnionLeaderNestedInput
+        classMonitor?: FixedClassUncheckedUpdateManyWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUncheckedUpdateManyWithoutUnionLeaderNestedInput
+        deputyUnionSecretaryOf?: FixedClassUncheckedUpdateManyWithoutDeputyUnionSecretaryNestedInput
+        unionSecretaryOf?: FixedClassUncheckedUpdateManyWithoutUnionSecretaryNestedInput
         subjectClassStudent?: StudentSubjectScoreUncheckedUpdateManyWithoutStudentNestedInput
         studentTrainingScore?: StudentTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutStudentNestedInput
@@ -594683,6 +595963,8 @@ export namespace Prisma {
         classType?: $Enums.FixedClassType
         classMonitor?: StudentCreateNestedOneWithoutClassMonitorInput
         unionLeader?: StudentCreateNestedOneWithoutUnionLeaderOfInput
+        deputyUnionSecretary?: StudentCreateNestedOneWithoutDeputyUnionSecretaryOfInput
+        unionSecretary?: StudentCreateNestedOneWithoutUnionSecretaryOfInput
         trainingCourse: TrainingCourseCreateNestedOneWithoutFixedClassInput
         managementOrganization?: DM_DonViCreateNestedOneWithoutFixedClassInput
         lecturerManagement?: LecturerCreateNestedOneWithoutManageFixedClassInput
@@ -594709,6 +595991,8 @@ export namespace Prisma {
         graduated?: boolean
         classMonitorId?: string | null
         unionLeaderId?: string | null
+        deputyUnionSecretaryId?: string | null
+        unionSecretaryId?: string | null
         trainingCourseId: string
         managementOrganizationId?: string | null
         lecturerManagementId?: string | null
@@ -596757,8 +598041,10 @@ export namespace Prisma {
         militaryTrainingPass?: boolean
         trainingLocation?: TrainingLocationCreateNestedOneWithoutStudentsInput
         priorityObject?: PriorityObjectCreateNestedManyWithoutStudentsInput
-        classMonitor?: FixedClassCreateNestedOneWithoutClassMonitorInput
-        unionLeaderOf?: FixedClassCreateNestedOneWithoutUnionLeaderInput
+        classMonitor?: FixedClassCreateNestedManyWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassCreateNestedManyWithoutUnionLeaderInput
+        deputyUnionSecretaryOf?: FixedClassCreateNestedManyWithoutDeputyUnionSecretaryInput
+        unionSecretaryOf?: FixedClassCreateNestedManyWithoutUnionSecretaryInput
         fixedClass?: FixedClassCreateNestedOneWithoutStudentsInput
         subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutStudentInput
         userProfile: UserProfileCreateNestedOneWithoutEducationAndTrainingInput
@@ -596836,8 +598122,10 @@ export namespace Prisma {
         strengthTrainingPass?: boolean
         militaryTrainingPass?: boolean
         priorityObject?: PriorityObjectUncheckedCreateNestedManyWithoutStudentsInput
-        classMonitor?: FixedClassUncheckedCreateNestedOneWithoutClassMonitorInput
-        unionLeaderOf?: FixedClassUncheckedCreateNestedOneWithoutUnionLeaderInput
+        classMonitor?: FixedClassUncheckedCreateNestedManyWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassUncheckedCreateNestedManyWithoutUnionLeaderInput
+        deputyUnionSecretaryOf?: FixedClassUncheckedCreateNestedManyWithoutDeputyUnionSecretaryInput
+        unionSecretaryOf?: FixedClassUncheckedCreateNestedManyWithoutUnionSecretaryInput
         subjectClassStudent?: StudentSubjectScoreUncheckedCreateNestedManyWithoutStudentInput
         studentTrainingScore?: StudentTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutStudentInput
@@ -597026,8 +598314,10 @@ export namespace Prisma {
         militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         trainingLocation?: TrainingLocationUpdateOneWithoutStudentsNestedInput
         priorityObject?: PriorityObjectUpdateManyWithoutStudentsNestedInput
-        classMonitor?: FixedClassUpdateOneWithoutClassMonitorNestedInput
-        unionLeaderOf?: FixedClassUpdateOneWithoutUnionLeaderNestedInput
+        classMonitor?: FixedClassUpdateManyWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUpdateManyWithoutUnionLeaderNestedInput
+        deputyUnionSecretaryOf?: FixedClassUpdateManyWithoutDeputyUnionSecretaryNestedInput
+        unionSecretaryOf?: FixedClassUpdateManyWithoutUnionSecretaryNestedInput
         fixedClass?: FixedClassUpdateOneWithoutStudentsNestedInput
         subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutStudentNestedInput
         userProfile?: UserProfileUpdateOneRequiredWithoutEducationAndTrainingNestedInput
@@ -597105,8 +598395,10 @@ export namespace Prisma {
         strengthTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         priorityObject?: PriorityObjectUncheckedUpdateManyWithoutStudentsNestedInput
-        classMonitor?: FixedClassUncheckedUpdateOneWithoutClassMonitorNestedInput
-        unionLeaderOf?: FixedClassUncheckedUpdateOneWithoutUnionLeaderNestedInput
+        classMonitor?: FixedClassUncheckedUpdateManyWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUncheckedUpdateManyWithoutUnionLeaderNestedInput
+        deputyUnionSecretaryOf?: FixedClassUncheckedUpdateManyWithoutDeputyUnionSecretaryNestedInput
+        unionSecretaryOf?: FixedClassUncheckedUpdateManyWithoutUnionSecretaryNestedInput
         subjectClassStudent?: StudentSubjectScoreUncheckedUpdateManyWithoutStudentNestedInput
         studentTrainingScore?: StudentTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutStudentNestedInput
@@ -597846,8 +599138,10 @@ export namespace Prisma {
         militaryTrainingPass?: boolean
         trainingLocation?: TrainingLocationCreateNestedOneWithoutStudentsInput
         priorityObject?: PriorityObjectCreateNestedManyWithoutStudentsInput
-        classMonitor?: FixedClassCreateNestedOneWithoutClassMonitorInput
-        unionLeaderOf?: FixedClassCreateNestedOneWithoutUnionLeaderInput
+        classMonitor?: FixedClassCreateNestedManyWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassCreateNestedManyWithoutUnionLeaderInput
+        deputyUnionSecretaryOf?: FixedClassCreateNestedManyWithoutDeputyUnionSecretaryInput
+        unionSecretaryOf?: FixedClassCreateNestedManyWithoutUnionSecretaryInput
         fixedClass?: FixedClassCreateNestedOneWithoutStudentsInput
         subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutStudentInput
         userProfile: UserProfileCreateNestedOneWithoutEducationAndTrainingInput
@@ -597925,8 +599219,10 @@ export namespace Prisma {
         strengthTrainingPass?: boolean
         militaryTrainingPass?: boolean
         priorityObject?: PriorityObjectUncheckedCreateNestedManyWithoutStudentsInput
-        classMonitor?: FixedClassUncheckedCreateNestedOneWithoutClassMonitorInput
-        unionLeaderOf?: FixedClassUncheckedCreateNestedOneWithoutUnionLeaderInput
+        classMonitor?: FixedClassUncheckedCreateNestedManyWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassUncheckedCreateNestedManyWithoutUnionLeaderInput
+        deputyUnionSecretaryOf?: FixedClassUncheckedCreateNestedManyWithoutDeputyUnionSecretaryInput
+        unionSecretaryOf?: FixedClassUncheckedCreateNestedManyWithoutUnionSecretaryInput
         subjectClassStudent?: StudentSubjectScoreUncheckedCreateNestedManyWithoutStudentInput
         studentTrainingScore?: StudentTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutStudentInput
@@ -598505,8 +599801,10 @@ export namespace Prisma {
         militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         trainingLocation?: TrainingLocationUpdateOneWithoutStudentsNestedInput
         priorityObject?: PriorityObjectUpdateManyWithoutStudentsNestedInput
-        classMonitor?: FixedClassUpdateOneWithoutClassMonitorNestedInput
-        unionLeaderOf?: FixedClassUpdateOneWithoutUnionLeaderNestedInput
+        classMonitor?: FixedClassUpdateManyWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUpdateManyWithoutUnionLeaderNestedInput
+        deputyUnionSecretaryOf?: FixedClassUpdateManyWithoutDeputyUnionSecretaryNestedInput
+        unionSecretaryOf?: FixedClassUpdateManyWithoutUnionSecretaryNestedInput
         fixedClass?: FixedClassUpdateOneWithoutStudentsNestedInput
         subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutStudentNestedInput
         userProfile?: UserProfileUpdateOneRequiredWithoutEducationAndTrainingNestedInput
@@ -598584,8 +599882,10 @@ export namespace Prisma {
         strengthTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         priorityObject?: PriorityObjectUncheckedUpdateManyWithoutStudentsNestedInput
-        classMonitor?: FixedClassUncheckedUpdateOneWithoutClassMonitorNestedInput
-        unionLeaderOf?: FixedClassUncheckedUpdateOneWithoutUnionLeaderNestedInput
+        classMonitor?: FixedClassUncheckedUpdateManyWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUncheckedUpdateManyWithoutUnionLeaderNestedInput
+        deputyUnionSecretaryOf?: FixedClassUncheckedUpdateManyWithoutDeputyUnionSecretaryNestedInput
+        unionSecretaryOf?: FixedClassUncheckedUpdateManyWithoutUnionSecretaryNestedInput
         subjectClassStudent?: StudentSubjectScoreUncheckedUpdateManyWithoutStudentNestedInput
         studentTrainingScore?: StudentTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutStudentNestedInput
@@ -599765,8 +601065,10 @@ export namespace Prisma {
         militaryTrainingPass?: boolean
         trainingLocation?: TrainingLocationCreateNestedOneWithoutStudentsInput
         priorityObject?: PriorityObjectCreateNestedManyWithoutStudentsInput
-        classMonitor?: FixedClassCreateNestedOneWithoutClassMonitorInput
-        unionLeaderOf?: FixedClassCreateNestedOneWithoutUnionLeaderInput
+        classMonitor?: FixedClassCreateNestedManyWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassCreateNestedManyWithoutUnionLeaderInput
+        deputyUnionSecretaryOf?: FixedClassCreateNestedManyWithoutDeputyUnionSecretaryInput
+        unionSecretaryOf?: FixedClassCreateNestedManyWithoutUnionSecretaryInput
         fixedClass?: FixedClassCreateNestedOneWithoutStudentsInput
         subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutStudentInput
         userProfile: UserProfileCreateNestedOneWithoutEducationAndTrainingInput
@@ -599844,8 +601146,10 @@ export namespace Prisma {
         strengthTrainingPass?: boolean
         militaryTrainingPass?: boolean
         priorityObject?: PriorityObjectUncheckedCreateNestedManyWithoutStudentsInput
-        classMonitor?: FixedClassUncheckedCreateNestedOneWithoutClassMonitorInput
-        unionLeaderOf?: FixedClassUncheckedCreateNestedOneWithoutUnionLeaderInput
+        classMonitor?: FixedClassUncheckedCreateNestedManyWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassUncheckedCreateNestedManyWithoutUnionLeaderInput
+        deputyUnionSecretaryOf?: FixedClassUncheckedCreateNestedManyWithoutDeputyUnionSecretaryInput
+        unionSecretaryOf?: FixedClassUncheckedCreateNestedManyWithoutUnionSecretaryInput
         subjectClassStudent?: StudentSubjectScoreUncheckedCreateNestedManyWithoutStudentInput
         studentTrainingScore?: StudentTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutStudentInput
@@ -600321,8 +601625,10 @@ export namespace Prisma {
         militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         trainingLocation?: TrainingLocationUpdateOneWithoutStudentsNestedInput
         priorityObject?: PriorityObjectUpdateManyWithoutStudentsNestedInput
-        classMonitor?: FixedClassUpdateOneWithoutClassMonitorNestedInput
-        unionLeaderOf?: FixedClassUpdateOneWithoutUnionLeaderNestedInput
+        classMonitor?: FixedClassUpdateManyWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUpdateManyWithoutUnionLeaderNestedInput
+        deputyUnionSecretaryOf?: FixedClassUpdateManyWithoutDeputyUnionSecretaryNestedInput
+        unionSecretaryOf?: FixedClassUpdateManyWithoutUnionSecretaryNestedInput
         fixedClass?: FixedClassUpdateOneWithoutStudentsNestedInput
         subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutStudentNestedInput
         userProfile?: UserProfileUpdateOneRequiredWithoutEducationAndTrainingNestedInput
@@ -600400,8 +601706,10 @@ export namespace Prisma {
         strengthTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         priorityObject?: PriorityObjectUncheckedUpdateManyWithoutStudentsNestedInput
-        classMonitor?: FixedClassUncheckedUpdateOneWithoutClassMonitorNestedInput
-        unionLeaderOf?: FixedClassUncheckedUpdateOneWithoutUnionLeaderNestedInput
+        classMonitor?: FixedClassUncheckedUpdateManyWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUncheckedUpdateManyWithoutUnionLeaderNestedInput
+        deputyUnionSecretaryOf?: FixedClassUncheckedUpdateManyWithoutDeputyUnionSecretaryNestedInput
+        unionSecretaryOf?: FixedClassUncheckedUpdateManyWithoutUnionSecretaryNestedInput
         subjectClassStudent?: StudentSubjectScoreUncheckedUpdateManyWithoutStudentNestedInput
         studentTrainingScore?: StudentTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutStudentNestedInput
@@ -602274,8 +603582,10 @@ export namespace Prisma {
         militaryTrainingPass?: boolean
         trainingLocation?: TrainingLocationCreateNestedOneWithoutStudentsInput
         priorityObject?: PriorityObjectCreateNestedManyWithoutStudentsInput
-        classMonitor?: FixedClassCreateNestedOneWithoutClassMonitorInput
-        unionLeaderOf?: FixedClassCreateNestedOneWithoutUnionLeaderInput
+        classMonitor?: FixedClassCreateNestedManyWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassCreateNestedManyWithoutUnionLeaderInput
+        deputyUnionSecretaryOf?: FixedClassCreateNestedManyWithoutDeputyUnionSecretaryInput
+        unionSecretaryOf?: FixedClassCreateNestedManyWithoutUnionSecretaryInput
         fixedClass?: FixedClassCreateNestedOneWithoutStudentsInput
         subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutStudentInput
         userProfile: UserProfileCreateNestedOneWithoutEducationAndTrainingInput
@@ -602353,8 +603663,10 @@ export namespace Prisma {
         strengthTrainingPass?: boolean
         militaryTrainingPass?: boolean
         priorityObject?: PriorityObjectUncheckedCreateNestedManyWithoutStudentsInput
-        classMonitor?: FixedClassUncheckedCreateNestedOneWithoutClassMonitorInput
-        unionLeaderOf?: FixedClassUncheckedCreateNestedOneWithoutUnionLeaderInput
+        classMonitor?: FixedClassUncheckedCreateNestedManyWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassUncheckedCreateNestedManyWithoutUnionLeaderInput
+        deputyUnionSecretaryOf?: FixedClassUncheckedCreateNestedManyWithoutDeputyUnionSecretaryInput
+        unionSecretaryOf?: FixedClassUncheckedCreateNestedManyWithoutUnionSecretaryInput
         subjectClassStudent?: StudentSubjectScoreUncheckedCreateNestedManyWithoutStudentInput
         studentTrainingScore?: StudentTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutStudentInput
@@ -602610,8 +603922,10 @@ export namespace Prisma {
         militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         trainingLocation?: TrainingLocationUpdateOneWithoutStudentsNestedInput
         priorityObject?: PriorityObjectUpdateManyWithoutStudentsNestedInput
-        classMonitor?: FixedClassUpdateOneWithoutClassMonitorNestedInput
-        unionLeaderOf?: FixedClassUpdateOneWithoutUnionLeaderNestedInput
+        classMonitor?: FixedClassUpdateManyWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUpdateManyWithoutUnionLeaderNestedInput
+        deputyUnionSecretaryOf?: FixedClassUpdateManyWithoutDeputyUnionSecretaryNestedInput
+        unionSecretaryOf?: FixedClassUpdateManyWithoutUnionSecretaryNestedInput
         fixedClass?: FixedClassUpdateOneWithoutStudentsNestedInput
         subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutStudentNestedInput
         userProfile?: UserProfileUpdateOneRequiredWithoutEducationAndTrainingNestedInput
@@ -602689,8 +604003,10 @@ export namespace Prisma {
         strengthTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         priorityObject?: PriorityObjectUncheckedUpdateManyWithoutStudentsNestedInput
-        classMonitor?: FixedClassUncheckedUpdateOneWithoutClassMonitorNestedInput
-        unionLeaderOf?: FixedClassUncheckedUpdateOneWithoutUnionLeaderNestedInput
+        classMonitor?: FixedClassUncheckedUpdateManyWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUncheckedUpdateManyWithoutUnionLeaderNestedInput
+        deputyUnionSecretaryOf?: FixedClassUncheckedUpdateManyWithoutDeputyUnionSecretaryNestedInput
+        unionSecretaryOf?: FixedClassUncheckedUpdateManyWithoutUnionSecretaryNestedInput
         subjectClassStudent?: StudentSubjectScoreUncheckedUpdateManyWithoutStudentNestedInput
         studentTrainingScore?: StudentTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutStudentNestedInput
@@ -602801,6 +604117,8 @@ export namespace Prisma {
         classType?: $Enums.FixedClassType
         classMonitor?: StudentCreateNestedOneWithoutClassMonitorInput
         unionLeader?: StudentCreateNestedOneWithoutUnionLeaderOfInput
+        deputyUnionSecretary?: StudentCreateNestedOneWithoutDeputyUnionSecretaryOfInput
+        unionSecretary?: StudentCreateNestedOneWithoutUnionSecretaryOfInput
         trainingCourse: TrainingCourseCreateNestedOneWithoutFixedClassInput
         managementOrganization?: DM_DonViCreateNestedOneWithoutFixedClassInput
         lecturerManagement?: LecturerCreateNestedOneWithoutManageFixedClassInput
@@ -602827,6 +604145,8 @@ export namespace Prisma {
         graduated?: boolean
         classMonitorId?: string | null
         unionLeaderId?: string | null
+        deputyUnionSecretaryId?: string | null
+        unionSecretaryId?: string | null
         trainingCourseId: string
         managementOrganizationId?: string | null
         lecturerManagementId?: string | null
@@ -603123,6 +604443,8 @@ export namespace Prisma {
         classType?: EnumFixedClassTypeFieldUpdateOperationsInput | $Enums.FixedClassType
         classMonitor?: StudentUpdateOneWithoutClassMonitorNestedInput
         unionLeader?: StudentUpdateOneWithoutUnionLeaderOfNestedInput
+        deputyUnionSecretary?: StudentUpdateOneWithoutDeputyUnionSecretaryOfNestedInput
+        unionSecretary?: StudentUpdateOneWithoutUnionSecretaryOfNestedInput
         trainingCourse?: TrainingCourseUpdateOneRequiredWithoutFixedClassNestedInput
         managementOrganization?: DM_DonViUpdateOneWithoutFixedClassNestedInput
         lecturerManagement?: LecturerUpdateOneWithoutManageFixedClassNestedInput
@@ -603149,6 +604471,8 @@ export namespace Prisma {
         graduated?: BoolFieldUpdateOperationsInput | boolean
         classMonitorId?: NullableStringFieldUpdateOperationsInput | string | null
         unionLeaderId?: NullableStringFieldUpdateOperationsInput | string | null
+        deputyUnionSecretaryId?: NullableStringFieldUpdateOperationsInput | string | null
+        unionSecretaryId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingCourseId?: StringFieldUpdateOperationsInput | string
         managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerManagementId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -603923,8 +605247,10 @@ export namespace Prisma {
         militaryTrainingPass?: boolean
         trainingLocation?: TrainingLocationCreateNestedOneWithoutStudentsInput
         priorityObject?: PriorityObjectCreateNestedManyWithoutStudentsInput
-        classMonitor?: FixedClassCreateNestedOneWithoutClassMonitorInput
-        unionLeaderOf?: FixedClassCreateNestedOneWithoutUnionLeaderInput
+        classMonitor?: FixedClassCreateNestedManyWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassCreateNestedManyWithoutUnionLeaderInput
+        deputyUnionSecretaryOf?: FixedClassCreateNestedManyWithoutDeputyUnionSecretaryInput
+        unionSecretaryOf?: FixedClassCreateNestedManyWithoutUnionSecretaryInput
         fixedClass?: FixedClassCreateNestedOneWithoutStudentsInput
         subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutStudentInput
         userProfile: UserProfileCreateNestedOneWithoutEducationAndTrainingInput
@@ -604002,8 +605328,10 @@ export namespace Prisma {
         strengthTrainingPass?: boolean
         militaryTrainingPass?: boolean
         priorityObject?: PriorityObjectUncheckedCreateNestedManyWithoutStudentsInput
-        classMonitor?: FixedClassUncheckedCreateNestedOneWithoutClassMonitorInput
-        unionLeaderOf?: FixedClassUncheckedCreateNestedOneWithoutUnionLeaderInput
+        classMonitor?: FixedClassUncheckedCreateNestedManyWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassUncheckedCreateNestedManyWithoutUnionLeaderInput
+        deputyUnionSecretaryOf?: FixedClassUncheckedCreateNestedManyWithoutDeputyUnionSecretaryInput
+        unionSecretaryOf?: FixedClassUncheckedCreateNestedManyWithoutUnionSecretaryInput
         subjectClassStudent?: StudentSubjectScoreUncheckedCreateNestedManyWithoutStudentInput
         studentTrainingScore?: StudentTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutStudentInput
@@ -604119,8 +605447,10 @@ export namespace Prisma {
         militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         trainingLocation?: TrainingLocationUpdateOneWithoutStudentsNestedInput
         priorityObject?: PriorityObjectUpdateManyWithoutStudentsNestedInput
-        classMonitor?: FixedClassUpdateOneWithoutClassMonitorNestedInput
-        unionLeaderOf?: FixedClassUpdateOneWithoutUnionLeaderNestedInput
+        classMonitor?: FixedClassUpdateManyWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUpdateManyWithoutUnionLeaderNestedInput
+        deputyUnionSecretaryOf?: FixedClassUpdateManyWithoutDeputyUnionSecretaryNestedInput
+        unionSecretaryOf?: FixedClassUpdateManyWithoutUnionSecretaryNestedInput
         fixedClass?: FixedClassUpdateOneWithoutStudentsNestedInput
         subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutStudentNestedInput
         userProfile?: UserProfileUpdateOneRequiredWithoutEducationAndTrainingNestedInput
@@ -604198,8 +605528,10 @@ export namespace Prisma {
         strengthTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         priorityObject?: PriorityObjectUncheckedUpdateManyWithoutStudentsNestedInput
-        classMonitor?: FixedClassUncheckedUpdateOneWithoutClassMonitorNestedInput
-        unionLeaderOf?: FixedClassUncheckedUpdateOneWithoutUnionLeaderNestedInput
+        classMonitor?: FixedClassUncheckedUpdateManyWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUncheckedUpdateManyWithoutUnionLeaderNestedInput
+        deputyUnionSecretaryOf?: FixedClassUncheckedUpdateManyWithoutDeputyUnionSecretaryNestedInput
+        unionSecretaryOf?: FixedClassUncheckedUpdateManyWithoutUnionSecretaryNestedInput
         subjectClassStudent?: StudentSubjectScoreUncheckedUpdateManyWithoutStudentNestedInput
         studentTrainingScore?: StudentTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutStudentNestedInput
@@ -604267,8 +605599,10 @@ export namespace Prisma {
         militaryTrainingPass?: boolean
         trainingLocation?: TrainingLocationCreateNestedOneWithoutStudentsInput
         priorityObject?: PriorityObjectCreateNestedManyWithoutStudentsInput
-        classMonitor?: FixedClassCreateNestedOneWithoutClassMonitorInput
-        unionLeaderOf?: FixedClassCreateNestedOneWithoutUnionLeaderInput
+        classMonitor?: FixedClassCreateNestedManyWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassCreateNestedManyWithoutUnionLeaderInput
+        deputyUnionSecretaryOf?: FixedClassCreateNestedManyWithoutDeputyUnionSecretaryInput
+        unionSecretaryOf?: FixedClassCreateNestedManyWithoutUnionSecretaryInput
         fixedClass?: FixedClassCreateNestedOneWithoutStudentsInput
         subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutStudentInput
         userProfile: UserProfileCreateNestedOneWithoutEducationAndTrainingInput
@@ -604346,8 +605680,10 @@ export namespace Prisma {
         strengthTrainingPass?: boolean
         militaryTrainingPass?: boolean
         priorityObject?: PriorityObjectUncheckedCreateNestedManyWithoutStudentsInput
-        classMonitor?: FixedClassUncheckedCreateNestedOneWithoutClassMonitorInput
-        unionLeaderOf?: FixedClassUncheckedCreateNestedOneWithoutUnionLeaderInput
+        classMonitor?: FixedClassUncheckedCreateNestedManyWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassUncheckedCreateNestedManyWithoutUnionLeaderInput
+        deputyUnionSecretaryOf?: FixedClassUncheckedCreateNestedManyWithoutDeputyUnionSecretaryInput
+        unionSecretaryOf?: FixedClassUncheckedCreateNestedManyWithoutUnionSecretaryInput
         subjectClassStudent?: StudentSubjectScoreUncheckedCreateNestedManyWithoutStudentInput
         studentTrainingScore?: StudentTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutStudentInput
@@ -604612,8 +605948,10 @@ export namespace Prisma {
         militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         trainingLocation?: TrainingLocationUpdateOneWithoutStudentsNestedInput
         priorityObject?: PriorityObjectUpdateManyWithoutStudentsNestedInput
-        classMonitor?: FixedClassUpdateOneWithoutClassMonitorNestedInput
-        unionLeaderOf?: FixedClassUpdateOneWithoutUnionLeaderNestedInput
+        classMonitor?: FixedClassUpdateManyWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUpdateManyWithoutUnionLeaderNestedInput
+        deputyUnionSecretaryOf?: FixedClassUpdateManyWithoutDeputyUnionSecretaryNestedInput
+        unionSecretaryOf?: FixedClassUpdateManyWithoutUnionSecretaryNestedInput
         fixedClass?: FixedClassUpdateOneWithoutStudentsNestedInput
         subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutStudentNestedInput
         userProfile?: UserProfileUpdateOneRequiredWithoutEducationAndTrainingNestedInput
@@ -604691,8 +606029,10 @@ export namespace Prisma {
         strengthTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         priorityObject?: PriorityObjectUncheckedUpdateManyWithoutStudentsNestedInput
-        classMonitor?: FixedClassUncheckedUpdateOneWithoutClassMonitorNestedInput
-        unionLeaderOf?: FixedClassUncheckedUpdateOneWithoutUnionLeaderNestedInput
+        classMonitor?: FixedClassUncheckedUpdateManyWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUncheckedUpdateManyWithoutUnionLeaderNestedInput
+        deputyUnionSecretaryOf?: FixedClassUncheckedUpdateManyWithoutDeputyUnionSecretaryNestedInput
+        unionSecretaryOf?: FixedClassUncheckedUpdateManyWithoutUnionSecretaryNestedInput
         subjectClassStudent?: StudentSubjectScoreUncheckedUpdateManyWithoutStudentNestedInput
         studentTrainingScore?: StudentTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutStudentNestedInput
@@ -604875,8 +606215,10 @@ export namespace Prisma {
         militaryTrainingPass?: boolean
         trainingLocation?: TrainingLocationCreateNestedOneWithoutStudentsInput
         priorityObject?: PriorityObjectCreateNestedManyWithoutStudentsInput
-        classMonitor?: FixedClassCreateNestedOneWithoutClassMonitorInput
-        unionLeaderOf?: FixedClassCreateNestedOneWithoutUnionLeaderInput
+        classMonitor?: FixedClassCreateNestedManyWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassCreateNestedManyWithoutUnionLeaderInput
+        deputyUnionSecretaryOf?: FixedClassCreateNestedManyWithoutDeputyUnionSecretaryInput
+        unionSecretaryOf?: FixedClassCreateNestedManyWithoutUnionSecretaryInput
         fixedClass?: FixedClassCreateNestedOneWithoutStudentsInput
         subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutStudentInput
         userProfile: UserProfileCreateNestedOneWithoutEducationAndTrainingInput
@@ -604954,8 +606296,10 @@ export namespace Prisma {
         strengthTrainingPass?: boolean
         militaryTrainingPass?: boolean
         priorityObject?: PriorityObjectUncheckedCreateNestedManyWithoutStudentsInput
-        classMonitor?: FixedClassUncheckedCreateNestedOneWithoutClassMonitorInput
-        unionLeaderOf?: FixedClassUncheckedCreateNestedOneWithoutUnionLeaderInput
+        classMonitor?: FixedClassUncheckedCreateNestedManyWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassUncheckedCreateNestedManyWithoutUnionLeaderInput
+        deputyUnionSecretaryOf?: FixedClassUncheckedCreateNestedManyWithoutDeputyUnionSecretaryInput
+        unionSecretaryOf?: FixedClassUncheckedCreateNestedManyWithoutUnionSecretaryInput
         subjectClassStudent?: StudentSubjectScoreUncheckedCreateNestedManyWithoutStudentInput
         studentTrainingScore?: StudentTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutStudentInput
@@ -605152,8 +606496,10 @@ export namespace Prisma {
         militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         trainingLocation?: TrainingLocationUpdateOneWithoutStudentsNestedInput
         priorityObject?: PriorityObjectUpdateManyWithoutStudentsNestedInput
-        classMonitor?: FixedClassUpdateOneWithoutClassMonitorNestedInput
-        unionLeaderOf?: FixedClassUpdateOneWithoutUnionLeaderNestedInput
+        classMonitor?: FixedClassUpdateManyWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUpdateManyWithoutUnionLeaderNestedInput
+        deputyUnionSecretaryOf?: FixedClassUpdateManyWithoutDeputyUnionSecretaryNestedInput
+        unionSecretaryOf?: FixedClassUpdateManyWithoutUnionSecretaryNestedInput
         fixedClass?: FixedClassUpdateOneWithoutStudentsNestedInput
         subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutStudentNestedInput
         userProfile?: UserProfileUpdateOneRequiredWithoutEducationAndTrainingNestedInput
@@ -605231,8 +606577,10 @@ export namespace Prisma {
         strengthTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         priorityObject?: PriorityObjectUncheckedUpdateManyWithoutStudentsNestedInput
-        classMonitor?: FixedClassUncheckedUpdateOneWithoutClassMonitorNestedInput
-        unionLeaderOf?: FixedClassUncheckedUpdateOneWithoutUnionLeaderNestedInput
+        classMonitor?: FixedClassUncheckedUpdateManyWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUncheckedUpdateManyWithoutUnionLeaderNestedInput
+        deputyUnionSecretaryOf?: FixedClassUncheckedUpdateManyWithoutDeputyUnionSecretaryNestedInput
+        unionSecretaryOf?: FixedClassUncheckedUpdateManyWithoutUnionSecretaryNestedInput
         subjectClassStudent?: StudentSubjectScoreUncheckedUpdateManyWithoutStudentNestedInput
         studentTrainingScore?: StudentTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutStudentNestedInput
@@ -605789,8 +607137,10 @@ export namespace Prisma {
         militaryTrainingPass?: boolean
         trainingLocation?: TrainingLocationCreateNestedOneWithoutStudentsInput
         priorityObject?: PriorityObjectCreateNestedManyWithoutStudentsInput
-        classMonitor?: FixedClassCreateNestedOneWithoutClassMonitorInput
-        unionLeaderOf?: FixedClassCreateNestedOneWithoutUnionLeaderInput
+        classMonitor?: FixedClassCreateNestedManyWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassCreateNestedManyWithoutUnionLeaderInput
+        deputyUnionSecretaryOf?: FixedClassCreateNestedManyWithoutDeputyUnionSecretaryInput
+        unionSecretaryOf?: FixedClassCreateNestedManyWithoutUnionSecretaryInput
         fixedClass?: FixedClassCreateNestedOneWithoutStudentsInput
         subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutStudentInput
         userProfile: UserProfileCreateNestedOneWithoutEducationAndTrainingInput
@@ -605868,8 +607218,10 @@ export namespace Prisma {
         strengthTrainingPass?: boolean
         militaryTrainingPass?: boolean
         priorityObject?: PriorityObjectUncheckedCreateNestedManyWithoutStudentsInput
-        classMonitor?: FixedClassUncheckedCreateNestedOneWithoutClassMonitorInput
-        unionLeaderOf?: FixedClassUncheckedCreateNestedOneWithoutUnionLeaderInput
+        classMonitor?: FixedClassUncheckedCreateNestedManyWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassUncheckedCreateNestedManyWithoutUnionLeaderInput
+        deputyUnionSecretaryOf?: FixedClassUncheckedCreateNestedManyWithoutDeputyUnionSecretaryInput
+        unionSecretaryOf?: FixedClassUncheckedCreateNestedManyWithoutUnionSecretaryInput
         subjectClassStudent?: StudentSubjectScoreUncheckedCreateNestedManyWithoutStudentInput
         studentTrainingScore?: StudentTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutStudentInput
@@ -606060,8 +607412,10 @@ export namespace Prisma {
         militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         trainingLocation?: TrainingLocationUpdateOneWithoutStudentsNestedInput
         priorityObject?: PriorityObjectUpdateManyWithoutStudentsNestedInput
-        classMonitor?: FixedClassUpdateOneWithoutClassMonitorNestedInput
-        unionLeaderOf?: FixedClassUpdateOneWithoutUnionLeaderNestedInput
+        classMonitor?: FixedClassUpdateManyWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUpdateManyWithoutUnionLeaderNestedInput
+        deputyUnionSecretaryOf?: FixedClassUpdateManyWithoutDeputyUnionSecretaryNestedInput
+        unionSecretaryOf?: FixedClassUpdateManyWithoutUnionSecretaryNestedInput
         fixedClass?: FixedClassUpdateOneWithoutStudentsNestedInput
         subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutStudentNestedInput
         userProfile?: UserProfileUpdateOneRequiredWithoutEducationAndTrainingNestedInput
@@ -606139,8 +607493,10 @@ export namespace Prisma {
         strengthTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         priorityObject?: PriorityObjectUncheckedUpdateManyWithoutStudentsNestedInput
-        classMonitor?: FixedClassUncheckedUpdateOneWithoutClassMonitorNestedInput
-        unionLeaderOf?: FixedClassUncheckedUpdateOneWithoutUnionLeaderNestedInput
+        classMonitor?: FixedClassUncheckedUpdateManyWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUncheckedUpdateManyWithoutUnionLeaderNestedInput
+        deputyUnionSecretaryOf?: FixedClassUncheckedUpdateManyWithoutDeputyUnionSecretaryNestedInput
+        unionSecretaryOf?: FixedClassUncheckedUpdateManyWithoutUnionSecretaryNestedInput
         subjectClassStudent?: StudentSubjectScoreUncheckedUpdateManyWithoutStudentNestedInput
         studentTrainingScore?: StudentTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutStudentNestedInput
@@ -606294,8 +607650,10 @@ export namespace Prisma {
         militaryTrainingPass?: boolean
         trainingLocation?: TrainingLocationCreateNestedOneWithoutStudentsInput
         priorityObject?: PriorityObjectCreateNestedManyWithoutStudentsInput
-        classMonitor?: FixedClassCreateNestedOneWithoutClassMonitorInput
-        unionLeaderOf?: FixedClassCreateNestedOneWithoutUnionLeaderInput
+        classMonitor?: FixedClassCreateNestedManyWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassCreateNestedManyWithoutUnionLeaderInput
+        deputyUnionSecretaryOf?: FixedClassCreateNestedManyWithoutDeputyUnionSecretaryInput
+        unionSecretaryOf?: FixedClassCreateNestedManyWithoutUnionSecretaryInput
         fixedClass?: FixedClassCreateNestedOneWithoutStudentsInput
         subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutStudentInput
         userProfile: UserProfileCreateNestedOneWithoutEducationAndTrainingInput
@@ -606373,8 +607731,10 @@ export namespace Prisma {
         strengthTrainingPass?: boolean
         militaryTrainingPass?: boolean
         priorityObject?: PriorityObjectUncheckedCreateNestedManyWithoutStudentsInput
-        classMonitor?: FixedClassUncheckedCreateNestedOneWithoutClassMonitorInput
-        unionLeaderOf?: FixedClassUncheckedCreateNestedOneWithoutUnionLeaderInput
+        classMonitor?: FixedClassUncheckedCreateNestedManyWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassUncheckedCreateNestedManyWithoutUnionLeaderInput
+        deputyUnionSecretaryOf?: FixedClassUncheckedCreateNestedManyWithoutDeputyUnionSecretaryInput
+        unionSecretaryOf?: FixedClassUncheckedCreateNestedManyWithoutUnionSecretaryInput
         subjectClassStudent?: StudentSubjectScoreUncheckedCreateNestedManyWithoutStudentInput
         studentTrainingScore?: StudentTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutStudentInput
@@ -606551,8 +607911,10 @@ export namespace Prisma {
         militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         trainingLocation?: TrainingLocationUpdateOneWithoutStudentsNestedInput
         priorityObject?: PriorityObjectUpdateManyWithoutStudentsNestedInput
-        classMonitor?: FixedClassUpdateOneWithoutClassMonitorNestedInput
-        unionLeaderOf?: FixedClassUpdateOneWithoutUnionLeaderNestedInput
+        classMonitor?: FixedClassUpdateManyWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUpdateManyWithoutUnionLeaderNestedInput
+        deputyUnionSecretaryOf?: FixedClassUpdateManyWithoutDeputyUnionSecretaryNestedInput
+        unionSecretaryOf?: FixedClassUpdateManyWithoutUnionSecretaryNestedInput
         fixedClass?: FixedClassUpdateOneWithoutStudentsNestedInput
         subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutStudentNestedInput
         userProfile?: UserProfileUpdateOneRequiredWithoutEducationAndTrainingNestedInput
@@ -606630,8 +607992,10 @@ export namespace Prisma {
         strengthTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         priorityObject?: PriorityObjectUncheckedUpdateManyWithoutStudentsNestedInput
-        classMonitor?: FixedClassUncheckedUpdateOneWithoutClassMonitorNestedInput
-        unionLeaderOf?: FixedClassUncheckedUpdateOneWithoutUnionLeaderNestedInput
+        classMonitor?: FixedClassUncheckedUpdateManyWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUncheckedUpdateManyWithoutUnionLeaderNestedInput
+        deputyUnionSecretaryOf?: FixedClassUncheckedUpdateManyWithoutDeputyUnionSecretaryNestedInput
+        unionSecretaryOf?: FixedClassUncheckedUpdateManyWithoutUnionSecretaryNestedInput
         subjectClassStudent?: StudentSubjectScoreUncheckedUpdateManyWithoutStudentNestedInput
         studentTrainingScore?: StudentTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutStudentNestedInput
@@ -614616,8 +615980,10 @@ export namespace Prisma {
         militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         trainingLocation?: TrainingLocationUpdateOneWithoutStudentsNestedInput
         priorityObject?: PriorityObjectUpdateManyWithoutStudentsNestedInput
-        classMonitor?: FixedClassUpdateOneWithoutClassMonitorNestedInput
-        unionLeaderOf?: FixedClassUpdateOneWithoutUnionLeaderNestedInput
+        classMonitor?: FixedClassUpdateManyWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUpdateManyWithoutUnionLeaderNestedInput
+        deputyUnionSecretaryOf?: FixedClassUpdateManyWithoutDeputyUnionSecretaryNestedInput
+        unionSecretaryOf?: FixedClassUpdateManyWithoutUnionSecretaryNestedInput
         fixedClass?: FixedClassUpdateOneWithoutStudentsNestedInput
         subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutStudentNestedInput
         registrationArea?: DM_KhuVuc_DiaLyUpdateOneWithoutStudentNestedInput
@@ -614694,8 +616060,10 @@ export namespace Prisma {
         strengthTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         priorityObject?: PriorityObjectUncheckedUpdateManyWithoutStudentsNestedInput
-        classMonitor?: FixedClassUncheckedUpdateOneWithoutClassMonitorNestedInput
-        unionLeaderOf?: FixedClassUncheckedUpdateOneWithoutUnionLeaderNestedInput
+        classMonitor?: FixedClassUncheckedUpdateManyWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUncheckedUpdateManyWithoutUnionLeaderNestedInput
+        deputyUnionSecretaryOf?: FixedClassUncheckedUpdateManyWithoutDeputyUnionSecretaryNestedInput
+        unionSecretaryOf?: FixedClassUncheckedUpdateManyWithoutUnionSecretaryNestedInput
         subjectClassStudent?: StudentSubjectScoreUncheckedUpdateManyWithoutStudentNestedInput
         studentTrainingScore?: StudentTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutStudentNestedInput
@@ -622053,6 +623421,8 @@ export namespace Prisma {
         graduated?: boolean
         classMonitorId?: string | null
         unionLeaderId?: string | null
+        deputyUnionSecretaryId?: string | null
+        unionSecretaryId?: string | null
         trainingCourseId: string
         lecturerManagementId?: string | null
         staffManagementId?: string | null
@@ -622561,6 +623931,8 @@ export namespace Prisma {
         classType?: EnumFixedClassTypeFieldUpdateOperationsInput | $Enums.FixedClassType
         classMonitor?: StudentUpdateOneWithoutClassMonitorNestedInput
         unionLeader?: StudentUpdateOneWithoutUnionLeaderOfNestedInput
+        deputyUnionSecretary?: StudentUpdateOneWithoutDeputyUnionSecretaryOfNestedInput
+        unionSecretary?: StudentUpdateOneWithoutUnionSecretaryOfNestedInput
         trainingCourse?: TrainingCourseUpdateOneRequiredWithoutFixedClassNestedInput
         lecturerManagement?: LecturerUpdateOneWithoutManageFixedClassNestedInput
         staffManagement?: StaffUpdateOneWithoutFixedClassNestedInput
@@ -622587,6 +623959,8 @@ export namespace Prisma {
         graduated?: BoolFieldUpdateOperationsInput | boolean
         classMonitorId?: NullableStringFieldUpdateOperationsInput | string | null
         unionLeaderId?: NullableStringFieldUpdateOperationsInput | string | null
+        deputyUnionSecretaryId?: NullableStringFieldUpdateOperationsInput | string | null
+        unionSecretaryId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingCourseId?: StringFieldUpdateOperationsInput | string
         lecturerManagementId?: NullableStringFieldUpdateOperationsInput | string | null
         staffManagementId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -622614,6 +623988,8 @@ export namespace Prisma {
         graduated?: BoolFieldUpdateOperationsInput | boolean
         classMonitorId?: NullableStringFieldUpdateOperationsInput | string | null
         unionLeaderId?: NullableStringFieldUpdateOperationsInput | string | null
+        deputyUnionSecretaryId?: NullableStringFieldUpdateOperationsInput | string | null
+        unionSecretaryId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingCourseId?: StringFieldUpdateOperationsInput | string
         lecturerManagementId?: NullableStringFieldUpdateOperationsInput | string | null
         staffManagementId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -623480,8 +624856,10 @@ export namespace Prisma {
         militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         trainingLocation?: TrainingLocationUpdateOneWithoutStudentsNestedInput
         priorityObject?: PriorityObjectUpdateManyWithoutStudentsNestedInput
-        classMonitor?: FixedClassUpdateOneWithoutClassMonitorNestedInput
-        unionLeaderOf?: FixedClassUpdateOneWithoutUnionLeaderNestedInput
+        classMonitor?: FixedClassUpdateManyWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUpdateManyWithoutUnionLeaderNestedInput
+        deputyUnionSecretaryOf?: FixedClassUpdateManyWithoutDeputyUnionSecretaryNestedInput
+        unionSecretaryOf?: FixedClassUpdateManyWithoutUnionSecretaryNestedInput
         fixedClass?: FixedClassUpdateOneWithoutStudentsNestedInput
         subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutStudentNestedInput
         userProfile?: UserProfileUpdateOneRequiredWithoutEducationAndTrainingNestedInput
@@ -623558,8 +624936,10 @@ export namespace Prisma {
         strengthTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         priorityObject?: PriorityObjectUncheckedUpdateManyWithoutStudentsNestedInput
-        classMonitor?: FixedClassUncheckedUpdateOneWithoutClassMonitorNestedInput
-        unionLeaderOf?: FixedClassUncheckedUpdateOneWithoutUnionLeaderNestedInput
+        classMonitor?: FixedClassUncheckedUpdateManyWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUncheckedUpdateManyWithoutUnionLeaderNestedInput
+        deputyUnionSecretaryOf?: FixedClassUncheckedUpdateManyWithoutDeputyUnionSecretaryNestedInput
+        unionSecretaryOf?: FixedClassUncheckedUpdateManyWithoutUnionSecretaryNestedInput
         subjectClassStudent?: StudentSubjectScoreUncheckedUpdateManyWithoutStudentNestedInput
         studentTrainingScore?: StudentTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutStudentNestedInput
@@ -638007,6 +639387,8 @@ export namespace Prisma {
         graduated?: boolean
         classMonitorId?: string | null
         unionLeaderId?: string | null
+        deputyUnionSecretaryId?: string | null
+        unionSecretaryId?: string | null
         trainingCourseId: string
         managementOrganizationId?: string | null
         lecturerManagementId?: string | null
@@ -638030,6 +639412,8 @@ export namespace Prisma {
         classType?: EnumFixedClassTypeFieldUpdateOperationsInput | $Enums.FixedClassType
         classMonitor?: StudentUpdateOneWithoutClassMonitorNestedInput
         unionLeader?: StudentUpdateOneWithoutUnionLeaderOfNestedInput
+        deputyUnionSecretary?: StudentUpdateOneWithoutDeputyUnionSecretaryOfNestedInput
+        unionSecretary?: StudentUpdateOneWithoutUnionSecretaryOfNestedInput
         trainingCourse?: TrainingCourseUpdateOneRequiredWithoutFixedClassNestedInput
         managementOrganization?: DM_DonViUpdateOneWithoutFixedClassNestedInput
         lecturerManagement?: LecturerUpdateOneWithoutManageFixedClassNestedInput
@@ -638056,6 +639440,8 @@ export namespace Prisma {
         graduated?: BoolFieldUpdateOperationsInput | boolean
         classMonitorId?: NullableStringFieldUpdateOperationsInput | string | null
         unionLeaderId?: NullableStringFieldUpdateOperationsInput | string | null
+        deputyUnionSecretaryId?: NullableStringFieldUpdateOperationsInput | string | null
+        unionSecretaryId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingCourseId?: StringFieldUpdateOperationsInput | string
         managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerManagementId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -638083,6 +639469,8 @@ export namespace Prisma {
         graduated?: BoolFieldUpdateOperationsInput | boolean
         classMonitorId?: NullableStringFieldUpdateOperationsInput | string | null
         unionLeaderId?: NullableStringFieldUpdateOperationsInput | string | null
+        deputyUnionSecretaryId?: NullableStringFieldUpdateOperationsInput | string | null
+        unionSecretaryId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingCourseId?: StringFieldUpdateOperationsInput | string
         managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerManagementId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -641673,6 +643061,8 @@ export namespace Prisma {
         graduated?: boolean
         classMonitorId?: string | null
         unionLeaderId?: string | null
+        deputyUnionSecretaryId?: string | null
+        unionSecretaryId?: string | null
         managementOrganizationId?: string | null
         lecturerManagementId?: string | null
         staffManagementId?: string | null
@@ -642066,6 +643456,8 @@ export namespace Prisma {
         classType?: EnumFixedClassTypeFieldUpdateOperationsInput | $Enums.FixedClassType
         classMonitor?: StudentUpdateOneWithoutClassMonitorNestedInput
         unionLeader?: StudentUpdateOneWithoutUnionLeaderOfNestedInput
+        deputyUnionSecretary?: StudentUpdateOneWithoutDeputyUnionSecretaryOfNestedInput
+        unionSecretary?: StudentUpdateOneWithoutUnionSecretaryOfNestedInput
         managementOrganization?: DM_DonViUpdateOneWithoutFixedClassNestedInput
         lecturerManagement?: LecturerUpdateOneWithoutManageFixedClassNestedInput
         staffManagement?: StaffUpdateOneWithoutFixedClassNestedInput
@@ -642092,6 +643484,8 @@ export namespace Prisma {
         graduated?: BoolFieldUpdateOperationsInput | boolean
         classMonitorId?: NullableStringFieldUpdateOperationsInput | string | null
         unionLeaderId?: NullableStringFieldUpdateOperationsInput | string | null
+        deputyUnionSecretaryId?: NullableStringFieldUpdateOperationsInput | string | null
+        unionSecretaryId?: NullableStringFieldUpdateOperationsInput | string | null
         managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerManagementId?: NullableStringFieldUpdateOperationsInput | string | null
         staffManagementId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -642119,6 +643513,8 @@ export namespace Prisma {
         graduated?: BoolFieldUpdateOperationsInput | boolean
         classMonitorId?: NullableStringFieldUpdateOperationsInput | string | null
         unionLeaderId?: NullableStringFieldUpdateOperationsInput | string | null
+        deputyUnionSecretaryId?: NullableStringFieldUpdateOperationsInput | string | null
+        unionSecretaryId?: NullableStringFieldUpdateOperationsInput | string | null
         managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerManagementId?: NullableStringFieldUpdateOperationsInput | string | null
         staffManagementId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -643044,8 +644440,10 @@ export namespace Prisma {
         militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         trainingLocation?: TrainingLocationUpdateOneWithoutStudentsNestedInput
         priorityObject?: PriorityObjectUpdateManyWithoutStudentsNestedInput
-        classMonitor?: FixedClassUpdateOneWithoutClassMonitorNestedInput
-        unionLeaderOf?: FixedClassUpdateOneWithoutUnionLeaderNestedInput
+        classMonitor?: FixedClassUpdateManyWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUpdateManyWithoutUnionLeaderNestedInput
+        deputyUnionSecretaryOf?: FixedClassUpdateManyWithoutDeputyUnionSecretaryNestedInput
+        unionSecretaryOf?: FixedClassUpdateManyWithoutUnionSecretaryNestedInput
         subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutStudentNestedInput
         userProfile?: UserProfileUpdateOneRequiredWithoutEducationAndTrainingNestedInput
         registrationArea?: DM_KhuVuc_DiaLyUpdateOneWithoutStudentNestedInput
@@ -643122,8 +644520,10 @@ export namespace Prisma {
         strengthTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         priorityObject?: PriorityObjectUncheckedUpdateManyWithoutStudentsNestedInput
-        classMonitor?: FixedClassUncheckedUpdateOneWithoutClassMonitorNestedInput
-        unionLeaderOf?: FixedClassUncheckedUpdateOneWithoutUnionLeaderNestedInput
+        classMonitor?: FixedClassUncheckedUpdateManyWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUncheckedUpdateManyWithoutUnionLeaderNestedInput
+        deputyUnionSecretaryOf?: FixedClassUncheckedUpdateManyWithoutDeputyUnionSecretaryNestedInput
+        unionSecretaryOf?: FixedClassUncheckedUpdateManyWithoutUnionSecretaryNestedInput
         subjectClassStudent?: StudentSubjectScoreUncheckedUpdateManyWithoutStudentNestedInput
         studentTrainingScore?: StudentTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutStudentNestedInput
@@ -644202,8 +645602,10 @@ export namespace Prisma {
         militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         trainingLocation?: TrainingLocationUpdateOneWithoutStudentsNestedInput
         priorityObject?: PriorityObjectUpdateManyWithoutStudentsNestedInput
-        classMonitor?: FixedClassUpdateOneWithoutClassMonitorNestedInput
-        unionLeaderOf?: FixedClassUpdateOneWithoutUnionLeaderNestedInput
+        classMonitor?: FixedClassUpdateManyWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUpdateManyWithoutUnionLeaderNestedInput
+        deputyUnionSecretaryOf?: FixedClassUpdateManyWithoutDeputyUnionSecretaryNestedInput
+        unionSecretaryOf?: FixedClassUpdateManyWithoutUnionSecretaryNestedInput
         fixedClass?: FixedClassUpdateOneWithoutStudentsNestedInput
         subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutStudentNestedInput
         userProfile?: UserProfileUpdateOneRequiredWithoutEducationAndTrainingNestedInput
@@ -644280,8 +645682,10 @@ export namespace Prisma {
         strengthTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         priorityObject?: PriorityObjectUncheckedUpdateManyWithoutStudentsNestedInput
-        classMonitor?: FixedClassUncheckedUpdateOneWithoutClassMonitorNestedInput
-        unionLeaderOf?: FixedClassUncheckedUpdateOneWithoutUnionLeaderNestedInput
+        classMonitor?: FixedClassUncheckedUpdateManyWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUncheckedUpdateManyWithoutUnionLeaderNestedInput
+        deputyUnionSecretaryOf?: FixedClassUncheckedUpdateManyWithoutDeputyUnionSecretaryNestedInput
+        unionSecretaryOf?: FixedClassUncheckedUpdateManyWithoutUnionSecretaryNestedInput
         subjectClassStudent?: StudentSubjectScoreUncheckedUpdateManyWithoutStudentNestedInput
         studentTrainingScore?: StudentTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutStudentNestedInput
@@ -644395,8 +645799,10 @@ export namespace Prisma {
         militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         trainingLocation?: TrainingLocationUpdateOneWithoutStudentsNestedInput
         priorityObject?: PriorityObjectUpdateManyWithoutStudentsNestedInput
-        classMonitor?: FixedClassUpdateOneWithoutClassMonitorNestedInput
-        unionLeaderOf?: FixedClassUpdateOneWithoutUnionLeaderNestedInput
+        classMonitor?: FixedClassUpdateManyWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUpdateManyWithoutUnionLeaderNestedInput
+        deputyUnionSecretaryOf?: FixedClassUpdateManyWithoutDeputyUnionSecretaryNestedInput
+        unionSecretaryOf?: FixedClassUpdateManyWithoutUnionSecretaryNestedInput
         fixedClass?: FixedClassUpdateOneWithoutStudentsNestedInput
         subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutStudentNestedInput
         userProfile?: UserProfileUpdateOneRequiredWithoutEducationAndTrainingNestedInput
@@ -644473,8 +645879,10 @@ export namespace Prisma {
         strengthTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         priorityObject?: PriorityObjectUncheckedUpdateManyWithoutStudentsNestedInput
-        classMonitor?: FixedClassUncheckedUpdateOneWithoutClassMonitorNestedInput
-        unionLeaderOf?: FixedClassUncheckedUpdateOneWithoutUnionLeaderNestedInput
+        classMonitor?: FixedClassUncheckedUpdateManyWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUncheckedUpdateManyWithoutUnionLeaderNestedInput
+        deputyUnionSecretaryOf?: FixedClassUncheckedUpdateManyWithoutDeputyUnionSecretaryNestedInput
+        unionSecretaryOf?: FixedClassUncheckedUpdateManyWithoutUnionSecretaryNestedInput
         subjectClassStudent?: StudentSubjectScoreUncheckedUpdateManyWithoutStudentNestedInput
         studentTrainingScore?: StudentTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutStudentNestedInput
@@ -647304,6 +648712,8 @@ export namespace Prisma {
         classType?: EnumFixedClassTypeFieldUpdateOperationsInput | $Enums.FixedClassType
         classMonitor?: StudentUpdateOneWithoutClassMonitorNestedInput
         unionLeader?: StudentUpdateOneWithoutUnionLeaderOfNestedInput
+        deputyUnionSecretary?: StudentUpdateOneWithoutDeputyUnionSecretaryOfNestedInput
+        unionSecretary?: StudentUpdateOneWithoutUnionSecretaryOfNestedInput
         trainingCourse?: TrainingCourseUpdateOneRequiredWithoutFixedClassNestedInput
         managementOrganization?: DM_DonViUpdateOneWithoutFixedClassNestedInput
         lecturerManagement?: LecturerUpdateOneWithoutManageFixedClassNestedInput
@@ -647330,6 +648740,8 @@ export namespace Prisma {
         graduated?: BoolFieldUpdateOperationsInput | boolean
         classMonitorId?: NullableStringFieldUpdateOperationsInput | string | null
         unionLeaderId?: NullableStringFieldUpdateOperationsInput | string | null
+        deputyUnionSecretaryId?: NullableStringFieldUpdateOperationsInput | string | null
+        unionSecretaryId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingCourseId?: StringFieldUpdateOperationsInput | string
         managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerManagementId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -647357,6 +648769,8 @@ export namespace Prisma {
         graduated?: BoolFieldUpdateOperationsInput | boolean
         classMonitorId?: NullableStringFieldUpdateOperationsInput | string | null
         unionLeaderId?: NullableStringFieldUpdateOperationsInput | string | null
+        deputyUnionSecretaryId?: NullableStringFieldUpdateOperationsInput | string | null
+        unionSecretaryId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingCourseId?: StringFieldUpdateOperationsInput | string
         managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerManagementId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -650488,8 +651902,10 @@ export namespace Prisma {
         strengthTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         trainingLocation?: TrainingLocationUpdateOneWithoutStudentsNestedInput
-        classMonitor?: FixedClassUpdateOneWithoutClassMonitorNestedInput
-        unionLeaderOf?: FixedClassUpdateOneWithoutUnionLeaderNestedInput
+        classMonitor?: FixedClassUpdateManyWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUpdateManyWithoutUnionLeaderNestedInput
+        deputyUnionSecretaryOf?: FixedClassUpdateManyWithoutDeputyUnionSecretaryNestedInput
+        unionSecretaryOf?: FixedClassUpdateManyWithoutUnionSecretaryNestedInput
         fixedClass?: FixedClassUpdateOneWithoutStudentsNestedInput
         subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutStudentNestedInput
         userProfile?: UserProfileUpdateOneRequiredWithoutEducationAndTrainingNestedInput
@@ -650567,8 +651983,10 @@ export namespace Prisma {
         ITCertificationPass?: BoolFieldUpdateOperationsInput | boolean
         strengthTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
-        classMonitor?: FixedClassUncheckedUpdateOneWithoutClassMonitorNestedInput
-        unionLeaderOf?: FixedClassUncheckedUpdateOneWithoutUnionLeaderNestedInput
+        classMonitor?: FixedClassUncheckedUpdateManyWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUncheckedUpdateManyWithoutUnionLeaderNestedInput
+        deputyUnionSecretaryOf?: FixedClassUncheckedUpdateManyWithoutDeputyUnionSecretaryNestedInput
+        unionSecretaryOf?: FixedClassUncheckedUpdateManyWithoutUnionSecretaryNestedInput
         subjectClassStudent?: StudentSubjectScoreUncheckedUpdateManyWithoutStudentNestedInput
         studentTrainingScore?: StudentTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutStudentNestedInput
@@ -651294,8 +652712,10 @@ export namespace Prisma {
         strengthTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         priorityObject?: PriorityObjectUpdateManyWithoutStudentsNestedInput
-        classMonitor?: FixedClassUpdateOneWithoutClassMonitorNestedInput
-        unionLeaderOf?: FixedClassUpdateOneWithoutUnionLeaderNestedInput
+        classMonitor?: FixedClassUpdateManyWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUpdateManyWithoutUnionLeaderNestedInput
+        deputyUnionSecretaryOf?: FixedClassUpdateManyWithoutDeputyUnionSecretaryNestedInput
+        unionSecretaryOf?: FixedClassUpdateManyWithoutUnionSecretaryNestedInput
         fixedClass?: FixedClassUpdateOneWithoutStudentsNestedInput
         subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutStudentNestedInput
         userProfile?: UserProfileUpdateOneRequiredWithoutEducationAndTrainingNestedInput
@@ -651373,8 +652793,10 @@ export namespace Prisma {
         strengthTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         priorityObject?: PriorityObjectUncheckedUpdateManyWithoutStudentsNestedInput
-        classMonitor?: FixedClassUncheckedUpdateOneWithoutClassMonitorNestedInput
-        unionLeaderOf?: FixedClassUncheckedUpdateOneWithoutUnionLeaderNestedInput
+        classMonitor?: FixedClassUncheckedUpdateManyWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUncheckedUpdateManyWithoutUnionLeaderNestedInput
+        deputyUnionSecretaryOf?: FixedClassUncheckedUpdateManyWithoutDeputyUnionSecretaryNestedInput
+        unionSecretaryOf?: FixedClassUncheckedUpdateManyWithoutUnionSecretaryNestedInput
         subjectClassStudent?: StudentSubjectScoreUncheckedUpdateManyWithoutStudentNestedInput
         studentTrainingScore?: StudentTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutStudentNestedInput
@@ -654680,6 +656102,102 @@ export namespace Prisma {
         proposalGraduation?: NullableStringFieldUpdateOperationsInput | string | null
         skipCertificateCheck?: NullableBoolFieldUpdateOperationsInput | boolean | null
     };
+    export type FixedClassCreateManyClassMonitorInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        name: string
+        summary?: string | null
+        startYear?: number | null
+        graduated?: boolean
+        unionLeaderId?: string | null
+        deputyUnionSecretaryId?: string | null
+        unionSecretaryId?: string | null
+        trainingCourseId: string
+        managementOrganizationId?: string | null
+        lecturerManagementId?: string | null
+        staffManagementId?: string | null
+        curriculumVersionId?: string | null
+        classType?: $Enums.FixedClassType
+        planTrainingSubjectId?: string | null
+    };
+    export type FixedClassCreateManyUnionLeaderInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        name: string
+        summary?: string | null
+        startYear?: number | null
+        graduated?: boolean
+        classMonitorId?: string | null
+        deputyUnionSecretaryId?: string | null
+        unionSecretaryId?: string | null
+        trainingCourseId: string
+        managementOrganizationId?: string | null
+        lecturerManagementId?: string | null
+        staffManagementId?: string | null
+        curriculumVersionId?: string | null
+        classType?: $Enums.FixedClassType
+        planTrainingSubjectId?: string | null
+    };
+    export type FixedClassCreateManyDeputyUnionSecretaryInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        name: string
+        summary?: string | null
+        startYear?: number | null
+        graduated?: boolean
+        classMonitorId?: string | null
+        unionLeaderId?: string | null
+        unionSecretaryId?: string | null
+        trainingCourseId: string
+        managementOrganizationId?: string | null
+        lecturerManagementId?: string | null
+        staffManagementId?: string | null
+        curriculumVersionId?: string | null
+        classType?: $Enums.FixedClassType
+        planTrainingSubjectId?: string | null
+    };
+    export type FixedClassCreateManyUnionSecretaryInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        name: string
+        summary?: string | null
+        startYear?: number | null
+        graduated?: boolean
+        classMonitorId?: string | null
+        unionLeaderId?: string | null
+        deputyUnionSecretaryId?: string | null
+        trainingCourseId: string
+        managementOrganizationId?: string | null
+        lecturerManagementId?: string | null
+        staffManagementId?: string | null
+        curriculumVersionId?: string | null
+        classType?: $Enums.FixedClassType
+        planTrainingSubjectId?: string | null
+    };
     export type StudentSubjectScoreCreateManyStudentInput = {
         id?: string
         code?: string | null
@@ -655161,6 +656679,334 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
+    };
+    export type FixedClassUpdateWithoutClassMonitorInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+        summary?: NullableStringFieldUpdateOperationsInput | string | null
+        startYear?: NullableIntFieldUpdateOperationsInput | number | null
+        graduated?: BoolFieldUpdateOperationsInput | boolean
+        classType?: EnumFixedClassTypeFieldUpdateOperationsInput | $Enums.FixedClassType
+        unionLeader?: StudentUpdateOneWithoutUnionLeaderOfNestedInput
+        deputyUnionSecretary?: StudentUpdateOneWithoutDeputyUnionSecretaryOfNestedInput
+        unionSecretary?: StudentUpdateOneWithoutUnionSecretaryOfNestedInput
+        trainingCourse?: TrainingCourseUpdateOneRequiredWithoutFixedClassNestedInput
+        managementOrganization?: DM_DonViUpdateOneWithoutFixedClassNestedInput
+        lecturerManagement?: LecturerUpdateOneWithoutManageFixedClassNestedInput
+        staffManagement?: StaffUpdateOneWithoutFixedClassNestedInput
+        students?: StudentUpdateManyWithoutFixedClassNestedInput
+        curriculumVersion?: CurriculumVersionUpdateOneWithoutFixedClassNestedInput
+        subjectClasses?: SubjectClassUpdateManyWithoutFixedClassesNestedInput
+        notifications?: NotificationUpdateManyWithoutTargetClassesNestedInput
+        surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutFixedClassesNestedInput
+        scoreLinkSheets?: ScoreLinkSheetUpdateManyWithoutFixedClassNestedInput
+        planTrainingSubject?: PlanTrainingSubjectUpdateOneWithoutFixedClassNestedInput
+    };
+    export type FixedClassUncheckedUpdateWithoutClassMonitorInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+        summary?: NullableStringFieldUpdateOperationsInput | string | null
+        startYear?: NullableIntFieldUpdateOperationsInput | number | null
+        graduated?: BoolFieldUpdateOperationsInput | boolean
+        unionLeaderId?: NullableStringFieldUpdateOperationsInput | string | null
+        deputyUnionSecretaryId?: NullableStringFieldUpdateOperationsInput | string | null
+        unionSecretaryId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingCourseId?: StringFieldUpdateOperationsInput | string
+        managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
+        lecturerManagementId?: NullableStringFieldUpdateOperationsInput | string | null
+        staffManagementId?: NullableStringFieldUpdateOperationsInput | string | null
+        curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+        classType?: EnumFixedClassTypeFieldUpdateOperationsInput | $Enums.FixedClassType
+        planTrainingSubjectId?: NullableStringFieldUpdateOperationsInput | string | null
+        students?: StudentUncheckedUpdateManyWithoutFixedClassNestedInput
+        subjectClasses?: SubjectClassUncheckedUpdateManyWithoutFixedClassesNestedInput
+        notifications?: NotificationUncheckedUpdateManyWithoutTargetClassesNestedInput
+        surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutFixedClassesNestedInput
+        scoreLinkSheets?: ScoreLinkSheetUncheckedUpdateManyWithoutFixedClassNestedInput
+    };
+    export type FixedClassUncheckedUpdateManyWithoutClassMonitorInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+        summary?: NullableStringFieldUpdateOperationsInput | string | null
+        startYear?: NullableIntFieldUpdateOperationsInput | number | null
+        graduated?: BoolFieldUpdateOperationsInput | boolean
+        unionLeaderId?: NullableStringFieldUpdateOperationsInput | string | null
+        deputyUnionSecretaryId?: NullableStringFieldUpdateOperationsInput | string | null
+        unionSecretaryId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingCourseId?: StringFieldUpdateOperationsInput | string
+        managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
+        lecturerManagementId?: NullableStringFieldUpdateOperationsInput | string | null
+        staffManagementId?: NullableStringFieldUpdateOperationsInput | string | null
+        curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+        classType?: EnumFixedClassTypeFieldUpdateOperationsInput | $Enums.FixedClassType
+        planTrainingSubjectId?: NullableStringFieldUpdateOperationsInput | string | null
+    };
+    export type FixedClassUpdateWithoutUnionLeaderInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+        summary?: NullableStringFieldUpdateOperationsInput | string | null
+        startYear?: NullableIntFieldUpdateOperationsInput | number | null
+        graduated?: BoolFieldUpdateOperationsInput | boolean
+        classType?: EnumFixedClassTypeFieldUpdateOperationsInput | $Enums.FixedClassType
+        classMonitor?: StudentUpdateOneWithoutClassMonitorNestedInput
+        deputyUnionSecretary?: StudentUpdateOneWithoutDeputyUnionSecretaryOfNestedInput
+        unionSecretary?: StudentUpdateOneWithoutUnionSecretaryOfNestedInput
+        trainingCourse?: TrainingCourseUpdateOneRequiredWithoutFixedClassNestedInput
+        managementOrganization?: DM_DonViUpdateOneWithoutFixedClassNestedInput
+        lecturerManagement?: LecturerUpdateOneWithoutManageFixedClassNestedInput
+        staffManagement?: StaffUpdateOneWithoutFixedClassNestedInput
+        students?: StudentUpdateManyWithoutFixedClassNestedInput
+        curriculumVersion?: CurriculumVersionUpdateOneWithoutFixedClassNestedInput
+        subjectClasses?: SubjectClassUpdateManyWithoutFixedClassesNestedInput
+        notifications?: NotificationUpdateManyWithoutTargetClassesNestedInput
+        surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutFixedClassesNestedInput
+        scoreLinkSheets?: ScoreLinkSheetUpdateManyWithoutFixedClassNestedInput
+        planTrainingSubject?: PlanTrainingSubjectUpdateOneWithoutFixedClassNestedInput
+    };
+    export type FixedClassUncheckedUpdateWithoutUnionLeaderInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+        summary?: NullableStringFieldUpdateOperationsInput | string | null
+        startYear?: NullableIntFieldUpdateOperationsInput | number | null
+        graduated?: BoolFieldUpdateOperationsInput | boolean
+        classMonitorId?: NullableStringFieldUpdateOperationsInput | string | null
+        deputyUnionSecretaryId?: NullableStringFieldUpdateOperationsInput | string | null
+        unionSecretaryId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingCourseId?: StringFieldUpdateOperationsInput | string
+        managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
+        lecturerManagementId?: NullableStringFieldUpdateOperationsInput | string | null
+        staffManagementId?: NullableStringFieldUpdateOperationsInput | string | null
+        curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+        classType?: EnumFixedClassTypeFieldUpdateOperationsInput | $Enums.FixedClassType
+        planTrainingSubjectId?: NullableStringFieldUpdateOperationsInput | string | null
+        students?: StudentUncheckedUpdateManyWithoutFixedClassNestedInput
+        subjectClasses?: SubjectClassUncheckedUpdateManyWithoutFixedClassesNestedInput
+        notifications?: NotificationUncheckedUpdateManyWithoutTargetClassesNestedInput
+        surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutFixedClassesNestedInput
+        scoreLinkSheets?: ScoreLinkSheetUncheckedUpdateManyWithoutFixedClassNestedInput
+    };
+    export type FixedClassUncheckedUpdateManyWithoutUnionLeaderInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+        summary?: NullableStringFieldUpdateOperationsInput | string | null
+        startYear?: NullableIntFieldUpdateOperationsInput | number | null
+        graduated?: BoolFieldUpdateOperationsInput | boolean
+        classMonitorId?: NullableStringFieldUpdateOperationsInput | string | null
+        deputyUnionSecretaryId?: NullableStringFieldUpdateOperationsInput | string | null
+        unionSecretaryId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingCourseId?: StringFieldUpdateOperationsInput | string
+        managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
+        lecturerManagementId?: NullableStringFieldUpdateOperationsInput | string | null
+        staffManagementId?: NullableStringFieldUpdateOperationsInput | string | null
+        curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+        classType?: EnumFixedClassTypeFieldUpdateOperationsInput | $Enums.FixedClassType
+        planTrainingSubjectId?: NullableStringFieldUpdateOperationsInput | string | null
+    };
+    export type FixedClassUpdateWithoutDeputyUnionSecretaryInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+        summary?: NullableStringFieldUpdateOperationsInput | string | null
+        startYear?: NullableIntFieldUpdateOperationsInput | number | null
+        graduated?: BoolFieldUpdateOperationsInput | boolean
+        classType?: EnumFixedClassTypeFieldUpdateOperationsInput | $Enums.FixedClassType
+        classMonitor?: StudentUpdateOneWithoutClassMonitorNestedInput
+        unionLeader?: StudentUpdateOneWithoutUnionLeaderOfNestedInput
+        unionSecretary?: StudentUpdateOneWithoutUnionSecretaryOfNestedInput
+        trainingCourse?: TrainingCourseUpdateOneRequiredWithoutFixedClassNestedInput
+        managementOrganization?: DM_DonViUpdateOneWithoutFixedClassNestedInput
+        lecturerManagement?: LecturerUpdateOneWithoutManageFixedClassNestedInput
+        staffManagement?: StaffUpdateOneWithoutFixedClassNestedInput
+        students?: StudentUpdateManyWithoutFixedClassNestedInput
+        curriculumVersion?: CurriculumVersionUpdateOneWithoutFixedClassNestedInput
+        subjectClasses?: SubjectClassUpdateManyWithoutFixedClassesNestedInput
+        notifications?: NotificationUpdateManyWithoutTargetClassesNestedInput
+        surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutFixedClassesNestedInput
+        scoreLinkSheets?: ScoreLinkSheetUpdateManyWithoutFixedClassNestedInput
+        planTrainingSubject?: PlanTrainingSubjectUpdateOneWithoutFixedClassNestedInput
+    };
+    export type FixedClassUncheckedUpdateWithoutDeputyUnionSecretaryInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+        summary?: NullableStringFieldUpdateOperationsInput | string | null
+        startYear?: NullableIntFieldUpdateOperationsInput | number | null
+        graduated?: BoolFieldUpdateOperationsInput | boolean
+        classMonitorId?: NullableStringFieldUpdateOperationsInput | string | null
+        unionLeaderId?: NullableStringFieldUpdateOperationsInput | string | null
+        unionSecretaryId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingCourseId?: StringFieldUpdateOperationsInput | string
+        managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
+        lecturerManagementId?: NullableStringFieldUpdateOperationsInput | string | null
+        staffManagementId?: NullableStringFieldUpdateOperationsInput | string | null
+        curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+        classType?: EnumFixedClassTypeFieldUpdateOperationsInput | $Enums.FixedClassType
+        planTrainingSubjectId?: NullableStringFieldUpdateOperationsInput | string | null
+        students?: StudentUncheckedUpdateManyWithoutFixedClassNestedInput
+        subjectClasses?: SubjectClassUncheckedUpdateManyWithoutFixedClassesNestedInput
+        notifications?: NotificationUncheckedUpdateManyWithoutTargetClassesNestedInput
+        surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutFixedClassesNestedInput
+        scoreLinkSheets?: ScoreLinkSheetUncheckedUpdateManyWithoutFixedClassNestedInput
+    };
+    export type FixedClassUncheckedUpdateManyWithoutDeputyUnionSecretaryInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+        summary?: NullableStringFieldUpdateOperationsInput | string | null
+        startYear?: NullableIntFieldUpdateOperationsInput | number | null
+        graduated?: BoolFieldUpdateOperationsInput | boolean
+        classMonitorId?: NullableStringFieldUpdateOperationsInput | string | null
+        unionLeaderId?: NullableStringFieldUpdateOperationsInput | string | null
+        unionSecretaryId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingCourseId?: StringFieldUpdateOperationsInput | string
+        managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
+        lecturerManagementId?: NullableStringFieldUpdateOperationsInput | string | null
+        staffManagementId?: NullableStringFieldUpdateOperationsInput | string | null
+        curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+        classType?: EnumFixedClassTypeFieldUpdateOperationsInput | $Enums.FixedClassType
+        planTrainingSubjectId?: NullableStringFieldUpdateOperationsInput | string | null
+    };
+    export type FixedClassUpdateWithoutUnionSecretaryInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+        summary?: NullableStringFieldUpdateOperationsInput | string | null
+        startYear?: NullableIntFieldUpdateOperationsInput | number | null
+        graduated?: BoolFieldUpdateOperationsInput | boolean
+        classType?: EnumFixedClassTypeFieldUpdateOperationsInput | $Enums.FixedClassType
+        classMonitor?: StudentUpdateOneWithoutClassMonitorNestedInput
+        unionLeader?: StudentUpdateOneWithoutUnionLeaderOfNestedInput
+        deputyUnionSecretary?: StudentUpdateOneWithoutDeputyUnionSecretaryOfNestedInput
+        trainingCourse?: TrainingCourseUpdateOneRequiredWithoutFixedClassNestedInput
+        managementOrganization?: DM_DonViUpdateOneWithoutFixedClassNestedInput
+        lecturerManagement?: LecturerUpdateOneWithoutManageFixedClassNestedInput
+        staffManagement?: StaffUpdateOneWithoutFixedClassNestedInput
+        students?: StudentUpdateManyWithoutFixedClassNestedInput
+        curriculumVersion?: CurriculumVersionUpdateOneWithoutFixedClassNestedInput
+        subjectClasses?: SubjectClassUpdateManyWithoutFixedClassesNestedInput
+        notifications?: NotificationUpdateManyWithoutTargetClassesNestedInput
+        surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutFixedClassesNestedInput
+        scoreLinkSheets?: ScoreLinkSheetUpdateManyWithoutFixedClassNestedInput
+        planTrainingSubject?: PlanTrainingSubjectUpdateOneWithoutFixedClassNestedInput
+    };
+    export type FixedClassUncheckedUpdateWithoutUnionSecretaryInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+        summary?: NullableStringFieldUpdateOperationsInput | string | null
+        startYear?: NullableIntFieldUpdateOperationsInput | number | null
+        graduated?: BoolFieldUpdateOperationsInput | boolean
+        classMonitorId?: NullableStringFieldUpdateOperationsInput | string | null
+        unionLeaderId?: NullableStringFieldUpdateOperationsInput | string | null
+        deputyUnionSecretaryId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingCourseId?: StringFieldUpdateOperationsInput | string
+        managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
+        lecturerManagementId?: NullableStringFieldUpdateOperationsInput | string | null
+        staffManagementId?: NullableStringFieldUpdateOperationsInput | string | null
+        curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+        classType?: EnumFixedClassTypeFieldUpdateOperationsInput | $Enums.FixedClassType
+        planTrainingSubjectId?: NullableStringFieldUpdateOperationsInput | string | null
+        students?: StudentUncheckedUpdateManyWithoutFixedClassNestedInput
+        subjectClasses?: SubjectClassUncheckedUpdateManyWithoutFixedClassesNestedInput
+        notifications?: NotificationUncheckedUpdateManyWithoutTargetClassesNestedInput
+        surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutFixedClassesNestedInput
+        scoreLinkSheets?: ScoreLinkSheetUncheckedUpdateManyWithoutFixedClassNestedInput
+    };
+    export type FixedClassUncheckedUpdateManyWithoutUnionSecretaryInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+        summary?: NullableStringFieldUpdateOperationsInput | string | null
+        startYear?: NullableIntFieldUpdateOperationsInput | number | null
+        graduated?: BoolFieldUpdateOperationsInput | boolean
+        classMonitorId?: NullableStringFieldUpdateOperationsInput | string | null
+        unionLeaderId?: NullableStringFieldUpdateOperationsInput | string | null
+        deputyUnionSecretaryId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingCourseId?: StringFieldUpdateOperationsInput | string
+        managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
+        lecturerManagementId?: NullableStringFieldUpdateOperationsInput | string | null
+        staffManagementId?: NullableStringFieldUpdateOperationsInput | string | null
+        curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+        classType?: EnumFixedClassTypeFieldUpdateOperationsInput | $Enums.FixedClassType
+        planTrainingSubjectId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type StudentSubjectScoreUpdateWithoutStudentInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -656848,6 +658694,8 @@ export namespace Prisma {
         classType?: EnumFixedClassTypeFieldUpdateOperationsInput | $Enums.FixedClassType
         classMonitor?: StudentUpdateOneWithoutClassMonitorNestedInput
         unionLeader?: StudentUpdateOneWithoutUnionLeaderOfNestedInput
+        deputyUnionSecretary?: StudentUpdateOneWithoutDeputyUnionSecretaryOfNestedInput
+        unionSecretary?: StudentUpdateOneWithoutUnionSecretaryOfNestedInput
         trainingCourse?: TrainingCourseUpdateOneRequiredWithoutFixedClassNestedInput
         managementOrganization?: DM_DonViUpdateOneWithoutFixedClassNestedInput
         lecturerManagement?: LecturerUpdateOneWithoutManageFixedClassNestedInput
@@ -656874,6 +658722,8 @@ export namespace Prisma {
         graduated?: BoolFieldUpdateOperationsInput | boolean
         classMonitorId?: NullableStringFieldUpdateOperationsInput | string | null
         unionLeaderId?: NullableStringFieldUpdateOperationsInput | string | null
+        deputyUnionSecretaryId?: NullableStringFieldUpdateOperationsInput | string | null
+        unionSecretaryId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingCourseId?: StringFieldUpdateOperationsInput | string
         managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerManagementId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -656901,6 +658751,8 @@ export namespace Prisma {
         graduated?: BoolFieldUpdateOperationsInput | boolean
         classMonitorId?: NullableStringFieldUpdateOperationsInput | string | null
         unionLeaderId?: NullableStringFieldUpdateOperationsInput | string | null
+        deputyUnionSecretaryId?: NullableStringFieldUpdateOperationsInput | string | null
+        unionSecretaryId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingCourseId?: StringFieldUpdateOperationsInput | string
         managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerManagementId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -656950,8 +658802,10 @@ export namespace Prisma {
         militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         trainingLocation?: TrainingLocationUpdateOneWithoutStudentsNestedInput
         priorityObject?: PriorityObjectUpdateManyWithoutStudentsNestedInput
-        classMonitor?: FixedClassUpdateOneWithoutClassMonitorNestedInput
-        unionLeaderOf?: FixedClassUpdateOneWithoutUnionLeaderNestedInput
+        classMonitor?: FixedClassUpdateManyWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUpdateManyWithoutUnionLeaderNestedInput
+        deputyUnionSecretaryOf?: FixedClassUpdateManyWithoutDeputyUnionSecretaryNestedInput
+        unionSecretaryOf?: FixedClassUpdateManyWithoutUnionSecretaryNestedInput
         fixedClass?: FixedClassUpdateOneWithoutStudentsNestedInput
         subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutStudentNestedInput
         userProfile?: UserProfileUpdateOneRequiredWithoutEducationAndTrainingNestedInput
@@ -657029,8 +658883,10 @@ export namespace Prisma {
         strengthTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
         priorityObject?: PriorityObjectUncheckedUpdateManyWithoutStudentsNestedInput
-        classMonitor?: FixedClassUncheckedUpdateOneWithoutClassMonitorNestedInput
-        unionLeaderOf?: FixedClassUncheckedUpdateOneWithoutUnionLeaderNestedInput
+        classMonitor?: FixedClassUncheckedUpdateManyWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUncheckedUpdateManyWithoutUnionLeaderNestedInput
+        deputyUnionSecretaryOf?: FixedClassUncheckedUpdateManyWithoutDeputyUnionSecretaryNestedInput
+        unionSecretaryOf?: FixedClassUncheckedUpdateManyWithoutUnionSecretaryNestedInput
         subjectClassStudent?: StudentSubjectScoreUncheckedUpdateManyWithoutStudentNestedInput
         studentTrainingScore?: StudentTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutStudentNestedInput
@@ -658147,6 +660003,8 @@ export namespace Prisma {
         graduated?: boolean
         classMonitorId?: string | null
         unionLeaderId?: string | null
+        deputyUnionSecretaryId?: string | null
+        unionSecretaryId?: string | null
         trainingCourseId: string
         managementOrganizationId?: string | null
         staffManagementId?: string | null
@@ -658989,6 +660847,8 @@ export namespace Prisma {
         classType?: EnumFixedClassTypeFieldUpdateOperationsInput | $Enums.FixedClassType
         classMonitor?: StudentUpdateOneWithoutClassMonitorNestedInput
         unionLeader?: StudentUpdateOneWithoutUnionLeaderOfNestedInput
+        deputyUnionSecretary?: StudentUpdateOneWithoutDeputyUnionSecretaryOfNestedInput
+        unionSecretary?: StudentUpdateOneWithoutUnionSecretaryOfNestedInput
         trainingCourse?: TrainingCourseUpdateOneRequiredWithoutFixedClassNestedInput
         managementOrganization?: DM_DonViUpdateOneWithoutFixedClassNestedInput
         staffManagement?: StaffUpdateOneWithoutFixedClassNestedInput
@@ -659015,6 +660875,8 @@ export namespace Prisma {
         graduated?: BoolFieldUpdateOperationsInput | boolean
         classMonitorId?: NullableStringFieldUpdateOperationsInput | string | null
         unionLeaderId?: NullableStringFieldUpdateOperationsInput | string | null
+        deputyUnionSecretaryId?: NullableStringFieldUpdateOperationsInput | string | null
+        unionSecretaryId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingCourseId?: StringFieldUpdateOperationsInput | string
         managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
         staffManagementId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -659042,6 +660904,8 @@ export namespace Prisma {
         graduated?: BoolFieldUpdateOperationsInput | boolean
         classMonitorId?: NullableStringFieldUpdateOperationsInput | string | null
         unionLeaderId?: NullableStringFieldUpdateOperationsInput | string | null
+        deputyUnionSecretaryId?: NullableStringFieldUpdateOperationsInput | string | null
+        unionSecretaryId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingCourseId?: StringFieldUpdateOperationsInput | string
         managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
         staffManagementId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -665450,6 +667314,8 @@ export namespace Prisma {
         classType?: EnumFixedClassTypeFieldUpdateOperationsInput | $Enums.FixedClassType
         classMonitor?: StudentUpdateOneWithoutClassMonitorNestedInput
         unionLeader?: StudentUpdateOneWithoutUnionLeaderOfNestedInput
+        deputyUnionSecretary?: StudentUpdateOneWithoutDeputyUnionSecretaryOfNestedInput
+        unionSecretary?: StudentUpdateOneWithoutUnionSecretaryOfNestedInput
         trainingCourse?: TrainingCourseUpdateOneRequiredWithoutFixedClassNestedInput
         managementOrganization?: DM_DonViUpdateOneWithoutFixedClassNestedInput
         lecturerManagement?: LecturerUpdateOneWithoutManageFixedClassNestedInput
@@ -665476,6 +667342,8 @@ export namespace Prisma {
         graduated?: BoolFieldUpdateOperationsInput | boolean
         classMonitorId?: NullableStringFieldUpdateOperationsInput | string | null
         unionLeaderId?: NullableStringFieldUpdateOperationsInput | string | null
+        deputyUnionSecretaryId?: NullableStringFieldUpdateOperationsInput | string | null
+        unionSecretaryId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingCourseId?: StringFieldUpdateOperationsInput | string
         managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerManagementId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -665503,6 +667371,8 @@ export namespace Prisma {
         graduated?: BoolFieldUpdateOperationsInput | boolean
         classMonitorId?: NullableStringFieldUpdateOperationsInput | string | null
         unionLeaderId?: NullableStringFieldUpdateOperationsInput | string | null
+        deputyUnionSecretaryId?: NullableStringFieldUpdateOperationsInput | string | null
+        unionSecretaryId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingCourseId?: StringFieldUpdateOperationsInput | string
         managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerManagementId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -668400,6 +670270,8 @@ export namespace Prisma {
         graduated?: boolean
         classMonitorId?: string | null
         unionLeaderId?: string | null
+        deputyUnionSecretaryId?: string | null
+        unionSecretaryId?: string | null
         trainingCourseId: string
         managementOrganizationId?: string | null
         lecturerManagementId?: string | null
@@ -668423,6 +670295,8 @@ export namespace Prisma {
         classType?: EnumFixedClassTypeFieldUpdateOperationsInput | $Enums.FixedClassType
         classMonitor?: StudentUpdateOneWithoutClassMonitorNestedInput
         unionLeader?: StudentUpdateOneWithoutUnionLeaderOfNestedInput
+        deputyUnionSecretary?: StudentUpdateOneWithoutDeputyUnionSecretaryOfNestedInput
+        unionSecretary?: StudentUpdateOneWithoutUnionSecretaryOfNestedInput
         trainingCourse?: TrainingCourseUpdateOneRequiredWithoutFixedClassNestedInput
         managementOrganization?: DM_DonViUpdateOneWithoutFixedClassNestedInput
         lecturerManagement?: LecturerUpdateOneWithoutManageFixedClassNestedInput
@@ -668449,6 +670323,8 @@ export namespace Prisma {
         graduated?: BoolFieldUpdateOperationsInput | boolean
         classMonitorId?: NullableStringFieldUpdateOperationsInput | string | null
         unionLeaderId?: NullableStringFieldUpdateOperationsInput | string | null
+        deputyUnionSecretaryId?: NullableStringFieldUpdateOperationsInput | string | null
+        unionSecretaryId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingCourseId?: StringFieldUpdateOperationsInput | string
         managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerManagementId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -668476,6 +670352,8 @@ export namespace Prisma {
         graduated?: BoolFieldUpdateOperationsInput | boolean
         classMonitorId?: NullableStringFieldUpdateOperationsInput | string | null
         unionLeaderId?: NullableStringFieldUpdateOperationsInput | string | null
+        deputyUnionSecretaryId?: NullableStringFieldUpdateOperationsInput | string | null
+        unionSecretaryId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingCourseId?: StringFieldUpdateOperationsInput | string
         managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerManagementId?: NullableStringFieldUpdateOperationsInput | string | null

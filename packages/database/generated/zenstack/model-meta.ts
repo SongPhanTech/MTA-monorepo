@@ -10417,7 +10417,6 @@ const metadata: ModelMeta = {
                     name: "classMonitorId",
                     type: "String",
                     isOptional: true,
-                    attributes: [{ "name": "@unique", "args": [] }],
                     isForeignKey: true,
                     relationField: 'classMonitor',
                 }, unionLeader: {
@@ -10433,9 +10432,38 @@ const metadata: ModelMeta = {
                     name: "unionLeaderId",
                     type: "String",
                     isOptional: true,
-                    attributes: [{ "name": "@unique", "args": [] }],
                     isForeignKey: true,
                     relationField: 'unionLeader',
+                }, deputyUnionSecretary: {
+                    name: "deputyUnionSecretary",
+                    type: "Student",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "DeputyUnionSecretary" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'deputyUnionSecretaryOf',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "deputyUnionSecretaryId" },
+                }, deputyUnionSecretaryId: {
+                    name: "deputyUnionSecretaryId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'deputyUnionSecretary',
+                }, unionSecretary: {
+                    name: "unionSecretary",
+                    type: "Student",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "UnionSecretary" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'unionSecretaryOf',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "unionSecretaryId" },
+                }, unionSecretaryId: {
+                    name: "unionSecretaryId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'unionSecretary',
                 }, trainingCourse: {
                     name: "trainingCourse",
                     type: "TrainingCourse",
@@ -10571,12 +10599,6 @@ const metadata: ModelMeta = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
-                }, classMonitorId: {
-                    name: "classMonitorId",
-                    fields: ["classMonitorId"]
-                }, unionLeaderId: {
-                    name: "unionLeaderId",
-                    fields: ["unionLeaderId"]
                 }, curriculumVersionId: {
                     name: "curriculumVersionId",
                     fields: ["curriculumVersionId"]
@@ -15522,16 +15544,30 @@ const metadata: ModelMeta = {
                     name: "classMonitor",
                     type: "FixedClass",
                     isDataModel: true,
-                    isOptional: true,
+                    isArray: true,
                     attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "ClassMonitor" }] }],
                     backLink: 'classMonitor',
                 }, unionLeaderOf: {
                     name: "unionLeaderOf",
                     type: "FixedClass",
                     isDataModel: true,
-                    isOptional: true,
+                    isArray: true,
                     attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "UnionLeader" }] }],
                     backLink: 'unionLeader',
+                }, deputyUnionSecretaryOf: {
+                    name: "deputyUnionSecretaryOf",
+                    type: "FixedClass",
+                    isDataModel: true,
+                    isArray: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "DeputyUnionSecretary" }] }],
+                    backLink: 'deputyUnionSecretary',
+                }, unionSecretaryOf: {
+                    name: "unionSecretaryOf",
+                    type: "FixedClass",
+                    isDataModel: true,
+                    isArray: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "UnionSecretary" }] }],
+                    backLink: 'unionSecretary',
                 }, fixedClass: {
                     name: "fixedClass",
                     type: "FixedClass",

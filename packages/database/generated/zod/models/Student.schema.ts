@@ -92,8 +92,10 @@ const baseSchemaWithoutDefaults = z.object({
 const relationSchema = z.object({
     trainingLocation: z.record(z.string(), z.unknown()).optional(),
     priorityObject: z.array(z.unknown()).optional(),
-    classMonitor: z.record(z.string(), z.unknown()).optional(),
-    unionLeaderOf: z.record(z.string(), z.unknown()).optional(),
+    classMonitor: z.array(z.unknown()).optional(),
+    unionLeaderOf: z.array(z.unknown()).optional(),
+    deputyUnionSecretaryOf: z.array(z.unknown()).optional(),
+    unionSecretaryOf: z.array(z.unknown()).optional(),
     fixedClass: z.record(z.string(), z.unknown()).optional(),
     subjectClassStudent: z.array(z.unknown()).optional(),
     userProfile: z.record(z.string(), z.unknown()),

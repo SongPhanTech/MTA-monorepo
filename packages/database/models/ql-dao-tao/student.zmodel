@@ -70,8 +70,10 @@ model Student extends Base {
 
   status                         StudentStatus                    @default(ENROLLED)
 
-  classMonitor                   FixedClass?                      @relation("ClassMonitor")
-  unionLeaderOf                  FixedClass?                      @relation("UnionLeader")
+  classMonitor                   FixedClass[]                      @relation("ClassMonitor") // Lớp trưởng 
+  unionLeaderOf                  FixedClass[]                      @relation("UnionLeader") // Bí thư liên chi đoàn
+  deputyUnionSecretaryOf         FixedClass[]                      @relation("DeputyUnionSecretary") // Phó bí thư liên chi đoàn
+  unionSecretaryOf               FixedClass[]                      @relation("UnionSecretary")       // Bí thư
   fixedClass                     FixedClass?                      @relation(fields: [fixedClassId], references: [id])
   fixedClassId                   String?
   subjectClassStudent            StudentSubjectScore[]
