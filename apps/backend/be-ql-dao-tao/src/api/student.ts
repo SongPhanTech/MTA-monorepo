@@ -713,7 +713,7 @@ app.openapi(debtStatistics, async (c) => {
     studentId: string
     studentCode: string
     fullname: string
-    dateOfBirth: Date | null
+    dateOfBirth: string
     fixedClassCode: string
     subjectCode: string
     subjectName: string
@@ -809,7 +809,7 @@ app.openapi(debtStatistics, async (c) => {
     studentId: string
     studentCode: string
     fullname: string
-    dateOfBirth: Date | null
+    dateOfBirth: string
     fixedClassCode: string
     subjects: Record<string, DebtSubject>
   }
@@ -854,7 +854,6 @@ app.openapi(debtStatistics, async (c) => {
     },
     {} as Record<string, StudentDebtSummary>
   )
-
   const rows = Object.values(studentDebtMap).flatMap((s) => {
     const subjectsArray = Object.values(s.subjects)
     const totalDebtSubject = subjectsArray.length

@@ -31,12 +31,48 @@ import type React from "react"
 import { useEffect, useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 import { DownloadCurriculumTemplateButton } from "@components/ui/download-curriculum-template-button"
+import { $Enums } from "@workspace/db/client"
+type SubjectInBlock = {
+  type: $Enums.SubjectRequirementType
+  useForFinalScore: boolean
+  subject: { credit: number } | null
+}
 
+type TrainingBlock = {
+  electiveCreditsRequired: number
+  subjects: SubjectInBlock[]
+}
 const SESSION_KEYS = {
   FILTERS: "curriculum-filters",
   PAGE: "curriculum-current-page",
 }
+export function calcCurriculumCredits(trainingBlocks: TrainingBlock[] = []) {
+  let required = 0
+  let elective = 0
 
+  for (const block of trainingBlocks) {
+    for (const sub of block.subjects) {
+      if (!sub.useForFinalScore) continue
+
+      if (sub.type === $Enums.SubjectRequirementType.Mandatory) {
+        required += sub.subject?.credit ?? 0
+      }
+    }
+    const blockElective = block.subjects
+      .filter(
+        (sub) =>
+          sub.useForFinalScore &&
+          sub.type !== $Enums.SubjectRequirementType.Mandatory
+      )
+      .reduce((sum, sub) => sum + (sub.subject?.credit ?? 0), 0)
+
+    elective += block.electiveCreditsRequired != null
+  ? Math.min(blockElective, block.electiveCreditsRequired)
+  : blockElective
+  }
+
+  return { required, elective, total: required + elective }
+}
 const createDefaultFilters = (): FilterProps => ({
   searchText: "",
   trainingObjectTypes: undefined,
@@ -278,14 +314,21 @@ export default function TrainingProgramCatalog() {
           yearApplication: true,
           description: true,
           trainingBlocks: {
+            where: { deletedAt: null },
             select: {
+              electiveCreditsRequired: true, 
               subjects: {
-                select: {
-                  subject: { select: { credit: true } },
+              where: { deletedAt: null },
+              select: {
+                type: true,              
+                useForFinalScore: true,  
+                subject: {
+                  select: { credit: true },
                 },
-              },
+               },
             },
           },
+        },
           trainingObjectType: true,
           documentFiles: true,
           fixedClass: {
@@ -645,57 +688,32 @@ export default function TrainingProgramCatalog() {
                 },
               },
               {
-                title: <Tooltip title="Tổng số tín chỉ">Số tín chỉ</Tooltip>,
-                align: "center",
-                width: 90,
-                render: ({ trainingBlocks = [] }) => {
-                  const totalCredit = trainingBlocks.reduce(
-                    (
-                      total: number,
-                      block: {
-                        subjects?: {
-                          subject: { credit?: number }
-                        }[]
-                      }
-                    ) => {
-                      const blockCredit =
-                        block?.subjects?.reduce(
-                          (
-                            sum: number,
-                            {
-                              subject,
-                            }: {
-                              subject: {
-                                credit?: number
-                              }
-                            }
-                          ) => sum + (subject?.credit || 0),
-                          0
-                        ) || 0
-                      return total + blockCredit
-                    },
-                    0
-                  )
-
-                  return totalCredit
-                },
+              title: <Tooltip title="Tổng số tín chỉ">Số tín chỉ</Tooltip>,
+              align: "center",
+              width: 90,
+              render: (_, record) => {
+                const { total } = calcCurriculumCredits(record.trainingBlocks)
+                return total
               },
-              {
-                title: <Tooltip title="Số tín chỉ bắt buộc">Số tín chỉ (Bắt buộc)</Tooltip>,
-                dataIndex: "requiredCredits",
-                align: "center",
-                type: "cmp",
-                distinctFilters: ["requiredCredits"],
-                width: 90,
+            },
+            {
+              title: <Tooltip title="Số tín chỉ bắt buộc">Số tín chỉ (Bắt buộc)</Tooltip>,
+              align: "center",
+              width: 90,
+              render: (_, record) => {
+                const { required } = calcCurriculumCredits(record.trainingBlocks)
+                return required
               },
-              {
-                title: <Tooltip title="Số tín chỉ tự chọn">Số tín chỉ (Tự chọn)</Tooltip>,
-                align: "center",
-                type: "cmp",
-                width: 90,
-                dataIndex: "electiveCredits",
-                distinctFilters: ["electiveCredits"],
+            },
+            {
+              title: <Tooltip title="Số tín chỉ tự chọn">Số tín chỉ (Tự chọn)</Tooltip>,
+              align: "center",
+              width: 90,
+              render: (_, record) => {
+                const { elective } = calcCurriculumCredits(record.trainingBlocks)
+                return elective
               },
+            },
               {
                 title: <Tooltip title="Số học kỳ">Số HK</Tooltip>,
                 dataIndex: "numberOfSemesters",

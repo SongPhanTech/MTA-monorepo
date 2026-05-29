@@ -135,6 +135,7 @@ export * from './available-training-time';
 export * from './certificate';
 export * from './certificate-on-subject';
 export * from './award';
+export * from './officer-bonus-score';
 export * from './diploma-type';
 export * from './score-convert';
 export * from './load-category';

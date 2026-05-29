@@ -107,7 +107,7 @@ export class MinIOService {
   }
 
   async remove(objectName: string) {
-    this.minioClient.removeObject(this.bucketName, objectName)
+    await this.minioClient.removeObject(this.bucketName, objectName)
   }
 
   private listObjectsWithLimit(

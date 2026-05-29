@@ -239,6 +239,16 @@ enum TrainingObjectTypes {
   @@schema("ql-dao-tao")
 }
 
+/// Chức vụ cán bộ lớp
+enum OfficerPosition {
+  CLASS_MONITOR
+  UNION_SECRETARY
+  UNION_LEADER
+  DEPUTY_UNION_SECRETARY
+
+  @@schema("ql-dao-tao")
+}
+
 enum DiplomaTypeEnum {
   MASTER
   DOCTORATE
@@ -3322,9 +3332,13 @@ model FixedClass {
   startYear                Int?
   graduated                Boolean              @default(false)
   classMonitor             Student?             @relation("ClassMonitor", fields: [classMonitorId], references: [id])
-  classMonitorId           String?              @unique()
+  classMonitorId           String?
   unionLeader              Student?             @relation("UnionLeader", fields: [unionLeaderId], references: [id])
-  unionLeaderId            String?              @unique()
+  unionLeaderId            String?
+  deputyUnionSecretary     Student?             @relation("DeputyUnionSecretary", fields: [deputyUnionSecretaryId], references: [id])
+  deputyUnionSecretaryId   String?
+  unionSecretary           Student?             @relation("UnionSecretary", fields: [unionSecretaryId], references: [id])
+  unionSecretaryId         String?
   trainingCourse           TrainingCourse       @relation(fields: [trainingCourseId], references: [id])
   trainingCourseId         String
   managementOrganization   DM_DonVi?            @relation(fields: [managementOrganizationId], references: [Id])
@@ -4469,6 +4483,27 @@ model Award {
   @@schema("ql-dao-tao")
 }
 
+/// Điểm cộng cán bộ lớp
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model OfficerBonusScore {
+  id          String          @id() @default(cuid())
+  code        String?         @unique()
+  active      Boolean         @default(true)
+  description String?         @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @default(now()) @updatedAt()
+  createdBy   String?         @default("") @db.Uuid()
+  position    OfficerPosition @unique()
+  /// @gte(0, 'Điểm tối thiểu là 0')
+  /// @lte(10, 'Điểm tối đa là 10')
+  bonusScore  Float           @default(0)
+
+  @@schema("ql-dao-tao")
+}
+
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)
@@ -4644,8 +4679,10 @@ model Student {
   priorityObject                 PriorityObject[]
   unionLeader                    String?
   status                         StudentStatus                    @default(ENROLLED)
-  classMonitor                   FixedClass?                      @relation("ClassMonitor")
-  unionLeaderOf                  FixedClass?                      @relation("UnionLeader")
+  classMonitor                   FixedClass[]                     @relation("ClassMonitor")
+  unionLeaderOf                  FixedClass[]                     @relation("UnionLeader")
+  deputyUnionSecretaryOf         FixedClass[]                     @relation("DeputyUnionSecretary")
+  unionSecretaryOf               FixedClass[]                     @relation("UnionSecretary")
   fixedClass                     FixedClass?                      @relation(fields: [fixedClassId], references: [id])
   fixedClassId                   String?
   subjectClassStudent            StudentSubjectScore[]

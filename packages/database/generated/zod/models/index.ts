@@ -135,6 +135,7 @@ export * from './AvailableTrainingTime.schema';
 export * from './Certificate.schema';
 export * from './CertificateOnSubject.schema';
 export * from './Award.schema';
+export * from './OfficerBonusScore.schema';
 export * from './DiplomaType.schema';
 export * from './ScoreConvert.schema';
 export * from './LoadCategory.schema';

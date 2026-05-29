@@ -568,10 +568,16 @@ model FixedClass extends Base {
   graduated                Boolean              @default(false)
 
   classMonitor             Student?             @relation("ClassMonitor", fields: [classMonitorId], references: [id])
-  classMonitorId           String?              @unique
+  classMonitorId           String?              
 
   unionLeader              Student?             @relation("UnionLeader", fields: [unionLeaderId], references: [id])
-  unionLeaderId            String?              @unique
+  unionLeaderId            String?              
+
+  deputyUnionSecretary     Student?             @relation("DeputyUnionSecretary", fields: [deputyUnionSecretaryId], references: [id])
+  deputyUnionSecretaryId   String?              
+
+  unionSecretary           Student?             @relation("UnionSecretary", fields: [unionSecretaryId], references: [id])
+  unionSecretaryId         String?             
 
   trainingCourse           TrainingCourse       @relation(fields: [trainingCourseId], references: [id]) // Khoá học
   trainingCourseId         String

@@ -141,6 +141,7 @@ export const SqlTransactionBodyItemModel = {
   Certificate: 'Certificate',
   CertificateOnSubject: 'CertificateOnSubject',
   Award: 'Award',
+  OfficerBonusScore: 'OfficerBonusScore',
   DiplomaType: 'DiplomaType',
   ScoreConvert: 'ScoreConvert',
   LoadCategory: 'LoadCategory',

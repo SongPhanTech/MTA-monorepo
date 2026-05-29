@@ -9916,6 +9916,34 @@ const metadata: ModelMeta = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'unionLeader',
+                }, deputyUnionSecretary: {
+                    name: "deputyUnionSecretary",
+                    type: "Student",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'deputyUnionSecretaryOf',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "deputyUnionSecretaryId" },
+                }, deputyUnionSecretaryId: {
+                    name: "deputyUnionSecretaryId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'deputyUnionSecretary',
+                }, unionSecretary: {
+                    name: "unionSecretary",
+                    type: "Student",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'unionSecretaryOf',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "unionSecretaryId" },
+                }, unionSecretaryId: {
+                    name: "unionSecretaryId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'unionSecretary',
                 }, trainingCourse: {
                     name: "trainingCourse",
                     type: "TrainingCourse",
@@ -10043,12 +10071,6 @@ const metadata: ModelMeta = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
-                }, classMonitorId: {
-                    name: "classMonitorId",
-                    fields: ["classMonitorId"]
-                }, unionLeaderId: {
-                    name: "unionLeaderId",
-                    fields: ["unionLeaderId"]
                 }, curriculumVersionId: {
                     name: "curriculumVersionId",
                     fields: ["curriculumVersionId"]
@@ -14217,6 +14239,64 @@ const metadata: ModelMeta = {
                 },
             },
         },
+        officerBonusScore: {
+            name: 'OfficerBonusScore', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$OfficerBonusScore$createdBy,
+                }, position: {
+                    name: "position",
+                    type: "OfficerPosition",
+                }, bonusScore: {
+                    name: "bonusScore",
+                    type: "Float",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, position: {
+                    name: "position",
+                    fields: ["position"]
+                },
+            },
+        },
         diplomaType: {
             name: 'DiplomaType', fields: {
                 id: {
@@ -14748,14 +14828,26 @@ const metadata: ModelMeta = {
                     name: "classMonitor",
                     type: "FixedClass",
                     isDataModel: true,
-                    isOptional: true,
+                    isArray: true,
                     backLink: 'classMonitor',
                 }, unionLeaderOf: {
                     name: "unionLeaderOf",
                     type: "FixedClass",
                     isDataModel: true,
-                    isOptional: true,
+                    isArray: true,
                     backLink: 'unionLeader',
+                }, deputyUnionSecretaryOf: {
+                    name: "deputyUnionSecretaryOf",
+                    type: "FixedClass",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'deputyUnionSecretary',
+                }, unionSecretaryOf: {
+                    name: "unionSecretaryOf",
+                    type: "FixedClass",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'unionSecretary',
                 }, fixedClass: {
                     name: "fixedClass",
                     type: "FixedClass",
@@ -28108,6 +28200,10 @@ function $default$CertificateOnSubject$createdBy(user: any): unknown {
 }
 
 function $default$Award$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$OfficerBonusScore$createdBy(user: any): unknown {
     return user?.id;
 }
 

@@ -42,6 +42,8 @@ const baseSchemaWithoutDefaults = z.object({
 const relationSchema = z.object({
     classMonitor: z.record(z.string(), z.unknown()).optional(),
     unionLeader: z.record(z.string(), z.unknown()).optional(),
+    deputyUnionSecretary: z.record(z.string(), z.unknown()).optional(),
+    unionSecretary: z.record(z.string(), z.unknown()).optional(),
     trainingCourse: z.record(z.string(), z.unknown()),
     managementOrganization: z.record(z.string(), z.unknown()).optional(),
     lecturerManagement: z.record(z.string(), z.unknown()).optional(),
@@ -58,6 +60,8 @@ const relationSchema = z.object({
 const fkSchema = z.object({
     classMonitorId: z.string().nullish(),
     unionLeaderId: z.string().nullish(),
+    deputyUnionSecretaryId: z.string().nullish(),
+    unionSecretaryId: z.string().nullish(),
     trainingCourseId: z.string(),
     managementOrganizationId: z.string().uuid().nullish(),
     lecturerManagementId: z.string().nullish(),

@@ -2,6 +2,7 @@ import DefaultLayout from "@layouts/default-layout"
 import { Col, Row, Tabs } from "antd"
 import type React from "react"
 import { useState } from "react"
+import CanBoBonus from "./components/can-bo"
 import ArchivedCertificate from "./components/certificate"
 import OlympicAwards from "./components/olympic-award"
 
@@ -22,6 +23,11 @@ export default function ClassSubject() {
       key: "2",
       label: "Chứng chỉ",
       content: <ArchivedCertificate />,
+    },
+    {
+      key: "3",
+      label: "Điểm cộng cán bộ",
+      content: <CanBoBonus />,
     },
   ]
   return (

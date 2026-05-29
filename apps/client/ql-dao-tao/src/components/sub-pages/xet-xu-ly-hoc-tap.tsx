@@ -35,6 +35,7 @@ import {
 } from "@workspace/db/hooks"
 import { sqlTransaction } from "@workspace/libs/api/model"
 import { useExportStudentAcademicActionJson } from "@workspace/libs/api/training"
+import { normalizeVietnamese } from "@workspace/libs/utils"
 import { BookPlus } from "lucide-react"
 import { useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
@@ -60,6 +61,9 @@ interface SelectedStudent {
 const XetXuLyHocTap = ({ semesterId, trainingObjectTypeId, actionTaken }: XetXuLyHocTapProps) => {
   const [currentPage, setCurrentPage] = useState(1)
   const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
+  // Pagination riêng cho bảng "Quyết định" phía trên
+  const [currentPageDecision, setCurrentPageDecision] = useState(1)
+  const [numberOfPagesDecision, setNumberOfPagesDecision] = useState(DEFAULT_PAGINATE_SIZE)
   const [selectedStudents, setSelectedStudents] = useState<SelectedStudent[]>([])
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
   const [selectedDecision, setSelectedDecision] = useState<React.Key[]>([])
@@ -77,6 +81,11 @@ const XetXuLyHocTap = ({ semesterId, trainingObjectTypeId, actionTaken }: XetXuL
     organization: undefined,
     status: undefined,
     decisionDate: undefined,
+  })
+  // Bộ lọc riêng cho bảng "Xét" (danh sách sinh viên được xét) phía dưới
+  const [studentFilters, setStudentFilters] = useState<FilterProps>({
+    name: "",
+    fixedClass: undefined,
   })
   const isFiltering = useMemo(() => {
     return Object.values(filters).some((value) => !!value)
@@ -171,8 +180,8 @@ const XetXuLyHocTap = ({ semesterId, trainingObjectTypeId, actionTaken }: XetXuL
         },
         appliedConfig: true,
       },
-      take: numberOfPages,
-      skip: (currentPage - 1) * numberOfPages,
+      take: numberOfPagesDecision,
+      skip: (currentPageDecision - 1) * numberOfPagesDecision,
     },
     { enabled: !!semesterId }
   )
@@ -181,6 +190,9 @@ const XetXuLyHocTap = ({ semesterId, trainingObjectTypeId, actionTaken }: XetXuL
     where: {
       semesterId,
       actionTaken,
+      ...(trainingObjectTypeId
+        ? { student: { fixedClass: { trainingCourse: { trainingObjectTypeId } } } }
+        : {}),
       ...where,
     },
   })
@@ -218,7 +230,9 @@ const XetXuLyHocTap = ({ semesterId, trainingObjectTypeId, actionTaken }: XetXuL
     tag: "ModalChuyenLopLuuBan",
   })
 
-  const { data: students = [] } = useExportStudentAcademicActionJson<any[] | { data: any[] }>(
+  const { data: students = [], isFetching: isLoadingStudents } = useExportStudentAcademicActionJson<
+    any[] | { data: any[] }
+  >(
     {
       semesterId: semesterId,
       trainingObjectTypeId,
@@ -239,19 +253,36 @@ const XetXuLyHocTap = ({ semesterId, trainingObjectTypeId, actionTaken }: XetXuL
     return []
   }, [students])
 
+  const classOptions = useMemo(() => {
+    const map = new Map<string, string>()
+    for (const group of studentData)
+      for (const s of group.students ?? [])
+        if (s?.fixedClass?.code) map.set(s.fixedClass.code, s.fixedClass.name ?? s.fixedClass.code)
+    return Array.from(map, ([value, label]) => ({ value, label }))
+  }, [studentData])
+
   const filteredStudentData = useMemo(() => {
     const studentIdsWithDecisions = data
       ? new Set(data.map((decision: any) => decision.studentId))
       : new Set()
+    const kw = normalizeVietnamese((studentFilters.name ?? "").trim())
+    const cls = Array.isArray(studentFilters.fixedClass)
+      ? studentFilters.fixedClass
+      : studentFilters.fixedClass
+        ? [studentFilters.fixedClass]
+        : []
 
     return studentData.map((record) => ({
       ...record,
       students: (record.students || []).filter(
         (student: any) =>
-          !studentIdsWithDecisions.has(student.id) && !!student.studentSemesterResult // Chỉ lấy những sinh viên có kết quả học tập trong học kỳ này
+          !studentIdsWithDecisions.has(student.id) &&
+          !!student.studentSemesterResult && // Chỉ lấy những sinh viên có kết quả học tập trong học kỳ này
+          (!kw || normalizeVietnamese(student?.userProfile?.fullname ?? "").includes(kw)) &&
+          (cls.length === 0 || cls.includes(student?.fixedClass?.code))
       ),
     }))
-  }, [studentData, data])
+  }, [studentData, data, studentFilters])
 
   const { pagedStudentData, totalStudentsCount } = useMemo(() => {
     const allStudents = filteredStudentData.flatMap((group) =>
@@ -435,7 +466,7 @@ const XetXuLyHocTap = ({ semesterId, trainingObjectTypeId, actionTaken }: XetXuL
               rowSelection={decisionSelection}
               setFilters={(value) => {
                 setFilters(value)
-                setCurrentPage(1)
+                setCurrentPageDecision(1)
               }}
               onRow={(record) => ({
                 onClick: () => {
@@ -491,11 +522,6 @@ const XetXuLyHocTap = ({ semesterId, trainingObjectTypeId, actionTaken }: XetXuL
                   dataIndex: "fixedClass",
                   width: 150,
                   align: "center",
-                  // type: 'select',
-                  // options: fixedClassData.map((i: FixedClass) => ({
-                  //     value: i.id,
-                  //     label: i.name,
-                  // })),
                   render: (__, record) => record?.student?.fixedClass?.name,
                 },
                 {
@@ -503,11 +529,6 @@ const XetXuLyHocTap = ({ semesterId, trainingObjectTypeId, actionTaken }: XetXuL
                   dataIndex: "trainingCourse",
                   width: 100,
                   align: "center",
-                  // type: 'select',
-                  // options: trainingCourseData.map((i: TrainingCourse) => ({
-                  //     value: i.id,
-                  //     label: i.name,
-                  // })),
                   render: (__, record) => record?.student?.fixedClass?.trainingCourse?.name,
                 },
                 {
@@ -515,8 +536,6 @@ const XetXuLyHocTap = ({ semesterId, trainingObjectTypeId, actionTaken }: XetXuL
                   dataIndex: "organization",
                   width: 150,
                   align: "center",
-                  // type: 'tree_select',
-                  // options: treeData,
                   render: (__, record) => record?.student?.fixedClass?.managementOrganization?.sTen,
                 },
                 {
@@ -532,7 +551,6 @@ const XetXuLyHocTap = ({ semesterId, trainingObjectTypeId, actionTaken }: XetXuL
                   dataIndex: "decisionDate",
                   width: 150,
                   align: "center",
-                  // type: 'date',
                   render: (__, record) =>
                     record.decisionDate ? dayjs(record.decisionDate).format("DD/MM/YYYY") : "",
                 },
@@ -542,8 +560,6 @@ const XetXuLyHocTap = ({ semesterId, trainingObjectTypeId, actionTaken }: XetXuL
                   width: 120,
                   align: "center",
                   fixed: "right",
-                  // type: 'select',
-                  // options: decisionStatusOption,
                   render: (status) => (
                     <Tag color={getDecisionStatusColor(status)}>
                       {getDecisionStatusLabel(status)}
@@ -593,15 +609,15 @@ const XetXuLyHocTap = ({ semesterId, trainingObjectTypeId, actionTaken }: XetXuL
                 },
               ]}
               pagination={{
-                current: currentPage,
-                pageSize: numberOfPages,
+                current: currentPageDecision,
+                pageSize: numberOfPagesDecision,
                 total: count,
                 onChange: (page, pageSize) => {
-                  if (numberOfPages === pageSize) {
-                    setCurrentPage(page)
+                  if (numberOfPagesDecision === pageSize) {
+                    setCurrentPageDecision(page)
                   } else {
-                    setCurrentPage(1)
-                    setNumberOfPages(pageSize)
+                    setCurrentPageDecision(1)
+                    setNumberOfPagesDecision(pageSize)
                   }
                 },
                 showTotal: (total, range) =>
@@ -638,11 +654,17 @@ const XetXuLyHocTap = ({ semesterId, trainingObjectTypeId, actionTaken }: XetXuL
           </Col>
           <Col span={24}>
             <TableCollapse
+              loading={isLoadingStudents}
               rowKey="courseId"
               headerTitleKey="courseName"
               childrenFieldName="students"
               defaultExpandAll
               rowSelection={rowSelection}
+              filters={studentFilters}
+              setFilters={(value) => {
+                setStudentFilters(value)
+                setCurrentPage(1)
+              }}
               columns={[
                 {
                   title: "Mã SV",
@@ -652,8 +674,10 @@ const XetXuLyHocTap = ({ semesterId, trainingObjectTypeId, actionTaken }: XetXuL
                 },
                 {
                   title: "Tên sinh viên",
-                  dataIndex: ["userProfile", "fullname"],
+                  dataIndex: "name",
+                  type: "input",
                   width: 150,
+                  render: (_, record) => record?.userProfile?.fullname ?? "",
                 },
                 {
                   title: "Ngày sinh",
@@ -666,6 +690,9 @@ const XetXuLyHocTap = ({ semesterId, trainingObjectTypeId, actionTaken }: XetXuL
                 },
                 {
                   title: "Lớp",
+                  dataIndex: "fixedClass",
+                  type: "select",
+                  options: classOptions,
                   width: 60,
                   align: "center",
                   render: (_, record) => {

@@ -896,7 +896,11 @@ export default function NhapDiem({
             <>
               <Button
                 onClick={() => setImportModalVisible(true)}
-                disabled={!selectedSubjectClassId || role !== "GV" || disabledForm && !manualEnableLockPrint}
+                disabled={
+                  !selectedSubjectClassId ||
+                  role !== "GV" ||
+                  (disabledForm && !manualEnableLockPrint)
+                }
                 className="w-full flex justify-start"
               >
                 <FileUp />
@@ -979,10 +983,7 @@ export default function NhapDiem({
                 >
                   {manualEnableLockPrint ? "Tắt mở khoá in" : "Bật mở khoá in"}
                 </Button>
-                <Button
-                  disabled={isLockAndPrintDisabled}
-                  onClick={() => handlePrint()}
-                >
+                <Button disabled={isLockAndPrintDisabled} onClick={() => handlePrint()}>
                   <Printer />
                   Khoá và in phiếu điểm
                 </Button>
@@ -1013,7 +1014,11 @@ export default function NhapDiem({
                 </Button>
               </>
             )}
-          <Button type="primary" disabled={disabledForm && !manualEnableLockPrint} onClick={handleSave}>
+          <Button
+            type="primary"
+            disabled={disabledForm && !manualEnableLockPrint}
+            onClick={handleSave}
+          >
             <Save stroke="white" />
             Lưu
           </Button>
@@ -1185,8 +1190,8 @@ export default function NhapDiem({
                 type: "date",
                 align: "center",
                 render: (_, record) =>
-                  record?.student?.userProfile.dateOfBirth
-                    ? dayjs(record?.student?.userProfile.dateOfBirth).format("DD/MM/YYYY")
+                  record?.student?.userProfile?.dateOfBirth
+                    ? dayjs(record?.student?.userProfile?.dateOfBirth).format("DD/MM/YYYY")
                     : "",
               },
               {
@@ -1208,7 +1213,8 @@ export default function NhapDiem({
                 width: 100,
                 align: "center",
                 render: (_, record) => {
-                  const readOnly = role !== "GV" || score === "THI" || (disabledForm && !manualEnableLockPrint)
+                  const readOnly =
+                    role !== "GV" || score === "THI" || (disabledForm && !manualEnableLockPrint)
                   return (
                     <ScoreInputCell
                       recordId={record.id}
@@ -1242,7 +1248,8 @@ export default function NhapDiem({
                 width: 100,
                 align: "center",
                 render: (_, record) => {
-                  const readOnly = role !== "GV" || score === "THI" || (disabledForm && !manualEnableLockPrint)
+                  const readOnly =
+                    role !== "GV" || score === "THI" || (disabledForm && !manualEnableLockPrint)
                   return (
                     <ScoreInputCell
                       recordId={record.id}

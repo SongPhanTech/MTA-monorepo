@@ -1,1 +1,19 @@
 @import "@workspace/ui/globals.css";
+
+/* Ngăn cuộn trong dropdown của Select/Dropdown bị tràn ra phần tử cuộn phía sau (scroll chaining) */
+.ant-select-dropdown .rc-virtual-list-holder,
+.ant-select-dropdown .rc-virtual-list-holder-inner,
+.ant-dropdown-menu,
+.ant-cascader-menu,
+.ant-tree-select-dropdown .rc-virtual-list-holder {
+  overscroll-behavior: contain;
+}
+
+.ant-table-row[class*="bg-"] > .ant-table-cell.ant-table-cell-fix-left,
+.ant-table-row[class*="bg-"] > .ant-table-cell.ant-table-cell-fix-right {
+  background-color: inherit;
+}
+
+.ant-table-wrapper .ant-table-tbody > tr.ant-table-row[class*="bg-"]:hover > .ant-table-cell {
+  background-color: inherit;
+}

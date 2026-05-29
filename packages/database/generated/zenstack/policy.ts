@@ -28,6 +28,7 @@ import { SubjectClassType } from "../prisma-client";
 import { SubjectClassStatus } from "../prisma-client";
 import { ScoreCorrectionStatus } from "../prisma-client";
 import { TrainingObjectTypes } from "../prisma-client";
+import { OfficerPosition } from "../prisma-client";
 import { DiplomaTypeEnum } from "../prisma-client";
 import { AcademicRankingBaseType } from "../prisma-client";
 import { StudentStatus } from "../prisma-client";
@@ -2678,6 +2679,26 @@ const policy: PolicyDef = {
                 update: { guard: Award_update, },
                 postUpdate: { guard: Award_postUpdate, },
                 delete: { guard: Award_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        officerBonusScore: {
+            modelLevel: {
+                read: { guard: OfficerBonusScore_read, },
+                create: { guard: OfficerBonusScore_create, inputChecker: OfficerBonusScore_create_input, },
+                update: { guard: OfficerBonusScore_update, },
+                postUpdate: { guard: OfficerBonusScore_postUpdate, },
+                delete: { guard: OfficerBonusScore_delete, }
             },
             fieldLevel: {
                 read:
@@ -5664,6 +5685,7 @@ const policy: PolicyDef = {
         certificate: { hasValidation: false },
         certificateOnSubject: { hasValidation: true },
         award: { hasValidation: false },
+        officerBonusScore: { hasValidation: true },
         diplomaType: { hasValidation: false },
         scoreConvert: { hasValidation: false },
         loadCategory: { hasValidation: false },
@@ -14298,6 +14320,71 @@ function Award_delete(context: QueryContext, db: CrudContract): any {
 }
 
 function $check_Award_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function OfficerBonusScore_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_OfficerBonusScore_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function OfficerBonusScore_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_OfficerBonusScore_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function OfficerBonusScore_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function OfficerBonusScore_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_OfficerBonusScore_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function OfficerBonusScore_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_OfficerBonusScore_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function OfficerBonusScore_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_OfficerBonusScore_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 

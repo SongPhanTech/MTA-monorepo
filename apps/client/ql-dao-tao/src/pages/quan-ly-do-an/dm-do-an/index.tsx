@@ -1,5 +1,6 @@
 import { LockOutlined, UnlockOutlined } from "@ant-design/icons"
 import { queryClient } from "@api/index"
+import DocumentPaths from "@components/commons/documentPaths"
 import LectureTreeSelect from "@components/commons/lecture-select-multi/TreeSelectLecture"
 import Select from "@components/commons/select"
 import Table from "@components/commons/table"
@@ -10,6 +11,7 @@ import DefaultLayout from "@layouts/default-layout"
 import { useSession } from "@workspace/auth/react"
 import {
   CouncilRole,
+  DocumentFile,
   StudentThesisRegistrationStatus,
   SubjectVersionType,
   ThesisProjectStatus,
@@ -23,14 +25,17 @@ import {
   useFindManyExpertProfile,
   useFindManyRoom,
   useFindManySubjectClass,
+  useCreateLibrarySubmission,
   useFindManyThesisProject,
+  useUpdateLibrarySubmission,
   useUpdateThesisProject,
 } from "@workspace/db/hooks"
 import { sqlTransaction } from "@workspace/libs/api/model"
 import { formatLecturerName } from "@workspace/libs/utils"
 import { useAbility } from "@workspace/permissions"
 import { QL_DAO_TAO_PERMISSION } from "@workspace/router"
-import { useSemesterStore, useTrainingObjectTypeStore } from "@workspace/ui"
+import FormItem from "@components/commons/form-item"
+import {  useSemesterStore, useTrainingObjectTypeStore } from "@workspace/ui"
 import {
   AutoComplete,
   Button,
@@ -48,17 +53,32 @@ import {
   Tag,
   Tooltip,
 } from "antd"
-import dayjs from "dayjs"
+import dayjs, { type Dayjs } from "dayjs"
 import utc from "dayjs/plugin/utc"
 import { CircleMinus, SquarePen } from "lucide-react"
 import { useEffect, useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
+import { SqlTransactionBodyItem } from "@workspace/libs/api/schemas"
 
 dayjs.extend(utc)
 interface DoAnForm {
   subjectClassId: string
+ 
+}
+type DoAnModelType = {
+  thesisLibraryId?: string
+  isHardcopy?: boolean
+  isSoftcopy?: boolean
+  librarianNote?: string
+  submissionDate?: Dayjs
+  documentFile?: DocumentFile[]
 }
 const { TextArea } = Input
+
+const FORM_ITEM_LAYOUT = {
+  labelCol: { flex: "0 0 150px" },
+  wrapperCol: { flex: "1" },
+}
 
 export default function DanhMucDoAn() {
   const [form] = Form.useForm<DoAnForm>()
@@ -231,6 +251,7 @@ export default function DanhMucDoAn() {
           },
         },
       },
+      librarySubmission: true,
     },
     take: numberOfPages,
     skip: (currentPage - 1) * numberOfPages,
@@ -770,19 +791,15 @@ export default function DanhMucDoAn() {
                   width: 280,
                   align: "left" as const,
                   render: (_: any, record: any) => {
-                    const getSupervisorName = (profile: any) =>
+                    const getSupervisorName = (profile: any) => 
                       [
                         profile?.rank?.sMa,
-                        ",",
                         profile?.academicRankType?.sMa,
-                        ",",
                         profile?.academicDegreeType?.sMa,
-                        ",",
-
                         profile?.fullname,
                       ]
                         .filter(Boolean)
-                        .join(" ")
+                        .join(", ");
 
                     if (editingRowKeys.includes(record?.id)) {
                       return (
@@ -1517,6 +1534,8 @@ export default function DanhMucDoAn() {
           isOpen={isMemberModalOpen}
           onClose={() => setIsMemberModalOpen(false)}
           project={currentProject}
+          librarySubmission={currentProject?.librarySubmission}
+          thesisProjectId={currentProject?.id}
           allStudentsInClass={studentsInSelectedClass}
           onRefresh={async () => {
             handleSearch()
@@ -1527,14 +1546,45 @@ export default function DanhMucDoAn() {
     </Row>
   )
 }
+
+const mapDocumentFileCreateInput = (file: DocumentFile) => ({
+  name: file.name,
+  path: file.path,
+  mimeType: file.mimeType,
+  size: file.size,
+})
+
+const buildDocumentFileUpdateInput = (
+  filesInForm: DocumentFile[],
+  initialFiles: DocumentFile[]
+) => ({
+  upsert: filesInForm
+    .filter((file) => !!file.id)
+    .map((file) => ({
+      where: { id: file.id },
+      create: mapDocumentFileCreateInput(file),
+      update: mapDocumentFileCreateInput(file),
+    })),
+  create: filesInForm.filter((file) => !file.id).map(mapDocumentFileCreateInput),
+  disconnect: initialFiles
+    .filter((initialFile) => !filesInForm.some((finalFile) => finalFile.id === initialFile.id))
+    .map((fileToDisconnect) => ({ id: fileToDisconnect.id })),
+})
+
 const StudentManagementModal = ({
+  librarySubmission,
+  thesisProjectId,
   isOpen,
   onClose,
   project,
   allStudentsInClass,
   onRefresh,
 }: any) => {
+  const { mutateAsync: createLibrarySubmission } = useCreateLibrarySubmission()
+  const { mutateAsync: updateLibrarySubmission } = useUpdateLibrarySubmission()
   const [activeTab, setActiveTab] = useState("1")
+  const [document, setDocument] = useState<DocumentFile[]>([])
+  const [form] = Form.useForm<DoAnModelType>()
   const [selectedStudentIds, setSelectedStudentIds] = useState<string[]>([])
   const selectedStudentsData = useMemo(() => {
     return allStudentsInClass.filter((item: any) => selectedStudentIds.includes(item.studentId))
@@ -1556,8 +1606,19 @@ const StudentManagementModal = ({
         }
       })
       setGradeValues(initialGrades)
+      setDocument(librarySubmission?.documentFile ?? [])
+      form.setFieldsValue({
+        thesisLibraryId: librarySubmission?.id ?? null,
+        isHardcopy: librarySubmission?.isHardcopy ?? false,
+        isSoftcopy: librarySubmission?.isSoftcopy ?? false,
+        librarianNote: librarySubmission?.librarianNote ?? "",
+        submissionDate: librarySubmission?.submissionDate
+          ? dayjs(librarySubmission.submissionDate)
+          : undefined,
+        documentFile: librarySubmission?.documentFile ?? [],
+      })
     }
-  }, [project, isOpen])
+  }, [project, isOpen, librarySubmission, form])
 
   const handleScoreChange = (studentId: string, field: string, val: number | null) => {
     setGradeValues((prev) => ({
@@ -1675,7 +1736,7 @@ const StudentManagementModal = ({
   ]
   const handleSaveMembers = async () => {
     try {
-      const transactions: any[] = []
+      const transactions: SqlTransactionBodyItem[] = []
 
       const affectedProjectIds = new Set<string>()
       affectedProjectIds.add(project.id)
@@ -1756,18 +1817,15 @@ const StudentManagementModal = ({
         },
       })
       await sqlTransaction(transactions)
-
-      message.success("Cập nhật thành viên đồ án thành công")
-      onClose()
-      onRefresh()
     } catch (error) {
       console.error("Lỗi cập nhật nhóm:", error)
       message.error("Có lỗi xảy ra trong quá trình xử lý nhóm.")
+      throw error
     }
   }
   const handleSaveScores = async () => {
     try {
-      const transactions: any[] = []
+      const transactions: SqlTransactionBodyItem[] = []
 
       Object.keys(gradeValues).forEach((studentId) => {
         const grades = gradeValues[studentId]
@@ -1793,24 +1851,69 @@ const StudentManagementModal = ({
       }
 
       await sqlTransaction(transactions)
-      message.success("Cập nhật bảng điểm thành công")
-      onClose()
-      onRefresh()
     } catch (error) {
       message.error("Lỗi khi lưu điểm số")
+      throw error
     }
   }
+
+  const handleSaveDocument = async (data: DoAnModelType) => {
+    const libraryId = librarySubmission?.id ?? data.thesisLibraryId
+    const thesisId = thesisProjectId ?? project?.id
+    const filesInForm = data.documentFile ?? []
+
+    const submissionPayload = {
+      submissionDate: data.submissionDate?.toDate(),
+      isHardcopy: data.isHardcopy ?? false,
+      isSoftcopy: data.isSoftcopy ?? false,
+      librarianNote: data.librarianNote,
+    }
+
+    if (libraryId) {
+      await updateLibrarySubmission({
+        where: { id: libraryId },
+        data: {
+          ...submissionPayload,
+          documentFile: buildDocumentFileUpdateInput(filesInForm, document),
+        },
+      })
+      return
+    }
+
+    if (!thesisId) {
+      message.warning("Không xác định được đồ án để lưu minh chứng")
+      return
+    }
+
+    await createLibrarySubmission({
+      data: {
+        ...submissionPayload,
+        thesis: { connect: { id: thesisId } },
+        documentFile: {
+          create: filesInForm.map(mapDocumentFileCreateInput),
+        },
+      },
+    })
+  }
+
   const handleOk = async () => {
-    if (activeTab === "1") {
+    const formValues = form.getFieldsValue(true)
+
+    try {
       await handleSaveMembers()
-    } else {
       await handleSaveScores()
+      await handleSaveDocument(formValues)
+      message.success("Lưu thay đổi thành công")
+      onClose()
+      onRefresh()
+    } catch {
+      // Các handler con đã hiển thị message lỗi
     }
   }
 
   return (
     <Modal
-      title="Quản lý thành viên và điểm số"
+      title="Quản lý thành viên, minh chứng, điểm số"
       open={isOpen}
       onOk={handleOk}
       onCancel={onClose}
@@ -1818,7 +1921,8 @@ const StudentManagementModal = ({
       okText="Lưu thay đổi"
       destroyOnClose
     >
-      <Tabs activeKey={activeTab} onChange={setActiveTab}>
+      <Form form={form} layout="horizontal">
+      <Tabs activeKey={activeTab} onChange={setActiveTab} destroyInactiveTabPane={false}>
         <Tabs.TabPane tab="Thành viên nhóm" key="1">
           <div className="py-4">
             <Select
@@ -1855,7 +1959,91 @@ const StudentManagementModal = ({
             />
           </div>
         </Tabs.TabPane>
-        <Tabs.TabPane tab="Nhập điểm" key="2">
+        <Tabs.TabPane tab="Minh chứng" key="2" forceRender>
+          <div className="py-4">
+          <Row gutter={32} className="w-full mt-4">
+          <Col span={24}>
+           
+            <Row gutter={16}>
+              <Col span={8}>
+                <FormItem
+                  form={form}
+                  name="submissionDate"
+                  label="Ngày nộp"
+                  className="mb-5"
+                  labelAlign="left"
+                  {...FORM_ITEM_LAYOUT}
+                >
+                  <DatePicker
+                    placeholder="Chọn Ngày nộp"
+                    format={{
+                      format: "DD/MM/YYYY",
+                      type: "mask",
+                    }}
+                    className="w-full"
+                  />
+                </FormItem>
+              </Col>
+
+              <Col span={8}>
+                <FormItem
+                  form={form}
+                  name="isHardcopy"
+                  label="Nộp bản cứng"
+                  className="mb-5"
+                  labelAlign="left"
+                  valuePropName="checked"
+                >
+                  <Checkbox />
+                </FormItem>
+              </Col>
+
+              <Col span={8}>
+                <FormItem
+                  form={form}
+                  name="isSoftcopy"
+                  label="Nộp bản mềm"
+                  className="mb-5"
+                  labelAlign="left"
+                  valuePropName="checked"
+                >
+                  <Checkbox />
+                </FormItem>
+              </Col>
+            </Row>
+
+            <FormItem
+              form={form}
+              name="librarianNote"
+              label="Ghi chú"
+              className="mb-5"
+              labelAlign="left"
+              {...FORM_ITEM_LAYOUT}
+            >
+              <TextArea placeholder="Nhập Ghi chú " rows={4} className="w-full" />
+            </FormItem>
+
+            <FormItem
+              form={form}
+              name="documentFile"
+              label="File minh chứng"
+              className="mb-5"
+              labelAlign="left"
+              {...FORM_ITEM_LAYOUT}
+            >
+              <DocumentPaths
+                form={form}
+                data={document}
+                relationId={librarySubmission?.id ?? ""}
+                relationType="librarySubmissionId"
+                titleForm="documentFile"
+              />
+            </FormItem>
+          </Col>
+        </Row>
+          </div>
+        </Tabs.TabPane>
+        <Tabs.TabPane tab="Nhập điểm" key="3">
           <div className="py-4">
             <Table
               dataSource={project?.registrations || []}
@@ -1867,6 +2055,7 @@ const StudentManagementModal = ({
           </div>
         </Tabs.TabPane>
       </Tabs>
+      </Form>
     </Modal>
   )
 }
@@ -1874,3 +2063,5 @@ const StudentManagementModal = ({
 DanhMucDoAn.getLayout = function getLayout(page: React.ReactElement) {
   return <DefaultLayout>{page}</DefaultLayout>
 }
+
+

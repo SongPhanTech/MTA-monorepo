@@ -13,7 +13,7 @@ import useSpinner from "@hooks/spinner"
 // import { $Enums, type StudentSemesterResult } from '@workspace/db'
 import type { ScholarshipAward } from "@workspace/db/client"
 import {
-  useCountTrainingCourse,
+  useCountScholarshipAward,
   useDeleteScholarshipAward,
   useFindManyScholarship,
   useFindManyTrainingCourse,
@@ -23,6 +23,7 @@ import {
   exportStudentScholarshipExcel,
   useExportStudentScholarshipJson,
 } from "@workspace/libs/api/training"
+import { normalizeVietnamese } from "@workspace/libs/utils"
 import { saveAs } from "file-saver"
 import { BookPlus } from "lucide-react"
 import { useEffect, useMemo, useState } from "react"
@@ -60,6 +61,11 @@ const XetHocBong = ({ semesterId, trainingObjectTypeId }: XetHocBongProps) => {
     code: "",
     name: "",
     scholarship: undefined,
+  })
+  // Bộ lọc riêng cho bảng "thoả mãn học bổng" phía dưới (lọc client-side)
+  const [filterDs, setFilterDs] = useState<FilterProps>({
+    name: "",
+    fixedClass: undefined,
   })
 
   const where = useMemo(
@@ -105,7 +111,7 @@ const XetHocBong = ({ semesterId, trainingObjectTypeId }: XetHocBongProps) => {
   )
 
   const [isModalVisible, setIsModalVisible] = useState(false)
-  const { onOpen, onClose } = useDisclosure<{
+  const { onOpen } = useDisclosure<{
     id: string
     semesterId: string
   }>({
@@ -115,7 +121,7 @@ const XetHocBong = ({ semesterId, trainingObjectTypeId }: XetHocBongProps) => {
   const {
     data: students = [],
     refetch,
-    isPending,
+    isFetching: isLoadingStudents,
   } = useExportStudentScholarshipJson<any[] | { data: any[] }>(
     {
       semesterId: semesterId || "",
@@ -226,6 +232,32 @@ const XetHocBong = ({ semesterId, trainingObjectTypeId }: XetHocBongProps) => {
     if (students.data && Array.isArray(students.data)) return students.data
     return []
   }, [students])
+
+  const classOptions = useMemo(() => {
+    const map = new Map<string, string>()
+    for (const group of studentData)
+      for (const s of group.students ?? [])
+        if (s?.fixedClass?.code) map.set(s.fixedClass.code, s.fixedClass.name ?? s.fixedClass.code)
+    return Array.from(map, ([value, label]) => ({ value, label }))
+  }, [studentData])
+
+  const filteredStudentData = useMemo(() => {
+    const kw = normalizeVietnamese((filterDs.name ?? "").trim())
+    const cls = Array.isArray(filterDs.fixedClass)
+      ? filterDs.fixedClass
+      : filterDs.fixedClass
+        ? [filterDs.fixedClass]
+        : []
+    if (!kw && cls.length === 0) return studentData
+    return studentData.map((group: any) => ({
+      ...group,
+      students: (group.students || []).filter(
+        (s: any) =>
+          (!kw || normalizeVietnamese(s?.userProfile?.fullname ?? "").includes(kw)) &&
+          (cls.length === 0 || cls.includes(s?.fixedClass?.code))
+      ),
+    }))
+  }, [studentData, filterDs])
   const transformedTrainingCourses = useMemo(() => {
     if (!studentDataAward || !Array.isArray(studentDataAward)) return []
 
@@ -255,10 +287,22 @@ const XetHocBong = ({ semesterId, trainingObjectTypeId }: XetHocBongProps) => {
     })
   }, [studentDataAward])
 
-  const { data: count } = useCountTrainingCourse({
+  const { data: count } = useCountScholarshipAward({
     where: {
-      ...where,
-      deletedAt: null,
+      semesterId,
+      student: {
+        ...(trainingObjectTypeId
+          ? { fixedClass: { trainingCourse: { trainingObjectTypeId } } }
+          : {}),
+        ...(filters.code && filters.code !== ""
+          ? { code: { contains: filters.code, mode: "insensitive" as const } }
+          : {}),
+        userProfile:
+          filters.name && filters.name !== ""
+            ? { fullname: { contains: filters.name, mode: "insensitive" as const } }
+            : {},
+      },
+      ...(filters.scholarship ? { scholarshipId: { in: filters.scholarship } } : {}),
     },
   })
 
@@ -662,11 +706,14 @@ const XetHocBong = ({ semesterId, trainingObjectTypeId }: XetHocBongProps) => {
                 </Col>
                 <Col span={24}>
                   <TableCollapse
+                    loading={isLoadingStudents}
                     rowKey="courseId"
                     headerTitleKey="courseName"
                     childrenFieldName="students"
                     defaultExpandAll
                     rowSelection={rowSelection}
+                    filters={filterDs}
+                    setFilters={setFilterDs}
                     onRow={(record) => ({
                       onClick: () => {
                         if (!record.id) return
@@ -683,8 +730,10 @@ const XetHocBong = ({ semesterId, trainingObjectTypeId }: XetHocBongProps) => {
                       },
                       {
                         title: "Tên sinh viên",
-                        dataIndex: ["userProfile", "fullname"],
+                        dataIndex: "name",
+                        type: "input",
                         width: 150,
+                        render: (_, record) => record?.userProfile?.fullname ?? "",
                       },
                       {
                         title: "Ngày sinh",
@@ -697,6 +746,9 @@ const XetHocBong = ({ semesterId, trainingObjectTypeId }: XetHocBongProps) => {
                       },
                       {
                         title: "Lớp",
+                        dataIndex: "fixedClass",
+                        type: "select",
+                        options: classOptions,
                         width: 60,
                         align: "center",
                         render: (_, record) => {
@@ -737,31 +789,6 @@ const XetHocBong = ({ semesterId, trainingObjectTypeId }: XetHocBongProps) => {
                         align: "center",
                         render: (_, record) => record?.studentSemesterResult?.conductScore ?? "-",
                       },
-                      // {
-                      //     title: 'TBHK',
-                      //     dataIndex: ['studentSemesterResult'],
-                      //     width: 40,
-                      //     align: 'center',
-                      //     render: (result?: StudentSemesterResult) =>
-                      //         result?.baseScore ===
-                      //         $Enums.AcademicRankingBaseType.Base10
-                      //             ? Number(result.gpaBase10)
-                      //             : Number(result?.gpaBase4 || 0),
-                      // },
-                      // {
-                      //     title: 'Xếp loại rèn luyện',
-                      //     dataIndex: [
-                      //         'studentSemesterResult',
-                      //         'studentTrainingType',
-                      //     ],
-                      //     width: 120,
-                      //     align: 'center',
-                      //     render: (value) => (
-                      //         <Tag color={getStudentTrainingTypeColor(value)}>
-                      //             {getStudentTrainingTypeLabel(value)}
-                      //         </Tag>
-                      //     ),
-                      // },
                       {
                         title: "Học bổng",
                         dataIndex: ["scholarship"],
@@ -804,23 +831,8 @@ const XetHocBong = ({ semesterId, trainingObjectTypeId }: XetHocBongProps) => {
                         render: (value?: string) => value?.split("\n").map((r) => <p>{r}</p>),
                       },
                     ]}
-                    data={studentData}
-                    pagination={{
-                      current: currentPage,
-                      pageSize: numberOfPages,
-                      total: studentData.reduce(
-                        (acc, course) => acc + (course.students?.length || 0),
-                        0
-                      ),
-                      onChange: (page, pageSize) => {
-                        if (numberOfPages === pageSize) {
-                          setCurrentPage(page)
-                        } else {
-                          setCurrentPage(1)
-                          setNumberOfPages(pageSize)
-                        }
-                      },
-                    }}
+                    data={filteredStudentData}
+                    pagination={false}
                   />
                 </Col>
               </Row>
