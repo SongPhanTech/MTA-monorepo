@@ -5,6 +5,7 @@ import "dayjs/locale/vi"
 import { queryClient } from "@api/index"
 import TableCollapse from "@components/commons/tableCollapse"
 import { DEFAULT_PAGINATE_SIZE } from "@constants/constants"
+import type { FilterProps } from "@constants/type"
 import useSpinner from "@hooks/spinner"
 import {
   $Enums,
@@ -17,6 +18,7 @@ import {
   exportStudentAcademicWarningExcel,
   useExportStudentAcademicWarningJson,
 } from "@workspace/libs/api/training"
+import { normalizeVietnamese } from "@workspace/libs/utils"
 import { saveAs } from "file-saver"
 import { BookPlus } from "lucide-react"
 import { useMemo, useState } from "react"
@@ -34,15 +36,17 @@ const NangCanhCaoHocTap = ({ semesterId, trainingObjectTypeId }: NangCanhCaoHocT
   const [currentPage, setCurrentPage] = useState(1)
   const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
   const [selectedRowKeys, setSelectedRowKeys] = useState<string[]>([])
+  const [filters, setFilters] = useState<FilterProps>({ name: "", fixedClass: undefined })
 
   const { showSpinner, hideSpinner } = useSpinner()
   const { mutateAsync: sqlTransaction } = useSqlTransaction()
 
-  const { data: students = [] } = useExportStudentAcademicWarningJson<any[] | { data: any[] }>(
-    { semesterId, trainingObjectTypeId },
-    { query: { enabled: !!semesterId && !!trainingObjectTypeId } },
-    queryClient
-  )
+  const { data: students = [], isFetching: isLoadingStudents } =
+    useExportStudentAcademicWarningJson<any[] | { data: any[] }>(
+      { semesterId, trainingObjectTypeId },
+      { query: { enabled: !!semesterId && !!trainingObjectTypeId } },
+      queryClient
+    )
 
   const studentData = useMemo(() => {
     if (!students) return []
@@ -55,18 +59,34 @@ const NangCanhCaoHocTap = ({ semesterId, trainingObjectTypeId }: NangCanhCaoHocT
     where: { semesterId },
   })
 
+  const classOptions = useMemo(() => {
+    const map = new Map<string, string>()
+    for (const group of studentData)
+      for (const s of group.students ?? [])
+        if (s?.fixedClass?.code) map.set(s.fixedClass.code, s.fixedClass.name ?? s.fixedClass.code)
+    return Array.from(map, ([value, label]) => ({ value, label }))
+  }, [studentData])
+
   const filteredStudentData = useMemo(() => {
-    if (!academicWarningData) return studentData
     const studentIdsWithWarnings = new Set(
-      academicWarningData.map((warning: AcademicWarning) => warning.studentId)
+      (academicWarningData ?? []).map((warning: AcademicWarning) => warning.studentId)
     )
+    const kw = normalizeVietnamese((filters.name ?? "").trim())
+    const cls = Array.isArray(filters.fixedClass)
+      ? filters.fixedClass
+      : filters.fixedClass
+        ? [filters.fixedClass]
+        : []
     return studentData.map((record) => ({
       ...record,
       students: (record.students || []).filter(
-        (student: Student) => !studentIdsWithWarnings.has(student.id)
+        (student: any) =>
+          !studentIdsWithWarnings.has(student.id) &&
+          (!kw || normalizeVietnamese(student?.userProfile?.fullname ?? "").includes(kw)) &&
+          (cls.length === 0 || cls.includes(student?.fixedClass?.code))
       ),
     }))
-  }, [studentData, academicWarningData])
+  }, [studentData, academicWarningData, filters])
 
   const rowSelection = {
     selectedRowKeys,
@@ -244,12 +264,18 @@ const NangCanhCaoHocTap = ({ semesterId, trainingObjectTypeId }: NangCanhCaoHocT
       </Col>
       <Col span={24} className="mt-4">
         <TableCollapse
+          loading={isLoadingStudents}
           rowKey="courseId"
           headerTitleKey="courseName"
           childrenFieldName="students"
           defaultExpandAll
           data={filteredStudentData}
           rowSelection={rowSelection}
+          filters={filters}
+          setFilters={(value) => {
+            setFilters(value)
+            setCurrentPage(1)
+          }}
           columns={[
             {
               title: "Mã sinh viên",
@@ -260,8 +286,10 @@ const NangCanhCaoHocTap = ({ semesterId, trainingObjectTypeId }: NangCanhCaoHocT
             },
             {
               title: "Tên sinh viên",
-              dataIndex: ["userProfile", "fullname"],
+              dataIndex: "name",
+              type: "input",
               width: 200,
+              render: (_, record) => record?.userProfile?.fullname ?? "",
             },
             {
               title: "Ngày sinh",
@@ -274,6 +302,9 @@ const NangCanhCaoHocTap = ({ semesterId, trainingObjectTypeId }: NangCanhCaoHocT
             },
             {
               title: "Lớp",
+              dataIndex: "fixedClass",
+              type: "select",
+              options: classOptions,
               width: 60,
               align: "center",
               render: (_, record) => (
@@ -306,22 +337,7 @@ const NangCanhCaoHocTap = ({ semesterId, trainingObjectTypeId }: NangCanhCaoHocT
               render: (value?: string) => value?.split("\n").map((r) => <p>{r}</p>),
             },
           ]}
-          pagination={{
-            current: currentPage,
-            pageSize: numberOfPages,
-            total: filteredStudentData.reduce(
-              (acc, course) => acc + (course.students?.length || 0),
-              0
-            ),
-            onChange: (page, pageSize) => {
-              if (numberOfPages === pageSize) {
-                setCurrentPage(page)
-              } else {
-                setCurrentPage(1)
-                setNumberOfPages(pageSize)
-              }
-            },
-          }}
+          pagination={false}
         />
       </Col>
     </Row>

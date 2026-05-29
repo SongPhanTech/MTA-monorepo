@@ -66,7 +66,9 @@ export function calcCurriculumCredits(trainingBlocks: TrainingBlock[] = []) {
       )
       .reduce((sum, sub) => sum + (sub.subject?.credit ?? 0), 0)
 
-    elective += Math.min(blockElective, block.electiveCreditsRequired ?? 0)
+    elective += block.electiveCreditsRequired != null
+  ? Math.min(blockElective, block.electiveCreditsRequired)
+  : blockElective
   }
 
   return { required, elective, total: required + elective }
@@ -686,32 +688,32 @@ export default function TrainingProgramCatalog() {
                 },
               },
               {
-                title: <Tooltip title="Tổng số tín chỉ">Số tín chỉ</Tooltip>,
-                align: "center",
-                width: 90,
-                render: (_, record) => {
-                  const { total } = calcCurriculumCredits(record.trainingBlocks)
-                  return total
-                },
+              title: <Tooltip title="Tổng số tín chỉ">Số tín chỉ</Tooltip>,
+              align: "center",
+              width: 90,
+              render: (_, record) => {
+                const { total } = calcCurriculumCredits(record.trainingBlocks)
+                return total
               },
-              {
-                title: <Tooltip title="Số tín chỉ bắt buộc">Số tín chỉ (Bắt buộc)</Tooltip>,
-                align: "center",
-                width: 90,
-                render: (_, record) => {
-                  const { required } = calcCurriculumCredits(record.trainingBlocks)
-                  return required
-                },
+            },
+            {
+              title: <Tooltip title="Số tín chỉ bắt buộc">Số tín chỉ (Bắt buộc)</Tooltip>,
+              align: "center",
+              width: 90,
+              render: (_, record) => {
+                const { required } = calcCurriculumCredits(record.trainingBlocks)
+                return required
               },
-              {
-                title: <Tooltip title="Số tín chỉ tự chọn">Số tín chỉ (Tự chọn)</Tooltip>,
-                align: "center",
-                width: 90,
-                render: (_, record) => {
-                  const { elective } = calcCurriculumCredits(record.trainingBlocks)
-                  return elective
-                },
+            },
+            {
+              title: <Tooltip title="Số tín chỉ tự chọn">Số tín chỉ (Tự chọn)</Tooltip>,
+              align: "center",
+              width: 90,
+              render: (_, record) => {
+                const { elective } = calcCurriculumCredits(record.trainingBlocks)
+                return elective
               },
+            },
               {
                 title: <Tooltip title="Số học kỳ">Số HK</Tooltip>,
                 dataIndex: "numberOfSemesters",
