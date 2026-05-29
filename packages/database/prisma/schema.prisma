@@ -239,6 +239,16 @@ enum TrainingObjectTypes {
   @@schema("ql-dao-tao")
 }
 
+/// Chức vụ cán bộ lớp
+enum OfficerPosition {
+  CLASS_MONITOR
+  UNION_SECRETARY
+  UNION_LEADER
+  DEPUTY_UNION_SECRETARY
+
+  @@schema("ql-dao-tao")
+}
+
 enum DiplomaTypeEnum {
   MASTER
   DOCTORATE
@@ -4056,6 +4066,22 @@ model Award {
   subjects      Subject[]
   /// SV đạt
   archivedAward ArchivedAward[]
+
+  @@schema("ql-dao-tao")
+}
+
+/// Điểm cộng cán bộ lớp
+model OfficerBonusScore {
+  id          String          @id() @default(cuid())
+  code        String?         @unique()
+  active      Boolean         @default(true)
+  description String?         @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @default(now()) @updatedAt()
+  createdBy   String?         @db.Uuid()
+  position    OfficerPosition @unique()
+  bonusScore  Float           @default(0)
 
   @@schema("ql-dao-tao")
 }

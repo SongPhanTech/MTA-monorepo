@@ -32,8 +32,9 @@ import { saveAs } from "file-saver"
 import _ from "lodash"
 import { BookCheckIcon } from "lucide-react"
 import { useRouter } from "next/router"
-import { useCallback, useState } from "react"
+import { useCallback, useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
+import { cn } from "@workspace/ui/lib/utils"
 import type { IHocKi, IMonHoc } from "./ket-qua-hoc-tap/[id]"
 
 dayjs.locale("vi")
@@ -207,6 +208,33 @@ export default function StudentFixedClassPage() {
       enabled: !!fixedClassId,
     }
   )
+
+  // Danh sách chức vụ cán bộ lớp + màu đánh dấu tương ứng
+  const canBoRoles = [
+    { id: fixedClass?.classMonitorId, label: "Lớp trưởng", className: "bg-blue-200" },
+    { id: fixedClass?.unionSecretaryId, label: "Bí thư", className: "bg-green-200" },
+    { id: fixedClass?.unionLeaderId, label: "Bí thư liên chi đoàn", className: "bg-yellow-200" },
+    {
+      id: fixedClass?.deputyUnionSecretaryId,
+      label: "Phó bí thư liên chi đoàn",
+      className: "bg-orange-200",
+    },
+  ]
+
+  // Map studentId -> className để tô màu dòng theo chức vụ
+  const roleByStudentId = useMemo(() => {
+    const map: Record<string, string> = {}
+    for (const r of canBoRoles) {
+      if (r.id) map[r.id] = r.className
+    }
+    return map
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    fixedClass?.classMonitorId,
+    fixedClass?.unionSecretaryId,
+    fixedClass?.unionLeaderId,
+    fixedClass?.deputyUnionSecretaryId,
+  ])
 
   const { data = [], refetch } = useFindManyStudent(
     {
@@ -421,6 +449,12 @@ export default function StudentFixedClassPage() {
     id: string
   }>({
     tag: "PutChuanDauRaModal",
+  })
+
+  const { onOpen: onOpenGanCanBo } = useDisclosure<{
+    id: string
+  }>({
+    tag: "GanCanBoLopModal",
   })
 
   const { showSpinner, hideSpinner } = useSpinner()
@@ -1748,11 +1782,21 @@ export default function StudentFixedClassPage() {
       <Row gutter={[16, 0]}>
         <Col span={24}>
           {/* Row nút thêm */}
-          <Row gutter={[16, 0]} align="top" justify="space-between">
-            {/* <Col span={12} /> */}
+          <Row gutter={[16, 0]} align="middle" justify="space-between">
+            {/* Chú thích màu cán bộ lớp */}
+            <Col flex="auto">
+              <Flex gap={24} wrap align="center" className="px-1">
+                {canBoRoles.map((r) => (
+                  <span key={r.label} className="inline-flex items-center gap-1.5">
+                    <span className={cn("inline-block h-4 w-4 shrink-0 rounded", r.className)} />
+                    <span className="leading-4">{r.label}</span>
+                  </span>
+                ))}
+              </Flex>
+            </Col>
 
             {/* Hàng chứa các button */}
-            <Col span={24}>
+            <Col flex="none">
               <Flex justify="end" wrap="wrap" gap="8px" className="mt-1">
                 <Dropdown
                   menu={{
@@ -2106,21 +2150,15 @@ export default function StudentFixedClassPage() {
                   </Button>
                 </Dropdown>
 
+                <Button onClick={() => onOpenGanCanBo({ id: fixedClassId })} type="primary">
+                  Cán bộ lớp
+                </Button>
+
                 <Tooltip title="Thêm Học viên/Sinh viên">
                   <Button onClick={handleModal} type="primary">
                     Thêm HV/SV
                   </Button>
                 </Tooltip>
-                {/* <Dropdown overlay={menuDownload} trigger={['hover']}>
-                                    <Button type="primary" icon={<DownloadOutlined />}>
-                                        Tải file mẫu
-                                    </Button>
-                                </Dropdown>
-                                <Dropdown overlay={menuUpload} trigger={['hover']}>
-                                    <Button type="primary" icon={<UploadOutlined />}>
-                                        Nhập file
-                                    </Button>
-                                </Dropdown> */}
               </Flex>
             </Col>
           </Row>
@@ -2128,6 +2166,7 @@ export default function StudentFixedClassPage() {
         <Col span={24}>
           <Table
             rowKey="id"
+            rowClassName={(record: any) => roleByStudentId[record.id] ?? ""}
             rowSelection={{
               selectedRowKeys,
               onChange: (selectedKeys: any) => setSelectedRowKeys(selectedKeys),

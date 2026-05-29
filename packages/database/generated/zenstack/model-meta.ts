@@ -14991,6 +14991,68 @@ const metadata: ModelMeta = {
             },
             attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
+        officerBonusScore: {
+            name: 'OfficerBonusScore', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$OfficerBonusScore$createdBy,
+                }, position: {
+                    name: "position",
+                    type: "OfficerPosition",
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, bonusScore: {
+                    name: "bonusScore",
+                    type: "Float",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }, { "name": "@gte", "args": [{ "name": "value", "value": 0 }, { "name": "message", "value": "Điểm tối thiểu là 0" }] }, { "name": "@lte", "args": [{ "name": "value", "value": 10 }, { "name": "message", "value": "Điểm tối đa là 10" }] }],
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, position: {
+                    name: "position",
+                    fields: ["position"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+        },
         diplomaType: {
             name: 'DiplomaType', fields: {
                 id: {
@@ -29693,6 +29755,10 @@ function $default$CertificateOnSubject$createdBy(user: any): unknown {
 }
 
 function $default$Award$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$OfficerBonusScore$createdBy(user: any): unknown {
     return user?.id;
 }
 
