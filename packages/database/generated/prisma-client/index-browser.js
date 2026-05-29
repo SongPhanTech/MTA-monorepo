@@ -2560,6 +2560,19 @@ exports.Prisma.AwardScalarFieldEnum = {
   bonusScore: 'bonusScore'
 };
 
+exports.Prisma.OfficerBonusScoreScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  position: 'position',
+  bonusScore: 'bonusScore'
+};
+
 exports.Prisma.DiplomaTypeScalarFieldEnum = {
   id: 'id',
   code: 'code',
@@ -6489,6 +6502,13 @@ exports.Prisma.AwardOrderByRelevanceFieldEnum = {
   englishName: 'englishName'
 };
 
+exports.Prisma.OfficerBonusScoreOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy'
+};
+
 exports.Prisma.DiplomaTypeOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
@@ -8088,6 +8108,13 @@ exports.TrainingObjectTypes = exports.$Enums.TrainingObjectTypes = {
   INTERNATIONAL_MILITARY: 'INTERNATIONAL_MILITARY'
 };
 
+exports.OfficerPosition = exports.$Enums.OfficerPosition = {
+  CLASS_MONITOR: 'CLASS_MONITOR',
+  UNION_SECRETARY: 'UNION_SECRETARY',
+  UNION_LEADER: 'UNION_LEADER',
+  DEPUTY_UNION_SECRETARY: 'DEPUTY_UNION_SECRETARY'
+};
+
 exports.DiplomaTypeEnum = exports.$Enums.DiplomaTypeEnum = {
   MASTER: 'MASTER',
   DOCTORATE: 'DOCTORATE',
@@ -8538,6 +8565,7 @@ exports.Prisma.ModelName = {
   Certificate: 'Certificate',
   CertificateOnSubject: 'CertificateOnSubject',
   Award: 'Award',
+  OfficerBonusScore: 'OfficerBonusScore',
   DiplomaType: 'DiplomaType',
   ScoreConvert: 'ScoreConvert',
   LoadCategory: 'LoadCategory',

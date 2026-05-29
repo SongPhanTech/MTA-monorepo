@@ -316,6 +316,24 @@ model Award extends Base {
   @@schema("ql-dao-tao")
 }
 
+/// Chức vụ cán bộ lớp
+enum OfficerPosition {
+  CLASS_MONITOR          // Lớp trưởng
+  UNION_SECRETARY        // Bí thư
+  UNION_LEADER           // Bí thư liên chi đoàn
+  DEPUTY_UNION_SECRETARY // Phó bí thư liên chi đoàn
+
+  @@schema("ql-dao-tao")
+}
+
+/// Điểm cộng cán bộ lớp
+model OfficerBonusScore extends Base {
+  position   OfficerPosition @unique
+  bonusScore Float           @default(0) @gte(0, 'Điểm tối thiểu là 0') @lte(10, 'Điểm tối đa là 10')
+
+  @@schema("ql-dao-tao")
+}
+
 
 
 // enum DiplomaFields {
