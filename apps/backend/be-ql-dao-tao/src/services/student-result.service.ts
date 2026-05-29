@@ -8,6 +8,7 @@ import {
   CriteriaField,
   CriteriaOperator,
   DecisionStatus,
+  OfficerPosition,
   type Prisma,
   RankingContext,
   type Scholarship,
@@ -1513,6 +1514,31 @@ export const listStudentResultInfo = async (
       },
     })
 
+    // Cấu hình điểm cộng cán bộ lớp (hệ 10) theo từng chức vụ
+    const officerBonusScores = await prisma.officerBonusScore.findMany({
+      where: { deletedAt: null, active: true },
+    })
+    const officerBonusMap = new Map<OfficerPosition, number>(
+      officerBonusScores.map((o) => [o.position, o.bonusScore])
+    )
+    // Bảng quy đổi điểm để suy hệ 4 từ hệ 10 sau khi cộng điểm cán bộ
+    const scoreConverts = await prisma.scoreConvert.findMany({
+      where: {
+        trainingCourseId: { in: listTrainingCourseId },
+        deletedAt: null,
+        active: true,
+      },
+      select: {
+        trainingCourseId: true,
+        letter: true,
+        base10Min: true,
+        base10Max: true,
+        base4: true,
+        classification: true,
+        pass: true,
+      },
+    })
+
     const studentsInfo: StudentInfoCheck[] = await Promise.all(
       students.map(async (student) => {
         const userProfile = student.userProfile
@@ -1535,6 +1561,40 @@ export const listStudentResultInfo = async (
                 trainingCourseId,
                 rankingConvert
               )
+
+        // Điểm cộng cán bộ lớp: xác định (các) chức vụ SV đang giữ trên lớp,
+        // lấy điểm cộng (hệ 10) cao nhất nếu kiêm nhiệm.
+        const fixedClass = student.fixedClass
+        const heldPositions: { position: OfficerPosition; label: string }[] = []
+        if (fixedClass?.classMonitorId === student.id)
+          heldPositions.push({ position: OfficerPosition.CLASS_MONITOR, label: "Lớp trưởng" })
+        if (fixedClass?.unionSecretaryId === student.id)
+          heldPositions.push({ position: OfficerPosition.UNION_SECRETARY, label: "Bí thư" })
+        if (fixedClass?.unionLeaderId === student.id)
+          heldPositions.push({
+            position: OfficerPosition.UNION_LEADER,
+            label: "Bí thư liên chi đoàn",
+          })
+        if (fixedClass?.deputyUnionSecretaryId === student.id)
+          heldPositions.push({
+            position: OfficerPosition.DEPUTY_UNION_SECRETARY,
+            label: "Phó bí thư liên chi đoàn",
+          })
+        const diemThuongCanBo = heldPositions.reduce(
+          (max, p) => Math.max(max, officerBonusMap.get(p.position) ?? 0),
+          0
+        )
+
+        // Điểm hệ 10 đã được tính xong từ trước -> tại đây chỉ CỘNG THÊM điểm cán bộ.
+        const gpaBase10Goc = semesterResult?.gpaBase10.toNumber() || 0
+        const gpaBase4Goc = semesterResult?.gpaBase4.toNumber() || 0
+        const gpaBase10CongThuong = gpaBase10Goc + diemThuongCanBo
+        // Hệ 4 suy ra từ hệ 10 đã cộng (giữ nguyên hệ 4 gốc nếu không có điểm cộng)
+        const gpaBase4CongThuong =
+          diemThuongCanBo > 0
+            ? layGiaTriDiem4(gpaBase10CongThuong, trainingCourseId, scoreConverts) || gpaBase4Goc
+            : gpaBase4Goc
+
         return {
           stt: 0,
           id: student.id ?? "",
@@ -1559,8 +1619,8 @@ export const listStudentResultInfo = async (
           fullDiemD: true,
           diemMonThuongNhoNhat: semesterResult?.lowestFinalScore ?? 0,
           diemMonTotNghiepNhoNhat: semesterResult?.lowestGraduationScore ?? 0,
-          diemTrungBinh4: semesterResult?.gpaBase4.toNumber() || 0,
-          diemTrungBinh10: semesterResult?.gpaBase10.toNumber() || 0,
+          diemTrungBinh4: gpaBase4CongThuong,
+          diemTrungBinh10: gpaBase10CongThuong,
           diemTrungBinhNam4: yearResult?.gpaBase4.toNumber() || 0,
           diemTrungBinhNam10: yearResult?.gpaBase10.toNumber() || 0,
           noTinChiTrongNam: yearResult?.failedCredits || 0,
@@ -1580,15 +1640,11 @@ export const listStudentResultInfo = async (
           trinhDoTinHoc: false,
           kyDangHoc: semesterResult?.semesterIndexInCourse || 0,
           kyCuoi: semesterResult?.isLastSemester || false,
-          chucVuHocVien: semesterResult?.isClassMonitor
-            ? "Lớp trưởng"
-            : semesterResult?.isUnionLeader
-              ? "Bí thư"
-              : "", // Chức vụ học viên
+          chucVuHocVien: heldPositions.map((p) => p.label).join(", "), // Chức vụ học viên
           quocTich: userProfile.nationalityId ?? "", // Quốc tịch
           // duDieuKienHocBong: true, // Điều kiện học bổng
           ghiChu: "", // Ghi chú,
-          diemThuong: semesterResult?.isClassMonitor || semesterResult?.isUnionLeader ? 0.1 : 0, // Điểm thưởng
+          diemThuong: diemThuongCanBo, // Điểm thưởng chức vụ cán bộ (hệ 10)
           userProfile: userProfile, // Thông tin người dùng
           rank,
           // Add missing properties with default values or calculated from item if possible
@@ -2246,6 +2302,12 @@ export const resultCourseStudentScholarship = async (
         rankId: _rankId,
         ...filteredResult
       } = studentSemesterResult as any
+
+      // Hiển thị điểm đã cộng điểm cán bộ (student.diemTrungBinh* đã được cộng ở listStudentResultInfo)
+      if ((student.diemThuong ?? 0) > 0) {
+        filteredResult.gpaBase10 = new Decimal(student.diemTrungBinh10)
+        filteredResult.gpaBase4 = new Decimal(student.diemTrungBinh4)
+      }
 
       console.log("studentSemesterResult", studentSemesterResult)
 

@@ -1,6 +1,7 @@
 import { PutLichVaSuKienModal, ViewNotificationModal, XemTaiLieu } from "@workspace/ui"
 import PutAddCertificateScoreModal from "./add-certificate"
 import AddStudentToFixedClassModal from "./add-student-to-fixedClass"
+import GanCanBoLopModal from "./gan-can-bo-lop"
 import ConfirmModal from "./confirm-dialog"
 import ExportStatsArchivedAwardModal from "./export-stats-archived-award"
 import PutScoreLinkSheetModal from "./modal-add-diem-lien-ket"
@@ -160,6 +161,7 @@ export {
   ModalPrintToKQHT,
   PutOneSubjectClassModal,
   AddStudentToFixedClassModal,
+  GanCanBoLopModal,
   PutOlympicScoreModal,
   PutCertificateScoreModal,
   PutAddOlympicScoreModal,
