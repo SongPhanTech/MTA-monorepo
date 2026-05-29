@@ -281,7 +281,7 @@ export default function MonDaLapKeHoach({ type }: { type?: $Enums.SubjectClassTy
                                 align: "center",
                               },
                               {
-                                value: "",
+                                value: item.studentCount,
                                 align: "center",
                                 rowSpan,
                               },
