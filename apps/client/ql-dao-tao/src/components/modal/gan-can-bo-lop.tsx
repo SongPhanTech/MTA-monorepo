@@ -136,7 +136,7 @@ const GanCanBoLopModal = () => {
       </Col>
 
       <Col span={24}>
-        <FormItem form={form} name="unionLeaderId" label="Bí thư liên chi đoàn">
+        <FormItem form={form} name="unionLeaderId" label="Bí thư LCĐ">
           <Select
             showSearch
             allowClear
@@ -149,7 +149,7 @@ const GanCanBoLopModal = () => {
       </Col>
 
       <Col span={24}>
-        <FormItem form={form} name="deputyUnionSecretaryId" label="Phó bí thư liên chi đoàn">
+        <FormItem form={form} name="deputyUnionSecretaryId" label="Phó bí thư LCĐ">
           <Select
             showSearch
             allowClear

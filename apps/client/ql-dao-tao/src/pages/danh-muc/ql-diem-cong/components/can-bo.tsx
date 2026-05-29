@@ -5,12 +5,11 @@ import { useFindManyOfficerBonusScore, useUpsertOfficerBonusScore } from "@works
 import { Button, Col, Form, InputNumber, message, Row } from "antd"
 import { useEffect } from "react"
 
-/// 4 chức vụ cán bộ lớp cố định (khớp enum OfficerPosition ở backend)
 const POSITIONS = [
   { position: "CLASS_MONITOR", label: "Lớp trưởng" },
   { position: "UNION_SECRETARY", label: "Bí thư" },
-  { position: "UNION_LEADER", label: "Bí thư liên chi đoàn" },
-  { position: "DEPUTY_UNION_SECRETARY", label: "Phó bí thư liên chi đoàn" },
+  { position: "UNION_LEADER", label: "Bí thư LCĐ" },
+  { position: "DEPUTY_UNION_SECRETARY", label: "Phó bí thư LCĐ" },
 ] as const
 
 // điểm cộng theo từng chức vụ, key = position
@@ -58,8 +57,8 @@ export default function CanBoBonus() {
       form={form}
       layout="horizontal"
       labelAlign="left"
-      labelCol={{ span: 5 }}
-      wrapperCol={{ span: 19 }}
+      labelCol={{ span: 4 }}
+      wrapperCol={{ span: 20 }}
       onFinish={onSave}
       className="mt-4 max-w-[640px]"
     >
