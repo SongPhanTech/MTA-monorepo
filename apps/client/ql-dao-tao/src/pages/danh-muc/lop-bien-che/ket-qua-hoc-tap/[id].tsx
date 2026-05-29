@@ -131,7 +131,9 @@ export default function StudentScoreClassPage() {
 
   const transcript = useMemo(() => {
     const trainingObjectTypeName =
-      selectedTrainingObjectType?.name ?? student?.fixedClass?.trainingCourse?.trainingObjectType?.name ?? ""
+      selectedTrainingObjectType?.name ??
+      student?.fixedClass?.trainingCourse?.trainingObjectType?.name ??
+      ""
 
     if (trainingObjectTypeName.includes("Đại học")) {
       return " (Mẫu P2)"
@@ -343,84 +345,82 @@ export default function StudentScoreClassPage() {
       })
   }, [data, semesterId])
 
- const sortSubjectClassesForExport = (subjectClasses: any[]) => {
-  if (!subjectClasses?.length) return []
+  const sortSubjectClassesForExport = (subjectClasses: any[]) => {
+    if (!subjectClasses?.length) return []
 
-  const prereqMap = new Map<string, Set<string>>()
+    const prereqMap = new Map<string, Set<string>>()
 
-  const items = subjectClasses.map((subjectClass, index) => ({
-    subjectClass,
-    originalIndex: index,
-    id: subjectClass?.subject?.id,
-    subject: subjectClass?.subject,
-  }))
+    const items = subjectClasses.map((subjectClass, index) => ({
+      subjectClass,
+      originalIndex: index,
+      id: subjectClass?.subject?.id,
+      subject: subjectClass?.subject,
+    }))
 
-  const parent = new Map<string, string>()
-  const find = (i: string): string => {
-    if (!parent.has(i)) parent.set(i, i)
-    if (parent.get(i) !== i) parent.set(i, find(parent.get(i)!))
-    return parent.get(i)!
-  }
-  const union = (i: string, j: string) => {
-    const rootI = find(i)
-    const rootJ = find(j)
-    if (rootI !== rootJ) parent.set(rootI, rootJ)
-  }
-
-  items.forEach(({ id, subject }) => {
-    if (!id || !subject) return
-
-    const prereqIds = (subject.prerequisiteSubject || [])
-      .map((x: any) => x?.id)
-      .filter(Boolean)
-    prereqMap.set(id, new Set(prereqIds))
-
-    const relations = [
-      ...prereqIds,
-      ...(subject.dependentSubject || []).map((x: any) => x?.id),
-      ...(subject.coRequisiteSubject || []).map((x: any) => x?.id),
-      ...(subject.depCoRequisiteSubject || []).map((x: any) => x?.id)
-    ]
-
-    const eqGroups = (subject.equivalencyGroups || []).map((x: any) => x?.equivalencyGroupId)
-
-    ;[...relations, ...eqGroups].forEach((relId) => {
-      if (relId) union(id, relId)
-    })
-  })
-
-  const groupMinIndex = new Map<string, number>()
-  items.forEach((item) => {
-    if (!item.id) return
-    const groupId = find(item.id)
-    const currentMin = groupMinIndex.get(groupId) ?? Infinity
-    groupMinIndex.set(groupId, Math.min(currentMin, item.originalIndex))
-  })
-
-  const sortedItems = [...items].sort((a, b) => {
-    if (!a.id || !b.id) return 0
-
-    const groupA = find(a.id)
-    const groupB = find(b.id)
-
-    if (groupA !== groupB) {
-      return (groupMinIndex.get(groupA) ?? 0) - (groupMinIndex.get(groupB) ?? 0)
+    const parent = new Map<string, string>()
+    const find = (i: string): string => {
+      if (!parent.has(i)) parent.set(i, i)
+      if (parent.get(i) !== i) parent.set(i, find(parent.get(i)!))
+      return parent.get(i)!
+    }
+    const union = (i: string, j: string) => {
+      const rootI = find(i)
+      const rootJ = find(j)
+      if (rootI !== rootJ) parent.set(rootI, rootJ)
     }
 
-    const aPrereqs = prereqMap.get(a.id)
-    const bPrereqs = prereqMap.get(b.id)
+    items.forEach(({ id, subject }) => {
+      if (!id || !subject) return
 
-    if (aPrereqs?.has(b.id)) return 1
-    if (bPrereqs?.has(a.id)) return -1
+      const prereqIds = (subject.prerequisiteSubject || []).map((x: any) => x?.id).filter(Boolean)
+      prereqMap.set(id, new Set(prereqIds))
 
-    return (
-      a.originalIndex - b.originalIndex ||
-      String(a.subject?.code || "").localeCompare(String(b.subject?.code || ""))
-    )
-  })
+      const relations = [
+        ...prereqIds,
+        ...(subject.dependentSubject || []).map((x: any) => x?.id),
+        ...(subject.coRequisiteSubject || []).map((x: any) => x?.id),
+        ...(subject.depCoRequisiteSubject || []).map((x: any) => x?.id),
+      ]
 
-  return sortedItems.map((item) => item.subjectClass).filter(Boolean)
-}
+      const eqGroups = (subject.equivalencyGroups || []).map((x: any) => x?.equivalencyGroupId)
+
+      ;[...relations, ...eqGroups].forEach((relId) => {
+        if (relId) union(id, relId)
+      })
+    })
+
+    const groupMinIndex = new Map<string, number>()
+    items.forEach((item) => {
+      if (!item.id) return
+      const groupId = find(item.id)
+      const currentMin = groupMinIndex.get(groupId) ?? Infinity
+      groupMinIndex.set(groupId, Math.min(currentMin, item.originalIndex))
+    })
+
+    const sortedItems = [...items].sort((a, b) => {
+      if (!a.id || !b.id) return 0
+
+      const groupA = find(a.id)
+      const groupB = find(b.id)
+
+      if (groupA !== groupB) {
+        return (groupMinIndex.get(groupA) ?? 0) - (groupMinIndex.get(groupB) ?? 0)
+      }
+
+      const aPrereqs = prereqMap.get(a.id)
+      const bPrereqs = prereqMap.get(b.id)
+
+      if (aPrereqs?.has(b.id)) return 1
+      if (bPrereqs?.has(a.id)) return -1
+
+      return (
+        a.originalIndex - b.originalIndex ||
+        String(a.subject?.code || "").localeCompare(String(b.subject?.code || ""))
+      )
+    })
+
+    return sortedItems.map((item) => item.subjectClass).filter(Boolean)
+  }
 
   const exportTemplate = async () => {
     const hocKis: IHocKi[] = []
@@ -786,9 +786,7 @@ export default function StudentScoreClassPage() {
           { value: "Điểm trung bình học kỳ:", colSpan: 6, bold: true, align: "center" },
           { value: null },
           {
-            value: hasMon
-              ? { formula: sumStcFormula, result: hocKi.SoTinChiKy ?? 0 }
-              : 0,
+            value: hasMon ? { formula: sumStcFormula, result: hocKi.SoTinChiKy ?? 0 } : 0,
             bold: true,
             align: "center",
           },
@@ -798,17 +796,13 @@ export default function StudentScoreClassPage() {
           { value: null },
           { value: null },
           {
-            value: hasMon
-              ? { formula: tbHe10Formula, result: hocKi.DiemTBKyHe10 ?? 0 }
-              : 0,
+            value: hasMon ? { formula: tbHe10Formula, result: hocKi.DiemTBKyHe10 ?? 0 } : 0,
             bold: true,
             align: "right",
             numFmt: "0.00",
           },
           {
-            value: hasMon
-              ? { formula: tbHe4Formula, result: hocKi.DiemTBKyHe4 ?? 0 }
-              : 0,
+            value: hasMon ? { formula: tbHe4Formula, result: hocKi.DiemTBKyHe4 ?? 0 } : 0,
             bold: true,
             align: "right",
             numFmt: "0.00",
@@ -951,7 +945,7 @@ export default function StudentScoreClassPage() {
         latestSubjectClassesMap.set(subjectId, subjectClass)
       }
     })
-    
+
     const uniqueSubjectClasses = Array.from(latestSubjectClassesMap.values())
 
     const orderedSubjectClasses = sortSubjectClassesForExport(uniqueSubjectClasses)
@@ -959,9 +953,7 @@ export default function StudentScoreClassPage() {
     orderedSubjectClasses.forEach((subjectClass) => {
       subjectClass.subjectClassStudent.forEach((subjectClassStudent: any) => {
         const rawScore =
-          subjectClassStudent?.manualFinalScore ||
-          subjectClassStudent?.finalScore?.toNumber() ||
-          0
+          subjectClassStudent?.manualFinalScore || subjectClassStudent?.finalScore?.toNumber() || 0
 
         const isGraduation = subjectClass?.subject?.trainingBlocks?.[0]?.graduation === true
         const converted = convertScoreWithGraduation(rawScore, isGraduation)

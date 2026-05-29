@@ -1193,6 +1193,9 @@ app.openapi(exportSubjectClassScore, async (c) => {
         TT: index + 1,
         MA_SV: scs.student.code,
         HO_TEN: scs.student.userProfile?.fullname || "",
+        NGAY_SINH: scs.student.userProfile?.dateOfBirth
+          ? dayjs(scs.student.userProfile.dateOfBirth).format("DD/MM/YYYY")
+          : "",
         LOP: scs.student.fixedClass?.code || "",
         CC:
           scs.attendanceScore !== null && scs.attendanceScore !== undefined

@@ -12,7 +12,7 @@ import {
   type Student,
   type StudentSemesterResult,
 } from "@workspace/db/client"
-import {useFindManyAcademicWarning ,useFindUniqueSemester} from "@workspace/db/hooks"
+import { useFindManyAcademicWarning, useFindUniqueSemester } from "@workspace/db/hooks"
 import {
   exportStudentAcademicWarningExcel,
   useExportStudentAcademicWarningJson,
@@ -79,68 +79,68 @@ const NangCanhCaoHocTap = ({ semesterId, trainingObjectTypeId }: NangCanhCaoHocT
     },
   }
   const { data: currentSemester } = useFindUniqueSemester(
-  { where: { id: semesterId } },
-  { enabled: !!semesterId }
-)
-const handleExportPhuLucIII = async () => {
-  if (!filteredStudentData || filteredStudentData.length === 0) {
-    message.warning("Không có dữ liệu để xuất")
-    return
+    { where: { id: semesterId } },
+    { enabled: !!semesterId }
+  )
+  const handleExportPhuLucIII = async () => {
+    if (!filteredStudentData || filteredStudentData.length === 0) {
+      message.warning("Không có dữ liệu để xuất")
+      return
+    }
+
+    try {
+      showSpinner()
+
+      let globalIndex = 0
+      const list = filteredStudentData.flatMap((course: any) =>
+        (course.students || []).map((record: any) => {
+          const result = record.studentSemesterResult
+          const currentLevel = result?.academicWarningLevel ?? 0
+          const severity =
+            record.academicWarningRule?.length > 0
+              ? Math.max(...record.academicWarningRule.map((r: any) => r.severity))
+              : 1
+
+          return {
+            index: ++globalIndex,
+            fullname: record.userProfile?.fullname || "",
+            className: record.fixedClass?.name || "",
+            gpaHK: Number(result?.gpaBase10),
+            gpaTL: Number(result?.cumulativeGpaBase10),
+            debtHK: result?.failedCredits ?? 0,
+            debtTL: result?.totalFailedCredits ?? 0,
+            oldLevel: currentLevel,
+            newLevel: currentLevel + severity,
+            reason: record.reason || "",
+          }
+        })
+      )
+
+      const mappedData = {
+        totalCount: globalIndex,
+        semesterInfo: currentSemester?.name || "",
+        list,
+      }
+
+      const exportRes = await docxTemplate({
+        fileName: "Phu_luc_III_CBHT.docx",
+        path: "Phu_luc_III_CBHT.docx",
+        prefix: "/mta/template",
+        data: mappedData as Record<string, unknown>,
+      })
+
+      if (exportRes && exportRes.status >= 200 && exportRes.status < 300) {
+        saveAs(exportRes.data, "Phu_luc_III_CBHT.docx")
+      } else {
+        message.error(`Xuất file thất bại: Status ${exportRes?.status}`)
+      }
+    } catch (error: unknown) {
+      const msg = error instanceof Error ? error.message : JSON.stringify(error)
+      message.error(`Lỗi xuất file: ${msg}`)
+    } finally {
+      hideSpinner()
+    }
   }
-
-  try {
-    showSpinner()
-
-    let globalIndex = 0
-    const list = filteredStudentData.flatMap((course: any) =>
-  (course.students || []).map((record: any) => {
-    const result = record.studentSemesterResult
-    const currentLevel = result?.academicWarningLevel ?? 0
-    const severity =
-      record.academicWarningRule?.length > 0
-        ? Math.max(...record.academicWarningRule.map((r: any) => r.severity))
-        : 1
-
-    return {
-      index: ++globalIndex,
-      fullname: record.userProfile?.fullname || "",
-      className: record.fixedClass?.name || "",
-      gpaHK: Number(result?.gpaBase10),
-      gpaTL: Number(result?.cumulativeGpaBase10),
-      debtHK: result?.failedCredits ?? 0,
-      debtTL: result?.totalFailedCredits ?? 0,
-      oldLevel: currentLevel,
-      newLevel: currentLevel + severity,
-      reason: record.reason || "",
-    }
-  })
-)
-
-    const mappedData = {
-      totalCount: globalIndex,
-      semesterInfo: currentSemester?.name || "",
-      list,
-    }
-
-    const exportRes = await docxTemplate({
-      fileName: "Phu_luc_III_CBHT.docx",
-      path: "Phu_luc_III_CBHT.docx",
-      prefix: "/mta/template",
-      data: mappedData as Record<string, unknown>,
-    })
-
-    if (exportRes && exportRes.status >= 200 && exportRes.status < 300) {
-      saveAs(exportRes.data, "Phu_luc_III_CBHT.docx")
-    } else {
-      message.error(`Xuất file thất bại: Status ${exportRes?.status}`)
-    }
-  } catch (error: unknown) {
-    const msg = error instanceof Error ? error.message : JSON.stringify(error)
-    message.error(`Lỗi xuất file: ${msg}`)
-  } finally {
-    hideSpinner()
-  }
-}
   const handleApproved = async () => {
     if (selectedRowKeys.length === 0) {
       message.warning("Vui lòng chọn ít nhất một sinh viên để duyệt")
@@ -233,7 +233,7 @@ const handleExportPhuLucIII = async () => {
       <Col span={24}>
         <Flex justify="end" gap={8}>
           <Button type="primary" onClick={handleExportPhuLucIII}>
-          <Download />
+            <Download />
             Tải Phụ lục III
           </Button>
           <Button type="primary" onClick={handleApproved}>

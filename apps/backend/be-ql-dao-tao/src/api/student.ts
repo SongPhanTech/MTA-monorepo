@@ -814,51 +814,50 @@ app.openapi(debtStatistics, async (c) => {
     subjects: Record<string, DebtSubject>
   }
 
- const studentDebtMap = res.reduce(
-  (acc, record) => {
-    const {
-      studentId,
-      studentCode,
-      fullname,
-      dateOfBirth,
-      fixedClassCode,
-      subjectCode,
-      subjectName,
-      subjectCredit,
-      semesterCode,
-      finalScore,
-    } = record
-
-    if (!acc[studentId]) {
-      acc[studentId] = {
+  const studentDebtMap = res.reduce(
+    (acc, record) => {
+      const {
         studentId,
         studentCode,
         fullname,
         dateOfBirth,
         fixedClassCode,
-        subjects: {},
-      }
-    }
-
-    if (!acc[studentId].subjects[subjectCode]) {
-      acc[studentId].subjects[subjectCode] = {
         subjectCode,
         subjectName,
         subjectCredit,
-        attempts: [],
-      }
-    }
+        semesterCode,
+        finalScore,
+      } = record
 
-    acc[studentId].subjects[subjectCode].attempts.push({ semesterCode, finalScore })
-    return acc
-  },
-  {} as Record<string, StudentDebtSummary>
-)
+      if (!acc[studentId]) {
+        acc[studentId] = {
+          studentId,
+          studentCode,
+          fullname,
+          dateOfBirth,
+          fixedClassCode,
+          subjects: {},
+        }
+      }
+
+      if (!acc[studentId].subjects[subjectCode]) {
+        acc[studentId].subjects[subjectCode] = {
+          subjectCode,
+          subjectName,
+          subjectCredit,
+          attempts: [],
+        }
+      }
+
+      acc[studentId].subjects[subjectCode].attempts.push({ semesterCode, finalScore })
+      return acc
+    },
+    {} as Record<string, StudentDebtSummary>
+  )
   const rows = Object.values(studentDebtMap).flatMap((s) => {
     const subjectsArray = Object.values(s.subjects)
     const totalDebtSubject = subjectsArray.length
     const totalDebtCredit = subjectsArray.reduce((sum, sub) => sum + sub.subjectCredit, 0)
-
 
     return subjectsArray.map((subject) => {
       const finalScores = subject.attempts.map((attempt) => attempt.finalScore)
