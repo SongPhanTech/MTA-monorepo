@@ -10,6 +10,7 @@ import type { FilterProps } from "@constants/type"
 import { useExamTypeOptions } from "@hooks/examType"
 import useSpinner from "@hooks/spinner"
 import type { SubjectClass } from "@workspace/db/client"
+import LectureTreeSelect from "@components/commons/lecture-select-multi/TreeSelectLecture"
 import {
   useFindManyBuilding,
   useFindManyClassSchedule,
@@ -72,6 +73,9 @@ const PutOneSubjectClassModal = () => {
 
   const { mutateAsync: updateSubjectClass } = useUpdateSubjectClass()
   // const { mutateAsync: updateSubjectClass } = useUpdateSubjectClass()
+
+  const lecturerId = Form.useWatch("lecturerId", form);
+  const extraLecturerId = Form.useWatch("extraLecturerId", form);
   async function onOk(output?: PutOneSubjectClassType) {
     if (!output) return
     try {
@@ -536,46 +540,32 @@ const PutOneSubjectClassModal = () => {
                   />
                 </FormItem>
               </Col>
-              <Col span={6}>
+            <Col span={6}>
                 <FormItem form={form} name="lecturerId" label="Giảng viên 1">
-                  <Select
-                    disabled
-                    options={lecturerData.map((i) => {
-                      return {
-                        ...i,
-                        value: i?.id,
-                        label: [i?.code, i?.userProfile?.fullname].filter(Boolean).join(" - "),
-                      }
-                    })}
+                  <LectureTreeSelect
                     placeholder="Chọn giảng viên 1"
+                    ignoreLectureIds={[extraLecturerId].filter(Boolean) as string[]}
+                    onChange={(value) => {
+                      form.setFieldsValue({ enterGradeLecturerId: value });
+                    }}
                   />
                 </FormItem>
               </Col>
               <Col span={6}>
                 <FormItem form={form} name="extraLecturerId" label="Giảng viên 2">
-                  <Select
-                    disabled
-                    options={lecturerData.map((i) => {
-                      return {
-                        value: i?.id,
-                        label: [i?.code, i?.userProfile?.fullname].filter(Boolean).join(" - "),
-                      }
-                    })}
-                    placeholder="Chọn giảng viên"
+                  <LectureTreeSelect
+                    placeholder="Chọn giảng viên 2"
+                    ignoreLectureIds={[lecturerId].filter(Boolean) as string[]}
                   />
                 </FormItem>
               </Col>
               <Col span={6}>
                 <FormItem form={form} name="enterGradeLecturerId" label="Giảng viên chấm điểm">
-                  <Select
-                    disabled
-                    options={lecturerData.map((i) => {
-                      return {
-                        value: i?.id,
-                        label: [i?.code, i?.userProfile?.fullname].filter(Boolean).join(" - "),
-                      }
-                    })}
+                  <LectureTreeSelect
                     placeholder="Chọn giảng viên"
+                    onChange={(value) => {
+                      form.setFieldsValue({ lecturerId: value });
+                    }}
                   />
                 </FormItem>
               </Col>
