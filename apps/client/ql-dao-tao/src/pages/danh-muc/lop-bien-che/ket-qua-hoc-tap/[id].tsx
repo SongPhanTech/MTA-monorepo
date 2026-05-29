@@ -1090,7 +1090,7 @@ export default function StudentScoreClassPage() {
     const gapRow: TableRow = { cells: [{ value: null, colSpan: 9, border: false }] }
 
     exportFromTemplate({
-      templateUrl: getMinioUrl("/mta/template/bangdiemquatrinh.xlsx"),
+      templateUrl: getMinioUrl("/mta/template/BangDiemQuaTrinh.xlsx"),
       sheets: [
         {
           sheet: "BaoCaoDiem",
