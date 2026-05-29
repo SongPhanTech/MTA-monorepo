@@ -1,12 +1,12 @@
 import { cn } from "@workspace/ui/lib/utils"
 import { Form, type FormInstance, type FormItemProps as FormItemAntDrops } from "antd"
 
-type FormItemProps<T = Record<string, unknown>, K = keyof T> = FormItemAntDrops & {
+type FormItemProps<T extends object, K extends keyof T = keyof T> = FormItemAntDrops & {
   form: FormInstance<T>
   name: K | (string | number)[]
 }
 
-const FormItem = <T extends Record<string, unknown>, K extends keyof T>({
+const FormItem = <T extends object, K extends keyof T>({
   form,
   ...rest
 }: FormItemProps<T, K>) => {

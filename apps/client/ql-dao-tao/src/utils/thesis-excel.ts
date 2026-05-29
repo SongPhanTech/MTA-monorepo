@@ -338,42 +338,28 @@ interface HDDanhGiaLuanVanTemplateData {
   tail: HDDanhGiaLuanVanTail
   data: HDDanhGiaLuanVanData[]
 }
-const formatDocDate = (date?: Date | string | null) => {
-  if (!date) return { day: "", month: "", year: "" }
-  const d = dayjs(date)
-  const day = d.date()
-  const month = d.month() + 1
-  const year = d.year()
 
-  const formatUnit = (val: number) => {
-    if (val === 1 || val === 2) return val.toString().padStart(2, "0")
-    return val.toString()
-  }
 
-  // const dayStr = day.toString()
-  // const monthStr = month === 1 || month === 2 ? month.toString().padStart(2, "0") : month.toString()
+const formatDay = (day: number) => day.toString().padStart(2, "0"); // Luôn hiển thị 01-09
+const formatMonth = (month: number) => (month === 1 || month === 2) ? `0${month}` : month.toString(); // Chỉ thêm 0 cho tháng 1, 2
+
+export const formatDocDate = (date?: Date | string | null) => {
+  if (!date) return { day: "", month: "", year: "" };
+  const d = dayjs(date);
 
   return {
-    day: formatUnit(day),
-    month: formatUnit(month),
-    year: year.toString(),
-  }
-}
+    day: formatDay(d.date()),
+    month: formatMonth(d.month() + 1),
+    year: d.year().toString(),
+  };
+};
 
-const formatBirthDate = (date?: Date | string | null) => {
-  if (!date) return ""
-  const d = dayjs(date)
-  const day = d.date()
-  const month = d.month() + 1
-  const year = d.year()
+export const formatBirthDate = (date?: Date | string | null) => {
+  if (!date) return "";
+  const d = dayjs(date);
 
-  const formatUnit = (val: number) => {
-    if (val === 1 || val === 2) return val.toString().padStart(2, "0")
-    return val.toString()
-  }
-
-  return `${formatUnit(day)}/${formatUnit(month)}/${year}`
-}
+  return `${formatDay(d.date())}/${formatMonth(d.month() + 1)}/${d.year()}`;
+};
 
 export const exportPhuLucDsLuanVan = async ({
   allStudentsInClasses,
