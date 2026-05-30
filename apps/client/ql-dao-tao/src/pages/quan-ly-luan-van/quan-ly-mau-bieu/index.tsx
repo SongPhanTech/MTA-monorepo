@@ -10,8 +10,9 @@ import { Button, Col, Flex, Input, message, Popconfirm, Row, Tag, Tooltip, Uploa
 import axios from "axios"
 import dayjs from "dayjs"
 import _ from "lodash"
-import { Download, RefreshCcw, Trash2 } from "lucide-react"
+import { Download, Eye, RefreshCcw, Trash2 } from "lucide-react"
 import { useCallback, useEffect, useMemo, useState } from "react"
+import { useDisclosure } from "react-hook-disclosure-modal"
 
 type SortField = "name" | "size" | "lastModified"
 type SortOrder = "asc" | "desc"
@@ -48,6 +49,8 @@ const stripPrefix = (name: string | undefined) => {
 
 const getDisplayName = (item: BucketItemDto) => stripPrefix(item.name || item.prefix || "")
 
+const getFileExtension = (fileName: string) => fileName.split(".").pop()?.toLowerCase() || ""
+
 const normalizeBucketItems = (value: unknown): BucketItemDto[] => {
   if (Array.isArray(value)) return value
   if (value && typeof value === "object" && "data" in value) {
@@ -68,6 +71,14 @@ export default function QuanLyMauBieu() {
   const [deletingObjectName, setDeletingObjectName] = useState<string | null>(null)
 
   const { showSpinner, hideSpinner } = useSpinner()
+
+  const { onOpen: onOpenPreview } = useDisclosure<{
+    uri: string
+    name?: string
+    mimeType?: string
+  }>({
+    tag: "XemTaiLieu",
+  })
 
   const debouncedSetSearch = useCallback(
     _.debounce((value: string) => {
@@ -153,15 +164,20 @@ export default function QuanLyMauBieu() {
     refetch()
   }
 
-  const handleOpen = async (objectName?: string) => {
+  const handlePreview = async (objectName?: string) => {
     if (!objectName) return
+    const displayName = stripPrefix(objectName) || objectName
     try {
       showSpinner()
       const res = await presignedGetObject({ objectName })
-      window.open(res.data.url, "_blank", "noopener,noreferrer")
+      onOpenPreview({
+        uri: res.data.url,
+        name: displayName,
+        mimeType: getFileExtension(displayName),
+      })
     } catch (error) {
       console.error(error)
-      message.error("Không thể tải file. Vui lòng thử lại.")
+      message.error("Không thể xem trước file. Vui lòng thử lại.")
     } finally {
       hideSpinner()
     }
@@ -345,7 +361,7 @@ export default function QuanLyMauBieu() {
                       ) : (
                         <span
                           className="cursor-pointer text-blue-600 hover:underline"
-                          onClick={() => handleOpen(record.name)}
+                          onClick={() => handlePreview(record.name)}
                         >
                           {display}
                         </span>
@@ -377,13 +393,21 @@ export default function QuanLyMauBieu() {
               },
               {
                 title: "Thao tác",
-                width: 120,
+                width: 150,
                 align: "center",
                 fixed: "right",
                 render: (_, record) => {
                   if (!record.name) return null
                   return (
                     <Flex justify="center" gap={4}>
+                      <Tooltip title="Xem trước">
+                        <Button
+                          type="text"
+                          size="small"
+                          icon={<Eye size={16} />}
+                          onClick={() => handlePreview(record.name)}
+                        />
+                      </Tooltip>
                       <Tooltip title="Tải file xuống">
                         <Button
                           type="text"
