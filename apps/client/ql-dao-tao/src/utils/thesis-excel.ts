@@ -34,16 +34,23 @@ interface ExportOptions {
     inAcademy: boolean
   }>
   /** Trước khi xuất: tạo/ghi đè thanh toán GVHD theo cấu hình mặc định + chuẩn hoá single/dual */
-  ensureSupervisorPaymentsForExport?: (
-    project: any,
-    exportFilterInAcademy?: boolean
-  ) => Promise<void>
+  ensureSupervisorPaymentsForExport?: (project: any) => Promise<void>
 }
 
 const resolveSigningDate = (signingDate?: Date | string) =>
   signingDate ? dayjs(signingDate) : dayjs()
 const formatAmountWithComma = (amount: number) =>
   Number(amount || 0).toLocaleString("en-US", { maximumFractionDigits: 0 })
+
+const readDecimalAmount = (value: unknown): number => {
+  if (value == null) return 0
+  if (typeof value === "number") return value
+  if (typeof value === "string") return Number(value) || 0
+  if (typeof (value as { toNumber?: () => number }).toNumber === "function") {
+    return (value as { toNumber: () => number }).toNumber()
+  }
+  return Number(value) || 0
+}
 /** Phạm vi chuyên gia khi gom dữ liệu giấy mời chấm LV PB (cán bộ trong / ngoài học viện). */
 type GmcLvPbExpertScope = "all" | "inAcademy" | "outsideAcademy"
 
@@ -1951,13 +1958,60 @@ const tenDoiTuong = {
   },
 }
 
-const getThesisProjectWithCouncilBySessionId = (student: any, thesisSessionId?: string) => {
+const getThesisProjectBySessionId = (student: any, thesisSessionId?: string) => {
   if (!thesisSessionId) return undefined
+  return student?.thesisRegistrations?.find((reg: any) => {
+    const project = reg?.thesisProject
+    if (!project) return false
+    return (
+      project.thesisSession?.id === thesisSessionId ||
+      project.thesisSessionId === thesisSessionId
+    )
+  })?.thesisProject
+}
 
-  const thesisProject = student?.thesisRegistrations?.find(
-    (reg: any) => reg?.thesisProject?.thesisSession?.id === thesisSessionId
-  )?.thesisProject
+const buildSupervisorPaymentRows = (project: any) => {
+  const rows: Array<{
+    expert: any
+    amount: number
+    bankAccountNumber: string
+    bankName: string
+  }> = []
 
+  if (project.singleSupervisorPaymentId || project.singleSupervisorPayment) {
+    const expert = project.supervisor || project.coSupervisor
+    if (expert) {
+      rows.push({
+        expert,
+        amount: readDecimalAmount(project.singleSupervisorPayment?.amount),
+        bankAccountNumber: expert.bankAccountNumber || "",
+        bankName: expert.bankName || "",
+      })
+    }
+    return rows
+  }
+
+  if (project.supervisor) {
+    rows.push({
+      expert: project.supervisor,
+      amount: readDecimalAmount(project.supervisorPayment?.amount),
+      bankAccountNumber: project.supervisor.bankAccountNumber || "",
+      bankName: project.supervisor.bankName || "",
+    })
+  }
+  if (project.coSupervisor) {
+    rows.push({
+      expert: project.coSupervisor,
+      amount: readDecimalAmount(project.coSupervisorPayment?.amount),
+      bankAccountNumber: project.coSupervisor.bankAccountNumber || "",
+      bankName: project.coSupervisor.bankName || "",
+    })
+  }
+  return rows
+}
+
+const getThesisProjectWithCouncilBySessionId = (student: any, thesisSessionId?: string) => {
+  const thesisProject = getThesisProjectBySessionId(student, thesisSessionId)
   if (!thesisProject?.council?.members?.length) return undefined
   return thesisProject
 }
@@ -2412,7 +2466,6 @@ export const exportThanhToanHuongDanTrongHv = async ({
   showSpinner,
   hideSpinner,
   message,
-  inAcademy,
   ensureSupervisorPaymentsForExport,
 }: ExportOptions) => {
   if (!allStudentsInClasses?.length) {
@@ -2421,23 +2474,31 @@ export const exportThanhToanHuongDanTrongHv = async ({
   }
   try {
     showSpinner?.()
-    const dataConvert = await convertToThanhToanHuongDanTrongHvData(
-      allStudentsInClasses,
-      thesisSessionId,
-      inAcademy,
-      ensureSupervisorPaymentsForExport
-    )
-    if (dataConvert.length === 0) {
-      message.error("Chưa có dữ liệu để xuất thanh toán hướng dẫn")
+    const { groups, studentsInSession, studentsWithSupervisor } =
+      await convertToThanhToanHuongDanTrongHvData(
+        allStudentsInClasses,
+        thesisSessionId,
+        ensureSupervisorPaymentsForExport
+      )
+    if (groups.length === 0) {
+      if (!thesisSessionId) {
+        message.warning("Vui lòng chọn đợt xét luận văn trước khi xuất.")
+      } else if (studentsInSession > 0 && studentsWithSupervisor === 0) {
+        message.error(
+          `Có ${studentsInSession} học viên trong đợt đã chọn nhưng chưa gán GVHD (hoặc chưa load đủ thông tin GVHD/thanh toán) để xuất file.`
+        )
+      } else {
+        message.error("Chưa có dữ liệu để xuất thanh toán hướng dẫn")
+      }
       return []
     }
-    const fileName = inAcademy ? "ThanhToanHuongDanTrongHv" : "ThanhToanHuongDanNgoaiHV"
-    const path = inAcademy ? "ThanhToanHuongDanTrongHV.xlsx" : "ThanhToanHuongDanNgoaiHV.xlsx"
+    const dataConvert = groups
+    const fileName = "ThanhToanHuongDan"
     const payload: ExcelTemplateBody = {
       head: { data: null },
       tail: { data: null },
       fileName: fileName,
-      path: path,
+      path: "ThanhToanHuongDanTrongHV.xlsx",
       prefix: "mta/luan-van",
       payload: dataConvert,
       showGridLines: true,
@@ -2460,74 +2521,36 @@ export const exportThanhToanHuongDanTrongHv = async ({
 const convertToThanhToanHuongDanTrongHvData = async (
   allStudentsInClasses: any[],
   thesisSessionId?: string,
-  inAcademy?: boolean,
-  ensureSupervisorPaymentsForExport?: (
-    project: any,
-    exportFilterInAcademy?: boolean
-  ) => Promise<void>
-): Promise<ThanhToanHuongDanTrongHvData[]> => {
+  ensureSupervisorPaymentsForExport?: (project: any) => Promise<void>
+): Promise<{
+  groups: ThanhToanHuongDanTrongHvData[]
+  studentsInSession: number
+  studentsWithSupervisor: number
+}> => {
   if (!allStudentsInClasses?.length) {
-    return []
+    return { groups: [], studentsInSession: 0, studentsWithSupervisor: 0 }
   }
   const now = dayjs()
   const organizationMap = new Map<string, ThanhToanHuongDanTrongHvData>()
   const studentsWithProject = allStudentsInClasses.filter((student) => {
-    return Boolean(getThesisProjectWithCouncilBySessionId(student, thesisSessionId))
+    return Boolean(getThesisProjectBySessionId(student, thesisSessionId))
   })
-  if (!studentsWithProject.length) return []
+  if (!studentsWithProject.length) {
+    return { groups: [], studentsInSession: 0, studentsWithSupervisor: 0 }
+  }
+  let studentsWithSupervisor = 0
   for (const student of studentsWithProject) {
-    const project = student?.thesisRegistrations?.[0]?.thesisProject
+    const project = getThesisProjectBySessionId(student, thesisSessionId)
     if (!project) continue
 
     if (ensureSupervisorPaymentsForExport) {
-      await ensureSupervisorPaymentsForExport(project, inAcademy)
+      await ensureSupervisorPaymentsForExport(project)
     }
 
-    const isMatchInAcademy = (expert: any) => {
-      const hasLecturer = !!(expert?.lecturer || expert?.lecturerId)
-      if (inAcademy === true) return hasLecturer
-      if (inAcademy === false) return !hasLecturer
-      return true
-    }
-
-    const supervisorRows: Array<{
-      expert: any
-      amount: number
-      bankAccountNumber: string
-      bankName: string
-    }> = []
-
-    if (project.singleSupervisorPaymentId || project.singleSupervisorPayment) {
-      const candidates = [project.supervisor, project.coSupervisor].filter(Boolean)
-      const expert = candidates.find((x) => isMatchInAcademy(x)) || candidates[0]
-      if (expert && isMatchInAcademy(expert)) {
-        supervisorRows.push({
-          expert,
-          amount: Number(project.singleSupervisorPayment?.amount || 0),
-          bankAccountNumber: expert.bankAccountNumber || "",
-          bankName: expert.bankName || "",
-        })
-      }
-    } else {
-      if (project.supervisor && isMatchInAcademy(project.supervisor)) {
-        supervisorRows.push({
-          expert: project.supervisor,
-          amount: Number(project.supervisorPayment?.amount || 0),
-          bankAccountNumber: project.supervisor.bankAccountNumber || "",
-          bankName: project.supervisor.bankName || "",
-        })
-      }
-      if (project.coSupervisor && isMatchInAcademy(project.coSupervisor)) {
-        supervisorRows.push({
-          expert: project.coSupervisor,
-          amount: Number(project.coSupervisorPayment?.amount || 0),
-          bankAccountNumber: project.coSupervisor.bankAccountNumber || "",
-          bankName: project.coSupervisor.bankName || "",
-        })
-      }
-    }
+    const supervisorRows = buildSupervisorPaymentRows(project)
 
     if (!supervisorRows.length) continue
+    studentsWithSupervisor += 1
 
     const orgName = project.organization?.sTen || "Chưa có đơn vị"
 
@@ -2596,7 +2619,11 @@ const convertToThanhToanHuongDanTrongHvData = async (
     currentGroup.data.tongTienChu = Number(currentGroup.data.tongTienSo).toVndWord("đồng")
   }
 
-  return Array.from(organizationMap.values())
+  return {
+    groups: Array.from(organizationMap.values()),
+    studentsInSession: studentsWithProject.length,
+    studentsWithSupervisor,
+  }
 }
 export const exportKetQuaBaoVeLuanVan = async ({
   allStudentsInClasses,
