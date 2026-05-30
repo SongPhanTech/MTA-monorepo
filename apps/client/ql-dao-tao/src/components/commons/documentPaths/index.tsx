@@ -70,7 +70,6 @@ const DocumentPaths: React.FC<DocumentPathsComponentProps> = ({
       mimeType: item.mimeType,
       [relationType]: relationId,
     }))
-
     form.setFieldValue(titleForm, updatedFiles)
   }
 
