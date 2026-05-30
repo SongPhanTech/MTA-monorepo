@@ -40,10 +40,10 @@ export interface IMonHoc {
   diem01?: number
   diem02?: number
   diem07?: number
-  diemhe10?: number
-  diemhe4?: number
-  diemchu?: string
-  pass?: boolean
+  diemhe10?: number | null
+  diemhe4?: number | null
+  diemchu?: string | null
+  pass?: boolean | null
   ghichu?: string
 }
 
@@ -266,7 +266,21 @@ export default function StudentScoreClassPage() {
           subject: {
             include: {
               trainingBlocks: {
-                select: { graduation: true },
+                select: {
+                  graduation: true,
+                  trainingBlockOnCurriculumVersion: {
+                    select: {
+                      priority: true,
+                      trainingBlock: {
+                        select: {
+                          id: true,
+                          name: true,
+                          priority: true,
+                        },
+                      },
+                    },
+                  },
+                },
                 take: 1,
               },
               prerequisiteSubject: {
@@ -345,81 +359,145 @@ export default function StudentScoreClassPage() {
       })
   }, [data, semesterId])
 
+  const getTrainingBlockSortKey = (subject: any, originalIndex: number) => {
+    const curriculumBlock = subject?.trainingBlocks?.[0]?.trainingBlockOnCurriculumVersion
+
+    return [
+      curriculumBlock?.priority ?? Infinity,
+      curriculumBlock?.trainingBlock?.priority ?? Infinity,
+      curriculumBlock?.trainingBlock?.name ?? "",
+      originalIndex,
+    ] as const
+  }
+
+  const getRelatedSubjectIds = (subject: any) => {
+    const prerequisiteIds: string[] = (subject?.prerequisiteSubject ?? [])
+      .map((item: any) => item?.id)
+      .filter(Boolean)
+
+    return {
+      prerequisiteIds,
+      relatedIds: [
+        ...prerequisiteIds,
+        ...(subject?.dependentSubject ?? []),
+        ...(subject?.coRequisiteSubject ?? []),
+        ...(subject?.depCoRequisiteSubject ?? []),
+        ...(subject?.equivalencyGroups ?? []),
+      ]
+        .map((item: any) => item?.id ?? item?.equivalencyGroupId)
+        .filter(Boolean),
+    }
+  }
+
+  const compareTrainingBlockSortKey = (
+    a: ReturnType<typeof getTrainingBlockSortKey>,
+    b: ReturnType<typeof getTrainingBlockSortKey>
+  ) =>
+    (a[0] - b[0]) ||
+    (a[1] - b[1]) ||
+    a[2].localeCompare(b[2], "vi") ||
+    (a[3] - b[3])
+
   const sortSubjectClassesForExport = (subjectClasses: any[]) => {
     if (!subjectClasses?.length) return []
 
-    const prereqMap = new Map<string, Set<string>>()
-
-    const items = subjectClasses.map((subjectClass, index) => ({
-      subjectClass,
-      originalIndex: index,
-      id: subjectClass?.subject?.id,
-      subject: subjectClass?.subject,
-    }))
-
     const parent = new Map<string, string>()
-    const find = (i: string): string => {
-      if (!parent.has(i)) parent.set(i, i)
-      if (parent.get(i) !== i) parent.set(i, find(parent.get(i)!))
-      return parent.get(i)!
-    }
-    const union = (i: string, j: string) => {
-      const rootI = find(i)
-      const rootJ = find(j)
-      if (rootI !== rootJ) parent.set(rootI, rootJ)
-    }
+    const rank = new Map<string, number>()
+    const prerequisiteMap = new Map<string, Set<string>>()
 
-    items.forEach(({ id, subject }) => {
-      if (!id || !subject) return
-
-      const prereqIds = (subject.prerequisiteSubject || []).map((x: any) => x?.id).filter(Boolean)
-      prereqMap.set(id, new Set(prereqIds))
-
-      const relations = [
-        ...prereqIds,
-        ...(subject.dependentSubject || []).map((x: any) => x?.id),
-        ...(subject.coRequisiteSubject || []).map((x: any) => x?.id),
-        ...(subject.depCoRequisiteSubject || []).map((x: any) => x?.id),
-      ]
-
-      const eqGroups = (subject.equivalencyGroups || []).map((x: any) => x?.equivalencyGroupId)
-
-      ;[...relations, ...eqGroups].forEach((relId) => {
-        if (relId) union(id, relId)
-      })
-    })
-
-    const groupMinIndex = new Map<string, number>()
-    items.forEach((item) => {
-      if (!item.id) return
-      const groupId = find(item.id)
-      const currentMin = groupMinIndex.get(groupId) ?? Infinity
-      groupMinIndex.set(groupId, Math.min(currentMin, item.originalIndex))
-    })
-
-    const sortedItems = [...items].sort((a, b) => {
-      if (!a.id || !b.id) return 0
-
-      const groupA = find(a.id)
-      const groupB = find(b.id)
-
-      if (groupA !== groupB) {
-        return (groupMinIndex.get(groupA) ?? 0) - (groupMinIndex.get(groupB) ?? 0)
+    const findGroup = (subjectId: string): string => {
+      if (!parent.has(subjectId)) {
+        parent.set(subjectId, subjectId)
+        rank.set(subjectId, 0)
       }
 
-      const aPrereqs = prereqMap.get(a.id)
-      const bPrereqs = prereqMap.get(b.id)
+      if (parent.get(subjectId) !== subjectId) {
+        parent.set(subjectId, findGroup(parent.get(subjectId)!))
+      }
 
-      if (aPrereqs?.has(b.id)) return 1
-      if (bPrereqs?.has(a.id)) return -1
+      return parent.get(subjectId)!
+    }
 
-      return (
-        a.originalIndex - b.originalIndex ||
-        String(a.subject?.code || "").localeCompare(String(b.subject?.code || ""))
-      )
+    const mergeGroup = (subjectId: string, relatedSubjectId: string) => {
+      const rootA = findGroup(subjectId)
+      const rootB = findGroup(relatedSubjectId)
+
+      if (rootA === rootB) return
+
+      const rankA = rank.get(rootA)!
+      const rankB = rank.get(rootB)!
+
+      if (rankA < rankB) {
+        parent.set(rootA, rootB)
+      } else if (rankA > rankB) {
+        parent.set(rootB, rootA)
+      } else {
+        parent.set(rootB, rootA)
+        rank.set(rootA, rankA + 1)
+      }
+    }
+
+    const items = subjectClasses.map((subjectClass, originalIndex) => {
+      const subject = subjectClass?.subject
+      const subjectId: string = subject?.id
+
+      if (subjectId && subject) {
+        const { prerequisiteIds, relatedIds } = getRelatedSubjectIds(subject)
+
+        prerequisiteMap.set(subjectId, new Set(prerequisiteIds))
+        relatedIds.forEach((relatedId: string) => {
+          mergeGroup(subjectId, relatedId)
+        })
+      }
+
+      return {
+        subjectClass,
+        subject,
+        subjectId,
+        sortKey: getTrainingBlockSortKey(subject, originalIndex),
+        originalIndex,
+      }
     })
 
-    return sortedItems.map((item) => item.subjectClass).filter(Boolean)
+    const groupMinSortKey = new Map<string, ReturnType<typeof getTrainingBlockSortKey>>()
+
+    items.forEach(({ subjectId, sortKey }) => {
+      if (!subjectId) return
+
+      const groupId = findGroup(subjectId)
+      const currentMinKey = groupMinSortKey.get(groupId)
+
+      if (!currentMinKey || compareTrainingBlockSortKey(sortKey, currentMinKey) < 0) {
+        groupMinSortKey.set(groupId, sortKey)
+      }
+    })
+
+    return items
+      .sort((a, b) => {
+        if (!a.subjectId || !b.subjectId) return 0
+
+        const groupA = findGroup(a.subjectId)
+        const groupB = findGroup(b.subjectId) 
+
+        if (groupA !== groupB) {
+          return compareTrainingBlockSortKey(
+            groupMinSortKey.get(groupA) ?? a.sortKey,
+            groupMinSortKey.get(groupB) ?? b.sortKey
+          )
+        }
+
+        const sortKeyCompare = compareTrainingBlockSortKey(a.sortKey, b.sortKey)
+        if (sortKeyCompare) return sortKeyCompare
+
+        if (prerequisiteMap.get(a.subjectId)?.has(b.subjectId)) return 1
+        if (prerequisiteMap.get(b.subjectId)?.has(a.subjectId)) return -1
+
+        return (
+          a.originalIndex - b.originalIndex ||
+          String(a.subject?.code ?? "").localeCompare(String(b.subject?.code ?? ""))
+        )
+      })
+      .map((item) => item.subjectClass)
   }
 
   const exportTemplate = async () => {
@@ -953,7 +1031,7 @@ export default function StudentScoreClassPage() {
     orderedSubjectClasses.forEach((subjectClass) => {
       subjectClass.subjectClassStudent.forEach((subjectClassStudent: any) => {
         const rawScore =
-          subjectClassStudent?.manualFinalScore || subjectClassStudent?.finalScore?.toNumber() || 0
+          subjectClassStudent?.manualFinalScore ?? subjectClassStudent?.finalScore?.toNumber() ?? null
 
         const isGraduation = subjectClass?.subject?.trainingBlocks?.[0]?.graduation === true
         const converted = convertScoreWithGraduation(rawScore, isGraduation)
@@ -969,9 +1047,9 @@ export default function StudentScoreClassPage() {
           TenMonhoc: tenMonHoc,
           soTC: subjectClass.subject.credit,
           diemhe10: rawScore,
-          diemhe4: converted?.base4 ?? 0,
-          diemchu: converted?.letter ?? "",
-          pass: converted?.pass ?? false,
+          diemhe4: converted?.base4 ?? null,
+          diemchu: converted?.letter ?? null,
+          pass: converted?.pass ?? null,
         })
       })
     })
@@ -989,17 +1067,22 @@ export default function StudentScoreClassPage() {
       hinhThucDaoTao: student?.curriculumVersion?.trainingType?.name,
     }
 
-    const tableRows: TableRow[] = monhocList.map((monHoc: IMonHoc) => {
-      const isFail = monHoc.pass === false
+    const scoredMonhocs = monhocList.filter(
+      (monHoc) => monHoc.diemhe10 != null || monHoc.diemhe4 != null || monHoc.diemchu != null
+    )
+
+    const tableRows: TableRow[] = scoredMonhocs.map((monHoc: IMonHoc) => {
+      const hasScore = monHoc.diemhe10 != null || monHoc.diemhe4 != null || monHoc.diemchu != null
+      const isFail = hasScore && monHoc.pass === false
       const cellStyle = isFail ? { bgColor: "FFFFC7CE", color: "FFFF0000" } : {}
       return {
         cells: [
           { value: stt++, align: "center", ...cellStyle },
           { value: monHoc.TenMonhoc ?? "", colSpan: 6, border: true, ...cellStyle },
           { value: monHoc.soTC, align: "center", ...cellStyle },
-          { value: monHoc.diemhe10 ?? 0, align: "right", ...cellStyle },
-          { value: monHoc.diemhe4 ?? 0, align: "right", ...cellStyle },
-          { value: monHoc.diemchu ?? "", align: "center", ...cellStyle },
+          { value: monHoc.diemhe10 ?? null, align: "right", ...cellStyle },
+          { value: monHoc.diemhe4 ?? null, align: "right", ...cellStyle },
+          { value: monHoc.diemchu ?? null, align: "center", ...cellStyle },
         ],
       }
     })
