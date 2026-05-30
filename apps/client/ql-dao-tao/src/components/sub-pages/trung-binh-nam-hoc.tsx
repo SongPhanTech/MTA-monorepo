@@ -121,8 +121,8 @@ const DiemTrungBinhKyHoc = () => {
           select: {
             code: true,
             name: true,
-            unionLeaderId:true,
-            unionSecretaryId:true
+            unionSecretaryId:true,
+            classMonitorId:true
           },
         },
       },
