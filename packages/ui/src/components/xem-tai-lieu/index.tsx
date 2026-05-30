@@ -3,7 +3,7 @@ import { createId } from "@workspace/db"
 import { convertDocument } from "@workspace/libs/api/model"
 import { getMinioUrl } from "@workspace/libs/utils"
 import { Col, Image, Modal, Row } from "antd"
-import { useEffect } from "react"
+import { useEffect, useId } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 export type DocumentType =
   | "word"
@@ -287,6 +287,9 @@ type Props = {
   fileType?: string // ví dụ: 'docx', 'xlsx', 'pptx'
   mode?: "view" | "edit"
   documentServerUrl?: string // Mặc định là http://localhost
+  allowDownload?: boolean
+  containerClassName?: string
+  editorHeight?: string
 }
 
 declare global {
@@ -296,11 +299,21 @@ declare global {
   }
 }
 
-const OnlyOfficeViewer = ({ uri, title = "Tài liệu", fileType = "docx", mode = "view" }: Props) => {
-  useEffect(() => {
-    const id = createId()
+const OnlyOfficeViewer = ({
+  uri,
+  title = "Tài liệu",
+  fileType = "docx",
+  mode = "view",
+  allowDownload = true,
+  containerClassName = "w-full h-[90vh]",
+  editorHeight = "750px",
+}: Props) => {
+  const containerId = useId().replace(/:/g, "")
 
-    const placeholderContainer = document.getElementById("placeholder-container")
+  useEffect(() => {
+    const editorNodeId = createId()
+
+    const placeholderContainer = document.getElementById(containerId)
     if (window.DocsAPI) {
       while (placeholderContainer?.firstChild) {
         if (placeholderContainer.lastChild)
@@ -308,51 +321,54 @@ const OnlyOfficeViewer = ({ uri, title = "Tài liệu", fileType = "docx", mode 
       }
       window.docEditor?.destroyEditor?.()
       const placeholder = document.createElement("div")
-      placeholder.id = id
+      placeholder.id = editorNodeId
+      placeholder.style.height = "100%"
       placeholderContainer?.appendChild(placeholder)
       const config = {
         width: "100%",
-        height: "750px",
-        type: "desktop",
-        // type: mode === 'edit' ? 'desktop' : 'embedded',
+        height: editorHeight,
+        type: allowDownload ? "desktop" : "embedded",
         documentType: getDocumentType(fileType),
         token: "",
         document: {
           fileType,
-          key: id, // unique key
+          key: editorNodeId,
           title,
           url: uri,
           permissions: {
-            download: true,
-            print: true,
+            download: allowDownload,
+            print: allowDownload,
+            edit: false,
+            copy: allowDownload,
           },
         },
         events: {
-          onRequestSaveAs: (event) => {
-            // console.log('OnlyOfficeViewer - onRequestSaveAs:', event)
-          },
-          onDocumentStateChange: (state) => {
-            console.log("OnlyOfficeViewer - onDocumentStateChange:", state)
-          },
-          onDownloadAs(data) {
-            const link = document.createElement("a")
-            link.href = data?.data?.url
-            link.setAttribute("download", title || "download")
-            document.body.appendChild(link)
-            link.click()
-            link.parentNode?.removeChild(link)
-          },
+          onRequestSaveAs: () => {},
+          ...(allowDownload
+            ? {
+                onDownloadAs(data: { data?: { url?: string } }) {
+                  const link = document.createElement("a")
+                  link.href = data?.data?.url ?? ""
+                  link.setAttribute("download", title || "download")
+                  document.body.appendChild(link)
+                  link.click()
+                  link.parentNode?.removeChild(link)
+                },
+              }
+            : {}),
         },
         editorConfig: {
           mode,
           lang: "vi",
           customization: {
             forcesave: false,
-            toolbar: false,
+            toolbar: allowDownload,
+            compactToolbar: !allowDownload,
             statusBar: false,
             autosave: false,
+            help: false,
             logo: {
-              visible: false, // Ẩn logo
+              visible: false,
             },
             chat: false,
             comments: false,
@@ -360,15 +376,39 @@ const OnlyOfficeViewer = ({ uri, title = "Tài liệu", fileType = "docx", mode 
               request: false,
             },
             plugins: false,
+            ...(allowDownload
+              ? {}
+              : {
+                  layout: {
+                    toolbar: {
+                      file: false,
+                      home: true,
+                      layout: true,
+                      insert: false,
+                      draw: false,
+                      review: false,
+                      view: true,
+                    },
+                    header: {
+                      save: false,
+                      edit: false,
+                      users: false,
+                    },
+                  },
+                }),
           },
           region: "vn",
         },
       } satisfies OnlyOfficeFullConfig
-      window.docEditor = new window.DocsAPI.DocEditor(id, config)
+      window.docEditor = new window.DocsAPI.DocEditor(editorNodeId, config)
     }
-  }, [uri, title, fileType, mode])
 
-  return <div id="placeholder-container" className="w-full h-[90vh]" />
+    return () => {
+      window.docEditor?.destroyEditor?.()
+    }
+  }, [uri, title, fileType, mode, allowDownload, editorHeight, containerId])
+
+  return <div id={containerId} className={containerClassName} />
 }
 
 function getDocumentType(fileType: string): DocumentType {
@@ -497,4 +537,4 @@ const XemTaiLieu = () => {
   )
 }
 
-export { XemTaiLieu }
+export { OnlyOfficeViewer, XemTaiLieu }

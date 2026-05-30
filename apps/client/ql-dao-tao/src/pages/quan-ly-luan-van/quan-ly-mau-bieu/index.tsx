@@ -1,28 +1,77 @@
-import { SearchOutlined, UploadOutlined } from "@ant-design/icons"
-import Table from "@components/commons/table"
-import { DEFAULT_PAGINATE_SIZE } from "@constants/constants"
+import { FileOutlined, FolderOutlined, SearchOutlined, UploadOutlined } from "@ant-design/icons"
 import useSpinner from "@hooks/spinner"
 import DefaultLayout from "@layouts/default-layout"
-import { generatePresignedUrl, deleteObject, presignedGetObject, useListObjects } from "@workspace/libs/api/model"
+import { useQuery } from "@tanstack/react-query"
+import {
+  generatePresignedUrl,
+  deleteObject,
+  listObjects,
+  presignedGetObject,
+  useListObjects,
+} from "@workspace/libs/api/model"
 import type { BucketItemDto } from "@workspace/libs/api/schemas"
 import { normalizeVietnamese } from "@workspace/libs/utils"
-import { Button, Col, Flex, Input, message, Popconfirm, Row, Tag, Tooltip, Upload } from "antd"
+import {
+  OnlyOfficeViewer,
+  supportedDocFileTypes,
+  supportedImageFileTypes,
+} from "@workspace/ui"
+import {
+  Badge,
+  Button,
+  Empty,
+  Flex,
+  Image,
+  Input,
+  message,
+  Popconfirm,
+  Spin,
+  Tooltip,
+  Tree,
+  Typography,
+  Upload,
+} from "antd"
+import type { DataNode } from "antd/es/tree"
 import axios from "axios"
 import dayjs from "dayjs"
 import _ from "lodash"
-import { Download, Eye, RefreshCcw, Trash2 } from "lucide-react"
-import { useCallback, useEffect, useMemo, useState } from "react"
-import { useDisclosure } from "react-hook-disclosure-modal"
+import { Download, RefreshCcw, Trash2 } from "lucide-react"
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type Key,
+  type MouseEvent,
+} from "react"
 
-type SortField = "name" | "size" | "lastModified"
-type SortOrder = "asc" | "desc"
+const { Text } = Typography
 
 const LUAN_VAN_PREFIX = "luan-van/"
 const LUAN_VAN_PATH = "luan-van"
-/** Lấy toàn bộ object trong prefix; phân trang chỉ ở FE (số lượng mẫu biểu nhỏ). */
 const LIST_ALL_OBJECTS_LIMIT = 10_000
 const MAX_UPLOAD_SIZE_MB = 50
-// const ACCEPT_EXTENSIONS = ".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.zip,.rar,.txt,.jpg,.jpeg,.png,.xlsx, "
+
+type MauBieuTreeNode = DataNode & {
+  isFile?: boolean
+  isFolder?: boolean
+  folderPrefix?: string
+  objectName?: string
+  item?: BucketItemDto
+}
+
+const toFolderPrefix = (relativePath: string) => {
+  const normalized = relativePath.replace(/^\/+|\/+$/g, "")
+  return normalized ? `${LUAN_VAN_PREFIX}${normalized}/` : LUAN_VAN_PREFIX
+}
+
+const prefixToTreeKey = (prefix: string) => stripPrefix(prefix).replace(/\/$/, "")
+
+type TreeAccumulator = {
+  children: Map<string, TreeAccumulator>
+  file?: BucketItemDto
+}
 
 const splitFileName = (fileName: string) => {
   const lastDot = fileName.lastIndexOf(".")
@@ -47,7 +96,18 @@ const stripPrefix = (name: string | undefined) => {
   return name.startsWith(LUAN_VAN_PREFIX) ? name.slice(LUAN_VAN_PREFIX.length) : name
 }
 
-const getDisplayName = (item: BucketItemDto) => stripPrefix(item.name || item.prefix || "")
+const isFileEntry = (item: BucketItemDto) => Boolean(item.name)
+const isFolderEntry = (item: BucketItemDto) => !item.name && Boolean(item.prefix)
+
+const getDisplayName = (item: BucketItemDto) => {
+  if (item.name) return stripPrefix(item.name)
+  if (item.prefix) {
+    const relative = stripPrefix(item.prefix).replace(/\/$/, "")
+    const parts = relative.split("/").filter(Boolean)
+    return parts[parts.length - 1] || relative
+  }
+  return ""
+}
 
 const getFileExtension = (fileName: string) => fileName.split(".").pop()?.toLowerCase() || ""
 
@@ -60,30 +120,140 @@ const normalizeBucketItems = (value: unknown): BucketItemDto[] => {
   return []
 }
 
+const getOrCreateChild = (parent: TreeAccumulator, name: string): TreeAccumulator => {
+  if (!parent.children.has(name)) {
+    parent.children.set(name, { children: new Map() })
+  }
+  return parent.children.get(name)!
+}
+
+const buildFileTreeFromItems = (items: BucketItemDto[]): MauBieuTreeNode[] => {
+  const root: TreeAccumulator = { children: new Map() }
+
+  for (const item of items) {
+    if (item.name) {
+      const relativePath = stripPrefix(item.name)
+      if (!relativePath) continue
+      const parts = relativePath.split("/").filter(Boolean)
+      let node = root
+      for (let i = 0; i < parts.length; i++) {
+        const part = parts[i]
+        const isLast = i === parts.length - 1
+        node = getOrCreateChild(node, part)
+        if (isLast) {
+          node.file = item
+        }
+      }
+      continue
+    }
+
+    if (item.prefix) {
+      const relativePath = stripPrefix(item.prefix).replace(/\/$/, "")
+      if (!relativePath) continue
+      const parts = relativePath.split("/").filter(Boolean)
+      let node = root
+      for (const part of parts) {
+        node = getOrCreateChild(node, part)
+      }
+    }
+  }
+
+  const convertNode = (node: TreeAccumulator, parentKey: string): MauBieuTreeNode[] => {
+    const entries = Array.from(node.children.entries()).sort(([nameA, childA], [nameB, childB]) => {
+      const aIsFile = Boolean(childA.file) && childA.children.size === 0
+      const bIsFile = Boolean(childB.file) && childB.children.size === 0
+      if (aIsFile !== bIsFile) return aIsFile ? 1 : -1
+      return nameA.localeCompare(nameB, "vi")
+    })
+
+    return entries.map(([name, child]) => {
+      const key = parentKey ? `${parentKey}/${name}` : name
+      const childNodes = convertNode(child, key)
+      const isLeafFile = Boolean(child.file) && child.children.size === 0
+
+      if (isLeafFile && child.file) {
+        return {
+          key,
+          title: name,
+          isLeaf: true,
+          isFile: true,
+          objectName: child.file.name,
+          item: child.file,
+          icon: <FileOutlined />,
+        }
+      }
+
+      const relativePath = parentKey ? `${parentKey}/${name}` : name
+
+      return {
+        key,
+        title: name,
+        isFile: false,
+        isFolder: true,
+        folderPrefix: toFolderPrefix(relativePath),
+        selectable: false,
+        icon: <FolderOutlined />,
+        children: childNodes,
+      }
+    })
+  }
+
+  return convertNode(root, "")
+}
+
+const findFirstFileNode = (nodes: MauBieuTreeNode[]): MauBieuTreeNode | null => {
+  for (const node of nodes) {
+    if (node.isFile && node.objectName) return node
+    if (node.children?.length) {
+      const found = findFirstFileNode(node.children as MauBieuTreeNode[])
+      if (found) return found
+    }
+  }
+  return null
+}
+
+const findFileNodeByObjectName = (
+  nodes: MauBieuTreeNode[],
+  objectName: string
+): MauBieuTreeNode | null => {
+  for (const node of nodes) {
+    if (node.objectName === objectName) return node
+    if (node.children?.length) {
+      const found = findFileNodeByObjectName(node.children as MauBieuTreeNode[], objectName)
+      if (found) return found
+    }
+  }
+  return null
+}
+
+const mergeBucketItems = (...groups: BucketItemDto[][]) => {
+  const byKey = new Map<string, BucketItemDto>()
+  for (const group of groups) {
+    for (const item of group) {
+      const key = item.name ?? item.prefix
+      if (key) byKey.set(key, item)
+    }
+  }
+  return Array.from(byKey.values())
+}
+
 export default function QuanLyMauBieu() {
-  const [pageSize, setPageSize] = useState<number>(DEFAULT_PAGINATE_SIZE)
-  const [currentPage, setCurrentPage] = useState<number>(1)
-  const [uploading, setUploading] = useState<boolean>(false)
+  const [uploading, setUploading] = useState(false)
   const [searchInput, setSearchInput] = useState("")
   const [searchText, setSearchText] = useState("")
-  const [sortField, setSortField] = useState<SortField | null>(null)
-  const [sortOrder, setSortOrder] = useState<SortOrder | null>(null)
   const [deletingObjectName, setDeletingObjectName] = useState<string | null>(null)
+  const [selectedObjectName, setSelectedObjectName] = useState<string | null>(null)
+  const [selectedTreeKey, setSelectedTreeKey] = useState<string | null>(null)
+  const [expandedKeys, setExpandedKeys] = useState<string[]>([])
+  const [folderListings, setFolderListings] = useState<Record<string, BucketItemDto[]>>({})
+  const [loadingFolderPrefixes, setLoadingFolderPrefixes] = useState<Set<string>>(new Set())
+  const loadedFolderPrefixesRef = useRef<Set<string>>(new Set())
 
   const { showSpinner, hideSpinner } = useSpinner()
-
-  const { onOpen: onOpenPreview } = useDisclosure<{
-    uri: string
-    name?: string
-    mimeType?: string
-  }>({
-    tag: "XemTaiLieu",
-  })
 
   const debouncedSetSearch = useCallback(
     _.debounce((value: string) => {
       setSearchText(value)
-      setCurrentPage(1)
     }, 300),
     []
   )
@@ -106,85 +276,157 @@ export default function QuanLyMauBieu() {
     },
   })
 
-  const allItems = useMemo(
-    () =>
-      normalizeBucketItems(data?.data).map((item) => ({
-        ...item,
-        name: item.name || item.prefix || "",
-      })),
-    [data]
+  const rootItems = useMemo(() => normalizeBucketItems(data?.data), [data])
+
+  const nestedItems = useMemo(
+    () => Object.values(folderListings).flat(),
+    [folderListings]
   )
 
-  const filteredItems = useMemo(() => {
+  const allItems = useMemo(() => mergeBucketItems(rootItems, nestedItems), [rootItems, nestedItems])
+
+  const fileItems = useMemo(() => allItems.filter(isFileEntry), [allItems])
+
+  const folderItems = useMemo(() => allItems.filter(isFolderEntry), [allItems])
+
+  const loadFolderContents = useCallback(async (folderPrefix: string) => {
+    if (loadedFolderPrefixesRef.current.has(folderPrefix)) return
+    loadedFolderPrefixesRef.current.add(folderPrefix)
+
+    setLoadingFolderPrefixes((prev) => new Set(prev).add(folderPrefix))
+    try {
+      const res = await listObjects({ path: folderPrefix, limit: LIST_ALL_OBJECTS_LIMIT })
+      setFolderListings((prev) => ({
+        ...prev,
+        [folderPrefix]: normalizeBucketItems(res.data),
+      }))
+    } catch (error) {
+      console.error(error)
+      message.error("Không thể tải nội dung thư mục.")
+      loadedFolderPrefixesRef.current.delete(folderPrefix)
+      setFolderListings((prev) => ({ ...prev, [folderPrefix]: [] }))
+    } finally {
+      setLoadingFolderPrefixes((prev) => {
+        const next = new Set(prev)
+        next.delete(folderPrefix)
+        return next
+      })
+    }
+  }, [])
+
+  const treeSourceItems = useMemo(() => {
     const keyword = normalizeVietnamese(searchText.trim())
-    if (!keyword) return allItems
-    return allItems.filter((item) =>
+    if (!keyword) {
+      return allItems
+    }
+
+    const matchedFiles = fileItems.filter((item) =>
       normalizeVietnamese(getDisplayName(item)).includes(keyword)
     )
-  }, [allItems, searchText])
 
-  const sortedItems = useMemo(() => {
-    if (!sortField || !sortOrder) return filteredItems
-    const sorted = [...filteredItems]
-    sorted.sort((a, b) => {
-      let compare = 0
-      if (sortField === "name") {
-        compare = getDisplayName(a).localeCompare(getDisplayName(b), "vi")
-      } else if (sortField === "size") {
-        compare = (a.size ?? 0) - (b.size ?? 0)
-      } else if (sortField === "lastModified") {
-        const aTime = a.lastModified ? new Date(a.lastModified).getTime() : 0
-        const bTime = b.lastModified ? new Date(b.lastModified).getTime() : 0
-        compare = aTime - bTime
-      }
-      return sortOrder === "asc" ? compare : -compare
+    const matchedFolders = folderItems.filter((item) => {
+      const relative = stripPrefix(item.prefix).replace(/\/$/, "")
+      return normalizeVietnamese(relative).includes(keyword)
     })
-    return sorted
-  }, [filteredItems, sortField, sortOrder])
 
-  const totalCount = sortedItems.length
-  const maxPage = Math.max(1, Math.ceil(totalCount / pageSize) || 1)
+    const ancestorFolderPaths = new Set<string>()
+    for (const file of matchedFiles) {
+      const parts = stripPrefix(file.name).split("/").filter(Boolean)
+      for (let i = 0; i < parts.length - 1; i++) {
+        ancestorFolderPaths.add(parts.slice(0, i + 1).join("/"))
+      }
+    }
+
+    const ancestorFolders = folderItems.filter((item) => {
+      const relative = stripPrefix(item.prefix).replace(/\/$/, "")
+      return ancestorFolderPaths.has(relative)
+    })
+
+    return mergeBucketItems(matchedFiles, matchedFolders, ancestorFolders)
+  }, [allItems, fileItems, folderItems, searchText])
+
+  const treeData = useMemo(() => buildFileTreeFromItems(treeSourceItems), [treeSourceItems])
 
   useEffect(() => {
-    if (currentPage > maxPage) setCurrentPage(maxPage)
-  }, [currentPage, maxPage])
+    const rootFolders = rootItems.filter(isFolderEntry)
+    if (rootFolders.length === 0) return
 
-  const items = useMemo(() => {
-    const start = (currentPage - 1) * pageSize
-    return sortedItems.slice(start, start + pageSize)
-  }, [sortedItems, currentPage, pageSize])
+    rootFolders.forEach((item) => {
+      if (item.prefix) void loadFolderContents(item.prefix)
+    })
 
-  const getColumnSortOrder = (field: SortField) => {
-    if (sortField !== field || !sortOrder) return null
-    return sortOrder === "asc" ? "ascend" : "descend"
-  }
+    setExpandedKeys((prev) => {
+      const keys = rootFolders.map((item) => prefixToTreeKey(item.prefix!))
+      return [...new Set([...prev, ...keys])]
+    })
+  }, [rootItems, loadFolderContents])
+
+  useEffect(() => {
+    if (!selectedObjectName) {
+      const firstFile = findFirstFileNode(treeData)
+      if (firstFile?.objectName) {
+        setSelectedObjectName(firstFile.objectName)
+        setSelectedTreeKey(String(firstFile.key))
+      }
+      return
+    }
+
+    const stillExists = findFileNodeByObjectName(treeData, selectedObjectName)
+    if (!stillExists) {
+      const firstFile = findFirstFileNode(treeData)
+      setSelectedObjectName(firstFile?.objectName ?? null)
+      setSelectedTreeKey(firstFile ? String(firstFile.key) : null)
+      return
+    }
+
+    setSelectedTreeKey(String(stillExists.key))
+  }, [treeData, selectedObjectName])
+
+  const selectedItem = useMemo(
+    () => fileItems.find((item) => item.name === selectedObjectName),
+    [fileItems, selectedObjectName]
+  )
+
+  const selectedDisplayName = selectedItem ? getDisplayName(selectedItem) : ""
+  const selectedFileType = getFileExtension(selectedDisplayName)
+
+  const {
+    data: previewUrl,
+    isFetching: previewLoading,
+    isError: previewError,
+  } = useQuery({
+    queryKey: ["mau-bieu-preview", selectedObjectName],
+    queryFn: async () => {
+      const res = await presignedGetObject({ objectName: selectedObjectName! })
+      return res.data.url
+    },
+    enabled: Boolean(selectedObjectName),
+    refetchOnWindowFocus: false,
+  })
 
   const handleReload = () => {
-    setCurrentPage(1)
+    loadedFolderPrefixesRef.current.clear()
+    setFolderListings({})
     refetch()
   }
 
-  const handlePreview = async (objectName?: string) => {
-    if (!objectName) return
-    const displayName = stripPrefix(objectName) || objectName
-    try {
-      showSpinner()
-      const res = await presignedGetObject({ objectName })
-      onOpenPreview({
-        uri: res.data.url,
-        name: displayName,
-        mimeType: getFileExtension(displayName),
-      })
-    } catch (error) {
-      console.error(error)
-      message.error("Không thể xem trước file. Vui lòng thử lại.")
-    } finally {
-      hideSpinner()
+  const handleTreeExpand = (
+    keys: Key[],
+    info: { expanded: boolean; node: MauBieuTreeNode }
+  ) => {
+    setExpandedKeys(keys as string[])
+    if (info.expanded && info.node.folderPrefix) {
+      void loadFolderContents(info.node.folderPrefix)
     }
   }
 
-  const handleDownload = async (objectName?: string) => {
-    if (!objectName) return
+  const handleSelectFile = (objectName: string, treeKey: string) => {
+    setSelectedObjectName(objectName)
+    setSelectedTreeKey(treeKey)
+  }
+
+  const handleDownload = async (objectName: string, e?: MouseEvent) => {
+    e?.stopPropagation()
     try {
       showSpinner()
       const res = await presignedGetObject({ objectName })
@@ -195,7 +437,7 @@ export default function QuanLyMauBieu() {
       const downloadName = stripPrefix(objectName) || objectName
       const anchor = document.createElement("a")
       anchor.href = blobUrl
-      anchor.download = downloadName
+      anchor.download = downloadName.split("/").pop() || downloadName
       document.body.appendChild(anchor)
       anchor.click()
       document.body.removeChild(anchor)
@@ -208,8 +450,7 @@ export default function QuanLyMauBieu() {
     }
   }
 
-  const handleDelete = async (objectName?: string) => {
-    if (!objectName) return
+  const handleDelete = async (objectName: string) => {
     try {
       setDeletingObjectName(objectName)
       showSpinner()
@@ -218,6 +459,10 @@ export default function QuanLyMauBieu() {
         throw new Error(`HTTP ${res.status}`)
       }
       message.success(`Đã xóa "${stripPrefix(objectName)}".`)
+      if (selectedObjectName === objectName) {
+        setSelectedObjectName(null)
+        setSelectedTreeKey(null)
+      }
       await refetch()
     } catch (error) {
       console.error(error)
@@ -248,7 +493,6 @@ export default function QuanLyMauBieu() {
       showSpinner()
       await uploadSingle(file)
       message.success(`Đã tải lên "${file.name}".`)
-      setCurrentPage(1)
       await refetch()
     } catch (error) {
       console.error(error)
@@ -259,23 +503,204 @@ export default function QuanLyMauBieu() {
     }
   }
 
-  return (
-    <div>
-      <Row gutter={[16, 16]}>
-        <Col span={24}>
-          <h2 className="text-base font-semibold m-0">
-            Quản lý mẫu biểu/tài liệu phòng sau đại học
-          </h2>
-        </Col>
+  const renderTreeTitle = (node: MauBieuTreeNode) => {
+    if (node.isFolder || (!node.isFile && !node.objectName)) {
+      const isLoading =
+        node.folderPrefix !== undefined && loadingFolderPrefixes.has(node.folderPrefix)
 
-        <Col span={24}>
-          <Flex justify="space-between" align="center" gap={16}>
+      return (
+        <Flex align="center" gap={6} className="min-w-0 h-8">
+          <FolderOutlined className="text-amber-500 text-sm shrink-0 leading-none" />
+          <Text strong className="text-[13px] text-gray-700 truncate leading-snug">
+            {String(node.title)}
+          </Text>
+          {isLoading && <Spin size="small" />}
+        </Flex>
+      )
+    }
+
+    if (!node.objectName) {
+      return <span>{String(node.title)}</span>
+    }
+
+    const objectName = node.objectName
+    const displayName = String(node.title)
+    const isSelected = selectedObjectName === objectName
+
+    return (
+      <div
+        className={`group flex items-center gap-2 w-full min-w-0 h-8 rounded-md px-1 ${
+          isSelected ? "bg-[#e8f5ef]" : "hover:bg-gray-50"
+        }`}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <FileOutlined className="shrink-0 text-gray-400 text-xs" />
+        <Tooltip title={displayName}>
+          <button
+            type="button"
+            className={`flex-1 min-w-0 text-left text-[13px] truncate border-0 bg-transparent p-0 cursor-pointer ${
+              isSelected ? "text-[#16774b] font-medium" : "text-gray-800"
+            }`}
+            onClick={() => handleSelectFile(objectName, String(node.key))}
+          >
+            {displayName}
+          </button>
+        </Tooltip>
+        <Flex gap={0} className="shrink-0 opacity-70 group-hover:opacity-100">
+          <Tooltip title="Tải xuống">
+            <Button
+              type="text"
+              size="small"
+              className="!w-7 !h-7"
+              icon={<Download size={15} />}
+              onClick={(e) => handleDownload(objectName, e)}
+            />
+          </Tooltip>
+          <Popconfirm
+            title={`Xóa file "${displayName}"?`}
+            description="Hành động này không thể hoàn tác."
+            okText="Xóa"
+            cancelText="Hủy"
+            okButtonProps={{
+              danger: true,
+              loading: deletingObjectName === objectName,
+            }}
+            onConfirm={() => handleDelete(objectName)}
+          >
+            <Tooltip title="Xóa file">
+              <Button
+                type="text"
+                size="small"
+                danger
+                className="!w-7 !h-7"
+                icon={<Trash2 size={15} />}
+                loading={deletingObjectName === objectName}
+                onClick={(e) => e.stopPropagation()}
+              />
+            </Tooltip>
+          </Popconfirm>
+        </Flex>
+      </div>
+    )
+  }
+
+  const renderPreviewContent = () => {
+    if (!selectedObjectName) {
+      return (
+        <Empty
+          className="my-auto"
+          description="Chọn một file ở danh sách bên trái để xem trước"
+        />
+      )
+    }
+
+    if (previewLoading) {
+      return (
+        <Flex align="center" justify="center" className="flex-1 min-h-[400px]">
+          <Spin tip="Đang tải file xem trước..." />
+        </Flex>
+      )
+    }
+
+    if (previewError || !previewUrl) {
+      return (
+        <Empty
+          className="my-auto"
+          description="Không thể tải file xem trước. Vui lòng thử lại."
+        />
+      )
+    }
+
+    if (supportedImageFileTypes.includes(selectedFileType)) {
+      return (
+        <Flex align="center" justify="center" className="absolute inset-0 p-4 overflow-auto">
+          <Image
+            src={previewUrl}
+            alt={selectedDisplayName}
+            className="max-h-full max-w-full object-contain shadow-sm rounded"
+            preview={false}
+          />
+        </Flex>
+      )
+    }
+
+    if (supportedDocFileTypes.includes(selectedFileType)) {
+      return (
+        <div className="absolute inset-0">
+          <OnlyOfficeViewer
+            key={selectedObjectName}
+            uri={previewUrl}
+            title={selectedDisplayName}
+            fileType={selectedFileType}
+            mode="view"
+            allowDownload={false}
+            containerClassName="w-full h-full"
+            editorHeight="100%"
+          />
+        </div>
+      )
+    }
+
+    return (
+      <Empty
+        className="my-auto"
+        description={`Định dạng .${selectedFileType || "unknown"} chưa hỗ trợ xem trước. Vui lòng tải xuống từ danh sách bên trái.`}
+      />
+    )
+  }
+
+  const fileCount = fileItems.length
+
+  return (
+    <div className="flex flex-col gap-3 h-[calc(100vh-168px)] min-h-[620px]">
+      <Flex align="center" justify="space-between" gap={12} className="shrink-0">
+        <h2 className="text-base font-semibold m-0">
+          Quản lý mẫu biểu/tài liệu phòng sau đại học
+        </h2>
+        <Upload
+          multiple
+          showUploadList={false}
+          beforeUpload={(file: File) => {
+            const isValidSize = file.size / 1024 / 1024 < MAX_UPLOAD_SIZE_MB
+            if (!isValidSize) {
+              message.error(`"${file.name}" vượt quá ${MAX_UPLOAD_SIZE_MB}MB.`)
+              return Upload.LIST_IGNORE
+            }
+            handleUpload(file)
+            return false
+          }}
+        >
+          <Button type="primary" icon={<UploadOutlined />} loading={uploading}>
+            Tải file lên
+          </Button>
+        </Upload>
+      </Flex>
+
+      <div className="grid grid-cols-[minmax(280px,340px)_1fr] gap-4 flex-1 min-h-0">
+        {/* Sidebar */}
+        <section className="flex flex-col min-h-0 rounded-lg border border-gray-200 bg-white shadow-sm overflow-hidden">
+          <div className="px-3 py-2.5 border-b border-gray-100 bg-gray-50/80 shrink-0">
+            <Flex align="center" justify="space-between" gap={8}>
+              <Text strong className="text-sm">
+                Danh sách tài liệu
+              </Text>
+              <Badge
+                count={fileCount}
+                showZero
+                color="#16774b"
+                overflowCount={9999}
+                className="[&_.ant-badge-count]:text-[11px]"
+              />
+            </Flex>
+          </div>
+
+          <div className="p-3 space-y-2.5 shrink-0 border-b border-gray-100">
             <Input
               placeholder="Tìm kiếm theo tên file"
-              prefix={<SearchOutlined />}
+              prefix={<SearchOutlined className="text-gray-400" />}
               allowClear
+              size="middle"
               value={searchInput}
-              className="max-w-sm"
               onChange={(e) => {
                 const value = e.target.value
                 setSearchInput(value)
@@ -285,181 +710,142 @@ export default function QuanLyMauBieu() {
                 setSearchInput("")
                 debouncedSetSearch.cancel()
                 setSearchText("")
-                setCurrentPage(1)
               }}
             />
-            <Flex gap={8} className="shrink-0">
-              <Upload
-                multiple
-                // accept={ACCEPT_EXTENSIONS}
-                showUploadList={false}
-                beforeUpload={(file: File) => {
-                  const isValidSize = file.size / 1024 / 1024 < MAX_UPLOAD_SIZE_MB
-                  if (!isValidSize) {
-                    message.error(`"${file.name}" vượt quá ${MAX_UPLOAD_SIZE_MB}MB.`)
-                    return Upload.LIST_IGNORE
-                  }
-                  handleUpload(file)
-                  return false
-                }}
-              >
-                <Button type="primary" icon={<UploadOutlined />} loading={uploading}>
-                  Tải file lên
-                </Button>
-              </Upload>
-              <Button icon={<RefreshCcw size={14} />} onClick={handleReload} loading={isFetching}>
-                Tải lại
-              </Button>
-            </Flex>
-          </Flex>
-        </Col>
+            <Button
+              block
+              icon={<RefreshCcw size={14} />}
+              onClick={handleReload}
+              loading={isFetching}
+            >
+              Tải lại danh sách
+            </Button>
+          </div>
 
-        <Col span={24}>
-          <Table<BucketItemDto>
-            id="quan-ly-mau-bieu"
-            rowKey="name"
-            loading={isFetching}
-            data={items}
-            onChange={(_, __, sorterInfo) => {
-              const sorter = Array.isArray(sorterInfo) ? sorterInfo[0] : sorterInfo
-              const field = (sorter?.field ?? sorter?.columnKey) as SortField | undefined
-              if (
-                !sorter?.order ||
-                !field ||
-                !["name", "size", "lastModified"].includes(field)
-              ) {
-                setSortField(null)
-                setSortOrder(null)
-                return
-              }
-              setSortField(field)
-              setSortOrder(sorter.order === "ascend" ? "asc" : "desc")
-              setCurrentPage(1)
-            }}
-            columns={[
-              {
-                title: "STT",
-                width: 70,
-                align: "center",
-                fixed: "left",
-                render: (_, __, index) => (currentPage - 1) * pageSize + index + 1,
-              },
-              {
-                title: "Tên file",
-                dataIndex: "name",
-                key: "name",
-                ellipsis: true,
-                sorter: true,
-                sortOrder: getColumnSortOrder("name"),
-                render: (_, record) => {
-                  const display = getDisplayName(record)
-                  const isFolder = !record.name && Boolean(record.prefix)
-                  return (
-                    <Tooltip title={record.name || record.prefix}>
-                      {isFolder ? (
-                        <Tag color="gold">{display}</Tag>
-                      ) : (
-                        <span
-                          className="cursor-pointer text-blue-600 hover:underline"
-                          onClick={() => handlePreview(record.name)}
-                        >
-                          {display}
-                        </span>
-                      )}
-                    </Tooltip>
-                  )
-                },
-              },
-              {
-                title: "Kích thước",
-                dataIndex: "size",
-                key: "size",
-                width: 130,
-                align: "right",
-                sorter: true,
-                sortOrder: getColumnSortOrder("size"),
-                render: (value) => formatBytes(value),
-              },
-              {
-                title: "Cập nhật",
-                dataIndex: "lastModified",
-                key: "lastModified",
-                width: 170,
-                align: "center",
-                sorter: true,
-                sortOrder: getColumnSortOrder("lastModified"),
-                render: (value: Date | string | undefined) =>
-                  value ? dayjs(value).format(" HH:mm DD/MM/YYYY") : "",
-              },
-              {
-                title: "Thao tác",
-                width: 150,
-                align: "center",
-                fixed: "right",
-                render: (_, record) => {
-                  if (!record.name) return null
-                  return (
-                    <Flex justify="center" gap={4}>
-                      <Tooltip title="Xem trước">
-                        <Button
-                          type="text"
-                          size="small"
-                          icon={<Eye size={16} />}
-                          onClick={() => handlePreview(record.name)}
-                        />
-                      </Tooltip>
-                      <Tooltip title="Tải file xuống">
-                        <Button
-                          type="text"
-                          size="small"
-                          icon={<Download size={16} />}
-                          onClick={() => handleDownload(record.name)}
-                        />
-                      </Tooltip>
-                      <Popconfirm
-                        title={`Xóa file "${getDisplayName(record)}"?`}
-                        description="Hành động này không thể hoàn tác."
-                        okText="Xóa"
-                        cancelText="Hủy"
-                        okButtonProps={{
-                          danger: true,
-                          loading: deletingObjectName === record.name,
-                        }}
-                        onConfirm={() => handleDelete(record.name)}
-                      >
-                        <Tooltip title="Xóa file">
-                          <Button
-                            type="text"
-                            size="small"
-                            danger
-                            icon={<Trash2 size={16} />}
-                            loading={deletingObjectName === record.name}
-                          />
-                        </Tooltip>
-                      </Popconfirm>
-                    </Flex>
-                  )
-                },
-              },
-            ]}
-            pagination={{
-              current: currentPage,
-              pageSize,
-              total: totalCount,
-              showTotal: (total, range) =>
-                `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
-              onChange: (page, size) => {
-                if (size !== pageSize) {
-                  setPageSize(size)
-                  setCurrentPage(1)
-                } else {
-                  setCurrentPage(page)
-                }
-              },
-            }}
-          />
-        </Col>
-      </Row>
+          <div className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden px-1 py-2 mau-bieu-file-tree">
+            {isFetching && treeData.length === 0 ? (
+              <Flex align="center" justify="center" className="h-40">
+                <Spin />
+              </Flex>
+            ) : treeData.length === 0 ? (
+              <Empty
+                image={Empty.PRESENTED_IMAGE_SIMPLE}
+                description={searchText ? "Không tìm thấy file phù hợp" : "Chưa có file nào"}
+                className="mt-10"
+              />
+            ) : (
+              <Tree
+                blockNode
+                showIcon={false}
+                treeData={treeData}
+                expandedKeys={expandedKeys}
+                onExpand={handleTreeExpand}
+                selectedKeys={selectedTreeKey ? [selectedTreeKey] : []}
+                onSelect={(_, info) => {
+                  const node = info.node as MauBieuTreeNode
+                  if (node.isFile && node.objectName) {
+                    handleSelectFile(node.objectName, String(node.key))
+                  }
+                }}
+                titleRender={(node) => renderTreeTitle(node as MauBieuTreeNode)}
+              />
+            )}
+          </div>
+        </section>
+
+        {/* Preview */}
+        <section className="flex flex-col min-h-0 rounded-lg border border-gray-200 bg-white shadow-sm overflow-hidden">
+          <div className="px-4 py-3 border-b border-gray-100 shrink-0 bg-gray-50/50">
+            {selectedItem ? (
+              <Flex vertical gap={2}>
+                <Text strong className="text-[15px] leading-snug" ellipsis title={selectedDisplayName}>
+                  {selectedDisplayName}
+                </Text>
+                <Flex wrap="wrap" gap={12} className="text-xs text-gray-500">
+                  <span>Kích thước: {formatBytes(selectedItem.size)}</span>
+                  <span>
+                    Cập nhật:{" "}
+                    {selectedItem.lastModified
+                      ? dayjs(selectedItem.lastModified).format("HH:mm DD/MM/YYYY")
+                      : "—"}
+                  </span>
+                </Flex>
+              </Flex>
+            ) : (
+              <Text type="secondary">Xem trước tài liệu</Text>
+            )}
+          </div>
+
+          <div className="relative flex-1 min-h-0 bg-[#f3f4f6]">
+            {!selectedObjectName || previewLoading || previewError || !previewUrl ? (
+              <Flex align="center" justify="center" className="absolute inset-0 p-6">
+                {renderPreviewContent()}
+              </Flex>
+            ) : (
+              renderPreviewContent()
+            )}
+          </div>
+        </section>
+      </div>
+
+      <style jsx global>{`
+        .mau-bieu-file-tree .ant-tree-treenode {
+          display: flex;
+          align-items: center;
+          padding-bottom: 2px;
+        }
+        .mau-bieu-file-tree .ant-tree-switcher {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          align-self: center;
+          width: 24px;
+          height: 32px;
+          line-height: 0;
+          margin-inline-end: 2px;
+          background: transparent !important;
+        }
+        .mau-bieu-file-tree .ant-tree-switcher::before {
+          top: auto !important;
+        }
+        .mau-bieu-file-tree .ant-tree-switcher .ant-tree-switcher-icon,
+        .mau-bieu-file-tree .ant-tree-switcher .ant-select-tree-switcher-icon {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          line-height: 0;
+          vertical-align: middle;
+        }
+        .mau-bieu-file-tree .ant-tree-switcher-leaf-line::before,
+        .mau-bieu-file-tree .ant-tree-switcher-leaf-line::after {
+          top: 50%;
+        }
+        .mau-bieu-file-tree .ant-tree-indent {
+          align-self: center;
+        }
+        .mau-bieu-file-tree .ant-tree-node-content-wrapper {
+          display: flex;
+          align-items: center;
+          flex: 1;
+          min-width: 0;
+          min-height: 32px;
+          line-height: normal;
+          padding: 0 6px 0 4px !important;
+          border-radius: 6px;
+        }
+        .mau-bieu-file-tree .ant-tree-title {
+          display: flex;
+          align-items: center;
+          width: 100%;
+          min-height: 32px;
+        }
+        .mau-bieu-file-tree .ant-tree-node-selected .ant-tree-node-content-wrapper {
+          background: transparent !important;
+        }
+        .mau-bieu-file-tree .ant-tree-indent-unit {
+          width: 16px;
+        }
+      `}</style>
     </div>
   )
 }
