@@ -251,7 +251,11 @@ export default function DanhMucDoAn() {
           },
         },
       },
-      librarySubmission: true,
+      librarySubmission: {
+        include: {
+          documentFile: true,
+        },
+      },
     },
     take: numberOfPages,
     skip: (currentPage - 1) * numberOfPages,
@@ -1547,30 +1551,6 @@ export default function DanhMucDoAn() {
   )
 }
 
-const mapDocumentFileCreateInput = (file: DocumentFile) => ({
-  name: file.name,
-  path: file.path,
-  mimeType: file.mimeType,
-  size: file.size,
-})
-
-const buildDocumentFileUpdateInput = (
-  filesInForm: DocumentFile[],
-  initialFiles: DocumentFile[]
-) => ({
-  upsert: filesInForm
-    .filter((file) => !!file.id)
-    .map((file) => ({
-      where: { id: file.id },
-      create: mapDocumentFileCreateInput(file),
-      update: mapDocumentFileCreateInput(file),
-    })),
-  create: filesInForm.filter((file) => !file.id).map(mapDocumentFileCreateInput),
-  disconnect: initialFiles
-    .filter((initialFile) => !filesInForm.some((finalFile) => finalFile.id === initialFile.id))
-    .map((fileToDisconnect) => ({ id: fileToDisconnect.id })),
-})
-
 const StudentManagementModal = ({
   librarySubmission,
   thesisProjectId,
@@ -1860,7 +1840,8 @@ const StudentManagementModal = ({
   const handleSaveDocument = async (data: DoAnModelType) => {
     const libraryId = librarySubmission?.id ?? data.thesisLibraryId
     const thesisId = thesisProjectId ?? project?.id
-    const filesInForm = data.documentFile ?? []
+    const filesInForm = form.getFieldValue("documentFile") || (data as any).documentFile || []
+    const initialFiles = document
 
     const submissionPayload = {
       submissionDate: data.submissionDate?.toDate(),
@@ -1869,12 +1850,46 @@ const StudentManagementModal = ({
       librarianNote: data.librarianNote,
     }
 
+    const documentFileInput = {
+      upsert: filesInForm
+        .filter((file: DocumentFile) => !!file.id)
+        .map((file: DocumentFile) => ({
+          where: { id: file.id },
+          create: {
+            name: file.name,
+            path: file.path,
+            mimeType: file.mimeType,
+            size: file.size,
+          },
+          update: {
+            name: file.name,
+            path: file.path,
+            mimeType: file.mimeType,
+            size: file.size,
+          },
+        })),
+      create: filesInForm
+        .filter((file: DocumentFile) => !file.id)
+        .map((file: DocumentFile) => ({
+          name: file.name,
+          path: file.path,
+          mimeType: file.mimeType,
+          size: file.size,
+        })),
+      disconnect: initialFiles
+        .filter(
+          (initialFile) =>
+            !filesInForm.some((finalFile: DocumentFile) => finalFile.id === initialFile.id)
+        )
+        .map((fileToDisconnect) => ({ id: fileToDisconnect.id })),
+    }
+
     if (libraryId) {
       await updateLibrarySubmission({
         where: { id: libraryId },
         data: {
           ...submissionPayload,
-          documentFile: buildDocumentFileUpdateInput(filesInForm, document),
+          documentFile: documentFileInput,
         },
       })
       return
@@ -1890,7 +1905,14 @@ const StudentManagementModal = ({
         ...submissionPayload,
         thesis: { connect: { id: thesisId } },
         documentFile: {
-          create: filesInForm.map(mapDocumentFileCreateInput),
+          create: filesInForm
+            .filter((file: DocumentFile) => !file.id)
+            .map((file: DocumentFile) => ({
+              name: file.name,
+              path: file.path,
+              mimeType: file.mimeType,
+              size: file.size,
+            })),
         },
       },
     })
@@ -2034,7 +2056,7 @@ const StudentManagementModal = ({
               <DocumentPaths
                 form={form}
                 data={document}
-                relationId={librarySubmission?.id ?? ""}
+                relationId={project?.librarySubmission?.id ?? ""}
                 relationType="librarySubmissionId"
                 titleForm="documentFile"
               />
