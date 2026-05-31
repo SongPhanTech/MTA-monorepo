@@ -65,6 +65,7 @@ export default {
     "DANH_MUC_LOP_BIEN_CHE_KET_QUA_HOC_TAP_ID": "/danh-muc/lop-bien-che/ket-qua-hoc-tap/[id]",
     "DANH_MUC_NGON_NGU_DAO_TAO": "/danh-muc/ngon-ngu-dao-tao",
     "DANH_MUC_NOI_DUNG_TINH_TAI": "/danh-muc/noi-dung-tinh-tai",
+    "DANH_MUC_QL_DIEM_CONG_COMPONENTS_CAN_BO": "/danh-muc/ql-diem-cong/components/can-bo",
     "DANH_MUC_QL_DIEM_CONG_COMPONENTS_CERTIFICATE": "/danh-muc/ql-diem-cong/components/certificate",
     "DANH_MUC_QL_DIEM_CONG_COMPONENTS_OLYMPIC_AWARD": "/danh-muc/ql-diem-cong/components/olympic-award",
     "DANH_MUC_QL_DIEM_CONG": "/danh-muc/ql-diem-cong",
@@ -185,6 +186,14 @@ export default {
     "QUAN_LY_HO_SO": "/quan-ly-ho-so",
     "QUAN_LY_HO_SO_ME": "/quan-ly-ho-so/me",
     "QUAN_LY_HO_SO_TAO_MOI": "/quan-ly-ho-so/tao-moi"
+  },
+  "QL_LICH_CONG_TAC": {
+    "INDEX": "/",
+    "QUAN_LY_LICH_LICH_CA_NHAN": "/quan-ly-lich/lich-ca-nhan",
+    "QUAN_LY_LICH_LICH_CONG_TAC": "/quan-ly-lich/lich-cong-tac",
+    "QUAN_LY_LICH_LICH_THANG": "/quan-ly-lich/lich-thang",
+    "QUAN_LY_LICH_LICH_TUAN": "/quan-ly-lich/lich-tuan",
+    "TONG_QUAN": "/tong-quan"
   },
   "TRO_LY_AO": {
     "CAU_HOI_THUONG_GAP": "/cau-hoi-thuong-gap",

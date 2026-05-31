@@ -1,0 +1,19 @@
+.month-schedule-table-wrap {
+  max-height: calc(100vh - 340px);
+}
+
+.month-schedule-table-wrap .week-schedule-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+.month-schedule-table-wrap .week-schedule-table .week-schedule-day-col {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+}
+
+.month-schedule-table-wrap .week-schedule-table thead .week-schedule-day-col {
+  z-index: 3;
+}

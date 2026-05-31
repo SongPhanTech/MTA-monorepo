@@ -1,0 +1,132 @@
+import { MOCK_WEEK_SCHEDULE_ENTRIES } from "@constants/work-schedule-week-mock"
+import type { WeekScheduleEntry } from "@/types/work-schedule-week-view"
+
+export const MOCK_MONTH_REFERENCE = "2026-05"
+
+const MAY_2026_EXTRA_ENTRIES: WeekScheduleEntry[] = [
+  {
+    id: "me-1",
+    leaderId: "w-leader-1",
+    date: "2026-05-05",
+    time: "08:00",
+    content: "Họp giao ban đầu tháng 5 (P405-S1)",
+    type: "ORIGINAL",
+  },
+  {
+    id: "me-2",
+    leaderId: "w-leader-2",
+    date: "2026-05-05",
+    time: "14:00",
+    content: "Làm việc với Vụ Kế hoạch - Tài chính (P301)",
+    type: "PARTICIPANT",
+  },
+  {
+    id: "me-3",
+    leaderId: "w-leader-4",
+    date: "2026-05-06",
+    time: "07:00",
+    content: "Trực BGĐ",
+    type: "DUTY",
+  },
+  {
+    id: "me-4",
+    leaderId: "w-leader-3",
+    date: "2026-05-07",
+    time: "09:30",
+    content: "Kiểm tra công tác đào tạo các khoa (Khu A)",
+    type: "ORIGINAL",
+  },
+  {
+    id: "me-5",
+    leaderId: "w-leader-2",
+    date: "2026-05-08",
+    time: "15:00",
+    content: "Họp bổ sung triển khai nghị quyết (P715-S4)",
+    type: "SUPPLEMENT",
+  },
+  {
+    id: "me-6",
+    leaderId: "w-leader-1",
+    date: "2026-05-12",
+    time: "10:00",
+    content: "Chủ trì hội nghị sơ kết quý I (Hội trường lớn)",
+    type: "PARTICIPANT",
+  },
+  {
+    id: "me-7",
+    leaderId: "w-leader-4",
+    date: "2026-05-13",
+    time: "07:00",
+    content: "Trực BGĐ",
+    type: "DUTY",
+  },
+  {
+    id: "me-8",
+    leaderId: "w-leader-3",
+    date: "2026-05-14",
+    time: "13:30",
+    content: "Giao ban chuyên môn tháng 5 (HT-S4)",
+    type: "PARTICIPANT",
+  },
+  {
+    id: "me-9",
+    leaderId: "w-leader-2",
+    date: "2026-05-15",
+    time: "08:30",
+    content: "Họp công tác tuần toàn quân (Online)",
+    type: "ORIGINAL",
+  },
+  {
+    id: "me-10",
+    leaderId: "w-leader-4",
+    date: "2026-05-16",
+    time: "09:00",
+    content: "Tiếp đoàn doanh nghiệp đối tác (Phòng khách VIP)",
+    type: "PARTICIPANT",
+  },
+  {
+    id: "me-11",
+    leaderId: "w-leader-1",
+    date: "2026-05-19",
+    time: "14:00",
+    content: "Làm việc Ban Chấp hành Đảng bộ (P405-S1)",
+    type: "SUPPLEMENT",
+  },
+  {
+    id: "me-12",
+    leaderId: "w-leader-3",
+    date: "2026-05-20",
+    time: "07:30",
+    content: "Rà soát kế hoạch tuyển sinh năm học mới (P301)",
+    type: "ORIGINAL",
+  },
+  {
+    id: "me-13",
+    leaderId: "w-leader-2",
+    date: "2026-05-21",
+    time: "16:00",
+    content: "Họp phát sinh công tác an ninh (P501)",
+    type: "SUPPLEMENT",
+  },
+  {
+    id: "me-14",
+    leaderId: "w-leader-4",
+    date: "2026-05-22",
+    time: "08:00",
+    content: "Dự lễ kỷ niệm ngày thành lập đơn vị (Sân Học viện)",
+    type: "PARTICIPANT",
+  },
+  {
+    id: "me-15",
+    leaderId: "w-leader-1",
+    date: "2026-05-23",
+    time: "09:00",
+    content: "Chuẩn bị đoàn công tác nước ngoài (VP Học viện)",
+    type: "ORIGINAL",
+  },
+]
+
+export const MOCK_MONTH_SCHEDULE_ENTRIES: WeekScheduleEntry[] = [
+  ...MAY_2026_EXTRA_ENTRIES,
+  ...MOCK_WEEK_SCHEDULE_ENTRIES,
+]

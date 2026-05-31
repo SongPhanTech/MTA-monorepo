@@ -32,6 +32,7 @@ import { DANG_KY_HOC_PERMISSION } from "../generated/dang-ky-hoc"
 import { KHAO_THI_PERMISSION } from "../generated/khao-thi"
 import { QL_DAO_TAO_PERMISSION } from "../generated/ql-dao-tao"
 import { QL_HO_SO_PERMISSION } from "../generated/ql-ho-so"
+import { QL_LICH_CONG_TAC_PERMISSION } from "../generated/ql-lich-cong-tac"
 import ROUTER_PATH from "../generated/router"
 import { TRO_LY_AO_PERMISSION } from "../generated/tro-ly-ao"
 import "./index.css"
@@ -1022,6 +1023,49 @@ const NAVIGATION: NavigationType = {
       },
     ],
   },
+  QL_LICH_CONG_TAC: {
+    label: "Quản lý lịch công tác",
+    menus: [
+      {
+        id: QL_LICH_CONG_TAC_PERMISSION.QL_LICH_CONG_TAC_TONG_QUAN,
+        label: "Tổng quan",
+        icon: BarChart3,
+        path: ROUTER_PATH.QL_LICH_CONG_TAC.TONG_QUAN,
+        description: "Tổng quan lịch công tác",
+      },
+      {
+        id: "quan-ly-lich",
+        label: "Quản lý lịch",
+        icon: CalendarRange,
+        children: [
+          {
+            id: QL_LICH_CONG_TAC_PERMISSION.QL_LICH_CONG_TAC_QUAN_LY_LICH_LICH_CONG_TAC,
+            label: "Lịch công tác",
+            path: ROUTER_PATH.QL_LICH_CONG_TAC.QUAN_LY_LICH_LICH_CONG_TAC,
+            description: "Quản lý lịch công tác",
+          },
+          {
+            id: QL_LICH_CONG_TAC_PERMISSION.QL_LICH_CONG_TAC_QUAN_LY_LICH_LICH_TUAN,
+            label: "Lịch tuần",
+            path: ROUTER_PATH.QL_LICH_CONG_TAC.QUAN_LY_LICH_LICH_TUAN,
+            description: "Quản lý lịch tuần",
+          },
+          {
+            id: QL_LICH_CONG_TAC_PERMISSION.QL_LICH_CONG_TAC_QUAN_LY_LICH_LICH_THANG,
+            label: "Lịch tháng",
+            path: ROUTER_PATH.QL_LICH_CONG_TAC.QUAN_LY_LICH_LICH_THANG,
+            description: "Quản lý lịch tháng",
+          },
+          {
+            id: QL_LICH_CONG_TAC_PERMISSION.QL_LICH_CONG_TAC_QUAN_LY_LICH_LICH_CA_NHAN,
+            label: "Lịch cá nhân",
+            path: ROUTER_PATH.QL_LICH_CONG_TAC.QUAN_LY_LICH_LICH_CA_NHAN,
+            description: "Quản lý lịch cá nhân",
+          },
+        ],
+      },
+    ],
+  },
 }
 
 const PUBLIC_ROUTER = [ROUTER_PATH.KHAO_THI.LAM_KHAO_SAT_ID.replace("[id]", "")]
@@ -1031,6 +1075,7 @@ export {
   PUBLIC_ROUTER,
   QL_DAO_TAO_PERMISSION,
   QL_HO_SO_PERMISSION,
+  QL_LICH_CONG_TAC_PERMISSION,
   ROUTER_PATH,
   TRO_LY_AO_PERMISSION,
 }

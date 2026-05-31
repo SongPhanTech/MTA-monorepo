@@ -96,6 +96,8 @@ app.all("/api/system/:appcode/*", async (c) => {
         return process.env.KEYCLOAK_CLIENT_ID_PORTAL || ""
       case "chatbot":
         return process.env.KEYCLOAK_CLIENT_ID_CHATBOT || ""
+      case "lct":
+        return process.env.KEYCLOAK_CLIENT_ID_LCT || ""
       default:
         return process.env.KEYCLOAK_CLIENT_ID || ""
     }
@@ -114,6 +116,8 @@ app.all("/api/system/:appcode/*", async (c) => {
         return process.env.KEYCLOAK_CLIENT_SECRET_PORTAL || ""
       case "chatbot":
         return process.env.KEYCLOAK_CLIENT_SECRET_CHATBOT || ""
+      case "lct":
+        return process.env.KEYCLOAK_CLIENT_SECRET_LCT || ""
       default:
         return process.env.KEYCLOAK_CLIENT_SECRET || ""
     }
