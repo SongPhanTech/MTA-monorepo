@@ -4797,6 +4797,8 @@ model StudentSemesterResult {
   foreignLangPass          Boolean
   isClassMonitor           Boolean
   isUnionLeader            Boolean
+  gpaBase4WithBonus        Decimal?                @db.Decimal(5, 2)
+  gpaBase10WithBonus       Decimal?                @db.Decimal(5, 2)
   entryScore               Float?
   isImproving              Boolean
   postponeWithReason       Boolean                 @default(false)

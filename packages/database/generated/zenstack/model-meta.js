@@ -16138,6 +16138,16 @@ const metadata = {
                 }, isUnionLeader: {
                     name: "isUnionLeader",
                     type: "Boolean",
+                }, gpaBase4WithBonus: {
+                    name: "gpaBase4WithBonus",
+                    type: "Decimal",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Decimal", "args": [{ "name": "p", "value": 5 }, { "name": "s", "value": 2 }] }],
+                }, gpaBase10WithBonus: {
+                    name: "gpaBase10WithBonus",
+                    type: "Decimal",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Decimal", "args": [{ "name": "p", "value": 5 }, { "name": "s", "value": 2 }] }],
                 }, entryScore: {
                     name: "entryScore",
                     type: "Float",

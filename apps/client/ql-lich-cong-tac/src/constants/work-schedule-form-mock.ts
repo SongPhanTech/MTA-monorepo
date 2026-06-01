@@ -112,5 +112,7 @@ export const DEFAULT_WORK_SCHEDULE_FORM_VALUES: WorkScheduleFormValues = {
 }
 
 export function getEventTypeMeta(type: WorkScheduleEventType) {
-  return WORK_SCHEDULE_EVENT_TYPES.find((item) => item.value === type) ?? WORK_SCHEDULE_EVENT_TYPES[0]
+  return (
+    WORK_SCHEDULE_EVENT_TYPES.find((item) => item.value === type) ?? WORK_SCHEDULE_EVENT_TYPES[0]
+  )
 }

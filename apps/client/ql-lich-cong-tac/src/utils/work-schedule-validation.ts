@@ -1,7 +1,4 @@
-import type {
-  WorkScheduleFormValues,
-  WorkSchedulePreviewEvent,
-} from "@/types/work-schedule-form"
+import type { WorkScheduleFormValues, WorkSchedulePreviewEvent } from "@/types/work-schedule-form"
 import dayjs from "dayjs"
 
 export type WorkScheduleValidationError = {
@@ -94,10 +91,7 @@ export function detectWorkScheduleConflicts(
   }
 
   const sameDayEvents = existingEvents.filter(
-    (event) =>
-      event.date === values.date &&
-      event.id !== excludeEventId &&
-      event.id !== "preview-1"
+    (event) => event.date === values.date && event.id !== excludeEventId && event.id !== "preview-1"
   )
 
   const normalizedLocation = normalizeLocation(values.location)
@@ -108,10 +102,7 @@ export function detectWorkScheduleConflicts(
 
     if (!eventStart.isValid() || !eventEnd.isValid()) continue
 
-    if (
-      event.leaderId === values.leaderId &&
-      rangesOverlap(startAt, endAt, eventStart, eventEnd)
-    ) {
+    if (event.leaderId === values.leaderId && rangesOverlap(startAt, endAt, eventStart, eventEnd)) {
       conflicts.push({
         type: "leader_time",
         message: `Thủ trưởng đã có lịch trùng giờ (${event.startTime} - ${event.endTime}): ${event.title}`,

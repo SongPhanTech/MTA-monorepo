@@ -28,7 +28,9 @@ export function WeekScheduleEntryItem({ entry, onClick }: WeekScheduleEntryItemP
       )}
       onClick={() => onClick?.(entry)}
     >
-      {isDraft ? <span className="week-schedule-entry-badge week-schedule-entry-badge--draft">Nháp</span> : null}
+      {isDraft ? (
+        <span className="week-schedule-entry-badge week-schedule-entry-badge--draft">Nháp</span>
+      ) : null}
       {entry.time ? <span className="week-schedule-entry-time">{entry.time} </span> : null}
       <span>{entry.content}</span>
     </button>
@@ -72,7 +74,10 @@ export function WeekScheduleLegend({
                 style={{ backgroundColor: "#f7eedf", border: "1px solid #d4b896" }}
               />
             ) : (
-              <span className="week-schedule-legend-dot" style={{ backgroundColor: meta.dotColor }} />
+              <span
+                className="week-schedule-legend-dot"
+                style={{ backgroundColor: meta.dotColor }}
+              />
             )}
             {meta.label}
           </button>

@@ -155,8 +155,8 @@ const DiemTrungBinhKyHoc = () => {
           select: {
             code: true,
             name: true,
-            unionSecretaryId:true,
-            classMonitorId:true
+            unionSecretaryId: true,
+            classMonitorId: true,
           },
         },
       },
@@ -529,26 +529,6 @@ const DiemTrungBinhKyHoc = () => {
                   )
                 },
               },
-               {
-                  title: "Lớp trưởng",
-                  align: "center",
-                  width: 80,
-                  render: (_, record) => (
-                    <div className="flex items-center justify-center">
-                      <Checkbox checked={record?.fixedClass?.classMonitorId === record?.id} disabled />
-                    </div>
-                  ),
-                },
-                {
-                  title: "Bí thư",
-                  align: "center",
-                  width: 80,
-                  render: (_, record) => (
-                    <div className="flex items-center justify-center">
-                      <Checkbox checked={record?.fixedClass?.unionSecretaryId === record?.id} disabled />
-                    </div>
-                  ),
-                },
               {
                 title: "Điểm thi đầu vào",
                 dataIndex: ["studentSemesterResult", "0", "entryScore"],

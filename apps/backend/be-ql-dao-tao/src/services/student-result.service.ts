@@ -740,6 +740,8 @@ export const calculateStudentSemesterResult = async (
             trainingCourseId: true, // Lấy ID khoá học
             classMonitorId: true, // Lấy ID lớp trưởng
             unionLeaderId: true, // Lấy ID bí thư
+            unionSecretaryId: true, // Lấy ID bí thư đoàn
+            deputyUnionSecretaryId: true, // Lấy ID phó bí thư liên chi đoàn
             trainingCourse: {
               select: {
                 baseScore: true, // Lấy điểm chuẩn của đối tượng đào tạo
@@ -770,6 +772,26 @@ export const calculateStudentSemesterResult = async (
             },
           },
         },
+      },
+    })
+
+    // Cấu hình điểm cộng cán bộ lớp và bảng quy đổi điểm
+    const officerBonusScores = await prisma.officerBonusScore.findMany({
+      where: { deletedAt: null, active: true },
+    })
+    const officerBonusMap = new Map<OfficerPosition, number>(
+      officerBonusScores.map((o) => [o.position, o.bonusScore])
+    )
+    const scoreConverts = await prisma.scoreConvert.findMany({
+      where: { trainingCourseId, deletedAt: null, active: true },
+      select: {
+        trainingCourseId: true,
+        letter: true,
+        base10Min: true,
+        base10Max: true,
+        base4: true,
+        classification: true,
+        pass: true,
       },
     })
 
@@ -840,6 +862,29 @@ export const calculateStudentSemesterResult = async (
           orderBy: { createdAt: "desc" },
         })
 
+        // Tính điểm cộng cán bộ và snapshot GPA đã cộng thưởng
+        const fixedClass = student.fixedClass
+        const heldPositions: OfficerPosition[] = []
+        if (fixedClass?.classMonitorId === student.id)
+          heldPositions.push(OfficerPosition.CLASS_MONITOR)
+        if (fixedClass?.unionSecretaryId === student.id)
+          heldPositions.push(OfficerPosition.UNION_SECRETARY)
+        if (fixedClass?.unionLeaderId === student.id)
+          heldPositions.push(OfficerPosition.UNION_LEADER)
+        if (fixedClass?.deputyUnionSecretaryId === student.id)
+          heldPositions.push(OfficerPosition.DEPUTY_UNION_SECRETARY)
+        const diemThuongCanBo = heldPositions.reduce(
+          (max, p) => Math.max(max, officerBonusMap.get(p) ?? 0),
+          0
+        )
+        const gpaBase10Goc = thongTinDiemHocKy.diemTrungBinh10TrongKy
+        const gpaBase4Goc = thongTinDiemHocKy.diemTrungBinh4TrongKy
+        const gpaBase10WithBonus = gpaBase10Goc + diemThuongCanBo
+        const gpaBase4WithBonus =
+          diemThuongCanBo > 0
+            ? layGiaTriDiem4(gpaBase10WithBonus, trainingCourseId, scoreConverts) || gpaBase4Goc
+            : gpaBase4Goc
+
         const result: Prisma.StudentSemesterResultUncheckedCreateInput = {
           studentId: student.id,
           conductScore: conductScore?.score || 10,
@@ -866,8 +911,10 @@ export const calculateStudentSemesterResult = async (
           totalFailedCredits: thongTinTichLuy.tongTinChiNoTichLuy, // Số tín chỉ nợ tích lũy
           rankId: thongTinTichLuy.rank?.id ?? null,
           foreignLangPass: student.foreignLangPass, // Đạt trình độ ngoại nsgữ theo quy định
-          isClassMonitor: student.id === student.fixedClass?.classMonitorId, // là lớp trưởng nếu id trùng classMonitorId)
-          isUnionLeader: student.id === student.fixedClass?.unionLeaderId, // là bí thư nếu id trùng unionLeaderId)
+          isClassMonitor: student.id === student.fixedClass?.classMonitorId,
+          isUnionLeader: student.id === student.fixedClass?.unionLeaderId,
+          gpaBase10WithBonus: new Decimal(gpaBase10WithBonus),
+          gpaBase4WithBonus: new Decimal(gpaBase4WithBonus),
           entryScore: student.entryScore, // Điểm đầu vào
           academicWarningLevel:
             student.academicWarningLevel ?? academicWarningForSemester?.level ?? 0, // mức cảnh báo học tập
@@ -1585,15 +1632,17 @@ export const listStudentResultInfo = async (
           0
         )
 
-        // Điểm hệ 10 đã được tính xong từ trước -> tại đây chỉ CỘNG THÊM điểm cán bộ.
+        // Ưu tiên dùng snapshot đã lưu khi chạy tổng kết; fallback về real-time cho data cũ
         const gpaBase10Goc = semesterResult?.gpaBase10.toNumber() || 0
         const gpaBase4Goc = semesterResult?.gpaBase4.toNumber() || 0
-        const gpaBase10CongThuong = gpaBase10Goc + diemThuongCanBo
-        // Hệ 4 suy ra từ hệ 10 đã cộng (giữ nguyên hệ 4 gốc nếu không có điểm cộng)
+        const gpaBase10CongThuong =
+          semesterResult?.gpaBase10WithBonus?.toNumber() ?? gpaBase10Goc + diemThuongCanBo
         const gpaBase4CongThuong =
-          diemThuongCanBo > 0
-            ? layGiaTriDiem4(gpaBase10CongThuong, trainingCourseId, scoreConverts) || gpaBase4Goc
-            : gpaBase4Goc
+          semesterResult?.gpaBase4WithBonus?.toNumber() ??
+          (diemThuongCanBo > 0
+            ? layGiaTriDiem4(gpaBase10Goc + diemThuongCanBo, trainingCourseId, scoreConverts) ||
+              gpaBase4Goc
+            : gpaBase4Goc)
 
         return {
           stt: 0,
@@ -2280,6 +2329,24 @@ export const resultCourseStudentScholarship = async (
 
       if (!studentSemesterResult) return
 
+      // Bước 1: Kiểm tra với GPA gốc (chưa cộng điểm thưởng cán bộ)
+      // Sinh viên phải đạt ít nhất 1 học bổng với GPA gốc thì mới được áp dụng điểm thưởng
+      const studentWithRawGpa = {
+        ...student,
+        diemTrungBinh10: studentSemesterResult.gpaBase10.toNumber(),
+        diemTrungBinh4: studentSemesterResult.gpaBase4.toNumber(),
+      }
+      const scholarshipInfoWithoutBonus = await getScholarship(
+        studentWithRawGpa,
+        trainingCourseId,
+        semesterScholarship,
+        scholarshipCriteriaList
+      )
+
+      if (scholarshipInfoWithoutBonus.length === 0) return
+
+      // Bước 2: Đã đủ điều kiện → kiểm tra lại với GPA đã cộng điểm thưởng
+      // để xem có đạt học bổng tốt hơn không
       const scholarshipInfo = await getScholarship(
         student,
         trainingCourseId,
@@ -2304,12 +2371,11 @@ export const resultCourseStudentScholarship = async (
       } = studentSemesterResult as any
 
       // Hiển thị điểm đã cộng điểm cán bộ (student.diemTrungBinh* đã được cộng ở listStudentResultInfo)
+      // Chỉ override WithBonus để frontend phân biệt raw vs bonus (hasBonus = gpaBase10WithBonus > gpaBase10)
       if ((student.diemThuong ?? 0) > 0) {
-        filteredResult.gpaBase10 = new Decimal(student.diemTrungBinh10)
-        filteredResult.gpaBase4 = new Decimal(student.diemTrungBinh4)
+        filteredResult.gpaBase10WithBonus = new Decimal(student.diemTrungBinh10)
+        filteredResult.gpaBase4WithBonus = new Decimal(student.diemTrungBinh4)
       }
-
-      console.log("studentSemesterResult", studentSemesterResult)
 
       const result = StudentScholarshipResult.parse({
         id: studentSemesterResult.studentId,

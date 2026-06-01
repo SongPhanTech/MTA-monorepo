@@ -15338,6 +15338,14 @@ const metadata: ModelMeta = {
                 }, isUnionLeader: {
                     name: "isUnionLeader",
                     type: "Boolean",
+                }, gpaBase4WithBonus: {
+                    name: "gpaBase4WithBonus",
+                    type: "Decimal",
+                    isOptional: true,
+                }, gpaBase10WithBonus: {
+                    name: "gpaBase10WithBonus",
+                    type: "Decimal",
+                    isOptional: true,
                 }, entryScore: {
                     name: "entryScore",
                     type: "Float",

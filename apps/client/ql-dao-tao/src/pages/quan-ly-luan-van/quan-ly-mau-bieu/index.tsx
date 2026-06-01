@@ -11,11 +11,7 @@ import {
 } from "@workspace/libs/api/model"
 import type { BucketItemDto } from "@workspace/libs/api/schemas"
 import { normalizeVietnamese } from "@workspace/libs/utils"
-import {
-  OnlyOfficeViewer,
-  supportedDocFileTypes,
-  supportedImageFileTypes,
-} from "@workspace/ui"
+import { OnlyOfficeViewer, supportedDocFileTypes, supportedImageFileTypes } from "@workspace/ui"
 import {
   Badge,
   Button,
@@ -36,15 +32,7 @@ import axios from "axios"
 import dayjs from "dayjs"
 import _ from "lodash"
 import { Download, RefreshCcw, Trash2 } from "lucide-react"
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-  type Key,
-  type MouseEvent,
-} from "react"
+import { useCallback, useEffect, useMemo, useRef, useState, type Key, type MouseEvent } from "react"
 
 const { Text } = Typography
 
@@ -278,10 +266,7 @@ export default function QuanLyMauBieu() {
 
   const rootItems = useMemo(() => normalizeBucketItems(data?.data), [data])
 
-  const nestedItems = useMemo(
-    () => Object.values(folderListings).flat(),
-    [folderListings]
-  )
+  const nestedItems = useMemo(() => Object.values(folderListings).flat(), [folderListings])
 
   const allItems = useMemo(() => mergeBucketItems(rootItems, nestedItems), [rootItems, nestedItems])
 
@@ -410,10 +395,7 @@ export default function QuanLyMauBieu() {
     refetch()
   }
 
-  const handleTreeExpand = (
-    keys: Key[],
-    info: { expanded: boolean; node: MauBieuTreeNode }
-  ) => {
+  const handleTreeExpand = (keys: Key[], info: { expanded: boolean; node: MauBieuTreeNode }) => {
     setExpandedKeys(keys as string[])
     if (info.expanded && info.node.folderPrefix) {
       void loadFolderContents(info.node.folderPrefix)
@@ -587,10 +569,7 @@ export default function QuanLyMauBieu() {
   const renderPreviewContent = () => {
     if (!selectedObjectName) {
       return (
-        <Empty
-          className="my-auto"
-          description="Chọn một file ở danh sách bên trái để xem trước"
-        />
+        <Empty className="my-auto" description="Chọn một file ở danh sách bên trái để xem trước" />
       )
     }
 
@@ -604,10 +583,7 @@ export default function QuanLyMauBieu() {
 
     if (previewError || !previewUrl) {
       return (
-        <Empty
-          className="my-auto"
-          description="Không thể tải file xem trước. Vui lòng thử lại."
-        />
+        <Empty className="my-auto" description="Không thể tải file xem trước. Vui lòng thử lại." />
       )
     }
 
@@ -654,9 +630,7 @@ export default function QuanLyMauBieu() {
   return (
     <div className="flex flex-col gap-3 h-[calc(100vh-168px)] min-h-[620px]">
       <Flex align="center" justify="space-between" gap={12} className="shrink-0">
-        <h2 className="text-base font-semibold m-0">
-          Quản lý mẫu biểu/tài liệu phòng sau đại học
-        </h2>
+        <h2 className="text-base font-semibold m-0">Quản lý mẫu biểu/tài liệu phòng sau đại học</h2>
         <Upload
           multiple
           showUploadList={false}
@@ -758,7 +732,12 @@ export default function QuanLyMauBieu() {
           <div className="px-4 py-3 border-b border-gray-100 shrink-0 bg-gray-50/50">
             {selectedItem ? (
               <Flex vertical gap={2}>
-                <Text strong className="text-[15px] leading-snug" ellipsis title={selectedDisplayName}>
+                <Text
+                  strong
+                  className="text-[15px] leading-snug"
+                  ellipsis
+                  title={selectedDisplayName}
+                >
                   {selectedDisplayName}
                 </Text>
                 <Flex wrap="wrap" gap={12} className="text-xs text-gray-500">

@@ -1,8 +1,4 @@
-import {
-  CheckCircleOutlined,
-  FileAddOutlined,
-  SaveOutlined,
-} from "@ant-design/icons"
+import { CheckCircleOutlined, FileAddOutlined, SaveOutlined } from "@ant-design/icons"
 import { Button, Space } from "antd"
 
 type WorkScheduleActionsProps = {

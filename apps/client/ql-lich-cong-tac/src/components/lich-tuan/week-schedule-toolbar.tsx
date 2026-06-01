@@ -1,11 +1,6 @@
 import { CUSTOM_VI_LOCALE } from "@constants/constants"
 import { formatWeekRangeLabel } from "@/utils/work-schedule-week"
-import {
-  CalendarOutlined,
-  LeftOutlined,
-  PrinterOutlined,
-  RightOutlined,
-} from "@ant-design/icons"
+import { CalendarOutlined, LeftOutlined, PrinterOutlined, RightOutlined } from "@ant-design/icons"
 import { Button, DatePicker, Space, Typography } from "antd"
 import dayjs from "dayjs"
 import isoWeek from "dayjs/plugin/isoWeek"

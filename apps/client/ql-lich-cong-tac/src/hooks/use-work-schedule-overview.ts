@@ -27,11 +27,36 @@ function buildDemoEvents(leaders: WorkScheduleLeader[]): WorkScheduleEventItem[]
 
   const templates = [
     { dayOffset: 0, hour: 8, content: "Họp Hội đồng", location: "P405 – S1", leaderIndex: 0 },
-    { dayOffset: 1, hour: 7, minute: 30, content: "Giao ban BTTM", location: "P405 – S1", leaderIndex: 0 },
-    { dayOffset: 1, hour: 14, content: "Làm việc với đơn vị", location: "Hội trường A", leaderIndex: 1 },
-    { dayOffset: 3, hour: 9, content: "Kiểm tra công tác tuần", location: "VP Học viện", leaderIndex: 2 },
+    {
+      dayOffset: 1,
+      hour: 7,
+      minute: 30,
+      content: "Giao ban BTTM",
+      location: "P405 – S1",
+      leaderIndex: 0,
+    },
+    {
+      dayOffset: 1,
+      hour: 14,
+      content: "Làm việc với đơn vị",
+      location: "Hội trường A",
+      leaderIndex: 1,
+    },
+    {
+      dayOffset: 3,
+      hour: 9,
+      content: "Kiểm tra công tác tuần",
+      location: "VP Học viện",
+      leaderIndex: 2,
+    },
     { dayOffset: 5, hour: 10, content: "Họp Ban Giám đốc", location: "P301", leaderIndex: 0 },
-    { dayOffset: 10, hour: 15, content: "Tổng kết tháng", location: "Hội trường lớn", leaderIndex: 1 },
+    {
+      dayOffset: 10,
+      hour: 15,
+      content: "Tổng kết tháng",
+      location: "Hội trường lớn",
+      leaderIndex: 1,
+    },
     { dayOffset: 20, hour: 8, content: "Hội nghị quý", location: "P501", leaderIndex: 2 },
     { dayOffset: 2, hour: 16, content: "Tiếp công dân", location: "VP Học viện", leaderIndex: 3 },
   ]
@@ -42,7 +67,10 @@ function buildDemoEvents(leaders: WorkScheduleLeader[]): WorkScheduleEventItem[]
       if (!leader) return null
 
       const date = monday.add(item.dayOffset, "day")
-      const startTime = date.hour(item.hour).minute(item.minute ?? 0).second(0)
+      const startTime = date
+        .hour(item.hour)
+        .minute(item.minute ?? 0)
+        .second(0)
 
       return {
         id: `demo-${index + 1}`,
@@ -76,11 +104,9 @@ function mapClassScheduleToEvents(
   )
 
   return schedules.flatMap((schedule) => {
-    const profileIds =
-      schedule.userProfiles?.map((profile) => profile.id).filter(Boolean) ?? []
+    const profileIds = schedule.userProfiles?.map((profile) => profile.id).filter(Boolean) ?? []
     const leaderId =
-      profileIds.map((profileId) => leaderByProfile.get(profileId)).find(Boolean) ??
-      leaders[0]?.id
+      profileIds.map((profileId) => leaderByProfile.get(profileId)).find(Boolean) ?? leaders[0]?.id
 
     if (!leaderId) return []
 
@@ -166,9 +192,8 @@ export function useWorkScheduleOverview() {
       monthPeriodLabel: formatMonthPeriodLabel(reference),
       quarterEventCount: events.filter((event) => isInCurrentQuarter(event, reference)).length,
       quarterPeriodLabel: formatQuarterPeriodLabel(reference),
-      upcoming7DaysEventCount: events.filter((event) =>
-        isUpcomingWithinDays(event, 7, reference)
-      ).length,
+      upcoming7DaysEventCount: events.filter((event) => isUpcomingWithinDays(event, 7, reference))
+        .length,
       upcoming7DaysPeriodLabel: formatUpcomingDaysPeriodLabel(7, reference),
     }
   }, [events])
@@ -178,10 +203,7 @@ export function useWorkScheduleOverview() {
 
     return events
       .filter((event) => isToday(event, reference))
-      .sort(
-        (left, right) =>
-          getEventDateTime(left).valueOf() - getEventDateTime(right).valueOf()
-      )
+      .sort((left, right) => getEventDateTime(left).valueOf() - getEventDateTime(right).valueOf())
       .slice(0, 5)
       .map((event) => {
         const leader = leaders.find((item) => item.id === event.leaderId)

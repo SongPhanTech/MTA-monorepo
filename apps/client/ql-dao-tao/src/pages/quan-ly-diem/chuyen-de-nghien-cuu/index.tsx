@@ -886,7 +886,6 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
                                           sMa: true,
                                         },
                                       },
-
                                     },
                                   },
                                 },
@@ -948,17 +947,14 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
                         (profile) => profile.lecturerId == null
                       )
 
-                      const mapExpertRows = (
-                        profiles: typeof expertProfilesData
-                      ) =>
+                      const mapExpertRows = (profiles: typeof expertProfilesData) =>
                         profiles.map((profile, idx) => ({
                           tt: idx + 1,
                           ho_ten: (getSupervisorName(profile, false, true) as string) || "",
                           cd_dl:
                             profile.supervisorResearchTopic.filter((t) => !t.coSupervisorId)
                               .length +
-                            profile.coSupervisorResearchTopic.filter((t) => !t.supervisorId)
-                              .length,
+                            profile.coSupervisorResearchTopic.filter((t) => !t.supervisorId).length,
                           tc_dl:
                             profile.supervisorResearchTopic
                               .filter((t) => !t.coSupervisorId)

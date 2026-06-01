@@ -35,7 +35,7 @@ import { formatLecturerName } from "@workspace/libs/utils"
 import { useAbility } from "@workspace/permissions"
 import { QL_DAO_TAO_PERMISSION } from "@workspace/router"
 import FormItem from "@components/commons/form-item"
-import {  useSemesterStore, useTrainingObjectTypeStore } from "@workspace/ui"
+import { useSemesterStore, useTrainingObjectTypeStore } from "@workspace/ui"
 import {
   AutoComplete,
   Button,
@@ -63,7 +63,6 @@ import { SqlTransactionBodyItem } from "@workspace/libs/api/schemas"
 dayjs.extend(utc)
 interface DoAnForm {
   subjectClassId: string
- 
 }
 type DoAnModelType = {
   thesisLibraryId?: string
@@ -795,7 +794,7 @@ export default function DanhMucDoAn() {
                   width: 280,
                   align: "left" as const,
                   render: (_: any, record: any) => {
-                    const getSupervisorName = (profile: any) => 
+                    const getSupervisorName = (profile: any) =>
                       [
                         profile?.rank?.sMa,
                         profile?.academicRankType?.sMa,
@@ -803,7 +802,7 @@ export default function DanhMucDoAn() {
                         profile?.fullname,
                       ]
                         .filter(Boolean)
-                        .join(", ");
+                        .join(", ")
 
                     if (editingRowKeys.includes(record?.id)) {
                       return (
@@ -1944,139 +1943,138 @@ const StudentManagementModal = ({
       destroyOnClose
     >
       <Form form={form} layout="horizontal">
-      <Tabs activeKey={activeTab} onChange={setActiveTab} destroyInactiveTabPane={false}>
-        <Tabs.TabPane tab="Thành viên nhóm" key="1">
-          <div className="py-4">
-            <Select
-              mode="multiple"
-              className="w-full"
-              value={selectedStudentIds}
-              onChange={setSelectedStudentIds}
-              options={allStudentsInClass.map((item: any) => ({
-                label: `${item.student?.code} - ${item.student?.userProfile?.fullname}`,
-                value: item.studentId,
-              }))}
-            />
-          </div>
-          <div>
-            <div className="mb-2 font-semibold">
-              Danh sách thành viên ({selectedStudentIds.length})
-            </div>
-            <Table
-              dataSource={selectedStudentsData}
-              columns={memberTableColumns}
-              rowKey="studentId"
-              size="small"
-              bordered
-              pagination={
-                selectedStudentsData.length > 5
-                  ? {
-                      pageSize: 5,
-                      showTotal: (total) => `Tổng số ${total} học viên`,
-                      position: ["bottomCenter"],
-                    }
-                  : false
-              }
-              locale={{ emptyText: "Chưa có thành viên nào được chọn" }}
-            />
-          </div>
-        </Tabs.TabPane>
-        <Tabs.TabPane tab="Minh chứng" key="2" forceRender>
-          <div className="py-4">
-          <Row gutter={32} className="w-full mt-4">
-          <Col span={24}>
-           
-            <Row gutter={16}>
-              <Col span={8}>
-                <FormItem
-                  form={form}
-                  name="submissionDate"
-                  label="Ngày nộp"
-                  className="mb-5"
-                  labelAlign="left"
-                  {...FORM_ITEM_LAYOUT}
-                >
-                  <DatePicker
-                    placeholder="Chọn Ngày nộp"
-                    format={{
-                      format: "DD/MM/YYYY",
-                      type: "mask",
-                    }}
-                    className="w-full"
-                  />
-                </FormItem>
-              </Col>
-
-              <Col span={8}>
-                <FormItem
-                  form={form}
-                  name="isHardcopy"
-                  label="Nộp bản cứng"
-                  className="mb-5"
-                  labelAlign="left"
-                  valuePropName="checked"
-                >
-                  <Checkbox />
-                </FormItem>
-              </Col>
-
-              <Col span={8}>
-                <FormItem
-                  form={form}
-                  name="isSoftcopy"
-                  label="Nộp bản mềm"
-                  className="mb-5"
-                  labelAlign="left"
-                  valuePropName="checked"
-                >
-                  <Checkbox />
-                </FormItem>
-              </Col>
-            </Row>
-
-            <FormItem
-              form={form}
-              name="librarianNote"
-              label="Ghi chú"
-              className="mb-5"
-              labelAlign="left"
-              {...FORM_ITEM_LAYOUT}
-            >
-              <TextArea placeholder="Nhập Ghi chú " rows={4} className="w-full" />
-            </FormItem>
-
-            <FormItem
-              form={form}
-              name="documentFile"
-              label="File minh chứng"
-              className="mb-5"
-              labelAlign="left"
-              {...FORM_ITEM_LAYOUT}
-            >
-              <DocumentPaths
-                form={form}
-                data={document}
-                relationId={project?.librarySubmission?.id ?? ""}
-                relationType="librarySubmissionId"
-                titleForm="documentFile"
+        <Tabs activeKey={activeTab} onChange={setActiveTab} destroyInactiveTabPane={false}>
+          <Tabs.TabPane tab="Thành viên nhóm" key="1">
+            <div className="py-4">
+              <Select
+                mode="multiple"
+                className="w-full"
+                value={selectedStudentIds}
+                onChange={setSelectedStudentIds}
+                options={allStudentsInClass.map((item: any) => ({
+                  label: `${item.student?.code} - ${item.student?.userProfile?.fullname}`,
+                  value: item.studentId,
+                }))}
               />
-            </FormItem>
-          </Col>
-        </Row>
-          </div>
-        </Tabs.TabPane>
-        <Tabs.TabPane tab="Nhập điểm" key="3">
-          <div className="py-4">
-            <Table
-              dataSource={project?.registrations || []}
-              columns={gradeColumns}
-              pagination={false}
-              rowKey="id"
-              size="small"
-            />
-          </div>
-        </Tabs.TabPane>
-      </Tabs>
+            </div>
+            <div>
+              <div className="mb-2 font-semibold">
+                Danh sách thành viên ({selectedStudentIds.length})
+              </div>
+              <Table
+                dataSource={selectedStudentsData}
+                columns={memberTableColumns}
+                rowKey="studentId"
+                size="small"
+                bordered
+                pagination={
+                  selectedStudentsData.length > 5
+                    ? {
+                        pageSize: 5,
+                        showTotal: (total) => `Tổng số ${total} học viên`,
+                        position: ["bottomCenter"],
+                      }
+                    : false
+                }
+                locale={{ emptyText: "Chưa có thành viên nào được chọn" }}
+              />
+            </div>
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="Minh chứng" key="2" forceRender>
+            <div className="py-4">
+              <Row gutter={32} className="w-full mt-4">
+                <Col span={24}>
+                  <Row gutter={16}>
+                    <Col span={8}>
+                      <FormItem
+                        form={form}
+                        name="submissionDate"
+                        label="Ngày nộp"
+                        className="mb-5"
+                        labelAlign="left"
+                        {...FORM_ITEM_LAYOUT}
+                      >
+                        <DatePicker
+                          placeholder="Chọn Ngày nộp"
+                          format={{
+                            format: "DD/MM/YYYY",
+                            type: "mask",
+                          }}
+                          className="w-full"
+                        />
+                      </FormItem>
+                    </Col>
+
+                    <Col span={8}>
+                      <FormItem
+                        form={form}
+                        name="isHardcopy"
+                        label="Nộp bản cứng"
+                        className="mb-5"
+                        labelAlign="left"
+                        valuePropName="checked"
+                      >
+                        <Checkbox />
+                      </FormItem>
+                    </Col>
+
+                    <Col span={8}>
+                      <FormItem
+                        form={form}
+                        name="isSoftcopy"
+                        label="Nộp bản mềm"
+                        className="mb-5"
+                        labelAlign="left"
+                        valuePropName="checked"
+                      >
+                        <Checkbox />
+                      </FormItem>
+                    </Col>
+                  </Row>
+
+                  <FormItem
+                    form={form}
+                    name="librarianNote"
+                    label="Ghi chú"
+                    className="mb-5"
+                    labelAlign="left"
+                    {...FORM_ITEM_LAYOUT}
+                  >
+                    <TextArea placeholder="Nhập Ghi chú " rows={4} className="w-full" />
+                  </FormItem>
+
+                  <FormItem
+                    form={form}
+                    name="documentFile"
+                    label="File minh chứng"
+                    className="mb-5"
+                    labelAlign="left"
+                    {...FORM_ITEM_LAYOUT}
+                  >
+                    <DocumentPaths
+                      form={form}
+                      data={document}
+                      relationId={project?.librarySubmission?.id ?? ""}
+                      relationType="librarySubmissionId"
+                      titleForm="documentFile"
+                    />
+                  </FormItem>
+                </Col>
+              </Row>
+            </div>
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="Nhập điểm" key="3">
+            <div className="py-4">
+              <Table
+                dataSource={project?.registrations || []}
+                columns={gradeColumns}
+                pagination={false}
+                rowKey="id"
+                size="small"
+              />
+            </div>
+          </Tabs.TabPane>
+        </Tabs>
       </Form>
     </Modal>
   )
@@ -2085,5 +2083,3 @@ const StudentManagementModal = ({
 DanhMucDoAn.getLayout = function getLayout(page: React.ReactElement) {
   return <DefaultLayout>{page}</DefaultLayout>
 }
-
-

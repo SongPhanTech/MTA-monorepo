@@ -114,17 +114,12 @@ export function getThesisProjectForSession(studentOrRecord: any, thesisSessionId
     const project = reg?.thesisProject
     if (!project) return false
     return (
-      project.thesisSession?.id === thesisSessionId ||
-      project.thesisSessionId === thesisSessionId
+      project.thesisSession?.id === thesisSessionId || project.thesisSessionId === thesisSessionId
     )
   })?.thesisProject
 }
 
-export function getCouncilMemberName(
-  record: any,
-  role: CouncilRole,
-  thesisSessionId?: string
-) {
+export function getCouncilMemberName(record: any, role: CouncilRole, thesisSessionId?: string) {
   const member = getThesisProjectForSession(record, thesisSessionId)?.council?.members?.find(
     (m: CouncilMember) => m.role === role
   )
@@ -1976,7 +1971,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                 fixed: "left",
                 align: "center",
                 render: (_, record) => {
-                  const status = getThesisProjectForSession(record, searchParams.thesisSessionId)?.status || ""
+                  const status =
+                    getThesisProjectForSession(record, searchParams.thesisSessionId)?.status || ""
                   if (editingRowKeys.includes(record?.id) && role === "P7") {
                     return (
                       <div onClick={(e) => e.stopPropagation()}>
@@ -1988,17 +1984,21 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           showSearch
                           treeDefaultExpandAll
                           defaultValue={
-                            getThesisProjectForSession(record, searchParams.thesisSessionId)?.organization?.Id || ""
+                            getThesisProjectForSession(record, searchParams.thesisSessionId)
+                              ?.organization?.Id || ""
                           }
                           onChange={(value) => handleEditChange(record?.id, "organization", value)}
                         />
                       </div>
                     )
                   }
-                  if (getThesisProjectForSession(record, searchParams.thesisSessionId)?.organization) {
+                  if (
+                    getThesisProjectForSession(record, searchParams.thesisSessionId)?.organization
+                  ) {
                     return (
                       `${
-                        getThesisProjectForSession(record, searchParams.thesisSessionId)?.organization?.sMa || ""
+                        getThesisProjectForSession(record, searchParams.thesisSessionId)
+                          ?.organization?.sMa || ""
                       } ` || "N/A "
                     )
                   }
@@ -2056,7 +2056,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                     const currentValue =
                       editingValues[record?.id]?.title !== undefined
                         ? editingValues[record?.id]?.title
-                        : getThesisProjectForSession(record, searchParams.thesisSessionId)?.title || ""
+                        : getThesisProjectForSession(record, searchParams.thesisSessionId)?.title ||
+                          ""
 
                     return (
                       <div onClick={(e) => e.stopPropagation()}>
@@ -2073,7 +2074,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                   }
                   return (
                     <p className="line-clamp-2">
-                      {getThesisProjectForSession(record, searchParams.thesisSessionId)?.title || ""}
+                      {getThesisProjectForSession(record, searchParams.thesisSessionId)?.title ||
+                        ""}
                     </p>
                   )
                 },
@@ -2091,7 +2093,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                     )
                     const currentValue = hasEditedSupervisor
                       ? editingValues[record?.id]?.supervisor
-                      : getThesisProjectForSession(record, searchParams.thesisSessionId)?.supervisor?.id || ""
+                      : getThesisProjectForSession(record, searchParams.thesisSessionId)?.supervisor
+                          ?.id || ""
                     return (
                       <div onClick={(e) => e.stopPropagation()}>
                         <Select
@@ -2127,7 +2130,10 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       </div>
                     )
                   }
-                  const supervisor = getThesisProjectForSession(record, searchParams.thesisSessionId)?.supervisor
+                  const supervisor = getThesisProjectForSession(
+                    record,
+                    searchParams.thesisSessionId
+                  )?.supervisor
 
                   return getSupervisorName(supervisor, true, true)
                 },
@@ -2146,7 +2152,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                     )
                     const currentValue = hasEditedCoSupervisor
                       ? editingValues[record?.id]?.coSupervisor
-                      : getThesisProjectForSession(record, searchParams.thesisSessionId)?.coSupervisor?.id || ""
+                      : getThesisProjectForSession(record, searchParams.thesisSessionId)
+                          ?.coSupervisor?.id || ""
 
                     return (
                       <div onClick={(e) => e.stopPropagation()}>
@@ -2183,7 +2190,10 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       </div>
                     )
                   }
-                  const coSupervisor = getThesisProjectForSession(record, searchParams.thesisSessionId)?.coSupervisor
+                  const coSupervisor = getThesisProjectForSession(
+                    record,
+                    searchParams.thesisSessionId
+                  )?.coSupervisor
                   return getSupervisorName(coSupervisor, true, true)
                 },
               },
@@ -2214,8 +2224,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                   }
                   return (
                     <p className="line-clamp-2">
-                      {getThesisProjectForSession(record, searchParams.thesisSessionId)?.researchTopicAssociated ||
-                        ""}
+                      {getThesisProjectForSession(record, searchParams.thesisSessionId)
+                        ?.researchTopicAssociated || ""}
                     </p>
                   )
                 },
@@ -2229,7 +2239,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                     const currentValue =
                       editingValues[record?.id]?.language !== undefined
                         ? editingValues[record?.id]?.language
-                        : getThesisProjectForSession(record, searchParams.thesisSessionId)?.language?.language || ""
+                        : getThesisProjectForSession(record, searchParams.thesisSessionId)?.language
+                            ?.language || ""
                     return (
                       <div onClick={(e) => e.stopPropagation()}>
                         <Input
@@ -2239,7 +2250,9 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       </div>
                     )
                   }
-                  return getThesisProjectForSession(record, searchParams.thesisSessionId)?.language || ""
+                  return (
+                    getThesisProjectForSession(record, searchParams.thesisSessionId)?.language || ""
+                  )
                 },
               },
               {
@@ -2251,7 +2264,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                     const currentValue =
                       editingValues[record?.id]?.type !== undefined
                         ? editingValues[record?.id]?.type
-                        : getThesisProjectForSession(record, searchParams.thesisSessionId)?.type || ""
+                        : getThesisProjectForSession(record, searchParams.thesisSessionId)?.type ||
+                          ""
                     return (
                       <div onClick={(e) => e.stopPropagation()}>
                         <Select
@@ -2266,7 +2280,9 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       </div>
                     )
                   }
-                  return getThesisProjectForSession(record, searchParams.thesisSessionId)?.type || ""
+                  return (
+                    getThesisProjectForSession(record, searchParams.thesisSessionId)?.type || ""
+                  )
                 },
               },
 
@@ -2282,7 +2298,10 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                     )
                     const currentValue = hasEditedCouncilChairman
                       ? editingValues[record?.id]?.councilChairman
-                      : getThesisProjectForSession(record, searchParams.thesisSessionId)?.council?.members?.find(
+                      : getThesisProjectForSession(
+                          record,
+                          searchParams.thesisSessionId
+                        )?.council?.members?.find(
                           (member: CouncilMember) => member.role === CouncilRole.CHAIRMAN
                         )?.expert?.id || ""
                     return (
@@ -2341,7 +2360,10 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                     )
                     const currentValue = hasEditedCouncilSecretary
                       ? editingValues[record?.id]?.councilSecretary
-                      : getThesisProjectForSession(record, searchParams.thesisSessionId)?.council?.members?.find(
+                      : getThesisProjectForSession(
+                          record,
+                          searchParams.thesisSessionId
+                        )?.council?.members?.find(
                           (member: CouncilMember) => member.role === CouncilRole.SECRETARY
                         )?.expert?.id || ""
                     return (
@@ -2400,7 +2422,10 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                     )
                     const currentValue = hasEditedReviewer1
                       ? editingValues[record?.id]?.reviewer1
-                      : getThesisProjectForSession(record, searchParams.thesisSessionId)?.council?.members?.find(
+                      : getThesisProjectForSession(
+                          record,
+                          searchParams.thesisSessionId
+                        )?.council?.members?.find(
                           (member: CouncilMember) => member.role === CouncilRole.REVIEWER_1
                         )?.expert?.id || ""
                     return (
@@ -2457,7 +2482,10 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                     )
                     const currentValue = hasEditedReviewer2
                       ? editingValues[record?.id]?.reviewer2
-                      : getThesisProjectForSession(record, searchParams.thesisSessionId)?.council?.members?.find(
+                      : getThesisProjectForSession(
+                          record,
+                          searchParams.thesisSessionId
+                        )?.council?.members?.find(
                           (member: any) => member.role === CouncilRole.REVIEWER_2
                         )?.expert?.id || ""
                     return (
@@ -2514,7 +2542,10 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                     )
                     const currentValue = hasEditedCouncilMember
                       ? editingValues[record?.id]?.councilMember
-                      : getThesisProjectForSession(record, searchParams.thesisSessionId)?.council?.members?.find(
+                      : getThesisProjectForSession(
+                          record,
+                          searchParams.thesisSessionId
+                        )?.council?.members?.find(
                           (member: any) => member.role === CouncilRole.MEMBER
                         )?.expert?.id || ""
                     return (
@@ -2571,7 +2602,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                     )
                     const currentValue = hasEditedRoom
                       ? editingValues[record?.id]?.room
-                      : getThesisProjectForSession(record, searchParams.thesisSessionId)?.room?.id || ""
+                      : getThesisProjectForSession(record, searchParams.thesisSessionId)?.room
+                          ?.id || ""
                     return (
                       <div onClick={(e) => e.stopPropagation()}>
                         <Select
@@ -2593,7 +2625,10 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                     )
                   }
 
-                  return getThesisProjectForSession(record, searchParams.thesisSessionId)?.room?.name || ""
+                  return (
+                    getThesisProjectForSession(record, searchParams.thesisSessionId)?.room?.name ||
+                    ""
+                  )
                 },
               },
               {
@@ -2605,7 +2640,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                     const currentValue =
                       editingValues[record?.id]?.defenseDate !== undefined
                         ? editingValues[record?.id]?.defenseDate
-                        : getThesisProjectForSession(record, searchParams.thesisSessionId)?.defenseDate || ""
+                        : getThesisProjectForSession(record, searchParams.thesisSessionId)
+                            ?.defenseDate || ""
                     const dayjsValue = currentValue ? dayjs(currentValue) : null
                     return (
                       <div onClick={(e) => e.stopPropagation()}>
@@ -2620,10 +2656,12 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       </div>
                     )
                   }
-                  return getThesisProjectForSession(record, searchParams.thesisSessionId)?.defenseDate
-                    ? dayjs(getThesisProjectForSession(record, searchParams.thesisSessionId)?.defenseDate).format(
-                        "DD/MM/YYYY"
-                      )
+                  return getThesisProjectForSession(record, searchParams.thesisSessionId)
+                    ?.defenseDate
+                    ? dayjs(
+                        getThesisProjectForSession(record, searchParams.thesisSessionId)
+                          ?.defenseDate
+                      ).format("DD/MM/YYYY")
                     : ""
                 },
               },
@@ -2640,7 +2678,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                     )
                     const currentValue = hasEditedDefenseSession
                       ? editingValues[record?.id]?.defenseSession
-                      : getThesisProjectForSession(record, searchParams.thesisSessionId)?.defenseSession?.id || ""
+                      : getThesisProjectForSession(record, searchParams.thesisSessionId)
+                          ?.defenseSession?.id || ""
 
                     return (
                       <div onClick={(e) => e.stopPropagation()}>
@@ -2668,7 +2707,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                     )
                   }
                   return formatDefenseSessionClock(
-                    getThesisProjectForSession(record, searchParams.thesisSessionId)?.defenseSession?.startTime
+                    getThesisProjectForSession(record, searchParams.thesisSessionId)?.defenseSession
+                      ?.startTime
                   )
                 },
               },
@@ -2682,8 +2722,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                     const currentValue =
                       editingValues[record?.id]?.score !== undefined
                         ? editingValues[record?.id]?.score
-                        : getThesisProjectForSession(record, searchParams.thesisSessionId)?.defenseRecord
-                            ?.finalScore || ""
+                        : getThesisProjectForSession(record, searchParams.thesisSessionId)
+                            ?.defenseRecord?.finalScore || ""
 
                     return (
                       <div onClick={(e) => e.stopPropagation()}>
@@ -2700,8 +2740,10 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                     )
                   }
                   return (
-                    getThesisProjectForSession(record, searchParams.thesisSessionId)?.defenseRecord?.finalScore?.toString() ||
-                    ""
+                    getThesisProjectForSession(
+                      record,
+                      searchParams.thesisSessionId
+                    )?.defenseRecord?.finalScore?.toString() || ""
                   )
                 },
               },
@@ -2748,7 +2790,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                 align: "center",
                 render: (_, record) => {
                   if (record?.id) {
-                    const status = getThesisProjectForSession(record, searchParams.thesisSessionId)?.status || ""
+                    const status =
+                      getThesisProjectForSession(record, searchParams.thesisSessionId)?.status || ""
                     return (
                       <Row className="justify-center gap-2">
                         {/** biome-ignore lint/a11y/noStaticElementInteractions: <React.Fragment> */}
@@ -2763,7 +2806,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                               size={24}
                               onClick={async () => {
                                 let status =
-                                  getThesisProjectForSession(record, searchParams.thesisSessionId)?.status || ""
+                                  getThesisProjectForSession(record, searchParams.thesisSessionId)
+                                    ?.status || ""
                                 switch (status) {
                                   case ThesisProjectStatus.APPROVED_BY_DEPT:
                                     status = ThesisProjectStatus.IN_PROGRESS
@@ -2775,7 +2819,10 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                                 await updateThesisProject({
                                   data: payload,
                                   where: {
-                                    id: getThesisProjectForSession(record, searchParams.thesisSessionId)?.id,
+                                    id: getThesisProjectForSession(
+                                      record,
+                                      searchParams.thesisSessionId
+                                    )?.id,
                                   },
                                 })
                               }}
@@ -2793,7 +2840,10 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                                 await updateThesisProject({
                                   data: payload,
                                   where: {
-                                    id: getThesisProjectForSession(record, searchParams.thesisSessionId)?.id,
+                                    id: getThesisProjectForSession(
+                                      record,
+                                      searchParams.thesisSessionId
+                                    )?.id,
                                   },
                                 })
                               }}
@@ -2805,8 +2855,10 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                             onClick={(e) => {
                               e.stopPropagation()
                               openModalCauHinhLuanVan({
-                                thesisProjectId:
-                                  getThesisProjectForSession(record, searchParams.thesisSessionId)?.id,
+                                thesisProjectId: getThesisProjectForSession(
+                                  record,
+                                  searchParams.thesisSessionId
+                                )?.id,
                                 thesisSessionId: searchParams?.thesisSessionId || "",
                               })
                             }}
@@ -2825,7 +2877,11 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                                   await updateThesisProject({
                                     data: payload,
                                     where: {
-                                      id: getThesisProjectForSession(record, searchParams.thesisSessionId)?.id || "",
+                                      id:
+                                        getThesisProjectForSession(
+                                          record,
+                                          searchParams.thesisSessionId
+                                        )?.id || "",
                                     },
                                   })
                                   message.success("Xóa thành công")

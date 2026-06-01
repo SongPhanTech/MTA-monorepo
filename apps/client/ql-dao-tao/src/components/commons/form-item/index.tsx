@@ -6,10 +6,7 @@ type FormItemProps<T extends object, K extends keyof T = keyof T> = FormItemAntD
   name: K | (string | number)[]
 }
 
-const FormItem = <T extends object, K extends keyof T>({
-  form,
-  ...rest
-}: FormItemProps<T, K>) => {
+const FormItem = <T extends object, K extends keyof T>({ form, ...rest }: FormItemProps<T, K>) => {
   return (
     <Form.Item<typeof form>
       rules={

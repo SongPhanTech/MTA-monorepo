@@ -143,5 +143,7 @@ export const MOCK_WEEK_SCHEDULE_ENTRIES: WeekScheduleEntry[] = [
 ]
 
 export function getWeekScheduleEntryTypeMeta(type: WeekScheduleEntry["type"]) {
-  return WEEK_SCHEDULE_ENTRY_TYPES.find((item) => item.type === type) ?? WEEK_SCHEDULE_ENTRY_TYPES[0]
+  return (
+    WEEK_SCHEDULE_ENTRY_TYPES.find((item) => item.type === type) ?? WEEK_SCHEDULE_ENTRY_TYPES[0]
+  )
 }

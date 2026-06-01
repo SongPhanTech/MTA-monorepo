@@ -189,6 +189,10 @@ model StudentSemesterResult extends Base {
 
   isClassMonitor           Boolean  // Lớp trưởng
   isUnionLeader            Boolean  // Bí thư đoàn/các chức vụ chính trị
+
+  gpaBase4WithBonus        Decimal?                 @db.Decimal(5, 2)    // GPA hệ 4 sau khi cộng thưởng cán bộ 
+  gpaBase10WithBonus       Decimal?                 @db.Decimal(5, 2)    // GPA hệ 10 sau khi cộng thưởng cán bộ
+
   entryScore               Float?   // Điểm thi đầu vào (nếu có)
 
   isImproving              Boolean  // Có đang học lại hoặc cải thiện không

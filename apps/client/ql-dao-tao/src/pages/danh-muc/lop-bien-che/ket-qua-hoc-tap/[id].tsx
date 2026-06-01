@@ -392,11 +392,7 @@ export default function StudentScoreClassPage() {
   const compareTrainingBlockSortKey = (
     a: ReturnType<typeof getTrainingBlockSortKey>,
     b: ReturnType<typeof getTrainingBlockSortKey>
-  ) =>
-    (a[0] - b[0]) ||
-    (a[1] - b[1]) ||
-    a[2].localeCompare(b[2], "vi") ||
-    (a[3] - b[3])
+  ) => a[0] - b[0] || a[1] - b[1] || a[2].localeCompare(b[2], "vi") || a[3] - b[3]
 
   const sortSubjectClassesForExport = (subjectClasses: any[]) => {
     if (!subjectClasses?.length) return []
@@ -477,7 +473,7 @@ export default function StudentScoreClassPage() {
         if (!a.subjectId || !b.subjectId) return 0
 
         const groupA = findGroup(a.subjectId)
-        const groupB = findGroup(b.subjectId) 
+        const groupB = findGroup(b.subjectId)
 
         if (groupA !== groupB) {
           return compareTrainingBlockSortKey(
@@ -1031,7 +1027,9 @@ export default function StudentScoreClassPage() {
     orderedSubjectClasses.forEach((subjectClass) => {
       subjectClass.subjectClassStudent.forEach((subjectClassStudent: any) => {
         const rawScore =
-          subjectClassStudent?.manualFinalScore ?? subjectClassStudent?.finalScore?.toNumber() ?? null
+          subjectClassStudent?.manualFinalScore ??
+          subjectClassStudent?.finalScore?.toNumber() ??
+          null
 
         const isGraduation = subjectClass?.subject?.trainingBlocks?.[0]?.graduation === true
         const converted = convertScoreWithGraduation(rawScore, isGraduation)

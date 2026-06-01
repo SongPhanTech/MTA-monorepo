@@ -216155,6 +216155,8 @@ export namespace Prisma {
     accumulatedCredits: number | null
     totalCreditsByCurriculum: number | null
     totalFailedCredits: number | null
+    gpaBase4WithBonus: Decimal | null
+    gpaBase10WithBonus: Decimal | null
     entryScore: number | null
     academicWarningLevel: number | null
     disciplinaryWarningLevel: number | null
@@ -216179,6 +216181,8 @@ export namespace Prisma {
     accumulatedCredits: number | null
     totalCreditsByCurriculum: number | null
     totalFailedCredits: number | null
+    gpaBase4WithBonus: Decimal | null
+    gpaBase10WithBonus: Decimal | null
     entryScore: number | null
     academicWarningLevel: number | null
     disciplinaryWarningLevel: number | null
@@ -216220,6 +216224,8 @@ export namespace Prisma {
     foreignLangPass: boolean | null
     isClassMonitor: boolean | null
     isUnionLeader: boolean | null
+    gpaBase4WithBonus: Decimal | null
+    gpaBase10WithBonus: Decimal | null
     entryScore: number | null
     isImproving: boolean | null
     postponeWithReason: boolean | null
@@ -216266,6 +216272,8 @@ export namespace Prisma {
     foreignLangPass: boolean | null
     isClassMonitor: boolean | null
     isUnionLeader: boolean | null
+    gpaBase4WithBonus: Decimal | null
+    gpaBase10WithBonus: Decimal | null
     entryScore: number | null
     isImproving: boolean | null
     postponeWithReason: boolean | null
@@ -216312,6 +216320,8 @@ export namespace Prisma {
     foreignLangPass: number
     isClassMonitor: number
     isUnionLeader: number
+    gpaBase4WithBonus: number
+    gpaBase10WithBonus: number
     entryScore: number
     isImproving: number
     postponeWithReason: number
@@ -216343,6 +216353,8 @@ export namespace Prisma {
     accumulatedCredits?: true
     totalCreditsByCurriculum?: true
     totalFailedCredits?: true
+    gpaBase4WithBonus?: true
+    gpaBase10WithBonus?: true
     entryScore?: true
     academicWarningLevel?: true
     disciplinaryWarningLevel?: true
@@ -216367,6 +216379,8 @@ export namespace Prisma {
     accumulatedCredits?: true
     totalCreditsByCurriculum?: true
     totalFailedCredits?: true
+    gpaBase4WithBonus?: true
+    gpaBase10WithBonus?: true
     entryScore?: true
     academicWarningLevel?: true
     disciplinaryWarningLevel?: true
@@ -216408,6 +216422,8 @@ export namespace Prisma {
     foreignLangPass?: true
     isClassMonitor?: true
     isUnionLeader?: true
+    gpaBase4WithBonus?: true
+    gpaBase10WithBonus?: true
     entryScore?: true
     isImproving?: true
     postponeWithReason?: true
@@ -216454,6 +216470,8 @@ export namespace Prisma {
     foreignLangPass?: true
     isClassMonitor?: true
     isUnionLeader?: true
+    gpaBase4WithBonus?: true
+    gpaBase10WithBonus?: true
     entryScore?: true
     isImproving?: true
     postponeWithReason?: true
@@ -216500,6 +216518,8 @@ export namespace Prisma {
     foreignLangPass?: true
     isClassMonitor?: true
     isUnionLeader?: true
+    gpaBase4WithBonus?: true
+    gpaBase10WithBonus?: true
     entryScore?: true
     isImproving?: true
     postponeWithReason?: true
@@ -216633,6 +216653,8 @@ export namespace Prisma {
     foreignLangPass: boolean
     isClassMonitor: boolean
     isUnionLeader: boolean
+    gpaBase4WithBonus: Decimal | null
+    gpaBase10WithBonus: Decimal | null
     entryScore: number | null
     isImproving: boolean
     postponeWithReason: boolean
@@ -216698,6 +216720,8 @@ export namespace Prisma {
     foreignLangPass?: boolean
     isClassMonitor?: boolean
     isUnionLeader?: boolean
+    gpaBase4WithBonus?: boolean
+    gpaBase10WithBonus?: boolean
     entryScore?: boolean
     isImproving?: boolean
     postponeWithReason?: boolean
@@ -216747,6 +216771,8 @@ export namespace Prisma {
     foreignLangPass?: boolean
     isClassMonitor?: boolean
     isUnionLeader?: boolean
+    gpaBase4WithBonus?: boolean
+    gpaBase10WithBonus?: boolean
     entryScore?: boolean
     isImproving?: boolean
     postponeWithReason?: boolean
@@ -216796,6 +216822,8 @@ export namespace Prisma {
     foreignLangPass?: boolean
     isClassMonitor?: boolean
     isUnionLeader?: boolean
+    gpaBase4WithBonus?: boolean
+    gpaBase10WithBonus?: boolean
     entryScore?: boolean
     isImproving?: boolean
     postponeWithReason?: boolean
@@ -216845,6 +216873,8 @@ export namespace Prisma {
     foreignLangPass?: boolean
     isClassMonitor?: boolean
     isUnionLeader?: boolean
+    gpaBase4WithBonus?: boolean
+    gpaBase10WithBonus?: boolean
     entryScore?: boolean
     isImproving?: boolean
     postponeWithReason?: boolean
@@ -216855,7 +216885,7 @@ export namespace Prisma {
     approved?: boolean
   }
 
-  export type StudentSemesterResultOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "studentId" | "semesterId" | "studyYear" | "semesterIndexInCourse" | "isLastSemester" | "baseScore" | "gpaBase4" | "cumulativeGpaBase4" | "gpaBase10" | "cumulativeGpaBase10" | "conductScore" | "studentTrainingType" | "rankId" | "lowestFinalScore" | "lowestGraduationScore" | "totalCredits" | "registeredCredits" | "retakingCredits" | "reExamCredits" | "passedCredits" | "failedCredits" | "accumulatedCredits" | "totalCreditsByCurriculum" | "totalFailedCredits" | "foreignLangPass" | "isClassMonitor" | "isUnionLeader" | "entryScore" | "isImproving" | "postponeWithReason" | "academicWarningLevel" | "disciplinaryWarningLevel" | "suspended" | "expelled" | "approved", ExtArgs["result"]["studentSemesterResult"]>
+  export type StudentSemesterResultOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "studentId" | "semesterId" | "studyYear" | "semesterIndexInCourse" | "isLastSemester" | "baseScore" | "gpaBase4" | "cumulativeGpaBase4" | "gpaBase10" | "cumulativeGpaBase10" | "conductScore" | "studentTrainingType" | "rankId" | "lowestFinalScore" | "lowestGraduationScore" | "totalCredits" | "registeredCredits" | "retakingCredits" | "reExamCredits" | "passedCredits" | "failedCredits" | "accumulatedCredits" | "totalCreditsByCurriculum" | "totalFailedCredits" | "foreignLangPass" | "isClassMonitor" | "isUnionLeader" | "gpaBase4WithBonus" | "gpaBase10WithBonus" | "entryScore" | "isImproving" | "postponeWithReason" | "academicWarningLevel" | "disciplinaryWarningLevel" | "suspended" | "expelled" | "approved", ExtArgs["result"]["studentSemesterResult"]>
   export type StudentSemesterResultInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     student?: boolean | StudentDefaultArgs<ExtArgs>
     semester?: boolean | SemesterDefaultArgs<ExtArgs>
@@ -216915,6 +216945,8 @@ export namespace Prisma {
       foreignLangPass: boolean
       isClassMonitor: boolean
       isUnionLeader: boolean
+      gpaBase4WithBonus: Prisma.Decimal | null
+      gpaBase10WithBonus: Prisma.Decimal | null
       entryScore: number | null
       isImproving: boolean
       postponeWithReason: boolean
@@ -217384,6 +217416,8 @@ export namespace Prisma {
     readonly foreignLangPass: FieldRef<"StudentSemesterResult", 'Boolean'>
     readonly isClassMonitor: FieldRef<"StudentSemesterResult", 'Boolean'>
     readonly isUnionLeader: FieldRef<"StudentSemesterResult", 'Boolean'>
+    readonly gpaBase4WithBonus: FieldRef<"StudentSemesterResult", 'Decimal'>
+    readonly gpaBase10WithBonus: FieldRef<"StudentSemesterResult", 'Decimal'>
     readonly entryScore: FieldRef<"StudentSemesterResult", 'Float'>
     readonly isImproving: FieldRef<"StudentSemesterResult", 'Boolean'>
     readonly postponeWithReason: FieldRef<"StudentSemesterResult", 'Boolean'>
@@ -386363,6 +386397,8 @@ export namespace Prisma {
     foreignLangPass: 'foreignLangPass',
     isClassMonitor: 'isClassMonitor',
     isUnionLeader: 'isUnionLeader',
+    gpaBase4WithBonus: 'gpaBase4WithBonus',
+    gpaBase10WithBonus: 'gpaBase10WithBonus',
     entryScore: 'entryScore',
     isImproving: 'isImproving',
     postponeWithReason: 'postponeWithReason',
@@ -410484,6 +410520,8 @@ export namespace Prisma {
     foreignLangPass?: BoolFilter<"StudentSemesterResult"> | boolean
     isClassMonitor?: BoolFilter<"StudentSemesterResult"> | boolean
     isUnionLeader?: BoolFilter<"StudentSemesterResult"> | boolean
+    gpaBase4WithBonus?: DecimalNullableFilter<"StudentSemesterResult"> | Decimal | DecimalJsLike | number | string | null
+    gpaBase10WithBonus?: DecimalNullableFilter<"StudentSemesterResult"> | Decimal | DecimalJsLike | number | string | null
     entryScore?: FloatNullableFilter<"StudentSemesterResult"> | number | null
     isImproving?: BoolFilter<"StudentSemesterResult"> | boolean
     postponeWithReason?: BoolFilter<"StudentSemesterResult"> | boolean
@@ -410533,6 +410571,8 @@ export namespace Prisma {
     foreignLangPass?: SortOrder
     isClassMonitor?: SortOrder
     isUnionLeader?: SortOrder
+    gpaBase4WithBonus?: SortOrderInput | SortOrder
+    gpaBase10WithBonus?: SortOrderInput | SortOrder
     entryScore?: SortOrderInput | SortOrder
     isImproving?: SortOrder
     postponeWithReason?: SortOrder
@@ -410587,6 +410627,8 @@ export namespace Prisma {
     foreignLangPass?: BoolFilter<"StudentSemesterResult"> | boolean
     isClassMonitor?: BoolFilter<"StudentSemesterResult"> | boolean
     isUnionLeader?: BoolFilter<"StudentSemesterResult"> | boolean
+    gpaBase4WithBonus?: DecimalNullableFilter<"StudentSemesterResult"> | Decimal | DecimalJsLike | number | string | null
+    gpaBase10WithBonus?: DecimalNullableFilter<"StudentSemesterResult"> | Decimal | DecimalJsLike | number | string | null
     entryScore?: FloatNullableFilter<"StudentSemesterResult"> | number | null
     isImproving?: BoolFilter<"StudentSemesterResult"> | boolean
     postponeWithReason?: BoolFilter<"StudentSemesterResult"> | boolean
@@ -410636,6 +410678,8 @@ export namespace Prisma {
     foreignLangPass?: SortOrder
     isClassMonitor?: SortOrder
     isUnionLeader?: SortOrder
+    gpaBase4WithBonus?: SortOrderInput | SortOrder
+    gpaBase10WithBonus?: SortOrderInput | SortOrder
     entryScore?: SortOrderInput | SortOrder
     isImproving?: SortOrder
     postponeWithReason?: SortOrder
@@ -410690,6 +410734,8 @@ export namespace Prisma {
     foreignLangPass?: BoolWithAggregatesFilter<"StudentSemesterResult"> | boolean
     isClassMonitor?: BoolWithAggregatesFilter<"StudentSemesterResult"> | boolean
     isUnionLeader?: BoolWithAggregatesFilter<"StudentSemesterResult"> | boolean
+    gpaBase4WithBonus?: DecimalNullableWithAggregatesFilter<"StudentSemesterResult"> | Decimal | DecimalJsLike | number | string | null
+    gpaBase10WithBonus?: DecimalNullableWithAggregatesFilter<"StudentSemesterResult"> | Decimal | DecimalJsLike | number | string | null
     entryScore?: FloatNullableWithAggregatesFilter<"StudentSemesterResult"> | number | null
     isImproving?: BoolWithAggregatesFilter<"StudentSemesterResult"> | boolean
     postponeWithReason?: BoolWithAggregatesFilter<"StudentSemesterResult"> | boolean
@@ -443871,6 +443917,8 @@ export namespace Prisma {
     foreignLangPass: boolean
     isClassMonitor: boolean
     isUnionLeader: boolean
+    gpaBase4WithBonus?: Decimal | DecimalJsLike | number | string | null
+    gpaBase10WithBonus?: Decimal | DecimalJsLike | number | string | null
     entryScore?: number | null
     isImproving: boolean
     postponeWithReason?: boolean
@@ -443920,6 +443968,8 @@ export namespace Prisma {
     foreignLangPass: boolean
     isClassMonitor: boolean
     isUnionLeader: boolean
+    gpaBase4WithBonus?: Decimal | DecimalJsLike | number | string | null
+    gpaBase10WithBonus?: Decimal | DecimalJsLike | number | string | null
     entryScore?: number | null
     isImproving: boolean
     postponeWithReason?: boolean
@@ -443963,6 +444013,8 @@ export namespace Prisma {
     foreignLangPass?: BoolFieldUpdateOperationsInput | boolean
     isClassMonitor?: BoolFieldUpdateOperationsInput | boolean
     isUnionLeader?: BoolFieldUpdateOperationsInput | boolean
+    gpaBase4WithBonus?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    gpaBase10WithBonus?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     isImproving?: BoolFieldUpdateOperationsInput | boolean
     postponeWithReason?: BoolFieldUpdateOperationsInput | boolean
@@ -444012,6 +444064,8 @@ export namespace Prisma {
     foreignLangPass?: BoolFieldUpdateOperationsInput | boolean
     isClassMonitor?: BoolFieldUpdateOperationsInput | boolean
     isUnionLeader?: BoolFieldUpdateOperationsInput | boolean
+    gpaBase4WithBonus?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    gpaBase10WithBonus?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     isImproving?: BoolFieldUpdateOperationsInput | boolean
     postponeWithReason?: BoolFieldUpdateOperationsInput | boolean
@@ -444058,6 +444112,8 @@ export namespace Prisma {
     foreignLangPass: boolean
     isClassMonitor: boolean
     isUnionLeader: boolean
+    gpaBase4WithBonus?: Decimal | DecimalJsLike | number | string | null
+    gpaBase10WithBonus?: Decimal | DecimalJsLike | number | string | null
     entryScore?: number | null
     isImproving: boolean
     postponeWithReason?: boolean
@@ -444101,6 +444157,8 @@ export namespace Prisma {
     foreignLangPass?: BoolFieldUpdateOperationsInput | boolean
     isClassMonitor?: BoolFieldUpdateOperationsInput | boolean
     isUnionLeader?: BoolFieldUpdateOperationsInput | boolean
+    gpaBase4WithBonus?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    gpaBase10WithBonus?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     isImproving?: BoolFieldUpdateOperationsInput | boolean
     postponeWithReason?: BoolFieldUpdateOperationsInput | boolean
@@ -444147,6 +444205,8 @@ export namespace Prisma {
     foreignLangPass?: BoolFieldUpdateOperationsInput | boolean
     isClassMonitor?: BoolFieldUpdateOperationsInput | boolean
     isUnionLeader?: BoolFieldUpdateOperationsInput | boolean
+    gpaBase4WithBonus?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    gpaBase10WithBonus?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     isImproving?: BoolFieldUpdateOperationsInput | boolean
     postponeWithReason?: BoolFieldUpdateOperationsInput | boolean
@@ -472325,6 +472385,8 @@ export namespace Prisma {
     foreignLangPass?: SortOrder
     isClassMonitor?: SortOrder
     isUnionLeader?: SortOrder
+    gpaBase4WithBonus?: SortOrder
+    gpaBase10WithBonus?: SortOrder
     entryScore?: SortOrder
     isImproving?: SortOrder
     postponeWithReason?: SortOrder
@@ -472354,6 +472416,8 @@ export namespace Prisma {
     accumulatedCredits?: SortOrder
     totalCreditsByCurriculum?: SortOrder
     totalFailedCredits?: SortOrder
+    gpaBase4WithBonus?: SortOrder
+    gpaBase10WithBonus?: SortOrder
     entryScore?: SortOrder
     academicWarningLevel?: SortOrder
     disciplinaryWarningLevel?: SortOrder
@@ -472395,6 +472459,8 @@ export namespace Prisma {
     foreignLangPass?: SortOrder
     isClassMonitor?: SortOrder
     isUnionLeader?: SortOrder
+    gpaBase4WithBonus?: SortOrder
+    gpaBase10WithBonus?: SortOrder
     entryScore?: SortOrder
     isImproving?: SortOrder
     postponeWithReason?: SortOrder
@@ -472441,6 +472507,8 @@ export namespace Prisma {
     foreignLangPass?: SortOrder
     isClassMonitor?: SortOrder
     isUnionLeader?: SortOrder
+    gpaBase4WithBonus?: SortOrder
+    gpaBase10WithBonus?: SortOrder
     entryScore?: SortOrder
     isImproving?: SortOrder
     postponeWithReason?: SortOrder
@@ -472470,6 +472538,8 @@ export namespace Prisma {
     accumulatedCredits?: SortOrder
     totalCreditsByCurriculum?: SortOrder
     totalFailedCredits?: SortOrder
+    gpaBase4WithBonus?: SortOrder
+    gpaBase10WithBonus?: SortOrder
     entryScore?: SortOrder
     academicWarningLevel?: SortOrder
     disciplinaryWarningLevel?: SortOrder
@@ -571015,6 +571085,8 @@ export namespace Prisma {
     foreignLangPass: boolean
     isClassMonitor: boolean
     isUnionLeader: boolean
+    gpaBase4WithBonus?: Decimal | DecimalJsLike | number | string | null
+    gpaBase10WithBonus?: Decimal | DecimalJsLike | number | string | null
     entryScore?: number | null
     isImproving: boolean
     postponeWithReason?: boolean
@@ -571062,6 +571134,8 @@ export namespace Prisma {
     foreignLangPass: boolean
     isClassMonitor: boolean
     isUnionLeader: boolean
+    gpaBase4WithBonus?: Decimal | DecimalJsLike | number | string | null
+    gpaBase10WithBonus?: Decimal | DecimalJsLike | number | string | null
     entryScore?: number | null
     isImproving: boolean
     postponeWithReason?: boolean
@@ -571964,6 +572038,8 @@ export namespace Prisma {
     foreignLangPass?: BoolFilter<"StudentSemesterResult"> | boolean
     isClassMonitor?: BoolFilter<"StudentSemesterResult"> | boolean
     isUnionLeader?: BoolFilter<"StudentSemesterResult"> | boolean
+    gpaBase4WithBonus?: DecimalNullableFilter<"StudentSemesterResult"> | Decimal | DecimalJsLike | number | string | null
+    gpaBase10WithBonus?: DecimalNullableFilter<"StudentSemesterResult"> | Decimal | DecimalJsLike | number | string | null
     entryScore?: FloatNullableFilter<"StudentSemesterResult"> | number | null
     isImproving?: BoolFilter<"StudentSemesterResult"> | boolean
     postponeWithReason?: BoolFilter<"StudentSemesterResult"> | boolean
@@ -601896,6 +601972,8 @@ export namespace Prisma {
     foreignLangPass: boolean
     isClassMonitor: boolean
     isUnionLeader: boolean
+    gpaBase4WithBonus?: Decimal | DecimalJsLike | number | string | null
+    gpaBase10WithBonus?: Decimal | DecimalJsLike | number | string | null
     entryScore?: number | null
     isImproving: boolean
     postponeWithReason?: boolean
@@ -601943,6 +602021,8 @@ export namespace Prisma {
     foreignLangPass: boolean
     isClassMonitor: boolean
     isUnionLeader: boolean
+    gpaBase4WithBonus?: Decimal | DecimalJsLike | number | string | null
+    gpaBase10WithBonus?: Decimal | DecimalJsLike | number | string | null
     entryScore?: number | null
     isImproving: boolean
     postponeWithReason?: boolean
@@ -647153,6 +647233,8 @@ export namespace Prisma {
     foreignLangPass: boolean
     isClassMonitor: boolean
     isUnionLeader: boolean
+    gpaBase4WithBonus?: Decimal | DecimalJsLike | number | string | null
+    gpaBase10WithBonus?: Decimal | DecimalJsLike | number | string | null
     entryScore?: number | null
     isImproving: boolean
     postponeWithReason?: boolean
@@ -647200,6 +647282,8 @@ export namespace Prisma {
     foreignLangPass: boolean
     isClassMonitor: boolean
     isUnionLeader: boolean
+    gpaBase4WithBonus?: Decimal | DecimalJsLike | number | string | null
+    gpaBase10WithBonus?: Decimal | DecimalJsLike | number | string | null
     entryScore?: number | null
     isImproving: boolean
     postponeWithReason?: boolean
@@ -687063,6 +687147,8 @@ export namespace Prisma {
     foreignLangPass: boolean
     isClassMonitor: boolean
     isUnionLeader: boolean
+    gpaBase4WithBonus?: Decimal | DecimalJsLike | number | string | null
+    gpaBase10WithBonus?: Decimal | DecimalJsLike | number | string | null
     entryScore?: number | null
     isImproving: boolean
     postponeWithReason?: boolean
@@ -687689,6 +687775,8 @@ export namespace Prisma {
     foreignLangPass?: BoolFieldUpdateOperationsInput | boolean
     isClassMonitor?: BoolFieldUpdateOperationsInput | boolean
     isUnionLeader?: BoolFieldUpdateOperationsInput | boolean
+    gpaBase4WithBonus?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    gpaBase10WithBonus?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     isImproving?: BoolFieldUpdateOperationsInput | boolean
     postponeWithReason?: BoolFieldUpdateOperationsInput | boolean
@@ -687736,6 +687824,8 @@ export namespace Prisma {
     foreignLangPass?: BoolFieldUpdateOperationsInput | boolean
     isClassMonitor?: BoolFieldUpdateOperationsInput | boolean
     isUnionLeader?: BoolFieldUpdateOperationsInput | boolean
+    gpaBase4WithBonus?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    gpaBase10WithBonus?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     isImproving?: BoolFieldUpdateOperationsInput | boolean
     postponeWithReason?: BoolFieldUpdateOperationsInput | boolean
@@ -687781,6 +687871,8 @@ export namespace Prisma {
     foreignLangPass?: BoolFieldUpdateOperationsInput | boolean
     isClassMonitor?: BoolFieldUpdateOperationsInput | boolean
     isUnionLeader?: BoolFieldUpdateOperationsInput | boolean
+    gpaBase4WithBonus?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    gpaBase10WithBonus?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     isImproving?: BoolFieldUpdateOperationsInput | boolean
     postponeWithReason?: BoolFieldUpdateOperationsInput | boolean
@@ -702638,6 +702730,8 @@ export namespace Prisma {
     foreignLangPass: boolean
     isClassMonitor: boolean
     isUnionLeader: boolean
+    gpaBase4WithBonus?: Decimal | DecimalJsLike | number | string | null
+    gpaBase10WithBonus?: Decimal | DecimalJsLike | number | string | null
     entryScore?: number | null
     isImproving: boolean
     postponeWithReason?: boolean
@@ -703595,6 +703689,8 @@ export namespace Prisma {
     foreignLangPass?: BoolFieldUpdateOperationsInput | boolean
     isClassMonitor?: BoolFieldUpdateOperationsInput | boolean
     isUnionLeader?: BoolFieldUpdateOperationsInput | boolean
+    gpaBase4WithBonus?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    gpaBase10WithBonus?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     isImproving?: BoolFieldUpdateOperationsInput | boolean
     postponeWithReason?: BoolFieldUpdateOperationsInput | boolean
@@ -703642,6 +703738,8 @@ export namespace Prisma {
     foreignLangPass?: BoolFieldUpdateOperationsInput | boolean
     isClassMonitor?: BoolFieldUpdateOperationsInput | boolean
     isUnionLeader?: BoolFieldUpdateOperationsInput | boolean
+    gpaBase4WithBonus?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    gpaBase10WithBonus?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     isImproving?: BoolFieldUpdateOperationsInput | boolean
     postponeWithReason?: BoolFieldUpdateOperationsInput | boolean
@@ -703687,6 +703785,8 @@ export namespace Prisma {
     foreignLangPass?: BoolFieldUpdateOperationsInput | boolean
     isClassMonitor?: BoolFieldUpdateOperationsInput | boolean
     isUnionLeader?: BoolFieldUpdateOperationsInput | boolean
+    gpaBase4WithBonus?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    gpaBase10WithBonus?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     isImproving?: BoolFieldUpdateOperationsInput | boolean
     postponeWithReason?: BoolFieldUpdateOperationsInput | boolean
@@ -718110,6 +718210,8 @@ export namespace Prisma {
     foreignLangPass: boolean
     isClassMonitor: boolean
     isUnionLeader: boolean
+    gpaBase4WithBonus?: Decimal | DecimalJsLike | number | string | null
+    gpaBase10WithBonus?: Decimal | DecimalJsLike | number | string | null
     entryScore?: number | null
     isImproving: boolean
     postponeWithReason?: boolean
@@ -718507,6 +718609,8 @@ export namespace Prisma {
     foreignLangPass?: BoolFieldUpdateOperationsInput | boolean
     isClassMonitor?: BoolFieldUpdateOperationsInput | boolean
     isUnionLeader?: BoolFieldUpdateOperationsInput | boolean
+    gpaBase4WithBonus?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    gpaBase10WithBonus?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     isImproving?: BoolFieldUpdateOperationsInput | boolean
     postponeWithReason?: BoolFieldUpdateOperationsInput | boolean
@@ -718554,6 +718658,8 @@ export namespace Prisma {
     foreignLangPass?: BoolFieldUpdateOperationsInput | boolean
     isClassMonitor?: BoolFieldUpdateOperationsInput | boolean
     isUnionLeader?: BoolFieldUpdateOperationsInput | boolean
+    gpaBase4WithBonus?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    gpaBase10WithBonus?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     isImproving?: BoolFieldUpdateOperationsInput | boolean
     postponeWithReason?: BoolFieldUpdateOperationsInput | boolean
@@ -718599,6 +718705,8 @@ export namespace Prisma {
     foreignLangPass?: BoolFieldUpdateOperationsInput | boolean
     isClassMonitor?: BoolFieldUpdateOperationsInput | boolean
     isUnionLeader?: BoolFieldUpdateOperationsInput | boolean
+    gpaBase4WithBonus?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    gpaBase10WithBonus?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     isImproving?: BoolFieldUpdateOperationsInput | boolean
     postponeWithReason?: BoolFieldUpdateOperationsInput | boolean

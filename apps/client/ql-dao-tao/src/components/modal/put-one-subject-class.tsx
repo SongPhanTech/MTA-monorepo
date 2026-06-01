@@ -74,8 +74,8 @@ const PutOneSubjectClassModal = () => {
   const { mutateAsync: updateSubjectClass } = useUpdateSubjectClass()
   // const { mutateAsync: updateSubjectClass } = useUpdateSubjectClass()
 
-  const lecturerId = Form.useWatch("lecturerId", form);
-  const extraLecturerId = Form.useWatch("extraLecturerId", form);
+  const lecturerId = Form.useWatch("lecturerId", form)
+  const extraLecturerId = Form.useWatch("extraLecturerId", form)
   async function onOk(output?: PutOneSubjectClassType) {
     if (!output) return
     try {
@@ -540,13 +540,13 @@ const PutOneSubjectClassModal = () => {
                   />
                 </FormItem>
               </Col>
-            <Col span={6}>
+              <Col span={6}>
                 <FormItem form={form} name="lecturerId" label="Giảng viên 1">
                   <LectureTreeSelect
                     placeholder="Chọn giảng viên 1"
                     ignoreLectureIds={[extraLecturerId].filter(Boolean) as string[]}
                     onChange={(value) => {
-                      form.setFieldsValue({ enterGradeLecturerId: value });
+                      form.setFieldsValue({ enterGradeLecturerId: value })
                     }}
                   />
                 </FormItem>
@@ -564,7 +564,7 @@ const PutOneSubjectClassModal = () => {
                   <LectureTreeSelect
                     placeholder="Chọn giảng viên"
                     onChange={(value) => {
-                      form.setFieldsValue({ lecturerId: value });
+                      form.setFieldsValue({ lecturerId: value })
                     }}
                   />
                 </FormItem>

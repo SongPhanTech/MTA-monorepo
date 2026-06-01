@@ -13,34 +13,22 @@ export const LEADER_PERSONAL_PROFILES: Record<string, LeaderPersonalProfile> = {
   "w-leader-1": {
     phone: "0912345678",
     email: "thai.le@hvktqs.mil.vn",
-    notes: [
-      "Lịch có thể thay đổi, cập nhật thường xuyên",
-      "Vui lòng kiểm tra trước khi tham gia",
-    ],
+    notes: ["Lịch có thể thay đổi, cập nhật thường xuyên", "Vui lòng kiểm tra trước khi tham gia"],
   },
   "w-leader-2": {
     phone: "0923456789",
     email: "thuong.tran@hvktqs.mil.vn",
-    notes: [
-      "Lịch có thể thay đổi, cập nhật thường xuyên",
-      "Vui lòng kiểm tra trước khi tham gia",
-    ],
+    notes: ["Lịch có thể thay đổi, cập nhật thường xuyên", "Vui lòng kiểm tra trước khi tham gia"],
   },
   "w-leader-3": {
     phone: "0987643456",
     email: "nam@gmail.com",
-    notes: [
-      "Lịch có thể thay đổi, cập nhật thường xuyên",
-      "Vui lòng kiểm tra trước khi tham gia",
-    ],
+    notes: ["Lịch có thể thay đổi, cập nhật thường xuyên", "Vui lòng kiểm tra trước khi tham gia"],
   },
   "w-leader-4": {
     phone: "0934567890",
     email: "huy.mai@hvktqs.mil.vn",
-    notes: [
-      "Lịch có thể thay đổi, cập nhật thường xuyên",
-      "Vui lòng kiểm tra trước khi tham gia",
-    ],
+    notes: ["Lịch có thể thay đổi, cập nhật thường xuyên", "Vui lòng kiểm tra trước khi tham gia"],
   },
 }
 

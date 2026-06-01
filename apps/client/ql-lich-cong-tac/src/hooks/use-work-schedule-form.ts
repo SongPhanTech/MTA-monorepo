@@ -41,9 +41,7 @@ function mergePreviewEvents(
     return true
   })
 
-  return [...sameDayEvents, draftEvent].sort((a, b) =>
-    a.startTime.localeCompare(b.startTime)
-  )
+  return [...sameDayEvents, draftEvent].sort((a, b) => a.startTime.localeCompare(b.startTime))
 }
 
 function showValidationErrors(errors: WorkScheduleValidationError[]) {
@@ -93,13 +91,16 @@ export function useWorkScheduleForm() {
     [formValues, savedEvents]
   )
 
-  const updateFormValues = useCallback((patch: Partial<WorkScheduleFormValues>) => {
-    setFormValues((current) => {
-      const next = { ...current, ...patch }
-      setConflicts(detectWorkScheduleConflicts(next, savedEvents))
-      return next
-    })
-  }, [savedEvents])
+  const updateFormValues = useCallback(
+    (patch: Partial<WorkScheduleFormValues>) => {
+      setFormValues((current) => {
+        const next = { ...current, ...patch }
+        setConflicts(detectWorkScheduleConflicts(next, savedEvents))
+        return next
+      })
+    },
+    [savedEvents]
+  )
 
   const resetForm = useCallback(() => {
     setFormValues({

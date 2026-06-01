@@ -37,7 +37,9 @@ export function PersonalSchedulePeriodToolbar({
   return (
     <div
       className={
-        embedded ? "personal-schedule-period-toolbar personal-schedule-period-toolbar--embedded" : "personal-schedule-period-toolbar"
+        embedded
+          ? "personal-schedule-period-toolbar personal-schedule-period-toolbar--embedded"
+          : "personal-schedule-period-toolbar"
       }
     >
       <Segmented

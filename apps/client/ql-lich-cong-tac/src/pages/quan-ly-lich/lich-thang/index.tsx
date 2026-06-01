@@ -62,9 +62,7 @@ function LichThangPage() {
           <Title level={3} className="!mb-2 !text-[#13ab55] uppercase tracking-wide">
             Lịch công tác tháng của Ban Giám đốc
           </Title>
-          <Text className="text-base text-gray-600 block">
-            {formatMonthLabel(monthStart)}
-          </Text>
+          <Text className="text-base text-gray-600 block">{formatMonthLabel(monthStart)}</Text>
           <Text className="text-sm text-gray-500">
             ({formatMonthPeriodLabel(monthStart, monthEnd)})
           </Text>

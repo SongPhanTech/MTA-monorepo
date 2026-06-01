@@ -89,7 +89,12 @@ export function ParticipantSelect({ participants, value, onChange }: Participant
             <span className="text-sm text-gray-500">
               Đã chọn {value.length} / {participants.length} người
             </span>
-            <Button type="primary" size="small" className="!bg-[#13ab55]" onClick={() => setOpen(false)}>
+            <Button
+              type="primary"
+              size="small"
+              className="!bg-[#13ab55]"
+              onClick={() => setOpen(false)}
+            >
               Xong
             </Button>
           </div>

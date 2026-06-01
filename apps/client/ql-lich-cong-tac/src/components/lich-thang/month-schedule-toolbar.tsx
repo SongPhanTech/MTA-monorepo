@@ -1,11 +1,6 @@
 import { CUSTOM_VI_LOCALE } from "@constants/constants"
 import { formatMonthPeriodLabel } from "@/utils/work-schedule-month"
-import {
-  CalendarOutlined,
-  LeftOutlined,
-  PrinterOutlined,
-  RightOutlined,
-} from "@ant-design/icons"
+import { CalendarOutlined, LeftOutlined, PrinterOutlined, RightOutlined } from "@ant-design/icons"
 import { Button, DatePicker, Space, Tag, Typography } from "antd"
 import dayjs from "dayjs"
 

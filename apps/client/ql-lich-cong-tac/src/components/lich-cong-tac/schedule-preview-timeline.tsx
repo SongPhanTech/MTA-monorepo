@@ -74,7 +74,9 @@ export function SchedulePreviewTimeline({
               <div key={event.id} className="schedule-preview__item">
                 <div className="schedule-preview__time">
                   <span>{event.startTime}</span>
-                  {index < events.length - 1 ? <span className="text-gray-400">{event.endTime}</span> : null}
+                  {index < events.length - 1 ? (
+                    <span className="text-gray-400">{event.endTime}</span>
+                  ) : null}
                 </div>
 
                 <div className="schedule-preview__axis">
@@ -97,7 +99,9 @@ export function SchedulePreviewTimeline({
                       <div className="text-sm font-semibold text-gray-700">
                         {event.startTime} - {event.endTime}
                       </div>
-                      <div className="mt-1 text-base font-semibold text-gray-900">{event.title}</div>
+                      <div className="mt-1 text-base font-semibold text-gray-900">
+                        {event.title}
+                      </div>
                     </div>
                     <Tag color={typeMeta.color} className="!m-0">
                       {typeMeta.label}

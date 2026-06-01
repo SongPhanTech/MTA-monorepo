@@ -2748,6 +2748,8 @@ exports.Prisma.StudentSemesterResultScalarFieldEnum = {
   foreignLangPass: 'foreignLangPass',
   isClassMonitor: 'isClassMonitor',
   isUnionLeader: 'isUnionLeader',
+  gpaBase4WithBonus: 'gpaBase4WithBonus',
+  gpaBase10WithBonus: 'gpaBase10WithBonus',
   entryScore: 'entryScore',
   isImproving: 'isImproving',
   postponeWithReason: 'postponeWithReason',

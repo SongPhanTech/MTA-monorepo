@@ -581,19 +581,55 @@ const XetHocBong = ({ semesterId, trainingObjectTypeId }: XetHocBongProps) => {
                         title: "Điểm hệ 4",
                         width: 80,
                         align: "center",
-                        render: (_, record) =>
-                          record?.student?.studentSemesterResult?.[0]?.gpaBase4
-                            ? Number(record.student.studentSemesterResult[0].gpaBase4).toFixed(2)
-                            : "-",
+                        render: (_, record) => {
+                          const sr = record?.student?.studentSemesterResult?.[0]
+                          const v = sr?.gpaBase4WithBonus ?? sr?.gpaBase4
+                          const hasBonus =
+                            Number(sr?.gpaBase4WithBonus ?? 0) > Number(sr?.gpaBase4 ?? 0)
+                          return v ? (
+                            <span>
+                              {Number(v).toFixed(2)}
+                              {hasBonus && (
+                                <Tooltip title="Đã cộng điểm thưởng chức vụ cán bộ">
+                                  <span
+                                    style={{ color: "#fa8c16", marginLeft: 2, fontWeight: 600 }}
+                                  >
+                                    *
+                                  </span>
+                                </Tooltip>
+                              )}
+                            </span>
+                          ) : (
+                            "-"
+                          )
+                        },
                       },
                       {
                         title: "Điểm hệ 10",
                         width: 80,
                         align: "center",
-                        render: (_, record) =>
-                          record?.student?.studentSemesterResult?.[0]?.gpaBase10
-                            ? Number(record.student.studentSemesterResult[0].gpaBase10).toFixed(2)
-                            : "-",
+                        render: (_, record) => {
+                          const sr = record?.student?.studentSemesterResult?.[0]
+                          const v = sr?.gpaBase10WithBonus ?? sr?.gpaBase10
+                          const hasBonus =
+                            Number(sr?.gpaBase10WithBonus ?? 0) > Number(sr?.gpaBase10 ?? 0)
+                          return v ? (
+                            <span>
+                              {Number(v).toFixed(2)}
+                              {hasBonus && (
+                                <Tooltip title="Đã cộng điểm thưởng chức vụ cán bộ">
+                                  <span
+                                    style={{ color: "#fa8c16", marginLeft: 2, fontWeight: 600 }}
+                                  >
+                                    *
+                                  </span>
+                                </Tooltip>
+                              )}
+                            </span>
+                          ) : (
+                            "-"
+                          )
+                        },
                       },
                       {
                         title: "Điểm rèn luyện",
@@ -769,19 +805,55 @@ const XetHocBong = ({ semesterId, trainingObjectTypeId }: XetHocBongProps) => {
                         title: "Điểm hệ 4",
                         width: 80,
                         align: "center",
-                        render: (_, record) =>
-                          record?.studentSemesterResult?.gpaBase4
-                            ? Number(record.studentSemesterResult.gpaBase4).toFixed(2)
-                            : "-",
+                        render: (_, record) => {
+                          const sr = record?.studentSemesterResult
+                          const v = sr?.gpaBase4WithBonus ?? sr?.gpaBase4
+                          const hasBonus =
+                            Number(sr?.gpaBase4WithBonus ?? 0) > Number(sr?.gpaBase4 ?? 0)
+                          return v ? (
+                            <span>
+                              {Number(v).toFixed(2)}
+                              {hasBonus && (
+                                <Tooltip title="Đã cộng điểm thưởng chức vụ cán bộ">
+                                  <span
+                                    style={{ color: "#fa8c16", marginLeft: 2, fontWeight: 600 }}
+                                  >
+                                    *
+                                  </span>
+                                </Tooltip>
+                              )}
+                            </span>
+                          ) : (
+                            "-"
+                          )
+                        },
                       },
                       {
                         title: "Điểm hệ 10",
                         width: 80,
                         align: "center",
-                        render: (_, record) =>
-                          record?.studentSemesterResult?.gpaBase10
-                            ? Number(record.studentSemesterResult.gpaBase10).toFixed(2)
-                            : "-",
+                        render: (_, record) => {
+                          const sr = record?.studentSemesterResult
+                          const v = sr?.gpaBase10WithBonus ?? sr?.gpaBase10
+                          const hasBonus =
+                            Number(sr?.gpaBase10WithBonus ?? 0) > Number(sr?.gpaBase10 ?? 0)
+                          return v ? (
+                            <span>
+                              {Number(v).toFixed(2)}
+                              {hasBonus && (
+                                <Tooltip title="Đã cộng điểm thưởng chức vụ cán bộ">
+                                  <span
+                                    style={{ color: "#fa8c16", marginLeft: 2, fontWeight: 600 }}
+                                  >
+                                    *
+                                  </span>
+                                </Tooltip>
+                              )}
+                            </span>
+                          ) : (
+                            "-"
+                          )
+                        },
                       },
                       {
                         title: "Điểm rèn luyện",

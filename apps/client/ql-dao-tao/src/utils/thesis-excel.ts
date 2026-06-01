@@ -1964,8 +1964,7 @@ const getThesisProjectBySessionId = (student: any, thesisSessionId?: string) => 
     const project = reg?.thesisProject
     if (!project) return false
     return (
-      project.thesisSession?.id === thesisSessionId ||
-      project.thesisSessionId === thesisSessionId
+      project.thesisSession?.id === thesisSessionId || project.thesisSessionId === thesisSessionId
     )
   })?.thesisProject
 }
