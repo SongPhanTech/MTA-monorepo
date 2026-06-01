@@ -1315,21 +1315,26 @@ export default function StudentScoreClassPage() {
               headerColumn={[
                 { colSpan: 1 },
                 {
-                  render: (_, { code, name, schoolYear }) => (
-                    <p className="font-medium text-base">
-                      {[code, name, schoolYear?.name].filter(Boolean).join(" - ")}
-                    </p>
-                  ),
+                  render: (_, semester) => {
+                    const { code, name, schoolYear } = semester
+                    const r = semester.studentSemesterResult?.[0]
+                    return (
+                      <div className="flex items-center gap-20">
+                        <p className="font-medium text-base">
+                          {[code, name, schoolYear?.name].filter(Boolean).join(" - ")}
+                        </p>
+                        {r && (
+                          <span className="font-semibold text-xs text-black-500">
+                            TBTL10: {r.cumulativeGpaBase10?.toFixed(2)} | TBTL4: {r.cumulativeGpaBase4?.toFixed(2)}
+                          </span>
+                        )}
+                      </div>
+                    )
+                  },
                   colSpan: 15,
                 },
-                // {
-                //     render: (_, { code, name, schoolYear }) => (
-                //         // TODO: kết quả học kỳ của SV: điểm TBC, học bổng, cảnh cáo,...
-                //         <Button>Chi tiết</Button>
-                //     ),
-                //     colSpan: 1,
-                // },
               ]}
+              
               filters={filters}
               setFilters={(value) => setFilters(value)}
               childrenFieldName="subjectClasses"
@@ -1528,9 +1533,9 @@ export default function StudentScoreClassPage() {
                       const r = record.semesterResult
                       return (
                         <span className="font-semibold text-xs">
-                          TBHK: {r.gpaBase10?.toFixed(2)} | TBTL10:{" "}
-                          {r.cumulativeGpaBase10?.toFixed(2)} | TBTL4:{" "}
-                          {r.cumulativeGpaBase4?.toFixed(2)}
+                          TBHK10: {r.gpaBase10?.toFixed(2)} | TBHK4:{" "}
+                          {r.gpaBase4?.toFixed(2)}
+                        
                         </span>
                       )
                     }
