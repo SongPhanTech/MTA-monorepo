@@ -628,48 +628,52 @@ export const exportThongKeCbHdlv = async ({
       doclap: item.singleStudent || 0,
       gvhd1: item.GVHD1Student,
       gvhd2: item.GVHD2Student,
-      thanhtoan: item.totalPayment,
+      thanhtoan: formatAmountWithComma(item.totalPayment),
       stk: item.stk,
       bank: item.tennganhang,
     }
   })
   try {
-    const payload: ExcelTemplateBody = {
-      head: { data: null },
-      tail: { data: null },
+    const tongsohocvien = dataMapping?.reduce(
+      (acc, item) => acc + item.GVHD1Student + item.GVHD2Student + item.singleStudent,
+      0
+    )
+    const tongsohd1 = dataMapping?.reduce((acc, item) => acc + item.GVHD1Student, 0)
+    const tongsohd2 = dataMapping?.reduce((acc, item) => acc + item.GVHD2Student, 0)
+    const tongsotien = dataMapping?.reduce((acc, item) => acc + item.totalPayment, 0)
+
+    const items = [
+      {
+        tendot: tendot ? tendot.trim().toUpperCase() : "",
+        tenkhoa: tenkhoa ? tenkhoa.trim().toUpperCase() : "",
+        ngay: ngay,
+        thang: thang,
+        nam: nam,
+        tongsohocvien: tongsohocvien,
+        tongsodoclap: tongSoDocLap,
+        tongsohd1: tongsohd1,
+        tongsohd2: tongsohd2,
+        tongsotien: formatAmountWithComma(tongsotien),
+        data: data,
+        "ngắt trang": "",
+      },
+    ]
+
+    const payload = {
       fileName: "ThongKeCanBoHuongDan",
-      path: "ThongKeCanBoHuongDan.xlsx",
+      path: "ThongKeCanBoHuongDan.docx",
       prefix: "mta/luan-van",
-      payload: [
-        {
-          data: {
-            tendot: tendot.trim().toUpperCase() || "",
-            tenkhoa: tenkhoa.trim().toUpperCase() || "",
-            ngay: ngay,
-            thang: thang,
-            nam: nam,
-            tongsohocvien: dataMapping?.reduce(
-              (acc, item) => acc + item.GVHD1Student + item.GVHD2Student + item.singleStudent,
-              0
-            ),
-            tongsodoclap: tongSoDocLap,
-            tongsohd1: dataMapping?.reduce((acc, item) => acc + item.GVHD1Student, 0),
-            tongsohd2: dataMapping?.reduce((acc, item) => acc + item.GVHD2Student, 0),
-            tongsotien: dataMapping?.reduce((acc, item) => acc + item.totalPayment, 0),
-            data: data,
-          },
-        },
-      ],
-      showGridLines: true,
-      wrapText: true,
+      data: {
+        items: items,
+      },
     }
-    const response = await excelTemplate(payload)
+    const response = await docxTemplate(payload)
     if (response.status !== 200) {
       message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
       return
     }
     const blob = response.data
-    downloadFile(blob, "ThongKeCanBoHuongDan.xlsx")
+    downloadFile(blob, "ThongKeCanBoHuongDan.docx")
     message.success("Xuất file thành công")
   } catch (error) {
     message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
@@ -1925,22 +1929,25 @@ export const exportThanhToanHoiDongBaoVe = async ({
       message.error("Chưa có dữ liệu để tạo thanh toán hội đồng bảo vệ")
       return
     }
-    const payload: ExcelTemplateBody = {
-      head: { data: null },
-      tail: { data: null },
+    const items = dataConvert.map((item, idx) => ({
+      ...item.data,
+      "ngắt trang": idx === dataConvert.length - 1 ? "" : "ngắt trang",
+    }))
+    const payload = {
       fileName: "ThanhToanHoiDongBaoVe",
-      path: "ThanhToanHoiDongBV.xlsx",
+      path: "ThanhToanHoiDongBV.docx",
       prefix: "mta/luan-van",
-      payload: dataConvert,
-      showGridLines: true,
+      data: {
+        items: items,
+      },
     }
-    const response = await excelTemplate(payload)
+    const response = await docxTemplate(payload)
     if (response.status !== 200) {
       message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
       return
     }
     const blob = response.data
-    downloadFile(blob, "ThanhToanHoiDongBaoVe.xlsx")
+    downloadFile(blob, "ThanhToanHoiDongBaoVe.docx")
     message.success("Xuất file thành công")
   } catch (error) {
     message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
@@ -2491,25 +2498,27 @@ export const exportThanhToanHuongDanTrongHv = async ({
       }
       return []
     }
-    const dataConvert = groups
+    const items = groups.map((item, idx) => ({
+      ...item.data,
+      tongTienSo: formatAmountWithComma(item.data.tongTienSo),
+      "ngắt trang": idx === groups.length - 1 ? "" : "ngắt trang",
+    }))
     const fileName = "ThanhToanHuongDan"
-    const payload: ExcelTemplateBody = {
-      head: { data: null },
-      tail: { data: null },
+    const payload = {
       fileName: fileName,
-      path: "ThanhToanHuongDanTrongHV.xlsx",
+      path: "ThanhToanHuongDanTrongHV.docx",
       prefix: "mta/luan-van",
-      payload: dataConvert,
-      showGridLines: true,
-      wrapText: true,
+      data: {
+        items: items,
+      },
     }
-    const response = await excelTemplate(payload)
+    const response = await docxTemplate(payload)
     if (response.status !== 200) {
       message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
       return []
     }
     const blob = response.data
-    downloadFile(blob, `${fileName}.xlsx`)
+    downloadFile(blob, `${fileName}.docx`)
     message.success("Xuất file thành công")
   } catch (error) {
     message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
@@ -3112,23 +3121,25 @@ export const exportDsChuyenGia = async ({
       return []
     }
     showSpinner?.()
-    const payload: ExcelTemplateBody = {
-      head: { data: null },
-      tail: { data: null },
+    const items = dataConvert.map((item, idx) => ({
+      ...item.data,
+      "ngắt trang": idx === dataConvert.length - 1 ? "" : "ngắt trang",
+    }))
+    const payload = {
       fileName: "DsChuyenGia",
-      path: "DanhSachChuyenGia.xlsx",
+      path: "DanhSachChuyenGia.docx",
       prefix: "mta/luan-van",
-      payload: dataConvert,
-      showGridLines: true,
-      wrapText: true,
+      data: {
+        items: items,
+      },
     }
-    const response = await excelTemplate(payload)
+    const response = await docxTemplate(payload)
     if (response.status !== 200) {
       message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
       return []
     }
     const blob = response.data
-    downloadFile(blob, "DsChuyenGia.xlsx")
+    downloadFile(blob, "DsChuyenGia.docx")
     message.success("Xuất file thành công")
   } catch (error) {
     message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
