@@ -44,16 +44,11 @@ function normalizePeriodStart(periodType: PersonalSchedulePeriodType, value: str
 export function usePersonalScheduleView(query: UsePersonalScheduleViewParams) {
   const router = useRouter()
   const { data: session } = useSession()
-  const sessionName =
-    session?.user?.name ??
-    (session?.user as { fullname?: string; fullName?: string } | undefined)?.fullname ??
-    (session?.user as { fullname?: string; fullName?: string } | undefined)?.fullName ??
-    null
+  const sessionName = session?.fullName ?? null
   const defaultLeaderId = resolveDefaultWeekLeaderId(sessionName)
   const leaderId = parseQueryValue(query.leaderId) ?? defaultLeaderId
   const periodType = (parseQueryValue(query.periodType) ?? "week") as PersonalSchedulePeriodType
-  const periodStartKey =
-    parseQueryValue(query.periodStart) ?? getDefaultPeriodStart(periodType)
+  const periodStartKey = parseQueryValue(query.periodStart) ?? getDefaultPeriodStart(periodType)
   const from = parseQueryValue(query.from)
 
   const leader = useMemo(() => getLeaderById(leaderId), [leaderId])
@@ -67,8 +62,7 @@ export function usePersonalScheduleView(query: UsePersonalScheduleViewParams) {
     return getPersonalWeekScheduleRows(leaderId, periodStartKey)
   }, [leaderId, periodStartKey, periodType])
 
-  const periodStartDate =
-    periodType === "month" ? schedule.monthStart : schedule.weekStart
+  const periodStartDate = periodType === "month" ? schedule.monthStart : schedule.weekStart
   const periodEndDate = periodType === "month" ? schedule.monthEnd : schedule.weekEnd
 
   const updateQuery = useCallback(

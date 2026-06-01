@@ -16,11 +16,7 @@ export function OverviewQuickLinks() {
   const [selectedLeaderId, setSelectedLeaderId] = useState("")
 
   const defaultLeaderId = useMemo(() => {
-    const displayName =
-      session?.user?.name ??
-      session?.user?.fullname ??
-      session?.user?.fullName ??
-      null
+    const displayName = session?.fullName ?? null
 
     return resolveDefaultWeekLeaderId(displayName)
   }, [session])

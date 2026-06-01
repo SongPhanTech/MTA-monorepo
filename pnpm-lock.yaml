@@ -1894,6 +1894,60 @@ importers:
       '@tanstack/react-query':
         specifier: 'catalog:'
         version: 5.90.5(react@18.3.1)
+      '@tiptap/core':
+        specifier: ^3.10.5
+        version: 3.11.0(@tiptap/pm@3.10.5)
+      '@tiptap/extension-color':
+        specifier: 'catalog:'
+        version: 3.10.5(@tiptap/extension-text-style@3.10.5(@tiptap/core@3.11.0(@tiptap/pm@3.10.5)))
+      '@tiptap/extension-highlight':
+        specifier: 'catalog:'
+        version: 3.10.5(@tiptap/core@3.11.0(@tiptap/pm@3.10.5))
+      '@tiptap/extension-image':
+        specifier: 'catalog:'
+        version: 3.10.5(@tiptap/core@3.11.0(@tiptap/pm@3.10.5))
+      '@tiptap/extension-link':
+        specifier: ^3.10.5
+        version: 3.11.0(@tiptap/core@3.11.0(@tiptap/pm@3.10.5))(@tiptap/pm@3.10.5)
+      '@tiptap/extension-mathematics':
+        specifier: 'catalog:'
+        version: 3.10.5(@tiptap/core@3.11.0(@tiptap/pm@3.10.5))(@tiptap/pm@3.10.5)(katex@0.16.25)
+      '@tiptap/extension-mention':
+        specifier: 'catalog:'
+        version: 3.10.5(@tiptap/core@3.11.0(@tiptap/pm@3.10.5))(@tiptap/pm@3.10.5)(@tiptap/suggestion@3.10.5(@tiptap/core@3.11.0(@tiptap/pm@3.10.5))(@tiptap/pm@3.10.5))
+      '@tiptap/extension-table':
+        specifier: 'catalog:'
+        version: 3.10.5(@tiptap/core@3.11.0(@tiptap/pm@3.10.5))(@tiptap/pm@3.10.5)
+      '@tiptap/extension-table-cell':
+        specifier: 'catalog:'
+        version: 3.10.5(@tiptap/extension-table@3.10.5(@tiptap/core@3.11.0(@tiptap/pm@3.10.5))(@tiptap/pm@3.10.5))
+      '@tiptap/extension-table-header':
+        specifier: 'catalog:'
+        version: 3.10.5(@tiptap/extension-table@3.10.5(@tiptap/core@3.11.0(@tiptap/pm@3.10.5))(@tiptap/pm@3.10.5))
+      '@tiptap/extension-table-row':
+        specifier: 'catalog:'
+        version: 3.10.5(@tiptap/extension-table@3.10.5(@tiptap/core@3.11.0(@tiptap/pm@3.10.5))(@tiptap/pm@3.10.5))
+      '@tiptap/extension-text-align':
+        specifier: 'catalog:'
+        version: 3.10.5(@tiptap/core@3.11.0(@tiptap/pm@3.10.5))
+      '@tiptap/extension-text-style':
+        specifier: 'catalog:'
+        version: 3.10.5(@tiptap/core@3.11.0(@tiptap/pm@3.10.5))
+      '@tiptap/extension-underline':
+        specifier: 'catalog:'
+        version: 3.10.5(@tiptap/core@3.11.0(@tiptap/pm@3.10.5))
+      '@tiptap/pm':
+        specifier: 'catalog:'
+        version: 3.10.5
+      '@tiptap/react':
+        specifier: 'catalog:'
+        version: 3.10.5(@floating-ui/dom@1.7.4)(@tiptap/core@3.11.0(@tiptap/pm@3.10.5))(@tiptap/pm@3.10.5)(@types/react-dom@18.3.7(@types/react@18.3.24))(@types/react@18.3.24)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@tiptap/starter-kit':
+        specifier: 'catalog:'
+        version: 3.10.5
+      '@tiptap/suggestion':
+        specifier: 'catalog:'
+        version: 3.10.5(@tiptap/core@3.11.0(@tiptap/pm@3.10.5))(@tiptap/pm@3.10.5)
       '@workspace/auth':
         specifier: workspace:*
         version: link:../../../packages/auth
@@ -1933,6 +1987,9 @@ importers:
       easy-peasy:
         specifier: 'catalog:'
         version: 6.0.5(@types/react-dom@18.3.7(@types/react@18.3.24))(@types/react@18.3.24)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      katex:
+        specifier: 'catalog:'
+        version: 0.16.25
       lodash:
         specifier: 'catalog:'
         version: 4.17.21
@@ -1960,12 +2017,21 @@ importers:
       react-idle-timer:
         specifier: 'catalog:'
         version: 5.7.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      react-to-print:
+        specifier: 'catalog:'
+        version: 3.2.0(react@18.3.1)
       react-top-loading-bar:
         specifier: 'catalog:'
         version: 2.3.1(react@18.3.1)
       tailwind-merge:
         specifier: 'catalog:'
         version: 2.6.0
+      tippy.js:
+        specifier: 'catalog:'
+        version: 6.3.7
+      xlsx:
+        specifier: 'catalog:'
+        version: https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz
       zod:
         specifier: 'catalog:'
         version: 3.25.76
