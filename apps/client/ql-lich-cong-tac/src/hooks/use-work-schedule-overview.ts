@@ -82,7 +82,7 @@ function buildDemoEvents(leaders: WorkScheduleLeader[]): WorkScheduleEventItem[]
         location: item.location,
       }
     })
-    .filter((event): event is WorkScheduleEventItem => event !== null)
+    .filter((event): event is NonNullable<typeof event> => event !== null)
 }
 
 function mapClassScheduleToEvents(

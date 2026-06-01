@@ -62,8 +62,8 @@ export function usePersonalScheduleView(query: UsePersonalScheduleViewParams) {
     return getPersonalWeekScheduleRows(leaderId, periodStartKey)
   }, [leaderId, periodStartKey, periodType])
 
-  const periodStartDate = periodType === "month" ? schedule.monthStart : schedule.weekStart
-  const periodEndDate = periodType === "month" ? schedule.monthEnd : schedule.weekEnd
+  const periodStartDate = "monthStart" in schedule ? schedule.monthStart : schedule.weekStart
+  const periodEndDate = "monthEnd" in schedule ? schedule.monthEnd : schedule.weekEnd
 
   const updateQuery = useCallback(
     (patch: { periodType?: PersonalSchedulePeriodType; periodStart?: string }) => {
