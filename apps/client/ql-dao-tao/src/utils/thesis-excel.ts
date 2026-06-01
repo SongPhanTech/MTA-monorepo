@@ -19,7 +19,6 @@ interface ExportOptions {
   hideSpinner: () => void
   message: any // Antd message instance
   inAcademy?: boolean
-  /** Người ký (mẫu cần ký): họ tên và chức danh — thay thế placeholder trong template */
   signerName?: string
   isChief?: boolean
   signingDate?: Date | string
@@ -33,7 +32,6 @@ interface ExportOptions {
     amount: number | string | { toNumber?: () => number }
     inAcademy: boolean
   }>
-  /** Trước khi xuất: tạo/ghi đè thanh toán GVHD theo cấu hình mặc định + chuẩn hoá single/dual */
   ensureSupervisorPaymentsForExport?: (project: any) => Promise<void>
 }
 
@@ -318,8 +316,7 @@ interface HDDanhGiaLuanVanTail {
   nam: string
 }
 interface HDDanhGiaLuanVanHead {
-  khoa: string
-  /** Sheet `Head` `${tenDonViQuanLi}` — gộp nhiều đơn vị bằng xuống dòng */
+  khoa: string 
   tenDonViQuanLi: string
 }
 interface HDDanhGiaLuanVanData {
@@ -347,8 +344,8 @@ interface HDDanhGiaLuanVanTemplateData {
   data: HDDanhGiaLuanVanData[]
 }
 
-const formatDay = (day: number) => day.toString().padStart(2, "0") // Luôn hiển thị 01-09
-const formatMonth = (month: number) => (month === 1 || month === 2 ? `0${month}` : month.toString()) // Chỉ thêm 0 cho tháng 1, 2
+const formatDay = (day: number) => day.toString().padStart(2, "0") 
+const formatMonth = (month: number) => (month === 1 || month === 2 ? `0${month}` : month.toString()) 
 
 export const formatDocDate = (date?: Date | string | null) => {
   if (!date) return { day: "", month: "", year: "" }
@@ -381,13 +378,17 @@ export const exportPhuLucDsLuanVan = async ({
     hideSpinner()
     return
   }
-
+  const project = getThesisProjectBySessionId(allStudentsInClasses, thesisSessionId)
+  if (!project) {
+    message.error("Không tìm thấy dữ liệu để xuất phụ lục danh sách luận văn")
+    return
+  }
   try {
     const majorMap = new Map<string, any>()
     let dotxet = ""
     let soQD = ""
     let ngayQD = ""
-    allStudentsInClasses.forEach((student) => {
+    project.forEach((student: any) => {
       const thesisProject = student?.thesisRegistrations?.find(
         (reg: any) => reg?.thesisProject?.thesisSession?.id === thesisSessionId
       )?.thesisProject
@@ -438,8 +439,6 @@ export const exportPhuLucDsLuanVan = async ({
       return
     }
     let count = 1
-    // const tableBodyStartRow = 7
-    // const tableHeaderThinBorder = { top: 5, left: 1, bottom: 6, right: 6 } as const
     const dataRows: TableRow[] = result.flatMap((item: any, index: number) => {
       const orgRow: TableRow = {
         cells: [
@@ -507,8 +506,6 @@ export const exportPhuLucDsLuanVan = async ({
           sheet: "PhuLucDanhSachLuanVan",
           rows: [...dataRows, gapRow, totalRow],
           tableStartCell: { row: 7, col: 1 },
-          // tableStartCell: { row: tableBodyStartRow, col: 1 },
-          // thinBorderRange: tableHeaderThinBorder,
           data: {
             dotxet: dotxet.trim().toUpperCase() || "",
             soQD: soQD || "",
@@ -594,6 +591,7 @@ export const getExpertSupervisionStats = (allStudentsInClasses: any[]) => {
 export const exportThongKeCbHdlv = async ({
   allStudentsInClasses,
   showSpinner,
+  thesisSessionId,
   hideSpinner,
   message,
 }: ExportOptions) => {
@@ -601,13 +599,17 @@ export const exportThongKeCbHdlv = async ({
     message.error("Không có dữ liệu để tạo thống kê cán bộ hướng dẫn LV")
     return
   }
+  const project = getThesisProjectBySessionId(allStudentsInClasses, thesisSessionId)
+  if (!project) {
+    message.error("Không tìm thấy dữ liệu để tạo thống kê cán bộ hướng dẫn LV")
+    return
+  }
   showSpinner()
-  const dataMapping = getExpertSupervisionStats(allStudentsInClasses)
+  const dataMapping = getExpertSupervisionStats(project)
   const ngayhientai = dayjs().format("DD/MM/YYYY")
   const ngay = ngayhientai.split("/")[0]
   const thang = ngayhientai.split("/")[1]
   const nam = ngayhientai.split("/")[2]
-  // const studenEnable = allStudentsInClasses?.filter((student) => student.thesisRegistrations > 0);
   const tendot =
     allStudentsInClasses?.length > 0
       ? allStudentsInClasses[0]?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.name
@@ -1384,6 +1386,7 @@ export const exportGiayMoiHdlv = async ({
 }
 export const exportSaoQDHDLV = async ({
   allStudentsInClasses,
+  thesisSessionId,
   showSpinner,
   hideSpinner,
   message,
@@ -1395,12 +1398,17 @@ export const exportSaoQDHDLV = async ({
     message.error("Không có dữ liệu đế tạo sao QĐ HDLV")
     return
   }
+  const project = getThesisProjectBySessionId(allStudentsInClasses, thesisSessionId)
+  if (!project) {
+    message.error("Không tìm thấy dữ liệu để tạo sao QĐ HDLV")
+    return
+  }
   showSpinner()
   const { day: ngayHT, month: thangHT, year: namHT } = formatDocDate(signingDate)
   try {
-    const allSheetOptions = allStudentsInClasses
-      ?.filter((s) => s?.thesisRegistrations?.[0]?.thesisProject)
-      .map((student) => {
+    const allSheetOptions = project
+      ?.filter((s: any) => s?.thesisRegistrations?.[0]?.thesisProject)
+      .map((student: any) => {
         const thesisProject = student?.thesisRegistrations?.[0]?.thesisProject
         const supervisor = thesisProject?.supervisor
         if (!supervisor) return null
@@ -1482,13 +1490,13 @@ export const exportSaoQDHDLV = async ({
     //   showGridLines: true,
     //   wrapText: true,
     // }
-    const validItems = allSheetOptions?.filter((item) => item !== null) ?? []
+    const validItems = allSheetOptions?.filter((item: any) => item !== null) ?? []
     if (validItems.length === 0) {
       message.error("Không có học viên hợp lệ để xuất")
       return
     }
 
-    const items = validItems.map((item) => item!.data)
+    const items = validItems.map((item: any) => item!.data)
     const payload = {
       fileName: "BanSaoQDHuongDanLuanVan.docx",
       path: "BanSaoQDHuongDanLuanVan.docx",
@@ -2186,6 +2194,7 @@ const convertToTthdbvData = async (
 }
 export const exportDanhSachNopLuanVanThuVien = async ({
   allStudentsInClasses,
+  thesisSessionId,
   showSpinner,
   hideSpinner,
   message,
@@ -2194,7 +2203,12 @@ export const exportDanhSachNopLuanVanThuVien = async ({
     message.error("Không có dữ liệu để xuất danh sách nộp luận văn thư viện")
     return
   }
-  const dataConvert = convertToDsnlvtvData(allStudentsInClasses)
+  const project = getThesisProjectBySessionId(allStudentsInClasses, thesisSessionId)
+  if (!project) {
+    message.error("Không tìm thấy dữ liệu để xuất danh sách nộp luận văn thư viện")
+    return
+  }
+  const dataConvert = convertToDsnlvtvData(project)
   if (dataConvert.data.data.length === 0) {
     message.error("Chưa có dữ liệu để xuất danh sách nộp luận văn thư viện")
     return
@@ -2300,6 +2314,7 @@ const convertToDsnlvtvData = (allStudentsInClasses: any[]): DsnlvtvData => {
 export const exportThongKeCbThamGiaHd = async ({
   allStudentsInClasses,
   showSpinner,
+  thesisSessionId,
   hideSpinner,
   message,
 }: ExportOptions) => {
@@ -2307,9 +2322,14 @@ export const exportThongKeCbThamGiaHd = async ({
     message.error("Không có dữ liệu để xuất thống kê cán bộ tham gia HĐ")
     return
   }
+  const project = getThesisProjectBySessionId(allStudentsInClasses, thesisSessionId)
+  if (!project) {
+    message.error("Không tìm thấy dữ liệu để tạo thống kê cán bộ tham gia HĐ")
+    return
+  }
   try {
     showSpinner?.()
-    const dataConvert = convertToThongKeCbThamGiaHdData(allStudentsInClasses)
+    const dataConvert = convertToThongKeCbThamGiaHdData(project)
     if (dataConvert.length === 0) {
       message.error("Chưa có dữ liệu để xuất thống kê cán bộ tham gia HĐ")
       return
@@ -2626,6 +2646,7 @@ const convertToThanhToanHuongDanTrongHvData = async (
 }
 export const exportKetQuaBaoVeLuanVan = async ({
   allStudentsInClasses,
+  thesisSessionId,
   showSpinner,
   hideSpinner,
   message,
@@ -2634,9 +2655,14 @@ export const exportKetQuaBaoVeLuanVan = async ({
     message.error("Không có dữ liệu để xuất kết quả bảo vệ luan van")
     return []
   }
+  const project = getThesisProjectBySessionId(allStudentsInClasses, thesisSessionId)
+  if (!project) {
+    message.error("Không tìm thấy dữ liệu để xuất kết quả bảo vệ luan van")
+    return []
+  }
   try {
     showSpinner?.()
-    const dataConvert = convertToKqbvlvData(allStudentsInClasses)
+    const dataConvert = convertToKqbvlvData(project)
 
     if (!dataConvert) {
       message.error("Chưa có dữ liệu để xuất kết quả bảo vệ luan van")
@@ -3576,6 +3602,7 @@ const convertToThongKeCoQuanDonViCanBoNgoaiHvData = (
 }
 export const exportThongKeCoQuanDonViCanBoNgoaiHv = async ({
   allStudentsInClasses,
+  thesisSessionId,
   showSpinner,
   hideSpinner,
   message,
@@ -3584,9 +3611,14 @@ export const exportThongKeCoQuanDonViCanBoNgoaiHv = async ({
     message.error("Không có dữ liệu để tạo thống kê cán bộ tham gia HĐ ngoài HV")
     return
   }
+  const project = getThesisProjectBySessionId(allStudentsInClasses, thesisSessionId)
+  if (!project) {
+    message.error("Không tìm thấy dữ liệu để tạo thống kê cán bộ tham gia HĐ ngoài HV")
+    return
+  }
   showSpinner()
   try {
-    const data = convertToThongKeCoQuanDonViCanBoNgoaiHvData(allStudentsInClasses)
+    const data = convertToThongKeCoQuanDonViCanBoNgoaiHvData(project)
     const payload: ExcelTemplateBody = {
       head: { data: null },
       tail: { data: null },
