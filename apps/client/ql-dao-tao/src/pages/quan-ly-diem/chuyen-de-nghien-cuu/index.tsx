@@ -16,14 +16,14 @@ import {
   useFindManySubjectClass,
   useFindManyTrainingCourse,
 } from "@workspace/db/hooks"
-import { excelTemplate, sqlTransaction } from "@workspace/libs/api/model"
+import { sqlTransaction } from "@workspace/libs/api/model"
 import { whereOrganization } from "@workspace/libs/constants"
+import { previewExcelTemplate } from "../../../utils/excel-template"
 import { useSemesterStore, useTrainingObjectTypeStore } from "@workspace/ui"
 import { cn } from "@workspace/ui/lib/utils"
 import { Button, Col, Flex, Form, Modal, message, Row, Tooltip } from "antd"
 import dayjs from "dayjs"
 import ExcelJS from "exceljs"
-import { saveAs } from "file-saver"
 import { SquarePen } from "lucide-react"
 import { useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
@@ -50,6 +50,14 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
     role: "P7" | "KHOA_BO_MON"
   }>({
     tag: "PutResearchTopicModal",
+  })
+
+  const { onOpen: openXemTaiLieu } = useDisclosure<{
+    uri: string
+    name?: string
+    mimeType?: string
+  }>({
+    tag: "XemTaiLieu",
   })
 
   const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
@@ -501,28 +509,6 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
                 <Button type="primary" onClick={async () => await getData()}>
                   Lấy dữ liệu
                 </Button>
-                {/* <Button type="primary" onClick={async () => await exportToExcel()}>
-                                    Xuất mẫu excel
-                                </Button>
-                                <Button
-                                    type="primary"
-                                    onClick={() => document.getElementById('import-excel')?.click()}
-                                >
-                                    Import Excel
-                                </Button> */}
-                {/* <input
-                                    id="import-excel"
-                                    type="file"
-                                    accept=".xlsx"
-                                    className="hidden"
-                                    onChange={(e) => {
-                                        const file = e.target.files?.[0]
-                                        if (file) {
-                                            confirmImport(file)
-                                        }
-                                        e.target.value = ''
-                                    }}
-                                /> */}
               </div>
             </Form.Item>
             {role === "P7" && (
@@ -577,7 +563,8 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
                       ])
                       const khoaVaKyData = khoaVaKy.data as [{ name: string }, { name: string }]
 
-                      const res = await excelTemplate({
+                      const res = await previewExcelTemplate({
+                        previewKey: `cdnc-qd-giao-${trainingCourseId}-${semesterId}`,
                         fileName: "QD_GiaoChuyenDe.xlsx",
                         path: "QD_GiaoChuyenDe.xlsx",
                         showGridLines: true,
@@ -594,7 +581,11 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
                           },
                         ],
                       })
-                      saveAs(res.data, `QD_GiaoChuyenDe_${dayjs().format("HH-mm-ss")}.xlsx`)
+                      openXemTaiLieu({
+                        uri: res.data.path,
+                        name: "QD_GiaoChuyenDe.xlsx",
+                        mimeType: "xlsx",
+                      })
                     }}
                   >
                     QĐ giao chuyên đề nghiên cứu
@@ -714,7 +705,8 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
                           >
                         )
                       )
-                      const res = await excelTemplate({
+                      const res = await previewExcelTemplate({
+                        previewKey: `cdnc-phu-luc-${trainingCourseId}-${semesterId}`,
                         fileName: "Phu-luc-QD-Chuyen-De-Nghien-Cuu.xlsx",
                         head: {
                           data: {
@@ -753,7 +745,11 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
                           }),
                         })),
                       })
-                      saveAs(res.data, `PL_ChuyenDeNghienCuu_${dayjs().format("HH-mm-ss")}.xlsx`)
+                      openXemTaiLieu({
+                        uri: res.data.path,
+                        name: "Phu-luc-QD-Chuyen-De-Nghien-Cuu.xlsx",
+                        mimeType: "xlsx",
+                      })
                     }}
                   >
                     Phụ lục QĐ chuyên đề nghiên cứu
@@ -989,7 +985,8 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
                         hoc_ky: khoaVaKyData?.[1]?.name?.toUpperCase?.(),
                       }
 
-                      const res = await excelTemplate({
+                      const res = await previewExcelTemplate({
+                        previewKey: `cdnc-tk-tai-giang-${trainingCourseId}-${semesterId}`,
                         fileName: "TK_TaiGiangDayCuaGiangVien.xlsx",
                         path: "TK_TaiGiangDayCuaGiangVien.xlsx",
                         showGridLines: true,
@@ -1020,10 +1017,11 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
                           },
                         ],
                       })
-                      saveAs(
-                        res.data,
-                        `TK_TaiGiangDayCuaGiangVien_${dayjs().format("HH-mm-ss")}.xlsx`
-                      )
+                      openXemTaiLieu({
+                        uri: res.data.path,
+                        name: "TK_TaiGiangDayCuaGiangVien.xlsx",
+                        mimeType: "xlsx",
+                      })
                     }}
                   >
                     TK tải giảng GV
@@ -1186,7 +1184,8 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
                         }
                       }>[]
 
-                      const res = await excelTemplate({
+                      const res = await previewExcelTemplate({
+                        previewKey: `cdnc-tk-so-luong-${trainingCourseId}-${semesterId}`,
                         fileName: "TK_SoLuongChuyenDeHocVien.xlsx",
                         path: "TK_SoLuongChuyenDeHocVien.xlsx",
                         showGridLines: true,
@@ -1221,10 +1220,11 @@ export default function ChuyenDeNghienCuu({ role = "P7" }: { role: "P7" | "KHOA_
                           },
                         ],
                       })
-                      saveAs(
-                        res.data,
-                        `TK_SoLuongChuyenDeHocVien_${dayjs().format("HH-mm-ss")}.xlsx`
-                      )
+                      openXemTaiLieu({
+                        uri: res.data.path,
+                        name: "TK_SoLuongChuyenDeHocVien.xlsx",
+                        mimeType: "xlsx",
+                      })
                     }}
                   >
                     TK Số lượng CĐ HV

@@ -211,8 +211,7 @@ export default function DiemTheoPhach({ type = "NHAP_DIEM_THEO_PHACH" }: DiemThe
               },
             })
           }}
-        >
-        </Form>
+        ></Form>
       </Col>
       <Col span={24}>
         <Tabs activeKey={activeKey} onChange={(key) => setActiveKey(key)} items={items} />

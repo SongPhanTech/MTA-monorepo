@@ -316,7 +316,7 @@ interface HDDanhGiaLuanVanTail {
   nam: string
 }
 interface HDDanhGiaLuanVanHead {
-  khoa: string 
+  khoa: string
   tenDonViQuanLi: string
 }
 interface HDDanhGiaLuanVanData {
@@ -344,8 +344,8 @@ interface HDDanhGiaLuanVanTemplateData {
   data: HDDanhGiaLuanVanData[]
 }
 
-const formatDay = (day: number) => day.toString().padStart(2, "0") 
-const formatMonth = (month: number) => (month === 1 || month === 2 ? `0${month}` : month.toString()) 
+const formatDay = (day: number) => day.toString().padStart(2, "0")
+const formatMonth = (month: number) => (month === 1 || month === 2 ? `0${month}` : month.toString())
 
 export const formatDocDate = (date?: Date | string | null) => {
   if (!date) return { day: "", month: "", year: "" }
