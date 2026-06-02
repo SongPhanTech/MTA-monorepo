@@ -207,7 +207,7 @@ const exportHandlers: Record<string, TExportConfig> = {
   },
   phuLucVanBangCaoHoc: {
     api: exportPhuLucVanBangCaoHoc,
-    fileName: "PhuLucVanBangCaoHoc.xlsx",
+    fileName: "PhuLucVanBangCaoHoc.docx",
   },
 }
 
@@ -1197,6 +1197,9 @@ export default function StudentGradeSystem() {
 
       if (res.status === 200) {
         saveAs(res.data, config.fileName)
+      } else {
+        const errorMsg = res.data?.message || "Đã xảy ra lỗi khi xuất file"
+        message.error(errorMsg)
       }
     } catch (error: any) {
       message.error(error.message || "Đã xảy ra lỗi, vui lòng kiểm tra lại")
