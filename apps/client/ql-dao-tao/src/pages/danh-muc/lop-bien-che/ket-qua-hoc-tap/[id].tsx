@@ -1325,7 +1325,8 @@ export default function StudentScoreClassPage() {
                         </p>
                         {r && (
                           <span className="font-semibold text-xs text-black-500">
-                            TBTL10: {r.cumulativeGpaBase10?.toFixed(2)} | TBTL4: {r.cumulativeGpaBase4?.toFixed(2)}
+                            TBTL10: {r.cumulativeGpaBase10?.toFixed(2)} | TBTL4:{" "}
+                            {r.cumulativeGpaBase4?.toFixed(2)}
                           </span>
                         )}
                       </div>
@@ -1334,7 +1335,6 @@ export default function StudentScoreClassPage() {
                   colSpan: 15,
                 },
               ]}
-              
               filters={filters}
               setFilters={(value) => setFilters(value)}
               childrenFieldName="subjectClasses"
@@ -1533,9 +1533,7 @@ export default function StudentScoreClassPage() {
                       const r = record.semesterResult
                       return (
                         <span className="font-semibold text-xs">
-                          TBHK10: {r.gpaBase10?.toFixed(2)} | TBHK4:{" "}
-                          {r.gpaBase4?.toFixed(2)}
-                        
+                          TBHK10: {r.gpaBase10?.toFixed(2)} | TBHK4: {r.gpaBase4?.toFixed(2)}
                         </span>
                       )
                     }

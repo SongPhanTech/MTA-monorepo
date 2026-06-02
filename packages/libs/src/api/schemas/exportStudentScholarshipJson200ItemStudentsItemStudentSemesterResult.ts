@@ -61,6 +61,8 @@ Các endpoint xuất file (Excel, PowerPoint, PDF) trả về **blob binary** v�
  */
 import type { ExportStudentScholarshipJson200ItemStudentsItemStudentSemesterResultBaseScore } from './exportStudentScholarshipJson200ItemStudentsItemStudentSemesterResultBaseScore';
 import type { ExportStudentScholarshipJson200ItemStudentsItemStudentSemesterResultStudentTrainingType } from './exportStudentScholarshipJson200ItemStudentsItemStudentSemesterResultStudentTrainingType';
+import type { ExportStudentScholarshipJson200ItemStudentsItemStudentSemesterResultGpaBase4WithBonus } from './exportStudentScholarshipJson200ItemStudentsItemStudentSemesterResultGpaBase4WithBonus';
+import type { ExportStudentScholarshipJson200ItemStudentsItemStudentSemesterResultGpaBase10WithBonus } from './exportStudentScholarshipJson200ItemStudentsItemStudentSemesterResultGpaBase10WithBonus';
 
 /**
  * Kết quả học tập của sinh viên trong học kỳ
@@ -107,6 +109,10 @@ export type ExportStudentScholarshipJson200ItemStudentsItemStudentSemesterResult
   foreignLangPass: boolean;
   isClassMonitor: boolean;
   isUnionLeader: boolean;
+  /** @nullable */
+  gpaBase4WithBonus?: ExportStudentScholarshipJson200ItemStudentsItemStudentSemesterResultGpaBase4WithBonus;
+  /** @nullable */
+  gpaBase10WithBonus?: ExportStudentScholarshipJson200ItemStudentsItemStudentSemesterResultGpaBase10WithBonus;
   /** @nullable */
   entryScore?: number | null;
   isImproving: boolean;

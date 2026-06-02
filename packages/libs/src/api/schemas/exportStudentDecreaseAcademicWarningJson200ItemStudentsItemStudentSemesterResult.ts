@@ -61,6 +61,8 @@ Các endpoint xuất file (Excel, PowerPoint, PDF) trả về **blob binary** v�
  */
 import type { ExportStudentDecreaseAcademicWarningJson200ItemStudentsItemStudentSemesterResultBaseScore } from './exportStudentDecreaseAcademicWarningJson200ItemStudentsItemStudentSemesterResultBaseScore';
 import type { ExportStudentDecreaseAcademicWarningJson200ItemStudentsItemStudentSemesterResultStudentTrainingType } from './exportStudentDecreaseAcademicWarningJson200ItemStudentsItemStudentSemesterResultStudentTrainingType';
+import type { ExportStudentDecreaseAcademicWarningJson200ItemStudentsItemStudentSemesterResultGpaBase4WithBonus } from './exportStudentDecreaseAcademicWarningJson200ItemStudentsItemStudentSemesterResultGpaBase4WithBonus';
+import type { ExportStudentDecreaseAcademicWarningJson200ItemStudentsItemStudentSemesterResultGpaBase10WithBonus } from './exportStudentDecreaseAcademicWarningJson200ItemStudentsItemStudentSemesterResultGpaBase10WithBonus';
 
 /**
  * Kết quả học tập của sinh viên trong học kỳ
@@ -107,6 +109,10 @@ export type ExportStudentDecreaseAcademicWarningJson200ItemStudentsItemStudentSe
   foreignLangPass: boolean;
   isClassMonitor: boolean;
   isUnionLeader: boolean;
+  /** @nullable */
+  gpaBase4WithBonus?: ExportStudentDecreaseAcademicWarningJson200ItemStudentsItemStudentSemesterResultGpaBase4WithBonus;
+  /** @nullable */
+  gpaBase10WithBonus?: ExportStudentDecreaseAcademicWarningJson200ItemStudentsItemStudentSemesterResultGpaBase10WithBonus;
   /** @nullable */
   entryScore?: number | null;
   isImproving: boolean;

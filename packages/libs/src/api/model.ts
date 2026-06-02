@@ -35,6 +35,8 @@ import type {
   CountRequestsParams,
   CreateApiKey200,
   CreateApiKeyBody,
+  DeleteObject200,
+  DeleteObjectParams,
   DocxTemplateBody,
   DocxTemplatePreview200,
   DocxTemplatePreview404,
@@ -43,6 +45,9 @@ import type {
   ErrorRate200Item,
   ErrorRateParams,
   ExcelTemplateBody,
+  ExcelTemplatePreview200,
+  ExcelTemplatePreview500,
+  ExcelTemplatePreviewBody,
   ExportTableByColumnsParams,
   ExportTableBySqlParams,
   GetColumns200Item,
@@ -2999,6 +3004,107 @@ export const useExcelTemplate = <TError = unknown, TContext = unknown>(
   return useMutation(mutationOptions, queryClient)
 }
 
+export type excelTemplatePreviewResponse200 = {
+  data: ExcelTemplatePreview200
+  status: 200
+}
+
+export type excelTemplatePreviewResponse500 = {
+  data: ExcelTemplatePreview500
+  status: 500
+}
+
+export type excelTemplatePreviewResponseSuccess = excelTemplatePreviewResponse200 & {
+  headers: Headers
+}
+export type excelTemplatePreviewResponseError = excelTemplatePreviewResponse500 & {
+  headers: Headers
+}
+
+export type excelTemplatePreviewResponse =
+  | excelTemplatePreviewResponseSuccess
+  | excelTemplatePreviewResponseError
+
+export const getExcelTemplatePreviewUrl = () => {
+  return `/api/excel-template/preview`
+}
+
+export const excelTemplatePreview = async (
+  excelTemplatePreviewBody: ExcelTemplatePreviewBody,
+  options?: RequestInit
+): Promise<excelTemplatePreviewResponse> => {
+  return customModelFetch<excelTemplatePreviewResponse>(getExcelTemplatePreviewUrl(), {
+    ...options,
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(excelTemplatePreviewBody),
+  })
+}
+
+export const getExcelTemplatePreviewMutationOptions = <
+  TError = ExcelTemplatePreview500,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof excelTemplatePreview>>,
+    TError,
+    { data: ExcelTemplatePreviewBody },
+    TContext
+  >
+  request?: SecondParameter<typeof customModelFetch>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof excelTemplatePreview>>,
+  TError,
+  { data: ExcelTemplatePreviewBody },
+  TContext
+> => {
+  const mutationKey = ["excelTemplatePreview"]
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof excelTemplatePreview>>,
+    { data: ExcelTemplatePreviewBody }
+  > = (props) => {
+    const { data } = props ?? {}
+
+    return excelTemplatePreview(data, requestOptions)
+  }
+
+  return { mutationFn, ...mutationOptions }
+}
+
+export type ExcelTemplatePreviewMutationResult = NonNullable<
+  Awaited<ReturnType<typeof excelTemplatePreview>>
+>
+export type ExcelTemplatePreviewMutationBody = ExcelTemplatePreviewBody
+export type ExcelTemplatePreviewMutationError = ExcelTemplatePreview500
+
+export const useExcelTemplatePreview = <TError = ExcelTemplatePreview500, TContext = unknown>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof excelTemplatePreview>>,
+      TError,
+      { data: ExcelTemplatePreviewBody },
+      TContext
+    >
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof excelTemplatePreview>>,
+  TError,
+  { data: ExcelTemplatePreviewBody },
+  TContext
+> => {
+  const mutationOptions = getExcelTemplatePreviewMutationOptions(options)
+
+  return useMutation(mutationOptions, queryClient)
+}
+
 export type docxTemplateResponse200 = {
   data: Blob
   status: 200
@@ -3414,6 +3520,100 @@ export function useListObjects<TData = Awaited<ReturnType<typeof listObjects>>, 
   return query
 }
 
+export type deleteObjectResponse200 = {
+  data: DeleteObject200
+  status: 200
+}
+
+export type deleteObjectResponseSuccess = deleteObjectResponse200 & {
+  headers: Headers
+}
+
+export type deleteObjectResponse = deleteObjectResponseSuccess
+
+export const getDeleteObjectUrl = (params: DeleteObjectParams) => {
+  const normalizedParams = new URLSearchParams()
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? "null" : value.toString())
+    }
+  })
+
+  const stringifiedParams = normalizedParams.toString()
+
+  return stringifiedParams.length > 0 ? `/api/minio?${stringifiedParams}` : `/api/minio`
+}
+
+export const deleteObject = async (
+  params: DeleteObjectParams,
+  options?: RequestInit
+): Promise<deleteObjectResponse> => {
+  return customModelFetch<deleteObjectResponse>(getDeleteObjectUrl(params), {
+    ...options,
+    method: "DELETE",
+  })
+}
+
+export const getDeleteObjectMutationOptions = <TError = unknown, TContext = unknown>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof deleteObject>>,
+    TError,
+    { params: DeleteObjectParams },
+    TContext
+  >
+  request?: SecondParameter<typeof customModelFetch>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof deleteObject>>,
+  TError,
+  { params: DeleteObjectParams },
+  TContext
+> => {
+  const mutationKey = ["deleteObject"]
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof deleteObject>>,
+    { params: DeleteObjectParams }
+  > = (props) => {
+    const { params } = props ?? {}
+
+    return deleteObject(params, requestOptions)
+  }
+
+  return { mutationFn, ...mutationOptions }
+}
+
+export type DeleteObjectMutationResult = NonNullable<Awaited<ReturnType<typeof deleteObject>>>
+
+export type DeleteObjectMutationError = unknown
+
+export const useDeleteObject = <TError = unknown, TContext = unknown>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof deleteObject>>,
+      TError,
+      { params: DeleteObjectParams },
+      TContext
+    >
+    request?: SecondParameter<typeof customModelFetch>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof deleteObject>>,
+  TError,
+  { params: DeleteObjectParams },
+  TContext
+> => {
+  const mutationOptions = getDeleteObjectMutationOptions(options)
+
+  return useMutation(mutationOptions, queryClient)
+}
+
 export type presignedGetObjectResponse200 = {
   data: UrlDto
   status: 200
@@ -3556,41 +3756,6 @@ export function usePresignedGetObject<
   query.queryKey = queryOptions.queryKey
 
   return query
-}
-
-export type deleteObjectResponse200 = {
-  data: { success: boolean }
-  status: 200
-}
-
-export type deleteObjectResponseSuccess = deleteObjectResponse200 & {
-  headers: Headers
-}
-
-export type deleteObjectResponse = deleteObjectResponseSuccess
-
-export const getDeleteObjectUrl = (params: PresignedGetObjectParams) => {
-  const normalizedParams = new URLSearchParams()
-
-  Object.entries(params || {}).forEach(([key, value]) => {
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? "null" : value.toString())
-    }
-  })
-
-  const stringifiedParams = normalizedParams.toString()
-
-  return stringifiedParams.length > 0 ? `/api/minio?${stringifiedParams}` : `/api/minio`
-}
-
-export const deleteObject = async (
-  params: PresignedGetObjectParams,
-  options?: RequestInit
-): Promise<deleteObjectResponse> => {
-  return customModelFetch<deleteObjectResponse>(getDeleteObjectUrl(params), {
-    ...options,
-    method: "DELETE",
-  })
 }
 
 export type convertDocumentResponse200 = {
