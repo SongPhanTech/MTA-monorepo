@@ -1959,31 +1959,50 @@ export const exportGiayMoiChamLvPb = async ({
       message.error("Không có dữ liệu để tạo giấy mời chấm LV PB")
       return
     }
-    const sheets = [
+    const exportGroups = [
       ...(dataTrongHv.length > 0
-        ? [{ sheetName: "Can bo trong hoc vien", payload: dataTrongHv }]
+        ? [
+            {
+              downloadFileName: "GiayMoiChamLuanVan_TrongHocVien.docx",
+              items: dataTrongHv.map((item, idx) => ({
+                ...item.data,
+                "ngắt trang": idx === dataTrongHv.length - 1 ? "" : "ngắt trang",
+              })),
+            },
+          ]
         : []),
       ...(dataNgoaiHv.length > 0
-        ? [{ sheetName: "Can bo ngoai hoc vien", payload: dataNgoaiHv }]
+        ? [
+            {
+              downloadFileName: "GiayMoiChamLuanVan_NgoaiHocVien.docx",
+              items: dataNgoaiHv.map((item, idx) => ({
+                ...item.data,
+                "ngắt trang": idx === dataNgoaiHv.length - 1 ? "" : "ngắt trang",
+              })),
+            },
+          ]
         : []),
     ]
-    const items = [...dataTrongHv, ...dataNgoaiHv].map((item) => item.data)
-    const payload = {
-      fileName: "GiayMoiChamLuanVan",
-      path: "GiayMoiChamLuanVan.docx",
-      prefix: "mta/luan-van",
-      data: {
-        items: items,
-      },
-    }
-    const response = await docxTemplate(payload)
+    const responses = await Promise.all(
+      exportGroups.map((group) =>
+        docxTemplate({
+          fileName: "GiayMoiChamLuanVan",
+          path: "GiayMoiChamLuanVan.docx",
+          prefix: "mta/luan-van",
+          data: {
+            items: group.items,
+          },
+        })
+      )
+    )
 
-    if (response.status !== 200) {
+    if (responses.some((response) => response.status !== 200)) {
       message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
       return
     }
-    const blob = response.data
-    downloadFile(blob, "GiayMoiChamLuanVan.docx")
+    responses.forEach((response, index) => {
+      downloadFile(response.data, exportGroups[index].downloadFileName)
+    })
     message.success("Xuất file thành công")
   } catch (error) {
     message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
@@ -2449,34 +2468,32 @@ export const exportThongKeCbThamGiaHd = async ({
       message.error("Chưa có dữ liệu để xuất thống kê cán bộ tham gia HĐ")
       return
     }
-    const formattedDataConvert = dataConvert.map((item) => ({
-      ...item,
-      data: {
-        ...item.data,
-        tongThanhToan: formatAmountWithComma(Number(item.data.tongThanhToan || 0)),
-        data: item.data.data.map((row) => ({
-          ...row,
-          thanhToan: formatAmountWithComma(Number(row.thanhToan || 0)),
-        })),
-      },
+    const items = dataConvert.map((item, idx) => ({
+      ...item.data,
+      tongThanhToan: formatAmountWithComma(Number(item.data.tongThanhToan || 0)),
+      "ngắt trang": idx === dataConvert.length - 1 ? "" : "ngắt trang",
+      data: item.data.data.map((row) => ({
+        ...row,
+        tong: row.tongSo,
+        bank: row.tennganhang,
+        thanhToan: formatAmountWithComma(Number(row.thanhToan || 0)),
+      })),
     }))
-    const payload: ExcelTemplateBody = {
-      head: { data: null },
-      tail: { data: null },
+    const payload = {
       fileName: "ThongKeCbThamGiaHd",
-      path: "ThongKeCanBoHoiDong.xlsx",
+      path: "ThongKeCanBoHoiDong.docx",
       prefix: "mta/luan-van",
-      payload: formattedDataConvert,
-      showGridLines: true,
-      wrapText: true,
+      data: {
+        items: items,
+      },
     }
-    const response = await excelTemplate(payload)
+    const response = await docxTemplate(payload)
     if (response.status !== 200) {
       message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
       return
     }
     const blob = response.data
-    downloadFile(blob, "ThongKeCbThamGiaHd.xlsx")
+    downloadFile(blob, "ThongKeCbThamGiaHd.docx")
     message.success("Xuất file thành công")
   } catch (error) {
     message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
