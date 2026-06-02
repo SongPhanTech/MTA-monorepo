@@ -511,7 +511,7 @@ export default function StudentScoreClassPage() {
         )
 
         hocKis.push({
-          TenHocKi: `${item.code}-${item.name}-${item.schoolYear?.name}`,
+          TenHocKi: `${item.schoolYear?.name}`,
           SoTinChiKy: tongSoTinChi,
           DiemTBKyHe10: diemTBHe10,
           DiemTBKyHe4: diemTBHe4,
@@ -547,7 +547,7 @@ export default function StudentScoreClassPage() {
       monHocs.forEach((monHoc: IMonHoc, index: number) => {
         tableRows.push({
           cells: [
-            { value: index + 1 },
+            { value: index + 1, align: "center" },
             { value: monHoc.TenMonhoc ?? "", colSpan: 6, border: true },
             { value: monHoc.MaMH ?? "" },
             { value: monHoc.soTC, align: "center" },
@@ -627,7 +627,7 @@ export default function StudentScoreClassPage() {
     const xeploai = convertScore(tongdiemhe10).classification
 
     exportFromTemplate({
-      templateUrl: getMinioUrl("/mta/template/quatrinh.xlsx"),
+      templateUrl: getMinioUrl("/mta/template/BangDiemCaNhan(P2).xlsx"),
       sheets: [
         {
           sheet: "BaoCaoDiem",
@@ -641,7 +641,7 @@ export default function StudentScoreClassPage() {
             nganh: sampleStudentData.nganh ?? "",
             lop: sampleStudentData.lop ?? "",
           },
-          tableStartCell: { row: 11, col: 1 },
+          tableStartCell: { row: 14, col: 1 },
           rows: [
             ...tableRows,
             gapRow,
@@ -668,10 +668,10 @@ export default function StudentScoreClassPage() {
             { cells: [{ value: `Xếp loại: ${xeploai}`, colSpan: 19, border: false }] },
             {
               cells: [
-                { value: null, colSpan: 13, border: false },
+                { value: null, colSpan: 8, border: false },
                 {
                   value: `Hà Nội, ngày ${new Date().getDate()} tháng ${new Date().getMonth() + 1} năm ${new Date().getFullYear()}`,
-                  colSpan: 6,
+                  colSpan: 11,
                   border: false,
                   align: "center",
                 },
@@ -679,10 +679,10 @@ export default function StudentScoreClassPage() {
             },
             {
               cells: [
-                { value: null, colSpan: 13, border: false },
+                { value: null, colSpan: 8, border: false },
                 {
                   value: "  KT. TRƯỞNG PHÒNG",
-                  colSpan: 6,
+                  colSpan: 11,
                   border: false,
                   align: "center",
                   bold: true,
@@ -691,10 +691,10 @@ export default function StudentScoreClassPage() {
             },
             {
               cells: [
-                { value: null, colSpan: 13, border: false },
+                { value: null, colSpan: 8, border: false },
                 {
                   value: "  PHÓ TRƯỞNG PHÒNG",
-                  colSpan: 6,
+                  colSpan: 11,
                   border: false,
                   align: "center",
                   bold: true,
@@ -703,10 +703,10 @@ export default function StudentScoreClassPage() {
             },
             {
               cells: [
-                { value: null, colSpan: 13, border: false },
+                { value: null, colSpan: 8, border: false },
                 {
                   value: "Đại tá, TS Nguyễn Văn Bình",
-                  colSpan: 6,
+                  colSpan: 11,
                   border: false,
                   align: "center",
                   bold: true,
@@ -765,7 +765,7 @@ export default function StudentScoreClassPage() {
         )
 
         hocKis.push({
-          TenHocKi: `${item.code}-${item.name}-${item.schoolYear?.name}`,
+          TenHocKi: `${item.schoolYear?.name}`,
           SoTinChiKy: tongSoTinChi,
           DiemTBKyHe10: diemTBHe10,
           DiemTBKyHe4: diemTBHe4,
@@ -801,7 +801,7 @@ export default function StudentScoreClassPage() {
       monHocs.forEach((monHoc: IMonHoc, index: number) => {
         tableRows.push({
           cells: [
-            { value: index + 1 },
+            { value: index + 1, align: "center" },
             { value: monHoc.TenMonhoc ?? "", colSpan: 6, border: true },
             { value: monHoc.MaMH ?? "" },
             { value: monHoc.soTC, align: "center" },
@@ -881,7 +881,7 @@ export default function StudentScoreClassPage() {
     const xeploai = convertScore(tongdiemhe10).classification
 
     exportFromTemplate({
-      templateUrl: getMinioUrl("/mta/luan-van/BangDiemCaNhan(MauP7).xlsx"),
+      templateUrl: getMinioUrl("/mta/luan-van/BangDiemCaNhan(P7).xlsx"),
       sheets: [
         {
           sheet: "BaoCaoDiem",
@@ -895,7 +895,7 @@ export default function StudentScoreClassPage() {
             nganh: sampleStudentData.nganh ?? "",
             lop: sampleStudentData.lop ?? "",
           },
-          tableStartCell: { row: 11, col: 1 },
+          tableStartCell: { row: 14, col: 1 },
           rows: [
             ...tableRows,
             gapRow,
@@ -922,10 +922,10 @@ export default function StudentScoreClassPage() {
             { cells: [{ value: `Xếp loại: ${xeploai}`, colSpan: 19, border: false }] },
             {
               cells: [
-                { value: null, colSpan: 13, border: false },
+                { value: null, colSpan: 8, border: false },
                 {
                   value: `Hà Nội, ngày ${new Date().getDate()} tháng ${new Date().getMonth() + 1} năm ${new Date().getFullYear()}`,
-                  colSpan: 6,
+                  colSpan: 11,
                   border: false,
                   align: "center",
                 },
