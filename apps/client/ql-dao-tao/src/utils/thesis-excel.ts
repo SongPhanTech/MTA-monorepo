@@ -605,13 +605,17 @@ export const exportThongKeCbHdlv = async ({
     message.error("Không có dữ liệu để tạo thống kê cán bộ hướng dẫn LV")
     return
   }
-  console.log("allStudentsInClasses", allStudentsInClasses)
-  console.log("thesisSessionId", thesisSessionId)
-  const project = allStudentsInClasses.filter((student) => {
-    return Boolean(getThesisProjectBySessionId(student, thesisSessionId))
-  })
-  console.log("project", project)
-  if (!project) {
+  const project = allStudentsInClasses
+    .map((student) => {
+      const thesisProject = getThesisProjectBySessionId(student, thesisSessionId)
+      if (!thesisProject) return null
+      return {
+        ...student,
+        thesisRegistrations: [{ thesisProject }],
+      }
+    })
+    .filter(Boolean)
+  if (project.length === 0) {
     message.error("Không tìm thấy dữ liệu để tạo thống kê cán bộ hướng dẫn LV")
     return
   }
@@ -622,16 +626,10 @@ export const exportThongKeCbHdlv = async ({
   const ngay = ngayhientai.split("/")[0]
   const thang = ngayhientai.split("/")[1]
   const nam = ngayhientai.split("/")[2]
-  const tendot =
-    allStudentsInClasses?.length > 0
-      ? allStudentsInClasses[0]?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.name
-      : ""
+  const tendot = project[0]?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.name || ""
 
   const tenkhoa =
-    allStudentsInClasses?.length > 0
-      ? allStudentsInClasses[0]?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor
-          ?.organization?.sTen || ""
-      : ""
+    project[0]?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.organization?.sTen || ""
   const tongSoDocLap = dataMapping?.reduce((acc, item) => acc + (item.singleStudent || 0), 0)
   const data = dataMapping?.map((item, index) => {
     return {
@@ -1348,9 +1346,16 @@ export const exportGiayMoiHdlv = async ({
     message.error("Không có dữ liệu đế tạo giấy mời HDLV")
     return
   }
-  const project = allStudentsInClasses.filter((student) => {
-    return Boolean(getThesisProjectBySessionId(student, thesisSessionId))
-  })
+  const project = allStudentsInClasses
+    .map((student) => {
+      const thesisProject = getThesisProjectBySessionId(student, thesisSessionId)
+      if (!thesisProject) return null
+      return {
+        ...student,
+        thesisRegistrations: [{ thesisProject }],
+      }
+    })
+    .filter(Boolean)
   if (!project) {
     message.error("Không tìm thấy dữ liệu đế tạo giấy mời HDLV")
     return
@@ -1422,9 +1427,16 @@ export const exportSaoQDHDLV = async ({
     message.error("Không có dữ liệu đế tạo sao QĐ HDLV")
     return
   }
-  const project = allStudentsInClasses.filter((student) => {
-    return Boolean(getThesisProjectBySessionId(student, thesisSessionId))
-  })
+  const project = allStudentsInClasses
+    .map((student) => {
+      const thesisProject = getThesisProjectBySessionId(student, thesisSessionId)
+      if (!thesisProject) return null
+      return {
+        ...student,
+        thesisRegistrations: [{ thesisProject }],
+      }
+    })
+    .filter(Boolean)
   if (!project) {
     message.error("Không tìm thấy dữ liệu để tạo sao QĐ HDLV")
     return
@@ -1872,9 +1884,16 @@ export const exportGiayMoiChamLvPb = async ({
     message.error("Không có dữ liệu để tạo giấy mời chấm LV PB")
     return
   }
-  const project = allStudentsInClasses.filter((student) => {
-    return Boolean(getThesisProjectBySessionId(student, thesisSessionId))
-  })
+  const project = allStudentsInClasses
+    .map((student) => {
+      const thesisProject = getThesisProjectBySessionId(student, thesisSessionId)
+      if (!thesisProject) return null
+      return {
+        ...student,
+        thesisRegistrations: [{ thesisProject }],
+      }
+    })
+    .filter(Boolean)
   if (!project) {
     message.error("Không tìm thấy dữ liệu đế tạo giấy mời chấm LV PB")
     return
@@ -2234,9 +2253,16 @@ export const exportDanhSachNopLuanVanThuVien = async ({
     message.error("Không có dữ liệu để xuất danh sách nộp luận văn thư viện")
     return
   }
-  const project = allStudentsInClasses.filter((student) => {
-    return Boolean(getThesisProjectBySessionId(student, thesisSessionId))
-  })
+  const project = allStudentsInClasses
+    .map((student) => {
+      const thesisProject = getThesisProjectBySessionId(student, thesisSessionId)
+      if (!thesisProject) return null
+      return {
+        ...student,
+        thesisRegistrations: [{ thesisProject }],
+      }
+    })
+    .filter(Boolean)
   if (!project) {
     message.error("Không tìm thấy dữ liệu để xuất danh sách nộp luận văn thư viện")
     return
@@ -2355,9 +2381,16 @@ export const exportThongKeCbThamGiaHd = async ({
     message.error("Không có dữ liệu để xuất thống kê cán bộ tham gia HĐ")
     return
   }
-  const project = allStudentsInClasses.filter((student) => {
-    return Boolean(getThesisProjectBySessionId(student, thesisSessionId))
-  })
+  const project = allStudentsInClasses
+    .map((student) => {
+      const thesisProject = getThesisProjectBySessionId(student, thesisSessionId)
+      if (!thesisProject) return null
+      return {
+        ...student,
+        thesisRegistrations: [{ thesisProject }],
+      }
+    })
+    .filter(Boolean)
   if (!project) {
     message.error("Không tìm thấy dữ liệu để tạo thống kê cán bộ tham gia HĐ")
     return
@@ -2407,119 +2440,111 @@ export const exportThongKeCbThamGiaHd = async ({
 const convertToThongKeCbThamGiaHdData = (allStudentsInClasses: any[]): ThongKeCbThamGiaHdData[] => {
   if (!allStudentsInClasses || allStudentsInClasses.length === 0) return []
 
-  const majorMap = new Map<string, any[]>()
-  allStudentsInClasses.forEach((student) => {
-    const majorName =
-      student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || "Chưa xác định"
-    if (!majorMap.has(majorName)) {
-      majorMap.set(majorName, [])
-    }
-    majorMap.get(majorName)?.push(student)
+  const studentsWithProject = allStudentsInClasses.filter((student) =>
+    Boolean(student?.thesisRegistrations?.find((reg: any) => reg?.thesisProject?.council))
+  )
+  if (!studentsWithProject.length) {
+    return []
+  }
+
+  const expertStats = new Map<string, ThongKeCbThamGiaHdTable>()
+
+  let totalParticipations = 0
+  let totalCT = 0
+  let totalTK = 0
+  let totalUV = 0
+  let totalPB1 = 0
+  let totalPB2 = 0
+  let totalThanhToan = 0
+
+  studentsWithProject.forEach((student) => {
+    const project = student?.thesisRegistrations?.find(
+      (reg: any) => reg?.thesisProject?.council
+    )?.thesisProject
+    if (!project?.council?.members?.length) return
+
+    project.council.members.forEach((member: any) => {
+      const expert = member.expert
+      const name = (getSupervisorName(expert, false, true) as string) || ""
+      const donViQuanLi = expert?.workplace || expert?.lecturer?.organization?.sMa || ""
+      const stk =
+        expert?.bankAccountNumber || expert?.lecturer?.userProfile?.bankAccountNumber || ""
+      const tennganhang = expert?.bankName || expert?.lecturer?.userProfile?.bankName || ""
+      if (!expert?.id) return
+      const thanhtoan = Number(member.payment.amount) || 0
+
+      if (!expertStats.has(expert.id)) {
+        expertStats.set(expert.id, {
+          stt: 0,
+          tenThanhVien: name || "",
+          donViQuanLi: donViQuanLi || "",
+          thanhToan: 0,
+          tongSo: 0,
+          chuTich: 0,
+          thuKi: 0,
+          uyVien: 0,
+          phanBien1: 0,
+          phanBien2: 0,
+          stk: stk || "",
+          tennganhang: tennganhang || "",
+        })
+      }
+
+      // biome-ignore lint/style/noNonNullAssertion: id của export luôn có
+      const stats = expertStats.get(expert.id)!
+      stats.thanhToan += thanhtoan
+      totalThanhToan += thanhtoan
+      stats.tongSo++
+      totalParticipations++
+
+      switch (member.role) {
+        case CouncilRole.CHAIRMAN:
+          stats.chuTich++
+          totalCT++
+          break
+        case CouncilRole.SECRETARY:
+          stats.thuKi++
+          totalTK++
+          break
+        case CouncilRole.REVIEWER_1:
+          stats.phanBien1++
+          totalPB1++
+          break
+        case CouncilRole.REVIEWER_2:
+          stats.phanBien2++
+          totalPB2++
+          break
+        case CouncilRole.MEMBER:
+          stats.uyVien++
+          totalUV++
+          break
+      }
+    })
   })
 
-  const result: ThongKeCbThamGiaHdData[] = []
+  const tableRows = Array.from(expertStats.values())
+  if (tableRows.length === 0) {
+    return []
+  }
+  tableRows.forEach((row, index) => {
+    row.stt = index + 1
+  })
 
-  majorMap.forEach((students, majorName) => {
-    const studentsWithProject = students.filter(
-      (student) => student?.thesisRegistrations?.[0]?.thesisProject?.council
-    )
-    if (!studentsWithProject.length) {
-      return
-    }
+  const firstStudentWithProject = studentsWithProject[0]
+  if (!firstStudentWithProject) {
+    return []
+  }
+  const firstProject = firstStudentWithProject?.thesisRegistrations?.find(
+    (reg: any) => reg?.thesisProject?.council
+  )?.thesisProject
 
-    const expertStats = new Map<string, ThongKeCbThamGiaHdTable>()
-
-    let totalParticipations = 0
-    let totalCT = 0
-    let totalTK = 0
-    let totalUV = 0
-    let totalPB1 = 0
-    let totalPB2 = 0
-    let totalThanhToan = 0
-    studentsWithProject.forEach((student) => {
-      const project = student.thesisRegistrations?.[0]?.thesisProject
-      if (!project || !project.council) return
-
-      project.council.members.forEach((member: any) => {
-        const expert = member.expert
-        const name = (getSupervisorName(expert, false, true) as string) || ""
-        const donViQuanLi = expert?.workplace || expert?.lecturer?.organization?.sMa || ""
-        const stk =
-          expert?.bankAccountNumber || expert?.lecturer?.userProfile?.bankAccountNumber || ""
-        const tennganhang = expert?.bankName || expert?.lecturer?.userProfile?.bankName || ""
-        if (!expert?.id) return
-        const thanhtoan = Number(member.payment.amount) || 0
-
-        if (!expertStats.has(expert.id)) {
-          expertStats.set(expert.id, {
-            stt: 0,
-            tenThanhVien: name || "",
-            donViQuanLi: donViQuanLi || "",
-            thanhToan: 0,
-            tongSo: 0,
-            chuTich: 0,
-            thuKi: 0,
-            uyVien: 0,
-            phanBien1: 0,
-            phanBien2: 0,
-            stk: stk || "",
-            tennganhang: tennganhang || "",
-          })
-        }
-
-        // biome-ignore lint/style/noNonNullAssertion: id của export luôn có
-        const stats = expertStats.get(expert.id)!
-        stats.thanhToan += thanhtoan
-        totalThanhToan += thanhtoan
-        stats.tongSo++
-        totalParticipations++
-
-        switch (member.role) {
-          case CouncilRole.CHAIRMAN:
-            stats.chuTich++
-            totalCT++
-            break
-          case CouncilRole.SECRETARY:
-            stats.thuKi++
-            totalTK++
-            break
-          case CouncilRole.REVIEWER_1:
-            stats.phanBien1++
-            totalPB1++
-            break
-          case CouncilRole.REVIEWER_2:
-            stats.phanBien2++
-            totalPB2++
-            break
-          case CouncilRole.MEMBER:
-            stats.uyVien++
-            totalUV++
-            break
-        }
-      })
-    })
-
-    const tableRows = Array.from(expertStats.values())
-    if (tableRows.length === 0) {
-      // Bỏ qua chuyên ngành không có cán bộ nào tham gia hội đồng.
-      return
-    }
-    tableRows.forEach((row, index) => {
-      row.stt = index + 1
-    })
-
-    const firstStudentWithProject = studentsWithProject[0]
-    if (!firstStudentWithProject) {
-      return
-    }
-    const project = firstStudentWithProject.thesisRegistrations?.[0]?.thesisProject
-
-    result.push({
+  const result: ThongKeCbThamGiaHdData[] = [
+    {
       data: {
         khoaTitle: firstStudentWithProject.fixedClass?.trainingCourse?.name?.toUpperCase() || "",
         khoa: firstStudentWithProject.fixedClass?.trainingCourse?.name || "",
-        chuyenNganh: majorName,
-        dotXet: project?.thesisSession?.name || "",
+        chuyenNganh: "Tất cả chuyên ngành",
+        dotXet: firstProject?.thesisSession?.name || "",
         tong: totalParticipations,
         tongChuTich: totalCT,
         tongThuky: totalTK,
@@ -2529,8 +2554,8 @@ const convertToThongKeCbThamGiaHdData = (allStudentsInClasses: any[]): ThongKeCb
         tongThanhToan: totalThanhToan,
         data: tableRows,
       },
-    })
-  })
+    },
+  ]
 
   return result
 }
@@ -2712,9 +2737,16 @@ export const exportKetQuaBaoVeLuanVan = async ({
     message.error("Không có dữ liệu để xuất kết quả bảo vệ luan van")
     return []
   }
-  const project = allStudentsInClasses.filter((student) => {
-    return Boolean(getThesisProjectBySessionId(student, thesisSessionId))
-  })
+  const project = allStudentsInClasses
+    .map((student) => {
+      const thesisProject = getThesisProjectBySessionId(student, thesisSessionId)
+      if (!thesisProject) return null
+      return {
+        ...student,
+        thesisRegistrations: [{ thesisProject }],
+      }
+    })
+    .filter(Boolean)
   if (!project) {
     message.error("Không tìm thấy dữ liệu để xuất kết quả bảo vệ luan van")
     return []
@@ -3672,9 +3704,16 @@ export const exportThongKeCoQuanDonViCanBoNgoaiHv = async ({
     message.error("Không có dữ liệu để tạo thống kê cán bộ tham gia HĐ ngoài HV")
     return
   }
-  const project = allStudentsInClasses.filter((student) => {
-    return Boolean(getThesisProjectBySessionId(student, thesisSessionId))
-  })
+  const project = allStudentsInClasses
+    .map((student) => {
+      const thesisProject = getThesisProjectBySessionId(student, thesisSessionId)
+      if (!thesisProject) return null
+      return {
+        ...student,
+        thesisRegistrations: [{ thesisProject }],
+      }
+    })
+    .filter(Boolean)
   if (!project) {
     message.error("Không tìm thấy dữ liệu để tạo thống kê cán bộ tham gia HĐ ngoài HV")
     return
