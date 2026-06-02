@@ -382,9 +382,16 @@ export const exportPhuLucDsLuanVan = async ({
     hideSpinner()
     return
   }
-  const project = allStudentsInClasses.filter((student) => {
-    return Boolean(getThesisProjectWithCouncilBySessionId(student, thesisSessionId))
-  })
+  const project = allStudentsInClasses
+    .map((student) => {
+      const thesisProject = getThesisProjectBySessionId(student, thesisSessionId)
+      if (!thesisProject) return null
+      return {
+        ...student,
+        thesisRegistrations: [{ thesisProject }],
+      }
+    })
+    .filter(Boolean)
   if (!project) {
     message.error("Không tìm thấy dữ liệu để xuất phụ lục danh sách luận văn")
     return
