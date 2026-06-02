@@ -511,7 +511,7 @@ export default function StudentScoreClassPage() {
         )
 
         hocKis.push({
-          TenHocKi: `${item.schoolYear?.name}`,
+          TenHocKi: `${item.name}`,
           SoTinChiKy: tongSoTinChi,
           DiemTBKyHe10: diemTBHe10,
           DiemTBKyHe4: diemTBHe4,
@@ -765,7 +765,7 @@ export default function StudentScoreClassPage() {
         )
 
         hocKis.push({
-          TenHocKi: `${item.schoolYear?.name}`,
+          TenHocKi: `${item.name}`,
           SoTinChiKy: tongSoTinChi,
           DiemTBKyHe10: diemTBHe10,
           DiemTBKyHe4: diemTBHe4,
