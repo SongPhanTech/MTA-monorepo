@@ -59,9 +59,8 @@ Các endpoint xuất file (Excel, PowerPoint, PDF) trả về **blob binary** v�
 - Các endpoint **Import** nhận file Excel (`.xlsx`) qua `multipart/form-data`, trả về báo cáo kết quả từng dòng (thành công / lỗi).
  * OpenAPI spec version: 1.0.0
  */
-import type { CalculateStudentSemesterResultJson200Warnings } from './calculateStudentSemesterResultJson200Warnings';
 
-export type CalculateStudentSemesterResultJson200 = {
-  message: string;
-  warnings: CalculateStudentSemesterResultJson200Warnings;
-};
+/**
+ * @nullable
+ */
+export type CalculateStudentSemesterResultJson200 = unknown | null;
