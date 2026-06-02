@@ -635,8 +635,7 @@ export const exportThongKeCbHdlv = async ({
   const nam = ngayhientai.split("/")[2]
   const tendot = project[0]?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.name || ""
 
-  const tenkhoa =
-    project[0]?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.organization?.sTen || ""
+  const tenkhoa = "Tất cả khoa viện"
   const tongSoDocLap = dataMapping?.reduce((acc, item) => acc + (item.singleStudent || 0), 0)
   const data = dataMapping?.map((item, index) => {
     return {
