@@ -1002,26 +1002,6 @@ export default function StudentGraduationApplication() {
                                       handleOpenModalLearningResult(record)
                                     }}
                                   />
-                                  {/*<RejectIcon
-                                                                        popConfirm={{
-                                                                            onConfirm: (e) => {
-                                                                                e?.stopPropagation()
-                                                                                handleReject(
-                                                                                    record.id
-                                                                                )
-                                                                            },
-                                                                            onCancel: (e) => {
-                                                                                e?.stopPropagation()
-                                                                            },
-                                                                        }}
-                                                                        onClick={(e) =>
-                                                                            e.stopPropagation()
-                                                                        }
-                                                                        disabled={
-                                                                            initialValue?.status !==
-                                                                            GraduationSessionStatus.IN_REVIEW
-                                                                        }
-                                                                    />*/}
                                   <EditIcon
                                     disabled={record.status === ApplicationStatus.APPROVED}
                                     onClick={(e) => {
@@ -1033,26 +1013,6 @@ export default function StudentGraduationApplication() {
                                     }}
                                     className="text-sm text-blue-700 cursor-pointer"
                                   />
-                                  {/* <DeleteIcon
-                                                                        disabled={
-                                                                            record.status ===
-                                                                            ApplicationStatus.APPROVED
-                                                                        }
-                                                                        popConfirm={{
-                                                                            onConfirm: (e) => {
-                                                                                handleDelete(
-                                                                                    record.id
-                                                                                )
-                                                                                e?.stopPropagation()
-                                                                            },
-                                                                            onCancel: (e) => {
-                                                                                e?.stopPropagation()
-                                                                            },
-                                                                        }}
-                                                                        onClick={(e) =>
-                                                                            e.stopPropagation()
-                                                                        }
-                                                                    /> */}
                                 </Row>
                               )
                             }

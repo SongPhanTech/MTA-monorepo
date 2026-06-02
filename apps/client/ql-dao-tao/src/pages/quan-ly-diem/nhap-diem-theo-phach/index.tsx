@@ -42,7 +42,6 @@ export default function DiemTheoPhach({ type = "NHAP_DIEM_THEO_PHACH" }: DiemThe
   const [form] = Form.useForm<SubmitFormType>()
   const [activeKey, setActiveKey] = useState("1")
   const { examId, subjectClassId } = useStore(kythiStore)
-  const { selectedExamListId } = useStore(diemPhongThiStore)
   const { data } = useFindFirstSubjectClass(
     {
       where: { examId },
@@ -86,12 +85,6 @@ export default function DiemTheoPhach({ type = "NHAP_DIEM_THEO_PHACH" }: DiemThe
         key: "1",
         children: <KyThi setActiveKey={setActiveKey} />,
       },
-      // {
-      //     label: 'Phòng thi',
-      //     key: '11',
-      //     children: <PhongThi setActiveKey={setActiveKey} />,
-      //     disabled: !examId,
-      // },
     ]
 
     if (type === "DANH_PHACH") {
@@ -218,56 +211,7 @@ export default function DiemTheoPhach({ type = "NHAP_DIEM_THEO_PHACH" }: DiemThe
               },
             })
           }}
-        >
-          {/* <div className="flex items-center mb-2 w-full">
-                        <div className="min-w-[150px] w-[150px]">Hạn nhập điểm</div>
-                        <div className="w-full">{reasonDate()}</div>
-                    </div> */}
-          {/* <div className="flex items-center mb-2 w-full h-6">
-                        <div className="flex items-center mr-9 ">
-                            <FormItem
-                                form={form}
-                                name="isLockExamScore"
-                                className="min-w-[200px] !mb-0"
-                                valuePropName="checked"
-                            >
-                                <Checkbox disabled={!selectedExamListId}>P13 đã khoá</Checkbox>
-                            </FormItem>
-                        </div>
-                        <div className="flex items-center w-full">
-                            <FormItem
-                                form={form}
-                                name="scoreSubmitted"
-                                className="min-w-[200px] !mb-0"
-                                valuePropName="checked"
-                            >
-                                <Checkbox disabled={!selectedExamListId}>
-                                    P13 đã nhận Phiếu điểm
-                                </Checkbox>
-                            </FormItem>
-                            <div className="w-full">
-                                <Input size="small" className="pointer-events-none" />
-                            </div>
-                        </div>
-                    </div> */}
-          {/* <div className="flex items-center mb-2 w-full h-6">
-                        <div className="flex items-center w-full">
-                            <FormItem
-                                form={form}
-                                name="scoreChecked"
-                                className="min-w-[250px]"
-                                valuePropName="checked"
-                            >
-                                <Checkbox disabled={!selectedExamListId}>
-                                    P2/P7 kiểm tra lại phiếu điểm
-                                </Checkbox>
-                            </FormItem>
-                            <div className="w-full">
-                                <Input size="small" className="pointer-events-none" />
-                            </div>
-                        </div>
-                    </div> */}
-        </Form>
+        ></Form>
       </Col>
       <Col span={24}>
         <Tabs activeKey={activeKey} onChange={(key) => setActiveKey(key)} items={items} />

@@ -414,7 +414,7 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
       })
 
       if (exportRes && exportRes.status >= 200 && exportRes.status < 300) {
-        saveAs(exportRes.data, "Phu_luc_IX.docx")
+        saveAs(exportRes.data, "Danh_sach_cong_nhan_tot_nghiep.docx")
       } else {
         message.error(`Xuất file thất bại: Status ${exportRes?.status}`)
       }

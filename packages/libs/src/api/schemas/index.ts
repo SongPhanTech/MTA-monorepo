@@ -94,6 +94,8 @@ export * from './calculateStudentSchoolYearResult400';
 export * from './calculateStudentSchoolYearResult500';
 export * from './calculateStudentSchoolYearResultParams';
 export * from './calculateStudentSemesterResultJson200';
+export * from './calculateStudentSemesterResultJson200Warnings';
+export * from './calculateStudentSemesterResultJson200WarningsStudentsItem';
 export * from './calculateStudentSemesterResultJson400';
 export * from './calculateStudentSemesterResultJson500';
 export * from './calculateStudentSemesterResultJsonParams';
