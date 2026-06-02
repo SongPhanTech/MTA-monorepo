@@ -17,6 +17,7 @@ import DocxTemplateApp from "./api/docx-template"
 import MinIOApp from "./api/minio"
 import SqlTransactionApp from "./api/transaction"
 import WSO2AmApp from "./api/wso2am"
+import { startPreviewCleanupCron } from "./cron/cleanup-preview"
 import { checkIp } from "./middlewares/check-ip"
 import { setupOpenApi } from "./utils/openapi"
 
@@ -234,6 +235,8 @@ Bun.serve({
   hostname: "0.0.0.0",
   port: process.env.PORT || 3000,
 })
+
+startPreviewCleanupCron()
 
 process.on("SIGINT", () => {
   process.exit()
