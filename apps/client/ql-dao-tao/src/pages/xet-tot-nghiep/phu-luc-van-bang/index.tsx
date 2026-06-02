@@ -203,7 +203,7 @@ const exportHandlers: Record<string, TExportConfig> = {
   },
   phuLucVanBangNganHan: {
     api: exportPhuLucVanBangNganHan,
-    fileName: "PhuLucVanBangNganHan.xlsx",
+    fileName: "PhuLucVanBangNganHan.docx",
   },
   phuLucVanBangCaoHoc: {
     api: exportPhuLucVanBangCaoHoc,
