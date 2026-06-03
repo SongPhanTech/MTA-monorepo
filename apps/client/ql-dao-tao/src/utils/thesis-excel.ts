@@ -38,7 +38,7 @@ interface ExportOptions {
 const resolveSigningDate = (signingDate?: Date | string) =>
   signingDate ? dayjs(signingDate) : dayjs()
 const formatAmountWithComma = (amount: number) =>
-  Number(amount || 0).toLocaleString("en-US", { maximumFractionDigits: 0 })
+  Number(amount || 0).toLocaleString("vi-VN", { maximumFractionDigits: 0 })
 
 const readDecimalAmount = (value: unknown): number => {
   if (value == null) return 0
@@ -132,6 +132,7 @@ interface ThongKeCbThamGiaHdData {
     tongUyVien: number
     tongPhanBien1: number
     tongPhanBien2: number
+    tongThanhToan: number
     data: ThongKeCbThamGiaHdTable[]
   }
 }
@@ -145,6 +146,9 @@ interface ThongKeCbThamGiaHdTable {
   uyVien: number
   phanBien1: number
   phanBien2: number
+  thanhToan: number
+  stk: string
+  tennganhang: string
 }
 interface ThanhToanHuongDanTrongHvData {
   data: {
@@ -316,7 +320,7 @@ interface HDDanhGiaLuanVanTail {
   nam: string
 }
 interface HDDanhGiaLuanVanHead {
-  khoa: string 
+  khoa: string
   tenDonViQuanLi: string
 }
 interface HDDanhGiaLuanVanData {
@@ -344,8 +348,8 @@ interface HDDanhGiaLuanVanTemplateData {
   data: HDDanhGiaLuanVanData[]
 }
 
-const formatDay = (day: number) => day.toString().padStart(2, "0") 
-const formatMonth = (month: number) => (month === 1 || month === 2 ? `0${month}` : month.toString()) 
+const formatDay = (day: number) => day.toString().padStart(2, "0")
+const formatMonth = (month: number) => (month === 1 || month === 2 ? `0${month}` : month.toString())
 
 export const formatDocDate = (date?: Date | string | null) => {
   if (!date) return { day: "", month: "", year: "" }
@@ -378,7 +382,16 @@ export const exportPhuLucDsLuanVan = async ({
     hideSpinner()
     return
   }
-  const project = getThesisProjectBySessionId(allStudentsInClasses, thesisSessionId)
+  const project = allStudentsInClasses
+    .map((student) => {
+      const thesisProject = getThesisProjectBySessionId(student, thesisSessionId)
+      if (!thesisProject) return null
+      return {
+        ...student,
+        thesisRegistrations: [{ thesisProject }],
+      }
+    })
+    .filter(Boolean)
   if (!project) {
     message.error("Không tìm thấy dữ liệu để xuất phụ lục danh sách luận văn")
     return
@@ -599,27 +612,30 @@ export const exportThongKeCbHdlv = async ({
     message.error("Không có dữ liệu để tạo thống kê cán bộ hướng dẫn LV")
     return
   }
-  const project = getThesisProjectBySessionId(allStudentsInClasses, thesisSessionId)
-  if (!project) {
+  const project = allStudentsInClasses
+    .map((student) => {
+      const thesisProject = getThesisProjectBySessionId(student, thesisSessionId)
+      if (!thesisProject) return null
+      return {
+        ...student,
+        thesisRegistrations: [{ thesisProject }],
+      }
+    })
+    .filter(Boolean)
+  if (project.length === 0) {
     message.error("Không tìm thấy dữ liệu để tạo thống kê cán bộ hướng dẫn LV")
     return
   }
+
   showSpinner()
   const dataMapping = getExpertSupervisionStats(project)
   const ngayhientai = dayjs().format("DD/MM/YYYY")
   const ngay = ngayhientai.split("/")[0]
   const thang = ngayhientai.split("/")[1]
   const nam = ngayhientai.split("/")[2]
-  const tendot =
-    allStudentsInClasses?.length > 0
-      ? allStudentsInClasses[0]?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.name
-      : ""
+  const tendot = project[0]?.thesisRegistrations?.[0]?.thesisProject?.thesisSession?.name || ""
 
-  const tenkhoa =
-    allStudentsInClasses?.length > 0
-      ? allStudentsInClasses[0]?.fixedClass?.curriculumVersion?.curriculum?.trainingMajor
-          ?.organization?.sTen || ""
-      : ""
+  const tenkhoa = "Tất cả khoa viện"
   const tongSoDocLap = dataMapping?.reduce((acc, item) => acc + (item.singleStudent || 0), 0)
   const data = dataMapping?.map((item, index) => {
     return {
@@ -630,48 +646,52 @@ export const exportThongKeCbHdlv = async ({
       doclap: item.singleStudent || 0,
       gvhd1: item.GVHD1Student,
       gvhd2: item.GVHD2Student,
-      thanhtoan: item.totalPayment,
+      thanhtoan: formatAmountWithComma(item.totalPayment),
       stk: item.stk,
       bank: item.tennganhang,
     }
   })
   try {
-    const payload: ExcelTemplateBody = {
-      head: { data: null },
-      tail: { data: null },
+    const tongsohocvien = dataMapping?.reduce(
+      (acc, item) => acc + item.GVHD1Student + item.GVHD2Student + item.singleStudent,
+      0
+    )
+    const tongsohd1 = dataMapping?.reduce((acc, item) => acc + item.GVHD1Student, 0)
+    const tongsohd2 = dataMapping?.reduce((acc, item) => acc + item.GVHD2Student, 0)
+    const tongsotien = dataMapping?.reduce((acc, item) => acc + item.totalPayment, 0)
+
+    const items = [
+      {
+        tendot: tendot ? tendot.trim().toUpperCase() : "",
+        tenkhoa: tenkhoa ? tenkhoa.trim().toUpperCase() : "",
+        ngay: ngay,
+        thang: thang,
+        nam: nam,
+        tongsohocvien: tongsohocvien,
+        tongsodoclap: tongSoDocLap,
+        tongsohd1: tongsohd1,
+        tongsohd2: tongsohd2,
+        tongsotien: formatAmountWithComma(tongsotien),
+        data: data,
+        "ngắt trang": "",
+      },
+    ]
+
+    const payload = {
       fileName: "ThongKeCanBoHuongDan",
-      path: "ThongKeCanBoHuongDan.xlsx",
+      path: "ThongKeCanBoHuongDan.docx",
       prefix: "mta/luan-van",
-      payload: [
-        {
-          data: {
-            tendot: tendot.trim().toUpperCase() || "",
-            tenkhoa: tenkhoa.trim().toUpperCase() || "",
-            ngay: ngay,
-            thang: thang,
-            nam: nam,
-            tongsohocvien: dataMapping?.reduce(
-              (acc, item) => acc + item.GVHD1Student + item.GVHD2Student + item.singleStudent,
-              0
-            ),
-            tongsodoclap: tongSoDocLap,
-            tongsohd1: dataMapping?.reduce((acc, item) => acc + item.GVHD1Student, 0),
-            tongsohd2: dataMapping?.reduce((acc, item) => acc + item.GVHD2Student, 0),
-            tongsotien: dataMapping?.reduce((acc, item) => acc + item.totalPayment, 0),
-            data: data,
-          },
-        },
-      ],
-      showGridLines: true,
-      wrapText: true,
+      data: {
+        items: items,
+      },
     }
-    const response = await excelTemplate(payload)
+    const response = await docxTemplate(payload)
     if (response.status !== 200) {
       message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
       return
     }
     const blob = response.data
-    downloadFile(blob, "ThongKeCanBoHuongDan.xlsx")
+    downloadFile(blob, "ThongKeCanBoHuongDan.docx")
     message.success("Xuất file thành công")
   } catch (error) {
     message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
@@ -682,6 +702,7 @@ export const exportThongKeCbHdlv = async ({
 export const exportDanhSachBaoVe = async ({
   allStudentsInClasses,
   showSpinner,
+  thesisSessionId,
   hideSpinner,
   message,
 }: ExportOptions) => {
@@ -689,10 +710,20 @@ export const exportDanhSachBaoVe = async ({
     message.error("Không có dữ liệu để tạo danh sách bảo vệ LV")
     return
   }
+  const project = allStudentsInClasses
+    .map((student) => {
+      const thesisProject = getThesisProjectBySessionId(student, thesisSessionId)
+      if (!thesisProject) return null
+      return {
+        ...student,
+        thesisRegistrations: [{ thesisProject }],
+      }
+    })
+    .filter(Boolean)
   showSpinner()
   try {
     let index = 0
-    const data = allStudentsInClasses
+    const data = project
       ?.map((student) => {
         if (!student?.thesisRegistrations?.[0]?.thesisProject) return null
         return {
@@ -722,7 +753,7 @@ export const exportDanhSachBaoVe = async ({
       })
       .filter(Boolean)
     const dotxet =
-      allStudentsInClasses
+      project
         ?.map((student) =>
           student?.thesisRegistrations
             ?.find((registration: any) => registration?.thesisProject?.thesisSession?.name)
@@ -731,7 +762,7 @@ export const exportDanhSachBaoVe = async ({
         .find(Boolean) || "CHƯA CÓ ĐỢT XÉT"
     const normalizedDotxet = dotxet?.trim()?.toUpperCase()
     const soluonghocvien =
-      allStudentsInClasses?.filter((student) =>
+      project?.filter((student) =>
         student?.thesisRegistrations?.some((registration: any) => {
           const thesisSessionName = registration?.thesisProject?.thesisSession?.name
             ?.trim()
@@ -939,6 +970,7 @@ export const convertToDanhSachBaoVeDanNgoaiPhongData = (
 
 export const exportDanhSachBaoVeDanNgoaiPhong = async ({
   allStudentsInClasses,
+  thesisSessionId,
   showSpinner,
   hideSpinner,
   message,
@@ -947,9 +979,19 @@ export const exportDanhSachBaoVeDanNgoaiPhong = async ({
     message.error("Không có dữ liệu để xuất danh sách bảo vệ dán ngoài phòng")
     return []
   }
+  const project = allStudentsInClasses
+    .map((student) => {
+      const thesisProject = getThesisProjectBySessionId(student, thesisSessionId)
+      if (!thesisProject) return null
+      return {
+        ...student,
+        thesisRegistrations: [{ thesisProject }],
+      }
+    })
+    .filter(Boolean)
   showSpinner?.()
   try {
-    const results = convertToDanhSachBaoVeDanNgoaiPhongData(allStudentsInClasses)
+    const results = convertToDanhSachBaoVeDanNgoaiPhongData(project)
     if (!results.length) {
       message.error("Chưa có dữ liệu để xuất danh sách bảo vệ dán ngoài phòng")
       return []
@@ -1223,6 +1265,7 @@ export const exportDanhSachBaoVeDanNgoaiPhong = async ({
 
 export const exportHosobvlv = async ({
   allStudentsInClasses,
+  thesisSessionId,
   showSpinner,
   hideSpinner,
   message,
@@ -1234,9 +1277,17 @@ export const exportHosobvlv = async ({
     message.error("Không có dữ liệu để tạo danh sách bảo vệ LV dán PBV")
     return
   }
+  const project = allStudentsInClasses.map((student) => {
+    const thesisProject = getThesisProjectBySessionId(student, thesisSessionId)
+    if (!thesisProject) return null
+    return {
+      ...student,
+      thesisRegistrations: [{ thesisProject }],
+    }
+  })
   showSpinner()
   try {
-    const allSheetOptions = allStudentsInClasses?.map((student) => {
+    const allSheetOptions = project?.map((student) => {
       if (!student?.thesisRegistrations?.[0]?.thesisProject) return null
       const thanhvienhoidong = student?.thesisRegistrations?.[0]?.thesisProject?.council?.members
       const phanbien1 = thanhvienhoidong?.find(
@@ -1320,6 +1371,7 @@ export const exportHosobvlv = async ({
 }
 export const exportGiayMoiHdlv = async ({
   allStudentsInClasses,
+  thesisSessionId,
   showSpinner,
   hideSpinner,
   message,
@@ -1331,13 +1383,27 @@ export const exportGiayMoiHdlv = async ({
     message.error("Không có dữ liệu đế tạo giấy mời HDLV")
     return
   }
+  const project = allStudentsInClasses
+    .map((student) => {
+      const thesisProject = getThesisProjectBySessionId(student, thesisSessionId)
+      if (!thesisProject) return null
+      return {
+        ...student,
+        thesisRegistrations: [{ thesisProject }],
+      }
+    })
+    .filter(Boolean)
+  if (!project) {
+    message.error("Không tìm thấy dữ liệu đế tạo giấy mời HDLV")
+    return
+  }
   showSpinner()
   const presentDay = resolveSigningDate(signingDate).format("DD/MM/YYYY")
   const ngay = presentDay.split("/")[0]
   const thang = presentDay.split("/")[1]
   const nam = presentDay.split("/")[2]
   try {
-    const allSheetOptions = allStudentsInClasses?.map((student) => {
+    const allSheetOptions = project?.map((student) => {
       const supervisor = student?.thesisRegistrations?.[0]?.thesisProject?.supervisor
       if (!supervisor) return null
       const khoahoc =
@@ -1398,7 +1464,16 @@ export const exportSaoQDHDLV = async ({
     message.error("Không có dữ liệu đế tạo sao QĐ HDLV")
     return
   }
-  const project = getThesisProjectBySessionId(allStudentsInClasses, thesisSessionId)
+  const project = allStudentsInClasses
+    .map((student) => {
+      const thesisProject = getThesisProjectBySessionId(student, thesisSessionId)
+      if (!thesisProject) return null
+      return {
+        ...student,
+        thesisRegistrations: [{ thesisProject }],
+      }
+    })
+    .filter(Boolean)
   if (!project) {
     message.error("Không tìm thấy dữ liệu để tạo sao QĐ HDLV")
     return
@@ -1534,11 +1609,21 @@ export const exportKiemTraTienDo = async ({
     return
   }
   showSpinner()
+  const project = allStudentsInClasses
+    .map((student) => {
+      const thesisProject = getThesisProjectBySessionId(student, thesisSessionId)
+      if (!thesisProject) return null
+      return {
+        ...student,
+        thesisRegistrations: [{ thesisProject }],
+      }
+    })
+    .filter(Boolean)
   try {
     const organizationMap = new Map<string, any>()
     let dotxet = ""
 
-    allStudentsInClasses.forEach((student) => {
+    project.forEach((student) => {
       const thesisProject = student?.thesisRegistrations?.find(
         (reg: any) => reg?.thesisProject?.thesisSession?.id === thesisSessionId
       )?.thesisProject
@@ -1834,6 +1919,7 @@ export const convertToGmcLvPbData = (
 }
 export const exportGiayMoiChamLvPb = async ({
   allStudentsInClasses,
+  thesisSessionId,
   showSpinner,
   hideSpinner,
   message,
@@ -1845,17 +1931,25 @@ export const exportGiayMoiChamLvPb = async ({
     message.error("Không có dữ liệu để tạo giấy mời chấm LV PB")
     return
   }
+  const project = allStudentsInClasses
+    .map((student) => {
+      const thesisProject = getThesisProjectBySessionId(student, thesisSessionId)
+      if (!thesisProject) return null
+      return {
+        ...student,
+        thesisRegistrations: [{ thesisProject }],
+      }
+    })
+    .filter(Boolean)
+  if (!project) {
+    message.error("Không tìm thấy dữ liệu đế tạo giấy mời chấm LV PB")
+    return
+  }
   try {
     showSpinner?.()
-    const dataTrongHv = convertToGmcLvPbData(
-      allStudentsInClasses,
-      signerName,
-      isChief,
-      signingDate,
-      "inAcademy"
-    )
+    const dataTrongHv = convertToGmcLvPbData(project, signerName, isChief, signingDate, "inAcademy")
     const dataNgoaiHv = convertToGmcLvPbData(
-      allStudentsInClasses,
+      project,
       signerName,
       isChief,
       signingDate,
@@ -1865,31 +1959,50 @@ export const exportGiayMoiChamLvPb = async ({
       message.error("Không có dữ liệu để tạo giấy mời chấm LV PB")
       return
     }
-    const sheets = [
+    const exportGroups = [
       ...(dataTrongHv.length > 0
-        ? [{ sheetName: "Can bo trong hoc vien", payload: dataTrongHv }]
+        ? [
+            {
+              downloadFileName: "GiayMoiChamLuanVan_TrongHocVien.docx",
+              items: dataTrongHv.map((item, idx) => ({
+                ...item.data,
+                "ngắt trang": idx === dataTrongHv.length - 1 ? "" : "ngắt trang",
+              })),
+            },
+          ]
         : []),
       ...(dataNgoaiHv.length > 0
-        ? [{ sheetName: "Can bo ngoai hoc vien", payload: dataNgoaiHv }]
+        ? [
+            {
+              downloadFileName: "GiayMoiChamLuanVan_NgoaiHocVien.docx",
+              items: dataNgoaiHv.map((item, idx) => ({
+                ...item.data,
+                "ngắt trang": idx === dataNgoaiHv.length - 1 ? "" : "ngắt trang",
+              })),
+            },
+          ]
         : []),
     ]
-    const items = [...dataTrongHv, ...dataNgoaiHv].map((item) => item.data)
-    const payload = {
-      fileName: "GiayMoiChamLuanVan",
-      path: "GiayMoiChamLuanVan.docx",
-      prefix: "mta/luan-van",
-      data: {
-        items: items,
-      },
-    }
-    const response = await docxTemplate(payload)
+    const responses = await Promise.all(
+      exportGroups.map((group) =>
+        docxTemplate({
+          fileName: "GiayMoiChamLuanVan",
+          path: "GiayMoiChamLuanVan.docx",
+          prefix: "mta/luan-van",
+          data: {
+            items: group.items,
+          },
+        })
+      )
+    )
 
-    if (response.status !== 200) {
+    if (responses.some((response) => response.status !== 200)) {
       message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
       return
     }
-    const blob = response.data
-    downloadFile(blob, "GiayMoiChamLuanVan.docx")
+    responses.forEach((response, index) => {
+      downloadFile(response.data, exportGroups[index].downloadFileName)
+    })
     message.success("Xuất file thành công")
   } catch (error) {
     message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
@@ -1933,22 +2046,25 @@ export const exportThanhToanHoiDongBaoVe = async ({
       message.error("Chưa có dữ liệu để tạo thanh toán hội đồng bảo vệ")
       return
     }
-    const payload: ExcelTemplateBody = {
-      head: { data: null },
-      tail: { data: null },
+    const items = dataConvert.map((item, idx) => ({
+      ...item.data,
+      "ngắt trang": idx === dataConvert.length - 1 ? "" : "ngắt trang",
+    }))
+    const payload = {
       fileName: "ThanhToanHoiDongBaoVe",
-      path: "ThanhToanHoiDongBV.xlsx",
+      path: "ThanhToanHoiDongBV.docx",
       prefix: "mta/luan-van",
-      payload: dataConvert,
-      showGridLines: true,
+      data: {
+        items: items,
+      },
     }
-    const response = await excelTemplate(payload)
+    const response = await docxTemplate(payload)
     if (response.status !== 200) {
       message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
       return
     }
     const blob = response.data
-    downloadFile(blob, "ThanhToanHoiDongBaoVe.xlsx")
+    downloadFile(blob, "ThanhToanHoiDongBaoVe.docx")
     message.success("Xuất file thành công")
   } catch (error) {
     message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
@@ -2203,7 +2319,16 @@ export const exportDanhSachNopLuanVanThuVien = async ({
     message.error("Không có dữ liệu để xuất danh sách nộp luận văn thư viện")
     return
   }
-  const project = getThesisProjectBySessionId(allStudentsInClasses, thesisSessionId)
+  const project = allStudentsInClasses
+    .map((student) => {
+      const thesisProject = getThesisProjectBySessionId(student, thesisSessionId)
+      if (!thesisProject) return null
+      return {
+        ...student,
+        thesisRegistrations: [{ thesisProject }],
+      }
+    })
+    .filter(Boolean)
   if (!project) {
     message.error("Không tìm thấy dữ liệu để xuất danh sách nộp luận văn thư viện")
     return
@@ -2322,7 +2447,16 @@ export const exportThongKeCbThamGiaHd = async ({
     message.error("Không có dữ liệu để xuất thống kê cán bộ tham gia HĐ")
     return
   }
-  const project = getThesisProjectBySessionId(allStudentsInClasses, thesisSessionId)
+  const project = allStudentsInClasses
+    .map((student) => {
+      const thesisProject = getThesisProjectBySessionId(student, thesisSessionId)
+      if (!thesisProject) return null
+      return {
+        ...student,
+        thesisRegistrations: [{ thesisProject }],
+      }
+    })
+    .filter(Boolean)
   if (!project) {
     message.error("Không tìm thấy dữ liệu để tạo thống kê cán bộ tham gia HĐ")
     return
@@ -2334,23 +2468,32 @@ export const exportThongKeCbThamGiaHd = async ({
       message.error("Chưa có dữ liệu để xuất thống kê cán bộ tham gia HĐ")
       return
     }
-    const payload: ExcelTemplateBody = {
-      head: { data: null },
-      tail: { data: null },
+    const items = dataConvert.map((item, idx) => ({
+      ...item.data,
+      tongThanhToan: formatAmountWithComma(Number(item.data.tongThanhToan || 0)),
+      "ngắt trang": idx === dataConvert.length - 1 ? "" : "ngắt trang",
+      data: item.data.data.map((row) => ({
+        ...row,
+        tong: row.tongSo,
+        bank: row.tennganhang,
+        thanhToan: formatAmountWithComma(Number(row.thanhToan || 0)),
+      })),
+    }))
+    const payload = {
       fileName: "ThongKeCbThamGiaHd",
-      path: "ThongKeCanBoHoiDong.xlsx",
+      path: "ThongKeCanBoHoiDong.docx",
       prefix: "mta/luan-van",
-      payload: dataConvert,
-      showGridLines: true,
-      wrapText: true,
+      data: {
+        items: items,
+      },
     }
-    const response = await excelTemplate(payload)
+    const response = await docxTemplate(payload)
     if (response.status !== 200) {
       message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
       return
     }
     const blob = response.data
-    downloadFile(blob, "ThongKeCbThamGiaHd.xlsx")
+    downloadFile(blob, "ThongKeCbThamGiaHd.docx")
     message.success("Xuất file thành công")
   } catch (error) {
     message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
@@ -2361,121 +2504,122 @@ export const exportThongKeCbThamGiaHd = async ({
 const convertToThongKeCbThamGiaHdData = (allStudentsInClasses: any[]): ThongKeCbThamGiaHdData[] => {
   if (!allStudentsInClasses || allStudentsInClasses.length === 0) return []
 
-  const majorMap = new Map<string, any[]>()
-  allStudentsInClasses.forEach((student) => {
-    const majorName =
-      student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || "Chưa xác định"
-    if (!majorMap.has(majorName)) {
-      majorMap.set(majorName, [])
-    }
-    majorMap.get(majorName)?.push(student)
+  const studentsWithProject = allStudentsInClasses.filter((student) =>
+    Boolean(student?.thesisRegistrations?.find((reg: any) => reg?.thesisProject?.council))
+  )
+  if (!studentsWithProject.length) {
+    return []
+  }
+
+  const expertStats = new Map<string, ThongKeCbThamGiaHdTable>()
+
+  let totalParticipations = 0
+  let totalCT = 0
+  let totalTK = 0
+  let totalUV = 0
+  let totalPB1 = 0
+  let totalPB2 = 0
+  let totalThanhToan = 0
+
+  studentsWithProject.forEach((student) => {
+    const project = student?.thesisRegistrations?.find(
+      (reg: any) => reg?.thesisProject?.council
+    )?.thesisProject
+    if (!project?.council?.members?.length) return
+
+    project.council.members.forEach((member: any) => {
+      const expert = member.expert
+      const name = (getSupervisorName(expert, false, true) as string) || ""
+      const donViQuanLi = expert?.workplace || expert?.lecturer?.organization?.sMa || ""
+      const stk =
+        expert?.bankAccountNumber || expert?.lecturer?.userProfile?.bankAccountNumber || ""
+      const tennganhang = expert?.bankName || expert?.lecturer?.userProfile?.bankName || ""
+      if (!expert?.id) return
+      const thanhtoan = Number(member.payment.amount) || 0
+
+      if (!expertStats.has(expert.id)) {
+        expertStats.set(expert.id, {
+          stt: 0,
+          tenThanhVien: name || "",
+          donViQuanLi: donViQuanLi || "",
+          thanhToan: 0,
+          tongSo: 0,
+          chuTich: 0,
+          thuKi: 0,
+          uyVien: 0,
+          phanBien1: 0,
+          phanBien2: 0,
+          stk: stk || "",
+          tennganhang: tennganhang || "",
+        })
+      }
+
+      // biome-ignore lint/style/noNonNullAssertion: id của export luôn có
+      const stats = expertStats.get(expert.id)!
+      stats.thanhToan += thanhtoan
+      totalThanhToan += thanhtoan
+      stats.tongSo++
+      totalParticipations++
+
+      switch (member.role) {
+        case CouncilRole.CHAIRMAN:
+          stats.chuTich++
+          totalCT++
+          break
+        case CouncilRole.SECRETARY:
+          stats.thuKi++
+          totalTK++
+          break
+        case CouncilRole.REVIEWER_1:
+          stats.phanBien1++
+          totalPB1++
+          break
+        case CouncilRole.REVIEWER_2:
+          stats.phanBien2++
+          totalPB2++
+          break
+        case CouncilRole.MEMBER:
+          stats.uyVien++
+          totalUV++
+          break
+      }
+    })
   })
 
-  const result: ThongKeCbThamGiaHdData[] = []
+  const tableRows = Array.from(expertStats.values())
+  if (tableRows.length === 0) {
+    return []
+  }
+  tableRows.forEach((row, index) => {
+    row.stt = index + 1
+  })
 
-  majorMap.forEach((students, majorName) => {
-    const studentsWithProject = students.filter(
-      (student) => student?.thesisRegistrations?.[0]?.thesisProject?.council
-    )
-    if (!studentsWithProject.length) {
-      return
-    }
+  const firstStudentWithProject = studentsWithProject[0]
+  if (!firstStudentWithProject) {
+    return []
+  }
+  const firstProject = firstStudentWithProject?.thesisRegistrations?.find(
+    (reg: any) => reg?.thesisProject?.council
+  )?.thesisProject
 
-    const expertStats = new Map<string, ThongKeCbThamGiaHdTable>()
-
-    let totalParticipations = 0
-    let totalCT = 0
-    let totalTK = 0
-    let totalUV = 0
-    let totalPB1 = 0
-    let totalPB2 = 0
-
-    studentsWithProject.forEach((student) => {
-      const project = student.thesisRegistrations?.[0]?.thesisProject
-      if (!project || !project.council) return
-
-      project.council.members.forEach((member: any) => {
-        const expert = member.expert
-        const name = (getSupervisorName(expert, false, true) as string) || ""
-        const donViQuanLi = expert?.workplace || expert?.lecturer?.organization?.sMa || ""
-
-        if (!expert?.id) return
-
-        if (!expertStats.has(expert.id)) {
-          expertStats.set(expert.id, {
-            stt: 0,
-            tenThanhVien: name || "",
-            donViQuanLi: donViQuanLi || "",
-            tongSo: 0,
-            chuTich: 0,
-            thuKi: 0,
-            uyVien: 0,
-            phanBien1: 0,
-            phanBien2: 0,
-          })
-        }
-
-        // biome-ignore lint/style/noNonNullAssertion: id của export luôn có
-        const stats = expertStats.get(expert.id)!
-        stats.tongSo++
-        totalParticipations++
-
-        switch (member.role) {
-          case CouncilRole.CHAIRMAN:
-            stats.chuTich++
-            totalCT++
-            break
-          case CouncilRole.SECRETARY:
-            stats.thuKi++
-            totalTK++
-            break
-          case CouncilRole.REVIEWER_1:
-            stats.phanBien1++
-            totalPB1++
-            break
-          case CouncilRole.REVIEWER_2:
-            stats.phanBien2++
-            totalPB2++
-            break
-          case CouncilRole.MEMBER:
-            stats.uyVien++
-            totalUV++
-            break
-        }
-      })
-    })
-
-    const tableRows = Array.from(expertStats.values())
-    if (tableRows.length === 0) {
-      // Bỏ qua chuyên ngành không có cán bộ nào tham gia hội đồng.
-      return
-    }
-    tableRows.forEach((row, index) => {
-      row.stt = index + 1
-    })
-
-    const firstStudentWithProject = studentsWithProject[0]
-    if (!firstStudentWithProject) {
-      return
-    }
-    const project = firstStudentWithProject.thesisRegistrations?.[0]?.thesisProject
-
-    result.push({
+  const result: ThongKeCbThamGiaHdData[] = [
+    {
       data: {
         khoaTitle: firstStudentWithProject.fixedClass?.trainingCourse?.name?.toUpperCase() || "",
         khoa: firstStudentWithProject.fixedClass?.trainingCourse?.name || "",
-        chuyenNganh: majorName,
-        dotXet: project?.thesisSession?.name || "",
+        chuyenNganh: "Tất cả chuyên ngành",
+        dotXet: firstProject?.thesisSession?.name || "",
         tong: totalParticipations,
         tongChuTich: totalCT,
         tongThuky: totalTK,
         tongUyVien: totalUV,
         tongPhanBien1: totalPB1,
         tongPhanBien2: totalPB2,
+        tongThanhToan: totalThanhToan,
         data: tableRows,
       },
-    })
-  })
+    },
+  ]
 
   return result
 }
@@ -2511,25 +2655,27 @@ export const exportThanhToanHuongDanTrongHv = async ({
       }
       return []
     }
-    const dataConvert = groups
+    const items = groups.map((item, idx) => ({
+      ...item.data,
+      tongTienSo: formatAmountWithComma(item.data.tongTienSo),
+      "ngắt trang": idx === groups.length - 1 ? "" : "ngắt trang",
+    }))
     const fileName = "ThanhToanHuongDan"
-    const payload: ExcelTemplateBody = {
-      head: { data: null },
-      tail: { data: null },
+    const payload = {
       fileName: fileName,
-      path: "ThanhToanHuongDanTrongHV.xlsx",
+      path: "ThanhToanHuongDanTrongHV.docx",
       prefix: "mta/luan-van",
-      payload: dataConvert,
-      showGridLines: true,
-      wrapText: true,
+      data: {
+        items: items,
+      },
     }
-    const response = await excelTemplate(payload)
+    const response = await docxTemplate(payload)
     if (response.status !== 200) {
       message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
       return []
     }
     const blob = response.data
-    downloadFile(blob, `${fileName}.xlsx`)
+    downloadFile(blob, `${fileName}.docx`)
     message.success("Xuất file thành công")
   } catch (error) {
     message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
@@ -2655,7 +2801,16 @@ export const exportKetQuaBaoVeLuanVan = async ({
     message.error("Không có dữ liệu để xuất kết quả bảo vệ luan van")
     return []
   }
-  const project = getThesisProjectBySessionId(allStudentsInClasses, thesisSessionId)
+  const project = allStudentsInClasses
+    .map((student) => {
+      const thesisProject = getThesisProjectBySessionId(student, thesisSessionId)
+      if (!thesisProject) return null
+      return {
+        ...student,
+        thesisRegistrations: [{ thesisProject }],
+      }
+    })
+    .filter(Boolean)
   if (!project) {
     message.error("Không tìm thấy dữ liệu để xuất kết quả bảo vệ luan van")
     return []
@@ -2787,6 +2942,7 @@ const convertToKqbvlvData = (allStudentsInClasses: any[]): KqbvlvData => {
 }
 export const exportBanSaoHDDGLV = async ({
   allStudentsInClasses,
+  thesisSessionId,
   showSpinner,
   hideSpinner,
   message,
@@ -2798,14 +2954,19 @@ export const exportBanSaoHDDGLV = async ({
     message.error("Không có dữ liệu để xuất bản sao hội đồng bảo vệ luan van")
     return []
   }
+  const project = allStudentsInClasses
+    .map((student) => {
+      const thesisProject = getThesisProjectBySessionId(student, thesisSessionId)
+      if (!thesisProject) return null
+      return {
+        ...student,
+        thesisRegistrations: [{ thesisProject }],
+      }
+    })
+    .filter(Boolean)
   try {
     showSpinner?.()
-    const dataConvert = convertToBanSaoHDDGLV(
-      allStudentsInClasses,
-      signerName,
-      isChief,
-      signingDate
-    )
+    const dataConvert = convertToBanSaoHDDGLV(project, signerName, isChief, signingDate)
 
     if (!dataConvert || dataConvert.length === 0) {
       message.error("Chưa có dữ liệu để xuất bản sao hội đồng bảo vệ luan van")
@@ -2938,6 +3099,7 @@ const convertToBanSaoHDDGLV = (
 export const exportPhuLucQdhdd = async ({
   allStudentsInClasses,
   showSpinner,
+  thesisSessionId,
   hideSpinner,
   message,
 }: ExportOptions) => {
@@ -2945,9 +3107,17 @@ export const exportPhuLucQdhdd = async ({
     message.error("Không có dữ liệu để xuất phụ lục QĐHĐ")
     return []
   }
+  const project = allStudentsInClasses.map((student) => {
+    const thesisProject = getThesisProjectBySessionId(student, thesisSessionId)
+    if (!thesisProject) return null
+    return {
+      ...student,
+      thesisRegistrations: [{ thesisProject }],
+    }
+  })
   try {
     showSpinner?.()
-    const dataConvert = convertToPhuLucQdhdTemplateData(allStudentsInClasses)
+    const dataConvert = convertToPhuLucQdhdTemplateData(project)
     if (!dataConvert) {
       message.error("Chưa có dữ liệu để xuất phụ lục QĐHĐ")
       return []
@@ -3138,23 +3308,25 @@ export const exportDsChuyenGia = async ({
       return []
     }
     showSpinner?.()
-    const payload: ExcelTemplateBody = {
-      head: { data: null },
-      tail: { data: null },
+    const items = dataConvert.map((item, idx) => ({
+      ...item.data,
+      "ngắt trang": idx === dataConvert.length - 1 ? "" : "ngắt trang",
+    }))
+    const payload = {
       fileName: "DsChuyenGia",
-      path: "DanhSachChuyenGia.xlsx",
+      path: "DanhSachChuyenGia.docx",
       prefix: "mta/luan-van",
-      payload: dataConvert,
-      showGridLines: true,
-      wrapText: true,
+      data: {
+        items: items,
+      },
     }
-    const response = await excelTemplate(payload)
+    const response = await docxTemplate(payload)
     if (response.status !== 200) {
       message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
       return []
     }
     const blob = response.data
-    downloadFile(blob, "DsChuyenGia.xlsx")
+    downloadFile(blob, "DsChuyenGia.docx")
     message.success("Xuất file thành công")
   } catch (error) {
     message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
@@ -3300,6 +3472,7 @@ const convertToDsChuyenGiaData = (
 }
 export const exportHDDanhGiaLuanVan = async ({
   allStudentsInClasses,
+  thesisSessionId,
   showSpinner,
   hideSpinner,
   message,
@@ -3308,8 +3481,18 @@ export const exportHDDanhGiaLuanVan = async ({
     message.error("Không có dữ liệu để xuất danh sách đánh giá luan van")
     return []
   }
+  const project = allStudentsInClasses
+    .map((student) => {
+      const thesisProject = getThesisProjectBySessionId(student, thesisSessionId)
+      if (!thesisProject) return null
+      return {
+        ...student,
+        thesisRegistrations: [{ thesisProject }],
+      }
+    })
+    .filter(Boolean)
   try {
-    const dataConvert = convertToHDDanhGiaLuanVanTemplateData(allStudentsInClasses)
+    const dataConvert = convertToHDDanhGiaLuanVanTemplateData(project)
     if (!dataConvert) {
       message.error("Chưa có dữ liệu để xuất danh sách đánh giá luan van")
       return []
@@ -3611,7 +3794,16 @@ export const exportThongKeCoQuanDonViCanBoNgoaiHv = async ({
     message.error("Không có dữ liệu để tạo thống kê cán bộ tham gia HĐ ngoài HV")
     return
   }
-  const project = getThesisProjectBySessionId(allStudentsInClasses, thesisSessionId)
+  const project = allStudentsInClasses
+    .map((student) => {
+      const thesisProject = getThesisProjectBySessionId(student, thesisSessionId)
+      if (!thesisProject) return null
+      return {
+        ...student,
+        thesisRegistrations: [{ thesisProject }],
+      }
+    })
+    .filter(Boolean)
   if (!project) {
     message.error("Không tìm thấy dữ liệu để tạo thống kê cán bộ tham gia HĐ ngoài HV")
     return

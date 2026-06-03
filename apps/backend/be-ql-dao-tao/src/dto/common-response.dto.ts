@@ -83,3 +83,9 @@ export const ExcelBinaryResponseSchema = z.string().openapi({
   format: "binary",
   description: "File Excel (.xlsx) — tải về qua header Content-Disposition.",
 })
+
+export const DocxBinaryResponseSchema = z.string().openapi({
+  type: "string",
+  format: "binary",
+  description: "File Word (.docx) — tải về qua header Content-Disposition.",
+})

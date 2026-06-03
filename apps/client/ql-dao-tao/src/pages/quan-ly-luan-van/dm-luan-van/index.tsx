@@ -1284,7 +1284,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
   }> = [
     {
       id: 1,
-      label: "Phụ lục ds luận văn",
+      label: "Phụ lục danh sách luận văn",
       needModal: true,
       needSign: true,
       onClick: async () =>
@@ -1298,7 +1298,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
     },
     {
       id: 2,
-      label: "Sao QĐ HDLV",
+      label: "Sao quyết định hướng dẫn luận văn",
       needModal: true,
       needSign: true,
       onClick: async (signer?: SignerPayload) =>
@@ -1315,7 +1315,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
     },
     {
       id: 3,
-      label: "Giấy mời HDLV",
+      label: "Giấy mời hướng dẫn luận văn",
       needModal: true,
       needSign: true,
       onClick: async (signer?: SignerPayload) =>
@@ -1332,7 +1332,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
     },
     {
       id: 5,
-      label: "Giấy mời chấm LV PB",
+      label: "Giấy mời chấm luận văn phản biện",
       needModal: true,
       needSign: true,
       onClick: async (signer?: SignerPayload) =>
@@ -1349,7 +1349,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
     },
     {
       id: 6,
-      label: "Phụ lục QĐHĐ",
+      label: "Phụ lục quyết định hội đồng bảo vệ",
       onClick: async () =>
         await exportPhuLucQdhdd({
           allStudentsInClasses,
@@ -1361,7 +1361,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
     },
     {
       id: 6.1,
-      label: "Bản sao HDDGLV",
+      label: "Bản sao hội đồng đánh giá luận văn",
       needModal: true,
       needSign: true,
       onClick: async (signer?: SignerPayload) =>
@@ -1378,7 +1378,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
     },
     {
       id: 8,
-      label: "Hồ sơ BV LV",
+      label: "Hồ sơ bảo vệ luận văn",
       needModal: true,
       needSign: true,
       onClick: async (signer?: SignerPayload) =>
@@ -1474,7 +1474,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
     },
     {
       id: 14,
-      label: "Thống kê CBHD LV",
+      label: "Thống kê chuyên gia hướng dẫn luận văn",
       onClick: async () =>
         await exportThongKeCbHdlv({
           allStudentsInClasses,
@@ -1486,7 +1486,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
     },
     {
       id: 15,
-      label: "Thống kê cán bộ tham gia HĐ",
+      label: "Thống kê cán bộ tham gia hội đồng bảo vệ",
       onClick: async () =>
         await exportThongKeCbThamGiaHd({
           allStudentsInClasses,
@@ -1498,7 +1498,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
     },
     {
       id: 15.1,
-      label: "Thống kê cơ quan đơn vị cán bộ (ngoài HV)",
+      label: "Thống kê cơ quan đơn vị cán bộ (ngoài học viên)",
       onClick: async () =>
         await exportThongKeCoQuanDonViCanBoNgoaiHv({
           allStudentsInClasses,
@@ -1510,7 +1510,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
     },
     {
       id: 16,
-      label: "Thống kê KQ BV LV",
+      label: "Thống kê kết quả bảo vệ luận văn",
       onClick: async () =>
         await exportKetQuaBaoVeLuanVan({
           allStudentsInClasses,
@@ -1877,7 +1877,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       placeholder="Chọn mẫu in"
                       dropdownMatchSelectWidth={false}
                       options={buttonList.map((item) => ({
-                        label: `${item.id}. ${item.label}`,
+                        label: `${item.label}`,
                         value: String(item.id),
                         disabled: item.disabled,
                       }))}

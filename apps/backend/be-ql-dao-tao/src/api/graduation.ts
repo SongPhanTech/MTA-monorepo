@@ -23,6 +23,8 @@ import customParseFormat from "dayjs/plugin/customParseFormat"
 dayjs.extend(customParseFormat)
 import ExcelJS from "exceljs"
 import XlsxTemplate from "xlsx-template"
+import Docxtemplater from "docxtemplater"
+import PizZip from "pizzip"
 import { prisma } from ".."
 import { UploadExcelModel } from "../dto/upload-excel.dto"
 import { evaluateCondition } from "../services/student-result.service"
@@ -40,6 +42,7 @@ import {
 import { fieldDesc } from "../dto/openapi-helpers"
 import {
   CountOnlyResponseSchema,
+  DocxBinaryResponseSchema,
   ErrorMessageResponseSchema,
   ExcelBinaryResponseSchema,
   SuccessMessageResponseSchema,
@@ -2301,8 +2304,8 @@ const exportPhuLucVanBangCaoHoc = createRoute({
     200: {
       description: "Export thành công",
       content: {
-        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
-          schema: ExcelBinaryResponseSchema,
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document": {
+          schema: DocxBinaryResponseSchema,
         },
       },
     },
@@ -2480,6 +2483,16 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
     groups.get(sheetName)!.push(student)
   }
 
+  const safeString = (val: any): string => {
+    if (val === null || val === undefined) return ""
+    return String(val).trim()
+  }
+
+  const safeNumber = (val: any): number => {
+    if (val === null || val === undefined || isNaN(Number(val))) return 0
+    return Number(val)
+  }
+
   const sheetData = Array.from(groups.entries()).map(([sheetName, groupStudents]) => {
     const payloads = groupStudents.map((student) => {
       const user = student.userProfile
@@ -2498,56 +2511,61 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
       let totalPoints4 = 0
 
       const subjectRows = (student.subjectClassStudent || []).map((record, idx) => {
-        const score =
+        const rawScore =
           record.manualFinalScore ?? (record.finalScore ? Number(record.finalScore) : null)
-        const credits = record.subjectVersion?.credit || 0
+        const score = safeNumber(rawScore)
+        const credits = safeNumber(record.subjectVersion?.credit)
 
         const scoreConverts = course?.scoreConverts || []
         const conversion = scoreConverts.find(
-          (c) => score !== null && score >= c.base10Min && score <= c.base10Max
+          (c) => score >= c.base10Min && score <= c.base10Max
         )
 
         if (credits) {
           totalCredits += credits
-          totalPoints10 += (score || 0) * credits
+          totalPoints10 += score * credits
           if (conversion) {
-            totalPoints4 += conversion.base4 * credits
+            totalPoints4 += safeNumber(conversion.base4) * credits
           }
         }
-
+        console.log(`Record ${idx + 1}: score=${score}, credits=${credits}, conversion=${conversion ? conversion.base4 : "N/A"}`)
         return {
           stt: idx + 1,
-          ten_hoc_phan: record.subjectVersion?.subject?.name || "",
+          ten_hoc_phan: safeString(record.subjectVersion?.subject?.name),
           stc: credits,
-          diem_he_10: formatScore(score, 1),
-          diem_he_4: formatScore(conversion?.base4, 1),
-          diem_he_chu: conversion ? conversion.letter : "",
+          diem_he_10: formatScore(score, 1) || "0,0",
+          diem_he_4: formatScore(conversion?.base4 || 0) || "0,0",
+          diem_he_chu: conversion?.letter,
         }
       })
 
       const lastYearResult = student.studentYearResult?.find((r) => r.isLastStudyYear)
-      const gpa10 = lastYearResult
+      const rawGpa10 = lastYearResult
         ? Number(lastYearResult.cumulativeGpaBase10)
         : totalCredits > 0
           ? totalPoints10 / totalCredits
           : 0
-      const gpa4 = lastYearResult
+      const gpa10 = safeNumber(rawGpa10)
+
+      const rawGpa4 = lastYearResult
         ? Number(lastYearResult.cumulativeGpaBase4)
         : totalCredits > 0
           ? totalPoints4 / totalCredits
           : 0
+      const gpa4 = safeNumber(rawGpa4)
+
       const councilMembers = (tR?.council?.members || []).map((m) => {
         const expert = m.expert
-        const rank = expert?.academicRankType?.sTen || ""
-        const degree = expert?.academicDegreeType?.sTen || ""
+        const rank = safeString(expert?.academicRankType?.sTen)
+        const degree = safeString(expert?.academicDegreeType?.sTen)
 
         const title = [rank, degree].filter(Boolean).join(".")
 
         return {
-          chuc_vi: title || "",
-          ten_day_du: expert?.name || "",
-          don_vi: expert?.organization || "",
-          vai_tro_hoi_dong: councilRoleVi[m.role] || m.role,
+          chuc_vi: safeString(title),
+          ten_day_du: safeString(expert?.name),
+          don_vi: safeString(expert?.organization),
+          vai_tro_hoi_dong: safeString(councilRoleVi[m.role] || m.role),
         }
       })
 
@@ -2557,46 +2575,48 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
         tP?.thirdSupervisor?.name,
       ]
         .filter(Boolean)
+        .map(safeString)
         .join("; ")
 
       return {
         data: {
-          so_quyet_dinh: gD?.diplomaNumber || "",
-          ho_ten_hoc_vien: user?.fullname?.toUpperCase() || "",
-          ma_hoc_vien: student.code || "",
-          ngay_sinh: dobParts?.dateVi || "",
-          gioi_tinh: user?.gender?.sTen || "",
-          so_dinh_danh_ca_nhan: user?.idCardNumber || "",
-          noi_sinh: user?.placeOfBirth || "",
-          khoa: course?.name || "",
-          ngay_nhap_hoc: enrollDateParts?.dateVi || "",
-          nganh: major?.trainingField?.name || "",
-          chuyen_nganh: major?.name || "",
-          thoi_gian_dao_tao: curriculumVersion?.trainingTime?.name || "24 tháng",
+          so_quyet_dinh: safeString(gD?.diplomaNumber),
+          ho_ten_hoc_vien: safeString(user?.fullname?.toUpperCase()),
+          ma_hoc_vien: safeString(student.code),
+          ngay_sinh: safeString(dobParts?.dateVi),
+          gioi_tinh: safeString(user?.gender?.sTen),
+          so_dinh_danh_ca_nhan: safeString(user?.idCardNumber),
+          noi_sinh: safeString(user?.placeOfBirth),
+          khoa: safeString(course?.name),
+          ngay_nhap_hoc: safeString(enrollDateParts?.dateVi),
+          nganh: safeString(major?.trainingField?.name),
+          chuyen_nganh: safeString(major?.name),
+          thoi_gian_dao_tao: safeString(curriculumVersion?.trainingTime?.name || "24 tháng"),
           ngon_ngu_dao_tao: "Tiếng Việt",
-          hinh_thuc_dao_tao: course?.trainingObjectType?.trainingForm?.name || "",
+          hinh_thuc_dao_tao: safeString(course?.trainingObjectType?.trainingForm?.name),
           dinh_huong: course?.trainingObjectType?.name?.toLowerCase()?.includes("nghiên cứu")
             ? "nghiên cứu"
             : course?.trainingObjectType?.name?.toLowerCase()?.includes("ứng dụng")
               ? "ứng dụng"
               : "",
-          academic_year: academicYear || "",
+          academic_year: safeString(academicYear),
           data: subjectRows,
           tong_so_tc: totalCredits,
-          diem_tb_he_10: formatScore(gpa10, 2),
-          diem_tb_he_4: formatScore(gpa4, 2),
+          diem_tb_he_10: formatScore(gpa10, 2) || "0,00",
+          diem_tb_he_4: formatScore(gpa4, 2) || "0,00",
 
-          ten_de_an_tot_nghiep: tP?.title || "",
-          danh_sach_can_bo_huong_dan: supervisors,
-          ngay_bao_ve: defenseDateParts?.fullVi || "",
+          ten_de_an_tot_nghiep: safeString(tP?.title),
+          danh_sach_can_bo_huong_dan: safeString(supervisors),
+          ngay_bao_ve: safeString(defenseDateParts?.fullVi),
 
-          ngay_in: pDateParts?.day || "",
-          thang_in: pDateParts?.monthVi || "",
-          nam_in: pDateParts?.year || "",
+          ngay_in: safeString(pDateParts?.day),
+          thang_in: safeString(pDateParts?.monthVi),
+          nam_in: safeString(pDateParts?.year),
           page_break: "ngắt trang",
-          ...signerInfo,
-          ten_nguoi_ky: signerInfo.ten_day_du,
-          chuc_vi_tl: (signerInfo as any).chuc_vi_ky_thay || "",
+          chuc_vi: safeString(signerInfo.chuc_vi),
+          chuc_vi_tl: safeString((signerInfo as any).chuc_vi_ky_thay),
+          quan_ham: safeString(signerInfo.quan_ham),
+          ten_nguoi_ky: safeString(signerInfo.ten_day_du),
         },
         group: councilMembers,
       }
@@ -2605,15 +2625,63 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
     return { sheetName, payload: payloads }
   })
 
-  const templateBuffer = await getLuanVanTemplateBuffer(prisma, "PhuLucVanBangCaoHoc_v15.xlsx")
-  const result = await generateExcelMultiSheet(templateBuffer, sheetData)
-  const fileName = "PhuLucVanBangCaoHoc.xlsx"
-  const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
+  const studentsPayload: any[] = []
+  for (const sheet of sheetData) {
+    for (const p of sheet.payload) {
+      studentsPayload.push({
+        ...p.data,
+        group: p.group,
+      })
+    }
+  }
 
-  return c.body(result as any, 200, {
-    "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-    "Content-Disposition": disposition,
-  })
+  try {
+    const templateBuffer = await getLuanVanTemplateBuffer(prisma, "PhuLucVanBangCaoHoc_v2.docx")
+    const zip = new PizZip(templateBuffer)
+    const doc = new Docxtemplater(zip, {
+      paragraphLoop: true,
+      linebreaks: true,
+    })
+
+    doc.render({
+      students: studentsPayload,
+    })
+
+    const renderedZip = doc.getZip()
+    const file = renderedZip.file("word/document.xml")
+    if (!file) {
+      throw new Error("Invalid DOCX: word/document.xml not found")
+    }
+    let docXml = file.asText()
+
+    const pRegex = /<w:p\b[^>]*?>(?:(?!<w:p\b).)*?ngắt trang(?:(?!<\/w:p>).)*?<\/w:p>/g
+    const matches = docXml.match(pRegex)
+    const totalMatches = matches ? matches.length : 0
+    let occurrence = 0
+
+    docXml = docXml.replace(pRegex, () => {
+      occurrence++
+      if (occurrence === totalMatches) {
+        return ""
+      }
+      return '<w:p><w:r><w:br w:type="page"/></w:r></w:p>'
+    })
+
+    renderedZip.file("word/document.xml", docXml)
+    const resultBuffer = renderedZip.generate({ type: "nodebuffer" })
+
+    const fileName = "PhuLucVanBangCaoHoc.docx"
+    const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
+
+    return c.body(new Uint8Array(resultBuffer) as any, 200, {
+      "Content-Type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      "Content-Disposition": disposition,
+    })
+  } catch (error: any) {
+    const errorDetails = error.properties?.errors
+    console.error("Docxtemplater render error for PhuLucVanBangCaoHoc:", errorDetails || error)
+    return c.json({ message: "Lỗi khi xuất file Word: " + (error.message || "Unknown error") }, 500)
+  }
 })
 
 const exportPhuLucVanBangNganHan = createRoute({
@@ -2648,8 +2716,8 @@ const exportPhuLucVanBangNganHan = createRoute({
     200: {
       description: "Export thành công",
       content: {
-        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
-          schema: ExcelBinaryResponseSchema,
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document": {
+          schema: DocxBinaryResponseSchema,
         },
       },
     },
@@ -2796,6 +2864,16 @@ app.openapi(exportPhuLucVanBangNganHan, async (c: any) => {
     groups.get(sheetName)!.push(student)
   }
 
+  const safeString = (val: any): string => {
+    if (val === null || val === undefined) return ""
+    return String(val).trim()
+  }
+
+  const safeNumber = (val: any): number => {
+    if (val === null || val === undefined || isNaN(Number(val))) return 0
+    return Number(val)
+  }
+
   const sheetData = Array.from(groups.entries()).map(([sheetName, groupStudents]) => {
     const payloads = groupStudents.map((student) => {
       const user = student.userProfile
@@ -2810,20 +2888,22 @@ app.openapi(exportPhuLucVanBangNganHan, async (c: any) => {
       let totalCredits = 0
       let totalPoints10 = 0
 
-      const allSubjects = (student.subjectClassStudent || []).map((record) => {
-        const score =
+      const allSubjects = (student.subjectClassStudent || []).map((record, idx) => {
+        const rawScore =
           record.manualFinalScore ?? (record.finalScore ? Number(record.finalScore) : null)
-        const credits = record.subjectVersion?.credit || 0
+        const score = safeNumber(rawScore)
+        const credits = safeNumber(record.subjectVersion?.credit)
 
         if (credits) {
           totalCredits += credits
-          totalPoints10 += (score || 0) * credits
+          totalPoints10 += score * credits
         }
-
+console.log(`Record ${idx + 1}: score=${score}, credits=${credits}`)
         return {
-          ten_hoc_phan: record.subjectVersion?.subject?.name || "",
+          stt: idx + 1,
+          ten_hoc_phan: safeString(record.subjectVersion?.subject?.name),
           stc: credits,
-          diem_he_10: formatScore(score, 1),
+          diem_he_10: formatScore(score, 1) || "0,0",
           type: record.subjectVersion?.type,
         }
       })
@@ -2841,35 +2921,35 @@ app.openapi(exportPhuLucVanBangNganHan, async (c: any) => {
         : totalCredits > 0
           ? totalPoints10 / totalCredits
           : 0
-
+console.log(`Student ${student.code}: totalCredits=${totalCredits}, totalPoints10=${totalPoints10}, gpa10=${gpa10}`)
       return {
         data: {
-          so_quyet_dinh: gD?.diplomaNumber || "",
-          ten_hoc_vien: user?.fullname?.toUpperCase() || "",
-          ma_hoc_vien: student.code || "",
-          ngay_sinh: dobParts?.dateVi || "",
-          gioi_tinh: user?.gender?.sTen || "",
-          so_dinh_danh_ca_nhan: user?.idCardNumber || "",
-          noi_sinh: user?.placeOfBirth || "",
-          khoa: course?.name || "",
-          academic_year: academicYear || "",
-          ngay_nhap_hoc: enrollDateParts?.dateVi || "",
-          nganh: major?.trainingField?.name || "",
-          chuyen_nganh_chuyen_sau: major?.name || "",
-          thoi_gian_dao_tao: curriculumVersion?.trainingTime?.name || "24 tháng",
+          so_quyet_dinh: safeString(gD?.diplomaNumber),
+          ten_hoc_vien: safeString(user?.fullname?.toUpperCase()),
+          ma_hoc_vien: safeString(student.code),
+          ngay_sinh: safeString(dobParts?.dateVi),
+          gioi_tinh: safeString(user?.gender?.sTen),
+          so_dinh_danh_ca_nhan: safeString(user?.idCardNumber),
+          noi_sinh: safeString(user?.placeOfBirth),
+          khoa: safeString(course?.name),
+          academic_year: safeString(academicYear),
+          ngay_nhap_hoc: safeString(enrollDateParts?.dateVi),
+          nganh: safeString(major?.trainingField?.name),
+          chuyen_nganh_chuyen_sau: safeString(major?.name),
+          thoi_gian_dao_tao: safeString(curriculumVersion?.trainingTime?.name || "24 tháng"),
           ngon_ngu_dao_tao: "Tiếng Việt",
-          hinh_thuc_dao_tao: course?.trainingObjectType?.trainingForm?.name || "",
+          hinh_thuc_dao_tao: safeString(course?.trainingObjectType?.trainingForm?.name),
           data: subjectRows,
-          diem_tb_tn: formatScore(gpa10, 2),
+          diem_tb_tn: formatScore(gpa10, 2) || "0,00",
           hoc_luc: getClassification(gpa10),
 
-          ngay_in: pDateParts?.day || "",
-          thang_in: pDateParts?.monthVi || "",
-          nam_in: pDateParts?.year || "",
+          ngay_in: safeString(pDateParts?.day),
+          thang_in: safeString(pDateParts?.monthVi),
+          nam_in: safeString(pDateParts?.year),
           page_break: "ngắt trang",
           ...signerInfo,
-          ten_nguoi_ky: signerInfo.ten_day_du,
-          chuc_vi_tl: (signerInfo as any).chuc_vi_ky_thay || "",
+          ten_nguoi_ky: safeString(signerInfo.ten_day_du),
+          chuc_vi_tl: safeString((signerInfo as any).chuc_vi_ky_thay),
         },
         group: graduationSubjects,
       }
@@ -2878,15 +2958,63 @@ app.openapi(exportPhuLucVanBangNganHan, async (c: any) => {
     return { sheetName, payload: payloads }
   })
 
-  const templateBuffer = await getLuanVanTemplateBuffer(prisma, "PhuLucVanBangNganHan_v6.xlsx")
-  const result = await generateExcelMultiSheet(templateBuffer, sheetData)
-  const fileName = "PhuLucVanBangNganHan.xlsx"
-  const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
+  const studentsPayload: any[] = []
+  for (const sheet of sheetData) {
+    for (const p of sheet.payload) {
+      studentsPayload.push({
+        ...p.data,
+        group: p.group,
+      })
+    }
+  }
 
-  return c.body(result as any, 200, {
-    "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-    "Content-Disposition": disposition,
-  })
+  try {
+    const templateBuffer = await getLuanVanTemplateBuffer(prisma, "PhuLucVanBangNganHan_v4.docx")
+    const zip = new PizZip(templateBuffer)
+    const doc = new Docxtemplater(zip, {
+      paragraphLoop: true,
+      linebreaks: true,
+    })
+
+    doc.render({
+      students: studentsPayload,
+    })
+
+    const renderedZip = doc.getZip()
+    const file = renderedZip.file("word/document.xml")
+    if (!file) {
+      throw new Error("Invalid DOCX: word/document.xml not found")
+    }
+    let docXml = file.asText()
+
+    const pRegex = /<w:p\b[^>]*?>(?:(?!<w:p\b).)*?ngắt trang(?:(?!<\/w:p>).)*?<\/w:p>/g
+    const matches = docXml.match(pRegex)
+    const totalMatches = matches ? matches.length : 0
+    let occurrence = 0
+
+    docXml = docXml.replace(pRegex, () => {
+      occurrence++
+      if (occurrence === totalMatches) {
+        return ""
+      }
+      return '<w:p><w:r><w:br w:type="page"/></w:r></w:p>'
+    })
+
+    renderedZip.file("word/document.xml", docXml)
+    const resultBuffer = renderedZip.generate({ type: "nodebuffer" })
+
+    const fileName = "PhuLucVanBangNganHan.docx"
+    const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
+
+    return c.body(new Uint8Array(resultBuffer) as any, 200, {
+      "Content-Type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      "Content-Disposition": disposition,
+    })
+  } catch (error: any) {
+    const errorDetails = error.properties?.errors
+    console.error("Docxtemplater render error for PhuLucVanBangNganHan:", errorDetails || error)
+    return c.json({ message: "Lỗi khi xuất file Word: " + (error.message || "Unknown error") }, 500)
+  }
 })
 
 const getPhuLucIXData = createRoute({

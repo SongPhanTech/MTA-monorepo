@@ -318,6 +318,15 @@ const DiemTrungBinhKyHoc = () => {
           <Table
             rowKey="id"
             className="m-0"
+            rowClassName={(record: any) => {
+              const gpa4 = record?.studentSemesterResult?.[0]?.gpaBase4
+              const gpa10 = record?.studentSemesterResult?.[0]?.gpaBase10
+              const hasResult = gpa4 !== null && gpa4 !== undefined
+              if (hasResult && (Number(gpa4) === 0 || Number(gpa10) === 0)) {
+                return "bg-red-100"
+              }
+              return ""
+            }}
             filters={filters}
             setFilters={(value) => {
               setFilters(value)

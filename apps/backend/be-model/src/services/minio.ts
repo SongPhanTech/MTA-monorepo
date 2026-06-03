@@ -110,6 +110,29 @@ export class MinIOService {
     await this.minioClient.removeObject(this.bucketName, objectName)
   }
 
+  /**
+   * Xoá toàn bộ object trong `prefix` có `lastModified` cũ hơn `maxAgeMs`.
+   * Dùng cho việc dọn file tạm (preview) định kỳ. Trả về số object đã xoá.
+   */
+  async removeStaleObjects(prefix: string, maxAgeMs: number): Promise<number> {
+    const cutoff = Date.now() - maxAgeMs
+    const toRemove = await new Promise<string[]>((resolve, reject) => {
+      const stream = this.minioClient.listObjectsV2(this.bucketName, prefix, true)
+      const names: string[] = []
+      stream.on("data", (obj: BucketItem) => {
+        if (obj.name && obj.lastModified && obj.lastModified.getTime() < cutoff) {
+          names.push(obj.name)
+        }
+      })
+      stream.on("end", () => resolve(names))
+      stream.on("error", reject)
+    })
+    if (toRemove.length > 0) {
+      await this.minioClient.removeObjects(this.bucketName, toRemove)
+    }
+    return toRemove.length
+  }
+
   private listObjectsWithLimit(
     bucketName: string,
     prefix = "",
