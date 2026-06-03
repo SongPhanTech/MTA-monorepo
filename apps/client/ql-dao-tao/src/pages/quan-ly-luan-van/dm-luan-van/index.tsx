@@ -25,7 +25,17 @@ import {
   useCreateStudentThesisRegistration,
   useCreateSupervisorPaymentRecord,
   useCreateThesisProject,
-  useDeleteStudentThesisRegistration,
+  useDeleteManyCouncil,
+  useDeleteManyCouncilMember,
+  useDeleteManyDecision,
+  useDeleteManyDefenseRecord,
+  useDeleteManyDocumentFile,
+  useDeleteManyInvitation,
+  useDeleteManyLibrarySubmission,
+  useDeleteManyPaymentRecord,
+  useDeleteManyStudentThesisRegistration,
+  useDeleteManySupervisorPaymentRecord,
+  useDeleteManyThesisProject,
   useDeleteSupervisorPaymentRecord,
   useFindManyDefaultCouncilRolePayAmount,
   useFindManyDefaultSupervisorPayAmount,
@@ -123,6 +133,54 @@ export function getThesisRegistrationForSession(studentOrRecord: any, thesisSess
 
 export function getThesisProjectForSession(studentOrRecord: any, thesisSessionId?: string) {
   return getThesisRegistrationForSession(studentOrRecord, thesisSessionId)?.thesisProject
+}
+
+/** GVHD chính và GVHD phụ không được cùng một chuyên gia (khi cả hai đều được chọn). */
+export function hasDuplicateThesisSupervisors(
+  supervisor: string | null | undefined,
+  coSupervisor: string | null | undefined
+): boolean {
+  const sup =
+    supervisor === "" || supervisor === undefined || supervisor === null ? null : String(supervisor)
+  const co =
+    coSupervisor === "" || coSupervisor === undefined || coSupervisor === null
+      ? null
+      : String(coSupervisor)
+  return sup !== null && co !== null && sup === co
+}
+
+const THESIS_COUNCIL_EXPERT_FIELDS = [
+  "councilChairman",
+  "councilSecretary",
+  "reviewer1",
+  "reviewer2",
+  "councilMember",
+] as const
+
+function normalizeCouncilExpertId(id: unknown): string | null {
+  if (id === "" || id === undefined || id === null) return null
+  return String(id)
+}
+
+/** Các cán bộ hội đồng bảo vệ (đã chọn) không được trùng chuyên gia. */
+export function hasDuplicateCouncilExperts(row: Record<string, unknown>): boolean {
+  const ids = THESIS_COUNCIL_EXPERT_FIELDS.map((field) =>
+    normalizeCouncilExpertId(row[field])
+  ).filter((id): id is string => id !== null)
+  return new Set(ids).size !== ids.length
+}
+
+export function getCouncilExpertIdsExcludingField(
+  row: Record<string, unknown>,
+  excludeField: (typeof THESIS_COUNCIL_EXPERT_FIELDS)[number]
+): Set<string> {
+  const excluded = new Set<string>()
+  for (const field of THESIS_COUNCIL_EXPERT_FIELDS) {
+    if (field === excludeField) continue
+    const id = normalizeCouncilExpertId(row[field])
+    if (id) excluded.add(id)
+  }
+  return excluded
 }
 
 export function getCouncilMemberName(record: any, role: CouncilRole, thesisSessionId?: string) {
@@ -697,7 +755,19 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
   const { mutateAsync: updateThesisSession } = useUpdateThesisSession()
   const { mutateAsync: createThesisProject } = useCreateThesisProject()
   const { mutateAsync: createStudentThesisRegistration } = useCreateStudentThesisRegistration()
-  const { mutateAsync: deleteStudentThesisRegistration } = useDeleteStudentThesisRegistration()
+  const { mutateAsync: deleteManyCouncil } = useDeleteManyCouncil()
+  const { mutateAsync: deleteManyCouncilMember } = useDeleteManyCouncilMember()
+  const { mutateAsync: deleteManyStudentThesisRegistration } =
+    useDeleteManyStudentThesisRegistration()
+  const { mutateAsync: deleteManyDecision } = useDeleteManyDecision()
+  const { mutateAsync: deleteManyDefenseRecord } = useDeleteManyDefenseRecord()
+  const { mutateAsync: deleteManyDocumentFile } = useDeleteManyDocumentFile()
+  const { mutateAsync: deleteManyInvitation } = useDeleteManyInvitation()
+  const { mutateAsync: deleteManyLibrarySubmission } = useDeleteManyLibrarySubmission()
+  const { mutateAsync: deleteManyPaymentRecord } = useDeleteManyPaymentRecord()
+  const { mutateAsync: deleteManySupervisorPaymentRecord } =
+    useDeleteManySupervisorPaymentRecord()
+  const { mutateAsync: deleteManyThesisProject } = useDeleteManyThesisProject()
   const { mutateAsync: updateThesisProject } = useUpdateThesisProject()
   const { mutateAsync: updateManyThesisProject } = useUpdateManyThesisProject()
   const { mutateAsync: createPaymentRecord } = useCreatePaymentRecord()
@@ -736,6 +806,39 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
     }
   }, [searchParams.thesisSessionId, thesisSessionData, form])
   const handleEditChange = (rowId: string, field: string, value: any) => {
+    if (field === "supervisor" || field === "coSupervisor") {
+      setEditingValues((prev) => {
+        const row = prev[rowId] || {}
+        const nextSupervisor = field === "supervisor" ? value : row.supervisor
+        const nextCoSupervisor = field === "coSupervisor" ? value : row.coSupervisor
+        if (hasDuplicateThesisSupervisors(nextSupervisor, nextCoSupervisor)) {
+          message.error("GVHD 1 và GVHD 2 không được trùng nhau")
+          return prev
+        }
+        return {
+          ...prev,
+          [rowId]: { ...row, [field]: value },
+        }
+      })
+      return
+    }
+    if (
+      (THESIS_COUNCIL_EXPERT_FIELDS as readonly string[]).includes(field)
+    ) {
+      setEditingValues((prev) => {
+        const row = prev[rowId] || {}
+        const nextRow = { ...row, [field]: value }
+        if (hasDuplicateCouncilExperts(nextRow)) {
+          message.error("Các cán bộ trong hội đồng bảo vệ không được trùng nhau")
+          return prev
+        }
+        return {
+          ...prev,
+          [rowId]: nextRow,
+        }
+      })
+      return
+    }
     setEditingValues((prev) => ({
       ...prev,
       [rowId]: {
@@ -743,6 +846,135 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
         [field]: value,
       },
     }))
+  }
+
+  const refetchThesisTableData = useCallback(async () => {
+    await Promise.all([refetchStudents(), refetchCount(), refetchAllStudentsInClasses()])
+  }, [refetchStudents, refetchCount, refetchAllStudentsInClasses])
+
+  /** Xóa cứng ThesisProject và dữ liệu phụ thuộc (chỉ khi không còn đăng ký). */
+  const hardDeleteThesisProjectById = useCallback(
+    async (thesisProjectId: string) => {
+      const councilOnThesis = { thesis: { some: { id: thesisProjectId } } }
+
+      await deleteManyPaymentRecord({
+        where: { councilMember: { council: councilOnThesis } },
+      })
+      await deleteManyInvitation({
+        where: { councilMember: { council: councilOnThesis } },
+      })
+      await deleteManyCouncilMember({
+        where: { council: councilOnThesis },
+      })
+      await deleteManyCouncil({
+        where: councilOnThesis,
+      })
+
+      await deleteManyDocumentFile({
+        where: {
+          OR: [
+            { defenseRecord: { thesisId: thesisProjectId } },
+            { librarySubmission: { thesisId: thesisProjectId } },
+            { decision: { thesisProjectId } },
+          ],
+        },
+      })
+      await deleteManyDefenseRecord({ where: { thesisId: thesisProjectId } })
+      await deleteManyLibrarySubmission({ where: { thesisId: thesisProjectId } })
+      await deleteManyDecision({ where: { thesisProjectId } })
+
+      await updateManyThesisProject({
+        where: { id: thesisProjectId },
+        data: {
+          supervisorPaymentId: null,
+          coSupervisorPaymentId: null,
+          singleSupervisorPaymentId: null,
+          councilId: null,
+        },
+      })
+      await deleteManySupervisorPaymentRecord({
+        where: {
+          OR: [
+            { thesisProjects: { some: { id: thesisProjectId } } },
+            { coThesisProjects: { some: { id: thesisProjectId } } },
+            { singleSupervisorPayment: { some: { id: thesisProjectId } } },
+          ],
+        },
+      })
+
+      await deleteManyThesisProject({
+        where: {
+          id: thesisProjectId,
+          registrations: { none: {} },
+        },
+      })
+    },
+    [
+      deleteManyCouncil,
+      deleteManyCouncilMember,
+      deleteManyDecision,
+      deleteManyDefenseRecord,
+      deleteManyDocumentFile,
+      deleteManyInvitation,
+      deleteManyLibrarySubmission,
+      deleteManyPaymentRecord,
+      deleteManySupervisorPaymentRecord,
+      deleteManyThesisProject,
+      updateManyThesisProject,
+    ]
+  )
+
+  const handleDeleteStudentThesis = async (record: { id: string }) => {
+    const thesisSessionId = searchParams.thesisSessionId?.trim()
+    if (!thesisSessionId) {
+      message.warning("Vui lòng chọn đợt luận văn trước khi xóa.")
+      return
+    }
+
+    const registration = getThesisRegistrationForSession(record, thesisSessionId)
+    const thesisProjectId =
+      registration?.thesisProjectId ?? registration?.thesisProject?.id ?? undefined
+
+    if (!registration?.id) {
+      message.error("Không tìm thấy đăng ký luận văn để xóa")
+      return
+    }
+
+    try {
+      showSpinner()
+
+      // Hội đồng gắn trực tiếp đăng ký (nếu có) — gỡ trước để tránh lỗi FK
+      await deleteManyCouncilMember({
+        where: { council: { studentThesisRegistrationId: registration.id } },
+      })
+      await deleteManyCouncil({
+        where: { studentThesisRegistrationId: registration.id },
+      })
+
+      await deleteManyStudentThesisRegistration({
+        where: { id: registration.id },
+      })
+
+      if (thesisProjectId) {
+        await hardDeleteThesisProjectById(thesisProjectId)
+      }
+
+      setEditingRowKeys((prev) => prev.filter((k) => k !== record.id))
+      setEditingValues((prev) => {
+        const next = { ...prev }
+        delete next[record.id]
+        return next
+      })
+      setSelectedRowKeys((prev) => prev.filter((k) => k !== record.id))
+
+      await refetchThesisTableData()
+      message.success("Xóa luận văn thành công")
+    } catch (error: any) {
+      const detail = error?.info?.message || error?.message
+      message.error(detail || "Đã xảy ra lỗi, vui lòng kiểm tra lại")
+    } finally {
+      hideSpinner()
+    }
   }
 
   const taodulieumau = async () => {
@@ -756,11 +988,14 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
       const fixedClassType = student.fixedClass?.classType
       const organizationId = student.curriculumVersion?.curriculum?.trainingMajor?.organization?.Id
       const typeLabel = fixedClassType === FixedClassType.APPLICATION ? "Đề án" : "Luận văn"
-      const hasThesisRegistration = student.thesisRegistrations?.some(
-        (registration) =>
-          registration.thesisProject?.thesisType === ThesisType.THESIS &&
-          registration.thesisProject?.thesisSessionId === thesisSessionId
-      )
+      const hasThesisRegistration = student.thesisRegistrations?.some((registration) => {
+        if (registration?.deletedAt) return false
+        const project = registration.thesisProject
+        if (!project || project.deletedAt) return false
+        return (
+          project.thesisType === ThesisType.THESIS && project.thesisSessionId === thesisSessionId
+        )
+      })
       if (hasThesisRegistration) {
         return null
       }
@@ -850,11 +1085,30 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
     }
 
     showSpinner()
+    for (const studentId of selectedRowKeys) {
+      const rowData = editingValues[studentId.toString()]
+      if (!rowData) continue
+      const studentRecord = students?.find((s) => s.id === studentId)
+      if (hasDuplicateCouncilExperts(rowData)) {
+        message.error(
+          `Các cán bộ hội đồng bảo vệ không được trùng nhau (mã học viên: ${studentRecord?.code || studentId}).`
+        )
+        hideSpinner()
+        return
+      }
+    }
     if (role === "Khoa" || role === "P7") {
       for (const studentId of selectedRowKeys) {
         const rowData = editingValues[studentId.toString()]
         if (!rowData) continue
         const studentRecord = students?.find((s) => s.id === studentId)
+        if (hasDuplicateThesisSupervisors(rowData.supervisor, rowData.coSupervisor)) {
+          message.error(
+            `GVHD 1 và GVHD 2 không được trùng nhau (mã học viên: ${studentRecord?.code || studentId}).`
+          )
+          hideSpinner()
+          return
+        }
         const orig = getThesisProjectForSession(studentRecord, searchParams.thesisSessionId)
         if (!orig) continue
         const newSup = rowData.supervisor ?? ""
@@ -881,6 +1135,10 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
         )?.id
 
         if (!thesisProjectId || !rowData) return
+
+        if (hasDuplicateCouncilExperts(rowData)) {
+          throw new Error("DUPLICATE_COUNCIL")
+        }
 
         const description = `Ngôn ngữ: ${rowData.language} - Luận án/Đề án: ${rowData.type}`
         const status = rowData.status
@@ -940,6 +1198,10 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
           const normalizedSupervisor = rowData.supervisor === "" ? null : rowData.supervisor
           const normalizedCoSupervisor = rowData.coSupervisor === "" ? null : rowData.coSupervisor
 
+          if (hasDuplicateThesisSupervisors(normalizedSupervisor, normalizedCoSupervisor)) {
+            throw new Error("DUPLICATE_SUPERVISORS")
+          }
+
           if (normalizedSupervisor !== undefined) {
             payload.supervisor =
               normalizedSupervisor === null
@@ -976,8 +1238,14 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
       await Promise.all(updatePromises.filter((p) => p !== undefined))
 
       message.success(`Lưu thành công ${selectedRowKeys.length} đề tài đã chỉnh sửa.`)
-    } catch (error) {
-      message.error("Đã xảy ra lỗi khi lưu hàng loạt, vui lòng kiểm tra lại")
+    } catch (error: any) {
+      if (error?.message === "DUPLICATE_SUPERVISORS") {
+        message.error("GVHD 1 và GVHD 2 không được trùng nhau")
+      } else if (error?.message === "DUPLICATE_COUNCIL") {
+        message.error("Các cán bộ trong hội đồng bảo vệ không được trùng nhau")
+      } else {
+        message.error("Đã xảy ra lỗi khi lưu hàng loạt, vui lòng kiểm tra lại")
+      }
     } finally {
       hideSpinner()
       await refetchStudents()
@@ -2107,10 +2375,18 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       editingValues[record?.id] || {},
                       "supervisor"
                     )
+                    const hasEditedCoSupervisor = Object.prototype.hasOwnProperty.call(
+                      editingValues[record?.id] || {},
+                      "coSupervisor"
+                    )
                     const currentValue = hasEditedSupervisor
                       ? editingValues[record?.id]?.supervisor
                       : getThesisProjectForSession(record, searchParams.thesisSessionId)?.supervisor
                           ?.id || ""
+                    const coSupervisorPeerId = hasEditedCoSupervisor
+                      ? editingValues[record?.id]?.coSupervisor
+                      : getThesisProjectForSession(record, searchParams.thesisSessionId)
+                          ?.coSupervisor?.id
                     return (
                       <div onClick={(e) => e.stopPropagation()}>
                         <Select
@@ -2119,7 +2395,12 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           dropdownMatchSelectWidth={false}
                           dropdownStyle={{ minWidth: 200 }}
                           disabled={!isWithinGvhdSupervisorEditWindow()}
-                          options={expertProfileData?.map((item) => {
+                          options={expertProfileData
+                            ?.filter(
+                              (item) =>
+                                !coSupervisorPeerId || item.id !== String(coSupervisorPeerId)
+                            )
+                            .map((item) => {
                             const text = getSupervisorName(item, true, true)
                             const hasLecturer = item.lecturer != null
                             return {
@@ -2166,10 +2447,18 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       editingValues[record?.id] || {},
                       "coSupervisor"
                     )
+                    const hasEditedSupervisor = Object.prototype.hasOwnProperty.call(
+                      editingValues[record?.id] || {},
+                      "supervisor"
+                    )
                     const currentValue = hasEditedCoSupervisor
                       ? editingValues[record?.id]?.coSupervisor
                       : getThesisProjectForSession(record, searchParams.thesisSessionId)
                           ?.coSupervisor?.id || ""
+                    const supervisorPeerId = hasEditedSupervisor
+                      ? editingValues[record?.id]?.supervisor
+                      : getThesisProjectForSession(record, searchParams.thesisSessionId)
+                          ?.supervisor?.id
 
                     return (
                       <div onClick={(e) => e.stopPropagation()}>
@@ -2179,7 +2468,11 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           dropdownStyle={{ minWidth: 200 }}
                           className="w-full"
                           disabled={!isWithinGvhdSupervisorEditWindow()}
-                          options={expertProfileData?.map((item) => {
+                          options={expertProfileData
+                            ?.filter(
+                              (item) => !supervisorPeerId || item.id !== String(supervisorPeerId)
+                            )
+                            .map((item) => {
                             const text = getSupervisorName(item, true, true)
                             const hasLecturer = item.lecturer != null
                             return {
@@ -2320,6 +2613,11 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                         )?.council?.members?.find(
                           (member: CouncilMember) => member.role === CouncilRole.CHAIRMAN
                         )?.expert?.id || ""
+                    const councilRow = editingValues[record?.id] || {}
+                    const excludedCouncilIds = getCouncilExpertIdsExcludingField(
+                      councilRow,
+                      "councilChairman"
+                    )
                     return (
                       <div onClick={(e) => e.stopPropagation()}>
                         <Select
@@ -2329,7 +2627,10 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           className="w-full"
                           disabled={!isWithinCouncilEditWindow()}
                           options={expertProfileData
-                            ?.filter((item) => item.eligiblePresident === true)
+                            ?.filter(
+                              (item) =>
+                                item.eligiblePresident === true && !excludedCouncilIds.has(item.id)
+                            )
                             .map((item) => {
                               const text = getSupervisorName(item, true, true)
                               const hasLecturer = item.lecturer != null
@@ -2382,6 +2683,11 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                         )?.council?.members?.find(
                           (member: CouncilMember) => member.role === CouncilRole.SECRETARY
                         )?.expert?.id || ""
+                    const councilRow = editingValues[record?.id] || {}
+                    const excludedCouncilIds = getCouncilExpertIdsExcludingField(
+                      councilRow,
+                      "councilSecretary"
+                    )
                     return (
                       <div onClick={(e) => e.stopPropagation()}>
                         <Select
@@ -2391,7 +2697,10 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           dropdownStyle={{ minWidth: 200 }}
                           disabled={!isWithinCouncilEditWindow()}
                           options={expertProfileData
-                            ?.filter((item) => item.eligibleSecretary === true)
+                            ?.filter(
+                              (item) =>
+                                item.eligibleSecretary === true && !excludedCouncilIds.has(item.id)
+                            )
                             .map((item) => {
                               const text = getSupervisorName(item, true, true)
                               const hasLecturer = item.lecturer != null
@@ -2444,6 +2753,11 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                         )?.council?.members?.find(
                           (member: CouncilMember) => member.role === CouncilRole.REVIEWER_1
                         )?.expert?.id || ""
+                    const councilRow = editingValues[record?.id] || {}
+                    const excludedCouncilIds = getCouncilExpertIdsExcludingField(
+                      councilRow,
+                      "reviewer1"
+                    )
                     return (
                       <div onClick={(e) => e.stopPropagation()}>
                         <Select
@@ -2452,7 +2766,9 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           dropdownMatchSelectWidth={false}
                           dropdownStyle={{ minWidth: 200 }}
                           disabled={!isWithinCouncilEditWindow()}
-                          options={expertProfileData?.map((item) => {
+                          options={expertProfileData
+                            ?.filter((item) => !excludedCouncilIds.has(item.id))
+                            .map((item) => {
                             const text = getSupervisorName(item, true, true)
                             const hasLecturer = item.lecturer != null
                             return {
@@ -2504,6 +2820,11 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                         )?.council?.members?.find(
                           (member: any) => member.role === CouncilRole.REVIEWER_2
                         )?.expert?.id || ""
+                    const councilRow = editingValues[record?.id] || {}
+                    const excludedCouncilIds = getCouncilExpertIdsExcludingField(
+                      councilRow,
+                      "reviewer2"
+                    )
                     return (
                       <div onClick={(e) => e.stopPropagation()}>
                         <Select
@@ -2512,7 +2833,9 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           dropdownMatchSelectWidth={false}
                           dropdownStyle={{ minWidth: 200 }}
                           disabled={!isWithinCouncilEditWindow()}
-                          options={expertProfileData?.map((item) => {
+                          options={expertProfileData
+                            ?.filter((item) => !excludedCouncilIds.has(item.id))
+                            .map((item) => {
                             const text = getSupervisorName(item, true, true)
                             const hasLecturer = item.lecturer != null
                             return {
@@ -2564,6 +2887,11 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                         )?.council?.members?.find(
                           (member: any) => member.role === CouncilRole.MEMBER
                         )?.expert?.id || ""
+                    const councilRow = editingValues[record?.id] || {}
+                    const excludedCouncilIds = getCouncilExpertIdsExcludingField(
+                      councilRow,
+                      "councilMember"
+                    )
                     return (
                       <div onClick={(e) => e.stopPropagation()}>
                         <Select
@@ -2572,7 +2900,9 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           dropdownMatchSelectWidth={false}
                           dropdownStyle={{ minWidth: 200 }}
                           disabled={!isWithinCouncilEditWindow()}
-                          options={expertProfileData?.map((item) => {
+                          options={expertProfileData
+                            ?.filter((item) => !excludedCouncilIds.has(item.id))
+                            .map((item) => {
                             const text = getSupervisorName(item, true, true)
                             const hasLecturer = item.lecturer != null
                             return {
@@ -2880,49 +3210,14 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                             }}
                           />
                           <DeleteIcon
-                            title="Xóa"
+                            title="Xóa luận văn/đề án"
                             size={24}
                             className="text-lg font-bold text-red-700"
                             popConfirm={{
-                              onConfirm: async () => {
-                                const registration = getThesisRegistrationForSession(
-                                  record,
-                                  searchParams.thesisSessionId
-                                )
-                                const thesisProjectId =
-                                  registration?.thesisProject?.id ||
-                                  getThesisProjectForSession(record, searchParams.thesisSessionId)
-                                    ?.id
-                                if (!registration?.id || !thesisProjectId) {
-                                  message.error("Không tìm thấy đăng ký luận văn để xóa")
-                                  return
-                                }
-                                try {
-                                  showSpinner()
-                                  await deleteStudentThesisRegistration({
-                                    where: { id: registration.id },
-                                  })
-                                  // updateMany tránh RESULT_NOT_READABLE (@@deny read khi deletedAt != null)
-                                  await updateManyThesisProject({
-                                    where: {
-                                      id: thesisProjectId,
-                                      deletedAt: null,
-                                      registrations: { none: {} },
-                                    },
-                                    data: { deletedAt: new Date() },
-                                  })
-                                  await Promise.all([
-                                    refetchStudents(),
-                                    refetchCount(),
-                                    refetchAllStudentsInClasses(),
-                                  ])
-                                  message.success("Xóa thành công")
-                                } catch (error) {
-                                  message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
-                                } finally {
-                                  hideSpinner()
-                                }
-                              },
+                              title: "Xóa luận văn/đề án",
+                              description:
+                                "Xóa luận văn/đề án . Thao tác không thể hoàn tác.",
+                              onConfirm: () => handleDeleteStudentThesis(record),
                             }}
                           />
                         </div>
