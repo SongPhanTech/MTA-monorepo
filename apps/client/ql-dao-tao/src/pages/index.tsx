@@ -28,22 +28,36 @@
 //     return <DefaultLayout>{page}</DefaultLayout>
 // }
 import Loading from "@components/commons/loading"
+import { useGiangVien } from "@hooks/use-giang-vien"
 import { getRuntimeEnv } from "@workspace/libs/utils"
 import { ROUTER_PATH } from "@workspace/router"
 import { useRouter } from "next/router"
 import { useEffect } from "react"
+import { GIANG_VIEN_HOME } from "@/constants/giang-vien-menu"
+import { setLayoutMode, useLayoutMode } from "@/stores/layout-mode"
 
 const IndexPage = () => {
   const router = useRouter()
+  const { isGiangVien, isLoading } = useGiangVien()
+  const mode = useLayoutMode()
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <skip router?.asPath>
   useEffect(() => {
-    router.push(
-      window.location.pathname !== getRuntimeEnv("NEXT_PUBLIC_BASE_PATH")
-        ? router?.asPath.replace(/\?token=[^&]*/, "")
-        : ROUTER_PATH.QL_DAO_TAO.HOME
-    )
-  }, [router.push])
+    if (isLoading) return
+
+    if (window.location.pathname !== getRuntimeEnv("NEXT_PUBLIC_BASE_PATH")) {
+      router.push(router?.asPath.replace(/\?token=[^&]*/, ""))
+      return
+    }
+
+    if (isGiangVien && mode !== "quan-tri") {
+      setLayoutMode("giang-vien")
+      router.push(GIANG_VIEN_HOME)
+      return
+    }
+
+    router.push(ROUTER_PATH.QL_DAO_TAO.HOME)
+  }, [isLoading, isGiangVien, mode, router.push])
 
   return <Loading />
 }
