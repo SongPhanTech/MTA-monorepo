@@ -1877,7 +1877,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                       placeholder="Chọn mẫu in"
                       dropdownMatchSelectWidth={false}
                       options={buttonList.map((item) => ({
-                        label: `${item.label}`,
+                        label: `${item.id}. ${item.label}`,
                         value: String(item.id),
                         disabled: item.disabled,
                       }))}
