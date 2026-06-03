@@ -25,6 +25,7 @@ import {
   useCreateStudentThesisRegistration,
   useCreateSupervisorPaymentRecord,
   useCreateThesisProject,
+  useDeleteStudentThesisRegistration,
   useDeleteSupervisorPaymentRecord,
   useFindManyDefaultCouncilRolePayAmount,
   useFindManyDefaultSupervisorPayAmount,
@@ -35,6 +36,7 @@ import {
   useFindManyRoom,
   useFindManyStudent,
   useFindManyThesisSession,
+  useUpdateManyThesisProject,
   useUpdateThesisProject,
   useUpdateThesisSession,
 } from "@workspace/db/hooks"
@@ -107,16 +109,20 @@ export interface DanhMucLuanVanProps {
   role?: "P7" | "Khoa"
 }
 
-/** Lấy thesisProject của học viên theo đợt xét đang chọn (không dùng registrations[0]). */
-export function getThesisProjectForSession(studentOrRecord: any, thesisSessionId?: string) {
+export function getThesisRegistrationForSession(studentOrRecord: any, thesisSessionId?: string) {
   if (!thesisSessionId) return undefined
   return studentOrRecord?.thesisRegistrations?.find((reg: any) => {
+    if (reg?.deletedAt) return false
     const project = reg?.thesisProject
-    if (!project) return false
+    if (!project || project.deletedAt) return false
     return (
       project.thesisSession?.id === thesisSessionId || project.thesisSessionId === thesisSessionId
     )
-  })?.thesisProject
+  })
+}
+
+export function getThesisProjectForSession(studentOrRecord: any, thesisSessionId?: string) {
+  return getThesisRegistrationForSession(studentOrRecord, thesisSessionId)?.thesisProject
 }
 
 export function getCouncilMemberName(record: any, role: CouncilRole, thesisSessionId?: string) {
@@ -300,6 +306,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
     }
 
     const thesisProjectConditions: any = {
+      deletedAt: null,
       thesisSessionId: searchParams.thesisSessionId,
       thesisType: ThesisType.THESIS,
       organizationId: searchParams.organizationId || undefined,
@@ -339,6 +346,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
       thesisRegistrations: {
         some: {
           thesisProject: thesisProjectConditions,
+          deletedAt: null,
         },
       },
     })
@@ -350,7 +358,11 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
           {
             thesisRegistrations: {
               some: {
+                deletedAt: null,
                 thesisProject: {
+                  deletedAt: null,
+                  thesisSessionId: searchParams.thesisSessionId,
+                  thesisType: ThesisType.THESIS,
                   OR: [
                     {
                       supervisor: { name: { contains: debouncedNameKeyword, mode: "insensitive" } },
@@ -394,6 +406,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
   const allStudentWhere = useMemo(() => {
     if (!searchParams.thesisSessionId) return { id: { in: [] } }
     const thesisProjectWhere: Record<string, any> = {
+      deletedAt: null,
       thesisSessionId: searchParams.thesisSessionId,
       thesisType: ThesisType.THESIS,
       organizationId: searchParams.organizationId || undefined,
@@ -450,6 +463,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
         {
           thesisRegistrations: {
             some: {
+              deletedAt: null,
               thesisProject: thesisProjectWhere,
             },
           },
@@ -683,7 +697,9 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
   const { mutateAsync: updateThesisSession } = useUpdateThesisSession()
   const { mutateAsync: createThesisProject } = useCreateThesisProject()
   const { mutateAsync: createStudentThesisRegistration } = useCreateStudentThesisRegistration()
+  const { mutateAsync: deleteStudentThesisRegistration } = useDeleteStudentThesisRegistration()
   const { mutateAsync: updateThesisProject } = useUpdateThesisProject()
+  const { mutateAsync: updateManyThesisProject } = useUpdateManyThesisProject()
   const { mutateAsync: createPaymentRecord } = useCreatePaymentRecord()
   const { data: defaultCouncilPayAmounts = [] } = useFindManyDefaultCouncilRolePayAmount()
   const { data: defaultSupervisorPayAmounts = [] } = useFindManyDefaultSupervisorPayAmount()
@@ -2869,21 +2885,37 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                             className="text-lg font-bold text-red-700"
                             popConfirm={{
                               onConfirm: async () => {
-                                const payload = {
-                                  deletedAt: new Date(),
+                                const registration = getThesisRegistrationForSession(
+                                  record,
+                                  searchParams.thesisSessionId
+                                )
+                                const thesisProjectId =
+                                  registration?.thesisProject?.id ||
+                                  getThesisProjectForSession(record, searchParams.thesisSessionId)
+                                    ?.id
+                                if (!registration?.id || !thesisProjectId) {
+                                  message.error("Không tìm thấy đăng ký luận văn để xóa")
+                                  return
                                 }
                                 try {
                                   showSpinner()
-                                  await updateThesisProject({
-                                    data: payload,
-                                    where: {
-                                      id:
-                                        getThesisProjectForSession(
-                                          record,
-                                          searchParams.thesisSessionId
-                                        )?.id || "",
-                                    },
+                                  await deleteStudentThesisRegistration({
+                                    where: { id: registration.id },
                                   })
+                                  // updateMany tránh RESULT_NOT_READABLE (@@deny read khi deletedAt != null)
+                                  await updateManyThesisProject({
+                                    where: {
+                                      id: thesisProjectId,
+                                      deletedAt: null,
+                                      registrations: { none: {} },
+                                    },
+                                    data: { deletedAt: new Date() },
+                                  })
+                                  await Promise.all([
+                                    refetchStudents(),
+                                    refetchCount(),
+                                    refetchAllStudentsInClasses(),
+                                  ])
                                   message.success("Xóa thành công")
                                 } catch (error) {
                                   message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
