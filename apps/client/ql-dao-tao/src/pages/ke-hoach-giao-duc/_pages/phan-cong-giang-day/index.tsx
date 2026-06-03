@@ -24,6 +24,7 @@ import {
   useFindManyDM_DonVi,
   useFindManyTrainingLocation,
   useUpdateManySubjectClass,
+  useFindManyTrainingCourse
 } from "@workspace/db/hooks"
 import { sqlTransaction } from "@workspace/libs/api/model"
 import { whereOrganization } from "@workspace/libs/constants"
@@ -86,7 +87,9 @@ type BaoDayForm = {
 }
 
 type XepKhuVucForm = {
-  trainingLocationId: string
+  trainingCourseId?: string        
+  trainingLocationId?: string
+  schedule?: $Enums.SubjectClassSchedule  
   isOverride: boolean
 }
 
@@ -769,7 +772,14 @@ export default function PhanCongGiangDay({
   }>({
     tag: "PutOneSubjectClassModal",
   })
-
+const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
+  orderBy: { name: "asc" },
+  where: {
+    deletedAt: null,
+    active: true,
+    trainingObjectTypeId,
+  },
+})
   const dataWithRowSpan = useMemo(() => {
     if (dmDonViData) {
       const countSubjectClassBySubjectId: Record<string, number> = {}
@@ -1063,6 +1073,13 @@ export default function PhanCongGiangDay({
                         <Form
                           form={formXepKhuVuc}
                           initialValues={{ isOverride: false }}
+                          layout="horizontal"
+                          labelCol={{ span: 8 }}
+                          wrapperCol={{ span: 16 }}
+                          labelAlign="left"
+                          colon={true}
+                          style={{ width: 360 }}
+                          className="[&_.ant-form-item]:mb-3"
                           onFinish={async (values: XepKhuVucForm) => {
                             try {
                               showSpinner()
@@ -1074,78 +1091,96 @@ export default function PhanCongGiangDay({
                                     where: {
                                       trainingObjectTypeId,
                                       semesterId,
-                                      status: $Enums.SubjectClassStatus.DRAFT,
-                                      ...(!values.isOverride
-                                        ? {
-                                            trainingLocationId: null,
-                                          }
+                                      active: true,
+                                      deletedAt: null,
+                                      type: type,
+                                      ...(values.trainingCourseId
+                                        ? { fixedClasses: { some: { trainingCourseId: values.trainingCourseId } } }
                                         : {}),
+                                      ...(!values.isOverride ? { trainingLocationId: null } : {}),
                                     },
                                     data: {
-                                      trainingLocationId: values.trainingLocationId ?? null,
-                                    },
-                                  },
-                                },
-                              ])
-                              if (res.status !== 200) {
-                                throw new Error("Lỗi khi xếp khu vực")
-                              }
-                              debouncedRefetch()
-                              message.success("Xếp khu vực thành công")
-                            } catch (error: any) {
-                              message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
-                            } finally {
-                              hideSpinner()
-                            }
-                          }}
-                        >
-                          <FormItem
-                            form={formXepKhuVuc}
-                            name={"trainingLocationId"}
-                            required
-                            label="Khu vực đào tạo"
-                          >
+                              ...(values.trainingLocationId
+                                ? { trainingLocationId: values.trainingLocationId }
+                                : {}),
+                              ...(values.schedule ? { schedule: values.schedule } : {}),
+                            },
+                          },
+                        },
+                      ])
+                      if (res.status !== 200) {
+                        throw new Error("Lỗi khi xếp khu vực")
+                      }
+                      debouncedRefetch()
+                      formXepKhuVuc.resetFields()
+                      message.success("Xếp khu vực / kíp học thành công")
+                    } catch (error: any) {
+                      message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
+                    } finally {
+                      hideSpinner()
+                    }
+                  }}
+                >
+                     <Form.Item name="trainingCourseId" label="Khoá đào tạo">
                             <Select
-                              options={trainingLocationData.map((e) => ({
-                                label: e.name,
-                                value: e.id,
-                              }))}
+                              options={trainingCourseData.map((e) => ({ label: e.name, value: e.id }))}
                               allowClear
                               showSearch
+                              placeholder="Tất cả khoá"
                               filterOption={(input, option) =>
-                                (option?.label ?? "")
-                                  .toString()
-                                  .toLowerCase()
-                                  .includes(input.toLowerCase())
+                                (option?.label ?? "").toString().toLowerCase().includes(input.toLowerCase())
                               }
-                              dropdownStyle={{
-                                width: 400,
-                                maxHeight: 400,
-                              }}
-                            />
-                          </FormItem>
-                          <FormItem
-                            form={formXepKhuVuc}
-                            name={"isOverride"}
-                            label="Ghi đè khu vực đã xếp"
-                            className="mt-2"
-                          >
-                            <Switch />
-                          </FormItem>
-                          <Col span={24} className="text-right mt-4">
+                              dropdownStyle={{ width: 320 }}
+                          />
+                        </Form.Item>
+
+                        <Form.Item name="trainingLocationId" label="Khu vực đào tạo">
+                          <Select
+                            options={trainingLocationData.map((e) => ({ label: e.name, value: e.id }))}
+                            allowClear
+                            showSearch
+                            placeholder="Không thay đổi"
+                            filterOption={(input, option) =>
+                              (option?.label ?? "").toString().toLowerCase().includes(input.toLowerCase())
+                            }
+                            dropdownStyle={{ width: 320 }}
+                          />
+                        </Form.Item>
+
+                        <Form.Item name="schedule" label="Kíp học">
+                          <Select
+                            options={Object.entries(SUBJECT_CLASS_SCHEDULE_TYPE).map(([key, value]) => ({
+                              label: value,
+                              value: key,
+                            }))}
+                            allowClear
+                            placeholder="Không thay đổi"
+                          />
+                        </Form.Item>
+
+                        <Divider className="my-2" />
+
+                        <Form.Item name="isOverride" label="Ghi đè đã xếp" valuePropName="checked">
+                          <Switch checkedChildren="Ghi đè" unCheckedChildren="Bỏ qua" />
+                        </Form.Item>
+
+                        <Form.Item wrapperCol={{ offset: 9, span: 15 }}>
+                          <Flex gap={8} justify="end">
+                            <Button onClick={() => formXepKhuVuc.resetFields()}>Đặt lại</Button>
                             <Button type="primary" htmlType="submit">
-                              Xếp khu vực
+                              Xếp nhanh
                             </Button>
-                          </Col>
-                        </Form>
-                      }
-                      title="Xếp khu vực nhanh"
-                      trigger="click"
-                      placement="bottomRight"
-                    >
-                      <Button type="dashed">Xếp khu vực (nhanh)</Button>
-                    </Popover>
-                  )}
+                          </Flex>
+                        </Form.Item>
+                      </Form>
+                          }
+                          title="Xếp khu vực / kíp học (nhanh)"
+                          trigger="click"
+                          placement="bottomRight"
+                        >
+                          <Button type="dashed">Xếp khu vực (nhanh)</Button>
+                        </Popover>
+                      )}
                   {!khoaBoMon && (
                     <Button
                       onClick={() => handleP2LuuKeHoach()}
