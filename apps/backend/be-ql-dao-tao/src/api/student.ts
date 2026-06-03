@@ -720,6 +720,8 @@ app.openapi(debtStatistics, async (c) => {
     subjectCredit: number
     semesterCode: string
     finalScore: number | null
+    examBanned: boolean
+    examBannedReason: string | null
   }[]
 
   const res = await prisma.$queryRaw<Result>`
@@ -733,7 +735,9 @@ app.openapi(debtStatistics, async (c) => {
                         sv.name as "subjectName",
                         sv.credit as "subjectCredit",
                         SEM.code as "semesterCode",
-                        SSS."finalScore" as "finalScore"
+                        SSS."finalScore" as "finalScore",
+                        SSS."examBanned" as "examBanned",
+                        SSS."examBannedReason" as "examBannedReason"
                     from "ql-dao-tao"."StudentSubjectScore" as SSS
                         inner join "ql-dao-tao"."Student" S on S.id = SSS."studentId"
                         inner join "ql-nguoi-dung"."UserProfile" "UP" on "UP".id = S."userProfileId"
@@ -796,6 +800,8 @@ app.openapi(debtStatistics, async (c) => {
   type SubjectAttempt = {
     semesterCode: string
     finalScore: number | null
+    examBanned: boolean
+    examBannedReason: string | null
   }
 
   type DebtSubject = {
@@ -827,6 +833,8 @@ app.openapi(debtStatistics, async (c) => {
         subjectCredit,
         semesterCode,
         finalScore,
+        examBanned,
+        examBannedReason,
       } = record
 
       if (!acc[studentId]) {
@@ -849,28 +857,42 @@ app.openapi(debtStatistics, async (c) => {
         }
       }
 
-      acc[studentId].subjects[subjectCode].attempts.push({ semesterCode, finalScore })
+      acc[studentId].subjects[subjectCode].attempts.push({
+        semesterCode,
+        finalScore,
+        examBanned,
+        examBannedReason,
+      })
+
       return acc
     },
     {} as Record<string, StudentDebtSummary>
   )
+
   const rows = Object.values(studentDebtMap).flatMap((s) => {
     const subjectsArray = Object.values(s.subjects)
     const totalDebtSubject = subjectsArray.length
     const totalDebtCredit = subjectsArray.reduce((sum, sub) => sum + sub.subjectCredit, 0)
 
     return subjectsArray.map((subject) => {
-      const finalScores = subject.attempts.map((attempt) => attempt.finalScore)
-      let type = "THI LẠI"
-      let note = "Đã thi trượt 1 lần"
+      const lastAttempt = subject.attempts[subject.attempts.length - 1]
 
-      if (finalScores[finalScores.length - 1] === null) {
-        type = "CHƯA THI"
-        note = "Chưa thi hoặc GV chưa nhập điểm thi"
-      } else if (finalScores.length > 1) {
-        type = "HỌC LẠI"
-        note = `Đã thi trượt ít nhất ${finalScores.length} lần`
-      }
+    let type = "THI LẠI"
+    let note = "Đã thi trượt 1 lần"
+
+    if (!lastAttempt) {
+      type = "CHƯA THI"
+      note = "Chưa có dữ liệu thi"
+    } else if (lastAttempt.examBanned) {
+      type = "HỌC LẠI"
+      note = `Bị cấm thi${lastAttempt.examBannedReason ? `: ${lastAttempt.examBannedReason}` : ""}`
+    } else if (lastAttempt.finalScore === null) {
+      type = "CHƯA THI"
+      note = "Chưa thi hoặc GV chưa nhập điểm thi"
+    } else if (subject.attempts.length > 1) {
+      type = "HỌC LẠI"
+      note = `Đã thi trượt ít nhất ${subject.attempts.length} lần`
+    }
 
       return {
         studentCode: s.studentCode,
@@ -883,7 +905,9 @@ app.openapi(debtStatistics, async (c) => {
         subjectName: subject.subjectName,
         subjectCredit: subject.subjectCredit,
         semesters: subject.attempts.map((attempt) => attempt.semesterCode).join("/"),
-        finalScores: subject.attempts.map((attempt) => String(attempt.finalScore ?? "0")).join("/"),
+        finalScores: subject.attempts
+          .map((attempt) => (attempt.finalScore === null ? "Chưa có điểm" : String(attempt.finalScore)))
+          .join("/"),
         type,
         note,
       }
