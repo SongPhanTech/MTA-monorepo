@@ -26,6 +26,9 @@ import LoadingBar from "react-top-loading-bar"
 import "@assets/css/custom.css"
 import { getRuntimeEnv } from "@workspace/libs/utils"
 import { lightThemeCustom } from "@workspace/ui"
+import GiangVienLayout from "@layouts/giang-vien-layout"
+import { useGiangVien } from "@hooks/use-giang-vien"
+import { useLayoutMode } from "@/stores/layout-mode"
 
 dayjs.locale("vi")
 dayjs.extend(weekOfYear)
@@ -35,13 +38,38 @@ dayjs.extend(isSameOrBefore)
 dayjs.extend(quarterOfYear)
 dayjs.extend(isBetween)
 
-function App({ Component, pageProps }: AppProps) {
+// Chọn layout — phải nằm TRONG các Provider (Session/QueryClient/ZenStack) vì useGiangVien cần chúng.
+// Mặc định sang Cổng Giảng viên khi là giảng viên, kể cả khi chưa có lựa chọn mode (vào deep link).
+function AppContent({
+  Component,
+  pageProps,
+}: {
+  Component: AppProps["Component"]
+  pageProps: AppProps["pageProps"]
+}) {
+  const mode = useLayoutMode()
+  const { isGiangVien, isLoading } = useGiangVien()
+
+  // Chưa chọn mode và đang xác định vai trò -> chờ, tránh nháy từ layout mặc định sang Cổng GV.
+  if (mode === null && isLoading) return null
+
+  const componentWithLayout = Component as NextComponentType & {
+    getLayout?: (page: ReactNode) => ReactNode
+  }
   const getLayout: (page: ReactNode) => ReactNode =
-    (
-      Component as NextComponentType & {
-        getLayout?: (page: ReactNode) => ReactNode
-      }
-    ).getLayout ?? ((page) => page)
+    componentWithLayout.getLayout ?? ((page) => page)
+  const effectiveMode = mode ?? (isGiangVien ? "giang-vien" : "quan-tri")
+
+  const pageElement = <Component {...pageProps} />
+
+  // Các trang không khai báo getLayout (in ấn, đứng độc lập) vẫn render nguyên bản.
+  if (effectiveMode === "giang-vien" && componentWithLayout.getLayout) {
+    return <GiangVienLayout>{pageElement}</GiangVienLayout>
+  }
+  return <>{getLayout(pageElement)}</>
+}
+
+function App({ Component, pageProps }: AppProps) {
   const [progress, setProgress] = useState(0)
   const [isClient, setIsClient] = useState(false)
   const router = useRouter()
@@ -76,6 +104,7 @@ function App({ Component, pageProps }: AppProps) {
   }, [])
 
   if (!isClient) return null
+
   return (
     <SessionProvider session={pageProps.session}>
       <StoreProvider store={store}>
@@ -97,7 +126,8 @@ function App({ Component, pageProps }: AppProps) {
               }}
             >
               <ReactHookModalProvider modals={modals}>
-                {getLayout(<Component {...pageProps} />)}
+                <AppContent Component={Component} pageProps={pageProps} />
+
                 {/* <WidgetChatbot src={getRuntimeEnv('NEXT_PUBLIC_CHATBOT_SRC')} /> */}
                 <Spinner />
               </ReactHookModalProvider>
