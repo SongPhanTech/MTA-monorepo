@@ -407,7 +407,7 @@ export default function NhapDiem({
         const res = await sqlTransaction(listSqlTransaction)
         if (res?.status === 200) {
           form.resetFields()
-          message.success("Đã cập nhật điểm quá trình thành công!")
+          message.success("Đã cập nhật điểm thi thành công!")
           debouncedRefetch()
         }
       }

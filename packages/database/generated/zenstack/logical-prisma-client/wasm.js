@@ -3125,7 +3125,8 @@ exports.Prisma.ThesisSessionScalarFieldEnum = {
   chief: 'chief',
   deputy: 'deputy',
   topicEntryDeadline: 'topicEntryDeadline',
-  councilDeadline: 'councilDeadline'
+  councilDeadline: 'councilDeadline',
+  configPaymentSessionId: 'configPaymentSessionId'
 };
 
 exports.Prisma.ThesisProjectScalarFieldEnum = {
@@ -3348,8 +3349,7 @@ exports.Prisma.ConfigPaymentSessionScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
-  name: 'name',
-  sessionId: 'sessionId'
+  name: 'name'
 };
 
 exports.Prisma.DefaultCouncilRolePayAmountScalarFieldEnum = {
@@ -6838,7 +6838,8 @@ exports.Prisma.ThesisSessionOrderByRelevanceFieldEnum = {
   graduationNumber: 'graduationNumber',
   graduationDecisionMaker: 'graduationDecisionMaker',
   chief: 'chief',
-  deputy: 'deputy'
+  deputy: 'deputy',
+  configPaymentSessionId: 'configPaymentSessionId'
 };
 
 exports.Prisma.ThesisProjectOrderByRelevanceFieldEnum = {
@@ -6980,8 +6981,7 @@ exports.Prisma.ConfigPaymentSessionOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
-  name: 'name',
-  sessionId: 'sessionId'
+  name: 'name'
 };
 
 exports.Prisma.DefaultCouncilRolePayAmountOrderByRelevanceFieldEnum = {

@@ -17657,12 +17657,20 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'thesisSession',
+                }, configPaymentSessionId: {
+                    name: "configPaymentSessionId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'configPayment',
                 }, configPayment: {
                     name: "configPayment",
                     type: "ConfigPaymentSession",
                     isDataModel: true,
                     isOptional: true,
-                    backLink: 'session',
+                    backLink: 'thesisSessions',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "configPaymentSessionId" },
                 },
             }, uniqueConstraints: {
                 id: {
@@ -19024,18 +19032,12 @@ const metadata: ModelMeta = {
                 }, name: {
                     name: "name",
                     type: "String",
-                }, sessionId: {
-                    name: "sessionId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'session',
-                }, session: {
-                    name: "session",
+                }, thesisSessions: {
+                    name: "thesisSessions",
                     type: "ThesisSession",
                     isDataModel: true,
+                    isArray: true,
                     backLink: 'configPayment',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "sessionId" },
                 }, councilPayAmounts: {
                     name: "councilPayAmounts",
                     type: "DefaultCouncilRolePayAmount",
@@ -19056,9 +19058,6 @@ const metadata: ModelMeta = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
-                }, sessionId: {
-                    name: "sessionId",
-                    fields: ["sessionId"]
                 },
             },
         },

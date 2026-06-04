@@ -764,8 +764,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
   const { mutateAsync: deleteManyInvitation } = useDeleteManyInvitation()
   const { mutateAsync: deleteManyLibrarySubmission } = useDeleteManyLibrarySubmission()
   const { mutateAsync: deleteManyPaymentRecord } = useDeleteManyPaymentRecord()
-  const { mutateAsync: deleteManySupervisorPaymentRecord } =
-    useDeleteManySupervisorPaymentRecord()
+  const { mutateAsync: deleteManySupervisorPaymentRecord } = useDeleteManySupervisorPaymentRecord()
   const { mutateAsync: deleteManyThesisProject } = useDeleteManyThesisProject()
   const { mutateAsync: updateThesisProject } = useUpdateThesisProject()
   const { mutateAsync: updateManyThesisProject } = useUpdateManyThesisProject()
@@ -821,9 +820,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
       })
       return
     }
-    if (
-      (THESIS_COUNCIL_EXPERT_FIELDS as readonly string[]).includes(field)
-    ) {
+    if ((THESIS_COUNCIL_EXPERT_FIELDS as readonly string[]).includes(field)) {
       setEditingValues((prev) => {
         const row = prev[rowId] || {}
         const nextRow = { ...row, [field]: value }
@@ -2309,20 +2306,20 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                                 !coSupervisorPeerId || item.id !== String(coSupervisorPeerId)
                             )
                             .map((item) => {
-                            const text = getSupervisorName(item, true, true)
-                            const hasLecturer = item.lecturer != null
-                            return {
-                              label: (
-                                <span
-                                  title={hasLecturer ? "Trong học viện" : "Ngoài học viện"}
-                                  style={{ color: hasLecturer ? "#000000" : "#16a34a" }}
-                                >
-                                  {text}
-                                </span>
-                              ),
-                              value: item.id,
-                            }
-                          })}
+                              const text = getSupervisorName(item, true, true)
+                              const hasLecturer = item.lecturer != null
+                              return {
+                                label: (
+                                  <span
+                                    title={hasLecturer ? "Trong học viện" : "Ngoài học viện"}
+                                    style={{ color: hasLecturer ? "#000000" : "#16a34a" }}
+                                  >
+                                    {text}
+                                  </span>
+                                ),
+                                value: item.id,
+                              }
+                            })}
                           value={currentValue === null ? undefined : currentValue || undefined}
                           onChange={(value) =>
                             handleEditChange(
@@ -2365,8 +2362,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           ?.coSupervisor?.id || ""
                     const supervisorPeerId = hasEditedSupervisor
                       ? editingValues[record?.id]?.supervisor
-                      : getThesisProjectForSession(record, searchParams.thesisSessionId)
-                          ?.supervisor?.id
+                      : getThesisProjectForSession(record, searchParams.thesisSessionId)?.supervisor
+                          ?.id
 
                     return (
                       <div onClick={(e) => e.stopPropagation()}>
@@ -2381,20 +2378,20 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                               (item) => !supervisorPeerId || item.id !== String(supervisorPeerId)
                             )
                             .map((item) => {
-                            const text = getSupervisorName(item, true, true)
-                            const hasLecturer = item.lecturer != null
-                            return {
-                              label: (
-                                <span
-                                  title={hasLecturer ? "Trong học viện" : "Ngoài học viện"}
-                                  style={{ color: hasLecturer ? "#000000" : "#16a34a" }}
-                                >
-                                  {text}
-                                </span>
-                              ),
-                              value: item.id,
-                            }
-                          })}
+                              const text = getSupervisorName(item, true, true)
+                              const hasLecturer = item.lecturer != null
+                              return {
+                                label: (
+                                  <span
+                                    title={hasLecturer ? "Trong học viện" : "Ngoài học viện"}
+                                    style={{ color: hasLecturer ? "#000000" : "#16a34a" }}
+                                  >
+                                    {text}
+                                  </span>
+                                ),
+                                value: item.id,
+                              }
+                            })}
                           value={currentValue === null ? undefined : currentValue || undefined}
                           onChange={(value) =>
                             handleEditChange(
@@ -2677,20 +2674,20 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           options={expertProfileData
                             ?.filter((item) => !excludedCouncilIds.has(item.id))
                             .map((item) => {
-                            const text = getSupervisorName(item, true, true)
-                            const hasLecturer = item.lecturer != null
-                            return {
-                              label: (
-                                <span
-                                  title={hasLecturer ? "Trong học viện" : "Ngoài học viện"}
-                                  style={{ color: hasLecturer ? "#000000" : "#16a34a" }}
-                                >
-                                  {text}
-                                </span>
-                              ),
-                              value: item.id,
-                            }
-                          })}
+                              const text = getSupervisorName(item, true, true)
+                              const hasLecturer = item.lecturer != null
+                              return {
+                                label: (
+                                  <span
+                                    title={hasLecturer ? "Trong học viện" : "Ngoài học viện"}
+                                    style={{ color: hasLecturer ? "#000000" : "#16a34a" }}
+                                  >
+                                    {text}
+                                  </span>
+                                ),
+                                value: item.id,
+                              }
+                            })}
                           value={currentValue === null ? undefined : currentValue || undefined}
                           onChange={(value) =>
                             handleEditChange(
@@ -2744,20 +2741,20 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           options={expertProfileData
                             ?.filter((item) => !excludedCouncilIds.has(item.id))
                             .map((item) => {
-                            const text = getSupervisorName(item, true, true)
-                            const hasLecturer = item.lecturer != null
-                            return {
-                              label: (
-                                <span
-                                  title={hasLecturer ? "Trong học viện" : "Ngoài học viện"}
-                                  style={{ color: hasLecturer ? "#000000" : "#16a34a" }}
-                                >
-                                  {text}
-                                </span>
-                              ),
-                              value: item.id,
-                            }
-                          })}
+                              const text = getSupervisorName(item, true, true)
+                              const hasLecturer = item.lecturer != null
+                              return {
+                                label: (
+                                  <span
+                                    title={hasLecturer ? "Trong học viện" : "Ngoài học viện"}
+                                    style={{ color: hasLecturer ? "#000000" : "#16a34a" }}
+                                  >
+                                    {text}
+                                  </span>
+                                ),
+                                value: item.id,
+                              }
+                            })}
                           value={currentValue === null ? undefined : currentValue || undefined}
                           onChange={(value) =>
                             handleEditChange(
@@ -2811,20 +2808,20 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                           options={expertProfileData
                             ?.filter((item) => !excludedCouncilIds.has(item.id))
                             .map((item) => {
-                            const text = getSupervisorName(item, true, true)
-                            const hasLecturer = item.lecturer != null
-                            return {
-                              label: (
-                                <span
-                                  title={hasLecturer ? "Trong học viện" : "Ngoài học viện"}
-                                  style={{ color: hasLecturer ? "#16a34a" : "" }}
-                                >
-                                  {text}
-                                </span>
-                              ),
-                              value: item.id,
-                            }
-                          })}
+                              const text = getSupervisorName(item, true, true)
+                              const hasLecturer = item.lecturer != null
+                              return {
+                                label: (
+                                  <span
+                                    title={hasLecturer ? "Trong học viện" : "Ngoài học viện"}
+                                    style={{ color: hasLecturer ? "#16a34a" : "" }}
+                                  >
+                                    {text}
+                                  </span>
+                                ),
+                                value: item.id,
+                              }
+                            })}
                           value={currentValue === null ? undefined : currentValue || undefined}
                           onChange={(value) =>
                             handleEditChange(
@@ -3123,8 +3120,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                             className="text-lg font-bold text-red-700"
                             popConfirm={{
                               title: "Xóa luận văn/đề án",
-                              description:
-                                "Xóa luận văn/đề án . Thao tác không thể hoàn tác.",
+                              description: "Xóa luận văn/đề án . Thao tác không thể hoàn tác.",
                               onConfirm: () => handleDeleteStudentThesis(record),
                             }}
                           />

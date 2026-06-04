@@ -6,4 +6,4 @@
 
 import { z } from 'zod/v3';
 
-export const ConfigPaymentSessionOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "createdBy", "name", "sessionId"])
+export const ConfigPaymentSessionOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "createdBy", "name"])

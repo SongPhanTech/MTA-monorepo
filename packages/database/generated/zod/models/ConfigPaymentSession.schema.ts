@@ -30,13 +30,9 @@ const baseSchemaWithoutDefaults = z.object({
 }
 ).strict();
 const relationSchema = z.object({
-    session: z.record(z.string(), z.unknown()),
+    thesisSessions: z.array(z.unknown()).optional(),
     councilPayAmounts: z.array(z.unknown()).optional(),
     supervisorPayAmounts: z.array(z.unknown()).optional(),
-}
-);
-const fkSchema = z.object({
-    sessionId: z.string(),
 }
 );
 
@@ -49,7 +45,7 @@ export const ConfigPaymentSessionScalarSchema = baseSchema;
 /**
  * `ConfigPaymentSession` schema including all fields (scalar, foreign key, and relations) and validations.
  */
-export const ConfigPaymentSessionSchema = ConfigPaymentSessionScalarSchema.merge(fkSchema).merge(relationSchema.partial());
+export const ConfigPaymentSessionSchema = ConfigPaymentSessionScalarSchema.merge(relationSchema.partial());
 
 
 /**
@@ -87,7 +83,9 @@ export const ConfigPaymentSessionCreateScalarSchema = baseSchemaWithoutDefaults.
 /**
  * `ConfigPaymentSession` schema for create operations including scalar fields, foreign key fields, and validations.
  */
-export const ConfigPaymentSessionCreateSchema = ConfigPaymentSessionCreateScalarSchema.merge(fkSchema);
+export const ConfigPaymentSessionCreateSchema = baseSchemaWithoutDefaults.partial({
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true
+});
 
 
 /**
@@ -99,5 +97,5 @@ export const ConfigPaymentSessionUpdateScalarSchema = baseSchemaWithoutDefaults.
 /**
  * `ConfigPaymentSession` schema for update operations including scalar fields, foreign key fields, and validations.
  */
-export const ConfigPaymentSessionUpdateSchema = ConfigPaymentSessionUpdateScalarSchema.merge(fkSchema.partial());
+export const ConfigPaymentSessionUpdateSchema = ConfigPaymentSessionUpdateScalarSchema;
 
