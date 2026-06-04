@@ -1174,7 +1174,7 @@ app.openapi(exportSubjectClassScore, async (c) => {
     m: dayjs().month() + 1,
     y: dayjs().year(),
     NGUOI_IN: c.get("user")?.fullName || "",
-    THOI_GIAN_IN: dayjs().format("HH:mm:ss DD/MM/YYYY"),
+    THOI_GIAN_IN: dayjs().tz("Asia/Ho_Chi_Minh").format("HH:mm:ss DD/MM/YYYY"),
     data: subjectClass.subjectClassStudent.map((scs, index) => {
       const statusTexts = []
       if (scs.examPostponed) statusTexts.push("Hoãn thi")
