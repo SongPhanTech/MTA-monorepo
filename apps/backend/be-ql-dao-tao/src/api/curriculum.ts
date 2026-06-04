@@ -305,6 +305,7 @@ app.openapi(exportCurriculumVersion, async (c) => {
         code: subj.code,
         organization: subj.managementOrganization?.sMa || "",
         credit: subj.credit,
+        onePoint: subj.onePoint ? "1" : "",
         structure: subj.period,
         totalPeriod: subj.period,
         schedulePeriod: subj.schedulePeriod,
