@@ -354,7 +354,9 @@ function ProjectPaymentConfiguration() {
         if (!originalItem) return
 
         if (item.type === "COUNCIL") {
-          const councilRole = COUNCIL_PLACEHOLDER_ROLES.find((r) => r.roleName === item.roleName)?.role
+          const councilRole = COUNCIL_PLACEHOLDER_ROLES.find(
+            (r) => r.roleName === item.roleName
+          )?.role
           if (!councilRole) return
           for (const { idKey, valueKey, description, inAcademy } of PAY_AMOUNT_CELL_DEFS) {
             if (description !== PROJECT_PAY_DESCRIPTION) continue
@@ -392,9 +394,7 @@ function ProjectPaymentConfiguration() {
           const original = originalItem[valueKey]
           if (id) {
             if (current !== original) {
-              updatePromises.push(
-                updateSupervisorPay({ where: { id }, data: { amount: current } })
-              )
+              updatePromises.push(updateSupervisorPay({ where: { id }, data: { amount: current } }))
             }
           } else if (current !== original && current !== 0) {
             updatePromises.push(
@@ -516,21 +516,22 @@ function ThesisPaymentConfiguration() {
 
   const thesisSessionOptions = useMemo(() => {
     return allThesisSessions
-      .filter(
-        (s) => !s.configPaymentSessionId || s.configPaymentSessionId === selectedConfigId
-      )
+      .filter((s) => !s.configPaymentSessionId || s.configPaymentSessionId === selectedConfigId)
       .map((s) => ({
         value: s.id,
         label: s.name,
       }))
   }, [allThesisSessions, selectedConfigId])
 
-  const syncConfigMeta = useCallback((configId: string) => {
-    const config = paymentConfigs.find((c) => c.id === configId)
-    if (!config) return
-    setConfigName(config.name)
-    setLinkedSessionIds(config.thesisSessions?.map((s) => s.id) ?? [])
-  }, [paymentConfigs])
+  const syncConfigMeta = useCallback(
+    (configId: string) => {
+      const config = paymentConfigs.find((c) => c.id === configId)
+      if (!config) return
+      setConfigName(config.name)
+      setLinkedSessionIds(config.thesisSessions?.map((s) => s.id) ?? [])
+    },
+    [paymentConfigs]
+  )
 
   useEffect(() => {
     if (!selectedConfigId && paymentConfigs.length > 0) {
@@ -651,7 +652,11 @@ function ThesisPaymentConfiguration() {
     )
   }
 
-  const renderThesisCell = (value: number, record: ThesisGroupedRow, field: "amountIn" | "amountOut") => {
+  const renderThesisCell = (
+    value: number,
+    record: ThesisGroupedRow,
+    field: "amountIn" | "amountOut"
+  ) => {
     if (isEditing) {
       return (
         <Input
@@ -673,9 +678,7 @@ function ThesisPaymentConfiguration() {
       const metaChanged =
         configName.trim() !== (selectedConfig?.name ?? "") ||
         JSON.stringify([...linkedSessionIds].sort()) !==
-          JSON.stringify(
-            (selectedConfig?.thesisSessions?.map((s) => s.id) ?? []).sort()
-          )
+          JSON.stringify((selectedConfig?.thesisSessions?.map((s) => s.id) ?? []).sort())
 
       if (metaChanged) {
         await updateConfig({
@@ -700,8 +703,9 @@ function ThesisPaymentConfiguration() {
         if (!originalItem) return
 
         if (item.type === "COUNCIL") {
-          const councilRole = COUNCIL_PLACEHOLDER_ROLES.find((r) => r.roleName === item.roleName)
-            ?.role
+          const councilRole = COUNCIL_PLACEHOLDER_ROLES.find(
+            (r) => r.roleName === item.roleName
+          )?.role
           if (!councilRole) return
           for (const { idKey, valueKey, inAcademy } of THESIS_PAY_CELLS) {
             const id = item[idKey]
@@ -709,9 +713,7 @@ function ThesisPaymentConfiguration() {
             const original = originalItem[valueKey]
             if (id) {
               if (current !== original) {
-                amountPromises.push(
-                  updateCouncilPay({ where: { id }, data: { amount: current } })
-                )
+                amountPromises.push(updateCouncilPay({ where: { id }, data: { amount: current } }))
               }
             } else if (current !== original && current !== 0) {
               amountPromises.push(
@@ -740,9 +742,7 @@ function ThesisPaymentConfiguration() {
           const original = originalItem[valueKey]
           if (id) {
             if (current !== original) {
-              amountPromises.push(
-                updateSupervisorPay({ where: { id }, data: { amount: current } })
-              )
+              amountPromises.push(updateSupervisorPay({ where: { id }, data: { amount: current } }))
             }
           } else if (current !== original && current !== 0) {
             amountPromises.push(
@@ -790,7 +790,7 @@ function ThesisPaymentConfiguration() {
                 value={selectedConfigId}
                 options={paymentConfigs.map((c) => ({
                   value: c.id,
-                  label: `${c.name} (${c._count?.thesisSessions ?? c.thesisSessions?.length ?? 0} đợt)`,
+                  label: `${c.name}`,
                 }))}
                 onChange={(id) => {
                   setSelectedConfigId(id)
@@ -833,10 +833,6 @@ function ThesisPaymentConfiguration() {
                       onChange={setLinkedSessionIds}
                     />
                   </Flex>
-                  <p className="text-neutral-500 text-sm mb-0">
-                    Một mức thanh toán có thể áp dụng cho nhiều đợt xét. Mỗi đợt xét chỉ được gán
-                    một mức.
-                  </p>
                 </Flex>
               </Card>
             </Col>
@@ -863,7 +859,8 @@ function ThesisPaymentConfiguration() {
                         title: "Trong học viện (VNĐ)",
                         width: 150,
                         align: "center",
-                        render: (_, r: ThesisGroupedRow) => renderThesisCell(r.amountIn, r, "amountIn"),
+                        render: (_, r: ThesisGroupedRow) =>
+                          renderThesisCell(r.amountIn, r, "amountIn"),
                       },
                       {
                         title: "Ngoài học viện (VNĐ)",

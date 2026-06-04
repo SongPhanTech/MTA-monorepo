@@ -5,6 +5,7 @@ import useSpinner from "@hooks/spinner"
 import type { ThesisSession } from "@workspace/db/client"
 import {
   useCreateThesisSession,
+  useFindManyConfigPaymentSession,
   useFindManyTrainingCourse,
   useFindUniqueThesisSession,
   useUpdateThesisSession,
@@ -109,6 +110,10 @@ const PutThesisSession = () => {
 
   const { data: trainingObjectTypes = [] } = useFindManyTrainingObjectTypePermission()
   const [trainingObjectId, setTrainingObjectId] = useState<string | null>(null)
+  const { data: paymentConfigs = [] } = useFindManyConfigPaymentSession({
+    orderBy: { createdAt: "desc" },
+    select: { id: true, name: true },
+  })
   const { data: trainingCourses = [] } = useFindManyTrainingCourse(
     {
       where: { trainingObjectTypeId: trainingObjectId ?? ("" as string) },
@@ -170,6 +175,7 @@ const PutThesisSession = () => {
         chief: output.chief,
         deputy: output.deputy?.trim() || undefined,
         endDate: output.endDate ? dayjs(output.endDate).toDate() : new Date(),
+        configPaymentSessionId: output.configPaymentSessionId ?? null,
       }
 
       if (id) {
@@ -187,9 +193,10 @@ const PutThesisSession = () => {
         message.success("Thêm mới thành công")
       }
 
-      queryClient.invalidateQueries({
-        queryKey: ["ThesisSession"],
-      })
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["ThesisSession"] }),
+        queryClient.invalidateQueries({ queryKey: ["ConfigPaymentSession"] }),
+      ])
       onClose()
     } catch (error: any) {
       if (error?.info?.message) {
@@ -398,16 +405,27 @@ const PutThesisSession = () => {
           </div>
         </div>
       </Col>
-
-      <Col span={12}>
+      <Col span={8}>
+        <FormItem form={form} name="chief" label="Trưởng phòng sau đại học">
+          <Input placeholder="Nhập trưởng phòng sau đại học" />
+        </FormItem>
+      </Col>
+      <Col span={8}>
         <FormItem form={form} name="deputy" label="Phó trưởng phòng sau đại học">
           <Input placeholder="Nhập phó trưởng phòng sau đại học" />
         </FormItem>
       </Col>
 
-      <Col span={12}>
-        <FormItem form={form} name="chief" label="Trưởng phòng sau đại học">
-          <Input placeholder="Nhập trưởng phòng sau đại học" />
+      <Col span={8}>
+        <FormItem form={form} name="configPaymentSessionId" label="Định mức thanh toán">
+          <Select
+            allowClear
+            placeholder="Chọn định mức thanh toán"
+            options={paymentConfigs.map((item) => ({
+              label: item.name,
+              value: item.id,
+            }))}
+          />
         </FormItem>
       </Col>
     </PutFormModal>

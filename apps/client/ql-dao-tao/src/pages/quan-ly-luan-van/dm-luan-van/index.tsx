@@ -647,6 +647,12 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                 defenseSession: true,
                 thesisSession: {
                   include: {
+                    configPayment: {
+                      include: {
+                        councilPayAmounts: true,
+                        supervisorPayAmounts: true,
+                      },
+                    },
                     trainingCourse: {
                       include: {
                         trainingObjectType: true,
