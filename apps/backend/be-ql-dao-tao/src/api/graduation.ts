@@ -2517,9 +2517,7 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
         const credits = safeNumber(record.subjectVersion?.credit)
 
         const scoreConverts = course?.scoreConverts || []
-        const conversion = scoreConverts.find(
-          (c) => score >= c.base10Min && score <= c.base10Max
-        )
+        const conversion = scoreConverts.find((c) => score >= c.base10Min && score <= c.base10Max)
 
         if (credits) {
           totalCredits += credits
@@ -2528,7 +2526,9 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
             totalPoints4 += safeNumber(conversion.base4) * credits
           }
         }
-        console.log(`Record ${idx + 1}: score=${score}, credits=${credits}, conversion=${conversion ? conversion.base4 : "N/A"}`)
+        console.log(
+          `Record ${idx + 1}: score=${score}, credits=${credits}, conversion=${conversion ? conversion.base4 : "N/A"}`
+        )
         return {
           stt: idx + 1,
           ten_hoc_phan: safeString(record.subjectVersion?.subject?.name),
@@ -2898,7 +2898,7 @@ app.openapi(exportPhuLucVanBangNganHan, async (c: any) => {
           totalCredits += credits
           totalPoints10 += score * credits
         }
-console.log(`Record ${idx + 1}: score=${score}, credits=${credits}`)
+        console.log(`Record ${idx + 1}: score=${score}, credits=${credits}`)
         return {
           stt: idx + 1,
           ten_hoc_phan: safeString(record.subjectVersion?.subject?.name),
@@ -2921,7 +2921,9 @@ console.log(`Record ${idx + 1}: score=${score}, credits=${credits}`)
         : totalCredits > 0
           ? totalPoints10 / totalCredits
           : 0
-console.log(`Student ${student.code}: totalCredits=${totalCredits}, totalPoints10=${totalPoints10}, gpa10=${gpa10}`)
+      console.log(
+        `Student ${student.code}: totalCredits=${totalCredits}, totalPoints10=${totalPoints10}, gpa10=${gpa10}`
+      )
       return {
         data: {
           so_quyet_dinh: safeString(gD?.diplomaNumber),

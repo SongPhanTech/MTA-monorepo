@@ -1759,7 +1759,7 @@ export type DefenseRecord = $Result.DefaultSelection<Prisma.$DefenseRecordPayloa
 export type LibrarySubmission = $Result.DefaultSelection<Prisma.$LibrarySubmissionPayload>;
 /**
  * Model ConfigPaymentSession
- * Bộ định mức thanh toán gắn với một đợt xét (1 đợt — 1 config)
+ * Bộ định mức thanh toán
  * @
  * @allow ('all', auth() != null)
  * @
@@ -1770,7 +1770,7 @@ export type LibrarySubmission = $Result.DefaultSelection<Prisma.$LibrarySubmissi
 export type ConfigPaymentSession = $Result.DefaultSelection<Prisma.$ConfigPaymentSessionPayload>;
 /**
  * Model DefaultCouncilRolePayAmount
- * Định mức hội đồng: configPaymentSessionId = null → mức chung; có id → theo đợt
+ * Định mức hội đồng
  * @
  * @allow ('all', auth() != null)
  * @
@@ -1781,7 +1781,7 @@ export type ConfigPaymentSession = $Result.DefaultSelection<Prisma.$ConfigPaymen
 export type DefaultCouncilRolePayAmount = $Result.DefaultSelection<Prisma.$DefaultCouncilRolePayAmountPayload>;
 /**
  * Model DefaultSupervisorPayAmount
- * Định mức hướng dẫn: configPaymentSessionId = null → mức chung; có id → theo đợt
+ * Định mức hướng dẫn
  * @
  * @allow ('all', auth() != null)
  * @
@@ -9383,7 +9383,8 @@ export namespace Prisma {
         chief: 'chief',
         deputy: 'deputy',
         topicEntryDeadline: 'topicEntryDeadline',
-        councilDeadline: 'councilDeadline'
+        councilDeadline: 'councilDeadline',
+        configPaymentSessionId: 'configPaymentSessionId'
     };
     export const ThesisProjectScalarFieldEnum: {
         id: 'id',
@@ -9595,8 +9596,7 @@ export namespace Prisma {
         createdAt: 'createdAt',
         updatedAt: 'updatedAt',
         createdBy: 'createdBy',
-        name: 'name',
-        sessionId: 'sessionId'
+        name: 'name'
     };
     export const DefaultCouncilRolePayAmountScalarFieldEnum: {
         id: 'id',
@@ -12816,7 +12816,8 @@ export namespace Prisma {
         graduationNumber: 'graduationNumber',
         graduationDecisionMaker: 'graduationDecisionMaker',
         chief: 'chief',
-        deputy: 'deputy'
+        deputy: 'deputy',
+        configPaymentSessionId: 'configPaymentSessionId'
     };
     export const ThesisProjectOrderByRelevanceFieldEnum: {
         id: 'id',
@@ -12947,8 +12948,7 @@ export namespace Prisma {
         code: 'code',
         description: 'description',
         createdBy: 'createdBy',
-        name: 'name',
-        sessionId: 'sessionId'
+        name: 'name'
     };
     export const DefaultCouncilRolePayAmountOrderByRelevanceFieldEnum: {
         id: 'id',
@@ -76094,6 +76094,7 @@ export namespace Prisma {
         readonly deputy: FieldRef<"ThesisSession", 'String'>;
         readonly topicEntryDeadline: FieldRef<"ThesisSession", 'DateTime'>;
         readonly councilDeadline: FieldRef<"ThesisSession", 'DateTime'>;
+        readonly configPaymentSessionId: FieldRef<"ThesisSession", 'String'>;
     }
 
     export interface ThesisProjectDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
@@ -80382,7 +80383,7 @@ export namespace Prisma {
      */
     export interface Prisma__ConfigPaymentSessionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
         readonly [Symbol.toStringTag]: "PrismaPromise";
-        session<T extends ThesisSessionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ThesisSessionDefaultArgs<ExtArgs>>): Prisma__ThesisSessionClient<$Result.GetResult<Prisma.$ThesisSessionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
+        thesisSessions<T extends ConfigPaymentSession$thesisSessionsArgs<ExtArgs> = {}>(args?: Subset<T, ConfigPaymentSession$thesisSessionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ThesisSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         councilPayAmounts<T extends ConfigPaymentSession$councilPayAmountsArgs<ExtArgs> = {}>(args?: Subset<T, ConfigPaymentSession$councilPayAmountsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DefaultCouncilRolePayAmountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         supervisorPayAmounts<T extends ConfigPaymentSession$supervisorPayAmountsArgs<ExtArgs> = {}>(args?: Subset<T, ConfigPaymentSession$supervisorPayAmountsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DefaultSupervisorPayAmountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         /**
@@ -80420,7 +80421,6 @@ export namespace Prisma {
         readonly updatedAt: FieldRef<"ConfigPaymentSession", 'DateTime'>;
         readonly createdBy: FieldRef<"ConfigPaymentSession", 'String'>;
         readonly name: FieldRef<"ConfigPaymentSession", 'String'>;
-        readonly sessionId: FieldRef<"ConfigPaymentSession", 'String'>;
     }
 
     export interface DefaultCouncilRolePayAmountDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
@@ -146327,10 +146327,12 @@ export namespace Prisma {
      * Count Type ConfigPaymentSessionCountOutputType
      */
     export type ConfigPaymentSessionCountOutputType = {
+        thesisSessions: number
         councilPayAmounts: number
         supervisorPayAmounts: number
     };
     export type ConfigPaymentSessionCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        thesisSessions?: boolean | ConfigPaymentSessionCountOutputTypeCountThesisSessionsArgs
         councilPayAmounts?: boolean | ConfigPaymentSessionCountOutputTypeCountCouncilPayAmountsArgs
         supervisorPayAmounts?: boolean | ConfigPaymentSessionCountOutputTypeCountSupervisorPayAmountsArgs
     };
@@ -146342,6 +146344,12 @@ export namespace Prisma {
          * Select specific fields to fetch from the ConfigPaymentSessionCountOutputType
          */
         select?: ConfigPaymentSessionCountOutputTypeSelect<ExtArgs> | null
+    };
+    /**
+     * ConfigPaymentSessionCountOutputType without action
+     */
+    export type ConfigPaymentSessionCountOutputTypeCountThesisSessionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: ThesisSessionWhereInput
     };
     /**
      * ConfigPaymentSessionCountOutputType without action
@@ -278767,6 +278775,7 @@ export namespace Prisma {
         deputy: string | null
         topicEntryDeadline: Date | null
         councilDeadline: Date | null
+        configPaymentSessionId: string | null
     };
     export type ThesisSessionMaxAggregateOutputType = {
         id: string | null
@@ -278798,6 +278807,7 @@ export namespace Prisma {
         deputy: string | null
         topicEntryDeadline: Date | null
         councilDeadline: Date | null
+        configPaymentSessionId: string | null
     };
     export type ThesisSessionCountAggregateOutputType = {
         id: number
@@ -278829,6 +278839,7 @@ export namespace Prisma {
         deputy: number
         topicEntryDeadline: number
         councilDeadline: number
+        configPaymentSessionId: number
         _all: number
     };
     export type ThesisSessionMinAggregateInputType = {
@@ -278861,6 +278872,7 @@ export namespace Prisma {
         deputy?: true
         topicEntryDeadline?: true
         councilDeadline?: true
+        configPaymentSessionId?: true
     };
     export type ThesisSessionMaxAggregateInputType = {
         id?: true
@@ -278892,6 +278904,7 @@ export namespace Prisma {
         deputy?: true
         topicEntryDeadline?: true
         councilDeadline?: true
+        configPaymentSessionId?: true
     };
     export type ThesisSessionCountAggregateInputType = {
         id?: true
@@ -278923,6 +278936,7 @@ export namespace Prisma {
         deputy?: true
         topicEntryDeadline?: true
         councilDeadline?: true
+        configPaymentSessionId?: true
         _all?: true
     };
     export type ThesisSessionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -279021,6 +279035,7 @@ export namespace Prisma {
         deputy: string | null
         topicEntryDeadline: Date | null
         councilDeadline: Date | null
+        configPaymentSessionId: string | null
         _count: ThesisSessionCountAggregateOutputType | null
         _min: ThesisSessionMinAggregateOutputType | null
         _max: ThesisSessionMaxAggregateOutputType | null
@@ -279067,6 +279082,7 @@ export namespace Prisma {
         deputy?: boolean
         topicEntryDeadline?: boolean
         councilDeadline?: boolean
+        configPaymentSessionId?: boolean
         trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
         trainingCourse?: boolean | TrainingCourseDefaultArgs<ExtArgs>
         thesisProject?: boolean | ThesisSession$thesisProjectArgs<ExtArgs>
@@ -279103,8 +279119,10 @@ export namespace Prisma {
         deputy?: boolean
         topicEntryDeadline?: boolean
         councilDeadline?: boolean
+        configPaymentSessionId?: boolean
         trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
         trainingCourse?: boolean | TrainingCourseDefaultArgs<ExtArgs>
+        configPayment?: boolean | ThesisSession$configPaymentArgs<ExtArgs>
     }, ExtArgs["result"]["thesisSession"]>;
     export type ThesisSessionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
         id?: boolean
@@ -279136,8 +279154,10 @@ export namespace Prisma {
         deputy?: boolean
         topicEntryDeadline?: boolean
         councilDeadline?: boolean
+        configPaymentSessionId?: boolean
         trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
         trainingCourse?: boolean | TrainingCourseDefaultArgs<ExtArgs>
+        configPayment?: boolean | ThesisSession$configPaymentArgs<ExtArgs>
     }, ExtArgs["result"]["thesisSession"]>;
     export type ThesisSessionSelectScalar = {
         id?: boolean
@@ -279169,8 +279189,9 @@ export namespace Prisma {
         deputy?: boolean
         topicEntryDeadline?: boolean
         councilDeadline?: boolean
+        configPaymentSessionId?: boolean
     };
-    export type ThesisSessionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name" | "startDate" | "endDate" | "trainingObjectTypeId" | "trainingCourseId" | "proposalReport" | "councilReport" | "graduationReport" | "decisionNumber" | "decisionMaker" | "decisionDate" | "defenseDecisionNumber" | "defenseDecisionMaker" | "defenseDecisionDate" | "graduationNumber" | "graduationDecisionMaker" | "graduationDecisionDate" | "chief" | "deputy" | "topicEntryDeadline" | "councilDeadline", ExtArgs["result"]["thesisSession"]>;
+    export type ThesisSessionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name" | "startDate" | "endDate" | "trainingObjectTypeId" | "trainingCourseId" | "proposalReport" | "councilReport" | "graduationReport" | "decisionNumber" | "decisionMaker" | "decisionDate" | "defenseDecisionNumber" | "defenseDecisionMaker" | "defenseDecisionDate" | "graduationNumber" | "graduationDecisionMaker" | "graduationDecisionDate" | "chief" | "deputy" | "topicEntryDeadline" | "councilDeadline" | "configPaymentSessionId", ExtArgs["result"]["thesisSession"]>;
     export type ThesisSessionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
         trainingCourse?: boolean | TrainingCourseDefaultArgs<ExtArgs>
@@ -279181,10 +279202,12 @@ export namespace Prisma {
     export type ThesisSessionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
         trainingCourse?: boolean | TrainingCourseDefaultArgs<ExtArgs>
+        configPayment?: boolean | ThesisSession$configPaymentArgs<ExtArgs>
     };
     export type ThesisSessionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
         trainingCourse?: boolean | TrainingCourseDefaultArgs<ExtArgs>
+        configPayment?: boolean | ThesisSession$configPaymentArgs<ExtArgs>
     };
     export type $ThesisSessionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         name: "ThesisSession"
@@ -279269,6 +279292,7 @@ export namespace Prisma {
              * Hạn nhập hội đồng
              */
             councilDeadline: Date | null
+            configPaymentSessionId: string | null
         }, ExtArgs["result"]["thesisSession"]>
         composites: {}
     };
@@ -288431,7 +288455,6 @@ export namespace Prisma {
         updatedAt: Date | null
         createdBy: string | null
         name: string | null
-        sessionId: string | null
     };
     export type ConfigPaymentSessionMaxAggregateOutputType = {
         id: string | null
@@ -288443,7 +288466,6 @@ export namespace Prisma {
         updatedAt: Date | null
         createdBy: string | null
         name: string | null
-        sessionId: string | null
     };
     export type ConfigPaymentSessionCountAggregateOutputType = {
         id: number
@@ -288455,7 +288477,6 @@ export namespace Prisma {
         updatedAt: number
         createdBy: number
         name: number
-        sessionId: number
         _all: number
     };
     export type ConfigPaymentSessionMinAggregateInputType = {
@@ -288468,7 +288489,6 @@ export namespace Prisma {
         updatedAt?: true
         createdBy?: true
         name?: true
-        sessionId?: true
     };
     export type ConfigPaymentSessionMaxAggregateInputType = {
         id?: true
@@ -288480,7 +288500,6 @@ export namespace Prisma {
         updatedAt?: true
         createdBy?: true
         name?: true
-        sessionId?: true
     };
     export type ConfigPaymentSessionCountAggregateInputType = {
         id?: true
@@ -288492,7 +288511,6 @@ export namespace Prisma {
         updatedAt?: true
         createdBy?: true
         name?: true
-        sessionId?: true
         _all?: true
     };
     export type ConfigPaymentSessionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -288571,7 +288589,6 @@ export namespace Prisma {
         updatedAt: Date
         createdBy: string | null
         name: string
-        sessionId: string
         _count: ConfigPaymentSessionCountAggregateOutputType | null
         _min: ConfigPaymentSessionMinAggregateOutputType | null
         _max: ConfigPaymentSessionMaxAggregateOutputType | null
@@ -288598,8 +288615,7 @@ export namespace Prisma {
         updatedAt?: boolean
         createdBy?: boolean
         name?: boolean
-        sessionId?: boolean
-        session?: boolean | ThesisSessionDefaultArgs<ExtArgs>
+        thesisSessions?: boolean | ConfigPaymentSession$thesisSessionsArgs<ExtArgs>
         councilPayAmounts?: boolean | ConfigPaymentSession$councilPayAmountsArgs<ExtArgs>
         supervisorPayAmounts?: boolean | ConfigPaymentSession$supervisorPayAmountsArgs<ExtArgs>
         _count?: boolean | ConfigPaymentSessionCountOutputTypeDefaultArgs<ExtArgs>
@@ -288614,8 +288630,6 @@ export namespace Prisma {
         updatedAt?: boolean
         createdBy?: boolean
         name?: boolean
-        sessionId?: boolean
-        session?: boolean | ThesisSessionDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["configPaymentSession"]>;
     export type ConfigPaymentSessionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
         id?: boolean
@@ -288627,8 +288641,6 @@ export namespace Prisma {
         updatedAt?: boolean
         createdBy?: boolean
         name?: boolean
-        sessionId?: boolean
-        session?: boolean | ThesisSessionDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["configPaymentSession"]>;
     export type ConfigPaymentSessionSelectScalar = {
         id?: boolean
@@ -288640,25 +288652,20 @@ export namespace Prisma {
         updatedAt?: boolean
         createdBy?: boolean
         name?: boolean
-        sessionId?: boolean
     };
-    export type ConfigPaymentSessionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name" | "sessionId", ExtArgs["result"]["configPaymentSession"]>;
+    export type ConfigPaymentSessionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name", ExtArgs["result"]["configPaymentSession"]>;
     export type ConfigPaymentSessionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        session?: boolean | ThesisSessionDefaultArgs<ExtArgs>
+        thesisSessions?: boolean | ConfigPaymentSession$thesisSessionsArgs<ExtArgs>
         councilPayAmounts?: boolean | ConfigPaymentSession$councilPayAmountsArgs<ExtArgs>
         supervisorPayAmounts?: boolean | ConfigPaymentSession$supervisorPayAmountsArgs<ExtArgs>
         _count?: boolean | ConfigPaymentSessionCountOutputTypeDefaultArgs<ExtArgs>
     };
-    export type ConfigPaymentSessionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        session?: boolean | ThesisSessionDefaultArgs<ExtArgs>
-    };
-    export type ConfigPaymentSessionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        session?: boolean | ThesisSessionDefaultArgs<ExtArgs>
-    };
+    export type ConfigPaymentSessionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {};
+    export type ConfigPaymentSessionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {};
     export type $ConfigPaymentSessionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         name: "ConfigPaymentSession"
         objects: {
-            session: Prisma.$ThesisSessionPayload<ExtArgs>
+            thesisSessions: Prisma.$ThesisSessionPayload<ExtArgs>[]
             councilPayAmounts: Prisma.$DefaultCouncilRolePayAmountPayload<ExtArgs>[]
             supervisorPayAmounts: Prisma.$DefaultSupervisorPayAmountPayload<ExtArgs>[]
         }
@@ -288672,7 +288679,6 @@ export namespace Prisma {
             updatedAt: Date
             createdBy: string | null
             name: string
-            sessionId: string
         }, ExtArgs["result"]["configPaymentSession"]>
         composites: {}
     };
@@ -288918,10 +288924,6 @@ export namespace Prisma {
          */
         data: ConfigPaymentSessionCreateManyInput | ConfigPaymentSessionCreateManyInput[]
         skipDuplicates?: boolean
-        /**
-         * Choose, which related nodes to fetch as well
-         */
-        include?: ConfigPaymentSessionIncludeCreateManyAndReturn<ExtArgs> | null
     };
     /**
      * ConfigPaymentSession update
@@ -288989,10 +288991,6 @@ export namespace Prisma {
          * Limit how many ConfigPaymentSessions to update.
          */
         limit?: number
-        /**
-         * Choose, which related nodes to fetch as well
-         */
-        include?: ConfigPaymentSessionIncludeUpdateManyAndReturn<ExtArgs> | null
     };
     /**
      * ConfigPaymentSession upsert
@@ -289056,6 +289054,29 @@ export namespace Prisma {
          * Limit how many ConfigPaymentSessions to delete.
          */
         limit?: number
+    };
+    /**
+     * ConfigPaymentSession.thesisSessions
+     */
+    export type ConfigPaymentSession$thesisSessionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ThesisSession
+         */
+        select?: ThesisSessionSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ThesisSession
+         */
+        omit?: ThesisSessionOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ThesisSessionInclude<ExtArgs> | null
+        where?: ThesisSessionWhereInput
+        orderBy?: ThesisSessionOrderByWithRelationInput | ThesisSessionOrderByWithRelationInput[]
+        cursor?: ThesisSessionWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: ThesisSessionScalarFieldEnum | ThesisSessionScalarFieldEnum[]
     };
     /**
      * ConfigPaymentSession.councilPayAmounts
@@ -385517,6 +385538,7 @@ export namespace Prisma {
         deputy?: StringNullableFilter<"ThesisSession"> | string | null
         topicEntryDeadline?: DateTimeNullableFilter<"ThesisSession"> | Date | string | null
         councilDeadline?: DateTimeNullableFilter<"ThesisSession"> | Date | string | null
+        configPaymentSessionId?: StringNullableFilter<"ThesisSession"> | string | null
         trainingObjectType?: XOR<TrainingObjectTypeScalarRelationFilter, TrainingObjectTypeWhereInput>
         trainingCourse?: XOR<TrainingCourseScalarRelationFilter, TrainingCourseWhereInput>
         thesisProject?: ThesisProjectListRelationFilter
@@ -385552,6 +385574,7 @@ export namespace Prisma {
         deputy?: SortOrderInput | SortOrder
         topicEntryDeadline?: SortOrderInput | SortOrder
         councilDeadline?: SortOrderInput | SortOrder
+        configPaymentSessionId?: SortOrderInput | SortOrder
         trainingObjectType?: TrainingObjectTypeOrderByWithRelationInput
         trainingCourse?: TrainingCourseOrderByWithRelationInput
         thesisProject?: ThesisProjectOrderByRelationAggregateInput
@@ -385591,6 +385614,7 @@ export namespace Prisma {
         deputy?: StringNullableFilter<"ThesisSession"> | string | null
         topicEntryDeadline?: DateTimeNullableFilter<"ThesisSession"> | Date | string | null
         councilDeadline?: DateTimeNullableFilter<"ThesisSession"> | Date | string | null
+        configPaymentSessionId?: StringNullableFilter<"ThesisSession"> | string | null
         trainingObjectType?: XOR<TrainingObjectTypeScalarRelationFilter, TrainingObjectTypeWhereInput>
         trainingCourse?: XOR<TrainingCourseScalarRelationFilter, TrainingCourseWhereInput>
         thesisProject?: ThesisProjectListRelationFilter
@@ -385626,6 +385650,7 @@ export namespace Prisma {
         deputy?: SortOrderInput | SortOrder
         topicEntryDeadline?: SortOrderInput | SortOrder
         councilDeadline?: SortOrderInput | SortOrder
+        configPaymentSessionId?: SortOrderInput | SortOrder
         _count?: ThesisSessionCountOrderByAggregateInput
         _max?: ThesisSessionMaxOrderByAggregateInput
         _min?: ThesisSessionMinOrderByAggregateInput
@@ -385663,6 +385688,7 @@ export namespace Prisma {
         deputy?: StringNullableWithAggregatesFilter<"ThesisSession"> | string | null
         topicEntryDeadline?: DateTimeNullableWithAggregatesFilter<"ThesisSession"> | Date | string | null
         councilDeadline?: DateTimeNullableWithAggregatesFilter<"ThesisSession"> | Date | string | null
+        configPaymentSessionId?: StringNullableWithAggregatesFilter<"ThesisSession"> | string | null
     };
     export type ThesisProjectWhereInput = {
         AND?: ThesisProjectWhereInput | ThesisProjectWhereInput[]
@@ -386973,8 +386999,7 @@ export namespace Prisma {
         updatedAt?: DateTimeFilter<"ConfigPaymentSession"> | Date | string
         createdBy?: UuidNullableFilter<"ConfigPaymentSession"> | string | null
         name?: StringFilter<"ConfigPaymentSession"> | string
-        sessionId?: StringFilter<"ConfigPaymentSession"> | string
-        session?: XOR<ThesisSessionScalarRelationFilter, ThesisSessionWhereInput>
+        thesisSessions?: ThesisSessionListRelationFilter
         councilPayAmounts?: DefaultCouncilRolePayAmountListRelationFilter
         supervisorPayAmounts?: DefaultSupervisorPayAmountListRelationFilter
     };
@@ -386988,8 +387013,7 @@ export namespace Prisma {
         updatedAt?: SortOrder
         createdBy?: SortOrderInput | SortOrder
         name?: SortOrder
-        sessionId?: SortOrder
-        session?: ThesisSessionOrderByWithRelationInput
+        thesisSessions?: ThesisSessionOrderByRelationAggregateInput
         councilPayAmounts?: DefaultCouncilRolePayAmountOrderByRelationAggregateInput
         supervisorPayAmounts?: DefaultSupervisorPayAmountOrderByRelationAggregateInput
         _relevance?: ConfigPaymentSessionOrderByRelevanceInput
@@ -386997,7 +387021,6 @@ export namespace Prisma {
     export type ConfigPaymentSessionWhereUniqueInput = Prisma.AtLeast<{
         id?: string
         code?: string
-        sessionId?: string
         AND?: ConfigPaymentSessionWhereInput | ConfigPaymentSessionWhereInput[]
         OR?: ConfigPaymentSessionWhereInput[]
         NOT?: ConfigPaymentSessionWhereInput | ConfigPaymentSessionWhereInput[]
@@ -387008,10 +387031,10 @@ export namespace Prisma {
         updatedAt?: DateTimeFilter<"ConfigPaymentSession"> | Date | string
         createdBy?: UuidNullableFilter<"ConfigPaymentSession"> | string | null
         name?: StringFilter<"ConfigPaymentSession"> | string
-        session?: XOR<ThesisSessionScalarRelationFilter, ThesisSessionWhereInput>
+        thesisSessions?: ThesisSessionListRelationFilter
         councilPayAmounts?: DefaultCouncilRolePayAmountListRelationFilter
         supervisorPayAmounts?: DefaultSupervisorPayAmountListRelationFilter
-    }, "id" | "code" | "sessionId">;
+    }, "id" | "code">;
     export type ConfigPaymentSessionOrderByWithAggregationInput = {
         id?: SortOrder
         code?: SortOrderInput | SortOrder
@@ -387022,7 +387045,6 @@ export namespace Prisma {
         updatedAt?: SortOrder
         createdBy?: SortOrderInput | SortOrder
         name?: SortOrder
-        sessionId?: SortOrder
         _count?: ConfigPaymentSessionCountOrderByAggregateInput
         _max?: ConfigPaymentSessionMaxOrderByAggregateInput
         _min?: ConfigPaymentSessionMinOrderByAggregateInput
@@ -387040,7 +387062,6 @@ export namespace Prisma {
         updatedAt?: DateTimeWithAggregatesFilter<"ConfigPaymentSession"> | Date | string
         createdBy?: UuidNullableWithAggregatesFilter<"ConfigPaymentSession"> | string | null
         name?: StringWithAggregatesFilter<"ConfigPaymentSession"> | string
-        sessionId?: StringWithAggregatesFilter<"ConfigPaymentSession"> | string
     };
     export type DefaultCouncilRolePayAmountWhereInput = {
         AND?: DefaultCouncilRolePayAmountWhereInput | DefaultCouncilRolePayAmountWhereInput[]
@@ -417650,7 +417671,7 @@ export namespace Prisma {
         trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutThesisSessionInput
         trainingCourse: TrainingCourseCreateNestedOneWithoutThesisSessionInput
         thesisProject?: ThesisProjectCreateNestedManyWithoutThesisSessionInput
-        configPayment?: ConfigPaymentSessionCreateNestedOneWithoutSessionInput
+        configPayment?: ConfigPaymentSessionCreateNestedOneWithoutThesisSessionsInput
     };
     export type ThesisSessionUncheckedCreateInput = {
         id?: string
@@ -417682,8 +417703,8 @@ export namespace Prisma {
         deputy?: string | null
         topicEntryDeadline?: Date | string | null
         councilDeadline?: Date | string | null
+        configPaymentSessionId?: string | null
         thesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutThesisSessionInput
-        configPayment?: ConfigPaymentSessionUncheckedCreateNestedOneWithoutSessionInput
     };
     export type ThesisSessionUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -417716,7 +417737,7 @@ export namespace Prisma {
         trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutThesisSessionNestedInput
         trainingCourse?: TrainingCourseUpdateOneRequiredWithoutThesisSessionNestedInput
         thesisProject?: ThesisProjectUpdateManyWithoutThesisSessionNestedInput
-        configPayment?: ConfigPaymentSessionUpdateOneWithoutSessionNestedInput
+        configPayment?: ConfigPaymentSessionUpdateOneWithoutThesisSessionsNestedInput
     };
     export type ThesisSessionUncheckedUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -417748,8 +417769,8 @@ export namespace Prisma {
         deputy?: NullableStringFieldUpdateOperationsInput | string | null
         topicEntryDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         councilDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        configPaymentSessionId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisProject?: ThesisProjectUncheckedUpdateManyWithoutThesisSessionNestedInput
-        configPayment?: ConfigPaymentSessionUncheckedUpdateOneWithoutSessionNestedInput
     };
     export type ThesisSessionCreateManyInput = {
         id?: string
@@ -417781,6 +417802,7 @@ export namespace Prisma {
         deputy?: string | null
         topicEntryDeadline?: Date | string | null
         councilDeadline?: Date | string | null
+        configPaymentSessionId?: string | null
     };
     export type ThesisSessionUpdateManyMutationInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -417841,6 +417863,7 @@ export namespace Prisma {
         deputy?: NullableStringFieldUpdateOperationsInput | string | null
         topicEntryDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         councilDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        configPaymentSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type ThesisProjectCreateInput = {
         id?: string
@@ -419327,7 +419350,7 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         name: string
-        session: ThesisSessionCreateNestedOneWithoutConfigPaymentInput
+        thesisSessions?: ThesisSessionCreateNestedManyWithoutConfigPaymentInput
         councilPayAmounts?: DefaultCouncilRolePayAmountCreateNestedManyWithoutConfigPaymentSessionInput
         supervisorPayAmounts?: DefaultSupervisorPayAmountCreateNestedManyWithoutConfigPaymentSessionInput
     };
@@ -419341,7 +419364,7 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         name: string
-        sessionId: string
+        thesisSessions?: ThesisSessionUncheckedCreateNestedManyWithoutConfigPaymentInput
         councilPayAmounts?: DefaultCouncilRolePayAmountUncheckedCreateNestedManyWithoutConfigPaymentSessionInput
         supervisorPayAmounts?: DefaultSupervisorPayAmountUncheckedCreateNestedManyWithoutConfigPaymentSessionInput
     };
@@ -419355,7 +419378,7 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
-        session?: ThesisSessionUpdateOneRequiredWithoutConfigPaymentNestedInput
+        thesisSessions?: ThesisSessionUpdateManyWithoutConfigPaymentNestedInput
         councilPayAmounts?: DefaultCouncilRolePayAmountUpdateManyWithoutConfigPaymentSessionNestedInput
         supervisorPayAmounts?: DefaultSupervisorPayAmountUpdateManyWithoutConfigPaymentSessionNestedInput
     };
@@ -419369,7 +419392,7 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
-        sessionId?: StringFieldUpdateOperationsInput | string
+        thesisSessions?: ThesisSessionUncheckedUpdateManyWithoutConfigPaymentNestedInput
         councilPayAmounts?: DefaultCouncilRolePayAmountUncheckedUpdateManyWithoutConfigPaymentSessionNestedInput
         supervisorPayAmounts?: DefaultSupervisorPayAmountUncheckedUpdateManyWithoutConfigPaymentSessionNestedInput
     };
@@ -419383,7 +419406,6 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         name: string
-        sessionId: string
     };
     export type ConfigPaymentSessionUpdateManyMutationInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -419406,7 +419428,6 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
-        sessionId?: StringFieldUpdateOperationsInput | string
     };
     export type DefaultCouncilRolePayAmountCreateInput = {
         id?: string
@@ -443110,6 +443131,7 @@ export namespace Prisma {
         deputy?: SortOrder
         topicEntryDeadline?: SortOrder
         councilDeadline?: SortOrder
+        configPaymentSessionId?: SortOrder
     };
     export type ThesisSessionMaxOrderByAggregateInput = {
         id?: SortOrder
@@ -443141,6 +443163,7 @@ export namespace Prisma {
         deputy?: SortOrder
         topicEntryDeadline?: SortOrder
         councilDeadline?: SortOrder
+        configPaymentSessionId?: SortOrder
     };
     export type ThesisSessionMinOrderByAggregateInput = {
         id?: SortOrder
@@ -443172,6 +443195,7 @@ export namespace Prisma {
         deputy?: SortOrder
         topicEntryDeadline?: SortOrder
         councilDeadline?: SortOrder
+        configPaymentSessionId?: SortOrder
     };
     export type EnumThesisTypeFilter<$PrismaModel = never> = {
         equals?: $Enums.ThesisType | EnumThesisTypeFieldRefInput<$PrismaModel>
@@ -444014,10 +444038,6 @@ export namespace Prisma {
         thesisId?: SortOrder
         confirmedById?: SortOrder
     };
-    export type ThesisSessionScalarRelationFilter = {
-        is?: ThesisSessionWhereInput
-        isNot?: ThesisSessionWhereInput
-    };
     export type DefaultCouncilRolePayAmountListRelationFilter = {
         every?: DefaultCouncilRolePayAmountWhereInput
         some?: DefaultCouncilRolePayAmountWhereInput
@@ -444049,7 +444069,6 @@ export namespace Prisma {
         updatedAt?: SortOrder
         createdBy?: SortOrder
         name?: SortOrder
-        sessionId?: SortOrder
     };
     export type ConfigPaymentSessionMaxOrderByAggregateInput = {
         id?: SortOrder
@@ -444061,7 +444080,6 @@ export namespace Prisma {
         updatedAt?: SortOrder
         createdBy?: SortOrder
         name?: SortOrder
-        sessionId?: SortOrder
     };
     export type ConfigPaymentSessionMinOrderByAggregateInput = {
         id?: SortOrder
@@ -444073,7 +444091,6 @@ export namespace Prisma {
         updatedAt?: SortOrder
         createdBy?: SortOrder
         name?: SortOrder
-        sessionId?: SortOrder
     };
     export type DefaultCouncilRolePayAmountOrderByRelevanceInput = {
         fields: DefaultCouncilRolePayAmountOrderByRelevanceFieldEnum | DefaultCouncilRolePayAmountOrderByRelevanceFieldEnum[]
@@ -468075,9 +468092,9 @@ export namespace Prisma {
         createMany?: ThesisProjectCreateManyThesisSessionInputEnvelope
         connect?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
     };
-    export type ConfigPaymentSessionCreateNestedOneWithoutSessionInput = {
-        create?: XOR<ConfigPaymentSessionCreateWithoutSessionInput, ConfigPaymentSessionUncheckedCreateWithoutSessionInput>
-        connectOrCreate?: ConfigPaymentSessionCreateOrConnectWithoutSessionInput
+    export type ConfigPaymentSessionCreateNestedOneWithoutThesisSessionsInput = {
+        create?: XOR<ConfigPaymentSessionCreateWithoutThesisSessionsInput, ConfigPaymentSessionUncheckedCreateWithoutThesisSessionsInput>
+        connectOrCreate?: ConfigPaymentSessionCreateOrConnectWithoutThesisSessionsInput
         connect?: ConfigPaymentSessionWhereUniqueInput
     };
     export type ThesisProjectUncheckedCreateNestedManyWithoutThesisSessionInput = {
@@ -468085,11 +468102,6 @@ export namespace Prisma {
         connectOrCreate?: ThesisProjectCreateOrConnectWithoutThesisSessionInput | ThesisProjectCreateOrConnectWithoutThesisSessionInput[]
         createMany?: ThesisProjectCreateManyThesisSessionInputEnvelope
         connect?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
-    };
-    export type ConfigPaymentSessionUncheckedCreateNestedOneWithoutSessionInput = {
-        create?: XOR<ConfigPaymentSessionCreateWithoutSessionInput, ConfigPaymentSessionUncheckedCreateWithoutSessionInput>
-        connectOrCreate?: ConfigPaymentSessionCreateOrConnectWithoutSessionInput
-        connect?: ConfigPaymentSessionWhereUniqueInput
     };
     export type TrainingObjectTypeUpdateOneRequiredWithoutThesisSessionNestedInput = {
         create?: XOR<TrainingObjectTypeCreateWithoutThesisSessionInput, TrainingObjectTypeUncheckedCreateWithoutThesisSessionInput>
@@ -468118,14 +468130,14 @@ export namespace Prisma {
         updateMany?: ThesisProjectUpdateManyWithWhereWithoutThesisSessionInput | ThesisProjectUpdateManyWithWhereWithoutThesisSessionInput[]
         deleteMany?: ThesisProjectScalarWhereInput | ThesisProjectScalarWhereInput[]
     };
-    export type ConfigPaymentSessionUpdateOneWithoutSessionNestedInput = {
-        create?: XOR<ConfigPaymentSessionCreateWithoutSessionInput, ConfigPaymentSessionUncheckedCreateWithoutSessionInput>
-        connectOrCreate?: ConfigPaymentSessionCreateOrConnectWithoutSessionInput
-        upsert?: ConfigPaymentSessionUpsertWithoutSessionInput
+    export type ConfigPaymentSessionUpdateOneWithoutThesisSessionsNestedInput = {
+        create?: XOR<ConfigPaymentSessionCreateWithoutThesisSessionsInput, ConfigPaymentSessionUncheckedCreateWithoutThesisSessionsInput>
+        connectOrCreate?: ConfigPaymentSessionCreateOrConnectWithoutThesisSessionsInput
+        upsert?: ConfigPaymentSessionUpsertWithoutThesisSessionsInput
         disconnect?: ConfigPaymentSessionWhereInput | boolean
         delete?: ConfigPaymentSessionWhereInput | boolean
         connect?: ConfigPaymentSessionWhereUniqueInput
-        update?: XOR<XOR<ConfigPaymentSessionUpdateToOneWithWhereWithoutSessionInput, ConfigPaymentSessionUpdateWithoutSessionInput>, ConfigPaymentSessionUncheckedUpdateWithoutSessionInput>
+        update?: XOR<XOR<ConfigPaymentSessionUpdateToOneWithWhereWithoutThesisSessionsInput, ConfigPaymentSessionUpdateWithoutThesisSessionsInput>, ConfigPaymentSessionUncheckedUpdateWithoutThesisSessionsInput>
     };
     export type ThesisProjectUncheckedUpdateManyWithoutThesisSessionNestedInput = {
         create?: XOR<ThesisProjectCreateWithoutThesisSessionInput, ThesisProjectUncheckedCreateWithoutThesisSessionInput> | ThesisProjectCreateWithoutThesisSessionInput[] | ThesisProjectUncheckedCreateWithoutThesisSessionInput[]
@@ -468139,15 +468151,6 @@ export namespace Prisma {
         update?: ThesisProjectUpdateWithWhereUniqueWithoutThesisSessionInput | ThesisProjectUpdateWithWhereUniqueWithoutThesisSessionInput[]
         updateMany?: ThesisProjectUpdateManyWithWhereWithoutThesisSessionInput | ThesisProjectUpdateManyWithWhereWithoutThesisSessionInput[]
         deleteMany?: ThesisProjectScalarWhereInput | ThesisProjectScalarWhereInput[]
-    };
-    export type ConfigPaymentSessionUncheckedUpdateOneWithoutSessionNestedInput = {
-        create?: XOR<ConfigPaymentSessionCreateWithoutSessionInput, ConfigPaymentSessionUncheckedCreateWithoutSessionInput>
-        connectOrCreate?: ConfigPaymentSessionCreateOrConnectWithoutSessionInput
-        upsert?: ConfigPaymentSessionUpsertWithoutSessionInput
-        disconnect?: ConfigPaymentSessionWhereInput | boolean
-        delete?: ConfigPaymentSessionWhereInput | boolean
-        connect?: ConfigPaymentSessionWhereUniqueInput
-        update?: XOR<XOR<ConfigPaymentSessionUpdateToOneWithWhereWithoutSessionInput, ConfigPaymentSessionUpdateWithoutSessionInput>, ConfigPaymentSessionUncheckedUpdateWithoutSessionInput>
     };
     export type LecturerCreateNestedOneWithoutPrimarySupervisorThesisProjectInput = {
         create?: XOR<LecturerCreateWithoutPrimarySupervisorThesisProjectInput, LecturerUncheckedCreateWithoutPrimarySupervisorThesisProjectInput>
@@ -469399,10 +469402,11 @@ export namespace Prisma {
         updateMany?: DocumentFileUpdateManyWithWhereWithoutLibrarySubmissionInput | DocumentFileUpdateManyWithWhereWithoutLibrarySubmissionInput[]
         deleteMany?: DocumentFileScalarWhereInput | DocumentFileScalarWhereInput[]
     };
-    export type ThesisSessionCreateNestedOneWithoutConfigPaymentInput = {
-        create?: XOR<ThesisSessionCreateWithoutConfigPaymentInput, ThesisSessionUncheckedCreateWithoutConfigPaymentInput>
-        connectOrCreate?: ThesisSessionCreateOrConnectWithoutConfigPaymentInput
-        connect?: ThesisSessionWhereUniqueInput
+    export type ThesisSessionCreateNestedManyWithoutConfigPaymentInput = {
+        create?: XOR<ThesisSessionCreateWithoutConfigPaymentInput, ThesisSessionUncheckedCreateWithoutConfigPaymentInput> | ThesisSessionCreateWithoutConfigPaymentInput[] | ThesisSessionUncheckedCreateWithoutConfigPaymentInput[]
+        connectOrCreate?: ThesisSessionCreateOrConnectWithoutConfigPaymentInput | ThesisSessionCreateOrConnectWithoutConfigPaymentInput[]
+        createMany?: ThesisSessionCreateManyConfigPaymentInputEnvelope
+        connect?: ThesisSessionWhereUniqueInput | ThesisSessionWhereUniqueInput[]
     };
     export type DefaultCouncilRolePayAmountCreateNestedManyWithoutConfigPaymentSessionInput = {
         create?: XOR<DefaultCouncilRolePayAmountCreateWithoutConfigPaymentSessionInput, DefaultCouncilRolePayAmountUncheckedCreateWithoutConfigPaymentSessionInput> | DefaultCouncilRolePayAmountCreateWithoutConfigPaymentSessionInput[] | DefaultCouncilRolePayAmountUncheckedCreateWithoutConfigPaymentSessionInput[]
@@ -469416,6 +469420,12 @@ export namespace Prisma {
         createMany?: DefaultSupervisorPayAmountCreateManyConfigPaymentSessionInputEnvelope
         connect?: DefaultSupervisorPayAmountWhereUniqueInput | DefaultSupervisorPayAmountWhereUniqueInput[]
     };
+    export type ThesisSessionUncheckedCreateNestedManyWithoutConfigPaymentInput = {
+        create?: XOR<ThesisSessionCreateWithoutConfigPaymentInput, ThesisSessionUncheckedCreateWithoutConfigPaymentInput> | ThesisSessionCreateWithoutConfigPaymentInput[] | ThesisSessionUncheckedCreateWithoutConfigPaymentInput[]
+        connectOrCreate?: ThesisSessionCreateOrConnectWithoutConfigPaymentInput | ThesisSessionCreateOrConnectWithoutConfigPaymentInput[]
+        createMany?: ThesisSessionCreateManyConfigPaymentInputEnvelope
+        connect?: ThesisSessionWhereUniqueInput | ThesisSessionWhereUniqueInput[]
+    };
     export type DefaultCouncilRolePayAmountUncheckedCreateNestedManyWithoutConfigPaymentSessionInput = {
         create?: XOR<DefaultCouncilRolePayAmountCreateWithoutConfigPaymentSessionInput, DefaultCouncilRolePayAmountUncheckedCreateWithoutConfigPaymentSessionInput> | DefaultCouncilRolePayAmountCreateWithoutConfigPaymentSessionInput[] | DefaultCouncilRolePayAmountUncheckedCreateWithoutConfigPaymentSessionInput[]
         connectOrCreate?: DefaultCouncilRolePayAmountCreateOrConnectWithoutConfigPaymentSessionInput | DefaultCouncilRolePayAmountCreateOrConnectWithoutConfigPaymentSessionInput[]
@@ -469428,12 +469438,18 @@ export namespace Prisma {
         createMany?: DefaultSupervisorPayAmountCreateManyConfigPaymentSessionInputEnvelope
         connect?: DefaultSupervisorPayAmountWhereUniqueInput | DefaultSupervisorPayAmountWhereUniqueInput[]
     };
-    export type ThesisSessionUpdateOneRequiredWithoutConfigPaymentNestedInput = {
-        create?: XOR<ThesisSessionCreateWithoutConfigPaymentInput, ThesisSessionUncheckedCreateWithoutConfigPaymentInput>
-        connectOrCreate?: ThesisSessionCreateOrConnectWithoutConfigPaymentInput
-        upsert?: ThesisSessionUpsertWithoutConfigPaymentInput
-        connect?: ThesisSessionWhereUniqueInput
-        update?: XOR<XOR<ThesisSessionUpdateToOneWithWhereWithoutConfigPaymentInput, ThesisSessionUpdateWithoutConfigPaymentInput>, ThesisSessionUncheckedUpdateWithoutConfigPaymentInput>
+    export type ThesisSessionUpdateManyWithoutConfigPaymentNestedInput = {
+        create?: XOR<ThesisSessionCreateWithoutConfigPaymentInput, ThesisSessionUncheckedCreateWithoutConfigPaymentInput> | ThesisSessionCreateWithoutConfigPaymentInput[] | ThesisSessionUncheckedCreateWithoutConfigPaymentInput[]
+        connectOrCreate?: ThesisSessionCreateOrConnectWithoutConfigPaymentInput | ThesisSessionCreateOrConnectWithoutConfigPaymentInput[]
+        upsert?: ThesisSessionUpsertWithWhereUniqueWithoutConfigPaymentInput | ThesisSessionUpsertWithWhereUniqueWithoutConfigPaymentInput[]
+        createMany?: ThesisSessionCreateManyConfigPaymentInputEnvelope
+        set?: ThesisSessionWhereUniqueInput | ThesisSessionWhereUniqueInput[]
+        disconnect?: ThesisSessionWhereUniqueInput | ThesisSessionWhereUniqueInput[]
+        delete?: ThesisSessionWhereUniqueInput | ThesisSessionWhereUniqueInput[]
+        connect?: ThesisSessionWhereUniqueInput | ThesisSessionWhereUniqueInput[]
+        update?: ThesisSessionUpdateWithWhereUniqueWithoutConfigPaymentInput | ThesisSessionUpdateWithWhereUniqueWithoutConfigPaymentInput[]
+        updateMany?: ThesisSessionUpdateManyWithWhereWithoutConfigPaymentInput | ThesisSessionUpdateManyWithWhereWithoutConfigPaymentInput[]
+        deleteMany?: ThesisSessionScalarWhereInput | ThesisSessionScalarWhereInput[]
     };
     export type DefaultCouncilRolePayAmountUpdateManyWithoutConfigPaymentSessionNestedInput = {
         create?: XOR<DefaultCouncilRolePayAmountCreateWithoutConfigPaymentSessionInput, DefaultCouncilRolePayAmountUncheckedCreateWithoutConfigPaymentSessionInput> | DefaultCouncilRolePayAmountCreateWithoutConfigPaymentSessionInput[] | DefaultCouncilRolePayAmountUncheckedCreateWithoutConfigPaymentSessionInput[]
@@ -469460,6 +469476,19 @@ export namespace Prisma {
         update?: DefaultSupervisorPayAmountUpdateWithWhereUniqueWithoutConfigPaymentSessionInput | DefaultSupervisorPayAmountUpdateWithWhereUniqueWithoutConfigPaymentSessionInput[]
         updateMany?: DefaultSupervisorPayAmountUpdateManyWithWhereWithoutConfigPaymentSessionInput | DefaultSupervisorPayAmountUpdateManyWithWhereWithoutConfigPaymentSessionInput[]
         deleteMany?: DefaultSupervisorPayAmountScalarWhereInput | DefaultSupervisorPayAmountScalarWhereInput[]
+    };
+    export type ThesisSessionUncheckedUpdateManyWithoutConfigPaymentNestedInput = {
+        create?: XOR<ThesisSessionCreateWithoutConfigPaymentInput, ThesisSessionUncheckedCreateWithoutConfigPaymentInput> | ThesisSessionCreateWithoutConfigPaymentInput[] | ThesisSessionUncheckedCreateWithoutConfigPaymentInput[]
+        connectOrCreate?: ThesisSessionCreateOrConnectWithoutConfigPaymentInput | ThesisSessionCreateOrConnectWithoutConfigPaymentInput[]
+        upsert?: ThesisSessionUpsertWithWhereUniqueWithoutConfigPaymentInput | ThesisSessionUpsertWithWhereUniqueWithoutConfigPaymentInput[]
+        createMany?: ThesisSessionCreateManyConfigPaymentInputEnvelope
+        set?: ThesisSessionWhereUniqueInput | ThesisSessionWhereUniqueInput[]
+        disconnect?: ThesisSessionWhereUniqueInput | ThesisSessionWhereUniqueInput[]
+        delete?: ThesisSessionWhereUniqueInput | ThesisSessionWhereUniqueInput[]
+        connect?: ThesisSessionWhereUniqueInput | ThesisSessionWhereUniqueInput[]
+        update?: ThesisSessionUpdateWithWhereUniqueWithoutConfigPaymentInput | ThesisSessionUpdateWithWhereUniqueWithoutConfigPaymentInput[]
+        updateMany?: ThesisSessionUpdateManyWithWhereWithoutConfigPaymentInput | ThesisSessionUpdateManyWithWhereWithoutConfigPaymentInput[]
+        deleteMany?: ThesisSessionScalarWhereInput | ThesisSessionScalarWhereInput[]
     };
     export type DefaultCouncilRolePayAmountUncheckedUpdateManyWithoutConfigPaymentSessionNestedInput = {
         create?: XOR<DefaultCouncilRolePayAmountCreateWithoutConfigPaymentSessionInput, DefaultCouncilRolePayAmountUncheckedCreateWithoutConfigPaymentSessionInput> | DefaultCouncilRolePayAmountCreateWithoutConfigPaymentSessionInput[] | DefaultCouncilRolePayAmountUncheckedCreateWithoutConfigPaymentSessionInput[]
@@ -536467,7 +536496,7 @@ export namespace Prisma {
         councilDeadline?: Date | string | null
         trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutThesisSessionInput
         thesisProject?: ThesisProjectCreateNestedManyWithoutThesisSessionInput
-        configPayment?: ConfigPaymentSessionCreateNestedOneWithoutSessionInput
+        configPayment?: ConfigPaymentSessionCreateNestedOneWithoutThesisSessionsInput
     };
     export type ThesisSessionUncheckedCreateWithoutTrainingCourseInput = {
         id?: string
@@ -536498,8 +536527,8 @@ export namespace Prisma {
         deputy?: string | null
         topicEntryDeadline?: Date | string | null
         councilDeadline?: Date | string | null
+        configPaymentSessionId?: string | null
         thesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutThesisSessionInput
-        configPayment?: ConfigPaymentSessionUncheckedCreateNestedOneWithoutSessionInput
     };
     export type ThesisSessionCreateOrConnectWithoutTrainingCourseInput = {
         where: ThesisSessionWhereUniqueInput
@@ -537177,6 +537206,7 @@ export namespace Prisma {
         deputy?: StringNullableFilter<"ThesisSession"> | string | null
         topicEntryDeadline?: DateTimeNullableFilter<"ThesisSession"> | Date | string | null
         councilDeadline?: DateTimeNullableFilter<"ThesisSession"> | Date | string | null
+        configPaymentSessionId?: StringNullableFilter<"ThesisSession"> | string | null
     };
     export type PlanTrainingUpsertWithWhereUniqueWithoutTrainingCourseInput = {
         where: PlanTrainingWhereUniqueInput
@@ -554781,7 +554811,7 @@ export namespace Prisma {
         councilDeadline?: Date | string | null
         trainingCourse: TrainingCourseCreateNestedOneWithoutThesisSessionInput
         thesisProject?: ThesisProjectCreateNestedManyWithoutThesisSessionInput
-        configPayment?: ConfigPaymentSessionCreateNestedOneWithoutSessionInput
+        configPayment?: ConfigPaymentSessionCreateNestedOneWithoutThesisSessionsInput
     };
     export type ThesisSessionUncheckedCreateWithoutTrainingObjectTypeInput = {
         id?: string
@@ -554812,8 +554842,8 @@ export namespace Prisma {
         deputy?: string | null
         topicEntryDeadline?: Date | string | null
         councilDeadline?: Date | string | null
+        configPaymentSessionId?: string | null
         thesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutThesisSessionInput
-        configPayment?: ConfigPaymentSessionUncheckedCreateNestedOneWithoutSessionInput
     };
     export type ThesisSessionCreateOrConnectWithoutTrainingObjectTypeInput = {
         where: ThesisSessionWhereUniqueInput
@@ -578039,7 +578069,7 @@ export namespace Prisma {
         data: ThesisProjectCreateManyThesisSessionInput | ThesisProjectCreateManyThesisSessionInput[]
         skipDuplicates?: boolean
     };
-    export type ConfigPaymentSessionCreateWithoutSessionInput = {
+    export type ConfigPaymentSessionCreateWithoutThesisSessionsInput = {
         id?: string
         code?: string | null
         active?: boolean
@@ -578052,7 +578082,7 @@ export namespace Prisma {
         councilPayAmounts?: DefaultCouncilRolePayAmountCreateNestedManyWithoutConfigPaymentSessionInput
         supervisorPayAmounts?: DefaultSupervisorPayAmountCreateNestedManyWithoutConfigPaymentSessionInput
     };
-    export type ConfigPaymentSessionUncheckedCreateWithoutSessionInput = {
+    export type ConfigPaymentSessionUncheckedCreateWithoutThesisSessionsInput = {
         id?: string
         code?: string | null
         active?: boolean
@@ -578065,9 +578095,9 @@ export namespace Prisma {
         councilPayAmounts?: DefaultCouncilRolePayAmountUncheckedCreateNestedManyWithoutConfigPaymentSessionInput
         supervisorPayAmounts?: DefaultSupervisorPayAmountUncheckedCreateNestedManyWithoutConfigPaymentSessionInput
     };
-    export type ConfigPaymentSessionCreateOrConnectWithoutSessionInput = {
+    export type ConfigPaymentSessionCreateOrConnectWithoutThesisSessionsInput = {
         where: ConfigPaymentSessionWhereUniqueInput
-        create: XOR<ConfigPaymentSessionCreateWithoutSessionInput, ConfigPaymentSessionUncheckedCreateWithoutSessionInput>
+        create: XOR<ConfigPaymentSessionCreateWithoutThesisSessionsInput, ConfigPaymentSessionUncheckedCreateWithoutThesisSessionsInput>
     };
     export type TrainingObjectTypeUpsertWithoutThesisSessionInput = {
         update: XOR<TrainingObjectTypeUpdateWithoutThesisSessionInput, TrainingObjectTypeUncheckedUpdateWithoutThesisSessionInput>
@@ -578282,16 +578312,16 @@ export namespace Prisma {
         where: ThesisProjectScalarWhereInput
         data: XOR<ThesisProjectUpdateManyMutationInput, ThesisProjectUncheckedUpdateManyWithoutThesisSessionInput>
     };
-    export type ConfigPaymentSessionUpsertWithoutSessionInput = {
-        update: XOR<ConfigPaymentSessionUpdateWithoutSessionInput, ConfigPaymentSessionUncheckedUpdateWithoutSessionInput>
-        create: XOR<ConfigPaymentSessionCreateWithoutSessionInput, ConfigPaymentSessionUncheckedCreateWithoutSessionInput>
+    export type ConfigPaymentSessionUpsertWithoutThesisSessionsInput = {
+        update: XOR<ConfigPaymentSessionUpdateWithoutThesisSessionsInput, ConfigPaymentSessionUncheckedUpdateWithoutThesisSessionsInput>
+        create: XOR<ConfigPaymentSessionCreateWithoutThesisSessionsInput, ConfigPaymentSessionUncheckedCreateWithoutThesisSessionsInput>
         where?: ConfigPaymentSessionWhereInput
     };
-    export type ConfigPaymentSessionUpdateToOneWithWhereWithoutSessionInput = {
+    export type ConfigPaymentSessionUpdateToOneWithWhereWithoutThesisSessionsInput = {
         where?: ConfigPaymentSessionWhereInput
-        data: XOR<ConfigPaymentSessionUpdateWithoutSessionInput, ConfigPaymentSessionUncheckedUpdateWithoutSessionInput>
+        data: XOR<ConfigPaymentSessionUpdateWithoutThesisSessionsInput, ConfigPaymentSessionUncheckedUpdateWithoutThesisSessionsInput>
     };
-    export type ConfigPaymentSessionUpdateWithoutSessionInput = {
+    export type ConfigPaymentSessionUpdateWithoutThesisSessionsInput = {
         id?: StringFieldUpdateOperationsInput | string
         code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
@@ -578304,7 +578334,7 @@ export namespace Prisma {
         councilPayAmounts?: DefaultCouncilRolePayAmountUpdateManyWithoutConfigPaymentSessionNestedInput
         supervisorPayAmounts?: DefaultSupervisorPayAmountUpdateManyWithoutConfigPaymentSessionNestedInput
     };
-    export type ConfigPaymentSessionUncheckedUpdateWithoutSessionInput = {
+    export type ConfigPaymentSessionUncheckedUpdateWithoutThesisSessionsInput = {
         id?: StringFieldUpdateOperationsInput | string
         code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
@@ -578687,7 +578717,7 @@ export namespace Prisma {
         councilDeadline?: Date | string | null
         trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutThesisSessionInput
         trainingCourse: TrainingCourseCreateNestedOneWithoutThesisSessionInput
-        configPayment?: ConfigPaymentSessionCreateNestedOneWithoutSessionInput
+        configPayment?: ConfigPaymentSessionCreateNestedOneWithoutThesisSessionsInput
     };
     export type ThesisSessionUncheckedCreateWithoutThesisProjectInput = {
         id?: string
@@ -578719,7 +578749,7 @@ export namespace Prisma {
         deputy?: string | null
         topicEntryDeadline?: Date | string | null
         councilDeadline?: Date | string | null
-        configPayment?: ConfigPaymentSessionUncheckedCreateNestedOneWithoutSessionInput
+        configPaymentSessionId?: string | null
     };
     export type ThesisSessionCreateOrConnectWithoutThesisProjectInput = {
         where: ThesisSessionWhereUniqueInput
@@ -579728,7 +579758,7 @@ export namespace Prisma {
         councilDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutThesisSessionNestedInput
         trainingCourse?: TrainingCourseUpdateOneRequiredWithoutThesisSessionNestedInput
-        configPayment?: ConfigPaymentSessionUpdateOneWithoutSessionNestedInput
+        configPayment?: ConfigPaymentSessionUpdateOneWithoutThesisSessionsNestedInput
     };
     export type ThesisSessionUncheckedUpdateWithoutThesisProjectInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -579760,7 +579790,7 @@ export namespace Prisma {
         deputy?: NullableStringFieldUpdateOperationsInput | string | null
         topicEntryDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         councilDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        configPayment?: ConfigPaymentSessionUncheckedUpdateOneWithoutSessionNestedInput
+        configPaymentSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type ExpertProfileUpsertWithoutSupervisedThesesInput = {
         update: XOR<ExpertProfileUpdateWithoutSupervisedThesesInput, ExpertProfileUncheckedUpdateWithoutSupervisedThesesInput>
@@ -584752,6 +584782,10 @@ export namespace Prisma {
         where: ThesisSessionWhereUniqueInput
         create: XOR<ThesisSessionCreateWithoutConfigPaymentInput, ThesisSessionUncheckedCreateWithoutConfigPaymentInput>
     };
+    export type ThesisSessionCreateManyConfigPaymentInputEnvelope = {
+        data: ThesisSessionCreateManyConfigPaymentInput | ThesisSessionCreateManyConfigPaymentInput[]
+        skipDuplicates?: boolean
+    };
     export type DefaultCouncilRolePayAmountCreateWithoutConfigPaymentSessionInput = {
         id?: string
         code?: string | null
@@ -584820,78 +584854,18 @@ export namespace Prisma {
         data: DefaultSupervisorPayAmountCreateManyConfigPaymentSessionInput | DefaultSupervisorPayAmountCreateManyConfigPaymentSessionInput[]
         skipDuplicates?: boolean
     };
-    export type ThesisSessionUpsertWithoutConfigPaymentInput = {
+    export type ThesisSessionUpsertWithWhereUniqueWithoutConfigPaymentInput = {
+        where: ThesisSessionWhereUniqueInput
         update: XOR<ThesisSessionUpdateWithoutConfigPaymentInput, ThesisSessionUncheckedUpdateWithoutConfigPaymentInput>
         create: XOR<ThesisSessionCreateWithoutConfigPaymentInput, ThesisSessionUncheckedCreateWithoutConfigPaymentInput>
-        where?: ThesisSessionWhereInput
     };
-    export type ThesisSessionUpdateToOneWithWhereWithoutConfigPaymentInput = {
-        where?: ThesisSessionWhereInput
+    export type ThesisSessionUpdateWithWhereUniqueWithoutConfigPaymentInput = {
+        where: ThesisSessionWhereUniqueInput
         data: XOR<ThesisSessionUpdateWithoutConfigPaymentInput, ThesisSessionUncheckedUpdateWithoutConfigPaymentInput>
     };
-    export type ThesisSessionUpdateWithoutConfigPaymentInput = {
-        id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
-        active?: BoolFieldUpdateOperationsInput | boolean
-        description?: NullableStringFieldUpdateOperationsInput | string | null
-        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-        name?: StringFieldUpdateOperationsInput | string
-        startDate?: DateTimeFieldUpdateOperationsInput | Date | string
-        endDate?: DateTimeFieldUpdateOperationsInput | Date | string
-        proposalReport?: NullableStringFieldUpdateOperationsInput | string | null
-        councilReport?: NullableStringFieldUpdateOperationsInput | string | null
-        graduationReport?: NullableStringFieldUpdateOperationsInput | string | null
-        decisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
-        decisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
-        decisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        defenseDecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
-        defenseDecisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
-        defenseDecisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        graduationNumber?: NullableStringFieldUpdateOperationsInput | string | null
-        graduationDecisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
-        graduationDecisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        chief?: NullableStringFieldUpdateOperationsInput | string | null
-        deputy?: NullableStringFieldUpdateOperationsInput | string | null
-        topicEntryDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        councilDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutThesisSessionNestedInput
-        trainingCourse?: TrainingCourseUpdateOneRequiredWithoutThesisSessionNestedInput
-        thesisProject?: ThesisProjectUpdateManyWithoutThesisSessionNestedInput
-    };
-    export type ThesisSessionUncheckedUpdateWithoutConfigPaymentInput = {
-        id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
-        active?: BoolFieldUpdateOperationsInput | boolean
-        description?: NullableStringFieldUpdateOperationsInput | string | null
-        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
-        name?: StringFieldUpdateOperationsInput | string
-        startDate?: DateTimeFieldUpdateOperationsInput | Date | string
-        endDate?: DateTimeFieldUpdateOperationsInput | Date | string
-        trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
-        trainingCourseId?: StringFieldUpdateOperationsInput | string
-        proposalReport?: NullableStringFieldUpdateOperationsInput | string | null
-        councilReport?: NullableStringFieldUpdateOperationsInput | string | null
-        graduationReport?: NullableStringFieldUpdateOperationsInput | string | null
-        decisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
-        decisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
-        decisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        defenseDecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
-        defenseDecisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
-        defenseDecisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        graduationNumber?: NullableStringFieldUpdateOperationsInput | string | null
-        graduationDecisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
-        graduationDecisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        chief?: NullableStringFieldUpdateOperationsInput | string | null
-        deputy?: NullableStringFieldUpdateOperationsInput | string | null
-        topicEntryDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        councilDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        thesisProject?: ThesisProjectUncheckedUpdateManyWithoutThesisSessionNestedInput
+    export type ThesisSessionUpdateManyWithWhereWithoutConfigPaymentInput = {
+        where: ThesisSessionScalarWhereInput
+        data: XOR<ThesisSessionUpdateManyMutationInput, ThesisSessionUncheckedUpdateManyWithoutConfigPaymentInput>
     };
     export type DefaultCouncilRolePayAmountUpsertWithWhereUniqueWithoutConfigPaymentSessionInput = {
         where: DefaultCouncilRolePayAmountWhereUniqueInput
@@ -584963,7 +584937,7 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         name: string
-        session: ThesisSessionCreateNestedOneWithoutConfigPaymentInput
+        thesisSessions?: ThesisSessionCreateNestedManyWithoutConfigPaymentInput
         supervisorPayAmounts?: DefaultSupervisorPayAmountCreateNestedManyWithoutConfigPaymentSessionInput
     };
     export type ConfigPaymentSessionUncheckedCreateWithoutCouncilPayAmountsInput = {
@@ -584976,7 +584950,7 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         name: string
-        sessionId: string
+        thesisSessions?: ThesisSessionUncheckedCreateNestedManyWithoutConfigPaymentInput
         supervisorPayAmounts?: DefaultSupervisorPayAmountUncheckedCreateNestedManyWithoutConfigPaymentSessionInput
     };
     export type ConfigPaymentSessionCreateOrConnectWithoutCouncilPayAmountsInput = {
@@ -585002,7 +584976,7 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
-        session?: ThesisSessionUpdateOneRequiredWithoutConfigPaymentNestedInput
+        thesisSessions?: ThesisSessionUpdateManyWithoutConfigPaymentNestedInput
         supervisorPayAmounts?: DefaultSupervisorPayAmountUpdateManyWithoutConfigPaymentSessionNestedInput
     };
     export type ConfigPaymentSessionUncheckedUpdateWithoutCouncilPayAmountsInput = {
@@ -585015,7 +584989,7 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
-        sessionId?: StringFieldUpdateOperationsInput | string
+        thesisSessions?: ThesisSessionUncheckedUpdateManyWithoutConfigPaymentNestedInput
         supervisorPayAmounts?: DefaultSupervisorPayAmountUncheckedUpdateManyWithoutConfigPaymentSessionNestedInput
     };
     export type ConfigPaymentSessionCreateWithoutSupervisorPayAmountsInput = {
@@ -585028,7 +585002,7 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         name: string
-        session: ThesisSessionCreateNestedOneWithoutConfigPaymentInput
+        thesisSessions?: ThesisSessionCreateNestedManyWithoutConfigPaymentInput
         councilPayAmounts?: DefaultCouncilRolePayAmountCreateNestedManyWithoutConfigPaymentSessionInput
     };
     export type ConfigPaymentSessionUncheckedCreateWithoutSupervisorPayAmountsInput = {
@@ -585041,7 +585015,7 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         name: string
-        sessionId: string
+        thesisSessions?: ThesisSessionUncheckedCreateNestedManyWithoutConfigPaymentInput
         councilPayAmounts?: DefaultCouncilRolePayAmountUncheckedCreateNestedManyWithoutConfigPaymentSessionInput
     };
     export type ConfigPaymentSessionCreateOrConnectWithoutSupervisorPayAmountsInput = {
@@ -585067,7 +585041,7 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
-        session?: ThesisSessionUpdateOneRequiredWithoutConfigPaymentNestedInput
+        thesisSessions?: ThesisSessionUpdateManyWithoutConfigPaymentNestedInput
         councilPayAmounts?: DefaultCouncilRolePayAmountUpdateManyWithoutConfigPaymentSessionNestedInput
     };
     export type ConfigPaymentSessionUncheckedUpdateWithoutSupervisorPayAmountsInput = {
@@ -585080,7 +585054,7 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         name?: StringFieldUpdateOperationsInput | string
-        sessionId?: StringFieldUpdateOperationsInput | string
+        thesisSessions?: ThesisSessionUncheckedUpdateManyWithoutConfigPaymentNestedInput
         councilPayAmounts?: DefaultCouncilRolePayAmountUncheckedUpdateManyWithoutConfigPaymentSessionNestedInput
     };
     export type CouncilMemberCreateWithoutPaymentInput = {
@@ -647054,6 +647028,7 @@ export namespace Prisma {
         deputy?: string | null
         topicEntryDeadline?: Date | string | null
         councilDeadline?: Date | string | null
+        configPaymentSessionId?: string | null
     };
     export type PlanTrainingCreateManyTrainingCourseInput = {
         id?: string
@@ -647930,7 +647905,7 @@ export namespace Prisma {
         councilDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutThesisSessionNestedInput
         thesisProject?: ThesisProjectUpdateManyWithoutThesisSessionNestedInput
-        configPayment?: ConfigPaymentSessionUpdateOneWithoutSessionNestedInput
+        configPayment?: ConfigPaymentSessionUpdateOneWithoutThesisSessionsNestedInput
     };
     export type ThesisSessionUncheckedUpdateWithoutTrainingCourseInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -647961,8 +647936,8 @@ export namespace Prisma {
         deputy?: NullableStringFieldUpdateOperationsInput | string | null
         topicEntryDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         councilDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        configPaymentSessionId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisProject?: ThesisProjectUncheckedUpdateManyWithoutThesisSessionNestedInput
-        configPayment?: ConfigPaymentSessionUncheckedUpdateOneWithoutSessionNestedInput
     };
     export type ThesisSessionUncheckedUpdateManyWithoutTrainingCourseInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -647993,6 +647968,7 @@ export namespace Prisma {
         deputy?: NullableStringFieldUpdateOperationsInput | string | null
         topicEntryDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         councilDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        configPaymentSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type PlanTrainingUpdateWithoutTrainingCourseInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -654275,6 +654251,7 @@ export namespace Prisma {
         deputy?: string | null
         topicEntryDeadline?: Date | string | null
         councilDeadline?: Date | string | null
+        configPaymentSessionId?: string | null
     };
     export type TrainingBlockCreateManyTrainingObjectTypeInput = {
         id?: string
@@ -655293,7 +655270,7 @@ export namespace Prisma {
         councilDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         trainingCourse?: TrainingCourseUpdateOneRequiredWithoutThesisSessionNestedInput
         thesisProject?: ThesisProjectUpdateManyWithoutThesisSessionNestedInput
-        configPayment?: ConfigPaymentSessionUpdateOneWithoutSessionNestedInput
+        configPayment?: ConfigPaymentSessionUpdateOneWithoutThesisSessionsNestedInput
     };
     export type ThesisSessionUncheckedUpdateWithoutTrainingObjectTypeInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -655324,8 +655301,8 @@ export namespace Prisma {
         deputy?: NullableStringFieldUpdateOperationsInput | string | null
         topicEntryDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         councilDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        configPaymentSessionId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisProject?: ThesisProjectUncheckedUpdateManyWithoutThesisSessionNestedInput
-        configPayment?: ConfigPaymentSessionUncheckedUpdateOneWithoutSessionNestedInput
     };
     export type ThesisSessionUncheckedUpdateManyWithoutTrainingObjectTypeInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -655356,6 +655333,7 @@ export namespace Prisma {
         deputy?: NullableStringFieldUpdateOperationsInput | string | null
         topicEntryDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         councilDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        configPaymentSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type TrainingBlockUpdateWithoutTrainingObjectTypeInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -668840,6 +668818,37 @@ export namespace Prisma {
         evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
         knowledgeBlockId?: NullableStringFieldUpdateOperationsInput | string | null
     };
+    export type ThesisSessionCreateManyConfigPaymentInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        name: string
+        startDate: Date | string
+        endDate: Date | string
+        trainingObjectTypeId: string
+        trainingCourseId: string
+        proposalReport?: string | null
+        councilReport?: string | null
+        graduationReport?: string | null
+        decisionNumber?: string | null
+        decisionMaker?: string | null
+        decisionDate?: Date | string | null
+        defenseDecisionNumber?: string | null
+        defenseDecisionMaker?: string | null
+        defenseDecisionDate?: Date | string | null
+        graduationNumber?: string | null
+        graduationDecisionMaker?: string | null
+        graduationDecisionDate?: Date | string | null
+        chief?: string | null
+        deputy?: string | null
+        topicEntryDeadline?: Date | string | null
+        councilDeadline?: Date | string | null
+    };
     export type DefaultCouncilRolePayAmountCreateManyConfigPaymentSessionInput = {
         id?: string
         code?: string | null
@@ -668865,6 +668874,101 @@ export namespace Prisma {
         role: $Enums.SupervisorRole
         amount: Decimal | DecimalJsLike | number | string
         inAcademy?: boolean
+    };
+    export type ThesisSessionUpdateWithoutConfigPaymentInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+        startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        proposalReport?: NullableStringFieldUpdateOperationsInput | string | null
+        councilReport?: NullableStringFieldUpdateOperationsInput | string | null
+        graduationReport?: NullableStringFieldUpdateOperationsInput | string | null
+        decisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        decisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
+        decisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        defenseDecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        defenseDecisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
+        defenseDecisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        graduationNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        graduationDecisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
+        graduationDecisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        chief?: NullableStringFieldUpdateOperationsInput | string | null
+        deputy?: NullableStringFieldUpdateOperationsInput | string | null
+        topicEntryDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        councilDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutThesisSessionNestedInput
+        trainingCourse?: TrainingCourseUpdateOneRequiredWithoutThesisSessionNestedInput
+        thesisProject?: ThesisProjectUpdateManyWithoutThesisSessionNestedInput
+    };
+    export type ThesisSessionUncheckedUpdateWithoutConfigPaymentInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+        startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
+        trainingCourseId?: StringFieldUpdateOperationsInput | string
+        proposalReport?: NullableStringFieldUpdateOperationsInput | string | null
+        councilReport?: NullableStringFieldUpdateOperationsInput | string | null
+        graduationReport?: NullableStringFieldUpdateOperationsInput | string | null
+        decisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        decisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
+        decisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        defenseDecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        defenseDecisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
+        defenseDecisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        graduationNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        graduationDecisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
+        graduationDecisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        chief?: NullableStringFieldUpdateOperationsInput | string | null
+        deputy?: NullableStringFieldUpdateOperationsInput | string | null
+        topicEntryDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        councilDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        thesisProject?: ThesisProjectUncheckedUpdateManyWithoutThesisSessionNestedInput
+    };
+    export type ThesisSessionUncheckedUpdateManyWithoutConfigPaymentInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+        startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
+        trainingCourseId?: StringFieldUpdateOperationsInput | string
+        proposalReport?: NullableStringFieldUpdateOperationsInput | string | null
+        councilReport?: NullableStringFieldUpdateOperationsInput | string | null
+        graduationReport?: NullableStringFieldUpdateOperationsInput | string | null
+        decisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        decisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
+        decisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        defenseDecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        defenseDecisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
+        defenseDecisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        graduationNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        graduationDecisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
+        graduationDecisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        chief?: NullableStringFieldUpdateOperationsInput | string | null
+        deputy?: NullableStringFieldUpdateOperationsInput | string | null
+        topicEntryDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        councilDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     };
     export type DefaultCouncilRolePayAmountUpdateWithoutConfigPaymentSessionInput = {
         id?: StringFieldUpdateOperationsInput | string

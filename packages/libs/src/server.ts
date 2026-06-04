@@ -9,9 +9,10 @@ export const getTemplateBuffer = async (prisma: PrismaClient, templateCode: stri
   // if (!templateFile) {
   //     throw new HTTPException(404, { message: `template not found (${templateCode})` })
   // }
-  const fallbackPath = templateCode.endsWith(".xlsx") || templateCode.endsWith(".docx")
-    ? `/mta/template/${templateCode}`
-    : `/mta/template/${templateCode}.xlsx`
+  const fallbackPath =
+    templateCode.endsWith(".xlsx") || templateCode.endsWith(".docx")
+      ? `/mta/template/${templateCode}`
+      : `/mta/template/${templateCode}.xlsx`
   const url = getMinioUrl(templateFile?.path || fallbackPath)
 
   const res = await fetch(url)
@@ -31,9 +32,10 @@ export const getLuanVanTemplateBuffer = async (prisma: PrismaClient, templateCod
     where: { code: templateCode },
   })
 
-  const fallbackPath = templateCode.endsWith(".xlsx") || templateCode.endsWith(".docx")
-    ? `/mta/luan-van/${templateCode}`
-    : `/mta/luan-van/${templateCode}.xlsx`
+  const fallbackPath =
+    templateCode.endsWith(".xlsx") || templateCode.endsWith(".docx")
+      ? `/mta/luan-van/${templateCode}`
+      : `/mta/luan-van/${templateCode}.xlsx`
   const url = getMinioUrl(templateFile?.path || fallbackPath)
 
   const res = await fetch(url)

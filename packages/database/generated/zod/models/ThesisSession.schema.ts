@@ -75,6 +75,7 @@ const relationSchema = z.object({
 const fkSchema = z.object({
     trainingObjectTypeId: z.string(),
     trainingCourseId: z.string(),
+    configPaymentSessionId: z.string().nullish(),
 }
 );
 

@@ -877,22 +877,22 @@ app.openapi(debtStatistics, async (c) => {
     return subjectsArray.map((subject) => {
       const lastAttempt = subject.attempts[subject.attempts.length - 1]
 
-    let type = "THI LẠI"
-    let note = "Đã thi trượt 1 lần"
+      let type = "THI LẠI"
+      let note = "Đã thi trượt 1 lần"
 
-    if (!lastAttempt) {
-      type = "CHƯA THI"
-      note = "Chưa có dữ liệu thi"
-    } else if (lastAttempt.examBanned) {
-      type = "HỌC LẠI"
-      note = `Bị cấm thi${lastAttempt.examBannedReason ? `: ${lastAttempt.examBannedReason}` : ""}`
-    } else if (lastAttempt.finalScore === null) {
-      type = "CHƯA THI"
-      note = "Chưa thi hoặc GV chưa nhập điểm thi"
-    } else if (subject.attempts.length > 1) {
-      type = "HỌC LẠI"
-      note = `Đã thi trượt ít nhất ${subject.attempts.length} lần`
-    }
+      if (!lastAttempt) {
+        type = "CHƯA THI"
+        note = "Chưa có dữ liệu thi"
+      } else if (lastAttempt.examBanned) {
+        type = "HỌC LẠI"
+        note = `Bị cấm thi${lastAttempt.examBannedReason ? `: ${lastAttempt.examBannedReason}` : ""}`
+      } else if (lastAttempt.finalScore === null) {
+        type = "CHƯA THI"
+        note = "Chưa thi hoặc GV chưa nhập điểm thi"
+      } else if (subject.attempts.length > 1) {
+        type = "HỌC LẠI"
+        note = `Đã thi trượt ít nhất ${subject.attempts.length} lần`
+      }
 
       return {
         studentCode: s.studentCode,
@@ -906,7 +906,9 @@ app.openapi(debtStatistics, async (c) => {
         subjectCredit: subject.subjectCredit,
         semesters: subject.attempts.map((attempt) => attempt.semesterCode).join("/"),
         finalScores: subject.attempts
-          .map((attempt) => (attempt.finalScore === null ? "Chưa có điểm" : String(attempt.finalScore)))
+          .map((attempt) =>
+            attempt.finalScore === null ? "Chưa có điểm" : String(attempt.finalScore)
+          )
           .join("/"),
         type,
         note,

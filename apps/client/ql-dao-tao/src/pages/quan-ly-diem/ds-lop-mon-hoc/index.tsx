@@ -10,7 +10,7 @@ import useSpinner from "@hooks/spinner"
 import DefaultLayout from "@layouts/default-layout"
 import { cn } from "@lib/utils"
 import { useSession } from "@workspace/auth/react"
-import { $Enums, type Prisma, type SubjectVersion } from "@workspace/db/client"
+import { $Enums, type Prisma } from "@workspace/db/client"
 import {
   useCountSubjectClass,
   useFindManyFixedClass,

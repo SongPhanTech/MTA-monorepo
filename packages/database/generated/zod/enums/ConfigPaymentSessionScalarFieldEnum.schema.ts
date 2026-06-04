@@ -6,4 +6,4 @@
 
 import { z } from 'zod/v3';
 
-export const ConfigPaymentSessionScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "name", "sessionId"])
+export const ConfigPaymentSessionScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "createdBy", "name"])

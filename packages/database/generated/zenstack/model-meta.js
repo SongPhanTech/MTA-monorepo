@@ -18607,12 +18607,21 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'thesisSession',
+                }, configPaymentSessionId: {
+                    name: "configPaymentSessionId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'configPayment',
                 }, configPayment: {
                     name: "configPayment",
                     type: "ConfigPaymentSession",
                     isDataModel: true,
                     isOptional: true,
-                    backLink: 'session',
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'thesisSessions',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "configPaymentSessionId" },
                 },
             }, uniqueConstraints: {
                 id: {
@@ -20069,20 +20078,12 @@ const metadata = {
                 }, name: {
                     name: "name",
                     type: "String",
-                }, sessionId: {
-                    name: "sessionId",
-                    type: "String",
-                    attributes: [{ "name": "@unique", "args": [] }],
-                    isForeignKey: true,
-                    relationField: 'session',
-                }, session: {
-                    name: "session",
+                }, thesisSessions: {
+                    name: "thesisSessions",
                     type: "ThesisSession",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    isArray: true,
                     backLink: 'configPayment',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "sessionId" },
                 }, councilPayAmounts: {
                     name: "councilPayAmounts",
                     type: "DefaultCouncilRolePayAmount",
@@ -20105,9 +20106,6 @@ const metadata = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
-                }, sessionId: {
-                    name: "sessionId",
-                    fields: ["sessionId"]
                 },
             },
             attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],

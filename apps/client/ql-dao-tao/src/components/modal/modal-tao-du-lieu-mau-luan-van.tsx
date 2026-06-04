@@ -1,13 +1,6 @@
 import useSpinner from "@hooks/spinner"
-import {
-  CouncilProposalStatus,
-  FixedClassType,
-  ThesisType,
-} from "@workspace/db/client"
-import {
-  useCreateStudentThesisRegistration,
-  useCreateThesisProject,
-} from "@workspace/db/hooks"
+import { CouncilProposalStatus, FixedClassType, ThesisType } from "@workspace/db/client"
+import { useCreateStudentThesisRegistration, useCreateThesisProject } from "@workspace/db/hooks"
 import { Button, Flex, Modal, Table, Typography, message } from "antd"
 import type { ColumnsType } from "antd/es/table"
 import dayjs from "dayjs"
@@ -51,19 +44,13 @@ export function studentHasThesisInSession(
     if (registration?.deletedAt) return false
     const project = registration.thesisProject
     if (!project || project.deletedAt) return false
-    return (
-      project.thesisType === ThesisType.THESIS && project.thesisSessionId === thesisSessionId
-    )
+    return project.thesisType === ThesisType.THESIS && project.thesisSessionId === thesisSessionId
   })
 }
 
-const buildSampleThesisPayload = (
-  student: TaoDuLieuMauStudentRow,
-  thesisSessionId: string
-) => {
+const buildSampleThesisPayload = (student: TaoDuLieuMauStudentRow, thesisSessionId: string) => {
   const fixedClassType = student.fixedClass?.classType
-  const organizationId =
-    student.curriculumVersion?.curriculum?.trainingMajor?.organization?.Id
+  const organizationId = student.curriculumVersion?.curriculum?.trainingMajor?.organization?.Id
   const typeLabel = fixedClassType === FixedClassType.APPLICATION ? "Đề án" : "Luận văn"
 
   return {
@@ -73,9 +60,7 @@ const buildSampleThesisPayload = (
     maxStudents: 1,
     language: "Tiếng Việt",
     type: typeLabel,
-    organization: organizationId
-      ? { connect: { Id: organizationId } }
-      : { disconnect: true },
+    organization: organizationId ? { connect: { Id: organizationId } } : { disconnect: true },
     thesisSession: { connect: { id: thesisSessionId } },
     thesisType: ThesisType.THESIS,
     librarySubmission: {
@@ -141,9 +126,7 @@ const ModalTaoDuLieuMauLuanVan = () => {
     }
 
     const selectedStudents = students.filter((s) => selectedRowKeys.includes(s.id))
-    const invalid = selectedStudents.filter((s) =>
-      studentHasThesisInSession(s, thesisSessionId)
-    )
+    const invalid = selectedStudents.filter((s) => studentHasThesisInSession(s, thesisSessionId))
     if (invalid.length > 0) {
       message.error("Không thể tạo cho sinh viên đã có luận văn/đề án trong đợt.")
       return
@@ -177,36 +160,36 @@ const ModalTaoDuLieuMauLuanVan = () => {
 
   const columns = useMemo<ColumnsType<TaoDuLieuMauStudentRow>>(
     () => [
-    {
-      title: "STT",
-      width: 60,
-      align: "center",
-      render: (_, __, index) => (tablePage - 1) * tablePageSize + index + 1,
-    },
-    {
-      title: "Mã HV",
-      width: 100,
-      render: (_, record) => record.code ?? "—",
-    },
-    {
-      title: "Họ và tên",
-      ellipsis: true,
-      render: (_, record) => record.userProfile?.fullname ?? "—",
-    },
-    {
-      title: "Lớp quản lí",
-      width: 220,
-      ellipsis: true,
-      render: (_, record) => record.fixedClass?.name ?? "—",
-    },
-    {
-      title: "Ngày sinh",
-      width: 110,
-      render: (_, record) => {
-        const dob = record.userProfile?.dateOfBirth
-        return dob ? dayjs(dob).format("DD/MM/YYYY") : "—"
+      {
+        title: "STT",
+        width: 60,
+        align: "center",
+        render: (_, __, index) => (tablePage - 1) * tablePageSize + index + 1,
       },
-    },
+      {
+        title: "Mã HV",
+        width: 100,
+        render: (_, record) => record.code ?? "—",
+      },
+      {
+        title: "Họ và tên",
+        ellipsis: true,
+        render: (_, record) => record.userProfile?.fullname ?? "—",
+      },
+      {
+        title: "Lớp quản lí",
+        width: 220,
+        ellipsis: true,
+        render: (_, record) => record.fixedClass?.name ?? "—",
+      },
+      {
+        title: "Ngày sinh",
+        width: 110,
+        render: (_, record) => {
+          const dob = record.userProfile?.dateOfBirth
+          return dob ? dayjs(dob).format("DD/MM/YYYY") : "—"
+        },
+      },
     ],
     [tablePage, tablePageSize]
   )
@@ -236,8 +219,8 @@ const ModalTaoDuLieuMauLuanVan = () => {
       <Flex vertical gap={12}>
         <Flex wrap="wrap" gap={8} align="center">
           <Text type="secondary">
-            Tổng {students.length} sinh viên · {eligibleCount} có thể tạo · {existingCount} đã có
-            dữ liệu
+            Tổng {students.length} sinh viên · {eligibleCount} có thể tạo · {existingCount} đã có dữ
+            liệu
           </Text>
           <span className="inline-flex items-center gap-1 text-xs text-gray-500">
             <span className="inline-block w-4 h-4 rounded bg-[#e6f4ff] border border-[#91caff]" />

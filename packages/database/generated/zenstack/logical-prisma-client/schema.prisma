@@ -5392,7 +5392,8 @@ model ThesisSession {
   /// Hạn nhập hội đồng
   councilDeadline         DateTime?
   thesisProject           ThesisProject[]
-  configPayment           ConfigPaymentSession?
+  configPaymentSessionId  String?
+  configPayment           ConfigPaymentSession? @relation(fields: [configPaymentSessionId], references: [id])
 
   @@schema("ql-dao-tao")
 }
@@ -5726,7 +5727,7 @@ model LibrarySubmission {
   @@schema("ql-dao-tao")
 }
 
-/// Bộ định mức thanh toán gắn với một đợt xét (1 đợt — 1 config)
+/// Bộ định mức thanh toán
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)
@@ -5740,15 +5741,14 @@ model ConfigPaymentSession {
   updatedAt            DateTime                      @default(now()) @updatedAt()
   createdBy            String?                       @default("") @db.Uuid()
   name                 String
-  sessionId            String                        @unique()
-  session              ThesisSession                 @relation(fields: [sessionId], references: [id])
+  thesisSessions       ThesisSession[]
   councilPayAmounts    DefaultCouncilRolePayAmount[] @relation("ConfigCouncilPayAmounts")
   supervisorPayAmounts DefaultSupervisorPayAmount[]  @relation("ConfigSupervisorPayAmounts")
 
   @@schema("ql-dao-tao")
 }
 
-/// Định mức hội đồng: configPaymentSessionId = null → mức chung; có id → theo đợt
+/// Định mức hội đồng
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)
@@ -5771,7 +5771,7 @@ model DefaultCouncilRolePayAmount {
   @@schema("ql-dao-tao")
 }
 
-/// Định mức hướng dẫn: configPaymentSessionId = null → mức chung; có id → theo đợt
+/// Định mức hướng dẫn
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)

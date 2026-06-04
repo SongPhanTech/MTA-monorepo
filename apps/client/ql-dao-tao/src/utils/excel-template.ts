@@ -1,5 +1,5 @@
 import { customModelFetch } from "@workspace/libs/api/custom-instance"
-import { ExcelTemplateBody } from "@workspace/libs/api/schemas";
+import { ExcelTemplateBody } from "@workspace/libs/api/schemas"
 
 export interface CustomModelResponse<T> {
   status: number

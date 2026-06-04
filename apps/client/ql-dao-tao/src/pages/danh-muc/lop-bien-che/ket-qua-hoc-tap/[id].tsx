@@ -119,7 +119,6 @@ export default function StudentScoreClassPage() {
     { enabled: !!studentId }
   )
 
-
   const { convertScore } = useScoreConverter(student?.fixedClass?.trainingCourse.scoreConverts)
   const scoreToPassGraduation = student?.fixedClass?.trainingCourse?.scoreToPassGraduation ?? 5.5
   const convertScoreWithGraduation = useCallback(
@@ -1202,11 +1201,8 @@ export default function StudentScoreClassPage() {
                           },
                         ],
                       }}
-                      >
-                      <Button
-                        type="primary"
-                        icon={<DownloadOutlined />}
-                      >
+                    >
+                      <Button type="primary" icon={<DownloadOutlined />}>
                         Xuất bảng điểm cá nhân
                       </Button>
                     </Dropdown>
