@@ -108,6 +108,8 @@ const GiangVienLayout = ({
             <div className="flex items-center gap-2">
               <SelectTrainingObjectType />
               <TreeSelectSemester />
+            </div>
+            <div className="flex items-center gap-2">
               <ToggleVaiTro />
               <HeaderApp />
             </div>
