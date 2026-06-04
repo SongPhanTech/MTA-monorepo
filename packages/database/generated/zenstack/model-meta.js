@@ -18607,6 +18607,12 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'thesisSession',
+                }, configPayment: {
+                    name: "configPayment",
+                    type: "ConfigPaymentSession",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'session',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -20021,6 +20027,91 @@ const metadata = {
             },
             attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
+        configPaymentSession: {
+            name: 'ConfigPaymentSession', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$ConfigPaymentSession$createdBy,
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, sessionId: {
+                    name: "sessionId",
+                    type: "String",
+                    attributes: [{ "name": "@unique", "args": [] }],
+                    isForeignKey: true,
+                    relationField: 'session',
+                }, session: {
+                    name: "session",
+                    type: "ThesisSession",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'configPayment',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "sessionId" },
+                }, councilPayAmounts: {
+                    name: "councilPayAmounts",
+                    type: "DefaultCouncilRolePayAmount",
+                    isDataModel: true,
+                    isArray: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "ConfigCouncilPayAmounts" }] }],
+                    backLink: 'configPaymentSession',
+                }, supervisorPayAmounts: {
+                    name: "supervisorPayAmounts",
+                    type: "DefaultSupervisorPayAmount",
+                    isDataModel: true,
+                    isArray: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "ConfigSupervisorPayAmounts" }] }],
+                    backLink: 'configPaymentSession',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, sessionId: {
+                    name: "sessionId",
+                    fields: ["sessionId"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+        },
         defaultCouncilRolePayAmount: {
             name: 'DefaultCouncilRolePayAmount', fields: {
                 id: {
@@ -20070,6 +20161,21 @@ const metadata = {
                     name: "inAcademy",
                     type: "Boolean",
                     attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, configPaymentSessionId: {
+                    name: "configPaymentSessionId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'configPaymentSession',
+                }, configPaymentSession: {
+                    name: "configPaymentSession",
+                    type: "ConfigPaymentSession",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "ConfigCouncilPayAmounts" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'councilPayAmounts',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "configPaymentSessionId" },
                 },
             }, uniqueConstraints: {
                 id: {
@@ -20078,9 +20184,12 @@ const metadata = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
+                }, configPaymentSessionId_role_inAcademy_description: {
+                    name: "configPaymentSessionId_role_inAcademy_description",
+                    fields: ["configPaymentSessionId", "role", "inAcademy", "description"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null, null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         defaultSupervisorPayAmount: {
             name: 'DefaultSupervisorPayAmount', fields: {
@@ -20131,6 +20240,21 @@ const metadata = {
                     name: "inAcademy",
                     type: "Boolean",
                     attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, configPaymentSessionId: {
+                    name: "configPaymentSessionId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'configPaymentSession',
+                }, configPaymentSession: {
+                    name: "configPaymentSession",
+                    type: "ConfigPaymentSession",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "ConfigSupervisorPayAmounts" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'supervisorPayAmounts',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "configPaymentSessionId" },
                 },
             }, uniqueConstraints: {
                 id: {
@@ -20139,9 +20263,12 @@ const metadata = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
+                }, configPaymentSessionId_role_inAcademy_description: {
+                    name: "configPaymentSessionId_role_inAcademy_description",
+                    fields: ["configPaymentSessionId", "role", "inAcademy", "description"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null, null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         paymentRecord: {
             name: 'PaymentRecord', fields: {
@@ -29768,6 +29895,9 @@ function $default$DefenseRecord$createdBy(user) {
     return user === null || user === void 0 ? void 0 : user.id;
 }
 function $default$LibrarySubmission$createdBy(user) {
+    return user === null || user === void 0 ? void 0 : user.id;
+}
+function $default$ConfigPaymentSession$createdBy(user) {
     return user === null || user === void 0 ? void 0 : user.id;
 }
 function $default$DefaultCouncilRolePayAmount$createdBy(user) {

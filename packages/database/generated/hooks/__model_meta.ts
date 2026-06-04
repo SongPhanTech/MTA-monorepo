@@ -17657,6 +17657,12 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'thesisSession',
+                }, configPayment: {
+                    name: "configPayment",
+                    type: "ConfigPaymentSession",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'session',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -18978,6 +18984,84 @@ const metadata: ModelMeta = {
                 },
             },
         },
+        configPaymentSession: {
+            name: 'ConfigPaymentSession', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$ConfigPaymentSession$createdBy,
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, sessionId: {
+                    name: "sessionId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'session',
+                }, session: {
+                    name: "session",
+                    type: "ThesisSession",
+                    isDataModel: true,
+                    backLink: 'configPayment',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "sessionId" },
+                }, councilPayAmounts: {
+                    name: "councilPayAmounts",
+                    type: "DefaultCouncilRolePayAmount",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'configPaymentSession',
+                }, supervisorPayAmounts: {
+                    name: "supervisorPayAmounts",
+                    type: "DefaultSupervisorPayAmount",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'configPaymentSession',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, sessionId: {
+                    name: "sessionId",
+                    fields: ["sessionId"]
+                },
+            },
+        },
         defaultCouncilRolePayAmount: {
             name: 'DefaultCouncilRolePayAmount', fields: {
                 id: {
@@ -19025,6 +19109,20 @@ const metadata: ModelMeta = {
                     name: "inAcademy",
                     type: "Boolean",
                     attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, configPaymentSessionId: {
+                    name: "configPaymentSessionId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'configPaymentSession',
+                }, configPaymentSession: {
+                    name: "configPaymentSession",
+                    type: "ConfigPaymentSession",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'councilPayAmounts',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "configPaymentSessionId" },
                 },
             }, uniqueConstraints: {
                 id: {
@@ -19033,6 +19131,9 @@ const metadata: ModelMeta = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
+                }, configPaymentSessionId_role_inAcademy_description: {
+                    name: "configPaymentSessionId_role_inAcademy_description",
+                    fields: ["configPaymentSessionId", "role", "inAcademy", "description"]
                 },
             },
         },
@@ -19083,6 +19184,20 @@ const metadata: ModelMeta = {
                     name: "inAcademy",
                     type: "Boolean",
                     attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, configPaymentSessionId: {
+                    name: "configPaymentSessionId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'configPaymentSession',
+                }, configPaymentSession: {
+                    name: "configPaymentSession",
+                    type: "ConfigPaymentSession",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'supervisorPayAmounts',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "configPaymentSessionId" },
                 },
             }, uniqueConstraints: {
                 id: {
@@ -19091,6 +19206,9 @@ const metadata: ModelMeta = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
+                }, configPaymentSessionId_role_inAcademy_description: {
+                    name: "configPaymentSessionId_role_inAcademy_description",
+                    fields: ["configPaymentSessionId", "role", "inAcademy", "description"]
                 },
             },
         },
@@ -28360,6 +28478,10 @@ function $default$DefenseRecord$createdBy(user: any): unknown {
 }
 
 function $default$LibrarySubmission$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$ConfigPaymentSession$createdBy(user: any): unknown {
     return user?.id;
 }
 

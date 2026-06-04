@@ -173,6 +173,7 @@ export * from './council';
 export * from './council-member';
 export * from './defense-record';
 export * from './library-submission';
+export * from './config-payment-session';
 export * from './default-council-role-pay-amount';
 export * from './default-supervisor-pay-amount';
 export * from './payment-record';

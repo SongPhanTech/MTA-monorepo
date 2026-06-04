@@ -1758,7 +1758,19 @@ export type DefenseRecord = $Result.DefaultSelection<Prisma.$DefenseRecordPayloa
  */
 export type LibrarySubmission = $Result.DefaultSelection<Prisma.$LibrarySubmissionPayload>;
 /**
+ * Model ConfigPaymentSession
+ * Bộ định mức thanh toán gắn với một đợt xét (1 đợt — 1 config)
+ * @
+ * @allow ('all', auth() != null)
+ * @
+ * @deny ('read', deletedAt != null)
+ * @
+ * @allow ('read', auth() != null)
+ */
+export type ConfigPaymentSession = $Result.DefaultSelection<Prisma.$ConfigPaymentSessionPayload>;
+/**
  * Model DefaultCouncilRolePayAmount
+ * Định mức hội đồng: configPaymentSessionId = null → mức chung; có id → theo đợt
  * @
  * @allow ('all', auth() != null)
  * @
@@ -1769,6 +1781,7 @@ export type LibrarySubmission = $Result.DefaultSelection<Prisma.$LibrarySubmissi
 export type DefaultCouncilRolePayAmount = $Result.DefaultSelection<Prisma.$DefaultCouncilRolePayAmountPayload>;
 /**
  * Model DefaultSupervisorPayAmount
+ * Định mức hướng dẫn: configPaymentSessionId = null → mức chung; có id → theo đợt
  * @
  * @allow ('all', auth() != null)
  * @
@@ -4482,6 +4495,15 @@ export class PrismaClient<ClientOptions extends Prisma.PrismaClientOptions = Pri
      */
     get librarySubmission(): Prisma.LibrarySubmissionDelegate<ExtArgs, ClientOptions>;
     /**
+     * `prisma.configPaymentSession`: Exposes CRUD operations for the **ConfigPaymentSession** model.
+     * Example usage:
+     * ```ts
+     * // Fetch zero or more ConfigPaymentSessions
+     * const configPaymentSessions = await prisma.configPaymentSession.findMany()
+     * ```
+     */
+    get configPaymentSession(): Prisma.ConfigPaymentSessionDelegate<ExtArgs, ClientOptions>;
+    /**
      * `prisma.defaultCouncilRolePayAmount`: Exposes CRUD operations for the **DefaultCouncilRolePayAmount** model.
      * Example usage:
      * ```ts
@@ -6397,6 +6419,7 @@ export namespace Prisma {
         CouncilMember: 'CouncilMember',
         DefenseRecord: 'DefenseRecord',
         LibrarySubmission: 'LibrarySubmission',
+        ConfigPaymentSession: 'ConfigPaymentSession',
         DefaultCouncilRolePayAmount: 'DefaultCouncilRolePayAmount',
         DefaultSupervisorPayAmount: 'DefaultSupervisorPayAmount',
         PaymentRecord: 'PaymentRecord',
@@ -9563,6 +9586,18 @@ export namespace Prisma {
         thesisId: 'thesisId',
         confirmedById: 'confirmedById'
     };
+    export const ConfigPaymentSessionScalarFieldEnum: {
+        id: 'id',
+        code: 'code',
+        active: 'active',
+        description: 'description',
+        deletedAt: 'deletedAt',
+        createdAt: 'createdAt',
+        updatedAt: 'updatedAt',
+        createdBy: 'createdBy',
+        name: 'name',
+        sessionId: 'sessionId'
+    };
     export const DefaultCouncilRolePayAmountScalarFieldEnum: {
         id: 'id',
         code: 'code',
@@ -9574,7 +9609,8 @@ export namespace Prisma {
         createdBy: 'createdBy',
         role: 'role',
         amount: 'amount',
-        inAcademy: 'inAcademy'
+        inAcademy: 'inAcademy',
+        configPaymentSessionId: 'configPaymentSessionId'
     };
     export const DefaultSupervisorPayAmountScalarFieldEnum: {
         id: 'id',
@@ -9587,7 +9623,8 @@ export namespace Prisma {
         createdBy: 'createdBy',
         role: 'role',
         amount: 'amount',
-        inAcademy: 'inAcademy'
+        inAcademy: 'inAcademy',
+        configPaymentSessionId: 'configPaymentSessionId'
     };
     export const PaymentRecordScalarFieldEnum: {
         id: 'id',
@@ -12905,17 +12942,27 @@ export namespace Prisma {
         thesisId: 'thesisId',
         confirmedById: 'confirmedById'
     };
+    export const ConfigPaymentSessionOrderByRelevanceFieldEnum: {
+        id: 'id',
+        code: 'code',
+        description: 'description',
+        createdBy: 'createdBy',
+        name: 'name',
+        sessionId: 'sessionId'
+    };
     export const DefaultCouncilRolePayAmountOrderByRelevanceFieldEnum: {
         id: 'id',
         code: 'code',
         description: 'description',
-        createdBy: 'createdBy'
+        createdBy: 'createdBy',
+        configPaymentSessionId: 'configPaymentSessionId'
     };
     export const DefaultSupervisorPayAmountOrderByRelevanceFieldEnum: {
         id: 'id',
         code: 'code',
         description: 'description',
-        createdBy: 'createdBy'
+        createdBy: 'createdBy',
+        configPaymentSessionId: 'configPaymentSessionId'
     };
     export const PaymentRecordOrderByRelevanceFieldEnum: {
         id: 'id',
@@ -75991,6 +76038,7 @@ export namespace Prisma {
         trainingObjectType<T extends TrainingObjectTypeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TrainingObjectTypeDefaultArgs<ExtArgs>>): Prisma__TrainingObjectTypeClient<$Result.GetResult<Prisma.$TrainingObjectTypePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
         trainingCourse<T extends TrainingCourseDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TrainingCourseDefaultArgs<ExtArgs>>): Prisma__TrainingCourseClient<$Result.GetResult<Prisma.$TrainingCoursePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
         thesisProject<T extends ThesisSession$thesisProjectArgs<ExtArgs> = {}>(args?: Subset<T, ThesisSession$thesisProjectArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ThesisProjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        configPayment<T extends ThesisSession$configPaymentArgs<ExtArgs> = {}>(args?: Subset<T, ThesisSession$configPaymentArgs<ExtArgs>>): Prisma__ConfigPaymentSessionClient<$Result.GetResult<Prisma.$ConfigPaymentSessionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         /**
          * Attaches callbacks for the resolution and/or rejection of the Promise.
          * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -79991,6 +80039,390 @@ export namespace Prisma {
         readonly confirmedById: FieldRef<"LibrarySubmission", 'String'>;
     }
 
+    export interface ConfigPaymentSessionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+        [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ConfigPaymentSession'], meta: { name: 'ConfigPaymentSession' } };
+        /**
+         * Fields of the ConfigPaymentSession model
+         */
+        readonly fields: ConfigPaymentSessionFieldRefs;
+        /**
+         * Find zero or one ConfigPaymentSession that matches the filter.
+         * @param {ConfigPaymentSessionFindUniqueArgs} args - Arguments to find a ConfigPaymentSession
+         * @example
+         * // Get one ConfigPaymentSession
+         * const configPaymentSession = await prisma.configPaymentSession.findUnique({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findUnique<T extends ConfigPaymentSessionFindUniqueArgs>(args: SelectSubset<T, ConfigPaymentSessionFindUniqueArgs<ExtArgs>>): Prisma__ConfigPaymentSessionClient<$Result.GetResult<Prisma.$ConfigPaymentSessionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find one ConfigPaymentSession that matches the filter or throw an error with `error.code='P2025'`
+         * if no matches were found.
+         * @param {ConfigPaymentSessionFindUniqueOrThrowArgs} args - Arguments to find a ConfigPaymentSession
+         * @example
+         * // Get one ConfigPaymentSession
+         * const configPaymentSession = await prisma.configPaymentSession.findUniqueOrThrow({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findUniqueOrThrow<T extends ConfigPaymentSessionFindUniqueOrThrowArgs>(args: SelectSubset<T, ConfigPaymentSessionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ConfigPaymentSessionClient<$Result.GetResult<Prisma.$ConfigPaymentSessionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find the first ConfigPaymentSession that matches the filter.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ConfigPaymentSessionFindFirstArgs} args - Arguments to find a ConfigPaymentSession
+         * @example
+         * // Get one ConfigPaymentSession
+         * const configPaymentSession = await prisma.configPaymentSession.findFirst({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findFirst<T extends ConfigPaymentSessionFindFirstArgs>(args?: SelectSubset<T, ConfigPaymentSessionFindFirstArgs<ExtArgs>>): Prisma__ConfigPaymentSessionClient<$Result.GetResult<Prisma.$ConfigPaymentSessionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find the first ConfigPaymentSession that matches the filter or
+         * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ConfigPaymentSessionFindFirstOrThrowArgs} args - Arguments to find a ConfigPaymentSession
+         * @example
+         * // Get one ConfigPaymentSession
+         * const configPaymentSession = await prisma.configPaymentSession.findFirstOrThrow({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findFirstOrThrow<T extends ConfigPaymentSessionFindFirstOrThrowArgs>(args?: SelectSubset<T, ConfigPaymentSessionFindFirstOrThrowArgs<ExtArgs>>): Prisma__ConfigPaymentSessionClient<$Result.GetResult<Prisma.$ConfigPaymentSessionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find zero or more ConfigPaymentSessions that matches the filter.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ConfigPaymentSessionFindManyArgs} args - Arguments to filter and select certain fields only.
+         * @example
+         * // Get all ConfigPaymentSessions
+         * const configPaymentSessions = await prisma.configPaymentSession.findMany()
+         *
+         * // Get first 10 ConfigPaymentSessions
+         * const configPaymentSessions = await prisma.configPaymentSession.findMany({ take: 10 })
+         *
+         * // Only select the `id`
+         * const configPaymentSessionWithIdOnly = await prisma.configPaymentSession.findMany({ select: { id: true } })
+         */
+        findMany<T extends ConfigPaymentSessionFindManyArgs>(args?: SelectSubset<T, ConfigPaymentSessionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ConfigPaymentSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>;
+        /**
+         * Create a ConfigPaymentSession.
+         * @param {ConfigPaymentSessionCreateArgs} args - Arguments to create a ConfigPaymentSession.
+         * @example
+         * // Create one ConfigPaymentSession
+         * const ConfigPaymentSession = await prisma.configPaymentSession.create({
+         *   data: {
+         *     // ... data to create a ConfigPaymentSession
+         *   }
+         * })
+         */
+        create<T extends ConfigPaymentSessionCreateArgs>(args: SelectSubset<T, ConfigPaymentSessionCreateArgs<ExtArgs>>): Prisma__ConfigPaymentSessionClient<$Result.GetResult<Prisma.$ConfigPaymentSessionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Create many ConfigPaymentSessions.
+         * @param {ConfigPaymentSessionCreateManyArgs} args - Arguments to create many ConfigPaymentSessions.
+         * @example
+         * // Create many ConfigPaymentSessions
+         * const configPaymentSession = await prisma.configPaymentSession.createMany({
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         */
+        createMany<T extends ConfigPaymentSessionCreateManyArgs>(args?: SelectSubset<T, ConfigPaymentSessionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Create many ConfigPaymentSessions and returns the data saved in the database.
+         * @param {ConfigPaymentSessionCreateManyAndReturnArgs} args - Arguments to create many ConfigPaymentSessions.
+         * @example
+         * // Create many ConfigPaymentSessions
+         * const configPaymentSession = await prisma.configPaymentSession.createManyAndReturn({
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         *
+         * // Create many ConfigPaymentSessions and only return the `id`
+         * const configPaymentSessionWithIdOnly = await prisma.configPaymentSession.createManyAndReturn({
+         *   select: { id: true },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         */
+        createManyAndReturn<T extends ConfigPaymentSessionCreateManyAndReturnArgs>(args?: SelectSubset<T, ConfigPaymentSessionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ConfigPaymentSessionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>;
+        /**
+         * Delete a ConfigPaymentSession.
+         * @param {ConfigPaymentSessionDeleteArgs} args - Arguments to delete one ConfigPaymentSession.
+         * @example
+         * // Delete one ConfigPaymentSession
+         * const ConfigPaymentSession = await prisma.configPaymentSession.delete({
+         *   where: {
+         *     // ... filter to delete one ConfigPaymentSession
+         *   }
+         * })
+         */
+        delete<T extends ConfigPaymentSessionDeleteArgs>(args: SelectSubset<T, ConfigPaymentSessionDeleteArgs<ExtArgs>>): Prisma__ConfigPaymentSessionClient<$Result.GetResult<Prisma.$ConfigPaymentSessionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Update one ConfigPaymentSession.
+         * @param {ConfigPaymentSessionUpdateArgs} args - Arguments to update one ConfigPaymentSession.
+         * @example
+         * // Update one ConfigPaymentSession
+         * const configPaymentSession = await prisma.configPaymentSession.update({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: {
+         *     // ... provide data here
+         *   }
+         * })
+         */
+        update<T extends ConfigPaymentSessionUpdateArgs>(args: SelectSubset<T, ConfigPaymentSessionUpdateArgs<ExtArgs>>): Prisma__ConfigPaymentSessionClient<$Result.GetResult<Prisma.$ConfigPaymentSessionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Delete zero or more ConfigPaymentSessions.
+         * @param {ConfigPaymentSessionDeleteManyArgs} args - Arguments to filter ConfigPaymentSessions to delete.
+         * @example
+         * // Delete a few ConfigPaymentSessions
+         * const { count } = await prisma.configPaymentSession.deleteMany({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        deleteMany<T extends ConfigPaymentSessionDeleteManyArgs>(args?: SelectSubset<T, ConfigPaymentSessionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Update zero or more ConfigPaymentSessions.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ConfigPaymentSessionUpdateManyArgs} args - Arguments to update one or more rows.
+         * @example
+         * // Update many ConfigPaymentSessions
+         * const configPaymentSession = await prisma.configPaymentSession.updateMany({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: {
+         *     // ... provide data here
+         *   }
+         * })
+         */
+        updateMany<T extends ConfigPaymentSessionUpdateManyArgs>(args: SelectSubset<T, ConfigPaymentSessionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Update zero or more ConfigPaymentSessions and returns the data updated in the database.
+         * @param {ConfigPaymentSessionUpdateManyAndReturnArgs} args - Arguments to update many ConfigPaymentSessions.
+         * @example
+         * // Update many ConfigPaymentSessions
+         * const configPaymentSession = await prisma.configPaymentSession.updateManyAndReturn({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         *
+         * // Update zero or more ConfigPaymentSessions and only return the `id`
+         * const configPaymentSessionWithIdOnly = await prisma.configPaymentSession.updateManyAndReturn({
+         *   select: { id: true },
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         */
+        updateManyAndReturn<T extends ConfigPaymentSessionUpdateManyAndReturnArgs>(args: SelectSubset<T, ConfigPaymentSessionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ConfigPaymentSessionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>;
+        /**
+         * Create or update one ConfigPaymentSession.
+         * @param {ConfigPaymentSessionUpsertArgs} args - Arguments to update or create a ConfigPaymentSession.
+         * @example
+         * // Update or create a ConfigPaymentSession
+         * const configPaymentSession = await prisma.configPaymentSession.upsert({
+         *   create: {
+         *     // ... data to create a ConfigPaymentSession
+         *   },
+         *   update: {
+         *     // ... in case it already exists, update
+         *   },
+         *   where: {
+         *     // ... the filter for the ConfigPaymentSession we want to update
+         *   }
+         * })
+         */
+        upsert<T extends ConfigPaymentSessionUpsertArgs>(args: SelectSubset<T, ConfigPaymentSessionUpsertArgs<ExtArgs>>): Prisma__ConfigPaymentSessionClient<$Result.GetResult<Prisma.$ConfigPaymentSessionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Count the number of ConfigPaymentSessions.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ConfigPaymentSessionCountArgs} args - Arguments to filter ConfigPaymentSessions to count.
+         * @example
+         * // Count the number of ConfigPaymentSessions
+         * const count = await prisma.configPaymentSession.count({
+         *   where: {
+         *     // ... the filter for the ConfigPaymentSessions we want to count
+         *   }
+         * })
+         */
+        count<T extends ConfigPaymentSessionCountArgs>(args?: Subset<T, ConfigPaymentSessionCountArgs>): Prisma.PrismaPromise<
+            T extends $Utils.Record<'select', any>
+            ? T['select'] extends true
+            ? number
+            : GetScalarType<T['select'], ConfigPaymentSessionCountAggregateOutputType>
+            : number
+        >;
+        /**
+         * Allows you to perform aggregations operations on a ConfigPaymentSession.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ConfigPaymentSessionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+         * @example
+         * // Ordered by age ascending
+         * // Where email contains prisma.io
+         * // Limited to the 10 users
+         * const aggregations = await prisma.user.aggregate({
+         *   _avg: {
+         *     age: true,
+         *   },
+         *   where: {
+         *     email: {
+         *       contains: "prisma.io",
+         *     },
+         *   },
+         *   orderBy: {
+         *     age: "asc",
+         *   },
+         *   take: 10,
+         * })
+         */
+        aggregate<T extends ConfigPaymentSessionAggregateArgs>(args: Subset<T, ConfigPaymentSessionAggregateArgs>): Prisma.PrismaPromise<GetConfigPaymentSessionAggregateType<T>>;
+        /**
+         * Group by ConfigPaymentSession.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ConfigPaymentSessionGroupByArgs} args - Group by arguments.
+         * @example
+         * // Group by city, order by createdAt, get count
+         * const result = await prisma.user.groupBy({
+         *   by: ['city', 'createdAt'],
+         *   orderBy: {
+         *     createdAt: true
+         *   },
+         *   _count: {
+         *     _all: true
+         *   },
+         * })
+         */
+        groupBy<T extends ConfigPaymentSessionGroupByArgs, HasSelectOrTake extends Or<
+            Extends<'skip', Keys<T>>,
+            Extends<'take', Keys<T>>
+        >, OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ConfigPaymentSessionGroupByArgs['orderBy'] }
+        : { orderBy?: ConfigPaymentSessionGroupByArgs['orderBy'] }, OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>, ByFields extends MaybeTupleToUnion<T['by']>, ByValid extends Has<ByFields, OrderFields>, HavingFields extends GetHavingFields<T['having']>, HavingValid extends Has<ByFields, HavingFields>, ByEmpty extends T['by'] extends never[] ? True : False, InputErrors extends ByEmpty extends True
+        ? `Error: "by" must not be empty.`
+        : HavingValid extends False
+        ? {
+            [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+            ]
+        }[HavingFields]
+        : 'take' extends Keys<T>
+        ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+        : 'skip' extends Keys<T>
+        ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+        : ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]>(args: SubsetIntersection<T, ConfigPaymentSessionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetConfigPaymentSessionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>;
+    }
+
+    /**
+     * The delegate class that acts as a "Promise-like" for ConfigPaymentSession.
+     * Why is this prefixed with `Prisma__`?
+     * Because we want to prevent naming conflicts as mentioned in
+     * https://github.com/prisma/prisma-client-js/issues/707
+     */
+    export interface Prisma__ConfigPaymentSessionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+        readonly [Symbol.toStringTag]: "PrismaPromise";
+        session<T extends ThesisSessionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ThesisSessionDefaultArgs<ExtArgs>>): Prisma__ThesisSessionClient<$Result.GetResult<Prisma.$ThesisSessionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
+        councilPayAmounts<T extends ConfigPaymentSession$councilPayAmountsArgs<ExtArgs> = {}>(args?: Subset<T, ConfigPaymentSession$councilPayAmountsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DefaultCouncilRolePayAmountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        supervisorPayAmounts<T extends ConfigPaymentSession$supervisorPayAmountsArgs<ExtArgs> = {}>(args?: Subset<T, ConfigPaymentSession$supervisorPayAmountsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DefaultSupervisorPayAmountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        /**
+         * Attaches callbacks for the resolution and/or rejection of the Promise.
+         * @param onfulfilled The callback to execute when the Promise is resolved.
+         * @param onrejected The callback to execute when the Promise is rejected.
+         * @returns A Promise for the completion of which ever callback is executed.
+         */
+        then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>;
+        /**
+         * Attaches a callback for only the rejection of the Promise.
+         * @param onrejected The callback to execute when the Promise is rejected.
+         * @returns A Promise for the completion of the callback.
+         */
+        catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>;
+        /**
+         * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+         * resolved value cannot be modified from the callback.
+         * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+         * @returns A Promise for the completion of the callback.
+         */
+        finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+    }
+
+    /**
+     * Fields of the ConfigPaymentSession model
+     */
+    interface ConfigPaymentSessionFieldRefs {
+        readonly id: FieldRef<"ConfigPaymentSession", 'String'>;
+        readonly code: FieldRef<"ConfigPaymentSession", 'String'>;
+        readonly active: FieldRef<"ConfigPaymentSession", 'Boolean'>;
+        readonly description: FieldRef<"ConfigPaymentSession", 'String'>;
+        readonly deletedAt: FieldRef<"ConfigPaymentSession", 'DateTime'>;
+        readonly createdAt: FieldRef<"ConfigPaymentSession", 'DateTime'>;
+        readonly updatedAt: FieldRef<"ConfigPaymentSession", 'DateTime'>;
+        readonly createdBy: FieldRef<"ConfigPaymentSession", 'String'>;
+        readonly name: FieldRef<"ConfigPaymentSession", 'String'>;
+        readonly sessionId: FieldRef<"ConfigPaymentSession", 'String'>;
+    }
+
     export interface DefaultCouncilRolePayAmountDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
         [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['DefaultCouncilRolePayAmount'], meta: { name: 'DefaultCouncilRolePayAmount' } };
         /**
@@ -80334,6 +80766,7 @@ export namespace Prisma {
      */
     export interface Prisma__DefaultCouncilRolePayAmountClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
         readonly [Symbol.toStringTag]: "PrismaPromise";
+        configPaymentSession<T extends DefaultCouncilRolePayAmount$configPaymentSessionArgs<ExtArgs> = {}>(args?: Subset<T, DefaultCouncilRolePayAmount$configPaymentSessionArgs<ExtArgs>>): Prisma__ConfigPaymentSessionClient<$Result.GetResult<Prisma.$ConfigPaymentSessionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         /**
          * Attaches callbacks for the resolution and/or rejection of the Promise.
          * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -80371,6 +80804,7 @@ export namespace Prisma {
         readonly role: FieldRef<"DefaultCouncilRolePayAmount", 'CouncilRole'>;
         readonly amount: FieldRef<"DefaultCouncilRolePayAmount", 'Decimal'>;
         readonly inAcademy: FieldRef<"DefaultCouncilRolePayAmount", 'Boolean'>;
+        readonly configPaymentSessionId: FieldRef<"DefaultCouncilRolePayAmount", 'String'>;
     }
 
     export interface DefaultSupervisorPayAmountDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
@@ -80716,6 +81150,7 @@ export namespace Prisma {
      */
     export interface Prisma__DefaultSupervisorPayAmountClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
         readonly [Symbol.toStringTag]: "PrismaPromise";
+        configPaymentSession<T extends DefaultSupervisorPayAmount$configPaymentSessionArgs<ExtArgs> = {}>(args?: Subset<T, DefaultSupervisorPayAmount$configPaymentSessionArgs<ExtArgs>>): Prisma__ConfigPaymentSessionClient<$Result.GetResult<Prisma.$ConfigPaymentSessionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         /**
          * Attaches callbacks for the resolution and/or rejection of the Promise.
          * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -80753,6 +81188,7 @@ export namespace Prisma {
         readonly role: FieldRef<"DefaultSupervisorPayAmount", 'SupervisorRole'>;
         readonly amount: FieldRef<"DefaultSupervisorPayAmount", 'Decimal'>;
         readonly inAcademy: FieldRef<"DefaultSupervisorPayAmount", 'Boolean'>;
+        readonly configPaymentSessionId: FieldRef<"DefaultSupervisorPayAmount", 'String'>;
     }
 
     export interface PaymentRecordDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
@@ -120725,7 +121161,7 @@ export namespace Prisma {
             omit: GlobalOmitOptions
         }
         meta: {
-            modelProps: "config" | "suggestion" | "changeLog" | "userProfile" | "hocHam" | "chucVuChinhQuyen" | "chucVuDang" | "hocVi" | "relative" | "trinhDoLyLuanChinhTri" | "trinhDoQuanLyNhaNuoc" | "ngoaiNgu" | "tinHoc" | "boiDuongQuocPhongAnNinh" | "capBac" | "quaTrinhCongTac" | "quaTrinhCuDiCongTac" | "quaTrinhCuDiDaoTao" | "khenThuong" | "kyLuat" | "doiTuongChinhSach" | "keKhaiTaiSan" | "tiengDanToc" | "chienDau" | "nuocNgoai" | "thuongTat" | "danhHieu" | "quaTrinhHocTap" | "toChucXaHoi" | "quaTrinhLuong" | "group" | "role" | "permission" | "chatBotConfig" | "userSession" | "document" | "documentTopic" | "fAQ" | "prompt" | "conversation" | "conversationFeedback" | "message" | "citationMessage" | "topic" | "documentClassification" | "dM_CapBac" | "dM_ChucDanh" | "dM_ChucVu" | "dM_HocHam" | "dM_HocVi" | "dM_ChungChiTinHoc" | "dM_DanToc" | "dM_DonVi" | "dM_DonViHanhChinh" | "dM_KhuVuc_DiaLy" | "dM_NgoaiNgu" | "dM_TonGiao" | "dM_TrinhDoNgoaiNgu" | "dM_TrinhDoTinHoc" | "dM_GioiTinh" | "dM_NhanVien" | "dM_PhanCap_ChatLuong_TrangThietBi" | "dM_PhanLoai_CSKT" | "dM_NhomNguoiDung" | "dM_NhomUngDung" | "dM_QuocGia" | "dM_Tinh" | "dM_Tinh_New" | "dM_QuanHuyen" | "dM_XaPhuong" | "dM_XaPhuong_New" | "dM_ViTriCongViec" | "planTraining" | "planTrainingPractice" | "planTrainingSubject" | "studentScoreConvert" | "subjectScoreConvert" | "studentSubjectScore" | "studentSubjectScoreHistory" | "studentResearchTopic" | "studentInternship" | "archivedCertificateOnStudentSubjectScore" | "archivedCertificate" | "archivedAwardOnStudentSubjectScore" | "archivedAward" | "schoolYear" | "semester" | "milestone" | "trainingLanguage" | "trainingCourse" | "trainingCourseRegulation" | "fixedClass" | "curriculum" | "curriculumVersion" | "subject" | "subjectVersionCategory" | "subjectVersion" | "subjectVersionHistory" | "equivalencyGroup" | "subjectInGroup" | "trainingBlockSubject" | "classRegisterSessionCredit" | "classRegisterSession" | "classRegisterLogs" | "subjectClass" | "subjectClassAttendance" | "subjectClassAttendanceStudent" | "subjectClassHistory" | "subjectClassTime" | "classSchedule" | "scoreCorrectionTicket" | "scoreCorrectionItem" | "trainingObjectType" | "priorityObject" | "trainingType" | "trainingLevel" | "trainingForm" | "trainingLocation" | "building" | "room" | "trainingField" | "trainingFieldOnTrainingObjectType" | "trainingMajor" | "trainingMajorOnTrainingObjectType" | "trainingBlock" | "trainingBlockOnCurriculumVersion" | "trainingTime" | "availableTrainingTime" | "certificate" | "certificateOnSubject" | "award" | "officerBonusScore" | "diplomaType" | "scoreConvert" | "loadCategory" | "outputStandard" | "outputStandardOnCurriculum" | "student" | "trainingActivity" | "studentSemesterResult" | "studentYearResult" | "notification" | "documentFile" | "academicActionConfig" | "academicActionRuleSet" | "academicActionCondition" | "studentAcademicDecision" | "trainingScoreSession" | "studentTrainingScore" | "semesterTrainingScore" | "schoolYearTrainingScore" | "lecturerType" | "staffType" | "staffPosition" | "lecturer" | "lecturerHistory" | "researchProject" | "studentResearchRegistration" | "thesisSession" | "thesisProject" | "defenseSession" | "studentThesisRegistration" | "expertProfile" | "decision" | "invitation" | "council" | "councilMember" | "defenseRecord" | "librarySubmission" | "defaultCouncilRolePayAmount" | "defaultSupervisorPayAmount" | "paymentRecord" | "supervisorPaymentRecord" | "evaluationPeriod" | "evaluationStandardSet" | "standardCatalog" | "criterionCatalog" | "evidenceCategory" | "evidence" | "evaluationCriterionComment" | "requirementCriterionCatalog" | "standardPeriod" | "criterionPeriod" | "analysisCriterion" | "evaluationCriterion" | "requirementCriterion" | "analysisFormEvidence" | "evaluationCouncil" | "evaluationCouncilMember" | "evidenceFile" | "surveyObjectType" | "surveyTopic" | "surveyQuestionGroup" | "clusterSurvey" | "survey" | "surveyQuestion" | "specificChoice" | "surveyChoice" | "surveySession" | "surveyResponse" | "questionBank" | "question" | "multipleChoiceOption" | "fillInBlankSlot" | "orderingItem" | "exam" | "examRoom" | "examList" | "examBank" | "examBankQuestion" | "examPaper" | "examFramework" | "examMatrix" | "knowledgeBlock" | "configExam" | "staff" | "staffHistory" | "scholarship" | "scholarshipCriteria" | "scholarshipAward" | "graduationSession" | "studentGraduationApplication" | "applicationDowngraded" | "applicationCheckResult" | "graduationDecision" | "academicRankingConvert" | "graduationRankDowngradeRule" | "graduationRankDowngradeCondition" | "rankingCondition" | "diplomaVerificationApplication" | "scoreLinkSheet" | "scoreLinkSubjectVersion" | "scoreLinkStudent" | "note" | "noteFolder" | "noteTag" | "noteReminder" | "academicWarningRule" | "academicWarning" | "disciplinaryWarning" | "disciplinaryWarningReason" | "feedback" | "dM_TrinhDoHocVan" | "dM_TrinhDoLyLuanChinhTri" | "dM_TrinhDoQuanLyNhaNuoc" | "dM_TinhTrangHonNhan" | "dM_QuanHeThanNhan" | "dM_TrangThaiLamViec" | "dM_HinhThucKhenThuongChinhQuyen" | "dM_HinhThucKhenThuongDang" | "dM_XepLoaiDanhGiaCanBo" | "dM_XepLoaiDanhGiaChatLuongDangVien" | "dM_LoaiHinhCongTac" | "dM_TinhTrangCongTac" | "dM_LoaiTinhTrangCongTac" | "dM_LoaiHinhDiHocTap" | "dM_TinhTrangDiHocTap" | "dM_NuocCuDiHocTap" | "dM_ChucDanhCMNVGiangVien" | "dM_ChucDanhCMNVNghienCuuVien" | "dM_ChucDanhCMNVKySu" | "dM_TruongDaoTaoBacDH" | "dM_ChuyenNganhDaoTaoBacDH" | "dM_ChiHuyQuanLy" | "dM_ChuyenMonKyThuat" | "dM_SucKhoe" | "dM_NhomMau" | "dM_LoaiThuongTat" | "dM_NganhHoc" | "dM_ToChucXaHoi" | "dM_Ngach" | "dM_BacLuong" | "templateFile" | "blockedIp"
+            modelProps: "config" | "suggestion" | "changeLog" | "userProfile" | "hocHam" | "chucVuChinhQuyen" | "chucVuDang" | "hocVi" | "relative" | "trinhDoLyLuanChinhTri" | "trinhDoQuanLyNhaNuoc" | "ngoaiNgu" | "tinHoc" | "boiDuongQuocPhongAnNinh" | "capBac" | "quaTrinhCongTac" | "quaTrinhCuDiCongTac" | "quaTrinhCuDiDaoTao" | "khenThuong" | "kyLuat" | "doiTuongChinhSach" | "keKhaiTaiSan" | "tiengDanToc" | "chienDau" | "nuocNgoai" | "thuongTat" | "danhHieu" | "quaTrinhHocTap" | "toChucXaHoi" | "quaTrinhLuong" | "group" | "role" | "permission" | "chatBotConfig" | "userSession" | "document" | "documentTopic" | "fAQ" | "prompt" | "conversation" | "conversationFeedback" | "message" | "citationMessage" | "topic" | "documentClassification" | "dM_CapBac" | "dM_ChucDanh" | "dM_ChucVu" | "dM_HocHam" | "dM_HocVi" | "dM_ChungChiTinHoc" | "dM_DanToc" | "dM_DonVi" | "dM_DonViHanhChinh" | "dM_KhuVuc_DiaLy" | "dM_NgoaiNgu" | "dM_TonGiao" | "dM_TrinhDoNgoaiNgu" | "dM_TrinhDoTinHoc" | "dM_GioiTinh" | "dM_NhanVien" | "dM_PhanCap_ChatLuong_TrangThietBi" | "dM_PhanLoai_CSKT" | "dM_NhomNguoiDung" | "dM_NhomUngDung" | "dM_QuocGia" | "dM_Tinh" | "dM_Tinh_New" | "dM_QuanHuyen" | "dM_XaPhuong" | "dM_XaPhuong_New" | "dM_ViTriCongViec" | "planTraining" | "planTrainingPractice" | "planTrainingSubject" | "studentScoreConvert" | "subjectScoreConvert" | "studentSubjectScore" | "studentSubjectScoreHistory" | "studentResearchTopic" | "studentInternship" | "archivedCertificateOnStudentSubjectScore" | "archivedCertificate" | "archivedAwardOnStudentSubjectScore" | "archivedAward" | "schoolYear" | "semester" | "milestone" | "trainingLanguage" | "trainingCourse" | "trainingCourseRegulation" | "fixedClass" | "curriculum" | "curriculumVersion" | "subject" | "subjectVersionCategory" | "subjectVersion" | "subjectVersionHistory" | "equivalencyGroup" | "subjectInGroup" | "trainingBlockSubject" | "classRegisterSessionCredit" | "classRegisterSession" | "classRegisterLogs" | "subjectClass" | "subjectClassAttendance" | "subjectClassAttendanceStudent" | "subjectClassHistory" | "subjectClassTime" | "classSchedule" | "scoreCorrectionTicket" | "scoreCorrectionItem" | "trainingObjectType" | "priorityObject" | "trainingType" | "trainingLevel" | "trainingForm" | "trainingLocation" | "building" | "room" | "trainingField" | "trainingFieldOnTrainingObjectType" | "trainingMajor" | "trainingMajorOnTrainingObjectType" | "trainingBlock" | "trainingBlockOnCurriculumVersion" | "trainingTime" | "availableTrainingTime" | "certificate" | "certificateOnSubject" | "award" | "officerBonusScore" | "diplomaType" | "scoreConvert" | "loadCategory" | "outputStandard" | "outputStandardOnCurriculum" | "student" | "trainingActivity" | "studentSemesterResult" | "studentYearResult" | "notification" | "documentFile" | "academicActionConfig" | "academicActionRuleSet" | "academicActionCondition" | "studentAcademicDecision" | "trainingScoreSession" | "studentTrainingScore" | "semesterTrainingScore" | "schoolYearTrainingScore" | "lecturerType" | "staffType" | "staffPosition" | "lecturer" | "lecturerHistory" | "researchProject" | "studentResearchRegistration" | "thesisSession" | "thesisProject" | "defenseSession" | "studentThesisRegistration" | "expertProfile" | "decision" | "invitation" | "council" | "councilMember" | "defenseRecord" | "librarySubmission" | "configPaymentSession" | "defaultCouncilRolePayAmount" | "defaultSupervisorPayAmount" | "paymentRecord" | "supervisorPaymentRecord" | "evaluationPeriod" | "evaluationStandardSet" | "standardCatalog" | "criterionCatalog" | "evidenceCategory" | "evidence" | "evaluationCriterionComment" | "requirementCriterionCatalog" | "standardPeriod" | "criterionPeriod" | "analysisCriterion" | "evaluationCriterion" | "requirementCriterion" | "analysisFormEvidence" | "evaluationCouncil" | "evaluationCouncilMember" | "evidenceFile" | "surveyObjectType" | "surveyTopic" | "surveyQuestionGroup" | "clusterSurvey" | "survey" | "surveyQuestion" | "specificChoice" | "surveyChoice" | "surveySession" | "surveyResponse" | "questionBank" | "question" | "multipleChoiceOption" | "fillInBlankSlot" | "orderingItem" | "exam" | "examRoom" | "examList" | "examBank" | "examBankQuestion" | "examPaper" | "examFramework" | "examMatrix" | "knowledgeBlock" | "configExam" | "staff" | "staffHistory" | "scholarship" | "scholarshipCriteria" | "scholarshipAward" | "graduationSession" | "studentGraduationApplication" | "applicationDowngraded" | "applicationCheckResult" | "graduationDecision" | "academicRankingConvert" | "graduationRankDowngradeRule" | "graduationRankDowngradeCondition" | "rankingCondition" | "diplomaVerificationApplication" | "scoreLinkSheet" | "scoreLinkSubjectVersion" | "scoreLinkStudent" | "note" | "noteFolder" | "noteTag" | "noteReminder" | "academicWarningRule" | "academicWarning" | "disciplinaryWarning" | "disciplinaryWarningReason" | "feedback" | "dM_TrinhDoHocVan" | "dM_TrinhDoLyLuanChinhTri" | "dM_TrinhDoQuanLyNhaNuoc" | "dM_TinhTrangHonNhan" | "dM_QuanHeThanNhan" | "dM_TrangThaiLamViec" | "dM_HinhThucKhenThuongChinhQuyen" | "dM_HinhThucKhenThuongDang" | "dM_XepLoaiDanhGiaCanBo" | "dM_XepLoaiDanhGiaChatLuongDangVien" | "dM_LoaiHinhCongTac" | "dM_TinhTrangCongTac" | "dM_LoaiTinhTrangCongTac" | "dM_LoaiHinhDiHocTap" | "dM_TinhTrangDiHocTap" | "dM_NuocCuDiHocTap" | "dM_ChucDanhCMNVGiangVien" | "dM_ChucDanhCMNVNghienCuuVien" | "dM_ChucDanhCMNVKySu" | "dM_TruongDaoTaoBacDH" | "dM_ChuyenNganhDaoTaoBacDH" | "dM_ChiHuyQuanLy" | "dM_ChuyenMonKyThuat" | "dM_SucKhoe" | "dM_NhomMau" | "dM_LoaiThuongTat" | "dM_NganhHoc" | "dM_ToChucXaHoi" | "dM_Ngach" | "dM_BacLuong" | "templateFile" | "blockedIp"
             txIsolationLevel: Prisma.TransactionIsolationLevel
         }
         model: {
@@ -133235,6 +133671,80 @@ export namespace Prisma {
                     }
                 }
             }
+            ConfigPaymentSession: {
+                payload: Prisma.$ConfigPaymentSessionPayload<ExtArgs>
+                fields: Prisma.ConfigPaymentSessionFieldRefs
+                operations: {
+                    findUnique: {
+                        args: Prisma.ConfigPaymentSessionFindUniqueArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ConfigPaymentSessionPayload> | null
+                    }
+                    findUniqueOrThrow: {
+                        args: Prisma.ConfigPaymentSessionFindUniqueOrThrowArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ConfigPaymentSessionPayload>
+                    }
+                    findFirst: {
+                        args: Prisma.ConfigPaymentSessionFindFirstArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ConfigPaymentSessionPayload> | null
+                    }
+                    findFirstOrThrow: {
+                        args: Prisma.ConfigPaymentSessionFindFirstOrThrowArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ConfigPaymentSessionPayload>
+                    }
+                    findMany: {
+                        args: Prisma.ConfigPaymentSessionFindManyArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ConfigPaymentSessionPayload>[]
+                    }
+                    create: {
+                        args: Prisma.ConfigPaymentSessionCreateArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ConfigPaymentSessionPayload>
+                    }
+                    createMany: {
+                        args: Prisma.ConfigPaymentSessionCreateManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    createManyAndReturn: {
+                        args: Prisma.ConfigPaymentSessionCreateManyAndReturnArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ConfigPaymentSessionPayload>[]
+                    }
+                    delete: {
+                        args: Prisma.ConfigPaymentSessionDeleteArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ConfigPaymentSessionPayload>
+                    }
+                    update: {
+                        args: Prisma.ConfigPaymentSessionUpdateArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ConfigPaymentSessionPayload>
+                    }
+                    deleteMany: {
+                        args: Prisma.ConfigPaymentSessionDeleteManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    updateMany: {
+                        args: Prisma.ConfigPaymentSessionUpdateManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    updateManyAndReturn: {
+                        args: Prisma.ConfigPaymentSessionUpdateManyAndReturnArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ConfigPaymentSessionPayload>[]
+                    }
+                    upsert: {
+                        args: Prisma.ConfigPaymentSessionUpsertArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ConfigPaymentSessionPayload>
+                    }
+                    aggregate: {
+                        args: Prisma.ConfigPaymentSessionAggregateArgs<ExtArgs>
+                        result: $Utils.Optional<AggregateConfigPaymentSession>
+                    }
+                    groupBy: {
+                        args: Prisma.ConfigPaymentSessionGroupByArgs<ExtArgs>
+                        result: $Utils.Optional<ConfigPaymentSessionGroupByOutputType>[]
+                    }
+                    count: {
+                        args: Prisma.ConfigPaymentSessionCountArgs<ExtArgs>
+                        result: $Utils.Optional<ConfigPaymentSessionCountAggregateOutputType> | number
+                    }
+                }
+            }
             DefaultCouncilRolePayAmount: {
                 payload: Prisma.$DefaultCouncilRolePayAmountPayload<ExtArgs>
                 fields: Prisma.DefaultCouncilRolePayAmountFieldRefs
@@ -141205,6 +141715,7 @@ export namespace Prisma {
         councilMember?: CouncilMemberOmit
         defenseRecord?: DefenseRecordOmit
         librarySubmission?: LibrarySubmissionOmit
+        configPaymentSession?: ConfigPaymentSessionOmit
         defaultCouncilRolePayAmount?: DefaultCouncilRolePayAmountOmit
         defaultSupervisorPayAmount?: DefaultSupervisorPayAmountOmit
         paymentRecord?: PaymentRecordOmit
@@ -145811,6 +146322,38 @@ export namespace Prisma {
      */
     export type LibrarySubmissionCountOutputTypeCountDocumentFileArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         where?: DocumentFileWhereInput
+    };
+    /**
+     * Count Type ConfigPaymentSessionCountOutputType
+     */
+    export type ConfigPaymentSessionCountOutputType = {
+        councilPayAmounts: number
+        supervisorPayAmounts: number
+    };
+    export type ConfigPaymentSessionCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        councilPayAmounts?: boolean | ConfigPaymentSessionCountOutputTypeCountCouncilPayAmountsArgs
+        supervisorPayAmounts?: boolean | ConfigPaymentSessionCountOutputTypeCountSupervisorPayAmountsArgs
+    };
+    /**
+     * ConfigPaymentSessionCountOutputType without action
+     */
+    export type ConfigPaymentSessionCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ConfigPaymentSessionCountOutputType
+         */
+        select?: ConfigPaymentSessionCountOutputTypeSelect<ExtArgs> | null
+    };
+    /**
+     * ConfigPaymentSessionCountOutputType without action
+     */
+    export type ConfigPaymentSessionCountOutputTypeCountCouncilPayAmountsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: DefaultCouncilRolePayAmountWhereInput
+    };
+    /**
+     * ConfigPaymentSessionCountOutputType without action
+     */
+    export type ConfigPaymentSessionCountOutputTypeCountSupervisorPayAmountsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: DefaultSupervisorPayAmountWhereInput
     };
     /**
      * Count Type SupervisorPaymentRecordCountOutputType
@@ -278527,6 +279070,7 @@ export namespace Prisma {
         trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
         trainingCourse?: boolean | TrainingCourseDefaultArgs<ExtArgs>
         thesisProject?: boolean | ThesisSession$thesisProjectArgs<ExtArgs>
+        configPayment?: boolean | ThesisSession$configPaymentArgs<ExtArgs>
         _count?: boolean | ThesisSessionCountOutputTypeDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["thesisSession"]>;
     export type ThesisSessionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -278631,6 +279175,7 @@ export namespace Prisma {
         trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
         trainingCourse?: boolean | TrainingCourseDefaultArgs<ExtArgs>
         thesisProject?: boolean | ThesisSession$thesisProjectArgs<ExtArgs>
+        configPayment?: boolean | ThesisSession$configPaymentArgs<ExtArgs>
         _count?: boolean | ThesisSessionCountOutputTypeDefaultArgs<ExtArgs>
     };
     export type ThesisSessionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -278647,6 +279192,7 @@ export namespace Prisma {
             trainingObjectType: Prisma.$TrainingObjectTypePayload<ExtArgs>
             trainingCourse: Prisma.$TrainingCoursePayload<ExtArgs>
             thesisProject: Prisma.$ThesisProjectPayload<ExtArgs>[]
+            configPayment: Prisma.$ConfigPaymentSessionPayload<ExtArgs> | null
         }
         scalars: $Extensions.GetPayloadResult<{
             id: string
@@ -279129,6 +279675,24 @@ export namespace Prisma {
         take?: number
         skip?: number
         distinct?: ThesisProjectScalarFieldEnum | ThesisProjectScalarFieldEnum[]
+    };
+    /**
+     * ThesisSession.configPayment
+     */
+    export type ThesisSession$configPaymentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ConfigPaymentSession
+         */
+        select?: ConfigPaymentSessionSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ConfigPaymentSession
+         */
+        omit?: ConfigPaymentSessionOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ConfigPaymentSessionInclude<ExtArgs> | null
+        where?: ConfigPaymentSessionWhereInput
     };
     /**
      * ThesisSession without action
@@ -287850,6 +288414,713 @@ export namespace Prisma {
         include?: LibrarySubmissionInclude<ExtArgs> | null
     };
     /**
+     * Model ConfigPaymentSession
+     */
+    export type AggregateConfigPaymentSession = {
+        _count: ConfigPaymentSessionCountAggregateOutputType | null
+        _min: ConfigPaymentSessionMinAggregateOutputType | null
+        _max: ConfigPaymentSessionMaxAggregateOutputType | null
+    };
+    export type ConfigPaymentSessionMinAggregateOutputType = {
+        id: string | null
+        code: string | null
+        active: boolean | null
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date | null
+        updatedAt: Date | null
+        createdBy: string | null
+        name: string | null
+        sessionId: string | null
+    };
+    export type ConfigPaymentSessionMaxAggregateOutputType = {
+        id: string | null
+        code: string | null
+        active: boolean | null
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date | null
+        updatedAt: Date | null
+        createdBy: string | null
+        name: string | null
+        sessionId: string | null
+    };
+    export type ConfigPaymentSessionCountAggregateOutputType = {
+        id: number
+        code: number
+        active: number
+        description: number
+        deletedAt: number
+        createdAt: number
+        updatedAt: number
+        createdBy: number
+        name: number
+        sessionId: number
+        _all: number
+    };
+    export type ConfigPaymentSessionMinAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        createdBy?: true
+        name?: true
+        sessionId?: true
+    };
+    export type ConfigPaymentSessionMaxAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        createdBy?: true
+        name?: true
+        sessionId?: true
+    };
+    export type ConfigPaymentSessionCountAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        createdBy?: true
+        name?: true
+        sessionId?: true
+        _all?: true
+    };
+    export type ConfigPaymentSessionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Filter which ConfigPaymentSession to aggregate.
+         */
+        where?: ConfigPaymentSessionWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of ConfigPaymentSessions to fetch.
+         */
+        orderBy?: ConfigPaymentSessionOrderByWithRelationInput | ConfigPaymentSessionOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the start position
+         */
+        cursor?: ConfigPaymentSessionWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` ConfigPaymentSessions from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` ConfigPaymentSessions.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Count returned ConfigPaymentSessions
+        **/
+        _count?: true | ConfigPaymentSessionCountAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to find the minimum value
+        **/
+        _min?: ConfigPaymentSessionMinAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to find the maximum value
+        **/
+        _max?: ConfigPaymentSessionMaxAggregateInputType
+    };
+    export type GetConfigPaymentSessionAggregateType<T extends ConfigPaymentSessionAggregateArgs> = {
+        [P in keyof T & keyof AggregateConfigPaymentSession]: P extends '_count' | 'count'
+        ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateConfigPaymentSession[P]>
+        : GetScalarType<T[P], AggregateConfigPaymentSession[P]>
+    };
+    export type ConfigPaymentSessionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: ConfigPaymentSessionWhereInput
+        orderBy?: ConfigPaymentSessionOrderByWithAggregationInput | ConfigPaymentSessionOrderByWithAggregationInput[]
+        by: ConfigPaymentSessionScalarFieldEnum[] | ConfigPaymentSessionScalarFieldEnum
+        having?: ConfigPaymentSessionScalarWhereWithAggregatesInput
+        take?: number
+        skip?: number
+        _count?: ConfigPaymentSessionCountAggregateInputType | true
+        _min?: ConfigPaymentSessionMinAggregateInputType
+        _max?: ConfigPaymentSessionMaxAggregateInputType
+    };
+    export type ConfigPaymentSessionGroupByOutputType = {
+        id: string
+        code: string | null
+        active: boolean
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date
+        updatedAt: Date
+        createdBy: string | null
+        name: string
+        sessionId: string
+        _count: ConfigPaymentSessionCountAggregateOutputType | null
+        _min: ConfigPaymentSessionMinAggregateOutputType | null
+        _max: ConfigPaymentSessionMaxAggregateOutputType | null
+    };
+    type GetConfigPaymentSessionGroupByPayload<T extends ConfigPaymentSessionGroupByArgs> = Prisma.PrismaPromise<
+        Array<
+            PickEnumerable<ConfigPaymentSessionGroupByOutputType, T['by']> &
+            {
+                [P in ((keyof T) & (keyof ConfigPaymentSessionGroupByOutputType))]: P extends '_count'
+                ? T[P] extends boolean
+                ? number
+                : GetScalarType<T[P], ConfigPaymentSessionGroupByOutputType[P]>
+                : GetScalarType<T[P], ConfigPaymentSessionGroupByOutputType[P]>
+            }
+        >
+    >;
+    export type ConfigPaymentSessionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        createdBy?: boolean
+        name?: boolean
+        sessionId?: boolean
+        session?: boolean | ThesisSessionDefaultArgs<ExtArgs>
+        councilPayAmounts?: boolean | ConfigPaymentSession$councilPayAmountsArgs<ExtArgs>
+        supervisorPayAmounts?: boolean | ConfigPaymentSession$supervisorPayAmountsArgs<ExtArgs>
+        _count?: boolean | ConfigPaymentSessionCountOutputTypeDefaultArgs<ExtArgs>
+    }, ExtArgs["result"]["configPaymentSession"]>;
+    export type ConfigPaymentSessionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        createdBy?: boolean
+        name?: boolean
+        sessionId?: boolean
+        session?: boolean | ThesisSessionDefaultArgs<ExtArgs>
+    }, ExtArgs["result"]["configPaymentSession"]>;
+    export type ConfigPaymentSessionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        createdBy?: boolean
+        name?: boolean
+        sessionId?: boolean
+        session?: boolean | ThesisSessionDefaultArgs<ExtArgs>
+    }, ExtArgs["result"]["configPaymentSession"]>;
+    export type ConfigPaymentSessionSelectScalar = {
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        createdBy?: boolean
+        name?: boolean
+        sessionId?: boolean
+    };
+    export type ConfigPaymentSessionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name" | "sessionId", ExtArgs["result"]["configPaymentSession"]>;
+    export type ConfigPaymentSessionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        session?: boolean | ThesisSessionDefaultArgs<ExtArgs>
+        councilPayAmounts?: boolean | ConfigPaymentSession$councilPayAmountsArgs<ExtArgs>
+        supervisorPayAmounts?: boolean | ConfigPaymentSession$supervisorPayAmountsArgs<ExtArgs>
+        _count?: boolean | ConfigPaymentSessionCountOutputTypeDefaultArgs<ExtArgs>
+    };
+    export type ConfigPaymentSessionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        session?: boolean | ThesisSessionDefaultArgs<ExtArgs>
+    };
+    export type ConfigPaymentSessionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        session?: boolean | ThesisSessionDefaultArgs<ExtArgs>
+    };
+    export type $ConfigPaymentSessionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        name: "ConfigPaymentSession"
+        objects: {
+            session: Prisma.$ThesisSessionPayload<ExtArgs>
+            councilPayAmounts: Prisma.$DefaultCouncilRolePayAmountPayload<ExtArgs>[]
+            supervisorPayAmounts: Prisma.$DefaultSupervisorPayAmountPayload<ExtArgs>[]
+        }
+        scalars: $Extensions.GetPayloadResult<{
+            id: string
+            code: string | null
+            active: boolean
+            description: string | null
+            deletedAt: Date | null
+            createdAt: Date
+            updatedAt: Date
+            createdBy: string | null
+            name: string
+            sessionId: string
+        }, ExtArgs["result"]["configPaymentSession"]>
+        composites: {}
+    };
+    type ConfigPaymentSessionGetPayload<S extends boolean | null | undefined | ConfigPaymentSessionDefaultArgs> = $Result.GetResult<Prisma.$ConfigPaymentSessionPayload, S>;
+    type ConfigPaymentSessionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = Omit<ConfigPaymentSessionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+        select?: ConfigPaymentSessionCountAggregateInputType | true
+    };
+    /**
+     * ConfigPaymentSession findUnique
+     */
+    export type ConfigPaymentSessionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ConfigPaymentSession
+         */
+        select?: ConfigPaymentSessionSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ConfigPaymentSession
+         */
+        omit?: ConfigPaymentSessionOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ConfigPaymentSessionInclude<ExtArgs> | null
+        /**
+         * Filter, which ConfigPaymentSession to fetch.
+         */
+        where: ConfigPaymentSessionWhereUniqueInput
+    };
+    /**
+     * ConfigPaymentSession findUniqueOrThrow
+     */
+    export type ConfigPaymentSessionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ConfigPaymentSession
+         */
+        select?: ConfigPaymentSessionSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ConfigPaymentSession
+         */
+        omit?: ConfigPaymentSessionOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ConfigPaymentSessionInclude<ExtArgs> | null
+        /**
+         * Filter, which ConfigPaymentSession to fetch.
+         */
+        where: ConfigPaymentSessionWhereUniqueInput
+    };
+    /**
+     * ConfigPaymentSession findFirst
+     */
+    export type ConfigPaymentSessionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ConfigPaymentSession
+         */
+        select?: ConfigPaymentSessionSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ConfigPaymentSession
+         */
+        omit?: ConfigPaymentSessionOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ConfigPaymentSessionInclude<ExtArgs> | null
+        /**
+         * Filter, which ConfigPaymentSession to fetch.
+         */
+        where?: ConfigPaymentSessionWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of ConfigPaymentSessions to fetch.
+         */
+        orderBy?: ConfigPaymentSessionOrderByWithRelationInput | ConfigPaymentSessionOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for searching for ConfigPaymentSessions.
+         */
+        cursor?: ConfigPaymentSessionWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` ConfigPaymentSessions from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` ConfigPaymentSessions.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+         * 
+         * Filter by unique combinations of ConfigPaymentSessions.
+         */
+        distinct?: ConfigPaymentSessionScalarFieldEnum | ConfigPaymentSessionScalarFieldEnum[]
+    };
+    /**
+     * ConfigPaymentSession findFirstOrThrow
+     */
+    export type ConfigPaymentSessionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ConfigPaymentSession
+         */
+        select?: ConfigPaymentSessionSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ConfigPaymentSession
+         */
+        omit?: ConfigPaymentSessionOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ConfigPaymentSessionInclude<ExtArgs> | null
+        /**
+         * Filter, which ConfigPaymentSession to fetch.
+         */
+        where?: ConfigPaymentSessionWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of ConfigPaymentSessions to fetch.
+         */
+        orderBy?: ConfigPaymentSessionOrderByWithRelationInput | ConfigPaymentSessionOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for searching for ConfigPaymentSessions.
+         */
+        cursor?: ConfigPaymentSessionWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` ConfigPaymentSessions from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` ConfigPaymentSessions.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+         * 
+         * Filter by unique combinations of ConfigPaymentSessions.
+         */
+        distinct?: ConfigPaymentSessionScalarFieldEnum | ConfigPaymentSessionScalarFieldEnum[]
+    };
+    /**
+     * ConfigPaymentSession findMany
+     */
+    export type ConfigPaymentSessionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ConfigPaymentSession
+         */
+        select?: ConfigPaymentSessionSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ConfigPaymentSession
+         */
+        omit?: ConfigPaymentSessionOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ConfigPaymentSessionInclude<ExtArgs> | null
+        /**
+         * Filter, which ConfigPaymentSessions to fetch.
+         */
+        where?: ConfigPaymentSessionWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of ConfigPaymentSessions to fetch.
+         */
+        orderBy?: ConfigPaymentSessionOrderByWithRelationInput | ConfigPaymentSessionOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for listing ConfigPaymentSessions.
+         */
+        cursor?: ConfigPaymentSessionWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` ConfigPaymentSessions from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` ConfigPaymentSessions.
+         */
+        skip?: number
+        distinct?: ConfigPaymentSessionScalarFieldEnum | ConfigPaymentSessionScalarFieldEnum[]
+    };
+    /**
+     * ConfigPaymentSession create
+     */
+    export type ConfigPaymentSessionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ConfigPaymentSession
+         */
+        select?: ConfigPaymentSessionSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ConfigPaymentSession
+         */
+        omit?: ConfigPaymentSessionOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ConfigPaymentSessionInclude<ExtArgs> | null
+        /**
+         * The data needed to create a ConfigPaymentSession.
+         */
+        data: XOR<ConfigPaymentSessionCreateInput, ConfigPaymentSessionUncheckedCreateInput>
+    };
+    /**
+     * ConfigPaymentSession createMany
+     */
+    export type ConfigPaymentSessionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * The data used to create many ConfigPaymentSessions.
+         */
+        data: ConfigPaymentSessionCreateManyInput | ConfigPaymentSessionCreateManyInput[]
+        skipDuplicates?: boolean
+    };
+    /**
+     * ConfigPaymentSession createManyAndReturn
+     */
+    export type ConfigPaymentSessionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ConfigPaymentSession
+         */
+        select?: ConfigPaymentSessionSelectCreateManyAndReturn<ExtArgs> | null
+        /**
+         * Omit specific fields from the ConfigPaymentSession
+         */
+        omit?: ConfigPaymentSessionOmit<ExtArgs> | null
+        /**
+         * The data used to create many ConfigPaymentSessions.
+         */
+        data: ConfigPaymentSessionCreateManyInput | ConfigPaymentSessionCreateManyInput[]
+        skipDuplicates?: boolean
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ConfigPaymentSessionIncludeCreateManyAndReturn<ExtArgs> | null
+    };
+    /**
+     * ConfigPaymentSession update
+     */
+    export type ConfigPaymentSessionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ConfigPaymentSession
+         */
+        select?: ConfigPaymentSessionSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ConfigPaymentSession
+         */
+        omit?: ConfigPaymentSessionOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ConfigPaymentSessionInclude<ExtArgs> | null
+        /**
+         * The data needed to update a ConfigPaymentSession.
+         */
+        data: XOR<ConfigPaymentSessionUpdateInput, ConfigPaymentSessionUncheckedUpdateInput>
+        /**
+         * Choose, which ConfigPaymentSession to update.
+         */
+        where: ConfigPaymentSessionWhereUniqueInput
+    };
+    /**
+     * ConfigPaymentSession updateMany
+     */
+    export type ConfigPaymentSessionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * The data used to update ConfigPaymentSessions.
+         */
+        data: XOR<ConfigPaymentSessionUpdateManyMutationInput, ConfigPaymentSessionUncheckedUpdateManyInput>
+        /**
+         * Filter which ConfigPaymentSessions to update
+         */
+        where?: ConfigPaymentSessionWhereInput
+        /**
+         * Limit how many ConfigPaymentSessions to update.
+         */
+        limit?: number
+    };
+    /**
+     * ConfigPaymentSession updateManyAndReturn
+     */
+    export type ConfigPaymentSessionUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ConfigPaymentSession
+         */
+        select?: ConfigPaymentSessionSelectUpdateManyAndReturn<ExtArgs> | null
+        /**
+         * Omit specific fields from the ConfigPaymentSession
+         */
+        omit?: ConfigPaymentSessionOmit<ExtArgs> | null
+        /**
+         * The data used to update ConfigPaymentSessions.
+         */
+        data: XOR<ConfigPaymentSessionUpdateManyMutationInput, ConfigPaymentSessionUncheckedUpdateManyInput>
+        /**
+         * Filter which ConfigPaymentSessions to update
+         */
+        where?: ConfigPaymentSessionWhereInput
+        /**
+         * Limit how many ConfigPaymentSessions to update.
+         */
+        limit?: number
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ConfigPaymentSessionIncludeUpdateManyAndReturn<ExtArgs> | null
+    };
+    /**
+     * ConfigPaymentSession upsert
+     */
+    export type ConfigPaymentSessionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ConfigPaymentSession
+         */
+        select?: ConfigPaymentSessionSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ConfigPaymentSession
+         */
+        omit?: ConfigPaymentSessionOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ConfigPaymentSessionInclude<ExtArgs> | null
+        /**
+         * The filter to search for the ConfigPaymentSession to update in case it exists.
+         */
+        where: ConfigPaymentSessionWhereUniqueInput
+        /**
+         * In case the ConfigPaymentSession found by the `where` argument doesn't exist, create a new ConfigPaymentSession with this data.
+         */
+        create: XOR<ConfigPaymentSessionCreateInput, ConfigPaymentSessionUncheckedCreateInput>
+        /**
+         * In case the ConfigPaymentSession was found with the provided `where` argument, update it with this data.
+         */
+        update: XOR<ConfigPaymentSessionUpdateInput, ConfigPaymentSessionUncheckedUpdateInput>
+    };
+    /**
+     * ConfigPaymentSession delete
+     */
+    export type ConfigPaymentSessionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ConfigPaymentSession
+         */
+        select?: ConfigPaymentSessionSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ConfigPaymentSession
+         */
+        omit?: ConfigPaymentSessionOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ConfigPaymentSessionInclude<ExtArgs> | null
+        /**
+         * Filter which ConfigPaymentSession to delete.
+         */
+        where: ConfigPaymentSessionWhereUniqueInput
+    };
+    /**
+     * ConfigPaymentSession deleteMany
+     */
+    export type ConfigPaymentSessionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Filter which ConfigPaymentSessions to delete
+         */
+        where?: ConfigPaymentSessionWhereInput
+        /**
+         * Limit how many ConfigPaymentSessions to delete.
+         */
+        limit?: number
+    };
+    /**
+     * ConfigPaymentSession.councilPayAmounts
+     */
+    export type ConfigPaymentSession$councilPayAmountsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the DefaultCouncilRolePayAmount
+         */
+        select?: DefaultCouncilRolePayAmountSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the DefaultCouncilRolePayAmount
+         */
+        omit?: DefaultCouncilRolePayAmountOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: DefaultCouncilRolePayAmountInclude<ExtArgs> | null
+        where?: DefaultCouncilRolePayAmountWhereInput
+        orderBy?: DefaultCouncilRolePayAmountOrderByWithRelationInput | DefaultCouncilRolePayAmountOrderByWithRelationInput[]
+        cursor?: DefaultCouncilRolePayAmountWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: DefaultCouncilRolePayAmountScalarFieldEnum | DefaultCouncilRolePayAmountScalarFieldEnum[]
+    };
+    /**
+     * ConfigPaymentSession.supervisorPayAmounts
+     */
+    export type ConfigPaymentSession$supervisorPayAmountsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the DefaultSupervisorPayAmount
+         */
+        select?: DefaultSupervisorPayAmountSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the DefaultSupervisorPayAmount
+         */
+        omit?: DefaultSupervisorPayAmountOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: DefaultSupervisorPayAmountInclude<ExtArgs> | null
+        where?: DefaultSupervisorPayAmountWhereInput
+        orderBy?: DefaultSupervisorPayAmountOrderByWithRelationInput | DefaultSupervisorPayAmountOrderByWithRelationInput[]
+        cursor?: DefaultSupervisorPayAmountWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: DefaultSupervisorPayAmountScalarFieldEnum | DefaultSupervisorPayAmountScalarFieldEnum[]
+    };
+    /**
+     * ConfigPaymentSession without action
+     */
+    export type ConfigPaymentSessionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ConfigPaymentSession
+         */
+        select?: ConfigPaymentSessionSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ConfigPaymentSession
+         */
+        omit?: ConfigPaymentSessionOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ConfigPaymentSessionInclude<ExtArgs> | null
+    };
+    /**
      * Model DefaultCouncilRolePayAmount
      */
     export type AggregateDefaultCouncilRolePayAmount = {
@@ -287877,6 +289148,7 @@ export namespace Prisma {
         role: $Enums.CouncilRole | null
         amount: Decimal | null
         inAcademy: boolean | null
+        configPaymentSessionId: string | null
     };
     export type DefaultCouncilRolePayAmountMaxAggregateOutputType = {
         id: string | null
@@ -287890,6 +289162,7 @@ export namespace Prisma {
         role: $Enums.CouncilRole | null
         amount: Decimal | null
         inAcademy: boolean | null
+        configPaymentSessionId: string | null
     };
     export type DefaultCouncilRolePayAmountCountAggregateOutputType = {
         id: number
@@ -287903,6 +289176,7 @@ export namespace Prisma {
         role: number
         amount: number
         inAcademy: number
+        configPaymentSessionId: number
         _all: number
     };
     export type DefaultCouncilRolePayAmountAvgAggregateInputType = {
@@ -287923,6 +289197,7 @@ export namespace Prisma {
         role?: true
         amount?: true
         inAcademy?: true
+        configPaymentSessionId?: true
     };
     export type DefaultCouncilRolePayAmountMaxAggregateInputType = {
         id?: true
@@ -287936,6 +289211,7 @@ export namespace Prisma {
         role?: true
         amount?: true
         inAcademy?: true
+        configPaymentSessionId?: true
     };
     export type DefaultCouncilRolePayAmountCountAggregateInputType = {
         id?: true
@@ -287949,6 +289225,7 @@ export namespace Prisma {
         role?: true
         amount?: true
         inAcademy?: true
+        configPaymentSessionId?: true
         _all?: true
     };
     export type DefaultCouncilRolePayAmountAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -288043,6 +289320,7 @@ export namespace Prisma {
         role: $Enums.CouncilRole
         amount: Decimal
         inAcademy: boolean
+        configPaymentSessionId: string | null
         _count: DefaultCouncilRolePayAmountCountAggregateOutputType | null
         _avg: DefaultCouncilRolePayAmountAvgAggregateOutputType | null
         _sum: DefaultCouncilRolePayAmountSumAggregateOutputType | null
@@ -288073,6 +289351,8 @@ export namespace Prisma {
         role?: boolean
         amount?: boolean
         inAcademy?: boolean
+        configPaymentSessionId?: boolean
+        configPaymentSession?: boolean | DefaultCouncilRolePayAmount$configPaymentSessionArgs<ExtArgs>
     }, ExtArgs["result"]["defaultCouncilRolePayAmount"]>;
     export type DefaultCouncilRolePayAmountSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
         id?: boolean
@@ -288086,6 +289366,8 @@ export namespace Prisma {
         role?: boolean
         amount?: boolean
         inAcademy?: boolean
+        configPaymentSessionId?: boolean
+        configPaymentSession?: boolean | DefaultCouncilRolePayAmount$configPaymentSessionArgs<ExtArgs>
     }, ExtArgs["result"]["defaultCouncilRolePayAmount"]>;
     export type DefaultCouncilRolePayAmountSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
         id?: boolean
@@ -288099,6 +289381,8 @@ export namespace Prisma {
         role?: boolean
         amount?: boolean
         inAcademy?: boolean
+        configPaymentSessionId?: boolean
+        configPaymentSession?: boolean | DefaultCouncilRolePayAmount$configPaymentSessionArgs<ExtArgs>
     }, ExtArgs["result"]["defaultCouncilRolePayAmount"]>;
     export type DefaultCouncilRolePayAmountSelectScalar = {
         id?: boolean
@@ -288112,11 +289396,23 @@ export namespace Prisma {
         role?: boolean
         amount?: boolean
         inAcademy?: boolean
+        configPaymentSessionId?: boolean
     };
-    export type DefaultCouncilRolePayAmountOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "role" | "amount" | "inAcademy", ExtArgs["result"]["defaultCouncilRolePayAmount"]>;
+    export type DefaultCouncilRolePayAmountOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "role" | "amount" | "inAcademy" | "configPaymentSessionId", ExtArgs["result"]["defaultCouncilRolePayAmount"]>;
+    export type DefaultCouncilRolePayAmountInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        configPaymentSession?: boolean | DefaultCouncilRolePayAmount$configPaymentSessionArgs<ExtArgs>
+    };
+    export type DefaultCouncilRolePayAmountIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        configPaymentSession?: boolean | DefaultCouncilRolePayAmount$configPaymentSessionArgs<ExtArgs>
+    };
+    export type DefaultCouncilRolePayAmountIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        configPaymentSession?: boolean | DefaultCouncilRolePayAmount$configPaymentSessionArgs<ExtArgs>
+    };
     export type $DefaultCouncilRolePayAmountPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         name: "DefaultCouncilRolePayAmount"
-        objects: {}
+        objects: {
+            configPaymentSession: Prisma.$ConfigPaymentSessionPayload<ExtArgs> | null
+        }
         scalars: $Extensions.GetPayloadResult<{
             id: string
             code: string | null
@@ -288129,6 +289425,7 @@ export namespace Prisma {
             role: $Enums.CouncilRole
             amount: Prisma.Decimal
             inAcademy: boolean
+            configPaymentSessionId: string | null
         }, ExtArgs["result"]["defaultCouncilRolePayAmount"]>
         composites: {}
     };
@@ -288149,6 +289446,10 @@ export namespace Prisma {
          */
         omit?: DefaultCouncilRolePayAmountOmit<ExtArgs> | null
         /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: DefaultCouncilRolePayAmountInclude<ExtArgs> | null
+        /**
          * Filter, which DefaultCouncilRolePayAmount to fetch.
          */
         where: DefaultCouncilRolePayAmountWhereUniqueInput
@@ -288166,6 +289467,10 @@ export namespace Prisma {
          */
         omit?: DefaultCouncilRolePayAmountOmit<ExtArgs> | null
         /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: DefaultCouncilRolePayAmountInclude<ExtArgs> | null
+        /**
          * Filter, which DefaultCouncilRolePayAmount to fetch.
          */
         where: DefaultCouncilRolePayAmountWhereUniqueInput
@@ -288182,6 +289487,10 @@ export namespace Prisma {
          * Omit specific fields from the DefaultCouncilRolePayAmount
          */
         omit?: DefaultCouncilRolePayAmountOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: DefaultCouncilRolePayAmountInclude<ExtArgs> | null
         /**
          * Filter, which DefaultCouncilRolePayAmount to fetch.
          */
@@ -288230,6 +289539,10 @@ export namespace Prisma {
          */
         omit?: DefaultCouncilRolePayAmountOmit<ExtArgs> | null
         /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: DefaultCouncilRolePayAmountInclude<ExtArgs> | null
+        /**
          * Filter, which DefaultCouncilRolePayAmount to fetch.
          */
         where?: DefaultCouncilRolePayAmountWhereInput
@@ -288277,6 +289590,10 @@ export namespace Prisma {
          */
         omit?: DefaultCouncilRolePayAmountOmit<ExtArgs> | null
         /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: DefaultCouncilRolePayAmountInclude<ExtArgs> | null
+        /**
          * Filter, which DefaultCouncilRolePayAmounts to fetch.
          */
         where?: DefaultCouncilRolePayAmountWhereInput
@@ -288319,6 +289636,10 @@ export namespace Prisma {
          */
         omit?: DefaultCouncilRolePayAmountOmit<ExtArgs> | null
         /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: DefaultCouncilRolePayAmountInclude<ExtArgs> | null
+        /**
          * The data needed to create a DefaultCouncilRolePayAmount.
          */
         data: XOR<DefaultCouncilRolePayAmountCreateInput, DefaultCouncilRolePayAmountUncheckedCreateInput>
@@ -288350,6 +289671,10 @@ export namespace Prisma {
          */
         data: DefaultCouncilRolePayAmountCreateManyInput | DefaultCouncilRolePayAmountCreateManyInput[]
         skipDuplicates?: boolean
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: DefaultCouncilRolePayAmountIncludeCreateManyAndReturn<ExtArgs> | null
     };
     /**
      * DefaultCouncilRolePayAmount update
@@ -288363,6 +289688,10 @@ export namespace Prisma {
          * Omit specific fields from the DefaultCouncilRolePayAmount
          */
         omit?: DefaultCouncilRolePayAmountOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: DefaultCouncilRolePayAmountInclude<ExtArgs> | null
         /**
          * The data needed to update a DefaultCouncilRolePayAmount.
          */
@@ -288413,6 +289742,10 @@ export namespace Prisma {
          * Limit how many DefaultCouncilRolePayAmounts to update.
          */
         limit?: number
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: DefaultCouncilRolePayAmountIncludeUpdateManyAndReturn<ExtArgs> | null
     };
     /**
      * DefaultCouncilRolePayAmount upsert
@@ -288426,6 +289759,10 @@ export namespace Prisma {
          * Omit specific fields from the DefaultCouncilRolePayAmount
          */
         omit?: DefaultCouncilRolePayAmountOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: DefaultCouncilRolePayAmountInclude<ExtArgs> | null
         /**
          * The filter to search for the DefaultCouncilRolePayAmount to update in case it exists.
          */
@@ -288452,6 +289789,10 @@ export namespace Prisma {
          */
         omit?: DefaultCouncilRolePayAmountOmit<ExtArgs> | null
         /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: DefaultCouncilRolePayAmountInclude<ExtArgs> | null
+        /**
          * Filter which DefaultCouncilRolePayAmount to delete.
          */
         where: DefaultCouncilRolePayAmountWhereUniqueInput
@@ -288470,6 +289811,24 @@ export namespace Prisma {
         limit?: number
     };
     /**
+     * DefaultCouncilRolePayAmount.configPaymentSession
+     */
+    export type DefaultCouncilRolePayAmount$configPaymentSessionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ConfigPaymentSession
+         */
+        select?: ConfigPaymentSessionSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ConfigPaymentSession
+         */
+        omit?: ConfigPaymentSessionOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ConfigPaymentSessionInclude<ExtArgs> | null
+        where?: ConfigPaymentSessionWhereInput
+    };
+    /**
      * DefaultCouncilRolePayAmount without action
      */
     export type DefaultCouncilRolePayAmountDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -288481,6 +289840,10 @@ export namespace Prisma {
          * Omit specific fields from the DefaultCouncilRolePayAmount
          */
         omit?: DefaultCouncilRolePayAmountOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: DefaultCouncilRolePayAmountInclude<ExtArgs> | null
     };
     /**
      * Model DefaultSupervisorPayAmount
@@ -288510,6 +289873,7 @@ export namespace Prisma {
         role: $Enums.SupervisorRole | null
         amount: Decimal | null
         inAcademy: boolean | null
+        configPaymentSessionId: string | null
     };
     export type DefaultSupervisorPayAmountMaxAggregateOutputType = {
         id: string | null
@@ -288523,6 +289887,7 @@ export namespace Prisma {
         role: $Enums.SupervisorRole | null
         amount: Decimal | null
         inAcademy: boolean | null
+        configPaymentSessionId: string | null
     };
     export type DefaultSupervisorPayAmountCountAggregateOutputType = {
         id: number
@@ -288536,6 +289901,7 @@ export namespace Prisma {
         role: number
         amount: number
         inAcademy: number
+        configPaymentSessionId: number
         _all: number
     };
     export type DefaultSupervisorPayAmountAvgAggregateInputType = {
@@ -288556,6 +289922,7 @@ export namespace Prisma {
         role?: true
         amount?: true
         inAcademy?: true
+        configPaymentSessionId?: true
     };
     export type DefaultSupervisorPayAmountMaxAggregateInputType = {
         id?: true
@@ -288569,6 +289936,7 @@ export namespace Prisma {
         role?: true
         amount?: true
         inAcademy?: true
+        configPaymentSessionId?: true
     };
     export type DefaultSupervisorPayAmountCountAggregateInputType = {
         id?: true
@@ -288582,6 +289950,7 @@ export namespace Prisma {
         role?: true
         amount?: true
         inAcademy?: true
+        configPaymentSessionId?: true
         _all?: true
     };
     export type DefaultSupervisorPayAmountAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -288676,6 +290045,7 @@ export namespace Prisma {
         role: $Enums.SupervisorRole
         amount: Decimal
         inAcademy: boolean
+        configPaymentSessionId: string | null
         _count: DefaultSupervisorPayAmountCountAggregateOutputType | null
         _avg: DefaultSupervisorPayAmountAvgAggregateOutputType | null
         _sum: DefaultSupervisorPayAmountSumAggregateOutputType | null
@@ -288706,6 +290076,8 @@ export namespace Prisma {
         role?: boolean
         amount?: boolean
         inAcademy?: boolean
+        configPaymentSessionId?: boolean
+        configPaymentSession?: boolean | DefaultSupervisorPayAmount$configPaymentSessionArgs<ExtArgs>
     }, ExtArgs["result"]["defaultSupervisorPayAmount"]>;
     export type DefaultSupervisorPayAmountSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
         id?: boolean
@@ -288719,6 +290091,8 @@ export namespace Prisma {
         role?: boolean
         amount?: boolean
         inAcademy?: boolean
+        configPaymentSessionId?: boolean
+        configPaymentSession?: boolean | DefaultSupervisorPayAmount$configPaymentSessionArgs<ExtArgs>
     }, ExtArgs["result"]["defaultSupervisorPayAmount"]>;
     export type DefaultSupervisorPayAmountSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
         id?: boolean
@@ -288732,6 +290106,8 @@ export namespace Prisma {
         role?: boolean
         amount?: boolean
         inAcademy?: boolean
+        configPaymentSessionId?: boolean
+        configPaymentSession?: boolean | DefaultSupervisorPayAmount$configPaymentSessionArgs<ExtArgs>
     }, ExtArgs["result"]["defaultSupervisorPayAmount"]>;
     export type DefaultSupervisorPayAmountSelectScalar = {
         id?: boolean
@@ -288745,11 +290121,23 @@ export namespace Prisma {
         role?: boolean
         amount?: boolean
         inAcademy?: boolean
+        configPaymentSessionId?: boolean
     };
-    export type DefaultSupervisorPayAmountOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "role" | "amount" | "inAcademy", ExtArgs["result"]["defaultSupervisorPayAmount"]>;
+    export type DefaultSupervisorPayAmountOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "role" | "amount" | "inAcademy" | "configPaymentSessionId", ExtArgs["result"]["defaultSupervisorPayAmount"]>;
+    export type DefaultSupervisorPayAmountInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        configPaymentSession?: boolean | DefaultSupervisorPayAmount$configPaymentSessionArgs<ExtArgs>
+    };
+    export type DefaultSupervisorPayAmountIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        configPaymentSession?: boolean | DefaultSupervisorPayAmount$configPaymentSessionArgs<ExtArgs>
+    };
+    export type DefaultSupervisorPayAmountIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        configPaymentSession?: boolean | DefaultSupervisorPayAmount$configPaymentSessionArgs<ExtArgs>
+    };
     export type $DefaultSupervisorPayAmountPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         name: "DefaultSupervisorPayAmount"
-        objects: {}
+        objects: {
+            configPaymentSession: Prisma.$ConfigPaymentSessionPayload<ExtArgs> | null
+        }
         scalars: $Extensions.GetPayloadResult<{
             id: string
             code: string | null
@@ -288762,6 +290150,7 @@ export namespace Prisma {
             role: $Enums.SupervisorRole
             amount: Prisma.Decimal
             inAcademy: boolean
+            configPaymentSessionId: string | null
         }, ExtArgs["result"]["defaultSupervisorPayAmount"]>
         composites: {}
     };
@@ -288782,6 +290171,10 @@ export namespace Prisma {
          */
         omit?: DefaultSupervisorPayAmountOmit<ExtArgs> | null
         /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: DefaultSupervisorPayAmountInclude<ExtArgs> | null
+        /**
          * Filter, which DefaultSupervisorPayAmount to fetch.
          */
         where: DefaultSupervisorPayAmountWhereUniqueInput
@@ -288799,6 +290192,10 @@ export namespace Prisma {
          */
         omit?: DefaultSupervisorPayAmountOmit<ExtArgs> | null
         /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: DefaultSupervisorPayAmountInclude<ExtArgs> | null
+        /**
          * Filter, which DefaultSupervisorPayAmount to fetch.
          */
         where: DefaultSupervisorPayAmountWhereUniqueInput
@@ -288815,6 +290212,10 @@ export namespace Prisma {
          * Omit specific fields from the DefaultSupervisorPayAmount
          */
         omit?: DefaultSupervisorPayAmountOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: DefaultSupervisorPayAmountInclude<ExtArgs> | null
         /**
          * Filter, which DefaultSupervisorPayAmount to fetch.
          */
@@ -288863,6 +290264,10 @@ export namespace Prisma {
          */
         omit?: DefaultSupervisorPayAmountOmit<ExtArgs> | null
         /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: DefaultSupervisorPayAmountInclude<ExtArgs> | null
+        /**
          * Filter, which DefaultSupervisorPayAmount to fetch.
          */
         where?: DefaultSupervisorPayAmountWhereInput
@@ -288910,6 +290315,10 @@ export namespace Prisma {
          */
         omit?: DefaultSupervisorPayAmountOmit<ExtArgs> | null
         /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: DefaultSupervisorPayAmountInclude<ExtArgs> | null
+        /**
          * Filter, which DefaultSupervisorPayAmounts to fetch.
          */
         where?: DefaultSupervisorPayAmountWhereInput
@@ -288952,6 +290361,10 @@ export namespace Prisma {
          */
         omit?: DefaultSupervisorPayAmountOmit<ExtArgs> | null
         /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: DefaultSupervisorPayAmountInclude<ExtArgs> | null
+        /**
          * The data needed to create a DefaultSupervisorPayAmount.
          */
         data: XOR<DefaultSupervisorPayAmountCreateInput, DefaultSupervisorPayAmountUncheckedCreateInput>
@@ -288983,6 +290396,10 @@ export namespace Prisma {
          */
         data: DefaultSupervisorPayAmountCreateManyInput | DefaultSupervisorPayAmountCreateManyInput[]
         skipDuplicates?: boolean
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: DefaultSupervisorPayAmountIncludeCreateManyAndReturn<ExtArgs> | null
     };
     /**
      * DefaultSupervisorPayAmount update
@@ -288996,6 +290413,10 @@ export namespace Prisma {
          * Omit specific fields from the DefaultSupervisorPayAmount
          */
         omit?: DefaultSupervisorPayAmountOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: DefaultSupervisorPayAmountInclude<ExtArgs> | null
         /**
          * The data needed to update a DefaultSupervisorPayAmount.
          */
@@ -289046,6 +290467,10 @@ export namespace Prisma {
          * Limit how many DefaultSupervisorPayAmounts to update.
          */
         limit?: number
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: DefaultSupervisorPayAmountIncludeUpdateManyAndReturn<ExtArgs> | null
     };
     /**
      * DefaultSupervisorPayAmount upsert
@@ -289059,6 +290484,10 @@ export namespace Prisma {
          * Omit specific fields from the DefaultSupervisorPayAmount
          */
         omit?: DefaultSupervisorPayAmountOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: DefaultSupervisorPayAmountInclude<ExtArgs> | null
         /**
          * The filter to search for the DefaultSupervisorPayAmount to update in case it exists.
          */
@@ -289085,6 +290514,10 @@ export namespace Prisma {
          */
         omit?: DefaultSupervisorPayAmountOmit<ExtArgs> | null
         /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: DefaultSupervisorPayAmountInclude<ExtArgs> | null
+        /**
          * Filter which DefaultSupervisorPayAmount to delete.
          */
         where: DefaultSupervisorPayAmountWhereUniqueInput
@@ -289103,6 +290536,24 @@ export namespace Prisma {
         limit?: number
     };
     /**
+     * DefaultSupervisorPayAmount.configPaymentSession
+     */
+    export type DefaultSupervisorPayAmount$configPaymentSessionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ConfigPaymentSession
+         */
+        select?: ConfigPaymentSessionSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ConfigPaymentSession
+         */
+        omit?: ConfigPaymentSessionOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ConfigPaymentSessionInclude<ExtArgs> | null
+        where?: ConfigPaymentSessionWhereInput
+    };
+    /**
      * DefaultSupervisorPayAmount without action
      */
     export type DefaultSupervisorPayAmountDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -289114,6 +290565,10 @@ export namespace Prisma {
          * Omit specific fields from the DefaultSupervisorPayAmount
          */
         omit?: DefaultSupervisorPayAmountOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: DefaultSupervisorPayAmountInclude<ExtArgs> | null
     };
     /**
      * Model PaymentRecord
@@ -364750,6 +366205,7 @@ export namespace Prisma {
     export type CouncilMemberScalarFieldEnum = (typeof CouncilMemberScalarFieldEnum)[keyof typeof CouncilMemberScalarFieldEnum];
     export type DefenseRecordScalarFieldEnum = (typeof DefenseRecordScalarFieldEnum)[keyof typeof DefenseRecordScalarFieldEnum];
     export type LibrarySubmissionScalarFieldEnum = (typeof LibrarySubmissionScalarFieldEnum)[keyof typeof LibrarySubmissionScalarFieldEnum];
+    export type ConfigPaymentSessionScalarFieldEnum = (typeof ConfigPaymentSessionScalarFieldEnum)[keyof typeof ConfigPaymentSessionScalarFieldEnum];
     export type DefaultCouncilRolePayAmountScalarFieldEnum = (typeof DefaultCouncilRolePayAmountScalarFieldEnum)[keyof typeof DefaultCouncilRolePayAmountScalarFieldEnum];
     export type DefaultSupervisorPayAmountScalarFieldEnum = (typeof DefaultSupervisorPayAmountScalarFieldEnum)[keyof typeof DefaultSupervisorPayAmountScalarFieldEnum];
     export type PaymentRecordScalarFieldEnum = (typeof PaymentRecordScalarFieldEnum)[keyof typeof PaymentRecordScalarFieldEnum];
@@ -365029,6 +366485,7 @@ export namespace Prisma {
     export type CouncilMemberOrderByRelevanceFieldEnum = (typeof CouncilMemberOrderByRelevanceFieldEnum)[keyof typeof CouncilMemberOrderByRelevanceFieldEnum];
     export type DefenseRecordOrderByRelevanceFieldEnum = (typeof DefenseRecordOrderByRelevanceFieldEnum)[keyof typeof DefenseRecordOrderByRelevanceFieldEnum];
     export type LibrarySubmissionOrderByRelevanceFieldEnum = (typeof LibrarySubmissionOrderByRelevanceFieldEnum)[keyof typeof LibrarySubmissionOrderByRelevanceFieldEnum];
+    export type ConfigPaymentSessionOrderByRelevanceFieldEnum = (typeof ConfigPaymentSessionOrderByRelevanceFieldEnum)[keyof typeof ConfigPaymentSessionOrderByRelevanceFieldEnum];
     export type DefaultCouncilRolePayAmountOrderByRelevanceFieldEnum = (typeof DefaultCouncilRolePayAmountOrderByRelevanceFieldEnum)[keyof typeof DefaultCouncilRolePayAmountOrderByRelevanceFieldEnum];
     export type DefaultSupervisorPayAmountOrderByRelevanceFieldEnum = (typeof DefaultSupervisorPayAmountOrderByRelevanceFieldEnum)[keyof typeof DefaultSupervisorPayAmountOrderByRelevanceFieldEnum];
     export type PaymentRecordOrderByRelevanceFieldEnum = (typeof PaymentRecordOrderByRelevanceFieldEnum)[keyof typeof PaymentRecordOrderByRelevanceFieldEnum];
@@ -384063,6 +385520,7 @@ export namespace Prisma {
         trainingObjectType?: XOR<TrainingObjectTypeScalarRelationFilter, TrainingObjectTypeWhereInput>
         trainingCourse?: XOR<TrainingCourseScalarRelationFilter, TrainingCourseWhereInput>
         thesisProject?: ThesisProjectListRelationFilter
+        configPayment?: XOR<ConfigPaymentSessionNullableScalarRelationFilter, ConfigPaymentSessionWhereInput> | null
     };
     export type ThesisSessionOrderByWithRelationInput = {
         id?: SortOrder
@@ -384097,6 +385555,7 @@ export namespace Prisma {
         trainingObjectType?: TrainingObjectTypeOrderByWithRelationInput
         trainingCourse?: TrainingCourseOrderByWithRelationInput
         thesisProject?: ThesisProjectOrderByRelationAggregateInput
+        configPayment?: ConfigPaymentSessionOrderByWithRelationInput
         _relevance?: ThesisSessionOrderByRelevanceInput
     };
     export type ThesisSessionWhereUniqueInput = Prisma.AtLeast<{
@@ -384135,6 +385594,7 @@ export namespace Prisma {
         trainingObjectType?: XOR<TrainingObjectTypeScalarRelationFilter, TrainingObjectTypeWhereInput>
         trainingCourse?: XOR<TrainingCourseScalarRelationFilter, TrainingCourseWhereInput>
         thesisProject?: ThesisProjectListRelationFilter
+        configPayment?: XOR<ConfigPaymentSessionNullableScalarRelationFilter, ConfigPaymentSessionWhereInput> | null
     }, "id" | "code">;
     export type ThesisSessionOrderByWithAggregationInput = {
         id?: SortOrder
@@ -385500,6 +386960,88 @@ export namespace Prisma {
         thesisId?: StringWithAggregatesFilter<"LibrarySubmission"> | string
         confirmedById?: StringNullableWithAggregatesFilter<"LibrarySubmission"> | string | null
     };
+    export type ConfigPaymentSessionWhereInput = {
+        AND?: ConfigPaymentSessionWhereInput | ConfigPaymentSessionWhereInput[]
+        OR?: ConfigPaymentSessionWhereInput[]
+        NOT?: ConfigPaymentSessionWhereInput | ConfigPaymentSessionWhereInput[]
+        id?: StringFilter<"ConfigPaymentSession"> | string
+        code?: StringNullableFilter<"ConfigPaymentSession"> | string | null
+        active?: BoolFilter<"ConfigPaymentSession"> | boolean
+        description?: StringNullableFilter<"ConfigPaymentSession"> | string | null
+        deletedAt?: DateTimeNullableFilter<"ConfigPaymentSession"> | Date | string | null
+        createdAt?: DateTimeFilter<"ConfigPaymentSession"> | Date | string
+        updatedAt?: DateTimeFilter<"ConfigPaymentSession"> | Date | string
+        createdBy?: UuidNullableFilter<"ConfigPaymentSession"> | string | null
+        name?: StringFilter<"ConfigPaymentSession"> | string
+        sessionId?: StringFilter<"ConfigPaymentSession"> | string
+        session?: XOR<ThesisSessionScalarRelationFilter, ThesisSessionWhereInput>
+        councilPayAmounts?: DefaultCouncilRolePayAmountListRelationFilter
+        supervisorPayAmounts?: DefaultSupervisorPayAmountListRelationFilter
+    };
+    export type ConfigPaymentSessionOrderByWithRelationInput = {
+        id?: SortOrder
+        code?: SortOrderInput | SortOrder
+        active?: SortOrder
+        description?: SortOrderInput | SortOrder
+        deletedAt?: SortOrderInput | SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        createdBy?: SortOrderInput | SortOrder
+        name?: SortOrder
+        sessionId?: SortOrder
+        session?: ThesisSessionOrderByWithRelationInput
+        councilPayAmounts?: DefaultCouncilRolePayAmountOrderByRelationAggregateInput
+        supervisorPayAmounts?: DefaultSupervisorPayAmountOrderByRelationAggregateInput
+        _relevance?: ConfigPaymentSessionOrderByRelevanceInput
+    };
+    export type ConfigPaymentSessionWhereUniqueInput = Prisma.AtLeast<{
+        id?: string
+        code?: string
+        sessionId?: string
+        AND?: ConfigPaymentSessionWhereInput | ConfigPaymentSessionWhereInput[]
+        OR?: ConfigPaymentSessionWhereInput[]
+        NOT?: ConfigPaymentSessionWhereInput | ConfigPaymentSessionWhereInput[]
+        active?: BoolFilter<"ConfigPaymentSession"> | boolean
+        description?: StringNullableFilter<"ConfigPaymentSession"> | string | null
+        deletedAt?: DateTimeNullableFilter<"ConfigPaymentSession"> | Date | string | null
+        createdAt?: DateTimeFilter<"ConfigPaymentSession"> | Date | string
+        updatedAt?: DateTimeFilter<"ConfigPaymentSession"> | Date | string
+        createdBy?: UuidNullableFilter<"ConfigPaymentSession"> | string | null
+        name?: StringFilter<"ConfigPaymentSession"> | string
+        session?: XOR<ThesisSessionScalarRelationFilter, ThesisSessionWhereInput>
+        councilPayAmounts?: DefaultCouncilRolePayAmountListRelationFilter
+        supervisorPayAmounts?: DefaultSupervisorPayAmountListRelationFilter
+    }, "id" | "code" | "sessionId">;
+    export type ConfigPaymentSessionOrderByWithAggregationInput = {
+        id?: SortOrder
+        code?: SortOrderInput | SortOrder
+        active?: SortOrder
+        description?: SortOrderInput | SortOrder
+        deletedAt?: SortOrderInput | SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        createdBy?: SortOrderInput | SortOrder
+        name?: SortOrder
+        sessionId?: SortOrder
+        _count?: ConfigPaymentSessionCountOrderByAggregateInput
+        _max?: ConfigPaymentSessionMaxOrderByAggregateInput
+        _min?: ConfigPaymentSessionMinOrderByAggregateInput
+    };
+    export type ConfigPaymentSessionScalarWhereWithAggregatesInput = {
+        AND?: ConfigPaymentSessionScalarWhereWithAggregatesInput | ConfigPaymentSessionScalarWhereWithAggregatesInput[]
+        OR?: ConfigPaymentSessionScalarWhereWithAggregatesInput[]
+        NOT?: ConfigPaymentSessionScalarWhereWithAggregatesInput | ConfigPaymentSessionScalarWhereWithAggregatesInput[]
+        id?: StringWithAggregatesFilter<"ConfigPaymentSession"> | string
+        code?: StringNullableWithAggregatesFilter<"ConfigPaymentSession"> | string | null
+        active?: BoolWithAggregatesFilter<"ConfigPaymentSession"> | boolean
+        description?: StringNullableWithAggregatesFilter<"ConfigPaymentSession"> | string | null
+        deletedAt?: DateTimeNullableWithAggregatesFilter<"ConfigPaymentSession"> | Date | string | null
+        createdAt?: DateTimeWithAggregatesFilter<"ConfigPaymentSession"> | Date | string
+        updatedAt?: DateTimeWithAggregatesFilter<"ConfigPaymentSession"> | Date | string
+        createdBy?: UuidNullableWithAggregatesFilter<"ConfigPaymentSession"> | string | null
+        name?: StringWithAggregatesFilter<"ConfigPaymentSession"> | string
+        sessionId?: StringWithAggregatesFilter<"ConfigPaymentSession"> | string
+    };
     export type DefaultCouncilRolePayAmountWhereInput = {
         AND?: DefaultCouncilRolePayAmountWhereInput | DefaultCouncilRolePayAmountWhereInput[]
         OR?: DefaultCouncilRolePayAmountWhereInput[]
@@ -385515,6 +387057,8 @@ export namespace Prisma {
         role?: EnumCouncilRoleFilter<"DefaultCouncilRolePayAmount"> | $Enums.CouncilRole
         amount?: DecimalFilter<"DefaultCouncilRolePayAmount"> | Decimal | DecimalJsLike | number | string
         inAcademy?: BoolFilter<"DefaultCouncilRolePayAmount"> | boolean
+        configPaymentSessionId?: StringNullableFilter<"DefaultCouncilRolePayAmount"> | string | null
+        configPaymentSession?: XOR<ConfigPaymentSessionNullableScalarRelationFilter, ConfigPaymentSessionWhereInput> | null
     };
     export type DefaultCouncilRolePayAmountOrderByWithRelationInput = {
         id?: SortOrder
@@ -385528,11 +387072,14 @@ export namespace Prisma {
         role?: SortOrder
         amount?: SortOrder
         inAcademy?: SortOrder
+        configPaymentSessionId?: SortOrderInput | SortOrder
+        configPaymentSession?: ConfigPaymentSessionOrderByWithRelationInput
         _relevance?: DefaultCouncilRolePayAmountOrderByRelevanceInput
     };
     export type DefaultCouncilRolePayAmountWhereUniqueInput = Prisma.AtLeast<{
         id?: string
         code?: string
+        configPaymentSessionId_role_inAcademy_description?: DefaultCouncilRolePayAmountConfigPaymentSessionIdRoleInAcademyDescriptionCompoundUniqueInput
         AND?: DefaultCouncilRolePayAmountWhereInput | DefaultCouncilRolePayAmountWhereInput[]
         OR?: DefaultCouncilRolePayAmountWhereInput[]
         NOT?: DefaultCouncilRolePayAmountWhereInput | DefaultCouncilRolePayAmountWhereInput[]
@@ -385545,7 +387092,9 @@ export namespace Prisma {
         role?: EnumCouncilRoleFilter<"DefaultCouncilRolePayAmount"> | $Enums.CouncilRole
         amount?: DecimalFilter<"DefaultCouncilRolePayAmount"> | Decimal | DecimalJsLike | number | string
         inAcademy?: BoolFilter<"DefaultCouncilRolePayAmount"> | boolean
-    }, "id" | "code">;
+        configPaymentSessionId?: StringNullableFilter<"DefaultCouncilRolePayAmount"> | string | null
+        configPaymentSession?: XOR<ConfigPaymentSessionNullableScalarRelationFilter, ConfigPaymentSessionWhereInput> | null
+    }, "id" | "code" | "configPaymentSessionId_role_inAcademy_description">;
     export type DefaultCouncilRolePayAmountOrderByWithAggregationInput = {
         id?: SortOrder
         code?: SortOrderInput | SortOrder
@@ -385558,6 +387107,7 @@ export namespace Prisma {
         role?: SortOrder
         amount?: SortOrder
         inAcademy?: SortOrder
+        configPaymentSessionId?: SortOrderInput | SortOrder
         _count?: DefaultCouncilRolePayAmountCountOrderByAggregateInput
         _avg?: DefaultCouncilRolePayAmountAvgOrderByAggregateInput
         _max?: DefaultCouncilRolePayAmountMaxOrderByAggregateInput
@@ -385579,6 +387129,7 @@ export namespace Prisma {
         role?: EnumCouncilRoleWithAggregatesFilter<"DefaultCouncilRolePayAmount"> | $Enums.CouncilRole
         amount?: DecimalWithAggregatesFilter<"DefaultCouncilRolePayAmount"> | Decimal | DecimalJsLike | number | string
         inAcademy?: BoolWithAggregatesFilter<"DefaultCouncilRolePayAmount"> | boolean
+        configPaymentSessionId?: StringNullableWithAggregatesFilter<"DefaultCouncilRolePayAmount"> | string | null
     };
     export type DefaultSupervisorPayAmountWhereInput = {
         AND?: DefaultSupervisorPayAmountWhereInput | DefaultSupervisorPayAmountWhereInput[]
@@ -385595,6 +387146,8 @@ export namespace Prisma {
         role?: EnumSupervisorRoleFilter<"DefaultSupervisorPayAmount"> | $Enums.SupervisorRole
         amount?: DecimalFilter<"DefaultSupervisorPayAmount"> | Decimal | DecimalJsLike | number | string
         inAcademy?: BoolFilter<"DefaultSupervisorPayAmount"> | boolean
+        configPaymentSessionId?: StringNullableFilter<"DefaultSupervisorPayAmount"> | string | null
+        configPaymentSession?: XOR<ConfigPaymentSessionNullableScalarRelationFilter, ConfigPaymentSessionWhereInput> | null
     };
     export type DefaultSupervisorPayAmountOrderByWithRelationInput = {
         id?: SortOrder
@@ -385608,11 +387161,14 @@ export namespace Prisma {
         role?: SortOrder
         amount?: SortOrder
         inAcademy?: SortOrder
+        configPaymentSessionId?: SortOrderInput | SortOrder
+        configPaymentSession?: ConfigPaymentSessionOrderByWithRelationInput
         _relevance?: DefaultSupervisorPayAmountOrderByRelevanceInput
     };
     export type DefaultSupervisorPayAmountWhereUniqueInput = Prisma.AtLeast<{
         id?: string
         code?: string
+        configPaymentSessionId_role_inAcademy_description?: DefaultSupervisorPayAmountConfigPaymentSessionIdRoleInAcademyDescriptionCompoundUniqueInput
         AND?: DefaultSupervisorPayAmountWhereInput | DefaultSupervisorPayAmountWhereInput[]
         OR?: DefaultSupervisorPayAmountWhereInput[]
         NOT?: DefaultSupervisorPayAmountWhereInput | DefaultSupervisorPayAmountWhereInput[]
@@ -385625,7 +387181,9 @@ export namespace Prisma {
         role?: EnumSupervisorRoleFilter<"DefaultSupervisorPayAmount"> | $Enums.SupervisorRole
         amount?: DecimalFilter<"DefaultSupervisorPayAmount"> | Decimal | DecimalJsLike | number | string
         inAcademy?: BoolFilter<"DefaultSupervisorPayAmount"> | boolean
-    }, "id" | "code">;
+        configPaymentSessionId?: StringNullableFilter<"DefaultSupervisorPayAmount"> | string | null
+        configPaymentSession?: XOR<ConfigPaymentSessionNullableScalarRelationFilter, ConfigPaymentSessionWhereInput> | null
+    }, "id" | "code" | "configPaymentSessionId_role_inAcademy_description">;
     export type DefaultSupervisorPayAmountOrderByWithAggregationInput = {
         id?: SortOrder
         code?: SortOrderInput | SortOrder
@@ -385638,6 +387196,7 @@ export namespace Prisma {
         role?: SortOrder
         amount?: SortOrder
         inAcademy?: SortOrder
+        configPaymentSessionId?: SortOrderInput | SortOrder
         _count?: DefaultSupervisorPayAmountCountOrderByAggregateInput
         _avg?: DefaultSupervisorPayAmountAvgOrderByAggregateInput
         _max?: DefaultSupervisorPayAmountMaxOrderByAggregateInput
@@ -385659,6 +387218,7 @@ export namespace Prisma {
         role?: EnumSupervisorRoleWithAggregatesFilter<"DefaultSupervisorPayAmount"> | $Enums.SupervisorRole
         amount?: DecimalWithAggregatesFilter<"DefaultSupervisorPayAmount"> | Decimal | DecimalJsLike | number | string
         inAcademy?: BoolWithAggregatesFilter<"DefaultSupervisorPayAmount"> | boolean
+        configPaymentSessionId?: StringNullableWithAggregatesFilter<"DefaultSupervisorPayAmount"> | string | null
     };
     export type PaymentRecordWhereInput = {
         AND?: PaymentRecordWhereInput | PaymentRecordWhereInput[]
@@ -416090,6 +417650,7 @@ export namespace Prisma {
         trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutThesisSessionInput
         trainingCourse: TrainingCourseCreateNestedOneWithoutThesisSessionInput
         thesisProject?: ThesisProjectCreateNestedManyWithoutThesisSessionInput
+        configPayment?: ConfigPaymentSessionCreateNestedOneWithoutSessionInput
     };
     export type ThesisSessionUncheckedCreateInput = {
         id?: string
@@ -416122,6 +417683,7 @@ export namespace Prisma {
         topicEntryDeadline?: Date | string | null
         councilDeadline?: Date | string | null
         thesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutThesisSessionInput
+        configPayment?: ConfigPaymentSessionUncheckedCreateNestedOneWithoutSessionInput
     };
     export type ThesisSessionUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -416154,6 +417716,7 @@ export namespace Prisma {
         trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutThesisSessionNestedInput
         trainingCourse?: TrainingCourseUpdateOneRequiredWithoutThesisSessionNestedInput
         thesisProject?: ThesisProjectUpdateManyWithoutThesisSessionNestedInput
+        configPayment?: ConfigPaymentSessionUpdateOneWithoutSessionNestedInput
     };
     export type ThesisSessionUncheckedUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -416186,6 +417749,7 @@ export namespace Prisma {
         topicEntryDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         councilDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         thesisProject?: ThesisProjectUncheckedUpdateManyWithoutThesisSessionNestedInput
+        configPayment?: ConfigPaymentSessionUncheckedUpdateOneWithoutSessionNestedInput
     };
     export type ThesisSessionCreateManyInput = {
         id?: string
@@ -417753,6 +419317,97 @@ export namespace Prisma {
         thesisId?: StringFieldUpdateOperationsInput | string
         confirmedById?: NullableStringFieldUpdateOperationsInput | string | null
     };
+    export type ConfigPaymentSessionCreateInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        name: string
+        session: ThesisSessionCreateNestedOneWithoutConfigPaymentInput
+        councilPayAmounts?: DefaultCouncilRolePayAmountCreateNestedManyWithoutConfigPaymentSessionInput
+        supervisorPayAmounts?: DefaultSupervisorPayAmountCreateNestedManyWithoutConfigPaymentSessionInput
+    };
+    export type ConfigPaymentSessionUncheckedCreateInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        name: string
+        sessionId: string
+        councilPayAmounts?: DefaultCouncilRolePayAmountUncheckedCreateNestedManyWithoutConfigPaymentSessionInput
+        supervisorPayAmounts?: DefaultSupervisorPayAmountUncheckedCreateNestedManyWithoutConfigPaymentSessionInput
+    };
+    export type ConfigPaymentSessionUpdateInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+        session?: ThesisSessionUpdateOneRequiredWithoutConfigPaymentNestedInput
+        councilPayAmounts?: DefaultCouncilRolePayAmountUpdateManyWithoutConfigPaymentSessionNestedInput
+        supervisorPayAmounts?: DefaultSupervisorPayAmountUpdateManyWithoutConfigPaymentSessionNestedInput
+    };
+    export type ConfigPaymentSessionUncheckedUpdateInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+        sessionId?: StringFieldUpdateOperationsInput | string
+        councilPayAmounts?: DefaultCouncilRolePayAmountUncheckedUpdateManyWithoutConfigPaymentSessionNestedInput
+        supervisorPayAmounts?: DefaultSupervisorPayAmountUncheckedUpdateManyWithoutConfigPaymentSessionNestedInput
+    };
+    export type ConfigPaymentSessionCreateManyInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        name: string
+        sessionId: string
+    };
+    export type ConfigPaymentSessionUpdateManyMutationInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+    };
+    export type ConfigPaymentSessionUncheckedUpdateManyInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+        sessionId?: StringFieldUpdateOperationsInput | string
+    };
     export type DefaultCouncilRolePayAmountCreateInput = {
         id?: string
         code?: string | null
@@ -417765,6 +419420,7 @@ export namespace Prisma {
         role: $Enums.CouncilRole
         amount: Decimal | DecimalJsLike | number | string
         inAcademy?: boolean
+        configPaymentSession?: ConfigPaymentSessionCreateNestedOneWithoutCouncilPayAmountsInput
     };
     export type DefaultCouncilRolePayAmountUncheckedCreateInput = {
         id?: string
@@ -417778,6 +419434,7 @@ export namespace Prisma {
         role: $Enums.CouncilRole
         amount: Decimal | DecimalJsLike | number | string
         inAcademy?: boolean
+        configPaymentSessionId?: string | null
     };
     export type DefaultCouncilRolePayAmountUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -417791,6 +419448,7 @@ export namespace Prisma {
         role?: EnumCouncilRoleFieldUpdateOperationsInput | $Enums.CouncilRole
         amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
         inAcademy?: BoolFieldUpdateOperationsInput | boolean
+        configPaymentSession?: ConfigPaymentSessionUpdateOneWithoutCouncilPayAmountsNestedInput
     };
     export type DefaultCouncilRolePayAmountUncheckedUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -417804,6 +419462,7 @@ export namespace Prisma {
         role?: EnumCouncilRoleFieldUpdateOperationsInput | $Enums.CouncilRole
         amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
         inAcademy?: BoolFieldUpdateOperationsInput | boolean
+        configPaymentSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type DefaultCouncilRolePayAmountCreateManyInput = {
         id?: string
@@ -417817,6 +419476,7 @@ export namespace Prisma {
         role: $Enums.CouncilRole
         amount: Decimal | DecimalJsLike | number | string
         inAcademy?: boolean
+        configPaymentSessionId?: string | null
     };
     export type DefaultCouncilRolePayAmountUpdateManyMutationInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -417843,6 +419503,7 @@ export namespace Prisma {
         role?: EnumCouncilRoleFieldUpdateOperationsInput | $Enums.CouncilRole
         amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
         inAcademy?: BoolFieldUpdateOperationsInput | boolean
+        configPaymentSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type DefaultSupervisorPayAmountCreateInput = {
         id?: string
@@ -417856,6 +419517,7 @@ export namespace Prisma {
         role: $Enums.SupervisorRole
         amount: Decimal | DecimalJsLike | number | string
         inAcademy?: boolean
+        configPaymentSession?: ConfigPaymentSessionCreateNestedOneWithoutSupervisorPayAmountsInput
     };
     export type DefaultSupervisorPayAmountUncheckedCreateInput = {
         id?: string
@@ -417869,6 +419531,7 @@ export namespace Prisma {
         role: $Enums.SupervisorRole
         amount: Decimal | DecimalJsLike | number | string
         inAcademy?: boolean
+        configPaymentSessionId?: string | null
     };
     export type DefaultSupervisorPayAmountUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -417882,6 +419545,7 @@ export namespace Prisma {
         role?: EnumSupervisorRoleFieldUpdateOperationsInput | $Enums.SupervisorRole
         amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
         inAcademy?: BoolFieldUpdateOperationsInput | boolean
+        configPaymentSession?: ConfigPaymentSessionUpdateOneWithoutSupervisorPayAmountsNestedInput
     };
     export type DefaultSupervisorPayAmountUncheckedUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -417895,6 +419559,7 @@ export namespace Prisma {
         role?: EnumSupervisorRoleFieldUpdateOperationsInput | $Enums.SupervisorRole
         amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
         inAcademy?: BoolFieldUpdateOperationsInput | boolean
+        configPaymentSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type DefaultSupervisorPayAmountCreateManyInput = {
         id?: string
@@ -417908,6 +419573,7 @@ export namespace Prisma {
         role: $Enums.SupervisorRole
         amount: Decimal | DecimalJsLike | number | string
         inAcademy?: boolean
+        configPaymentSessionId?: string | null
     };
     export type DefaultSupervisorPayAmountUpdateManyMutationInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -417934,6 +419600,7 @@ export namespace Prisma {
         role?: EnumSupervisorRoleFieldUpdateOperationsInput | $Enums.SupervisorRole
         amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
         inAcademy?: BoolFieldUpdateOperationsInput | boolean
+        configPaymentSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type PaymentRecordCreateInput = {
         id?: string
@@ -441404,6 +443071,10 @@ export namespace Prisma {
         _min?: NestedEnumRegistrationStatusFilter<$PrismaModel>
         _max?: NestedEnumRegistrationStatusFilter<$PrismaModel>
     };
+    export type ConfigPaymentSessionNullableScalarRelationFilter = {
+        is?: ConfigPaymentSessionWhereInput | null
+        isNot?: ConfigPaymentSessionWhereInput | null
+    };
     export type ThesisSessionOrderByRelevanceInput = {
         fields: ThesisSessionOrderByRelevanceFieldEnum | ThesisSessionOrderByRelevanceFieldEnum[]
         sort: SortOrder
@@ -442343,10 +444014,77 @@ export namespace Prisma {
         thesisId?: SortOrder
         confirmedById?: SortOrder
     };
+    export type ThesisSessionScalarRelationFilter = {
+        is?: ThesisSessionWhereInput
+        isNot?: ThesisSessionWhereInput
+    };
+    export type DefaultCouncilRolePayAmountListRelationFilter = {
+        every?: DefaultCouncilRolePayAmountWhereInput
+        some?: DefaultCouncilRolePayAmountWhereInput
+        none?: DefaultCouncilRolePayAmountWhereInput
+    };
+    export type DefaultSupervisorPayAmountListRelationFilter = {
+        every?: DefaultSupervisorPayAmountWhereInput
+        some?: DefaultSupervisorPayAmountWhereInput
+        none?: DefaultSupervisorPayAmountWhereInput
+    };
+    export type DefaultCouncilRolePayAmountOrderByRelationAggregateInput = {
+        _count?: SortOrder
+    };
+    export type DefaultSupervisorPayAmountOrderByRelationAggregateInput = {
+        _count?: SortOrder
+    };
+    export type ConfigPaymentSessionOrderByRelevanceInput = {
+        fields: ConfigPaymentSessionOrderByRelevanceFieldEnum | ConfigPaymentSessionOrderByRelevanceFieldEnum[]
+        sort: SortOrder
+        search: string
+    };
+    export type ConfigPaymentSessionCountOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        createdBy?: SortOrder
+        name?: SortOrder
+        sessionId?: SortOrder
+    };
+    export type ConfigPaymentSessionMaxOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        createdBy?: SortOrder
+        name?: SortOrder
+        sessionId?: SortOrder
+    };
+    export type ConfigPaymentSessionMinOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        createdBy?: SortOrder
+        name?: SortOrder
+        sessionId?: SortOrder
+    };
     export type DefaultCouncilRolePayAmountOrderByRelevanceInput = {
         fields: DefaultCouncilRolePayAmountOrderByRelevanceFieldEnum | DefaultCouncilRolePayAmountOrderByRelevanceFieldEnum[]
         sort: SortOrder
         search: string
+    };
+    export type DefaultCouncilRolePayAmountConfigPaymentSessionIdRoleInAcademyDescriptionCompoundUniqueInput = {
+        configPaymentSessionId: string
+        role: $Enums.CouncilRole
+        inAcademy: boolean
+        description: string
     };
     export type DefaultCouncilRolePayAmountCountOrderByAggregateInput = {
         id?: SortOrder
@@ -442360,6 +444098,7 @@ export namespace Prisma {
         role?: SortOrder
         amount?: SortOrder
         inAcademy?: SortOrder
+        configPaymentSessionId?: SortOrder
     };
     export type DefaultCouncilRolePayAmountAvgOrderByAggregateInput = {
         amount?: SortOrder
@@ -442376,6 +444115,7 @@ export namespace Prisma {
         role?: SortOrder
         amount?: SortOrder
         inAcademy?: SortOrder
+        configPaymentSessionId?: SortOrder
     };
     export type DefaultCouncilRolePayAmountMinOrderByAggregateInput = {
         id?: SortOrder
@@ -442389,6 +444129,7 @@ export namespace Prisma {
         role?: SortOrder
         amount?: SortOrder
         inAcademy?: SortOrder
+        configPaymentSessionId?: SortOrder
     };
     export type DefaultCouncilRolePayAmountSumOrderByAggregateInput = {
         amount?: SortOrder
@@ -442404,6 +444145,12 @@ export namespace Prisma {
         sort: SortOrder
         search: string
     };
+    export type DefaultSupervisorPayAmountConfigPaymentSessionIdRoleInAcademyDescriptionCompoundUniqueInput = {
+        configPaymentSessionId: string
+        role: $Enums.SupervisorRole
+        inAcademy: boolean
+        description: string
+    };
     export type DefaultSupervisorPayAmountCountOrderByAggregateInput = {
         id?: SortOrder
         code?: SortOrder
@@ -442416,6 +444163,7 @@ export namespace Prisma {
         role?: SortOrder
         amount?: SortOrder
         inAcademy?: SortOrder
+        configPaymentSessionId?: SortOrder
     };
     export type DefaultSupervisorPayAmountAvgOrderByAggregateInput = {
         amount?: SortOrder
@@ -442432,6 +444180,7 @@ export namespace Prisma {
         role?: SortOrder
         amount?: SortOrder
         inAcademy?: SortOrder
+        configPaymentSessionId?: SortOrder
     };
     export type DefaultSupervisorPayAmountMinOrderByAggregateInput = {
         id?: SortOrder
@@ -442445,6 +444194,7 @@ export namespace Prisma {
         role?: SortOrder
         amount?: SortOrder
         inAcademy?: SortOrder
+        configPaymentSessionId?: SortOrder
     };
     export type DefaultSupervisorPayAmountSumOrderByAggregateInput = {
         amount?: SortOrder
@@ -466325,11 +468075,21 @@ export namespace Prisma {
         createMany?: ThesisProjectCreateManyThesisSessionInputEnvelope
         connect?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
     };
+    export type ConfigPaymentSessionCreateNestedOneWithoutSessionInput = {
+        create?: XOR<ConfigPaymentSessionCreateWithoutSessionInput, ConfigPaymentSessionUncheckedCreateWithoutSessionInput>
+        connectOrCreate?: ConfigPaymentSessionCreateOrConnectWithoutSessionInput
+        connect?: ConfigPaymentSessionWhereUniqueInput
+    };
     export type ThesisProjectUncheckedCreateNestedManyWithoutThesisSessionInput = {
         create?: XOR<ThesisProjectCreateWithoutThesisSessionInput, ThesisProjectUncheckedCreateWithoutThesisSessionInput> | ThesisProjectCreateWithoutThesisSessionInput[] | ThesisProjectUncheckedCreateWithoutThesisSessionInput[]
         connectOrCreate?: ThesisProjectCreateOrConnectWithoutThesisSessionInput | ThesisProjectCreateOrConnectWithoutThesisSessionInput[]
         createMany?: ThesisProjectCreateManyThesisSessionInputEnvelope
         connect?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
+    };
+    export type ConfigPaymentSessionUncheckedCreateNestedOneWithoutSessionInput = {
+        create?: XOR<ConfigPaymentSessionCreateWithoutSessionInput, ConfigPaymentSessionUncheckedCreateWithoutSessionInput>
+        connectOrCreate?: ConfigPaymentSessionCreateOrConnectWithoutSessionInput
+        connect?: ConfigPaymentSessionWhereUniqueInput
     };
     export type TrainingObjectTypeUpdateOneRequiredWithoutThesisSessionNestedInput = {
         create?: XOR<TrainingObjectTypeCreateWithoutThesisSessionInput, TrainingObjectTypeUncheckedCreateWithoutThesisSessionInput>
@@ -466358,6 +468118,15 @@ export namespace Prisma {
         updateMany?: ThesisProjectUpdateManyWithWhereWithoutThesisSessionInput | ThesisProjectUpdateManyWithWhereWithoutThesisSessionInput[]
         deleteMany?: ThesisProjectScalarWhereInput | ThesisProjectScalarWhereInput[]
     };
+    export type ConfigPaymentSessionUpdateOneWithoutSessionNestedInput = {
+        create?: XOR<ConfigPaymentSessionCreateWithoutSessionInput, ConfigPaymentSessionUncheckedCreateWithoutSessionInput>
+        connectOrCreate?: ConfigPaymentSessionCreateOrConnectWithoutSessionInput
+        upsert?: ConfigPaymentSessionUpsertWithoutSessionInput
+        disconnect?: ConfigPaymentSessionWhereInput | boolean
+        delete?: ConfigPaymentSessionWhereInput | boolean
+        connect?: ConfigPaymentSessionWhereUniqueInput
+        update?: XOR<XOR<ConfigPaymentSessionUpdateToOneWithWhereWithoutSessionInput, ConfigPaymentSessionUpdateWithoutSessionInput>, ConfigPaymentSessionUncheckedUpdateWithoutSessionInput>
+    };
     export type ThesisProjectUncheckedUpdateManyWithoutThesisSessionNestedInput = {
         create?: XOR<ThesisProjectCreateWithoutThesisSessionInput, ThesisProjectUncheckedCreateWithoutThesisSessionInput> | ThesisProjectCreateWithoutThesisSessionInput[] | ThesisProjectUncheckedCreateWithoutThesisSessionInput[]
         connectOrCreate?: ThesisProjectCreateOrConnectWithoutThesisSessionInput | ThesisProjectCreateOrConnectWithoutThesisSessionInput[]
@@ -466370,6 +468139,15 @@ export namespace Prisma {
         update?: ThesisProjectUpdateWithWhereUniqueWithoutThesisSessionInput | ThesisProjectUpdateWithWhereUniqueWithoutThesisSessionInput[]
         updateMany?: ThesisProjectUpdateManyWithWhereWithoutThesisSessionInput | ThesisProjectUpdateManyWithWhereWithoutThesisSessionInput[]
         deleteMany?: ThesisProjectScalarWhereInput | ThesisProjectScalarWhereInput[]
+    };
+    export type ConfigPaymentSessionUncheckedUpdateOneWithoutSessionNestedInput = {
+        create?: XOR<ConfigPaymentSessionCreateWithoutSessionInput, ConfigPaymentSessionUncheckedCreateWithoutSessionInput>
+        connectOrCreate?: ConfigPaymentSessionCreateOrConnectWithoutSessionInput
+        upsert?: ConfigPaymentSessionUpsertWithoutSessionInput
+        disconnect?: ConfigPaymentSessionWhereInput | boolean
+        delete?: ConfigPaymentSessionWhereInput | boolean
+        connect?: ConfigPaymentSessionWhereUniqueInput
+        update?: XOR<XOR<ConfigPaymentSessionUpdateToOneWithWhereWithoutSessionInput, ConfigPaymentSessionUpdateWithoutSessionInput>, ConfigPaymentSessionUncheckedUpdateWithoutSessionInput>
     };
     export type LecturerCreateNestedOneWithoutPrimarySupervisorThesisProjectInput = {
         create?: XOR<LecturerCreateWithoutPrimarySupervisorThesisProjectInput, LecturerUncheckedCreateWithoutPrimarySupervisorThesisProjectInput>
@@ -467621,8 +469399,124 @@ export namespace Prisma {
         updateMany?: DocumentFileUpdateManyWithWhereWithoutLibrarySubmissionInput | DocumentFileUpdateManyWithWhereWithoutLibrarySubmissionInput[]
         deleteMany?: DocumentFileScalarWhereInput | DocumentFileScalarWhereInput[]
     };
+    export type ThesisSessionCreateNestedOneWithoutConfigPaymentInput = {
+        create?: XOR<ThesisSessionCreateWithoutConfigPaymentInput, ThesisSessionUncheckedCreateWithoutConfigPaymentInput>
+        connectOrCreate?: ThesisSessionCreateOrConnectWithoutConfigPaymentInput
+        connect?: ThesisSessionWhereUniqueInput
+    };
+    export type DefaultCouncilRolePayAmountCreateNestedManyWithoutConfigPaymentSessionInput = {
+        create?: XOR<DefaultCouncilRolePayAmountCreateWithoutConfigPaymentSessionInput, DefaultCouncilRolePayAmountUncheckedCreateWithoutConfigPaymentSessionInput> | DefaultCouncilRolePayAmountCreateWithoutConfigPaymentSessionInput[] | DefaultCouncilRolePayAmountUncheckedCreateWithoutConfigPaymentSessionInput[]
+        connectOrCreate?: DefaultCouncilRolePayAmountCreateOrConnectWithoutConfigPaymentSessionInput | DefaultCouncilRolePayAmountCreateOrConnectWithoutConfigPaymentSessionInput[]
+        createMany?: DefaultCouncilRolePayAmountCreateManyConfigPaymentSessionInputEnvelope
+        connect?: DefaultCouncilRolePayAmountWhereUniqueInput | DefaultCouncilRolePayAmountWhereUniqueInput[]
+    };
+    export type DefaultSupervisorPayAmountCreateNestedManyWithoutConfigPaymentSessionInput = {
+        create?: XOR<DefaultSupervisorPayAmountCreateWithoutConfigPaymentSessionInput, DefaultSupervisorPayAmountUncheckedCreateWithoutConfigPaymentSessionInput> | DefaultSupervisorPayAmountCreateWithoutConfigPaymentSessionInput[] | DefaultSupervisorPayAmountUncheckedCreateWithoutConfigPaymentSessionInput[]
+        connectOrCreate?: DefaultSupervisorPayAmountCreateOrConnectWithoutConfigPaymentSessionInput | DefaultSupervisorPayAmountCreateOrConnectWithoutConfigPaymentSessionInput[]
+        createMany?: DefaultSupervisorPayAmountCreateManyConfigPaymentSessionInputEnvelope
+        connect?: DefaultSupervisorPayAmountWhereUniqueInput | DefaultSupervisorPayAmountWhereUniqueInput[]
+    };
+    export type DefaultCouncilRolePayAmountUncheckedCreateNestedManyWithoutConfigPaymentSessionInput = {
+        create?: XOR<DefaultCouncilRolePayAmountCreateWithoutConfigPaymentSessionInput, DefaultCouncilRolePayAmountUncheckedCreateWithoutConfigPaymentSessionInput> | DefaultCouncilRolePayAmountCreateWithoutConfigPaymentSessionInput[] | DefaultCouncilRolePayAmountUncheckedCreateWithoutConfigPaymentSessionInput[]
+        connectOrCreate?: DefaultCouncilRolePayAmountCreateOrConnectWithoutConfigPaymentSessionInput | DefaultCouncilRolePayAmountCreateOrConnectWithoutConfigPaymentSessionInput[]
+        createMany?: DefaultCouncilRolePayAmountCreateManyConfigPaymentSessionInputEnvelope
+        connect?: DefaultCouncilRolePayAmountWhereUniqueInput | DefaultCouncilRolePayAmountWhereUniqueInput[]
+    };
+    export type DefaultSupervisorPayAmountUncheckedCreateNestedManyWithoutConfigPaymentSessionInput = {
+        create?: XOR<DefaultSupervisorPayAmountCreateWithoutConfigPaymentSessionInput, DefaultSupervisorPayAmountUncheckedCreateWithoutConfigPaymentSessionInput> | DefaultSupervisorPayAmountCreateWithoutConfigPaymentSessionInput[] | DefaultSupervisorPayAmountUncheckedCreateWithoutConfigPaymentSessionInput[]
+        connectOrCreate?: DefaultSupervisorPayAmountCreateOrConnectWithoutConfigPaymentSessionInput | DefaultSupervisorPayAmountCreateOrConnectWithoutConfigPaymentSessionInput[]
+        createMany?: DefaultSupervisorPayAmountCreateManyConfigPaymentSessionInputEnvelope
+        connect?: DefaultSupervisorPayAmountWhereUniqueInput | DefaultSupervisorPayAmountWhereUniqueInput[]
+    };
+    export type ThesisSessionUpdateOneRequiredWithoutConfigPaymentNestedInput = {
+        create?: XOR<ThesisSessionCreateWithoutConfigPaymentInput, ThesisSessionUncheckedCreateWithoutConfigPaymentInput>
+        connectOrCreate?: ThesisSessionCreateOrConnectWithoutConfigPaymentInput
+        upsert?: ThesisSessionUpsertWithoutConfigPaymentInput
+        connect?: ThesisSessionWhereUniqueInput
+        update?: XOR<XOR<ThesisSessionUpdateToOneWithWhereWithoutConfigPaymentInput, ThesisSessionUpdateWithoutConfigPaymentInput>, ThesisSessionUncheckedUpdateWithoutConfigPaymentInput>
+    };
+    export type DefaultCouncilRolePayAmountUpdateManyWithoutConfigPaymentSessionNestedInput = {
+        create?: XOR<DefaultCouncilRolePayAmountCreateWithoutConfigPaymentSessionInput, DefaultCouncilRolePayAmountUncheckedCreateWithoutConfigPaymentSessionInput> | DefaultCouncilRolePayAmountCreateWithoutConfigPaymentSessionInput[] | DefaultCouncilRolePayAmountUncheckedCreateWithoutConfigPaymentSessionInput[]
+        connectOrCreate?: DefaultCouncilRolePayAmountCreateOrConnectWithoutConfigPaymentSessionInput | DefaultCouncilRolePayAmountCreateOrConnectWithoutConfigPaymentSessionInput[]
+        upsert?: DefaultCouncilRolePayAmountUpsertWithWhereUniqueWithoutConfigPaymentSessionInput | DefaultCouncilRolePayAmountUpsertWithWhereUniqueWithoutConfigPaymentSessionInput[]
+        createMany?: DefaultCouncilRolePayAmountCreateManyConfigPaymentSessionInputEnvelope
+        set?: DefaultCouncilRolePayAmountWhereUniqueInput | DefaultCouncilRolePayAmountWhereUniqueInput[]
+        disconnect?: DefaultCouncilRolePayAmountWhereUniqueInput | DefaultCouncilRolePayAmountWhereUniqueInput[]
+        delete?: DefaultCouncilRolePayAmountWhereUniqueInput | DefaultCouncilRolePayAmountWhereUniqueInput[]
+        connect?: DefaultCouncilRolePayAmountWhereUniqueInput | DefaultCouncilRolePayAmountWhereUniqueInput[]
+        update?: DefaultCouncilRolePayAmountUpdateWithWhereUniqueWithoutConfigPaymentSessionInput | DefaultCouncilRolePayAmountUpdateWithWhereUniqueWithoutConfigPaymentSessionInput[]
+        updateMany?: DefaultCouncilRolePayAmountUpdateManyWithWhereWithoutConfigPaymentSessionInput | DefaultCouncilRolePayAmountUpdateManyWithWhereWithoutConfigPaymentSessionInput[]
+        deleteMany?: DefaultCouncilRolePayAmountScalarWhereInput | DefaultCouncilRolePayAmountScalarWhereInput[]
+    };
+    export type DefaultSupervisorPayAmountUpdateManyWithoutConfigPaymentSessionNestedInput = {
+        create?: XOR<DefaultSupervisorPayAmountCreateWithoutConfigPaymentSessionInput, DefaultSupervisorPayAmountUncheckedCreateWithoutConfigPaymentSessionInput> | DefaultSupervisorPayAmountCreateWithoutConfigPaymentSessionInput[] | DefaultSupervisorPayAmountUncheckedCreateWithoutConfigPaymentSessionInput[]
+        connectOrCreate?: DefaultSupervisorPayAmountCreateOrConnectWithoutConfigPaymentSessionInput | DefaultSupervisorPayAmountCreateOrConnectWithoutConfigPaymentSessionInput[]
+        upsert?: DefaultSupervisorPayAmountUpsertWithWhereUniqueWithoutConfigPaymentSessionInput | DefaultSupervisorPayAmountUpsertWithWhereUniqueWithoutConfigPaymentSessionInput[]
+        createMany?: DefaultSupervisorPayAmountCreateManyConfigPaymentSessionInputEnvelope
+        set?: DefaultSupervisorPayAmountWhereUniqueInput | DefaultSupervisorPayAmountWhereUniqueInput[]
+        disconnect?: DefaultSupervisorPayAmountWhereUniqueInput | DefaultSupervisorPayAmountWhereUniqueInput[]
+        delete?: DefaultSupervisorPayAmountWhereUniqueInput | DefaultSupervisorPayAmountWhereUniqueInput[]
+        connect?: DefaultSupervisorPayAmountWhereUniqueInput | DefaultSupervisorPayAmountWhereUniqueInput[]
+        update?: DefaultSupervisorPayAmountUpdateWithWhereUniqueWithoutConfigPaymentSessionInput | DefaultSupervisorPayAmountUpdateWithWhereUniqueWithoutConfigPaymentSessionInput[]
+        updateMany?: DefaultSupervisorPayAmountUpdateManyWithWhereWithoutConfigPaymentSessionInput | DefaultSupervisorPayAmountUpdateManyWithWhereWithoutConfigPaymentSessionInput[]
+        deleteMany?: DefaultSupervisorPayAmountScalarWhereInput | DefaultSupervisorPayAmountScalarWhereInput[]
+    };
+    export type DefaultCouncilRolePayAmountUncheckedUpdateManyWithoutConfigPaymentSessionNestedInput = {
+        create?: XOR<DefaultCouncilRolePayAmountCreateWithoutConfigPaymentSessionInput, DefaultCouncilRolePayAmountUncheckedCreateWithoutConfigPaymentSessionInput> | DefaultCouncilRolePayAmountCreateWithoutConfigPaymentSessionInput[] | DefaultCouncilRolePayAmountUncheckedCreateWithoutConfigPaymentSessionInput[]
+        connectOrCreate?: DefaultCouncilRolePayAmountCreateOrConnectWithoutConfigPaymentSessionInput | DefaultCouncilRolePayAmountCreateOrConnectWithoutConfigPaymentSessionInput[]
+        upsert?: DefaultCouncilRolePayAmountUpsertWithWhereUniqueWithoutConfigPaymentSessionInput | DefaultCouncilRolePayAmountUpsertWithWhereUniqueWithoutConfigPaymentSessionInput[]
+        createMany?: DefaultCouncilRolePayAmountCreateManyConfigPaymentSessionInputEnvelope
+        set?: DefaultCouncilRolePayAmountWhereUniqueInput | DefaultCouncilRolePayAmountWhereUniqueInput[]
+        disconnect?: DefaultCouncilRolePayAmountWhereUniqueInput | DefaultCouncilRolePayAmountWhereUniqueInput[]
+        delete?: DefaultCouncilRolePayAmountWhereUniqueInput | DefaultCouncilRolePayAmountWhereUniqueInput[]
+        connect?: DefaultCouncilRolePayAmountWhereUniqueInput | DefaultCouncilRolePayAmountWhereUniqueInput[]
+        update?: DefaultCouncilRolePayAmountUpdateWithWhereUniqueWithoutConfigPaymentSessionInput | DefaultCouncilRolePayAmountUpdateWithWhereUniqueWithoutConfigPaymentSessionInput[]
+        updateMany?: DefaultCouncilRolePayAmountUpdateManyWithWhereWithoutConfigPaymentSessionInput | DefaultCouncilRolePayAmountUpdateManyWithWhereWithoutConfigPaymentSessionInput[]
+        deleteMany?: DefaultCouncilRolePayAmountScalarWhereInput | DefaultCouncilRolePayAmountScalarWhereInput[]
+    };
+    export type DefaultSupervisorPayAmountUncheckedUpdateManyWithoutConfigPaymentSessionNestedInput = {
+        create?: XOR<DefaultSupervisorPayAmountCreateWithoutConfigPaymentSessionInput, DefaultSupervisorPayAmountUncheckedCreateWithoutConfigPaymentSessionInput> | DefaultSupervisorPayAmountCreateWithoutConfigPaymentSessionInput[] | DefaultSupervisorPayAmountUncheckedCreateWithoutConfigPaymentSessionInput[]
+        connectOrCreate?: DefaultSupervisorPayAmountCreateOrConnectWithoutConfigPaymentSessionInput | DefaultSupervisorPayAmountCreateOrConnectWithoutConfigPaymentSessionInput[]
+        upsert?: DefaultSupervisorPayAmountUpsertWithWhereUniqueWithoutConfigPaymentSessionInput | DefaultSupervisorPayAmountUpsertWithWhereUniqueWithoutConfigPaymentSessionInput[]
+        createMany?: DefaultSupervisorPayAmountCreateManyConfigPaymentSessionInputEnvelope
+        set?: DefaultSupervisorPayAmountWhereUniqueInput | DefaultSupervisorPayAmountWhereUniqueInput[]
+        disconnect?: DefaultSupervisorPayAmountWhereUniqueInput | DefaultSupervisorPayAmountWhereUniqueInput[]
+        delete?: DefaultSupervisorPayAmountWhereUniqueInput | DefaultSupervisorPayAmountWhereUniqueInput[]
+        connect?: DefaultSupervisorPayAmountWhereUniqueInput | DefaultSupervisorPayAmountWhereUniqueInput[]
+        update?: DefaultSupervisorPayAmountUpdateWithWhereUniqueWithoutConfigPaymentSessionInput | DefaultSupervisorPayAmountUpdateWithWhereUniqueWithoutConfigPaymentSessionInput[]
+        updateMany?: DefaultSupervisorPayAmountUpdateManyWithWhereWithoutConfigPaymentSessionInput | DefaultSupervisorPayAmountUpdateManyWithWhereWithoutConfigPaymentSessionInput[]
+        deleteMany?: DefaultSupervisorPayAmountScalarWhereInput | DefaultSupervisorPayAmountScalarWhereInput[]
+    };
+    export type ConfigPaymentSessionCreateNestedOneWithoutCouncilPayAmountsInput = {
+        create?: XOR<ConfigPaymentSessionCreateWithoutCouncilPayAmountsInput, ConfigPaymentSessionUncheckedCreateWithoutCouncilPayAmountsInput>
+        connectOrCreate?: ConfigPaymentSessionCreateOrConnectWithoutCouncilPayAmountsInput
+        connect?: ConfigPaymentSessionWhereUniqueInput
+    };
+    export type ConfigPaymentSessionUpdateOneWithoutCouncilPayAmountsNestedInput = {
+        create?: XOR<ConfigPaymentSessionCreateWithoutCouncilPayAmountsInput, ConfigPaymentSessionUncheckedCreateWithoutCouncilPayAmountsInput>
+        connectOrCreate?: ConfigPaymentSessionCreateOrConnectWithoutCouncilPayAmountsInput
+        upsert?: ConfigPaymentSessionUpsertWithoutCouncilPayAmountsInput
+        disconnect?: ConfigPaymentSessionWhereInput | boolean
+        delete?: ConfigPaymentSessionWhereInput | boolean
+        connect?: ConfigPaymentSessionWhereUniqueInput
+        update?: XOR<XOR<ConfigPaymentSessionUpdateToOneWithWhereWithoutCouncilPayAmountsInput, ConfigPaymentSessionUpdateWithoutCouncilPayAmountsInput>, ConfigPaymentSessionUncheckedUpdateWithoutCouncilPayAmountsInput>
+    };
+    export type ConfigPaymentSessionCreateNestedOneWithoutSupervisorPayAmountsInput = {
+        create?: XOR<ConfigPaymentSessionCreateWithoutSupervisorPayAmountsInput, ConfigPaymentSessionUncheckedCreateWithoutSupervisorPayAmountsInput>
+        connectOrCreate?: ConfigPaymentSessionCreateOrConnectWithoutSupervisorPayAmountsInput
+        connect?: ConfigPaymentSessionWhereUniqueInput
+    };
     export type EnumSupervisorRoleFieldUpdateOperationsInput = {
         set?: $Enums.SupervisorRole
+    };
+    export type ConfigPaymentSessionUpdateOneWithoutSupervisorPayAmountsNestedInput = {
+        create?: XOR<ConfigPaymentSessionCreateWithoutSupervisorPayAmountsInput, ConfigPaymentSessionUncheckedCreateWithoutSupervisorPayAmountsInput>
+        connectOrCreate?: ConfigPaymentSessionCreateOrConnectWithoutSupervisorPayAmountsInput
+        upsert?: ConfigPaymentSessionUpsertWithoutSupervisorPayAmountsInput
+        disconnect?: ConfigPaymentSessionWhereInput | boolean
+        delete?: ConfigPaymentSessionWhereInput | boolean
+        connect?: ConfigPaymentSessionWhereUniqueInput
+        update?: XOR<XOR<ConfigPaymentSessionUpdateToOneWithWhereWithoutSupervisorPayAmountsInput, ConfigPaymentSessionUpdateWithoutSupervisorPayAmountsInput>, ConfigPaymentSessionUncheckedUpdateWithoutSupervisorPayAmountsInput>
     };
     export type CouncilMemberCreateNestedOneWithoutPaymentInput = {
         create?: XOR<CouncilMemberCreateWithoutPaymentInput, CouncilMemberUncheckedCreateWithoutPaymentInput>
@@ -534573,6 +536467,7 @@ export namespace Prisma {
         councilDeadline?: Date | string | null
         trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutThesisSessionInput
         thesisProject?: ThesisProjectCreateNestedManyWithoutThesisSessionInput
+        configPayment?: ConfigPaymentSessionCreateNestedOneWithoutSessionInput
     };
     export type ThesisSessionUncheckedCreateWithoutTrainingCourseInput = {
         id?: string
@@ -534604,6 +536499,7 @@ export namespace Prisma {
         topicEntryDeadline?: Date | string | null
         councilDeadline?: Date | string | null
         thesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutThesisSessionInput
+        configPayment?: ConfigPaymentSessionUncheckedCreateNestedOneWithoutSessionInput
     };
     export type ThesisSessionCreateOrConnectWithoutTrainingCourseInput = {
         where: ThesisSessionWhereUniqueInput
@@ -552885,6 +554781,7 @@ export namespace Prisma {
         councilDeadline?: Date | string | null
         trainingCourse: TrainingCourseCreateNestedOneWithoutThesisSessionInput
         thesisProject?: ThesisProjectCreateNestedManyWithoutThesisSessionInput
+        configPayment?: ConfigPaymentSessionCreateNestedOneWithoutSessionInput
     };
     export type ThesisSessionUncheckedCreateWithoutTrainingObjectTypeInput = {
         id?: string
@@ -552916,6 +554813,7 @@ export namespace Prisma {
         topicEntryDeadline?: Date | string | null
         councilDeadline?: Date | string | null
         thesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutThesisSessionInput
+        configPayment?: ConfigPaymentSessionUncheckedCreateNestedOneWithoutSessionInput
     };
     export type ThesisSessionCreateOrConnectWithoutTrainingObjectTypeInput = {
         where: ThesisSessionWhereUniqueInput
@@ -576141,6 +578039,36 @@ export namespace Prisma {
         data: ThesisProjectCreateManyThesisSessionInput | ThesisProjectCreateManyThesisSessionInput[]
         skipDuplicates?: boolean
     };
+    export type ConfigPaymentSessionCreateWithoutSessionInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        name: string
+        councilPayAmounts?: DefaultCouncilRolePayAmountCreateNestedManyWithoutConfigPaymentSessionInput
+        supervisorPayAmounts?: DefaultSupervisorPayAmountCreateNestedManyWithoutConfigPaymentSessionInput
+    };
+    export type ConfigPaymentSessionUncheckedCreateWithoutSessionInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        name: string
+        councilPayAmounts?: DefaultCouncilRolePayAmountUncheckedCreateNestedManyWithoutConfigPaymentSessionInput
+        supervisorPayAmounts?: DefaultSupervisorPayAmountUncheckedCreateNestedManyWithoutConfigPaymentSessionInput
+    };
+    export type ConfigPaymentSessionCreateOrConnectWithoutSessionInput = {
+        where: ConfigPaymentSessionWhereUniqueInput
+        create: XOR<ConfigPaymentSessionCreateWithoutSessionInput, ConfigPaymentSessionUncheckedCreateWithoutSessionInput>
+    };
     export type TrainingObjectTypeUpsertWithoutThesisSessionInput = {
         update: XOR<TrainingObjectTypeUpdateWithoutThesisSessionInput, TrainingObjectTypeUncheckedUpdateWithoutThesisSessionInput>
         create: XOR<TrainingObjectTypeCreateWithoutThesisSessionInput, TrainingObjectTypeUncheckedCreateWithoutThesisSessionInput>
@@ -576353,6 +578281,41 @@ export namespace Prisma {
     export type ThesisProjectUpdateManyWithWhereWithoutThesisSessionInput = {
         where: ThesisProjectScalarWhereInput
         data: XOR<ThesisProjectUpdateManyMutationInput, ThesisProjectUncheckedUpdateManyWithoutThesisSessionInput>
+    };
+    export type ConfigPaymentSessionUpsertWithoutSessionInput = {
+        update: XOR<ConfigPaymentSessionUpdateWithoutSessionInput, ConfigPaymentSessionUncheckedUpdateWithoutSessionInput>
+        create: XOR<ConfigPaymentSessionCreateWithoutSessionInput, ConfigPaymentSessionUncheckedCreateWithoutSessionInput>
+        where?: ConfigPaymentSessionWhereInput
+    };
+    export type ConfigPaymentSessionUpdateToOneWithWhereWithoutSessionInput = {
+        where?: ConfigPaymentSessionWhereInput
+        data: XOR<ConfigPaymentSessionUpdateWithoutSessionInput, ConfigPaymentSessionUncheckedUpdateWithoutSessionInput>
+    };
+    export type ConfigPaymentSessionUpdateWithoutSessionInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+        councilPayAmounts?: DefaultCouncilRolePayAmountUpdateManyWithoutConfigPaymentSessionNestedInput
+        supervisorPayAmounts?: DefaultSupervisorPayAmountUpdateManyWithoutConfigPaymentSessionNestedInput
+    };
+    export type ConfigPaymentSessionUncheckedUpdateWithoutSessionInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+        councilPayAmounts?: DefaultCouncilRolePayAmountUncheckedUpdateManyWithoutConfigPaymentSessionNestedInput
+        supervisorPayAmounts?: DefaultSupervisorPayAmountUncheckedUpdateManyWithoutConfigPaymentSessionNestedInput
     };
     export type LecturerCreateWithoutPrimarySupervisorThesisProjectInput = {
         id?: string
@@ -576724,6 +578687,7 @@ export namespace Prisma {
         councilDeadline?: Date | string | null
         trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutThesisSessionInput
         trainingCourse: TrainingCourseCreateNestedOneWithoutThesisSessionInput
+        configPayment?: ConfigPaymentSessionCreateNestedOneWithoutSessionInput
     };
     export type ThesisSessionUncheckedCreateWithoutThesisProjectInput = {
         id?: string
@@ -576755,6 +578719,7 @@ export namespace Prisma {
         deputy?: string | null
         topicEntryDeadline?: Date | string | null
         councilDeadline?: Date | string | null
+        configPayment?: ConfigPaymentSessionUncheckedCreateNestedOneWithoutSessionInput
     };
     export type ThesisSessionCreateOrConnectWithoutThesisProjectInput = {
         where: ThesisSessionWhereUniqueInput
@@ -577763,6 +579728,7 @@ export namespace Prisma {
         councilDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutThesisSessionNestedInput
         trainingCourse?: TrainingCourseUpdateOneRequiredWithoutThesisSessionNestedInput
+        configPayment?: ConfigPaymentSessionUpdateOneWithoutSessionNestedInput
     };
     export type ThesisSessionUncheckedUpdateWithoutThesisProjectInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -577794,6 +579760,7 @@ export namespace Prisma {
         deputy?: NullableStringFieldUpdateOperationsInput | string | null
         topicEntryDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         councilDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        configPayment?: ConfigPaymentSessionUncheckedUpdateOneWithoutSessionNestedInput
     };
     export type ExpertProfileUpsertWithoutSupervisedThesesInput = {
         update: XOR<ExpertProfileUpdateWithoutSupervisedThesesInput, ExpertProfileUncheckedUpdateWithoutSupervisedThesesInput>
@@ -582716,6 +584683,405 @@ export namespace Prisma {
     export type DocumentFileUpdateManyWithWhereWithoutLibrarySubmissionInput = {
         where: DocumentFileScalarWhereInput
         data: XOR<DocumentFileUpdateManyMutationInput, DocumentFileUncheckedUpdateManyWithoutLibrarySubmissionInput>
+    };
+    export type ThesisSessionCreateWithoutConfigPaymentInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        name: string
+        startDate: Date | string
+        endDate: Date | string
+        proposalReport?: string | null
+        councilReport?: string | null
+        graduationReport?: string | null
+        decisionNumber?: string | null
+        decisionMaker?: string | null
+        decisionDate?: Date | string | null
+        defenseDecisionNumber?: string | null
+        defenseDecisionMaker?: string | null
+        defenseDecisionDate?: Date | string | null
+        graduationNumber?: string | null
+        graduationDecisionMaker?: string | null
+        graduationDecisionDate?: Date | string | null
+        chief?: string | null
+        deputy?: string | null
+        topicEntryDeadline?: Date | string | null
+        councilDeadline?: Date | string | null
+        trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutThesisSessionInput
+        trainingCourse: TrainingCourseCreateNestedOneWithoutThesisSessionInput
+        thesisProject?: ThesisProjectCreateNestedManyWithoutThesisSessionInput
+    };
+    export type ThesisSessionUncheckedCreateWithoutConfigPaymentInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        name: string
+        startDate: Date | string
+        endDate: Date | string
+        trainingObjectTypeId: string
+        trainingCourseId: string
+        proposalReport?: string | null
+        councilReport?: string | null
+        graduationReport?: string | null
+        decisionNumber?: string | null
+        decisionMaker?: string | null
+        decisionDate?: Date | string | null
+        defenseDecisionNumber?: string | null
+        defenseDecisionMaker?: string | null
+        defenseDecisionDate?: Date | string | null
+        graduationNumber?: string | null
+        graduationDecisionMaker?: string | null
+        graduationDecisionDate?: Date | string | null
+        chief?: string | null
+        deputy?: string | null
+        topicEntryDeadline?: Date | string | null
+        councilDeadline?: Date | string | null
+        thesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutThesisSessionInput
+    };
+    export type ThesisSessionCreateOrConnectWithoutConfigPaymentInput = {
+        where: ThesisSessionWhereUniqueInput
+        create: XOR<ThesisSessionCreateWithoutConfigPaymentInput, ThesisSessionUncheckedCreateWithoutConfigPaymentInput>
+    };
+    export type DefaultCouncilRolePayAmountCreateWithoutConfigPaymentSessionInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        role: $Enums.CouncilRole
+        amount: Decimal | DecimalJsLike | number | string
+        inAcademy?: boolean
+    };
+    export type DefaultCouncilRolePayAmountUncheckedCreateWithoutConfigPaymentSessionInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        role: $Enums.CouncilRole
+        amount: Decimal | DecimalJsLike | number | string
+        inAcademy?: boolean
+    };
+    export type DefaultCouncilRolePayAmountCreateOrConnectWithoutConfigPaymentSessionInput = {
+        where: DefaultCouncilRolePayAmountWhereUniqueInput
+        create: XOR<DefaultCouncilRolePayAmountCreateWithoutConfigPaymentSessionInput, DefaultCouncilRolePayAmountUncheckedCreateWithoutConfigPaymentSessionInput>
+    };
+    export type DefaultCouncilRolePayAmountCreateManyConfigPaymentSessionInputEnvelope = {
+        data: DefaultCouncilRolePayAmountCreateManyConfigPaymentSessionInput | DefaultCouncilRolePayAmountCreateManyConfigPaymentSessionInput[]
+        skipDuplicates?: boolean
+    };
+    export type DefaultSupervisorPayAmountCreateWithoutConfigPaymentSessionInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        role: $Enums.SupervisorRole
+        amount: Decimal | DecimalJsLike | number | string
+        inAcademy?: boolean
+    };
+    export type DefaultSupervisorPayAmountUncheckedCreateWithoutConfigPaymentSessionInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        role: $Enums.SupervisorRole
+        amount: Decimal | DecimalJsLike | number | string
+        inAcademy?: boolean
+    };
+    export type DefaultSupervisorPayAmountCreateOrConnectWithoutConfigPaymentSessionInput = {
+        where: DefaultSupervisorPayAmountWhereUniqueInput
+        create: XOR<DefaultSupervisorPayAmountCreateWithoutConfigPaymentSessionInput, DefaultSupervisorPayAmountUncheckedCreateWithoutConfigPaymentSessionInput>
+    };
+    export type DefaultSupervisorPayAmountCreateManyConfigPaymentSessionInputEnvelope = {
+        data: DefaultSupervisorPayAmountCreateManyConfigPaymentSessionInput | DefaultSupervisorPayAmountCreateManyConfigPaymentSessionInput[]
+        skipDuplicates?: boolean
+    };
+    export type ThesisSessionUpsertWithoutConfigPaymentInput = {
+        update: XOR<ThesisSessionUpdateWithoutConfigPaymentInput, ThesisSessionUncheckedUpdateWithoutConfigPaymentInput>
+        create: XOR<ThesisSessionCreateWithoutConfigPaymentInput, ThesisSessionUncheckedCreateWithoutConfigPaymentInput>
+        where?: ThesisSessionWhereInput
+    };
+    export type ThesisSessionUpdateToOneWithWhereWithoutConfigPaymentInput = {
+        where?: ThesisSessionWhereInput
+        data: XOR<ThesisSessionUpdateWithoutConfigPaymentInput, ThesisSessionUncheckedUpdateWithoutConfigPaymentInput>
+    };
+    export type ThesisSessionUpdateWithoutConfigPaymentInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+        startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        proposalReport?: NullableStringFieldUpdateOperationsInput | string | null
+        councilReport?: NullableStringFieldUpdateOperationsInput | string | null
+        graduationReport?: NullableStringFieldUpdateOperationsInput | string | null
+        decisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        decisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
+        decisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        defenseDecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        defenseDecisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
+        defenseDecisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        graduationNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        graduationDecisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
+        graduationDecisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        chief?: NullableStringFieldUpdateOperationsInput | string | null
+        deputy?: NullableStringFieldUpdateOperationsInput | string | null
+        topicEntryDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        councilDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutThesisSessionNestedInput
+        trainingCourse?: TrainingCourseUpdateOneRequiredWithoutThesisSessionNestedInput
+        thesisProject?: ThesisProjectUpdateManyWithoutThesisSessionNestedInput
+    };
+    export type ThesisSessionUncheckedUpdateWithoutConfigPaymentInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+        startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
+        trainingCourseId?: StringFieldUpdateOperationsInput | string
+        proposalReport?: NullableStringFieldUpdateOperationsInput | string | null
+        councilReport?: NullableStringFieldUpdateOperationsInput | string | null
+        graduationReport?: NullableStringFieldUpdateOperationsInput | string | null
+        decisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        decisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
+        decisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        defenseDecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        defenseDecisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
+        defenseDecisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        graduationNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        graduationDecisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
+        graduationDecisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        chief?: NullableStringFieldUpdateOperationsInput | string | null
+        deputy?: NullableStringFieldUpdateOperationsInput | string | null
+        topicEntryDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        councilDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        thesisProject?: ThesisProjectUncheckedUpdateManyWithoutThesisSessionNestedInput
+    };
+    export type DefaultCouncilRolePayAmountUpsertWithWhereUniqueWithoutConfigPaymentSessionInput = {
+        where: DefaultCouncilRolePayAmountWhereUniqueInput
+        update: XOR<DefaultCouncilRolePayAmountUpdateWithoutConfigPaymentSessionInput, DefaultCouncilRolePayAmountUncheckedUpdateWithoutConfigPaymentSessionInput>
+        create: XOR<DefaultCouncilRolePayAmountCreateWithoutConfigPaymentSessionInput, DefaultCouncilRolePayAmountUncheckedCreateWithoutConfigPaymentSessionInput>
+    };
+    export type DefaultCouncilRolePayAmountUpdateWithWhereUniqueWithoutConfigPaymentSessionInput = {
+        where: DefaultCouncilRolePayAmountWhereUniqueInput
+        data: XOR<DefaultCouncilRolePayAmountUpdateWithoutConfigPaymentSessionInput, DefaultCouncilRolePayAmountUncheckedUpdateWithoutConfigPaymentSessionInput>
+    };
+    export type DefaultCouncilRolePayAmountUpdateManyWithWhereWithoutConfigPaymentSessionInput = {
+        where: DefaultCouncilRolePayAmountScalarWhereInput
+        data: XOR<DefaultCouncilRolePayAmountUpdateManyMutationInput, DefaultCouncilRolePayAmountUncheckedUpdateManyWithoutConfigPaymentSessionInput>
+    };
+    export type DefaultCouncilRolePayAmountScalarWhereInput = {
+        AND?: DefaultCouncilRolePayAmountScalarWhereInput | DefaultCouncilRolePayAmountScalarWhereInput[]
+        OR?: DefaultCouncilRolePayAmountScalarWhereInput[]
+        NOT?: DefaultCouncilRolePayAmountScalarWhereInput | DefaultCouncilRolePayAmountScalarWhereInput[]
+        id?: StringFilter<"DefaultCouncilRolePayAmount"> | string
+        code?: StringNullableFilter<"DefaultCouncilRolePayAmount"> | string | null
+        active?: BoolFilter<"DefaultCouncilRolePayAmount"> | boolean
+        description?: StringNullableFilter<"DefaultCouncilRolePayAmount"> | string | null
+        deletedAt?: DateTimeNullableFilter<"DefaultCouncilRolePayAmount"> | Date | string | null
+        createdAt?: DateTimeFilter<"DefaultCouncilRolePayAmount"> | Date | string
+        updatedAt?: DateTimeFilter<"DefaultCouncilRolePayAmount"> | Date | string
+        createdBy?: UuidNullableFilter<"DefaultCouncilRolePayAmount"> | string | null
+        role?: EnumCouncilRoleFilter<"DefaultCouncilRolePayAmount"> | $Enums.CouncilRole
+        amount?: DecimalFilter<"DefaultCouncilRolePayAmount"> | Decimal | DecimalJsLike | number | string
+        inAcademy?: BoolFilter<"DefaultCouncilRolePayAmount"> | boolean
+        configPaymentSessionId?: StringNullableFilter<"DefaultCouncilRolePayAmount"> | string | null
+    };
+    export type DefaultSupervisorPayAmountUpsertWithWhereUniqueWithoutConfigPaymentSessionInput = {
+        where: DefaultSupervisorPayAmountWhereUniqueInput
+        update: XOR<DefaultSupervisorPayAmountUpdateWithoutConfigPaymentSessionInput, DefaultSupervisorPayAmountUncheckedUpdateWithoutConfigPaymentSessionInput>
+        create: XOR<DefaultSupervisorPayAmountCreateWithoutConfigPaymentSessionInput, DefaultSupervisorPayAmountUncheckedCreateWithoutConfigPaymentSessionInput>
+    };
+    export type DefaultSupervisorPayAmountUpdateWithWhereUniqueWithoutConfigPaymentSessionInput = {
+        where: DefaultSupervisorPayAmountWhereUniqueInput
+        data: XOR<DefaultSupervisorPayAmountUpdateWithoutConfigPaymentSessionInput, DefaultSupervisorPayAmountUncheckedUpdateWithoutConfigPaymentSessionInput>
+    };
+    export type DefaultSupervisorPayAmountUpdateManyWithWhereWithoutConfigPaymentSessionInput = {
+        where: DefaultSupervisorPayAmountScalarWhereInput
+        data: XOR<DefaultSupervisorPayAmountUpdateManyMutationInput, DefaultSupervisorPayAmountUncheckedUpdateManyWithoutConfigPaymentSessionInput>
+    };
+    export type DefaultSupervisorPayAmountScalarWhereInput = {
+        AND?: DefaultSupervisorPayAmountScalarWhereInput | DefaultSupervisorPayAmountScalarWhereInput[]
+        OR?: DefaultSupervisorPayAmountScalarWhereInput[]
+        NOT?: DefaultSupervisorPayAmountScalarWhereInput | DefaultSupervisorPayAmountScalarWhereInput[]
+        id?: StringFilter<"DefaultSupervisorPayAmount"> | string
+        code?: StringNullableFilter<"DefaultSupervisorPayAmount"> | string | null
+        active?: BoolFilter<"DefaultSupervisorPayAmount"> | boolean
+        description?: StringNullableFilter<"DefaultSupervisorPayAmount"> | string | null
+        deletedAt?: DateTimeNullableFilter<"DefaultSupervisorPayAmount"> | Date | string | null
+        createdAt?: DateTimeFilter<"DefaultSupervisorPayAmount"> | Date | string
+        updatedAt?: DateTimeFilter<"DefaultSupervisorPayAmount"> | Date | string
+        createdBy?: UuidNullableFilter<"DefaultSupervisorPayAmount"> | string | null
+        role?: EnumSupervisorRoleFilter<"DefaultSupervisorPayAmount"> | $Enums.SupervisorRole
+        amount?: DecimalFilter<"DefaultSupervisorPayAmount"> | Decimal | DecimalJsLike | number | string
+        inAcademy?: BoolFilter<"DefaultSupervisorPayAmount"> | boolean
+        configPaymentSessionId?: StringNullableFilter<"DefaultSupervisorPayAmount"> | string | null
+    };
+    export type ConfigPaymentSessionCreateWithoutCouncilPayAmountsInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        name: string
+        session: ThesisSessionCreateNestedOneWithoutConfigPaymentInput
+        supervisorPayAmounts?: DefaultSupervisorPayAmountCreateNestedManyWithoutConfigPaymentSessionInput
+    };
+    export type ConfigPaymentSessionUncheckedCreateWithoutCouncilPayAmountsInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        name: string
+        sessionId: string
+        supervisorPayAmounts?: DefaultSupervisorPayAmountUncheckedCreateNestedManyWithoutConfigPaymentSessionInput
+    };
+    export type ConfigPaymentSessionCreateOrConnectWithoutCouncilPayAmountsInput = {
+        where: ConfigPaymentSessionWhereUniqueInput
+        create: XOR<ConfigPaymentSessionCreateWithoutCouncilPayAmountsInput, ConfigPaymentSessionUncheckedCreateWithoutCouncilPayAmountsInput>
+    };
+    export type ConfigPaymentSessionUpsertWithoutCouncilPayAmountsInput = {
+        update: XOR<ConfigPaymentSessionUpdateWithoutCouncilPayAmountsInput, ConfigPaymentSessionUncheckedUpdateWithoutCouncilPayAmountsInput>
+        create: XOR<ConfigPaymentSessionCreateWithoutCouncilPayAmountsInput, ConfigPaymentSessionUncheckedCreateWithoutCouncilPayAmountsInput>
+        where?: ConfigPaymentSessionWhereInput
+    };
+    export type ConfigPaymentSessionUpdateToOneWithWhereWithoutCouncilPayAmountsInput = {
+        where?: ConfigPaymentSessionWhereInput
+        data: XOR<ConfigPaymentSessionUpdateWithoutCouncilPayAmountsInput, ConfigPaymentSessionUncheckedUpdateWithoutCouncilPayAmountsInput>
+    };
+    export type ConfigPaymentSessionUpdateWithoutCouncilPayAmountsInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+        session?: ThesisSessionUpdateOneRequiredWithoutConfigPaymentNestedInput
+        supervisorPayAmounts?: DefaultSupervisorPayAmountUpdateManyWithoutConfigPaymentSessionNestedInput
+    };
+    export type ConfigPaymentSessionUncheckedUpdateWithoutCouncilPayAmountsInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+        sessionId?: StringFieldUpdateOperationsInput | string
+        supervisorPayAmounts?: DefaultSupervisorPayAmountUncheckedUpdateManyWithoutConfigPaymentSessionNestedInput
+    };
+    export type ConfigPaymentSessionCreateWithoutSupervisorPayAmountsInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        name: string
+        session: ThesisSessionCreateNestedOneWithoutConfigPaymentInput
+        councilPayAmounts?: DefaultCouncilRolePayAmountCreateNestedManyWithoutConfigPaymentSessionInput
+    };
+    export type ConfigPaymentSessionUncheckedCreateWithoutSupervisorPayAmountsInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        name: string
+        sessionId: string
+        councilPayAmounts?: DefaultCouncilRolePayAmountUncheckedCreateNestedManyWithoutConfigPaymentSessionInput
+    };
+    export type ConfigPaymentSessionCreateOrConnectWithoutSupervisorPayAmountsInput = {
+        where: ConfigPaymentSessionWhereUniqueInput
+        create: XOR<ConfigPaymentSessionCreateWithoutSupervisorPayAmountsInput, ConfigPaymentSessionUncheckedCreateWithoutSupervisorPayAmountsInput>
+    };
+    export type ConfigPaymentSessionUpsertWithoutSupervisorPayAmountsInput = {
+        update: XOR<ConfigPaymentSessionUpdateWithoutSupervisorPayAmountsInput, ConfigPaymentSessionUncheckedUpdateWithoutSupervisorPayAmountsInput>
+        create: XOR<ConfigPaymentSessionCreateWithoutSupervisorPayAmountsInput, ConfigPaymentSessionUncheckedCreateWithoutSupervisorPayAmountsInput>
+        where?: ConfigPaymentSessionWhereInput
+    };
+    export type ConfigPaymentSessionUpdateToOneWithWhereWithoutSupervisorPayAmountsInput = {
+        where?: ConfigPaymentSessionWhereInput
+        data: XOR<ConfigPaymentSessionUpdateWithoutSupervisorPayAmountsInput, ConfigPaymentSessionUncheckedUpdateWithoutSupervisorPayAmountsInput>
+    };
+    export type ConfigPaymentSessionUpdateWithoutSupervisorPayAmountsInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+        session?: ThesisSessionUpdateOneRequiredWithoutConfigPaymentNestedInput
+        councilPayAmounts?: DefaultCouncilRolePayAmountUpdateManyWithoutConfigPaymentSessionNestedInput
+    };
+    export type ConfigPaymentSessionUncheckedUpdateWithoutSupervisorPayAmountsInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        name?: StringFieldUpdateOperationsInput | string
+        sessionId?: StringFieldUpdateOperationsInput | string
+        councilPayAmounts?: DefaultCouncilRolePayAmountUncheckedUpdateManyWithoutConfigPaymentSessionNestedInput
     };
     export type CouncilMemberCreateWithoutPaymentInput = {
         id?: string
@@ -645564,6 +647930,7 @@ export namespace Prisma {
         councilDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutThesisSessionNestedInput
         thesisProject?: ThesisProjectUpdateManyWithoutThesisSessionNestedInput
+        configPayment?: ConfigPaymentSessionUpdateOneWithoutSessionNestedInput
     };
     export type ThesisSessionUncheckedUpdateWithoutTrainingCourseInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -645595,6 +647962,7 @@ export namespace Prisma {
         topicEntryDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         councilDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         thesisProject?: ThesisProjectUncheckedUpdateManyWithoutThesisSessionNestedInput
+        configPayment?: ConfigPaymentSessionUncheckedUpdateOneWithoutSessionNestedInput
     };
     export type ThesisSessionUncheckedUpdateManyWithoutTrainingCourseInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -652925,6 +655293,7 @@ export namespace Prisma {
         councilDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         trainingCourse?: TrainingCourseUpdateOneRequiredWithoutThesisSessionNestedInput
         thesisProject?: ThesisProjectUpdateManyWithoutThesisSessionNestedInput
+        configPayment?: ConfigPaymentSessionUpdateOneWithoutSessionNestedInput
     };
     export type ThesisSessionUncheckedUpdateWithoutTrainingObjectTypeInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -652956,6 +655325,7 @@ export namespace Prisma {
         topicEntryDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         councilDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         thesisProject?: ThesisProjectUncheckedUpdateManyWithoutThesisSessionNestedInput
+        configPayment?: ConfigPaymentSessionUncheckedUpdateOneWithoutSessionNestedInput
     };
     export type ThesisSessionUncheckedUpdateManyWithoutTrainingObjectTypeInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -666469,6 +668839,110 @@ export namespace Prisma {
         noteId?: NullableStringFieldUpdateOperationsInput | string | null
         evaluationPeriodId?: NullableStringFieldUpdateOperationsInput | string | null
         knowledgeBlockId?: NullableStringFieldUpdateOperationsInput | string | null
+    };
+    export type DefaultCouncilRolePayAmountCreateManyConfigPaymentSessionInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        role: $Enums.CouncilRole
+        amount: Decimal | DecimalJsLike | number | string
+        inAcademy?: boolean
+    };
+    export type DefaultSupervisorPayAmountCreateManyConfigPaymentSessionInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        createdBy?: string | null
+        role: $Enums.SupervisorRole
+        amount: Decimal | DecimalJsLike | number | string
+        inAcademy?: boolean
+    };
+    export type DefaultCouncilRolePayAmountUpdateWithoutConfigPaymentSessionInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        role?: EnumCouncilRoleFieldUpdateOperationsInput | $Enums.CouncilRole
+        amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+        inAcademy?: BoolFieldUpdateOperationsInput | boolean
+    };
+    export type DefaultCouncilRolePayAmountUncheckedUpdateWithoutConfigPaymentSessionInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        role?: EnumCouncilRoleFieldUpdateOperationsInput | $Enums.CouncilRole
+        amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+        inAcademy?: BoolFieldUpdateOperationsInput | boolean
+    };
+    export type DefaultCouncilRolePayAmountUncheckedUpdateManyWithoutConfigPaymentSessionInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        role?: EnumCouncilRoleFieldUpdateOperationsInput | $Enums.CouncilRole
+        amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+        inAcademy?: BoolFieldUpdateOperationsInput | boolean
+    };
+    export type DefaultSupervisorPayAmountUpdateWithoutConfigPaymentSessionInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        role?: EnumSupervisorRoleFieldUpdateOperationsInput | $Enums.SupervisorRole
+        amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+        inAcademy?: BoolFieldUpdateOperationsInput | boolean
+    };
+    export type DefaultSupervisorPayAmountUncheckedUpdateWithoutConfigPaymentSessionInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        role?: EnumSupervisorRoleFieldUpdateOperationsInput | $Enums.SupervisorRole
+        amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+        inAcademy?: BoolFieldUpdateOperationsInput | boolean
+    };
+    export type DefaultSupervisorPayAmountUncheckedUpdateManyWithoutConfigPaymentSessionInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+        role?: EnumSupervisorRoleFieldUpdateOperationsInput | $Enums.SupervisorRole
+        amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+        inAcademy?: BoolFieldUpdateOperationsInput | boolean
     };
     export type ThesisProjectCreateManySupervisorPaymentInput = {
         id?: string

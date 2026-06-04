@@ -3339,6 +3339,19 @@ exports.Prisma.LibrarySubmissionScalarFieldEnum = {
   confirmedById: 'confirmedById'
 };
 
+exports.Prisma.ConfigPaymentSessionScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  name: 'name',
+  sessionId: 'sessionId'
+};
+
 exports.Prisma.DefaultCouncilRolePayAmountScalarFieldEnum = {
   id: 'id',
   code: 'code',
@@ -3350,7 +3363,8 @@ exports.Prisma.DefaultCouncilRolePayAmountScalarFieldEnum = {
   createdBy: 'createdBy',
   role: 'role',
   amount: 'amount',
-  inAcademy: 'inAcademy'
+  inAcademy: 'inAcademy',
+  configPaymentSessionId: 'configPaymentSessionId'
 };
 
 exports.Prisma.DefaultSupervisorPayAmountScalarFieldEnum = {
@@ -3364,7 +3378,8 @@ exports.Prisma.DefaultSupervisorPayAmountScalarFieldEnum = {
   createdBy: 'createdBy',
   role: 'role',
   amount: 'amount',
-  inAcademy: 'inAcademy'
+  inAcademy: 'inAcademy',
+  configPaymentSessionId: 'configPaymentSessionId'
 };
 
 exports.Prisma.PaymentRecordScalarFieldEnum = {
@@ -6960,18 +6975,29 @@ exports.Prisma.LibrarySubmissionOrderByRelevanceFieldEnum = {
   confirmedById: 'confirmedById'
 };
 
+exports.Prisma.ConfigPaymentSessionOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  name: 'name',
+  sessionId: 'sessionId'
+};
+
 exports.Prisma.DefaultCouncilRolePayAmountOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
-  createdBy: 'createdBy'
+  createdBy: 'createdBy',
+  configPaymentSessionId: 'configPaymentSessionId'
 };
 
 exports.Prisma.DefaultSupervisorPayAmountOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
-  createdBy: 'createdBy'
+  createdBy: 'createdBy',
+  configPaymentSessionId: 'configPaymentSessionId'
 };
 
 exports.Prisma.PaymentRecordOrderByRelevanceFieldEnum = {
@@ -8605,6 +8631,7 @@ exports.Prisma.ModelName = {
   CouncilMember: 'CouncilMember',
   DefenseRecord: 'DefenseRecord',
   LibrarySubmission: 'LibrarySubmission',
+  ConfigPaymentSession: 'ConfigPaymentSession',
   DefaultCouncilRolePayAmount: 'DefaultCouncilRolePayAmount',
   DefaultSupervisorPayAmount: 'DefaultSupervisorPayAmount',
   PaymentRecord: 'PaymentRecord',

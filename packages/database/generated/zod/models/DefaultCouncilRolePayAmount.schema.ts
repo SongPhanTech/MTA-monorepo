@@ -36,6 +36,14 @@ const baseSchemaWithoutDefaults = z.object({
     inAcademy: z.boolean(),
 }
 ).strict();
+const relationSchema = z.object({
+    configPaymentSession: z.record(z.string(), z.unknown()).optional(),
+}
+);
+const fkSchema = z.object({
+    configPaymentSessionId: z.string().nullish(),
+}
+);
 
 /**
  * `DefaultCouncilRolePayAmount` schema excluding foreign keys and relations.
@@ -46,7 +54,7 @@ export const DefaultCouncilRolePayAmountScalarSchema = baseSchema;
 /**
  * `DefaultCouncilRolePayAmount` schema including all fields (scalar, foreign key, and relations) and validations.
  */
-export const DefaultCouncilRolePayAmountSchema = DefaultCouncilRolePayAmountScalarSchema;
+export const DefaultCouncilRolePayAmountSchema = DefaultCouncilRolePayAmountScalarSchema.merge(fkSchema).merge(relationSchema.partial());
 
 
 /**
@@ -86,9 +94,7 @@ export const DefaultCouncilRolePayAmountCreateScalarSchema = baseSchemaWithoutDe
 /**
  * `DefaultCouncilRolePayAmount` schema for create operations including scalar fields, foreign key fields, and validations.
  */
-export const DefaultCouncilRolePayAmountCreateSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, inAcademy: true
-});
+export const DefaultCouncilRolePayAmountCreateSchema = DefaultCouncilRolePayAmountCreateScalarSchema.merge(fkSchema);
 
 
 /**
@@ -100,5 +106,5 @@ export const DefaultCouncilRolePayAmountUpdateScalarSchema = baseSchemaWithoutDe
 /**
  * `DefaultCouncilRolePayAmount` schema for update operations including scalar fields, foreign key fields, and validations.
  */
-export const DefaultCouncilRolePayAmountUpdateSchema = DefaultCouncilRolePayAmountUpdateScalarSchema;
+export const DefaultCouncilRolePayAmountUpdateSchema = DefaultCouncilRolePayAmountUpdateScalarSchema.merge(fkSchema.partial());
 

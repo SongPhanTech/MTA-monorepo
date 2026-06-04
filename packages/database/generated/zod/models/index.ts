@@ -173,6 +173,7 @@ export * from './Council.schema';
 export * from './CouncilMember.schema';
 export * from './DefenseRecord.schema';
 export * from './LibrarySubmission.schema';
+export * from './ConfigPaymentSession.schema';
 export * from './DefaultCouncilRolePayAmount.schema';
 export * from './DefaultSupervisorPayAmount.schema';
 export * from './PaymentRecord.schema';

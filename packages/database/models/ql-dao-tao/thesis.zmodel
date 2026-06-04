@@ -74,6 +74,7 @@ model ThesisSession extends Base {
   councilDeadline       DateTime?
 
   thesisProject         ThesisProject[]
+  configPayment         ConfigPaymentSession?
 
   @@schema("ql-dao-tao")
 }
@@ -397,16 +398,49 @@ model LibrarySubmission extends Base {
   @@schema("ql-dao-tao")
 }
 
+/// Bộ định mức thanh toán gắn với một đợt xét
+model ConfigPaymentSession extends Base {
+  name      String
+  sessionId String        @unique
+  session   ThesisSession @relation(fields: [sessionId], references: [id])
+
+  councilPayAmounts    DefaultCouncilRolePayAmount[] @relation("ConfigCouncilPayAmounts")
+  supervisorPayAmounts DefaultSupervisorPayAmount[] @relation("ConfigSupervisorPayAmounts")
+
+  @@schema("ql-dao-tao")
+}
+
+/// Định mức hội đồng
 model DefaultCouncilRolePayAmount extends Base {
   role      CouncilRole
   amount    Decimal
   inAcademy Boolean     @default(true)
+
+  configPaymentSessionId String?
+  configPaymentSession   ConfigPaymentSession? @relation(
+    "ConfigCouncilPayAmounts",
+    fields: [configPaymentSessionId],
+    references: [id]
+  )
+
+  @@unique([configPaymentSessionId, role, inAcademy, description])
   @@schema("ql-dao-tao")
 }
+
+/// Định mức hướng dẫn
 model DefaultSupervisorPayAmount extends Base {
   role      SupervisorRole
   amount    Decimal
   inAcademy Boolean        @default(true)
+
+  configPaymentSessionId String?
+  configPaymentSession   ConfigPaymentSession? @relation(
+    "ConfigSupervisorPayAmounts",
+    fields: [configPaymentSessionId],
+    references: [id]
+  )
+
+  @@unique([configPaymentSessionId, role, inAcademy, description])
   @@schema("ql-dao-tao")
 }
 enum PaymentStatus {

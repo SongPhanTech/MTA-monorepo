@@ -4846,20 +4846,20 @@ model StudentResearchRegistration {
 }
 
 model ThesisSession {
-  id                      String             @id() @default(cuid())
-  code                    String?            @unique()
-  active                  Boolean            @default(true)
-  description             String?            @db.Text()
+  id                      String                @id() @default(cuid())
+  code                    String?               @unique()
+  active                  Boolean               @default(true)
+  description             String?               @db.Text()
   deletedAt               DateTime?
-  createdAt               DateTime           @default(now())
-  updatedAt               DateTime           @default(now()) @updatedAt()
-  createdBy               String?            @db.Uuid()
+  createdAt               DateTime              @default(now())
+  updatedAt               DateTime              @default(now()) @updatedAt()
+  createdBy               String?               @db.Uuid()
   name                    String
   startDate               DateTime
   endDate                 DateTime
-  trainingObjectType      TrainingObjectType @relation(fields: [trainingObjectTypeId], references: [id])
+  trainingObjectType      TrainingObjectType    @relation(fields: [trainingObjectTypeId], references: [id])
   trainingObjectTypeId    String
-  trainingCourse          TrainingCourse     @relation(fields: [trainingCourseId], references: [id])
+  trainingCourse          TrainingCourse        @relation(fields: [trainingCourseId], references: [id])
   trainingCourseId        String
   /// Tờ trình đề tài
   proposalReport          String?
@@ -4893,6 +4893,7 @@ model ThesisSession {
   /// Hạn nhập hội đồng
   councilDeadline         DateTime?
   thesisProject           ThesisProject[]
+  configPayment           ConfigPaymentSession?
 
   @@schema("ql-dao-tao")
 }
@@ -5195,35 +5196,62 @@ model LibrarySubmission {
   @@schema("ql-dao-tao")
 }
 
-model DefaultCouncilRolePayAmount {
-  id          String      @id() @default(cuid())
-  code        String?     @unique()
-  active      Boolean     @default(true)
-  description String?     @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @default(now()) @updatedAt()
-  createdBy   String?     @db.Uuid()
-  role        CouncilRole
-  amount      Decimal
-  inAcademy   Boolean     @default(true)
+/// Bộ định mức thanh toán gắn với một đợt xét (1 đợt — 1 config)
+model ConfigPaymentSession {
+  id                   String                        @id() @default(cuid())
+  code                 String?                       @unique()
+  active               Boolean                       @default(true)
+  description          String?                       @db.Text()
+  deletedAt            DateTime?
+  createdAt            DateTime                      @default(now())
+  updatedAt            DateTime                      @default(now()) @updatedAt()
+  createdBy            String?                       @db.Uuid()
+  name                 String
+  sessionId            String                        @unique()
+  session              ThesisSession                 @relation(fields: [sessionId], references: [id])
+  councilPayAmounts    DefaultCouncilRolePayAmount[] @relation("ConfigCouncilPayAmounts")
+  supervisorPayAmounts DefaultSupervisorPayAmount[]  @relation("ConfigSupervisorPayAmounts")
 
   @@schema("ql-dao-tao")
 }
 
-model DefaultSupervisorPayAmount {
-  id          String         @id() @default(cuid())
-  code        String?        @unique()
-  active      Boolean        @default(true)
-  description String?        @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime       @default(now())
-  updatedAt   DateTime       @default(now()) @updatedAt()
-  createdBy   String?        @db.Uuid()
-  role        SupervisorRole
-  amount      Decimal
-  inAcademy   Boolean        @default(true)
+/// Định mức hội đồng: configPaymentSessionId = null → mức chung; có id → theo đợt
+model DefaultCouncilRolePayAmount {
+  id                     String                @id() @default(cuid())
+  code                   String?               @unique()
+  active                 Boolean               @default(true)
+  description            String?               @db.Text()
+  deletedAt              DateTime?
+  createdAt              DateTime              @default(now())
+  updatedAt              DateTime              @default(now()) @updatedAt()
+  createdBy              String?               @db.Uuid()
+  role                   CouncilRole
+  amount                 Decimal
+  inAcademy              Boolean               @default(true)
+  configPaymentSessionId String?
+  configPaymentSession   ConfigPaymentSession? @relation("ConfigCouncilPayAmounts", fields: [configPaymentSessionId], references: [id])
 
+  @@unique([configPaymentSessionId, role, inAcademy, description])
+  @@schema("ql-dao-tao")
+}
+
+/// Định mức hướng dẫn: configPaymentSessionId = null → mức chung; có id → theo đợt
+model DefaultSupervisorPayAmount {
+  id                     String                @id() @default(cuid())
+  code                   String?               @unique()
+  active                 Boolean               @default(true)
+  description            String?               @db.Text()
+  deletedAt              DateTime?
+  createdAt              DateTime              @default(now())
+  updatedAt              DateTime              @default(now()) @updatedAt()
+  createdBy              String?               @db.Uuid()
+  role                   SupervisorRole
+  amount                 Decimal
+  inAcademy              Boolean               @default(true)
+  configPaymentSessionId String?
+  configPaymentSession   ConfigPaymentSession? @relation("ConfigSupervisorPayAmounts", fields: [configPaymentSessionId], references: [id])
+
+  @@unique([configPaymentSessionId, role, inAcademy, description])
   @@schema("ql-dao-tao")
 }
 

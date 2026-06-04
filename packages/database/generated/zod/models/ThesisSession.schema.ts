@@ -69,6 +69,7 @@ const relationSchema = z.object({
     trainingObjectType: z.record(z.string(), z.unknown()),
     trainingCourse: z.record(z.string(), z.unknown()),
     thesisProject: z.array(z.unknown()).optional(),
+    configPayment: z.record(z.string(), z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({

@@ -36,6 +36,14 @@ const baseSchemaWithoutDefaults = z.object({
     inAcademy: z.boolean(),
 }
 ).strict();
+const relationSchema = z.object({
+    configPaymentSession: z.record(z.string(), z.unknown()).optional(),
+}
+);
+const fkSchema = z.object({
+    configPaymentSessionId: z.string().nullish(),
+}
+);
 
 /**
  * `DefaultSupervisorPayAmount` schema excluding foreign keys and relations.
@@ -46,7 +54,7 @@ export const DefaultSupervisorPayAmountScalarSchema = baseSchema;
 /**
  * `DefaultSupervisorPayAmount` schema including all fields (scalar, foreign key, and relations) and validations.
  */
-export const DefaultSupervisorPayAmountSchema = DefaultSupervisorPayAmountScalarSchema;
+export const DefaultSupervisorPayAmountSchema = DefaultSupervisorPayAmountScalarSchema.merge(fkSchema).merge(relationSchema.partial());
 
 
 /**
@@ -86,9 +94,7 @@ export const DefaultSupervisorPayAmountCreateScalarSchema = baseSchemaWithoutDef
 /**
  * `DefaultSupervisorPayAmount` schema for create operations including scalar fields, foreign key fields, and validations.
  */
-export const DefaultSupervisorPayAmountCreateSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, inAcademy: true
-});
+export const DefaultSupervisorPayAmountCreateSchema = DefaultSupervisorPayAmountCreateScalarSchema.merge(fkSchema);
 
 
 /**
@@ -100,5 +106,5 @@ export const DefaultSupervisorPayAmountUpdateScalarSchema = baseSchemaWithoutDef
 /**
  * `DefaultSupervisorPayAmount` schema for update operations including scalar fields, foreign key fields, and validations.
  */
-export const DefaultSupervisorPayAmountUpdateSchema = DefaultSupervisorPayAmountUpdateScalarSchema;
+export const DefaultSupervisorPayAmountUpdateSchema = DefaultSupervisorPayAmountUpdateScalarSchema.merge(fkSchema.partial());
 

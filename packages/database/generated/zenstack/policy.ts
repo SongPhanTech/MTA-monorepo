@@ -3452,6 +3452,26 @@ const policy: PolicyDef = {
             },
 
         },
+        configPaymentSession: {
+            modelLevel: {
+                read: { guard: ConfigPaymentSession_read, },
+                create: { guard: ConfigPaymentSession_create, inputChecker: ConfigPaymentSession_create_input, },
+                update: { guard: ConfigPaymentSession_update, },
+                postUpdate: { guard: ConfigPaymentSession_postUpdate, },
+                delete: { guard: ConfigPaymentSession_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
         defaultCouncilRolePayAmount: {
             modelLevel: {
                 read: { guard: DefaultCouncilRolePayAmount_read, },
@@ -5723,6 +5743,7 @@ const policy: PolicyDef = {
         councilMember: { hasValidation: false },
         defenseRecord: { hasValidation: false },
         librarySubmission: { hasValidation: false },
+        configPaymentSession: { hasValidation: false },
         defaultCouncilRolePayAmount: { hasValidation: false },
         defaultSupervisorPayAmount: { hasValidation: false },
         paymentRecord: { hasValidation: false },
@@ -16790,6 +16811,71 @@ function LibrarySubmission_delete(context: QueryContext, db: CrudContract): any 
 }
 
 function $check_LibrarySubmission_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ConfigPaymentSession_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_ConfigPaymentSession_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ConfigPaymentSession_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_ConfigPaymentSession_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ConfigPaymentSession_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function ConfigPaymentSession_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_ConfigPaymentSession_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ConfigPaymentSession_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_ConfigPaymentSession_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function ConfigPaymentSession_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_ConfigPaymentSession_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
