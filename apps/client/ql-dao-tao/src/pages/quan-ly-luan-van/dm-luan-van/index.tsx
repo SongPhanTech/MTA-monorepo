@@ -1,6 +1,7 @@
 /** biome-ignore-all lint/a11y/useKeyWithClickEvents: <sử dụng onClick để ngăn chặn sự kiện click lồng nhau> */
 import Select from "@components/commons/select"
 import Table from "@components/commons/table"
+import type { ModalTaoDuLieuMauLuanVanInput } from "@components/modal/modal-tao-du-lieu-mau-luan-van"
 import ApproveIcon from "@components/icons/approve"
 import DeleteIcon from "@components/icons/delete"
 import { DEFAULT_PAGINATE_SIZE } from "@constants/constants"
@@ -12,7 +13,6 @@ import {
   CouncilMember,
   CouncilProposalStatus,
   CouncilRole,
-  FixedClassType,
   PaymentStatus,
   SupervisorRole,
   ThesisProjectStatus,
@@ -22,9 +22,7 @@ import { queryClient } from "@api/index"
 import {
   useCountStudent,
   useCreatePaymentRecord,
-  useCreateStudentThesisRegistration,
   useCreateSupervisorPaymentRecord,
-  useCreateThesisProject,
   useDeleteManyCouncil,
   useDeleteManyCouncilMember,
   useDeleteManyDecision,
@@ -282,6 +280,9 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
     allStudentsInClasses: any[]
   }>({
     tag: "ModalChuyenDiemLopMonHoc",
+  })
+  const { onOpen: openModalTaoDuLieuMau } = useDisclosure<ModalTaoDuLieuMauLuanVanInput>({
+    tag: "ModalTaoDuLieuMauLuanVan",
   })
   const { data: sDm_Donvi = [] } = useFindManyDM_DonVi({
     where: whereOrganization,
@@ -753,8 +754,6 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
   /** Hạn nhập GVHD: dùng topicEntryDeadline của đợt xét (ThesisSession) */
 
   const { mutateAsync: updateThesisSession } = useUpdateThesisSession()
-  const { mutateAsync: createThesisProject } = useCreateThesisProject()
-  const { mutateAsync: createStudentThesisRegistration } = useCreateStudentThesisRegistration()
   const { mutateAsync: deleteManyCouncil } = useDeleteManyCouncil()
   const { mutateAsync: deleteManyCouncilMember } = useDeleteManyCouncilMember()
   const { mutateAsync: deleteManyStudentThesisRegistration } =
@@ -974,103 +973,6 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
       message.error(detail || "Đã xảy ra lỗi, vui lòng kiểm tra lại")
     } finally {
       hideSpinner()
-    }
-  }
-
-  const taodulieumau = async () => {
-    const thesisSessionId = searchParams.thesisSessionId?.trim()
-    if (!thesisSessionId) {
-      message.warning("Vui lòng chọn đợt luận văn trước khi tạo dữ liệu mẫu.")
-      return
-    }
-    showSpinner()
-    const createPromises = allStudentsInClasses?.map(async (student) => {
-      const fixedClassType = student.fixedClass?.classType
-      const organizationId = student.curriculumVersion?.curriculum?.trainingMajor?.organization?.Id
-      const typeLabel = fixedClassType === FixedClassType.APPLICATION ? "Đề án" : "Luận văn"
-      const hasThesisRegistration = student.thesisRegistrations?.some((registration) => {
-        if (registration?.deletedAt) return false
-        const project = registration.thesisProject
-        if (!project || project.deletedAt) return false
-        return (
-          project.thesisType === ThesisType.THESIS && project.thesisSessionId === thesisSessionId
-        )
-      })
-      if (hasThesisRegistration) {
-        return null
-      }
-      const payload = {
-        title: "",
-        summary: "",
-        titleEN: "",
-        maxStudents: 1,
-        language: "Tiếng Việt",
-        type: typeLabel,
-        organization: organizationId
-          ? {
-              connect: {
-                Id: organizationId,
-              },
-            }
-          : { disconnect: true },
-        thesisSession: thesisSessionId
-          ? {
-              connect: {
-                id: thesisSessionId,
-              },
-            }
-          : { disconnect: true },
-        thesisType: ThesisType.THESIS,
-        librarySubmission: {
-          create: {
-            isHardcopy: false,
-            isSoftcopy: false,
-            librarianNote: "",
-          },
-        },
-        council: {
-          create: {
-            proposedDate: new Date(),
-            status: CouncilProposalStatus.PENDING,
-          },
-        },
-        defenseRecord: {
-          create: {
-            isProfileComplete: false,
-          },
-        },
-      }
-      const response = await createThesisProject({
-        data: {
-          ...payload,
-        },
-      })
-      const payloadRegistration = {
-        thesisProjectId: response?.id ?? "",
-        studentId: student.id,
-      }
-      const responseRegistration = await createStudentThesisRegistration({
-        data: payloadRegistration,
-      })
-      return { response, responseRegistration }
-    })
-    try {
-      const results = await Promise.all(createPromises || [])
-      const skippedCount = results.filter((r) => r === null).length
-      if (skippedCount > 0) {
-        message.success(
-          `Tạo dữ liệu mẫu thành công. Đã bỏ qua ${skippedCount} sinh viên đã có luận văn/đề án.`
-        )
-      } else {
-        message.success("Tạo dữ liệu mẫu thành công")
-      }
-    } catch (error) {
-      message.error("Đã xảy ra lỗi trong lúc tạo dữ liệu mẫu")
-    } finally {
-      hideSpinner()
-      await refetchStudents()
-      await refetchAllStudentsInClasses()
-      await refetchCount()
     }
   }
 
@@ -2075,19 +1977,25 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
 
                   <Form.Item className="flex justify-end gap-3">
                     {role === "P7" && (
-                      <Popconfirm
-                        placement="rightTop"
-                        title="Xác nhận tạo dữ liệu mẫu"
-                        description="Tạo dữ liệu mẫu sẽ ghi đè lại dữ liệu (nếu có). Bạn có chắc chắn muốn tạo dữ liệu mẫu không?"
-                        onConfirm={async () => {
+                      <Button
+                        type="primary"
+                        className="ml-2"
+                        onClick={() => {
+                          const thesisSessionId = searchParams.thesisSessionId?.trim()
+                          if (!thesisSessionId) {
+                            message.warning("Vui lòng chọn đợt luận văn trước khi tạo dữ liệu mẫu.")
+                            return
+                          }
                           setEditingRowKeys([])
-                          await taodulieumau()
+                          openModalTaoDuLieuMau({
+                            thesisSessionId,
+                            students: allStudentsInClasses,
+                            onSuccess: refetchThesisTableData,
+                          })
                         }}
                       >
-                        <Button type="primary" className="ml-2">
-                          Tạo dữ liệu mẫu
-                        </Button>
-                      </Popconfirm>
+                        Tạo dữ liệu mẫu
+                      </Button>
                     )}
                     {editingRowKeys.length > 0 ? (
                       <>
