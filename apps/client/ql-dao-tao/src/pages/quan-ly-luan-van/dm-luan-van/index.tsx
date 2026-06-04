@@ -751,7 +751,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
     () => thesisSessionData?.find((s) => s.id === searchParams.thesisSessionId),
     [thesisSessionData, searchParams.thesisSessionId]
   )
-  /** Hạn nhập GVHD: dùng topicEntryDeadline của đợt xét (ThesisSession) */
+  const thesisConfigPaymentSessionId = selectedThesisSession?.configPaymentSessionId ?? null
 
   const { mutateAsync: updateThesisSession } = useUpdateThesisSession()
   const { mutateAsync: deleteManyCouncil } = useDeleteManyCouncil()
@@ -769,8 +769,24 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
   const { mutateAsync: updateThesisProject } = useUpdateThesisProject()
   const { mutateAsync: updateManyThesisProject } = useUpdateManyThesisProject()
   const { mutateAsync: createPaymentRecord } = useCreatePaymentRecord()
-  const { data: defaultCouncilPayAmounts = [] } = useFindManyDefaultCouncilRolePayAmount()
-  const { data: defaultSupervisorPayAmounts = [] } = useFindManyDefaultSupervisorPayAmount()
+  const { data: defaultCouncilPayAmounts = [] } = useFindManyDefaultCouncilRolePayAmount(
+    {
+      where: {
+        configPaymentSessionId: thesisConfigPaymentSessionId,
+        description: "THESIS",
+      },
+    },
+    { enabled: !!searchParams.thesisSessionId }
+  )
+  const { data: defaultSupervisorPayAmounts = [] } = useFindManyDefaultSupervisorPayAmount(
+    {
+      where: {
+        configPaymentSessionId: thesisConfigPaymentSessionId,
+        description: "THESIS",
+      },
+    },
+    { enabled: !!searchParams.thesisSessionId }
+  )
   const { mutateAsync: createSupervisorPaymentRecord } = useCreateSupervisorPaymentRecord()
   const { mutateAsync: deleteSupervisorPaymentRecord } = useDeleteSupervisorPaymentRecord()
   const isWithinGvhdSupervisorEditWindow = (): boolean => {
