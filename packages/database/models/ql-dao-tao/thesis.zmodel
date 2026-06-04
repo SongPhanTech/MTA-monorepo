@@ -74,7 +74,9 @@ model ThesisSession extends Base {
   councilDeadline       DateTime?
 
   thesisProject         ThesisProject[]
-  configPayment         ConfigPaymentSession?
+
+  configPaymentSessionId String?
+  configPayment          ConfigPaymentSession? @relation(fields: [configPaymentSessionId], references: [id])
 
   @@schema("ql-dao-tao")
 }
@@ -398,12 +400,11 @@ model LibrarySubmission extends Base {
   @@schema("ql-dao-tao")
 }
 
-/// Bộ định mức thanh toán gắn với một đợt xét
+/// Bộ định mức thanh toán
 model ConfigPaymentSession extends Base {
-  name      String
-  sessionId String        @unique
-  session   ThesisSession @relation(fields: [sessionId], references: [id])
+  name String
 
+  thesisSessions       ThesisSession[]
   councilPayAmounts    DefaultCouncilRolePayAmount[] @relation("ConfigCouncilPayAmounts")
   supervisorPayAmounts DefaultSupervisorPayAmount[] @relation("ConfigSupervisorPayAmounts")
 
