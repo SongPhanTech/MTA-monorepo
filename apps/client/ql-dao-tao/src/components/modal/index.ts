@@ -8,6 +8,7 @@ import PutScoreLinkSheetModal from "./modal-add-diem-lien-ket"
 import PutMonHocTuongDuong from "./modal-add-mon-tuong-duong"
 import PutUpdatePaymentStatus from "./modal-cap-nhat-trang-thai-thanh-toan"
 import ModalCauHinhLuanVan from "./modal-cau-hinh-luan-van"
+import ModalTaoDuLieuMauLuanVan from "./modal-tao-du-lieu-mau-luan-van"
 import ModalChiTietGiangVien from "./modal-chi-tiet-giang-vien"
 import ModalChiTietLopBienChe from "./modal-chi-tiet-lop-bien-che"
 import ModalChiTietMonHoc from "./modal-chi-tiet-mon-hoc"
@@ -233,6 +234,7 @@ export {
   PutDeadlineScoreModal,
   PutThesisSession,
   ModalCauHinhLuanVan,
+  ModalTaoDuLieuMauLuanVan,
   ModalDanhSachChungChi,
   ModalChuyenDoiChungChiThanhDiem,
   PutResearchTopicModal,
