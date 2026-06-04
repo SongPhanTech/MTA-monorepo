@@ -31,7 +31,7 @@ const ToggleVaiTro = () => {
   }
 
   return (
-    <Button icon={<Repeat size={16} />} onClick={handleToggle}>
+    <Button icon={<Repeat size={14} className="align-middle" />} onClick={handleToggle}>
       {dangOGiangVien ? "Vào trang quản trị" : "Đổi vai trò"}
     </Button>
   )

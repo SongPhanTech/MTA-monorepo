@@ -7,13 +7,12 @@ import { useFindUniqueConfig } from "@workspace/db/hooks"
 import { useGetUnitInfosInfo } from "@workspace/libs/api/system"
 import { getVersion } from "@workspace/libs/api/training"
 import { SelectTrainingObjectType, TreeSelectSemester } from "@workspace/ui"
-import { Layout, theme } from "antd"
+import { Divider, Layout, theme } from "antd"
 import Image from "next/image"
 import { type ReactNode, useEffect, useState } from "react"
 import { IdleTimerProvider } from "react-idle-timer"
 import { GIANG_VIEN_MENU } from "@/constants/giang-vien-menu"
 import HeaderApp from "@/components/header"
-import packageInfo from "../../../package.json"
 
 const { Header, Content, Footer } = Layout
 
@@ -107,7 +106,11 @@ const GiangVienLayout = ({
           >
             <div className="flex items-center gap-2">
               <SelectTrainingObjectType />
+              <Divider type="vertical" className="bg-primary h-[30px]" />
+              <div className="mr-2 font-bold">Học kỳ</div>
               <TreeSelectSemester />
+            </div>
+            <div className="flex items-center gap-2">
               <ToggleVaiTro />
               <HeaderApp />
             </div>
