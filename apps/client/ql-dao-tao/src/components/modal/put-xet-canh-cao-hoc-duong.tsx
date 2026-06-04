@@ -124,6 +124,17 @@ const PutDisciplinaryWarning = () => {
           data,
           where: { id: input?.id },
         })
+
+      const delta = rest.level - (initialValue?.level || 0)
+      if (delta !== 0) {
+        await updateStudent({
+          where: { id: studentId },
+          data: {
+            disciplinaryWarningLevel: { increment: delta },
+          },
+        })
+      }
+
         message.success("Cập nhật thành công")
       } else {
         await createDisciplinaryWarning({
@@ -134,15 +145,18 @@ const PutDisciplinaryWarning = () => {
             },
           },
         })
-        message.success("Thêm mới thành công")
-      }
-
       await updateStudent({
         where: { id: studentId },
         data: {
-          disciplinaryWarningLevel: rest.level,
+          disciplinaryWarningLevel: {
+            increment: rest.level - (rest.increasedFrom || 0),
+          },
         },
       })
+
+      message.success("Thêm mới thành công")
+    }
+
       onClose()
     } catch (error: any) {
       if (error?.info?.message) {
