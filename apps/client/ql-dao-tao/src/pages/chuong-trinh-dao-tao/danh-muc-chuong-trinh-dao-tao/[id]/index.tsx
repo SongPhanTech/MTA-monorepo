@@ -421,8 +421,6 @@ export default function TrainingProgramSubjects() {
 
   const { mutateAsync: deleteTrainingBlockSubject } = useDeleteTrainingBlockSubject()
   async function handleDeleteTrainingBlockSubject(id: string) {
-    console.log(">>> id:", id)
-
     try {
       showSpinner()
       await deleteTrainingBlockSubject({
