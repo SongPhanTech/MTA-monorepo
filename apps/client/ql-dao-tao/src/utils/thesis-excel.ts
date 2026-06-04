@@ -1,4 +1,9 @@
-import { CouncilRole, ThesisType, TrainingObjectTypes } from "@workspace/db/client"
+import {
+  CouncilRole,
+  type SupervisorRole,
+  ThesisType,
+  TrainingObjectTypes,
+} from "@workspace/db/client"
 import ExcelJS from "exceljs"
 import { saveAs } from "file-saver"
 import { excelTemplate } from "@workspace/libs/api/model"
@@ -27,12 +32,23 @@ interface ExportOptions {
     councilMemberId: string
     amount: number
   }) => Promise<unknown>
-  defaultCouncilPayAmounts?: Array<{
-    role: CouncilRole
-    amount: number | string | { toNumber?: () => number }
-    inAcademy: boolean
-  }>
+  defaultCouncilPayAmounts?: DefaultCouncilPayAmountRow[]
+  defaultSupervisorPayAmounts?: DefaultSupervisorPayAmountRow[]
   ensureSupervisorPaymentsForExport?: (project: any) => Promise<void>
+}
+
+export type DefaultCouncilPayAmountRow = {
+  role: CouncilRole
+  amount: number | string | { toNumber?: () => number }
+  inAcademy: boolean
+  description?: string | null
+}
+
+export type DefaultSupervisorPayAmountRow = {
+  role: SupervisorRole
+  amount: number | string | { toNumber?: () => number }
+  inAcademy: boolean
+  description?: string | null
 }
 
 const resolveSigningDate = (signingDate?: Date | string) =>
@@ -40,7 +56,7 @@ const resolveSigningDate = (signingDate?: Date | string) =>
 const formatAmountWithComma = (amount: number) =>
   Number(amount || 0).toLocaleString("vi-VN", { maximumFractionDigits: 0 })
 
-const readDecimalAmount = (value: unknown): number => {
+export const readDecimalAmount = (value: unknown): number => {
   if (value == null) return 0
   if (typeof value === "number") return value
   if (typeof value === "string") return Number(value) || 0
@@ -48,6 +64,69 @@ const readDecimalAmount = (value: unknown): number => {
     return (value as { toNumber: () => number }).toNumber()
   }
   return Number(value) || 0
+}
+
+const THESIS_PAY_DESCRIPTION = "THESIS"
+
+export function getCouncilDefaultPayAmount(
+  amounts: DefaultCouncilPayAmountRow[] | undefined,
+  role: CouncilRole,
+  inAcademy: boolean
+): number {
+  if (!amounts?.length) return 0
+  const row =
+    amounts.find(
+      (x) =>
+        x.role === role &&
+        x.inAcademy === inAcademy &&
+        (x.description === THESIS_PAY_DESCRIPTION || !x.description)
+    ) ?? amounts.find((x) => x.role === role && x.inAcademy === inAcademy)
+  return row ? readDecimalAmount(row.amount) : 0
+}
+
+export function getSupervisorDefaultPayAmount(
+  amounts: DefaultSupervisorPayAmountRow[] | undefined,
+  role: SupervisorRole,
+  inAcademy: boolean
+): number {
+  if (!amounts?.length) return 0
+  const row =
+    amounts.find(
+      (x) =>
+        x.role === role &&
+        x.inAcademy === inAcademy &&
+        (x.description === THESIS_PAY_DESCRIPTION || !x.description)
+    ) ?? amounts.find((x) => x.role === role && x.inAcademy === inAcademy)
+  return row ? readDecimalAmount(row.amount) : 0
+}
+
+export function resolveCouncilPayAmountsForProject(
+  project: { thesisSession?: { configPayment?: { councilPayAmounts?: DefaultCouncilPayAmountRow[] } } } | null | undefined,
+  fallback: DefaultCouncilPayAmountRow[] = []
+): DefaultCouncilPayAmountRow[] {
+  const embedded = project?.thesisSession?.configPayment?.councilPayAmounts
+  if (embedded?.length) return embedded
+  return fallback
+}
+
+export function resolveSupervisorPayAmountsForProject(
+  project: { thesisSession?: { configPayment?: { supervisorPayAmounts?: DefaultSupervisorPayAmountRow[] } } } | null | undefined,
+  fallback: DefaultSupervisorPayAmountRow[] = []
+): DefaultSupervisorPayAmountRow[] {
+  const embedded = project?.thesisSession?.configPayment?.supervisorPayAmounts
+  if (embedded?.length) return embedded
+  return fallback
+}
+
+export function resolveCouncilMemberPayAmount(
+  member: { role: CouncilRole; payment?: { amount?: unknown } | null },
+  expert: { lecturerId?: string | null; lecturer?: unknown } | null | undefined,
+  councilDefaults: DefaultCouncilPayAmountRow[]
+): number {
+  const recorded = readDecimalAmount(member.payment?.amount)
+  if (recorded > 0) return recorded
+  const inAcademy = !!(expert?.lecturerId || expert?.lecturer)
+  return getCouncilDefaultPayAmount(councilDefaults, member.role, inAcademy)
 }
 /** Phạm vi chuyên gia khi gom dữ liệu giấy mời chấm LV PB (cán bộ trong / ngoài học viện). */
 type GmcLvPbExpertScope = "all" | "inAcademy" | "outsideAcademy"
@@ -2034,6 +2113,10 @@ export const exportThanhToanHoiDongBaoVe = async ({
     message.error("Không có dữ liệu để tạo thanh toán hội đồng bảo vệ")
     return
   }
+  if (!thesisSessionId) {
+    message.warning("Vui lòng chọn đợt xét luận văn trước khi xuất.")
+    return
+  }
   try {
     showSpinner?.()
     const dataConvert = await convertToTthdbvData(
@@ -2146,11 +2229,7 @@ const convertToTthdbvData = async (
     councilMemberId: string
     amount: number
   }) => Promise<unknown>,
-  defaultCouncilPayAmounts: Array<{
-    role: CouncilRole
-    amount: number | string | { toNumber?: () => number }
-    inAcademy: boolean
-  }> = []
+  defaultCouncilPayAmounts: DefaultCouncilPayAmountRow[] = []
 ): Promise<TthdbvData[]> => {
   if (!allStudentsInClasses?.length) return []
   const now = dayjs()
@@ -2158,7 +2237,6 @@ const convertToTthdbvData = async (
     return Boolean(getThesisProjectWithCouncilBySessionId(student, thesisSessionId))
   })
   if (!studentsWithProject.length) return []
-  console.log("studentsWithProject", studentsWithProject)
   const majorMap = new Map<string, any[]>()
   let khoaquanli = ""
 
@@ -2221,19 +2299,11 @@ const convertToTthdbvData = async (
       const name = (getSupervisorName(expert, false, true) as string) || ""
       hdLines.push(`${rolePrefix}: ${name || ""}${org}${roleSuffix}`)
 
-      let rawAmount = Number(m.payment?.amount || 0)
-      const hasPaymentRecord = !!m.payment
+      const councilDefaults = resolveCouncilPayAmountsForProject(project, defaultCouncilPayAmounts)
+      let rawAmount = resolveCouncilMemberPayAmount(m, expert, councilDefaults)
+      const hasPaymentRecord = readDecimalAmount(m.payment?.amount) > 0
       if (!hasPaymentRecord && m.id && !createdCouncilPaymentIds.has(m.id)) {
-        const inAcademy = !!expert?.lecturerId
-        const defaultPay = defaultCouncilPayAmounts.find(
-          (x) => x.role === m.role && x.inAcademy === inAcademy
-        )
-        const defaultAmount =
-          typeof defaultPay?.amount === "number"
-            ? defaultPay.amount
-            : typeof defaultPay?.amount === "string"
-              ? Number(defaultPay.amount)
-              : Number(defaultPay?.amount?.toNumber?.() || 0)
+        const defaultAmount = rawAmount
         if (createCouncilPaymentRecord && defaultAmount > 0) {
           await createCouncilPaymentRecord({
             councilMemberId: m.id,
@@ -2274,7 +2344,7 @@ const convertToTthdbvData = async (
     const firstItem = studentsWithProject.find(
       (s) => s.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name === majorName
     )
-    const project = firstItem?.thesisRegistrations?.[0]?.thesisProject
+    const project = getThesisProjectBySessionId(firstItem, thesisSessionId)
     const nguoiki = project?.thesisSession?.chief?.trim() || ""
     const dotXet = project?.thesisSession?.name || ""
 
@@ -2442,6 +2512,7 @@ export const exportThongKeCbThamGiaHd = async ({
   thesisSessionId,
   hideSpinner,
   message,
+  defaultCouncilPayAmounts = [],
 }: ExportOptions) => {
   if (!allStudentsInClasses?.length) {
     message.error("Không có dữ liệu để xuất thống kê cán bộ tham gia HĐ")
@@ -2463,7 +2534,11 @@ export const exportThongKeCbThamGiaHd = async ({
   }
   try {
     showSpinner?.()
-    const dataConvert = convertToThongKeCbThamGiaHdData(project)
+    const dataConvert = convertToThongKeCbThamGiaHdData(
+      project,
+      thesisSessionId,
+      defaultCouncilPayAmounts
+    )
     if (dataConvert.length === 0) {
       message.error("Chưa có dữ liệu để xuất thống kê cán bộ tham gia HĐ")
       return
@@ -2501,15 +2576,22 @@ export const exportThongKeCbThamGiaHd = async ({
     hideSpinner?.()
   }
 }
-const convertToThongKeCbThamGiaHdData = (allStudentsInClasses: any[]): ThongKeCbThamGiaHdData[] => {
+const convertToThongKeCbThamGiaHdData = (
+  allStudentsInClasses: any[],
+  thesisSessionId?: string,
+  defaultCouncilPayAmounts: DefaultCouncilPayAmountRow[] = []
+): ThongKeCbThamGiaHdData[] => {
   if (!allStudentsInClasses || allStudentsInClasses.length === 0) return []
 
   const studentsWithProject = allStudentsInClasses.filter((student) =>
-    Boolean(student?.thesisRegistrations?.find((reg: any) => reg?.thesisProject?.council))
+    Boolean(getThesisProjectWithCouncilBySessionId(student, thesisSessionId))
   )
   if (!studentsWithProject.length) {
     return []
   }
+
+  const firstProject = getThesisProjectBySessionId(studentsWithProject[0], thesisSessionId)
+  const councilDefaults = resolveCouncilPayAmountsForProject(firstProject, defaultCouncilPayAmounts)
 
   const expertStats = new Map<string, ThongKeCbThamGiaHdTable>()
 
@@ -2522,9 +2604,7 @@ const convertToThongKeCbThamGiaHdData = (allStudentsInClasses: any[]): ThongKeCb
   let totalThanhToan = 0
 
   studentsWithProject.forEach((student) => {
-    const project = student?.thesisRegistrations?.find(
-      (reg: any) => reg?.thesisProject?.council
-    )?.thesisProject
+    const project = getThesisProjectBySessionId(student, thesisSessionId)
     if (!project?.council?.members?.length) return
 
     project.council.members.forEach((member: any) => {
@@ -2535,7 +2615,7 @@ const convertToThongKeCbThamGiaHdData = (allStudentsInClasses: any[]): ThongKeCb
         expert?.bankAccountNumber || expert?.lecturer?.userProfile?.bankAccountNumber || ""
       const tennganhang = expert?.bankName || expert?.lecturer?.userProfile?.bankName || ""
       if (!expert?.id) return
-      const thanhtoan = Number(member.payment.amount) || 0
+      const thanhtoan = resolveCouncilMemberPayAmount(member, expert, councilDefaults)
 
       if (!expertStats.has(expert.id)) {
         expertStats.set(expert.id, {
@@ -2598,9 +2678,7 @@ const convertToThongKeCbThamGiaHdData = (allStudentsInClasses: any[]): ThongKeCb
   if (!firstStudentWithProject) {
     return []
   }
-  const firstProject = firstStudentWithProject?.thesisRegistrations?.find(
-    (reg: any) => reg?.thesisProject?.council
-  )?.thesisProject
+  const headerProject = getThesisProjectBySessionId(firstStudentWithProject, thesisSessionId)
 
   const result: ThongKeCbThamGiaHdData[] = [
     {
@@ -2608,7 +2686,7 @@ const convertToThongKeCbThamGiaHdData = (allStudentsInClasses: any[]): ThongKeCb
         khoaTitle: firstStudentWithProject.fixedClass?.trainingCourse?.name?.toUpperCase() || "",
         khoa: firstStudentWithProject.fixedClass?.trainingCourse?.name || "",
         chuyenNganh: "Tất cả chuyên ngành",
-        dotXet: firstProject?.thesisSession?.name || "",
+        dotXet: headerProject?.thesisSession?.name || "",
         tong: totalParticipations,
         tongChuTich: totalCT,
         tongThuky: totalTK,
@@ -2633,6 +2711,10 @@ export const exportThanhToanHuongDanTrongHv = async ({
 }: ExportOptions) => {
   if (!allStudentsInClasses?.length) {
     message.error("Không có dữ liệu để xuất thanh toán hướng dẫn")
+    return []
+  }
+  if (!thesisSessionId) {
+    message.warning("Vui lòng chọn đợt xét luận văn trước khi xuất.")
     return []
   }
   try {

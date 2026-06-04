@@ -91,6 +91,9 @@ import {
   exportThongKeCbHdlv,
   exportThongKeCbThamGiaHd,
   exportThongKeCoQuanDonViCanBoNgoaiHv,
+  getSupervisorDefaultPayAmount,
+  readDecimalAmount,
+  resolveSupervisorPayAmountsForProject,
 } from "@/utils/thesis-excel"
 import type { FilterProps } from "@constants/type"
 
@@ -748,6 +751,12 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
     include: {
       trainingObjectType: true,
       trainingCourse: true,
+      configPayment: {
+        include: {
+          councilPayAmounts: true,
+          supervisorPayAmounts: true,
+        },
+      },
     },
   })
   const trainingCourse = thesisSessionData?.find(
@@ -1240,37 +1249,25 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
   const [signingDate, setSigningDate] = useState<ReturnType<typeof dayjs>>(dayjs())
   const [signMoneyAmount, setSignMoneyAmount] = useState<number>(100000)
 
-  const readDecimalAmount = (v: unknown): number => {
-    if (v == null) return 0
-    if (typeof v === "number") return v
-    if (typeof v === "string") return Number(v) || 0
-    if (typeof (v as { toNumber?: () => number }).toNumber === "function") {
-      return (v as { toNumber: () => number }).toNumber()
-    }
-    return Number(v) || 0
-  }
+  const getDefaultSupervisorPay = useCallback(
+    (project: any, role: SupervisorRole, inAcademy: boolean) => {
+      const amounts = resolveSupervisorPayAmountsForProject(project, defaultSupervisorPayAmounts)
+      return getSupervisorDefaultPayAmount(amounts, role, inAcademy)
+    },
+    [defaultSupervisorPayAmounts]
+  )
 
-  const getDefaultSupervisorPay = (
-    role: SupervisorRole,
-    inAcademy: boolean,
-    thesisDesc: "THESIS" | "PROJECT"
-  ) => {
-    const row =
-      defaultSupervisorPayAmounts.find(
-        (x) => x.role === role && x.inAcademy === inAcademy && x.description === thesisDesc
-      ) ||
-      defaultSupervisorPayAmounts.find(
-        (x) => x.role === role && x.inAcademy === inAcademy && !x.description
-      )
-    return row ? readDecimalAmount(row.amount) : 0
-  }
+  const warnMissingThesisPaymentConfig = useCallback(() => {
+    if (thesisConfigPaymentSessionId) return true
+    message.warning(
+      "Đợt xét chưa gán định mức thanh toán. Vui lòng cấu hình tại Cấu hình thanh toán luận văn hoặc khi tạo đợt xét."
+    )
+    return false
+  }, [thesisConfigPaymentSessionId, message])
 
   const ensureSupervisorPaymentsForExport = useCallback(
     async (project: any) => {
       if (!project?.id) return
-
-      const thesisDesc: "THESIS" | "PROJECT" =
-        project.thesisType === ThesisType.THESIS ? "THESIS" : "PROJECT"
 
       const supExpert = project.supervisor || null
       const coExpert = project.coSupervisor || null
@@ -1295,8 +1292,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
       if (supExpert && coExpert) {
         const inAcSup = !!(supExpert.lecturer || supExpert.lecturerId)
         const inAcCo = !!(coExpert.lecturer || coExpert.lecturerId)
-        const amtSup = getDefaultSupervisorPay(SupervisorRole.SUPERVISOR, inAcSup, thesisDesc)
-        const amtCo = getDefaultSupervisorPay(SupervisorRole.CO_SUPERVISOR, inAcCo, thesisDesc)
+        const amtSup = getDefaultSupervisorPay(project, SupervisorRole.SUPERVISOR, inAcSup)
+        const amtCo = getDefaultSupervisorPay(project, SupervisorRole.CO_SUPERVISOR, inAcCo)
 
         const supMissing =
           !project.supervisorPaymentId || paymentAmount(project.supervisorPayment) <= 0
@@ -1382,7 +1379,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
       if (!expert) return
 
       const inAc = !!(expert.lecturer || expert.lecturerId)
-      const amtSingle = getDefaultSupervisorPay(SupervisorRole.SINGLE, inAc, thesisDesc)
+      const amtSingle = getDefaultSupervisorPay(project, SupervisorRole.SINGLE, inAc)
 
       const singleMissing =
         !project.singleSupervisorPaymentId || paymentAmount(project.singleSupervisorPayment) <= 0
@@ -1449,8 +1446,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
     },
     [
       createSupervisorPaymentRecord,
-      defaultSupervisorPayAmounts,
       deleteSupervisorPaymentRecord,
+      getDefaultSupervisorPay,
       updateThesisProject,
     ]
   )
@@ -1609,7 +1606,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
     {
       id: 11,
       label: "Thanh toán hội đồng bảo vệ",
-      onClick: async () =>
+      onClick: async () => {
+        if (!warnMissingThesisPaymentConfig()) return
         await exportThanhToanHoiDongBaoVe({
           allStudentsInClasses,
           thesisSessionId: searchParams.thesisSessionId,
@@ -1626,7 +1624,8 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                 },
               },
             }),
-        }),
+        })
+      },
     },
     {
       id: 12,
@@ -1650,7 +1649,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
       id: 13,
       label: "Thanh toán hướng dẫn",
       onClick: async () => {
-        console.log("students", students)
+        if (!warnMissingThesisPaymentConfig()) return
         await exportThanhToanHuongDanTrongHv({
           allStudentsInClasses,
           showSpinner,
@@ -1683,6 +1682,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
           thesisSessionId: searchParams.thesisSessionId,
           hideSpinner,
           message,
+          defaultCouncilPayAmounts,
         }),
     },
     {
@@ -1772,7 +1772,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
     const isChief = signRole === "chief" ? true : false
     if (selected.needSign && !signerName) {
       message.warning(
-        `Chưa có họ tên ${signRole === "chief" ? "Trưởng phòng" : "Phó phòng"} sau đại học trong đợt xét.`
+        `Chưa có họ tên ${signRole === "chief" ? "Trưởng phòng" : "Phó trưởng phòng"} sau đại học trong đợt xét.`
       )
       return
     }
@@ -1871,7 +1871,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
                 Trưởng phòng sau đại học: <strong>{chiefDisplay}</strong>
               </Radio>
               <Radio value="deputy">
-                Phó phòng sau đại học: <strong>{deputyDisplay}</strong>
+                Phó trưởng phòng sau đại học: <strong>{deputyDisplay}</strong>
               </Radio>
             </Radio.Group>
           </>

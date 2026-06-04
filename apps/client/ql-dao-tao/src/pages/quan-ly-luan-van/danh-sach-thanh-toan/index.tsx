@@ -88,7 +88,7 @@ export default function PaymentRecordPage() {
     }
 
     const councilMemberWhere: Record<string, unknown> = {
-      ...buildCouncilThesisWhere(thesisSessionId),
+      council: { is: buildCouncilThesisWhere(thesisSessionId) },
     }
 
     if (filters.name) {
