@@ -1,5 +1,5 @@
 import { type MenuItem, ROUTER_PATH } from "@workspace/router"
-import { CalendarDays, GraduationCap, House, Users } from "lucide-react"
+import { CalendarDays, ChartLine, GraduationCap, House, Users } from "lucide-react"
 
 const P = ROUTER_PATH.QL_DAO_TAO
 
@@ -22,36 +22,10 @@ export const GIANG_VIEN_MENU: MenuItem[] = [
     path: P.LICH_TUAN_THANG,
   },
   {
-    id: "gv-quan-ly-lop",
-    label: "Quản lý lớp quản lý",
-    icon: Users,
-    children: [
-      {
-        id: "gv-ho-so-sv",
-        label: "Hồ sơ sinh viên / học viên",
-        path: P.QUAN_LY_HO_SO_QL_SINH_VIEN,
-      },
-      {
-        id: "gv-ren-luyen-ky",
-        label: "Điểm rèn luyện học kỳ",
-        path: P.QUAN_LY_DIEM_QL_REN_LUYEN,
-      },
-      {
-        id: "gv-ren-luyen-nam",
-        label: "Điểm rèn luyện năm học",
-        path: P.QUAN_LY_DIEM_QL_REN_LUYEN_THEO_NAM,
-      },
-      {
-        id: "gv-tong-ket-ky",
-        label: "Tổng kết học kỳ",
-        path: P.QUAN_LY_DIEM_TONG_KET_KY_HOC,
-      },
-      {
-        id: "gv-tong-ket-nam",
-        label: "Tổng kết năm học",
-        path: P.QUAN_LY_DIEM_TONG_KET_NAM_HOC,
-      },
-    ],
+    id: "gv-khao-sat",
+    label: "Khảo sát",
+    icon: ChartLine,
+    path: P.KHAO_SAT,
   },
   {
     id: "gv-giang-day",
