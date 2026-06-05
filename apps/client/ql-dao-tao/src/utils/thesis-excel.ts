@@ -3390,7 +3390,6 @@ export const exportDsChuyenGia = async ({
     message.error("Không có dữ liệu để xuất danh sách chuyên gia")
     return []
   }
-
   try {
     const dataConvert = convertToDsChuyenGiaData(
       allStudentsInClasses,

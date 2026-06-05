@@ -154,7 +154,26 @@ function normalizeCouncilExpertId(id: unknown): string | null {
   return String(id)
 }
 
-/** Các cán bộ hội đồng bảo vệ (đã chọn) không được trùng chuyên gia. */
+function getSupervisorExpertIdsFromRow(row: Record<string, unknown>): string[] {
+  return [row.supervisor, row.coSupervisor]
+    .map((id) => normalizeCouncilExpertId(id))
+    .filter((id): id is string => id !== null)
+}
+
+function getCouncilExpertIdsFromRow(row: Record<string, unknown>): string[] {
+  return THESIS_COUNCIL_EXPERT_FIELDS.map((field) => normalizeCouncilExpertId(row[field])).filter(
+    (id): id is string => id !== null
+  )
+}
+
+/** GVHD (chính/phụ) không được trùng bất kỳ thành viên hội đồng bảo vệ nào. */
+export function hasSupervisorConflictWithCouncilRow(row: Record<string, unknown>): boolean {
+  const supervisorIds = getSupervisorExpertIdsFromRow(row)
+  if (!supervisorIds.length) return false
+  const councilIds = new Set(getCouncilExpertIdsFromRow(row))
+  return supervisorIds.some((id) => councilIds.has(id))
+}
+
 export function hasDuplicateCouncilExperts(row: Record<string, unknown>): boolean {
   const ids = THESIS_COUNCIL_EXPERT_FIELDS.map((field) =>
     normalizeCouncilExpertId(row[field])
@@ -823,9 +842,16 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
           message.error("GVHD 1 và GVHD 2 không được trùng nhau")
           return prev
         }
+        const nextRow = { ...row, [field]: value }
+        if (hasSupervisorConflictWithCouncilRow(nextRow)) {
+          message.error(
+            "Giáo viên hướng dẫn không được trùng với các thành viên hội đồng bảo vệ"
+          )
+          return prev
+        }
         return {
           ...prev,
-          [rowId]: { ...row, [field]: value },
+          [rowId]: nextRow,
         }
       })
       return
@@ -836,6 +862,12 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
         const nextRow = { ...row, [field]: value }
         if (hasDuplicateCouncilExperts(nextRow)) {
           message.error("Các cán bộ trong hội đồng bảo vệ không được trùng nhau")
+          return prev
+        }
+        if (hasSupervisorConflictWithCouncilRow(nextRow)) {
+          message.error(
+            "Giáo viên hướng dẫn không được trùng với các thành viên hội đồng bảo vệ"
+          )
           return prev
         }
         return {
@@ -1005,6 +1037,13 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
         hideSpinner()
         return
       }
+      if (hasSupervisorConflictWithCouncilRow(rowData)) {
+        message.error(
+          `Giáo viên hướng dẫn không được trùng với các thành viên hội đồng bảo vệ (mã học viên: ${studentRecord?.code || studentId}).`
+        )
+        hideSpinner()
+        return
+      }
     }
     if (role === "Khoa" || role === "P7") {
       for (const studentId of selectedRowKeys) {
@@ -1047,6 +1086,9 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
 
         if (hasDuplicateCouncilExperts(rowData)) {
           throw new Error("DUPLICATE_COUNCIL")
+        }
+        if (hasSupervisorConflictWithCouncilRow(rowData)) {
+          throw new Error("SUPERVISOR_COUNCIL_CONFLICT")
         }
 
         const description = `Ngôn ngữ: ${rowData.language} - Luận án/Đề án: ${rowData.type}`
@@ -1152,6 +1194,10 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
         message.error("GVHD 1 và GVHD 2 không được trùng nhau")
       } else if (error?.message === "DUPLICATE_COUNCIL") {
         message.error("Các cán bộ trong hội đồng bảo vệ không được trùng nhau")
+      } else if (error?.message === "SUPERVISOR_COUNCIL_CONFLICT") {
+        message.error(
+          "Giáo viên hướng dẫn không được trùng với các thành viên hội đồng bảo vệ"
+        )
       } else {
         message.error("Đã xảy ra lỗi khi lưu hàng loạt, vui lòng kiểm tra lại")
       }
