@@ -16,10 +16,18 @@ import {
   formatDefenseSessionClock,
   getSupervisorName,
 } from "../pages/quan-ly-luan-van/dm-luan-van/index"
+import {
+  exportThesisCouncilPayments,
+  exportThesisSupervisorPayments,
+  syncThesisCouncilPayments,
+  syncThesisSupervisorPayments,
+} from "@workspace/libs/api/thesis-payment"
 import { docxTemplate } from "./docx-template"
+import { buildSupervisorPaymentRows } from "./thesis-supervisor-payment-export"
 interface ExportOptions {
   thesisSessionId?: string
   allStudentsInClasses: any[]
+  studentIds?: string[]
   showSpinner: () => void
   hideSpinner: () => void
   message: any // Antd message instance
@@ -28,13 +36,9 @@ interface ExportOptions {
   isChief?: boolean
   signingDate?: Date | string
   moneyAmount?: number
-  createCouncilPaymentRecord?: (payload: {
-    councilMemberId: string
-    amount: number
-  }) => Promise<unknown>
   defaultCouncilPayAmounts?: DefaultCouncilPayAmountRow[]
   defaultSupervisorPayAmounts?: DefaultSupervisorPayAmountRow[]
-  ensureSupervisorPaymentsForExport?: (project: any) => Promise<void>
+  recreateAllPayments?: boolean
 }
 
 export type DefaultCouncilPayAmountRow = {
@@ -101,7 +105,10 @@ export function getSupervisorDefaultPayAmount(
 }
 
 export function resolveCouncilPayAmountsForProject(
-  project: { thesisSession?: { configPayment?: { councilPayAmounts?: DefaultCouncilPayAmountRow[] } } } | null | undefined,
+  project:
+    | { thesisSession?: { configPayment?: { councilPayAmounts?: DefaultCouncilPayAmountRow[] } } }
+    | null
+    | undefined,
   fallback: DefaultCouncilPayAmountRow[] = []
 ): DefaultCouncilPayAmountRow[] {
   const embedded = project?.thesisSession?.configPayment?.councilPayAmounts
@@ -110,7 +117,14 @@ export function resolveCouncilPayAmountsForProject(
 }
 
 export function resolveSupervisorPayAmountsForProject(
-  project: { thesisSession?: { configPayment?: { supervisorPayAmounts?: DefaultSupervisorPayAmountRow[] } } } | null | undefined,
+  project:
+    | {
+        thesisSession?: {
+          configPayment?: { supervisorPayAmounts?: DefaultSupervisorPayAmountRow[] }
+        }
+      }
+    | null
+    | undefined,
   fallback: DefaultSupervisorPayAmountRow[] = []
 ): DefaultSupervisorPayAmountRow[] {
   const embedded = project?.thesisSession?.configPayment?.supervisorPayAmounts
@@ -2102,12 +2116,12 @@ const downloadFile = (blob: Blob, fileName: string) => {
 
 export const exportThanhToanHoiDongBaoVe = async ({
   allStudentsInClasses,
+  studentIds,
   thesisSessionId,
   showSpinner,
   hideSpinner,
   message,
-  createCouncilPaymentRecord,
-  defaultCouncilPayAmounts = [],
+  recreateAllPayments = false,
 }: ExportOptions) => {
   if (!allStudentsInClasses?.length) {
     message.error("Không có dữ liệu để tạo thanh toán hội đồng bảo vệ")
@@ -2117,37 +2131,40 @@ export const exportThanhToanHoiDongBaoVe = async ({
     message.warning("Vui lòng chọn đợt xét luận văn trước khi xuất.")
     return
   }
+  const scopeStudentIds = studentIds?.length
+    ? studentIds
+    : allStudentsInClasses.map((student) => student.id).filter(Boolean)
   try {
     showSpinner?.()
-    const dataConvert = await convertToTthdbvData(
-      allStudentsInClasses,
+    const syncResponse = await syncThesisCouncilPayments({
       thesisSessionId,
-      createCouncilPaymentRecord,
-      defaultCouncilPayAmounts
-    )
-    if (dataConvert.length === 0) {
-      message.error("Chưa có dữ liệu để tạo thanh toán hội đồng bảo vệ")
+      studentIds: scopeStudentIds,
+      recreateAll: recreateAllPayments,
+    })
+    if (syncResponse.status !== 200) {
+      message.error(
+        "message" in syncResponse.data
+          ? syncResponse.data.message
+          : "Đồng bộ thanh toán hội đồng thất bại"
+      )
       return
     }
-    const items = dataConvert.map((item, idx) => ({
-      ...item.data,
-      "ngắt trang": idx === dataConvert.length - 1 ? "" : "ngắt trang",
-    }))
-    const payload = {
-      fileName: "ThanhToanHoiDongBaoVe",
-      path: "ThanhToanHoiDongBV.docx",
-      prefix: "mta/luan-van",
-      data: {
-        items: items,
-      },
-    }
-    const response = await docxTemplate(payload)
-    if (response.status !== 200) {
-      message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
+
+    const exportResponse = await exportThesisCouncilPayments({
+      thesisSessionId,
+      studentIds: scopeStudentIds,
+    })
+    if (exportResponse.status !== 200 || !(exportResponse.data instanceof Blob)) {
+      message.error(
+        exportResponse.data &&
+          typeof exportResponse.data === "object" &&
+          "message" in exportResponse.data
+          ? String(exportResponse.data.message)
+          : "Xuất file thanh toán hội đồng thất bại"
+      )
       return
     }
-    const blob = response.data
-    downloadFile(blob, "ThanhToanHoiDongBaoVe.docx")
+    downloadFile(exportResponse.data, "ThanhToanHoiDongBaoVe.docx")
     message.success("Xuất file thành công")
   } catch (error) {
     message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
@@ -2176,46 +2193,6 @@ const getThesisProjectBySessionId = (student: any, thesisSessionId?: string) => 
   })?.thesisProject
 }
 
-const buildSupervisorPaymentRows = (project: any) => {
-  const rows: Array<{
-    expert: any
-    amount: number
-    bankAccountNumber: string
-    bankName: string
-  }> = []
-
-  if (project.singleSupervisorPaymentId || project.singleSupervisorPayment) {
-    const expert = project.supervisor || project.coSupervisor
-    if (expert) {
-      rows.push({
-        expert,
-        amount: readDecimalAmount(project.singleSupervisorPayment?.amount),
-        bankAccountNumber: expert.bankAccountNumber || "",
-        bankName: expert.bankName || "",
-      })
-    }
-    return rows
-  }
-
-  if (project.supervisor) {
-    rows.push({
-      expert: project.supervisor,
-      amount: readDecimalAmount(project.supervisorPayment?.amount),
-      bankAccountNumber: project.supervisor.bankAccountNumber || "",
-      bankName: project.supervisor.bankName || "",
-    })
-  }
-  if (project.coSupervisor) {
-    rows.push({
-      expert: project.coSupervisor,
-      amount: readDecimalAmount(project.coSupervisorPayment?.amount),
-      bankAccountNumber: project.coSupervisor.bankAccountNumber || "",
-      bankName: project.coSupervisor.bankName || "",
-    })
-  }
-  return rows
-}
-
 const getThesisProjectWithCouncilBySessionId = (student: any, thesisSessionId?: string) => {
   const thesisProject = getThesisProjectBySessionId(student, thesisSessionId)
   if (!thesisProject?.council?.members?.length) return undefined
@@ -2229,8 +2206,17 @@ const convertToTthdbvData = async (
     councilMemberId: string
     amount: number
   }) => Promise<unknown>,
-  defaultCouncilPayAmounts: DefaultCouncilPayAmountRow[] = []
+  defaultCouncilPayAmounts: DefaultCouncilPayAmountRow[] = [],
+  paymentOptions: {
+    recreateAllPayments?: boolean
+    upsertCouncilPaymentRecord?: (payload: {
+      councilMemberId: string
+      amount: number
+      existingPaymentId?: string
+    }) => Promise<unknown>
+  } = {}
 ): Promise<TthdbvData[]> => {
+  const { recreateAllPayments = false, upsertCouncilPaymentRecord } = paymentOptions
   if (!allStudentsInClasses?.length) return []
   const now = dayjs()
   const studentsWithProject = allStudentsInClasses.filter((student) => {
@@ -2300,18 +2286,38 @@ const convertToTthdbvData = async (
       hdLines.push(`${rolePrefix}: ${name || ""}${org}${roleSuffix}`)
 
       const councilDefaults = resolveCouncilPayAmountsForProject(project, defaultCouncilPayAmounts)
-      let rawAmount = resolveCouncilMemberPayAmount(m, expert, councilDefaults)
-      const hasPaymentRecord = readDecimalAmount(m.payment?.amount) > 0
-      if (!hasPaymentRecord && m.id && !createdCouncilPaymentIds.has(m.id)) {
-        const defaultAmount = rawAmount
-        if (createCouncilPaymentRecord && defaultAmount > 0) {
-          await createCouncilPaymentRecord({
+      const inAcademy = !!(expert?.lecturerId || expert?.lecturer)
+      const defaultAmount = getCouncilDefaultPayAmount(councilDefaults, m.role, inAcademy)
+
+      let rawAmount = defaultAmount
+      if (recreateAllPayments) {
+        if (m.id && upsertCouncilPaymentRecord && !createdCouncilPaymentIds.has(m.id)) {
+          const existingPaymentId = m.payment?.id as string | undefined
+          const upserted = (await upsertCouncilPaymentRecord({
             councilMemberId: m.id,
             amount: defaultAmount,
-          })
-          rawAmount = defaultAmount
-          m.payment = { amount: defaultAmount }
+            existingPaymentId,
+          })) as { id?: string } | undefined
+          m.payment = {
+            ...(m.payment || {}),
+            id: upserted?.id ?? existingPaymentId,
+            amount: defaultAmount,
+          }
           createdCouncilPaymentIds.add(m.id)
+        }
+      } else {
+        rawAmount = resolveCouncilMemberPayAmount(m, expert, councilDefaults)
+        const hasPaymentRecord = readDecimalAmount(m.payment?.amount) > 0
+        if (!hasPaymentRecord && m.id && !createdCouncilPaymentIds.has(m.id)) {
+          if (createCouncilPaymentRecord && defaultAmount > 0) {
+            await createCouncilPaymentRecord({
+              councilMemberId: m.id,
+              amount: defaultAmount,
+            })
+            rawAmount = defaultAmount
+            m.payment = { amount: defaultAmount }
+            createdCouncilPaymentIds.add(m.id)
+          }
         }
       }
       studentTotal += rawAmount
@@ -2703,11 +2709,12 @@ const convertToThongKeCbThamGiaHdData = (
 }
 export const exportThanhToanHuongDanTrongHv = async ({
   allStudentsInClasses,
+  studentIds,
   thesisSessionId,
   showSpinner,
   hideSpinner,
   message,
-  ensureSupervisorPaymentsForExport,
+  recreateAllPayments = false,
 }: ExportOptions) => {
   if (!allStudentsInClasses?.length) {
     message.error("Không có dữ liệu để xuất thanh toán hướng dẫn")
@@ -2717,47 +2724,40 @@ export const exportThanhToanHuongDanTrongHv = async ({
     message.warning("Vui lòng chọn đợt xét luận văn trước khi xuất.")
     return []
   }
+  const scopeStudentIds = studentIds?.length
+    ? studentIds
+    : allStudentsInClasses.map((student) => student.id).filter(Boolean)
   try {
     showSpinner?.()
-    const { groups, studentsInSession, studentsWithSupervisor } =
-      await convertToThanhToanHuongDanTrongHvData(
-        allStudentsInClasses,
-        thesisSessionId,
-        ensureSupervisorPaymentsForExport
+    const syncResponse = await syncThesisSupervisorPayments({
+      thesisSessionId,
+      studentIds: scopeStudentIds,
+      recreateAll: recreateAllPayments,
+    })
+    if (syncResponse.status !== 200) {
+      message.error(
+        "message" in syncResponse.data
+          ? syncResponse.data.message
+          : "Đồng bộ thanh toán hướng dẫn thất bại"
       )
-    if (groups.length === 0) {
-      if (!thesisSessionId) {
-        message.warning("Vui lòng chọn đợt xét luận văn trước khi xuất.")
-      } else if (studentsInSession > 0 && studentsWithSupervisor === 0) {
-        message.error(
-          `Có ${studentsInSession} học viên trong đợt đã chọn nhưng chưa gán GVHD (hoặc chưa load đủ thông tin GVHD/thanh toán) để xuất file.`
-        )
-      } else {
-        message.error("Chưa có dữ liệu để xuất thanh toán hướng dẫn")
-      }
       return []
     }
-    const items = groups.map((item, idx) => ({
-      ...item.data,
-      tongTienSo: formatAmountWithComma(item.data.tongTienSo),
-      "ngắt trang": idx === groups.length - 1 ? "" : "ngắt trang",
-    }))
-    const fileName = "ThanhToanHuongDan"
-    const payload = {
-      fileName: fileName,
-      path: "ThanhToanHuongDanTrongHV.docx",
-      prefix: "mta/luan-van",
-      data: {
-        items: items,
-      },
-    }
-    const response = await docxTemplate(payload)
-    if (response.status !== 200) {
-      message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
+
+    const exportResponse = await exportThesisSupervisorPayments({
+      thesisSessionId,
+      studentIds: scopeStudentIds,
+    })
+    if (exportResponse.status !== 200 || !(exportResponse.data instanceof Blob)) {
+      message.error(
+        exportResponse.data &&
+          typeof exportResponse.data === "object" &&
+          "message" in exportResponse.data
+          ? String(exportResponse.data.message)
+          : "Xuất file thanh toán hướng dẫn thất bại"
+      )
       return []
     }
-    const blob = response.data
-    downloadFile(blob, `${fileName}.docx`)
+    downloadFile(exportResponse.data, "ThanhToanHuongDan.docx")
     message.success("Xuất file thành công")
   } catch (error) {
     message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
@@ -2768,7 +2768,12 @@ export const exportThanhToanHuongDanTrongHv = async ({
 const convertToThanhToanHuongDanTrongHvData = async (
   allStudentsInClasses: any[],
   thesisSessionId?: string,
-  ensureSupervisorPaymentsForExport?: (project: any) => Promise<void>
+  ensureSupervisorPaymentsForExport?: (
+    projects: any[],
+    options?: { recreateAll?: boolean }
+  ) => Promise<void>,
+  defaultSupervisorPayAmounts: DefaultSupervisorPayAmountRow[] = [],
+  recreateAllPayments = false
 ): Promise<{
   groups: ThanhToanHuongDanTrongHvData[]
   studentsInSession: number
@@ -2785,16 +2790,23 @@ const convertToThanhToanHuongDanTrongHvData = async (
   if (!studentsWithProject.length) {
     return { groups: [], studentsInSession: 0, studentsWithSupervisor: 0 }
   }
+
+  const projectsInSession = studentsWithProject
+    .map((student) => getThesisProjectBySessionId(student, thesisSessionId))
+    .filter((project): project is NonNullable<typeof project> => Boolean(project))
+
+  if (ensureSupervisorPaymentsForExport) {
+    await ensureSupervisorPaymentsForExport(projectsInSession, {
+      recreateAll: recreateAllPayments,
+    })
+  }
+
   let studentsWithSupervisor = 0
   for (const student of studentsWithProject) {
     const project = getThesisProjectBySessionId(student, thesisSessionId)
     if (!project) continue
 
-    if (ensureSupervisorPaymentsForExport) {
-      await ensureSupervisorPaymentsForExport(project)
-    }
-
-    const supervisorRows = buildSupervisorPaymentRows(project)
+    const supervisorRows = buildSupervisorPaymentRows(project, defaultSupervisorPayAmounts)
 
     if (!supervisorRows.length) continue
     studentsWithSupervisor += 1

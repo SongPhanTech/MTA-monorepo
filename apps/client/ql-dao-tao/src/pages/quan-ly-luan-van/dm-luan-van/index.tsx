@@ -13,16 +13,12 @@ import {
   CouncilMember,
   CouncilProposalStatus,
   CouncilRole,
-  PaymentStatus,
-  SupervisorRole,
   ThesisProjectStatus,
   ThesisType,
 } from "@workspace/db/client"
 import { queryClient } from "@api/index"
 import {
   useCountStudent,
-  useCreatePaymentRecord,
-  useCreateSupervisorPaymentRecord,
   useDeleteManyCouncil,
   useDeleteManyCouncilMember,
   useDeleteManyDecision,
@@ -34,9 +30,7 @@ import {
   useDeleteManyStudentThesisRegistration,
   useDeleteManySupervisorPaymentRecord,
   useDeleteManyThesisProject,
-  useDeleteSupervisorPaymentRecord,
   useFindManyDefaultCouncilRolePayAmount,
-  useFindManyDefaultSupervisorPayAmount,
   useFindManyDefenseSession,
   useFindManyDM_DonVi,
   useFindManyExpertProfile,
@@ -49,6 +43,7 @@ import {
   useUpdateThesisSession,
 } from "@workspace/db/hooks"
 import { whereOrganization } from "@workspace/libs/constants"
+import { WalletOutlined } from "@ant-design/icons"
 import { dayjs, useTrainingObjectTypeStore } from "@workspace/ui"
 import {
   Button,
@@ -66,7 +61,6 @@ import {
   Space,
   Tag,
 } from "antd"
-import Decimal from "decimal.js"
 import { SquarePen } from "lucide-react"
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
@@ -91,9 +85,6 @@ import {
   exportThongKeCbHdlv,
   exportThongKeCbThamGiaHd,
   exportThongKeCoQuanDonViCanBoNgoaiHv,
-  getSupervisorDefaultPayAmount,
-  readDecimalAmount,
-  resolveSupervisorPayAmountsForProject,
 } from "@/utils/thesis-excel"
 import type { FilterProps } from "@constants/type"
 
@@ -783,7 +774,6 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
   const { mutateAsync: deleteManyThesisProject } = useDeleteManyThesisProject()
   const { mutateAsync: updateThesisProject } = useUpdateThesisProject()
   const { mutateAsync: updateManyThesisProject } = useUpdateManyThesisProject()
-  const { mutateAsync: createPaymentRecord } = useCreatePaymentRecord()
   const { data: defaultCouncilPayAmounts = [] } = useFindManyDefaultCouncilRolePayAmount(
     {
       where: {
@@ -793,17 +783,6 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
     },
     { enabled: !!searchParams.thesisSessionId }
   )
-  const { data: defaultSupervisorPayAmounts = [] } = useFindManyDefaultSupervisorPayAmount(
-    {
-      where: {
-        configPaymentSessionId: thesisConfigPaymentSessionId,
-        description: "THESIS",
-      },
-    },
-    { enabled: !!searchParams.thesisSessionId }
-  )
-  const { mutateAsync: createSupervisorPaymentRecord } = useCreateSupervisorPaymentRecord()
-  const { mutateAsync: deleteSupervisorPaymentRecord } = useDeleteSupervisorPaymentRecord()
   const isWithinGvhdSupervisorEditWindow = (): boolean => {
     const deadline = selectedThesisSession?.topicEntryDeadline
     if (!deadline) return true
@@ -1249,14 +1228,6 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
   const [signingDate, setSigningDate] = useState<ReturnType<typeof dayjs>>(dayjs())
   const [signMoneyAmount, setSignMoneyAmount] = useState<number>(100000)
 
-  const getDefaultSupervisorPay = useCallback(
-    (project: any, role: SupervisorRole, inAcademy: boolean) => {
-      const amounts = resolveSupervisorPayAmountsForProject(project, defaultSupervisorPayAmounts)
-      return getSupervisorDefaultPayAmount(amounts, role, inAcademy)
-    },
-    [defaultSupervisorPayAmounts]
-  )
-
   const warnMissingThesisPaymentConfig = useCallback(() => {
     if (thesisConfigPaymentSessionId) return true
     message.warning(
@@ -1265,192 +1236,65 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
     return false
   }, [thesisConfigPaymentSessionId, message])
 
-  const ensureSupervisorPaymentsForExport = useCallback(
-    async (project: any) => {
-      if (!project?.id) return
-
-      const supExpert = project.supervisor || null
-      const coExpert = project.coSupervisor || null
-
-      if (!supExpert && !coExpert) return
-
-      const paymentAmount = (p: any) => readDecimalAmount(p?.amount)
-
-      const deletePaymentHard = async (id?: string | null) => {
-        if (!id) return
-        try {
-          await deleteSupervisorPaymentRecord({ where: { id } })
-        } catch {
-          // đã xoá hoặc không tồn tại
-        }
+  const askRecreatePayments = (): Promise<boolean | null> =>
+    new Promise((resolve) => {
+      let settled = false
+      const settle = (value: boolean | null) => {
+        if (settled) return
+        settled = true
+        resolve(value)
       }
 
-      const oldSupPayId = project.supervisorPaymentId as string | undefined
-      const oldCoPayId = project.coSupervisorPaymentId as string | undefined
-      const oldSinglePayId = project.singleSupervisorPaymentId as string | undefined
-
-      if (supExpert && coExpert) {
-        const inAcSup = !!(supExpert.lecturer || supExpert.lecturerId)
-        const inAcCo = !!(coExpert.lecturer || coExpert.lecturerId)
-        const amtSup = getDefaultSupervisorPay(project, SupervisorRole.SUPERVISOR, inAcSup)
-        const amtCo = getDefaultSupervisorPay(project, SupervisorRole.CO_SUPERVISOR, inAcCo)
-
-        const supMissing =
-          !project.supervisorPaymentId || paymentAmount(project.supervisorPayment) <= 0
-        const coMissing =
-          !project.coSupervisorPaymentId || paymentAmount(project.coSupervisorPayment) <= 0
-        const mustClearSingle = !!oldSinglePayId
-
-        if (!supMissing && !coMissing && !mustClearSingle) return
-
-        if (!supMissing && !coMissing && mustClearSingle) {
-          await updateThesisProject({
-            where: { id: project.id },
-            data: {
-              singleSupervisorPayment: { disconnect: true },
-            },
-          })
-          if (oldSinglePayId) await deletePaymentHard(oldSinglePayId)
-          project.singleSupervisorPaymentId = null
-          project.singleSupervisorPayment = null
-          return
-        }
-
-        let newSupId = oldSupPayId
-        let newCoId = oldCoPayId
-
-        if (supMissing) {
-          const created = await createSupervisorPaymentRecord({
-            data: {
-              amount: new Decimal(amtSup),
-              status: PaymentStatus.PENDING,
-              thesisProjects: { connect: { id: project.id } },
-            },
-          })
-          if (!created?.id) return
-          newSupId = created.id
-        }
-
-        if (coMissing) {
-          const created = await createSupervisorPaymentRecord({
-            data: {
-              amount: new Decimal(amtCo),
-              status: PaymentStatus.PENDING,
-              coThesisProjects: { connect: { id: project.id } },
-            },
-          })
-          if (!created?.id) return
-          newCoId = created.id
-        }
-
-        await updateThesisProject({
-          where: { id: project.id },
-          data: {
-            singleSupervisorPayment: { disconnect: true },
-            supervisorPayment: newSupId ? { connect: { id: newSupId } } : { disconnect: true },
-            coSupervisorPayment: newCoId ? { connect: { id: newCoId } } : { disconnect: true },
-          },
-        })
-
-        if (mustClearSingle && oldSinglePayId) {
-          await deletePaymentHard(oldSinglePayId)
-        }
-        if (supMissing && oldSupPayId && newSupId && oldSupPayId !== newSupId) {
-          await deletePaymentHard(oldSupPayId)
-        }
-        if (coMissing && oldCoPayId && newCoId && oldCoPayId !== newCoId) {
-          await deletePaymentHard(oldCoPayId)
-        }
-
-        project.singleSupervisorPaymentId = null
-        project.singleSupervisorPayment = null
-        project.supervisorPaymentId = newSupId
-        project.coSupervisorPaymentId = newCoId
-        project.supervisorPayment = newSupId
-          ? { ...(project.supervisorPayment || {}), id: newSupId, amount: amtSup }
-          : null
-        project.coSupervisorPayment = newCoId
-          ? { ...(project.coSupervisorPayment || {}), id: newCoId, amount: amtCo }
-          : null
-        return
-      }
-
-      const expert = supExpert || coExpert
-      if (!expert) return
-
-      const inAc = !!(expert.lecturer || expert.lecturerId)
-      const amtSingle = getDefaultSupervisorPay(project, SupervisorRole.SINGLE, inAc)
-
-      const singleMissing =
-        !project.singleSupervisorPaymentId || paymentAmount(project.singleSupervisorPayment) <= 0
-      const mustClearDual = !!(oldSupPayId || oldCoPayId)
-
-      if (!singleMissing && !mustClearDual) return
-
-      if (!singleMissing && mustClearDual) {
-        await updateThesisProject({
-          where: { id: project.id },
-          data: {
-            supervisorPayment: { disconnect: true },
-            coSupervisorPayment: { disconnect: true },
-          },
-        })
-        if (oldSupPayId) await deletePaymentHard(oldSupPayId)
-        if (oldCoPayId) await deletePaymentHard(oldCoPayId)
-        project.supervisorPaymentId = null
-        project.coSupervisorPaymentId = null
-        project.supervisorPayment = null
-        project.coSupervisorPayment = null
-        return
-      }
-
-      let newSingleId = oldSinglePayId
-
-      if (singleMissing) {
-        const created = await createSupervisorPaymentRecord({
-          data: {
-            amount: new Decimal(amtSingle),
-            status: PaymentStatus.PENDING,
-            singleSupervisorPayment: { connect: { id: project.id } },
-          },
-        })
-        if (!created?.id) return
-        newSingleId = created.id
-      }
-
-      await updateThesisProject({
-        where: { id: project.id },
-        data: {
-          supervisorPayment: { disconnect: true },
-          coSupervisorPayment: { disconnect: true },
-          singleSupervisorPayment: newSingleId
-            ? { connect: { id: newSingleId } }
-            : { disconnect: true },
+      const modal = Modal.confirm({
+        width: 600,
+        centered: true,
+        closable: true,
+        maskClosable: false,
+        icon: null,
+        title: (
+          <Flex align="center" gap={12}>
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-blue-50 text-lg text-blue-500">
+              <WalletOutlined />
+            </span>
+            <span className="text-base font-semibold text-gray-900">Tạo lại thanh toán?</span>
+          </Flex>
+        ),
+        content: (
+          <p className="mb-0 mt-1 pl-[52px] text-sm text-gray-500">
+            Cập nhật theo định mức hiện tại cho mọi bản ghi.
+          </p>
+        ),
+        styles: {
+          content: { padding: "20px 24px 12px" },
+          footer: { padding: "12px 24px 20px", marginTop: 0 },
+        },
+        footer: (
+          <Flex justify="flex-end" gap={8}>
+            <Button
+              onClick={() => {
+                modal.destroy()
+                settle(false)
+              }}
+            >
+              Không
+            </Button>
+            <Button
+              type="primary"
+              onClick={() => {
+                modal.destroy()
+                settle(true)
+              }}
+            >
+              Có
+            </Button>
+          </Flex>
+        ),
+        onCancel: () => {
+          modal.destroy()
+          settle(null)
         },
       })
-
-      if (oldSupPayId) await deletePaymentHard(oldSupPayId)
-      if (oldCoPayId) await deletePaymentHard(oldCoPayId)
-      if (singleMissing && oldSinglePayId && newSingleId && oldSinglePayId !== newSingleId) {
-        await deletePaymentHard(oldSinglePayId)
-      }
-
-      project.supervisorPaymentId = null
-      project.coSupervisorPaymentId = null
-      project.supervisorPayment = null
-      project.coSupervisorPayment = null
-      project.singleSupervisorPaymentId = newSingleId
-      project.singleSupervisorPayment = newSingleId
-        ? { ...(project.singleSupervisorPayment || {}), id: newSingleId, amount: amtSingle }
-        : null
-    },
-    [
-      createSupervisorPaymentRecord,
-      deleteSupervisorPaymentRecord,
-      getDefaultSupervisorPay,
-      updateThesisProject,
-    ]
-  )
+    })
 
   type SignerPayload = {
     signerName: string
@@ -1608,22 +1452,15 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
       label: "Thanh toán hội đồng bảo vệ",
       onClick: async () => {
         if (!warnMissingThesisPaymentConfig()) return
+        const recreateChoice = await askRecreatePayments()
+        if (recreateChoice === null) return
         await exportThanhToanHoiDongBaoVe({
           allStudentsInClasses,
           thesisSessionId: searchParams.thesisSessionId,
           showSpinner,
           hideSpinner,
           message,
-          defaultCouncilPayAmounts,
-          createCouncilPaymentRecord: async ({ councilMemberId, amount }) =>
-            await createPaymentRecord({
-              data: {
-                amount,
-                councilMember: {
-                  connect: { id: councilMemberId },
-                },
-              },
-            }),
+          recreateAllPayments: recreateChoice,
         })
       },
     },
@@ -1650,13 +1487,15 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
       label: "Thanh toán hướng dẫn",
       onClick: async () => {
         if (!warnMissingThesisPaymentConfig()) return
+        const recreateChoice = await askRecreatePayments()
+        if (recreateChoice === null) return
         await exportThanhToanHuongDanTrongHv({
           allStudentsInClasses,
           showSpinner,
           thesisSessionId: searchParams.thesisSessionId,
           hideSpinner,
           message,
-          ensureSupervisorPaymentsForExport,
+          recreateAllPayments: recreateChoice,
         })
       },
     },
