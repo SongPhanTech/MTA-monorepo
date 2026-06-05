@@ -401,14 +401,19 @@ export function formatLecturerName(
     }
   }> | null
 ) {
-  return (
-    [lecturer?.userProfile?.academicRankType?.sMa, lecturer?.userProfile?.academicDegreeType?.sMa]
-      .filter(Boolean)
-      .join(".") +
-    " " +
-    lecturer?.userProfile?.fullname +
-    `${lecturer?.code ? ` - ${lecturer?.code}` : ""}`
-  )
+  if (!lecturer) return ""
+
+  const prefix = [
+    lecturer.userProfile?.academicRankType?.sMa,
+    lecturer.userProfile?.academicDegreeType?.sMa,
+  ]
+    .filter(Boolean)
+    .join(".")
+
+  const fullname = lecturer.userProfile?.fullname ?? ""
+  const codeSuffix = lecturer.code ? ` - ${lecturer.code}` : ""
+
+  return `${prefix ? `${prefix} ` : ""}${fullname}${codeSuffix}`.trim()
 }
 
 export const calcFinalScore = (

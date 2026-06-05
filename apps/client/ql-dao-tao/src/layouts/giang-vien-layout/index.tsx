@@ -121,7 +121,7 @@ const GiangVienLayout = ({
             ) : (
               <div
                 className={cn(
-                  "min-h-[calc(100vh-64px-24px)] bg-white rounded-lg shadow-sm p-4",
+                  "min-h-[calc(100vh-120px)] bg-white rounded-lg shadow-sm p-4",
                   className
                 )}
                 style={{ background: colorBgContainer }}
