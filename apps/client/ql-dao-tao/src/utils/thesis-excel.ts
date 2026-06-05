@@ -215,8 +215,8 @@ interface DsnlvtvTable {
 }
 interface ThongKeCbThamGiaHdData {
   data: {
-    khoa: string
-    khoaTitle: string
+    trainingCourse: string
+    trainingCourseTitle: string
     chuyenNganh: string
     dotXet: string
     tong: number
@@ -648,8 +648,8 @@ export const getExpertSupervisionStats = (allStudentsInClasses: any[]) => {
     if (!stats) {
       stats = {
         expertId: expertId,
-        name: (getSupervisorName(expert, false, true) as string) || "",
-        sDonvi: expert?.workplace || expert?.lecturer?.organization?.sMa || "",
+        name: (getSupervisorName(expert, false, false) as string) || "",
+        sDonvi: expert?.workplace || expert?.lecturer?.organization?.sTen || "",
         stk: expert?.bankAccountNumber || expert?.lecturer?.userProfile?.bankAccountNumber || "",
         tennganhang: expert?.bankName || expert?.lecturer?.userProfile?.bankName || "",
         GVHD1Student: 0,
@@ -2615,8 +2615,8 @@ const convertToThongKeCbThamGiaHdData = (
 
     project.council.members.forEach((member: any) => {
       const expert = member.expert
-      const name = (getSupervisorName(expert, false, true) as string) || ""
-      const donViQuanLi = expert?.workplace || expert?.lecturer?.organization?.sMa || ""
+      const name = (getSupervisorName(expert, false, false) as string) || ""
+      const donViQuanLi = expert?.workplace || expert?.lecturer?.organization?.sTen || ""
       const stk =
         expert?.bankAccountNumber || expert?.lecturer?.userProfile?.bankAccountNumber || ""
       const tennganhang = expert?.bankName || expert?.lecturer?.userProfile?.bankName || ""
@@ -2689,8 +2689,9 @@ const convertToThongKeCbThamGiaHdData = (
   const result: ThongKeCbThamGiaHdData[] = [
     {
       data: {
-        khoaTitle: firstStudentWithProject.fixedClass?.trainingCourse?.name?.toUpperCase() || "",
-        khoa: firstStudentWithProject.fixedClass?.trainingCourse?.name || "",
+        trainingCourseTitle:
+          firstStudentWithProject.fixedClass?.trainingCourse?.name?.toUpperCase() || "",
+        trainingCourse: firstStudentWithProject.fixedClass?.trainingCourse?.name || "",
         chuyenNganh: "Tất cả chuyên ngành",
         dotXet: headerProject?.thesisSession?.name || "",
         tong: totalParticipations,
