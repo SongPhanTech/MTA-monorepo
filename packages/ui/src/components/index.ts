@@ -28,6 +28,7 @@ dayjs.extend(isBetween)
 dayjs.locale("vi")
 export { dayjs }
 export * from "./commons"
+export * from "./cong-giang-vien"
 export * from "./icon"
 export * from "./lich-tuan"
 export * from "./search-system"
