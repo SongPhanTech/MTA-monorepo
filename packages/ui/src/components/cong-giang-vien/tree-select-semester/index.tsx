@@ -4,7 +4,7 @@ import { TreeSelect as AntdTreeSelect, type TreeSelectProps as AntdTreeSelectPro
 import type React from "react"
 import { useMemo } from "react"
 
-export interface TreeNodeType {
+interface TreeNodeType {
   value: string
   title: React.ReactNode
   children?: TreeNodeType[]
@@ -53,7 +53,7 @@ const TreeSelectFloat = ({ label, className, ...props }: TTreeSelectFloat) => {
       treeNodeFilterProp="title"
       filterTreeNode={(input, treeNode) => fuzzyMatch(input, treeNode?.title?.toString() || "")}
       notFoundContent="Không có dữ liệu"
-      className={`${label ? "h-10 w-full" : className ?? ""}`}
+      className={`${label ? "h-10 w-full" : (className ?? "")}`}
       {...props}
     />
   )

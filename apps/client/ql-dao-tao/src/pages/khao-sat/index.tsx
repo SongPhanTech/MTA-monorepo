@@ -4,7 +4,7 @@ import { Button, SelectFloat, TreeSelectFloat } from "@workspace/ui"
 import { Breadcrumb, Input, Typography } from "antd"
 import { RefreshCcw, Search } from "lucide-react"
 import { useState } from "react"
-import { StatCardsKhaoSat } from "./_components/stat-cards-khao-sat"
+import StatCardsKhaoSat from "./_components/stat-cards-khao-sat"
 
 const KhaoSatGiangVien = () => {
   const [semesterId, setSemesterId] = useState<string>()

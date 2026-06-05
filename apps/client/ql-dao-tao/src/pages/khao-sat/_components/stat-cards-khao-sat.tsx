@@ -94,4 +94,4 @@ const StatCardsKhaoSat = ({ thongKe, isLoading }: StatCardsKhaoSatProps) => {
   )
 }
 
-export { StatCardsKhaoSat }
+export default StatCardsKhaoSat
