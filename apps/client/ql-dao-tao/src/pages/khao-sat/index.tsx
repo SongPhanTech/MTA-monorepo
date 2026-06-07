@@ -4,11 +4,11 @@ import { Button, SelectFloat, TreeSelectFloat } from "@workspace/ui"
 import { Breadcrumb, Input, Typography } from "antd"
 import { RefreshCcw, Search } from "lucide-react"
 import { useState } from "react"
-import StatCardsKhaoSat from "./_components/stat-cards-khao-sat"
+import StatCardsKhaoSat from "@components/cong-giang-vien/khao-sat/stat-cards-khao-sat"
 
 const KhaoSatGiangVien = () => {
   const [semesterId, setSemesterId] = useState<string>()
-  const { tongSo, thongKe, isLoading } = useKhaoSatGiangVien(semesterId)
+  const { tongSo, thongKe } = useKhaoSatGiangVien(semesterId)
 
   return (
     <div>
@@ -31,7 +31,6 @@ const KhaoSatGiangVien = () => {
           sapDienRa: thongKe.sapDienRa,
           daKetThuc: thongKe.daKetThuc,
         }}
-        isLoading={isLoading}
       />
 
       <div className="flex items-center gap-4">
@@ -42,7 +41,7 @@ const KhaoSatGiangVien = () => {
           size="small"
         />
 
-        <SelectFloat label="Trạng thái" placeholder="Chọn trạng thái" className="w-40 text-sm" />
+        <SelectFloat label="Trạng thái" className="w-40 text-sm" />
 
         <TreeSelectFloat
           label="Năm học"

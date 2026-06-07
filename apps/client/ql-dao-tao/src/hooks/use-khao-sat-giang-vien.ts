@@ -20,7 +20,7 @@ const useKhaoSatGiangVien = (semesterId?: string) => {
   const { data: session } = useSession()
   const profileId = session?.sDM_NhanVienId || "fa330b1b-4326-4018-b3d9-3cd79344f660"
 
-  const { data, isLoading } = useGetSurveysOfProfile(
+  const { data } = useGetSurveysOfProfile(
     profileId as string,
     { limit: 100, semesterId },
     { query: { enabled: !!profileId } }
@@ -41,7 +41,7 @@ const useKhaoSatGiangVien = (semesterId?: string) => {
     return ketQua
   }, [danhSach])
 
-  return { danhSach, tongSo, thongKe, isLoading: !!profileId && isLoading }
+  return { danhSach, tongSo, thongKe, isLoading: !!profileId }
 }
 
 export { useKhaoSatGiangVien }

@@ -75,6 +75,7 @@ export default {
     "DANH_MUC_XEP_LOAI_HOC_LUC": "/danh-muc/xep-loai-hoc-luc",
     "DANH_MUC_XEP_LOAI_TOT_NGHIEP": "/danh-muc/xep-loai-tot-nghiep",
     "GIANG_VIEN": "/giang-vien",
+    "HO_SO_CA_NHAN_THONG_TIN_CA_NHAN": "/ho-so-ca-nhan/thong-tin-ca-nhan",
     "HOME": "/home",
     "INDEX": "/",
     "KE_HOACH_GIAO_DUC": "/ke-hoach-giao-duc",

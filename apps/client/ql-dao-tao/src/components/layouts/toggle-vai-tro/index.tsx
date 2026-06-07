@@ -4,7 +4,6 @@ import { ROUTER_PATH } from "@workspace/router"
 import { Button } from "antd"
 import { Repeat } from "lucide-react"
 import { useRouter } from "next/router"
-import { GIANG_VIEN_HOME } from "@/constants/giang-vien-menu"
 import { setLayoutMode, useLayoutMode } from "@/stores/layout-mode"
 
 // Nút "Đổi vai trò": chuyển qua lại giữa Cổng Giảng viên và layout quản trị.
@@ -26,7 +25,7 @@ const ToggleVaiTro = () => {
       router.push(ROUTER_PATH.QL_DAO_TAO.HOME)
     } else {
       setLayoutMode("giang-vien")
-      router.push(GIANG_VIEN_HOME)
+      router.push(ROUTER_PATH.QL_DAO_TAO.GIANG_VIEN)
     }
   }
 

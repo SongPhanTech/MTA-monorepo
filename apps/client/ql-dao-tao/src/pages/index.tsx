@@ -33,7 +33,6 @@ import { getRuntimeEnv } from "@workspace/libs/utils"
 import { ROUTER_PATH } from "@workspace/router"
 import { useRouter } from "next/router"
 import { useEffect } from "react"
-import { GIANG_VIEN_HOME } from "@/constants/giang-vien-menu"
 import { setLayoutMode, useLayoutMode } from "@/stores/layout-mode"
 
 const IndexPage = () => {
@@ -52,7 +51,7 @@ const IndexPage = () => {
 
     if (isGiangVien && mode !== "quan-tri") {
       setLayoutMode("giang-vien")
-      router.push(GIANG_VIEN_HOME)
+      router.push(ROUTER_PATH.QL_DAO_TAO.GIANG_VIEN)
       return
     }
 

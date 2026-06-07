@@ -11,7 +11,6 @@ interface ThongKeKhaoSat {
 
 interface StatCardsKhaoSatProps {
   thongKe: ThongKeKhaoSat
-  isLoading?: boolean
 }
 
 interface ItemThongKe {
@@ -23,19 +22,13 @@ interface ItemThongKe {
   mauChu: string
 }
 
-const StatCardsKhaoSat = ({ thongKe, isLoading }: StatCardsKhaoSatProps) => {
+const StatCardsKhaoSat = ({ thongKe }: StatCardsKhaoSatProps) => {
   const items: ItemThongKe[] = [
     {
       key: "tat-ca",
       icon: <ClipboardList size={22} />,
       soLuong: thongKe.tongSo,
-      nhan: (
-        <>
-          Tất cả
-          <br />
-          khảo sát
-        </>
-      ),
+      nhan: "Tất cả khảo sát",
       bgIcon: "bg-cgv-green",
       mauChu: "text-cgv-green-dark",
     },
@@ -69,21 +62,17 @@ const StatCardsKhaoSat = ({ thongKe, isLoading }: StatCardsKhaoSatProps) => {
     <Row gutter={[16, 16]} className="my-4">
       {items.map((item) => (
         <Col key={item.key} xs={24} sm={12} lg={6}>
-          <Card size="small" className="h-full" styles={{ body: { padding: 16 } }}>
-            <div className="flex items-center gap-4">
+          <Card size="small" className="h-full" styles={{ body: { padding: 12 } }}>
+            <div className="flex items-center gap-3">
               <div
-                className={`flex h-12 w-12 min-w-12 items-center justify-center rounded-xl ${item.bgIcon} ${item.mauChu}`}
+                className={`flex h-10 w-10 min-w-10 items-center justify-center rounded-xl ${item.bgIcon} ${item.mauChu}`}
               >
                 {item.icon}
               </div>
               <div className="flex flex-col">
-                {isLoading ? (
-                  <Skeleton.Button active size="small" style={{ width: 40, height: 28 }} />
-                ) : (
-                  <span className={`text-2xl font-bold leading-tight ${item.mauChu}`}>
-                    {String(item.soLuong).padStart(2, "0")}
-                  </span>
-                )}
+                <span className={`text-2xl font-bold leading-tight ${item.mauChu}`}>
+                  {String(item.soLuong).padStart(2, "0")}
+                </span>
                 <span className="text-sm text-gray-500">{item.nhan}</span>
               </div>
             </div>
