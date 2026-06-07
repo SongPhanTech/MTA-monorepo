@@ -25,7 +25,7 @@ const ToggleVaiTro = () => {
       router.push(ROUTER_PATH.QL_DAO_TAO.HOME)
     } else {
       setLayoutMode("giang-vien")
-      router.push(ROUTER_PATH.QL_DAO_TAO.GIANG_VIEN)
+      router.push(ROUTER_PATH.QL_DAO_TAO.CONG_GIANG_VIEN_GIANG_VIEN)
     }
   }
 

@@ -1,0 +1,130 @@
+/* Cổng giảng viên — navbar & sidebar (layout mới, tách riêng khỏi custom.css) */
+.giang-vien-header {
+  background: #004725 !important;
+  height: 64px !important;
+  line-height: normal !important;
+  padding-inline: 16px !important;
+}
+
+.giang-vien-header-menu-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 40px !important;
+  min-width: 40px !important;
+  height: 40px !important;
+  padding: 0 !important;
+  line-height: 0 !important;
+  border-radius: 8px !important;
+  color: #fff !important;
+  background: rgba(0, 0, 0, 0.22) !important;
+}
+
+.giang-vien-header-menu-btn .ant-btn-icon {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin: 0 !important;
+  line-height: 0 !important;
+}
+
+.giang-vien-header-menu-btn:hover {
+  color: #fff !important;
+  background: rgba(255, 255, 255, 0.16) !important;
+}
+
+.giang-vien-header-logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.14);
+  flex-shrink: 0;
+}
+
+.giang-vien-toggle-role {
+  background: #fff !important;
+  color: #004725 !important;
+  border: none !important;
+  border-radius: 8px !important;
+  font-weight: 600;
+  height: 36px;
+}
+
+.giang-vien-toggle-role:hover {
+  background: #f0fdf4 !important;
+  color: #004725 !important;
+}
+
+.giang-vien-header-app {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.giang-vien-sider {
+  background: #f3f4f6 !important;
+  border-right: 1px solid #e5e7eb;
+}
+
+.giang-vien-sider .ant-layout-sider-children {
+  background: #f3f4f6;
+}
+
+.giang-vien-sider-menu.ant-menu {
+  background: transparent !important;
+  border-inline-end: none !important;
+  padding: 8px;
+}
+
+.giang-vien-sider-menu .ant-menu-item,
+.giang-vien-sider-menu .ant-menu-submenu-title {
+  text-transform: uppercase;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: #6b7280 !important;
+  border-radius: 8px !important;
+  margin: 2px 0 !important;
+  width: 100%;
+  height: 44px !important;
+  line-height: 44px !important;
+}
+
+.giang-vien-sider-menu .ant-menu-item .ant-menu-item-icon,
+.giang-vien-sider-menu .ant-menu-submenu-title .ant-menu-item-icon {
+  color: #9ca3af !important;
+}
+
+.giang-vien-sider-menu .ant-menu-item-selected {
+  background: #ebf6ed !important;
+  color: #004725 !important;
+}
+
+.giang-vien-sider-menu .ant-menu-item-selected .ant-menu-item-icon,
+.giang-vien-sider-menu .ant-menu-item-selected a {
+  color: #004725 !important;
+}
+
+.giang-vien-sider-menu .ant-menu-submenu-selected > .ant-menu-submenu-title {
+  color: #004725 !important;
+}
+
+.giang-vien-sider-menu .ant-menu-sub.ant-menu-inline {
+  background: transparent !important;
+}
+
+.giang-vien-sider-menu .ant-menu-sub .ant-menu-item {
+  text-transform: none;
+  font-size: 13px;
+  font-weight: 500;
+  padding-left: 44px !important;
+  height: 38px !important;
+  line-height: 38px !important;
+}
+
+.giang-vien-menu-badge .ant-badge-count {
+  box-shadow: none;
+}

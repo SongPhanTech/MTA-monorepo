@@ -42,6 +42,8 @@ export default {
     "CHUONG_TRINH_DAO_TAO_DANH_SACH_MON_HOC": "/chuong-trinh-dao-tao/danh-sach-mon-hoc",
     "CHUONG_TRINH_DAO_TAO_KHOI_KIEN_THUC_CTDT": "/chuong-trinh-dao-tao/khoi-kien-thuc-ctdt",
     "CHUONG_TRINH_DAO_TAO_QL_MON_HOC": "/chuong-trinh-dao-tao/ql-mon-hoc",
+    "CONG_GIANG_VIEN_GIANG_VIEN": "/cong-giang-vien/giang-vien",
+    "CONG_GIANG_VIEN": "/cong-giang-vien",
     "DANG_KY_HOC_DANG_KY_HOC_OFFLINE": "/dang-ky-hoc/dang-ky-hoc-offline",
     "DANG_KY_HOC_DOT_DANG_KY_HOC_ONLINE_ID": "/dang-ky-hoc/dot-dang-ky-hoc-online/[id]",
     "DANG_KY_HOC_DOT_DANG_KY_HOC_ONLINE": "/dang-ky-hoc/dot-dang-ky-hoc-online",
