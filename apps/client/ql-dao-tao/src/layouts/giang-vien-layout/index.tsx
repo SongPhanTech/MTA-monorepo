@@ -1,6 +1,6 @@
 import logo_mta from "@assets/images/daotao.svg"
 import SiderGiangVien from "@components/layouts/sider-giang-vien"
-import ToggleVaiTro from "@components/layouts/toggle-vai-tro"
+// import ToggleVaiTro from "@components/layouts/toggle-vai-tro"
 import { cn } from "@lib/utils"
 import { CONFIG_KEY } from "@workspace/constant"
 import { useFindUniqueConfig } from "@workspace/db/hooks"
@@ -111,7 +111,7 @@ const GiangVienLayout = ({
               <TreeSelectSemester />
             </div>
             <div className="flex items-center gap-2">
-              <ToggleVaiTro />
+              {/* <ToggleVaiTro /> */}
               <HeaderApp />
             </div>
           </Header>

@@ -6,7 +6,7 @@ const useGiangVien = () => {
   const { data: me } = useSession()
   const profileId = me?.sDM_NhanVienId || "fa330b1b-4326-4018-b3d9-3cd79344f660"
 
-  const { data, isLoading } = useFindUniqueUserProfile(
+  const { data } = useFindUniqueUserProfile(
     {
       where: { id: profileId ?? "" },
       select: { bLaGiangVien: true },
@@ -16,7 +16,6 @@ const useGiangVien = () => {
 
   return {
     isGiangVien: !!data?.bLaGiangVien,
-    isLoading: !!profileId && isLoading,
   }
 }
 

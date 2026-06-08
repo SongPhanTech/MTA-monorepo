@@ -8,32 +8,32 @@ import { setLayoutMode, useLayoutMode } from "@/stores/layout-mode"
 
 // Nút "Đổi vai trò": chuyển qua lại giữa Cổng Giảng viên và layout quản trị.
 // Chỉ hiển thị khi người dùng vừa là giảng viên vừa có quyền quản trị.
-const ToggleVaiTro = () => {
-  const router = useRouter()
-  const mode = useLayoutMode()
-  const { isGiangVien } = useGiangVien()
-  const permissions = usePermissions()
-  const hasAdminAccess = permissions.length > 0
+// const ToggleVaiTro = () => {
+//   const router = useRouter()
+//   const mode = useLayoutMode()
+//   const { isGiangVien } = useGiangVien()
+//   const permissions = usePermissions()
+//   const hasAdminAccess = permissions.length > 0
 
-  if (!isGiangVien || !hasAdminAccess) return null
+//   if (!isGiangVien || !hasAdminAccess) return null
 
-  const dangOGiangVien = mode === "giang-vien"
+//   const dangOGiangVien = mode === "giang-vien"
 
-  const handleToggle = () => {
-    if (dangOGiangVien) {
-      setLayoutMode("quan-tri")
-      router.push(ROUTER_PATH.QL_DAO_TAO.HOME)
-    } else {
-      setLayoutMode("giang-vien")
-      router.push(ROUTER_PATH.QL_DAO_TAO.CONG_GIANG_VIEN_GIANG_VIEN)
-    }
-  }
+//   const handleToggle = () => {
+//     if (dangOGiangVien) {
+//       setLayoutMode("quan-tri")
+//       router.push(ROUTER_PATH.QL_DAO_TAO.HOME)
+//     } else {
+//       setLayoutMode("giang-vien")
+//       router.push(ROUTER_PATH.QL_DAO_TAO.CONG_GIANG_VIEN_GIANG_VIEN)
+//     }
+//   }
 
-  return (
-    <Button icon={<Repeat size={14} className="align-middle" />} onClick={handleToggle}>
-      {dangOGiangVien ? "Vào trang quản trị" : "Đổi vai trò"}
-    </Button>
-  )
-}
+//   return (
+//     <Button icon={<Repeat size={14} className="align-middle" />} onClick={handleToggle}>
+//       {dangOGiangVien ? "Vào trang quản trị" : "Đổi vai trò"}
+//     </Button>
+//   )
+// }
 
-export default ToggleVaiTro
+// export default ToggleVaiTro

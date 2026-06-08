@@ -5,7 +5,7 @@ import SiderCongGiangVien, {
   CONG_GIANG_VIEN_SIDER_COLLAPSED_WIDTH,
   CONG_GIANG_VIEN_SIDER_WIDTH,
 } from "@components/layouts/sider-cong-giang-vien"
-import ToggleVaiTroCongGiangVien from "@components/layouts/toggle-vai-tro-cong-giang-vien"
+// import ToggleVaiTroCongGiangVien from "@components/layouts/toggle-vai-tro-cong-giang-vien"
 import { CONG_GIANG_VIEN_MENU } from "@constants/cong-giang-vien-menu"
 import { cn } from "@lib/utils"
 import { CONFIG_KEY } from "@workspace/constant"
@@ -86,7 +86,7 @@ const CongGiangVienLayout = ({
           </div>
 
           <div className="flex shrink-0 items-center gap-3">
-            <ToggleVaiTroCongGiangVien />
+            {/* <ToggleVaiTroCongGiangVien /> */}
             <GiangVienHeaderApp className="giang-vien-header-app" />
           </div>
         </Header>
