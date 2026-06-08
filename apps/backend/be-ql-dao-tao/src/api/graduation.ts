@@ -2402,9 +2402,7 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
               thirdSupervisor: true,
               defenseRecord: true,
               thesisSession: true,
-            },
-          },
-          council: {
+              council: {
             include: {
               members: {
                 include: {
@@ -2417,6 +2415,8 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
                   },
                 },
               },
+            },
+          },
             },
           },
         },
@@ -2445,7 +2445,8 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
   }
 
   const signerInfo = parseSignerInfo(signerName || "")
-  const pDateParts = getReportDateParts(printDate || new Date())
+  const pDateRaw = printDate ? printDate.split("T")[0] : new Date()
+  const pDateParts = getReportDateParts(pDateRaw)
 
   const councilRoleVi: Record<string, string> = {
     CHAIRMAN: "Chủ tịch",
@@ -2526,9 +2527,6 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
             totalPoints4 += safeNumber(conversion.base4) * credits
           }
         }
-        console.log(
-          `Record ${idx + 1}: score=${score}, credits=${credits}, conversion=${conversion ? conversion.base4 : "N/A"}`
-        )
         return {
           stt: idx + 1,
           ten_hoc_phan: safeString(record.subjectVersion?.subject?.name),
@@ -2554,20 +2552,46 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
           : 0
       const gpa4 = safeNumber(rawGpa4)
 
-      const councilMembers = (tR?.council?.members || []).map((m) => {
-        const expert = m.expert
-        const rank = safeString(expert?.academicRankType?.sTen)
-        const degree = safeString(expert?.academicDegreeType?.sTen)
+      const roleOrder: Record<string, number> = {
+        CHAIRMAN: 1,
+        SECRETARY: 2,
+        REVIEWER_1: 3,
+        REVIEWER_2: 4,
+        MEMBER: 5,
+      }
 
-        const title = [rank, degree].filter(Boolean).join(".")
+      const chucViByRole: Record<string, string> = {
+        CHAIRMAN: "Chủ tịch",
+        SECRETARY: "Thư ký",
+        REVIEWER_1: "Ủy viên",
+        REVIEWER_2: "Ủy viên",
+        MEMBER: "Ủy viên",
+      }
 
-        return {
-          chuc_vi: safeString(title),
-          ten_day_du: safeString(expert?.name),
-          don_vi: safeString(expert?.organization),
-          vai_tro_hoi_dong: safeString(councilRoleVi[m.role] || m.role),
-        }
-      })
+      const vaiTroByRole: Record<string, string> = {
+        CHAIRMAN: "",
+        SECRETARY: "",
+        REVIEWER_1: "Phản biện 1",
+        REVIEWER_2: "Phản biện 2",
+        MEMBER: "",
+      }
+
+      const councilMembers = [...(tP?.council?.members || [])]
+        .sort((a, b) => (roleOrder[a.role] ?? 99) - (roleOrder[b.role] ?? 99))
+        .map((m, idx) => {
+          const expert = m.expert
+          const rank = safeString(expert?.academicRankType?.sTen)
+          const degree = safeString(expert?.academicDegreeType?.sTen)
+          const title = [rank, degree].filter(Boolean).join(".")
+          const chucVi = chucViByRole[m.role] ?? "Ủy viên"
+
+          return {
+            chuc_vi: `${idx + 1}. ${chucVi}`,
+            ten_day_du: [title, safeString(expert?.name)].filter(Boolean).join(" "),
+            don_vi: safeString(expert?.organization),
+            vai_tro_hoi_dong: vaiTroByRole[m.role] ?? "",
+          }
+        })
 
       const supervisors = [
         tP?.primarySupervisor?.userProfile?.fullname,
@@ -2636,7 +2660,7 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
   }
 
   try {
-    const templateBuffer = await getLuanVanTemplateBuffer(prisma, "PhuLucVanBangCaoHoc_v2.docx")
+    const templateBuffer = await getLuanVanTemplateBuffer(prisma, "PhuLucVanBangCaoHoc_v8.docx")
     const zip = new PizZip(templateBuffer)
     const doc = new Docxtemplater(zip, {
       paragraphLoop: true,
@@ -2826,7 +2850,8 @@ app.openapi(exportPhuLucVanBangNganHan, async (c: any) => {
   }
 
   const signerInfo = parseSignerInfo(signerName || "")
-  const pDateParts = getReportDateParts(printDate || new Date())
+  const pDateRaw = printDate ? printDate.split("T")[0] : new Date()
+  const pDateParts = getReportDateParts(pDateRaw)
 
   const trainingObjectTypeShort: Record<string, string> = {
     "Định hướng ứng dụng": "ƯD",
@@ -2898,7 +2923,6 @@ app.openapi(exportPhuLucVanBangNganHan, async (c: any) => {
           totalCredits += credits
           totalPoints10 += score * credits
         }
-        console.log(`Record ${idx + 1}: score=${score}, credits=${credits}`)
         return {
           stt: idx + 1,
           ten_hoc_phan: safeString(record.subjectVersion?.subject?.name),
@@ -2921,9 +2945,6 @@ app.openapi(exportPhuLucVanBangNganHan, async (c: any) => {
         : totalCredits > 0
           ? totalPoints10 / totalCredits
           : 0
-      console.log(
-        `Student ${student.code}: totalCredits=${totalCredits}, totalPoints10=${totalPoints10}, gpa10=${gpa10}`
-      )
       return {
         data: {
           so_quyet_dinh: safeString(gD?.diplomaNumber),
@@ -2971,7 +2992,7 @@ app.openapi(exportPhuLucVanBangNganHan, async (c: any) => {
   }
 
   try {
-    const templateBuffer = await getLuanVanTemplateBuffer(prisma, "PhuLucVanBangNganHan_v4.docx")
+    const templateBuffer = await getLuanVanTemplateBuffer(prisma, "PhuLucVanBangNganHan_v9.docx")
     const zip = new PizZip(templateBuffer)
     const doc = new Docxtemplater(zip, {
       paragraphLoop: true,
