@@ -1,6 +1,7 @@
 import '../base'
 import '../ql-dao-tao/plan-training'
 import '../ql-dao-tao/student'
+import '../ql-dao-tao/lecturer'
 import '../ql-nguoi-dung/user'
 import 'document'
 import 'core-categories'
@@ -49,13 +50,12 @@ model Notification extends Base {
   targetCourses  TrainingCourse[]     // Gửi cho các khoá cụ thể
   targetClasses  FixedClass[]         // Gửi cho các lớp cụ thể
   targetStudents Student[]            // Gửi cho sinh viên cụ thể
+  lecturer       Lecturer?            @relation(fields: [lecturerId], references: [id])
+  lecturerId     String?               // Gửi cho giảng viên cụ thể
 
   // Tệp đính kèm
   attachments    DocumentFile[]
-  user UserProfile
-  userId String @db.Uuid
-  isRead Boolean @default(false)
-  
 
+  @@index([lecturerId])
   @@schema("ql-danh-muc")
 }

@@ -301,9 +301,8 @@ model UserProfile extends BaseUuid {
   evaluationCriterionComments          EvaluationCriterionComment[]
   classSchedules                       ClassSchedule[]
   subjectClassAttendance               SubjectClassAttendance[]
-  notifications                        Notification[]
 
-  @@auth()
+  @@auth() 
   @@schema("ql-nguoi-dung")
 }
 
