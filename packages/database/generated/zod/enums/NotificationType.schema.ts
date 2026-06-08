@@ -6,4 +6,4 @@
 
 import { z } from 'zod/v3';
 
-export const NotificationTypeSchema = z.enum(["GENERAL", "ACADEMIC", "EXAM", "EVENT", "SCHOLARSHIP", "TUITION", "URGENT", "MAINTENANCE"])
+export const NotificationTypeSchema = z.enum(["GENERAL", "ACADEMIC", "EXAM", "EVENT", "SCHOLARSHIP", "TUITION", "URGENT", "MAINTENANCE", "TEACHING_ASSIGNMENTS", "PROCESS_SCORE_DEADLINE", "EXAM_DEADLINE", "SURVEY_DEADLINE"])
