@@ -13,6 +13,10 @@ import type { FilterProps } from "@constants/type"
 import { useExamTypeOptions } from "@hooks/examType"
 import useSpinner from "@hooks/spinner"
 import DefaultLayout from "@layouts/default-layout"
+import {
+  layGiangVienPhanCongThayDoi,
+  thongBaoPhanCongGiangDay,
+} from "@lib/thong-bao-giang-vien"
 import { buildOrgFlat, buildOrgTree } from "@lib/utils"
 import { emptyObjectIf } from "@workspace/constant"
 import { $Enums, type Prisma, type SubjectClass } from "@workspace/db/client"
@@ -616,33 +620,49 @@ export default function PhanCongGiangDay({
   async function handleP2LuuKeHoach() {
     try {
       showSpinner()
+      const banGhiSua = Object.entries(subjectClassForm).filter(([_, sc]) => sc.isEdit)
+      const lopGoc = dataWithRowSpan.flatMap((e) => e.children)
+
       const res = await sqlTransaction(
-        Object.entries(subjectClassForm)
-          .filter(([_, subjectClass]) => subjectClass.isEdit)
-          .map(([id, subjectClass]) => ({
-            model: "SubjectClass",
-            operation: "update",
+        banGhiSua.map(([id, subjectClass]) => ({
+          model: "SubjectClass",
+          operation: "update",
+          data: {
+            where: { id },
             data: {
-              where: { id },
-              data: {
-                schedule: subjectClass.schedule,
-                lecturerAssignmentDeadline: subjectClass.lecturerAssignmentDeadline
-                  ? subjectClass.lecturerAssignmentDeadline?.toDate()
-                  : null,
-                lecturerId: subjectClass.lecturerId ?? null,
-                extraLecturerId: subjectClass.extraLecturerId ?? null,
-                enterGradeLecturerId: subjectClass.enterGradeLecturerId ?? null,
-                examType: subjectClass.examType ?? null,
-                roomId: subjectClass.roomId ?? null,
-                trainingLocationId: subjectClass.trainingLocationId ?? null,
-                maxStudent: subjectClass.maxStudent ?? null,
-              },
+              schedule: subjectClass.schedule,
+              lecturerAssignmentDeadline: subjectClass.lecturerAssignmentDeadline
+                ? subjectClass.lecturerAssignmentDeadline?.toDate()
+                : null,
+              lecturerId: subjectClass.lecturerId ?? null,
+              extraLecturerId: subjectClass.extraLecturerId ?? null,
+              enterGradeLecturerId: subjectClass.enterGradeLecturerId ?? null,
+              examType: subjectClass.examType ?? null,
+              roomId: subjectClass.roomId ?? null,
+              trainingLocationId: subjectClass.trainingLocationId ?? null,
+              maxStudent: subjectClass.maxStudent ?? null,
             },
-          }))
+          },
+        }))
       )
       if (res.status !== 200) {
         throw new Error("Lỗi khi phân công giảng dạy")
       }
+
+      for (const [id, subjectClass] of banGhiSua) {
+        const goc = lopGoc.find((item) => item.id === id)
+        const gvMoi = layGiangVienPhanCongThayDoi(
+          { lecturerId: goc?.lecturerId, extraLecturerId: goc?.extraLecturerId },
+          {
+            lecturerId: subjectClass.lecturerId,
+            extraLecturerId: subjectClass.extraLecturerId,
+          }
+        )
+        if (gvMoi.length) {
+          await thongBaoPhanCongGiangDay([id], gvMoi)
+        }
+      }
+
       debouncedRefetch()
       message.success("Phân công giảng dạy thành công")
     } catch (error: any) {
@@ -655,29 +675,45 @@ export default function PhanCongGiangDay({
   async function handleKhoaBoMonLuuPCGD() {
     try {
       showSpinner()
+      const banGhiSua = Object.entries(subjectClassForm).filter(([_, sc]) => sc.isEdit)
+      const lopGoc = dataWithRowSpan.flatMap((e) => e.children)
+
       const res = await sqlTransaction(
-        Object.entries(subjectClassForm)
-          .filter(([_, subjectClass]) => subjectClass.isEdit)
-          .map(([id, subjectClass]) => ({
-            model: "SubjectClass",
-            operation: "update",
+        banGhiSua.map(([id, subjectClass]) => ({
+          model: "SubjectClass",
+          operation: "update",
+          data: {
+            where: { id },
             data: {
-              where: { id },
-              data: {
-                schedule: subjectClass.schedule,
-                examType: subjectClass.examType ?? null,
-                roomId: subjectClass.roomId ?? null,
-                maxStudent: subjectClass.maxStudent ?? null,
-                lecturerId: subjectClass.lecturerId ?? null,
-                extraLecturerId: subjectClass.extraLecturerId ?? null,
-                enterGradeLecturerId: subjectClass.enterGradeLecturerId ?? null,
-              },
+              schedule: subjectClass.schedule,
+              examType: subjectClass.examType ?? null,
+              roomId: subjectClass.roomId ?? null,
+              maxStudent: subjectClass.maxStudent ?? null,
+              lecturerId: subjectClass.lecturerId ?? null,
+              extraLecturerId: subjectClass.extraLecturerId ?? null,
+              enterGradeLecturerId: subjectClass.enterGradeLecturerId ?? null,
             },
-          }))
+          },
+        }))
       )
       if (res.status !== 200) {
         throw new Error("Lỗi khi lưu phân công giảng dạy")
       }
+
+      for (const [id, subjectClass] of banGhiSua) {
+        const goc = lopGoc.find((item) => item.id === id)
+        const gvMoi = layGiangVienPhanCongThayDoi(
+          { lecturerId: goc?.lecturerId, extraLecturerId: goc?.extraLecturerId },
+          {
+            lecturerId: subjectClass.lecturerId,
+            extraLecturerId: subjectClass.extraLecturerId,
+          }
+        )
+        if (gvMoi.length) {
+          await thongBaoPhanCongGiangDay([id], gvMoi)
+        }
+      }
+
       debouncedRefetch()
       message.success("Lưu phân công giảng dạy thành công")
     } catch (error: any) {
@@ -719,6 +755,7 @@ export default function PhanCongGiangDay({
   async function handleP2DuyetPCGD() {
     try {
       showSpinner()
+      const lopDuyetIds = selectedRowKeys as string[]
       await updateManySubjectClass({
         data: {
           approveLecturerAssignmentAt: new Date(),
@@ -727,10 +764,11 @@ export default function PhanCongGiangDay({
           trainingObjectTypeId,
           semesterId,
           id: {
-            in: selectedRowKeys as string[],
+            in: lopDuyetIds,
           },
         },
       })
+      await thongBaoPhanCongGiangDay(lopDuyetIds)
       setSelectedRowKeys([])
       message.success("Duyệt PCGD thành công")
       debouncedRefetch()

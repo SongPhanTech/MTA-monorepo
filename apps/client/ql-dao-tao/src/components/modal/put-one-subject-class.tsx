@@ -9,6 +9,12 @@ import { SUBJECT_CLASS_SCHEDULE_TYPE } from "@constants/constants"
 import type { FilterProps } from "@constants/type"
 import { useExamTypeOptions } from "@hooks/examType"
 import useSpinner from "@hooks/spinner"
+import {
+  layGiangVienPhanCongThayDoi,
+  thongBaoHanNhapDiemQuaTrinh,
+  thongBaoHanNhapDiemThi,
+  thongBaoPhanCongGiangDay,
+} from "@lib/thong-bao-giang-vien"
 import type { SubjectClass } from "@workspace/db/client"
 import LectureTreeSelect from "@components/commons/lecture-select-multi/TreeSelectLecture"
 import {
@@ -113,6 +119,35 @@ const PutOneSubjectClassModal = () => {
           id: input?.id,
         },
       })
+
+      if (input?.id) {
+        const gvMoi = layGiangVienPhanCongThayDoi(
+          {
+            lecturerId: subjectClassData?.lecturerId,
+            extraLecturerId: subjectClassData?.extraLecturerId,
+          },
+          { lecturerId: output.lecturerId, extraLecturerId: output.extraLecturerId }
+        )
+        if (gvMoi.length) {
+          await thongBaoPhanCongGiangDay([input.id], gvMoi)
+        }
+        const hanQtMoi = output.scoreDeadline ? dayjs(output.scoreDeadline) : null
+        const hanQtCu = subjectClassData?.scoreDeadline
+          ? dayjs(subjectClassData.scoreDeadline)
+          : null
+        if (hanQtMoi && (!hanQtCu || !hanQtMoi.isSame(hanQtCu, "day"))) {
+          await thongBaoHanNhapDiemQuaTrinh([input.id])
+        }
+
+        const hanThiMoi = output.examScoreDeadline ? dayjs(output.examScoreDeadline) : null
+        const hanThiCu = subjectClassData?.examScoreDeadline
+          ? dayjs(subjectClassData.examScoreDeadline)
+          : null
+        if (hanThiMoi && (!hanThiCu || !hanThiMoi.isSame(hanThiCu, "day"))) {
+          await thongBaoHanNhapDiemThi([input.id])
+        }
+      }
+
       // refetch() lại danh sách level
       queryClient.invalidateQueries({
         queryKey: ["SubjectClass"],
