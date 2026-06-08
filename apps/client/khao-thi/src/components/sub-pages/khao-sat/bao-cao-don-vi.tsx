@@ -211,7 +211,6 @@ function OrganizationSurveyReport({
       lecturerMap[lecId].completed += completedCount
       lecturerMap[lecId].total += studentCount
     })
-
     const departments = organizations.filter((o) => o.iLoaiDonVi === 7)
     const faculties = organizations.filter((o) => o.iLoaiDonVi === 5 || o.iLoaiDonVi === 6)
 
@@ -226,9 +225,6 @@ function OrganizationSurveyReport({
 
       facDepts.forEach((dept) => {
         const deptLecturers = Object.values(lecturerMap).filter((l) => l.organizationId === dept.Id)
-
-        // console.log("Department:", dept.sTen)
-        // console.log("Lecturers:", deptLecturers)
 
         let deptCompleted = 0
         let deptTotal = 0
@@ -283,12 +279,6 @@ function OrganizationSurveyReport({
         })
       })
 
-      console.log("Faculty Total:", {
-        faculty: fac.sTen,
-        completed: facCompleted,
-        total: facTotal,
-      })
-
       if (facTotal > 0) {
         resultRows.push({
           key: `fac_${fac.Id}`,
@@ -325,6 +315,7 @@ function OrganizationSurveyReport({
 
     return resultRows
   }, [surveys, organizations])
+  console.log("Progress Data:", progressData)
 
   const isLoading = isSurveysLoading || isOrgLoading
   const dataBarchart = useMemo(() => {
