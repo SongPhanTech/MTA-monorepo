@@ -16,7 +16,10 @@ enum NotificationType {
   TUITION           // Học phí
   URGENT            // Khẩn cấp
   MAINTENANCE       // Bảo trì hệ thống
-
+  TEACHING_ASSIGNMENTS // Phân công giảng dạy
+  PROCESS_SCORE_DEADLINE // Hạn nhập điểm quá trình
+  EXAM_DEADLINE     // Hạn nhập điểm thi
+  SURVEY_DEADLINE   // Hạn điền khảo sát
   @@schema("ql-danh-muc")
 }
 
@@ -49,7 +52,10 @@ model Notification extends Base {
 
   // Tệp đính kèm
   attachments    DocumentFile[]
-
+  user UserProfile
+  userId String @db.Uuid
+  isRead Boolean @default(false)
+  
 
   @@schema("ql-danh-muc")
 }
