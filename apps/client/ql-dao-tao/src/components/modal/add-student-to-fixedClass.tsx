@@ -11,7 +11,6 @@ import {
   useCountStudent,
   useFindManyStudent,
   useFindUniqueFixedClass,
-  useUpdateManyStudent,
 } from "@workspace/db/hooks"
 import { sqlTransaction } from "@workspace/libs/api/model"
 import { Button, Col, Divider, Flex, Form, Input, message, Row, Tag, Tooltip } from "antd"
@@ -40,20 +39,34 @@ const AddStudentToFixedClassModal = () => {
   const [currentPageNotClass, setCurrentPageNotClass] = useState(1)
   const [selectedRowKeys, setSelectedRowKeys] = useState<string[]>([])
   const [selectedRowKeysInClass, setSelectedRowKeysInClass] = useState<string[]>([])
+  // Danh sách thay đổi tạm thời (chưa lưu DB): SV chờ thêm vào lớp / chờ xoá khỏi lớp
+  const [stagedAdd, setStagedAdd] = useState<any[]>([])
+  const [stagedRemove, setStagedRemove] = useState<any[]>([])
   const [form] = Form.useForm<{ list: Student[] }>()
+
+  const resetStaged = () => {
+    setStagedAdd([])
+    setStagedRemove([])
+    setSelectedRowKeys([])
+    setSelectedRowKeysInClass([])
+  }
+
   const {
     isOpen,
     onClose,
     input: id,
   } = useDisclosure<string>({
     tag: "AddStudentToFixedClassModal",
-    onClose: form.resetFields,
+    onClose: () => {
+      form.resetFields()
+      resetStaged()
+    },
   })
 
   const { onOpen: onOpenModalConfirm, onClose: onCloseModalConfirm } = useDisclosure<string>({
     tag: "ConfirmModal",
     onOk: (value: any) => {
-      updateStudent()
+      saveChanges()
     },
   })
 
@@ -62,8 +75,6 @@ const AddStudentToFixedClassModal = () => {
     searchText: "",
     trainingObjectTypeId: undefined,
   })
-  // const { mutateAsync: createSubjectVersion } = useCreateSubjectVersion()
-  const { mutateAsync: updateManyUserProfile } = useUpdateManyStudent()
   const { data: dataStudentNotClass = [], refetch } = useFindManyStudent({
     where: {
       fixedClassId: null,
@@ -212,63 +223,90 @@ const AddStudentToFixedClassModal = () => {
     }
   )
 
+  const stagedAddIds = stagedAdd.map((s) => s.id)
+  const stagedRemoveIds = stagedRemove.map((s) => s.id)
+
+  // Danh sách hiển thị: gộp các thay đổi tạm (chưa lưu) vào dữ liệu từ server.
+  // SV vừa chuyển được đưa lên đầu bảng đích để dễ nhìn thấy.
+  const dataStudentNotClassDisplay = [
+    ...stagedRemove,
+    ...dataStudentNotClass.filter((s) => !stagedAddIds.includes(s.id)),
+  ]
+  const dataInClassDisplay = [
+    ...stagedAdd,
+    ...data.filter((s) => !stagedRemoveIds.includes(s.id)),
+  ]
+
+  // Bấm "Lưu" mới thực sự ghi xuống DB
   async function onOk() {
-    try {
-      showSpinner()
-      onClose()
-    } catch (error: any) {
-      if (error?.info?.message) {
-        message.error(error?.info?.message)
-        return
-      }
-      message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
-    } finally {
-      hideSpinner()
+    if (stagedAdd.length === 0 && stagedRemove.length === 0) {
+      message.warning("Chưa có thay đổi nào để lưu")
+      return
+    }
+    // Lớp có CTĐT -> xác nhận trước khi lưu (sẽ đổi CTĐT cho SV được thêm vào lớp)
+    if (fixedClass?.curriculumVersionId) {
+      onOpenModalConfirm(
+        "Thay đổi CTĐT cho tất cả các sinh viên này, sinh viên bảo lưu sẽ không được thay đổi CTĐT?"
+      )
+    } else {
+      await saveChanges()
     }
   }
 
-  const updateStudent = async () => {
-    if (!selectedRowKeys || selectedRowKeys.length === 0) {
-      message.warning("Vui lòng chọn ít nhất một sinh viên để cập nhật")
-      return
-    }
+  const saveChanges = async () => {
+    const addIds = stagedAdd.map((s) => s.id)
+    const removeIds = stagedRemove.map((s) => s.id)
     const cvId = fixedClass?.curriculumVersionId
-    const ops: SqlTransactionBodyItem[] = [
-      {
+    const ops: SqlTransactionBodyItem[] = []
+
+    if (addIds.length) {
+      ops.push({
         model: "Student",
         operation: "updateMany",
         data: {
-          where: { id: { in: selectedRowKeys } },
+          where: { id: { in: addIds } },
           data: { fixedClassId },
         },
-      },
-    ]
-    if (cvId) {
+      })
+      if (cvId) {
+        ops.push({
+          model: "Student",
+          operation: "updateMany",
+          data: {
+            where: {
+              id: { in: addIds },
+              status: { not: StudentStatus.DEFERRED_STUDY },
+            },
+            data: { curriculumVersionId: cvId },
+          },
+        })
+      }
       ops.push({
         model: "Student",
         operation: "updateMany",
         data: {
           where: {
-            id: { in: selectedRowKeys },
-            status: { not: StudentStatus.DEFERRED_STUDY },
+            id: { in: addIds },
+            status: StudentStatus.DEFERRED_STUDY,
           },
-          data: { curriculumVersionId: cvId },
+          data: { status: StudentStatus.ENROLLED },
         },
       })
     }
-    ops.push({
-      model: "Student",
-      operation: "updateMany",
-      data: {
-        where: {
-          id: { in: selectedRowKeys },
-          status: StudentStatus.DEFERRED_STUDY,
+
+    if (removeIds.length) {
+      ops.push({
+        model: "Student",
+        operation: "updateMany",
+        data: {
+          where: { id: { in: removeIds } },
+          data: { fixedClassId: null },
         },
-        data: { status: StudentStatus.ENROLLED },
-      },
-    })
+      })
+    }
 
     try {
+      showSpinner()
       const res = await sqlTransaction(ops)
 
       if (res.status !== 200) {
@@ -280,72 +318,41 @@ const AddStudentToFixedClassModal = () => {
       })
       message.success("Cập nhật thành công")
       onCloseModalConfirm()
+      onClose()
     } catch (error) {
       console.error("Lỗi khi cập nhật sinh viên:", error)
       message.error("Cập nhật thất bại, vui lòng thử lại!")
-    }
-  }
-
-  const handleAddStudentToClass = async () => {
-    try {
-      showSpinner()
-      if (selectedRowKeys?.length > 0) {
-        if (!fixedClass?.curriculumVersionId) {
-          await updateManyUserProfile({
-            where: {
-              id: {
-                in: selectedRowKeys,
-              },
-            },
-            data: {
-              fixedClassId: fixedClassId,
-            },
-          })
-          message.success("Cập nhật thành công")
-        } else {
-          // await updateStudent()
-          onOpenModalConfirm(
-            "Thay đổi CTĐT cho tất cả các sinh viên này, sinh viên bảo lưu sẽ không được thay đổi CTĐT?"
-          )
-        }
-      }
-      setSelectedRowKeysInClass([])
-    } catch (error: any) {
-      if (error?.info?.message) {
-        message.error(error?.info?.message)
-        return
-      }
-      message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
     } finally {
       hideSpinner()
     }
   }
 
-  const handleRemoveStudentFromClass = async () => {
-    try {
-      showSpinner()
-      if (selectedRowKeysInClass?.length > 0) {
-        await updateManyUserProfile({
-          where: {
-            id: {
-              in: selectedRowKeysInClass,
-            },
-          },
-          data: {
-            fixedClassId: null,
-          },
-        })
-        message.success("Cập nhật thành công")
-      }
-    } catch (error: any) {
-      if (error?.info?.message) {
-        message.error(error?.info?.message)
-        return
-      }
-      message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại")
-    } finally {
-      hideSpinner()
-    }
+  // Chuyển SV sang lớp (chỉ tạm thời, chưa lưu DB)
+  const handleAddStudentToClass = () => {
+    if (!selectedRowKeys.length) return
+    const selectedSet = new Set(selectedRowKeys)
+    // SV đang chờ xoá mà được chuyển lại vào lớp -> huỷ thao tác xoá
+    setStagedRemove((prev) => prev.filter((s) => !selectedSet.has(s.id)))
+    // SV chưa có lớp -> đưa vào danh sách chờ thêm
+    const toAdd = dataStudentNotClass.filter(
+      (s) => selectedSet.has(s.id) && !stagedAddIds.includes(s.id)
+    )
+    setStagedAdd((prev) => [...prev, ...toAdd])
+    setSelectedRowKeys([])
+  }
+
+  // Chuyển SV ra khỏi lớp (chỉ tạm thời, chưa lưu DB)
+  const handleRemoveStudentFromClass = () => {
+    if (!selectedRowKeysInClass.length) return
+    const selectedSet = new Set(selectedRowKeysInClass)
+    // SV đang chờ thêm mà được chuyển lại ra ngoài -> huỷ thao tác thêm
+    setStagedAdd((prev) => prev.filter((s) => !selectedSet.has(s.id)))
+    // SV đang trong lớp -> đưa vào danh sách chờ xoá
+    const toRemove = data.filter(
+      (s) => selectedSet.has(s.id) && !stagedRemoveIds.includes(s.id)
+    )
+    setStagedRemove((prev) => [...prev, ...toRemove])
+    setSelectedRowKeysInClass([])
   }
 
   return (
@@ -477,12 +484,12 @@ const AddStudentToFixedClassModal = () => {
                 },
               },
             ]}
-            data={dataStudentNotClass}
+            data={dataStudentNotClassDisplay}
             scroll={{ x: "max-content" }}
             pagination={{
               current: currentPageNotClass,
               pageSize: numberOfPagesNotClass,
-              total: countNotClass,
+              total: (countNotClass ?? 0) - stagedAdd.length + stagedRemove.length,
 
               onChange: (page, pageSize) => {
                 if (numberOfPagesNotClass === pageSize) {
@@ -618,12 +625,12 @@ const AddStudentToFixedClassModal = () => {
                 },
               },
             ]}
-            data={data}
+            data={dataInClassDisplay}
             scroll={{ x: "max-content" }}
             pagination={{
               current: currentPage,
               pageSize: numberOfPages,
-              total: count,
+              total: (count ?? 0) + stagedAdd.length - stagedRemove.length,
               onChange: (page, pageSize) => {
                 if (numberOfPages === pageSize) {
                   setCurrentPage(page)

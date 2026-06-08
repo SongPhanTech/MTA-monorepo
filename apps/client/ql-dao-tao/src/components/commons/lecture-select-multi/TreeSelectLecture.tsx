@@ -3,7 +3,7 @@ import { formatLecturerName } from "@workspace/libs"
 import { message, TreeSelect as TreeSelectAnt, type TreeSelectProps, Switch, Divider } from "antd"
 import { UserIcon } from "lucide-react"
 import type React from "react"
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import type { TreeNodeType } from "@/utils/convertOrganizationToTree"
 import { whereOrganization } from "@workspace/libs/constants"
 
@@ -38,6 +38,22 @@ function buildOrgAndLectureTree(
   return [...organizationLecturers, ...children]
 }
 
+// để auto-expand cho thấy ngay giảng viên đã chọn
+function findAncestorKeys(
+  nodes: Array<TreeNodeType>,
+  targetValue: string,
+  ancestors: string[] = []
+): string[] | null {
+  for (const node of nodes) {
+    if (node.value === targetValue) return ancestors
+    if (node.children?.length) {
+      const found = findAncestorKeys(node.children, targetValue, [...ancestors, node.value])
+      if (found) return found
+    }
+  }
+  return null
+}
+
 // Define props for our custom component
 type LectureTreeSelectProps = {
   organizationId?: string | null // ID của tổ chức để lọc giảng viên
@@ -53,6 +69,8 @@ const LectureTreeSelect: React.FC<LectureTreeSelectProps> = ({
   ...rest
 }) => {
   const [isSelectAllOrgs, setIsSelectAllOrgs] = useState(false)
+  const lastAutoAdjustedValue = useRef<string | undefined>(undefined)
+  const [expandedKeys, setExpandedKeys] = useState<string[]>([])
 
   // Lấy danh sách Organization (Khoa và Bộ môn)
   const {
@@ -125,18 +143,29 @@ const LectureTreeSelect: React.FC<LectureTreeSelectProps> = ({
     isSelectAllOrgs,
   ])
 
-  // Nếu giá trị đang được chọn thuộc GV từ đơn vị khác, tự động bật "toàn học viện"
   useEffect(() => {
     const selectedValue = rest.value as string | undefined
-    if (selectedValue && !isSelectAllOrgs && organizationId && lecturers.length > 0) {
-      const isInCurrentOrg = lecturers.some(
-        (l) => l.id === selectedValue && l.organizationId === organizationId
-      )
-      if (!isInCurrentOrg) {
-        setIsSelectAllOrgs(true)
-      }
+    // Chưa load xong lecturers thì khoan xử lý (không đánh dấu đã xử lý)
+    if (!selectedValue || !organizationId || lecturers.length === 0) return
+    if (selectedValue === lastAutoAdjustedValue.current) return
+    lastAutoAdjustedValue.current = selectedValue
+    const isInCurrentOrg = lecturers.some(
+      (l) => l.id === selectedValue && l.organizationId === organizationId
+    )
+    if (!isInCurrentOrg) {
+      setIsSelectAllOrgs(true)
     }
-  }, [rest.value, lecturers, organizationId, isSelectAllOrgs])
+  }, [rest.value, lecturers, organizationId])
+
+  // Auto-expand các đơn vị cha chứa giảng viên đã chọn để hiện ngay khi mở dropdown
+  useEffect(() => {
+    const selectedValue = rest.value as string | undefined
+    if (!selectedValue || !treeData.length) {
+      setExpandedKeys([])
+      return
+    }
+    setExpandedKeys(findAncestorKeys(treeData, selectedValue) ?? [])
+  }, [rest.value, treeData])
 
   // Xử lý lỗi
   useEffect(() => {
@@ -161,6 +190,8 @@ const LectureTreeSelect: React.FC<LectureTreeSelectProps> = ({
       showSearch={true}
       treeNodeFilterProp="title"
       treeExpandAction="click"
+      treeExpandedKeys={expandedKeys}
+      onTreeExpand={(keys) => setExpandedKeys(keys as string[])}
       treeIcon
       showCheckedStrategy="SHOW_CHILD"
       placeholder="Chọn giảng viên"
