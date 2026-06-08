@@ -1,3 +1,4 @@
+import { CONG_GIANG_VIEN_THONG_BAO_PATH } from "@constants/cong-giang-vien-path"
 import { ROUTER_PATH } from "@workspace/router"
 import {
   Bell,
@@ -85,8 +86,7 @@ export const CONG_GIANG_VIEN_MENU: CongGiangVienMenuItem[] = [
     id: "gv-thong-bao",
     label: "Thông báo",
     icon: Bell,
-    path: ROUTER_PATH.QL_DAO_TAO.CONG_GIANG_VIEN_GIANG_VIEN,
-    badge: 3,
+    path: CONG_GIANG_VIEN_THONG_BAO_PATH,
   },
   {
     id: "ho-so-ca-nhan",
