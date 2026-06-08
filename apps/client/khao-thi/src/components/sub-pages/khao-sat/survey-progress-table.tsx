@@ -10,6 +10,7 @@ interface ProgressRow {
 }
 
 export function SurveyProgressTable({ data }: { data: ProgressRow[] }) {
+  console.log("SurveyProgressTable", data)
   return (
     <Table
       bordered

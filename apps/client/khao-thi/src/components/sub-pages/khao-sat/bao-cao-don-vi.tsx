@@ -47,8 +47,7 @@ function OrganizationSurveyReport({
   trainingObjectTypeName,
   trainingObjectTypeId,
   semesterId,
-  // organizationSelected,
-  // setOrganizationSelected,
+  organizations,
 }: {
   selectedId: string
   surveyName: string
@@ -56,10 +55,8 @@ function OrganizationSurveyReport({
   trainingObjectTypeName?: string
   trainingObjectTypeId: string
   semesterId: string
-  // organizationSelected: string
-  // setOrganizationSelected: (value: string) => void
+  organizations: any[]
 }) {
-  console.log(selectedId)
   const router = useRouter()
   const { onOpen } = useDisclosure({
     tag: "ModalPrintBaoCaoDonVi",
@@ -137,7 +134,7 @@ function OrganizationSurveyReport({
   })
   // const { data: organizations = [] } = useFindManyDM_DonVi()
   // const treeData = buildOrgTree(organizations)
-  const { data: surveys = [], isLoading: isSurveysLoading } = useFindManySurvey(
+  const { data: surveys = [] } = useFindManySurvey(
     {
       where: { clusterSurveyId: selectedId },
       include: {
@@ -153,171 +150,114 @@ function OrganizationSurveyReport({
           },
         },
       },
-    },
-    {
-      enabled: !!selectedId,
     }
+    // {
+    //   enabled: !!selectedId,
+    // }
   )
 
-  const { data: organizations = [], isLoading: isOrgLoading } = useFindManyDM_DonVi(
-    {
-      where: {
-        iLoaiDonVi: {
-          in: [5, 6, 7],
-        },
-      },
-    },
-    {
-      enabled: !!selectedId,
-    }
-  )
+  const progressData = useMemo<ProgressRow[]>(() => {
+    const result: ProgressRow[] = []
 
-  const progressData = useMemo(() => {
-    if (!surveys.length || !organizations.length) return []
+    const faculties = organizations.filter((x) => !x.sParentId || x.sParentId === "0")
 
-    const lecturerMap: Record<
-      string,
-      {
-        lecturerId: string
-        fullName: string
-        code: string | null
-        organizationId: string | null
-        completed: number
-        total: number
-      }
-    > = {}
+    let grandCompleted = 0
+    let grandTotal = 0
 
-    surveys.forEach((survey) => {
-      if (!survey.lecture) return
-      const lecId = survey.lecture.id
-      const userProfile = survey.lecture.userProfile
-      const fullName =
-        `${userProfile?.lastName ?? ""} ${userProfile?.firstName ?? ""}`.trim() ||
-        "Giảng viên không tên"
+    faculties.forEach((faculty) => {
+      const departments = organizations.filter((x) => x.sParentId === faculty.Id)
 
-      const completedCount = survey.surveySessions?.length || 0
-      const studentCount = survey.subjectClass?.subjectClassStudent?.length || 0
+      let facultyCompleted = 0
+      let facultyTotal = 0
 
-      if (!lecturerMap[lecId]) {
-        lecturerMap[lecId] = {
-          lecturerId: lecId,
-          fullName,
-          code: survey.lecture.code,
-          organizationId: survey.lecture.organizationId,
-          completed: 0,
-          total: 0,
-        }
-      }
-      lecturerMap[lecId].completed += completedCount
-      lecturerMap[lecId].total += studentCount
-    })
-    const departments = organizations.filter((o) => o.iLoaiDonVi === 7)
-    const faculties = organizations.filter((o) => o.iLoaiDonVi === 5 || o.iLoaiDonVi === 6)
+      const departmentRows: ProgressRow[] = []
 
-    const resultRows: ProgressRow[] = []
+      departments.forEach((department) => {
+        const departmentSurveys = surveys.filter((s) => s.lecture?.organizationId === department.Id)
 
-    faculties.forEach((fac) => {
-      const facDepts = departments.filter((d) => d.sParentId === fac.Id)
+        let departmentCompleted = 0
+        let departmentTotal = 0
 
-      let facCompleted = 0
-      let facTotal = 0
-      const deptRows: ProgressRow[] = []
+        const lecturerRows: ProgressRow[] = []
 
-      facDepts.forEach((dept) => {
-        const deptLecturers = Object.values(lecturerMap).filter((l) => l.organizationId === dept.Id)
+        const lecturerMap = new Map<string, typeof departmentSurveys>()
 
-        let deptCompleted = 0
-        let deptTotal = 0
-        const lecRows: ProgressRow[] = []
+        departmentSurveys.forEach((survey) => {
+          const lecturerName =
+            survey.lecture?.userProfile?.fullname ||
+            `${survey.lecture?.userProfile?.lastName ?? ""} ${
+              survey.lecture?.userProfile?.firstName ?? ""
+            }`.trim() ||
+            survey.lecture?.code ||
+            "Không xác định"
 
-        deptLecturers.forEach((lec) => {
-          deptCompleted += lec.completed
-          deptTotal += lec.total
+          const current = lecturerMap.get(lecturerName) ?? []
 
-          lecRows.push({
-            key: `lec_${lec.lecturerId}`,
+          current.push(survey)
+
+          lecturerMap.set(lecturerName, current)
+        })
+
+        lecturerMap.forEach((items, lecturerName) => {
+          const total = items.length
+
+          const completed = items.filter((x) => x.surveySessions.length > 0).length
+
+          lecturerRows.push({
+            key: `${department.Id}-${lecturerName}`,
             type: "lecturer",
-            name: lec.fullName,
-            completed: lec.completed,
-            total: lec.total,
+            name: lecturerName,
+            completed,
+            total,
             indent: 2,
           })
+
+          departmentCompleted += completed
+          departmentTotal += total
         })
 
-        if (deptTotal > 0) {
-          facCompleted += deptCompleted
-          facTotal += deptTotal
-
-          deptRows.push({
-            key: `dept_${dept.Id}`,
-            type: "department",
-            name: `${dept.sMa ? dept.sMa + " - " : ""}${dept.sTen}`,
-            completed: deptCompleted,
-            total: deptTotal,
-            indent: 1,
-          })
-          deptRows.push(...lecRows)
-        }
-      })
-
-      // Add lecturers who are directly under the faculty (not inside a department)
-      const facDirectLecturers = Object.values(lecturerMap).filter(
-        (l) => l.organizationId === fac.Id
-      )
-      const facDirectLecRows: ProgressRow[] = []
-      facDirectLecturers.forEach((lec) => {
-        facCompleted += lec.completed
-        facTotal += lec.total
-
-        facDirectLecRows.push({
-          key: `lec_${lec.lecturerId}`,
-          type: "lecturer",
-          name: lec.fullName,
-          completed: lec.completed,
-          total: lec.total,
+        departmentRows.push({
+          key: department.Id,
+          type: "department",
+          name: department.sTen ?? "Không xác định",
+          completed: departmentCompleted,
+          total: departmentTotal,
           indent: 1,
         })
+
+        departmentRows.push(...lecturerRows)
+
+        facultyCompleted += departmentCompleted
+        facultyTotal += departmentTotal
       })
 
-      if (facTotal > 0) {
-        resultRows.push({
-          key: `fac_${fac.Id}`,
-          type: "faculty",
-          name: `${fac.sMa ? fac.sMa + " - " : ""}${fac.sTen}`,
-          completed: facCompleted,
-          total: facTotal,
-          indent: 0,
-        })
-        resultRows.push(...deptRows)
-        resultRows.push(...facDirectLecRows)
-      }
-    })
-
-    let totalCompleted = 0
-    let totalTotal = 0
-    resultRows.forEach((row) => {
-      if (row.type === "faculty") {
-        totalCompleted += row.completed
-        totalTotal += row.total
-      }
-    })
-
-    if (resultRows.length > 0) {
-      resultRows.push({
-        key: "total_summary",
-        type: "total",
-        name: "Tổng:",
-        completed: totalCompleted,
-        total: totalTotal,
+      result.push({
+        key: faculty.Id,
+        type: "faculty",
+        name: faculty.sTen ?? "Không xác định",
+        completed: facultyCompleted,
+        total: facultyTotal,
         indent: 0,
       })
-    }
 
-    return resultRows
+      result.push(...departmentRows)
+
+      grandCompleted += facultyCompleted
+      grandTotal += facultyTotal
+    })
+
+    result.push({
+      key: "total",
+      type: "total",
+      name: "Tổng",
+      completed: grandCompleted,
+      total: grandTotal,
+      indent: 0,
+    })
+
+    return result
   }, [surveys, organizations])
-  console.log("Progress Data:", progressData)
 
-  const isLoading = isSurveysLoading || isOrgLoading
   const dataBarchart = useMemo(() => {
     let choices: any = []
 
@@ -741,7 +681,7 @@ function OrganizationSurveyReport({
                         height: Math.max(300, (dataLevel?.data?.data?.length || 0) * 35 + 120),
                       }}
                     />
-                    <SurveyProgressTable data={progressData} loading={isLoading} />
+                    <SurveyProgressTable data={progressData} />
                     {dataLevel?.data?.data?.length > 0 &&
                       renderTable(dataLevel?.data?.data, dataLevel?.data?.choices)}
                   </div>
