@@ -11,6 +11,7 @@ import { saveAs } from "file-saver"
 import { useRouter } from "next/router"
 import { useMemo } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
+import { SurveyProgressTable } from "./survey-progress-table"
 
 const { Title } = Typography
 
@@ -49,6 +50,7 @@ function OrganizationSurveyReport({
   // organizationSelected: string
   // setOrganizationSelected: (value: string) => void
 }) {
+  console.log(selectedId)
   const router = useRouter()
   const { onOpen } = useDisclosure({
     tag: "ModalPrintBaoCaoDonVi",
@@ -550,7 +552,7 @@ function OrganizationSurveyReport({
                         height: Math.max(300, (dataLevel?.data?.data?.length || 0) * 35 + 120),
                       }}
                     />
-
+                    <SurveyProgressTable selectedId={selectedId} />
                     {dataLevel?.data?.data?.length > 0 &&
                       renderTable(dataLevel?.data?.data, dataLevel?.data?.choices)}
                   </div>
