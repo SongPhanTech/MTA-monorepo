@@ -534,10 +534,19 @@ export default function StudentFixedClassPage() {
           const scoreData = (student as any).subjectClassStudent?.find(
             (score: any) => score.subjectVersionId === subjectInfo.subject.id
           )
-          if (scoreData) {
-            return scoreData.manualFinalScore ?? scoreData.finalScore
+          
+          if (!scoreData) return "Null"
+          if (scoreData.exempted) return "Miễn"
+          if (scoreData.examPostponed) return "HT"
+          if (scoreData.examBanned) return "CT"
+          if (scoreData.suspended) return "ĐCT"
+
+          const final = scoreData.manualFinalScore ?? scoreData.finalScore
+          if (final !== null && final !== undefined) {
+            return final
           }
-          return null
+          
+          return "Null"
         })
         const ccta = student.foreignLangPass ? "Đạt" : ""
         const tbcData = (student as any).studentSemesterResult?.[0]?.cumulativeGpaBase10
