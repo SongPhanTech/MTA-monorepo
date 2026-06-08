@@ -17,3 +17,10 @@
 .ant-table-wrapper .ant-table-tbody > tr.ant-table-row[class*="bg-"]:hover > .ant-table-cell {
   background-color: inherit;
 }
+.ant-table-tbody > tr.row-failed > td {
+  background-color: #fee2e2 !important;
+}
+
+.ant-table-tbody > tr.row-failed:hover > td {
+  background-color: #fecaca !important;
+}
