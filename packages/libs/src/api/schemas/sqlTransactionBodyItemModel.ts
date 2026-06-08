@@ -179,6 +179,7 @@ export const SqlTransactionBodyItemModel = {
   CouncilMember: 'CouncilMember',
   DefenseRecord: 'DefenseRecord',
   LibrarySubmission: 'LibrarySubmission',
+  ConfigPaymentSession: 'ConfigPaymentSession',
   DefaultCouncilRolePayAmount: 'DefaultCouncilRolePayAmount',
   DefaultSupervisorPayAmount: 'DefaultSupervisorPayAmount',
   PaymentRecord: 'PaymentRecord',
