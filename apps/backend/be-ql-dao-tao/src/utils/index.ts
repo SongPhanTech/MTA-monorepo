@@ -53,15 +53,20 @@ export const MONTH_EN = [
 ]
 
 export const getReportDateParts = (date?: Date | dayjs.Dayjs | string | number | null) => {
+  if (!date) return null
   const d = dayjs(date)
   if (!d.isValid()) return null
 
-  const day = d.date().toString().padStart(2, "0")
-  const monthRaw = d.month() + 1
+  // Convert to UTC+7 (Vietnam Time) to avoid server timezone issues
+  const utcTimestamp = d.valueOf()
+  const vnDate = new Date(utcTimestamp + 7 * 60 * 60 * 1000)
+
+  const day = vnDate.getUTCDate().toString().padStart(2, "0")
+  const monthRaw = vnDate.getUTCMonth() + 1
   const monthVi =
     monthRaw === 1 || monthRaw === 2 ? monthRaw.toString().padStart(2, "0") : monthRaw.toString()
-  const monthEn = MONTH_EN[d.month()]
-  const year = d.year().toString()
+  const monthEn = MONTH_EN[vnDate.getUTCMonth()]
+  const year = vnDate.getUTCFullYear().toString()
 
   const dateVi = `${day}/${monthVi}/${year}`
   const fullVi = `ngày ${day} tháng ${monthVi} năm ${year}`
