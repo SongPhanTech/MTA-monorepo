@@ -964,8 +964,8 @@ export const parseSignerInfo = (signerStr: string) => {
   const isDirector = role.toLowerCase() === "giám đốc"
 
   return {
-    chuc_vi: isDirector ? "GIÁM ĐỐC" : "KT. GIÁM ĐỐC",
-    chuc_vi_ky_thay: isDirector ? "" : "PHÓ GIÁM ĐỐC",
+    chuc_vi: isDirector ? "GIÁM ĐỐC" : "TL. GIÁM ĐỐC",
+    chuc_vi_ky_thay: isDirector ? "" : role.toUpperCase(),
     quan_ham: rank,
     ten_day_du: nameWithDegree,
   }
