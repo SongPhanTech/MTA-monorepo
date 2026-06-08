@@ -2445,16 +2445,8 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
   }
 
   const signerInfo = parseSignerInfo(signerName || "")
-  const pDateRaw = printDate ? printDate.split("T")[0] : new Date()
+  const pDateRaw = printDate ? new Date(printDate) : new Date()
   const pDateParts = getReportDateParts(pDateRaw)
-
-  const councilRoleVi: Record<string, string> = {
-    CHAIRMAN: "Chủ tịch",
-    SECRETARY: "Thư ký",
-    REVIEWER_1: "Phản biện 1",
-    REVIEWER_2: "Phản biện 2",
-    MEMBER: "Ủy viên",
-  }
 
   const trainingObjectTypeShort: Record<string, string> = {
     "Định hướng ứng dụng": "ƯD",
@@ -2850,7 +2842,7 @@ app.openapi(exportPhuLucVanBangNganHan, async (c: any) => {
   }
 
   const signerInfo = parseSignerInfo(signerName || "")
-  const pDateRaw = printDate ? printDate.split("T")[0] : new Date()
+  const pDateRaw = printDate ? new Date(printDate) : new Date()
   const pDateParts = getReportDateParts(pDateRaw)
 
   const trainingObjectTypeShort: Record<string, string> = {
