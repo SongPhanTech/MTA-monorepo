@@ -104,7 +104,7 @@ const CongGiangVienLayout = ({
               minHeight: `calc(100vh - ${CONG_GIANG_VIEN_HEADER_HEIGHT}px)`,
             }}
           >
-            <Content className="px-4 py-4">
+            <Content className="overflow-hidden px-2 py-2">
               {unLayout ? (
                 children
               ) : (
