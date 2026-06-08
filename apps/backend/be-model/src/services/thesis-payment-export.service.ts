@@ -11,7 +11,9 @@ import {
 } from "./thesis-payment.helpers"
 import { loadThesisProjectsForPayment } from "./thesis-payment-query"
 
-function resolveSupervisorPayAmounts(project: Awaited<ReturnType<typeof loadThesisProjectsForPayment>>[number]) {
+function resolveSupervisorPayAmounts(
+  project: Awaited<ReturnType<typeof loadThesisProjectsForPayment>>[number]
+) {
   return project.thesisSession?.configPayment?.supervisorPayAmounts ?? []
 }
 
@@ -42,7 +44,11 @@ function buildSupervisorPaymentRows(
     if (expert) {
       rows.push({
         expert,
-        amount: resolveAmount(project.singleSupervisorPayment?.amount, SupervisorRole.SINGLE, expert),
+        amount: resolveAmount(
+          project.singleSupervisorPayment?.amount,
+          SupervisorRole.SINGLE,
+          expert
+        ),
         bankAccountNumber: expert.bankAccountNumber || "",
         bankName: expert.bankName || "",
       })
@@ -77,7 +83,9 @@ function buildSupervisorPaymentRows(
   return rows
 }
 
-function getStudentFromProject(project: Awaited<ReturnType<typeof loadThesisProjectsForPayment>>[number]) {
+function getStudentFromProject(
+  project: Awaited<ReturnType<typeof loadThesisProjectsForPayment>>[number]
+) {
   return project.registrations[0]?.student
 }
 
@@ -100,8 +108,7 @@ export async function buildCouncilPaymentExportPayload(params: {
     if (!student) continue
 
     const councilDefaults = project.thesisSession?.configPayment?.councilPayAmounts ?? []
-    const majorName =
-      student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || ""
+    const majorName = student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || ""
     if (!khoaquanli) {
       khoaquanli =
         student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.organization?.sTen || ""

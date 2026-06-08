@@ -534,7 +534,7 @@ export default function StudentFixedClassPage() {
           const scoreData = (student as any).subjectClassStudent?.find(
             (score: any) => score.subjectVersionId === subjectInfo.subject.id
           )
-          
+
           if (!scoreData) return "Null"
           if (scoreData.exempted) return "Miễn"
           if (scoreData.examPostponed) return "HT"
@@ -545,7 +545,7 @@ export default function StudentFixedClassPage() {
           if (final !== null && final !== undefined) {
             return final
           }
-          
+
           return "Null"
         })
         const ccta = student.foreignLangPass ? "Đạt" : ""

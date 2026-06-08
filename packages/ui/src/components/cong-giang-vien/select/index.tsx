@@ -13,7 +13,7 @@ const SelectFloat = ({ label, className, ...props }: TSelectFloat) => {
       showSearch
       filterOption={(input, option) => fuzzyMatch(input, option?.label?.toString() || "")}
       notFoundContent="Không có dữ liệu"
-      className={`${label ? "h-10 w-full" : className ?? ""}`}
+      className={`${label ? "h-10 w-full" : (className ?? "")}`}
       {...props}
     />
   )

@@ -844,9 +844,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
         }
         const nextRow = { ...row, [field]: value }
         if (hasSupervisorConflictWithCouncilRow(nextRow)) {
-          message.error(
-            "Giáo viên hướng dẫn không được trùng với các thành viên hội đồng bảo vệ"
-          )
+          message.error("Giáo viên hướng dẫn không được trùng với các thành viên hội đồng bảo vệ")
           return prev
         }
         return {
@@ -865,9 +863,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
           return prev
         }
         if (hasSupervisorConflictWithCouncilRow(nextRow)) {
-          message.error(
-            "Giáo viên hướng dẫn không được trùng với các thành viên hội đồng bảo vệ"
-          )
+          message.error("Giáo viên hướng dẫn không được trùng với các thành viên hội đồng bảo vệ")
           return prev
         }
         return {
@@ -1195,9 +1191,7 @@ export default function DanhMucLuanVan({ role = "P7" }: DanhMucLuanVanProps) {
       } else if (error?.message === "DUPLICATE_COUNCIL") {
         message.error("Các cán bộ trong hội đồng bảo vệ không được trùng nhau")
       } else if (error?.message === "SUPERVISOR_COUNCIL_CONFLICT") {
-        message.error(
-          "Giáo viên hướng dẫn không được trùng với các thành viên hội đồng bảo vệ"
-        )
+        message.error("Giáo viên hướng dẫn không được trùng với các thành viên hội đồng bảo vệ")
       } else {
         message.error("Đã xảy ra lỗi khi lưu hàng loạt, vui lòng kiểm tra lại")
       }

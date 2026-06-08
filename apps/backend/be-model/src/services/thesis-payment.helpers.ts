@@ -67,20 +67,23 @@ export function resolveCouncilMemberPayAmount(
 }
 
 export function getSupervisorName(
-  expert: {
-    name?: string | null
-    workplace?: string | null
-    lecturerId?: string | null
-    academicRankType?: { sMa?: string | null } | null
-    academicDegreeType?: { sMa?: string | null } | null
-    lecturer?: {
-      userProfile?: {
-        fullname?: string | null
+  expert:
+    | {
+        name?: string | null
+        workplace?: string | null
+        lecturerId?: string | null
         academicRankType?: { sMa?: string | null } | null
         academicDegreeType?: { sMa?: string | null } | null
-      } | null
-    } | null
-  } | null | undefined,
+        lecturer?: {
+          userProfile?: {
+            fullname?: string | null
+            academicRankType?: { sMa?: string | null } | null
+            academicDegreeType?: { sMa?: string | null } | null
+          } | null
+        } | null
+      }
+    | null
+    | undefined,
   showWorkplace = false
 ) {
   if (!expert) return ""

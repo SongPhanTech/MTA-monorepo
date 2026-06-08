@@ -424,9 +424,9 @@ export async function _generateStudentImportTemplate(
   const buffer = await getTemplateBuffer(prisma, "MauImportDSHV_v4.xlsx")
   const template = new XlsxTemplate(buffer)
   template.substitute("HỌC VIÊN, SINH VIÊN", {
-  doituongdaotao: trainingObjectType.name,
-})
- template.substitute("DoiTuongDaoTao", {
+    doituongdaotao: trainingObjectType.name,
+  })
+  template.substitute("DoiTuongDaoTao", {
     team: [{ ten: trainingObjectType.name }],
   })
   template.substitute("DanhMucLopQuanLi", {

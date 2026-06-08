@@ -171,10 +171,7 @@ export default function SupervisorPaymentRecordPage() {
             singleSupervisorPayment: {
               some: {
                 ...projectWhere,
-                OR: [
-                  { supervisor: { name: nameFilter } },
-                  { coSupervisor: { name: nameFilter } },
-                ],
+                OR: [{ supervisor: { name: nameFilter } }, { coSupervisor: { name: nameFilter } }],
               },
             },
           },
@@ -234,10 +231,7 @@ export default function SupervisorPaymentRecordPage() {
     { enabled: !!thesisSessionId }
   )
 
-  const { data: count } = useCountSupervisorPaymentRecord(
-    { where },
-    { enabled: !!thesisSessionId }
-  )
+  const { data: count } = useCountSupervisorPaymentRecord({ where }, { enabled: !!thesisSessionId })
 
   const { showSpinner, hideSpinner } = useSpinner()
 

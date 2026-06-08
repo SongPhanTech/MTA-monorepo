@@ -10,7 +10,11 @@ import { loadThesisProjectsForPayment } from "./thesis-payment-query"
 
 const SYNC_CONCURRENCY = 8
 
-async function runWithConcurrency<T>(items: T[], limit: number, worker: (item: T) => Promise<void>) {
+async function runWithConcurrency<T>(
+  items: T[],
+  limit: number,
+  worker: (item: T) => Promise<void>
+) {
   if (!items.length) return
   let nextIndex = 0
   const poolSize = Math.min(limit, items.length)
@@ -56,8 +60,7 @@ function projectNeedsSupervisorPaymentSync(project: {
   const oldCoPayId = project.coSupervisorPaymentId
 
   if (supExpert && coExpert) {
-    const supMissing =
-      !project.supervisorPaymentId || paymentAmount(project.supervisorPayment) <= 0
+    const supMissing = !project.supervisorPaymentId || paymentAmount(project.supervisorPayment) <= 0
     const coMissing =
       !project.coSupervisorPaymentId || paymentAmount(project.coSupervisorPayment) <= 0
     return supMissing || coMissing || !!oldSinglePayId
@@ -68,12 +71,18 @@ function projectNeedsSupervisorPaymentSync(project: {
   return singleMissing || !!(oldSupPayId || oldCoPayId)
 }
 
-function resolveSupervisorDefaults(project: Awaited<ReturnType<typeof loadThesisProjectsForPayment>>[number]) {
+function resolveSupervisorDefaults(
+  project: Awaited<ReturnType<typeof loadThesisProjectsForPayment>>[number]
+) {
   const embedded = project.thesisSession?.configPayment?.supervisorPayAmounts
   return embedded?.length ? embedded : []
 }
 
-async function createSupervisorPayment(amount: number, projectId: string, link: "supervisor" | "coSupervisor" | "single") {
+async function createSupervisorPayment(
+  amount: number,
+  projectId: string,
+  link: "supervisor" | "coSupervisor" | "single"
+) {
   const base = {
     amount: new Decimal(amount),
     status: PaymentStatus.PENDING,
@@ -189,8 +198,7 @@ async function ensureSupervisorPaymentForProject(
     const amtSup = getSupervisorDefaultPayAmount(defaults, SupervisorRole.SUPERVISOR, inAcSup)
     const amtCo = getSupervisorDefaultPayAmount(defaults, SupervisorRole.CO_SUPERVISOR, inAcCo)
 
-    const supMissing =
-      !project.supervisorPaymentId || paymentAmount(project.supervisorPayment) <= 0
+    const supMissing = !project.supervisorPaymentId || paymentAmount(project.supervisorPayment) <= 0
     const coMissing =
       !project.coSupervisorPaymentId || paymentAmount(project.coSupervisorPayment) <= 0
     const mustClearSingle = !!oldSinglePayId

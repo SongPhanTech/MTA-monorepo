@@ -1,8 +1,5 @@
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
-import {
-  renderDocxTemplate,
-  TemplateNotFoundError,
-} from "../services/docx-template-render.service"
+import { renderDocxTemplate, TemplateNotFoundError } from "../services/docx-template-render.service"
 import { MinIOService } from "../services/minio"
 
 const app = new OpenAPIHono({ strict: false })

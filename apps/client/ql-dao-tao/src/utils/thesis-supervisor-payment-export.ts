@@ -36,9 +36,14 @@ function getSupervisorDefaultPayAmount(
 }
 
 function resolveSupervisorPayAmountsForProject(
-  project: {
-    thesisSession?: { configPayment?: { supervisorPayAmounts?: DefaultSupervisorPayAmountRow[] } }
-  } | null | undefined,
+  project:
+    | {
+        thesisSession?: {
+          configPayment?: { supervisorPayAmounts?: DefaultSupervisorPayAmountRow[] }
+        }
+      }
+    | null
+    | undefined,
   fallback: DefaultSupervisorPayAmountRow[] = []
 ): DefaultSupervisorPayAmountRow[] {
   const embedded = project?.thesisSession?.configPayment?.supervisorPayAmounts
@@ -80,8 +85,7 @@ export function projectNeedsSupervisorPaymentSync(project: any): boolean {
   const oldCoPayId = project.coSupervisorPaymentId as string | undefined
 
   if (supExpert && coExpert) {
-    const supMissing =
-      !project.supervisorPaymentId || paymentAmount(project.supervisorPayment) <= 0
+    const supMissing = !project.supervisorPaymentId || paymentAmount(project.supervisorPayment) <= 0
     const coMissing =
       !project.coSupervisorPaymentId || paymentAmount(project.coSupervisorPayment) <= 0
     const mustClearSingle = !!oldSinglePayId
@@ -231,8 +235,7 @@ export async function ensureSupervisorPaymentForProject(
     const amtSup = getDefaultPay(project, SupervisorRole.SUPERVISOR, inAcSup)
     const amtCo = getDefaultPay(project, SupervisorRole.CO_SUPERVISOR, inAcCo)
 
-    const supMissing =
-      !project.supervisorPaymentId || paymentAmount(project.supervisorPayment) <= 0
+    const supMissing = !project.supervisorPaymentId || paymentAmount(project.supervisorPayment) <= 0
     const coMissing =
       !project.coSupervisorPaymentId || paymentAmount(project.coSupervisorPayment) <= 0
     const mustClearSingle = !!oldSinglePayId
@@ -338,9 +341,7 @@ export async function ensureSupervisorPaymentForProject(
   await updateProject(project.id, {
     supervisorPayment: { disconnect: true },
     coSupervisorPayment: { disconnect: true },
-    singleSupervisorPayment: newSingleId
-      ? { connect: { id: newSingleId } }
-      : { disconnect: true },
+    singleSupervisorPayment: newSingleId ? { connect: { id: newSingleId } } : { disconnect: true },
   })
 
   queueDelete(oldSupPayId)
@@ -408,7 +409,11 @@ export function buildSupervisorPaymentRows(
       const inAc = !!(expert.lecturer || expert.lecturerId)
       rows.push({
         expert,
-        amount: resolveAmount(project.singleSupervisorPayment?.amount, SupervisorRole.SINGLE, expert),
+        amount: resolveAmount(
+          project.singleSupervisorPayment?.amount,
+          SupervisorRole.SINGLE,
+          expert
+        ),
         bankAccountNumber: expert.bankAccountNumber || "",
         bankName: expert.bankName || "",
       })

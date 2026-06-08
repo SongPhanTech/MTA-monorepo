@@ -7,11 +7,7 @@ import {
 } from "@constants/constants"
 import useSpinner from "@hooks/spinner"
 import { StudentStatus, type Student } from "@workspace/db/client"
-import {
-  useCountStudent,
-  useFindManyStudent,
-  useFindUniqueFixedClass,
-} from "@workspace/db/hooks"
+import { useCountStudent, useFindManyStudent, useFindUniqueFixedClass } from "@workspace/db/hooks"
 import { sqlTransaction } from "@workspace/libs/api/model"
 import { Button, Col, Divider, Flex, Form, Input, message, Row, Tag, Tooltip } from "antd"
 import dayjs from "dayjs"
@@ -232,10 +228,7 @@ const AddStudentToFixedClassModal = () => {
     ...stagedRemove,
     ...dataStudentNotClass.filter((s) => !stagedAddIds.includes(s.id)),
   ]
-  const dataInClassDisplay = [
-    ...stagedAdd,
-    ...data.filter((s) => !stagedRemoveIds.includes(s.id)),
-  ]
+  const dataInClassDisplay = [...stagedAdd, ...data.filter((s) => !stagedRemoveIds.includes(s.id))]
 
   // Bấm "Lưu" mới thực sự ghi xuống DB
   async function onOk() {
@@ -348,9 +341,7 @@ const AddStudentToFixedClassModal = () => {
     // SV đang chờ thêm mà được chuyển lại ra ngoài -> huỷ thao tác thêm
     setStagedAdd((prev) => prev.filter((s) => !selectedSet.has(s.id)))
     // SV đang trong lớp -> đưa vào danh sách chờ xoá
-    const toRemove = data.filter(
-      (s) => selectedSet.has(s.id) && !stagedRemoveIds.includes(s.id)
-    )
+    const toRemove = data.filter((s) => selectedSet.has(s.id) && !stagedRemoveIds.includes(s.id))
     setStagedRemove((prev) => [...prev, ...toRemove])
     setSelectedRowKeysInClass([])
   }

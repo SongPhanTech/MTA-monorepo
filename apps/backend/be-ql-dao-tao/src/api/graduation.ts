@@ -2403,20 +2403,20 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
               defenseRecord: true,
               thesisSession: true,
               council: {
-            include: {
-              members: {
                 include: {
-                  expert: {
+                  members: {
                     include: {
-                      lecturer: { include: { userProfile: true } },
-                      academicDegreeType: true,
-                      academicRankType: true,
+                      expert: {
+                        include: {
+                          lecturer: { include: { userProfile: true } },
+                          academicDegreeType: true,
+                          academicRankType: true,
+                        },
+                      },
                     },
                   },
                 },
               },
-            },
-          },
             },
           },
         },
