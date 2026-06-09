@@ -6,17 +6,8 @@ import { Button, Segmented } from "antd"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 
 const LichCuaToi = () => {
-  const {
-    cheDo,
-    setCheDo,
-    nhanThoiGian,
-    suKienNgay,
-    suKienTuan,
-    lui,
-    tien,
-    veHomNay,
-    isLoading,
-  } = useLichCuaToi()
+  const { cheDo, setCheDo, nhanThoiGian, suKienNgay, suKienTuan, lui, tien, veHomNay, isLoading } =
+    useLichCuaToi()
 
   return (
     <div className="flex h-full min-h-0 w-full min-w-0 flex-col overflow-hidden rounded-lg bg-white shadow-sm">

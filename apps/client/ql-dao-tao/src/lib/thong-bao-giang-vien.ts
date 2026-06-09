@@ -27,13 +27,14 @@ type TaoThongBaoInput = {
   expiresAt?: Date | string | null
 }
 
-const formatNgay = (value?: Date | string | null) =>
-  value ? dayjs(value).format(FMT_NGAY) : ""
+const formatNgay = (value?: Date | string | null) => (value ? dayjs(value).format(FMT_NGAY) : "")
 
 const tenMonHoc = (lop: LopMonHocThongBao) => lop.monHoc || lop.name || ""
 
 const gomGiangVienNhapDiem = (lop: LopMonHocThongBao) =>
-  [...new Set([lop.lecturerId, lop.extraLecturerId, lop.enterGradeLecturerId].filter(Boolean))] as string[]
+  [
+    ...new Set([lop.lecturerId, lop.extraLecturerId, lop.enterGradeLecturerId].filter(Boolean)),
+  ] as string[]
 
 const gomGiangVienGiangDay = (lop: LopMonHocThongBao) =>
   [...new Set([lop.lecturerId, lop.extraLecturerId].filter(Boolean))] as string[]
@@ -101,10 +102,7 @@ async function layLopMonHoc(ids: string[]): Promise<LopMonHocThongBao[]> {
 }
 
 /** Gửi thông báo phân công giảng dạy cho GV chính / phụ. */
-async function thongBaoPhanCongGiangDay(
-  subjectClassIds: string[],
-  chiGiangVienIds?: string[]
-) {
+async function thongBaoPhanCongGiangDay(subjectClassIds: string[], chiGiangVienIds?: string[]) {
   const lopList = await layLopMonHoc(subjectClassIds)
   const danhSach: TaoThongBaoInput[] = []
 

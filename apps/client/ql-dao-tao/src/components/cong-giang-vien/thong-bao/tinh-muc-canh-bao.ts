@@ -6,10 +6,7 @@ import {
 } from "@components/cong-giang-vien/thong-bao/types"
 import dayjs from "dayjs"
 
-const tinhMucCanhBao = (
-  loai: LoaiThongBaoGv,
-  expiresAt?: Date | string | null
-): MucCanhBao => {
+const tinhMucCanhBao = (loai: LoaiThongBaoGv, expiresAt?: Date | string | null): MucCanhBao => {
   // Phân công giảng dạy không có hạn xử lý → luôn là thông báo mới.
   if (loai === "TEACHING_ASSIGNMENTS") return "moi"
 

@@ -74,7 +74,9 @@ const TheThongBao = ({ thongBao, compact, onClick }: TheThongBaoProps) => {
           </div>
         </div>
 
-        <div className={cn("flex shrink-0 flex-col items-end pl-1", compact ? "gap-1" : "gap-2 pl-2")}>
+        <div
+          className={cn("flex shrink-0 flex-col items-end pl-1", compact ? "gap-1" : "gap-2 pl-2")}
+        >
           <span className="whitespace-nowrap text-[10px] text-gray-500 sm:text-xs">
             {compact ? thongBao.thoiGian.split(" • ")[0] : thongBao.thoiGian}
           </span>
@@ -82,7 +84,9 @@ const TheThongBao = ({ thongBao, compact, onClick }: TheThongBaoProps) => {
             <span className="text-[10px] text-gray-400 sm:text-xs">Hạn: {thongBao.hanXuLy}</span>
           ) : null}
           <div className="flex items-center gap-1 text-[10px] sm:text-xs">
-            <span className={cn("inline-block h-1.5 w-1.5 rounded-full sm:h-2 sm:w-2", mucMeta.dot)} />
+            <span
+              className={cn("inline-block h-1.5 w-1.5 rounded-full sm:h-2 sm:w-2", mucMeta.dot)}
+            />
             {!compact ? (
               <span className={cn("font-medium", mucMeta.statusColor)}>{mucMeta.label}</span>
             ) : null}

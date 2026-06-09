@@ -39,7 +39,9 @@ const gomGiangVienNhapDiem = (lop: {
   extraLecturerId: string | null
   enterGradeLecturerId: string | null
 }) =>
-  [...new Set([lop.lecturerId, lop.extraLecturerId, lop.enterGradeLecturerId].filter(Boolean))] as string[]
+  [
+    ...new Set([lop.lecturerId, lop.extraLecturerId, lop.enterGradeLecturerId].filter(Boolean)),
+  ] as string[]
 
 const maThongBaoCron = (
   type: NotificationType,
@@ -48,10 +50,7 @@ const maThongBaoCron = (
   slotKey: string
 ) => `CRON-${type}-${refId}-${lecturerId}-${slotKey}`
 
-async function taoThongBaoCoMa(
-  prisma: PrismaClient,
-  danhSach: ThongBaoJobInput[]
-) {
+async function taoThongBaoCoMa(prisma: PrismaClient, danhSach: ThongBaoJobInput[]) {
   if (!danhSach.length) return 0
 
   const result = await prisma.notification.createMany({
@@ -107,7 +106,11 @@ async function quetVaThongBaoHanGiangVien(prisma: PrismaClient, slotKey: string)
       active: true,
       deletedAt: null,
       cancelled: false,
-      OR: [{ lecturerId: { not: null } }, { extraLecturerId: { not: null } }, { enterGradeLecturerId: { not: null } }],
+      OR: [
+        { lecturerId: { not: null } },
+        { extraLecturerId: { not: null } },
+        { enterGradeLecturerId: { not: null } },
+      ],
     },
     select: {
       id: true,
@@ -288,10 +291,7 @@ const selectLopMonHoc = {
   subject: { select: { name: true } },
 } satisfies Parameters<PrismaClient["subjectClass"]["findMany"]>[0]["select"]
 
-async function thongBaoHanNhapDiemQuaTrinhServer(
-  prisma: PrismaClient,
-  subjectClassIds: string[]
-) {
+async function thongBaoHanNhapDiemQuaTrinhServer(prisma: PrismaClient, subjectClassIds: string[]) {
   if (!subjectClassIds.length) return
 
   const lopList = await prisma.subjectClass.findMany({

@@ -62,11 +62,7 @@ const BangLopQuanLy = ({ data, loading, gon, onXemTatCa, onRowClick }: BangLopQu
         dataSource={data}
         loading={loading}
         pagination={false}
-        scroll={
-          gon
-            ? { x: "100%", ...(data.length > 3 ? { y: 120 } : {}) }
-            : { x: "max-content" }
-        }
+        scroll={gon ? { x: "100%", ...(data.length > 3 ? { y: 120 } : {}) } : { x: "max-content" }}
         className={gon ? "table-gv-gon [&_.ant-table]:text-xs" : undefined}
         onRow={(record) => ({
           onClick: () => onRowClick?.(record.id),

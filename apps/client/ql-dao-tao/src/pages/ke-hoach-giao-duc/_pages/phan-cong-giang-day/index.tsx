@@ -13,10 +13,7 @@ import type { FilterProps } from "@constants/type"
 import { useExamTypeOptions } from "@hooks/examType"
 import useSpinner from "@hooks/spinner"
 import DefaultLayout from "@layouts/default-layout"
-import {
-  layGiangVienPhanCongThayDoi,
-  thongBaoPhanCongGiangDay,
-} from "@lib/thong-bao-giang-vien"
+import { layGiangVienPhanCongThayDoi, thongBaoPhanCongGiangDay } from "@lib/thong-bao-giang-vien"
 import { buildOrgFlat, buildOrgTree } from "@lib/utils"
 import { emptyObjectIf } from "@workspace/constant"
 import { $Enums, type Prisma, type SubjectClass } from "@workspace/db/client"

@@ -2,10 +2,7 @@ import DatePicker from "@components/commons/date-picker"
 import FormItem from "@components/commons/form-item"
 import PutFormModal from "@components/commons/put-modal"
 import useSpinner from "@hooks/spinner"
-import {
-  thongBaoHanNhapDiemQuaTrinh,
-  thongBaoHanNhapDiemThi,
-} from "@lib/thong-bao-giang-vien"
+import { thongBaoHanNhapDiemQuaTrinh, thongBaoHanNhapDiemThi } from "@lib/thong-bao-giang-vien"
 import { useFindUniqueSubjectClass, useUpdateSubjectClass } from "@workspace/db/hooks"
 import { DatePicker as AntdDatePicker, Col, Form, message } from "antd"
 import locale from "antd/es/date-picker/locale/vi_VN"

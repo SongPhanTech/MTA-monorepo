@@ -37,7 +37,14 @@ const columns: ColumnsType<LopMonHocRow> = [
 ]
 
 // Bảng dùng chung cho "Lớp giảng dạy" và "Lớp trợ giảng".
-const BangLopMonHoc = ({ tieuDe, data, loading, gon, onXemTatCa, onRowClick }: BangLopMonHocProps) => {
+const BangLopMonHoc = ({
+  tieuDe,
+  data,
+  loading,
+  gon,
+  onXemTatCa,
+  onRowClick,
+}: BangLopMonHocProps) => {
   return (
     <KhungPanel
       className={gon ? "h-full" : undefined}
@@ -63,11 +70,7 @@ const BangLopMonHoc = ({ tieuDe, data, loading, gon, onXemTatCa, onRowClick }: B
         dataSource={data}
         loading={loading}
         pagination={false}
-        scroll={
-          gon
-            ? { x: "100%", ...(data.length > 3 ? { y: 120 } : {}) }
-            : { x: "max-content" }
-        }
+        scroll={gon ? { x: "100%", ...(data.length > 3 ? { y: 120 } : {}) } : { x: "max-content" }}
         className={gon ? "table-gv-gon [&_.ant-table]:text-xs" : undefined}
         onRow={(record) => ({
           onClick: () => onRowClick?.(record.id),

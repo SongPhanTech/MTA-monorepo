@@ -9,11 +9,7 @@ import {
   type LecturerDeadlineCronSchedule,
 } from "@workspace/constant"
 import type { ConfigKey } from "@workspace/db/client"
-import {
-  useCreateConfig,
-  useFindUniqueConfig,
-  useUpdateConfig,
-} from "@workspace/db/hooks"
+import { useCreateConfig, useFindUniqueConfig, useUpdateConfig } from "@workspace/db/hooks"
 import { Alert, Button, Col, Flex, Form, Modal, Row, Switch, TimePicker, message } from "antd"
 import dayjs, { type Dayjs } from "dayjs"
 import { useEffect, useMemo, useState } from "react"
@@ -118,9 +114,10 @@ export default function CauHinhQuetHanGiangVien() {
         return
       }
 
-      const hoursMoi = editingHour === null
-        ? [...rows.map((r) => r.hour), hour]
-        : rows.map((r) => (r.hour === editingHour ? hour : r.hour))
+      const hoursMoi =
+        editingHour === null
+          ? [...rows.map((r) => r.hour), hour]
+          : rows.map((r) => (r.hour === editingHour ? hour : r.hour))
 
       await luuSchedule({
         ...savedSchedule,

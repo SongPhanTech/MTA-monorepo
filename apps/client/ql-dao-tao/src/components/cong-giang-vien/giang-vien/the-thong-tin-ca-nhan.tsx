@@ -25,7 +25,12 @@ const Hang = ({ icon, nhan, giaTri }: HangProps) => (
 // Thẻ THÔNG TIN CÁ NHÂN gọn — header xanh + danh sách icon/label/value.
 const TheThongTinCaNhan = ({ thongTin, isLoading }: TheThongTinCaNhanProps) => {
   const danhSach = [
-    { key: "ma-gv", icon: <Users size={14} />, nhan: "Mã giảng viên", giaTri: thongTin.maGiangVien },
+    {
+      key: "ma-gv",
+      icon: <Users size={14} />,
+      nhan: "Mã giảng viên",
+      giaTri: thongTin.maGiangVien,
+    },
     { key: "khoa", icon: <Building2 size={14} />, nhan: "Khoa", giaTri: thongTin.khoa },
     { key: "bo-mon", icon: <BookOpen size={14} />, nhan: "Bộ môn", giaTri: thongTin.boMon },
     { key: "hoc-vi", icon: <GraduationCap size={14} />, nhan: "Học vị", giaTri: thongTin.hocVi },

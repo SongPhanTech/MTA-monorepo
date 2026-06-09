@@ -729,7 +729,10 @@ app.openapi(setExamScoreDeadLine, async (c) => {
     },
     select: { id: true },
   })
-  await thongBaoHanNhapDiemThiServer(prisma, lopDaCapNhat.map((item) => item.id))
+  await thongBaoHanNhapDiemThiServer(
+    prisma,
+    lopDaCapNhat.map((item) => item.id)
+  )
 
   return c.json({ message: "Success" })
 })

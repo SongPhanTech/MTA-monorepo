@@ -25,12 +25,7 @@ const tinhMsDenLanChayTiep = (gioChay: number[], tz: string): number => {
     }
   }
 
-  const sangHomSau = now
-    .add(1, "day")
-    .hour(sorted[0]!)
-    .minute(0)
-    .second(0)
-    .millisecond(0)
+  const sangHomSau = now.add(1, "day").hour(sorted[0]!).minute(0).second(0).millisecond(0)
   return sangHomSau.diff(now)
 }
 

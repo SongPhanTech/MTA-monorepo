@@ -149,13 +149,10 @@ const useThongBaoGiangVien = () => {
     { enabled: !!profileId }
   )
 
-  const locTheoMucCanhBao = useCallback(
-    (items: ThongBaoView[], muc: BoLocMucCanhBao) => {
-      if (muc === "tat_ca") return items
-      return items.filter((item) => item.mucCanhBao === muc)
-    },
-    []
-  )
+  const locTheoMucCanhBao = useCallback((items: ThongBaoView[], muc: BoLocMucCanhBao) => {
+    if (muc === "tat_ca") return items
+    return items.filter((item) => item.mucCanhBao === muc)
+  }, [])
 
   const danhSachGoc = useMemo(() => {
     return raw

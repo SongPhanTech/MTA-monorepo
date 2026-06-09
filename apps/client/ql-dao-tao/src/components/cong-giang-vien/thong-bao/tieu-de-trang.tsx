@@ -13,7 +13,10 @@ const TieuDeTrangThongBao = () => {
         items={[
           {
             title: (
-              <Link href={ROUTER_PATH.QL_DAO_TAO.CONG_GIANG_VIEN_GIANG_VIEN} className="text-gray-500">
+              <Link
+                href={ROUTER_PATH.QL_DAO_TAO.CONG_GIANG_VIEN_GIANG_VIEN}
+                className="text-gray-500"
+              >
                 Trang chủ
               </Link>
             ),
