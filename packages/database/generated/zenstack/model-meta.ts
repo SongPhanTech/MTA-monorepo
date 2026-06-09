@@ -14197,6 +14197,7 @@ const metadata: ModelMeta = {
                 }, summary: {
                     name: "summary",
                     type: "String",
+                    isOptional: true,
                 }, numberCreditsMajor: {
                     name: "numberCreditsMajor",
                     type: "Int",
