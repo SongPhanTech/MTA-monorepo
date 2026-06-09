@@ -2397,9 +2397,8 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
         include: {
           thesisProject: {
             include: {
-              primarySupervisor: { include: { userProfile: true } },
-              secondarySupervisor: { include: { userProfile: true } },
-              thirdSupervisor: true,
+              supervisor: true,
+              coSupervisor: true,
               defenseRecord: true,
               thesisSession: true,
               council: {
@@ -2584,11 +2583,9 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
             vai_tro_hoi_dong: vaiTroByRole[m.role] ?? "",
           }
         })
-
       const supervisors = [
-        tP?.primarySupervisor?.userProfile?.fullname,
-        tP?.secondarySupervisor?.userProfile?.fullname,
-        tP?.thirdSupervisor?.name,
+        tP?.supervisor?.name,
+        tP?.coSupervisor?.name,
       ]
         .filter(Boolean)
         .map(safeString)
@@ -2652,7 +2649,7 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
   }
 
   try {
-    const templateBuffer = await getLuanVanTemplateBuffer(prisma, "PhuLucVanBangCaoHoc_v8.docx")
+    const templateBuffer = await getLuanVanTemplateBuffer(prisma, "PhuLucVanBangCaoHoc_v9 .docx")
     const zip = new PizZip(templateBuffer)
     const doc = new Docxtemplater(zip, {
       paragraphLoop: true,
