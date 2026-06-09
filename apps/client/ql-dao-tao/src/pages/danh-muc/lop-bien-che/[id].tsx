@@ -543,18 +543,19 @@ export default function StudentFixedClassPage() {
           return "Null"
         })
         const ccta = student.foreignLangPass ? "Đạt" : ""
-        
+
         let totalScoreCredits = 0
         let totalCreditsForAvg = 0
 
         ;(subjectsInOrder || []).forEach((subjectInfo, i) => {
           const d = diem[i]
           if (typeof d === "number") {
-             totalScoreCredits += d * (subjectInfo.subject.credit || 0)
-             totalCreditsForAvg += (subjectInfo.subject.credit || 0)
+            totalScoreCredits += d * (subjectInfo.subject.credit || 0)
+            totalCreditsForAvg += subjectInfo.subject.credit || 0
           }
         })
-        const tbcData = totalCreditsForAvg > 0 ? (totalScoreCredits / totalCreditsForAvg).toFixed(2) : null
+        const tbcData =
+          totalCreditsForAvg > 0 ? (totalScoreCredits / totalCreditsForAvg).toFixed(2) : null
         const tbc = tbcData ? Number(tbcData) : null
 
         const thesisReg = (student as any).thesisRegistrations?.[0]
@@ -562,11 +563,13 @@ export default function StudentFixedClassPage() {
         let dlv = dlvData ? Number(dlvData) : null
 
         if (dlv === null) {
-           const gradSubjectIndex = (subjectsInOrder || []).findIndex(s => s.subject.name.toLowerCase().includes("luận văn"))
-           if (gradSubjectIndex >= 0) {
-              const d = diem[gradSubjectIndex]
-              if (typeof d === "number") dlv = d
-           }
+          const gradSubjectIndex = (subjectsInOrder || []).findIndex((s) =>
+            s.subject.name.toLowerCase().includes("luận văn")
+          )
+          if (gradSubjectIndex >= 0) {
+            const d = diem[gradSubjectIndex]
+            if (typeof d === "number") dlv = d
+          }
         }
 
         return {

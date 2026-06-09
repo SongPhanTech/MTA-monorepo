@@ -193,7 +193,7 @@ export default function CauHinhQuetHanGiangVien() {
                 title: "STT",
                 width: 80,
                 align: "center",
-                render: (_: unknown, __: unknown, index: number) => index + 1,
+                render: (_, __, index: number) => index + 1,
               },
               {
                 title: "Giờ quét (VN)",
@@ -211,7 +211,7 @@ export default function CauHinhQuetHanGiangVien() {
                 width: 100,
                 align: "center",
                 fixed: "right",
-                render: (_: unknown, record: GioQuetRow) => (
+                render: (_, record) => (
                   <div className="flex justify-center gap-3">
                     <EditOutlined
                       className="text-sm text-blue-700 cursor-pointer"
@@ -262,7 +262,6 @@ export default function CauHinhQuetHanGiangVien() {
               format="HH:mm"
               className="w-full"
               placeholder="Chọn giờ (phút sẽ được làm tròn về :00)"
-              minuteStep={60}
             />
           </Form.Item>
         </Form>

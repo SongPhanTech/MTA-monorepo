@@ -10,7 +10,7 @@ import {
   THU_TU_MUC_CANH_BAO,
 } from "@components/cong-giang-vien/thong-bao/types"
 import { useSession } from "@workspace/auth/react"
-import type { Prisma } from "@workspace/db"
+import { Prisma } from "@workspace/db/client"
 import { useFindFirstLecturer, useFindManyNotification } from "@workspace/db/hooks"
 import dayjs from "dayjs"
 import { useCallback, useDeferredValue, useEffect, useMemo, useState } from "react"
@@ -160,7 +160,7 @@ const useThongBaoGiangVien = () => {
         const view = mapThongBao(item, daDocIds)
         return view ? { view, publishedAt: item.publishedAt } : null
       })
-      .filter((item): item is { view: ThongBaoView; publishedAt: Date | string } => item !== null)
+      .filter((item): item is { view: ThongBaoView; publishedAt: Date } => item !== null)
       .sort(sapXepTheoUuTien)
       .map((item) => item.view)
   }, [raw, daDocIds])

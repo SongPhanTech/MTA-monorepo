@@ -2583,10 +2583,7 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
             vai_tro_hoi_dong: vaiTroByRole[m.role] ?? "",
           }
         })
-      const supervisors = [
-        tP?.supervisor?.name,
-        tP?.coSupervisor?.name,
-      ]
+      const supervisors = [tP?.supervisor?.name, tP?.coSupervisor?.name]
         .filter(Boolean)
         .map(safeString)
         .join("; ")
