@@ -25,6 +25,7 @@ export type PresignedUrlDto = {
   path: string;
   extension: string;
   name?: string | null;
+  flat?: boolean | null;
 };
 
 export type BucketItemDto = {

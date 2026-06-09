@@ -15637,1305 +15637,26 @@ const metadata: ModelMeta = {
                     isArray: true,
                     backLink: 'notifications',
                     isRelationOwner: true,
+                }, lecturer: {
+                    name: "lecturer",
+                    type: "Lecturer",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'notifications',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "lecturerId" },
+                }, lecturerId: {
+                    name: "lecturerId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'lecturer',
                 }, attachments: {
                     name: "attachments",
                     type: "DocumentFile",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'notification',
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                },
-            },
-        },
-        documentFile: {
-            name: 'DocumentFile', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$DocumentFile$createdBy,
-                }, name: {
-                    name: "name",
-                    type: "String",
-                }, path: {
-                    name: "path",
-                    type: "String",
-                }, size: {
-                    name: "size",
-                    type: "BigInt",
-                }, mimeType: {
-                    name: "mimeType",
-                    type: "String",
-                    isOptional: true,
-                }, archivedCertificate: {
-                    name: "archivedCertificate",
-                    type: "ArchivedCertificate",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'documentFiles',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "archivedCertificateId" },
-                }, archivedCertificateId: {
-                    name: "archivedCertificateId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'archivedCertificate',
-                }, trainingCourse: {
-                    name: "trainingCourse",
-                    type: "TrainingCourse",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'documentFiles',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "trainingCourseId" },
-                }, trainingCourseId: {
-                    name: "trainingCourseId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'trainingCourse',
-                }, archivedAward: {
-                    name: "archivedAward",
-                    type: "ArchivedAward",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'documentFiles',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "archivedAwardId" },
-                }, archivedAwardId: {
-                    name: "archivedAwardId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'archivedAward',
-                }, curriculum: {
-                    name: "curriculum",
-                    type: "Curriculum",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'documentFiles',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "curriculumId" },
-                }, curriculumId: {
-                    name: "curriculumId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'curriculum',
-                }, curriculumVersion: {
-                    name: "curriculumVersion",
-                    type: "CurriculumVersion",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'documentFiles',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "curriculumVersionId" },
-                }, curriculumVersionId: {
-                    name: "curriculumVersionId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'curriculumVersion',
-                }, subjectVersion: {
-                    name: "subjectVersion",
-                    type: "SubjectVersion",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'documentFiles',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "subjectVersionId" },
-                }, subjectVersionId: {
-                    name: "subjectVersionId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'subjectVersion',
-                }, studentAcademicDecision: {
-                    name: "studentAcademicDecision",
-                    type: "StudentAcademicDecision",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'documentEvidence',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "studentAcademicDecisionId" },
-                }, studentAcademicDecisionId: {
-                    name: "studentAcademicDecisionId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'studentAcademicDecision',
-                }, notification: {
-                    name: "notification",
-                    type: "Notification",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'attachments',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "notificationId" },
-                }, notificationId: {
-                    name: "notificationId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'notification',
-                }, decision: {
-                    name: "decision",
-                    type: "Decision",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'documentFile',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "decisionId" },
-                }, decisionId: {
-                    name: "decisionId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'decision',
-                }, defenseRecord: {
-                    name: "defenseRecord",
-                    type: "DefenseRecord",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'documents',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "defenseRecordId" },
-                }, defenseRecordId: {
-                    name: "defenseRecordId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'defenseRecord',
-                }, librarySubmission: {
-                    name: "librarySubmission",
-                    type: "LibrarySubmission",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'documentFile',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "librarySubmissionId" },
-                }, librarySubmissionId: {
-                    name: "librarySubmissionId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'librarySubmission',
-                }, diplomaFront: {
-                    name: "diplomaFront",
-                    type: "GraduationDecision",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'diplomaFront',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "diplomaFrontId" },
-                }, diplomaFrontId: {
-                    name: "diplomaFrontId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'diplomaFront',
-                }, diplomaBack: {
-                    name: "diplomaBack",
-                    type: "GraduationDecision",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'diplomaBack',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "diplomaBackId" },
-                }, diplomaBackId: {
-                    name: "diplomaBackId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'diplomaBack',
-                }, diplomaVerification: {
-                    name: "diplomaVerification",
-                    type: "DiplomaVerificationApplication",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'attachments',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "diplomaVerificationId" },
-                }, diplomaVerificationId: {
-                    name: "diplomaVerificationId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'diplomaVerification',
-                }, diplomaVerificationFront: {
-                    name: "diplomaVerificationFront",
-                    type: "DiplomaVerificationApplication",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'diplomaFront',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "diplomaVerificationFrontId" },
-                }, diplomaVerificationFrontId: {
-                    name: "diplomaVerificationFrontId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'diplomaVerificationFront',
-                }, diplomaVerificationBack: {
-                    name: "diplomaVerificationBack",
-                    type: "DiplomaVerificationApplication",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'diplomaBack',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "diplomaVerificationBackId" },
-                }, diplomaVerificationBackId: {
-                    name: "diplomaVerificationBackId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'diplomaVerificationBack',
-                }, trainingField: {
-                    name: "trainingField",
-                    type: "TrainingField",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'documentFiles',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "trainingFieldId" },
-                }, trainingFieldId: {
-                    name: "trainingFieldId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'trainingField',
-                }, studentScoreConvert: {
-                    name: "studentScoreConvert",
-                    type: "StudentScoreConvert",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'documentFiles',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "studentScoreConvertId" },
-                }, studentScoreConvertId: {
-                    name: "studentScoreConvertId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'studentScoreConvert',
-                }, scoreLinkSheet: {
-                    name: "scoreLinkSheet",
-                    type: "ScoreLinkSheet",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'documents',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "scoreLinkSheetId" },
-                }, scoreLinkSheetId: {
-                    name: "scoreLinkSheetId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'scoreLinkSheet',
-                }, examFramework: {
-                    name: "examFramework",
-                    type: "ExamFramework",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'documentFiles',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "examFrameworkId" },
-                }, examFrameworkId: {
-                    name: "examFrameworkId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'examFramework',
-                }, note: {
-                    name: "note",
-                    type: "Note",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'attachments',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "noteId" },
-                }, noteId: {
-                    name: "noteId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'note',
-                }, evaluationPeriod: {
-                    name: "evaluationPeriod",
-                    type: "EvaluationPeriod",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'documentFiles',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "evaluationPeriodId" },
-                }, evaluationPeriodId: {
-                    name: "evaluationPeriodId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'evaluationPeriod',
-                }, knowledgeBlock: {
-                    name: "knowledgeBlock",
-                    type: "KnowledgeBlock",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'documentFiles',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "knowledgeBlockId" },
-                }, knowledgeBlockId: {
-                    name: "knowledgeBlockId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'knowledgeBlock',
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                }, diplomaFrontId: {
-                    name: "diplomaFrontId",
-                    fields: ["diplomaFrontId"]
-                }, diplomaBackId: {
-                    name: "diplomaBackId",
-                    fields: ["diplomaBackId"]
-                }, diplomaVerificationId: {
-                    name: "diplomaVerificationId",
-                    fields: ["diplomaVerificationId"]
-                }, diplomaVerificationFrontId: {
-                    name: "diplomaVerificationFrontId",
-                    fields: ["diplomaVerificationFrontId"]
-                }, diplomaVerificationBackId: {
-                    name: "diplomaVerificationBackId",
-                    fields: ["diplomaVerificationBackId"]
-                },
-            },
-        },
-        academicActionConfig: {
-            name: 'AcademicActionConfig', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$AcademicActionConfig$createdBy,
-                }, name: {
-                    name: "name",
-                    type: "String",
-                }, actionType: {
-                    name: "actionType",
-                    type: "AcademicActionType",
-                }, trainingCourse: {
-                    name: "trainingCourse",
-                    type: "TrainingCourse",
-                    isDataModel: true,
-                    backLink: 'academicActionConfig',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "trainingCourseId" },
-                }, trainingCourseId: {
-                    name: "trainingCourseId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'trainingCourse',
-                }, ruleSets: {
-                    name: "ruleSets",
-                    type: "AcademicActionRuleSet",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'config',
-                }, decisions: {
-                    name: "decisions",
-                    type: "StudentAcademicDecision",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'appliedConfig',
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                }, trainingCourseId_name: {
-                    name: "trainingCourseId_name",
-                    fields: ["trainingCourseId", "name"]
-                },
-            },
-        },
-        academicActionRuleSet: {
-            name: 'AcademicActionRuleSet', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$AcademicActionRuleSet$createdBy,
-                }, config: {
-                    name: "config",
-                    type: "AcademicActionConfig",
-                    isDataModel: true,
-                    backLink: 'ruleSets',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "configId" },
-                }, configId: {
-                    name: "configId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'config',
-                }, conditions: {
-                    name: "conditions",
-                    type: "AcademicActionCondition",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'ruleSet',
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                },
-            },
-        },
-        academicActionCondition: {
-            name: 'AcademicActionCondition', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$AcademicActionCondition$createdBy,
-                }, ruleSet: {
-                    name: "ruleSet",
-                    type: "AcademicActionRuleSet",
-                    isDataModel: true,
-                    backLink: 'conditions',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "ruleSetId" },
-                }, ruleSetId: {
-                    name: "ruleSetId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'ruleSet',
-                }, field: {
-                    name: "field",
-                    type: "CriteriaField",
-                }, operator: {
-                    name: "operator",
-                    type: "CriteriaOperator",
-                }, invert: {
-                    name: "invert",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
-                }, value: {
-                    name: "value",
-                    type: "Float",
-                }, tuple: {
-                    name: "tuple",
-                    type: "String",
-                    isArray: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": [] }] }],
-                }, yearCondition: {
-                    name: "yearCondition",
-                    type: "Int",
-                    isOptional: true,
-                }, isPriorityStudent: {
-                    name: "isPriorityStudent",
-                    type: "Boolean",
-                    isOptional: true,
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                },
-            },
-        },
-        studentAcademicDecision: {
-            name: 'StudentAcademicDecision', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$StudentAcademicDecision$createdBy,
-                }, student: {
-                    name: "student",
-                    type: "Student",
-                    isDataModel: true,
-                    backLink: 'studentAcademicDecision',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "studentId" },
-                }, studentId: {
-                    name: "studentId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'student',
-                }, semester: {
-                    name: "semester",
-                    type: "Semester",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'studentAcademicDecision',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "semesterId" },
-                }, semesterId: {
-                    name: "semesterId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'semester',
-                }, schoolYear: {
-                    name: "schoolYear",
-                    type: "SchoolYear",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'studentAcademicDecision',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "schoolYearId" },
-                }, schoolYearId: {
-                    name: "schoolYearId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'schoolYear',
-                }, appliedConfig: {
-                    name: "appliedConfig",
-                    type: "AcademicActionConfig",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'decisions',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "appliedConfigId" },
-                }, appliedConfigId: {
-                    name: "appliedConfigId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'appliedConfig',
-                }, actionTaken: {
-                    name: "actionTaken",
-                    type: "AcademicActionType",
-                }, decisionDate: {
-                    name: "decisionDate",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, validUntil: {
-                    name: "validUntil",
-                    type: "DateTime",
-                    isOptional: true,
-                }, reason: {
-                    name: "reason",
-                    type: "String",
-                    isOptional: true,
-                }, documentEvidence: {
-                    name: "documentEvidence",
-                    type: "DocumentFile",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'studentAcademicDecision',
-                }, status: {
-                    name: "status",
-                    type: "DecisionStatus",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedResult: {
-                    name: "updatedResult",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                }, studentId_semesterId_schoolYearId_appliedConfigId: {
-                    name: "studentId_semesterId_schoolYearId_appliedConfigId",
-                    fields: ["studentId", "semesterId", "schoolYearId", "appliedConfigId"]
-                },
-            },
-        },
-        trainingScoreSession: {
-            name: 'TrainingScoreSession', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$TrainingScoreSession$createdBy,
-                }, name: {
-                    name: "name",
-                    type: "String",
-                }, time: {
-                    name: "time",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, semester: {
-                    name: "semester",
-                    type: "Semester",
-                    isDataModel: true,
-                    backLink: 'trainingScoreSession',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "semesterId" },
-                }, semesterId: {
-                    name: "semesterId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'semester',
-                }, trainingObjectType: {
-                    name: "trainingObjectType",
-                    type: "TrainingObjectType",
-                    isDataModel: true,
-                    backLink: 'trainingScoreSession',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "trainingObjectTypeId" },
-                }, trainingObjectTypeId: {
-                    name: "trainingObjectTypeId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'trainingObjectType',
-                }, studentTrainingScore: {
-                    name: "studentTrainingScore",
-                    type: "StudentTrainingScore",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'trainingScoreSession',
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                },
-            },
-        },
-        studentTrainingScore: {
-            name: 'StudentTrainingScore', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$StudentTrainingScore$createdBy,
-                }, trainingScoreSession: {
-                    name: "trainingScoreSession",
-                    type: "TrainingScoreSession",
-                    isDataModel: true,
-                    backLink: 'studentTrainingScore',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "trainingScoreSessionId" },
-                }, trainingScoreSessionId: {
-                    name: "trainingScoreSessionId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'trainingScoreSession',
-                }, student: {
-                    name: "student",
-                    type: "Student",
-                    isDataModel: true,
-                    backLink: 'studentTrainingScore',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "studentId" },
-                }, studentId: {
-                    name: "studentId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'student',
-                }, score: {
-                    name: "score",
-                    type: "Float",
-                    isOptional: true,
-                }, studentTrainingType: {
-                    name: "studentTrainingType",
-                    type: "StudentTrainingType",
-                    isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, status: {
-                    name: "status",
-                    type: "TrainingScoreStatus",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                }, trainingScoreSessionId_studentId: {
-                    name: "trainingScoreSessionId_studentId",
-                    fields: ["trainingScoreSessionId", "studentId"]
-                },
-            },
-        },
-        semesterTrainingScore: {
-            name: 'SemesterTrainingScore', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$SemesterTrainingScore$createdBy,
-                }, semester: {
-                    name: "semester",
-                    type: "Semester",
-                    isDataModel: true,
-                    backLink: 'semesterTrainingScore',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "semesterId" },
-                }, semesterId: {
-                    name: "semesterId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'semester',
-                }, student: {
-                    name: "student",
-                    type: "Student",
-                    isDataModel: true,
-                    backLink: 'semesterTrainingScore',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "studentId" },
-                }, studentId: {
-                    name: "studentId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'student',
-                }, score: {
-                    name: "score",
-                    type: "Int",
-                    isOptional: true,
-                }, status: {
-                    name: "status",
-                    type: "TrainingScoreStatus",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                },
-            },
-        },
-        schoolYearTrainingScore: {
-            name: 'SchoolYearTrainingScore', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$SchoolYearTrainingScore$createdBy,
-                }, schoolYear: {
-                    name: "schoolYear",
-                    type: "SchoolYear",
-                    isDataModel: true,
-                    backLink: 'schoolYearTrainingScore',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "schoolYearId" },
-                }, schoolYearId: {
-                    name: "schoolYearId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'schoolYear',
-                }, student: {
-                    name: "student",
-                    type: "Student",
-                    isDataModel: true,
-                    backLink: 'schoolYearTrainingScore',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "studentId" },
-                }, studentId: {
-                    name: "studentId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'student',
-                }, score: {
-                    name: "score",
-                    type: "Int",
-                    isOptional: true,
-                }, status: {
-                    name: "status",
-                    type: "TrainingScoreStatus",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                },
-            },
-        },
-        lecturerType: {
-            name: 'LecturerType', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$LecturerType$createdBy,
-                }, name: {
-                    name: "name",
-                    type: "String",
-                }, lecturers: {
-                    name: "lecturers",
-                    type: "Lecturer",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'lecturerType',
-                }, lecturerHistory: {
-                    name: "lecturerHistory",
-                    type: "LecturerHistory",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'lecturerType',
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                }, name: {
-                    name: "name",
-                    fields: ["name"]
-                },
-            },
-        },
-        staffType: {
-            name: 'StaffType', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$StaffType$createdBy,
-                }, name: {
-                    name: "name",
-                    type: "String",
-                }, staffs: {
-                    name: "staffs",
-                    type: "Staff",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'staffType',
-                }, staffHistory: {
-                    name: "staffHistory",
-                    type: "StaffHistory",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'staffType',
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                }, name: {
-                    name: "name",
-                    fields: ["name"]
-                },
-            },
-        },
-        staffPosition: {
-            name: 'StaffPosition', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$StaffPosition$createdBy,
-                }, name: {
-                    name: "name",
-                    type: "String",
-                }, staffs: {
-                    name: "staffs",
-                    type: "Staff",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'staffPosition',
-                }, staffHistory: {
-                    name: "staffHistory",
-                    type: "StaffHistory",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'staffPosition',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -17153,6 +15874,12 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'secondarySupervisor',
+                }, notifications: {
+                    name: "notifications",
+                    type: "Notification",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'lecturer',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -17265,6 +15992,417 @@ const metadata: ModelMeta = {
                     type: "String",
                     isForeignKey: true,
                     relationField: 'lecturerType',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, userProfileId: {
+                    name: "userProfileId",
+                    fields: ["userProfileId"]
+                },
+            },
+        },
+        lecturerType: {
+            name: 'LecturerType', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$LecturerType$createdBy,
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, lecturers: {
+                    name: "lecturers",
+                    type: "Lecturer",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'lecturerType',
+                }, lecturerHistory: {
+                    name: "lecturerHistory",
+                    type: "LecturerHistory",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'lecturerType',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, name: {
+                    name: "name",
+                    fields: ["name"]
+                },
+            },
+        },
+        staffType: {
+            name: 'StaffType', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$StaffType$createdBy,
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, staffs: {
+                    name: "staffs",
+                    type: "Staff",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'staffType',
+                }, staffHistory: {
+                    name: "staffHistory",
+                    type: "StaffHistory",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'staffType',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, name: {
+                    name: "name",
+                    fields: ["name"]
+                },
+            },
+        },
+        staffPosition: {
+            name: 'StaffPosition', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$StaffPosition$createdBy,
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, staffs: {
+                    name: "staffs",
+                    type: "Staff",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'staffPosition',
+                }, staffHistory: {
+                    name: "staffHistory",
+                    type: "StaffHistory",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'staffPosition',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+        },
+        staff: {
+            name: 'Staff', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$Staff$createdBy,
+                }, from: {
+                    name: "from",
+                    type: "DateTime",
+                    isOptional: true,
+                }, userProfile: {
+                    name: "userProfile",
+                    type: "UserProfile",
+                    isDataModel: true,
+                    backLink: 'staffs',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "userProfileId" },
+                }, userProfileId: {
+                    name: "userProfileId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'userProfile',
+                }, organization: {
+                    name: "organization",
+                    type: "DM_DonVi",
+                    isDataModel: true,
+                    backLink: 'staffs',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "Id": "organizationId" },
+                }, organizationId: {
+                    name: "organizationId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'organization',
+                }, staffType: {
+                    name: "staffType",
+                    type: "StaffType",
+                    isDataModel: true,
+                    backLink: 'staffs',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "staffTypeId" },
+                }, staffTypeId: {
+                    name: "staffTypeId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'staffType',
+                }, staffPosition: {
+                    name: "staffPosition",
+                    type: "StaffPosition",
+                    isDataModel: true,
+                    backLink: 'staffs',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "staffPositionId" },
+                }, staffPositionId: {
+                    name: "staffPositionId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'staffPosition',
+                }, fixedClass: {
+                    name: "fixedClass",
+                    type: "FixedClass",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'staffManagement',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, userProfileId: {
+                    name: "userProfileId",
+                    fields: ["userProfileId"]
+                },
+            },
+        },
+        staffHistory: {
+            name: 'StaffHistory', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$StaffHistory$createdBy,
+                }, from: {
+                    name: "from",
+                    type: "DateTime",
+                    isOptional: true,
+                }, to: {
+                    name: "to",
+                    type: "DateTime",
+                    isOptional: true,
+                }, userProfile: {
+                    name: "userProfile",
+                    type: "UserProfile",
+                    isDataModel: true,
+                    backLink: 'staffHistory',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "userProfileId" },
+                }, userProfileId: {
+                    name: "userProfileId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'userProfile',
+                }, organization: {
+                    name: "organization",
+                    type: "DM_DonVi",
+                    isDataModel: true,
+                    backLink: 'staffHistory',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "Id": "organizationId" },
+                }, organizationId: {
+                    name: "organizationId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'organization',
+                }, staffType: {
+                    name: "staffType",
+                    type: "StaffType",
+                    isDataModel: true,
+                    backLink: 'staffHistory',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "staffTypeId" },
+                }, staffTypeId: {
+                    name: "staffTypeId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'staffType',
+                }, staffPosition: {
+                    name: "staffPosition",
+                    type: "StaffPosition",
+                    isDataModel: true,
+                    backLink: 'staffHistory',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "staffPositionId" },
+                }, staffPositionId: {
+                    name: "staffPositionId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'staffPosition',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -19372,8 +18510,8 @@ const metadata: ModelMeta = {
                 },
             },
         },
-        evaluationPeriod: {
-            name: 'EvaluationPeriod', fields: {
+        documentFile: {
+            name: 'DocumentFile', fields: {
                 id: {
                     name: "id",
                     type: "String",
@@ -19408,28 +18546,670 @@ const metadata: ModelMeta = {
                     type: "String",
                     isOptional: true,
                     attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$EvaluationPeriod$createdBy,
+                    defaultValueProvider: $default$DocumentFile$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
-                }, startDate: {
-                    name: "startDate",
-                    type: "DateTime",
+                }, path: {
+                    name: "path",
+                    type: "String",
+                }, size: {
+                    name: "size",
+                    type: "BigInt",
+                }, mimeType: {
+                    name: "mimeType",
+                    type: "String",
+                    isOptional: true,
+                }, archivedCertificate: {
+                    name: "archivedCertificate",
+                    type: "ArchivedCertificate",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'documentFiles',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "archivedCertificateId" },
+                }, archivedCertificateId: {
+                    name: "archivedCertificateId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'archivedCertificate',
+                }, trainingCourse: {
+                    name: "trainingCourse",
+                    type: "TrainingCourse",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'documentFiles',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "trainingCourseId" },
+                }, trainingCourseId: {
+                    name: "trainingCourseId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'trainingCourse',
+                }, archivedAward: {
+                    name: "archivedAward",
+                    type: "ArchivedAward",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'documentFiles',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "archivedAwardId" },
+                }, archivedAwardId: {
+                    name: "archivedAwardId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'archivedAward',
+                }, curriculum: {
+                    name: "curriculum",
+                    type: "Curriculum",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'documentFiles',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "curriculumId" },
+                }, curriculumId: {
+                    name: "curriculumId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'curriculum',
+                }, curriculumVersion: {
+                    name: "curriculumVersion",
+                    type: "CurriculumVersion",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'documentFiles',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "curriculumVersionId" },
+                }, curriculumVersionId: {
+                    name: "curriculumVersionId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'curriculumVersion',
+                }, subjectVersion: {
+                    name: "subjectVersion",
+                    type: "SubjectVersion",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'documentFiles',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "subjectVersionId" },
+                }, subjectVersionId: {
+                    name: "subjectVersionId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'subjectVersion',
+                }, studentAcademicDecision: {
+                    name: "studentAcademicDecision",
+                    type: "StudentAcademicDecision",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'documentEvidence',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "studentAcademicDecisionId" },
+                }, studentAcademicDecisionId: {
+                    name: "studentAcademicDecisionId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'studentAcademicDecision',
+                }, notification: {
+                    name: "notification",
+                    type: "Notification",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'attachments',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "notificationId" },
+                }, notificationId: {
+                    name: "notificationId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'notification',
+                }, decision: {
+                    name: "decision",
+                    type: "Decision",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'documentFile',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "decisionId" },
+                }, decisionId: {
+                    name: "decisionId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'decision',
+                }, defenseRecord: {
+                    name: "defenseRecord",
+                    type: "DefenseRecord",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'documents',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "defenseRecordId" },
+                }, defenseRecordId: {
+                    name: "defenseRecordId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'defenseRecord',
+                }, librarySubmission: {
+                    name: "librarySubmission",
+                    type: "LibrarySubmission",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'documentFile',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "librarySubmissionId" },
+                }, librarySubmissionId: {
+                    name: "librarySubmissionId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'librarySubmission',
+                }, diplomaFront: {
+                    name: "diplomaFront",
+                    type: "GraduationDecision",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'diplomaFront',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "diplomaFrontId" },
+                }, diplomaFrontId: {
+                    name: "diplomaFrontId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'diplomaFront',
+                }, diplomaBack: {
+                    name: "diplomaBack",
+                    type: "GraduationDecision",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'diplomaBack',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "diplomaBackId" },
+                }, diplomaBackId: {
+                    name: "diplomaBackId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'diplomaBack',
+                }, diplomaVerification: {
+                    name: "diplomaVerification",
+                    type: "DiplomaVerificationApplication",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'attachments',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "diplomaVerificationId" },
+                }, diplomaVerificationId: {
+                    name: "diplomaVerificationId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'diplomaVerification',
+                }, diplomaVerificationFront: {
+                    name: "diplomaVerificationFront",
+                    type: "DiplomaVerificationApplication",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'diplomaFront',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "diplomaVerificationFrontId" },
+                }, diplomaVerificationFrontId: {
+                    name: "diplomaVerificationFrontId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'diplomaVerificationFront',
+                }, diplomaVerificationBack: {
+                    name: "diplomaVerificationBack",
+                    type: "DiplomaVerificationApplication",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'diplomaBack',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "diplomaVerificationBackId" },
+                }, diplomaVerificationBackId: {
+                    name: "diplomaVerificationBackId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'diplomaVerificationBack',
+                }, trainingField: {
+                    name: "trainingField",
+                    type: "TrainingField",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'documentFiles',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "trainingFieldId" },
+                }, trainingFieldId: {
+                    name: "trainingFieldId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'trainingField',
+                }, studentScoreConvert: {
+                    name: "studentScoreConvert",
+                    type: "StudentScoreConvert",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'documentFiles',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "studentScoreConvertId" },
+                }, studentScoreConvertId: {
+                    name: "studentScoreConvertId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'studentScoreConvert',
+                }, scoreLinkSheet: {
+                    name: "scoreLinkSheet",
+                    type: "ScoreLinkSheet",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'documents',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "scoreLinkSheetId" },
+                }, scoreLinkSheetId: {
+                    name: "scoreLinkSheetId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'scoreLinkSheet',
+                }, examFramework: {
+                    name: "examFramework",
+                    type: "ExamFramework",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'documentFiles',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "examFrameworkId" },
+                }, examFrameworkId: {
+                    name: "examFrameworkId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'examFramework',
+                }, note: {
+                    name: "note",
+                    type: "Note",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'attachments',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "noteId" },
+                }, noteId: {
+                    name: "noteId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'note',
+                }, evaluationPeriod: {
+                    name: "evaluationPeriod",
+                    type: "EvaluationPeriod",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'documentFiles',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "evaluationPeriodId" },
+                }, evaluationPeriodId: {
+                    name: "evaluationPeriodId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'evaluationPeriod',
+                }, knowledgeBlock: {
+                    name: "knowledgeBlock",
+                    type: "KnowledgeBlock",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'documentFiles',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "knowledgeBlockId" },
+                }, knowledgeBlockId: {
+                    name: "knowledgeBlockId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'knowledgeBlock',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, diplomaFrontId: {
+                    name: "diplomaFrontId",
+                    fields: ["diplomaFrontId"]
+                }, diplomaBackId: {
+                    name: "diplomaBackId",
+                    fields: ["diplomaBackId"]
+                }, diplomaVerificationId: {
+                    name: "diplomaVerificationId",
+                    fields: ["diplomaVerificationId"]
+                }, diplomaVerificationFrontId: {
+                    name: "diplomaVerificationFrontId",
+                    fields: ["diplomaVerificationFrontId"]
+                }, diplomaVerificationBackId: {
+                    name: "diplomaVerificationBackId",
+                    fields: ["diplomaVerificationBackId"]
+                },
+            },
+        },
+        academicActionConfig: {
+            name: 'AcademicActionConfig', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
                     attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, endDate: {
-                    name: "endDate",
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
                     type: "DateTime",
                     isOptional: true,
-                }, status: {
-                    name: "status",
-                    type: "EvaluationPeriodStatus",
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
                     attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$AcademicActionConfig$createdBy,
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, actionType: {
+                    name: "actionType",
+                    type: "AcademicActionType",
+                }, trainingCourse: {
+                    name: "trainingCourse",
+                    type: "TrainingCourse",
+                    isDataModel: true,
+                    backLink: 'academicActionConfig',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "trainingCourseId" },
+                }, trainingCourseId: {
+                    name: "trainingCourseId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'trainingCourse',
+                }, ruleSets: {
+                    name: "ruleSets",
+                    type: "AcademicActionRuleSet",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'config',
+                }, decisions: {
+                    name: "decisions",
+                    type: "StudentAcademicDecision",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'appliedConfig',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, trainingCourseId_name: {
+                    name: "trainingCourseId_name",
+                    fields: ["trainingCourseId", "name"]
+                },
+            },
+        },
+        academicActionRuleSet: {
+            name: 'AcademicActionRuleSet', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$AcademicActionRuleSet$createdBy,
+                }, config: {
+                    name: "config",
+                    type: "AcademicActionConfig",
+                    isDataModel: true,
+                    backLink: 'ruleSets',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "configId" },
+                }, configId: {
+                    name: "configId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'config',
+                }, conditions: {
+                    name: "conditions",
+                    type: "AcademicActionCondition",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'ruleSet',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+        },
+        academicActionCondition: {
+            name: 'AcademicActionCondition', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$AcademicActionCondition$createdBy,
+                }, ruleSet: {
+                    name: "ruleSet",
+                    type: "AcademicActionRuleSet",
+                    isDataModel: true,
+                    backLink: 'conditions',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "ruleSetId" },
+                }, ruleSetId: {
+                    name: "ruleSetId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'ruleSet',
+                }, field: {
+                    name: "field",
+                    type: "CriteriaField",
+                }, operator: {
+                    name: "operator",
+                    type: "CriteriaOperator",
+                }, invert: {
+                    name: "invert",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                }, value: {
+                    name: "value",
+                    type: "Float",
+                }, tuple: {
+                    name: "tuple",
+                    type: "String",
+                    isArray: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": [] }] }],
+                }, yearCondition: {
+                    name: "yearCondition",
+                    type: "Int",
+                    isOptional: true,
+                }, isPriorityStudent: {
+                    name: "isPriorityStudent",
+                    type: "Boolean",
+                    isOptional: true,
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+        },
+        studentAcademicDecision: {
+            name: 'StudentAcademicDecision', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$StudentAcademicDecision$createdBy,
+                }, student: {
+                    name: "student",
+                    type: "Student",
+                    isDataModel: true,
+                    backLink: 'studentAcademicDecision',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "studentId" },
+                }, studentId: {
+                    name: "studentId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'student',
+                }, semester: {
+                    name: "semester",
+                    type: "Semester",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'studentAcademicDecision',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "semesterId" },
+                }, semesterId: {
+                    name: "semesterId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'semester',
                 }, schoolYear: {
                     name: "schoolYear",
                     type: "SchoolYear",
                     isDataModel: true,
                     isOptional: true,
-                    backLink: 'evaluationPeriod',
+                    backLink: 'studentAcademicDecision',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "schoolYearId" },
                 }, schoolYearId: {
@@ -19438,1767 +19218,49 @@ const metadata: ModelMeta = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'schoolYear',
-                }, standards: {
-                    name: "standards",
-                    type: "StandardPeriod",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'period',
-                }, council: {
-                    name: "council",
-                    type: "EvaluationCouncil",
+                }, appliedConfig: {
+                    name: "appliedConfig",
+                    type: "AcademicActionConfig",
                     isDataModel: true,
                     isOptional: true,
-                    backLink: 'period',
-                }, documentFiles: {
-                    name: "documentFiles",
+                    backLink: 'decisions',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "appliedConfigId" },
+                }, appliedConfigId: {
+                    name: "appliedConfigId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'appliedConfig',
+                }, actionTaken: {
+                    name: "actionTaken",
+                    type: "AcademicActionType",
+                }, decisionDate: {
+                    name: "decisionDate",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, validUntil: {
+                    name: "validUntil",
+                    type: "DateTime",
+                    isOptional: true,
+                }, reason: {
+                    name: "reason",
+                    type: "String",
+                    isOptional: true,
+                }, documentEvidence: {
+                    name: "documentEvidence",
                     type: "DocumentFile",
                     isDataModel: true,
                     isArray: true,
-                    backLink: 'evaluationPeriod',
-                }, overviewProblem: {
-                    name: "overviewProblem",
-                    type: "String",
-                    isOptional: true,
-                }, overviewGeneral: {
-                    name: "overviewGeneral",
-                    type: "String",
-                    isOptional: true,
-                }, overviewResults: {
-                    name: "overviewResults",
-                    type: "String",
-                    isOptional: true,
-                }, conclude: {
-                    name: "conclude",
-                    type: "String",
-                    isOptional: true,
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                },
-            },
-        },
-        evaluationStandardSet: {
-            name: 'EvaluationStandardSet', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$EvaluationStandardSet$createdBy,
-                }, name: {
-                    name: "name",
-                    type: "String",
-                }, objectType: {
-                    name: "objectType",
-                    type: "StandardCatalogType",
-                }, standards: {
-                    name: "standards",
-                    type: "StandardCatalog",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'standardSet',
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                }, name: {
-                    name: "name",
-                    fields: ["name"]
-                },
-            },
-        },
-        standardCatalog: {
-            name: 'StandardCatalog', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$StandardCatalog$createdBy,
-                }, order: {
-                    name: "order",
-                    type: "Int",
-                }, name: {
-                    name: "name",
-                    type: "String",
-                }, criteria: {
-                    name: "criteria",
-                    type: "CriterionCatalog",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'standard',
-                }, standardSet: {
-                    name: "standardSet",
-                    type: "EvaluationStandardSet",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'standards',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "standardSetId" },
-                }, standardSetId: {
-                    name: "standardSetId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'standardSet',
-                }, objectType: {
-                    name: "objectType",
-                    type: "StandardCatalogType",
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                },
-            },
-        },
-        criterionCatalog: {
-            name: 'CriterionCatalog', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$CriterionCatalog$createdBy,
-                }, standard: {
-                    name: "standard",
-                    type: "StandardCatalog",
-                    isDataModel: true,
-                    backLink: 'criteria',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "standardId" },
-                }, standardId: {
-                    name: "standardId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'standard',
-                }, order: {
-                    name: "order",
-                    type: "Int",
-                }, name: {
-                    name: "name",
-                    type: "String",
-                }, requirementCriterionCatalog: {
-                    name: "requirementCriterionCatalog",
-                    type: "RequirementCriterionCatalog",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'criterionCatalog',
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                }, standardId_name: {
-                    name: "standardId_name",
-                    fields: ["standardId", "name"]
-                },
-            },
-        },
-        evidenceCategory: {
-            name: 'EvidenceCategory', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$EvidenceCategory$createdBy,
-                }, name: {
-                    name: "name",
-                    type: "String",
-                }, evidences: {
-                    name: "evidences",
-                    type: "Evidence",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'category',
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                },
-            },
-        },
-        evidence: {
-            name: 'Evidence', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$Evidence$createdBy,
-                }, category: {
-                    name: "category",
-                    type: "EvidenceCategory",
-                    isDataModel: true,
-                    backLink: 'evidences',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "categoryId" },
-                }, categoryId: {
-                    name: "categoryId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'category',
-                }, name: {
-                    name: "name",
-                    type: "String",
-                }, information: {
-                    name: "information",
-                    type: "String",
-                }, issuer: {
-                    name: "issuer",
-                    type: "String",
-                }, evidenceFile: {
-                    name: "evidenceFile",
-                    type: "EvidenceFile",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'evidence',
-                }, analysisFormEvidence: {
-                    name: "analysisFormEvidence",
-                    type: "AnalysisFormEvidence",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'evidence',
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                },
-            },
-        },
-        evaluationCriterionComment: {
-            name: 'EvaluationCriterionComment', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$EvaluationCriterionComment$createdBy,
-                }, reviewer: {
-                    name: "reviewer",
-                    type: "UserProfile",
-                    isDataModel: true,
-                    backLink: 'evaluationCriterionComments',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "reviewerId" },
-                }, reviewerId: {
-                    name: "reviewerId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'reviewer',
-                }, requirementCriterion: {
-                    name: "requirementCriterion",
-                    type: "RequirementCriterion",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'evaluationCriterionComment',
-                    isRelationOwner: true,
-                    onDeleteAction: 'Cascade',
-                    foreignKeyMapping: { "id": "requirementCriterionId" },
-                }, requirementCriterionId: {
-                    name: "requirementCriterionId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'requirementCriterion',
-                }, content: {
-                    name: "content",
-                    type: "String",
-                    isOptional: true,
-                }, analysisCriterion: {
-                    name: "analysisCriterion",
-                    type: "AnalysisCriterion",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'evaluationCriterionComments',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "analysisCriterionId" },
-                }, analysisCriterionId: {
-                    name: "analysisCriterionId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'analysisCriterion',
-                }, evaluationCriterion: {
-                    name: "evaluationCriterion",
-                    type: "EvaluationCriterion",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'evaluationCriterionComments',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "evaluationCriterionId" },
-                }, evaluationCriterionId: {
-                    name: "evaluationCriterionId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'evaluationCriterion',
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                },
-            },
-        },
-        requirementCriterionCatalog: {
-            name: 'RequirementCriterionCatalog', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$RequirementCriterionCatalog$createdBy,
-                }, criterionCatalog: {
-                    name: "criterionCatalog",
-                    type: "CriterionCatalog",
-                    isDataModel: true,
-                    backLink: 'requirementCriterionCatalog',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "criterionCatalogId" },
-                }, criterionCatalogId: {
-                    name: "criterionCatalogId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'criterionCatalog',
-                }, order: {
-                    name: "order",
-                    type: "Int",
-                }, name: {
-                    name: "name",
-                    type: "String",
-                }, questions: {
-                    name: "questions",
-                    type: "String",
-                    isArray: true,
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                }, criterionCatalogId_name: {
-                    name: "criterionCatalogId_name",
-                    fields: ["criterionCatalogId", "name"]
-                },
-            },
-        },
-        standardPeriod: {
-            name: 'StandardPeriod', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$StandardPeriod$createdBy,
-                }, period: {
-                    name: "period",
-                    type: "EvaluationPeriod",
-                    isDataModel: true,
-                    backLink: 'standards',
-                    isRelationOwner: true,
-                    onDeleteAction: 'Cascade',
-                    foreignKeyMapping: { "id": "periodId" },
-                }, periodId: {
-                    name: "periodId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'period',
-                }, name: {
-                    name: "name",
-                    type: "String",
-                }, order: {
-                    name: "order",
-                    type: "Int",
-                }, opening: {
-                    name: "opening",
-                    type: "String",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": "" }] }],
-                }, conclusion: {
-                    name: "conclusion",
-                    type: "String",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": "" }] }],
-                }, criteria: {
-                    name: "criteria",
-                    type: "CriterionPeriod",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'evaluationStandard',
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                }, periodId_name: {
-                    name: "periodId_name",
-                    fields: ["periodId", "name"]
-                },
-            },
-        },
-        criterionPeriod: {
-            name: 'CriterionPeriod', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$CriterionPeriod$createdBy,
-                }, name: {
-                    name: "name",
-                    type: "String",
-                }, order: {
-                    name: "order",
-                    type: "Int",
-                }, evaluationStandard: {
-                    name: "evaluationStandard",
-                    type: "StandardPeriod",
-                    isDataModel: true,
-                    backLink: 'criteria',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "evaluationStandardId" },
-                }, evaluationStandardId: {
-                    name: "evaluationStandardId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'evaluationStandard',
-                }, analysisCriterions: {
-                    name: "analysisCriterions",
-                    type: "AnalysisCriterion",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'criterionPeriod',
-                }, evaluationCriterion: {
-                    name: "evaluationCriterion",
-                    type: "EvaluationCriterion",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'criterionPeriod',
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                },
-            },
-        },
-        analysisCriterion: {
-            name: 'AnalysisCriterion', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$AnalysisCriterion$createdBy,
-                }, criterionPeriod: {
-                    name: "criterionPeriod",
-                    type: "CriterionPeriod",
-                    isDataModel: true,
-                    backLink: 'analysisCriterions',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "criterionPeriodId" },
-                }, criterionPeriodId: {
-                    name: "criterionPeriodId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'criterionPeriod',
-                }, lecturer: {
-                    name: "lecturer",
-                    type: "Lecturer",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'analysisCriterion',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "lecturerId" },
-                }, lecturerId: {
-                    name: "lecturerId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'lecturer',
-                }, deadline: {
-                    name: "deadline",
-                    type: "DateTime",
-                    isOptional: true,
+                    backLink: 'studentAcademicDecision',
                 }, status: {
                     name: "status",
-                    type: "EvaluationCriterionStatus",
+                    type: "DecisionStatus",
                     attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, requirementCriterions: {
-                    name: "requirementCriterions",
-                    type: "RequirementCriterion",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'analysisCriterion',
-                }, evaluationCriterionComments: {
-                    name: "evaluationCriterionComments",
-                    type: "EvaluationCriterionComment",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'analysisCriterion',
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                }, criterionPeriodId: {
-                    name: "criterionPeriodId",
-                    fields: ["criterionPeriodId"]
-                },
-            },
-        },
-        evaluationCriterion: {
-            name: 'EvaluationCriterion', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$EvaluationCriterion$createdBy,
-                }, criterionPeriod: {
-                    name: "criterionPeriod",
-                    type: "CriterionPeriod",
-                    isDataModel: true,
-                    backLink: 'evaluationCriterion',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "criterionPeriodId" },
-                }, criterionPeriodId: {
-                    name: "criterionPeriodId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'criterionPeriod',
-                }, lecturer: {
-                    name: "lecturer",
-                    type: "Lecturer",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'evaluationCriterions',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "lecturerId" },
-                }, lecturerId: {
-                    name: "lecturerId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'lecturer',
-                }, deadline: {
-                    name: "deadline",
-                    type: "DateTime",
-                    isOptional: true,
-                }, status: {
-                    name: "status",
-                    type: "EvaluationStatus",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, reviewer: {
-                    name: "reviewer",
-                    type: "EvaluationCouncilMember",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'evaluationCriterions',
-                    isRelationOwner: true,
-                    onDeleteAction: 'Cascade',
-                    foreignKeyMapping: { "id": "reviewerId" },
-                }, reviewerId: {
-                    name: "reviewerId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'reviewer',
-                }, deadlineReview: {
-                    name: "deadlineReview",
-                    type: "DateTime",
-                    isOptional: true,
-                }, deadlineReviewExternal: {
-                    name: "deadlineReviewExternal",
-                    type: "DateTime",
-                    isOptional: true,
-                }, lecturerReview: {
-                    name: "lecturerReview",
-                    type: "Lecturer",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'evaluationCriterionReviews',
-                }, evaluationCriterionComments: {
-                    name: "evaluationCriterionComments",
-                    type: "EvaluationCriterionComment",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'evaluationCriterion',
-                }, currentSituation: {
-                    name: "currentSituation",
-                    type: "String",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": "" }] }],
-                }, strengths: {
-                    name: "strengths",
-                    type: "String",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": "" }] }],
-                }, weakness: {
-                    name: "weakness",
-                    type: "String",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": "" }] }],
-                }, actionPlan: {
-                    name: "actionPlan",
-                    type: "String",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": "" }] }],
-                }, score: {
-                    name: "score",
-                    type: "String",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": "" }] }],
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                }, criterionPeriodId: {
-                    name: "criterionPeriodId",
-                    fields: ["criterionPeriodId"]
-                },
-            },
-        },
-        requirementCriterion: {
-            name: 'RequirementCriterion', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$RequirementCriterion$createdBy,
-                }, analysisCriterion: {
-                    name: "analysisCriterion",
-                    type: "AnalysisCriterion",
-                    isDataModel: true,
-                    backLink: 'requirementCriterions',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "analysisCriterionId" },
-                }, analysisCriterionId: {
-                    name: "analysisCriterionId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'analysisCriterion',
-                }, order: {
-                    name: "order",
-                    type: "Int",
-                }, name: {
-                    name: "name",
-                    type: "String",
-                }, questions: {
-                    name: "questions",
-                    type: "String",
-                    isArray: true,
-                }, evidences: {
-                    name: "evidences",
-                    type: "AnalysisFormEvidence",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'requirementCriterion',
-                }, evidencePlaces: {
-                    name: "evidencePlaces",
-                    type: "String",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": "" }] }],
-                }, collectionMethod: {
-                    name: "collectionMethod",
-                    type: "String",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": "" }] }],
-                }, evaluationCriterionComment: {
-                    name: "evaluationCriterionComment",
-                    type: "EvaluationCriterionComment",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'requirementCriterion',
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                },
-            },
-        },
-        analysisFormEvidence: {
-            name: 'AnalysisFormEvidence', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$AnalysisFormEvidence$createdBy,
-                }, requirementCriterion: {
-                    name: "requirementCriterion",
-                    type: "RequirementCriterion",
-                    isDataModel: true,
-                    backLink: 'evidences',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "requirementCriterionId" },
-                }, requirementCriterionId: {
-                    name: "requirementCriterionId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'requirementCriterion',
-                }, evidence: {
-                    name: "evidence",
-                    type: "Evidence",
-                    isDataModel: true,
-                    backLink: 'analysisFormEvidence',
-                    isRelationOwner: true,
-                    onDeleteAction: 'Cascade',
-                    foreignKeyMapping: { "id": "evidenceId" },
-                }, evidenceId: {
-                    name: "evidenceId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'evidence',
-                }, order: {
-                    name: "order",
-                    type: "Int",
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                }, requirementCriterionId_evidenceId: {
-                    name: "requirementCriterionId_evidenceId",
-                    fields: ["requirementCriterionId", "evidenceId"]
-                },
-            },
-        },
-        evaluationCouncil: {
-            name: 'EvaluationCouncil', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$EvaluationCouncil$createdBy,
-                }, period: {
-                    name: "period",
-                    type: "EvaluationPeriod",
-                    isDataModel: true,
-                    backLink: 'council',
-                    isRelationOwner: true,
-                    onDeleteAction: 'Cascade',
-                    foreignKeyMapping: { "id": "periodId" },
-                }, periodId: {
-                    name: "periodId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'period',
-                }, name: {
-                    name: "name",
-                    type: "String",
-                }, members: {
-                    name: "members",
-                    type: "EvaluationCouncilMember",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'evaluationCouncil',
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                }, periodId: {
-                    name: "periodId",
-                    fields: ["periodId"]
-                },
-            },
-        },
-        evaluationCouncilMember: {
-            name: 'EvaluationCouncilMember', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$EvaluationCouncilMember$createdBy,
-                }, evaluationCouncil: {
-                    name: "evaluationCouncil",
-                    type: "EvaluationCouncil",
-                    isDataModel: true,
-                    backLink: 'members',
-                    isRelationOwner: true,
-                    onDeleteAction: 'Cascade',
-                    foreignKeyMapping: { "id": "evaluationCouncilId" },
-                }, evaluationCouncilId: {
-                    name: "evaluationCouncilId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'evaluationCouncil',
-                }, lecturer: {
-                    name: "lecturer",
-                    type: "Lecturer",
-                    isDataModel: true,
-                    backLink: 'evaluationCouncilMember',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "lecturerId" },
-                }, lecturerId: {
-                    name: "lecturerId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'lecturer',
-                }, groupName: {
-                    name: "groupName",
-                    type: "String",
-                    isOptional: true,
-                }, role: {
-                    name: "role",
-                    type: "EvaluationMemberRole",
-                    isOptional: true,
-                }, evaluationCriterions: {
-                    name: "evaluationCriterions",
-                    type: "EvaluationCriterion",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'reviewer',
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                },
-            },
-        },
-        evidenceFile: {
-            name: 'EvidenceFile', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$EvidenceFile$createdBy,
-                }, name: {
-                    name: "name",
-                    type: "String",
-                }, path: {
-                    name: "path",
-                    type: "String",
-                }, mimeType: {
-                    name: "mimeType",
-                    type: "String",
-                }, size: {
-                    name: "size",
-                    type: "BigInt",
-                }, evidence: {
-                    name: "evidence",
-                    type: "Evidence",
-                    isDataModel: true,
-                    backLink: 'evidenceFile',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "evidenceId" },
-                }, evidenceId: {
-                    name: "evidenceId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'evidence',
-                }, userProfile: {
-                    name: "userProfile",
-                    type: "UserProfile",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'evidenceFiles',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "userProfileId" },
-                }, userProfileId: {
-                    name: "userProfileId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'userProfile',
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                },
-            },
-        },
-        surveyObjectType: {
-            name: 'SurveyObjectType', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$SurveyObjectType$createdBy,
-                }, name: {
-                    name: "name",
-                    type: "String",
-                }, survey: {
-                    name: "survey",
-                    type: "Survey",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'surveyObjectType',
-                    isRelationOwner: true,
-                }, type: {
-                    name: "type",
-                    type: "SurveyObject",
-                    isArray: true,
-                }, organizations: {
-                    name: "organizations",
-                    type: "DM_DonVi",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'surveyObjectTypes',
-                    isRelationOwner: true,
-                }, trainingFields: {
-                    name: "trainingFields",
-                    type: "TrainingField",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'surveyObjectTypes',
-                    isRelationOwner: true,
-                }, trainingMajors: {
-                    name: "trainingMajors",
-                    type: "TrainingMajor",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'surveyObjectTypes',
-                    isRelationOwner: true,
-                }, trainingCourses: {
-                    name: "trainingCourses",
-                    type: "TrainingCourse",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'surveyObjectTypes',
-                    isRelationOwner: true,
-                }, fixedClasses: {
-                    name: "fixedClasses",
-                    type: "FixedClass",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'surveyObjectTypes',
-                    isRelationOwner: true,
-                }, subjectClasses: {
-                    name: "subjectClasses",
-                    type: "SubjectClass",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'surveyObjectTypes',
-                    isRelationOwner: true,
-                }, surveySessions: {
-                    name: "surveySessions",
-                    type: "SurveySession",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'surveyObjectType',
-                }, clusterSurvey: {
-                    name: "clusterSurvey",
-                    type: "ClusterSurvey",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'surveyObjectType',
-                    isRelationOwner: true,
-                }, trainingObjectType: {
-                    name: "trainingObjectType",
-                    type: "TrainingObjectType",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'surveyObjectType',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "trainingObjectTypeId" },
-                }, trainingObjectTypeId: {
-                    name: "trainingObjectTypeId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'trainingObjectType',
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                },
-            },
-        },
-        surveyTopic: {
-            name: 'SurveyTopic', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$SurveyTopic$createdBy,
-                }, name: {
-                    name: "name",
-                    type: "String",
-                }, clusterSurvey: {
-                    name: "clusterSurvey",
-                    type: "ClusterSurvey",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'surveyTopic',
-                }, survey: {
-                    name: "survey",
-                    type: "Survey",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'surveyTopic',
-                }, surveyQuestionGroup: {
-                    name: "surveyQuestionGroup",
-                    type: "SurveyQuestionGroup",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'surveyTopic',
-                    isRelationOwner: true,
-                }, type: {
-                    name: "type",
-                    type: "SurveyType",
-                    isOptional: true,
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                },
-            },
-        },
-        surveyQuestionGroup: {
-            name: 'SurveyQuestionGroup', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$SurveyQuestionGroup$createdBy,
-                }, name: {
-                    name: "name",
-                    type: "String",
-                }, surveyQuestion: {
-                    name: "surveyQuestion",
-                    type: "SurveyQuestion",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'surveyQuestionGroup',
-                }, surveyTopic: {
-                    name: "surveyTopic",
-                    type: "SurveyTopic",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'surveyQuestionGroup',
-                    isRelationOwner: true,
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                },
-            },
-        },
-        clusterSurvey: {
-            name: 'ClusterSurvey', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$ClusterSurvey$createdBy,
-                }, name: {
-                    name: "name",
-                    type: "String",
-                }, startDate: {
-                    name: "startDate",
-                    type: "DateTime",
-                }, endDate: {
-                    name: "endDate",
-                    type: "DateTime",
-                    isOptional: true,
-                }, isPublic: {
-                    name: "isPublic",
+                }, updatedResult: {
+                    name: "updatedResult",
                     type: "Boolean",
                     attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
-                }, anonymous: {
-                    name: "anonymous",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, surveyTopic: {
-                    name: "surveyTopic",
-                    type: "SurveyTopic",
-                    isDataModel: true,
-                    backLink: 'clusterSurvey',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "surveyTopicId" },
-                }, surveyTopicId: {
-                    name: "surveyTopicId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'surveyTopic',
-                }, surveyObjectType: {
-                    name: "surveyObjectType",
-                    type: "SurveyObjectType",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'clusterSurvey',
-                    isRelationOwner: true,
-                }, lecturers: {
-                    name: "lecturers",
-                    type: "Lecturer",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'clusterSurvey',
-                    isRelationOwner: true,
-                }, surveyChoice: {
-                    name: "surveyChoice",
-                    type: "SurveyChoice",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'clusterSurvey',
-                }, surveyQuestion: {
-                    name: "surveyQuestion",
-                    type: "SurveyQuestion",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'clusterSurvey',
-                    isRelationOwner: true,
-                }, surveys: {
-                    name: "surveys",
-                    type: "Survey",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'clusterSurvey',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -21207,11 +19269,14 @@ const metadata: ModelMeta = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
+                }, studentId_semesterId_schoolYearId_appliedConfigId: {
+                    name: "studentId_semesterId_schoolYearId_appliedConfigId",
+                    fields: ["studentId", "semesterId", "schoolYearId", "appliedConfigId"]
                 },
             },
         },
-        survey: {
-            name: 'Survey', fields: {
+        trainingScoreSession: {
+            name: 'TrainingScoreSession', fields: {
                 id: {
                     name: "id",
                     type: "String",
@@ -21246,1676 +19311,44 @@ const metadata: ModelMeta = {
                     type: "String",
                     isOptional: true,
                     attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$Survey$createdBy,
-                }, name: {
-                    name: "name",
-                    type: "String",
-                }, startDate: {
-                    name: "startDate",
-                    type: "DateTime",
-                }, endDate: {
-                    name: "endDate",
-                    type: "DateTime",
-                    isOptional: true,
-                }, isPublic: {
-                    name: "isPublic",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
-                }, anonymous: {
-                    name: "anonymous",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, surveyObjectType: {
-                    name: "surveyObjectType",
-                    type: "SurveyObjectType",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'survey',
-                    isRelationOwner: true,
-                }, lecture: {
-                    name: "lecture",
-                    type: "Lecturer",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'survey',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "lectureId" },
-                }, lectureId: {
-                    name: "lectureId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'lecture',
-                }, subjectClass: {
-                    name: "subjectClass",
-                    type: "SubjectClass",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'survey',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "subjectClassId" },
-                }, subjectClassId: {
-                    name: "subjectClassId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'subjectClass',
-                }, semester: {
-                    name: "semester",
-                    type: "Semester",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'survey',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "semesterId" },
-                }, semesterId: {
-                    name: "semesterId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'semester',
-                }, surveyTopic: {
-                    name: "surveyTopic",
-                    type: "SurveyTopic",
-                    isDataModel: true,
-                    backLink: 'survey',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "surveyTopicId" },
-                }, surveyTopicId: {
-                    name: "surveyTopicId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'surveyTopic',
-                }, trainingObjectType: {
-                    name: "trainingObjectType",
-                    type: "TrainingObjectType",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'survey',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "trainingObjectTypeId" },
-                }, trainingObjectTypeId: {
-                    name: "trainingObjectTypeId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'trainingObjectType',
-                }, surveyChoice: {
-                    name: "surveyChoice",
-                    type: "SurveyChoice",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'survey',
-                    isRelationOwner: true,
-                }, surveyQuestion: {
-                    name: "surveyQuestion",
-                    type: "SurveyQuestion",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'survey',
-                    isRelationOwner: true,
-                }, surveySessions: {
-                    name: "surveySessions",
-                    type: "SurveySession",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'survey',
-                }, clusterSurvey: {
-                    name: "clusterSurvey",
-                    type: "ClusterSurvey",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'surveys',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "clusterSurveyId" },
-                }, clusterSurveyId: {
-                    name: "clusterSurveyId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'clusterSurvey',
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                },
-            },
-        },
-        surveyQuestion: {
-            name: 'SurveyQuestion', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$SurveyQuestion$createdBy,
-                }, name: {
-                    name: "name",
-                    type: "String",
-                }, type: {
-                    name: "type",
-                    type: "SurveyQuestionType",
-                }, surveyQuestionGroup: {
-                    name: "surveyQuestionGroup",
-                    type: "SurveyQuestionGroup",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'surveyQuestion',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "surveyQuestionGroupId" },
-                }, surveyQuestionGroupId: {
-                    name: "surveyQuestionGroupId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'surveyQuestionGroup',
-                }, survey: {
-                    name: "survey",
-                    type: "Survey",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'surveyQuestion',
-                    isRelationOwner: true,
-                }, clusterSurvey: {
-                    name: "clusterSurvey",
-                    type: "ClusterSurvey",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'surveyQuestion',
-                    isRelationOwner: true,
-                }, surveyResponses: {
-                    name: "surveyResponses",
-                    type: "SurveyResponse",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'surveyQuestion',
-                }, specificChoice: {
-                    name: "specificChoice",
-                    type: "SpecificChoice",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'surveyQuestion',
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                },
-            },
-        },
-        specificChoice: {
-            name: 'SpecificChoice', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$SpecificChoice$createdBy,
-                }, answer: {
-                    name: "answer",
-                    type: "String",
-                }, surveyQuestion: {
-                    name: "surveyQuestion",
-                    type: "SurveyQuestion",
-                    isDataModel: true,
-                    backLink: 'specificChoice',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "surveyQuestionId" },
-                }, surveyQuestionId: {
-                    name: "surveyQuestionId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'surveyQuestion',
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                },
-            },
-        },
-        surveyChoice: {
-            name: 'SurveyChoice', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$SurveyChoice$createdBy,
-                }, answer: {
-                    name: "answer",
-                    type: "String",
-                }, requireExplanation: {
-                    name: "requireExplanation",
-                    type: "Boolean",
-                }, clusterSurvey: {
-                    name: "clusterSurvey",
-                    type: "ClusterSurvey",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'surveyChoice',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "clusterSurveyId" },
-                }, clusterSurveyId: {
-                    name: "clusterSurveyId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'clusterSurvey',
-                }, survey: {
-                    name: "survey",
-                    type: "Survey",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'surveyChoice',
-                    isRelationOwner: true,
-                }, surveyResponses: {
-                    name: "surveyResponses",
-                    type: "SurveyResponse",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'surveyChoice',
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                },
-            },
-        },
-        surveySession: {
-            name: 'SurveySession', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$SurveySession$createdBy,
-                }, survey: {
-                    name: "survey",
-                    type: "Survey",
-                    isDataModel: true,
-                    backLink: 'surveySessions',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "surveyId" },
-                }, surveyId: {
-                    name: "surveyId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'survey',
-                }, profile: {
-                    name: "profile",
-                    type: "UserProfile",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'surveySession',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "profileId" },
-                }, profileId: {
-                    name: "profileId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'profile',
-                }, student: {
-                    name: "student",
-                    type: "Student",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'surveySessions',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "studentId" },
-                }, studentId: {
-                    name: "studentId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'student',
-                }, startedAt: {
-                    name: "startedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, completedAt: {
-                    name: "completedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, isCompleted: {
-                    name: "isCompleted",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
-                }, surveyObjectType: {
-                    name: "surveyObjectType",
-                    type: "SurveyObjectType",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'surveySessions',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "surveyObjectTypeId" },
-                }, surveyObjectTypeId: {
-                    name: "surveyObjectTypeId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'surveyObjectType',
-                }, responses: {
-                    name: "responses",
-                    type: "SurveyResponse",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'surveySession',
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                }, surveyId_studentId: {
-                    name: "surveyId_studentId",
-                    fields: ["surveyId", "studentId"]
-                },
-            },
-        },
-        surveyResponse: {
-            name: 'SurveyResponse', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$SurveyResponse$createdBy,
-                }, surveySession: {
-                    name: "surveySession",
-                    type: "SurveySession",
-                    isDataModel: true,
-                    backLink: 'responses',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "surveySessionId" },
-                }, surveySessionId: {
-                    name: "surveySessionId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'surveySession',
-                }, surveyQuestion: {
-                    name: "surveyQuestion",
-                    type: "SurveyQuestion",
-                    isDataModel: true,
-                    backLink: 'surveyResponses',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "surveyQuestionId" },
-                }, surveyQuestionId: {
-                    name: "surveyQuestionId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'surveyQuestion',
-                }, answerText: {
-                    name: "answerText",
-                    type: "String",
-                    isOptional: true,
-                }, explanation: {
-                    name: "explanation",
-                    type: "String",
-                    isOptional: true,
-                }, surveyChoice: {
-                    name: "surveyChoice",
-                    type: "SurveyChoice",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'surveyResponses',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "surveyChoiceId" },
-                }, surveyChoiceId: {
-                    name: "surveyChoiceId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'surveyChoice',
-                }, answeredAt: {
-                    name: "answeredAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                }, surveySessionId_surveyQuestionId: {
-                    name: "surveySessionId_surveyQuestionId",
-                    fields: ["surveySessionId", "surveyQuestionId"]
-                },
-            },
-        },
-        questionBank: {
-            name: 'QuestionBank', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$QuestionBank$createdBy,
-                }, name: {
-                    name: "name",
-                    type: "String",
-                }, subjectVersion: {
-                    name: "subjectVersion",
-                    type: "SubjectVersion",
-                    isDataModel: true,
-                    backLink: 'questionBanks',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "subjectVersionId" },
-                }, subjectVersionId: {
-                    name: "subjectVersionId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'subjectVersion',
-                }, questions: {
-                    name: "questions",
-                    type: "Question",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'questionBank',
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                }, subjectVersionId_name: {
-                    name: "subjectVersionId_name",
-                    fields: ["subjectVersionId", "name"]
-                },
-            },
-        },
-        question: {
-            name: 'Question', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$Question$createdBy,
-                }, content: {
-                    name: "content",
-                    type: "String",
-                }, type: {
-                    name: "type",
-                    type: "QuestionType",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, point: {
-                    name: "point",
-                    type: "Float",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 1 }] }],
-                }, explanation: {
-                    name: "explanation",
-                    type: "String",
-                    isOptional: true,
-                }, isAutoGraded: {
-                    name: "isAutoGraded",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
-                }, difficult: {
-                    name: "difficult",
-                    type: "Difficult",
-                }, multipleChoiceOptions: {
-                    name: "multipleChoiceOptions",
-                    type: "MultipleChoiceOption",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'question',
-                }, fillInBlankSlots: {
-                    name: "fillInBlankSlots",
-                    type: "FillInBlankSlot",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'question',
-                }, orderingItems: {
-                    name: "orderingItems",
-                    type: "OrderingItem",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'question',
-                }, questionBank: {
-                    name: "questionBank",
-                    type: "QuestionBank",
-                    isDataModel: true,
-                    backLink: 'questions',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "questionBankId" },
-                }, questionBankId: {
-                    name: "questionBankId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'questionBank',
-                }, knowledgeBlock: {
-                    name: "knowledgeBlock",
-                    type: "KnowledgeBlock",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'questions',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "knowledgeBlockId" },
-                }, knowledgeBlockId: {
-                    name: "knowledgeBlockId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'knowledgeBlock',
-                }, sessionQuestions: {
-                    name: "sessionQuestions",
-                    type: "ExamBankQuestion",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'question',
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                },
-            },
-        },
-        multipleChoiceOption: {
-            name: 'MultipleChoiceOption', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$MultipleChoiceOption$createdBy,
-                }, questionId: {
-                    name: "questionId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'question',
-                }, question: {
-                    name: "question",
-                    type: "Question",
-                    isDataModel: true,
-                    backLink: 'multipleChoiceOptions',
-                    isRelationOwner: true,
-                    onDeleteAction: 'Cascade',
-                    foreignKeyMapping: { "id": "questionId" },
-                }, content: {
-                    name: "content",
-                    type: "String",
-                }, isCorrect: {
-                    name: "isCorrect",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
-                }, order: {
-                    name: "order",
-                    type: "Int",
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                },
-            },
-        },
-        fillInBlankSlot: {
-            name: 'FillInBlankSlot', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$FillInBlankSlot$createdBy,
-                }, questionId: {
-                    name: "questionId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'question',
-                }, question: {
-                    name: "question",
-                    type: "Question",
-                    isDataModel: true,
-                    backLink: 'fillInBlankSlots',
-                    isRelationOwner: true,
-                    onDeleteAction: 'Cascade',
-                    foreignKeyMapping: { "id": "questionId" },
-                }, order: {
-                    name: "order",
-                    type: "Int",
-                }, correctAnswer: {
-                    name: "correctAnswer",
-                    type: "String",
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                }, questionId_order: {
-                    name: "questionId_order",
-                    fields: ["questionId", "order"]
-                },
-            },
-        },
-        orderingItem: {
-            name: 'OrderingItem', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$OrderingItem$createdBy,
-                }, questionId: {
-                    name: "questionId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'question',
-                }, question: {
-                    name: "question",
-                    type: "Question",
-                    isDataModel: true,
-                    backLink: 'orderingItems',
-                    isRelationOwner: true,
-                    onDeleteAction: 'Cascade',
-                    foreignKeyMapping: { "id": "questionId" },
-                }, content: {
-                    name: "content",
-                    type: "String",
-                }, correctOrder: {
-                    name: "correctOrder",
-                    type: "Int",
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                }, questionId_correctOrder: {
-                    name: "questionId_correctOrder",
-                    fields: ["questionId", "correctOrder"]
-                },
-            },
-        },
-        exam: {
-            name: 'Exam', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$Exam$createdBy,
-                }, lockExamSessions: {
-                    name: "lockExamSessions",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
-                }, duration: {
-                    name: "duration",
-                    type: "Int",
-                    isOptional: true,
-                }, session: {
-                    name: "session",
-                    type: "Int",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 1 }] }],
-                }, subjectVersionId: {
-                    name: "subjectVersionId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'subjectVersion',
-                }, subjectVersion: {
-                    name: "subjectVersion",
-                    type: "SubjectVersion",
-                    isDataModel: true,
-                    backLink: 'exams',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "subjectVersionId" },
-                }, semester: {
-                    name: "semester",
-                    type: "Semester",
-                    isDataModel: true,
-                    backLink: 'exam',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "semesterId" },
-                }, semesterId: {
-                    name: "semesterId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'semester',
-                }, subjectClass: {
-                    name: "subjectClass",
-                    type: "SubjectClass",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'exam',
-                }, examBank: {
-                    name: "examBank",
-                    type: "ExamBank",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'exam',
-                }, examRooms: {
-                    name: "examRooms",
-                    type: "ExamRoom",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'exam',
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                },
-            },
-        },
-        examRoom: {
-            name: 'ExamRoom', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$ExamRoom$createdBy,
-                }, exam: {
-                    name: "exam",
-                    type: "Exam",
-                    isDataModel: true,
-                    backLink: 'examRooms',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "examId" },
-                }, examId: {
-                    name: "examId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'exam',
-                }, room: {
-                    name: "room",
-                    type: "Room",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'examRooms',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "roomId" },
-                }, roomId: {
-                    name: "roomId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'room',
-                }, capacity: {
-                    name: "capacity",
-                    type: "Int",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
-                }, examList: {
-                    name: "examList",
-                    type: "ExamList",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'examRoom',
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                }, examId_roomId: {
-                    name: "examId_roomId",
-                    fields: ["examId", "roomId"]
-                },
-            },
-        },
-        examList: {
-            name: 'ExamList', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$ExamList$createdBy,
-                }, examRoom: {
-                    name: "examRoom",
-                    type: "ExamRoom",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'examList',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "examRoomId" },
-                }, examRoomId: {
-                    name: "examRoomId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'examRoom',
-                }, firstSupervisor: {
-                    name: "firstSupervisor",
-                    type: "Lecturer",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'examRoomsMain',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "firstSupervisorId" },
-                }, firstSupervisorId: {
-                    name: "firstSupervisorId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'firstSupervisor',
-                }, secondSupervisor: {
-                    name: "secondSupervisor",
-                    type: "Lecturer",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'examRoomsExtra',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "secondSupervisorId" },
-                }, secondSupervisorId: {
-                    name: "secondSupervisorId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'secondSupervisor',
-                }, createdExamCode: {
-                    name: "createdExamCode",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
-                }, lockExamCode: {
-                    name: "lockExamCode",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
-                }, start: {
-                    name: "start",
-                    type: "Int",
-                    isOptional: true,
-                }, end: {
-                    name: "end",
-                    type: "Int",
-                    isOptional: true,
-                }, examPapers: {
-                    name: "examPapers",
-                    type: "ExamPaper",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'examList',
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                },
-            },
-        },
-        examBank: {
-            name: 'ExamBank', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$ExamBank$createdBy,
-                }, exam: {
-                    name: "exam",
-                    type: "Exam",
-                    isDataModel: true,
-                    backLink: 'examBank',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "examId" },
-                }, examId: {
-                    name: "examId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'exam',
-                }, examTime: {
-                    name: "examTime",
-                    type: "Int",
-                    isOptional: true,
-                }, examCode: {
-                    name: "examCode",
-                    type: "String",
-                }, subjectClass: {
-                    name: "subjectClass",
-                    type: "SubjectClass",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'examBank',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "subjectClassId" },
-                }, subjectClassId: {
-                    name: "subjectClassId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'subjectClass',
-                }, explain: {
-                    name: "explain",
-                    type: "String",
-                    isOptional: true,
-                }, examDay: {
-                    name: "examDay",
-                    type: "DateTime",
-                    isOptional: true,
-                }, examType: {
-                    name: "examType",
-                    type: "ExamType",
-                    isOptional: true,
-                }, questions: {
-                    name: "questions",
-                    type: "ExamBankQuestion",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'examBank',
-                }, examMatrix: {
-                    name: "examMatrix",
-                    type: "ExamMatrix",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'examBank',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "examMatrixId" },
-                }, examMatrixId: {
-                    name: "examMatrixId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'examMatrix',
-                }, isLock: {
-                    name: "isLock",
-                    type: "Boolean",
-                    isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
-                }, isNote: {
-                    name: "isNote",
-                    type: "Boolean",
-                    isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
-                }, isGroup: {
-                    name: "isGroup",
-                    type: "Boolean",
-                    isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                }, examId_examCode: {
-                    name: "examId_examCode",
-                    fields: ["examId", "examCode"]
-                },
-            },
-        },
-        examBankQuestion: {
-            name: 'ExamBankQuestion', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$ExamBankQuestion$createdBy,
-                }, examBankId: {
-                    name: "examBankId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'examBank',
-                }, examBank: {
-                    name: "examBank",
-                    type: "ExamBank",
-                    isDataModel: true,
-                    backLink: 'questions',
-                    isRelationOwner: true,
-                    onDeleteAction: 'Cascade',
-                    foreignKeyMapping: { "id": "examBankId" },
-                }, questionId: {
-                    name: "questionId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'question',
-                }, question: {
-                    name: "question",
-                    type: "Question",
-                    isDataModel: true,
-                    backLink: 'sessionQuestions',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "questionId" },
-                }, order: {
-                    name: "order",
-                    type: "Int",
-                    isOptional: true,
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                }, examBankId_questionId: {
-                    name: "examBankId_questionId",
-                    fields: ["examBankId", "questionId"]
-                }, examBankId_order: {
-                    name: "examBankId_order",
-                    fields: ["examBankId", "order"]
-                },
-            },
-        },
-        examPaper: {
-            name: 'ExamPaper', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$ExamPaper$createdBy,
-                }, examList: {
-                    name: "examList",
-                    type: "ExamList",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'examPapers',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "examListId" },
-                }, examListId: {
-                    name: "examListId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'examList',
-                }, studentSubjectScore: {
-                    name: "studentSubjectScore",
-                    type: "StudentSubjectScore",
-                    isDataModel: true,
-                    backLink: 'examPaper',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "studentSubjectScoreId" },
-                }, studentSubjectScoreId: {
-                    name: "studentSubjectScoreId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'studentSubjectScore',
-                }, examCode: {
-                    name: "examCode",
-                    type: "String",
-                    isOptional: true,
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                }, studentSubjectScoreId: {
-                    name: "studentSubjectScoreId",
-                    fields: ["studentSubjectScoreId"]
-                }, examCode_examListId: {
-                    name: "examCode_examListId",
-                    fields: ["examCode", "examListId"]
-                },
-            },
-        },
-        examFramework: {
-            name: 'ExamFramework', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$ExamFramework$createdBy,
+                    defaultValueProvider: $default$TrainingScoreSession$createdBy,
                 }, name: {
                     name: "name",
                     type: "String",
                 }, time: {
                     name: "time",
-                    type: "Int",
-                }, subjectVersion: {
-                    name: "subjectVersion",
-                    type: "SubjectVersion",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, semester: {
+                    name: "semester",
+                    type: "Semester",
                     isDataModel: true,
-                    backLink: 'examFramework',
+                    backLink: 'trainingScoreSession',
                     isRelationOwner: true,
-                    foreignKeyMapping: { "id": "subjectVersionId" },
-                }, subjectVersionId: {
-                    name: "subjectVersionId",
+                    foreignKeyMapping: { "id": "semesterId" },
+                }, semesterId: {
+                    name: "semesterId",
                     type: "String",
                     isForeignKey: true,
-                    relationField: 'subjectVersion',
-                }, examMatrixs: {
-                    name: "examMatrixs",
-                    type: "ExamMatrix",
+                    relationField: 'semester',
+                }, trainingObjectType: {
+                    name: "trainingObjectType",
+                    type: "TrainingObjectType",
+                    isDataModel: true,
+                    backLink: 'trainingScoreSession',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "trainingObjectTypeId" },
+                }, trainingObjectTypeId: {
+                    name: "trainingObjectTypeId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'trainingObjectType',
+                }, studentTrainingScore: {
+                    name: "studentTrainingScore",
+                    type: "StudentTrainingScore",
                     isDataModel: true,
                     isArray: true,
-                    backLink: 'examFramework',
-                }, documentFiles: {
-                    name: "documentFiles",
-                    type: "DocumentFile",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'examFramework',
+                    backLink: 'trainingScoreSession',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -22927,8 +19360,8 @@ const metadata: ModelMeta = {
                 },
             },
         },
-        examMatrix: {
-            name: 'ExamMatrix', fields: {
+        studentTrainingScore: {
+            name: 'StudentTrainingScore', fields: {
                 id: {
                     name: "id",
                     type: "String",
@@ -22963,208 +19396,44 @@ const metadata: ModelMeta = {
                     type: "String",
                     isOptional: true,
                     attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$ExamMatrix$createdBy,
-                }, name: {
-                    name: "name",
-                    type: "String",
-                }, isDefault: {
-                    name: "isDefault",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
-                }, examFramework: {
-                    name: "examFramework",
-                    type: "ExamFramework",
+                    defaultValueProvider: $default$StudentTrainingScore$createdBy,
+                }, trainingScoreSession: {
+                    name: "trainingScoreSession",
+                    type: "TrainingScoreSession",
                     isDataModel: true,
-                    backLink: 'examMatrixs',
+                    backLink: 'studentTrainingScore',
                     isRelationOwner: true,
-                    foreignKeyMapping: { "id": "examFrameworkId" },
-                }, examFrameworkId: {
-                    name: "examFrameworkId",
+                    foreignKeyMapping: { "id": "trainingScoreSessionId" },
+                }, trainingScoreSessionId: {
+                    name: "trainingScoreSessionId",
                     type: "String",
                     isForeignKey: true,
-                    relationField: 'examFramework',
-                }, knowledgeBlocks: {
-                    name: "knowledgeBlocks",
-                    type: "KnowledgeBlock",
+                    relationField: 'trainingScoreSession',
+                }, student: {
+                    name: "student",
+                    type: "Student",
                     isDataModel: true,
-                    isArray: true,
-                    backLink: 'examMatrix',
-                }, examBank: {
-                    name: "examBank",
-                    type: "ExamBank",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'examMatrix',
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                },
-            },
-        },
-        knowledgeBlock: {
-            name: 'KnowledgeBlock', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$KnowledgeBlock$createdBy,
-                }, name: {
-                    name: "name",
-                    type: "String",
-                }, examMatrix: {
-                    name: "examMatrix",
-                    type: "ExamMatrix",
-                    isDataModel: true,
-                    backLink: 'knowledgeBlocks',
+                    backLink: 'studentTrainingScore',
                     isRelationOwner: true,
-                    foreignKeyMapping: { "id": "examMatrixId" },
-                }, examMatrixId: {
-                    name: "examMatrixId",
+                    foreignKeyMapping: { "id": "studentId" },
+                }, studentId: {
+                    name: "studentId",
                     type: "String",
                     isForeignKey: true,
-                    relationField: 'examMatrix',
-                }, questions: {
-                    name: "questions",
-                    type: "Question",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'knowledgeBlock',
-                }, documentFiles: {
-                    name: "documentFiles",
-                    type: "DocumentFile",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'knowledgeBlock',
-                }, configExams: {
-                    name: "configExams",
-                    type: "ConfigExam",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'knowledgeBlock',
-                }, subjectVersion: {
-                    name: "subjectVersion",
-                    type: "SubjectVersion",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'knowledgeBlocks',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "subjectVersionId" },
-                }, subjectVersionId: {
-                    name: "subjectVersionId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'subjectVersion',
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                },
-            },
-        },
-        configExam: {
-            name: 'ConfigExam', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, createdBy: {
-                    name: "createdBy",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$ConfigExam$createdBy,
-                }, difficult: {
-                    name: "difficult",
-                    type: "Difficult",
-                }, type: {
-                    name: "type",
-                    type: "QuestionType",
-                    isOptional: true,
-                }, quantity: {
-                    name: "quantity",
-                    type: "Int",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
-                }, point: {
-                    name: "point",
+                    relationField: 'student',
+                }, score: {
+                    name: "score",
                     type: "Float",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
-                }, knowledgeBlock: {
-                    name: "knowledgeBlock",
-                    type: "KnowledgeBlock",
-                    isDataModel: true,
-                    backLink: 'configExams',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "knowledgeBlockId" },
-                }, knowledgeBlockId: {
-                    name: "knowledgeBlockId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'knowledgeBlock',
+                    isOptional: true,
+                }, studentTrainingType: {
+                    name: "studentTrainingType",
+                    type: "StudentTrainingType",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, status: {
+                    name: "status",
+                    type: "TrainingScoreStatus",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 },
             }, uniqueConstraints: {
                 id: {
@@ -23173,11 +19442,14 @@ const metadata: ModelMeta = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
+                }, trainingScoreSessionId_studentId: {
+                    name: "trainingScoreSessionId_studentId",
+                    fields: ["trainingScoreSessionId", "studentId"]
                 },
             },
         },
-        staff: {
-            name: 'Staff', fields: {
+        semesterTrainingScore: {
+            name: 'SemesterTrainingScore', fields: {
                 id: {
                     name: "id",
                     type: "String",
@@ -23212,65 +19484,39 @@ const metadata: ModelMeta = {
                     type: "String",
                     isOptional: true,
                     attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$Staff$createdBy,
-                }, from: {
-                    name: "from",
-                    type: "DateTime",
+                    defaultValueProvider: $default$SemesterTrainingScore$createdBy,
+                }, semester: {
+                    name: "semester",
+                    type: "Semester",
+                    isDataModel: true,
+                    backLink: 'semesterTrainingScore',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "semesterId" },
+                }, semesterId: {
+                    name: "semesterId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'semester',
+                }, student: {
+                    name: "student",
+                    type: "Student",
+                    isDataModel: true,
+                    backLink: 'semesterTrainingScore',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "studentId" },
+                }, studentId: {
+                    name: "studentId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'student',
+                }, score: {
+                    name: "score",
+                    type: "Int",
                     isOptional: true,
-                }, userProfile: {
-                    name: "userProfile",
-                    type: "UserProfile",
-                    isDataModel: true,
-                    backLink: 'staffs',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "userProfileId" },
-                }, userProfileId: {
-                    name: "userProfileId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'userProfile',
-                }, organization: {
-                    name: "organization",
-                    type: "DM_DonVi",
-                    isDataModel: true,
-                    backLink: 'staffs',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "Id": "organizationId" },
-                }, organizationId: {
-                    name: "organizationId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'organization',
-                }, staffType: {
-                    name: "staffType",
-                    type: "StaffType",
-                    isDataModel: true,
-                    backLink: 'staffs',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "staffTypeId" },
-                }, staffTypeId: {
-                    name: "staffTypeId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'staffType',
-                }, staffPosition: {
-                    name: "staffPosition",
-                    type: "StaffPosition",
-                    isDataModel: true,
-                    backLink: 'staffs',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "staffPositionId" },
-                }, staffPositionId: {
-                    name: "staffPositionId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'staffPosition',
-                }, fixedClass: {
-                    name: "fixedClass",
-                    type: "FixedClass",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'staffManagement',
+                }, status: {
+                    name: "status",
+                    type: "TrainingScoreStatus",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 },
             }, uniqueConstraints: {
                 id: {
@@ -23279,14 +19525,11 @@ const metadata: ModelMeta = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
-                }, userProfileId: {
-                    name: "userProfileId",
-                    fields: ["userProfileId"]
                 },
             },
         },
-        staffHistory: {
-            name: 'StaffHistory', fields: {
+        schoolYearTrainingScore: {
+            name: 'SchoolYearTrainingScore', fields: {
                 id: {
                     name: "id",
                     type: "String",
@@ -23321,63 +19564,39 @@ const metadata: ModelMeta = {
                     type: "String",
                     isOptional: true,
                     attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                    defaultValueProvider: $default$StaffHistory$createdBy,
-                }, from: {
-                    name: "from",
-                    type: "DateTime",
+                    defaultValueProvider: $default$SchoolYearTrainingScore$createdBy,
+                }, schoolYear: {
+                    name: "schoolYear",
+                    type: "SchoolYear",
+                    isDataModel: true,
+                    backLink: 'schoolYearTrainingScore',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "schoolYearId" },
+                }, schoolYearId: {
+                    name: "schoolYearId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'schoolYear',
+                }, student: {
+                    name: "student",
+                    type: "Student",
+                    isDataModel: true,
+                    backLink: 'schoolYearTrainingScore',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "studentId" },
+                }, studentId: {
+                    name: "studentId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'student',
+                }, score: {
+                    name: "score",
+                    type: "Int",
                     isOptional: true,
-                }, to: {
-                    name: "to",
-                    type: "DateTime",
-                    isOptional: true,
-                }, userProfile: {
-                    name: "userProfile",
-                    type: "UserProfile",
-                    isDataModel: true,
-                    backLink: 'staffHistory',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "userProfileId" },
-                }, userProfileId: {
-                    name: "userProfileId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'userProfile',
-                }, organization: {
-                    name: "organization",
-                    type: "DM_DonVi",
-                    isDataModel: true,
-                    backLink: 'staffHistory',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "Id": "organizationId" },
-                }, organizationId: {
-                    name: "organizationId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'organization',
-                }, staffType: {
-                    name: "staffType",
-                    type: "StaffType",
-                    isDataModel: true,
-                    backLink: 'staffHistory',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "staffTypeId" },
-                }, staffTypeId: {
-                    name: "staffTypeId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'staffType',
-                }, staffPosition: {
-                    name: "staffPosition",
-                    type: "StaffPosition",
-                    isDataModel: true,
-                    backLink: 'staffHistory',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "staffPositionId" },
-                }, staffPositionId: {
-                    name: "staffPositionId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'staffPosition',
+                }, status: {
+                    name: "status",
+                    type: "TrainingScoreStatus",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 },
             }, uniqueConstraints: {
                 id: {
@@ -23386,9 +19605,6 @@ const metadata: ModelMeta = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
-                }, userProfileId: {
-                    name: "userProfileId",
-                    fields: ["userProfileId"]
                 },
             },
         },
@@ -25540,6 +21756,3810 @@ const metadata: ModelMeta = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
+                },
+            },
+        },
+        evaluationPeriod: {
+            name: 'EvaluationPeriod', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$EvaluationPeriod$createdBy,
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, startDate: {
+                    name: "startDate",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, endDate: {
+                    name: "endDate",
+                    type: "DateTime",
+                    isOptional: true,
+                }, status: {
+                    name: "status",
+                    type: "EvaluationPeriodStatus",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, schoolYear: {
+                    name: "schoolYear",
+                    type: "SchoolYear",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'evaluationPeriod',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "schoolYearId" },
+                }, schoolYearId: {
+                    name: "schoolYearId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'schoolYear',
+                }, standards: {
+                    name: "standards",
+                    type: "StandardPeriod",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'period',
+                }, council: {
+                    name: "council",
+                    type: "EvaluationCouncil",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'period',
+                }, documentFiles: {
+                    name: "documentFiles",
+                    type: "DocumentFile",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'evaluationPeriod',
+                }, overviewProblem: {
+                    name: "overviewProblem",
+                    type: "String",
+                    isOptional: true,
+                }, overviewGeneral: {
+                    name: "overviewGeneral",
+                    type: "String",
+                    isOptional: true,
+                }, overviewResults: {
+                    name: "overviewResults",
+                    type: "String",
+                    isOptional: true,
+                }, conclude: {
+                    name: "conclude",
+                    type: "String",
+                    isOptional: true,
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+        },
+        evaluationStandardSet: {
+            name: 'EvaluationStandardSet', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$EvaluationStandardSet$createdBy,
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, objectType: {
+                    name: "objectType",
+                    type: "StandardCatalogType",
+                }, standards: {
+                    name: "standards",
+                    type: "StandardCatalog",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'standardSet',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, name: {
+                    name: "name",
+                    fields: ["name"]
+                },
+            },
+        },
+        standardCatalog: {
+            name: 'StandardCatalog', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$StandardCatalog$createdBy,
+                }, order: {
+                    name: "order",
+                    type: "Int",
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, criteria: {
+                    name: "criteria",
+                    type: "CriterionCatalog",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'standard',
+                }, standardSet: {
+                    name: "standardSet",
+                    type: "EvaluationStandardSet",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'standards',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "standardSetId" },
+                }, standardSetId: {
+                    name: "standardSetId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'standardSet',
+                }, objectType: {
+                    name: "objectType",
+                    type: "StandardCatalogType",
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+        },
+        criterionCatalog: {
+            name: 'CriterionCatalog', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$CriterionCatalog$createdBy,
+                }, standard: {
+                    name: "standard",
+                    type: "StandardCatalog",
+                    isDataModel: true,
+                    backLink: 'criteria',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "standardId" },
+                }, standardId: {
+                    name: "standardId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'standard',
+                }, order: {
+                    name: "order",
+                    type: "Int",
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, requirementCriterionCatalog: {
+                    name: "requirementCriterionCatalog",
+                    type: "RequirementCriterionCatalog",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'criterionCatalog',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, standardId_name: {
+                    name: "standardId_name",
+                    fields: ["standardId", "name"]
+                },
+            },
+        },
+        evidenceCategory: {
+            name: 'EvidenceCategory', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$EvidenceCategory$createdBy,
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, evidences: {
+                    name: "evidences",
+                    type: "Evidence",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'category',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+        },
+        evidence: {
+            name: 'Evidence', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$Evidence$createdBy,
+                }, category: {
+                    name: "category",
+                    type: "EvidenceCategory",
+                    isDataModel: true,
+                    backLink: 'evidences',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "categoryId" },
+                }, categoryId: {
+                    name: "categoryId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'category',
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, information: {
+                    name: "information",
+                    type: "String",
+                }, issuer: {
+                    name: "issuer",
+                    type: "String",
+                }, evidenceFile: {
+                    name: "evidenceFile",
+                    type: "EvidenceFile",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'evidence',
+                }, analysisFormEvidence: {
+                    name: "analysisFormEvidence",
+                    type: "AnalysisFormEvidence",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'evidence',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+        },
+        evaluationCriterionComment: {
+            name: 'EvaluationCriterionComment', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$EvaluationCriterionComment$createdBy,
+                }, reviewer: {
+                    name: "reviewer",
+                    type: "UserProfile",
+                    isDataModel: true,
+                    backLink: 'evaluationCriterionComments',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "reviewerId" },
+                }, reviewerId: {
+                    name: "reviewerId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'reviewer',
+                }, requirementCriterion: {
+                    name: "requirementCriterion",
+                    type: "RequirementCriterion",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'evaluationCriterionComment',
+                    isRelationOwner: true,
+                    onDeleteAction: 'Cascade',
+                    foreignKeyMapping: { "id": "requirementCriterionId" },
+                }, requirementCriterionId: {
+                    name: "requirementCriterionId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'requirementCriterion',
+                }, content: {
+                    name: "content",
+                    type: "String",
+                    isOptional: true,
+                }, analysisCriterion: {
+                    name: "analysisCriterion",
+                    type: "AnalysisCriterion",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'evaluationCriterionComments',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "analysisCriterionId" },
+                }, analysisCriterionId: {
+                    name: "analysisCriterionId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'analysisCriterion',
+                }, evaluationCriterion: {
+                    name: "evaluationCriterion",
+                    type: "EvaluationCriterion",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'evaluationCriterionComments',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "evaluationCriterionId" },
+                }, evaluationCriterionId: {
+                    name: "evaluationCriterionId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'evaluationCriterion',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+        },
+        requirementCriterionCatalog: {
+            name: 'RequirementCriterionCatalog', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$RequirementCriterionCatalog$createdBy,
+                }, criterionCatalog: {
+                    name: "criterionCatalog",
+                    type: "CriterionCatalog",
+                    isDataModel: true,
+                    backLink: 'requirementCriterionCatalog',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "criterionCatalogId" },
+                }, criterionCatalogId: {
+                    name: "criterionCatalogId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'criterionCatalog',
+                }, order: {
+                    name: "order",
+                    type: "Int",
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, questions: {
+                    name: "questions",
+                    type: "String",
+                    isArray: true,
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, criterionCatalogId_name: {
+                    name: "criterionCatalogId_name",
+                    fields: ["criterionCatalogId", "name"]
+                },
+            },
+        },
+        standardPeriod: {
+            name: 'StandardPeriod', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$StandardPeriod$createdBy,
+                }, period: {
+                    name: "period",
+                    type: "EvaluationPeriod",
+                    isDataModel: true,
+                    backLink: 'standards',
+                    isRelationOwner: true,
+                    onDeleteAction: 'Cascade',
+                    foreignKeyMapping: { "id": "periodId" },
+                }, periodId: {
+                    name: "periodId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'period',
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, order: {
+                    name: "order",
+                    type: "Int",
+                }, opening: {
+                    name: "opening",
+                    type: "String",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": "" }] }],
+                }, conclusion: {
+                    name: "conclusion",
+                    type: "String",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": "" }] }],
+                }, criteria: {
+                    name: "criteria",
+                    type: "CriterionPeriod",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'evaluationStandard',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, periodId_name: {
+                    name: "periodId_name",
+                    fields: ["periodId", "name"]
+                },
+            },
+        },
+        criterionPeriod: {
+            name: 'CriterionPeriod', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$CriterionPeriod$createdBy,
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, order: {
+                    name: "order",
+                    type: "Int",
+                }, evaluationStandard: {
+                    name: "evaluationStandard",
+                    type: "StandardPeriod",
+                    isDataModel: true,
+                    backLink: 'criteria',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "evaluationStandardId" },
+                }, evaluationStandardId: {
+                    name: "evaluationStandardId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'evaluationStandard',
+                }, analysisCriterions: {
+                    name: "analysisCriterions",
+                    type: "AnalysisCriterion",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'criterionPeriod',
+                }, evaluationCriterion: {
+                    name: "evaluationCriterion",
+                    type: "EvaluationCriterion",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'criterionPeriod',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+        },
+        analysisCriterion: {
+            name: 'AnalysisCriterion', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$AnalysisCriterion$createdBy,
+                }, criterionPeriod: {
+                    name: "criterionPeriod",
+                    type: "CriterionPeriod",
+                    isDataModel: true,
+                    backLink: 'analysisCriterions',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "criterionPeriodId" },
+                }, criterionPeriodId: {
+                    name: "criterionPeriodId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'criterionPeriod',
+                }, lecturer: {
+                    name: "lecturer",
+                    type: "Lecturer",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'analysisCriterion',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "lecturerId" },
+                }, lecturerId: {
+                    name: "lecturerId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'lecturer',
+                }, deadline: {
+                    name: "deadline",
+                    type: "DateTime",
+                    isOptional: true,
+                }, status: {
+                    name: "status",
+                    type: "EvaluationCriterionStatus",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, requirementCriterions: {
+                    name: "requirementCriterions",
+                    type: "RequirementCriterion",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'analysisCriterion',
+                }, evaluationCriterionComments: {
+                    name: "evaluationCriterionComments",
+                    type: "EvaluationCriterionComment",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'analysisCriterion',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, criterionPeriodId: {
+                    name: "criterionPeriodId",
+                    fields: ["criterionPeriodId"]
+                },
+            },
+        },
+        evaluationCriterion: {
+            name: 'EvaluationCriterion', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$EvaluationCriterion$createdBy,
+                }, criterionPeriod: {
+                    name: "criterionPeriod",
+                    type: "CriterionPeriod",
+                    isDataModel: true,
+                    backLink: 'evaluationCriterion',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "criterionPeriodId" },
+                }, criterionPeriodId: {
+                    name: "criterionPeriodId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'criterionPeriod',
+                }, lecturer: {
+                    name: "lecturer",
+                    type: "Lecturer",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'evaluationCriterions',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "lecturerId" },
+                }, lecturerId: {
+                    name: "lecturerId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'lecturer',
+                }, deadline: {
+                    name: "deadline",
+                    type: "DateTime",
+                    isOptional: true,
+                }, status: {
+                    name: "status",
+                    type: "EvaluationStatus",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, reviewer: {
+                    name: "reviewer",
+                    type: "EvaluationCouncilMember",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'evaluationCriterions',
+                    isRelationOwner: true,
+                    onDeleteAction: 'Cascade',
+                    foreignKeyMapping: { "id": "reviewerId" },
+                }, reviewerId: {
+                    name: "reviewerId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'reviewer',
+                }, deadlineReview: {
+                    name: "deadlineReview",
+                    type: "DateTime",
+                    isOptional: true,
+                }, deadlineReviewExternal: {
+                    name: "deadlineReviewExternal",
+                    type: "DateTime",
+                    isOptional: true,
+                }, lecturerReview: {
+                    name: "lecturerReview",
+                    type: "Lecturer",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'evaluationCriterionReviews',
+                }, evaluationCriterionComments: {
+                    name: "evaluationCriterionComments",
+                    type: "EvaluationCriterionComment",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'evaluationCriterion',
+                }, currentSituation: {
+                    name: "currentSituation",
+                    type: "String",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": "" }] }],
+                }, strengths: {
+                    name: "strengths",
+                    type: "String",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": "" }] }],
+                }, weakness: {
+                    name: "weakness",
+                    type: "String",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": "" }] }],
+                }, actionPlan: {
+                    name: "actionPlan",
+                    type: "String",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": "" }] }],
+                }, score: {
+                    name: "score",
+                    type: "String",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": "" }] }],
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, criterionPeriodId: {
+                    name: "criterionPeriodId",
+                    fields: ["criterionPeriodId"]
+                },
+            },
+        },
+        requirementCriterion: {
+            name: 'RequirementCriterion', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$RequirementCriterion$createdBy,
+                }, analysisCriterion: {
+                    name: "analysisCriterion",
+                    type: "AnalysisCriterion",
+                    isDataModel: true,
+                    backLink: 'requirementCriterions',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "analysisCriterionId" },
+                }, analysisCriterionId: {
+                    name: "analysisCriterionId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'analysisCriterion',
+                }, order: {
+                    name: "order",
+                    type: "Int",
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, questions: {
+                    name: "questions",
+                    type: "String",
+                    isArray: true,
+                }, evidences: {
+                    name: "evidences",
+                    type: "AnalysisFormEvidence",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'requirementCriterion',
+                }, evidencePlaces: {
+                    name: "evidencePlaces",
+                    type: "String",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": "" }] }],
+                }, collectionMethod: {
+                    name: "collectionMethod",
+                    type: "String",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": "" }] }],
+                }, evaluationCriterionComment: {
+                    name: "evaluationCriterionComment",
+                    type: "EvaluationCriterionComment",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'requirementCriterion',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+        },
+        analysisFormEvidence: {
+            name: 'AnalysisFormEvidence', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$AnalysisFormEvidence$createdBy,
+                }, requirementCriterion: {
+                    name: "requirementCriterion",
+                    type: "RequirementCriterion",
+                    isDataModel: true,
+                    backLink: 'evidences',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "requirementCriterionId" },
+                }, requirementCriterionId: {
+                    name: "requirementCriterionId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'requirementCriterion',
+                }, evidence: {
+                    name: "evidence",
+                    type: "Evidence",
+                    isDataModel: true,
+                    backLink: 'analysisFormEvidence',
+                    isRelationOwner: true,
+                    onDeleteAction: 'Cascade',
+                    foreignKeyMapping: { "id": "evidenceId" },
+                }, evidenceId: {
+                    name: "evidenceId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'evidence',
+                }, order: {
+                    name: "order",
+                    type: "Int",
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, requirementCriterionId_evidenceId: {
+                    name: "requirementCriterionId_evidenceId",
+                    fields: ["requirementCriterionId", "evidenceId"]
+                },
+            },
+        },
+        evaluationCouncil: {
+            name: 'EvaluationCouncil', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$EvaluationCouncil$createdBy,
+                }, period: {
+                    name: "period",
+                    type: "EvaluationPeriod",
+                    isDataModel: true,
+                    backLink: 'council',
+                    isRelationOwner: true,
+                    onDeleteAction: 'Cascade',
+                    foreignKeyMapping: { "id": "periodId" },
+                }, periodId: {
+                    name: "periodId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'period',
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, members: {
+                    name: "members",
+                    type: "EvaluationCouncilMember",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'evaluationCouncil',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, periodId: {
+                    name: "periodId",
+                    fields: ["periodId"]
+                },
+            },
+        },
+        evaluationCouncilMember: {
+            name: 'EvaluationCouncilMember', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$EvaluationCouncilMember$createdBy,
+                }, evaluationCouncil: {
+                    name: "evaluationCouncil",
+                    type: "EvaluationCouncil",
+                    isDataModel: true,
+                    backLink: 'members',
+                    isRelationOwner: true,
+                    onDeleteAction: 'Cascade',
+                    foreignKeyMapping: { "id": "evaluationCouncilId" },
+                }, evaluationCouncilId: {
+                    name: "evaluationCouncilId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'evaluationCouncil',
+                }, lecturer: {
+                    name: "lecturer",
+                    type: "Lecturer",
+                    isDataModel: true,
+                    backLink: 'evaluationCouncilMember',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "lecturerId" },
+                }, lecturerId: {
+                    name: "lecturerId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'lecturer',
+                }, groupName: {
+                    name: "groupName",
+                    type: "String",
+                    isOptional: true,
+                }, role: {
+                    name: "role",
+                    type: "EvaluationMemberRole",
+                    isOptional: true,
+                }, evaluationCriterions: {
+                    name: "evaluationCriterions",
+                    type: "EvaluationCriterion",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'reviewer',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+        },
+        evidenceFile: {
+            name: 'EvidenceFile', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$EvidenceFile$createdBy,
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, path: {
+                    name: "path",
+                    type: "String",
+                }, mimeType: {
+                    name: "mimeType",
+                    type: "String",
+                }, size: {
+                    name: "size",
+                    type: "BigInt",
+                }, evidence: {
+                    name: "evidence",
+                    type: "Evidence",
+                    isDataModel: true,
+                    backLink: 'evidenceFile',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "evidenceId" },
+                }, evidenceId: {
+                    name: "evidenceId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'evidence',
+                }, userProfile: {
+                    name: "userProfile",
+                    type: "UserProfile",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'evidenceFiles',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "userProfileId" },
+                }, userProfileId: {
+                    name: "userProfileId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'userProfile',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+        },
+        questionBank: {
+            name: 'QuestionBank', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$QuestionBank$createdBy,
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, subjectVersion: {
+                    name: "subjectVersion",
+                    type: "SubjectVersion",
+                    isDataModel: true,
+                    backLink: 'questionBanks',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "subjectVersionId" },
+                }, subjectVersionId: {
+                    name: "subjectVersionId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'subjectVersion',
+                }, questions: {
+                    name: "questions",
+                    type: "Question",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'questionBank',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, subjectVersionId_name: {
+                    name: "subjectVersionId_name",
+                    fields: ["subjectVersionId", "name"]
+                },
+            },
+        },
+        question: {
+            name: 'Question', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$Question$createdBy,
+                }, content: {
+                    name: "content",
+                    type: "String",
+                }, type: {
+                    name: "type",
+                    type: "QuestionType",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, point: {
+                    name: "point",
+                    type: "Float",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 1 }] }],
+                }, explanation: {
+                    name: "explanation",
+                    type: "String",
+                    isOptional: true,
+                }, isAutoGraded: {
+                    name: "isAutoGraded",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                }, difficult: {
+                    name: "difficult",
+                    type: "Difficult",
+                }, multipleChoiceOptions: {
+                    name: "multipleChoiceOptions",
+                    type: "MultipleChoiceOption",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'question',
+                }, fillInBlankSlots: {
+                    name: "fillInBlankSlots",
+                    type: "FillInBlankSlot",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'question',
+                }, orderingItems: {
+                    name: "orderingItems",
+                    type: "OrderingItem",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'question',
+                }, questionBank: {
+                    name: "questionBank",
+                    type: "QuestionBank",
+                    isDataModel: true,
+                    backLink: 'questions',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "questionBankId" },
+                }, questionBankId: {
+                    name: "questionBankId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'questionBank',
+                }, knowledgeBlock: {
+                    name: "knowledgeBlock",
+                    type: "KnowledgeBlock",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'questions',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "knowledgeBlockId" },
+                }, knowledgeBlockId: {
+                    name: "knowledgeBlockId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'knowledgeBlock',
+                }, sessionQuestions: {
+                    name: "sessionQuestions",
+                    type: "ExamBankQuestion",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'question',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+        },
+        multipleChoiceOption: {
+            name: 'MultipleChoiceOption', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$MultipleChoiceOption$createdBy,
+                }, questionId: {
+                    name: "questionId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'question',
+                }, question: {
+                    name: "question",
+                    type: "Question",
+                    isDataModel: true,
+                    backLink: 'multipleChoiceOptions',
+                    isRelationOwner: true,
+                    onDeleteAction: 'Cascade',
+                    foreignKeyMapping: { "id": "questionId" },
+                }, content: {
+                    name: "content",
+                    type: "String",
+                }, isCorrect: {
+                    name: "isCorrect",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                }, order: {
+                    name: "order",
+                    type: "Int",
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+        },
+        fillInBlankSlot: {
+            name: 'FillInBlankSlot', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$FillInBlankSlot$createdBy,
+                }, questionId: {
+                    name: "questionId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'question',
+                }, question: {
+                    name: "question",
+                    type: "Question",
+                    isDataModel: true,
+                    backLink: 'fillInBlankSlots',
+                    isRelationOwner: true,
+                    onDeleteAction: 'Cascade',
+                    foreignKeyMapping: { "id": "questionId" },
+                }, order: {
+                    name: "order",
+                    type: "Int",
+                }, correctAnswer: {
+                    name: "correctAnswer",
+                    type: "String",
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, questionId_order: {
+                    name: "questionId_order",
+                    fields: ["questionId", "order"]
+                },
+            },
+        },
+        orderingItem: {
+            name: 'OrderingItem', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$OrderingItem$createdBy,
+                }, questionId: {
+                    name: "questionId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'question',
+                }, question: {
+                    name: "question",
+                    type: "Question",
+                    isDataModel: true,
+                    backLink: 'orderingItems',
+                    isRelationOwner: true,
+                    onDeleteAction: 'Cascade',
+                    foreignKeyMapping: { "id": "questionId" },
+                }, content: {
+                    name: "content",
+                    type: "String",
+                }, correctOrder: {
+                    name: "correctOrder",
+                    type: "Int",
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, questionId_correctOrder: {
+                    name: "questionId_correctOrder",
+                    fields: ["questionId", "correctOrder"]
+                },
+            },
+        },
+        exam: {
+            name: 'Exam', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$Exam$createdBy,
+                }, lockExamSessions: {
+                    name: "lockExamSessions",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                }, duration: {
+                    name: "duration",
+                    type: "Int",
+                    isOptional: true,
+                }, session: {
+                    name: "session",
+                    type: "Int",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 1 }] }],
+                }, subjectVersionId: {
+                    name: "subjectVersionId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'subjectVersion',
+                }, subjectVersion: {
+                    name: "subjectVersion",
+                    type: "SubjectVersion",
+                    isDataModel: true,
+                    backLink: 'exams',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "subjectVersionId" },
+                }, semester: {
+                    name: "semester",
+                    type: "Semester",
+                    isDataModel: true,
+                    backLink: 'exam',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "semesterId" },
+                }, semesterId: {
+                    name: "semesterId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'semester',
+                }, subjectClass: {
+                    name: "subjectClass",
+                    type: "SubjectClass",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'exam',
+                }, examBank: {
+                    name: "examBank",
+                    type: "ExamBank",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'exam',
+                }, examRooms: {
+                    name: "examRooms",
+                    type: "ExamRoom",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'exam',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+        },
+        examRoom: {
+            name: 'ExamRoom', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$ExamRoom$createdBy,
+                }, exam: {
+                    name: "exam",
+                    type: "Exam",
+                    isDataModel: true,
+                    backLink: 'examRooms',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "examId" },
+                }, examId: {
+                    name: "examId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'exam',
+                }, room: {
+                    name: "room",
+                    type: "Room",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'examRooms',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "roomId" },
+                }, roomId: {
+                    name: "roomId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'room',
+                }, capacity: {
+                    name: "capacity",
+                    type: "Int",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                }, examList: {
+                    name: "examList",
+                    type: "ExamList",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'examRoom',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, examId_roomId: {
+                    name: "examId_roomId",
+                    fields: ["examId", "roomId"]
+                },
+            },
+        },
+        examList: {
+            name: 'ExamList', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$ExamList$createdBy,
+                }, examRoom: {
+                    name: "examRoom",
+                    type: "ExamRoom",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'examList',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "examRoomId" },
+                }, examRoomId: {
+                    name: "examRoomId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'examRoom',
+                }, firstSupervisor: {
+                    name: "firstSupervisor",
+                    type: "Lecturer",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'examRoomsMain',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "firstSupervisorId" },
+                }, firstSupervisorId: {
+                    name: "firstSupervisorId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'firstSupervisor',
+                }, secondSupervisor: {
+                    name: "secondSupervisor",
+                    type: "Lecturer",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'examRoomsExtra',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "secondSupervisorId" },
+                }, secondSupervisorId: {
+                    name: "secondSupervisorId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'secondSupervisor',
+                }, createdExamCode: {
+                    name: "createdExamCode",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                }, lockExamCode: {
+                    name: "lockExamCode",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                }, start: {
+                    name: "start",
+                    type: "Int",
+                    isOptional: true,
+                }, end: {
+                    name: "end",
+                    type: "Int",
+                    isOptional: true,
+                }, examPapers: {
+                    name: "examPapers",
+                    type: "ExamPaper",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'examList',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+        },
+        examBank: {
+            name: 'ExamBank', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$ExamBank$createdBy,
+                }, exam: {
+                    name: "exam",
+                    type: "Exam",
+                    isDataModel: true,
+                    backLink: 'examBank',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "examId" },
+                }, examId: {
+                    name: "examId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'exam',
+                }, examTime: {
+                    name: "examTime",
+                    type: "Int",
+                    isOptional: true,
+                }, examCode: {
+                    name: "examCode",
+                    type: "String",
+                }, subjectClass: {
+                    name: "subjectClass",
+                    type: "SubjectClass",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'examBank',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "subjectClassId" },
+                }, subjectClassId: {
+                    name: "subjectClassId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'subjectClass',
+                }, explain: {
+                    name: "explain",
+                    type: "String",
+                    isOptional: true,
+                }, examDay: {
+                    name: "examDay",
+                    type: "DateTime",
+                    isOptional: true,
+                }, examType: {
+                    name: "examType",
+                    type: "ExamType",
+                    isOptional: true,
+                }, questions: {
+                    name: "questions",
+                    type: "ExamBankQuestion",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'examBank',
+                }, examMatrix: {
+                    name: "examMatrix",
+                    type: "ExamMatrix",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'examBank',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "examMatrixId" },
+                }, examMatrixId: {
+                    name: "examMatrixId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'examMatrix',
+                }, isLock: {
+                    name: "isLock",
+                    type: "Boolean",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                }, isNote: {
+                    name: "isNote",
+                    type: "Boolean",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                }, isGroup: {
+                    name: "isGroup",
+                    type: "Boolean",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, examId_examCode: {
+                    name: "examId_examCode",
+                    fields: ["examId", "examCode"]
+                },
+            },
+        },
+        examBankQuestion: {
+            name: 'ExamBankQuestion', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$ExamBankQuestion$createdBy,
+                }, examBankId: {
+                    name: "examBankId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'examBank',
+                }, examBank: {
+                    name: "examBank",
+                    type: "ExamBank",
+                    isDataModel: true,
+                    backLink: 'questions',
+                    isRelationOwner: true,
+                    onDeleteAction: 'Cascade',
+                    foreignKeyMapping: { "id": "examBankId" },
+                }, questionId: {
+                    name: "questionId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'question',
+                }, question: {
+                    name: "question",
+                    type: "Question",
+                    isDataModel: true,
+                    backLink: 'sessionQuestions',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "questionId" },
+                }, order: {
+                    name: "order",
+                    type: "Int",
+                    isOptional: true,
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, examBankId_questionId: {
+                    name: "examBankId_questionId",
+                    fields: ["examBankId", "questionId"]
+                }, examBankId_order: {
+                    name: "examBankId_order",
+                    fields: ["examBankId", "order"]
+                },
+            },
+        },
+        examPaper: {
+            name: 'ExamPaper', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$ExamPaper$createdBy,
+                }, examList: {
+                    name: "examList",
+                    type: "ExamList",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'examPapers',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "examListId" },
+                }, examListId: {
+                    name: "examListId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'examList',
+                }, studentSubjectScore: {
+                    name: "studentSubjectScore",
+                    type: "StudentSubjectScore",
+                    isDataModel: true,
+                    backLink: 'examPaper',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "studentSubjectScoreId" },
+                }, studentSubjectScoreId: {
+                    name: "studentSubjectScoreId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'studentSubjectScore',
+                }, examCode: {
+                    name: "examCode",
+                    type: "String",
+                    isOptional: true,
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, studentSubjectScoreId: {
+                    name: "studentSubjectScoreId",
+                    fields: ["studentSubjectScoreId"]
+                }, examCode_examListId: {
+                    name: "examCode_examListId",
+                    fields: ["examCode", "examListId"]
+                },
+            },
+        },
+        examFramework: {
+            name: 'ExamFramework', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$ExamFramework$createdBy,
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, time: {
+                    name: "time",
+                    type: "Int",
+                }, subjectVersion: {
+                    name: "subjectVersion",
+                    type: "SubjectVersion",
+                    isDataModel: true,
+                    backLink: 'examFramework',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "subjectVersionId" },
+                }, subjectVersionId: {
+                    name: "subjectVersionId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'subjectVersion',
+                }, examMatrixs: {
+                    name: "examMatrixs",
+                    type: "ExamMatrix",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'examFramework',
+                }, documentFiles: {
+                    name: "documentFiles",
+                    type: "DocumentFile",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'examFramework',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+        },
+        examMatrix: {
+            name: 'ExamMatrix', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$ExamMatrix$createdBy,
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, isDefault: {
+                    name: "isDefault",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                }, examFramework: {
+                    name: "examFramework",
+                    type: "ExamFramework",
+                    isDataModel: true,
+                    backLink: 'examMatrixs',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "examFrameworkId" },
+                }, examFrameworkId: {
+                    name: "examFrameworkId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'examFramework',
+                }, knowledgeBlocks: {
+                    name: "knowledgeBlocks",
+                    type: "KnowledgeBlock",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'examMatrix',
+                }, examBank: {
+                    name: "examBank",
+                    type: "ExamBank",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'examMatrix',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+        },
+        knowledgeBlock: {
+            name: 'KnowledgeBlock', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$KnowledgeBlock$createdBy,
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, examMatrix: {
+                    name: "examMatrix",
+                    type: "ExamMatrix",
+                    isDataModel: true,
+                    backLink: 'knowledgeBlocks',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "examMatrixId" },
+                }, examMatrixId: {
+                    name: "examMatrixId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'examMatrix',
+                }, questions: {
+                    name: "questions",
+                    type: "Question",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'knowledgeBlock',
+                }, documentFiles: {
+                    name: "documentFiles",
+                    type: "DocumentFile",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'knowledgeBlock',
+                }, configExams: {
+                    name: "configExams",
+                    type: "ConfigExam",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'knowledgeBlock',
+                }, subjectVersion: {
+                    name: "subjectVersion",
+                    type: "SubjectVersion",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'knowledgeBlocks',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "subjectVersionId" },
+                }, subjectVersionId: {
+                    name: "subjectVersionId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'subjectVersion',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+        },
+        configExam: {
+            name: 'ConfigExam', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$ConfigExam$createdBy,
+                }, difficult: {
+                    name: "difficult",
+                    type: "Difficult",
+                }, type: {
+                    name: "type",
+                    type: "QuestionType",
+                    isOptional: true,
+                }, quantity: {
+                    name: "quantity",
+                    type: "Int",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                }, point: {
+                    name: "point",
+                    type: "Float",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                }, knowledgeBlock: {
+                    name: "knowledgeBlock",
+                    type: "KnowledgeBlock",
+                    isDataModel: true,
+                    backLink: 'configExams',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "knowledgeBlockId" },
+                }, knowledgeBlockId: {
+                    name: "knowledgeBlockId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'knowledgeBlock',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+        },
+        surveyObjectType: {
+            name: 'SurveyObjectType', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$SurveyObjectType$createdBy,
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, survey: {
+                    name: "survey",
+                    type: "Survey",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'surveyObjectType',
+                    isRelationOwner: true,
+                }, type: {
+                    name: "type",
+                    type: "SurveyObject",
+                    isArray: true,
+                }, organizations: {
+                    name: "organizations",
+                    type: "DM_DonVi",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'surveyObjectTypes',
+                    isRelationOwner: true,
+                }, trainingFields: {
+                    name: "trainingFields",
+                    type: "TrainingField",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'surveyObjectTypes',
+                    isRelationOwner: true,
+                }, trainingMajors: {
+                    name: "trainingMajors",
+                    type: "TrainingMajor",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'surveyObjectTypes',
+                    isRelationOwner: true,
+                }, trainingCourses: {
+                    name: "trainingCourses",
+                    type: "TrainingCourse",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'surveyObjectTypes',
+                    isRelationOwner: true,
+                }, fixedClasses: {
+                    name: "fixedClasses",
+                    type: "FixedClass",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'surveyObjectTypes',
+                    isRelationOwner: true,
+                }, subjectClasses: {
+                    name: "subjectClasses",
+                    type: "SubjectClass",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'surveyObjectTypes',
+                    isRelationOwner: true,
+                }, surveySessions: {
+                    name: "surveySessions",
+                    type: "SurveySession",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'surveyObjectType',
+                }, clusterSurvey: {
+                    name: "clusterSurvey",
+                    type: "ClusterSurvey",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'surveyObjectType',
+                    isRelationOwner: true,
+                }, trainingObjectType: {
+                    name: "trainingObjectType",
+                    type: "TrainingObjectType",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'surveyObjectType',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "trainingObjectTypeId" },
+                }, trainingObjectTypeId: {
+                    name: "trainingObjectTypeId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'trainingObjectType',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+        },
+        surveyTopic: {
+            name: 'SurveyTopic', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$SurveyTopic$createdBy,
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, clusterSurvey: {
+                    name: "clusterSurvey",
+                    type: "ClusterSurvey",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'surveyTopic',
+                }, survey: {
+                    name: "survey",
+                    type: "Survey",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'surveyTopic',
+                }, surveyQuestionGroup: {
+                    name: "surveyQuestionGroup",
+                    type: "SurveyQuestionGroup",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'surveyTopic',
+                    isRelationOwner: true,
+                }, type: {
+                    name: "type",
+                    type: "SurveyType",
+                    isOptional: true,
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+        },
+        surveyQuestionGroup: {
+            name: 'SurveyQuestionGroup', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$SurveyQuestionGroup$createdBy,
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, surveyQuestion: {
+                    name: "surveyQuestion",
+                    type: "SurveyQuestion",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'surveyQuestionGroup',
+                }, surveyTopic: {
+                    name: "surveyTopic",
+                    type: "SurveyTopic",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'surveyQuestionGroup',
+                    isRelationOwner: true,
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+        },
+        clusterSurvey: {
+            name: 'ClusterSurvey', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$ClusterSurvey$createdBy,
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, startDate: {
+                    name: "startDate",
+                    type: "DateTime",
+                }, endDate: {
+                    name: "endDate",
+                    type: "DateTime",
+                    isOptional: true,
+                }, isPublic: {
+                    name: "isPublic",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                }, anonymous: {
+                    name: "anonymous",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, surveyTopic: {
+                    name: "surveyTopic",
+                    type: "SurveyTopic",
+                    isDataModel: true,
+                    backLink: 'clusterSurvey',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "surveyTopicId" },
+                }, surveyTopicId: {
+                    name: "surveyTopicId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'surveyTopic',
+                }, surveyObjectType: {
+                    name: "surveyObjectType",
+                    type: "SurveyObjectType",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'clusterSurvey',
+                    isRelationOwner: true,
+                }, lecturers: {
+                    name: "lecturers",
+                    type: "Lecturer",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'clusterSurvey',
+                    isRelationOwner: true,
+                }, surveyChoice: {
+                    name: "surveyChoice",
+                    type: "SurveyChoice",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'clusterSurvey',
+                }, surveyQuestion: {
+                    name: "surveyQuestion",
+                    type: "SurveyQuestion",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'clusterSurvey',
+                    isRelationOwner: true,
+                }, surveys: {
+                    name: "surveys",
+                    type: "Survey",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'clusterSurvey',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+        },
+        survey: {
+            name: 'Survey', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$Survey$createdBy,
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, startDate: {
+                    name: "startDate",
+                    type: "DateTime",
+                }, endDate: {
+                    name: "endDate",
+                    type: "DateTime",
+                    isOptional: true,
+                }, isPublic: {
+                    name: "isPublic",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                }, anonymous: {
+                    name: "anonymous",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, surveyObjectType: {
+                    name: "surveyObjectType",
+                    type: "SurveyObjectType",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'survey',
+                    isRelationOwner: true,
+                }, lecture: {
+                    name: "lecture",
+                    type: "Lecturer",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'survey',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "lectureId" },
+                }, lectureId: {
+                    name: "lectureId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'lecture',
+                }, subjectClass: {
+                    name: "subjectClass",
+                    type: "SubjectClass",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'survey',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "subjectClassId" },
+                }, subjectClassId: {
+                    name: "subjectClassId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'subjectClass',
+                }, semester: {
+                    name: "semester",
+                    type: "Semester",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'survey',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "semesterId" },
+                }, semesterId: {
+                    name: "semesterId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'semester',
+                }, surveyTopic: {
+                    name: "surveyTopic",
+                    type: "SurveyTopic",
+                    isDataModel: true,
+                    backLink: 'survey',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "surveyTopicId" },
+                }, surveyTopicId: {
+                    name: "surveyTopicId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'surveyTopic',
+                }, trainingObjectType: {
+                    name: "trainingObjectType",
+                    type: "TrainingObjectType",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'survey',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "trainingObjectTypeId" },
+                }, trainingObjectTypeId: {
+                    name: "trainingObjectTypeId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'trainingObjectType',
+                }, surveyChoice: {
+                    name: "surveyChoice",
+                    type: "SurveyChoice",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'survey',
+                    isRelationOwner: true,
+                }, surveyQuestion: {
+                    name: "surveyQuestion",
+                    type: "SurveyQuestion",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'survey',
+                    isRelationOwner: true,
+                }, surveySessions: {
+                    name: "surveySessions",
+                    type: "SurveySession",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'survey',
+                }, clusterSurvey: {
+                    name: "clusterSurvey",
+                    type: "ClusterSurvey",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'surveys',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "clusterSurveyId" },
+                }, clusterSurveyId: {
+                    name: "clusterSurveyId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'clusterSurvey',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+        },
+        surveyQuestion: {
+            name: 'SurveyQuestion', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$SurveyQuestion$createdBy,
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, type: {
+                    name: "type",
+                    type: "SurveyQuestionType",
+                }, surveyQuestionGroup: {
+                    name: "surveyQuestionGroup",
+                    type: "SurveyQuestionGroup",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'surveyQuestion',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "surveyQuestionGroupId" },
+                }, surveyQuestionGroupId: {
+                    name: "surveyQuestionGroupId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'surveyQuestionGroup',
+                }, survey: {
+                    name: "survey",
+                    type: "Survey",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'surveyQuestion',
+                    isRelationOwner: true,
+                }, clusterSurvey: {
+                    name: "clusterSurvey",
+                    type: "ClusterSurvey",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'surveyQuestion',
+                    isRelationOwner: true,
+                }, surveyResponses: {
+                    name: "surveyResponses",
+                    type: "SurveyResponse",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'surveyQuestion',
+                }, specificChoice: {
+                    name: "specificChoice",
+                    type: "SpecificChoice",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'surveyQuestion',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+        },
+        specificChoice: {
+            name: 'SpecificChoice', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$SpecificChoice$createdBy,
+                }, answer: {
+                    name: "answer",
+                    type: "String",
+                }, surveyQuestion: {
+                    name: "surveyQuestion",
+                    type: "SurveyQuestion",
+                    isDataModel: true,
+                    backLink: 'specificChoice',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "surveyQuestionId" },
+                }, surveyQuestionId: {
+                    name: "surveyQuestionId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'surveyQuestion',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+        },
+        surveyChoice: {
+            name: 'SurveyChoice', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$SurveyChoice$createdBy,
+                }, answer: {
+                    name: "answer",
+                    type: "String",
+                }, requireExplanation: {
+                    name: "requireExplanation",
+                    type: "Boolean",
+                }, clusterSurvey: {
+                    name: "clusterSurvey",
+                    type: "ClusterSurvey",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'surveyChoice',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "clusterSurveyId" },
+                }, clusterSurveyId: {
+                    name: "clusterSurveyId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'clusterSurvey',
+                }, survey: {
+                    name: "survey",
+                    type: "Survey",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'surveyChoice',
+                    isRelationOwner: true,
+                }, surveyResponses: {
+                    name: "surveyResponses",
+                    type: "SurveyResponse",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'surveyChoice',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+        },
+        surveySession: {
+            name: 'SurveySession', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$SurveySession$createdBy,
+                }, survey: {
+                    name: "survey",
+                    type: "Survey",
+                    isDataModel: true,
+                    backLink: 'surveySessions',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "surveyId" },
+                }, surveyId: {
+                    name: "surveyId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'survey',
+                }, profile: {
+                    name: "profile",
+                    type: "UserProfile",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'surveySession',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "profileId" },
+                }, profileId: {
+                    name: "profileId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'profile',
+                }, student: {
+                    name: "student",
+                    type: "Student",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'surveySessions',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "studentId" },
+                }, studentId: {
+                    name: "studentId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'student',
+                }, startedAt: {
+                    name: "startedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, completedAt: {
+                    name: "completedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, isCompleted: {
+                    name: "isCompleted",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                }, surveyObjectType: {
+                    name: "surveyObjectType",
+                    type: "SurveyObjectType",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'surveySessions',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "surveyObjectTypeId" },
+                }, surveyObjectTypeId: {
+                    name: "surveyObjectTypeId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'surveyObjectType',
+                }, responses: {
+                    name: "responses",
+                    type: "SurveyResponse",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'surveySession',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, surveyId_studentId: {
+                    name: "surveyId_studentId",
+                    fields: ["surveyId", "studentId"]
+                },
+            },
+        },
+        surveyResponse: {
+            name: 'SurveyResponse', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$SurveyResponse$createdBy,
+                }, surveySession: {
+                    name: "surveySession",
+                    type: "SurveySession",
+                    isDataModel: true,
+                    backLink: 'responses',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "surveySessionId" },
+                }, surveySessionId: {
+                    name: "surveySessionId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'surveySession',
+                }, surveyQuestion: {
+                    name: "surveyQuestion",
+                    type: "SurveyQuestion",
+                    isDataModel: true,
+                    backLink: 'surveyResponses',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "surveyQuestionId" },
+                }, surveyQuestionId: {
+                    name: "surveyQuestionId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'surveyQuestion',
+                }, answerText: {
+                    name: "answerText",
+                    type: "String",
+                    isOptional: true,
+                }, explanation: {
+                    name: "explanation",
+                    type: "String",
+                    isOptional: true,
+                }, surveyChoice: {
+                    name: "surveyChoice",
+                    type: "SurveyChoice",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'surveyResponses',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "surveyChoiceId" },
+                }, surveyChoiceId: {
+                    name: "surveyChoiceId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'surveyChoice',
+                }, answeredAt: {
+                    name: "answeredAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, surveySessionId_surveyQuestionId: {
+                    name: "surveySessionId_surveyQuestionId",
+                    fields: ["surveySessionId", "surveyQuestionId"]
                 },
             },
         },
@@ -27893,6 +27913,8 @@ const metadata: ModelMeta = {
     deleteCascade: {
         subjectVersion: ['SubjectInGroup'],
         equivalencyGroup: ['SubjectInGroup'],
+        scoreLinkSubjectVersion: ['ScoreLinkStudent'],
+        note: ['NoteReminder'],
         evaluationPeriod: ['StandardPeriod', 'EvaluationCouncil'],
         evidence: ['AnalysisFormEvidence'],
         requirementCriterion: ['EvaluationCriterionComment'],
@@ -27900,8 +27922,6 @@ const metadata: ModelMeta = {
         evaluationCouncilMember: ['EvaluationCriterion'],
         question: ['MultipleChoiceOption', 'FillInBlankSlot', 'OrderingItem'],
         examBank: ['ExamBankQuestion'],
-        scoreLinkSubjectVersion: ['ScoreLinkStudent'],
-        note: ['NoteReminder'],
 
     },
     authModel: 'UserProfile'
@@ -28372,39 +28392,11 @@ function $default$Notification$createdBy(user: any): unknown {
     return user?.id;
 }
 
-function $default$DocumentFile$createdBy(user: any): unknown {
+function $default$Lecturer$createdBy(user: any): unknown {
     return user?.id;
 }
 
-function $default$AcademicActionConfig$createdBy(user: any): unknown {
-    return user?.id;
-}
-
-function $default$AcademicActionRuleSet$createdBy(user: any): unknown {
-    return user?.id;
-}
-
-function $default$AcademicActionCondition$createdBy(user: any): unknown {
-    return user?.id;
-}
-
-function $default$StudentAcademicDecision$createdBy(user: any): unknown {
-    return user?.id;
-}
-
-function $default$TrainingScoreSession$createdBy(user: any): unknown {
-    return user?.id;
-}
-
-function $default$StudentTrainingScore$createdBy(user: any): unknown {
-    return user?.id;
-}
-
-function $default$SemesterTrainingScore$createdBy(user: any): unknown {
-    return user?.id;
-}
-
-function $default$SchoolYearTrainingScore$createdBy(user: any): unknown {
+function $default$LecturerHistory$createdBy(user: any): unknown {
     return user?.id;
 }
 
@@ -28420,11 +28412,11 @@ function $default$StaffPosition$createdBy(user: any): unknown {
     return user?.id;
 }
 
-function $default$Lecturer$createdBy(user: any): unknown {
+function $default$Staff$createdBy(user: any): unknown {
     return user?.id;
 }
 
-function $default$LecturerHistory$createdBy(user: any): unknown {
+function $default$StaffHistory$createdBy(user: any): unknown {
     return user?.id;
 }
 
@@ -28500,179 +28492,39 @@ function $default$SupervisorPaymentRecord$createdBy(user: any): unknown {
     return user?.id;
 }
 
-function $default$EvaluationPeriod$createdBy(user: any): unknown {
+function $default$DocumentFile$createdBy(user: any): unknown {
     return user?.id;
 }
 
-function $default$EvaluationStandardSet$createdBy(user: any): unknown {
+function $default$AcademicActionConfig$createdBy(user: any): unknown {
     return user?.id;
 }
 
-function $default$StandardCatalog$createdBy(user: any): unknown {
+function $default$AcademicActionRuleSet$createdBy(user: any): unknown {
     return user?.id;
 }
 
-function $default$CriterionCatalog$createdBy(user: any): unknown {
+function $default$AcademicActionCondition$createdBy(user: any): unknown {
     return user?.id;
 }
 
-function $default$EvidenceCategory$createdBy(user: any): unknown {
+function $default$StudentAcademicDecision$createdBy(user: any): unknown {
     return user?.id;
 }
 
-function $default$Evidence$createdBy(user: any): unknown {
+function $default$TrainingScoreSession$createdBy(user: any): unknown {
     return user?.id;
 }
 
-function $default$EvaluationCriterionComment$createdBy(user: any): unknown {
+function $default$StudentTrainingScore$createdBy(user: any): unknown {
     return user?.id;
 }
 
-function $default$RequirementCriterionCatalog$createdBy(user: any): unknown {
+function $default$SemesterTrainingScore$createdBy(user: any): unknown {
     return user?.id;
 }
 
-function $default$StandardPeriod$createdBy(user: any): unknown {
-    return user?.id;
-}
-
-function $default$CriterionPeriod$createdBy(user: any): unknown {
-    return user?.id;
-}
-
-function $default$AnalysisCriterion$createdBy(user: any): unknown {
-    return user?.id;
-}
-
-function $default$EvaluationCriterion$createdBy(user: any): unknown {
-    return user?.id;
-}
-
-function $default$RequirementCriterion$createdBy(user: any): unknown {
-    return user?.id;
-}
-
-function $default$AnalysisFormEvidence$createdBy(user: any): unknown {
-    return user?.id;
-}
-
-function $default$EvaluationCouncil$createdBy(user: any): unknown {
-    return user?.id;
-}
-
-function $default$EvaluationCouncilMember$createdBy(user: any): unknown {
-    return user?.id;
-}
-
-function $default$EvidenceFile$createdBy(user: any): unknown {
-    return user?.id;
-}
-
-function $default$SurveyObjectType$createdBy(user: any): unknown {
-    return user?.id;
-}
-
-function $default$SurveyTopic$createdBy(user: any): unknown {
-    return user?.id;
-}
-
-function $default$SurveyQuestionGroup$createdBy(user: any): unknown {
-    return user?.id;
-}
-
-function $default$ClusterSurvey$createdBy(user: any): unknown {
-    return user?.id;
-}
-
-function $default$Survey$createdBy(user: any): unknown {
-    return user?.id;
-}
-
-function $default$SurveyQuestion$createdBy(user: any): unknown {
-    return user?.id;
-}
-
-function $default$SpecificChoice$createdBy(user: any): unknown {
-    return user?.id;
-}
-
-function $default$SurveyChoice$createdBy(user: any): unknown {
-    return user?.id;
-}
-
-function $default$SurveySession$createdBy(user: any): unknown {
-    return user?.id;
-}
-
-function $default$SurveyResponse$createdBy(user: any): unknown {
-    return user?.id;
-}
-
-function $default$QuestionBank$createdBy(user: any): unknown {
-    return user?.id;
-}
-
-function $default$Question$createdBy(user: any): unknown {
-    return user?.id;
-}
-
-function $default$MultipleChoiceOption$createdBy(user: any): unknown {
-    return user?.id;
-}
-
-function $default$FillInBlankSlot$createdBy(user: any): unknown {
-    return user?.id;
-}
-
-function $default$OrderingItem$createdBy(user: any): unknown {
-    return user?.id;
-}
-
-function $default$Exam$createdBy(user: any): unknown {
-    return user?.id;
-}
-
-function $default$ExamRoom$createdBy(user: any): unknown {
-    return user?.id;
-}
-
-function $default$ExamList$createdBy(user: any): unknown {
-    return user?.id;
-}
-
-function $default$ExamBank$createdBy(user: any): unknown {
-    return user?.id;
-}
-
-function $default$ExamBankQuestion$createdBy(user: any): unknown {
-    return user?.id;
-}
-
-function $default$ExamPaper$createdBy(user: any): unknown {
-    return user?.id;
-}
-
-function $default$ExamFramework$createdBy(user: any): unknown {
-    return user?.id;
-}
-
-function $default$ExamMatrix$createdBy(user: any): unknown {
-    return user?.id;
-}
-
-function $default$KnowledgeBlock$createdBy(user: any): unknown {
-    return user?.id;
-}
-
-function $default$ConfigExam$createdBy(user: any): unknown {
-    return user?.id;
-}
-
-function $default$Staff$createdBy(user: any): unknown {
-    return user?.id;
-}
-
-function $default$StaffHistory$createdBy(user: any): unknown {
+function $default$SchoolYearTrainingScore$createdBy(user: any): unknown {
     return user?.id;
 }
 
@@ -28753,6 +28605,174 @@ function $default$NoteTag$createdBy(user: any): unknown {
 }
 
 function $default$NoteReminder$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$EvaluationPeriod$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$EvaluationStandardSet$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$StandardCatalog$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$CriterionCatalog$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$EvidenceCategory$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$Evidence$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$EvaluationCriterionComment$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$RequirementCriterionCatalog$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$StandardPeriod$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$CriterionPeriod$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$AnalysisCriterion$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$EvaluationCriterion$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$RequirementCriterion$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$AnalysisFormEvidence$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$EvaluationCouncil$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$EvaluationCouncilMember$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$EvidenceFile$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$QuestionBank$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$Question$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$MultipleChoiceOption$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$FillInBlankSlot$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$OrderingItem$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$Exam$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$ExamRoom$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$ExamList$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$ExamBank$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$ExamBankQuestion$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$ExamPaper$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$ExamFramework$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$ExamMatrix$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$KnowledgeBlock$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$ConfigExam$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$SurveyObjectType$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$SurveyTopic$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$SurveyQuestionGroup$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$ClusterSurvey$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$Survey$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$SurveyQuestion$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$SpecificChoice$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$SurveyChoice$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$SurveySession$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$SurveyResponse$createdBy(user: any): unknown {
     return user?.id;
 }
 

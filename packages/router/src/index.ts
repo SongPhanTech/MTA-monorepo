@@ -747,6 +747,13 @@ const NAVIGATION: NavigationType = {
         description: "Quản lý thông báo đào tạo",
       },
       {
+        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CAU_HINH_THONG_BAO_GIANG_VIEN,
+        label: "Cấu hình quét hạn GV",
+        icon: Settings,
+        path: ROUTER_PATH.QL_DAO_TAO.CAU_HINH_THONG_BAO_GIANG_VIEN,
+        description: "Lịch cron quét hạn nhập điểm & khảo sát cổng giảng viên",
+      },
+      {
         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_LICH_TUAN_THANG,
         label: "Lịch tuần tháng",
         icon: CalendarRange,

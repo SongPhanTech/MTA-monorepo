@@ -48,7 +48,12 @@ const relationSchema = z.object({
     targetCourses: z.array(z.unknown()).optional(),
     targetClasses: z.array(z.unknown()).optional(),
     targetStudents: z.array(z.unknown()).optional(),
+    lecturer: z.record(z.string(), z.unknown()).optional(),
     attachments: z.array(z.unknown()).optional(),
+}
+);
+const fkSchema = z.object({
+    lecturerId: z.string().nullish(),
 }
 );
 
@@ -61,7 +66,7 @@ export const NotificationScalarSchema = baseSchema;
 /**
  * `Notification` schema including all fields (scalar, foreign key, and relations) and validations.
  */
-export const NotificationSchema = NotificationScalarSchema.merge(relationSchema.partial());
+export const NotificationSchema = NotificationScalarSchema.merge(fkSchema).merge(relationSchema.partial());
 
 
 /**
@@ -105,9 +110,7 @@ export const NotificationCreateScalarSchema = baseSchemaWithoutDefaults.partial(
 /**
  * `Notification` schema for create operations including scalar fields, foreign key fields, and validations.
  */
-export const NotificationCreateSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, type: true, priority: true, publishedAt: true, targetAll: true
-});
+export const NotificationCreateSchema = NotificationCreateScalarSchema.merge(fkSchema);
 
 
 /**
@@ -119,5 +122,5 @@ export const NotificationUpdateScalarSchema = baseSchemaWithoutDefaults.partial(
 /**
  * `Notification` schema for update operations including scalar fields, foreign key fields, and validations.
  */
-export const NotificationUpdateSchema = NotificationUpdateScalarSchema;
+export const NotificationUpdateSchema = NotificationUpdateScalarSchema.merge(fkSchema.partial());
 

@@ -13,6 +13,7 @@
     "@hono/zod-openapi": "catalog:",
     "@scalar/core": "0.1.1",
     "@scalar/hono-api-reference": "catalog:",
+    "@workspace/constant": "workspace:*",
     "@workspace/db": "workspace:*",
     "@workspace/libs": "workspace:*",
     "axios": "catalog:",

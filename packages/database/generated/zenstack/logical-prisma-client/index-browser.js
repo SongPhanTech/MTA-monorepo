@@ -2810,10 +2810,11 @@ exports.Prisma.NotificationScalarFieldEnum = {
   priority: 'priority',
   publishedAt: 'publishedAt',
   expiresAt: 'expiresAt',
-  targetAll: 'targetAll'
+  targetAll: 'targetAll',
+  lecturerId: 'lecturerId'
 };
 
-exports.Prisma.DocumentFileScalarFieldEnum = {
+exports.Prisma.LecturerScalarFieldEnum = {
   id: 'id',
   code: 'code',
   active: 'active',
@@ -2822,36 +2823,15 @@ exports.Prisma.DocumentFileScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
-  name: 'name',
-  path: 'path',
-  size: 'size',
-  mimeType: 'mimeType',
-  archivedCertificateId: 'archivedCertificateId',
-  trainingCourseId: 'trainingCourseId',
-  archivedAwardId: 'archivedAwardId',
-  curriculumId: 'curriculumId',
-  curriculumVersionId: 'curriculumVersionId',
-  subjectVersionId: 'subjectVersionId',
-  studentAcademicDecisionId: 'studentAcademicDecisionId',
-  notificationId: 'notificationId',
-  decisionId: 'decisionId',
-  defenseRecordId: 'defenseRecordId',
-  librarySubmissionId: 'librarySubmissionId',
-  diplomaFrontId: 'diplomaFrontId',
-  diplomaBackId: 'diplomaBackId',
-  diplomaVerificationId: 'diplomaVerificationId',
-  diplomaVerificationFrontId: 'diplomaVerificationFrontId',
-  diplomaVerificationBackId: 'diplomaVerificationBackId',
-  trainingFieldId: 'trainingFieldId',
-  studentScoreConvertId: 'studentScoreConvertId',
-  scoreLinkSheetId: 'scoreLinkSheetId',
-  examFrameworkId: 'examFrameworkId',
-  noteId: 'noteId',
-  evaluationPeriodId: 'evaluationPeriodId',
-  knowledgeBlockId: 'knowledgeBlockId'
+  from: 'from',
+  lectureID: 'lectureID',
+  serviceDate: 'serviceDate',
+  userProfileId: 'userProfileId',
+  organizationId: 'organizationId',
+  lecturerTypeId: 'lecturerTypeId'
 };
 
-exports.Prisma.AcademicActionConfigScalarFieldEnum = {
+exports.Prisma.LecturerHistoryScalarFieldEnum = {
   id: 'id',
   code: 'code',
   active: 'active',
@@ -2860,122 +2840,14 @@ exports.Prisma.AcademicActionConfigScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
-  name: 'name',
-  actionType: 'actionType',
-  trainingCourseId: 'trainingCourseId'
-};
-
-exports.Prisma.AcademicActionRuleSetScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  configId: 'configId'
-};
-
-exports.Prisma.AcademicActionConditionScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  ruleSetId: 'ruleSetId',
-  field: 'field',
-  operator: 'operator',
-  invert: 'invert',
-  value: 'value',
-  tuple: 'tuple',
-  yearCondition: 'yearCondition',
-  isPriorityStudent: 'isPriorityStudent'
-};
-
-exports.Prisma.StudentAcademicDecisionScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  studentId: 'studentId',
-  semesterId: 'semesterId',
-  schoolYearId: 'schoolYearId',
-  appliedConfigId: 'appliedConfigId',
-  actionTaken: 'actionTaken',
-  decisionDate: 'decisionDate',
-  validUntil: 'validUntil',
-  reason: 'reason',
-  status: 'status',
-  updatedResult: 'updatedResult'
-};
-
-exports.Prisma.TrainingScoreSessionScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  name: 'name',
-  time: 'time',
-  semesterId: 'semesterId',
-  trainingObjectTypeId: 'trainingObjectTypeId'
-};
-
-exports.Prisma.StudentTrainingScoreScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  trainingScoreSessionId: 'trainingScoreSessionId',
-  studentId: 'studentId',
-  score: 'score',
-  studentTrainingType: 'studentTrainingType',
-  status: 'status'
-};
-
-exports.Prisma.SemesterTrainingScoreScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  semesterId: 'semesterId',
-  studentId: 'studentId',
-  score: 'score',
-  status: 'status'
-};
-
-exports.Prisma.SchoolYearTrainingScoreScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  schoolYearId: 'schoolYearId',
-  studentId: 'studentId',
-  score: 'score',
-  status: 'status'
+  from: 'from',
+  to: 'to',
+  lectureID: 'lectureID',
+  lectureCode: 'lectureCode',
+  serviceDate: 'serviceDate',
+  userProfileId: 'userProfileId',
+  organizationId: 'organizationId',
+  lecturerTypeId: 'lecturerTypeId'
 };
 
 exports.Prisma.LecturerTypeScalarFieldEnum = {
@@ -3014,7 +2886,7 @@ exports.Prisma.StaffPositionScalarFieldEnum = {
   name: 'name'
 };
 
-exports.Prisma.LecturerScalarFieldEnum = {
+exports.Prisma.StaffScalarFieldEnum = {
   id: 'id',
   code: 'code',
   active: 'active',
@@ -3024,14 +2896,13 @@ exports.Prisma.LecturerScalarFieldEnum = {
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
   from: 'from',
-  lectureID: 'lectureID',
-  serviceDate: 'serviceDate',
   userProfileId: 'userProfileId',
   organizationId: 'organizationId',
-  lecturerTypeId: 'lecturerTypeId'
+  staffTypeId: 'staffTypeId',
+  staffPositionId: 'staffPositionId'
 };
 
-exports.Prisma.LecturerHistoryScalarFieldEnum = {
+exports.Prisma.StaffHistoryScalarFieldEnum = {
   id: 'id',
   code: 'code',
   active: 'active',
@@ -3042,12 +2913,10 @@ exports.Prisma.LecturerHistoryScalarFieldEnum = {
   createdBy: 'createdBy',
   from: 'from',
   to: 'to',
-  lectureID: 'lectureID',
-  lectureCode: 'lectureCode',
-  serviceDate: 'serviceDate',
   userProfileId: 'userProfileId',
   organizationId: 'organizationId',
-  lecturerTypeId: 'lecturerTypeId'
+  staffTypeId: 'staffTypeId',
+  staffPositionId: 'staffPositionId'
 };
 
 exports.Prisma.ResearchProjectScalarFieldEnum = {
@@ -3413,254 +3282,7 @@ exports.Prisma.SupervisorPaymentRecordScalarFieldEnum = {
   transactionCode: 'transactionCode'
 };
 
-exports.Prisma.EvaluationPeriodScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  name: 'name',
-  startDate: 'startDate',
-  endDate: 'endDate',
-  status: 'status',
-  schoolYearId: 'schoolYearId',
-  overviewProblem: 'overviewProblem',
-  overviewGeneral: 'overviewGeneral',
-  overviewResults: 'overviewResults',
-  conclude: 'conclude'
-};
-
-exports.Prisma.EvaluationStandardSetScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  name: 'name',
-  objectType: 'objectType'
-};
-
-exports.Prisma.StandardCatalogScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  order: 'order',
-  name: 'name',
-  standardSetId: 'standardSetId',
-  objectType: 'objectType'
-};
-
-exports.Prisma.CriterionCatalogScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  standardId: 'standardId',
-  order: 'order',
-  name: 'name'
-};
-
-exports.Prisma.EvidenceCategoryScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  name: 'name'
-};
-
-exports.Prisma.EvidenceScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  categoryId: 'categoryId',
-  name: 'name',
-  information: 'information',
-  issuer: 'issuer'
-};
-
-exports.Prisma.EvaluationCriterionCommentScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  reviewerId: 'reviewerId',
-  requirementCriterionId: 'requirementCriterionId',
-  content: 'content',
-  analysisCriterionId: 'analysisCriterionId',
-  evaluationCriterionId: 'evaluationCriterionId'
-};
-
-exports.Prisma.RequirementCriterionCatalogScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  criterionCatalogId: 'criterionCatalogId',
-  order: 'order',
-  name: 'name',
-  questions: 'questions'
-};
-
-exports.Prisma.StandardPeriodScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  periodId: 'periodId',
-  name: 'name',
-  order: 'order',
-  opening: 'opening',
-  conclusion: 'conclusion'
-};
-
-exports.Prisma.CriterionPeriodScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  name: 'name',
-  order: 'order',
-  evaluationStandardId: 'evaluationStandardId'
-};
-
-exports.Prisma.AnalysisCriterionScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  criterionPeriodId: 'criterionPeriodId',
-  lecturerId: 'lecturerId',
-  deadline: 'deadline',
-  status: 'status'
-};
-
-exports.Prisma.EvaluationCriterionScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  criterionPeriodId: 'criterionPeriodId',
-  lecturerId: 'lecturerId',
-  deadline: 'deadline',
-  status: 'status',
-  reviewerId: 'reviewerId',
-  deadlineReview: 'deadlineReview',
-  deadlineReviewExternal: 'deadlineReviewExternal',
-  currentSituation: 'currentSituation',
-  strengths: 'strengths',
-  weakness: 'weakness',
-  actionPlan: 'actionPlan',
-  score: 'score'
-};
-
-exports.Prisma.RequirementCriterionScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  analysisCriterionId: 'analysisCriterionId',
-  order: 'order',
-  name: 'name',
-  questions: 'questions',
-  evidencePlaces: 'evidencePlaces',
-  collectionMethod: 'collectionMethod'
-};
-
-exports.Prisma.AnalysisFormEvidenceScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  requirementCriterionId: 'requirementCriterionId',
-  evidenceId: 'evidenceId',
-  order: 'order'
-};
-
-exports.Prisma.EvaluationCouncilScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  periodId: 'periodId',
-  name: 'name'
-};
-
-exports.Prisma.EvaluationCouncilMemberScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  evaluationCouncilId: 'evaluationCouncilId',
-  lecturerId: 'lecturerId',
-  groupName: 'groupName',
-  role: 'role'
-};
-
-exports.Prisma.EvidenceFileScalarFieldEnum = {
+exports.Prisma.DocumentFileScalarFieldEnum = {
   id: 'id',
   code: 'code',
   active: 'active',
@@ -3671,199 +3293,34 @@ exports.Prisma.EvidenceFileScalarFieldEnum = {
   createdBy: 'createdBy',
   name: 'name',
   path: 'path',
-  mimeType: 'mimeType',
   size: 'size',
-  evidenceId: 'evidenceId',
-  userProfileId: 'userProfileId'
-};
-
-exports.Prisma.SurveyObjectTypeScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  name: 'name',
-  type: 'type',
-  trainingObjectTypeId: 'trainingObjectTypeId'
-};
-
-exports.Prisma.SurveyTopicScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  name: 'name',
-  type: 'type'
-};
-
-exports.Prisma.SurveyQuestionGroupScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  name: 'name'
-};
-
-exports.Prisma.ClusterSurveyScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  name: 'name',
-  startDate: 'startDate',
-  endDate: 'endDate',
-  isPublic: 'isPublic',
-  anonymous: 'anonymous',
-  surveyTopicId: 'surveyTopicId'
-};
-
-exports.Prisma.SurveyScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  name: 'name',
-  startDate: 'startDate',
-  endDate: 'endDate',
-  isPublic: 'isPublic',
-  anonymous: 'anonymous',
-  lectureId: 'lectureId',
-  subjectClassId: 'subjectClassId',
-  semesterId: 'semesterId',
-  surveyTopicId: 'surveyTopicId',
-  trainingObjectTypeId: 'trainingObjectTypeId',
-  clusterSurveyId: 'clusterSurveyId'
-};
-
-exports.Prisma.SurveyQuestionScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  name: 'name',
-  type: 'type',
-  surveyQuestionGroupId: 'surveyQuestionGroupId'
-};
-
-exports.Prisma.SpecificChoiceScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  answer: 'answer',
-  surveyQuestionId: 'surveyQuestionId'
-};
-
-exports.Prisma.SurveyChoiceScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  answer: 'answer',
-  requireExplanation: 'requireExplanation',
-  clusterSurveyId: 'clusterSurveyId'
-};
-
-exports.Prisma.SurveySessionScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  surveyId: 'surveyId',
-  profileId: 'profileId',
-  studentId: 'studentId',
-  startedAt: 'startedAt',
-  completedAt: 'completedAt',
-  isCompleted: 'isCompleted',
-  surveyObjectTypeId: 'surveyObjectTypeId'
-};
-
-exports.Prisma.SurveyResponseScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  surveySessionId: 'surveySessionId',
-  surveyQuestionId: 'surveyQuestionId',
-  answerText: 'answerText',
-  explanation: 'explanation',
-  surveyChoiceId: 'surveyChoiceId',
-  answeredAt: 'answeredAt'
-};
-
-exports.Prisma.QuestionBankScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  name: 'name',
-  subjectVersionId: 'subjectVersionId'
-};
-
-exports.Prisma.QuestionScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  content: 'content',
-  type: 'type',
-  point: 'point',
-  explanation: 'explanation',
-  isAutoGraded: 'isAutoGraded',
-  difficult: 'difficult',
-  questionBankId: 'questionBankId',
+  mimeType: 'mimeType',
+  archivedCertificateId: 'archivedCertificateId',
+  trainingCourseId: 'trainingCourseId',
+  archivedAwardId: 'archivedAwardId',
+  curriculumId: 'curriculumId',
+  curriculumVersionId: 'curriculumVersionId',
+  subjectVersionId: 'subjectVersionId',
+  studentAcademicDecisionId: 'studentAcademicDecisionId',
+  notificationId: 'notificationId',
+  decisionId: 'decisionId',
+  defenseRecordId: 'defenseRecordId',
+  librarySubmissionId: 'librarySubmissionId',
+  diplomaFrontId: 'diplomaFrontId',
+  diplomaBackId: 'diplomaBackId',
+  diplomaVerificationId: 'diplomaVerificationId',
+  diplomaVerificationFrontId: 'diplomaVerificationFrontId',
+  diplomaVerificationBackId: 'diplomaVerificationBackId',
+  trainingFieldId: 'trainingFieldId',
+  studentScoreConvertId: 'studentScoreConvertId',
+  scoreLinkSheetId: 'scoreLinkSheetId',
+  examFrameworkId: 'examFrameworkId',
+  noteId: 'noteId',
+  evaluationPeriodId: 'evaluationPeriodId',
   knowledgeBlockId: 'knowledgeBlockId'
 };
 
-exports.Prisma.MultipleChoiceOptionScalarFieldEnum = {
+exports.Prisma.AcademicActionConfigScalarFieldEnum = {
   id: 'id',
   code: 'code',
   active: 'active',
@@ -3872,13 +3329,12 @@ exports.Prisma.MultipleChoiceOptionScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
-  questionId: 'questionId',
-  content: 'content',
-  isCorrect: 'isCorrect',
-  order: 'order'
+  name: 'name',
+  actionType: 'actionType',
+  trainingCourseId: 'trainingCourseId'
 };
 
-exports.Prisma.FillInBlankSlotScalarFieldEnum = {
+exports.Prisma.AcademicActionRuleSetScalarFieldEnum = {
   id: 'id',
   code: 'code',
   active: 'active',
@@ -3887,12 +3343,10 @@ exports.Prisma.FillInBlankSlotScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
-  questionId: 'questionId',
-  order: 'order',
-  correctAnswer: 'correctAnswer'
+  configId: 'configId'
 };
 
-exports.Prisma.OrderingItemScalarFieldEnum = {
+exports.Prisma.AcademicActionConditionScalarFieldEnum = {
   id: 'id',
   code: 'code',
   active: 'active',
@@ -3901,12 +3355,17 @@ exports.Prisma.OrderingItemScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
-  questionId: 'questionId',
-  content: 'content',
-  correctOrder: 'correctOrder'
+  ruleSetId: 'ruleSetId',
+  field: 'field',
+  operator: 'operator',
+  invert: 'invert',
+  value: 'value',
+  tuple: 'tuple',
+  yearCondition: 'yearCondition',
+  isPriorityStudent: 'isPriorityStudent'
 };
 
-exports.Prisma.ExamScalarFieldEnum = {
+exports.Prisma.StudentAcademicDecisionScalarFieldEnum = {
   id: 'id',
   code: 'code',
   active: 'active',
@@ -3915,96 +3374,19 @@ exports.Prisma.ExamScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
-  lockExamSessions: 'lockExamSessions',
-  duration: 'duration',
-  session: 'session',
-  subjectVersionId: 'subjectVersionId',
-  semesterId: 'semesterId'
+  studentId: 'studentId',
+  semesterId: 'semesterId',
+  schoolYearId: 'schoolYearId',
+  appliedConfigId: 'appliedConfigId',
+  actionTaken: 'actionTaken',
+  decisionDate: 'decisionDate',
+  validUntil: 'validUntil',
+  reason: 'reason',
+  status: 'status',
+  updatedResult: 'updatedResult'
 };
 
-exports.Prisma.ExamRoomScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  examId: 'examId',
-  roomId: 'roomId',
-  capacity: 'capacity'
-};
-
-exports.Prisma.ExamListScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  examRoomId: 'examRoomId',
-  firstSupervisorId: 'firstSupervisorId',
-  secondSupervisorId: 'secondSupervisorId',
-  createdExamCode: 'createdExamCode',
-  lockExamCode: 'lockExamCode',
-  start: 'start',
-  end: 'end'
-};
-
-exports.Prisma.ExamBankScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  examId: 'examId',
-  examTime: 'examTime',
-  examCode: 'examCode',
-  subjectClassId: 'subjectClassId',
-  explain: 'explain',
-  examDay: 'examDay',
-  examType: 'examType',
-  examMatrixId: 'examMatrixId',
-  isLock: 'isLock',
-  isNote: 'isNote',
-  isGroup: 'isGroup'
-};
-
-exports.Prisma.ExamBankQuestionScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  examBankId: 'examBankId',
-  questionId: 'questionId',
-  order: 'order'
-};
-
-exports.Prisma.ExamPaperScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  examListId: 'examListId',
-  studentSubjectScoreId: 'studentSubjectScoreId',
-  examCode: 'examCode'
-};
-
-exports.Prisma.ExamFrameworkScalarFieldEnum = {
+exports.Prisma.TrainingScoreSessionScalarFieldEnum = {
   id: 'id',
   code: 'code',
   active: 'active',
@@ -4015,10 +3397,11 @@ exports.Prisma.ExamFrameworkScalarFieldEnum = {
   createdBy: 'createdBy',
   name: 'name',
   time: 'time',
-  subjectVersionId: 'subjectVersionId'
+  semesterId: 'semesterId',
+  trainingObjectTypeId: 'trainingObjectTypeId'
 };
 
-exports.Prisma.ExamMatrixScalarFieldEnum = {
+exports.Prisma.StudentTrainingScoreScalarFieldEnum = {
   id: 'id',
   code: 'code',
   active: 'active',
@@ -4027,12 +3410,14 @@ exports.Prisma.ExamMatrixScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
-  name: 'name',
-  isDefault: 'isDefault',
-  examFrameworkId: 'examFrameworkId'
+  trainingScoreSessionId: 'trainingScoreSessionId',
+  studentId: 'studentId',
+  score: 'score',
+  studentTrainingType: 'studentTrainingType',
+  status: 'status'
 };
 
-exports.Prisma.KnowledgeBlockScalarFieldEnum = {
+exports.Prisma.SemesterTrainingScoreScalarFieldEnum = {
   id: 'id',
   code: 'code',
   active: 'active',
@@ -4041,12 +3426,13 @@ exports.Prisma.KnowledgeBlockScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
-  name: 'name',
-  examMatrixId: 'examMatrixId',
-  subjectVersionId: 'subjectVersionId'
+  semesterId: 'semesterId',
+  studentId: 'studentId',
+  score: 'score',
+  status: 'status'
 };
 
-exports.Prisma.ConfigExamScalarFieldEnum = {
+exports.Prisma.SchoolYearTrainingScoreScalarFieldEnum = {
   id: 'id',
   code: 'code',
   active: 'active',
@@ -4055,44 +3441,10 @@ exports.Prisma.ConfigExamScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
-  difficult: 'difficult',
-  type: 'type',
-  quantity: 'quantity',
-  point: 'point',
-  knowledgeBlockId: 'knowledgeBlockId'
-};
-
-exports.Prisma.StaffScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  from: 'from',
-  userProfileId: 'userProfileId',
-  organizationId: 'organizationId',
-  staffTypeId: 'staffTypeId',
-  staffPositionId: 'staffPositionId'
-};
-
-exports.Prisma.StaffHistoryScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdBy: 'createdBy',
-  from: 'from',
-  to: 'to',
-  userProfileId: 'userProfileId',
-  organizationId: 'organizationId',
-  staffTypeId: 'staffTypeId',
-  staffPositionId: 'staffPositionId'
+  schoolYearId: 'schoolYearId',
+  studentId: 'studentId',
+  score: 'score',
+  status: 'status'
 };
 
 exports.Prisma.ScholarshipScalarFieldEnum = {
@@ -4474,6 +3826,655 @@ exports.Prisma.NoteReminderScalarFieldEnum = {
   repeatType: 'repeatType',
   isNotified: 'isNotified',
   noteId: 'noteId'
+};
+
+exports.Prisma.EvaluationPeriodScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  name: 'name',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  status: 'status',
+  schoolYearId: 'schoolYearId',
+  overviewProblem: 'overviewProblem',
+  overviewGeneral: 'overviewGeneral',
+  overviewResults: 'overviewResults',
+  conclude: 'conclude'
+};
+
+exports.Prisma.EvaluationStandardSetScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  name: 'name',
+  objectType: 'objectType'
+};
+
+exports.Prisma.StandardCatalogScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  order: 'order',
+  name: 'name',
+  standardSetId: 'standardSetId',
+  objectType: 'objectType'
+};
+
+exports.Prisma.CriterionCatalogScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  standardId: 'standardId',
+  order: 'order',
+  name: 'name'
+};
+
+exports.Prisma.EvidenceCategoryScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  name: 'name'
+};
+
+exports.Prisma.EvidenceScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  categoryId: 'categoryId',
+  name: 'name',
+  information: 'information',
+  issuer: 'issuer'
+};
+
+exports.Prisma.EvaluationCriterionCommentScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  reviewerId: 'reviewerId',
+  requirementCriterionId: 'requirementCriterionId',
+  content: 'content',
+  analysisCriterionId: 'analysisCriterionId',
+  evaluationCriterionId: 'evaluationCriterionId'
+};
+
+exports.Prisma.RequirementCriterionCatalogScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  criterionCatalogId: 'criterionCatalogId',
+  order: 'order',
+  name: 'name',
+  questions: 'questions'
+};
+
+exports.Prisma.StandardPeriodScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  periodId: 'periodId',
+  name: 'name',
+  order: 'order',
+  opening: 'opening',
+  conclusion: 'conclusion'
+};
+
+exports.Prisma.CriterionPeriodScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  name: 'name',
+  order: 'order',
+  evaluationStandardId: 'evaluationStandardId'
+};
+
+exports.Prisma.AnalysisCriterionScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  criterionPeriodId: 'criterionPeriodId',
+  lecturerId: 'lecturerId',
+  deadline: 'deadline',
+  status: 'status'
+};
+
+exports.Prisma.EvaluationCriterionScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  criterionPeriodId: 'criterionPeriodId',
+  lecturerId: 'lecturerId',
+  deadline: 'deadline',
+  status: 'status',
+  reviewerId: 'reviewerId',
+  deadlineReview: 'deadlineReview',
+  deadlineReviewExternal: 'deadlineReviewExternal',
+  currentSituation: 'currentSituation',
+  strengths: 'strengths',
+  weakness: 'weakness',
+  actionPlan: 'actionPlan',
+  score: 'score'
+};
+
+exports.Prisma.RequirementCriterionScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  analysisCriterionId: 'analysisCriterionId',
+  order: 'order',
+  name: 'name',
+  questions: 'questions',
+  evidencePlaces: 'evidencePlaces',
+  collectionMethod: 'collectionMethod'
+};
+
+exports.Prisma.AnalysisFormEvidenceScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  requirementCriterionId: 'requirementCriterionId',
+  evidenceId: 'evidenceId',
+  order: 'order'
+};
+
+exports.Prisma.EvaluationCouncilScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  periodId: 'periodId',
+  name: 'name'
+};
+
+exports.Prisma.EvaluationCouncilMemberScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  evaluationCouncilId: 'evaluationCouncilId',
+  lecturerId: 'lecturerId',
+  groupName: 'groupName',
+  role: 'role'
+};
+
+exports.Prisma.EvidenceFileScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  name: 'name',
+  path: 'path',
+  mimeType: 'mimeType',
+  size: 'size',
+  evidenceId: 'evidenceId',
+  userProfileId: 'userProfileId'
+};
+
+exports.Prisma.QuestionBankScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  name: 'name',
+  subjectVersionId: 'subjectVersionId'
+};
+
+exports.Prisma.QuestionScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  content: 'content',
+  type: 'type',
+  point: 'point',
+  explanation: 'explanation',
+  isAutoGraded: 'isAutoGraded',
+  difficult: 'difficult',
+  questionBankId: 'questionBankId',
+  knowledgeBlockId: 'knowledgeBlockId'
+};
+
+exports.Prisma.MultipleChoiceOptionScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  questionId: 'questionId',
+  content: 'content',
+  isCorrect: 'isCorrect',
+  order: 'order'
+};
+
+exports.Prisma.FillInBlankSlotScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  questionId: 'questionId',
+  order: 'order',
+  correctAnswer: 'correctAnswer'
+};
+
+exports.Prisma.OrderingItemScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  questionId: 'questionId',
+  content: 'content',
+  correctOrder: 'correctOrder'
+};
+
+exports.Prisma.ExamScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  lockExamSessions: 'lockExamSessions',
+  duration: 'duration',
+  session: 'session',
+  subjectVersionId: 'subjectVersionId',
+  semesterId: 'semesterId'
+};
+
+exports.Prisma.ExamRoomScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  examId: 'examId',
+  roomId: 'roomId',
+  capacity: 'capacity'
+};
+
+exports.Prisma.ExamListScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  examRoomId: 'examRoomId',
+  firstSupervisorId: 'firstSupervisorId',
+  secondSupervisorId: 'secondSupervisorId',
+  createdExamCode: 'createdExamCode',
+  lockExamCode: 'lockExamCode',
+  start: 'start',
+  end: 'end'
+};
+
+exports.Prisma.ExamBankScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  examId: 'examId',
+  examTime: 'examTime',
+  examCode: 'examCode',
+  subjectClassId: 'subjectClassId',
+  explain: 'explain',
+  examDay: 'examDay',
+  examType: 'examType',
+  examMatrixId: 'examMatrixId',
+  isLock: 'isLock',
+  isNote: 'isNote',
+  isGroup: 'isGroup'
+};
+
+exports.Prisma.ExamBankQuestionScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  examBankId: 'examBankId',
+  questionId: 'questionId',
+  order: 'order'
+};
+
+exports.Prisma.ExamPaperScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  examListId: 'examListId',
+  studentSubjectScoreId: 'studentSubjectScoreId',
+  examCode: 'examCode'
+};
+
+exports.Prisma.ExamFrameworkScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  name: 'name',
+  time: 'time',
+  subjectVersionId: 'subjectVersionId'
+};
+
+exports.Prisma.ExamMatrixScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  name: 'name',
+  isDefault: 'isDefault',
+  examFrameworkId: 'examFrameworkId'
+};
+
+exports.Prisma.KnowledgeBlockScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  name: 'name',
+  examMatrixId: 'examMatrixId',
+  subjectVersionId: 'subjectVersionId'
+};
+
+exports.Prisma.ConfigExamScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  difficult: 'difficult',
+  type: 'type',
+  quantity: 'quantity',
+  point: 'point',
+  knowledgeBlockId: 'knowledgeBlockId'
+};
+
+exports.Prisma.SurveyObjectTypeScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  name: 'name',
+  type: 'type',
+  trainingObjectTypeId: 'trainingObjectTypeId'
+};
+
+exports.Prisma.SurveyTopicScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  name: 'name',
+  type: 'type'
+};
+
+exports.Prisma.SurveyQuestionGroupScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  name: 'name'
+};
+
+exports.Prisma.ClusterSurveyScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  name: 'name',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  isPublic: 'isPublic',
+  anonymous: 'anonymous',
+  surveyTopicId: 'surveyTopicId'
+};
+
+exports.Prisma.SurveyScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  name: 'name',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  isPublic: 'isPublic',
+  anonymous: 'anonymous',
+  lectureId: 'lectureId',
+  subjectClassId: 'subjectClassId',
+  semesterId: 'semesterId',
+  surveyTopicId: 'surveyTopicId',
+  trainingObjectTypeId: 'trainingObjectTypeId',
+  clusterSurveyId: 'clusterSurveyId'
+};
+
+exports.Prisma.SurveyQuestionScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  name: 'name',
+  type: 'type',
+  surveyQuestionGroupId: 'surveyQuestionGroupId'
+};
+
+exports.Prisma.SpecificChoiceScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  answer: 'answer',
+  surveyQuestionId: 'surveyQuestionId'
+};
+
+exports.Prisma.SurveyChoiceScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  answer: 'answer',
+  requireExplanation: 'requireExplanation',
+  clusterSurveyId: 'clusterSurveyId'
+};
+
+exports.Prisma.SurveySessionScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  surveyId: 'surveyId',
+  profileId: 'profileId',
+  studentId: 'studentId',
+  startedAt: 'startedAt',
+  completedAt: 'completedAt',
+  isCompleted: 'isCompleted',
+  surveyObjectTypeId: 'surveyObjectTypeId'
+};
+
+exports.Prisma.SurveyResponseScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  surveySessionId: 'surveySessionId',
+  surveyQuestionId: 'surveyQuestionId',
+  answerText: 'answerText',
+  explanation: 'explanation',
+  surveyChoiceId: 'surveyChoiceId',
+  answeredAt: 'answeredAt'
 };
 
 exports.Prisma.AcademicWarningRuleScalarFieldEnum = {
@@ -6634,115 +6635,31 @@ exports.Prisma.NotificationOrderByRelevanceFieldEnum = {
   description: 'description',
   createdBy: 'createdBy',
   title: 'title',
-  content: 'content'
+  content: 'content',
+  lecturerId: 'lecturerId'
 };
 
-exports.Prisma.DocumentFileOrderByRelevanceFieldEnum = {
+exports.Prisma.LecturerOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
-  name: 'name',
-  path: 'path',
-  mimeType: 'mimeType',
-  archivedCertificateId: 'archivedCertificateId',
-  trainingCourseId: 'trainingCourseId',
-  archivedAwardId: 'archivedAwardId',
-  curriculumId: 'curriculumId',
-  curriculumVersionId: 'curriculumVersionId',
-  subjectVersionId: 'subjectVersionId',
-  studentAcademicDecisionId: 'studentAcademicDecisionId',
-  notificationId: 'notificationId',
-  decisionId: 'decisionId',
-  defenseRecordId: 'defenseRecordId',
-  librarySubmissionId: 'librarySubmissionId',
-  diplomaFrontId: 'diplomaFrontId',
-  diplomaBackId: 'diplomaBackId',
-  diplomaVerificationId: 'diplomaVerificationId',
-  diplomaVerificationFrontId: 'diplomaVerificationFrontId',
-  diplomaVerificationBackId: 'diplomaVerificationBackId',
-  trainingFieldId: 'trainingFieldId',
-  studentScoreConvertId: 'studentScoreConvertId',
-  scoreLinkSheetId: 'scoreLinkSheetId',
-  examFrameworkId: 'examFrameworkId',
-  noteId: 'noteId',
-  evaluationPeriodId: 'evaluationPeriodId',
-  knowledgeBlockId: 'knowledgeBlockId'
+  lectureID: 'lectureID',
+  userProfileId: 'userProfileId',
+  organizationId: 'organizationId',
+  lecturerTypeId: 'lecturerTypeId'
 };
 
-exports.Prisma.AcademicActionConfigOrderByRelevanceFieldEnum = {
+exports.Prisma.LecturerHistoryOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
-  name: 'name',
-  trainingCourseId: 'trainingCourseId'
-};
-
-exports.Prisma.AcademicActionRuleSetOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  configId: 'configId'
-};
-
-exports.Prisma.AcademicActionConditionOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  ruleSetId: 'ruleSetId',
-  tuple: 'tuple'
-};
-
-exports.Prisma.StudentAcademicDecisionOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  studentId: 'studentId',
-  semesterId: 'semesterId',
-  schoolYearId: 'schoolYearId',
-  appliedConfigId: 'appliedConfigId',
-  reason: 'reason'
-};
-
-exports.Prisma.TrainingScoreSessionOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  name: 'name',
-  semesterId: 'semesterId',
-  trainingObjectTypeId: 'trainingObjectTypeId'
-};
-
-exports.Prisma.StudentTrainingScoreOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  trainingScoreSessionId: 'trainingScoreSessionId',
-  studentId: 'studentId'
-};
-
-exports.Prisma.SemesterTrainingScoreOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  semesterId: 'semesterId',
-  studentId: 'studentId'
-};
-
-exports.Prisma.SchoolYearTrainingScoreOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  schoolYearId: 'schoolYearId',
-  studentId: 'studentId'
+  lectureID: 'lectureID',
+  lectureCode: 'lectureCode',
+  userProfileId: 'userProfileId',
+  organizationId: 'organizationId',
+  lecturerTypeId: 'lecturerTypeId'
 };
 
 exports.Prisma.LecturerTypeOrderByRelevanceFieldEnum = {
@@ -6769,27 +6686,26 @@ exports.Prisma.StaffPositionOrderByRelevanceFieldEnum = {
   name: 'name'
 };
 
-exports.Prisma.LecturerOrderByRelevanceFieldEnum = {
+exports.Prisma.StaffOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
-  lectureID: 'lectureID',
   userProfileId: 'userProfileId',
   organizationId: 'organizationId',
-  lecturerTypeId: 'lecturerTypeId'
+  staffTypeId: 'staffTypeId',
+  staffPositionId: 'staffPositionId'
 };
 
-exports.Prisma.LecturerHistoryOrderByRelevanceFieldEnum = {
+exports.Prisma.StaffHistoryOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
-  lectureID: 'lectureID',
-  lectureCode: 'lectureCode',
   userProfileId: 'userProfileId',
   organizationId: 'organizationId',
-  lecturerTypeId: 'lecturerTypeId'
+  staffTypeId: 'staffTypeId',
+  staffPositionId: 'staffPositionId'
 };
 
 exports.Prisma.ResearchProjectOrderByRelevanceFieldEnum = {
@@ -7017,171 +6933,7 @@ exports.Prisma.SupervisorPaymentRecordOrderByRelevanceFieldEnum = {
   transactionCode: 'transactionCode'
 };
 
-exports.Prisma.EvaluationPeriodOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  name: 'name',
-  schoolYearId: 'schoolYearId',
-  overviewProblem: 'overviewProblem',
-  overviewGeneral: 'overviewGeneral',
-  overviewResults: 'overviewResults',
-  conclude: 'conclude'
-};
-
-exports.Prisma.EvaluationStandardSetOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  name: 'name'
-};
-
-exports.Prisma.StandardCatalogOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  name: 'name',
-  standardSetId: 'standardSetId'
-};
-
-exports.Prisma.CriterionCatalogOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  standardId: 'standardId',
-  name: 'name'
-};
-
-exports.Prisma.EvidenceCategoryOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  name: 'name'
-};
-
-exports.Prisma.EvidenceOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  categoryId: 'categoryId',
-  name: 'name',
-  information: 'information',
-  issuer: 'issuer'
-};
-
-exports.Prisma.EvaluationCriterionCommentOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  reviewerId: 'reviewerId',
-  requirementCriterionId: 'requirementCriterionId',
-  content: 'content',
-  analysisCriterionId: 'analysisCriterionId',
-  evaluationCriterionId: 'evaluationCriterionId'
-};
-
-exports.Prisma.RequirementCriterionCatalogOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  criterionCatalogId: 'criterionCatalogId',
-  name: 'name',
-  questions: 'questions'
-};
-
-exports.Prisma.StandardPeriodOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  periodId: 'periodId',
-  name: 'name',
-  opening: 'opening',
-  conclusion: 'conclusion'
-};
-
-exports.Prisma.CriterionPeriodOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  name: 'name',
-  evaluationStandardId: 'evaluationStandardId'
-};
-
-exports.Prisma.AnalysisCriterionOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  criterionPeriodId: 'criterionPeriodId',
-  lecturerId: 'lecturerId'
-};
-
-exports.Prisma.EvaluationCriterionOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  criterionPeriodId: 'criterionPeriodId',
-  lecturerId: 'lecturerId',
-  reviewerId: 'reviewerId',
-  currentSituation: 'currentSituation',
-  strengths: 'strengths',
-  weakness: 'weakness',
-  actionPlan: 'actionPlan',
-  score: 'score'
-};
-
-exports.Prisma.RequirementCriterionOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  analysisCriterionId: 'analysisCriterionId',
-  name: 'name',
-  questions: 'questions',
-  evidencePlaces: 'evidencePlaces',
-  collectionMethod: 'collectionMethod'
-};
-
-exports.Prisma.AnalysisFormEvidenceOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  requirementCriterionId: 'requirementCriterionId',
-  evidenceId: 'evidenceId'
-};
-
-exports.Prisma.EvaluationCouncilOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  periodId: 'periodId',
-  name: 'name'
-};
-
-exports.Prisma.EvaluationCouncilMemberOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  evaluationCouncilId: 'evaluationCouncilId',
-  lecturerId: 'lecturerId',
-  groupName: 'groupName'
-};
-
-exports.Prisma.EvidenceFileOrderByRelevanceFieldEnum = {
+exports.Prisma.DocumentFileOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
@@ -7189,270 +6941,104 @@ exports.Prisma.EvidenceFileOrderByRelevanceFieldEnum = {
   name: 'name',
   path: 'path',
   mimeType: 'mimeType',
-  evidenceId: 'evidenceId',
-  userProfileId: 'userProfileId'
+  archivedCertificateId: 'archivedCertificateId',
+  trainingCourseId: 'trainingCourseId',
+  archivedAwardId: 'archivedAwardId',
+  curriculumId: 'curriculumId',
+  curriculumVersionId: 'curriculumVersionId',
+  subjectVersionId: 'subjectVersionId',
+  studentAcademicDecisionId: 'studentAcademicDecisionId',
+  notificationId: 'notificationId',
+  decisionId: 'decisionId',
+  defenseRecordId: 'defenseRecordId',
+  librarySubmissionId: 'librarySubmissionId',
+  diplomaFrontId: 'diplomaFrontId',
+  diplomaBackId: 'diplomaBackId',
+  diplomaVerificationId: 'diplomaVerificationId',
+  diplomaVerificationFrontId: 'diplomaVerificationFrontId',
+  diplomaVerificationBackId: 'diplomaVerificationBackId',
+  trainingFieldId: 'trainingFieldId',
+  studentScoreConvertId: 'studentScoreConvertId',
+  scoreLinkSheetId: 'scoreLinkSheetId',
+  examFrameworkId: 'examFrameworkId',
+  noteId: 'noteId',
+  evaluationPeriodId: 'evaluationPeriodId',
+  knowledgeBlockId: 'knowledgeBlockId'
 };
 
-exports.Prisma.SurveyObjectTypeOrderByRelevanceFieldEnum = {
+exports.Prisma.AcademicActionConfigOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
   name: 'name',
+  trainingCourseId: 'trainingCourseId'
+};
+
+exports.Prisma.AcademicActionRuleSetOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  configId: 'configId'
+};
+
+exports.Prisma.AcademicActionConditionOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  ruleSetId: 'ruleSetId',
+  tuple: 'tuple'
+};
+
+exports.Prisma.StudentAcademicDecisionOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  studentId: 'studentId',
+  semesterId: 'semesterId',
+  schoolYearId: 'schoolYearId',
+  appliedConfigId: 'appliedConfigId',
+  reason: 'reason'
+};
+
+exports.Prisma.TrainingScoreSessionOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  name: 'name',
+  semesterId: 'semesterId',
   trainingObjectTypeId: 'trainingObjectTypeId'
 };
 
-exports.Prisma.SurveyTopicOrderByRelevanceFieldEnum = {
+exports.Prisma.StudentTrainingScoreOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
-  name: 'name'
+  trainingScoreSessionId: 'trainingScoreSessionId',
+  studentId: 'studentId'
 };
 
-exports.Prisma.SurveyQuestionGroupOrderByRelevanceFieldEnum = {
+exports.Prisma.SemesterTrainingScoreOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
-  name: 'name'
-};
-
-exports.Prisma.ClusterSurveyOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  name: 'name',
-  surveyTopicId: 'surveyTopicId'
-};
-
-exports.Prisma.SurveyOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  name: 'name',
-  lectureId: 'lectureId',
-  subjectClassId: 'subjectClassId',
   semesterId: 'semesterId',
-  surveyTopicId: 'surveyTopicId',
-  trainingObjectTypeId: 'trainingObjectTypeId',
-  clusterSurveyId: 'clusterSurveyId'
+  studentId: 'studentId'
 };
 
-exports.Prisma.SurveyQuestionOrderByRelevanceFieldEnum = {
+exports.Prisma.SchoolYearTrainingScoreOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
   createdBy: 'createdBy',
-  name: 'name',
-  surveyQuestionGroupId: 'surveyQuestionGroupId'
-};
-
-exports.Prisma.SpecificChoiceOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  answer: 'answer',
-  surveyQuestionId: 'surveyQuestionId'
-};
-
-exports.Prisma.SurveyChoiceOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  answer: 'answer',
-  clusterSurveyId: 'clusterSurveyId'
-};
-
-exports.Prisma.SurveySessionOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  surveyId: 'surveyId',
-  profileId: 'profileId',
-  studentId: 'studentId',
-  surveyObjectTypeId: 'surveyObjectTypeId'
-};
-
-exports.Prisma.SurveyResponseOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  surveySessionId: 'surveySessionId',
-  surveyQuestionId: 'surveyQuestionId',
-  answerText: 'answerText',
-  explanation: 'explanation',
-  surveyChoiceId: 'surveyChoiceId'
-};
-
-exports.Prisma.QuestionBankOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  name: 'name',
-  subjectVersionId: 'subjectVersionId'
-};
-
-exports.Prisma.QuestionOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  content: 'content',
-  explanation: 'explanation',
-  questionBankId: 'questionBankId',
-  knowledgeBlockId: 'knowledgeBlockId'
-};
-
-exports.Prisma.MultipleChoiceOptionOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  questionId: 'questionId',
-  content: 'content'
-};
-
-exports.Prisma.FillInBlankSlotOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  questionId: 'questionId',
-  correctAnswer: 'correctAnswer'
-};
-
-exports.Prisma.OrderingItemOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  questionId: 'questionId',
-  content: 'content'
-};
-
-exports.Prisma.ExamOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  subjectVersionId: 'subjectVersionId',
-  semesterId: 'semesterId'
-};
-
-exports.Prisma.ExamRoomOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  examId: 'examId',
-  roomId: 'roomId'
-};
-
-exports.Prisma.ExamListOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  examRoomId: 'examRoomId',
-  firstSupervisorId: 'firstSupervisorId',
-  secondSupervisorId: 'secondSupervisorId'
-};
-
-exports.Prisma.ExamBankOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  examId: 'examId',
-  examCode: 'examCode',
-  subjectClassId: 'subjectClassId',
-  explain: 'explain',
-  examMatrixId: 'examMatrixId'
-};
-
-exports.Prisma.ExamBankQuestionOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  examBankId: 'examBankId',
-  questionId: 'questionId'
-};
-
-exports.Prisma.ExamPaperOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  examListId: 'examListId',
-  studentSubjectScoreId: 'studentSubjectScoreId',
-  examCode: 'examCode'
-};
-
-exports.Prisma.ExamFrameworkOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  name: 'name',
-  subjectVersionId: 'subjectVersionId'
-};
-
-exports.Prisma.ExamMatrixOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  name: 'name',
-  examFrameworkId: 'examFrameworkId'
-};
-
-exports.Prisma.KnowledgeBlockOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  name: 'name',
-  examMatrixId: 'examMatrixId',
-  subjectVersionId: 'subjectVersionId'
-};
-
-exports.Prisma.ConfigExamOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  knowledgeBlockId: 'knowledgeBlockId'
-};
-
-exports.Prisma.StaffOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  userProfileId: 'userProfileId',
-  organizationId: 'organizationId',
-  staffTypeId: 'staffTypeId',
-  staffPositionId: 'staffPositionId'
-};
-
-exports.Prisma.StaffHistoryOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  createdBy: 'createdBy',
-  userProfileId: 'userProfileId',
-  organizationId: 'organizationId',
-  staffTypeId: 'staffTypeId',
-  staffPositionId: 'staffPositionId'
+  schoolYearId: 'schoolYearId',
+  studentId: 'studentId'
 };
 
 exports.Prisma.ScholarshipOrderByRelevanceFieldEnum = {
@@ -7671,6 +7257,422 @@ exports.Prisma.NoteReminderOrderByRelevanceFieldEnum = {
   createdBy: 'createdBy',
   title: 'title',
   noteId: 'noteId'
+};
+
+exports.Prisma.EvaluationPeriodOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  name: 'name',
+  schoolYearId: 'schoolYearId',
+  overviewProblem: 'overviewProblem',
+  overviewGeneral: 'overviewGeneral',
+  overviewResults: 'overviewResults',
+  conclude: 'conclude'
+};
+
+exports.Prisma.EvaluationStandardSetOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  name: 'name'
+};
+
+exports.Prisma.StandardCatalogOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  name: 'name',
+  standardSetId: 'standardSetId'
+};
+
+exports.Prisma.CriterionCatalogOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  standardId: 'standardId',
+  name: 'name'
+};
+
+exports.Prisma.EvidenceCategoryOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  name: 'name'
+};
+
+exports.Prisma.EvidenceOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  categoryId: 'categoryId',
+  name: 'name',
+  information: 'information',
+  issuer: 'issuer'
+};
+
+exports.Prisma.EvaluationCriterionCommentOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  reviewerId: 'reviewerId',
+  requirementCriterionId: 'requirementCriterionId',
+  content: 'content',
+  analysisCriterionId: 'analysisCriterionId',
+  evaluationCriterionId: 'evaluationCriterionId'
+};
+
+exports.Prisma.RequirementCriterionCatalogOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  criterionCatalogId: 'criterionCatalogId',
+  name: 'name',
+  questions: 'questions'
+};
+
+exports.Prisma.StandardPeriodOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  periodId: 'periodId',
+  name: 'name',
+  opening: 'opening',
+  conclusion: 'conclusion'
+};
+
+exports.Prisma.CriterionPeriodOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  name: 'name',
+  evaluationStandardId: 'evaluationStandardId'
+};
+
+exports.Prisma.AnalysisCriterionOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  criterionPeriodId: 'criterionPeriodId',
+  lecturerId: 'lecturerId'
+};
+
+exports.Prisma.EvaluationCriterionOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  criterionPeriodId: 'criterionPeriodId',
+  lecturerId: 'lecturerId',
+  reviewerId: 'reviewerId',
+  currentSituation: 'currentSituation',
+  strengths: 'strengths',
+  weakness: 'weakness',
+  actionPlan: 'actionPlan',
+  score: 'score'
+};
+
+exports.Prisma.RequirementCriterionOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  analysisCriterionId: 'analysisCriterionId',
+  name: 'name',
+  questions: 'questions',
+  evidencePlaces: 'evidencePlaces',
+  collectionMethod: 'collectionMethod'
+};
+
+exports.Prisma.AnalysisFormEvidenceOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  requirementCriterionId: 'requirementCriterionId',
+  evidenceId: 'evidenceId'
+};
+
+exports.Prisma.EvaluationCouncilOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  periodId: 'periodId',
+  name: 'name'
+};
+
+exports.Prisma.EvaluationCouncilMemberOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  evaluationCouncilId: 'evaluationCouncilId',
+  lecturerId: 'lecturerId',
+  groupName: 'groupName'
+};
+
+exports.Prisma.EvidenceFileOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  name: 'name',
+  path: 'path',
+  mimeType: 'mimeType',
+  evidenceId: 'evidenceId',
+  userProfileId: 'userProfileId'
+};
+
+exports.Prisma.QuestionBankOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  name: 'name',
+  subjectVersionId: 'subjectVersionId'
+};
+
+exports.Prisma.QuestionOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  content: 'content',
+  explanation: 'explanation',
+  questionBankId: 'questionBankId',
+  knowledgeBlockId: 'knowledgeBlockId'
+};
+
+exports.Prisma.MultipleChoiceOptionOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  questionId: 'questionId',
+  content: 'content'
+};
+
+exports.Prisma.FillInBlankSlotOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  questionId: 'questionId',
+  correctAnswer: 'correctAnswer'
+};
+
+exports.Prisma.OrderingItemOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  questionId: 'questionId',
+  content: 'content'
+};
+
+exports.Prisma.ExamOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  subjectVersionId: 'subjectVersionId',
+  semesterId: 'semesterId'
+};
+
+exports.Prisma.ExamRoomOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  examId: 'examId',
+  roomId: 'roomId'
+};
+
+exports.Prisma.ExamListOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  examRoomId: 'examRoomId',
+  firstSupervisorId: 'firstSupervisorId',
+  secondSupervisorId: 'secondSupervisorId'
+};
+
+exports.Prisma.ExamBankOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  examId: 'examId',
+  examCode: 'examCode',
+  subjectClassId: 'subjectClassId',
+  explain: 'explain',
+  examMatrixId: 'examMatrixId'
+};
+
+exports.Prisma.ExamBankQuestionOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  examBankId: 'examBankId',
+  questionId: 'questionId'
+};
+
+exports.Prisma.ExamPaperOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  examListId: 'examListId',
+  studentSubjectScoreId: 'studentSubjectScoreId',
+  examCode: 'examCode'
+};
+
+exports.Prisma.ExamFrameworkOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  name: 'name',
+  subjectVersionId: 'subjectVersionId'
+};
+
+exports.Prisma.ExamMatrixOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  name: 'name',
+  examFrameworkId: 'examFrameworkId'
+};
+
+exports.Prisma.KnowledgeBlockOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  name: 'name',
+  examMatrixId: 'examMatrixId',
+  subjectVersionId: 'subjectVersionId'
+};
+
+exports.Prisma.ConfigExamOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  knowledgeBlockId: 'knowledgeBlockId'
+};
+
+exports.Prisma.SurveyObjectTypeOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  name: 'name',
+  trainingObjectTypeId: 'trainingObjectTypeId'
+};
+
+exports.Prisma.SurveyTopicOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  name: 'name'
+};
+
+exports.Prisma.SurveyQuestionGroupOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  name: 'name'
+};
+
+exports.Prisma.ClusterSurveyOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  name: 'name',
+  surveyTopicId: 'surveyTopicId'
+};
+
+exports.Prisma.SurveyOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  name: 'name',
+  lectureId: 'lectureId',
+  subjectClassId: 'subjectClassId',
+  semesterId: 'semesterId',
+  surveyTopicId: 'surveyTopicId',
+  trainingObjectTypeId: 'trainingObjectTypeId',
+  clusterSurveyId: 'clusterSurveyId'
+};
+
+exports.Prisma.SurveyQuestionOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  name: 'name',
+  surveyQuestionGroupId: 'surveyQuestionGroupId'
+};
+
+exports.Prisma.SpecificChoiceOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  answer: 'answer',
+  surveyQuestionId: 'surveyQuestionId'
+};
+
+exports.Prisma.SurveyChoiceOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  answer: 'answer',
+  clusterSurveyId: 'clusterSurveyId'
+};
+
+exports.Prisma.SurveySessionOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  surveyId: 'surveyId',
+  profileId: 'profileId',
+  studentId: 'studentId',
+  surveyObjectTypeId: 'surveyObjectTypeId'
+};
+
+exports.Prisma.SurveyResponseOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  surveySessionId: 'surveySessionId',
+  surveyQuestionId: 'surveyQuestionId',
+  answerText: 'answerText',
+  explanation: 'explanation',
+  surveyChoiceId: 'surveyChoiceId'
 };
 
 exports.Prisma.AcademicWarningRuleOrderByRelevanceFieldEnum = {
@@ -7988,7 +7990,8 @@ exports.ConfigKey = exports.$Enums.ConfigKey = {
   DISTRICT: 'DISTRICT',
   WARD: 'WARD',
   USER_SESSION_TIMEOUT: 'USER_SESSION_TIMEOUT',
-  ACADEMIC_ACTION_RULES: 'ACADEMIC_ACTION_RULES'
+  ACADEMIC_ACTION_RULES: 'ACADEMIC_ACTION_RULES',
+  LECTURER_DEADLINE_CRON_SCHEDULE: 'LECTURER_DEADLINE_CRON_SCHEDULE'
 };
 
 exports.PermissionType = exports.$Enums.PermissionType = {
@@ -8180,7 +8183,11 @@ exports.NotificationType = exports.$Enums.NotificationType = {
   SCHOLARSHIP: 'SCHOLARSHIP',
   TUITION: 'TUITION',
   URGENT: 'URGENT',
-  MAINTENANCE: 'MAINTENANCE'
+  MAINTENANCE: 'MAINTENANCE',
+  TEACHING_ASSIGNMENTS: 'TEACHING_ASSIGNMENTS',
+  PROCESS_SCORE_DEADLINE: 'PROCESS_SCORE_DEADLINE',
+  EXAM_DEADLINE: 'EXAM_DEADLINE',
+  SURVEY_DEADLINE: 'SURVEY_DEADLINE'
 };
 
 exports.NotificationPriority = exports.$Enums.NotificationPriority = {
@@ -8188,64 +8195,6 @@ exports.NotificationPriority = exports.$Enums.NotificationPriority = {
   NORMAL: 'NORMAL',
   HIGH: 'HIGH',
   URGENT: 'URGENT'
-};
-
-exports.AcademicActionType = exports.$Enums.AcademicActionType = {
-  REPEAT_YEAR: 'REPEAT_YEAR',
-  SUSPENSION: 'SUSPENSION',
-  EXPULSION: 'EXPULSION'
-};
-
-exports.CriteriaField = exports.$Enums.CriteriaField = {
-  SEMESTER_GPA: 'SEMESTER_GPA',
-  YEARLY_GPA: 'YEARLY_GPA',
-  CUMULATIVE_GPA: 'CUMULATIVE_GPA',
-  ENTRY_SCORE: 'ENTRY_SCORE',
-  COURSE_GRADE_LOWEST: 'COURSE_GRADE_LOWEST',
-  GRADUATION_COURSE_GRADE_LOWEST: 'GRADUATION_COURSE_GRADE_LOWEST',
-  SEMESTER_REGISTERED_CREDITS: 'SEMESTER_REGISTERED_CREDITS',
-  SEMESTER_PASSED_CREDITS: 'SEMESTER_PASSED_CREDITS',
-  SEMESTER_FAILED_CREDITS: 'SEMESTER_FAILED_CREDITS',
-  YEAR_FAILED_CREDITS: 'YEAR_FAILED_CREDITS',
-  FAILED_CREDITS_PERCENT: 'FAILED_CREDITS_PERCENT',
-  CUMULATIVE_PASSED_CREDITS: 'CUMULATIVE_PASSED_CREDITS',
-  CUMULATIVE_DEBT_CREDITS: 'CUMULATIVE_DEBT_CREDITS',
-  CUMULATIVE_PROGRESS_PERCENT: 'CUMULATIVE_PROGRESS_PERCENT',
-  CUMULATIVE_RETAKE_PERCENT: 'CUMULATIVE_RETAKE_PERCENT',
-  ACADEMIC_WARNING_LEVEL: 'ACADEMIC_WARNING_LEVEL',
-  DISCIPLINARY_WARNING_LEVEL: 'DISCIPLINARY_WARNING_LEVEL',
-  REPEAT_YEAR_COUNT: 'REPEAT_YEAR_COUNT',
-  SUSPENSION_COUNT: 'SUSPENSION_COUNT',
-  CONDUCT_SCORE: 'CONDUCT_SCORE',
-  HAS_PASSED_FOREIGN_LANGUAGE: 'HAS_PASSED_FOREIGN_LANGUAGE',
-  HAS_REGISTERED_FOR_SEMESTER: 'HAS_REGISTERED_FOR_SEMESTER',
-  IS_PRIORITY_STUDENT: 'IS_PRIORITY_STUDENT',
-  IS_CLASS_MONITOR_OR_LEADER: 'IS_CLASS_MONITOR_OR_LEADER',
-  IS_STUDY_DURATION_EXCEEDED: 'IS_STUDY_DURATION_EXCEEDED',
-  IS_DEBT_SUBJECT_CONSECUTIVE: 'IS_DEBT_SUBJECT_CONSECUTIVE',
-  HAS_IMPROVEMENT_REGISTRATION: 'HAS_IMPROVEMENT_REGISTRATION'
-};
-
-exports.CriteriaOperator = exports.$Enums.CriteriaOperator = {
-  GT: 'GT',
-  GTE: 'GTE',
-  LT: 'LT',
-  LTE: 'LTE',
-  EQ: 'EQ',
-  IN: 'IN'
-};
-
-exports.DecisionStatus = exports.$Enums.DecisionStatus = {
-  PENDING: 'PENDING',
-  APPROVED: 'APPROVED',
-  REJECTED: 'REJECTED',
-  APPEALED: 'APPEALED'
-};
-
-exports.TrainingScoreStatus = exports.$Enums.TrainingScoreStatus = {
-  PENDING: 'PENDING',
-  APPROVED: 'APPROVED',
-  REJECTED: 'REJECTED'
 };
 
 exports.ResearchProjectStatus = exports.$Enums.ResearchProjectStatus = {
@@ -8318,6 +8267,105 @@ exports.PaymentStatus = exports.$Enums.PaymentStatus = {
   FAILED: 'FAILED'
 };
 
+exports.AcademicActionType = exports.$Enums.AcademicActionType = {
+  REPEAT_YEAR: 'REPEAT_YEAR',
+  SUSPENSION: 'SUSPENSION',
+  EXPULSION: 'EXPULSION'
+};
+
+exports.CriteriaField = exports.$Enums.CriteriaField = {
+  SEMESTER_GPA: 'SEMESTER_GPA',
+  YEARLY_GPA: 'YEARLY_GPA',
+  CUMULATIVE_GPA: 'CUMULATIVE_GPA',
+  ENTRY_SCORE: 'ENTRY_SCORE',
+  COURSE_GRADE_LOWEST: 'COURSE_GRADE_LOWEST',
+  GRADUATION_COURSE_GRADE_LOWEST: 'GRADUATION_COURSE_GRADE_LOWEST',
+  SEMESTER_REGISTERED_CREDITS: 'SEMESTER_REGISTERED_CREDITS',
+  SEMESTER_PASSED_CREDITS: 'SEMESTER_PASSED_CREDITS',
+  SEMESTER_FAILED_CREDITS: 'SEMESTER_FAILED_CREDITS',
+  YEAR_FAILED_CREDITS: 'YEAR_FAILED_CREDITS',
+  FAILED_CREDITS_PERCENT: 'FAILED_CREDITS_PERCENT',
+  CUMULATIVE_PASSED_CREDITS: 'CUMULATIVE_PASSED_CREDITS',
+  CUMULATIVE_DEBT_CREDITS: 'CUMULATIVE_DEBT_CREDITS',
+  CUMULATIVE_PROGRESS_PERCENT: 'CUMULATIVE_PROGRESS_PERCENT',
+  CUMULATIVE_RETAKE_PERCENT: 'CUMULATIVE_RETAKE_PERCENT',
+  ACADEMIC_WARNING_LEVEL: 'ACADEMIC_WARNING_LEVEL',
+  DISCIPLINARY_WARNING_LEVEL: 'DISCIPLINARY_WARNING_LEVEL',
+  REPEAT_YEAR_COUNT: 'REPEAT_YEAR_COUNT',
+  SUSPENSION_COUNT: 'SUSPENSION_COUNT',
+  CONDUCT_SCORE: 'CONDUCT_SCORE',
+  HAS_PASSED_FOREIGN_LANGUAGE: 'HAS_PASSED_FOREIGN_LANGUAGE',
+  HAS_REGISTERED_FOR_SEMESTER: 'HAS_REGISTERED_FOR_SEMESTER',
+  IS_PRIORITY_STUDENT: 'IS_PRIORITY_STUDENT',
+  IS_CLASS_MONITOR_OR_LEADER: 'IS_CLASS_MONITOR_OR_LEADER',
+  IS_STUDY_DURATION_EXCEEDED: 'IS_STUDY_DURATION_EXCEEDED',
+  IS_DEBT_SUBJECT_CONSECUTIVE: 'IS_DEBT_SUBJECT_CONSECUTIVE',
+  HAS_IMPROVEMENT_REGISTRATION: 'HAS_IMPROVEMENT_REGISTRATION'
+};
+
+exports.CriteriaOperator = exports.$Enums.CriteriaOperator = {
+  GT: 'GT',
+  GTE: 'GTE',
+  LT: 'LT',
+  LTE: 'LTE',
+  EQ: 'EQ',
+  IN: 'IN'
+};
+
+exports.DecisionStatus = exports.$Enums.DecisionStatus = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED',
+  APPEALED: 'APPEALED'
+};
+
+exports.TrainingScoreStatus = exports.$Enums.TrainingScoreStatus = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+};
+
+exports.GraduationSessionStatus = exports.$Enums.GraduationSessionStatus = {
+  PLANNING: 'PLANNING',
+  OPEN_FOR_APPLICATION: 'OPEN_FOR_APPLICATION',
+  IN_REVIEW: 'IN_REVIEW',
+  COMPLETED: 'COMPLETED',
+  CLOSED: 'CLOSED'
+};
+
+exports.ApplicationStatus = exports.$Enums.ApplicationStatus = {
+  SUBMITTED: 'SUBMITTED',
+  IN_REVIEW: 'IN_REVIEW',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+};
+
+exports.RankingContext = exports.$Enums.RankingContext = {
+  STUDYING: 'STUDYING',
+  GRADUATION: 'GRADUATION'
+};
+
+exports.DiplomaVerificationStatus = exports.$Enums.DiplomaVerificationStatus = {
+  PENDING: 'PENDING',
+  IN_PROGRESS: 'IN_PROGRESS',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+};
+
+exports.ScoreLinkStatus = exports.$Enums.ScoreLinkStatus = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+};
+
+exports.ReminderRepeatType = exports.$Enums.ReminderRepeatType = {
+  NONE: 'NONE',
+  DAILY: 'DAILY',
+  WEEKLY: 'WEEKLY',
+  MONTHLY: 'MONTHLY',
+  YEARLY: 'YEARLY'
+};
+
 exports.EvaluationPeriodStatus = exports.$Enums.EvaluationPeriodStatus = {
   COUNCIL_ESTABLISHED: 'COUNCIL_ESTABLISHED',
   ASSIGNMENT: 'ASSIGNMENT',
@@ -8366,23 +8414,6 @@ exports.EvaluationMemberRole = exports.$Enums.EvaluationMemberRole = {
   NONCOUNCIL_MEMBERS: 'NONCOUNCIL_MEMBERS'
 };
 
-exports.SurveyObject = exports.$Enums.SurveyObject = {
-  MILITARY_STUDENT: 'MILITARY_STUDENT',
-  CIVILIAN_STUDENT: 'CIVILIAN_STUDENT',
-  LECTURER: 'LECTURER',
-  STAFF: 'STAFF'
-};
-
-exports.SurveyType = exports.$Enums.SurveyType = {
-  SINGLE: 'SINGLE',
-  CLUSTER: 'CLUSTER'
-};
-
-exports.SurveyQuestionType = exports.$Enums.SurveyQuestionType = {
-  ESSAY: 'ESSAY',
-  SINGLE_CHOICE: 'SINGLE_CHOICE'
-};
-
 exports.QuestionType = exports.$Enums.QuestionType = {
   ESSAY: 'ESSAY',
   ORAL: 'ORAL',
@@ -8399,45 +8430,21 @@ exports.Difficult = exports.$Enums.Difficult = {
   D4: 'D4'
 };
 
-exports.GraduationSessionStatus = exports.$Enums.GraduationSessionStatus = {
-  PLANNING: 'PLANNING',
-  OPEN_FOR_APPLICATION: 'OPEN_FOR_APPLICATION',
-  IN_REVIEW: 'IN_REVIEW',
-  COMPLETED: 'COMPLETED',
-  CLOSED: 'CLOSED'
+exports.SurveyObject = exports.$Enums.SurveyObject = {
+  MILITARY_STUDENT: 'MILITARY_STUDENT',
+  CIVILIAN_STUDENT: 'CIVILIAN_STUDENT',
+  LECTURER: 'LECTURER',
+  STAFF: 'STAFF'
 };
 
-exports.ApplicationStatus = exports.$Enums.ApplicationStatus = {
-  SUBMITTED: 'SUBMITTED',
-  IN_REVIEW: 'IN_REVIEW',
-  APPROVED: 'APPROVED',
-  REJECTED: 'REJECTED'
+exports.SurveyType = exports.$Enums.SurveyType = {
+  SINGLE: 'SINGLE',
+  CLUSTER: 'CLUSTER'
 };
 
-exports.RankingContext = exports.$Enums.RankingContext = {
-  STUDYING: 'STUDYING',
-  GRADUATION: 'GRADUATION'
-};
-
-exports.DiplomaVerificationStatus = exports.$Enums.DiplomaVerificationStatus = {
-  PENDING: 'PENDING',
-  IN_PROGRESS: 'IN_PROGRESS',
-  APPROVED: 'APPROVED',
-  REJECTED: 'REJECTED'
-};
-
-exports.ScoreLinkStatus = exports.$Enums.ScoreLinkStatus = {
-  PENDING: 'PENDING',
-  APPROVED: 'APPROVED',
-  REJECTED: 'REJECTED'
-};
-
-exports.ReminderRepeatType = exports.$Enums.ReminderRepeatType = {
-  NONE: 'NONE',
-  DAILY: 'DAILY',
-  WEEKLY: 'WEEKLY',
-  MONTHLY: 'MONTHLY',
-  YEARLY: 'YEARLY'
+exports.SurveyQuestionType = exports.$Enums.SurveyQuestionType = {
+  ESSAY: 'ESSAY',
+  SINGLE_CHOICE: 'SINGLE_CHOICE'
 };
 
 exports.FeedbackStatus = exports.$Enums.FeedbackStatus = {
@@ -8604,20 +8611,13 @@ exports.Prisma.ModelName = {
   StudentSemesterResult: 'StudentSemesterResult',
   StudentYearResult: 'StudentYearResult',
   Notification: 'Notification',
-  DocumentFile: 'DocumentFile',
-  AcademicActionConfig: 'AcademicActionConfig',
-  AcademicActionRuleSet: 'AcademicActionRuleSet',
-  AcademicActionCondition: 'AcademicActionCondition',
-  StudentAcademicDecision: 'StudentAcademicDecision',
-  TrainingScoreSession: 'TrainingScoreSession',
-  StudentTrainingScore: 'StudentTrainingScore',
-  SemesterTrainingScore: 'SemesterTrainingScore',
-  SchoolYearTrainingScore: 'SchoolYearTrainingScore',
+  Lecturer: 'Lecturer',
+  LecturerHistory: 'LecturerHistory',
   LecturerType: 'LecturerType',
   StaffType: 'StaffType',
   StaffPosition: 'StaffPosition',
-  Lecturer: 'Lecturer',
-  LecturerHistory: 'LecturerHistory',
+  Staff: 'Staff',
+  StaffHistory: 'StaffHistory',
   ResearchProject: 'ResearchProject',
   StudentResearchRegistration: 'StudentResearchRegistration',
   ThesisSession: 'ThesisSession',
@@ -8636,50 +8636,15 @@ exports.Prisma.ModelName = {
   DefaultSupervisorPayAmount: 'DefaultSupervisorPayAmount',
   PaymentRecord: 'PaymentRecord',
   SupervisorPaymentRecord: 'SupervisorPaymentRecord',
-  EvaluationPeriod: 'EvaluationPeriod',
-  EvaluationStandardSet: 'EvaluationStandardSet',
-  StandardCatalog: 'StandardCatalog',
-  CriterionCatalog: 'CriterionCatalog',
-  EvidenceCategory: 'EvidenceCategory',
-  Evidence: 'Evidence',
-  EvaluationCriterionComment: 'EvaluationCriterionComment',
-  RequirementCriterionCatalog: 'RequirementCriterionCatalog',
-  StandardPeriod: 'StandardPeriod',
-  CriterionPeriod: 'CriterionPeriod',
-  AnalysisCriterion: 'AnalysisCriterion',
-  EvaluationCriterion: 'EvaluationCriterion',
-  RequirementCriterion: 'RequirementCriterion',
-  AnalysisFormEvidence: 'AnalysisFormEvidence',
-  EvaluationCouncil: 'EvaluationCouncil',
-  EvaluationCouncilMember: 'EvaluationCouncilMember',
-  EvidenceFile: 'EvidenceFile',
-  SurveyObjectType: 'SurveyObjectType',
-  SurveyTopic: 'SurveyTopic',
-  SurveyQuestionGroup: 'SurveyQuestionGroup',
-  ClusterSurvey: 'ClusterSurvey',
-  Survey: 'Survey',
-  SurveyQuestion: 'SurveyQuestion',
-  SpecificChoice: 'SpecificChoice',
-  SurveyChoice: 'SurveyChoice',
-  SurveySession: 'SurveySession',
-  SurveyResponse: 'SurveyResponse',
-  QuestionBank: 'QuestionBank',
-  Question: 'Question',
-  MultipleChoiceOption: 'MultipleChoiceOption',
-  FillInBlankSlot: 'FillInBlankSlot',
-  OrderingItem: 'OrderingItem',
-  Exam: 'Exam',
-  ExamRoom: 'ExamRoom',
-  ExamList: 'ExamList',
-  ExamBank: 'ExamBank',
-  ExamBankQuestion: 'ExamBankQuestion',
-  ExamPaper: 'ExamPaper',
-  ExamFramework: 'ExamFramework',
-  ExamMatrix: 'ExamMatrix',
-  KnowledgeBlock: 'KnowledgeBlock',
-  ConfigExam: 'ConfigExam',
-  Staff: 'Staff',
-  StaffHistory: 'StaffHistory',
+  DocumentFile: 'DocumentFile',
+  AcademicActionConfig: 'AcademicActionConfig',
+  AcademicActionRuleSet: 'AcademicActionRuleSet',
+  AcademicActionCondition: 'AcademicActionCondition',
+  StudentAcademicDecision: 'StudentAcademicDecision',
+  TrainingScoreSession: 'TrainingScoreSession',
+  StudentTrainingScore: 'StudentTrainingScore',
+  SemesterTrainingScore: 'SemesterTrainingScore',
+  SchoolYearTrainingScore: 'SchoolYearTrainingScore',
   Scholarship: 'Scholarship',
   ScholarshipCriteria: 'ScholarshipCriteria',
   ScholarshipAward: 'ScholarshipAward',
@@ -8700,6 +8665,48 @@ exports.Prisma.ModelName = {
   NoteFolder: 'NoteFolder',
   NoteTag: 'NoteTag',
   NoteReminder: 'NoteReminder',
+  EvaluationPeriod: 'EvaluationPeriod',
+  EvaluationStandardSet: 'EvaluationStandardSet',
+  StandardCatalog: 'StandardCatalog',
+  CriterionCatalog: 'CriterionCatalog',
+  EvidenceCategory: 'EvidenceCategory',
+  Evidence: 'Evidence',
+  EvaluationCriterionComment: 'EvaluationCriterionComment',
+  RequirementCriterionCatalog: 'RequirementCriterionCatalog',
+  StandardPeriod: 'StandardPeriod',
+  CriterionPeriod: 'CriterionPeriod',
+  AnalysisCriterion: 'AnalysisCriterion',
+  EvaluationCriterion: 'EvaluationCriterion',
+  RequirementCriterion: 'RequirementCriterion',
+  AnalysisFormEvidence: 'AnalysisFormEvidence',
+  EvaluationCouncil: 'EvaluationCouncil',
+  EvaluationCouncilMember: 'EvaluationCouncilMember',
+  EvidenceFile: 'EvidenceFile',
+  QuestionBank: 'QuestionBank',
+  Question: 'Question',
+  MultipleChoiceOption: 'MultipleChoiceOption',
+  FillInBlankSlot: 'FillInBlankSlot',
+  OrderingItem: 'OrderingItem',
+  Exam: 'Exam',
+  ExamRoom: 'ExamRoom',
+  ExamList: 'ExamList',
+  ExamBank: 'ExamBank',
+  ExamBankQuestion: 'ExamBankQuestion',
+  ExamPaper: 'ExamPaper',
+  ExamFramework: 'ExamFramework',
+  ExamMatrix: 'ExamMatrix',
+  KnowledgeBlock: 'KnowledgeBlock',
+  ConfigExam: 'ConfigExam',
+  SurveyObjectType: 'SurveyObjectType',
+  SurveyTopic: 'SurveyTopic',
+  SurveyQuestionGroup: 'SurveyQuestionGroup',
+  ClusterSurvey: 'ClusterSurvey',
+  Survey: 'Survey',
+  SurveyQuestion: 'SurveyQuestion',
+  SpecificChoice: 'SpecificChoice',
+  SurveyChoice: 'SurveyChoice',
+  SurveySession: 'SurveySession',
+  SurveyResponse: 'SurveyResponse',
   AcademicWarningRule: 'AcademicWarningRule',
   AcademicWarning: 'AcademicWarning',
   DisciplinaryWarning: 'DisciplinaryWarning',

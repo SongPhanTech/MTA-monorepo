@@ -6,6 +6,10 @@ import dayjs from "dayjs"
 import { read, utils } from "xlsx"
 import XlsxTemplate from "xlsx-template"
 import { prisma } from ".."
+import {
+  thongBaoHanNhapDiemQuaTrinhServer,
+  thongBaoHanNhapDiemThiServer,
+} from "../lib/thong-bao-giang-vien"
 import { EnrollFixedClassOnSubjectClass, OpenSubjectClass } from "../dto/subject-class.dto"
 import { UploadExcelModel } from "../dto/upload-excel.dto"
 import { ListOf } from "../zod/base"
@@ -662,6 +666,20 @@ app.openapi(setScoreDeadLine, async (c) => {
         `)
   })
 
+  const lopDaCapNhat = await prisma.subjectClass.findMany({
+    where: {
+      trainingObjectTypeId,
+      ...(semesterId ? { semesterId } : {}),
+      ...(classIds?.length ? { id: { in: classIds } } : {}),
+      scoreDeadline: { not: null },
+    },
+    select: { id: true },
+  })
+  await thongBaoHanNhapDiemQuaTrinhServer(
+    prisma,
+    lopDaCapNhat.map((item) => item.id)
+  )
+
   return c.json({ message: "Success" })
 })
 
@@ -701,6 +719,17 @@ app.openapi(setExamScoreDeadLine, async (c) => {
             END
             ${whereSQL};
     `)
+
+  const lopDaCapNhat = await prisma.subjectClass.findMany({
+    where: {
+      trainingObjectTypeId,
+      ...(semesterId ? { semesterId } : {}),
+      ...(classIds?.length ? { id: { in: classIds } } : {}),
+      examScoreDeadline: { not: null },
+    },
+    select: { id: true },
+  })
+  await thongBaoHanNhapDiemThiServer(prisma, lopDaCapNhat.map((item) => item.id))
 
   return c.json({ message: "Success" })
 })

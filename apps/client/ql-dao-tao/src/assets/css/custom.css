@@ -117,6 +117,24 @@
 .ant-table-empty .ant-table-wrapper .ant-table-tbody > tr > td {
   border-bottom: 0px solid #f0f0f0;
 }
+
+/* Bảng gọn trang chủ GV — tránh kế thừa height 100% global gây lệch header / khoảng trống */
+.table-gv-gon.ant-table-wrapper,
+.table-gv-gon .ant-table,
+.table-gv-gon .ant-table-wrapper div,
+.table-gv-gon .ant-table-container,
+.table-gv-gon .ant-table-content {
+  height: auto !important;
+}
+
+.table-gv-gon .ant-table-content {
+  overflow: visible !important;
+  outline: none;
+}
+
+.table-gv-gon .ant-table-container {
+  outline: none;
+}
 .ant-layout {
   background: #ffffff;
 }

@@ -1,6 +1,7 @@
 import '../base'
 import '../ql-dao-tao/plan-training'
 import '../ql-dao-tao/student'
+import '../ql-dao-tao/lecturer'
 import '../ql-nguoi-dung/user'
 import 'document'
 import 'core-categories'
@@ -16,7 +17,10 @@ enum NotificationType {
   TUITION           // Học phí
   URGENT            // Khẩn cấp
   MAINTENANCE       // Bảo trì hệ thống
-
+  TEACHING_ASSIGNMENTS // Phân công giảng dạy
+  PROCESS_SCORE_DEADLINE // Hạn nhập điểm quá trình
+  EXAM_DEADLINE     // Hạn nhập điểm thi
+  SURVEY_DEADLINE   // Hạn điền khảo sát
   @@schema("ql-danh-muc")
 }
 
@@ -46,10 +50,12 @@ model Notification extends Base {
   targetCourses  TrainingCourse[]     // Gửi cho các khoá cụ thể
   targetClasses  FixedClass[]         // Gửi cho các lớp cụ thể
   targetStudents Student[]            // Gửi cho sinh viên cụ thể
+  lecturer       Lecturer?            @relation(fields: [lecturerId], references: [id])
+  lecturerId     String?               // Gửi cho giảng viên cụ thể
 
   // Tệp đính kèm
   attachments    DocumentFile[]
 
-
+  @@index([lecturerId])
   @@schema("ql-danh-muc")
 }

@@ -328,7 +328,7 @@ export function useSuspenseCountNotification<TArgs extends Prisma.NotificationCo
 }
 import type { NotificationType, NotificationPriority } from '../zenstack/models';
 
-export function useCheckNotification<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; title?: string; content?: string; type?: NotificationType; priority?: NotificationPriority; targetAll?: boolean }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckNotification<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; title?: string; content?: string; type?: NotificationType; priority?: NotificationPriority; targetAll?: boolean; lecturerId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('Notification', `${endpoint}/notification/check`, args, options, fetch);
 }

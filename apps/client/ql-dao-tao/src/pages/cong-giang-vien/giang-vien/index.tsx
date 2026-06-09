@@ -1,42 +1,114 @@
-import DanhSachLopGiangVien from "@components/sub-pages/danh-sach-lop-giang-vien"
-import { useSession } from "@workspace/auth/react"
-import { DanhSachThongBao, LichCongTac } from "@workspace/ui"
-import { Col, Row, Typography } from "antd"
-
-const { Title } = Typography
+import BangLopMonHoc from "@components/cong-giang-vien/giang-vien/bang-lop-mon-hoc"
+import BangLopQuanLy from "@components/cong-giang-vien/giang-vien/bang-lop-quan-ly"
+import BangThongBao from "@components/cong-giang-vien/giang-vien/bang-thong-bao"
+import BoLocThoiGian from "@components/cong-giang-vien/giang-vien/bo-loc-thoi-gian"
+import LichCuaToi from "@components/cong-giang-vien/giang-vien/lich-cua-toi"
+import LoiChao from "@components/cong-giang-vien/giang-vien/loi-chao"
+import TheThongKe from "@components/cong-giang-vien/giang-vien/the-thong-ke"
+import TheThongTinCaNhan from "@components/cong-giang-vien/giang-vien/the-thong-tin-ca-nhan"
+import type { ThongTinCaNhanTomTat } from "@components/cong-giang-vien/giang-vien/types"
+import { useHoSoCaNhan } from "@hooks/use-ho-so-ca-nhan"
+import { useKhaoSatGiangVien } from "@hooks/use-khao-sat-giang-vien"
+import { useTrangChuGiangVien } from "@hooks/use-trang-chu-giang-vien"
+import { ROUTER_PATH } from "@workspace/router"
+import { Col, Row } from "antd"
+import { useRouter } from "next/router"
+import { useMemo } from "react"
 
 function CongGiangVienTrangChuPage() {
-  const { data: me } = useSession()
+  const router = useRouter()
+  const { thongTin, daoTao, isLoading: dangTaiHoSo } = useHoSoCaNhan()
+  const { tongSo, thongKe: thongKeKhaoSat } = useKhaoSatGiangVien()
+  const {
+    lopGiangDay,
+    lopTroGiang,
+    lopQuanLy,
+    soLopGiangDay,
+    soLopQuanLy,
+    soLopTroGiang,
+    isLoading: dangTaiLop,
+  } = useTrangChuGiangVien()
+
+  const thongTinCaNhan: ThongTinCaNhanTomTat = useMemo(
+    () => ({
+      hoVaTen: thongTin.hoVaTen,
+      maGiangVien: thongTin.maGiangVien,
+      khoa: thongTin.donViCongTac,
+      boMon: thongTin.chucDanh,
+      hocVi: daoTao.trinhDo || thongTin.hocHam,
+      email: thongTin.email,
+      dienThoai: thongTin.soDienThoai,
+      anhDaiDien: thongTin.anhDaiDien,
+    }),
+    [thongTin, daoTao]
+  )
+
+  const goTo = (path: string) => router.push(path)
 
   return (
-    <div>
-      <Title level={4} className="!mb-1">
-        Xin chào{me?.fullName ? `, ${me.fullName}` : ""}!
-      </Title>
-
-      <Row gutter={[8, 8]}>
-        <Col span={24}>
-          <DanhSachLopGiangVien />
-        </Col>
-
-        <Col xs={24} lg={16}>
-          <div className="bg-white rounded shadow h-full flex flex-col">
-            <div className="px-4">
-              <Title level={5}>Thời khoá biểu</Title>
+    <div className="flex h-[calc(100vh-80px)] flex-col overflow-y-auto lg:overflow-hidden">
+      <Row className="min-h-0 flex-1" gutter={[8, 8]} align="stretch">
+        <Col xs={24} xl={18} className="flex min-h-0">
+          <div className="flex min-h-0 w-full flex-1 flex-col gap-1">
+            <div className="shrink-0">
+              <LoiChao hoVaTen={thongTin.hoVaTen} khoa={thongTin.donViCongTac} />
+              <div className="mb-1 flex justify-end">
+                <BoLocThoiGian />
+              </div>
+              <TheThongKe
+                soLopGiangDay={soLopGiangDay}
+                soLopQuanLy={soLopQuanLy}
+                soLopTroGiang={soLopTroGiang}
+                tongKhaoSat={tongSo}
+                khaoSatDangDienRa={thongKeKhaoSat.dangDienRa}
+                khaoSatSapDienRa={thongKeKhaoSat.sapDienRa}
+                onXemLopGiangDay={() => goTo(ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_DS_LOP_MON_HOC)}
+                onXemLopQuanLy={() => goTo(ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_QL_REN_LUYEN)}
+                onXemLopTroGiang={() => goTo(ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_DS_LOP_MON_HOC)}
+                onXemKhaoSat={() => goTo(ROUTER_PATH.QL_DAO_TAO.KHAO_SAT)}
+              />
             </div>
-            <div className="flex-1 px-2">
-              <LichCongTac onlyMySchedule />
+
+            <div className="grid min-h-0 flex-1 grid-cols-1 gap-1 lg:grid-cols-2 lg:grid-rows-2">
+              <div className="min-h-0">
+                <LichCuaToi />
+              </div>
+              <div className="min-h-0">
+                <BangLopMonHoc
+                  gon
+                  tieuDe="Lớp giảng dạy"
+                  data={lopGiangDay}
+                  loading={dangTaiLop}
+                  onXemTatCa={() => goTo(ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_DS_LOP_MON_HOC)}
+                />
+              </div>
+              <div className="min-h-0">
+                <BangLopQuanLy
+                  gon
+                  data={lopQuanLy}
+                  loading={dangTaiLop}
+                  onXemTatCa={() => goTo(ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_QL_REN_LUYEN)}
+                />
+              </div>
+              <div className="min-h-0">
+                <BangLopMonHoc
+                  gon
+                  tieuDe="Lớp trợ giảng"
+                  data={lopTroGiang}
+                  loading={dangTaiLop}
+                  onXemTatCa={() => goTo(ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_DS_LOP_MON_HOC)}
+                />
+              </div>
             </div>
           </div>
         </Col>
-        <Col xs={24} lg={8}>
-          <div className="bg-white rounded shadow h-full flex flex-col">
-            <div className="px-4">
-              <Title level={5}>Thông báo</Title>
-            </div>
-            <div className="flex-1 overflow-y-auto mb-2 px-2">
-              <DanhSachThongBao />
-            </div>
+
+        <Col xs={24} xl={6} className="flex min-h-0 flex-col gap-1">
+          <div className="shrink-0">
+            <TheThongTinCaNhan thongTin={thongTinCaNhan} isLoading={dangTaiHoSo} />
+          </div>
+          <div className="min-h-0 flex-1 overflow-hidden">
+            <BangThongBao gon />
           </div>
         </Col>
       </Row>

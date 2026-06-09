@@ -10,6 +10,7 @@ import '../ql-dao-tao/thesis'
 import '../khao-thi/evaluate'
 import '../khao-thi/survey'
 import '../khao-thi/exam'
+import '../ql-danh-muc/notification'
 
 model Lecturer extends Base {
   from                             DateTime? // từ ngày
@@ -47,6 +48,7 @@ model Lecturer extends Base {
   evaluationCriterionReviews       EvaluationCriterion[]         @relation("EvaluationCriterionLecturerReview")
   primarySupervisorThesisProject   ThesisProject[]               @relation("PrimarySupervisorToThesis")
   secondarySupervisorThesisProject ThesisProject[]               @relation("SecondarySupervisorToThesis")
+  notifications                    Notification[]                // Thông báo giảng viên
 
   @@index([userProfileId])
   @@schema("ql-dao-tao")

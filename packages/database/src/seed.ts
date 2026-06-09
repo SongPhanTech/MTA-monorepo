@@ -44,6 +44,21 @@ async function main() {
     })
   }
 
+  const cronScheduleKey = ConfigKey.LECTURER_DEADLINE_CRON_SCHEDULE
+  const cronScheduleTonTai = await prisma.config.findUnique({ where: { key: cronScheduleKey } })
+  if (!cronScheduleTonTai) {
+    await prisma.config.create({
+      data: {
+        key: cronScheduleKey,
+        value: JSON.stringify({
+          enabled: true,
+          hours: [0, 12],
+          timezone: "Asia/Ho_Chi_Minh",
+        }),
+      },
+    })
+  }
+
   await prisma.defaultCouncilRolePayAmount.createMany({
     skipDuplicates: true,
     data: [

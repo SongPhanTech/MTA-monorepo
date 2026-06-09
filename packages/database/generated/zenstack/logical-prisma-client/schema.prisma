@@ -30,6 +30,7 @@ enum ConfigKey {
   WARD
   USER_SESSION_TIMEOUT
   ACADEMIC_ACTION_RULES
+  LECTURER_DEADLINE_CRON_SCHEDULE
 
   @@schema("he-thong")
 }
@@ -288,6 +289,10 @@ enum NotificationType {
   TUITION
   URGENT
   MAINTENANCE
+  TEACHING_ASSIGNMENTS
+  PROCESS_SCORE_DEADLINE
+  EXAM_DEADLINE
+  SURVEY_DEADLINE
 
   @@schema("ql-danh-muc")
 }
@@ -299,44 +304,6 @@ enum NotificationPriority {
   URGENT
 
   @@schema("ql-danh-muc")
-}
-
-/// Loại hành động xử lý học tập
-enum AcademicActionType {
-  REPEAT_YEAR
-  SUSPENSION
-  EXPULSION
-
-  @@schema("ql-dao-tao")
-}
-
-enum DecisionStatus {
-  PENDING
-  APPROVED
-  REJECTED
-  APPEALED
-
-  @@schema("ql-dao-tao")
-}
-
-enum TrainingScoreStatus {
-  PENDING
-  APPROVED
-  REJECTED
-
-  @@schema("ql-dao-tao")
-}
-
-enum StudentTrainingType {
-  EXCELLENT
-  GOOD
-  FAIR
-  MEDIUM
-  AVERAGE
-  POOR
-  VERY_POOR
-
-  @@schema("ql-dao-tao")
 }
 
 enum ResearchProjectStatus {
@@ -431,108 +398,42 @@ enum PaymentStatus {
   @@schema("ql-dao-tao")
 }
 
-/// Trạng thái đợt đánh giá
-enum EvaluationPeriodStatus {
-  COUNCIL_ESTABLISHED
-  ASSIGNMENT
-  ANALYSIS_WRITING
-  SECRETARY_REVIEW
-  DIRECTOR_REVIEW
-  EVALUATION_WRITING
-  CROSS_REVIEW_ASSIGNMENT
-  CROSS_REVIEW
-  CONSOLIDATION
-  COUNCIL_APPROVAL
-  COMPLETED
+/// Loại hành động xử lý học tập
+enum AcademicActionType {
+  REPEAT_YEAR
+  SUSPENSION
+  EXPULSION
 
-  @@schema("khao-thi")
+  @@schema("ql-dao-tao")
 }
 
-enum StandardCatalogType {
-  ASSET
-  PROGRAM
-
-  @@schema("khao-thi")
-}
-
-enum EvaluationCriterionStatus {
+enum DecisionStatus {
   PENDING
-  SUBMITTED
-  REVISION
   APPROVED
-  COMPLETED
+  REJECTED
+  APPEALED
 
-  @@schema("khao-thi")
+  @@schema("ql-dao-tao")
 }
 
-enum EvaluationStatus {
-  LOCK
+enum TrainingScoreStatus {
   PENDING
-  SUBMITTED
-  REVISION
   APPROVED
-  COMPLETED
+  REJECTED
 
-  @@schema("khao-thi")
+  @@schema("ql-dao-tao")
 }
 
-/// Vai trò của thành viên trong hội đồng đánh giá
-enum EvaluationMemberRole {
-  CHAIRMAN
-  VICE_PRESIDENT
-  HEAD_SECRETARY
-  SECRETARY
-  MEMBER
-  ADVISORY_BOARD
-  HEAD_SPECIALIZED
-  SPECIALIZED
-  NONCOUNCIL_MEMBERS
+enum StudentTrainingType {
+  EXCELLENT
+  GOOD
+  FAIR
+  MEDIUM
+  AVERAGE
+  POOR
+  VERY_POOR
 
-  @@schema("khao-thi")
-}
-
-enum SurveyQuestionType {
-  ESSAY
-  SINGLE_CHOICE
-
-  @@schema("khao-thi")
-}
-
-enum SurveyObject {
-  MILITARY_STUDENT
-  CIVILIAN_STUDENT
-  LECTURER
-  STAFF
-
-  @@schema("khao-thi")
-}
-
-enum SurveyType {
-  SINGLE
-  CLUSTER
-
-  @@schema("khao-thi")
-}
-
-/// Loại câu hỏi
-enum QuestionType {
-  ESSAY
-  ORAL
-  SINGLE_CHOICE
-  MULTIPLE_CHOICE
-  FILL_IN_BLANK
-  ORDERING
-
-  @@schema("khao-thi")
-}
-
-enum Difficult {
-  D1
-  D2
-  D3
-  D4
-
-  @@schema("khao-thi")
+  @@schema("ql-dao-tao")
 }
 
 /// Enum hệ thống đánh giá (Học bổng, Cảnh báo, Xử lý học tập).
@@ -631,6 +532,110 @@ enum ReminderRepeatType {
   YEARLY
 
   @@schema("ql-dao-tao")
+}
+
+/// Trạng thái đợt đánh giá
+enum EvaluationPeriodStatus {
+  COUNCIL_ESTABLISHED
+  ASSIGNMENT
+  ANALYSIS_WRITING
+  SECRETARY_REVIEW
+  DIRECTOR_REVIEW
+  EVALUATION_WRITING
+  CROSS_REVIEW_ASSIGNMENT
+  CROSS_REVIEW
+  CONSOLIDATION
+  COUNCIL_APPROVAL
+  COMPLETED
+
+  @@schema("khao-thi")
+}
+
+enum StandardCatalogType {
+  ASSET
+  PROGRAM
+
+  @@schema("khao-thi")
+}
+
+enum EvaluationCriterionStatus {
+  PENDING
+  SUBMITTED
+  REVISION
+  APPROVED
+  COMPLETED
+
+  @@schema("khao-thi")
+}
+
+enum EvaluationStatus {
+  LOCK
+  PENDING
+  SUBMITTED
+  REVISION
+  APPROVED
+  COMPLETED
+
+  @@schema("khao-thi")
+}
+
+/// Vai trò của thành viên trong hội đồng đánh giá
+enum EvaluationMemberRole {
+  CHAIRMAN
+  VICE_PRESIDENT
+  HEAD_SECRETARY
+  SECRETARY
+  MEMBER
+  ADVISORY_BOARD
+  HEAD_SPECIALIZED
+  SPECIALIZED
+  NONCOUNCIL_MEMBERS
+
+  @@schema("khao-thi")
+}
+
+/// Loại câu hỏi
+enum QuestionType {
+  ESSAY
+  ORAL
+  SINGLE_CHOICE
+  MULTIPLE_CHOICE
+  FILL_IN_BLANK
+  ORDERING
+
+  @@schema("khao-thi")
+}
+
+enum Difficult {
+  D1
+  D2
+  D3
+  D4
+
+  @@schema("khao-thi")
+}
+
+enum SurveyQuestionType {
+  ESSAY
+  SINGLE_CHOICE
+
+  @@schema("khao-thi")
+}
+
+enum SurveyObject {
+  MILITARY_STUDENT
+  CIVILIAN_STUDENT
+  LECTURER
+  STAFF
+
+  @@schema("khao-thi")
+}
+
+enum SurveyType {
+  SINGLE
+  CLUSTER
+
+  @@schema("khao-thi")
 }
 
 enum FeedbackStatus {
@@ -4878,269 +4883,84 @@ model Notification {
   targetCourses  TrainingCourse[]
   targetClasses  FixedClass[]
   targetStudents Student[]
+  lecturer       Lecturer?            @relation(fields: [lecturerId], references: [id])
+  lecturerId     String?
   attachments    DocumentFile[]
 
+  @@index([lecturerId])
   @@schema("ql-danh-muc")
 }
 
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)
-model DocumentFile {
-  id                         String                          @id() @default(cuid())
-  code                       String?                         @unique()
-  active                     Boolean                         @default(true)
-  description                String?                         @db.Text()
-  deletedAt                  DateTime?
-  createdAt                  DateTime                        @default(now())
-  updatedAt                  DateTime                        @default(now()) @updatedAt()
-  createdBy                  String?                         @default("") @db.Uuid()
-  name                       String
-  path                       String
-  size                       BigInt
-  mimeType                   String?
-  archivedCertificate        ArchivedCertificate?            @relation(fields: [archivedCertificateId], references: [id])
-  archivedCertificateId      String?
-  trainingCourse             TrainingCourse?                 @relation(fields: [trainingCourseId], references: [id])
-  trainingCourseId           String?
-  archivedAward              ArchivedAward?                  @relation(fields: [archivedAwardId], references: [id])
-  archivedAwardId            String?
-  curriculum                 Curriculum?                     @relation(fields: [curriculumId], references: [id])
-  curriculumId               String?
-  curriculumVersion          CurriculumVersion?              @relation(fields: [curriculumVersionId], references: [id])
-  curriculumVersionId        String?
-  subjectVersion             SubjectVersion?                 @relation(fields: [subjectVersionId], references: [id])
-  subjectVersionId           String?
-  studentAcademicDecision    StudentAcademicDecision?        @relation(fields: [studentAcademicDecisionId], references: [id])
-  studentAcademicDecisionId  String?
-  notification               Notification?                   @relation(fields: [notificationId], references: [id])
-  notificationId             String?
-  decision                   Decision?                       @relation(fields: [decisionId], references: [id])
-  decisionId                 String?
-  defenseRecord              DefenseRecord?                  @relation(fields: [defenseRecordId], references: [id])
-  defenseRecordId            String?
-  librarySubmission          LibrarySubmission?              @relation(fields: [librarySubmissionId], references: [id])
-  librarySubmissionId        String?
-  diplomaFront               GraduationDecision?             @relation(name: "DiplomaFront", fields: [diplomaFrontId], references: [id])
-  diplomaFrontId             String?                         @unique()
-  diplomaBack                GraduationDecision?             @relation(name: "DiplomaBack", fields: [diplomaBackId], references: [id])
-  diplomaBackId              String?                         @unique()
-  diplomaVerification        DiplomaVerificationApplication? @relation(name: "DiplomaVerificationAttachments", fields: [diplomaVerificationId], references: [id])
-  diplomaVerificationId      String?                         @unique()
-  diplomaVerificationFront   DiplomaVerificationApplication? @relation(name: "DiplomaVerificationFront", fields: [diplomaVerificationFrontId], references: [id])
-  diplomaVerificationFrontId String?                         @unique()
-  diplomaVerificationBack    DiplomaVerificationApplication? @relation(name: "DiplomaVerificationBack", fields: [diplomaVerificationBackId], references: [id])
-  diplomaVerificationBackId  String?                         @unique()
-  trainingField              TrainingField?                  @relation(fields: [trainingFieldId], references: [id])
-  trainingFieldId            String?
-  studentScoreConvert        StudentScoreConvert?            @relation(fields: [studentScoreConvertId], references: [id])
-  studentScoreConvertId      String?
-  scoreLinkSheet             ScoreLinkSheet?                 @relation(fields: [scoreLinkSheetId], references: [id])
-  scoreLinkSheetId           String?
-  examFramework              ExamFramework?                  @relation(fields: [examFrameworkId], references: [id])
-  examFrameworkId            String?
-  note                       Note?                           @relation(fields: [noteId], references: [id])
-  noteId                     String?
-  evaluationPeriod           EvaluationPeriod?               @relation(fields: [evaluationPeriodId], references: [id])
-  evaluationPeriodId         String?
-  knowledgeBlock             KnowledgeBlock?                 @relation(fields: [knowledgeBlockId], references: [id])
-  knowledgeBlockId           String?
+model Lecturer {
+  id                               String                        @id() @default(cuid())
+  code                             String?                       @unique()
+  active                           Boolean                       @default(true)
+  description                      String?                       @db.Text()
+  deletedAt                        DateTime?
+  createdAt                        DateTime                      @default(now())
+  updatedAt                        DateTime                      @default(now()) @updatedAt()
+  createdBy                        String?                       @default("") @db.Uuid()
+  from                             DateTime?
+  lectureID                        String?                       @unique()
+  serviceDate                      DateTime?
+  userProfile                      UserProfile                   @relation(fields: [userProfileId], references: [id])
+  userProfileId                    String                        @unique() @db.Uuid()
+  organization                     DM_DonVi                      @relation(fields: [organizationId], references: [Id])
+  organizationId                   String                        @db.Uuid()
+  lecturerType                     LecturerType                  @relation(fields: [lecturerTypeId], references: [id])
+  lecturerTypeId                   String
+  mainSubjectClasses               SubjectClass[]                @relation("MainLecturer")
+  extraSubjectClasses              SubjectClass[]                @relation("ExtraLecturer")
+  enterGradeClasses                SubjectClass[]                @relation("EnterGradeLecturer")
+  manageFixedClass                 FixedClass[]                  @relation("ManageLecturer")
+  classSchedules                   ClassSchedule[]               @relation("MainLecturer")
+  extraClassSchedules              ClassSchedule[]               @relation("ExtraLecturer")
+  researchProjects                 ResearchProject[]
+  reviewedRegistrations            StudentResearchRegistration[]
+  reviewedThesisRegistrations      StudentThesisRegistration[]
+  expertProfile                    ExpertProfile[]
+  survey                           Survey[]
+  clusterSurvey                    ClusterSurvey[]
+  examRoomsMain                    ExamList[]                    @relation("FirstSupervisor")
+  examRoomsExtra                   ExamList[]                    @relation("SecondSupervisor")
+  evaluationCriterions             EvaluationCriterion[]         @relation("EvaluationCriterionLecturer")
+  analysisCriterion                AnalysisCriterion[]
+  evaluationCouncilMember          EvaluationCouncilMember[]
+  evaluationCriterionReviews       EvaluationCriterion[]         @relation("EvaluationCriterionLecturerReview")
+  primarySupervisorThesisProject   ThesisProject[]               @relation("PrimarySupervisorToThesis")
+  secondarySupervisorThesisProject ThesisProject[]               @relation("SecondarySupervisorToThesis")
+  notifications                    Notification[]
 
-  @@schema("ql-danh-muc")
-}
-
-/// Cấu hình các hành động xử lý học tập (Lưu ban, Đình chỉ, Thôi học)
-/// @@allow('all', auth() != null)
-/// @@deny('read', deletedAt != null)
-/// @@allow('read', auth() != null)
-model AcademicActionConfig {
-  id               String                    @id() @default(cuid())
-  code             String?                   @unique()
-  active           Boolean                   @default(true)
-  description      String?                   @db.Text()
-  deletedAt        DateTime?
-  createdAt        DateTime                  @default(now())
-  updatedAt        DateTime                  @default(now()) @updatedAt()
-  createdBy        String?                   @default("") @db.Uuid()
-  name             String
-  actionType       AcademicActionType
-  trainingCourse   TrainingCourse            @relation(fields: [trainingCourseId], references: [id])
-  trainingCourseId String
-  ruleSets         AcademicActionRuleSet[]
-  decisions        StudentAcademicDecision[]
-
-  @@unique([trainingCourseId, name])
-  @@schema("ql-dao-tao")
-}
-
-/// Bộ quy tắc, chứa nhiều điều kiện (AND logic)
-/// Một cấu hình có thể có nhiều bộ quy tắc (OR logic)
-/// Ví dụ: (CBHT mức 3 AND CCHĐ >= 1) OR (CBHT mức 4)
-/// @@allow('all', auth() != null)
-/// @@deny('read', deletedAt != null)
-/// @@allow('read', auth() != null)
-model AcademicActionRuleSet {
-  id          String                    @id() @default(cuid())
-  code        String?                   @unique()
-  active      Boolean                   @default(true)
-  description String?                   @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime                  @default(now())
-  updatedAt   DateTime                  @default(now()) @updatedAt()
-  createdBy   String?                   @default("") @db.Uuid()
-  config      AcademicActionConfig      @relation(fields: [configId], references: [id])
-  configId    String
-  conditions  AcademicActionCondition[]
-
-  @@schema("ql-dao-tao")
-}
-
-/// Điều kiện cụ thể để kích hoạt xử lý
-/// @@allow('all', auth() != null)
-/// @@deny('read', deletedAt != null)
-/// @@allow('read', auth() != null)
-model AcademicActionCondition {
-  id                String                @id() @default(cuid())
-  code              String?               @unique()
-  active            Boolean               @default(true)
-  description       String?               @db.Text()
-  deletedAt         DateTime?
-  createdAt         DateTime              @default(now())
-  updatedAt         DateTime              @default(now()) @updatedAt()
-  createdBy         String?               @default("") @db.Uuid()
-  ruleSet           AcademicActionRuleSet @relation(fields: [ruleSetId], references: [id])
-  ruleSetId         String
-  field             CriteriaField
-  operator          CriteriaOperator
-  invert            Boolean               @default(false)
-  value             Float
-  tuple             String[]              @default([])
-  yearCondition     Int?
-  isPriorityStudent Boolean?
-
-  @@schema("ql-dao-tao")
-}
-
-/// Quyết định xử lý học tập cho sinh viên
-/// @@allow('all', auth() != null)
-/// @@deny('read', deletedAt != null)
-/// @@allow('read', auth() != null)
-model StudentAcademicDecision {
-  id               String                @id() @default(cuid())
-  code             String?               @unique()
-  active           Boolean               @default(true)
-  description      String?               @db.Text()
-  deletedAt        DateTime?
-  createdAt        DateTime              @default(now())
-  updatedAt        DateTime              @default(now()) @updatedAt()
-  createdBy        String?               @default("") @db.Uuid()
-  student          Student               @relation(fields: [studentId], references: [id])
-  studentId        String
-  semester         Semester?             @relation(fields: [semesterId], references: [id])
-  semesterId       String?
-  schoolYear       SchoolYear?           @relation(fields: [schoolYearId], references: [id])
-  schoolYearId     String?
-  appliedConfig    AcademicActionConfig? @relation(fields: [appliedConfigId], references: [id])
-  appliedConfigId  String?
-  actionTaken      AcademicActionType
-  decisionDate     DateTime              @default(now())
-  validUntil       DateTime?
-  reason           String?
-  documentEvidence DocumentFile[]
-  status           DecisionStatus        @default(PENDING)
-  updatedResult    Boolean               @default(false)
-
-  @@unique([studentId, semesterId, schoolYearId, appliedConfigId])
+  @@index([userProfileId])
   @@schema("ql-dao-tao")
 }
 
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)
-model TrainingScoreSession {
-  id                   String                 @id() @default(cuid())
-  code                 String?                @unique()
-  active               Boolean                @default(true)
-  description          String?                @db.Text()
-  deletedAt            DateTime?
-  createdAt            DateTime               @default(now())
-  updatedAt            DateTime               @default(now()) @updatedAt()
-  createdBy            String?                @default("") @db.Uuid()
-  name                 String
-  time                 DateTime               @default(now())
-  semester             Semester               @relation(fields: [semesterId], references: [id])
-  semesterId           String
-  trainingObjectType   TrainingObjectType     @relation(fields: [trainingObjectTypeId], references: [id])
-  trainingObjectTypeId String
-  studentTrainingScore StudentTrainingScore[]
-
-  @@schema("ql-dao-tao")
-}
-
-/// @@allow('all', auth() != null)
-/// @@deny('read', deletedAt != null)
-/// @@allow('read', auth() != null)
-model StudentTrainingScore {
-  id                     String               @id() @default(cuid())
-  code                   String?              @unique()
-  active                 Boolean              @default(true)
-  description            String?              @db.Text()
-  deletedAt              DateTime?
-  createdAt              DateTime             @default(now())
-  updatedAt              DateTime             @default(now()) @updatedAt()
-  createdBy              String?              @default("") @db.Uuid()
-  trainingScoreSession   TrainingScoreSession @relation(fields: [trainingScoreSessionId], references: [id])
-  trainingScoreSessionId String
-  student                Student              @relation(fields: [studentId], references: [id])
-  studentId              String
-  score                  Float?
-  studentTrainingType    StudentTrainingType? @default(GOOD)
-  status                 TrainingScoreStatus  @default(PENDING)
-
-  @@unique([trainingScoreSessionId, studentId])
-  @@schema("ql-dao-tao")
-}
-
-/// @@allow('all', auth() != null)
-/// @@deny('read', deletedAt != null)
-/// @@allow('read', auth() != null)
-model SemesterTrainingScore {
-  id          String              @id() @default(cuid())
-  code        String?             @unique()
-  active      Boolean             @default(true)
-  description String?             @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime            @default(now())
-  updatedAt   DateTime            @default(now()) @updatedAt()
-  createdBy   String?             @default("") @db.Uuid()
-  semester    Semester            @relation(fields: [semesterId], references: [id])
-  semesterId  String
-  student     Student             @relation(fields: [studentId], references: [id])
-  studentId   String
-  score       Int?
-  status      TrainingScoreStatus @default(PENDING)
-
-  @@schema("ql-dao-tao")
-}
-
-/// @@allow('all', auth() != null)
-/// @@deny('read', deletedAt != null)
-/// @@allow('read', auth() != null)
-model SchoolYearTrainingScore {
-  id           String              @id() @default(cuid())
-  code         String?             @unique()
-  active       Boolean             @default(true)
-  description  String?             @db.Text()
-  deletedAt    DateTime?
-  createdAt    DateTime            @default(now())
-  updatedAt    DateTime            @default(now()) @updatedAt()
-  createdBy    String?             @default("") @db.Uuid()
-  schoolYear   SchoolYear          @relation(fields: [schoolYearId], references: [id])
-  schoolYearId String
-  student      Student             @relation(fields: [studentId], references: [id])
-  studentId    String
-  score        Int?
-  status       TrainingScoreStatus @default(PENDING)
+model LecturerHistory {
+  id             String       @id() @default(cuid())
+  code           String?      @unique()
+  active         Boolean      @default(true)
+  description    String?      @db.Text()
+  deletedAt      DateTime?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @default(now()) @updatedAt()
+  createdBy      String?      @default("") @db.Uuid()
+  from           DateTime?
+  to             DateTime?
+  lectureID      String?
+  lectureCode    String?
+  serviceDate    DateTime?
+  userProfile    UserProfile  @relation(fields: [userProfileId], references: [id])
+  userProfileId  String       @unique() @db.Uuid()
+  organization   DM_DonVi?    @relation(fields: [organizationId], references: [Id])
+  organizationId String?      @db.Uuid()
+  lecturerType   LecturerType @relation(fields: [lecturerTypeId], references: [id])
+  lecturerTypeId String
 
   @@schema("ql-dao-tao")
 }
@@ -5208,72 +5028,51 @@ model StaffPosition {
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)
-model Lecturer {
-  id                               String                        @id() @default(cuid())
-  code                             String?                       @unique()
-  active                           Boolean                       @default(true)
-  description                      String?                       @db.Text()
-  deletedAt                        DateTime?
-  createdAt                        DateTime                      @default(now())
-  updatedAt                        DateTime                      @default(now()) @updatedAt()
-  createdBy                        String?                       @default("") @db.Uuid()
-  from                             DateTime?
-  lectureID                        String?                       @unique()
-  serviceDate                      DateTime?
-  userProfile                      UserProfile                   @relation(fields: [userProfileId], references: [id])
-  userProfileId                    String                        @unique() @db.Uuid()
-  organization                     DM_DonVi                      @relation(fields: [organizationId], references: [Id])
-  organizationId                   String                        @db.Uuid()
-  lecturerType                     LecturerType                  @relation(fields: [lecturerTypeId], references: [id])
-  lecturerTypeId                   String
-  mainSubjectClasses               SubjectClass[]                @relation("MainLecturer")
-  extraSubjectClasses              SubjectClass[]                @relation("ExtraLecturer")
-  enterGradeClasses                SubjectClass[]                @relation("EnterGradeLecturer")
-  manageFixedClass                 FixedClass[]                  @relation("ManageLecturer")
-  classSchedules                   ClassSchedule[]               @relation("MainLecturer")
-  extraClassSchedules              ClassSchedule[]               @relation("ExtraLecturer")
-  researchProjects                 ResearchProject[]
-  reviewedRegistrations            StudentResearchRegistration[]
-  reviewedThesisRegistrations      StudentThesisRegistration[]
-  expertProfile                    ExpertProfile[]
-  survey                           Survey[]
-  clusterSurvey                    ClusterSurvey[]
-  examRoomsMain                    ExamList[]                    @relation("FirstSupervisor")
-  examRoomsExtra                   ExamList[]                    @relation("SecondSupervisor")
-  evaluationCriterions             EvaluationCriterion[]         @relation("EvaluationCriterionLecturer")
-  analysisCriterion                AnalysisCriterion[]
-  evaluationCouncilMember          EvaluationCouncilMember[]
-  evaluationCriterionReviews       EvaluationCriterion[]         @relation("EvaluationCriterionLecturerReview")
-  primarySupervisorThesisProject   ThesisProject[]               @relation("PrimarySupervisorToThesis")
-  secondarySupervisorThesisProject ThesisProject[]               @relation("SecondarySupervisorToThesis")
+model Staff {
+  id              String        @id() @default(cuid())
+  code            String?       @unique()
+  active          Boolean       @default(true)
+  description     String?       @db.Text()
+  deletedAt       DateTime?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @default(now()) @updatedAt()
+  createdBy       String?       @default("") @db.Uuid()
+  from            DateTime?
+  userProfile     UserProfile   @relation(fields: [userProfileId], references: [id])
+  userProfileId   String        @unique() @db.Uuid()
+  organization    DM_DonVi      @relation(fields: [organizationId], references: [Id])
+  organizationId  String        @db.Uuid()
+  staffType       StaffType     @relation(fields: [staffTypeId], references: [id])
+  staffTypeId     String
+  staffPosition   StaffPosition @relation(fields: [staffPositionId], references: [id])
+  staffPositionId String
+  fixedClass      FixedClass[]  @relation("ManageStaff")
 
-  @@index([userProfileId])
   @@schema("ql-dao-tao")
 }
 
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)
-model LecturerHistory {
-  id             String       @id() @default(cuid())
-  code           String?      @unique()
-  active         Boolean      @default(true)
-  description    String?      @db.Text()
-  deletedAt      DateTime?
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @default(now()) @updatedAt()
-  createdBy      String?      @default("") @db.Uuid()
-  from           DateTime?
-  to             DateTime?
-  lectureID      String?
-  lectureCode    String?
-  serviceDate    DateTime?
-  userProfile    UserProfile  @relation(fields: [userProfileId], references: [id])
-  userProfileId  String       @unique() @db.Uuid()
-  organization   DM_DonVi?    @relation(fields: [organizationId], references: [Id])
-  organizationId String?      @db.Uuid()
-  lecturerType   LecturerType @relation(fields: [lecturerTypeId], references: [id])
-  lecturerTypeId String
+model StaffHistory {
+  id              String        @id() @default(cuid())
+  code            String?       @unique()
+  active          Boolean       @default(true)
+  description     String?       @db.Text()
+  deletedAt       DateTime?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @default(now()) @updatedAt()
+  createdBy       String?       @default("") @db.Uuid()
+  from            DateTime?
+  to              DateTime?
+  userProfile     UserProfile   @relation(fields: [userProfileId], references: [id])
+  userProfileId   String        @unique() @db.Uuid()
+  organization    DM_DonVi      @relation(fields: [organizationId], references: [Id])
+  organizationId  String        @db.Uuid()
+  staffType       StaffType     @relation(fields: [staffTypeId], references: [id])
+  staffTypeId     String
+  staffPosition   StaffPosition @relation(fields: [staffPositionId], references: [id])
+  staffPositionId String
 
   @@schema("ql-dao-tao")
 }
@@ -5841,361 +5640,103 @@ model SupervisorPaymentRecord {
   @@schema("ql-dao-tao")
 }
 
-/// Đợt đánh giá CTDT
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)
-model EvaluationPeriod {
-  id              String                 @id() @default(cuid())
-  code            String?                @unique()
-  active          Boolean                @default(true)
-  description     String?                @db.Text()
-  deletedAt       DateTime?
-  createdAt       DateTime               @default(now())
-  updatedAt       DateTime               @default(now()) @updatedAt()
-  createdBy       String?                @default("") @db.Uuid()
-  name            String
-  startDate       DateTime               @default(now())
-  endDate         DateTime?
-  status          EvaluationPeriodStatus @default(COUNCIL_ESTABLISHED)
-  schoolYear      SchoolYear?            @relation(fields: [schoolYearId], references: [id])
-  schoolYearId    String?
-  standards       StandardPeriod[]
-  council         EvaluationCouncil?
-  documentFiles   DocumentFile[]
-  overviewProblem String?
-  overviewGeneral String?
-  overviewResults String?
-  conclude        String?
-
-  @@schema("khao-thi")
-}
-
-/// @@allow('all', auth() != null)
-/// @@deny('read', deletedAt != null)
-/// @@allow('read', auth() != null)
-model EvaluationStandardSet {
-  id          String              @id() @default(cuid())
-  code        String?             @unique()
-  active      Boolean             @default(true)
-  description String?             @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime            @default(now())
-  updatedAt   DateTime            @default(now()) @updatedAt()
-  createdBy   String?             @default("") @db.Uuid()
-  name        String              @unique()
-  objectType  StandardCatalogType
-  standards   StandardCatalog[]
-
-  @@schema("khao-thi")
-}
-
-/// Danh mục tiêu chuẩn
-/// @@allow('all', auth() != null)
-/// @@deny('read', deletedAt != null)
-/// @@allow('read', auth() != null)
-model StandardCatalog {
-  id            String                 @id() @default(cuid())
-  code          String?                @unique()
-  active        Boolean                @default(true)
-  description   String?                @db.Text()
-  deletedAt     DateTime?
-  createdAt     DateTime               @default(now())
-  updatedAt     DateTime               @default(now()) @updatedAt()
-  createdBy     String?                @default("") @db.Uuid()
-  order         Int
-  name          String
-  criteria      CriterionCatalog[]
-  standardSet   EvaluationStandardSet? @relation(fields: [standardSetId], references: [id])
-  standardSetId String?
-  objectType    StandardCatalogType
-
-  @@schema("khao-thi")
-}
-
-/// Danh mục tiêu chí
-/// @@allow('all', auth() != null)
-/// @@deny('read', deletedAt != null)
-/// @@allow('read', auth() != null)
-model CriterionCatalog {
-  id                          String                        @id() @default(cuid())
-  code                        String?                       @unique()
-  active                      Boolean                       @default(true)
-  description                 String?                       @db.Text()
-  deletedAt                   DateTime?
-  createdAt                   DateTime                      @default(now())
-  updatedAt                   DateTime                      @default(now()) @updatedAt()
-  createdBy                   String?                       @default("") @db.Uuid()
-  standard                    StandardCatalog               @relation(fields: [standardId], references: [id])
-  standardId                  String
-  order                       Int
-  name                        String
-  requirementCriterionCatalog RequirementCriterionCatalog[]
-
-  @@unique([standardId, name])
-  @@schema("khao-thi")
-}
-
-/// Nhóm minh chứng - require code
-/// @@allow('all', auth() != null)
-/// @@deny('read', deletedAt != null)
-/// @@allow('read', auth() != null)
-model EvidenceCategory {
-  id          String     @id() @default(cuid())
-  code        String?    @unique()
-  active      Boolean    @default(true)
-  description String?    @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @default(now()) @updatedAt()
-  createdBy   String?    @default("") @db.Uuid()
-  name        String
-  evidences   Evidence[]
-
-  @@schema("khao-thi")
-}
-
-/// Danh mục minh chứng
-/// @@allow('all', auth() != null)
-/// @@deny('read', deletedAt != null)
-/// @@allow('read', auth() != null)
-model Evidence {
-  id                   String                 @id() @default(cuid())
-  code                 String?                @unique()
-  active               Boolean                @default(true)
-  description          String?                @db.Text()
-  deletedAt            DateTime?
-  createdAt            DateTime               @default(now())
-  updatedAt            DateTime               @default(now()) @updatedAt()
-  createdBy            String?                @default("") @db.Uuid()
-  category             EvidenceCategory       @relation(fields: [categoryId], references: [id])
-  categoryId           String
-  name                 String
-  information          String
-  issuer               String
-  evidenceFile         EvidenceFile[]
-  analysisFormEvidence AnalysisFormEvidence[]
-
-  @@schema("khao-thi")
-}
-
-/// @@allow('all', auth() != null)
-/// @@deny('read', deletedAt != null)
-/// @@allow('read', auth() != null)
-model EvaluationCriterionComment {
-  id                     String                @id() @default(cuid())
-  code                   String?               @unique()
-  active                 Boolean               @default(true)
-  description            String?               @db.Text()
-  deletedAt              DateTime?
-  createdAt              DateTime              @default(now())
-  updatedAt              DateTime              @default(now()) @updatedAt()
-  createdBy              String?               @default("") @db.Uuid()
-  reviewer               UserProfile           @relation(fields: [reviewerId], references: [id])
-  reviewerId             String                @db.Uuid()
-  requirementCriterion   RequirementCriterion? @relation(fields: [requirementCriterionId], references: [id], onDelete: Cascade)
-  requirementCriterionId String?
-  content                String?               @db.Text()
-  analysisCriterion      AnalysisCriterion?    @relation(fields: [analysisCriterionId], references: [id])
-  analysisCriterionId    String?
-  evaluationCriterion    EvaluationCriterion?  @relation(fields: [evaluationCriterionId], references: [id])
-  evaluationCriterionId  String?
-
-  @@schema("khao-thi")
-}
-
-/// Danh mục yêu cầu
-/// @@allow('all', auth() != null)
-/// @@deny('read', deletedAt != null)
-/// @@allow('read', auth() != null)
-model RequirementCriterionCatalog {
-  id                 String           @id() @default(cuid())
-  code               String?          @unique()
-  active             Boolean          @default(true)
-  description        String?          @db.Text()
-  deletedAt          DateTime?
-  createdAt          DateTime         @default(now())
-  updatedAt          DateTime         @default(now()) @updatedAt()
-  createdBy          String?          @default("") @db.Uuid()
-  criterionCatalog   CriterionCatalog @relation(fields: [criterionCatalogId], references: [id])
-  criterionCatalogId String
-  order              Int
-  name               String
-  questions          String[]
-
-  @@unique([criterionCatalogId, name])
-  @@schema("khao-thi")
-}
-
-/// Tiêu chuẩn của đợt (Bản sao/áp dụng từ StandardCatalog)
-/// @@allow('all', auth() != null)
-/// @@deny('read', deletedAt != null)
-/// @@allow('read', auth() != null)
-model StandardPeriod {
-  id          String            @id() @default(cuid())
-  code        String?           @unique()
-  active      Boolean           @default(true)
-  description String?           @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime          @default(now())
-  updatedAt   DateTime          @default(now()) @updatedAt()
-  createdBy   String?           @default("") @db.Uuid()
-  period      EvaluationPeriod  @relation(fields: [periodId], references: [id], onDelete: Cascade)
-  periodId    String
-  name        String
-  order       Int
-  /// Mở đầu
-  opening     String            @default("")
-  /// Kết luận
-  conclusion  String            @default("")
-  criteria    CriterionPeriod[]
-
-  @@unique([periodId, name])
-  @@schema("khao-thi")
-}
-
-/// Tiêu chí của đợt (Bản sao/áp dụng từ StandardCatalog)
-/// @@allow('all', auth() != null)
-/// @@deny('read', deletedAt != null)
-/// @@allow('read', auth() != null)
-model CriterionPeriod {
-  id                   String               @id() @default(cuid())
-  code                 String?              @unique()
-  active               Boolean              @default(true)
-  description          String?              @db.Text()
-  deletedAt            DateTime?
-  createdAt            DateTime             @default(now())
-  updatedAt            DateTime             @default(now()) @updatedAt()
-  createdBy            String?              @default("") @db.Uuid()
-  name                 String
-  order                Int
-  evaluationStandard   StandardPeriod       @relation(fields: [evaluationStandardId], references: [id])
-  evaluationStandardId String
-  analysisCriterions   AnalysisCriterion?
-  evaluationCriterion  EvaluationCriterion?
-
-  @@schema("khao-thi")
-}
-
-/// Phiếu phân tích của đợt (Bản sao/áp dụng từ CriterionCatalog)
-/// @@allow('all', auth() != null)
-/// @@deny('read', deletedAt != null)
-/// @@allow('read', auth() != null)
-model AnalysisCriterion {
-  id                          String                       @id() @default(cuid())
-  code                        String?                      @unique()
-  active                      Boolean                      @default(true)
-  description                 String?                      @db.Text()
-  deletedAt                   DateTime?
-  createdAt                   DateTime                     @default(now())
-  updatedAt                   DateTime                     @default(now()) @updatedAt()
-  createdBy                   String?                      @default("") @db.Uuid()
-  criterionPeriod             CriterionPeriod              @relation(fields: [criterionPeriodId], references: [id])
-  criterionPeriodId           String                       @unique()
-  lecturer                    Lecturer?                    @relation(fields: [lecturerId], references: [id])
-  lecturerId                  String?
-  deadline                    DateTime?
-  status                      EvaluationCriterionStatus    @default(PENDING)
-  /// Yêu cầu trong phiếu phân tích
-  requirementCriterions       RequirementCriterion[]
-  evaluationCriterionComments EvaluationCriterionComment[]
-
-  @@schema("khao-thi")
-}
-
-/// Phiếu đánh giá của đợt (Bản sao/áp dụng từ CriterionCatalog)
-/// @@allow('all', auth() != null)
-/// @@deny('read', deletedAt != null)
-/// @@allow('read', auth() != null)
-model EvaluationCriterion {
-  id                          String                       @id() @default(cuid())
-  code                        String?                      @unique()
-  active                      Boolean                      @default(true)
-  description                 String?                      @db.Text()
-  deletedAt                   DateTime?
-  createdAt                   DateTime                     @default(now())
-  updatedAt                   DateTime                     @default(now()) @updatedAt()
-  createdBy                   String?                      @default("") @db.Uuid()
-  criterionPeriod             CriterionPeriod              @relation(fields: [criterionPeriodId], references: [id])
-  criterionPeriodId           String                       @unique()
-  lecturer                    Lecturer?                    @relation("EvaluationCriterionLecturer", fields: [lecturerId], references: [id])
-  lecturerId                  String?
-  deadline                    DateTime?
-  status                      EvaluationStatus             @default(LOCK)
-  reviewer                    EvaluationCouncilMember?     @relation(fields: [reviewerId], references: [id], onDelete: Cascade)
-  reviewerId                  String?
-  deadlineReview              DateTime?
-  deadlineReviewExternal      DateTime?
-  lecturerReview              Lecturer[]                   @relation("EvaluationCriterionLecturerReview")
-  evaluationCriterionComments EvaluationCriterionComment[]
-  /// 1. Mô tả hiện trạng
-  currentSituation            String                       @default("")
-  /// 2. Điểm mạnh
-  strengths                   String                       @default("")
-  /// 3. Điểm tồn tại
-  weakness                    String                       @default("")
-  /// 4. Kế hoạch hành động
-  actionPlan                  String                       @default("")
-  /// 5. Tự đánh giá
-  score                       String                       @default("")
-
-  @@schema("khao-thi")
-}
-
-/// Yêu cầu trong phiếu phân tích tiêu chí
-/// @@allow('all', auth() != null)
-/// @@deny('read', deletedAt != null)
-/// @@allow('read', auth() != null)
-model RequirementCriterion {
-  id                         String                       @id() @default(cuid())
-  code                       String?                      @unique()
-  active                     Boolean                      @default(true)
-  description                String?                      @db.Text()
+model DocumentFile {
+  id                         String                          @id() @default(cuid())
+  code                       String?                         @unique()
+  active                     Boolean                         @default(true)
+  description                String?                         @db.Text()
   deletedAt                  DateTime?
-  createdAt                  DateTime                     @default(now())
-  updatedAt                  DateTime                     @default(now()) @updatedAt()
-  createdBy                  String?                      @default("") @db.Uuid()
-  analysisCriterion          AnalysisCriterion            @relation(fields: [analysisCriterionId], references: [id])
-  analysisCriterionId        String
-  order                      Int
+  createdAt                  DateTime                        @default(now())
+  updatedAt                  DateTime                        @default(now()) @updatedAt()
+  createdBy                  String?                         @default("") @db.Uuid()
   name                       String
-  questions                  String[]
-  evidences                  AnalysisFormEvidence[]
-  evidencePlaces             String                       @default("")
-  collectionMethod           String                       @default("")
-  evaluationCriterionComment EvaluationCriterionComment[]
+  path                       String
+  size                       BigInt
+  mimeType                   String?
+  archivedCertificate        ArchivedCertificate?            @relation(fields: [archivedCertificateId], references: [id])
+  archivedCertificateId      String?
+  trainingCourse             TrainingCourse?                 @relation(fields: [trainingCourseId], references: [id])
+  trainingCourseId           String?
+  archivedAward              ArchivedAward?                  @relation(fields: [archivedAwardId], references: [id])
+  archivedAwardId            String?
+  curriculum                 Curriculum?                     @relation(fields: [curriculumId], references: [id])
+  curriculumId               String?
+  curriculumVersion          CurriculumVersion?              @relation(fields: [curriculumVersionId], references: [id])
+  curriculumVersionId        String?
+  subjectVersion             SubjectVersion?                 @relation(fields: [subjectVersionId], references: [id])
+  subjectVersionId           String?
+  studentAcademicDecision    StudentAcademicDecision?        @relation(fields: [studentAcademicDecisionId], references: [id])
+  studentAcademicDecisionId  String?
+  notification               Notification?                   @relation(fields: [notificationId], references: [id])
+  notificationId             String?
+  decision                   Decision?                       @relation(fields: [decisionId], references: [id])
+  decisionId                 String?
+  defenseRecord              DefenseRecord?                  @relation(fields: [defenseRecordId], references: [id])
+  defenseRecordId            String?
+  librarySubmission          LibrarySubmission?              @relation(fields: [librarySubmissionId], references: [id])
+  librarySubmissionId        String?
+  diplomaFront               GraduationDecision?             @relation(name: "DiplomaFront", fields: [diplomaFrontId], references: [id])
+  diplomaFrontId             String?                         @unique()
+  diplomaBack                GraduationDecision?             @relation(name: "DiplomaBack", fields: [diplomaBackId], references: [id])
+  diplomaBackId              String?                         @unique()
+  diplomaVerification        DiplomaVerificationApplication? @relation(name: "DiplomaVerificationAttachments", fields: [diplomaVerificationId], references: [id])
+  diplomaVerificationId      String?                         @unique()
+  diplomaVerificationFront   DiplomaVerificationApplication? @relation(name: "DiplomaVerificationFront", fields: [diplomaVerificationFrontId], references: [id])
+  diplomaVerificationFrontId String?                         @unique()
+  diplomaVerificationBack    DiplomaVerificationApplication? @relation(name: "DiplomaVerificationBack", fields: [diplomaVerificationBackId], references: [id])
+  diplomaVerificationBackId  String?                         @unique()
+  trainingField              TrainingField?                  @relation(fields: [trainingFieldId], references: [id])
+  trainingFieldId            String?
+  studentScoreConvert        StudentScoreConvert?            @relation(fields: [studentScoreConvertId], references: [id])
+  studentScoreConvertId      String?
+  scoreLinkSheet             ScoreLinkSheet?                 @relation(fields: [scoreLinkSheetId], references: [id])
+  scoreLinkSheetId           String?
+  examFramework              ExamFramework?                  @relation(fields: [examFrameworkId], references: [id])
+  examFrameworkId            String?
+  note                       Note?                           @relation(fields: [noteId], references: [id])
+  noteId                     String?
+  evaluationPeriod           EvaluationPeriod?               @relation(fields: [evaluationPeriodId], references: [id])
+  evaluationPeriodId         String?
+  knowledgeBlock             KnowledgeBlock?                 @relation(fields: [knowledgeBlockId], references: [id])
+  knowledgeBlockId           String?
 
-  @@schema("khao-thi")
+  @@schema("ql-danh-muc")
 }
 
-/// Minh chứng phiếu phân tích
+/// Cấu hình các hành động xử lý học tập (Lưu ban, Đình chỉ, Thôi học)
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)
-model AnalysisFormEvidence {
-  id                     String               @id() @default(cuid())
-  code                   String?              @unique()
-  active                 Boolean              @default(true)
-  description            String?              @db.Text()
-  deletedAt              DateTime?
-  createdAt              DateTime             @default(now())
-  updatedAt              DateTime             @default(now()) @updatedAt()
-  createdBy              String?              @default("") @db.Uuid()
-  requirementCriterion   RequirementCriterion @relation(fields: [requirementCriterionId], references: [id])
-  requirementCriterionId String
-  evidence               Evidence             @relation(fields: [evidenceId], references: [id], onDelete: Cascade)
-  evidenceId             String
-  order                  Int
+model AcademicActionConfig {
+  id               String                    @id() @default(cuid())
+  code             String?                   @unique()
+  active           Boolean                   @default(true)
+  description      String?                   @db.Text()
+  deletedAt        DateTime?
+  createdAt        DateTime                  @default(now())
+  updatedAt        DateTime                  @default(now()) @updatedAt()
+  createdBy        String?                   @default("") @db.Uuid()
+  name             String
+  actionType       AcademicActionType
+  trainingCourse   TrainingCourse            @relation(fields: [trainingCourseId], references: [id])
+  trainingCourseId String
+  ruleSets         AcademicActionRuleSet[]
+  decisions        StudentAcademicDecision[]
 
-  @@unique([requirementCriterionId, evidenceId])
-  @@schema("khao-thi")
+  @@unique([trainingCourseId, name])
+  @@schema("ql-dao-tao")
 }
 
-/// Hội đồng đánh giá
+/// Bộ quy tắc, chứa nhiều điều kiện (AND logic)
+/// Một cấu hình có thể có nhiều bộ quy tắc (OR logic)
+/// Ví dụ: (CBHT mức 3 AND CCHĐ >= 1) OR (CBHT mức 4)
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)
-model EvaluationCouncil {
+model AcademicActionRuleSet {
   id          String                    @id() @default(cuid())
   code        String?                   @unique()
   active      Boolean                   @default(true)
@@ -6204,716 +5745,91 @@ model EvaluationCouncil {
   createdAt   DateTime                  @default(now())
   updatedAt   DateTime                  @default(now()) @updatedAt()
   createdBy   String?                   @default("") @db.Uuid()
-  period      EvaluationPeriod          @relation(fields: [periodId], references: [id], onDelete: Cascade)
-  periodId    String                    @unique()
-  name        String
-  members     EvaluationCouncilMember[]
+  config      AcademicActionConfig      @relation(fields: [configId], references: [id])
+  configId    String
+  conditions  AcademicActionCondition[]
 
-  @@schema("khao-thi")
+  @@schema("ql-dao-tao")
 }
 
-/// Thành viên hội đồng đánh giá
+/// Điều kiện cụ thể để kích hoạt xử lý
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)
-model EvaluationCouncilMember {
-  id                   String                @id() @default(cuid())
-  code                 String?               @unique()
-  active               Boolean               @default(true)
-  description          String?               @db.Text()
+model AcademicActionCondition {
+  id                String                @id() @default(cuid())
+  code              String?               @unique()
+  active            Boolean               @default(true)
+  description       String?               @db.Text()
+  deletedAt         DateTime?
+  createdAt         DateTime              @default(now())
+  updatedAt         DateTime              @default(now()) @updatedAt()
+  createdBy         String?               @default("") @db.Uuid()
+  ruleSet           AcademicActionRuleSet @relation(fields: [ruleSetId], references: [id])
+  ruleSetId         String
+  field             CriteriaField
+  operator          CriteriaOperator
+  invert            Boolean               @default(false)
+  value             Float
+  tuple             String[]              @default([])
+  yearCondition     Int?
+  isPriorityStudent Boolean?
+
+  @@schema("ql-dao-tao")
+}
+
+/// Quyết định xử lý học tập cho sinh viên
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model StudentAcademicDecision {
+  id               String                @id() @default(cuid())
+  code             String?               @unique()
+  active           Boolean               @default(true)
+  description      String?               @db.Text()
+  deletedAt        DateTime?
+  createdAt        DateTime              @default(now())
+  updatedAt        DateTime              @default(now()) @updatedAt()
+  createdBy        String?               @default("") @db.Uuid()
+  student          Student               @relation(fields: [studentId], references: [id])
+  studentId        String
+  semester         Semester?             @relation(fields: [semesterId], references: [id])
+  semesterId       String?
+  schoolYear       SchoolYear?           @relation(fields: [schoolYearId], references: [id])
+  schoolYearId     String?
+  appliedConfig    AcademicActionConfig? @relation(fields: [appliedConfigId], references: [id])
+  appliedConfigId  String?
+  actionTaken      AcademicActionType
+  decisionDate     DateTime              @default(now())
+  validUntil       DateTime?
+  reason           String?
+  documentEvidence DocumentFile[]
+  status           DecisionStatus        @default(PENDING)
+  updatedResult    Boolean               @default(false)
+
+  @@unique([studentId, semesterId, schoolYearId, appliedConfigId])
+  @@schema("ql-dao-tao")
+}
+
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model TrainingScoreSession {
+  id                   String                 @id() @default(cuid())
+  code                 String?                @unique()
+  active               Boolean                @default(true)
+  description          String?                @db.Text()
   deletedAt            DateTime?
-  createdAt            DateTime              @default(now())
-  updatedAt            DateTime              @default(now()) @updatedAt()
-  createdBy            String?               @default("") @db.Uuid()
-  evaluationCouncil    EvaluationCouncil     @relation(fields: [evaluationCouncilId], references: [id], onDelete: Cascade)
-  evaluationCouncilId  String
-  lecturer             Lecturer              @relation(fields: [lecturerId], references: [id])
-  lecturerId           String
-  groupName            String?
-  role                 EvaluationMemberRole?
-  evaluationCriterions EvaluationCriterion[]
-
-  @@schema("khao-thi")
-}
-
-/// @@allow('all', auth() != null)
-/// @@deny('read', deletedAt != null)
-/// @@allow('read', auth() != null)
-model EvidenceFile {
-  id            String       @id() @default(cuid())
-  code          String?      @unique()
-  active        Boolean      @default(true)
-  description   String?      @db.Text()
-  deletedAt     DateTime?
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @default(now()) @updatedAt()
-  createdBy     String?      @default("") @db.Uuid()
-  name          String
-  path          String
-  mimeType      String
-  size          BigInt
-  evidence      Evidence     @relation(fields: [evidenceId], references: [id])
-  evidenceId    String
-  userProfile   UserProfile? @relation(fields: [userProfileId], references: [id])
-  userProfileId String?      @db.Uuid()
-
-  @@schema("khao-thi")
-}
-
-/// @@allow('all', auth() != null)
-/// @@deny('read', deletedAt != null)
-/// @@allow('read', auth() != null)
-model SurveyObjectType {
-  id                   String              @id() @default(cuid())
-  code                 String?             @unique()
-  active               Boolean             @default(true)
-  description          String?             @db.Text()
-  deletedAt            DateTime?
-  createdAt            DateTime            @default(now())
-  updatedAt            DateTime            @default(now()) @updatedAt()
-  createdBy            String?             @default("") @db.Uuid()
+  createdAt            DateTime               @default(now())
+  updatedAt            DateTime               @default(now()) @updatedAt()
+  createdBy            String?                @default("") @db.Uuid()
   name                 String
-  survey               Survey[]
-  type                 SurveyObject[]
-  organizations        DM_DonVi[]
-  trainingFields       TrainingField[]
-  trainingMajors       TrainingMajor[]
-  trainingCourses      TrainingCourse[]
-  fixedClasses         FixedClass[]
-  subjectClasses       SubjectClass[]
-  surveySessions       SurveySession[]
-  clusterSurvey        ClusterSurvey[]
-  trainingObjectType   TrainingObjectType? @relation(fields: [trainingObjectTypeId], references: [id])
-  trainingObjectTypeId String?
-
-  @@schema("khao-thi")
-}
-
-/// @@allow('all', auth() != null)
-/// @@deny('read', deletedAt != null)
-/// @@allow('read', auth() != null)
-model SurveyTopic {
-  id                  String                @id() @default(cuid())
-  code                String?               @unique()
-  active              Boolean               @default(true)
-  description         String?               @db.Text()
-  deletedAt           DateTime?
-  createdAt           DateTime              @default(now())
-  updatedAt           DateTime              @default(now()) @updatedAt()
-  createdBy           String?               @default("") @db.Uuid()
-  name                String
-  clusterSurvey       ClusterSurvey[]
-  survey              Survey[]
-  surveyQuestionGroup SurveyQuestionGroup[]
-  type                SurveyType?
-
-  @@schema("khao-thi")
-}
-
-/// @@allow('all', auth() != null)
-/// @@deny('read', deletedAt != null)
-/// @@allow('read', auth() != null)
-model SurveyQuestionGroup {
-  id             String           @id() @default(cuid())
-  code           String?          @unique()
-  active         Boolean          @default(true)
-  description    String?          @db.Text()
-  deletedAt      DateTime?
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @default(now()) @updatedAt()
-  createdBy      String?          @default("") @db.Uuid()
-  name           String
-  surveyQuestion SurveyQuestion[]
-  surveyTopic    SurveyTopic[]
-
-  @@schema("khao-thi")
-}
-
-/// Khảo sát cụm
-/// @@allow('all', auth() != null)
-/// @@deny('read', deletedAt != null)
-/// @@allow('read', auth() != null)
-model ClusterSurvey {
-  id               String             @id() @default(cuid())
-  code             String?            @unique()
-  active           Boolean            @default(true)
-  description      String?            @db.Text()
-  deletedAt        DateTime?
-  createdAt        DateTime           @default(now())
-  updatedAt        DateTime           @default(now()) @updatedAt()
-  createdBy        String?            @default("") @db.Uuid()
-  name             String
-  startDate        DateTime
-  endDate          DateTime?
-  isPublic         Boolean            @default(false)
-  anonymous        Boolean            @default(true)
-  surveyTopic      SurveyTopic        @relation(fields: [surveyTopicId], references: [id])
-  surveyTopicId    String
-  surveyObjectType SurveyObjectType[]
-  lecturers        Lecturer[]
-  surveyChoice     SurveyChoice[]
-  surveyQuestion   SurveyQuestion[]
-  surveys          Survey[]
-
-  @@schema("khao-thi")
-}
-
-/// @@allow('all', auth() != null)
-/// @@deny('read', deletedAt != null)
-/// @@allow('read', auth() != null)
-model Survey {
-  id                   String              @id() @default(cuid())
-  code                 String?             @unique()
-  active               Boolean             @default(true)
-  description          String?             @db.Text()
-  deletedAt            DateTime?
-  createdAt            DateTime            @default(now())
-  updatedAt            DateTime            @default(now()) @updatedAt()
-  createdBy            String?             @default("") @db.Uuid()
-  name                 String
-  startDate            DateTime
-  endDate              DateTime?
-  isPublic             Boolean             @default(false)
-  anonymous            Boolean             @default(true)
-  surveyObjectType     SurveyObjectType[]
-  lecture              Lecturer?           @relation(fields: [lectureId], references: [id])
-  lectureId            String?
-  subjectClass         SubjectClass?       @relation(fields: [subjectClassId], references: [id])
-  subjectClassId       String?
-  semester             Semester?           @relation(fields: [semesterId], references: [id])
-  semesterId           String?
-  surveyTopic          SurveyTopic         @relation(fields: [surveyTopicId], references: [id])
-  surveyTopicId        String
-  trainingObjectType   TrainingObjectType? @relation(fields: [trainingObjectTypeId], references: [id])
-  trainingObjectTypeId String?
-  surveyChoice         SurveyChoice[]
-  surveyQuestion       SurveyQuestion[]
-  surveySessions       SurveySession[]
-  clusterSurvey        ClusterSurvey?      @relation(fields: [clusterSurveyId], references: [id])
-  clusterSurveyId      String?
-
-  @@schema("khao-thi")
-}
-
-/// @@allow('all', auth() != null)
-/// @@deny('read', deletedAt != null)
-/// @@allow('read', auth() != null)
-model SurveyQuestion {
-  id                    String               @id() @default(cuid())
-  code                  String?              @unique()
-  active                Boolean              @default(true)
-  description           String?              @db.Text()
-  deletedAt             DateTime?
-  createdAt             DateTime             @default(now())
-  updatedAt             DateTime             @default(now()) @updatedAt()
-  createdBy             String?              @default("") @db.Uuid()
-  name                  String
-  type                  SurveyQuestionType
-  surveyQuestionGroup   SurveyQuestionGroup? @relation(fields: [surveyQuestionGroupId], references: [id])
-  surveyQuestionGroupId String?
-  survey                Survey[]
-  clusterSurvey         ClusterSurvey[]
-  surveyResponses       SurveyResponse[]
-  specificChoice        SpecificChoice[]
-
-  @@schema("khao-thi")
-}
-
-/// @@allow('all', auth() != null)
-/// @@deny('read', deletedAt != null)
-/// @@allow('read', auth() != null)
-model SpecificChoice {
-  id               String         @id() @default(cuid())
-  code             String?        @unique()
-  active           Boolean        @default(true)
-  description      String?        @db.Text()
-  deletedAt        DateTime?
-  createdAt        DateTime       @default(now())
-  updatedAt        DateTime       @default(now()) @updatedAt()
-  createdBy        String?        @default("") @db.Uuid()
-  answer           String
-  surveyQuestion   SurveyQuestion @relation(fields: [surveyQuestionId], references: [id])
-  surveyQuestionId String
-
-  @@schema("khao-thi")
-}
-
-/// Lựa chọn của câu hỏi khảo sát
-/// @@allow('all', auth() != null)
-/// @@deny('read', deletedAt != null)
-/// @@allow('read', auth() != null)
-model SurveyChoice {
-  id                 String           @id() @default(cuid())
-  code               String?          @unique()
-  active             Boolean          @default(true)
-  description        String?          @db.Text()
-  deletedAt          DateTime?
-  createdAt          DateTime         @default(now())
-  updatedAt          DateTime         @default(now()) @updatedAt()
-  createdBy          String?          @default("") @db.Uuid()
-  answer             String
-  requireExplanation Boolean
-  clusterSurvey      ClusterSurvey?   @relation(fields: [clusterSurveyId], references: [id])
-  clusterSurveyId    String?
-  survey             Survey[]
-  surveyResponses    SurveyResponse[]
-
-  @@schema("khao-thi")
-}
-
-/// Bảng lưu phiên khảo sát
-/// @@allow('all', auth() != null)
-/// @@deny('read', deletedAt != null)
-/// @@allow('read', auth() != null)
-model SurveySession {
-  id                 String            @id() @default(cuid())
-  code               String?           @unique()
-  active             Boolean           @default(true)
-  description        String?           @db.Text()
-  deletedAt          DateTime?
-  createdAt          DateTime          @default(now())
-  updatedAt          DateTime          @default(now()) @updatedAt()
-  createdBy          String?           @default("") @db.Uuid()
-  survey             Survey            @relation(fields: [surveyId], references: [id])
-  surveyId           String
-  profile            UserProfile?      @relation(fields: [profileId], references: [id])
-  profileId          String?           @db.Uuid()
-  student            Student?          @relation(fields: [studentId], references: [id])
-  studentId          String?
-  startedAt          DateTime          @default(now())
-  completedAt        DateTime?
-  isCompleted        Boolean           @default(false)
-  surveyObjectType   SurveyObjectType? @relation(fields: [surveyObjectTypeId], references: [id])
-  surveyObjectTypeId String?
-  responses          SurveyResponse[]
-
-  @@unique([surveyId, studentId])
-  @@schema("khao-thi")
-}
-
-/// Bảng lưu câu trả lời cụ thể của học viên cho từng câu hỏi
-/// @@allow('all', auth() != null)
-/// @@deny('read', deletedAt != null)
-/// @@allow('read', auth() != null)
-model SurveyResponse {
-  id               String         @id() @default(cuid())
-  code             String?        @unique()
-  active           Boolean        @default(true)
-  description      String?        @db.Text()
-  deletedAt        DateTime?
-  createdAt        DateTime       @default(now())
-  updatedAt        DateTime       @default(now()) @updatedAt()
-  createdBy        String?        @default("") @db.Uuid()
-  surveySession    SurveySession  @relation(fields: [surveySessionId], references: [id])
-  surveySessionId  String
-  surveyQuestion   SurveyQuestion @relation(fields: [surveyQuestionId], references: [id])
-  surveyQuestionId String
-  answerText       String?
-  explanation      String?
-  surveyChoice     SurveyChoice?  @relation(fields: [surveyChoiceId], references: [id])
-  surveyChoiceId   String?
-  answeredAt       DateTime       @default(now())
-
-  @@unique([surveySessionId, surveyQuestionId])
-  @@schema("khao-thi")
-}
-
-/// Phiên bản ngân hàng câu hỏi
-/// @@allow('all', auth() != null)
-/// @@deny('read', deletedAt != null)
-/// @@allow('read', auth() != null)
-model QuestionBank {
-  id               String         @id() @default(cuid())
-  code             String?        @unique()
-  active           Boolean        @default(true)
-  description      String?        @db.Text()
-  deletedAt        DateTime?
-  createdAt        DateTime       @default(now())
-  updatedAt        DateTime       @default(now()) @updatedAt()
-  createdBy        String?        @default("") @db.Uuid()
-  name             String
-  subjectVersion   SubjectVersion @relation(fields: [subjectVersionId], references: [id])
-  subjectVersionId String
-  questions        Question[]
-
-  @@unique([subjectVersionId, name])
-  @@schema("khao-thi")
-}
-
-/// Câu hỏi
-/// @@allow('all', auth() != null)
-/// @@deny('read', deletedAt != null)
-/// @@allow('read', auth() != null)
-model Question {
-  id                    String                 @id() @default(cuid())
-  code                  String?                @unique()
-  active                Boolean                @default(true)
-  description           String?                @db.Text()
-  deletedAt             DateTime?
-  createdAt             DateTime               @default(now())
-  updatedAt             DateTime               @default(now()) @updatedAt()
-  createdBy             String?                @default("") @db.Uuid()
-  content               String
-  type                  QuestionType           @default(ESSAY)
-  point                 Float                  @default(1)
-  explanation           String?
-  isAutoGraded          Boolean                @default(false)
-  difficult             Difficult
-  multipleChoiceOptions MultipleChoiceOption[]
-  fillInBlankSlots      FillInBlankSlot[]
-  orderingItems         OrderingItem[]
-  questionBank          QuestionBank           @relation(fields: [questionBankId], references: [id])
-  questionBankId        String
-  knowledgeBlock        KnowledgeBlock?        @relation(fields: [knowledgeBlockId], references: [id])
-  knowledgeBlockId      String?
-  sessionQuestions      ExamBankQuestion[]
-
-  @@schema("khao-thi")
-}
-
-/// Lựa chọn cho câu hỏi trắc nghiệm (một hoặc nhiều đáp án)
-/// @@allow('all', auth() != null)
-/// @@deny('read', deletedAt != null)
-/// @@allow('read', auth() != null)
-model MultipleChoiceOption {
-  id          String    @id() @default(cuid())
-  code        String?   @unique()
-  active      Boolean   @default(true)
-  description String?   @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @default(now()) @updatedAt()
-  createdBy   String?   @default("") @db.Uuid()
-  questionId  String
-  question    Question  @relation(fields: [questionId], references: [id], onDelete: Cascade)
-  content     String
-  isCorrect   Boolean   @default(false)
-  order       Int
-
-  @@schema("khao-thi")
-}
-
-/// Chỗ trống cần điền cho câu hỏi điền khuyết
-/// @@allow('all', auth() != null)
-/// @@deny('read', deletedAt != null)
-/// @@allow('read', auth() != null)
-model FillInBlankSlot {
-  id            String    @id() @default(cuid())
-  code          String?   @unique()
-  active        Boolean   @default(true)
-  description   String?   @db.Text()
-  deletedAt     DateTime?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @default(now()) @updatedAt()
-  createdBy     String?   @default("") @db.Uuid()
-  questionId    String
-  question      Question  @relation(fields: [questionId], references: [id], onDelete: Cascade)
-  order         Int
-  correctAnswer String
-
-  @@unique([questionId, order])
-  @@schema("khao-thi")
-}
-
-/// Mục cần sắp xếp cho câu hỏi sắp xếp thứ tự
-/// @@allow('all', auth() != null)
-/// @@deny('read', deletedAt != null)
-/// @@allow('read', auth() != null)
-model OrderingItem {
-  id           String    @id() @default(cuid())
-  code         String?   @unique()
-  active       Boolean   @default(true)
-  description  String?   @db.Text()
-  deletedAt    DateTime?
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @default(now()) @updatedAt()
-  createdBy    String?   @default("") @db.Uuid()
-  questionId   String
-  question     Question  @relation(fields: [questionId], references: [id], onDelete: Cascade)
-  content      String
-  correctOrder Int
-
-  @@unique([questionId, correctOrder])
-  @@schema("khao-thi")
-}
-
-/// Kỳ thi
-/// @@allow('all', auth() != null)
-/// @@deny('read', deletedAt != null)
-/// @@allow('read', auth() != null)
-model Exam {
-  id               String         @id() @default(cuid())
-  code             String?        @unique()
-  active           Boolean        @default(true)
-  description      String?        @db.Text()
-  deletedAt        DateTime?
-  createdAt        DateTime       @default(now())
-  updatedAt        DateTime       @default(now()) @updatedAt()
-  createdBy        String?        @default("") @db.Uuid()
-  /// khoá DS thi
-  lockExamSessions Boolean        @default(false)
-  /// thời gian thi
-  duration         Int?
-  session          Int            @default(1)
-  subjectVersionId String
-  subjectVersion   SubjectVersion @relation(fields: [subjectVersionId], references: [id])
-  semester         Semester       @relation(fields: [semesterId], references: [id])
-  semesterId       String
-  /// Lớp môn học
-  subjectClass     SubjectClass[]
-  examBank         ExamBank[]
-  examRooms        ExamRoom[]
-
-  @@schema("khao-thi")
-}
-
-/// @@allow('all', auth() != null)
-/// @@deny('read', deletedAt != null)
-/// @@allow('read', auth() != null)
-model ExamRoom {
-  id          String     @id() @default(cuid())
-  code        String?    @unique()
-  active      Boolean    @default(true)
-  description String?    @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @default(now()) @updatedAt()
-  createdBy   String?    @default("") @db.Uuid()
-  exam        Exam       @relation(fields: [examId], references: [id])
-  examId      String
-  room        Room?      @relation(fields: [roomId], references: [id])
-  roomId      String?
-  capacity    Int        @default(0)
-  examList    ExamList[]
-
-  @@unique([examId, roomId])
-  @@schema("khao-thi")
-}
-
-/// Danh sách thi trong phòng thi
-/// @@allow('all', auth() != null)
-/// @@deny('read', deletedAt != null)
-/// @@allow('read', auth() != null)
-model ExamList {
-  id                 String      @id() @default(cuid())
-  code               String?     @unique()
-  active             Boolean     @default(true)
-  description        String?     @db.Text()
-  deletedAt          DateTime?
-  createdAt          DateTime    @default(now())
-  updatedAt          DateTime    @default(now()) @updatedAt()
-  createdBy          String?     @default("") @db.Uuid()
-  examRoom           ExamRoom?   @relation(fields: [examRoomId], references: [id])
-  examRoomId         String?
-  firstSupervisor    Lecturer?   @relation("FirstSupervisor", fields: [firstSupervisorId], references: [id])
-  firstSupervisorId  String?
-  secondSupervisor   Lecturer?   @relation("SecondSupervisor", fields: [secondSupervisorId], references: [id])
-  secondSupervisorId String?
-  /// Đã đánh phách
-  createdExamCode    Boolean     @default(false)
-  lockExamCode       Boolean     @default(false)
-  start              Int?
-  end                Int?
-  examPapers         ExamPaper[]
-
-  @@schema("khao-thi")
-}
-
-/// Đề thi
-/// @@allow('all', auth() != null)
-/// @@deny('read', deletedAt != null)
-/// @@allow('read', auth() != null)
-model ExamBank {
-  id             String             @id() @default(cuid())
-  code           String?            @unique()
-  active         Boolean            @default(true)
-  description    String?            @db.Text()
-  deletedAt      DateTime?
-  createdAt      DateTime           @default(now())
-  updatedAt      DateTime           @default(now()) @updatedAt()
-  createdBy      String?            @default("") @db.Uuid()
-  exam           Exam               @relation(fields: [examId], references: [id])
-  examId         String
-  examTime       Int?
-  examCode       String
-  subjectClass   SubjectClass?      @relation(fields: [subjectClassId], references: [id])
-  subjectClassId String?
-  explain        String?
-  examDay        DateTime?
-  examType       ExamType?
-  questions      ExamBankQuestion[]
-  examMatrix     ExamMatrix?        @relation(fields: [examMatrixId], references: [id])
-  examMatrixId   String?
-  isLock         Boolean?           @default(false)
-  /// được sử dụng tài liệu hay không
-  isNote         Boolean?           @default(false)
-  isGroup        Boolean?           @default(true)
-
-  @@unique([examId, examCode])
-  @@schema("khao-thi")
-}
-
-/// Bảng nối, xác định câu hỏi nào thuộc về đề thi nào
-/// @@allow('all', auth() != null)
-/// @@deny('read', deletedAt != null)
-/// @@allow('read', auth() != null)
-model ExamBankQuestion {
-  id          String    @id() @default(cuid())
-  code        String?   @unique()
-  active      Boolean   @default(true)
-  description String?   @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @default(now()) @updatedAt()
-  createdBy   String?   @default("") @db.Uuid()
-  examBankId  String
-  examBank    ExamBank  @relation(fields: [examBankId], references: [id], onDelete: Cascade)
-  questionId  String
-  question    Question  @relation(fields: [questionId], references: [id])
-  order       Int?
-
-  @@unique([examBankId, questionId])
-  @@unique([examBankId, order])
-  @@schema("khao-thi")
-}
-
-/// Bài thi
-/// @@allow('all', auth() != null)
-/// @@deny('read', deletedAt != null)
-/// @@allow('read', auth() != null)
-model ExamPaper {
-  id                    String              @id() @default(cuid())
-  code                  String?             @unique()
-  active                Boolean             @default(true)
-  description           String?             @db.Text()
-  deletedAt             DateTime?
-  createdAt             DateTime            @default(now())
-  updatedAt             DateTime            @default(now()) @updatedAt()
-  createdBy             String?             @default("") @db.Uuid()
-  examList              ExamList?           @relation(fields: [examListId], references: [id])
-  examListId            String?
-  studentSubjectScore   StudentSubjectScore @relation(fields: [studentSubjectScoreId], references: [id])
-  studentSubjectScoreId String              @unique()
-  /// phách
-  examCode              String?
-
-  @@unique([examCode, examListId])
-  @@schema("khao-thi")
-}
-
-/// @@allow('all', auth() != null)
-/// @@deny('read', deletedAt != null)
-/// @@allow('read', auth() != null)
-model ExamFramework {
-  id               String         @id() @default(cuid())
-  code             String?        @unique()
-  active           Boolean        @default(true)
-  description      String?        @db.Text()
-  deletedAt        DateTime?
-  createdAt        DateTime       @default(now())
-  updatedAt        DateTime       @default(now()) @updatedAt()
-  createdBy        String?        @default("") @db.Uuid()
-  name             String
-  time             Int
-  subjectVersion   SubjectVersion @relation(fields: [subjectVersionId], references: [id])
-  subjectVersionId String
-  examMatrixs      ExamMatrix[]
-  documentFiles    DocumentFile[]
-
-  @@schema("khao-thi")
-}
-
-/// @@allow('all', auth() != null)
-/// @@deny('read', deletedAt != null)
-/// @@allow('read', auth() != null)
-model ExamMatrix {
-  id              String           @id() @default(cuid())
-  code            String?          @unique()
-  active          Boolean          @default(true)
-  description     String?          @db.Text()
-  deletedAt       DateTime?
-  createdAt       DateTime         @default(now())
-  updatedAt       DateTime         @default(now()) @updatedAt()
-  createdBy       String?          @default("") @db.Uuid()
-  name            String
-  isDefault       Boolean          @default(false)
-  examFramework   ExamFramework    @relation(fields: [examFrameworkId], references: [id])
-  examFrameworkId String
-  knowledgeBlocks KnowledgeBlock[]
-  examBank        ExamBank[]
-
-  @@schema("khao-thi")
-}
-
-/// Khối kiến thức / Chuẩn đầu ra
-/// @@allow('all', auth() != null)
-/// @@deny('read', deletedAt != null)
-/// @@allow('read', auth() != null)
-model KnowledgeBlock {
-  id               String          @id() @default(cuid())
-  code             String?         @unique()
-  active           Boolean         @default(true)
-  description      String?         @db.Text()
-  deletedAt        DateTime?
-  createdAt        DateTime        @default(now())
-  updatedAt        DateTime        @default(now()) @updatedAt()
-  createdBy        String?         @default("") @db.Uuid()
-  name             String
-  examMatrix       ExamMatrix      @relation(fields: [examMatrixId], references: [id])
-  examMatrixId     String
-  questions        Question[]
-  documentFiles    DocumentFile[]
-  configExams      ConfigExam[]
-  subjectVersion   SubjectVersion? @relation(fields: [subjectVersionId], references: [id])
-  subjectVersionId String?
-
-  @@schema("khao-thi")
-}
-
-/// @@allow('all', auth() != null)
-/// @@deny('read', deletedAt != null)
-/// @@allow('read', auth() != null)
-model ConfigExam {
-  id               String         @id() @default(cuid())
-  code             String?        @unique()
-  active           Boolean        @default(true)
-  description      String?        @db.Text()
-  deletedAt        DateTime?
-  createdAt        DateTime       @default(now())
-  updatedAt        DateTime       @default(now()) @updatedAt()
-  createdBy        String?        @default("") @db.Uuid()
-  difficult        Difficult
-  type             QuestionType?
-  quantity         Int            @default(0)
-  point            Float          @default(0)
-  knowledgeBlock   KnowledgeBlock @relation(fields: [knowledgeBlockId], references: [id])
-  knowledgeBlockId String
-
-  @@schema("khao-thi")
-}
-
-/// @@allow('all', auth() != null)
-/// @@deny('read', deletedAt != null)
-/// @@allow('read', auth() != null)
-model Staff {
-  id              String        @id() @default(cuid())
-  code            String?       @unique()
-  active          Boolean       @default(true)
-  description     String?       @db.Text()
-  deletedAt       DateTime?
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @default(now()) @updatedAt()
-  createdBy       String?       @default("") @db.Uuid()
-  from            DateTime?
-  userProfile     UserProfile   @relation(fields: [userProfileId], references: [id])
-  userProfileId   String        @unique() @db.Uuid()
-  organization    DM_DonVi      @relation(fields: [organizationId], references: [Id])
-  organizationId  String        @db.Uuid()
-  staffType       StaffType     @relation(fields: [staffTypeId], references: [id])
-  staffTypeId     String
-  staffPosition   StaffPosition @relation(fields: [staffPositionId], references: [id])
-  staffPositionId String
-  fixedClass      FixedClass[]  @relation("ManageStaff")
+  time                 DateTime               @default(now())
+  semester             Semester               @relation(fields: [semesterId], references: [id])
+  semesterId           String
+  trainingObjectType   TrainingObjectType     @relation(fields: [trainingObjectTypeId], references: [id])
+  trainingObjectTypeId String
+  studentTrainingScore StudentTrainingScore[]
 
   @@schema("ql-dao-tao")
 }
@@ -6921,25 +5837,67 @@ model Staff {
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)
-model StaffHistory {
-  id              String        @id() @default(cuid())
-  code            String?       @unique()
-  active          Boolean       @default(true)
-  description     String?       @db.Text()
-  deletedAt       DateTime?
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @default(now()) @updatedAt()
-  createdBy       String?       @default("") @db.Uuid()
-  from            DateTime?
-  to              DateTime?
-  userProfile     UserProfile   @relation(fields: [userProfileId], references: [id])
-  userProfileId   String        @unique() @db.Uuid()
-  organization    DM_DonVi      @relation(fields: [organizationId], references: [Id])
-  organizationId  String        @db.Uuid()
-  staffType       StaffType     @relation(fields: [staffTypeId], references: [id])
-  staffTypeId     String
-  staffPosition   StaffPosition @relation(fields: [staffPositionId], references: [id])
-  staffPositionId String
+model StudentTrainingScore {
+  id                     String               @id() @default(cuid())
+  code                   String?              @unique()
+  active                 Boolean              @default(true)
+  description            String?              @db.Text()
+  deletedAt              DateTime?
+  createdAt              DateTime             @default(now())
+  updatedAt              DateTime             @default(now()) @updatedAt()
+  createdBy              String?              @default("") @db.Uuid()
+  trainingScoreSession   TrainingScoreSession @relation(fields: [trainingScoreSessionId], references: [id])
+  trainingScoreSessionId String
+  student                Student              @relation(fields: [studentId], references: [id])
+  studentId              String
+  score                  Float?
+  studentTrainingType    StudentTrainingType? @default(GOOD)
+  status                 TrainingScoreStatus  @default(PENDING)
+
+  @@unique([trainingScoreSessionId, studentId])
+  @@schema("ql-dao-tao")
+}
+
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model SemesterTrainingScore {
+  id          String              @id() @default(cuid())
+  code        String?             @unique()
+  active      Boolean             @default(true)
+  description String?             @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @default(now()) @updatedAt()
+  createdBy   String?             @default("") @db.Uuid()
+  semester    Semester            @relation(fields: [semesterId], references: [id])
+  semesterId  String
+  student     Student             @relation(fields: [studentId], references: [id])
+  studentId   String
+  score       Int?
+  status      TrainingScoreStatus @default(PENDING)
+
+  @@schema("ql-dao-tao")
+}
+
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model SchoolYearTrainingScore {
+  id           String              @id() @default(cuid())
+  code         String?             @unique()
+  active       Boolean             @default(true)
+  description  String?             @db.Text()
+  deletedAt    DateTime?
+  createdAt    DateTime            @default(now())
+  updatedAt    DateTime            @default(now()) @updatedAt()
+  createdBy    String?             @default("") @db.Uuid()
+  schoolYear   SchoolYear          @relation(fields: [schoolYearId], references: [id])
+  schoolYearId String
+  student      Student             @relation(fields: [studentId], references: [id])
+  studentId    String
+  score        Int?
+  status       TrainingScoreStatus @default(PENDING)
 
   @@schema("ql-dao-tao")
 }
@@ -7530,6 +6488,1057 @@ model NoteReminder {
   noteId       String
 
   @@schema("ql-dao-tao")
+}
+
+/// Đợt đánh giá CTDT
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model EvaluationPeriod {
+  id              String                 @id() @default(cuid())
+  code            String?                @unique()
+  active          Boolean                @default(true)
+  description     String?                @db.Text()
+  deletedAt       DateTime?
+  createdAt       DateTime               @default(now())
+  updatedAt       DateTime               @default(now()) @updatedAt()
+  createdBy       String?                @default("") @db.Uuid()
+  name            String
+  startDate       DateTime               @default(now())
+  endDate         DateTime?
+  status          EvaluationPeriodStatus @default(COUNCIL_ESTABLISHED)
+  schoolYear      SchoolYear?            @relation(fields: [schoolYearId], references: [id])
+  schoolYearId    String?
+  standards       StandardPeriod[]
+  council         EvaluationCouncil?
+  documentFiles   DocumentFile[]
+  overviewProblem String?
+  overviewGeneral String?
+  overviewResults String?
+  conclude        String?
+
+  @@schema("khao-thi")
+}
+
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model EvaluationStandardSet {
+  id          String              @id() @default(cuid())
+  code        String?             @unique()
+  active      Boolean             @default(true)
+  description String?             @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @default(now()) @updatedAt()
+  createdBy   String?             @default("") @db.Uuid()
+  name        String              @unique()
+  objectType  StandardCatalogType
+  standards   StandardCatalog[]
+
+  @@schema("khao-thi")
+}
+
+/// Danh mục tiêu chuẩn
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model StandardCatalog {
+  id            String                 @id() @default(cuid())
+  code          String?                @unique()
+  active        Boolean                @default(true)
+  description   String?                @db.Text()
+  deletedAt     DateTime?
+  createdAt     DateTime               @default(now())
+  updatedAt     DateTime               @default(now()) @updatedAt()
+  createdBy     String?                @default("") @db.Uuid()
+  order         Int
+  name          String
+  criteria      CriterionCatalog[]
+  standardSet   EvaluationStandardSet? @relation(fields: [standardSetId], references: [id])
+  standardSetId String?
+  objectType    StandardCatalogType
+
+  @@schema("khao-thi")
+}
+
+/// Danh mục tiêu chí
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model CriterionCatalog {
+  id                          String                        @id() @default(cuid())
+  code                        String?                       @unique()
+  active                      Boolean                       @default(true)
+  description                 String?                       @db.Text()
+  deletedAt                   DateTime?
+  createdAt                   DateTime                      @default(now())
+  updatedAt                   DateTime                      @default(now()) @updatedAt()
+  createdBy                   String?                       @default("") @db.Uuid()
+  standard                    StandardCatalog               @relation(fields: [standardId], references: [id])
+  standardId                  String
+  order                       Int
+  name                        String
+  requirementCriterionCatalog RequirementCriterionCatalog[]
+
+  @@unique([standardId, name])
+  @@schema("khao-thi")
+}
+
+/// Nhóm minh chứng - require code
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model EvidenceCategory {
+  id          String     @id() @default(cuid())
+  code        String?    @unique()
+  active      Boolean    @default(true)
+  description String?    @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @default(now()) @updatedAt()
+  createdBy   String?    @default("") @db.Uuid()
+  name        String
+  evidences   Evidence[]
+
+  @@schema("khao-thi")
+}
+
+/// Danh mục minh chứng
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model Evidence {
+  id                   String                 @id() @default(cuid())
+  code                 String?                @unique()
+  active               Boolean                @default(true)
+  description          String?                @db.Text()
+  deletedAt            DateTime?
+  createdAt            DateTime               @default(now())
+  updatedAt            DateTime               @default(now()) @updatedAt()
+  createdBy            String?                @default("") @db.Uuid()
+  category             EvidenceCategory       @relation(fields: [categoryId], references: [id])
+  categoryId           String
+  name                 String
+  information          String
+  issuer               String
+  evidenceFile         EvidenceFile[]
+  analysisFormEvidence AnalysisFormEvidence[]
+
+  @@schema("khao-thi")
+}
+
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model EvaluationCriterionComment {
+  id                     String                @id() @default(cuid())
+  code                   String?               @unique()
+  active                 Boolean               @default(true)
+  description            String?               @db.Text()
+  deletedAt              DateTime?
+  createdAt              DateTime              @default(now())
+  updatedAt              DateTime              @default(now()) @updatedAt()
+  createdBy              String?               @default("") @db.Uuid()
+  reviewer               UserProfile           @relation(fields: [reviewerId], references: [id])
+  reviewerId             String                @db.Uuid()
+  requirementCriterion   RequirementCriterion? @relation(fields: [requirementCriterionId], references: [id], onDelete: Cascade)
+  requirementCriterionId String?
+  content                String?               @db.Text()
+  analysisCriterion      AnalysisCriterion?    @relation(fields: [analysisCriterionId], references: [id])
+  analysisCriterionId    String?
+  evaluationCriterion    EvaluationCriterion?  @relation(fields: [evaluationCriterionId], references: [id])
+  evaluationCriterionId  String?
+
+  @@schema("khao-thi")
+}
+
+/// Danh mục yêu cầu
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model RequirementCriterionCatalog {
+  id                 String           @id() @default(cuid())
+  code               String?          @unique()
+  active             Boolean          @default(true)
+  description        String?          @db.Text()
+  deletedAt          DateTime?
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @default(now()) @updatedAt()
+  createdBy          String?          @default("") @db.Uuid()
+  criterionCatalog   CriterionCatalog @relation(fields: [criterionCatalogId], references: [id])
+  criterionCatalogId String
+  order              Int
+  name               String
+  questions          String[]
+
+  @@unique([criterionCatalogId, name])
+  @@schema("khao-thi")
+}
+
+/// Tiêu chuẩn của đợt (Bản sao/áp dụng từ StandardCatalog)
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model StandardPeriod {
+  id          String            @id() @default(cuid())
+  code        String?           @unique()
+  active      Boolean           @default(true)
+  description String?           @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @default(now()) @updatedAt()
+  createdBy   String?           @default("") @db.Uuid()
+  period      EvaluationPeriod  @relation(fields: [periodId], references: [id], onDelete: Cascade)
+  periodId    String
+  name        String
+  order       Int
+  /// Mở đầu
+  opening     String            @default("")
+  /// Kết luận
+  conclusion  String            @default("")
+  criteria    CriterionPeriod[]
+
+  @@unique([periodId, name])
+  @@schema("khao-thi")
+}
+
+/// Tiêu chí của đợt (Bản sao/áp dụng từ StandardCatalog)
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model CriterionPeriod {
+  id                   String               @id() @default(cuid())
+  code                 String?              @unique()
+  active               Boolean              @default(true)
+  description          String?              @db.Text()
+  deletedAt            DateTime?
+  createdAt            DateTime             @default(now())
+  updatedAt            DateTime             @default(now()) @updatedAt()
+  createdBy            String?              @default("") @db.Uuid()
+  name                 String
+  order                Int
+  evaluationStandard   StandardPeriod       @relation(fields: [evaluationStandardId], references: [id])
+  evaluationStandardId String
+  analysisCriterions   AnalysisCriterion?
+  evaluationCriterion  EvaluationCriterion?
+
+  @@schema("khao-thi")
+}
+
+/// Phiếu phân tích của đợt (Bản sao/áp dụng từ CriterionCatalog)
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model AnalysisCriterion {
+  id                          String                       @id() @default(cuid())
+  code                        String?                      @unique()
+  active                      Boolean                      @default(true)
+  description                 String?                      @db.Text()
+  deletedAt                   DateTime?
+  createdAt                   DateTime                     @default(now())
+  updatedAt                   DateTime                     @default(now()) @updatedAt()
+  createdBy                   String?                      @default("") @db.Uuid()
+  criterionPeriod             CriterionPeriod              @relation(fields: [criterionPeriodId], references: [id])
+  criterionPeriodId           String                       @unique()
+  lecturer                    Lecturer?                    @relation(fields: [lecturerId], references: [id])
+  lecturerId                  String?
+  deadline                    DateTime?
+  status                      EvaluationCriterionStatus    @default(PENDING)
+  /// Yêu cầu trong phiếu phân tích
+  requirementCriterions       RequirementCriterion[]
+  evaluationCriterionComments EvaluationCriterionComment[]
+
+  @@schema("khao-thi")
+}
+
+/// Phiếu đánh giá của đợt (Bản sao/áp dụng từ CriterionCatalog)
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model EvaluationCriterion {
+  id                          String                       @id() @default(cuid())
+  code                        String?                      @unique()
+  active                      Boolean                      @default(true)
+  description                 String?                      @db.Text()
+  deletedAt                   DateTime?
+  createdAt                   DateTime                     @default(now())
+  updatedAt                   DateTime                     @default(now()) @updatedAt()
+  createdBy                   String?                      @default("") @db.Uuid()
+  criterionPeriod             CriterionPeriod              @relation(fields: [criterionPeriodId], references: [id])
+  criterionPeriodId           String                       @unique()
+  lecturer                    Lecturer?                    @relation("EvaluationCriterionLecturer", fields: [lecturerId], references: [id])
+  lecturerId                  String?
+  deadline                    DateTime?
+  status                      EvaluationStatus             @default(LOCK)
+  reviewer                    EvaluationCouncilMember?     @relation(fields: [reviewerId], references: [id], onDelete: Cascade)
+  reviewerId                  String?
+  deadlineReview              DateTime?
+  deadlineReviewExternal      DateTime?
+  lecturerReview              Lecturer[]                   @relation("EvaluationCriterionLecturerReview")
+  evaluationCriterionComments EvaluationCriterionComment[]
+  /// 1. Mô tả hiện trạng
+  currentSituation            String                       @default("")
+  /// 2. Điểm mạnh
+  strengths                   String                       @default("")
+  /// 3. Điểm tồn tại
+  weakness                    String                       @default("")
+  /// 4. Kế hoạch hành động
+  actionPlan                  String                       @default("")
+  /// 5. Tự đánh giá
+  score                       String                       @default("")
+
+  @@schema("khao-thi")
+}
+
+/// Yêu cầu trong phiếu phân tích tiêu chí
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model RequirementCriterion {
+  id                         String                       @id() @default(cuid())
+  code                       String?                      @unique()
+  active                     Boolean                      @default(true)
+  description                String?                      @db.Text()
+  deletedAt                  DateTime?
+  createdAt                  DateTime                     @default(now())
+  updatedAt                  DateTime                     @default(now()) @updatedAt()
+  createdBy                  String?                      @default("") @db.Uuid()
+  analysisCriterion          AnalysisCriterion            @relation(fields: [analysisCriterionId], references: [id])
+  analysisCriterionId        String
+  order                      Int
+  name                       String
+  questions                  String[]
+  evidences                  AnalysisFormEvidence[]
+  evidencePlaces             String                       @default("")
+  collectionMethod           String                       @default("")
+  evaluationCriterionComment EvaluationCriterionComment[]
+
+  @@schema("khao-thi")
+}
+
+/// Minh chứng phiếu phân tích
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model AnalysisFormEvidence {
+  id                     String               @id() @default(cuid())
+  code                   String?              @unique()
+  active                 Boolean              @default(true)
+  description            String?              @db.Text()
+  deletedAt              DateTime?
+  createdAt              DateTime             @default(now())
+  updatedAt              DateTime             @default(now()) @updatedAt()
+  createdBy              String?              @default("") @db.Uuid()
+  requirementCriterion   RequirementCriterion @relation(fields: [requirementCriterionId], references: [id])
+  requirementCriterionId String
+  evidence               Evidence             @relation(fields: [evidenceId], references: [id], onDelete: Cascade)
+  evidenceId             String
+  order                  Int
+
+  @@unique([requirementCriterionId, evidenceId])
+  @@schema("khao-thi")
+}
+
+/// Hội đồng đánh giá
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model EvaluationCouncil {
+  id          String                    @id() @default(cuid())
+  code        String?                   @unique()
+  active      Boolean                   @default(true)
+  description String?                   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime                  @default(now())
+  updatedAt   DateTime                  @default(now()) @updatedAt()
+  createdBy   String?                   @default("") @db.Uuid()
+  period      EvaluationPeriod          @relation(fields: [periodId], references: [id], onDelete: Cascade)
+  periodId    String                    @unique()
+  name        String
+  members     EvaluationCouncilMember[]
+
+  @@schema("khao-thi")
+}
+
+/// Thành viên hội đồng đánh giá
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model EvaluationCouncilMember {
+  id                   String                @id() @default(cuid())
+  code                 String?               @unique()
+  active               Boolean               @default(true)
+  description          String?               @db.Text()
+  deletedAt            DateTime?
+  createdAt            DateTime              @default(now())
+  updatedAt            DateTime              @default(now()) @updatedAt()
+  createdBy            String?               @default("") @db.Uuid()
+  evaluationCouncil    EvaluationCouncil     @relation(fields: [evaluationCouncilId], references: [id], onDelete: Cascade)
+  evaluationCouncilId  String
+  lecturer             Lecturer              @relation(fields: [lecturerId], references: [id])
+  lecturerId           String
+  groupName            String?
+  role                 EvaluationMemberRole?
+  evaluationCriterions EvaluationCriterion[]
+
+  @@schema("khao-thi")
+}
+
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model EvidenceFile {
+  id            String       @id() @default(cuid())
+  code          String?      @unique()
+  active        Boolean      @default(true)
+  description   String?      @db.Text()
+  deletedAt     DateTime?
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @default(now()) @updatedAt()
+  createdBy     String?      @default("") @db.Uuid()
+  name          String
+  path          String
+  mimeType      String
+  size          BigInt
+  evidence      Evidence     @relation(fields: [evidenceId], references: [id])
+  evidenceId    String
+  userProfile   UserProfile? @relation(fields: [userProfileId], references: [id])
+  userProfileId String?      @db.Uuid()
+
+  @@schema("khao-thi")
+}
+
+/// Phiên bản ngân hàng câu hỏi
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model QuestionBank {
+  id               String         @id() @default(cuid())
+  code             String?        @unique()
+  active           Boolean        @default(true)
+  description      String?        @db.Text()
+  deletedAt        DateTime?
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @default(now()) @updatedAt()
+  createdBy        String?        @default("") @db.Uuid()
+  name             String
+  subjectVersion   SubjectVersion @relation(fields: [subjectVersionId], references: [id])
+  subjectVersionId String
+  questions        Question[]
+
+  @@unique([subjectVersionId, name])
+  @@schema("khao-thi")
+}
+
+/// Câu hỏi
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model Question {
+  id                    String                 @id() @default(cuid())
+  code                  String?                @unique()
+  active                Boolean                @default(true)
+  description           String?                @db.Text()
+  deletedAt             DateTime?
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @default(now()) @updatedAt()
+  createdBy             String?                @default("") @db.Uuid()
+  content               String
+  type                  QuestionType           @default(ESSAY)
+  point                 Float                  @default(1)
+  explanation           String?
+  isAutoGraded          Boolean                @default(false)
+  difficult             Difficult
+  multipleChoiceOptions MultipleChoiceOption[]
+  fillInBlankSlots      FillInBlankSlot[]
+  orderingItems         OrderingItem[]
+  questionBank          QuestionBank           @relation(fields: [questionBankId], references: [id])
+  questionBankId        String
+  knowledgeBlock        KnowledgeBlock?        @relation(fields: [knowledgeBlockId], references: [id])
+  knowledgeBlockId      String?
+  sessionQuestions      ExamBankQuestion[]
+
+  @@schema("khao-thi")
+}
+
+/// Lựa chọn cho câu hỏi trắc nghiệm (một hoặc nhiều đáp án)
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model MultipleChoiceOption {
+  id          String    @id() @default(cuid())
+  code        String?   @unique()
+  active      Boolean   @default(true)
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @default(now()) @updatedAt()
+  createdBy   String?   @default("") @db.Uuid()
+  questionId  String
+  question    Question  @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  content     String
+  isCorrect   Boolean   @default(false)
+  order       Int
+
+  @@schema("khao-thi")
+}
+
+/// Chỗ trống cần điền cho câu hỏi điền khuyết
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model FillInBlankSlot {
+  id            String    @id() @default(cuid())
+  code          String?   @unique()
+  active        Boolean   @default(true)
+  description   String?   @db.Text()
+  deletedAt     DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @default(now()) @updatedAt()
+  createdBy     String?   @default("") @db.Uuid()
+  questionId    String
+  question      Question  @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  order         Int
+  correctAnswer String
+
+  @@unique([questionId, order])
+  @@schema("khao-thi")
+}
+
+/// Mục cần sắp xếp cho câu hỏi sắp xếp thứ tự
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model OrderingItem {
+  id           String    @id() @default(cuid())
+  code         String?   @unique()
+  active       Boolean   @default(true)
+  description  String?   @db.Text()
+  deletedAt    DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @default(now()) @updatedAt()
+  createdBy    String?   @default("") @db.Uuid()
+  questionId   String
+  question     Question  @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  content      String
+  correctOrder Int
+
+  @@unique([questionId, correctOrder])
+  @@schema("khao-thi")
+}
+
+/// Kỳ thi
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model Exam {
+  id               String         @id() @default(cuid())
+  code             String?        @unique()
+  active           Boolean        @default(true)
+  description      String?        @db.Text()
+  deletedAt        DateTime?
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @default(now()) @updatedAt()
+  createdBy        String?        @default("") @db.Uuid()
+  /// khoá DS thi
+  lockExamSessions Boolean        @default(false)
+  /// thời gian thi
+  duration         Int?
+  session          Int            @default(1)
+  subjectVersionId String
+  subjectVersion   SubjectVersion @relation(fields: [subjectVersionId], references: [id])
+  semester         Semester       @relation(fields: [semesterId], references: [id])
+  semesterId       String
+  /// Lớp môn học
+  subjectClass     SubjectClass[]
+  examBank         ExamBank[]
+  examRooms        ExamRoom[]
+
+  @@schema("khao-thi")
+}
+
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model ExamRoom {
+  id          String     @id() @default(cuid())
+  code        String?    @unique()
+  active      Boolean    @default(true)
+  description String?    @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @default(now()) @updatedAt()
+  createdBy   String?    @default("") @db.Uuid()
+  exam        Exam       @relation(fields: [examId], references: [id])
+  examId      String
+  room        Room?      @relation(fields: [roomId], references: [id])
+  roomId      String?
+  capacity    Int        @default(0)
+  examList    ExamList[]
+
+  @@unique([examId, roomId])
+  @@schema("khao-thi")
+}
+
+/// Danh sách thi trong phòng thi
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model ExamList {
+  id                 String      @id() @default(cuid())
+  code               String?     @unique()
+  active             Boolean     @default(true)
+  description        String?     @db.Text()
+  deletedAt          DateTime?
+  createdAt          DateTime    @default(now())
+  updatedAt          DateTime    @default(now()) @updatedAt()
+  createdBy          String?     @default("") @db.Uuid()
+  examRoom           ExamRoom?   @relation(fields: [examRoomId], references: [id])
+  examRoomId         String?
+  firstSupervisor    Lecturer?   @relation("FirstSupervisor", fields: [firstSupervisorId], references: [id])
+  firstSupervisorId  String?
+  secondSupervisor   Lecturer?   @relation("SecondSupervisor", fields: [secondSupervisorId], references: [id])
+  secondSupervisorId String?
+  /// Đã đánh phách
+  createdExamCode    Boolean     @default(false)
+  lockExamCode       Boolean     @default(false)
+  start              Int?
+  end                Int?
+  examPapers         ExamPaper[]
+
+  @@schema("khao-thi")
+}
+
+/// Đề thi
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model ExamBank {
+  id             String             @id() @default(cuid())
+  code           String?            @unique()
+  active         Boolean            @default(true)
+  description    String?            @db.Text()
+  deletedAt      DateTime?
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @default(now()) @updatedAt()
+  createdBy      String?            @default("") @db.Uuid()
+  exam           Exam               @relation(fields: [examId], references: [id])
+  examId         String
+  examTime       Int?
+  examCode       String
+  subjectClass   SubjectClass?      @relation(fields: [subjectClassId], references: [id])
+  subjectClassId String?
+  explain        String?
+  examDay        DateTime?
+  examType       ExamType?
+  questions      ExamBankQuestion[]
+  examMatrix     ExamMatrix?        @relation(fields: [examMatrixId], references: [id])
+  examMatrixId   String?
+  isLock         Boolean?           @default(false)
+  /// được sử dụng tài liệu hay không
+  isNote         Boolean?           @default(false)
+  isGroup        Boolean?           @default(true)
+
+  @@unique([examId, examCode])
+  @@schema("khao-thi")
+}
+
+/// Bảng nối, xác định câu hỏi nào thuộc về đề thi nào
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model ExamBankQuestion {
+  id          String    @id() @default(cuid())
+  code        String?   @unique()
+  active      Boolean   @default(true)
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @default(now()) @updatedAt()
+  createdBy   String?   @default("") @db.Uuid()
+  examBankId  String
+  examBank    ExamBank  @relation(fields: [examBankId], references: [id], onDelete: Cascade)
+  questionId  String
+  question    Question  @relation(fields: [questionId], references: [id])
+  order       Int?
+
+  @@unique([examBankId, questionId])
+  @@unique([examBankId, order])
+  @@schema("khao-thi")
+}
+
+/// Bài thi
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model ExamPaper {
+  id                    String              @id() @default(cuid())
+  code                  String?             @unique()
+  active                Boolean             @default(true)
+  description           String?             @db.Text()
+  deletedAt             DateTime?
+  createdAt             DateTime            @default(now())
+  updatedAt             DateTime            @default(now()) @updatedAt()
+  createdBy             String?             @default("") @db.Uuid()
+  examList              ExamList?           @relation(fields: [examListId], references: [id])
+  examListId            String?
+  studentSubjectScore   StudentSubjectScore @relation(fields: [studentSubjectScoreId], references: [id])
+  studentSubjectScoreId String              @unique()
+  /// phách
+  examCode              String?
+
+  @@unique([examCode, examListId])
+  @@schema("khao-thi")
+}
+
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model ExamFramework {
+  id               String         @id() @default(cuid())
+  code             String?        @unique()
+  active           Boolean        @default(true)
+  description      String?        @db.Text()
+  deletedAt        DateTime?
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @default(now()) @updatedAt()
+  createdBy        String?        @default("") @db.Uuid()
+  name             String
+  time             Int
+  subjectVersion   SubjectVersion @relation(fields: [subjectVersionId], references: [id])
+  subjectVersionId String
+  examMatrixs      ExamMatrix[]
+  documentFiles    DocumentFile[]
+
+  @@schema("khao-thi")
+}
+
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model ExamMatrix {
+  id              String           @id() @default(cuid())
+  code            String?          @unique()
+  active          Boolean          @default(true)
+  description     String?          @db.Text()
+  deletedAt       DateTime?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @default(now()) @updatedAt()
+  createdBy       String?          @default("") @db.Uuid()
+  name            String
+  isDefault       Boolean          @default(false)
+  examFramework   ExamFramework    @relation(fields: [examFrameworkId], references: [id])
+  examFrameworkId String
+  knowledgeBlocks KnowledgeBlock[]
+  examBank        ExamBank[]
+
+  @@schema("khao-thi")
+}
+
+/// Khối kiến thức / Chuẩn đầu ra
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model KnowledgeBlock {
+  id               String          @id() @default(cuid())
+  code             String?         @unique()
+  active           Boolean         @default(true)
+  description      String?         @db.Text()
+  deletedAt        DateTime?
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @default(now()) @updatedAt()
+  createdBy        String?         @default("") @db.Uuid()
+  name             String
+  examMatrix       ExamMatrix      @relation(fields: [examMatrixId], references: [id])
+  examMatrixId     String
+  questions        Question[]
+  documentFiles    DocumentFile[]
+  configExams      ConfigExam[]
+  subjectVersion   SubjectVersion? @relation(fields: [subjectVersionId], references: [id])
+  subjectVersionId String?
+
+  @@schema("khao-thi")
+}
+
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model ConfigExam {
+  id               String         @id() @default(cuid())
+  code             String?        @unique()
+  active           Boolean        @default(true)
+  description      String?        @db.Text()
+  deletedAt        DateTime?
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @default(now()) @updatedAt()
+  createdBy        String?        @default("") @db.Uuid()
+  difficult        Difficult
+  type             QuestionType?
+  quantity         Int            @default(0)
+  point            Float          @default(0)
+  knowledgeBlock   KnowledgeBlock @relation(fields: [knowledgeBlockId], references: [id])
+  knowledgeBlockId String
+
+  @@schema("khao-thi")
+}
+
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model SurveyObjectType {
+  id                   String              @id() @default(cuid())
+  code                 String?             @unique()
+  active               Boolean             @default(true)
+  description          String?             @db.Text()
+  deletedAt            DateTime?
+  createdAt            DateTime            @default(now())
+  updatedAt            DateTime            @default(now()) @updatedAt()
+  createdBy            String?             @default("") @db.Uuid()
+  name                 String
+  survey               Survey[]
+  type                 SurveyObject[]
+  organizations        DM_DonVi[]
+  trainingFields       TrainingField[]
+  trainingMajors       TrainingMajor[]
+  trainingCourses      TrainingCourse[]
+  fixedClasses         FixedClass[]
+  subjectClasses       SubjectClass[]
+  surveySessions       SurveySession[]
+  clusterSurvey        ClusterSurvey[]
+  trainingObjectType   TrainingObjectType? @relation(fields: [trainingObjectTypeId], references: [id])
+  trainingObjectTypeId String?
+
+  @@schema("khao-thi")
+}
+
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model SurveyTopic {
+  id                  String                @id() @default(cuid())
+  code                String?               @unique()
+  active              Boolean               @default(true)
+  description         String?               @db.Text()
+  deletedAt           DateTime?
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime              @default(now()) @updatedAt()
+  createdBy           String?               @default("") @db.Uuid()
+  name                String
+  clusterSurvey       ClusterSurvey[]
+  survey              Survey[]
+  surveyQuestionGroup SurveyQuestionGroup[]
+  type                SurveyType?
+
+  @@schema("khao-thi")
+}
+
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model SurveyQuestionGroup {
+  id             String           @id() @default(cuid())
+  code           String?          @unique()
+  active         Boolean          @default(true)
+  description    String?          @db.Text()
+  deletedAt      DateTime?
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @default(now()) @updatedAt()
+  createdBy      String?          @default("") @db.Uuid()
+  name           String
+  surveyQuestion SurveyQuestion[]
+  surveyTopic    SurveyTopic[]
+
+  @@schema("khao-thi")
+}
+
+/// Khảo sát cụm
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model ClusterSurvey {
+  id               String             @id() @default(cuid())
+  code             String?            @unique()
+  active           Boolean            @default(true)
+  description      String?            @db.Text()
+  deletedAt        DateTime?
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @default(now()) @updatedAt()
+  createdBy        String?            @default("") @db.Uuid()
+  name             String
+  startDate        DateTime
+  endDate          DateTime?
+  isPublic         Boolean            @default(false)
+  anonymous        Boolean            @default(true)
+  surveyTopic      SurveyTopic        @relation(fields: [surveyTopicId], references: [id])
+  surveyTopicId    String
+  surveyObjectType SurveyObjectType[]
+  lecturers        Lecturer[]
+  surveyChoice     SurveyChoice[]
+  surveyQuestion   SurveyQuestion[]
+  surveys          Survey[]
+
+  @@schema("khao-thi")
+}
+
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model Survey {
+  id                   String              @id() @default(cuid())
+  code                 String?             @unique()
+  active               Boolean             @default(true)
+  description          String?             @db.Text()
+  deletedAt            DateTime?
+  createdAt            DateTime            @default(now())
+  updatedAt            DateTime            @default(now()) @updatedAt()
+  createdBy            String?             @default("") @db.Uuid()
+  name                 String
+  startDate            DateTime
+  endDate              DateTime?
+  isPublic             Boolean             @default(false)
+  anonymous            Boolean             @default(true)
+  surveyObjectType     SurveyObjectType[]
+  lecture              Lecturer?           @relation(fields: [lectureId], references: [id])
+  lectureId            String?
+  subjectClass         SubjectClass?       @relation(fields: [subjectClassId], references: [id])
+  subjectClassId       String?
+  semester             Semester?           @relation(fields: [semesterId], references: [id])
+  semesterId           String?
+  surveyTopic          SurveyTopic         @relation(fields: [surveyTopicId], references: [id])
+  surveyTopicId        String
+  trainingObjectType   TrainingObjectType? @relation(fields: [trainingObjectTypeId], references: [id])
+  trainingObjectTypeId String?
+  surveyChoice         SurveyChoice[]
+  surveyQuestion       SurveyQuestion[]
+  surveySessions       SurveySession[]
+  clusterSurvey        ClusterSurvey?      @relation(fields: [clusterSurveyId], references: [id])
+  clusterSurveyId      String?
+
+  @@schema("khao-thi")
+}
+
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model SurveyQuestion {
+  id                    String               @id() @default(cuid())
+  code                  String?              @unique()
+  active                Boolean              @default(true)
+  description           String?              @db.Text()
+  deletedAt             DateTime?
+  createdAt             DateTime             @default(now())
+  updatedAt             DateTime             @default(now()) @updatedAt()
+  createdBy             String?              @default("") @db.Uuid()
+  name                  String
+  type                  SurveyQuestionType
+  surveyQuestionGroup   SurveyQuestionGroup? @relation(fields: [surveyQuestionGroupId], references: [id])
+  surveyQuestionGroupId String?
+  survey                Survey[]
+  clusterSurvey         ClusterSurvey[]
+  surveyResponses       SurveyResponse[]
+  specificChoice        SpecificChoice[]
+
+  @@schema("khao-thi")
+}
+
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model SpecificChoice {
+  id               String         @id() @default(cuid())
+  code             String?        @unique()
+  active           Boolean        @default(true)
+  description      String?        @db.Text()
+  deletedAt        DateTime?
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @default(now()) @updatedAt()
+  createdBy        String?        @default("") @db.Uuid()
+  answer           String
+  surveyQuestion   SurveyQuestion @relation(fields: [surveyQuestionId], references: [id])
+  surveyQuestionId String
+
+  @@schema("khao-thi")
+}
+
+/// Lựa chọn của câu hỏi khảo sát
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model SurveyChoice {
+  id                 String           @id() @default(cuid())
+  code               String?          @unique()
+  active             Boolean          @default(true)
+  description        String?          @db.Text()
+  deletedAt          DateTime?
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @default(now()) @updatedAt()
+  createdBy          String?          @default("") @db.Uuid()
+  answer             String
+  requireExplanation Boolean
+  clusterSurvey      ClusterSurvey?   @relation(fields: [clusterSurveyId], references: [id])
+  clusterSurveyId    String?
+  survey             Survey[]
+  surveyResponses    SurveyResponse[]
+
+  @@schema("khao-thi")
+}
+
+/// Bảng lưu phiên khảo sát
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model SurveySession {
+  id                 String            @id() @default(cuid())
+  code               String?           @unique()
+  active             Boolean           @default(true)
+  description        String?           @db.Text()
+  deletedAt          DateTime?
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @default(now()) @updatedAt()
+  createdBy          String?           @default("") @db.Uuid()
+  survey             Survey            @relation(fields: [surveyId], references: [id])
+  surveyId           String
+  profile            UserProfile?      @relation(fields: [profileId], references: [id])
+  profileId          String?           @db.Uuid()
+  student            Student?          @relation(fields: [studentId], references: [id])
+  studentId          String?
+  startedAt          DateTime          @default(now())
+  completedAt        DateTime?
+  isCompleted        Boolean           @default(false)
+  surveyObjectType   SurveyObjectType? @relation(fields: [surveyObjectTypeId], references: [id])
+  surveyObjectTypeId String?
+  responses          SurveyResponse[]
+
+  @@unique([surveyId, studentId])
+  @@schema("khao-thi")
+}
+
+/// Bảng lưu câu trả lời cụ thể của học viên cho từng câu hỏi
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model SurveyResponse {
+  id               String         @id() @default(cuid())
+  code             String?        @unique()
+  active           Boolean        @default(true)
+  description      String?        @db.Text()
+  deletedAt        DateTime?
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @default(now()) @updatedAt()
+  createdBy        String?        @default("") @db.Uuid()
+  surveySession    SurveySession  @relation(fields: [surveySessionId], references: [id])
+  surveySessionId  String
+  surveyQuestion   SurveyQuestion @relation(fields: [surveyQuestionId], references: [id])
+  surveyQuestionId String
+  answerText       String?
+  explanation      String?
+  surveyChoice     SurveyChoice?  @relation(fields: [surveyChoiceId], references: [id])
+  surveyChoiceId   String?
+  answeredAt       DateTime       @default(now())
+
+  @@unique([surveySessionId, surveyQuestionId])
+  @@schema("khao-thi")
 }
 
 /// Quy tắc cấu hình Cảnh báo học tập

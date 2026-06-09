@@ -302,8 +302,7 @@ model UserProfile extends BaseUuid {
   classSchedules                       ClassSchedule[]
   subjectClassAttendance               SubjectClassAttendance[]
 
-
-  @@auth()
+  @@auth() 
   @@schema("ql-nguoi-dung")
 }
 
