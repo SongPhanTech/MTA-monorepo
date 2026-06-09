@@ -30,14 +30,6 @@ type AnswerItem = {
 }
 
 type AnswerWithPercent = AnswerItem & { percent: number; total: number }
-interface ProgressRow {
-  key: string
-  type: "faculty" | "department" | "lecturer" | "total"
-  name: string
-  completed: number
-  total: number
-  indent: number
-}
 function OrganizationSurveyReport({
   selectedId,
   surveyName,
@@ -45,7 +37,6 @@ function OrganizationSurveyReport({
   trainingObjectTypeName,
   trainingObjectTypeId,
   semesterId,
-  organizations,
 }: {
   selectedId: string
   surveyName: string
@@ -53,7 +44,6 @@ function OrganizationSurveyReport({
   trainingObjectTypeName?: string
   trainingObjectTypeId: string
   semesterId: string
-  organizations: any[]
 }) {
   const router = useRouter()
   const { onOpen } = useDisclosure({

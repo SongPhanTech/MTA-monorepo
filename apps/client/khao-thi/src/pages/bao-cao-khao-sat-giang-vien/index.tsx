@@ -410,7 +410,6 @@ export default function BaoCaoGiangVien() {
             trainingObjectTypeName={trainingObjectTypeName}
             semesterId={semesterId || ""}
             trainingObjectTypeId={trainingObjectTypeId || ""}
-            organizations={organizations}
           />
         )
       }
