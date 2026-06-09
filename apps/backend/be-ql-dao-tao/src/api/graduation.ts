@@ -2590,7 +2590,7 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
 
       return {
         data: {
-          so_quyet_dinh: safeString(gD?.diplomaNumber),
+          so_quyet_dinh: safeString(gD?.originalDiplomaNumber),
           ho_ten_hoc_vien: safeString(user?.fullname?.toUpperCase()),
           ma_hoc_vien: safeString(student.code),
           ngay_sinh: safeString(dobParts?.dateVi),
@@ -2646,7 +2646,7 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
   }
 
   try {
-    const templateBuffer = await getLuanVanTemplateBuffer(prisma, "PhuLucVanBangCaoHoc_v9 .docx")
+    const templateBuffer = await getLuanVanTemplateBuffer(prisma, "PhuLucVanBangCaoHoc_v9.docx")
     const zip = new PizZip(templateBuffer)
     const doc = new Docxtemplater(zip, {
       paragraphLoop: true,
@@ -2933,7 +2933,7 @@ app.openapi(exportPhuLucVanBangNganHan, async (c: any) => {
           : 0
       return {
         data: {
-          so_quyet_dinh: safeString(gD?.diplomaNumber),
+          so_quyet_dinh: safeString(gD?.originalDiplomaNumber),
           ten_hoc_vien: safeString(user?.fullname?.toUpperCase()),
           ma_hoc_vien: safeString(student.code),
           ngay_sinh: safeString(dobParts?.dateVi),
