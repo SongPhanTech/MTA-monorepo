@@ -11,8 +11,6 @@ import { saveAs } from "file-saver"
 import { useRouter } from "next/router"
 import { useMemo } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
-import { SurveyProgressTable } from "./survey-progress-table"
-import { useFindManyDM_DonVi, useFindManySurvey } from "@workspace/db/hooks"
 
 const { Title } = Typography
 
@@ -134,129 +132,6 @@ function OrganizationSurveyReport({
   })
   // const { data: organizations = [] } = useFindManyDM_DonVi()
   // const treeData = buildOrgTree(organizations)
-  const { data: surveys = [] } = useFindManySurvey(
-    {
-      where: { clusterSurveyId: selectedId },
-      include: {
-        lecture: {
-          include: {
-            userProfile: true,
-          },
-        },
-        surveySessions: true,
-        subjectClass: {
-          include: {
-            subjectClassStudent: true,
-          },
-        },
-      },
-    }
-    // {
-    //   enabled: !!selectedId,
-    // }
-  )
-
-  const progressData = useMemo<ProgressRow[]>(() => {
-    const result: ProgressRow[] = []
-
-    const faculties = organizations.filter((x) => !x.sParentId || x.sParentId === "0")
-
-    let grandCompleted = 0
-    let grandTotal = 0
-
-    faculties.forEach((faculty) => {
-      const departments = organizations.filter((x) => x.sParentId === faculty.Id)
-
-      let facultyCompleted = 0
-      let facultyTotal = 0
-
-      const departmentRows: ProgressRow[] = []
-
-      departments.forEach((department) => {
-        const departmentSurveys = surveys.filter((s) => s.lecture?.organizationId === department.Id)
-
-        let departmentCompleted = 0
-        let departmentTotal = 0
-
-        const lecturerRows: ProgressRow[] = []
-
-        const lecturerMap = new Map<string, typeof departmentSurveys>()
-
-        departmentSurveys.forEach((survey) => {
-          const lecturerName =
-            survey.lecture?.userProfile?.fullname ||
-            `${survey.lecture?.userProfile?.lastName ?? ""} ${
-              survey.lecture?.userProfile?.firstName ?? ""
-            }`.trim() ||
-            survey.lecture?.code ||
-            "Không xác định"
-
-          const current = lecturerMap.get(lecturerName) ?? []
-
-          current.push(survey)
-
-          lecturerMap.set(lecturerName, current)
-        })
-
-        lecturerMap.forEach((items, lecturerName) => {
-          const total = items.length
-
-          const completed = items.filter((x) => x.surveySessions.length > 0).length
-
-          lecturerRows.push({
-            key: `${department.Id}-${lecturerName}`,
-            type: "lecturer",
-            name: lecturerName,
-            completed,
-            total,
-            indent: 2,
-          })
-
-          departmentCompleted += completed
-          departmentTotal += total
-        })
-
-        departmentRows.push({
-          key: department.Id,
-          type: "department",
-          name: department.sTen ?? "Không xác định",
-          completed: departmentCompleted,
-          total: departmentTotal,
-          indent: 1,
-        })
-
-        departmentRows.push(...lecturerRows)
-
-        facultyCompleted += departmentCompleted
-        facultyTotal += departmentTotal
-      })
-
-      result.push({
-        key: faculty.Id,
-        type: "faculty",
-        name: faculty.sTen ?? "Không xác định",
-        completed: facultyCompleted,
-        total: facultyTotal,
-        indent: 0,
-      })
-
-      result.push(...departmentRows)
-
-      grandCompleted += facultyCompleted
-      grandTotal += facultyTotal
-    })
-
-    result.push({
-      key: "total",
-      type: "total",
-      name: "Tổng",
-      completed: grandCompleted,
-      total: grandTotal,
-      indent: 0,
-    })
-
-    return result
-  }, [surveys, organizations])
 
   const dataBarchart = useMemo(() => {
     let choices: any = []
@@ -681,7 +556,6 @@ function OrganizationSurveyReport({
                         height: Math.max(300, (dataLevel?.data?.data?.length || 0) * 35 + 120),
                       }}
                     />
-                    <SurveyProgressTable data={progressData} />
                     {dataLevel?.data?.data?.length > 0 &&
                       renderTable(dataLevel?.data?.data, dataLevel?.data?.choices)}
                   </div>

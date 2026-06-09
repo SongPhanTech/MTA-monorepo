@@ -307,6 +307,93 @@ export default function BaoCaoGiangVien() {
 
   const hanleSearchReport = () => {}
 
+  const getLecturerDisplayName = (lecturer: any) => {
+    const fullName =
+      `${lecturer?.userProfile?.lastName ?? ""} ${lecturer?.userProfile?.firstName ?? ""}`.trim() ||
+      lecturer?.userProfile?.fullName ||
+      "Giảng viên không tên"
+
+    return fullName
+  }
+
+  const progressData = useMemo(() => {
+    const lecturerIds = new Set(lecturerActive.map((item) => item.id))
+
+    const getDescendantOrgIds = (orgId: string): string[] => {
+      const children = organizations.filter((item: any) => item.sParentId === orgId)
+      return children.flatMap((item: any) => [item.Id, ...getDescendantOrgIds(item.Id)])
+    }
+
+    const countLecturers = (orgId: string) =>
+      lecturerData.filter((item: any) => {
+        const orgIds = [orgId, ...getDescendantOrgIds(orgId)]
+        return orgIds.includes(item.organizationId)
+      }).length
+
+    const countCompleted = (orgId: string) =>
+      lecturerData.filter((item: any) => {
+        const orgIds = [orgId, ...getDescendantOrgIds(orgId)]
+        return orgIds.includes(item.organizationId) && lecturerIds.has(item.id)
+      }).length
+
+    const facultyRows = organizations
+      .filter((item: any) => [5, 6].includes(item.iLoaiDonVi))
+      .map((item: any) => ({
+        key: `faculty-${item.Id}`,
+        parentKey: undefined,
+        type: "faculty" as const,
+        name: `${item.sMa || ""} - ${item.sTen || ""}`.trim(),
+        completed: countCompleted(item.Id),
+        total: countLecturers(item.Id),
+      }))
+
+    const departmentRows = organizations
+      .filter((item: any) => item.iLoaiDonVi === 7)
+      .map((item: any) => ({
+        key: `department-${item.Id}`,
+        parentKey: `faculty-${item.sParentId}`,
+        type: "department" as const,
+        name: `${item.sMa || ""} - ${item.sTen || ""}`.trim(),
+        completed: countCompleted(item.Id),
+        total: countLecturers(item.Id),
+      }))
+
+    const lecturerRows = lecturerData
+      .filter((item: any) => item.organizationId)
+      .map((item: any) => {
+        const organization = organizations.find((org: any) => org.Id === item.organizationId)
+        const lecturerName = getLecturerDisplayName(item)
+        const lecturerCode = item.code?.trim() || ""
+        const name =
+          [lecturerCode, lecturerName].filter(Boolean).join(" - ") || "Giảng viên không tên"
+
+        return {
+          key: `lecturer-${item.id}`,
+          parentKey:
+            organization?.iLoaiDonVi === 7
+              ? `department-${item.organizationId}`
+              : `faculty-${item.organizationId}`,
+          type: "lecturer" as const,
+          name,
+          completed: lecturerIds.has(item.id) ? 1 : 0,
+          total: 1,
+        }
+      })
+
+    return [
+      ...facultyRows,
+      ...departmentRows,
+      ...lecturerRows,
+      {
+        key: "total",
+        type: "total" as const,
+        name: "Tổng số",
+        completed: lecturerActive.length,
+        total: lecturerData.length,
+      },
+    ]
+  }, [organizations, lecturerData, lecturerActive])
+
   const items = useMemo(() => {
     if (!filters?.clusterId) {
       return <div className="my-10 text-center text-primary text-base">Chọn đợt khảo sát</div>
@@ -361,6 +448,7 @@ export default function BaoCaoGiangVien() {
             selectedId={filters?.clusterId}
             lectureId={selectedItem?.id}
             surveyName={filters?.surveyName}
+            progressData={progressData}
             trainingObjectTypeName={trainingObjectTypeName}
             semesterName={semesterName}
             trainingSystemName={trainingSystemName}
