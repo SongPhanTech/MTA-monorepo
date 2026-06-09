@@ -426,12 +426,6 @@ export default function StudentFixedClassPage() {
     [convertScore, scoreToPassGraduation]
   )
 
-  const debouncedRefetch = useCallback(
-    _.debounce(() => {
-      refetch()
-    }, 500),
-    []
-  )
   const { onOpen } = useDisclosure<{
     id: string
   }>({
@@ -535,7 +529,7 @@ export default function StudentFixedClassPage() {
             (score: any) => score.subjectVersionId === subjectInfo.subject.id
           )
 
-          if (!scoreData) return "Null"
+          if (!scoreData) return ""
           if (scoreData.exempted) return "Miễn"
           if (scoreData.examPostponed) return "HT"
           if (scoreData.examBanned) return "CT"
@@ -549,12 +543,32 @@ export default function StudentFixedClassPage() {
           return "Null"
         })
         const ccta = student.foreignLangPass ? "Đạt" : ""
-        const tbcData = (student as any).studentSemesterResult?.[0]?.cumulativeGpaBase10
+        
+        let totalScoreCredits = 0
+        let totalCreditsForAvg = 0
+
+        ;(subjectsInOrder || []).forEach((subjectInfo, i) => {
+          const d = diem[i]
+          if (typeof d === "number") {
+             totalScoreCredits += d * (subjectInfo.subject.credit || 0)
+             totalCreditsForAvg += (subjectInfo.subject.credit || 0)
+          }
+        })
+        const tbcData = totalCreditsForAvg > 0 ? (totalScoreCredits / totalCreditsForAvg).toFixed(2) : null
         const tbc = tbcData ? Number(tbcData) : null
 
         const thesisReg = (student as any).thesisRegistrations?.[0]
         const dlvData = thesisReg?.thesisProject?.defenseRecord?.finalScore
-        const dlv = dlvData ? Number(dlvData) : null
+        let dlv = dlvData ? Number(dlvData) : null
+
+        if (dlv === null) {
+           const gradSubjectIndex = (subjectsInOrder || []).findIndex(s => s.subject.name.toLowerCase().includes("luận văn"))
+           if (gradSubjectIndex >= 0) {
+              const d = diem[gradSubjectIndex]
+              if (typeof d === "number") dlv = d
+           }
+        }
+
         return {
           cells: [
             { value: index + 1, align: "center" as const, border: true },
@@ -571,8 +585,8 @@ export default function StudentFixedClassPage() {
               align: "center" as const,
               border: true,
             },
-            ...diem.map((d) => ({
-              value: d !== null ? String(d) : null,
+            ...Array.from({ length: 23 }).map((_, i) => ({
+              value: diem[i] !== undefined ? (diem[i] !== null ? String(diem[i]) : null) : null,
               align: "right" as const,
               border: true,
             })),
