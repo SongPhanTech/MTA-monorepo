@@ -18,6 +18,7 @@ import { useMemo, useState } from "react"
 import OrganizationSurveyReport from "@/components/sub-pages/khao-sat/bao-cao-don-vi"
 import { getRuntimeEnv } from "@workspace/libs"
 import { $Enums } from "@workspace/db/client"
+import dayjs from "dayjs"
 
 /**
  * Nhãn hệ đào tạo cho mẫu báo cáo — chỉ theo `TrainingObjectType.type` (không đoán qua tên/regex).
@@ -213,8 +214,25 @@ export default function BaoCaoGiangVien() {
       },
       include: {
         userProfile: true,
-        mainSubjectClasses: true,
         organization: true,
+        mainSubjectClasses: {
+          include: {
+            subjectClassStudent: {
+              include: {
+                student: {
+                  include: {
+                    userProfile: {},
+                    surveySessions: {
+                      include: {
+                        survey: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
       },
     },
     {
@@ -317,24 +335,69 @@ export default function BaoCaoGiangVien() {
   }
 
   const progressData = useMemo(() => {
-    const lecturerIds = new Set(lecturerActive.map((item) => item.id))
-
     const getDescendantOrgIds = (orgId: string): string[] => {
       const children = organizations.filter((item: any) => item.sParentId === orgId)
       return children.flatMap((item: any) => [item.Id, ...getDescendantOrgIds(item.Id)])
     }
 
-    const countLecturers = (orgId: string) =>
-      lecturerData.filter((item: any) => {
-        const orgIds = [orgId, ...getDescendantOrgIds(orgId)]
-        return orgIds.includes(item.organizationId)
-      }).length
+    const selectedCluster = data.find((c: any) => c.id === filters.clusterId)
+    const clusterSubjectClassIds = new Set<string>(
+      (selectedCluster?.surveys || []).map((s: any) => s.subjectClassId).filter(Boolean)
+    )
+
+    const getStudents = (lecturer: any) => {
+      const seen = new Set<string>()
+      const students: any[] = []
+
+      for (const subjectClass of lecturer.mainSubjectClasses || []) {
+        if (!clusterSubjectClassIds.has(subjectClass.id)) continue
+        for (const entry of subjectClass.subjectClassStudent || []) {
+          const student = entry?.student
+          if (!student || seen.has(student.id)) continue
+          seen.add(student.id)
+          students.push(student)
+        }
+      }
+
+      return students
+    }
+
+    const isStudentCompleted = (student: any) =>
+      (student?.surveySessions || []).some((session: any) => {
+        const survey = session?.survey
+        return (
+          survey?.clusterSurveyId === filters.clusterId &&
+          (session?.completedAt || session?.isCompleted)
+        )
+      })
+
+    const studentStats = lecturerData.reduce<Record<string, { total: number; completed: number }>>(
+      (acc, lecturer) => {
+        const students = getStudents(lecturer)
+        acc[lecturer.id] = {
+          total: students.length,
+          completed: students.filter(isStudentCompleted).length,
+        }
+        return acc
+      },
+      {}
+    )
+
+    const countStudents = (orgId: string) =>
+      lecturerData
+        .filter((item: any) => {
+          const orgIds = [orgId, ...getDescendantOrgIds(orgId)]
+          return orgIds.includes(item.organizationId)
+        })
+        .reduce((sum, item) => sum + (studentStats[item.id]?.total || 0), 0)
 
     const countCompleted = (orgId: string) =>
-      lecturerData.filter((item: any) => {
-        const orgIds = [orgId, ...getDescendantOrgIds(orgId)]
-        return orgIds.includes(item.organizationId) && lecturerIds.has(item.id)
-      }).length
+      lecturerData
+        .filter((item: any) => {
+          const orgIds = [orgId, ...getDescendantOrgIds(orgId)]
+          return orgIds.includes(item.organizationId)
+        })
+        .reduce((sum, item) => sum + (studentStats[item.id]?.completed || 0), 0)
 
     const facultyRows = organizations
       .filter((item: any) => [5, 6].includes(item.iLoaiDonVi))
@@ -344,7 +407,7 @@ export default function BaoCaoGiangVien() {
         type: "faculty" as const,
         name: `${item.sMa || ""} - ${item.sTen || ""}`.trim(),
         completed: countCompleted(item.Id),
-        total: countLecturers(item.Id),
+        total: countStudents(item.Id),
       }))
 
     const departmentRows = organizations
@@ -355,7 +418,7 @@ export default function BaoCaoGiangVien() {
         type: "department" as const,
         name: `${item.sMa || ""} - ${item.sTen || ""}`.trim(),
         completed: countCompleted(item.Id),
-        total: countLecturers(item.Id),
+        total: countStudents(item.Id),
       }))
 
     const lecturerRows = lecturerData
@@ -375,10 +438,19 @@ export default function BaoCaoGiangVien() {
               : `faculty-${item.organizationId}`,
           type: "lecturer" as const,
           name,
-          completed: lecturerIds.has(item.id) ? 1 : 0,
-          total: 1,
+          completed: studentStats[item.id]?.completed || 0,
+          total: studentStats[item.id]?.total || 0,
         }
       })
+
+    const totalCompleted = lecturerData.reduce(
+      (sum, item) => sum + (studentStats[item.id]?.completed || 0),
+      0
+    )
+    const totalStudents = lecturerData.reduce(
+      (sum, item) => sum + (studentStats[item.id]?.total || 0),
+      0
+    )
 
     return [
       ...facultyRows,
@@ -388,11 +460,11 @@ export default function BaoCaoGiangVien() {
         key: "total",
         type: "total" as const,
         name: "Tổng số",
-        completed: lecturerActive.length,
-        total: lecturerData.length,
+        completed: totalCompleted,
+        total: totalStudents,
       },
     ]
-  }, [organizations, lecturerData, lecturerActive])
+  }, [organizations, lecturerData, filters.clusterId, data])
 
   const items = useMemo(() => {
     if (!filters?.clusterId) {

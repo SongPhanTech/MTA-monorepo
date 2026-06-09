@@ -15,7 +15,7 @@ interface ProgressRow {
 }
 
 function getStatusStyles(row: ProgressRow) {
-  const isComplete = row.completed === row.total && row.total > 0
+  const isComplete = row.completed === row.total
 
   if (row.type === "total") {
     return {
