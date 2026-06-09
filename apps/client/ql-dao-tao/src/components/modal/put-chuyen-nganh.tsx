@@ -375,6 +375,11 @@ const PutTrainingMajorModal = () => {
         </FormItem>
       </Col>
       <Col span={24}>
+        <FormItem form={form} name="summary" label="Tóm tắt" required>
+          <Input.TextArea placeholder="Nhập tóm tắt" />
+        </FormItem>
+      </Col>
+      <Col span={24}>
         <FormItem form={form} name="description" label="Mô tả">
           <Input.TextArea placeholder="Nhập mô tả" />
         </FormItem>
