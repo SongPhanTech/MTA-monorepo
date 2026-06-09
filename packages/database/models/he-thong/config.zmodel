@@ -18,6 +18,7 @@ enum ConfigKey {
 
     USER_SESSION_TIMEOUT
     ACADEMIC_ACTION_RULES
+    LECTURER_DEADLINE_CRON_SCHEDULE // Lịch cron quét hạn thông báo giảng viên (JSON)
 
     @@schema("he-thong")
 }

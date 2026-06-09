@@ -2218,6 +2218,7 @@ export type ExcelTemplateRequestBody = {
   }[];
   fileName: string;
   path: string;
+  prefix?: string | null;
   /**
    * Có hiển thị lưới trong Excel hay không
    *
@@ -2230,8 +2231,6 @@ export type ExcelTemplateRequestBody = {
    * @default true
    */
   wrapText?: boolean;
-  orientation?: "portrait" | "landscape";
-  horizontalCentered?: boolean;
 };
 
 export type ExcelTemplateVariables = {
@@ -2269,6 +2268,504 @@ export const useExcelTemplate = (
   >({
     mutationFn: (variables: ExcelTemplateVariables) =>
       fetchExcelTemplate(deepMerge(fetcherOptions, variables)),
+    ...options,
+  });
+};
+
+export type ExcelTemplatePreviewError = Fetcher.ErrorWrapper<{
+  status: 500;
+  payload: {
+    message: string;
+  };
+}>;
+
+export type ExcelTemplatePreviewResponse = {
+  path: string;
+  fileType: string;
+};
+
+export type ExcelTemplatePreviewRequestBody = {
+  tail?: {
+    data?: void | null;
+  };
+  head?: {
+    data?: void | null;
+  };
+  /**
+   * Dữ liệu để điền vào template (chế độ cũ: 1 sheet)
+   */
+  payload?: {
+    data?: void | null;
+    /**
+     * Danh sách các ô cần gộp trong sheet, định dạng giống như A1:B2
+     */
+    mergeCells?: string[];
+  }[];
+  /**
+   * Dữ liệu nhiều sheet. Nếu có thì mỗi phần tử tạo ra 1 sheet trong file xuất.
+   */
+  sheets?: {
+    sheetName?: string;
+    payload: {
+      data?: void | null;
+      /**
+       * Danh sách các ô cần gộp trong sheet, định dạng giống như A1:B2
+       */
+      mergeCells?: string[];
+    }[];
+  }[];
+  fileName: string;
+  path: string;
+  prefix?: string | null;
+  /**
+   * Có hiển thị lưới trong Excel hay không
+   *
+   * @default false
+   */
+  showGridLines?: boolean;
+  /**
+   * Có tự động xuống dòng trong ô hay không
+   *
+   * @default true
+   */
+  wrapText?: boolean;
+  previewKey: string;
+};
+
+export type ExcelTemplatePreviewVariables = {
+  body: ExcelTemplatePreviewRequestBody;
+} & CommonContext["fetcherOptions"];
+
+export const fetchExcelTemplatePreview = (
+  variables: ExcelTemplatePreviewVariables,
+  signal?: AbortSignal,
+) =>
+  commonFetch<
+    ExcelTemplatePreviewResponse,
+    ExcelTemplatePreviewError,
+    ExcelTemplatePreviewRequestBody,
+    {},
+    {},
+    {}
+  >({
+    url: "/api/excel-template/preview",
+    method: "post",
+    ...variables,
+    signal,
+  });
+
+export const useExcelTemplatePreview = (
+  options?: Omit<
+    reactQuery.UseMutationOptions<
+      ExcelTemplatePreviewResponse,
+      ExcelTemplatePreviewError,
+      ExcelTemplatePreviewVariables
+    >,
+    "mutationFn"
+  >,
+) => {
+  const { fetcherOptions } = useCommonContext();
+  return reactQuery.useMutation<
+    ExcelTemplatePreviewResponse,
+    ExcelTemplatePreviewError,
+    ExcelTemplatePreviewVariables
+  >({
+    mutationFn: (variables: ExcelTemplatePreviewVariables) =>
+      fetchExcelTemplatePreview(deepMerge(fetcherOptions, variables)),
+    ...options,
+  });
+};
+
+export type DocxTemplateError = Fetcher.ErrorWrapper<undefined>;
+
+export type DocxTemplateRequestBody = {
+  fileName: string;
+  path: string;
+  prefix?: string | null;
+  data: {
+    [key: string]: void | null;
+  };
+};
+
+export type DocxTemplateVariables = {
+  body: DocxTemplateRequestBody;
+} & CommonContext["fetcherOptions"];
+
+export const fetchDocxTemplate = (
+  variables: DocxTemplateVariables,
+  signal?: AbortSignal,
+) =>
+  commonFetch<
+    undefined,
+    DocxTemplateError,
+    DocxTemplateRequestBody,
+    {},
+    {},
+    {}
+  >({ url: "/api/docx-template", method: "post", ...variables, signal });
+
+export const useDocxTemplate = (
+  options?: Omit<
+    reactQuery.UseMutationOptions<
+      undefined,
+      DocxTemplateError,
+      DocxTemplateVariables
+    >,
+    "mutationFn"
+  >,
+) => {
+  const { fetcherOptions } = useCommonContext();
+  return reactQuery.useMutation<
+    undefined,
+    DocxTemplateError,
+    DocxTemplateVariables
+  >({
+    mutationFn: (variables: DocxTemplateVariables) =>
+      fetchDocxTemplate(deepMerge(fetcherOptions, variables)),
+    ...options,
+  });
+};
+
+export type DocxTemplatePreviewError = Fetcher.ErrorWrapper<
+  | {
+      status: 404;
+      payload: {
+        message: string;
+      };
+    }
+  | {
+      status: 500;
+      payload: {
+        message: string;
+      };
+    }
+>;
+
+export type DocxTemplatePreviewResponse = {
+  path: string;
+  fileType: string;
+};
+
+export type DocxTemplatePreviewRequestBody = {
+  fileName: string;
+  path: string;
+  prefix?: string | null;
+  data: {
+    [key: string]: void | null;
+  };
+  previewKey: string;
+};
+
+export type DocxTemplatePreviewVariables = {
+  body: DocxTemplatePreviewRequestBody;
+} & CommonContext["fetcherOptions"];
+
+export const fetchDocxTemplatePreview = (
+  variables: DocxTemplatePreviewVariables,
+  signal?: AbortSignal,
+) =>
+  commonFetch<
+    DocxTemplatePreviewResponse,
+    DocxTemplatePreviewError,
+    DocxTemplatePreviewRequestBody,
+    {},
+    {},
+    {}
+  >({
+    url: "/api/docx-template/preview",
+    method: "post",
+    ...variables,
+    signal,
+  });
+
+export const useDocxTemplatePreview = (
+  options?: Omit<
+    reactQuery.UseMutationOptions<
+      DocxTemplatePreviewResponse,
+      DocxTemplatePreviewError,
+      DocxTemplatePreviewVariables
+    >,
+    "mutationFn"
+  >,
+) => {
+  const { fetcherOptions } = useCommonContext();
+  return reactQuery.useMutation<
+    DocxTemplatePreviewResponse,
+    DocxTemplatePreviewError,
+    DocxTemplatePreviewVariables
+  >({
+    mutationFn: (variables: DocxTemplatePreviewVariables) =>
+      fetchDocxTemplatePreview(deepMerge(fetcherOptions, variables)),
+    ...options,
+  });
+};
+
+export type SyncThesisCouncilPaymentsError = Fetcher.ErrorWrapper<{
+  status: 400;
+  payload: {
+    message: string;
+  };
+}>;
+
+export type SyncThesisCouncilPaymentsResponse = {
+  syncedCount: number;
+  projectCount: number;
+};
+
+export type SyncThesisCouncilPaymentsRequestBody = {
+  /**
+   * ID đợt xét luận văn.
+   */
+  thesisSessionId: string;
+  /**
+   * Danh sách ID học viên trong phạm vi lọc hiện tại.
+   */
+  studentIds?: string[];
+  /**
+   * true = cập nhật lại toàn bộ bản ghi thanh toán hội đồng.
+   *
+   * @default false
+   */
+  recreateAll?: boolean;
+};
+
+export type SyncThesisCouncilPaymentsVariables = {
+  body: SyncThesisCouncilPaymentsRequestBody;
+} & CommonContext["fetcherOptions"];
+
+export const fetchSyncThesisCouncilPayments = (
+  variables: SyncThesisCouncilPaymentsVariables,
+  signal?: AbortSignal,
+) =>
+  commonFetch<
+    SyncThesisCouncilPaymentsResponse,
+    SyncThesisCouncilPaymentsError,
+    SyncThesisCouncilPaymentsRequestBody,
+    {},
+    {},
+    {}
+  >({
+    url: "/api/thesis-payment/sync-council-payments",
+    method: "post",
+    ...variables,
+    signal,
+  });
+
+export const useSyncThesisCouncilPayments = (
+  options?: Omit<
+    reactQuery.UseMutationOptions<
+      SyncThesisCouncilPaymentsResponse,
+      SyncThesisCouncilPaymentsError,
+      SyncThesisCouncilPaymentsVariables
+    >,
+    "mutationFn"
+  >,
+) => {
+  const { fetcherOptions } = useCommonContext();
+  return reactQuery.useMutation<
+    SyncThesisCouncilPaymentsResponse,
+    SyncThesisCouncilPaymentsError,
+    SyncThesisCouncilPaymentsVariables
+  >({
+    mutationFn: (variables: SyncThesisCouncilPaymentsVariables) =>
+      fetchSyncThesisCouncilPayments(deepMerge(fetcherOptions, variables)),
+    ...options,
+  });
+};
+
+export type SyncThesisSupervisorPaymentsError = Fetcher.ErrorWrapper<{
+  status: 400;
+  payload: {
+    message: string;
+  };
+}>;
+
+export type SyncThesisSupervisorPaymentsResponse = {
+  syncedCount: number;
+  projectCount: number;
+};
+
+export type SyncThesisSupervisorPaymentsRequestBody = {
+  /**
+   * ID đợt xét luận văn.
+   */
+  thesisSessionId: string;
+  /**
+   * Danh sách ID học viên trong phạm vi lọc hiện tại.
+   */
+  studentIds?: string[];
+  /**
+   * true = cập nhật lại toàn bộ bản ghi thanh toán GVHD.
+   *
+   * @default false
+   */
+  recreateAll?: boolean;
+};
+
+export type SyncThesisSupervisorPaymentsVariables = {
+  body: SyncThesisSupervisorPaymentsRequestBody;
+} & CommonContext["fetcherOptions"];
+
+export const fetchSyncThesisSupervisorPayments = (
+  variables: SyncThesisSupervisorPaymentsVariables,
+  signal?: AbortSignal,
+) =>
+  commonFetch<
+    SyncThesisSupervisorPaymentsResponse,
+    SyncThesisSupervisorPaymentsError,
+    SyncThesisSupervisorPaymentsRequestBody,
+    {},
+    {},
+    {}
+  >({
+    url: "/api/thesis-payment/sync-supervisor-payments",
+    method: "post",
+    ...variables,
+    signal,
+  });
+
+export const useSyncThesisSupervisorPayments = (
+  options?: Omit<
+    reactQuery.UseMutationOptions<
+      SyncThesisSupervisorPaymentsResponse,
+      SyncThesisSupervisorPaymentsError,
+      SyncThesisSupervisorPaymentsVariables
+    >,
+    "mutationFn"
+  >,
+) => {
+  const { fetcherOptions } = useCommonContext();
+  return reactQuery.useMutation<
+    SyncThesisSupervisorPaymentsResponse,
+    SyncThesisSupervisorPaymentsError,
+    SyncThesisSupervisorPaymentsVariables
+  >({
+    mutationFn: (variables: SyncThesisSupervisorPaymentsVariables) =>
+      fetchSyncThesisSupervisorPayments(deepMerge(fetcherOptions, variables)),
+    ...options,
+  });
+};
+
+export type ExportThesisCouncilPaymentsError = Fetcher.ErrorWrapper<{
+  status: 400;
+  payload: {
+    message: string;
+  };
+}>;
+
+export type ExportThesisCouncilPaymentsRequestBody = {
+  /**
+   * ID đợt xét luận văn.
+   */
+  thesisSessionId: string;
+  /**
+   * Danh sách ID học viên trong phạm vi lọc hiện tại.
+   */
+  studentIds?: string[];
+};
+
+export type ExportThesisCouncilPaymentsVariables = {
+  body: ExportThesisCouncilPaymentsRequestBody;
+} & CommonContext["fetcherOptions"];
+
+export const fetchExportThesisCouncilPayments = (
+  variables: ExportThesisCouncilPaymentsVariables,
+  signal?: AbortSignal,
+) =>
+  commonFetch<
+    undefined,
+    ExportThesisCouncilPaymentsError,
+    ExportThesisCouncilPaymentsRequestBody,
+    {},
+    {},
+    {}
+  >({
+    url: "/api/thesis-payment/export-council-payments",
+    method: "post",
+    ...variables,
+    signal,
+  });
+
+export const useExportThesisCouncilPayments = (
+  options?: Omit<
+    reactQuery.UseMutationOptions<
+      undefined,
+      ExportThesisCouncilPaymentsError,
+      ExportThesisCouncilPaymentsVariables
+    >,
+    "mutationFn"
+  >,
+) => {
+  const { fetcherOptions } = useCommonContext();
+  return reactQuery.useMutation<
+    undefined,
+    ExportThesisCouncilPaymentsError,
+    ExportThesisCouncilPaymentsVariables
+  >({
+    mutationFn: (variables: ExportThesisCouncilPaymentsVariables) =>
+      fetchExportThesisCouncilPayments(deepMerge(fetcherOptions, variables)),
+    ...options,
+  });
+};
+
+export type ExportThesisSupervisorPaymentsError = Fetcher.ErrorWrapper<{
+  status: 400;
+  payload: {
+    message: string;
+  };
+}>;
+
+export type ExportThesisSupervisorPaymentsRequestBody = {
+  /**
+   * ID đợt xét luận văn.
+   */
+  thesisSessionId: string;
+  /**
+   * Danh sách ID học viên trong phạm vi lọc hiện tại.
+   */
+  studentIds?: string[];
+};
+
+export type ExportThesisSupervisorPaymentsVariables = {
+  body: ExportThesisSupervisorPaymentsRequestBody;
+} & CommonContext["fetcherOptions"];
+
+export const fetchExportThesisSupervisorPayments = (
+  variables: ExportThesisSupervisorPaymentsVariables,
+  signal?: AbortSignal,
+) =>
+  commonFetch<
+    undefined,
+    ExportThesisSupervisorPaymentsError,
+    ExportThesisSupervisorPaymentsRequestBody,
+    {},
+    {},
+    {}
+  >({
+    url: "/api/thesis-payment/export-supervisor-payments",
+    method: "post",
+    ...variables,
+    signal,
+  });
+
+export const useExportThesisSupervisorPayments = (
+  options?: Omit<
+    reactQuery.UseMutationOptions<
+      undefined,
+      ExportThesisSupervisorPaymentsError,
+      ExportThesisSupervisorPaymentsVariables
+    >,
+    "mutationFn"
+  >,
+) => {
+  const { fetcherOptions } = useCommonContext();
+  return reactQuery.useMutation<
+    undefined,
+    ExportThesisSupervisorPaymentsError,
+    ExportThesisSupervisorPaymentsVariables
+  >({
+    mutationFn: (variables: ExportThesisSupervisorPaymentsVariables) =>
+      fetchExportThesisSupervisorPayments(deepMerge(fetcherOptions, variables)),
     ...options,
   });
 };
@@ -2322,7 +2819,7 @@ export const useGeneratePresignedUrl = (
 export type ListObjectsQueryParams = {
   path?: string;
   startAfter?: string;
-  limit: number;
+  limit?: number | null;
 };
 
 export type ListObjectsError = Fetcher.ErrorWrapper<undefined>;
@@ -2330,7 +2827,7 @@ export type ListObjectsError = Fetcher.ErrorWrapper<undefined>;
 export type ListObjectsResponse = Schemas.BucketItemDto[];
 
 export type ListObjectsVariables = {
-  queryParams: ListObjectsQueryParams;
+  queryParams?: ListObjectsQueryParams;
 } & CommonContext["fetcherOptions"];
 
 export const fetchListObjects = (
@@ -2411,6 +2908,55 @@ export const useListObjects = <TData = ListObjectsResponse,>(
     ),
     ...options,
     ...queryOptions,
+  });
+};
+
+export type DeleteObjectQueryParams = {
+  objectName: string;
+};
+
+export type DeleteObjectError = Fetcher.ErrorWrapper<undefined>;
+
+export type DeleteObjectResponse = {
+  success: boolean;
+};
+
+export type DeleteObjectVariables = {
+  queryParams: DeleteObjectQueryParams;
+} & CommonContext["fetcherOptions"];
+
+export const fetchDeleteObject = (
+  variables: DeleteObjectVariables,
+  signal?: AbortSignal,
+) =>
+  commonFetch<
+    DeleteObjectResponse,
+    DeleteObjectError,
+    undefined,
+    {},
+    DeleteObjectQueryParams,
+    {}
+  >({ url: "/api/minio", method: "delete", ...variables, signal });
+
+export const useDeleteObject = (
+  options?: Omit<
+    reactQuery.UseMutationOptions<
+      DeleteObjectResponse,
+      DeleteObjectError,
+      DeleteObjectVariables
+    >,
+    "mutationFn"
+  >,
+) => {
+  const { fetcherOptions } = useCommonContext();
+  return reactQuery.useMutation<
+    DeleteObjectResponse,
+    DeleteObjectError,
+    DeleteObjectVariables
+  >({
+    mutationFn: (variables: DeleteObjectVariables) =>
+      fetchDeleteObject(deepMerge(fetcherOptions, variables)),
+    ...options,
   });
 };
 
@@ -2767,6 +3313,7 @@ export type SqlTransactionRequestBody = {
     | "Certificate"
     | "CertificateOnSubject"
     | "Award"
+    | "OfficerBonusScore"
     | "DiplomaType"
     | "ScoreConvert"
     | "LoadCategory"
@@ -2777,20 +3324,13 @@ export type SqlTransactionRequestBody = {
     | "StudentSemesterResult"
     | "StudentYearResult"
     | "Notification"
-    | "DocumentFile"
-    | "AcademicActionConfig"
-    | "AcademicActionRuleSet"
-    | "AcademicActionCondition"
-    | "StudentAcademicDecision"
-    | "TrainingScoreSession"
-    | "StudentTrainingScore"
-    | "SemesterTrainingScore"
-    | "SchoolYearTrainingScore"
+    | "Lecturer"
+    | "LecturerHistory"
     | "LecturerType"
     | "StaffType"
     | "StaffPosition"
-    | "Lecturer"
-    | "LecturerHistory"
+    | "Staff"
+    | "StaffHistory"
     | "ResearchProject"
     | "StudentResearchRegistration"
     | "ThesisSession"
@@ -2804,54 +3344,20 @@ export type SqlTransactionRequestBody = {
     | "CouncilMember"
     | "DefenseRecord"
     | "LibrarySubmission"
+    | "ConfigPaymentSession"
     | "DefaultCouncilRolePayAmount"
     | "DefaultSupervisorPayAmount"
     | "PaymentRecord"
     | "SupervisorPaymentRecord"
-    | "EvaluationPeriod"
-    | "EvaluationStandardSet"
-    | "StandardCatalog"
-    | "CriterionCatalog"
-    | "EvidenceCategory"
-    | "Evidence"
-    | "EvaluationCriterionComment"
-    | "RequirementCriterionCatalog"
-    | "StandardPeriod"
-    | "CriterionPeriod"
-    | "AnalysisCriterion"
-    | "EvaluationCriterion"
-    | "RequirementCriterion"
-    | "AnalysisFormEvidence"
-    | "EvaluationCouncil"
-    | "EvaluationCouncilMember"
-    | "EvidenceFile"
-    | "SurveyObjectType"
-    | "SurveyTopic"
-    | "SurveyQuestionGroup"
-    | "ClusterSurvey"
-    | "Survey"
-    | "SurveyQuestion"
-    | "SpecificChoice"
-    | "SurveyChoice"
-    | "SurveySession"
-    | "SurveyResponse"
-    | "QuestionBank"
-    | "Question"
-    | "MultipleChoiceOption"
-    | "FillInBlankSlot"
-    | "OrderingItem"
-    | "Exam"
-    | "ExamRoom"
-    | "ExamList"
-    | "ExamBank"
-    | "ExamBankQuestion"
-    | "ExamPaper"
-    | "ExamFramework"
-    | "ExamMatrix"
-    | "KnowledgeBlock"
-    | "ConfigExam"
-    | "Staff"
-    | "StaffHistory"
+    | "DocumentFile"
+    | "AcademicActionConfig"
+    | "AcademicActionRuleSet"
+    | "AcademicActionCondition"
+    | "StudentAcademicDecision"
+    | "TrainingScoreSession"
+    | "StudentTrainingScore"
+    | "SemesterTrainingScore"
+    | "SchoolYearTrainingScore"
     | "Scholarship"
     | "ScholarshipCriteria"
     | "ScholarshipAward"
@@ -2872,6 +3378,48 @@ export type SqlTransactionRequestBody = {
     | "NoteFolder"
     | "NoteTag"
     | "NoteReminder"
+    | "EvaluationPeriod"
+    | "EvaluationStandardSet"
+    | "StandardCatalog"
+    | "CriterionCatalog"
+    | "EvidenceCategory"
+    | "Evidence"
+    | "EvaluationCriterionComment"
+    | "RequirementCriterionCatalog"
+    | "StandardPeriod"
+    | "CriterionPeriod"
+    | "AnalysisCriterion"
+    | "EvaluationCriterion"
+    | "RequirementCriterion"
+    | "AnalysisFormEvidence"
+    | "EvaluationCouncil"
+    | "EvaluationCouncilMember"
+    | "EvidenceFile"
+    | "QuestionBank"
+    | "Question"
+    | "MultipleChoiceOption"
+    | "FillInBlankSlot"
+    | "OrderingItem"
+    | "Exam"
+    | "ExamRoom"
+    | "ExamList"
+    | "ExamBank"
+    | "ExamBankQuestion"
+    | "ExamPaper"
+    | "ExamFramework"
+    | "ExamMatrix"
+    | "KnowledgeBlock"
+    | "ConfigExam"
+    | "SurveyObjectType"
+    | "SurveyTopic"
+    | "SurveyQuestionGroup"
+    | "ClusterSurvey"
+    | "Survey"
+    | "SurveyQuestion"
+    | "SpecificChoice"
+    | "SurveyChoice"
+    | "SurveySession"
+    | "SurveyResponse"
     | "AcademicWarningRule"
     | "AcademicWarning"
     | "DisciplinaryWarning"

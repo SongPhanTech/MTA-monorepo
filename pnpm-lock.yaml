@@ -697,6 +697,9 @@ importers:
       '@scalar/hono-api-reference':
         specifier: 'catalog:'
         version: 0.5.184(hono@4.10.6)
+      '@workspace/constant':
+        specifier: workspace:*
+        version: link:../../../packages/constant
       '@workspace/db':
         specifier: workspace:*
         version: link:../../../packages/database

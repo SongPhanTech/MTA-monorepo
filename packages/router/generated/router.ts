@@ -37,6 +37,8 @@ export default {
   "QL_DAO_TAO": {
     "CAU_HINH_THANH_TOAN_PAYMENTCONFIGURATION": "/cau-hinh-thanh-toan/PaymentConfiguration",
     "CAU_HINH_THOI_GIAN_DEFENSESCHEDULECONFIGURATION": "/cau-hinh-thoi-gian/DefenseScheduleConfiguration",
+    "CAU_HINH_THONG_BAO_GIANG_VIEN_CAUHINHQUETHANGIANGVIEN": "/cau-hinh-thong-bao-giang-vien/CauHinhQuetHanGiangVien",
+    "CAU_HINH_THONG_BAO_GIANG_VIEN": "/cau-hinh-thong-bao-giang-vien",
     "CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO_ID": "/chuong-trinh-dao-tao/danh-muc-chuong-trinh-dao-tao/[id]",
     "CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO": "/chuong-trinh-dao-tao/danh-muc-chuong-trinh-dao-tao",
     "CHUONG_TRINH_DAO_TAO_DANH_SACH_MON_HOC": "/chuong-trinh-dao-tao/danh-sach-mon-hoc",
@@ -44,6 +46,7 @@ export default {
     "CHUONG_TRINH_DAO_TAO_QL_MON_HOC": "/chuong-trinh-dao-tao/ql-mon-hoc",
     "CONG_GIANG_VIEN_GIANG_VIEN": "/cong-giang-vien/giang-vien",
     "CONG_GIANG_VIEN": "/cong-giang-vien",
+    "CONG_GIANG_VIEN_THONG_BAO": "/cong-giang-vien/thong-bao",
     "DANG_KY_HOC_DANG_KY_HOC_OFFLINE": "/dang-ky-hoc/dang-ky-hoc-offline",
     "DANG_KY_HOC_DOT_DANG_KY_HOC_ONLINE_ID": "/dang-ky-hoc/dot-dang-ky-hoc-online/[id]",
     "DANG_KY_HOC_DOT_DANG_KY_HOC_ONLINE": "/dang-ky-hoc/dot-dang-ky-hoc-online",

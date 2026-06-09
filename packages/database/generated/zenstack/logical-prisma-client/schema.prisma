@@ -30,6 +30,7 @@ enum ConfigKey {
   WARD
   USER_SESSION_TIMEOUT
   ACADEMIC_ACTION_RULES
+  LECTURER_DEADLINE_CRON_SCHEDULE
 
   @@schema("he-thong")
 }
