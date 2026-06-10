@@ -12,6 +12,7 @@ import '../tro-ly-ao/chat-bot'
 import '../ql-ho-so/categories'
 import '../khao-thi/evaluate'
 import '../he-thong/changelog'
+import '../ql-danh-muc/notification'
 
 enum UserType {
   MILITARY_STUDENT // Học viên quân sự
@@ -300,6 +301,7 @@ model UserProfile extends BaseUuid {
   surveySession                        SurveySession[]
   evaluationCriterionComments          EvaluationCriterionComment[]
   classSchedules                       ClassSchedule[]
+  individualSchedules                  IndividualSchedule[]
   subjectClassAttendance               SubjectClassAttendance[]
 
   @@auth() 

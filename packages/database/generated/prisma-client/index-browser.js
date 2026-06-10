@@ -2843,6 +2843,9 @@ exports.Prisma.IndividualScheduleScalarFieldEnum = {
   endTime: 'endTime',
   allDay: 'allDay',
   location: 'location',
+  content: 'content',
+  reminderMinutes: 'reminderMinutes',
+  repeatType: 'repeatType',
   lecturerId: 'lecturerId'
 };
 
@@ -6688,6 +6691,7 @@ exports.Prisma.IndividualScheduleOrderByRelevanceFieldEnum = {
   createdBy: 'createdBy',
   title: 'title',
   location: 'location',
+  content: 'content',
   lecturerId: 'lecturerId'
 };
 
@@ -8247,6 +8251,14 @@ exports.NotificationPriority = exports.$Enums.NotificationPriority = {
   NORMAL: 'NORMAL',
   HIGH: 'HIGH',
   URGENT: 'URGENT'
+};
+
+exports.ScheduleRepeatType = exports.$Enums.ScheduleRepeatType = {
+  NONE: 'NONE',
+  DAILY: 'DAILY',
+  WEEKLY: 'WEEKLY',
+  MONTHLY: 'MONTHLY',
+  YEARLY: 'YEARLY'
 };
 
 exports.ResearchProjectStatus = exports.$Enums.ResearchProjectStatus = {

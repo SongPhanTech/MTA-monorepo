@@ -1486,6 +1486,13 @@ const metadata = {
                     isArray: true,
                     backLink: 'userProfiles',
                     isRelationOwner: true,
+                }, individualSchedules: {
+                    name: "individualSchedules",
+                    type: "IndividualSchedule",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'relatedUserProfiles',
+                    isRelationOwner: true,
                 }, subjectClassAttendance: {
                     name: "subjectClassAttendance",
                     type: "SubjectClassAttendance",
@@ -16627,6 +16634,19 @@ const metadata = {
                     name: "location",
                     type: "String",
                     isOptional: true,
+                }, content: {
+                    name: "content",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, reminderMinutes: {
+                    name: "reminderMinutes",
+                    type: "Int",
+                    isOptional: true,
+                }, repeatType: {
+                    name: "repeatType",
+                    type: "ScheduleRepeatType",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, lecturer: {
                     name: "lecturer",
                     type: "Lecturer",
@@ -16646,6 +16666,13 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'schedules',
+                    isRelationOwner: true,
+                }, relatedUserProfiles: {
+                    name: "relatedUserProfiles",
+                    type: "UserProfile",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'individualSchedules',
                     isRelationOwner: true,
                 },
             }, uniqueConstraints: {

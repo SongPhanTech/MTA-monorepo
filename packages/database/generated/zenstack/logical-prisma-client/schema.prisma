@@ -306,6 +306,17 @@ enum NotificationPriority {
   @@schema("ql-danh-muc")
 }
 
+/// Loại lặp lại lịch cá nhân (modal: Lặp lại).
+enum ScheduleRepeatType {
+  NONE
+  DAILY
+  WEEKLY
+  MONTHLY
+  YEARLY
+
+  @@schema("ql-danh-muc")
+}
+
 enum ResearchProjectStatus {
   OPEN
   FULL
@@ -944,6 +955,7 @@ model UserProfile {
   surveySession                        SurveySession[]
   evaluationCriterionComments          EvaluationCriterionComment[]
   classSchedules                       ClassSchedule[]
+  individualSchedules                  IndividualSchedule[]
   subjectClassAttendance               SubjectClassAttendance[]
 
   @@schema("ql-nguoi-dung")
@@ -4921,22 +4933,26 @@ model PersonalWorkTag {
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)
 model IndividualSchedule {
-  id          String            @id() @default(cuid())
-  code        String?           @unique()
-  active      Boolean           @default(true)
-  description String?           @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime          @default(now())
-  updatedAt   DateTime          @default(now()) @updatedAt()
-  createdBy   String?           @default("") @db.Uuid()
-  title       String
-  startTime   DateTime
-  endTime     DateTime
-  allDay      Boolean           @default(false)
-  location    String?
-  lecturer    Lecturer          @relation(fields: [lecturerId], references: [id])
-  lecturerId  String
-  tags        PersonalWorkTag[]
+  id                  String             @id() @default(cuid())
+  code                String?            @unique()
+  active              Boolean            @default(true)
+  description         String?            @db.Text()
+  deletedAt           DateTime?
+  createdAt           DateTime           @default(now())
+  updatedAt           DateTime           @default(now()) @updatedAt()
+  createdBy           String?            @default("") @db.Uuid()
+  title               String
+  startTime           DateTime
+  endTime             DateTime
+  allDay              Boolean            @default(false)
+  location            String?
+  content             String?            @db.Text()
+  reminderMinutes     Int?
+  repeatType          ScheduleRepeatType @default(NONE)
+  lecturer            Lecturer           @relation(fields: [lecturerId], references: [id])
+  lecturerId          String
+  tags                PersonalWorkTag[]
+  relatedUserProfiles UserProfile[]
 
   @@index([lecturerId])
   @@index([startTime])

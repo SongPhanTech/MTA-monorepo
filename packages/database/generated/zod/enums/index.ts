@@ -592,6 +592,7 @@ export * from './StudentStatus.schema';
 export * from './StudentTrainingType.schema';
 export * from './NotificationType.schema';
 export * from './NotificationPriority.schema';
+export * from './ScheduleRepeatType.schema';
 export * from './ResearchProjectStatus.schema';
 export * from './RegistrationStatus.schema';
 export * from './ThesisType.schema';

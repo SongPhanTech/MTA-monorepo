@@ -3,9 +3,9 @@ import '../ql-dao-tao/plan-training'
 import '../ql-dao-tao/student'
 import '../ql-dao-tao/lecturer'
 import '../ql-nguoi-dung/user'
+import '../ql-ho-so/profile'
 import 'document'
 import 'core-categories'
-import '../ql-dao-tao/student'
 
 // Enum loại thông báo
 enum NotificationType {
@@ -76,18 +76,34 @@ model PersonalWorkTag extends Base {
   @@schema("ql-danh-muc")
 }
 
+/// Loại lặp lại lịch cá nhân (modal: Lặp lại).
+enum ScheduleRepeatType {
+  NONE    // Không lặp lại
+  DAILY   // Hàng ngày
+  WEEKLY  // Hàng tuần
+  MONTHLY // Hàng tháng
+  YEARLY  // Hàng năm
+
+  @@schema("ql-danh-muc")
+}
+
 /// Lịch / công việc cá nhân của giảng viên (không trùng ClassSchedule hệ thống).
 model IndividualSchedule extends Base {
-  title     String
-  startTime DateTime
-  endTime   DateTime
-  allDay    Boolean  @default(false) // Sự kiện cả ngày
-  location  String?
+  title     String   // Tiêu đề lịch
+  startTime DateTime // Thời điểm bắt đầu (gộp từ ngày + từ giờ)
+  endTime   DateTime // Thời điểm kết thúc (gộp đến ngày + đến giờ)
+  allDay    Boolean  @default(false) // Cả ngày
+  location  String?  // Địa điểm / nền tảng
+  content   String?  @db.Text // Nội dung công việc, cuộc họp, ghi chú
+
+  reminderMinutes Int?               // Nhắc lịch: số phút trước giờ bắt đầu (null = không nhắc)
+  repeatType      ScheduleRepeatType @default(NONE) // Lặp lại
 
   lecturer   Lecturer @relation(fields: [lecturerId], references: [id])
   lecturerId String
 
-  tags PersonalWorkTag[]
+  tags                PersonalWorkTag[] // Loại lịch
+  relatedUserProfiles UserProfile[]     // Người liên quan (tùy chọn)
 
   @@index([lecturerId])
   @@index([startTime])
