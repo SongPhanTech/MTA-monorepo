@@ -451,9 +451,7 @@ function SurveylecturerReport({
         <Col span={24}>
           <div className="bg-white h-full flex flex-col">
             <div className="p-4 flex justify-between">
-              <div>
-                <Title level={4}>Tiến độ khảo sát theo đơn vị</Title>
-              </div>
+              <Title level={4}>Thống kê theo từng Câu hỏi</Title>
               {dataLevel?.status === 200 && (
                 <Dropdown
                   trigger={["click"]}
@@ -529,9 +527,6 @@ function SurveylecturerReport({
               {dataLevel?.status === 200 && dataLevel?.data?.data?.questions?.length > 0 ? (
                 <div style={{ width: "100%", height: "100%" }}>
                   <SurveyProgressTable data={progressData} />
-                  <div style={{ marginBottom: 20 }}>
-                    <Title level={4}>Thống kê theo từng Câu hỏi</Title>
-                  </div>
                   <ReactECharts
                     option={dataBarchart}
                     style={{

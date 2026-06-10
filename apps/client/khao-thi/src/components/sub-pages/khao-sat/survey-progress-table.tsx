@@ -1,5 +1,6 @@
 import { CaretDownOutlined, CaretRightOutlined } from "@ant-design/icons"
 import { Table, Typography } from "antd"
+import { Title } from "chart.js"
 import { useEffect, useMemo, useState } from "react"
 
 const { Text } = Typography
@@ -28,13 +29,6 @@ function getStatusStyles(row: ProgressRow) {
     return {
       color: "#52c41a",
       backgroundColor: "rgba(82, 196, 26, 0.12)",
-    }
-  }
-
-  if (row.completed > 0) {
-    return {
-      color: "#faad14",
-      backgroundColor: "rgba(250, 173, 20, 0.12)",
     }
   }
 
@@ -123,10 +117,12 @@ export function SurveyProgressTable({ data }: { data: ProgressRow[] }) {
           justifyContent: "space-between",
           alignItems: "center",
           marginBottom: 8,
+          flexWrap: "wrap",
+          gap: 12,
         }}
       >
-        <Text type="secondary" style={{ fontSize: 12 }}>
-          Số giảng viên đã có ý kiến / tổng số giảng viên
+        <Text strong style={{ fontSize: 15 }}>
+          Tiến độ khảo sát theo đơn vị
         </Text>
 
         <div
@@ -159,6 +155,10 @@ export function SurveyProgressTable({ data }: { data: ProgressRow[] }) {
             />
             <Text style={{ fontSize: 12 }}>Chưa lấy đủ ý kiến</Text>
           </div>
+
+          <Text type="secondary" style={{ fontSize: 12 }}>
+            Số giảng viên đã có ý kiến / tổng số giảng viên
+          </Text>
         </div>
       </div>
       <Table
