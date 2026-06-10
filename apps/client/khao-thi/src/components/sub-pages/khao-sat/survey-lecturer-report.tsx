@@ -526,6 +526,7 @@ function SurveylecturerReport({
             <div className="flex-1 mb-6">
               {dataLevel?.status === 200 && dataLevel?.data?.data?.questions?.length > 0 ? (
                 <div style={{ width: "100%", height: "100%" }}>
+                  <SurveyProgressTable data={progressData} />
                   <ReactECharts
                     option={dataBarchart}
                     style={{
@@ -536,7 +537,6 @@ function SurveylecturerReport({
                       ),
                     }}
                   />
-                  <SurveyProgressTable data={progressData} />
                   {dataLevel?.data?.data?.questions?.length > 0 &&
                     renderTable(dataLevel?.data?.data?.questions)}
                 </div>

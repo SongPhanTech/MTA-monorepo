@@ -134,7 +134,6 @@ export function SurveyProgressTable({ data }: { data: ProgressRow[] }) {
           Số giảng viên đã có ý kiến / tổng số giảng viên
         </Text>
       </div>
-
       <Table
         bordered
         size="middle"
@@ -231,6 +230,39 @@ export function SurveyProgressTable({ data }: { data: ProgressRow[] }) {
           },
         ]}
       />
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          gap: 16,
+          marginTop: 12,
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+          <span
+            style={{
+              width: 20,
+              height: 20,
+              borderRadius: "50%",
+              backgroundColor: "#52c41a",
+            }}
+          />
+          <Text style={{ fontSize: 12 }}>Đã lấy đủ ý kiến</Text>
+        </div>
+
+        <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+          <span
+            style={{
+              width: 20,
+              height: 20,
+              borderRadius: "50%",
+              backgroundColor: "#ff4d4f",
+            }}
+          />
+          <Text style={{ fontSize: 12 }}>Chưa lấy đủ ý kiến</Text>
+        </div>
+      </div>
     </div>
   )
 }
