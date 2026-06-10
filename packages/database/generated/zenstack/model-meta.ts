@@ -16489,6 +16489,179 @@ const metadata: ModelMeta = {
             },
             attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-danh-muc" }] }],
         },
+        personalWorkTag: {
+            name: 'PersonalWorkTag', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$PersonalWorkTag$createdBy,
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, color: {
+                    name: "color",
+                    type: "String",
+                    isOptional: true,
+                }, sortOrder: {
+                    name: "sortOrder",
+                    type: "Int",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                }, lecturer: {
+                    name: "lecturer",
+                    type: "Lecturer",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'personalWorkTags',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "lecturerId" },
+                }, lecturerId: {
+                    name: "lecturerId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'lecturer',
+                }, schedules: {
+                    name: "schedules",
+                    type: "IndividualSchedule",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'tags',
+                    isRelationOwner: true,
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, lecturerId_name: {
+                    name: "lecturerId_name",
+                    fields: ["lecturerId", "name"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-danh-muc" }] }],
+        },
+        individualSchedule: {
+            name: 'IndividualSchedule', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$IndividualSchedule$createdBy,
+                }, title: {
+                    name: "title",
+                    type: "String",
+                }, startTime: {
+                    name: "startTime",
+                    type: "DateTime",
+                }, endTime: {
+                    name: "endTime",
+                    type: "DateTime",
+                }, allDay: {
+                    name: "allDay",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                }, location: {
+                    name: "location",
+                    type: "String",
+                    isOptional: true,
+                }, lecturer: {
+                    name: "lecturer",
+                    type: "Lecturer",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'individualSchedules',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "lecturerId" },
+                }, lecturerId: {
+                    name: "lecturerId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'lecturer',
+                }, tags: {
+                    name: "tags",
+                    type: "PersonalWorkTag",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'schedules',
+                    isRelationOwner: true,
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null] }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null] }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-danh-muc" }] }],
+        },
         lecturer: {
             name: 'Lecturer', fields: {
                 id: {
@@ -16718,6 +16891,18 @@ const metadata: ModelMeta = {
                 }, notifications: {
                     name: "notifications",
                     type: "Notification",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'lecturer',
+                }, personalWorkTags: {
+                    name: "personalWorkTags",
+                    type: "PersonalWorkTag",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'lecturer',
+                }, individualSchedules: {
+                    name: "individualSchedules",
+                    type: "IndividualSchedule",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'lecturer',
@@ -29956,6 +30141,14 @@ function $default$StudentYearResult$createdBy(user: any): unknown {
 }
 
 function $default$Notification$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$PersonalWorkTag$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$IndividualSchedule$createdBy(user: any): unknown {
     return user?.id;
 }
 

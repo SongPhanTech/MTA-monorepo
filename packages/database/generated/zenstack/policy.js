@@ -1851,6 +1851,32 @@ const policy = {
                 update: {},
             },
         },
+        personalWorkTag: {
+            modelLevel: {
+                read: { guard: PersonalWorkTag_read, },
+                create: { guard: PersonalWorkTag_create, inputChecker: PersonalWorkTag_create_input, },
+                update: { guard: PersonalWorkTag_update, },
+                postUpdate: { guard: PersonalWorkTag_postUpdate, },
+                delete: { guard: PersonalWorkTag_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        individualSchedule: {
+            modelLevel: {
+                read: { guard: IndividualSchedule_read, },
+                create: { guard: IndividualSchedule_create, inputChecker: IndividualSchedule_create_input, },
+                update: { guard: IndividualSchedule_update, },
+                postUpdate: { guard: IndividualSchedule_postUpdate, },
+                delete: { guard: IndividualSchedule_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
         lecturer: {
             modelLevel: {
                 read: { guard: Lecturer_read, },
@@ -3724,6 +3750,8 @@ const policy = {
         studentSemesterResult: { hasValidation: false },
         studentYearResult: { hasValidation: false },
         notification: { hasValidation: false },
+        personalWorkTag: { hasValidation: false },
+        individualSchedule: { hasValidation: false },
         lecturer: { hasValidation: false },
         lecturerHistory: { hasValidation: false },
         lecturerType: { hasValidation: false },
@@ -14883,6 +14911,162 @@ function Notification_delete(context, db) {
     return { OR: [] };
 }
 function $check_Notification_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function PersonalWorkTag_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_PersonalWorkTag_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function PersonalWorkTag_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_PersonalWorkTag_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function PersonalWorkTag_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function PersonalWorkTag_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_PersonalWorkTag_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function PersonalWorkTag_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_PersonalWorkTag_postUpdate(input, context) {
+    return true;
+}
+function PersonalWorkTag_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_PersonalWorkTag_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function IndividualSchedule_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_IndividualSchedule_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function IndividualSchedule_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_IndividualSchedule_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function IndividualSchedule_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function IndividualSchedule_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_IndividualSchedule_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function IndividualSchedule_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_IndividualSchedule_postUpdate(input, context) {
+    return true;
+}
+function IndividualSchedule_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_IndividualSchedule_delete(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {

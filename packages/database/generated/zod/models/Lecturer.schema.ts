@@ -58,6 +58,8 @@ const relationSchema = z.object({
     primarySupervisorThesisProject: z.array(z.unknown()).optional(),
     secondarySupervisorThesisProject: z.array(z.unknown()).optional(),
     notifications: z.array(z.unknown()).optional(),
+    personalWorkTags: z.array(z.unknown()).optional(),
+    individualSchedules: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({

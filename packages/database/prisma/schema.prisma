@@ -4443,6 +4443,53 @@ model Notification {
   @@schema("ql-danh-muc")
 }
 
+/// Tag công việc cá nhân — mỗi giảng viên tự tạo và quản lý bộ tag riêng.
+model PersonalWorkTag {
+  id          String               @id() @default(cuid())
+  code        String?              @unique()
+  active      Boolean              @default(true)
+  description String?              @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime             @default(now())
+  updatedAt   DateTime             @default(now()) @updatedAt()
+  createdBy   String?              @db.Uuid()
+  name        String
+  color       String?
+  sortOrder   Int                  @default(0)
+  lecturer    Lecturer             @relation(fields: [lecturerId], references: [id])
+  lecturerId  String
+  schedules   IndividualSchedule[]
+
+  @@unique([lecturerId, name])
+  @@index([lecturerId])
+  @@schema("ql-danh-muc")
+}
+
+/// Lịch / công việc cá nhân của giảng viên (không trùng ClassSchedule hệ thống).
+model IndividualSchedule {
+  id          String            @id() @default(cuid())
+  code        String?           @unique()
+  active      Boolean           @default(true)
+  description String?           @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @default(now()) @updatedAt()
+  createdBy   String?           @db.Uuid()
+  title       String
+  startTime   DateTime
+  endTime     DateTime
+  allDay      Boolean           @default(false)
+  location    String?
+  lecturer    Lecturer          @relation(fields: [lecturerId], references: [id])
+  lecturerId  String
+  tags        PersonalWorkTag[]
+
+  @@index([lecturerId])
+  @@index([startTime])
+  @@index([endTime])
+  @@schema("ql-danh-muc")
+}
+
 model Lecturer {
   id                               String                        @id() @default(cuid())
   code                             String?                       @unique()
@@ -4482,6 +4529,8 @@ model Lecturer {
   primarySupervisorThesisProject   ThesisProject[]               @relation("PrimarySupervisorToThesis")
   secondarySupervisorThesisProject ThesisProject[]               @relation("SecondarySupervisorToThesis")
   notifications                    Notification[]
+  personalWorkTags                 PersonalWorkTag[]
+  individualSchedules              IndividualSchedule[]
 
   @@index([userProfileId])
   @@schema("ql-dao-tao")
