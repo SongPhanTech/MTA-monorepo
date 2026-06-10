@@ -41,6 +41,7 @@ const ModalThemLichCaNhan = () => {
     isOpen,
     onClose,
     input,
+    store: modalStore,
   } = useDisclosure<InputThemLichCaNhan>({
     tag: "ModalThemLichCaNhan",
     onClose: () => {
@@ -48,11 +49,6 @@ const ModalThemLichCaNhan = () => {
       dangSeedTag.current = false
     },
   })
-
-  const { onOpen: moThemLoaiLich } = useDisclosure<{
-    lecturerId: string
-    onCreated?: (tagId: string) => void
-  }>({ tag: "ModalThemLoaiLich" })
 
   const {
     data: tags = [],
@@ -196,11 +192,20 @@ const ModalThemLichCaNhan = () => {
   }
 
   const moThemLoai = () => {
-    if (!lecturerId) return
-    moThemLoaiLich({
-      lecturerId,
-      onCreated: (tagId) => form.setFieldValue("tagId", tagId),
-    })
+    if (!lecturerId) {
+      message.warning("Không xác định được giảng viên. Vui lòng liên hệ quản trị viên.")
+    }
+    modalStore.setState((state) => ({
+      modalTags: {
+        ...state.modalTags,
+        ModalThemLoaiLich: {
+          input: {
+            lecturerId: lecturerId ?? "",
+            onCreated: (tagId: string) => form.setFieldValue("tagId", tagId),
+          },
+        },
+      },
+    }))
   }
 
   return (
@@ -214,13 +219,13 @@ const ModalThemLichCaNhan = () => {
       }
       okText="Lưu lịch"
       cancelText="Hủy"
-      width={680}
+      width={720}
       rowWrap={false}
       form={form}
       onFinish={onFinish}
       centered
       destroyOnClose
-      className="[&_.ant-modal-footer]:border-t-0 [&_.ant-modal-footer]:pt-2 [&_.ant-modal-header]:mb-0"
+      className="modal-them-lich-ca-nhan [&_.ant-modal-footer]:border-t-0 [&_.ant-modal-footer]:pt-2 [&_.ant-modal-header]:mb-0"
       styles={{
         header: { paddingBottom: 8 },
         body: { paddingTop: 8, paddingBottom: 8 },
@@ -237,24 +242,27 @@ const ModalThemLichCaNhan = () => {
           "[&_.ant-form-item-label>label]:text-sm [&_.ant-form-item-label>label]:font-medium [&_.ant-form-item-label>label]:text-gray-700",
       }}
     >
-      <div className="flex flex-col gap-5">
-        <FormItem form={form} name="title" label="Tiêu đề lịch" required>
-          <Input placeholder="Nhập tiêu đề lịch..." maxLength={200} className="h-10" />
-        </FormItem>
+      <div className="flex flex-col gap-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:items-start">
+          <FormItem form={form} name="title" label="Tiêu đề lịch" required className="min-w-0">
+            <Input placeholder="Nhập tiêu đề lịch..." maxLength={200} className="h-10" />
+          </FormItem>
 
-        <FormItem
-          form={form}
-          name="tagId"
-          label="Loại lịch"
-          required
-          rules={[{ required: true, message: "Vui lòng chọn loại lịch" }]}
-        >
-          <ChonLoaiLich
-            tags={tags}
-            onThemLoai={moThemLoai}
-            dangTai={dangTaiTag || dangFetchTag}
-          />
-        </FormItem>
+          <FormItem
+            form={form}
+            name="tagId"
+            label="Loại lịch"
+            required
+            className="min-w-0"
+            rules={[{ required: true, message: "Vui lòng chọn loại lịch" }]}
+          >
+            <ChonLoaiLich
+              tags={tags}
+              onThemLoai={moThemLoai}
+              dangTai={dangTaiTag || dangFetchTag}
+            />
+          </FormItem>
+        </div>
 
         <div>
           <p className="mb-3 text-sm font-medium text-gray-700">Thời gian</p>
@@ -318,24 +326,30 @@ const ModalThemLichCaNhan = () => {
         <div className="grid grid-cols-1 gap-x-4 gap-y-3 sm:grid-cols-2">
           <div className="flex flex-col gap-1.5">
             <span className="text-sm font-medium text-gray-700">Nhắc lịch</span>
-            <div className="flex items-center gap-2">
-              <Bell size={16} className="shrink-0 text-gray-400" />
+            <div className="relative">
+              <Bell
+                size={16}
+                className="pointer-events-none absolute left-3 top-1/2 z-10 -translate-y-1/2 text-gray-400"
+              />
               <Select
                 disabled
                 defaultValue="30"
-                className="h-10 flex-1"
+                className="h-10 w-full [&_.ant-select-selector]:!h-10 [&_.ant-select-selector]:!items-center [&_.ant-select-selector]:!pl-9"
                 options={[{ value: "30", label: "Trước 30 phút" }]}
               />
             </div>
           </div>
           <div className="flex flex-col gap-1.5">
             <span className="text-sm font-medium text-gray-700">Lặp lại</span>
-            <div className="flex items-center gap-2">
-              <RefreshCw size={16} className="shrink-0 text-gray-400" />
+            <div className="relative">
+              <RefreshCw
+                size={16}
+                className="pointer-events-none absolute left-3 top-1/2 z-10 -translate-y-1/2 text-gray-400"
+              />
               <Select
                 disabled
                 defaultValue="none"
-                className="h-10 flex-1"
+                className="h-10 w-full [&_.ant-select-selector]:!h-10 [&_.ant-select-selector]:!items-center [&_.ant-select-selector]:!pl-9"
                 options={[{ value: "none", label: "Không lặp lại" }]}
               />
             </div>

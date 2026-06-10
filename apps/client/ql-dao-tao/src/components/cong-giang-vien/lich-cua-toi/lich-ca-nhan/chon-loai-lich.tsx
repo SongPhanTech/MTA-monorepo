@@ -14,12 +14,12 @@ interface ChonLoaiLichProps {
 
 const iconTheoTen = (ten: string, mau: string): ReactNode => {
   const chuan = ten.normalize("NFD").replace(/\p{M}/gu, "").toLowerCase()
-  if (chuan.includes("hop")) return <Users size={15} style={{ color: mau }} />
-  if (chuan.includes("ca nhan")) return <User size={15} style={{ color: mau }} />
+  if (chuan.includes("hop")) return <Users size={16} style={{ color: mau }} />
+  if (chuan.includes("ca nhan")) return <User size={16} style={{ color: mau }} />
   if (chuan.includes("cong viec") || chuan.includes("viec")) {
-    return <BookOpen size={15} style={{ color: mau }} />
+    return <BookOpen size={16} style={{ color: mau }} />
   }
-  return <Tag size={15} style={{ color: mau }} />
+  return <Tag size={16} style={{ color: mau }} />
 }
 
 const ChonLoaiLich = forwardRef<HTMLDivElement, ChonLoaiLichProps>(function ChonLoaiLich(
@@ -28,14 +28,16 @@ const ChonLoaiLich = forwardRef<HTMLDivElement, ChonLoaiLichProps>(function Chon
 ) {
   if (dangTai) {
     return (
-      <div ref={ref} className="text-sm text-gray-400">
-        Đang tải loại lịch...
+      <div ref={ref} className="flex w-full gap-2">
+        {[0, 1, 2].map((i) => (
+          <div key={i} className="h-10 flex-1 animate-pulse rounded-lg bg-gray-100" />
+        ))}
       </div>
     )
   }
 
   return (
-    <div ref={ref} className="flex w-full flex-wrap items-center gap-2.5">
+    <div ref={ref} className="flex w-full items-stretch gap-2">
       {tags.map((tag) => {
         const mau = tag.color ?? MAU_LOAI_LICH_MAC_DINH[0]
         const dangChon = value === tag.id
@@ -45,17 +47,19 @@ const ChonLoaiLich = forwardRef<HTMLDivElement, ChonLoaiLichProps>(function Chon
             type="button"
             onClick={() => onChange?.(tag.id)}
             className={cn(
-              "inline-flex h-9 items-center gap-2 rounded-full border px-4 text-sm font-medium transition-all",
-              dangChon ? "shadow-sm" : "border-gray-200 bg-white hover:border-gray-300"
+              "inline-flex h-10 min-w-0 flex-1 items-center justify-center gap-2 rounded-lg border px-2 text-sm font-medium transition-all",
+              dangChon
+                ? "border-2 bg-white shadow-none"
+                : "border-gray-200 bg-white text-gray-700 hover:border-gray-300"
             )}
             style={{
               borderColor: dangChon ? mau : undefined,
-              color: mau,
-              backgroundColor: dangChon ? `${mau}18` : undefined,
+              backgroundColor: dangChon ? `${mau}14` : undefined,
+              color: dangChon ? mau : undefined,
             }}
           >
             {iconTheoTen(tag.name, mau)}
-            {tag.name}
+            <span className="truncate">{tag.name}</span>
           </button>
         )
       })}
@@ -63,7 +67,7 @@ const ChonLoaiLich = forwardRef<HTMLDivElement, ChonLoaiLichProps>(function Chon
       <button
         type="button"
         onClick={onThemLoai}
-        className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-dashed border-gray-300 text-gray-400 transition-colors hover:border-cgv-green-dark hover:text-cgv-green-dark"
+        className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-dashed border-gray-300 text-gray-400 transition-colors hover:border-cgv-green-dark hover:text-cgv-green-dark"
         aria-label="Thêm loại lịch"
         title="Thêm loại lịch"
       >

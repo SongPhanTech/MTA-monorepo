@@ -77,6 +77,8 @@ const ModalThemLoaiLich = () => {
       title={<span className="font-bold text-cgv-green-dark">THÊM LOẠI LỊCH</span>}
       okText="Lưu"
       width={420}
+      zIndex={1100}
+      centered
       form={form}
       onFinish={onFinish}
     >

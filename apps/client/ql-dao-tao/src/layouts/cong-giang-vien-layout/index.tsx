@@ -65,7 +65,7 @@ const CongGiangVienLayout = ({
       onIdle={() => {}}
     >
       <Layout className="giang-vien-layout min-h-screen bg-[#f3f4f6]">
-        <Header className="giang-vien-header fixed top-0 left-0 right-0 z-[1001] flex h-16 items-center justify-between border-none px-4">
+        <Header className="giang-vien-header fixed top-0 left-0 right-0 z-[100] flex h-16 items-center justify-between border-none px-4">
           <div className="flex min-w-0 items-center gap-3">
             <Button
               type="text"
