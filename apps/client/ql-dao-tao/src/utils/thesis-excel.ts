@@ -3299,7 +3299,11 @@ const convertToPhuLucQdhdTemplateData = (allStudentsInClasses: any[]): PhuLucQdh
       student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name || "Chưa xác định"
     const trainingField =
       student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.trainingField?.name || ""
-    const groupKey = `Ngành ${trainingField} (${majorName})`
+    const groupName = trainingField || majorName
+    const groupKey =
+      trainingField && trainingField !== majorName
+        ? `Ngành ${groupName} (CHUYÊN NGÀNH ${majorName.toUpperCase()})`
+        : `Ngành ${groupName}`
     if (!majorMap.has(groupKey)) {
       majorMap.set(groupKey, [])
     }
@@ -3333,30 +3337,35 @@ const convertToPhuLucQdhdTemplateData = (allStudentsInClasses: any[]): PhuLucQdh
       const member = getMember(CouncilRole.MEMBER)
       const ngaySinhStr = formatBirthDate(student.userProfile?.dateOfBirth)
       const khoaHocStr = `${student.fixedClass?.trainingCourse?.name || ""} (${student.fixedClass?.trainingCourse?.academicYear || ""})`
+      const rawGvhd1 = (getSupervisorName(project?.supervisor, false, false) as string) || ""
+      const rawGvhd2 = (getSupervisorName(project?.coSupervisor, false, false) as string) || ""
+      const hasTwoGvhd = Boolean(rawGvhd1 && rawGvhd2)
+      const gvhd1 = hasTwoGvhd ? `1. ${rawGvhd1}` : rawGvhd1
+      const gvhd2 = hasTwoGvhd ? `2. ${rawGvhd2}` : rawGvhd2
       return {
         sttHoiDong: (studentIdx + 1).toString(),
-        loaiLuanVan: project?.type || "Luận văn",
+        loaiLuanVan: project?.type?.trim().toLowerCase() || "luận văn",
         nganh: groupKey,
         tenDeTai: project?.title.trim().replace(/\s+/g, " ") || "",
         tenHocVien: student.userProfile?.fullname || "",
         ngaySinh: ngaySinhStr,
         khoaHoc: khoaHocStr,
-        gvhd1: (getSupervisorName(project?.supervisor, false, true) as string) || "",
-        gvhd2: (getSupervisorName(project?.coSupervisor, false, true) as string) || "",
+        gvhd1,
+        gvhd2,
 
-        tenChuTich: (getSupervisorName(chairman?.expert, false, true) as string) || "",
+        tenChuTich: (getSupervisorName(chairman?.expert, false, false) as string) || "",
         toChucChuTich: chairman?.expert?.workplace || "Học viện KTQS",
 
-        tenThuKy: (getSupervisorName(secretary?.expert, false, true) as string) || "",
+        tenThuKy: (getSupervisorName(secretary?.expert, false, false) as string) || "",
         toChucThuKy: secretary?.expert?.workplace || "Học viện KTQS",
 
-        tenUyVien: (getSupervisorName(member?.expert, false, true) as string) || "",
+        tenUyVien: (getSupervisorName(member?.expert, false, false) as string) || "",
         toChucUyVien: member?.expert?.workplace || "Học viện KTQS",
 
-        tenPb1: (getSupervisorName(reviewer1?.expert, false, true) as string) || "",
+        tenPb1: (getSupervisorName(reviewer1?.expert, false, false) as string) || "",
         toChucPb1: reviewer1?.expert?.workplace || "Học viện KTQS",
 
-        tenPb2: (getSupervisorName(reviewer2?.expert, false, true) as string) || "",
+        tenPb2: (getSupervisorName(reviewer2?.expert, false, false) as string) || "",
         toChucPb2: reviewer2?.expert?.workplace || "Học viện KTQS",
       }
     })
@@ -3364,7 +3373,7 @@ const convertToPhuLucQdhdTemplateData = (allStudentsInClasses: any[]): PhuLucQdh
     groupedData.push({
       data: {
         sttChuyenNganh: toRoman(majorIndex),
-        tenChuyenNganh: groupKey,
+        tenChuyenNganh: `${groupKey.toUpperCase()} (${tableRows.length} HỘI ĐỒNG)`,
         data: tableRows,
       },
     })
@@ -3505,7 +3514,7 @@ const convertToDsChuyenGiaData = (
 
           if (!expertAggregator.has(expertId)) {
             expertAggregator.set(expertId, {
-              tenChuyenGia: (getSupervisorName(expert, false, true) as string) || "",
+              tenChuyenGia: (getSupervisorName(expert, false, false) as string) || "",
               chucVu: expert.position || expert.lecturer?.userProfile?.position || "",
               donViQuanLi: expert.organization || expert.workplace || "",
               soTienRaw: 0,
