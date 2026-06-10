@@ -5,7 +5,7 @@ import SiderCongGiangVien, {
   CONG_GIANG_VIEN_SIDER_COLLAPSED_WIDTH,
   CONG_GIANG_VIEN_SIDER_WIDTH,
 } from "@components/layouts/sider-cong-giang-vien"
-// import ToggleVaiTroCongGiangVien from "@components/layouts/toggle-vai-tro-cong-giang-vien"
+import ToggleVaiTroCongGiangVien from "@components/layouts/toggle-vai-tro-cong-giang-vien"
 import { CONG_GIANG_VIEN_MENU } from "@constants/cong-giang-vien-menu"
 import { cn } from "@lib/utils"
 import { CONFIG_KEY } from "@workspace/constant"
