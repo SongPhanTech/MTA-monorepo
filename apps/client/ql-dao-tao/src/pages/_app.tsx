@@ -27,7 +27,10 @@ import "@assets/css/cong-giang-vien.css"
 import "@assets/css/custom.css"
 import { getRuntimeEnv } from "@workspace/libs/utils"
 import { lightThemeCustom } from "@workspace/ui"
-import { isCongGiangVienRoute } from "@constants/cong-giang-vien-path"
+import {
+  CONG_GIANG_VIEN_LICH_CUA_TOI_PATH,
+  isCongGiangVienRoute,
+} from "@constants/cong-giang-vien-path"
 import CongGiangVienLayout from "@layouts/cong-giang-vien-layout"
 import { useGiangVien } from "@hooks/use-giang-vien"
 import { ROUTER_PATH } from "@workspace/router"
@@ -80,7 +83,9 @@ function AppContent({
 
   const pageElement = <Component {...pageProps} />
   const useCongGiangVienLayout = isGiangVien && onCongGiangVienRoute
-  const unLayout = pathname === ROUTER_PATH.QL_DAO_TAO.CONG_GIANG_VIEN_GIANG_VIEN
+  const unLayout =
+    pathname === ROUTER_PATH.QL_DAO_TAO.CONG_GIANG_VIEN_GIANG_VIEN ||
+    pathname === CONG_GIANG_VIEN_LICH_CUA_TOI_PATH
 
   if (useCongGiangVienLayout) {
     return <CongGiangVienLayout unLayout={unLayout}>{pageElement}</CongGiangVienLayout>

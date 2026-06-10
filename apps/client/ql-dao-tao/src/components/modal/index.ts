@@ -121,6 +121,8 @@ import AddSubjectClassAttendance from "./add-diem-danh"
 import AddSubjectClassAttendanceStudent from "./add-diem-danh-mon-hoc"
 import PutAvailableTrainingTimeModal from "./PutAvailableTrainingTimeModal"
 import ModalPhienDiemKyHoc from "./modal-phien-diem-ky-hoc"
+import ModalThemLichCaNhan from "./modal-them-lich-ca-nhan"
+import ModalThemLoaiLich from "./modal-them-loai-lich"
 
 export {
   ExportStatsArchivedAwardModal,
@@ -248,6 +250,8 @@ export {
   AddSubjectClassAttendanceStudent,
   PutAvailableTrainingTimeModal,
   ModalPhienDiemKyHoc,
+  ModalThemLichCaNhan,
+  ModalThemLoaiLich,
 }
 export * from "./ke-hoach-dao-tao"
 export * from "./thong-bao"

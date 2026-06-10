@@ -56,13 +56,13 @@ const mapSuKien = (event: LichRaw): SuKienLich => {
   }
 }
 
-const useLichCuaToi = () => {
+const useLichCuaToi = (macDinhCheDo: CheDoLich = "ngay") => {
   const { data: me } = useSession()
   const profileId = me?.sDM_NhanVienId
   const { id: semesterId } = useSemesterStore()
   const { id: trainingObjectId } = useTrainingObjectTypeStore()
 
-  const [cheDo, setCheDo] = useState<CheDoLich>("ngay")
+  const [cheDo, setCheDo] = useState<CheDoLich>(macDinhCheDo)
   const [offset, setOffset] = useState(0)
 
   const ngayThamChieu = useMemo(() => {
