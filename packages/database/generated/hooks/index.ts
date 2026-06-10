@@ -146,6 +146,8 @@ export * from './training-activity';
 export * from './student-semester-result';
 export * from './student-year-result';
 export * from './notification';
+export * from './personal-work-tag';
+export * from './individual-schedule';
 export * from './lecturer';
 export * from './lecturer-history';
 export * from './lecturer-type';

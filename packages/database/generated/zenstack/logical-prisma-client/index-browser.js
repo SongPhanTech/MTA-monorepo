@@ -2814,6 +2814,38 @@ exports.Prisma.NotificationScalarFieldEnum = {
   lecturerId: 'lecturerId'
 };
 
+exports.Prisma.PersonalWorkTagScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  name: 'name',
+  color: 'color',
+  sortOrder: 'sortOrder',
+  lecturerId: 'lecturerId'
+};
+
+exports.Prisma.IndividualScheduleScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  title: 'title',
+  startTime: 'startTime',
+  endTime: 'endTime',
+  allDay: 'allDay',
+  location: 'location',
+  lecturerId: 'lecturerId'
+};
+
 exports.Prisma.LecturerScalarFieldEnum = {
   id: 'id',
   code: 'code',
@@ -6639,6 +6671,26 @@ exports.Prisma.NotificationOrderByRelevanceFieldEnum = {
   lecturerId: 'lecturerId'
 };
 
+exports.Prisma.PersonalWorkTagOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  name: 'name',
+  color: 'color',
+  lecturerId: 'lecturerId'
+};
+
+exports.Prisma.IndividualScheduleOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  title: 'title',
+  location: 'location',
+  lecturerId: 'lecturerId'
+};
+
 exports.Prisma.LecturerOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
@@ -8611,6 +8663,8 @@ exports.Prisma.ModelName = {
   StudentSemesterResult: 'StudentSemesterResult',
   StudentYearResult: 'StudentYearResult',
   Notification: 'Notification',
+  PersonalWorkTag: 'PersonalWorkTag',
+  IndividualSchedule: 'IndividualSchedule',
   Lecturer: 'Lecturer',
   LecturerHistory: 'LecturerHistory',
   LecturerType: 'LecturerType',

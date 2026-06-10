@@ -724,6 +724,16 @@ export type StudentYearResult = $Result.DefaultSelection<Prisma.$StudentYearResu
  */
 export type Notification = $Result.DefaultSelection<Prisma.$NotificationPayload>
 /**
+ * Model PersonalWorkTag
+ * Tag công việc cá nhân — mỗi giảng viên tự tạo và quản lý bộ tag riêng.
+ */
+export type PersonalWorkTag = $Result.DefaultSelection<Prisma.$PersonalWorkTagPayload>
+/**
+ * Model IndividualSchedule
+ * Lịch / công việc cá nhân của giảng viên (không trùng ClassSchedule hệ thống).
+ */
+export type IndividualSchedule = $Result.DefaultSelection<Prisma.$IndividualSchedulePayload>
+/**
  * Model Lecturer
  * 
  */
@@ -3906,6 +3916,26 @@ export class PrismaClient<
   get notification(): Prisma.NotificationDelegate<ExtArgs, ClientOptions>;
 
   /**
+   * `prisma.personalWorkTag`: Exposes CRUD operations for the **PersonalWorkTag** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more PersonalWorkTags
+    * const personalWorkTags = await prisma.personalWorkTag.findMany()
+    * ```
+    */
+  get personalWorkTag(): Prisma.PersonalWorkTagDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.individualSchedule`: Exposes CRUD operations for the **IndividualSchedule** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more IndividualSchedules
+    * const individualSchedules = await prisma.individualSchedule.findMany()
+    * ```
+    */
+  get individualSchedule(): Prisma.IndividualScheduleDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.lecturer`: Exposes CRUD operations for the **Lecturer** model.
     * Example usage:
     * ```ts
@@ -5816,6 +5846,8 @@ export namespace Prisma {
     StudentSemesterResult: 'StudentSemesterResult',
     StudentYearResult: 'StudentYearResult',
     Notification: 'Notification',
+    PersonalWorkTag: 'PersonalWorkTag',
+    IndividualSchedule: 'IndividualSchedule',
     Lecturer: 'Lecturer',
     LecturerHistory: 'LecturerHistory',
     LecturerType: 'LecturerType',
@@ -5967,7 +5999,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "config" | "suggestion" | "changeLog" | "userProfile" | "hocHam" | "chucVuChinhQuyen" | "chucVuDang" | "hocVi" | "relative" | "trinhDoLyLuanChinhTri" | "trinhDoQuanLyNhaNuoc" | "ngoaiNgu" | "tinHoc" | "boiDuongQuocPhongAnNinh" | "capBac" | "quaTrinhCongTac" | "quaTrinhCuDiCongTac" | "quaTrinhCuDiDaoTao" | "khenThuong" | "kyLuat" | "doiTuongChinhSach" | "keKhaiTaiSan" | "tiengDanToc" | "chienDau" | "nuocNgoai" | "thuongTat" | "danhHieu" | "quaTrinhHocTap" | "toChucXaHoi" | "quaTrinhLuong" | "group" | "role" | "permission" | "chatBotConfig" | "userSession" | "document" | "documentTopic" | "fAQ" | "prompt" | "conversation" | "conversationFeedback" | "message" | "citationMessage" | "topic" | "documentClassification" | "dM_CapBac" | "dM_ChucDanh" | "dM_ChucVu" | "dM_HocHam" | "dM_HocVi" | "dM_ChungChiTinHoc" | "dM_DanToc" | "dM_DonVi" | "dM_DonViHanhChinh" | "dM_KhuVuc_DiaLy" | "dM_NgoaiNgu" | "dM_TonGiao" | "dM_TrinhDoNgoaiNgu" | "dM_TrinhDoTinHoc" | "dM_GioiTinh" | "dM_NhanVien" | "dM_PhanCap_ChatLuong_TrangThietBi" | "dM_PhanLoai_CSKT" | "dM_NhomNguoiDung" | "dM_NhomUngDung" | "dM_QuocGia" | "dM_Tinh" | "dM_Tinh_New" | "dM_QuanHuyen" | "dM_XaPhuong" | "dM_XaPhuong_New" | "dM_ViTriCongViec" | "planTraining" | "planTrainingPractice" | "planTrainingSubject" | "studentScoreConvert" | "subjectScoreConvert" | "studentSubjectScore" | "studentSubjectScoreHistory" | "studentResearchTopic" | "studentInternship" | "archivedCertificateOnStudentSubjectScore" | "archivedCertificate" | "archivedAwardOnStudentSubjectScore" | "archivedAward" | "schoolYear" | "semester" | "milestone" | "trainingLanguage" | "trainingCourse" | "trainingCourseRegulation" | "fixedClass" | "curriculum" | "curriculumVersion" | "subject" | "subjectVersionCategory" | "subjectVersion" | "subjectVersionHistory" | "equivalencyGroup" | "subjectInGroup" | "trainingBlockSubject" | "classRegisterSessionCredit" | "classRegisterSession" | "classRegisterLogs" | "subjectClass" | "subjectClassAttendance" | "subjectClassAttendanceStudent" | "subjectClassHistory" | "subjectClassTime" | "classSchedule" | "scoreCorrectionTicket" | "scoreCorrectionItem" | "trainingObjectType" | "priorityObject" | "trainingType" | "trainingLevel" | "trainingForm" | "trainingLocation" | "building" | "room" | "trainingField" | "trainingFieldOnTrainingObjectType" | "trainingMajor" | "trainingMajorOnTrainingObjectType" | "trainingBlock" | "trainingBlockOnCurriculumVersion" | "trainingTime" | "availableTrainingTime" | "certificate" | "certificateOnSubject" | "award" | "officerBonusScore" | "diplomaType" | "scoreConvert" | "loadCategory" | "outputStandard" | "outputStandardOnCurriculum" | "student" | "trainingActivity" | "studentSemesterResult" | "studentYearResult" | "notification" | "lecturer" | "lecturerHistory" | "lecturerType" | "staffType" | "staffPosition" | "staff" | "staffHistory" | "researchProject" | "studentResearchRegistration" | "thesisSession" | "thesisProject" | "defenseSession" | "studentThesisRegistration" | "expertProfile" | "decision" | "invitation" | "council" | "councilMember" | "defenseRecord" | "librarySubmission" | "configPaymentSession" | "defaultCouncilRolePayAmount" | "defaultSupervisorPayAmount" | "paymentRecord" | "supervisorPaymentRecord" | "documentFile" | "academicActionConfig" | "academicActionRuleSet" | "academicActionCondition" | "studentAcademicDecision" | "trainingScoreSession" | "studentTrainingScore" | "semesterTrainingScore" | "schoolYearTrainingScore" | "scholarship" | "scholarshipCriteria" | "scholarshipAward" | "graduationSession" | "studentGraduationApplication" | "applicationDowngraded" | "applicationCheckResult" | "graduationDecision" | "academicRankingConvert" | "graduationRankDowngradeRule" | "graduationRankDowngradeCondition" | "rankingCondition" | "diplomaVerificationApplication" | "scoreLinkSheet" | "scoreLinkSubjectVersion" | "scoreLinkStudent" | "note" | "noteFolder" | "noteTag" | "noteReminder" | "evaluationPeriod" | "evaluationStandardSet" | "standardCatalog" | "criterionCatalog" | "evidenceCategory" | "evidence" | "evaluationCriterionComment" | "requirementCriterionCatalog" | "standardPeriod" | "criterionPeriod" | "analysisCriterion" | "evaluationCriterion" | "requirementCriterion" | "analysisFormEvidence" | "evaluationCouncil" | "evaluationCouncilMember" | "evidenceFile" | "questionBank" | "question" | "multipleChoiceOption" | "fillInBlankSlot" | "orderingItem" | "exam" | "examRoom" | "examList" | "examBank" | "examBankQuestion" | "examPaper" | "examFramework" | "examMatrix" | "knowledgeBlock" | "configExam" | "surveyObjectType" | "surveyTopic" | "surveyQuestionGroup" | "clusterSurvey" | "survey" | "surveyQuestion" | "specificChoice" | "surveyChoice" | "surveySession" | "surveyResponse" | "academicWarningRule" | "academicWarning" | "disciplinaryWarning" | "disciplinaryWarningReason" | "feedback" | "dM_TrinhDoHocVan" | "dM_TrinhDoLyLuanChinhTri" | "dM_TrinhDoQuanLyNhaNuoc" | "dM_TinhTrangHonNhan" | "dM_QuanHeThanNhan" | "dM_TrangThaiLamViec" | "dM_HinhThucKhenThuongChinhQuyen" | "dM_HinhThucKhenThuongDang" | "dM_XepLoaiDanhGiaCanBo" | "dM_XepLoaiDanhGiaChatLuongDangVien" | "dM_LoaiHinhCongTac" | "dM_TinhTrangCongTac" | "dM_LoaiTinhTrangCongTac" | "dM_LoaiHinhDiHocTap" | "dM_TinhTrangDiHocTap" | "dM_NuocCuDiHocTap" | "dM_ChucDanhCMNVGiangVien" | "dM_ChucDanhCMNVNghienCuuVien" | "dM_ChucDanhCMNVKySu" | "dM_TruongDaoTaoBacDH" | "dM_ChuyenNganhDaoTaoBacDH" | "dM_ChiHuyQuanLy" | "dM_ChuyenMonKyThuat" | "dM_SucKhoe" | "dM_NhomMau" | "dM_LoaiThuongTat" | "dM_NganhHoc" | "dM_ToChucXaHoi" | "dM_Ngach" | "dM_BacLuong" | "templateFile" | "blockedIp"
+      modelProps: "config" | "suggestion" | "changeLog" | "userProfile" | "hocHam" | "chucVuChinhQuyen" | "chucVuDang" | "hocVi" | "relative" | "trinhDoLyLuanChinhTri" | "trinhDoQuanLyNhaNuoc" | "ngoaiNgu" | "tinHoc" | "boiDuongQuocPhongAnNinh" | "capBac" | "quaTrinhCongTac" | "quaTrinhCuDiCongTac" | "quaTrinhCuDiDaoTao" | "khenThuong" | "kyLuat" | "doiTuongChinhSach" | "keKhaiTaiSan" | "tiengDanToc" | "chienDau" | "nuocNgoai" | "thuongTat" | "danhHieu" | "quaTrinhHocTap" | "toChucXaHoi" | "quaTrinhLuong" | "group" | "role" | "permission" | "chatBotConfig" | "userSession" | "document" | "documentTopic" | "fAQ" | "prompt" | "conversation" | "conversationFeedback" | "message" | "citationMessage" | "topic" | "documentClassification" | "dM_CapBac" | "dM_ChucDanh" | "dM_ChucVu" | "dM_HocHam" | "dM_HocVi" | "dM_ChungChiTinHoc" | "dM_DanToc" | "dM_DonVi" | "dM_DonViHanhChinh" | "dM_KhuVuc_DiaLy" | "dM_NgoaiNgu" | "dM_TonGiao" | "dM_TrinhDoNgoaiNgu" | "dM_TrinhDoTinHoc" | "dM_GioiTinh" | "dM_NhanVien" | "dM_PhanCap_ChatLuong_TrangThietBi" | "dM_PhanLoai_CSKT" | "dM_NhomNguoiDung" | "dM_NhomUngDung" | "dM_QuocGia" | "dM_Tinh" | "dM_Tinh_New" | "dM_QuanHuyen" | "dM_XaPhuong" | "dM_XaPhuong_New" | "dM_ViTriCongViec" | "planTraining" | "planTrainingPractice" | "planTrainingSubject" | "studentScoreConvert" | "subjectScoreConvert" | "studentSubjectScore" | "studentSubjectScoreHistory" | "studentResearchTopic" | "studentInternship" | "archivedCertificateOnStudentSubjectScore" | "archivedCertificate" | "archivedAwardOnStudentSubjectScore" | "archivedAward" | "schoolYear" | "semester" | "milestone" | "trainingLanguage" | "trainingCourse" | "trainingCourseRegulation" | "fixedClass" | "curriculum" | "curriculumVersion" | "subject" | "subjectVersionCategory" | "subjectVersion" | "subjectVersionHistory" | "equivalencyGroup" | "subjectInGroup" | "trainingBlockSubject" | "classRegisterSessionCredit" | "classRegisterSession" | "classRegisterLogs" | "subjectClass" | "subjectClassAttendance" | "subjectClassAttendanceStudent" | "subjectClassHistory" | "subjectClassTime" | "classSchedule" | "scoreCorrectionTicket" | "scoreCorrectionItem" | "trainingObjectType" | "priorityObject" | "trainingType" | "trainingLevel" | "trainingForm" | "trainingLocation" | "building" | "room" | "trainingField" | "trainingFieldOnTrainingObjectType" | "trainingMajor" | "trainingMajorOnTrainingObjectType" | "trainingBlock" | "trainingBlockOnCurriculumVersion" | "trainingTime" | "availableTrainingTime" | "certificate" | "certificateOnSubject" | "award" | "officerBonusScore" | "diplomaType" | "scoreConvert" | "loadCategory" | "outputStandard" | "outputStandardOnCurriculum" | "student" | "trainingActivity" | "studentSemesterResult" | "studentYearResult" | "notification" | "personalWorkTag" | "individualSchedule" | "lecturer" | "lecturerHistory" | "lecturerType" | "staffType" | "staffPosition" | "staff" | "staffHistory" | "researchProject" | "studentResearchRegistration" | "thesisSession" | "thesisProject" | "defenseSession" | "studentThesisRegistration" | "expertProfile" | "decision" | "invitation" | "council" | "councilMember" | "defenseRecord" | "librarySubmission" | "configPaymentSession" | "defaultCouncilRolePayAmount" | "defaultSupervisorPayAmount" | "paymentRecord" | "supervisorPaymentRecord" | "documentFile" | "academicActionConfig" | "academicActionRuleSet" | "academicActionCondition" | "studentAcademicDecision" | "trainingScoreSession" | "studentTrainingScore" | "semesterTrainingScore" | "schoolYearTrainingScore" | "scholarship" | "scholarshipCriteria" | "scholarshipAward" | "graduationSession" | "studentGraduationApplication" | "applicationDowngraded" | "applicationCheckResult" | "graduationDecision" | "academicRankingConvert" | "graduationRankDowngradeRule" | "graduationRankDowngradeCondition" | "rankingCondition" | "diplomaVerificationApplication" | "scoreLinkSheet" | "scoreLinkSubjectVersion" | "scoreLinkStudent" | "note" | "noteFolder" | "noteTag" | "noteReminder" | "evaluationPeriod" | "evaluationStandardSet" | "standardCatalog" | "criterionCatalog" | "evidenceCategory" | "evidence" | "evaluationCriterionComment" | "requirementCriterionCatalog" | "standardPeriod" | "criterionPeriod" | "analysisCriterion" | "evaluationCriterion" | "requirementCriterion" | "analysisFormEvidence" | "evaluationCouncil" | "evaluationCouncilMember" | "evidenceFile" | "questionBank" | "question" | "multipleChoiceOption" | "fillInBlankSlot" | "orderingItem" | "exam" | "examRoom" | "examList" | "examBank" | "examBankQuestion" | "examPaper" | "examFramework" | "examMatrix" | "knowledgeBlock" | "configExam" | "surveyObjectType" | "surveyTopic" | "surveyQuestionGroup" | "clusterSurvey" | "survey" | "surveyQuestion" | "specificChoice" | "surveyChoice" | "surveySession" | "surveyResponse" | "academicWarningRule" | "academicWarning" | "disciplinaryWarning" | "disciplinaryWarningReason" | "feedback" | "dM_TrinhDoHocVan" | "dM_TrinhDoLyLuanChinhTri" | "dM_TrinhDoQuanLyNhaNuoc" | "dM_TinhTrangHonNhan" | "dM_QuanHeThanNhan" | "dM_TrangThaiLamViec" | "dM_HinhThucKhenThuongChinhQuyen" | "dM_HinhThucKhenThuongDang" | "dM_XepLoaiDanhGiaCanBo" | "dM_XepLoaiDanhGiaChatLuongDangVien" | "dM_LoaiHinhCongTac" | "dM_TinhTrangCongTac" | "dM_LoaiTinhTrangCongTac" | "dM_LoaiHinhDiHocTap" | "dM_TinhTrangDiHocTap" | "dM_NuocCuDiHocTap" | "dM_ChucDanhCMNVGiangVien" | "dM_ChucDanhCMNVNghienCuuVien" | "dM_ChucDanhCMNVKySu" | "dM_TruongDaoTaoBacDH" | "dM_ChuyenNganhDaoTaoBacDH" | "dM_ChiHuyQuanLy" | "dM_ChuyenMonKyThuat" | "dM_SucKhoe" | "dM_NhomMau" | "dM_LoaiThuongTat" | "dM_NganhHoc" | "dM_ToChucXaHoi" | "dM_Ngach" | "dM_BacLuong" | "templateFile" | "blockedIp"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -16479,6 +16511,154 @@ export namespace Prisma {
           }
         }
       }
+      PersonalWorkTag: {
+        payload: Prisma.$PersonalWorkTagPayload<ExtArgs>
+        fields: Prisma.PersonalWorkTagFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.PersonalWorkTagFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PersonalWorkTagPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.PersonalWorkTagFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PersonalWorkTagPayload>
+          }
+          findFirst: {
+            args: Prisma.PersonalWorkTagFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PersonalWorkTagPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.PersonalWorkTagFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PersonalWorkTagPayload>
+          }
+          findMany: {
+            args: Prisma.PersonalWorkTagFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PersonalWorkTagPayload>[]
+          }
+          create: {
+            args: Prisma.PersonalWorkTagCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PersonalWorkTagPayload>
+          }
+          createMany: {
+            args: Prisma.PersonalWorkTagCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.PersonalWorkTagCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PersonalWorkTagPayload>[]
+          }
+          delete: {
+            args: Prisma.PersonalWorkTagDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PersonalWorkTagPayload>
+          }
+          update: {
+            args: Prisma.PersonalWorkTagUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PersonalWorkTagPayload>
+          }
+          deleteMany: {
+            args: Prisma.PersonalWorkTagDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.PersonalWorkTagUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.PersonalWorkTagUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PersonalWorkTagPayload>[]
+          }
+          upsert: {
+            args: Prisma.PersonalWorkTagUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PersonalWorkTagPayload>
+          }
+          aggregate: {
+            args: Prisma.PersonalWorkTagAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePersonalWorkTag>
+          }
+          groupBy: {
+            args: Prisma.PersonalWorkTagGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PersonalWorkTagGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.PersonalWorkTagCountArgs<ExtArgs>
+            result: $Utils.Optional<PersonalWorkTagCountAggregateOutputType> | number
+          }
+        }
+      }
+      IndividualSchedule: {
+        payload: Prisma.$IndividualSchedulePayload<ExtArgs>
+        fields: Prisma.IndividualScheduleFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.IndividualScheduleFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$IndividualSchedulePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.IndividualScheduleFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$IndividualSchedulePayload>
+          }
+          findFirst: {
+            args: Prisma.IndividualScheduleFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$IndividualSchedulePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.IndividualScheduleFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$IndividualSchedulePayload>
+          }
+          findMany: {
+            args: Prisma.IndividualScheduleFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$IndividualSchedulePayload>[]
+          }
+          create: {
+            args: Prisma.IndividualScheduleCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$IndividualSchedulePayload>
+          }
+          createMany: {
+            args: Prisma.IndividualScheduleCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.IndividualScheduleCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$IndividualSchedulePayload>[]
+          }
+          delete: {
+            args: Prisma.IndividualScheduleDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$IndividualSchedulePayload>
+          }
+          update: {
+            args: Prisma.IndividualScheduleUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$IndividualSchedulePayload>
+          }
+          deleteMany: {
+            args: Prisma.IndividualScheduleDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.IndividualScheduleUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.IndividualScheduleUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$IndividualSchedulePayload>[]
+          }
+          upsert: {
+            args: Prisma.IndividualScheduleUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$IndividualSchedulePayload>
+          }
+          aggregate: {
+            args: Prisma.IndividualScheduleAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateIndividualSchedule>
+          }
+          groupBy: {
+            args: Prisma.IndividualScheduleGroupByArgs<ExtArgs>
+            result: $Utils.Optional<IndividualScheduleGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.IndividualScheduleCountArgs<ExtArgs>
+            result: $Utils.Optional<IndividualScheduleCountAggregateOutputType> | number
+          }
+        }
+      }
       Lecturer: {
         payload: Prisma.$LecturerPayload<ExtArgs>
         fields: Prisma.LecturerFieldRefs
@@ -26551,6 +26731,8 @@ export namespace Prisma {
     studentSemesterResult?: StudentSemesterResultOmit
     studentYearResult?: StudentYearResultOmit
     notification?: NotificationOmit
+    personalWorkTag?: PersonalWorkTagOmit
+    individualSchedule?: IndividualScheduleOmit
     lecturer?: LecturerOmit
     lecturerHistory?: LecturerHistoryOmit
     lecturerType?: LecturerTypeOmit
@@ -31274,6 +31456,68 @@ export namespace Prisma {
 
 
   /**
+   * Count Type PersonalWorkTagCountOutputType
+   */
+
+  export type PersonalWorkTagCountOutputType = {
+    schedules: number
+  }
+
+  export type PersonalWorkTagCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    schedules?: boolean | PersonalWorkTagCountOutputTypeCountSchedulesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * PersonalWorkTagCountOutputType without action
+   */
+  export type PersonalWorkTagCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PersonalWorkTagCountOutputType
+     */
+    select?: PersonalWorkTagCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * PersonalWorkTagCountOutputType without action
+   */
+  export type PersonalWorkTagCountOutputTypeCountSchedulesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: IndividualScheduleWhereInput
+  }
+
+
+  /**
+   * Count Type IndividualScheduleCountOutputType
+   */
+
+  export type IndividualScheduleCountOutputType = {
+    tags: number
+  }
+
+  export type IndividualScheduleCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    tags?: boolean | IndividualScheduleCountOutputTypeCountTagsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * IndividualScheduleCountOutputType without action
+   */
+  export type IndividualScheduleCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IndividualScheduleCountOutputType
+     */
+    select?: IndividualScheduleCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * IndividualScheduleCountOutputType without action
+   */
+  export type IndividualScheduleCountOutputTypeCountTagsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PersonalWorkTagWhereInput
+  }
+
+
+  /**
    * Count Type LecturerCountOutputType
    */
 
@@ -31299,6 +31543,8 @@ export namespace Prisma {
     primarySupervisorThesisProject: number
     secondarySupervisorThesisProject: number
     notifications: number
+    personalWorkTags: number
+    individualSchedules: number
   }
 
   export type LecturerCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -31323,6 +31569,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: boolean | LecturerCountOutputTypeCountPrimarySupervisorThesisProjectArgs
     secondarySupervisorThesisProject?: boolean | LecturerCountOutputTypeCountSecondarySupervisorThesisProjectArgs
     notifications?: boolean | LecturerCountOutputTypeCountNotificationsArgs
+    personalWorkTags?: boolean | LecturerCountOutputTypeCountPersonalWorkTagsArgs
+    individualSchedules?: boolean | LecturerCountOutputTypeCountIndividualSchedulesArgs
   }
 
   // Custom InputTypes
@@ -31481,6 +31729,20 @@ export namespace Prisma {
    */
   export type LecturerCountOutputTypeCountNotificationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: NotificationWhereInput
+  }
+
+  /**
+   * LecturerCountOutputType without action
+   */
+  export type LecturerCountOutputTypeCountPersonalWorkTagsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PersonalWorkTagWhereInput
+  }
+
+  /**
+   * LecturerCountOutputType without action
+   */
+  export type LecturerCountOutputTypeCountIndividualSchedulesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: IndividualScheduleWhereInput
   }
 
 
@@ -194389,7 +194651,7 @@ export namespace Prisma {
     name: string
     englishName: string | null
     shortName: string | null
-    summary: string
+    summary: string | null
     numberCreditsMajor: number
     numberCreditsRequired: number
     numberCreditsElective: number
@@ -194578,7 +194840,7 @@ export namespace Prisma {
       name: string
       englishName: string | null
       shortName: string | null
-      summary: string
+      summary: string | null
       /**
        * Số tín chỉ chuyên ngành
        */
@@ -220878,6 +221140,2424 @@ export namespace Prisma {
 
 
   /**
+   * Model PersonalWorkTag
+   */
+
+  export type AggregatePersonalWorkTag = {
+    _count: PersonalWorkTagCountAggregateOutputType | null
+    _avg: PersonalWorkTagAvgAggregateOutputType | null
+    _sum: PersonalWorkTagSumAggregateOutputType | null
+    _min: PersonalWorkTagMinAggregateOutputType | null
+    _max: PersonalWorkTagMaxAggregateOutputType | null
+  }
+
+  export type PersonalWorkTagAvgAggregateOutputType = {
+    sortOrder: number | null
+  }
+
+  export type PersonalWorkTagSumAggregateOutputType = {
+    sortOrder: number | null
+  }
+
+  export type PersonalWorkTagMinAggregateOutputType = {
+    id: string | null
+    code: string | null
+    active: boolean | null
+    description: string | null
+    deletedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    createdBy: string | null
+    name: string | null
+    color: string | null
+    sortOrder: number | null
+    lecturerId: string | null
+  }
+
+  export type PersonalWorkTagMaxAggregateOutputType = {
+    id: string | null
+    code: string | null
+    active: boolean | null
+    description: string | null
+    deletedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    createdBy: string | null
+    name: string | null
+    color: string | null
+    sortOrder: number | null
+    lecturerId: string | null
+  }
+
+  export type PersonalWorkTagCountAggregateOutputType = {
+    id: number
+    code: number
+    active: number
+    description: number
+    deletedAt: number
+    createdAt: number
+    updatedAt: number
+    createdBy: number
+    name: number
+    color: number
+    sortOrder: number
+    lecturerId: number
+    _all: number
+  }
+
+
+  export type PersonalWorkTagAvgAggregateInputType = {
+    sortOrder?: true
+  }
+
+  export type PersonalWorkTagSumAggregateInputType = {
+    sortOrder?: true
+  }
+
+  export type PersonalWorkTagMinAggregateInputType = {
+    id?: true
+    code?: true
+    active?: true
+    description?: true
+    deletedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+    name?: true
+    color?: true
+    sortOrder?: true
+    lecturerId?: true
+  }
+
+  export type PersonalWorkTagMaxAggregateInputType = {
+    id?: true
+    code?: true
+    active?: true
+    description?: true
+    deletedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+    name?: true
+    color?: true
+    sortOrder?: true
+    lecturerId?: true
+  }
+
+  export type PersonalWorkTagCountAggregateInputType = {
+    id?: true
+    code?: true
+    active?: true
+    description?: true
+    deletedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+    name?: true
+    color?: true
+    sortOrder?: true
+    lecturerId?: true
+    _all?: true
+  }
+
+  export type PersonalWorkTagAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PersonalWorkTag to aggregate.
+     */
+    where?: PersonalWorkTagWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PersonalWorkTags to fetch.
+     */
+    orderBy?: PersonalWorkTagOrderByWithRelationInput | PersonalWorkTagOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: PersonalWorkTagWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PersonalWorkTags from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PersonalWorkTags.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned PersonalWorkTags
+    **/
+    _count?: true | PersonalWorkTagCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: PersonalWorkTagAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: PersonalWorkTagSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: PersonalWorkTagMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: PersonalWorkTagMaxAggregateInputType
+  }
+
+  export type GetPersonalWorkTagAggregateType<T extends PersonalWorkTagAggregateArgs> = {
+        [P in keyof T & keyof AggregatePersonalWorkTag]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePersonalWorkTag[P]>
+      : GetScalarType<T[P], AggregatePersonalWorkTag[P]>
+  }
+
+
+
+
+  export type PersonalWorkTagGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PersonalWorkTagWhereInput
+    orderBy?: PersonalWorkTagOrderByWithAggregationInput | PersonalWorkTagOrderByWithAggregationInput[]
+    by: PersonalWorkTagScalarFieldEnum[] | PersonalWorkTagScalarFieldEnum
+    having?: PersonalWorkTagScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: PersonalWorkTagCountAggregateInputType | true
+    _avg?: PersonalWorkTagAvgAggregateInputType
+    _sum?: PersonalWorkTagSumAggregateInputType
+    _min?: PersonalWorkTagMinAggregateInputType
+    _max?: PersonalWorkTagMaxAggregateInputType
+  }
+
+  export type PersonalWorkTagGroupByOutputType = {
+    id: string
+    code: string | null
+    active: boolean
+    description: string | null
+    deletedAt: Date | null
+    createdAt: Date
+    updatedAt: Date
+    createdBy: string | null
+    name: string
+    color: string | null
+    sortOrder: number
+    lecturerId: string
+    _count: PersonalWorkTagCountAggregateOutputType | null
+    _avg: PersonalWorkTagAvgAggregateOutputType | null
+    _sum: PersonalWorkTagSumAggregateOutputType | null
+    _min: PersonalWorkTagMinAggregateOutputType | null
+    _max: PersonalWorkTagMaxAggregateOutputType | null
+  }
+
+  type GetPersonalWorkTagGroupByPayload<T extends PersonalWorkTagGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<PersonalWorkTagGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof PersonalWorkTagGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], PersonalWorkTagGroupByOutputType[P]>
+            : GetScalarType<T[P], PersonalWorkTagGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type PersonalWorkTagSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    code?: boolean
+    active?: boolean
+    description?: boolean
+    deletedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    name?: boolean
+    color?: boolean
+    sortOrder?: boolean
+    lecturerId?: boolean
+    lecturer?: boolean | LecturerDefaultArgs<ExtArgs>
+    schedules?: boolean | PersonalWorkTag$schedulesArgs<ExtArgs>
+    _count?: boolean | PersonalWorkTagCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["personalWorkTag"]>
+
+  export type PersonalWorkTagSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    code?: boolean
+    active?: boolean
+    description?: boolean
+    deletedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    name?: boolean
+    color?: boolean
+    sortOrder?: boolean
+    lecturerId?: boolean
+    lecturer?: boolean | LecturerDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["personalWorkTag"]>
+
+  export type PersonalWorkTagSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    code?: boolean
+    active?: boolean
+    description?: boolean
+    deletedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    name?: boolean
+    color?: boolean
+    sortOrder?: boolean
+    lecturerId?: boolean
+    lecturer?: boolean | LecturerDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["personalWorkTag"]>
+
+  export type PersonalWorkTagSelectScalar = {
+    id?: boolean
+    code?: boolean
+    active?: boolean
+    description?: boolean
+    deletedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    name?: boolean
+    color?: boolean
+    sortOrder?: boolean
+    lecturerId?: boolean
+  }
+
+  export type PersonalWorkTagOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name" | "color" | "sortOrder" | "lecturerId", ExtArgs["result"]["personalWorkTag"]>
+  export type PersonalWorkTagInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    lecturer?: boolean | LecturerDefaultArgs<ExtArgs>
+    schedules?: boolean | PersonalWorkTag$schedulesArgs<ExtArgs>
+    _count?: boolean | PersonalWorkTagCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type PersonalWorkTagIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    lecturer?: boolean | LecturerDefaultArgs<ExtArgs>
+  }
+  export type PersonalWorkTagIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    lecturer?: boolean | LecturerDefaultArgs<ExtArgs>
+  }
+
+  export type $PersonalWorkTagPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "PersonalWorkTag"
+    objects: {
+      lecturer: Prisma.$LecturerPayload<ExtArgs>
+      schedules: Prisma.$IndividualSchedulePayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      code: string | null
+      active: boolean
+      description: string | null
+      deletedAt: Date | null
+      createdAt: Date
+      updatedAt: Date
+      createdBy: string | null
+      name: string
+      color: string | null
+      sortOrder: number
+      lecturerId: string
+    }, ExtArgs["result"]["personalWorkTag"]>
+    composites: {}
+  }
+
+  type PersonalWorkTagGetPayload<S extends boolean | null | undefined | PersonalWorkTagDefaultArgs> = $Result.GetResult<Prisma.$PersonalWorkTagPayload, S>
+
+  type PersonalWorkTagCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<PersonalWorkTagFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: PersonalWorkTagCountAggregateInputType | true
+    }
+
+  export interface PersonalWorkTagDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['PersonalWorkTag'], meta: { name: 'PersonalWorkTag' } }
+    /**
+     * Find zero or one PersonalWorkTag that matches the filter.
+     * @param {PersonalWorkTagFindUniqueArgs} args - Arguments to find a PersonalWorkTag
+     * @example
+     * // Get one PersonalWorkTag
+     * const personalWorkTag = await prisma.personalWorkTag.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends PersonalWorkTagFindUniqueArgs>(args: SelectSubset<T, PersonalWorkTagFindUniqueArgs<ExtArgs>>): Prisma__PersonalWorkTagClient<$Result.GetResult<Prisma.$PersonalWorkTagPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one PersonalWorkTag that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {PersonalWorkTagFindUniqueOrThrowArgs} args - Arguments to find a PersonalWorkTag
+     * @example
+     * // Get one PersonalWorkTag
+     * const personalWorkTag = await prisma.personalWorkTag.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends PersonalWorkTagFindUniqueOrThrowArgs>(args: SelectSubset<T, PersonalWorkTagFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PersonalWorkTagClient<$Result.GetResult<Prisma.$PersonalWorkTagPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first PersonalWorkTag that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PersonalWorkTagFindFirstArgs} args - Arguments to find a PersonalWorkTag
+     * @example
+     * // Get one PersonalWorkTag
+     * const personalWorkTag = await prisma.personalWorkTag.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends PersonalWorkTagFindFirstArgs>(args?: SelectSubset<T, PersonalWorkTagFindFirstArgs<ExtArgs>>): Prisma__PersonalWorkTagClient<$Result.GetResult<Prisma.$PersonalWorkTagPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first PersonalWorkTag that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PersonalWorkTagFindFirstOrThrowArgs} args - Arguments to find a PersonalWorkTag
+     * @example
+     * // Get one PersonalWorkTag
+     * const personalWorkTag = await prisma.personalWorkTag.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends PersonalWorkTagFindFirstOrThrowArgs>(args?: SelectSubset<T, PersonalWorkTagFindFirstOrThrowArgs<ExtArgs>>): Prisma__PersonalWorkTagClient<$Result.GetResult<Prisma.$PersonalWorkTagPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more PersonalWorkTags that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PersonalWorkTagFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all PersonalWorkTags
+     * const personalWorkTags = await prisma.personalWorkTag.findMany()
+     * 
+     * // Get first 10 PersonalWorkTags
+     * const personalWorkTags = await prisma.personalWorkTag.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const personalWorkTagWithIdOnly = await prisma.personalWorkTag.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends PersonalWorkTagFindManyArgs>(args?: SelectSubset<T, PersonalWorkTagFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PersonalWorkTagPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a PersonalWorkTag.
+     * @param {PersonalWorkTagCreateArgs} args - Arguments to create a PersonalWorkTag.
+     * @example
+     * // Create one PersonalWorkTag
+     * const PersonalWorkTag = await prisma.personalWorkTag.create({
+     *   data: {
+     *     // ... data to create a PersonalWorkTag
+     *   }
+     * })
+     * 
+     */
+    create<T extends PersonalWorkTagCreateArgs>(args: SelectSubset<T, PersonalWorkTagCreateArgs<ExtArgs>>): Prisma__PersonalWorkTagClient<$Result.GetResult<Prisma.$PersonalWorkTagPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many PersonalWorkTags.
+     * @param {PersonalWorkTagCreateManyArgs} args - Arguments to create many PersonalWorkTags.
+     * @example
+     * // Create many PersonalWorkTags
+     * const personalWorkTag = await prisma.personalWorkTag.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends PersonalWorkTagCreateManyArgs>(args?: SelectSubset<T, PersonalWorkTagCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many PersonalWorkTags and returns the data saved in the database.
+     * @param {PersonalWorkTagCreateManyAndReturnArgs} args - Arguments to create many PersonalWorkTags.
+     * @example
+     * // Create many PersonalWorkTags
+     * const personalWorkTag = await prisma.personalWorkTag.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many PersonalWorkTags and only return the `id`
+     * const personalWorkTagWithIdOnly = await prisma.personalWorkTag.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends PersonalWorkTagCreateManyAndReturnArgs>(args?: SelectSubset<T, PersonalWorkTagCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PersonalWorkTagPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a PersonalWorkTag.
+     * @param {PersonalWorkTagDeleteArgs} args - Arguments to delete one PersonalWorkTag.
+     * @example
+     * // Delete one PersonalWorkTag
+     * const PersonalWorkTag = await prisma.personalWorkTag.delete({
+     *   where: {
+     *     // ... filter to delete one PersonalWorkTag
+     *   }
+     * })
+     * 
+     */
+    delete<T extends PersonalWorkTagDeleteArgs>(args: SelectSubset<T, PersonalWorkTagDeleteArgs<ExtArgs>>): Prisma__PersonalWorkTagClient<$Result.GetResult<Prisma.$PersonalWorkTagPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one PersonalWorkTag.
+     * @param {PersonalWorkTagUpdateArgs} args - Arguments to update one PersonalWorkTag.
+     * @example
+     * // Update one PersonalWorkTag
+     * const personalWorkTag = await prisma.personalWorkTag.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends PersonalWorkTagUpdateArgs>(args: SelectSubset<T, PersonalWorkTagUpdateArgs<ExtArgs>>): Prisma__PersonalWorkTagClient<$Result.GetResult<Prisma.$PersonalWorkTagPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more PersonalWorkTags.
+     * @param {PersonalWorkTagDeleteManyArgs} args - Arguments to filter PersonalWorkTags to delete.
+     * @example
+     * // Delete a few PersonalWorkTags
+     * const { count } = await prisma.personalWorkTag.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends PersonalWorkTagDeleteManyArgs>(args?: SelectSubset<T, PersonalWorkTagDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PersonalWorkTags.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PersonalWorkTagUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many PersonalWorkTags
+     * const personalWorkTag = await prisma.personalWorkTag.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends PersonalWorkTagUpdateManyArgs>(args: SelectSubset<T, PersonalWorkTagUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PersonalWorkTags and returns the data updated in the database.
+     * @param {PersonalWorkTagUpdateManyAndReturnArgs} args - Arguments to update many PersonalWorkTags.
+     * @example
+     * // Update many PersonalWorkTags
+     * const personalWorkTag = await prisma.personalWorkTag.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more PersonalWorkTags and only return the `id`
+     * const personalWorkTagWithIdOnly = await prisma.personalWorkTag.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends PersonalWorkTagUpdateManyAndReturnArgs>(args: SelectSubset<T, PersonalWorkTagUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PersonalWorkTagPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one PersonalWorkTag.
+     * @param {PersonalWorkTagUpsertArgs} args - Arguments to update or create a PersonalWorkTag.
+     * @example
+     * // Update or create a PersonalWorkTag
+     * const personalWorkTag = await prisma.personalWorkTag.upsert({
+     *   create: {
+     *     // ... data to create a PersonalWorkTag
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the PersonalWorkTag we want to update
+     *   }
+     * })
+     */
+    upsert<T extends PersonalWorkTagUpsertArgs>(args: SelectSubset<T, PersonalWorkTagUpsertArgs<ExtArgs>>): Prisma__PersonalWorkTagClient<$Result.GetResult<Prisma.$PersonalWorkTagPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of PersonalWorkTags.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PersonalWorkTagCountArgs} args - Arguments to filter PersonalWorkTags to count.
+     * @example
+     * // Count the number of PersonalWorkTags
+     * const count = await prisma.personalWorkTag.count({
+     *   where: {
+     *     // ... the filter for the PersonalWorkTags we want to count
+     *   }
+     * })
+    **/
+    count<T extends PersonalWorkTagCountArgs>(
+      args?: Subset<T, PersonalWorkTagCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], PersonalWorkTagCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a PersonalWorkTag.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PersonalWorkTagAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends PersonalWorkTagAggregateArgs>(args: Subset<T, PersonalWorkTagAggregateArgs>): Prisma.PrismaPromise<GetPersonalWorkTagAggregateType<T>>
+
+    /**
+     * Group by PersonalWorkTag.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PersonalWorkTagGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends PersonalWorkTagGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: PersonalWorkTagGroupByArgs['orderBy'] }
+        : { orderBy?: PersonalWorkTagGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, PersonalWorkTagGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPersonalWorkTagGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the PersonalWorkTag model
+   */
+  readonly fields: PersonalWorkTagFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for PersonalWorkTag.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__PersonalWorkTagClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    lecturer<T extends LecturerDefaultArgs<ExtArgs> = {}>(args?: Subset<T, LecturerDefaultArgs<ExtArgs>>): Prisma__LecturerClient<$Result.GetResult<Prisma.$LecturerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    schedules<T extends PersonalWorkTag$schedulesArgs<ExtArgs> = {}>(args?: Subset<T, PersonalWorkTag$schedulesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$IndividualSchedulePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the PersonalWorkTag model
+   */
+  interface PersonalWorkTagFieldRefs {
+    readonly id: FieldRef<"PersonalWorkTag", 'String'>
+    readonly code: FieldRef<"PersonalWorkTag", 'String'>
+    readonly active: FieldRef<"PersonalWorkTag", 'Boolean'>
+    readonly description: FieldRef<"PersonalWorkTag", 'String'>
+    readonly deletedAt: FieldRef<"PersonalWorkTag", 'DateTime'>
+    readonly createdAt: FieldRef<"PersonalWorkTag", 'DateTime'>
+    readonly updatedAt: FieldRef<"PersonalWorkTag", 'DateTime'>
+    readonly createdBy: FieldRef<"PersonalWorkTag", 'String'>
+    readonly name: FieldRef<"PersonalWorkTag", 'String'>
+    readonly color: FieldRef<"PersonalWorkTag", 'String'>
+    readonly sortOrder: FieldRef<"PersonalWorkTag", 'Int'>
+    readonly lecturerId: FieldRef<"PersonalWorkTag", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * PersonalWorkTag findUnique
+   */
+  export type PersonalWorkTagFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PersonalWorkTag
+     */
+    select?: PersonalWorkTagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PersonalWorkTag
+     */
+    omit?: PersonalWorkTagOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PersonalWorkTagInclude<ExtArgs> | null
+    /**
+     * Filter, which PersonalWorkTag to fetch.
+     */
+    where: PersonalWorkTagWhereUniqueInput
+  }
+
+  /**
+   * PersonalWorkTag findUniqueOrThrow
+   */
+  export type PersonalWorkTagFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PersonalWorkTag
+     */
+    select?: PersonalWorkTagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PersonalWorkTag
+     */
+    omit?: PersonalWorkTagOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PersonalWorkTagInclude<ExtArgs> | null
+    /**
+     * Filter, which PersonalWorkTag to fetch.
+     */
+    where: PersonalWorkTagWhereUniqueInput
+  }
+
+  /**
+   * PersonalWorkTag findFirst
+   */
+  export type PersonalWorkTagFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PersonalWorkTag
+     */
+    select?: PersonalWorkTagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PersonalWorkTag
+     */
+    omit?: PersonalWorkTagOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PersonalWorkTagInclude<ExtArgs> | null
+    /**
+     * Filter, which PersonalWorkTag to fetch.
+     */
+    where?: PersonalWorkTagWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PersonalWorkTags to fetch.
+     */
+    orderBy?: PersonalWorkTagOrderByWithRelationInput | PersonalWorkTagOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PersonalWorkTags.
+     */
+    cursor?: PersonalWorkTagWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PersonalWorkTags from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PersonalWorkTags.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PersonalWorkTags.
+     */
+    distinct?: PersonalWorkTagScalarFieldEnum | PersonalWorkTagScalarFieldEnum[]
+  }
+
+  /**
+   * PersonalWorkTag findFirstOrThrow
+   */
+  export type PersonalWorkTagFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PersonalWorkTag
+     */
+    select?: PersonalWorkTagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PersonalWorkTag
+     */
+    omit?: PersonalWorkTagOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PersonalWorkTagInclude<ExtArgs> | null
+    /**
+     * Filter, which PersonalWorkTag to fetch.
+     */
+    where?: PersonalWorkTagWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PersonalWorkTags to fetch.
+     */
+    orderBy?: PersonalWorkTagOrderByWithRelationInput | PersonalWorkTagOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PersonalWorkTags.
+     */
+    cursor?: PersonalWorkTagWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PersonalWorkTags from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PersonalWorkTags.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PersonalWorkTags.
+     */
+    distinct?: PersonalWorkTagScalarFieldEnum | PersonalWorkTagScalarFieldEnum[]
+  }
+
+  /**
+   * PersonalWorkTag findMany
+   */
+  export type PersonalWorkTagFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PersonalWorkTag
+     */
+    select?: PersonalWorkTagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PersonalWorkTag
+     */
+    omit?: PersonalWorkTagOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PersonalWorkTagInclude<ExtArgs> | null
+    /**
+     * Filter, which PersonalWorkTags to fetch.
+     */
+    where?: PersonalWorkTagWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PersonalWorkTags to fetch.
+     */
+    orderBy?: PersonalWorkTagOrderByWithRelationInput | PersonalWorkTagOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing PersonalWorkTags.
+     */
+    cursor?: PersonalWorkTagWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PersonalWorkTags from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PersonalWorkTags.
+     */
+    skip?: number
+    distinct?: PersonalWorkTagScalarFieldEnum | PersonalWorkTagScalarFieldEnum[]
+  }
+
+  /**
+   * PersonalWorkTag create
+   */
+  export type PersonalWorkTagCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PersonalWorkTag
+     */
+    select?: PersonalWorkTagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PersonalWorkTag
+     */
+    omit?: PersonalWorkTagOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PersonalWorkTagInclude<ExtArgs> | null
+    /**
+     * The data needed to create a PersonalWorkTag.
+     */
+    data: XOR<PersonalWorkTagCreateInput, PersonalWorkTagUncheckedCreateInput>
+  }
+
+  /**
+   * PersonalWorkTag createMany
+   */
+  export type PersonalWorkTagCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many PersonalWorkTags.
+     */
+    data: PersonalWorkTagCreateManyInput | PersonalWorkTagCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * PersonalWorkTag createManyAndReturn
+   */
+  export type PersonalWorkTagCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PersonalWorkTag
+     */
+    select?: PersonalWorkTagSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the PersonalWorkTag
+     */
+    omit?: PersonalWorkTagOmit<ExtArgs> | null
+    /**
+     * The data used to create many PersonalWorkTags.
+     */
+    data: PersonalWorkTagCreateManyInput | PersonalWorkTagCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PersonalWorkTagIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * PersonalWorkTag update
+   */
+  export type PersonalWorkTagUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PersonalWorkTag
+     */
+    select?: PersonalWorkTagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PersonalWorkTag
+     */
+    omit?: PersonalWorkTagOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PersonalWorkTagInclude<ExtArgs> | null
+    /**
+     * The data needed to update a PersonalWorkTag.
+     */
+    data: XOR<PersonalWorkTagUpdateInput, PersonalWorkTagUncheckedUpdateInput>
+    /**
+     * Choose, which PersonalWorkTag to update.
+     */
+    where: PersonalWorkTagWhereUniqueInput
+  }
+
+  /**
+   * PersonalWorkTag updateMany
+   */
+  export type PersonalWorkTagUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update PersonalWorkTags.
+     */
+    data: XOR<PersonalWorkTagUpdateManyMutationInput, PersonalWorkTagUncheckedUpdateManyInput>
+    /**
+     * Filter which PersonalWorkTags to update
+     */
+    where?: PersonalWorkTagWhereInput
+    /**
+     * Limit how many PersonalWorkTags to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * PersonalWorkTag updateManyAndReturn
+   */
+  export type PersonalWorkTagUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PersonalWorkTag
+     */
+    select?: PersonalWorkTagSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the PersonalWorkTag
+     */
+    omit?: PersonalWorkTagOmit<ExtArgs> | null
+    /**
+     * The data used to update PersonalWorkTags.
+     */
+    data: XOR<PersonalWorkTagUpdateManyMutationInput, PersonalWorkTagUncheckedUpdateManyInput>
+    /**
+     * Filter which PersonalWorkTags to update
+     */
+    where?: PersonalWorkTagWhereInput
+    /**
+     * Limit how many PersonalWorkTags to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PersonalWorkTagIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * PersonalWorkTag upsert
+   */
+  export type PersonalWorkTagUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PersonalWorkTag
+     */
+    select?: PersonalWorkTagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PersonalWorkTag
+     */
+    omit?: PersonalWorkTagOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PersonalWorkTagInclude<ExtArgs> | null
+    /**
+     * The filter to search for the PersonalWorkTag to update in case it exists.
+     */
+    where: PersonalWorkTagWhereUniqueInput
+    /**
+     * In case the PersonalWorkTag found by the `where` argument doesn't exist, create a new PersonalWorkTag with this data.
+     */
+    create: XOR<PersonalWorkTagCreateInput, PersonalWorkTagUncheckedCreateInput>
+    /**
+     * In case the PersonalWorkTag was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PersonalWorkTagUpdateInput, PersonalWorkTagUncheckedUpdateInput>
+  }
+
+  /**
+   * PersonalWorkTag delete
+   */
+  export type PersonalWorkTagDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PersonalWorkTag
+     */
+    select?: PersonalWorkTagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PersonalWorkTag
+     */
+    omit?: PersonalWorkTagOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PersonalWorkTagInclude<ExtArgs> | null
+    /**
+     * Filter which PersonalWorkTag to delete.
+     */
+    where: PersonalWorkTagWhereUniqueInput
+  }
+
+  /**
+   * PersonalWorkTag deleteMany
+   */
+  export type PersonalWorkTagDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PersonalWorkTags to delete
+     */
+    where?: PersonalWorkTagWhereInput
+    /**
+     * Limit how many PersonalWorkTags to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * PersonalWorkTag.schedules
+   */
+  export type PersonalWorkTag$schedulesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IndividualSchedule
+     */
+    select?: IndividualScheduleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the IndividualSchedule
+     */
+    omit?: IndividualScheduleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IndividualScheduleInclude<ExtArgs> | null
+    where?: IndividualScheduleWhereInput
+    orderBy?: IndividualScheduleOrderByWithRelationInput | IndividualScheduleOrderByWithRelationInput[]
+    cursor?: IndividualScheduleWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: IndividualScheduleScalarFieldEnum | IndividualScheduleScalarFieldEnum[]
+  }
+
+  /**
+   * PersonalWorkTag without action
+   */
+  export type PersonalWorkTagDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PersonalWorkTag
+     */
+    select?: PersonalWorkTagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PersonalWorkTag
+     */
+    omit?: PersonalWorkTagOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PersonalWorkTagInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model IndividualSchedule
+   */
+
+  export type AggregateIndividualSchedule = {
+    _count: IndividualScheduleCountAggregateOutputType | null
+    _min: IndividualScheduleMinAggregateOutputType | null
+    _max: IndividualScheduleMaxAggregateOutputType | null
+  }
+
+  export type IndividualScheduleMinAggregateOutputType = {
+    id: string | null
+    code: string | null
+    active: boolean | null
+    description: string | null
+    deletedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    createdBy: string | null
+    title: string | null
+    startTime: Date | null
+    endTime: Date | null
+    allDay: boolean | null
+    location: string | null
+    lecturerId: string | null
+  }
+
+  export type IndividualScheduleMaxAggregateOutputType = {
+    id: string | null
+    code: string | null
+    active: boolean | null
+    description: string | null
+    deletedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    createdBy: string | null
+    title: string | null
+    startTime: Date | null
+    endTime: Date | null
+    allDay: boolean | null
+    location: string | null
+    lecturerId: string | null
+  }
+
+  export type IndividualScheduleCountAggregateOutputType = {
+    id: number
+    code: number
+    active: number
+    description: number
+    deletedAt: number
+    createdAt: number
+    updatedAt: number
+    createdBy: number
+    title: number
+    startTime: number
+    endTime: number
+    allDay: number
+    location: number
+    lecturerId: number
+    _all: number
+  }
+
+
+  export type IndividualScheduleMinAggregateInputType = {
+    id?: true
+    code?: true
+    active?: true
+    description?: true
+    deletedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+    title?: true
+    startTime?: true
+    endTime?: true
+    allDay?: true
+    location?: true
+    lecturerId?: true
+  }
+
+  export type IndividualScheduleMaxAggregateInputType = {
+    id?: true
+    code?: true
+    active?: true
+    description?: true
+    deletedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+    title?: true
+    startTime?: true
+    endTime?: true
+    allDay?: true
+    location?: true
+    lecturerId?: true
+  }
+
+  export type IndividualScheduleCountAggregateInputType = {
+    id?: true
+    code?: true
+    active?: true
+    description?: true
+    deletedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+    title?: true
+    startTime?: true
+    endTime?: true
+    allDay?: true
+    location?: true
+    lecturerId?: true
+    _all?: true
+  }
+
+  export type IndividualScheduleAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which IndividualSchedule to aggregate.
+     */
+    where?: IndividualScheduleWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of IndividualSchedules to fetch.
+     */
+    orderBy?: IndividualScheduleOrderByWithRelationInput | IndividualScheduleOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: IndividualScheduleWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` IndividualSchedules from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` IndividualSchedules.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned IndividualSchedules
+    **/
+    _count?: true | IndividualScheduleCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: IndividualScheduleMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: IndividualScheduleMaxAggregateInputType
+  }
+
+  export type GetIndividualScheduleAggregateType<T extends IndividualScheduleAggregateArgs> = {
+        [P in keyof T & keyof AggregateIndividualSchedule]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateIndividualSchedule[P]>
+      : GetScalarType<T[P], AggregateIndividualSchedule[P]>
+  }
+
+
+
+
+  export type IndividualScheduleGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: IndividualScheduleWhereInput
+    orderBy?: IndividualScheduleOrderByWithAggregationInput | IndividualScheduleOrderByWithAggregationInput[]
+    by: IndividualScheduleScalarFieldEnum[] | IndividualScheduleScalarFieldEnum
+    having?: IndividualScheduleScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: IndividualScheduleCountAggregateInputType | true
+    _min?: IndividualScheduleMinAggregateInputType
+    _max?: IndividualScheduleMaxAggregateInputType
+  }
+
+  export type IndividualScheduleGroupByOutputType = {
+    id: string
+    code: string | null
+    active: boolean
+    description: string | null
+    deletedAt: Date | null
+    createdAt: Date
+    updatedAt: Date
+    createdBy: string | null
+    title: string
+    startTime: Date
+    endTime: Date
+    allDay: boolean
+    location: string | null
+    lecturerId: string
+    _count: IndividualScheduleCountAggregateOutputType | null
+    _min: IndividualScheduleMinAggregateOutputType | null
+    _max: IndividualScheduleMaxAggregateOutputType | null
+  }
+
+  type GetIndividualScheduleGroupByPayload<T extends IndividualScheduleGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<IndividualScheduleGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof IndividualScheduleGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], IndividualScheduleGroupByOutputType[P]>
+            : GetScalarType<T[P], IndividualScheduleGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type IndividualScheduleSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    code?: boolean
+    active?: boolean
+    description?: boolean
+    deletedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    title?: boolean
+    startTime?: boolean
+    endTime?: boolean
+    allDay?: boolean
+    location?: boolean
+    lecturerId?: boolean
+    lecturer?: boolean | LecturerDefaultArgs<ExtArgs>
+    tags?: boolean | IndividualSchedule$tagsArgs<ExtArgs>
+    _count?: boolean | IndividualScheduleCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["individualSchedule"]>
+
+  export type IndividualScheduleSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    code?: boolean
+    active?: boolean
+    description?: boolean
+    deletedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    title?: boolean
+    startTime?: boolean
+    endTime?: boolean
+    allDay?: boolean
+    location?: boolean
+    lecturerId?: boolean
+    lecturer?: boolean | LecturerDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["individualSchedule"]>
+
+  export type IndividualScheduleSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    code?: boolean
+    active?: boolean
+    description?: boolean
+    deletedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    title?: boolean
+    startTime?: boolean
+    endTime?: boolean
+    allDay?: boolean
+    location?: boolean
+    lecturerId?: boolean
+    lecturer?: boolean | LecturerDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["individualSchedule"]>
+
+  export type IndividualScheduleSelectScalar = {
+    id?: boolean
+    code?: boolean
+    active?: boolean
+    description?: boolean
+    deletedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    title?: boolean
+    startTime?: boolean
+    endTime?: boolean
+    allDay?: boolean
+    location?: boolean
+    lecturerId?: boolean
+  }
+
+  export type IndividualScheduleOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "title" | "startTime" | "endTime" | "allDay" | "location" | "lecturerId", ExtArgs["result"]["individualSchedule"]>
+  export type IndividualScheduleInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    lecturer?: boolean | LecturerDefaultArgs<ExtArgs>
+    tags?: boolean | IndividualSchedule$tagsArgs<ExtArgs>
+    _count?: boolean | IndividualScheduleCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type IndividualScheduleIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    lecturer?: boolean | LecturerDefaultArgs<ExtArgs>
+  }
+  export type IndividualScheduleIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    lecturer?: boolean | LecturerDefaultArgs<ExtArgs>
+  }
+
+  export type $IndividualSchedulePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "IndividualSchedule"
+    objects: {
+      lecturer: Prisma.$LecturerPayload<ExtArgs>
+      tags: Prisma.$PersonalWorkTagPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      code: string | null
+      active: boolean
+      description: string | null
+      deletedAt: Date | null
+      createdAt: Date
+      updatedAt: Date
+      createdBy: string | null
+      title: string
+      startTime: Date
+      endTime: Date
+      allDay: boolean
+      location: string | null
+      lecturerId: string
+    }, ExtArgs["result"]["individualSchedule"]>
+    composites: {}
+  }
+
+  type IndividualScheduleGetPayload<S extends boolean | null | undefined | IndividualScheduleDefaultArgs> = $Result.GetResult<Prisma.$IndividualSchedulePayload, S>
+
+  type IndividualScheduleCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<IndividualScheduleFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: IndividualScheduleCountAggregateInputType | true
+    }
+
+  export interface IndividualScheduleDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['IndividualSchedule'], meta: { name: 'IndividualSchedule' } }
+    /**
+     * Find zero or one IndividualSchedule that matches the filter.
+     * @param {IndividualScheduleFindUniqueArgs} args - Arguments to find a IndividualSchedule
+     * @example
+     * // Get one IndividualSchedule
+     * const individualSchedule = await prisma.individualSchedule.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends IndividualScheduleFindUniqueArgs>(args: SelectSubset<T, IndividualScheduleFindUniqueArgs<ExtArgs>>): Prisma__IndividualScheduleClient<$Result.GetResult<Prisma.$IndividualSchedulePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one IndividualSchedule that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {IndividualScheduleFindUniqueOrThrowArgs} args - Arguments to find a IndividualSchedule
+     * @example
+     * // Get one IndividualSchedule
+     * const individualSchedule = await prisma.individualSchedule.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends IndividualScheduleFindUniqueOrThrowArgs>(args: SelectSubset<T, IndividualScheduleFindUniqueOrThrowArgs<ExtArgs>>): Prisma__IndividualScheduleClient<$Result.GetResult<Prisma.$IndividualSchedulePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first IndividualSchedule that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {IndividualScheduleFindFirstArgs} args - Arguments to find a IndividualSchedule
+     * @example
+     * // Get one IndividualSchedule
+     * const individualSchedule = await prisma.individualSchedule.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends IndividualScheduleFindFirstArgs>(args?: SelectSubset<T, IndividualScheduleFindFirstArgs<ExtArgs>>): Prisma__IndividualScheduleClient<$Result.GetResult<Prisma.$IndividualSchedulePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first IndividualSchedule that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {IndividualScheduleFindFirstOrThrowArgs} args - Arguments to find a IndividualSchedule
+     * @example
+     * // Get one IndividualSchedule
+     * const individualSchedule = await prisma.individualSchedule.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends IndividualScheduleFindFirstOrThrowArgs>(args?: SelectSubset<T, IndividualScheduleFindFirstOrThrowArgs<ExtArgs>>): Prisma__IndividualScheduleClient<$Result.GetResult<Prisma.$IndividualSchedulePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more IndividualSchedules that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {IndividualScheduleFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all IndividualSchedules
+     * const individualSchedules = await prisma.individualSchedule.findMany()
+     * 
+     * // Get first 10 IndividualSchedules
+     * const individualSchedules = await prisma.individualSchedule.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const individualScheduleWithIdOnly = await prisma.individualSchedule.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends IndividualScheduleFindManyArgs>(args?: SelectSubset<T, IndividualScheduleFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$IndividualSchedulePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a IndividualSchedule.
+     * @param {IndividualScheduleCreateArgs} args - Arguments to create a IndividualSchedule.
+     * @example
+     * // Create one IndividualSchedule
+     * const IndividualSchedule = await prisma.individualSchedule.create({
+     *   data: {
+     *     // ... data to create a IndividualSchedule
+     *   }
+     * })
+     * 
+     */
+    create<T extends IndividualScheduleCreateArgs>(args: SelectSubset<T, IndividualScheduleCreateArgs<ExtArgs>>): Prisma__IndividualScheduleClient<$Result.GetResult<Prisma.$IndividualSchedulePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many IndividualSchedules.
+     * @param {IndividualScheduleCreateManyArgs} args - Arguments to create many IndividualSchedules.
+     * @example
+     * // Create many IndividualSchedules
+     * const individualSchedule = await prisma.individualSchedule.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends IndividualScheduleCreateManyArgs>(args?: SelectSubset<T, IndividualScheduleCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many IndividualSchedules and returns the data saved in the database.
+     * @param {IndividualScheduleCreateManyAndReturnArgs} args - Arguments to create many IndividualSchedules.
+     * @example
+     * // Create many IndividualSchedules
+     * const individualSchedule = await prisma.individualSchedule.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many IndividualSchedules and only return the `id`
+     * const individualScheduleWithIdOnly = await prisma.individualSchedule.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends IndividualScheduleCreateManyAndReturnArgs>(args?: SelectSubset<T, IndividualScheduleCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$IndividualSchedulePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a IndividualSchedule.
+     * @param {IndividualScheduleDeleteArgs} args - Arguments to delete one IndividualSchedule.
+     * @example
+     * // Delete one IndividualSchedule
+     * const IndividualSchedule = await prisma.individualSchedule.delete({
+     *   where: {
+     *     // ... filter to delete one IndividualSchedule
+     *   }
+     * })
+     * 
+     */
+    delete<T extends IndividualScheduleDeleteArgs>(args: SelectSubset<T, IndividualScheduleDeleteArgs<ExtArgs>>): Prisma__IndividualScheduleClient<$Result.GetResult<Prisma.$IndividualSchedulePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one IndividualSchedule.
+     * @param {IndividualScheduleUpdateArgs} args - Arguments to update one IndividualSchedule.
+     * @example
+     * // Update one IndividualSchedule
+     * const individualSchedule = await prisma.individualSchedule.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends IndividualScheduleUpdateArgs>(args: SelectSubset<T, IndividualScheduleUpdateArgs<ExtArgs>>): Prisma__IndividualScheduleClient<$Result.GetResult<Prisma.$IndividualSchedulePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more IndividualSchedules.
+     * @param {IndividualScheduleDeleteManyArgs} args - Arguments to filter IndividualSchedules to delete.
+     * @example
+     * // Delete a few IndividualSchedules
+     * const { count } = await prisma.individualSchedule.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends IndividualScheduleDeleteManyArgs>(args?: SelectSubset<T, IndividualScheduleDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more IndividualSchedules.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {IndividualScheduleUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many IndividualSchedules
+     * const individualSchedule = await prisma.individualSchedule.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends IndividualScheduleUpdateManyArgs>(args: SelectSubset<T, IndividualScheduleUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more IndividualSchedules and returns the data updated in the database.
+     * @param {IndividualScheduleUpdateManyAndReturnArgs} args - Arguments to update many IndividualSchedules.
+     * @example
+     * // Update many IndividualSchedules
+     * const individualSchedule = await prisma.individualSchedule.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more IndividualSchedules and only return the `id`
+     * const individualScheduleWithIdOnly = await prisma.individualSchedule.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends IndividualScheduleUpdateManyAndReturnArgs>(args: SelectSubset<T, IndividualScheduleUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$IndividualSchedulePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one IndividualSchedule.
+     * @param {IndividualScheduleUpsertArgs} args - Arguments to update or create a IndividualSchedule.
+     * @example
+     * // Update or create a IndividualSchedule
+     * const individualSchedule = await prisma.individualSchedule.upsert({
+     *   create: {
+     *     // ... data to create a IndividualSchedule
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the IndividualSchedule we want to update
+     *   }
+     * })
+     */
+    upsert<T extends IndividualScheduleUpsertArgs>(args: SelectSubset<T, IndividualScheduleUpsertArgs<ExtArgs>>): Prisma__IndividualScheduleClient<$Result.GetResult<Prisma.$IndividualSchedulePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of IndividualSchedules.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {IndividualScheduleCountArgs} args - Arguments to filter IndividualSchedules to count.
+     * @example
+     * // Count the number of IndividualSchedules
+     * const count = await prisma.individualSchedule.count({
+     *   where: {
+     *     // ... the filter for the IndividualSchedules we want to count
+     *   }
+     * })
+    **/
+    count<T extends IndividualScheduleCountArgs>(
+      args?: Subset<T, IndividualScheduleCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], IndividualScheduleCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a IndividualSchedule.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {IndividualScheduleAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends IndividualScheduleAggregateArgs>(args: Subset<T, IndividualScheduleAggregateArgs>): Prisma.PrismaPromise<GetIndividualScheduleAggregateType<T>>
+
+    /**
+     * Group by IndividualSchedule.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {IndividualScheduleGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends IndividualScheduleGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: IndividualScheduleGroupByArgs['orderBy'] }
+        : { orderBy?: IndividualScheduleGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, IndividualScheduleGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetIndividualScheduleGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the IndividualSchedule model
+   */
+  readonly fields: IndividualScheduleFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for IndividualSchedule.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__IndividualScheduleClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    lecturer<T extends LecturerDefaultArgs<ExtArgs> = {}>(args?: Subset<T, LecturerDefaultArgs<ExtArgs>>): Prisma__LecturerClient<$Result.GetResult<Prisma.$LecturerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    tags<T extends IndividualSchedule$tagsArgs<ExtArgs> = {}>(args?: Subset<T, IndividualSchedule$tagsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PersonalWorkTagPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the IndividualSchedule model
+   */
+  interface IndividualScheduleFieldRefs {
+    readonly id: FieldRef<"IndividualSchedule", 'String'>
+    readonly code: FieldRef<"IndividualSchedule", 'String'>
+    readonly active: FieldRef<"IndividualSchedule", 'Boolean'>
+    readonly description: FieldRef<"IndividualSchedule", 'String'>
+    readonly deletedAt: FieldRef<"IndividualSchedule", 'DateTime'>
+    readonly createdAt: FieldRef<"IndividualSchedule", 'DateTime'>
+    readonly updatedAt: FieldRef<"IndividualSchedule", 'DateTime'>
+    readonly createdBy: FieldRef<"IndividualSchedule", 'String'>
+    readonly title: FieldRef<"IndividualSchedule", 'String'>
+    readonly startTime: FieldRef<"IndividualSchedule", 'DateTime'>
+    readonly endTime: FieldRef<"IndividualSchedule", 'DateTime'>
+    readonly allDay: FieldRef<"IndividualSchedule", 'Boolean'>
+    readonly location: FieldRef<"IndividualSchedule", 'String'>
+    readonly lecturerId: FieldRef<"IndividualSchedule", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * IndividualSchedule findUnique
+   */
+  export type IndividualScheduleFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IndividualSchedule
+     */
+    select?: IndividualScheduleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the IndividualSchedule
+     */
+    omit?: IndividualScheduleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IndividualScheduleInclude<ExtArgs> | null
+    /**
+     * Filter, which IndividualSchedule to fetch.
+     */
+    where: IndividualScheduleWhereUniqueInput
+  }
+
+  /**
+   * IndividualSchedule findUniqueOrThrow
+   */
+  export type IndividualScheduleFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IndividualSchedule
+     */
+    select?: IndividualScheduleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the IndividualSchedule
+     */
+    omit?: IndividualScheduleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IndividualScheduleInclude<ExtArgs> | null
+    /**
+     * Filter, which IndividualSchedule to fetch.
+     */
+    where: IndividualScheduleWhereUniqueInput
+  }
+
+  /**
+   * IndividualSchedule findFirst
+   */
+  export type IndividualScheduleFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IndividualSchedule
+     */
+    select?: IndividualScheduleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the IndividualSchedule
+     */
+    omit?: IndividualScheduleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IndividualScheduleInclude<ExtArgs> | null
+    /**
+     * Filter, which IndividualSchedule to fetch.
+     */
+    where?: IndividualScheduleWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of IndividualSchedules to fetch.
+     */
+    orderBy?: IndividualScheduleOrderByWithRelationInput | IndividualScheduleOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for IndividualSchedules.
+     */
+    cursor?: IndividualScheduleWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` IndividualSchedules from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` IndividualSchedules.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of IndividualSchedules.
+     */
+    distinct?: IndividualScheduleScalarFieldEnum | IndividualScheduleScalarFieldEnum[]
+  }
+
+  /**
+   * IndividualSchedule findFirstOrThrow
+   */
+  export type IndividualScheduleFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IndividualSchedule
+     */
+    select?: IndividualScheduleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the IndividualSchedule
+     */
+    omit?: IndividualScheduleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IndividualScheduleInclude<ExtArgs> | null
+    /**
+     * Filter, which IndividualSchedule to fetch.
+     */
+    where?: IndividualScheduleWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of IndividualSchedules to fetch.
+     */
+    orderBy?: IndividualScheduleOrderByWithRelationInput | IndividualScheduleOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for IndividualSchedules.
+     */
+    cursor?: IndividualScheduleWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` IndividualSchedules from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` IndividualSchedules.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of IndividualSchedules.
+     */
+    distinct?: IndividualScheduleScalarFieldEnum | IndividualScheduleScalarFieldEnum[]
+  }
+
+  /**
+   * IndividualSchedule findMany
+   */
+  export type IndividualScheduleFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IndividualSchedule
+     */
+    select?: IndividualScheduleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the IndividualSchedule
+     */
+    omit?: IndividualScheduleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IndividualScheduleInclude<ExtArgs> | null
+    /**
+     * Filter, which IndividualSchedules to fetch.
+     */
+    where?: IndividualScheduleWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of IndividualSchedules to fetch.
+     */
+    orderBy?: IndividualScheduleOrderByWithRelationInput | IndividualScheduleOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing IndividualSchedules.
+     */
+    cursor?: IndividualScheduleWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` IndividualSchedules from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` IndividualSchedules.
+     */
+    skip?: number
+    distinct?: IndividualScheduleScalarFieldEnum | IndividualScheduleScalarFieldEnum[]
+  }
+
+  /**
+   * IndividualSchedule create
+   */
+  export type IndividualScheduleCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IndividualSchedule
+     */
+    select?: IndividualScheduleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the IndividualSchedule
+     */
+    omit?: IndividualScheduleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IndividualScheduleInclude<ExtArgs> | null
+    /**
+     * The data needed to create a IndividualSchedule.
+     */
+    data: XOR<IndividualScheduleCreateInput, IndividualScheduleUncheckedCreateInput>
+  }
+
+  /**
+   * IndividualSchedule createMany
+   */
+  export type IndividualScheduleCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many IndividualSchedules.
+     */
+    data: IndividualScheduleCreateManyInput | IndividualScheduleCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * IndividualSchedule createManyAndReturn
+   */
+  export type IndividualScheduleCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IndividualSchedule
+     */
+    select?: IndividualScheduleSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the IndividualSchedule
+     */
+    omit?: IndividualScheduleOmit<ExtArgs> | null
+    /**
+     * The data used to create many IndividualSchedules.
+     */
+    data: IndividualScheduleCreateManyInput | IndividualScheduleCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IndividualScheduleIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * IndividualSchedule update
+   */
+  export type IndividualScheduleUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IndividualSchedule
+     */
+    select?: IndividualScheduleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the IndividualSchedule
+     */
+    omit?: IndividualScheduleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IndividualScheduleInclude<ExtArgs> | null
+    /**
+     * The data needed to update a IndividualSchedule.
+     */
+    data: XOR<IndividualScheduleUpdateInput, IndividualScheduleUncheckedUpdateInput>
+    /**
+     * Choose, which IndividualSchedule to update.
+     */
+    where: IndividualScheduleWhereUniqueInput
+  }
+
+  /**
+   * IndividualSchedule updateMany
+   */
+  export type IndividualScheduleUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update IndividualSchedules.
+     */
+    data: XOR<IndividualScheduleUpdateManyMutationInput, IndividualScheduleUncheckedUpdateManyInput>
+    /**
+     * Filter which IndividualSchedules to update
+     */
+    where?: IndividualScheduleWhereInput
+    /**
+     * Limit how many IndividualSchedules to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * IndividualSchedule updateManyAndReturn
+   */
+  export type IndividualScheduleUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IndividualSchedule
+     */
+    select?: IndividualScheduleSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the IndividualSchedule
+     */
+    omit?: IndividualScheduleOmit<ExtArgs> | null
+    /**
+     * The data used to update IndividualSchedules.
+     */
+    data: XOR<IndividualScheduleUpdateManyMutationInput, IndividualScheduleUncheckedUpdateManyInput>
+    /**
+     * Filter which IndividualSchedules to update
+     */
+    where?: IndividualScheduleWhereInput
+    /**
+     * Limit how many IndividualSchedules to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IndividualScheduleIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * IndividualSchedule upsert
+   */
+  export type IndividualScheduleUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IndividualSchedule
+     */
+    select?: IndividualScheduleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the IndividualSchedule
+     */
+    omit?: IndividualScheduleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IndividualScheduleInclude<ExtArgs> | null
+    /**
+     * The filter to search for the IndividualSchedule to update in case it exists.
+     */
+    where: IndividualScheduleWhereUniqueInput
+    /**
+     * In case the IndividualSchedule found by the `where` argument doesn't exist, create a new IndividualSchedule with this data.
+     */
+    create: XOR<IndividualScheduleCreateInput, IndividualScheduleUncheckedCreateInput>
+    /**
+     * In case the IndividualSchedule was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<IndividualScheduleUpdateInput, IndividualScheduleUncheckedUpdateInput>
+  }
+
+  /**
+   * IndividualSchedule delete
+   */
+  export type IndividualScheduleDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IndividualSchedule
+     */
+    select?: IndividualScheduleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the IndividualSchedule
+     */
+    omit?: IndividualScheduleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IndividualScheduleInclude<ExtArgs> | null
+    /**
+     * Filter which IndividualSchedule to delete.
+     */
+    where: IndividualScheduleWhereUniqueInput
+  }
+
+  /**
+   * IndividualSchedule deleteMany
+   */
+  export type IndividualScheduleDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which IndividualSchedules to delete
+     */
+    where?: IndividualScheduleWhereInput
+    /**
+     * Limit how many IndividualSchedules to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * IndividualSchedule.tags
+   */
+  export type IndividualSchedule$tagsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PersonalWorkTag
+     */
+    select?: PersonalWorkTagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PersonalWorkTag
+     */
+    omit?: PersonalWorkTagOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PersonalWorkTagInclude<ExtArgs> | null
+    where?: PersonalWorkTagWhereInput
+    orderBy?: PersonalWorkTagOrderByWithRelationInput | PersonalWorkTagOrderByWithRelationInput[]
+    cursor?: PersonalWorkTagWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PersonalWorkTagScalarFieldEnum | PersonalWorkTagScalarFieldEnum[]
+  }
+
+  /**
+   * IndividualSchedule without action
+   */
+  export type IndividualScheduleDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IndividualSchedule
+     */
+    select?: IndividualScheduleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the IndividualSchedule
+     */
+    omit?: IndividualScheduleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IndividualScheduleInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model Lecturer
    */
 
@@ -221137,6 +223817,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: boolean | Lecturer$primarySupervisorThesisProjectArgs<ExtArgs>
     secondarySupervisorThesisProject?: boolean | Lecturer$secondarySupervisorThesisProjectArgs<ExtArgs>
     notifications?: boolean | Lecturer$notificationsArgs<ExtArgs>
+    personalWorkTags?: boolean | Lecturer$personalWorkTagsArgs<ExtArgs>
+    individualSchedules?: boolean | Lecturer$individualSchedulesArgs<ExtArgs>
     _count?: boolean | LecturerCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["lecturer"]>
 
@@ -221223,6 +223905,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: boolean | Lecturer$primarySupervisorThesisProjectArgs<ExtArgs>
     secondarySupervisorThesisProject?: boolean | Lecturer$secondarySupervisorThesisProjectArgs<ExtArgs>
     notifications?: boolean | Lecturer$notificationsArgs<ExtArgs>
+    personalWorkTags?: boolean | Lecturer$personalWorkTagsArgs<ExtArgs>
+    individualSchedules?: boolean | Lecturer$individualSchedulesArgs<ExtArgs>
     _count?: boolean | LecturerCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type LecturerIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -221263,6 +223947,8 @@ export namespace Prisma {
       primarySupervisorThesisProject: Prisma.$ThesisProjectPayload<ExtArgs>[]
       secondarySupervisorThesisProject: Prisma.$ThesisProjectPayload<ExtArgs>[]
       notifications: Prisma.$NotificationPayload<ExtArgs>[]
+      personalWorkTags: Prisma.$PersonalWorkTagPayload<ExtArgs>[]
+      individualSchedules: Prisma.$IndividualSchedulePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -221697,6 +224383,8 @@ export namespace Prisma {
     primarySupervisorThesisProject<T extends Lecturer$primarySupervisorThesisProjectArgs<ExtArgs> = {}>(args?: Subset<T, Lecturer$primarySupervisorThesisProjectArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ThesisProjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     secondarySupervisorThesisProject<T extends Lecturer$secondarySupervisorThesisProjectArgs<ExtArgs> = {}>(args?: Subset<T, Lecturer$secondarySupervisorThesisProjectArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ThesisProjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     notifications<T extends Lecturer$notificationsArgs<ExtArgs> = {}>(args?: Subset<T, Lecturer$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    personalWorkTags<T extends Lecturer$personalWorkTagsArgs<ExtArgs> = {}>(args?: Subset<T, Lecturer$personalWorkTagsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PersonalWorkTagPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    individualSchedules<T extends Lecturer$individualSchedulesArgs<ExtArgs> = {}>(args?: Subset<T, Lecturer$individualSchedulesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$IndividualSchedulePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -222637,6 +225325,54 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: NotificationScalarFieldEnum | NotificationScalarFieldEnum[]
+  }
+
+  /**
+   * Lecturer.personalWorkTags
+   */
+  export type Lecturer$personalWorkTagsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PersonalWorkTag
+     */
+    select?: PersonalWorkTagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PersonalWorkTag
+     */
+    omit?: PersonalWorkTagOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PersonalWorkTagInclude<ExtArgs> | null
+    where?: PersonalWorkTagWhereInput
+    orderBy?: PersonalWorkTagOrderByWithRelationInput | PersonalWorkTagOrderByWithRelationInput[]
+    cursor?: PersonalWorkTagWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PersonalWorkTagScalarFieldEnum | PersonalWorkTagScalarFieldEnum[]
+  }
+
+  /**
+   * Lecturer.individualSchedules
+   */
+  export type Lecturer$individualSchedulesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IndividualSchedule
+     */
+    select?: IndividualScheduleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the IndividualSchedule
+     */
+    omit?: IndividualScheduleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IndividualScheduleInclude<ExtArgs> | null
+    where?: IndividualScheduleWhereInput
+    orderBy?: IndividualScheduleOrderByWithRelationInput | IndividualScheduleOrderByWithRelationInput[]
+    cursor?: IndividualScheduleWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: IndividualScheduleScalarFieldEnum | IndividualScheduleScalarFieldEnum[]
   }
 
   /**
@@ -388112,6 +390848,44 @@ export namespace Prisma {
   export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
 
 
+  export const PersonalWorkTagScalarFieldEnum: {
+    id: 'id',
+    code: 'code',
+    active: 'active',
+    description: 'description',
+    deletedAt: 'deletedAt',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    createdBy: 'createdBy',
+    name: 'name',
+    color: 'color',
+    sortOrder: 'sortOrder',
+    lecturerId: 'lecturerId'
+  };
+
+  export type PersonalWorkTagScalarFieldEnum = (typeof PersonalWorkTagScalarFieldEnum)[keyof typeof PersonalWorkTagScalarFieldEnum]
+
+
+  export const IndividualScheduleScalarFieldEnum: {
+    id: 'id',
+    code: 'code',
+    active: 'active',
+    description: 'description',
+    deletedAt: 'deletedAt',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    createdBy: 'createdBy',
+    title: 'title',
+    startTime: 'startTime',
+    endTime: 'endTime',
+    allDay: 'allDay',
+    location: 'location',
+    lecturerId: 'lecturerId'
+  };
+
+  export type IndividualScheduleScalarFieldEnum = (typeof IndividualScheduleScalarFieldEnum)[keyof typeof IndividualScheduleScalarFieldEnum]
+
+
   export const LecturerScalarFieldEnum: {
     id: 'id',
     code: 'code',
@@ -392775,6 +395549,32 @@ export namespace Prisma {
   };
 
   export type NotificationOrderByRelevanceFieldEnum = (typeof NotificationOrderByRelevanceFieldEnum)[keyof typeof NotificationOrderByRelevanceFieldEnum]
+
+
+  export const PersonalWorkTagOrderByRelevanceFieldEnum: {
+    id: 'id',
+    code: 'code',
+    description: 'description',
+    createdBy: 'createdBy',
+    name: 'name',
+    color: 'color',
+    lecturerId: 'lecturerId'
+  };
+
+  export type PersonalWorkTagOrderByRelevanceFieldEnum = (typeof PersonalWorkTagOrderByRelevanceFieldEnum)[keyof typeof PersonalWorkTagOrderByRelevanceFieldEnum]
+
+
+  export const IndividualScheduleOrderByRelevanceFieldEnum: {
+    id: 'id',
+    code: 'code',
+    description: 'description',
+    createdBy: 'createdBy',
+    title: 'title',
+    location: 'location',
+    lecturerId: 'lecturerId'
+  };
+
+  export type IndividualScheduleOrderByRelevanceFieldEnum = (typeof IndividualScheduleOrderByRelevanceFieldEnum)[keyof typeof IndividualScheduleOrderByRelevanceFieldEnum]
 
 
   export const LecturerOrderByRelevanceFieldEnum: {
@@ -410253,7 +413053,7 @@ export namespace Prisma {
     name?: StringFilter<"TrainingMajor"> | string
     englishName?: StringNullableFilter<"TrainingMajor"> | string | null
     shortName?: StringNullableFilter<"TrainingMajor"> | string | null
-    summary?: StringFilter<"TrainingMajor"> | string
+    summary?: StringNullableFilter<"TrainingMajor"> | string | null
     numberCreditsMajor?: IntFilter<"TrainingMajor"> | number
     numberCreditsRequired?: IntFilter<"TrainingMajor"> | number
     numberCreditsElective?: IntFilter<"TrainingMajor"> | number
@@ -410285,7 +413085,7 @@ export namespace Prisma {
     name?: SortOrder
     englishName?: SortOrderInput | SortOrder
     shortName?: SortOrderInput | SortOrder
-    summary?: SortOrder
+    summary?: SortOrderInput | SortOrder
     numberCreditsMajor?: SortOrder
     numberCreditsRequired?: SortOrder
     numberCreditsElective?: SortOrder
@@ -410321,7 +413121,7 @@ export namespace Prisma {
     name?: StringFilter<"TrainingMajor"> | string
     englishName?: StringNullableFilter<"TrainingMajor"> | string | null
     shortName?: StringNullableFilter<"TrainingMajor"> | string | null
-    summary?: StringFilter<"TrainingMajor"> | string
+    summary?: StringNullableFilter<"TrainingMajor"> | string | null
     numberCreditsMajor?: IntFilter<"TrainingMajor"> | number
     numberCreditsRequired?: IntFilter<"TrainingMajor"> | number
     numberCreditsElective?: IntFilter<"TrainingMajor"> | number
@@ -410353,7 +413153,7 @@ export namespace Prisma {
     name?: SortOrder
     englishName?: SortOrderInput | SortOrder
     shortName?: SortOrderInput | SortOrder
-    summary?: SortOrder
+    summary?: SortOrderInput | SortOrder
     numberCreditsMajor?: SortOrder
     numberCreditsRequired?: SortOrder
     numberCreditsElective?: SortOrder
@@ -410383,7 +413183,7 @@ export namespace Prisma {
     name?: StringWithAggregatesFilter<"TrainingMajor"> | string
     englishName?: StringNullableWithAggregatesFilter<"TrainingMajor"> | string | null
     shortName?: StringNullableWithAggregatesFilter<"TrainingMajor"> | string | null
-    summary?: StringWithAggregatesFilter<"TrainingMajor"> | string
+    summary?: StringNullableWithAggregatesFilter<"TrainingMajor"> | string | null
     numberCreditsMajor?: IntWithAggregatesFilter<"TrainingMajor"> | number
     numberCreditsRequired?: IntWithAggregatesFilter<"TrainingMajor"> | number
     numberCreditsElective?: IntWithAggregatesFilter<"TrainingMajor"> | number
@@ -412743,6 +415543,207 @@ export namespace Prisma {
     lecturerId?: StringNullableWithAggregatesFilter<"Notification"> | string | null
   }
 
+  export type PersonalWorkTagWhereInput = {
+    AND?: PersonalWorkTagWhereInput | PersonalWorkTagWhereInput[]
+    OR?: PersonalWorkTagWhereInput[]
+    NOT?: PersonalWorkTagWhereInput | PersonalWorkTagWhereInput[]
+    id?: StringFilter<"PersonalWorkTag"> | string
+    code?: StringNullableFilter<"PersonalWorkTag"> | string | null
+    active?: BoolFilter<"PersonalWorkTag"> | boolean
+    description?: StringNullableFilter<"PersonalWorkTag"> | string | null
+    deletedAt?: DateTimeNullableFilter<"PersonalWorkTag"> | Date | string | null
+    createdAt?: DateTimeFilter<"PersonalWorkTag"> | Date | string
+    updatedAt?: DateTimeFilter<"PersonalWorkTag"> | Date | string
+    createdBy?: UuidNullableFilter<"PersonalWorkTag"> | string | null
+    name?: StringFilter<"PersonalWorkTag"> | string
+    color?: StringNullableFilter<"PersonalWorkTag"> | string | null
+    sortOrder?: IntFilter<"PersonalWorkTag"> | number
+    lecturerId?: StringFilter<"PersonalWorkTag"> | string
+    lecturer?: XOR<LecturerScalarRelationFilter, LecturerWhereInput>
+    schedules?: IndividualScheduleListRelationFilter
+  }
+
+  export type PersonalWorkTagOrderByWithRelationInput = {
+    id?: SortOrder
+    code?: SortOrderInput | SortOrder
+    active?: SortOrder
+    description?: SortOrderInput | SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    name?: SortOrder
+    color?: SortOrderInput | SortOrder
+    sortOrder?: SortOrder
+    lecturerId?: SortOrder
+    lecturer?: LecturerOrderByWithRelationInput
+    schedules?: IndividualScheduleOrderByRelationAggregateInput
+    _relevance?: PersonalWorkTagOrderByRelevanceInput
+  }
+
+  export type PersonalWorkTagWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    code?: string
+    lecturerId_name?: PersonalWorkTagLecturerIdNameCompoundUniqueInput
+    AND?: PersonalWorkTagWhereInput | PersonalWorkTagWhereInput[]
+    OR?: PersonalWorkTagWhereInput[]
+    NOT?: PersonalWorkTagWhereInput | PersonalWorkTagWhereInput[]
+    active?: BoolFilter<"PersonalWorkTag"> | boolean
+    description?: StringNullableFilter<"PersonalWorkTag"> | string | null
+    deletedAt?: DateTimeNullableFilter<"PersonalWorkTag"> | Date | string | null
+    createdAt?: DateTimeFilter<"PersonalWorkTag"> | Date | string
+    updatedAt?: DateTimeFilter<"PersonalWorkTag"> | Date | string
+    createdBy?: UuidNullableFilter<"PersonalWorkTag"> | string | null
+    name?: StringFilter<"PersonalWorkTag"> | string
+    color?: StringNullableFilter<"PersonalWorkTag"> | string | null
+    sortOrder?: IntFilter<"PersonalWorkTag"> | number
+    lecturerId?: StringFilter<"PersonalWorkTag"> | string
+    lecturer?: XOR<LecturerScalarRelationFilter, LecturerWhereInput>
+    schedules?: IndividualScheduleListRelationFilter
+  }, "id" | "code" | "lecturerId_name">
+
+  export type PersonalWorkTagOrderByWithAggregationInput = {
+    id?: SortOrder
+    code?: SortOrderInput | SortOrder
+    active?: SortOrder
+    description?: SortOrderInput | SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    name?: SortOrder
+    color?: SortOrderInput | SortOrder
+    sortOrder?: SortOrder
+    lecturerId?: SortOrder
+    _count?: PersonalWorkTagCountOrderByAggregateInput
+    _avg?: PersonalWorkTagAvgOrderByAggregateInput
+    _max?: PersonalWorkTagMaxOrderByAggregateInput
+    _min?: PersonalWorkTagMinOrderByAggregateInput
+    _sum?: PersonalWorkTagSumOrderByAggregateInput
+  }
+
+  export type PersonalWorkTagScalarWhereWithAggregatesInput = {
+    AND?: PersonalWorkTagScalarWhereWithAggregatesInput | PersonalWorkTagScalarWhereWithAggregatesInput[]
+    OR?: PersonalWorkTagScalarWhereWithAggregatesInput[]
+    NOT?: PersonalWorkTagScalarWhereWithAggregatesInput | PersonalWorkTagScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"PersonalWorkTag"> | string
+    code?: StringNullableWithAggregatesFilter<"PersonalWorkTag"> | string | null
+    active?: BoolWithAggregatesFilter<"PersonalWorkTag"> | boolean
+    description?: StringNullableWithAggregatesFilter<"PersonalWorkTag"> | string | null
+    deletedAt?: DateTimeNullableWithAggregatesFilter<"PersonalWorkTag"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"PersonalWorkTag"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"PersonalWorkTag"> | Date | string
+    createdBy?: UuidNullableWithAggregatesFilter<"PersonalWorkTag"> | string | null
+    name?: StringWithAggregatesFilter<"PersonalWorkTag"> | string
+    color?: StringNullableWithAggregatesFilter<"PersonalWorkTag"> | string | null
+    sortOrder?: IntWithAggregatesFilter<"PersonalWorkTag"> | number
+    lecturerId?: StringWithAggregatesFilter<"PersonalWorkTag"> | string
+  }
+
+  export type IndividualScheduleWhereInput = {
+    AND?: IndividualScheduleWhereInput | IndividualScheduleWhereInput[]
+    OR?: IndividualScheduleWhereInput[]
+    NOT?: IndividualScheduleWhereInput | IndividualScheduleWhereInput[]
+    id?: StringFilter<"IndividualSchedule"> | string
+    code?: StringNullableFilter<"IndividualSchedule"> | string | null
+    active?: BoolFilter<"IndividualSchedule"> | boolean
+    description?: StringNullableFilter<"IndividualSchedule"> | string | null
+    deletedAt?: DateTimeNullableFilter<"IndividualSchedule"> | Date | string | null
+    createdAt?: DateTimeFilter<"IndividualSchedule"> | Date | string
+    updatedAt?: DateTimeFilter<"IndividualSchedule"> | Date | string
+    createdBy?: UuidNullableFilter<"IndividualSchedule"> | string | null
+    title?: StringFilter<"IndividualSchedule"> | string
+    startTime?: DateTimeFilter<"IndividualSchedule"> | Date | string
+    endTime?: DateTimeFilter<"IndividualSchedule"> | Date | string
+    allDay?: BoolFilter<"IndividualSchedule"> | boolean
+    location?: StringNullableFilter<"IndividualSchedule"> | string | null
+    lecturerId?: StringFilter<"IndividualSchedule"> | string
+    lecturer?: XOR<LecturerScalarRelationFilter, LecturerWhereInput>
+    tags?: PersonalWorkTagListRelationFilter
+  }
+
+  export type IndividualScheduleOrderByWithRelationInput = {
+    id?: SortOrder
+    code?: SortOrderInput | SortOrder
+    active?: SortOrder
+    description?: SortOrderInput | SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    title?: SortOrder
+    startTime?: SortOrder
+    endTime?: SortOrder
+    allDay?: SortOrder
+    location?: SortOrderInput | SortOrder
+    lecturerId?: SortOrder
+    lecturer?: LecturerOrderByWithRelationInput
+    tags?: PersonalWorkTagOrderByRelationAggregateInput
+    _relevance?: IndividualScheduleOrderByRelevanceInput
+  }
+
+  export type IndividualScheduleWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    code?: string
+    AND?: IndividualScheduleWhereInput | IndividualScheduleWhereInput[]
+    OR?: IndividualScheduleWhereInput[]
+    NOT?: IndividualScheduleWhereInput | IndividualScheduleWhereInput[]
+    active?: BoolFilter<"IndividualSchedule"> | boolean
+    description?: StringNullableFilter<"IndividualSchedule"> | string | null
+    deletedAt?: DateTimeNullableFilter<"IndividualSchedule"> | Date | string | null
+    createdAt?: DateTimeFilter<"IndividualSchedule"> | Date | string
+    updatedAt?: DateTimeFilter<"IndividualSchedule"> | Date | string
+    createdBy?: UuidNullableFilter<"IndividualSchedule"> | string | null
+    title?: StringFilter<"IndividualSchedule"> | string
+    startTime?: DateTimeFilter<"IndividualSchedule"> | Date | string
+    endTime?: DateTimeFilter<"IndividualSchedule"> | Date | string
+    allDay?: BoolFilter<"IndividualSchedule"> | boolean
+    location?: StringNullableFilter<"IndividualSchedule"> | string | null
+    lecturerId?: StringFilter<"IndividualSchedule"> | string
+    lecturer?: XOR<LecturerScalarRelationFilter, LecturerWhereInput>
+    tags?: PersonalWorkTagListRelationFilter
+  }, "id" | "code">
+
+  export type IndividualScheduleOrderByWithAggregationInput = {
+    id?: SortOrder
+    code?: SortOrderInput | SortOrder
+    active?: SortOrder
+    description?: SortOrderInput | SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    title?: SortOrder
+    startTime?: SortOrder
+    endTime?: SortOrder
+    allDay?: SortOrder
+    location?: SortOrderInput | SortOrder
+    lecturerId?: SortOrder
+    _count?: IndividualScheduleCountOrderByAggregateInput
+    _max?: IndividualScheduleMaxOrderByAggregateInput
+    _min?: IndividualScheduleMinOrderByAggregateInput
+  }
+
+  export type IndividualScheduleScalarWhereWithAggregatesInput = {
+    AND?: IndividualScheduleScalarWhereWithAggregatesInput | IndividualScheduleScalarWhereWithAggregatesInput[]
+    OR?: IndividualScheduleScalarWhereWithAggregatesInput[]
+    NOT?: IndividualScheduleScalarWhereWithAggregatesInput | IndividualScheduleScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"IndividualSchedule"> | string
+    code?: StringNullableWithAggregatesFilter<"IndividualSchedule"> | string | null
+    active?: BoolWithAggregatesFilter<"IndividualSchedule"> | boolean
+    description?: StringNullableWithAggregatesFilter<"IndividualSchedule"> | string | null
+    deletedAt?: DateTimeNullableWithAggregatesFilter<"IndividualSchedule"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"IndividualSchedule"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"IndividualSchedule"> | Date | string
+    createdBy?: UuidNullableWithAggregatesFilter<"IndividualSchedule"> | string | null
+    title?: StringWithAggregatesFilter<"IndividualSchedule"> | string
+    startTime?: DateTimeWithAggregatesFilter<"IndividualSchedule"> | Date | string
+    endTime?: DateTimeWithAggregatesFilter<"IndividualSchedule"> | Date | string
+    allDay?: BoolWithAggregatesFilter<"IndividualSchedule"> | boolean
+    location?: StringNullableWithAggregatesFilter<"IndividualSchedule"> | string | null
+    lecturerId?: StringWithAggregatesFilter<"IndividualSchedule"> | string
+  }
+
   export type LecturerWhereInput = {
     AND?: LecturerWhereInput | LecturerWhereInput[]
     OR?: LecturerWhereInput[]
@@ -412785,6 +415786,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectListRelationFilter
     secondarySupervisorThesisProject?: ThesisProjectListRelationFilter
     notifications?: NotificationListRelationFilter
+    personalWorkTags?: PersonalWorkTagListRelationFilter
+    individualSchedules?: IndividualScheduleListRelationFilter
   }
 
   export type LecturerOrderByWithRelationInput = {
@@ -412826,6 +415829,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectOrderByRelationAggregateInput
     secondarySupervisorThesisProject?: ThesisProjectOrderByRelationAggregateInput
     notifications?: NotificationOrderByRelationAggregateInput
+    personalWorkTags?: PersonalWorkTagOrderByRelationAggregateInput
+    individualSchedules?: IndividualScheduleOrderByRelationAggregateInput
     _relevance?: LecturerOrderByRelevanceInput
   }
 
@@ -412871,6 +415876,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectListRelationFilter
     secondarySupervisorThesisProject?: ThesisProjectListRelationFilter
     notifications?: NotificationListRelationFilter
+    personalWorkTags?: PersonalWorkTagListRelationFilter
+    individualSchedules?: IndividualScheduleListRelationFilter
   }, "id" | "code" | "lectureID" | "userProfileId">
 
   export type LecturerOrderByWithAggregationInput = {
@@ -443497,7 +446504,7 @@ export namespace Prisma {
     name: string
     englishName?: string | null
     shortName?: string | null
-    summary: string
+    summary?: string | null
     numberCreditsMajor?: number
     numberCreditsRequired?: number
     numberCreditsElective?: number
@@ -443525,7 +446532,7 @@ export namespace Prisma {
     name: string
     englishName?: string | null
     shortName?: string | null
-    summary: string
+    summary?: string | null
     numberCreditsMajor?: number
     numberCreditsRequired?: number
     numberCreditsElective?: number
@@ -443553,7 +446560,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
-    summary?: StringFieldUpdateOperationsInput | string
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
     numberCreditsMajor?: IntFieldUpdateOperationsInput | number
     numberCreditsRequired?: IntFieldUpdateOperationsInput | number
     numberCreditsElective?: IntFieldUpdateOperationsInput | number
@@ -443581,7 +446588,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
-    summary?: StringFieldUpdateOperationsInput | string
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
     numberCreditsMajor?: IntFieldUpdateOperationsInput | number
     numberCreditsRequired?: IntFieldUpdateOperationsInput | number
     numberCreditsElective?: IntFieldUpdateOperationsInput | number
@@ -443609,7 +446616,7 @@ export namespace Prisma {
     name: string
     englishName?: string | null
     shortName?: string | null
-    summary: string
+    summary?: string | null
     numberCreditsMajor?: number
     numberCreditsRequired?: number
     numberCreditsElective?: number
@@ -443631,7 +446638,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
-    summary?: StringFieldUpdateOperationsInput | string
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
     numberCreditsMajor?: IntFieldUpdateOperationsInput | number
     numberCreditsRequired?: IntFieldUpdateOperationsInput | number
     numberCreditsElective?: IntFieldUpdateOperationsInput | number
@@ -443649,7 +446656,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
-    summary?: StringFieldUpdateOperationsInput | string
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
     numberCreditsMajor?: IntFieldUpdateOperationsInput | number
     numberCreditsRequired?: IntFieldUpdateOperationsInput | number
     numberCreditsElective?: IntFieldUpdateOperationsInput | number
@@ -446400,6 +449407,236 @@ export namespace Prisma {
     lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
+  export type PersonalWorkTagCreateInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    name: string
+    color?: string | null
+    sortOrder?: number
+    lecturer: LecturerCreateNestedOneWithoutPersonalWorkTagsInput
+    schedules?: IndividualScheduleCreateNestedManyWithoutTagsInput
+  }
+
+  export type PersonalWorkTagUncheckedCreateInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    name: string
+    color?: string | null
+    sortOrder?: number
+    lecturerId: string
+    schedules?: IndividualScheduleUncheckedCreateNestedManyWithoutTagsInput
+  }
+
+  export type PersonalWorkTagUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    color?: NullableStringFieldUpdateOperationsInput | string | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    lecturer?: LecturerUpdateOneRequiredWithoutPersonalWorkTagsNestedInput
+    schedules?: IndividualScheduleUpdateManyWithoutTagsNestedInput
+  }
+
+  export type PersonalWorkTagUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    color?: NullableStringFieldUpdateOperationsInput | string | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    lecturerId?: StringFieldUpdateOperationsInput | string
+    schedules?: IndividualScheduleUncheckedUpdateManyWithoutTagsNestedInput
+  }
+
+  export type PersonalWorkTagCreateManyInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    name: string
+    color?: string | null
+    sortOrder?: number
+    lecturerId: string
+  }
+
+  export type PersonalWorkTagUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    color?: NullableStringFieldUpdateOperationsInput | string | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type PersonalWorkTagUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    color?: NullableStringFieldUpdateOperationsInput | string | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    lecturerId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type IndividualScheduleCreateInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    title: string
+    startTime: Date | string
+    endTime: Date | string
+    allDay?: boolean
+    location?: string | null
+    lecturer: LecturerCreateNestedOneWithoutIndividualSchedulesInput
+    tags?: PersonalWorkTagCreateNestedManyWithoutSchedulesInput
+  }
+
+  export type IndividualScheduleUncheckedCreateInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    title: string
+    startTime: Date | string
+    endTime: Date | string
+    allDay?: boolean
+    location?: string | null
+    lecturerId: string
+    tags?: PersonalWorkTagUncheckedCreateNestedManyWithoutSchedulesInput
+  }
+
+  export type IndividualScheduleUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    allDay?: BoolFieldUpdateOperationsInput | boolean
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    lecturer?: LecturerUpdateOneRequiredWithoutIndividualSchedulesNestedInput
+    tags?: PersonalWorkTagUpdateManyWithoutSchedulesNestedInput
+  }
+
+  export type IndividualScheduleUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    allDay?: BoolFieldUpdateOperationsInput | boolean
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    lecturerId?: StringFieldUpdateOperationsInput | string
+    tags?: PersonalWorkTagUncheckedUpdateManyWithoutSchedulesNestedInput
+  }
+
+  export type IndividualScheduleCreateManyInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    title: string
+    startTime: Date | string
+    endTime: Date | string
+    allDay?: boolean
+    location?: string | null
+    lecturerId: string
+  }
+
+  export type IndividualScheduleUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    allDay?: BoolFieldUpdateOperationsInput | boolean
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type IndividualScheduleUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    allDay?: BoolFieldUpdateOperationsInput | boolean
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    lecturerId?: StringFieldUpdateOperationsInput | string
+  }
+
   export type LecturerCreateInput = {
     id?: string
     code?: string | null
@@ -446436,6 +449673,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutPrimarySupervisorInput
     secondarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutSecondarySupervisorInput
     notifications?: NotificationCreateNestedManyWithoutLecturerInput
+    personalWorkTags?: PersonalWorkTagCreateNestedManyWithoutLecturerInput
+    individualSchedules?: IndividualScheduleCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerUncheckedCreateInput = {
@@ -446474,6 +449713,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutPrimarySupervisorInput
     secondarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutSecondarySupervisorInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutLecturerInput
+    personalWorkTags?: PersonalWorkTagUncheckedCreateNestedManyWithoutLecturerInput
+    individualSchedules?: IndividualScheduleUncheckedCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerUpdateInput = {
@@ -446512,6 +449753,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutPrimarySupervisorNestedInput
     secondarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutSecondarySupervisorNestedInput
     notifications?: NotificationUpdateManyWithoutLecturerNestedInput
+    personalWorkTags?: PersonalWorkTagUpdateManyWithoutLecturerNestedInput
+    individualSchedules?: IndividualScheduleUpdateManyWithoutLecturerNestedInput
   }
 
   export type LecturerUncheckedUpdateInput = {
@@ -446550,6 +449793,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutPrimarySupervisorNestedInput
     secondarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutSecondarySupervisorNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutLecturerNestedInput
+    personalWorkTags?: PersonalWorkTagUncheckedUpdateManyWithoutLecturerNestedInput
+    individualSchedules?: IndividualScheduleUncheckedUpdateManyWithoutLecturerNestedInput
   }
 
   export type LecturerCreateManyInput = {
@@ -474735,6 +477980,152 @@ export namespace Prisma {
     _max?: NestedEnumNotificationPriorityFilter<$PrismaModel>
   }
 
+  export type LecturerScalarRelationFilter = {
+    is?: LecturerWhereInput
+    isNot?: LecturerWhereInput
+  }
+
+  export type IndividualScheduleListRelationFilter = {
+    every?: IndividualScheduleWhereInput
+    some?: IndividualScheduleWhereInput
+    none?: IndividualScheduleWhereInput
+  }
+
+  export type IndividualScheduleOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type PersonalWorkTagOrderByRelevanceInput = {
+    fields: PersonalWorkTagOrderByRelevanceFieldEnum | PersonalWorkTagOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
+  }
+
+  export type PersonalWorkTagLecturerIdNameCompoundUniqueInput = {
+    lecturerId: string
+    name: string
+  }
+
+  export type PersonalWorkTagCountOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    active?: SortOrder
+    description?: SortOrder
+    deletedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+    name?: SortOrder
+    color?: SortOrder
+    sortOrder?: SortOrder
+    lecturerId?: SortOrder
+  }
+
+  export type PersonalWorkTagAvgOrderByAggregateInput = {
+    sortOrder?: SortOrder
+  }
+
+  export type PersonalWorkTagMaxOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    active?: SortOrder
+    description?: SortOrder
+    deletedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+    name?: SortOrder
+    color?: SortOrder
+    sortOrder?: SortOrder
+    lecturerId?: SortOrder
+  }
+
+  export type PersonalWorkTagMinOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    active?: SortOrder
+    description?: SortOrder
+    deletedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+    name?: SortOrder
+    color?: SortOrder
+    sortOrder?: SortOrder
+    lecturerId?: SortOrder
+  }
+
+  export type PersonalWorkTagSumOrderByAggregateInput = {
+    sortOrder?: SortOrder
+  }
+
+  export type PersonalWorkTagListRelationFilter = {
+    every?: PersonalWorkTagWhereInput
+    some?: PersonalWorkTagWhereInput
+    none?: PersonalWorkTagWhereInput
+  }
+
+  export type PersonalWorkTagOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type IndividualScheduleOrderByRelevanceInput = {
+    fields: IndividualScheduleOrderByRelevanceFieldEnum | IndividualScheduleOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
+  }
+
+  export type IndividualScheduleCountOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    active?: SortOrder
+    description?: SortOrder
+    deletedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+    title?: SortOrder
+    startTime?: SortOrder
+    endTime?: SortOrder
+    allDay?: SortOrder
+    location?: SortOrder
+    lecturerId?: SortOrder
+  }
+
+  export type IndividualScheduleMaxOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    active?: SortOrder
+    description?: SortOrder
+    deletedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+    title?: SortOrder
+    startTime?: SortOrder
+    endTime?: SortOrder
+    allDay?: SortOrder
+    location?: SortOrder
+    lecturerId?: SortOrder
+  }
+
+  export type IndividualScheduleMinOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    active?: SortOrder
+    description?: SortOrder
+    deletedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+    title?: SortOrder
+    startTime?: SortOrder
+    endTime?: SortOrder
+    allDay?: SortOrder
+    location?: SortOrder
+    lecturerId?: SortOrder
+  }
+
   export type LecturerTypeScalarRelationFilter = {
     is?: LecturerTypeWhereInput
     isNot?: LecturerTypeWhereInput
@@ -475162,11 +478553,6 @@ export namespace Prisma {
     in?: $Enums.ResearchProjectStatus[] | ListEnumResearchProjectStatusFieldRefInput<$PrismaModel>
     notIn?: $Enums.ResearchProjectStatus[] | ListEnumResearchProjectStatusFieldRefInput<$PrismaModel>
     not?: NestedEnumResearchProjectStatusFilter<$PrismaModel> | $Enums.ResearchProjectStatus
-  }
-
-  export type LecturerScalarRelationFilter = {
-    is?: LecturerWhereInput
-    isNot?: LecturerWhereInput
   }
 
   export type ResearchProjectOrderByRelevanceInput = {
@@ -501869,6 +505255,110 @@ export namespace Prisma {
     deleteMany?: DocumentFileScalarWhereInput | DocumentFileScalarWhereInput[]
   }
 
+  export type LecturerCreateNestedOneWithoutPersonalWorkTagsInput = {
+    create?: XOR<LecturerCreateWithoutPersonalWorkTagsInput, LecturerUncheckedCreateWithoutPersonalWorkTagsInput>
+    connectOrCreate?: LecturerCreateOrConnectWithoutPersonalWorkTagsInput
+    connect?: LecturerWhereUniqueInput
+  }
+
+  export type IndividualScheduleCreateNestedManyWithoutTagsInput = {
+    create?: XOR<IndividualScheduleCreateWithoutTagsInput, IndividualScheduleUncheckedCreateWithoutTagsInput> | IndividualScheduleCreateWithoutTagsInput[] | IndividualScheduleUncheckedCreateWithoutTagsInput[]
+    connectOrCreate?: IndividualScheduleCreateOrConnectWithoutTagsInput | IndividualScheduleCreateOrConnectWithoutTagsInput[]
+    connect?: IndividualScheduleWhereUniqueInput | IndividualScheduleWhereUniqueInput[]
+  }
+
+  export type IndividualScheduleUncheckedCreateNestedManyWithoutTagsInput = {
+    create?: XOR<IndividualScheduleCreateWithoutTagsInput, IndividualScheduleUncheckedCreateWithoutTagsInput> | IndividualScheduleCreateWithoutTagsInput[] | IndividualScheduleUncheckedCreateWithoutTagsInput[]
+    connectOrCreate?: IndividualScheduleCreateOrConnectWithoutTagsInput | IndividualScheduleCreateOrConnectWithoutTagsInput[]
+    connect?: IndividualScheduleWhereUniqueInput | IndividualScheduleWhereUniqueInput[]
+  }
+
+  export type LecturerUpdateOneRequiredWithoutPersonalWorkTagsNestedInput = {
+    create?: XOR<LecturerCreateWithoutPersonalWorkTagsInput, LecturerUncheckedCreateWithoutPersonalWorkTagsInput>
+    connectOrCreate?: LecturerCreateOrConnectWithoutPersonalWorkTagsInput
+    upsert?: LecturerUpsertWithoutPersonalWorkTagsInput
+    connect?: LecturerWhereUniqueInput
+    update?: XOR<XOR<LecturerUpdateToOneWithWhereWithoutPersonalWorkTagsInput, LecturerUpdateWithoutPersonalWorkTagsInput>, LecturerUncheckedUpdateWithoutPersonalWorkTagsInput>
+  }
+
+  export type IndividualScheduleUpdateManyWithoutTagsNestedInput = {
+    create?: XOR<IndividualScheduleCreateWithoutTagsInput, IndividualScheduleUncheckedCreateWithoutTagsInput> | IndividualScheduleCreateWithoutTagsInput[] | IndividualScheduleUncheckedCreateWithoutTagsInput[]
+    connectOrCreate?: IndividualScheduleCreateOrConnectWithoutTagsInput | IndividualScheduleCreateOrConnectWithoutTagsInput[]
+    upsert?: IndividualScheduleUpsertWithWhereUniqueWithoutTagsInput | IndividualScheduleUpsertWithWhereUniqueWithoutTagsInput[]
+    set?: IndividualScheduleWhereUniqueInput | IndividualScheduleWhereUniqueInput[]
+    disconnect?: IndividualScheduleWhereUniqueInput | IndividualScheduleWhereUniqueInput[]
+    delete?: IndividualScheduleWhereUniqueInput | IndividualScheduleWhereUniqueInput[]
+    connect?: IndividualScheduleWhereUniqueInput | IndividualScheduleWhereUniqueInput[]
+    update?: IndividualScheduleUpdateWithWhereUniqueWithoutTagsInput | IndividualScheduleUpdateWithWhereUniqueWithoutTagsInput[]
+    updateMany?: IndividualScheduleUpdateManyWithWhereWithoutTagsInput | IndividualScheduleUpdateManyWithWhereWithoutTagsInput[]
+    deleteMany?: IndividualScheduleScalarWhereInput | IndividualScheduleScalarWhereInput[]
+  }
+
+  export type IndividualScheduleUncheckedUpdateManyWithoutTagsNestedInput = {
+    create?: XOR<IndividualScheduleCreateWithoutTagsInput, IndividualScheduleUncheckedCreateWithoutTagsInput> | IndividualScheduleCreateWithoutTagsInput[] | IndividualScheduleUncheckedCreateWithoutTagsInput[]
+    connectOrCreate?: IndividualScheduleCreateOrConnectWithoutTagsInput | IndividualScheduleCreateOrConnectWithoutTagsInput[]
+    upsert?: IndividualScheduleUpsertWithWhereUniqueWithoutTagsInput | IndividualScheduleUpsertWithWhereUniqueWithoutTagsInput[]
+    set?: IndividualScheduleWhereUniqueInput | IndividualScheduleWhereUniqueInput[]
+    disconnect?: IndividualScheduleWhereUniqueInput | IndividualScheduleWhereUniqueInput[]
+    delete?: IndividualScheduleWhereUniqueInput | IndividualScheduleWhereUniqueInput[]
+    connect?: IndividualScheduleWhereUniqueInput | IndividualScheduleWhereUniqueInput[]
+    update?: IndividualScheduleUpdateWithWhereUniqueWithoutTagsInput | IndividualScheduleUpdateWithWhereUniqueWithoutTagsInput[]
+    updateMany?: IndividualScheduleUpdateManyWithWhereWithoutTagsInput | IndividualScheduleUpdateManyWithWhereWithoutTagsInput[]
+    deleteMany?: IndividualScheduleScalarWhereInput | IndividualScheduleScalarWhereInput[]
+  }
+
+  export type LecturerCreateNestedOneWithoutIndividualSchedulesInput = {
+    create?: XOR<LecturerCreateWithoutIndividualSchedulesInput, LecturerUncheckedCreateWithoutIndividualSchedulesInput>
+    connectOrCreate?: LecturerCreateOrConnectWithoutIndividualSchedulesInput
+    connect?: LecturerWhereUniqueInput
+  }
+
+  export type PersonalWorkTagCreateNestedManyWithoutSchedulesInput = {
+    create?: XOR<PersonalWorkTagCreateWithoutSchedulesInput, PersonalWorkTagUncheckedCreateWithoutSchedulesInput> | PersonalWorkTagCreateWithoutSchedulesInput[] | PersonalWorkTagUncheckedCreateWithoutSchedulesInput[]
+    connectOrCreate?: PersonalWorkTagCreateOrConnectWithoutSchedulesInput | PersonalWorkTagCreateOrConnectWithoutSchedulesInput[]
+    connect?: PersonalWorkTagWhereUniqueInput | PersonalWorkTagWhereUniqueInput[]
+  }
+
+  export type PersonalWorkTagUncheckedCreateNestedManyWithoutSchedulesInput = {
+    create?: XOR<PersonalWorkTagCreateWithoutSchedulesInput, PersonalWorkTagUncheckedCreateWithoutSchedulesInput> | PersonalWorkTagCreateWithoutSchedulesInput[] | PersonalWorkTagUncheckedCreateWithoutSchedulesInput[]
+    connectOrCreate?: PersonalWorkTagCreateOrConnectWithoutSchedulesInput | PersonalWorkTagCreateOrConnectWithoutSchedulesInput[]
+    connect?: PersonalWorkTagWhereUniqueInput | PersonalWorkTagWhereUniqueInput[]
+  }
+
+  export type LecturerUpdateOneRequiredWithoutIndividualSchedulesNestedInput = {
+    create?: XOR<LecturerCreateWithoutIndividualSchedulesInput, LecturerUncheckedCreateWithoutIndividualSchedulesInput>
+    connectOrCreate?: LecturerCreateOrConnectWithoutIndividualSchedulesInput
+    upsert?: LecturerUpsertWithoutIndividualSchedulesInput
+    connect?: LecturerWhereUniqueInput
+    update?: XOR<XOR<LecturerUpdateToOneWithWhereWithoutIndividualSchedulesInput, LecturerUpdateWithoutIndividualSchedulesInput>, LecturerUncheckedUpdateWithoutIndividualSchedulesInput>
+  }
+
+  export type PersonalWorkTagUpdateManyWithoutSchedulesNestedInput = {
+    create?: XOR<PersonalWorkTagCreateWithoutSchedulesInput, PersonalWorkTagUncheckedCreateWithoutSchedulesInput> | PersonalWorkTagCreateWithoutSchedulesInput[] | PersonalWorkTagUncheckedCreateWithoutSchedulesInput[]
+    connectOrCreate?: PersonalWorkTagCreateOrConnectWithoutSchedulesInput | PersonalWorkTagCreateOrConnectWithoutSchedulesInput[]
+    upsert?: PersonalWorkTagUpsertWithWhereUniqueWithoutSchedulesInput | PersonalWorkTagUpsertWithWhereUniqueWithoutSchedulesInput[]
+    set?: PersonalWorkTagWhereUniqueInput | PersonalWorkTagWhereUniqueInput[]
+    disconnect?: PersonalWorkTagWhereUniqueInput | PersonalWorkTagWhereUniqueInput[]
+    delete?: PersonalWorkTagWhereUniqueInput | PersonalWorkTagWhereUniqueInput[]
+    connect?: PersonalWorkTagWhereUniqueInput | PersonalWorkTagWhereUniqueInput[]
+    update?: PersonalWorkTagUpdateWithWhereUniqueWithoutSchedulesInput | PersonalWorkTagUpdateWithWhereUniqueWithoutSchedulesInput[]
+    updateMany?: PersonalWorkTagUpdateManyWithWhereWithoutSchedulesInput | PersonalWorkTagUpdateManyWithWhereWithoutSchedulesInput[]
+    deleteMany?: PersonalWorkTagScalarWhereInput | PersonalWorkTagScalarWhereInput[]
+  }
+
+  export type PersonalWorkTagUncheckedUpdateManyWithoutSchedulesNestedInput = {
+    create?: XOR<PersonalWorkTagCreateWithoutSchedulesInput, PersonalWorkTagUncheckedCreateWithoutSchedulesInput> | PersonalWorkTagCreateWithoutSchedulesInput[] | PersonalWorkTagUncheckedCreateWithoutSchedulesInput[]
+    connectOrCreate?: PersonalWorkTagCreateOrConnectWithoutSchedulesInput | PersonalWorkTagCreateOrConnectWithoutSchedulesInput[]
+    upsert?: PersonalWorkTagUpsertWithWhereUniqueWithoutSchedulesInput | PersonalWorkTagUpsertWithWhereUniqueWithoutSchedulesInput[]
+    set?: PersonalWorkTagWhereUniqueInput | PersonalWorkTagWhereUniqueInput[]
+    disconnect?: PersonalWorkTagWhereUniqueInput | PersonalWorkTagWhereUniqueInput[]
+    delete?: PersonalWorkTagWhereUniqueInput | PersonalWorkTagWhereUniqueInput[]
+    connect?: PersonalWorkTagWhereUniqueInput | PersonalWorkTagWhereUniqueInput[]
+    update?: PersonalWorkTagUpdateWithWhereUniqueWithoutSchedulesInput | PersonalWorkTagUpdateWithWhereUniqueWithoutSchedulesInput[]
+    updateMany?: PersonalWorkTagUpdateManyWithWhereWithoutSchedulesInput | PersonalWorkTagUpdateManyWithWhereWithoutSchedulesInput[]
+    deleteMany?: PersonalWorkTagScalarWhereInput | PersonalWorkTagScalarWhereInput[]
+  }
+
   export type UserProfileCreateNestedOneWithoutLecturerInput = {
     create?: XOR<UserProfileCreateWithoutLecturerInput, UserProfileUncheckedCreateWithoutLecturerInput>
     connectOrCreate?: UserProfileCreateOrConnectWithoutLecturerInput
@@ -502032,6 +505522,20 @@ export namespace Prisma {
     connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
   }
 
+  export type PersonalWorkTagCreateNestedManyWithoutLecturerInput = {
+    create?: XOR<PersonalWorkTagCreateWithoutLecturerInput, PersonalWorkTagUncheckedCreateWithoutLecturerInput> | PersonalWorkTagCreateWithoutLecturerInput[] | PersonalWorkTagUncheckedCreateWithoutLecturerInput[]
+    connectOrCreate?: PersonalWorkTagCreateOrConnectWithoutLecturerInput | PersonalWorkTagCreateOrConnectWithoutLecturerInput[]
+    createMany?: PersonalWorkTagCreateManyLecturerInputEnvelope
+    connect?: PersonalWorkTagWhereUniqueInput | PersonalWorkTagWhereUniqueInput[]
+  }
+
+  export type IndividualScheduleCreateNestedManyWithoutLecturerInput = {
+    create?: XOR<IndividualScheduleCreateWithoutLecturerInput, IndividualScheduleUncheckedCreateWithoutLecturerInput> | IndividualScheduleCreateWithoutLecturerInput[] | IndividualScheduleUncheckedCreateWithoutLecturerInput[]
+    connectOrCreate?: IndividualScheduleCreateOrConnectWithoutLecturerInput | IndividualScheduleCreateOrConnectWithoutLecturerInput[]
+    createMany?: IndividualScheduleCreateManyLecturerInputEnvelope
+    connect?: IndividualScheduleWhereUniqueInput | IndividualScheduleWhereUniqueInput[]
+  }
+
   export type SubjectClassUncheckedCreateNestedManyWithoutMainLecturerInput = {
     create?: XOR<SubjectClassCreateWithoutMainLecturerInput, SubjectClassUncheckedCreateWithoutMainLecturerInput> | SubjectClassCreateWithoutMainLecturerInput[] | SubjectClassUncheckedCreateWithoutMainLecturerInput[]
     connectOrCreate?: SubjectClassCreateOrConnectWithoutMainLecturerInput | SubjectClassCreateOrConnectWithoutMainLecturerInput[]
@@ -502175,6 +505679,20 @@ export namespace Prisma {
     connectOrCreate?: NotificationCreateOrConnectWithoutLecturerInput | NotificationCreateOrConnectWithoutLecturerInput[]
     createMany?: NotificationCreateManyLecturerInputEnvelope
     connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+  }
+
+  export type PersonalWorkTagUncheckedCreateNestedManyWithoutLecturerInput = {
+    create?: XOR<PersonalWorkTagCreateWithoutLecturerInput, PersonalWorkTagUncheckedCreateWithoutLecturerInput> | PersonalWorkTagCreateWithoutLecturerInput[] | PersonalWorkTagUncheckedCreateWithoutLecturerInput[]
+    connectOrCreate?: PersonalWorkTagCreateOrConnectWithoutLecturerInput | PersonalWorkTagCreateOrConnectWithoutLecturerInput[]
+    createMany?: PersonalWorkTagCreateManyLecturerInputEnvelope
+    connect?: PersonalWorkTagWhereUniqueInput | PersonalWorkTagWhereUniqueInput[]
+  }
+
+  export type IndividualScheduleUncheckedCreateNestedManyWithoutLecturerInput = {
+    create?: XOR<IndividualScheduleCreateWithoutLecturerInput, IndividualScheduleUncheckedCreateWithoutLecturerInput> | IndividualScheduleCreateWithoutLecturerInput[] | IndividualScheduleUncheckedCreateWithoutLecturerInput[]
+    connectOrCreate?: IndividualScheduleCreateOrConnectWithoutLecturerInput | IndividualScheduleCreateOrConnectWithoutLecturerInput[]
+    createMany?: IndividualScheduleCreateManyLecturerInputEnvelope
+    connect?: IndividualScheduleWhereUniqueInput | IndividualScheduleWhereUniqueInput[]
   }
 
   export type UserProfileUpdateOneRequiredWithoutLecturerNestedInput = {
@@ -502493,6 +506011,34 @@ export namespace Prisma {
     deleteMany?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
   }
 
+  export type PersonalWorkTagUpdateManyWithoutLecturerNestedInput = {
+    create?: XOR<PersonalWorkTagCreateWithoutLecturerInput, PersonalWorkTagUncheckedCreateWithoutLecturerInput> | PersonalWorkTagCreateWithoutLecturerInput[] | PersonalWorkTagUncheckedCreateWithoutLecturerInput[]
+    connectOrCreate?: PersonalWorkTagCreateOrConnectWithoutLecturerInput | PersonalWorkTagCreateOrConnectWithoutLecturerInput[]
+    upsert?: PersonalWorkTagUpsertWithWhereUniqueWithoutLecturerInput | PersonalWorkTagUpsertWithWhereUniqueWithoutLecturerInput[]
+    createMany?: PersonalWorkTagCreateManyLecturerInputEnvelope
+    set?: PersonalWorkTagWhereUniqueInput | PersonalWorkTagWhereUniqueInput[]
+    disconnect?: PersonalWorkTagWhereUniqueInput | PersonalWorkTagWhereUniqueInput[]
+    delete?: PersonalWorkTagWhereUniqueInput | PersonalWorkTagWhereUniqueInput[]
+    connect?: PersonalWorkTagWhereUniqueInput | PersonalWorkTagWhereUniqueInput[]
+    update?: PersonalWorkTagUpdateWithWhereUniqueWithoutLecturerInput | PersonalWorkTagUpdateWithWhereUniqueWithoutLecturerInput[]
+    updateMany?: PersonalWorkTagUpdateManyWithWhereWithoutLecturerInput | PersonalWorkTagUpdateManyWithWhereWithoutLecturerInput[]
+    deleteMany?: PersonalWorkTagScalarWhereInput | PersonalWorkTagScalarWhereInput[]
+  }
+
+  export type IndividualScheduleUpdateManyWithoutLecturerNestedInput = {
+    create?: XOR<IndividualScheduleCreateWithoutLecturerInput, IndividualScheduleUncheckedCreateWithoutLecturerInput> | IndividualScheduleCreateWithoutLecturerInput[] | IndividualScheduleUncheckedCreateWithoutLecturerInput[]
+    connectOrCreate?: IndividualScheduleCreateOrConnectWithoutLecturerInput | IndividualScheduleCreateOrConnectWithoutLecturerInput[]
+    upsert?: IndividualScheduleUpsertWithWhereUniqueWithoutLecturerInput | IndividualScheduleUpsertWithWhereUniqueWithoutLecturerInput[]
+    createMany?: IndividualScheduleCreateManyLecturerInputEnvelope
+    set?: IndividualScheduleWhereUniqueInput | IndividualScheduleWhereUniqueInput[]
+    disconnect?: IndividualScheduleWhereUniqueInput | IndividualScheduleWhereUniqueInput[]
+    delete?: IndividualScheduleWhereUniqueInput | IndividualScheduleWhereUniqueInput[]
+    connect?: IndividualScheduleWhereUniqueInput | IndividualScheduleWhereUniqueInput[]
+    update?: IndividualScheduleUpdateWithWhereUniqueWithoutLecturerInput | IndividualScheduleUpdateWithWhereUniqueWithoutLecturerInput[]
+    updateMany?: IndividualScheduleUpdateManyWithWhereWithoutLecturerInput | IndividualScheduleUpdateManyWithWhereWithoutLecturerInput[]
+    deleteMany?: IndividualScheduleScalarWhereInput | IndividualScheduleScalarWhereInput[]
+  }
+
   export type SubjectClassUncheckedUpdateManyWithoutMainLecturerNestedInput = {
     create?: XOR<SubjectClassCreateWithoutMainLecturerInput, SubjectClassUncheckedCreateWithoutMainLecturerInput> | SubjectClassCreateWithoutMainLecturerInput[] | SubjectClassUncheckedCreateWithoutMainLecturerInput[]
     connectOrCreate?: SubjectClassCreateOrConnectWithoutMainLecturerInput | SubjectClassCreateOrConnectWithoutMainLecturerInput[]
@@ -502783,6 +506329,34 @@ export namespace Prisma {
     update?: NotificationUpdateWithWhereUniqueWithoutLecturerInput | NotificationUpdateWithWhereUniqueWithoutLecturerInput[]
     updateMany?: NotificationUpdateManyWithWhereWithoutLecturerInput | NotificationUpdateManyWithWhereWithoutLecturerInput[]
     deleteMany?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
+  }
+
+  export type PersonalWorkTagUncheckedUpdateManyWithoutLecturerNestedInput = {
+    create?: XOR<PersonalWorkTagCreateWithoutLecturerInput, PersonalWorkTagUncheckedCreateWithoutLecturerInput> | PersonalWorkTagCreateWithoutLecturerInput[] | PersonalWorkTagUncheckedCreateWithoutLecturerInput[]
+    connectOrCreate?: PersonalWorkTagCreateOrConnectWithoutLecturerInput | PersonalWorkTagCreateOrConnectWithoutLecturerInput[]
+    upsert?: PersonalWorkTagUpsertWithWhereUniqueWithoutLecturerInput | PersonalWorkTagUpsertWithWhereUniqueWithoutLecturerInput[]
+    createMany?: PersonalWorkTagCreateManyLecturerInputEnvelope
+    set?: PersonalWorkTagWhereUniqueInput | PersonalWorkTagWhereUniqueInput[]
+    disconnect?: PersonalWorkTagWhereUniqueInput | PersonalWorkTagWhereUniqueInput[]
+    delete?: PersonalWorkTagWhereUniqueInput | PersonalWorkTagWhereUniqueInput[]
+    connect?: PersonalWorkTagWhereUniqueInput | PersonalWorkTagWhereUniqueInput[]
+    update?: PersonalWorkTagUpdateWithWhereUniqueWithoutLecturerInput | PersonalWorkTagUpdateWithWhereUniqueWithoutLecturerInput[]
+    updateMany?: PersonalWorkTagUpdateManyWithWhereWithoutLecturerInput | PersonalWorkTagUpdateManyWithWhereWithoutLecturerInput[]
+    deleteMany?: PersonalWorkTagScalarWhereInput | PersonalWorkTagScalarWhereInput[]
+  }
+
+  export type IndividualScheduleUncheckedUpdateManyWithoutLecturerNestedInput = {
+    create?: XOR<IndividualScheduleCreateWithoutLecturerInput, IndividualScheduleUncheckedCreateWithoutLecturerInput> | IndividualScheduleCreateWithoutLecturerInput[] | IndividualScheduleUncheckedCreateWithoutLecturerInput[]
+    connectOrCreate?: IndividualScheduleCreateOrConnectWithoutLecturerInput | IndividualScheduleCreateOrConnectWithoutLecturerInput[]
+    upsert?: IndividualScheduleUpsertWithWhereUniqueWithoutLecturerInput | IndividualScheduleUpsertWithWhereUniqueWithoutLecturerInput[]
+    createMany?: IndividualScheduleCreateManyLecturerInputEnvelope
+    set?: IndividualScheduleWhereUniqueInput | IndividualScheduleWhereUniqueInput[]
+    disconnect?: IndividualScheduleWhereUniqueInput | IndividualScheduleWhereUniqueInput[]
+    delete?: IndividualScheduleWhereUniqueInput | IndividualScheduleWhereUniqueInput[]
+    connect?: IndividualScheduleWhereUniqueInput | IndividualScheduleWhereUniqueInput[]
+    update?: IndividualScheduleUpdateWithWhereUniqueWithoutLecturerInput | IndividualScheduleUpdateWithWhereUniqueWithoutLecturerInput[]
+    updateMany?: IndividualScheduleUpdateManyWithWhereWithoutLecturerInput | IndividualScheduleUpdateManyWithWhereWithoutLecturerInput[]
+    deleteMany?: IndividualScheduleScalarWhereInput | IndividualScheduleScalarWhereInput[]
   }
 
   export type UserProfileCreateNestedOneWithoutLecturerHistoryInput = {
@@ -518773,6 +522347,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutPrimarySupervisorInput
     secondarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutSecondarySupervisorInput
     notifications?: NotificationCreateNestedManyWithoutLecturerInput
+    personalWorkTags?: PersonalWorkTagCreateNestedManyWithoutLecturerInput
+    individualSchedules?: IndividualScheduleCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerUncheckedCreateWithoutUserProfileInput = {
@@ -518810,6 +522386,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutPrimarySupervisorInput
     secondarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutSecondarySupervisorInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutLecturerInput
+    personalWorkTags?: PersonalWorkTagUncheckedCreateNestedManyWithoutLecturerInput
+    individualSchedules?: IndividualScheduleUncheckedCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerCreateOrConnectWithoutUserProfileInput = {
@@ -522837,6 +526415,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutPrimarySupervisorNestedInput
     secondarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutSecondarySupervisorNestedInput
     notifications?: NotificationUpdateManyWithoutLecturerNestedInput
+    personalWorkTags?: PersonalWorkTagUpdateManyWithoutLecturerNestedInput
+    individualSchedules?: IndividualScheduleUpdateManyWithoutLecturerNestedInput
   }
 
   export type LecturerUncheckedUpdateWithoutUserProfileInput = {
@@ -522874,6 +526454,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutPrimarySupervisorNestedInput
     secondarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutSecondarySupervisorNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutLecturerNestedInput
+    personalWorkTags?: PersonalWorkTagUncheckedUpdateManyWithoutLecturerNestedInput
+    individualSchedules?: IndividualScheduleUncheckedUpdateManyWithoutLecturerNestedInput
   }
 
   export type LecturerHistoryUpsertWithWhereUniqueWithoutUserProfileInput = {
@@ -553702,6 +557284,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutPrimarySupervisorInput
     secondarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutSecondarySupervisorInput
     notifications?: NotificationCreateNestedManyWithoutLecturerInput
+    personalWorkTags?: PersonalWorkTagCreateNestedManyWithoutLecturerInput
+    individualSchedules?: IndividualScheduleCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerUncheckedCreateWithoutOrganizationInput = {
@@ -553739,6 +557323,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutPrimarySupervisorInput
     secondarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutSecondarySupervisorInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutLecturerInput
+    personalWorkTags?: PersonalWorkTagUncheckedCreateNestedManyWithoutLecturerInput
+    individualSchedules?: IndividualScheduleUncheckedCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerCreateOrConnectWithoutOrganizationInput = {
@@ -554223,7 +557809,7 @@ export namespace Prisma {
     name: string
     englishName?: string | null
     shortName?: string | null
-    summary: string
+    summary?: string | null
     numberCreditsMajor?: number
     numberCreditsRequired?: number
     numberCreditsElective?: number
@@ -554250,7 +557836,7 @@ export namespace Prisma {
     name: string
     englishName?: string | null
     shortName?: string | null
-    summary: string
+    summary?: string | null
     numberCreditsMajor?: number
     numberCreditsRequired?: number
     numberCreditsElective?: number
@@ -554287,7 +557873,7 @@ export namespace Prisma {
     name: string
     englishName?: string | null
     shortName?: string | null
-    summary: string
+    summary?: string | null
     numberCreditsMajor?: number
     numberCreditsRequired?: number
     numberCreditsElective?: number
@@ -554314,7 +557900,7 @@ export namespace Prisma {
     name: string
     englishName?: string | null
     shortName?: string | null
-    summary: string
+    summary?: string | null
     numberCreditsMajor?: number
     numberCreditsRequired?: number
     numberCreditsElective?: number
@@ -554351,7 +557937,7 @@ export namespace Prisma {
     name: string
     englishName?: string | null
     shortName?: string | null
-    summary: string
+    summary?: string | null
     numberCreditsMajor?: number
     numberCreditsRequired?: number
     numberCreditsElective?: number
@@ -554378,7 +557964,7 @@ export namespace Prisma {
     name: string
     englishName?: string | null
     shortName?: string | null
-    summary: string
+    summary?: string | null
     numberCreditsMajor?: number
     numberCreditsRequired?: number
     numberCreditsElective?: number
@@ -554997,7 +558583,7 @@ export namespace Prisma {
     name?: StringFilter<"TrainingMajor"> | string
     englishName?: StringNullableFilter<"TrainingMajor"> | string | null
     shortName?: StringNullableFilter<"TrainingMajor"> | string | null
-    summary?: StringFilter<"TrainingMajor"> | string
+    summary?: StringNullableFilter<"TrainingMajor"> | string | null
     numberCreditsMajor?: IntFilter<"TrainingMajor"> | number
     numberCreditsRequired?: IntFilter<"TrainingMajor"> | number
     numberCreditsElective?: IntFilter<"TrainingMajor"> | number
@@ -578045,6 +581631,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutPrimarySupervisorInput
     secondarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutSecondarySupervisorInput
     notifications?: NotificationCreateNestedManyWithoutLecturerInput
+    personalWorkTags?: PersonalWorkTagCreateNestedManyWithoutLecturerInput
+    individualSchedules?: IndividualScheduleCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerUncheckedCreateWithoutManageFixedClassInput = {
@@ -578082,6 +581670,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutPrimarySupervisorInput
     secondarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutSecondarySupervisorInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutLecturerInput
+    personalWorkTags?: PersonalWorkTagUncheckedCreateNestedManyWithoutLecturerInput
+    individualSchedules?: IndividualScheduleUncheckedCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerCreateOrConnectWithoutManageFixedClassInput = {
@@ -579613,6 +583203,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutPrimarySupervisorNestedInput
     secondarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutSecondarySupervisorNestedInput
     notifications?: NotificationUpdateManyWithoutLecturerNestedInput
+    personalWorkTags?: PersonalWorkTagUpdateManyWithoutLecturerNestedInput
+    individualSchedules?: IndividualScheduleUpdateManyWithoutLecturerNestedInput
   }
 
   export type LecturerUncheckedUpdateWithoutManageFixedClassInput = {
@@ -579650,6 +583242,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutPrimarySupervisorNestedInput
     secondarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutSecondarySupervisorNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutLecturerNestedInput
+    personalWorkTags?: PersonalWorkTagUncheckedUpdateManyWithoutLecturerNestedInput
+    individualSchedules?: IndividualScheduleUncheckedUpdateManyWithoutLecturerNestedInput
   }
 
   export type StaffUpsertWithoutFixedClassInput = {
@@ -580016,7 +583610,7 @@ export namespace Prisma {
     name: string
     englishName?: string | null
     shortName?: string | null
-    summary: string
+    summary?: string | null
     numberCreditsMajor?: number
     numberCreditsRequired?: number
     numberCreditsElective?: number
@@ -580043,7 +583637,7 @@ export namespace Prisma {
     name: string
     englishName?: string | null
     shortName?: string | null
-    summary: string
+    summary?: string | null
     numberCreditsMajor?: number
     numberCreditsRequired?: number
     numberCreditsElective?: number
@@ -580436,7 +584030,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
-    summary?: StringFieldUpdateOperationsInput | string
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
     numberCreditsMajor?: IntFieldUpdateOperationsInput | number
     numberCreditsRequired?: IntFieldUpdateOperationsInput | number
     numberCreditsElective?: IntFieldUpdateOperationsInput | number
@@ -580463,7 +584057,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
-    summary?: StringFieldUpdateOperationsInput | string
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
     numberCreditsMajor?: IntFieldUpdateOperationsInput | number
     numberCreditsRequired?: IntFieldUpdateOperationsInput | number
     numberCreditsElective?: IntFieldUpdateOperationsInput | number
@@ -588068,6 +591662,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutPrimarySupervisorInput
     secondarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutSecondarySupervisorInput
     notifications?: NotificationCreateNestedManyWithoutLecturerInput
+    personalWorkTags?: PersonalWorkTagCreateNestedManyWithoutLecturerInput
+    individualSchedules?: IndividualScheduleCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerUncheckedCreateWithoutMainSubjectClassesInput = {
@@ -588105,6 +591701,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutPrimarySupervisorInput
     secondarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutSecondarySupervisorInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutLecturerInput
+    personalWorkTags?: PersonalWorkTagUncheckedCreateNestedManyWithoutLecturerInput
+    individualSchedules?: IndividualScheduleUncheckedCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerCreateOrConnectWithoutMainSubjectClassesInput = {
@@ -588147,6 +591745,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutPrimarySupervisorInput
     secondarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutSecondarySupervisorInput
     notifications?: NotificationCreateNestedManyWithoutLecturerInput
+    personalWorkTags?: PersonalWorkTagCreateNestedManyWithoutLecturerInput
+    individualSchedules?: IndividualScheduleCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerUncheckedCreateWithoutExtraSubjectClassesInput = {
@@ -588184,6 +591784,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutPrimarySupervisorInput
     secondarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutSecondarySupervisorInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutLecturerInput
+    personalWorkTags?: PersonalWorkTagUncheckedCreateNestedManyWithoutLecturerInput
+    individualSchedules?: IndividualScheduleUncheckedCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerCreateOrConnectWithoutExtraSubjectClassesInput = {
@@ -588226,6 +591828,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutPrimarySupervisorInput
     secondarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutSecondarySupervisorInput
     notifications?: NotificationCreateNestedManyWithoutLecturerInput
+    personalWorkTags?: PersonalWorkTagCreateNestedManyWithoutLecturerInput
+    individualSchedules?: IndividualScheduleCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerUncheckedCreateWithoutEnterGradeClassesInput = {
@@ -588263,6 +591867,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutPrimarySupervisorInput
     secondarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutSecondarySupervisorInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutLecturerInput
+    personalWorkTags?: PersonalWorkTagUncheckedCreateNestedManyWithoutLecturerInput
+    individualSchedules?: IndividualScheduleUncheckedCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerCreateOrConnectWithoutEnterGradeClassesInput = {
@@ -589587,6 +593193,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutPrimarySupervisorNestedInput
     secondarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutSecondarySupervisorNestedInput
     notifications?: NotificationUpdateManyWithoutLecturerNestedInput
+    personalWorkTags?: PersonalWorkTagUpdateManyWithoutLecturerNestedInput
+    individualSchedules?: IndividualScheduleUpdateManyWithoutLecturerNestedInput
   }
 
   export type LecturerUncheckedUpdateWithoutMainSubjectClassesInput = {
@@ -589624,6 +593232,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutPrimarySupervisorNestedInput
     secondarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutSecondarySupervisorNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutLecturerNestedInput
+    personalWorkTags?: PersonalWorkTagUncheckedUpdateManyWithoutLecturerNestedInput
+    individualSchedules?: IndividualScheduleUncheckedUpdateManyWithoutLecturerNestedInput
   }
 
   export type LecturerUpsertWithoutExtraSubjectClassesInput = {
@@ -589672,6 +593282,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutPrimarySupervisorNestedInput
     secondarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutSecondarySupervisorNestedInput
     notifications?: NotificationUpdateManyWithoutLecturerNestedInput
+    personalWorkTags?: PersonalWorkTagUpdateManyWithoutLecturerNestedInput
+    individualSchedules?: IndividualScheduleUpdateManyWithoutLecturerNestedInput
   }
 
   export type LecturerUncheckedUpdateWithoutExtraSubjectClassesInput = {
@@ -589709,6 +593321,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutPrimarySupervisorNestedInput
     secondarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutSecondarySupervisorNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutLecturerNestedInput
+    personalWorkTags?: PersonalWorkTagUncheckedUpdateManyWithoutLecturerNestedInput
+    individualSchedules?: IndividualScheduleUncheckedUpdateManyWithoutLecturerNestedInput
   }
 
   export type LecturerUpsertWithoutEnterGradeClassesInput = {
@@ -589757,6 +593371,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutPrimarySupervisorNestedInput
     secondarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutSecondarySupervisorNestedInput
     notifications?: NotificationUpdateManyWithoutLecturerNestedInput
+    personalWorkTags?: PersonalWorkTagUpdateManyWithoutLecturerNestedInput
+    individualSchedules?: IndividualScheduleUpdateManyWithoutLecturerNestedInput
   }
 
   export type LecturerUncheckedUpdateWithoutEnterGradeClassesInput = {
@@ -589794,6 +593410,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutPrimarySupervisorNestedInput
     secondarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutSecondarySupervisorNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutLecturerNestedInput
+    personalWorkTags?: PersonalWorkTagUncheckedUpdateManyWithoutLecturerNestedInput
+    individualSchedules?: IndividualScheduleUncheckedUpdateManyWithoutLecturerNestedInput
   }
 
   export type ScoreLinkSubjectVersionUpsertWithoutSubjectClassInput = {
@@ -592934,6 +596552,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutPrimarySupervisorInput
     secondarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutSecondarySupervisorInput
     notifications?: NotificationCreateNestedManyWithoutLecturerInput
+    personalWorkTags?: PersonalWorkTagCreateNestedManyWithoutLecturerInput
+    individualSchedules?: IndividualScheduleCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerUncheckedCreateWithoutClassSchedulesInput = {
@@ -592971,6 +596591,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutPrimarySupervisorInput
     secondarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutSecondarySupervisorInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutLecturerInput
+    personalWorkTags?: PersonalWorkTagUncheckedCreateNestedManyWithoutLecturerInput
+    individualSchedules?: IndividualScheduleUncheckedCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerCreateOrConnectWithoutClassSchedulesInput = {
@@ -593013,6 +596635,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutPrimarySupervisorInput
     secondarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutSecondarySupervisorInput
     notifications?: NotificationCreateNestedManyWithoutLecturerInput
+    personalWorkTags?: PersonalWorkTagCreateNestedManyWithoutLecturerInput
+    individualSchedules?: IndividualScheduleCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerUncheckedCreateWithoutExtraClassSchedulesInput = {
@@ -593050,6 +596674,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutPrimarySupervisorInput
     secondarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutSecondarySupervisorInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutLecturerInput
+    personalWorkTags?: PersonalWorkTagUncheckedCreateNestedManyWithoutLecturerInput
+    individualSchedules?: IndividualScheduleUncheckedCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerCreateOrConnectWithoutExtraClassSchedulesInput = {
@@ -593756,6 +597382,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutPrimarySupervisorNestedInput
     secondarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutSecondarySupervisorNestedInput
     notifications?: NotificationUpdateManyWithoutLecturerNestedInput
+    personalWorkTags?: PersonalWorkTagUpdateManyWithoutLecturerNestedInput
+    individualSchedules?: IndividualScheduleUpdateManyWithoutLecturerNestedInput
   }
 
   export type LecturerUncheckedUpdateWithoutClassSchedulesInput = {
@@ -593793,6 +597421,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutPrimarySupervisorNestedInput
     secondarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutSecondarySupervisorNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutLecturerNestedInput
+    personalWorkTags?: PersonalWorkTagUncheckedUpdateManyWithoutLecturerNestedInput
+    individualSchedules?: IndividualScheduleUncheckedUpdateManyWithoutLecturerNestedInput
   }
 
   export type LecturerUpsertWithoutExtraClassSchedulesInput = {
@@ -593841,6 +597471,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutPrimarySupervisorNestedInput
     secondarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutSecondarySupervisorNestedInput
     notifications?: NotificationUpdateManyWithoutLecturerNestedInput
+    personalWorkTags?: PersonalWorkTagUpdateManyWithoutLecturerNestedInput
+    individualSchedules?: IndividualScheduleUpdateManyWithoutLecturerNestedInput
   }
 
   export type LecturerUncheckedUpdateWithoutExtraClassSchedulesInput = {
@@ -593878,6 +597510,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutPrimarySupervisorNestedInput
     secondarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutSecondarySupervisorNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutLecturerNestedInput
+    personalWorkTags?: PersonalWorkTagUncheckedUpdateManyWithoutLecturerNestedInput
+    individualSchedules?: IndividualScheduleUncheckedUpdateManyWithoutLecturerNestedInput
   }
 
   export type UserProfileUpsertWithWhereUniqueWithoutClassSchedulesInput = {
@@ -598315,7 +601949,7 @@ export namespace Prisma {
     name: string
     englishName?: string | null
     shortName?: string | null
-    summary: string
+    summary?: string | null
     numberCreditsMajor?: number
     numberCreditsRequired?: number
     numberCreditsElective?: number
@@ -598342,7 +601976,7 @@ export namespace Prisma {
     name: string
     englishName?: string | null
     shortName?: string | null
-    summary: string
+    summary?: string | null
     numberCreditsMajor?: number
     numberCreditsRequired?: number
     numberCreditsElective?: number
@@ -600043,7 +603677,7 @@ export namespace Prisma {
     name: string
     englishName?: string | null
     shortName?: string | null
-    summary: string
+    summary?: string | null
     numberCreditsMajor?: number
     numberCreditsRequired?: number
     numberCreditsElective?: number
@@ -600070,7 +603704,7 @@ export namespace Prisma {
     name: string
     englishName?: string | null
     shortName?: string | null
-    summary: string
+    summary?: string | null
     numberCreditsMajor?: number
     numberCreditsRequired?: number
     numberCreditsElective?: number
@@ -600184,7 +603818,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
-    summary?: StringFieldUpdateOperationsInput | string
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
     numberCreditsMajor?: IntFieldUpdateOperationsInput | number
     numberCreditsRequired?: IntFieldUpdateOperationsInput | number
     numberCreditsElective?: IntFieldUpdateOperationsInput | number
@@ -600211,7 +603845,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
-    summary?: StringFieldUpdateOperationsInput | string
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
     numberCreditsMajor?: IntFieldUpdateOperationsInput | number
     numberCreditsRequired?: IntFieldUpdateOperationsInput | number
     numberCreditsElective?: IntFieldUpdateOperationsInput | number
@@ -608741,6 +612375,8 @@ export namespace Prisma {
     evaluationCriterionReviews?: EvaluationCriterionCreateNestedManyWithoutLecturerReviewInput
     primarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutPrimarySupervisorInput
     secondarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutSecondarySupervisorInput
+    personalWorkTags?: PersonalWorkTagCreateNestedManyWithoutLecturerInput
+    individualSchedules?: IndividualScheduleCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerUncheckedCreateWithoutNotificationsInput = {
@@ -608778,6 +612414,8 @@ export namespace Prisma {
     evaluationCriterionReviews?: EvaluationCriterionUncheckedCreateNestedManyWithoutLecturerReviewInput
     primarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutPrimarySupervisorInput
     secondarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutSecondarySupervisorInput
+    personalWorkTags?: PersonalWorkTagUncheckedCreateNestedManyWithoutLecturerInput
+    individualSchedules?: IndividualScheduleUncheckedCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerCreateOrConnectWithoutNotificationsInput = {
@@ -608963,6 +612601,8 @@ export namespace Prisma {
     evaluationCriterionReviews?: EvaluationCriterionUpdateManyWithoutLecturerReviewNestedInput
     primarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutPrimarySupervisorNestedInput
     secondarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutSecondarySupervisorNestedInput
+    personalWorkTags?: PersonalWorkTagUpdateManyWithoutLecturerNestedInput
+    individualSchedules?: IndividualScheduleUpdateManyWithoutLecturerNestedInput
   }
 
   export type LecturerUncheckedUpdateWithoutNotificationsInput = {
@@ -609000,6 +612640,8 @@ export namespace Prisma {
     evaluationCriterionReviews?: EvaluationCriterionUncheckedUpdateManyWithoutLecturerReviewNestedInput
     primarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutPrimarySupervisorNestedInput
     secondarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutSecondarySupervisorNestedInput
+    personalWorkTags?: PersonalWorkTagUncheckedUpdateManyWithoutLecturerNestedInput
+    individualSchedules?: IndividualScheduleUncheckedUpdateManyWithoutLecturerNestedInput
   }
 
   export type DocumentFileUpsertWithWhereUniqueWithoutNotificationInput = {
@@ -609016,6 +612658,494 @@ export namespace Prisma {
   export type DocumentFileUpdateManyWithWhereWithoutNotificationInput = {
     where: DocumentFileScalarWhereInput
     data: XOR<DocumentFileUpdateManyMutationInput, DocumentFileUncheckedUpdateManyWithoutNotificationInput>
+  }
+
+  export type LecturerCreateWithoutPersonalWorkTagsInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    from?: Date | string | null
+    lectureID?: string | null
+    serviceDate?: Date | string | null
+    userProfile: UserProfileCreateNestedOneWithoutLecturerInput
+    organization: DM_DonViCreateNestedOneWithoutLecturersInput
+    lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
+    mainSubjectClasses?: SubjectClassCreateNestedManyWithoutMainLecturerInput
+    extraSubjectClasses?: SubjectClassCreateNestedManyWithoutExtraLecturerInput
+    enterGradeClasses?: SubjectClassCreateNestedManyWithoutEnterGradeLecturerInput
+    manageFixedClass?: FixedClassCreateNestedManyWithoutLecturerManagementInput
+    classSchedules?: ClassScheduleCreateNestedManyWithoutLecturerInput
+    extraClassSchedules?: ClassScheduleCreateNestedManyWithoutExtraLecturerInput
+    researchProjects?: ResearchProjectCreateNestedManyWithoutSupervisorInput
+    reviewedRegistrations?: StudentResearchRegistrationCreateNestedManyWithoutReviewedByInput
+    reviewedThesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutReviewedByInput
+    expertProfile?: ExpertProfileCreateNestedManyWithoutLecturerInput
+    survey?: SurveyCreateNestedManyWithoutLectureInput
+    clusterSurvey?: ClusterSurveyCreateNestedManyWithoutLecturersInput
+    examRoomsMain?: ExamListCreateNestedManyWithoutFirstSupervisorInput
+    examRoomsExtra?: ExamListCreateNestedManyWithoutSecondSupervisorInput
+    evaluationCriterions?: EvaluationCriterionCreateNestedManyWithoutLecturerInput
+    analysisCriterion?: AnalysisCriterionCreateNestedManyWithoutLecturerInput
+    evaluationCouncilMember?: EvaluationCouncilMemberCreateNestedManyWithoutLecturerInput
+    evaluationCriterionReviews?: EvaluationCriterionCreateNestedManyWithoutLecturerReviewInput
+    primarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutPrimarySupervisorInput
+    secondarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutSecondarySupervisorInput
+    notifications?: NotificationCreateNestedManyWithoutLecturerInput
+    individualSchedules?: IndividualScheduleCreateNestedManyWithoutLecturerInput
+  }
+
+  export type LecturerUncheckedCreateWithoutPersonalWorkTagsInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    from?: Date | string | null
+    lectureID?: string | null
+    serviceDate?: Date | string | null
+    userProfileId: string
+    organizationId: string
+    lecturerTypeId: string
+    mainSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutMainLecturerInput
+    extraSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutExtraLecturerInput
+    enterGradeClasses?: SubjectClassUncheckedCreateNestedManyWithoutEnterGradeLecturerInput
+    manageFixedClass?: FixedClassUncheckedCreateNestedManyWithoutLecturerManagementInput
+    classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutLecturerInput
+    extraClassSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutExtraLecturerInput
+    researchProjects?: ResearchProjectUncheckedCreateNestedManyWithoutSupervisorInput
+    reviewedRegistrations?: StudentResearchRegistrationUncheckedCreateNestedManyWithoutReviewedByInput
+    reviewedThesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutReviewedByInput
+    expertProfile?: ExpertProfileUncheckedCreateNestedManyWithoutLecturerInput
+    survey?: SurveyUncheckedCreateNestedManyWithoutLectureInput
+    clusterSurvey?: ClusterSurveyUncheckedCreateNestedManyWithoutLecturersInput
+    examRoomsMain?: ExamListUncheckedCreateNestedManyWithoutFirstSupervisorInput
+    examRoomsExtra?: ExamListUncheckedCreateNestedManyWithoutSecondSupervisorInput
+    evaluationCriterions?: EvaluationCriterionUncheckedCreateNestedManyWithoutLecturerInput
+    analysisCriterion?: AnalysisCriterionUncheckedCreateNestedManyWithoutLecturerInput
+    evaluationCouncilMember?: EvaluationCouncilMemberUncheckedCreateNestedManyWithoutLecturerInput
+    evaluationCriterionReviews?: EvaluationCriterionUncheckedCreateNestedManyWithoutLecturerReviewInput
+    primarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutPrimarySupervisorInput
+    secondarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutSecondarySupervisorInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutLecturerInput
+    individualSchedules?: IndividualScheduleUncheckedCreateNestedManyWithoutLecturerInput
+  }
+
+  export type LecturerCreateOrConnectWithoutPersonalWorkTagsInput = {
+    where: LecturerWhereUniqueInput
+    create: XOR<LecturerCreateWithoutPersonalWorkTagsInput, LecturerUncheckedCreateWithoutPersonalWorkTagsInput>
+  }
+
+  export type IndividualScheduleCreateWithoutTagsInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    title: string
+    startTime: Date | string
+    endTime: Date | string
+    allDay?: boolean
+    location?: string | null
+    lecturer: LecturerCreateNestedOneWithoutIndividualSchedulesInput
+  }
+
+  export type IndividualScheduleUncheckedCreateWithoutTagsInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    title: string
+    startTime: Date | string
+    endTime: Date | string
+    allDay?: boolean
+    location?: string | null
+    lecturerId: string
+  }
+
+  export type IndividualScheduleCreateOrConnectWithoutTagsInput = {
+    where: IndividualScheduleWhereUniqueInput
+    create: XOR<IndividualScheduleCreateWithoutTagsInput, IndividualScheduleUncheckedCreateWithoutTagsInput>
+  }
+
+  export type LecturerUpsertWithoutPersonalWorkTagsInput = {
+    update: XOR<LecturerUpdateWithoutPersonalWorkTagsInput, LecturerUncheckedUpdateWithoutPersonalWorkTagsInput>
+    create: XOR<LecturerCreateWithoutPersonalWorkTagsInput, LecturerUncheckedCreateWithoutPersonalWorkTagsInput>
+    where?: LecturerWhereInput
+  }
+
+  export type LecturerUpdateToOneWithWhereWithoutPersonalWorkTagsInput = {
+    where?: LecturerWhereInput
+    data: XOR<LecturerUpdateWithoutPersonalWorkTagsInput, LecturerUncheckedUpdateWithoutPersonalWorkTagsInput>
+  }
+
+  export type LecturerUpdateWithoutPersonalWorkTagsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+    serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
+    organization?: DM_DonViUpdateOneRequiredWithoutLecturersNestedInput
+    lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
+    mainSubjectClasses?: SubjectClassUpdateManyWithoutMainLecturerNestedInput
+    extraSubjectClasses?: SubjectClassUpdateManyWithoutExtraLecturerNestedInput
+    enterGradeClasses?: SubjectClassUpdateManyWithoutEnterGradeLecturerNestedInput
+    manageFixedClass?: FixedClassUpdateManyWithoutLecturerManagementNestedInput
+    classSchedules?: ClassScheduleUpdateManyWithoutLecturerNestedInput
+    extraClassSchedules?: ClassScheduleUpdateManyWithoutExtraLecturerNestedInput
+    researchProjects?: ResearchProjectUpdateManyWithoutSupervisorNestedInput
+    reviewedRegistrations?: StudentResearchRegistrationUpdateManyWithoutReviewedByNestedInput
+    reviewedThesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutReviewedByNestedInput
+    expertProfile?: ExpertProfileUpdateManyWithoutLecturerNestedInput
+    survey?: SurveyUpdateManyWithoutLectureNestedInput
+    clusterSurvey?: ClusterSurveyUpdateManyWithoutLecturersNestedInput
+    examRoomsMain?: ExamListUpdateManyWithoutFirstSupervisorNestedInput
+    examRoomsExtra?: ExamListUpdateManyWithoutSecondSupervisorNestedInput
+    evaluationCriterions?: EvaluationCriterionUpdateManyWithoutLecturerNestedInput
+    analysisCriterion?: AnalysisCriterionUpdateManyWithoutLecturerNestedInput
+    evaluationCouncilMember?: EvaluationCouncilMemberUpdateManyWithoutLecturerNestedInput
+    evaluationCriterionReviews?: EvaluationCriterionUpdateManyWithoutLecturerReviewNestedInput
+    primarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutPrimarySupervisorNestedInput
+    secondarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutSecondarySupervisorNestedInput
+    notifications?: NotificationUpdateManyWithoutLecturerNestedInput
+    individualSchedules?: IndividualScheduleUpdateManyWithoutLecturerNestedInput
+  }
+
+  export type LecturerUncheckedUpdateWithoutPersonalWorkTagsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+    serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userProfileId?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    lecturerTypeId?: StringFieldUpdateOperationsInput | string
+    mainSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutMainLecturerNestedInput
+    extraSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutExtraLecturerNestedInput
+    enterGradeClasses?: SubjectClassUncheckedUpdateManyWithoutEnterGradeLecturerNestedInput
+    manageFixedClass?: FixedClassUncheckedUpdateManyWithoutLecturerManagementNestedInput
+    classSchedules?: ClassScheduleUncheckedUpdateManyWithoutLecturerNestedInput
+    extraClassSchedules?: ClassScheduleUncheckedUpdateManyWithoutExtraLecturerNestedInput
+    researchProjects?: ResearchProjectUncheckedUpdateManyWithoutSupervisorNestedInput
+    reviewedRegistrations?: StudentResearchRegistrationUncheckedUpdateManyWithoutReviewedByNestedInput
+    reviewedThesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutReviewedByNestedInput
+    expertProfile?: ExpertProfileUncheckedUpdateManyWithoutLecturerNestedInput
+    survey?: SurveyUncheckedUpdateManyWithoutLectureNestedInput
+    clusterSurvey?: ClusterSurveyUncheckedUpdateManyWithoutLecturersNestedInput
+    examRoomsMain?: ExamListUncheckedUpdateManyWithoutFirstSupervisorNestedInput
+    examRoomsExtra?: ExamListUncheckedUpdateManyWithoutSecondSupervisorNestedInput
+    evaluationCriterions?: EvaluationCriterionUncheckedUpdateManyWithoutLecturerNestedInput
+    analysisCriterion?: AnalysisCriterionUncheckedUpdateManyWithoutLecturerNestedInput
+    evaluationCouncilMember?: EvaluationCouncilMemberUncheckedUpdateManyWithoutLecturerNestedInput
+    evaluationCriterionReviews?: EvaluationCriterionUncheckedUpdateManyWithoutLecturerReviewNestedInput
+    primarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutPrimarySupervisorNestedInput
+    secondarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutSecondarySupervisorNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutLecturerNestedInput
+    individualSchedules?: IndividualScheduleUncheckedUpdateManyWithoutLecturerNestedInput
+  }
+
+  export type IndividualScheduleUpsertWithWhereUniqueWithoutTagsInput = {
+    where: IndividualScheduleWhereUniqueInput
+    update: XOR<IndividualScheduleUpdateWithoutTagsInput, IndividualScheduleUncheckedUpdateWithoutTagsInput>
+    create: XOR<IndividualScheduleCreateWithoutTagsInput, IndividualScheduleUncheckedCreateWithoutTagsInput>
+  }
+
+  export type IndividualScheduleUpdateWithWhereUniqueWithoutTagsInput = {
+    where: IndividualScheduleWhereUniqueInput
+    data: XOR<IndividualScheduleUpdateWithoutTagsInput, IndividualScheduleUncheckedUpdateWithoutTagsInput>
+  }
+
+  export type IndividualScheduleUpdateManyWithWhereWithoutTagsInput = {
+    where: IndividualScheduleScalarWhereInput
+    data: XOR<IndividualScheduleUpdateManyMutationInput, IndividualScheduleUncheckedUpdateManyWithoutTagsInput>
+  }
+
+  export type IndividualScheduleScalarWhereInput = {
+    AND?: IndividualScheduleScalarWhereInput | IndividualScheduleScalarWhereInput[]
+    OR?: IndividualScheduleScalarWhereInput[]
+    NOT?: IndividualScheduleScalarWhereInput | IndividualScheduleScalarWhereInput[]
+    id?: StringFilter<"IndividualSchedule"> | string
+    code?: StringNullableFilter<"IndividualSchedule"> | string | null
+    active?: BoolFilter<"IndividualSchedule"> | boolean
+    description?: StringNullableFilter<"IndividualSchedule"> | string | null
+    deletedAt?: DateTimeNullableFilter<"IndividualSchedule"> | Date | string | null
+    createdAt?: DateTimeFilter<"IndividualSchedule"> | Date | string
+    updatedAt?: DateTimeFilter<"IndividualSchedule"> | Date | string
+    createdBy?: UuidNullableFilter<"IndividualSchedule"> | string | null
+    title?: StringFilter<"IndividualSchedule"> | string
+    startTime?: DateTimeFilter<"IndividualSchedule"> | Date | string
+    endTime?: DateTimeFilter<"IndividualSchedule"> | Date | string
+    allDay?: BoolFilter<"IndividualSchedule"> | boolean
+    location?: StringNullableFilter<"IndividualSchedule"> | string | null
+    lecturerId?: StringFilter<"IndividualSchedule"> | string
+  }
+
+  export type LecturerCreateWithoutIndividualSchedulesInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    from?: Date | string | null
+    lectureID?: string | null
+    serviceDate?: Date | string | null
+    userProfile: UserProfileCreateNestedOneWithoutLecturerInput
+    organization: DM_DonViCreateNestedOneWithoutLecturersInput
+    lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
+    mainSubjectClasses?: SubjectClassCreateNestedManyWithoutMainLecturerInput
+    extraSubjectClasses?: SubjectClassCreateNestedManyWithoutExtraLecturerInput
+    enterGradeClasses?: SubjectClassCreateNestedManyWithoutEnterGradeLecturerInput
+    manageFixedClass?: FixedClassCreateNestedManyWithoutLecturerManagementInput
+    classSchedules?: ClassScheduleCreateNestedManyWithoutLecturerInput
+    extraClassSchedules?: ClassScheduleCreateNestedManyWithoutExtraLecturerInput
+    researchProjects?: ResearchProjectCreateNestedManyWithoutSupervisorInput
+    reviewedRegistrations?: StudentResearchRegistrationCreateNestedManyWithoutReviewedByInput
+    reviewedThesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutReviewedByInput
+    expertProfile?: ExpertProfileCreateNestedManyWithoutLecturerInput
+    survey?: SurveyCreateNestedManyWithoutLectureInput
+    clusterSurvey?: ClusterSurveyCreateNestedManyWithoutLecturersInput
+    examRoomsMain?: ExamListCreateNestedManyWithoutFirstSupervisorInput
+    examRoomsExtra?: ExamListCreateNestedManyWithoutSecondSupervisorInput
+    evaluationCriterions?: EvaluationCriterionCreateNestedManyWithoutLecturerInput
+    analysisCriterion?: AnalysisCriterionCreateNestedManyWithoutLecturerInput
+    evaluationCouncilMember?: EvaluationCouncilMemberCreateNestedManyWithoutLecturerInput
+    evaluationCriterionReviews?: EvaluationCriterionCreateNestedManyWithoutLecturerReviewInput
+    primarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutPrimarySupervisorInput
+    secondarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutSecondarySupervisorInput
+    notifications?: NotificationCreateNestedManyWithoutLecturerInput
+    personalWorkTags?: PersonalWorkTagCreateNestedManyWithoutLecturerInput
+  }
+
+  export type LecturerUncheckedCreateWithoutIndividualSchedulesInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    from?: Date | string | null
+    lectureID?: string | null
+    serviceDate?: Date | string | null
+    userProfileId: string
+    organizationId: string
+    lecturerTypeId: string
+    mainSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutMainLecturerInput
+    extraSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutExtraLecturerInput
+    enterGradeClasses?: SubjectClassUncheckedCreateNestedManyWithoutEnterGradeLecturerInput
+    manageFixedClass?: FixedClassUncheckedCreateNestedManyWithoutLecturerManagementInput
+    classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutLecturerInput
+    extraClassSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutExtraLecturerInput
+    researchProjects?: ResearchProjectUncheckedCreateNestedManyWithoutSupervisorInput
+    reviewedRegistrations?: StudentResearchRegistrationUncheckedCreateNestedManyWithoutReviewedByInput
+    reviewedThesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutReviewedByInput
+    expertProfile?: ExpertProfileUncheckedCreateNestedManyWithoutLecturerInput
+    survey?: SurveyUncheckedCreateNestedManyWithoutLectureInput
+    clusterSurvey?: ClusterSurveyUncheckedCreateNestedManyWithoutLecturersInput
+    examRoomsMain?: ExamListUncheckedCreateNestedManyWithoutFirstSupervisorInput
+    examRoomsExtra?: ExamListUncheckedCreateNestedManyWithoutSecondSupervisorInput
+    evaluationCriterions?: EvaluationCriterionUncheckedCreateNestedManyWithoutLecturerInput
+    analysisCriterion?: AnalysisCriterionUncheckedCreateNestedManyWithoutLecturerInput
+    evaluationCouncilMember?: EvaluationCouncilMemberUncheckedCreateNestedManyWithoutLecturerInput
+    evaluationCriterionReviews?: EvaluationCriterionUncheckedCreateNestedManyWithoutLecturerReviewInput
+    primarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutPrimarySupervisorInput
+    secondarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutSecondarySupervisorInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutLecturerInput
+    personalWorkTags?: PersonalWorkTagUncheckedCreateNestedManyWithoutLecturerInput
+  }
+
+  export type LecturerCreateOrConnectWithoutIndividualSchedulesInput = {
+    where: LecturerWhereUniqueInput
+    create: XOR<LecturerCreateWithoutIndividualSchedulesInput, LecturerUncheckedCreateWithoutIndividualSchedulesInput>
+  }
+
+  export type PersonalWorkTagCreateWithoutSchedulesInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    name: string
+    color?: string | null
+    sortOrder?: number
+    lecturer: LecturerCreateNestedOneWithoutPersonalWorkTagsInput
+  }
+
+  export type PersonalWorkTagUncheckedCreateWithoutSchedulesInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    name: string
+    color?: string | null
+    sortOrder?: number
+    lecturerId: string
+  }
+
+  export type PersonalWorkTagCreateOrConnectWithoutSchedulesInput = {
+    where: PersonalWorkTagWhereUniqueInput
+    create: XOR<PersonalWorkTagCreateWithoutSchedulesInput, PersonalWorkTagUncheckedCreateWithoutSchedulesInput>
+  }
+
+  export type LecturerUpsertWithoutIndividualSchedulesInput = {
+    update: XOR<LecturerUpdateWithoutIndividualSchedulesInput, LecturerUncheckedUpdateWithoutIndividualSchedulesInput>
+    create: XOR<LecturerCreateWithoutIndividualSchedulesInput, LecturerUncheckedCreateWithoutIndividualSchedulesInput>
+    where?: LecturerWhereInput
+  }
+
+  export type LecturerUpdateToOneWithWhereWithoutIndividualSchedulesInput = {
+    where?: LecturerWhereInput
+    data: XOR<LecturerUpdateWithoutIndividualSchedulesInput, LecturerUncheckedUpdateWithoutIndividualSchedulesInput>
+  }
+
+  export type LecturerUpdateWithoutIndividualSchedulesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+    serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
+    organization?: DM_DonViUpdateOneRequiredWithoutLecturersNestedInput
+    lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
+    mainSubjectClasses?: SubjectClassUpdateManyWithoutMainLecturerNestedInput
+    extraSubjectClasses?: SubjectClassUpdateManyWithoutExtraLecturerNestedInput
+    enterGradeClasses?: SubjectClassUpdateManyWithoutEnterGradeLecturerNestedInput
+    manageFixedClass?: FixedClassUpdateManyWithoutLecturerManagementNestedInput
+    classSchedules?: ClassScheduleUpdateManyWithoutLecturerNestedInput
+    extraClassSchedules?: ClassScheduleUpdateManyWithoutExtraLecturerNestedInput
+    researchProjects?: ResearchProjectUpdateManyWithoutSupervisorNestedInput
+    reviewedRegistrations?: StudentResearchRegistrationUpdateManyWithoutReviewedByNestedInput
+    reviewedThesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutReviewedByNestedInput
+    expertProfile?: ExpertProfileUpdateManyWithoutLecturerNestedInput
+    survey?: SurveyUpdateManyWithoutLectureNestedInput
+    clusterSurvey?: ClusterSurveyUpdateManyWithoutLecturersNestedInput
+    examRoomsMain?: ExamListUpdateManyWithoutFirstSupervisorNestedInput
+    examRoomsExtra?: ExamListUpdateManyWithoutSecondSupervisorNestedInput
+    evaluationCriterions?: EvaluationCriterionUpdateManyWithoutLecturerNestedInput
+    analysisCriterion?: AnalysisCriterionUpdateManyWithoutLecturerNestedInput
+    evaluationCouncilMember?: EvaluationCouncilMemberUpdateManyWithoutLecturerNestedInput
+    evaluationCriterionReviews?: EvaluationCriterionUpdateManyWithoutLecturerReviewNestedInput
+    primarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutPrimarySupervisorNestedInput
+    secondarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutSecondarySupervisorNestedInput
+    notifications?: NotificationUpdateManyWithoutLecturerNestedInput
+    personalWorkTags?: PersonalWorkTagUpdateManyWithoutLecturerNestedInput
+  }
+
+  export type LecturerUncheckedUpdateWithoutIndividualSchedulesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+    serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userProfileId?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    lecturerTypeId?: StringFieldUpdateOperationsInput | string
+    mainSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutMainLecturerNestedInput
+    extraSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutExtraLecturerNestedInput
+    enterGradeClasses?: SubjectClassUncheckedUpdateManyWithoutEnterGradeLecturerNestedInput
+    manageFixedClass?: FixedClassUncheckedUpdateManyWithoutLecturerManagementNestedInput
+    classSchedules?: ClassScheduleUncheckedUpdateManyWithoutLecturerNestedInput
+    extraClassSchedules?: ClassScheduleUncheckedUpdateManyWithoutExtraLecturerNestedInput
+    researchProjects?: ResearchProjectUncheckedUpdateManyWithoutSupervisorNestedInput
+    reviewedRegistrations?: StudentResearchRegistrationUncheckedUpdateManyWithoutReviewedByNestedInput
+    reviewedThesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutReviewedByNestedInput
+    expertProfile?: ExpertProfileUncheckedUpdateManyWithoutLecturerNestedInput
+    survey?: SurveyUncheckedUpdateManyWithoutLectureNestedInput
+    clusterSurvey?: ClusterSurveyUncheckedUpdateManyWithoutLecturersNestedInput
+    examRoomsMain?: ExamListUncheckedUpdateManyWithoutFirstSupervisorNestedInput
+    examRoomsExtra?: ExamListUncheckedUpdateManyWithoutSecondSupervisorNestedInput
+    evaluationCriterions?: EvaluationCriterionUncheckedUpdateManyWithoutLecturerNestedInput
+    analysisCriterion?: AnalysisCriterionUncheckedUpdateManyWithoutLecturerNestedInput
+    evaluationCouncilMember?: EvaluationCouncilMemberUncheckedUpdateManyWithoutLecturerNestedInput
+    evaluationCriterionReviews?: EvaluationCriterionUncheckedUpdateManyWithoutLecturerReviewNestedInput
+    primarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutPrimarySupervisorNestedInput
+    secondarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutSecondarySupervisorNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutLecturerNestedInput
+    personalWorkTags?: PersonalWorkTagUncheckedUpdateManyWithoutLecturerNestedInput
+  }
+
+  export type PersonalWorkTagUpsertWithWhereUniqueWithoutSchedulesInput = {
+    where: PersonalWorkTagWhereUniqueInput
+    update: XOR<PersonalWorkTagUpdateWithoutSchedulesInput, PersonalWorkTagUncheckedUpdateWithoutSchedulesInput>
+    create: XOR<PersonalWorkTagCreateWithoutSchedulesInput, PersonalWorkTagUncheckedCreateWithoutSchedulesInput>
+  }
+
+  export type PersonalWorkTagUpdateWithWhereUniqueWithoutSchedulesInput = {
+    where: PersonalWorkTagWhereUniqueInput
+    data: XOR<PersonalWorkTagUpdateWithoutSchedulesInput, PersonalWorkTagUncheckedUpdateWithoutSchedulesInput>
+  }
+
+  export type PersonalWorkTagUpdateManyWithWhereWithoutSchedulesInput = {
+    where: PersonalWorkTagScalarWhereInput
+    data: XOR<PersonalWorkTagUpdateManyMutationInput, PersonalWorkTagUncheckedUpdateManyWithoutSchedulesInput>
+  }
+
+  export type PersonalWorkTagScalarWhereInput = {
+    AND?: PersonalWorkTagScalarWhereInput | PersonalWorkTagScalarWhereInput[]
+    OR?: PersonalWorkTagScalarWhereInput[]
+    NOT?: PersonalWorkTagScalarWhereInput | PersonalWorkTagScalarWhereInput[]
+    id?: StringFilter<"PersonalWorkTag"> | string
+    code?: StringNullableFilter<"PersonalWorkTag"> | string | null
+    active?: BoolFilter<"PersonalWorkTag"> | boolean
+    description?: StringNullableFilter<"PersonalWorkTag"> | string | null
+    deletedAt?: DateTimeNullableFilter<"PersonalWorkTag"> | Date | string | null
+    createdAt?: DateTimeFilter<"PersonalWorkTag"> | Date | string
+    updatedAt?: DateTimeFilter<"PersonalWorkTag"> | Date | string
+    createdBy?: UuidNullableFilter<"PersonalWorkTag"> | string | null
+    name?: StringFilter<"PersonalWorkTag"> | string
+    color?: StringNullableFilter<"PersonalWorkTag"> | string | null
+    sortOrder?: IntFilter<"PersonalWorkTag"> | number
+    lecturerId?: StringFilter<"PersonalWorkTag"> | string
   }
 
   export type UserProfileCreateWithoutLecturerInput = {
@@ -611035,6 +615165,90 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type PersonalWorkTagCreateWithoutLecturerInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    name: string
+    color?: string | null
+    sortOrder?: number
+    schedules?: IndividualScheduleCreateNestedManyWithoutTagsInput
+  }
+
+  export type PersonalWorkTagUncheckedCreateWithoutLecturerInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    name: string
+    color?: string | null
+    sortOrder?: number
+    schedules?: IndividualScheduleUncheckedCreateNestedManyWithoutTagsInput
+  }
+
+  export type PersonalWorkTagCreateOrConnectWithoutLecturerInput = {
+    where: PersonalWorkTagWhereUniqueInput
+    create: XOR<PersonalWorkTagCreateWithoutLecturerInput, PersonalWorkTagUncheckedCreateWithoutLecturerInput>
+  }
+
+  export type PersonalWorkTagCreateManyLecturerInputEnvelope = {
+    data: PersonalWorkTagCreateManyLecturerInput | PersonalWorkTagCreateManyLecturerInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type IndividualScheduleCreateWithoutLecturerInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    title: string
+    startTime: Date | string
+    endTime: Date | string
+    allDay?: boolean
+    location?: string | null
+    tags?: PersonalWorkTagCreateNestedManyWithoutSchedulesInput
+  }
+
+  export type IndividualScheduleUncheckedCreateWithoutLecturerInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    title: string
+    startTime: Date | string
+    endTime: Date | string
+    allDay?: boolean
+    location?: string | null
+    tags?: PersonalWorkTagUncheckedCreateNestedManyWithoutSchedulesInput
+  }
+
+  export type IndividualScheduleCreateOrConnectWithoutLecturerInput = {
+    where: IndividualScheduleWhereUniqueInput
+    create: XOR<IndividualScheduleCreateWithoutLecturerInput, IndividualScheduleUncheckedCreateWithoutLecturerInput>
+  }
+
+  export type IndividualScheduleCreateManyLecturerInputEnvelope = {
+    data: IndividualScheduleCreateManyLecturerInput | IndividualScheduleCreateManyLecturerInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserProfileUpsertWithoutLecturerInput = {
     update: XOR<UserProfileUpdateWithoutLecturerInput, UserProfileUncheckedUpdateWithoutLecturerInput>
     create: XOR<UserProfileCreateWithoutLecturerInput, UserProfileUncheckedCreateWithoutLecturerInput>
@@ -611963,6 +616177,38 @@ export namespace Prisma {
   export type NotificationUpdateManyWithWhereWithoutLecturerInput = {
     where: NotificationScalarWhereInput
     data: XOR<NotificationUpdateManyMutationInput, NotificationUncheckedUpdateManyWithoutLecturerInput>
+  }
+
+  export type PersonalWorkTagUpsertWithWhereUniqueWithoutLecturerInput = {
+    where: PersonalWorkTagWhereUniqueInput
+    update: XOR<PersonalWorkTagUpdateWithoutLecturerInput, PersonalWorkTagUncheckedUpdateWithoutLecturerInput>
+    create: XOR<PersonalWorkTagCreateWithoutLecturerInput, PersonalWorkTagUncheckedCreateWithoutLecturerInput>
+  }
+
+  export type PersonalWorkTagUpdateWithWhereUniqueWithoutLecturerInput = {
+    where: PersonalWorkTagWhereUniqueInput
+    data: XOR<PersonalWorkTagUpdateWithoutLecturerInput, PersonalWorkTagUncheckedUpdateWithoutLecturerInput>
+  }
+
+  export type PersonalWorkTagUpdateManyWithWhereWithoutLecturerInput = {
+    where: PersonalWorkTagScalarWhereInput
+    data: XOR<PersonalWorkTagUpdateManyMutationInput, PersonalWorkTagUncheckedUpdateManyWithoutLecturerInput>
+  }
+
+  export type IndividualScheduleUpsertWithWhereUniqueWithoutLecturerInput = {
+    where: IndividualScheduleWhereUniqueInput
+    update: XOR<IndividualScheduleUpdateWithoutLecturerInput, IndividualScheduleUncheckedUpdateWithoutLecturerInput>
+    create: XOR<IndividualScheduleCreateWithoutLecturerInput, IndividualScheduleUncheckedCreateWithoutLecturerInput>
+  }
+
+  export type IndividualScheduleUpdateWithWhereUniqueWithoutLecturerInput = {
+    where: IndividualScheduleWhereUniqueInput
+    data: XOR<IndividualScheduleUpdateWithoutLecturerInput, IndividualScheduleUncheckedUpdateWithoutLecturerInput>
+  }
+
+  export type IndividualScheduleUpdateManyWithWhereWithoutLecturerInput = {
+    where: IndividualScheduleScalarWhereInput
+    data: XOR<IndividualScheduleUpdateManyMutationInput, IndividualScheduleUncheckedUpdateManyWithoutLecturerInput>
   }
 
   export type UserProfileCreateWithoutLecturerHistoryInput = {
@@ -612964,6 +617210,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutPrimarySupervisorInput
     secondarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutSecondarySupervisorInput
     notifications?: NotificationCreateNestedManyWithoutLecturerInput
+    personalWorkTags?: PersonalWorkTagCreateNestedManyWithoutLecturerInput
+    individualSchedules?: IndividualScheduleCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerUncheckedCreateWithoutLecturerTypeInput = {
@@ -613001,6 +617249,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutPrimarySupervisorInput
     secondarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutSecondarySupervisorInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutLecturerInput
+    personalWorkTags?: PersonalWorkTagUncheckedCreateNestedManyWithoutLecturerInput
+    individualSchedules?: IndividualScheduleUncheckedCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerCreateOrConnectWithoutLecturerTypeInput = {
@@ -615508,6 +619758,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutPrimarySupervisorInput
     secondarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutSecondarySupervisorInput
     notifications?: NotificationCreateNestedManyWithoutLecturerInput
+    personalWorkTags?: PersonalWorkTagCreateNestedManyWithoutLecturerInput
+    individualSchedules?: IndividualScheduleCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerUncheckedCreateWithoutResearchProjectsInput = {
@@ -615545,6 +619797,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutPrimarySupervisorInput
     secondarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutSecondarySupervisorInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutLecturerInput
+    personalWorkTags?: PersonalWorkTagUncheckedCreateNestedManyWithoutLecturerInput
+    individualSchedules?: IndividualScheduleUncheckedCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerCreateOrConnectWithoutResearchProjectsInput = {
@@ -615735,6 +619989,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutPrimarySupervisorNestedInput
     secondarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutSecondarySupervisorNestedInput
     notifications?: NotificationUpdateManyWithoutLecturerNestedInput
+    personalWorkTags?: PersonalWorkTagUpdateManyWithoutLecturerNestedInput
+    individualSchedules?: IndividualScheduleUpdateManyWithoutLecturerNestedInput
   }
 
   export type LecturerUncheckedUpdateWithoutResearchProjectsInput = {
@@ -615772,6 +620028,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutPrimarySupervisorNestedInput
     secondarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutSecondarySupervisorNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutLecturerNestedInput
+    personalWorkTags?: PersonalWorkTagUncheckedUpdateManyWithoutLecturerNestedInput
+    individualSchedules?: IndividualScheduleUncheckedUpdateManyWithoutLecturerNestedInput
   }
 
   export type DM_DonViUpsertWithoutResearchProjectsInput = {
@@ -616136,6 +620394,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutPrimarySupervisorInput
     secondarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutSecondarySupervisorInput
     notifications?: NotificationCreateNestedManyWithoutLecturerInput
+    personalWorkTags?: PersonalWorkTagCreateNestedManyWithoutLecturerInput
+    individualSchedules?: IndividualScheduleCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerUncheckedCreateWithoutReviewedRegistrationsInput = {
@@ -616173,6 +620433,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutPrimarySupervisorInput
     secondarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutSecondarySupervisorInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutLecturerInput
+    personalWorkTags?: PersonalWorkTagUncheckedCreateNestedManyWithoutLecturerInput
+    individualSchedules?: IndividualScheduleUncheckedCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerCreateOrConnectWithoutReviewedRegistrationsInput = {
@@ -616454,6 +620716,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutPrimarySupervisorNestedInput
     secondarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutSecondarySupervisorNestedInput
     notifications?: NotificationUpdateManyWithoutLecturerNestedInput
+    personalWorkTags?: PersonalWorkTagUpdateManyWithoutLecturerNestedInput
+    individualSchedules?: IndividualScheduleUpdateManyWithoutLecturerNestedInput
   }
 
   export type LecturerUncheckedUpdateWithoutReviewedRegistrationsInput = {
@@ -616491,6 +620755,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutPrimarySupervisorNestedInput
     secondarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutSecondarySupervisorNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutLecturerNestedInput
+    personalWorkTags?: PersonalWorkTagUncheckedUpdateManyWithoutLecturerNestedInput
+    individualSchedules?: IndividualScheduleUncheckedUpdateManyWithoutLecturerNestedInput
   }
 
   export type TrainingObjectTypeCreateWithoutThesisSessionInput = {
@@ -617160,6 +621426,8 @@ export namespace Prisma {
     evaluationCriterionReviews?: EvaluationCriterionCreateNestedManyWithoutLecturerReviewInput
     secondarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutSecondarySupervisorInput
     notifications?: NotificationCreateNestedManyWithoutLecturerInput
+    personalWorkTags?: PersonalWorkTagCreateNestedManyWithoutLecturerInput
+    individualSchedules?: IndividualScheduleCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerUncheckedCreateWithoutPrimarySupervisorThesisProjectInput = {
@@ -617197,6 +621465,8 @@ export namespace Prisma {
     evaluationCriterionReviews?: EvaluationCriterionUncheckedCreateNestedManyWithoutLecturerReviewInput
     secondarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutSecondarySupervisorInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutLecturerInput
+    personalWorkTags?: PersonalWorkTagUncheckedCreateNestedManyWithoutLecturerInput
+    individualSchedules?: IndividualScheduleUncheckedCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerCreateOrConnectWithoutPrimarySupervisorThesisProjectInput = {
@@ -617239,6 +621509,8 @@ export namespace Prisma {
     evaluationCriterionReviews?: EvaluationCriterionCreateNestedManyWithoutLecturerReviewInput
     primarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutPrimarySupervisorInput
     notifications?: NotificationCreateNestedManyWithoutLecturerInput
+    personalWorkTags?: PersonalWorkTagCreateNestedManyWithoutLecturerInput
+    individualSchedules?: IndividualScheduleCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerUncheckedCreateWithoutSecondarySupervisorThesisProjectInput = {
@@ -617276,6 +621548,8 @@ export namespace Prisma {
     evaluationCriterionReviews?: EvaluationCriterionUncheckedCreateNestedManyWithoutLecturerReviewInput
     primarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutPrimarySupervisorInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutLecturerInput
+    personalWorkTags?: PersonalWorkTagUncheckedCreateNestedManyWithoutLecturerInput
+    individualSchedules?: IndividualScheduleUncheckedCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerCreateOrConnectWithoutSecondarySupervisorThesisProjectInput = {
@@ -618243,6 +622517,8 @@ export namespace Prisma {
     evaluationCriterionReviews?: EvaluationCriterionUpdateManyWithoutLecturerReviewNestedInput
     secondarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutSecondarySupervisorNestedInput
     notifications?: NotificationUpdateManyWithoutLecturerNestedInput
+    personalWorkTags?: PersonalWorkTagUpdateManyWithoutLecturerNestedInput
+    individualSchedules?: IndividualScheduleUpdateManyWithoutLecturerNestedInput
   }
 
   export type LecturerUncheckedUpdateWithoutPrimarySupervisorThesisProjectInput = {
@@ -618280,6 +622556,8 @@ export namespace Prisma {
     evaluationCriterionReviews?: EvaluationCriterionUncheckedUpdateManyWithoutLecturerReviewNestedInput
     secondarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutSecondarySupervisorNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutLecturerNestedInput
+    personalWorkTags?: PersonalWorkTagUncheckedUpdateManyWithoutLecturerNestedInput
+    individualSchedules?: IndividualScheduleUncheckedUpdateManyWithoutLecturerNestedInput
   }
 
   export type LecturerUpsertWithoutSecondarySupervisorThesisProjectInput = {
@@ -618328,6 +622606,8 @@ export namespace Prisma {
     evaluationCriterionReviews?: EvaluationCriterionUpdateManyWithoutLecturerReviewNestedInput
     primarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutPrimarySupervisorNestedInput
     notifications?: NotificationUpdateManyWithoutLecturerNestedInput
+    personalWorkTags?: PersonalWorkTagUpdateManyWithoutLecturerNestedInput
+    individualSchedules?: IndividualScheduleUpdateManyWithoutLecturerNestedInput
   }
 
   export type LecturerUncheckedUpdateWithoutSecondarySupervisorThesisProjectInput = {
@@ -618365,6 +622645,8 @@ export namespace Prisma {
     evaluationCriterionReviews?: EvaluationCriterionUncheckedUpdateManyWithoutLecturerReviewNestedInput
     primarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutPrimarySupervisorNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutLecturerNestedInput
+    personalWorkTags?: PersonalWorkTagUncheckedUpdateManyWithoutLecturerNestedInput
+    individualSchedules?: IndividualScheduleUncheckedUpdateManyWithoutLecturerNestedInput
   }
 
   export type ExpertProfileUpsertWithoutThirdSupervisedThesesInput = {
@@ -619892,6 +624174,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutPrimarySupervisorInput
     secondarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutSecondarySupervisorInput
     notifications?: NotificationCreateNestedManyWithoutLecturerInput
+    personalWorkTags?: PersonalWorkTagCreateNestedManyWithoutLecturerInput
+    individualSchedules?: IndividualScheduleCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerUncheckedCreateWithoutReviewedThesisRegistrationsInput = {
@@ -619929,6 +624213,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutPrimarySupervisorInput
     secondarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutSecondarySupervisorInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutLecturerInput
+    personalWorkTags?: PersonalWorkTagUncheckedCreateNestedManyWithoutLecturerInput
+    individualSchedules?: IndividualScheduleUncheckedCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerCreateOrConnectWithoutReviewedThesisRegistrationsInput = {
@@ -620414,6 +624700,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutPrimarySupervisorNestedInput
     secondarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutSecondarySupervisorNestedInput
     notifications?: NotificationUpdateManyWithoutLecturerNestedInput
+    personalWorkTags?: PersonalWorkTagUpdateManyWithoutLecturerNestedInput
+    individualSchedules?: IndividualScheduleUpdateManyWithoutLecturerNestedInput
   }
 
   export type LecturerUncheckedUpdateWithoutReviewedThesisRegistrationsInput = {
@@ -620451,6 +624739,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutPrimarySupervisorNestedInput
     secondarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutSecondarySupervisorNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutLecturerNestedInput
+    personalWorkTags?: PersonalWorkTagUncheckedUpdateManyWithoutLecturerNestedInput
+    individualSchedules?: IndividualScheduleUncheckedUpdateManyWithoutLecturerNestedInput
   }
 
   export type CouncilUpsertWithoutStudentThesisRegistrationInput = {
@@ -620529,6 +624819,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutPrimarySupervisorInput
     secondarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutSecondarySupervisorInput
     notifications?: NotificationCreateNestedManyWithoutLecturerInput
+    personalWorkTags?: PersonalWorkTagCreateNestedManyWithoutLecturerInput
+    individualSchedules?: IndividualScheduleCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerUncheckedCreateWithoutExpertProfileInput = {
@@ -620566,6 +624858,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutPrimarySupervisorInput
     secondarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutSecondarySupervisorInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutLecturerInput
+    personalWorkTags?: PersonalWorkTagUncheckedCreateNestedManyWithoutLecturerInput
+    individualSchedules?: IndividualScheduleUncheckedCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerCreateOrConnectWithoutExpertProfileInput = {
@@ -620675,7 +624969,7 @@ export namespace Prisma {
     name: string
     englishName?: string | null
     shortName?: string | null
-    summary: string
+    summary?: string | null
     numberCreditsMajor?: number
     numberCreditsRequired?: number
     numberCreditsElective?: number
@@ -620702,7 +624996,7 @@ export namespace Prisma {
     name: string
     englishName?: string | null
     shortName?: string | null
-    summary: string
+    summary?: string | null
     numberCreditsMajor?: number
     numberCreditsRequired?: number
     numberCreditsElective?: number
@@ -621589,6 +625883,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutPrimarySupervisorNestedInput
     secondarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutSecondarySupervisorNestedInput
     notifications?: NotificationUpdateManyWithoutLecturerNestedInput
+    personalWorkTags?: PersonalWorkTagUpdateManyWithoutLecturerNestedInput
+    individualSchedules?: IndividualScheduleUpdateManyWithoutLecturerNestedInput
   }
 
   export type LecturerUncheckedUpdateWithoutExpertProfileInput = {
@@ -621626,6 +625922,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutPrimarySupervisorNestedInput
     secondarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutSecondarySupervisorNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutLecturerNestedInput
+    personalWorkTags?: PersonalWorkTagUncheckedUpdateManyWithoutLecturerNestedInput
+    individualSchedules?: IndividualScheduleUncheckedUpdateManyWithoutLecturerNestedInput
   }
 
   export type DM_HocViUpsertWithoutExpertProfileInput = {
@@ -632404,7 +636702,7 @@ export namespace Prisma {
     name: string
     englishName?: string | null
     shortName?: string | null
-    summary: string
+    summary?: string | null
     numberCreditsMajor?: number
     numberCreditsRequired?: number
     numberCreditsElective?: number
@@ -632431,7 +636729,7 @@ export namespace Prisma {
     name: string
     englishName?: string | null
     shortName?: string | null
-    summary: string
+    summary?: string | null
     numberCreditsMajor?: number
     numberCreditsRequired?: number
     numberCreditsElective?: number
@@ -633124,7 +637422,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
-    summary?: StringFieldUpdateOperationsInput | string
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
     numberCreditsMajor?: IntFieldUpdateOperationsInput | number
     numberCreditsRequired?: IntFieldUpdateOperationsInput | number
     numberCreditsElective?: IntFieldUpdateOperationsInput | number
@@ -633151,7 +637449,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
-    summary?: StringFieldUpdateOperationsInput | string
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
     numberCreditsMajor?: IntFieldUpdateOperationsInput | number
     numberCreditsRequired?: IntFieldUpdateOperationsInput | number
     numberCreditsElective?: IntFieldUpdateOperationsInput | number
@@ -634269,7 +638567,7 @@ export namespace Prisma {
     name: string
     englishName?: string | null
     shortName?: string | null
-    summary: string
+    summary?: string | null
     numberCreditsMajor?: number
     numberCreditsRequired?: number
     numberCreditsElective?: number
@@ -634296,7 +638594,7 @@ export namespace Prisma {
     name: string
     englishName?: string | null
     shortName?: string | null
-    summary: string
+    summary?: string | null
     numberCreditsMajor?: number
     numberCreditsRequired?: number
     numberCreditsElective?: number
@@ -634859,7 +639157,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
-    summary?: StringFieldUpdateOperationsInput | string
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
     numberCreditsMajor?: IntFieldUpdateOperationsInput | number
     numberCreditsRequired?: IntFieldUpdateOperationsInput | number
     numberCreditsElective?: IntFieldUpdateOperationsInput | number
@@ -634886,7 +639184,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
-    summary?: StringFieldUpdateOperationsInput | string
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
     numberCreditsMajor?: IntFieldUpdateOperationsInput | number
     numberCreditsRequired?: IntFieldUpdateOperationsInput | number
     numberCreditsElective?: IntFieldUpdateOperationsInput | number
@@ -642754,6 +647052,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutPrimarySupervisorInput
     secondarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutSecondarySupervisorInput
     notifications?: NotificationCreateNestedManyWithoutLecturerInput
+    personalWorkTags?: PersonalWorkTagCreateNestedManyWithoutLecturerInput
+    individualSchedules?: IndividualScheduleCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerUncheckedCreateWithoutAnalysisCriterionInput = {
@@ -642791,6 +647091,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutPrimarySupervisorInput
     secondarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutSecondarySupervisorInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutLecturerInput
+    personalWorkTags?: PersonalWorkTagUncheckedCreateNestedManyWithoutLecturerInput
+    individualSchedules?: IndividualScheduleUncheckedCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerCreateOrConnectWithoutAnalysisCriterionInput = {
@@ -642971,6 +647273,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutPrimarySupervisorNestedInput
     secondarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutSecondarySupervisorNestedInput
     notifications?: NotificationUpdateManyWithoutLecturerNestedInput
+    personalWorkTags?: PersonalWorkTagUpdateManyWithoutLecturerNestedInput
+    individualSchedules?: IndividualScheduleUpdateManyWithoutLecturerNestedInput
   }
 
   export type LecturerUncheckedUpdateWithoutAnalysisCriterionInput = {
@@ -643008,6 +647312,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutPrimarySupervisorNestedInput
     secondarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutSecondarySupervisorNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutLecturerNestedInput
+    personalWorkTags?: PersonalWorkTagUncheckedUpdateManyWithoutLecturerNestedInput
+    individualSchedules?: IndividualScheduleUncheckedUpdateManyWithoutLecturerNestedInput
   }
 
   export type RequirementCriterionUpsertWithWhereUniqueWithoutAnalysisCriterionInput = {
@@ -643132,6 +647438,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutPrimarySupervisorInput
     secondarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutSecondarySupervisorInput
     notifications?: NotificationCreateNestedManyWithoutLecturerInput
+    personalWorkTags?: PersonalWorkTagCreateNestedManyWithoutLecturerInput
+    individualSchedules?: IndividualScheduleCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerUncheckedCreateWithoutEvaluationCriterionsInput = {
@@ -643169,6 +647477,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutPrimarySupervisorInput
     secondarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutSecondarySupervisorInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutLecturerInput
+    personalWorkTags?: PersonalWorkTagUncheckedCreateNestedManyWithoutLecturerInput
+    individualSchedules?: IndividualScheduleUncheckedCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerCreateOrConnectWithoutEvaluationCriterionsInput = {
@@ -643246,6 +647556,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutPrimarySupervisorInput
     secondarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutSecondarySupervisorInput
     notifications?: NotificationCreateNestedManyWithoutLecturerInput
+    personalWorkTags?: PersonalWorkTagCreateNestedManyWithoutLecturerInput
+    individualSchedules?: IndividualScheduleCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerUncheckedCreateWithoutEvaluationCriterionReviewsInput = {
@@ -643283,6 +647595,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutPrimarySupervisorInput
     secondarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutSecondarySupervisorInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutLecturerInput
+    personalWorkTags?: PersonalWorkTagUncheckedCreateNestedManyWithoutLecturerInput
+    individualSchedules?: IndividualScheduleUncheckedCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerCreateOrConnectWithoutEvaluationCriterionReviewsInput = {
@@ -643417,6 +647731,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutPrimarySupervisorNestedInput
     secondarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutSecondarySupervisorNestedInput
     notifications?: NotificationUpdateManyWithoutLecturerNestedInput
+    personalWorkTags?: PersonalWorkTagUpdateManyWithoutLecturerNestedInput
+    individualSchedules?: IndividualScheduleUpdateManyWithoutLecturerNestedInput
   }
 
   export type LecturerUncheckedUpdateWithoutEvaluationCriterionsInput = {
@@ -643454,6 +647770,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutPrimarySupervisorNestedInput
     secondarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutSecondarySupervisorNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutLecturerNestedInput
+    personalWorkTags?: PersonalWorkTagUncheckedUpdateManyWithoutLecturerNestedInput
+    individualSchedules?: IndividualScheduleUncheckedUpdateManyWithoutLecturerNestedInput
   }
 
   export type EvaluationCouncilMemberUpsertWithoutEvaluationCriterionsInput = {
@@ -644111,6 +648429,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutPrimarySupervisorInput
     secondarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutSecondarySupervisorInput
     notifications?: NotificationCreateNestedManyWithoutLecturerInput
+    personalWorkTags?: PersonalWorkTagCreateNestedManyWithoutLecturerInput
+    individualSchedules?: IndividualScheduleCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerUncheckedCreateWithoutEvaluationCouncilMemberInput = {
@@ -644148,6 +648468,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutPrimarySupervisorInput
     secondarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutSecondarySupervisorInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutLecturerInput
+    personalWorkTags?: PersonalWorkTagUncheckedCreateNestedManyWithoutLecturerInput
+    individualSchedules?: IndividualScheduleUncheckedCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerCreateOrConnectWithoutEvaluationCouncilMemberInput = {
@@ -644296,6 +648618,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutPrimarySupervisorNestedInput
     secondarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutSecondarySupervisorNestedInput
     notifications?: NotificationUpdateManyWithoutLecturerNestedInput
+    personalWorkTags?: PersonalWorkTagUpdateManyWithoutLecturerNestedInput
+    individualSchedules?: IndividualScheduleUpdateManyWithoutLecturerNestedInput
   }
 
   export type LecturerUncheckedUpdateWithoutEvaluationCouncilMemberInput = {
@@ -644333,6 +648657,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutPrimarySupervisorNestedInput
     secondarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutSecondarySupervisorNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutLecturerNestedInput
+    personalWorkTags?: PersonalWorkTagUncheckedUpdateManyWithoutLecturerNestedInput
+    individualSchedules?: IndividualScheduleUncheckedUpdateManyWithoutLecturerNestedInput
   }
 
   export type EvaluationCriterionUpsertWithWhereUniqueWithoutReviewerInput = {
@@ -647184,6 +651510,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutPrimarySupervisorInput
     secondarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutSecondarySupervisorInput
     notifications?: NotificationCreateNestedManyWithoutLecturerInput
+    personalWorkTags?: PersonalWorkTagCreateNestedManyWithoutLecturerInput
+    individualSchedules?: IndividualScheduleCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerUncheckedCreateWithoutExamRoomsMainInput = {
@@ -647221,6 +651549,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutPrimarySupervisorInput
     secondarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutSecondarySupervisorInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutLecturerInput
+    personalWorkTags?: PersonalWorkTagUncheckedCreateNestedManyWithoutLecturerInput
+    individualSchedules?: IndividualScheduleUncheckedCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerCreateOrConnectWithoutExamRoomsMainInput = {
@@ -647263,6 +651593,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutPrimarySupervisorInput
     secondarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutSecondarySupervisorInput
     notifications?: NotificationCreateNestedManyWithoutLecturerInput
+    personalWorkTags?: PersonalWorkTagCreateNestedManyWithoutLecturerInput
+    individualSchedules?: IndividualScheduleCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerUncheckedCreateWithoutExamRoomsExtraInput = {
@@ -647300,6 +651632,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutPrimarySupervisorInput
     secondarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutSecondarySupervisorInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutLecturerInput
+    personalWorkTags?: PersonalWorkTagUncheckedCreateNestedManyWithoutLecturerInput
+    individualSchedules?: IndividualScheduleUncheckedCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerCreateOrConnectWithoutExamRoomsExtraInput = {
@@ -647428,6 +651762,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutPrimarySupervisorNestedInput
     secondarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutSecondarySupervisorNestedInput
     notifications?: NotificationUpdateManyWithoutLecturerNestedInput
+    personalWorkTags?: PersonalWorkTagUpdateManyWithoutLecturerNestedInput
+    individualSchedules?: IndividualScheduleUpdateManyWithoutLecturerNestedInput
   }
 
   export type LecturerUncheckedUpdateWithoutExamRoomsMainInput = {
@@ -647465,6 +651801,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutPrimarySupervisorNestedInput
     secondarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutSecondarySupervisorNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutLecturerNestedInput
+    personalWorkTags?: PersonalWorkTagUncheckedUpdateManyWithoutLecturerNestedInput
+    individualSchedules?: IndividualScheduleUncheckedUpdateManyWithoutLecturerNestedInput
   }
 
   export type LecturerUpsertWithoutExamRoomsExtraInput = {
@@ -647513,6 +651851,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutPrimarySupervisorNestedInput
     secondarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutSecondarySupervisorNestedInput
     notifications?: NotificationUpdateManyWithoutLecturerNestedInput
+    personalWorkTags?: PersonalWorkTagUpdateManyWithoutLecturerNestedInput
+    individualSchedules?: IndividualScheduleUpdateManyWithoutLecturerNestedInput
   }
 
   export type LecturerUncheckedUpdateWithoutExamRoomsExtraInput = {
@@ -647550,6 +651890,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutPrimarySupervisorNestedInput
     secondarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutSecondarySupervisorNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutLecturerNestedInput
+    personalWorkTags?: PersonalWorkTagUncheckedUpdateManyWithoutLecturerNestedInput
+    individualSchedules?: IndividualScheduleUncheckedUpdateManyWithoutLecturerNestedInput
   }
 
   export type ExamPaperUpsertWithWhereUniqueWithoutExamListInput = {
@@ -649966,7 +654308,7 @@ export namespace Prisma {
     name: string
     englishName?: string | null
     shortName?: string | null
-    summary: string
+    summary?: string | null
     numberCreditsMajor?: number
     numberCreditsRequired?: number
     numberCreditsElective?: number
@@ -649993,7 +654335,7 @@ export namespace Prisma {
     name: string
     englishName?: string | null
     shortName?: string | null
-    summary: string
+    summary?: string | null
     numberCreditsMajor?: number
     numberCreditsRequired?: number
     numberCreditsElective?: number
@@ -651207,6 +655549,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutPrimarySupervisorInput
     secondarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutSecondarySupervisorInput
     notifications?: NotificationCreateNestedManyWithoutLecturerInput
+    personalWorkTags?: PersonalWorkTagCreateNestedManyWithoutLecturerInput
+    individualSchedules?: IndividualScheduleCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerUncheckedCreateWithoutClusterSurveyInput = {
@@ -651244,6 +655588,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutPrimarySupervisorInput
     secondarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutSecondarySupervisorInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutLecturerInput
+    personalWorkTags?: PersonalWorkTagUncheckedCreateNestedManyWithoutLecturerInput
+    individualSchedules?: IndividualScheduleUncheckedCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerCreateOrConnectWithoutClusterSurveyInput = {
@@ -651612,6 +655958,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutPrimarySupervisorInput
     secondarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutSecondarySupervisorInput
     notifications?: NotificationCreateNestedManyWithoutLecturerInput
+    personalWorkTags?: PersonalWorkTagCreateNestedManyWithoutLecturerInput
+    individualSchedules?: IndividualScheduleCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerUncheckedCreateWithoutSurveyInput = {
@@ -651649,6 +655997,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutPrimarySupervisorInput
     secondarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutSecondarySupervisorInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutLecturerInput
+    personalWorkTags?: PersonalWorkTagUncheckedCreateNestedManyWithoutLecturerInput
+    individualSchedules?: IndividualScheduleUncheckedCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerCreateOrConnectWithoutSurveyInput = {
@@ -652181,6 +656531,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutPrimarySupervisorNestedInput
     secondarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutSecondarySupervisorNestedInput
     notifications?: NotificationUpdateManyWithoutLecturerNestedInput
+    personalWorkTags?: PersonalWorkTagUpdateManyWithoutLecturerNestedInput
+    individualSchedules?: IndividualScheduleUpdateManyWithoutLecturerNestedInput
   }
 
   export type LecturerUncheckedUpdateWithoutSurveyInput = {
@@ -652218,6 +656570,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutPrimarySupervisorNestedInput
     secondarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutSecondarySupervisorNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutLecturerNestedInput
+    personalWorkTags?: PersonalWorkTagUncheckedUpdateManyWithoutLecturerNestedInput
+    individualSchedules?: IndividualScheduleUncheckedUpdateManyWithoutLecturerNestedInput
   }
 
   export type SubjectClassUpsertWithoutSurveyInput = {
@@ -672160,7 +676514,7 @@ export namespace Prisma {
     name: string
     englishName?: string | null
     shortName?: string | null
-    summary: string
+    summary?: string | null
     numberCreditsMajor?: number
     numberCreditsRequired?: number
     numberCreditsElective?: number
@@ -672181,7 +676535,7 @@ export namespace Prisma {
     name: string
     englishName?: string | null
     shortName?: string | null
-    summary: string
+    summary?: string | null
     numberCreditsMajor?: number
     numberCreditsRequired?: number
     numberCreditsElective?: number
@@ -672202,7 +676556,7 @@ export namespace Prisma {
     name: string
     englishName?: string | null
     shortName?: string | null
-    summary: string
+    summary?: string | null
     numberCreditsMajor?: number
     numberCreditsRequired?: number
     numberCreditsElective?: number
@@ -672332,6 +676686,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutPrimarySupervisorNestedInput
     secondarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutSecondarySupervisorNestedInput
     notifications?: NotificationUpdateManyWithoutLecturerNestedInput
+    personalWorkTags?: PersonalWorkTagUpdateManyWithoutLecturerNestedInput
+    individualSchedules?: IndividualScheduleUpdateManyWithoutLecturerNestedInput
   }
 
   export type LecturerUncheckedUpdateWithoutOrganizationInput = {
@@ -672369,6 +676725,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutPrimarySupervisorNestedInput
     secondarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutSecondarySupervisorNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutLecturerNestedInput
+    personalWorkTags?: PersonalWorkTagUncheckedUpdateManyWithoutLecturerNestedInput
+    individualSchedules?: IndividualScheduleUncheckedUpdateManyWithoutLecturerNestedInput
   }
 
   export type LecturerUncheckedUpdateManyWithoutOrganizationInput = {
@@ -672937,7 +677295,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
-    summary?: StringFieldUpdateOperationsInput | string
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
     numberCreditsMajor?: IntFieldUpdateOperationsInput | number
     numberCreditsRequired?: IntFieldUpdateOperationsInput | number
     numberCreditsElective?: IntFieldUpdateOperationsInput | number
@@ -672964,7 +677322,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
-    summary?: StringFieldUpdateOperationsInput | string
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
     numberCreditsMajor?: IntFieldUpdateOperationsInput | number
     numberCreditsRequired?: IntFieldUpdateOperationsInput | number
     numberCreditsElective?: IntFieldUpdateOperationsInput | number
@@ -672991,7 +677349,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
-    summary?: StringFieldUpdateOperationsInput | string
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
     numberCreditsMajor?: IntFieldUpdateOperationsInput | number
     numberCreditsRequired?: IntFieldUpdateOperationsInput | number
     numberCreditsElective?: IntFieldUpdateOperationsInput | number
@@ -673012,7 +677370,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
-    summary?: StringFieldUpdateOperationsInput | string
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
     numberCreditsMajor?: IntFieldUpdateOperationsInput | number
     numberCreditsRequired?: IntFieldUpdateOperationsInput | number
     numberCreditsElective?: IntFieldUpdateOperationsInput | number
@@ -673039,7 +677397,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
-    summary?: StringFieldUpdateOperationsInput | string
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
     numberCreditsMajor?: IntFieldUpdateOperationsInput | number
     numberCreditsRequired?: IntFieldUpdateOperationsInput | number
     numberCreditsElective?: IntFieldUpdateOperationsInput | number
@@ -673066,7 +677424,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
-    summary?: StringFieldUpdateOperationsInput | string
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
     numberCreditsMajor?: IntFieldUpdateOperationsInput | number
     numberCreditsRequired?: IntFieldUpdateOperationsInput | number
     numberCreditsElective?: IntFieldUpdateOperationsInput | number
@@ -673087,7 +677445,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
-    summary?: StringFieldUpdateOperationsInput | string
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
     numberCreditsMajor?: IntFieldUpdateOperationsInput | number
     numberCreditsRequired?: IntFieldUpdateOperationsInput | number
     numberCreditsElective?: IntFieldUpdateOperationsInput | number
@@ -673114,7 +677472,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
-    summary?: StringFieldUpdateOperationsInput | string
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
     numberCreditsMajor?: IntFieldUpdateOperationsInput | number
     numberCreditsRequired?: IntFieldUpdateOperationsInput | number
     numberCreditsElective?: IntFieldUpdateOperationsInput | number
@@ -673141,7 +677499,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
-    summary?: StringFieldUpdateOperationsInput | string
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
     numberCreditsMajor?: IntFieldUpdateOperationsInput | number
     numberCreditsRequired?: IntFieldUpdateOperationsInput | number
     numberCreditsElective?: IntFieldUpdateOperationsInput | number
@@ -703318,7 +707676,7 @@ export namespace Prisma {
     name: string
     englishName?: string | null
     shortName?: string | null
-    summary: string
+    summary?: string | null
     numberCreditsMajor?: number
     numberCreditsRequired?: number
     numberCreditsElective?: number
@@ -703412,7 +707770,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
-    summary?: StringFieldUpdateOperationsInput | string
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
     numberCreditsMajor?: IntFieldUpdateOperationsInput | number
     numberCreditsRequired?: IntFieldUpdateOperationsInput | number
     numberCreditsElective?: IntFieldUpdateOperationsInput | number
@@ -703439,7 +707797,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
-    summary?: StringFieldUpdateOperationsInput | string
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
     numberCreditsMajor?: IntFieldUpdateOperationsInput | number
     numberCreditsRequired?: IntFieldUpdateOperationsInput | number
     numberCreditsElective?: IntFieldUpdateOperationsInput | number
@@ -703466,7 +707824,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
-    summary?: StringFieldUpdateOperationsInput | string
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
     numberCreditsMajor?: IntFieldUpdateOperationsInput | number
     numberCreditsRequired?: IntFieldUpdateOperationsInput | number
     numberCreditsElective?: IntFieldUpdateOperationsInput | number
@@ -708705,6 +713063,102 @@ export namespace Prisma {
     knowledgeBlockId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
+  export type IndividualScheduleUpdateWithoutTagsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    allDay?: BoolFieldUpdateOperationsInput | boolean
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    lecturer?: LecturerUpdateOneRequiredWithoutIndividualSchedulesNestedInput
+  }
+
+  export type IndividualScheduleUncheckedUpdateWithoutTagsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    allDay?: BoolFieldUpdateOperationsInput | boolean
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    lecturerId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type IndividualScheduleUncheckedUpdateManyWithoutTagsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    allDay?: BoolFieldUpdateOperationsInput | boolean
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    lecturerId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type PersonalWorkTagUpdateWithoutSchedulesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    color?: NullableStringFieldUpdateOperationsInput | string | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    lecturer?: LecturerUpdateOneRequiredWithoutPersonalWorkTagsNestedInput
+  }
+
+  export type PersonalWorkTagUncheckedUpdateWithoutSchedulesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    color?: NullableStringFieldUpdateOperationsInput | string | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    lecturerId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type PersonalWorkTagUncheckedUpdateManyWithoutSchedulesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    color?: NullableStringFieldUpdateOperationsInput | string | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    lecturerId?: StringFieldUpdateOperationsInput | string
+  }
+
   export type SubjectClassCreateManyMainLecturerInput = {
     id?: string
     active?: boolean
@@ -709246,6 +713700,36 @@ export namespace Prisma {
     publishedAt?: Date | string
     expiresAt?: Date | string | null
     targetAll?: boolean
+  }
+
+  export type PersonalWorkTagCreateManyLecturerInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    name: string
+    color?: string | null
+    sortOrder?: number
+  }
+
+  export type IndividualScheduleCreateManyLecturerInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    title: string
+    startTime: Date | string
+    endTime: Date | string
+    allDay?: boolean
+    location?: string | null
   }
 
   export type SubjectClassUpdateWithoutMainLecturerInput = {
@@ -711175,6 +715659,100 @@ export namespace Prisma {
     targetAll?: BoolFieldUpdateOperationsInput | boolean
   }
 
+  export type PersonalWorkTagUpdateWithoutLecturerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    color?: NullableStringFieldUpdateOperationsInput | string | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    schedules?: IndividualScheduleUpdateManyWithoutTagsNestedInput
+  }
+
+  export type PersonalWorkTagUncheckedUpdateWithoutLecturerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    color?: NullableStringFieldUpdateOperationsInput | string | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    schedules?: IndividualScheduleUncheckedUpdateManyWithoutTagsNestedInput
+  }
+
+  export type PersonalWorkTagUncheckedUpdateManyWithoutLecturerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    color?: NullableStringFieldUpdateOperationsInput | string | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type IndividualScheduleUpdateWithoutLecturerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    allDay?: BoolFieldUpdateOperationsInput | boolean
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    tags?: PersonalWorkTagUpdateManyWithoutSchedulesNestedInput
+  }
+
+  export type IndividualScheduleUncheckedUpdateWithoutLecturerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    allDay?: BoolFieldUpdateOperationsInput | boolean
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    tags?: PersonalWorkTagUncheckedUpdateManyWithoutSchedulesNestedInput
+  }
+
+  export type IndividualScheduleUncheckedUpdateManyWithoutLecturerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    allDay?: BoolFieldUpdateOperationsInput | boolean
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
   export type LecturerCreateManyLecturerTypeInput = {
     id?: string
     code?: string | null
@@ -711244,6 +715822,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutPrimarySupervisorNestedInput
     secondarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutSecondarySupervisorNestedInput
     notifications?: NotificationUpdateManyWithoutLecturerNestedInput
+    personalWorkTags?: PersonalWorkTagUpdateManyWithoutLecturerNestedInput
+    individualSchedules?: IndividualScheduleUpdateManyWithoutLecturerNestedInput
   }
 
   export type LecturerUncheckedUpdateWithoutLecturerTypeInput = {
@@ -711281,6 +715861,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutPrimarySupervisorNestedInput
     secondarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutSecondarySupervisorNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutLecturerNestedInput
+    personalWorkTags?: PersonalWorkTagUncheckedUpdateManyWithoutLecturerNestedInput
+    individualSchedules?: IndividualScheduleUncheckedUpdateManyWithoutLecturerNestedInput
   }
 
   export type LecturerUncheckedUpdateManyWithoutLecturerTypeInput = {
@@ -712739,7 +717321,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
-    summary?: StringFieldUpdateOperationsInput | string
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
     numberCreditsMajor?: IntFieldUpdateOperationsInput | number
     numberCreditsRequired?: IntFieldUpdateOperationsInput | number
     numberCreditsElective?: IntFieldUpdateOperationsInput | number
@@ -712766,7 +717348,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
-    summary?: StringFieldUpdateOperationsInput | string
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
     numberCreditsMajor?: IntFieldUpdateOperationsInput | number
     numberCreditsRequired?: IntFieldUpdateOperationsInput | number
     numberCreditsElective?: IntFieldUpdateOperationsInput | number
@@ -712793,7 +717375,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
-    summary?: StringFieldUpdateOperationsInput | string
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
     numberCreditsMajor?: IntFieldUpdateOperationsInput | number
     numberCreditsRequired?: IntFieldUpdateOperationsInput | number
     numberCreditsElective?: IntFieldUpdateOperationsInput | number
@@ -719214,6 +723796,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutPrimarySupervisorNestedInput
     secondarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutSecondarySupervisorNestedInput
     notifications?: NotificationUpdateManyWithoutLecturerNestedInput
+    personalWorkTags?: PersonalWorkTagUpdateManyWithoutLecturerNestedInput
+    individualSchedules?: IndividualScheduleUpdateManyWithoutLecturerNestedInput
   }
 
   export type LecturerUncheckedUpdateWithoutEvaluationCriterionReviewsInput = {
@@ -719251,6 +723835,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutPrimarySupervisorNestedInput
     secondarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutSecondarySupervisorNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutLecturerNestedInput
+    personalWorkTags?: PersonalWorkTagUncheckedUpdateManyWithoutLecturerNestedInput
+    individualSchedules?: IndividualScheduleUncheckedUpdateManyWithoutLecturerNestedInput
   }
 
   export type LecturerUncheckedUpdateManyWithoutEvaluationCriterionReviewsInput = {
@@ -721288,7 +725874,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
-    summary?: StringFieldUpdateOperationsInput | string
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
     numberCreditsMajor?: IntFieldUpdateOperationsInput | number
     numberCreditsRequired?: IntFieldUpdateOperationsInput | number
     numberCreditsElective?: IntFieldUpdateOperationsInput | number
@@ -721315,7 +725901,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
-    summary?: StringFieldUpdateOperationsInput | string
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
     numberCreditsMajor?: IntFieldUpdateOperationsInput | number
     numberCreditsRequired?: IntFieldUpdateOperationsInput | number
     numberCreditsElective?: IntFieldUpdateOperationsInput | number
@@ -721342,7 +725928,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     englishName?: NullableStringFieldUpdateOperationsInput | string | null
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
-    summary?: StringFieldUpdateOperationsInput | string
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
     numberCreditsMajor?: IntFieldUpdateOperationsInput | number
     numberCreditsRequired?: IntFieldUpdateOperationsInput | number
     numberCreditsElective?: IntFieldUpdateOperationsInput | number
@@ -722308,6 +726894,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutPrimarySupervisorNestedInput
     secondarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutSecondarySupervisorNestedInput
     notifications?: NotificationUpdateManyWithoutLecturerNestedInput
+    personalWorkTags?: PersonalWorkTagUpdateManyWithoutLecturerNestedInput
+    individualSchedules?: IndividualScheduleUpdateManyWithoutLecturerNestedInput
   }
 
   export type LecturerUncheckedUpdateWithoutClusterSurveyInput = {
@@ -722345,6 +726933,8 @@ export namespace Prisma {
     primarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutPrimarySupervisorNestedInput
     secondarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutSecondarySupervisorNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutLecturerNestedInput
+    personalWorkTags?: PersonalWorkTagUncheckedUpdateManyWithoutLecturerNestedInput
+    individualSchedules?: IndividualScheduleUncheckedUpdateManyWithoutLecturerNestedInput
   }
 
   export type LecturerUncheckedUpdateManyWithoutClusterSurveyInput = {

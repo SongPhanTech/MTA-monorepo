@@ -59,3 +59,38 @@ model Notification extends Base {
   @@index([lecturerId])
   @@schema("ql-danh-muc")
 }
+
+/// Tag công việc cá nhân — mỗi giảng viên tự tạo và quản lý bộ tag riêng.
+model PersonalWorkTag extends Base {
+  name       String // Tên tag, ví dụ: "Họp", "Chấm bài", "Nghiên cứu"
+  color      String? // Màu hiển thị trên lịch (hex), ví dụ #3b82f6
+  sortOrder  Int     @default(0) // Thứ tự hiển thị trong danh sách tag
+
+  lecturer   Lecturer @relation(fields: [lecturerId], references: [id])
+  lecturerId String
+
+  schedules  IndividualSchedule[]
+
+  @@unique([lecturerId, name])
+  @@index([lecturerId])
+  @@schema("ql-danh-muc")
+}
+
+/// Lịch / công việc cá nhân của giảng viên (không trùng ClassSchedule hệ thống).
+model IndividualSchedule extends Base {
+  title     String
+  startTime DateTime
+  endTime   DateTime
+  allDay    Boolean  @default(false) // Sự kiện cả ngày
+  location  String?
+
+  lecturer   Lecturer @relation(fields: [lecturerId], references: [id])
+  lecturerId String
+
+  tags PersonalWorkTag[]
+
+  @@index([lecturerId])
+  @@index([startTime])
+  @@index([endTime])
+  @@schema("ql-danh-muc")
+}

@@ -49,6 +49,8 @@ model Lecturer extends Base {
   primarySupervisorThesisProject   ThesisProject[]               @relation("PrimarySupervisorToThesis")
   secondarySupervisorThesisProject ThesisProject[]               @relation("SecondarySupervisorToThesis")
   notifications                    Notification[]                // Thông báo giảng viên
+  personalWorkTags                 PersonalWorkTag[]             // Tag công việc cá nhân
+  individualSchedules              IndividualSchedule[]          // Lịch cá nhân
 
   @@index([userProfileId])
   @@schema("ql-dao-tao")

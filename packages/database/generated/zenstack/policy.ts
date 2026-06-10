@@ -2912,6 +2912,46 @@ const policy: PolicyDef = {
             },
 
         },
+        personalWorkTag: {
+            modelLevel: {
+                read: { guard: PersonalWorkTag_read, },
+                create: { guard: PersonalWorkTag_create, inputChecker: PersonalWorkTag_create_input, },
+                update: { guard: PersonalWorkTag_update, },
+                postUpdate: { guard: PersonalWorkTag_postUpdate, },
+                delete: { guard: PersonalWorkTag_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        individualSchedule: {
+            modelLevel: {
+                read: { guard: IndividualSchedule_read, },
+                create: { guard: IndividualSchedule_create, inputChecker: IndividualSchedule_create_input, },
+                update: { guard: IndividualSchedule_update, },
+                postUpdate: { guard: IndividualSchedule_postUpdate, },
+                delete: { guard: IndividualSchedule_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
         lecturer: {
             modelLevel: {
                 read: { guard: Lecturer_read, },
@@ -5716,6 +5756,8 @@ const policy: PolicyDef = {
         studentSemesterResult: { hasValidation: false },
         studentYearResult: { hasValidation: false },
         notification: { hasValidation: false },
+        personalWorkTag: { hasValidation: false },
+        individualSchedule: { hasValidation: false },
         lecturer: { hasValidation: false },
         lecturerHistory: { hasValidation: false },
         lecturerType: { hasValidation: false },
@@ -15056,6 +15098,136 @@ function Notification_delete(context: QueryContext, db: CrudContract): any {
 }
 
 function $check_Notification_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function PersonalWorkTag_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_PersonalWorkTag_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function PersonalWorkTag_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_PersonalWorkTag_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function PersonalWorkTag_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function PersonalWorkTag_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_PersonalWorkTag_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function PersonalWorkTag_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_PersonalWorkTag_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function PersonalWorkTag_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_PersonalWorkTag_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function IndividualSchedule_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_IndividualSchedule_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function IndividualSchedule_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_IndividualSchedule_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function IndividualSchedule_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function IndividualSchedule_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_IndividualSchedule_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function IndividualSchedule_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_IndividualSchedule_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function IndividualSchedule_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_IndividualSchedule_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 

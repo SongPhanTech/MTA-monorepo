@@ -146,6 +146,8 @@ export * from './TrainingActivity.schema';
 export * from './StudentSemesterResult.schema';
 export * from './StudentYearResult.schema';
 export * from './Notification.schema';
+export * from './PersonalWorkTag.schema';
+export * from './IndividualSchedule.schema';
 export * from './Lecturer.schema';
 export * from './LecturerHistory.schema';
 export * from './LecturerType.schema';

@@ -175,7 +175,7 @@ model TrainingMajor extends Base {
   name                         String
   englishName                  String?
   shortName                    String? // Tên viết tắt
-  summary                      String
+  summary                      String?
   /// Số tín chỉ chuyên ngành
   numberCreditsMajor           Int                                 @default(0)
   /// Số tín chỉ bắt buộc
