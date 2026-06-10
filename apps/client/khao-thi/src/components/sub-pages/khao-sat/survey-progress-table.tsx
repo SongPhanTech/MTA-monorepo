@@ -126,14 +126,7 @@ export function SurveyProgressTable({ data }: { data: ProgressRow[] }) {
           gap: 12,
           flexWrap: "wrap",
         }}
-      >
-        <Text strong style={{ fontSize: 15 }}>
-          Tiến độ khảo sát theo đơn vị
-        </Text>
-        <Text type="secondary" style={{ fontSize: 12 }}>
-          Số giảng viên đã có ý kiến / tổng số giảng viên
-        </Text>
-      </div>
+      ></div>
       <Table
         bordered
         size="middle"
