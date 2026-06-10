@@ -2,7 +2,7 @@ import type { CheDoHienThiLich, DangXemLich } from "@components/cong-giang-vien/
 import { cn } from "@workspace/ui/lib/utils"
 import { Button, DatePicker, Select } from "antd"
 import type { Dayjs } from "dayjs"
-import { CalendarDays, ChevronLeft, ChevronRight, LayoutGrid, Plus, Table2 } from "lucide-react"
+import { CalendarDays, ChevronLeft, ChevronRight, LayoutGrid, Plus } from "lucide-react"
 
 interface ThanhCongCuLichCaNhanProps {
   cheDoHienThi: CheDoHienThiLich
@@ -15,6 +15,9 @@ interface ThanhCongCuLichCaNhanProps {
   onDoiDangXem: (value: DangXemLich) => void
   onThemLich?: () => void
 }
+
+const NUT_OUTLINE =
+  "inline-flex h-9 items-center gap-2 rounded-lg border px-3.5 text-sm font-medium transition-colors"
 
 const ThanhCongCuLichCaNhan = ({
   cheDoHienThi,
@@ -72,45 +75,47 @@ const ThanhCongCuLichCaNhan = ({
       </div>
 
       <div className="flex flex-wrap items-center gap-2">
-        <Button
-          type="primary"
-          icon={<Plus size={16} />}
+        <button
+          type="button"
           onClick={onThemLich}
-          className="!bg-cgv-green-dark hover:!bg-cgv-green-dark/90"
+          className={cn(
+            NUT_OUTLINE,
+            "border-cgv-green-dark bg-white text-cgv-green-dark hover:bg-cgv-green/40"
+          )}
         >
+          <Plus size={16} strokeWidth={2.5} />
           Thêm lịch
-        </Button>
+        </button>
 
-        <div className="flex items-center rounded-md border border-gray-200 p-0.5">
-          <button
-            type="button"
-            onClick={() => onDoiDangXem("bang")}
-            className={cn(
-              "flex items-center gap-1.5 rounded px-2.5 py-1 text-xs font-medium transition-colors",
-              dangXem === "bang"
-                ? "bg-cgv-green-dark text-white"
-                : "text-gray-600 hover:bg-gray-50"
-            )}
-            aria-pressed={dangXem === "bang"}
-          >
-            <Table2 size={14} />
-            Bảng
-          </button>
-          <button
-            type="button"
-            onClick={() => onDoiDangXem("lich")}
-            className={cn(
-              "flex items-center gap-1.5 rounded px-2.5 py-1 text-xs font-medium transition-colors",
-              dangXem === "lich"
-                ? "bg-cgv-green-dark text-white"
-                : "text-gray-600 hover:bg-gray-50"
-            )}
-            aria-pressed={dangXem === "lich"}
-          >
-            <LayoutGrid size={14} />
-            Lịch
-          </button>
-        </div>
+        <button
+          type="button"
+          onClick={() => onDoiDangXem("bang")}
+          className={cn(
+            NUT_OUTLINE,
+            dangXem === "bang"
+              ? "border-cgv-green-dark bg-cgv-green text-cgv-green-dark"
+              : "border-cgv-green-dark bg-white text-cgv-green-dark hover:bg-cgv-green/40"
+          )}
+          aria-pressed={dangXem === "bang"}
+        >
+          <LayoutGrid size={16} strokeWidth={2} />
+          Table
+        </button>
+
+        <button
+          type="button"
+          onClick={() => onDoiDangXem("lich")}
+          className={cn(
+            NUT_OUTLINE,
+            dangXem === "lich"
+              ? "border-cgv-green-dark bg-cgv-green text-cgv-green-dark"
+              : "border-gray-200 bg-white text-[#1e3a5f] hover:bg-gray-50"
+          )}
+          aria-pressed={dangXem === "lich"}
+        >
+          <CalendarDays size={16} strokeWidth={2} />
+          Lịch
+        </button>
       </div>
     </div>
   )

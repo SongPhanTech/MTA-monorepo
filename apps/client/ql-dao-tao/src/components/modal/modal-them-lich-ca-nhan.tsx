@@ -11,6 +11,7 @@ import {
 import type { GiaTriFormLichCaNhan } from "@components/cong-giang-vien/lich-cua-toi/lich-ca-nhan/utils"
 import {
   chuyenPhutSangNhacLich,
+  datGioCaNgay,
   taoDuLieuLuuLich,
   taoThoiGianLich,
 } from "@components/cong-giang-vien/lich-cua-toi/lich-ca-nhan/utils"
@@ -42,6 +43,7 @@ const ModalThemLichCaNhan = () => {
   const { lecturerId } = useLecturerHienTai()
   const caNgay = Form.useWatch("caNgay", form)
   const dangSeedTag = useRef(false)
+  const daNapForm = useRef(false)
   const [timNguoiLienQuan, setTimNguoiLienQuan] = useState("")
 
   const { mutateAsync: taoLich } = useCreateIndividualSchedule()
@@ -126,6 +128,27 @@ const ModalThemLichCaNhan = () => {
     return [...map.values()]
   }, [nguoiDung, lichHienTai?.relatedUserProfiles])
 
+  const xuLyThayDoiForm = (
+    thayDoi: Partial<GiaTriFormLichCaNhan>,
+    giaTri: GiaTriFormLichCaNhan
+  ) => {
+    if (thayDoi.caNgay && giaTri.caNgay) {
+      const tuNgay = giaTri.tuNgay ?? dayjs()
+      const denNgay = giaTri.denNgay ?? tuNgay
+      form.setFieldsValue(datGioCaNgay(tuNgay, denNgay))
+      return
+    }
+
+    if (
+      giaTri.caNgay &&
+      (thayDoi.tuNgay != null || thayDoi.denNgay != null) &&
+      giaTri.tuNgay &&
+      giaTri.denNgay
+    ) {
+      form.setFieldsValue(datGioCaNgay(giaTri.tuNgay, giaTri.denNgay))
+    }
+  }
+
   useEffect(() => {
     if (!isOpen || !lecturerId || tags.length > 0 || dangSeedTag.current || dangTaiTag || dangFetchTag) {
       return
@@ -150,25 +173,40 @@ const ModalThemLichCaNhan = () => {
   }, [isOpen, lecturerId, tags.length, dangTaiTag, dangFetchTag, taoNhieuTag])
 
   useEffect(() => {
-    if (!isOpen) return
+    if (!isOpen) {
+      daNapForm.current = false
+      return
+    }
 
-    if (lichHienTai) {
+    if (daNapForm.current) {
+      if (!input?.id && tags[0]?.id && !form.getFieldValue("tagId")) {
+        form.setFieldValue("tagId", tags[0].id)
+      }
+      return
+    }
+
+    if (input?.id) {
+      if (!lichHienTai) return
+
       const batDau = dayjs(lichHienTai.startTime)
       const ketThuc = dayjs(lichHienTai.endTime)
+      const gioCaNgay = lichHienTai.allDay
+        ? datGioCaNgay(batDau, ketThuc)
+        : { tuGio: batDau, denGio: ketThuc }
       form.setFieldsValue({
         title: lichHienTai.title,
         tagId: lichHienTai.tags[0]?.id,
         tuNgay: batDau,
         denNgay: ketThuc,
         caNgay: lichHienTai.allDay,
-        tuGio: batDau,
-        denGio: ketThuc,
+        ...gioCaNgay,
         diaDiem: lichHienTai.location ?? undefined,
         noiDung: lichHienTai.content ?? undefined,
         nhacLich: chuyenPhutSangNhacLich(lichHienTai.reminderMinutes),
         lapLai: lichHienTai.repeatType ?? ScheduleRepeatType.NONE,
         nguoiLienQuanIds: lichHienTai.relatedUserProfiles.map((nguoi) => nguoi.id),
       })
+      daNapForm.current = true
       return
     }
 
@@ -187,6 +225,7 @@ const ModalThemLichCaNhan = () => {
       lapLai: ScheduleRepeatType.NONE,
       nguoiLienQuanIds: [],
     })
+    daNapForm.current = true
   }, [isOpen, input, lichHienTai, tags, form])
 
   const onFinish = async (giaTri: GiaTriFormLichCaNhan) => {
@@ -299,6 +338,7 @@ const ModalThemLichCaNhan = () => {
       formProps={{
         className:
           "[&_.ant-form-item-label>label]:text-sm [&_.ant-form-item-label>label]:font-medium [&_.ant-form-item-label>label]:text-gray-700",
+        onValuesChange: xuLyThayDoiForm,
       }}
     >
       <div className="flex flex-col gap-4">
@@ -326,41 +366,46 @@ const ModalThemLichCaNhan = () => {
         <div>
           <p className="mb-3 text-sm font-medium text-gray-700">Thời gian</p>
 
-          <div className="grid grid-cols-1 gap-x-4 gap-y-3 sm:grid-cols-[1fr_1fr_auto] sm:items-end">
-            <FormItem form={form} name="tuNgay" label="Từ ngày" required>
+          <div className="grid grid-cols-1 gap-x-4 gap-y-3 sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto] sm:items-end">
+            <FormItem form={form} name="tuNgay" label="Từ ngày" required className="min-w-0">
               <DatePicker className="h-10 w-full" />
             </FormItem>
-            <FormItem form={form} name="denNgay" label="Đến ngày" required>
+            <FormItem form={form} name="denNgay" label="Đến ngày" required className="min-w-0">
               <DatePicker className="h-10 w-full" />
             </FormItem>
-            <FormItem form={form} name="caNgay" valuePropName="checked" className="sm:pb-1">
+            <FormItem
+              form={form}
+              name="caNgay"
+              valuePropName="checked"
+              className="min-w-0 sm:col-start-3 sm:row-start-1 sm:pb-1"
+            >
               <Checkbox className="text-sm text-gray-600">Cả ngày</Checkbox>
             </FormItem>
-          </div>
 
-          {!caNgay ? (
-            <div className="mt-1 grid grid-cols-1 gap-x-4 gap-y-3 sm:grid-cols-[1fr_1fr_1fr] sm:items-end">
-              <FormItem form={form} name="tuGio" label="Từ giờ" required>
-                <TimePicker
-                  format="HH:mm"
-                  className="h-10 w-full"
-                  needConfirm={false}
-                  suffixIcon={<Clock size={14} className="text-gray-400" />}
-                />
-              </FormItem>
-              <FormItem form={form} name="denGio" label="Đến giờ" required>
-                <TimePicker
-                  format="HH:mm"
-                  className="h-10 w-full"
-                  needConfirm={false}
-                  suffixIcon={<Clock size={14} className="text-gray-400" />}
-                />
-              </FormItem>
-              <p className="pb-2 text-xs text-gray-400 sm:whitespace-nowrap">
-                Thời gian theo múi giờ: GMT+7
-              </p>
-            </div>
-          ) : null}
+            <FormItem form={form} name="tuGio" label="Từ giờ" required className="min-w-0">
+              <TimePicker
+                format="HH:mm"
+                className="h-10 w-full"
+                style={{ width: "100%" }}
+                needConfirm={false}
+                disabled={caNgay}
+                suffixIcon={<Clock size={14} className="text-gray-400" />}
+              />
+            </FormItem>
+            <FormItem form={form} name="denGio" label="Đến giờ" required className="min-w-0">
+              <TimePicker
+                format="HH:mm"
+                className="h-10 w-full"
+                style={{ width: "100%" }}
+                needConfirm={false}
+                disabled={caNgay}
+                suffixIcon={<Clock size={14} className="text-gray-400" />}
+              />
+            </FormItem>
+            <p className="min-w-0 pb-2 text-xs text-gray-400 sm:col-start-3 sm:row-start-2 sm:whitespace-nowrap">
+              Thời gian theo múi giờ: GMT+7
+            </p>
+          </div>
         </div>
 
         <FormItem form={form} name="diaDiem" label="Địa điểm / Nền tảng">

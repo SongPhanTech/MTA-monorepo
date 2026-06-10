@@ -31,13 +31,6 @@ const BangLichCaNhan = ({
       render: (_, row) => `${row.thoiGianBatDau} - ${row.thoiGianKetThuc}`,
     },
     {
-      title: "Tiết",
-      dataIndex: "tiet",
-      key: "tiet",
-      width: 64,
-      align: "center",
-    },
-    {
       title: "Tiêu đề",
       dataIndex: "tieuDe",
       key: "tieuDe",
@@ -140,7 +133,7 @@ const BangLichCaNhan = ({
         loading={dangTai}
         pagination={false}
         size="small"
-        scroll={{ x: 1100 }}
+        scroll={{ x: 1036 }}
         className="[&_.ant-table-thead>tr>th]:!bg-gray-50 [&_.ant-table-thead>tr>th]:!text-xs [&_.ant-table-thead>tr>th]:!font-semibold [&_.ant-table-thead>tr>th]:!text-gray-600"
         locale={{ emptyText: "Không có sự kiện trong ngày" }}
       />

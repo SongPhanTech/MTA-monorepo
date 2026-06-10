@@ -33,7 +33,6 @@ export const mapLichSangDong = (lich: LichVoiTag) => {
     id: lich.id,
     thoiGianBatDau: lich.allDay ? "Cả ngày" : batDau.format("HH:mm"),
     thoiGianKetThuc: lich.allDay ? "" : ketThuc.format("HH:mm"),
-    tiet: "—",
     tieuDe: lich.title,
     nhomLoai: tag ? mapTenTagSangNhom(tag.name) : ("cong-viec" as NhomLoaiLichCaNhan),
     tenLoai: tag?.name ?? "—",
@@ -80,14 +79,20 @@ export const taoDuLieuLuuLich = (
   repeatType: giaTri.lapLai ?? ScheduleRepeatType.NONE,
 })
 
+export const datGioCaNgay = (tuNgay: Dayjs, denNgay: Dayjs) => ({
+  tuGio: tuNgay.startOf("day").hour(0).minute(0).second(0),
+  denGio: denNgay.startOf("day").hour(23).minute(59).second(0),
+})
+
 export const taoThoiGianLich = (giaTri: GiaTriFormLichCaNhan) => {
   const tuNgay = giaTri.tuNgay.startOf("day")
   const denNgay = giaTri.denNgay.startOf("day")
 
   if (giaTri.caNgay) {
+    const { tuGio, denGio } = datGioCaNgay(tuNgay, denNgay)
     return {
-      startTime: tuNgay.toDate(),
-      endTime: denNgay.endOf("day").toDate(),
+      startTime: tuGio.toDate(),
+      endTime: denGio.toDate(),
       allDay: true,
     }
   }

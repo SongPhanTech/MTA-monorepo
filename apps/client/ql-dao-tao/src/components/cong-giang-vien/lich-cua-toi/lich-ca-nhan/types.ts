@@ -5,7 +5,6 @@ export type DongLichCaNhan = {
   id: string
   thoiGianBatDau: string
   thoiGianKetThuc: string
-  tiet: string
   tieuDe: string
   nhomLoai: NhomLoaiLichCaNhan
   tenLoai: string
