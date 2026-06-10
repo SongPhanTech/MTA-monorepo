@@ -37,8 +37,6 @@ function OrganizationSurveyReport({
   trainingObjectTypeName,
   trainingObjectTypeId,
   semesterId,
-  // organizationSelected,
-  // setOrganizationSelected,
 }: {
   selectedId: string
   surveyName: string
@@ -46,8 +44,6 @@ function OrganizationSurveyReport({
   trainingObjectTypeName?: string
   trainingObjectTypeId: string
   semesterId: string
-  // organizationSelected: string
-  // setOrganizationSelected: (value: string) => void
 }) {
   const router = useRouter()
   const { onOpen } = useDisclosure({
@@ -550,7 +546,6 @@ function OrganizationSurveyReport({
                         height: Math.max(300, (dataLevel?.data?.data?.length || 0) * 35 + 120),
                       }}
                     />
-
                     {dataLevel?.data?.data?.length > 0 &&
                       renderTable(dataLevel?.data?.data, dataLevel?.data?.choices)}
                   </div>

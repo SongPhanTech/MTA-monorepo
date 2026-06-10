@@ -18,6 +18,7 @@ import { useMemo, useState } from "react"
 import OrganizationSurveyReport from "@/components/sub-pages/khao-sat/bao-cao-don-vi"
 import { getRuntimeEnv } from "@workspace/libs"
 import { $Enums } from "@workspace/db/client"
+import dayjs from "dayjs"
 
 /**
  * Nhãn hệ đào tạo cho mẫu báo cáo — chỉ theo `TrainingObjectType.type` (không đoán qua tên/regex).
@@ -213,8 +214,25 @@ export default function BaoCaoGiangVien() {
       },
       include: {
         userProfile: true,
-        mainSubjectClasses: true,
         organization: true,
+        mainSubjectClasses: {
+          include: {
+            subjectClassStudent: {
+              include: {
+                student: {
+                  include: {
+                    userProfile: {},
+                    surveySessions: {
+                      include: {
+                        survey: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
       },
     },
     {
@@ -307,6 +325,147 @@ export default function BaoCaoGiangVien() {
 
   const hanleSearchReport = () => {}
 
+  const getLecturerDisplayName = (lecturer: any) => {
+    const fullName =
+      `${lecturer?.userProfile?.lastName ?? ""} ${lecturer?.userProfile?.firstName ?? ""}`.trim() ||
+      lecturer?.userProfile?.fullName ||
+      "Giảng viên không tên"
+
+    return fullName
+  }
+
+  const progressData = useMemo(() => {
+    const getDescendantOrgIds = (orgId: string): string[] => {
+      const children = organizations.filter((item: any) => item.sParentId === orgId)
+      return children.flatMap((item: any) => [item.Id, ...getDescendantOrgIds(item.Id)])
+    }
+
+    const selectedCluster = data.find((c: any) => c.id === filters.clusterId)
+    const clusterSubjectClassIds = new Set<string>(
+      (selectedCluster?.surveys || []).map((s: any) => s.subjectClassId).filter(Boolean)
+    )
+
+    const getStudents = (lecturer: any) => {
+      const seen = new Set<string>()
+      const students: any[] = []
+
+      for (const subjectClass of lecturer.mainSubjectClasses || []) {
+        if (!clusterSubjectClassIds.has(subjectClass.id)) continue
+        for (const entry of subjectClass.subjectClassStudent || []) {
+          const student = entry?.student
+          if (!student || seen.has(student.id)) continue
+          seen.add(student.id)
+          students.push(student)
+        }
+      }
+
+      return students
+    }
+
+    const isStudentCompleted = (student: any) =>
+      (student?.surveySessions || []).some((session: any) => {
+        const survey = session?.survey
+        return (
+          survey?.clusterSurveyId === filters.clusterId &&
+          (session?.completedAt || session?.isCompleted)
+        )
+      })
+
+    const studentStats = lecturerData.reduce<Record<string, { total: number; completed: number }>>(
+      (acc, lecturer) => {
+        const students = getStudents(lecturer)
+        acc[lecturer.id] = {
+          total: students.length,
+          completed: students.filter(isStudentCompleted).length,
+        }
+        return acc
+      },
+      {}
+    )
+
+    const countStudents = (orgId: string) =>
+      lecturerData
+        .filter((item: any) => {
+          const orgIds = [orgId, ...getDescendantOrgIds(orgId)]
+          return orgIds.includes(item.organizationId)
+        })
+        .reduce((sum, item) => sum + (studentStats[item.id]?.total || 0), 0)
+
+    const countCompleted = (orgId: string) =>
+      lecturerData
+        .filter((item: any) => {
+          const orgIds = [orgId, ...getDescendantOrgIds(orgId)]
+          return orgIds.includes(item.organizationId)
+        })
+        .reduce((sum, item) => sum + (studentStats[item.id]?.completed || 0), 0)
+
+    const facultyRows = organizations
+      .filter((item: any) => [5, 6].includes(item.iLoaiDonVi))
+      .map((item: any) => ({
+        key: `faculty-${item.Id}`,
+        parentKey: undefined,
+        type: "faculty" as const,
+        name: `${item.sMa || ""} - ${item.sTen || ""}`.trim(),
+        completed: countCompleted(item.Id),
+        total: countStudents(item.Id),
+      }))
+
+    const departmentRows = organizations
+      .filter((item: any) => item.iLoaiDonVi === 7)
+      .map((item: any) => ({
+        key: `department-${item.Id}`,
+        parentKey: `faculty-${item.sParentId}`,
+        type: "department" as const,
+        name: `${item.sMa || ""} - ${item.sTen || ""}`.trim(),
+        completed: countCompleted(item.Id),
+        total: countStudents(item.Id),
+      }))
+
+    const lecturerRows = lecturerData
+      .filter((item: any) => item.organizationId)
+      .map((item: any) => {
+        const organization = organizations.find((org: any) => org.Id === item.organizationId)
+        const lecturerName = getLecturerDisplayName(item)
+        const lecturerCode = item.code?.trim() || ""
+        const name =
+          [lecturerCode, lecturerName].filter(Boolean).join(" - ") || "Giảng viên không tên"
+
+        return {
+          key: `lecturer-${item.id}`,
+          parentKey:
+            organization?.iLoaiDonVi === 7
+              ? `department-${item.organizationId}`
+              : `faculty-${item.organizationId}`,
+          type: "lecturer" as const,
+          name,
+          completed: studentStats[item.id]?.completed || 0,
+          total: studentStats[item.id]?.total || 0,
+        }
+      })
+
+    const totalCompleted = lecturerData.reduce(
+      (sum, item) => sum + (studentStats[item.id]?.completed || 0),
+      0
+    )
+    const totalStudents = lecturerData.reduce(
+      (sum, item) => sum + (studentStats[item.id]?.total || 0),
+      0
+    )
+
+    return [
+      ...facultyRows,
+      ...departmentRows,
+      ...lecturerRows,
+      {
+        key: "total",
+        type: "total" as const,
+        name: "Tổng số",
+        completed: totalCompleted,
+        total: totalStudents,
+      },
+    ]
+  }, [organizations, lecturerData, filters.clusterId, data])
+
   const items = useMemo(() => {
     if (!filters?.clusterId) {
       return <div className="my-10 text-center text-primary text-base">Chọn đợt khảo sát</div>
@@ -344,6 +503,7 @@ export default function BaoCaoGiangVien() {
             }
             departmentName={selectedItem.iCapDonVi === 3 ? selectedItem.sTen : ""}
             departmentCode={selectedItem.iCapDonVi === 3 ? selectedItem.sMa : ""}
+            selectedItem={selectedItem}
           />
         )
       }
@@ -359,6 +519,7 @@ export default function BaoCaoGiangVien() {
             selectedId={filters?.clusterId}
             lectureId={selectedItem?.id}
             surveyName={filters?.surveyName}
+            progressData={progressData}
             trainingObjectTypeName={trainingObjectTypeName}
             semesterName={semesterName}
             trainingSystemName={trainingSystemName}

@@ -18,6 +18,7 @@ import { exportSurveyDocxTemplate } from "@/utils/export-survey-docx-template"
 import { useRouter } from "next/router"
 import { useMemo } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
+import { SurveyProgressTable } from "./survey-progress-table"
 
 const { Title } = Typography
 
@@ -38,6 +39,7 @@ function SurveylecturerReport({
   selectedId,
   lectureId,
   surveyName,
+  progressData = [],
   trainingObjectTypeName,
   semesterName,
   trainingSystemName,
@@ -51,6 +53,15 @@ function SurveylecturerReport({
   selectedId: string
   lectureId: string
   surveyName: string
+  progressData?: Array<{
+    key: string
+    parentKey?: string
+    type: "faculty" | "department" | "lecturer" | "total"
+    name: string
+    completed: number
+    total: number
+    indent?: number
+  }>
   trainingObjectTypeName?: string
   semesterName?: string
   trainingSystemName?: string
@@ -121,8 +132,7 @@ function SurveylecturerReport({
         tooltip: {
           trigger: "axis",
           axisPointer: {
-            // Use axis to trigger tooltip
-            type: "shadow", // 'shadow' as default; can also be 'line' or 'shadow'
+            type: "shadow",
           },
         },
         legend: {},
@@ -516,6 +526,7 @@ function SurveylecturerReport({
             <div className="flex-1 mb-6">
               {dataLevel?.status === 200 && dataLevel?.data?.data?.questions?.length > 0 ? (
                 <div style={{ width: "100%", height: "100%" }}>
+                  <SurveyProgressTable data={progressData} />
                   <ReactECharts
                     option={dataBarchart}
                     style={{
