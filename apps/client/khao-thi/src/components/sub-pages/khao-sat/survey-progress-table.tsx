@@ -123,10 +123,44 @@ export function SurveyProgressTable({ data }: { data: ProgressRow[] }) {
           justifyContent: "space-between",
           alignItems: "center",
           marginBottom: 8,
-          gap: 12,
-          flexWrap: "wrap",
         }}
-      ></div>
+      >
+        <Text type="secondary" style={{ fontSize: 12 }}>
+          Số giảng viên đã có ý kiến / tổng số giảng viên
+        </Text>
+
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 16,
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+            <span
+              style={{
+                width: 10,
+                height: 10,
+                borderRadius: "50%",
+                backgroundColor: "#52c41a",
+              }}
+            />
+            <Text style={{ fontSize: 12 }}>Đã lấy đủ ý kiến</Text>
+          </div>
+
+          <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+            <span
+              style={{
+                width: 10,
+                height: 10,
+                borderRadius: "50%",
+                backgroundColor: "#ff4d4f",
+              }}
+            />
+            <Text style={{ fontSize: 12 }}>Chưa lấy đủ ý kiến</Text>
+          </div>
+        </div>
+      </div>
       <Table
         bordered
         size="middle"
@@ -223,39 +257,6 @@ export function SurveyProgressTable({ data }: { data: ProgressRow[] }) {
           },
         ]}
       />
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          gap: 16,
-          marginTop: 12,
-        }}
-      >
-        <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-          <span
-            style={{
-              width: 20,
-              height: 20,
-              borderRadius: "50%",
-              backgroundColor: "#52c41a",
-            }}
-          />
-          <Text style={{ fontSize: 12 }}>Đã lấy đủ ý kiến</Text>
-        </div>
-
-        <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-          <span
-            style={{
-              width: 20,
-              height: 20,
-              borderRadius: "50%",
-              backgroundColor: "#ff4d4f",
-            }}
-          />
-          <Text style={{ fontSize: 12 }}>Chưa lấy đủ ý kiến</Text>
-        </div>
-      </div>
     </div>
   )
 }
