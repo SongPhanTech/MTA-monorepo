@@ -1,5 +1,6 @@
 import type { NhomLoaiLichCaNhan } from "@components/cong-giang-vien/lich-cua-toi/lich-ca-nhan/types"
 import type { Prisma } from "@workspace/db"
+import { ScheduleRepeatType } from "@workspace/db/client"
 import dayjs, { type Dayjs } from "dayjs"
 
 type LichVoiTag = Prisma.IndividualScheduleGetPayload<{
@@ -38,7 +39,7 @@ export const mapLichSangDong = (lich: LichVoiTag) => {
     tenLoai: tag?.name ?? "—",
     mauLoai: tag?.color ?? undefined,
     diaDiem: lich.location?.trim() || "—",
-    noiDung: lich.description?.trim() || "—",
+    noiDung: lich.content?.trim() || "—",
     ghiChu: "—",
   }
 }
@@ -53,7 +54,31 @@ export type GiaTriFormLichCaNhan = {
   denGio: Dayjs
   diaDiem?: string
   noiDung?: string
+  nhacLich?: string
+  lapLai: ScheduleRepeatType
+  nguoiLienQuanIds?: string[]
 }
+
+export const chuyenNhacLichSangPhut = (nhacLich?: string | null): number | null => {
+  if (!nhacLich || nhacLich === "none") return null
+  const phut = Number(nhacLich)
+  return Number.isFinite(phut) ? phut : null
+}
+
+export const chuyenPhutSangNhacLich = (phut?: number | null): string =>
+  phut == null ? "none" : String(phut)
+
+export const taoDuLieuLuuLich = (
+  giaTri: GiaTriFormLichCaNhan,
+  thoiGian: ReturnType<typeof taoThoiGianLich>
+) => ({
+  title: giaTri.title.trim(),
+  ...thoiGian,
+  location: giaTri.diaDiem?.trim() || null,
+  content: giaTri.noiDung?.trim() || null,
+  reminderMinutes: chuyenNhacLichSangPhut(giaTri.nhacLich),
+  repeatType: giaTri.lapLai ?? ScheduleRepeatType.NONE,
+})
 
 export const taoThoiGianLich = (giaTri: GiaTriFormLichCaNhan) => {
   const tuNgay = giaTri.tuNgay.startOf("day")

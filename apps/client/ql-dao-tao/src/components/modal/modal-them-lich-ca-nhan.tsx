@@ -3,22 +3,32 @@ import DatePicker from "@components/commons/date-picker"
 import FormItem from "@components/commons/form-item"
 import PutFormModal from "@components/commons/put-modal"
 import ChonLoaiLich from "@components/cong-giang-vien/lich-cua-toi/lich-ca-nhan/chon-loai-lich"
-import { TAG_LOAI_LICH_MAC_DINH } from "@components/cong-giang-vien/lich-cua-toi/lich-ca-nhan/constants"
+import {
+  TAG_LOAI_LICH_MAC_DINH,
+  TUY_CHON_LAP_LAI,
+  TUY_CHON_NHAC_LICH,
+} from "@components/cong-giang-vien/lich-cua-toi/lich-ca-nhan/constants"
 import type { GiaTriFormLichCaNhan } from "@components/cong-giang-vien/lich-cua-toi/lich-ca-nhan/utils"
-import { taoThoiGianLich } from "@components/cong-giang-vien/lich-cua-toi/lich-ca-nhan/utils"
+import {
+  chuyenPhutSangNhacLich,
+  taoDuLieuLuuLich,
+  taoThoiGianLich,
+} from "@components/cong-giang-vien/lich-cua-toi/lich-ca-nhan/utils"
 import useSpinner from "@hooks/spinner"
 import { useLecturerHienTai } from "@hooks/use-lecturer-hien-tai"
 import {
   useCreateIndividualSchedule,
   useCreateManyPersonalWorkTag,
   useFindManyPersonalWorkTag,
+  useFindManyUserProfile,
   useFindUniqueIndividualSchedule,
   useUpdateIndividualSchedule,
 } from "@workspace/db/hooks"
+import { ScheduleRepeatType } from "@workspace/db/client"
 import { Checkbox, Form, Input, Select, TimePicker, message } from "antd"
 import dayjs from "dayjs"
 import { Bell, Clock, MapPin, RefreshCw, UserPlus } from "lucide-react"
-import { useEffect, useRef } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 
 type InputThemLichCaNhan = {
@@ -32,6 +42,7 @@ const ModalThemLichCaNhan = () => {
   const { lecturerId } = useLecturerHienTai()
   const caNgay = Form.useWatch("caNgay", form)
   const dangSeedTag = useRef(false)
+  const [timNguoiLienQuan, setTimNguoiLienQuan] = useState("")
 
   const { mutateAsync: taoLich } = useCreateIndividualSchedule()
   const { mutateAsync: capNhatLich } = useUpdateIndividualSchedule()
@@ -47,6 +58,7 @@ const ModalThemLichCaNhan = () => {
     onClose: () => {
       form.resetFields()
       dangSeedTag.current = false
+      setTimNguoiLienQuan("")
     },
   })
 
@@ -66,10 +78,53 @@ const ModalThemLichCaNhan = () => {
   const { data: lichHienTai } = useFindUniqueIndividualSchedule(
     {
       where: { id: input?.id ?? "" },
-      include: { tags: { select: { id: true } } },
+      include: {
+        tags: { select: { id: true } },
+        relatedUserProfiles: { select: { id: true, fullname: true, email: true } },
+      },
     },
     { enabled: !!input?.id && isOpen }
   )
+
+  const { data: nguoiDung = [] } = useFindManyUserProfile(
+    {
+      where: {
+        active: true,
+        ...(timNguoiLienQuan
+          ? {
+              OR: [
+                { fullname: { contains: timNguoiLienQuan, mode: "insensitive" } },
+                { email: { contains: timNguoiLienQuan, mode: "insensitive" } },
+                { phoneNumber: { contains: timNguoiLienQuan, mode: "insensitive" } },
+              ],
+            }
+          : {}),
+      },
+      select: { id: true, fullname: true, email: true },
+      take: 50,
+      orderBy: [{ fullname: "asc" }],
+    },
+    { enabled: isOpen }
+  )
+
+  const tuyChonNguoiLienQuan = useMemo(() => {
+    const map = new Map<string, { value: string; label: string }>()
+    for (const nguoi of nguoiDung) {
+      map.set(nguoi.id, {
+        value: nguoi.id,
+        label: nguoi.fullname?.trim() || nguoi.email || nguoi.id,
+      })
+    }
+    for (const nguoi of lichHienTai?.relatedUserProfiles ?? []) {
+      if (!map.has(nguoi.id)) {
+        map.set(nguoi.id, {
+          value: nguoi.id,
+          label: nguoi.fullname?.trim() || nguoi.email || nguoi.id,
+        })
+      }
+    }
+    return [...map.values()]
+  }, [nguoiDung, lichHienTai?.relatedUserProfiles])
 
   useEffect(() => {
     if (!isOpen || !lecturerId || tags.length > 0 || dangSeedTag.current || dangTaiTag || dangFetchTag) {
@@ -109,7 +164,10 @@ const ModalThemLichCaNhan = () => {
         tuGio: batDau,
         denGio: ketThuc,
         diaDiem: lichHienTai.location ?? undefined,
-        noiDung: lichHienTai.description ?? undefined,
+        noiDung: lichHienTai.content ?? undefined,
+        nhacLich: chuyenPhutSangNhacLich(lichHienTai.reminderMinutes),
+        lapLai: lichHienTai.repeatType ?? ScheduleRepeatType.NONE,
+        nguoiLienQuanIds: lichHienTai.relatedUserProfiles.map((nguoi) => nguoi.id),
       })
       return
     }
@@ -125,6 +183,9 @@ const ModalThemLichCaNhan = () => {
       denGio: ngay.hour(9).minute(30),
       diaDiem: undefined,
       noiDung: undefined,
+      nhacLich: "30",
+      lapLai: ScheduleRepeatType.NONE,
+      nguoiLienQuanIds: [],
     })
   }, [isOpen, input, lichHienTai, tags, form])
 
@@ -152,14 +213,8 @@ const ModalThemLichCaNhan = () => {
 
     try {
       showSpinner()
-      const duLieuChung = {
-        title: giaTri.title.trim(),
-        startTime,
-        endTime,
-        allDay,
-        location: giaTri.diaDiem?.trim() || null,
-        description: giaTri.noiDung?.trim() || null,
-      }
+      const duLieuChung = taoDuLieuLuuLich(giaTri, taoThoiGianLich(giaTri))
+      const nguoiLienQuanIds = giaTri.nguoiLienQuanIds ?? []
 
       if (input?.id) {
         await capNhatLich({
@@ -167,6 +222,7 @@ const ModalThemLichCaNhan = () => {
           data: {
             ...duLieuChung,
             tags: { set: [{ id: giaTri.tagId }] },
+            relatedUserProfiles: { set: nguoiLienQuanIds.map((id) => ({ id })) },
           },
         })
         message.success("Đã cập nhật lịch")
@@ -176,6 +232,9 @@ const ModalThemLichCaNhan = () => {
             ...duLieuChung,
             lecturer: { connect: { id: lecturerId } },
             tags: { connect: [{ id: giaTri.tagId }] },
+            ...(nguoiLienQuanIds.length > 0
+              ? { relatedUserProfiles: { connect: nguoiLienQuanIds.map((id) => ({ id })) } }
+              : {}),
           },
         })
         message.success("Đã thêm lịch")
@@ -324,47 +383,41 @@ const ModalThemLichCaNhan = () => {
         </FormItem>
 
         <div className="grid grid-cols-1 gap-x-4 gap-y-3 sm:grid-cols-2">
-          <div className="flex flex-col gap-1.5">
-            <span className="text-sm font-medium text-gray-700">Nhắc lịch</span>
-            <div className="relative">
-              <Bell
-                size={16}
-                className="pointer-events-none absolute left-3 top-1/2 z-10 -translate-y-1/2 text-gray-400"
-              />
-              <Select
-                disabled
-                defaultValue="30"
-                className="h-10 w-full [&_.ant-select-selector]:!h-10 [&_.ant-select-selector]:!items-center [&_.ant-select-selector]:!pl-9"
-                options={[{ value: "30", label: "Trước 30 phút" }]}
-              />
-            </div>
-          </div>
-          <div className="flex flex-col gap-1.5">
-            <span className="text-sm font-medium text-gray-700">Lặp lại</span>
-            <div className="relative">
-              <RefreshCw
-                size={16}
-                className="pointer-events-none absolute left-3 top-1/2 z-10 -translate-y-1/2 text-gray-400"
-              />
-              <Select
-                disabled
-                defaultValue="none"
-                className="h-10 w-full [&_.ant-select-selector]:!h-10 [&_.ant-select-selector]:!items-center [&_.ant-select-selector]:!pl-9"
-                options={[{ value: "none", label: "Không lặp lại" }]}
-              />
-            </div>
-          </div>
+          <FormItem form={form} name="nhacLich" label="Nhắc lịch">
+            <Select
+              className="h-10 w-full [&_.ant-select-selector]:!h-10 [&_.ant-select-selector]:!items-center [&_.ant-select-prefix]:!mr-2"
+              options={TUY_CHON_NHAC_LICH.map((item) => ({
+                value: item.value,
+                label: item.label,
+              }))}
+              prefix={<Bell size={16} className="text-gray-400" />}
+            />
+          </FormItem>
+          <FormItem form={form} name="lapLai" label="Lặp lại">
+            <Select
+              className="h-10 w-full [&_.ant-select-selector]:!h-10 [&_.ant-select-selector]:!items-center [&_.ant-select-prefix]:!mr-2"
+              options={TUY_CHON_LAP_LAI.map((item) => ({
+                value: item.value,
+                label: item.label,
+              }))}
+              prefix={<RefreshCw size={16} className="text-gray-400" />}
+            />
+          </FormItem>
         </div>
 
-        <div className="flex flex-col gap-1.5">
-          <span className="text-sm font-medium text-gray-700">Người liên quan (tùy chọn)</span>
-          <Input
-            disabled
+        <FormItem form={form} name="nguoiLienQuanIds" label="Người liên quan (tùy chọn)">
+          <Select
+            mode="multiple"
+            allowClear
+            showSearch
+            filterOption={false}
             placeholder="Tìm kiếm giảng viên, người dùng..."
-            suffix={<UserPlus size={16} className="text-gray-400" />}
-            className="h-10"
+            className="w-full [&_.ant-select-selector]:!min-h-10"
+            options={tuyChonNguoiLienQuan}
+            onSearch={setTimNguoiLienQuan}
+            suffixIcon={<UserPlus size={16} className="text-gray-400" />}
           />
-        </div>
+        </FormItem>
       </div>
     </PutFormModal>
   )
