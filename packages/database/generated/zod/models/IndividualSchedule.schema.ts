@@ -5,6 +5,8 @@
 /* eslint-disable */
 
 import { z } from 'zod/v3';
+import { ScheduleRepeatType } from '../../zenstack/models';
+import { ScheduleRepeatTypeSchema } from '../enums/ScheduleRepeatType.schema';
 const baseSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
@@ -19,6 +21,9 @@ const baseSchema = z.object({
     endTime: z.coerce.date(),
     allDay: z.boolean().default(false),
     location: z.string().nullish(),
+    content: z.string().nullish(),
+    reminderMinutes: z.number().nullish(),
+    repeatType: ScheduleRepeatTypeSchema,
 }
 ).strict();
 const baseSchemaWithoutDefaults = z.object({
@@ -35,11 +40,15 @@ const baseSchemaWithoutDefaults = z.object({
     endTime: z.coerce.date(),
     allDay: z.boolean(),
     location: z.string().nullish(),
+    content: z.string().nullish(),
+    reminderMinutes: z.number().nullish(),
+    repeatType: ScheduleRepeatTypeSchema,
 }
 ).strict();
 const relationSchema = z.object({
     lecturer: z.record(z.string(), z.unknown()),
     tags: z.array(z.unknown()).optional(),
+    relatedUserProfiles: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({
@@ -83,7 +92,10 @@ export const IndividualSchedulePrismaUpdateSchema = z.object({
     startTime: z.coerce.date(),
     endTime: z.coerce.date(),
     allDay: z.boolean(),
-    location: z.string().nullish()
+    location: z.string().nullish(),
+    content: z.string().nullish(),
+    reminderMinutes: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
+    repeatType: ScheduleRepeatTypeSchema
 }).partial().passthrough();
 
 
@@ -91,7 +103,7 @@ export const IndividualSchedulePrismaUpdateSchema = z.object({
  * `IndividualSchedule` schema for create operations excluding foreign keys and relations.
  */
 export const IndividualScheduleCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, allDay: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, allDay: true, repeatType: true
 });
 
 

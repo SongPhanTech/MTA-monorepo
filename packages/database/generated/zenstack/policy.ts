@@ -34,6 +34,7 @@ import { AcademicRankingBaseType } from "../prisma-client";
 import { StudentStatus } from "../prisma-client";
 import { NotificationType } from "../prisma-client";
 import { NotificationPriority } from "../prisma-client";
+import { ScheduleRepeatType } from "../prisma-client";
 import { ResearchProjectStatus } from "../prisma-client";
 import { RegistrationStatus } from "../prisma-client";
 import { ThesisProjectStatus } from "../prisma-client";
