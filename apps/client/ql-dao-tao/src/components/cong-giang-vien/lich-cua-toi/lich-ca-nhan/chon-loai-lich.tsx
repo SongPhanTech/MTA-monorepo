@@ -1,4 +1,4 @@
-import { MAU_LOAI_LICH_MAC_DINH } from "@components/cong-giang-vien/lich-cua-toi/lich-ca-nhan/utils"
+import { MAU_LOAI_MAC_DINH } from "@components/cong-giang-vien/lich-cua-toi/lich-ca-nhan/utils"
 import { cn } from "@workspace/ui/lib/utils"
 import type { PersonalWorkTag } from "@workspace/db/client"
 import { BookOpen, Plus, Tag, User, Users } from "lucide-react"
@@ -39,7 +39,7 @@ const ChonLoaiLich = forwardRef<HTMLDivElement, ChonLoaiLichProps>(function Chon
   return (
     <div ref={ref} className="flex w-full items-stretch gap-2">
       {tags.map((tag) => {
-        const mau = tag.color ?? MAU_LOAI_LICH_MAC_DINH[0]
+        const mau = tag.color ?? MAU_LOAI_MAC_DINH
         const dangChon = value === tag.id
         return (
           <button

@@ -3,7 +3,14 @@ import type {
   DongLichCaNhan,
   TagLoaiLich,
 } from "@components/cong-giang-vien/lich-cua-toi/lich-ca-nhan/types"
-import { MAU_LOAI_LICH_MAC_DINH } from "@components/cong-giang-vien/lich-cua-toi/lich-ca-nhan/utils"
+import { MAU_LOAI_MAC_DINH } from "@components/cong-giang-vien/lich-cua-toi/lich-ca-nhan/utils"
+import {
+  CHIEU_CAO_MOI_GIO,
+  CHIEU_CAO_TIMELINE,
+  formatGioTimeline,
+  gioTrongTimeline,
+  tinhViTriTimeline,
+} from "@components/cong-giang-vien/lich-cua-toi/timeline/constants"
 import { Empty, Spin } from "antd"
 import dayjs, { type Dayjs } from "dayjs"
 import { useMemo } from "react"
@@ -16,30 +23,22 @@ interface LichTuanCaNhanProps {
   onSua?: (id: string) => void
 }
 
-const GIO_BAT_DAU = 7
-const GIO_KET_THUC = 17
-
 const TEN_THU = ["Chủ nhật", "Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7"] as const
-
-const formatGio = (gio: number) => `${String(gio).padStart(2, "0")}:00`
 
 const formatNhanNgayTuan = (ngay: Dayjs) => `${TEN_THU[ngay.day()]} ${ngay.format("DD/MM")}`
 
-const layMauSuKien = (suKien: DongLichCaNhan) => suKien.mauLoai ?? MAU_LOAI_LICH_MAC_DINH[0]
+const layMauSuKien = (suKien: DongLichCaNhan) => suKien.mauLoai ?? MAU_LOAI_MAC_DINH
 
 type SuKienViTri = DongLichCaNhan & {
-  top: number
-  height: number
+  topPx: number
+  heightPx: number
   mau: string
   khoangThoiGian: string
   diaDiemHienThi: string
 }
 
 const LichTuanCaNhan = ({ danhSach, dauTuan, tags, dangTai, onSua }: LichTuanCaNhanProps) => {
-  const gioNhan = useMemo(
-    () => Array.from({ length: GIO_KET_THUC - GIO_BAT_DAU + 1 }, (_, i) => GIO_BAT_DAU + i),
-    []
-  )
+  const gioNhan = useMemo(() => gioTrongTimeline(), [])
 
   const ngayTrongTuan = useMemo(
     () => Array.from({ length: 7 }, (_, i) => dauTuan.add(i, "day")),
@@ -47,7 +46,6 @@ const LichTuanCaNhan = ({ danhSach, dauTuan, tags, dangTai, onSua }: LichTuanCaN
   )
 
   const suKienTheoNgay = useMemo(() => {
-    const tongPhut = (GIO_KET_THUC - GIO_BAT_DAU) * 60
     const map = new Map<string, SuKienViTri[]>()
 
     for (const ngay of ngayTrongTuan) {
@@ -61,22 +59,11 @@ const LichTuanCaNhan = ({ danhSach, dauTuan, tags, dangTai, onSua }: LichTuanCaN
       const batDau = dayjs(suKien.batDauIso)
       const ketThuc = dayjs(suKien.ketThucIso)
       const mau = layMauSuKien(suKien)
-
-      let phutBatDau: number
-      let phutKetThuc: number
-
-      if (suKien.caNgay) {
-        phutBatDau = 0
-        phutKetThuc = tongPhut
-      } else {
-        phutBatDau = batDau.hour() * 60 + batDau.minute() - GIO_BAT_DAU * 60
-        phutKetThuc = ketThuc.hour() * 60 + ketThuc.minute() - GIO_BAT_DAU * 60
-      }
-
-      const top = Math.max(0, (phutBatDau / tongPhut) * 100)
-      const height = Math.max(
-        6,
-        ((Math.min(phutKetThuc, tongPhut) - Math.max(phutBatDau, 0)) / tongPhut) * 100
+      const { topPx, heightPx } = tinhViTriTimeline(
+        suKien.batDauIso,
+        suKien.ketThucIso,
+        suKien.caNgay,
+        28
       )
 
       const khoangThoiGian = suKien.caNgay
@@ -87,8 +74,8 @@ const LichTuanCaNhan = ({ danhSach, dauTuan, tags, dangTai, onSua }: LichTuanCaN
 
       map.get(key)!.push({
         ...suKien,
-        top,
-        height,
+        topPx,
+        heightPx,
         mau,
         khoangThoiGian,
         diaDiemHienThi,
@@ -110,9 +97,9 @@ const LichTuanCaNhan = ({ danhSach, dauTuan, tags, dangTai, onSua }: LichTuanCaN
 
   return (
     <div className="flex h-full min-h-0 flex-col gap-3">
-      <div className="min-h-0 flex-1 overflow-auto overflow-x-hidden">
+      <div className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden">
         <div className="sticky top-0 z-10 flex border-b border-gray-200 bg-white pb-2 pt-0.5">
-          <div className="flex w-10 shrink-0 items-end pb-0.5 text-[10px] leading-none text-gray-400">
+          <div className="flex w-11 shrink-0 items-end pb-0.5 text-[10px] leading-none text-gray-400">
             GMT+7
           </div>
           <div className="grid min-w-0 flex-1 grid-cols-7 gap-1">
@@ -127,11 +114,15 @@ const LichTuanCaNhan = ({ danhSach, dauTuan, tags, dangTai, onSua }: LichTuanCaN
           </div>
         </div>
 
-        <div className="relative flex min-h-[360px]">
-          <div className="flex w-10 shrink-0 flex-col justify-between py-0.5 text-xs text-gray-400">
+        <div className="relative flex" style={{ height: CHIEU_CAO_TIMELINE }}>
+          <div className="relative w-11 shrink-0">
             {gioNhan.map((gio) => (
-              <span key={gio} className="leading-none">
-                {formatGio(gio)}
+              <span
+                key={gio}
+                className="absolute right-1 -translate-y-1/2 text-xs leading-none text-gray-400"
+                style={{ top: gio * CHIEU_CAO_MOI_GIO }}
+              >
+                {formatGioTimeline(gio)}
               </span>
             ))}
           </div>
@@ -142,14 +133,16 @@ const LichTuanCaNhan = ({ danhSach, dauTuan, tags, dangTai, onSua }: LichTuanCaN
               const suKienNgay = suKienTheoNgay.get(key) ?? []
 
               return (
-                <div key={key} className="relative border-l border-gray-100 first:border-l-0">
+                <div
+                  key={key}
+                  className="relative border-l border-gray-100 first:border-l-0"
+                  style={{ height: CHIEU_CAO_TIMELINE }}
+                >
                   {gioNhan.slice(1).map((gio) => (
                     <div
                       key={gio}
                       className="pointer-events-none absolute left-0 right-0 border-t border-dashed border-gray-200"
-                      style={{
-                        top: `${((gio - GIO_BAT_DAU) / (GIO_KET_THUC - GIO_BAT_DAU)) * 100}%`,
-                      }}
+                      style={{ top: gio * CHIEU_CAO_MOI_GIO }}
                     />
                   ))}
 
@@ -160,9 +153,8 @@ const LichTuanCaNhan = ({ danhSach, dauTuan, tags, dangTai, onSua }: LichTuanCaN
                       onClick={() => onSua?.(suKien.id)}
                       className="absolute left-0.5 right-0.5 overflow-hidden rounded-sm border border-gray-100 px-1.5 py-1 text-left transition-shadow hover:shadow-sm"
                       style={{
-                        top: `${suKien.top}%`,
-                        height: `${suKien.height}%`,
-                        minHeight: 28,
+                        top: suKien.topPx,
+                        height: suKien.heightPx,
                         backgroundColor: `${suKien.mau}14`,
                         borderLeftWidth: 3,
                         borderLeftColor: suKien.mau,

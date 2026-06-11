@@ -1,5 +1,6 @@
 import type { CheDoHienThiLich, DangXemLich } from "@components/cong-giang-vien/lich-cua-toi/types"
 import { formatNgayChonHienThi } from "@components/cong-giang-vien/lich-cua-toi/lich-ca-nhan/utils"
+import { formatNhanTuan } from "@components/cong-giang-vien/lich-cua-toi/utils"
 import { cn } from "@workspace/ui/lib/utils"
 import { Button, DatePicker, Select } from "antd"
 import locale from "antd/locale/vi_VN"
@@ -11,7 +12,6 @@ interface ThanhCongCuLichCaNhanProps {
   cheDoHienThi: CheDoHienThiLich
   onDoiCheDoHienThi: (value: CheDoHienThiLich) => void
   ngayChon: Dayjs
-  nhanKhoangThoiGian: string
   onDoiNgay: (ngay: Dayjs) => void
   onLuiNgay: () => void
   onTienNgay: () => void
@@ -27,7 +27,6 @@ const ThanhCongCuLichCaNhan = ({
   cheDoHienThi,
   onDoiCheDoHienThi,
   ngayChon,
-  nhanKhoangThoiGian,
   onDoiNgay,
   onLuiNgay,
   onTienNgay,
@@ -67,9 +66,17 @@ const ThanhCongCuLichCaNhan = ({
             }
           />
           {cheDoHienThi === "tuan" ? (
-            <div className="flex h-8 min-w-[220px] items-center justify-center rounded-md border border-gray-200 bg-white px-3 text-sm text-gray-800">
-              {nhanKhoangThoiGian}
-            </div>
+            <DatePicker
+              picker="week"
+              value={ngayChon}
+              onChange={(value) => value && onDoiNgay(value.startOf("isoWeek"))}
+              allowClear={false}
+              format={(value) => (value ? formatNhanTuan(value) : "")}
+              locale={locale.DatePicker}
+              className="min-w-[220px]"
+              suffixIcon={<CalendarDays size={14} className="text-gray-400" />}
+              inputReadOnly
+            />
           ) : cheDoHienThi === "thang" ? (
             <DatePicker
               picker="month"

@@ -1,10 +1,10 @@
 import TableCollapse from "@components/commons/tableCollapse"
-import { META_LOAI_LICH_CA_NHAN } from "@components/cong-giang-vien/lich-cua-toi/lich-ca-nhan/constants"
 import type {
   DongLichBangThang,
   DongLichCaNhan,
   NhomNgayLich,
 } from "@components/cong-giang-vien/lich-cua-toi/lich-ca-nhan/types"
+import { MAU_LOAI_MAC_DINH } from "@components/cong-giang-vien/lich-cua-toi/lich-ca-nhan/utils"
 import type { CheDoHienThiLich } from "@components/cong-giang-vien/lich-cua-toi/types"
 import EditIcon from "@components/icons/edit"
 import DeleteIcon from "@components/icons/delete"
@@ -28,26 +28,19 @@ interface BangLichCaNhanProps {
 const CHIEU_CAO_HEADER_BANG = 39
 
 const renderLoaiLich = (row: DongLichCaNhan) => {
-  const meta = META_LOAI_LICH_CA_NHAN[row.nhomLoai]
-  if (row.mauLoai) {
-    return (
-      <span
-        className="inline-block rounded border px-2 py-0.5 text-xs font-medium"
-        style={{
-          borderColor: row.mauLoai,
-          color: row.mauLoai,
-          backgroundColor: `${row.mauLoai}14`,
-        }}
-      >
-        {row.tenLoai || meta.label}
-      </span>
-    )
-  }
+  const mau = row.mauLoai ?? MAU_LOAI_MAC_DINH
+  const ten = row.tenLoai && row.tenLoai !== "—" ? row.tenLoai : "Loại lịch"
+
   return (
     <span
-      className={`inline-block rounded border px-2 py-0.5 text-xs font-medium ${meta.tagClass}`}
+      className="inline-block rounded border px-2 py-0.5 text-xs font-medium"
+      style={{
+        borderColor: mau,
+        color: mau,
+        backgroundColor: `${mau}14`,
+      }}
     >
-      {row.tenLoai || meta.label}
+      {ten}
     </span>
   )
 }

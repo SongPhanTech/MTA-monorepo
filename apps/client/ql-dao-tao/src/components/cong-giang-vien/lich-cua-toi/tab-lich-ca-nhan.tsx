@@ -22,7 +22,6 @@ const TabLichCaNhan = () => {
     setDangXem,
     ngayChon,
     setNgayChon,
-    nhanKhoangThoiGian,
     luiNgay,
     tienNgay,
     tuKhoa,
@@ -70,7 +69,6 @@ const TabLichCaNhan = () => {
           cheDoHienThi={cheDoHienThi}
           onDoiCheDoHienThi={setCheDoHienThi}
           ngayChon={ngayChon}
-          nhanKhoangThoiGian={nhanKhoangThoiGian}
           onDoiNgay={setNgayChon}
           onLuiNgay={luiNgay}
           onTienNgay={tienNgay}

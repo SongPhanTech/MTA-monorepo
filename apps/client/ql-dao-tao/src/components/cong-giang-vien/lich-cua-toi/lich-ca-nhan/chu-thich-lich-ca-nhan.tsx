@@ -1,4 +1,4 @@
-import { MAU_LOAI_LICH_MAC_DINH } from "@components/cong-giang-vien/lich-cua-toi/lich-ca-nhan/utils"
+import { MAU_LOAI_MAC_DINH } from "@components/cong-giang-vien/lich-cua-toi/lich-ca-nhan/utils"
 import type { TagLoaiLich } from "@components/cong-giang-vien/lich-cua-toi/lich-ca-nhan/types"
 import { cn } from "@workspace/ui/lib/utils"
 
@@ -14,8 +14,8 @@ const ChuThichLichCaNhan = ({ tags, className }: ChuThichLichCaNhanProps) => {
     <div
       className={cn("flex flex-wrap items-center gap-x-5 gap-y-1 text-xs text-gray-600", className)}
     >
-      {tags.map((tag, index) => {
-        const mau = tag.color ?? MAU_LOAI_LICH_MAC_DINH[index % MAU_LOAI_LICH_MAC_DINH.length]
+      {tags.map((tag) => {
+        const mau = tag.color ?? MAU_LOAI_MAC_DINH
         return (
           <span key={tag.id} className="inline-flex items-center gap-1.5">
             <span

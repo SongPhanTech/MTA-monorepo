@@ -17,7 +17,8 @@ type LichVoiTag = Prisma.IndividualScheduleGetPayload<{
   include: { tags: { select: { id: true; name: true; color: true } } }
 }>
 
-export const MAU_LOAI_LICH_MAC_DINH = ["#16a34a", "#2563eb", "#ea580c", "#9333ea", "#dc2626"]
+/** Màu dự phòng khi tag API chưa có color. */
+export const MAU_LOAI_MAC_DINH = "#9ca3af"
 
 export const mapTenTagSangNhom = (ten: string): NhomLoaiLichCaNhan => {
   const chuan = ten.normalize("NFD").replace(/\p{M}/gu, "").toLowerCase()
