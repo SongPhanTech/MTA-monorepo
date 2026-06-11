@@ -148,6 +148,12 @@ export default function HocHamForm({ expland, setExpland }: DomProps) {
               render: (_, record) => formatDate(record?.to) || "",
             },
             {
+              title: "Năm nhận",
+              align: "center",
+              width: 120,
+              render: (_, record) => record.year || "",
+            },
+            {
               title: "Thao tác",
               width: 100,
               align: "center",
