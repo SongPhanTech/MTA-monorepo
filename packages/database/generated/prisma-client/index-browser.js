@@ -239,6 +239,7 @@ exports.Prisma.UserProfileScalarFieldEnum = {
   temporaryAddress: 'temporaryAddress',
   contactAddress: 'contactAddress',
   phoneNumber: 'phoneNumber',
+  officePhone: 'officePhone',
   email: 'email',
   nationalityId: 'nationalityId',
   religionId: 'religionId',
@@ -303,6 +304,7 @@ exports.Prisma.HocHamScalarFieldEnum = {
   soQuyetDinh: 'soQuyetDinh',
   from: 'from',
   to: 'to',
+  year: 'year',
   userProfileId: 'userProfileId'
 };
 
@@ -346,6 +348,7 @@ exports.Prisma.HocViScalarFieldEnum = {
   academicDegreeTypeId: 'academicDegreeTypeId',
   nationalityId: 'nationalityId',
   linhVuc: 'linhVuc',
+  tenLuanAn: 'tenLuanAn',
   truongId: 'truongId',
   year: 'year',
   userProfileId: 'userProfileId'
@@ -5098,6 +5101,7 @@ exports.Prisma.UserProfileOrderByRelevanceFieldEnum = {
   temporaryAddress: 'temporaryAddress',
   contactAddress: 'contactAddress',
   phoneNumber: 'phoneNumber',
+  officePhone: 'officePhone',
   email: 'email',
   nationalityId: 'nationalityId',
   religionId: 'religionId',
@@ -5175,6 +5179,7 @@ exports.Prisma.HocViOrderByRelevanceFieldEnum = {
   academicDegreeTypeId: 'academicDegreeTypeId',
   nationalityId: 'nationalityId',
   linhVuc: 'linhVuc',
+  tenLuanAn: 'tenLuanAn',
   truongId: 'truongId',
   userProfileId: 'userProfileId'
 };

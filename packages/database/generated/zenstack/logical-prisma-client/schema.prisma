@@ -832,6 +832,7 @@ model UserProfile {
   temporaryAddress                     String?
   contactAddress                       String?
   phoneNumber                          String?
+  officePhone                          String?
   email                                String?
   nationality                          DM_QuocGia?                         @relation(fields: [nationalityId], references: [Id])
   nationalityId                        String?                             @db.Uuid()
@@ -979,6 +980,7 @@ model HocHam {
   soQuyetDinh        String?
   from               DateTime?
   to                 DateTime?
+  year               Int?
   userProfile        UserProfile @relation(fields: [userProfileId], references: [id])
   userProfileId      String      @db.Uuid()
 
@@ -1044,6 +1046,7 @@ model HocVi {
   nationality          DM_QuocGia?           @relation(fields: [nationalityId], references: [Id])
   nationalityId        String?               @db.Uuid()
   linhVuc              String?
+  tenLuanAn            String?
   truong               DM_TruongDaoTaoBacDH? @relation(fields: [truongId], references: [id])
   truongId             String?
   year                 Int?

@@ -6709,6 +6709,7 @@ export namespace Prisma {
         temporaryAddress: 'temporaryAddress',
         contactAddress: 'contactAddress',
         phoneNumber: 'phoneNumber',
+        officePhone: 'officePhone',
         email: 'email',
         nationalityId: 'nationalityId',
         religionId: 'religionId',
@@ -6772,6 +6773,7 @@ export namespace Prisma {
         soQuyetDinh: 'soQuyetDinh',
         from: 'from',
         to: 'to',
+        year: 'year',
         userProfileId: 'userProfileId'
     };
     export const ChucVuChinhQuyenScalarFieldEnum: {
@@ -6812,6 +6814,7 @@ export namespace Prisma {
         academicDegreeTypeId: 'academicDegreeTypeId',
         nationalityId: 'nationalityId',
         linhVuc: 'linhVuc',
+        tenLuanAn: 'tenLuanAn',
         truongId: 'truongId',
         year: 'year',
         userProfileId: 'userProfileId'
@@ -11286,6 +11289,7 @@ export namespace Prisma {
         temporaryAddress: 'temporaryAddress',
         contactAddress: 'contactAddress',
         phoneNumber: 'phoneNumber',
+        officePhone: 'officePhone',
         email: 'email',
         nationalityId: 'nationalityId',
         religionId: 'religionId',
@@ -11359,6 +11363,7 @@ export namespace Prisma {
         academicDegreeTypeId: 'academicDegreeTypeId',
         nationalityId: 'nationalityId',
         linhVuc: 'linhVuc',
+        tenLuanAn: 'tenLuanAn',
         truongId: 'truongId',
         userProfileId: 'userProfileId'
     };
@@ -15694,6 +15699,7 @@ export namespace Prisma {
         readonly temporaryAddress: FieldRef<"UserProfile", 'String'>;
         readonly contactAddress: FieldRef<"UserProfile", 'String'>;
         readonly phoneNumber: FieldRef<"UserProfile", 'String'>;
+        readonly officePhone: FieldRef<"UserProfile", 'String'>;
         readonly email: FieldRef<"UserProfile", 'String'>;
         readonly nationalityId: FieldRef<"UserProfile", 'String'>;
         readonly religionId: FieldRef<"UserProfile", 'String'>;
@@ -16128,6 +16134,7 @@ export namespace Prisma {
         readonly soQuyetDinh: FieldRef<"HocHam", 'String'>;
         readonly from: FieldRef<"HocHam", 'DateTime'>;
         readonly to: FieldRef<"HocHam", 'DateTime'>;
+        readonly year: FieldRef<"HocHam", 'Int'>;
         readonly userProfileId: FieldRef<"HocHam", 'String'>;
     }
 
@@ -17283,6 +17290,7 @@ export namespace Prisma {
         readonly academicDegreeTypeId: FieldRef<"HocVi", 'String'>;
         readonly nationalityId: FieldRef<"HocVi", 'String'>;
         readonly linhVuc: FieldRef<"HocVi", 'String'>;
+        readonly tenLuanAn: FieldRef<"HocVi", 'String'>;
         readonly truongId: FieldRef<"HocVi", 'String'>;
         readonly year: FieldRef<"HocVi", 'Int'>;
         readonly userProfileId: FieldRef<"HocVi", 'String'>;
@@ -151746,6 +151754,7 @@ export namespace Prisma {
         temporaryAddress: string | null
         contactAddress: string | null
         phoneNumber: string | null
+        officePhone: string | null
         email: string | null
         nationalityId: string | null
         religionId: string | null
@@ -151875,6 +151884,7 @@ export namespace Prisma {
         temporaryAddress: string | null
         contactAddress: string | null
         phoneNumber: string | null
+        officePhone: string | null
         email: string | null
         nationalityId: string | null
         religionId: string | null
@@ -152004,6 +152014,7 @@ export namespace Prisma {
         temporaryAddress: number
         contactAddress: number
         phoneNumber: number
+        officePhone: number
         email: number
         nationalityId: number
         religionId: number
@@ -152146,6 +152157,7 @@ export namespace Prisma {
         temporaryAddress?: true
         contactAddress?: true
         phoneNumber?: true
+        officePhone?: true
         email?: true
         nationalityId?: true
         religionId?: true
@@ -152275,6 +152287,7 @@ export namespace Prisma {
         temporaryAddress?: true
         contactAddress?: true
         phoneNumber?: true
+        officePhone?: true
         email?: true
         nationalityId?: true
         religionId?: true
@@ -152404,6 +152417,7 @@ export namespace Prisma {
         temporaryAddress?: true
         contactAddress?: true
         phoneNumber?: true
+        officePhone?: true
         email?: true
         nationalityId?: true
         religionId?: true
@@ -152614,6 +152628,7 @@ export namespace Prisma {
         temporaryAddress: string | null
         contactAddress: string | null
         phoneNumber: string | null
+        officePhone: string | null
         email: string | null
         nationalityId: string | null
         religionId: string | null
@@ -152760,6 +152775,7 @@ export namespace Prisma {
         temporaryAddress?: boolean
         contactAddress?: boolean
         phoneNumber?: boolean
+        officePhone?: boolean
         email?: boolean
         nationalityId?: boolean
         religionId?: boolean
@@ -152980,6 +152996,7 @@ export namespace Prisma {
         temporaryAddress?: boolean
         contactAddress?: boolean
         phoneNumber?: boolean
+        officePhone?: boolean
         email?: boolean
         nationalityId?: boolean
         religionId?: boolean
@@ -153153,6 +153170,7 @@ export namespace Prisma {
         temporaryAddress?: boolean
         contactAddress?: boolean
         phoneNumber?: boolean
+        officePhone?: boolean
         email?: boolean
         nationalityId?: boolean
         religionId?: boolean
@@ -153326,6 +153344,7 @@ export namespace Prisma {
         temporaryAddress?: boolean
         contactAddress?: boolean
         phoneNumber?: boolean
+        officePhone?: boolean
         email?: boolean
         nationalityId?: boolean
         religionId?: boolean
@@ -153375,7 +153394,7 @@ export namespace Prisma {
         familyName?: boolean
         trinhDoHocVanId?: boolean
     };
-    export type UserProfileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "bLaNguoiDung" | "bLaGiangVien" | "bLaCanBoNhanVien" | "bLaHocVien" | "groupId" | "sDM_DonViId" | "sDM_ViTriCongViecId" | "sQuanlyTrucTiepId" | "iDictionaryKey" | "bSystem" | "sNguoiTao" | "sNguoiSua" | "sThietBiTao" | "sThietBiSua" | "avatar" | "firstName" | "lastName" | "idCardNumber" | "placeOfIdCardNumber" | "fullname" | "healthInsuranceNumber" | "bankAccountNumber" | "bankName" | "currentAddress" | "newCurrentAddress" | "occupationWhenRecruiting" | "thuongBinh" | "benh" | "tinhHinhNhaO" | "truocKhiNhapNgu" | "thanhPhanGiaDinh" | "soTruong" | "hoTenThuongDung" | "lichSuBanThan" | "conThuMay" | "chieuCao" | "canNang" | "soACE" | "kinhTeGiaDinh" | "chinhTriGiaDinh" | "fSoACE" | "fKinhTeGiaDinh" | "fThanhPhanGiaDinh" | "fChinhTriGiaDinh" | "fBanThan" | "nationalId" | "provinceCurrentAddressId" | "districtCurrentAddressId" | "communeCurrentAddressId" | "newProvinceCurrentAddressId" | "newCommuneCurrentAddressId" | "dateOfBirth" | "placeOfBirth" | "provinceOfBirthId" | "districtOfBirthId" | "communeOfBirthId" | "newProvinceOfBirthId" | "newCommuneOfBirthId" | "homeTown" | "idCardDate" | "idCardExpirationDate" | "genderId" | "permanentAddress" | "provincePermanentAddressId" | "districtPermanentAddressId" | "communePermanentAddressId" | "newProvincePermanentAddressId" | "newCommunePermanentAddressId" | "temporaryAddress" | "contactAddress" | "phoneNumber" | "email" | "nationalityId" | "religionId" | "ethnicityId" | "provinceHometownId" | "districtHometownId" | "communeHometownId" | "newProvinceHometownId" | "newCommuneHometownId" | "officerNumber" | "rankId" | "rankDate" | "academicDegreeTypeId" | "academicDegreeDate" | "academicRankTypeId" | "academicRankDate" | "levelId" | "chiHuyQuanLyId" | "chuyenMonKyThuatId" | "sucKhoeId" | "nhomMauId" | "tinhTrangHonNhanId" | "trangThaiLamViecId" | "dM_ChucDanhCMNVGiangVienId" | "dM_ChucDanhCMNVNghienCuuVienId" | "dM_ChucDanhCMNVKySuId" | "dM_XepLoaiDanhGiaChatLuongDangVienId" | "dM_XepLoaiDanhGiaCanBoId" | "dM_HinhThucKhenThuongDangId" | "unionDate" | "unionPlace" | "CPVJoinDate" | "officialCPVDate" | "CPVJoinPlace" | "positionCPVId" | "chucVuChinhQuyenId" | "tenureDate" | "enlistmentDate" | "reEnlistmentDate" | "dischargeDate" | "recruitmentDate" | "recruitmentAgency" | "mainJobAssigned" | "revolutionaryDate" | "originalPlace" | "familyPhone" | "familyName" | "trinhDoHocVanId", ExtArgs["result"]["userProfile"]>;
+    export type UserProfileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "bLaNguoiDung" | "bLaGiangVien" | "bLaCanBoNhanVien" | "bLaHocVien" | "groupId" | "sDM_DonViId" | "sDM_ViTriCongViecId" | "sQuanlyTrucTiepId" | "iDictionaryKey" | "bSystem" | "sNguoiTao" | "sNguoiSua" | "sThietBiTao" | "sThietBiSua" | "avatar" | "firstName" | "lastName" | "idCardNumber" | "placeOfIdCardNumber" | "fullname" | "healthInsuranceNumber" | "bankAccountNumber" | "bankName" | "currentAddress" | "newCurrentAddress" | "occupationWhenRecruiting" | "thuongBinh" | "benh" | "tinhHinhNhaO" | "truocKhiNhapNgu" | "thanhPhanGiaDinh" | "soTruong" | "hoTenThuongDung" | "lichSuBanThan" | "conThuMay" | "chieuCao" | "canNang" | "soACE" | "kinhTeGiaDinh" | "chinhTriGiaDinh" | "fSoACE" | "fKinhTeGiaDinh" | "fThanhPhanGiaDinh" | "fChinhTriGiaDinh" | "fBanThan" | "nationalId" | "provinceCurrentAddressId" | "districtCurrentAddressId" | "communeCurrentAddressId" | "newProvinceCurrentAddressId" | "newCommuneCurrentAddressId" | "dateOfBirth" | "placeOfBirth" | "provinceOfBirthId" | "districtOfBirthId" | "communeOfBirthId" | "newProvinceOfBirthId" | "newCommuneOfBirthId" | "homeTown" | "idCardDate" | "idCardExpirationDate" | "genderId" | "permanentAddress" | "provincePermanentAddressId" | "districtPermanentAddressId" | "communePermanentAddressId" | "newProvincePermanentAddressId" | "newCommunePermanentAddressId" | "temporaryAddress" | "contactAddress" | "phoneNumber" | "officePhone" | "email" | "nationalityId" | "religionId" | "ethnicityId" | "provinceHometownId" | "districtHometownId" | "communeHometownId" | "newProvinceHometownId" | "newCommuneHometownId" | "officerNumber" | "rankId" | "rankDate" | "academicDegreeTypeId" | "academicDegreeDate" | "academicRankTypeId" | "academicRankDate" | "levelId" | "chiHuyQuanLyId" | "chuyenMonKyThuatId" | "sucKhoeId" | "nhomMauId" | "tinhTrangHonNhanId" | "trangThaiLamViecId" | "dM_ChucDanhCMNVGiangVienId" | "dM_ChucDanhCMNVNghienCuuVienId" | "dM_ChucDanhCMNVKySuId" | "dM_XepLoaiDanhGiaChatLuongDangVienId" | "dM_XepLoaiDanhGiaCanBoId" | "dM_HinhThucKhenThuongDangId" | "unionDate" | "unionPlace" | "CPVJoinDate" | "officialCPVDate" | "CPVJoinPlace" | "positionCPVId" | "chucVuChinhQuyenId" | "tenureDate" | "enlistmentDate" | "reEnlistmentDate" | "dischargeDate" | "recruitmentDate" | "recruitmentAgency" | "mainJobAssigned" | "revolutionaryDate" | "originalPlace" | "familyPhone" | "familyName" | "trinhDoHocVanId", ExtArgs["result"]["userProfile"]>;
     export type UserProfileInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         group?: boolean | UserProfile$groupArgs<ExtArgs>
         provinceCurrentAddress?: boolean | UserProfile$provinceCurrentAddressArgs<ExtArgs>
@@ -153747,6 +153766,7 @@ export namespace Prisma {
             temporaryAddress: string | null
             contactAddress: string | null
             phoneNumber: string | null
+            officePhone: string | null
             email: string | null
             nationalityId: string | null
             religionId: string | null
@@ -156041,8 +156061,16 @@ export namespace Prisma {
      */
     export type AggregateHocHam = {
         _count: HocHamCountAggregateOutputType | null
+        _avg: HocHamAvgAggregateOutputType | null
+        _sum: HocHamSumAggregateOutputType | null
         _min: HocHamMinAggregateOutputType | null
         _max: HocHamMaxAggregateOutputType | null
+    };
+    export type HocHamAvgAggregateOutputType = {
+        year: number | null
+    };
+    export type HocHamSumAggregateOutputType = {
+        year: number | null
     };
     export type HocHamMinAggregateOutputType = {
         id: string | null
@@ -156058,6 +156086,7 @@ export namespace Prisma {
         soQuyetDinh: string | null
         from: Date | null
         to: Date | null
+        year: number | null
         userProfileId: string | null
     };
     export type HocHamMaxAggregateOutputType = {
@@ -156074,6 +156103,7 @@ export namespace Prisma {
         soQuyetDinh: string | null
         from: Date | null
         to: Date | null
+        year: number | null
         userProfileId: string | null
     };
     export type HocHamCountAggregateOutputType = {
@@ -156090,8 +156120,15 @@ export namespace Prisma {
         soQuyetDinh: number
         from: number
         to: number
+        year: number
         userProfileId: number
         _all: number
+    };
+    export type HocHamAvgAggregateInputType = {
+        year?: true
+    };
+    export type HocHamSumAggregateInputType = {
+        year?: true
     };
     export type HocHamMinAggregateInputType = {
         id?: true
@@ -156107,6 +156144,7 @@ export namespace Prisma {
         soQuyetDinh?: true
         from?: true
         to?: true
+        year?: true
         userProfileId?: true
     };
     export type HocHamMaxAggregateInputType = {
@@ -156123,6 +156161,7 @@ export namespace Prisma {
         soQuyetDinh?: true
         from?: true
         to?: true
+        year?: true
         userProfileId?: true
     };
     export type HocHamCountAggregateInputType = {
@@ -156139,6 +156178,7 @@ export namespace Prisma {
         soQuyetDinh?: true
         from?: true
         to?: true
+        year?: true
         userProfileId?: true
         _all?: true
     };
@@ -156180,6 +156220,18 @@ export namespace Prisma {
         /**
          * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
          * 
+         * Select which fields to average
+        **/
+        _avg?: HocHamAvgAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to sum
+        **/
+        _sum?: HocHamSumAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
          * Select which fields to find the minimum value
         **/
         _min?: HocHamMinAggregateInputType
@@ -156205,6 +156257,8 @@ export namespace Prisma {
         take?: number
         skip?: number
         _count?: HocHamCountAggregateInputType | true
+        _avg?: HocHamAvgAggregateInputType
+        _sum?: HocHamSumAggregateInputType
         _min?: HocHamMinAggregateInputType
         _max?: HocHamMaxAggregateInputType
     };
@@ -156222,8 +156276,11 @@ export namespace Prisma {
         soQuyetDinh: string | null
         from: Date | null
         to: Date | null
+        year: number | null
         userProfileId: string
         _count: HocHamCountAggregateOutputType | null
+        _avg: HocHamAvgAggregateOutputType | null
+        _sum: HocHamSumAggregateOutputType | null
         _min: HocHamMinAggregateOutputType | null
         _max: HocHamMaxAggregateOutputType | null
     };
@@ -156253,6 +156310,7 @@ export namespace Prisma {
         soQuyetDinh?: boolean
         from?: boolean
         to?: boolean
+        year?: boolean
         userProfileId?: boolean
         academicRankType?: boolean | HocHam$academicRankTypeArgs<ExtArgs>
         userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
@@ -156271,6 +156329,7 @@ export namespace Prisma {
         soQuyetDinh?: boolean
         from?: boolean
         to?: boolean
+        year?: boolean
         userProfileId?: boolean
         academicRankType?: boolean | HocHam$academicRankTypeArgs<ExtArgs>
         userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
@@ -156289,6 +156348,7 @@ export namespace Prisma {
         soQuyetDinh?: boolean
         from?: boolean
         to?: boolean
+        year?: boolean
         userProfileId?: boolean
         academicRankType?: boolean | HocHam$academicRankTypeArgs<ExtArgs>
         userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
@@ -156307,9 +156367,10 @@ export namespace Prisma {
         soQuyetDinh?: boolean
         from?: boolean
         to?: boolean
+        year?: boolean
         userProfileId?: boolean
     };
-    export type HocHamOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "academicRankTypeId" | "noiCap" | "soQuyetDinh" | "from" | "to" | "userProfileId", ExtArgs["result"]["hocHam"]>;
+    export type HocHamOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "academicRankTypeId" | "noiCap" | "soQuyetDinh" | "from" | "to" | "year" | "userProfileId", ExtArgs["result"]["hocHam"]>;
     export type HocHamInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         academicRankType?: boolean | HocHam$academicRankTypeArgs<ExtArgs>
         userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
@@ -156342,6 +156403,7 @@ export namespace Prisma {
             soQuyetDinh: string | null
             from: Date | null
             to: Date | null
+            year: number | null
             userProfileId: string
         }, ExtArgs["result"]["hocHam"]>
         composites: {}
@@ -158170,6 +158232,7 @@ export namespace Prisma {
         academicDegreeTypeId: string | null
         nationalityId: string | null
         linhVuc: string | null
+        tenLuanAn: string | null
         truongId: string | null
         year: number | null
         userProfileId: string | null
@@ -158186,6 +158249,7 @@ export namespace Prisma {
         academicDegreeTypeId: string | null
         nationalityId: string | null
         linhVuc: string | null
+        tenLuanAn: string | null
         truongId: string | null
         year: number | null
         userProfileId: string | null
@@ -158202,6 +158266,7 @@ export namespace Prisma {
         academicDegreeTypeId: number
         nationalityId: number
         linhVuc: number
+        tenLuanAn: number
         truongId: number
         year: number
         userProfileId: number
@@ -158225,6 +158290,7 @@ export namespace Prisma {
         academicDegreeTypeId?: true
         nationalityId?: true
         linhVuc?: true
+        tenLuanAn?: true
         truongId?: true
         year?: true
         userProfileId?: true
@@ -158241,6 +158307,7 @@ export namespace Prisma {
         academicDegreeTypeId?: true
         nationalityId?: true
         linhVuc?: true
+        tenLuanAn?: true
         truongId?: true
         year?: true
         userProfileId?: true
@@ -158257,6 +158324,7 @@ export namespace Prisma {
         academicDegreeTypeId?: true
         nationalityId?: true
         linhVuc?: true
+        tenLuanAn?: true
         truongId?: true
         year?: true
         userProfileId?: true
@@ -158354,6 +158422,7 @@ export namespace Prisma {
         academicDegreeTypeId: string | null
         nationalityId: string | null
         linhVuc: string | null
+        tenLuanAn: string | null
         truongId: string | null
         year: number | null
         userProfileId: string
@@ -158387,6 +158456,7 @@ export namespace Prisma {
         academicDegreeTypeId?: boolean
         nationalityId?: boolean
         linhVuc?: boolean
+        tenLuanAn?: boolean
         truongId?: boolean
         year?: boolean
         userProfileId?: boolean
@@ -158407,6 +158477,7 @@ export namespace Prisma {
         academicDegreeTypeId?: boolean
         nationalityId?: boolean
         linhVuc?: boolean
+        tenLuanAn?: boolean
         truongId?: boolean
         year?: boolean
         userProfileId?: boolean
@@ -158427,6 +158498,7 @@ export namespace Prisma {
         academicDegreeTypeId?: boolean
         nationalityId?: boolean
         linhVuc?: boolean
+        tenLuanAn?: boolean
         truongId?: boolean
         year?: boolean
         userProfileId?: boolean
@@ -158447,11 +158519,12 @@ export namespace Prisma {
         academicDegreeTypeId?: boolean
         nationalityId?: boolean
         linhVuc?: boolean
+        tenLuanAn?: boolean
         truongId?: boolean
         year?: boolean
         userProfileId?: boolean
     };
-    export type HocViOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "academicDegreeTypeId" | "nationalityId" | "linhVuc" | "truongId" | "year" | "userProfileId", ExtArgs["result"]["hocVi"]>;
+    export type HocViOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "academicDegreeTypeId" | "nationalityId" | "linhVuc" | "tenLuanAn" | "truongId" | "year" | "userProfileId", ExtArgs["result"]["hocVi"]>;
     export type HocViInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         academicDegreeType?: boolean | HocVi$academicDegreeTypeArgs<ExtArgs>
         nationality?: boolean | HocVi$nationalityArgs<ExtArgs>
@@ -158490,6 +158563,7 @@ export namespace Prisma {
             academicDegreeTypeId: string | null
             nationalityId: string | null
             linhVuc: string | null
+            tenLuanAn: string | null
             truongId: string | null
             year: number | null
             userProfileId: string
@@ -370329,6 +370403,7 @@ export namespace Prisma {
         temporaryAddress?: StringNullableFilter<"UserProfile"> | string | null
         contactAddress?: StringNullableFilter<"UserProfile"> | string | null
         phoneNumber?: StringNullableFilter<"UserProfile"> | string | null
+        officePhone?: StringNullableFilter<"UserProfile"> | string | null
         email?: StringNullableFilter<"UserProfile"> | string | null
         nationalityId?: UuidNullableFilter<"UserProfile"> | string | null
         religionId?: UuidNullableFilter<"UserProfile"> | string | null
@@ -370548,6 +370623,7 @@ export namespace Prisma {
         temporaryAddress?: SortOrderInput | SortOrder
         contactAddress?: SortOrderInput | SortOrder
         phoneNumber?: SortOrderInput | SortOrder
+        officePhone?: SortOrderInput | SortOrder
         email?: SortOrderInput | SortOrder
         nationalityId?: SortOrderInput | SortOrder
         religionId?: SortOrderInput | SortOrder
@@ -370771,6 +370847,7 @@ export namespace Prisma {
         temporaryAddress?: StringNullableFilter<"UserProfile"> | string | null
         contactAddress?: StringNullableFilter<"UserProfile"> | string | null
         phoneNumber?: StringNullableFilter<"UserProfile"> | string | null
+        officePhone?: StringNullableFilter<"UserProfile"> | string | null
         email?: StringNullableFilter<"UserProfile"> | string | null
         nationalityId?: UuidNullableFilter<"UserProfile"> | string | null
         religionId?: UuidNullableFilter<"UserProfile"> | string | null
@@ -370990,6 +371067,7 @@ export namespace Prisma {
         temporaryAddress?: SortOrderInput | SortOrder
         contactAddress?: SortOrderInput | SortOrder
         phoneNumber?: SortOrderInput | SortOrder
+        officePhone?: SortOrderInput | SortOrder
         email?: SortOrderInput | SortOrder
         nationalityId?: SortOrderInput | SortOrder
         religionId?: SortOrderInput | SortOrder
@@ -371127,6 +371205,7 @@ export namespace Prisma {
         temporaryAddress?: StringNullableWithAggregatesFilter<"UserProfile"> | string | null
         contactAddress?: StringNullableWithAggregatesFilter<"UserProfile"> | string | null
         phoneNumber?: StringNullableWithAggregatesFilter<"UserProfile"> | string | null
+        officePhone?: StringNullableWithAggregatesFilter<"UserProfile"> | string | null
         email?: StringNullableWithAggregatesFilter<"UserProfile"> | string | null
         nationalityId?: UuidNullableWithAggregatesFilter<"UserProfile"> | string | null
         religionId?: UuidNullableWithAggregatesFilter<"UserProfile"> | string | null
@@ -371193,6 +371272,7 @@ export namespace Prisma {
         soQuyetDinh?: StringNullableFilter<"HocHam"> | string | null
         from?: DateTimeNullableFilter<"HocHam"> | Date | string | null
         to?: DateTimeNullableFilter<"HocHam"> | Date | string | null
+        year?: IntNullableFilter<"HocHam"> | number | null
         userProfileId?: UuidFilter<"HocHam"> | string
         academicRankType?: XOR<DM_HocHamNullableScalarRelationFilter, DM_HocHamWhereInput> | null
         userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
@@ -371211,6 +371291,7 @@ export namespace Prisma {
         soQuyetDinh?: SortOrderInput | SortOrder
         from?: SortOrderInput | SortOrder
         to?: SortOrderInput | SortOrder
+        year?: SortOrderInput | SortOrder
         userProfileId?: SortOrder
         academicRankType?: DM_HocHamOrderByWithRelationInput
         userProfile?: UserProfileOrderByWithRelationInput
@@ -371233,6 +371314,7 @@ export namespace Prisma {
         soQuyetDinh?: StringNullableFilter<"HocHam"> | string | null
         from?: DateTimeNullableFilter<"HocHam"> | Date | string | null
         to?: DateTimeNullableFilter<"HocHam"> | Date | string | null
+        year?: IntNullableFilter<"HocHam"> | number | null
         userProfileId?: UuidFilter<"HocHam"> | string
         academicRankType?: XOR<DM_HocHamNullableScalarRelationFilter, DM_HocHamWhereInput> | null
         userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
@@ -371251,10 +371333,13 @@ export namespace Prisma {
         soQuyetDinh?: SortOrderInput | SortOrder
         from?: SortOrderInput | SortOrder
         to?: SortOrderInput | SortOrder
+        year?: SortOrderInput | SortOrder
         userProfileId?: SortOrder
         _count?: HocHamCountOrderByAggregateInput
+        _avg?: HocHamAvgOrderByAggregateInput
         _max?: HocHamMaxOrderByAggregateInput
         _min?: HocHamMinOrderByAggregateInput
+        _sum?: HocHamSumOrderByAggregateInput
     };
     export type HocHamScalarWhereWithAggregatesInput = {
         AND?: HocHamScalarWhereWithAggregatesInput | HocHamScalarWhereWithAggregatesInput[]
@@ -371273,6 +371358,7 @@ export namespace Prisma {
         soQuyetDinh?: StringNullableWithAggregatesFilter<"HocHam"> | string | null
         from?: DateTimeNullableWithAggregatesFilter<"HocHam"> | Date | string | null
         to?: DateTimeNullableWithAggregatesFilter<"HocHam"> | Date | string | null
+        year?: IntNullableWithAggregatesFilter<"HocHam"> | number | null
         userProfileId?: UuidWithAggregatesFilter<"HocHam"> | string
     };
     export type ChucVuChinhQuyenWhereInput = {
@@ -371458,6 +371544,7 @@ export namespace Prisma {
         academicDegreeTypeId?: UuidNullableFilter<"HocVi"> | string | null
         nationalityId?: UuidNullableFilter<"HocVi"> | string | null
         linhVuc?: StringNullableFilter<"HocVi"> | string | null
+        tenLuanAn?: StringNullableFilter<"HocVi"> | string | null
         truongId?: StringNullableFilter<"HocVi"> | string | null
         year?: IntNullableFilter<"HocVi"> | number | null
         userProfileId?: UuidFilter<"HocVi"> | string
@@ -371478,6 +371565,7 @@ export namespace Prisma {
         academicDegreeTypeId?: SortOrderInput | SortOrder
         nationalityId?: SortOrderInput | SortOrder
         linhVuc?: SortOrderInput | SortOrder
+        tenLuanAn?: SortOrderInput | SortOrder
         truongId?: SortOrderInput | SortOrder
         year?: SortOrderInput | SortOrder
         userProfileId?: SortOrder
@@ -371502,6 +371590,7 @@ export namespace Prisma {
         academicDegreeTypeId?: UuidNullableFilter<"HocVi"> | string | null
         nationalityId?: UuidNullableFilter<"HocVi"> | string | null
         linhVuc?: StringNullableFilter<"HocVi"> | string | null
+        tenLuanAn?: StringNullableFilter<"HocVi"> | string | null
         truongId?: StringNullableFilter<"HocVi"> | string | null
         year?: IntNullableFilter<"HocVi"> | number | null
         userProfileId?: UuidFilter<"HocVi"> | string
@@ -371522,6 +371611,7 @@ export namespace Prisma {
         academicDegreeTypeId?: SortOrderInput | SortOrder
         nationalityId?: SortOrderInput | SortOrder
         linhVuc?: SortOrderInput | SortOrder
+        tenLuanAn?: SortOrderInput | SortOrder
         truongId?: SortOrderInput | SortOrder
         year?: SortOrderInput | SortOrder
         userProfileId?: SortOrder
@@ -371546,6 +371636,7 @@ export namespace Prisma {
         academicDegreeTypeId?: UuidNullableWithAggregatesFilter<"HocVi"> | string | null
         nationalityId?: UuidNullableWithAggregatesFilter<"HocVi"> | string | null
         linhVuc?: StringNullableWithAggregatesFilter<"HocVi"> | string | null
+        tenLuanAn?: StringNullableWithAggregatesFilter<"HocVi"> | string | null
         truongId?: StringNullableWithAggregatesFilter<"HocVi"> | string | null
         year?: IntNullableWithAggregatesFilter<"HocVi"> | number | null
         userProfileId?: UuidWithAggregatesFilter<"HocVi"> | string
@@ -400160,6 +400251,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -400352,6 +400444,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -400510,6 +400603,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -400702,6 +400796,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -400877,6 +400972,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -400989,6 +401085,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -401091,6 +401188,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -401153,6 +401251,7 @@ export namespace Prisma {
         soQuyetDinh?: string | null
         from?: Date | string | null
         to?: Date | string | null
+        year?: number | null
         academicRankType?: DM_HocHamCreateNestedOneWithoutHocHamInput
         userProfile: UserProfileCreateNestedOneWithoutHocHamInput
     };
@@ -401170,6 +401269,7 @@ export namespace Prisma {
         soQuyetDinh?: string | null
         from?: Date | string | null
         to?: Date | string | null
+        year?: number | null
         userProfileId: string
     };
     export type HocHamUpdateInput = {
@@ -401185,6 +401285,7 @@ export namespace Prisma {
         soQuyetDinh?: NullableStringFieldUpdateOperationsInput | string | null
         from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        year?: NullableIntFieldUpdateOperationsInput | number | null
         academicRankType?: DM_HocHamUpdateOneWithoutHocHamNestedInput
         userProfile?: UserProfileUpdateOneRequiredWithoutHocHamNestedInput
     };
@@ -401202,6 +401303,7 @@ export namespace Prisma {
         soQuyetDinh?: NullableStringFieldUpdateOperationsInput | string | null
         from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        year?: NullableIntFieldUpdateOperationsInput | number | null
         userProfileId?: StringFieldUpdateOperationsInput | string
     };
     export type HocHamCreateManyInput = {
@@ -401218,6 +401320,7 @@ export namespace Prisma {
         soQuyetDinh?: string | null
         from?: Date | string | null
         to?: Date | string | null
+        year?: number | null
         userProfileId: string
     };
     export type HocHamUpdateManyMutationInput = {
@@ -401233,6 +401336,7 @@ export namespace Prisma {
         soQuyetDinh?: NullableStringFieldUpdateOperationsInput | string | null
         from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        year?: NullableIntFieldUpdateOperationsInput | number | null
     };
     export type HocHamUncheckedUpdateManyInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -401248,6 +401352,7 @@ export namespace Prisma {
         soQuyetDinh?: NullableStringFieldUpdateOperationsInput | string | null
         from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        year?: NullableIntFieldUpdateOperationsInput | number | null
         userProfileId?: StringFieldUpdateOperationsInput | string
     };
     export type ChucVuChinhQuyenCreateInput = {
@@ -401438,6 +401543,7 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         linhVuc?: string | null
+        tenLuanAn?: string | null
         year?: number | null
         academicDegreeType?: DM_HocViCreateNestedOneWithoutHocViInput
         nationality?: DM_QuocGiaCreateNestedOneWithoutHocViInput
@@ -401456,6 +401562,7 @@ export namespace Prisma {
         academicDegreeTypeId?: string | null
         nationalityId?: string | null
         linhVuc?: string | null
+        tenLuanAn?: string | null
         truongId?: string | null
         year?: number | null
         userProfileId: string
@@ -401470,6 +401577,7 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         linhVuc?: NullableStringFieldUpdateOperationsInput | string | null
+        tenLuanAn?: NullableStringFieldUpdateOperationsInput | string | null
         year?: NullableIntFieldUpdateOperationsInput | number | null
         academicDegreeType?: DM_HocViUpdateOneWithoutHocViNestedInput
         nationality?: DM_QuocGiaUpdateOneWithoutHocViNestedInput
@@ -401488,6 +401596,7 @@ export namespace Prisma {
         academicDegreeTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         linhVuc?: NullableStringFieldUpdateOperationsInput | string | null
+        tenLuanAn?: NullableStringFieldUpdateOperationsInput | string | null
         truongId?: NullableStringFieldUpdateOperationsInput | string | null
         year?: NullableIntFieldUpdateOperationsInput | number | null
         userProfileId?: StringFieldUpdateOperationsInput | string
@@ -401504,6 +401613,7 @@ export namespace Prisma {
         academicDegreeTypeId?: string | null
         nationalityId?: string | null
         linhVuc?: string | null
+        tenLuanAn?: string | null
         truongId?: string | null
         year?: number | null
         userProfileId: string
@@ -401518,6 +401628,7 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         linhVuc?: NullableStringFieldUpdateOperationsInput | string | null
+        tenLuanAn?: NullableStringFieldUpdateOperationsInput | string | null
         year?: NullableIntFieldUpdateOperationsInput | number | null
     };
     export type HocViUncheckedUpdateManyInput = {
@@ -401532,6 +401643,7 @@ export namespace Prisma {
         academicDegreeTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         linhVuc?: NullableStringFieldUpdateOperationsInput | string | null
+        tenLuanAn?: NullableStringFieldUpdateOperationsInput | string | null
         truongId?: NullableStringFieldUpdateOperationsInput | string | null
         year?: NullableIntFieldUpdateOperationsInput | number | null
         userProfileId?: StringFieldUpdateOperationsInput | string
@@ -434554,6 +434666,7 @@ export namespace Prisma {
         temporaryAddress?: SortOrder
         contactAddress?: SortOrder
         phoneNumber?: SortOrder
+        officePhone?: SortOrder
         email?: SortOrder
         nationalityId?: SortOrder
         religionId?: SortOrder
@@ -434689,6 +434802,7 @@ export namespace Prisma {
         temporaryAddress?: SortOrder
         contactAddress?: SortOrder
         phoneNumber?: SortOrder
+        officePhone?: SortOrder
         email?: SortOrder
         nationalityId?: SortOrder
         religionId?: SortOrder
@@ -434818,6 +434932,7 @@ export namespace Prisma {
         temporaryAddress?: SortOrder
         contactAddress?: SortOrder
         phoneNumber?: SortOrder
+        officePhone?: SortOrder
         email?: SortOrder
         nationalityId?: SortOrder
         religionId?: SortOrder
@@ -434914,7 +435029,11 @@ export namespace Prisma {
         soQuyetDinh?: SortOrder
         from?: SortOrder
         to?: SortOrder
+        year?: SortOrder
         userProfileId?: SortOrder
+    };
+    export type HocHamAvgOrderByAggregateInput = {
+        year?: SortOrder
     };
     export type HocHamMaxOrderByAggregateInput = {
         id?: SortOrder
@@ -434930,6 +435049,7 @@ export namespace Prisma {
         soQuyetDinh?: SortOrder
         from?: SortOrder
         to?: SortOrder
+        year?: SortOrder
         userProfileId?: SortOrder
     };
     export type HocHamMinOrderByAggregateInput = {
@@ -434946,7 +435066,11 @@ export namespace Prisma {
         soQuyetDinh?: SortOrder
         from?: SortOrder
         to?: SortOrder
+        year?: SortOrder
         userProfileId?: SortOrder
+    };
+    export type HocHamSumOrderByAggregateInput = {
+        year?: SortOrder
     };
     export type ChucVuChinhQuyenOrderByRelevanceInput = {
         fields: ChucVuChinhQuyenOrderByRelevanceFieldEnum | ChucVuChinhQuyenOrderByRelevanceFieldEnum[]
@@ -435057,6 +435181,7 @@ export namespace Prisma {
         academicDegreeTypeId?: SortOrder
         nationalityId?: SortOrder
         linhVuc?: SortOrder
+        tenLuanAn?: SortOrder
         truongId?: SortOrder
         year?: SortOrder
         userProfileId?: SortOrder
@@ -435076,6 +435201,7 @@ export namespace Prisma {
         academicDegreeTypeId?: SortOrder
         nationalityId?: SortOrder
         linhVuc?: SortOrder
+        tenLuanAn?: SortOrder
         truongId?: SortOrder
         year?: SortOrder
         userProfileId?: SortOrder
@@ -435092,6 +435218,7 @@ export namespace Prisma {
         academicDegreeTypeId?: SortOrder
         nationalityId?: SortOrder
         linhVuc?: SortOrder
+        tenLuanAn?: SortOrder
         truongId?: SortOrder
         year?: SortOrder
         userProfileId?: SortOrder
@@ -481546,6 +481673,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -481737,6 +481865,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -481907,6 +482036,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -482098,6 +482228,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -484536,6 +484667,7 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         linhVuc?: string | null
+        tenLuanAn?: string | null
         year?: number | null
         academicDegreeType?: DM_HocViCreateNestedOneWithoutHocViInput
         nationality?: DM_QuocGiaCreateNestedOneWithoutHocViInput
@@ -484553,6 +484685,7 @@ export namespace Prisma {
         academicDegreeTypeId?: string | null
         nationalityId?: string | null
         linhVuc?: string | null
+        tenLuanAn?: string | null
         truongId?: string | null
         year?: number | null
     };
@@ -484577,6 +484710,7 @@ export namespace Prisma {
         soQuyetDinh?: string | null
         from?: Date | string | null
         to?: Date | string | null
+        year?: number | null
         academicRankType?: DM_HocHamCreateNestedOneWithoutHocHamInput
     };
     export type HocHamUncheckedCreateWithoutUserProfileInput = {
@@ -484593,6 +484727,7 @@ export namespace Prisma {
         soQuyetDinh?: string | null
         from?: Date | string | null
         to?: Date | string | null
+        year?: number | null
     };
     export type HocHamCreateOrConnectWithoutUserProfileInput = {
         where: HocHamWhereUniqueInput
@@ -488463,6 +488598,7 @@ export namespace Prisma {
         academicDegreeTypeId?: UuidNullableFilter<"HocVi"> | string | null
         nationalityId?: UuidNullableFilter<"HocVi"> | string | null
         linhVuc?: StringNullableFilter<"HocVi"> | string | null
+        tenLuanAn?: StringNullableFilter<"HocVi"> | string | null
         truongId?: StringNullableFilter<"HocVi"> | string | null
         year?: IntNullableFilter<"HocVi"> | number | null
         userProfileId?: UuidFilter<"HocVi"> | string
@@ -488497,6 +488633,7 @@ export namespace Prisma {
         soQuyetDinh?: StringNullableFilter<"HocHam"> | string | null
         from?: DateTimeNullableFilter<"HocHam"> | Date | string | null
         to?: DateTimeNullableFilter<"HocHam"> | Date | string | null
+        year?: IntNullableFilter<"HocHam"> | number | null
         userProfileId?: UuidFilter<"HocHam"> | string
     };
     export type TiengDanTocUpsertWithWhereUniqueWithoutUserProfileInput = {
@@ -489661,6 +489798,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -489852,6 +489990,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -490069,6 +490208,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -490260,6 +490400,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -490467,6 +490608,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -490658,6 +490800,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -490883,6 +491026,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -491074,6 +491218,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -491281,6 +491426,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -491472,6 +491618,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -491697,6 +491844,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -491888,6 +492036,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -492159,6 +492308,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -492350,6 +492500,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -492649,6 +492800,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -492840,6 +492992,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -493023,6 +493176,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -493214,6 +493368,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -493415,6 +493570,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -493606,6 +493762,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -493763,6 +493920,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -493954,6 +494112,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -494150,6 +494309,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -494341,6 +494501,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -494529,6 +494690,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -494720,6 +494882,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -494916,6 +495079,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -495107,6 +495271,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -495373,6 +495538,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -495564,6 +495730,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -495822,6 +495989,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -496013,6 +496181,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -496208,6 +496377,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -496399,6 +496569,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -496612,6 +496783,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -496803,6 +496975,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -496960,6 +497133,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -497151,6 +497325,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -497321,6 +497496,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -497512,6 +497688,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -497709,6 +497886,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -497900,6 +498078,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -498115,6 +498294,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -498306,6 +498486,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -498539,6 +498720,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -498730,6 +498912,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -498986,6 +499169,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -499177,6 +499361,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -499462,6 +499647,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -499653,6 +499839,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -499971,6 +500158,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -500162,6 +500350,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -500371,6 +500560,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -500562,6 +500752,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -500794,6 +500985,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -500985,6 +501177,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -501168,6 +501361,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -501359,6 +501553,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -501560,6 +501755,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -501751,6 +501947,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -501908,6 +502105,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -502099,6 +502297,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -502269,6 +502468,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -502460,6 +502660,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -502617,6 +502818,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -502808,6 +503010,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -502978,6 +503181,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -503169,6 +503373,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -503326,6 +503531,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -503517,6 +503723,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -503687,6 +503894,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -503878,6 +504086,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -504079,6 +504288,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -504270,6 +504480,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -504489,6 +504700,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -504680,6 +504892,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -504837,6 +505050,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -505028,6 +505242,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -505198,6 +505413,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -505389,6 +505605,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -505590,6 +505807,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -505781,6 +505999,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -506000,6 +506219,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -506191,6 +506411,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -506374,6 +506595,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -506565,6 +506787,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -506766,6 +506989,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -506957,6 +507181,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -507114,6 +507339,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -507305,6 +507531,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -507475,6 +507702,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -507666,6 +507894,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -507903,6 +508132,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -508094,6 +508324,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -508359,6 +508590,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -508550,6 +508782,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -508733,6 +508966,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -508924,6 +509158,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -509125,6 +509360,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -509316,6 +509552,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -509525,6 +509762,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -509716,6 +509954,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -509948,6 +510187,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -510139,6 +510379,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -510408,6 +510649,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -510598,6 +510840,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -510878,6 +511121,7 @@ export namespace Prisma {
         temporaryAddress?: StringNullableFilter<"UserProfile"> | string | null
         contactAddress?: StringNullableFilter<"UserProfile"> | string | null
         phoneNumber?: StringNullableFilter<"UserProfile"> | string | null
+        officePhone?: StringNullableFilter<"UserProfile"> | string | null
         email?: StringNullableFilter<"UserProfile"> | string | null
         nationalityId?: UuidNullableFilter<"UserProfile"> | string | null
         religionId?: UuidNullableFilter<"UserProfile"> | string | null
@@ -511224,6 +511468,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -511415,6 +511660,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -511576,6 +511822,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -511767,6 +512014,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -511998,6 +512246,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -512189,6 +512438,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -512355,6 +512605,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -512546,6 +512797,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -512937,6 +513189,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -513128,6 +513381,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -513289,6 +513543,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -513480,6 +513735,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -513691,6 +513947,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -513882,6 +514139,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -514048,6 +514306,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -514239,6 +514498,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -514473,6 +514733,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -514664,6 +514925,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -514974,6 +515236,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -515165,6 +515428,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -516010,6 +516274,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -516201,6 +516466,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -516428,6 +516694,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -516619,6 +516886,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -516797,6 +517065,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -516988,6 +517257,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -517153,6 +517423,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -517344,6 +517615,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -517741,6 +518013,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -517932,6 +518205,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -518047,6 +518321,7 @@ export namespace Prisma {
         soQuyetDinh?: string | null
         from?: Date | string | null
         to?: Date | string | null
+        year?: number | null
         userProfile: UserProfileCreateNestedOneWithoutHocHamInput
     };
     export type HocHamUncheckedCreateWithoutAcademicRankTypeInput = {
@@ -518062,6 +518337,7 @@ export namespace Prisma {
         soQuyetDinh?: string | null
         from?: Date | string | null
         to?: Date | string | null
+        year?: number | null
         userProfileId: string
     };
     export type HocHamCreateOrConnectWithoutAcademicRankTypeInput = {
@@ -518283,6 +518559,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -518474,6 +518751,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -518586,6 +518864,7 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         linhVuc?: string | null
+        tenLuanAn?: string | null
         year?: number | null
         nationality?: DM_QuocGiaCreateNestedOneWithoutHocViInput
         truong?: DM_TruongDaoTaoBacDHCreateNestedOneWithoutHocViInput
@@ -518602,6 +518881,7 @@ export namespace Prisma {
         createdBy?: string | null
         nationalityId?: string | null
         linhVuc?: string | null
+        tenLuanAn?: string | null
         truongId?: string | null
         year?: number | null
         userProfileId: string
@@ -518796,6 +519076,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -518987,6 +519268,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -520860,6 +521142,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -521051,6 +521334,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         ethnicityId?: string | null
@@ -521333,6 +521617,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -521523,6 +521808,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -521778,6 +522064,7 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         linhVuc?: string | null
+        tenLuanAn?: string | null
         year?: number | null
         academicDegreeType?: DM_HocViCreateNestedOneWithoutHocViInput
         truong?: DM_TruongDaoTaoBacDHCreateNestedOneWithoutHocViInput
@@ -521794,6 +522081,7 @@ export namespace Prisma {
         createdBy?: string | null
         academicDegreeTypeId?: string | null
         linhVuc?: string | null
+        tenLuanAn?: string | null
         truongId?: string | null
         year?: number | null
         userProfileId: string
@@ -521869,6 +522157,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -522060,6 +522349,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         religionId?: string | null
         ethnicityId?: string | null
@@ -522300,6 +522590,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -522491,6 +522782,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -522656,6 +522948,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -522846,6 +523139,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -523012,6 +523306,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -523202,6 +523497,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -523368,6 +523664,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -523558,6 +523855,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -523843,6 +524141,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -524034,6 +524333,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -524199,6 +524499,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -524389,6 +524690,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -524555,6 +524857,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -524745,6 +525048,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -524911,6 +525215,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -525101,6 +525406,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -525370,6 +525676,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -525561,6 +525868,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -525726,6 +526034,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -525916,6 +526225,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -526082,6 +526392,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -526272,6 +526583,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -526438,6 +526750,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -526628,6 +526941,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -526846,6 +527160,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -527037,6 +527352,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -527202,6 +527518,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -527392,6 +527709,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -527558,6 +527876,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -527748,6 +528067,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -527914,6 +528234,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -528104,6 +528425,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -528322,6 +528644,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -528513,6 +528836,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -528678,6 +529002,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -528868,6 +529193,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -529034,6 +529360,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -529224,6 +529551,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -529390,6 +529718,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -529580,6 +529909,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -533780,6 +534110,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -533971,6 +534302,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -534228,6 +534560,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -534419,6 +534752,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -549030,6 +549364,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -549221,6 +549556,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -549508,6 +549844,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -549699,6 +550036,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -554104,6 +554442,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -554295,6 +554634,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -554618,6 +554958,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -554809,6 +555150,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -555493,6 +555835,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -555684,6 +556027,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -555975,6 +556319,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -556166,6 +556511,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -556884,6 +557230,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -557075,6 +557422,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -566749,6 +567097,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -566940,6 +567289,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -568704,6 +569054,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -568895,6 +569246,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -572200,6 +572552,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -572391,6 +572744,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -572680,6 +573034,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -572871,6 +573226,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -574701,6 +575057,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -574892,6 +575249,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -575570,6 +575928,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -575761,6 +576120,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -576045,6 +576405,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -576236,6 +576597,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -576873,6 +577235,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -577064,6 +577427,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -577442,6 +577806,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -577633,6 +577998,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -577960,6 +578326,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -578151,6 +578518,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -578463,6 +578831,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -578654,6 +579023,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -603300,6 +603670,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -603491,6 +603862,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -603783,6 +604155,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -603974,6 +604347,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -606342,6 +606716,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -606533,6 +606908,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -606742,6 +607118,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -606933,6 +607310,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -614750,6 +615128,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -614941,6 +615320,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -615408,6 +615788,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -615599,6 +615980,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -617741,6 +618123,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -617932,6 +618315,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -618212,6 +618596,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -618403,6 +618788,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -618636,6 +619022,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -618827,6 +619214,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -619058,6 +619446,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -619249,6 +619638,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -619427,6 +619817,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -619618,6 +620009,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -619796,6 +620188,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -619987,6 +620380,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -620501,6 +620895,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -620692,6 +621087,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -620870,6 +621266,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -621061,6 +621458,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -621239,6 +621637,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -621430,6 +621829,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -621555,6 +621955,7 @@ export namespace Prisma {
         updatedAt?: Date | string
         createdBy?: string | null
         linhVuc?: string | null
+        tenLuanAn?: string | null
         year?: number | null
         academicDegreeType?: DM_HocViCreateNestedOneWithoutHocViInput
         nationality?: DM_QuocGiaCreateNestedOneWithoutHocViInput
@@ -621572,6 +621973,7 @@ export namespace Prisma {
         academicDegreeTypeId?: string | null
         nationalityId?: string | null
         linhVuc?: string | null
+        tenLuanAn?: string | null
         year?: number | null
         userProfileId: string
     };
@@ -621769,6 +622171,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -621960,6 +622363,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -622138,6 +622542,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -622329,6 +622734,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -622507,6 +622913,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -622698,6 +623105,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -622876,6 +623284,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         officerNumber?: string | null
         rankDate?: Date | string | null
@@ -623067,6 +623476,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -623683,6 +624093,7 @@ export namespace Prisma {
         academicDegreeTypeId?: string | null
         nationalityId?: string | null
         linhVuc?: string | null
+        tenLuanAn?: string | null
         truongId?: string | null
         year?: number | null
     };
@@ -623700,6 +624111,7 @@ export namespace Prisma {
         soQuyetDinh?: string | null
         from?: Date | string | null
         to?: Date | string | null
+        year?: number | null
     };
     export type TiengDanTocCreateManyUserProfileInput = {
         id?: string
@@ -624792,6 +625204,7 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         linhVuc?: NullableStringFieldUpdateOperationsInput | string | null
+        tenLuanAn?: NullableStringFieldUpdateOperationsInput | string | null
         year?: NullableIntFieldUpdateOperationsInput | number | null
         academicDegreeType?: DM_HocViUpdateOneWithoutHocViNestedInput
         nationality?: DM_QuocGiaUpdateOneWithoutHocViNestedInput
@@ -624809,6 +625222,7 @@ export namespace Prisma {
         academicDegreeTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         linhVuc?: NullableStringFieldUpdateOperationsInput | string | null
+        tenLuanAn?: NullableStringFieldUpdateOperationsInput | string | null
         truongId?: NullableStringFieldUpdateOperationsInput | string | null
         year?: NullableIntFieldUpdateOperationsInput | number | null
     };
@@ -624824,6 +625238,7 @@ export namespace Prisma {
         academicDegreeTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         linhVuc?: NullableStringFieldUpdateOperationsInput | string | null
+        tenLuanAn?: NullableStringFieldUpdateOperationsInput | string | null
         truongId?: NullableStringFieldUpdateOperationsInput | string | null
         year?: NullableIntFieldUpdateOperationsInput | number | null
     };
@@ -624840,6 +625255,7 @@ export namespace Prisma {
         soQuyetDinh?: NullableStringFieldUpdateOperationsInput | string | null
         from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        year?: NullableIntFieldUpdateOperationsInput | number | null
         academicRankType?: DM_HocHamUpdateOneWithoutHocHamNestedInput
     };
     export type HocHamUncheckedUpdateWithoutUserProfileInput = {
@@ -624856,6 +625272,7 @@ export namespace Prisma {
         soQuyetDinh?: NullableStringFieldUpdateOperationsInput | string | null
         from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        year?: NullableIntFieldUpdateOperationsInput | number | null
     };
     export type HocHamUncheckedUpdateManyWithoutUserProfileInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -624871,6 +625288,7 @@ export namespace Prisma {
         soQuyetDinh?: NullableStringFieldUpdateOperationsInput | string | null
         from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        year?: NullableIntFieldUpdateOperationsInput | number | null
     };
     export type TiengDanTocUpdateWithoutUserProfileInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -626479,6 +626897,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -626739,6 +627158,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -626929,6 +627349,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -627103,6 +627524,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -627907,6 +628329,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -628032,6 +628455,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -628223,6 +628647,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -628397,6 +628822,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -628567,6 +628993,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -628678,6 +629105,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -628869,6 +629297,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -629043,6 +629472,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -629171,6 +629601,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -629299,6 +629730,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -629471,6 +629903,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -629662,6 +630095,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -629836,6 +630270,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -629947,6 +630382,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -630138,6 +630574,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -630312,6 +630749,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -630623,6 +631061,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -630684,6 +631123,7 @@ export namespace Prisma {
         soQuyetDinh?: string | null
         from?: Date | string | null
         to?: Date | string | null
+        year?: number | null
         userProfileId: string
     };
     export type ExpertProfileCreateManyAcademicRankTypeInput = {
@@ -630774,6 +631214,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -630965,6 +631406,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -631139,6 +631581,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -631200,6 +631643,7 @@ export namespace Prisma {
         soQuyetDinh?: NullableStringFieldUpdateOperationsInput | string | null
         from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        year?: NullableIntFieldUpdateOperationsInput | number | null
         userProfile?: UserProfileUpdateOneRequiredWithoutHocHamNestedInput
     };
     export type HocHamUncheckedUpdateWithoutAcademicRankTypeInput = {
@@ -631215,6 +631659,7 @@ export namespace Prisma {
         soQuyetDinh?: NullableStringFieldUpdateOperationsInput | string | null
         from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        year?: NullableIntFieldUpdateOperationsInput | number | null
         userProfileId?: StringFieldUpdateOperationsInput | string
     };
     export type HocHamUncheckedUpdateManyWithoutAcademicRankTypeInput = {
@@ -631230,6 +631675,7 @@ export namespace Prisma {
         soQuyetDinh?: NullableStringFieldUpdateOperationsInput | string | null
         from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        year?: NullableIntFieldUpdateOperationsInput | number | null
         userProfileId?: StringFieldUpdateOperationsInput | string
     };
     export type ExpertProfileUpdateWithoutAcademicRankTypeInput = {
@@ -631409,6 +631855,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -631468,6 +631915,7 @@ export namespace Prisma {
         createdBy?: string | null
         nationalityId?: string | null
         linhVuc?: string | null
+        tenLuanAn?: string | null
         truongId?: string | null
         year?: number | null
         userProfileId: string
@@ -631560,6 +632008,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -631751,6 +632200,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -631925,6 +632375,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -631983,6 +632434,7 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         linhVuc?: NullableStringFieldUpdateOperationsInput | string | null
+        tenLuanAn?: NullableStringFieldUpdateOperationsInput | string | null
         year?: NullableIntFieldUpdateOperationsInput | number | null
         nationality?: DM_QuocGiaUpdateOneWithoutHocViNestedInput
         truong?: DM_TruongDaoTaoBacDHUpdateOneWithoutHocViNestedInput
@@ -631999,6 +632451,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         linhVuc?: NullableStringFieldUpdateOperationsInput | string | null
+        tenLuanAn?: NullableStringFieldUpdateOperationsInput | string | null
         truongId?: NullableStringFieldUpdateOperationsInput | string | null
         year?: NullableIntFieldUpdateOperationsInput | number | null
         userProfileId?: StringFieldUpdateOperationsInput | string
@@ -632014,6 +632467,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         linhVuc?: NullableStringFieldUpdateOperationsInput | string | null
+        tenLuanAn?: NullableStringFieldUpdateOperationsInput | string | null
         truongId?: NullableStringFieldUpdateOperationsInput | string | null
         year?: NullableIntFieldUpdateOperationsInput | number | null
         userProfileId?: StringFieldUpdateOperationsInput | string
@@ -632195,6 +632649,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -632320,6 +632775,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -632511,6 +632967,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -632685,6 +633142,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -634608,6 +635066,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         ethnicityId?: string | null
@@ -634719,6 +635178,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -634910,6 +635370,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         ethnicityId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -635084,6 +635545,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         ethnicityId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -635335,6 +635797,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -635447,6 +635910,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -635637,6 +636101,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -635811,6 +636276,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -635923,6 +636389,7 @@ export namespace Prisma {
         createdBy?: string | null
         academicDegreeTypeId?: string | null
         linhVuc?: string | null
+        tenLuanAn?: string | null
         truongId?: string | null
         year?: number | null
         userProfileId: string
@@ -636007,6 +636474,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         religionId?: string | null
         ethnicityId?: string | null
@@ -636079,6 +636547,7 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         linhVuc?: NullableStringFieldUpdateOperationsInput | string | null
+        tenLuanAn?: NullableStringFieldUpdateOperationsInput | string | null
         year?: NullableIntFieldUpdateOperationsInput | number | null
         academicDegreeType?: DM_HocViUpdateOneWithoutHocViNestedInput
         truong?: DM_TruongDaoTaoBacDHUpdateOneWithoutHocViNestedInput
@@ -636095,6 +636564,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         academicDegreeTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         linhVuc?: NullableStringFieldUpdateOperationsInput | string | null
+        tenLuanAn?: NullableStringFieldUpdateOperationsInput | string | null
         truongId?: NullableStringFieldUpdateOperationsInput | string | null
         year?: NullableIntFieldUpdateOperationsInput | number | null
         userProfileId?: StringFieldUpdateOperationsInput | string
@@ -636110,6 +636580,7 @@ export namespace Prisma {
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         academicDegreeTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         linhVuc?: NullableStringFieldUpdateOperationsInput | string | null
+        tenLuanAn?: NullableStringFieldUpdateOperationsInput | string | null
         truongId?: NullableStringFieldUpdateOperationsInput | string | null
         year?: NullableIntFieldUpdateOperationsInput | number | null
         userProfileId?: StringFieldUpdateOperationsInput | string
@@ -636177,6 +636648,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -636368,6 +636840,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
         ethnicityId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -636542,6 +637015,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
         ethnicityId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -636712,6 +637186,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -636839,6 +637314,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -636967,6 +637443,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -637095,6 +637572,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -637219,6 +637697,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -637410,6 +637889,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -637584,6 +638064,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -637695,6 +638176,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -637885,6 +638367,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -638059,6 +638542,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -638171,6 +638655,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -638361,6 +638846,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -638535,6 +639021,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -638647,6 +639134,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -638837,6 +639325,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -639011,6 +639500,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -639182,6 +639672,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -639309,6 +639800,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -639437,6 +639929,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -639565,6 +640058,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -639689,6 +640183,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -639880,6 +640375,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -640054,6 +640550,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -640165,6 +640662,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -640355,6 +640853,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -640529,6 +641028,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -640641,6 +641141,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -640831,6 +641332,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -641005,6 +641507,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -641117,6 +641620,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -641307,6 +641811,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -641481,6 +641986,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -641652,6 +642158,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -641779,6 +642286,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -641907,6 +642415,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -642035,6 +642544,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -642147,6 +642657,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -642338,6 +642849,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -642512,6 +643024,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -642623,6 +643136,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -642813,6 +643327,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -642987,6 +643502,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -643099,6 +643615,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -643289,6 +643806,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -643463,6 +643981,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -643575,6 +644094,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -643765,6 +644285,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -643939,6 +644460,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -644068,6 +644590,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -644195,6 +644718,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -644323,6 +644847,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -644451,6 +644976,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -644563,6 +645089,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -644754,6 +645281,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -644928,6 +645456,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -645039,6 +645568,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -645229,6 +645759,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -645403,6 +645934,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -645515,6 +646047,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -645705,6 +646238,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -645879,6 +646413,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -645991,6 +646526,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -646181,6 +646717,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -646355,6 +646892,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -646484,6 +647022,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -646611,6 +647150,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -646739,6 +647279,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -646867,6 +647408,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -646979,6 +647521,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -647170,6 +647713,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -647344,6 +647888,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -647455,6 +648000,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -647645,6 +648191,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -647819,6 +648366,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -647931,6 +648479,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -648121,6 +648670,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -648295,6 +648845,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -648407,6 +648958,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -648597,6 +649149,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -648771,6 +649324,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -659188,6 +659742,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -659379,6 +659934,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -659553,6 +660109,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -668764,6 +669321,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -668955,6 +669513,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -669129,6 +669688,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -683483,6 +684043,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -683594,6 +684155,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -683785,6 +684347,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -683959,6 +684522,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -684207,6 +684771,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -684318,6 +684883,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -684509,6 +685075,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -684683,6 +685250,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -684879,6 +685447,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -684990,6 +685559,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -685181,6 +685751,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -685355,6 +685926,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -685547,6 +686119,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -685658,6 +686231,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -685849,6 +686423,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -686023,6 +686598,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -686151,6 +686727,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -686262,6 +686839,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -686453,6 +687031,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -686627,6 +687206,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -686755,6 +687335,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -686866,6 +687447,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -687057,6 +687639,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -687231,6 +687814,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -687779,6 +688363,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -687890,6 +688475,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -688081,6 +688667,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -688255,6 +688842,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -688383,6 +688971,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -688494,6 +689083,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -688685,6 +689275,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -688859,6 +689450,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -688987,6 +689579,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -689098,6 +689691,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -689289,6 +689883,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -689463,6 +690058,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -689523,6 +690119,7 @@ export namespace Prisma {
         academicDegreeTypeId?: string | null
         nationalityId?: string | null
         linhVuc?: string | null
+        tenLuanAn?: string | null
         year?: number | null
         userProfileId: string
     };
@@ -689553,6 +690150,7 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         createdBy?: NullableStringFieldUpdateOperationsInput | string | null
         linhVuc?: NullableStringFieldUpdateOperationsInput | string | null
+        tenLuanAn?: NullableStringFieldUpdateOperationsInput | string | null
         year?: NullableIntFieldUpdateOperationsInput | number | null
         academicDegreeType?: DM_HocViUpdateOneWithoutHocViNestedInput
         nationality?: DM_QuocGiaUpdateOneWithoutHocViNestedInput
@@ -689570,6 +690168,7 @@ export namespace Prisma {
         academicDegreeTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         linhVuc?: NullableStringFieldUpdateOperationsInput | string | null
+        tenLuanAn?: NullableStringFieldUpdateOperationsInput | string | null
         year?: NullableIntFieldUpdateOperationsInput | number | null
         userProfileId?: StringFieldUpdateOperationsInput | string
     };
@@ -689585,6 +690184,7 @@ export namespace Prisma {
         academicDegreeTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         linhVuc?: NullableStringFieldUpdateOperationsInput | string | null
+        tenLuanAn?: NullableStringFieldUpdateOperationsInput | string | null
         year?: NullableIntFieldUpdateOperationsInput | number | null
         userProfileId?: StringFieldUpdateOperationsInput | string
     };
@@ -689787,6 +690387,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -689898,6 +690499,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -690089,6 +690691,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -690263,6 +690866,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -690391,6 +690995,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -690502,6 +691107,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -690693,6 +691299,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -690867,6 +691474,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -690995,6 +691603,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -691106,6 +691715,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -691297,6 +691907,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -691471,6 +692082,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -691599,6 +692211,7 @@ export namespace Prisma {
         temporaryAddress?: string | null
         contactAddress?: string | null
         phoneNumber?: string | null
+        officePhone?: string | null
         email?: string | null
         nationalityId?: string | null
         religionId?: string | null
@@ -691710,6 +692323,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
         rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -691901,6 +692515,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -692075,6 +692690,7 @@ export namespace Prisma {
         temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
         contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        officePhone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
         nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
         religionId?: NullableStringFieldUpdateOperationsInput | string | null

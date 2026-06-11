@@ -327,7 +327,7 @@ export function useSuspenseCountHocVi<TArgs extends Prisma.HocViCountArgs, TQuer
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('HocVi', `${endpoint}/hocVi/count`, args, options, fetch);
 }
 
-export function useCheckHocVi<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; academicDegreeTypeId?: string; nationalityId?: string; linhVuc?: string; truongId?: string; year?: number; userProfileId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckHocVi<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; academicDegreeTypeId?: string; nationalityId?: string; linhVuc?: string; tenLuanAn?: string; truongId?: string; year?: number; userProfileId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('HocVi', `${endpoint}/hocVi/check`, args, options, fetch);
 }

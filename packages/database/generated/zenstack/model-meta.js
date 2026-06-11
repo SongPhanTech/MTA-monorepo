@@ -714,6 +714,10 @@ const metadata = {
                     name: "phoneNumber",
                     type: "String",
                     isOptional: true,
+                }, officePhone: {
+                    name: "officePhone",
+                    type: "String",
+                    isOptional: true,
                 }, email: {
                     name: "email",
                     type: "String",
@@ -1585,6 +1589,10 @@ const metadata = {
                     name: "to",
                     type: "DateTime",
                     isOptional: true,
+                }, year: {
+                    name: "year",
+                    type: "Int",
+                    isOptional: true,
                 }, userProfile: {
                     name: "userProfile",
                     type: "UserProfile",
@@ -1854,6 +1862,10 @@ const metadata = {
                     relationField: 'nationality',
                 }, linhVuc: {
                     name: "linhVuc",
+                    type: "String",
+                    isOptional: true,
+                }, tenLuanAn: {
+                    name: "tenLuanAn",
                     type: "String",
                     isOptional: true,
                 }, truong: {

@@ -145,6 +145,7 @@ model UserProfile extends BaseUuid {
   temporaryAddress                     String? // địa chỉ tạm trú
   contactAddress                       String? // địa chỉ liên hệ
   phoneNumber                          String? // số điện thoại
+  officePhone                          String? // điện thoại cơ quan
   email                                String? // email
   nationality                          DM_QuocGia?                         @relation(fields: [nationalityId], references: [Id]) // quốc tịch
   nationalityId                        String?                             @db.Uuid
@@ -316,6 +317,7 @@ model HocHam extends Base {
   soQuyetDinh        String?
   from               DateTime?
   to                 DateTime?
+  year               Int? // năm cấp bằng học hàm
 
   userProfile        UserProfile @relation(fields: [userProfileId], references: [id])
   userProfileId      String      @db.Uuid
@@ -356,6 +358,7 @@ model HocVi extends Base {
   nationalityId        String?               @db.Uuid
 
   linhVuc              String?
+  tenLuanAn            String? // tên luận án/đề tài
   truong               DM_TruongDaoTaoBacDH? @relation(fields: [truongId], references: [id])
   truongId             String?
   year                 Int?
