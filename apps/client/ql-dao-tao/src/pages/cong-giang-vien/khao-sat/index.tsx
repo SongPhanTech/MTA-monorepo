@@ -1,4 +1,3 @@
-import GiangVienLayout from "@layouts/giang-vien-layout"
 import { useKhaoSatGiangVien } from "@hooks/use-khao-sat-giang-vien"
 import { Button, SelectFloat, TreeSelectFloat } from "@workspace/ui"
 import { Breadcrumb, Input, Typography } from "antd"
@@ -63,7 +62,3 @@ const KhaoSatGiangVien = () => {
 }
 
 export default KhaoSatGiangVien
-
-KhaoSatGiangVien.getLayout = function getLayout(page: React.ReactElement) {
-  return <GiangVienLayout>{page}</GiangVienLayout>
-}

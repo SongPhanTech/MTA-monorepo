@@ -1080,63 +1080,8 @@ const NAVIGATION: NavigationType = {
 
 const PUBLIC_ROUTER = [ROUTER_PATH.KHAO_THI.LAM_KHAO_SAT_ID.replace("[id]", "")]
 
-const GIANG_VIEN_MENU: MenuItem[] = [
-  {
-    id: "gv-trang-chu",
-    label: "Trang chủ",
-    icon: House,
-    path: ROUTER_PATH.QL_DAO_TAO.GIANG_VIEN,
-  },
-  {
-    id: "gv-lich-giang-day",
-    label: "Lịch giảng dạy",
-    icon: CalendarDays,
-    path: ROUTER_PATH.QL_DAO_TAO.LICH_TUAN_THANG,
-  },
-  {
-    id: "gv-khao-sat",
-    label: "Khảo sát",
-    icon: ChartLine,
-    path: ROUTER_PATH.QL_DAO_TAO.KHAO_SAT,
-  },
-  {
-    id: "gv-giang-day",
-    label: "Giảng dạy",
-    icon: GraduationCap,
-    children: [
-      {
-        id: "gv-diem-danh",
-        label: "Điểm danh",
-        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_DIEM_DANH,
-      },
-      {
-        id: "gv-nhap-diem-qt",
-        label: "Nhập điểm quá trình",
-        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_QL_DIEM_CC_TX,
-      },
-      {
-        id: "gv-nhap-diem-thi",
-        label: "Nhập điểm thi",
-        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_QL_DIEM_THI,
-      },
-    ],
-  },
-  {
-    id: "ho-so-ca-nhan",
-    label: "Hồ sơ cá nhân",
-    icon: User,
-    children: [
-      {
-        id: "thong-tin-ca-nhan",
-        label: "Thông tin cá nhân",
-        path: ROUTER_PATH.QL_DAO_TAO.HO_SO_CA_NHAN_THONG_TIN_CA_NHAN,
-      },
-    ],
-  },
-]
 export {
   DANG_KY_HOC_PERMISSION,
-  GIANG_VIEN_MENU,
   KHAO_THI_PERMISSION,
   PUBLIC_ROUTER,
   QL_DAO_TAO_PERMISSION,

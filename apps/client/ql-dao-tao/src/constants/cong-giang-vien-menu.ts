@@ -77,7 +77,7 @@ export const CONG_GIANG_VIEN_MENU: CongGiangVienMenuItem[] = [
     id: "gv-khao-sat",
     label: "Khảo sát",
     icon: ClipboardCheck,
-    path: ROUTER_PATH.QL_DAO_TAO.KHAO_SAT,
+    path: ROUTER_PATH.QL_DAO_TAO.CONG_GIANG_VIEN_KHAO_SAT,
   },
   {
     id: "gv-nghien-cuu",
@@ -99,7 +99,7 @@ export const CONG_GIANG_VIEN_MENU: CongGiangVienMenuItem[] = [
       {
         id: "thong-tin-ca-nhan",
         label: "Thông tin cá nhân",
-        path: ROUTER_PATH.QL_DAO_TAO.HO_SO_CA_NHAN_THONG_TIN_CA_NHAN,
+        path: ROUTER_PATH.QL_DAO_TAO.CONG_GIANG_VIEN_HO_SO_CA_NHAN_THONG_TIN_CA_NHAN,
       },
     ],
   },
