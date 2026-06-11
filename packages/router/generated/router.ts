@@ -49,6 +49,8 @@ export default {
     "CONG_GIANG_VIEN": "/cong-giang-vien",
     "CONG_GIANG_VIEN_KHAO_SAT": "/cong-giang-vien/khao-sat",
     "CONG_GIANG_VIEN_LICH_CUA_TOI": "/cong-giang-vien/lich-cua-toi",
+    "CONG_GIANG_VIEN_LOP_TRO_GIANG": "/cong-giang-vien/lop-tro-giang",
+    "CONG_GIANG_VIEN_NGHIEN_CUU": "/cong-giang-vien/nghien-cuu",
     "CONG_GIANG_VIEN_THONG_BAO": "/cong-giang-vien/thong-bao",
     "DANG_KY_HOC_DANG_KY_HOC_OFFLINE": "/dang-ky-hoc/dang-ky-hoc-offline",
     "DANG_KY_HOC_DOT_DANG_KY_HOC_ONLINE_ID": "/dang-ky-hoc/dot-dang-ky-hoc-online/[id]",

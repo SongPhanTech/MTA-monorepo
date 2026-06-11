@@ -71,7 +71,7 @@ export const CONG_GIANG_VIEN_MENU: CongGiangVienMenuItem[] = [
     id: "gv-lop-tro-giang",
     label: "Lớp trợ giảng",
     icon: Briefcase,
-    path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_DS_LOP_MON_HOC,
+    path: ROUTER_PATH.QL_DAO_TAO.CONG_GIANG_VIEN_LOP_TRO_GIANG,
   },
   {
     id: "gv-khao-sat",
@@ -83,7 +83,7 @@ export const CONG_GIANG_VIEN_MENU: CongGiangVienMenuItem[] = [
     id: "gv-nghien-cuu",
     label: "Nghiên cứu",
     icon: BinocularsIcon,
-    path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_CHUYEN_DE_NGHIEN_CUU,
+    path: ROUTER_PATH.QL_DAO_TAO.CONG_GIANG_VIEN_NGHIEN_CUU,
   },
   {
     id: "gv-thong-bao",
