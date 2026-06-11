@@ -177,7 +177,7 @@ const useThongBaoGiangVien = () => {
     return danhSachDayDu.slice(batDau, batDau + soTrang)
   }, [danhSachDayDu, trang, soTrang])
 
-  const danhSachTomTat = useMemo(() => danhSachDayDu.slice(0, 4), [danhSachDayDu])
+  const danhSachTomTat = useMemo(() => danhSachDayDu.slice(0, 9), [danhSachDayDu])
 
   const thongKeMuc = useMemo(
     () => ({
