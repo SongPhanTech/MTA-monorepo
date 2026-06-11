@@ -36,15 +36,7 @@ const columns: ColumnsType<SuKienLich> = [
     ellipsis: true,
     render: (value: string) => formatThu(value),
   },
-  {
-    title: "Tiết",
-    dataIndex: "tiet",
-    width: 44,
-    align: "center",
-    ellipsis: true,
-    render: (value?: string) => value ?? "—",
-  },
-  { title: "TG", dataIndex: "thoiGian", width: 88, ellipsis: true },
+  { title: "Thời gian", dataIndex: "thoiGian", width: 100, ellipsis: true },
   {
     title: "Nội dung",
     dataIndex: "tieuDe",

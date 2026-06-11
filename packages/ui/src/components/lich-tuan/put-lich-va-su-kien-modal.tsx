@@ -796,16 +796,16 @@ const PutLichVaSuKienModal = () => {
                       return dayjs(record.classDate).format("dddd DD/MM/YYYY")
                     },
                   },
-                  {
-                    title: "Tiết học",
-                    render: (_, record) => {
-                      return (
-                        <>
-                          {record.startPeriod} - {record.endPeriod}
-                        </>
-                      )
-                    },
-                  },
+                  // {
+                  //   title: "Tiết học",
+                  //   render: (_, record) => {
+                  //     return (
+                  //       <>
+                  //         {record.startPeriod} - {record.endPeriod}
+                  //       </>
+                  //     )
+                  //   },
+                  // },
                 ]}
               />
             </Tabs.TabPane>

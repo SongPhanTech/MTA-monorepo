@@ -96,13 +96,6 @@ const BangLichGiangDay = ({
       width: 120,
       render: (_, row) => `${row.thoiGianBatDau} - ${row.thoiGianKetThuc}`,
     },
-    {
-      title: "Tiết",
-      dataIndex: "tiet",
-      key: "tiet",
-      width: 72,
-      align: "center",
-    },
     ...cotChiTiet,
   ]
 
@@ -193,7 +186,7 @@ const BangLichGiangDay = ({
             loading={dangTai}
             pagination={false}
             size="small"
-            scroll={{ x: 1020, y: chieuCaoBody }}
+            scroll={{ x: 948, y: chieuCaoBody }}
             className="[&_.ant-table-thead>tr>th]:!bg-gray-50 [&_.ant-table-thead>tr>th]:!text-xs [&_.ant-table-thead>tr>th]:!font-semibold [&_.ant-table-thead>tr>th]:!text-gray-600"
             locale={{ emptyText }}
           />
@@ -205,7 +198,7 @@ const BangLichGiangDay = ({
             loading={dangTai}
             pagination={false}
             size="small"
-            scroll={{ x: 980, y: chieuCaoBody }}
+            scroll={{ x: 908, y: chieuCaoBody }}
             className="[&_.ant-table-thead>tr>th]:!bg-gray-50 [&_.ant-table-thead>tr>th]:!text-xs [&_.ant-table-thead>tr>th]:!font-semibold [&_.ant-table-thead>tr>th]:!text-gray-600"
             locale={{ emptyText }}
           />

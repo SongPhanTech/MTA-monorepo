@@ -392,25 +392,23 @@ const ModalThemLichCaNhan = () => {
       cancelText="Hủy"
       footer={
         input?.id ? (
-          <div className="flex items-center justify-between gap-2">
+          <div className="flex justify-end gap-2">
             <Button danger className="!h-9 !font-medium" onClick={xoaLichCaNhan}>
               Xóa lịch
             </Button>
-            <div className="flex gap-2">
-              <Button
-                onClick={onClose}
-                className="!h-9 !min-w-[80px] !border-gray-300 !bg-white !font-medium !text-gray-700"
-              >
-                Hủy
-              </Button>
-              <Button
-                type="primary"
-                onClick={() => form.submit()}
-                className="!h-9 !min-w-[100px] !border-cgv-green-dark !bg-cgv-green-dark !font-medium hover:!opacity-90"
-              >
-                Lưu lịch
-              </Button>
-            </div>
+            <Button
+              onClick={onClose}
+              className="!h-9 !min-w-[80px] !border-gray-300 !bg-white !font-medium !text-gray-700"
+            >
+              Hủy
+            </Button>
+            <Button
+              type="primary"
+              onClick={() => form.submit()}
+              className="!h-9 !min-w-[100px] !border-cgv-green-dark !bg-cgv-green-dark !font-medium hover:!opacity-90"
+            >
+              Lưu lịch
+            </Button>
           </div>
         ) : undefined
       }
