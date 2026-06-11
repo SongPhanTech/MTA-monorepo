@@ -300121,6 +300121,7 @@ export namespace Prisma {
     name: string | null
     information: string | null
     issuer: string | null
+    suffix: string | null
   }
 
   export type EvidenceMaxAggregateOutputType = {
@@ -300136,6 +300137,7 @@ export namespace Prisma {
     name: string | null
     information: string | null
     issuer: string | null
+    suffix: string | null
   }
 
   export type EvidenceCountAggregateOutputType = {
@@ -300151,6 +300153,7 @@ export namespace Prisma {
     name: number
     information: number
     issuer: number
+    suffix: number
     _all: number
   }
 
@@ -300168,6 +300171,7 @@ export namespace Prisma {
     name?: true
     information?: true
     issuer?: true
+    suffix?: true
   }
 
   export type EvidenceMaxAggregateInputType = {
@@ -300183,6 +300187,7 @@ export namespace Prisma {
     name?: true
     information?: true
     issuer?: true
+    suffix?: true
   }
 
   export type EvidenceCountAggregateInputType = {
@@ -300198,6 +300203,7 @@ export namespace Prisma {
     name?: true
     information?: true
     issuer?: true
+    suffix?: true
     _all?: true
   }
 
@@ -300286,6 +300292,7 @@ export namespace Prisma {
     name: string
     information: string
     issuer: string
+    suffix: string | null
     _count: EvidenceCountAggregateOutputType | null
     _min: EvidenceMinAggregateOutputType | null
     _max: EvidenceMaxAggregateOutputType | null
@@ -300318,6 +300325,7 @@ export namespace Prisma {
     name?: boolean
     information?: boolean
     issuer?: boolean
+    suffix?: boolean
     category?: boolean | EvidenceCategoryDefaultArgs<ExtArgs>
     evidenceFile?: boolean | Evidence$evidenceFileArgs<ExtArgs>
     analysisFormEvidence?: boolean | Evidence$analysisFormEvidenceArgs<ExtArgs>
@@ -300337,6 +300345,7 @@ export namespace Prisma {
     name?: boolean
     information?: boolean
     issuer?: boolean
+    suffix?: boolean
     category?: boolean | EvidenceCategoryDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["evidence"]>
 
@@ -300353,6 +300362,7 @@ export namespace Prisma {
     name?: boolean
     information?: boolean
     issuer?: boolean
+    suffix?: boolean
     category?: boolean | EvidenceCategoryDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["evidence"]>
 
@@ -300369,9 +300379,10 @@ export namespace Prisma {
     name?: boolean
     information?: boolean
     issuer?: boolean
+    suffix?: boolean
   }
 
-  export type EvidenceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "categoryId" | "name" | "information" | "issuer", ExtArgs["result"]["evidence"]>
+  export type EvidenceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "categoryId" | "name" | "information" | "issuer" | "suffix", ExtArgs["result"]["evidence"]>
   export type EvidenceInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     category?: boolean | EvidenceCategoryDefaultArgs<ExtArgs>
     evidenceFile?: boolean | Evidence$evidenceFileArgs<ExtArgs>
@@ -300405,6 +300416,7 @@ export namespace Prisma {
       name: string
       information: string
       issuer: string
+      suffix: string | null
     }, ExtArgs["result"]["evidence"]>
     composites: {}
   }
@@ -300843,6 +300855,7 @@ export namespace Prisma {
     readonly name: FieldRef<"Evidence", 'String'>
     readonly information: FieldRef<"Evidence", 'String'>
     readonly issuer: FieldRef<"Evidence", 'String'>
+    readonly suffix: FieldRef<"Evidence", 'String'>
   }
     
 
@@ -392404,7 +392417,8 @@ export namespace Prisma {
     categoryId: 'categoryId',
     name: 'name',
     information: 'information',
-    issuer: 'issuer'
+    issuer: 'issuer',
+    suffix: 'suffix'
   };
 
   export type EvidenceScalarFieldEnum = (typeof EvidenceScalarFieldEnum)[keyof typeof EvidenceScalarFieldEnum]
@@ -396673,7 +396687,8 @@ export namespace Prisma {
     categoryId: 'categoryId',
     name: 'name',
     information: 'information',
-    issuer: 'issuer'
+    issuer: 'issuer',
+    suffix: 'suffix'
   };
 
   export type EvidenceOrderByRelevanceFieldEnum = (typeof EvidenceOrderByRelevanceFieldEnum)[keyof typeof EvidenceOrderByRelevanceFieldEnum]
@@ -423057,6 +423072,7 @@ export namespace Prisma {
     name?: StringFilter<"Evidence"> | string
     information?: StringFilter<"Evidence"> | string
     issuer?: StringFilter<"Evidence"> | string
+    suffix?: StringNullableFilter<"Evidence"> | string | null
     category?: XOR<EvidenceCategoryScalarRelationFilter, EvidenceCategoryWhereInput>
     evidenceFile?: EvidenceFileListRelationFilter
     analysisFormEvidence?: AnalysisFormEvidenceListRelationFilter
@@ -423075,6 +423091,7 @@ export namespace Prisma {
     name?: SortOrder
     information?: SortOrder
     issuer?: SortOrder
+    suffix?: SortOrderInput | SortOrder
     category?: EvidenceCategoryOrderByWithRelationInput
     evidenceFile?: EvidenceFileOrderByRelationAggregateInput
     analysisFormEvidence?: AnalysisFormEvidenceOrderByRelationAggregateInput
@@ -423097,6 +423114,7 @@ export namespace Prisma {
     name?: StringFilter<"Evidence"> | string
     information?: StringFilter<"Evidence"> | string
     issuer?: StringFilter<"Evidence"> | string
+    suffix?: StringNullableFilter<"Evidence"> | string | null
     category?: XOR<EvidenceCategoryScalarRelationFilter, EvidenceCategoryWhereInput>
     evidenceFile?: EvidenceFileListRelationFilter
     analysisFormEvidence?: AnalysisFormEvidenceListRelationFilter
@@ -423115,6 +423133,7 @@ export namespace Prisma {
     name?: SortOrder
     information?: SortOrder
     issuer?: SortOrder
+    suffix?: SortOrderInput | SortOrder
     _count?: EvidenceCountOrderByAggregateInput
     _max?: EvidenceMaxOrderByAggregateInput
     _min?: EvidenceMinOrderByAggregateInput
@@ -423136,6 +423155,7 @@ export namespace Prisma {
     name?: StringWithAggregatesFilter<"Evidence"> | string
     information?: StringWithAggregatesFilter<"Evidence"> | string
     issuer?: StringWithAggregatesFilter<"Evidence"> | string
+    suffix?: StringNullableWithAggregatesFilter<"Evidence"> | string | null
   }
 
   export type EvaluationCriterionCommentWhereInput = {
@@ -457917,6 +457937,7 @@ export namespace Prisma {
     name: string
     information: string
     issuer: string
+    suffix?: string | null
     category: EvidenceCategoryCreateNestedOneWithoutEvidencesInput
     evidenceFile?: EvidenceFileCreateNestedManyWithoutEvidenceInput
     analysisFormEvidence?: AnalysisFormEvidenceCreateNestedManyWithoutEvidenceInput
@@ -457935,6 +457956,7 @@ export namespace Prisma {
     name: string
     information: string
     issuer: string
+    suffix?: string | null
     evidenceFile?: EvidenceFileUncheckedCreateNestedManyWithoutEvidenceInput
     analysisFormEvidence?: AnalysisFormEvidenceUncheckedCreateNestedManyWithoutEvidenceInput
   }
@@ -457951,6 +457973,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     information?: StringFieldUpdateOperationsInput | string
     issuer?: StringFieldUpdateOperationsInput | string
+    suffix?: NullableStringFieldUpdateOperationsInput | string | null
     category?: EvidenceCategoryUpdateOneRequiredWithoutEvidencesNestedInput
     evidenceFile?: EvidenceFileUpdateManyWithoutEvidenceNestedInput
     analysisFormEvidence?: AnalysisFormEvidenceUpdateManyWithoutEvidenceNestedInput
@@ -457969,6 +457992,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     information?: StringFieldUpdateOperationsInput | string
     issuer?: StringFieldUpdateOperationsInput | string
+    suffix?: NullableStringFieldUpdateOperationsInput | string | null
     evidenceFile?: EvidenceFileUncheckedUpdateManyWithoutEvidenceNestedInput
     analysisFormEvidence?: AnalysisFormEvidenceUncheckedUpdateManyWithoutEvidenceNestedInput
   }
@@ -457986,6 +458010,7 @@ export namespace Prisma {
     name: string
     information: string
     issuer: string
+    suffix?: string | null
   }
 
   export type EvidenceUpdateManyMutationInput = {
@@ -458000,6 +458025,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     information?: StringFieldUpdateOperationsInput | string
     issuer?: StringFieldUpdateOperationsInput | string
+    suffix?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type EvidenceUncheckedUpdateManyInput = {
@@ -458015,6 +458041,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     information?: StringFieldUpdateOperationsInput | string
     issuer?: StringFieldUpdateOperationsInput | string
+    suffix?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type EvaluationCriterionCommentCreateInput = {
@@ -483492,6 +483519,7 @@ export namespace Prisma {
     name?: SortOrder
     information?: SortOrder
     issuer?: SortOrder
+    suffix?: SortOrder
   }
 
   export type EvidenceMaxOrderByAggregateInput = {
@@ -483507,6 +483535,7 @@ export namespace Prisma {
     name?: SortOrder
     information?: SortOrder
     issuer?: SortOrder
+    suffix?: SortOrder
   }
 
   export type EvidenceMinOrderByAggregateInput = {
@@ -483522,6 +483551,7 @@ export namespace Prisma {
     name?: SortOrder
     information?: SortOrder
     issuer?: SortOrder
+    suffix?: SortOrder
   }
 
   export type RequirementCriterionNullableScalarRelationFilter = {
@@ -646634,6 +646664,7 @@ export namespace Prisma {
     name: string
     information: string
     issuer: string
+    suffix?: string | null
     evidenceFile?: EvidenceFileCreateNestedManyWithoutEvidenceInput
     analysisFormEvidence?: AnalysisFormEvidenceCreateNestedManyWithoutEvidenceInput
   }
@@ -646650,6 +646681,7 @@ export namespace Prisma {
     name: string
     information: string
     issuer: string
+    suffix?: string | null
     evidenceFile?: EvidenceFileUncheckedCreateNestedManyWithoutEvidenceInput
     analysisFormEvidence?: AnalysisFormEvidenceUncheckedCreateNestedManyWithoutEvidenceInput
   }
@@ -646696,6 +646728,7 @@ export namespace Prisma {
     name?: StringFilter<"Evidence"> | string
     information?: StringFilter<"Evidence"> | string
     issuer?: StringFilter<"Evidence"> | string
+    suffix?: StringNullableFilter<"Evidence"> | string | null
   }
 
   export type EvidenceCategoryCreateWithoutEvidencesInput = {
@@ -649516,6 +649549,7 @@ export namespace Prisma {
     name: string
     information: string
     issuer: string
+    suffix?: string | null
     category: EvidenceCategoryCreateNestedOneWithoutEvidencesInput
     evidenceFile?: EvidenceFileCreateNestedManyWithoutEvidenceInput
   }
@@ -649533,6 +649567,7 @@ export namespace Prisma {
     name: string
     information: string
     issuer: string
+    suffix?: string | null
     evidenceFile?: EvidenceFileUncheckedCreateNestedManyWithoutEvidenceInput
   }
 
@@ -649611,6 +649646,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     information?: StringFieldUpdateOperationsInput | string
     issuer?: StringFieldUpdateOperationsInput | string
+    suffix?: NullableStringFieldUpdateOperationsInput | string | null
     category?: EvidenceCategoryUpdateOneRequiredWithoutEvidencesNestedInput
     evidenceFile?: EvidenceFileUpdateManyWithoutEvidenceNestedInput
   }
@@ -649628,6 +649664,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     information?: StringFieldUpdateOperationsInput | string
     issuer?: StringFieldUpdateOperationsInput | string
+    suffix?: NullableStringFieldUpdateOperationsInput | string | null
     evidenceFile?: EvidenceFileUncheckedUpdateManyWithoutEvidenceNestedInput
   }
 
@@ -650117,6 +650154,7 @@ export namespace Prisma {
     name: string
     information: string
     issuer: string
+    suffix?: string | null
     category: EvidenceCategoryCreateNestedOneWithoutEvidencesInput
     analysisFormEvidence?: AnalysisFormEvidenceCreateNestedManyWithoutEvidenceInput
   }
@@ -650134,6 +650172,7 @@ export namespace Prisma {
     name: string
     information: string
     issuer: string
+    suffix?: string | null
     analysisFormEvidence?: AnalysisFormEvidenceUncheckedCreateNestedManyWithoutEvidenceInput
   }
 
@@ -650522,6 +650561,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     information?: StringFieldUpdateOperationsInput | string
     issuer?: StringFieldUpdateOperationsInput | string
+    suffix?: NullableStringFieldUpdateOperationsInput | string | null
     category?: EvidenceCategoryUpdateOneRequiredWithoutEvidencesNestedInput
     analysisFormEvidence?: AnalysisFormEvidenceUpdateManyWithoutEvidenceNestedInput
   }
@@ -650539,6 +650579,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     information?: StringFieldUpdateOperationsInput | string
     issuer?: StringFieldUpdateOperationsInput | string
+    suffix?: NullableStringFieldUpdateOperationsInput | string | null
     analysisFormEvidence?: AnalysisFormEvidenceUncheckedUpdateManyWithoutEvidenceNestedInput
   }
 
@@ -725677,6 +725718,7 @@ export namespace Prisma {
     name: string
     information: string
     issuer: string
+    suffix?: string | null
   }
 
   export type EvidenceUpdateWithoutCategoryInput = {
@@ -725691,6 +725733,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     information?: StringFieldUpdateOperationsInput | string
     issuer?: StringFieldUpdateOperationsInput | string
+    suffix?: NullableStringFieldUpdateOperationsInput | string | null
     evidenceFile?: EvidenceFileUpdateManyWithoutEvidenceNestedInput
     analysisFormEvidence?: AnalysisFormEvidenceUpdateManyWithoutEvidenceNestedInput
   }
@@ -725707,6 +725750,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     information?: StringFieldUpdateOperationsInput | string
     issuer?: StringFieldUpdateOperationsInput | string
+    suffix?: NullableStringFieldUpdateOperationsInput | string | null
     evidenceFile?: EvidenceFileUncheckedUpdateManyWithoutEvidenceNestedInput
     analysisFormEvidence?: AnalysisFormEvidenceUncheckedUpdateManyWithoutEvidenceNestedInput
   }
@@ -725723,6 +725767,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     information?: StringFieldUpdateOperationsInput | string
     issuer?: StringFieldUpdateOperationsInput | string
+    suffix?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type EvidenceFileCreateManyEvidenceInput = {

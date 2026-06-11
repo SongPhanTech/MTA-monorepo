@@ -104,9 +104,7 @@ const useKhaoSatGiangVien = ({
     return danhSach.filter((ks) => {
       const khopTuKhoa = tuKhoaChuanHoa ? boDau(ks.name).includes(tuKhoaChuanHoa) : true
       const khopTrangThai =
-        trangThai === "tat_ca"
-          ? true
-          : getTrangThaiKhaoSat(ks.startDate, ks.endDate) === trangThai
+        trangThai === "tat_ca" ? true : getTrangThaiKhaoSat(ks.startDate, ks.endDate) === trangThai
       return khopTuKhoa && khopTrangThai
     })
   }, [danhSach, tuKhoa, trangThai])
@@ -127,7 +125,16 @@ const useKhaoSatGiangVien = ({
     return nhom
   }, [danhSachLoc])
 
-  return { danhSach, danhSachLoc, nhomTheoTrangThai, tongSo, thongKe, isLoading, isFetching, refetch }
+  return {
+    danhSach,
+    danhSachLoc,
+    nhomTheoTrangThai,
+    tongSo,
+    thongKe,
+    isLoading,
+    isFetching,
+    refetch,
+  }
 }
 
 export { useKhaoSatGiangVien }

@@ -3952,7 +3952,8 @@ exports.Prisma.EvidenceScalarFieldEnum = {
   categoryId: 'categoryId',
   name: 'name',
   information: 'information',
-  issuer: 'issuer'
+  issuer: 'issuer',
+  suffix: 'suffix'
 };
 
 exports.Prisma.EvaluationCriterionCommentScalarFieldEnum = {
@@ -7375,7 +7376,8 @@ exports.Prisma.EvidenceOrderByRelevanceFieldEnum = {
   categoryId: 'categoryId',
   name: 'name',
   information: 'information',
-  issuer: 'issuer'
+  issuer: 'issuer',
+  suffix: 'suffix'
 };
 
 exports.Prisma.EvaluationCriterionCommentOrderByRelevanceFieldEnum = {
