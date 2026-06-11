@@ -4,6 +4,13 @@ import type {
   TagLoaiLich,
 } from "@components/cong-giang-vien/lich-cua-toi/lich-ca-nhan/types"
 import { MAU_LOAI_LICH_MAC_DINH } from "@components/cong-giang-vien/lich-cua-toi/lich-ca-nhan/utils"
+import {
+  CHIEU_CAO_MOI_GIO,
+  CHIEU_CAO_TIMELINE,
+  formatGioTimeline,
+  gioTrongTimeline,
+  tinhViTriTimeline,
+} from "@components/cong-giang-vien/lich-cua-toi/timeline/constants"
 import { Empty, Spin } from "antd"
 import dayjs from "dayjs"
 import { BookOpen, User, Users } from "lucide-react"
@@ -15,11 +22,6 @@ interface LichNgayCaNhanProps {
   dangTai?: boolean
   onSua?: (id: string) => void
 }
-
-const GIO_BAT_DAU = 7
-const GIO_KET_THUC = 17
-
-const formatGio = (gio: number) => `${String(gio).padStart(2, "0")}:00`
 
 const iconTheoTenTag = (ten: string, mau: string): ReactNode => {
   const props = { size: 14, style: { color: mau } }
@@ -34,33 +36,17 @@ const iconTheoTenTag = (ten: string, mau: string): ReactNode => {
 const layMauSuKien = (suKien: DongLichCaNhan) => suKien.mauLoai ?? MAU_LOAI_LICH_MAC_DINH[0]
 
 const LichNgayCaNhan = ({ danhSach, tags, dangTai, onSua }: LichNgayCaNhanProps) => {
-  const gioNhan = useMemo(
-    () => Array.from({ length: GIO_KET_THUC - GIO_BAT_DAU + 1 }, (_, i) => GIO_BAT_DAU + i),
-    []
-  )
+  const gioNhan = useMemo(() => gioTrongTimeline(), [])
 
   const viTriSuKien = useMemo(() => {
-    const tongPhut = (GIO_KET_THUC - GIO_BAT_DAU) * 60
     return danhSach.map((suKien) => {
       const batDau = dayjs(suKien.batDauIso)
       const ketThuc = dayjs(suKien.ketThucIso)
       const mau = layMauSuKien(suKien)
-
-      let phutBatDau: number
-      let phutKetThuc: number
-
-      if (suKien.caNgay) {
-        phutBatDau = 0
-        phutKetThuc = tongPhut
-      } else {
-        phutBatDau = batDau.hour() * 60 + batDau.minute() - GIO_BAT_DAU * 60
-        phutKetThuc = ketThuc.hour() * 60 + ketThuc.minute() - GIO_BAT_DAU * 60
-      }
-
-      const top = Math.max(0, (phutBatDau / tongPhut) * 100)
-      const height = Math.max(
-        8,
-        ((Math.min(phutKetThuc, tongPhut) - Math.max(phutBatDau, 0)) / tongPhut) * 100
+      const { topPx, heightPx } = tinhViTriTimeline(
+        suKien.batDauIso,
+        suKien.ketThucIso,
+        suKien.caNgay
       )
 
       const khoangThoiGian = suKien.caNgay
@@ -71,8 +57,8 @@ const LichNgayCaNhan = ({ danhSach, tags, dangTai, onSua }: LichNgayCaNhanProps)
 
       return {
         ...suKien,
-        top,
-        height,
+        topPx,
+        heightPx,
         mau,
         khoangThoiGian,
         tieuDeDayDu: `${suKien.tieuDe}${diaDiemHienThi}`,
@@ -91,28 +77,33 @@ const LichNgayCaNhan = ({ danhSach, tags, dangTai, onSua }: LichNgayCaNhanProps)
   return (
     <div className="flex h-full min-h-0 flex-col gap-3">
       <div className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden">
-        <div className="flex h-full min-h-[360px] gap-3">
-          <div className="flex w-10 shrink-0 flex-col justify-between py-0.5 text-xs text-gray-400">
+        <div className="relative flex" style={{ height: CHIEU_CAO_TIMELINE }}>
+          <div className="relative w-11 shrink-0">
             {gioNhan.map((gio) => (
-              <span key={gio} className="leading-none">
-                {formatGio(gio)}
+              <span
+                key={gio}
+                className="absolute right-1 -translate-y-1/2 text-xs leading-none text-gray-400"
+                style={{ top: gio * CHIEU_CAO_MOI_GIO }}
+              >
+                {formatGioTimeline(gio)}
               </span>
             ))}
           </div>
 
-          <div className="relative min-h-0 min-w-0 flex-1">
+          <div className="relative min-w-0 flex-1 pr-1">
             {gioNhan.slice(1).map((gio) => (
               <div
                 key={gio}
                 className="pointer-events-none absolute left-0 right-0 border-t border-dashed border-gray-200"
-                style={{
-                  top: `${((gio - GIO_BAT_DAU) / (GIO_KET_THUC - GIO_BAT_DAU)) * 100}%`,
-                }}
+                style={{ top: gio * CHIEU_CAO_MOI_GIO }}
               />
             ))}
 
             {viTriSuKien.length === 0 ? (
-              <div className="flex h-full items-center justify-center">
+              <div
+                className="flex items-center justify-center"
+                style={{ height: CHIEU_CAO_TIMELINE }}
+              >
                 <Empty
                   description="Không có sự kiện trong ngày"
                   image={Empty.PRESENTED_IMAGE_SIMPLE}
@@ -127,8 +118,8 @@ const LichNgayCaNhan = ({ danhSach, tags, dangTai, onSua }: LichNgayCaNhanProps)
                   onClick={() => onSua?.(suKien.id)}
                   className="absolute left-0 right-0 flex min-h-[36px] items-center gap-2 overflow-hidden rounded-md border border-gray-100 px-3 py-2 text-left transition-shadow hover:shadow-sm"
                   style={{
-                    top: `${suKien.top}%`,
-                    height: `${suKien.height}%`,
+                    top: suKien.topPx,
+                    height: suKien.heightPx,
                     backgroundColor: `${suKien.mau}14`,
                     borderLeftWidth: 3,
                     borderLeftColor: suKien.mau,
