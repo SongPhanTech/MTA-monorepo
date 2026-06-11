@@ -33,7 +33,7 @@ const PutEvidence = () => {
     try {
       showSpinner()
       const data = {
-        code: output.code,
+        suffix: output.suffix,
         name: output.name.trim(),
         categoryId: input?.categoryId || "",
         information: output.information,
@@ -154,7 +154,7 @@ const PutEvidence = () => {
       className="w-[700px] top-2"
     >
       <Col span={24}>
-        <FormItem form={form} name="code" label="Mã minh chứng" required>
+        <FormItem form={form} name="suffix" label="Mã minh chứng" required>
           <Input placeholder="Nhập mã minh chứng" />
         </FormItem>
       </Col>

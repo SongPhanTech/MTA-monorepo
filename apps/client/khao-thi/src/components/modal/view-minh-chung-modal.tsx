@@ -38,7 +38,9 @@ const ViewMinhChungModal = () => {
         <Skeleton active paragraph={{ rows: 5 }} />
       ) : data ? (
         <Descriptions column={1} bordered size="small">
-          {data.code && <Descriptions.Item label="Mã minh chứng">{data.code}</Descriptions.Item>}
+          {data.suffix && (
+            <Descriptions.Item label="Mã minh chứng">{data.suffix}</Descriptions.Item>
+          )}
           <Descriptions.Item label="Tên minh chứng">
             <Typography.Text strong>{data.name}</Typography.Text>
           </Descriptions.Item>
