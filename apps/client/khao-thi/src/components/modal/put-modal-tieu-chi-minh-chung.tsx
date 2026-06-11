@@ -155,9 +155,10 @@ const PutTieuChiMinhChungModal = () => {
               operation: "delete",
               data: {
                 where: {
-                  requirementCriterionId_evidenceId: {
+                  requirementCriterionId_evidenceId_suffix: {
                     requirementCriterionId: input.id,
                     evidenceId: item.value,
+                    suffix: "",
                   },
                 },
               },
@@ -197,9 +198,10 @@ const PutTieuChiMinhChungModal = () => {
                 operation: "update",
                 data: {
                   where: {
-                    requirementCriterionId_evidenceId: {
+                    requirementCriterionId_evidenceId_suffix: {
                       requirementCriterionId: input.id,
                       evidenceId: evidenceId,
+                      suffix: "",
                     },
                   },
                   data: {
