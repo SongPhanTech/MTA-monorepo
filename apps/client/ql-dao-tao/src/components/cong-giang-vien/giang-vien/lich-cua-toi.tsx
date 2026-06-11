@@ -159,7 +159,7 @@ const LichCuaToi = ({ variant = "widget" }: LichCuaToiProps) => {
         </div>
       </div>
 
-      <div className={cn("min-h-0 flex-1 overflow-hidden", laTrang ? "p-3" : "p-2")}>
+      <div className={cn("flex min-h-0 flex-1 flex-col overflow-hidden", laTrang ? "p-3" : "p-2")}>
         {cheDo === "ngay" ? (
           <LichNgay suKien={suKienNgay} isLoading={isLoading} />
         ) : (

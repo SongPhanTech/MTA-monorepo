@@ -1,8 +1,20 @@
+import {
+  khoangNgayQuery as khoangNgayCaNhan,
+  khoangTuanQuery as khoangTuanCaNhan,
+  mapLichSangDong,
+} from "@components/cong-giang-vien/lich-cua-toi/lich-ca-nhan/utils"
+import {
+  khoangNgayQuery as khoangNgayGiangDay,
+  khoangTuanQuery as khoangTuanGiangDay,
+  layKhoangTuan,
+  mapLichGiangDaySangDong,
+} from "@components/cong-giang-vien/lich-cua-toi/lich-giang-day/utils"
+import type { DongTatCaLich } from "@components/cong-giang-vien/lich-cua-toi/tat-ca-lich/types"
+import { gopVaSapXepLich } from "@components/cong-giang-vien/lich-cua-toi/tat-ca-lich/utils"
 import type { CheDoLich, SuKienLich } from "@components/cong-giang-vien/giang-vien/types"
+import { useLecturerHienTai } from "@hooks/use-lecturer-hien-tai"
 import { useSession } from "@workspace/auth/react"
-import type { Prisma } from "@workspace/db"
-import { useFindFirstLecturer, useFindManyClassSchedule } from "@workspace/db/hooks"
-import { PERIOD } from "@workspace/ui"
+import { useFindManyClassSchedule, useFindManyIndividualSchedule } from "@workspace/db/hooks"
 import { useSemesterStore, useTrainingObjectTypeStore } from "@workspace/ui"
 import dayjs from "dayjs"
 import isoWeek from "dayjs/plugin/isoWeek"
@@ -10,92 +22,16 @@ import { useMemo, useState } from "react"
 
 dayjs.extend(isoWeek)
 
-type LichRaw = Prisma.ClassScheduleGetPayload<{
-  include: {
-    subjectClass: {
-      select: {
-        code: true
-        name: true
-        subject: { select: { name: true } }
-        room: { select: { name: true } }
-      }
-    }
-    room: { select: { name: true } }
-  }
-}>
-
-const mapSuKien = (event: LichRaw): SuKienLich => {
-  const startPeriod = PERIOD[event.startPeriod as keyof typeof PERIOD]
-  const endPeriod = PERIOD[event.endPeriod as keyof typeof PERIOD]
-  const start = event.startTime
-    ? dayjs(event.startTime)
-    : dayjs(event.classDate)
-        .hour(dayjs(startPeriod?.startTime).hour())
-        .minute(dayjs(startPeriod?.startTime).minute())
-  const end = event.endTime
-    ? dayjs(event.endTime)
-    : dayjs(event.classDate)
-        .hour(dayjs(endPeriod?.endTime).hour())
-        .minute(dayjs(endPeriod?.endTime).minute())
-
-  const maLop = event.subjectClass?.code ?? ""
-  const tenMon = event.subjectClass?.subject?.name ?? event.subjectClass?.name ?? event.notes ?? ""
-  const tieuDe = maLop && tenMon ? `${maLop} - ${tenMon}` : tenMon || maLop || "Sự kiện"
-
-  return {
-    id: event.id,
-    ngay: dayjs(event.classDate).format("YYYY-MM-DD"),
-    tieuDe,
-    tiet: `${event.startPeriod} - ${event.endPeriod}`,
-    thoiGian: `${start.format("HH:mm")} - ${end.format("HH:mm")}`,
-    thoiGianBatDau: start.toISOString(),
-    thoiGianKetThuc: end.toISOString(),
-    loaiLich: event.periodType,
-    diaDiem: event.location ?? event.room?.name ?? event.subjectClass?.room?.name ?? "",
-    ghiChu: event.notes ?? undefined,
-  }
-}
-
-const useLichCuaToi = (macDinhCheDo: CheDoLich = "ngay") => {
-  const { data: me } = useSession()
-  const profileId = me?.sDM_NhanVienId
-  const { id: semesterId } = useSemesterStore()
-  const { id: trainingObjectId } = useTrainingObjectTypeStore()
-
-  const [cheDo, setCheDo] = useState<CheDoLich>(macDinhCheDo)
-  const [offset, setOffset] = useState(0)
-
-  const ngayThamChieu = useMemo(() => {
-    const homNay = dayjs().startOf("day")
-    if (cheDo === "ngay") return homNay.add(offset, "day")
-    return homNay.add(offset, "week").startOf("isoWeek")
-  }, [cheDo, offset])
-
-  const khoangNgay = useMemo(() => {
-    if (cheDo === "ngay") {
-      return { tu: ngayThamChieu.startOf("day"), den: ngayThamChieu.endOf("day") }
-    }
-    return {
-      tu: ngayThamChieu.startOf("isoWeek"),
-      den: ngayThamChieu.endOf("isoWeek"),
-    }
-  }, [cheDo, ngayThamChieu])
-
-  const { data: lecturer } = useFindFirstLecturer(
-    { where: { userProfileId: profileId ?? "" }, select: { id: true } },
-    { enabled: !!profileId }
-  )
-
-  const { data: lichRaw = [], isLoading } = useFindManyClassSchedule(
-    {
-      where: {
-        classDate: {
-          gte: khoangNgay.tu.toDate(),
-          lte: khoangNgay.den.toDate(),
-        },
-        OR: [
-          { lecturerId: lecturer?.id },
-          { extraLecturerId: lecturer?.id },
+const dieuKienLichGiangVien = (
+  lecturerId: string | undefined,
+  profileId: string | undefined,
+  semesterId: string | undefined,
+  trainingObjectId: string | undefined
+) => ({
+  OR: [
+    ...(lecturerId ? [{ lecturerId }, { extraLecturerId: lecturerId }] : []),
+    ...(profileId && semesterId && trainingObjectId
+      ? [
           {
             subjectClass: {
               mainLecturer: { userProfileId: profileId },
@@ -112,25 +48,116 @@ const useLichCuaToi = (macDinhCheDo: CheDoLich = "ngay") => {
               cancelled: false,
             },
           },
-        ],
+        ]
+      : []),
+  ],
+})
+
+const mapDongTatCaSangSuKien = (item: DongTatCaLich): SuKienLich => {
+  const tietMatch = item.nguon === "giang-day" ? item.noiDung.match(/^Tiết (.+?):/) : null
+
+  return {
+    id: item.id,
+    ngay: item.ngayKey,
+    tieuDe: item.tieuDeHienThi,
+    tiet: tietMatch?.[1],
+    thoiGian: item.thoiGian,
+    thoiGianBatDau: item.batDauIso,
+    thoiGianKetThuc: item.ketThucIso,
+    caNgay: item.caNgay,
+    tenLoai: item.tenLoai,
+    mauLoai: item.mauLoai,
+    diaDiem: item.diaDiem !== "—" ? item.diaDiem : "",
+    ghiChu: item.ghiChu !== "—" ? item.ghiChu : undefined,
+  }
+}
+
+const useLichCuaToi = (macDinhCheDo: CheDoLich = "ngay") => {
+  const { data: me } = useSession()
+  const profileId = me?.sDM_NhanVienId
+  const { lecturerId, isLoading: dangTaiLecturer } = useLecturerHienTai()
+  const { id: semesterId } = useSemesterStore()
+  const { id: trainingObjectId } = useTrainingObjectTypeStore()
+
+  const [cheDo, setCheDo] = useState<CheDoLich>(macDinhCheDo)
+  const [offset, setOffset] = useState(0)
+
+  const ngayThamChieu = useMemo(() => {
+    const homNay = dayjs().startOf("day")
+    if (cheDo === "ngay") return homNay.add(offset, "day")
+    return homNay.add(offset, "week").startOf("isoWeek")
+  }, [cheDo, offset])
+
+  const { dauTuan, cuoiTuan } = useMemo(
+    () => (cheDo === "tuan" ? layKhoangTuan(ngayThamChieu) : { dauTuan: ngayThamChieu, cuoiTuan: ngayThamChieu }),
+    [cheDo, ngayThamChieu]
+  )
+
+  const khoangGiangDay = useMemo(
+    () =>
+      cheDo === "tuan"
+        ? khoangTuanGiangDay(dauTuan, cuoiTuan)
+        : khoangNgayGiangDay(ngayThamChieu),
+    [cheDo, dauTuan, cuoiTuan, ngayThamChieu]
+  )
+
+  const khoangCaNhan = useMemo(
+    () =>
+      cheDo === "tuan"
+        ? khoangTuanCaNhan(dauTuan, cuoiTuan)
+        : khoangNgayCaNhan(ngayThamChieu),
+    [cheDo, dauTuan, cuoiTuan, ngayThamChieu]
+  )
+
+  const duDieuKienGiangDay = !!profileId && !!semesterId && !!trainingObjectId
+  const duDieuKienCaNhan = !!lecturerId
+
+  const { data: lichGiangRaw = [], isLoading: dangTaiGiangDay } = useFindManyClassSchedule(
+    {
+      where: {
+        ...khoangGiangDay,
+        ...dieuKienLichGiangVien(lecturerId, profileId, semesterId, trainingObjectId),
       },
       include: {
         subjectClass: {
           select: {
+            id: true,
             code: true,
             name: true,
-            subject: { select: { name: true } },
+            subject: { select: { name: true, code: true } },
+            trainingLocation: { select: { name: true } },
             room: { select: { name: true } },
           },
         },
-        room: { select: { name: true } },
+        room: {
+          select: {
+            name: true,
+            building: { select: { trainingLocation: { select: { name: true } } } },
+          },
+        },
       },
       orderBy: [{ classDate: "asc" }, { startPeriod: "asc" }],
     },
-    { enabled: !!profileId && !!semesterId && !!trainingObjectId }
+    { enabled: duDieuKienGiangDay }
   )
 
-  const suKien = useMemo(() => lichRaw.map(mapSuKien), [lichRaw])
+  const { data: lichCaNhanRaw = [], isLoading: dangTaiCaNhan } = useFindManyIndividualSchedule(
+    {
+      where: {
+        lecturerId: lecturerId ?? "",
+        ...khoangCaNhan,
+      },
+      include: { tags: { select: { id: true, name: true, color: true } } },
+      orderBy: [{ startTime: "asc" }],
+    },
+    { enabled: duDieuKienCaNhan }
+  )
+
+  const suKien = useMemo(() => {
+    const giangDay = lichGiangRaw.map(mapLichGiangDaySangDong)
+    const caNhan = lichCaNhanRaw.map(mapLichSangDong)
+    return gopVaSapXepLich(giangDay, caNhan).map(mapDongTatCaSangSuKien)
+  }, [lichGiangRaw, lichCaNhanRaw])
 
   const suKienNgay = useMemo(
     () => suKien.filter((item) => dayjs(item.ngay).isSame(ngayThamChieu, "day")),
@@ -142,11 +169,11 @@ const useLichCuaToi = (macDinhCheDo: CheDoLich = "ngay") => {
       const thu = ngayThamChieu.format("dddd")
       return `${thu.charAt(0).toUpperCase()}${thu.slice(1)}, ${ngayThamChieu.format("DD/MM/YYYY")}`
     }
-    const dauTuan = ngayThamChieu.startOf("isoWeek")
-    const cuoiTuan = ngayThamChieu.endOf("isoWeek")
+    const dauTuanLabel = ngayThamChieu.startOf("isoWeek")
+    const cuoiTuanLabel = ngayThamChieu.endOf("isoWeek")
 
-    const dinhDangDau = dauTuan.isSame(cuoiTuan, "year") ? "DD/MM" : "DD/MM/YYYY"
-    return `${dauTuan.format(dinhDangDau)} - ${cuoiTuan.format("DD/MM/YYYY")}`
+    const dinhDangDau = dauTuanLabel.isSame(cuoiTuanLabel, "year") ? "DD/MM" : "DD/MM/YYYY"
+    return `${dauTuanLabel.format(dinhDangDau)} - ${cuoiTuanLabel.format("DD/MM/YYYY")}`
   }, [cheDo, ngayThamChieu])
 
   const lui = () => setOffset((prev) => prev - 1)
@@ -173,7 +200,7 @@ const useLichCuaToi = (macDinhCheDo: CheDoLich = "ngay") => {
     tien,
     veHomNay,
     dichDenNgay,
-    isLoading: !!profileId && isLoading,
+    isLoading: dangTaiLecturer || dangTaiGiangDay || dangTaiCaNhan,
   }
 }
 

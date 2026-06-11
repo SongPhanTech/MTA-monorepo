@@ -41,16 +41,19 @@ export interface ThongKeTrangChu {
   khaoSatSapDienRa: number
 }
 
-/** Sự kiện lịch dùng cho view Ngày / Tuần. */
+/** Sự kiện lịch dùng cho view Ngày / Tuần (giảng dạy + cá nhân). */
 export interface SuKienLich {
   id: string
   ngay: string
   tieuDe: string
-  tiet: string
+  tiet?: string
   thoiGian: string
   thoiGianBatDau: string
   thoiGianKetThuc: string
-  loaiLich: PeriodType
+  caNgay?: boolean
+  loaiLich?: PeriodType
+  tenLoai: string
+  mauLoai: string
   diaDiem: string
   ghiChu?: string
 }

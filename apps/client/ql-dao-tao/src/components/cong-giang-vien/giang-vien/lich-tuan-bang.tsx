@@ -1,5 +1,5 @@
-import { LOAI_LICH_META, type SuKienLich } from "@components/cong-giang-vien/giang-vien/types"
-import { Empty, Spin, Table, Tag } from "antd"
+import type { SuKienLich } from "@components/cong-giang-vien/giang-vien/types"
+import { Empty, Spin, Table } from "antd"
 import type { ColumnsType } from "antd/es/table"
 import dayjs from "dayjs"
 
@@ -15,6 +15,19 @@ const formatThu = (ngay: string) => {
   return `T${thu + 1} ${d.format("DD/MM")}`
 }
 
+const renderLoaiLich = (row: SuKienLich) => (
+  <span
+    className="inline-block rounded border px-1.5 py-0 text-[10px] font-medium leading-tight"
+    style={{
+      borderColor: row.mauLoai,
+      color: row.mauLoai,
+      backgroundColor: `${row.mauLoai}14`,
+    }}
+  >
+    {row.tenLoai}
+  </span>
+)
+
 const columns: ColumnsType<SuKienLich> = [
   {
     title: "Thứ",
@@ -23,7 +36,14 @@ const columns: ColumnsType<SuKienLich> = [
     ellipsis: true,
     render: (value: string) => formatThu(value),
   },
-  { title: "Tiết", dataIndex: "tiet", width: 44, align: "center", ellipsis: true },
+  {
+    title: "Tiết",
+    dataIndex: "tiet",
+    width: 44,
+    align: "center",
+    ellipsis: true,
+    render: (value?: string) => value ?? "—",
+  },
   { title: "TG", dataIndex: "thoiGian", width: 88, ellipsis: true },
   {
     title: "Nội dung",
@@ -33,17 +53,10 @@ const columns: ColumnsType<SuKienLich> = [
   },
   {
     title: "Loại",
-    dataIndex: "loaiLich",
+    key: "loai",
     width: 80,
     ellipsis: true,
-    render: (value: SuKienLich["loaiLich"]) => {
-      const meta = LOAI_LICH_META[value]
-      return (
-        <Tag color={meta.badgeColor} className="m-0 text-[10px] leading-tight">
-          {meta.label}
-        </Tag>
-      )
-    },
+    render: (_, row) => renderLoaiLich(row),
   },
 ]
 

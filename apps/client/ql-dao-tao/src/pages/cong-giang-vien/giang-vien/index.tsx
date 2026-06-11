@@ -49,8 +49,8 @@ function CongGiangVienTrangChuPage() {
 
   return (
     <div className="flex h-[calc(100vh-80px)] flex-col overflow-y-auto lg:overflow-hidden">
-      <Row className="min-h-0 flex-1" gutter={[8, 8]} align="stretch">
-        <Col xs={24} xl={18} className="flex min-h-0">
+      <Row className="h-full min-h-0 flex-1" gutter={[8, 8]} align="stretch">
+        <Col xs={24} xl={18} className="flex h-full min-h-0">
           <div className="flex min-h-0 w-full flex-1 flex-col gap-1">
             <div className="shrink-0">
               <LoiChao hoVaTen={thongTin.hoVaTen} khoa={thongTin.donViCongTac} />
@@ -73,11 +73,11 @@ function CongGiangVienTrangChuPage() {
               />
             </div>
 
-            <div className="grid min-h-0 flex-1 grid-cols-1 gap-1 lg:grid-cols-2 lg:grid-rows-2">
-              <div className="min-h-0">
+            <div className="grid min-h-0 flex-1 grid-cols-1 gap-1 lg:grid-cols-2 lg:grid-rows-[minmax(0,1fr)_minmax(0,1fr)]">
+              <div className="flex h-full min-h-0 flex-col overflow-hidden">
                 <LichCuaToi />
               </div>
-              <div className="min-h-0">
+              <div className="flex h-full min-h-0 flex-col overflow-hidden">
                 <BangLopMonHoc
                   gon
                   tieuDe="Lớp giảng dạy"
@@ -90,7 +90,7 @@ function CongGiangVienTrangChuPage() {
                   }
                 />
               </div>
-              <div className="min-h-0">
+              <div className="flex h-full min-h-0 flex-col overflow-hidden">
                 <BangLopQuanLy
                   gon
                   data={lopQuanLy}
@@ -98,7 +98,7 @@ function CongGiangVienTrangChuPage() {
                   onXemTatCa={() => goTo(ROUTER_PATH.QL_DAO_TAO.CONG_GIANG_VIEN_LOP_QUAN_LY)}
                 />
               </div>
-              <div className="min-h-0">
+              <div className="flex h-full min-h-0 flex-col overflow-hidden">
                 <BangLopMonHoc
                   gon
                   tieuDe="Lớp trợ giảng"

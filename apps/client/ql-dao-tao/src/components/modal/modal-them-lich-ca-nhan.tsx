@@ -11,20 +11,24 @@ import type { GiaTriFormLichCaNhan } from "@components/cong-giang-vien/lich-cua-
 import {
   chuyenPhutSangNhacLich,
   datGioCaNgay,
+  MAU_LOAI_MAC_DINH,
   taoDuLieuLuuLich,
   taoThoiGianLich,
 } from "@components/cong-giang-vien/lich-cua-toi/lich-ca-nhan/utils"
+import { demSoLichGanTag } from "@components/cong-giang-vien/lich-cua-toi/lich-ca-nhan/dem-lich-gan-tag"
 import useSpinner from "@hooks/spinner"
 import { useLecturerHienTai } from "@hooks/use-lecturer-hien-tai"
 import {
   useCreateIndividualSchedule,
+  useDeleteIndividualSchedule,
+  useDeletePersonalWorkTag,
   useFindManyPersonalWorkTag,
   useFindManyUserProfile,
   useFindUniqueIndividualSchedule,
   useUpdateIndividualSchedule,
 } from "@workspace/db/hooks"
 import { ScheduleRepeatType } from "@workspace/db/client"
-import { Checkbox, Form, Input, Select, TimePicker, message } from "antd"
+import { Button, Checkbox, Form, Input, Modal, Select, TimePicker, message } from "antd"
 import dayjs from "dayjs"
 import { Bell, Clock, MapPin, RefreshCw, UserPlus } from "lucide-react"
 import { useEffect, useMemo, useRef, useState } from "react"
@@ -45,6 +49,8 @@ const ModalThemLichCaNhan = () => {
 
   const { mutateAsync: taoLich } = useCreateIndividualSchedule()
   const { mutateAsync: capNhatLich } = useUpdateIndividualSchedule()
+  const { mutateAsync: xoaLich } = useDeleteIndividualSchedule()
+  const { mutateAsync: xoaTag } = useDeletePersonalWorkTag()
 
   const {
     isOpen,
@@ -278,6 +284,101 @@ const ModalThemLichCaNhan = () => {
     }))
   }
 
+  const moSuaLoai = (tagId: string) => {
+    const tag = tags.find((item) => item.id === tagId)
+    if (!tag) return
+
+    modalStore.setState((state) => ({
+      modalTags: {
+        ...state.modalTags,
+        ModalThemLoaiLich: {
+          input: {
+            lecturerId: lecturerId ?? "",
+            id: tag.id,
+            name: tag.name,
+            color: tag.color ?? MAU_LOAI_MAC_DINH,
+          },
+        },
+      },
+    }))
+  }
+
+  const xoaLichCaNhan = () => {
+    const lichId = input?.id
+    if (!lichId) return
+
+    Modal.confirm({
+      title: "Xóa lịch này?",
+      okText: "Xóa",
+      cancelText: "Hủy",
+      okButtonProps: { danger: true },
+      onOk: async () => {
+        showSpinner()
+        try {
+          await xoaLich({ where: { id: lichId } })
+          await queryClient.invalidateQueries({ queryKey: ["IndividualSchedule"] })
+          message.success("Đã xóa lịch")
+          onClose()
+        } catch (error: unknown) {
+          const err = error as { info?: { message?: string } }
+          message.error(err?.info?.message ?? "Không thể xóa lịch")
+          throw error
+        } finally {
+          hideSpinner()
+        }
+      },
+    })
+  }
+
+  const xoaLoaiLich = async (tagId: string) => {
+    if (!lecturerId) {
+      message.error("Không xác định được giảng viên")
+      return
+    }
+
+    showSpinner()
+    try {
+      const soLich = await demSoLichGanTag(tagId, lecturerId)
+      if (soLich > 0) {
+        message.warning("Loại lịch này đang được gắn với lịch cá nhân, không thể xóa.")
+        return
+      }
+    } catch {
+      message.error("Không thể kiểm tra lịch gắn loại lịch")
+      return
+    } finally {
+      hideSpinner()
+    }
+
+    Modal.confirm({
+      title: "Xóa loại lịch",
+      content: "Bạn có chắc muốn xóa loại lịch này? Thao tác này không thể hoàn tác.",
+      okText: "Xóa",
+      cancelText: "Hủy",
+      okButtonProps: { danger: true },
+      onOk: async () => {
+        showSpinner()
+        try {
+          await xoaTag({ where: { id: tagId } })
+          await queryClient.invalidateQueries({ queryKey: ["PersonalWorkTag"] })
+
+          if (form.getFieldValue("tagId") === tagId) {
+            const tagConLai = tags.filter((item) => item.id !== tagId)
+            form.setFieldValue("tagId", tagConLai[0]?.id)
+          }
+
+          message.success("Đã xóa loại lịch")
+        } catch (error: unknown) {
+          const err = error as { info?: { message?: string } }
+          message.error(err?.info?.message ?? "Không thể xóa loại lịch")
+          throw error
+        } finally {
+          hideSpinner()
+        }
+      },
+    })
+  }
+
   return (
     <PutFormModal<GiaTriFormLichCaNhan>
       open={isOpen}
@@ -289,7 +390,31 @@ const ModalThemLichCaNhan = () => {
       }
       okText="Lưu lịch"
       cancelText="Hủy"
-      width={720}
+      footer={
+        input?.id ? (
+          <div className="flex items-center justify-between gap-2">
+            <Button danger className="!h-9 !font-medium" onClick={xoaLichCaNhan}>
+              Xóa lịch
+            </Button>
+            <div className="flex gap-2">
+              <Button
+                onClick={onClose}
+                className="!h-9 !min-w-[80px] !border-gray-300 !bg-white !font-medium !text-gray-700"
+              >
+                Hủy
+              </Button>
+              <Button
+                type="primary"
+                onClick={() => form.submit()}
+                className="!h-9 !min-w-[100px] !border-cgv-green-dark !bg-cgv-green-dark !font-medium hover:!opacity-90"
+              >
+                Lưu lịch
+              </Button>
+            </div>
+          </div>
+        ) : undefined
+      }
+      width={700}
       rowWrap={false}
       form={form}
       onFinish={onFinish}
@@ -315,26 +440,26 @@ const ModalThemLichCaNhan = () => {
       }}
     >
       <div className="flex flex-col gap-4">
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:items-start">
-          <FormItem form={form} name="title" label="Tiêu đề lịch" required className="min-w-0">
-            <Input placeholder="Nhập tiêu đề lịch..." maxLength={200} className="h-10" />
-          </FormItem>
+        <FormItem form={form} name="title" label="Tiêu đề lịch" required className="min-w-0">
+          <Input placeholder="Nhập tiêu đề lịch..." maxLength={200} className="h-10" />
+        </FormItem>
 
-          <FormItem
-            form={form}
-            name="tagId"
-            label="Loại lịch"
-            required
-            className="min-w-0"
-            rules={[{ required: true, message: "Vui lòng chọn loại lịch" }]}
-          >
-            <ChonLoaiLich
-              tags={tags}
-              onThemLoai={moThemLoai}
-              dangTai={dangTaiTag || dangFetchTag}
-            />
-          </FormItem>
-        </div>
+        <FormItem
+          form={form}
+          name="tagId"
+          label="Loại lịch"
+          required
+          className="min-w-0"
+          rules={[{ required: true, message: "Vui lòng chọn loại lịch" }]}
+        >
+          <ChonLoaiLich
+            tags={tags}
+            onThemLoai={moThemLoai}
+            onSuaLoai={moSuaLoai}
+            onXoaLoai={xoaLoaiLich}
+            dangTai={dangTaiTag || dangFetchTag}
+          />
+        </FormItem>
 
         <div>
           <p className="mb-3 text-sm font-medium text-gray-700">Thời gian</p>
@@ -393,9 +518,9 @@ const ModalThemLichCaNhan = () => {
         <FormItem form={form} name="noiDung" label="Nội dung">
           <Input.TextArea
             placeholder="Nhập nội dung công việc, nội dung cuộc họp, ghi chú..."
-            rows={4}
-            maxLength={1000}
-            showCount={{ formatter: ({ count, maxLength }) => `${count}/${maxLength}` }}
+            rows={3}
+            // maxLength={1000}
+            // showCount={{ formatter: ({ count, maxLength }) => `${count}/${maxLength}` }}
             className="resize-none"
           />
         </FormItem>

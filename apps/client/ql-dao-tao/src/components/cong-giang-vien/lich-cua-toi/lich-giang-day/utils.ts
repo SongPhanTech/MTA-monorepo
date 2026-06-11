@@ -228,6 +228,8 @@ export const mapLichGiangDaySangSuKien = (lich: LichGiangDayRaw): SuKienLich => 
     thoiGianBatDau: batDauIso.toISOString(),
     thoiGianKetThuc: ketThucIso.toISOString(),
     loaiLich: lich.periodType,
+    tenLoai: "Giảng dạy",
+    mauLoai: MAU_SU_KIEN_LICH_GIANG_DAY,
     diaDiem: dong.phongHoc !== "—" ? dong.phongHoc : dong.khuVuc,
     ghiChu: dong.ghiChu !== "—" ? dong.ghiChu : undefined,
   }

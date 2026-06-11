@@ -1,3 +1,6 @@
+/** Số loại lịch hiển thị trực tiếp trong modal; phần còn lại gom vào +N. */
+export const SO_TAG_HIEN_THI_TOI_DA = 3
+
 /** Bảng màu chọn khi thêm loại lịch mới. */
 export const TUY_CHON_MAU_LOAI_LICH = [
   "#16a34a",
