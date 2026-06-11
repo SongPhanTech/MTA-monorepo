@@ -1,5 +1,8 @@
 import type { CheDoHienThiLich, DangXemLich } from "@components/cong-giang-vien/lich-cua-toi/types"
-import type { DongLichCaNhan, ThongKeLichCaNhan } from "@components/cong-giang-vien/lich-cua-toi/lich-ca-nhan/types"
+import type {
+  DongLichCaNhan,
+  ThongKeLichCaNhan,
+} from "@components/cong-giang-vien/lich-cua-toi/lich-ca-nhan/types"
 import {
   chuyenSangDongBangThang,
   formatNhanThang,
@@ -174,15 +177,9 @@ const useLichCaNhan = () => {
     [danhSachLoc, trang, soTrang]
   )
 
-  const danhSachNhomTrang = useMemo(
-    () => nhomLichTheoNgay(danhSachTrang),
-    [danhSachTrang]
-  )
+  const danhSachNhomTrang = useMemo(() => nhomLichTheoNgay(danhSachTrang), [danhSachTrang])
 
-  const danhSachBangThang = useMemo(
-    () => chuyenSangDongBangThang(danhSachTrang),
-    [danhSachTrang]
-  )
+  const danhSachBangThang = useMemo(() => chuyenSangDongBangThang(danhSachTrang), [danhSachTrang])
 
   const nhanKhoangThoiGian = useMemo(() => {
     if (cheDoHienThi === "thang") return formatNhanThang(ngayChon)

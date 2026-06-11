@@ -112,7 +112,13 @@ export async function exportThoiKhoaBieu({
         subjectName: sc.subject.name,
         credit: sc.subject.credit,
         classCode: sc.code,
-        lecturers: [sc.mainLecturer?.userProfile?.fullname, sc.extraLecturer?.userProfile?.fullname]
+        lecturers: [sc.mainLecturer, sc.extraLecturer]
+          .filter(Boolean)
+          .map((lecturer) =>
+            lecturer?.code
+              ? `${lecturer.userProfile?.fullname} (${lecturer.code})`
+              : lecturer?.userProfile?.fullname
+          )
           .filter(Boolean)
           .join("; "),
         weekday: classTime?.dayOfWeek || "",

@@ -11,7 +11,9 @@ const ChuThichLichCaNhan = ({ tags, className }: ChuThichLichCaNhanProps) => {
   if (tags.length === 0) return null
 
   return (
-    <div className={cn("flex flex-wrap items-center gap-x-5 gap-y-1 text-xs text-gray-600", className)}>
+    <div
+      className={cn("flex flex-wrap items-center gap-x-5 gap-y-1 text-xs text-gray-600", className)}
+    >
       {tags.map((tag, index) => {
         const mau = tag.color ?? MAU_LOAI_LICH_MAC_DINH[index % MAU_LOAI_LICH_MAC_DINH.length]
         return (
