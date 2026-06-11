@@ -144,7 +144,9 @@ const useLichCuaToi = (macDinhCheDo: CheDoLich = "ngay") => {
     }
     const dauTuan = ngayThamChieu.startOf("isoWeek")
     const cuoiTuan = ngayThamChieu.endOf("isoWeek")
-    return `${dauTuan.format("DD/MM/YYYY")} - ${cuoiTuan.format("DD/MM/YYYY")}`
+
+    const dinhDangDau = dauTuan.isSame(cuoiTuan, "year") ? "DD/MM" : "DD/MM/YYYY"
+    return `${dauTuan.format(dinhDangDau)} - ${cuoiTuan.format("DD/MM/YYYY")}`
   }, [cheDo, ngayThamChieu])
 
   const lui = () => setOffset((prev) => prev - 1)
