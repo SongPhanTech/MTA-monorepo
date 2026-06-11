@@ -11,6 +11,7 @@ import { useHoSoCaNhan } from "@hooks/use-ho-so-ca-nhan"
 import { useKhaoSatGiangVien } from "@hooks/use-khao-sat-giang-vien"
 import { useTrangChuGiangVien } from "@hooks/use-trang-chu-giang-vien"
 import { ROUTER_PATH } from "@workspace/router"
+import { useSemesterStore } from "@workspace/ui"
 import { Col, Row } from "antd"
 import { useRouter } from "next/router"
 import { useMemo } from "react"
@@ -18,7 +19,8 @@ import { useMemo } from "react"
 function CongGiangVienTrangChuPage() {
   const router = useRouter()
   const { thongTin, daoTao, isLoading: dangTaiHoSo } = useHoSoCaNhan()
-  const { tongSo, thongKe: thongKeKhaoSat } = useKhaoSatGiangVien()
+  const { id: semesterId } = useSemesterStore()
+  const { tongSo, thongKe: thongKeKhaoSat } = useKhaoSatGiangVien({ semesterId })
   const {
     lopGiangDay,
     lopTroGiang,
