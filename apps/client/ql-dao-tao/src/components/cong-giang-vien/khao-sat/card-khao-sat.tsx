@@ -1,8 +1,13 @@
-import { getTrangThaiKhaoSat, type KhaoSatItem, type TrangThaiKhaoSat } from "@hooks/use-khao-sat-giang-vien"
+import {
+  getTrangThaiKhaoSat,
+  type KhaoSatItem,
+  type TrangThaiKhaoSat,
+} from "@hooks/use-khao-sat-giang-vien"
 import { Button, Card, Tag, Typography } from "antd"
 import dayjs from "dayjs"
 import { CalendarCheck, CalendarDays, ClipboardCheck, ClipboardList, FileClock } from "lucide-react"
 import type React from "react"
+import { useDisclosure } from "react-hook-disclosure-modal"
 
 interface CardKhaoSatProps {
   khaoSat: KhaoSatItem
@@ -48,6 +53,9 @@ const CardKhaoSat = ({ khaoSat }: CardKhaoSatProps) => {
   const cauHinh = CAU_HINH_TRANG_THAI[trangThai]
   const daHoanThanh = khaoSat.surveySessions?.some((s) => s.isCompleted) ?? false
 
+  const { onOpen: moLamKhaoSat } = useDisclosure<{ surveyId: string }>({ tag: "ModalLamKhaoSat" })
+  const { onOpen: moXemLai } = useDisclosure<{ surveyId: string }>({ tag: "ModalXemLaiKhaoSat" })
+
   return (
     <Card size="small" className="mb-3" styles={{ body: { padding: 12 } }}>
       <div className="flex items-center gap-4">
@@ -84,9 +92,7 @@ const CardKhaoSat = ({ khaoSat }: CardKhaoSatProps) => {
           <CalendarDays size={18} className="text-gray-400" />
           <div className="flex flex-col">
             <span>Thời gian bắt đầu</span>
-            <span className="font-medium text-gray-700">
-              {dinhDangThoiGian(khaoSat.startDate)}
-            </span>
+            <span className="font-medium text-gray-700">{dinhDangThoiGian(khaoSat.startDate)}</span>
           </div>
         </div>
 
@@ -94,13 +100,11 @@ const CardKhaoSat = ({ khaoSat }: CardKhaoSatProps) => {
           <CalendarDays size={18} className="text-gray-400" />
           <div className="flex flex-col">
             <span>Thời gian kết thúc</span>
-            <span className="font-medium text-gray-700">
-              {dinhDangThoiGian(khaoSat.endDate)}
-            </span>
+            <span className="font-medium text-gray-700">{dinhDangThoiGian(khaoSat.endDate)}</span>
           </div>
         </div>
 
-        <Tag color={cauHinh.mauBadge} className="m-0 px-3 py-1 text-sm font-medium">
+        <Tag color={cauHinh.mauBadge} className="m-0 text-sm font-medium">
           {cauHinh.nhanBadge}
         </Tag>
 
@@ -109,9 +113,11 @@ const CardKhaoSat = ({ khaoSat }: CardKhaoSatProps) => {
             type="primary"
             size="small"
             disabled={trangThai === "sap_dien_ra"}
-            onClick={() => {
-              // TODO: điều hướng sang trang trả lời khảo sát khi có route
-            }}
+            onClick={() =>
+              daHoanThanh
+                ? moXemLai({ surveyId: khaoSat.id })
+                : moLamKhaoSat({ surveyId: khaoSat.id })
+            }
           >
             {daHoanThanh ? "Xem lại" : "Trả lời khảo sát"}
           </Button>

@@ -123,6 +123,8 @@ import PutAvailableTrainingTimeModal from "./PutAvailableTrainingTimeModal"
 import ModalPhienDiemKyHoc from "./modal-phien-diem-ky-hoc"
 import ModalThemLichCaNhan from "./modal-them-lich-ca-nhan"
 import ModalThemLoaiLich from "./modal-them-loai-lich"
+import ModalLamKhaoSat from "./modal-lam-khao-sat"
+import ModalXemLaiKhaoSat from "./modal-xem-lai-khao-sat"
 
 export {
   ExportStatsArchivedAwardModal,
@@ -252,6 +254,8 @@ export {
   ModalPhienDiemKyHoc,
   ModalThemLichCaNhan,
   ModalThemLoaiLich,
+  ModalLamKhaoSat,
+  ModalXemLaiKhaoSat,
 }
 export * from "./ke-hoach-dao-tao"
 export * from "./thong-bao"

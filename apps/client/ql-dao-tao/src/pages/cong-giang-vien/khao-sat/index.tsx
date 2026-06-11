@@ -1,8 +1,9 @@
 import { type TrangThaiKhaoSat, useKhaoSatGiangVien } from "@hooks/use-khao-sat-giang-vien"
+import { useFindFirstSemester } from "@workspace/db/hooks"
 import { Button, TreeSelectFloat } from "@workspace/ui"
 import { Breadcrumb, Input, Select, Typography } from "antd"
 import { RefreshCcw, Search } from "lucide-react"
-import { useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import StatCardsKhaoSat from "@components/cong-giang-vien/khao-sat/stat-cards-khao-sat"
 import DanhSachKhaoSat from "@components/cong-giang-vien/khao-sat/danh-sach-khao-sat"
 
@@ -19,6 +20,18 @@ const KhaoSatGiangVien = () => {
   const [semesterId, setSemesterId] = useState<string>()
   const [tuKhoa, setTuKhoa] = useState("")
   const [trangThai, setTrangThai] = useState<TrangThaiLoc>("tat_ca")
+
+  // Mặc định chọn kỳ học hiện tại (kỳ chứa ngày hôm nay)
+  const now = useMemo(() => new Date().toISOString(), [])
+  const { data: hocKyHienTai } = useFindFirstSemester({
+    where: { startDate: { lte: now }, endDate: { gte: now } },
+  })
+
+  useEffect(() => {
+    if (hocKyHienTai?.id && semesterId === undefined) {
+      setSemesterId(hocKyHienTai.id)
+    }
+  }, [hocKyHienTai, semesterId])
 
   const { tongSo, thongKe, nhomTheoTrangThai, isLoading, isFetching, refetch } =
     useKhaoSatGiangVien({
