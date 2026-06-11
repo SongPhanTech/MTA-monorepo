@@ -49,7 +49,7 @@ const useKhaoSatGiangVien = ({
   const { data: session } = useSession()
   const profileId = session?.sDM_NhanVienId || "fa330b1b-4326-4018-b3d9-3cd79344f660"
 
-  const { data, isLoading } = useGetSurveysOfProfile(
+  const { data, isLoading, isFetching, refetch } = useGetSurveysOfProfile(
     profileId as string,
     { limit: 100, semesterId },
     { query: { enabled: !!profileId } }
@@ -127,7 +127,7 @@ const useKhaoSatGiangVien = ({
     return nhom
   }, [danhSachLoc])
 
-  return { danhSach, danhSachLoc, nhomTheoTrangThai, tongSo, thongKe, isLoading }
+  return { danhSach, danhSachLoc, nhomTheoTrangThai, tongSo, thongKe, isLoading, isFetching, refetch }
 }
 
 export { useKhaoSatGiangVien }

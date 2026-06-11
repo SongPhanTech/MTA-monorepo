@@ -100,7 +100,7 @@ const CardKhaoSat = ({ khaoSat }: CardKhaoSatProps) => {
           </div>
         </div>
 
-        <Tag color={cauHinh.mauBadge} className="m-0">
+        <Tag color={cauHinh.mauBadge} className="m-0 px-3 py-1 text-sm font-medium">
           {cauHinh.nhanBadge}
         </Tag>
 
