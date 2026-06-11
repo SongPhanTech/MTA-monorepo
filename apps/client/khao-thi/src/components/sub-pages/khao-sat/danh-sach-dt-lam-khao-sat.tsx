@@ -4,7 +4,7 @@ import type { FilterProps } from "@components/commons/typeFilter"
 import ExportObjectInSurvey from "@components/modal/export-list-object-in-survey"
 import { DEFAULT_PAGINATE_SIZE } from "@constants/constants"
 import { useSession } from "@workspace/auth/react"
-import type { Survey, Lecturer } from "@workspace/db"
+import type { Survey, SurveyObjectType, SurveyObject } from "@workspace/db"
 import { useFindManyFixedClass, useFindManyTrainingCourse } from "@workspace/db/hooks"
 import { useGetSurveyObjects } from "@workspace/libs/api/exam"
 import { useAbility } from "@workspace/permissions/hooks"
@@ -17,6 +17,11 @@ import { Eye } from "lucide-react"
 import { useRouter } from "next/router"
 import { useEffect, useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
+
+// Survey kèm relation surveyObjectType (runtime data có sẵn nhưng scalar type không include)
+type SurveyWithObjectType = Survey & {
+  surveyObjectType?: (SurveyObjectType & { type: SurveyObject[] })[]
+}
 
 function DanhSachDoiTuong({ selectedId }: { selectedId: Survey | null }) {
   const { can, canSome } = useAbility()
@@ -38,14 +43,14 @@ function DanhSachDoiTuong({ selectedId }: { selectedId: Survey | null }) {
     isStudent: "all",
   })
 
-  const STUDENT_TYPES = ["MILITARY_STUDENT", "CIVILIAN_STUDENT"]
-  const LECTURER_TYPES = ["LECTURER", "STAFF"]
+  const STUDENT_TYPES: SurveyObject[] = ["MILITARY_STUDENT", "CIVILIAN_STUDENT"]
+  const LECTURER_TYPES: SurveyObject[] = ["LECTURER", "STAFF"]
 
   // Kiểm tra từng loại đối tượng trong đợt khảo sát
   const { hasLecturer, hasStudent } = useMemo(() => {
-    const objectTypes = (selectedId as any)?.surveyObjectType as any[] | undefined
+    const objectTypes = (selectedId as SurveyWithObjectType)?.surveyObjectType
     if (!objectTypes?.length) return { hasLecturer: false, hasStudent: false }
-    const allTypes: string[] = objectTypes.flatMap((o: any) =>
+    const allTypes: SurveyObject[] = objectTypes.flatMap((o) =>
       Array.isArray(o.type) ? o.type : []
     )
     return {
@@ -263,28 +268,28 @@ function DanhSachDoiTuong({ selectedId }: { selectedId: Survey | null }) {
             </Dropdown>
 
             {!isLecturerOnly && (
-              <Button
-                color="primary"
-                onClick={() => {
-                  setFilters({ ...filters, isStudent: "all" })
-                }}
-                variant="solid"
-                size="small"
-              >
-                Tất cả
-              </Button>
-            )}
-            {!isLecturerOnly && (
-              <Button
-                color="primary"
-                onClick={() => {
-                  setFilters({ ...filters, isStudent: "student" })
-                }}
-                variant="solid"
-                size="small"
-              >
-                Học viên
-              </Button>
+              <>
+                <Button
+                  color="primary"
+                  onClick={() => {
+                    setFilters({ ...filters, isStudent: "all" })
+                  }}
+                  variant="solid"
+                  size="small"
+                >
+                  Tất cả
+                </Button>
+                <Button
+                  color="primary"
+                  onClick={() => {
+                    setFilters({ ...filters, isStudent: "student" })
+                  }}
+                  variant="solid"
+                  size="small"
+                >
+                  Học viên
+                </Button>
+              </>
             )}
             <Button
               color="primary"
