@@ -62,7 +62,7 @@ const AddEvidenceToPeriod = () => {
                 operation: "delete",
                 data: {
                   where: {
-                    requirementCriterionId_evidenceId_suffix: {
+                    requirementCriterionId_evidenceId: {
                       requirementCriterionId: id,
                       evidenceId: i.value,
                       suffix: "",
@@ -100,7 +100,7 @@ const AddEvidenceToPeriod = () => {
               operation: "update",
               data: {
                 where: {
-                  requirementCriterionId_evidenceId_suffix: {
+                  requirementCriterionId_evidenceId: {
                     requirementCriterionId: id,
                     evidenceId: i.value,
                     suffix: "",

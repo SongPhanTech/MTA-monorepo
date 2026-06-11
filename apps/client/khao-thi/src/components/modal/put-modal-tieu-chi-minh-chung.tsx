@@ -155,7 +155,7 @@ const PutTieuChiMinhChungModal = () => {
               operation: "delete",
               data: {
                 where: {
-                  requirementCriterionId_evidenceId_suffix: {
+                  requirementCriterionId_evidenceId: {
                     requirementCriterionId: input.id,
                     evidenceId: item.value,
                     suffix: "",
@@ -198,7 +198,7 @@ const PutTieuChiMinhChungModal = () => {
                 operation: "update",
                 data: {
                   where: {
-                    requirementCriterionId_evidenceId_suffix: {
+                    requirementCriterionId_evidenceId: {
                       requirementCriterionId: input.id,
                       evidenceId: evidenceId,
                       suffix: "",
