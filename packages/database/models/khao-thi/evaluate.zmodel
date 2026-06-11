@@ -271,9 +271,9 @@ model AnalysisFormEvidence extends Base {
   evidence               Evidence             @relation(fields: [evidenceId], references: [id], onDelete: Cascade)
   evidenceId             String
   order                  Int
-  suffix                 String               @default("")
+  suffix                 String               @default("") // Mã minh chứng phụ 
 
-  @@unique([requirementCriterionId, evidenceId, suffix])
+  @@unique([requirementCriterionId, evidenceId])
   @@schema("khao-thi")
 }
 
