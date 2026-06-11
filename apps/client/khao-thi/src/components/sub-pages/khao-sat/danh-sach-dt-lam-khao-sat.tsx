@@ -4,7 +4,7 @@ import type { FilterProps } from "@components/commons/typeFilter"
 import ExportObjectInSurvey from "@components/modal/export-list-object-in-survey"
 import { DEFAULT_PAGINATE_SIZE } from "@constants/constants"
 import { useSession } from "@workspace/auth/react"
-import type { Survey } from "@workspace/db"
+import type { Survey, Lecturer } from "@workspace/db"
 import { useFindManyFixedClass, useFindManyTrainingCourse } from "@workspace/db/hooks"
 import { useGetSurveyObjects } from "@workspace/libs/api/exam"
 import { useAbility } from "@workspace/permissions/hooks"
@@ -15,7 +15,7 @@ import { Document, Table as DocxTable, Packer, Paragraph, TableCell, TableRow, T
 import { saveAs } from "file-saver"
 import { Eye } from "lucide-react"
 import { useRouter } from "next/router"
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 
 function DanhSachDoiTuong({ selectedId }: { selectedId: Survey | null }) {
@@ -37,6 +37,38 @@ function DanhSachDoiTuong({ selectedId }: { selectedId: Survey | null }) {
     organization: undefined,
     isStudent: "all",
   })
+
+  const STUDENT_TYPES = ["MILITARY_STUDENT", "CIVILIAN_STUDENT"]
+  const LECTURER_TYPES = ["LECTURER", "STAFF"]
+
+  // Kiểm tra từng loại đối tượng trong đợt khảo sát
+  const { hasLecturer, hasStudent } = useMemo(() => {
+    const objectTypes = (selectedId as any)?.surveyObjectType as any[] | undefined
+    if (!objectTypes?.length) return { hasLecturer: false, hasStudent: false }
+    const allTypes: string[] = objectTypes.flatMap((o: any) =>
+      Array.isArray(o.type) ? o.type : []
+    )
+    return {
+      hasLecturer: allTypes.some((t) => LECTURER_TYPES.includes(t)),
+      hasStudent: allTypes.some((t) => STUDENT_TYPES.includes(t)),
+    }
+  }, [selectedId])
+
+  // Chỉ giảng viên (không có học viên)
+  const isLecturerOnly = hasLecturer && !hasStudent
+  // Có cả giảng viên lẫn học viên
+  const isMixed = hasLecturer && hasStudent
+
+  // Tiêu đề cột mã theo từng trường hợp
+  const codeColumnTitle = isLecturerOnly ? "Mã GV" : isMixed ? "Mã HV/GV" : "Mã HV"
+
+  // Tự động set bộ lọc isStudent khi đổi đợt khảo sát
+  useEffect(() => {
+    setFilters((prev) => ({
+      ...prev,
+      isStudent: isLecturerOnly ? "lecturer" : "all",
+    }))
+  }, [isLecturerOnly, selectedId?.id])
   const router = useRouter()
   const { onOpen: openPrint } = useDisclosure({
     tag: "ModalPrintDanhSachDoiTuong",
@@ -230,26 +262,30 @@ function DanhSachDoiTuong({ selectedId }: { selectedId: Survey | null }) {
               </Button>
             </Dropdown>
 
-            <Button
-              color="primary"
-              onClick={() => {
-                setFilters({ ...filters, isStudent: "all" })
-              }}
-              variant="solid"
-              size="small"
-            >
-              Tất cả
-            </Button>
-            <Button
-              color="primary"
-              onClick={() => {
-                setFilters({ ...filters, isStudent: "student" })
-              }}
-              variant="solid"
-              size="small"
-            >
-              Học viên
-            </Button>
+            {!isLecturerOnly && (
+              <Button
+                color="primary"
+                onClick={() => {
+                  setFilters({ ...filters, isStudent: "all" })
+                }}
+                variant="solid"
+                size="small"
+              >
+                Tất cả
+              </Button>
+            )}
+            {!isLecturerOnly && (
+              <Button
+                color="primary"
+                onClick={() => {
+                  setFilters({ ...filters, isStudent: "student" })
+                }}
+                variant="solid"
+                size="small"
+              >
+                Học viên
+              </Button>
+            )}
             <Button
               color="primary"
               onClick={() => {
@@ -279,7 +315,7 @@ function DanhSachDoiTuong({ selectedId }: { selectedId: Survey | null }) {
                 render: (_, __, index) => index + 1 + (currentPage - 1) * numberOfPages,
               },
               {
-                title: "Mã HV",
+                title: codeColumnTitle,
                 dataIndex: "studentCode",
                 type: "input",
                 width: 125,
@@ -336,6 +372,7 @@ function DanhSachDoiTuong({ selectedId }: { selectedId: Survey | null }) {
                 width: 100,
                 type: "select",
                 align: "center",
+                hidden: isLecturerOnly,
                 options: fixedClasses?.map((fc) => ({ value: fc.id, label: fc.name })) || [],
                 render: (_, record) =>
                   record?.educationAndTraining?.length > 0
@@ -348,6 +385,7 @@ function DanhSachDoiTuong({ selectedId }: { selectedId: Survey | null }) {
                 type: "select",
                 align: "center",
                 width: 100,
+                hidden: isLecturerOnly,
                 options:
                   trainingCourses?.map((tc) => ({
                     value: tc.id,
