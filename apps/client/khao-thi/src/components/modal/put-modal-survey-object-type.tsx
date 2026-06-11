@@ -467,7 +467,7 @@ const PutSurveyObjectTypeModal = () => {
         children: (
           <Row gutter={[16, 0]}>
             <Col span={24}>
-              <FormItem form={form} name="Organizations" label="Đơn vị quản lý">
+              <FormItem form={form} name="Organizations" label="Đơn vị quản lý" required>
                 <TreeSelect
                   placeholder="Chọn đơn vị quản lý"
                   allowClear
