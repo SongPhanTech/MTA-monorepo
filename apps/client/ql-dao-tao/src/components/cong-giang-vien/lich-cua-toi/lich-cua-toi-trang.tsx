@@ -17,9 +17,9 @@ const LichCuaToiTrang = () => {
   const NoiDungTab = TAB_NOI_DUNG[tabHienTai]
 
   return (
-    <div className="flex h-[calc(100vh-80px)] flex-col gap-3 overflow-hidden">
+    <div className="flex h-full min-h-0 flex-col gap-3 overflow-hidden">
       <HeaderLichCuaToi tabHienTai={tabHienTai} onDoiTab={setTabHienTai} />
-      <div className="min-h-0 flex-1 overflow-auto">
+      <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
         <NoiDungTab />
       </div>
     </div>

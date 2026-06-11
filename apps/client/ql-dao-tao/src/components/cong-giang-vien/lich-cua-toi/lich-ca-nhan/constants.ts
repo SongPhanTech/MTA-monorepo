@@ -26,6 +26,13 @@ export const TUY_CHON_LAP_LAI = [
   { value: "YEARLY", label: "Hàng năm" },
 ] as const
 
+export const MAU_NHOM_LOAI: Record<NhomLoaiLichCaNhan, string> = {
+  "giang-day": "#16a34a",
+  "cong-viec": "#2563eb",
+  "cuoc-hop": "#ea580c",
+  "ca-nhan": "#9333ea",
+}
+
 export const META_LOAI_LICH_CA_NHAN: Record<
   NhomLoaiLichCaNhan,
   { label: string; tagClass: string }
@@ -36,7 +43,7 @@ export const META_LOAI_LICH_CA_NHAN: Record<
   },
   "cong-viec": {
     label: "Công việc",
-    tagClass: "bg-green-50 text-green-700 border-green-200",
+    tagClass: "bg-blue-50 text-blue-700 border-blue-200",
   },
   "cuoc-hop": {
     label: "Cuộc họp",

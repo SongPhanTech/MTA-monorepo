@@ -1,10 +1,12 @@
 import type { ThongKeLichCaNhan } from "@components/cong-giang-vien/lich-cua-toi/lich-ca-nhan/types"
+import type { CheDoHienThiLich } from "@components/cong-giang-vien/lich-cua-toi/types"
 import { Card, Col, Row } from "antd"
 import { BookOpen, CalendarDays, User, Users } from "lucide-react"
 import type { ReactNode } from "react"
 
 interface TheThongKeLichCaNhanProps {
   thongKe: ThongKeLichCaNhan
+  cheDoHienThi: CheDoHienThiLich
 }
 
 interface TheDonProps {
@@ -33,12 +35,15 @@ const TheDon = ({ tieuDe, soLuong, bienDong, icon, bgIcon, mauChu }: TheDonProps
   </Card>
 )
 
-const TheThongKeLichCaNhan = ({ thongKe }: TheThongKeLichCaNhanProps) => {
+const TheThongKeLichCaNhan = ({ thongKe, cheDoHienThi }: TheThongKeLichCaNhanProps) => {
+  const donVi =
+    cheDoHienThi === "thang" ? "tháng" : cheDoHienThi === "tuan" ? "tuần" : "ngày"
+
   return (
     <Row gutter={[12, 12]} className="py-3">
       <Col xs={24} sm={12} lg={6}>
         <TheDon
-          tieuDe="Tổng sự kiện trong ngày"
+          tieuDe={`Tổng sự kiện trong ${donVi}`}
           soLuong={thongKe.tongSuKien}
           bienDong={thongKe.tongBienDong}
           icon={<CalendarDays size={20} />}

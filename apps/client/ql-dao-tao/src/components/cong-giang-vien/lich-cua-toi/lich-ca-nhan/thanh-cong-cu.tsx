@@ -1,13 +1,17 @@
 import type { CheDoHienThiLich, DangXemLich } from "@components/cong-giang-vien/lich-cua-toi/types"
+import { formatNgayChonHienThi } from "@components/cong-giang-vien/lich-cua-toi/lich-ca-nhan/utils"
 import { cn } from "@workspace/ui/lib/utils"
 import { Button, DatePicker, Select } from "antd"
+import locale from "antd/locale/vi_VN"
 import type { Dayjs } from "dayjs"
+import "dayjs/locale/vi"
 import { CalendarDays, ChevronLeft, ChevronRight, LayoutGrid, Plus } from "lucide-react"
 
 interface ThanhCongCuLichCaNhanProps {
   cheDoHienThi: CheDoHienThiLich
   onDoiCheDoHienThi: (value: CheDoHienThiLich) => void
   ngayChon: Dayjs
+  nhanKhoangThoiGian: string
   onDoiNgay: (ngay: Dayjs) => void
   onLuiNgay: () => void
   onTienNgay: () => void
@@ -23,6 +27,7 @@ const ThanhCongCuLichCaNhan = ({
   cheDoHienThi,
   onDoiCheDoHienThi,
   ngayChon,
+  nhanKhoangThoiGian,
   onDoiNgay,
   onLuiNgay,
   onTienNgay,
@@ -41,8 +46,8 @@ const ThanhCongCuLichCaNhan = ({
             className="min-w-[100px]"
             options={[
               { value: "ngay", label: "Ngày" },
-              { value: "tuan", label: "Tuần", disabled: true },
-              { value: "thang", label: "Tháng", disabled: true },
+              { value: "tuan", label: "Tuần" },
+              { value: "thang", label: "Tháng" },
             ]}
           />
         </div>
@@ -53,23 +58,54 @@ const ThanhCongCuLichCaNhan = ({
             size="small"
             icon={<ChevronLeft size={16} />}
             onClick={onLuiNgay}
-            aria-label="Ngày trước"
+            aria-label={
+              cheDoHienThi === "thang"
+                ? "Tháng trước"
+                : cheDoHienThi === "tuan"
+                  ? "Tuần trước"
+                  : "Ngày trước"
+            }
           />
-          <DatePicker
-            value={ngayChon}
-            onChange={(value) => value && onDoiNgay(value)}
-            allowClear={false}
-            format="dddd, DD/MM/YYYY"
-            className="w-[200px]"
-            suffixIcon={<CalendarDays size={14} className="text-gray-400" />}
-            inputReadOnly
-          />
+          {cheDoHienThi === "tuan" ? (
+            <div className="flex h-8 min-w-[220px] items-center justify-center rounded-md border border-gray-200 bg-white px-3 text-sm text-gray-800">
+              {nhanKhoangThoiGian}
+            </div>
+          ) : cheDoHienThi === "thang" ? (
+            <DatePicker
+              picker="month"
+              value={ngayChon}
+              onChange={(value) => value && onDoiNgay(value.startOf("month"))}
+              allowClear={false}
+              format="MM/YYYY"
+              locale={locale.DatePicker}
+              className="w-[120px]"
+              suffixIcon={<CalendarDays size={14} className="text-gray-400" />}
+              inputReadOnly
+            />
+          ) : (
+            <DatePicker
+              value={ngayChon}
+              onChange={(value) => value && onDoiNgay(value)}
+              allowClear={false}
+              format={(value) => (value ? formatNgayChonHienThi(value) : "")}
+              locale={locale.DatePicker}
+              className="w-[200px]"
+              suffixIcon={<CalendarDays size={14} className="text-gray-400" />}
+              inputReadOnly
+            />
+          )}
           <Button
             type="text"
             size="small"
             icon={<ChevronRight size={16} />}
             onClick={onTienNgay}
-            aria-label="Ngày sau"
+            aria-label={
+              cheDoHienThi === "thang"
+                ? "Tháng sau"
+                : cheDoHienThi === "tuan"
+                  ? "Tuần sau"
+                  : "Ngày sau"
+            }
           />
         </div>
       </div>
@@ -99,7 +135,7 @@ const ThanhCongCuLichCaNhan = ({
           aria-pressed={dangXem === "bang"}
         >
           <LayoutGrid size={16} strokeWidth={2} />
-          Table
+          Bảng
         </button>
 
         <button

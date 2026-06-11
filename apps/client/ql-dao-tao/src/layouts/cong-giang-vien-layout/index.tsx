@@ -64,7 +64,7 @@ const CongGiangVienLayout = ({
       timeout={Number.parseFloat(userSessionTimeout?.value || "15") * 60 * 1000}
       onIdle={() => {}}
     >
-      <Layout className="giang-vien-layout min-h-screen bg-[#f3f4f6]">
+      <Layout className="giang-vien-layout h-screen overflow-hidden bg-[#f3f4f6]">
         <Header className="giang-vien-header fixed top-0 left-0 right-0 z-[100] flex h-16 items-center justify-between border-none px-4">
           <div className="flex min-w-0 items-center gap-3">
             <Button
@@ -101,12 +101,13 @@ const CongGiangVienLayout = ({
             style={{
               marginInlineStart: siderWidth,
               transition: "margin-inline-start 0.2s",
-              minHeight: `calc(100vh - ${CONG_GIANG_VIEN_HEADER_HEIGHT}px)`,
+              height: `calc(100vh - ${CONG_GIANG_VIEN_HEADER_HEIGHT}px)`,
+              overflow: "hidden",
             }}
           >
-            <Content className="overflow-hidden px-2 py-2">
+            <Content className="flex h-full flex-col overflow-hidden px-2 py-2">
               {unLayout ? (
-                children
+                <div className="flex min-h-0 flex-1 flex-col overflow-hidden">{children}</div>
               ) : (
                 <div
                   className={cn(
