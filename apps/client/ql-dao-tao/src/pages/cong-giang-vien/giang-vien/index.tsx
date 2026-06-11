@@ -65,7 +65,7 @@ function CongGiangVienTrangChuPage() {
                 onXemLopGiangDay={() => goTo(ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_DS_LOP_MON_HOC)}
                 onXemLopQuanLy={() => goTo(ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_QL_REN_LUYEN)}
                 onXemLopTroGiang={() => goTo(ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_DS_LOP_MON_HOC)}
-                onXemKhaoSat={() => goTo(ROUTER_PATH.QL_DAO_TAO.KHAO_SAT)}
+                onXemKhaoSat={() => goTo(ROUTER_PATH.QL_DAO_TAO.CONG_GIANG_VIEN_KHAO_SAT)}
               />
             </div>
 

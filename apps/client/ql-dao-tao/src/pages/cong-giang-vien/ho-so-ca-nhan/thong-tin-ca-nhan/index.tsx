@@ -2,7 +2,6 @@ import QuaTrinhCongTacBlock from "@components/cong-giang-vien/ho-so-ca-nhan/qua-
 import ThongTinChung from "@components/cong-giang-vien/ho-so-ca-nhan/thong-tin-chung"
 import ThongTinLienHeDaoTao from "@components/cong-giang-vien/ho-so-ca-nhan/thong-tin-lien-he-dao-tao"
 import { useHoSoCaNhan } from "@hooks/use-ho-so-ca-nhan"
-import GiangVienLayout from "@layouts/giang-vien-layout"
 import { Breadcrumb, Skeleton, Typography } from "antd"
 
 const ThongTinCaNhanPage = () => {
@@ -37,7 +36,3 @@ const ThongTinCaNhanPage = () => {
 }
 
 export default ThongTinCaNhanPage
-
-ThongTinCaNhanPage.getLayout = function getLayout(page: React.ReactElement) {
-  return <GiangVienLayout>{page}</GiangVienLayout>
-}
