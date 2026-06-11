@@ -6,6 +6,7 @@ interface PhanTrangLichGiangDayProps {
   tongSo: number
   batDau: number
   ketThuc: number
+  donVi?: "lịch" | "ngày"
   onDoiTrang: (trang: number) => void
 }
 
@@ -15,14 +16,15 @@ const PhanTrangLichGiangDay = ({
   tongSo,
   batDau,
   ketThuc,
+  donVi = "lịch",
   onDoiTrang,
 }: PhanTrangLichGiangDayProps) => {
   return (
     <div className="flex flex-wrap items-center justify-between gap-3 border-t border-gray-100 pt-3">
       <span className="text-sm text-gray-600">
         {tongSo === 0
-          ? "Hiển thị 0 / 0 lịch"
-          : `Hiển thị ${batDau} - ${ketThuc} / ${tongSo} lịch`}
+          ? `Hiển thị 0 / 0 ${donVi}`
+          : `Hiển thị ${batDau} - ${ketThuc} / ${tongSo} ${donVi}`}
       </span>
 
       <Pagination

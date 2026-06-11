@@ -4,7 +4,7 @@ import PutFormModal from "@components/commons/put-modal"
 import { TUY_CHON_MAU_LOAI_LICH } from "@components/cong-giang-vien/lich-cua-toi/lich-ca-nhan/constants"
 import useSpinner from "@hooks/spinner"
 import { useCreatePersonalWorkTag } from "@workspace/db/hooks"
-import { Col, Form, Input, message } from "antd"
+import { Col, ColorPicker, Form, Input, message } from "antd"
 import { useEffect } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 
@@ -85,23 +85,38 @@ const ModalThemLoaiLich = () => {
       </Col>
       <Col span={24}>
         <FormItem form={form} name="color" label="Màu hiển thị" required>
-          <div className="flex flex-wrap gap-2">
-            {TUY_CHON_MAU_LOAI_LICH.map((mau) => {
-              const dangChon = mauChon === mau
-              return (
-                <button
-                  key={mau}
-                  type="button"
-                  onClick={() => form.setFieldValue("color", mau)}
-                  className="h-8 w-8 rounded-full border-2 transition-transform hover:scale-105"
-                  style={{
-                    backgroundColor: mau,
-                    borderColor: dangChon ? "#1f2937" : "transparent",
-                  }}
-                  aria-label={`Chọn màu ${mau}`}
-                />
-              )
-            })}
+          <div className="flex flex-col gap-3">
+            <div className="flex flex-wrap gap-2">
+              {TUY_CHON_MAU_LOAI_LICH.map((mau) => {
+                const dangChon = mauChon === mau
+                return (
+                  <button
+                    key={mau}
+                    type="button"
+                    onClick={() => form.setFieldValue("color", mau)}
+                    className="h-8 w-8 rounded-full border-2 transition-transform hover:scale-105"
+                    style={{
+                      backgroundColor: mau,
+                      borderColor: dangChon ? "#1f2937" : "transparent",
+                    }}
+                    aria-label={`Chọn màu ${mau}`}
+                  />
+                )
+              })}
+            </div>
+            <ColorPicker
+              value={mauChon}
+              format="hex"
+              disabledAlpha
+              showText
+              onChange={(_, hex) => form.setFieldValue("color", hex)}
+              presets={[
+                {
+                  label: "Màu gợi ý",
+                  colors: [...TUY_CHON_MAU_LOAI_LICH],
+                },
+              ]}
+            />
           </div>
         </FormItem>
       </Col>
