@@ -4,7 +4,6 @@ import FormItem from "@components/commons/form-item"
 import PutFormModal from "@components/commons/put-modal"
 import ChonLoaiLich from "@components/cong-giang-vien/lich-cua-toi/lich-ca-nhan/chon-loai-lich"
 import {
-  TAG_LOAI_LICH_MAC_DINH,
   TUY_CHON_LAP_LAI,
   TUY_CHON_NHAC_LICH,
 } from "@components/cong-giang-vien/lich-cua-toi/lich-ca-nhan/constants"
@@ -19,7 +18,6 @@ import useSpinner from "@hooks/spinner"
 import { useLecturerHienTai } from "@hooks/use-lecturer-hien-tai"
 import {
   useCreateIndividualSchedule,
-  useCreateManyPersonalWorkTag,
   useFindManyPersonalWorkTag,
   useFindManyUserProfile,
   useFindUniqueIndividualSchedule,
@@ -42,13 +40,11 @@ const ModalThemLichCaNhan = () => {
   const { showSpinner, hideSpinner } = useSpinner()
   const { lecturerId } = useLecturerHienTai()
   const caNgay = Form.useWatch("caNgay", form)
-  const dangSeedTag = useRef(false)
   const daNapForm = useRef(false)
   const [timNguoiLienQuan, setTimNguoiLienQuan] = useState("")
 
   const { mutateAsync: taoLich } = useCreateIndividualSchedule()
   const { mutateAsync: capNhatLich } = useUpdateIndividualSchedule()
-  const { mutateAsync: taoNhieuTag } = useCreateManyPersonalWorkTag()
 
   const {
     isOpen,
@@ -59,7 +55,6 @@ const ModalThemLichCaNhan = () => {
     tag: "ModalThemLichCaNhan",
     onClose: () => {
       form.resetFields()
-      dangSeedTag.current = false
       setTimNguoiLienQuan("")
     },
   })
@@ -148,36 +143,6 @@ const ModalThemLichCaNhan = () => {
       form.setFieldsValue(datGioCaNgay(giaTri.tuNgay, giaTri.denNgay))
     }
   }
-
-  useEffect(() => {
-    if (
-      !isOpen ||
-      !lecturerId ||
-      tags.length > 0 ||
-      dangSeedTag.current ||
-      dangTaiTag ||
-      dangFetchTag
-    ) {
-      return
-    }
-
-    dangSeedTag.current = true
-    void (async () => {
-      try {
-        await taoNhieuTag({
-          data: TAG_LOAI_LICH_MAC_DINH.map((tag) => ({
-            name: tag.name,
-            color: tag.color,
-            sortOrder: tag.sortOrder,
-            lecturerId,
-          })),
-        })
-        await queryClient.invalidateQueries({ queryKey: ["PersonalWorkTag"] })
-      } catch {
-        dangSeedTag.current = false
-      }
-    })()
-  }, [isOpen, lecturerId, tags.length, dangTaiTag, dangFetchTag, taoNhieuTag])
 
   useEffect(() => {
     if (!isOpen) {

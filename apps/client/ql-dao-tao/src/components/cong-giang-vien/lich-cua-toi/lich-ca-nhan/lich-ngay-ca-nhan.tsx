@@ -3,7 +3,7 @@ import type {
   DongLichCaNhan,
   TagLoaiLich,
 } from "@components/cong-giang-vien/lich-cua-toi/lich-ca-nhan/types"
-import { MAU_LOAI_LICH_MAC_DINH } from "@components/cong-giang-vien/lich-cua-toi/lich-ca-nhan/utils"
+import { MAU_LOAI_MAC_DINH } from "@components/cong-giang-vien/lich-cua-toi/lich-ca-nhan/utils"
 import {
   CHIEU_CAO_MOI_GIO,
   CHIEU_CAO_TIMELINE,
@@ -33,7 +33,7 @@ const iconTheoTenTag = (ten: string, mau: string): ReactNode => {
   return <BookOpen {...props} />
 }
 
-const layMauSuKien = (suKien: DongLichCaNhan) => suKien.mauLoai ?? MAU_LOAI_LICH_MAC_DINH[0]
+const layMauSuKien = (suKien: DongLichCaNhan) => suKien.mauLoai ?? MAU_LOAI_MAC_DINH
 
 const LichNgayCaNhan = ({ danhSach, tags, dangTai, onSua }: LichNgayCaNhanProps) => {
   const gioNhan = useMemo(() => gioTrongTimeline(), [])

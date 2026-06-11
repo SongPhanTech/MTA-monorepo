@@ -5,7 +5,7 @@ import type {
 } from "@components/cong-giang-vien/lich-cua-toi/lich-ca-nhan/types"
 import {
   layKhoangThang,
-  MAU_LOAI_LICH_MAC_DINH,
+  MAU_LOAI_MAC_DINH,
   taoNgayTrongLichThang,
 } from "@components/cong-giang-vien/lich-cua-toi/lich-ca-nhan/utils"
 import { cn } from "@workspace/ui/lib/utils"
@@ -25,7 +25,7 @@ interface LichThangCaNhanProps {
 const TIEU_DE_THU = ["Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7", "Chủ nhật"] as const
 const SO_SU_KIEN_TOI_DA = 3
 
-const layMauSuKien = (suKien: DongLichCaNhan) => suKien.mauLoai ?? MAU_LOAI_LICH_MAC_DINH[0]
+const layMauSuKien = (suKien: DongLichCaNhan) => suKien.mauLoai ?? MAU_LOAI_MAC_DINH
 
 const formatGioSuKien = (suKien: DongLichCaNhan) =>
   suKien.caNgay ? "Cả ngày" : suKien.thoiGianBatDau

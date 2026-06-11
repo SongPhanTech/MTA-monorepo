@@ -3,7 +3,7 @@ import type {
   DongLichCaNhan,
   TagLoaiLich,
 } from "@components/cong-giang-vien/lich-cua-toi/lich-ca-nhan/types"
-import { MAU_LOAI_LICH_MAC_DINH } from "@components/cong-giang-vien/lich-cua-toi/lich-ca-nhan/utils"
+import { MAU_LOAI_MAC_DINH } from "@components/cong-giang-vien/lich-cua-toi/lich-ca-nhan/utils"
 import {
   CHIEU_CAO_MOI_GIO,
   CHIEU_CAO_TIMELINE,
@@ -27,7 +27,7 @@ const TEN_THU = ["Chủ nhật", "Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Th
 
 const formatNhanNgayTuan = (ngay: Dayjs) => `${TEN_THU[ngay.day()]} ${ngay.format("DD/MM")}`
 
-const layMauSuKien = (suKien: DongLichCaNhan) => suKien.mauLoai ?? MAU_LOAI_LICH_MAC_DINH[0]
+const layMauSuKien = (suKien: DongLichCaNhan) => suKien.mauLoai ?? MAU_LOAI_MAC_DINH
 
 type SuKienViTri = DongLichCaNhan & {
   topPx: number

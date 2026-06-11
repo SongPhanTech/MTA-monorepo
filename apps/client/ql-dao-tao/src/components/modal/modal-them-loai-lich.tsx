@@ -1,7 +1,7 @@
 import { queryClient } from "@api/index"
 import FormItem from "@components/commons/form-item"
 import PutFormModal from "@components/commons/put-modal"
-import { MAU_LOAI_LICH_MAC_DINH } from "@components/cong-giang-vien/lich-cua-toi/lich-ca-nhan/utils"
+import { TUY_CHON_MAU_LOAI_LICH } from "@components/cong-giang-vien/lich-cua-toi/lich-ca-nhan/constants"
 import useSpinner from "@hooks/spinner"
 import { useCreatePersonalWorkTag } from "@workspace/db/hooks"
 import { Col, Form, Input, message } from "antd"
@@ -34,7 +34,7 @@ const ModalThemLoaiLich = () => {
     if (isOpen) {
       form.setFieldsValue({
         name: "",
-        color: MAU_LOAI_LICH_MAC_DINH[0],
+        color: TUY_CHON_MAU_LOAI_LICH[0],
       })
     }
   }, [isOpen, form])
@@ -86,7 +86,7 @@ const ModalThemLoaiLich = () => {
       <Col span={24}>
         <FormItem form={form} name="color" label="Màu hiển thị" required>
           <div className="flex flex-wrap gap-2">
-            {MAU_LOAI_LICH_MAC_DINH.map((mau) => {
+            {TUY_CHON_MAU_LOAI_LICH.map((mau) => {
               const dangChon = mauChon === mau
               return (
                 <button
