@@ -65,7 +65,6 @@ const AddEvidenceToPeriod = () => {
                     requirementCriterionId_evidenceId: {
                       requirementCriterionId: id,
                       evidenceId: i.value,
-                      suffix: "",
                     },
                   },
                 },
@@ -103,7 +102,6 @@ const AddEvidenceToPeriod = () => {
                   requirementCriterionId_evidenceId: {
                     requirementCriterionId: id,
                     evidenceId: i.value,
-                    suffix: "",
                   },
                 },
                 data: {

@@ -158,7 +158,6 @@ const PutTieuChiMinhChungModal = () => {
                   requirementCriterionId_evidenceId: {
                     requirementCriterionId: input.id,
                     evidenceId: item.value,
-                    suffix: "",
                   },
                 },
               },
@@ -201,7 +200,6 @@ const PutTieuChiMinhChungModal = () => {
                     requirementCriterionId_evidenceId: {
                       requirementCriterionId: input.id,
                       evidenceId: evidenceId,
-                      suffix: "",
                     },
                   },
                   data: {
