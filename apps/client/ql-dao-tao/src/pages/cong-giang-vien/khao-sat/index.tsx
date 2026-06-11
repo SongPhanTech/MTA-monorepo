@@ -1,8 +1,9 @@
 import { type TrangThaiKhaoSat, useKhaoSatGiangVien } from "@hooks/use-khao-sat-giang-vien"
-import { Button, SelectFloat, TreeSelectFloat } from "@workspace/ui"
-import { Breadcrumb, Input, Typography } from "antd"
+import { useFindFirstSemester } from "@workspace/db/hooks"
+import { Button, TreeSelectFloat } from "@workspace/ui"
+import { Breadcrumb, Input, Select, Typography } from "antd"
 import { RefreshCcw, Search } from "lucide-react"
-import { useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import StatCardsKhaoSat from "@components/cong-giang-vien/khao-sat/stat-cards-khao-sat"
 import DanhSachKhaoSat from "@components/cong-giang-vien/khao-sat/danh-sach-khao-sat"
 
@@ -20,16 +21,28 @@ const KhaoSatGiangVien = () => {
   const [tuKhoa, setTuKhoa] = useState("")
   const [trangThai, setTrangThai] = useState<TrangThaiLoc>("tat_ca")
 
-  const { tongSo, thongKe, nhomTheoTrangThai, isLoading } = useKhaoSatGiangVien({
-    semesterId,
-    tuKhoa,
-    trangThai,
+  // Mặc định chọn kỳ học hiện tại (kỳ chứa ngày hôm nay)
+  const now = useMemo(() => new Date().toISOString(), [])
+  const { data: hocKyHienTai } = useFindFirstSemester({
+    where: { startDate: { lte: now }, endDate: { gte: now } },
   })
 
+  useEffect(() => {
+    if (hocKyHienTai?.id && semesterId === undefined) {
+      setSemesterId(hocKyHienTai.id)
+    }
+  }, [hocKyHienTai, semesterId])
+
+  const { tongSo, thongKe, nhomTheoTrangThai, isLoading, isFetching, refetch } =
+    useKhaoSatGiangVien({
+      semesterId,
+      tuKhoa,
+      trangThai,
+    })
+
+  // Làm mới = tải lại dữ liệu mới, GIỮ NGUYÊN bộ lọc đang chọn
   const lamMoi = () => {
-    setTuKhoa("")
-    setTrangThai("tat_ca")
-    setSemesterId(undefined)
+    refetch()
   }
 
   return (
@@ -55,7 +68,7 @@ const KhaoSatGiangVien = () => {
         }}
       />
 
-      <div className="flex shrink-0 items-center gap-4">
+      <div className="flex shrink-0 flex-wrap items-center gap-3">
         <Input
           placeholder="Tìm kiếm theo tiêu đề khảo sát..."
           prefix={<Search size="12" />}
@@ -66,26 +79,37 @@ const KhaoSatGiangVien = () => {
           allowClear
         />
 
-        <SelectFloat
-          label="Trạng thái"
-          className="w-40 text-sm"
-          options={TUY_CHON_TRANG_THAI}
-          value={trangThai}
-          onChange={(value) => setTrangThai((value as TrangThaiLoc) ?? "tat_ca")}
-        />
+        <div className="flex h-10 items-center gap-1.5 rounded-md border border-gray-200 bg-white px-2">
+          <span className="text-xs text-gray-500">Trạng thái:</span>
+          <Select
+            variant="borderless"
+            size="small"
+            className="min-w-[120px]"
+            options={TUY_CHON_TRANG_THAI}
+            value={trangThai}
+            onChange={(value) => setTrangThai((value as TrangThaiLoc) ?? "tat_ca")}
+          />
+        </div>
 
-        <TreeSelectFloat
-          label="Năm học"
-          placeholder="Chọn năm học"
-          className="w-48  text-sm"
-          value={semesterId}
-          onChange={(value) => setSemesterId(value as string | undefined)}
-        />
+        <div className="flex h-10 items-center gap-1.5 rounded-md border border-gray-200 bg-white px-2">
+          <span className="text-xs text-gray-500">Năm học:</span>
+          <TreeSelectFloat
+            variant="borderless"
+            size="small"
+            placeholder="Chọn năm học"
+            className="min-w-[150px]"
+            value={semesterId}
+            onChange={(value) => setSemesterId(value as string | undefined)}
+          />
+        </div>
 
-        <Button type="primary" className="text-sm" onClick={lamMoi}>
-          <span>
-            <RefreshCcw size="16" />
-          </span>
+        <Button
+          type="primary"
+          className="inline-flex h-10 items-center justify-center gap-1 text-sm leading-none"
+          loading={isFetching}
+          icon={<RefreshCcw size={16} className="block" />}
+          onClick={lamMoi}
+        >
           Làm mới
         </Button>
       </div>
