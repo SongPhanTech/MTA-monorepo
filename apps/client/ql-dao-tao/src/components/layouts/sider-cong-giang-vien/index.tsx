@@ -2,7 +2,7 @@ import type { CongGiangVienMenuItem } from "@constants/cong-giang-vien-menu"
 import { Badge, Layout, Menu } from "antd"
 import type { ItemType, MenuItemType } from "antd/es/menu/interface"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { useRouter } from "next/router"
 import { useMemo, useState } from "react"
 
 const { Sider } = Layout
@@ -94,7 +94,8 @@ const findMatchingKey = (
 }
 
 const SiderCongGiangVien = ({ collapsed, items, onCollapse }: SiderCongGiangVienProps) => {
-  const pathname = usePathname()
+  const router = useRouter()
+  const pathname = router.pathname
   const [openKeys, setOpenKeys] = useState<string[]>(findOpenKeys(items, pathname))
 
   const selectedKeys = useMemo(() => {

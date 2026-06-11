@@ -1,4 +1,7 @@
-import { CONG_GIANG_VIEN_THONG_BAO_PATH } from "@constants/cong-giang-vien-path"
+import {
+  CONG_GIANG_VIEN_LICH_CUA_TOI_PATH,
+  CONG_GIANG_VIEN_THONG_BAO_PATH,
+} from "@constants/cong-giang-vien-path"
 import { ROUTER_PATH } from "@workspace/router"
 import {
   Bell,
@@ -33,7 +36,7 @@ export const CONG_GIANG_VIEN_MENU: CongGiangVienMenuItem[] = [
     id: "gv-lich-cua-toi",
     label: "Lịch của tôi",
     icon: CalendarDays,
-    path: ROUTER_PATH.QL_DAO_TAO.LICH_TUAN_THANG,
+    path: CONG_GIANG_VIEN_LICH_CUA_TOI_PATH,
   },
   {
     id: "gv-lop-quan-ly",

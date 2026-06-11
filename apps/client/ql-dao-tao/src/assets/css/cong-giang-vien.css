@@ -128,3 +128,16 @@
 .giang-vien-menu-badge .ant-badge-count {
   box-shadow: none;
 }
+
+/* Modal thêm lịch cá nhân */
+.modal-them-lich-ca-nhan .ant-form-item-required::before {
+  color: #ef4444 !important;
+}
+
+.modal-them-lich-ca-nhan .ant-modal-close {
+  color: #6b7280;
+}
+
+.modal-them-lich-ca-nhan .ant-modal-close:hover {
+  color: #374151;
+}
