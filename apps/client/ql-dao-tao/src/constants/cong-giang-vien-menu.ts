@@ -42,13 +42,7 @@ export const CONG_GIANG_VIEN_MENU: CongGiangVienMenuItem[] = [
     id: "gv-lop-quan-ly",
     label: "Lớp quản lý",
     icon: Users,
-    children: [
-      {
-        id: "gv-lop-quan-ly-ren-luyen",
-        label: "Rèn luyện",
-        path: ROUTER_PATH.QL_DAO_TAO.CONG_GIANG_VIEN_LOP_QUAN_LY_REN_LUYEN,
-      },
-    ],
+    path: ROUTER_PATH.QL_DAO_TAO.CONG_GIANG_VIEN_LOP_QUAN_LY,
   },
   {
     id: "gv-lop-giang-day",

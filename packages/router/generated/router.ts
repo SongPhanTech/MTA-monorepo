@@ -51,7 +51,7 @@ export default {
     "CONG_GIANG_VIEN_LICH_CUA_TOI": "/cong-giang-vien/lich-cua-toi",
     "CONG_GIANG_VIEN_LOP_GIANG_DAY_DANH_SACH_LOP_GIANG_DAY": "/cong-giang-vien/lop-giang-day/danh-sach-lop-giang-day",
     "CONG_GIANG_VIEN_LOP_GIANG_DAY_TAI_GIANG_VIEN": "/cong-giang-vien/lop-giang-day/tai-giang-vien",
-    "CONG_GIANG_VIEN_LOP_QUAN_LY_REN_LUYEN": "/cong-giang-vien/lop-quan-ly/ren-luyen",
+    "CONG_GIANG_VIEN_LOP_QUAN_LY": "/cong-giang-vien/lop-quan-ly",
     "CONG_GIANG_VIEN_LOP_TRO_GIANG": "/cong-giang-vien/lop-tro-giang",
     "CONG_GIANG_VIEN_NGHIEN_CUU": "/cong-giang-vien/nghien-cuu",
     "CONG_GIANG_VIEN_THONG_BAO": "/cong-giang-vien/thong-bao",
@@ -200,14 +200,6 @@ export default {
     "QUAN_LY_HO_SO": "/quan-ly-ho-so",
     "QUAN_LY_HO_SO_ME": "/quan-ly-ho-so/me",
     "QUAN_LY_HO_SO_TAO_MOI": "/quan-ly-ho-so/tao-moi"
-  },
-  "QL_LICH_CONG_TAC": {
-    "INDEX": "/",
-    "QUAN_LY_LICH_LICH_CA_NHAN": "/quan-ly-lich/lich-ca-nhan",
-    "QUAN_LY_LICH_LICH_CONG_TAC": "/quan-ly-lich/lich-cong-tac",
-    "QUAN_LY_LICH_LICH_THANG": "/quan-ly-lich/lich-thang",
-    "QUAN_LY_LICH_LICH_TUAN": "/quan-ly-lich/lich-tuan",
-    "TONG_QUAN": "/tong-quan"
   },
   "TRO_LY_AO": {
     "CAU_HOI_THUONG_GAP": "/cau-hoi-thuong-gap",

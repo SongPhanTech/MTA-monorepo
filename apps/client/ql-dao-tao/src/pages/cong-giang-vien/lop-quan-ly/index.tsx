@@ -1,7 +1,7 @@
 import TinhNangPhatTrien from "@components/cong-giang-vien/tinh-nang-phat-trien"
 
-const RenLuyen = () => {
+const LopQuanLy = () => {
   return <TinhNangPhatTrien />
 }
 
-export default RenLuyen
+export default LopQuanLy

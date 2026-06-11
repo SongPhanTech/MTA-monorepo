@@ -151,15 +151,26 @@ const useLichCuaToi = (macDinhCheDo: CheDoLich = "ngay") => {
   const tien = () => setOffset((prev) => prev + 1)
   const veHomNay = () => setOffset(0)
 
+  const dichDenNgay = (ngay: dayjs.Dayjs) => {
+    const homNay = dayjs().startOf("day")
+    if (cheDo === "ngay") {
+      setOffset(ngay.startOf("day").diff(homNay, "day"))
+    } else {
+      setOffset(ngay.startOf("isoWeek").diff(homNay.startOf("isoWeek"), "week"))
+    }
+  }
+
   return {
     cheDo,
     setCheDo,
     nhanThoiGian,
+    ngayThamChieu,
     suKienNgay,
     suKienTuan: suKien,
     lui,
     tien,
     veHomNay,
+    dichDenNgay,
     isLoading: !!profileId && isLoading,
   }
 }
