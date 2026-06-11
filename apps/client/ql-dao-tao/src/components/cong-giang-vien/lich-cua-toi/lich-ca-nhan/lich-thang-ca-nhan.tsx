@@ -1,5 +1,8 @@
 import ChuThichLichCaNhan from "@components/cong-giang-vien/lich-cua-toi/lich-ca-nhan/chu-thich-lich-ca-nhan"
-import type { DongLichCaNhan, TagLoaiLich } from "@components/cong-giang-vien/lich-cua-toi/lich-ca-nhan/types"
+import type {
+  DongLichCaNhan,
+  TagLoaiLich,
+} from "@components/cong-giang-vien/lich-cua-toi/lich-ca-nhan/types"
 import {
   layKhoangThang,
   MAU_LOAI_LICH_MAC_DINH,
@@ -22,8 +25,7 @@ interface LichThangCaNhanProps {
 const TIEU_DE_THU = ["Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7", "Chủ nhật"] as const
 const SO_SU_KIEN_TOI_DA = 3
 
-const layMauSuKien = (suKien: DongLichCaNhan) =>
-  suKien.mauLoai ?? MAU_LOAI_LICH_MAC_DINH[0]
+const layMauSuKien = (suKien: DongLichCaNhan) => suKien.mauLoai ?? MAU_LOAI_LICH_MAC_DINH[0]
 
 const formatGioSuKien = (suKien: DongLichCaNhan) =>
   suKien.caNgay ? "Cả ngày" : suKien.thoiGianBatDau
@@ -41,10 +43,7 @@ const LichThangCaNhan = ({
 
   const { dauLich, cuoiLich } = useMemo(() => layKhoangThang(thangXem), [thangXem])
 
-  const ngayTrongLich = useMemo(
-    () => taoNgayTrongLichThang(dauLich, cuoiLich),
-    [dauLich, cuoiLich]
-  )
+  const ngayTrongLich = useMemo(() => taoNgayTrongLichThang(dauLich, cuoiLich), [dauLich, cuoiLich])
 
   const suKienTheoNgay = useMemo(() => {
     const map = new Map<string, DongLichCaNhan[]>()
@@ -110,7 +109,8 @@ const LichThangCaNhan = ({
                   className={cn(
                     "mb-1 flex h-6 w-6 shrink-0 items-center justify-center self-end rounded-full text-xs font-medium",
                     trongThang ? "text-gray-800" : "text-gray-400",
-                    laHomNay && "bg-cgv-green text-cgv-green-dark ring-2 ring-cgv-green-dark ring-offset-1",
+                    laHomNay &&
+                      "bg-cgv-green text-cgv-green-dark ring-2 ring-cgv-green-dark ring-offset-1",
                     laNgayChon && !laHomNay && trongThang && "bg-cgv-green/30 text-cgv-green-dark"
                   )}
                 >

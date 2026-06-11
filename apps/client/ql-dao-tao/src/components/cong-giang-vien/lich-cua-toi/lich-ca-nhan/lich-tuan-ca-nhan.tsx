@@ -1,5 +1,8 @@
 import ChuThichLichCaNhan from "@components/cong-giang-vien/lich-cua-toi/lich-ca-nhan/chu-thich-lich-ca-nhan"
-import type { DongLichCaNhan, TagLoaiLich } from "@components/cong-giang-vien/lich-cua-toi/lich-ca-nhan/types"
+import type {
+  DongLichCaNhan,
+  TagLoaiLich,
+} from "@components/cong-giang-vien/lich-cua-toi/lich-ca-nhan/types"
 import { MAU_LOAI_LICH_MAC_DINH } from "@components/cong-giang-vien/lich-cua-toi/lich-ca-nhan/utils"
 import { Empty, Spin } from "antd"
 import dayjs, { type Dayjs } from "dayjs"
@@ -16,23 +19,13 @@ interface LichTuanCaNhanProps {
 const GIO_BAT_DAU = 7
 const GIO_KET_THUC = 17
 
-const TEN_THU = [
-  "Chủ nhật",
-  "Thứ 2",
-  "Thứ 3",
-  "Thứ 4",
-  "Thứ 5",
-  "Thứ 6",
-  "Thứ 7",
-] as const
+const TEN_THU = ["Chủ nhật", "Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7"] as const
 
 const formatGio = (gio: number) => `${String(gio).padStart(2, "0")}:00`
 
-const formatNhanNgayTuan = (ngay: Dayjs) =>
-  `${TEN_THU[ngay.day()]} ${ngay.format("DD/MM")}`
+const formatNhanNgayTuan = (ngay: Dayjs) => `${TEN_THU[ngay.day()]} ${ngay.format("DD/MM")}`
 
-const layMauSuKien = (suKien: DongLichCaNhan) =>
-  suKien.mauLoai ?? MAU_LOAI_LICH_MAC_DINH[0]
+const layMauSuKien = (suKien: DongLichCaNhan) => suKien.mauLoai ?? MAU_LOAI_LICH_MAC_DINH[0]
 
 type SuKienViTri = DongLichCaNhan & {
   top: number
@@ -90,8 +83,7 @@ const LichTuanCaNhan = ({ danhSach, dauTuan, tags, dangTai, onSua }: LichTuanCaN
         ? "Cả ngày"
         : `${batDau.format("HH:mm")} - ${ketThuc.format("HH:mm")}`
 
-      const diaDiemHienThi =
-        suKien.diaDiem && suKien.diaDiem !== "—" ? suKien.diaDiem : ""
+      const diaDiemHienThi = suKien.diaDiem && suKien.diaDiem !== "—" ? suKien.diaDiem : ""
 
       map.get(key)!.push({
         ...suKien,
@@ -150,10 +142,7 @@ const LichTuanCaNhan = ({ danhSach, dauTuan, tags, dangTai, onSua }: LichTuanCaN
               const suKienNgay = suKienTheoNgay.get(key) ?? []
 
               return (
-                <div
-                  key={key}
-                  className="relative border-l border-gray-100 first:border-l-0"
-                >
+                <div key={key} className="relative border-l border-gray-100 first:border-l-0">
                   {gioNhan.slice(1).map((gio) => (
                     <div
                       key={gio}

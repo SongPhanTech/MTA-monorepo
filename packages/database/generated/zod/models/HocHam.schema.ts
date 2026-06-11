@@ -18,6 +18,7 @@ const baseSchema = z.object({
     soQuyetDinh: z.string().nullish(),
     from: z.coerce.date().nullish(),
     to: z.coerce.date().nullish(),
+    year: z.number().nullish(),
 }
 ).strict();
 const baseSchemaWithoutDefaults = z.object({
@@ -33,6 +34,7 @@ const baseSchemaWithoutDefaults = z.object({
     soQuyetDinh: z.string().nullish(),
     from: z.coerce.date().nullish(),
     to: z.coerce.date().nullish(),
+    year: z.number().nullish(),
 }
 ).strict();
 const relationSchema = z.object({
@@ -81,7 +83,8 @@ export const HocHamPrismaUpdateSchema = z.object({
     noiCap: z.string().nullish(),
     soQuyetDinh: z.string().nullish(),
     from: z.coerce.date().nullish(),
-    to: z.coerce.date().nullish()
+    to: z.coerce.date().nullish(),
+    year: z.union([z.number().nullish(), z.record(z.string(), z.unknown())])
 }).partial().passthrough();
 
 

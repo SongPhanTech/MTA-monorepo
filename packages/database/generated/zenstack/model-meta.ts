@@ -717,6 +717,10 @@ const metadata: ModelMeta = {
                     name: "phoneNumber",
                     type: "String",
                     isOptional: true,
+                }, officePhone: {
+                    name: "officePhone",
+                    type: "String",
+                    isOptional: true,
                 }, email: {
                     name: "email",
                     type: "String",
@@ -1588,6 +1592,10 @@ const metadata: ModelMeta = {
                     name: "to",
                     type: "DateTime",
                     isOptional: true,
+                }, year: {
+                    name: "year",
+                    type: "Int",
+                    isOptional: true,
                 }, userProfile: {
                     name: "userProfile",
                     type: "UserProfile",
@@ -1857,6 +1865,10 @@ const metadata: ModelMeta = {
                     relationField: 'nationality',
                 }, linhVuc: {
                     name: "linhVuc",
+                    type: "String",
+                    isOptional: true,
+                }, tenLuanAn: {
+                    name: "tenLuanAn",
                     type: "String",
                     isOptional: true,
                 }, truong: {

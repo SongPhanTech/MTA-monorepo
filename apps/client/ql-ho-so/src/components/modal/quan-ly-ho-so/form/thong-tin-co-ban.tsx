@@ -230,6 +230,11 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
             </FormItem>
           </Col>
           <Col span={12}>
+            <FormItem form={form} name="officePhone" label="Điện thoại cơ quan" className="mb-0">
+              <Input placeholder="Nhập điện thoại cơ quan" className="h-9" />
+            </FormItem>
+          </Col>
+          <Col span={12}>
             <FormItem
               required
               form={form}

@@ -25,11 +25,7 @@ const ModalThemLoaiLich = () => {
 
   const mauChon = Form.useWatch("color", form)
 
-  const {
-    isOpen,
-    onClose,
-    input,
-  } = useDisclosure<InputThemLoaiLich>({
+  const { isOpen, onClose, input } = useDisclosure<InputThemLoaiLich>({
     tag: "ModalThemLoaiLich",
     onClose: form.resetFields,
   })

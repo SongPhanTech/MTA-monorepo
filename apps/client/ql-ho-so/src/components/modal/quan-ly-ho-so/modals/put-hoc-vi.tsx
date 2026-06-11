@@ -90,6 +90,11 @@ export default function PutHocViModal() {
         </FormItem>
       </Col>
       <Col span={24}>
+        <FormItem label="Tên luận án" name="tenLuanAn" form={form}>
+          <Input placeholder="Nhập tên luận án" />
+        </FormItem>
+      </Col>
+      <Col span={24}>
         <FormItem label="Trường" name="truongId" required form={form}>
           <Select
             placeholder="Chọn trường"

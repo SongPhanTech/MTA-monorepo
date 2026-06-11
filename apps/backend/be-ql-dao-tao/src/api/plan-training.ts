@@ -412,6 +412,7 @@ const importFileGiaoVienCoGioGiay = async (
               maxStudent: subjectClass.quanSo,
               lecturerId: subjectClass.gvChinh ?? existSubjectClass.lecturerId,
               extraLecturerId: subjectClass.gvPhu ?? existSubjectClass.extraLecturerId,
+              enterGradeLecturerId: subjectClass.gvChinh ?? existSubjectClass.enterGradeLecturerId,
               startDate: subjectClass.ngayBatDau ?? existSubjectClass.startDate,
               endDate: subjectClass.ngayKetThuc ?? existSubjectClass.endDate,
               examDate: subjectClass.ngayThi ?? existSubjectClass.examDate,
@@ -535,6 +536,7 @@ const importFileGiaoVienCoGioGiay = async (
               semesterId,
               lecturerId: subjectClass.gvChinh,
               extraLecturerId: subjectClass.gvPhu,
+              enterGradeLecturerId: subjectClass.gvChinh,
               subjectId: subjectClass.monHoc,
               examType: subjectClass.examType,
               roomId: subjectClass.phongHoc,
@@ -704,16 +706,18 @@ const importFileTKBTheoLopHocPhan = async (
   })
   rowData.splice(indexOfFooter, rowData.length)
   const danhSachTenGV = new Set<string>()
+  const danhSachMaGV = new Set<string>()
   const danhSachMaMonHoc = new Set<string>()
   const danhSachMaPhongHoc = new Set<string>()
   for (const row of rowData) {
     // Xử lý từng dòng dữ liệu ở đây
     const [, maMon, , , , tenGV, , , maPhongHoc] = row
     if (tenGV) {
-      tenGV
-        .split(";")
-        .map((e) => e.replace(/\([^)]*\)/g, "").trim())
-        .forEach((e) => danhSachTenGV.add(e))
+      tenGV.split(";").forEach((e) => {
+        const ma = e.match(/\(([^)]*)\)/)?.[1]?.trim()
+        if (ma) danhSachMaGV.add(ma)
+        danhSachTenGV.add(e.replace(/\([^)]*\)/g, "").trim())
+      })
     }
     if (maMon) {
       danhSachMaMonHoc.add(String(maMon).trim())
@@ -724,11 +728,10 @@ const importFileTKBTheoLopHocPhan = async (
   }
   const danhSachGV = await prisma.lecturer.findMany({
     where: {
-      userProfile: {
-        fullname: {
-          in: Array.from(danhSachTenGV),
-        },
-      },
+      OR: [
+        { userProfile: { fullname: { in: Array.from(danhSachTenGV) } } },
+        { code: { in: Array.from(danhSachMaGV) } },
+      ],
     },
     select: {
       id: true,
@@ -829,12 +832,22 @@ const importFileTKBTheoLopHocPhan = async (
         }
 
         if (tenGV) {
-          const [tenGVChinh, tenGvPhu] = tenGV
-            .split(";")
-            .map((e) => e.replace(/\([^)]*\)/g, "").trim())
-          const gvChinh = danhSachGV.find(
-            (gv) => gv.userProfile.fullname?.toLowerCase() === tenGVChinh?.toLowerCase()
-          )
+          const [rawGvChinh, rawGvPhu] = tenGV.split(";")
+          const timGiangVien = (raw?: string) => {
+            if (!raw) return undefined
+            const ma = raw.match(/\(([^)]*)\)/)?.[1]?.trim()
+            const ten = raw.replace(/\([^)]*\)/g, "").trim()
+            if (ma) {
+              const gvTheoMa = danhSachGV.find((gv) => gv.code?.toLowerCase() === ma.toLowerCase())
+              if (gvTheoMa) return gvTheoMa
+            }
+            return danhSachGV.find(
+              (gv) => gv.userProfile.fullname?.toLowerCase() === ten.toLowerCase()
+            )
+          }
+          const tenGVChinh = rawGvChinh?.replace(/\([^)]*\)/g, "").trim()
+          const tenGvPhu = rawGvPhu?.replace(/\([^)]*\)/g, "").trim()
+          const gvChinh = timGiangVien(rawGvChinh)
           if (gvChinh) {
             subjectClass.gvChinh = gvChinh.id
           } else {
@@ -843,9 +856,7 @@ const importFileTKBTheoLopHocPhan = async (
             })
           }
           if (tenGvPhu) {
-            const gvPhu = danhSachGV.find(
-              (gv) => gv.userProfile.fullname?.toLowerCase() === tenGvPhu?.toLowerCase()
-            )
+            const gvPhu = timGiangVien(rawGvPhu)
             if (gvPhu) {
               subjectClass.gvPhu = gvPhu.id
             } else {
@@ -912,6 +923,7 @@ const importFileTKBTheoLopHocPhan = async (
               maxStudent: subjectClass.quanSo,
               lecturerId: subjectClass.gvChinh ?? existSubjectClass.lecturerId,
               extraLecturerId: subjectClass.gvPhu ?? existSubjectClass.extraLecturerId,
+              enterGradeLecturerId: subjectClass.gvChinh ?? existSubjectClass.enterGradeLecturerId,
               schedule: scheduleOfSubjectClass,
               startDate: ngayBatDau ?? existSubjectClass.startDate,
               endDate: ngayKetThuc ?? existSubjectClass.endDate,
@@ -1011,6 +1023,7 @@ const importFileTKBTheoLopHocPhan = async (
               semesterId,
               lecturerId: subjectClass.gvChinh,
               extraLecturerId: subjectClass.gvPhu,
+              enterGradeLecturerId: subjectClass.gvChinh,
               subjectId: subjectClass.monHoc,
               examType: subjectClass.examType,
               roomId: subjectClass.phongHoc,

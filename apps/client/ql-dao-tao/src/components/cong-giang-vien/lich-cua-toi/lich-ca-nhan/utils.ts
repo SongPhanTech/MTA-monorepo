@@ -11,15 +11,7 @@ import isoWeek from "dayjs/plugin/isoWeek"
 
 dayjs.extend(isoWeek)
 
-const TEN_THU = [
-  "Chủ nhật",
-  "Thứ 2",
-  "Thứ 3",
-  "Thứ 4",
-  "Thứ 5",
-  "Thứ 6",
-  "Thứ 7",
-] as const
+const TEN_THU = ["Chủ nhật", "Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7"] as const
 
 type LichVoiTag = Prisma.IndividualScheduleGetPayload<{
   include: { tags: { select: { id: true; name: true; color: true } } }
@@ -72,8 +64,7 @@ export const taoNgayTrongLichThang = (dauLich: Dayjs, cuoiLich: Dayjs): Dayjs[] 
 export const locSuKienTrongThang = (danhSach: DongLichCaNhan[], thangXem: Dayjs) =>
   danhSach.filter((e) => dayjs(e.ngayKey).isSame(thangXem, "month"))
 
-export const formatNhanThang = (ngayChon: Dayjs) =>
-  `Tháng ${ngayChon.format("M, YYYY")}`
+export const formatNhanThang = (ngayChon: Dayjs) => `Tháng ${ngayChon.format("M, YYYY")}`
 
 export const formatNgayChonHienThi = (ngay: Dayjs) =>
   `${TEN_THU[ngay.day()]}, ${ngay.format("DD/MM/YYYY")}`

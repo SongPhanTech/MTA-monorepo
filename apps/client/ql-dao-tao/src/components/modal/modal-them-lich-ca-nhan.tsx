@@ -150,7 +150,14 @@ const ModalThemLichCaNhan = () => {
   }
 
   useEffect(() => {
-    if (!isOpen || !lecturerId || tags.length > 0 || dangSeedTag.current || dangTaiTag || dangFetchTag) {
+    if (
+      !isOpen ||
+      !lecturerId ||
+      tags.length > 0 ||
+      dangSeedTag.current ||
+      dangTaiTag ||
+      dangFetchTag
+    ) {
       return
     }
 
@@ -330,7 +337,8 @@ const ModalThemLichCaNhan = () => {
         footer: { paddingTop: 8 },
       }}
       okButtonProps={{
-        className: "!h-9 !min-w-[100px] !border-cgv-green-dark !bg-cgv-green-dark !font-medium hover:!opacity-90",
+        className:
+          "!h-9 !min-w-[100px] !border-cgv-green-dark !bg-cgv-green-dark !font-medium hover:!opacity-90",
       }}
       cancelButtonProps={{
         className: "!h-9 !min-w-[80px] !border-gray-300 !bg-white !font-medium !text-gray-700",

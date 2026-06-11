@@ -152,6 +152,8 @@ export const SqlTransactionBodyItemModel = {
   StudentSemesterResult: 'StudentSemesterResult',
   StudentYearResult: 'StudentYearResult',
   Notification: 'Notification',
+  PersonalWorkTag: 'PersonalWorkTag',
+  IndividualSchedule: 'IndividualSchedule',
   Lecturer: 'Lecturer',
   LecturerHistory: 'LecturerHistory',
   LecturerType: 'LecturerType',

@@ -15,6 +15,7 @@ const baseSchema = z.object({
     updatedAt: z.coerce.date().default(() => new Date()),
     createdBy: z.string().uuid().nullish(),
     linhVuc: z.string().nullish(),
+    tenLuanAn: z.string().nullish(),
     year: z.number().nullish(),
 }
 ).strict();
@@ -28,6 +29,7 @@ const baseSchemaWithoutDefaults = z.object({
     updatedAt: z.coerce.date(),
     createdBy: z.string().uuid().nullish(),
     linhVuc: z.string().nullish(),
+    tenLuanAn: z.string().nullish(),
     year: z.number().nullish(),
 }
 ).strict();
@@ -79,6 +81,7 @@ export const HocViPrismaUpdateSchema = z.object({
     updatedAt: z.coerce.date(),
     createdBy: z.string().uuid().nullish(),
     linhVuc: z.string().nullish(),
+    tenLuanAn: z.string().nullish(),
     year: z.union([z.number().nullish(), z.record(z.string(), z.unknown())])
 }).partial().passthrough();
 

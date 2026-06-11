@@ -36,8 +36,7 @@ const TheDon = ({ tieuDe, soLuong, bienDong, icon, bgIcon, mauChu }: TheDonProps
 )
 
 const TheThongKeLichCaNhan = ({ thongKe, cheDoHienThi }: TheThongKeLichCaNhanProps) => {
-  const donVi =
-    cheDoHienThi === "thang" ? "tháng" : cheDoHienThi === "tuan" ? "tuần" : "ngày"
+  const donVi = cheDoHienThi === "thang" ? "tháng" : cheDoHienThi === "tuan" ? "tuần" : "ngày"
 
   return (
     <Row gutter={[12, 12]} className="py-3">

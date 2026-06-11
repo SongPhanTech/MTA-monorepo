@@ -1,5 +1,8 @@
 import ChuThichLichCaNhan from "@components/cong-giang-vien/lich-cua-toi/lich-ca-nhan/chu-thich-lich-ca-nhan"
-import type { DongLichCaNhan, TagLoaiLich } from "@components/cong-giang-vien/lich-cua-toi/lich-ca-nhan/types"
+import type {
+  DongLichCaNhan,
+  TagLoaiLich,
+} from "@components/cong-giang-vien/lich-cua-toi/lich-ca-nhan/types"
 import { MAU_LOAI_LICH_MAC_DINH } from "@components/cong-giang-vien/lich-cua-toi/lich-ca-nhan/utils"
 import { Empty, Spin } from "antd"
 import dayjs from "dayjs"
@@ -28,8 +31,7 @@ const iconTheoTenTag = (ten: string, mau: string): ReactNode => {
   return <BookOpen {...props} />
 }
 
-const layMauSuKien = (suKien: DongLichCaNhan) =>
-  suKien.mauLoai ?? MAU_LOAI_LICH_MAC_DINH[0]
+const layMauSuKien = (suKien: DongLichCaNhan) => suKien.mauLoai ?? MAU_LOAI_LICH_MAC_DINH[0]
 
 const LichNgayCaNhan = ({ danhSach, tags, dangTai, onSua }: LichNgayCaNhanProps) => {
   const gioNhan = useMemo(
@@ -65,8 +67,7 @@ const LichNgayCaNhan = ({ danhSach, tags, dangTai, onSua }: LichNgayCaNhanProps)
         ? "Cả ngày"
         : `${batDau.format("HH:mm")} - ${ketThuc.format("HH:mm")}`
 
-      const diaDiemHienThi =
-        suKien.diaDiem && suKien.diaDiem !== "—" ? ` - ${suKien.diaDiem}` : ""
+      const diaDiemHienThi = suKien.diaDiem && suKien.diaDiem !== "—" ? ` - ${suKien.diaDiem}` : ""
 
       return {
         ...suKien,

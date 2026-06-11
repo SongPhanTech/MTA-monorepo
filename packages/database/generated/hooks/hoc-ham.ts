@@ -327,7 +327,7 @@ export function useSuspenseCountHocHam<TArgs extends Prisma.HocHamCountArgs, TQu
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('HocHam', `${endpoint}/hocHam/count`, args, options, fetch);
 }
 
-export function useCheckHocHam<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; academicRankTypeId?: string; noiCap?: string; soQuyetDinh?: string; userProfileId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckHocHam<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; academicRankTypeId?: string; noiCap?: string; soQuyetDinh?: string; year?: number; userProfileId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('HocHam', `${endpoint}/hocHam/check`, args, options, fetch);
 }

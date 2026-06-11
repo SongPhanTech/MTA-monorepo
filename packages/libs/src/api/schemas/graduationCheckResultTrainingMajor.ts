@@ -84,7 +84,8 @@ export type GraduationCheckResultTrainingMajor = {
   englishName?: string | null;
   /** @nullable */
   shortName?: string | null;
-  summary: string;
+  /** @nullable */
+  summary?: string | null;
   numberCreditsMajor?: number;
   numberCreditsRequired?: number;
   numberCreditsElective?: number;

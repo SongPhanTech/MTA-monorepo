@@ -44,7 +44,9 @@ const renderLoaiLich = (row: DongLichCaNhan) => {
     )
   }
   return (
-    <span className={`inline-block rounded border px-2 py-0.5 text-xs font-medium ${meta.tagClass}`}>
+    <span
+      className={`inline-block rounded border px-2 py-0.5 text-xs font-medium ${meta.tagClass}`}
+    >
       {row.tenLoai || meta.label}
     </span>
   )

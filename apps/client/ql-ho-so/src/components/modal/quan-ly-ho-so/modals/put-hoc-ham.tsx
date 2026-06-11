@@ -5,7 +5,7 @@ import Select from "@components/commons/select"
 import useSpinner from "@hooks/spinner"
 import type { HocHam } from "@workspace/db"
 import { useFindManyDM_HocHam } from "@workspace/db/hooks"
-import { Col, Form, Input, message } from "antd"
+import { Col, Form, Input, InputNumber, message } from "antd"
 import dayjs from "dayjs"
 import { useEffect } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
@@ -90,6 +90,18 @@ export default function PutHocHamModal() {
       <Col span={24}>
         <FormItem label="Số quyết định" name="soQuyetDinh" required form={form}>
           <Input placeholder="Nhập số quyết định" />
+        </FormItem>
+      </Col>
+      <Col span={24}>
+        <FormItem label="Năm nhận" name="year" form={form}>
+          <InputNumber
+            type="number"
+            precision={0}
+            style={{ width: "100%" }}
+            max={new Date().getFullYear()}
+            min={0}
+            placeholder="Nhập năm nhận"
+          />
         </FormItem>
       </Col>
       <Col span={24}>
