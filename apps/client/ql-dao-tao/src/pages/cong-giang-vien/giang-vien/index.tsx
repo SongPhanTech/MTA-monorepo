@@ -111,11 +111,11 @@ function CongGiangVienTrangChuPage() {
           </div>
         </Col>
 
-        <Col xs={24} xl={6} className="flex min-h-0 flex-col gap-1">
+        <Col xs={24} xl={6} className="flex h-full min-h-0 flex-col gap-1">
           <div className="shrink-0">
             <TheThongTinCaNhan thongTin={thongTinCaNhan} isLoading={dangTaiHoSo} />
           </div>
-          <div className="min-h-0 flex-1 overflow-hidden">
+          <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
             <BangThongBao gon />
           </div>
         </Col>

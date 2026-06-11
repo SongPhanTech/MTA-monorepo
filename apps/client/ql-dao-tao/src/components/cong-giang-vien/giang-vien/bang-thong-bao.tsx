@@ -23,9 +23,23 @@ const BangThongBao = ({ gon }: BangThongBaoProps) => {
     moChiTiet(id)
   }
 
+  const noiDung = isLoading ? (
+    <div className="flex h-full min-h-[120px] items-center justify-center">
+      <Spin size="small" />
+    </div>
+  ) : danhSachTomTat.length === 0 ? (
+    <div className="flex h-full min-h-[120px] items-center justify-center">
+      <Empty description="Không có thông báo" image={Empty.PRESENTED_IMAGE_SIMPLE} />
+    </div>
+  ) : (
+    danhSachTomTat.map((item) => (
+      <TheThongBao key={item.id} thongBao={item} compact={gon} onClick={handleChon} />
+    ))
+  )
+
   return (
     <KhungPanel
-      className={gon ? "flex h-full min-h-0 flex-col" : undefined}
+      className={gon ? "flex h-full min-h-0 flex-col overflow-hidden" : undefined}
       tieuDe="Thông báo"
       action={
         <Link
@@ -35,21 +49,17 @@ const BangThongBao = ({ gon }: BangThongBaoProps) => {
           Xem tất cả →
         </Link>
       }
-      bodyClassName={gon ? "min-h-0 flex-1 overflow-hidden p-1" : undefined}
+      bodyClassName={gon ? "flex min-h-0 flex-1 flex-col overflow-hidden p-1" : undefined}
     >
-      <div className={gon ? "h-full space-y-2 overflow-y-auto pr-1" : "space-y-2"}>
-        {isLoading ? (
-          <div className="flex min-h-[120px] items-center justify-center">
-            <Spin size="small" />
+      {gon ? (
+        <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
+          <div className="min-h-0 flex-1 space-y-2 overflow-y-auto overflow-x-hidden pr-1">
+            {noiDung}
           </div>
-        ) : danhSachTomTat.length === 0 ? (
-          <Empty description="Không có thông báo" image={Empty.PRESENTED_IMAGE_SIMPLE} />
-        ) : (
-          danhSachTomTat.map((item) => (
-            <TheThongBao key={item.id} thongBao={item} compact={gon} onClick={handleChon} />
-          ))
-        )}
-      </div>
+        </div>
+      ) : (
+        <div className="space-y-2">{noiDung}</div>
+      )}
     </KhungPanel>
   )
 }
