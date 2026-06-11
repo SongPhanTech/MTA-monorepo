@@ -4,7 +4,6 @@ import NAVIGATION, {
   type MenuItem,
   type QL_DAO_TAO_PERMISSION,
   type QL_HO_SO_PERMISSION,
-  type QL_LICH_CONG_TAC_PERMISSION,
   ROUTER_PATH,
   type TRO_LY_AO_PERMISSION,
 } from "@workspace/router"
@@ -58,8 +57,7 @@ const useAbility = () => {
         | DANG_KY_HOC_PERMISSION
         | QL_DAO_TAO_PERMISSION
         | TRO_LY_AO_PERMISSION
-        | QL_HO_SO_PERMISSION
-        | QL_LICH_CONG_TAC_PERMISSION,
+        | QL_HO_SO_PERMISSION,
       ...action: (keyof typeof PERMISSIONS)[]
     ) => {
       if (
@@ -80,8 +78,7 @@ const useAbility = () => {
         | DANG_KY_HOC_PERMISSION
         | QL_DAO_TAO_PERMISSION
         | TRO_LY_AO_PERMISSION
-        | QL_HO_SO_PERMISSION
-        | QL_LICH_CONG_TAC_PERMISSION,
+        | QL_HO_SO_PERMISSION,
       ...action: (keyof typeof PERMISSIONS)[]
     ) => {
       if (

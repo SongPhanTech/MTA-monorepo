@@ -11,6 +11,7 @@ import { useHoSoCaNhan } from "@hooks/use-ho-so-ca-nhan"
 import { useKhaoSatGiangVien } from "@hooks/use-khao-sat-giang-vien"
 import { useTrangChuGiangVien } from "@hooks/use-trang-chu-giang-vien"
 import { ROUTER_PATH } from "@workspace/router"
+import { useSemesterStore } from "@workspace/ui"
 import { Col, Row } from "antd"
 import { useRouter } from "next/router"
 import { useMemo } from "react"
@@ -18,7 +19,8 @@ import { useMemo } from "react"
 function CongGiangVienTrangChuPage() {
   const router = useRouter()
   const { thongTin, daoTao, isLoading: dangTaiHoSo } = useHoSoCaNhan()
-  const { tongSo, thongKe: thongKeKhaoSat } = useKhaoSatGiangVien()
+  const { id: semesterId } = useSemesterStore()
+  const { tongSo, thongKe: thongKeKhaoSat } = useKhaoSatGiangVien({ semesterId })
   const {
     lopGiangDay,
     lopTroGiang,
@@ -62,9 +64,11 @@ function CongGiangVienTrangChuPage() {
                 tongKhaoSat={tongSo}
                 khaoSatDangDienRa={thongKeKhaoSat.dangDienRa}
                 khaoSatSapDienRa={thongKeKhaoSat.sapDienRa}
-                onXemLopGiangDay={() => goTo(ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_DS_LOP_MON_HOC)}
-                onXemLopQuanLy={() => goTo(ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_QL_REN_LUYEN)}
-                onXemLopTroGiang={() => goTo(ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_DS_LOP_MON_HOC)}
+                onXemLopGiangDay={() =>
+                  goTo(ROUTER_PATH.QL_DAO_TAO.CONG_GIANG_VIEN_LOP_GIANG_DAY_DANH_SACH_LOP_GIANG_DAY)
+                }
+                onXemLopQuanLy={() => goTo(ROUTER_PATH.QL_DAO_TAO.CONG_GIANG_VIEN_LOP_QUAN_LY)}
+                onXemLopTroGiang={() => goTo(ROUTER_PATH.QL_DAO_TAO.CONG_GIANG_VIEN_LOP_TRO_GIANG)}
                 onXemKhaoSat={() => goTo(ROUTER_PATH.QL_DAO_TAO.CONG_GIANG_VIEN_KHAO_SAT)}
               />
             </div>
@@ -79,7 +83,11 @@ function CongGiangVienTrangChuPage() {
                   tieuDe="Lớp giảng dạy"
                   data={lopGiangDay}
                   loading={dangTaiLop}
-                  onXemTatCa={() => goTo(ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_DS_LOP_MON_HOC)}
+                  onXemTatCa={() =>
+                    goTo(
+                      ROUTER_PATH.QL_DAO_TAO.CONG_GIANG_VIEN_LOP_GIANG_DAY_DANH_SACH_LOP_GIANG_DAY
+                    )
+                  }
                 />
               </div>
               <div className="min-h-0">
@@ -87,7 +95,7 @@ function CongGiangVienTrangChuPage() {
                   gon
                   data={lopQuanLy}
                   loading={dangTaiLop}
-                  onXemTatCa={() => goTo(ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_QL_REN_LUYEN)}
+                  onXemTatCa={() => goTo(ROUTER_PATH.QL_DAO_TAO.CONG_GIANG_VIEN_LOP_QUAN_LY)}
                 />
               </div>
               <div className="min-h-0">
@@ -96,7 +104,7 @@ function CongGiangVienTrangChuPage() {
                   tieuDe="Lớp trợ giảng"
                   data={lopTroGiang}
                   loading={dangTaiLop}
-                  onXemTatCa={() => goTo(ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_DS_LOP_MON_HOC)}
+                  onXemTatCa={() => goTo(ROUTER_PATH.QL_DAO_TAO.CONG_GIANG_VIEN_LOP_TRO_GIANG)}
                 />
               </div>
             </div>

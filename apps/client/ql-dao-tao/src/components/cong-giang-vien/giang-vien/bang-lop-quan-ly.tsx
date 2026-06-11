@@ -5,6 +5,12 @@ import {
 } from "@components/cong-giang-vien/giang-vien/types"
 import { Table, Tag } from "antd"
 import type { ColumnsType } from "antd/es/table"
+import { type CSSProperties, useEffect, useRef, useState } from "react"
+
+// Chiều cao header (thead) của bảng, dùng để tính chiều cao thân bảng cuộn.
+const CHIEU_CAO_HEADER_BANG = 39
+// Số bản ghi tối đa hiển thị ở dạng xem nhanh (gon) trên trang chủ.
+const SO_BAN_GHI_TOI_DA = 10
 
 interface BangLopQuanLyProps {
   data: LopQuanLyRow[]
@@ -37,6 +43,21 @@ const columns: ColumnsType<LopQuanLyRow> = [
 
 // Bảng "Lớp quản lý" (lớp biên chế GVCN phụ trách).
 const BangLopQuanLy = ({ data, loading, gon, onXemTatCa, onRowClick }: BangLopQuanLyProps) => {
+  const vungBangRef = useRef<HTMLDivElement>(null)
+  const [chieuCaoBody, setChieuCaoBody] = useState(120)
+
+  useEffect(() => {
+    const el = vungBangRef.current
+    if (!el) return
+    const capNhatChieuCao = () => {
+      setChieuCaoBody(Math.max(120, el.clientHeight - CHIEU_CAO_HEADER_BANG))
+    }
+    capNhatChieuCao()
+    const observer = new ResizeObserver(capNhatChieuCao)
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+
   return (
     <KhungPanel
       className={gon ? "h-full" : undefined}
@@ -54,21 +75,27 @@ const BangLopQuanLy = ({ data, loading, gon, onXemTatCa, onRowClick }: BangLopQu
       }
       bodyClassName="p-0"
     >
-      <Table<LopQuanLyRow>
-        rowKey="id"
-        size="small"
-        tableLayout={gon ? "fixed" : undefined}
-        columns={columns}
-        dataSource={data}
-        loading={loading}
-        pagination={false}
-        scroll={gon ? { x: "100%", ...(data.length > 3 ? { y: 120 } : {}) } : { x: "max-content" }}
-        className={gon ? "table-gv-gon [&_.ant-table]:text-xs" : undefined}
-        onRow={(record) => ({
-          onClick: () => onRowClick?.(record.id),
-          className: onRowClick ? "cursor-pointer" : "",
-        })}
-      />
+      <div
+        ref={vungBangRef}
+        className="h-full min-h-0 overflow-hidden"
+        style={gon ? ({ "--gv-body-h": `${chieuCaoBody}px` } as CSSProperties) : undefined}
+      >
+        <Table<LopQuanLyRow>
+          rowKey="id"
+          size="small"
+          tableLayout={gon ? "fixed" : undefined}
+          columns={columns}
+          dataSource={data.slice(0, SO_BAN_GHI_TOI_DA)}
+          loading={loading}
+          pagination={false}
+          scroll={gon ? { x: "100%", y: chieuCaoBody } : { x: "max-content" }}
+          className={gon ? "bang-gv-full [&_.ant-table]:text-xs" : undefined}
+          onRow={(record) => ({
+            onClick: () => onRowClick?.(record.id),
+            className: onRowClick ? "cursor-pointer" : "",
+          })}
+        />
+      </div>
     </KhungPanel>
   )
 }

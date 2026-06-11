@@ -6696,6 +6696,7 @@ model Evidence {
   name                 String
   information          String
   issuer               String
+  suffix               String?
   evidenceFile         EvidenceFile[]
   analysisFormEvidence AnalysisFormEvidence[]
 

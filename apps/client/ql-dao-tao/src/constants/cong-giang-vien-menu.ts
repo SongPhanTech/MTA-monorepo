@@ -42,13 +42,7 @@ export const CONG_GIANG_VIEN_MENU: CongGiangVienMenuItem[] = [
     id: "gv-lop-quan-ly",
     label: "Lớp quản lý",
     icon: Users,
-    children: [
-      {
-        id: "gv-lop-quan-ly-ren-luyen",
-        label: "Rèn luyện",
-        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_QL_REN_LUYEN,
-      },
-    ],
+    path: ROUTER_PATH.QL_DAO_TAO.CONG_GIANG_VIEN_LOP_QUAN_LY,
   },
   {
     id: "gv-lop-giang-day",
@@ -58,12 +52,12 @@ export const CONG_GIANG_VIEN_MENU: CongGiangVienMenuItem[] = [
       {
         id: "gv-ds-lop-giang-day",
         label: "Danh sách lớp giảng dạy",
-        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_DS_LOP_MON_HOC,
+        path: ROUTER_PATH.QL_DAO_TAO.CONG_GIANG_VIEN_LOP_GIANG_DAY_DANH_SACH_LOP_GIANG_DAY,
       },
       {
         id: "gv-tai-giang-day",
         label: "Tải giảng dạy",
-        path: ROUTER_PATH.QL_DAO_TAO.LICH_KIEM_TRA_GIANG_DAY,
+        path: ROUTER_PATH.QL_DAO_TAO.CONG_GIANG_VIEN_LOP_GIANG_DAY_TAI_GIANG_VIEN,
       },
     ],
   },

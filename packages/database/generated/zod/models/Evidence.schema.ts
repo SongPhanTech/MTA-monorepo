@@ -17,6 +17,7 @@ const baseSchema = z.object({
     name: z.string(),
     information: z.string(),
     issuer: z.string(),
+    suffix: z.string().nullish(),
 }
 ).strict();
 const baseSchemaWithoutDefaults = z.object({
@@ -31,6 +32,7 @@ const baseSchemaWithoutDefaults = z.object({
     name: z.string(),
     information: z.string(),
     issuer: z.string(),
+    suffix: z.string().nullish(),
 }
 ).strict();
 const relationSchema = z.object({
@@ -78,7 +80,8 @@ export const EvidencePrismaUpdateSchema = z.object({
     createdBy: z.string().uuid().nullish(),
     name: z.string(),
     information: z.string(),
-    issuer: z.string()
+    issuer: z.string(),
+    suffix: z.string().nullish()
 }).partial().passthrough();
 
 

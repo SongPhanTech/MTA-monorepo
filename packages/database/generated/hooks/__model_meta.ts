@@ -22416,6 +22416,10 @@ const metadata: ModelMeta = {
                 }, issuer: {
                     name: "issuer",
                     type: "String",
+                }, suffix: {
+                    name: "suffix",
+                    type: "String",
+                    isOptional: true,
                 }, evidenceFile: {
                     name: "evidenceFile",
                     type: "EvidenceFile",

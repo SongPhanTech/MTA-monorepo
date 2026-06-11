@@ -30,14 +30,16 @@ function ThongBaoGiangVienPage() {
   }
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex h-[calc(100vh-112px)] flex-col gap-4">
       <TieuDeTrangThongBao />
       <BoLocThongBao
         boLoc={boLoc}
         onChange={capNhatBoLoc}
         onDanhDauTatCaDaDoc={danhDauTatCaDaDoc}
       />
-      <DanhSachThongBao danhSach={danhSach} loading={isLoading} onChon={handleChonThongBao} />
+      <div className="min-h-0 flex-1 overflow-y-auto pr-1">
+        <DanhSachThongBao danhSach={danhSach} loading={isLoading} onChon={handleChonThongBao} />
+      </div>
       <PhanTrangThongBao
         trang={trang}
         soTrang={soTrang}
