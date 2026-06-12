@@ -80,13 +80,12 @@ const useLichCuaToi = (macDinhCheDo: CheDoLich = "ngay") => {
   const { id: trainingObjectId } = useTrainingObjectTypeStore()
 
   const [cheDo, setCheDo] = useState<CheDoLich>(macDinhCheDo)
-  const [offset, setOffset] = useState(0)
+  const [ngayNeo, setNgayNeo] = useState(() => dayjs().startOf("day"))
 
-  const ngayThamChieu = useMemo(() => {
-    const homNay = dayjs().startOf("day")
-    if (cheDo === "ngay") return homNay.add(offset, "day")
-    return homNay.add(offset, "week").startOf("isoWeek")
-  }, [cheDo, offset])
+  const ngayThamChieu = useMemo(
+    () => (cheDo === "ngay" ? ngayNeo.startOf("day") : ngayNeo.startOf("isoWeek")),
+    [cheDo, ngayNeo]
+  )
 
   const { dauTuan, cuoiTuan } = useMemo(
     () => (cheDo === "tuan" ? layKhoangTuan(ngayThamChieu) : { dauTuan: ngayThamChieu, cuoiTuan: ngayThamChieu }),
@@ -176,18 +175,11 @@ const useLichCuaToi = (macDinhCheDo: CheDoLich = "ngay") => {
     return `${dauTuanLabel.format(dinhDangDau)} - ${cuoiTuanLabel.format("DD/MM/YYYY")}`
   }, [cheDo, ngayThamChieu])
 
-  const lui = () => setOffset((prev) => prev - 1)
-  const tien = () => setOffset((prev) => prev + 1)
-  const veHomNay = () => setOffset(0)
+  const lui = () => setNgayNeo((prev) => prev.subtract(1, cheDo === "ngay" ? "day" : "week"))
+  const tien = () => setNgayNeo((prev) => prev.add(1, cheDo === "ngay" ? "day" : "week"))
+  const veHomNay = () => setNgayNeo(dayjs().startOf("day"))
 
-  const dichDenNgay = (ngay: dayjs.Dayjs) => {
-    const homNay = dayjs().startOf("day")
-    if (cheDo === "ngay") {
-      setOffset(ngay.startOf("day").diff(homNay, "day"))
-    } else {
-      setOffset(ngay.startOf("isoWeek").diff(homNay.startOf("isoWeek"), "week"))
-    }
-  }
+  const dichDenNgay = (ngay: dayjs.Dayjs) => setNgayNeo(ngay.startOf("day"))
 
   return {
     cheDo,
