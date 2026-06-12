@@ -109,10 +109,7 @@ const LichCuaToi = ({ variant = "widget" }: LichCuaToiProps) => {
             size={laTrang ? "middle" : "small"}
             className="shrink-0"
             value={cheDo}
-            onChange={(value) => {
-              setCheDo(value)
-              veHomNay()
-            }}
+            onChange={(value) => setCheDo(value)}
             options={[
               { label: "Tuần", value: "tuan" },
               { label: "Ngày", value: "ngay" },
