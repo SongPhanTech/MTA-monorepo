@@ -8854,7 +8854,7 @@ const config = {
       "multiSchema",
       "typedSql"
     ],
-    "sourceFilePath": "/Users/phuong/Documents/Swantech/MTA-monorepo/packages/database/logical-1781168918973.prisma",
+    "sourceFilePath": "/Users/phuong/Documents/Swantech/MTA-monorepo/packages/database/logical-1781238003965.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
