@@ -91,6 +91,8 @@ const ExportTemplateGuestLecturer = () => {
       cell.style = tableHeaderStyle
     })
 
+    // Mặc định "Kiểu giảng viên" là giảng viên ngoài cho các dòng nhập liệu
+    worksheet.getCell("F5").value = "Giảng viên ngoài"
     // Điều chỉnh độ rộng cột
     worksheet.columns = [
       { width: 10 },
