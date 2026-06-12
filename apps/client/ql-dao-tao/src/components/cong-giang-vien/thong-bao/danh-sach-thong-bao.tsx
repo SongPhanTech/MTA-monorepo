@@ -6,9 +6,10 @@ interface DanhSachThongBaoProps {
   danhSach: ThongBaoView[]
   loading?: boolean
   onChon?: (id: string) => void
+  onDanhDauDaDoc?: (id: string) => void
 }
 
-const DanhSachThongBao = ({ danhSach, loading, onChon }: DanhSachThongBaoProps) => {
+const DanhSachThongBao = ({ danhSach, loading, onChon, onDanhDauDaDoc }: DanhSachThongBaoProps) => {
   if (loading) {
     return (
       <div className="flex min-h-[240px] items-center justify-center">
@@ -28,7 +29,12 @@ const DanhSachThongBao = ({ danhSach, loading, onChon }: DanhSachThongBaoProps) 
   return (
     <div className="flex flex-col gap-3">
       {danhSach.map((item) => (
-        <TheThongBao key={item.id} thongBao={item} onClick={onChon} />
+        <TheThongBao
+          key={item.id}
+          thongBao={item}
+          onClick={onChon}
+          onDanhDauDaDoc={onDanhDauDaDoc}
+        />
       ))}
     </div>
   )

@@ -3,36 +3,19 @@ import type {
   BoLocThongBao,
   BoLocMucCanhBao,
   ThongBaoView,
+  TrangThaiDoc,
 } from "@components/cong-giang-vien/thong-bao/types"
 import {
   DANH_SACH_LOAI_THONG_BAO_GV,
   isLoaiThongBaoGv,
   THU_TU_MUC_CANH_BAO,
 } from "@components/cong-giang-vien/thong-bao/types"
+import { loadDaDocIds, saveDaDocIds } from "@lib/thong-bao-da-doc"
 import { useSession } from "@workspace/auth/react"
 import { Prisma } from "@workspace/db/client"
 import { useFindFirstLecturer, useFindManyNotification } from "@workspace/db/hooks"
 import dayjs from "dayjs"
 import { useCallback, useDeferredValue, useEffect, useMemo, useState } from "react"
-
-const STORAGE_PREFIX = "cgv-thong-bao-da-doc"
-
-const docIdsKey = (profileId: string) => `${STORAGE_PREFIX}-${profileId}`
-
-const loadDaDocIds = (profileId: string): Set<string> => {
-  if (typeof window === "undefined") return new Set()
-  try {
-    const raw = localStorage.getItem(docIdsKey(profileId))
-    return new Set(raw ? (JSON.parse(raw) as string[]) : [])
-  } catch {
-    return new Set()
-  }
-}
-
-const saveDaDocIds = (profileId: string, ids: Set<string>) => {
-  if (typeof window === "undefined") return
-  localStorage.setItem(docIdsKey(profileId), JSON.stringify([...ids]))
-}
 
 const stripHtml = (html: string) =>
   html
@@ -85,6 +68,7 @@ const useThongBaoGiangVien = () => {
     tuKhoa: "",
     loai: "tat_ca",
     mucCanhBao: "tat_ca",
+    trangThaiDoc: "tat_ca",
   })
   const [trang, setTrang] = useState(1)
   const [soTrang, setSoTrang] = useState(10)
@@ -154,6 +138,12 @@ const useThongBaoGiangVien = () => {
     return items.filter((item) => item.mucCanhBao === muc)
   }, [])
 
+  const locTheoTrangThaiDoc = useCallback((items: ThongBaoView[], trangThai: TrangThaiDoc) => {
+    if (trangThai === "chua_doc") return items.filter((item) => !item.daDoc)
+    if (trangThai === "da_doc") return items.filter((item) => item.daDoc)
+    return items
+  }, [])
+
   const danhSachGoc = useMemo(() => {
     return raw
       .map((item) => {
@@ -165,9 +155,14 @@ const useThongBaoGiangVien = () => {
       .map((item) => item.view)
   }, [raw, daDocIds])
 
-  const danhSachDayDu = useMemo(
-    () => locTheoMucCanhBao(danhSachGoc, boLoc.mucCanhBao),
-    [danhSachGoc, boLoc.mucCanhBao, locTheoMucCanhBao]
+  const danhSachDayDu = useMemo(() => {
+    const theoMuc = locTheoMucCanhBao(danhSachGoc, boLoc.mucCanhBao)
+    return locTheoTrangThaiDoc(theoMuc, boLoc.trangThaiDoc)
+  }, [danhSachGoc, boLoc.mucCanhBao, boLoc.trangThaiDoc, locTheoMucCanhBao, locTheoTrangThaiDoc])
+
+  const soChuaDoc = useMemo(
+    () => danhSachGoc.filter((item) => !item.daDoc).length,
+    [danhSachGoc]
   )
 
   const tongSo = danhSachDayDu.length
@@ -193,25 +188,33 @@ const useThongBaoGiangVien = () => {
     setTrang(1)
   }
 
-  const danhDauDaDoc = (id: string) => {
-    if (!profileId) return
-    setDaDocIds((prev) => {
-      const next = new Set(prev)
-      next.add(id)
-      saveDaDocIds(profileId, next)
-      return next
-    })
-  }
+  const danhDauDaDoc = useCallback(
+    (id: string) => {
+      if (!profileId || daDocIds.has(id)) return false
+      setDaDocIds((prev) => {
+        const next = new Set(prev)
+        next.add(id)
+        saveDaDocIds(profileId, next)
+        return next
+      })
+      return true
+    },
+    [profileId, daDocIds]
+  )
 
-  const danhDauTatCaDaDoc = () => {
-    if (!profileId) return
+  const danhDauTatCaDaDoc = useCallback(() => {
+    if (!profileId) return 0
+    const idsChuaDoc = danhSachGoc.filter((item) => !item.daDoc).map((item) => item.id)
+    if (!idsChuaDoc.length) return 0
+
     setDaDocIds((prev) => {
       const next = new Set(prev)
-      for (const item of raw) next.add(item.id)
+      for (const id of idsChuaDoc) next.add(id)
       saveDaDocIds(profileId, next)
       return next
     })
-  }
+    return idsChuaDoc.length
+  }, [profileId, danhSachGoc])
 
   return {
     boLoc,
@@ -225,6 +228,7 @@ const useThongBaoGiangVien = () => {
     soTrang,
     setSoTrang,
     isLoading: !!profileId && isLoading,
+    soChuaDoc,
     danhDauDaDoc,
     danhDauTatCaDaDoc,
   }

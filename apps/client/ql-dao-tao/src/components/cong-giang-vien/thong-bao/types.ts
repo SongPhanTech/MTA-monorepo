@@ -19,10 +19,13 @@ export type MucCanhBao = "moi" | "sap_het_han" | "qua_han"
 
 export type BoLocMucCanhBao = MucCanhBao | "tat_ca"
 
+export type TrangThaiDoc = "tat_ca" | "chua_doc" | "da_doc"
+
 export interface BoLocThongBao {
   tuKhoa: string
   loai: LoaiThongBaoGv | "tat_ca"
   mucCanhBao: BoLocMucCanhBao
+  trangThaiDoc: TrangThaiDoc
 }
 
 export interface ThongBaoView {
@@ -140,6 +143,12 @@ export const TUY_CHON_MUC_CANH_BAO: { value: BoLocMucCanhBao; label: string }[] 
   { value: "moi", label: MUC_CANH_BAO_META.moi.label },
   { value: "sap_het_han", label: MUC_CANH_BAO_META.sap_het_han.label },
   { value: "qua_han", label: MUC_CANH_BAO_META.qua_han.label },
+]
+
+export const TUY_CHON_TRANG_THAI_DOC: { value: TrangThaiDoc; label: string }[] = [
+  { value: "tat_ca", label: "Tất cả" },
+  { value: "chua_doc", label: "Chưa đọc" },
+  { value: "da_doc", label: "Đã đọc" },
 ]
 
 /** Số ngày trước hạn được coi là "sắp hết hạn". */

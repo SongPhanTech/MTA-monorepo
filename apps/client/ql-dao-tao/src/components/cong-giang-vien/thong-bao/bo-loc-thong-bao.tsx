@@ -2,17 +2,24 @@ import type { BoLocThongBao } from "@components/cong-giang-vien/thong-bao/types"
 import {
   TUY_CHON_LOAI_THONG_BAO,
   TUY_CHON_MUC_CANH_BAO,
+  TUY_CHON_TRANG_THAI_DOC,
 } from "@components/cong-giang-vien/thong-bao/types"
 import { Button, Input, Select } from "antd"
 import { MailCheck, Search } from "lucide-react"
 
 interface BoLocThongBaoProps {
   boLoc: BoLocThongBao
+  soChuaDoc?: number
   onChange: (capNhat: Partial<BoLocThongBao>) => void
   onDanhDauTatCaDaDoc: () => void
 }
 
-const BoLocThongBao = ({ boLoc, onChange, onDanhDauTatCaDaDoc }: BoLocThongBaoProps) => {
+const BoLocThongBao = ({
+  boLoc,
+  soChuaDoc = 0,
+  onChange,
+  onDanhDauTatCaDaDoc,
+}: BoLocThongBaoProps) => {
   return (
     <div className="flex flex-wrap items-center gap-3">
       <Input
@@ -44,13 +51,22 @@ const BoLocThongBao = ({ boLoc, onChange, onDanhDauTatCaDaDoc }: BoLocThongBaoPr
         options={TUY_CHON_MUC_CANH_BAO}
       />
 
+      <Select
+        value={boLoc.trangThaiDoc}
+        onChange={(value) => onChange({ trangThaiDoc: value })}
+        className="h-10 w-36"
+        options={TUY_CHON_TRANG_THAI_DOC}
+      />
+
       <Button
         type="primary"
-        className="ml-auto flex h-10 items-center gap-2 bg-cgv-green-dark hover:!bg-cgv-green-dark/90"
+        disabled={soChuaDoc === 0}
+        className="ml-auto flex h-10 items-center gap-2 bg-cgv-green-dark hover:!bg-cgv-green-dark/90 disabled:!bg-gray-200 disabled:!text-gray-400"
         icon={<MailCheck size={16} />}
         onClick={onDanhDauTatCaDaDoc}
       >
         Đánh dấu tất cả đã đọc
+        {soChuaDoc > 0 ? ` (${soChuaDoc})` : ""}
       </Button>
     </div>
   )

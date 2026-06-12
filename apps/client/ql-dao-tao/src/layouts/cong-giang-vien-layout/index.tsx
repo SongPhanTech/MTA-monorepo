@@ -1,12 +1,16 @@
 import logo_mta from "@assets/images/daotao.svg"
 import GiangVienHeaderApp from "@components/header/giang-vien-header-app"
-import SiderCongGiangVien, {
+import SiderCongGiangVien from "@components/layouts/sider-cong-giang-vien"
+import { CONG_GIANG_VIEN_MENU } from "@constants/cong-giang-vien-menu"
+import {
+  CONG_GIANG_VIEN_CONTENT_VERTICAL_OFFSET,
+  CONG_GIANG_VIEN_DEFAULT_SCHOOL_NAME,
   CONG_GIANG_VIEN_HEADER_HEIGHT,
+  CONG_GIANG_VIEN_PORTAL_TITLE,
+  CONG_GIANG_VIEN_SIDEBAR_COLLAPSE_STORAGE_KEY,
   CONG_GIANG_VIEN_SIDER_COLLAPSED_WIDTH,
   CONG_GIANG_VIEN_SIDER_WIDTH,
-} from "@components/layouts/sider-cong-giang-vien"
-import ToggleVaiTroCongGiangVien from "@components/layouts/toggle-vai-tro-cong-giang-vien"
-import { CONG_GIANG_VIEN_MENU } from "@constants/cong-giang-vien-menu"
+} from "@constants/cong-giang-vien-layout"
 import { cn } from "@lib/utils"
 import { CONFIG_KEY } from "@workspace/constant"
 import { useFindUniqueConfig } from "@workspace/db/hooks"
@@ -18,6 +22,10 @@ import { type ReactNode, useEffect, useState } from "react"
 import { IdleTimerProvider } from "react-idle-timer"
 
 const { Header, Content } = Layout
+
+const readSidebarCollapsed = () =>
+  typeof window !== "undefined" &&
+  localStorage.getItem(CONG_GIANG_VIEN_SIDEBAR_COLLAPSE_STORAGE_KEY) === "true"
 
 const CongGiangVienLayout = ({
   children,
@@ -31,23 +39,17 @@ const CongGiangVienLayout = ({
   const { data: unitInfoResponse } = useGetUnitInfosInfo()
   const unitInfo = unitInfoResponse?.data
 
-  const [collapsed, setCollapsed] = useState(() => {
-    return typeof window !== "undefined" && localStorage.getItem("collapsed") === "true"
-  })
+  const [collapsed, setCollapsed] = useState(readSidebarCollapsed)
 
   const handleCollapsed = (value?: boolean) => {
-    if (typeof window !== "undefined") {
-      const newValue = value ?? !collapsed
-      setCollapsed(newValue)
-      localStorage.setItem("collapsed", newValue.toString())
-    }
+    if (typeof window === "undefined") return
+    const newValue = value ?? !collapsed
+    setCollapsed(newValue)
+    localStorage.setItem(CONG_GIANG_VIEN_SIDEBAR_COLLAPSE_STORAGE_KEY, newValue.toString())
   }
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: <>
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      setCollapsed(localStorage.getItem("collapsed") === "true")
-    }
+    setCollapsed(readSidebarCollapsed())
   }, [])
 
   const { data: userSessionTimeout } = useFindUniqueConfig({
@@ -57,7 +59,7 @@ const CongGiangVienLayout = ({
   })
 
   const siderWidth = collapsed ? CONG_GIANG_VIEN_SIDER_COLLAPSED_WIDTH : CONG_GIANG_VIEN_SIDER_WIDTH
-  const schoolName = unitInfo?.sTenDayDu || "Học viện Kỹ thuật Quân sự"
+  const schoolName = unitInfo?.sTenDayDu || CONG_GIANG_VIEN_DEFAULT_SCHOOL_NAME
 
   return (
     <IdleTimerProvider
@@ -81,22 +83,17 @@ const CongGiangVienLayout = ({
               <div className="truncate text-[11px] font-medium uppercase tracking-wide opacity-90">
                 {schoolName}
               </div>
-              <div className="truncate text-sm font-bold uppercase">Cổng giảng viên</div>
+              <div className="truncate text-sm font-bold uppercase">{CONG_GIANG_VIEN_PORTAL_TITLE}</div>
             </div>
           </div>
 
           <div className="flex shrink-0 items-center gap-3">
-            {/* <ToggleVaiTroCongGiangVien /> */}
             <GiangVienHeaderApp className="giang-vien-header-app" />
           </div>
         </Header>
 
         <Layout hasSider style={{ marginTop: CONG_GIANG_VIEN_HEADER_HEIGHT }}>
-          <SiderCongGiangVien
-            items={CONG_GIANG_VIEN_MENU}
-            onCollapse={handleCollapsed}
-            collapsed={collapsed}
-          />
+          <SiderCongGiangVien items={CONG_GIANG_VIEN_MENU} collapsed={collapsed} />
           <Layout
             style={{
               marginInlineStart: siderWidth,
@@ -110,10 +107,8 @@ const CongGiangVienLayout = ({
                 <div className="flex min-h-0 flex-1 flex-col overflow-hidden">{children}</div>
               ) : (
                 <div
-                  className={cn(
-                    "min-h-[calc(100vh-96px)] rounded-lg bg-white p-4 shadow-sm",
-                    className
-                  )}
+                  className={cn("rounded-lg bg-white p-4 shadow-sm", className)}
+                  style={{ minHeight: `calc(100vh - ${CONG_GIANG_VIEN_CONTENT_VERTICAL_OFFSET}px)` }}
                 >
                   {children}
                 </div>
