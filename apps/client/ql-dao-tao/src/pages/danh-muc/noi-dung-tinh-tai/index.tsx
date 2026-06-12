@@ -6,7 +6,7 @@ import type { FilterProps } from "@constants/type"
 import useSpinner from "@hooks/spinner"
 import DefaultLayout from "@layouts/default-layout"
 import {
-  useCountTrainingType,
+  useCountLoadCategory,
   useFindManyLoadCategory,
   useUpdateLoadCategory,
 } from "@workspace/db/hooks"
@@ -15,9 +15,10 @@ import { QL_DAO_TAO_PERMISSION } from "@workspace/router"
 import { Button, Col, Flex, message, Row, Tag } from "antd"
 import _ from "lodash"
 import type React from "react"
-import { useCallback, useState } from "react"
+import { useState } from "react"
 import { useDisclosure } from "react-hook-disclosure-modal"
 export default function NoiDungTinhTaiPage() {
+  const { showSpinner, hideSpinner } = useSpinner()
   const { can, canSome } = useAbility()
   const [currentPage, setCurrentPage] = useState(1)
   const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -25,7 +26,7 @@ export default function NoiDungTinhTaiPage() {
     name: "",
   })
 
-  const { data = [], refetch } = useFindManyLoadCategory({
+  const { data = [] } = useFindManyLoadCategory({
     where: {
       ...(filters.name
         ? {
@@ -35,6 +36,7 @@ export default function NoiDungTinhTaiPage() {
             },
           }
         : {}),
+      deletedAt: null,
     },
     orderBy: {
       name: "asc",
@@ -43,7 +45,7 @@ export default function NoiDungTinhTaiPage() {
     skip: (currentPage - 1) * numberOfPages,
   })
 
-  const { data: count } = useCountTrainingType({
+  const { data: count } = useCountLoadCategory({
     where: {
       ...(filters.name
         ? {
@@ -57,22 +59,16 @@ export default function NoiDungTinhTaiPage() {
     },
   })
 
-  const debouncedRefetch = useCallback(
-    _.debounce(() => {
-      refetch()
-    }, 500),
-    []
-  )
   const { onOpen } = useDisclosure<string>({
     tag: "PutNoiDungTinhTaiModal",
   })
 
-  const { showSpinner, hideSpinner } = useSpinner()
-
   const handleModal = () => {
     onOpen()
   }
+
   const { mutateAsync: updateLoadCategory } = useUpdateLoadCategory()
+
   async function handleDelete(id: string) {
     try {
       showSpinner()
@@ -141,19 +137,15 @@ export default function NoiDungTinhTaiPage() {
                 title: "Loại nội dung tính tải",
                 dataIndex: "category",
                 align: "left",
-                type: "input",
               },
               {
                 title: "Đơn vị tính tải",
                 dataIndex: "unit",
                 align: "left",
-                type: "input",
               },
               {
                 title: "Số quy giờ chuẩn",
                 dataIndex: "standardHours",
-                align: "right",
-                type: "input",
               },
               {
                 title: "Trạng thái",

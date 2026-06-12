@@ -29,6 +29,7 @@ const PutNoiDungTinhTaiModal = () => {
 
   const { mutateAsync: createLoadCategory } = useCreateLoadCategory()
   const { mutateAsync: updateLoadCategory } = useUpdateLoadCategory()
+
   async function onOk({ ...rest }: LoadCategory) {
     try {
       showSpinner()
@@ -119,22 +120,18 @@ const PutNoiDungTinhTaiModal = () => {
         </FormItem>
       </Col>
       <Col span={12}>
-        <FormItem form={form} name="note" label="Mô tả">
-          <Input.TextArea placeholder="Nhập mô tả" />
-        </FormItem>
-      </Col>
-      <Col span={12}>
         <FormItem
           form={form}
           name="isOverageCalculated"
-          label="Cho phép tính vượt định mức"
+          label=" "
+          colon={false}
           valuePropName="checked"
         >
-          <Checkbox />
+          <Checkbox>Cho phép tính vượt định mức</Checkbox>
         </FormItem>
       </Col>
       {id && (
-        <Col span={24}>
+        <Col span={12}>
           <FormItem form={form} name={"active"} label="Trạng thái">
             <Radio.Group buttonStyle="solid">
               <Radio value={true}>Đang hoạt động</Radio>
