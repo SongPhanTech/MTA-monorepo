@@ -2888,6 +2888,55 @@ exports.Prisma.LecturerHistoryScalarFieldEnum = {
   lecturerTypeId: 'lecturerTypeId'
 };
 
+exports.Prisma.GuestTeachingRateConfigScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  name: 'name',
+  schoolYearId: 'schoolYearId'
+};
+
+exports.Prisma.GuestTeachingRateScalarFieldEnum = {
+  id: 'id',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  configId: 'configId',
+  academicRankTypeId: 'academicRankTypeId',
+  academicDegreeTypeId: 'academicDegreeTypeId',
+  isForeign: 'isForeign',
+  ratePerPeriod: 'ratePerPeriod'
+};
+
+exports.Prisma.GuestTeachingPaymentScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  lecturerId: 'lecturerId',
+  semesterId: 'semesterId',
+  hiringOrgId: 'hiringOrgId',
+  totalPeriods: 'totalPeriods',
+  ratePerPeriod: 'ratePerPeriod',
+  amount: 'amount',
+  status: 'status',
+  paymentDate: 'paymentDate',
+  transactionCode: 'transactionCode',
+  decisionRef: 'decisionRef'
+};
+
 exports.Prisma.LecturerTypeScalarFieldEnum = {
   id: 'id',
   code: 'code',
@@ -2897,7 +2946,8 @@ exports.Prisma.LecturerTypeScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy',
-  name: 'name'
+  name: 'name',
+  isExternal: 'isExternal'
 };
 
 exports.Prisma.StaffTypeScalarFieldEnum = {
@@ -6724,6 +6774,36 @@ exports.Prisma.LecturerHistoryOrderByRelevanceFieldEnum = {
   lecturerTypeId: 'lecturerTypeId'
 };
 
+exports.Prisma.GuestTeachingRateConfigOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  name: 'name',
+  schoolYearId: 'schoolYearId'
+};
+
+exports.Prisma.GuestTeachingRateOrderByRelevanceFieldEnum = {
+  id: 'id',
+  description: 'description',
+  createdBy: 'createdBy',
+  configId: 'configId',
+  academicRankTypeId: 'academicRankTypeId',
+  academicDegreeTypeId: 'academicDegreeTypeId'
+};
+
+exports.Prisma.GuestTeachingPaymentOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  createdBy: 'createdBy',
+  lecturerId: 'lecturerId',
+  semesterId: 'semesterId',
+  hiringOrgId: 'hiringOrgId',
+  transactionCode: 'transactionCode',
+  decisionRef: 'decisionRef'
+};
+
 exports.Prisma.LecturerTypeOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
@@ -8268,6 +8348,13 @@ exports.ScheduleRepeatType = exports.$Enums.ScheduleRepeatType = {
   YEARLY: 'YEARLY'
 };
 
+exports.PaymentStatus = exports.$Enums.PaymentStatus = {
+  PENDING: 'PENDING',
+  PROCESSING: 'PROCESSING',
+  PAID: 'PAID',
+  FAILED: 'FAILED'
+};
+
 exports.ResearchProjectStatus = exports.$Enums.ResearchProjectStatus = {
   OPEN: 'OPEN',
   FULL: 'FULL',
@@ -8329,13 +8416,6 @@ exports.SupervisorRole = exports.$Enums.SupervisorRole = {
   SUPERVISOR: 'SUPERVISOR',
   CO_SUPERVISOR: 'CO_SUPERVISOR',
   SINGLE: 'SINGLE'
-};
-
-exports.PaymentStatus = exports.$Enums.PaymentStatus = {
-  PENDING: 'PENDING',
-  PROCESSING: 'PROCESSING',
-  PAID: 'PAID',
-  FAILED: 'FAILED'
 };
 
 exports.AcademicActionType = exports.$Enums.AcademicActionType = {
@@ -8686,6 +8766,9 @@ exports.Prisma.ModelName = {
   IndividualSchedule: 'IndividualSchedule',
   Lecturer: 'Lecturer',
   LecturerHistory: 'LecturerHistory',
+  GuestTeachingRateConfig: 'GuestTeachingRateConfig',
+  GuestTeachingRate: 'GuestTeachingRate',
+  GuestTeachingPayment: 'GuestTeachingPayment',
   LecturerType: 'LecturerType',
   StaffType: 'StaffType',
   StaffPosition: 'StaffPosition',

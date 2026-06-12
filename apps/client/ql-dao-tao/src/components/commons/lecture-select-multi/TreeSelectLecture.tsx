@@ -13,7 +13,7 @@ function buildOrgAndLectureTree(
   lecturers: Array<{
     id: string
     userProfile: { fullName: string }
-    organizationId: string
+    organizationId: string | null
   }>,
   parentId: string | null = null
 ): Array<TreeNodeType> {

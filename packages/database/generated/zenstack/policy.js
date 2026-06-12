@@ -1903,6 +1903,45 @@ const policy = {
                 update: {},
             },
         },
+        guestTeachingRateConfig: {
+            modelLevel: {
+                read: { guard: GuestTeachingRateConfig_read, },
+                create: { guard: GuestTeachingRateConfig_create, inputChecker: GuestTeachingRateConfig_create_input, },
+                update: { guard: GuestTeachingRateConfig_update, },
+                postUpdate: { guard: GuestTeachingRateConfig_postUpdate, },
+                delete: { guard: GuestTeachingRateConfig_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        guestTeachingRate: {
+            modelLevel: {
+                read: { guard: GuestTeachingRate_read, },
+                create: { guard: GuestTeachingRate_create, inputChecker: GuestTeachingRate_create_input, },
+                update: { guard: GuestTeachingRate_update, },
+                postUpdate: { guard: GuestTeachingRate_postUpdate, },
+                delete: { guard: GuestTeachingRate_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        guestTeachingPayment: {
+            modelLevel: {
+                read: { guard: GuestTeachingPayment_read, },
+                create: { guard: GuestTeachingPayment_create, inputChecker: GuestTeachingPayment_create_input, },
+                update: { guard: GuestTeachingPayment_update, },
+                postUpdate: { guard: GuestTeachingPayment_postUpdate, },
+                delete: { guard: GuestTeachingPayment_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
         lecturerType: {
             modelLevel: {
                 read: { guard: LecturerType_read, },
@@ -3754,6 +3793,9 @@ const policy = {
         individualSchedule: { hasValidation: false },
         lecturer: { hasValidation: false },
         lecturerHistory: { hasValidation: false },
+        guestTeachingRateConfig: { hasValidation: false },
+        guestTeachingRate: { hasValidation: false },
+        guestTeachingPayment: { hasValidation: false },
         lecturerType: { hasValidation: false },
         staffType: { hasValidation: false },
         staffPosition: { hasValidation: false },
@@ -15223,6 +15265,240 @@ function LecturerHistory_delete(context, db) {
     return { OR: [] };
 }
 function $check_LecturerHistory_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function GuestTeachingRateConfig_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_GuestTeachingRateConfig_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function GuestTeachingRateConfig_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_GuestTeachingRateConfig_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function GuestTeachingRateConfig_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function GuestTeachingRateConfig_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_GuestTeachingRateConfig_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function GuestTeachingRateConfig_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_GuestTeachingRateConfig_postUpdate(input, context) {
+    return true;
+}
+function GuestTeachingRateConfig_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_GuestTeachingRateConfig_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function GuestTeachingRate_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_GuestTeachingRate_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function GuestTeachingRate_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_GuestTeachingRate_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function GuestTeachingRate_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function GuestTeachingRate_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_GuestTeachingRate_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function GuestTeachingRate_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_GuestTeachingRate_postUpdate(input, context) {
+    return true;
+}
+function GuestTeachingRate_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_GuestTeachingRate_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function GuestTeachingPayment_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_GuestTeachingPayment_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function GuestTeachingPayment_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_GuestTeachingPayment_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function GuestTeachingPayment_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function GuestTeachingPayment_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_GuestTeachingPayment_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function GuestTeachingPayment_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_GuestTeachingPayment_postUpdate(input, context) {
+    return true;
+}
+function GuestTeachingPayment_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_GuestTeachingPayment_delete(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {

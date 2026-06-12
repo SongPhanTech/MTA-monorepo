@@ -23,9 +23,7 @@ const LichNgayGiangDay = ({ danhSach, dangTai }: LichNgayGiangDayProps) => {
     return danhSach.map((suKien) => {
       const { topPx, heightPx } = tinhViTriTimeline(suKien.batDauIso, suKien.ketThucIso)
       const meta = LOAI_LICH_META[suKien.periodType]
-      const phuDe = [suKien.lopHocPhan, suKien.phongHoc]
-        .filter((v) => v && v !== "—")
-        .join(" | ")
+      const phuDe = [suKien.lopHocPhan, suKien.phongHoc].filter((v) => v && v !== "—").join(" | ")
 
       return {
         ...suKien,
@@ -38,10 +36,7 @@ const LichNgayGiangDay = ({ danhSach, dangTai }: LichNgayGiangDayProps) => {
     })
   }, [danhSach])
 
-  const loaiTiet = useMemo(
-    () => [...new Set(danhSach.map((item) => item.periodType))],
-    [danhSach]
-  )
+  const loaiTiet = useMemo(() => [...new Set(danhSach.map((item) => item.periodType))], [danhSach])
 
   if (dangTai) {
     return (

@@ -327,7 +327,7 @@ export function useSuspenseCountLecturerType<TArgs extends Prisma.LecturerTypeCo
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('LecturerType', `${endpoint}/lecturerType/count`, args, options, fetch);
 }
 
-export function useCheckLecturerType<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; name?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckLecturerType<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; createdBy?: string; name?: string; isExternal?: boolean }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('LecturerType', `${endpoint}/lecturerType/check`, args, options, fetch);
 }

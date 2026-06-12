@@ -35,6 +35,7 @@ export default {
     "XEM_LAI_KHAO_SAT_ID": "/xem-lai-khao-sat/[id]"
   },
   "QL_DAO_TAO": {
+    "CAU_HINH_THANH_TOAN_GIANG_VIEN_NGOAI": "/cau-hinh-thanh-toan-giang-vien-ngoai",
     "CAU_HINH_THANH_TOAN_PAYMENTCONFIGURATION": "/cau-hinh-thanh-toan/PaymentConfiguration",
     "CAU_HINH_THOI_GIAN_DEFENSESCHEDULECONFIGURATION": "/cau-hinh-thoi-gian/DefenseScheduleConfiguration",
     "CAU_HINH_THONG_BAO_GIANG_VIEN_CAUHINHQUETHANGIANGVIEN": "/cau-hinh-thong-bao-giang-vien/CauHinhQuetHanGiangVien",
@@ -151,6 +152,7 @@ export default {
     "QUAN_LY_LUAN_VAN_QL_DOT_XET_LUAN_VAN_CAU_HINH_HOI_DONG_ID": "/quan-ly-luan-van/ql-dot-xet-luan-van/cau-hinh-hoi-dong/[id]",
     "QUAN_LY_LUAN_VAN_QL_DOT_XET_LUAN_VAN": "/quan-ly-luan-van/ql-dot-xet-luan-van",
     "QUAN_LY_LUAN_VAN_QUAN_LY_MAU_BIEU": "/quan-ly-luan-van/quan-ly-mau-bieu",
+    "QUAN_LY_THANH_TOAN": "/quan-ly-thanh-toan",
     "THONG_BAO": "/thong-bao",
     "THONG_KE_HOC_LAI": "/thong-ke-hoc-lai",
     "THONG_KE_THI_LAI": "/thong-ke-thi-lai",
@@ -201,6 +203,7 @@ export default {
     "QUAN_LY_HO_SO_ME": "/quan-ly-ho-so/me",
     "QUAN_LY_HO_SO_TAO_MOI": "/quan-ly-ho-so/tao-moi"
   },
+  "QL_LICH_CONG_TAC": {},
   "TRO_LY_AO": {
     "CAU_HOI_THUONG_GAP": "/cau-hoi-thuong-gap",
     "HOI_THOAI_ID": "/hoi-thoai/[id]",

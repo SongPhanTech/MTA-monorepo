@@ -22,8 +22,9 @@ model Lecturer extends Base {
   userProfile                      UserProfile                   @relation(fields: [userProfileId], references: [id])
   userProfileId                    String                        @db.Uuid @unique
 
-  organization                     DM_DonVi                      @relation(fields: [organizationId], references: [Id])
-  organizationId                   String                        @db.Uuid
+  // đơn vị nhà của GV cơ hữu; NULL với GV ngoài học viện (mời giảng)
+  organization                     DM_DonVi?                     @relation(fields: [organizationId], references: [Id])
+  organizationId                   String?                       @db.Uuid
 
   lecturerType                     LecturerType                  @relation(fields: [lecturerTypeId], references: [id])
   lecturerTypeId                   String
@@ -51,6 +52,7 @@ model Lecturer extends Base {
   notifications                    Notification[]                // Thông báo giảng viên
   personalWorkTags                 PersonalWorkTag[]             // Tag công việc cá nhân
   individualSchedules              IndividualSchedule[]          // Lịch cá nhân
+  guestTeachingPayments            GuestTeachingPayment[]        // Kết toán mời giảng (GV ngoài)
 
   @@index([userProfileId])
   @@schema("ql-dao-tao")
@@ -76,5 +78,62 @@ model LecturerHistory extends Base {
 
 
 
+  @@schema("ql-dao-tao")
+}
+
+/// Bộ đơn giá mời giảng theo năm học (Điều 7 - định mức chi cho mời giảng)
+model GuestTeachingRateConfig extends Base {
+  name         String
+  schoolYear   SchoolYear          @relation(fields: [schoolYearId], references: [id])
+  schoolYearId String              @unique
+  rates        GuestTeachingRate[]
+
+  @@schema("ql-dao-tao")
+}
+
+/// Đơn giá mời giảng / tiết theo chức danh (học hàm/học vị) - giải mức cao nhất khớp
+model GuestTeachingRate extends BaseNoCode {
+  config               GuestTeachingRateConfig @relation(fields: [configId], references: [id], onDelete: Cascade)
+  configId             String
+  // học hàm (GS/PGS) - null nếu không xét
+  academicRankType     DM_HocHam?              @relation(fields: [academicRankTypeId], references: [Id])
+  academicRankTypeId   String?                 @db.Uuid
+  // học vị (TS/TSKH/ThS) - null nếu không xét
+  academicDegreeType   DM_HocVi?               @relation(fields: [academicDegreeTypeId], references: [Id])
+  academicDegreeTypeId String?                 @db.Uuid
+  // GV nước ngoài - áp trần riêng theo QĐ-BQP
+  isForeign            Boolean                 @default(false)
+  // đơn giá đồng/tiết
+  ratePerPeriod        Decimal                 @db.Decimal(18, 2)
+
+  @@unique([configId, academicRankTypeId, academicDegreeTypeId, isForeign])
+  @@schema("ql-dao-tao")
+}
+
+/// Kết toán mời giảng theo (giảng viên ngoài × học kỳ × khoa chủ trì chi trả)
+model GuestTeachingPayment extends Base {
+  lecturer        Lecturer      @relation(fields: [lecturerId], references: [id])
+  lecturerId      String
+  semester        Semester      @relation(fields: [semesterId], references: [id])
+  semesterId      String
+  // khoa/viện chủ trì chi trả
+  hiringOrg       DM_DonVi      @relation(fields: [hiringOrgId], references: [Id])
+  hiringOrgId     String        @db.Uuid
+  // tổng số tiết lấy từ PCGV (TKB chính khóa đã duyệt), chốt cứng khi quyết toán
+  totalPeriods    Int           @default(0)
+  // đơn giá đã giải theo chức danh, chốt cứng khi quyết toán
+  ratePerPeriod   Decimal       @db.Decimal(18, 2)
+  // = totalPeriods × ratePerPeriod
+  amount          Decimal       @db.Decimal(18, 2)
+  status          PaymentStatus @default(PENDING)
+  paymentDate     DateTime?
+  transactionCode String?
+  // số quyết định mời giảng
+  decisionRef     String?
+
+  @@unique([lecturerId, semesterId, hiringOrgId])
+  @@index([semesterId])
+  @@index([hiringOrgId])
+  @@index([status])
   @@schema("ql-dao-tao")
 }

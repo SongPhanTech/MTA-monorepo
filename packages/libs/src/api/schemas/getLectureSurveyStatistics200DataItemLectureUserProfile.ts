@@ -131,6 +131,8 @@ export type GetLectureSurveyStatistics200DataItemLectureUserProfile = {
   /** @nullable */
   phoneNumber?: string | null;
   /** @nullable */
+  officePhone?: string | null;
+  /** @nullable */
   email?: string | null;
   /** @nullable */
   officerNumber?: string | null;

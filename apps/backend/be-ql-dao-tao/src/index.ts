@@ -22,6 +22,7 @@ import ExportStudentYearResultApp from "./api/export-student-year-result"
 import ExportThoiKhoaBieuApp from "./api/export-thoi-khoa-bieu"
 import FixedClassApp from "./api/fixed-class"
 import GraduationApp from "./api/graduation"
+import GuestTeachingPaymentApp from "./api/guest-teaching-payment"
 import ImportApp from "./api/import"
 import InternshipApp from "./api/internship"
 import LecturerApp from "./api/lecturer"
@@ -107,6 +108,7 @@ app.route("/api/graduation", GraduationApp)
 app.route("/api/internship", InternshipApp)
 app.route("/api/plan-training", PlanTraining)
 app.route("/api/import", ImportApp)
+app.route("/api/guest-teaching-payment", GuestTeachingPaymentApp)
 app.route("/api/score-correction", ScoreCorrectionApp)
 app.route("/api/archived-score", ArchivedScoreApp)
 app.route("/api/exam", ExamApp)

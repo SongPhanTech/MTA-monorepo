@@ -160,10 +160,7 @@ const useThongBaoGiangVien = () => {
     return locTheoTrangThaiDoc(theoMuc, boLoc.trangThaiDoc)
   }, [danhSachGoc, boLoc.mucCanhBao, boLoc.trangThaiDoc, locTheoMucCanhBao, locTheoTrangThaiDoc])
 
-  const soChuaDoc = useMemo(
-    () => danhSachGoc.filter((item) => !item.daDoc).length,
-    [danhSachGoc]
-  )
+  const soChuaDoc = useMemo(() => danhSachGoc.filter((item) => !item.daDoc).length, [danhSachGoc])
 
   const tongSo = danhSachDayDu.length
 

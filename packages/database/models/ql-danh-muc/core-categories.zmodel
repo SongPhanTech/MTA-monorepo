@@ -69,6 +69,7 @@ model DM_HocHam extends CoreBase {
   profiles UserProfile[]
   hocHam   HocHam[]
 	expertProfile ExpertProfile[]
+  guestTeachingRate GuestTeachingRate[]
 
   @@schema("mta")
 }
@@ -77,7 +78,8 @@ model DM_HocVi extends CoreBase {
   profiles UserProfile[]
   hocVi    HocVi[]
 	expertProfile ExpertProfile[]
-  
+  guestTeachingRate GuestTeachingRate[]
+
   @@schema("mta")
 }
 
@@ -134,6 +136,7 @@ model DM_DonVi extends CoreBase {
   researchProjects     ResearchProject[]         // Đề tài của đơn vị
   thesisProjects       ThesisProject[]             // Đồ án của đơn vị
   surveyObjectTypes    SurveyObjectType[]
+  guestTeachingPayments GuestTeachingPayment[]    // Khoa chủ trì chi trả mời giảng
 
 
   @@index([sParentId], map: "IX_DM_DonVi_iParentId")

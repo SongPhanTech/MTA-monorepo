@@ -88,23 +88,22 @@ const useLichCuaToi = (macDinhCheDo: CheDoLich = "ngay") => {
   )
 
   const { dauTuan, cuoiTuan } = useMemo(
-    () => (cheDo === "tuan" ? layKhoangTuan(ngayThamChieu) : { dauTuan: ngayThamChieu, cuoiTuan: ngayThamChieu }),
+    () =>
+      cheDo === "tuan"
+        ? layKhoangTuan(ngayThamChieu)
+        : { dauTuan: ngayThamChieu, cuoiTuan: ngayThamChieu },
     [cheDo, ngayThamChieu]
   )
 
   const khoangGiangDay = useMemo(
     () =>
-      cheDo === "tuan"
-        ? khoangTuanGiangDay(dauTuan, cuoiTuan)
-        : khoangNgayGiangDay(ngayThamChieu),
+      cheDo === "tuan" ? khoangTuanGiangDay(dauTuan, cuoiTuan) : khoangNgayGiangDay(ngayThamChieu),
     [cheDo, dauTuan, cuoiTuan, ngayThamChieu]
   )
 
   const khoangCaNhan = useMemo(
     () =>
-      cheDo === "tuan"
-        ? khoangTuanCaNhan(dauTuan, cuoiTuan)
-        : khoangNgayCaNhan(ngayThamChieu),
+      cheDo === "tuan" ? khoangTuanCaNhan(dauTuan, cuoiTuan) : khoangNgayCaNhan(ngayThamChieu),
     [cheDo, dauTuan, cuoiTuan, ngayThamChieu]
   )
 

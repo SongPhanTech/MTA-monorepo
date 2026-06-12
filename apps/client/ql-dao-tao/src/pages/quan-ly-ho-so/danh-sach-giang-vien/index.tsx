@@ -1,6 +1,8 @@
 import { ExportOutlined, TableOutlined, UploadOutlined } from "@ant-design/icons"
 import Table from "@components/commons/table"
+import ExportTemplateGuestLecturer from "@components/modal/export-template-guest-lecturer"
 import ExportTemplateLecturer from "@components/modal/export-template-lecturer"
+import ImportGuestLecturerModal from "@components/modal/import-excel-guest-lecturer"
 import ImportLecturerModal from "@components/modal/import-excel-lecturer"
 import ModalChiTietGiangVien from "@components/modal/modal-chi-tiet-giang-vien"
 import { DEFAULT_PAGINATE_SIZE } from "@constants/constants"
@@ -46,6 +48,7 @@ export default function UserProfilePageLecture() {
   const { can, canSome } = useAbility()
   const [currentPage, setCurrentPage] = useState(1)
   const [importModalVisible, setImportModalVisible] = useState(false)
+  const [guestImportModalVisible, setGuestImportModalVisible] = useState(false)
   const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
   const router = useRouter()
   const [filters, setFilters] = useState<FilterProps>({
@@ -321,7 +324,24 @@ export default function UserProfilePageLecture() {
               }}
               onCancel={() => setImportModalVisible(false)}
             />
+            <Button
+              type="primary"
+              onClick={() => setGuestImportModalVisible(true)}
+              icon={<UploadOutlined />}
+            >
+              Nhập GV mời giảng
+            </Button>
+            <ImportGuestLecturerModal
+              visible={guestImportModalVisible}
+              onSuccess={() => {
+                setGuestImportModalVisible(false)
+                refetch()
+                refetchCount()
+              }}
+              onCancel={() => setGuestImportModalVisible(false)}
+            />
             <ExportTemplateLecturer />
+            <ExportTemplateGuestLecturer />
           </Row>
         </Col>
         <Col span={24}>

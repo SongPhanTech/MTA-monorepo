@@ -29,9 +29,7 @@ const LichNgayTatCaLich = ({ danhSach, tags, dangTai }: LichNgayTatCaLichProps) 
           suKien.caNgay
         )
         const phuDe =
-          suKien.diaDiem !== "—"
-            ? `${suKien.thoiGian} - ${suKien.diaDiem}`
-            : suKien.thoiGian
+          suKien.diaDiem !== "—" ? `${suKien.thoiGian} - ${suKien.diaDiem}` : suKien.thoiGian
 
         return { ...suKien, topPx, heightPx, phuDe }
       }),

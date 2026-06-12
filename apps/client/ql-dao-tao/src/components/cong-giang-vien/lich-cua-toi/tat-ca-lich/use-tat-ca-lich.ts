@@ -166,10 +166,7 @@ const useTatCaLich = () => {
     return danhSachHop
   }, [cheDoHienThi, danhSachHop, ngayChon])
 
-  const danhSachLoc = useMemo(
-    () => locLichTheoTuKhoa(danhSachGoc, tuKhoa),
-    [danhSachGoc, tuKhoa]
-  )
+  const danhSachLoc = useMemo(() => locLichTheoTuKhoa(danhSachGoc, tuKhoa), [danhSachGoc, tuKhoa])
 
   const thongKe = useMemo(() => tinhThongKeTatCaLich(danhSachGoc), [danhSachGoc])
 
@@ -188,15 +185,9 @@ const useTatCaLich = () => {
     [danhSachLoc, trang, soTrang]
   )
 
-  const danhSachBangTuan = useMemo(
-    () => chuyenSangDongBangTuan(danhSachTrang),
-    [danhSachTrang]
-  )
+  const danhSachBangTuan = useMemo(() => chuyenSangDongBangTuan(danhSachTrang), [danhSachTrang])
 
-  const danhSachBangThang = useMemo(
-    () => chuyenSangDongBangThang(danhSachTrang),
-    [danhSachTrang]
-  )
+  const danhSachBangThang = useMemo(() => chuyenSangDongBangThang(danhSachTrang), [danhSachTrang])
 
   const setCheDoHienThi = useCallback((value: CheDoHienThiLich) => {
     setCheDoHienThiState(value)

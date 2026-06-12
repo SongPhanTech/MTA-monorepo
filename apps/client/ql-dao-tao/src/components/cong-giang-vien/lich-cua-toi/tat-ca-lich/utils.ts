@@ -27,12 +27,7 @@ const hienThiGhiChu = (value: string) => (value && value !== "—" ? value : "�
 
 export const mapGiangDaySangTatCa = (lich: DongLichGiangDay): DongTatCaLich => {
   const ma = layMaHienThiLichGiangDay(lich)
-  const diaDiem =
-    lich.phongHoc !== "—"
-      ? lich.phongHoc
-      : lich.khuVuc !== "—"
-        ? lich.khuVuc
-        : "—"
+  const diaDiem = lich.phongHoc !== "—" ? lich.phongHoc : lich.khuVuc !== "—" ? lich.khuVuc : "—"
 
   return {
     id: `gd-${lich.id}`,
@@ -73,10 +68,7 @@ export const gopVaSapXepLich = (
   giangDay: DongLichGiangDay[],
   caNhan: DongLichCaNhan[]
 ): DongTatCaLich[] => {
-  const merged = [
-    ...giangDay.map(mapGiangDaySangTatCa),
-    ...caNhan.map(mapCaNhanSangTatCa),
-  ]
+  const merged = [...giangDay.map(mapGiangDaySangTatCa), ...caNhan.map(mapCaNhanSangTatCa)]
   return merged.sort((a, b) => a.batDauIso.localeCompare(b.batDauIso))
 }
 

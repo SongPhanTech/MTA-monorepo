@@ -179,16 +179,12 @@ export const mapLichGiangDaySangDong = (lich: LichGiangDayRaw): DongLichGiangDay
         .minute(dayjs(endPeriod?.endTime).minute())
 
   const maMon = lich.subjectClass?.subject?.code ?? lich.subjectClass?.code ?? ""
-  const tenMon =
-    lich.subjectClass?.subject?.name ?? lich.subjectClass?.name ?? lich.notes ?? ""
-  const hocPhan =
-    maMon && tenMon ? `${maMon} - ${tenMon}` : tenMon || maMon || "—"
+  const tenMon = lich.subjectClass?.subject?.name ?? lich.subjectClass?.name ?? lich.notes ?? ""
+  const hocPhan = maMon && tenMon ? `${maMon} - ${tenMon}` : tenMon || maMon || "—"
 
   const phongHoc = lich.room?.name ?? lich.subjectClass?.room?.name ?? "—"
   const khuVuc =
-    lich.subjectClass?.trainingLocation?.name ??
-    lich.room?.building?.trainingLocation?.name ??
-    "—"
+    lich.subjectClass?.trainingLocation?.name ?? lich.room?.building?.trainingLocation?.name ?? "—"
 
   return {
     id: lich.id,

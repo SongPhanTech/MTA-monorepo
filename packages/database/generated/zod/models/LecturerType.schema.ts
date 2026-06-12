@@ -15,6 +15,7 @@ const baseSchema = z.object({
     updatedAt: z.coerce.date().default(() => new Date()),
     createdBy: z.string().uuid().nullish(),
     name: z.string(),
+    isExternal: z.boolean().default(false),
 }
 ).strict();
 const baseSchemaWithoutDefaults = z.object({
@@ -27,6 +28,7 @@ const baseSchemaWithoutDefaults = z.object({
     updatedAt: z.coerce.date(),
     createdBy: z.string().uuid().nullish(),
     name: z.string(),
+    isExternal: z.boolean(),
 }
 ).strict();
 const relationSchema = z.object({
@@ -67,7 +69,8 @@ export const LecturerTypePrismaUpdateSchema = z.object({
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
     createdBy: z.string().uuid().nullish(),
-    name: z.string()
+    name: z.string(),
+    isExternal: z.boolean()
 }).partial().passthrough();
 
 
@@ -75,7 +78,7 @@ export const LecturerTypePrismaUpdateSchema = z.object({
  * `LecturerType` schema for create operations excluding foreign keys and relations.
  */
 export const LecturerTypeCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, isExternal: true
 });
 
 
@@ -83,7 +86,7 @@ export const LecturerTypeCreateScalarSchema = baseSchemaWithoutDefaults.partial(
  * `LecturerType` schema for create operations including scalar fields, foreign key fields, and validations.
  */
 export const LecturerTypeCreateSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true
+    id: true, active: true, createdAt: true, updatedAt: true, createdBy: true, isExternal: true
 });
 
 

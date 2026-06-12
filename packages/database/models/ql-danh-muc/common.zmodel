@@ -57,6 +57,8 @@ import '../ql-dao-tao/staff'
 /// Loại giảng viên
 model LecturerType extends Base {
   name            String            @unique
+  /// true = giảng viên ngoài học viện (mời giảng); quyết định nhóm thanh toán mời giảng
+  isExternal      Boolean           @default(false)
 
   lecturers       Lecturer[]
   lecturerHistory LecturerHistory[]

@@ -24,7 +24,10 @@ export type ListOfundefinedAllOfDataItemEducationAndTrainingItemFixedClassCurric
   name: string;
   /** @nullable */
   englishName?: string | null;
-  summary: string;
+  /** @nullable */
+  shortName?: string | null;
+  /** @nullable */
+  summary?: string | null;
   numberCreditsMajor?: number;
   numberCreditsRequired?: number;
   numberCreditsElective?: number;

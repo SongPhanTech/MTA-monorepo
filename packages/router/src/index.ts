@@ -479,6 +479,12 @@ const NAVIGATION: NavigationType = {
                 path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_NOI_DUNG_TINH_TAI,
                 description: "Nội dung tính tải",
               },
+              {
+                id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CAU_HINH_THANH_TOAN_GIANG_VIEN_NGOAI,
+                label: "Cấu hình thanh toán giảng viên ngoài",
+                path: ROUTER_PATH.QL_DAO_TAO.CAU_HINH_THANH_TOAN_GIANG_VIEN_NGOAI,
+                description: "Cấu hình thanh toán giảng viên ngoài",
+              },
             ],
           },
           {
@@ -766,6 +772,19 @@ const NAVIGATION: NavigationType = {
         icon: CalendarRange,
         path: ROUTER_PATH.QL_DAO_TAO.LICH_KIEM_TRA_GIANG_DAY,
         description: "Quản lý lịch kiểm tra giảng dạy",
+      },
+      {
+        id: "quan-ly-thanh-toan",
+        label: "Quản lý thanh toán",
+        icon: Library,
+        children: [
+          {
+            id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_THANH_TOAN,
+            label: "Quản lý thanh toán",
+            path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_THANH_TOAN,
+            description: "Quản lý thanh toán",
+          },
+        ],
       },
     ],
     label: "Quản lý đào tạo",

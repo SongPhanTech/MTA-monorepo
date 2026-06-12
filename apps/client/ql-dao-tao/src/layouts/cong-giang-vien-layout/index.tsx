@@ -83,7 +83,9 @@ const CongGiangVienLayout = ({
               <div className="truncate text-[11px] font-medium uppercase tracking-wide opacity-90">
                 {schoolName}
               </div>
-              <div className="truncate text-sm font-bold uppercase">{CONG_GIANG_VIEN_PORTAL_TITLE}</div>
+              <div className="truncate text-sm font-bold uppercase">
+                {CONG_GIANG_VIEN_PORTAL_TITLE}
+              </div>
             </div>
           </div>
 
@@ -108,7 +110,9 @@ const CongGiangVienLayout = ({
               ) : (
                 <div
                   className={cn("rounded-lg bg-white p-4 shadow-sm", className)}
-                  style={{ minHeight: `calc(100vh - ${CONG_GIANG_VIEN_CONTENT_VERTICAL_OFFSET}px)` }}
+                  style={{
+                    minHeight: `calc(100vh - ${CONG_GIANG_VIEN_CONTENT_VERTICAL_OFFSET}px)`,
+                  }}
                 >
                   {children}
                 </div>

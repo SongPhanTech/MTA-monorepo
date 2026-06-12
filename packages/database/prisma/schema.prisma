@@ -1869,47 +1869,49 @@ model DM_ChucVu {
 }
 
 model DM_HocHam {
-  Id             String          @id() @default(uuid()) @db.Uuid()
-  sMa            String?
-  sTen           String?
-  sGhiChu        String?
-  iSTT           Int?            @default(0)
-  bActive        Boolean?        @default(true)
-  bDeleted       Boolean?        @default(false)
-  bSystem        Boolean?        @default(false)
-  iDictionaryKey Int?            @default(0)
-  dNgayTao       DateTime?
-  dNgaySua       DateTime?
-  sNguoiTao      String?
-  sNguoiSua      String?
-  sThietBiTao    String?
-  sThietBiSua    String?
-  profiles       UserProfile[]
-  hocHam         HocHam[]
-  expertProfile  ExpertProfile[]
+  Id                String              @id() @default(uuid()) @db.Uuid()
+  sMa               String?
+  sTen              String?
+  sGhiChu           String?
+  iSTT              Int?                @default(0)
+  bActive           Boolean?            @default(true)
+  bDeleted          Boolean?            @default(false)
+  bSystem           Boolean?            @default(false)
+  iDictionaryKey    Int?                @default(0)
+  dNgayTao          DateTime?
+  dNgaySua          DateTime?
+  sNguoiTao         String?
+  sNguoiSua         String?
+  sThietBiTao       String?
+  sThietBiSua       String?
+  profiles          UserProfile[]
+  hocHam            HocHam[]
+  expertProfile     ExpertProfile[]
+  guestTeachingRate GuestTeachingRate[]
 
   @@schema("mta")
 }
 
 model DM_HocVi {
-  Id             String          @id() @default(uuid()) @db.Uuid()
-  sMa            String?
-  sTen           String?
-  sGhiChu        String?
-  iSTT           Int?            @default(0)
-  bActive        Boolean?        @default(true)
-  bDeleted       Boolean?        @default(false)
-  bSystem        Boolean?        @default(false)
-  iDictionaryKey Int?            @default(0)
-  dNgayTao       DateTime?
-  dNgaySua       DateTime?
-  sNguoiTao      String?
-  sNguoiSua      String?
-  sThietBiTao    String?
-  sThietBiSua    String?
-  profiles       UserProfile[]
-  hocVi          HocVi[]
-  expertProfile  ExpertProfile[]
+  Id                String              @id() @default(uuid()) @db.Uuid()
+  sMa               String?
+  sTen              String?
+  sGhiChu           String?
+  iSTT              Int?                @default(0)
+  bActive           Boolean?            @default(true)
+  bDeleted          Boolean?            @default(false)
+  bSystem           Boolean?            @default(false)
+  iDictionaryKey    Int?                @default(0)
+  dNgayTao          DateTime?
+  dNgaySua          DateTime?
+  sNguoiTao         String?
+  sNguoiSua         String?
+  sThietBiTao       String?
+  sThietBiSua       String?
+  profiles          UserProfile[]
+  hocVi             HocVi[]
+  expertProfile     ExpertProfile[]
+  guestTeachingRate GuestTeachingRate[]
 
   @@schema("mta")
 }
@@ -1963,50 +1965,51 @@ model DM_DanToc {
 }
 
 model DM_DonVi {
-  Id                   String             @id() @default(uuid()) @db.Uuid()
-  sMa                  String?
-  sTen                 String?
-  sGhiChu              String?
-  iSTT                 Int?               @default(0)
-  bActive              Boolean?           @default(true)
-  bDeleted             Boolean?           @default(false)
-  bSystem              Boolean?           @default(false)
-  iDictionaryKey       Int?               @default(0)
-  dNgayTao             DateTime?
-  dNgaySua             DateTime?
-  sNguoiTao            String?
-  sNguoiSua            String?
-  sThietBiTao          String?
-  sThietBiSua          String?
-  sCode                String?
+  Id                    String                 @id() @default(uuid()) @db.Uuid()
+  sMa                   String?
+  sTen                  String?
+  sGhiChu               String?
+  iSTT                  Int?                   @default(0)
+  bActive               Boolean?               @default(true)
+  bDeleted              Boolean?               @default(false)
+  bSystem               Boolean?               @default(false)
+  iDictionaryKey        Int?                   @default(0)
+  dNgayTao              DateTime?
+  dNgaySua              DateTime?
+  sNguoiTao             String?
+  sNguoiSua             String?
+  sThietBiTao           String?
+  sThietBiSua           String?
+  sCode                 String?
   /// mã TKBU
-  sTKPUCode            String?
-  sTenVietTat          String?
-  sParentId            String?            @db.Uuid()
-  sTruongDonVi         String?            @db.Uuid()
-  sChucNangNhiemVu     String?
-  sDiaChi              String?
+  sTKPUCode             String?
+  sTenVietTat           String?
+  sParentId             String?                @db.Uuid()
+  sTruongDonVi          String?                @db.Uuid()
+  sChucNangNhiemVu      String?
+  sDiaChi               String?
   /// 0: Cơ quan chức năng; 1: Khoa/Viện/Trung tâm;2: Hệ, tiểu đoàn
-  iNhomDonVi           Int?
+  iNhomDonVi            Int?
   /// 0:Học viện / Nhà trường (Cấp 1);1: Khối (Cấp 2);2:Phòng / Ban / Khoa / Viện (Cấp 3);3:Bộ môn / Phòng TN / Đại đội (Cấp 4); 4:Tổ / Nhóm / Lớp (Cấp 5)
-  iCapDonVi            Int?
+  iCapDonVi             Int?
   /// 0: Phòng;1: Ban; 2: Trung tâm; 3: Văn phòng; 4: Tổ công tác; 5: Khoa; 6: Viện, 7: Bộ môn; 8: Phòng thí nghiệm; 9: Xưởng thực hành; 10: Hệ; 11: Tiểu đoàn; 12: Đại đội: 13: Trung đội; 14: Lớp/Chi đoàn
-  iLoaiDonVi           Int?
-  lecturers            Lecturer[]
-  lecturerHistory      LecturerHistory[]
-  staffs               Staff[]
-  staffHistory         StaffHistory[]
-  curriculum           Curriculum[]
-  fixedClass           FixedClass[]
-  subjectVersions      SubjectVersion[]
-  subjects             Subject[]
-  trainingFields       TrainingField[]
-  trainingMajors       TrainingMajor[]    @relation("organization")
-  secondTrainingMajors TrainingMajor[]    @relation("secondOrganization")
-  thirdTrainingMajors  TrainingMajor[]    @relation("thirdOrganization")
-  researchProjects     ResearchProject[]
-  thesisProjects       ThesisProject[]
-  surveyObjectTypes    SurveyObjectType[]
+  iLoaiDonVi            Int?
+  lecturers             Lecturer[]
+  lecturerHistory       LecturerHistory[]
+  staffs                Staff[]
+  staffHistory          StaffHistory[]
+  curriculum            Curriculum[]
+  fixedClass            FixedClass[]
+  subjectVersions       SubjectVersion[]
+  subjects              Subject[]
+  trainingFields        TrainingField[]
+  trainingMajors        TrainingMajor[]        @relation("organization")
+  secondTrainingMajors  TrainingMajor[]        @relation("secondOrganization")
+  thirdTrainingMajors   TrainingMajor[]        @relation("thirdOrganization")
+  researchProjects      ResearchProject[]
+  thesisProjects        ThesisProject[]
+  surveyObjectTypes     SurveyObjectType[]
+  guestTeachingPayments GuestTeachingPayment[]
 
   @@index([sParentId], map: "IX_DM_DonVi_iParentId")
   @@index([sMa], map: "IX_DM_DonVi_sMa")
@@ -2865,6 +2868,7 @@ model SchoolYear {
   studentAcademicDecision StudentAcademicDecision[]
   evaluationPeriod        EvaluationPeriod[]
   schoolYearTrainingScore SchoolYearTrainingScore[]
+  guestTeachingRateConfig GuestTeachingRateConfig[]
 
   @@schema("ql-dao-tao")
 }
@@ -2903,6 +2907,7 @@ model Semester {
   availableTrainingTime   AvailableTrainingTime[]
   studentSubjectScore     StudentSubjectScore[]
   planTrainingPractice    PlanTrainingPractice[]
+  guestTeachingPayments   GuestTeachingPayment[]
 
   @@schema("ql-dao-tao")
 }
@@ -4523,8 +4528,8 @@ model Lecturer {
   serviceDate                      DateTime?
   userProfile                      UserProfile                   @relation(fields: [userProfileId], references: [id])
   userProfileId                    String                        @unique() @db.Uuid()
-  organization                     DM_DonVi                      @relation(fields: [organizationId], references: [Id])
-  organizationId                   String                        @db.Uuid()
+  organization                     DM_DonVi?                     @relation(fields: [organizationId], references: [Id])
+  organizationId                   String?                       @db.Uuid()
   lecturerType                     LecturerType                  @relation(fields: [lecturerTypeId], references: [id])
   lecturerTypeId                   String
   mainSubjectClasses               SubjectClass[]                @relation("MainLecturer")
@@ -4550,6 +4555,7 @@ model Lecturer {
   notifications                    Notification[]
   personalWorkTags                 PersonalWorkTag[]
   individualSchedules              IndividualSchedule[]
+  guestTeachingPayments            GuestTeachingPayment[]
 
   @@index([userProfileId])
   @@schema("ql-dao-tao")
@@ -4579,6 +4585,77 @@ model LecturerHistory {
   @@schema("ql-dao-tao")
 }
 
+/// Bộ đơn giá mời giảng theo năm học (Điều 7 - định mức chi cho mời giảng)
+model GuestTeachingRateConfig {
+  id           String              @id() @default(cuid())
+  code         String?             @unique()
+  active       Boolean             @default(true)
+  description  String?             @db.Text()
+  deletedAt    DateTime?
+  createdAt    DateTime            @default(now())
+  updatedAt    DateTime            @default(now()) @updatedAt()
+  createdBy    String?             @db.Uuid()
+  name         String
+  schoolYear   SchoolYear          @relation(fields: [schoolYearId], references: [id])
+  schoolYearId String              @unique()
+  rates        GuestTeachingRate[]
+
+  @@schema("ql-dao-tao")
+}
+
+/// Đơn giá mời giảng / tiết theo chức danh (học hàm/học vị) - giải mức cao nhất khớp
+model GuestTeachingRate {
+  id                   String                  @id() @default(cuid())
+  active               Boolean                 @default(true)
+  description          String?                 @db.Text()
+  deletedAt            DateTime?
+  createdAt            DateTime                @default(now())
+  updatedAt            DateTime                @default(now()) @updatedAt()
+  createdBy            String?                 @db.Uuid()
+  config               GuestTeachingRateConfig @relation(fields: [configId], references: [id], onDelete: Cascade)
+  configId             String
+  academicRankType     DM_HocHam?              @relation(fields: [academicRankTypeId], references: [Id])
+  academicRankTypeId   String?                 @db.Uuid()
+  academicDegreeType   DM_HocVi?               @relation(fields: [academicDegreeTypeId], references: [Id])
+  academicDegreeTypeId String?                 @db.Uuid()
+  isForeign            Boolean                 @default(false)
+  ratePerPeriod        Decimal                 @db.Decimal(18, 2)
+
+  @@unique([configId, academicRankTypeId, academicDegreeTypeId, isForeign])
+  @@schema("ql-dao-tao")
+}
+
+/// Kết toán mời giảng theo (giảng viên ngoài × học kỳ × khoa chủ trì chi trả)
+model GuestTeachingPayment {
+  id              String        @id() @default(cuid())
+  code            String?       @unique()
+  active          Boolean       @default(true)
+  description     String?       @db.Text()
+  deletedAt       DateTime?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @default(now()) @updatedAt()
+  createdBy       String?       @db.Uuid()
+  lecturer        Lecturer      @relation(fields: [lecturerId], references: [id])
+  lecturerId      String
+  semester        Semester      @relation(fields: [semesterId], references: [id])
+  semesterId      String
+  hiringOrg       DM_DonVi      @relation(fields: [hiringOrgId], references: [Id])
+  hiringOrgId     String        @db.Uuid()
+  totalPeriods    Int           @default(0)
+  ratePerPeriod   Decimal       @db.Decimal(18, 2)
+  amount          Decimal       @db.Decimal(18, 2)
+  status          PaymentStatus @default(PENDING)
+  paymentDate     DateTime?
+  transactionCode String?
+  decisionRef     String?
+
+  @@unique([lecturerId, semesterId, hiringOrgId])
+  @@index([semesterId])
+  @@index([hiringOrgId])
+  @@index([status])
+  @@schema("ql-dao-tao")
+}
+
 /// Loại giảng viên
 model LecturerType {
   id              String            @id() @default(cuid())
@@ -4590,6 +4667,8 @@ model LecturerType {
   updatedAt       DateTime          @default(now()) @updatedAt()
   createdBy       String?           @db.Uuid()
   name            String            @unique()
+  /// true = giảng viên ngoài học viện (mời giảng); quyết định nhóm thanh toán mời giảng
+  isExternal      Boolean           @default(false)
   lecturers       Lecturer[]
   lecturerHistory LecturerHistory[]
 

@@ -47,10 +47,7 @@ const LichTuanGiangDay = ({ danhSach, dauTuan, dangTai }: LichTuanGiangDayProps)
     return map
   }, [danhSach, ngayTrongTuan])
 
-  const loaiTiet = useMemo(
-    () => [...new Set(danhSach.map((item) => item.periodType))],
-    [danhSach]
-  )
+  const loaiTiet = useMemo(() => [...new Set(danhSach.map((item) => item.periodType))], [danhSach])
 
   const tuanHienTai = useMemo(() => homNay.isSame(dauTuan, "isoWeek"), [dauTuan, homNay])
 

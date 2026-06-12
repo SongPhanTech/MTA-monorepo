@@ -744,6 +744,21 @@ export type Lecturer = $Result.DefaultSelection<Prisma.$LecturerPayload>
  */
 export type LecturerHistory = $Result.DefaultSelection<Prisma.$LecturerHistoryPayload>
 /**
+ * Model GuestTeachingRateConfig
+ * Bộ đơn giá mời giảng theo năm học (Điều 7 - định mức chi cho mời giảng)
+ */
+export type GuestTeachingRateConfig = $Result.DefaultSelection<Prisma.$GuestTeachingRateConfigPayload>
+/**
+ * Model GuestTeachingRate
+ * Đơn giá mời giảng / tiết theo chức danh (học hàm/học vị) - giải mức cao nhất khớp
+ */
+export type GuestTeachingRate = $Result.DefaultSelection<Prisma.$GuestTeachingRatePayload>
+/**
+ * Model GuestTeachingPayment
+ * Kết toán mời giảng theo (giảng viên ngoài × học kỳ × khoa chủ trì chi trả)
+ */
+export type GuestTeachingPayment = $Result.DefaultSelection<Prisma.$GuestTeachingPaymentPayload>
+/**
  * Model LecturerType
  * Loại giảng viên
  */
@@ -3971,6 +3986,36 @@ export class PrismaClient<
   get lecturerHistory(): Prisma.LecturerHistoryDelegate<ExtArgs, ClientOptions>;
 
   /**
+   * `prisma.guestTeachingRateConfig`: Exposes CRUD operations for the **GuestTeachingRateConfig** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more GuestTeachingRateConfigs
+    * const guestTeachingRateConfigs = await prisma.guestTeachingRateConfig.findMany()
+    * ```
+    */
+  get guestTeachingRateConfig(): Prisma.GuestTeachingRateConfigDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.guestTeachingRate`: Exposes CRUD operations for the **GuestTeachingRate** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more GuestTeachingRates
+    * const guestTeachingRates = await prisma.guestTeachingRate.findMany()
+    * ```
+    */
+  get guestTeachingRate(): Prisma.GuestTeachingRateDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.guestTeachingPayment`: Exposes CRUD operations for the **GuestTeachingPayment** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more GuestTeachingPayments
+    * const guestTeachingPayments = await prisma.guestTeachingPayment.findMany()
+    * ```
+    */
+  get guestTeachingPayment(): Prisma.GuestTeachingPaymentDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.lecturerType`: Exposes CRUD operations for the **LecturerType** model.
     * Example usage:
     * ```ts
@@ -5865,6 +5910,9 @@ export namespace Prisma {
     IndividualSchedule: 'IndividualSchedule',
     Lecturer: 'Lecturer',
     LecturerHistory: 'LecturerHistory',
+    GuestTeachingRateConfig: 'GuestTeachingRateConfig',
+    GuestTeachingRate: 'GuestTeachingRate',
+    GuestTeachingPayment: 'GuestTeachingPayment',
     LecturerType: 'LecturerType',
     StaffType: 'StaffType',
     StaffPosition: 'StaffPosition',
@@ -6014,7 +6062,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "config" | "suggestion" | "changeLog" | "userProfile" | "hocHam" | "chucVuChinhQuyen" | "chucVuDang" | "hocVi" | "relative" | "trinhDoLyLuanChinhTri" | "trinhDoQuanLyNhaNuoc" | "ngoaiNgu" | "tinHoc" | "boiDuongQuocPhongAnNinh" | "capBac" | "quaTrinhCongTac" | "quaTrinhCuDiCongTac" | "quaTrinhCuDiDaoTao" | "khenThuong" | "kyLuat" | "doiTuongChinhSach" | "keKhaiTaiSan" | "tiengDanToc" | "chienDau" | "nuocNgoai" | "thuongTat" | "danhHieu" | "quaTrinhHocTap" | "toChucXaHoi" | "quaTrinhLuong" | "group" | "role" | "permission" | "chatBotConfig" | "userSession" | "document" | "documentTopic" | "fAQ" | "prompt" | "conversation" | "conversationFeedback" | "message" | "citationMessage" | "topic" | "documentClassification" | "dM_CapBac" | "dM_ChucDanh" | "dM_ChucVu" | "dM_HocHam" | "dM_HocVi" | "dM_ChungChiTinHoc" | "dM_DanToc" | "dM_DonVi" | "dM_DonViHanhChinh" | "dM_KhuVuc_DiaLy" | "dM_NgoaiNgu" | "dM_TonGiao" | "dM_TrinhDoNgoaiNgu" | "dM_TrinhDoTinHoc" | "dM_GioiTinh" | "dM_NhanVien" | "dM_PhanCap_ChatLuong_TrangThietBi" | "dM_PhanLoai_CSKT" | "dM_NhomNguoiDung" | "dM_NhomUngDung" | "dM_QuocGia" | "dM_Tinh" | "dM_Tinh_New" | "dM_QuanHuyen" | "dM_XaPhuong" | "dM_XaPhuong_New" | "dM_ViTriCongViec" | "planTraining" | "planTrainingPractice" | "planTrainingSubject" | "studentScoreConvert" | "subjectScoreConvert" | "studentSubjectScore" | "studentSubjectScoreHistory" | "studentResearchTopic" | "studentInternship" | "archivedCertificateOnStudentSubjectScore" | "archivedCertificate" | "archivedAwardOnStudentSubjectScore" | "archivedAward" | "schoolYear" | "semester" | "milestone" | "trainingLanguage" | "trainingCourse" | "trainingCourseRegulation" | "fixedClass" | "curriculum" | "curriculumVersion" | "subject" | "subjectVersionCategory" | "subjectVersion" | "subjectVersionHistory" | "equivalencyGroup" | "subjectInGroup" | "trainingBlockSubject" | "classRegisterSessionCredit" | "classRegisterSession" | "classRegisterLogs" | "subjectClass" | "subjectClassAttendance" | "subjectClassAttendanceStudent" | "subjectClassHistory" | "subjectClassTime" | "classSchedule" | "scoreCorrectionTicket" | "scoreCorrectionItem" | "trainingObjectType" | "priorityObject" | "trainingType" | "trainingLevel" | "trainingForm" | "trainingLocation" | "building" | "room" | "trainingField" | "trainingFieldOnTrainingObjectType" | "trainingMajor" | "trainingMajorOnTrainingObjectType" | "trainingBlock" | "trainingBlockOnCurriculumVersion" | "trainingTime" | "availableTrainingTime" | "certificate" | "certificateOnSubject" | "award" | "officerBonusScore" | "diplomaType" | "scoreConvert" | "loadCategory" | "outputStandard" | "outputStandardOnCurriculum" | "student" | "trainingActivity" | "studentSemesterResult" | "studentYearResult" | "notification" | "personalWorkTag" | "individualSchedule" | "lecturer" | "lecturerHistory" | "lecturerType" | "staffType" | "staffPosition" | "staff" | "staffHistory" | "researchProject" | "studentResearchRegistration" | "thesisSession" | "thesisProject" | "defenseSession" | "studentThesisRegistration" | "expertProfile" | "decision" | "invitation" | "council" | "councilMember" | "defenseRecord" | "librarySubmission" | "configPaymentSession" | "defaultCouncilRolePayAmount" | "defaultSupervisorPayAmount" | "paymentRecord" | "supervisorPaymentRecord" | "documentFile" | "academicActionConfig" | "academicActionRuleSet" | "academicActionCondition" | "studentAcademicDecision" | "trainingScoreSession" | "studentTrainingScore" | "semesterTrainingScore" | "schoolYearTrainingScore" | "scholarship" | "scholarshipCriteria" | "scholarshipAward" | "graduationSession" | "studentGraduationApplication" | "applicationDowngraded" | "applicationCheckResult" | "graduationDecision" | "academicRankingConvert" | "graduationRankDowngradeRule" | "graduationRankDowngradeCondition" | "rankingCondition" | "diplomaVerificationApplication" | "scoreLinkSheet" | "scoreLinkSubjectVersion" | "scoreLinkStudent" | "note" | "noteFolder" | "noteTag" | "noteReminder" | "evaluationPeriod" | "evaluationStandardSet" | "standardCatalog" | "criterionCatalog" | "evidenceCategory" | "evidence" | "evaluationCriterionComment" | "requirementCriterionCatalog" | "standardPeriod" | "criterionPeriod" | "analysisCriterion" | "evaluationCriterion" | "requirementCriterion" | "analysisFormEvidence" | "evaluationCouncil" | "evaluationCouncilMember" | "evidenceFile" | "questionBank" | "question" | "multipleChoiceOption" | "fillInBlankSlot" | "orderingItem" | "exam" | "examRoom" | "examList" | "examBank" | "examBankQuestion" | "examPaper" | "examFramework" | "examMatrix" | "knowledgeBlock" | "configExam" | "surveyObjectType" | "surveyTopic" | "surveyQuestionGroup" | "clusterSurvey" | "survey" | "surveyQuestion" | "specificChoice" | "surveyChoice" | "surveySession" | "surveyResponse" | "academicWarningRule" | "academicWarning" | "disciplinaryWarning" | "disciplinaryWarningReason" | "feedback" | "dM_TrinhDoHocVan" | "dM_TrinhDoLyLuanChinhTri" | "dM_TrinhDoQuanLyNhaNuoc" | "dM_TinhTrangHonNhan" | "dM_QuanHeThanNhan" | "dM_TrangThaiLamViec" | "dM_HinhThucKhenThuongChinhQuyen" | "dM_HinhThucKhenThuongDang" | "dM_XepLoaiDanhGiaCanBo" | "dM_XepLoaiDanhGiaChatLuongDangVien" | "dM_LoaiHinhCongTac" | "dM_TinhTrangCongTac" | "dM_LoaiTinhTrangCongTac" | "dM_LoaiHinhDiHocTap" | "dM_TinhTrangDiHocTap" | "dM_NuocCuDiHocTap" | "dM_ChucDanhCMNVGiangVien" | "dM_ChucDanhCMNVNghienCuuVien" | "dM_ChucDanhCMNVKySu" | "dM_TruongDaoTaoBacDH" | "dM_ChuyenNganhDaoTaoBacDH" | "dM_ChiHuyQuanLy" | "dM_ChuyenMonKyThuat" | "dM_SucKhoe" | "dM_NhomMau" | "dM_LoaiThuongTat" | "dM_NganhHoc" | "dM_ToChucXaHoi" | "dM_Ngach" | "dM_BacLuong" | "templateFile" | "blockedIp"
+      modelProps: "config" | "suggestion" | "changeLog" | "userProfile" | "hocHam" | "chucVuChinhQuyen" | "chucVuDang" | "hocVi" | "relative" | "trinhDoLyLuanChinhTri" | "trinhDoQuanLyNhaNuoc" | "ngoaiNgu" | "tinHoc" | "boiDuongQuocPhongAnNinh" | "capBac" | "quaTrinhCongTac" | "quaTrinhCuDiCongTac" | "quaTrinhCuDiDaoTao" | "khenThuong" | "kyLuat" | "doiTuongChinhSach" | "keKhaiTaiSan" | "tiengDanToc" | "chienDau" | "nuocNgoai" | "thuongTat" | "danhHieu" | "quaTrinhHocTap" | "toChucXaHoi" | "quaTrinhLuong" | "group" | "role" | "permission" | "chatBotConfig" | "userSession" | "document" | "documentTopic" | "fAQ" | "prompt" | "conversation" | "conversationFeedback" | "message" | "citationMessage" | "topic" | "documentClassification" | "dM_CapBac" | "dM_ChucDanh" | "dM_ChucVu" | "dM_HocHam" | "dM_HocVi" | "dM_ChungChiTinHoc" | "dM_DanToc" | "dM_DonVi" | "dM_DonViHanhChinh" | "dM_KhuVuc_DiaLy" | "dM_NgoaiNgu" | "dM_TonGiao" | "dM_TrinhDoNgoaiNgu" | "dM_TrinhDoTinHoc" | "dM_GioiTinh" | "dM_NhanVien" | "dM_PhanCap_ChatLuong_TrangThietBi" | "dM_PhanLoai_CSKT" | "dM_NhomNguoiDung" | "dM_NhomUngDung" | "dM_QuocGia" | "dM_Tinh" | "dM_Tinh_New" | "dM_QuanHuyen" | "dM_XaPhuong" | "dM_XaPhuong_New" | "dM_ViTriCongViec" | "planTraining" | "planTrainingPractice" | "planTrainingSubject" | "studentScoreConvert" | "subjectScoreConvert" | "studentSubjectScore" | "studentSubjectScoreHistory" | "studentResearchTopic" | "studentInternship" | "archivedCertificateOnStudentSubjectScore" | "archivedCertificate" | "archivedAwardOnStudentSubjectScore" | "archivedAward" | "schoolYear" | "semester" | "milestone" | "trainingLanguage" | "trainingCourse" | "trainingCourseRegulation" | "fixedClass" | "curriculum" | "curriculumVersion" | "subject" | "subjectVersionCategory" | "subjectVersion" | "subjectVersionHistory" | "equivalencyGroup" | "subjectInGroup" | "trainingBlockSubject" | "classRegisterSessionCredit" | "classRegisterSession" | "classRegisterLogs" | "subjectClass" | "subjectClassAttendance" | "subjectClassAttendanceStudent" | "subjectClassHistory" | "subjectClassTime" | "classSchedule" | "scoreCorrectionTicket" | "scoreCorrectionItem" | "trainingObjectType" | "priorityObject" | "trainingType" | "trainingLevel" | "trainingForm" | "trainingLocation" | "building" | "room" | "trainingField" | "trainingFieldOnTrainingObjectType" | "trainingMajor" | "trainingMajorOnTrainingObjectType" | "trainingBlock" | "trainingBlockOnCurriculumVersion" | "trainingTime" | "availableTrainingTime" | "certificate" | "certificateOnSubject" | "award" | "officerBonusScore" | "diplomaType" | "scoreConvert" | "loadCategory" | "outputStandard" | "outputStandardOnCurriculum" | "student" | "trainingActivity" | "studentSemesterResult" | "studentYearResult" | "notification" | "personalWorkTag" | "individualSchedule" | "lecturer" | "lecturerHistory" | "guestTeachingRateConfig" | "guestTeachingRate" | "guestTeachingPayment" | "lecturerType" | "staffType" | "staffPosition" | "staff" | "staffHistory" | "researchProject" | "studentResearchRegistration" | "thesisSession" | "thesisProject" | "defenseSession" | "studentThesisRegistration" | "expertProfile" | "decision" | "invitation" | "council" | "councilMember" | "defenseRecord" | "librarySubmission" | "configPaymentSession" | "defaultCouncilRolePayAmount" | "defaultSupervisorPayAmount" | "paymentRecord" | "supervisorPaymentRecord" | "documentFile" | "academicActionConfig" | "academicActionRuleSet" | "academicActionCondition" | "studentAcademicDecision" | "trainingScoreSession" | "studentTrainingScore" | "semesterTrainingScore" | "schoolYearTrainingScore" | "scholarship" | "scholarshipCriteria" | "scholarshipAward" | "graduationSession" | "studentGraduationApplication" | "applicationDowngraded" | "applicationCheckResult" | "graduationDecision" | "academicRankingConvert" | "graduationRankDowngradeRule" | "graduationRankDowngradeCondition" | "rankingCondition" | "diplomaVerificationApplication" | "scoreLinkSheet" | "scoreLinkSubjectVersion" | "scoreLinkStudent" | "note" | "noteFolder" | "noteTag" | "noteReminder" | "evaluationPeriod" | "evaluationStandardSet" | "standardCatalog" | "criterionCatalog" | "evidenceCategory" | "evidence" | "evaluationCriterionComment" | "requirementCriterionCatalog" | "standardPeriod" | "criterionPeriod" | "analysisCriterion" | "evaluationCriterion" | "requirementCriterion" | "analysisFormEvidence" | "evaluationCouncil" | "evaluationCouncilMember" | "evidenceFile" | "questionBank" | "question" | "multipleChoiceOption" | "fillInBlankSlot" | "orderingItem" | "exam" | "examRoom" | "examList" | "examBank" | "examBankQuestion" | "examPaper" | "examFramework" | "examMatrix" | "knowledgeBlock" | "configExam" | "surveyObjectType" | "surveyTopic" | "surveyQuestionGroup" | "clusterSurvey" | "survey" | "surveyQuestion" | "specificChoice" | "surveyChoice" | "surveySession" | "surveyResponse" | "academicWarningRule" | "academicWarning" | "disciplinaryWarning" | "disciplinaryWarningReason" | "feedback" | "dM_TrinhDoHocVan" | "dM_TrinhDoLyLuanChinhTri" | "dM_TrinhDoQuanLyNhaNuoc" | "dM_TinhTrangHonNhan" | "dM_QuanHeThanNhan" | "dM_TrangThaiLamViec" | "dM_HinhThucKhenThuongChinhQuyen" | "dM_HinhThucKhenThuongDang" | "dM_XepLoaiDanhGiaCanBo" | "dM_XepLoaiDanhGiaChatLuongDangVien" | "dM_LoaiHinhCongTac" | "dM_TinhTrangCongTac" | "dM_LoaiTinhTrangCongTac" | "dM_LoaiHinhDiHocTap" | "dM_TinhTrangDiHocTap" | "dM_NuocCuDiHocTap" | "dM_ChucDanhCMNVGiangVien" | "dM_ChucDanhCMNVNghienCuuVien" | "dM_ChucDanhCMNVKySu" | "dM_TruongDaoTaoBacDH" | "dM_ChuyenNganhDaoTaoBacDH" | "dM_ChiHuyQuanLy" | "dM_ChuyenMonKyThuat" | "dM_SucKhoe" | "dM_NhomMau" | "dM_LoaiThuongTat" | "dM_NganhHoc" | "dM_ToChucXaHoi" | "dM_Ngach" | "dM_BacLuong" | "templateFile" | "blockedIp"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -16822,6 +16870,228 @@ export namespace Prisma {
           }
         }
       }
+      GuestTeachingRateConfig: {
+        payload: Prisma.$GuestTeachingRateConfigPayload<ExtArgs>
+        fields: Prisma.GuestTeachingRateConfigFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.GuestTeachingRateConfigFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GuestTeachingRateConfigPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.GuestTeachingRateConfigFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GuestTeachingRateConfigPayload>
+          }
+          findFirst: {
+            args: Prisma.GuestTeachingRateConfigFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GuestTeachingRateConfigPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.GuestTeachingRateConfigFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GuestTeachingRateConfigPayload>
+          }
+          findMany: {
+            args: Prisma.GuestTeachingRateConfigFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GuestTeachingRateConfigPayload>[]
+          }
+          create: {
+            args: Prisma.GuestTeachingRateConfigCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GuestTeachingRateConfigPayload>
+          }
+          createMany: {
+            args: Prisma.GuestTeachingRateConfigCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.GuestTeachingRateConfigCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GuestTeachingRateConfigPayload>[]
+          }
+          delete: {
+            args: Prisma.GuestTeachingRateConfigDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GuestTeachingRateConfigPayload>
+          }
+          update: {
+            args: Prisma.GuestTeachingRateConfigUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GuestTeachingRateConfigPayload>
+          }
+          deleteMany: {
+            args: Prisma.GuestTeachingRateConfigDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.GuestTeachingRateConfigUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.GuestTeachingRateConfigUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GuestTeachingRateConfigPayload>[]
+          }
+          upsert: {
+            args: Prisma.GuestTeachingRateConfigUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GuestTeachingRateConfigPayload>
+          }
+          aggregate: {
+            args: Prisma.GuestTeachingRateConfigAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateGuestTeachingRateConfig>
+          }
+          groupBy: {
+            args: Prisma.GuestTeachingRateConfigGroupByArgs<ExtArgs>
+            result: $Utils.Optional<GuestTeachingRateConfigGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.GuestTeachingRateConfigCountArgs<ExtArgs>
+            result: $Utils.Optional<GuestTeachingRateConfigCountAggregateOutputType> | number
+          }
+        }
+      }
+      GuestTeachingRate: {
+        payload: Prisma.$GuestTeachingRatePayload<ExtArgs>
+        fields: Prisma.GuestTeachingRateFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.GuestTeachingRateFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GuestTeachingRatePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.GuestTeachingRateFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GuestTeachingRatePayload>
+          }
+          findFirst: {
+            args: Prisma.GuestTeachingRateFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GuestTeachingRatePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.GuestTeachingRateFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GuestTeachingRatePayload>
+          }
+          findMany: {
+            args: Prisma.GuestTeachingRateFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GuestTeachingRatePayload>[]
+          }
+          create: {
+            args: Prisma.GuestTeachingRateCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GuestTeachingRatePayload>
+          }
+          createMany: {
+            args: Prisma.GuestTeachingRateCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.GuestTeachingRateCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GuestTeachingRatePayload>[]
+          }
+          delete: {
+            args: Prisma.GuestTeachingRateDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GuestTeachingRatePayload>
+          }
+          update: {
+            args: Prisma.GuestTeachingRateUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GuestTeachingRatePayload>
+          }
+          deleteMany: {
+            args: Prisma.GuestTeachingRateDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.GuestTeachingRateUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.GuestTeachingRateUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GuestTeachingRatePayload>[]
+          }
+          upsert: {
+            args: Prisma.GuestTeachingRateUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GuestTeachingRatePayload>
+          }
+          aggregate: {
+            args: Prisma.GuestTeachingRateAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateGuestTeachingRate>
+          }
+          groupBy: {
+            args: Prisma.GuestTeachingRateGroupByArgs<ExtArgs>
+            result: $Utils.Optional<GuestTeachingRateGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.GuestTeachingRateCountArgs<ExtArgs>
+            result: $Utils.Optional<GuestTeachingRateCountAggregateOutputType> | number
+          }
+        }
+      }
+      GuestTeachingPayment: {
+        payload: Prisma.$GuestTeachingPaymentPayload<ExtArgs>
+        fields: Prisma.GuestTeachingPaymentFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.GuestTeachingPaymentFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GuestTeachingPaymentPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.GuestTeachingPaymentFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GuestTeachingPaymentPayload>
+          }
+          findFirst: {
+            args: Prisma.GuestTeachingPaymentFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GuestTeachingPaymentPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.GuestTeachingPaymentFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GuestTeachingPaymentPayload>
+          }
+          findMany: {
+            args: Prisma.GuestTeachingPaymentFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GuestTeachingPaymentPayload>[]
+          }
+          create: {
+            args: Prisma.GuestTeachingPaymentCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GuestTeachingPaymentPayload>
+          }
+          createMany: {
+            args: Prisma.GuestTeachingPaymentCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.GuestTeachingPaymentCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GuestTeachingPaymentPayload>[]
+          }
+          delete: {
+            args: Prisma.GuestTeachingPaymentDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GuestTeachingPaymentPayload>
+          }
+          update: {
+            args: Prisma.GuestTeachingPaymentUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GuestTeachingPaymentPayload>
+          }
+          deleteMany: {
+            args: Prisma.GuestTeachingPaymentDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.GuestTeachingPaymentUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.GuestTeachingPaymentUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GuestTeachingPaymentPayload>[]
+          }
+          upsert: {
+            args: Prisma.GuestTeachingPaymentUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GuestTeachingPaymentPayload>
+          }
+          aggregate: {
+            args: Prisma.GuestTeachingPaymentAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateGuestTeachingPayment>
+          }
+          groupBy: {
+            args: Prisma.GuestTeachingPaymentGroupByArgs<ExtArgs>
+            result: $Utils.Optional<GuestTeachingPaymentGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.GuestTeachingPaymentCountArgs<ExtArgs>
+            result: $Utils.Optional<GuestTeachingPaymentCountAggregateOutputType> | number
+          }
+        }
+      }
       LecturerType: {
         payload: Prisma.$LecturerTypePayload<ExtArgs>
         fields: Prisma.LecturerTypeFieldRefs
@@ -26750,6 +27020,9 @@ export namespace Prisma {
     individualSchedule?: IndividualScheduleOmit
     lecturer?: LecturerOmit
     lecturerHistory?: LecturerHistoryOmit
+    guestTeachingRateConfig?: GuestTeachingRateConfigOmit
+    guestTeachingRate?: GuestTeachingRateOmit
+    guestTeachingPayment?: GuestTeachingPaymentOmit
     lecturerType?: LecturerTypeOmit
     staffType?: StaffTypeOmit
     staffPosition?: StaffPositionOmit
@@ -27885,12 +28158,14 @@ export namespace Prisma {
     profiles: number
     hocHam: number
     expertProfile: number
+    guestTeachingRate: number
   }
 
   export type DM_HocHamCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     profiles?: boolean | DM_HocHamCountOutputTypeCountProfilesArgs
     hocHam?: boolean | DM_HocHamCountOutputTypeCountHocHamArgs
     expertProfile?: boolean | DM_HocHamCountOutputTypeCountExpertProfileArgs
+    guestTeachingRate?: boolean | DM_HocHamCountOutputTypeCountGuestTeachingRateArgs
   }
 
   // Custom InputTypes
@@ -27925,6 +28200,13 @@ export namespace Prisma {
     where?: ExpertProfileWhereInput
   }
 
+  /**
+   * DM_HocHamCountOutputType without action
+   */
+  export type DM_HocHamCountOutputTypeCountGuestTeachingRateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: GuestTeachingRateWhereInput
+  }
+
 
   /**
    * Count Type DM_HocViCountOutputType
@@ -27934,12 +28216,14 @@ export namespace Prisma {
     profiles: number
     hocVi: number
     expertProfile: number
+    guestTeachingRate: number
   }
 
   export type DM_HocViCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     profiles?: boolean | DM_HocViCountOutputTypeCountProfilesArgs
     hocVi?: boolean | DM_HocViCountOutputTypeCountHocViArgs
     expertProfile?: boolean | DM_HocViCountOutputTypeCountExpertProfileArgs
+    guestTeachingRate?: boolean | DM_HocViCountOutputTypeCountGuestTeachingRateArgs
   }
 
   // Custom InputTypes
@@ -27972,6 +28256,13 @@ export namespace Prisma {
    */
   export type DM_HocViCountOutputTypeCountExpertProfileArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ExpertProfileWhereInput
+  }
+
+  /**
+   * DM_HocViCountOutputType without action
+   */
+  export type DM_HocViCountOutputTypeCountGuestTeachingRateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: GuestTeachingRateWhereInput
   }
 
 
@@ -28035,6 +28326,7 @@ export namespace Prisma {
     researchProjects: number
     thesisProjects: number
     surveyObjectTypes: number
+    guestTeachingPayments: number
   }
 
   export type DM_DonViCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -28053,6 +28345,7 @@ export namespace Prisma {
     researchProjects?: boolean | DM_DonViCountOutputTypeCountResearchProjectsArgs
     thesisProjects?: boolean | DM_DonViCountOutputTypeCountThesisProjectsArgs
     surveyObjectTypes?: boolean | DM_DonViCountOutputTypeCountSurveyObjectTypesArgs
+    guestTeachingPayments?: boolean | DM_DonViCountOutputTypeCountGuestTeachingPaymentsArgs
   }
 
   // Custom InputTypes
@@ -28169,6 +28462,13 @@ export namespace Prisma {
    */
   export type DM_DonViCountOutputTypeCountSurveyObjectTypesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: SurveyObjectTypeWhereInput
+  }
+
+  /**
+   * DM_DonViCountOutputType without action
+   */
+  export type DM_DonViCountOutputTypeCountGuestTeachingPaymentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: GuestTeachingPaymentWhereInput
   }
 
 
@@ -29024,6 +29324,7 @@ export namespace Prisma {
     studentAcademicDecision: number
     evaluationPeriod: number
     schoolYearTrainingScore: number
+    guestTeachingRateConfig: number
   }
 
   export type SchoolYearCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -29033,6 +29334,7 @@ export namespace Prisma {
     studentAcademicDecision?: boolean | SchoolYearCountOutputTypeCountStudentAcademicDecisionArgs
     evaluationPeriod?: boolean | SchoolYearCountOutputTypeCountEvaluationPeriodArgs
     schoolYearTrainingScore?: boolean | SchoolYearCountOutputTypeCountSchoolYearTrainingScoreArgs
+    guestTeachingRateConfig?: boolean | SchoolYearCountOutputTypeCountGuestTeachingRateConfigArgs
   }
 
   // Custom InputTypes
@@ -29088,6 +29390,13 @@ export namespace Prisma {
     where?: SchoolYearTrainingScoreWhereInput
   }
 
+  /**
+   * SchoolYearCountOutputType without action
+   */
+  export type SchoolYearCountOutputTypeCountGuestTeachingRateConfigArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: GuestTeachingRateConfigWhereInput
+  }
+
 
   /**
    * Count Type SemesterCountOutputType
@@ -29111,6 +29420,7 @@ export namespace Prisma {
     availableTrainingTime: number
     studentSubjectScore: number
     planTrainingPractice: number
+    guestTeachingPayments: number
   }
 
   export type SemesterCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -29131,6 +29441,7 @@ export namespace Prisma {
     availableTrainingTime?: boolean | SemesterCountOutputTypeCountAvailableTrainingTimeArgs
     studentSubjectScore?: boolean | SemesterCountOutputTypeCountStudentSubjectScoreArgs
     planTrainingPractice?: boolean | SemesterCountOutputTypeCountPlanTrainingPracticeArgs
+    guestTeachingPayments?: boolean | SemesterCountOutputTypeCountGuestTeachingPaymentsArgs
   }
 
   // Custom InputTypes
@@ -29261,6 +29572,13 @@ export namespace Prisma {
    */
   export type SemesterCountOutputTypeCountPlanTrainingPracticeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: PlanTrainingPracticeWhereInput
+  }
+
+  /**
+   * SemesterCountOutputType without action
+   */
+  export type SemesterCountOutputTypeCountGuestTeachingPaymentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: GuestTeachingPaymentWhereInput
   }
 
 
@@ -31578,6 +31896,7 @@ export namespace Prisma {
     notifications: number
     personalWorkTags: number
     individualSchedules: number
+    guestTeachingPayments: number
   }
 
   export type LecturerCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -31604,6 +31923,7 @@ export namespace Prisma {
     notifications?: boolean | LecturerCountOutputTypeCountNotificationsArgs
     personalWorkTags?: boolean | LecturerCountOutputTypeCountPersonalWorkTagsArgs
     individualSchedules?: boolean | LecturerCountOutputTypeCountIndividualSchedulesArgs
+    guestTeachingPayments?: boolean | LecturerCountOutputTypeCountGuestTeachingPaymentsArgs
   }
 
   // Custom InputTypes
@@ -31776,6 +32096,44 @@ export namespace Prisma {
    */
   export type LecturerCountOutputTypeCountIndividualSchedulesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: IndividualScheduleWhereInput
+  }
+
+  /**
+   * LecturerCountOutputType without action
+   */
+  export type LecturerCountOutputTypeCountGuestTeachingPaymentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: GuestTeachingPaymentWhereInput
+  }
+
+
+  /**
+   * Count Type GuestTeachingRateConfigCountOutputType
+   */
+
+  export type GuestTeachingRateConfigCountOutputType = {
+    rates: number
+  }
+
+  export type GuestTeachingRateConfigCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    rates?: boolean | GuestTeachingRateConfigCountOutputTypeCountRatesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * GuestTeachingRateConfigCountOutputType without action
+   */
+  export type GuestTeachingRateConfigCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GuestTeachingRateConfigCountOutputType
+     */
+    select?: GuestTeachingRateConfigCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * GuestTeachingRateConfigCountOutputType without action
+   */
+  export type GuestTeachingRateConfigCountOutputTypeCountRatesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: GuestTeachingRateWhereInput
   }
 
 
@@ -97189,6 +97547,7 @@ export namespace Prisma {
     profiles?: boolean | DM_HocHam$profilesArgs<ExtArgs>
     hocHam?: boolean | DM_HocHam$hocHamArgs<ExtArgs>
     expertProfile?: boolean | DM_HocHam$expertProfileArgs<ExtArgs>
+    guestTeachingRate?: boolean | DM_HocHam$guestTeachingRateArgs<ExtArgs>
     _count?: boolean | DM_HocHamCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["dM_HocHam"]>
 
@@ -97251,6 +97610,7 @@ export namespace Prisma {
     profiles?: boolean | DM_HocHam$profilesArgs<ExtArgs>
     hocHam?: boolean | DM_HocHam$hocHamArgs<ExtArgs>
     expertProfile?: boolean | DM_HocHam$expertProfileArgs<ExtArgs>
+    guestTeachingRate?: boolean | DM_HocHam$guestTeachingRateArgs<ExtArgs>
     _count?: boolean | DM_HocHamCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type DM_HocHamIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -97262,6 +97622,7 @@ export namespace Prisma {
       profiles: Prisma.$UserProfilePayload<ExtArgs>[]
       hocHam: Prisma.$HocHamPayload<ExtArgs>[]
       expertProfile: Prisma.$ExpertProfilePayload<ExtArgs>[]
+      guestTeachingRate: Prisma.$GuestTeachingRatePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       Id: string
@@ -97676,6 +98037,7 @@ export namespace Prisma {
     profiles<T extends DM_HocHam$profilesArgs<ExtArgs> = {}>(args?: Subset<T, DM_HocHam$profilesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     hocHam<T extends DM_HocHam$hocHamArgs<ExtArgs> = {}>(args?: Subset<T, DM_HocHam$hocHamArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$HocHamPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     expertProfile<T extends DM_HocHam$expertProfileArgs<ExtArgs> = {}>(args?: Subset<T, DM_HocHam$expertProfileArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExpertProfilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    guestTeachingRate<T extends DM_HocHam$guestTeachingRateArgs<ExtArgs> = {}>(args?: Subset<T, DM_HocHam$guestTeachingRateArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GuestTeachingRatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -98180,6 +98542,30 @@ export namespace Prisma {
   }
 
   /**
+   * DM_HocHam.guestTeachingRate
+   */
+  export type DM_HocHam$guestTeachingRateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GuestTeachingRate
+     */
+    select?: GuestTeachingRateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GuestTeachingRate
+     */
+    omit?: GuestTeachingRateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GuestTeachingRateInclude<ExtArgs> | null
+    where?: GuestTeachingRateWhereInput
+    orderBy?: GuestTeachingRateOrderByWithRelationInput | GuestTeachingRateOrderByWithRelationInput[]
+    cursor?: GuestTeachingRateWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: GuestTeachingRateScalarFieldEnum | GuestTeachingRateScalarFieldEnum[]
+  }
+
+  /**
    * DM_HocHam without action
    */
   export type DM_HocHamDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -98483,6 +98869,7 @@ export namespace Prisma {
     profiles?: boolean | DM_HocVi$profilesArgs<ExtArgs>
     hocVi?: boolean | DM_HocVi$hocViArgs<ExtArgs>
     expertProfile?: boolean | DM_HocVi$expertProfileArgs<ExtArgs>
+    guestTeachingRate?: boolean | DM_HocVi$guestTeachingRateArgs<ExtArgs>
     _count?: boolean | DM_HocViCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["dM_HocVi"]>
 
@@ -98545,6 +98932,7 @@ export namespace Prisma {
     profiles?: boolean | DM_HocVi$profilesArgs<ExtArgs>
     hocVi?: boolean | DM_HocVi$hocViArgs<ExtArgs>
     expertProfile?: boolean | DM_HocVi$expertProfileArgs<ExtArgs>
+    guestTeachingRate?: boolean | DM_HocVi$guestTeachingRateArgs<ExtArgs>
     _count?: boolean | DM_HocViCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type DM_HocViIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -98556,6 +98944,7 @@ export namespace Prisma {
       profiles: Prisma.$UserProfilePayload<ExtArgs>[]
       hocVi: Prisma.$HocViPayload<ExtArgs>[]
       expertProfile: Prisma.$ExpertProfilePayload<ExtArgs>[]
+      guestTeachingRate: Prisma.$GuestTeachingRatePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       Id: string
@@ -98970,6 +99359,7 @@ export namespace Prisma {
     profiles<T extends DM_HocVi$profilesArgs<ExtArgs> = {}>(args?: Subset<T, DM_HocVi$profilesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     hocVi<T extends DM_HocVi$hocViArgs<ExtArgs> = {}>(args?: Subset<T, DM_HocVi$hocViArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$HocViPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     expertProfile<T extends DM_HocVi$expertProfileArgs<ExtArgs> = {}>(args?: Subset<T, DM_HocVi$expertProfileArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExpertProfilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    guestTeachingRate<T extends DM_HocVi$guestTeachingRateArgs<ExtArgs> = {}>(args?: Subset<T, DM_HocVi$guestTeachingRateArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GuestTeachingRatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -99471,6 +99861,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ExpertProfileScalarFieldEnum | ExpertProfileScalarFieldEnum[]
+  }
+
+  /**
+   * DM_HocVi.guestTeachingRate
+   */
+  export type DM_HocVi$guestTeachingRateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GuestTeachingRate
+     */
+    select?: GuestTeachingRateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GuestTeachingRate
+     */
+    omit?: GuestTeachingRateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GuestTeachingRateInclude<ExtArgs> | null
+    where?: GuestTeachingRateWhereInput
+    orderBy?: GuestTeachingRateOrderByWithRelationInput | GuestTeachingRateOrderByWithRelationInput[]
+    cursor?: GuestTeachingRateWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: GuestTeachingRateScalarFieldEnum | GuestTeachingRateScalarFieldEnum[]
   }
 
   /**
@@ -102388,6 +102802,7 @@ export namespace Prisma {
     researchProjects?: boolean | DM_DonVi$researchProjectsArgs<ExtArgs>
     thesisProjects?: boolean | DM_DonVi$thesisProjectsArgs<ExtArgs>
     surveyObjectTypes?: boolean | DM_DonVi$surveyObjectTypesArgs<ExtArgs>
+    guestTeachingPayments?: boolean | DM_DonVi$guestTeachingPaymentsArgs<ExtArgs>
     _count?: boolean | DM_DonViCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["dM_DonVi"]>
 
@@ -102492,6 +102907,7 @@ export namespace Prisma {
     researchProjects?: boolean | DM_DonVi$researchProjectsArgs<ExtArgs>
     thesisProjects?: boolean | DM_DonVi$thesisProjectsArgs<ExtArgs>
     surveyObjectTypes?: boolean | DM_DonVi$surveyObjectTypesArgs<ExtArgs>
+    guestTeachingPayments?: boolean | DM_DonVi$guestTeachingPaymentsArgs<ExtArgs>
     _count?: boolean | DM_DonViCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type DM_DonViIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -102515,6 +102931,7 @@ export namespace Prisma {
       researchProjects: Prisma.$ResearchProjectPayload<ExtArgs>[]
       thesisProjects: Prisma.$ThesisProjectPayload<ExtArgs>[]
       surveyObjectTypes: Prisma.$SurveyObjectTypePayload<ExtArgs>[]
+      guestTeachingPayments: Prisma.$GuestTeachingPaymentPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       Id: string
@@ -102963,6 +103380,7 @@ export namespace Prisma {
     researchProjects<T extends DM_DonVi$researchProjectsArgs<ExtArgs> = {}>(args?: Subset<T, DM_DonVi$researchProjectsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ResearchProjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     thesisProjects<T extends DM_DonVi$thesisProjectsArgs<ExtArgs> = {}>(args?: Subset<T, DM_DonVi$thesisProjectsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ThesisProjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     surveyObjectTypes<T extends DM_DonVi$surveyObjectTypesArgs<ExtArgs> = {}>(args?: Subset<T, DM_DonVi$surveyObjectTypesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SurveyObjectTypePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    guestTeachingPayments<T extends DM_DonVi$guestTeachingPaymentsArgs<ExtArgs> = {}>(args?: Subset<T, DM_DonVi$guestTeachingPaymentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GuestTeachingPaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -103762,6 +104180,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: SurveyObjectTypeScalarFieldEnum | SurveyObjectTypeScalarFieldEnum[]
+  }
+
+  /**
+   * DM_DonVi.guestTeachingPayments
+   */
+  export type DM_DonVi$guestTeachingPaymentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GuestTeachingPayment
+     */
+    select?: GuestTeachingPaymentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GuestTeachingPayment
+     */
+    omit?: GuestTeachingPaymentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GuestTeachingPaymentInclude<ExtArgs> | null
+    where?: GuestTeachingPaymentWhereInput
+    orderBy?: GuestTeachingPaymentOrderByWithRelationInput | GuestTeachingPaymentOrderByWithRelationInput[]
+    cursor?: GuestTeachingPaymentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: GuestTeachingPaymentScalarFieldEnum | GuestTeachingPaymentScalarFieldEnum[]
   }
 
   /**
@@ -144933,6 +145375,7 @@ export namespace Prisma {
     studentAcademicDecision?: boolean | SchoolYear$studentAcademicDecisionArgs<ExtArgs>
     evaluationPeriod?: boolean | SchoolYear$evaluationPeriodArgs<ExtArgs>
     schoolYearTrainingScore?: boolean | SchoolYear$schoolYearTrainingScoreArgs<ExtArgs>
+    guestTeachingRateConfig?: boolean | SchoolYear$guestTeachingRateConfigArgs<ExtArgs>
     _count?: boolean | SchoolYearCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["schoolYear"]>
 
@@ -144986,6 +145429,7 @@ export namespace Prisma {
     studentAcademicDecision?: boolean | SchoolYear$studentAcademicDecisionArgs<ExtArgs>
     evaluationPeriod?: boolean | SchoolYear$evaluationPeriodArgs<ExtArgs>
     schoolYearTrainingScore?: boolean | SchoolYear$schoolYearTrainingScoreArgs<ExtArgs>
+    guestTeachingRateConfig?: boolean | SchoolYear$guestTeachingRateConfigArgs<ExtArgs>
     _count?: boolean | SchoolYearCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type SchoolYearIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -145000,6 +145444,7 @@ export namespace Prisma {
       studentAcademicDecision: Prisma.$StudentAcademicDecisionPayload<ExtArgs>[]
       evaluationPeriod: Prisma.$EvaluationPeriodPayload<ExtArgs>[]
       schoolYearTrainingScore: Prisma.$SchoolYearTrainingScorePayload<ExtArgs>[]
+      guestTeachingRateConfig: Prisma.$GuestTeachingRateConfigPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -145413,6 +145858,7 @@ export namespace Prisma {
     studentAcademicDecision<T extends SchoolYear$studentAcademicDecisionArgs<ExtArgs> = {}>(args?: Subset<T, SchoolYear$studentAcademicDecisionArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentAcademicDecisionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     evaluationPeriod<T extends SchoolYear$evaluationPeriodArgs<ExtArgs> = {}>(args?: Subset<T, SchoolYear$evaluationPeriodArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EvaluationPeriodPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     schoolYearTrainingScore<T extends SchoolYear$schoolYearTrainingScoreArgs<ExtArgs> = {}>(args?: Subset<T, SchoolYear$schoolYearTrainingScoreArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SchoolYearTrainingScorePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    guestTeachingRateConfig<T extends SchoolYear$guestTeachingRateConfigArgs<ExtArgs> = {}>(args?: Subset<T, SchoolYear$guestTeachingRateConfigArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GuestTeachingRateConfigPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -145985,6 +146431,30 @@ export namespace Prisma {
   }
 
   /**
+   * SchoolYear.guestTeachingRateConfig
+   */
+  export type SchoolYear$guestTeachingRateConfigArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GuestTeachingRateConfig
+     */
+    select?: GuestTeachingRateConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GuestTeachingRateConfig
+     */
+    omit?: GuestTeachingRateConfigOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GuestTeachingRateConfigInclude<ExtArgs> | null
+    where?: GuestTeachingRateConfigWhereInput
+    orderBy?: GuestTeachingRateConfigOrderByWithRelationInput | GuestTeachingRateConfigOrderByWithRelationInput[]
+    cursor?: GuestTeachingRateConfigWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: GuestTeachingRateConfigScalarFieldEnum | GuestTeachingRateConfigScalarFieldEnum[]
+  }
+
+  /**
    * SchoolYear without action
    */
   export type SchoolYearDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -146257,6 +146727,7 @@ export namespace Prisma {
     availableTrainingTime?: boolean | Semester$availableTrainingTimeArgs<ExtArgs>
     studentSubjectScore?: boolean | Semester$studentSubjectScoreArgs<ExtArgs>
     planTrainingPractice?: boolean | Semester$planTrainingPracticeArgs<ExtArgs>
+    guestTeachingPayments?: boolean | Semester$guestTeachingPaymentsArgs<ExtArgs>
     _count?: boolean | SemesterCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["semester"]>
 
@@ -146333,6 +146804,7 @@ export namespace Prisma {
     availableTrainingTime?: boolean | Semester$availableTrainingTimeArgs<ExtArgs>
     studentSubjectScore?: boolean | Semester$studentSubjectScoreArgs<ExtArgs>
     planTrainingPractice?: boolean | Semester$planTrainingPracticeArgs<ExtArgs>
+    guestTeachingPayments?: boolean | Semester$guestTeachingPaymentsArgs<ExtArgs>
     _count?: boolean | SemesterCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type SemesterIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -146363,6 +146835,7 @@ export namespace Prisma {
       availableTrainingTime: Prisma.$AvailableTrainingTimePayload<ExtArgs>[]
       studentSubjectScore: Prisma.$StudentSubjectScorePayload<ExtArgs>[]
       planTrainingPractice: Prisma.$PlanTrainingPracticePayload<ExtArgs>[]
+      guestTeachingPayments: Prisma.$GuestTeachingPaymentPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -146791,6 +147264,7 @@ export namespace Prisma {
     availableTrainingTime<T extends Semester$availableTrainingTimeArgs<ExtArgs> = {}>(args?: Subset<T, Semester$availableTrainingTimeArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AvailableTrainingTimePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     studentSubjectScore<T extends Semester$studentSubjectScoreArgs<ExtArgs> = {}>(args?: Subset<T, Semester$studentSubjectScoreArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentSubjectScorePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     planTrainingPractice<T extends Semester$planTrainingPracticeArgs<ExtArgs> = {}>(args?: Subset<T, Semester$planTrainingPracticeArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlanTrainingPracticePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    guestTeachingPayments<T extends Semester$guestTeachingPaymentsArgs<ExtArgs> = {}>(args?: Subset<T, Semester$guestTeachingPaymentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GuestTeachingPaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -147635,6 +148109,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: PlanTrainingPracticeScalarFieldEnum | PlanTrainingPracticeScalarFieldEnum[]
+  }
+
+  /**
+   * Semester.guestTeachingPayments
+   */
+  export type Semester$guestTeachingPaymentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GuestTeachingPayment
+     */
+    select?: GuestTeachingPaymentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GuestTeachingPayment
+     */
+    omit?: GuestTeachingPaymentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GuestTeachingPaymentInclude<ExtArgs> | null
+    where?: GuestTeachingPaymentWhereInput
+    orderBy?: GuestTeachingPaymentOrderByWithRelationInput | GuestTeachingPaymentOrderByWithRelationInput[]
+    cursor?: GuestTeachingPaymentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: GuestTeachingPaymentScalarFieldEnum | GuestTeachingPaymentScalarFieldEnum[]
   }
 
   /**
@@ -223992,7 +224490,7 @@ export namespace Prisma {
     lectureID: string | null
     serviceDate: Date | null
     userProfileId: string
-    organizationId: string
+    organizationId: string | null
     lecturerTypeId: string
     _count: LecturerCountAggregateOutputType | null
     _min: LecturerMinAggregateOutputType | null
@@ -224029,7 +224527,7 @@ export namespace Prisma {
     organizationId?: boolean
     lecturerTypeId?: boolean
     userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
-    organization?: boolean | DM_DonViDefaultArgs<ExtArgs>
+    organization?: boolean | Lecturer$organizationArgs<ExtArgs>
     lecturerType?: boolean | LecturerTypeDefaultArgs<ExtArgs>
     mainSubjectClasses?: boolean | Lecturer$mainSubjectClassesArgs<ExtArgs>
     extraSubjectClasses?: boolean | Lecturer$extraSubjectClassesArgs<ExtArgs>
@@ -224054,6 +224552,7 @@ export namespace Prisma {
     notifications?: boolean | Lecturer$notificationsArgs<ExtArgs>
     personalWorkTags?: boolean | Lecturer$personalWorkTagsArgs<ExtArgs>
     individualSchedules?: boolean | Lecturer$individualSchedulesArgs<ExtArgs>
+    guestTeachingPayments?: boolean | Lecturer$guestTeachingPaymentsArgs<ExtArgs>
     _count?: boolean | LecturerCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["lecturer"]>
 
@@ -224073,7 +224572,7 @@ export namespace Prisma {
     organizationId?: boolean
     lecturerTypeId?: boolean
     userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
-    organization?: boolean | DM_DonViDefaultArgs<ExtArgs>
+    organization?: boolean | Lecturer$organizationArgs<ExtArgs>
     lecturerType?: boolean | LecturerTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["lecturer"]>
 
@@ -224093,7 +224592,7 @@ export namespace Prisma {
     organizationId?: boolean
     lecturerTypeId?: boolean
     userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
-    organization?: boolean | DM_DonViDefaultArgs<ExtArgs>
+    organization?: boolean | Lecturer$organizationArgs<ExtArgs>
     lecturerType?: boolean | LecturerTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["lecturer"]>
 
@@ -224117,7 +224616,7 @@ export namespace Prisma {
   export type LecturerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "from" | "lectureID" | "serviceDate" | "userProfileId" | "organizationId" | "lecturerTypeId", ExtArgs["result"]["lecturer"]>
   export type LecturerInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
-    organization?: boolean | DM_DonViDefaultArgs<ExtArgs>
+    organization?: boolean | Lecturer$organizationArgs<ExtArgs>
     lecturerType?: boolean | LecturerTypeDefaultArgs<ExtArgs>
     mainSubjectClasses?: boolean | Lecturer$mainSubjectClassesArgs<ExtArgs>
     extraSubjectClasses?: boolean | Lecturer$extraSubjectClassesArgs<ExtArgs>
@@ -224142,16 +224641,17 @@ export namespace Prisma {
     notifications?: boolean | Lecturer$notificationsArgs<ExtArgs>
     personalWorkTags?: boolean | Lecturer$personalWorkTagsArgs<ExtArgs>
     individualSchedules?: boolean | Lecturer$individualSchedulesArgs<ExtArgs>
+    guestTeachingPayments?: boolean | Lecturer$guestTeachingPaymentsArgs<ExtArgs>
     _count?: boolean | LecturerCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type LecturerIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
-    organization?: boolean | DM_DonViDefaultArgs<ExtArgs>
+    organization?: boolean | Lecturer$organizationArgs<ExtArgs>
     lecturerType?: boolean | LecturerTypeDefaultArgs<ExtArgs>
   }
   export type LecturerIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
-    organization?: boolean | DM_DonViDefaultArgs<ExtArgs>
+    organization?: boolean | Lecturer$organizationArgs<ExtArgs>
     lecturerType?: boolean | LecturerTypeDefaultArgs<ExtArgs>
   }
 
@@ -224159,7 +224659,7 @@ export namespace Prisma {
     name: "Lecturer"
     objects: {
       userProfile: Prisma.$UserProfilePayload<ExtArgs>
-      organization: Prisma.$DM_DonViPayload<ExtArgs>
+      organization: Prisma.$DM_DonViPayload<ExtArgs> | null
       lecturerType: Prisma.$LecturerTypePayload<ExtArgs>
       mainSubjectClasses: Prisma.$SubjectClassPayload<ExtArgs>[]
       extraSubjectClasses: Prisma.$SubjectClassPayload<ExtArgs>[]
@@ -224184,6 +224684,7 @@ export namespace Prisma {
       notifications: Prisma.$NotificationPayload<ExtArgs>[]
       personalWorkTags: Prisma.$PersonalWorkTagPayload<ExtArgs>[]
       individualSchedules: Prisma.$IndividualSchedulePayload<ExtArgs>[]
+      guestTeachingPayments: Prisma.$GuestTeachingPaymentPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -224198,7 +224699,7 @@ export namespace Prisma {
       lectureID: string | null
       serviceDate: Date | null
       userProfileId: string
-      organizationId: string
+      organizationId: string | null
       lecturerTypeId: string
     }, ExtArgs["result"]["lecturer"]>
     composites: {}
@@ -224595,7 +225096,7 @@ export namespace Prisma {
   export interface Prisma__LecturerClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     userProfile<T extends UserProfileDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserProfileDefaultArgs<ExtArgs>>): Prisma__UserProfileClient<$Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    organization<T extends DM_DonViDefaultArgs<ExtArgs> = {}>(args?: Subset<T, DM_DonViDefaultArgs<ExtArgs>>): Prisma__DM_DonViClient<$Result.GetResult<Prisma.$DM_DonViPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    organization<T extends Lecturer$organizationArgs<ExtArgs> = {}>(args?: Subset<T, Lecturer$organizationArgs<ExtArgs>>): Prisma__DM_DonViClient<$Result.GetResult<Prisma.$DM_DonViPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     lecturerType<T extends LecturerTypeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, LecturerTypeDefaultArgs<ExtArgs>>): Prisma__LecturerTypeClient<$Result.GetResult<Prisma.$LecturerTypePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     mainSubjectClasses<T extends Lecturer$mainSubjectClassesArgs<ExtArgs> = {}>(args?: Subset<T, Lecturer$mainSubjectClassesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SubjectClassPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     extraSubjectClasses<T extends Lecturer$extraSubjectClassesArgs<ExtArgs> = {}>(args?: Subset<T, Lecturer$extraSubjectClassesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SubjectClassPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -224620,6 +225121,7 @@ export namespace Prisma {
     notifications<T extends Lecturer$notificationsArgs<ExtArgs> = {}>(args?: Subset<T, Lecturer$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     personalWorkTags<T extends Lecturer$personalWorkTagsArgs<ExtArgs> = {}>(args?: Subset<T, Lecturer$personalWorkTagsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PersonalWorkTagPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     individualSchedules<T extends Lecturer$individualSchedulesArgs<ExtArgs> = {}>(args?: Subset<T, Lecturer$individualSchedulesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$IndividualSchedulePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    guestTeachingPayments<T extends Lecturer$guestTeachingPaymentsArgs<ExtArgs> = {}>(args?: Subset<T, Lecturer$guestTeachingPaymentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GuestTeachingPaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -225056,6 +225558,25 @@ export namespace Prisma {
      * Limit how many Lecturers to delete.
      */
     limit?: number
+  }
+
+  /**
+   * Lecturer.organization
+   */
+  export type Lecturer$organizationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DM_DonVi
+     */
+    select?: DM_DonViSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DM_DonVi
+     */
+    omit?: DM_DonViOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DM_DonViInclude<ExtArgs> | null
+    where?: DM_DonViWhereInput
   }
 
   /**
@@ -225608,6 +226129,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: IndividualScheduleScalarFieldEnum | IndividualScheduleScalarFieldEnum[]
+  }
+
+  /**
+   * Lecturer.guestTeachingPayments
+   */
+  export type Lecturer$guestTeachingPaymentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GuestTeachingPayment
+     */
+    select?: GuestTeachingPaymentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GuestTeachingPayment
+     */
+    omit?: GuestTeachingPaymentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GuestTeachingPaymentInclude<ExtArgs> | null
+    where?: GuestTeachingPaymentWhereInput
+    orderBy?: GuestTeachingPaymentOrderByWithRelationInput | GuestTeachingPaymentOrderByWithRelationInput[]
+    cursor?: GuestTeachingPaymentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: GuestTeachingPaymentScalarFieldEnum | GuestTeachingPaymentScalarFieldEnum[]
   }
 
   /**
@@ -226866,6 +227411,3681 @@ export namespace Prisma {
 
 
   /**
+   * Model GuestTeachingRateConfig
+   */
+
+  export type AggregateGuestTeachingRateConfig = {
+    _count: GuestTeachingRateConfigCountAggregateOutputType | null
+    _min: GuestTeachingRateConfigMinAggregateOutputType | null
+    _max: GuestTeachingRateConfigMaxAggregateOutputType | null
+  }
+
+  export type GuestTeachingRateConfigMinAggregateOutputType = {
+    id: string | null
+    code: string | null
+    active: boolean | null
+    description: string | null
+    deletedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    createdBy: string | null
+    name: string | null
+    schoolYearId: string | null
+  }
+
+  export type GuestTeachingRateConfigMaxAggregateOutputType = {
+    id: string | null
+    code: string | null
+    active: boolean | null
+    description: string | null
+    deletedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    createdBy: string | null
+    name: string | null
+    schoolYearId: string | null
+  }
+
+  export type GuestTeachingRateConfigCountAggregateOutputType = {
+    id: number
+    code: number
+    active: number
+    description: number
+    deletedAt: number
+    createdAt: number
+    updatedAt: number
+    createdBy: number
+    name: number
+    schoolYearId: number
+    _all: number
+  }
+
+
+  export type GuestTeachingRateConfigMinAggregateInputType = {
+    id?: true
+    code?: true
+    active?: true
+    description?: true
+    deletedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+    name?: true
+    schoolYearId?: true
+  }
+
+  export type GuestTeachingRateConfigMaxAggregateInputType = {
+    id?: true
+    code?: true
+    active?: true
+    description?: true
+    deletedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+    name?: true
+    schoolYearId?: true
+  }
+
+  export type GuestTeachingRateConfigCountAggregateInputType = {
+    id?: true
+    code?: true
+    active?: true
+    description?: true
+    deletedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+    name?: true
+    schoolYearId?: true
+    _all?: true
+  }
+
+  export type GuestTeachingRateConfigAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which GuestTeachingRateConfig to aggregate.
+     */
+    where?: GuestTeachingRateConfigWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GuestTeachingRateConfigs to fetch.
+     */
+    orderBy?: GuestTeachingRateConfigOrderByWithRelationInput | GuestTeachingRateConfigOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: GuestTeachingRateConfigWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GuestTeachingRateConfigs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GuestTeachingRateConfigs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned GuestTeachingRateConfigs
+    **/
+    _count?: true | GuestTeachingRateConfigCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: GuestTeachingRateConfigMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: GuestTeachingRateConfigMaxAggregateInputType
+  }
+
+  export type GetGuestTeachingRateConfigAggregateType<T extends GuestTeachingRateConfigAggregateArgs> = {
+        [P in keyof T & keyof AggregateGuestTeachingRateConfig]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateGuestTeachingRateConfig[P]>
+      : GetScalarType<T[P], AggregateGuestTeachingRateConfig[P]>
+  }
+
+
+
+
+  export type GuestTeachingRateConfigGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: GuestTeachingRateConfigWhereInput
+    orderBy?: GuestTeachingRateConfigOrderByWithAggregationInput | GuestTeachingRateConfigOrderByWithAggregationInput[]
+    by: GuestTeachingRateConfigScalarFieldEnum[] | GuestTeachingRateConfigScalarFieldEnum
+    having?: GuestTeachingRateConfigScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: GuestTeachingRateConfigCountAggregateInputType | true
+    _min?: GuestTeachingRateConfigMinAggregateInputType
+    _max?: GuestTeachingRateConfigMaxAggregateInputType
+  }
+
+  export type GuestTeachingRateConfigGroupByOutputType = {
+    id: string
+    code: string | null
+    active: boolean
+    description: string | null
+    deletedAt: Date | null
+    createdAt: Date
+    updatedAt: Date
+    createdBy: string | null
+    name: string
+    schoolYearId: string
+    _count: GuestTeachingRateConfigCountAggregateOutputType | null
+    _min: GuestTeachingRateConfigMinAggregateOutputType | null
+    _max: GuestTeachingRateConfigMaxAggregateOutputType | null
+  }
+
+  type GetGuestTeachingRateConfigGroupByPayload<T extends GuestTeachingRateConfigGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<GuestTeachingRateConfigGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof GuestTeachingRateConfigGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], GuestTeachingRateConfigGroupByOutputType[P]>
+            : GetScalarType<T[P], GuestTeachingRateConfigGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type GuestTeachingRateConfigSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    code?: boolean
+    active?: boolean
+    description?: boolean
+    deletedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    name?: boolean
+    schoolYearId?: boolean
+    schoolYear?: boolean | SchoolYearDefaultArgs<ExtArgs>
+    rates?: boolean | GuestTeachingRateConfig$ratesArgs<ExtArgs>
+    _count?: boolean | GuestTeachingRateConfigCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["guestTeachingRateConfig"]>
+
+  export type GuestTeachingRateConfigSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    code?: boolean
+    active?: boolean
+    description?: boolean
+    deletedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    name?: boolean
+    schoolYearId?: boolean
+    schoolYear?: boolean | SchoolYearDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["guestTeachingRateConfig"]>
+
+  export type GuestTeachingRateConfigSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    code?: boolean
+    active?: boolean
+    description?: boolean
+    deletedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    name?: boolean
+    schoolYearId?: boolean
+    schoolYear?: boolean | SchoolYearDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["guestTeachingRateConfig"]>
+
+  export type GuestTeachingRateConfigSelectScalar = {
+    id?: boolean
+    code?: boolean
+    active?: boolean
+    description?: boolean
+    deletedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    name?: boolean
+    schoolYearId?: boolean
+  }
+
+  export type GuestTeachingRateConfigOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name" | "schoolYearId", ExtArgs["result"]["guestTeachingRateConfig"]>
+  export type GuestTeachingRateConfigInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    schoolYear?: boolean | SchoolYearDefaultArgs<ExtArgs>
+    rates?: boolean | GuestTeachingRateConfig$ratesArgs<ExtArgs>
+    _count?: boolean | GuestTeachingRateConfigCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type GuestTeachingRateConfigIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    schoolYear?: boolean | SchoolYearDefaultArgs<ExtArgs>
+  }
+  export type GuestTeachingRateConfigIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    schoolYear?: boolean | SchoolYearDefaultArgs<ExtArgs>
+  }
+
+  export type $GuestTeachingRateConfigPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "GuestTeachingRateConfig"
+    objects: {
+      schoolYear: Prisma.$SchoolYearPayload<ExtArgs>
+      rates: Prisma.$GuestTeachingRatePayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      code: string | null
+      active: boolean
+      description: string | null
+      deletedAt: Date | null
+      createdAt: Date
+      updatedAt: Date
+      createdBy: string | null
+      name: string
+      schoolYearId: string
+    }, ExtArgs["result"]["guestTeachingRateConfig"]>
+    composites: {}
+  }
+
+  type GuestTeachingRateConfigGetPayload<S extends boolean | null | undefined | GuestTeachingRateConfigDefaultArgs> = $Result.GetResult<Prisma.$GuestTeachingRateConfigPayload, S>
+
+  type GuestTeachingRateConfigCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<GuestTeachingRateConfigFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: GuestTeachingRateConfigCountAggregateInputType | true
+    }
+
+  export interface GuestTeachingRateConfigDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['GuestTeachingRateConfig'], meta: { name: 'GuestTeachingRateConfig' } }
+    /**
+     * Find zero or one GuestTeachingRateConfig that matches the filter.
+     * @param {GuestTeachingRateConfigFindUniqueArgs} args - Arguments to find a GuestTeachingRateConfig
+     * @example
+     * // Get one GuestTeachingRateConfig
+     * const guestTeachingRateConfig = await prisma.guestTeachingRateConfig.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends GuestTeachingRateConfigFindUniqueArgs>(args: SelectSubset<T, GuestTeachingRateConfigFindUniqueArgs<ExtArgs>>): Prisma__GuestTeachingRateConfigClient<$Result.GetResult<Prisma.$GuestTeachingRateConfigPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one GuestTeachingRateConfig that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {GuestTeachingRateConfigFindUniqueOrThrowArgs} args - Arguments to find a GuestTeachingRateConfig
+     * @example
+     * // Get one GuestTeachingRateConfig
+     * const guestTeachingRateConfig = await prisma.guestTeachingRateConfig.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends GuestTeachingRateConfigFindUniqueOrThrowArgs>(args: SelectSubset<T, GuestTeachingRateConfigFindUniqueOrThrowArgs<ExtArgs>>): Prisma__GuestTeachingRateConfigClient<$Result.GetResult<Prisma.$GuestTeachingRateConfigPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first GuestTeachingRateConfig that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GuestTeachingRateConfigFindFirstArgs} args - Arguments to find a GuestTeachingRateConfig
+     * @example
+     * // Get one GuestTeachingRateConfig
+     * const guestTeachingRateConfig = await prisma.guestTeachingRateConfig.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends GuestTeachingRateConfigFindFirstArgs>(args?: SelectSubset<T, GuestTeachingRateConfigFindFirstArgs<ExtArgs>>): Prisma__GuestTeachingRateConfigClient<$Result.GetResult<Prisma.$GuestTeachingRateConfigPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first GuestTeachingRateConfig that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GuestTeachingRateConfigFindFirstOrThrowArgs} args - Arguments to find a GuestTeachingRateConfig
+     * @example
+     * // Get one GuestTeachingRateConfig
+     * const guestTeachingRateConfig = await prisma.guestTeachingRateConfig.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends GuestTeachingRateConfigFindFirstOrThrowArgs>(args?: SelectSubset<T, GuestTeachingRateConfigFindFirstOrThrowArgs<ExtArgs>>): Prisma__GuestTeachingRateConfigClient<$Result.GetResult<Prisma.$GuestTeachingRateConfigPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more GuestTeachingRateConfigs that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GuestTeachingRateConfigFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all GuestTeachingRateConfigs
+     * const guestTeachingRateConfigs = await prisma.guestTeachingRateConfig.findMany()
+     * 
+     * // Get first 10 GuestTeachingRateConfigs
+     * const guestTeachingRateConfigs = await prisma.guestTeachingRateConfig.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const guestTeachingRateConfigWithIdOnly = await prisma.guestTeachingRateConfig.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends GuestTeachingRateConfigFindManyArgs>(args?: SelectSubset<T, GuestTeachingRateConfigFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GuestTeachingRateConfigPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a GuestTeachingRateConfig.
+     * @param {GuestTeachingRateConfigCreateArgs} args - Arguments to create a GuestTeachingRateConfig.
+     * @example
+     * // Create one GuestTeachingRateConfig
+     * const GuestTeachingRateConfig = await prisma.guestTeachingRateConfig.create({
+     *   data: {
+     *     // ... data to create a GuestTeachingRateConfig
+     *   }
+     * })
+     * 
+     */
+    create<T extends GuestTeachingRateConfigCreateArgs>(args: SelectSubset<T, GuestTeachingRateConfigCreateArgs<ExtArgs>>): Prisma__GuestTeachingRateConfigClient<$Result.GetResult<Prisma.$GuestTeachingRateConfigPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many GuestTeachingRateConfigs.
+     * @param {GuestTeachingRateConfigCreateManyArgs} args - Arguments to create many GuestTeachingRateConfigs.
+     * @example
+     * // Create many GuestTeachingRateConfigs
+     * const guestTeachingRateConfig = await prisma.guestTeachingRateConfig.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends GuestTeachingRateConfigCreateManyArgs>(args?: SelectSubset<T, GuestTeachingRateConfigCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many GuestTeachingRateConfigs and returns the data saved in the database.
+     * @param {GuestTeachingRateConfigCreateManyAndReturnArgs} args - Arguments to create many GuestTeachingRateConfigs.
+     * @example
+     * // Create many GuestTeachingRateConfigs
+     * const guestTeachingRateConfig = await prisma.guestTeachingRateConfig.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many GuestTeachingRateConfigs and only return the `id`
+     * const guestTeachingRateConfigWithIdOnly = await prisma.guestTeachingRateConfig.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends GuestTeachingRateConfigCreateManyAndReturnArgs>(args?: SelectSubset<T, GuestTeachingRateConfigCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GuestTeachingRateConfigPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a GuestTeachingRateConfig.
+     * @param {GuestTeachingRateConfigDeleteArgs} args - Arguments to delete one GuestTeachingRateConfig.
+     * @example
+     * // Delete one GuestTeachingRateConfig
+     * const GuestTeachingRateConfig = await prisma.guestTeachingRateConfig.delete({
+     *   where: {
+     *     // ... filter to delete one GuestTeachingRateConfig
+     *   }
+     * })
+     * 
+     */
+    delete<T extends GuestTeachingRateConfigDeleteArgs>(args: SelectSubset<T, GuestTeachingRateConfigDeleteArgs<ExtArgs>>): Prisma__GuestTeachingRateConfigClient<$Result.GetResult<Prisma.$GuestTeachingRateConfigPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one GuestTeachingRateConfig.
+     * @param {GuestTeachingRateConfigUpdateArgs} args - Arguments to update one GuestTeachingRateConfig.
+     * @example
+     * // Update one GuestTeachingRateConfig
+     * const guestTeachingRateConfig = await prisma.guestTeachingRateConfig.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends GuestTeachingRateConfigUpdateArgs>(args: SelectSubset<T, GuestTeachingRateConfigUpdateArgs<ExtArgs>>): Prisma__GuestTeachingRateConfigClient<$Result.GetResult<Prisma.$GuestTeachingRateConfigPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more GuestTeachingRateConfigs.
+     * @param {GuestTeachingRateConfigDeleteManyArgs} args - Arguments to filter GuestTeachingRateConfigs to delete.
+     * @example
+     * // Delete a few GuestTeachingRateConfigs
+     * const { count } = await prisma.guestTeachingRateConfig.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends GuestTeachingRateConfigDeleteManyArgs>(args?: SelectSubset<T, GuestTeachingRateConfigDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more GuestTeachingRateConfigs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GuestTeachingRateConfigUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many GuestTeachingRateConfigs
+     * const guestTeachingRateConfig = await prisma.guestTeachingRateConfig.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends GuestTeachingRateConfigUpdateManyArgs>(args: SelectSubset<T, GuestTeachingRateConfigUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more GuestTeachingRateConfigs and returns the data updated in the database.
+     * @param {GuestTeachingRateConfigUpdateManyAndReturnArgs} args - Arguments to update many GuestTeachingRateConfigs.
+     * @example
+     * // Update many GuestTeachingRateConfigs
+     * const guestTeachingRateConfig = await prisma.guestTeachingRateConfig.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more GuestTeachingRateConfigs and only return the `id`
+     * const guestTeachingRateConfigWithIdOnly = await prisma.guestTeachingRateConfig.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends GuestTeachingRateConfigUpdateManyAndReturnArgs>(args: SelectSubset<T, GuestTeachingRateConfigUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GuestTeachingRateConfigPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one GuestTeachingRateConfig.
+     * @param {GuestTeachingRateConfigUpsertArgs} args - Arguments to update or create a GuestTeachingRateConfig.
+     * @example
+     * // Update or create a GuestTeachingRateConfig
+     * const guestTeachingRateConfig = await prisma.guestTeachingRateConfig.upsert({
+     *   create: {
+     *     // ... data to create a GuestTeachingRateConfig
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the GuestTeachingRateConfig we want to update
+     *   }
+     * })
+     */
+    upsert<T extends GuestTeachingRateConfigUpsertArgs>(args: SelectSubset<T, GuestTeachingRateConfigUpsertArgs<ExtArgs>>): Prisma__GuestTeachingRateConfigClient<$Result.GetResult<Prisma.$GuestTeachingRateConfigPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of GuestTeachingRateConfigs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GuestTeachingRateConfigCountArgs} args - Arguments to filter GuestTeachingRateConfigs to count.
+     * @example
+     * // Count the number of GuestTeachingRateConfigs
+     * const count = await prisma.guestTeachingRateConfig.count({
+     *   where: {
+     *     // ... the filter for the GuestTeachingRateConfigs we want to count
+     *   }
+     * })
+    **/
+    count<T extends GuestTeachingRateConfigCountArgs>(
+      args?: Subset<T, GuestTeachingRateConfigCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], GuestTeachingRateConfigCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a GuestTeachingRateConfig.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GuestTeachingRateConfigAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends GuestTeachingRateConfigAggregateArgs>(args: Subset<T, GuestTeachingRateConfigAggregateArgs>): Prisma.PrismaPromise<GetGuestTeachingRateConfigAggregateType<T>>
+
+    /**
+     * Group by GuestTeachingRateConfig.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GuestTeachingRateConfigGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends GuestTeachingRateConfigGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: GuestTeachingRateConfigGroupByArgs['orderBy'] }
+        : { orderBy?: GuestTeachingRateConfigGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, GuestTeachingRateConfigGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetGuestTeachingRateConfigGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the GuestTeachingRateConfig model
+   */
+  readonly fields: GuestTeachingRateConfigFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for GuestTeachingRateConfig.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__GuestTeachingRateConfigClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    schoolYear<T extends SchoolYearDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SchoolYearDefaultArgs<ExtArgs>>): Prisma__SchoolYearClient<$Result.GetResult<Prisma.$SchoolYearPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    rates<T extends GuestTeachingRateConfig$ratesArgs<ExtArgs> = {}>(args?: Subset<T, GuestTeachingRateConfig$ratesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GuestTeachingRatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the GuestTeachingRateConfig model
+   */
+  interface GuestTeachingRateConfigFieldRefs {
+    readonly id: FieldRef<"GuestTeachingRateConfig", 'String'>
+    readonly code: FieldRef<"GuestTeachingRateConfig", 'String'>
+    readonly active: FieldRef<"GuestTeachingRateConfig", 'Boolean'>
+    readonly description: FieldRef<"GuestTeachingRateConfig", 'String'>
+    readonly deletedAt: FieldRef<"GuestTeachingRateConfig", 'DateTime'>
+    readonly createdAt: FieldRef<"GuestTeachingRateConfig", 'DateTime'>
+    readonly updatedAt: FieldRef<"GuestTeachingRateConfig", 'DateTime'>
+    readonly createdBy: FieldRef<"GuestTeachingRateConfig", 'String'>
+    readonly name: FieldRef<"GuestTeachingRateConfig", 'String'>
+    readonly schoolYearId: FieldRef<"GuestTeachingRateConfig", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * GuestTeachingRateConfig findUnique
+   */
+  export type GuestTeachingRateConfigFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GuestTeachingRateConfig
+     */
+    select?: GuestTeachingRateConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GuestTeachingRateConfig
+     */
+    omit?: GuestTeachingRateConfigOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GuestTeachingRateConfigInclude<ExtArgs> | null
+    /**
+     * Filter, which GuestTeachingRateConfig to fetch.
+     */
+    where: GuestTeachingRateConfigWhereUniqueInput
+  }
+
+  /**
+   * GuestTeachingRateConfig findUniqueOrThrow
+   */
+  export type GuestTeachingRateConfigFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GuestTeachingRateConfig
+     */
+    select?: GuestTeachingRateConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GuestTeachingRateConfig
+     */
+    omit?: GuestTeachingRateConfigOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GuestTeachingRateConfigInclude<ExtArgs> | null
+    /**
+     * Filter, which GuestTeachingRateConfig to fetch.
+     */
+    where: GuestTeachingRateConfigWhereUniqueInput
+  }
+
+  /**
+   * GuestTeachingRateConfig findFirst
+   */
+  export type GuestTeachingRateConfigFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GuestTeachingRateConfig
+     */
+    select?: GuestTeachingRateConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GuestTeachingRateConfig
+     */
+    omit?: GuestTeachingRateConfigOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GuestTeachingRateConfigInclude<ExtArgs> | null
+    /**
+     * Filter, which GuestTeachingRateConfig to fetch.
+     */
+    where?: GuestTeachingRateConfigWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GuestTeachingRateConfigs to fetch.
+     */
+    orderBy?: GuestTeachingRateConfigOrderByWithRelationInput | GuestTeachingRateConfigOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for GuestTeachingRateConfigs.
+     */
+    cursor?: GuestTeachingRateConfigWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GuestTeachingRateConfigs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GuestTeachingRateConfigs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of GuestTeachingRateConfigs.
+     */
+    distinct?: GuestTeachingRateConfigScalarFieldEnum | GuestTeachingRateConfigScalarFieldEnum[]
+  }
+
+  /**
+   * GuestTeachingRateConfig findFirstOrThrow
+   */
+  export type GuestTeachingRateConfigFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GuestTeachingRateConfig
+     */
+    select?: GuestTeachingRateConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GuestTeachingRateConfig
+     */
+    omit?: GuestTeachingRateConfigOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GuestTeachingRateConfigInclude<ExtArgs> | null
+    /**
+     * Filter, which GuestTeachingRateConfig to fetch.
+     */
+    where?: GuestTeachingRateConfigWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GuestTeachingRateConfigs to fetch.
+     */
+    orderBy?: GuestTeachingRateConfigOrderByWithRelationInput | GuestTeachingRateConfigOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for GuestTeachingRateConfigs.
+     */
+    cursor?: GuestTeachingRateConfigWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GuestTeachingRateConfigs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GuestTeachingRateConfigs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of GuestTeachingRateConfigs.
+     */
+    distinct?: GuestTeachingRateConfigScalarFieldEnum | GuestTeachingRateConfigScalarFieldEnum[]
+  }
+
+  /**
+   * GuestTeachingRateConfig findMany
+   */
+  export type GuestTeachingRateConfigFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GuestTeachingRateConfig
+     */
+    select?: GuestTeachingRateConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GuestTeachingRateConfig
+     */
+    omit?: GuestTeachingRateConfigOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GuestTeachingRateConfigInclude<ExtArgs> | null
+    /**
+     * Filter, which GuestTeachingRateConfigs to fetch.
+     */
+    where?: GuestTeachingRateConfigWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GuestTeachingRateConfigs to fetch.
+     */
+    orderBy?: GuestTeachingRateConfigOrderByWithRelationInput | GuestTeachingRateConfigOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing GuestTeachingRateConfigs.
+     */
+    cursor?: GuestTeachingRateConfigWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GuestTeachingRateConfigs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GuestTeachingRateConfigs.
+     */
+    skip?: number
+    distinct?: GuestTeachingRateConfigScalarFieldEnum | GuestTeachingRateConfigScalarFieldEnum[]
+  }
+
+  /**
+   * GuestTeachingRateConfig create
+   */
+  export type GuestTeachingRateConfigCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GuestTeachingRateConfig
+     */
+    select?: GuestTeachingRateConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GuestTeachingRateConfig
+     */
+    omit?: GuestTeachingRateConfigOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GuestTeachingRateConfigInclude<ExtArgs> | null
+    /**
+     * The data needed to create a GuestTeachingRateConfig.
+     */
+    data: XOR<GuestTeachingRateConfigCreateInput, GuestTeachingRateConfigUncheckedCreateInput>
+  }
+
+  /**
+   * GuestTeachingRateConfig createMany
+   */
+  export type GuestTeachingRateConfigCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many GuestTeachingRateConfigs.
+     */
+    data: GuestTeachingRateConfigCreateManyInput | GuestTeachingRateConfigCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * GuestTeachingRateConfig createManyAndReturn
+   */
+  export type GuestTeachingRateConfigCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GuestTeachingRateConfig
+     */
+    select?: GuestTeachingRateConfigSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the GuestTeachingRateConfig
+     */
+    omit?: GuestTeachingRateConfigOmit<ExtArgs> | null
+    /**
+     * The data used to create many GuestTeachingRateConfigs.
+     */
+    data: GuestTeachingRateConfigCreateManyInput | GuestTeachingRateConfigCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GuestTeachingRateConfigIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * GuestTeachingRateConfig update
+   */
+  export type GuestTeachingRateConfigUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GuestTeachingRateConfig
+     */
+    select?: GuestTeachingRateConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GuestTeachingRateConfig
+     */
+    omit?: GuestTeachingRateConfigOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GuestTeachingRateConfigInclude<ExtArgs> | null
+    /**
+     * The data needed to update a GuestTeachingRateConfig.
+     */
+    data: XOR<GuestTeachingRateConfigUpdateInput, GuestTeachingRateConfigUncheckedUpdateInput>
+    /**
+     * Choose, which GuestTeachingRateConfig to update.
+     */
+    where: GuestTeachingRateConfigWhereUniqueInput
+  }
+
+  /**
+   * GuestTeachingRateConfig updateMany
+   */
+  export type GuestTeachingRateConfigUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update GuestTeachingRateConfigs.
+     */
+    data: XOR<GuestTeachingRateConfigUpdateManyMutationInput, GuestTeachingRateConfigUncheckedUpdateManyInput>
+    /**
+     * Filter which GuestTeachingRateConfigs to update
+     */
+    where?: GuestTeachingRateConfigWhereInput
+    /**
+     * Limit how many GuestTeachingRateConfigs to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * GuestTeachingRateConfig updateManyAndReturn
+   */
+  export type GuestTeachingRateConfigUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GuestTeachingRateConfig
+     */
+    select?: GuestTeachingRateConfigSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the GuestTeachingRateConfig
+     */
+    omit?: GuestTeachingRateConfigOmit<ExtArgs> | null
+    /**
+     * The data used to update GuestTeachingRateConfigs.
+     */
+    data: XOR<GuestTeachingRateConfigUpdateManyMutationInput, GuestTeachingRateConfigUncheckedUpdateManyInput>
+    /**
+     * Filter which GuestTeachingRateConfigs to update
+     */
+    where?: GuestTeachingRateConfigWhereInput
+    /**
+     * Limit how many GuestTeachingRateConfigs to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GuestTeachingRateConfigIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * GuestTeachingRateConfig upsert
+   */
+  export type GuestTeachingRateConfigUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GuestTeachingRateConfig
+     */
+    select?: GuestTeachingRateConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GuestTeachingRateConfig
+     */
+    omit?: GuestTeachingRateConfigOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GuestTeachingRateConfigInclude<ExtArgs> | null
+    /**
+     * The filter to search for the GuestTeachingRateConfig to update in case it exists.
+     */
+    where: GuestTeachingRateConfigWhereUniqueInput
+    /**
+     * In case the GuestTeachingRateConfig found by the `where` argument doesn't exist, create a new GuestTeachingRateConfig with this data.
+     */
+    create: XOR<GuestTeachingRateConfigCreateInput, GuestTeachingRateConfigUncheckedCreateInput>
+    /**
+     * In case the GuestTeachingRateConfig was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<GuestTeachingRateConfigUpdateInput, GuestTeachingRateConfigUncheckedUpdateInput>
+  }
+
+  /**
+   * GuestTeachingRateConfig delete
+   */
+  export type GuestTeachingRateConfigDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GuestTeachingRateConfig
+     */
+    select?: GuestTeachingRateConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GuestTeachingRateConfig
+     */
+    omit?: GuestTeachingRateConfigOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GuestTeachingRateConfigInclude<ExtArgs> | null
+    /**
+     * Filter which GuestTeachingRateConfig to delete.
+     */
+    where: GuestTeachingRateConfigWhereUniqueInput
+  }
+
+  /**
+   * GuestTeachingRateConfig deleteMany
+   */
+  export type GuestTeachingRateConfigDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which GuestTeachingRateConfigs to delete
+     */
+    where?: GuestTeachingRateConfigWhereInput
+    /**
+     * Limit how many GuestTeachingRateConfigs to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * GuestTeachingRateConfig.rates
+   */
+  export type GuestTeachingRateConfig$ratesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GuestTeachingRate
+     */
+    select?: GuestTeachingRateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GuestTeachingRate
+     */
+    omit?: GuestTeachingRateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GuestTeachingRateInclude<ExtArgs> | null
+    where?: GuestTeachingRateWhereInput
+    orderBy?: GuestTeachingRateOrderByWithRelationInput | GuestTeachingRateOrderByWithRelationInput[]
+    cursor?: GuestTeachingRateWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: GuestTeachingRateScalarFieldEnum | GuestTeachingRateScalarFieldEnum[]
+  }
+
+  /**
+   * GuestTeachingRateConfig without action
+   */
+  export type GuestTeachingRateConfigDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GuestTeachingRateConfig
+     */
+    select?: GuestTeachingRateConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GuestTeachingRateConfig
+     */
+    omit?: GuestTeachingRateConfigOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GuestTeachingRateConfigInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model GuestTeachingRate
+   */
+
+  export type AggregateGuestTeachingRate = {
+    _count: GuestTeachingRateCountAggregateOutputType | null
+    _avg: GuestTeachingRateAvgAggregateOutputType | null
+    _sum: GuestTeachingRateSumAggregateOutputType | null
+    _min: GuestTeachingRateMinAggregateOutputType | null
+    _max: GuestTeachingRateMaxAggregateOutputType | null
+  }
+
+  export type GuestTeachingRateAvgAggregateOutputType = {
+    ratePerPeriod: Decimal | null
+  }
+
+  export type GuestTeachingRateSumAggregateOutputType = {
+    ratePerPeriod: Decimal | null
+  }
+
+  export type GuestTeachingRateMinAggregateOutputType = {
+    id: string | null
+    active: boolean | null
+    description: string | null
+    deletedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    createdBy: string | null
+    configId: string | null
+    academicRankTypeId: string | null
+    academicDegreeTypeId: string | null
+    isForeign: boolean | null
+    ratePerPeriod: Decimal | null
+  }
+
+  export type GuestTeachingRateMaxAggregateOutputType = {
+    id: string | null
+    active: boolean | null
+    description: string | null
+    deletedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    createdBy: string | null
+    configId: string | null
+    academicRankTypeId: string | null
+    academicDegreeTypeId: string | null
+    isForeign: boolean | null
+    ratePerPeriod: Decimal | null
+  }
+
+  export type GuestTeachingRateCountAggregateOutputType = {
+    id: number
+    active: number
+    description: number
+    deletedAt: number
+    createdAt: number
+    updatedAt: number
+    createdBy: number
+    configId: number
+    academicRankTypeId: number
+    academicDegreeTypeId: number
+    isForeign: number
+    ratePerPeriod: number
+    _all: number
+  }
+
+
+  export type GuestTeachingRateAvgAggregateInputType = {
+    ratePerPeriod?: true
+  }
+
+  export type GuestTeachingRateSumAggregateInputType = {
+    ratePerPeriod?: true
+  }
+
+  export type GuestTeachingRateMinAggregateInputType = {
+    id?: true
+    active?: true
+    description?: true
+    deletedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+    configId?: true
+    academicRankTypeId?: true
+    academicDegreeTypeId?: true
+    isForeign?: true
+    ratePerPeriod?: true
+  }
+
+  export type GuestTeachingRateMaxAggregateInputType = {
+    id?: true
+    active?: true
+    description?: true
+    deletedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+    configId?: true
+    academicRankTypeId?: true
+    academicDegreeTypeId?: true
+    isForeign?: true
+    ratePerPeriod?: true
+  }
+
+  export type GuestTeachingRateCountAggregateInputType = {
+    id?: true
+    active?: true
+    description?: true
+    deletedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+    configId?: true
+    academicRankTypeId?: true
+    academicDegreeTypeId?: true
+    isForeign?: true
+    ratePerPeriod?: true
+    _all?: true
+  }
+
+  export type GuestTeachingRateAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which GuestTeachingRate to aggregate.
+     */
+    where?: GuestTeachingRateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GuestTeachingRates to fetch.
+     */
+    orderBy?: GuestTeachingRateOrderByWithRelationInput | GuestTeachingRateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: GuestTeachingRateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GuestTeachingRates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GuestTeachingRates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned GuestTeachingRates
+    **/
+    _count?: true | GuestTeachingRateCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: GuestTeachingRateAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: GuestTeachingRateSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: GuestTeachingRateMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: GuestTeachingRateMaxAggregateInputType
+  }
+
+  export type GetGuestTeachingRateAggregateType<T extends GuestTeachingRateAggregateArgs> = {
+        [P in keyof T & keyof AggregateGuestTeachingRate]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateGuestTeachingRate[P]>
+      : GetScalarType<T[P], AggregateGuestTeachingRate[P]>
+  }
+
+
+
+
+  export type GuestTeachingRateGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: GuestTeachingRateWhereInput
+    orderBy?: GuestTeachingRateOrderByWithAggregationInput | GuestTeachingRateOrderByWithAggregationInput[]
+    by: GuestTeachingRateScalarFieldEnum[] | GuestTeachingRateScalarFieldEnum
+    having?: GuestTeachingRateScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: GuestTeachingRateCountAggregateInputType | true
+    _avg?: GuestTeachingRateAvgAggregateInputType
+    _sum?: GuestTeachingRateSumAggregateInputType
+    _min?: GuestTeachingRateMinAggregateInputType
+    _max?: GuestTeachingRateMaxAggregateInputType
+  }
+
+  export type GuestTeachingRateGroupByOutputType = {
+    id: string
+    active: boolean
+    description: string | null
+    deletedAt: Date | null
+    createdAt: Date
+    updatedAt: Date
+    createdBy: string | null
+    configId: string
+    academicRankTypeId: string | null
+    academicDegreeTypeId: string | null
+    isForeign: boolean
+    ratePerPeriod: Decimal
+    _count: GuestTeachingRateCountAggregateOutputType | null
+    _avg: GuestTeachingRateAvgAggregateOutputType | null
+    _sum: GuestTeachingRateSumAggregateOutputType | null
+    _min: GuestTeachingRateMinAggregateOutputType | null
+    _max: GuestTeachingRateMaxAggregateOutputType | null
+  }
+
+  type GetGuestTeachingRateGroupByPayload<T extends GuestTeachingRateGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<GuestTeachingRateGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof GuestTeachingRateGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], GuestTeachingRateGroupByOutputType[P]>
+            : GetScalarType<T[P], GuestTeachingRateGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type GuestTeachingRateSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    active?: boolean
+    description?: boolean
+    deletedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    configId?: boolean
+    academicRankTypeId?: boolean
+    academicDegreeTypeId?: boolean
+    isForeign?: boolean
+    ratePerPeriod?: boolean
+    config?: boolean | GuestTeachingRateConfigDefaultArgs<ExtArgs>
+    academicRankType?: boolean | GuestTeachingRate$academicRankTypeArgs<ExtArgs>
+    academicDegreeType?: boolean | GuestTeachingRate$academicDegreeTypeArgs<ExtArgs>
+  }, ExtArgs["result"]["guestTeachingRate"]>
+
+  export type GuestTeachingRateSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    active?: boolean
+    description?: boolean
+    deletedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    configId?: boolean
+    academicRankTypeId?: boolean
+    academicDegreeTypeId?: boolean
+    isForeign?: boolean
+    ratePerPeriod?: boolean
+    config?: boolean | GuestTeachingRateConfigDefaultArgs<ExtArgs>
+    academicRankType?: boolean | GuestTeachingRate$academicRankTypeArgs<ExtArgs>
+    academicDegreeType?: boolean | GuestTeachingRate$academicDegreeTypeArgs<ExtArgs>
+  }, ExtArgs["result"]["guestTeachingRate"]>
+
+  export type GuestTeachingRateSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    active?: boolean
+    description?: boolean
+    deletedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    configId?: boolean
+    academicRankTypeId?: boolean
+    academicDegreeTypeId?: boolean
+    isForeign?: boolean
+    ratePerPeriod?: boolean
+    config?: boolean | GuestTeachingRateConfigDefaultArgs<ExtArgs>
+    academicRankType?: boolean | GuestTeachingRate$academicRankTypeArgs<ExtArgs>
+    academicDegreeType?: boolean | GuestTeachingRate$academicDegreeTypeArgs<ExtArgs>
+  }, ExtArgs["result"]["guestTeachingRate"]>
+
+  export type GuestTeachingRateSelectScalar = {
+    id?: boolean
+    active?: boolean
+    description?: boolean
+    deletedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    configId?: boolean
+    academicRankTypeId?: boolean
+    academicDegreeTypeId?: boolean
+    isForeign?: boolean
+    ratePerPeriod?: boolean
+  }
+
+  export type GuestTeachingRateOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "configId" | "academicRankTypeId" | "academicDegreeTypeId" | "isForeign" | "ratePerPeriod", ExtArgs["result"]["guestTeachingRate"]>
+  export type GuestTeachingRateInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    config?: boolean | GuestTeachingRateConfigDefaultArgs<ExtArgs>
+    academicRankType?: boolean | GuestTeachingRate$academicRankTypeArgs<ExtArgs>
+    academicDegreeType?: boolean | GuestTeachingRate$academicDegreeTypeArgs<ExtArgs>
+  }
+  export type GuestTeachingRateIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    config?: boolean | GuestTeachingRateConfigDefaultArgs<ExtArgs>
+    academicRankType?: boolean | GuestTeachingRate$academicRankTypeArgs<ExtArgs>
+    academicDegreeType?: boolean | GuestTeachingRate$academicDegreeTypeArgs<ExtArgs>
+  }
+  export type GuestTeachingRateIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    config?: boolean | GuestTeachingRateConfigDefaultArgs<ExtArgs>
+    academicRankType?: boolean | GuestTeachingRate$academicRankTypeArgs<ExtArgs>
+    academicDegreeType?: boolean | GuestTeachingRate$academicDegreeTypeArgs<ExtArgs>
+  }
+
+  export type $GuestTeachingRatePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "GuestTeachingRate"
+    objects: {
+      config: Prisma.$GuestTeachingRateConfigPayload<ExtArgs>
+      academicRankType: Prisma.$DM_HocHamPayload<ExtArgs> | null
+      academicDegreeType: Prisma.$DM_HocViPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      active: boolean
+      description: string | null
+      deletedAt: Date | null
+      createdAt: Date
+      updatedAt: Date
+      createdBy: string | null
+      configId: string
+      academicRankTypeId: string | null
+      academicDegreeTypeId: string | null
+      isForeign: boolean
+      ratePerPeriod: Prisma.Decimal
+    }, ExtArgs["result"]["guestTeachingRate"]>
+    composites: {}
+  }
+
+  type GuestTeachingRateGetPayload<S extends boolean | null | undefined | GuestTeachingRateDefaultArgs> = $Result.GetResult<Prisma.$GuestTeachingRatePayload, S>
+
+  type GuestTeachingRateCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<GuestTeachingRateFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: GuestTeachingRateCountAggregateInputType | true
+    }
+
+  export interface GuestTeachingRateDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['GuestTeachingRate'], meta: { name: 'GuestTeachingRate' } }
+    /**
+     * Find zero or one GuestTeachingRate that matches the filter.
+     * @param {GuestTeachingRateFindUniqueArgs} args - Arguments to find a GuestTeachingRate
+     * @example
+     * // Get one GuestTeachingRate
+     * const guestTeachingRate = await prisma.guestTeachingRate.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends GuestTeachingRateFindUniqueArgs>(args: SelectSubset<T, GuestTeachingRateFindUniqueArgs<ExtArgs>>): Prisma__GuestTeachingRateClient<$Result.GetResult<Prisma.$GuestTeachingRatePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one GuestTeachingRate that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {GuestTeachingRateFindUniqueOrThrowArgs} args - Arguments to find a GuestTeachingRate
+     * @example
+     * // Get one GuestTeachingRate
+     * const guestTeachingRate = await prisma.guestTeachingRate.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends GuestTeachingRateFindUniqueOrThrowArgs>(args: SelectSubset<T, GuestTeachingRateFindUniqueOrThrowArgs<ExtArgs>>): Prisma__GuestTeachingRateClient<$Result.GetResult<Prisma.$GuestTeachingRatePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first GuestTeachingRate that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GuestTeachingRateFindFirstArgs} args - Arguments to find a GuestTeachingRate
+     * @example
+     * // Get one GuestTeachingRate
+     * const guestTeachingRate = await prisma.guestTeachingRate.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends GuestTeachingRateFindFirstArgs>(args?: SelectSubset<T, GuestTeachingRateFindFirstArgs<ExtArgs>>): Prisma__GuestTeachingRateClient<$Result.GetResult<Prisma.$GuestTeachingRatePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first GuestTeachingRate that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GuestTeachingRateFindFirstOrThrowArgs} args - Arguments to find a GuestTeachingRate
+     * @example
+     * // Get one GuestTeachingRate
+     * const guestTeachingRate = await prisma.guestTeachingRate.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends GuestTeachingRateFindFirstOrThrowArgs>(args?: SelectSubset<T, GuestTeachingRateFindFirstOrThrowArgs<ExtArgs>>): Prisma__GuestTeachingRateClient<$Result.GetResult<Prisma.$GuestTeachingRatePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more GuestTeachingRates that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GuestTeachingRateFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all GuestTeachingRates
+     * const guestTeachingRates = await prisma.guestTeachingRate.findMany()
+     * 
+     * // Get first 10 GuestTeachingRates
+     * const guestTeachingRates = await prisma.guestTeachingRate.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const guestTeachingRateWithIdOnly = await prisma.guestTeachingRate.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends GuestTeachingRateFindManyArgs>(args?: SelectSubset<T, GuestTeachingRateFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GuestTeachingRatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a GuestTeachingRate.
+     * @param {GuestTeachingRateCreateArgs} args - Arguments to create a GuestTeachingRate.
+     * @example
+     * // Create one GuestTeachingRate
+     * const GuestTeachingRate = await prisma.guestTeachingRate.create({
+     *   data: {
+     *     // ... data to create a GuestTeachingRate
+     *   }
+     * })
+     * 
+     */
+    create<T extends GuestTeachingRateCreateArgs>(args: SelectSubset<T, GuestTeachingRateCreateArgs<ExtArgs>>): Prisma__GuestTeachingRateClient<$Result.GetResult<Prisma.$GuestTeachingRatePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many GuestTeachingRates.
+     * @param {GuestTeachingRateCreateManyArgs} args - Arguments to create many GuestTeachingRates.
+     * @example
+     * // Create many GuestTeachingRates
+     * const guestTeachingRate = await prisma.guestTeachingRate.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends GuestTeachingRateCreateManyArgs>(args?: SelectSubset<T, GuestTeachingRateCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many GuestTeachingRates and returns the data saved in the database.
+     * @param {GuestTeachingRateCreateManyAndReturnArgs} args - Arguments to create many GuestTeachingRates.
+     * @example
+     * // Create many GuestTeachingRates
+     * const guestTeachingRate = await prisma.guestTeachingRate.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many GuestTeachingRates and only return the `id`
+     * const guestTeachingRateWithIdOnly = await prisma.guestTeachingRate.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends GuestTeachingRateCreateManyAndReturnArgs>(args?: SelectSubset<T, GuestTeachingRateCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GuestTeachingRatePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a GuestTeachingRate.
+     * @param {GuestTeachingRateDeleteArgs} args - Arguments to delete one GuestTeachingRate.
+     * @example
+     * // Delete one GuestTeachingRate
+     * const GuestTeachingRate = await prisma.guestTeachingRate.delete({
+     *   where: {
+     *     // ... filter to delete one GuestTeachingRate
+     *   }
+     * })
+     * 
+     */
+    delete<T extends GuestTeachingRateDeleteArgs>(args: SelectSubset<T, GuestTeachingRateDeleteArgs<ExtArgs>>): Prisma__GuestTeachingRateClient<$Result.GetResult<Prisma.$GuestTeachingRatePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one GuestTeachingRate.
+     * @param {GuestTeachingRateUpdateArgs} args - Arguments to update one GuestTeachingRate.
+     * @example
+     * // Update one GuestTeachingRate
+     * const guestTeachingRate = await prisma.guestTeachingRate.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends GuestTeachingRateUpdateArgs>(args: SelectSubset<T, GuestTeachingRateUpdateArgs<ExtArgs>>): Prisma__GuestTeachingRateClient<$Result.GetResult<Prisma.$GuestTeachingRatePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more GuestTeachingRates.
+     * @param {GuestTeachingRateDeleteManyArgs} args - Arguments to filter GuestTeachingRates to delete.
+     * @example
+     * // Delete a few GuestTeachingRates
+     * const { count } = await prisma.guestTeachingRate.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends GuestTeachingRateDeleteManyArgs>(args?: SelectSubset<T, GuestTeachingRateDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more GuestTeachingRates.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GuestTeachingRateUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many GuestTeachingRates
+     * const guestTeachingRate = await prisma.guestTeachingRate.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends GuestTeachingRateUpdateManyArgs>(args: SelectSubset<T, GuestTeachingRateUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more GuestTeachingRates and returns the data updated in the database.
+     * @param {GuestTeachingRateUpdateManyAndReturnArgs} args - Arguments to update many GuestTeachingRates.
+     * @example
+     * // Update many GuestTeachingRates
+     * const guestTeachingRate = await prisma.guestTeachingRate.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more GuestTeachingRates and only return the `id`
+     * const guestTeachingRateWithIdOnly = await prisma.guestTeachingRate.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends GuestTeachingRateUpdateManyAndReturnArgs>(args: SelectSubset<T, GuestTeachingRateUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GuestTeachingRatePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one GuestTeachingRate.
+     * @param {GuestTeachingRateUpsertArgs} args - Arguments to update or create a GuestTeachingRate.
+     * @example
+     * // Update or create a GuestTeachingRate
+     * const guestTeachingRate = await prisma.guestTeachingRate.upsert({
+     *   create: {
+     *     // ... data to create a GuestTeachingRate
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the GuestTeachingRate we want to update
+     *   }
+     * })
+     */
+    upsert<T extends GuestTeachingRateUpsertArgs>(args: SelectSubset<T, GuestTeachingRateUpsertArgs<ExtArgs>>): Prisma__GuestTeachingRateClient<$Result.GetResult<Prisma.$GuestTeachingRatePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of GuestTeachingRates.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GuestTeachingRateCountArgs} args - Arguments to filter GuestTeachingRates to count.
+     * @example
+     * // Count the number of GuestTeachingRates
+     * const count = await prisma.guestTeachingRate.count({
+     *   where: {
+     *     // ... the filter for the GuestTeachingRates we want to count
+     *   }
+     * })
+    **/
+    count<T extends GuestTeachingRateCountArgs>(
+      args?: Subset<T, GuestTeachingRateCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], GuestTeachingRateCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a GuestTeachingRate.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GuestTeachingRateAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends GuestTeachingRateAggregateArgs>(args: Subset<T, GuestTeachingRateAggregateArgs>): Prisma.PrismaPromise<GetGuestTeachingRateAggregateType<T>>
+
+    /**
+     * Group by GuestTeachingRate.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GuestTeachingRateGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends GuestTeachingRateGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: GuestTeachingRateGroupByArgs['orderBy'] }
+        : { orderBy?: GuestTeachingRateGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, GuestTeachingRateGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetGuestTeachingRateGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the GuestTeachingRate model
+   */
+  readonly fields: GuestTeachingRateFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for GuestTeachingRate.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__GuestTeachingRateClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    config<T extends GuestTeachingRateConfigDefaultArgs<ExtArgs> = {}>(args?: Subset<T, GuestTeachingRateConfigDefaultArgs<ExtArgs>>): Prisma__GuestTeachingRateConfigClient<$Result.GetResult<Prisma.$GuestTeachingRateConfigPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    academicRankType<T extends GuestTeachingRate$academicRankTypeArgs<ExtArgs> = {}>(args?: Subset<T, GuestTeachingRate$academicRankTypeArgs<ExtArgs>>): Prisma__DM_HocHamClient<$Result.GetResult<Prisma.$DM_HocHamPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    academicDegreeType<T extends GuestTeachingRate$academicDegreeTypeArgs<ExtArgs> = {}>(args?: Subset<T, GuestTeachingRate$academicDegreeTypeArgs<ExtArgs>>): Prisma__DM_HocViClient<$Result.GetResult<Prisma.$DM_HocViPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the GuestTeachingRate model
+   */
+  interface GuestTeachingRateFieldRefs {
+    readonly id: FieldRef<"GuestTeachingRate", 'String'>
+    readonly active: FieldRef<"GuestTeachingRate", 'Boolean'>
+    readonly description: FieldRef<"GuestTeachingRate", 'String'>
+    readonly deletedAt: FieldRef<"GuestTeachingRate", 'DateTime'>
+    readonly createdAt: FieldRef<"GuestTeachingRate", 'DateTime'>
+    readonly updatedAt: FieldRef<"GuestTeachingRate", 'DateTime'>
+    readonly createdBy: FieldRef<"GuestTeachingRate", 'String'>
+    readonly configId: FieldRef<"GuestTeachingRate", 'String'>
+    readonly academicRankTypeId: FieldRef<"GuestTeachingRate", 'String'>
+    readonly academicDegreeTypeId: FieldRef<"GuestTeachingRate", 'String'>
+    readonly isForeign: FieldRef<"GuestTeachingRate", 'Boolean'>
+    readonly ratePerPeriod: FieldRef<"GuestTeachingRate", 'Decimal'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * GuestTeachingRate findUnique
+   */
+  export type GuestTeachingRateFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GuestTeachingRate
+     */
+    select?: GuestTeachingRateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GuestTeachingRate
+     */
+    omit?: GuestTeachingRateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GuestTeachingRateInclude<ExtArgs> | null
+    /**
+     * Filter, which GuestTeachingRate to fetch.
+     */
+    where: GuestTeachingRateWhereUniqueInput
+  }
+
+  /**
+   * GuestTeachingRate findUniqueOrThrow
+   */
+  export type GuestTeachingRateFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GuestTeachingRate
+     */
+    select?: GuestTeachingRateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GuestTeachingRate
+     */
+    omit?: GuestTeachingRateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GuestTeachingRateInclude<ExtArgs> | null
+    /**
+     * Filter, which GuestTeachingRate to fetch.
+     */
+    where: GuestTeachingRateWhereUniqueInput
+  }
+
+  /**
+   * GuestTeachingRate findFirst
+   */
+  export type GuestTeachingRateFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GuestTeachingRate
+     */
+    select?: GuestTeachingRateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GuestTeachingRate
+     */
+    omit?: GuestTeachingRateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GuestTeachingRateInclude<ExtArgs> | null
+    /**
+     * Filter, which GuestTeachingRate to fetch.
+     */
+    where?: GuestTeachingRateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GuestTeachingRates to fetch.
+     */
+    orderBy?: GuestTeachingRateOrderByWithRelationInput | GuestTeachingRateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for GuestTeachingRates.
+     */
+    cursor?: GuestTeachingRateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GuestTeachingRates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GuestTeachingRates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of GuestTeachingRates.
+     */
+    distinct?: GuestTeachingRateScalarFieldEnum | GuestTeachingRateScalarFieldEnum[]
+  }
+
+  /**
+   * GuestTeachingRate findFirstOrThrow
+   */
+  export type GuestTeachingRateFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GuestTeachingRate
+     */
+    select?: GuestTeachingRateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GuestTeachingRate
+     */
+    omit?: GuestTeachingRateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GuestTeachingRateInclude<ExtArgs> | null
+    /**
+     * Filter, which GuestTeachingRate to fetch.
+     */
+    where?: GuestTeachingRateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GuestTeachingRates to fetch.
+     */
+    orderBy?: GuestTeachingRateOrderByWithRelationInput | GuestTeachingRateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for GuestTeachingRates.
+     */
+    cursor?: GuestTeachingRateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GuestTeachingRates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GuestTeachingRates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of GuestTeachingRates.
+     */
+    distinct?: GuestTeachingRateScalarFieldEnum | GuestTeachingRateScalarFieldEnum[]
+  }
+
+  /**
+   * GuestTeachingRate findMany
+   */
+  export type GuestTeachingRateFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GuestTeachingRate
+     */
+    select?: GuestTeachingRateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GuestTeachingRate
+     */
+    omit?: GuestTeachingRateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GuestTeachingRateInclude<ExtArgs> | null
+    /**
+     * Filter, which GuestTeachingRates to fetch.
+     */
+    where?: GuestTeachingRateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GuestTeachingRates to fetch.
+     */
+    orderBy?: GuestTeachingRateOrderByWithRelationInput | GuestTeachingRateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing GuestTeachingRates.
+     */
+    cursor?: GuestTeachingRateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GuestTeachingRates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GuestTeachingRates.
+     */
+    skip?: number
+    distinct?: GuestTeachingRateScalarFieldEnum | GuestTeachingRateScalarFieldEnum[]
+  }
+
+  /**
+   * GuestTeachingRate create
+   */
+  export type GuestTeachingRateCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GuestTeachingRate
+     */
+    select?: GuestTeachingRateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GuestTeachingRate
+     */
+    omit?: GuestTeachingRateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GuestTeachingRateInclude<ExtArgs> | null
+    /**
+     * The data needed to create a GuestTeachingRate.
+     */
+    data: XOR<GuestTeachingRateCreateInput, GuestTeachingRateUncheckedCreateInput>
+  }
+
+  /**
+   * GuestTeachingRate createMany
+   */
+  export type GuestTeachingRateCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many GuestTeachingRates.
+     */
+    data: GuestTeachingRateCreateManyInput | GuestTeachingRateCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * GuestTeachingRate createManyAndReturn
+   */
+  export type GuestTeachingRateCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GuestTeachingRate
+     */
+    select?: GuestTeachingRateSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the GuestTeachingRate
+     */
+    omit?: GuestTeachingRateOmit<ExtArgs> | null
+    /**
+     * The data used to create many GuestTeachingRates.
+     */
+    data: GuestTeachingRateCreateManyInput | GuestTeachingRateCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GuestTeachingRateIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * GuestTeachingRate update
+   */
+  export type GuestTeachingRateUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GuestTeachingRate
+     */
+    select?: GuestTeachingRateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GuestTeachingRate
+     */
+    omit?: GuestTeachingRateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GuestTeachingRateInclude<ExtArgs> | null
+    /**
+     * The data needed to update a GuestTeachingRate.
+     */
+    data: XOR<GuestTeachingRateUpdateInput, GuestTeachingRateUncheckedUpdateInput>
+    /**
+     * Choose, which GuestTeachingRate to update.
+     */
+    where: GuestTeachingRateWhereUniqueInput
+  }
+
+  /**
+   * GuestTeachingRate updateMany
+   */
+  export type GuestTeachingRateUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update GuestTeachingRates.
+     */
+    data: XOR<GuestTeachingRateUpdateManyMutationInput, GuestTeachingRateUncheckedUpdateManyInput>
+    /**
+     * Filter which GuestTeachingRates to update
+     */
+    where?: GuestTeachingRateWhereInput
+    /**
+     * Limit how many GuestTeachingRates to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * GuestTeachingRate updateManyAndReturn
+   */
+  export type GuestTeachingRateUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GuestTeachingRate
+     */
+    select?: GuestTeachingRateSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the GuestTeachingRate
+     */
+    omit?: GuestTeachingRateOmit<ExtArgs> | null
+    /**
+     * The data used to update GuestTeachingRates.
+     */
+    data: XOR<GuestTeachingRateUpdateManyMutationInput, GuestTeachingRateUncheckedUpdateManyInput>
+    /**
+     * Filter which GuestTeachingRates to update
+     */
+    where?: GuestTeachingRateWhereInput
+    /**
+     * Limit how many GuestTeachingRates to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GuestTeachingRateIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * GuestTeachingRate upsert
+   */
+  export type GuestTeachingRateUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GuestTeachingRate
+     */
+    select?: GuestTeachingRateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GuestTeachingRate
+     */
+    omit?: GuestTeachingRateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GuestTeachingRateInclude<ExtArgs> | null
+    /**
+     * The filter to search for the GuestTeachingRate to update in case it exists.
+     */
+    where: GuestTeachingRateWhereUniqueInput
+    /**
+     * In case the GuestTeachingRate found by the `where` argument doesn't exist, create a new GuestTeachingRate with this data.
+     */
+    create: XOR<GuestTeachingRateCreateInput, GuestTeachingRateUncheckedCreateInput>
+    /**
+     * In case the GuestTeachingRate was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<GuestTeachingRateUpdateInput, GuestTeachingRateUncheckedUpdateInput>
+  }
+
+  /**
+   * GuestTeachingRate delete
+   */
+  export type GuestTeachingRateDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GuestTeachingRate
+     */
+    select?: GuestTeachingRateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GuestTeachingRate
+     */
+    omit?: GuestTeachingRateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GuestTeachingRateInclude<ExtArgs> | null
+    /**
+     * Filter which GuestTeachingRate to delete.
+     */
+    where: GuestTeachingRateWhereUniqueInput
+  }
+
+  /**
+   * GuestTeachingRate deleteMany
+   */
+  export type GuestTeachingRateDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which GuestTeachingRates to delete
+     */
+    where?: GuestTeachingRateWhereInput
+    /**
+     * Limit how many GuestTeachingRates to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * GuestTeachingRate.academicRankType
+   */
+  export type GuestTeachingRate$academicRankTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DM_HocHam
+     */
+    select?: DM_HocHamSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DM_HocHam
+     */
+    omit?: DM_HocHamOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DM_HocHamInclude<ExtArgs> | null
+    where?: DM_HocHamWhereInput
+  }
+
+  /**
+   * GuestTeachingRate.academicDegreeType
+   */
+  export type GuestTeachingRate$academicDegreeTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DM_HocVi
+     */
+    select?: DM_HocViSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DM_HocVi
+     */
+    omit?: DM_HocViOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DM_HocViInclude<ExtArgs> | null
+    where?: DM_HocViWhereInput
+  }
+
+  /**
+   * GuestTeachingRate without action
+   */
+  export type GuestTeachingRateDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GuestTeachingRate
+     */
+    select?: GuestTeachingRateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GuestTeachingRate
+     */
+    omit?: GuestTeachingRateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GuestTeachingRateInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model GuestTeachingPayment
+   */
+
+  export type AggregateGuestTeachingPayment = {
+    _count: GuestTeachingPaymentCountAggregateOutputType | null
+    _avg: GuestTeachingPaymentAvgAggregateOutputType | null
+    _sum: GuestTeachingPaymentSumAggregateOutputType | null
+    _min: GuestTeachingPaymentMinAggregateOutputType | null
+    _max: GuestTeachingPaymentMaxAggregateOutputType | null
+  }
+
+  export type GuestTeachingPaymentAvgAggregateOutputType = {
+    totalPeriods: number | null
+    ratePerPeriod: Decimal | null
+    amount: Decimal | null
+  }
+
+  export type GuestTeachingPaymentSumAggregateOutputType = {
+    totalPeriods: number | null
+    ratePerPeriod: Decimal | null
+    amount: Decimal | null
+  }
+
+  export type GuestTeachingPaymentMinAggregateOutputType = {
+    id: string | null
+    code: string | null
+    active: boolean | null
+    description: string | null
+    deletedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    createdBy: string | null
+    lecturerId: string | null
+    semesterId: string | null
+    hiringOrgId: string | null
+    totalPeriods: number | null
+    ratePerPeriod: Decimal | null
+    amount: Decimal | null
+    status: $Enums.PaymentStatus | null
+    paymentDate: Date | null
+    transactionCode: string | null
+    decisionRef: string | null
+  }
+
+  export type GuestTeachingPaymentMaxAggregateOutputType = {
+    id: string | null
+    code: string | null
+    active: boolean | null
+    description: string | null
+    deletedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    createdBy: string | null
+    lecturerId: string | null
+    semesterId: string | null
+    hiringOrgId: string | null
+    totalPeriods: number | null
+    ratePerPeriod: Decimal | null
+    amount: Decimal | null
+    status: $Enums.PaymentStatus | null
+    paymentDate: Date | null
+    transactionCode: string | null
+    decisionRef: string | null
+  }
+
+  export type GuestTeachingPaymentCountAggregateOutputType = {
+    id: number
+    code: number
+    active: number
+    description: number
+    deletedAt: number
+    createdAt: number
+    updatedAt: number
+    createdBy: number
+    lecturerId: number
+    semesterId: number
+    hiringOrgId: number
+    totalPeriods: number
+    ratePerPeriod: number
+    amount: number
+    status: number
+    paymentDate: number
+    transactionCode: number
+    decisionRef: number
+    _all: number
+  }
+
+
+  export type GuestTeachingPaymentAvgAggregateInputType = {
+    totalPeriods?: true
+    ratePerPeriod?: true
+    amount?: true
+  }
+
+  export type GuestTeachingPaymentSumAggregateInputType = {
+    totalPeriods?: true
+    ratePerPeriod?: true
+    amount?: true
+  }
+
+  export type GuestTeachingPaymentMinAggregateInputType = {
+    id?: true
+    code?: true
+    active?: true
+    description?: true
+    deletedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+    lecturerId?: true
+    semesterId?: true
+    hiringOrgId?: true
+    totalPeriods?: true
+    ratePerPeriod?: true
+    amount?: true
+    status?: true
+    paymentDate?: true
+    transactionCode?: true
+    decisionRef?: true
+  }
+
+  export type GuestTeachingPaymentMaxAggregateInputType = {
+    id?: true
+    code?: true
+    active?: true
+    description?: true
+    deletedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+    lecturerId?: true
+    semesterId?: true
+    hiringOrgId?: true
+    totalPeriods?: true
+    ratePerPeriod?: true
+    amount?: true
+    status?: true
+    paymentDate?: true
+    transactionCode?: true
+    decisionRef?: true
+  }
+
+  export type GuestTeachingPaymentCountAggregateInputType = {
+    id?: true
+    code?: true
+    active?: true
+    description?: true
+    deletedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    createdBy?: true
+    lecturerId?: true
+    semesterId?: true
+    hiringOrgId?: true
+    totalPeriods?: true
+    ratePerPeriod?: true
+    amount?: true
+    status?: true
+    paymentDate?: true
+    transactionCode?: true
+    decisionRef?: true
+    _all?: true
+  }
+
+  export type GuestTeachingPaymentAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which GuestTeachingPayment to aggregate.
+     */
+    where?: GuestTeachingPaymentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GuestTeachingPayments to fetch.
+     */
+    orderBy?: GuestTeachingPaymentOrderByWithRelationInput | GuestTeachingPaymentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: GuestTeachingPaymentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GuestTeachingPayments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GuestTeachingPayments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned GuestTeachingPayments
+    **/
+    _count?: true | GuestTeachingPaymentCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: GuestTeachingPaymentAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: GuestTeachingPaymentSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: GuestTeachingPaymentMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: GuestTeachingPaymentMaxAggregateInputType
+  }
+
+  export type GetGuestTeachingPaymentAggregateType<T extends GuestTeachingPaymentAggregateArgs> = {
+        [P in keyof T & keyof AggregateGuestTeachingPayment]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateGuestTeachingPayment[P]>
+      : GetScalarType<T[P], AggregateGuestTeachingPayment[P]>
+  }
+
+
+
+
+  export type GuestTeachingPaymentGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: GuestTeachingPaymentWhereInput
+    orderBy?: GuestTeachingPaymentOrderByWithAggregationInput | GuestTeachingPaymentOrderByWithAggregationInput[]
+    by: GuestTeachingPaymentScalarFieldEnum[] | GuestTeachingPaymentScalarFieldEnum
+    having?: GuestTeachingPaymentScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: GuestTeachingPaymentCountAggregateInputType | true
+    _avg?: GuestTeachingPaymentAvgAggregateInputType
+    _sum?: GuestTeachingPaymentSumAggregateInputType
+    _min?: GuestTeachingPaymentMinAggregateInputType
+    _max?: GuestTeachingPaymentMaxAggregateInputType
+  }
+
+  export type GuestTeachingPaymentGroupByOutputType = {
+    id: string
+    code: string | null
+    active: boolean
+    description: string | null
+    deletedAt: Date | null
+    createdAt: Date
+    updatedAt: Date
+    createdBy: string | null
+    lecturerId: string
+    semesterId: string
+    hiringOrgId: string
+    totalPeriods: number
+    ratePerPeriod: Decimal
+    amount: Decimal
+    status: $Enums.PaymentStatus
+    paymentDate: Date | null
+    transactionCode: string | null
+    decisionRef: string | null
+    _count: GuestTeachingPaymentCountAggregateOutputType | null
+    _avg: GuestTeachingPaymentAvgAggregateOutputType | null
+    _sum: GuestTeachingPaymentSumAggregateOutputType | null
+    _min: GuestTeachingPaymentMinAggregateOutputType | null
+    _max: GuestTeachingPaymentMaxAggregateOutputType | null
+  }
+
+  type GetGuestTeachingPaymentGroupByPayload<T extends GuestTeachingPaymentGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<GuestTeachingPaymentGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof GuestTeachingPaymentGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], GuestTeachingPaymentGroupByOutputType[P]>
+            : GetScalarType<T[P], GuestTeachingPaymentGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type GuestTeachingPaymentSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    code?: boolean
+    active?: boolean
+    description?: boolean
+    deletedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    lecturerId?: boolean
+    semesterId?: boolean
+    hiringOrgId?: boolean
+    totalPeriods?: boolean
+    ratePerPeriod?: boolean
+    amount?: boolean
+    status?: boolean
+    paymentDate?: boolean
+    transactionCode?: boolean
+    decisionRef?: boolean
+    lecturer?: boolean | LecturerDefaultArgs<ExtArgs>
+    semester?: boolean | SemesterDefaultArgs<ExtArgs>
+    hiringOrg?: boolean | DM_DonViDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["guestTeachingPayment"]>
+
+  export type GuestTeachingPaymentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    code?: boolean
+    active?: boolean
+    description?: boolean
+    deletedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    lecturerId?: boolean
+    semesterId?: boolean
+    hiringOrgId?: boolean
+    totalPeriods?: boolean
+    ratePerPeriod?: boolean
+    amount?: boolean
+    status?: boolean
+    paymentDate?: boolean
+    transactionCode?: boolean
+    decisionRef?: boolean
+    lecturer?: boolean | LecturerDefaultArgs<ExtArgs>
+    semester?: boolean | SemesterDefaultArgs<ExtArgs>
+    hiringOrg?: boolean | DM_DonViDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["guestTeachingPayment"]>
+
+  export type GuestTeachingPaymentSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    code?: boolean
+    active?: boolean
+    description?: boolean
+    deletedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    lecturerId?: boolean
+    semesterId?: boolean
+    hiringOrgId?: boolean
+    totalPeriods?: boolean
+    ratePerPeriod?: boolean
+    amount?: boolean
+    status?: boolean
+    paymentDate?: boolean
+    transactionCode?: boolean
+    decisionRef?: boolean
+    lecturer?: boolean | LecturerDefaultArgs<ExtArgs>
+    semester?: boolean | SemesterDefaultArgs<ExtArgs>
+    hiringOrg?: boolean | DM_DonViDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["guestTeachingPayment"]>
+
+  export type GuestTeachingPaymentSelectScalar = {
+    id?: boolean
+    code?: boolean
+    active?: boolean
+    description?: boolean
+    deletedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean
+    lecturerId?: boolean
+    semesterId?: boolean
+    hiringOrgId?: boolean
+    totalPeriods?: boolean
+    ratePerPeriod?: boolean
+    amount?: boolean
+    status?: boolean
+    paymentDate?: boolean
+    transactionCode?: boolean
+    decisionRef?: boolean
+  }
+
+  export type GuestTeachingPaymentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "lecturerId" | "semesterId" | "hiringOrgId" | "totalPeriods" | "ratePerPeriod" | "amount" | "status" | "paymentDate" | "transactionCode" | "decisionRef", ExtArgs["result"]["guestTeachingPayment"]>
+  export type GuestTeachingPaymentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    lecturer?: boolean | LecturerDefaultArgs<ExtArgs>
+    semester?: boolean | SemesterDefaultArgs<ExtArgs>
+    hiringOrg?: boolean | DM_DonViDefaultArgs<ExtArgs>
+  }
+  export type GuestTeachingPaymentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    lecturer?: boolean | LecturerDefaultArgs<ExtArgs>
+    semester?: boolean | SemesterDefaultArgs<ExtArgs>
+    hiringOrg?: boolean | DM_DonViDefaultArgs<ExtArgs>
+  }
+  export type GuestTeachingPaymentIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    lecturer?: boolean | LecturerDefaultArgs<ExtArgs>
+    semester?: boolean | SemesterDefaultArgs<ExtArgs>
+    hiringOrg?: boolean | DM_DonViDefaultArgs<ExtArgs>
+  }
+
+  export type $GuestTeachingPaymentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "GuestTeachingPayment"
+    objects: {
+      lecturer: Prisma.$LecturerPayload<ExtArgs>
+      semester: Prisma.$SemesterPayload<ExtArgs>
+      hiringOrg: Prisma.$DM_DonViPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      code: string | null
+      active: boolean
+      description: string | null
+      deletedAt: Date | null
+      createdAt: Date
+      updatedAt: Date
+      createdBy: string | null
+      lecturerId: string
+      semesterId: string
+      hiringOrgId: string
+      totalPeriods: number
+      ratePerPeriod: Prisma.Decimal
+      amount: Prisma.Decimal
+      status: $Enums.PaymentStatus
+      paymentDate: Date | null
+      transactionCode: string | null
+      decisionRef: string | null
+    }, ExtArgs["result"]["guestTeachingPayment"]>
+    composites: {}
+  }
+
+  type GuestTeachingPaymentGetPayload<S extends boolean | null | undefined | GuestTeachingPaymentDefaultArgs> = $Result.GetResult<Prisma.$GuestTeachingPaymentPayload, S>
+
+  type GuestTeachingPaymentCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<GuestTeachingPaymentFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: GuestTeachingPaymentCountAggregateInputType | true
+    }
+
+  export interface GuestTeachingPaymentDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['GuestTeachingPayment'], meta: { name: 'GuestTeachingPayment' } }
+    /**
+     * Find zero or one GuestTeachingPayment that matches the filter.
+     * @param {GuestTeachingPaymentFindUniqueArgs} args - Arguments to find a GuestTeachingPayment
+     * @example
+     * // Get one GuestTeachingPayment
+     * const guestTeachingPayment = await prisma.guestTeachingPayment.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends GuestTeachingPaymentFindUniqueArgs>(args: SelectSubset<T, GuestTeachingPaymentFindUniqueArgs<ExtArgs>>): Prisma__GuestTeachingPaymentClient<$Result.GetResult<Prisma.$GuestTeachingPaymentPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one GuestTeachingPayment that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {GuestTeachingPaymentFindUniqueOrThrowArgs} args - Arguments to find a GuestTeachingPayment
+     * @example
+     * // Get one GuestTeachingPayment
+     * const guestTeachingPayment = await prisma.guestTeachingPayment.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends GuestTeachingPaymentFindUniqueOrThrowArgs>(args: SelectSubset<T, GuestTeachingPaymentFindUniqueOrThrowArgs<ExtArgs>>): Prisma__GuestTeachingPaymentClient<$Result.GetResult<Prisma.$GuestTeachingPaymentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first GuestTeachingPayment that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GuestTeachingPaymentFindFirstArgs} args - Arguments to find a GuestTeachingPayment
+     * @example
+     * // Get one GuestTeachingPayment
+     * const guestTeachingPayment = await prisma.guestTeachingPayment.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends GuestTeachingPaymentFindFirstArgs>(args?: SelectSubset<T, GuestTeachingPaymentFindFirstArgs<ExtArgs>>): Prisma__GuestTeachingPaymentClient<$Result.GetResult<Prisma.$GuestTeachingPaymentPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first GuestTeachingPayment that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GuestTeachingPaymentFindFirstOrThrowArgs} args - Arguments to find a GuestTeachingPayment
+     * @example
+     * // Get one GuestTeachingPayment
+     * const guestTeachingPayment = await prisma.guestTeachingPayment.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends GuestTeachingPaymentFindFirstOrThrowArgs>(args?: SelectSubset<T, GuestTeachingPaymentFindFirstOrThrowArgs<ExtArgs>>): Prisma__GuestTeachingPaymentClient<$Result.GetResult<Prisma.$GuestTeachingPaymentPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more GuestTeachingPayments that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GuestTeachingPaymentFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all GuestTeachingPayments
+     * const guestTeachingPayments = await prisma.guestTeachingPayment.findMany()
+     * 
+     * // Get first 10 GuestTeachingPayments
+     * const guestTeachingPayments = await prisma.guestTeachingPayment.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const guestTeachingPaymentWithIdOnly = await prisma.guestTeachingPayment.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends GuestTeachingPaymentFindManyArgs>(args?: SelectSubset<T, GuestTeachingPaymentFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GuestTeachingPaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a GuestTeachingPayment.
+     * @param {GuestTeachingPaymentCreateArgs} args - Arguments to create a GuestTeachingPayment.
+     * @example
+     * // Create one GuestTeachingPayment
+     * const GuestTeachingPayment = await prisma.guestTeachingPayment.create({
+     *   data: {
+     *     // ... data to create a GuestTeachingPayment
+     *   }
+     * })
+     * 
+     */
+    create<T extends GuestTeachingPaymentCreateArgs>(args: SelectSubset<T, GuestTeachingPaymentCreateArgs<ExtArgs>>): Prisma__GuestTeachingPaymentClient<$Result.GetResult<Prisma.$GuestTeachingPaymentPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many GuestTeachingPayments.
+     * @param {GuestTeachingPaymentCreateManyArgs} args - Arguments to create many GuestTeachingPayments.
+     * @example
+     * // Create many GuestTeachingPayments
+     * const guestTeachingPayment = await prisma.guestTeachingPayment.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends GuestTeachingPaymentCreateManyArgs>(args?: SelectSubset<T, GuestTeachingPaymentCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many GuestTeachingPayments and returns the data saved in the database.
+     * @param {GuestTeachingPaymentCreateManyAndReturnArgs} args - Arguments to create many GuestTeachingPayments.
+     * @example
+     * // Create many GuestTeachingPayments
+     * const guestTeachingPayment = await prisma.guestTeachingPayment.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many GuestTeachingPayments and only return the `id`
+     * const guestTeachingPaymentWithIdOnly = await prisma.guestTeachingPayment.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends GuestTeachingPaymentCreateManyAndReturnArgs>(args?: SelectSubset<T, GuestTeachingPaymentCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GuestTeachingPaymentPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a GuestTeachingPayment.
+     * @param {GuestTeachingPaymentDeleteArgs} args - Arguments to delete one GuestTeachingPayment.
+     * @example
+     * // Delete one GuestTeachingPayment
+     * const GuestTeachingPayment = await prisma.guestTeachingPayment.delete({
+     *   where: {
+     *     // ... filter to delete one GuestTeachingPayment
+     *   }
+     * })
+     * 
+     */
+    delete<T extends GuestTeachingPaymentDeleteArgs>(args: SelectSubset<T, GuestTeachingPaymentDeleteArgs<ExtArgs>>): Prisma__GuestTeachingPaymentClient<$Result.GetResult<Prisma.$GuestTeachingPaymentPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one GuestTeachingPayment.
+     * @param {GuestTeachingPaymentUpdateArgs} args - Arguments to update one GuestTeachingPayment.
+     * @example
+     * // Update one GuestTeachingPayment
+     * const guestTeachingPayment = await prisma.guestTeachingPayment.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends GuestTeachingPaymentUpdateArgs>(args: SelectSubset<T, GuestTeachingPaymentUpdateArgs<ExtArgs>>): Prisma__GuestTeachingPaymentClient<$Result.GetResult<Prisma.$GuestTeachingPaymentPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more GuestTeachingPayments.
+     * @param {GuestTeachingPaymentDeleteManyArgs} args - Arguments to filter GuestTeachingPayments to delete.
+     * @example
+     * // Delete a few GuestTeachingPayments
+     * const { count } = await prisma.guestTeachingPayment.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends GuestTeachingPaymentDeleteManyArgs>(args?: SelectSubset<T, GuestTeachingPaymentDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more GuestTeachingPayments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GuestTeachingPaymentUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many GuestTeachingPayments
+     * const guestTeachingPayment = await prisma.guestTeachingPayment.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends GuestTeachingPaymentUpdateManyArgs>(args: SelectSubset<T, GuestTeachingPaymentUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more GuestTeachingPayments and returns the data updated in the database.
+     * @param {GuestTeachingPaymentUpdateManyAndReturnArgs} args - Arguments to update many GuestTeachingPayments.
+     * @example
+     * // Update many GuestTeachingPayments
+     * const guestTeachingPayment = await prisma.guestTeachingPayment.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more GuestTeachingPayments and only return the `id`
+     * const guestTeachingPaymentWithIdOnly = await prisma.guestTeachingPayment.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends GuestTeachingPaymentUpdateManyAndReturnArgs>(args: SelectSubset<T, GuestTeachingPaymentUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GuestTeachingPaymentPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one GuestTeachingPayment.
+     * @param {GuestTeachingPaymentUpsertArgs} args - Arguments to update or create a GuestTeachingPayment.
+     * @example
+     * // Update or create a GuestTeachingPayment
+     * const guestTeachingPayment = await prisma.guestTeachingPayment.upsert({
+     *   create: {
+     *     // ... data to create a GuestTeachingPayment
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the GuestTeachingPayment we want to update
+     *   }
+     * })
+     */
+    upsert<T extends GuestTeachingPaymentUpsertArgs>(args: SelectSubset<T, GuestTeachingPaymentUpsertArgs<ExtArgs>>): Prisma__GuestTeachingPaymentClient<$Result.GetResult<Prisma.$GuestTeachingPaymentPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of GuestTeachingPayments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GuestTeachingPaymentCountArgs} args - Arguments to filter GuestTeachingPayments to count.
+     * @example
+     * // Count the number of GuestTeachingPayments
+     * const count = await prisma.guestTeachingPayment.count({
+     *   where: {
+     *     // ... the filter for the GuestTeachingPayments we want to count
+     *   }
+     * })
+    **/
+    count<T extends GuestTeachingPaymentCountArgs>(
+      args?: Subset<T, GuestTeachingPaymentCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], GuestTeachingPaymentCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a GuestTeachingPayment.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GuestTeachingPaymentAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends GuestTeachingPaymentAggregateArgs>(args: Subset<T, GuestTeachingPaymentAggregateArgs>): Prisma.PrismaPromise<GetGuestTeachingPaymentAggregateType<T>>
+
+    /**
+     * Group by GuestTeachingPayment.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GuestTeachingPaymentGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends GuestTeachingPaymentGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: GuestTeachingPaymentGroupByArgs['orderBy'] }
+        : { orderBy?: GuestTeachingPaymentGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, GuestTeachingPaymentGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetGuestTeachingPaymentGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the GuestTeachingPayment model
+   */
+  readonly fields: GuestTeachingPaymentFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for GuestTeachingPayment.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__GuestTeachingPaymentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    lecturer<T extends LecturerDefaultArgs<ExtArgs> = {}>(args?: Subset<T, LecturerDefaultArgs<ExtArgs>>): Prisma__LecturerClient<$Result.GetResult<Prisma.$LecturerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    semester<T extends SemesterDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SemesterDefaultArgs<ExtArgs>>): Prisma__SemesterClient<$Result.GetResult<Prisma.$SemesterPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    hiringOrg<T extends DM_DonViDefaultArgs<ExtArgs> = {}>(args?: Subset<T, DM_DonViDefaultArgs<ExtArgs>>): Prisma__DM_DonViClient<$Result.GetResult<Prisma.$DM_DonViPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the GuestTeachingPayment model
+   */
+  interface GuestTeachingPaymentFieldRefs {
+    readonly id: FieldRef<"GuestTeachingPayment", 'String'>
+    readonly code: FieldRef<"GuestTeachingPayment", 'String'>
+    readonly active: FieldRef<"GuestTeachingPayment", 'Boolean'>
+    readonly description: FieldRef<"GuestTeachingPayment", 'String'>
+    readonly deletedAt: FieldRef<"GuestTeachingPayment", 'DateTime'>
+    readonly createdAt: FieldRef<"GuestTeachingPayment", 'DateTime'>
+    readonly updatedAt: FieldRef<"GuestTeachingPayment", 'DateTime'>
+    readonly createdBy: FieldRef<"GuestTeachingPayment", 'String'>
+    readonly lecturerId: FieldRef<"GuestTeachingPayment", 'String'>
+    readonly semesterId: FieldRef<"GuestTeachingPayment", 'String'>
+    readonly hiringOrgId: FieldRef<"GuestTeachingPayment", 'String'>
+    readonly totalPeriods: FieldRef<"GuestTeachingPayment", 'Int'>
+    readonly ratePerPeriod: FieldRef<"GuestTeachingPayment", 'Decimal'>
+    readonly amount: FieldRef<"GuestTeachingPayment", 'Decimal'>
+    readonly status: FieldRef<"GuestTeachingPayment", 'PaymentStatus'>
+    readonly paymentDate: FieldRef<"GuestTeachingPayment", 'DateTime'>
+    readonly transactionCode: FieldRef<"GuestTeachingPayment", 'String'>
+    readonly decisionRef: FieldRef<"GuestTeachingPayment", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * GuestTeachingPayment findUnique
+   */
+  export type GuestTeachingPaymentFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GuestTeachingPayment
+     */
+    select?: GuestTeachingPaymentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GuestTeachingPayment
+     */
+    omit?: GuestTeachingPaymentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GuestTeachingPaymentInclude<ExtArgs> | null
+    /**
+     * Filter, which GuestTeachingPayment to fetch.
+     */
+    where: GuestTeachingPaymentWhereUniqueInput
+  }
+
+  /**
+   * GuestTeachingPayment findUniqueOrThrow
+   */
+  export type GuestTeachingPaymentFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GuestTeachingPayment
+     */
+    select?: GuestTeachingPaymentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GuestTeachingPayment
+     */
+    omit?: GuestTeachingPaymentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GuestTeachingPaymentInclude<ExtArgs> | null
+    /**
+     * Filter, which GuestTeachingPayment to fetch.
+     */
+    where: GuestTeachingPaymentWhereUniqueInput
+  }
+
+  /**
+   * GuestTeachingPayment findFirst
+   */
+  export type GuestTeachingPaymentFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GuestTeachingPayment
+     */
+    select?: GuestTeachingPaymentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GuestTeachingPayment
+     */
+    omit?: GuestTeachingPaymentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GuestTeachingPaymentInclude<ExtArgs> | null
+    /**
+     * Filter, which GuestTeachingPayment to fetch.
+     */
+    where?: GuestTeachingPaymentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GuestTeachingPayments to fetch.
+     */
+    orderBy?: GuestTeachingPaymentOrderByWithRelationInput | GuestTeachingPaymentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for GuestTeachingPayments.
+     */
+    cursor?: GuestTeachingPaymentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GuestTeachingPayments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GuestTeachingPayments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of GuestTeachingPayments.
+     */
+    distinct?: GuestTeachingPaymentScalarFieldEnum | GuestTeachingPaymentScalarFieldEnum[]
+  }
+
+  /**
+   * GuestTeachingPayment findFirstOrThrow
+   */
+  export type GuestTeachingPaymentFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GuestTeachingPayment
+     */
+    select?: GuestTeachingPaymentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GuestTeachingPayment
+     */
+    omit?: GuestTeachingPaymentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GuestTeachingPaymentInclude<ExtArgs> | null
+    /**
+     * Filter, which GuestTeachingPayment to fetch.
+     */
+    where?: GuestTeachingPaymentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GuestTeachingPayments to fetch.
+     */
+    orderBy?: GuestTeachingPaymentOrderByWithRelationInput | GuestTeachingPaymentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for GuestTeachingPayments.
+     */
+    cursor?: GuestTeachingPaymentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GuestTeachingPayments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GuestTeachingPayments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of GuestTeachingPayments.
+     */
+    distinct?: GuestTeachingPaymentScalarFieldEnum | GuestTeachingPaymentScalarFieldEnum[]
+  }
+
+  /**
+   * GuestTeachingPayment findMany
+   */
+  export type GuestTeachingPaymentFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GuestTeachingPayment
+     */
+    select?: GuestTeachingPaymentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GuestTeachingPayment
+     */
+    omit?: GuestTeachingPaymentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GuestTeachingPaymentInclude<ExtArgs> | null
+    /**
+     * Filter, which GuestTeachingPayments to fetch.
+     */
+    where?: GuestTeachingPaymentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GuestTeachingPayments to fetch.
+     */
+    orderBy?: GuestTeachingPaymentOrderByWithRelationInput | GuestTeachingPaymentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing GuestTeachingPayments.
+     */
+    cursor?: GuestTeachingPaymentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GuestTeachingPayments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GuestTeachingPayments.
+     */
+    skip?: number
+    distinct?: GuestTeachingPaymentScalarFieldEnum | GuestTeachingPaymentScalarFieldEnum[]
+  }
+
+  /**
+   * GuestTeachingPayment create
+   */
+  export type GuestTeachingPaymentCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GuestTeachingPayment
+     */
+    select?: GuestTeachingPaymentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GuestTeachingPayment
+     */
+    omit?: GuestTeachingPaymentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GuestTeachingPaymentInclude<ExtArgs> | null
+    /**
+     * The data needed to create a GuestTeachingPayment.
+     */
+    data: XOR<GuestTeachingPaymentCreateInput, GuestTeachingPaymentUncheckedCreateInput>
+  }
+
+  /**
+   * GuestTeachingPayment createMany
+   */
+  export type GuestTeachingPaymentCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many GuestTeachingPayments.
+     */
+    data: GuestTeachingPaymentCreateManyInput | GuestTeachingPaymentCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * GuestTeachingPayment createManyAndReturn
+   */
+  export type GuestTeachingPaymentCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GuestTeachingPayment
+     */
+    select?: GuestTeachingPaymentSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the GuestTeachingPayment
+     */
+    omit?: GuestTeachingPaymentOmit<ExtArgs> | null
+    /**
+     * The data used to create many GuestTeachingPayments.
+     */
+    data: GuestTeachingPaymentCreateManyInput | GuestTeachingPaymentCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GuestTeachingPaymentIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * GuestTeachingPayment update
+   */
+  export type GuestTeachingPaymentUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GuestTeachingPayment
+     */
+    select?: GuestTeachingPaymentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GuestTeachingPayment
+     */
+    omit?: GuestTeachingPaymentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GuestTeachingPaymentInclude<ExtArgs> | null
+    /**
+     * The data needed to update a GuestTeachingPayment.
+     */
+    data: XOR<GuestTeachingPaymentUpdateInput, GuestTeachingPaymentUncheckedUpdateInput>
+    /**
+     * Choose, which GuestTeachingPayment to update.
+     */
+    where: GuestTeachingPaymentWhereUniqueInput
+  }
+
+  /**
+   * GuestTeachingPayment updateMany
+   */
+  export type GuestTeachingPaymentUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update GuestTeachingPayments.
+     */
+    data: XOR<GuestTeachingPaymentUpdateManyMutationInput, GuestTeachingPaymentUncheckedUpdateManyInput>
+    /**
+     * Filter which GuestTeachingPayments to update
+     */
+    where?: GuestTeachingPaymentWhereInput
+    /**
+     * Limit how many GuestTeachingPayments to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * GuestTeachingPayment updateManyAndReturn
+   */
+  export type GuestTeachingPaymentUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GuestTeachingPayment
+     */
+    select?: GuestTeachingPaymentSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the GuestTeachingPayment
+     */
+    omit?: GuestTeachingPaymentOmit<ExtArgs> | null
+    /**
+     * The data used to update GuestTeachingPayments.
+     */
+    data: XOR<GuestTeachingPaymentUpdateManyMutationInput, GuestTeachingPaymentUncheckedUpdateManyInput>
+    /**
+     * Filter which GuestTeachingPayments to update
+     */
+    where?: GuestTeachingPaymentWhereInput
+    /**
+     * Limit how many GuestTeachingPayments to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GuestTeachingPaymentIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * GuestTeachingPayment upsert
+   */
+  export type GuestTeachingPaymentUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GuestTeachingPayment
+     */
+    select?: GuestTeachingPaymentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GuestTeachingPayment
+     */
+    omit?: GuestTeachingPaymentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GuestTeachingPaymentInclude<ExtArgs> | null
+    /**
+     * The filter to search for the GuestTeachingPayment to update in case it exists.
+     */
+    where: GuestTeachingPaymentWhereUniqueInput
+    /**
+     * In case the GuestTeachingPayment found by the `where` argument doesn't exist, create a new GuestTeachingPayment with this data.
+     */
+    create: XOR<GuestTeachingPaymentCreateInput, GuestTeachingPaymentUncheckedCreateInput>
+    /**
+     * In case the GuestTeachingPayment was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<GuestTeachingPaymentUpdateInput, GuestTeachingPaymentUncheckedUpdateInput>
+  }
+
+  /**
+   * GuestTeachingPayment delete
+   */
+  export type GuestTeachingPaymentDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GuestTeachingPayment
+     */
+    select?: GuestTeachingPaymentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GuestTeachingPayment
+     */
+    omit?: GuestTeachingPaymentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GuestTeachingPaymentInclude<ExtArgs> | null
+    /**
+     * Filter which GuestTeachingPayment to delete.
+     */
+    where: GuestTeachingPaymentWhereUniqueInput
+  }
+
+  /**
+   * GuestTeachingPayment deleteMany
+   */
+  export type GuestTeachingPaymentDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which GuestTeachingPayments to delete
+     */
+    where?: GuestTeachingPaymentWhereInput
+    /**
+     * Limit how many GuestTeachingPayments to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * GuestTeachingPayment without action
+   */
+  export type GuestTeachingPaymentDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GuestTeachingPayment
+     */
+    select?: GuestTeachingPaymentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GuestTeachingPayment
+     */
+    omit?: GuestTeachingPaymentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GuestTeachingPaymentInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model LecturerType
    */
 
@@ -226885,6 +231105,7 @@ export namespace Prisma {
     updatedAt: Date | null
     createdBy: string | null
     name: string | null
+    isExternal: boolean | null
   }
 
   export type LecturerTypeMaxAggregateOutputType = {
@@ -226897,6 +231118,7 @@ export namespace Prisma {
     updatedAt: Date | null
     createdBy: string | null
     name: string | null
+    isExternal: boolean | null
   }
 
   export type LecturerTypeCountAggregateOutputType = {
@@ -226909,6 +231131,7 @@ export namespace Prisma {
     updatedAt: number
     createdBy: number
     name: number
+    isExternal: number
     _all: number
   }
 
@@ -226923,6 +231146,7 @@ export namespace Prisma {
     updatedAt?: true
     createdBy?: true
     name?: true
+    isExternal?: true
   }
 
   export type LecturerTypeMaxAggregateInputType = {
@@ -226935,6 +231159,7 @@ export namespace Prisma {
     updatedAt?: true
     createdBy?: true
     name?: true
+    isExternal?: true
   }
 
   export type LecturerTypeCountAggregateInputType = {
@@ -226947,6 +231172,7 @@ export namespace Prisma {
     updatedAt?: true
     createdBy?: true
     name?: true
+    isExternal?: true
     _all?: true
   }
 
@@ -227032,6 +231258,7 @@ export namespace Prisma {
     updatedAt: Date
     createdBy: string | null
     name: string
+    isExternal: boolean
     _count: LecturerTypeCountAggregateOutputType | null
     _min: LecturerTypeMinAggregateOutputType | null
     _max: LecturerTypeMaxAggregateOutputType | null
@@ -227061,6 +231288,7 @@ export namespace Prisma {
     updatedAt?: boolean
     createdBy?: boolean
     name?: boolean
+    isExternal?: boolean
     lecturers?: boolean | LecturerType$lecturersArgs<ExtArgs>
     lecturerHistory?: boolean | LecturerType$lecturerHistoryArgs<ExtArgs>
     _count?: boolean | LecturerTypeCountOutputTypeDefaultArgs<ExtArgs>
@@ -227076,6 +231304,7 @@ export namespace Prisma {
     updatedAt?: boolean
     createdBy?: boolean
     name?: boolean
+    isExternal?: boolean
   }, ExtArgs["result"]["lecturerType"]>
 
   export type LecturerTypeSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -227088,6 +231317,7 @@ export namespace Prisma {
     updatedAt?: boolean
     createdBy?: boolean
     name?: boolean
+    isExternal?: boolean
   }, ExtArgs["result"]["lecturerType"]>
 
   export type LecturerTypeSelectScalar = {
@@ -227100,9 +231330,10 @@ export namespace Prisma {
     updatedAt?: boolean
     createdBy?: boolean
     name?: boolean
+    isExternal?: boolean
   }
 
-  export type LecturerTypeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name", ExtArgs["result"]["lecturerType"]>
+  export type LecturerTypeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "createdBy" | "name" | "isExternal", ExtArgs["result"]["lecturerType"]>
   export type LecturerTypeInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     lecturers?: boolean | LecturerType$lecturersArgs<ExtArgs>
     lecturerHistory?: boolean | LecturerType$lecturerHistoryArgs<ExtArgs>
@@ -227127,6 +231358,10 @@ export namespace Prisma {
       updatedAt: Date
       createdBy: string | null
       name: string
+      /**
+       * true = giảng viên ngoài học viện (mời giảng); quyết định nhóm thanh toán mời giảng
+       */
+      isExternal: boolean
     }, ExtArgs["result"]["lecturerType"]>
     composites: {}
   }
@@ -227561,6 +231796,7 @@ export namespace Prisma {
     readonly updatedAt: FieldRef<"LecturerType", 'DateTime'>
     readonly createdBy: FieldRef<"LecturerType", 'String'>
     readonly name: FieldRef<"LecturerType", 'String'>
+    readonly isExternal: FieldRef<"LecturerType", 'Boolean'>
   }
     
 
@@ -391182,6 +395418,64 @@ export namespace Prisma {
   export type LecturerHistoryScalarFieldEnum = (typeof LecturerHistoryScalarFieldEnum)[keyof typeof LecturerHistoryScalarFieldEnum]
 
 
+  export const GuestTeachingRateConfigScalarFieldEnum: {
+    id: 'id',
+    code: 'code',
+    active: 'active',
+    description: 'description',
+    deletedAt: 'deletedAt',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    createdBy: 'createdBy',
+    name: 'name',
+    schoolYearId: 'schoolYearId'
+  };
+
+  export type GuestTeachingRateConfigScalarFieldEnum = (typeof GuestTeachingRateConfigScalarFieldEnum)[keyof typeof GuestTeachingRateConfigScalarFieldEnum]
+
+
+  export const GuestTeachingRateScalarFieldEnum: {
+    id: 'id',
+    active: 'active',
+    description: 'description',
+    deletedAt: 'deletedAt',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    createdBy: 'createdBy',
+    configId: 'configId',
+    academicRankTypeId: 'academicRankTypeId',
+    academicDegreeTypeId: 'academicDegreeTypeId',
+    isForeign: 'isForeign',
+    ratePerPeriod: 'ratePerPeriod'
+  };
+
+  export type GuestTeachingRateScalarFieldEnum = (typeof GuestTeachingRateScalarFieldEnum)[keyof typeof GuestTeachingRateScalarFieldEnum]
+
+
+  export const GuestTeachingPaymentScalarFieldEnum: {
+    id: 'id',
+    code: 'code',
+    active: 'active',
+    description: 'description',
+    deletedAt: 'deletedAt',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    createdBy: 'createdBy',
+    lecturerId: 'lecturerId',
+    semesterId: 'semesterId',
+    hiringOrgId: 'hiringOrgId',
+    totalPeriods: 'totalPeriods',
+    ratePerPeriod: 'ratePerPeriod',
+    amount: 'amount',
+    status: 'status',
+    paymentDate: 'paymentDate',
+    transactionCode: 'transactionCode',
+    decisionRef: 'decisionRef'
+  };
+
+  export type GuestTeachingPaymentScalarFieldEnum = (typeof GuestTeachingPaymentScalarFieldEnum)[keyof typeof GuestTeachingPaymentScalarFieldEnum]
+
+
   export const LecturerTypeScalarFieldEnum: {
     id: 'id',
     code: 'code',
@@ -391191,7 +395485,8 @@ export namespace Prisma {
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     createdBy: 'createdBy',
-    name: 'name'
+    name: 'name',
+    isExternal: 'isExternal'
   };
 
   export type LecturerTypeScalarFieldEnum = (typeof LecturerTypeScalarFieldEnum)[keyof typeof LecturerTypeScalarFieldEnum]
@@ -395864,6 +400159,45 @@ export namespace Prisma {
   export type LecturerHistoryOrderByRelevanceFieldEnum = (typeof LecturerHistoryOrderByRelevanceFieldEnum)[keyof typeof LecturerHistoryOrderByRelevanceFieldEnum]
 
 
+  export const GuestTeachingRateConfigOrderByRelevanceFieldEnum: {
+    id: 'id',
+    code: 'code',
+    description: 'description',
+    createdBy: 'createdBy',
+    name: 'name',
+    schoolYearId: 'schoolYearId'
+  };
+
+  export type GuestTeachingRateConfigOrderByRelevanceFieldEnum = (typeof GuestTeachingRateConfigOrderByRelevanceFieldEnum)[keyof typeof GuestTeachingRateConfigOrderByRelevanceFieldEnum]
+
+
+  export const GuestTeachingRateOrderByRelevanceFieldEnum: {
+    id: 'id',
+    description: 'description',
+    createdBy: 'createdBy',
+    configId: 'configId',
+    academicRankTypeId: 'academicRankTypeId',
+    academicDegreeTypeId: 'academicDegreeTypeId'
+  };
+
+  export type GuestTeachingRateOrderByRelevanceFieldEnum = (typeof GuestTeachingRateOrderByRelevanceFieldEnum)[keyof typeof GuestTeachingRateOrderByRelevanceFieldEnum]
+
+
+  export const GuestTeachingPaymentOrderByRelevanceFieldEnum: {
+    id: 'id',
+    code: 'code',
+    description: 'description',
+    createdBy: 'createdBy',
+    lecturerId: 'lecturerId',
+    semesterId: 'semesterId',
+    hiringOrgId: 'hiringOrgId',
+    transactionCode: 'transactionCode',
+    decisionRef: 'decisionRef'
+  };
+
+  export type GuestTeachingPaymentOrderByRelevanceFieldEnum = (typeof GuestTeachingPaymentOrderByRelevanceFieldEnum)[keyof typeof GuestTeachingPaymentOrderByRelevanceFieldEnum]
+
+
   export const LecturerTypeOrderByRelevanceFieldEnum: {
     id: 'id',
     code: 'code',
@@ -398077,6 +402411,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'PaymentStatus'
+   */
+  export type EnumPaymentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PaymentStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'PaymentStatus[]'
+   */
+  export type ListEnumPaymentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PaymentStatus[]'>
+    
+
+
+  /**
    * Reference to a field of type 'ResearchProjectStatus'
    */
   export type EnumResearchProjectStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ResearchProjectStatus'>
@@ -398199,20 +402547,6 @@ export namespace Prisma {
    * Reference to a field of type 'SupervisorRole[]'
    */
   export type ListEnumSupervisorRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SupervisorRole[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'PaymentStatus'
-   */
-  export type EnumPaymentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PaymentStatus'>
-    
-
-
-  /**
-   * Reference to a field of type 'PaymentStatus[]'
-   */
-  export type ListEnumPaymentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PaymentStatus[]'>
     
 
 
@@ -404276,6 +408610,7 @@ export namespace Prisma {
     profiles?: UserProfileListRelationFilter
     hocHam?: HocHamListRelationFilter
     expertProfile?: ExpertProfileListRelationFilter
+    guestTeachingRate?: GuestTeachingRateListRelationFilter
   }
 
   export type DM_HocHamOrderByWithRelationInput = {
@@ -404297,6 +408632,7 @@ export namespace Prisma {
     profiles?: UserProfileOrderByRelationAggregateInput
     hocHam?: HocHamOrderByRelationAggregateInput
     expertProfile?: ExpertProfileOrderByRelationAggregateInput
+    guestTeachingRate?: GuestTeachingRateOrderByRelationAggregateInput
     _relevance?: DM_HocHamOrderByRelevanceInput
   }
 
@@ -404322,6 +408658,7 @@ export namespace Prisma {
     profiles?: UserProfileListRelationFilter
     hocHam?: HocHamListRelationFilter
     expertProfile?: ExpertProfileListRelationFilter
+    guestTeachingRate?: GuestTeachingRateListRelationFilter
   }, "Id">
 
   export type DM_HocHamOrderByWithAggregationInput = {
@@ -404390,6 +408727,7 @@ export namespace Prisma {
     profiles?: UserProfileListRelationFilter
     hocVi?: HocViListRelationFilter
     expertProfile?: ExpertProfileListRelationFilter
+    guestTeachingRate?: GuestTeachingRateListRelationFilter
   }
 
   export type DM_HocViOrderByWithRelationInput = {
@@ -404411,6 +408749,7 @@ export namespace Prisma {
     profiles?: UserProfileOrderByRelationAggregateInput
     hocVi?: HocViOrderByRelationAggregateInput
     expertProfile?: ExpertProfileOrderByRelationAggregateInput
+    guestTeachingRate?: GuestTeachingRateOrderByRelationAggregateInput
     _relevance?: DM_HocViOrderByRelevanceInput
   }
 
@@ -404436,6 +408775,7 @@ export namespace Prisma {
     profiles?: UserProfileListRelationFilter
     hocVi?: HocViListRelationFilter
     expertProfile?: ExpertProfileListRelationFilter
+    guestTeachingRate?: GuestTeachingRateListRelationFilter
   }, "Id">
 
   export type DM_HocViOrderByWithAggregationInput = {
@@ -404772,6 +409112,7 @@ export namespace Prisma {
     researchProjects?: ResearchProjectListRelationFilter
     thesisProjects?: ThesisProjectListRelationFilter
     surveyObjectTypes?: SurveyObjectTypeListRelationFilter
+    guestTeachingPayments?: GuestTeachingPaymentListRelationFilter
   }
 
   export type DM_DonViOrderByWithRelationInput = {
@@ -404815,6 +409156,7 @@ export namespace Prisma {
     researchProjects?: ResearchProjectOrderByRelationAggregateInput
     thesisProjects?: ThesisProjectOrderByRelationAggregateInput
     surveyObjectTypes?: SurveyObjectTypeOrderByRelationAggregateInput
+    guestTeachingPayments?: GuestTeachingPaymentOrderByRelationAggregateInput
     _relevance?: DM_DonViOrderByRelevanceInput
   }
 
@@ -404862,6 +409204,7 @@ export namespace Prisma {
     researchProjects?: ResearchProjectListRelationFilter
     thesisProjects?: ThesisProjectListRelationFilter
     surveyObjectTypes?: SurveyObjectTypeListRelationFilter
+    guestTeachingPayments?: GuestTeachingPaymentListRelationFilter
   }, "Id">
 
   export type DM_DonViOrderByWithAggregationInput = {
@@ -408763,6 +413106,7 @@ export namespace Prisma {
     studentAcademicDecision?: StudentAcademicDecisionListRelationFilter
     evaluationPeriod?: EvaluationPeriodListRelationFilter
     schoolYearTrainingScore?: SchoolYearTrainingScoreListRelationFilter
+    guestTeachingRateConfig?: GuestTeachingRateConfigListRelationFilter
   }
 
   export type SchoolYearOrderByWithRelationInput = {
@@ -408783,6 +413127,7 @@ export namespace Prisma {
     studentAcademicDecision?: StudentAcademicDecisionOrderByRelationAggregateInput
     evaluationPeriod?: EvaluationPeriodOrderByRelationAggregateInput
     schoolYearTrainingScore?: SchoolYearTrainingScoreOrderByRelationAggregateInput
+    guestTeachingRateConfig?: GuestTeachingRateConfigOrderByRelationAggregateInput
     _relevance?: SchoolYearOrderByRelevanceInput
   }
 
@@ -408807,6 +413152,7 @@ export namespace Prisma {
     studentAcademicDecision?: StudentAcademicDecisionListRelationFilter
     evaluationPeriod?: EvaluationPeriodListRelationFilter
     schoolYearTrainingScore?: SchoolYearTrainingScoreListRelationFilter
+    guestTeachingRateConfig?: GuestTeachingRateConfigListRelationFilter
   }, "id" | "code">
 
   export type SchoolYearOrderByWithAggregationInput = {
@@ -408879,6 +413225,7 @@ export namespace Prisma {
     availableTrainingTime?: AvailableTrainingTimeListRelationFilter
     studentSubjectScore?: StudentSubjectScoreListRelationFilter
     planTrainingPractice?: PlanTrainingPracticeListRelationFilter
+    guestTeachingPayments?: GuestTeachingPaymentListRelationFilter
   }
 
   export type SemesterOrderByWithRelationInput = {
@@ -408914,6 +413261,7 @@ export namespace Prisma {
     availableTrainingTime?: AvailableTrainingTimeOrderByRelationAggregateInput
     studentSubjectScore?: StudentSubjectScoreOrderByRelationAggregateInput
     planTrainingPractice?: PlanTrainingPracticeOrderByRelationAggregateInput
+    guestTeachingPayments?: GuestTeachingPaymentOrderByRelationAggregateInput
     _relevance?: SemesterOrderByRelevanceInput
   }
 
@@ -408953,6 +413301,7 @@ export namespace Prisma {
     availableTrainingTime?: AvailableTrainingTimeListRelationFilter
     studentSubjectScore?: StudentSubjectScoreListRelationFilter
     planTrainingPractice?: PlanTrainingPracticeListRelationFilter
+    guestTeachingPayments?: GuestTeachingPaymentListRelationFilter
   }, "id" | "code">
 
   export type SemesterOrderByWithAggregationInput = {
@@ -416073,10 +420422,10 @@ export namespace Prisma {
     lectureID?: StringNullableFilter<"Lecturer"> | string | null
     serviceDate?: DateTimeNullableFilter<"Lecturer"> | Date | string | null
     userProfileId?: UuidFilter<"Lecturer"> | string
-    organizationId?: UuidFilter<"Lecturer"> | string
+    organizationId?: UuidNullableFilter<"Lecturer"> | string | null
     lecturerTypeId?: StringFilter<"Lecturer"> | string
     userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
-    organization?: XOR<DM_DonViScalarRelationFilter, DM_DonViWhereInput>
+    organization?: XOR<DM_DonViNullableScalarRelationFilter, DM_DonViWhereInput> | null
     lecturerType?: XOR<LecturerTypeScalarRelationFilter, LecturerTypeWhereInput>
     mainSubjectClasses?: SubjectClassListRelationFilter
     extraSubjectClasses?: SubjectClassListRelationFilter
@@ -416101,6 +420450,7 @@ export namespace Prisma {
     notifications?: NotificationListRelationFilter
     personalWorkTags?: PersonalWorkTagListRelationFilter
     individualSchedules?: IndividualScheduleListRelationFilter
+    guestTeachingPayments?: GuestTeachingPaymentListRelationFilter
   }
 
   export type LecturerOrderByWithRelationInput = {
@@ -416116,7 +420466,7 @@ export namespace Prisma {
     lectureID?: SortOrderInput | SortOrder
     serviceDate?: SortOrderInput | SortOrder
     userProfileId?: SortOrder
-    organizationId?: SortOrder
+    organizationId?: SortOrderInput | SortOrder
     lecturerTypeId?: SortOrder
     userProfile?: UserProfileOrderByWithRelationInput
     organization?: DM_DonViOrderByWithRelationInput
@@ -416144,6 +420494,7 @@ export namespace Prisma {
     notifications?: NotificationOrderByRelationAggregateInput
     personalWorkTags?: PersonalWorkTagOrderByRelationAggregateInput
     individualSchedules?: IndividualScheduleOrderByRelationAggregateInput
+    guestTeachingPayments?: GuestTeachingPaymentOrderByRelationAggregateInput
     _relevance?: LecturerOrderByRelevanceInput
   }
 
@@ -416163,10 +420514,10 @@ export namespace Prisma {
     createdBy?: UuidNullableFilter<"Lecturer"> | string | null
     from?: DateTimeNullableFilter<"Lecturer"> | Date | string | null
     serviceDate?: DateTimeNullableFilter<"Lecturer"> | Date | string | null
-    organizationId?: UuidFilter<"Lecturer"> | string
+    organizationId?: UuidNullableFilter<"Lecturer"> | string | null
     lecturerTypeId?: StringFilter<"Lecturer"> | string
     userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
-    organization?: XOR<DM_DonViScalarRelationFilter, DM_DonViWhereInput>
+    organization?: XOR<DM_DonViNullableScalarRelationFilter, DM_DonViWhereInput> | null
     lecturerType?: XOR<LecturerTypeScalarRelationFilter, LecturerTypeWhereInput>
     mainSubjectClasses?: SubjectClassListRelationFilter
     extraSubjectClasses?: SubjectClassListRelationFilter
@@ -416191,6 +420542,7 @@ export namespace Prisma {
     notifications?: NotificationListRelationFilter
     personalWorkTags?: PersonalWorkTagListRelationFilter
     individualSchedules?: IndividualScheduleListRelationFilter
+    guestTeachingPayments?: GuestTeachingPaymentListRelationFilter
   }, "id" | "code" | "lectureID" | "userProfileId">
 
   export type LecturerOrderByWithAggregationInput = {
@@ -416206,7 +420558,7 @@ export namespace Prisma {
     lectureID?: SortOrderInput | SortOrder
     serviceDate?: SortOrderInput | SortOrder
     userProfileId?: SortOrder
-    organizationId?: SortOrder
+    organizationId?: SortOrderInput | SortOrder
     lecturerTypeId?: SortOrder
     _count?: LecturerCountOrderByAggregateInput
     _max?: LecturerMaxOrderByAggregateInput
@@ -416229,7 +420581,7 @@ export namespace Prisma {
     lectureID?: StringNullableWithAggregatesFilter<"Lecturer"> | string | null
     serviceDate?: DateTimeNullableWithAggregatesFilter<"Lecturer"> | Date | string | null
     userProfileId?: UuidWithAggregatesFilter<"Lecturer"> | string
-    organizationId?: UuidWithAggregatesFilter<"Lecturer"> | string
+    organizationId?: UuidNullableWithAggregatesFilter<"Lecturer"> | string | null
     lecturerTypeId?: StringWithAggregatesFilter<"Lecturer"> | string
   }
 
@@ -416350,6 +420702,320 @@ export namespace Prisma {
     lecturerTypeId?: StringWithAggregatesFilter<"LecturerHistory"> | string
   }
 
+  export type GuestTeachingRateConfigWhereInput = {
+    AND?: GuestTeachingRateConfigWhereInput | GuestTeachingRateConfigWhereInput[]
+    OR?: GuestTeachingRateConfigWhereInput[]
+    NOT?: GuestTeachingRateConfigWhereInput | GuestTeachingRateConfigWhereInput[]
+    id?: StringFilter<"GuestTeachingRateConfig"> | string
+    code?: StringNullableFilter<"GuestTeachingRateConfig"> | string | null
+    active?: BoolFilter<"GuestTeachingRateConfig"> | boolean
+    description?: StringNullableFilter<"GuestTeachingRateConfig"> | string | null
+    deletedAt?: DateTimeNullableFilter<"GuestTeachingRateConfig"> | Date | string | null
+    createdAt?: DateTimeFilter<"GuestTeachingRateConfig"> | Date | string
+    updatedAt?: DateTimeFilter<"GuestTeachingRateConfig"> | Date | string
+    createdBy?: UuidNullableFilter<"GuestTeachingRateConfig"> | string | null
+    name?: StringFilter<"GuestTeachingRateConfig"> | string
+    schoolYearId?: StringFilter<"GuestTeachingRateConfig"> | string
+    schoolYear?: XOR<SchoolYearScalarRelationFilter, SchoolYearWhereInput>
+    rates?: GuestTeachingRateListRelationFilter
+  }
+
+  export type GuestTeachingRateConfigOrderByWithRelationInput = {
+    id?: SortOrder
+    code?: SortOrderInput | SortOrder
+    active?: SortOrder
+    description?: SortOrderInput | SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    name?: SortOrder
+    schoolYearId?: SortOrder
+    schoolYear?: SchoolYearOrderByWithRelationInput
+    rates?: GuestTeachingRateOrderByRelationAggregateInput
+    _relevance?: GuestTeachingRateConfigOrderByRelevanceInput
+  }
+
+  export type GuestTeachingRateConfigWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    code?: string
+    schoolYearId?: string
+    AND?: GuestTeachingRateConfigWhereInput | GuestTeachingRateConfigWhereInput[]
+    OR?: GuestTeachingRateConfigWhereInput[]
+    NOT?: GuestTeachingRateConfigWhereInput | GuestTeachingRateConfigWhereInput[]
+    active?: BoolFilter<"GuestTeachingRateConfig"> | boolean
+    description?: StringNullableFilter<"GuestTeachingRateConfig"> | string | null
+    deletedAt?: DateTimeNullableFilter<"GuestTeachingRateConfig"> | Date | string | null
+    createdAt?: DateTimeFilter<"GuestTeachingRateConfig"> | Date | string
+    updatedAt?: DateTimeFilter<"GuestTeachingRateConfig"> | Date | string
+    createdBy?: UuidNullableFilter<"GuestTeachingRateConfig"> | string | null
+    name?: StringFilter<"GuestTeachingRateConfig"> | string
+    schoolYear?: XOR<SchoolYearScalarRelationFilter, SchoolYearWhereInput>
+    rates?: GuestTeachingRateListRelationFilter
+  }, "id" | "code" | "schoolYearId">
+
+  export type GuestTeachingRateConfigOrderByWithAggregationInput = {
+    id?: SortOrder
+    code?: SortOrderInput | SortOrder
+    active?: SortOrder
+    description?: SortOrderInput | SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    name?: SortOrder
+    schoolYearId?: SortOrder
+    _count?: GuestTeachingRateConfigCountOrderByAggregateInput
+    _max?: GuestTeachingRateConfigMaxOrderByAggregateInput
+    _min?: GuestTeachingRateConfigMinOrderByAggregateInput
+  }
+
+  export type GuestTeachingRateConfigScalarWhereWithAggregatesInput = {
+    AND?: GuestTeachingRateConfigScalarWhereWithAggregatesInput | GuestTeachingRateConfigScalarWhereWithAggregatesInput[]
+    OR?: GuestTeachingRateConfigScalarWhereWithAggregatesInput[]
+    NOT?: GuestTeachingRateConfigScalarWhereWithAggregatesInput | GuestTeachingRateConfigScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"GuestTeachingRateConfig"> | string
+    code?: StringNullableWithAggregatesFilter<"GuestTeachingRateConfig"> | string | null
+    active?: BoolWithAggregatesFilter<"GuestTeachingRateConfig"> | boolean
+    description?: StringNullableWithAggregatesFilter<"GuestTeachingRateConfig"> | string | null
+    deletedAt?: DateTimeNullableWithAggregatesFilter<"GuestTeachingRateConfig"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"GuestTeachingRateConfig"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"GuestTeachingRateConfig"> | Date | string
+    createdBy?: UuidNullableWithAggregatesFilter<"GuestTeachingRateConfig"> | string | null
+    name?: StringWithAggregatesFilter<"GuestTeachingRateConfig"> | string
+    schoolYearId?: StringWithAggregatesFilter<"GuestTeachingRateConfig"> | string
+  }
+
+  export type GuestTeachingRateWhereInput = {
+    AND?: GuestTeachingRateWhereInput | GuestTeachingRateWhereInput[]
+    OR?: GuestTeachingRateWhereInput[]
+    NOT?: GuestTeachingRateWhereInput | GuestTeachingRateWhereInput[]
+    id?: StringFilter<"GuestTeachingRate"> | string
+    active?: BoolFilter<"GuestTeachingRate"> | boolean
+    description?: StringNullableFilter<"GuestTeachingRate"> | string | null
+    deletedAt?: DateTimeNullableFilter<"GuestTeachingRate"> | Date | string | null
+    createdAt?: DateTimeFilter<"GuestTeachingRate"> | Date | string
+    updatedAt?: DateTimeFilter<"GuestTeachingRate"> | Date | string
+    createdBy?: UuidNullableFilter<"GuestTeachingRate"> | string | null
+    configId?: StringFilter<"GuestTeachingRate"> | string
+    academicRankTypeId?: UuidNullableFilter<"GuestTeachingRate"> | string | null
+    academicDegreeTypeId?: UuidNullableFilter<"GuestTeachingRate"> | string | null
+    isForeign?: BoolFilter<"GuestTeachingRate"> | boolean
+    ratePerPeriod?: DecimalFilter<"GuestTeachingRate"> | Decimal | DecimalJsLike | number | string
+    config?: XOR<GuestTeachingRateConfigScalarRelationFilter, GuestTeachingRateConfigWhereInput>
+    academicRankType?: XOR<DM_HocHamNullableScalarRelationFilter, DM_HocHamWhereInput> | null
+    academicDegreeType?: XOR<DM_HocViNullableScalarRelationFilter, DM_HocViWhereInput> | null
+  }
+
+  export type GuestTeachingRateOrderByWithRelationInput = {
+    id?: SortOrder
+    active?: SortOrder
+    description?: SortOrderInput | SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    configId?: SortOrder
+    academicRankTypeId?: SortOrderInput | SortOrder
+    academicDegreeTypeId?: SortOrderInput | SortOrder
+    isForeign?: SortOrder
+    ratePerPeriod?: SortOrder
+    config?: GuestTeachingRateConfigOrderByWithRelationInput
+    academicRankType?: DM_HocHamOrderByWithRelationInput
+    academicDegreeType?: DM_HocViOrderByWithRelationInput
+    _relevance?: GuestTeachingRateOrderByRelevanceInput
+  }
+
+  export type GuestTeachingRateWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    configId_academicRankTypeId_academicDegreeTypeId_isForeign?: GuestTeachingRateConfigIdAcademicRankTypeIdAcademicDegreeTypeIdIsForeignCompoundUniqueInput
+    AND?: GuestTeachingRateWhereInput | GuestTeachingRateWhereInput[]
+    OR?: GuestTeachingRateWhereInput[]
+    NOT?: GuestTeachingRateWhereInput | GuestTeachingRateWhereInput[]
+    active?: BoolFilter<"GuestTeachingRate"> | boolean
+    description?: StringNullableFilter<"GuestTeachingRate"> | string | null
+    deletedAt?: DateTimeNullableFilter<"GuestTeachingRate"> | Date | string | null
+    createdAt?: DateTimeFilter<"GuestTeachingRate"> | Date | string
+    updatedAt?: DateTimeFilter<"GuestTeachingRate"> | Date | string
+    createdBy?: UuidNullableFilter<"GuestTeachingRate"> | string | null
+    configId?: StringFilter<"GuestTeachingRate"> | string
+    academicRankTypeId?: UuidNullableFilter<"GuestTeachingRate"> | string | null
+    academicDegreeTypeId?: UuidNullableFilter<"GuestTeachingRate"> | string | null
+    isForeign?: BoolFilter<"GuestTeachingRate"> | boolean
+    ratePerPeriod?: DecimalFilter<"GuestTeachingRate"> | Decimal | DecimalJsLike | number | string
+    config?: XOR<GuestTeachingRateConfigScalarRelationFilter, GuestTeachingRateConfigWhereInput>
+    academicRankType?: XOR<DM_HocHamNullableScalarRelationFilter, DM_HocHamWhereInput> | null
+    academicDegreeType?: XOR<DM_HocViNullableScalarRelationFilter, DM_HocViWhereInput> | null
+  }, "id" | "configId_academicRankTypeId_academicDegreeTypeId_isForeign">
+
+  export type GuestTeachingRateOrderByWithAggregationInput = {
+    id?: SortOrder
+    active?: SortOrder
+    description?: SortOrderInput | SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    configId?: SortOrder
+    academicRankTypeId?: SortOrderInput | SortOrder
+    academicDegreeTypeId?: SortOrderInput | SortOrder
+    isForeign?: SortOrder
+    ratePerPeriod?: SortOrder
+    _count?: GuestTeachingRateCountOrderByAggregateInput
+    _avg?: GuestTeachingRateAvgOrderByAggregateInput
+    _max?: GuestTeachingRateMaxOrderByAggregateInput
+    _min?: GuestTeachingRateMinOrderByAggregateInput
+    _sum?: GuestTeachingRateSumOrderByAggregateInput
+  }
+
+  export type GuestTeachingRateScalarWhereWithAggregatesInput = {
+    AND?: GuestTeachingRateScalarWhereWithAggregatesInput | GuestTeachingRateScalarWhereWithAggregatesInput[]
+    OR?: GuestTeachingRateScalarWhereWithAggregatesInput[]
+    NOT?: GuestTeachingRateScalarWhereWithAggregatesInput | GuestTeachingRateScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"GuestTeachingRate"> | string
+    active?: BoolWithAggregatesFilter<"GuestTeachingRate"> | boolean
+    description?: StringNullableWithAggregatesFilter<"GuestTeachingRate"> | string | null
+    deletedAt?: DateTimeNullableWithAggregatesFilter<"GuestTeachingRate"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"GuestTeachingRate"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"GuestTeachingRate"> | Date | string
+    createdBy?: UuidNullableWithAggregatesFilter<"GuestTeachingRate"> | string | null
+    configId?: StringWithAggregatesFilter<"GuestTeachingRate"> | string
+    academicRankTypeId?: UuidNullableWithAggregatesFilter<"GuestTeachingRate"> | string | null
+    academicDegreeTypeId?: UuidNullableWithAggregatesFilter<"GuestTeachingRate"> | string | null
+    isForeign?: BoolWithAggregatesFilter<"GuestTeachingRate"> | boolean
+    ratePerPeriod?: DecimalWithAggregatesFilter<"GuestTeachingRate"> | Decimal | DecimalJsLike | number | string
+  }
+
+  export type GuestTeachingPaymentWhereInput = {
+    AND?: GuestTeachingPaymentWhereInput | GuestTeachingPaymentWhereInput[]
+    OR?: GuestTeachingPaymentWhereInput[]
+    NOT?: GuestTeachingPaymentWhereInput | GuestTeachingPaymentWhereInput[]
+    id?: StringFilter<"GuestTeachingPayment"> | string
+    code?: StringNullableFilter<"GuestTeachingPayment"> | string | null
+    active?: BoolFilter<"GuestTeachingPayment"> | boolean
+    description?: StringNullableFilter<"GuestTeachingPayment"> | string | null
+    deletedAt?: DateTimeNullableFilter<"GuestTeachingPayment"> | Date | string | null
+    createdAt?: DateTimeFilter<"GuestTeachingPayment"> | Date | string
+    updatedAt?: DateTimeFilter<"GuestTeachingPayment"> | Date | string
+    createdBy?: UuidNullableFilter<"GuestTeachingPayment"> | string | null
+    lecturerId?: StringFilter<"GuestTeachingPayment"> | string
+    semesterId?: StringFilter<"GuestTeachingPayment"> | string
+    hiringOrgId?: UuidFilter<"GuestTeachingPayment"> | string
+    totalPeriods?: IntFilter<"GuestTeachingPayment"> | number
+    ratePerPeriod?: DecimalFilter<"GuestTeachingPayment"> | Decimal | DecimalJsLike | number | string
+    amount?: DecimalFilter<"GuestTeachingPayment"> | Decimal | DecimalJsLike | number | string
+    status?: EnumPaymentStatusFilter<"GuestTeachingPayment"> | $Enums.PaymentStatus
+    paymentDate?: DateTimeNullableFilter<"GuestTeachingPayment"> | Date | string | null
+    transactionCode?: StringNullableFilter<"GuestTeachingPayment"> | string | null
+    decisionRef?: StringNullableFilter<"GuestTeachingPayment"> | string | null
+    lecturer?: XOR<LecturerScalarRelationFilter, LecturerWhereInput>
+    semester?: XOR<SemesterScalarRelationFilter, SemesterWhereInput>
+    hiringOrg?: XOR<DM_DonViScalarRelationFilter, DM_DonViWhereInput>
+  }
+
+  export type GuestTeachingPaymentOrderByWithRelationInput = {
+    id?: SortOrder
+    code?: SortOrderInput | SortOrder
+    active?: SortOrder
+    description?: SortOrderInput | SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    lecturerId?: SortOrder
+    semesterId?: SortOrder
+    hiringOrgId?: SortOrder
+    totalPeriods?: SortOrder
+    ratePerPeriod?: SortOrder
+    amount?: SortOrder
+    status?: SortOrder
+    paymentDate?: SortOrderInput | SortOrder
+    transactionCode?: SortOrderInput | SortOrder
+    decisionRef?: SortOrderInput | SortOrder
+    lecturer?: LecturerOrderByWithRelationInput
+    semester?: SemesterOrderByWithRelationInput
+    hiringOrg?: DM_DonViOrderByWithRelationInput
+    _relevance?: GuestTeachingPaymentOrderByRelevanceInput
+  }
+
+  export type GuestTeachingPaymentWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    code?: string
+    lecturerId_semesterId_hiringOrgId?: GuestTeachingPaymentLecturerIdSemesterIdHiringOrgIdCompoundUniqueInput
+    AND?: GuestTeachingPaymentWhereInput | GuestTeachingPaymentWhereInput[]
+    OR?: GuestTeachingPaymentWhereInput[]
+    NOT?: GuestTeachingPaymentWhereInput | GuestTeachingPaymentWhereInput[]
+    active?: BoolFilter<"GuestTeachingPayment"> | boolean
+    description?: StringNullableFilter<"GuestTeachingPayment"> | string | null
+    deletedAt?: DateTimeNullableFilter<"GuestTeachingPayment"> | Date | string | null
+    createdAt?: DateTimeFilter<"GuestTeachingPayment"> | Date | string
+    updatedAt?: DateTimeFilter<"GuestTeachingPayment"> | Date | string
+    createdBy?: UuidNullableFilter<"GuestTeachingPayment"> | string | null
+    lecturerId?: StringFilter<"GuestTeachingPayment"> | string
+    semesterId?: StringFilter<"GuestTeachingPayment"> | string
+    hiringOrgId?: UuidFilter<"GuestTeachingPayment"> | string
+    totalPeriods?: IntFilter<"GuestTeachingPayment"> | number
+    ratePerPeriod?: DecimalFilter<"GuestTeachingPayment"> | Decimal | DecimalJsLike | number | string
+    amount?: DecimalFilter<"GuestTeachingPayment"> | Decimal | DecimalJsLike | number | string
+    status?: EnumPaymentStatusFilter<"GuestTeachingPayment"> | $Enums.PaymentStatus
+    paymentDate?: DateTimeNullableFilter<"GuestTeachingPayment"> | Date | string | null
+    transactionCode?: StringNullableFilter<"GuestTeachingPayment"> | string | null
+    decisionRef?: StringNullableFilter<"GuestTeachingPayment"> | string | null
+    lecturer?: XOR<LecturerScalarRelationFilter, LecturerWhereInput>
+    semester?: XOR<SemesterScalarRelationFilter, SemesterWhereInput>
+    hiringOrg?: XOR<DM_DonViScalarRelationFilter, DM_DonViWhereInput>
+  }, "id" | "code" | "lecturerId_semesterId_hiringOrgId">
+
+  export type GuestTeachingPaymentOrderByWithAggregationInput = {
+    id?: SortOrder
+    code?: SortOrderInput | SortOrder
+    active?: SortOrder
+    description?: SortOrderInput | SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    lecturerId?: SortOrder
+    semesterId?: SortOrder
+    hiringOrgId?: SortOrder
+    totalPeriods?: SortOrder
+    ratePerPeriod?: SortOrder
+    amount?: SortOrder
+    status?: SortOrder
+    paymentDate?: SortOrderInput | SortOrder
+    transactionCode?: SortOrderInput | SortOrder
+    decisionRef?: SortOrderInput | SortOrder
+    _count?: GuestTeachingPaymentCountOrderByAggregateInput
+    _avg?: GuestTeachingPaymentAvgOrderByAggregateInput
+    _max?: GuestTeachingPaymentMaxOrderByAggregateInput
+    _min?: GuestTeachingPaymentMinOrderByAggregateInput
+    _sum?: GuestTeachingPaymentSumOrderByAggregateInput
+  }
+
+  export type GuestTeachingPaymentScalarWhereWithAggregatesInput = {
+    AND?: GuestTeachingPaymentScalarWhereWithAggregatesInput | GuestTeachingPaymentScalarWhereWithAggregatesInput[]
+    OR?: GuestTeachingPaymentScalarWhereWithAggregatesInput[]
+    NOT?: GuestTeachingPaymentScalarWhereWithAggregatesInput | GuestTeachingPaymentScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"GuestTeachingPayment"> | string
+    code?: StringNullableWithAggregatesFilter<"GuestTeachingPayment"> | string | null
+    active?: BoolWithAggregatesFilter<"GuestTeachingPayment"> | boolean
+    description?: StringNullableWithAggregatesFilter<"GuestTeachingPayment"> | string | null
+    deletedAt?: DateTimeNullableWithAggregatesFilter<"GuestTeachingPayment"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"GuestTeachingPayment"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"GuestTeachingPayment"> | Date | string
+    createdBy?: UuidNullableWithAggregatesFilter<"GuestTeachingPayment"> | string | null
+    lecturerId?: StringWithAggregatesFilter<"GuestTeachingPayment"> | string
+    semesterId?: StringWithAggregatesFilter<"GuestTeachingPayment"> | string
+    hiringOrgId?: UuidWithAggregatesFilter<"GuestTeachingPayment"> | string
+    totalPeriods?: IntWithAggregatesFilter<"GuestTeachingPayment"> | number
+    ratePerPeriod?: DecimalWithAggregatesFilter<"GuestTeachingPayment"> | Decimal | DecimalJsLike | number | string
+    amount?: DecimalWithAggregatesFilter<"GuestTeachingPayment"> | Decimal | DecimalJsLike | number | string
+    status?: EnumPaymentStatusWithAggregatesFilter<"GuestTeachingPayment"> | $Enums.PaymentStatus
+    paymentDate?: DateTimeNullableWithAggregatesFilter<"GuestTeachingPayment"> | Date | string | null
+    transactionCode?: StringNullableWithAggregatesFilter<"GuestTeachingPayment"> | string | null
+    decisionRef?: StringNullableWithAggregatesFilter<"GuestTeachingPayment"> | string | null
+  }
+
   export type LecturerTypeWhereInput = {
     AND?: LecturerTypeWhereInput | LecturerTypeWhereInput[]
     OR?: LecturerTypeWhereInput[]
@@ -416363,6 +421029,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"LecturerType"> | Date | string
     createdBy?: UuidNullableFilter<"LecturerType"> | string | null
     name?: StringFilter<"LecturerType"> | string
+    isExternal?: BoolFilter<"LecturerType"> | boolean
     lecturers?: LecturerListRelationFilter
     lecturerHistory?: LecturerHistoryListRelationFilter
   }
@@ -416377,6 +421044,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     createdBy?: SortOrderInput | SortOrder
     name?: SortOrder
+    isExternal?: SortOrder
     lecturers?: LecturerOrderByRelationAggregateInput
     lecturerHistory?: LecturerHistoryOrderByRelationAggregateInput
     _relevance?: LecturerTypeOrderByRelevanceInput
@@ -416395,6 +421063,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"LecturerType"> | Date | string
     updatedAt?: DateTimeFilter<"LecturerType"> | Date | string
     createdBy?: UuidNullableFilter<"LecturerType"> | string | null
+    isExternal?: BoolFilter<"LecturerType"> | boolean
     lecturers?: LecturerListRelationFilter
     lecturerHistory?: LecturerHistoryListRelationFilter
   }, "id" | "code" | "name">
@@ -416409,6 +421078,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     createdBy?: SortOrderInput | SortOrder
     name?: SortOrder
+    isExternal?: SortOrder
     _count?: LecturerTypeCountOrderByAggregateInput
     _max?: LecturerTypeMaxOrderByAggregateInput
     _min?: LecturerTypeMinOrderByAggregateInput
@@ -416427,6 +421097,7 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"LecturerType"> | Date | string
     createdBy?: UuidNullableWithAggregatesFilter<"LecturerType"> | string | null
     name?: StringWithAggregatesFilter<"LecturerType"> | string
+    isExternal?: BoolWithAggregatesFilter<"LecturerType"> | boolean
   }
 
   export type StaffTypeWhereInput = {
@@ -436249,6 +440920,7 @@ export namespace Prisma {
     profiles?: UserProfileCreateNestedManyWithoutAcademicRankTypeInput
     hocHam?: HocHamCreateNestedManyWithoutAcademicRankTypeInput
     expertProfile?: ExpertProfileCreateNestedManyWithoutAcademicRankTypeInput
+    guestTeachingRate?: GuestTeachingRateCreateNestedManyWithoutAcademicRankTypeInput
   }
 
   export type DM_HocHamUncheckedCreateInput = {
@@ -436270,6 +440942,7 @@ export namespace Prisma {
     profiles?: UserProfileUncheckedCreateNestedManyWithoutAcademicRankTypeInput
     hocHam?: HocHamUncheckedCreateNestedManyWithoutAcademicRankTypeInput
     expertProfile?: ExpertProfileUncheckedCreateNestedManyWithoutAcademicRankTypeInput
+    guestTeachingRate?: GuestTeachingRateUncheckedCreateNestedManyWithoutAcademicRankTypeInput
   }
 
   export type DM_HocHamUpdateInput = {
@@ -436291,6 +440964,7 @@ export namespace Prisma {
     profiles?: UserProfileUpdateManyWithoutAcademicRankTypeNestedInput
     hocHam?: HocHamUpdateManyWithoutAcademicRankTypeNestedInput
     expertProfile?: ExpertProfileUpdateManyWithoutAcademicRankTypeNestedInput
+    guestTeachingRate?: GuestTeachingRateUpdateManyWithoutAcademicRankTypeNestedInput
   }
 
   export type DM_HocHamUncheckedUpdateInput = {
@@ -436312,6 +440986,7 @@ export namespace Prisma {
     profiles?: UserProfileUncheckedUpdateManyWithoutAcademicRankTypeNestedInput
     hocHam?: HocHamUncheckedUpdateManyWithoutAcademicRankTypeNestedInput
     expertProfile?: ExpertProfileUncheckedUpdateManyWithoutAcademicRankTypeNestedInput
+    guestTeachingRate?: GuestTeachingRateUncheckedUpdateManyWithoutAcademicRankTypeNestedInput
   }
 
   export type DM_HocHamCreateManyInput = {
@@ -436387,6 +441062,7 @@ export namespace Prisma {
     profiles?: UserProfileCreateNestedManyWithoutAcademicDegreeTypeInput
     hocVi?: HocViCreateNestedManyWithoutAcademicDegreeTypeInput
     expertProfile?: ExpertProfileCreateNestedManyWithoutAcademicDegreeTypeInput
+    guestTeachingRate?: GuestTeachingRateCreateNestedManyWithoutAcademicDegreeTypeInput
   }
 
   export type DM_HocViUncheckedCreateInput = {
@@ -436408,6 +441084,7 @@ export namespace Prisma {
     profiles?: UserProfileUncheckedCreateNestedManyWithoutAcademicDegreeTypeInput
     hocVi?: HocViUncheckedCreateNestedManyWithoutAcademicDegreeTypeInput
     expertProfile?: ExpertProfileUncheckedCreateNestedManyWithoutAcademicDegreeTypeInput
+    guestTeachingRate?: GuestTeachingRateUncheckedCreateNestedManyWithoutAcademicDegreeTypeInput
   }
 
   export type DM_HocViUpdateInput = {
@@ -436429,6 +441106,7 @@ export namespace Prisma {
     profiles?: UserProfileUpdateManyWithoutAcademicDegreeTypeNestedInput
     hocVi?: HocViUpdateManyWithoutAcademicDegreeTypeNestedInput
     expertProfile?: ExpertProfileUpdateManyWithoutAcademicDegreeTypeNestedInput
+    guestTeachingRate?: GuestTeachingRateUpdateManyWithoutAcademicDegreeTypeNestedInput
   }
 
   export type DM_HocViUncheckedUpdateInput = {
@@ -436450,6 +441128,7 @@ export namespace Prisma {
     profiles?: UserProfileUncheckedUpdateManyWithoutAcademicDegreeTypeNestedInput
     hocVi?: HocViUncheckedUpdateManyWithoutAcademicDegreeTypeNestedInput
     expertProfile?: ExpertProfileUncheckedUpdateManyWithoutAcademicDegreeTypeNestedInput
+    guestTeachingRate?: GuestTeachingRateUncheckedUpdateManyWithoutAcademicDegreeTypeNestedInput
   }
 
   export type DM_HocViCreateManyInput = {
@@ -436849,6 +441528,7 @@ export namespace Prisma {
     researchProjects?: ResearchProjectCreateNestedManyWithoutOrganizationInput
     thesisProjects?: ThesisProjectCreateNestedManyWithoutOrganizationInput
     surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutOrganizationsInput
+    guestTeachingPayments?: GuestTeachingPaymentCreateNestedManyWithoutHiringOrgInput
   }
 
   export type DM_DonViUncheckedCreateInput = {
@@ -436892,6 +441572,7 @@ export namespace Prisma {
     researchProjects?: ResearchProjectUncheckedCreateNestedManyWithoutOrganizationInput
     thesisProjects?: ThesisProjectUncheckedCreateNestedManyWithoutOrganizationInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutOrganizationsInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedCreateNestedManyWithoutHiringOrgInput
   }
 
   export type DM_DonViUpdateInput = {
@@ -436935,6 +441616,7 @@ export namespace Prisma {
     researchProjects?: ResearchProjectUpdateManyWithoutOrganizationNestedInput
     thesisProjects?: ThesisProjectUpdateManyWithoutOrganizationNestedInput
     surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutOrganizationsNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUpdateManyWithoutHiringOrgNestedInput
   }
 
   export type DM_DonViUncheckedUpdateInput = {
@@ -436978,6 +441660,7 @@ export namespace Prisma {
     researchProjects?: ResearchProjectUncheckedUpdateManyWithoutOrganizationNestedInput
     thesisProjects?: ThesisProjectUncheckedUpdateManyWithoutOrganizationNestedInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutOrganizationsNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedUpdateManyWithoutHiringOrgNestedInput
   }
 
   export type DM_DonViCreateManyInput = {
@@ -441582,6 +446265,7 @@ export namespace Prisma {
     studentAcademicDecision?: StudentAcademicDecisionCreateNestedManyWithoutSchoolYearInput
     evaluationPeriod?: EvaluationPeriodCreateNestedManyWithoutSchoolYearInput
     schoolYearTrainingScore?: SchoolYearTrainingScoreCreateNestedManyWithoutSchoolYearInput
+    guestTeachingRateConfig?: GuestTeachingRateConfigCreateNestedManyWithoutSchoolYearInput
   }
 
   export type SchoolYearUncheckedCreateInput = {
@@ -441602,6 +446286,7 @@ export namespace Prisma {
     studentAcademicDecision?: StudentAcademicDecisionUncheckedCreateNestedManyWithoutSchoolYearInput
     evaluationPeriod?: EvaluationPeriodUncheckedCreateNestedManyWithoutSchoolYearInput
     schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedCreateNestedManyWithoutSchoolYearInput
+    guestTeachingRateConfig?: GuestTeachingRateConfigUncheckedCreateNestedManyWithoutSchoolYearInput
   }
 
   export type SchoolYearUpdateInput = {
@@ -441622,6 +446307,7 @@ export namespace Prisma {
     studentAcademicDecision?: StudentAcademicDecisionUpdateManyWithoutSchoolYearNestedInput
     evaluationPeriod?: EvaluationPeriodUpdateManyWithoutSchoolYearNestedInput
     schoolYearTrainingScore?: SchoolYearTrainingScoreUpdateManyWithoutSchoolYearNestedInput
+    guestTeachingRateConfig?: GuestTeachingRateConfigUpdateManyWithoutSchoolYearNestedInput
   }
 
   export type SchoolYearUncheckedUpdateInput = {
@@ -441642,6 +446328,7 @@ export namespace Prisma {
     studentAcademicDecision?: StudentAcademicDecisionUncheckedUpdateManyWithoutSchoolYearNestedInput
     evaluationPeriod?: EvaluationPeriodUncheckedUpdateManyWithoutSchoolYearNestedInput
     schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedUpdateManyWithoutSchoolYearNestedInput
+    guestTeachingRateConfig?: GuestTeachingRateConfigUncheckedUpdateManyWithoutSchoolYearNestedInput
   }
 
   export type SchoolYearCreateManyInput = {
@@ -441718,6 +446405,7 @@ export namespace Prisma {
     availableTrainingTime?: AvailableTrainingTimeCreateNestedManyWithoutSemesterInput
     studentSubjectScore?: StudentSubjectScoreCreateNestedManyWithoutSemesterInput
     planTrainingPractice?: PlanTrainingPracticeCreateNestedManyWithoutSemesterInput
+    guestTeachingPayments?: GuestTeachingPaymentCreateNestedManyWithoutSemesterInput
   }
 
   export type SemesterUncheckedCreateInput = {
@@ -441752,6 +446440,7 @@ export namespace Prisma {
     availableTrainingTime?: AvailableTrainingTimeUncheckedCreateNestedManyWithoutSemesterInput
     studentSubjectScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutSemesterInput
     planTrainingPractice?: PlanTrainingPracticeUncheckedCreateNestedManyWithoutSemesterInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedCreateNestedManyWithoutSemesterInput
   }
 
   export type SemesterUpdateInput = {
@@ -441786,6 +446475,7 @@ export namespace Prisma {
     availableTrainingTime?: AvailableTrainingTimeUpdateManyWithoutSemesterNestedInput
     studentSubjectScore?: StudentSubjectScoreUpdateManyWithoutSemesterNestedInput
     planTrainingPractice?: PlanTrainingPracticeUpdateManyWithoutSemesterNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUpdateManyWithoutSemesterNestedInput
   }
 
   export type SemesterUncheckedUpdateInput = {
@@ -441820,6 +446510,7 @@ export namespace Prisma {
     availableTrainingTime?: AvailableTrainingTimeUncheckedUpdateManyWithoutSemesterNestedInput
     studentSubjectScore?: StudentSubjectScoreUncheckedUpdateManyWithoutSemesterNestedInput
     planTrainingPractice?: PlanTrainingPracticeUncheckedUpdateManyWithoutSemesterNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedUpdateManyWithoutSemesterNestedInput
   }
 
   export type SemesterCreateManyInput = {
@@ -450018,7 +454709,7 @@ export namespace Prisma {
     lectureID?: string | null
     serviceDate?: Date | string | null
     userProfile: UserProfileCreateNestedOneWithoutLecturerInput
-    organization: DM_DonViCreateNestedOneWithoutLecturersInput
+    organization?: DM_DonViCreateNestedOneWithoutLecturersInput
     lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
     mainSubjectClasses?: SubjectClassCreateNestedManyWithoutMainLecturerInput
     extraSubjectClasses?: SubjectClassCreateNestedManyWithoutExtraLecturerInput
@@ -450043,6 +454734,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutLecturerInput
     personalWorkTags?: PersonalWorkTagCreateNestedManyWithoutLecturerInput
     individualSchedules?: IndividualScheduleCreateNestedManyWithoutLecturerInput
+    guestTeachingPayments?: GuestTeachingPaymentCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerUncheckedCreateInput = {
@@ -450058,7 +454750,7 @@ export namespace Prisma {
     lectureID?: string | null
     serviceDate?: Date | string | null
     userProfileId: string
-    organizationId: string
+    organizationId?: string | null
     lecturerTypeId: string
     mainSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutMainLecturerInput
     extraSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutExtraLecturerInput
@@ -450083,6 +454775,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutLecturerInput
     personalWorkTags?: PersonalWorkTagUncheckedCreateNestedManyWithoutLecturerInput
     individualSchedules?: IndividualScheduleUncheckedCreateNestedManyWithoutLecturerInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerUpdateInput = {
@@ -450098,7 +454791,7 @@ export namespace Prisma {
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
-    organization?: DM_DonViUpdateOneRequiredWithoutLecturersNestedInput
+    organization?: DM_DonViUpdateOneWithoutLecturersNestedInput
     lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
     mainSubjectClasses?: SubjectClassUpdateManyWithoutMainLecturerNestedInput
     extraSubjectClasses?: SubjectClassUpdateManyWithoutExtraLecturerNestedInput
@@ -450123,6 +454816,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutLecturerNestedInput
     personalWorkTags?: PersonalWorkTagUpdateManyWithoutLecturerNestedInput
     individualSchedules?: IndividualScheduleUpdateManyWithoutLecturerNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUpdateManyWithoutLecturerNestedInput
   }
 
   export type LecturerUncheckedUpdateInput = {
@@ -450138,7 +454832,7 @@ export namespace Prisma {
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfileId?: StringFieldUpdateOperationsInput | string
-    organizationId?: StringFieldUpdateOperationsInput | string
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
     lecturerTypeId?: StringFieldUpdateOperationsInput | string
     mainSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutMainLecturerNestedInput
     extraSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutExtraLecturerNestedInput
@@ -450163,6 +454857,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutLecturerNestedInput
     personalWorkTags?: PersonalWorkTagUncheckedUpdateManyWithoutLecturerNestedInput
     individualSchedules?: IndividualScheduleUncheckedUpdateManyWithoutLecturerNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedUpdateManyWithoutLecturerNestedInput
   }
 
   export type LecturerCreateManyInput = {
@@ -450178,7 +454873,7 @@ export namespace Prisma {
     lectureID?: string | null
     serviceDate?: Date | string | null
     userProfileId: string
-    organizationId: string
+    organizationId?: string | null
     lecturerTypeId: string
   }
 
@@ -450209,7 +454904,7 @@ export namespace Prisma {
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfileId?: StringFieldUpdateOperationsInput | string
-    organizationId?: StringFieldUpdateOperationsInput | string
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
     lecturerTypeId?: StringFieldUpdateOperationsInput | string
   }
 
@@ -450343,6 +455038,346 @@ export namespace Prisma {
     lecturerTypeId?: StringFieldUpdateOperationsInput | string
   }
 
+  export type GuestTeachingRateConfigCreateInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    name: string
+    schoolYear: SchoolYearCreateNestedOneWithoutGuestTeachingRateConfigInput
+    rates?: GuestTeachingRateCreateNestedManyWithoutConfigInput
+  }
+
+  export type GuestTeachingRateConfigUncheckedCreateInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    name: string
+    schoolYearId: string
+    rates?: GuestTeachingRateUncheckedCreateNestedManyWithoutConfigInput
+  }
+
+  export type GuestTeachingRateConfigUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    schoolYear?: SchoolYearUpdateOneRequiredWithoutGuestTeachingRateConfigNestedInput
+    rates?: GuestTeachingRateUpdateManyWithoutConfigNestedInput
+  }
+
+  export type GuestTeachingRateConfigUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    schoolYearId?: StringFieldUpdateOperationsInput | string
+    rates?: GuestTeachingRateUncheckedUpdateManyWithoutConfigNestedInput
+  }
+
+  export type GuestTeachingRateConfigCreateManyInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    name: string
+    schoolYearId: string
+  }
+
+  export type GuestTeachingRateConfigUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type GuestTeachingRateConfigUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    schoolYearId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type GuestTeachingRateCreateInput = {
+    id?: string
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    isForeign?: boolean
+    ratePerPeriod: Decimal | DecimalJsLike | number | string
+    config: GuestTeachingRateConfigCreateNestedOneWithoutRatesInput
+    academicRankType?: DM_HocHamCreateNestedOneWithoutGuestTeachingRateInput
+    academicDegreeType?: DM_HocViCreateNestedOneWithoutGuestTeachingRateInput
+  }
+
+  export type GuestTeachingRateUncheckedCreateInput = {
+    id?: string
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    configId: string
+    academicRankTypeId?: string | null
+    academicDegreeTypeId?: string | null
+    isForeign?: boolean
+    ratePerPeriod: Decimal | DecimalJsLike | number | string
+  }
+
+  export type GuestTeachingRateUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isForeign?: BoolFieldUpdateOperationsInput | boolean
+    ratePerPeriod?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    config?: GuestTeachingRateConfigUpdateOneRequiredWithoutRatesNestedInput
+    academicRankType?: DM_HocHamUpdateOneWithoutGuestTeachingRateNestedInput
+    academicDegreeType?: DM_HocViUpdateOneWithoutGuestTeachingRateNestedInput
+  }
+
+  export type GuestTeachingRateUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    configId?: StringFieldUpdateOperationsInput | string
+    academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+    academicDegreeTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+    isForeign?: BoolFieldUpdateOperationsInput | boolean
+    ratePerPeriod?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+  }
+
+  export type GuestTeachingRateCreateManyInput = {
+    id?: string
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    configId: string
+    academicRankTypeId?: string | null
+    academicDegreeTypeId?: string | null
+    isForeign?: boolean
+    ratePerPeriod: Decimal | DecimalJsLike | number | string
+  }
+
+  export type GuestTeachingRateUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isForeign?: BoolFieldUpdateOperationsInput | boolean
+    ratePerPeriod?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+  }
+
+  export type GuestTeachingRateUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    configId?: StringFieldUpdateOperationsInput | string
+    academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+    academicDegreeTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+    isForeign?: BoolFieldUpdateOperationsInput | boolean
+    ratePerPeriod?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+  }
+
+  export type GuestTeachingPaymentCreateInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    totalPeriods?: number
+    ratePerPeriod: Decimal | DecimalJsLike | number | string
+    amount: Decimal | DecimalJsLike | number | string
+    status?: $Enums.PaymentStatus
+    paymentDate?: Date | string | null
+    transactionCode?: string | null
+    decisionRef?: string | null
+    lecturer: LecturerCreateNestedOneWithoutGuestTeachingPaymentsInput
+    semester: SemesterCreateNestedOneWithoutGuestTeachingPaymentsInput
+    hiringOrg: DM_DonViCreateNestedOneWithoutGuestTeachingPaymentsInput
+  }
+
+  export type GuestTeachingPaymentUncheckedCreateInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    lecturerId: string
+    semesterId: string
+    hiringOrgId: string
+    totalPeriods?: number
+    ratePerPeriod: Decimal | DecimalJsLike | number | string
+    amount: Decimal | DecimalJsLike | number | string
+    status?: $Enums.PaymentStatus
+    paymentDate?: Date | string | null
+    transactionCode?: string | null
+    decisionRef?: string | null
+  }
+
+  export type GuestTeachingPaymentUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    totalPeriods?: IntFieldUpdateOperationsInput | number
+    ratePerPeriod?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    transactionCode?: NullableStringFieldUpdateOperationsInput | string | null
+    decisionRef?: NullableStringFieldUpdateOperationsInput | string | null
+    lecturer?: LecturerUpdateOneRequiredWithoutGuestTeachingPaymentsNestedInput
+    semester?: SemesterUpdateOneRequiredWithoutGuestTeachingPaymentsNestedInput
+    hiringOrg?: DM_DonViUpdateOneRequiredWithoutGuestTeachingPaymentsNestedInput
+  }
+
+  export type GuestTeachingPaymentUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    lecturerId?: StringFieldUpdateOperationsInput | string
+    semesterId?: StringFieldUpdateOperationsInput | string
+    hiringOrgId?: StringFieldUpdateOperationsInput | string
+    totalPeriods?: IntFieldUpdateOperationsInput | number
+    ratePerPeriod?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    transactionCode?: NullableStringFieldUpdateOperationsInput | string | null
+    decisionRef?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type GuestTeachingPaymentCreateManyInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    lecturerId: string
+    semesterId: string
+    hiringOrgId: string
+    totalPeriods?: number
+    ratePerPeriod: Decimal | DecimalJsLike | number | string
+    amount: Decimal | DecimalJsLike | number | string
+    status?: $Enums.PaymentStatus
+    paymentDate?: Date | string | null
+    transactionCode?: string | null
+    decisionRef?: string | null
+  }
+
+  export type GuestTeachingPaymentUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    totalPeriods?: IntFieldUpdateOperationsInput | number
+    ratePerPeriod?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    transactionCode?: NullableStringFieldUpdateOperationsInput | string | null
+    decisionRef?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type GuestTeachingPaymentUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    lecturerId?: StringFieldUpdateOperationsInput | string
+    semesterId?: StringFieldUpdateOperationsInput | string
+    hiringOrgId?: StringFieldUpdateOperationsInput | string
+    totalPeriods?: IntFieldUpdateOperationsInput | number
+    ratePerPeriod?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    transactionCode?: NullableStringFieldUpdateOperationsInput | string | null
+    decisionRef?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
   export type LecturerTypeCreateInput = {
     id?: string
     code?: string | null
@@ -450353,6 +455388,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
+    isExternal?: boolean
     lecturers?: LecturerCreateNestedManyWithoutLecturerTypeInput
     lecturerHistory?: LecturerHistoryCreateNestedManyWithoutLecturerTypeInput
   }
@@ -450367,6 +455403,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
+    isExternal?: boolean
     lecturers?: LecturerUncheckedCreateNestedManyWithoutLecturerTypeInput
     lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutLecturerTypeInput
   }
@@ -450381,6 +455418,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
+    isExternal?: BoolFieldUpdateOperationsInput | boolean
     lecturers?: LecturerUpdateManyWithoutLecturerTypeNestedInput
     lecturerHistory?: LecturerHistoryUpdateManyWithoutLecturerTypeNestedInput
   }
@@ -450395,6 +455433,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
+    isExternal?: BoolFieldUpdateOperationsInput | boolean
     lecturers?: LecturerUncheckedUpdateManyWithoutLecturerTypeNestedInput
     lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutLecturerTypeNestedInput
   }
@@ -450409,6 +455448,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
+    isExternal?: boolean
   }
 
   export type LecturerTypeUpdateManyMutationInput = {
@@ -450421,6 +455461,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
+    isExternal?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type LecturerTypeUncheckedUpdateManyInput = {
@@ -450433,6 +455474,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
+    isExternal?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type StaffTypeCreateInput = {
@@ -469838,7 +474880,17 @@ export namespace Prisma {
     none?: ExpertProfileWhereInput
   }
 
+  export type GuestTeachingRateListRelationFilter = {
+    every?: GuestTeachingRateWhereInput
+    some?: GuestTeachingRateWhereInput
+    none?: GuestTeachingRateWhereInput
+  }
+
   export type ExpertProfileOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type GuestTeachingRateOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -470206,6 +475258,12 @@ export namespace Prisma {
     none?: SurveyObjectTypeWhereInput
   }
 
+  export type GuestTeachingPaymentListRelationFilter = {
+    every?: GuestTeachingPaymentWhereInput
+    some?: GuestTeachingPaymentWhereInput
+    none?: GuestTeachingPaymentWhereInput
+  }
+
   export type LecturerOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -470247,6 +475305,10 @@ export namespace Prisma {
   }
 
   export type SurveyObjectTypeOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type GuestTeachingPaymentOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -473096,6 +478158,12 @@ export namespace Prisma {
     none?: SchoolYearTrainingScoreWhereInput
   }
 
+  export type GuestTeachingRateConfigListRelationFilter = {
+    every?: GuestTeachingRateConfigWhereInput
+    some?: GuestTeachingRateConfigWhereInput
+    none?: GuestTeachingRateConfigWhereInput
+  }
+
   export type SemesterOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -473117,6 +478185,10 @@ export namespace Prisma {
   }
 
   export type SchoolYearTrainingScoreOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type GuestTeachingRateConfigOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -478727,6 +483799,226 @@ export namespace Prisma {
     lecturerTypeId?: SortOrder
   }
 
+  export type GuestTeachingRateConfigOrderByRelevanceInput = {
+    fields: GuestTeachingRateConfigOrderByRelevanceFieldEnum | GuestTeachingRateConfigOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
+  }
+
+  export type GuestTeachingRateConfigCountOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    active?: SortOrder
+    description?: SortOrder
+    deletedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+    name?: SortOrder
+    schoolYearId?: SortOrder
+  }
+
+  export type GuestTeachingRateConfigMaxOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    active?: SortOrder
+    description?: SortOrder
+    deletedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+    name?: SortOrder
+    schoolYearId?: SortOrder
+  }
+
+  export type GuestTeachingRateConfigMinOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    active?: SortOrder
+    description?: SortOrder
+    deletedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+    name?: SortOrder
+    schoolYearId?: SortOrder
+  }
+
+  export type GuestTeachingRateConfigScalarRelationFilter = {
+    is?: GuestTeachingRateConfigWhereInput
+    isNot?: GuestTeachingRateConfigWhereInput
+  }
+
+  export type GuestTeachingRateOrderByRelevanceInput = {
+    fields: GuestTeachingRateOrderByRelevanceFieldEnum | GuestTeachingRateOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
+  }
+
+  export type GuestTeachingRateConfigIdAcademicRankTypeIdAcademicDegreeTypeIdIsForeignCompoundUniqueInput = {
+    configId: string
+    academicRankTypeId: string
+    academicDegreeTypeId: string
+    isForeign: boolean
+  }
+
+  export type GuestTeachingRateCountOrderByAggregateInput = {
+    id?: SortOrder
+    active?: SortOrder
+    description?: SortOrder
+    deletedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+    configId?: SortOrder
+    academicRankTypeId?: SortOrder
+    academicDegreeTypeId?: SortOrder
+    isForeign?: SortOrder
+    ratePerPeriod?: SortOrder
+  }
+
+  export type GuestTeachingRateAvgOrderByAggregateInput = {
+    ratePerPeriod?: SortOrder
+  }
+
+  export type GuestTeachingRateMaxOrderByAggregateInput = {
+    id?: SortOrder
+    active?: SortOrder
+    description?: SortOrder
+    deletedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+    configId?: SortOrder
+    academicRankTypeId?: SortOrder
+    academicDegreeTypeId?: SortOrder
+    isForeign?: SortOrder
+    ratePerPeriod?: SortOrder
+  }
+
+  export type GuestTeachingRateMinOrderByAggregateInput = {
+    id?: SortOrder
+    active?: SortOrder
+    description?: SortOrder
+    deletedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+    configId?: SortOrder
+    academicRankTypeId?: SortOrder
+    academicDegreeTypeId?: SortOrder
+    isForeign?: SortOrder
+    ratePerPeriod?: SortOrder
+  }
+
+  export type GuestTeachingRateSumOrderByAggregateInput = {
+    ratePerPeriod?: SortOrder
+  }
+
+  export type EnumPaymentStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.PaymentStatus | EnumPaymentStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.PaymentStatus[] | ListEnumPaymentStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PaymentStatus[] | ListEnumPaymentStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumPaymentStatusFilter<$PrismaModel> | $Enums.PaymentStatus
+  }
+
+  export type GuestTeachingPaymentOrderByRelevanceInput = {
+    fields: GuestTeachingPaymentOrderByRelevanceFieldEnum | GuestTeachingPaymentOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
+  }
+
+  export type GuestTeachingPaymentLecturerIdSemesterIdHiringOrgIdCompoundUniqueInput = {
+    lecturerId: string
+    semesterId: string
+    hiringOrgId: string
+  }
+
+  export type GuestTeachingPaymentCountOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    active?: SortOrder
+    description?: SortOrder
+    deletedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+    lecturerId?: SortOrder
+    semesterId?: SortOrder
+    hiringOrgId?: SortOrder
+    totalPeriods?: SortOrder
+    ratePerPeriod?: SortOrder
+    amount?: SortOrder
+    status?: SortOrder
+    paymentDate?: SortOrder
+    transactionCode?: SortOrder
+    decisionRef?: SortOrder
+  }
+
+  export type GuestTeachingPaymentAvgOrderByAggregateInput = {
+    totalPeriods?: SortOrder
+    ratePerPeriod?: SortOrder
+    amount?: SortOrder
+  }
+
+  export type GuestTeachingPaymentMaxOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    active?: SortOrder
+    description?: SortOrder
+    deletedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+    lecturerId?: SortOrder
+    semesterId?: SortOrder
+    hiringOrgId?: SortOrder
+    totalPeriods?: SortOrder
+    ratePerPeriod?: SortOrder
+    amount?: SortOrder
+    status?: SortOrder
+    paymentDate?: SortOrder
+    transactionCode?: SortOrder
+    decisionRef?: SortOrder
+  }
+
+  export type GuestTeachingPaymentMinOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    active?: SortOrder
+    description?: SortOrder
+    deletedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: SortOrder
+    lecturerId?: SortOrder
+    semesterId?: SortOrder
+    hiringOrgId?: SortOrder
+    totalPeriods?: SortOrder
+    ratePerPeriod?: SortOrder
+    amount?: SortOrder
+    status?: SortOrder
+    paymentDate?: SortOrder
+    transactionCode?: SortOrder
+    decisionRef?: SortOrder
+  }
+
+  export type GuestTeachingPaymentSumOrderByAggregateInput = {
+    totalPeriods?: SortOrder
+    ratePerPeriod?: SortOrder
+    amount?: SortOrder
+  }
+
+  export type EnumPaymentStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.PaymentStatus | EnumPaymentStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.PaymentStatus[] | ListEnumPaymentStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PaymentStatus[] | ListEnumPaymentStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumPaymentStatusWithAggregatesFilter<$PrismaModel> | $Enums.PaymentStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumPaymentStatusFilter<$PrismaModel>
+    _max?: NestedEnumPaymentStatusFilter<$PrismaModel>
+  }
+
   export type LecturerTypeOrderByRelevanceInput = {
     fields: LecturerTypeOrderByRelevanceFieldEnum | LecturerTypeOrderByRelevanceFieldEnum[]
     sort: SortOrder
@@ -478743,6 +484035,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     createdBy?: SortOrder
     name?: SortOrder
+    isExternal?: SortOrder
   }
 
   export type LecturerTypeMaxOrderByAggregateInput = {
@@ -478755,6 +484048,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     createdBy?: SortOrder
     name?: SortOrder
+    isExternal?: SortOrder
   }
 
   export type LecturerTypeMinOrderByAggregateInput = {
@@ -478767,6 +484061,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     createdBy?: SortOrder
     name?: SortOrder
+    isExternal?: SortOrder
   }
 
   export type StaffTypeOrderByRelevanceInput = {
@@ -480426,13 +485721,6 @@ export namespace Prisma {
     _max?: NestedEnumSupervisorRoleFilter<$PrismaModel>
   }
 
-  export type EnumPaymentStatusFilter<$PrismaModel = never> = {
-    equals?: $Enums.PaymentStatus | EnumPaymentStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.PaymentStatus[] | ListEnumPaymentStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.PaymentStatus[] | ListEnumPaymentStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumPaymentStatusFilter<$PrismaModel> | $Enums.PaymentStatus
-  }
-
   export type CouncilMemberNullableScalarRelationFilter = {
     is?: CouncilMemberWhereInput | null
     isNot?: CouncilMemberWhereInput | null
@@ -480498,16 +485786,6 @@ export namespace Prisma {
 
   export type PaymentRecordSumOrderByAggregateInput = {
     amount?: SortOrder
-  }
-
-  export type EnumPaymentStatusWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.PaymentStatus | EnumPaymentStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.PaymentStatus[] | ListEnumPaymentStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.PaymentStatus[] | ListEnumPaymentStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumPaymentStatusWithAggregatesFilter<$PrismaModel> | $Enums.PaymentStatus
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumPaymentStatusFilter<$PrismaModel>
-    _max?: NestedEnumPaymentStatusFilter<$PrismaModel>
   }
 
   export type SupervisorPaymentRecordOrderByRelevanceInput = {
@@ -492674,6 +497952,13 @@ export namespace Prisma {
     connect?: ExpertProfileWhereUniqueInput | ExpertProfileWhereUniqueInput[]
   }
 
+  export type GuestTeachingRateCreateNestedManyWithoutAcademicRankTypeInput = {
+    create?: XOR<GuestTeachingRateCreateWithoutAcademicRankTypeInput, GuestTeachingRateUncheckedCreateWithoutAcademicRankTypeInput> | GuestTeachingRateCreateWithoutAcademicRankTypeInput[] | GuestTeachingRateUncheckedCreateWithoutAcademicRankTypeInput[]
+    connectOrCreate?: GuestTeachingRateCreateOrConnectWithoutAcademicRankTypeInput | GuestTeachingRateCreateOrConnectWithoutAcademicRankTypeInput[]
+    createMany?: GuestTeachingRateCreateManyAcademicRankTypeInputEnvelope
+    connect?: GuestTeachingRateWhereUniqueInput | GuestTeachingRateWhereUniqueInput[]
+  }
+
   export type UserProfileUncheckedCreateNestedManyWithoutAcademicRankTypeInput = {
     create?: XOR<UserProfileCreateWithoutAcademicRankTypeInput, UserProfileUncheckedCreateWithoutAcademicRankTypeInput> | UserProfileCreateWithoutAcademicRankTypeInput[] | UserProfileUncheckedCreateWithoutAcademicRankTypeInput[]
     connectOrCreate?: UserProfileCreateOrConnectWithoutAcademicRankTypeInput | UserProfileCreateOrConnectWithoutAcademicRankTypeInput[]
@@ -492693,6 +497978,13 @@ export namespace Prisma {
     connectOrCreate?: ExpertProfileCreateOrConnectWithoutAcademicRankTypeInput | ExpertProfileCreateOrConnectWithoutAcademicRankTypeInput[]
     createMany?: ExpertProfileCreateManyAcademicRankTypeInputEnvelope
     connect?: ExpertProfileWhereUniqueInput | ExpertProfileWhereUniqueInput[]
+  }
+
+  export type GuestTeachingRateUncheckedCreateNestedManyWithoutAcademicRankTypeInput = {
+    create?: XOR<GuestTeachingRateCreateWithoutAcademicRankTypeInput, GuestTeachingRateUncheckedCreateWithoutAcademicRankTypeInput> | GuestTeachingRateCreateWithoutAcademicRankTypeInput[] | GuestTeachingRateUncheckedCreateWithoutAcademicRankTypeInput[]
+    connectOrCreate?: GuestTeachingRateCreateOrConnectWithoutAcademicRankTypeInput | GuestTeachingRateCreateOrConnectWithoutAcademicRankTypeInput[]
+    createMany?: GuestTeachingRateCreateManyAcademicRankTypeInputEnvelope
+    connect?: GuestTeachingRateWhereUniqueInput | GuestTeachingRateWhereUniqueInput[]
   }
 
   export type UserProfileUpdateManyWithoutAcademicRankTypeNestedInput = {
@@ -492737,6 +498029,20 @@ export namespace Prisma {
     deleteMany?: ExpertProfileScalarWhereInput | ExpertProfileScalarWhereInput[]
   }
 
+  export type GuestTeachingRateUpdateManyWithoutAcademicRankTypeNestedInput = {
+    create?: XOR<GuestTeachingRateCreateWithoutAcademicRankTypeInput, GuestTeachingRateUncheckedCreateWithoutAcademicRankTypeInput> | GuestTeachingRateCreateWithoutAcademicRankTypeInput[] | GuestTeachingRateUncheckedCreateWithoutAcademicRankTypeInput[]
+    connectOrCreate?: GuestTeachingRateCreateOrConnectWithoutAcademicRankTypeInput | GuestTeachingRateCreateOrConnectWithoutAcademicRankTypeInput[]
+    upsert?: GuestTeachingRateUpsertWithWhereUniqueWithoutAcademicRankTypeInput | GuestTeachingRateUpsertWithWhereUniqueWithoutAcademicRankTypeInput[]
+    createMany?: GuestTeachingRateCreateManyAcademicRankTypeInputEnvelope
+    set?: GuestTeachingRateWhereUniqueInput | GuestTeachingRateWhereUniqueInput[]
+    disconnect?: GuestTeachingRateWhereUniqueInput | GuestTeachingRateWhereUniqueInput[]
+    delete?: GuestTeachingRateWhereUniqueInput | GuestTeachingRateWhereUniqueInput[]
+    connect?: GuestTeachingRateWhereUniqueInput | GuestTeachingRateWhereUniqueInput[]
+    update?: GuestTeachingRateUpdateWithWhereUniqueWithoutAcademicRankTypeInput | GuestTeachingRateUpdateWithWhereUniqueWithoutAcademicRankTypeInput[]
+    updateMany?: GuestTeachingRateUpdateManyWithWhereWithoutAcademicRankTypeInput | GuestTeachingRateUpdateManyWithWhereWithoutAcademicRankTypeInput[]
+    deleteMany?: GuestTeachingRateScalarWhereInput | GuestTeachingRateScalarWhereInput[]
+  }
+
   export type UserProfileUncheckedUpdateManyWithoutAcademicRankTypeNestedInput = {
     create?: XOR<UserProfileCreateWithoutAcademicRankTypeInput, UserProfileUncheckedCreateWithoutAcademicRankTypeInput> | UserProfileCreateWithoutAcademicRankTypeInput[] | UserProfileUncheckedCreateWithoutAcademicRankTypeInput[]
     connectOrCreate?: UserProfileCreateOrConnectWithoutAcademicRankTypeInput | UserProfileCreateOrConnectWithoutAcademicRankTypeInput[]
@@ -492779,6 +498085,20 @@ export namespace Prisma {
     deleteMany?: ExpertProfileScalarWhereInput | ExpertProfileScalarWhereInput[]
   }
 
+  export type GuestTeachingRateUncheckedUpdateManyWithoutAcademicRankTypeNestedInput = {
+    create?: XOR<GuestTeachingRateCreateWithoutAcademicRankTypeInput, GuestTeachingRateUncheckedCreateWithoutAcademicRankTypeInput> | GuestTeachingRateCreateWithoutAcademicRankTypeInput[] | GuestTeachingRateUncheckedCreateWithoutAcademicRankTypeInput[]
+    connectOrCreate?: GuestTeachingRateCreateOrConnectWithoutAcademicRankTypeInput | GuestTeachingRateCreateOrConnectWithoutAcademicRankTypeInput[]
+    upsert?: GuestTeachingRateUpsertWithWhereUniqueWithoutAcademicRankTypeInput | GuestTeachingRateUpsertWithWhereUniqueWithoutAcademicRankTypeInput[]
+    createMany?: GuestTeachingRateCreateManyAcademicRankTypeInputEnvelope
+    set?: GuestTeachingRateWhereUniqueInput | GuestTeachingRateWhereUniqueInput[]
+    disconnect?: GuestTeachingRateWhereUniqueInput | GuestTeachingRateWhereUniqueInput[]
+    delete?: GuestTeachingRateWhereUniqueInput | GuestTeachingRateWhereUniqueInput[]
+    connect?: GuestTeachingRateWhereUniqueInput | GuestTeachingRateWhereUniqueInput[]
+    update?: GuestTeachingRateUpdateWithWhereUniqueWithoutAcademicRankTypeInput | GuestTeachingRateUpdateWithWhereUniqueWithoutAcademicRankTypeInput[]
+    updateMany?: GuestTeachingRateUpdateManyWithWhereWithoutAcademicRankTypeInput | GuestTeachingRateUpdateManyWithWhereWithoutAcademicRankTypeInput[]
+    deleteMany?: GuestTeachingRateScalarWhereInput | GuestTeachingRateScalarWhereInput[]
+  }
+
   export type UserProfileCreateNestedManyWithoutAcademicDegreeTypeInput = {
     create?: XOR<UserProfileCreateWithoutAcademicDegreeTypeInput, UserProfileUncheckedCreateWithoutAcademicDegreeTypeInput> | UserProfileCreateWithoutAcademicDegreeTypeInput[] | UserProfileUncheckedCreateWithoutAcademicDegreeTypeInput[]
     connectOrCreate?: UserProfileCreateOrConnectWithoutAcademicDegreeTypeInput | UserProfileCreateOrConnectWithoutAcademicDegreeTypeInput[]
@@ -492800,6 +498120,13 @@ export namespace Prisma {
     connect?: ExpertProfileWhereUniqueInput | ExpertProfileWhereUniqueInput[]
   }
 
+  export type GuestTeachingRateCreateNestedManyWithoutAcademicDegreeTypeInput = {
+    create?: XOR<GuestTeachingRateCreateWithoutAcademicDegreeTypeInput, GuestTeachingRateUncheckedCreateWithoutAcademicDegreeTypeInput> | GuestTeachingRateCreateWithoutAcademicDegreeTypeInput[] | GuestTeachingRateUncheckedCreateWithoutAcademicDegreeTypeInput[]
+    connectOrCreate?: GuestTeachingRateCreateOrConnectWithoutAcademicDegreeTypeInput | GuestTeachingRateCreateOrConnectWithoutAcademicDegreeTypeInput[]
+    createMany?: GuestTeachingRateCreateManyAcademicDegreeTypeInputEnvelope
+    connect?: GuestTeachingRateWhereUniqueInput | GuestTeachingRateWhereUniqueInput[]
+  }
+
   export type UserProfileUncheckedCreateNestedManyWithoutAcademicDegreeTypeInput = {
     create?: XOR<UserProfileCreateWithoutAcademicDegreeTypeInput, UserProfileUncheckedCreateWithoutAcademicDegreeTypeInput> | UserProfileCreateWithoutAcademicDegreeTypeInput[] | UserProfileUncheckedCreateWithoutAcademicDegreeTypeInput[]
     connectOrCreate?: UserProfileCreateOrConnectWithoutAcademicDegreeTypeInput | UserProfileCreateOrConnectWithoutAcademicDegreeTypeInput[]
@@ -492819,6 +498146,13 @@ export namespace Prisma {
     connectOrCreate?: ExpertProfileCreateOrConnectWithoutAcademicDegreeTypeInput | ExpertProfileCreateOrConnectWithoutAcademicDegreeTypeInput[]
     createMany?: ExpertProfileCreateManyAcademicDegreeTypeInputEnvelope
     connect?: ExpertProfileWhereUniqueInput | ExpertProfileWhereUniqueInput[]
+  }
+
+  export type GuestTeachingRateUncheckedCreateNestedManyWithoutAcademicDegreeTypeInput = {
+    create?: XOR<GuestTeachingRateCreateWithoutAcademicDegreeTypeInput, GuestTeachingRateUncheckedCreateWithoutAcademicDegreeTypeInput> | GuestTeachingRateCreateWithoutAcademicDegreeTypeInput[] | GuestTeachingRateUncheckedCreateWithoutAcademicDegreeTypeInput[]
+    connectOrCreate?: GuestTeachingRateCreateOrConnectWithoutAcademicDegreeTypeInput | GuestTeachingRateCreateOrConnectWithoutAcademicDegreeTypeInput[]
+    createMany?: GuestTeachingRateCreateManyAcademicDegreeTypeInputEnvelope
+    connect?: GuestTeachingRateWhereUniqueInput | GuestTeachingRateWhereUniqueInput[]
   }
 
   export type UserProfileUpdateManyWithoutAcademicDegreeTypeNestedInput = {
@@ -492863,6 +498197,20 @@ export namespace Prisma {
     deleteMany?: ExpertProfileScalarWhereInput | ExpertProfileScalarWhereInput[]
   }
 
+  export type GuestTeachingRateUpdateManyWithoutAcademicDegreeTypeNestedInput = {
+    create?: XOR<GuestTeachingRateCreateWithoutAcademicDegreeTypeInput, GuestTeachingRateUncheckedCreateWithoutAcademicDegreeTypeInput> | GuestTeachingRateCreateWithoutAcademicDegreeTypeInput[] | GuestTeachingRateUncheckedCreateWithoutAcademicDegreeTypeInput[]
+    connectOrCreate?: GuestTeachingRateCreateOrConnectWithoutAcademicDegreeTypeInput | GuestTeachingRateCreateOrConnectWithoutAcademicDegreeTypeInput[]
+    upsert?: GuestTeachingRateUpsertWithWhereUniqueWithoutAcademicDegreeTypeInput | GuestTeachingRateUpsertWithWhereUniqueWithoutAcademicDegreeTypeInput[]
+    createMany?: GuestTeachingRateCreateManyAcademicDegreeTypeInputEnvelope
+    set?: GuestTeachingRateWhereUniqueInput | GuestTeachingRateWhereUniqueInput[]
+    disconnect?: GuestTeachingRateWhereUniqueInput | GuestTeachingRateWhereUniqueInput[]
+    delete?: GuestTeachingRateWhereUniqueInput | GuestTeachingRateWhereUniqueInput[]
+    connect?: GuestTeachingRateWhereUniqueInput | GuestTeachingRateWhereUniqueInput[]
+    update?: GuestTeachingRateUpdateWithWhereUniqueWithoutAcademicDegreeTypeInput | GuestTeachingRateUpdateWithWhereUniqueWithoutAcademicDegreeTypeInput[]
+    updateMany?: GuestTeachingRateUpdateManyWithWhereWithoutAcademicDegreeTypeInput | GuestTeachingRateUpdateManyWithWhereWithoutAcademicDegreeTypeInput[]
+    deleteMany?: GuestTeachingRateScalarWhereInput | GuestTeachingRateScalarWhereInput[]
+  }
+
   export type UserProfileUncheckedUpdateManyWithoutAcademicDegreeTypeNestedInput = {
     create?: XOR<UserProfileCreateWithoutAcademicDegreeTypeInput, UserProfileUncheckedCreateWithoutAcademicDegreeTypeInput> | UserProfileCreateWithoutAcademicDegreeTypeInput[] | UserProfileUncheckedCreateWithoutAcademicDegreeTypeInput[]
     connectOrCreate?: UserProfileCreateOrConnectWithoutAcademicDegreeTypeInput | UserProfileCreateOrConnectWithoutAcademicDegreeTypeInput[]
@@ -492903,6 +498251,20 @@ export namespace Prisma {
     update?: ExpertProfileUpdateWithWhereUniqueWithoutAcademicDegreeTypeInput | ExpertProfileUpdateWithWhereUniqueWithoutAcademicDegreeTypeInput[]
     updateMany?: ExpertProfileUpdateManyWithWhereWithoutAcademicDegreeTypeInput | ExpertProfileUpdateManyWithWhereWithoutAcademicDegreeTypeInput[]
     deleteMany?: ExpertProfileScalarWhereInput | ExpertProfileScalarWhereInput[]
+  }
+
+  export type GuestTeachingRateUncheckedUpdateManyWithoutAcademicDegreeTypeNestedInput = {
+    create?: XOR<GuestTeachingRateCreateWithoutAcademicDegreeTypeInput, GuestTeachingRateUncheckedCreateWithoutAcademicDegreeTypeInput> | GuestTeachingRateCreateWithoutAcademicDegreeTypeInput[] | GuestTeachingRateUncheckedCreateWithoutAcademicDegreeTypeInput[]
+    connectOrCreate?: GuestTeachingRateCreateOrConnectWithoutAcademicDegreeTypeInput | GuestTeachingRateCreateOrConnectWithoutAcademicDegreeTypeInput[]
+    upsert?: GuestTeachingRateUpsertWithWhereUniqueWithoutAcademicDegreeTypeInput | GuestTeachingRateUpsertWithWhereUniqueWithoutAcademicDegreeTypeInput[]
+    createMany?: GuestTeachingRateCreateManyAcademicDegreeTypeInputEnvelope
+    set?: GuestTeachingRateWhereUniqueInput | GuestTeachingRateWhereUniqueInput[]
+    disconnect?: GuestTeachingRateWhereUniqueInput | GuestTeachingRateWhereUniqueInput[]
+    delete?: GuestTeachingRateWhereUniqueInput | GuestTeachingRateWhereUniqueInput[]
+    connect?: GuestTeachingRateWhereUniqueInput | GuestTeachingRateWhereUniqueInput[]
+    update?: GuestTeachingRateUpdateWithWhereUniqueWithoutAcademicDegreeTypeInput | GuestTeachingRateUpdateWithWhereUniqueWithoutAcademicDegreeTypeInput[]
+    updateMany?: GuestTeachingRateUpdateManyWithWhereWithoutAcademicDegreeTypeInput | GuestTeachingRateUpdateManyWithWhereWithoutAcademicDegreeTypeInput[]
+    deleteMany?: GuestTeachingRateScalarWhereInput | GuestTeachingRateScalarWhereInput[]
   }
 
   export type UserProfileCreateNestedManyWithoutEthnicityInput = {
@@ -493093,6 +498455,13 @@ export namespace Prisma {
     connect?: SurveyObjectTypeWhereUniqueInput | SurveyObjectTypeWhereUniqueInput[]
   }
 
+  export type GuestTeachingPaymentCreateNestedManyWithoutHiringOrgInput = {
+    create?: XOR<GuestTeachingPaymentCreateWithoutHiringOrgInput, GuestTeachingPaymentUncheckedCreateWithoutHiringOrgInput> | GuestTeachingPaymentCreateWithoutHiringOrgInput[] | GuestTeachingPaymentUncheckedCreateWithoutHiringOrgInput[]
+    connectOrCreate?: GuestTeachingPaymentCreateOrConnectWithoutHiringOrgInput | GuestTeachingPaymentCreateOrConnectWithoutHiringOrgInput[]
+    createMany?: GuestTeachingPaymentCreateManyHiringOrgInputEnvelope
+    connect?: GuestTeachingPaymentWhereUniqueInput | GuestTeachingPaymentWhereUniqueInput[]
+  }
+
   export type LecturerUncheckedCreateNestedManyWithoutOrganizationInput = {
     create?: XOR<LecturerCreateWithoutOrganizationInput, LecturerUncheckedCreateWithoutOrganizationInput> | LecturerCreateWithoutOrganizationInput[] | LecturerUncheckedCreateWithoutOrganizationInput[]
     connectOrCreate?: LecturerCreateOrConnectWithoutOrganizationInput | LecturerCreateOrConnectWithoutOrganizationInput[]
@@ -493195,6 +498564,13 @@ export namespace Prisma {
     create?: XOR<SurveyObjectTypeCreateWithoutOrganizationsInput, SurveyObjectTypeUncheckedCreateWithoutOrganizationsInput> | SurveyObjectTypeCreateWithoutOrganizationsInput[] | SurveyObjectTypeUncheckedCreateWithoutOrganizationsInput[]
     connectOrCreate?: SurveyObjectTypeCreateOrConnectWithoutOrganizationsInput | SurveyObjectTypeCreateOrConnectWithoutOrganizationsInput[]
     connect?: SurveyObjectTypeWhereUniqueInput | SurveyObjectTypeWhereUniqueInput[]
+  }
+
+  export type GuestTeachingPaymentUncheckedCreateNestedManyWithoutHiringOrgInput = {
+    create?: XOR<GuestTeachingPaymentCreateWithoutHiringOrgInput, GuestTeachingPaymentUncheckedCreateWithoutHiringOrgInput> | GuestTeachingPaymentCreateWithoutHiringOrgInput[] | GuestTeachingPaymentUncheckedCreateWithoutHiringOrgInput[]
+    connectOrCreate?: GuestTeachingPaymentCreateOrConnectWithoutHiringOrgInput | GuestTeachingPaymentCreateOrConnectWithoutHiringOrgInput[]
+    createMany?: GuestTeachingPaymentCreateManyHiringOrgInputEnvelope
+    connect?: GuestTeachingPaymentWhereUniqueInput | GuestTeachingPaymentWhereUniqueInput[]
   }
 
   export type LecturerUpdateManyWithoutOrganizationNestedInput = {
@@ -493406,6 +498782,20 @@ export namespace Prisma {
     deleteMany?: SurveyObjectTypeScalarWhereInput | SurveyObjectTypeScalarWhereInput[]
   }
 
+  export type GuestTeachingPaymentUpdateManyWithoutHiringOrgNestedInput = {
+    create?: XOR<GuestTeachingPaymentCreateWithoutHiringOrgInput, GuestTeachingPaymentUncheckedCreateWithoutHiringOrgInput> | GuestTeachingPaymentCreateWithoutHiringOrgInput[] | GuestTeachingPaymentUncheckedCreateWithoutHiringOrgInput[]
+    connectOrCreate?: GuestTeachingPaymentCreateOrConnectWithoutHiringOrgInput | GuestTeachingPaymentCreateOrConnectWithoutHiringOrgInput[]
+    upsert?: GuestTeachingPaymentUpsertWithWhereUniqueWithoutHiringOrgInput | GuestTeachingPaymentUpsertWithWhereUniqueWithoutHiringOrgInput[]
+    createMany?: GuestTeachingPaymentCreateManyHiringOrgInputEnvelope
+    set?: GuestTeachingPaymentWhereUniqueInput | GuestTeachingPaymentWhereUniqueInput[]
+    disconnect?: GuestTeachingPaymentWhereUniqueInput | GuestTeachingPaymentWhereUniqueInput[]
+    delete?: GuestTeachingPaymentWhereUniqueInput | GuestTeachingPaymentWhereUniqueInput[]
+    connect?: GuestTeachingPaymentWhereUniqueInput | GuestTeachingPaymentWhereUniqueInput[]
+    update?: GuestTeachingPaymentUpdateWithWhereUniqueWithoutHiringOrgInput | GuestTeachingPaymentUpdateWithWhereUniqueWithoutHiringOrgInput[]
+    updateMany?: GuestTeachingPaymentUpdateManyWithWhereWithoutHiringOrgInput | GuestTeachingPaymentUpdateManyWithWhereWithoutHiringOrgInput[]
+    deleteMany?: GuestTeachingPaymentScalarWhereInput | GuestTeachingPaymentScalarWhereInput[]
+  }
+
   export type LecturerUncheckedUpdateManyWithoutOrganizationNestedInput = {
     create?: XOR<LecturerCreateWithoutOrganizationInput, LecturerUncheckedCreateWithoutOrganizationInput> | LecturerCreateWithoutOrganizationInput[] | LecturerUncheckedCreateWithoutOrganizationInput[]
     connectOrCreate?: LecturerCreateOrConnectWithoutOrganizationInput | LecturerCreateOrConnectWithoutOrganizationInput[]
@@ -493613,6 +499003,20 @@ export namespace Prisma {
     update?: SurveyObjectTypeUpdateWithWhereUniqueWithoutOrganizationsInput | SurveyObjectTypeUpdateWithWhereUniqueWithoutOrganizationsInput[]
     updateMany?: SurveyObjectTypeUpdateManyWithWhereWithoutOrganizationsInput | SurveyObjectTypeUpdateManyWithWhereWithoutOrganizationsInput[]
     deleteMany?: SurveyObjectTypeScalarWhereInput | SurveyObjectTypeScalarWhereInput[]
+  }
+
+  export type GuestTeachingPaymentUncheckedUpdateManyWithoutHiringOrgNestedInput = {
+    create?: XOR<GuestTeachingPaymentCreateWithoutHiringOrgInput, GuestTeachingPaymentUncheckedCreateWithoutHiringOrgInput> | GuestTeachingPaymentCreateWithoutHiringOrgInput[] | GuestTeachingPaymentUncheckedCreateWithoutHiringOrgInput[]
+    connectOrCreate?: GuestTeachingPaymentCreateOrConnectWithoutHiringOrgInput | GuestTeachingPaymentCreateOrConnectWithoutHiringOrgInput[]
+    upsert?: GuestTeachingPaymentUpsertWithWhereUniqueWithoutHiringOrgInput | GuestTeachingPaymentUpsertWithWhereUniqueWithoutHiringOrgInput[]
+    createMany?: GuestTeachingPaymentCreateManyHiringOrgInputEnvelope
+    set?: GuestTeachingPaymentWhereUniqueInput | GuestTeachingPaymentWhereUniqueInput[]
+    disconnect?: GuestTeachingPaymentWhereUniqueInput | GuestTeachingPaymentWhereUniqueInput[]
+    delete?: GuestTeachingPaymentWhereUniqueInput | GuestTeachingPaymentWhereUniqueInput[]
+    connect?: GuestTeachingPaymentWhereUniqueInput | GuestTeachingPaymentWhereUniqueInput[]
+    update?: GuestTeachingPaymentUpdateWithWhereUniqueWithoutHiringOrgInput | GuestTeachingPaymentUpdateWithWhereUniqueWithoutHiringOrgInput[]
+    updateMany?: GuestTeachingPaymentUpdateManyWithWhereWithoutHiringOrgInput | GuestTeachingPaymentUpdateManyWithWhereWithoutHiringOrgInput[]
+    deleteMany?: GuestTeachingPaymentScalarWhereInput | GuestTeachingPaymentScalarWhereInput[]
   }
 
   export type StudentCreateNestedManyWithoutRegistrationAreaInput = {
@@ -496249,6 +501653,13 @@ export namespace Prisma {
     connect?: SchoolYearTrainingScoreWhereUniqueInput | SchoolYearTrainingScoreWhereUniqueInput[]
   }
 
+  export type GuestTeachingRateConfigCreateNestedManyWithoutSchoolYearInput = {
+    create?: XOR<GuestTeachingRateConfigCreateWithoutSchoolYearInput, GuestTeachingRateConfigUncheckedCreateWithoutSchoolYearInput> | GuestTeachingRateConfigCreateWithoutSchoolYearInput[] | GuestTeachingRateConfigUncheckedCreateWithoutSchoolYearInput[]
+    connectOrCreate?: GuestTeachingRateConfigCreateOrConnectWithoutSchoolYearInput | GuestTeachingRateConfigCreateOrConnectWithoutSchoolYearInput[]
+    createMany?: GuestTeachingRateConfigCreateManySchoolYearInputEnvelope
+    connect?: GuestTeachingRateConfigWhereUniqueInput | GuestTeachingRateConfigWhereUniqueInput[]
+  }
+
   export type SemesterUncheckedCreateNestedManyWithoutSchoolYearInput = {
     create?: XOR<SemesterCreateWithoutSchoolYearInput, SemesterUncheckedCreateWithoutSchoolYearInput> | SemesterCreateWithoutSchoolYearInput[] | SemesterUncheckedCreateWithoutSchoolYearInput[]
     connectOrCreate?: SemesterCreateOrConnectWithoutSchoolYearInput | SemesterCreateOrConnectWithoutSchoolYearInput[]
@@ -496289,6 +501700,13 @@ export namespace Prisma {
     connectOrCreate?: SchoolYearTrainingScoreCreateOrConnectWithoutSchoolYearInput | SchoolYearTrainingScoreCreateOrConnectWithoutSchoolYearInput[]
     createMany?: SchoolYearTrainingScoreCreateManySchoolYearInputEnvelope
     connect?: SchoolYearTrainingScoreWhereUniqueInput | SchoolYearTrainingScoreWhereUniqueInput[]
+  }
+
+  export type GuestTeachingRateConfigUncheckedCreateNestedManyWithoutSchoolYearInput = {
+    create?: XOR<GuestTeachingRateConfigCreateWithoutSchoolYearInput, GuestTeachingRateConfigUncheckedCreateWithoutSchoolYearInput> | GuestTeachingRateConfigCreateWithoutSchoolYearInput[] | GuestTeachingRateConfigUncheckedCreateWithoutSchoolYearInput[]
+    connectOrCreate?: GuestTeachingRateConfigCreateOrConnectWithoutSchoolYearInput | GuestTeachingRateConfigCreateOrConnectWithoutSchoolYearInput[]
+    createMany?: GuestTeachingRateConfigCreateManySchoolYearInputEnvelope
+    connect?: GuestTeachingRateConfigWhereUniqueInput | GuestTeachingRateConfigWhereUniqueInput[]
   }
 
   export type SemesterUpdateManyWithoutSchoolYearNestedInput = {
@@ -496375,6 +501793,20 @@ export namespace Prisma {
     deleteMany?: SchoolYearTrainingScoreScalarWhereInput | SchoolYearTrainingScoreScalarWhereInput[]
   }
 
+  export type GuestTeachingRateConfigUpdateManyWithoutSchoolYearNestedInput = {
+    create?: XOR<GuestTeachingRateConfigCreateWithoutSchoolYearInput, GuestTeachingRateConfigUncheckedCreateWithoutSchoolYearInput> | GuestTeachingRateConfigCreateWithoutSchoolYearInput[] | GuestTeachingRateConfigUncheckedCreateWithoutSchoolYearInput[]
+    connectOrCreate?: GuestTeachingRateConfigCreateOrConnectWithoutSchoolYearInput | GuestTeachingRateConfigCreateOrConnectWithoutSchoolYearInput[]
+    upsert?: GuestTeachingRateConfigUpsertWithWhereUniqueWithoutSchoolYearInput | GuestTeachingRateConfigUpsertWithWhereUniqueWithoutSchoolYearInput[]
+    createMany?: GuestTeachingRateConfigCreateManySchoolYearInputEnvelope
+    set?: GuestTeachingRateConfigWhereUniqueInput | GuestTeachingRateConfigWhereUniqueInput[]
+    disconnect?: GuestTeachingRateConfigWhereUniqueInput | GuestTeachingRateConfigWhereUniqueInput[]
+    delete?: GuestTeachingRateConfigWhereUniqueInput | GuestTeachingRateConfigWhereUniqueInput[]
+    connect?: GuestTeachingRateConfigWhereUniqueInput | GuestTeachingRateConfigWhereUniqueInput[]
+    update?: GuestTeachingRateConfigUpdateWithWhereUniqueWithoutSchoolYearInput | GuestTeachingRateConfigUpdateWithWhereUniqueWithoutSchoolYearInput[]
+    updateMany?: GuestTeachingRateConfigUpdateManyWithWhereWithoutSchoolYearInput | GuestTeachingRateConfigUpdateManyWithWhereWithoutSchoolYearInput[]
+    deleteMany?: GuestTeachingRateConfigScalarWhereInput | GuestTeachingRateConfigScalarWhereInput[]
+  }
+
   export type SemesterUncheckedUpdateManyWithoutSchoolYearNestedInput = {
     create?: XOR<SemesterCreateWithoutSchoolYearInput, SemesterUncheckedCreateWithoutSchoolYearInput> | SemesterCreateWithoutSchoolYearInput[] | SemesterUncheckedCreateWithoutSchoolYearInput[]
     connectOrCreate?: SemesterCreateOrConnectWithoutSchoolYearInput | SemesterCreateOrConnectWithoutSchoolYearInput[]
@@ -496457,6 +501889,20 @@ export namespace Prisma {
     update?: SchoolYearTrainingScoreUpdateWithWhereUniqueWithoutSchoolYearInput | SchoolYearTrainingScoreUpdateWithWhereUniqueWithoutSchoolYearInput[]
     updateMany?: SchoolYearTrainingScoreUpdateManyWithWhereWithoutSchoolYearInput | SchoolYearTrainingScoreUpdateManyWithWhereWithoutSchoolYearInput[]
     deleteMany?: SchoolYearTrainingScoreScalarWhereInput | SchoolYearTrainingScoreScalarWhereInput[]
+  }
+
+  export type GuestTeachingRateConfigUncheckedUpdateManyWithoutSchoolYearNestedInput = {
+    create?: XOR<GuestTeachingRateConfigCreateWithoutSchoolYearInput, GuestTeachingRateConfigUncheckedCreateWithoutSchoolYearInput> | GuestTeachingRateConfigCreateWithoutSchoolYearInput[] | GuestTeachingRateConfigUncheckedCreateWithoutSchoolYearInput[]
+    connectOrCreate?: GuestTeachingRateConfigCreateOrConnectWithoutSchoolYearInput | GuestTeachingRateConfigCreateOrConnectWithoutSchoolYearInput[]
+    upsert?: GuestTeachingRateConfigUpsertWithWhereUniqueWithoutSchoolYearInput | GuestTeachingRateConfigUpsertWithWhereUniqueWithoutSchoolYearInput[]
+    createMany?: GuestTeachingRateConfigCreateManySchoolYearInputEnvelope
+    set?: GuestTeachingRateConfigWhereUniqueInput | GuestTeachingRateConfigWhereUniqueInput[]
+    disconnect?: GuestTeachingRateConfigWhereUniqueInput | GuestTeachingRateConfigWhereUniqueInput[]
+    delete?: GuestTeachingRateConfigWhereUniqueInput | GuestTeachingRateConfigWhereUniqueInput[]
+    connect?: GuestTeachingRateConfigWhereUniqueInput | GuestTeachingRateConfigWhereUniqueInput[]
+    update?: GuestTeachingRateConfigUpdateWithWhereUniqueWithoutSchoolYearInput | GuestTeachingRateConfigUpdateWithWhereUniqueWithoutSchoolYearInput[]
+    updateMany?: GuestTeachingRateConfigUpdateManyWithWhereWithoutSchoolYearInput | GuestTeachingRateConfigUpdateManyWithWhereWithoutSchoolYearInput[]
+    deleteMany?: GuestTeachingRateConfigScalarWhereInput | GuestTeachingRateConfigScalarWhereInput[]
   }
 
   export type SchoolYearCreateNestedOneWithoutSemestersInput = {
@@ -496584,6 +502030,13 @@ export namespace Prisma {
     connect?: PlanTrainingPracticeWhereUniqueInput | PlanTrainingPracticeWhereUniqueInput[]
   }
 
+  export type GuestTeachingPaymentCreateNestedManyWithoutSemesterInput = {
+    create?: XOR<GuestTeachingPaymentCreateWithoutSemesterInput, GuestTeachingPaymentUncheckedCreateWithoutSemesterInput> | GuestTeachingPaymentCreateWithoutSemesterInput[] | GuestTeachingPaymentUncheckedCreateWithoutSemesterInput[]
+    connectOrCreate?: GuestTeachingPaymentCreateOrConnectWithoutSemesterInput | GuestTeachingPaymentCreateOrConnectWithoutSemesterInput[]
+    createMany?: GuestTeachingPaymentCreateManySemesterInputEnvelope
+    connect?: GuestTeachingPaymentWhereUniqueInput | GuestTeachingPaymentWhereUniqueInput[]
+  }
+
   export type SubjectClassUncheckedCreateNestedManyWithoutSemesterInput = {
     create?: XOR<SubjectClassCreateWithoutSemesterInput, SubjectClassUncheckedCreateWithoutSemesterInput> | SubjectClassCreateWithoutSemesterInput[] | SubjectClassUncheckedCreateWithoutSemesterInput[]
     connectOrCreate?: SubjectClassCreateOrConnectWithoutSemesterInput | SubjectClassCreateOrConnectWithoutSemesterInput[]
@@ -496701,6 +502154,13 @@ export namespace Prisma {
     connectOrCreate?: PlanTrainingPracticeCreateOrConnectWithoutSemesterInput | PlanTrainingPracticeCreateOrConnectWithoutSemesterInput[]
     createMany?: PlanTrainingPracticeCreateManySemesterInputEnvelope
     connect?: PlanTrainingPracticeWhereUniqueInput | PlanTrainingPracticeWhereUniqueInput[]
+  }
+
+  export type GuestTeachingPaymentUncheckedCreateNestedManyWithoutSemesterInput = {
+    create?: XOR<GuestTeachingPaymentCreateWithoutSemesterInput, GuestTeachingPaymentUncheckedCreateWithoutSemesterInput> | GuestTeachingPaymentCreateWithoutSemesterInput[] | GuestTeachingPaymentUncheckedCreateWithoutSemesterInput[]
+    connectOrCreate?: GuestTeachingPaymentCreateOrConnectWithoutSemesterInput | GuestTeachingPaymentCreateOrConnectWithoutSemesterInput[]
+    createMany?: GuestTeachingPaymentCreateManySemesterInputEnvelope
+    connect?: GuestTeachingPaymentWhereUniqueInput | GuestTeachingPaymentWhereUniqueInput[]
   }
 
   export type NullableEnumSemesterTypeFieldUpdateOperationsInput = {
@@ -496953,6 +502413,20 @@ export namespace Prisma {
     deleteMany?: PlanTrainingPracticeScalarWhereInput | PlanTrainingPracticeScalarWhereInput[]
   }
 
+  export type GuestTeachingPaymentUpdateManyWithoutSemesterNestedInput = {
+    create?: XOR<GuestTeachingPaymentCreateWithoutSemesterInput, GuestTeachingPaymentUncheckedCreateWithoutSemesterInput> | GuestTeachingPaymentCreateWithoutSemesterInput[] | GuestTeachingPaymentUncheckedCreateWithoutSemesterInput[]
+    connectOrCreate?: GuestTeachingPaymentCreateOrConnectWithoutSemesterInput | GuestTeachingPaymentCreateOrConnectWithoutSemesterInput[]
+    upsert?: GuestTeachingPaymentUpsertWithWhereUniqueWithoutSemesterInput | GuestTeachingPaymentUpsertWithWhereUniqueWithoutSemesterInput[]
+    createMany?: GuestTeachingPaymentCreateManySemesterInputEnvelope
+    set?: GuestTeachingPaymentWhereUniqueInput | GuestTeachingPaymentWhereUniqueInput[]
+    disconnect?: GuestTeachingPaymentWhereUniqueInput | GuestTeachingPaymentWhereUniqueInput[]
+    delete?: GuestTeachingPaymentWhereUniqueInput | GuestTeachingPaymentWhereUniqueInput[]
+    connect?: GuestTeachingPaymentWhereUniqueInput | GuestTeachingPaymentWhereUniqueInput[]
+    update?: GuestTeachingPaymentUpdateWithWhereUniqueWithoutSemesterInput | GuestTeachingPaymentUpdateWithWhereUniqueWithoutSemesterInput[]
+    updateMany?: GuestTeachingPaymentUpdateManyWithWhereWithoutSemesterInput | GuestTeachingPaymentUpdateManyWithWhereWithoutSemesterInput[]
+    deleteMany?: GuestTeachingPaymentScalarWhereInput | GuestTeachingPaymentScalarWhereInput[]
+  }
+
   export type SubjectClassUncheckedUpdateManyWithoutSemesterNestedInput = {
     create?: XOR<SubjectClassCreateWithoutSemesterInput, SubjectClassUncheckedCreateWithoutSemesterInput> | SubjectClassCreateWithoutSemesterInput[] | SubjectClassUncheckedCreateWithoutSemesterInput[]
     connectOrCreate?: SubjectClassCreateOrConnectWithoutSemesterInput | SubjectClassCreateOrConnectWithoutSemesterInput[]
@@ -497189,6 +502663,20 @@ export namespace Prisma {
     update?: PlanTrainingPracticeUpdateWithWhereUniqueWithoutSemesterInput | PlanTrainingPracticeUpdateWithWhereUniqueWithoutSemesterInput[]
     updateMany?: PlanTrainingPracticeUpdateManyWithWhereWithoutSemesterInput | PlanTrainingPracticeUpdateManyWithWhereWithoutSemesterInput[]
     deleteMany?: PlanTrainingPracticeScalarWhereInput | PlanTrainingPracticeScalarWhereInput[]
+  }
+
+  export type GuestTeachingPaymentUncheckedUpdateManyWithoutSemesterNestedInput = {
+    create?: XOR<GuestTeachingPaymentCreateWithoutSemesterInput, GuestTeachingPaymentUncheckedCreateWithoutSemesterInput> | GuestTeachingPaymentCreateWithoutSemesterInput[] | GuestTeachingPaymentUncheckedCreateWithoutSemesterInput[]
+    connectOrCreate?: GuestTeachingPaymentCreateOrConnectWithoutSemesterInput | GuestTeachingPaymentCreateOrConnectWithoutSemesterInput[]
+    upsert?: GuestTeachingPaymentUpsertWithWhereUniqueWithoutSemesterInput | GuestTeachingPaymentUpsertWithWhereUniqueWithoutSemesterInput[]
+    createMany?: GuestTeachingPaymentCreateManySemesterInputEnvelope
+    set?: GuestTeachingPaymentWhereUniqueInput | GuestTeachingPaymentWhereUniqueInput[]
+    disconnect?: GuestTeachingPaymentWhereUniqueInput | GuestTeachingPaymentWhereUniqueInput[]
+    delete?: GuestTeachingPaymentWhereUniqueInput | GuestTeachingPaymentWhereUniqueInput[]
+    connect?: GuestTeachingPaymentWhereUniqueInput | GuestTeachingPaymentWhereUniqueInput[]
+    update?: GuestTeachingPaymentUpdateWithWhereUniqueWithoutSemesterInput | GuestTeachingPaymentUpdateWithWhereUniqueWithoutSemesterInput[]
+    updateMany?: GuestTeachingPaymentUpdateManyWithWhereWithoutSemesterInput | GuestTeachingPaymentUpdateManyWithWhereWithoutSemesterInput[]
+    deleteMany?: GuestTeachingPaymentScalarWhereInput | GuestTeachingPaymentScalarWhereInput[]
   }
 
   export type SchoolYearCreateNestedOneWithoutMilestoneInput = {
@@ -506045,6 +511533,13 @@ export namespace Prisma {
     connect?: IndividualScheduleWhereUniqueInput | IndividualScheduleWhereUniqueInput[]
   }
 
+  export type GuestTeachingPaymentCreateNestedManyWithoutLecturerInput = {
+    create?: XOR<GuestTeachingPaymentCreateWithoutLecturerInput, GuestTeachingPaymentUncheckedCreateWithoutLecturerInput> | GuestTeachingPaymentCreateWithoutLecturerInput[] | GuestTeachingPaymentUncheckedCreateWithoutLecturerInput[]
+    connectOrCreate?: GuestTeachingPaymentCreateOrConnectWithoutLecturerInput | GuestTeachingPaymentCreateOrConnectWithoutLecturerInput[]
+    createMany?: GuestTeachingPaymentCreateManyLecturerInputEnvelope
+    connect?: GuestTeachingPaymentWhereUniqueInput | GuestTeachingPaymentWhereUniqueInput[]
+  }
+
   export type SubjectClassUncheckedCreateNestedManyWithoutMainLecturerInput = {
     create?: XOR<SubjectClassCreateWithoutMainLecturerInput, SubjectClassUncheckedCreateWithoutMainLecturerInput> | SubjectClassCreateWithoutMainLecturerInput[] | SubjectClassUncheckedCreateWithoutMainLecturerInput[]
     connectOrCreate?: SubjectClassCreateOrConnectWithoutMainLecturerInput | SubjectClassCreateOrConnectWithoutMainLecturerInput[]
@@ -506204,6 +511699,13 @@ export namespace Prisma {
     connect?: IndividualScheduleWhereUniqueInput | IndividualScheduleWhereUniqueInput[]
   }
 
+  export type GuestTeachingPaymentUncheckedCreateNestedManyWithoutLecturerInput = {
+    create?: XOR<GuestTeachingPaymentCreateWithoutLecturerInput, GuestTeachingPaymentUncheckedCreateWithoutLecturerInput> | GuestTeachingPaymentCreateWithoutLecturerInput[] | GuestTeachingPaymentUncheckedCreateWithoutLecturerInput[]
+    connectOrCreate?: GuestTeachingPaymentCreateOrConnectWithoutLecturerInput | GuestTeachingPaymentCreateOrConnectWithoutLecturerInput[]
+    createMany?: GuestTeachingPaymentCreateManyLecturerInputEnvelope
+    connect?: GuestTeachingPaymentWhereUniqueInput | GuestTeachingPaymentWhereUniqueInput[]
+  }
+
   export type UserProfileUpdateOneRequiredWithoutLecturerNestedInput = {
     create?: XOR<UserProfileCreateWithoutLecturerInput, UserProfileUncheckedCreateWithoutLecturerInput>
     connectOrCreate?: UserProfileCreateOrConnectWithoutLecturerInput
@@ -506212,10 +511714,12 @@ export namespace Prisma {
     update?: XOR<XOR<UserProfileUpdateToOneWithWhereWithoutLecturerInput, UserProfileUpdateWithoutLecturerInput>, UserProfileUncheckedUpdateWithoutLecturerInput>
   }
 
-  export type DM_DonViUpdateOneRequiredWithoutLecturersNestedInput = {
+  export type DM_DonViUpdateOneWithoutLecturersNestedInput = {
     create?: XOR<DM_DonViCreateWithoutLecturersInput, DM_DonViUncheckedCreateWithoutLecturersInput>
     connectOrCreate?: DM_DonViCreateOrConnectWithoutLecturersInput
     upsert?: DM_DonViUpsertWithoutLecturersInput
+    disconnect?: DM_DonViWhereInput | boolean
+    delete?: DM_DonViWhereInput | boolean
     connect?: DM_DonViWhereUniqueInput
     update?: XOR<XOR<DM_DonViUpdateToOneWithWhereWithoutLecturersInput, DM_DonViUpdateWithoutLecturersInput>, DM_DonViUncheckedUpdateWithoutLecturersInput>
   }
@@ -506548,6 +512052,20 @@ export namespace Prisma {
     deleteMany?: IndividualScheduleScalarWhereInput | IndividualScheduleScalarWhereInput[]
   }
 
+  export type GuestTeachingPaymentUpdateManyWithoutLecturerNestedInput = {
+    create?: XOR<GuestTeachingPaymentCreateWithoutLecturerInput, GuestTeachingPaymentUncheckedCreateWithoutLecturerInput> | GuestTeachingPaymentCreateWithoutLecturerInput[] | GuestTeachingPaymentUncheckedCreateWithoutLecturerInput[]
+    connectOrCreate?: GuestTeachingPaymentCreateOrConnectWithoutLecturerInput | GuestTeachingPaymentCreateOrConnectWithoutLecturerInput[]
+    upsert?: GuestTeachingPaymentUpsertWithWhereUniqueWithoutLecturerInput | GuestTeachingPaymentUpsertWithWhereUniqueWithoutLecturerInput[]
+    createMany?: GuestTeachingPaymentCreateManyLecturerInputEnvelope
+    set?: GuestTeachingPaymentWhereUniqueInput | GuestTeachingPaymentWhereUniqueInput[]
+    disconnect?: GuestTeachingPaymentWhereUniqueInput | GuestTeachingPaymentWhereUniqueInput[]
+    delete?: GuestTeachingPaymentWhereUniqueInput | GuestTeachingPaymentWhereUniqueInput[]
+    connect?: GuestTeachingPaymentWhereUniqueInput | GuestTeachingPaymentWhereUniqueInput[]
+    update?: GuestTeachingPaymentUpdateWithWhereUniqueWithoutLecturerInput | GuestTeachingPaymentUpdateWithWhereUniqueWithoutLecturerInput[]
+    updateMany?: GuestTeachingPaymentUpdateManyWithWhereWithoutLecturerInput | GuestTeachingPaymentUpdateManyWithWhereWithoutLecturerInput[]
+    deleteMany?: GuestTeachingPaymentScalarWhereInput | GuestTeachingPaymentScalarWhereInput[]
+  }
+
   export type SubjectClassUncheckedUpdateManyWithoutMainLecturerNestedInput = {
     create?: XOR<SubjectClassCreateWithoutMainLecturerInput, SubjectClassUncheckedCreateWithoutMainLecturerInput> | SubjectClassCreateWithoutMainLecturerInput[] | SubjectClassUncheckedCreateWithoutMainLecturerInput[]
     connectOrCreate?: SubjectClassCreateOrConnectWithoutMainLecturerInput | SubjectClassCreateOrConnectWithoutMainLecturerInput[]
@@ -506868,6 +512386,20 @@ export namespace Prisma {
     deleteMany?: IndividualScheduleScalarWhereInput | IndividualScheduleScalarWhereInput[]
   }
 
+  export type GuestTeachingPaymentUncheckedUpdateManyWithoutLecturerNestedInput = {
+    create?: XOR<GuestTeachingPaymentCreateWithoutLecturerInput, GuestTeachingPaymentUncheckedCreateWithoutLecturerInput> | GuestTeachingPaymentCreateWithoutLecturerInput[] | GuestTeachingPaymentUncheckedCreateWithoutLecturerInput[]
+    connectOrCreate?: GuestTeachingPaymentCreateOrConnectWithoutLecturerInput | GuestTeachingPaymentCreateOrConnectWithoutLecturerInput[]
+    upsert?: GuestTeachingPaymentUpsertWithWhereUniqueWithoutLecturerInput | GuestTeachingPaymentUpsertWithWhereUniqueWithoutLecturerInput[]
+    createMany?: GuestTeachingPaymentCreateManyLecturerInputEnvelope
+    set?: GuestTeachingPaymentWhereUniqueInput | GuestTeachingPaymentWhereUniqueInput[]
+    disconnect?: GuestTeachingPaymentWhereUniqueInput | GuestTeachingPaymentWhereUniqueInput[]
+    delete?: GuestTeachingPaymentWhereUniqueInput | GuestTeachingPaymentWhereUniqueInput[]
+    connect?: GuestTeachingPaymentWhereUniqueInput | GuestTeachingPaymentWhereUniqueInput[]
+    update?: GuestTeachingPaymentUpdateWithWhereUniqueWithoutLecturerInput | GuestTeachingPaymentUpdateWithWhereUniqueWithoutLecturerInput[]
+    updateMany?: GuestTeachingPaymentUpdateManyWithWhereWithoutLecturerInput | GuestTeachingPaymentUpdateManyWithWhereWithoutLecturerInput[]
+    deleteMany?: GuestTeachingPaymentScalarWhereInput | GuestTeachingPaymentScalarWhereInput[]
+  }
+
   export type UserProfileCreateNestedOneWithoutLecturerHistoryInput = {
     create?: XOR<UserProfileCreateWithoutLecturerHistoryInput, UserProfileUncheckedCreateWithoutLecturerHistoryInput>
     connectOrCreate?: UserProfileCreateOrConnectWithoutLecturerHistoryInput
@@ -506910,6 +512442,154 @@ export namespace Prisma {
     upsert?: LecturerTypeUpsertWithoutLecturerHistoryInput
     connect?: LecturerTypeWhereUniqueInput
     update?: XOR<XOR<LecturerTypeUpdateToOneWithWhereWithoutLecturerHistoryInput, LecturerTypeUpdateWithoutLecturerHistoryInput>, LecturerTypeUncheckedUpdateWithoutLecturerHistoryInput>
+  }
+
+  export type SchoolYearCreateNestedOneWithoutGuestTeachingRateConfigInput = {
+    create?: XOR<SchoolYearCreateWithoutGuestTeachingRateConfigInput, SchoolYearUncheckedCreateWithoutGuestTeachingRateConfigInput>
+    connectOrCreate?: SchoolYearCreateOrConnectWithoutGuestTeachingRateConfigInput
+    connect?: SchoolYearWhereUniqueInput
+  }
+
+  export type GuestTeachingRateCreateNestedManyWithoutConfigInput = {
+    create?: XOR<GuestTeachingRateCreateWithoutConfigInput, GuestTeachingRateUncheckedCreateWithoutConfigInput> | GuestTeachingRateCreateWithoutConfigInput[] | GuestTeachingRateUncheckedCreateWithoutConfigInput[]
+    connectOrCreate?: GuestTeachingRateCreateOrConnectWithoutConfigInput | GuestTeachingRateCreateOrConnectWithoutConfigInput[]
+    createMany?: GuestTeachingRateCreateManyConfigInputEnvelope
+    connect?: GuestTeachingRateWhereUniqueInput | GuestTeachingRateWhereUniqueInput[]
+  }
+
+  export type GuestTeachingRateUncheckedCreateNestedManyWithoutConfigInput = {
+    create?: XOR<GuestTeachingRateCreateWithoutConfigInput, GuestTeachingRateUncheckedCreateWithoutConfigInput> | GuestTeachingRateCreateWithoutConfigInput[] | GuestTeachingRateUncheckedCreateWithoutConfigInput[]
+    connectOrCreate?: GuestTeachingRateCreateOrConnectWithoutConfigInput | GuestTeachingRateCreateOrConnectWithoutConfigInput[]
+    createMany?: GuestTeachingRateCreateManyConfigInputEnvelope
+    connect?: GuestTeachingRateWhereUniqueInput | GuestTeachingRateWhereUniqueInput[]
+  }
+
+  export type SchoolYearUpdateOneRequiredWithoutGuestTeachingRateConfigNestedInput = {
+    create?: XOR<SchoolYearCreateWithoutGuestTeachingRateConfigInput, SchoolYearUncheckedCreateWithoutGuestTeachingRateConfigInput>
+    connectOrCreate?: SchoolYearCreateOrConnectWithoutGuestTeachingRateConfigInput
+    upsert?: SchoolYearUpsertWithoutGuestTeachingRateConfigInput
+    connect?: SchoolYearWhereUniqueInput
+    update?: XOR<XOR<SchoolYearUpdateToOneWithWhereWithoutGuestTeachingRateConfigInput, SchoolYearUpdateWithoutGuestTeachingRateConfigInput>, SchoolYearUncheckedUpdateWithoutGuestTeachingRateConfigInput>
+  }
+
+  export type GuestTeachingRateUpdateManyWithoutConfigNestedInput = {
+    create?: XOR<GuestTeachingRateCreateWithoutConfigInput, GuestTeachingRateUncheckedCreateWithoutConfigInput> | GuestTeachingRateCreateWithoutConfigInput[] | GuestTeachingRateUncheckedCreateWithoutConfigInput[]
+    connectOrCreate?: GuestTeachingRateCreateOrConnectWithoutConfigInput | GuestTeachingRateCreateOrConnectWithoutConfigInput[]
+    upsert?: GuestTeachingRateUpsertWithWhereUniqueWithoutConfigInput | GuestTeachingRateUpsertWithWhereUniqueWithoutConfigInput[]
+    createMany?: GuestTeachingRateCreateManyConfigInputEnvelope
+    set?: GuestTeachingRateWhereUniqueInput | GuestTeachingRateWhereUniqueInput[]
+    disconnect?: GuestTeachingRateWhereUniqueInput | GuestTeachingRateWhereUniqueInput[]
+    delete?: GuestTeachingRateWhereUniqueInput | GuestTeachingRateWhereUniqueInput[]
+    connect?: GuestTeachingRateWhereUniqueInput | GuestTeachingRateWhereUniqueInput[]
+    update?: GuestTeachingRateUpdateWithWhereUniqueWithoutConfigInput | GuestTeachingRateUpdateWithWhereUniqueWithoutConfigInput[]
+    updateMany?: GuestTeachingRateUpdateManyWithWhereWithoutConfigInput | GuestTeachingRateUpdateManyWithWhereWithoutConfigInput[]
+    deleteMany?: GuestTeachingRateScalarWhereInput | GuestTeachingRateScalarWhereInput[]
+  }
+
+  export type GuestTeachingRateUncheckedUpdateManyWithoutConfigNestedInput = {
+    create?: XOR<GuestTeachingRateCreateWithoutConfigInput, GuestTeachingRateUncheckedCreateWithoutConfigInput> | GuestTeachingRateCreateWithoutConfigInput[] | GuestTeachingRateUncheckedCreateWithoutConfigInput[]
+    connectOrCreate?: GuestTeachingRateCreateOrConnectWithoutConfigInput | GuestTeachingRateCreateOrConnectWithoutConfigInput[]
+    upsert?: GuestTeachingRateUpsertWithWhereUniqueWithoutConfigInput | GuestTeachingRateUpsertWithWhereUniqueWithoutConfigInput[]
+    createMany?: GuestTeachingRateCreateManyConfigInputEnvelope
+    set?: GuestTeachingRateWhereUniqueInput | GuestTeachingRateWhereUniqueInput[]
+    disconnect?: GuestTeachingRateWhereUniqueInput | GuestTeachingRateWhereUniqueInput[]
+    delete?: GuestTeachingRateWhereUniqueInput | GuestTeachingRateWhereUniqueInput[]
+    connect?: GuestTeachingRateWhereUniqueInput | GuestTeachingRateWhereUniqueInput[]
+    update?: GuestTeachingRateUpdateWithWhereUniqueWithoutConfigInput | GuestTeachingRateUpdateWithWhereUniqueWithoutConfigInput[]
+    updateMany?: GuestTeachingRateUpdateManyWithWhereWithoutConfigInput | GuestTeachingRateUpdateManyWithWhereWithoutConfigInput[]
+    deleteMany?: GuestTeachingRateScalarWhereInput | GuestTeachingRateScalarWhereInput[]
+  }
+
+  export type GuestTeachingRateConfigCreateNestedOneWithoutRatesInput = {
+    create?: XOR<GuestTeachingRateConfigCreateWithoutRatesInput, GuestTeachingRateConfigUncheckedCreateWithoutRatesInput>
+    connectOrCreate?: GuestTeachingRateConfigCreateOrConnectWithoutRatesInput
+    connect?: GuestTeachingRateConfigWhereUniqueInput
+  }
+
+  export type DM_HocHamCreateNestedOneWithoutGuestTeachingRateInput = {
+    create?: XOR<DM_HocHamCreateWithoutGuestTeachingRateInput, DM_HocHamUncheckedCreateWithoutGuestTeachingRateInput>
+    connectOrCreate?: DM_HocHamCreateOrConnectWithoutGuestTeachingRateInput
+    connect?: DM_HocHamWhereUniqueInput
+  }
+
+  export type DM_HocViCreateNestedOneWithoutGuestTeachingRateInput = {
+    create?: XOR<DM_HocViCreateWithoutGuestTeachingRateInput, DM_HocViUncheckedCreateWithoutGuestTeachingRateInput>
+    connectOrCreate?: DM_HocViCreateOrConnectWithoutGuestTeachingRateInput
+    connect?: DM_HocViWhereUniqueInput
+  }
+
+  export type GuestTeachingRateConfigUpdateOneRequiredWithoutRatesNestedInput = {
+    create?: XOR<GuestTeachingRateConfigCreateWithoutRatesInput, GuestTeachingRateConfigUncheckedCreateWithoutRatesInput>
+    connectOrCreate?: GuestTeachingRateConfigCreateOrConnectWithoutRatesInput
+    upsert?: GuestTeachingRateConfigUpsertWithoutRatesInput
+    connect?: GuestTeachingRateConfigWhereUniqueInput
+    update?: XOR<XOR<GuestTeachingRateConfigUpdateToOneWithWhereWithoutRatesInput, GuestTeachingRateConfigUpdateWithoutRatesInput>, GuestTeachingRateConfigUncheckedUpdateWithoutRatesInput>
+  }
+
+  export type DM_HocHamUpdateOneWithoutGuestTeachingRateNestedInput = {
+    create?: XOR<DM_HocHamCreateWithoutGuestTeachingRateInput, DM_HocHamUncheckedCreateWithoutGuestTeachingRateInput>
+    connectOrCreate?: DM_HocHamCreateOrConnectWithoutGuestTeachingRateInput
+    upsert?: DM_HocHamUpsertWithoutGuestTeachingRateInput
+    disconnect?: DM_HocHamWhereInput | boolean
+    delete?: DM_HocHamWhereInput | boolean
+    connect?: DM_HocHamWhereUniqueInput
+    update?: XOR<XOR<DM_HocHamUpdateToOneWithWhereWithoutGuestTeachingRateInput, DM_HocHamUpdateWithoutGuestTeachingRateInput>, DM_HocHamUncheckedUpdateWithoutGuestTeachingRateInput>
+  }
+
+  export type DM_HocViUpdateOneWithoutGuestTeachingRateNestedInput = {
+    create?: XOR<DM_HocViCreateWithoutGuestTeachingRateInput, DM_HocViUncheckedCreateWithoutGuestTeachingRateInput>
+    connectOrCreate?: DM_HocViCreateOrConnectWithoutGuestTeachingRateInput
+    upsert?: DM_HocViUpsertWithoutGuestTeachingRateInput
+    disconnect?: DM_HocViWhereInput | boolean
+    delete?: DM_HocViWhereInput | boolean
+    connect?: DM_HocViWhereUniqueInput
+    update?: XOR<XOR<DM_HocViUpdateToOneWithWhereWithoutGuestTeachingRateInput, DM_HocViUpdateWithoutGuestTeachingRateInput>, DM_HocViUncheckedUpdateWithoutGuestTeachingRateInput>
+  }
+
+  export type LecturerCreateNestedOneWithoutGuestTeachingPaymentsInput = {
+    create?: XOR<LecturerCreateWithoutGuestTeachingPaymentsInput, LecturerUncheckedCreateWithoutGuestTeachingPaymentsInput>
+    connectOrCreate?: LecturerCreateOrConnectWithoutGuestTeachingPaymentsInput
+    connect?: LecturerWhereUniqueInput
+  }
+
+  export type SemesterCreateNestedOneWithoutGuestTeachingPaymentsInput = {
+    create?: XOR<SemesterCreateWithoutGuestTeachingPaymentsInput, SemesterUncheckedCreateWithoutGuestTeachingPaymentsInput>
+    connectOrCreate?: SemesterCreateOrConnectWithoutGuestTeachingPaymentsInput
+    connect?: SemesterWhereUniqueInput
+  }
+
+  export type DM_DonViCreateNestedOneWithoutGuestTeachingPaymentsInput = {
+    create?: XOR<DM_DonViCreateWithoutGuestTeachingPaymentsInput, DM_DonViUncheckedCreateWithoutGuestTeachingPaymentsInput>
+    connectOrCreate?: DM_DonViCreateOrConnectWithoutGuestTeachingPaymentsInput
+    connect?: DM_DonViWhereUniqueInput
+  }
+
+  export type EnumPaymentStatusFieldUpdateOperationsInput = {
+    set?: $Enums.PaymentStatus
+  }
+
+  export type LecturerUpdateOneRequiredWithoutGuestTeachingPaymentsNestedInput = {
+    create?: XOR<LecturerCreateWithoutGuestTeachingPaymentsInput, LecturerUncheckedCreateWithoutGuestTeachingPaymentsInput>
+    connectOrCreate?: LecturerCreateOrConnectWithoutGuestTeachingPaymentsInput
+    upsert?: LecturerUpsertWithoutGuestTeachingPaymentsInput
+    connect?: LecturerWhereUniqueInput
+    update?: XOR<XOR<LecturerUpdateToOneWithWhereWithoutGuestTeachingPaymentsInput, LecturerUpdateWithoutGuestTeachingPaymentsInput>, LecturerUncheckedUpdateWithoutGuestTeachingPaymentsInput>
+  }
+
+  export type SemesterUpdateOneRequiredWithoutGuestTeachingPaymentsNestedInput = {
+    create?: XOR<SemesterCreateWithoutGuestTeachingPaymentsInput, SemesterUncheckedCreateWithoutGuestTeachingPaymentsInput>
+    connectOrCreate?: SemesterCreateOrConnectWithoutGuestTeachingPaymentsInput
+    upsert?: SemesterUpsertWithoutGuestTeachingPaymentsInput
+    connect?: SemesterWhereUniqueInput
+    update?: XOR<XOR<SemesterUpdateToOneWithWhereWithoutGuestTeachingPaymentsInput, SemesterUpdateWithoutGuestTeachingPaymentsInput>, SemesterUncheckedUpdateWithoutGuestTeachingPaymentsInput>
+  }
+
+  export type DM_DonViUpdateOneRequiredWithoutGuestTeachingPaymentsNestedInput = {
+    create?: XOR<DM_DonViCreateWithoutGuestTeachingPaymentsInput, DM_DonViUncheckedCreateWithoutGuestTeachingPaymentsInput>
+    connectOrCreate?: DM_DonViCreateOrConnectWithoutGuestTeachingPaymentsInput
+    upsert?: DM_DonViUpsertWithoutGuestTeachingPaymentsInput
+    connect?: DM_DonViWhereUniqueInput
+    update?: XOR<XOR<DM_DonViUpdateToOneWithWhereWithoutGuestTeachingPaymentsInput, DM_DonViUpdateWithoutGuestTeachingPaymentsInput>, DM_DonViUncheckedUpdateWithoutGuestTeachingPaymentsInput>
   }
 
   export type LecturerCreateNestedManyWithoutLecturerTypeInput = {
@@ -509100,10 +514780,6 @@ export namespace Prisma {
     create?: XOR<CouncilMemberCreateWithoutPaymentInput, CouncilMemberUncheckedCreateWithoutPaymentInput>
     connectOrCreate?: CouncilMemberCreateOrConnectWithoutPaymentInput
     connect?: CouncilMemberWhereUniqueInput
-  }
-
-  export type EnumPaymentStatusFieldUpdateOperationsInput = {
-    set?: $Enums.PaymentStatus
   }
 
   export type CouncilMemberUpdateOneWithoutPaymentNestedInput = {
@@ -518296,6 +523972,23 @@ export namespace Prisma {
     _max?: NestedEnumScheduleRepeatTypeFilter<$PrismaModel>
   }
 
+  export type NestedEnumPaymentStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.PaymentStatus | EnumPaymentStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.PaymentStatus[] | ListEnumPaymentStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PaymentStatus[] | ListEnumPaymentStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumPaymentStatusFilter<$PrismaModel> | $Enums.PaymentStatus
+  }
+
+  export type NestedEnumPaymentStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.PaymentStatus | EnumPaymentStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.PaymentStatus[] | ListEnumPaymentStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PaymentStatus[] | ListEnumPaymentStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumPaymentStatusWithAggregatesFilter<$PrismaModel> | $Enums.PaymentStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumPaymentStatusFilter<$PrismaModel>
+    _max?: NestedEnumPaymentStatusFilter<$PrismaModel>
+  }
+
   export type NestedEnumResearchProjectStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.ResearchProjectStatus | EnumResearchProjectStatusFieldRefInput<$PrismaModel>
     in?: $Enums.ResearchProjectStatus[] | ListEnumResearchProjectStatusFieldRefInput<$PrismaModel>
@@ -518447,23 +524140,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumSupervisorRoleFilter<$PrismaModel>
     _max?: NestedEnumSupervisorRoleFilter<$PrismaModel>
-  }
-
-  export type NestedEnumPaymentStatusFilter<$PrismaModel = never> = {
-    equals?: $Enums.PaymentStatus | EnumPaymentStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.PaymentStatus[] | ListEnumPaymentStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.PaymentStatus[] | ListEnumPaymentStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumPaymentStatusFilter<$PrismaModel> | $Enums.PaymentStatus
-  }
-
-  export type NestedEnumPaymentStatusWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.PaymentStatus | EnumPaymentStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.PaymentStatus[] | ListEnumPaymentStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.PaymentStatus[] | ListEnumPaymentStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumPaymentStatusWithAggregatesFilter<$PrismaModel> | $Enums.PaymentStatus
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumPaymentStatusFilter<$PrismaModel>
-    _max?: NestedEnumPaymentStatusFilter<$PrismaModel>
   }
 
   export type NestedBigIntFilter<$PrismaModel = never> = {
@@ -520984,6 +526660,7 @@ export namespace Prisma {
     sThietBiSua?: string | null
     hocVi?: HocViCreateNestedManyWithoutAcademicDegreeTypeInput
     expertProfile?: ExpertProfileCreateNestedManyWithoutAcademicDegreeTypeInput
+    guestTeachingRate?: GuestTeachingRateCreateNestedManyWithoutAcademicDegreeTypeInput
   }
 
   export type DM_HocViUncheckedCreateWithoutProfilesInput = {
@@ -521004,6 +526681,7 @@ export namespace Prisma {
     sThietBiSua?: string | null
     hocVi?: HocViUncheckedCreateNestedManyWithoutAcademicDegreeTypeInput
     expertProfile?: ExpertProfileUncheckedCreateNestedManyWithoutAcademicDegreeTypeInput
+    guestTeachingRate?: GuestTeachingRateUncheckedCreateNestedManyWithoutAcademicDegreeTypeInput
   }
 
   export type DM_HocViCreateOrConnectWithoutProfilesInput = {
@@ -521029,6 +526707,7 @@ export namespace Prisma {
     sThietBiSua?: string | null
     hocHam?: HocHamCreateNestedManyWithoutAcademicRankTypeInput
     expertProfile?: ExpertProfileCreateNestedManyWithoutAcademicRankTypeInput
+    guestTeachingRate?: GuestTeachingRateCreateNestedManyWithoutAcademicRankTypeInput
   }
 
   export type DM_HocHamUncheckedCreateWithoutProfilesInput = {
@@ -521049,6 +526728,7 @@ export namespace Prisma {
     sThietBiSua?: string | null
     hocHam?: HocHamUncheckedCreateNestedManyWithoutAcademicRankTypeInput
     expertProfile?: ExpertProfileUncheckedCreateNestedManyWithoutAcademicRankTypeInput
+    guestTeachingRate?: GuestTeachingRateUncheckedCreateNestedManyWithoutAcademicRankTypeInput
   }
 
   export type DM_HocHamCreateOrConnectWithoutProfilesInput = {
@@ -522862,7 +528542,7 @@ export namespace Prisma {
     from?: Date | string | null
     lectureID?: string | null
     serviceDate?: Date | string | null
-    organization: DM_DonViCreateNestedOneWithoutLecturersInput
+    organization?: DM_DonViCreateNestedOneWithoutLecturersInput
     lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
     mainSubjectClasses?: SubjectClassCreateNestedManyWithoutMainLecturerInput
     extraSubjectClasses?: SubjectClassCreateNestedManyWithoutExtraLecturerInput
@@ -522887,6 +528567,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutLecturerInput
     personalWorkTags?: PersonalWorkTagCreateNestedManyWithoutLecturerInput
     individualSchedules?: IndividualScheduleCreateNestedManyWithoutLecturerInput
+    guestTeachingPayments?: GuestTeachingPaymentCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerUncheckedCreateWithoutUserProfileInput = {
@@ -522901,7 +528582,7 @@ export namespace Prisma {
     from?: Date | string | null
     lectureID?: string | null
     serviceDate?: Date | string | null
-    organizationId: string
+    organizationId?: string | null
     lecturerTypeId: string
     mainSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutMainLecturerInput
     extraSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutExtraLecturerInput
@@ -522926,6 +528607,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutLecturerInput
     personalWorkTags?: PersonalWorkTagUncheckedCreateNestedManyWithoutLecturerInput
     individualSchedules?: IndividualScheduleUncheckedCreateNestedManyWithoutLecturerInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerCreateOrConnectWithoutUserProfileInput = {
@@ -525253,6 +530935,7 @@ export namespace Prisma {
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     hocVi?: HocViUpdateManyWithoutAcademicDegreeTypeNestedInput
     expertProfile?: ExpertProfileUpdateManyWithoutAcademicDegreeTypeNestedInput
+    guestTeachingRate?: GuestTeachingRateUpdateManyWithoutAcademicDegreeTypeNestedInput
   }
 
   export type DM_HocViUncheckedUpdateWithoutProfilesInput = {
@@ -525273,6 +530956,7 @@ export namespace Prisma {
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     hocVi?: HocViUncheckedUpdateManyWithoutAcademicDegreeTypeNestedInput
     expertProfile?: ExpertProfileUncheckedUpdateManyWithoutAcademicDegreeTypeNestedInput
+    guestTeachingRate?: GuestTeachingRateUncheckedUpdateManyWithoutAcademicDegreeTypeNestedInput
   }
 
   export type DM_HocHamUpsertWithoutProfilesInput = {
@@ -525304,6 +530988,7 @@ export namespace Prisma {
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     hocHam?: HocHamUpdateManyWithoutAcademicRankTypeNestedInput
     expertProfile?: ExpertProfileUpdateManyWithoutAcademicRankTypeNestedInput
+    guestTeachingRate?: GuestTeachingRateUpdateManyWithoutAcademicRankTypeNestedInput
   }
 
   export type DM_HocHamUncheckedUpdateWithoutProfilesInput = {
@@ -525324,6 +531009,7 @@ export namespace Prisma {
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     hocHam?: HocHamUncheckedUpdateManyWithoutAcademicRankTypeNestedInput
     expertProfile?: ExpertProfileUncheckedUpdateManyWithoutAcademicRankTypeNestedInput
+    guestTeachingRate?: GuestTeachingRateUncheckedUpdateManyWithoutAcademicRankTypeNestedInput
   }
 
   export type DM_ChucDanhUpsertWithoutUserProfileInput = {
@@ -526979,7 +532665,7 @@ export namespace Prisma {
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    organization?: DM_DonViUpdateOneRequiredWithoutLecturersNestedInput
+    organization?: DM_DonViUpdateOneWithoutLecturersNestedInput
     lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
     mainSubjectClasses?: SubjectClassUpdateManyWithoutMainLecturerNestedInput
     extraSubjectClasses?: SubjectClassUpdateManyWithoutExtraLecturerNestedInput
@@ -527004,6 +532690,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutLecturerNestedInput
     personalWorkTags?: PersonalWorkTagUpdateManyWithoutLecturerNestedInput
     individualSchedules?: IndividualScheduleUpdateManyWithoutLecturerNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUpdateManyWithoutLecturerNestedInput
   }
 
   export type LecturerUncheckedUpdateWithoutUserProfileInput = {
@@ -527018,7 +532705,7 @@ export namespace Prisma {
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    organizationId?: StringFieldUpdateOperationsInput | string
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
     lecturerTypeId?: StringFieldUpdateOperationsInput | string
     mainSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutMainLecturerNestedInput
     extraSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutExtraLecturerNestedInput
@@ -527043,6 +532730,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutLecturerNestedInput
     personalWorkTags?: PersonalWorkTagUncheckedUpdateManyWithoutLecturerNestedInput
     individualSchedules?: IndividualScheduleUncheckedUpdateManyWithoutLecturerNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedUpdateManyWithoutLecturerNestedInput
   }
 
   export type LecturerHistoryUpsertWithWhereUniqueWithoutUserProfileInput = {
@@ -527696,6 +533384,7 @@ export namespace Prisma {
     sThietBiSua?: string | null
     profiles?: UserProfileCreateNestedManyWithoutAcademicRankTypeInput
     expertProfile?: ExpertProfileCreateNestedManyWithoutAcademicRankTypeInput
+    guestTeachingRate?: GuestTeachingRateCreateNestedManyWithoutAcademicRankTypeInput
   }
 
   export type DM_HocHamUncheckedCreateWithoutHocHamInput = {
@@ -527716,6 +533405,7 @@ export namespace Prisma {
     sThietBiSua?: string | null
     profiles?: UserProfileUncheckedCreateNestedManyWithoutAcademicRankTypeInput
     expertProfile?: ExpertProfileUncheckedCreateNestedManyWithoutAcademicRankTypeInput
+    guestTeachingRate?: GuestTeachingRateUncheckedCreateNestedManyWithoutAcademicRankTypeInput
   }
 
   export type DM_HocHamCreateOrConnectWithoutHocHamInput = {
@@ -528109,6 +533799,7 @@ export namespace Prisma {
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     profiles?: UserProfileUpdateManyWithoutAcademicRankTypeNestedInput
     expertProfile?: ExpertProfileUpdateManyWithoutAcademicRankTypeNestedInput
+    guestTeachingRate?: GuestTeachingRateUpdateManyWithoutAcademicRankTypeNestedInput
   }
 
   export type DM_HocHamUncheckedUpdateWithoutHocHamInput = {
@@ -528129,6 +533820,7 @@ export namespace Prisma {
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     profiles?: UserProfileUncheckedUpdateManyWithoutAcademicRankTypeNestedInput
     expertProfile?: ExpertProfileUncheckedUpdateManyWithoutAcademicRankTypeNestedInput
+    guestTeachingRate?: GuestTeachingRateUncheckedUpdateManyWithoutAcademicRankTypeNestedInput
   }
 
   export type UserProfileUpsertWithoutHocHamInput = {
@@ -530176,6 +535868,7 @@ export namespace Prisma {
     sThietBiSua?: string | null
     profiles?: UserProfileCreateNestedManyWithoutAcademicDegreeTypeInput
     expertProfile?: ExpertProfileCreateNestedManyWithoutAcademicDegreeTypeInput
+    guestTeachingRate?: GuestTeachingRateCreateNestedManyWithoutAcademicDegreeTypeInput
   }
 
   export type DM_HocViUncheckedCreateWithoutHocViInput = {
@@ -530196,6 +535889,7 @@ export namespace Prisma {
     sThietBiSua?: string | null
     profiles?: UserProfileUncheckedCreateNestedManyWithoutAcademicDegreeTypeInput
     expertProfile?: ExpertProfileUncheckedCreateNestedManyWithoutAcademicDegreeTypeInput
+    guestTeachingRate?: GuestTeachingRateUncheckedCreateNestedManyWithoutAcademicDegreeTypeInput
   }
 
   export type DM_HocViCreateOrConnectWithoutHocViInput = {
@@ -530667,6 +536361,7 @@ export namespace Prisma {
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     profiles?: UserProfileUpdateManyWithoutAcademicDegreeTypeNestedInput
     expertProfile?: ExpertProfileUpdateManyWithoutAcademicDegreeTypeNestedInput
+    guestTeachingRate?: GuestTeachingRateUpdateManyWithoutAcademicDegreeTypeNestedInput
   }
 
   export type DM_HocViUncheckedUpdateWithoutHocViInput = {
@@ -530687,6 +536382,7 @@ export namespace Prisma {
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     profiles?: UserProfileUncheckedUpdateManyWithoutAcademicDegreeTypeNestedInput
     expertProfile?: ExpertProfileUncheckedUpdateManyWithoutAcademicDegreeTypeNestedInput
+    guestTeachingRate?: GuestTeachingRateUncheckedUpdateManyWithoutAcademicDegreeTypeNestedInput
   }
 
   export type DM_QuocGiaUpsertWithoutHocViInput = {
@@ -557110,6 +562806,44 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type GuestTeachingRateCreateWithoutAcademicRankTypeInput = {
+    id?: string
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    isForeign?: boolean
+    ratePerPeriod: Decimal | DecimalJsLike | number | string
+    config: GuestTeachingRateConfigCreateNestedOneWithoutRatesInput
+    academicDegreeType?: DM_HocViCreateNestedOneWithoutGuestTeachingRateInput
+  }
+
+  export type GuestTeachingRateUncheckedCreateWithoutAcademicRankTypeInput = {
+    id?: string
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    configId: string
+    academicDegreeTypeId?: string | null
+    isForeign?: boolean
+    ratePerPeriod: Decimal | DecimalJsLike | number | string
+  }
+
+  export type GuestTeachingRateCreateOrConnectWithoutAcademicRankTypeInput = {
+    where: GuestTeachingRateWhereUniqueInput
+    create: XOR<GuestTeachingRateCreateWithoutAcademicRankTypeInput, GuestTeachingRateUncheckedCreateWithoutAcademicRankTypeInput>
+  }
+
+  export type GuestTeachingRateCreateManyAcademicRankTypeInputEnvelope = {
+    data: GuestTeachingRateCreateManyAcademicRankTypeInput | GuestTeachingRateCreateManyAcademicRankTypeInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserProfileUpsertWithWhereUniqueWithoutAcademicRankTypeInput = {
     where: UserProfileWhereUniqueInput
     update: XOR<UserProfileUpdateWithoutAcademicRankTypeInput, UserProfileUncheckedUpdateWithoutAcademicRankTypeInput>
@@ -557186,6 +562920,40 @@ export namespace Prisma {
     thesisExpert?: BoolFilter<"ExpertProfile"> | boolean
     eligiblePresident?: BoolFilter<"ExpertProfile"> | boolean
     eligibleSecretary?: BoolFilter<"ExpertProfile"> | boolean
+  }
+
+  export type GuestTeachingRateUpsertWithWhereUniqueWithoutAcademicRankTypeInput = {
+    where: GuestTeachingRateWhereUniqueInput
+    update: XOR<GuestTeachingRateUpdateWithoutAcademicRankTypeInput, GuestTeachingRateUncheckedUpdateWithoutAcademicRankTypeInput>
+    create: XOR<GuestTeachingRateCreateWithoutAcademicRankTypeInput, GuestTeachingRateUncheckedCreateWithoutAcademicRankTypeInput>
+  }
+
+  export type GuestTeachingRateUpdateWithWhereUniqueWithoutAcademicRankTypeInput = {
+    where: GuestTeachingRateWhereUniqueInput
+    data: XOR<GuestTeachingRateUpdateWithoutAcademicRankTypeInput, GuestTeachingRateUncheckedUpdateWithoutAcademicRankTypeInput>
+  }
+
+  export type GuestTeachingRateUpdateManyWithWhereWithoutAcademicRankTypeInput = {
+    where: GuestTeachingRateScalarWhereInput
+    data: XOR<GuestTeachingRateUpdateManyMutationInput, GuestTeachingRateUncheckedUpdateManyWithoutAcademicRankTypeInput>
+  }
+
+  export type GuestTeachingRateScalarWhereInput = {
+    AND?: GuestTeachingRateScalarWhereInput | GuestTeachingRateScalarWhereInput[]
+    OR?: GuestTeachingRateScalarWhereInput[]
+    NOT?: GuestTeachingRateScalarWhereInput | GuestTeachingRateScalarWhereInput[]
+    id?: StringFilter<"GuestTeachingRate"> | string
+    active?: BoolFilter<"GuestTeachingRate"> | boolean
+    description?: StringNullableFilter<"GuestTeachingRate"> | string | null
+    deletedAt?: DateTimeNullableFilter<"GuestTeachingRate"> | Date | string | null
+    createdAt?: DateTimeFilter<"GuestTeachingRate"> | Date | string
+    updatedAt?: DateTimeFilter<"GuestTeachingRate"> | Date | string
+    createdBy?: UuidNullableFilter<"GuestTeachingRate"> | string | null
+    configId?: StringFilter<"GuestTeachingRate"> | string
+    academicRankTypeId?: UuidNullableFilter<"GuestTeachingRate"> | string | null
+    academicDegreeTypeId?: UuidNullableFilter<"GuestTeachingRate"> | string | null
+    isForeign?: BoolFilter<"GuestTeachingRate"> | boolean
+    ratePerPeriod?: DecimalFilter<"GuestTeachingRate"> | Decimal | DecimalJsLike | number | string
   }
 
   export type UserProfileCreateWithoutAcademicDegreeTypeInput = {
@@ -557678,6 +563446,44 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type GuestTeachingRateCreateWithoutAcademicDegreeTypeInput = {
+    id?: string
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    isForeign?: boolean
+    ratePerPeriod: Decimal | DecimalJsLike | number | string
+    config: GuestTeachingRateConfigCreateNestedOneWithoutRatesInput
+    academicRankType?: DM_HocHamCreateNestedOneWithoutGuestTeachingRateInput
+  }
+
+  export type GuestTeachingRateUncheckedCreateWithoutAcademicDegreeTypeInput = {
+    id?: string
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    configId: string
+    academicRankTypeId?: string | null
+    isForeign?: boolean
+    ratePerPeriod: Decimal | DecimalJsLike | number | string
+  }
+
+  export type GuestTeachingRateCreateOrConnectWithoutAcademicDegreeTypeInput = {
+    where: GuestTeachingRateWhereUniqueInput
+    create: XOR<GuestTeachingRateCreateWithoutAcademicDegreeTypeInput, GuestTeachingRateUncheckedCreateWithoutAcademicDegreeTypeInput>
+  }
+
+  export type GuestTeachingRateCreateManyAcademicDegreeTypeInputEnvelope = {
+    data: GuestTeachingRateCreateManyAcademicDegreeTypeInput | GuestTeachingRateCreateManyAcademicDegreeTypeInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserProfileUpsertWithWhereUniqueWithoutAcademicDegreeTypeInput = {
     where: UserProfileWhereUniqueInput
     update: XOR<UserProfileUpdateWithoutAcademicDegreeTypeInput, UserProfileUncheckedUpdateWithoutAcademicDegreeTypeInput>
@@ -557724,6 +563530,22 @@ export namespace Prisma {
   export type ExpertProfileUpdateManyWithWhereWithoutAcademicDegreeTypeInput = {
     where: ExpertProfileScalarWhereInput
     data: XOR<ExpertProfileUpdateManyMutationInput, ExpertProfileUncheckedUpdateManyWithoutAcademicDegreeTypeInput>
+  }
+
+  export type GuestTeachingRateUpsertWithWhereUniqueWithoutAcademicDegreeTypeInput = {
+    where: GuestTeachingRateWhereUniqueInput
+    update: XOR<GuestTeachingRateUpdateWithoutAcademicDegreeTypeInput, GuestTeachingRateUncheckedUpdateWithoutAcademicDegreeTypeInput>
+    create: XOR<GuestTeachingRateCreateWithoutAcademicDegreeTypeInput, GuestTeachingRateUncheckedCreateWithoutAcademicDegreeTypeInput>
+  }
+
+  export type GuestTeachingRateUpdateWithWhereUniqueWithoutAcademicDegreeTypeInput = {
+    where: GuestTeachingRateWhereUniqueInput
+    data: XOR<GuestTeachingRateUpdateWithoutAcademicDegreeTypeInput, GuestTeachingRateUncheckedUpdateWithoutAcademicDegreeTypeInput>
+  }
+
+  export type GuestTeachingRateUpdateManyWithWhereWithoutAcademicDegreeTypeInput = {
+    where: GuestTeachingRateScalarWhereInput
+    data: XOR<GuestTeachingRateUpdateManyMutationInput, GuestTeachingRateUncheckedUpdateManyWithoutAcademicDegreeTypeInput>
   }
 
   export type UserProfileCreateWithoutEthnicityInput = {
@@ -558197,6 +564019,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutLecturerInput
     personalWorkTags?: PersonalWorkTagCreateNestedManyWithoutLecturerInput
     individualSchedules?: IndividualScheduleCreateNestedManyWithoutLecturerInput
+    guestTeachingPayments?: GuestTeachingPaymentCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerUncheckedCreateWithoutOrganizationInput = {
@@ -558236,6 +564059,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutLecturerInput
     personalWorkTags?: PersonalWorkTagUncheckedCreateNestedManyWithoutLecturerInput
     individualSchedules?: IndividualScheduleUncheckedCreateNestedManyWithoutLecturerInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerCreateOrConnectWithoutOrganizationInput = {
@@ -559151,6 +564975,56 @@ export namespace Prisma {
     create: XOR<SurveyObjectTypeCreateWithoutOrganizationsInput, SurveyObjectTypeUncheckedCreateWithoutOrganizationsInput>
   }
 
+  export type GuestTeachingPaymentCreateWithoutHiringOrgInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    totalPeriods?: number
+    ratePerPeriod: Decimal | DecimalJsLike | number | string
+    amount: Decimal | DecimalJsLike | number | string
+    status?: $Enums.PaymentStatus
+    paymentDate?: Date | string | null
+    transactionCode?: string | null
+    decisionRef?: string | null
+    lecturer: LecturerCreateNestedOneWithoutGuestTeachingPaymentsInput
+    semester: SemesterCreateNestedOneWithoutGuestTeachingPaymentsInput
+  }
+
+  export type GuestTeachingPaymentUncheckedCreateWithoutHiringOrgInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    lecturerId: string
+    semesterId: string
+    totalPeriods?: number
+    ratePerPeriod: Decimal | DecimalJsLike | number | string
+    amount: Decimal | DecimalJsLike | number | string
+    status?: $Enums.PaymentStatus
+    paymentDate?: Date | string | null
+    transactionCode?: string | null
+    decisionRef?: string | null
+  }
+
+  export type GuestTeachingPaymentCreateOrConnectWithoutHiringOrgInput = {
+    where: GuestTeachingPaymentWhereUniqueInput
+    create: XOR<GuestTeachingPaymentCreateWithoutHiringOrgInput, GuestTeachingPaymentUncheckedCreateWithoutHiringOrgInput>
+  }
+
+  export type GuestTeachingPaymentCreateManyHiringOrgInputEnvelope = {
+    data: GuestTeachingPaymentCreateManyHiringOrgInput | GuestTeachingPaymentCreateManyHiringOrgInput[]
+    skipDuplicates?: boolean
+  }
+
   export type LecturerUpsertWithWhereUniqueWithoutOrganizationInput = {
     where: LecturerWhereUniqueInput
     update: XOR<LecturerUpdateWithoutOrganizationInput, LecturerUncheckedUpdateWithoutOrganizationInput>
@@ -559183,7 +565057,7 @@ export namespace Prisma {
     lectureID?: StringNullableFilter<"Lecturer"> | string | null
     serviceDate?: DateTimeNullableFilter<"Lecturer"> | Date | string | null
     userProfileId?: UuidFilter<"Lecturer"> | string
-    organizationId?: UuidFilter<"Lecturer"> | string
+    organizationId?: UuidNullableFilter<"Lecturer"> | string | null
     lecturerTypeId?: StringFilter<"Lecturer"> | string
   }
 
@@ -559693,6 +565567,46 @@ export namespace Prisma {
     name?: StringFilter<"SurveyObjectType"> | string
     type?: EnumSurveyObjectNullableListFilter<"SurveyObjectType">
     trainingObjectTypeId?: StringNullableFilter<"SurveyObjectType"> | string | null
+  }
+
+  export type GuestTeachingPaymentUpsertWithWhereUniqueWithoutHiringOrgInput = {
+    where: GuestTeachingPaymentWhereUniqueInput
+    update: XOR<GuestTeachingPaymentUpdateWithoutHiringOrgInput, GuestTeachingPaymentUncheckedUpdateWithoutHiringOrgInput>
+    create: XOR<GuestTeachingPaymentCreateWithoutHiringOrgInput, GuestTeachingPaymentUncheckedCreateWithoutHiringOrgInput>
+  }
+
+  export type GuestTeachingPaymentUpdateWithWhereUniqueWithoutHiringOrgInput = {
+    where: GuestTeachingPaymentWhereUniqueInput
+    data: XOR<GuestTeachingPaymentUpdateWithoutHiringOrgInput, GuestTeachingPaymentUncheckedUpdateWithoutHiringOrgInput>
+  }
+
+  export type GuestTeachingPaymentUpdateManyWithWhereWithoutHiringOrgInput = {
+    where: GuestTeachingPaymentScalarWhereInput
+    data: XOR<GuestTeachingPaymentUpdateManyMutationInput, GuestTeachingPaymentUncheckedUpdateManyWithoutHiringOrgInput>
+  }
+
+  export type GuestTeachingPaymentScalarWhereInput = {
+    AND?: GuestTeachingPaymentScalarWhereInput | GuestTeachingPaymentScalarWhereInput[]
+    OR?: GuestTeachingPaymentScalarWhereInput[]
+    NOT?: GuestTeachingPaymentScalarWhereInput | GuestTeachingPaymentScalarWhereInput[]
+    id?: StringFilter<"GuestTeachingPayment"> | string
+    code?: StringNullableFilter<"GuestTeachingPayment"> | string | null
+    active?: BoolFilter<"GuestTeachingPayment"> | boolean
+    description?: StringNullableFilter<"GuestTeachingPayment"> | string | null
+    deletedAt?: DateTimeNullableFilter<"GuestTeachingPayment"> | Date | string | null
+    createdAt?: DateTimeFilter<"GuestTeachingPayment"> | Date | string
+    updatedAt?: DateTimeFilter<"GuestTeachingPayment"> | Date | string
+    createdBy?: UuidNullableFilter<"GuestTeachingPayment"> | string | null
+    lecturerId?: StringFilter<"GuestTeachingPayment"> | string
+    semesterId?: StringFilter<"GuestTeachingPayment"> | string
+    hiringOrgId?: UuidFilter<"GuestTeachingPayment"> | string
+    totalPeriods?: IntFilter<"GuestTeachingPayment"> | number
+    ratePerPeriod?: DecimalFilter<"GuestTeachingPayment"> | Decimal | DecimalJsLike | number | string
+    amount?: DecimalFilter<"GuestTeachingPayment"> | Decimal | DecimalJsLike | number | string
+    status?: EnumPaymentStatusFilter<"GuestTeachingPayment"> | $Enums.PaymentStatus
+    paymentDate?: DateTimeNullableFilter<"GuestTeachingPayment"> | Date | string | null
+    transactionCode?: StringNullableFilter<"GuestTeachingPayment"> | string | null
+    decisionRef?: StringNullableFilter<"GuestTeachingPayment"> | string | null
   }
 
   export type StudentCreateWithoutRegistrationAreaInput = {
@@ -569242,6 +575156,7 @@ export namespace Prisma {
     availableTrainingTime?: AvailableTrainingTimeCreateNestedManyWithoutSemesterInput
     studentSubjectScore?: StudentSubjectScoreCreateNestedManyWithoutSemesterInput
     planTrainingPractice?: PlanTrainingPracticeCreateNestedManyWithoutSemesterInput
+    guestTeachingPayments?: GuestTeachingPaymentCreateNestedManyWithoutSemesterInput
   }
 
   export type SemesterUncheckedCreateWithoutPlanTrainingInput = {
@@ -569275,6 +575190,7 @@ export namespace Prisma {
     availableTrainingTime?: AvailableTrainingTimeUncheckedCreateNestedManyWithoutSemesterInput
     studentSubjectScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutSemesterInput
     planTrainingPractice?: PlanTrainingPracticeUncheckedCreateNestedManyWithoutSemesterInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedCreateNestedManyWithoutSemesterInput
   }
 
   export type SemesterCreateOrConnectWithoutPlanTrainingInput = {
@@ -569564,6 +575480,7 @@ export namespace Prisma {
     availableTrainingTime?: AvailableTrainingTimeUpdateManyWithoutSemesterNestedInput
     studentSubjectScore?: StudentSubjectScoreUpdateManyWithoutSemesterNestedInput
     planTrainingPractice?: PlanTrainingPracticeUpdateManyWithoutSemesterNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUpdateManyWithoutSemesterNestedInput
   }
 
   export type SemesterUncheckedUpdateWithoutPlanTrainingInput = {
@@ -569597,6 +575514,7 @@ export namespace Prisma {
     availableTrainingTime?: AvailableTrainingTimeUncheckedUpdateManyWithoutSemesterNestedInput
     studentSubjectScore?: StudentSubjectScoreUncheckedUpdateManyWithoutSemesterNestedInput
     planTrainingPractice?: PlanTrainingPracticeUncheckedUpdateManyWithoutSemesterNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedUpdateManyWithoutSemesterNestedInput
   }
 
   export type TrainingCourseUpsertWithoutPlanTrainingsInput = {
@@ -569865,6 +575783,7 @@ export namespace Prisma {
     semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutSemesterInput
     availableTrainingTime?: AvailableTrainingTimeCreateNestedManyWithoutSemesterInput
     studentSubjectScore?: StudentSubjectScoreCreateNestedManyWithoutSemesterInput
+    guestTeachingPayments?: GuestTeachingPaymentCreateNestedManyWithoutSemesterInput
   }
 
   export type SemesterUncheckedCreateWithoutPlanTrainingPracticeInput = {
@@ -569898,6 +575817,7 @@ export namespace Prisma {
     semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutSemesterInput
     availableTrainingTime?: AvailableTrainingTimeUncheckedCreateNestedManyWithoutSemesterInput
     studentSubjectScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutSemesterInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedCreateNestedManyWithoutSemesterInput
   }
 
   export type SemesterCreateOrConnectWithoutPlanTrainingPracticeInput = {
@@ -570149,6 +576069,7 @@ export namespace Prisma {
     semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutSemesterNestedInput
     availableTrainingTime?: AvailableTrainingTimeUpdateManyWithoutSemesterNestedInput
     studentSubjectScore?: StudentSubjectScoreUpdateManyWithoutSemesterNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUpdateManyWithoutSemesterNestedInput
   }
 
   export type SemesterUncheckedUpdateWithoutPlanTrainingPracticeInput = {
@@ -570182,6 +576103,7 @@ export namespace Prisma {
     semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutSemesterNestedInput
     availableTrainingTime?: AvailableTrainingTimeUncheckedUpdateManyWithoutSemesterNestedInput
     studentSubjectScore?: StudentSubjectScoreUncheckedUpdateManyWithoutSemesterNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedUpdateManyWithoutSemesterNestedInput
   }
 
   export type TrainingCourseUpsertWithoutPlanTrainingPracticeInput = {
@@ -571818,6 +577740,7 @@ export namespace Prisma {
     semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutSemesterInput
     availableTrainingTime?: AvailableTrainingTimeCreateNestedManyWithoutSemesterInput
     planTrainingPractice?: PlanTrainingPracticeCreateNestedManyWithoutSemesterInput
+    guestTeachingPayments?: GuestTeachingPaymentCreateNestedManyWithoutSemesterInput
   }
 
   export type SemesterUncheckedCreateWithoutStudentSubjectScoreInput = {
@@ -571851,6 +577774,7 @@ export namespace Prisma {
     semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutSemesterInput
     availableTrainingTime?: AvailableTrainingTimeUncheckedCreateNestedManyWithoutSemesterInput
     planTrainingPractice?: PlanTrainingPracticeUncheckedCreateNestedManyWithoutSemesterInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedCreateNestedManyWithoutSemesterInput
   }
 
   export type SemesterCreateOrConnectWithoutStudentSubjectScoreInput = {
@@ -572842,6 +578766,7 @@ export namespace Prisma {
     semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutSemesterNestedInput
     availableTrainingTime?: AvailableTrainingTimeUpdateManyWithoutSemesterNestedInput
     planTrainingPractice?: PlanTrainingPracticeUpdateManyWithoutSemesterNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUpdateManyWithoutSemesterNestedInput
   }
 
   export type SemesterUncheckedUpdateWithoutStudentSubjectScoreInput = {
@@ -572875,6 +578800,7 @@ export namespace Prisma {
     semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutSemesterNestedInput
     availableTrainingTime?: AvailableTrainingTimeUncheckedUpdateManyWithoutSemesterNestedInput
     planTrainingPractice?: PlanTrainingPracticeUncheckedUpdateManyWithoutSemesterNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedUpdateManyWithoutSemesterNestedInput
   }
 
   export type ExamPaperUpsertWithoutStudentSubjectScoreInput = {
@@ -577014,6 +582940,7 @@ export namespace Prisma {
     availableTrainingTime?: AvailableTrainingTimeCreateNestedManyWithoutSemesterInput
     studentSubjectScore?: StudentSubjectScoreCreateNestedManyWithoutSemesterInput
     planTrainingPractice?: PlanTrainingPracticeCreateNestedManyWithoutSemesterInput
+    guestTeachingPayments?: GuestTeachingPaymentCreateNestedManyWithoutSemesterInput
   }
 
   export type SemesterUncheckedCreateWithoutSchoolYearInput = {
@@ -577047,6 +582974,7 @@ export namespace Prisma {
     availableTrainingTime?: AvailableTrainingTimeUncheckedCreateNestedManyWithoutSemesterInput
     studentSubjectScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutSemesterInput
     planTrainingPractice?: PlanTrainingPracticeUncheckedCreateNestedManyWithoutSemesterInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedCreateNestedManyWithoutSemesterInput
   }
 
   export type SemesterCreateOrConnectWithoutSchoolYearInput = {
@@ -577323,6 +583251,42 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type GuestTeachingRateConfigCreateWithoutSchoolYearInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    name: string
+    rates?: GuestTeachingRateCreateNestedManyWithoutConfigInput
+  }
+
+  export type GuestTeachingRateConfigUncheckedCreateWithoutSchoolYearInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    name: string
+    rates?: GuestTeachingRateUncheckedCreateNestedManyWithoutConfigInput
+  }
+
+  export type GuestTeachingRateConfigCreateOrConnectWithoutSchoolYearInput = {
+    where: GuestTeachingRateConfigWhereUniqueInput
+    create: XOR<GuestTeachingRateConfigCreateWithoutSchoolYearInput, GuestTeachingRateConfigUncheckedCreateWithoutSchoolYearInput>
+  }
+
+  export type GuestTeachingRateConfigCreateManySchoolYearInputEnvelope = {
+    data: GuestTeachingRateConfigCreateManySchoolYearInput | GuestTeachingRateConfigCreateManySchoolYearInput[]
+    skipDuplicates?: boolean
+  }
+
   export type SemesterUpsertWithWhereUniqueWithoutSchoolYearInput = {
     where: SemesterWhereUniqueInput
     update: XOR<SemesterUpdateWithoutSchoolYearInput, SemesterUncheckedUpdateWithoutSchoolYearInput>
@@ -577562,6 +583526,38 @@ export namespace Prisma {
     status?: EnumTrainingScoreStatusFilter<"SchoolYearTrainingScore"> | $Enums.TrainingScoreStatus
   }
 
+  export type GuestTeachingRateConfigUpsertWithWhereUniqueWithoutSchoolYearInput = {
+    where: GuestTeachingRateConfigWhereUniqueInput
+    update: XOR<GuestTeachingRateConfigUpdateWithoutSchoolYearInput, GuestTeachingRateConfigUncheckedUpdateWithoutSchoolYearInput>
+    create: XOR<GuestTeachingRateConfigCreateWithoutSchoolYearInput, GuestTeachingRateConfigUncheckedCreateWithoutSchoolYearInput>
+  }
+
+  export type GuestTeachingRateConfigUpdateWithWhereUniqueWithoutSchoolYearInput = {
+    where: GuestTeachingRateConfigWhereUniqueInput
+    data: XOR<GuestTeachingRateConfigUpdateWithoutSchoolYearInput, GuestTeachingRateConfigUncheckedUpdateWithoutSchoolYearInput>
+  }
+
+  export type GuestTeachingRateConfigUpdateManyWithWhereWithoutSchoolYearInput = {
+    where: GuestTeachingRateConfigScalarWhereInput
+    data: XOR<GuestTeachingRateConfigUpdateManyMutationInput, GuestTeachingRateConfigUncheckedUpdateManyWithoutSchoolYearInput>
+  }
+
+  export type GuestTeachingRateConfigScalarWhereInput = {
+    AND?: GuestTeachingRateConfigScalarWhereInput | GuestTeachingRateConfigScalarWhereInput[]
+    OR?: GuestTeachingRateConfigScalarWhereInput[]
+    NOT?: GuestTeachingRateConfigScalarWhereInput | GuestTeachingRateConfigScalarWhereInput[]
+    id?: StringFilter<"GuestTeachingRateConfig"> | string
+    code?: StringNullableFilter<"GuestTeachingRateConfig"> | string | null
+    active?: BoolFilter<"GuestTeachingRateConfig"> | boolean
+    description?: StringNullableFilter<"GuestTeachingRateConfig"> | string | null
+    deletedAt?: DateTimeNullableFilter<"GuestTeachingRateConfig"> | Date | string | null
+    createdAt?: DateTimeFilter<"GuestTeachingRateConfig"> | Date | string
+    updatedAt?: DateTimeFilter<"GuestTeachingRateConfig"> | Date | string
+    createdBy?: UuidNullableFilter<"GuestTeachingRateConfig"> | string | null
+    name?: StringFilter<"GuestTeachingRateConfig"> | string
+    schoolYearId?: StringFilter<"GuestTeachingRateConfig"> | string
+  }
+
   export type SchoolYearCreateWithoutSemestersInput = {
     id?: string
     code?: string | null
@@ -577579,6 +583575,7 @@ export namespace Prisma {
     studentAcademicDecision?: StudentAcademicDecisionCreateNestedManyWithoutSchoolYearInput
     evaluationPeriod?: EvaluationPeriodCreateNestedManyWithoutSchoolYearInput
     schoolYearTrainingScore?: SchoolYearTrainingScoreCreateNestedManyWithoutSchoolYearInput
+    guestTeachingRateConfig?: GuestTeachingRateConfigCreateNestedManyWithoutSchoolYearInput
   }
 
   export type SchoolYearUncheckedCreateWithoutSemestersInput = {
@@ -577598,6 +583595,7 @@ export namespace Prisma {
     studentAcademicDecision?: StudentAcademicDecisionUncheckedCreateNestedManyWithoutSchoolYearInput
     evaluationPeriod?: EvaluationPeriodUncheckedCreateNestedManyWithoutSchoolYearInput
     schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedCreateNestedManyWithoutSchoolYearInput
+    guestTeachingRateConfig?: GuestTeachingRateConfigUncheckedCreateNestedManyWithoutSchoolYearInput
   }
 
   export type SchoolYearCreateOrConnectWithoutSemestersInput = {
@@ -578619,6 +584617,56 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type GuestTeachingPaymentCreateWithoutSemesterInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    totalPeriods?: number
+    ratePerPeriod: Decimal | DecimalJsLike | number | string
+    amount: Decimal | DecimalJsLike | number | string
+    status?: $Enums.PaymentStatus
+    paymentDate?: Date | string | null
+    transactionCode?: string | null
+    decisionRef?: string | null
+    lecturer: LecturerCreateNestedOneWithoutGuestTeachingPaymentsInput
+    hiringOrg: DM_DonViCreateNestedOneWithoutGuestTeachingPaymentsInput
+  }
+
+  export type GuestTeachingPaymentUncheckedCreateWithoutSemesterInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    lecturerId: string
+    hiringOrgId: string
+    totalPeriods?: number
+    ratePerPeriod: Decimal | DecimalJsLike | number | string
+    amount: Decimal | DecimalJsLike | number | string
+    status?: $Enums.PaymentStatus
+    paymentDate?: Date | string | null
+    transactionCode?: string | null
+    decisionRef?: string | null
+  }
+
+  export type GuestTeachingPaymentCreateOrConnectWithoutSemesterInput = {
+    where: GuestTeachingPaymentWhereUniqueInput
+    create: XOR<GuestTeachingPaymentCreateWithoutSemesterInput, GuestTeachingPaymentUncheckedCreateWithoutSemesterInput>
+  }
+
+  export type GuestTeachingPaymentCreateManySemesterInputEnvelope = {
+    data: GuestTeachingPaymentCreateManySemesterInput | GuestTeachingPaymentCreateManySemesterInput[]
+    skipDuplicates?: boolean
+  }
+
   export type SchoolYearUpsertWithoutSemestersInput = {
     update: XOR<SchoolYearUpdateWithoutSemestersInput, SchoolYearUncheckedUpdateWithoutSemestersInput>
     create: XOR<SchoolYearCreateWithoutSemestersInput, SchoolYearUncheckedCreateWithoutSemestersInput>
@@ -578647,6 +584695,7 @@ export namespace Prisma {
     studentAcademicDecision?: StudentAcademicDecisionUpdateManyWithoutSchoolYearNestedInput
     evaluationPeriod?: EvaluationPeriodUpdateManyWithoutSchoolYearNestedInput
     schoolYearTrainingScore?: SchoolYearTrainingScoreUpdateManyWithoutSchoolYearNestedInput
+    guestTeachingRateConfig?: GuestTeachingRateConfigUpdateManyWithoutSchoolYearNestedInput
   }
 
   export type SchoolYearUncheckedUpdateWithoutSemestersInput = {
@@ -578666,6 +584715,7 @@ export namespace Prisma {
     studentAcademicDecision?: StudentAcademicDecisionUncheckedUpdateManyWithoutSchoolYearNestedInput
     evaluationPeriod?: EvaluationPeriodUncheckedUpdateManyWithoutSchoolYearNestedInput
     schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedUpdateManyWithoutSchoolYearNestedInput
+    guestTeachingRateConfig?: GuestTeachingRateConfigUncheckedUpdateManyWithoutSchoolYearNestedInput
   }
 
   export type SubjectClassUpsertWithWhereUniqueWithoutSemesterInput = {
@@ -579350,6 +585400,22 @@ export namespace Prisma {
     endDate?: DateTimeNullableFilter<"PlanTrainingPractice"> | Date | string | null
   }
 
+  export type GuestTeachingPaymentUpsertWithWhereUniqueWithoutSemesterInput = {
+    where: GuestTeachingPaymentWhereUniqueInput
+    update: XOR<GuestTeachingPaymentUpdateWithoutSemesterInput, GuestTeachingPaymentUncheckedUpdateWithoutSemesterInput>
+    create: XOR<GuestTeachingPaymentCreateWithoutSemesterInput, GuestTeachingPaymentUncheckedCreateWithoutSemesterInput>
+  }
+
+  export type GuestTeachingPaymentUpdateWithWhereUniqueWithoutSemesterInput = {
+    where: GuestTeachingPaymentWhereUniqueInput
+    data: XOR<GuestTeachingPaymentUpdateWithoutSemesterInput, GuestTeachingPaymentUncheckedUpdateWithoutSemesterInput>
+  }
+
+  export type GuestTeachingPaymentUpdateManyWithWhereWithoutSemesterInput = {
+    where: GuestTeachingPaymentScalarWhereInput
+    data: XOR<GuestTeachingPaymentUpdateManyMutationInput, GuestTeachingPaymentUncheckedUpdateManyWithoutSemesterInput>
+  }
+
   export type SchoolYearCreateWithoutMilestoneInput = {
     id?: string
     code?: string | null
@@ -579367,6 +585433,7 @@ export namespace Prisma {
     studentAcademicDecision?: StudentAcademicDecisionCreateNestedManyWithoutSchoolYearInput
     evaluationPeriod?: EvaluationPeriodCreateNestedManyWithoutSchoolYearInput
     schoolYearTrainingScore?: SchoolYearTrainingScoreCreateNestedManyWithoutSchoolYearInput
+    guestTeachingRateConfig?: GuestTeachingRateConfigCreateNestedManyWithoutSchoolYearInput
   }
 
   export type SchoolYearUncheckedCreateWithoutMilestoneInput = {
@@ -579386,6 +585453,7 @@ export namespace Prisma {
     studentAcademicDecision?: StudentAcademicDecisionUncheckedCreateNestedManyWithoutSchoolYearInput
     evaluationPeriod?: EvaluationPeriodUncheckedCreateNestedManyWithoutSchoolYearInput
     schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedCreateNestedManyWithoutSchoolYearInput
+    guestTeachingRateConfig?: GuestTeachingRateConfigUncheckedCreateNestedManyWithoutSchoolYearInput
   }
 
   export type SchoolYearCreateOrConnectWithoutMilestoneInput = {
@@ -579421,6 +585489,7 @@ export namespace Prisma {
     studentAcademicDecision?: StudentAcademicDecisionUpdateManyWithoutSchoolYearNestedInput
     evaluationPeriod?: EvaluationPeriodUpdateManyWithoutSchoolYearNestedInput
     schoolYearTrainingScore?: SchoolYearTrainingScoreUpdateManyWithoutSchoolYearNestedInput
+    guestTeachingRateConfig?: GuestTeachingRateConfigUpdateManyWithoutSchoolYearNestedInput
   }
 
   export type SchoolYearUncheckedUpdateWithoutMilestoneInput = {
@@ -579440,6 +585509,7 @@ export namespace Prisma {
     studentAcademicDecision?: StudentAcademicDecisionUncheckedUpdateManyWithoutSchoolYearNestedInput
     evaluationPeriod?: EvaluationPeriodUncheckedUpdateManyWithoutSchoolYearNestedInput
     schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedUpdateManyWithoutSchoolYearNestedInput
+    guestTeachingRateConfig?: GuestTeachingRateConfigUncheckedUpdateManyWithoutSchoolYearNestedInput
   }
 
   export type TrainingCourseCreateWithoutTrainingLanguageInput = {
@@ -579778,6 +585848,7 @@ export namespace Prisma {
     availableTrainingTime?: AvailableTrainingTimeCreateNestedManyWithoutSemesterInput
     studentSubjectScore?: StudentSubjectScoreCreateNestedManyWithoutSemesterInput
     planTrainingPractice?: PlanTrainingPracticeCreateNestedManyWithoutSemesterInput
+    guestTeachingPayments?: GuestTeachingPaymentCreateNestedManyWithoutSemesterInput
   }
 
   export type SemesterUncheckedCreateWithoutTrainingCoursesStartInput = {
@@ -579811,6 +585882,7 @@ export namespace Prisma {
     availableTrainingTime?: AvailableTrainingTimeUncheckedCreateNestedManyWithoutSemesterInput
     studentSubjectScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutSemesterInput
     planTrainingPractice?: PlanTrainingPracticeUncheckedCreateNestedManyWithoutSemesterInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedCreateNestedManyWithoutSemesterInput
   }
 
   export type SemesterCreateOrConnectWithoutTrainingCoursesStartInput = {
@@ -580877,6 +586949,7 @@ export namespace Prisma {
     availableTrainingTime?: AvailableTrainingTimeUpdateManyWithoutSemesterNestedInput
     studentSubjectScore?: StudentSubjectScoreUpdateManyWithoutSemesterNestedInput
     planTrainingPractice?: PlanTrainingPracticeUpdateManyWithoutSemesterNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUpdateManyWithoutSemesterNestedInput
   }
 
   export type SemesterUncheckedUpdateWithoutTrainingCoursesStartInput = {
@@ -580910,6 +586983,7 @@ export namespace Prisma {
     availableTrainingTime?: AvailableTrainingTimeUncheckedUpdateManyWithoutSemesterNestedInput
     studentSubjectScore?: StudentSubjectScoreUncheckedUpdateManyWithoutSemesterNestedInput
     planTrainingPractice?: PlanTrainingPracticeUncheckedUpdateManyWithoutSemesterNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedUpdateManyWithoutSemesterNestedInput
   }
 
   export type TrainingLanguageUpsertWithoutTrainingCoursesInput = {
@@ -582560,6 +588634,7 @@ export namespace Prisma {
     researchProjects?: ResearchProjectCreateNestedManyWithoutOrganizationInput
     thesisProjects?: ThesisProjectCreateNestedManyWithoutOrganizationInput
     surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutOrganizationsInput
+    guestTeachingPayments?: GuestTeachingPaymentCreateNestedManyWithoutHiringOrgInput
   }
 
   export type DM_DonViUncheckedCreateWithoutFixedClassInput = {
@@ -582602,6 +588677,7 @@ export namespace Prisma {
     researchProjects?: ResearchProjectUncheckedCreateNestedManyWithoutOrganizationInput
     thesisProjects?: ThesisProjectUncheckedCreateNestedManyWithoutOrganizationInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutOrganizationsInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedCreateNestedManyWithoutHiringOrgInput
   }
 
   export type DM_DonViCreateOrConnectWithoutFixedClassInput = {
@@ -582622,7 +588698,7 @@ export namespace Prisma {
     lectureID?: string | null
     serviceDate?: Date | string | null
     userProfile: UserProfileCreateNestedOneWithoutLecturerInput
-    organization: DM_DonViCreateNestedOneWithoutLecturersInput
+    organization?: DM_DonViCreateNestedOneWithoutLecturersInput
     lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
     mainSubjectClasses?: SubjectClassCreateNestedManyWithoutMainLecturerInput
     extraSubjectClasses?: SubjectClassCreateNestedManyWithoutExtraLecturerInput
@@ -582646,6 +588722,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutLecturerInput
     personalWorkTags?: PersonalWorkTagCreateNestedManyWithoutLecturerInput
     individualSchedules?: IndividualScheduleCreateNestedManyWithoutLecturerInput
+    guestTeachingPayments?: GuestTeachingPaymentCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerUncheckedCreateWithoutManageFixedClassInput = {
@@ -582661,7 +588738,7 @@ export namespace Prisma {
     lectureID?: string | null
     serviceDate?: Date | string | null
     userProfileId: string
-    organizationId: string
+    organizationId?: string | null
     lecturerTypeId: string
     mainSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutMainLecturerInput
     extraSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutExtraLecturerInput
@@ -582685,6 +588762,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutLecturerInput
     personalWorkTags?: PersonalWorkTagUncheckedCreateNestedManyWithoutLecturerInput
     individualSchedules?: IndividualScheduleUncheckedCreateNestedManyWithoutLecturerInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerCreateOrConnectWithoutManageFixedClassInput = {
@@ -584126,6 +590204,7 @@ export namespace Prisma {
     researchProjects?: ResearchProjectUpdateManyWithoutOrganizationNestedInput
     thesisProjects?: ThesisProjectUpdateManyWithoutOrganizationNestedInput
     surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutOrganizationsNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUpdateManyWithoutHiringOrgNestedInput
   }
 
   export type DM_DonViUncheckedUpdateWithoutFixedClassInput = {
@@ -584168,6 +590247,7 @@ export namespace Prisma {
     researchProjects?: ResearchProjectUncheckedUpdateManyWithoutOrganizationNestedInput
     thesisProjects?: ThesisProjectUncheckedUpdateManyWithoutOrganizationNestedInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutOrganizationsNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedUpdateManyWithoutHiringOrgNestedInput
   }
 
   export type LecturerUpsertWithoutManageFixedClassInput = {
@@ -584194,7 +590274,7 @@ export namespace Prisma {
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
-    organization?: DM_DonViUpdateOneRequiredWithoutLecturersNestedInput
+    organization?: DM_DonViUpdateOneWithoutLecturersNestedInput
     lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
     mainSubjectClasses?: SubjectClassUpdateManyWithoutMainLecturerNestedInput
     extraSubjectClasses?: SubjectClassUpdateManyWithoutExtraLecturerNestedInput
@@ -584218,6 +590298,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutLecturerNestedInput
     personalWorkTags?: PersonalWorkTagUpdateManyWithoutLecturerNestedInput
     individualSchedules?: IndividualScheduleUpdateManyWithoutLecturerNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUpdateManyWithoutLecturerNestedInput
   }
 
   export type LecturerUncheckedUpdateWithoutManageFixedClassInput = {
@@ -584233,7 +590314,7 @@ export namespace Prisma {
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfileId?: StringFieldUpdateOperationsInput | string
-    organizationId?: StringFieldUpdateOperationsInput | string
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
     lecturerTypeId?: StringFieldUpdateOperationsInput | string
     mainSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutMainLecturerNestedInput
     extraSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutExtraLecturerNestedInput
@@ -584257,6 +590338,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutLecturerNestedInput
     personalWorkTags?: PersonalWorkTagUncheckedUpdateManyWithoutLecturerNestedInput
     individualSchedules?: IndividualScheduleUncheckedUpdateManyWithoutLecturerNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedUpdateManyWithoutLecturerNestedInput
   }
 
   export type StaffUpsertWithoutFixedClassInput = {
@@ -584562,6 +590644,7 @@ export namespace Prisma {
     researchProjects?: ResearchProjectCreateNestedManyWithoutOrganizationInput
     thesisProjects?: ThesisProjectCreateNestedManyWithoutOrganizationInput
     surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutOrganizationsInput
+    guestTeachingPayments?: GuestTeachingPaymentCreateNestedManyWithoutHiringOrgInput
   }
 
   export type DM_DonViUncheckedCreateWithoutCurriculumInput = {
@@ -584604,6 +590687,7 @@ export namespace Prisma {
     researchProjects?: ResearchProjectUncheckedCreateNestedManyWithoutOrganizationInput
     thesisProjects?: ThesisProjectUncheckedCreateNestedManyWithoutOrganizationInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutOrganizationsInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedCreateNestedManyWithoutHiringOrgInput
   }
 
   export type DM_DonViCreateOrConnectWithoutCurriculumInput = {
@@ -584976,6 +591060,7 @@ export namespace Prisma {
     researchProjects?: ResearchProjectUpdateManyWithoutOrganizationNestedInput
     thesisProjects?: ThesisProjectUpdateManyWithoutOrganizationNestedInput
     surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutOrganizationsNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUpdateManyWithoutHiringOrgNestedInput
   }
 
   export type DM_DonViUncheckedUpdateWithoutCurriculumInput = {
@@ -585018,6 +591103,7 @@ export namespace Prisma {
     researchProjects?: ResearchProjectUncheckedUpdateManyWithoutOrganizationNestedInput
     thesisProjects?: ThesisProjectUncheckedUpdateManyWithoutOrganizationNestedInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutOrganizationsNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedUpdateManyWithoutHiringOrgNestedInput
   }
 
   export type TrainingMajorUpsertWithoutCurriculumInput = {
@@ -586816,6 +592902,7 @@ export namespace Prisma {
     researchProjects?: ResearchProjectCreateNestedManyWithoutOrganizationInput
     thesisProjects?: ThesisProjectCreateNestedManyWithoutOrganizationInput
     surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutOrganizationsInput
+    guestTeachingPayments?: GuestTeachingPaymentCreateNestedManyWithoutHiringOrgInput
   }
 
   export type DM_DonViUncheckedCreateWithoutSubjectsInput = {
@@ -586858,6 +592945,7 @@ export namespace Prisma {
     researchProjects?: ResearchProjectUncheckedCreateNestedManyWithoutOrganizationInput
     thesisProjects?: ThesisProjectUncheckedCreateNestedManyWithoutOrganizationInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutOrganizationsInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedCreateNestedManyWithoutHiringOrgInput
   }
 
   export type DM_DonViCreateOrConnectWithoutSubjectsInput = {
@@ -587107,6 +593195,7 @@ export namespace Prisma {
     researchProjects?: ResearchProjectUpdateManyWithoutOrganizationNestedInput
     thesisProjects?: ThesisProjectUpdateManyWithoutOrganizationNestedInput
     surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutOrganizationsNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUpdateManyWithoutHiringOrgNestedInput
   }
 
   export type DM_DonViUncheckedUpdateWithoutSubjectsInput = {
@@ -587149,6 +593238,7 @@ export namespace Prisma {
     researchProjects?: ResearchProjectUncheckedUpdateManyWithoutOrganizationNestedInput
     thesisProjects?: ThesisProjectUncheckedUpdateManyWithoutOrganizationNestedInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutOrganizationsNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedUpdateManyWithoutHiringOrgNestedInput
   }
 
   export type SubjectVersionUpsertWithWhereUniqueWithoutSubjectInput = {
@@ -587409,6 +593499,7 @@ export namespace Prisma {
     researchProjects?: ResearchProjectCreateNestedManyWithoutOrganizationInput
     thesisProjects?: ThesisProjectCreateNestedManyWithoutOrganizationInput
     surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutOrganizationsInput
+    guestTeachingPayments?: GuestTeachingPaymentCreateNestedManyWithoutHiringOrgInput
   }
 
   export type DM_DonViUncheckedCreateWithoutSubjectVersionsInput = {
@@ -587451,6 +593542,7 @@ export namespace Prisma {
     researchProjects?: ResearchProjectUncheckedCreateNestedManyWithoutOrganizationInput
     thesisProjects?: ThesisProjectUncheckedCreateNestedManyWithoutOrganizationInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutOrganizationsInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedCreateNestedManyWithoutHiringOrgInput
   }
 
   export type DM_DonViCreateOrConnectWithoutSubjectVersionsInput = {
@@ -588805,6 +594897,7 @@ export namespace Prisma {
     researchProjects?: ResearchProjectUpdateManyWithoutOrganizationNestedInput
     thesisProjects?: ThesisProjectUpdateManyWithoutOrganizationNestedInput
     surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutOrganizationsNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUpdateManyWithoutHiringOrgNestedInput
   }
 
   export type DM_DonViUncheckedUpdateWithoutSubjectVersionsInput = {
@@ -588847,6 +594940,7 @@ export namespace Prisma {
     researchProjects?: ResearchProjectUncheckedUpdateManyWithoutOrganizationNestedInput
     thesisProjects?: ThesisProjectUncheckedUpdateManyWithoutOrganizationNestedInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutOrganizationsNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedUpdateManyWithoutHiringOrgNestedInput
   }
 
   export type SubjectUpsertWithoutSubjectVersionInput = {
@@ -591189,6 +597283,7 @@ export namespace Prisma {
     availableTrainingTime?: AvailableTrainingTimeCreateNestedManyWithoutSemesterInput
     studentSubjectScore?: StudentSubjectScoreCreateNestedManyWithoutSemesterInput
     planTrainingPractice?: PlanTrainingPracticeCreateNestedManyWithoutSemesterInput
+    guestTeachingPayments?: GuestTeachingPaymentCreateNestedManyWithoutSemesterInput
   }
 
   export type SemesterUncheckedCreateWithoutClassRegisterSessionInput = {
@@ -591222,6 +597317,7 @@ export namespace Prisma {
     availableTrainingTime?: AvailableTrainingTimeUncheckedCreateNestedManyWithoutSemesterInput
     studentSubjectScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutSemesterInput
     planTrainingPractice?: PlanTrainingPracticeUncheckedCreateNestedManyWithoutSemesterInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedCreateNestedManyWithoutSemesterInput
   }
 
   export type SemesterCreateOrConnectWithoutClassRegisterSessionInput = {
@@ -591482,6 +597578,7 @@ export namespace Prisma {
     availableTrainingTime?: AvailableTrainingTimeUpdateManyWithoutSemesterNestedInput
     studentSubjectScore?: StudentSubjectScoreUpdateManyWithoutSemesterNestedInput
     planTrainingPractice?: PlanTrainingPracticeUpdateManyWithoutSemesterNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUpdateManyWithoutSemesterNestedInput
   }
 
   export type SemesterUncheckedUpdateWithoutClassRegisterSessionInput = {
@@ -591515,6 +597612,7 @@ export namespace Prisma {
     availableTrainingTime?: AvailableTrainingTimeUncheckedUpdateManyWithoutSemesterNestedInput
     studentSubjectScore?: StudentSubjectScoreUncheckedUpdateManyWithoutSemesterNestedInput
     planTrainingPractice?: PlanTrainingPracticeUncheckedUpdateManyWithoutSemesterNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedUpdateManyWithoutSemesterNestedInput
   }
 
   export type ClassRegisterSessionCreditUpsertWithWhereUniqueWithoutClassRegisterSessionInput = {
@@ -592479,6 +598577,7 @@ export namespace Prisma {
     availableTrainingTime?: AvailableTrainingTimeCreateNestedManyWithoutSemesterInput
     studentSubjectScore?: StudentSubjectScoreCreateNestedManyWithoutSemesterInput
     planTrainingPractice?: PlanTrainingPracticeCreateNestedManyWithoutSemesterInput
+    guestTeachingPayments?: GuestTeachingPaymentCreateNestedManyWithoutSemesterInput
   }
 
   export type SemesterUncheckedCreateWithoutSubjectClassesInput = {
@@ -592512,6 +598611,7 @@ export namespace Prisma {
     availableTrainingTime?: AvailableTrainingTimeUncheckedCreateNestedManyWithoutSemesterInput
     studentSubjectScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutSemesterInput
     planTrainingPractice?: PlanTrainingPracticeUncheckedCreateNestedManyWithoutSemesterInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedCreateNestedManyWithoutSemesterInput
   }
 
   export type SemesterCreateOrConnectWithoutSubjectClassesInput = {
@@ -592661,7 +598761,7 @@ export namespace Prisma {
     lectureID?: string | null
     serviceDate?: Date | string | null
     userProfile: UserProfileCreateNestedOneWithoutLecturerInput
-    organization: DM_DonViCreateNestedOneWithoutLecturersInput
+    organization?: DM_DonViCreateNestedOneWithoutLecturersInput
     lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
     extraSubjectClasses?: SubjectClassCreateNestedManyWithoutExtraLecturerInput
     enterGradeClasses?: SubjectClassCreateNestedManyWithoutEnterGradeLecturerInput
@@ -592685,6 +598785,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutLecturerInput
     personalWorkTags?: PersonalWorkTagCreateNestedManyWithoutLecturerInput
     individualSchedules?: IndividualScheduleCreateNestedManyWithoutLecturerInput
+    guestTeachingPayments?: GuestTeachingPaymentCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerUncheckedCreateWithoutMainSubjectClassesInput = {
@@ -592700,7 +598801,7 @@ export namespace Prisma {
     lectureID?: string | null
     serviceDate?: Date | string | null
     userProfileId: string
-    organizationId: string
+    organizationId?: string | null
     lecturerTypeId: string
     extraSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutExtraLecturerInput
     enterGradeClasses?: SubjectClassUncheckedCreateNestedManyWithoutEnterGradeLecturerInput
@@ -592724,6 +598825,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutLecturerInput
     personalWorkTags?: PersonalWorkTagUncheckedCreateNestedManyWithoutLecturerInput
     individualSchedules?: IndividualScheduleUncheckedCreateNestedManyWithoutLecturerInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerCreateOrConnectWithoutMainSubjectClassesInput = {
@@ -592744,7 +598846,7 @@ export namespace Prisma {
     lectureID?: string | null
     serviceDate?: Date | string | null
     userProfile: UserProfileCreateNestedOneWithoutLecturerInput
-    organization: DM_DonViCreateNestedOneWithoutLecturersInput
+    organization?: DM_DonViCreateNestedOneWithoutLecturersInput
     lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
     mainSubjectClasses?: SubjectClassCreateNestedManyWithoutMainLecturerInput
     enterGradeClasses?: SubjectClassCreateNestedManyWithoutEnterGradeLecturerInput
@@ -592768,6 +598870,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutLecturerInput
     personalWorkTags?: PersonalWorkTagCreateNestedManyWithoutLecturerInput
     individualSchedules?: IndividualScheduleCreateNestedManyWithoutLecturerInput
+    guestTeachingPayments?: GuestTeachingPaymentCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerUncheckedCreateWithoutExtraSubjectClassesInput = {
@@ -592783,7 +598886,7 @@ export namespace Prisma {
     lectureID?: string | null
     serviceDate?: Date | string | null
     userProfileId: string
-    organizationId: string
+    organizationId?: string | null
     lecturerTypeId: string
     mainSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutMainLecturerInput
     enterGradeClasses?: SubjectClassUncheckedCreateNestedManyWithoutEnterGradeLecturerInput
@@ -592807,6 +598910,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutLecturerInput
     personalWorkTags?: PersonalWorkTagUncheckedCreateNestedManyWithoutLecturerInput
     individualSchedules?: IndividualScheduleUncheckedCreateNestedManyWithoutLecturerInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerCreateOrConnectWithoutExtraSubjectClassesInput = {
@@ -592827,7 +598931,7 @@ export namespace Prisma {
     lectureID?: string | null
     serviceDate?: Date | string | null
     userProfile: UserProfileCreateNestedOneWithoutLecturerInput
-    organization: DM_DonViCreateNestedOneWithoutLecturersInput
+    organization?: DM_DonViCreateNestedOneWithoutLecturersInput
     lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
     mainSubjectClasses?: SubjectClassCreateNestedManyWithoutMainLecturerInput
     extraSubjectClasses?: SubjectClassCreateNestedManyWithoutExtraLecturerInput
@@ -592851,6 +598955,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutLecturerInput
     personalWorkTags?: PersonalWorkTagCreateNestedManyWithoutLecturerInput
     individualSchedules?: IndividualScheduleCreateNestedManyWithoutLecturerInput
+    guestTeachingPayments?: GuestTeachingPaymentCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerUncheckedCreateWithoutEnterGradeClassesInput = {
@@ -592866,7 +598971,7 @@ export namespace Prisma {
     lectureID?: string | null
     serviceDate?: Date | string | null
     userProfileId: string
-    organizationId: string
+    organizationId?: string | null
     lecturerTypeId: string
     mainSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutMainLecturerInput
     extraSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutExtraLecturerInput
@@ -592890,6 +598995,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutLecturerInput
     personalWorkTags?: PersonalWorkTagUncheckedCreateNestedManyWithoutLecturerInput
     individualSchedules?: IndividualScheduleUncheckedCreateNestedManyWithoutLecturerInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerCreateOrConnectWithoutEnterGradeClassesInput = {
@@ -593986,6 +600092,7 @@ export namespace Prisma {
     availableTrainingTime?: AvailableTrainingTimeUpdateManyWithoutSemesterNestedInput
     studentSubjectScore?: StudentSubjectScoreUpdateManyWithoutSemesterNestedInput
     planTrainingPractice?: PlanTrainingPracticeUpdateManyWithoutSemesterNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUpdateManyWithoutSemesterNestedInput
   }
 
   export type SemesterUncheckedUpdateWithoutSubjectClassesInput = {
@@ -594019,6 +600126,7 @@ export namespace Prisma {
     availableTrainingTime?: AvailableTrainingTimeUncheckedUpdateManyWithoutSemesterNestedInput
     studentSubjectScore?: StudentSubjectScoreUncheckedUpdateManyWithoutSemesterNestedInput
     planTrainingPractice?: PlanTrainingPracticeUncheckedUpdateManyWithoutSemesterNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedUpdateManyWithoutSemesterNestedInput
   }
 
   export type ExamUpsertWithoutSubjectClassInput = {
@@ -594192,7 +600300,7 @@ export namespace Prisma {
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
-    organization?: DM_DonViUpdateOneRequiredWithoutLecturersNestedInput
+    organization?: DM_DonViUpdateOneWithoutLecturersNestedInput
     lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
     extraSubjectClasses?: SubjectClassUpdateManyWithoutExtraLecturerNestedInput
     enterGradeClasses?: SubjectClassUpdateManyWithoutEnterGradeLecturerNestedInput
@@ -594216,6 +600324,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutLecturerNestedInput
     personalWorkTags?: PersonalWorkTagUpdateManyWithoutLecturerNestedInput
     individualSchedules?: IndividualScheduleUpdateManyWithoutLecturerNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUpdateManyWithoutLecturerNestedInput
   }
 
   export type LecturerUncheckedUpdateWithoutMainSubjectClassesInput = {
@@ -594231,7 +600340,7 @@ export namespace Prisma {
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfileId?: StringFieldUpdateOperationsInput | string
-    organizationId?: StringFieldUpdateOperationsInput | string
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
     lecturerTypeId?: StringFieldUpdateOperationsInput | string
     extraSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutExtraLecturerNestedInput
     enterGradeClasses?: SubjectClassUncheckedUpdateManyWithoutEnterGradeLecturerNestedInput
@@ -594255,6 +600364,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutLecturerNestedInput
     personalWorkTags?: PersonalWorkTagUncheckedUpdateManyWithoutLecturerNestedInput
     individualSchedules?: IndividualScheduleUncheckedUpdateManyWithoutLecturerNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedUpdateManyWithoutLecturerNestedInput
   }
 
   export type LecturerUpsertWithoutExtraSubjectClassesInput = {
@@ -594281,7 +600391,7 @@ export namespace Prisma {
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
-    organization?: DM_DonViUpdateOneRequiredWithoutLecturersNestedInput
+    organization?: DM_DonViUpdateOneWithoutLecturersNestedInput
     lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
     mainSubjectClasses?: SubjectClassUpdateManyWithoutMainLecturerNestedInput
     enterGradeClasses?: SubjectClassUpdateManyWithoutEnterGradeLecturerNestedInput
@@ -594305,6 +600415,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutLecturerNestedInput
     personalWorkTags?: PersonalWorkTagUpdateManyWithoutLecturerNestedInput
     individualSchedules?: IndividualScheduleUpdateManyWithoutLecturerNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUpdateManyWithoutLecturerNestedInput
   }
 
   export type LecturerUncheckedUpdateWithoutExtraSubjectClassesInput = {
@@ -594320,7 +600431,7 @@ export namespace Prisma {
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfileId?: StringFieldUpdateOperationsInput | string
-    organizationId?: StringFieldUpdateOperationsInput | string
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
     lecturerTypeId?: StringFieldUpdateOperationsInput | string
     mainSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutMainLecturerNestedInput
     enterGradeClasses?: SubjectClassUncheckedUpdateManyWithoutEnterGradeLecturerNestedInput
@@ -594344,6 +600455,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutLecturerNestedInput
     personalWorkTags?: PersonalWorkTagUncheckedUpdateManyWithoutLecturerNestedInput
     individualSchedules?: IndividualScheduleUncheckedUpdateManyWithoutLecturerNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedUpdateManyWithoutLecturerNestedInput
   }
 
   export type LecturerUpsertWithoutEnterGradeClassesInput = {
@@ -594370,7 +600482,7 @@ export namespace Prisma {
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
-    organization?: DM_DonViUpdateOneRequiredWithoutLecturersNestedInput
+    organization?: DM_DonViUpdateOneWithoutLecturersNestedInput
     lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
     mainSubjectClasses?: SubjectClassUpdateManyWithoutMainLecturerNestedInput
     extraSubjectClasses?: SubjectClassUpdateManyWithoutExtraLecturerNestedInput
@@ -594394,6 +600506,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutLecturerNestedInput
     personalWorkTags?: PersonalWorkTagUpdateManyWithoutLecturerNestedInput
     individualSchedules?: IndividualScheduleUpdateManyWithoutLecturerNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUpdateManyWithoutLecturerNestedInput
   }
 
   export type LecturerUncheckedUpdateWithoutEnterGradeClassesInput = {
@@ -594409,7 +600522,7 @@ export namespace Prisma {
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfileId?: StringFieldUpdateOperationsInput | string
-    organizationId?: StringFieldUpdateOperationsInput | string
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
     lecturerTypeId?: StringFieldUpdateOperationsInput | string
     mainSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutMainLecturerNestedInput
     extraSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutExtraLecturerNestedInput
@@ -594433,6 +600546,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutLecturerNestedInput
     personalWorkTags?: PersonalWorkTagUncheckedUpdateManyWithoutLecturerNestedInput
     individualSchedules?: IndividualScheduleUncheckedUpdateManyWithoutLecturerNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedUpdateManyWithoutLecturerNestedInput
   }
 
   export type ScoreLinkSubjectVersionUpsertWithoutSubjectClassInput = {
@@ -597567,7 +603681,7 @@ export namespace Prisma {
     lectureID?: string | null
     serviceDate?: Date | string | null
     userProfile: UserProfileCreateNestedOneWithoutLecturerInput
-    organization: DM_DonViCreateNestedOneWithoutLecturersInput
+    organization?: DM_DonViCreateNestedOneWithoutLecturersInput
     lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
     mainSubjectClasses?: SubjectClassCreateNestedManyWithoutMainLecturerInput
     extraSubjectClasses?: SubjectClassCreateNestedManyWithoutExtraLecturerInput
@@ -597591,6 +603705,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutLecturerInput
     personalWorkTags?: PersonalWorkTagCreateNestedManyWithoutLecturerInput
     individualSchedules?: IndividualScheduleCreateNestedManyWithoutLecturerInput
+    guestTeachingPayments?: GuestTeachingPaymentCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerUncheckedCreateWithoutClassSchedulesInput = {
@@ -597606,7 +603721,7 @@ export namespace Prisma {
     lectureID?: string | null
     serviceDate?: Date | string | null
     userProfileId: string
-    organizationId: string
+    organizationId?: string | null
     lecturerTypeId: string
     mainSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutMainLecturerInput
     extraSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutExtraLecturerInput
@@ -597630,6 +603745,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutLecturerInput
     personalWorkTags?: PersonalWorkTagUncheckedCreateNestedManyWithoutLecturerInput
     individualSchedules?: IndividualScheduleUncheckedCreateNestedManyWithoutLecturerInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerCreateOrConnectWithoutClassSchedulesInput = {
@@ -597650,7 +603766,7 @@ export namespace Prisma {
     lectureID?: string | null
     serviceDate?: Date | string | null
     userProfile: UserProfileCreateNestedOneWithoutLecturerInput
-    organization: DM_DonViCreateNestedOneWithoutLecturersInput
+    organization?: DM_DonViCreateNestedOneWithoutLecturersInput
     lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
     mainSubjectClasses?: SubjectClassCreateNestedManyWithoutMainLecturerInput
     extraSubjectClasses?: SubjectClassCreateNestedManyWithoutExtraLecturerInput
@@ -597674,6 +603790,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutLecturerInput
     personalWorkTags?: PersonalWorkTagCreateNestedManyWithoutLecturerInput
     individualSchedules?: IndividualScheduleCreateNestedManyWithoutLecturerInput
+    guestTeachingPayments?: GuestTeachingPaymentCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerUncheckedCreateWithoutExtraClassSchedulesInput = {
@@ -597689,7 +603806,7 @@ export namespace Prisma {
     lectureID?: string | null
     serviceDate?: Date | string | null
     userProfileId: string
-    organizationId: string
+    organizationId?: string | null
     lecturerTypeId: string
     mainSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutMainLecturerInput
     extraSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutExtraLecturerInput
@@ -597713,6 +603830,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutLecturerInput
     personalWorkTags?: PersonalWorkTagUncheckedCreateNestedManyWithoutLecturerInput
     individualSchedules?: IndividualScheduleUncheckedCreateNestedManyWithoutLecturerInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerCreateOrConnectWithoutExtraClassSchedulesInput = {
@@ -598401,7 +604519,7 @@ export namespace Prisma {
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
-    organization?: DM_DonViUpdateOneRequiredWithoutLecturersNestedInput
+    organization?: DM_DonViUpdateOneWithoutLecturersNestedInput
     lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
     mainSubjectClasses?: SubjectClassUpdateManyWithoutMainLecturerNestedInput
     extraSubjectClasses?: SubjectClassUpdateManyWithoutExtraLecturerNestedInput
@@ -598425,6 +604543,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutLecturerNestedInput
     personalWorkTags?: PersonalWorkTagUpdateManyWithoutLecturerNestedInput
     individualSchedules?: IndividualScheduleUpdateManyWithoutLecturerNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUpdateManyWithoutLecturerNestedInput
   }
 
   export type LecturerUncheckedUpdateWithoutClassSchedulesInput = {
@@ -598440,7 +604559,7 @@ export namespace Prisma {
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfileId?: StringFieldUpdateOperationsInput | string
-    organizationId?: StringFieldUpdateOperationsInput | string
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
     lecturerTypeId?: StringFieldUpdateOperationsInput | string
     mainSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutMainLecturerNestedInput
     extraSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutExtraLecturerNestedInput
@@ -598464,6 +604583,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutLecturerNestedInput
     personalWorkTags?: PersonalWorkTagUncheckedUpdateManyWithoutLecturerNestedInput
     individualSchedules?: IndividualScheduleUncheckedUpdateManyWithoutLecturerNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedUpdateManyWithoutLecturerNestedInput
   }
 
   export type LecturerUpsertWithoutExtraClassSchedulesInput = {
@@ -598490,7 +604610,7 @@ export namespace Prisma {
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
-    organization?: DM_DonViUpdateOneRequiredWithoutLecturersNestedInput
+    organization?: DM_DonViUpdateOneWithoutLecturersNestedInput
     lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
     mainSubjectClasses?: SubjectClassUpdateManyWithoutMainLecturerNestedInput
     extraSubjectClasses?: SubjectClassUpdateManyWithoutExtraLecturerNestedInput
@@ -598514,6 +604634,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutLecturerNestedInput
     personalWorkTags?: PersonalWorkTagUpdateManyWithoutLecturerNestedInput
     individualSchedules?: IndividualScheduleUpdateManyWithoutLecturerNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUpdateManyWithoutLecturerNestedInput
   }
 
   export type LecturerUncheckedUpdateWithoutExtraClassSchedulesInput = {
@@ -598529,7 +604650,7 @@ export namespace Prisma {
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfileId?: StringFieldUpdateOperationsInput | string
-    organizationId?: StringFieldUpdateOperationsInput | string
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
     lecturerTypeId?: StringFieldUpdateOperationsInput | string
     mainSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutMainLecturerNestedInput
     extraSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutExtraLecturerNestedInput
@@ -598553,6 +604674,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutLecturerNestedInput
     personalWorkTags?: PersonalWorkTagUncheckedUpdateManyWithoutLecturerNestedInput
     individualSchedules?: IndividualScheduleUncheckedUpdateManyWithoutLecturerNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedUpdateManyWithoutLecturerNestedInput
   }
 
   export type UserProfileUpsertWithWhereUniqueWithoutClassSchedulesInput = {
@@ -602895,6 +609017,7 @@ export namespace Prisma {
     researchProjects?: ResearchProjectCreateNestedManyWithoutOrganizationInput
     thesisProjects?: ThesisProjectCreateNestedManyWithoutOrganizationInput
     surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutOrganizationsInput
+    guestTeachingPayments?: GuestTeachingPaymentCreateNestedManyWithoutHiringOrgInput
   }
 
   export type DM_DonViUncheckedCreateWithoutTrainingFieldsInput = {
@@ -602937,6 +609060,7 @@ export namespace Prisma {
     researchProjects?: ResearchProjectUncheckedCreateNestedManyWithoutOrganizationInput
     thesisProjects?: ThesisProjectUncheckedCreateNestedManyWithoutOrganizationInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutOrganizationsInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedCreateNestedManyWithoutHiringOrgInput
   }
 
   export type DM_DonViCreateOrConnectWithoutTrainingFieldsInput = {
@@ -603226,6 +609350,7 @@ export namespace Prisma {
     researchProjects?: ResearchProjectUpdateManyWithoutOrganizationNestedInput
     thesisProjects?: ThesisProjectUpdateManyWithoutOrganizationNestedInput
     surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutOrganizationsNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUpdateManyWithoutHiringOrgNestedInput
   }
 
   export type DM_DonViUncheckedUpdateWithoutTrainingFieldsInput = {
@@ -603268,6 +609393,7 @@ export namespace Prisma {
     researchProjects?: ResearchProjectUncheckedUpdateManyWithoutOrganizationNestedInput
     thesisProjects?: ThesisProjectUncheckedUpdateManyWithoutOrganizationNestedInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutOrganizationsNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedUpdateManyWithoutHiringOrgNestedInput
   }
 
   export type TrainingFieldOnTrainingObjectTypeUpsertWithWhereUniqueWithoutTrainingFieldInput = {
@@ -603614,6 +609740,7 @@ export namespace Prisma {
     researchProjects?: ResearchProjectCreateNestedManyWithoutOrganizationInput
     thesisProjects?: ThesisProjectCreateNestedManyWithoutOrganizationInput
     surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutOrganizationsInput
+    guestTeachingPayments?: GuestTeachingPaymentCreateNestedManyWithoutHiringOrgInput
   }
 
   export type DM_DonViUncheckedCreateWithoutTrainingMajorsInput = {
@@ -603656,6 +609783,7 @@ export namespace Prisma {
     researchProjects?: ResearchProjectUncheckedCreateNestedManyWithoutOrganizationInput
     thesisProjects?: ThesisProjectUncheckedCreateNestedManyWithoutOrganizationInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutOrganizationsInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedCreateNestedManyWithoutHiringOrgInput
   }
 
   export type DM_DonViCreateOrConnectWithoutTrainingMajorsInput = {
@@ -603703,6 +609831,7 @@ export namespace Prisma {
     researchProjects?: ResearchProjectCreateNestedManyWithoutOrganizationInput
     thesisProjects?: ThesisProjectCreateNestedManyWithoutOrganizationInput
     surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutOrganizationsInput
+    guestTeachingPayments?: GuestTeachingPaymentCreateNestedManyWithoutHiringOrgInput
   }
 
   export type DM_DonViUncheckedCreateWithoutSecondTrainingMajorsInput = {
@@ -603745,6 +609874,7 @@ export namespace Prisma {
     researchProjects?: ResearchProjectUncheckedCreateNestedManyWithoutOrganizationInput
     thesisProjects?: ThesisProjectUncheckedCreateNestedManyWithoutOrganizationInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutOrganizationsInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedCreateNestedManyWithoutHiringOrgInput
   }
 
   export type DM_DonViCreateOrConnectWithoutSecondTrainingMajorsInput = {
@@ -603792,6 +609922,7 @@ export namespace Prisma {
     researchProjects?: ResearchProjectCreateNestedManyWithoutOrganizationInput
     thesisProjects?: ThesisProjectCreateNestedManyWithoutOrganizationInput
     surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutOrganizationsInput
+    guestTeachingPayments?: GuestTeachingPaymentCreateNestedManyWithoutHiringOrgInput
   }
 
   export type DM_DonViUncheckedCreateWithoutThirdTrainingMajorsInput = {
@@ -603834,6 +609965,7 @@ export namespace Prisma {
     researchProjects?: ResearchProjectUncheckedCreateNestedManyWithoutOrganizationInput
     thesisProjects?: ThesisProjectUncheckedCreateNestedManyWithoutOrganizationInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutOrganizationsInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedCreateNestedManyWithoutHiringOrgInput
   }
 
   export type DM_DonViCreateOrConnectWithoutThirdTrainingMajorsInput = {
@@ -604301,6 +610433,7 @@ export namespace Prisma {
     researchProjects?: ResearchProjectUpdateManyWithoutOrganizationNestedInput
     thesisProjects?: ThesisProjectUpdateManyWithoutOrganizationNestedInput
     surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutOrganizationsNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUpdateManyWithoutHiringOrgNestedInput
   }
 
   export type DM_DonViUncheckedUpdateWithoutTrainingMajorsInput = {
@@ -604343,6 +610476,7 @@ export namespace Prisma {
     researchProjects?: ResearchProjectUncheckedUpdateManyWithoutOrganizationNestedInput
     thesisProjects?: ThesisProjectUncheckedUpdateManyWithoutOrganizationNestedInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutOrganizationsNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedUpdateManyWithoutHiringOrgNestedInput
   }
 
   export type DM_DonViUpsertWithoutSecondTrainingMajorsInput = {
@@ -604396,6 +610530,7 @@ export namespace Prisma {
     researchProjects?: ResearchProjectUpdateManyWithoutOrganizationNestedInput
     thesisProjects?: ThesisProjectUpdateManyWithoutOrganizationNestedInput
     surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutOrganizationsNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUpdateManyWithoutHiringOrgNestedInput
   }
 
   export type DM_DonViUncheckedUpdateWithoutSecondTrainingMajorsInput = {
@@ -604438,6 +610573,7 @@ export namespace Prisma {
     researchProjects?: ResearchProjectUncheckedUpdateManyWithoutOrganizationNestedInput
     thesisProjects?: ThesisProjectUncheckedUpdateManyWithoutOrganizationNestedInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutOrganizationsNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedUpdateManyWithoutHiringOrgNestedInput
   }
 
   export type DM_DonViUpsertWithoutThirdTrainingMajorsInput = {
@@ -604491,6 +610627,7 @@ export namespace Prisma {
     researchProjects?: ResearchProjectUpdateManyWithoutOrganizationNestedInput
     thesisProjects?: ThesisProjectUpdateManyWithoutOrganizationNestedInput
     surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutOrganizationsNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUpdateManyWithoutHiringOrgNestedInput
   }
 
   export type DM_DonViUncheckedUpdateWithoutThirdTrainingMajorsInput = {
@@ -604533,6 +610670,7 @@ export namespace Prisma {
     researchProjects?: ResearchProjectUncheckedUpdateManyWithoutOrganizationNestedInput
     thesisProjects?: ThesisProjectUncheckedUpdateManyWithoutOrganizationNestedInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutOrganizationsNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedUpdateManyWithoutHiringOrgNestedInput
   }
 
   export type TrainingFieldUpsertWithoutTrainingMajorsInput = {
@@ -605874,6 +612012,7 @@ export namespace Prisma {
     semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutSemesterInput
     studentSubjectScore?: StudentSubjectScoreCreateNestedManyWithoutSemesterInput
     planTrainingPractice?: PlanTrainingPracticeCreateNestedManyWithoutSemesterInput
+    guestTeachingPayments?: GuestTeachingPaymentCreateNestedManyWithoutSemesterInput
   }
 
   export type SemesterUncheckedCreateWithoutAvailableTrainingTimeInput = {
@@ -605907,6 +612046,7 @@ export namespace Prisma {
     semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutSemesterInput
     studentSubjectScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutSemesterInput
     planTrainingPractice?: PlanTrainingPracticeUncheckedCreateNestedManyWithoutSemesterInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedCreateNestedManyWithoutSemesterInput
   }
 
   export type SemesterCreateOrConnectWithoutAvailableTrainingTimeInput = {
@@ -606033,6 +612173,7 @@ export namespace Prisma {
     semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutSemesterNestedInput
     studentSubjectScore?: StudentSubjectScoreUpdateManyWithoutSemesterNestedInput
     planTrainingPractice?: PlanTrainingPracticeUpdateManyWithoutSemesterNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUpdateManyWithoutSemesterNestedInput
   }
 
   export type SemesterUncheckedUpdateWithoutAvailableTrainingTimeInput = {
@@ -606066,6 +612207,7 @@ export namespace Prisma {
     semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutSemesterNestedInput
     studentSubjectScore?: StudentSubjectScoreUncheckedUpdateManyWithoutSemesterNestedInput
     planTrainingPractice?: PlanTrainingPracticeUncheckedUpdateManyWithoutSemesterNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedUpdateManyWithoutSemesterNestedInput
   }
 
   export type OutputStandardCreateWithoutCertificatesInput = {
@@ -612086,6 +618228,7 @@ export namespace Prisma {
     availableTrainingTime?: AvailableTrainingTimeCreateNestedManyWithoutSemesterInput
     studentSubjectScore?: StudentSubjectScoreCreateNestedManyWithoutSemesterInput
     planTrainingPractice?: PlanTrainingPracticeCreateNestedManyWithoutSemesterInput
+    guestTeachingPayments?: GuestTeachingPaymentCreateNestedManyWithoutSemesterInput
   }
 
   export type SemesterUncheckedCreateWithoutStudentSemesterResultInput = {
@@ -612119,6 +618262,7 @@ export namespace Prisma {
     availableTrainingTime?: AvailableTrainingTimeUncheckedCreateNestedManyWithoutSemesterInput
     studentSubjectScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutSemesterInput
     planTrainingPractice?: PlanTrainingPracticeUncheckedCreateNestedManyWithoutSemesterInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedCreateNestedManyWithoutSemesterInput
   }
 
   export type SemesterCreateOrConnectWithoutStudentSemesterResultInput = {
@@ -612394,6 +618538,7 @@ export namespace Prisma {
     availableTrainingTime?: AvailableTrainingTimeUpdateManyWithoutSemesterNestedInput
     studentSubjectScore?: StudentSubjectScoreUpdateManyWithoutSemesterNestedInput
     planTrainingPractice?: PlanTrainingPracticeUpdateManyWithoutSemesterNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUpdateManyWithoutSemesterNestedInput
   }
 
   export type SemesterUncheckedUpdateWithoutStudentSemesterResultInput = {
@@ -612427,6 +618572,7 @@ export namespace Prisma {
     availableTrainingTime?: AvailableTrainingTimeUncheckedUpdateManyWithoutSemesterNestedInput
     studentSubjectScore?: StudentSubjectScoreUncheckedUpdateManyWithoutSemesterNestedInput
     planTrainingPractice?: PlanTrainingPracticeUncheckedUpdateManyWithoutSemesterNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedUpdateManyWithoutSemesterNestedInput
   }
 
   export type AcademicRankingConvertUpsertWithoutStudentSemesterResultInput = {
@@ -612672,6 +618818,7 @@ export namespace Prisma {
     studentAcademicDecision?: StudentAcademicDecisionCreateNestedManyWithoutSchoolYearInput
     evaluationPeriod?: EvaluationPeriodCreateNestedManyWithoutSchoolYearInput
     schoolYearTrainingScore?: SchoolYearTrainingScoreCreateNestedManyWithoutSchoolYearInput
+    guestTeachingRateConfig?: GuestTeachingRateConfigCreateNestedManyWithoutSchoolYearInput
   }
 
   export type SchoolYearUncheckedCreateWithoutStudentYearResultInput = {
@@ -612691,6 +618838,7 @@ export namespace Prisma {
     studentAcademicDecision?: StudentAcademicDecisionUncheckedCreateNestedManyWithoutSchoolYearInput
     evaluationPeriod?: EvaluationPeriodUncheckedCreateNestedManyWithoutSchoolYearInput
     schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedCreateNestedManyWithoutSchoolYearInput
+    guestTeachingRateConfig?: GuestTeachingRateConfigUncheckedCreateNestedManyWithoutSchoolYearInput
   }
 
   export type SchoolYearCreateOrConnectWithoutStudentYearResultInput = {
@@ -612952,6 +619100,7 @@ export namespace Prisma {
     studentAcademicDecision?: StudentAcademicDecisionUpdateManyWithoutSchoolYearNestedInput
     evaluationPeriod?: EvaluationPeriodUpdateManyWithoutSchoolYearNestedInput
     schoolYearTrainingScore?: SchoolYearTrainingScoreUpdateManyWithoutSchoolYearNestedInput
+    guestTeachingRateConfig?: GuestTeachingRateConfigUpdateManyWithoutSchoolYearNestedInput
   }
 
   export type SchoolYearUncheckedUpdateWithoutStudentYearResultInput = {
@@ -612971,6 +619120,7 @@ export namespace Prisma {
     studentAcademicDecision?: StudentAcademicDecisionUncheckedUpdateManyWithoutSchoolYearNestedInput
     evaluationPeriod?: EvaluationPeriodUncheckedUpdateManyWithoutSchoolYearNestedInput
     schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedUpdateManyWithoutSchoolYearNestedInput
+    guestTeachingRateConfig?: GuestTeachingRateConfigUncheckedUpdateManyWithoutSchoolYearNestedInput
   }
 
   export type AcademicRankingConvertUpsertWithoutStudentYearResultInput = {
@@ -613402,7 +619552,7 @@ export namespace Prisma {
     lectureID?: string | null
     serviceDate?: Date | string | null
     userProfile: UserProfileCreateNestedOneWithoutLecturerInput
-    organization: DM_DonViCreateNestedOneWithoutLecturersInput
+    organization?: DM_DonViCreateNestedOneWithoutLecturersInput
     lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
     mainSubjectClasses?: SubjectClassCreateNestedManyWithoutMainLecturerInput
     extraSubjectClasses?: SubjectClassCreateNestedManyWithoutExtraLecturerInput
@@ -613426,6 +619576,7 @@ export namespace Prisma {
     secondarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutSecondarySupervisorInput
     personalWorkTags?: PersonalWorkTagCreateNestedManyWithoutLecturerInput
     individualSchedules?: IndividualScheduleCreateNestedManyWithoutLecturerInput
+    guestTeachingPayments?: GuestTeachingPaymentCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerUncheckedCreateWithoutNotificationsInput = {
@@ -613441,7 +619592,7 @@ export namespace Prisma {
     lectureID?: string | null
     serviceDate?: Date | string | null
     userProfileId: string
-    organizationId: string
+    organizationId?: string | null
     lecturerTypeId: string
     mainSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutMainLecturerInput
     extraSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutExtraLecturerInput
@@ -613465,6 +619616,7 @@ export namespace Prisma {
     secondarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutSecondarySupervisorInput
     personalWorkTags?: PersonalWorkTagUncheckedCreateNestedManyWithoutLecturerInput
     individualSchedules?: IndividualScheduleUncheckedCreateNestedManyWithoutLecturerInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerCreateOrConnectWithoutNotificationsInput = {
@@ -613628,7 +619780,7 @@ export namespace Prisma {
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
-    organization?: DM_DonViUpdateOneRequiredWithoutLecturersNestedInput
+    organization?: DM_DonViUpdateOneWithoutLecturersNestedInput
     lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
     mainSubjectClasses?: SubjectClassUpdateManyWithoutMainLecturerNestedInput
     extraSubjectClasses?: SubjectClassUpdateManyWithoutExtraLecturerNestedInput
@@ -613652,6 +619804,7 @@ export namespace Prisma {
     secondarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutSecondarySupervisorNestedInput
     personalWorkTags?: PersonalWorkTagUpdateManyWithoutLecturerNestedInput
     individualSchedules?: IndividualScheduleUpdateManyWithoutLecturerNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUpdateManyWithoutLecturerNestedInput
   }
 
   export type LecturerUncheckedUpdateWithoutNotificationsInput = {
@@ -613667,7 +619820,7 @@ export namespace Prisma {
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfileId?: StringFieldUpdateOperationsInput | string
-    organizationId?: StringFieldUpdateOperationsInput | string
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
     lecturerTypeId?: StringFieldUpdateOperationsInput | string
     mainSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutMainLecturerNestedInput
     extraSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutExtraLecturerNestedInput
@@ -613691,6 +619844,7 @@ export namespace Prisma {
     secondarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutSecondarySupervisorNestedInput
     personalWorkTags?: PersonalWorkTagUncheckedUpdateManyWithoutLecturerNestedInput
     individualSchedules?: IndividualScheduleUncheckedUpdateManyWithoutLecturerNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedUpdateManyWithoutLecturerNestedInput
   }
 
   export type DocumentFileUpsertWithWhereUniqueWithoutNotificationInput = {
@@ -613722,7 +619876,7 @@ export namespace Prisma {
     lectureID?: string | null
     serviceDate?: Date | string | null
     userProfile: UserProfileCreateNestedOneWithoutLecturerInput
-    organization: DM_DonViCreateNestedOneWithoutLecturersInput
+    organization?: DM_DonViCreateNestedOneWithoutLecturersInput
     lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
     mainSubjectClasses?: SubjectClassCreateNestedManyWithoutMainLecturerInput
     extraSubjectClasses?: SubjectClassCreateNestedManyWithoutExtraLecturerInput
@@ -613746,6 +619900,7 @@ export namespace Prisma {
     secondarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutSecondarySupervisorInput
     notifications?: NotificationCreateNestedManyWithoutLecturerInput
     individualSchedules?: IndividualScheduleCreateNestedManyWithoutLecturerInput
+    guestTeachingPayments?: GuestTeachingPaymentCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerUncheckedCreateWithoutPersonalWorkTagsInput = {
@@ -613761,7 +619916,7 @@ export namespace Prisma {
     lectureID?: string | null
     serviceDate?: Date | string | null
     userProfileId: string
-    organizationId: string
+    organizationId?: string | null
     lecturerTypeId: string
     mainSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutMainLecturerInput
     extraSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutExtraLecturerInput
@@ -613785,6 +619940,7 @@ export namespace Prisma {
     secondarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutSecondarySupervisorInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutLecturerInput
     individualSchedules?: IndividualScheduleUncheckedCreateNestedManyWithoutLecturerInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerCreateOrConnectWithoutPersonalWorkTagsInput = {
@@ -613863,7 +620019,7 @@ export namespace Prisma {
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
-    organization?: DM_DonViUpdateOneRequiredWithoutLecturersNestedInput
+    organization?: DM_DonViUpdateOneWithoutLecturersNestedInput
     lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
     mainSubjectClasses?: SubjectClassUpdateManyWithoutMainLecturerNestedInput
     extraSubjectClasses?: SubjectClassUpdateManyWithoutExtraLecturerNestedInput
@@ -613887,6 +620043,7 @@ export namespace Prisma {
     secondarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutSecondarySupervisorNestedInput
     notifications?: NotificationUpdateManyWithoutLecturerNestedInput
     individualSchedules?: IndividualScheduleUpdateManyWithoutLecturerNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUpdateManyWithoutLecturerNestedInput
   }
 
   export type LecturerUncheckedUpdateWithoutPersonalWorkTagsInput = {
@@ -613902,7 +620059,7 @@ export namespace Prisma {
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfileId?: StringFieldUpdateOperationsInput | string
-    organizationId?: StringFieldUpdateOperationsInput | string
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
     lecturerTypeId?: StringFieldUpdateOperationsInput | string
     mainSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutMainLecturerNestedInput
     extraSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutExtraLecturerNestedInput
@@ -613926,6 +620083,7 @@ export namespace Prisma {
     secondarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutSecondarySupervisorNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutLecturerNestedInput
     individualSchedules?: IndividualScheduleUncheckedUpdateManyWithoutLecturerNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedUpdateManyWithoutLecturerNestedInput
   }
 
   export type IndividualScheduleUpsertWithWhereUniqueWithoutTagsInput = {
@@ -613957,7 +620115,7 @@ export namespace Prisma {
     lectureID?: string | null
     serviceDate?: Date | string | null
     userProfile: UserProfileCreateNestedOneWithoutLecturerInput
-    organization: DM_DonViCreateNestedOneWithoutLecturersInput
+    organization?: DM_DonViCreateNestedOneWithoutLecturersInput
     lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
     mainSubjectClasses?: SubjectClassCreateNestedManyWithoutMainLecturerInput
     extraSubjectClasses?: SubjectClassCreateNestedManyWithoutExtraLecturerInput
@@ -613981,6 +620139,7 @@ export namespace Prisma {
     secondarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutSecondarySupervisorInput
     notifications?: NotificationCreateNestedManyWithoutLecturerInput
     personalWorkTags?: PersonalWorkTagCreateNestedManyWithoutLecturerInput
+    guestTeachingPayments?: GuestTeachingPaymentCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerUncheckedCreateWithoutIndividualSchedulesInput = {
@@ -613996,7 +620155,7 @@ export namespace Prisma {
     lectureID?: string | null
     serviceDate?: Date | string | null
     userProfileId: string
-    organizationId: string
+    organizationId?: string | null
     lecturerTypeId: string
     mainSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutMainLecturerInput
     extraSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutExtraLecturerInput
@@ -614020,6 +620179,7 @@ export namespace Prisma {
     secondarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutSecondarySupervisorInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutLecturerInput
     personalWorkTags?: PersonalWorkTagUncheckedCreateNestedManyWithoutLecturerInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerCreateOrConnectWithoutIndividualSchedulesInput = {
@@ -614443,7 +620603,7 @@ export namespace Prisma {
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
-    organization?: DM_DonViUpdateOneRequiredWithoutLecturersNestedInput
+    organization?: DM_DonViUpdateOneWithoutLecturersNestedInput
     lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
     mainSubjectClasses?: SubjectClassUpdateManyWithoutMainLecturerNestedInput
     extraSubjectClasses?: SubjectClassUpdateManyWithoutExtraLecturerNestedInput
@@ -614467,6 +620627,7 @@ export namespace Prisma {
     secondarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutSecondarySupervisorNestedInput
     notifications?: NotificationUpdateManyWithoutLecturerNestedInput
     personalWorkTags?: PersonalWorkTagUpdateManyWithoutLecturerNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUpdateManyWithoutLecturerNestedInput
   }
 
   export type LecturerUncheckedUpdateWithoutIndividualSchedulesInput = {
@@ -614482,7 +620643,7 @@ export namespace Prisma {
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfileId?: StringFieldUpdateOperationsInput | string
-    organizationId?: StringFieldUpdateOperationsInput | string
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
     lecturerTypeId?: StringFieldUpdateOperationsInput | string
     mainSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutMainLecturerNestedInput
     extraSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutExtraLecturerNestedInput
@@ -614506,6 +620667,7 @@ export namespace Prisma {
     secondarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutSecondarySupervisorNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutLecturerNestedInput
     personalWorkTags?: PersonalWorkTagUncheckedUpdateManyWithoutLecturerNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedUpdateManyWithoutLecturerNestedInput
   }
 
   export type PersonalWorkTagUpsertWithWhereUniqueWithoutSchedulesInput = {
@@ -614955,6 +621117,7 @@ export namespace Prisma {
     researchProjects?: ResearchProjectCreateNestedManyWithoutOrganizationInput
     thesisProjects?: ThesisProjectCreateNestedManyWithoutOrganizationInput
     surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutOrganizationsInput
+    guestTeachingPayments?: GuestTeachingPaymentCreateNestedManyWithoutHiringOrgInput
   }
 
   export type DM_DonViUncheckedCreateWithoutLecturersInput = {
@@ -614997,6 +621160,7 @@ export namespace Prisma {
     researchProjects?: ResearchProjectUncheckedCreateNestedManyWithoutOrganizationInput
     thesisProjects?: ThesisProjectUncheckedCreateNestedManyWithoutOrganizationInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutOrganizationsInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedCreateNestedManyWithoutHiringOrgInput
   }
 
   export type DM_DonViCreateOrConnectWithoutLecturersInput = {
@@ -615014,6 +621178,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
+    isExternal?: boolean
     lecturerHistory?: LecturerHistoryCreateNestedManyWithoutLecturerTypeInput
   }
 
@@ -615027,6 +621192,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
+    isExternal?: boolean
     lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutLecturerTypeInput
   }
 
@@ -616671,6 +622837,56 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type GuestTeachingPaymentCreateWithoutLecturerInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    totalPeriods?: number
+    ratePerPeriod: Decimal | DecimalJsLike | number | string
+    amount: Decimal | DecimalJsLike | number | string
+    status?: $Enums.PaymentStatus
+    paymentDate?: Date | string | null
+    transactionCode?: string | null
+    decisionRef?: string | null
+    semester: SemesterCreateNestedOneWithoutGuestTeachingPaymentsInput
+    hiringOrg: DM_DonViCreateNestedOneWithoutGuestTeachingPaymentsInput
+  }
+
+  export type GuestTeachingPaymentUncheckedCreateWithoutLecturerInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    semesterId: string
+    hiringOrgId: string
+    totalPeriods?: number
+    ratePerPeriod: Decimal | DecimalJsLike | number | string
+    amount: Decimal | DecimalJsLike | number | string
+    status?: $Enums.PaymentStatus
+    paymentDate?: Date | string | null
+    transactionCode?: string | null
+    decisionRef?: string | null
+  }
+
+  export type GuestTeachingPaymentCreateOrConnectWithoutLecturerInput = {
+    where: GuestTeachingPaymentWhereUniqueInput
+    create: XOR<GuestTeachingPaymentCreateWithoutLecturerInput, GuestTeachingPaymentUncheckedCreateWithoutLecturerInput>
+  }
+
+  export type GuestTeachingPaymentCreateManyLecturerInputEnvelope = {
+    data: GuestTeachingPaymentCreateManyLecturerInput | GuestTeachingPaymentCreateManyLecturerInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserProfileUpsertWithoutLecturerInput = {
     update: XOR<UserProfileUpdateWithoutLecturerInput, UserProfileUncheckedUpdateWithoutLecturerInput>
     create: XOR<UserProfileCreateWithoutLecturerInput, UserProfileUncheckedCreateWithoutLecturerInput>
@@ -617085,6 +623301,7 @@ export namespace Prisma {
     researchProjects?: ResearchProjectUpdateManyWithoutOrganizationNestedInput
     thesisProjects?: ThesisProjectUpdateManyWithoutOrganizationNestedInput
     surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutOrganizationsNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUpdateManyWithoutHiringOrgNestedInput
   }
 
   export type DM_DonViUncheckedUpdateWithoutLecturersInput = {
@@ -617127,6 +623344,7 @@ export namespace Prisma {
     researchProjects?: ResearchProjectUncheckedUpdateManyWithoutOrganizationNestedInput
     thesisProjects?: ThesisProjectUncheckedUpdateManyWithoutOrganizationNestedInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutOrganizationsNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedUpdateManyWithoutHiringOrgNestedInput
   }
 
   export type LecturerTypeUpsertWithoutLecturersInput = {
@@ -617150,6 +623368,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
+    isExternal?: BoolFieldUpdateOperationsInput | boolean
     lecturerHistory?: LecturerHistoryUpdateManyWithoutLecturerTypeNestedInput
   }
 
@@ -617163,6 +623382,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
+    isExternal?: BoolFieldUpdateOperationsInput | boolean
     lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutLecturerTypeNestedInput
   }
 
@@ -617637,6 +623857,22 @@ export namespace Prisma {
     data: XOR<IndividualScheduleUpdateManyMutationInput, IndividualScheduleUncheckedUpdateManyWithoutLecturerInput>
   }
 
+  export type GuestTeachingPaymentUpsertWithWhereUniqueWithoutLecturerInput = {
+    where: GuestTeachingPaymentWhereUniqueInput
+    update: XOR<GuestTeachingPaymentUpdateWithoutLecturerInput, GuestTeachingPaymentUncheckedUpdateWithoutLecturerInput>
+    create: XOR<GuestTeachingPaymentCreateWithoutLecturerInput, GuestTeachingPaymentUncheckedCreateWithoutLecturerInput>
+  }
+
+  export type GuestTeachingPaymentUpdateWithWhereUniqueWithoutLecturerInput = {
+    where: GuestTeachingPaymentWhereUniqueInput
+    data: XOR<GuestTeachingPaymentUpdateWithoutLecturerInput, GuestTeachingPaymentUncheckedUpdateWithoutLecturerInput>
+  }
+
+  export type GuestTeachingPaymentUpdateManyWithWhereWithoutLecturerInput = {
+    where: GuestTeachingPaymentScalarWhereInput
+    data: XOR<GuestTeachingPaymentUpdateManyMutationInput, GuestTeachingPaymentUncheckedUpdateManyWithoutLecturerInput>
+  }
+
   export type UserProfileCreateWithoutLecturerHistoryInput = {
     id?: string
     code?: string | null
@@ -618034,6 +624270,7 @@ export namespace Prisma {
     researchProjects?: ResearchProjectCreateNestedManyWithoutOrganizationInput
     thesisProjects?: ThesisProjectCreateNestedManyWithoutOrganizationInput
     surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutOrganizationsInput
+    guestTeachingPayments?: GuestTeachingPaymentCreateNestedManyWithoutHiringOrgInput
   }
 
   export type DM_DonViUncheckedCreateWithoutLecturerHistoryInput = {
@@ -618076,6 +624313,7 @@ export namespace Prisma {
     researchProjects?: ResearchProjectUncheckedCreateNestedManyWithoutOrganizationInput
     thesisProjects?: ThesisProjectUncheckedCreateNestedManyWithoutOrganizationInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutOrganizationsInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedCreateNestedManyWithoutHiringOrgInput
   }
 
   export type DM_DonViCreateOrConnectWithoutLecturerHistoryInput = {
@@ -618093,6 +624331,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
+    isExternal?: boolean
     lecturers?: LecturerCreateNestedManyWithoutLecturerTypeInput
   }
 
@@ -618106,6 +624345,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy?: string | null
     name: string
+    isExternal?: boolean
     lecturers?: LecturerUncheckedCreateNestedManyWithoutLecturerTypeInput
   }
 
@@ -618528,6 +624768,7 @@ export namespace Prisma {
     researchProjects?: ResearchProjectUpdateManyWithoutOrganizationNestedInput
     thesisProjects?: ThesisProjectUpdateManyWithoutOrganizationNestedInput
     surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutOrganizationsNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUpdateManyWithoutHiringOrgNestedInput
   }
 
   export type DM_DonViUncheckedUpdateWithoutLecturerHistoryInput = {
@@ -618570,6 +624811,7 @@ export namespace Prisma {
     researchProjects?: ResearchProjectUncheckedUpdateManyWithoutOrganizationNestedInput
     thesisProjects?: ThesisProjectUncheckedUpdateManyWithoutOrganizationNestedInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutOrganizationsNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedUpdateManyWithoutHiringOrgNestedInput
   }
 
   export type LecturerTypeUpsertWithoutLecturerHistoryInput = {
@@ -618593,6 +624835,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
+    isExternal?: BoolFieldUpdateOperationsInput | boolean
     lecturers?: LecturerUpdateManyWithoutLecturerTypeNestedInput
   }
 
@@ -618606,10 +624849,429 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
+    isExternal?: BoolFieldUpdateOperationsInput | boolean
     lecturers?: LecturerUncheckedUpdateManyWithoutLecturerTypeNestedInput
   }
 
-  export type LecturerCreateWithoutLecturerTypeInput = {
+  export type SchoolYearCreateWithoutGuestTeachingRateConfigInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    name: string
+    startDate: Date | string
+    endDate?: Date | string | null
+    semesters?: SemesterCreateNestedManyWithoutSchoolYearInput
+    milestone?: MilestoneCreateNestedManyWithoutSchoolYearInput
+    studentYearResult?: StudentYearResultCreateNestedManyWithoutSchoolYearInput
+    studentAcademicDecision?: StudentAcademicDecisionCreateNestedManyWithoutSchoolYearInput
+    evaluationPeriod?: EvaluationPeriodCreateNestedManyWithoutSchoolYearInput
+    schoolYearTrainingScore?: SchoolYearTrainingScoreCreateNestedManyWithoutSchoolYearInput
+  }
+
+  export type SchoolYearUncheckedCreateWithoutGuestTeachingRateConfigInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    name: string
+    startDate: Date | string
+    endDate?: Date | string | null
+    semesters?: SemesterUncheckedCreateNestedManyWithoutSchoolYearInput
+    milestone?: MilestoneUncheckedCreateNestedManyWithoutSchoolYearInput
+    studentYearResult?: StudentYearResultUncheckedCreateNestedManyWithoutSchoolYearInput
+    studentAcademicDecision?: StudentAcademicDecisionUncheckedCreateNestedManyWithoutSchoolYearInput
+    evaluationPeriod?: EvaluationPeriodUncheckedCreateNestedManyWithoutSchoolYearInput
+    schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedCreateNestedManyWithoutSchoolYearInput
+  }
+
+  export type SchoolYearCreateOrConnectWithoutGuestTeachingRateConfigInput = {
+    where: SchoolYearWhereUniqueInput
+    create: XOR<SchoolYearCreateWithoutGuestTeachingRateConfigInput, SchoolYearUncheckedCreateWithoutGuestTeachingRateConfigInput>
+  }
+
+  export type GuestTeachingRateCreateWithoutConfigInput = {
+    id?: string
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    isForeign?: boolean
+    ratePerPeriod: Decimal | DecimalJsLike | number | string
+    academicRankType?: DM_HocHamCreateNestedOneWithoutGuestTeachingRateInput
+    academicDegreeType?: DM_HocViCreateNestedOneWithoutGuestTeachingRateInput
+  }
+
+  export type GuestTeachingRateUncheckedCreateWithoutConfigInput = {
+    id?: string
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    academicRankTypeId?: string | null
+    academicDegreeTypeId?: string | null
+    isForeign?: boolean
+    ratePerPeriod: Decimal | DecimalJsLike | number | string
+  }
+
+  export type GuestTeachingRateCreateOrConnectWithoutConfigInput = {
+    where: GuestTeachingRateWhereUniqueInput
+    create: XOR<GuestTeachingRateCreateWithoutConfigInput, GuestTeachingRateUncheckedCreateWithoutConfigInput>
+  }
+
+  export type GuestTeachingRateCreateManyConfigInputEnvelope = {
+    data: GuestTeachingRateCreateManyConfigInput | GuestTeachingRateCreateManyConfigInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type SchoolYearUpsertWithoutGuestTeachingRateConfigInput = {
+    update: XOR<SchoolYearUpdateWithoutGuestTeachingRateConfigInput, SchoolYearUncheckedUpdateWithoutGuestTeachingRateConfigInput>
+    create: XOR<SchoolYearCreateWithoutGuestTeachingRateConfigInput, SchoolYearUncheckedCreateWithoutGuestTeachingRateConfigInput>
+    where?: SchoolYearWhereInput
+  }
+
+  export type SchoolYearUpdateToOneWithWhereWithoutGuestTeachingRateConfigInput = {
+    where?: SchoolYearWhereInput
+    data: XOR<SchoolYearUpdateWithoutGuestTeachingRateConfigInput, SchoolYearUncheckedUpdateWithoutGuestTeachingRateConfigInput>
+  }
+
+  export type SchoolYearUpdateWithoutGuestTeachingRateConfigInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    semesters?: SemesterUpdateManyWithoutSchoolYearNestedInput
+    milestone?: MilestoneUpdateManyWithoutSchoolYearNestedInput
+    studentYearResult?: StudentYearResultUpdateManyWithoutSchoolYearNestedInput
+    studentAcademicDecision?: StudentAcademicDecisionUpdateManyWithoutSchoolYearNestedInput
+    evaluationPeriod?: EvaluationPeriodUpdateManyWithoutSchoolYearNestedInput
+    schoolYearTrainingScore?: SchoolYearTrainingScoreUpdateManyWithoutSchoolYearNestedInput
+  }
+
+  export type SchoolYearUncheckedUpdateWithoutGuestTeachingRateConfigInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    semesters?: SemesterUncheckedUpdateManyWithoutSchoolYearNestedInput
+    milestone?: MilestoneUncheckedUpdateManyWithoutSchoolYearNestedInput
+    studentYearResult?: StudentYearResultUncheckedUpdateManyWithoutSchoolYearNestedInput
+    studentAcademicDecision?: StudentAcademicDecisionUncheckedUpdateManyWithoutSchoolYearNestedInput
+    evaluationPeriod?: EvaluationPeriodUncheckedUpdateManyWithoutSchoolYearNestedInput
+    schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedUpdateManyWithoutSchoolYearNestedInput
+  }
+
+  export type GuestTeachingRateUpsertWithWhereUniqueWithoutConfigInput = {
+    where: GuestTeachingRateWhereUniqueInput
+    update: XOR<GuestTeachingRateUpdateWithoutConfigInput, GuestTeachingRateUncheckedUpdateWithoutConfigInput>
+    create: XOR<GuestTeachingRateCreateWithoutConfigInput, GuestTeachingRateUncheckedCreateWithoutConfigInput>
+  }
+
+  export type GuestTeachingRateUpdateWithWhereUniqueWithoutConfigInput = {
+    where: GuestTeachingRateWhereUniqueInput
+    data: XOR<GuestTeachingRateUpdateWithoutConfigInput, GuestTeachingRateUncheckedUpdateWithoutConfigInput>
+  }
+
+  export type GuestTeachingRateUpdateManyWithWhereWithoutConfigInput = {
+    where: GuestTeachingRateScalarWhereInput
+    data: XOR<GuestTeachingRateUpdateManyMutationInput, GuestTeachingRateUncheckedUpdateManyWithoutConfigInput>
+  }
+
+  export type GuestTeachingRateConfigCreateWithoutRatesInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    name: string
+    schoolYear: SchoolYearCreateNestedOneWithoutGuestTeachingRateConfigInput
+  }
+
+  export type GuestTeachingRateConfigUncheckedCreateWithoutRatesInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    name: string
+    schoolYearId: string
+  }
+
+  export type GuestTeachingRateConfigCreateOrConnectWithoutRatesInput = {
+    where: GuestTeachingRateConfigWhereUniqueInput
+    create: XOR<GuestTeachingRateConfigCreateWithoutRatesInput, GuestTeachingRateConfigUncheckedCreateWithoutRatesInput>
+  }
+
+  export type DM_HocHamCreateWithoutGuestTeachingRateInput = {
+    Id?: string
+    sMa?: string | null
+    sTen?: string | null
+    sGhiChu?: string | null
+    iSTT?: number | null
+    bActive?: boolean | null
+    bDeleted?: boolean | null
+    bSystem?: boolean | null
+    iDictionaryKey?: number | null
+    dNgayTao?: Date | string | null
+    dNgaySua?: Date | string | null
+    sNguoiTao?: string | null
+    sNguoiSua?: string | null
+    sThietBiTao?: string | null
+    sThietBiSua?: string | null
+    profiles?: UserProfileCreateNestedManyWithoutAcademicRankTypeInput
+    hocHam?: HocHamCreateNestedManyWithoutAcademicRankTypeInput
+    expertProfile?: ExpertProfileCreateNestedManyWithoutAcademicRankTypeInput
+  }
+
+  export type DM_HocHamUncheckedCreateWithoutGuestTeachingRateInput = {
+    Id?: string
+    sMa?: string | null
+    sTen?: string | null
+    sGhiChu?: string | null
+    iSTT?: number | null
+    bActive?: boolean | null
+    bDeleted?: boolean | null
+    bSystem?: boolean | null
+    iDictionaryKey?: number | null
+    dNgayTao?: Date | string | null
+    dNgaySua?: Date | string | null
+    sNguoiTao?: string | null
+    sNguoiSua?: string | null
+    sThietBiTao?: string | null
+    sThietBiSua?: string | null
+    profiles?: UserProfileUncheckedCreateNestedManyWithoutAcademicRankTypeInput
+    hocHam?: HocHamUncheckedCreateNestedManyWithoutAcademicRankTypeInput
+    expertProfile?: ExpertProfileUncheckedCreateNestedManyWithoutAcademicRankTypeInput
+  }
+
+  export type DM_HocHamCreateOrConnectWithoutGuestTeachingRateInput = {
+    where: DM_HocHamWhereUniqueInput
+    create: XOR<DM_HocHamCreateWithoutGuestTeachingRateInput, DM_HocHamUncheckedCreateWithoutGuestTeachingRateInput>
+  }
+
+  export type DM_HocViCreateWithoutGuestTeachingRateInput = {
+    Id?: string
+    sMa?: string | null
+    sTen?: string | null
+    sGhiChu?: string | null
+    iSTT?: number | null
+    bActive?: boolean | null
+    bDeleted?: boolean | null
+    bSystem?: boolean | null
+    iDictionaryKey?: number | null
+    dNgayTao?: Date | string | null
+    dNgaySua?: Date | string | null
+    sNguoiTao?: string | null
+    sNguoiSua?: string | null
+    sThietBiTao?: string | null
+    sThietBiSua?: string | null
+    profiles?: UserProfileCreateNestedManyWithoutAcademicDegreeTypeInput
+    hocVi?: HocViCreateNestedManyWithoutAcademicDegreeTypeInput
+    expertProfile?: ExpertProfileCreateNestedManyWithoutAcademicDegreeTypeInput
+  }
+
+  export type DM_HocViUncheckedCreateWithoutGuestTeachingRateInput = {
+    Id?: string
+    sMa?: string | null
+    sTen?: string | null
+    sGhiChu?: string | null
+    iSTT?: number | null
+    bActive?: boolean | null
+    bDeleted?: boolean | null
+    bSystem?: boolean | null
+    iDictionaryKey?: number | null
+    dNgayTao?: Date | string | null
+    dNgaySua?: Date | string | null
+    sNguoiTao?: string | null
+    sNguoiSua?: string | null
+    sThietBiTao?: string | null
+    sThietBiSua?: string | null
+    profiles?: UserProfileUncheckedCreateNestedManyWithoutAcademicDegreeTypeInput
+    hocVi?: HocViUncheckedCreateNestedManyWithoutAcademicDegreeTypeInput
+    expertProfile?: ExpertProfileUncheckedCreateNestedManyWithoutAcademicDegreeTypeInput
+  }
+
+  export type DM_HocViCreateOrConnectWithoutGuestTeachingRateInput = {
+    where: DM_HocViWhereUniqueInput
+    create: XOR<DM_HocViCreateWithoutGuestTeachingRateInput, DM_HocViUncheckedCreateWithoutGuestTeachingRateInput>
+  }
+
+  export type GuestTeachingRateConfigUpsertWithoutRatesInput = {
+    update: XOR<GuestTeachingRateConfigUpdateWithoutRatesInput, GuestTeachingRateConfigUncheckedUpdateWithoutRatesInput>
+    create: XOR<GuestTeachingRateConfigCreateWithoutRatesInput, GuestTeachingRateConfigUncheckedCreateWithoutRatesInput>
+    where?: GuestTeachingRateConfigWhereInput
+  }
+
+  export type GuestTeachingRateConfigUpdateToOneWithWhereWithoutRatesInput = {
+    where?: GuestTeachingRateConfigWhereInput
+    data: XOR<GuestTeachingRateConfigUpdateWithoutRatesInput, GuestTeachingRateConfigUncheckedUpdateWithoutRatesInput>
+  }
+
+  export type GuestTeachingRateConfigUpdateWithoutRatesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    schoolYear?: SchoolYearUpdateOneRequiredWithoutGuestTeachingRateConfigNestedInput
+  }
+
+  export type GuestTeachingRateConfigUncheckedUpdateWithoutRatesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    schoolYearId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type DM_HocHamUpsertWithoutGuestTeachingRateInput = {
+    update: XOR<DM_HocHamUpdateWithoutGuestTeachingRateInput, DM_HocHamUncheckedUpdateWithoutGuestTeachingRateInput>
+    create: XOR<DM_HocHamCreateWithoutGuestTeachingRateInput, DM_HocHamUncheckedCreateWithoutGuestTeachingRateInput>
+    where?: DM_HocHamWhereInput
+  }
+
+  export type DM_HocHamUpdateToOneWithWhereWithoutGuestTeachingRateInput = {
+    where?: DM_HocHamWhereInput
+    data: XOR<DM_HocHamUpdateWithoutGuestTeachingRateInput, DM_HocHamUncheckedUpdateWithoutGuestTeachingRateInput>
+  }
+
+  export type DM_HocHamUpdateWithoutGuestTeachingRateInput = {
+    Id?: StringFieldUpdateOperationsInput | string
+    sMa?: NullableStringFieldUpdateOperationsInput | string | null
+    sTen?: NullableStringFieldUpdateOperationsInput | string | null
+    sGhiChu?: NullableStringFieldUpdateOperationsInput | string | null
+    iSTT?: NullableIntFieldUpdateOperationsInput | number | null
+    bActive?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bDeleted?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
+    dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+    sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+    sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    profiles?: UserProfileUpdateManyWithoutAcademicRankTypeNestedInput
+    hocHam?: HocHamUpdateManyWithoutAcademicRankTypeNestedInput
+    expertProfile?: ExpertProfileUpdateManyWithoutAcademicRankTypeNestedInput
+  }
+
+  export type DM_HocHamUncheckedUpdateWithoutGuestTeachingRateInput = {
+    Id?: StringFieldUpdateOperationsInput | string
+    sMa?: NullableStringFieldUpdateOperationsInput | string | null
+    sTen?: NullableStringFieldUpdateOperationsInput | string | null
+    sGhiChu?: NullableStringFieldUpdateOperationsInput | string | null
+    iSTT?: NullableIntFieldUpdateOperationsInput | number | null
+    bActive?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bDeleted?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
+    dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+    sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+    sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    profiles?: UserProfileUncheckedUpdateManyWithoutAcademicRankTypeNestedInput
+    hocHam?: HocHamUncheckedUpdateManyWithoutAcademicRankTypeNestedInput
+    expertProfile?: ExpertProfileUncheckedUpdateManyWithoutAcademicRankTypeNestedInput
+  }
+
+  export type DM_HocViUpsertWithoutGuestTeachingRateInput = {
+    update: XOR<DM_HocViUpdateWithoutGuestTeachingRateInput, DM_HocViUncheckedUpdateWithoutGuestTeachingRateInput>
+    create: XOR<DM_HocViCreateWithoutGuestTeachingRateInput, DM_HocViUncheckedCreateWithoutGuestTeachingRateInput>
+    where?: DM_HocViWhereInput
+  }
+
+  export type DM_HocViUpdateToOneWithWhereWithoutGuestTeachingRateInput = {
+    where?: DM_HocViWhereInput
+    data: XOR<DM_HocViUpdateWithoutGuestTeachingRateInput, DM_HocViUncheckedUpdateWithoutGuestTeachingRateInput>
+  }
+
+  export type DM_HocViUpdateWithoutGuestTeachingRateInput = {
+    Id?: StringFieldUpdateOperationsInput | string
+    sMa?: NullableStringFieldUpdateOperationsInput | string | null
+    sTen?: NullableStringFieldUpdateOperationsInput | string | null
+    sGhiChu?: NullableStringFieldUpdateOperationsInput | string | null
+    iSTT?: NullableIntFieldUpdateOperationsInput | number | null
+    bActive?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bDeleted?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
+    dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+    sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+    sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    profiles?: UserProfileUpdateManyWithoutAcademicDegreeTypeNestedInput
+    hocVi?: HocViUpdateManyWithoutAcademicDegreeTypeNestedInput
+    expertProfile?: ExpertProfileUpdateManyWithoutAcademicDegreeTypeNestedInput
+  }
+
+  export type DM_HocViUncheckedUpdateWithoutGuestTeachingRateInput = {
+    Id?: StringFieldUpdateOperationsInput | string
+    sMa?: NullableStringFieldUpdateOperationsInput | string | null
+    sTen?: NullableStringFieldUpdateOperationsInput | string | null
+    sGhiChu?: NullableStringFieldUpdateOperationsInput | string | null
+    iSTT?: NullableIntFieldUpdateOperationsInput | number | null
+    bActive?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bDeleted?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
+    dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+    sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+    sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    profiles?: UserProfileUncheckedUpdateManyWithoutAcademicDegreeTypeNestedInput
+    hocVi?: HocViUncheckedUpdateManyWithoutAcademicDegreeTypeNestedInput
+    expertProfile?: ExpertProfileUncheckedUpdateManyWithoutAcademicDegreeTypeNestedInput
+  }
+
+  export type LecturerCreateWithoutGuestTeachingPaymentsInput = {
     id?: string
     code?: string | null
     active?: boolean
@@ -618622,7 +625284,8 @@ export namespace Prisma {
     lectureID?: string | null
     serviceDate?: Date | string | null
     userProfile: UserProfileCreateNestedOneWithoutLecturerInput
-    organization: DM_DonViCreateNestedOneWithoutLecturersInput
+    organization?: DM_DonViCreateNestedOneWithoutLecturersInput
+    lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
     mainSubjectClasses?: SubjectClassCreateNestedManyWithoutMainLecturerInput
     extraSubjectClasses?: SubjectClassCreateNestedManyWithoutExtraLecturerInput
     enterGradeClasses?: SubjectClassCreateNestedManyWithoutEnterGradeLecturerInput
@@ -618648,7 +625311,7 @@ export namespace Prisma {
     individualSchedules?: IndividualScheduleCreateNestedManyWithoutLecturerInput
   }
 
-  export type LecturerUncheckedCreateWithoutLecturerTypeInput = {
+  export type LecturerUncheckedCreateWithoutGuestTeachingPaymentsInput = {
     id?: string
     code?: string | null
     active?: boolean
@@ -618661,7 +625324,8 @@ export namespace Prisma {
     lectureID?: string | null
     serviceDate?: Date | string | null
     userProfileId: string
-    organizationId: string
+    organizationId?: string | null
+    lecturerTypeId: string
     mainSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutMainLecturerInput
     extraSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutExtraLecturerInput
     enterGradeClasses?: SubjectClassUncheckedCreateNestedManyWithoutEnterGradeLecturerInput
@@ -618685,6 +625349,522 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutLecturerInput
     personalWorkTags?: PersonalWorkTagUncheckedCreateNestedManyWithoutLecturerInput
     individualSchedules?: IndividualScheduleUncheckedCreateNestedManyWithoutLecturerInput
+  }
+
+  export type LecturerCreateOrConnectWithoutGuestTeachingPaymentsInput = {
+    where: LecturerWhereUniqueInput
+    create: XOR<LecturerCreateWithoutGuestTeachingPaymentsInput, LecturerUncheckedCreateWithoutGuestTeachingPaymentsInput>
+  }
+
+  export type SemesterCreateWithoutGuestTeachingPaymentsInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    name: string
+    shortName?: string | null
+    semesterType?: $Enums.SemesterType | null
+    startDate: Date | string
+    endDate: Date | string
+    schoolYear: SchoolYearCreateNestedOneWithoutSemestersInput
+    subjectClasses?: SubjectClassCreateNestedManyWithoutSemesterInput
+    trainingCoursesStart?: TrainingCourseCreateNestedManyWithoutSemesterStartInput
+    trainingScoreSession?: TrainingScoreSessionCreateNestedManyWithoutSemesterInput
+    studentSemesterResult?: StudentSemesterResultCreateNestedManyWithoutSemesterInput
+    scholarshipAward?: ScholarshipAwardCreateNestedManyWithoutSemesterInput
+    academicWarning?: AcademicWarningCreateNestedManyWithoutSemesterInput
+    disciplinaryWarning?: DisciplinaryWarningCreateNestedManyWithoutSemesterInput
+    studentAcademicDecision?: StudentAcademicDecisionCreateNestedManyWithoutSemesterInput
+    classRegisterSession?: ClassRegisterSessionCreateNestedManyWithoutSemesterInput
+    planTraining?: PlanTrainingCreateNestedManyWithoutSemesterInput
+    survey?: SurveyCreateNestedManyWithoutSemesterInput
+    exam?: ExamCreateNestedManyWithoutSemesterInput
+    scoreLinkSheets?: ScoreLinkSheetCreateNestedManyWithoutSemesterInput
+    semesterTrainingScore?: SemesterTrainingScoreCreateNestedManyWithoutSemesterInput
+    availableTrainingTime?: AvailableTrainingTimeCreateNestedManyWithoutSemesterInput
+    studentSubjectScore?: StudentSubjectScoreCreateNestedManyWithoutSemesterInput
+    planTrainingPractice?: PlanTrainingPracticeCreateNestedManyWithoutSemesterInput
+  }
+
+  export type SemesterUncheckedCreateWithoutGuestTeachingPaymentsInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    name: string
+    shortName?: string | null
+    semesterType?: $Enums.SemesterType | null
+    schoolYearId: string
+    startDate: Date | string
+    endDate: Date | string
+    subjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutSemesterInput
+    trainingCoursesStart?: TrainingCourseUncheckedCreateNestedManyWithoutSemesterStartInput
+    trainingScoreSession?: TrainingScoreSessionUncheckedCreateNestedManyWithoutSemesterInput
+    studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutSemesterInput
+    scholarshipAward?: ScholarshipAwardUncheckedCreateNestedManyWithoutSemesterInput
+    academicWarning?: AcademicWarningUncheckedCreateNestedManyWithoutSemesterInput
+    disciplinaryWarning?: DisciplinaryWarningUncheckedCreateNestedManyWithoutSemesterInput
+    studentAcademicDecision?: StudentAcademicDecisionUncheckedCreateNestedManyWithoutSemesterInput
+    classRegisterSession?: ClassRegisterSessionUncheckedCreateNestedManyWithoutSemesterInput
+    planTraining?: PlanTrainingUncheckedCreateNestedManyWithoutSemesterInput
+    survey?: SurveyUncheckedCreateNestedManyWithoutSemesterInput
+    exam?: ExamUncheckedCreateNestedManyWithoutSemesterInput
+    scoreLinkSheets?: ScoreLinkSheetUncheckedCreateNestedManyWithoutSemesterInput
+    semesterTrainingScore?: SemesterTrainingScoreUncheckedCreateNestedManyWithoutSemesterInput
+    availableTrainingTime?: AvailableTrainingTimeUncheckedCreateNestedManyWithoutSemesterInput
+    studentSubjectScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutSemesterInput
+    planTrainingPractice?: PlanTrainingPracticeUncheckedCreateNestedManyWithoutSemesterInput
+  }
+
+  export type SemesterCreateOrConnectWithoutGuestTeachingPaymentsInput = {
+    where: SemesterWhereUniqueInput
+    create: XOR<SemesterCreateWithoutGuestTeachingPaymentsInput, SemesterUncheckedCreateWithoutGuestTeachingPaymentsInput>
+  }
+
+  export type DM_DonViCreateWithoutGuestTeachingPaymentsInput = {
+    Id?: string
+    sMa?: string | null
+    sTen?: string | null
+    sGhiChu?: string | null
+    iSTT?: number | null
+    bActive?: boolean | null
+    bDeleted?: boolean | null
+    bSystem?: boolean | null
+    iDictionaryKey?: number | null
+    dNgayTao?: Date | string | null
+    dNgaySua?: Date | string | null
+    sNguoiTao?: string | null
+    sNguoiSua?: string | null
+    sThietBiTao?: string | null
+    sThietBiSua?: string | null
+    sCode?: string | null
+    sTKPUCode?: string | null
+    sTenVietTat?: string | null
+    sParentId?: string | null
+    sTruongDonVi?: string | null
+    sChucNangNhiemVu?: string | null
+    sDiaChi?: string | null
+    iNhomDonVi?: number | null
+    iCapDonVi?: number | null
+    iLoaiDonVi?: number | null
+    lecturers?: LecturerCreateNestedManyWithoutOrganizationInput
+    lecturerHistory?: LecturerHistoryCreateNestedManyWithoutOrganizationInput
+    staffs?: StaffCreateNestedManyWithoutOrganizationInput
+    staffHistory?: StaffHistoryCreateNestedManyWithoutOrganizationInput
+    curriculum?: CurriculumCreateNestedManyWithoutManagementOrganizationInput
+    fixedClass?: FixedClassCreateNestedManyWithoutManagementOrganizationInput
+    subjectVersions?: SubjectVersionCreateNestedManyWithoutManagementOrganizationInput
+    subjects?: SubjectCreateNestedManyWithoutManagementOrganizationInput
+    trainingFields?: TrainingFieldCreateNestedManyWithoutOrganizationInput
+    trainingMajors?: TrainingMajorCreateNestedManyWithoutOrganizationInput
+    secondTrainingMajors?: TrainingMajorCreateNestedManyWithoutSecondOrganizationInput
+    thirdTrainingMajors?: TrainingMajorCreateNestedManyWithoutThirdOrganizationInput
+    researchProjects?: ResearchProjectCreateNestedManyWithoutOrganizationInput
+    thesisProjects?: ThesisProjectCreateNestedManyWithoutOrganizationInput
+    surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutOrganizationsInput
+  }
+
+  export type DM_DonViUncheckedCreateWithoutGuestTeachingPaymentsInput = {
+    Id?: string
+    sMa?: string | null
+    sTen?: string | null
+    sGhiChu?: string | null
+    iSTT?: number | null
+    bActive?: boolean | null
+    bDeleted?: boolean | null
+    bSystem?: boolean | null
+    iDictionaryKey?: number | null
+    dNgayTao?: Date | string | null
+    dNgaySua?: Date | string | null
+    sNguoiTao?: string | null
+    sNguoiSua?: string | null
+    sThietBiTao?: string | null
+    sThietBiSua?: string | null
+    sCode?: string | null
+    sTKPUCode?: string | null
+    sTenVietTat?: string | null
+    sParentId?: string | null
+    sTruongDonVi?: string | null
+    sChucNangNhiemVu?: string | null
+    sDiaChi?: string | null
+    iNhomDonVi?: number | null
+    iCapDonVi?: number | null
+    iLoaiDonVi?: number | null
+    lecturers?: LecturerUncheckedCreateNestedManyWithoutOrganizationInput
+    lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutOrganizationInput
+    staffs?: StaffUncheckedCreateNestedManyWithoutOrganizationInput
+    staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutOrganizationInput
+    curriculum?: CurriculumUncheckedCreateNestedManyWithoutManagementOrganizationInput
+    fixedClass?: FixedClassUncheckedCreateNestedManyWithoutManagementOrganizationInput
+    subjectVersions?: SubjectVersionUncheckedCreateNestedManyWithoutManagementOrganizationInput
+    subjects?: SubjectUncheckedCreateNestedManyWithoutManagementOrganizationInput
+    trainingFields?: TrainingFieldUncheckedCreateNestedManyWithoutOrganizationInput
+    trainingMajors?: TrainingMajorUncheckedCreateNestedManyWithoutOrganizationInput
+    secondTrainingMajors?: TrainingMajorUncheckedCreateNestedManyWithoutSecondOrganizationInput
+    thirdTrainingMajors?: TrainingMajorUncheckedCreateNestedManyWithoutThirdOrganizationInput
+    researchProjects?: ResearchProjectUncheckedCreateNestedManyWithoutOrganizationInput
+    thesisProjects?: ThesisProjectUncheckedCreateNestedManyWithoutOrganizationInput
+    surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutOrganizationsInput
+  }
+
+  export type DM_DonViCreateOrConnectWithoutGuestTeachingPaymentsInput = {
+    where: DM_DonViWhereUniqueInput
+    create: XOR<DM_DonViCreateWithoutGuestTeachingPaymentsInput, DM_DonViUncheckedCreateWithoutGuestTeachingPaymentsInput>
+  }
+
+  export type LecturerUpsertWithoutGuestTeachingPaymentsInput = {
+    update: XOR<LecturerUpdateWithoutGuestTeachingPaymentsInput, LecturerUncheckedUpdateWithoutGuestTeachingPaymentsInput>
+    create: XOR<LecturerCreateWithoutGuestTeachingPaymentsInput, LecturerUncheckedCreateWithoutGuestTeachingPaymentsInput>
+    where?: LecturerWhereInput
+  }
+
+  export type LecturerUpdateToOneWithWhereWithoutGuestTeachingPaymentsInput = {
+    where?: LecturerWhereInput
+    data: XOR<LecturerUpdateWithoutGuestTeachingPaymentsInput, LecturerUncheckedUpdateWithoutGuestTeachingPaymentsInput>
+  }
+
+  export type LecturerUpdateWithoutGuestTeachingPaymentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+    serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
+    organization?: DM_DonViUpdateOneWithoutLecturersNestedInput
+    lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
+    mainSubjectClasses?: SubjectClassUpdateManyWithoutMainLecturerNestedInput
+    extraSubjectClasses?: SubjectClassUpdateManyWithoutExtraLecturerNestedInput
+    enterGradeClasses?: SubjectClassUpdateManyWithoutEnterGradeLecturerNestedInput
+    manageFixedClass?: FixedClassUpdateManyWithoutLecturerManagementNestedInput
+    classSchedules?: ClassScheduleUpdateManyWithoutLecturerNestedInput
+    extraClassSchedules?: ClassScheduleUpdateManyWithoutExtraLecturerNestedInput
+    researchProjects?: ResearchProjectUpdateManyWithoutSupervisorNestedInput
+    reviewedRegistrations?: StudentResearchRegistrationUpdateManyWithoutReviewedByNestedInput
+    reviewedThesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutReviewedByNestedInput
+    expertProfile?: ExpertProfileUpdateManyWithoutLecturerNestedInput
+    survey?: SurveyUpdateManyWithoutLectureNestedInput
+    clusterSurvey?: ClusterSurveyUpdateManyWithoutLecturersNestedInput
+    examRoomsMain?: ExamListUpdateManyWithoutFirstSupervisorNestedInput
+    examRoomsExtra?: ExamListUpdateManyWithoutSecondSupervisorNestedInput
+    evaluationCriterions?: EvaluationCriterionUpdateManyWithoutLecturerNestedInput
+    analysisCriterion?: AnalysisCriterionUpdateManyWithoutLecturerNestedInput
+    evaluationCouncilMember?: EvaluationCouncilMemberUpdateManyWithoutLecturerNestedInput
+    evaluationCriterionReviews?: EvaluationCriterionUpdateManyWithoutLecturerReviewNestedInput
+    primarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutPrimarySupervisorNestedInput
+    secondarySupervisorThesisProject?: ThesisProjectUpdateManyWithoutSecondarySupervisorNestedInput
+    notifications?: NotificationUpdateManyWithoutLecturerNestedInput
+    personalWorkTags?: PersonalWorkTagUpdateManyWithoutLecturerNestedInput
+    individualSchedules?: IndividualScheduleUpdateManyWithoutLecturerNestedInput
+  }
+
+  export type LecturerUncheckedUpdateWithoutGuestTeachingPaymentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+    serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userProfileId?: StringFieldUpdateOperationsInput | string
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
+    lecturerTypeId?: StringFieldUpdateOperationsInput | string
+    mainSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutMainLecturerNestedInput
+    extraSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutExtraLecturerNestedInput
+    enterGradeClasses?: SubjectClassUncheckedUpdateManyWithoutEnterGradeLecturerNestedInput
+    manageFixedClass?: FixedClassUncheckedUpdateManyWithoutLecturerManagementNestedInput
+    classSchedules?: ClassScheduleUncheckedUpdateManyWithoutLecturerNestedInput
+    extraClassSchedules?: ClassScheduleUncheckedUpdateManyWithoutExtraLecturerNestedInput
+    researchProjects?: ResearchProjectUncheckedUpdateManyWithoutSupervisorNestedInput
+    reviewedRegistrations?: StudentResearchRegistrationUncheckedUpdateManyWithoutReviewedByNestedInput
+    reviewedThesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutReviewedByNestedInput
+    expertProfile?: ExpertProfileUncheckedUpdateManyWithoutLecturerNestedInput
+    survey?: SurveyUncheckedUpdateManyWithoutLectureNestedInput
+    clusterSurvey?: ClusterSurveyUncheckedUpdateManyWithoutLecturersNestedInput
+    examRoomsMain?: ExamListUncheckedUpdateManyWithoutFirstSupervisorNestedInput
+    examRoomsExtra?: ExamListUncheckedUpdateManyWithoutSecondSupervisorNestedInput
+    evaluationCriterions?: EvaluationCriterionUncheckedUpdateManyWithoutLecturerNestedInput
+    analysisCriterion?: AnalysisCriterionUncheckedUpdateManyWithoutLecturerNestedInput
+    evaluationCouncilMember?: EvaluationCouncilMemberUncheckedUpdateManyWithoutLecturerNestedInput
+    evaluationCriterionReviews?: EvaluationCriterionUncheckedUpdateManyWithoutLecturerReviewNestedInput
+    primarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutPrimarySupervisorNestedInput
+    secondarySupervisorThesisProject?: ThesisProjectUncheckedUpdateManyWithoutSecondarySupervisorNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutLecturerNestedInput
+    personalWorkTags?: PersonalWorkTagUncheckedUpdateManyWithoutLecturerNestedInput
+    individualSchedules?: IndividualScheduleUncheckedUpdateManyWithoutLecturerNestedInput
+  }
+
+  export type SemesterUpsertWithoutGuestTeachingPaymentsInput = {
+    update: XOR<SemesterUpdateWithoutGuestTeachingPaymentsInput, SemesterUncheckedUpdateWithoutGuestTeachingPaymentsInput>
+    create: XOR<SemesterCreateWithoutGuestTeachingPaymentsInput, SemesterUncheckedCreateWithoutGuestTeachingPaymentsInput>
+    where?: SemesterWhereInput
+  }
+
+  export type SemesterUpdateToOneWithWhereWithoutGuestTeachingPaymentsInput = {
+    where?: SemesterWhereInput
+    data: XOR<SemesterUpdateWithoutGuestTeachingPaymentsInput, SemesterUncheckedUpdateWithoutGuestTeachingPaymentsInput>
+  }
+
+  export type SemesterUpdateWithoutGuestTeachingPaymentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    shortName?: NullableStringFieldUpdateOperationsInput | string | null
+    semesterType?: NullableEnumSemesterTypeFieldUpdateOperationsInput | $Enums.SemesterType | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    schoolYear?: SchoolYearUpdateOneRequiredWithoutSemestersNestedInput
+    subjectClasses?: SubjectClassUpdateManyWithoutSemesterNestedInput
+    trainingCoursesStart?: TrainingCourseUpdateManyWithoutSemesterStartNestedInput
+    trainingScoreSession?: TrainingScoreSessionUpdateManyWithoutSemesterNestedInput
+    studentSemesterResult?: StudentSemesterResultUpdateManyWithoutSemesterNestedInput
+    scholarshipAward?: ScholarshipAwardUpdateManyWithoutSemesterNestedInput
+    academicWarning?: AcademicWarningUpdateManyWithoutSemesterNestedInput
+    disciplinaryWarning?: DisciplinaryWarningUpdateManyWithoutSemesterNestedInput
+    studentAcademicDecision?: StudentAcademicDecisionUpdateManyWithoutSemesterNestedInput
+    classRegisterSession?: ClassRegisterSessionUpdateManyWithoutSemesterNestedInput
+    planTraining?: PlanTrainingUpdateManyWithoutSemesterNestedInput
+    survey?: SurveyUpdateManyWithoutSemesterNestedInput
+    exam?: ExamUpdateManyWithoutSemesterNestedInput
+    scoreLinkSheets?: ScoreLinkSheetUpdateManyWithoutSemesterNestedInput
+    semesterTrainingScore?: SemesterTrainingScoreUpdateManyWithoutSemesterNestedInput
+    availableTrainingTime?: AvailableTrainingTimeUpdateManyWithoutSemesterNestedInput
+    studentSubjectScore?: StudentSubjectScoreUpdateManyWithoutSemesterNestedInput
+    planTrainingPractice?: PlanTrainingPracticeUpdateManyWithoutSemesterNestedInput
+  }
+
+  export type SemesterUncheckedUpdateWithoutGuestTeachingPaymentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    shortName?: NullableStringFieldUpdateOperationsInput | string | null
+    semesterType?: NullableEnumSemesterTypeFieldUpdateOperationsInput | $Enums.SemesterType | null
+    schoolYearId?: StringFieldUpdateOperationsInput | string
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    subjectClasses?: SubjectClassUncheckedUpdateManyWithoutSemesterNestedInput
+    trainingCoursesStart?: TrainingCourseUncheckedUpdateManyWithoutSemesterStartNestedInput
+    trainingScoreSession?: TrainingScoreSessionUncheckedUpdateManyWithoutSemesterNestedInput
+    studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutSemesterNestedInput
+    scholarshipAward?: ScholarshipAwardUncheckedUpdateManyWithoutSemesterNestedInput
+    academicWarning?: AcademicWarningUncheckedUpdateManyWithoutSemesterNestedInput
+    disciplinaryWarning?: DisciplinaryWarningUncheckedUpdateManyWithoutSemesterNestedInput
+    studentAcademicDecision?: StudentAcademicDecisionUncheckedUpdateManyWithoutSemesterNestedInput
+    classRegisterSession?: ClassRegisterSessionUncheckedUpdateManyWithoutSemesterNestedInput
+    planTraining?: PlanTrainingUncheckedUpdateManyWithoutSemesterNestedInput
+    survey?: SurveyUncheckedUpdateManyWithoutSemesterNestedInput
+    exam?: ExamUncheckedUpdateManyWithoutSemesterNestedInput
+    scoreLinkSheets?: ScoreLinkSheetUncheckedUpdateManyWithoutSemesterNestedInput
+    semesterTrainingScore?: SemesterTrainingScoreUncheckedUpdateManyWithoutSemesterNestedInput
+    availableTrainingTime?: AvailableTrainingTimeUncheckedUpdateManyWithoutSemesterNestedInput
+    studentSubjectScore?: StudentSubjectScoreUncheckedUpdateManyWithoutSemesterNestedInput
+    planTrainingPractice?: PlanTrainingPracticeUncheckedUpdateManyWithoutSemesterNestedInput
+  }
+
+  export type DM_DonViUpsertWithoutGuestTeachingPaymentsInput = {
+    update: XOR<DM_DonViUpdateWithoutGuestTeachingPaymentsInput, DM_DonViUncheckedUpdateWithoutGuestTeachingPaymentsInput>
+    create: XOR<DM_DonViCreateWithoutGuestTeachingPaymentsInput, DM_DonViUncheckedCreateWithoutGuestTeachingPaymentsInput>
+    where?: DM_DonViWhereInput
+  }
+
+  export type DM_DonViUpdateToOneWithWhereWithoutGuestTeachingPaymentsInput = {
+    where?: DM_DonViWhereInput
+    data: XOR<DM_DonViUpdateWithoutGuestTeachingPaymentsInput, DM_DonViUncheckedUpdateWithoutGuestTeachingPaymentsInput>
+  }
+
+  export type DM_DonViUpdateWithoutGuestTeachingPaymentsInput = {
+    Id?: StringFieldUpdateOperationsInput | string
+    sMa?: NullableStringFieldUpdateOperationsInput | string | null
+    sTen?: NullableStringFieldUpdateOperationsInput | string | null
+    sGhiChu?: NullableStringFieldUpdateOperationsInput | string | null
+    iSTT?: NullableIntFieldUpdateOperationsInput | number | null
+    bActive?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bDeleted?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
+    dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+    sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+    sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    sCode?: NullableStringFieldUpdateOperationsInput | string | null
+    sTKPUCode?: NullableStringFieldUpdateOperationsInput | string | null
+    sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
+    sParentId?: NullableStringFieldUpdateOperationsInput | string | null
+    sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
+    sChucNangNhiemVu?: NullableStringFieldUpdateOperationsInput | string | null
+    sDiaChi?: NullableStringFieldUpdateOperationsInput | string | null
+    iNhomDonVi?: NullableIntFieldUpdateOperationsInput | number | null
+    iCapDonVi?: NullableIntFieldUpdateOperationsInput | number | null
+    iLoaiDonVi?: NullableIntFieldUpdateOperationsInput | number | null
+    lecturers?: LecturerUpdateManyWithoutOrganizationNestedInput
+    lecturerHistory?: LecturerHistoryUpdateManyWithoutOrganizationNestedInput
+    staffs?: StaffUpdateManyWithoutOrganizationNestedInput
+    staffHistory?: StaffHistoryUpdateManyWithoutOrganizationNestedInput
+    curriculum?: CurriculumUpdateManyWithoutManagementOrganizationNestedInput
+    fixedClass?: FixedClassUpdateManyWithoutManagementOrganizationNestedInput
+    subjectVersions?: SubjectVersionUpdateManyWithoutManagementOrganizationNestedInput
+    subjects?: SubjectUpdateManyWithoutManagementOrganizationNestedInput
+    trainingFields?: TrainingFieldUpdateManyWithoutOrganizationNestedInput
+    trainingMajors?: TrainingMajorUpdateManyWithoutOrganizationNestedInput
+    secondTrainingMajors?: TrainingMajorUpdateManyWithoutSecondOrganizationNestedInput
+    thirdTrainingMajors?: TrainingMajorUpdateManyWithoutThirdOrganizationNestedInput
+    researchProjects?: ResearchProjectUpdateManyWithoutOrganizationNestedInput
+    thesisProjects?: ThesisProjectUpdateManyWithoutOrganizationNestedInput
+    surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutOrganizationsNestedInput
+  }
+
+  export type DM_DonViUncheckedUpdateWithoutGuestTeachingPaymentsInput = {
+    Id?: StringFieldUpdateOperationsInput | string
+    sMa?: NullableStringFieldUpdateOperationsInput | string | null
+    sTen?: NullableStringFieldUpdateOperationsInput | string | null
+    sGhiChu?: NullableStringFieldUpdateOperationsInput | string | null
+    iSTT?: NullableIntFieldUpdateOperationsInput | number | null
+    bActive?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bDeleted?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
+    dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+    sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+    sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    sCode?: NullableStringFieldUpdateOperationsInput | string | null
+    sTKPUCode?: NullableStringFieldUpdateOperationsInput | string | null
+    sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
+    sParentId?: NullableStringFieldUpdateOperationsInput | string | null
+    sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
+    sChucNangNhiemVu?: NullableStringFieldUpdateOperationsInput | string | null
+    sDiaChi?: NullableStringFieldUpdateOperationsInput | string | null
+    iNhomDonVi?: NullableIntFieldUpdateOperationsInput | number | null
+    iCapDonVi?: NullableIntFieldUpdateOperationsInput | number | null
+    iLoaiDonVi?: NullableIntFieldUpdateOperationsInput | number | null
+    lecturers?: LecturerUncheckedUpdateManyWithoutOrganizationNestedInput
+    lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
+    staffs?: StaffUncheckedUpdateManyWithoutOrganizationNestedInput
+    staffHistory?: StaffHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
+    curriculum?: CurriculumUncheckedUpdateManyWithoutManagementOrganizationNestedInput
+    fixedClass?: FixedClassUncheckedUpdateManyWithoutManagementOrganizationNestedInput
+    subjectVersions?: SubjectVersionUncheckedUpdateManyWithoutManagementOrganizationNestedInput
+    subjects?: SubjectUncheckedUpdateManyWithoutManagementOrganizationNestedInput
+    trainingFields?: TrainingFieldUncheckedUpdateManyWithoutOrganizationNestedInput
+    trainingMajors?: TrainingMajorUncheckedUpdateManyWithoutOrganizationNestedInput
+    secondTrainingMajors?: TrainingMajorUncheckedUpdateManyWithoutSecondOrganizationNestedInput
+    thirdTrainingMajors?: TrainingMajorUncheckedUpdateManyWithoutThirdOrganizationNestedInput
+    researchProjects?: ResearchProjectUncheckedUpdateManyWithoutOrganizationNestedInput
+    thesisProjects?: ThesisProjectUncheckedUpdateManyWithoutOrganizationNestedInput
+    surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutOrganizationsNestedInput
+  }
+
+  export type LecturerCreateWithoutLecturerTypeInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    from?: Date | string | null
+    lectureID?: string | null
+    serviceDate?: Date | string | null
+    userProfile: UserProfileCreateNestedOneWithoutLecturerInput
+    organization?: DM_DonViCreateNestedOneWithoutLecturersInput
+    mainSubjectClasses?: SubjectClassCreateNestedManyWithoutMainLecturerInput
+    extraSubjectClasses?: SubjectClassCreateNestedManyWithoutExtraLecturerInput
+    enterGradeClasses?: SubjectClassCreateNestedManyWithoutEnterGradeLecturerInput
+    manageFixedClass?: FixedClassCreateNestedManyWithoutLecturerManagementInput
+    classSchedules?: ClassScheduleCreateNestedManyWithoutLecturerInput
+    extraClassSchedules?: ClassScheduleCreateNestedManyWithoutExtraLecturerInput
+    researchProjects?: ResearchProjectCreateNestedManyWithoutSupervisorInput
+    reviewedRegistrations?: StudentResearchRegistrationCreateNestedManyWithoutReviewedByInput
+    reviewedThesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutReviewedByInput
+    expertProfile?: ExpertProfileCreateNestedManyWithoutLecturerInput
+    survey?: SurveyCreateNestedManyWithoutLectureInput
+    clusterSurvey?: ClusterSurveyCreateNestedManyWithoutLecturersInput
+    examRoomsMain?: ExamListCreateNestedManyWithoutFirstSupervisorInput
+    examRoomsExtra?: ExamListCreateNestedManyWithoutSecondSupervisorInput
+    evaluationCriterions?: EvaluationCriterionCreateNestedManyWithoutLecturerInput
+    analysisCriterion?: AnalysisCriterionCreateNestedManyWithoutLecturerInput
+    evaluationCouncilMember?: EvaluationCouncilMemberCreateNestedManyWithoutLecturerInput
+    evaluationCriterionReviews?: EvaluationCriterionCreateNestedManyWithoutLecturerReviewInput
+    primarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutPrimarySupervisorInput
+    secondarySupervisorThesisProject?: ThesisProjectCreateNestedManyWithoutSecondarySupervisorInput
+    notifications?: NotificationCreateNestedManyWithoutLecturerInput
+    personalWorkTags?: PersonalWorkTagCreateNestedManyWithoutLecturerInput
+    individualSchedules?: IndividualScheduleCreateNestedManyWithoutLecturerInput
+    guestTeachingPayments?: GuestTeachingPaymentCreateNestedManyWithoutLecturerInput
+  }
+
+  export type LecturerUncheckedCreateWithoutLecturerTypeInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    from?: Date | string | null
+    lectureID?: string | null
+    serviceDate?: Date | string | null
+    userProfileId: string
+    organizationId?: string | null
+    mainSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutMainLecturerInput
+    extraSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutExtraLecturerInput
+    enterGradeClasses?: SubjectClassUncheckedCreateNestedManyWithoutEnterGradeLecturerInput
+    manageFixedClass?: FixedClassUncheckedCreateNestedManyWithoutLecturerManagementInput
+    classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutLecturerInput
+    extraClassSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutExtraLecturerInput
+    researchProjects?: ResearchProjectUncheckedCreateNestedManyWithoutSupervisorInput
+    reviewedRegistrations?: StudentResearchRegistrationUncheckedCreateNestedManyWithoutReviewedByInput
+    reviewedThesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutReviewedByInput
+    expertProfile?: ExpertProfileUncheckedCreateNestedManyWithoutLecturerInput
+    survey?: SurveyUncheckedCreateNestedManyWithoutLectureInput
+    clusterSurvey?: ClusterSurveyUncheckedCreateNestedManyWithoutLecturersInput
+    examRoomsMain?: ExamListUncheckedCreateNestedManyWithoutFirstSupervisorInput
+    examRoomsExtra?: ExamListUncheckedCreateNestedManyWithoutSecondSupervisorInput
+    evaluationCriterions?: EvaluationCriterionUncheckedCreateNestedManyWithoutLecturerInput
+    analysisCriterion?: AnalysisCriterionUncheckedCreateNestedManyWithoutLecturerInput
+    evaluationCouncilMember?: EvaluationCouncilMemberUncheckedCreateNestedManyWithoutLecturerInput
+    evaluationCriterionReviews?: EvaluationCriterionUncheckedCreateNestedManyWithoutLecturerReviewInput
+    primarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutPrimarySupervisorInput
+    secondarySupervisorThesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutSecondarySupervisorInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutLecturerInput
+    personalWorkTags?: PersonalWorkTagUncheckedCreateNestedManyWithoutLecturerInput
+    individualSchedules?: IndividualScheduleUncheckedCreateNestedManyWithoutLecturerInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerCreateOrConnectWithoutLecturerTypeInput = {
@@ -619404,6 +626584,7 @@ export namespace Prisma {
     researchProjects?: ResearchProjectCreateNestedManyWithoutOrganizationInput
     thesisProjects?: ThesisProjectCreateNestedManyWithoutOrganizationInput
     surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutOrganizationsInput
+    guestTeachingPayments?: GuestTeachingPaymentCreateNestedManyWithoutHiringOrgInput
   }
 
   export type DM_DonViUncheckedCreateWithoutStaffsInput = {
@@ -619446,6 +626627,7 @@ export namespace Prisma {
     researchProjects?: ResearchProjectUncheckedCreateNestedManyWithoutOrganizationInput
     thesisProjects?: ThesisProjectUncheckedCreateNestedManyWithoutOrganizationInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutOrganizationsInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedCreateNestedManyWithoutHiringOrgInput
   }
 
   export type DM_DonViCreateOrConnectWithoutStaffsInput = {
@@ -619999,6 +627181,7 @@ export namespace Prisma {
     researchProjects?: ResearchProjectUpdateManyWithoutOrganizationNestedInput
     thesisProjects?: ThesisProjectUpdateManyWithoutOrganizationNestedInput
     surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutOrganizationsNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUpdateManyWithoutHiringOrgNestedInput
   }
 
   export type DM_DonViUncheckedUpdateWithoutStaffsInput = {
@@ -620041,6 +627224,7 @@ export namespace Prisma {
     researchProjects?: ResearchProjectUncheckedUpdateManyWithoutOrganizationNestedInput
     thesisProjects?: ThesisProjectUncheckedUpdateManyWithoutOrganizationNestedInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutOrganizationsNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedUpdateManyWithoutHiringOrgNestedInput
   }
 
   export type StaffTypeUpsertWithoutStaffsInput = {
@@ -620530,6 +627714,7 @@ export namespace Prisma {
     researchProjects?: ResearchProjectCreateNestedManyWithoutOrganizationInput
     thesisProjects?: ThesisProjectCreateNestedManyWithoutOrganizationInput
     surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutOrganizationsInput
+    guestTeachingPayments?: GuestTeachingPaymentCreateNestedManyWithoutHiringOrgInput
   }
 
   export type DM_DonViUncheckedCreateWithoutStaffHistoryInput = {
@@ -620572,6 +627757,7 @@ export namespace Prisma {
     researchProjects?: ResearchProjectUncheckedCreateNestedManyWithoutOrganizationInput
     thesisProjects?: ThesisProjectUncheckedCreateNestedManyWithoutOrganizationInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutOrganizationsInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedCreateNestedManyWithoutHiringOrgInput
   }
 
   export type DM_DonViCreateOrConnectWithoutStaffHistoryInput = {
@@ -621055,6 +628241,7 @@ export namespace Prisma {
     researchProjects?: ResearchProjectUpdateManyWithoutOrganizationNestedInput
     thesisProjects?: ThesisProjectUpdateManyWithoutOrganizationNestedInput
     surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutOrganizationsNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUpdateManyWithoutHiringOrgNestedInput
   }
 
   export type DM_DonViUncheckedUpdateWithoutStaffHistoryInput = {
@@ -621097,6 +628284,7 @@ export namespace Prisma {
     researchProjects?: ResearchProjectUncheckedUpdateManyWithoutOrganizationNestedInput
     thesisProjects?: ThesisProjectUncheckedUpdateManyWithoutOrganizationNestedInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutOrganizationsNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedUpdateManyWithoutHiringOrgNestedInput
   }
 
   export type StaffTypeUpsertWithoutStaffHistoryInput = {
@@ -621186,7 +628374,7 @@ export namespace Prisma {
     lectureID?: string | null
     serviceDate?: Date | string | null
     userProfile: UserProfileCreateNestedOneWithoutLecturerInput
-    organization: DM_DonViCreateNestedOneWithoutLecturersInput
+    organization?: DM_DonViCreateNestedOneWithoutLecturersInput
     lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
     mainSubjectClasses?: SubjectClassCreateNestedManyWithoutMainLecturerInput
     extraSubjectClasses?: SubjectClassCreateNestedManyWithoutExtraLecturerInput
@@ -621210,6 +628398,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutLecturerInput
     personalWorkTags?: PersonalWorkTagCreateNestedManyWithoutLecturerInput
     individualSchedules?: IndividualScheduleCreateNestedManyWithoutLecturerInput
+    guestTeachingPayments?: GuestTeachingPaymentCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerUncheckedCreateWithoutResearchProjectsInput = {
@@ -621225,7 +628414,7 @@ export namespace Prisma {
     lectureID?: string | null
     serviceDate?: Date | string | null
     userProfileId: string
-    organizationId: string
+    organizationId?: string | null
     lecturerTypeId: string
     mainSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutMainLecturerInput
     extraSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutExtraLecturerInput
@@ -621249,6 +628438,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutLecturerInput
     personalWorkTags?: PersonalWorkTagUncheckedCreateNestedManyWithoutLecturerInput
     individualSchedules?: IndividualScheduleUncheckedCreateNestedManyWithoutLecturerInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerCreateOrConnectWithoutResearchProjectsInput = {
@@ -621296,6 +628486,7 @@ export namespace Prisma {
     thirdTrainingMajors?: TrainingMajorCreateNestedManyWithoutThirdOrganizationInput
     thesisProjects?: ThesisProjectCreateNestedManyWithoutOrganizationInput
     surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutOrganizationsInput
+    guestTeachingPayments?: GuestTeachingPaymentCreateNestedManyWithoutHiringOrgInput
   }
 
   export type DM_DonViUncheckedCreateWithoutResearchProjectsInput = {
@@ -621338,6 +628529,7 @@ export namespace Prisma {
     thirdTrainingMajors?: TrainingMajorUncheckedCreateNestedManyWithoutThirdOrganizationInput
     thesisProjects?: ThesisProjectUncheckedCreateNestedManyWithoutOrganizationInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutOrganizationsInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedCreateNestedManyWithoutHiringOrgInput
   }
 
   export type DM_DonViCreateOrConnectWithoutResearchProjectsInput = {
@@ -621417,7 +628609,7 @@ export namespace Prisma {
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
-    organization?: DM_DonViUpdateOneRequiredWithoutLecturersNestedInput
+    organization?: DM_DonViUpdateOneWithoutLecturersNestedInput
     lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
     mainSubjectClasses?: SubjectClassUpdateManyWithoutMainLecturerNestedInput
     extraSubjectClasses?: SubjectClassUpdateManyWithoutExtraLecturerNestedInput
@@ -621441,6 +628633,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutLecturerNestedInput
     personalWorkTags?: PersonalWorkTagUpdateManyWithoutLecturerNestedInput
     individualSchedules?: IndividualScheduleUpdateManyWithoutLecturerNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUpdateManyWithoutLecturerNestedInput
   }
 
   export type LecturerUncheckedUpdateWithoutResearchProjectsInput = {
@@ -621456,7 +628649,7 @@ export namespace Prisma {
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfileId?: StringFieldUpdateOperationsInput | string
-    organizationId?: StringFieldUpdateOperationsInput | string
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
     lecturerTypeId?: StringFieldUpdateOperationsInput | string
     mainSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutMainLecturerNestedInput
     extraSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutExtraLecturerNestedInput
@@ -621480,6 +628673,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutLecturerNestedInput
     personalWorkTags?: PersonalWorkTagUncheckedUpdateManyWithoutLecturerNestedInput
     individualSchedules?: IndividualScheduleUncheckedUpdateManyWithoutLecturerNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedUpdateManyWithoutLecturerNestedInput
   }
 
   export type DM_DonViUpsertWithoutResearchProjectsInput = {
@@ -621533,6 +628727,7 @@ export namespace Prisma {
     thirdTrainingMajors?: TrainingMajorUpdateManyWithoutThirdOrganizationNestedInput
     thesisProjects?: ThesisProjectUpdateManyWithoutOrganizationNestedInput
     surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutOrganizationsNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUpdateManyWithoutHiringOrgNestedInput
   }
 
   export type DM_DonViUncheckedUpdateWithoutResearchProjectsInput = {
@@ -621575,6 +628770,7 @@ export namespace Prisma {
     thirdTrainingMajors?: TrainingMajorUncheckedUpdateManyWithoutThirdOrganizationNestedInput
     thesisProjects?: ThesisProjectUncheckedUpdateManyWithoutOrganizationNestedInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutOrganizationsNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedUpdateManyWithoutHiringOrgNestedInput
   }
 
   export type StudentResearchRegistrationUpsertWithWhereUniqueWithoutResearchProjectInput = {
@@ -621822,7 +629018,7 @@ export namespace Prisma {
     lectureID?: string | null
     serviceDate?: Date | string | null
     userProfile: UserProfileCreateNestedOneWithoutLecturerInput
-    organization: DM_DonViCreateNestedOneWithoutLecturersInput
+    organization?: DM_DonViCreateNestedOneWithoutLecturersInput
     lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
     mainSubjectClasses?: SubjectClassCreateNestedManyWithoutMainLecturerInput
     extraSubjectClasses?: SubjectClassCreateNestedManyWithoutExtraLecturerInput
@@ -621846,6 +629042,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutLecturerInput
     personalWorkTags?: PersonalWorkTagCreateNestedManyWithoutLecturerInput
     individualSchedules?: IndividualScheduleCreateNestedManyWithoutLecturerInput
+    guestTeachingPayments?: GuestTeachingPaymentCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerUncheckedCreateWithoutReviewedRegistrationsInput = {
@@ -621861,7 +629058,7 @@ export namespace Prisma {
     lectureID?: string | null
     serviceDate?: Date | string | null
     userProfileId: string
-    organizationId: string
+    organizationId?: string | null
     lecturerTypeId: string
     mainSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutMainLecturerInput
     extraSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutExtraLecturerInput
@@ -621885,6 +629082,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutLecturerInput
     personalWorkTags?: PersonalWorkTagUncheckedCreateNestedManyWithoutLecturerInput
     individualSchedules?: IndividualScheduleUncheckedCreateNestedManyWithoutLecturerInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerCreateOrConnectWithoutReviewedRegistrationsInput = {
@@ -622144,7 +629342,7 @@ export namespace Prisma {
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
-    organization?: DM_DonViUpdateOneRequiredWithoutLecturersNestedInput
+    organization?: DM_DonViUpdateOneWithoutLecturersNestedInput
     lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
     mainSubjectClasses?: SubjectClassUpdateManyWithoutMainLecturerNestedInput
     extraSubjectClasses?: SubjectClassUpdateManyWithoutExtraLecturerNestedInput
@@ -622168,6 +629366,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutLecturerNestedInput
     personalWorkTags?: PersonalWorkTagUpdateManyWithoutLecturerNestedInput
     individualSchedules?: IndividualScheduleUpdateManyWithoutLecturerNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUpdateManyWithoutLecturerNestedInput
   }
 
   export type LecturerUncheckedUpdateWithoutReviewedRegistrationsInput = {
@@ -622183,7 +629382,7 @@ export namespace Prisma {
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfileId?: StringFieldUpdateOperationsInput | string
-    organizationId?: StringFieldUpdateOperationsInput | string
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
     lecturerTypeId?: StringFieldUpdateOperationsInput | string
     mainSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutMainLecturerNestedInput
     extraSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutExtraLecturerNestedInput
@@ -622207,6 +629406,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutLecturerNestedInput
     personalWorkTags?: PersonalWorkTagUncheckedUpdateManyWithoutLecturerNestedInput
     individualSchedules?: IndividualScheduleUncheckedUpdateManyWithoutLecturerNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedUpdateManyWithoutLecturerNestedInput
   }
 
   export type TrainingObjectTypeCreateWithoutThesisSessionInput = {
@@ -622854,7 +630054,7 @@ export namespace Prisma {
     lectureID?: string | null
     serviceDate?: Date | string | null
     userProfile: UserProfileCreateNestedOneWithoutLecturerInput
-    organization: DM_DonViCreateNestedOneWithoutLecturersInput
+    organization?: DM_DonViCreateNestedOneWithoutLecturersInput
     lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
     mainSubjectClasses?: SubjectClassCreateNestedManyWithoutMainLecturerInput
     extraSubjectClasses?: SubjectClassCreateNestedManyWithoutExtraLecturerInput
@@ -622878,6 +630078,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutLecturerInput
     personalWorkTags?: PersonalWorkTagCreateNestedManyWithoutLecturerInput
     individualSchedules?: IndividualScheduleCreateNestedManyWithoutLecturerInput
+    guestTeachingPayments?: GuestTeachingPaymentCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerUncheckedCreateWithoutPrimarySupervisorThesisProjectInput = {
@@ -622893,7 +630094,7 @@ export namespace Prisma {
     lectureID?: string | null
     serviceDate?: Date | string | null
     userProfileId: string
-    organizationId: string
+    organizationId?: string | null
     lecturerTypeId: string
     mainSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutMainLecturerInput
     extraSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutExtraLecturerInput
@@ -622917,6 +630118,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutLecturerInput
     personalWorkTags?: PersonalWorkTagUncheckedCreateNestedManyWithoutLecturerInput
     individualSchedules?: IndividualScheduleUncheckedCreateNestedManyWithoutLecturerInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerCreateOrConnectWithoutPrimarySupervisorThesisProjectInput = {
@@ -622937,7 +630139,7 @@ export namespace Prisma {
     lectureID?: string | null
     serviceDate?: Date | string | null
     userProfile: UserProfileCreateNestedOneWithoutLecturerInput
-    organization: DM_DonViCreateNestedOneWithoutLecturersInput
+    organization?: DM_DonViCreateNestedOneWithoutLecturersInput
     lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
     mainSubjectClasses?: SubjectClassCreateNestedManyWithoutMainLecturerInput
     extraSubjectClasses?: SubjectClassCreateNestedManyWithoutExtraLecturerInput
@@ -622961,6 +630163,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutLecturerInput
     personalWorkTags?: PersonalWorkTagCreateNestedManyWithoutLecturerInput
     individualSchedules?: IndividualScheduleCreateNestedManyWithoutLecturerInput
+    guestTeachingPayments?: GuestTeachingPaymentCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerUncheckedCreateWithoutSecondarySupervisorThesisProjectInput = {
@@ -622976,7 +630179,7 @@ export namespace Prisma {
     lectureID?: string | null
     serviceDate?: Date | string | null
     userProfileId: string
-    organizationId: string
+    organizationId?: string | null
     lecturerTypeId: string
     mainSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutMainLecturerInput
     extraSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutExtraLecturerInput
@@ -623000,6 +630203,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutLecturerInput
     personalWorkTags?: PersonalWorkTagUncheckedCreateNestedManyWithoutLecturerInput
     individualSchedules?: IndividualScheduleUncheckedCreateNestedManyWithoutLecturerInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerCreateOrConnectWithoutSecondarySupervisorThesisProjectInput = {
@@ -623591,6 +630795,7 @@ export namespace Prisma {
     thirdTrainingMajors?: TrainingMajorCreateNestedManyWithoutThirdOrganizationInput
     researchProjects?: ResearchProjectCreateNestedManyWithoutOrganizationInput
     surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutOrganizationsInput
+    guestTeachingPayments?: GuestTeachingPaymentCreateNestedManyWithoutHiringOrgInput
   }
 
   export type DM_DonViUncheckedCreateWithoutThesisProjectsInput = {
@@ -623633,6 +630838,7 @@ export namespace Prisma {
     thirdTrainingMajors?: TrainingMajorUncheckedCreateNestedManyWithoutThirdOrganizationInput
     researchProjects?: ResearchProjectUncheckedCreateNestedManyWithoutOrganizationInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutOrganizationsInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedCreateNestedManyWithoutHiringOrgInput
   }
 
   export type DM_DonViCreateOrConnectWithoutThesisProjectsInput = {
@@ -623945,7 +631151,7 @@ export namespace Prisma {
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
-    organization?: DM_DonViUpdateOneRequiredWithoutLecturersNestedInput
+    organization?: DM_DonViUpdateOneWithoutLecturersNestedInput
     lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
     mainSubjectClasses?: SubjectClassUpdateManyWithoutMainLecturerNestedInput
     extraSubjectClasses?: SubjectClassUpdateManyWithoutExtraLecturerNestedInput
@@ -623969,6 +631175,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutLecturerNestedInput
     personalWorkTags?: PersonalWorkTagUpdateManyWithoutLecturerNestedInput
     individualSchedules?: IndividualScheduleUpdateManyWithoutLecturerNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUpdateManyWithoutLecturerNestedInput
   }
 
   export type LecturerUncheckedUpdateWithoutPrimarySupervisorThesisProjectInput = {
@@ -623984,7 +631191,7 @@ export namespace Prisma {
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfileId?: StringFieldUpdateOperationsInput | string
-    organizationId?: StringFieldUpdateOperationsInput | string
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
     lecturerTypeId?: StringFieldUpdateOperationsInput | string
     mainSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutMainLecturerNestedInput
     extraSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutExtraLecturerNestedInput
@@ -624008,6 +631215,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutLecturerNestedInput
     personalWorkTags?: PersonalWorkTagUncheckedUpdateManyWithoutLecturerNestedInput
     individualSchedules?: IndividualScheduleUncheckedUpdateManyWithoutLecturerNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedUpdateManyWithoutLecturerNestedInput
   }
 
   export type LecturerUpsertWithoutSecondarySupervisorThesisProjectInput = {
@@ -624034,7 +631242,7 @@ export namespace Prisma {
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
-    organization?: DM_DonViUpdateOneRequiredWithoutLecturersNestedInput
+    organization?: DM_DonViUpdateOneWithoutLecturersNestedInput
     lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
     mainSubjectClasses?: SubjectClassUpdateManyWithoutMainLecturerNestedInput
     extraSubjectClasses?: SubjectClassUpdateManyWithoutExtraLecturerNestedInput
@@ -624058,6 +631266,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutLecturerNestedInput
     personalWorkTags?: PersonalWorkTagUpdateManyWithoutLecturerNestedInput
     individualSchedules?: IndividualScheduleUpdateManyWithoutLecturerNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUpdateManyWithoutLecturerNestedInput
   }
 
   export type LecturerUncheckedUpdateWithoutSecondarySupervisorThesisProjectInput = {
@@ -624073,7 +631282,7 @@ export namespace Prisma {
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfileId?: StringFieldUpdateOperationsInput | string
-    organizationId?: StringFieldUpdateOperationsInput | string
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
     lecturerTypeId?: StringFieldUpdateOperationsInput | string
     mainSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutMainLecturerNestedInput
     extraSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutExtraLecturerNestedInput
@@ -624097,6 +631306,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutLecturerNestedInput
     personalWorkTags?: PersonalWorkTagUncheckedUpdateManyWithoutLecturerNestedInput
     individualSchedules?: IndividualScheduleUncheckedUpdateManyWithoutLecturerNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedUpdateManyWithoutLecturerNestedInput
   }
 
   export type ExpertProfileUpsertWithoutThirdSupervisedThesesInput = {
@@ -624742,6 +631952,7 @@ export namespace Prisma {
     thirdTrainingMajors?: TrainingMajorUpdateManyWithoutThirdOrganizationNestedInput
     researchProjects?: ResearchProjectUpdateManyWithoutOrganizationNestedInput
     surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutOrganizationsNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUpdateManyWithoutHiringOrgNestedInput
   }
 
   export type DM_DonViUncheckedUpdateWithoutThesisProjectsInput = {
@@ -624784,6 +631995,7 @@ export namespace Prisma {
     thirdTrainingMajors?: TrainingMajorUncheckedUpdateManyWithoutThirdOrganizationNestedInput
     researchProjects?: ResearchProjectUncheckedUpdateManyWithoutOrganizationNestedInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutOrganizationsNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedUpdateManyWithoutHiringOrgNestedInput
   }
 
   export type CouncilUpsertWithoutThesisInput = {
@@ -625602,7 +632814,7 @@ export namespace Prisma {
     lectureID?: string | null
     serviceDate?: Date | string | null
     userProfile: UserProfileCreateNestedOneWithoutLecturerInput
-    organization: DM_DonViCreateNestedOneWithoutLecturersInput
+    organization?: DM_DonViCreateNestedOneWithoutLecturersInput
     lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
     mainSubjectClasses?: SubjectClassCreateNestedManyWithoutMainLecturerInput
     extraSubjectClasses?: SubjectClassCreateNestedManyWithoutExtraLecturerInput
@@ -625626,6 +632838,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutLecturerInput
     personalWorkTags?: PersonalWorkTagCreateNestedManyWithoutLecturerInput
     individualSchedules?: IndividualScheduleCreateNestedManyWithoutLecturerInput
+    guestTeachingPayments?: GuestTeachingPaymentCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerUncheckedCreateWithoutReviewedThesisRegistrationsInput = {
@@ -625641,7 +632854,7 @@ export namespace Prisma {
     lectureID?: string | null
     serviceDate?: Date | string | null
     userProfileId: string
-    organizationId: string
+    organizationId?: string | null
     lecturerTypeId: string
     mainSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutMainLecturerInput
     extraSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutExtraLecturerInput
@@ -625665,6 +632878,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutLecturerInput
     personalWorkTags?: PersonalWorkTagUncheckedCreateNestedManyWithoutLecturerInput
     individualSchedules?: IndividualScheduleUncheckedCreateNestedManyWithoutLecturerInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerCreateOrConnectWithoutReviewedThesisRegistrationsInput = {
@@ -626128,7 +633342,7 @@ export namespace Prisma {
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
-    organization?: DM_DonViUpdateOneRequiredWithoutLecturersNestedInput
+    organization?: DM_DonViUpdateOneWithoutLecturersNestedInput
     lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
     mainSubjectClasses?: SubjectClassUpdateManyWithoutMainLecturerNestedInput
     extraSubjectClasses?: SubjectClassUpdateManyWithoutExtraLecturerNestedInput
@@ -626152,6 +633366,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutLecturerNestedInput
     personalWorkTags?: PersonalWorkTagUpdateManyWithoutLecturerNestedInput
     individualSchedules?: IndividualScheduleUpdateManyWithoutLecturerNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUpdateManyWithoutLecturerNestedInput
   }
 
   export type LecturerUncheckedUpdateWithoutReviewedThesisRegistrationsInput = {
@@ -626167,7 +633382,7 @@ export namespace Prisma {
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfileId?: StringFieldUpdateOperationsInput | string
-    organizationId?: StringFieldUpdateOperationsInput | string
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
     lecturerTypeId?: StringFieldUpdateOperationsInput | string
     mainSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutMainLecturerNestedInput
     extraSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutExtraLecturerNestedInput
@@ -626191,6 +633406,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutLecturerNestedInput
     personalWorkTags?: PersonalWorkTagUncheckedUpdateManyWithoutLecturerNestedInput
     individualSchedules?: IndividualScheduleUncheckedUpdateManyWithoutLecturerNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedUpdateManyWithoutLecturerNestedInput
   }
 
   export type CouncilUpsertWithoutStudentThesisRegistrationInput = {
@@ -626247,7 +633463,7 @@ export namespace Prisma {
     lectureID?: string | null
     serviceDate?: Date | string | null
     userProfile: UserProfileCreateNestedOneWithoutLecturerInput
-    organization: DM_DonViCreateNestedOneWithoutLecturersInput
+    organization?: DM_DonViCreateNestedOneWithoutLecturersInput
     lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
     mainSubjectClasses?: SubjectClassCreateNestedManyWithoutMainLecturerInput
     extraSubjectClasses?: SubjectClassCreateNestedManyWithoutExtraLecturerInput
@@ -626271,6 +633487,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutLecturerInput
     personalWorkTags?: PersonalWorkTagCreateNestedManyWithoutLecturerInput
     individualSchedules?: IndividualScheduleCreateNestedManyWithoutLecturerInput
+    guestTeachingPayments?: GuestTeachingPaymentCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerUncheckedCreateWithoutExpertProfileInput = {
@@ -626286,7 +633503,7 @@ export namespace Prisma {
     lectureID?: string | null
     serviceDate?: Date | string | null
     userProfileId: string
-    organizationId: string
+    organizationId?: string | null
     lecturerTypeId: string
     mainSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutMainLecturerInput
     extraSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutExtraLecturerInput
@@ -626310,6 +633527,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutLecturerInput
     personalWorkTags?: PersonalWorkTagUncheckedCreateNestedManyWithoutLecturerInput
     individualSchedules?: IndividualScheduleUncheckedCreateNestedManyWithoutLecturerInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerCreateOrConnectWithoutExpertProfileInput = {
@@ -626335,6 +633553,7 @@ export namespace Prisma {
     sThietBiSua?: string | null
     profiles?: UserProfileCreateNestedManyWithoutAcademicDegreeTypeInput
     hocVi?: HocViCreateNestedManyWithoutAcademicDegreeTypeInput
+    guestTeachingRate?: GuestTeachingRateCreateNestedManyWithoutAcademicDegreeTypeInput
   }
 
   export type DM_HocViUncheckedCreateWithoutExpertProfileInput = {
@@ -626355,6 +633574,7 @@ export namespace Prisma {
     sThietBiSua?: string | null
     profiles?: UserProfileUncheckedCreateNestedManyWithoutAcademicDegreeTypeInput
     hocVi?: HocViUncheckedCreateNestedManyWithoutAcademicDegreeTypeInput
+    guestTeachingRate?: GuestTeachingRateUncheckedCreateNestedManyWithoutAcademicDegreeTypeInput
   }
 
   export type DM_HocViCreateOrConnectWithoutExpertProfileInput = {
@@ -626380,6 +633600,7 @@ export namespace Prisma {
     sThietBiSua?: string | null
     profiles?: UserProfileCreateNestedManyWithoutAcademicRankTypeInput
     hocHam?: HocHamCreateNestedManyWithoutAcademicRankTypeInput
+    guestTeachingRate?: GuestTeachingRateCreateNestedManyWithoutAcademicRankTypeInput
   }
 
   export type DM_HocHamUncheckedCreateWithoutExpertProfileInput = {
@@ -626400,6 +633621,7 @@ export namespace Prisma {
     sThietBiSua?: string | null
     profiles?: UserProfileUncheckedCreateNestedManyWithoutAcademicRankTypeInput
     hocHam?: HocHamUncheckedCreateNestedManyWithoutAcademicRankTypeInput
+    guestTeachingRate?: GuestTeachingRateUncheckedCreateNestedManyWithoutAcademicRankTypeInput
   }
 
   export type DM_HocHamCreateOrConnectWithoutExpertProfileInput = {
@@ -627311,7 +634533,7 @@ export namespace Prisma {
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
-    organization?: DM_DonViUpdateOneRequiredWithoutLecturersNestedInput
+    organization?: DM_DonViUpdateOneWithoutLecturersNestedInput
     lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
     mainSubjectClasses?: SubjectClassUpdateManyWithoutMainLecturerNestedInput
     extraSubjectClasses?: SubjectClassUpdateManyWithoutExtraLecturerNestedInput
@@ -627335,6 +634557,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutLecturerNestedInput
     personalWorkTags?: PersonalWorkTagUpdateManyWithoutLecturerNestedInput
     individualSchedules?: IndividualScheduleUpdateManyWithoutLecturerNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUpdateManyWithoutLecturerNestedInput
   }
 
   export type LecturerUncheckedUpdateWithoutExpertProfileInput = {
@@ -627350,7 +634573,7 @@ export namespace Prisma {
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfileId?: StringFieldUpdateOperationsInput | string
-    organizationId?: StringFieldUpdateOperationsInput | string
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
     lecturerTypeId?: StringFieldUpdateOperationsInput | string
     mainSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutMainLecturerNestedInput
     extraSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutExtraLecturerNestedInput
@@ -627374,6 +634597,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutLecturerNestedInput
     personalWorkTags?: PersonalWorkTagUncheckedUpdateManyWithoutLecturerNestedInput
     individualSchedules?: IndividualScheduleUncheckedUpdateManyWithoutLecturerNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedUpdateManyWithoutLecturerNestedInput
   }
 
   export type DM_HocViUpsertWithoutExpertProfileInput = {
@@ -627405,6 +634629,7 @@ export namespace Prisma {
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     profiles?: UserProfileUpdateManyWithoutAcademicDegreeTypeNestedInput
     hocVi?: HocViUpdateManyWithoutAcademicDegreeTypeNestedInput
+    guestTeachingRate?: GuestTeachingRateUpdateManyWithoutAcademicDegreeTypeNestedInput
   }
 
   export type DM_HocViUncheckedUpdateWithoutExpertProfileInput = {
@@ -627425,6 +634650,7 @@ export namespace Prisma {
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     profiles?: UserProfileUncheckedUpdateManyWithoutAcademicDegreeTypeNestedInput
     hocVi?: HocViUncheckedUpdateManyWithoutAcademicDegreeTypeNestedInput
+    guestTeachingRate?: GuestTeachingRateUncheckedUpdateManyWithoutAcademicDegreeTypeNestedInput
   }
 
   export type DM_HocHamUpsertWithoutExpertProfileInput = {
@@ -627456,6 +634682,7 @@ export namespace Prisma {
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     profiles?: UserProfileUpdateManyWithoutAcademicRankTypeNestedInput
     hocHam?: HocHamUpdateManyWithoutAcademicRankTypeNestedInput
+    guestTeachingRate?: GuestTeachingRateUpdateManyWithoutAcademicRankTypeNestedInput
   }
 
   export type DM_HocHamUncheckedUpdateWithoutExpertProfileInput = {
@@ -627476,6 +634703,7 @@ export namespace Prisma {
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
     profiles?: UserProfileUncheckedUpdateManyWithoutAcademicRankTypeNestedInput
     hocHam?: HocHamUncheckedUpdateManyWithoutAcademicRankTypeNestedInput
+    guestTeachingRate?: GuestTeachingRateUncheckedUpdateManyWithoutAcademicRankTypeNestedInput
   }
 
   export type TrainingMajorUpsertWithWhereUniqueWithoutExpertProfileInput = {
@@ -633989,6 +641217,7 @@ export namespace Prisma {
     availableTrainingTime?: AvailableTrainingTimeCreateNestedManyWithoutSemesterInput
     studentSubjectScore?: StudentSubjectScoreCreateNestedManyWithoutSemesterInput
     planTrainingPractice?: PlanTrainingPracticeCreateNestedManyWithoutSemesterInput
+    guestTeachingPayments?: GuestTeachingPaymentCreateNestedManyWithoutSemesterInput
   }
 
   export type SemesterUncheckedCreateWithoutStudentAcademicDecisionInput = {
@@ -634022,6 +641251,7 @@ export namespace Prisma {
     availableTrainingTime?: AvailableTrainingTimeUncheckedCreateNestedManyWithoutSemesterInput
     studentSubjectScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutSemesterInput
     planTrainingPractice?: PlanTrainingPracticeUncheckedCreateNestedManyWithoutSemesterInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedCreateNestedManyWithoutSemesterInput
   }
 
   export type SemesterCreateOrConnectWithoutStudentAcademicDecisionInput = {
@@ -634046,6 +641276,7 @@ export namespace Prisma {
     studentYearResult?: StudentYearResultCreateNestedManyWithoutSchoolYearInput
     evaluationPeriod?: EvaluationPeriodCreateNestedManyWithoutSchoolYearInput
     schoolYearTrainingScore?: SchoolYearTrainingScoreCreateNestedManyWithoutSchoolYearInput
+    guestTeachingRateConfig?: GuestTeachingRateConfigCreateNestedManyWithoutSchoolYearInput
   }
 
   export type SchoolYearUncheckedCreateWithoutStudentAcademicDecisionInput = {
@@ -634065,6 +641296,7 @@ export namespace Prisma {
     studentYearResult?: StudentYearResultUncheckedCreateNestedManyWithoutSchoolYearInput
     evaluationPeriod?: EvaluationPeriodUncheckedCreateNestedManyWithoutSchoolYearInput
     schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedCreateNestedManyWithoutSchoolYearInput
+    guestTeachingRateConfig?: GuestTeachingRateConfigUncheckedCreateNestedManyWithoutSchoolYearInput
   }
 
   export type SchoolYearCreateOrConnectWithoutStudentAcademicDecisionInput = {
@@ -634398,6 +641630,7 @@ export namespace Prisma {
     availableTrainingTime?: AvailableTrainingTimeUpdateManyWithoutSemesterNestedInput
     studentSubjectScore?: StudentSubjectScoreUpdateManyWithoutSemesterNestedInput
     planTrainingPractice?: PlanTrainingPracticeUpdateManyWithoutSemesterNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUpdateManyWithoutSemesterNestedInput
   }
 
   export type SemesterUncheckedUpdateWithoutStudentAcademicDecisionInput = {
@@ -634431,6 +641664,7 @@ export namespace Prisma {
     availableTrainingTime?: AvailableTrainingTimeUncheckedUpdateManyWithoutSemesterNestedInput
     studentSubjectScore?: StudentSubjectScoreUncheckedUpdateManyWithoutSemesterNestedInput
     planTrainingPractice?: PlanTrainingPracticeUncheckedUpdateManyWithoutSemesterNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedUpdateManyWithoutSemesterNestedInput
   }
 
   export type SchoolYearUpsertWithoutStudentAcademicDecisionInput = {
@@ -634461,6 +641695,7 @@ export namespace Prisma {
     studentYearResult?: StudentYearResultUpdateManyWithoutSchoolYearNestedInput
     evaluationPeriod?: EvaluationPeriodUpdateManyWithoutSchoolYearNestedInput
     schoolYearTrainingScore?: SchoolYearTrainingScoreUpdateManyWithoutSchoolYearNestedInput
+    guestTeachingRateConfig?: GuestTeachingRateConfigUpdateManyWithoutSchoolYearNestedInput
   }
 
   export type SchoolYearUncheckedUpdateWithoutStudentAcademicDecisionInput = {
@@ -634480,6 +641715,7 @@ export namespace Prisma {
     studentYearResult?: StudentYearResultUncheckedUpdateManyWithoutSchoolYearNestedInput
     evaluationPeriod?: EvaluationPeriodUncheckedUpdateManyWithoutSchoolYearNestedInput
     schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedUpdateManyWithoutSchoolYearNestedInput
+    guestTeachingRateConfig?: GuestTeachingRateConfigUncheckedUpdateManyWithoutSchoolYearNestedInput
   }
 
   export type AcademicActionConfigUpsertWithoutDecisionsInput = {
@@ -634570,6 +641806,7 @@ export namespace Prisma {
     availableTrainingTime?: AvailableTrainingTimeCreateNestedManyWithoutSemesterInput
     studentSubjectScore?: StudentSubjectScoreCreateNestedManyWithoutSemesterInput
     planTrainingPractice?: PlanTrainingPracticeCreateNestedManyWithoutSemesterInput
+    guestTeachingPayments?: GuestTeachingPaymentCreateNestedManyWithoutSemesterInput
   }
 
   export type SemesterUncheckedCreateWithoutTrainingScoreSessionInput = {
@@ -634603,6 +641840,7 @@ export namespace Prisma {
     availableTrainingTime?: AvailableTrainingTimeUncheckedCreateNestedManyWithoutSemesterInput
     studentSubjectScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutSemesterInput
     planTrainingPractice?: PlanTrainingPracticeUncheckedCreateNestedManyWithoutSemesterInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedCreateNestedManyWithoutSemesterInput
   }
 
   export type SemesterCreateOrConnectWithoutTrainingScoreSessionInput = {
@@ -634763,6 +642001,7 @@ export namespace Prisma {
     availableTrainingTime?: AvailableTrainingTimeUpdateManyWithoutSemesterNestedInput
     studentSubjectScore?: StudentSubjectScoreUpdateManyWithoutSemesterNestedInput
     planTrainingPractice?: PlanTrainingPracticeUpdateManyWithoutSemesterNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUpdateManyWithoutSemesterNestedInput
   }
 
   export type SemesterUncheckedUpdateWithoutTrainingScoreSessionInput = {
@@ -634796,6 +642035,7 @@ export namespace Prisma {
     availableTrainingTime?: AvailableTrainingTimeUncheckedUpdateManyWithoutSemesterNestedInput
     studentSubjectScore?: StudentSubjectScoreUncheckedUpdateManyWithoutSemesterNestedInput
     planTrainingPractice?: PlanTrainingPracticeUncheckedUpdateManyWithoutSemesterNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedUpdateManyWithoutSemesterNestedInput
   }
 
   export type TrainingObjectTypeUpsertWithoutTrainingScoreSessionInput = {
@@ -635322,6 +642562,7 @@ export namespace Prisma {
     availableTrainingTime?: AvailableTrainingTimeCreateNestedManyWithoutSemesterInput
     studentSubjectScore?: StudentSubjectScoreCreateNestedManyWithoutSemesterInput
     planTrainingPractice?: PlanTrainingPracticeCreateNestedManyWithoutSemesterInput
+    guestTeachingPayments?: GuestTeachingPaymentCreateNestedManyWithoutSemesterInput
   }
 
   export type SemesterUncheckedCreateWithoutSemesterTrainingScoreInput = {
@@ -635355,6 +642596,7 @@ export namespace Prisma {
     availableTrainingTime?: AvailableTrainingTimeUncheckedCreateNestedManyWithoutSemesterInput
     studentSubjectScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutSemesterInput
     planTrainingPractice?: PlanTrainingPracticeUncheckedCreateNestedManyWithoutSemesterInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedCreateNestedManyWithoutSemesterInput
   }
 
   export type SemesterCreateOrConnectWithoutSemesterTrainingScoreInput = {
@@ -635563,6 +642805,7 @@ export namespace Prisma {
     availableTrainingTime?: AvailableTrainingTimeUpdateManyWithoutSemesterNestedInput
     studentSubjectScore?: StudentSubjectScoreUpdateManyWithoutSemesterNestedInput
     planTrainingPractice?: PlanTrainingPracticeUpdateManyWithoutSemesterNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUpdateManyWithoutSemesterNestedInput
   }
 
   export type SemesterUncheckedUpdateWithoutSemesterTrainingScoreInput = {
@@ -635596,6 +642839,7 @@ export namespace Prisma {
     availableTrainingTime?: AvailableTrainingTimeUncheckedUpdateManyWithoutSemesterNestedInput
     studentSubjectScore?: StudentSubjectScoreUncheckedUpdateManyWithoutSemesterNestedInput
     planTrainingPractice?: PlanTrainingPracticeUncheckedUpdateManyWithoutSemesterNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedUpdateManyWithoutSemesterNestedInput
   }
 
   export type StudentUpsertWithoutSemesterTrainingScoreInput = {
@@ -635780,6 +643024,7 @@ export namespace Prisma {
     studentYearResult?: StudentYearResultCreateNestedManyWithoutSchoolYearInput
     studentAcademicDecision?: StudentAcademicDecisionCreateNestedManyWithoutSchoolYearInput
     evaluationPeriod?: EvaluationPeriodCreateNestedManyWithoutSchoolYearInput
+    guestTeachingRateConfig?: GuestTeachingRateConfigCreateNestedManyWithoutSchoolYearInput
   }
 
   export type SchoolYearUncheckedCreateWithoutSchoolYearTrainingScoreInput = {
@@ -635799,6 +643044,7 @@ export namespace Prisma {
     studentYearResult?: StudentYearResultUncheckedCreateNestedManyWithoutSchoolYearInput
     studentAcademicDecision?: StudentAcademicDecisionUncheckedCreateNestedManyWithoutSchoolYearInput
     evaluationPeriod?: EvaluationPeriodUncheckedCreateNestedManyWithoutSchoolYearInput
+    guestTeachingRateConfig?: GuestTeachingRateConfigUncheckedCreateNestedManyWithoutSchoolYearInput
   }
 
   export type SchoolYearCreateOrConnectWithoutSchoolYearTrainingScoreInput = {
@@ -635993,6 +643239,7 @@ export namespace Prisma {
     studentYearResult?: StudentYearResultUpdateManyWithoutSchoolYearNestedInput
     studentAcademicDecision?: StudentAcademicDecisionUpdateManyWithoutSchoolYearNestedInput
     evaluationPeriod?: EvaluationPeriodUpdateManyWithoutSchoolYearNestedInput
+    guestTeachingRateConfig?: GuestTeachingRateConfigUpdateManyWithoutSchoolYearNestedInput
   }
 
   export type SchoolYearUncheckedUpdateWithoutSchoolYearTrainingScoreInput = {
@@ -636012,6 +643259,7 @@ export namespace Prisma {
     studentYearResult?: StudentYearResultUncheckedUpdateManyWithoutSchoolYearNestedInput
     studentAcademicDecision?: StudentAcademicDecisionUncheckedUpdateManyWithoutSchoolYearNestedInput
     evaluationPeriod?: EvaluationPeriodUncheckedUpdateManyWithoutSchoolYearNestedInput
+    guestTeachingRateConfig?: GuestTeachingRateConfigUncheckedUpdateManyWithoutSchoolYearNestedInput
   }
 
   export type StudentUpsertWithoutSchoolYearTrainingScoreInput = {
@@ -636856,6 +644104,7 @@ export namespace Prisma {
     availableTrainingTime?: AvailableTrainingTimeCreateNestedManyWithoutSemesterInput
     studentSubjectScore?: StudentSubjectScoreCreateNestedManyWithoutSemesterInput
     planTrainingPractice?: PlanTrainingPracticeCreateNestedManyWithoutSemesterInput
+    guestTeachingPayments?: GuestTeachingPaymentCreateNestedManyWithoutSemesterInput
   }
 
   export type SemesterUncheckedCreateWithoutScholarshipAwardInput = {
@@ -636889,6 +644138,7 @@ export namespace Prisma {
     availableTrainingTime?: AvailableTrainingTimeUncheckedCreateNestedManyWithoutSemesterInput
     studentSubjectScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutSemesterInput
     planTrainingPractice?: PlanTrainingPracticeUncheckedCreateNestedManyWithoutSemesterInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedCreateNestedManyWithoutSemesterInput
   }
 
   export type SemesterCreateOrConnectWithoutScholarshipAwardInput = {
@@ -637146,6 +644396,7 @@ export namespace Prisma {
     availableTrainingTime?: AvailableTrainingTimeUpdateManyWithoutSemesterNestedInput
     studentSubjectScore?: StudentSubjectScoreUpdateManyWithoutSemesterNestedInput
     planTrainingPractice?: PlanTrainingPracticeUpdateManyWithoutSemesterNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUpdateManyWithoutSemesterNestedInput
   }
 
   export type SemesterUncheckedUpdateWithoutScholarshipAwardInput = {
@@ -637179,6 +644430,7 @@ export namespace Prisma {
     availableTrainingTime?: AvailableTrainingTimeUncheckedUpdateManyWithoutSemesterNestedInput
     studentSubjectScore?: StudentSubjectScoreUncheckedUpdateManyWithoutSemesterNestedInput
     planTrainingPractice?: PlanTrainingPracticeUncheckedUpdateManyWithoutSemesterNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedUpdateManyWithoutSemesterNestedInput
   }
 
   export type ScholarshipUpsertWithoutAwardsInput = {
@@ -643200,6 +650452,7 @@ export namespace Prisma {
     availableTrainingTime?: AvailableTrainingTimeCreateNestedManyWithoutSemesterInput
     studentSubjectScore?: StudentSubjectScoreCreateNestedManyWithoutSemesterInput
     planTrainingPractice?: PlanTrainingPracticeCreateNestedManyWithoutSemesterInput
+    guestTeachingPayments?: GuestTeachingPaymentCreateNestedManyWithoutSemesterInput
   }
 
   export type SemesterUncheckedCreateWithoutScoreLinkSheetsInput = {
@@ -643233,6 +650486,7 @@ export namespace Prisma {
     availableTrainingTime?: AvailableTrainingTimeUncheckedCreateNestedManyWithoutSemesterInput
     studentSubjectScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutSemesterInput
     planTrainingPractice?: PlanTrainingPracticeUncheckedCreateNestedManyWithoutSemesterInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedCreateNestedManyWithoutSemesterInput
   }
 
   export type SemesterCreateOrConnectWithoutScoreLinkSheetsInput = {
@@ -643552,6 +650806,7 @@ export namespace Prisma {
     availableTrainingTime?: AvailableTrainingTimeUpdateManyWithoutSemesterNestedInput
     studentSubjectScore?: StudentSubjectScoreUpdateManyWithoutSemesterNestedInput
     planTrainingPractice?: PlanTrainingPracticeUpdateManyWithoutSemesterNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUpdateManyWithoutSemesterNestedInput
   }
 
   export type SemesterUncheckedUpdateWithoutScoreLinkSheetsInput = {
@@ -643585,6 +650840,7 @@ export namespace Prisma {
     availableTrainingTime?: AvailableTrainingTimeUncheckedUpdateManyWithoutSemesterNestedInput
     studentSubjectScore?: StudentSubjectScoreUncheckedUpdateManyWithoutSemesterNestedInput
     planTrainingPractice?: PlanTrainingPracticeUncheckedUpdateManyWithoutSemesterNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedUpdateManyWithoutSemesterNestedInput
   }
 
   export type ScoreLinkSubjectVersionUpsertWithWhereUniqueWithoutScoreLinkSheetInput = {
@@ -645971,6 +653227,7 @@ export namespace Prisma {
     studentYearResult?: StudentYearResultCreateNestedManyWithoutSchoolYearInput
     studentAcademicDecision?: StudentAcademicDecisionCreateNestedManyWithoutSchoolYearInput
     schoolYearTrainingScore?: SchoolYearTrainingScoreCreateNestedManyWithoutSchoolYearInput
+    guestTeachingRateConfig?: GuestTeachingRateConfigCreateNestedManyWithoutSchoolYearInput
   }
 
   export type SchoolYearUncheckedCreateWithoutEvaluationPeriodInput = {
@@ -645990,6 +653247,7 @@ export namespace Prisma {
     studentYearResult?: StudentYearResultUncheckedCreateNestedManyWithoutSchoolYearInput
     studentAcademicDecision?: StudentAcademicDecisionUncheckedCreateNestedManyWithoutSchoolYearInput
     schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedCreateNestedManyWithoutSchoolYearInput
+    guestTeachingRateConfig?: GuestTeachingRateConfigUncheckedCreateNestedManyWithoutSchoolYearInput
   }
 
   export type SchoolYearCreateOrConnectWithoutEvaluationPeriodInput = {
@@ -646182,6 +653440,7 @@ export namespace Prisma {
     studentYearResult?: StudentYearResultUpdateManyWithoutSchoolYearNestedInput
     studentAcademicDecision?: StudentAcademicDecisionUpdateManyWithoutSchoolYearNestedInput
     schoolYearTrainingScore?: SchoolYearTrainingScoreUpdateManyWithoutSchoolYearNestedInput
+    guestTeachingRateConfig?: GuestTeachingRateConfigUpdateManyWithoutSchoolYearNestedInput
   }
 
   export type SchoolYearUncheckedUpdateWithoutEvaluationPeriodInput = {
@@ -646201,6 +653460,7 @@ export namespace Prisma {
     studentYearResult?: StudentYearResultUncheckedUpdateManyWithoutSchoolYearNestedInput
     studentAcademicDecision?: StudentAcademicDecisionUncheckedUpdateManyWithoutSchoolYearNestedInput
     schoolYearTrainingScore?: SchoolYearTrainingScoreUncheckedUpdateManyWithoutSchoolYearNestedInput
+    guestTeachingRateConfig?: GuestTeachingRateConfigUncheckedUpdateManyWithoutSchoolYearNestedInput
   }
 
   export type StandardPeriodUpsertWithWhereUniqueWithoutPeriodInput = {
@@ -648491,7 +655751,7 @@ export namespace Prisma {
     lectureID?: string | null
     serviceDate?: Date | string | null
     userProfile: UserProfileCreateNestedOneWithoutLecturerInput
-    organization: DM_DonViCreateNestedOneWithoutLecturersInput
+    organization?: DM_DonViCreateNestedOneWithoutLecturersInput
     lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
     mainSubjectClasses?: SubjectClassCreateNestedManyWithoutMainLecturerInput
     extraSubjectClasses?: SubjectClassCreateNestedManyWithoutExtraLecturerInput
@@ -648515,6 +655775,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutLecturerInput
     personalWorkTags?: PersonalWorkTagCreateNestedManyWithoutLecturerInput
     individualSchedules?: IndividualScheduleCreateNestedManyWithoutLecturerInput
+    guestTeachingPayments?: GuestTeachingPaymentCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerUncheckedCreateWithoutAnalysisCriterionInput = {
@@ -648530,7 +655791,7 @@ export namespace Prisma {
     lectureID?: string | null
     serviceDate?: Date | string | null
     userProfileId: string
-    organizationId: string
+    organizationId?: string | null
     lecturerTypeId: string
     mainSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutMainLecturerInput
     extraSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutExtraLecturerInput
@@ -648554,6 +655815,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutLecturerInput
     personalWorkTags?: PersonalWorkTagUncheckedCreateNestedManyWithoutLecturerInput
     individualSchedules?: IndividualScheduleUncheckedCreateNestedManyWithoutLecturerInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerCreateOrConnectWithoutAnalysisCriterionInput = {
@@ -648712,7 +655974,7 @@ export namespace Prisma {
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
-    organization?: DM_DonViUpdateOneRequiredWithoutLecturersNestedInput
+    organization?: DM_DonViUpdateOneWithoutLecturersNestedInput
     lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
     mainSubjectClasses?: SubjectClassUpdateManyWithoutMainLecturerNestedInput
     extraSubjectClasses?: SubjectClassUpdateManyWithoutExtraLecturerNestedInput
@@ -648736,6 +655998,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutLecturerNestedInput
     personalWorkTags?: PersonalWorkTagUpdateManyWithoutLecturerNestedInput
     individualSchedules?: IndividualScheduleUpdateManyWithoutLecturerNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUpdateManyWithoutLecturerNestedInput
   }
 
   export type LecturerUncheckedUpdateWithoutAnalysisCriterionInput = {
@@ -648751,7 +656014,7 @@ export namespace Prisma {
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfileId?: StringFieldUpdateOperationsInput | string
-    organizationId?: StringFieldUpdateOperationsInput | string
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
     lecturerTypeId?: StringFieldUpdateOperationsInput | string
     mainSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutMainLecturerNestedInput
     extraSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutExtraLecturerNestedInput
@@ -648775,6 +656038,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutLecturerNestedInput
     personalWorkTags?: PersonalWorkTagUncheckedUpdateManyWithoutLecturerNestedInput
     individualSchedules?: IndividualScheduleUncheckedUpdateManyWithoutLecturerNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedUpdateManyWithoutLecturerNestedInput
   }
 
   export type RequirementCriterionUpsertWithWhereUniqueWithoutAnalysisCriterionInput = {
@@ -648877,7 +656141,7 @@ export namespace Prisma {
     lectureID?: string | null
     serviceDate?: Date | string | null
     userProfile: UserProfileCreateNestedOneWithoutLecturerInput
-    organization: DM_DonViCreateNestedOneWithoutLecturersInput
+    organization?: DM_DonViCreateNestedOneWithoutLecturersInput
     lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
     mainSubjectClasses?: SubjectClassCreateNestedManyWithoutMainLecturerInput
     extraSubjectClasses?: SubjectClassCreateNestedManyWithoutExtraLecturerInput
@@ -648901,6 +656165,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutLecturerInput
     personalWorkTags?: PersonalWorkTagCreateNestedManyWithoutLecturerInput
     individualSchedules?: IndividualScheduleCreateNestedManyWithoutLecturerInput
+    guestTeachingPayments?: GuestTeachingPaymentCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerUncheckedCreateWithoutEvaluationCriterionsInput = {
@@ -648916,7 +656181,7 @@ export namespace Prisma {
     lectureID?: string | null
     serviceDate?: Date | string | null
     userProfileId: string
-    organizationId: string
+    organizationId?: string | null
     lecturerTypeId: string
     mainSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutMainLecturerInput
     extraSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutExtraLecturerInput
@@ -648940,6 +656205,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutLecturerInput
     personalWorkTags?: PersonalWorkTagUncheckedCreateNestedManyWithoutLecturerInput
     individualSchedules?: IndividualScheduleUncheckedCreateNestedManyWithoutLecturerInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerCreateOrConnectWithoutEvaluationCriterionsInput = {
@@ -648995,7 +656261,7 @@ export namespace Prisma {
     lectureID?: string | null
     serviceDate?: Date | string | null
     userProfile: UserProfileCreateNestedOneWithoutLecturerInput
-    organization: DM_DonViCreateNestedOneWithoutLecturersInput
+    organization?: DM_DonViCreateNestedOneWithoutLecturersInput
     lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
     mainSubjectClasses?: SubjectClassCreateNestedManyWithoutMainLecturerInput
     extraSubjectClasses?: SubjectClassCreateNestedManyWithoutExtraLecturerInput
@@ -649019,6 +656285,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutLecturerInput
     personalWorkTags?: PersonalWorkTagCreateNestedManyWithoutLecturerInput
     individualSchedules?: IndividualScheduleCreateNestedManyWithoutLecturerInput
+    guestTeachingPayments?: GuestTeachingPaymentCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerUncheckedCreateWithoutEvaluationCriterionReviewsInput = {
@@ -649034,7 +656301,7 @@ export namespace Prisma {
     lectureID?: string | null
     serviceDate?: Date | string | null
     userProfileId: string
-    organizationId: string
+    organizationId?: string | null
     lecturerTypeId: string
     mainSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutMainLecturerInput
     extraSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutExtraLecturerInput
@@ -649058,6 +656325,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutLecturerInput
     personalWorkTags?: PersonalWorkTagUncheckedCreateNestedManyWithoutLecturerInput
     individualSchedules?: IndividualScheduleUncheckedCreateNestedManyWithoutLecturerInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerCreateOrConnectWithoutEvaluationCriterionReviewsInput = {
@@ -649170,7 +656438,7 @@ export namespace Prisma {
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
-    organization?: DM_DonViUpdateOneRequiredWithoutLecturersNestedInput
+    organization?: DM_DonViUpdateOneWithoutLecturersNestedInput
     lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
     mainSubjectClasses?: SubjectClassUpdateManyWithoutMainLecturerNestedInput
     extraSubjectClasses?: SubjectClassUpdateManyWithoutExtraLecturerNestedInput
@@ -649194,6 +656462,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutLecturerNestedInput
     personalWorkTags?: PersonalWorkTagUpdateManyWithoutLecturerNestedInput
     individualSchedules?: IndividualScheduleUpdateManyWithoutLecturerNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUpdateManyWithoutLecturerNestedInput
   }
 
   export type LecturerUncheckedUpdateWithoutEvaluationCriterionsInput = {
@@ -649209,7 +656478,7 @@ export namespace Prisma {
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfileId?: StringFieldUpdateOperationsInput | string
-    organizationId?: StringFieldUpdateOperationsInput | string
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
     lecturerTypeId?: StringFieldUpdateOperationsInput | string
     mainSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutMainLecturerNestedInput
     extraSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutExtraLecturerNestedInput
@@ -649233,6 +656502,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutLecturerNestedInput
     personalWorkTags?: PersonalWorkTagUncheckedUpdateManyWithoutLecturerNestedInput
     individualSchedules?: IndividualScheduleUncheckedUpdateManyWithoutLecturerNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedUpdateManyWithoutLecturerNestedInput
   }
 
   export type EvaluationCouncilMemberUpsertWithoutEvaluationCriterionsInput = {
@@ -649872,7 +657142,7 @@ export namespace Prisma {
     lectureID?: string | null
     serviceDate?: Date | string | null
     userProfile: UserProfileCreateNestedOneWithoutLecturerInput
-    organization: DM_DonViCreateNestedOneWithoutLecturersInput
+    organization?: DM_DonViCreateNestedOneWithoutLecturersInput
     lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
     mainSubjectClasses?: SubjectClassCreateNestedManyWithoutMainLecturerInput
     extraSubjectClasses?: SubjectClassCreateNestedManyWithoutExtraLecturerInput
@@ -649896,6 +657166,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutLecturerInput
     personalWorkTags?: PersonalWorkTagCreateNestedManyWithoutLecturerInput
     individualSchedules?: IndividualScheduleCreateNestedManyWithoutLecturerInput
+    guestTeachingPayments?: GuestTeachingPaymentCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerUncheckedCreateWithoutEvaluationCouncilMemberInput = {
@@ -649911,7 +657182,7 @@ export namespace Prisma {
     lectureID?: string | null
     serviceDate?: Date | string | null
     userProfileId: string
-    organizationId: string
+    organizationId?: string | null
     lecturerTypeId: string
     mainSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutMainLecturerInput
     extraSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutExtraLecturerInput
@@ -649935,6 +657206,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutLecturerInput
     personalWorkTags?: PersonalWorkTagUncheckedCreateNestedManyWithoutLecturerInput
     individualSchedules?: IndividualScheduleUncheckedCreateNestedManyWithoutLecturerInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerCreateOrConnectWithoutEvaluationCouncilMemberInput = {
@@ -650061,7 +657333,7 @@ export namespace Prisma {
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
-    organization?: DM_DonViUpdateOneRequiredWithoutLecturersNestedInput
+    organization?: DM_DonViUpdateOneWithoutLecturersNestedInput
     lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
     mainSubjectClasses?: SubjectClassUpdateManyWithoutMainLecturerNestedInput
     extraSubjectClasses?: SubjectClassUpdateManyWithoutExtraLecturerNestedInput
@@ -650085,6 +657357,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutLecturerNestedInput
     personalWorkTags?: PersonalWorkTagUpdateManyWithoutLecturerNestedInput
     individualSchedules?: IndividualScheduleUpdateManyWithoutLecturerNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUpdateManyWithoutLecturerNestedInput
   }
 
   export type LecturerUncheckedUpdateWithoutEvaluationCouncilMemberInput = {
@@ -650100,7 +657373,7 @@ export namespace Prisma {
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfileId?: StringFieldUpdateOperationsInput | string
-    organizationId?: StringFieldUpdateOperationsInput | string
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
     lecturerTypeId?: StringFieldUpdateOperationsInput | string
     mainSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutMainLecturerNestedInput
     extraSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutExtraLecturerNestedInput
@@ -650124,6 +657397,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutLecturerNestedInput
     personalWorkTags?: PersonalWorkTagUncheckedUpdateManyWithoutLecturerNestedInput
     individualSchedules?: IndividualScheduleUncheckedUpdateManyWithoutLecturerNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedUpdateManyWithoutLecturerNestedInput
   }
 
   export type EvaluationCriterionUpsertWithWhereUniqueWithoutReviewerInput = {
@@ -652159,6 +659433,7 @@ export namespace Prisma {
     availableTrainingTime?: AvailableTrainingTimeCreateNestedManyWithoutSemesterInput
     studentSubjectScore?: StudentSubjectScoreCreateNestedManyWithoutSemesterInput
     planTrainingPractice?: PlanTrainingPracticeCreateNestedManyWithoutSemesterInput
+    guestTeachingPayments?: GuestTeachingPaymentCreateNestedManyWithoutSemesterInput
   }
 
   export type SemesterUncheckedCreateWithoutExamInput = {
@@ -652192,6 +659467,7 @@ export namespace Prisma {
     availableTrainingTime?: AvailableTrainingTimeUncheckedCreateNestedManyWithoutSemesterInput
     studentSubjectScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutSemesterInput
     planTrainingPractice?: PlanTrainingPracticeUncheckedCreateNestedManyWithoutSemesterInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedCreateNestedManyWithoutSemesterInput
   }
 
   export type SemesterCreateOrConnectWithoutExamInput = {
@@ -652578,6 +659854,7 @@ export namespace Prisma {
     availableTrainingTime?: AvailableTrainingTimeUpdateManyWithoutSemesterNestedInput
     studentSubjectScore?: StudentSubjectScoreUpdateManyWithoutSemesterNestedInput
     planTrainingPractice?: PlanTrainingPracticeUpdateManyWithoutSemesterNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUpdateManyWithoutSemesterNestedInput
   }
 
   export type SemesterUncheckedUpdateWithoutExamInput = {
@@ -652611,6 +659888,7 @@ export namespace Prisma {
     availableTrainingTime?: AvailableTrainingTimeUncheckedUpdateManyWithoutSemesterNestedInput
     studentSubjectScore?: StudentSubjectScoreUncheckedUpdateManyWithoutSemesterNestedInput
     planTrainingPractice?: PlanTrainingPracticeUncheckedUpdateManyWithoutSemesterNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedUpdateManyWithoutSemesterNestedInput
   }
 
   export type SubjectClassUpsertWithWhereUniqueWithoutExamInput = {
@@ -652965,7 +660243,7 @@ export namespace Prisma {
     lectureID?: string | null
     serviceDate?: Date | string | null
     userProfile: UserProfileCreateNestedOneWithoutLecturerInput
-    organization: DM_DonViCreateNestedOneWithoutLecturersInput
+    organization?: DM_DonViCreateNestedOneWithoutLecturersInput
     lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
     mainSubjectClasses?: SubjectClassCreateNestedManyWithoutMainLecturerInput
     extraSubjectClasses?: SubjectClassCreateNestedManyWithoutExtraLecturerInput
@@ -652989,6 +660267,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutLecturerInput
     personalWorkTags?: PersonalWorkTagCreateNestedManyWithoutLecturerInput
     individualSchedules?: IndividualScheduleCreateNestedManyWithoutLecturerInput
+    guestTeachingPayments?: GuestTeachingPaymentCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerUncheckedCreateWithoutExamRoomsMainInput = {
@@ -653004,7 +660283,7 @@ export namespace Prisma {
     lectureID?: string | null
     serviceDate?: Date | string | null
     userProfileId: string
-    organizationId: string
+    organizationId?: string | null
     lecturerTypeId: string
     mainSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutMainLecturerInput
     extraSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutExtraLecturerInput
@@ -653028,6 +660307,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutLecturerInput
     personalWorkTags?: PersonalWorkTagUncheckedCreateNestedManyWithoutLecturerInput
     individualSchedules?: IndividualScheduleUncheckedCreateNestedManyWithoutLecturerInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerCreateOrConnectWithoutExamRoomsMainInput = {
@@ -653048,7 +660328,7 @@ export namespace Prisma {
     lectureID?: string | null
     serviceDate?: Date | string | null
     userProfile: UserProfileCreateNestedOneWithoutLecturerInput
-    organization: DM_DonViCreateNestedOneWithoutLecturersInput
+    organization?: DM_DonViCreateNestedOneWithoutLecturersInput
     lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
     mainSubjectClasses?: SubjectClassCreateNestedManyWithoutMainLecturerInput
     extraSubjectClasses?: SubjectClassCreateNestedManyWithoutExtraLecturerInput
@@ -653072,6 +660352,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutLecturerInput
     personalWorkTags?: PersonalWorkTagCreateNestedManyWithoutLecturerInput
     individualSchedules?: IndividualScheduleCreateNestedManyWithoutLecturerInput
+    guestTeachingPayments?: GuestTeachingPaymentCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerUncheckedCreateWithoutExamRoomsExtraInput = {
@@ -653087,7 +660368,7 @@ export namespace Prisma {
     lectureID?: string | null
     serviceDate?: Date | string | null
     userProfileId: string
-    organizationId: string
+    organizationId?: string | null
     lecturerTypeId: string
     mainSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutMainLecturerInput
     extraSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutExtraLecturerInput
@@ -653111,6 +660392,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutLecturerInput
     personalWorkTags?: PersonalWorkTagUncheckedCreateNestedManyWithoutLecturerInput
     individualSchedules?: IndividualScheduleUncheckedCreateNestedManyWithoutLecturerInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerCreateOrConnectWithoutExamRoomsExtraInput = {
@@ -653217,7 +660499,7 @@ export namespace Prisma {
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
-    organization?: DM_DonViUpdateOneRequiredWithoutLecturersNestedInput
+    organization?: DM_DonViUpdateOneWithoutLecturersNestedInput
     lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
     mainSubjectClasses?: SubjectClassUpdateManyWithoutMainLecturerNestedInput
     extraSubjectClasses?: SubjectClassUpdateManyWithoutExtraLecturerNestedInput
@@ -653241,6 +660523,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutLecturerNestedInput
     personalWorkTags?: PersonalWorkTagUpdateManyWithoutLecturerNestedInput
     individualSchedules?: IndividualScheduleUpdateManyWithoutLecturerNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUpdateManyWithoutLecturerNestedInput
   }
 
   export type LecturerUncheckedUpdateWithoutExamRoomsMainInput = {
@@ -653256,7 +660539,7 @@ export namespace Prisma {
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfileId?: StringFieldUpdateOperationsInput | string
-    organizationId?: StringFieldUpdateOperationsInput | string
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
     lecturerTypeId?: StringFieldUpdateOperationsInput | string
     mainSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutMainLecturerNestedInput
     extraSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutExtraLecturerNestedInput
@@ -653280,6 +660563,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutLecturerNestedInput
     personalWorkTags?: PersonalWorkTagUncheckedUpdateManyWithoutLecturerNestedInput
     individualSchedules?: IndividualScheduleUncheckedUpdateManyWithoutLecturerNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedUpdateManyWithoutLecturerNestedInput
   }
 
   export type LecturerUpsertWithoutExamRoomsExtraInput = {
@@ -653306,7 +660590,7 @@ export namespace Prisma {
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
-    organization?: DM_DonViUpdateOneRequiredWithoutLecturersNestedInput
+    organization?: DM_DonViUpdateOneWithoutLecturersNestedInput
     lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
     mainSubjectClasses?: SubjectClassUpdateManyWithoutMainLecturerNestedInput
     extraSubjectClasses?: SubjectClassUpdateManyWithoutExtraLecturerNestedInput
@@ -653330,6 +660614,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutLecturerNestedInput
     personalWorkTags?: PersonalWorkTagUpdateManyWithoutLecturerNestedInput
     individualSchedules?: IndividualScheduleUpdateManyWithoutLecturerNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUpdateManyWithoutLecturerNestedInput
   }
 
   export type LecturerUncheckedUpdateWithoutExamRoomsExtraInput = {
@@ -653345,7 +660630,7 @@ export namespace Prisma {
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfileId?: StringFieldUpdateOperationsInput | string
-    organizationId?: StringFieldUpdateOperationsInput | string
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
     lecturerTypeId?: StringFieldUpdateOperationsInput | string
     mainSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutMainLecturerNestedInput
     extraSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutExtraLecturerNestedInput
@@ -653369,6 +660654,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutLecturerNestedInput
     personalWorkTags?: PersonalWorkTagUncheckedUpdateManyWithoutLecturerNestedInput
     individualSchedules?: IndividualScheduleUncheckedUpdateManyWithoutLecturerNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedUpdateManyWithoutLecturerNestedInput
   }
 
   export type ExamPaperUpsertWithWhereUniqueWithoutExamListInput = {
@@ -655681,6 +662967,7 @@ export namespace Prisma {
     thirdTrainingMajors?: TrainingMajorCreateNestedManyWithoutThirdOrganizationInput
     researchProjects?: ResearchProjectCreateNestedManyWithoutOrganizationInput
     thesisProjects?: ThesisProjectCreateNestedManyWithoutOrganizationInput
+    guestTeachingPayments?: GuestTeachingPaymentCreateNestedManyWithoutHiringOrgInput
   }
 
   export type DM_DonViUncheckedCreateWithoutSurveyObjectTypesInput = {
@@ -655723,6 +663010,7 @@ export namespace Prisma {
     thirdTrainingMajors?: TrainingMajorUncheckedCreateNestedManyWithoutThirdOrganizationInput
     researchProjects?: ResearchProjectUncheckedCreateNestedManyWithoutOrganizationInput
     thesisProjects?: ThesisProjectUncheckedCreateNestedManyWithoutOrganizationInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedCreateNestedManyWithoutHiringOrgInput
   }
 
   export type DM_DonViCreateOrConnectWithoutSurveyObjectTypesInput = {
@@ -657004,7 +664292,7 @@ export namespace Prisma {
     lectureID?: string | null
     serviceDate?: Date | string | null
     userProfile: UserProfileCreateNestedOneWithoutLecturerInput
-    organization: DM_DonViCreateNestedOneWithoutLecturersInput
+    organization?: DM_DonViCreateNestedOneWithoutLecturersInput
     lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
     mainSubjectClasses?: SubjectClassCreateNestedManyWithoutMainLecturerInput
     extraSubjectClasses?: SubjectClassCreateNestedManyWithoutExtraLecturerInput
@@ -657028,6 +664316,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutLecturerInput
     personalWorkTags?: PersonalWorkTagCreateNestedManyWithoutLecturerInput
     individualSchedules?: IndividualScheduleCreateNestedManyWithoutLecturerInput
+    guestTeachingPayments?: GuestTeachingPaymentCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerUncheckedCreateWithoutClusterSurveyInput = {
@@ -657043,7 +664332,7 @@ export namespace Prisma {
     lectureID?: string | null
     serviceDate?: Date | string | null
     userProfileId: string
-    organizationId: string
+    organizationId?: string | null
     lecturerTypeId: string
     mainSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutMainLecturerInput
     extraSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutExtraLecturerInput
@@ -657067,6 +664356,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutLecturerInput
     personalWorkTags?: PersonalWorkTagUncheckedCreateNestedManyWithoutLecturerInput
     individualSchedules?: IndividualScheduleUncheckedCreateNestedManyWithoutLecturerInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerCreateOrConnectWithoutClusterSurveyInput = {
@@ -657413,7 +664703,7 @@ export namespace Prisma {
     lectureID?: string | null
     serviceDate?: Date | string | null
     userProfile: UserProfileCreateNestedOneWithoutLecturerInput
-    organization: DM_DonViCreateNestedOneWithoutLecturersInput
+    organization?: DM_DonViCreateNestedOneWithoutLecturersInput
     lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
     mainSubjectClasses?: SubjectClassCreateNestedManyWithoutMainLecturerInput
     extraSubjectClasses?: SubjectClassCreateNestedManyWithoutExtraLecturerInput
@@ -657437,6 +664727,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutLecturerInput
     personalWorkTags?: PersonalWorkTagCreateNestedManyWithoutLecturerInput
     individualSchedules?: IndividualScheduleCreateNestedManyWithoutLecturerInput
+    guestTeachingPayments?: GuestTeachingPaymentCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerUncheckedCreateWithoutSurveyInput = {
@@ -657452,7 +664743,7 @@ export namespace Prisma {
     lectureID?: string | null
     serviceDate?: Date | string | null
     userProfileId: string
-    organizationId: string
+    organizationId?: string | null
     lecturerTypeId: string
     mainSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutMainLecturerInput
     extraSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutExtraLecturerInput
@@ -657476,6 +664767,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutLecturerInput
     personalWorkTags?: PersonalWorkTagUncheckedCreateNestedManyWithoutLecturerInput
     individualSchedules?: IndividualScheduleUncheckedCreateNestedManyWithoutLecturerInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedCreateNestedManyWithoutLecturerInput
   }
 
   export type LecturerCreateOrConnectWithoutSurveyInput = {
@@ -657633,6 +664925,7 @@ export namespace Prisma {
     availableTrainingTime?: AvailableTrainingTimeCreateNestedManyWithoutSemesterInput
     studentSubjectScore?: StudentSubjectScoreCreateNestedManyWithoutSemesterInput
     planTrainingPractice?: PlanTrainingPracticeCreateNestedManyWithoutSemesterInput
+    guestTeachingPayments?: GuestTeachingPaymentCreateNestedManyWithoutSemesterInput
   }
 
   export type SemesterUncheckedCreateWithoutSurveyInput = {
@@ -657666,6 +664959,7 @@ export namespace Prisma {
     availableTrainingTime?: AvailableTrainingTimeUncheckedCreateNestedManyWithoutSemesterInput
     studentSubjectScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutSemesterInput
     planTrainingPractice?: PlanTrainingPracticeUncheckedCreateNestedManyWithoutSemesterInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedCreateNestedManyWithoutSemesterInput
   }
 
   export type SemesterCreateOrConnectWithoutSurveyInput = {
@@ -657986,7 +665280,7 @@ export namespace Prisma {
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
-    organization?: DM_DonViUpdateOneRequiredWithoutLecturersNestedInput
+    organization?: DM_DonViUpdateOneWithoutLecturersNestedInput
     lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
     mainSubjectClasses?: SubjectClassUpdateManyWithoutMainLecturerNestedInput
     extraSubjectClasses?: SubjectClassUpdateManyWithoutExtraLecturerNestedInput
@@ -658010,6 +665304,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutLecturerNestedInput
     personalWorkTags?: PersonalWorkTagUpdateManyWithoutLecturerNestedInput
     individualSchedules?: IndividualScheduleUpdateManyWithoutLecturerNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUpdateManyWithoutLecturerNestedInput
   }
 
   export type LecturerUncheckedUpdateWithoutSurveyInput = {
@@ -658025,7 +665320,7 @@ export namespace Prisma {
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfileId?: StringFieldUpdateOperationsInput | string
-    organizationId?: StringFieldUpdateOperationsInput | string
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
     lecturerTypeId?: StringFieldUpdateOperationsInput | string
     mainSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutMainLecturerNestedInput
     extraSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutExtraLecturerNestedInput
@@ -658049,6 +665344,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutLecturerNestedInput
     personalWorkTags?: PersonalWorkTagUncheckedUpdateManyWithoutLecturerNestedInput
     individualSchedules?: IndividualScheduleUncheckedUpdateManyWithoutLecturerNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedUpdateManyWithoutLecturerNestedInput
   }
 
   export type SubjectClassUpsertWithoutSurveyInput = {
@@ -658218,6 +665514,7 @@ export namespace Prisma {
     availableTrainingTime?: AvailableTrainingTimeUpdateManyWithoutSemesterNestedInput
     studentSubjectScore?: StudentSubjectScoreUpdateManyWithoutSemesterNestedInput
     planTrainingPractice?: PlanTrainingPracticeUpdateManyWithoutSemesterNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUpdateManyWithoutSemesterNestedInput
   }
 
   export type SemesterUncheckedUpdateWithoutSurveyInput = {
@@ -658251,6 +665548,7 @@ export namespace Prisma {
     availableTrainingTime?: AvailableTrainingTimeUncheckedUpdateManyWithoutSemesterNestedInput
     studentSubjectScore?: StudentSubjectScoreUncheckedUpdateManyWithoutSemesterNestedInput
     planTrainingPractice?: PlanTrainingPracticeUncheckedUpdateManyWithoutSemesterNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedUpdateManyWithoutSemesterNestedInput
   }
 
   export type SurveyTopicUpsertWithoutSurveyInput = {
@@ -661200,6 +668498,7 @@ export namespace Prisma {
     availableTrainingTime?: AvailableTrainingTimeCreateNestedManyWithoutSemesterInput
     studentSubjectScore?: StudentSubjectScoreCreateNestedManyWithoutSemesterInput
     planTrainingPractice?: PlanTrainingPracticeCreateNestedManyWithoutSemesterInput
+    guestTeachingPayments?: GuestTeachingPaymentCreateNestedManyWithoutSemesterInput
   }
 
   export type SemesterUncheckedCreateWithoutAcademicWarningInput = {
@@ -661233,6 +668532,7 @@ export namespace Prisma {
     availableTrainingTime?: AvailableTrainingTimeUncheckedCreateNestedManyWithoutSemesterInput
     studentSubjectScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutSemesterInput
     planTrainingPractice?: PlanTrainingPracticeUncheckedCreateNestedManyWithoutSemesterInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedCreateNestedManyWithoutSemesterInput
   }
 
   export type SemesterCreateOrConnectWithoutAcademicWarningInput = {
@@ -661492,6 +668792,7 @@ export namespace Prisma {
     availableTrainingTime?: AvailableTrainingTimeUpdateManyWithoutSemesterNestedInput
     studentSubjectScore?: StudentSubjectScoreUpdateManyWithoutSemesterNestedInput
     planTrainingPractice?: PlanTrainingPracticeUpdateManyWithoutSemesterNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUpdateManyWithoutSemesterNestedInput
   }
 
   export type SemesterUncheckedUpdateWithoutAcademicWarningInput = {
@@ -661525,6 +668826,7 @@ export namespace Prisma {
     availableTrainingTime?: AvailableTrainingTimeUncheckedUpdateManyWithoutSemesterNestedInput
     studentSubjectScore?: StudentSubjectScoreUncheckedUpdateManyWithoutSemesterNestedInput
     planTrainingPractice?: PlanTrainingPracticeUncheckedUpdateManyWithoutSemesterNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedUpdateManyWithoutSemesterNestedInput
   }
 
   export type AcademicWarningRuleUpsertWithWhereUniqueWithoutAcademicWarningInput = {
@@ -661733,6 +669035,7 @@ export namespace Prisma {
     availableTrainingTime?: AvailableTrainingTimeCreateNestedManyWithoutSemesterInput
     studentSubjectScore?: StudentSubjectScoreCreateNestedManyWithoutSemesterInput
     planTrainingPractice?: PlanTrainingPracticeCreateNestedManyWithoutSemesterInput
+    guestTeachingPayments?: GuestTeachingPaymentCreateNestedManyWithoutSemesterInput
   }
 
   export type SemesterUncheckedCreateWithoutDisciplinaryWarningInput = {
@@ -661766,6 +669069,7 @@ export namespace Prisma {
     availableTrainingTime?: AvailableTrainingTimeUncheckedCreateNestedManyWithoutSemesterInput
     studentSubjectScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutSemesterInput
     planTrainingPractice?: PlanTrainingPracticeUncheckedCreateNestedManyWithoutSemesterInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedCreateNestedManyWithoutSemesterInput
   }
 
   export type SemesterCreateOrConnectWithoutDisciplinaryWarningInput = {
@@ -662011,6 +669315,7 @@ export namespace Prisma {
     availableTrainingTime?: AvailableTrainingTimeUpdateManyWithoutSemesterNestedInput
     studentSubjectScore?: StudentSubjectScoreUpdateManyWithoutSemesterNestedInput
     planTrainingPractice?: PlanTrainingPracticeUpdateManyWithoutSemesterNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUpdateManyWithoutSemesterNestedInput
   }
 
   export type SemesterUncheckedUpdateWithoutDisciplinaryWarningInput = {
@@ -662044,6 +669349,7 @@ export namespace Prisma {
     availableTrainingTime?: AvailableTrainingTimeUncheckedUpdateManyWithoutSemesterNestedInput
     studentSubjectScore?: StudentSubjectScoreUncheckedUpdateManyWithoutSemesterNestedInput
     planTrainingPractice?: PlanTrainingPracticeUncheckedUpdateManyWithoutSemesterNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedUpdateManyWithoutSemesterNestedInput
   }
 
   export type DisciplinaryWarningReasonUpsertWithWhereUniqueWithoutWarningInput = {
@@ -675882,6 +683188,20 @@ export namespace Prisma {
     eligibleSecretary?: boolean
   }
 
+  export type GuestTeachingRateCreateManyAcademicRankTypeInput = {
+    id?: string
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    configId: string
+    academicDegreeTypeId?: string | null
+    isForeign?: boolean
+    ratePerPeriod: Decimal | DecimalJsLike | number | string
+  }
+
   export type UserProfileUpdateWithoutAcademicRankTypeInput = {
     id?: StringFieldUpdateOperationsInput | string
     code?: NullableStringFieldUpdateOperationsInput | string | null
@@ -676515,6 +683835,48 @@ export namespace Prisma {
     eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
   }
 
+  export type GuestTeachingRateUpdateWithoutAcademicRankTypeInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isForeign?: BoolFieldUpdateOperationsInput | boolean
+    ratePerPeriod?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    config?: GuestTeachingRateConfigUpdateOneRequiredWithoutRatesNestedInput
+    academicDegreeType?: DM_HocViUpdateOneWithoutGuestTeachingRateNestedInput
+  }
+
+  export type GuestTeachingRateUncheckedUpdateWithoutAcademicRankTypeInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    configId?: StringFieldUpdateOperationsInput | string
+    academicDegreeTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+    isForeign?: BoolFieldUpdateOperationsInput | boolean
+    ratePerPeriod?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+  }
+
+  export type GuestTeachingRateUncheckedUpdateManyWithoutAcademicRankTypeInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    configId?: StringFieldUpdateOperationsInput | string
+    academicDegreeTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+    isForeign?: BoolFieldUpdateOperationsInput | boolean
+    ratePerPeriod?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+  }
+
   export type UserProfileCreateManyAcademicDegreeTypeInput = {
     id?: string
     code?: string | null
@@ -676686,6 +684048,20 @@ export namespace Prisma {
     thesisExpert?: boolean
     eligiblePresident?: boolean
     eligibleSecretary?: boolean
+  }
+
+  export type GuestTeachingRateCreateManyAcademicDegreeTypeInput = {
+    id?: string
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    configId: string
+    academicRankTypeId?: string | null
+    isForeign?: boolean
+    ratePerPeriod: Decimal | DecimalJsLike | number | string
   }
 
   export type UserProfileUpdateWithoutAcademicDegreeTypeInput = {
@@ -677319,6 +684695,48 @@ export namespace Prisma {
     thesisExpert?: BoolFieldUpdateOperationsInput | boolean
     eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
     eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type GuestTeachingRateUpdateWithoutAcademicDegreeTypeInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isForeign?: BoolFieldUpdateOperationsInput | boolean
+    ratePerPeriod?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    config?: GuestTeachingRateConfigUpdateOneRequiredWithoutRatesNestedInput
+    academicRankType?: DM_HocHamUpdateOneWithoutGuestTeachingRateNestedInput
+  }
+
+  export type GuestTeachingRateUncheckedUpdateWithoutAcademicDegreeTypeInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    configId?: StringFieldUpdateOperationsInput | string
+    academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+    isForeign?: BoolFieldUpdateOperationsInput | boolean
+    ratePerPeriod?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+  }
+
+  export type GuestTeachingRateUncheckedUpdateManyWithoutAcademicDegreeTypeInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    configId?: StringFieldUpdateOperationsInput | string
+    academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+    isForeign?: BoolFieldUpdateOperationsInput | boolean
+    ratePerPeriod?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
   }
 
   export type UserProfileCreateManyEthnicityInput = {
@@ -678316,6 +685734,26 @@ export namespace Prisma {
     projectEnd?: Date | string | null
   }
 
+  export type GuestTeachingPaymentCreateManyHiringOrgInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    lecturerId: string
+    semesterId: string
+    totalPeriods?: number
+    ratePerPeriod: Decimal | DecimalJsLike | number | string
+    amount: Decimal | DecimalJsLike | number | string
+    status?: $Enums.PaymentStatus
+    paymentDate?: Date | string | null
+    transactionCode?: string | null
+    decisionRef?: string | null
+  }
+
   export type LecturerUpdateWithoutOrganizationInput = {
     id?: StringFieldUpdateOperationsInput | string
     code?: NullableStringFieldUpdateOperationsInput | string | null
@@ -678353,6 +685791,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutLecturerNestedInput
     personalWorkTags?: PersonalWorkTagUpdateManyWithoutLecturerNestedInput
     individualSchedules?: IndividualScheduleUpdateManyWithoutLecturerNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUpdateManyWithoutLecturerNestedInput
   }
 
   export type LecturerUncheckedUpdateWithoutOrganizationInput = {
@@ -678392,6 +685831,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutLecturerNestedInput
     personalWorkTags?: PersonalWorkTagUncheckedUpdateManyWithoutLecturerNestedInput
     individualSchedules?: IndividualScheduleUncheckedUpdateManyWithoutLecturerNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedUpdateManyWithoutLecturerNestedInput
   }
 
   export type LecturerUncheckedUpdateManyWithoutOrganizationInput = {
@@ -679497,6 +686937,66 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     type?: SurveyObjectTypeUpdatetypeInput | $Enums.SurveyObject[]
     trainingObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type GuestTeachingPaymentUpdateWithoutHiringOrgInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    totalPeriods?: IntFieldUpdateOperationsInput | number
+    ratePerPeriod?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    transactionCode?: NullableStringFieldUpdateOperationsInput | string | null
+    decisionRef?: NullableStringFieldUpdateOperationsInput | string | null
+    lecturer?: LecturerUpdateOneRequiredWithoutGuestTeachingPaymentsNestedInput
+    semester?: SemesterUpdateOneRequiredWithoutGuestTeachingPaymentsNestedInput
+  }
+
+  export type GuestTeachingPaymentUncheckedUpdateWithoutHiringOrgInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    lecturerId?: StringFieldUpdateOperationsInput | string
+    semesterId?: StringFieldUpdateOperationsInput | string
+    totalPeriods?: IntFieldUpdateOperationsInput | number
+    ratePerPeriod?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    transactionCode?: NullableStringFieldUpdateOperationsInput | string | null
+    decisionRef?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type GuestTeachingPaymentUncheckedUpdateManyWithoutHiringOrgInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    lecturerId?: StringFieldUpdateOperationsInput | string
+    semesterId?: StringFieldUpdateOperationsInput | string
+    totalPeriods?: IntFieldUpdateOperationsInput | number
+    ratePerPeriod?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    transactionCode?: NullableStringFieldUpdateOperationsInput | string | null
+    decisionRef?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type StudentCreateManyRegistrationAreaInput = {
@@ -695810,6 +703310,18 @@ export namespace Prisma {
     status?: $Enums.TrainingScoreStatus
   }
 
+  export type GuestTeachingRateConfigCreateManySchoolYearInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    name: string
+  }
+
   export type SemesterUpdateWithoutSchoolYearInput = {
     id?: StringFieldUpdateOperationsInput | string
     code?: NullableStringFieldUpdateOperationsInput | string | null
@@ -695841,6 +703353,7 @@ export namespace Prisma {
     availableTrainingTime?: AvailableTrainingTimeUpdateManyWithoutSemesterNestedInput
     studentSubjectScore?: StudentSubjectScoreUpdateManyWithoutSemesterNestedInput
     planTrainingPractice?: PlanTrainingPracticeUpdateManyWithoutSemesterNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUpdateManyWithoutSemesterNestedInput
   }
 
   export type SemesterUncheckedUpdateWithoutSchoolYearInput = {
@@ -695874,6 +703387,7 @@ export namespace Prisma {
     availableTrainingTime?: AvailableTrainingTimeUncheckedUpdateManyWithoutSemesterNestedInput
     studentSubjectScore?: StudentSubjectScoreUncheckedUpdateManyWithoutSemesterNestedInput
     planTrainingPractice?: PlanTrainingPracticeUncheckedUpdateManyWithoutSemesterNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedUpdateManyWithoutSemesterNestedInput
   }
 
   export type SemesterUncheckedUpdateManyWithoutSchoolYearInput = {
@@ -696207,6 +703721,44 @@ export namespace Prisma {
     studentId?: StringFieldUpdateOperationsInput | string
     score?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumTrainingScoreStatusFieldUpdateOperationsInput | $Enums.TrainingScoreStatus
+  }
+
+  export type GuestTeachingRateConfigUpdateWithoutSchoolYearInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    rates?: GuestTeachingRateUpdateManyWithoutConfigNestedInput
+  }
+
+  export type GuestTeachingRateConfigUncheckedUpdateWithoutSchoolYearInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    rates?: GuestTeachingRateUncheckedUpdateManyWithoutConfigNestedInput
+  }
+
+  export type GuestTeachingRateConfigUncheckedUpdateManyWithoutSchoolYearInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
   }
 
   export type SubjectClassCreateManySemesterInput = {
@@ -696573,6 +704125,26 @@ export namespace Prisma {
     isDayOff?: boolean
     startDate: Date | string
     endDate?: Date | string | null
+  }
+
+  export type GuestTeachingPaymentCreateManySemesterInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    lecturerId: string
+    hiringOrgId: string
+    totalPeriods?: number
+    ratePerPeriod: Decimal | DecimalJsLike | number | string
+    amount: Decimal | DecimalJsLike | number | string
+    status?: $Enums.PaymentStatus
+    paymentDate?: Date | string | null
+    transactionCode?: string | null
+    decisionRef?: string | null
   }
 
   export type SubjectClassUpdateWithoutSemesterInput = {
@@ -697783,6 +705355,66 @@ export namespace Prisma {
     isDayOff?: BoolFieldUpdateOperationsInput | boolean
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type GuestTeachingPaymentUpdateWithoutSemesterInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    totalPeriods?: IntFieldUpdateOperationsInput | number
+    ratePerPeriod?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    transactionCode?: NullableStringFieldUpdateOperationsInput | string | null
+    decisionRef?: NullableStringFieldUpdateOperationsInput | string | null
+    lecturer?: LecturerUpdateOneRequiredWithoutGuestTeachingPaymentsNestedInput
+    hiringOrg?: DM_DonViUpdateOneRequiredWithoutGuestTeachingPaymentsNestedInput
+  }
+
+  export type GuestTeachingPaymentUncheckedUpdateWithoutSemesterInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    lecturerId?: StringFieldUpdateOperationsInput | string
+    hiringOrgId?: StringFieldUpdateOperationsInput | string
+    totalPeriods?: IntFieldUpdateOperationsInput | number
+    ratePerPeriod?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    transactionCode?: NullableStringFieldUpdateOperationsInput | string | null
+    decisionRef?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type GuestTeachingPaymentUncheckedUpdateManyWithoutSemesterInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    lecturerId?: StringFieldUpdateOperationsInput | string
+    hiringOrgId?: StringFieldUpdateOperationsInput | string
+    totalPeriods?: IntFieldUpdateOperationsInput | number
+    ratePerPeriod?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    transactionCode?: NullableStringFieldUpdateOperationsInput | string | null
+    decisionRef?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type TrainingCourseCreateManyTrainingLanguageInput = {
@@ -716041,6 +723673,26 @@ export namespace Prisma {
     repeatType?: $Enums.ScheduleRepeatType
   }
 
+  export type GuestTeachingPaymentCreateManyLecturerInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    semesterId: string
+    hiringOrgId: string
+    totalPeriods?: number
+    ratePerPeriod: Decimal | DecimalJsLike | number | string
+    amount: Decimal | DecimalJsLike | number | string
+    status?: $Enums.PaymentStatus
+    paymentDate?: Date | string | null
+    transactionCode?: string | null
+    decisionRef?: string | null
+  }
+
   export type SubjectClassUpdateWithoutMainLecturerInput = {
     id?: StringFieldUpdateOperationsInput | string
     active?: BoolFieldUpdateOperationsInput | boolean
@@ -718073,6 +725725,122 @@ export namespace Prisma {
     repeatType?: EnumScheduleRepeatTypeFieldUpdateOperationsInput | $Enums.ScheduleRepeatType
   }
 
+  export type GuestTeachingPaymentUpdateWithoutLecturerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    totalPeriods?: IntFieldUpdateOperationsInput | number
+    ratePerPeriod?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    transactionCode?: NullableStringFieldUpdateOperationsInput | string | null
+    decisionRef?: NullableStringFieldUpdateOperationsInput | string | null
+    semester?: SemesterUpdateOneRequiredWithoutGuestTeachingPaymentsNestedInput
+    hiringOrg?: DM_DonViUpdateOneRequiredWithoutGuestTeachingPaymentsNestedInput
+  }
+
+  export type GuestTeachingPaymentUncheckedUpdateWithoutLecturerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    semesterId?: StringFieldUpdateOperationsInput | string
+    hiringOrgId?: StringFieldUpdateOperationsInput | string
+    totalPeriods?: IntFieldUpdateOperationsInput | number
+    ratePerPeriod?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    transactionCode?: NullableStringFieldUpdateOperationsInput | string | null
+    decisionRef?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type GuestTeachingPaymentUncheckedUpdateManyWithoutLecturerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    semesterId?: StringFieldUpdateOperationsInput | string
+    hiringOrgId?: StringFieldUpdateOperationsInput | string
+    totalPeriods?: IntFieldUpdateOperationsInput | number
+    ratePerPeriod?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    paymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    transactionCode?: NullableStringFieldUpdateOperationsInput | string | null
+    decisionRef?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type GuestTeachingRateCreateManyConfigInput = {
+    id?: string
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: string | null
+    academicRankTypeId?: string | null
+    academicDegreeTypeId?: string | null
+    isForeign?: boolean
+    ratePerPeriod: Decimal | DecimalJsLike | number | string
+  }
+
+  export type GuestTeachingRateUpdateWithoutConfigInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isForeign?: BoolFieldUpdateOperationsInput | boolean
+    ratePerPeriod?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    academicRankType?: DM_HocHamUpdateOneWithoutGuestTeachingRateNestedInput
+    academicDegreeType?: DM_HocViUpdateOneWithoutGuestTeachingRateNestedInput
+  }
+
+  export type GuestTeachingRateUncheckedUpdateWithoutConfigInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+    academicDegreeTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+    isForeign?: BoolFieldUpdateOperationsInput | boolean
+    ratePerPeriod?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+  }
+
+  export type GuestTeachingRateUncheckedUpdateManyWithoutConfigInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+    academicDegreeTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+    isForeign?: BoolFieldUpdateOperationsInput | boolean
+    ratePerPeriod?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+  }
+
   export type LecturerCreateManyLecturerTypeInput = {
     id?: string
     code?: string | null
@@ -718086,7 +725854,7 @@ export namespace Prisma {
     lectureID?: string | null
     serviceDate?: Date | string | null
     userProfileId: string
-    organizationId: string
+    organizationId?: string | null
   }
 
   export type LecturerHistoryCreateManyLecturerTypeInput = {
@@ -718120,7 +725888,7 @@ export namespace Prisma {
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
-    organization?: DM_DonViUpdateOneRequiredWithoutLecturersNestedInput
+    organization?: DM_DonViUpdateOneWithoutLecturersNestedInput
     mainSubjectClasses?: SubjectClassUpdateManyWithoutMainLecturerNestedInput
     extraSubjectClasses?: SubjectClassUpdateManyWithoutExtraLecturerNestedInput
     enterGradeClasses?: SubjectClassUpdateManyWithoutEnterGradeLecturerNestedInput
@@ -718144,6 +725912,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutLecturerNestedInput
     personalWorkTags?: PersonalWorkTagUpdateManyWithoutLecturerNestedInput
     individualSchedules?: IndividualScheduleUpdateManyWithoutLecturerNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUpdateManyWithoutLecturerNestedInput
   }
 
   export type LecturerUncheckedUpdateWithoutLecturerTypeInput = {
@@ -718159,7 +725928,7 @@ export namespace Prisma {
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfileId?: StringFieldUpdateOperationsInput | string
-    organizationId?: StringFieldUpdateOperationsInput | string
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
     mainSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutMainLecturerNestedInput
     extraSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutExtraLecturerNestedInput
     enterGradeClasses?: SubjectClassUncheckedUpdateManyWithoutEnterGradeLecturerNestedInput
@@ -718183,6 +725952,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutLecturerNestedInput
     personalWorkTags?: PersonalWorkTagUncheckedUpdateManyWithoutLecturerNestedInput
     individualSchedules?: IndividualScheduleUncheckedUpdateManyWithoutLecturerNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedUpdateManyWithoutLecturerNestedInput
   }
 
   export type LecturerUncheckedUpdateManyWithoutLecturerTypeInput = {
@@ -718198,7 +725968,7 @@ export namespace Prisma {
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfileId?: StringFieldUpdateOperationsInput | string
-    organizationId?: StringFieldUpdateOperationsInput | string
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type LecturerHistoryUpdateWithoutLecturerTypeInput = {
@@ -726098,7 +733868,7 @@ export namespace Prisma {
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
-    organization?: DM_DonViUpdateOneRequiredWithoutLecturersNestedInput
+    organization?: DM_DonViUpdateOneWithoutLecturersNestedInput
     lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
     mainSubjectClasses?: SubjectClassUpdateManyWithoutMainLecturerNestedInput
     extraSubjectClasses?: SubjectClassUpdateManyWithoutExtraLecturerNestedInput
@@ -726122,6 +733892,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutLecturerNestedInput
     personalWorkTags?: PersonalWorkTagUpdateManyWithoutLecturerNestedInput
     individualSchedules?: IndividualScheduleUpdateManyWithoutLecturerNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUpdateManyWithoutLecturerNestedInput
   }
 
   export type LecturerUncheckedUpdateWithoutEvaluationCriterionReviewsInput = {
@@ -726137,7 +733908,7 @@ export namespace Prisma {
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfileId?: StringFieldUpdateOperationsInput | string
-    organizationId?: StringFieldUpdateOperationsInput | string
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
     lecturerTypeId?: StringFieldUpdateOperationsInput | string
     mainSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutMainLecturerNestedInput
     extraSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutExtraLecturerNestedInput
@@ -726161,6 +733932,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutLecturerNestedInput
     personalWorkTags?: PersonalWorkTagUncheckedUpdateManyWithoutLecturerNestedInput
     individualSchedules?: IndividualScheduleUncheckedUpdateManyWithoutLecturerNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedUpdateManyWithoutLecturerNestedInput
   }
 
   export type LecturerUncheckedUpdateManyWithoutEvaluationCriterionReviewsInput = {
@@ -726176,7 +733948,7 @@ export namespace Prisma {
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfileId?: StringFieldUpdateOperationsInput | string
-    organizationId?: StringFieldUpdateOperationsInput | string
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
     lecturerTypeId?: StringFieldUpdateOperationsInput | string
   }
 
@@ -728060,6 +735832,7 @@ export namespace Prisma {
     thirdTrainingMajors?: TrainingMajorUpdateManyWithoutThirdOrganizationNestedInput
     researchProjects?: ResearchProjectUpdateManyWithoutOrganizationNestedInput
     thesisProjects?: ThesisProjectUpdateManyWithoutOrganizationNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUpdateManyWithoutHiringOrgNestedInput
   }
 
   export type DM_DonViUncheckedUpdateWithoutSurveyObjectTypesInput = {
@@ -728102,6 +735875,7 @@ export namespace Prisma {
     thirdTrainingMajors?: TrainingMajorUncheckedUpdateManyWithoutThirdOrganizationNestedInput
     researchProjects?: ResearchProjectUncheckedUpdateManyWithoutOrganizationNestedInput
     thesisProjects?: ThesisProjectUncheckedUpdateManyWithoutOrganizationNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedUpdateManyWithoutHiringOrgNestedInput
   }
 
   export type DM_DonViUncheckedUpdateManyWithoutSurveyObjectTypesInput = {
@@ -729196,7 +736970,7 @@ export namespace Prisma {
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
-    organization?: DM_DonViUpdateOneRequiredWithoutLecturersNestedInput
+    organization?: DM_DonViUpdateOneWithoutLecturersNestedInput
     lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
     mainSubjectClasses?: SubjectClassUpdateManyWithoutMainLecturerNestedInput
     extraSubjectClasses?: SubjectClassUpdateManyWithoutExtraLecturerNestedInput
@@ -729220,6 +736994,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutLecturerNestedInput
     personalWorkTags?: PersonalWorkTagUpdateManyWithoutLecturerNestedInput
     individualSchedules?: IndividualScheduleUpdateManyWithoutLecturerNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUpdateManyWithoutLecturerNestedInput
   }
 
   export type LecturerUncheckedUpdateWithoutClusterSurveyInput = {
@@ -729235,7 +737010,7 @@ export namespace Prisma {
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfileId?: StringFieldUpdateOperationsInput | string
-    organizationId?: StringFieldUpdateOperationsInput | string
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
     lecturerTypeId?: StringFieldUpdateOperationsInput | string
     mainSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutMainLecturerNestedInput
     extraSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutExtraLecturerNestedInput
@@ -729259,6 +737034,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutLecturerNestedInput
     personalWorkTags?: PersonalWorkTagUncheckedUpdateManyWithoutLecturerNestedInput
     individualSchedules?: IndividualScheduleUncheckedUpdateManyWithoutLecturerNestedInput
+    guestTeachingPayments?: GuestTeachingPaymentUncheckedUpdateManyWithoutLecturerNestedInput
   }
 
   export type LecturerUncheckedUpdateManyWithoutClusterSurveyInput = {
@@ -729274,7 +737050,7 @@ export namespace Prisma {
     lectureID?: NullableStringFieldUpdateOperationsInput | string | null
     serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     userProfileId?: StringFieldUpdateOperationsInput | string
-    organizationId?: StringFieldUpdateOperationsInput | string
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
     lecturerTypeId?: StringFieldUpdateOperationsInput | string
   }
 

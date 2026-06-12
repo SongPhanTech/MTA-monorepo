@@ -2,6 +2,7 @@ import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
 import type { Prisma } from "@workspace/db"
 import { postDMNhanViens, putDMNhanViens } from "@workspace/libs/api/system"
 import {
+  parseSheetGuestLecturer,
   parseSheetHeQuanSu,
   parseSheetInternship,
   parseSheetLecturer,
@@ -501,6 +502,432 @@ app.openapi(importLecturer, async (c) => {
   return c.json(
     {
       message: `Nhập giảng viên thành công: ${successCount}/${data.lecturers.length}`,
+      time: Date.now() - start,
+    },
+    200
+  )
+})
+
+const importGuestLecturer = createRoute({
+  operationId: "import-guest-lecturer",
+  tags: ["Nhập dữ liệu"],
+  path: "/import-guest-lecturer",
+  method: "post",
+  summary: "Import giảng viên mời giảng (ngoài học viện) Excel",
+  description: `Nhập danh sách giảng viên mời giảng (ngoài học viện) từ file Excel.
+
+**Khác import GV thường:** không yêu cầu Khoa/Bộ môn (organizationId = null), bắt buộc thông tin ngân hàng, loại giảng viên phải là loại ngoài (isExternal = true).
+
+**Bảng dữ liệu nguồn:** Lecturer, UserProfile.
+
+**Tham số:** file, timeout (giây, mặc định 30).`,
+  request: {
+    body: {
+      content: {
+        "multipart/form-data": {
+          schema: UploadExcelModel.extend({
+            timeout: z.coerce
+              .number()
+              .default(30)
+              .openapi(fieldDesc("Timeout transaction (giây).", 30)),
+          }),
+        },
+      },
+    },
+  },
+  responses: {
+    200: {
+      description: "Import successfully",
+      content: {
+        "application/json": {
+          schema: ImportJobResponseSchema,
+        },
+      },
+    },
+    400: {
+      description: "Invalid file type",
+      content: {
+        "application/json": {
+          schema: ImportErrorResponseSchema,
+        },
+      },
+    },
+  },
+})
+
+app.openapi(importGuestLecturer, async (c) => {
+  const { file, timeout } = c.req.valid("form")
+  const start = Date.now()
+
+  const buf = await file.arrayBuffer()
+
+  const externalLecturerTypes = await prisma.lecturerType.findMany({
+    where: { isExternal: true },
+    select: { name: true },
+  })
+  const externalTypeNames = new Set(externalLecturerTypes.map(({ name }) => name))
+
+  const data = parseSheetGuestLecturer(buf, undefined, externalTypeNames)
+
+  if (data.errors.length) {
+    return c.json({ message: "Lỗi khi đọc file", errors: data.errors }, 400)
+  }
+
+  const genderMap = await buildGenderMapOrThrow(
+    prisma,
+    data.lecturers.map(({ gender }) => gender)
+  )
+
+  const lecturerTypeMap = await buildLecturerTypeMapOrThrow(
+    prisma,
+    data.lecturers.map(({ lecturerType }) => lecturerType)
+  )
+
+  const nonExternal = Array.from(
+    new Set(data.lecturers.map(({ lecturerType }) => lecturerType))
+  ).filter((name) => !externalTypeNames.has(name))
+  if (nonExternal.length) {
+    return c.json(
+      {
+        message: "Loại giảng viên không phải loại mời giảng (ngoài học viện)",
+        errors: nonExternal,
+      },
+      400
+    )
+  }
+
+  const degreeTypeMap = await buildDegreeTypeMapOrThrow(
+    prisma,
+    data.lecturers.map(({ degreeType }) => degreeType)
+  )
+
+  const degreeRankTypeMap = await buildDegreeRankTypeMapOrThrow(
+    prisma,
+    data.lecturers.map(({ degreeRankType }) => degreeRankType)
+  )
+
+  const existingProfiles = await prisma.userProfile.findMany({
+    where: {
+      idCardNumber: { in: data.lecturers.map((lecturer) => lecturer.idCardNumber) },
+    },
+    select: { id: true, idCardNumber: true },
+  })
+  const existingProfileMap = new Map(
+    existingProfiles.map(({ idCardNumber, id }) => [idCardNumber, id])
+  )
+
+  const existingLecturer = await prisma.lecturer.findMany({
+    where: { code: { in: data.lecturers.map((lecturer) => lecturer.code) } },
+    select: {
+      id: true,
+      code: true,
+      userProfileId: true,
+      userProfile: { select: { idCardNumber: true } },
+    },
+  })
+  const existingLecturerMap = new Map(
+    existingLecturer.map(({ code, id, userProfileId, userProfile }) => [
+      code,
+      { id, userProfileId, idCardNumber: userProfile.idCardNumber },
+    ])
+  )
+
+  const existingLecturerByCCCD = await prisma.lecturer.findMany({
+    where: {
+      userProfile: {
+        idCardNumber: { in: data.lecturers.map((lecturer) => lecturer.idCardNumber) },
+      },
+    },
+    select: {
+      id: true,
+      code: true,
+      userProfileId: true,
+      userProfile: { select: { idCardNumber: true } },
+    },
+  })
+  const existingLecturerByCCCDMap = new Map(
+    existingLecturerByCCCD
+      .filter(({ userProfile }) => userProfile.idCardNumber)
+      .map(({ code, id, userProfileId, userProfile }) => [
+        userProfile.idCardNumber,
+        { id, code, userProfileId },
+      ])
+  )
+
+  const duplicateCode: string[] = []
+  for (const l of data.lecturers) {
+    const existing = existingLecturerMap.get(l.code)
+    if (existing && existing.idCardNumber && existing.idCardNumber !== l.idCardNumber) {
+      duplicateCode.push(l.code)
+    }
+  }
+  if (duplicateCode.length) {
+    return c.json({ message: "Mã giảng viên đã tồn tại", errors: duplicateCode }, 400)
+  }
+
+  const cccdCount = new Map<string, string[]>()
+  for (const l of data.lecturers) {
+    if (!l.idCardNumber) continue
+    const codes = cccdCount.get(l.idCardNumber) ?? []
+    codes.push(l.code)
+    cccdCount.set(l.idCardNumber, codes)
+  }
+  const duplicateCCCD = [...cccdCount.entries()]
+    .filter(([, codes]) => codes.length > 1)
+    .map(([cccd, codes]) => `CCCD ${cccd} bị trùng ở mã GV: ${codes.join(", ")}`)
+  if (duplicateCCCD.length) {
+    return c.json({ message: "Số CCCD bị trùng trong file Excel", errors: duplicateCCCD }, 400)
+  }
+
+  const importErrors: { code: string; name: string; error: string }[] = []
+
+  try {
+    await prisma.$transaction(
+      async (tx) => {
+        for (const lecturer of data.lecturers) {
+          const lecturerData: Prisma.LecturerCreateInput = {
+            from: new Date(),
+            code: lecturer.code,
+            lecturerType: {
+              connect: { id: lecturerTypeMap.get(lecturer.lecturerType) },
+            },
+            userProfile: {},
+            description: lecturer.description,
+          }
+
+          const profileData: Prisma.UserProfileUncheckedCreateWithoutEducationAndTrainingInput = {
+            ...splitFullName(lecturer.fullname),
+            bLaGiangVien: true,
+            bLaCanBoNhanVien: true,
+            dateOfBirth: lecturer.dateOfBirth,
+            genderId: genderMap.get(lecturer.gender),
+            academicDegreeTypeId: degreeTypeMap.get(lecturer.degreeType ?? ""),
+            academicRankTypeId: degreeRankTypeMap.get(lecturer.degreeRankType ?? ""),
+            currentAddress: lecturer.currentAddress,
+            phoneNumber: lecturer.phoneNumber,
+            email: lecturer.email,
+            idCardNumber: lecturer.idCardNumber,
+            bankName: lecturer.bankName,
+            bankAccountNumber: lecturer.bankAccountNumber,
+          }
+
+          const existingProfileId = existingProfileMap.get(lecturer.idCardNumber)
+          try {
+            if (existingProfileId) {
+              const existing = existingLecturerMap.get(lecturer.code)
+              if (existing) {
+                const existingLecturerData = await tx.lecturer.findUnique({
+                  where: { id: existing.id },
+                  include: { userProfile: true },
+                })
+
+                if (existingLecturerData) {
+                  const validationErrors: string[] = []
+                  const existingProfile = existingLecturerData.userProfile
+                  if (
+                    existingProfile.firstName &&
+                    profileData.firstName !== existingProfile.firstName
+                  ) {
+                    validationErrors.push(
+                      `Không được đổi Tên (hiện tại: "${existingProfile.firstName}")`
+                    )
+                  }
+                  if (
+                    existingProfile.lastName &&
+                    profileData.lastName !== existingProfile.lastName
+                  ) {
+                    validationErrors.push(
+                      `Không được đổi Họ và đệm (hiện tại: "${existingProfile.lastName}")`
+                    )
+                  }
+                  if (
+                    existingProfile.phoneNumber &&
+                    profileData.phoneNumber !== existingProfile.phoneNumber
+                  ) {
+                    validationErrors.push(
+                      `Không được đổi Số điện thoại (hiện tại: "${existingProfile.phoneNumber}")`
+                    )
+                  }
+                  if (validationErrors.length > 0) {
+                    importErrors.push({
+                      code: lecturer.code,
+                      name: lecturer.fullname,
+                      error: validationErrors.join("; "),
+                    })
+                    continue
+                  }
+                }
+              }
+              const payload = {
+                Id: existingProfileId,
+                sMa: lecturer.code,
+                bLaGiangVien: true,
+                bLaCanBoNhanVien: true,
+                dNgaySinh: lecturer.dateOfBirth
+                  ? new Date(lecturer.dateOfBirth)?.toISOString()
+                  : null,
+                sCCCD: lecturer.idCardNumber,
+                sHoVaDem: profileData.lastName,
+                sTen: profileData.firstName,
+                sTenDayDu: lecturer.fullname,
+                sSDTDiDong: lecturer.phoneNumber ?? "",
+                sEmail: lecturer.email,
+                sDM_GioiTinhId: lecturer.gender ? genderMap.get(lecturer.gender) : null,
+              }
+
+              const res = await putDMNhanViens(payload, {
+                headers: {
+                  "x-clientid": process.env.KEYCLOAK_CLIENT_ID_LMS || "",
+                  "x-clientsecret": process.env.KEYCLOAK_CLIENT_SECRET_LMS || "",
+                },
+              })
+
+              if (existing) {
+                if (res.status === 200) {
+                  await tx.lecturer.update({
+                    where: { id: existing.id },
+                    data: {
+                      ...lecturerData,
+                      userProfile: { update: profileData },
+                    },
+                  })
+                } else {
+                  const extra = res.data?.extra as ErrorExtra | undefined
+                  const errMsg =
+                    extra?.message ||
+                    [extra?.code, extra?.data].join(" ") ||
+                    `LSB API error: ${res.status}`
+                  importErrors.push({ code: lecturer.code, name: lecturer.fullname, error: errMsg })
+                }
+              } else {
+                const lecturerByCCCD = existingLecturerByCCCDMap.get(lecturer.idCardNumber)
+                if (lecturerByCCCD) {
+                  importErrors.push({
+                    code: lecturer.code,
+                    name: lecturer.fullname,
+                    error: `CCCD "${lecturer.idCardNumber}" đã liên kết với giảng viên mã "${lecturerByCCCD.code}". Không thể tạo giảng viên mới hoặc đổi mã GV với CCCD này.`,
+                  })
+                  continue
+                }
+
+                if (res.status === 200) {
+                  if (typeof res.data !== "string" || !res.data) {
+                    importErrors.push({
+                      code: lecturer.code,
+                      name: lecturer.fullname,
+                      error: `LSB trả về dữ liệu không hợp lệ (mã GV: ${lecturer.code})`,
+                    })
+                  } else {
+                    await tx.lecturer.create({
+                      data: {
+                        ...lecturerData,
+                        userProfile: {
+                          connectOrCreate: {
+                            where: { idCardNumber: lecturer.idCardNumber },
+                            create: { id: res.data, ...profileData },
+                          },
+                        },
+                      },
+                    })
+                  }
+                } else {
+                  const extra = res.data?.extra as ErrorExtra | undefined
+                  const errMsg =
+                    extra?.message ||
+                    [extra?.code, extra?.data].join(" ") ||
+                    `LSB API error: ${res.status}`
+                  importErrors.push({ code: lecturer.code, name: lecturer.fullname, error: errMsg })
+                }
+              }
+            } else {
+              const payload = {
+                sMa: lecturer.idCardNumber,
+                bLaGiangVien: true,
+                bLaCanBoNhanVien: true,
+                bLaTaiKhoan: true,
+                dNgaySinh: lecturer.dateOfBirth
+                  ? new Date(lecturer.dateOfBirth)?.toISOString()
+                  : null,
+                sCCCD: lecturer.idCardNumber,
+                sHoVaDem: profileData.lastName,
+                sTen: profileData.firstName,
+                sTenDayDu: lecturer.fullname,
+                sSDTDiDong: lecturer.phoneNumber ?? "",
+                sEmail: lecturer.email,
+                sDM_GioiTinhId: lecturer.gender ? genderMap.get(lecturer.gender) : null,
+              }
+
+              const res = await postDMNhanViens(payload, {
+                headers: {
+                  "x-clientid": process.env.KEYCLOAK_CLIENT_ID_LMS || "",
+                  "x-clientsecret": process.env.KEYCLOAK_CLIENT_SECRET_LMS || "",
+                },
+              })
+
+              if (res.status === 200) {
+                if (typeof res.data !== "string" || !res.data) {
+                  importErrors.push({
+                    code: lecturer.code,
+                    name: lecturer.fullname,
+                    error: `LSB trả về dữ liệu không hợp lệ (mã GV: ${lecturer.code})`,
+                  })
+                } else {
+                  await tx.lecturer.create({
+                    data: {
+                      ...lecturerData,
+                      userProfile: {
+                        connectOrCreate: {
+                          where: { id: res.data },
+                          create: { id: res.data, ...profileData },
+                        },
+                      },
+                    },
+                  })
+                }
+              } else {
+                const extra = res.data?.extra as ErrorExtra | undefined
+                const errMsg =
+                  extra?.message ||
+                  [extra?.code, extra?.data].join(" ") ||
+                  `LSB API error: ${res.status}`
+                importErrors.push({ code: lecturer.code, name: lecturer.fullname, error: errMsg })
+              }
+            }
+          } catch (error) {
+            const errMsg = error instanceof Error ? error.message : String(error)
+            importErrors.push({ code: lecturer.code, name: lecturer.fullname, error: errMsg })
+          }
+        }
+
+        if (importErrors.length > 0) {
+          throw new Error(JSON.stringify(importErrors))
+        }
+      },
+      { timeout: timeout * 1000 }
+    )
+  } catch (error) {
+    if (error instanceof Error && error.message.startsWith("[")) {
+      try {
+        const errors = JSON.parse(error.message) as { code: string; name: string; error: string }[]
+        return c.json(
+          { message: "Có lỗi xảy ra khi import - Không lưu dữ liệu nào", failed: errors },
+          400
+        )
+      } catch {}
+    }
+    console.error("[IMPORT GUEST LECTURER ERROR]", error)
+    return c.json(
+      {
+        message: `Có lỗi xảy ra khi import: ${error instanceof Error ? error.message : String(error)}`,
+      },
+      400
+    )
+  }
+
+  const successCount = data.lecturers.length
+  return c.json(
+    {
+      message: `Nhập giảng viên mời giảng thành công: ${successCount}/${data.lecturers.length}`,
       time: Date.now() - start,
     },
     200

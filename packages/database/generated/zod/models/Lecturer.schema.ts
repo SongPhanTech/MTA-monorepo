@@ -35,7 +35,7 @@ const baseSchemaWithoutDefaults = z.object({
 ).strict();
 const relationSchema = z.object({
     userProfile: z.record(z.string(), z.unknown()),
-    organization: z.record(z.string(), z.unknown()),
+    organization: z.record(z.string(), z.unknown()).optional(),
     lecturerType: z.record(z.string(), z.unknown()),
     mainSubjectClasses: z.array(z.unknown()).optional(),
     extraSubjectClasses: z.array(z.unknown()).optional(),
@@ -60,11 +60,12 @@ const relationSchema = z.object({
     notifications: z.array(z.unknown()).optional(),
     personalWorkTags: z.array(z.unknown()).optional(),
     individualSchedules: z.array(z.unknown()).optional(),
+    guestTeachingPayments: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({
     userProfileId: z.string().uuid(),
-    organizationId: z.string().uuid(),
+    organizationId: z.string().uuid().nullish(),
     lecturerTypeId: z.string(),
 }
 );

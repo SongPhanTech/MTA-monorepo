@@ -394,6 +394,7 @@ model SchoolYear extends Base {
   studentAcademicDecision StudentAcademicDecision[]
   evaluationPeriod        EvaluationPeriod[]
   schoolYearTrainingScore SchoolYearTrainingScore[]
+  guestTeachingRateConfig GuestTeachingRateConfig[]
 
   @@schema("ql-dao-tao")
 }
@@ -435,6 +436,7 @@ model Semester extends Base {
   availableTrainingTime   AvailableTrainingTime[]
   studentSubjectScore     StudentSubjectScore[]
   planTrainingPractice    PlanTrainingPractice[]
+  guestTeachingPayments   GuestTeachingPayment[]
 
   @@schema("ql-dao-tao")
 }

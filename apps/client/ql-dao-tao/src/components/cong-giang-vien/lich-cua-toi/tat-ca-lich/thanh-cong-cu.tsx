@@ -35,18 +35,10 @@ const ThanhCongCuTatCaLich = ({
   onDoiDangXem,
 }: ThanhCongCuTatCaLichProps) => {
   const ariaLui =
-    cheDoHienThi === "thang"
-      ? "Tháng trước"
-      : cheDoHienThi === "tuan"
-        ? "Tuần trước"
-        : "Ngày trước"
+    cheDoHienThi === "thang" ? "Tháng trước" : cheDoHienThi === "tuan" ? "Tuần trước" : "Ngày trước"
 
   const ariaTien =
-    cheDoHienThi === "thang"
-      ? "Tháng sau"
-      : cheDoHienThi === "tuan"
-        ? "Tuần sau"
-        : "Ngày sau"
+    cheDoHienThi === "thang" ? "Tháng sau" : cheDoHienThi === "tuan" ? "Tuần sau" : "Ngày sau"
 
   return (
     <div className="flex flex-wrap items-center justify-between gap-3 border-b border-gray-100 pb-3">

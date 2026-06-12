@@ -45,6 +45,7 @@ const relationSchema = z.object({
     profiles: z.array(z.unknown()).optional(),
     hocVi: z.array(z.unknown()).optional(),
     expertProfile: z.array(z.unknown()).optional(),
+    guestTeachingRate: z.array(z.unknown()).optional(),
 }
 );
 

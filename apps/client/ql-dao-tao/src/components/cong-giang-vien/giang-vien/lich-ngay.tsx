@@ -26,9 +26,7 @@ const LichNgay = ({ suKien, isLoading }: LichNgayProps) => {
           item.caNgay,
           28
         )
-        const phuDe = item.diaDiem
-          ? `${item.thoiGian} · ${item.diaDiem}`
-          : item.thoiGian
+        const phuDe = item.diaDiem ? `${item.thoiGian} · ${item.diaDiem}` : item.thoiGian
 
         return { ...item, topPx, heightPx, phuDe }
       }),
@@ -94,7 +92,9 @@ const LichNgay = ({ suKien, isLoading }: LichNgayProps) => {
                   <p className="m-0 truncate text-[11px] font-semibold leading-tight text-gray-800">
                     {item.tieuDe}
                   </p>
-                  <p className="m-0 truncate text-[10px] leading-tight text-gray-500">{item.phuDe}</p>
+                  <p className="m-0 truncate text-[10px] leading-tight text-gray-500">
+                    {item.phuDe}
+                  </p>
                 </div>
               ))
             )}

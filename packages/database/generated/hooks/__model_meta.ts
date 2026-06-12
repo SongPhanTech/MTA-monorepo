@@ -5379,6 +5379,12 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'academicRankType',
+                }, guestTeachingRate: {
+                    name: "guestTeachingRate",
+                    type: "GuestTeachingRate",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'academicRankType',
                 },
             }, uniqueConstraints: {
                 Id: {
@@ -5470,6 +5476,12 @@ const metadata: ModelMeta = {
                 }, expertProfile: {
                     name: "expertProfile",
                     type: "ExpertProfile",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'academicDegreeType',
+                }, guestTeachingRate: {
+                    name: "guestTeachingRate",
+                    type: "GuestTeachingRate",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'academicDegreeType',
@@ -5868,6 +5880,12 @@ const metadata: ModelMeta = {
                     isArray: true,
                     backLink: 'organizations',
                     isRelationOwner: true,
+                }, guestTeachingPayments: {
+                    name: "guestTeachingPayments",
+                    type: "GuestTeachingPayment",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'hiringOrg',
                 },
             }, uniqueConstraints: {
                 Id: {
@@ -9156,6 +9174,12 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'schoolYear',
+                }, guestTeachingRateConfig: {
+                    name: "guestTeachingRateConfig",
+                    type: "GuestTeachingRateConfig",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'schoolYear',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -9332,6 +9356,12 @@ const metadata: ModelMeta = {
                 }, planTrainingPractice: {
                     name: "planTrainingPractice",
                     type: "PlanTrainingPractice",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'semester',
+                }, guestTeachingPayments: {
+                    name: "guestTeachingPayments",
+                    type: "GuestTeachingPayment",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'semester',
@@ -15937,12 +15967,14 @@ const metadata: ModelMeta = {
                     name: "organization",
                     type: "DM_DonVi",
                     isDataModel: true,
+                    isOptional: true,
                     backLink: 'lecturers',
                     isRelationOwner: true,
                     foreignKeyMapping: { "Id": "organizationId" },
                 }, organizationId: {
                     name: "organizationId",
                     type: "String",
+                    isOptional: true,
                     isForeignKey: true,
                     relationField: 'organization',
                 }, lecturerType: {
@@ -16096,6 +16128,12 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'lecturer',
+                }, guestTeachingPayments: {
+                    name: "guestTeachingPayments",
+                    type: "GuestTeachingPayment",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'lecturer',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -16222,6 +16260,283 @@ const metadata: ModelMeta = {
                 },
             },
         },
+        guestTeachingRateConfig: {
+            name: 'GuestTeachingRateConfig', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$GuestTeachingRateConfig$createdBy,
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, schoolYear: {
+                    name: "schoolYear",
+                    type: "SchoolYear",
+                    isDataModel: true,
+                    backLink: 'guestTeachingRateConfig',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "schoolYearId" },
+                }, schoolYearId: {
+                    name: "schoolYearId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'schoolYear',
+                }, rates: {
+                    name: "rates",
+                    type: "GuestTeachingRate",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'config',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, schoolYearId: {
+                    name: "schoolYearId",
+                    fields: ["schoolYearId"]
+                },
+            },
+        },
+        guestTeachingRate: {
+            name: 'GuestTeachingRate', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$GuestTeachingRate$createdBy,
+                }, config: {
+                    name: "config",
+                    type: "GuestTeachingRateConfig",
+                    isDataModel: true,
+                    backLink: 'rates',
+                    isRelationOwner: true,
+                    onDeleteAction: 'Cascade',
+                    foreignKeyMapping: { "id": "configId" },
+                }, configId: {
+                    name: "configId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'config',
+                }, academicRankType: {
+                    name: "academicRankType",
+                    type: "DM_HocHam",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'guestTeachingRate',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "Id": "academicRankTypeId" },
+                }, academicRankTypeId: {
+                    name: "academicRankTypeId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'academicRankType',
+                }, academicDegreeType: {
+                    name: "academicDegreeType",
+                    type: "DM_HocVi",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'guestTeachingRate',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "Id": "academicDegreeTypeId" },
+                }, academicDegreeTypeId: {
+                    name: "academicDegreeTypeId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'academicDegreeType',
+                }, isForeign: {
+                    name: "isForeign",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                }, ratePerPeriod: {
+                    name: "ratePerPeriod",
+                    type: "Decimal",
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, configId_academicRankTypeId_academicDegreeTypeId_isForeign: {
+                    name: "configId_academicRankTypeId_academicDegreeTypeId_isForeign",
+                    fields: ["configId", "academicRankTypeId", "academicDegreeTypeId", "isForeign"]
+                },
+            },
+        },
+        guestTeachingPayment: {
+            name: 'GuestTeachingPayment', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, createdBy: {
+                    name: "createdBy",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    defaultValueProvider: $default$GuestTeachingPayment$createdBy,
+                }, lecturer: {
+                    name: "lecturer",
+                    type: "Lecturer",
+                    isDataModel: true,
+                    backLink: 'guestTeachingPayments',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "lecturerId" },
+                }, lecturerId: {
+                    name: "lecturerId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'lecturer',
+                }, semester: {
+                    name: "semester",
+                    type: "Semester",
+                    isDataModel: true,
+                    backLink: 'guestTeachingPayments',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "semesterId" },
+                }, semesterId: {
+                    name: "semesterId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'semester',
+                }, hiringOrg: {
+                    name: "hiringOrg",
+                    type: "DM_DonVi",
+                    isDataModel: true,
+                    backLink: 'guestTeachingPayments',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "Id": "hiringOrgId" },
+                }, hiringOrgId: {
+                    name: "hiringOrgId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'hiringOrg',
+                }, totalPeriods: {
+                    name: "totalPeriods",
+                    type: "Int",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                }, ratePerPeriod: {
+                    name: "ratePerPeriod",
+                    type: "Decimal",
+                }, amount: {
+                    name: "amount",
+                    type: "Decimal",
+                }, status: {
+                    name: "status",
+                    type: "PaymentStatus",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, paymentDate: {
+                    name: "paymentDate",
+                    type: "DateTime",
+                    isOptional: true,
+                }, transactionCode: {
+                    name: "transactionCode",
+                    type: "String",
+                    isOptional: true,
+                }, decisionRef: {
+                    name: "decisionRef",
+                    type: "String",
+                    isOptional: true,
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, lecturerId_semesterId_hiringOrgId: {
+                    name: "lecturerId_semesterId_hiringOrgId",
+                    fields: ["lecturerId", "semesterId", "hiringOrgId"]
+                },
+            },
+        },
         lecturerType: {
             name: 'LecturerType', fields: {
                 id: {
@@ -16262,6 +16577,10 @@ const metadata: ModelMeta = {
                 }, name: {
                     name: "name",
                     type: "String",
+                }, isExternal: {
+                    name: "isExternal",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, lecturers: {
                     name: "lecturers",
                     type: "Lecturer",
@@ -28133,6 +28452,7 @@ const metadata: ModelMeta = {
     deleteCascade: {
         subjectVersion: ['SubjectInGroup'],
         equivalencyGroup: ['SubjectInGroup'],
+        guestTeachingRateConfig: ['GuestTeachingRate'],
         scoreLinkSubjectVersion: ['ScoreLinkStudent'],
         note: ['NoteReminder'],
         evaluationPeriod: ['StandardPeriod', 'EvaluationCouncil'],
@@ -28625,6 +28945,18 @@ function $default$Lecturer$createdBy(user: any): unknown {
 }
 
 function $default$LecturerHistory$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$GuestTeachingRateConfig$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$GuestTeachingRate$createdBy(user: any): unknown {
+    return user?.id;
+}
+
+function $default$GuestTeachingPayment$createdBy(user: any): unknown {
     return user?.id;
 }
 
