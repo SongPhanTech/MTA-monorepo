@@ -93,7 +93,7 @@ const useTrangChuGiangVien = () => {
         maLop: item.code ?? "",
         tenLop: item.name ?? "",
         siSo: item._count?.students ?? 0,
-        trangThai: item.graduated ? "tot_nghiep" : "dang_hoc",
+        classType: item.classType,
       })),
     [lecturer?.manageFixedClass]
   )

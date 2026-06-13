@@ -22,13 +22,15 @@ export interface LopMonHocRow {
   trangThai: TrangThaiLop
 }
 
+import type { FixedClassType } from "@workspace/db/client"
+
 /** Dòng dữ liệu cho bảng Lớp quản lý. */
 export interface LopQuanLyRow {
   id: string
   maLop: string
   tenLop: string
   siSo: number
-  trangThai: TrangThaiLop
+  classType: FixedClassType
 }
 
 /** Thống kê nhanh hiển thị trên các thẻ đầu trang. */

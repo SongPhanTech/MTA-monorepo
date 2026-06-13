@@ -1,9 +1,7 @@
 import KhungPanel from "@components/cong-giang-vien/giang-vien/khung-panel"
-import {
-  type LopQuanLyRow,
-  TRANG_THAI_LOP_META,
-} from "@components/cong-giang-vien/giang-vien/types"
-import { Table, Tag } from "antd"
+import type { LopQuanLyRow } from "@components/cong-giang-vien/giang-vien/types"
+import { useFixedClassTypeOptions } from "@hooks/fixedClassType"
+import { Table } from "antd"
 import type { ColumnsType } from "antd/es/table"
 import { type CSSProperties, useEffect, useRef, useState } from "react"
 
@@ -20,31 +18,28 @@ interface BangLopQuanLyProps {
   onRowClick?: (id: string) => void
 }
 
-const columns: ColumnsType<LopQuanLyRow> = [
-  {
-    title: "STT",
-    width: 56,
-    align: "center",
-    render: (_value, _record, index) => index + 1,
-  },
-  { title: "Mã lớp", dataIndex: "maLop", width: 110 },
-  { title: "Tên lớp", dataIndex: "tenLop", ellipsis: true },
-  { title: "Sĩ số", dataIndex: "siSo", width: 70, align: "center" },
-  {
-    title: "Trạng thái",
-    dataIndex: "trangThai",
-    width: 130,
-    render: (value: LopQuanLyRow["trangThai"]) => {
-      const meta = TRANG_THAI_LOP_META[value]
-      return <Tag color={meta.color}>{meta.label}</Tag>
-    },
-  },
-]
-
-// Bảng "Lớp quản lý" (lớp biên chế GVCN phụ trách).
 const BangLopQuanLy = ({ data, loading, gon, onXemTatCa, onRowClick }: BangLopQuanLyProps) => {
   const vungBangRef = useRef<HTMLDivElement>(null)
   const [chieuCaoBody, setChieuCaoBody] = useState(120)
+  const { getFixedClassTypeLabel } = useFixedClassTypeOptions()
+
+  const columns: ColumnsType<LopQuanLyRow> = [
+    {
+      title: "STT",
+      width: 56,
+      align: "center",
+      render: (_value, _record, index) => index + 1,
+    },
+    { title: "Mã lớp", dataIndex: "maLop", width: 110 },
+    { title: "Tên lớp", dataIndex: "tenLop", ellipsis: true },
+    { title: "Sĩ số", dataIndex: "siSo", width: 70, align: "center" },
+    {
+      title: "Loại lớp",
+      dataIndex: "classType",
+      width: 140,
+      render: (value: LopQuanLyRow["classType"]) => getFixedClassTypeLabel(value),
+    },
+  ]
 
   useEffect(() => {
     const el = vungBangRef.current
