@@ -46,7 +46,7 @@ const TheThongTinLop = ({ thongTin, loading }: TheThongTinLopProps) => {
   if (!thongTin) return null
 
   return (
-    <div className="flex h-full flex-col rounded-lg border border-gray-100 bg-white">
+    <div className="flex h-full min-h-0 flex-col rounded-lg border border-gray-100 bg-white">
       <div className="border-b border-gray-100 px-4 py-5 text-center">
         <div className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-full bg-cgv-green/30 text-cgv-green-dark">
           <Users size={28} />

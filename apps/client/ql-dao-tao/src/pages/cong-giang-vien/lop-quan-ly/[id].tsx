@@ -47,13 +47,15 @@ function TrangChiTietLopQuanLy() {
           }
         />
       ) : (
-        <div className="grid min-h-0 flex-1 grid-cols-1 gap-4 lg:grid-cols-[300px_minmax(0,1fr)]">
-          <div className="min-h-0 overflow-hidden lg:max-h-full">
+        <div className="grid min-h-0 flex-1 grid-cols-1 gap-4 lg:grid-cols-[300px_minmax(0,1fr)] lg:items-stretch">
+          <div className="flex h-full min-h-0 flex-col overflow-hidden">
             <TheThongTinLop thongTin={thongTinLop} loading={dangTaiLop} />
           </div>
 
-          <div className="flex min-h-0 flex-col overflow-hidden rounded-lg border border-gray-100 bg-white">
+          <div className="flex h-full min-h-0 flex-col overflow-hidden rounded-lg border border-gray-100 bg-white">
             <TabNoiDungLopQuanLy
+              fixedClassId={fixedClassId}
+              coQuyenXem={coQuyenXem}
               tabProps={{
                 boLoc,
                 capNhatBoLoc,

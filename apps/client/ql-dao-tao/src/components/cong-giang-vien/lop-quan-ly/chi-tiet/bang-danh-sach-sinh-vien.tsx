@@ -42,8 +42,12 @@ const BangDanhSachSinhVien = ({
     capNhatChieuCao()
     const observer = new ResizeObserver(capNhatChieuCao)
     observer.observe(el)
-    return () => observer.disconnect()
-  }, [])
+    window.addEventListener("resize", capNhatChieuCao)
+    return () => {
+      observer.disconnect()
+      window.removeEventListener("resize", capNhatChieuCao)
+    }
+  }, [danhSach.length, loading])
 
   const columns: ColumnsType<SinhVienLopQuanLyRow> = [
     {
@@ -122,7 +126,7 @@ const BangDanhSachSinhVien = ({
   ]
 
   return (
-    <div ref={vungBangRef} className="min-h-0 flex-1 overflow-hidden px-4 pb-2">
+    <div ref={vungBangRef} className="flex min-h-0 flex-1 flex-col overflow-hidden px-4 pb-2">
       <Table<SinhVienLopQuanLyRow>
         rowKey="id"
         size="small"
@@ -132,7 +136,7 @@ const BangDanhSachSinhVien = ({
         pagination={false}
         scroll={{ x: 1100, y: chieuCaoBody }}
         rowClassName={(_, index) => (index % 2 === 1 ? "bg-gray-50/80" : "")}
-        className="[&_.ant-table-thead>tr>th]:!bg-white [&_.ant-table-thead>tr>th]:!font-semibold [&_.ant-table-thead>tr>th]:!text-cgv-green-dark"
+        className="h-full [&_.ant-spin-nested-loading]:h-full [&_.ant-spin-container]:h-full [&_.ant-table-thead>tr>th]:!bg-white [&_.ant-table-thead>tr>th]:!font-semibold [&_.ant-table-thead>tr>th]:!text-cgv-green-dark"
       />
     </div>
   )

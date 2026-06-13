@@ -1,13 +1,16 @@
 import BangDanhSachSinhVien from "@components/cong-giang-vien/lop-quan-ly/chi-tiet/bang-danh-sach-sinh-vien"
 import BoLocSinhVien from "@components/cong-giang-vien/lop-quan-ly/chi-tiet/bo-loc-sinh-vien"
 import PhanTrangSinhVien from "@components/cong-giang-vien/lop-quan-ly/chi-tiet/phan-trang-sinh-vien"
-import TinhNangPhatTrien from "@components/cong-giang-vien/tinh-nang-phat-trien"
+import TabDiemRenLuyen from "@components/cong-giang-vien/lop-quan-ly/chi-tiet/tab-diem-ren-luyen"
+import TabTongKet from "@components/cong-giang-vien/lop-quan-ly/chi-tiet/tab-tong-ket"
+import { hoSoSinhVienLopQuanLyPath } from "@constants/cong-giang-vien-path"
 import { ROUTER_PATH } from "@workspace/router"
 import { Tabs } from "antd"
 import { useRouter } from "next/router"
-import { useDisclosure } from "react-hook-disclosure-modal"
+import { useState } from "react"
 
 interface TabDanhSachSinhVienProps {
+  fixedClassId: string
   boLoc: Parameters<typeof BoLocSinhVien>[0]["boLoc"]
   capNhatBoLoc: Parameters<typeof BoLocSinhVien>[0]["onChange"]
   timKiem: () => void
@@ -23,6 +26,7 @@ interface TabDanhSachSinhVienProps {
 }
 
 const TabDanhSachSinhVien = ({
+  fixedClassId,
   boLoc,
   capNhatBoLoc,
   timKiem,
@@ -37,7 +41,6 @@ const TabDanhSachSinhVien = ({
   layNhanTrangThai,
 }: TabDanhSachSinhVienProps) => {
   const router = useRouter()
-  const { onOpen: moHoSoSinhVien } = useDisclosure<string>({ tag: "ModalChiTietSinhVien" })
 
   return (
     <div className="flex h-full min-h-0 flex-col">
@@ -53,7 +56,9 @@ const TabDanhSachSinhVien = ({
         trang={trang}
         soTrang={soTrang}
         layNhanTrangThai={layNhanTrangThai}
-        onXemHoSo={moHoSoSinhVien}
+        onXemHoSo={(studentId) =>
+          router.push(hoSoSinhVienLopQuanLyPath(fixedClassId, studentId))
+        }
         onXemKetQuaHocTap={(studentId) =>
           router.push(
             ROUTER_PATH.QL_DAO_TAO.DANH_MUC_LOP_BIEN_CHE_KET_QUA_HOC_TAP_ID.replace("[id]", studentId)
@@ -72,36 +77,46 @@ const TabDanhSachSinhVien = ({
 }
 
 interface TabNoiDungLopQuanLyProps {
-  tabProps: TabDanhSachSinhVienProps
+  fixedClassId: string
+  coQuyenXem: boolean
+  tabProps: Omit<TabDanhSachSinhVienProps, "fixedClassId">
 }
 
-const TabNoiDungLopQuanLy = ({ tabProps }: TabNoiDungLopQuanLyProps) => {
+const TAB_CLASS =
+  "flex h-full min-h-0 flex-col overflow-hidden [&_.ant-tabs-nav]:mb-0 [&_.ant-tabs-nav]:shrink-0 [&_.ant-tabs-nav]:px-4 [&_.ant-tabs-content-holder]:flex [&_.ant-tabs-content-holder]:min-h-0 [&_.ant-tabs-content-holder]:flex-1 [&_.ant-tabs-content-holder]:flex-col [&_.ant-tabs-content-holder]:overflow-hidden [&_.ant-tabs-content]:h-full [&_.ant-tabs-content]:min-h-0 [&_.ant-tabs-tabpane]:h-full [&_.ant-tabs-tabpane-active]:!flex [&_.ant-tabs-tabpane-active]:!min-h-0 [&_.ant-tabs-tabpane-active]:!flex-1 [&_.ant-tabs-tabpane-active]:!flex-col [&_.ant-tabs-tab-active_.ant-tabs-tab-btn]:!text-cgv-green-dark [&_.ant-tabs-tab-btn]:font-medium [&_.ant-tabs-ink-bar]:!bg-cgv-green-dark"
+
+const TabNoiDungLopQuanLy = ({ fixedClassId, coQuyenXem, tabProps }: TabNoiDungLopQuanLyProps) => {
+  const [tabActive, setTabActive] = useState("danh-sach-sinh-vien")
+
   return (
     <Tabs
-      className="flex h-full min-h-0 flex-col [&_.ant-tabs-content]:min-h-0 [&_.ant-tabs-content]:flex-1 [&_.ant-tabs-content-holder]:min-h-0 [&_.ant-tabs-content-holder]:flex-1 [&_.ant-tabs-nav]:mb-0 [&_.ant-tabs-nav]:px-4 [&_.ant-tabs-tab-active_.ant-tabs-tab-btn]:!text-cgv-green-dark [&_.ant-tabs-tab-btn]:font-medium [&_.ant-tabs-ink-bar]:!bg-cgv-green-dark"
-      defaultActiveKey="danh-sach-sinh-vien"
+      className={TAB_CLASS}
+      activeKey={tabActive}
+      onChange={setTabActive}
       items={[
         {
           key: "danh-sach-sinh-vien",
           label: "Danh sách sinh viên",
-          children: <TabDanhSachSinhVien {...tabProps} />,
+          children: <TabDanhSachSinhVien fixedClassId={fixedClassId} {...tabProps} />,
         },
         {
           key: "diem-ren-luyen",
           label: "Điểm rèn luyện",
           children: (
-            <div className="flex h-full min-h-[280px] items-center justify-center p-6">
-              <TinhNangPhatTrien />
-            </div>
+            <TabDiemRenLuyen
+              fixedClassId={fixedClassId}
+              enabled={coQuyenXem && tabActive === "diem-ren-luyen"}
+            />
           ),
         },
         {
           key: "tong-ket",
           label: "Tổng kết",
           children: (
-            <div className="flex h-full min-h-[280px] items-center justify-center p-6">
-              <TinhNangPhatTrien />
-            </div>
+            <TabTongKet
+              fixedClassId={fixedClassId}
+              enabled={coQuyenXem && tabActive === "tong-ket"}
+            />
           ),
         },
       ]}

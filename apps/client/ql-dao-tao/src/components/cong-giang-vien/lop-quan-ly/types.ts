@@ -1,4 +1,4 @@
-import type { FixedClassType, StudentStatus } from "@workspace/db/client"
+import type { FixedClassType, StudentStatus, StudentTrainingType } from "@workspace/db/client"
 
 export type LoaiLopLoc = FixedClassType | "tat_ca"
 
@@ -49,4 +49,49 @@ export type ThongTinLopQuanLyTomTat = {
   bacDaoTao: string
   chuongTrinhDaoTao: string
   doiTuongDaoTao: string
+}
+
+export type DiemRenLuyenRow = {
+  id: string
+  maSinhVien: string
+  hoVaTen: string
+  diem: number | null
+  xepLoai: StudentTrainingType | null
+  ghiChu: string
+}
+
+export type ThongKeDiemRenLuyen = {
+  tongSinhVien: number
+  soDat: number
+  soKhongDat: number
+  diemTrungBinh: number | null
+}
+
+export type TongKetRow = {
+  id: string
+  maSinhVien: string
+  hoVaTen: string
+  diemToiDa: number
+  diem: number | null
+  xepLoai: string | null
+  ghiChu: string
+}
+
+export type ThongKeTongKet = {
+  tongSinhVien: number
+  diemTrungBinh: number | null
+  heDiem: 4 | 10
+  nguongDat: number | null
+  soDatNguong: number
+  tyLeDatNguong: string
+  soDuoiNguong: number
+  tyLeDuoiNguong: string
+  soXuatSac: number
+  tyLeXuatSac: string
+  soGioi: number
+  tyLeGioi: string
+  soKha: number
+  tyLeKha: string
+  soTbTroXuong: number
+  tyLeTbTroXuong: string
 }
