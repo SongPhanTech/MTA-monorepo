@@ -2,7 +2,7 @@ import type { SinhVienLopQuanLyRow } from "@components/cong-giang-vien/lop-quan-
 import { Button, Table, Tag } from "antd"
 import type { ColumnsType } from "antd/es/table"
 import { BarChart3, Eye } from "lucide-react"
-import { useEffect, useRef, useState } from "react"
+import { type CSSProperties, useEffect, useRef, useState } from "react"
 
 const CHIEU_CAO_HEADER_BANG = 48
 
@@ -11,6 +11,7 @@ interface BangDanhSachSinhVienProps {
   loading?: boolean
   trang: number
   soTrang: number
+  visible?: boolean
   layNhanTrangThai: (status: SinhVienLopQuanLyRow["trangThai"]) => {
     label: string
     color: string
@@ -24,6 +25,7 @@ const BangDanhSachSinhVien = ({
   loading,
   trang,
   soTrang,
+  visible = true,
   layNhanTrangThai,
   onXemHoSo,
   onXemKetQuaHocTap,
@@ -40,14 +42,16 @@ const BangDanhSachSinhVien = ({
     }
 
     capNhatChieuCao()
+    const raf = requestAnimationFrame(capNhatChieuCao)
     const observer = new ResizeObserver(capNhatChieuCao)
     observer.observe(el)
     window.addEventListener("resize", capNhatChieuCao)
     return () => {
+      cancelAnimationFrame(raf)
       observer.disconnect()
       window.removeEventListener("resize", capNhatChieuCao)
     }
-  }, [danhSach.length, loading])
+  }, [danhSach.length, loading, visible])
 
   const columns: ColumnsType<SinhVienLopQuanLyRow> = [
     {
@@ -126,17 +130,22 @@ const BangDanhSachSinhVien = ({
   ]
 
   return (
-    <div ref={vungBangRef} className="flex min-h-0 flex-1 flex-col overflow-hidden px-4 pb-2">
+    <div
+      ref={vungBangRef}
+      className="flex min-h-0 flex-1 flex-col overflow-hidden px-4 pb-2"
+      style={{ "--gv-body-h": `${chieuCaoBody}px` } as CSSProperties}
+    >
       <Table<SinhVienLopQuanLyRow>
         rowKey="id"
         size="small"
+        tableLayout="fixed"
         columns={columns}
         dataSource={danhSach}
         loading={loading}
         pagination={false}
         scroll={{ x: 1100, y: chieuCaoBody }}
         rowClassName={(_, index) => (index % 2 === 1 ? "bg-gray-50/80" : "")}
-        className="h-full [&_.ant-spin-nested-loading]:h-full [&_.ant-spin-container]:h-full [&_.ant-table-thead>tr>th]:!bg-white [&_.ant-table-thead>tr>th]:!font-semibold [&_.ant-table-thead>tr>th]:!text-cgv-green-dark"
+        className="bang-gv-full [&_.ant-table-thead>tr>th]:!bg-white [&_.ant-table-thead>tr>th]:!font-semibold [&_.ant-table-thead>tr>th]:!text-cgv-green-dark"
       />
     </div>
   )

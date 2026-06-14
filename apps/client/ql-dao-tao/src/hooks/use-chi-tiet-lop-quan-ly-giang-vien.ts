@@ -138,7 +138,7 @@ const useChiTietLopQuanLyGiangVien = (fixedClassId: string) => {
           include: { gender: true },
         },
       },
-      orderBy: [{ userProfile: { code: "asc" } }, { userProfile: { firstName: "asc" } }],
+      orderBy: [{ code: "asc" }],
       take: soTrang,
       skip: (trang - 1) * soTrang,
     },

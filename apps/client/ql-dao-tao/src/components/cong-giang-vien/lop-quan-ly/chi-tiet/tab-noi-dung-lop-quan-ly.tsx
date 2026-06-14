@@ -23,6 +23,7 @@ interface TabDanhSachSinhVienProps {
   setTrang: (trang: number) => void
   setSoTrang: (soTrang: number) => void
   layNhanTrangThai: Parameters<typeof BangDanhSachSinhVien>[0]["layNhanTrangThai"]
+  visible?: boolean
 }
 
 const TabDanhSachSinhVien = ({
@@ -39,6 +40,7 @@ const TabDanhSachSinhVien = ({
   setTrang,
   setSoTrang,
   layNhanTrangThai,
+  visible = true,
 }: TabDanhSachSinhVienProps) => {
   const router = useRouter()
 
@@ -55,6 +57,7 @@ const TabDanhSachSinhVien = ({
         loading={dangTaiSinhVien}
         trang={trang}
         soTrang={soTrang}
+        visible={visible}
         layNhanTrangThai={layNhanTrangThai}
         onXemHoSo={(studentId) =>
           router.push(hoSoSinhVienLopQuanLyPath(fixedClassId, studentId))
@@ -97,7 +100,13 @@ const TabNoiDungLopQuanLy = ({ fixedClassId, coQuyenXem, tabProps }: TabNoiDungL
         {
           key: "danh-sach-sinh-vien",
           label: "Danh sách sinh viên",
-          children: <TabDanhSachSinhVien fixedClassId={fixedClassId} {...tabProps} />,
+          children: (
+            <TabDanhSachSinhVien
+              fixedClassId={fixedClassId}
+              visible={tabActive === "danh-sach-sinh-vien"}
+              {...tabProps}
+            />
+          ),
         },
         {
           key: "diem-ren-luyen",
