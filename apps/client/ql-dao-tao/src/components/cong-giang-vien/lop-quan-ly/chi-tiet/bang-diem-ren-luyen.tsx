@@ -50,7 +50,6 @@ const BangDiemRenLuyen = ({
       title: "STT",
       width: 56,
       align: "center",
-      fixed: "left",
       render: (_value, _record, index) => (trang - 1) * soTrang + index + 1,
     },
     {
@@ -95,7 +94,6 @@ const BangDiemRenLuyen = ({
       title: "Chi tiết",
       width: 90,
       align: "center",
-      fixed: "right",
       render: (_value, record) => (
         <Button
           type="link"
@@ -111,7 +109,7 @@ const BangDiemRenLuyen = ({
   ]
 
   return (
-    <div ref={vungBangRef} className="flex min-h-0 flex-1 flex-col overflow-hidden px-4 pb-2">
+    <div ref={vungBangRef} className="min-h-0 flex-1 overflow-hidden px-4 pb-2">
       <Table<DiemRenLuyenRow>
         rowKey="id"
         size="small"
@@ -121,7 +119,7 @@ const BangDiemRenLuyen = ({
         pagination={false}
         scroll={{ x: 900, y: chieuCaoBody }}
         rowClassName={(_, index) => (index % 2 === 1 ? "bg-gray-50/80" : "")}
-        className="h-full [&_.ant-spin-nested-loading]:h-full [&_.ant-spin-container]:h-full [&_.ant-table-thead>tr>th]:!bg-white [&_.ant-table-thead>tr>th]:!font-semibold [&_.ant-table-thead>tr>th]:!text-cgv-green-dark"
+        className="bang-lq-chi-tiet [&_.ant-table-thead>tr>th]:!bg-white [&_.ant-table-thead>tr>th]:!font-semibold [&_.ant-table-thead>tr>th]:!text-cgv-green-dark"
       />
     </div>
   )
