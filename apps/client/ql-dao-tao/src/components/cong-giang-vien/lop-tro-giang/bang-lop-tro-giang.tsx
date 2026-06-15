@@ -2,9 +2,11 @@ import {
   type LopTroGiangRow,
   TRANG_THAI_TRO_GIANG_META,
 } from "@components/cong-giang-vien/lop-tro-giang/types"
-import { Button, Table, Tag } from "antd"
+import { diemDanhTroGiangPath } from "@constants/cong-giang-vien-path"
+import { Button, Table, Tag, Tooltip } from "antd"
 import type { ColumnsType } from "antd/es/table"
-import { BarChart3, Calendar, Eye } from "lucide-react"
+import { BarChart3, ClipboardCheck, Eye } from "lucide-react"
+import { useRouter } from "next/router"
 import { useEffect, useRef, useState } from "react"
 
 const CHIEU_CAO_HEADER_BANG = 56
@@ -17,6 +19,7 @@ interface BangLopTroGiangProps {
 }
 
 const BangLopTroGiang = ({ danhSach, loading, trang, soTrang }: BangLopTroGiangProps) => {
+  const router = useRouter()
   const vungBangRef = useRef<HTMLDivElement>(null)
   const [chieuCaoBody, setChieuCaoBody] = useState(320)
 
@@ -96,26 +99,33 @@ const BangLopTroGiang = ({ danhSach, loading, trang, soTrang }: BangLopTroGiangP
       width: 130,
       align: "center",
       fixed: "right",
-      render: () => (
+      render: (_value, record) => (
         <div className="flex items-center justify-center gap-1">
-          <Button
-            type="text"
-            size="small"
-            icon={<Eye size={16} />}
-            className="text-cgv-green-dark"
-          />
-          <Button
-            type="text"
-            size="small"
-            icon={<Calendar size={16} />}
-            className="text-cgv-green-dark"
-          />
-          <Button
-            type="text"
-            size="small"
-            icon={<BarChart3 size={16} />}
-            className="text-cgv-green-dark"
-          />
+          <Tooltip title="Xem chi tiết">
+            <Button
+              type="text"
+              size="small"
+              icon={<Eye size={16} />}
+              className="text-cgv-green-dark"
+            />
+          </Tooltip>
+          <Tooltip title="Điểm danh">
+            <Button
+              type="text"
+              size="small"
+              icon={<ClipboardCheck size={16} />}
+              onClick={() => router.push(diemDanhTroGiangPath(record.id))}
+              className="text-cgv-green-dark"
+            />
+          </Tooltip>
+          <Tooltip title="Thống kê">
+            <Button
+              type="text"
+              size="small"
+              icon={<BarChart3 size={16} />}
+              className="text-cgv-green-dark"
+            />
+          </Tooltip>
         </div>
       ),
     },
