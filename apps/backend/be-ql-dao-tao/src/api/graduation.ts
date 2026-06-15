@@ -2618,7 +2618,9 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
           ten_de_an_tot_nghiep: safeString(tP?.title),
           danh_sach_can_bo_huong_dan: safeString(supervisors),
           ngay_bao_ve: safeString(defenseDateParts?.fullVi),
-
+          hoc_phan_tot_nghiep: course?.trainingObjectType?.name?.toLowerCase()?.includes("cao học")
+            ? "luận văn tốt nghiệp"
+            : "đề án tốt nghiệp",
           ngay_in: safeString(pDateParts?.day),
           thang_in: safeString(pDateParts?.monthVi),
           nam_in: safeString(pDateParts?.year),
@@ -2646,7 +2648,7 @@ app.openapi(exportPhuLucVanBangCaoHoc, async (c: any) => {
   }
 
   try {
-    const templateBuffer = await getLuanVanTemplateBuffer(prisma, "PhuLucVanBangCaoHoc_v9.docx")
+    const templateBuffer = await getLuanVanTemplateBuffer(prisma, "PhuLucVanBangCaoHoc_v11.docx")
     const zip = new PizZip(templateBuffer)
     const doc = new Docxtemplater(zip, {
       paragraphLoop: true,
