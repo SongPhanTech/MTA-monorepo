@@ -157,7 +157,7 @@ export function SurveyProgressTable({ data }: { data: ProgressRow[] }) {
           </div>
 
           <Text type="secondary" style={{ fontSize: 12 }}>
-            Số giảng viên đã có ý kiến / tổng số giảng viên
+            Số sinh viên đã làm khảo sát / tổng số sinh viên
           </Text>
         </div>
       </div>
