@@ -1,4 +1,5 @@
 import { useFindManyDM_DonVi, useFindManyLecturer } from "@workspace/db/hooks"
+import { formatLecturerName } from "@workspace/libs"
 import type { SelectProps } from "antd"
 import { message, TreeSelect as TreeSelectAnt } from "antd"
 import type React from "react"
@@ -11,7 +12,7 @@ function buildOrgTree(
   lecturers: Array<{
     id: string
     userProfile: { fullName: string }
-    organizationId: string
+    organizationId: string | null
   }>,
   parentId: string | null = null
 ): Array<TreeNodeType> {
@@ -72,7 +73,12 @@ const TreeSelect: React.FC<CustomTreeSelectProps> = ({
   } = useFindManyLecturer({
     include: {
       organization: true,
-      userProfile: true,
+      userProfile: {
+        include: {
+          academicRankType: true,
+          academicDegreeType: true,
+        },
+      },
     },
     where: {
       userProfile: {
@@ -94,9 +100,7 @@ const TreeSelect: React.FC<CustomTreeSelectProps> = ({
       lecturers.map((lec) => ({
         id: lec.id,
         userProfile: {
-          fullName:
-            `${lec.userProfile?.lastName ?? ""} ${lec.userProfile?.firstName ?? ""}`.trim() ||
-            "Giảng viên không tên",
+          fullName: formatLecturerName(lec) || "Giảng viên không tên",
         },
         organizationId: lec.organizationId,
       })),
